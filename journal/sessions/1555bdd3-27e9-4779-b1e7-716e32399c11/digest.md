@@ -3736,3 +3736,430 @@ Termine : (1) réécris les deux fichiers pour coller au CLI réel (`analyser`/`
 … [3163 caractères tronqués]
   ```
 
+- **write** `{"content": "# Cinq exemples d'analyse, commentés\n\n> **Ce que ce document est.** Cinq exécutions **réelles** du produit, avec leur JSON commenté. Il\n> complète la notice [`README.md`](README.md) : la notice dit *quoi* faire, ce document dit\n> *comment lire* ce qui sort. Les sorties ont été produ … [20148 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des liens, de la revue et des compteurs après rédaction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nR=pathlib.Path('.')\nfor f in [R/'docs/produit/README.md', R/'docs/produit/exemples.md']:\n    t=f.read_text()\n    print('==',f)\n    for c in re.findall(r'\\]\\(([^)#]+?)\\)', t):\n        if c … [201 caractères tronqués]`
+
+  ```
+== docs/produit/README.md
+OK  exemples.md
+OK  ../../README.md
+OK  exemples.md
+OK  ../implantation/bloc-linguistique.md
+OK  ../../reports/rapport-pensee-v12.md
+OK  ../../reports/pensee-v12.json
+OK  ../../reports/rapport-audit-v10.md
+OK  ../../reports/rapport-cache-chunker-applique.md
+OK  ../../reports/rapport-pensee-gold-cascade.md
+OK  ../pilotage/references-non-regression.md
+OK  ../pilotage/utilisation.md
+OK  ../theorie/pre-traitement-linguistique.md
+== docs/produit/exemples.md
+OK  README.md
+OK  README.md
+OK  ../implantation/bloc-linguistique.md
+OK  ../../reports/rapport-pensee-v12.md
+OK  ../../reports/rapport-audit-v10.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -40; echo \"exit=${PIPESTATUS[0]}\"", "description": "Run documentation review"}`
+
+  ```
+revue de documentation · 679 fiche(s) · 772 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'état courant : liens produit et compteurs mis à jour par une autre session.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"produit\\|121\\|84\\|679\\|772\" docs/pilotage/en-cours.md | head -40", "description": "Check en-cours product links and counters"}`
+
+  ```
+63:### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif ; heartbeat à rafraîchir)*
+65:- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit et doc d'usage ; file des 29 tâches intégrée.
+77:- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+95:- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
+99:- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
+107:| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+109:| fichiers / JSON de résultats | **679** / **772** | `reports/*.md` / `reports/*.json` |
+110:| documents de `docs/` | **121** (hors archive et README) | `docs/**/*.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"docs/produit\" docs/ README.md 2>/dev/null | head -20; echo \"=== compteurs ===\"; python3 -c \"\nimport sys; sys.path.insert(0,'tools')\nimport revue_documentation as r\nprint('docs',r.compte_docs(),'portes',r.compte_port … [120 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:38:**État au 06/11 10 h 45.** B13 est à **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, F1 0,5849 ; dev 153/153, test 69/69 ; **le premier produit est debout** : `python3 tools/drave.py analyser|evaluer|rejouer`, la **porte produit** (`porte-produit.sh`, 6 contrôles, ~2 min) et la **doc d'usage** (`docs/produit/`) ; **autotest parallèle** (×2,4) ; **84 portes** (3 rouges : `indice`, `melange`, `sessions` du hub) ; **17 spans** inatteignables ; `master` et `s/v7` poussés au même commit ;
+=== compteurs ===
+docs 121 portes 84 fiches 679 json 772
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche du lien entrant réel vers `exemples.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"produit/\\|exemples\\.md\" docs/*.md docs/pilotage/*.md docs/produit/*.md | head -30", "description": "Find incoming link to exemples.md"}`
+
+  ```
+docs/README.md:94:| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave — à qui, quoi, comment, limites |
+docs/README.md:95:| [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels (entrée → sortie), dont un cas d'échec connu |
+docs/pilotage/roadmap.md:38:**État au 06/11 10 h 45.** B13 est à **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, F1 0,5849 ; dev 153/153, test 69/69 ; **le premier produit est debout** : `python3 tools/drave.py analyser|evaluer|rejouer`, la **porte produit** (`porte-produit.sh`, 6 contrôles, ~2 min) et la **doc d'usage** (`docs/produit/`) ; **autotest parallèle** (×2,4) ; **84 portes** (3 rouges : `indice`, `melange`, `sessions` du hub) ; **17 spans** inatteignables ; `master` et `s/v7` poussés au même commit ;
+docs/produit/README.md:70:[`exemples.md`](exemples.md).
+docs/produit/README.md:165:`stdout`**, code **1**. Le bloc, lui, rend un JSON avec `refus: "vide"` (voir `exemples.md` § 4) :
+docs/produit/README.md:352:| **voir cinq JSON commentés** | [`exemples.md`](exemples.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib\nsys.path.insert(0,'tools')\nimport revue_documentation as r\nR=pathlib.Path('.')\nentrants=set()\nfor f in r.sources_nav():\n    for c in r.liens(f.read_text(encoding='utf-8',errors='ignore')):\ … [580 caractères tronqués]`
+
+  ```
+exemples dans entrants ? True
+source: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/miroir.md
+    1. **Valider l'entrée par la sortie** ✓✓ : ce que l'entrée a compris doit pouvoir être **reproduit** par la sortie
+source: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/resultats.md
+    2. **La mesure qui le produit** — le calcul exact, la métrique ([chrF](../theorie/glossaire/entrees/chrf.md), précision, rappel, [AUC](../theorie/glossaire/entr
+source: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/methode/illustrations.md
+    Le **SVG généré n'a pas besoin d'être committé** : docwatch le produit à la demande. S'il est
+source: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/manques.md
+    | **M8** | ~~**défaut du variant log-normal** — le fichier sauvé ne reproduit pas le modèle entraîné~~ **CAUSE TROUVÉE ET CORRIGÉE le 2026-10-10 22 h 50** | la 
+source: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/utilisation.md
+    | 6 | **un seul cerveau, pas de « produit »** ✗ | un usage « clé en main » des facultés ✗ | les facultés sont des **outils et des portes** ✓, pas un service ✓ —
+source: /home/stephane/Data13TB/stephane/GitH
+… [48730 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle de la version finale de la notice et du point « doublon REL de l'union ».
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,16p docs/produit/README.md; echo \"...\"; sed -n 104,120p docs/produit/README.md; echo \"=== §4 début ===\"; sed -n 158,182p docs/produit/README.md; echo \"=== mtime ===\"; ls -l --time-style=full-iso docs/produit/", "descri … [57 caractères tronqués]`
+
+  ```
+# Le premier produit — analyser un texte avec Drave
+
+> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+> linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+> il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+> qu'il garantit.
+>
+> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
+> porte produit est verte. Les exemples du § 3 sont réels : ils ont été lancés pour ce document.
+> Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+>
+> **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
+> classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
+> candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
+
+...
+```
+
+**Lecture.** Un appel = **une annotation** ; les phrases sont des étiquettes de niveau `phrase`,
+pas des objets séparés. La REL « que j'ai lu » est bien rattachée à « livre » (cas `
+… [2140 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout du doublon REL de l'union dans les limites de la notice.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "old_string": "gold). Le JSON publie aussi une **seconde lecture d'union** (`meta.union: true`, span plus\nlarge) : c'est une lecture concurrente, pas un doublon. La sortie lisible du § 3.1 ne montre pas\n`union` … [284 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**2. Dix-sept spans restent inatteignables.** Sur **239 cibles**, **222** sont attachées\n(couverture **0,9289**) ; **17** ne le sont pas : **8 REL, 5 SUB, 4 GP**. Elles sont\n**inatteignables sans … [1249 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification automatique : chaque commande JSON du document reproduit-elle son bloc ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, json, subprocess, pathlib, sys\nt = pathlib.Path('docs/produit/exemples.md').read_text()\nblocs = re.findall(r'```(\\w*)\\n(.*?)```', t, re.S)\nprint('blocs:', [(lang, len(c.splitlines())) for lang, c in  … [63 caractères tronqués]`
+
+  ```
+blocs: [('bash', 9), ('bash', 1), ('', 10), ('bash', 9), ('json', 72), ('bash', 7), ('json', 82), ('bash', 7), ('json', 107), ('bash', 1), ('', 2), ('bash', 2), ('json', 6), ('json', 7), ('bash', 7), ('json', 60)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|when we left\\|r241\" docs/produit/exemples.md | head -20; wc -l docs/produit/exemples.md", "description": "Check whether example 3 exists"}`
+
+  ```
+12:## 0. Comment lire les JSON
+42:## 1. Une déclarative simple — `g001`
+172:## 2. Un attachement de REL — `g011`
+295:## 3. L'anglais et le marqueur ambigu — `r241`
+297:**Entrée.** `The day when we left was beautiful.` (phrase `reel` du gold, `r241`).
+302:python3 tools/drave.py analyser "The day when we left was beautiful." --langue en --json \
+392:      "valeur": "when we left",
+425:- `when` est tagué **CONJ** par le POS, mais il déclenche une **REL** `[8:20] « when we left »`
+441:## 4. Le refus — texte vide
+493:## 5. L'échec connu — un span non prédit (`r035`)
+605:## 6. Ce que ces exemples ne montrent pas
+621:## 7. Où aller ensuite
+629 docs/produit/exemples.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution des commandes du document et comparaison aux blocs JSON.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, json, subprocess, pathlib\nt = pathlib.Path('docs/produit/exemples.md').read_text()\nblocs = re.findall(r'```(\\w*)\\n(.*?)```', t, re.S)\nok = True\nfor i, (lang, contenu) in enumerate(blocs):\n    if la … [955 caractères tronqués]`
+
+  ```
+✅ bloc 3 → JSON identique ( 815 octets )
+✅ bloc 5 → JSON identique ( 1108 octets )
+✅ bloc 7 → JSON identique ( 1249 octets )
+✅ bloc 11 → JSON identique ( 69 octets )
+✅ bloc 14 → JSON identique ( 675 octets )
+TOUT OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final : revue, tableaux, liens et permissions des deux fichiers.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 docs/produit/README.md docs/produit/exemples.md && ls -l docs/produit/ && wc -l docs/produit/README.md docs/produit/exemples.md && git status --porcelain docs/produit/", "description": "Fix permissions and count lines"}`
+
+  ```
+total 44
+-rw-r--r--. 1 stephane stephane 19249  6 nov 10:45 exemples.md
+-rw-r--r--. 1 stephane stephane 22442  6 nov 10:49 README.md
+  370 docs/produit/README.md
+  629 docs/produit/exemples.md
+  999 total
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"revue_exit=${PIPESTATUS[0]}\"; echo \"=== tableaux ===\"; bash tools/porte-tableaux.sh 2>&1 | tail -10; echo \"tableaux_exit=${PIPESTATUS[0]}\"", "description": "Run review  … [17 caractères tronqués]`
+
+  ```
+revue de documentation · 679 fiche(s) · 773 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 772 JSON, le disque en a 773
+revue_exit=1
+=== tableaux ===
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+tableaux_exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux fichiers sont désormais suivis : lecture du diff par rapport au commit.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 -- docs/produit/ && echo \"=== stat ===\" && git diff --stat -- docs/produit/ && echo \"=== noms ===\" && git diff --name-status -- docs/produit/", "description": "Inspect commit and diff stat for product docs"}`
+
+  ```
+9952a330 PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES
+=== stat ===
+ docs/produit/README.md   | 297 +++++++++++-----------
+ docs/produit/exemples.md | 631 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 733 insertions(+), 195 deletions(-)
+=== noms ===
+M	docs/produit/README.md
+M	docs/produit/exemples.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --numstat -- docs/produit/; echo \"=== titres version HEAD ===\"; git show HEAD:docs/produit/README.md 2>/dev/null | grep -n \"^## \" | head -20; echo \"=== exemples HEAD ===\"; git show HEAD:docs/produit/exemples.md 2>/dev/ … [93 caractères tronqués]`
+
+  ```
+154	143	docs/produit/README.md
+579	52	docs/produit/exemples.md
+=== titres version HEAD ===
+18:## 1. À qui s'adresse le produit
+33:## 2. Ce que le produit fait
+64:## 3. Comment l'utiliser — cinq exemples réels
+157:## 4. Ce que le produit ne fait pas encore
+209:## 5. Performance
+230:## 6. Garanties
+256:## 7. Le CLI en préparation — contrat et manques
+342:## 8. Où aller ensuite
+=== exemples HEAD ===
+6:## 1. Une phrase simple, en français
+24:## 2. Une relative, en français
+43:## 3. Une phrase anglaise
+57:## 4. Le JSON, pour un client
+72:## 5. La mesure sur le gold
+90:## 6. Un cas d'échec connu
+  ```
+
+### 🤖 Assistant
+
+⏵ Le commit du hub a changé `cascade_pos` : vérification de l'état réel avant d'ajuster la notice.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"cascade_pos\" tools/tests/linguistique/evaluer_gold.py docs/pilotage/references-non-regression.md | head -20; echo \"=== commit ===\"; git show --stat 9952a330 | head -30", "description": "Check cascade_pos threshold and co … [12 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/evaluer_gold.py:283:        "cascade_pos": c_all["pos"]["exactitude"] >= 0.70,
+docs/pilotage/references-non-regression.md:67:| `porte-bloc-linguistique.sh` | 17 s | ✅ porte bloc linguistique verte (`cascade_pos` : plancher 0,70, la fusion rend 0,7465) |
+=== commit ===
+commit 9952a3303f6657c8ef9e6d387d135514f6a39fb4
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 10:23:41 2026 -0500
+
+    PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES
+
+ docs/README.md                                     |   7 +
+ docs/pilotage/en-cours.md                          |   2 +-
+ docs/produit/README.md                             | 359 +++++++++++++++++++
+ docs/produit/exemples.md                           | 102 ++++++
+ journal/2026-11-06/README.md                       |  13 +-
+ journal/2026-11-06/distribue.md                    |   8 +-
+ journal/2026-11-06/docs.md                         |   8 +-
+ journal/2026-11-06/mesures.md                      |  12 +-
+ journal/2026-11-06/modele.md                       |   8 +-
+ journal/2026-11-06/portes.md                       |   8 +-
+ journal/README.md   
+… [806 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,120p reports/rapport-produit-v0.md", "description": "Read product v0 report"}`
+
+  ```
+# B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Ce que c'est** : un **point d'entrée unique** — `python3 tools/drave.py` — qui expose le bloc
+> linguistique en autonomie, **hors ligne**, **CPU**, **déterministe** : `analyser` (POS, syntagmes
+> avec rôle et **cible d'attachement**, pragmatique), `evaluer` (la mesure sur le gold), `rejouer`
+> (le déterminisme par sha256), `--version`. Une **porte** le vérifie (`porte-produit.sh` : 5
+> contrôles + le smoke test + l'autotest parallèle), et un **smoke test** de 6 cas tourne en 1,2 s.
+>
+> **Dispositif** : [`drave.py`](../tools/drave.py), [`test_produit.py`](../tools/tests/test_produit.py),
+> [`porte-produit.sh`](../tools/porte-produit.sh) ; JSON [`pensee-produit-v0.json`](pensee-produit-v0.json).
+
+## 1. Ce que la commande fait
+
+| commande | sortie | mesure |
+|---|---|---|
+| `drave.py analyser "Le chat dort sur le toit."` | POS, syntagmes (GN/GV/GP, rôle, cible), pragmatique, couverture | 32 étiquettes, 3 segments |
+| `drave.py analyser … --langue en --json` | le même en JSON complet | 8 704 o (fr court 5 561 o
+… [2135 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la notice : `cascade_pos` est un plancher (0,70), la porte est verte.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rouge\\|cascade_pos\\|strict\" docs/produit/README.md", "description": "Locate cascade/red mentions in README"}`
+
+  ```
+190:**3. La rouge `cascade_pos`.** Elle appartient au **banc de recherche** (`evaluer_gold.py`,
+193:la fusion par confiance laisse gagner le stub. C'est une **rouge tolérée**, listée dans les
+345:| **`--strict`** | `evaluer` ne mesure pas la cascade et ne peut pas échouer sur une rouge tolérée ; c'est le banc de recherche qui le fait |
+363:| **la rouge tolérée** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 188,206p docs/produit/README.md", "description": "Read cascade paragraph"}`
+
+  ```
+une lecture unique (garder `union: null`, ou le segment qui en contient un autre).
+
+**3. La rouge `cascade_pos`.** Elle appartient au **banc de recherche** (`evaluer_gold.py`,
+porte `porte-bloc-linguistique.sh`), pas à `drave evaluer`, qui ne mesure que l'heuristique. La
+cascade (heuristique + `MockNeuronal`) donne **0,7465** en POS, sous l'heuristique **0,7581** :
+la fusion par confiance laisse gagner le stub. C'est une **rouge tolérée**, listée dans les
+références de non-régression. Elle améliore pourtant les syntagmes (F1 **0,6141** contre
+**0,5849**, tête **0,7432** contre **0,7336**) : c'est un **échange**, pas un gain. Le produit
+par défaut reste l'heuristique. La cascade avec le vrai tagger 7B a été mesurée à **0,9415** en
+POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit aujourd'hui :
+ce n'est pas un chemin livré.
+
+**4. Pas de neuronal.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de qualité.
+Le vrai adaptateur (`NeuronalLLM`, `NeuronalLLMPOS`) parle à un serveur local ; il n'est ni requis
+ni utilisé par défaut, et le CLI ne l'expose pas.
+
+**5. Les classes ouvertes sont fragiles.** POS fermé **0,9004**, ouvert **0,6234** :
+… [200 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un\n**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte\n`porte-bloc-linguistique … [1400 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier a encore changé : relecture avant la dernière correction.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=full-iso docs/produit/README.md; grep -n \"cascade_pos\\|rouge\\|plancher\" docs/produit/README.md | head -20; echo \"=== §3.2 ===\"; sed -n 104,114p docs/produit/README.md", "description": "Inspect latest README c … [8 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 22442 2026-11-06 10:49:06.890149034 -0500 docs/produit/README.md
+55:**Les contre-épreuves.** Le CLI imprime son propre plancher : **cible exacte tirée au hasard
+190:**3. La rouge `cascade_pos`.** Elle appartient au **banc de recherche** (`evaluer_gold.py`,
+193:la fusion par confiance laisse gagner le stub. C'est une **rouge tolérée**, listée dans les
+345:| **`--strict`** | `evaluer` ne mesure pas la cascade et ne peut pas échouer sur une rouge tolérée ; c'est le banc de recherche qui le fait |
+363:| **la rouge tolérée** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
+=== §3.2 ===
+```
+
+**Lecture.** Un appel = **une annotation** ; les phrases sont des étiquettes de niveau `phrase`,
+pas des objets séparés. La REL « que j'ai lu » est bien rattachée à « livre » (cas `g011` du
+gold). Le JSON publie aussi une **seconde lecture d'union** (`meta.union: true`, span plus
+large) : dans la sortie lisible, elle apparaît comme un **doublon REL** ; le JSON la marque
+`union: true`, à filtrer pour une lecture unique.
+
+### 3.3 Mesurer sur le gold
+
+```bash
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+1: # Le premier produit — analyser un texte avec Drave
+2: 
+3: > **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+4: > linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+5: > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+6: > qu'il garantit.
+7: >
+8: > **Vérifié le 2026-11-06** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+9: > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
+10: > porte produit est verte. Les exemples du § 3 sont réels : ils ont été lancés pour ce document.
+11: > Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+12: >
+13: > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
+14: > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
+15: > candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
+16: 
+17: ## 1. À qui s'adres
+… [22598 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un\n**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte\n`porte-bloc-linguistique … [1400 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |", "old_string": "| **`--strict`** | `evalu … [118 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+

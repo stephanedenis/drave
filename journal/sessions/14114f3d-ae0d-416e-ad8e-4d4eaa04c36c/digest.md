@@ -2272,3 +2272,238 @@ neuf reports/rapport-produit-bloc-l.md
 neuf reports/pensee-produit-bloc-l.json
   ```
 
+### 🤖 Assistant
+
+⏵ Construction du JSON de fiche à partir des mesures brutes
+
+- **write** `{"content": "# -*- coding: utf-8 -*-\n\"\"\"Construit reports/pensee-produit-bloc-l.json à partir des mesures de /tmp.\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport json\nimport pathlib\nimport sys\n\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\" … [32180 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/construire_json.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('''    \"niveaux\": list(__import__(\"bloc_linguistique\").NIVEAUX) if False else\n                [\"graphème\", \"morphème\", \"mot\", \"pos\", \"syntagme\" … [617 caractères tronqués]`
+
+  ```
+clean
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/audit_produit_bl/construire_json.py", line 41, in <module>
+    modes = {nom: mode(nom) for nom in ("heuristique", "mock_neuronal", "parallele", "cascade")}
+                  ~~~~^^^^^
+  File "/tmp/audit_produit_bl/construire_json.py", line 27, in mode
+    h = base["heuristique"][nom]
+        ~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'heuristique'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('    h = base[\"heuristique\"][nom]','    h = base[nom][\"all\"]')\np.write_text(s); print('fix')\nPY\npython3 construire_json.py && python3 -m json.tool /hom … [277 caractères tronqués]`
+
+  ```
+fix
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81273 octets
+JSON VALIDE
+81273 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nprint('top',list(d))\nprint('gold',d['gold']['exact'],d['gold']['couverture'],d['gold']['f1'],d['gold']['pos'],d['gold']['spans_perdus'],d['gold' … [787 caractères tronqués]`
+
+  ```
+top ['rapport', 'ligne', 'branche', 'commit', 'date', 'objet', 'verdict', 'dispositif', 'gold', 'banc_50', 'cas_limites', 'performance', 'contrat', 'compositions', 'correctifs', 'controle_negatif', 'limites', 'fichiers']
+gold 222 0.9289 0.5849 0.7581 17 cascade_pos
+modes {"heuristique": {"pos": 0.7581, "pos_ferme": 0.9004, "pos_ouvert": 0.6234, "f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "tete": 0.7336, "couverture": 0.9289, "labels": 222, "exact": 222, "exact_taux_span": 1.0}, "mock_neuronal": {"pos": 0.3454, "pos_ferme": 0.0757, "pos_ouvert": 0.6007, "f1": 0.5763, "precision": 0.72, "rappel": 0.4804, "tete": 0.7418, "couverture": 0.8326, "labels": 199, "exact": 0, "exact_taux_span": 0.0}, "parallele": {"pos": 0.7465, "pos_ferme": 0.9004, "pos_ouvert": 0.6007, "f1": 0.6141, "precision": 0.7283, "rappel": 0.5309, "tete": 0.7432, "couverture": 0.8703, "labels": 208, "exact": 208, "exact_taux_span": 1.0}, "cascade": {"pos": 0.7465, "pos_ferme": 0.9004, "pos_ouvert": 0.6007, "f1": 0.6141, "precision": 0.7283, "rappel": 0.5309, "tete": 0.7432, "couverture": 0.8703, "labels": 208, "exact": 208, "exact_taux_span": 1.0}}
+banc 0 0 0 34 149
+anom {"chevauchement_syntagme": 132, "che
+… [2476 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-produit-bloc-l.json'))\nprint(json.dumps(d['contrat'],ensure_ascii=False,indent=1)[:5000])\nprint('\\nCOMPOSITIONS')\nprint(json.dumps(d['compositions'],ensure_ascii=Fal … [223 caractères tronqués]`
+
+  ```
+{
+ "cles_annotation": [
+  "contexte",
+  "cout",
+  "etiquettes",
+  "fraction_semantique",
+  "langue",
+  "refus",
+  "script",
+  "source",
+  "texte",
+  "trace",
+  "unites_semantiques"
+ ],
+ "cles_etiquette": [
+  "candidats",
+  "confiance",
+  "debut",
+  "fin",
+  "langue",
+  "meta",
+  "niveau",
+  "script",
+  "source",
+  "type",
+  "valeur"
+ ],
+ "cles_annotation_stables": true,
+ "cles_etiquette_stables": true,
+ "niveaux": [
+  "graphème",
+  "morphème",
+  "mot",
+  "pos",
+  "syntagme",
+  "phrase",
+  "discours",
+  "pragmatique",
+  "document"
+ ],
+ "niveaux_optionnels": {
+  "morphème": 9,
+  "syntagme": 2
+ },
+ "types_par_niveau": {
+  "graphème": [
+   "chiffres",
+   "espace",
+   "lettres",
+   "ponctuation",
+   "symbole"
+  ],
+  "mot": [
+   "mot",
+   "nombre",
+   "ponctuation"
+  ],
+  "pos": [
+   "ADJ",
+   "ADV",
+   "AUX",
+   "CONJ",
+   "DET",
+   "MOT",
+   "NOUN",
+   "NUM",
+   "PREP",
+   "PRON",
+   "VERB"
+  ],
+  "syntagme": [
+   "GN",
+   "GP",
+   "GV",
+   "REL",
+   "SUB"
+  ],
+  "discours": [
+   "connecteur",
+   "paragraphe"
+  ],
+  "document": [
+   "paragraphe",
+   "titre"
+  ],
+  "phrase": [
+   "modalité",
+   "négation",
+   "type"
+  ],
+  "pragmatique": [
+   "acte",
+   "double_sens"
+  ],
+  "morphème": 
+… [5347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\ns=s.replace('\"sur_parcours_sur\": [','\"parse_sur\": [')\ns=s.replace('\"cible_close\": 16, \"cible_close_detail\"','\"cible_fermee\": 16, \"cible_fermee_detail\"')\np.w … [419 caractères tronqués]`
+
+  ```
+ok
+ancien JSON retiré
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81268 octets
+JSON VALIDE
+3109:  "parse_sur": [
+3133:   "cible_fermee": 16,
+3134:   "cible_fermee_detail": {
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\nold='''    \"langue_melangee\": {\"non_und\": sum(1 for x in extra[\"langue_melangee\"] if x[\"melange\"] != \"und\"),\n                        \"total\": len(extra[\"lan … [1579 caractères tronqués]`
+
+  ```
+patched
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81485 octets
+JSON VALIDE
+{
+ "non_und_detecter": 7,
+ "non_und_bloc": 6,
+ "total": 8,
+ "detail": [
+  {
+   "id": "f01",
+   "origine": "fr",
+   "melange": "fr",
+   "confiance": 0.3333,
+   "bloc": "fr"
+  },
+  {
+   "id": "f02",
+   "origine": "fr",
+   "melange": "fr",
+   "confiance": 0.0909,
+   "bloc": "und"
+  },
+  {
+   "id": "f03",
+   "origine": "fr",
+   "melange": "en",
+   "confiance": 0.2353,
+   "bloc": "en"
+  },
+  {
+   "id": "f20",
+   "origine": "fr",
+   "melange": "fr",
+   "confiance": 0.2222,
+   "bloc": "fr"
+  },
+  {
+   "id": "e29",
+   "origine": "en",
+   "melange": "de",
+   "confiance": 0.5,
+   "bloc": "de"
+  },
+  {
+   "id": "e30",
+   "origine": "en",
+   "melange": "it",
+   "confiance": 0.4286,
+   "bloc": "it"
+  },
+  {
+   "id": "e31",
+   "origine": "en",
+   "melange": "und",
+   "confiance": 0.0,
+   "bloc": "und"
+  },
+  {
+   "id": "e39",
+   "origine": "en",
+   "melange": "en",
+   "confiance": 0.25,
+   "bloc": "en"
+  }
+ ],
+ "lecture": "le détecteur par mots-outils n'est pas un rejeteur de bruit : au niveau du bloc (seuil 0,12), 6/8 textes à caractères mélangés reçoivent une langue, confia
+… [18 caractères tronqués]
+  ```
+

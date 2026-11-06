@@ -54,7 +54,7 @@ Critère : la tâche est réelle et non bloquée par une ressource externe, mais
 | T12 | S | Inventorier et proposer l'intégration des verdicts humains : 19 validations sur les 9 paragraphes, 150 sur la banque ; vérifier la couverture, S écrit et commite le pointeur | tools/structures/donnees/paragraphes-validations.jsonl ; validations.jsonl ; page /paragraphes | sous-module S | route /paragraphes en 404 sur 8765 ; sous-module modifié non committé | ls tools/structures/donnees/*validations*.jsonl ; curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8765/paragraphes | P1 |
 | T13 | S | Proposer la règle du nom après un adjectif hors lexique (« Le fait divers surprend ») ; S l'écrit | tools/structures/generateur.py ; tools/structures/donnees/ | T12 | sous-module S, territoire | pas de commande unique ; test dans le sous-module | P2 |
 | T14 | B9 | Resserrer la transition 9,23–9,96 M ; porter le masque dans le trainer | reports/b9-* (absent) ; tools/entrainer_native.py | N2 | objet non défini dans une fiche | pas de commande nommée | P2 |
-| T15 | B13 | gold 200+ : définir l'objet (gold linguistique 432 ou gold de pensée) avant d'exécuter | tools/tests/linguistique/gold_reel.* ; docs/pilotage/roadmap.md | v12 | libellé ambigu, 7 occurrences, aucune définition | grep -rn 'gold 200+' docs/pilotage | P1 |
+| T15 | B13 | gold 200+ : définir l'objet (gold linguistique 432 ou gold de pensée) avant d'exécuter | tools/tests/linguistique/gold_reel.* ; docs/pilotage/roadmap.md | v12 | libellé ambigu, 13 occurrences, aucune définition | grep -rn 'gold 200+' docs/pilotage | P1 |
 | T16 | PRODUIT | Appliquer les correctifs de l'audit de fiabilité du produit | reports/rapport-produit-bloc-l.md (absent) ; reports/pensee-produit-bloc-l.json (absent) ; tools/drave.py | audit 14114f3d en cours | artefact absent | bash tools/porte-produit.sh (après l'audit) | P1 |
 | T17 | DOC | Régénérer reports/INDEX.md (625 fiches annoncées, 678 sur disque) et vérifier les compteurs | reports/INDEX.md (généré) ; tools/index_reports.py | hub | l'outil réécrit l'INDEX et n'a pas de --help | python3 tools/index_reports.py (hub seulement) ; python3 tools/revue_documentation.py | P2 |
 | T18 | A2.6 | Trancher la frontière : A2.6 n'est pas libre (experts bloqués A6.2, tête refusée, A8.3a fait, lot répondu) ; le retirer de la frontière du graphe | docs/pilotage/backlog/dependances.md ; backlog/A2.6-ordonnanceur.md ; reports/rapport-a26-bilan.md | A6.2 | A6.2 (MoE local) | python3 tools/verifie_backlog.py | P1 |
@@ -87,7 +87,7 @@ Même action nommée dans plusieurs documents, ou même libellé pour deux objet
 | D2 | Les N spans | v5 (52), v7 (43), r1r3 (27), v9 (20), v10 (19), v11 (18), v12 (17) | v12 §2 : 17 spans (8 REL, 5 SUB, 4 GP) | Seul 17 est vivant ; les autres sont historiques |
 | D3 | T132/T133 | roadmap:178 ; chantiers:90 ; plan:39 et 195 ; en-cours:131 | autotest : T132 5/5, T133 5/5 | Fermer ; retirer les 5 mentions |
 | D4 | Passe complète | en-cours:131 ; plan:401 ; references:3 | ea7d3275 ; registre 06/11 (79/4) | Une seule passe de référence ; la prochaine sera 84 portes |
-| D5 | gold 200+ | roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195 | 7 occurrences, aucune définition | Définir l'objet avant d'en faire une tâche |
+| D5 | gold 200+ | roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195 | 13 occurrences, aucune définition | Définir l'objet avant d'en faire une tâche |
 | D6 | A2.6 experts | roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; backlog/A2.6 | rapport-a26-bilan.md:30 | Une seule ligne, bloquée A6.2 ; retirer de la frontière |
 
 ## 7. Périmées (18)
@@ -129,7 +129,7 @@ Ce qui n'est pas écrit dans la ligne de tâche mais qui décide de son exécuti
 | H6 | index_reports.py n'a pas de --help et réécrit l'INDEX | --help a modifié reports/INDEX.md (restauré) | Ne jamais lancer cet outil sur l'arbre partagé sans commit |
 | H7 | L'arbre bouge pendant l'inventaire | HEAD 62dad657 vers 7679a2d4 ; en-cours réécrit à 10 h 20 | Toute mesure doit nommer son HEAD ; les compteurs changent |
 | H8 | Collisions d'identifiants | manques.md N3/N4/N5 (modèle) contre roadmap N3/N4/N5 | Une tâche peut être prise pour une autre ; toujours nommer le document |
-| H9 | La passe complète coûte 2 h 29 | references:5-6 | Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers |
+| H9 | La passe complète coûte 2 h 11 (06/11) à 2 h 29 (04/11) | references:5-6 | Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers |
 | H10 | Chaque fiche neuve change les compteurs | 678/771 ; cette fiche : 679/772 ; trois fiches de vague : 682/775 | La revue échoue au prochain commit si en-cours n'est pas mis à jour |
 | H11 | Les heartbeats sont un prérequis de commit | porte-sessions : e181ce02 391 min, hub 1941 min | Rouge de coordination, pas de code |
 | H12 | eval_n2_propre.py exige un checkpoint | argparse : point positionnel | Pas de commande unique pour N2 ; nommer le checkpoint |
@@ -165,15 +165,15 @@ Ce qui n'est pas écrit dans la ligne de tâche mais qui décide de son exécuti
 
 **Protocole de commit (arbre partagé).** `git add` explicite, jamais `-A`. Index alterné (`GIT_INDEX_FILE=/tmp/index.<session> git read-tree HEAD`), puis resynchronisation de l'index principal (`git read-tree HEAD`, sans toucher à l'arbre). Ne pas committer `tools/structures` (sous-module) ni les modifications des autres sessions. Mettre à jour les compteurs **dans le même commit** : cette fiche fait passer `reports/` de **678/771** à **679/772** ; les trois fiches de vague feraient **682/775**. La revue ne signale que les compteurs ; la navigation passe parce que la fiche se lie elle-même. Un lien depuis `reports/README.md` ou l'INDEX régénéré reste la bonne pratique.
 
-**Ce que la fenêtre ne fait pas** : pas de passe complète (2 h 29, cf. `references:5-6`), pas d'écriture S/D/N2, pas de `git add -A`, pas de lancement de `index_reports.py` sur l'arbre partagé, pas de correction du gold synthétique (ce serait ajuster au test).
+**Ce que la fenêtre ne fait pas** : pas de passe complète (2 h 11 à 2 h 29, cf. `references:5-6` et le registre du 06/11), pas d'écriture S/D/N2, pas de `git add -A`, pas de lancement de `index_reports.py` sur l'arbre partagé, pas de correction du gold synthétique (ce serait ajuster au test).
 
 ## 10. Commandes vérifiées
 
-Vérification par `ls` et, quand l'outil le supporte, par `--help` ou une exécution réelle. Le tableau distingue **existe** de **exécutée** : une commande peut exister et coûter 2 h 29.
+Vérification par `ls` et, quand l'outil le supporte, par `--help` ou une exécution réelle. Le tableau distingue **existe** de **exécutée** : une commande peut exister et coûter 2 h 11 à 2 h 29.
 
 | commande | existe | exécutée | état observé |
 |---|---|---|---|
-| bash tools/toutes-les-portes.sh | oui | non (2 h 29) | 84 portes ; la passe du 06/11 a 79 vertes et 4 rouges |
+| bash tools/toutes-les-portes.sh | oui | non (2 h 11 à 2 h 29) | 84 portes ; la passe du 06/11 a 79 vertes et 4 rouges |
 | bash tools/porte-bloc-linguistique.sh | oui | oui | exit 1 ; cascade_pos 0,7465 < 0,7581 |
 | bash tools/porte-produit.sh | oui | oui | exit 0 ; 6 contrôles, autotest 183/183 |
 | bash tools/porte-sessions.sh | oui | oui | exit 1 ; heartbeats e181ce02 et 1e7ef596 |

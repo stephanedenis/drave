@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 115 |
-| Appels d'outils | 137 |
+| Messages | 119 |
+| Appels d'outils | 140 |
 | Fichiers touchés | 0 |
-| Commandes | 122 |
+| Commandes | 124 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*137 appels d'outils.* Actions notables :
+*140 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,44 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 110 autres
+- … et 112 autres
 
 **Synthèse produite :**
 
-⏵ Contrôle final de l'arbre et des fichiers livrés
+⏵ Livraison du bilan et de l'ordre des vagues
+
+Mission terminée. Les deux fichiers neufs sont écrits et validés :
+
+- `reports/rapport-file-taches.md` (215 lignes)
+- `reports/pensee-file-taches.json` (29 tâches structurées, comptes vérifiés)
+
+Ils ont été committés par la session principale dans `266b1833` ; **6 corrections factuelles** restent non committées dans l'arbre (12 +/12 −) : « gold 200+ » = **13** occurrences, et durée des passes = **2 h 11 (06/11) à 2 h 29 (04/11)**.
+
+\## Les trois files
+
+| file | nombre | contenu |
+|---|---:|---|
+| **(a) Autonomie maintenant** | **8** | T01 cascade rouge, T02 POS anglais, T03 spans, T04 r353, T05 doc produit, T06 état B13, T07 références 84 portes, T08 double §9 |
+| **(b) Coordination** | **11** | N2 porte propre, R1 aiguille, N4 consigne, S validations, S lexique, B9, gold 200+, correctifs produit, INDEX, frontière A2.6, cohérence v8 |
+| **(c) Bloquées** | **10** | Colab, FPGA, MoE, experts A2.6, corpus B1.5, `z`/B10.3, 10 scans R44, N5 gelé, chaîne R2/R3/R5, 7B local/restitution |
+
+\## Doublons et périmées
+
+- **6 doublons** : `dev/test` (4 fiches), les « N spans » (52→43→27→20→19→18→**17**), `T132/T133` (5 emplacements), la passe complète (3), `gold 200+` (13 occurrences, jamais défini), `A2.6 experts` (5 emplacements).
+- **18 périmées**, dont : T132/T133 **5/5** (pas 2/5) ; B13 **222/222** (pas 178/178) ; dev/test **fait** ; merge master **fait** (`fa1b0c6e`) ; 200 k pas N2 **fait** ; R1.2-1024 **fait** ; N3 **clos** ; R44 **plus bloquée par l'OCR** (tesseract 5.5.3 présent) ; **S a 150 verdicts humains + 19 sur les paragraphes** (la roadmap disait « aucun verdict ») ; A2.6 **pas libre** ; 83 portes → **84** ; INDEX 625 → **678**.
+
+\## Ordre proposé (09 h 30 → 12 h)
+
+La vague 0 (produit `drave` v0, `porte-produit`, autotest parallèle) est déjà faite à 09 h 56. Restent **3 vagues de 4 sous-agents max** :
+
+1. **10 h 30–11 h 00 — fermer la rouge, documenter** : `cascade`, `doc-produit`, `audit-portes`, `pos-anglais`. Portes : `bloc-linguistique`, `produit`, autotest, revue. 1 commit.
+2. **11 h 00–11 h 35 — trancher les spans et l'état** : `spans-gold`, `r353`, `s-validations`, `doc-index`. Portes : autotest, `evaluer_gold`, revue, liens. 1 commit.
+3. **11 h 35–12 h 10 — clore et publier** : `etat-final`, `produit-final`, `file-taches`, `passe-legere`. Portes : revue, tableaux, état, taille, sessions. 1 commit.
+
+\## Points de vigilance
+
+- **`cascade_pos`** : la porte est rouge dans les deux cas ; poser `DEEPSEEK_KEY_
+… [617 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -96,7 +129,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 82 autres
+- … et 84 autres
 
 ## 4. Mesures et résultats marquants
 

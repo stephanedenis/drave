@@ -217,10 +217,10 @@
    "action": "gold 200+ : définir l'objet (gold linguistique 432 ou gold de pensée) avant d'exécuter",
    "outil": "tools/tests/linguistique/gold_reel.* ; docs/pilotage/roadmap.md",
    "dependance": "v12",
-   "bloquant": "libellé ambigu, 7 occurrences, aucune définition",
+   "bloquant": "libellé ambigu, 13 occurrences, aucune définition",
    "commande": "grep -rn 'gold 200+' docs/pilotage",
    "prio": "P1",
-   "preuve": "7 occurrences dans roadmap et chantiers ; en-cours:131"
+   "preuve": "13 occurrences dans roadmap, chantiers, en-cours et plan"
   },
   {
    "id": "T16",
@@ -424,7 +424,7 @@
    "id": "D5",
    "action": "gold 200+",
    "ou": "roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195",
-   "preuve": "7 occurrences, aucune définition",
+   "preuve": "13 occurrences, aucune définition",
    "decision": "Définir l'objet avant d'en faire une tâche"
   },
   {
@@ -614,7 +614,7 @@
   },
   {
    "id": "H9",
-   "dependance": "La passe complète coûte 2 h 29",
+   "dependance": "La passe complète coûte 2 h 11 (06/11) à 2 h 29 (04/11)",
    "preuve": "references:5-6",
    "consequence": "Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers"
   },
@@ -720,7 +720,7 @@
   {
    "commande": "bash tools/toutes-les-portes.sh",
    "existe": "oui",
-   "executee": "non (2 h 29)",
+   "executee": "non (2 h 11 à 2 h 29)",
    "etat": "84 portes ; la passe du 06/11 a 79 vertes et 4 rouges"
   },
   {
@@ -840,7 +840,7 @@
  ],
  "limites": [
   "Instantané 10 h 20, HEAD 7679a2d4 ; l'arbre bouge.",
-  "Pas de passe complète (2 h 29) ; 4 rouges du registre du 06/11, seuls bloc-linguistique et sessions rejouées.",
+  "Pas de passe complète (2 h 11 à 2 h 29) ; 4 rouges du registre du 06/11, seuls bloc-linguistique et sessions rejouées.",
   "S lu, pas rejoué : 19 + 150 verdicts ; couverture par phrase à vérifier.",
   "gold 200+ non défini : classé en coordination, pas inventé.",
   "L'audit de fiabilité produit est en cours (14114f3d), sa fiche est absente.",

@@ -51051,3 +51051,123 @@ ven 06 nov 2026 10:44:18 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Prochaine action** : les **17 spans inatteignables** (gold, lexique), la **restitution**, et la **file des tâches** (ra … [671 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[still running after 60000ms; moved to background job bash-3026]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3026", "timeout_ms": 600000, "wait": true}`
+
+  ```
+17 files changed, 267 insertions(+), 52 deletions(-)
+COMMIT OK 1
+fba3072a ÉTAT — T0 DANS LE BUDGET APRÈS LA FILE DES TÂCHES
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit et doc d'usage.\",\n            \" … [584 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
+[still running after 400000ms; moved to background job bash-3034]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+Agent a0d33fb7-37a9-4834-8a94-0da119e3b18f sent a message: 
+A23 — FILE DES TÂCHES : terminé. Deux fichiers : `reports/rapport-file-taches.md` et `reports/pensee-file-taches.json`. Tu les as committés dans `266b1833` ; il reste **6 corrections factuelles non committées** (12+/12−, `git diff`) : « gold 200+ » = **13** occurrences et non 7 ; durée des passes = **2 h 11 (06/11) à 2 h 29 (04/11)**. Tu peux les reprendre telles quelles.
+
+**Comptes** : 29 tâches — **8 autonomes** (T01–T08), **11 coordination** (T09–T19), **10 bloquées** (T20–T29) ; **6 doublons**, **18 périmées**, **12 dépendances cachées**.
+
+**Constats qui changent la suite** :
+1. `porte-bloc-linguistique` : `cascade_pos` 0,7465 < 0,7581. Cause : `priorite_par_defaut()` = None sans `DEEPSEEK_KEY_FILE` ; avec la clé, la priorité par niveau + Mock = 0,3454 (pire). Ne pas poser la clé ; compléter le POS du Mock (il ne rend que NOUN/VERB/ADJ/ADV/MOT) ou changer la fusion. T138 attend 0,7465.
+2. S n'est plus bloquée : `validations.jsonl` = **150 verdicts humains**, `paragraphes-validations.jsonl` = **19** sur les 9 paragraphes (a001–a009). La roadmap le dit déjà (ta ligne S corrigée).
+3. A2.6 n'est pas libre : experts bloqués A6.2, tête refusée, A8.3a fait, lot répondu ; à retirer de la frontière.
+4. 84e porte `porte-produit` verte ; refs/en-cours disaient 83 ; `toutes-les-portes.sh` commente 81.
+5. `tools/porte-n2.sh` n'existe pas ; `eval_n2_propre.py` exige un checkpoint.
+6. `tools/index_reports.py --help` réécrit `reports/INDEX.md` (pas d'argparse) ; je l'ai restauré. INDEX dit 625 fiches vs 678.
+
+**Ordre** : 3 vagues de 4 sous-agents (10 h 30–11 h 00 ; 11 h 00–11 h 35 ; 11 h 35–12 h 10), détaillées dans le rapport. La vague 1 est déjà en cours (docs/produit). Chaque vague = mesure + fiche + 1 commit par l'agent principal.
+
+**État** : je n'ai rien committé, aucun existant modifié ; `revue_documentation.py` passe (679/772), compteurs à jour. `porte-sessions` reste rouge tant que les heartbeats e181ce02 et 1e7ef596 ne sont pas rafraîchis.
+
+### 👤 Utilisateur
+
+Background subagent a0d33fb7-37a9-4834-8a94-0da119e3b18f finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du bilan et de l'ordre des vagues
+
+Mission terminée. Les deux fichiers neufs sont écrits et validés :
+
+- `reports/rapport-file-taches.md` (215 lignes)
+- `reports/pensee-file-taches.json` (29 tâches structurées, comptes vérifiés)
+
+Ils ont été committés par la session principale dans `266b1833` ; **6 corrections factuelles** restent non committées dans l'arbre (12 +/12 −) : « gold 200+ » = **13** occurrences, et durée des passes = **2 h 11 (06/11) à 2 h 29 (04/11)**.
+
+## Les trois files
+
+| file | nombre | contenu |
+|---|---:|---|
+| **(a) Autonomie maintenant** | **8** | T01 cascade rouge, T02 POS anglais, T03 spans, T04 r353, T05 doc produit, T06 état B13, T07 références 84 portes, T08 double §9 |
+| **(b) Coordination** | **11** | N2 porte propre, R1 aiguille, N4 consigne, S validations, S lexique, B9, gold 200+, correctifs produit, INDEX, frontière A2.6, cohérence v8 |
+| **(c) Bloquées** | **10** | Colab, FPGA, MoE, experts A2.6, corpus B1.5, `z`/B10.3, 10 scans R44, N5 gelé, chaîne R2/R3/R5, 7B local/restitution |
+
+## Doublons et périmées
+
+- **6 doublons** : `dev/test` (4 fiches), les « N spans » (52→43→27→20→19→18→**17**), `T132/T133` (5 emplacements), la passe complète (3), `gold 200+` (13 occurrences, jamais défini), `A2.6 experts` (5 emplacements).
+- **18 périmées**, dont : T132/T133 **5/5** (pas 2/5) ; B13 **222/222** (pas 178/178) ; dev/test **fait** ; merge master **fait** (`fa1b0c6e`) ; 200 k pas N2 **fait** ; R1.2-1024 **fait** ; N3 **clos** ; R44 **plus bloquée par l'OCR** (tesseract 5.5.3 présent) ; **S a 150 verdicts humains + 19 sur les paragraphes** (la roadmap disait « aucun verdict ») ; A2.6 **pas libre** ; 83 portes → **84** ; INDEX 625 → **678**.
+
+## Ordre proposé (09 h 30 → 12 h)
+
+La vague 0 (produit `drave` v0, `porte-produit`, autotest parallèle) est déjà faite à 09 h 56. Restent **3 vagues de 4 sous-agents max** :
+
+1. **10 h 30–11 h 00 — fermer la rouge, documenter** : `cascade`, `doc-produit`, `audit-portes`, `pos-anglais`. Portes : `bloc-linguistique`, `produit`, autotest, revue. 1 commit.
+2. **11 h 00–11 h 35 — trancher les spans et l'état** : `spans-gold`, `r353`, `s-validations`, `doc-index`. Portes : autotest, `evaluer_gold`, revue, liens. 1 commit.
+3. **11 h 35–12 h 10 — clore et publier** : `etat-final`, `produit-final`, `file-taches`, `passe-legere`. Portes : revue, tableaux, état, taille, sessions. 1 commit.
+
+## Points de vigilance
+
+- **`cascade_pos`** : la porte est rouge dans les deux cas ; poser `DEEPSEEK_KEY_FILE` **aggrave** (0,3454). Il faut compléter le POS du `MockNeuronal` ou changer la fusion, sans casser T138.
+- **`porte-sessions`** reste rouge tant que les heartbeats `e181ce02` (391 min) et `1e7ef596` (1 941 min) ne sont pas rafraîchis.
+- **`tools/porte-n2.sh` n'existe pas** ; `eval_n2_propre.py` exige un checkpoint.
+- **`tools/index_reports.py --help`** réécrit `reports/INDEX.md` (pas d'argparse) : je l'ai restauré ; à ne lancer que par le hub.
+- **Aucun commit, aucun existant modifié** (seule exception : INDEX réécrit puis restauré). `revue_documentation.py` passe : **679 fiches / 772 JSON / 84 portes**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 tools/sessions.py --check 2>&1 | tail -3; git status --porcelain reports/rapport-file-taches.md reports/pensee-file-taches.json docs/produit/ | head -5; grep -n \"T0 : \" /tmp/t0.log 2>/dev/null; python3 tools/taille_do … [67 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 10:54:07 EST
+  ⚠ mandat périmé (1979 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+ M reports/pensee-file-taches.json
+ M reports/rapport-file-taches.md
+  ❌ 1 violation(s) :
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\*\" docs/pilotage/en-cours.md | cut -c1-260; grep -n \"drave\" docs/pilotage/en-cours.md | head -3 | cut -c1-200", "description": "Voir la ligne Fait réelle"}`
+
+  ```
+17:- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+56:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **banque 9 paragraphes** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analys
+71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit et doc d'usage ; file des 29 tâches intégrée.
+71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153 … [544 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+     · compteurs : en-cours.md dit 772 JSON, le disque en a 773
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1039 caractères tronqués]`

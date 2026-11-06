@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.2 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 103 |
-| Appels d'outils | 122 |
+| Messages | 126 |
+| Appels d'outils | 151 |
 | Fichiers touchés | 2 |
-| Commandes | 100 |
+| Commandes | 122 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*122 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 96 autres
+- … et 124 autres
 
 **Synthèse produite :**
 
-⏵ Réécriture de `exemples.md` avec les sorties CLI exactes, commande au-dessus.
+⏵ Contrôle final des sorties de la notice après les changements du hub.
 
 ## 3. Travail accompli
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 2 | 0 |
 
 ### Commandes exécutées (échantillon)
@@ -98,7 +98,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 60 autres
+- … et 82 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -146,6 +146,39 @@
 - **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
 - **T1** `**Lecture.** Le banc mesure **20 combinaisons** (4 lectures × 5 sources) et écrit un JSON de`
 - **T1** `unités     2 (61,5 %)`
+- **T1** `docs/pilotage/roadmap.md:38:**État au 06/11 10 h 45.** B13 est à **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, F1 0,5849 ; dev 153/153, test 69/69 ; **l`
+- **T1** `| `porte-homeostasie.sh` | 495 s | ✅ porte tenue (×0 exact · activité monotone · dominance reproduite) |`
+- **T1** `produit aucun événement. 15 % de zéros MXFP4 = 0,30 octet/poids économisé,`
+- **T1** `(35 M pour 6 400). Le dense, lui, calcule `784 × n_exc × 700` produits : **219 M** pour 400, **3,5 G** pour`
+- **T1** `(8,5 tok/s) parce que sa boucle de produit scalaire était limitée par une chaîne`
+- **T1** `Conséquence : les identifiants produits diffèrent dans **5,2 % des cas** (38 sur 737).`
+- **T1** `Trace produite : 17,4 Mo par couche.`
+- **T1** `0,5 à 1,2 % selon le jeu et le contexte, et le gain se reproduit sur des tokens`
+- **T1** `# Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un bit`
+- **T1** `- Le poste dominant est `proj+mlp` (le produit des experts) : **3 270,65 ms/token**`
+- **T1** `AVX2+FMA du produit scalaire (`DRAVE_SIMD_DOT=1`, ×2,06 sur la passe) — un gain`
+- **T1** `20 Go/s), mais par le **calcul de déquantification + produit scalaire**.`
+- **T1** `| **P9** — noyaux natifs | `matvec_f32` parallèle par lignes : **×9,34** sur l'attention de V4.1, **bit à bit identique** (2 544 vides comparés, 0 écart) ; déqu`
+- **T1** `grand pour compenser un routage qui perdait 10 % : le modèle produit est`
+- **T1** `> (1) **la chaîne hors-ligne reproduit le moteur** — 0,013 % (24 couches) et 0,006 % (16 couches) :`
+- **T1** `> Verdict : **personne.** Le produit théorique monte bien (17,0 % des paires au mieux à la sortie`
+- **T1** `* **la tendance du produit se retourne, et son maximum est à 8** : 16,96 % des paires au mieux —`
+- **T1** `38,1 %** (m20 ✓) — **la direction du résultat publié est reproduite** ✓, et c'est la **première`
+- **T1** `cher**. Le gain de A7.5 venait du flux **synthétique à 20 % de zéros** ; il **ne se reproduit pas**`
+- **T1** `| **restitution** (modèle spécialisé, 1 langue) | reproduit-il exactement le texte lu ? | **85,1 %** de fragments de 32 octets exacts (français), **99,4 %** d'o`
+- **T1** `> est **verte** (504 s, ×0 exact, activité monotone, dominance reproduite). Les références sont stables :`
+- **T1** `> activité monotone, dominance reproduite : m32 ×0,6 **−8,33 %** contre ×1,0 **−6,51 %**, m20 **−15,10 %**`
+- **T1** `> la dominance de ×0,6 est reproduite) entre dans la passe, et `porte-vision` y vérifie ses`
+- **T1** `calcul**, pas à la mémoire (151 936 lignes × 896 produits par jeton, en`
+- **T1** `- **Trace de calcul** : `--drvm-ppl --trace-flux` produit **6 144 listes** (16 Mo) ; rejouée sur le GGUF source et sur le DRVM, elle rend **0 liste manquante**.`
+- **T1** `- **Pas de nouvelle mesure du natif** : le **69,3 %** est repris de B11.7 ; il n'est pas reproduit ici.`
+- **T1** `- **Pas de champ natif** : le 69,3 % n’est pas reproduit ici.`
+- **T1** `- **Pas de champ natif** : le 69,3 % n’est pas reproduit.`
+- **T1** `La chaîne anglaise **reproduit la chaîne française** : −10,9 % en domaine (le français : −11,7 %),`
+- **T1** `| [rapport-matvec-f32-parallele.md](rapport-matvec-f32-parallele.md) | Rapport — Le produit matrice-vecteur f32 de V4.1 : ×9,34 sur l'attention, sans changer un`
+- **T1** `| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |`
+- **T1** `- **La mémoire** : ~50 Mo pour le module.`
+- **T1** `134:le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade`
 
 ## 5. Erreurs rencontrées
 

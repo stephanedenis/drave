@@ -3239,3 +3239,131 @@ M  docs/pilotage/en-cours.md
  M reports/rapport-file-taches.md
   ```
 
+### 🤖 Assistant
+
+⏵ Le parent a déjà committé mes fichiers : je vérifie l'écart avec ma version corrigée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat reports/rapport-file-taches.md reports/pensee-file-taches.json; echo \"=== diff md ===\"; git diff reports/rapport-file-taches.md | head -60", "description": "Diff committed vs corrected queue files"}`
+
+  ```
+reports/pensee-file-taches.json | 12 ++++++------
+ reports/rapport-file-taches.md  | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+=== diff md ===
+diff --git a/reports/rapport-file-taches.md b/reports/rapport-file-taches.md
+index 793b6bf1..6bd45cf6 100644
+--- a/reports/rapport-file-taches.md
++++ b/reports/rapport-file-taches.md
+@@ -54,7 +54,7 @@ Critère : la tâche est réelle et non bloquée par une ressource externe, mais
+ | T12 | S | Inventorier et proposer l'intégration des verdicts humains : 19 validations sur les 9 paragraphes, 150 sur la banque ; vérifier la couverture, S écrit et commite le pointeur | tools/structures/donnees/paragraphes-validations.jsonl ; validations.jsonl ; page /paragraphes | sous-module S | route /paragraphes en 404 sur 8765 ; sous-module modifié non committé | ls tools/structures/donnees/*validations*.jsonl ; curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8765/paragraphes | P1 |
+ | T13 | S | Proposer la règle du nom après un adjectif hors lexique (« Le fait divers surprend ») ; S l'écrit | tools/structures/generateur.py ; tools/structures/donnees/ | T12 | sous-module S, territoire | pas de commande unique ; test dans le sou
+… [6511 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final de l'arbre et des fichiers livrés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v -E '^ M journal|^M  journal|^D  journal|^MM journal|^\\?\\? journal|^ m tools/structures' | head -20; echo \"--- mes fichiers ---\"; git status --short reports/rapport-file-taches.md reports/pensee-file-t … [120 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-file-taches.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-file-taches.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- mes fichiers ---
+ M reports/pensee-file-taches.json
+ M reports/rapport-file-taches.md
+--- HEAD ---
+266b1833 ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)
+b2196cc7 PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière revue après les ajouts du parent (docs/produit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py >/tmp/revue_final.out 2>&1; echo \"EXIT=$?\"; tail -8 /tmp/revue_final.out; echo \"--- docs count ---\"; find docs -name '*.md' -not -path '*/archive/*' -not -name 'README.md' | wc -l" … [80 caractères tronqués]`
+
+  ```
+EXIT=0
+  revue de documentation · 679 fiche(s) · 772 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+--- docs count ---
+456
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure du delta final à transmettre au parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat reports/rapport-file-taches.md reports/pensee-file-taches.json; echo \"---\"; git diff --numstat reports/rapport-file-taches.md reports/pensee-file-taches.json", "description": "Show final diff stat"}`
+
+  ```
+reports/pensee-file-taches.json | 12 ++++++------
+ reports/rapport-file-taches.md  | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+---
+6	6	reports/pensee-file-taches.json
+6	6	reports/rapport-file-taches.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat final au parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "A23 — FILE DES TÂCHES : terminé. Deux fichiers : `reports/rapport-file-taches.md` et `reports/pensee-file-taches.json`. Tu les as committés dans `266b1833` ; il reste **6 corrections factuelles non committées** (12+/12−, `git diff`) :  … [1751 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison du bilan et de l'ordre des vagues
+
+Mission terminée. Les deux fichiers neufs sont écrits et validés :
+
+- `reports/rapport-file-taches.md` (215 lignes)
+- `reports/pensee-file-taches.json` (29 tâches structurées, comptes vérifiés)
+
+Ils ont été committés par la session principale dans `266b1833` ; **6 corrections factuelles** restent non committées dans l'arbre (12 +/12 −) : « gold 200+ » = **13** occurrences, et durée des passes = **2 h 11 (06/11) à 2 h 29 (04/11)**.
+
+## Les trois files
+
+| file | nombre | contenu |
+|---|---:|---|
+| **(a) Autonomie maintenant** | **8** | T01 cascade rouge, T02 POS anglais, T03 spans, T04 r353, T05 doc produit, T06 état B13, T07 références 84 portes, T08 double §9 |
+| **(b) Coordination** | **11** | N2 porte propre, R1 aiguille, N4 consigne, S validations, S lexique, B9, gold 200+, correctifs produit, INDEX, frontière A2.6, cohérence v8 |
+| **(c) Bloquées** | **10** | Colab, FPGA, MoE, experts A2.6, corpus B1.5, `z`/B10.3, 10 scans R44, N5 gelé, chaîne R2/R3/R5, 7B local/restitution |
+
+## Doublons et périmées
+
+- **6 doublons** : `dev/test` (4 fiches), les « N spans » (52→43→27→20→19→18→**17**), `T132/T133` (5 emplacements), la passe complète (3), `gold 200+` (13 occurrences, jamais défini), `A2.6 experts` (5 emplacements).
+- **18 périmées**, dont : T132/T133 **5/5** (pas 2/5) ; B13 **222/222** (pas 178/178) ; dev/test **fait** ; merge master **fait** (`fa1b0c6e`) ; 200 k pas N2 **fait** ; R1.2-1024 **fait** ; N3 **clos** ; R44 **plus bloquée par l'OCR** (tesseract 5.5.3 présent) ; **S a 150 verdicts humains + 19 sur les paragraphes** (la roadmap disait « aucun verdict ») ; A2.6 **pas libre** ; 83 portes → **84** ; INDEX 625 → **678**.
+
+## Ordre proposé (09 h 30 → 12 h)
+
+La vague 0 (produit `drave` v0, `porte-produit`, autotest parallèle) est déjà faite à 09 h 56. Restent **3 vagues de 4 sous-agents max** :
+
+1. **10 h 30–11 h 00 — fermer la rouge, documenter** : `cascade`, `doc-produit`, `audit-portes`, `pos-anglais`. Portes : `bloc-linguistique`, `produit`, autotest, revue. 1 commit.
+2. **11 h 00–11 h 35 — trancher les spans et l'état** : `spans-gold`, `r353`, `s-validations`, `doc-index`. Portes : autotest, `evaluer_gold`, revue, liens. 1 commit.
+3. **11 h 35–12 h 10 — clore et publier** : `etat-final`, `produit-final`, `file-taches`, `passe-legere`. Portes : revue, tableaux, état, taille, sessions. 1 commit.
+
+## Points de vigilance
+
+- **`cascade_pos`** : la porte est rouge dans les deux cas ; poser `DEEPSEEK_KEY_FILE` **aggrave** (0,3454). Il faut compléter le POS du `MockNeuronal` ou changer la fusion, sans casser T138.
+- **`porte-sessions`** reste rouge tant que les heartbeats `e181ce02` (391 min) et `1e7ef596` (1 941 min) ne sont pas rafraîchis.
+- **`tools/porte-n2.sh` n'existe pas** ; `eval_n2_propre.py` exige un checkpoint.
+- **`tools/index_reports.py --help`** réécrit `reports/INDEX.md` (pas d'argparse) : je l'ai restauré ; à ne lancer que par le hub.
+- **Aucun commit, aucun existant modifié** (seule exception : INDEX réécrit puis restauré). `revue_documentation.py` passe : **679 fiches / 772 JSON / 84 portes**.
+

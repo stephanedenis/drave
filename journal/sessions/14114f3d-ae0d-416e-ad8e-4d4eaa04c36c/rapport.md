@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.2 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 64 |
-| Appels d'outils | 77 |
-| Fichiers touchés | 5 |
-| Commandes | 59 |
+| Messages | 71 |
+| Appels d'outils | 84 |
+| Fichiers touchés | 6 |
+| Commandes | 65 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,11 +41,11 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 51 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-⏵ Construction du banc de 50 phrases libres et du harnais d'audit
+⏵ Construction du JSON de fiche à partir des mesures brutes
 
 ## 3. Travail accompli
 
@@ -58,6 +58,7 @@
 | `/tmp/audit_produit_bl/performance.py` | 1 | 0 |
 | `/tmp/audit_produit_bl/performance_final.py` | 1 | 0 |
 | `/tmp/audit_produit_bl/extra.py` | 1 | 0 |
+| `/tmp/audit_produit_bl/construire_json.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -101,7 +102,7 @@
 - **T1** Profiler une analyse de 2000 mots
 - **T1** Contrôles négatifs et simulation du correctif chevauchement
 - **T1** Tester les mutations et simuler la déduplication sur le gold
-- … et 19 autres
+- … et 25 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -123,12 +124,14 @@
 - **T1** `e34 'The prices rose by 12.5% between January and March 2024, three points ' | nb 1`
 - **T1** `### e34 'The prices rose by 12.5% between January and March 2024, three points more than expected.'`
 - **T1** `[(0, 22, "'The prices rose by 12.'"), (22, 89, "'5% between January and March 2024, three points more than expected.'")]`
+- **T1** `"valeur = texte[debut:fin] pour graphème/mot/pos/syntagme (100 %)"`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : MOTS 'https://example.com/a.pdf' [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (
 - **T1** : SIMULATION dedupe: paires 132 -> 0 | syntagmes 362 -> 292 | attachements 265 -> 215 | phrases 31 labels syntagme retirés 70 attachements retirés 50 [stderr] Traceback (most recent call last):   File "
 - **T1** : ### mutations span_hors_texte detectee True | ['chevauchement_syntagme', 'span_hors_texte'] cible_absente detectee True | ['chevauchement_syntagme', 'cible_absente'] chevauchement_syntagme detectee Tr
+- **T1** : clean [stderr] Traceback (most recent call last):   File "/tmp/audit_produit_bl/construire_json.py", line 41, in <module>     modes = {nom: mode(nom) for nom in ("heuristique", "mock_neuronal", "paral
 
