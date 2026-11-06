@@ -2556,3 +2556,91 @@ pas de tools/__init__.py (namespace package)
 docs/produit absent
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-files --error-unmatch data/udhr/articles.jsonl >/dev/null 2>&1 && echo \"versionné\" || echo \"non versionné\"; git check-ignore -v data/udhr/articles.jsonl 2>/dev/null || true", "description": "Check if UDHR corpus is version … [4 caractères tronqués]`
+
+  ```
+non versionné
+.gitignore:5:data/	data/udhr/articles.jsonl
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la reproductibilité des profils UDHR hors corpus versionné.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"articles.jsonl\" tools/*.py tools/*.sh 2>/dev/null | head -10; ls tools/ | grep -i udhr", "description": "Find UDHR profile builder"}`
+
+  ```
+tools/bloc_linguistique.py:25:    python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl
+tools/bloc_linguistique.py:2164:    ap.add_argument("--profils", default="", help="articles.jsonl UDHR pour les profils de langue")
+tools/bloc_linguistique.py:2168:    ap.add_argument("--udhr", default=str(RACINE / "data/udhr/articles.jsonl"))
+tools/extraire_evals_langues.py:24:UDHR = RACINE / "data/udhr/articles.jsonl"
+tools/importer_udhr.py:20:  · `articles.jsonl` : une ligne par (fichier, article) — le **texte normalisé** ✓.
+tools/importer_udhr.py:99:    (sortie / "articles.jsonl").write_text("".join(json.dumps(x, ensure_ascii=False) + "\n" for x in articles))
+tools/importer_udhr.py:111:    print(f"  ✓ écrit dans {sortie}/langues.jsonl et {sortie}/articles.jsonl")
+tools/preparer_udhr.py:33:    arts = [json.loads(l) for l in pathlib.Path("data/udhr/articles.jsonl").read_text().splitlines()]
+tools/porte-bloc-linguistique.sh:8:python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+extrait_udhr.py
+genealogie_udhr.py
+importer_udhr.py
+preparer_udhr.py
+restitution_udhr.py
+retri
+… [69 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,45p tools/importer_udhr.py", "description": "Confirm UDHR importer source/network"}`
+
+  ```
+#!/usr/bin/env python3
+"""importer_udhr.py — LE CORPUS PARALLÈLE UDHR : 400+ langues, 30 articles alignés.
+
+POURQUOI CE CORPUS. Pour tester une **couche commune** qui abstrait la langue, il faut **le même contenu dans
+beaucoup de langues** ✓✓ : c'est la seule façon de séparer « ce qui est dit » de « la langue qui le dit » ✓. La
+**Déclaration universelle des droits de l'homme** est le texte le plus traduit du monde ✓ — et le corpus Unicode
+UDHR (Office of the High Commissioner for Human Rights ✓) la donne en **459 fichiers XML**, avec le **même
+découpage en 30 articles** ✓✓.
+
+CE QU'IL Y A DANS LE CORPUS, ET C'EST TOUT L'INTÉRÊT ✓ :
+  · **404 langues** avec leurs métadonnées (iso639-3, nom, **écriture**, sens d'écriture ✓) ;
+  · **32 langues ont PLUSIEURS variantes** ✗✓ (l'occitan en a **7** ✓, le roumain 3, le hunde 3, l'allemand 2,
+    le chinois 2, le grec 2…) — ce sont des **traductions différentes de la même langue**, exactement ce qu'il
+    faut pour mesurer un **style de traducteur** ✓✓ ;
+  · **30 articles alignés** (le même numéro = le même sens ✓✓) — c'est notre unité parallèle ✓ ;
+  · et **7 écritures** dominantes (latin 324, cyrillique 29, arabe 8, devanagari 7, et le rest
+… [1100 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json tools/tests/linguistique/gold_gele.json; do git ls-files --error-unmatch \"$f\" >/dev/null 2>&1 && ech … [101 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/gold.json versionné
+tools/tests/linguistique/gold_reel.json versionné
+tools/tests/linguistique/gold_synthetique.json versionné
+tools/tests/linguistique/gold_gele.json versionné
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation des one-liners réels qui iront dans la notice.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && printf \"Le livre que j'ai lu est intéressant.\\n\" > /tmp/doc_produit/page.txt\necho \"--- ex1\"; python3 tools/bloc_linguistique.py --texte \"Le chat dort.\" --json | jq -r '\"\\(.langue) \\(.script) · \" + ([.etiquettes[]|select(. … [893 caractères tronqués]`
+
+  ```
+--- ex1
+fr Latn · GN Le chat [0:7] → dort · GV dort [8:12] → chat
+--- ex2
+fr Latn · 42 étiquettes · GN Le livre → intéressant · REL que j'ai lu → livre · REL que j'ai lu est intéressant → livre · GV est intéressant → livre
+--- ex4
+identique · c1f3c76a5a40fcbd…
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de `docs/produit/README.md`.
+
+- **bash** `{"command": "mkdir -p /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit && echo ok", "description": "Create product docs directory"}`
+
+  ```
+ok
+  ```
+

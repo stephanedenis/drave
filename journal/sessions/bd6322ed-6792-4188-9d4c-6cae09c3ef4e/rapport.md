@@ -9,7 +9,7 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 41 |
+| Messages | 42 |
 | Appels d'outils | 65 |
 | Fichiers touchés | 2 |
 | Commandes | 49 |
@@ -45,7 +45,64 @@
 
 **Synthèse produite :**
 
-⏵ Sending the measured result to the parent agent
+\## Livré
+
+Deux fichiers neufs, et eux seuls :
+
+- **`tools/drave.py`** (388 lignes) — point d'entrée produit `drave` v0.1.0 : `analyser`, `evaluer`, `rejouer`, `--version`, `--aide`.
+- **`tools/tests/test_produit.py`** (110 lignes) — smoke test de bout en bout, **6 tests / 8 assertions**, exécutable directement et sous `pytest`.
+
+Aucun fichier existant modifié, **aucun commit de ma part**. À signaler : le commit concurrent `62dad657` (« B13 — LE PREMIER PRODUIT… ») contient déjà ces deux fichiers ; `git diff HEAD` est vide sur eux.
+
+\## Commandes
+
+```bash
+python3 tools/drave.py analyser "Le chat dort."
+python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+python3 tools/drave.py evaluer              # gold vivant (612 phrases)
+python3 tools/drave.py evaluer --gold       # gold gelé (602 phrases, référence figée)
+python3 tools/drave.py evaluer --json       # mesures complètes
+python3 tools/drave.py rejouer "Le chat dort."
+python3 tools/drave.py --version | --aide
+```
+
+Codes de sortie : **0** succès · **2** usage (langue inconnue, argument/commande manquant) · **1** erreur ou refus d'analyse (`analyser ""`). `--json` exclut `duree_s` pour rester déterministe ; les temps se mesurent à l'extérieur.
+
+\## Sortie d'exemple
+
+```text
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 …
+```
+
+\## Tests
+
+```text
+python3 tools/tests/test_produit.py      → 6 tests, OK, 1,33 s
+python3 -m pytest tools/tests/test_produit.py -q → 6 passed, 1,28 s
+```
+
+Ils couvrent : phrase française (POS/syntagme/rôle/cible/acte), phrase anglaise, JSON valide et stable sur deux appels, `rejouer` identique, `--version`/`--aide`, et code 2 d'usage.
+
+\## Mesures (5 runs, médiane)
+
+| commande | temps | stdout |
+|---|---:|---:|
+| `--version` | 0,13 s | 12 o |
+| `analyser "Le chat dort."` | 0,13 s | 585 o |
+| `analyser` fr long (55 car.) | 0,13 s | 1 005 o |
+| `analyser` en | 0,13 s | 699 o |
+| `analyser "Le chat dort." --json` | 0,13 s | **5 561 o** |
+| `analyser` en `--json` | 0,13 s | **8 704 o** |
+| `analyser` fr long `--json` | 0,13 s | **16 100 o** 
+… [1622 caractères tronqués]
 
 ## 3. Travail accompli
 

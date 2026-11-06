@@ -2405,3 +2405,249 @@ rapport-n2-r12-2048.md
 … [3131 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -i \"aiguille\" reports/rapport-n2-r11.md reports/rapport-n2-r12-2048.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -12; echo \"--- R1.1 done? ---\"; grep -n -i \"porte R1.1\\|tenue\\|non atteinte\" reports/ra … [75 caractères tronqués]`
+
+  ```
+reports/rapport-n2-r12-2048.md:122:limite dure de R1 — et la raison pour laquelle la porte « aiguille native ≥ 15/18 à 4 000 octets »
+docs/pilotage/roadmap.md:79:5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
+docs/pilotage/roadmap.md:236:| **R1 — la fenêtre native** | contexte hiérarchique, curriculum, tokenisation | PPL à 1 000 octets, aiguille native, stabilité | R0, N1 ; plafonné par N2 |
+docs/pilotage/roadmap.md:267:| **R1.1** | **contexte hiérarchique** : [span](../theorie/glossaire/entrees/span.md) → paragraphe → section → document, avec un **état de section** ; le modèle n'a pas besoin de voir toute la page | ⏳ | PPL à 1 000 octets dans un facteur **1,5** de celle à 129 ; aiguille **native** ≥ 15/18 à 4 000 octets |
+--- R1.1 done? ---
+5:> la PPL à 1 000 octets de **8,2024** à **3,2545** : la **porte R1.1** (1 000 octets dans un
+6:> facteur **1,5** de la PPL à 129) est tenue à **0,97×** contre **2,33×**, et la PPL à 128
+119:**Donc la porte 1,5 de R1.1 est tenue par un modèle déjà entraîné (0,97×), pas par le schéma
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '110,130p' reports/rapport-n2-r12-2048.md", "description": "Read R1.2 needle limitation"}`
+
+  ```
+Le motif est **le même à toutes les tailles** : à 128 octets la fenêtre courte gagne de 0,05 à
+0,08 ; dès 512 elle perd **2,7** (11,47 M) et **2,8** (21,65 M). La fenêtre n'est donc **pas un
+luxe de gros modèle** : elle est la condition pour que la longueur existe, du plus petit au plus
+grand. Les niveaux absolus ne se comparent pas d'une taille à l'autre (les bras 34,3 M partent
+d'un modèle déjà entraîné, ceux-ci de zéro) ; c'est le **contraste fenêtre** qui est mesuré ici.
+
+## 4. Le miroir de copie reste muet
+
+Sur tous les modèles de la nuit, la justesse de copie à distance est **0,0078** au mieux (le
+hasard de 1/128), y compris à fenêtre 1 024 et sur la production affinée. **La fenêtre plus large
+ne crée pas de circuit de copie** : la PPL baisse, la restitution ne vient pas avec. C'est la
+limite dure de R1 — et la raison pour laquelle la porte « aiguille native ≥ 15/18 à 4 000 octets »
+n'est pas atteinte.
+
+## Ce que ça change
+
+- **La recette de production recommandée** devient : mélange 1 Go, RoPE, **fenêtre 1 024**,
+  autant de pas qu'on peut payer — pas 128. La fenêtre 512 reste le compromis à bas budget, et
+  2 048 n'a pas d'intérêt à budget d'octets fixé.
+- **La porte < 2,5 
+… [75 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des lignes B9 et A2.6 (encore ouvertes ?)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -i \"9,23\\|9.23\\|masque\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-*.md 2>/dev/null | grep -i -E \"9,23|9.23|masque\" | head -10; echo \"--- A2.6 reports ---\"; ls reports/ | grep -i a26 | head; e … [173 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:174:| **B9** | le banc externe et l'[élève](../theorie/glossaire/entrees/eleve.md) natif : DeepSeek, 610/910 prompts | ✅ | resserrer la transition **9,23–9,96 M** ; porter le masque dans le trainer |
+docs/pilotage/roadmap.md:273:**14,11** à **3,25**), et au-delà c'est l'**entraînement** qui verrouille, pas le masque (élargir
+reports/rapport-architecture-memoire.md:265:cœurs seuls, parce que deux fils d'une même paire masquent mutuellement la
+reports/rapport-audit-r1r3.md:253:| `r273` | fr | REL | reel | 9:23 | « qui pousse ici » | `fleur` | régression R1a |
+reports/rapport-audit-r1r3.md:285:au sens `exact / labels` (129/129, 83/83), mais elle masque le **recul français de 6 exacts**
+reports/rapport-audit-v10.md:194:  La fiche v9 ne mentionne pas `r303` ; le dev reste à 152/152, ce qui masque l'échange.
+reports/rapport-audit-v10.md:281:mesurées : `T153` top-1/exact 0,9205, `T161` 220/239, `T162` top-k 219/239 et tête 219/220,
+reports/rapport-audit-v10.md:295:| T162 | 211/239 (0,8828) | **219/239 (0,9163)** |
+reports/rapport-audit-v10.md:300:| T173 | 211/212 (0,9953) ; 211/239 (0,8828) | **219/220 (0,9955) ; 219/239 (0,9163)** |
+reports/rapport-cache-chunker.
+… [854 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' reports/rapport-a26-bilan.md", "description": "Read A2.6 bilan verdict"}`
+
+  ```
+# A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués
+
+> **Ligne de roadmap** : A2.6 · **Date** : 2026-10-29 · **Verdict** : ⚠️ **partielle** — la règle
+> générique et le KV sont mesurés ; la tête 4 bits est refusée par la perte ; les experts attendent
+> **A6.2** (pas de MoE local). A2.6 ne peut pas être « complétée » sans cette brique.
+>
+> **Dispositif** : bilan des mesures existantes (`placement.rs`, `rapport-placement-kv-8k.md`,
+> `rapport-regle-placement-perte.md`, A8.3) ; **pas de nouvelle mesure** ; données
+> [`a26-bilan.json`](a26-bilan.json).
+
+## Le bilan
+
+| partie | état | preuve |
+|---|---|---|
+| `choisir` générique | ✅ fait | `placement.rs`, 4 tests ; `kv_en_vram` appliqué dans `model.rs` |
+| KV en VRAM | ✅ mesuré | ×1,93 au préremplissage 8 k, ×5,8 sur l’attention |
+| tête 4 bits | ❌ refusée | +10 % de PPL ; `choisir_avec_perte` la refuse à 5 % |
+| experts | 🧱 bloqué | **A6.2** — pas de MoE local à router |
+| place + perte | 🔬 opt-in | A8.3 : le défaut déplace les portes ; **A8.3a** à venir |
+
+## Le contrôle négatif
+
+- `choisir_avec_perte` refuse la tête 4 bits à un budget de 5 % : la place ne suffit pas, la per
+… [879 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i a83; echo \"---\"; grep -rn -i \"A8.3a\\|A8.3c\\|A8.3d\" reports/*.md docs/pilotage/*.md 2>/dev/null | head -12", "description": "Check A8.3a/c/d status"}`
+
+  ```
+a83a-coupe.json
+a83a-flux.json
+a83a-pont.json
+a83b-decision.json
+a83b-lot.json
+a83b-regimes.json
+a83c-ctx.json
+a83c-lot.json
+a83-defaut.json
+a83d-lot-threads.json
+rapport-a83a-coupe.md
+rapport-a83a-flux.md
+rapport-a83a-pont.md
+rapport-a83b-decision.md
+rapport-a83b-lot.md
+rapport-a83b-regimes.md
+rapport-a83c-ctx.md
+rapport-a83c-lot.md
+rapport-a83-defaut.md
+rapport-a83d-lot-threads.md
+---
+reports/INDEX.md:45:| [rapport-a83a-coupe.md](rapport-a83a-coupe.md) | A8.3a — `porte-coupe` : le régime 1 % écrase la variance du point de coupe |
+reports/INDEX.md:46:| [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |
+reports/INDEX.md:47:| [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |
+reports/INDEX.md:51:| [rapport-a83c-ctx.md](rapport-a83c-ctx.md) | A8.3c.1 — le signe du mélange ne dépend pas de la taille du contexte |
+reports/INDEX.md:52:| [rapport-a83c-lot.md](rapport-a83c-lot.md) | A8.3c — le lot n'est pas neutre : la « non-monotonie » du KV était un effet de chemin |
+reports/INDEX.md:53:| [rapport-a83d-lot-threads.md](rapport-a83d-lot-threads.md) | A8.3d — le lot n'est pas le
+… [817 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -25 reports/rapport-a26-lot-disque.md; echo \"--- fin ---\"; tail -14 reports/rapport-a26-lot-disque.md", "description": "Read A2.6 lot disque verdict"}`
+
+  ```
+# A2.6 / A8.3 — le lot sur le disque : il accélère le calcul, il ne divise pas les lectures
+
+> **Verdict.** Sur un modèle **dense** de 0,5 Go (Qwen2.5-0.5B-Q8), avec l'**éviction du cache**
+> (`posix_fadvise(DONTNEED)`) : le lot **ne divise pas** les lectures du disque — **503 Mio** au lot 1,
+> **502 Mio** aux lots 2, 4 et 8 (le modèle est lu une fois, quel que soit le lot). Le lot
+> **accélère le calcul** : **24,0 → 30,5 tok/s** (+27 %) dès le lot 2, et le temps mural passe de
+> **12,04 s à 9,96 s**. La **PPL** ne bouge presque pas : **15,8452** (lot 1) → **15,8443** (lot 2+),
+> soit **−0,006 %**.
+>
+> **Date** : 2026-11-01. **Lignes** : A2.6 (ordonnanceur) et A8.3 (le lot). **Machine** : CPU seul.
+> **Dispositif** : `tools/mesure_lot_disque.sh`, 192 jetons (les 85 626 jetons de
+> `data/wikitext2_test.txt`), ctx 512, 20 fils, cache du modèle évincé avant chaque lot.
+
+## 1. La question
+
+A2.6 : « réduire le lot » — le lot réduit-il les lectures du disque ? A8.3c avait montré, sur le
+français en f32, que le lot déplace la PPL à lui seul (61,9920 au lot 1, 60,8135 au lot ≥ 2). Ici :
+le lot, sur l'**anglais**, en **Q8**, sur un modèle **dense**.
+
+## 2. Ce qui est mesuré
+
+| lot | PPL | l
+… [933 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Détection des fiches orphelines (non indexées)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-a26-lot-disque.md rapport-produit-v0.md rapport-autotest-parallele.md rapport-s-paragraphes.md rapport-pensee-v12.md; do printf \"%-40s \" \"$f\"; grep -c \"$f\" reports/INDEX.md reports/README.md 2>/dev/null | tr '\ … [169 caractères tronqués]`
+
+  ```
+rapport-a26-lot-disque.md                reports/INDEX.md:1 reports/README.md:0 
+rapport-produit-v0.md                    reports/INDEX.md:0 reports/README.md:1 
+rapport-autotest-parallele.md            reports/INDEX.md:0 reports/README.md:1 
+rapport-s-paragraphes.md                 reports/INDEX.md:1 reports/README.md:0 
+rapport-pensee-v12.md                    reports/INDEX.md:0 reports/README.md:1 
+--- index tool ---
+  675 fiches → reports/INDEX.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle d'effet de bord : `index_reports.py` a-t-il réécrit l'INDEX ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short reports/INDEX.md reports/README.md; echo \"--- diff stat ---\"; git diff --stat reports/INDEX.md reports/README.md", "description": "Check if reports index was modified"}`
+
+  ```
+M reports/INDEX.md
+--- diff stat ---
+ reports/INDEX.md | 52 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
+  ```
+
+### 🤖 Assistant
+
+⏵ Annulation de ma modification accidentelle de `reports/INDEX.md`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff reports/INDEX.md | head -20; echo \"--- restore ---\"; git restore -- reports/INDEX.md; echo \"EXIT=$?\"; git status --short reports/INDEX.md; echo \"(vide = restauré)\"", "description": "Inspect and restore accidental index … [9 caractères tronqués]`
+
+  ```
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index 0e5483c2..fc51b638 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tools/index_reports.py` — **625 fiches**. Les fichiers
++> **Généré** par `tools/index_reports.py` — **675 fiches**. Les fichiers
+ > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+ > la page d'état, elle, compte tous les `.md` de `reports/`.
+ 
+@@ -54,9 +54,16 @@
+ | [rapport-aiguille-topk.md](rapport-aiguille-topk.md) | Rapport — l'attention creuse perd-elle l'information ? (aiguille × `--attn-topk`) |
+ | [rapport-aiguille.md](rapport-aiguille.md) | L'aiguille dans la botte de foin : où en est la mesure de qualité |
+ | [rapport-analyse-flux.md](rapport-analyse-flux.md) | Analyse du flux, couche par couche |
++| [rapport-annotation-independante.md](rapport-annotation-independante.md) | Contrôle indépendant de la convention d'attachement — 20 segments annotés à la main |
+ | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
+ | [rapport-attention-creuse.md](rappor
+… [248 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification qu'aucun autre outil n'a modifié l'arbre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -v -E '^ M journal|^M  journal|^D  journal|^MM journal|^\\?\\? journal|^ m tools/structures' | head -25", "description": "List remaining worktree changes excluding pre-existing"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-produit-v0.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --cached --stat reports/rapport-produit-v0.md; git diff --cached reports/rapport-produit-v0.md | head -25", "description": "Inspect staged product fiche change"}`
+
+  ```
+reports/rapport-produit-v0.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/reports/rapport-produit-v0.md b/reports/rapport-produit-v0.md
+index 1aaddfaa..b41ddb68 100644
+--- a/reports/rapport-produit-v0.md
++++ b/reports/rapport-produit-v0.md
+@@ -15,8 +15,8 @@
+ | commande | sortie | mesure |
+ |---|---|---|
+ | `drave.py analyser "Le chat dort sur le toit."` | POS, syntagmes (GN/GV/GP, rôle, cible), pragmatique, couverture | 32 étiquettes, 3 segments |
+-| `drave.py analyser … --langue en --json` | le même en JSON complet | 4 013 octets, JSON valide |
+-| `drave.py evaluer` | POS, F1 syntagmes, attachement (exact, couverture) | 183/183 portes |
++| `drave.py analyser … --langue en --json` | le même en JSON complet | 8 704 o (fr court 5 561 o, fr long 16 100 o) |
++| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |
+ | `drave.py rejouer "…"` | deux analyses, sha256 identique | `6b6def47…` deux fois |
+ | `drave.py --version` | `drave 0.1.0` | — |
+  ```
+

@@ -9,10 +9,10 @@
 | Début | 2026-11-06 09:31 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 70 |
-| Appels d'outils | 85 |
+| Messages | 72 |
+| Appels d'outils | 87 |
 | Fichiers touchés | 0 |
-| Commandes | 73 |
+| Commandes | 75 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*85 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 63 autres
+- … et 65 autres
 
 **Synthèse produite :**
 
-⏵ Vérification de la reproductibilité des profils UDHR hors corpus versionné.
+⏵ Rédaction de `docs/produit/README.md`.
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 33 autres
+- … et 35 autres
 
 ## 4. Mesures et résultats marquants
 

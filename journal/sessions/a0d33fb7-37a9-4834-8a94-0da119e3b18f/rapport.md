@@ -7,12 +7,12 @@
 | Identifiant | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 78 |
-| Appels d'outils | 94 |
+| Messages | 88 |
+| Appels d'outils | 106 |
 | Fichiers touchés | 0 |
-| Commandes | 82 |
+| Commandes | 94 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier tout … [2209 caractères tronqués]
 
-*94 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - bash — List recent reports and pilotage docs
@@ -41,11 +41,11 @@
 - bash — Find 06/11 gate pass artifacts and commits
 - bash — Read 06/11 registry failures
 - bash — Inspect 06/11 red gate logs
-- … et 69 autres
+- … et 81 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des lignes B9 et A2.6 (encore ouvertes ?)
+⏵ Extraction du refus r353 dans les mesures existantes
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Locate Cascade, MockNeuronal and priority code
 - **T1** Read MockNeuronal, fusion and Cascade code
 - **T1** Run gold evaluation with key env var set
-- … et 42 autres
+- … et 54 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -149,6 +149,16 @@
 - **T1** `| tête 4 bits | ❌ refusée | +10 % de PPL ; `choisir_avec_perte` la refuse à 5 % |`
 - **T1** `- `choisir_avec_perte` refuse la tête 4 bits à un budget de 5 % : la place ne suffit pas, la perte`
 - **T1** `**testée**. La suite est **A6.2** (bloqué) ou **A8.3a** (épingler le régime 1 %), pas un nouveau`
+- **T1** `reports/INDEX.md:45:| [rapport-a83a-coupe.md](rapport-a83a-coupe.md) | A8.3a — `porte-coupe` : le régime 1 % écrase la variance du point de coupe |`
+- **T1** `reports/INDEX.md:46:| [rapport-a83a-flux.md](rapport-a83a-flux.md) | A8.3a — `porte-flux` : le régime 1 % a ses propres références |`
+- **T1** `reports/INDEX.md:47:| [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |`
+- **T1** `reports/INDEX.md:53:| [rapport-a83d-lot-threads.md](rapport-a83d-lot-threads.md) | A8.3d — le lot n'est pas les threads : l'écart de 1,90 % survit à 1 thread |`
+- **T1** `reports/rapport-a26-bilan.md:32:**testée**. La suite est **A6.2** (bloqué) ou **A8.3a** (épingler le régime 1 %), pas un nouveau`
+- **T1** `reports/rapport-a26-lot-disque.md:37:diffère ; l'écart de 1,9 % d'A8.3c (le français, f32) ne se retrouve pas ici (l'anglais, Q8). Le`
+- **T1** `> **accélère le calcul** : **24,0 → 30,5 tok/s** (+27 %) dès le lot 2, et le temps mural passe de`
+- **T1** `> soit **−0,006 %**.`
+- **T1** `- **La PPL à 192 jetons** : ce n'est pas la PPL du corpus ; l'écart de lot (0,006 %) est un ordre de`
+- **T1** `+| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |`
 
 ## 5. Erreurs rencontrées
 

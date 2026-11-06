@@ -7,12 +7,12 @@
 | Identifiant | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 0.5 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 34 |
-| Appels d'outils | 45 |
-| Fichiers touchés | 3 |
-| Commandes | 29 |
+| Messages | 42 |
+| Appels d'outils | 55 |
+| Fichiers touchés | 4 |
+| Commandes | 38 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2209 caractères tronqués]
 
-*45 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Lister outils, tests linguistiques, rapports
@@ -41,7 +41,7 @@
 - bash — Lire le contrat documenté du bloc
 - bash — Lire la suite du contrat documenté
 - bash — Vérifier le corpus UDHR et ses codes langue
-- … et 19 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
@@ -56,6 +56,7 @@
 | `/tmp/audit_produit_bl/phrases.py` | 1 | 0 |
 | `/tmp/audit_produit_bl/audit.py` | 1 | 0 |
 | `/tmp/audit_produit_bl/performance.py` | 1 | 0 |
+| `/tmp/audit_produit_bl/performance_final.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -88,6 +89,15 @@
 - **T1** Quantifier attachements, titres, connecteurs, URL
 - **T1** Compléter les mesures de contrat et compositions
 - **T1** Mesurer la détection de langue avec et sans profils
+- **T1** Tester cascade, fusion refus/contexte, décimales
+- **T1** Vérifier les appels neuronal de la cascade sur le gold
+- **T1** Mesurer le coût des modes composés
+- **T1** Lire le style des JSON de fiches
+- **T1** Lire le début de la fiche cohérence v8
+- **T1** Exécuter les mesures finales et le démarrage à froid
+- **T1** Corriger et relancer les mesures finales
+- **T1** Vérifier la croissance du coût jusqu'à 4000 mots
+- **T1** Profiler une analyse de 2000 mots
 
 ## 4. Mesures et résultats marquants
 
@@ -95,6 +105,16 @@
 - **T1** `(les réels passent de 40 % à 80 % en tête avec les deux lectures). Le **vrai** modèle neuronal est **refusé**`
 - **T1** `- **L'attachement par tête couvre 100 %** ; le gold annote 29 cibles ambiguës en double lecture,`
 - **T1** `MOTS '12,5 %' [(0, 2, '12', 'nombre'), (2, 3, ',', 'ponctuation'), (3, 4, '5', 'nombre'), (5, 6, '%', 'ponctuation')]`
+- **T1** `"permutation": "1,997/220 (0,908 %) p=0",`
+- **T1** `"candidat_aleatoire": "42,14 % top-1"`
+- **T1** `99.2 ms 32`
+- **T1** `109.0 ms 32`
+- **T1** `113.3 ms 32`
+- **T1** `200 median_s 0.019 ms/mot 0.096 labels 1061`
+- **T1** `500 median_s 0.07 ms/mot 0.139 labels 2613`
+- **T1** `1000 median_s 0.166 ms/mot 0.166 labels 5218`
+- **T1** `2000 median_s 0.482 ms/mot 0.241 labels 10438`
+- **T1** `4000 median_s 1.574 ms/mot 0.394 labels 20826`
 
 ## 5. Erreurs rencontrées
 

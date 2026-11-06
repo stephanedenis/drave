@@ -1586,3 +1586,247 @@ duree 50 avec profils 0.43 s
 … [365 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys, json, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique(); n=bl.MockNeuronal()\n# cascad … [2161 caractères tronqués]`
+
+  ```
+cascade appels 50 /50 residus {'morphème': 50, 'syntagme': 50, 'discours': 50, 'pragmatique': 50, 'pos': 2}
+couverture f01 {'graphème': 0.99, 'mot': 0.98, 'pos': 0.92, 'syntagme': 0.4, 'discours': 0.5, 'document': 0.7, 'phrase': 0.85, 'pragmatique': 0.45}
+parallele vide '... !!! ???' refus= '' etiq= 4 source= parallele
+cascade vide '... !!! ???' refus= '' etiq= 4 source= cascade
+parallele vide '' refus= '' etiq= 0 source= parallele
+cascade vide '' refus= '' etiq= 0 source= cascade
+parallele contexte annotation '' label humain [('contexte', 'contexte de test')]
+cascade contexte annotation '' label humain [('contexte', 'contexte de test')]
+
+TEXT La température est de 12.5 degrés. C'est chaud.
+phrases [(0, 25, "'La température est de 12.'"), (25, 34, "'5 degrés.'"), (34, 47, '" C\'est chaud."')]
+mots [(22, 24, '12', 'nombre'), (24, 25, '.', 'ponctuation'), (25, 26, '5', 'nombre'), (33, 34, '.', 'ponctuation'), (46, 47, '.', 'ponctuation')]
+
+TEXT Le rendez-vous est le 12.03.2024 à 9 h.
+phrases [(0, 25, "'Le rendez-vous est le 12.'"), (25, 28, "'03.'"), (28, 39, "'2024 à 9 h.'")]
+mots [(22, 24, '12', 'nombre'), (24, 25, '.', 'ponctuation'), (25, 27, '03', 'nombre'), (27, 28, '.', 'ponct
+… [602 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('eval_baseline.json'))\nfor mode in ('heuristique','mock_neuronal','parallele','cascade'):\n    x=d[mode]['all']\n    print(mode,'POS',x['pos']['exactitude'],'F1',x['syntagme']['f1'],'couverture',x['attachement' … [204 caractères tronqués]`
+
+  ```
+heuristique POS 0.7581 F1 0.5849 couverture 0.9289
+mock_neuronal POS 0.3454 F1 0.5763 couverture 0.8326
+parallele POS 0.7465 F1 0.6141 couverture 0.8703
+cascade POS 0.7465 F1 0.6141 couverture 0.8703
+cascade appels neuronal 1676
+cascade verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_reel': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': False, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'attachement_tete_couverture': True, 'attachement_tete_topk': True, 'attachement_tete_hasard': True, 'reel_non_requis': True}
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys,time,statistics,json\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nBASE=' '.join([p['texte'] for p in PHRASES if p … [687 caractères tronqués]`
+
+  ```
+heuristique median_ms 20.28 min 19.63 max 26.76 labels 1061
+mock median_ms 4.02 min 3.96 max 4.42 labels 215
+parallele median_ms 27.71 min 27.12 max 38.94 labels 1059
+cascade median_ms 29.34 min 28.07 max 39.24 labels 1059
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -60 reports/pensee-v12.json && echo \"---\" && head -40 reports/pensee-audit-v10.json", "description": "Lire le style des JSON de fiches"}`
+
+  ```
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 221,
+  "exact": 221,
+  "couverture": 0.9247,
+  "spans": 18
+ },
+ "apres": {
+  "labels": 222,
+  "exact": 222,
+  "exact_span": 1.0,
+  "couverture": 0.9289,
+  "f1": 0.5893,
+  "f1_s": 0.5014,
+  "f1_chunker": 0.6203,
+  "tete": 0.7392,
+  "fr": "136/136",
+  "en": "86/86",
+  "topk": 221,
+  "topk_taux": 0.9247,
+  "spans": {
+   "REL": 8,
+   "SUB": 5,
+   "GP": 4,
+   "total": 17
+  },
+  "dev": {
+   "exact": 153,
+   "labels": 153,
+   "couverture": 0.9387
+  },
+  "test": {
+   "exact": 69,
+   "labels": 69,
+   "couverture": 0.9079
+  }
+ },
+ "correction": "AMBIGUES_REL : REL après un GN, SUB ailleurs",
+ "controle_negatif": {
+  "permutation": "1,997/220 (0,908 %) p=0",
+  "candidat_aleatoire": "42,14 % top-1"
+ },
+ "limites": [
+  "17 spans inatteignables",
+  "in-sample",
+  "gold 612"
+ ]
+}
+---
+{
+ "rapport": "audit-v10",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit_audite": "710ec7f9",
+ "commit_parent": "160d08ca",
+ "date": "2026-11-05",
+ "objet": "Audit de l'état v10 : rejeu des valeurs sur le vivant 612 et le gelé 602, ablations par règle, contrôles négatifs, dev/test, portes.",
+ "methode": {
+  "gold_vivant": {
+   "so
+… [1020 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p reports/rapport-coherence-fiches-v8.md", "description": "Lire le début de la fiche cohérence v8"}`
+
+  ```
+# Cohérence des fiches B13 du 2026-11-05 — v2 → v8 (état `f908d7b0`)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ❌
+> **8 fiches auditées** (1 courante, 7 historiques), **42 écarts** dont **7 critiques** ;
+> **8/8** ont au moins un écart ; **3 contrôles négatifs invalides** (v4, v5, v6) et **2 absents**
+> (v8, gold-split) ; **7 mentions d'historique obsolètes** (v2→v7) et **1 imprécise** (v8) ;
+> **5 lignes** de `reports/README.md` à corriger ; **1 lien cassé** au commit (`rapport-spans-v7.md`,
+> cité par la v8, absent de `f908d7b0`) ; **2 tableaux dont la somme visible ne tombe pas**
+> (corrections de la v2, règles de la v8).
+>
+> **État audité** : commit **`f908d7b0`** (2026-11-05 21:08, branche `s/v7`), le commit demandé
+> (avant `d497324b`). Les huit fiches, leurs huit JSON et `reports/README.md` sont lus **à ce
+> commit** (`git show f908d7b0:…`), pas dans l'arbre de travail.
+>
+> **HEAD a bougé (note de version)** : pendant l'audit, HEAD est passé de `f908d7b0` à
+> **`d497324b`** (« la v8 réécrite honnêtement : +17 net, 7 régressions ; audits A17/A19
+> intégrés »). Ce commit corrige déjà une partie de ce rapport : la v8 es
+… [4302 caractères tronqués]
+  ```
+
+- **write** `{"content": "# -*- coding: utf-8 -*-\n\"\"\"Mesures finales de performance : heuristique et compositions, 10/50/200 mots.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport resource\nimport statistics\nimport sys\nimport time\nimport tracemalloc\n\nRACINE = pathlib.Path … [3853 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/performance_final.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('performance_final.py'); s=p.read_text()\ns=s.replace('''    t0 = time.perf_counter()\n    a2000 = h.analyser(texte2000)\n    stress = {\"mots\": 2000, \"duree_s\": round(time.perf_counter() - t0, 2),\n         … [1110 caractères tronqués]`
+
+  ```
+ok
+exit=1
+Traceback (most recent call last):
+  File "/tmp/audit_produit_bl/performance_final.py", line 105, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/audit_produit_bl/performance_final.py", line 62, in main
+    r = mediane(bloc, texte, rep)
+  File "/tmp/audit_produit_bl/performance_final.py", line 42, in mediane
+    "ms_par_mot": round(statistics.median(temps) / n, 3),
+                                                   ^
+NameError: name 'n' is not defined
+=== cold start ===
+99.2 ms 32
+0.14 s 27632 Kio
+109.0 ms 32
+0.15 s 27368 Kio
+113.3 ms 32
+0.15 s 27368 Kio
+[stderr]
+
+real	0m0,218s
+user	0m0,188s
+sys	0m0,029s
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('performance_final.py'); s=p.read_text()\ns=s.replace('def mediane(bloc, texte, repetitions):','def mediane(bloc, texte, repetitions, n):')\ns=s.replace('r = mediane(bloc, texte, rep)','r = mediane(bloc, texte, … [252 caractères tronqués]`
+
+  ```
+ok
+exit=0
+{
+ "machine": {
+  "cpu": "Intel Xeon E5-2687W v3 @ 3.10 GHz",
+  "python": "3.13.16"
+ },
+ "temps": {
+  "heuristique": [
+   {
+    "median_ms": 1.08,
+    "moyenne_ms": 1.28,
+    "ecart_type_ms": 0.28,
+    "min_ms": 1.05,
+    "max_ms": 1.75,
+    "p95_ms": 1.72,
+    "ms_par_mot": 0.108,
+    "phrases_par_s": 922.8,
+    "mots": 10,
+    "caracteres": 51,
+    "repetitions": 31
+   },
+   {
+    "median_ms": 4.6,
+    "moyenne_ms": 5.11,
+    "ecart_type_ms": 0.93,
+    "min_ms": 4.49,
+    "max_ms": 7.42,
+    "p95_ms": 7.05,
+    "ms_par_mot": 0.092,
+    "phrases_par_s": 217.5,
+    "mots": 50,
+    "caracteres": 268,
+    "repetitions": 21
+   },
+   {
+    "median_ms": 19.43,
+    "moyenne_ms": 23.52,
+    "ecart_type_ms": 6.58,
+    "min_ms": 17.75,
+    "max_ms": 32.77,
+    "p95_ms": 32.74,
+    "ms_par_mot": 0.097,
+    "phrases_par_s": 51.5,
+    "mots": 200,
+    "caracteres": 1126,
+    "repetitions": 11
+   }
+  ],
+  "mock_neuronal": [
+   {
+    "median_ms": 0.3,
+    "moyenne_ms": 0.31,
+    "ecart_type_ms": 0.01,
+    "min_ms": 0.29,
+    "max_ms": 0.35,
+    "p95_ms": 0.32,
+    "ms_par_mot": 0.03,
+    "phrases_par_s": 3319.7,
+    "mots": 10,
+    "caracteres": 51,
+    "repetitions": 31
+   },
+   {
+   
+… [2475 caractères tronqués]
+  ```
+

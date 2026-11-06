@@ -50526,3 +50526,201 @@ d003bbf1 ÉTAT — TRIM T0 APRÈS LE BLOC L
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0** et sa **porte produit**.\", \" ; **`drave` v0**.\")\np.write_text(t)\nPY\npython3 tools/taille_documents. … [422 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-2899]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2899", "timeout_ms": 600000, "wait": true}`
+
+  ```
+18 files changed, 557 insertions(+), 63 deletions(-)
+COMMIT OK 1
+8012087c ÉTAT — T0 DANS LE BUDGET (DRAVE V0)
+commit 8012087cce1b2bd1cfa0bae9285686cddb1e649a
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 10:04:34 2026 -0500
+
+    ÉTAT — T0 DANS LE BUDGET (DRAVE V0)
+
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Agent bd6322ed-6792-4188-9d4c-6cae09c3ef4e sent a message: 
+## Livré — CLI produit `drave` v0.1.0
+
+Deux fichiers neufs **seulement** :
+- `tools/drave.py` (388 lignes) — `analyser`, `evaluer`, `rejouer`, `--version`, `--aide` ;
+- `tools/tests/test_produit.py` (110 lignes) — 6 tests / 8 assertions, direct + pytest.
+
+Aucun fichier existant modifié, **aucun commit de ma part**. À noter : un commit concurrent (`62dad657`, « B13 — LE PREMIER PRODUIT… ») contient déjà ces deux fichiers ; `git diff HEAD` est vide sur eux.
+
+## Commandes
+
+```bash
+python3 tools/drave.py analyser "Le chat dort."
+python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+python3 tools/drave.py evaluer              # gold vivant (612 phrases)
+python3 tools/drave.py evaluer --gold       # gold gelé (602 phrases, référence figée)
+python3 tools/drave.py evaluer --json       # mesures complètes (2 748 octets)
+python3 tools/drave.py rejouer "Le chat dort."   # 2 analyses + sha256
+python3 tools/drave.py --version | --aide
+```
+
+Codes : 0 succès · 2 usage (langue inconnue, argument manquant, commande inconnue) · 1 erreur ou refus (`analyser ""`). `--json` exclut `duree_s` pour être déterministe ; les temps se mesurent dehors.
+
+## Sortie d'exemple
+
+```text
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 …
+```
+
+## Mesures (5 runs, médiane ; machine locale)
+
+| commande | temps | stdout |
+|---|---:|---:|
+| `--version` | 0,13 s | 12 o |
+| `analyser "Le chat dort."` | 0,13 s | 585 o |
+| `analyser` fr long (55 car.) | 0,13 s | 1 005 o |
+| `analyser` en | 0,13 s | 699 o |
+| `analyser "Le chat dort." --json` | 0,13 s | **5 561 o** (5 563 avec `--langue fr`) |
+| `analyser` en `--json` | 0,13 s | **8 704 o** |
+| `analyser` fr long `--json` | 0,13 s | **16 100 o** |
+| `rejouer` fr long | 0,13 s | 191 o |
+| `evaluer` | 0,49 s | 659 o |
+| `evaluer --json` | 0,49 s | **2 748 o** |
+| `evaluer --gold --json` | 0,49 s | **2 740 o** |
+
+Gold vivant : POS **75,81 %** (fermé 90,04 / ouvert 62,34) · syntagmes **F1 58,49** (P 62,92 / R 54,64) · tête **F1 73,36** · attachement **exact 92,89 %, couverture 92,89 %, exact-sur-span 100 %, top-k 92,47 %** · contrôle négatif cible exacte au hasard **1,67 %**. Gold gelé : POS 76,03 · F1 58,93 · tête 73,92 (attachement identique).
+
+Dump complet des annotations du gold (non exposé par la CLI) : **4 938 465 o (4,94 Mo)** en `indent=1`, **3 574 776 o (3,57 Mo)** compact, ~8,1 Ko/phrase.
+
+Tests : `python3 tools/tests/test_produit.py` → **6 tests OK en 1,33 s** ; `python3 -m pytest tools/tests/test_produit.py -q` → **6 passed en 1,28 s**.
+
+## Limites (ce qui n'est pas exposable aujourd'hui)
+
+- **Restitution** (annotation → texte), **traduction**, **génération** : absentes du bloc ; `restitution_udhr.py`, `traduire_bench.py`, `generer_natif.py` demandent torch + poids/checkpoints, hors périmètre hors ligne.
+- **Neuronal réel** : `NeuronalLLM` exige `llama-cli` + GGUF ; `NeuronalLLMPOS/Chunks/Pragmatique` exigent des endpoints locaux (:18081/:18082). Exclus par « aucun réseau, aucun GPU ».
+- `MockNeuronal`, `Parallele`, `Cascade` sont hors ligne et déterministes mais **non câblés** dans cette v0.1 (un `--mode` serait l'extension naturelle).
+- `evaluer` importe en lecture seule `tools/tests/linguistique/evaluer_gold.py` (comme prévu) : sans les fixtures de test, il sort en 1.
+- CLI mono-phrase ; le traitement de masse reste l'API Python.
+
+## Point à corriger dans ta fiche
+
+`reports/rapport-produit-v0.md` indique **4 013 octets** pour `analyser … --langue en --json`. C'est le JSON **compact** de `"Le chat dort."` ; mesuré ici : anglais `--json` = **8 704 o**, français court = **5 561 o**, français long = **16 100 o**. À corriger dans le tableau si tu gardes la fiche.
+
+### 👤 Utilisateur
+
+Background subagent bd6322ed-6792-4188-9d4c-6cae09c3ef4e finished and will do no further work unless you send it more.
+Its closing message:
+## Livré
+
+Deux fichiers neufs, et eux seuls :
+
+- **`tools/drave.py`** (388 lignes) — point d'entrée produit `drave` v0.1.0 : `analyser`, `evaluer`, `rejouer`, `--version`, `--aide`.
+- **`tools/tests/test_produit.py`** (110 lignes) — smoke test de bout en bout, **6 tests / 8 assertions**, exécutable directement et sous `pytest`.
+
+Aucun fichier existant modifié, **aucun commit de ma part**. À signaler : le commit concurrent `62dad657` (« B13 — LE PREMIER PRODUIT… ») contient déjà ces deux fichiers ; `git diff HEAD` est vide sur eux.
+
+## Commandes
+
+```bash
+python3 tools/drave.py analyser "Le chat dort."
+python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+python3 tools/drave.py evaluer              # gold vivant (612 phrases)
+python3 tools/drave.py evaluer --gold       # gold gelé (602 phrases, référence figée)
+python3 tools/drave.py evaluer --json       # mesures complètes
+python3 tools/drave.py rejouer "Le chat dort."
+python3 tools/drave.py --version | --aide
+```
+
+Codes de sortie : **0** succès · **2** usage (langue inconnue, argument/commande manquant) · **1** erreur ou refus d'analyse (`analyser ""`). `--json` exclut `duree_s` pour rester déterministe ; les temps se mesurent à l'extérieur.
+
+## Sortie d'exemple
+
+```text
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 …
+```
+
+## Tests
+
+```text
+python3 tools/tests/test_produit.py      → 6 tests, OK, 1,33 s
+python3 -m pytest tools/tests/test_produit.py -q → 6 passed, 1,28 s
+```
+
+Ils couvrent : phrase française (POS/syntagme/rôle/cible/acte), phrase anglaise, JSON valide et stable sur deux appels, `rejouer` identique, `--version`/`--aide`, et code 2 d'usage.
+
+## Mesures (5 runs, médiane)
+
+| commande | temps | stdout |
+|---|---:|---:|
+| `--version` | 0,13 s | 12 o |
+| `analyser "Le chat dort."` | 0,13 s | 585 o |
+| `analyser` fr long (55 car.) | 0,13 s | 1 005 o |
+| `analyser` en | 0,13 s | 699 o |
+| `analyser "Le chat dort." --json` | 0,13 s | **5 561 o** |
+| `analyser` en `--json` | 0,13 s | **8 704 o** |
+| `analyser` fr long `--json` | 0,13 s | **16 100 o** |
+| `rejouer` fr long | 0,13 s | 191 o |
+| `evaluer` | 0,49 s | 659 o |
+| `evaluer --json` | 0,49 s | **2 748 o** |
+| `evaluer --gold --json` | 0,49 s | **2 740 o** |
+
+Gold vivant : POS **75,81 %** (fermé 90,04 / ouvert 62,34) · syntagmes **F1 58,49** (P 62,92 / R 54,64) · tête **F1 73,36** · attachement **exact 92,89 %**, **couverture 92,89 %**, exact-sur-span 100 %, top-k 92,47 % · contrôle négatif (cible exacte au hasard) **1,67 %**. Gold gelé : POS 76,03 · F1 58,93 · tête 73,92 (attachement identique).
+
+Dump complet des annotations du gold, non exposé par la CLI : **4,94 Mo** en `indent=1` (**3,57 Mo** compact, ~8,1 Ko/phrase).
+
+## Limites
+
+- **Restitution** (annotation → texte), **traduction**, **génération** : absentes du bloc ; `restitution_udhr.py`, `traduire_bench.py`, `generer_natif.py` demandent torch + poids/checkpoints.
+- **Neuronal réel** : `NeuronalLLM` exige `llama-cli` + GGUF ; `NeuronalLLMPOS/Chunks/Pragmatique` exigent des endpoints locaux `:18081`/`:18082` — exclus par « aucun réseau, aucun GPU ».
+- `MockNeuronal`, `Parallele`, `Cascade` sont hors ligne et déterministes, mais **non câblés** dans cette v0.1 (extension naturelle : un `--mode`).
+- `evaluer` importe en lecture seule `tools/tests/linguistique/evaluer_gold.py` (comme prévu) ; sans les fixtures de test, il sort en 1.
+- CLI **mono-phrase** ; le traitement de masse reste l'API Python.
+- La fiche `reports/rapport-produit-v0.md` annonce **4 013 o** pour le JSON anglais : c'est le JSON compact de `"Le chat dort."` ; les vrais chiffres sont **8 704 o** (anglais), **5 561 o** (français court), **16 100 o** (français long).
+
+### 🤖 Assistant
+
+⏵ Le sous-agent corrige une mesure de ma fiche (taille JSON) : je la rectifie et je vérifie les autres livraisons
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-v0.md'); t=p.read_text()\nt=t.replace(\"| `drave.py analyser … --langue en --json` | le même en JSON complet | 4 013 octets, JSON valide |\",\n            \"|  … [621 caractères tronqués]`
+
+  ```
+fiche corrigée
+18:| `drave.py analyser … --langue en --json` | le même en JSON complet | 8 704 o (fr court 5 561 o, fr long 16 100 o) |
+19:| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |
+ven 06 nov 2026 10:07:07 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add reports/rapport-produit-v0.md\n  timeout 240 git commit -m \"FICHE — LES TAILLES JSON DU PRODUIT CORRIGÉES (8 704 O EN ANGLAIS, 5 561 O EN FRANÇAIS COURT) ET LA MESURE D'EVALUER\" -- reports/rapport-prod … [349 caractères tronqués]`
+
+  ```
+git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+8012087c ÉTAT — T0 DANS LE BUDGET (DRAVE V0)
+ven 06 nov 2026 10:12:41 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 10 h 30 HNE\", t)\np.write_text( … [725 caractères tronqués]`

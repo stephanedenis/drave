@@ -15,8 +15,8 @@
 | commande | sortie | mesure |
 |---|---|---|
 | `drave.py analyser "Le chat dort sur le toit."` | POS, syntagmes (GN/GV/GP, rôle, cible), pragmatique, couverture | 32 étiquettes, 3 segments |
-| `drave.py analyser … --langue en --json` | le même en JSON complet | 4 013 octets, JSON valide |
-| `drave.py evaluer` | POS, F1 syntagmes, attachement (exact, couverture) | 183/183 portes |
+| `drave.py analyser … --langue en --json` | le même en JSON complet | 8 704 o (fr court 5 561 o, fr long 16 100 o) |
+| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |
 | `drave.py rejouer "…"` | deux analyses, sha256 identique | `6b6def47…` deux fois |
 | `drave.py --version` | `drave 0.1.0` | — |
 
