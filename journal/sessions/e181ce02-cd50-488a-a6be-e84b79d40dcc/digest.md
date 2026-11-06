@@ -47811,3 +47811,256 @@ rapport-coherence-fiches-v8.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir deux descriptions anciennes\nt=t.replace(\"| [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B13** — l'at … [2127 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2346]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2346", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 reports/rapport-spans-v7.md
+ create mode 100644 reports/rapport-topk-v8.md
+COMMIT OK 1
+d497324b B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183
+jeu 05 nov 2026 22:42:00 EST
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Round suivant : réparer les 6 régressions françaises (la « garde PRON » de A17)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"garde\\|PRON\" reports/rapport-spans-v7.md | head -8 | cut -c1-180", "description": "Chercher la garde PRON de A17"}`
+
+  ```
+46:| **R3** | trois gardes de lexique/contexte (a `car`, b GP/déterminant, c `fall`/`call`) | **+1 / −0** seule ; **+3** en marge de R1+R2 | **+1 / −0** | **+2 / −0** seule ; **+4*
+338:if _normaliser(m) in lex.get("PRON", set()):
+398:### 5.3 R3 — Trois gardes de lexique et de contexte
+474:temporairement de 0,9949 à 0,9909. **R3c la rétablit à 1,0000** ; c'est la raison de garder
+518:`tomorrow` est une ambiguïté de gold ; on garde la règle existante et on documente r288
+590:6. **L'implémentation réelle peut différer** de la copie locale (placement du garde PRON,
+591:   ordre des tests, portée du garde DET). Les chiffres doivent être re-mesurés après
+600:3. **Puis R3a/R3b/R3c** : +4 exacts en marge (r280, r153, r102, r245), 0 perte. Le garde
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '325,350p' reports/rapport-spans-v7.md", "description": "Lire la garde PRON"}`
+
+  ```
+à la ligne de base. Un **nouveau label faux** (cible vide ou fausse sur un span qui était
+absent) est signalé séparément : il ne compte pas comme une perte d'exact mais dégrade
+`exact/labels`.
+
+### 5.1 R1 — Frontière de clause REL/SUB
+
+**Où** : `_syntagmes_simple`, branche `if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS)`
+(lignes 858-897 de l'état `69bd865e`), et le `est_verbe` local (lignes 843-855).
+
+**Quoi** : trois corrections dans la boucle de scan :
+
+```python
+# R1a — un pronom n'est jamais un verbe par la règle de position
+if _normaliser(m) in lex.get("PRON", set()):
+    return False
+
+# R1b — les modaux sont des AUX
+AUX_MOD = AUXILIAIRES | {"would","must","can","could","should","will","shall","may","might"}
+aux_vus = 0
+while j < len(mots) and mots[j][3] == "mot":
+    m = mots[j][2]
+    aux = _normaliser(m) in AUX_MOD
+    if aux:
+        if verbes_vus >= 1 or aux_vus >= 1:   # 2e AUX = principale
+            break
+        aux_vus += 1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# restaurer les relatifs dans SUJETS (la garde PRON les neutralise quand il faut)\nt=t.replace('''SUJETS = {\"i\", \"you\", \"he\", \"sh … [1990 caractères tronqués]`
+
+  ```
+garde PRON posée
+exact 218 / 218 | couv 0.9121 | F1 0.5791 | par langue {'fr': {'cibles': 151, 'labels': 135, 'exact': 135, 'topk': 134, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 83, 'exact': 83, 'topk': 83, 'exact_taux_span': 1.0}} | spans 21
+dev exact 151 / 151 | couv 0.9264 | F1 0.5782
+test exact 67 / 67 | couv 0.8816 | F1 0.5812
+  ```
+
+### 🤖 Assistant
+
+⏵ **218/218**, couverture **0,9121**, 21 spans. Trois derniers cas (g017, r280, r153)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# g017 : l'adverbe final se juge sur predicat_vu, pas sur verbes_vus\nt=t.replace('''                        if (verbes_vus >= 1 and _no … [1957 caractères tronqués]`
+
+  ```
+g017 + car
+exact 218 / 219 | couv 0.9163 | F1 0.5799 | par langue {'fr': {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 85, 'exact': 84, 'topk': 84, 'exact_taux_span': 0.9882}} | spans 20
+dev exact 151 / 152 | couv 0.9325
+test exact 67 / 67 | couv 0.8816
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfor p in charger():\n    a=h.analyser(p[\"texte\"] … [618 caractères tronqués]`
+
+  ```
+ÉCHEC r280 REL 'that I bought' gold car | cible The | The car that I bought runs.
+  ```
+
+### 🤖 Assistant
+
+⏵ r280 : le GN s'arrête sur « car » (subordonnant français) ; je conditionne par la langue
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# helper local\nt=t.replace('''        def est_verbe(d: int, m: str) -> bool:''',\n'''        def est_sub(n: str) -> bool:\n             … [1947 caractères tronqués]`
+
+  ```
+est_sub
+exact 219 / 219 | couv 0.9163 | F1 0.5822 | par langue {'fr': {'cibles': 151, 'labels': 134, 'exact': 134, 'topk': 133, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 85, 'exact': 85, 'topk': 85, 'exact_taux_span': 1.0}} | spans 20
+dev exact 152 / 152 | couv 0.9325
+test exact 67 / 67 | couv 0.8816
+  ```
+
+### 🤖 Assistant
+
+⏵ **219/219 (1,0000)**, couverture **0,9163**, F1 **0,5822**, 20 spans ; dev 152/152, test 67/67. Je recale et je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 5400 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest complet", "timeoutMs": 5400000}`
+
+  ```
+❌ T110 segmenteur        segmenteur : S F1 0.5006 tête 0.6675 ; chunker F1 0.6178 tête 0.7632
+  ❌ T111 hybride segmenteur hybride : tête F1 0.7423 (S 0,3552, chunker 0,4707)
+  ❌ T112 union segmenteurs union : segments F1 0.5866 (S 0,4966)
+  ❌ T113 union par défaut  union par défaut : F1 0.5866, tête 0.7381
+  ❌ T114 cascade + union   cascade : F1 0.6151, tête 0.7472, 602 appels
+  ❌ T115 tête cascade      tête cascade corrigée : 0.6895 (cascade 0,441 ; union 0,466)
+  ❌ T153 attachement       attachement : top1 0.9163, exact 0.9163, couverture 0.9163
+  ❌ T156 relation GN-GV    relation : 257/546 (0.4707)
+  ❌ T157 rôles par position rôles : 231 sans rôle, 156 avant le GV, 46 après
+  ❌ T161 cible proximité   proximité : top1 219/239, exact 219/239, tête 219/145
+  ❌ T162 candidats verbes  candidats : top-k 218/239 (0.9121), tête 218/219
+  ❌ T163 échecs attachement échecs : 20 de span, 1 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 219/239
+  ❌ T166 spans perdus      spans : 9 REL, 6 SUB, 5 GP
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9954 / 1.0
+  ❌ T168 classement        classement : exact 219/219 ; cibles 148 verbes, 
+… [488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.4966) < 0.001 and abs(f2 - 0.6057) < 0.001','abs(f1 - 0.5006) < 0.001 and abs(f2 - 0.6178) < 0.001'),\n   ('\"\"\"Le segme … [4554 caractères tronqués]`
+
+  ```
+23 / 23
+  183/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent d3114d4c-1629-45f2-aba6-9592332507c5 sent a message: 
+Audit terminé. Deux fichiers neufs (aucun existant modifié, aucun commit) :
+- `reports/rapport-coherence-fiches-v8.md`
+- `reports/pensee-coherence-fiches-v8.json`
+
+Périmètre : les 8 fiches v2→v8 et leurs 8 JSON, ancrés sur `f908d7b0` (les fichiers d'or sont identiques de `9d5337ce` à `f908d7b0` ; mesures rejouées avec le `bloc_linguistique.py` historique sur 612 et 602).
+
+Bilan : **42 écarts** (7 critiques, 23 majeurs, 12 mineurs), 8/8 fiches concernées.
+Par fiche : v2 4, v3 3, v4 4, v5 5, v6 3, gold-split 4, v7 7, v8 8, systémique 4.
+
+Critiques (état `f908d7b0`) :
+1. **v8** : tableau des règles `+15 dev/+5 test/0 perte/+3/+2/+2 = +27` ; réel **+23 labels gagnés / −7 perdus = +16 labels, +17 exacts** (24 gains/7 pertes en exact ; test net **+2**, pas +5 ; 7 pertes : s032, s037, s069, s072, s115, s135, r273). La somme +27 est celle du prototype A17 (222/222), pas du code intégré (212/212).
+2. **v8** : « 17 inatteignables » a la bonne somme mais la mauvaise composition. 27 = **17 inatteignables (6 REL + 3 SUB + 4 GP + r255 + r035 + r264 + r288) + 7 régressions + 3 gains A17 non intégrés (g017, r280, r153)**. Le texte compte 20 cas, omet 3 SUB synthétiques et met 6 régressions dans les « 12 synthétiques ».
+3. **v8** : à `f908d7b0`, pas de date, pas de commit exact, pas de contrôle négatif ; lien `rapport-spans-v7.md` cassé (fichier non committé).
+4. **v4** : F1/tête compare la v3 612 (0,2862/0,4989) à la v4 602 (0,4539/0,6432) ; base non nommée, § 3 dit 612.
+5. **v5** : `dev 126/126 (0,9921)` doit être 1,0000 ; F1 0,5156/tête 0,6826 sont les constantes de porte, pas la mesure 602 (0,5164/0,6834).
+6. **v7** : se dit « État courant 69bd865e » (faux) ; en-tête/JSON POS 0,7475 vs table 0,7482 ; JSON `avant` mélange v6 612 (f1 0,5130), v5 (tête 0,6826) et v4 (POS 0,7475) ; « qui 12 » au lieu de 6 ; § 3/§ 5 contredisent § 2 sur dev/test.
+7. **v4/v5/v6** : contrôles copiés de la v7 (`1,67/196` vs `195/196`) alors que leurs bases sont 160/187/187 : invalides.
+
+Autres corrections prioritaires : v2 (split lexical pré-v2 60/63 et 63/82 étiqueté POS gold ; 46 vs 45 ; colonne gains incomplète), v3 (bloc A13 absent du JSON), gold-split (53/54 = 0,9815 et non 0,9814 ; pas de contrôle ; JSON sans l'équilibre du split), README lignes 20, 21, 23, 24, 25 (+18 incomplète), métadonnées `commit`/`gold` absentes des JSON.
+
+Note importante : **HEAD a bougé vers `d497324b`** pendant l'audit. Ce commit réécrit la v8 (+17 net, 7 régressions, 17+7+3, contrôle, date, couverture française), passe la v7 en instantané (0,7482, « qui » 6, § 3) et remplace les faux contrôles v4/v5/v6 par un renvoi au dispositif v7. Ces points sont donc déjà traités ou partiellement traités au nouveau HEAD ; restent à vérifier : v2, v3, v4 (delta 612/602), v5 (dev/F1/27), v6 (correction 26→26), gold-split, le JSON `avant` de la v7, le README. Une lecture rapide de la nouvelle table d'ablation v8 de `d497324b` montre en outre une arithmétique à contrôler : R1 15+1+4 = 20 gains (19 annoncés), total 26 gains / 18 net (24/17 annoncés), `g017` compté comme perte R1c alors qu'il manquait déjà en v7 ; top-k 211 est postérieur à `f908d7b0` alors que l'en-tête porte `Commit : f908d7b0`.
+
+### 🤖 Assistant
+
+⏵ **183/183** avec 219/219 : je fige la fiche v9 (garde PRON, `est_sub`, `predicat_vu`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pensee-v9.md <<'MD'\n# B13 — la garde PRON : exact 219/219 (1,0000), couverture 0,9163, F1 0,5822\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·\n> **État courant** · * … [6996 caractères tronqués]`
+
+  ```
+fiche + JSON v9
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 👤 Utilisateur
+
+Background subagent d3114d4c-1629-45f2-aba6-9592332507c5 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du bilan de cohérence des huit fiches
+
+Les deux fichiers neufs sont écrits et validés :
+- `reports/rapport-coherence-fiches-v8.md`
+- `reports/pensee-coherence-fiches-v8.json`
+
+**Aucun fichier existant modifié, aucun commit.** L'audit est ancré sur `f908d7b0` (les fichiers d'or sont identiques de `9d5337ce` à `f908d7b0` ; mesures rejouées avec le `bloc_linguistique.py` historique sur 612 et 602).
+
+## Nombre de fiches et écarts
+
+**8 fiches** (1 courante : v8 ; 7 historiques : v2→v7), **42 écarts** : **7 critiques**, **23 majeurs**, **12 mineurs**.
+
+| fiche | écarts | dont critiques |
+|---|---:|---:|
+| v2 `9d5337ce` | 4 | 0 |
+| v3 `dcf7bc91` | 3 | 0 |
+| v4 `392f03aa` | 4 | 1 |
+| v5 `b975011b` | 5 | 1 |
+| v6 `0ec6c27d` | 3 | 0 |
+| gold-split `85e4082b` | 4 | 0 |
+| v7 `69bd865e` | 7 | 3 |
+| v8 `f908d7b0` | 8 | 2 |
+| systémique | 4 | 0 |
+
+## Corrections prioritaires
+
+**P1 — chiffres de tête et statut**
+1. **v8** : le tableau des règles annonce `+15 dev, +5 test, 0 perte, +3, +2, +2` (somme **+27**) ; la mesure réelle v7→v8 est **+23 labels gagnés / −7 perdus = +16 labels, +17 exacts** (24 gains/7 pertes ; test net **+2**, pas +5). Les 7 pertes : `s032, s037, s069, s072, s115, s135, r273`.
+2. **v8** : « 17 inatteignables » a le bon compte mais la mauvaise composition. Les 27 = **17 inatteignables** (6 REL + 3 SUB + 4 GP + `r255` + `r035` + `r264` + `r288`) **+ 7 régressions + 3 gains A17 non intégrés** (`g017`, `r280`, `r153`). Le texte compte 20 cas, omet 3 SUB synthétiques et classe 6 régressions dans les « 12 synthétiques ».
+3. **v8** : à `f908d7b0`, pas de date, pas de commit exact, pas de contrôle négatif ; le lien `rapport-spans-v7.md` est cassé (fichier non committé).
+4. **v4** : F1/tête compare la v3 **612** (`0,2862/0,4989`) à la v4 **602** (`0,4539/0,6432`) ; base non nommée, § 3 dit 612.
+5. **v5** : `dev 126/126 (0,9921)` doit être **1,0000** ; F1 `0,5156`/tête `0,6826` sont les constantes de porte, pas la mesure 602 (`0,5164/0,6834`).
+6. **v7** : se dit « État courant `69bd865e` » (faux) ; en-tête/JSON POS `0,7475` contre table `0,7482` ; JSON `avant` mélange v6 612 (`0,5130`), v5 (tête `0,6826`) et v4 (POS `0,7475`) ; « qui 12 » au lieu de 6 ; § 3/§ 5 contredisent § 2 sur dev/test.
+7. **v2** : split lexical pré-v2 `60/63` et `63/82` étiqueté « POS gold » ; `46` vs `45` ; colonne « gain » incomplète (`88+45=133` vs 141).
+
+**P2 — contrôles négatifs**
+8. **v4, v5, v6** : remplacer le contrôle copié de la v7 (`1,67/196` vs `195/196`) par un contrôle sur leur base (`1,80/160`, `1,93/187`, `1,95/187`) ou le retirer. **v8** et **gold-split** n'en ont aucun ; **v7** a un contrôle dont le protocole `1,67/196` n'est pas reproductible tel quel.
+
+**P3 — bases 612/602**
+9. v4/v5/v8 : nommer la base ; v7 : en-tête et JSON à `0,7482` ; v6 et gold-split sont corrects.
+
+**P4 — JSON ↔ texte**
+10. v7 `avant` ; v3 bloc A13 ; v5 dev/test et `27 = 26 + 1` ; v8 `cibles 239` et bilan des règles ; v2 compteurs ; v6 valeurs v5 ; gold-split équilibre du split.
+
+**P5 — README et historique**
+11. `reports/README.md` lignes **20, 21, 23, 24, 25** (+ ligne 18 à enrichir) ; les six fiches historiques pointent encore vers `69bd865e`/v7 au lieu de `f908d7b0`/v8 ; le nouveau rapport n'est pas référencé.
+
+**P6 — mineurs**
+12. gold-split `0,9814` → `0,9815` ; v7 « qui 12 » → 6 ; docstring T112 de `autotest.py`.
+
+## Note importante
+
+**HEAD a bougé vers `d497324b`** pendant l'audit. Ce commit réécrit déjà la v8 honnêtement (`+17 net`, 7 régressions, 17+7+3, contrôle, date/commit, couverture française), passe la v7 en instantané (`0,7482`, « qui » 6, § 3) et remplace les faux contrôles v4/v5/v6 par un renvoi au dispositif v7. Ces points sont donc déjà traités ou partiellement traités au nouveau HEAD ; restent à vérifier : v2, v3, v4 (delta 612/602), v5 (dev/F1/27), v6 (correction `26 → 26`), gold-split, le JSON `avant` de la v7 et le README. Une lecture rapide de la nouvelle table d'ablation v8 de `d497324b` montre en outre une arithmétique à contrôler : R1 `15+1+4 = 20` gains (19 annoncés), total 26 gains / 18 net (24/17 annoncés), `g017` compté comme perte R1c alors qu'il manquait déjà en v7 ; le `top-k 211` est postérieur à `f908d7b0` alors que l'en-tête porte `Commit : f908d7b0`.
+
+### 🤖 Assistant
+
+⏵ J'intègre l'audit de cohérence v8 (arithmétique, bases) et je commite le round v9
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\n# 1) v8 : arithmétique + historique\np=pathlib.Path('reports/rapport-pensee-r1r3.md'); t=p.read_text()\nt=t.replace(\"> **Commit** : `f908d7b0` · **État courant** · **Verdict** : ✅ chiffres, ⚠️ … [1834 caractères tronqués]`
+
+  ```
+corrections appliquées
+2
+2
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# gold-split : les deux 0,9814 restants (tableau)\np=pathlib.Path('reports/rapport-gold-split.md'); t=p.read_text()\nt=t.replace(\"0,9814\",\"0,9815\")\np.write_text(t)\n# v5 : les 0,5156 restants (t … [2127 caractères tronqués]`

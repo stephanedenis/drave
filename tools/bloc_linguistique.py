@@ -369,8 +369,8 @@ RELATIFS = {"qui", "que", "qu", "dont", "où", "which", "that", "who", "whom", "
 # les subordonnants qui n'ont pas d'antécédent : toujours SUB
 AMBIGUES_PREP = {"since", "before", "after", "until", "as", "depuis", "avant", "après", "pendant", "durant"}
 
-SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there",
-          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles"}
+SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there", "who", "that", "which",
+          "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "qui", "qu"}
 
 SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
@@ -856,11 +856,20 @@ class Heuristique:
         pos_verbes = pos_verbes or set()
         par_debut = {m[0]: k for k, m in enumerate(mots)}
 
+        def est_sub(n: str) -> bool:
+            """Le mot est-il un subordonnant **dans cette langue** ? (« car » est un nom anglais)"""
+            if n in SUB_PAR_LANGUE.get(langue, set()):
+                return True
+            return n in SUBORDONNANTS and not (langue == "en" and n == "car")
+
         def est_verbe(d: int, m: str) -> bool:
             """Le verbe : le lexique, le POS, ou la **position** après un pronom sujet."""
             if _est_verbe(m) or d in pos_verbes:
                 return True
             n2 = _normaliser(m)
+            # A17 (R1a) : un pronom n'est jamais un verbe **par la position** (« that I read »)
+            if n2 in lex.get("PRON", set()):
+                return False
             if n2 in lex.get("DET", set()) or n2 in lex.get("PREP", set()) or n2 in lex.get("CONJ", set()):
                 return False
             idx = par_debut.get(d)
@@ -874,8 +883,7 @@ class Heuristique:
         while i < len(mots):
             d, f, t, typ = mots[i]
             n = _normaliser(t)
-            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS
-                                 or n in SUB_PAR_LANGUE.get(langue, set())):
+            if typ == "mot" and (n in RELATIFS or est_sub(n)):
                 suivant = mots[i + 1] if i + 1 < len(mots) else None
                 # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
                 prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
@@ -920,7 +928,7 @@ class Heuristique:
                                 predicat_vu = True   # « is red » : copule + attribut
                             prec_aux = False
                         # un adverbe **final** n'appartient pas à la clause (« … would come | yesterday »)
-                        if (verbes_vus >= 1 and _normaliser(m) in lex.get("ADV", set())
+                        if (predicat_vu and _normaliser(m) in lex.get("ADV", set())
                                 and (j + 1 >= len(mots) or mots[j + 1][3] != "mot")):
                             break
                         j += 1
@@ -937,7 +945,7 @@ class Heuristique:
                 while (j < len(mots) and mots[j][3] == "mot"
                        and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set())
                        and _normaliser(mots[j][2]) not in RELATIFS
-                       and _normaliser(mots[j][2]) not in SUBORDONNANTS
+                       and not est_sub(_normaliser(mots[j][2]))
                        and (j == i + 1 or not est_verbe(mots[j][0], mots[j][2]))):
                     j += 1
                 role = "groupe nominal"

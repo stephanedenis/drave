@@ -1,7 +1,7 @@
 # B13 — R1/R2/R3 : exact 212/212 (1,0000), mais **+17 net** (24 gains, 7 régressions)
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
-> **Commit** : `f908d7b0` · **État courant** · **Verdict** : ✅ chiffres, ⚠️ attribution corrigée
+> **Instantané historique** : état au commit `f908d7b0` ; ne décrit pas l'état courant (v9, `219/219`) · **Verdict** : ✅ chiffres, ⚠️ attribution corrigée
 >
 > **183/183 portes** : l'attachement est **juste 212/212 (1,0000)** sur les **212 labels** prédits
 > (sur 239 cibles), **couverture 0,8870**, **F1 0,5763** (gelé 602 ; 0,5720 vivant), tête
@@ -19,11 +19,12 @@
 | **R1a** — `SUJETS` sans les relatifs (un pronom n'est plus un verbe) | +15 | −6 (r273, s069, s135, s032, s072, s115) | **+9** |
 | **R1b** — modaux dans les auxiliaires | +1 (r247) | 0 | **+1** |
 | **R1c** — second prédicat (AUX après prédicat, verbe après groupe verbal) | +4 (r224, r291, r115, r239) | −1 (g017) | **+3** |
-| **R1** (faisceau) | 19 | 7 | **+13** |
+| **R1** (faisceau) | 20 (15 + 1 + 4) | 7 | **+13** |
 | **R2** — SUB sans segment précédent | +4 (r215, r245, r279, r294) | −1 (s037) | **+3** |
 | **R3a** — subordonnants par langue | 0 | 0 | **0** (inerte : ses membres sont déjà dans `RELATIFS`/`SUBORDONNANTS`) |
 | **R3c** — `fall`/`call` | +2 (r102, r245) | 0 | **+2** |
-| **total** | **24** | **7** | **+17** |
+| **somme des règles** | **26** | **8** | +18 (les règles se recouvrent) |
+| **diff joint v7 → v8** | **24** | **7** | **+17** |
 
 **Décomposition de 212** : 195 (v7) − 7 régressions + 23 des 26 gains de A17 + 1 (r102).
 

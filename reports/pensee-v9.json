@@ -1,0 +1,53 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "avant": {
+  "labels": 212,
+  "exact": 212,
+  "couverture": 0.887,
+  "f1": 0.5763,
+  "spans": 27
+ },
+ "apres": {
+  "labels": 219,
+  "exact": 219,
+  "exact_span": 1.0,
+  "couverture": 0.9163,
+  "f1": 0.5822,
+  "f1_s": 0.5006,
+  "f1_chunker": 0.6178,
+  "tete": 0.7381,
+  "fr": "134/134",
+  "en": "85/85",
+  "topk": 218,
+  "topk_taux": 0.9121,
+  "spans": {
+   "REL": 9,
+   "SUB": 6,
+   "GP": 5,
+   "total": 20
+  },
+  "dev": {
+   "exact": 152,
+   "labels": 152,
+   "couverture": 0.9325
+  },
+  "test": {
+   "exact": 67,
+   "labels": 67,
+   "couverture": 0.8816
+  }
+ },
+ "corrections": [
+  "garde PRON (A17 R1a fidèle)",
+  "est_sub dans toutes les branches",
+  "predicat_vu (adverbe final)"
+ ],
+ "limites": [
+  "20 spans",
+  "in-sample",
+  "garde PRON fermée",
+  "français 134/134"
+ ]
+}

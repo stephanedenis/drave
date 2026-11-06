@@ -1,11 +1,11 @@
-# B13 — le gold coupé en dev/test : les gains généralisent (test 0,9814, dev 0,9811)
+# B13 — le gold coupé en dev/test : les gains généralisent (test 0,9815, dev 0,9811)
 
 > **Instantané historique** : état au commit `85e4082b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > Le gold 612 est coupé en **dev** (422 phrases, 163 cibles, 106 labels) et **test** (190, 76, 54)
 > par un **hash stable de l'identifiant** (`crc32(id) % 3 == 0` → test), stratifié par source et
-> par langue. Mesuré : **dev exact 104/106 (0,9811)**, **test 53/54 (0,9814)** — les règles de la
+> par langue. Mesuré : **dev exact 104/106 (0,9811)**, **test 53/54 (0,9815)** — les règles de la
 > journée ne sont donc pas un surajustement visible à ce niveau ; la F1 est même meilleure sur le
 > test (0,4719 contre 0,4414).
 >
@@ -25,7 +25,7 @@
 
 | | dev | test |
 |---|---:|---:|
-| exact / labels | 104/106 (**0,9811**) | 53/54 (**0,9814**) |
+| exact / labels | 104/106 (**0,9811**) | 53/54 (**0,9815**) |
 | F1 syntagmes | 0,4414 | **0,4719** |
 | F1 tête | 0,6347 | 0,6470 |
 | français (exact / spans) | 79/79 (1,000) | 38/39 (0,9744) |

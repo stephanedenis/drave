@@ -7,12 +7,12 @@
 | Identifiant | `d3114d4c-1629-45f2-aba6-9592332507c5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 1.5 h |
+| Durée | 1.7 h |
 | Tours | 1 |
-| Messages | 79 |
-| Appels d'outils | 102 |
+| Messages | 102 |
+| Appels d'outils | 124 |
 | Fichiers touchés | 1 |
-| Commandes | 89 |
+| Commandes | 102 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [1846 caractères tronqués]
 
-*102 appels d'outils.* Actions notables :
+*124 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, and commits
 - bash — List reports directory
@@ -41,11 +41,48 @@
 - bash — Find functions and constants in evaluer_gold
 - bash — Read evaluer_bloc tail and main
 - bash — Evaluate current code on 612 and 602 gold
-- … et 78 autres
+- … et 99 autres
 
 **Synthèse produite :**
 
-⏵ Correction de l'assertion (38 écarts de fiche + 4 systémiques) et génération du JSON
+⏵ Livraison du bilan de cohérence des huit fiches
+
+Les deux fichiers neufs sont écrits et validés :
+- `reports/rapport-coherence-fiches-v8.md`
+- `reports/pensee-coherence-fiches-v8.json`
+
+**Aucun fichier existant modifié, aucun commit.** L'audit est ancré sur `f908d7b0` (les fichiers d'or sont identiques de `9d5337ce` à `f908d7b0` ; mesures rejouées avec le `bloc_linguistique.py` historique sur 612 et 602).
+
+\## Nombre de fiches et écarts
+
+**8 fiches** (1 courante : v8 ; 7 historiques : v2→v7), **42 écarts** : **7 critiques**, **23 majeurs**, **12 mineurs**.
+
+| fiche | écarts | dont critiques |
+|---|---:|---:|
+| v2 `9d5337ce` | 4 | 0 |
+| v3 `dcf7bc91` | 3 | 0 |
+| v4 `392f03aa` | 4 | 1 |
+| v5 `b975011b` | 5 | 1 |
+| v6 `0ec6c27d` | 3 | 0 |
+| gold-split `85e4082b` | 4 | 0 |
+| v7 `69bd865e` | 7 | 3 |
+| v8 `f908d7b0` | 8 | 2 |
+| systémique | 4 | 0 |
+
+\## Corrections prioritaires
+
+**P1 — chiffres de tête et statut**
+1. **v8** : le tableau des règles annonce `+15 dev, +5 test, 0 perte, +3, +2, +2` (somme **+27**) ; la mesure réelle v7→v8 est **+23 labels gagnés / −7 perdus = +16 labels, +17 exacts** (24 gains/7 pertes ; test net **+2**, pas +5). Les 7 pertes : `s032, s037, s069, s072, s115, s135, r273`.
+2. **v8** : « 17 inatteignables » a le bon compte mais la mauvaise composition. Les 27 = **17 inatteignables** (6 REL + 3 SUB + 4 GP + `r255` + `r035` + `r264` + `r288`) **+ 7 régressions + 3 gains A17 non intégrés** (`g017`, `r280`, `r153`). Le texte compte 20 cas, omet 3 SUB synthétiques et classe 6 régressions dans les « 12 synthétiques ».
+3. **v8** : à `f908d7b0`, pas de date, pas de commit exact, pas de contrôle négatif ; le lien `rapport-spans-v7.md` est cassé (fichier non committé).
+4. **v4** : F1/tête compare la v3 **612** (`0,2862/0,4989`) à la v4 **602** (`0,4539/0,6432`) ; base non nommée, § 3 dit 612.
+5. **v5** : `dev 126/126 (0,9921)` doit être **1,0000** ; F1 `0,5156`/tête `0,6826` sont les constantes de porte, pas la mesure 602 (`0,5164/0,6834`).
+6. **v7** : se dit « État courant `69bd865e` » (faux) ; en-tête/JSON POS `0,7475` contre table `0,7482` ; JSON `avant` mélange v6 612 (`0,5130`), v5 (tête `0,6826`) et v4 (POS `0,7475`) ; « qui 12 » au lieu de 6 ; § 3/§ 5 contredisent § 2 sur dev/test.
+7. **v2** : split lexical pré-v2 `60/63` et `63/82` étiqueté « POS gold » ; `46` vs `45` ; colonne « gain » incomplète (`88+45=133` vs 141).
+
+**P2 — contrôles négatifs**
+8. **v4, v5, v6** : remplacer le contrôle copié de la v7 (`1,67/196` vs `195/196`) par un c
+… [1740 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -53,7 +90,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md` | 1 | 7 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +134,7 @@
 - **T1** Find A17 references
 - **T1** Search all reports for v8 fr/en counts
 - **T1** Check spans-v7 report and v8 commit files
-- … et 49 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -109,6 +146,11 @@
 - **T1** `35	| [`rapport-cache-chunker-applique.md`](rapport-cache-chunker-applique.md) | **B13** — le cache appliqué : **×139** en chunker, ×1 en défaut (S domine), sortie identique, **181/181** |`
 - **T1** `37	| [`rapport-cout-chunker.md`](rapport-cout-chunker.md) | **B13** — le coût du chunker : O(n²) confirmé, cache ×11,6 à 160 tokens |`
 - **T1** `+> donnerait **143/145 (98,62 %)** et 143/239 (59,83 %), avec « +2 cas, dont 2 synthétiques »`
+- **T1** `**Permutation globale des cibles** (2000 tirages) : **2,04/212** en moyenne (0,96 %) contre`
+- **T1** `**212/212** observé, p = 0. **Candidat aléatoire** : 35,9 % de top-1 (observé 100 %).`
+- **T1** `**Permutation des listes de candidats** : top-k 0,85 % (observé 83,5 %).`
+- **T1** `| [`rapport-native-capacite-egal.md`](rapport-native-capacite-egal.md) | **N2.5b** — capacité à budget égal : 21,63 M **4,294** vs 11,47 M **4,476** (−4,1 %) |`
+- **T1** `-| [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |`
 
 ## 5. Erreurs rencontrées
 

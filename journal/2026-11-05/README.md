@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**105 commits** · **26 session(s)** · **8 thème(s)**
+**106 commits** · **26 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 17 | [distribue.md](distribue.md) |
+| distribue | 18 | [distribue.md](distribue.md) |
 | docs | 35 | [docs.md](docs.md) |
 | memoire | 12 | [memoire.md](memoire.md) |
 | mesures | 28 | [mesures.md](mesures.md) |
@@ -44,8 +44,8 @@
 | `c4796573-e2dc-48c2-b832-96f8bfab22c3` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | [rapport](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/rapport.md) · [digest](../sessions/c4796573-e2dc-48c2-b832-96f8bfab22c3/digest.md) |
 | `c5910cba-e10a-4e08-8ac7-449ce150899c` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.2 h | [rapport](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) · [digest](../sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/digest.md) |
 | `d300542e-6e9d-47ac-875b-b44a192eec35` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 1.3 h | [rapport](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/rapport.md) · [digest](../sessions/d300542e-6e9d-47ac-875b-b44a192eec35/digest.md) |
-| `d3114d4c-1629-45f2-aba6-9592332507c5` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.5 h | [rapport](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) · [digest](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 126.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `d3114d4c-1629-45f2-aba6-9592332507c5` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.7 h | [rapport](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/rapport.md) · [digest](../sessions/d3114d4c-1629-45f2-aba6-9592332507c5/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 126.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `f55ccb7b-481e-4ab6-b5b4-331dc6ff2238` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.0 h | [rapport](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/rapport.md) · [digest](../sessions/f55ccb7b-481e-4ab6-b5b4-331dc6ff2238/digest.md) |
 | `fbdbd6fb-1ebc-4348-a6cc-f10faf76520b` | — | 2026-11-05 10:11 | 0.0 h | [rapport](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/rapport.md) · [digest](../sessions/fbdbd6fb-1ebc-4348-a6cc-f10faf76520b/digest.md) |
 | `ff7e786c-3ece-4eae-864e-19dddfead93c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | [rapport](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) · [digest](../sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/digest.md) |
@@ -160,6 +160,7 @@
 | 21:12 | `5c15ee91` | JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 INATTEIGNABLES |
 | 21:25 | `7c43c75e` | JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763 |
 | 21:55 | `b551cf3b` | ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS |
+| 22:39 | `d497324b` | B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 

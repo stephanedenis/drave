@@ -1,11 +1,11 @@
-# B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5156
+# B13 — la couverture : 187 labels, exact 186/187 (0,9947), F1 0,5164
 
 > **Instantané historique** : état au commit `b975011b` (2026-11-05) ; ne décrit pas l'état courant `69bd865e` — voir [rapport-pensee-couverture-v7](rapport-pensee-couverture-v7.md).
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ✅
 > **183/183 portes** : la **couverture** passe de **160 à 187 labels** (sur 239) et l'exactitude
 > tient : **exact 186/187 = 0,9947** (fr **0,9921**, en **1,0000** — 60/60) ; la **F1 syntagmes**
-> monte à **0,5156** (union ; S 0,4582, chunker 0,5351) et la tête à **0,6826** ; les **spans
+> monte à **0,5164** (union ; S 0,4582, chunker 0,5351) et la tête à **0,6826** ; les **spans
 > perdus** tombent de **79 à 52** (24 REL, 12 SUB, 16 GP). Sur le gold tenu à l'écart : **dev
 > 126/126 (1,000)**, **test 60/61** — la progression n'est pas un surajustement visible.
 >
@@ -34,8 +34,8 @@
 | **exact / labels** | 157/160 (0,9812) | **186/187 (0,9947)** |
 | top-k (sous-chaîne) | 156/239 | 161/239 (0,6736) |
 | **couverture** | 160/239 (0,6695) | **187/239 (0,7824)** |
-| F1 syntagmes (union) | 0,4539 | **0,5156** |
-| F1 tête | 0,6432 | **0,6826** |
+| F1 syntagmes (union, 602) | 0,4539 | **0,5164** |
+| F1 tête (602) | 0,6432 | **0,6834** |
 | français | 117/118 (0,9915) | **126/127 (0,9921)** |
 | anglais | 40/42 (0,9524) | **60/60 (1,0000)** |
 | spans perdus | 79 | **52** (24 REL, 12 SUB, 16 GP) |

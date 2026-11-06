@@ -6,10 +6,11 @@
   "labels": 187,
   "exact": 187,
   "couverture": 0.7824,
-  "f1": 0.513,
-  "tete": 0.6826,
-  "pos": 0.7475,
-  "spans": 52
+  "f1": 0.5164,
+  "tete": 0.6834,
+  "pos": 0.7482,
+  "spans": 52,
+  "base": "gelé 602, v6"
  },
  "apres": {
   "labels": 196,
@@ -30,7 +31,8 @@
    "SUB": 17,
    "GP": 5,
    "total": 43
-  }
+  },
+  "base": "gelé 602"
  },
  "corrections": [
   "POS contextuel (DET/PRÉP/ADJ → nom)",

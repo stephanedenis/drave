@@ -2247,3 +2247,390 @@ AssertionError
 [exit code: 1]
   ```
 
+### 🤖 Assistant
+
+⏵ Correction de l'assertion (38 écarts de fiche + 4 systémiques) et génération du JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json, pathlib\nfrom collections import Counter\n\nD = []\ndef add(id, fiche, gravite, ou, constat, mesure, correction):\n    D.append({\"id\": id, \"fiche\": fiche, \"gravite\": gravite, \"ou\": ou,\n      … [41548 caractères tronqués]`
+
+  ```
+rows 42 Counter({'majeure': 23, 'mineure': 12, 'critique': 7})
+written reports/pensee-coherence-fiches-v8.json 46264
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajustements de cohérence (contrôles valides, 8 bases, ligne 18 à enrichir)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "| contrôles négatifs valides | **3** (v2 négatif documenté, v3, v7 sous réserve) |", "new_string": "| contrôles négatifs valides | **2** (v2 négatif documenté, v3) + **1 sous réserv … [12 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "| ligne | effet annoncé | effet intégré mesuré |\n|---|---:|---:|\n| R1 | +15 dev, +5 test, 0 perte | dev 19 gains / 4 pertes (net +15) ; test 5 gains / 3 pertes (net +2) |\n| R2 |  … [661 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "Le prototype A17 atteint `222/222` (154/154 dev, 68/68 test, 17 absents) ; la v8 intégrée atteint", "new_string": "Les gains/pertes de la ligne R1 sont des **exacts** ; en **labels* … [188 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "- [`pensee-coherence-fiches-v8.json`](pensee-coherence-fiches-v8.json) — le registre structuré\n  (8 fiches, 42 écarts, 8 contrôles, 8 mentions, 7 bases, 6 lignes README).", "new_st … [211 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/pensee-coherence-fiches-v8.json')\nd=json.loads(p.read_text(encoding='utf-8'))\ns=d['synthese']\ns['controles_valides']=2\ns['controles_sous_reserve']=1\ns['lignes_read … [424 caractères tronqués]`
+
+  ```
+updated 46365
+{
+ "fiches_verifiees": 8,
+ "fiches_courantes": 1,
+ "fiches_historiques": 7,
+ "fiches_sans_ecart": 0,
+ "ecarts": 42,
+ "ecarts_critiques": 7,
+ "ecarts_majeurs": 23,
+ "ecarts_mineurs": 12,
+ "fiches_avec_ecart": 8,
+ "fiches_avec_ecart_critique": 4,
+ "fiches_avec_ecart_critique_liste": [
+  "v4",
+  "v5",
+  "v7",
+  "v8"
+ ],
+ "controles_valides": 2,
+ "controles_invalides": 3,
+ "controles_absents": 2,
+ "mentions_historiques_obsoletes": 7,
+ "mentions_historiques_imprecises": 1,
+ "lignes_readme_a_corriger": 5,
+ "liens_casses": 1,
+ "tableaux_somme_fausse": 2,
+ "verdict_global": "❌ 0 fiche entièrement conforme (chiffres + JSON + mention + contrôle) ; 42 écarts dont 7 critiques ; la v8 est fausse sur son tableau de règles et ses 17 inatteignables, et n'a ni date ni contrôle.",
+ "controles_sous_reserve": 1,
+ "lignes_readme_a_enrichir": 1
+}
+JSON VALID
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"contrôles négatifs valides\\|3 contrôles\\|2 valides\\|sous réserve\\|7 bases\\|6 lignes\" reports/rapport-coherence-fiches-v8.md | head -20", "description": "Check control counts in markdown"}`
+
+  ```
+5:> **8/8** ont au moins un écart ; **3 contrôles négatifs invalides** (v4, v5, v6) et **2 absents**
+43:| contrôles négatifs valides | **2** (v2 négatif documenté, v3) + **1 sous réserve** (v7) |
+487:  (8 fiches, 42 écarts, 8 contrôles, 8 mentions, 8 bases, 6 lignes README : 5 à corriger + 1 à enrichir).
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle croisé markdown ↔ JSON (IDs, gravités, compteurs)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, re, pathlib\nmd=pathlib.Path('reports/rapport-coherence-fiches-v8.md').read_text(encoding='utf-8')\nd=json.loads(pathlib.Path('reports/pensee-coherence-fiches-v8.json').read_text(encoding='utf-8'))\nid … [829 caractères tronqués]`
+
+  ```
+md 42 json 42
+missing in json []
+missing in md []
+md sev Counter({'M': 23, 'm': 12, '**C**': 7})
+json sev Counter({'majeure': 23, 'mineure': 12, 'critique': 7})
+fiches sum 38 synthese 42
+controls 8 mentions 8 bases 8 readme 6
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture des deux livrables et vérification des compteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\nd=json.loads(pathlib.Path('reports/pensee-coherence-fiches-v8.json').read_text(encoding='utf-8'))\nprint('keys', list(d.keys()))\nprint('synthese', {k:d['synthese'][k] for k in ('fiches_verifi … [814 caractères tronqués]`
+
+  ```
+keys ['date_verification', 'branche', 'ligne', 'objet', 'commit_audite', 'head_au_moment_de_l_ecriture', 'note_arbre_de_travail', 'perimetre', 'methode', 'synthese', 'fiches', 'divergences', 'tableaux_sommes', 'controles_negatifs', 'mentions_historiques', 'bases', 'readme', 'corrections', 'limites', 'fichiers']
+synthese {'fiches_verifiees': 8, 'ecarts': 42, 'ecarts_critiques': 7, 'ecarts_majeurs': 23, 'ecarts_mineurs': 12, 'controles_valides': 2, 'controles_sous_reserve': 1, 'controles_invalides': 3, 'controles_absents': 2, 'lignes_readme_a_corriger': 5, 'lignes_readme_a_enrichir': 1, 'liens_casses': 1}
+fiches [('v2', 4, 4), ('v3', 3, 3), ('v4', 4, 4), ('v5', 5, 5), ('v6', 3, 3), ('gold-split', 4, 4), ('v7', 7, 7), ('v8', 8, 8)]
+divergences per fiche {'v2': 4, 'v3': 3, 'v4': 4, 'v5': 5, 'v6': 3, 'gold-split': 4, 'v7': 7, 'v8': 8, 'systemique': 4}
+controles statuts ['acceptable (négatif documenté, pas un contrôle de permutation dans la fiche)', 'valide', 'invalide (contrôle de la v7 ; la v4 a 160/157)', 'invalide (contrôle de la v7 ; la v5 a 187/186)', 'invalide (contrôle de la v7 ; la v6 a 187/187)', 'présent mais protocole non reproductible', 'absent', 'absent']
+bases ['v2', 'v3',
+… [185 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' reports/rapport-coherence-fiches-v8.md", "description": "Read report header"}`
+
+  ```
+# Cohérence des fiches B13 du 2026-11-05 — v2 → v8 (état `f908d7b0`)
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 · **Verdict** : ❌
+> **8 fiches auditées** (1 courante, 7 historiques), **42 écarts** dont **7 critiques** ;
+> **8/8** ont au moins un écart ; **3 contrôles négatifs invalides** (v4, v5, v6) et **2 absents**
+> (v8, gold-split) ; **7 mentions d'historique obsolètes** (v2→v7) et **1 imprécise** (v8) ;
+> **5 lignes** de `reports/README.md` à corriger ; **1 lien cassé** au commit (`rapport-spans-v7.md`,
+> cité par la v8, absent de `f908d7b0`) ; **2 tableaux dont la somme visible ne tombe pas**
+> (corrections de la v2, règles de la v8).
+>
+> **État audité** : commit **`f908d7b0`** (2026-11-05 21:08, branche `s/v7`), le dernier commit
+> de la journée. Les huit fiches, leurs huit JSON et `reports/README.md` sont lus **à ce commit**
+> (`git show f908d7b0:…`), pas dans l'arbre de travail.
+>
+> **Concurrence (importante)** : au moment de l'écriture (22:15), l'arbre de travail contient des
+> corrections **non committées** de `rapport-pensee-couverture-v7.md` (en-tête POS `0,7475` →
+> `0,7482`, « qui » `12` → `6`, phrase `dev/test` du § 3) et l
+… [305 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : seuls deux fichiers neufs, aucun fichier existant modifié par l'audit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- reports/ | head -30; echo '--- our files ---'; ls -la reports/rapport-coherence-fiches-v8.md reports/pensee-coherence-fiches-v8.json; echo '--- tracked/untracked ---'; git ls-files --error-unmatch reports/rappor … [184 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-spans-chunker.md
+?? reports/pensee-coherence-fiches-v8.json
+?? reports/rapport-coherence-fiches-v8.md
+?? reports/rapport-s-paragraphes.md
+--- our files ---
+-rw-r--r--. 1 stephane stephane 46365  5 nov 22:43 reports/pensee-coherence-fiches-v8.json
+-rw-------. 1 stephane stephane 44484  5 nov 22:43 reports/rapport-coherence-fiches-v8.md
+--- tracked/untracked ---
+error: pathspec 'reports/rapport-coherence-fiches-v8.md' did not match any file(s) known to git
+error: pathspec 'reports/pensee-coherence-fiches-v8.json' did not match any file(s) known to git
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 && echo '---HEAD v7 header---' && git show HEAD:reports/rapport-pensee-couverture-v7.md | sed -n '5,10p' && echo '---status v7---' && git status --short -- reports/rapport-pensee-couverture-v7.md", "description": … [37 caractères tronqués]`
+
+  ```
+d497324b B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183
+b551cf3b ÉTAT — LA LIGNE FAIT PASSE À L'ATTACHEMENT 212/212, COUVERTURE 0,887, 27 SPANS
+7c43c75e JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763
+---HEAD v7 header---
+> tient : **exact 195/196 = 0,9949** (fr **135/135 = 1,0**, en **60/61**) ; la **F1 syntagmes**
+> monte à **0,5595** (union ; S 0,4741, chunker 0,5858), la tête à **0,7205** ; la **POS** passe de
+> **0,7482 à 0,7603** (gelé 602) ; les **spans perdus** tombent de **52 à 43** (21 REL, 17 SUB, 5 GP).
+>
+> **Instantané historique** : état au commit `69bd865e` · **Base** : F1/tête/POS sur le gold **gelé 602** (portes
+> T110-T115) ; sur le **612** : F1 **0,5555**, tête **0,7152**, POS **0,7581**. Couverture et
+---status v7---
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD a bougé vers d497324b : vérification de la nouvelle v8
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline d497324b | head -40 && echo '---new v8 fiche---' && git show d497324b:reports/rapport-pensee-r1r3.md | sed -n '1,120p'", "description": "Inspect new v8 commit and fiche"}`
+
+  ```
+d497324b B13 — TOP-K 211/239 (LE SITE D'APPEL prec = s), LA V8 RÉÉCRITE HONNÊTEMENT (+17 NET, 7 RÉGRESSIONS), AUDITS A17/A19 INTÉGRÉS ; 183/183
+ docs/pilotage/en-cours.md                          |    4 +-
+ journal/2026-11-05/README.md                       |   13 +-
+ journal/2026-11-05/attention.md                    |    8 +-
+ journal/2026-11-05/distribue.md                    |    8 +-
+ journal/2026-11-05/docs.md                         |   13 +-
+ journal/2026-11-05/memoire.md                      |    8 +-
+ journal/2026-11-05/mesures.md                      |    8 +-
+ journal/2026-11-05/modele.md                       |    8 +-
+ journal/2026-11-05/moteur.md                       |    8 +-
+ journal/2026-11-05/portes.md                       |    8 +-
+ journal/README.md                                  |    8 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |   10 +-
+ .../c5910cba-e10a-4e08-8ac7-449ce150899c/digest.md |  726 ++++++++
+ .../rapport.md                                     |   68 +-
+ .../d3114d4c-1629-45f2-aba6-9592332507c5/digest.md |  337 ++++
+ .../rapport.md                                     |   
+… [6154 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ HEAD d497324b : relevé des corrections déjà appliquées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-pensee-segmentation-v4.md reports/rapport-pensee-couverture-v5.md reports/rapport-pensee-attachement-parfait.md reports/rapport-pensee-couverture-v7.md reports/README.md reports/pensee-r1r3.json; do echo \"## … [131 caractères tronqués]`
+
+  ```
+######## reports/rapport-pensee-segmentation-v4.md
+diff --git a/reports/rapport-pensee-segmentation-v4.md b/reports/rapport-pensee-segmentation-v4.md
+index 4bea3e98..265f06a6 100644
+--- a/reports/rapport-pensee-segmentation-v4.md
++++ b/reports/rapport-pensee-segmentation-v4.md
+@@ -41,8 +41,9 @@
+ | spans perdus | 94 (48 REL, 33 SUB, 13 GP) | **79 (48 REL, 21 SUB, 10 GP)** |
+ | échecs de cible | 4 | **3 hors candidats** (r162, r309, r194) |
+ 
+-**Contrôle négatif** : le dispositif est celui de la fiche courante — **permutation globale des
+-cibles** (100 tirages) : **1,67/196** en moyenne contre **195/196** observé, p < 0,001.
++**Contrôle négatif** : voir le dispositif de la [fiche v7](rapport-pensee-couverture-v7.md)
++(permutation globale des cibles, candidat aléatoire) — les valeurs publiées là-bas sont celles de
++sa base, pas de celle-ci.
+ 
+ **Ce que ça dit** :
+ 
+######## reports/rapport-pensee-couverture-v5.md
+diff --git a/reports/rapport-pensee-couverture-v5.md b/reports/rapport-pensee-couverture-v5.md
+index 654badb9..cfd5d2cc 100644
+--- a/reports/rapport-pensee-couverture-v5.md
++++ b/reports/rapport-pensee-couverture-v5.md
+@@ -41,8 +41,9 @@
+ | spans perdus | 79 | **52** (24 REL, 
+… [8798 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Note de version : HEAD d497324b corrige déjà une partie des écarts
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "> **Concurrence (importante)** : au moment de l'écriture (22:15), l'arbre de travail contient des\n> corrections **non committées** de `rapport-pensee-couverture-v7.md` (en-tête POS … [1885 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/pensee-coherence-fiches-v8.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['head_au_moment_de_l_ecriture']='d497324b'\nd['note_head']=(\"HEAD a avancé de f908d7b … [2579 caractères tronqués]`
+
+  ```
+updated 48186
+JSON VALID
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "> **État audité** : commit **`f908d7b0`** (2026-11-05 21:08, branche `s/v7`), le dernier commit\n> de la journée. Les huit fiches, leurs huit JSON et `reports/README.md` sont lus ** … [346 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md", "old_string": "> perte R1c alors qu'il manquait déjà en v7) — audit séparé, non couvert ici.", "new_string": "> perte R1c alors qu'il manquait déjà en v7) — audit séparé, non couvert ici. De même, … [155 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coherence-fiches-v8.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dernier commit de la journée\\|7 bases\\|3 contrôles négatifs valides\\|d497324b\\|f908d7b0\" reports/rapport-coherence-fiches-v8.md | head -20", "description": "Check updated report notes"}`
+
+  ```
+1:# Cohérence des fiches B13 du 2026-11-05 — v2 → v8 (état `f908d7b0`)
+8:> cité par la v8, absent de `f908d7b0`) ; **2 tableaux dont la somme visible ne tombe pas**
+11:> **État audité** : commit **`f908d7b0`** (2026-11-05 21:08, branche `s/v7`), le commit demandé
+12:> (avant `d497324b`). Les huit fiches, leurs huit JSON et `reports/README.md` sont lus **à ce
+13:> commit** (`git show f908d7b0:…`), pas dans l'arbre de travail.
+15:> **HEAD a bougé (note de version)** : pendant l'audit, HEAD est passé de `f908d7b0` à
+16:> **`d497324b`** (« la v8 réécrite honnêtement : +17 net, 7 régressions ; audits A17/A19
+21:> sur leur base). **Ce rapport décrit `f908d7b0`**, l'état demandé : les points V8-1/2/3/5/6 et
+22:> V7-1/2/6 y sont donc déjà traités à `d497324b`. Les points V2, V3, V4, V5, V6, gold-split, le
+27:> `top-k 211` de la nouvelle fiche est postérieur à `f908d7b0` (correctif `prec = s`), alors que
+28:> son en-tête porte `Commit : f908d7b0` : à dater.
+33:> committées dans `d497324b` ; le lien A17 est donc valide au nouveau HEAD.
+38:> et le **gold gelé 602** ; les fichiers d'or sont **identiques** de `9d5337ce` à `f908d7b0`
+62:| liens cassés au commit `f908d7b0` | **1** (v8 → `rapport-
+… [1313 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nfrom pathlib import Path\np=Path('reports/rapport-coherence-fiches-v8.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"les points V8-1/2/3/5/6 et\\n> V7-1/2/6 y sont donc déjà traités à `d497324b`.\", \"les poi … [691 caractères tronqués]`
+
+  ```
+ok
+JSON VALID
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale des liens et de la structure des livrables
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, pathlib\np=pathlib.Path('reports/rapport-coherence-fiches-v8.md'); t=p.read_text(encoding='utf-8')\nlinks=re.findall(r'\\[[^\\]]+\\]\\(([^)]+)\\)',t); bad=[]\nfor l in links:\n    if l.startswith(('http: … [587 caractères tronqués]`
+
+  ```
+links 21 bad []
+ids 42 unique 42
+42 present True 7 critiques True
+JSON VALID
+-rw-r--r--. 1 stephane stephane 48216  5 nov 22:51 reports/pensee-coherence-fiches-v8.json
+-rw-------. 1 stephane stephane 45633  5 nov 22:51 reports/rapport-coherence-fiches-v8.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du bilan final au parent
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Audit terminé. Deux fichiers neufs (aucun existant modifié, aucun commit) :\n- `reports/rapport-coherence-fiches-v8.md`\n- `reports/pensee-coherence-fiches-v8.json`\n\nPérimètre : les 8 fiches v2→v8 et leurs 8 JSON, ancrés sur `f908d7b … [2968 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Déclaration des deux livrables
+
+- **present** `{"files": [{"path": "reports/rapport-coherence-fiches-v8.md", "description": "Rapport de cohérence des 8 fiches B13 (v2→v8) à l'état f908d7b0 : 42 écarts, 7 critiques, registre par fiche, contrôles, bases 612/602, README et corrections priorisées."}, {"path": "reports/pensee-coherence-fiches-v8.json … [162 caractères tronqués]`
+
+  ```
+Presented reports/rapport-coherence-fiches-v8.md
+Presented reports/pensee-coherence-fiches-v8.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison du bilan de cohérence des huit fiches
+
+Les deux fichiers neufs sont écrits et validés :
+- `reports/rapport-coherence-fiches-v8.md`
+- `reports/pensee-coherence-fiches-v8.json`
+
+**Aucun fichier existant modifié, aucun commit.** L'audit est ancré sur `f908d7b0` (les fichiers d'or sont identiques de `9d5337ce` à `f908d7b0` ; mesures rejouées avec le `bloc_linguistique.py` historique sur 612 et 602).
+
+## Nombre de fiches et écarts
+
+**8 fiches** (1 courante : v8 ; 7 historiques : v2→v7), **42 écarts** : **7 critiques**, **23 majeurs**, **12 mineurs**.
+
+| fiche | écarts | dont critiques |
+|---|---:|---:|
+| v2 `9d5337ce` | 4 | 0 |
+| v3 `dcf7bc91` | 3 | 0 |
+| v4 `392f03aa` | 4 | 1 |
+| v5 `b975011b` | 5 | 1 |
+| v6 `0ec6c27d` | 3 | 0 |
+| gold-split `85e4082b` | 4 | 0 |
+| v7 `69bd865e` | 7 | 3 |
+| v8 `f908d7b0` | 8 | 2 |
+| systémique | 4 | 0 |
+
+## Corrections prioritaires
+
+**P1 — chiffres de tête et statut**
+1. **v8** : le tableau des règles annonce `+15 dev, +5 test, 0 perte, +3, +2, +2` (somme **+27**) ; la mesure réelle v7→v8 est **+23 labels gagnés / −7 perdus = +16 labels, +17 exacts** (24 gains/7 pertes ; test net **+2**, pas +5). Les 7 pertes : `s032, s037, s069, s072, s115, s135, r273`.
+2. **v8** : « 17 inatteignables » a le bon compte mais la mauvaise composition. Les 27 = **17 inatteignables** (6 REL + 3 SUB + 4 GP + `r255` + `r035` + `r264` + `r288`) **+ 7 régressions + 3 gains A17 non intégrés** (`g017`, `r280`, `r153`). Le texte compte 20 cas, omet 3 SUB synthétiques et classe 6 régressions dans les « 12 synthétiques ».
+3. **v8** : à `f908d7b0`, pas de date, pas de commit exact, pas de contrôle négatif ; le lien `rapport-spans-v7.md` est cassé (fichier non committé).
+4. **v4** : F1/tête compare la v3 **612** (`0,2862/0,4989`) à la v4 **602** (`0,4539/0,6432`) ; base non nommée, § 3 dit 612.
+5. **v5** : `dev 126/126 (0,9921)` doit être **1,0000** ; F1 `0,5156`/tête `0,6826` sont les constantes de porte, pas la mesure 602 (`0,5164/0,6834`).
+6. **v7** : se dit « État courant `69bd865e` » (faux) ; en-tête/JSON POS `0,7475` contre table `0,7482` ; JSON `avant` mélange v6 612 (`0,5130`), v5 (tête `0,6826`) et v4 (POS `0,7475`) ; « qui 12 » au lieu de 6 ; § 3/§ 5 contredisent § 2 sur dev/test.
+7. **v2** : split lexical pré-v2 `60/63` et `63/82` étiqueté « POS gold » ; `46` vs `45` ; colonne « gain » incomplète (`88+45=133` vs 141).
+
+**P2 — contrôles négatifs**
+8. **v4, v5, v6** : remplacer le contrôle copié de la v7 (`1,67/196` vs `195/196`) par un contrôle sur leur base (`1,80/160`, `1,93/187`, `1,95/187`) ou le retirer. **v8** et **gold-split** n'en ont aucun ; **v7** a un contrôle dont le protocole `1,67/196` n'est pas reproductible tel quel.
+
+**P3 — bases 612/602**
+9. v4/v5/v8 : nommer la base ; v7 : en-tête et JSON à `0,7482` ; v6 et gold-split sont corrects.
+
+**P4 — JSON ↔ texte**
+10. v7 `avant` ; v3 bloc A13 ; v5 dev/test et `27 = 26 + 1` ; v8 `cibles 239` et bilan des règles ; v2 compteurs ; v6 valeurs v5 ; gold-split équilibre du split.
+
+**P5 — README et historique**
+11. `reports/README.md` lignes **20, 21, 23, 24, 25** (+ ligne 18 à enrichir) ; les six fiches historiques pointent encore vers `69bd865e`/v7 au lieu de `f908d7b0`/v8 ; le nouveau rapport n'est pas référencé.
+
+**P6 — mineurs**
+12. gold-split `0,9814` → `0,9815` ; v7 « qui 12 » → 6 ; docstring T112 de `autotest.py`.
+
+## Note importante
+
+**HEAD a bougé vers `d497324b`** pendant l'audit. Ce commit réécrit déjà la v8 honnêtement (`+17 net`, 7 régressions, 17+7+3, contrôle, date/commit, couverture française), passe la v7 en instantané (`0,7482`, « qui » 6, § 3) et remplace les faux contrôles v4/v5/v6 par un renvoi au dispositif v7. Ces points sont donc déjà traités ou partiellement traités au nouveau HEAD ; restent à vérifier : v2, v3, v4 (delta 612/602), v5 (dev/F1/27), v6 (correction `26 → 26`), gold-split, le JSON `avant` de la v7 et le README. Une lecture rapide de la nouvelle table d'ablation v8 de `d497324b` montre en outre une arithmétique à contrôler : R1 `15+1+4 = 20` gains (19 annoncés), total 26 gains / 18 net (24/17 annoncés), `g017` compté comme perte R1c alors qu'il manquait déjà en v7 ; le `top-k 211` est postérieur à `f908d7b0` alors que l'en-tête porte `Commit : f908d7b0`.
+
