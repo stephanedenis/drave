@@ -4,16 +4,17 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:28 | `653a7981` | B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+16) |
 | 01:00 | `3ab768f7` | B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
+| 01:26 | `0911ae29` | B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+14) |
 
 ## Chiffres du jour
 
-`0,9247` · `1,0000`
+`1,0000` · `0,9289` · `0,9247`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -30,6 +31,7 @@
 - [reports/rapport-dev-test-v10.md](../../reports/rapport-dev-test-v10.md)
 - [reports/rapport-pensee-v10.md](../../reports/rapport-pensee-v10.md)
 - [reports/rapport-pensee-v11.md](../../reports/rapport-pensee-v11.md)
+- [reports/rapport-pensee-v12.md](../../reports/rapport-pensee-v12.md)
 
 <!-- notes -->
 

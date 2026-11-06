@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**5 commits** · **3 session(s)** · **3 thème(s)**
+**6 commits** · **3 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| mesures | 2 | [mesures.md](mesures.md) |
+| mesures | 3 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -32,6 +32,7 @@
 | 00:28 | `653a7981` | B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183 |
 | 00:56 | `9a1b3914` | PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183 |
 | 01:00 | `3ab768f7` | B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES |
+| 01:26 | `0911ae29` | B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -55,4 +56,10 @@ restants sont, pour 17, inatteignables (12 formes synthétiques, 4 GP du gold sa
 tokenisation `qu'il`) ; le dernier (`g017`) est un arbitrage d'adverbe assumé. Les fiches
 `rapport-pensee-v9.md`, `-v10.md`, `-v11.md` et les audits `rapport-audit-r1r3.md`,
 `rapport-audit-v10.md`, `rapport-dev-test-v10.md` portent les mesures et les corrections.
+**La cible de A17 (1 h 30).** Le dernier écart était un marqueur ambigu : « when » après un GN est
+une **relative** (« The day when we left »), ailleurs une subordonnée. Avec `AMBIGUES_REL`,
+l'attachement est à **222/222 (1,0000)** — **fr 136/136, en 86/86** —, la **couverture** à
+**0,9289**, la **F1** à **0,5893** ; **dev 153/153, test 69/69**. Les **17 spans** restants sont
+**tous inatteignables** (12 formes synthétiques, 4 GP du gold sans préposition, une tokenisation).
+La journée referme ainsi le chantier ouvert le matin à 137/145 sur 145 labels (couverture 0,6067).
 <!-- /notes -->
