@@ -7,12 +7,12 @@
 | Identifiant | `082fe8ca-3e1e-4454-b91b-12586843e880` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 36 |
-| Appels d'outils | 49 |
+| Messages | 39 |
+| Appels d'outils | 54 |
 | Fichiers touchés | 2 |
-| Commandes | 40 |
+| Commandes | 45 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [1945 caractères tronqués]
 
-*49 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - bash — Check working directory and git status
 - bash — List repo root and reports directory
@@ -41,11 +41,11 @@
 - bash — Inspect existing JSON structure
 - bash — Probe CLI edge cases and exit codes
 - bash — Probe URL tokenization and phrase spans
-- … et 29 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ Classification fine des chevauchements, cibles et POS manquantes
+⏵ Inventaire du contrat de sortie (clés, types, valeurs vides)
 
 ## 3. Travail accompli
 
@@ -98,6 +98,7 @@
 - **T1** Retest surrogate CLI and non-str API after fix
 - **T1** Run detailed overlap/target analysis
 - **T1** Fix refusal handling and rerun detail analysis
+- … et 5 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -183,6 +184,10 @@
 - **T1** `f47 rc=0 wall=  147.1ms json=True labels=45 ovl={'discours': {'paires': 1, 'etiquettes': 2, 'exemples': [['connecteur', 0, 43, 'paragraphe', 0, 43]]}}`
 - **T1** `f48 rc=0 wall=  168.8ms json=True labels=89 ovl={}`
 - **T1** `f49 rc=0 wall=  154.3ms json=True labels=59 ovl={}`
+- **T1** `('evaluer', '--json') rc 0 ms 536.4 bytes 2746 err`
+- **T1** `('evaluer', '--gold', '--json') rc 0 ms 600.4 bytes 2735 err`
+- **T1** `('evaluer',) rc 0 ms 545.6 bytes 636 err`
+- **T1** `('evaluer', '--gold') rc 0 ms 577.0 bytes 624 err`
 
 ## 5. Erreurs rencontrées
 

@@ -7,12 +7,12 @@
 | Identifiant | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 11:17 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 30 |
-| Appels d'outils | 29 |
+| Messages | 35 |
+| Appels d'outils | 34 |
 | Fichiers touchés | 0 |
-| Commandes | 21 |
+| Commandes | 26 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **diagnost … [2138 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Check repo state and branch
 - bash — List repo and tools directories
@@ -41,11 +41,11 @@
 - bash — Audit rule risks on gold
 - bash — Run POS rule variants on dev and test
 - bash — Fix patch anchor and rerun variants
-- … et 9 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Debugging why R2s skips "plants" but fires on "flowers"
+⏵ Locating the R2s break and residual EN errors with sentence context
 
 ## 3. Travail accompli
 
@@ -77,6 +77,11 @@
 - **T1** Inspect breaks and transitions
 - **T1** Inspect flowers/books breaks
 - **T1** Inspect R2S patch text
+- **T1** Instrument R2s on the break phrases
+- **T1** Trace R2s decisions
+- **T1** Rerun measurements with reordered R2s
+- **T1** List breaks and residual errors
+- **T1** Print breaks and residual list from file
 
 ## 4. Mesures et résultats marquants
 

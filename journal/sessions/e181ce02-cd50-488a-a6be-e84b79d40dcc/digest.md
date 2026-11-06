@@ -52076,3 +52076,56 @@ ven 06 nov 2026 11:50:58 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir deux lignes anciennes de 15+ mots\nt=t.replace(\"| [`rapport-pensee-attachement-v2.md`](rapport-pensee-attachement-v2.md) | **B1 … [1804 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 17 files changed, 294 insertions(+), 60 deletions(-)
+COMMIT OK 1
+108faf92 DOCS — LE README DES FICHES DANS LE BUDGET T1 (LIGNES ANCIENNES RACCOURCIES)
+   1962eb15..108faf92  s/v7 -> s/v7
+   1962eb15..108faf92  master -> master
+0
+ven 06 nov 2026 11:53:40 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale et clôture de la fenêtre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [396 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 11:53:55 EST
+HEAD 108faf92
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=1
+python3 tools/verifier_schemas.py          EXIT=0
+
+OK
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py; python3 tools/index_reports.py --verifier; echo \"verifier EXIT=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1\nfor i in 1 2 3; do\n  git add reports/INDEX.md docs/pilotage/en-cours.md\n  ti … [562 caractères tronqués]`
+
+  ```
+679 fiches → reports/INDEX.md
+verifier EXIT=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+108faf92 DOCS — LE README DES FICHES DANS LE BUDGET T1 (LIGNES ANCIENNES RACCOURCIES)
+Everything up-to-date
+Everything up-to-date
+0
+ven 06 nov 2026 11:54:53 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 11 h 56 HNE\", t)\np.write_text( … [746 caractères tronqués]`

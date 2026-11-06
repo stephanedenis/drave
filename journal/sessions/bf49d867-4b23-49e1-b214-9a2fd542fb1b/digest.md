@@ -894,3 +894,86 @@ R2p {'VERB->NOU
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib,sys\nRAC=pathlib.Path('.')\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique'); sys.path.insert(0,'/tmp/qpos')\nimport evaluer_gold as eg, mesures_finales as mf\nfor p in  … [555 caractères tronqués]`
+
+  ```
+mesuré V0
+mesuré R1
+mesuré R2p
+mesuré R2s
+mesuré R2
+mesuré R3
+mesuré R1+R2
+mesuré R1+R2+R3
+
+--- DIAG EN ---
+tokens 1148 erreurs 270 exact 0.7648
+fermé {'n': 588, 'ok': 533} ouvert {'n': 557, 'ok': 345} part tokens ouverts 0.4852 part erreurs ouvertes 0.7852
+matrice {"ADJ": {"ADJ": 24, "NOUN": 12, "VERB": 4}, "ADV": {"ADV": 17, "NOUN": 15, "PREP": 1, "?": 1}, "AUX": {"AUX": 60, "NOUN": 1}, "CONJ": {"DET": 12, "CONJ": 22, "NOUN": 2}, "DET": {"DET": 213}, "NOUN": {"NOUN": 238, "ADJ": 5, "VERB": 5}, "NUM": {"NUM": 1}, "PONCT": {"?": 3}, "PREP": {"PREP": 43}, "PRON": {"PRON": 177, "NOUN": 8, "DET": 14, "CONJ": 1}, "VERB": {"VERB": 83, "NOUN": 176, "ADJ": 5, "AUX": 4, "?": 1}}
+top30 [(('that', 'CONJ', 'DET'), 12), (('that', 'PRON', 'DET'), 11), (('leave', 'VERB', 'NOUN'), 7), (('sings', 'VERB', 'NOUN'), 6), (('where', 'PRON', 'NOUN'), 6), (('writes', 'VERB', 'NOUN'), 5), (('speaks', 'VERB', 'NOUN'), 5), (('sees', 'VERB', 'NOUN'), 5), (('leaves', 'VERB', 'NOUN'), 4), (('play', 'VERB', 'NOUN'), 4), (('runs', 'VERB', 'NOUN'), 4), (('arrives', 'VERB', 'NOUN'), 4), (('late', 'ADV', 'NOUN'), 4), (('table', 'NOUN', 'ADJ'), 4), (('shines', 'VERB', 'NOUN'), 3), (('talks', 'VERB', 'NOUN'), 3), (('
+… [5958 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Debugging why R2s skips "plants" but fires on "flowers"
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib, re\nRAC=pathlib.Path('.'); sys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nsrc = open('tools/bloc_linguistique.py').read()\n# extrait  … [480 caractères tronqués]`
+
+  ```
+# 3 a bis. une forme en -s/-es apres un NOM sujet est un verbe (« the cat sleeps »).
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                continue
+            _av = etiquettes[pos_idx[_k - 1]]
+            if _av.type == "NOUN" and _normaliser(_e.valeur).endswith(("s", "es")):
+                etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "nom_sujet_3s"})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib\nRAC=pathlib.Path('.'); sys.path.insert(0,'tools')\ntxt=open('/tmp/qpos/mesures_finales.py').read()\nhead=txt.split(\"VARIANTES = {\")[0]\nns={'__name__':'mf_head'}\nexec(head, ns)\nh=ns['charge … [363 caractères tronqués]`
+
+  ```
+The gardener plants flowers.
+[('The', 'DET', 0.92, {'ouvert': False}), ('gardener', 'NOUN', 0.4, {'ouvert': True, 'contexte': 'DET'}), ('plants', 'NOUN', 0.3, {'ouvert': True}), ('flowers', 'VERB', 0.5, {'ouvert': True, 'contexte': 'nom_sujet_3s'})]
+The flowers grow in the garden.
+[('The', 'DET', 0.92, {'ouvert': False}), ('flowers', 'NOUN', 0.3, {'ouvert': True}), ('grow', 'NOUN', 0.3, {'ouvert': True}), ('in', 'PREP', 0.92, {'ouvert': False}), ('the', 'DET', 0.92, {'ouvert': False}), ('garden', 'NOUN', 0.3, {'ouvert': True})]
+Marie reads. She loves books.
+[('Marie', 'NOUN', 0.55, {'ouvert': True}), ('reads', 'VERB', 0.72, {'ouvert': True}), ('She', 'PRON', 0.92, {'ouvert': False}), ('loves', 'NOUN', 0.3, {'ouvert': True}), ('books', 'VERB', 0.5, {'ouvert': True, 'contexte': 'nom_sujet_3s'})]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib\nRAC=pathlib.Path('.'); sys.path.insert(0,'tools')\ntxt=open('/tmp/qpos/mesures_finales.py').read()\nhead=txt.split(\"VARIANTES = {\")[0]\nns={'__name__':'mf_head'}; exec(head, ns)\nR2S = ns['R2 … [604 caractères tronqués]`
+
+  ```
+DBG 'plants' NOUN 0.3 'gardener' VERB True
+DBG 'flowers' NOUN 0.3 'plants' NOUN True
+[('The', 'DET', 0.92), ('gardener', 'NOUN', 0.4), ('plants', 'NOUN', 0.3), ('flowers', 'VERB', 0.5)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reordering R2s after the nominal-context pass and rerunning
+
+- **bash** `{"command": "cd /tmp/qpos && python3 - <<'EOF'\ns=open('mesures_finales.py').read()\n# 1) R2S ne s'insere plus a l'ancre mais apres la boucle 3 bis\nold = \"P_R2S = [(ANCRE, ANCRE + R2S)]\"\nnew = '''FIN_3BIS = \\'\\'\\'            if avant.type in (\"DET\", \"PREP\", \"ADJ\"):\n                etiq … [828 caractères tronqués]`
+
+  ```
+ok
+--- DIFFS ---
+R1 {'corriges': 190, 'casses': 0, 'net': 190, 'corriges_en': 101, 'corriges_fr': 89, 'casses_en': 0, 'casses_fr': 0}
+R2p {'corriges': 172, 'casses': 0, 'net': 172, 'corriges_en': 84, 'corriges_fr': 88, 'casses_en': 0, 'casses_fr': 0}
+R2s {'corriges': 63, 'casses': 1, 'net': 62, 'corriges_en': 63, 'corriges_fr': 0, 'casses_en': 1, 'casses_fr': 0}
+R2 {'corriges': 235, 'casses': 0, 'net': 235, 'corriges_en': 147, 'corriges_fr': 88, 'casses_en': 0, 'casses_fr': 0}
+R3 {'corriges': 15, 'casses': 0, 'net': 15, 'corriges_en': 15, 'corriges_fr': 0, 'casses_en': 0, 'casses_fr': 0}
+R1+R2 {'corriges': 311, 'casses': 0, 'net': 311, 'corriges_en': 167, 'corriges_fr': 144, 'casses_en': 0, 'casses_fr': 0}
+R1+R2+R3 {'corriges': 333, 'casses': 0, 'net': 333, 'corriges_en': 189, 'corriges_fr': 144, 'casses_en': 0, 'casses_fr': 0}
+recouvrement {'R1': 189, 'R2': 234, 'R3': 15, 'R1&R2': 114, 'R1&R3': 0, 'R2&R3': 0, 'union': 324}
+
+--- BRANCHES EN ---
+{'branche': 'classe fermée 0,92', 'n': 563, 'justes': 531, 'taux': 0.9432}
+{'branche': 'défaut NOUN 0,30', 'n': 391, 'justes': 184, 'taux': 0.4706}
+{'branche': 'VERBES 0,72', 'n': 84, 'justes': 80, 'taux': 0.9524}
+{'branche': 'suffixe -er/-i
+… [1751 caractères tronqués]
+  ```
+

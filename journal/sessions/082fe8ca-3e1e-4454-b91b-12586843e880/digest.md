@@ -1158,3 +1158,56 @@ json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
   ```
 
 - **bash** `{"command": "cd /tmp && python3 - <<'PY'\np='/tmp/audit_cli_detail.py'\ns=open(p).read()\ns=s.replace('''    d = json.loads(p.stdout.decode(\"utf-8\"))\n    return p, d\n''','''    d = json.loads(p.stdout.decode(\"utf-8\")) if p.returncode == 0 else None\n    return p, d\n''')\nopen(p,'w').write(s)\ … [195 caractères tronqués]`
+
+  ```
+n 50
+langues attendues/observées:
+Counter({('fr', 'fr'): 35, ('en', 'en'): 5, ('fr', 'und'): 5, ('refus', None): 4, ('fr', 'it'): 1})
+syntagmes par type (somme):
+{'GN': {'total': 87, 'attaches': 83, 'sans': 4, 'union': 11, 'conflits_textes': 0}, 'GV': {'total': 145, 'attaches': 75, 'sans': 70, 'union': 35, 'conflits_textes': 0}, 'GP': {'total': 86, 'attaches': 84, 'sans': 2, 'union': 28, 'conflits_textes': 0}, 'REL': {'total': 28, 'attaches': 28, 'sans': 0, 'union': 10, 'conflits_textes': 0}, 'SUB': {'total': 14, 'attaches': 14, 'sans': 0, 'union': 1, 'conflits_textes': 0}}
+GN textes 28 sans 4 total 87
+GP textes 24 sans 2 total 86
+REL textes 9 sans 0 total 28
+SUB textes 8 sans 0 total 14
+GV textes 36 sans 70 total 145
+conflits sans union 0
+conflits après filtre union 0
+textes conflits après filtre []
+trous POS: {}
+{'mot': {'total': 766, 'sans_pos': 0}, 'ponctuation': {'total': 257, 'sans_pos': 257}, 'nombre': {'total': 45, 'sans_pos': 45}}
+cibles fermées 18 Counter({'ADV': 9, 'AUX': 4, 'DET': 4, 'PRON': 1})
+cibles absentes 0
+phrase chevauchement type 1 [('f20', 1)]
+phrases espaces initiaux 19 [('f03', 1), ('f20', 1), ('f25', 1), ('f26', 1), ('f29', 1), ('f50', 14)]
+documents 49 tro
+… [565 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de `evaluer`, des codes de sortie et du contrat de refus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport subprocess,sys,json,time\nR='.'\ndef run(*a):\n    t=time.perf_counter(); p=subprocess.run([sys.executable,'tools/drave.py',*a],capture_output=True,text=True); return p,(time.perf_counter()-t)*1000\nfor args in … [641 caractères tronqués]`
+
+  ```
+('evaluer', '--json') rc 0 ms 536.4 bytes 2746 err 
+ keys ['version', 'gold', 'heuristique', 'controle_negatif']
+ gold {'nom': 'vivant (hand + reel + synthétique)', 'gele': False, 'phrases': 612, 'tokens': 3179, 'cibles_attachement': 239}
+ pos {'exactitude': 0.7581, 'exactitude_ferme': 0.9004, 'exactitude_ouvert': 0.6234, 'tokens': 3179, 'confusions': {'ADJ': {'ADJ': 50, 'NOUN': 80, 'VERB': 4}, 'ADV': {'ADV': 117, 'NOUN': 20, 'PREP': 2, 'ADJ': 1, '?': 1}, 'AUX': {'PREP': 4, 'AUX': 118, '?': 3, 'NOUN': 3}, 'CONJ': {'CONJ': 44, 'PRON': 25, 'DET': 12, '?': 13, 'PREP': 2, 'NOUN': 2}, 'DET': {'DET': 586, '?': 2}, 'NOUN': {'NOUN': 657, 'ADJ': 17, 'VERB': 7, '?': 1}, 'NUM': {'NUM': 2}, 'PONCT': {'?': 25}, 'PREP': {'PREP': 114}, 'PRON': {'PRON': 411, 'NOUN': 8, '?': 30, 'DET': 25, 'CONJ': 1}, 'VERB': {'VERB': 311, 'NOUN': 450, 'ADJ': 5, 'PREP': 2, '?': 16, 'AUX': 7, 'ADV': 1}}}
+ syn {'precision': 0.6292, 'rappel': 0.5464, 'f1': 0.5849, 'tp': 1018, 'fp': 600, 'fn': 845, 'tete': {'precision': 0.81, 'rappel': 0.6704, 'f1': 0.7336, 'tp': 1249, 'fp': 293, 'fn': 614}}
+ att {'cibles': 239, 'labels': 222, 'top1': 222, 'topk': 221, 'exact': 222, 'top1_taux': 0.9289, 'topk_taux': 0.9247, 'exact_taux
+… [2762 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\necho '--- refus JSON'; python3 tools/drave.py analyser \"\" --json >/tmp/r.out 2>/tmp/r.err; echo \"rc=$? stdout=$(wc -c </tmp/r.out) stderr=$(cat /tmp/r.err)\"\necho '--- rejouer refus'; python3 tools/drave.py rejouer \"\" >/tmp/r.out … [515 caractères tronqués]`
+
+  ```
+--- refus JSON
+rc=1 stdout=0 stderr=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+--- rejouer refus
+rc=1 stdout=0 stderr=drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+--- depuis /tmp
+rc=0 bytes=5561 err=
+--- code 3/4
+  ```
+
