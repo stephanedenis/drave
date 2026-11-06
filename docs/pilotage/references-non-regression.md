@@ -1,7 +1,6 @@
 # Références de non-régression
 
-> **Passe — 2026-11-06 :** **83 portes, 79 vertes, 4 rouges** — `indice`, `melange` (structurelles),
-> `bloc-linguistique` (`cascade_pos`), `sessions` (mandats).
+> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
 > 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
@@ -13,12 +12,8 @@
 > à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
 > `homeostasie` **755 s**, `profondeur-routee` **700 s**, `vision` **670 s**, `ocr-scans` **529 s**.
 
-> **Passe précédente — 2026-11-03 à 11 h 30 :** **82 portes, 80 vertes, 2 rouges**,
-> **1 h 48** (journaux durables `work/portes/passe-0303-11h30`), **machine au repos** (GPU libres ;
-> seuls des claims CPU). Les **2 rouges sont les connues, structurelles** : `porte-indice` (821 s),
-> `porte-melange` (102 s). `porte-homeostasie` **verte** (495 s, LoRA régénéré), `porte-reparti-moteur`
-> **verte** (ré-étalonnée à 8,7434), `porte-sessions` **verte** (N2/S en pause), `porte-tableaux` et
-> `porte-ressources` vertes.
+> **Passe précédente — 2026-11-03 11 h 30 :** 82 portes, 80 vertes, 2 rouges structurelles
+> (`indice` 821 s, `melange` 102 s), 1 h 48, GPU libres.
 >
 > **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
 > `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
