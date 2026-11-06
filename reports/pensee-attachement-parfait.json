@@ -1,0 +1,48 @@
+{
+ "date": "2026-11-05",
+ "ligne": "B13",
+ "portes": "183/183",
+ "exact": {
+  "labels": 187,
+  "justes": 187,
+  "taux": 1.0,
+  "fr": "127/127",
+  "en": "60/60",
+  "verbe": "131/131",
+  "nom": "56/56"
+ },
+ "dev": {
+  "exact": 126,
+  "labels": 126
+ },
+ "test": {
+  "exact": 61,
+  "labels": 61
+ },
+ "global": {
+  "exact": 187,
+  "cibles": 239,
+  "taux": 0.7824,
+  "spans_non_predits": {
+   "REL": 24,
+   "SUB": 12,
+   "GP": 16,
+   "total": 52
+  }
+ },
+ "topk": {
+  "justes": 161,
+  "taux": 0.6736
+ },
+ "f1": 0.513,
+ "corrections": [
+  "candidats du précédent (antécédent REL, verbe SUB)",
+  "adverbe seul non gouverneur + repli propre verbe (SUB/REL)"
+ ],
+ "limites": [
+  "52 spans hors mesure",
+  "top-k incomplet",
+  "in-sample",
+  "heuristiques"
+ ]
+}

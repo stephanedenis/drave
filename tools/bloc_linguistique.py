@@ -438,6 +438,17 @@ am is are was were be been being have has had having do does did done
 """.split())
 
 
+ADVERBES_SEULS = {"peut-être", "vite", "bien", "mal", "hier", "demain", "aujourd'hui", "ici",
+                  "là", "souvent", "toujours", "jamais", "déjà", "encore", "enfin", "alors",
+                  "puis", "donc", "aussi", "très", "trop", "plus", "moins", "maybe", "perhaps"}
+
+
+def _est_adverbe_seul(g: dict) -> bool:
+    """Un GV d'un seul token adverbe n'est pas un gouverneur (« Peut-être »)."""
+    return (len((g.get("texte") or "").split()) == 1
+            and _normaliser(g.get("texte") or "") in ADVERBES_SEULS)
+
+
 ENCLITIQUES = ("-moi", "-toi", "-nous", "-vous", "-le", "-la", "-les", "-lui", "-leur", "-y", "-en")
 
 
@@ -645,6 +656,8 @@ class Heuristique:
         if segment.get("type") == "REL" and precedent.get("type") == "GN":
             return Heuristique._tete_nom(texte, precedent["debut"], precedent["fin"])
         if segment.get("type") == "SUB" and precedent.get("type") == "GV":
+            if _est_adverbe_seul(precedent):
+                return None
             return Heuristique._verbe_dans(texte, precedent["debut"], precedent["fin"], verbes)
         return None
 
@@ -677,6 +690,13 @@ class Heuristique:
         return Heuristique._tete_nom(texte, g["debut"], g["fin"])
 
     @staticmethod
+    def _repli_verbe_propre(texte: str, segment: dict, cible: str | None):
+        """Sans gouverneur extérieur, une SUB/REL prend son propre verbe (« qu'il viendra »)."""
+        if cible or segment.get("type") not in ("SUB", "REL"):
+            return cible
+        return Heuristique._verbe_dans(texte, segment["debut"], segment["fin"]) or cible
+
+    @staticmethod
     def _cible_hors_span(texte: str, segment: dict, gvs: list[dict], cible: str | None):
         """Un GP n'est pas gouverné par un mot de son span : on prend la tête du GV extérieur.
 
@@ -689,7 +709,8 @@ class Heuristique:
         if _normaliser(cible) not in _normaliser(span):
             return cible
         dehors = [g for g in gvs
-                  if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])]
+                  if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])
+                  and not _est_adverbe_seul(g)]
         # pour une SUB, le gouverneur est le verbe de la **principale** : à droite s'il n'y a
         # rien à gauche (mesuré : r227 « lit », r262 « travaille »)
         if not dehors:
@@ -760,6 +781,7 @@ class Heuristique:
         Rend `None` si le segment est lui-même un GV ou s'il n'y a pas de GV. Le verbe est le
         dernier token du GV (`a vu` → `vu`, `est mangé` → `mangé`).
         """
+        gvs = [g for g in gvs if not _est_adverbe_seul(g)]
         if segment.get("type") == "GV" or not gvs:
             return None
         if segment.get("type") == "GP":
@@ -1031,13 +1053,13 @@ class Heuristique:
                                  if x.get("fin", 0) <= s.get("debut", 0)]
                         if avant:
                             g = max(avant, key=lambda x: x["fin"])
-                            if g.get("type") == "GV":
+                            if g.get("type") == "GV" and not _est_adverbe_seul(g):
                                 cible = self._verbe_dans(texte, g["debut"], g["fin"], verbes)
                             elif g.get("type") == "GN":
                                 cible = self._tete_nom(texte, g["debut"], g["fin"])
                     if not cible and s.get("type") == "GP":
                         cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
-                    if not cible and brute:
+                    if not cible and brute and _normaliser(brute) not in ADVERBES_SEULS:
                         i = texte.find(brute)
                         if i >= 0:
                             cible = self._verbe_dans(texte, i, i + len(brute), verbes)
@@ -1048,6 +1070,7 @@ class Heuristique:
                         cible = (self._repli_cible_gp(texte, s, gns_s)
                                  or self._cible_proche(texte, s, gvs, verbes, cache_gv))
                     cible = self._cible_hors_span(texte, s, gvs, cible)
+                    cible = self._repli_verbe_propre(texte, s, cible)
                     meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
                     if cible:
                         meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
@@ -1076,6 +1099,7 @@ class Heuristique:
                          or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
+                cible = self._repli_verbe_propre(texte, s, cible)
                 prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}
@@ -1102,6 +1126,7 @@ class Heuristique:
                          or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)
+                cible = self._repli_verbe_propre(texte, s, cible)
                 prec = s
                 if cible:
                     meta["attachement"] = {"segment": s["texte"], "cible": cible}

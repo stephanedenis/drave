@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement **187/187 (1,0000)** sur les spans prédits, fr 1,0 / en 1,0, dev 126/126, test 61/61 ; le rendement reste 0,7824 |
 | [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — la couverture : **187 labels**, exact **185/187 (0,9893)**, F1 **0,5156**, dev/test 125/126 et 60/61 |
 | [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold dev/test : **test 0,9814**, dev 0,9811, la règle « régler sur dev, accepter si test ne baisse pas » |
 | [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | **B13** — la segmentation d'abord : F1 **0,4194**, exact **158/160**, couverture **160/239**, 183/183 |
@@ -144,7 +145,6 @@
 | [`rapport-native-distillation.md`](rapport-native-distillation.md) | **N2.3** — distillation : PPL **3,297** contre **3,465**, gap **+0,942** au professeur |
 | [`rapport-native-corpus-multi.md`](rapport-native-corpus-multi.md) | **N2.6** — 49 999 fenêtres, **4 sources** (fr, UDHR, en, littérature) |
 | [`rapport-native-corpus.md`](rapport-native-corpus.md) | **N2.1** — 50 000 fenêtres, 45 000/5 000, manifeste d'offsets |
-| [`rapport-drvm-ppl.md`](rapport-drvm-ppl.md) | **N0.3b** — PPL DRVM : **28,7355** ; **close** : conversion **68,1917 / 92,1875**, natif **4,6585 / 18,6394** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

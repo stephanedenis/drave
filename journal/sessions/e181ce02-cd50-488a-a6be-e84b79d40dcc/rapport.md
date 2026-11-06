@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 122.1 h |
+| Durée | 122.4 h |
 | Tours | 177 |
-| Messages | 2640 |
-| Appels d'outils | 2319 |
+| Messages | 2651 |
+| Appels d'outils | 2330 |
 | Fichiers touchés | 25 |
-| Commandes | 1912 |
+| Commandes | 1922 |
 | Sous-agents | 16 |
-| Commits | 280 |
+| Commits | 281 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*78 appels d'outils.* Actions notables :
+*89 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 59 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
-⏵ **186/187 (0,9947)**, anglais **60/60** : je mets la fiche à jour et je commite
+⏵ **187/187 = 1,0000** (fr 1,0, en 1,0, dev 126/126, test 61/61). Je recale les portes et je fige
 
 ## 3. Travail accompli
 
@@ -9613,7 +9613,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 1872 autres
+- … et 1882 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10041,4 +10041,5 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - B13 — LE GOLD DEV/TEST : TEST 0,9814, DEV 0,9811, LES GAINS GÉNÉRALISENT ; RÈGLE « RÉGLER SUR DEV, ACCEPTER SI TEST NE BAISSE PAS »" -- tools/tests/linguistique
 - B13 — LA COUVERTURE : 187 LABELS, EXACT 185/187 (0,9893), F1 0,5156, DEV 125/126 ET TEST 60/61 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py
 - B13 — LES CANDIDATS DU PRÉCÉDENT : EXACT 186/187 (0,9947), ANGLAIS 60/60, DEV 126/126 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py reports/
+- B13 — L'ATTACHEMENT PARFAIT SUR LES SPANS PRÉDITS : 187/187 (1,0000), FR 1,0, EN 1,0, DEV 126/126, TEST 61/61 ; RENDEMENT 0,7824 ; 183/183" -- tools/bloc_lingui
 
