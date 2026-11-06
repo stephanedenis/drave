@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 140.6 h |
+| Durée | 140.7 h |
 | Tours | 182 |
-| Messages | 3102 |
-| Appels d'outils | 2736 |
+| Messages | 3103 |
+| Appels d'outils | 2737 |
 | Fichiers touchés | 25 |
-| Commandes | 2243 |
+| Commandes | 2244 |
 | Sous-agents | 31 |
-| Commits | 352 |
+| Commits | 353 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9788,7 +9788,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 
 ### Tour 182 — Background subagent 082fe8ca-3e1e-4454-b91b-12586843e880 finished and will do no further work unless you send it more. I … [3010 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Vérifier les deux rapports d'audit
 - bash — Déclarer les rapports et vérifier
@@ -9918,7 +9918,7 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2203 autres
+- … et 2204 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10418,4 +10418,5 @@ Mon correctif de 11 h 34 (encodage `errors="replace"` + `refus="non_texte"`) a c
 - DOCS — UN MOT DE MOINS DANS LA LIGNE DE L'AUDIT (BUDGET T1) ; ÉTAT HORODATÉ" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --for
 - B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183" -- tools/bloc_linguistique.py tools
 - DOCS — LE README DES FICHES DANS LE BUDGET T1 APRÈS LES DEUX FICHES POS" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
+- DOCS — DEUX MOTS DE MOINS DANS LE README (T1 À 2 800)" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DE
 

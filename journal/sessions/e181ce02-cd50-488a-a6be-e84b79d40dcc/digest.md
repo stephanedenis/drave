@@ -52638,3 +52638,17 @@ COMMIT OK 1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — la POS à **83,83 %** (R2a/R3/R2b), F1 **0,6181**, attachemen … [1754 caractères tronqués]`
+
+  ```
+· reports/README.md : 2802 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 9 files changed, 36 insertions(+), 18 deletions(-)
+COMMIT OK 1
+795ec6d0 DOCS — LE README DES FICHES DANS LE BUDGET T1 APRÈS LES DEUX FICHES POS
+   2ba393b0..795ec6d0  s/v7 -> s/v7
+   2ba393b0..795ec6d0  master -> master
+0
+ven 06 nov 2026 13:20:48 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS anglais (A25) |\",\n            \"| [`rapport-pos-a … [1333 caractères tronqués]`

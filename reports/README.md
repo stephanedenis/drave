@@ -16,8 +16,8 @@
 | fichier | ce qu'il porte |
 |---|---|
 | [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — POS **83,83 %** (R2a/R3/R2b), F1 **0,6181** |
-| [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS anglais (A25) |
-| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold : 0 plantage, contrat à versionner |
+| [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS (A25) |
+| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité : 0 plantage, contrat à versionner |
 | [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
 | [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
 | [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : `--aide` sans écriture, index 625 → **677** |
