@@ -7,12 +7,12 @@
 | Identifiant | `d3114d4c-1629-45f2-aba6-9592332507c5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.2 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 28 |
-| Appels d'outils | 42 |
+| Messages | 57 |
+| Appels d'outils | 80 |
 | Fichiers touchés | 0 |
-| Commandes | 32 |
+| Commandes | 70 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : vérifier l … [1846 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*80 appels d'outils.* Actions notables :
 
 - bash — Check git status, branch, and commits
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Find functions and constants in evaluer_gold
 - bash — Read evaluer_bloc tail and main
 - bash — Evaluate current code on 612 and 602 gold
-- … et 19 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Décompte des spans manquants au commit courant
+⏵ Reproduction du contrôle de permutation de la v7
 
 ## 3. Travail accompli
 
@@ -88,16 +88,31 @@
 - **T1** List unpredicted target spans
 - **T1** Search audit v7 for span classification
 - **T1** Find inevitables mentions
+- **T1** Classify missing spans by lexicon
+- **T1** Search for v8 rule gains
+- **T1** Inspect v8 rule implementation
+- **T1** Search dev/test v7 for v8 rule gains
+- **T1** Read v8 clause boundary code
+- **T1** Find A17 references
+- **T1** Search all reports for v8 fr/en counts
+- **T1** Check spans-v7 report and v8 commit files
+- … et 30 autres
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `b1b1292f B13 — LE CACHE COMPLET : UN SEUL CHUNKING DANS LES DEUX CHEMINS (T178), VALIDÉ PAR A11 (×11,0, ÉGALITÉ 612/612) ; 181/181`
 - **T1** `e0592c59 B13 — LE CACHE DU CHUNKER APPLIQUÉ : ×139 À 160 RÉPÉTITIONS, SORTIE IDENTIQUE (0/612) ; ×1 EN DÉFAUT, S DOMINE ; 181/181`
 - **T1** `| [`rapport-native-distillation-tetes.md`](rapport-native-distillation-tetes.md) | **N2.4** — têtes dans la distillation : PPL **3,295**, pas de gain ; tête 3 **62,98 %** > principale **62,35 %** |`
+- **T1** `reports/rapport-pensee-phase-devine.md:4:> **83/83 portes** : l'agent reçoit un **signal bruité à 90 %** sur le but. La`
+- **T1** `32	| [`rapport-cache-chunker.md`](rapport-cache-chunker.md) | **B13** — la validation A11 du cache : ×11,0 à 160 tokens, égalité 612/612, cache falsifié détecté |`
+- **T1** `35	| [`rapport-cache-chunker-applique.md`](rapport-cache-chunker-applique.md) | **B13** — le cache appliqué : **×139** en chunker, ×1 en défaut (S domine), sortie identique, **181/181** |`
+- **T1** `37	| [`rapport-cout-chunker.md`](rapport-cout-chunker.md) | **B13** — le coût du chunker : O(n²) confirmé, cache ×11,6 à 160 tokens |`
+- **T1** `+> donnerait **143/145 (98,62 %)** et 143/239 (59,83 %), avec « +2 cas, dont 2 synthétiques »`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 26, in <module>   File "<stdin>", line 10, in load_hist   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistiq
+- **T1** : [stderr]   File "<stdin>", line 24     print('lexical split v2: verb',v_ok,'/',v_n, v_ok/v_n; 'nom',n_ok,'/',n_n,n_ok/n_n)                                                          ^ SyntaxError: inval
 

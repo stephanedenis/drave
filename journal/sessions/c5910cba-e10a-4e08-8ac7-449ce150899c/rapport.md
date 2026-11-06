@@ -7,12 +7,12 @@
 | Identifiant | `c5910cba-e10a-4e08-8ac7-449ce150899c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.3 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 32 |
-| Appels d'outils | 40 |
+| Messages | 56 |
+| Appels d'outils | 64 |
 | Fichiers touchés | 0 |
-| Commandes | 28 |
+| Commandes | 51 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer  … [2245 caractères tronqués]
 
-*40 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - bash — Check git status and current branch
 - bash — List relevant report files
@@ -41,7 +41,7 @@
 - bash — Find R1/R2/R3 claims in spans v7 report
 - bash — Read start of spans v7 report
 - bash — Check submodule state and tool file cleanliness
-- … et 15 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
@@ -84,6 +84,19 @@
 - **T1** Add bundle ablations and live F1 to harness
 - **T1** Run extended harness with bundle ablations
 - **T1** Read A17 rule implementation details
+- **T1** Validate all-off module equals parent commit
+- **T1** Show extended ablation results
+- **T1** Measure before-state, faithful R3a, top-k control
+- **T1** List SUBORDONNANTS occurrences
+- **T1** Read autotest results
+- **T1** Run complements with faithful R3a
+- **T1** Locate SUBORDONNANTS lines in tail
+- **T1** Rerun complements after fixing replacement order
+- **T1** Verify frozen, per-type, missing recoverables, stale docstrings
+- **T1** List A17 causes and case statuses
+- **T1** Print docstrings for late gates
+- **T1** Inspect predicted spans for regression cases
+- … et 11 autres
 
 ## 4. Mesures et résultats marquants
 

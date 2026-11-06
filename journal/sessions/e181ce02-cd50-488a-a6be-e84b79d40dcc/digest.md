@@ -47238,3 +47238,120 @@ jeu 05 nov 2026 21:25:11 EST
 background job bash-2109 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-r1r3|topk-v8|coherence-fiches-v8") finished [status: completed, exit code: 1]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-05/README.md'); t=p.read_text()\nbilan = \"\"\"\n**Le bilan de la journée (21 h 30).** Parti de **137/145 (0,9448)** sur les spans prédits et d'une\ncouverture de **0, … [1720 caractères tronqués]`
+
+  ```
+bilan au journal
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[still running after 60000ms; moved to background job bash-2151]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2151", "timeout_ms": 600000, "wait": true}`
+
+  ```
+20 files changed, 2277 insertions(+), 77 deletions(-)
+COMMIT OK 1
+7c43c75e JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870, F1 0,2862 → 0,5763
+[status: completed, exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-r1r3|topk-v8|coherence-fiches-v8\"", "description": "Attendre la vague 6 (2)", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2168]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2168", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 21:38:10 EST
+[status: completed, exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2168 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-r1r3|topk-v8|coherence-fiches-v8") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -10; echo \"=== commits depuis 11h :\"; git log --oneline --since=\"2026-11-05 11:00\" | wc -l; git log --oneline --since=\"2026-11-05 11:00\" | head -8 | cut -c1-90", "description": "État git et liste d … [12 caractères tronqués]`
+
+  ```
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/README.md
+=== commits depuis 11h :
+45
+7c43c75e JOURNAL — LE BILAN DE LA JOURNÉE : 137/145 → 212/212, COUVERTURE 0,6067 → 0,8870,
+5c15ee91 JOURNAL — LES RÈGLES DE A17 : EXACT 212/212, COUVERTURE 0,887, 27 SPANS DONT 17 I
+f908d7b0 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN
+638ac8e8 PORTES — 13 DOCSTRINGS PÉRIMÉES MISES À JOUR (ATTACHEMENT 195/196, SPANS 43, TOP-
+4ebeb683 B13 — L'AUDIT V7 INTÉGRÉ : DEUX RÉCITS CORRIGÉS (8 LABELS, +0,0118, EXEMPLE r204)
+9bf94feb FICHES — LA LISTE DE L'AUDIT APPLIQUÉE : PROSES V4/V5, SPLIT LEXICAL DE LA V2, F1
+35a67bc7 FICHES — TITRES V4/V5 ALIGNÉS SUR LEUR INSTANT, BASE 602 DE LA V7, README ET ÉTAT
+8d6c318d B13 — AUDIT DES 7 FICHES (23 ÉCARTS), DEV/TEST V7 (133/134, 62/62), LA V7 CORRIGÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"audit-r1r3|topk-v8|coherence-fiches-v8\"", "description": "Attendre la vague 6 (3)", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-2217]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2217", "timeout_ms": 300000, "wait": true}`
+
+  ```
+jeu 05 nov 2026 21:48:55 EST
+[status: completed, exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2217 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "audit-r1r3|topk-v8|coherence-fiches-v8") finished [status: completed, exit code: 1]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfrom tools.tests.linguistique.gold_split import dev, tes … [844 caractères tronqués]`
+
+  ```
+TOUT : labels 212 | exact 212 = 1.0 | couv 0.887 | F1 0.572 | tête 0.7262 | par langue {'fr': {'cibles': 151, 'labels': 129, 'exact': 129, 'topk': 120, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 83, 'exact': 83, 'topk': 57, 'exact_taux_span': 1.0}}
+dev exact 148 / 148 | couv 0.908 | F1 0.5723
+test exact 64 / 64 | couv 0.8421 | F1 0.5714
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=1
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4", "description": "Voir le dépassement T0"}`
+
+  ```
+· 25 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 618 l. rapport-spans-v7.md, 597 l. rapport-e5-distillation.md, 561 l. rapport-cache-chunker.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 27 spans ; bilan de la journée au journal.\", \" ; 27 spans.\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py  … [208 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+jeu 05 nov 2026 21:54:41 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-320", "description": "Voir la ligne Fait"}`
+
+  ```
+71:- **Fait** : B13 **183/183** ; **segmentation** F1 **0,4539**, tête 0,6432, attachement **exact 157/160 (0,9812)**, couverture **160/239**, fr 0,9915 / en 0,9524 ; 3 échecs.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"^- \\*\\*Fait\\*\\* : B13 \\*\\*183/183\\*\\*.*$\",\n\"- **Fait** : B13 **183/183** ; **attachement 212/212 (1,0000)** (f … [741 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `fff7ca81-5684-4c2e-b7c5-a8f3c012cc49` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-05 21:12 |
-| Durée | 0.3 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 29 |
-| Appels d'outils | 30 |
-| Fichiers touchés | 3 |
-| Commandes | 24 |
+| Messages | 55 |
+| Appels d'outils | 58 |
+| Fichiers touchés | 6 |
+| Commandes | 49 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **améliore … [1895 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — Show branch, status, and top-level files
 - bash — List linguistique tests and reports
@@ -41,11 +41,11 @@
 - bash — Read gold split and loader
 - bash — Count phrases and targets per gold file
 - bash — Compare vivant vs gele attachment metrics
-- … et 14 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Quantification du bruit des candidats ajoutés et contrôles négatifs
+⏵ Mesure de la borne de cohérence `cible ∈ candidats` (contrôle du metric)
 
 ## 3. Travail accompli
 
@@ -56,6 +56,9 @@
 | `/tmp/topk_v8_diag.py` | 1 | 0 |
 | `/tmp/topk_v8_rules.py` | 1 | 0 |
 | `/tmp/topk_v8_controls.py` | 1 | 0 |
+| `/tmp/topk_v8_final.py` | 1 | 0 |
+| `/tmp/topk_v8_variantes.py` | 1 | 0 |
+| `/tmp/topk_v8_refined.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -83,4 +86,21 @@
 - **T1** Exact cross-tabs for span vs coverage failures
 - **T1** Patch and run noise/control script
 - **T1** Fix script and show noise stats
+- **T1** Show R2/R3 noise and controls
+- **T1** Show control results
+- **T1** Dev/test balance and target counts
+- **T1** Run consolidated measurement
+- **T1** Fix and rerun consolidated measurement
+- **T1** Fix tuple keys and rerun
+- **T1** Inspect final results JSON
+- **T1** Verify target files are new
+- **T1** Read verb lexicon and _est_verbe
+- **T1** Check date convention and last commit
+- **T1** Look at latest v7 coverage report style
+- **T1** Check code drift since f908d7b0
+- **T1** Quantify PP ambiguity of nearest-GN rule on REL
+- **T1** R1 additions and precision by type
+- **T1** Dedup additions by label key
+- **T1** R1 additions by base success and hit
+- … et 9 autres
 

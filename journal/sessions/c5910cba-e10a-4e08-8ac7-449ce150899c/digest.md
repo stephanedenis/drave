@@ -1203,3 +1203,789 @@ s114 fr SUB 22:43 'que les avocat compte' -> d
 … [453 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Running 183 gates while extending ablations
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 tools/pensee/autotest.py > /tmp/audit_r1r3/autotest.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/autotest.log", "description": "Run the 183-gate autotest suite", "run_in_background": true}`
+
+  ```
+started background job bash-2155
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/audit_r1r3/resultats.json'))\nfor s in ('dev','test'):\n    x=d['dev_test'][s]\n    print(s, {k:x[k] for k in ('phrases','cibles','labels','exact','couverture','exact_taux_span',' … [179 caractères tronqués]`
+
+  ```
+dev {'phrases': 422, 'cibles': 163, 'labels': 148, 'exact': 148, 'couverture': 0.908, 'exact_taux_span': 1.0, 'f1': 0.5723, 'tete': 0.727}
+  par langue {'fr': {'cibles': 101, 'labels': 89, 'exact': 89, 'topk': 82}, 'en': {'cibles': 62, 'labels': 59, 'exact': 59, 'topk': 38}}
+  spans 15 [{'id': 's027', 'type': 'GP', 'langue': 'fr'}, {'id': 's148', 'type': 'GP', 'langue': 'fr'}, {'id': 's037', 'type': 'REL', 'langue': 'fr'}, {'id': 's065', 'type': 'REL', 'langue': 'fr'}, {'id': 's010', 'type': 'REL', 'langue': 'fr'}, {'id': 's061', 'type': 'REL', 'langue': 'fr'}, {'id': 'r280', 'type': 'REL', 'langue': 'en'}, {'id': 's125', 'type': 'REL', 'langue': 'fr'}, {'id': 's135', 'type': 'REL', 'langue': 'fr'}, {'id': 'r273', 'type': 'REL', 'langue': 'fr'}, {'id': 's069', 'type': 'REL', 'langue': 'fr'}, {'id': 'r035', 'type': 'REL', 'langue': 'en'}, {'id': 'g017', 'type': 'SUB', 'langue': 'en'}, {'id': 's044', 'type': 'SUB', 'langue': 'fr'}, {'id': 's114', 'type': 'SUB', 'langue': 'fr'}]
+test {'phrases': 190, 'cibles': 76, 'labels': 64, 'exact': 64, 'couverture': 0.8421, 'exact_taux_span': 1.0, 'f1': 0.5714, 'tete': 0.7241}
+  par langue {'fr': {'cibles': 50, 'labels': 40, 'exact': 40, 'topk': 
+… [638 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2155 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 tools/pensee/autotest.py > /tmp/audit_r1r3/autotest.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/autotest.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -15 /tmp/audit_r1r3/autotest.log; echo \"---FAILURES---\"; grep -c '❌' /tmp/audit_r1r3/autotest.log; grep '❌' /tmp/audit_r1r3/autotest.log | head -20; echo \"---COUNT---\"; grep -c '✅' /tmp/audit_r1r3/autotest.log", "description": "Inspect autotest gate results"}`
+
+  ```
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", line 32, in <module>
+    from .coeur import Candidat, Etat
+ImportError: attempted relative import with no known parent package
+EXIT:1
+---FAILURES---
+0
+---COUNT---
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 env PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_r1r3/autotest.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/autotest.log", "description": "Run autotest as module in background", "run_in_background": true}`
+
+  ```
+started background job bash-2160
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\np='harness.py'\ns=open(p).read()\n# add bundle variants and F1 live\ns=s.replace('''        \"sans_r3c\": charger_module(\"sans_r3c\", [(R3C_LINE, R3C_NEW, \"R3c fall/call\")]),\n    }\n    return v''','''        \"sans_r3c\": charger_module(\"san … [2485 caractères tronqués]`
+
+  ```
+patched
+117:        "r3a_intendue": charger_module("r3a_intendue", [(
+123:        "sans_r1": charger_module("sans_r1", [
+127:        "sans_r1r2r3": charger_module("sans_r1r2r3", [
+342:        att["f1_vivant"] = mesurer_segmentation(mod, phrases)["union"]["segments"]["f1"]
+352:                "f1_vivant": att["f1_vivant"], "tete_vivant": att["tete_vivant"],
+365:            "f1_vivant": m["f1_vivant"], "tete_vivant": m["tete_vivant"],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 /tmp/audit_r1r3/harness.py > /tmp/audit_r1r3/harness.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/harness.log", "description": "Run extended harness with bundle ablations", "run_in_background": true}`
+
+  ```
+started background job bash-2164
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '300,430p' reports/rapport-spans-v7.md", "description": "Read A17 rule implementation details"}`
+
+  ```
+(la classe d'élision `[ldmtsnLDMTNS]` ne contient pas `q`), donc la branche marqueur ne se
+  déclenche pas ; le GV `sais qu'il vient demain` avale tout. Le générateur S donne bien
+  SUB [8:19], mais pas `demain`. Il faudrait tokeniser `qu'` (ou tester `qu'` comme marqueur)
+  **et** relâcher la règle d'adverbe final.
+
+### 4.8 GP tronqué par un faux verbe — 1 cas
+
+r153 « We wait **for the bus** » : `_est_verbe("bus")` est vrai parce que `bus` finit par
+`s` et que `bu` (participe de *boire*) est dans `VERBES_CONNUS`. Le GP s'arrête à `for the`
+([8:15] au lieu de [8:19]). Un déterminant ne peut pas introduire un verbe : R3b.
+
+### 4.9 Adverbe final — 1 cas
+
+r288 « I know that he comes **tomorrow** » : la règle existante « un adverbe final
+n'appartient pas à la clause » coupe `tomorrow` ([7:20] au lieu de [7:29]). La retirer
+récupère r288 (test) mais **perd g017** (« that she would come **yesterday** », dev), dont le
+gold exclut `yesterday`. C'est un **arbitrage 1 pour 1** entre deux golds : la règle est
+conservée car dev perdrait 1 gain. La portée de l'adverbe final est une ambiguïté de gold,
+pas une erreur de règle.
+
+## 5. Règles proposées et mesures
+
+Chaque règle est mesurée **seule**
+… [4618 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 69bd865e:tools/bloc_linguistique.py > /tmp/audit_r1r3/bl_parent.py && diff -u /tmp/audit_r1r3/bl_parent.py /tmp/audit_r1r3/mods/sans_r1r2r3.py | head -20; echo \"DIFF_LINES:$(diff /tmp/audit_r1r3/bl_parent.py /tmp/audit_r1r3 … [96 caractères tronqués]`
+
+  ```
+--- /tmp/audit_r1r3/bl_parent.py	2026-11-05 21:28:18.073256918 -0500
++++ /tmp/audit_r1r3/mods/sans_r1r2r3.py	2026-11-05 21:27:20.575060310 -0500
+@@ -374,6 +374,10 @@
+ 
+ SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
+                  "whether", "car", "parce", "puisque", "comme", "quand", "si", "lorsque"}
++# « car » est français : en anglais c'est un nom commun (r280)
++SUB_PAR_LANGUE = {"fr": {"car", "parce", "puisque", "comme", "quand", "si", "lorsque"},
++                  "en": {"because", "although", "though", "if", "while", "as", "since",
++                         "unless", "whether", "when"}}
+ 
+ VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche trouve ouvre ferme "
+                         "go take come look give find open close".split())
+@@ -455,6 +459,9 @@
+             and _normaliser(g.get("texte") or "") in ADVERBES_SEULS)
+ 
+ 
++MODAUX = {"would", "must", "can", "could", "should", "will", "shall", "may", "might", "ought",
++          "could", "cannot"}
++
+DIFF_LINES:13
+  ```
+
+- **job_output** `{"job_id": "bash-2160"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2164 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 python3 /tmp/audit_r1r3/harness.py > /tmp/audit_r1r3/harness.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/harness.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nprint('BASELINE f1/tete vivant', d['baseline']['f1_vivant'], d['baseline']['tete_vivant'])\nfor k,v in d['ablations'].items():\n    print('\\n==',k)\n    print({kk:v[kk] for kk in ('labels','exact' … [341 caractères tronqués]`
+
+  ```
+BASELINE f1/tete vivant 0.572 0.7262
+
+== sans_r1a
+{'labels': 203, 'exact': 203, 'delta_labels': -9, 'delta_exact': -9, 'couverture': 0.8494, 'f1_vivant': 0.5643, 'tete_vivant': 0.7208, 'n_gains': 15, 'n_pertes': 6, 'n_labels_gagnes': 15, 'n_labels_perdus': 6}
+gains {'dev': ['r034:REL', 'r074:REL', 'r114:REL', 'r205:SUB', 'r219:SUB', 'r240:SUB', 'r243:REL', 'r247:SUB', 'r278:REL', 'r285:REL', 'r296:SUB', 'r299:REL'], 'test': ['r214:REL', 'r216:SUB', 'r281:SUB']}
+pertes {'dev': ['r273:REL', 's069:REL', 's135:REL'], 'test': ['s032:REL', 's072:REL', 's115:REL']}
+labels_gagnes {'dev': ['r034:REL', 'r074:REL', 'r114:REL', 'r205:SUB', 'r219:SUB', 'r240:SUB', 'r243:REL', 'r247:SUB', 'r278:REL', 'r285:REL', 'r296:SUB', 'r299:REL'], 'test': ['r214:REL', 'r216:SUB', 'r281:SUB']}
+labels_perdus {'dev': ['r273:REL', 's069:REL', 's135:REL'], 'test': ['s032:REL', 's072:REL', 's115:REL']}
+
+== sans_r1b
+{'labels': 211, 'exact': 211, 'delta_labels': -1, 'delta_exact': -1, 'couverture': 0.8828, 'f1_vivant': 0.5711, 'tete_vivant': 0.7257, 'n_gains': 1, 'n_pertes': 0, 'n_labels_gagnes': 1, 'n_labels_perdus': 0}
+gains {'dev': ['r247:SUB']}
+pertes {}
+labels_gagnes {'dev': ['r247:SUB']}
+labels_perdus {}
+
+==
+… [3749 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/audit_r1r3/complements.py <<'PY'\n\"\"\"Compléments : avant (gelé 602), R3a fidèle à A17, contrôle top-k par permutation.\"\"\"\nfrom __future__ import annotations\nimport importlib.util, json, pathlib, random, statistics, sys\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/ … [5045 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/audit_r1r3/complements.py", line 54, in <module>
+    assert src.count("not in subordonnants") == 2, src.count("not in subordonnants")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1
+EXIT:1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"SUBORDONNANTS\" tools/bloc_linguistique.py", "description": "List SUBORDONNANTS occurrences"}`
+
+  ```
+375:SUBORDONNANTS = {"because", "although", "though", "if", "while", "as", "since", "unless",
+870:            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS
+885:                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV"
+933:                       and _normaliser(mots[j][2]) not in SUBORDONNANTS
+956:                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
+  ```
+
+### 👤 Utilisateur
+
+background job bash-2160 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1800 env PYTHONPATH=. python3 -m tools.pensee.autotest > /tmp/audit_r1r3/autotest.log 2>&1; echo EXIT:$? >> /tmp/audit_r1r3/autotest.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "tail -8 /tmp/audit_r1r3/autotest.log; echo \"---FAIL---\"; grep '❌' /tmp/audit_r1r3/autotest.log | head; echo \"---OK---\"; grep -c '✅' /tmp/audit_r1r3/autotest.log", "description": "Read autotest results"}`
+
+  ```
+✅ T175 audit attachement audit : 14/14, écarts 0
+  ✅ T176 segment précédent segment précédent : s052 ouvre, s012 écoute
+  ✅ T177 candidats têtes   candidats têtes : 177/212 (0.8349)
+  ✅ T178 cache chunker     cache : 1 chunking chunker, 1 défaut (1+2S avant)
+  ✅ T179 multi-cibles      multi-cibles : exact 212/212, exact_any 212/212
+  ✅ T180 par langue        langues : fr 129/129, en 83/83 (83/88 labels)
+  183/183 portes tenues
+EXIT:0
+---FAIL---
+---OK---
+183
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\np='complements.py'\ns=open(p).read()\nstart=s.index(\"# R3a fidèle à A17\")\nend=s.index(\"# détail r280 avant/après\")\nnew='''# R3a fidèle à A17 : SUBORDONNANTS - {car} en anglais, dans tous les usages de la fonction\nsrc = H.SOURCE\nidx = src.i … [1826 caractères tronqués]`
+
+  ```
+patched
+Traceback (most recent call last):
+  File "/tmp/audit_r1r3/complements.py", line 41, in <module>
+    assert tail.count("SUBORDONNANTS") == 4, tail.count("SUBORDONNANTS")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 6
+EXIT:1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nsrc=open('tools/bloc_linguistique.py').read()\nidx=src.index('    def _syntagmes_simple')\ntail=src[idx:]\nfor i,l in enumerate(tail.splitlines(),1):\n    if 'SUBORDONNANTS' in l: print(i+len(src[:idx].splitlines()) … [69 caractères tronqués]`
+
+  ```
+870 '            if typ == "mot" and (n in RELATIFS or n in SUBORDONNANTS'
+885 '                    stype = "SUB" if (n in SUBORDONNANTS or precedent == "GV"'
+933 '                       and _normaliser(mots[j][2]) not in SUBORDONNANTS'
+956 '                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):'
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\np='complements.py'; s=open(p).read()\ns=s.replace('''assert old_debut in tail\ntail = tail.replace(old_debut, new_debut, 1)\nassert tail.count(\"SUBORDONNANTS\") == 4, tail.count(\"SUBORDONNANTS\")\ntail = tail.replace(\"SUBORDONNANTS\", \"subordo … [507 caractères tronqués]`
+
+  ```
+"tete": {
+    "precision": 0.9214,
+    "rappel": 0.6406,
+    "f1": 0.7558,
+    "tp": 1173,
+    "fp": 100,
+    "fn": 658
+   }
+  }
+ },
+ "gele_avant": {
+  "union": {
+   "segments": {
+    "precision": 0.5983,
+    "rappel": 0.5254,
+    "f1": 0.5595,
+    "tp": 962,
+    "fp": 646,
+    "fn": 869
+   },
+   "tete": {
+    "precision": 0.7919,
+    "rappel": 0.6608,
+    "f1": 0.7205,
+    "tp": 1210,
+    "fp": 318,
+    "fn": 621
+   }
+  },
+  "s": {
+   "segments": {
+    "precision": 0.5712,
+    "rappel": 0.4052,
+    "f1": 0.4741,
+    "tp": 742,
+    "fp": 557,
+    "fn": 1089
+   },
+   "tete": {
+    "precision": 0.7852,
+    "rappel": 0.5571,
+    "f1": 0.6518,
+    "tp": 1020,
+    "fp": 279,
+    "fn": 811
+   }
+  },
+  "chunker": {
+   "segments": {
+    "precision": 0.7132,
+    "rappel": 0.497,
+    "f1": 0.5858,
+    "tp": 910,
+    "fp": 366,
+    "fn": 921
+   },
+   "tete": {
+    "precision": 0.906,
+    "rappel": 0.6313,
+    "f1": 0.7441,
+    "tp": 1156,
+    "fp": 120,
+    "fn": 675
+   }
+  }
+ },
+ "vivant_avant": {
+  "cibles": 239,
+  "labels": 196,
+  "exact": 195,
+  "couverture": 0.8201,
+  "topk": 166,
+  "topk_taux": 0.6946
+ },
+ "avant_spans": {
+  "n": 43,
+  "types": {
+   "REL": 21,
+   "SUB": 17,
+   "GP": 5
+ 
+… [967 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/audit_r1r3/verifs.py <<'PY'\n\"\"\"Vérifications finales : gelé, par langue/type, 10 récupérables non intégrés.\"\"\"\nfrom __future__ import annotations\nimport ast, json, pathlib, sys\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nsys.path.inse … [3633 caractères tronqués]`
+
+  ```
+}
+  }
+ },
+ "avant_vivant": {
+  "cibles": 239,
+  "labels": 196,
+  "exact": 195,
+  "couverture": 0.8201,
+  "par_langue": {
+   "fr": {
+    "cibles": 151,
+    "labels": 135,
+    "exact": 135,
+    "topk": 121
+   },
+   "en": {
+    "cibles": 88,
+    "labels": 61,
+    "exact": 60,
+    "topk": 45
+   }
+  }
+ },
+ "avant_gele": {
+  "cibles": 239,
+  "labels": 196,
+  "exact": 195,
+  "couverture": 0.8201,
+  "par_langue": {
+   "fr": {
+    "cibles": 151,
+    "labels": 135,
+    "exact": 135,
+    "topk": 121
+   },
+   "en": {
+    "cibles": 88,
+    "labels": 61,
+    "exact": 60,
+    "topk": 45
+   }
+  }
+ },
+ "par_type": {
+  "REL": {
+   "cibles": 74,
+   "labels": 58,
+   "exact": 58,
+   "couverture": 0.7838
+  },
+  "SUB": {
+   "cibles": 69,
+   "labels": 63,
+   "exact": 63,
+   "couverture": 0.913
+  },
+  "GP": {
+   "cibles": 96,
+   "labels": 91,
+   "exact": 91,
+   "couverture": 0.9479
+  }
+ },
+ "a17_recuperes_non_integres": [
+  "g017",
+  "r153",
+  "r280"
+ ],
+ "causes_manquants": {
+  "g017": [
+   "sans_r1c"
+  ]
+ },
+ "a17_recuperes_exacts": [
+  "r034",
+  "r074",
+  "r114",
+  "r115",
+  "r205",
+  "r214",
+  "r215",
+  "r216",
+  "r219",
+  "r224",
+  "r239",
+  "r240",
+  "r243",
+  "r245",
+  "r247",
+  "r278",
+  "r279",
+  
+… [673 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, collections\nd=json.load(open('reports/pensee-spans-v7.json'))\nprint('causes:')\nfor c in d['causes']:\n    print('-', c['cause'], c['effectif'], c['types'], len(c['ids']), c['ids'])\nprint('\\nstatuts … [346 caractères tronqués]`
+
+  ```
+causes:
+- Frontière de clause 20 {'REL': 12, 'SUB': 8, 'GP': 0} 20 ['g017', 'r034', 'r074', 'r114', 'r115', 'r205', 'r214', 'r216', 'r219', 'r224', 'r239', 'r240', 'r243', 'r247', 'r278', 'r281', 'r285', 'r291', 'r296', 'r299']
+- Type attendu différent 4 {'REL': 0, 'SUB': 4, 'GP': 0} 4 ['r215', 'r245', 'r279', 'r294']
+- GN qui avale 4 {'REL': 1, 'SUB': 3, 'GP': 0} 4 ['r280', 's044', 's112', 's114']
+- Lexique disjoint synthétique (REL sur-longues) 6 {'REL': 6, 'SUB': 0, 'GP': 0} 6 ['s010', 's035', 's061', 's065', 's125', 's141']
+- Gold synthétique sans préposition 4 {'REL': 0, 'SUB': 0, 'GP': 4} 4 ['s027', 's146', 's148', 's160']
+- Marqueur absent ou élidé 2 {'REL': 1, 'SUB': 1, 'GP': 0} 2 ['r035', 'r264']
+- Lexique verbal réel 1 {'REL': 1, 'SUB': 0, 'GP': 0} 1 ['r255']
+- GP tronqué par un faux verbe 1 {'REL': 0, 'SUB': 0, 'GP': 1} 1 ['r153']
+- Adverbe final (arbitrage dev/test) 1 {'REL': 0, 'SUB': 1, 'GP': 0} 1 ['r288']
+
+statuts:
+('exact', 'R1') 20
+('absent', '— (règle non écrite)') 1
+('exact', 'R3b') 1
+('exact', 'R2') 3
+('exact', 'R2 (span) / — (cible)') 1
+('absent', '— (lexique)') 1
+('absent', '— (tokenisation)') 1
+('exact', 'R3a') 1
+('absent', '— (arbitrage)') 1
+('absent', '— (l
+… [410 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport ast\nsrc=open('tools/pensee/autotest.py').read(); tree=ast.parse(src)\nfor n in tree.body:\n    if isinstance(n,ast.FunctionDef) and n.name.startswith('t') and n.name[1:].split('_')[0].isdigit():\n        num … [216 caractères tronqués]`
+
+  ```
+t107_gold_complet: Le gold complet : 602 phrases, POS 0,7603 (gelé).
+t108_anaphore_68: La coréférence à 68 liens : 52/68 par le rôle, 51/68 par le dernier nom.
+t109_anaphore_103: La coréférence à 103 liens : 86/103 pour les deux règles.
+t110_segmenteur: Le segmenteur : S F1 0,4966 (français seul), chunker 0,6057 ; tête 0,6654 / 0,7558 (gelé 602).
+t111_hybride_seg: L'hybride frontières/têtes : tête F1 0,4183 (S 0,3552, chunker 0,4707).
+t112_union: L'union des segmenteurs : segments F1 0,5595 (S 0,4741).
+t113_union_defaut: L'union par défaut : F1 0,5595, tête 0,7205 dans l'analyseur.
+t114_cascade_union: La cascade avec l'union : F1 0,5864, tête 0,7285, 602 appels neuronaux.
+t115_tete_cascade: La tête de la cascade : la correction par l'union dégrade (0,455 contre 0,441).
+t116_miroir: Le miroir : surface 1,0, mots 0,2095.
+t117_miroir_pos: La sortie POS : fidélité 0,201.
+t118_miroir_espaces: La restitution POS avec les intervalles : 1,0.
+t119_miroir_resume: La restitution sémantique : rappel 0,7834 (heur), 0,7472 (cascade).
+t120_miroir_reponse: La réponse : 19/19 sur les questions du gold.
+t121_reponse_contenu: La réponse au contenu : 0/19, la frontière du modèle.
+t122_extraction: La r
+… [4875 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/audit_r1r3/details.py <<'PY'\nimport json, pathlib, sys\nRACINE=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,str(RACINE)); sys.path.insert(0,str(RACINE/'tools')); sys.path.insert(0,'/tmp/audit_r1r3')\nimport tools.tests.linguistique.evalu … [1172 caractères tronqués]`
+
+  ```
+{
+ "g017": {
+  "phrase": "She said that she would come yesterday.",
+  "langue": "en",
+  "gold": [
+   {
+    "type": "GN",
+    "texte": "She",
+    "role": "agent",
+    "debut": 0,
+    "fin": 3
+   },
+   {
+    "type": "GV",
+    "texte": "said",
+    "role": "prédicat",
+    "debut": 4,
+    "fin": 8
+   },
+   {
+    "type": "SUB",
+    "texte": "that she would come",
+    "role": "contenu",
+    "debut": 9,
+    "fin": 28,
+    "cibles": [
+     "said"
+    ],
+    "cible": "said"
+   }
+  ],
+  "baseline": [
+   {
+    "type": "SUB",
+    "debut": 9,
+    "fin": 38,
+    "texte": "that she would come yesterday",
+    "cible": "said"
+   }
+  ],
+  "sans_r1c": [
+   {
+    "type": "SUB",
+    "debut": 9,
+    "fin": 28,
+    "texte": "that she would come",
+    "cible": "said"
+   }
+  ]
+ },
+ "s037": {
+  "phrase": "Paul qui marche marche",
+  "langue": "fr",
+  "gold": [
+   {
+    "type": "GN",
+    "texte": "Paul",
+    "role": "gn",
+    "debut": 0,
+    "fin": 4
+   },
+   {
+    "type": "REL",
+    "texte": "qui marche",
+    "role": "rel",
+    "debut": 5,
+    "fin": 15,
+    "cibles": [
+     "Paul"
+    ],
+    "cible": "Paul"
+   },
+   {
+    "type": "GV",
+    "texte": "marche",
+    "role": "gv",
+    "debut": 16,
+    "fin": 22
+ 
+… [1230 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/audit_r1r3/compile.py <<'PY'\nimport json, pathlib, sys, collections\nRACINE=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0,str(RACINE)); sys.path.insert(0,str(RACINE/'tools')); sys.path.insert(0,'/tmp/audit_r1r3')\nimport tools.tests.lingu … [3199 caractères tronqués]`
+
+  ```
+"type": "REL",
+   "debut": 10,
+   "fin": 18,
+   "texte": "qui nage",
+   "cible_gold": "chemin"
+  },
+  {
+   "id": "s061",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "debut": 9,
+   "fin": 18,
+   "texte": "qui saute",
+   "cible_gold": "nuage"
+  },
+  {
+   "id": "s032",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "debut": 11,
+   "fin": 19,
+   "texte": "qui crie",
+   "cible_gold": "village"
+  },
+  {
+   "id": "s035",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "debut": 10,
+   "fin": 19,
+   "texte": "qui ferme",
+   "cible_gold": "papier"
+  },
+  {
+   "id": "r280",
+   "langue": "en",
+   "source": "reel",
+   "type": "REL",
+   "debut": 8,
+   "fin": 21,
+   "texte": "that I bought",
+   "cible_gold": "car"
+  },
+  {
+   "id": "s125",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "debut": 11,
+   "fin": 21,
+   "texte": "qui compte",
+   "cible_gold": "renard"
+  },
+  {
+   "id": "s135",
+   "langue": "fr",
+   "source": "synthetique",
+   "type": "REL",
+   "debut": 11,
+   "fin": 22,
+   "texte": "qui dessine",
+   "cible_gold": "fenêtre"
+  },
+  {
+   "id": "r273",
+   "langue": "fr",
+   "source": "reel",
+   "type": "
+… [2168 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\nimport json\nd=json.load(open('compile.json'))\nfor k in ('set_math','avant','apres','langues','delta_langues','classes_27','types_27','langues_27','sources_27','a17_nonrec'):\n    print(k, json.dumps(d[k],ensure_ascii=False))\nprint('ids', json.d … [85 caractères tronqués]`
+
+  ```
+set_math {"exact_base": 212, "exact_off": 195, "exact_communs": 188, "exact_gagnes": 24, "exact_perdus": 7, "labels_base": 212, "labels_off": 196, "labels_communs": 189, "labels_gagnes": 23, "labels_perdus": 7}
+avant {"cibles": 239, "labels": 196, "exact": 195, "couverture": 0.8201, "topk": 166, "topk_taux": 0.6946}
+apres {"cibles": 239, "labels": 212, "exact": 212, "couverture": 0.887, "topk": 177, "topk_taux": 0.7406}
+langues {"avant": {"fr": {"cibles": 151, "labels": 135, "exact": 135, "topk": 121}, "en": {"cibles": 88, "labels": 61, "exact": 60, "topk": 45}}, "apres": {"fr": {"cibles": 151, "labels": 129, "exact": 129, "topk": 120}, "en": {"cibles": 88, "labels": 83, "exact": 83, "topk": 57}}}
+delta_langues {"fr": {"cibles": 0, "labels": -6, "exact": -6}, "en": {"cibles": 0, "labels": 22, "exact": 23}}
+classes_27 {"A17 récupérable, R3b non intégré": ["r153"], "A17 non récupérable": ["r035", "r255", "r264", "r288", "s010", "s027", "s035", "s044", "s061", "s065", "s112", "s114", "s125", "s141", "s146", "s148", "s160"], "régression R2 (span v7 exact perdu)": ["s037"], "régression R1a (span v7 exact perdu)": ["r273", "s032", "s069", "s072", "s115", "s135"], "A17 récupérable, R3a in
+… [761 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, charger_gele, evaluer_bloc\nfrom too … [682 caractères tronqués]`
+
+  ```
+{
+ "dev": {
+  "phrases": 422,
+  "cibles": 163,
+  "labels": 148,
+  "exact": 148,
+  "couverture": 0.908,
+  "exact_taux_span": 1.0,
+  "topk": 120,
+  "topk_taux": 0.7362,
+  "f1": 0.5723,
+  "tete": 0.727
+ },
+ "test": {
+  "phrases": 190,
+  "cibles": 76,
+  "labels": 64,
+  "exact": 64,
+  "couverture": 0.8421,
+  "exact_taux_span": 1.0,
+  "topk": 57,
+  "topk_taux": 0.75,
+  "f1": 0.5714,
+  "tete": 0.7241
+ },
+ "vivant": {
+  "phrases": 612,
+  "cibles": 239,
+  "labels": 212,
+  "exact": 212,
+  "couverture": 0.887,
+  "exact_taux_span": 1.0,
+  "topk": 177,
+  "topk_taux": 0.7406,
+  "f1": 0.572,
+  "tete": 0.7262
+ },
+ "gele": {
+  "phrases": 602,
+  "cibles": 239,
+  "labels": 212,
+  "exact": 212,
+  "couverture": 0.887,
+  "exact_taux_span": 1.0,
+  "topk": 177,
+  "topk_taux": 0.7406,
+  "f1": 0.5763,
+  "tete": 0.7316
+ }
+}
+  ```
+
+- **bash** `{"command": "grep -E \"T111|T112|T113|T114|T115|T153|T161|T162|T163|T166|T167|T172|T173|T177|T179|T180\" /tmp/audit_r1r3/autotest.log", "description": "Show gate outputs for stale docstrings"}`
+
+  ```
+✅ T111 hybride segmenteur hybride : tête F1 0.7402 (S 0,3552, chunker 0,4707)
+  ✅ T112 union segmenteurs union : segments F1 0.5763 (S 0,4966)
+  ✅ T113 union par défaut  union par défaut : F1 0.5763, tête 0.7316
+  ✅ T114 cascade + union   cascade : F1 0.6033, tête 0.7399, 602 appels
+  ✅ T115 tête cascade      tête cascade corrigée : 0.6822 (cascade 0,441 ; union 0,466)
+  ✅ T153 attachement       attachement : top1 0.887, exact 0.887, couverture 0.887
+  ✅ T161 cible proximité   proximité : top1 212/239, exact 212/239, tête 212/145
+  ✅ T162 candidats verbes  candidats : top-k 177/239 (0.7406), tête 178/212
+  ✅ T163 échecs attachement échecs : 27 de span, 35 de cible (33 avant les correctifs)
+  ✅ T166 spans perdus      spans : 16 REL, 6 SUB, 5 GP
+  ✅ T167 dénominateur      dénominateur : spans 1.0 / 0.8349 / 1.0
+  ✅ T172 échecs de cible   échecs de cible : 0 hors candidats, 0 mal classés
+  ✅ T173 top-k strict      top-k : 177 sous-chaîne, 177 exacts (0.8349)
+  ✅ T177 candidats têtes   candidats têtes : 177/212 (0.8349)
+  ✅ T179 multi-cibles      multi-cibles : exact 212/212, exact_any 212/212
+  ✅ T180 par langue        langues : fr 129/129, en 83/83 (83/88 labels)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"audit-r1r3\\|pensee-audit-r1r3\" || echo \"ABSENT\"; echo \"---\"; ls reports/ | grep -i audit | head -20; echo \"---git tracked?---\"; git ls-files reports/pensee-audit-r1r3.json reports/rapport-audit-r1r3.md … [53 caractères tronqués]`
+
+  ```
+ABSENT
+---
+a80-audit-final.json
+b1110-audit.json
+pensee-audit-attachement.json
+pensee-audit.json
+pensee-audit-v2.json
+pensee-audit-v7.json
+rapport-a80-audit-final.md
+rapport-audit-attachement.md
+rapport-audit-v2.md
+rapport-audit-v7.md
+rapport-b1110-audit.md
+rapport-pensee-audit.md
+---git tracked?---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\n# contrôle hasard officiel (evaluer_gold) et union des splits\nimport sys, random, zlib\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nfrom tools.tests.linguistique.evaluer_gold import charger\nfrom tools.test … [611 caractères tronqués]`
+
+  ```
+hasard officiel 1 / 239 0.0042
+split 422 190 0 612
+cibles 163 76
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"autotest\" tools/toutes-les-portes.sh | head -10; echo \"---\"; head -40 tools/toutes-les-portes.sh", "description": "Check how official gate runner invokes autotest"}`
+
+  ```
+---
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge
+… [890 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'.'); sys.path.insert(0,'tools'); sys.path.insert(0,'/tmp/audit_r1r3')\nimport harness as H\nfrom tools.tests.linguistique.evaluer_gold import charger\nvar=H.construit … [283 caractères tronqués]`
+
+  ```
+baseline {'union': {'f1': 0.572, 'tete': 0.7262}, 's': {'f1': 0.491, 'tete': 0.6581}, 'chunker': {'f1': 0.6018, 'tete': 0.7512}}
+avant {'union': {'f1': 0.5555, 'tete': 0.7152}, 's': {'f1': 0.4688, 'tete': 0.6446}, 'chunker': {'f1': 0.5822, 'tete': 0.7397}}
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_r1r3 && python3 - <<'PY'\nimport json\nd=json.load(open('compile.json'))\nsp={x['id']:x for x in d['spans']}\nclasses=d['classes_27']\nfor cl,ids in classes.items():\n    print('\\n##',cl, len(ids))\n    for i in ids:\n        x=sp[i]\n        print(f\"| `{i}` | {x['langue … [156 caractères tronqués]`
+
+  ```
+## A17 récupérable, R3b non intégré 1
+| `r153` | en | GP | reel | 8:19 | « for the bus » | `wait` |
+
+## A17 non récupérable 17
+| `r035` | en | REL | reel | 9:24 | « she talks about » | `film` |
+| `r255` | fr | REL | reel | 11:27 | « que j'ai achetée » | `voiture` |
+| `r264` | fr | SUB | reel | 8:26 | « qu'il vient demain » | `sais` |
+| `r288` | en | SUB | reel | 7:29 | « that he comes tomorrow » | `know` |
+| `s010` | fr | REL | synthetique | 10:18 | « qui nage » | `chemin` |
+| `s027` | fr | GP | synthetique | 31:33 | « il » | `marche` |
+| `s035` | fr | REL | synthetique | 10:19 | « qui ferme » | `papier` |
+| `s044` | fr | SUB | synthetique | 17:29 | « que ils crie » | `nage` |
+| `s061` | fr | REL | synthetique | 9:18 | « qui saute » | `nuage` |
+| `s065` | fr | REL | synthetique | 5:17 | « qui commence » | `elle` |
+| `s112` | fr | SUB | synthetique | 24:39 | « que Lucas ferme » | `nage` |
+| `s114` | fr | SUB | synthetique | 22:43 | « que les avocat compte » | `dessine` |
+| `s125` | fr | REL | synthetique | 11:21 | « qui compte » | `renard` |
+| `s141` | fr | REL | synthetique | 5:15 | « qui trouve » | `Emma` |
+| `s146` | fr | GP | synthetique | 25:35 | « les jardin » | `observe` |
+| 
+… [950 caractères tronqués]
+  ```
+
