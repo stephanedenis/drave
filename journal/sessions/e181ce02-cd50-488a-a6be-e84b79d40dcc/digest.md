@@ -49882,3 +49882,283 @@ MM journal/2026-11-05/README.md
 ⏵ Merge fait : `master` fast-forwardé sur `s/v7` puis poussé (`af28eadd..789b1284`). Je consigne l'état
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-list --count origin/master..s/v7; git rev-list --count s/v7..origin/master; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; passe complète **79/83** (2 stru … [1290 caractères tronqués]`
+
+  ```
+0
+0
+état : merge consigné
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+[still running after 60000ms; moved to background job bash-2647]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2647", "timeout_ms": 600000, "wait": true}`
+
+  ```
+12 files changed, 255 insertions(+), 23 deletions(-)
+COMMIT OK 1
+fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+  master                           789b1284 [origin/master] DOCS — LA PASSE DU 06/11 EN UNE LIGNE ET L'ANCIENNE COMPRESSÉE (BUDGET T1)
+* s/v7                             fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin master 2>&1 | tail -3; git branch -vv | grep -E \"^\\*|master\"; git rev-list --count origin/master..s/v7; date", "description": "Ré-aligner master et pousser", "timeoutMs": 18 … [5 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   789b1284..fa1b0c6e  master -> master
+  master                           fa1b0c6e [origin/master] ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+* s/v7                             fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+0
+ven 06 nov 2026 09:18:38 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Merge terminé et vérifié : je refais la vérification finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD : %h %s'; git rev-list --count master..s/v7; git rev-list --count origin/master..s/v7; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableau … [248 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 09:18:47 EST
+HEAD : fa1b0c6e ÉTAT — MASTER EST À JOUR : s/v7 FAST-FORWARDÉ ET POUSSÉ (375 COMMITS, af28eadd..789b1284)
+0
+0
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/sessions.py --check        EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Merge fait et poussé : `master` = `s/v7` = `fa1b0c6e`, zéro divergence
+
+## Le merge
+
+`master` était un **ancêtre** de `s/v7` (0 commit en retard, 375 en avance) : le merge était donc un **fast-forward**, sans conflit.
+
+```
+af28eadd..789b1284  master -> master     (375 commits)
+789b1284..fa1b0c6e  master -> master     (le commit d'état du merge)
+```
+
+- `master` local : `af28eadd` → **`fa1b0c6e`**
+- `origin/master` : poussé, **au même commit**
+- `git rev-list --count master..s/v7` = **0** ; `git rev-list --count s/v7..master` = **0**
+
+J'ai utilisé `git branch -f master s/v7` plutôt qu'un `git checkout master && git merge` : les autres sessions ont des modifications non commitées dans `journal/`, et un changement de branche les aurait emportées ou bloquées. Le déplacement de référence ne touche pas l'arbre de travail.
+
+## Ce que master contient maintenant
+
+Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couverture **0,9289**), F1 **0,5849**, POS **0,7581**, fr **136/136**, en **86/86**, dev **153/153**, test **69/69** ; 17 spans restants tous inatteignables ; le cache du chunker (×139) ; le classement appris rejeté ; les 8 fiches v2→v12 et les 7 audits ; le dossier pilotage à jour.
+
+## L'état vérifié
+
+| contrôle | résultat |
+|---|---|
+| `revue_documentation` | ✅ |
+| `taille_documents` (T0/T1) | ✅ |
+| `porte-tableaux` (3 400+ liens) | ✅ |
+| `verifie_en_cours` | ✅ |
+| `verifie_journal` | ✅ |
+| `sessions --check` | ✅ (les deux mandats rafraîchis) |
+| autotest | **183/183** |
+| passe complète (83 portes) | **79 vertes**, 2 structurelles connues, `bloc-linguistique` (`cascade_pos`, documentée), `sessions` (résolu depuis) |
+
+**Une remarque** : `s/v7` a un commit d'avance sur `master` à chaque nouveau commit — c'est le flux normal ; il faudra refaire `git branch -f master s/v7 && git push` (ou un merge classique) pour republier. Si vous préférez que je travaille désormais directement sur `master`, dites-le-moi.
+
+
+## Tour 179
+
+### 👤 Utilisateur
+
+push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vise un système utilisable en autonomie comme premier produit.
+
+### 🤖 Assistant
+
+⏵ Nouvelle fenêtre (09 h 18 → 12 h) : je pousse, je prends l'inventaire des tâches restantes et je dispatche
+
+- **create_goal** `{"max_goal_rounds": 200, "objective": "Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utili … [302 caractères tronqués]`
+
+> **Objectif** (create) : Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produit (entrée CLI, smoke test de bout en bout, documentation d'usage, portes vertes) ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.
+
+
+  ```
+{"goal":{"id":"goal-8d1eae1d-753d-4e7d-9b61-3aa3de59d56b","revision":1,"objective":"Autonomie du 2026-11-06 09 h 20 → 12 h 00 : pousser l'état, prendre le contrôle de TOUTES les tâches restantes du dépôt (roadmap, en-cours, chantiers, file « jamais en attente »), les exécuter en sous-agents coordonnés (2-4 par vague), et viser un système utilisable en autonomie comme premier produit (entrée CLI, smoke test de bout en bout, documentation d'usage, portes vertes) ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":0,"maxGoalRounds":200},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git status -sb | head -3; git remote -v | head -2; git branch -r | head -8; echo \"=== s/v7 distant ?\"; git ls-remote origin 2>/dev/null | grep -E \"s/v7|master\" | head -3", "description": "Pousser et voir les branches distan … [5 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 09:29:08 EST
+## s/v7
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+origin	git@github.com:stephanedenis/drave.git (fetch)
+origin	git@github.com:stephanedenis/drave.git (push)
+  origin/HEAD -> origin/master
+  origin/master
+  origin/s/close
+  origin/s/v7
+=== s/v7 distant ?
+fa1b0c6eb90b3d27ec78f946d677817ba08b419e	refs/heads/master
+f7195ce06a9967839a0f0803b51ed952c5d04980	refs/heads/s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 git push origin s/v7 2>&1 | tail -3; git ls-remote origin 2>/dev/null | grep -E \"refs/heads/(master|s/v7)\"", "description": "Pousser s/v7 aussi", "timeoutMs": 180000}`
+
+  ```
+To github.com:stephanedenis/drave.git
+   f7195ce0..fa1b0c6e  s/v7 -> s/v7
+fa1b0c6eb90b3d27ec78f946d677817ba08b419e	refs/heads/master
+fa1b0c6eb90b3d27ec78f946d677817ba08b419e	refs/heads/s/v7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Prochaine action\\|prochaine action\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -12 | cut -c1-230", "description": "Lire les prochaines actions"}`
+
+  ```
+docs/pilotage/en-cours.md:18:- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+docs/pilotage/en-cours.md:44:- **Prochaine action** : reprise par le hub `1e7ef596` ; l'état du 04/11 est la source.
+docs/pilotage/en-cours.md:59:- **Prochaine action** : **reprise** : poursuivre la validation sur `/paragraphes` (a001–a003 faits, 8 restants), puis la rétro-traduction API et les 71 langues.
+docs/pilotage/en-cours.md:74:- **Prochaine action** : **réduire les candidats à leur tête** (top-k strict), puis le **classement appris**.
+docs/pilotage/en-cours.md:89:- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
+docs/pilotage/en-cours.md:116:externes** et la **prochaine action**.
+docs/pilotage/en-cours.md:118:| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+docs/pilotage/roadmap.md:5:> contrôles vivent dans [`reports/`](../../reports/) ; ici : l'[état](../theorie/glossaire/entrees/etat.md), la prochaine action, et ce qui bloque.
+docs/pilotage/roadmap.md:18:- **DSH ne reste jamais en attente** : chaque ligne a une **prochaine action** ; si elle est bloquée, on prend la
+docs/pilotage/roadmap.md:28:| chantier | ce qu'il c
+… [177 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' docs/pilotage/en-cours.md | cut -c1-240", "description": "Lire la synthèse de l'état"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-06, 04 h 05 HNE (heure locale, EST).**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+>
+> **Reboot du 03/11 19 h 33** : la nuit a été coupée (`kd2` **8 250/30 000**, `rope2048`
+> **3 350/20 000**, sans checkpoint) ; les quatre sessions ont été mises en pause. **Reprise du
+> 04/11** : hub `1e7ef596` (08 h 50), N2 09 h 41, S 09 h 46, L/B13 10 h 14 ; **N3** clos en
+> session courte (11 h 30–11 h 38). Runbook [`plan-travail.md`](plan-travail.md) § 9 et § 12.
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+
+## Sessions en cours
+
+> Contrat : [`continuite
+… [437 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '110,175p' docs/pilotage/en-cours.md | cut -c1-260", "description": "Lire le tableau des chantiers"}`
+
+  ```
+| documents de `docs/` | **120** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+
+**Dépendances** : [le graphe](backlog/dependances.md) ; cette table ne garde que les **bloquants
+externes** et la **prochaine action**.
+
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 178/178, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entra
+… [1483 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/*.py | head -20; echo \"=== CLI ?\"; grep -rln \"argparse\" tools/*.py | head -6; echo \"=== README produit ?\"; ls README* 2>/dev/null; head -30 README.md 2>/dev/null | cut -c1-150", "description": "Chercher un point d'entr … [12 caractères tronqués]`
+
+  ```
+tools/adaptateur_langue.py
+tools/aiguille.py
+tools/aligneur_litteraire.py
+tools/amplification.py
+tools/analyse_alignement.py
+tools/analyse_empreinte.py
+tools/analyse_engram.py
+tools/analyse_experts_statique.py
+tools/analyse_flux.py
+tools/analyse_hc.py
+tools/analyse_litteraire.py
+tools/analyse_octets_par_jeton.py
+tools/analyse_reutilisation_experts.py
+tools/analyse_union_experts.py
+tools/ancre_professeur.py
+tools/applique_pont.py
+tools/approximabilite_bloc.py
+tools/archive_sessions.py
+tools/audit_drapeaux_harnais.py
+tools/banc_complet.py
+=== CLI ?
+tools/adaptateur_langue.py
+tools/aiguille.py
+tools/aligneur_litteraire.py
+tools/analyse_alignement.py
+tools/analyse_empreinte.py
+tools/analyse_engram.py
+=== README produit ?
+README.md
+# Drave
+
+> **Ce que ce document est.** La vitrine publique de Drave : la vision, les cinq axes, les deux
+> étages, six résultats et l'état du dépôt. Les chiffres sont cités comme état ; les fiches sont
+> dans [`reports/`](reports/). **Chargement :** T1 — ce résumé, puis la section utile.
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Un moteur qui traite les
+activations d'un réseau de neurones comme des **faits** —
+… [1662 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire fait : pas de point d'entrée produit. Je lance la vague « produit » (CLI, doc d'usage, audit de fiabilité, file des tâches)
+
+- **subagent** `{"description": "CLI produit prototype", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python, dépôt Drave). Mission : **prototyper le point d'entrée produit** — une CLI unique qui expose le bloc linguistique.\n\nContexte : `tools/bloc_linguist … [1908 caractères tronqués]`
+- **subagent** `{"description": "Doc d'usage du produit", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrire la **documentation d'usage du premier produit** — ce qu'un utilisateur peut faire aujourd'hui, en autonomie, avec le système. … [1858 caractères tronqués]`
+- **subagent** `{"description": "Fiabilité produit du bloc L", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **auditer la fiabilité « produit » du bloc linguistique** — qu'est-ce qu'un utilisateur peut utiliser en autonomie, et qu'est-ce qui … [1639 caractères tronqués]`
+- **subagent** `{"description": "File des tâches restantes", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **inventorier toutes les tâches restantes** du dépôt et en faire une file exécutable, priorisée et sans dépendance cachée.\n\nContexte : `docs … [1637 caractères tronqués]`
+
+  ```
+started subagent bd6322ed-6792-4188-9d4c-6cae09c3ef4e
+  ```
+
+
+  ```
+started subagent 1555bdd3-27e9-4779-b1e7-716e32399c11
+  ```
+
+
+  ```
+started subagent 14114f3d-ae0d-416e-ad8e-4d4eaa04c36c
+  ```
+
+
+  ```
+started subagent a0d33fb7-37a9-4834-8a94-0da119e3b18f
+  ```
+
+### 🤖 Assistant
+
+⏵ Vague produit lancée ; je consigne l'objectif « premier produit » au pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289**, **F1 0,5 … [1518 caractères tronqués]`
