@@ -38,7 +38,7 @@
 - **Le neuronal** (`NeuronalLLM`) : hors ligne, il n'est pas exposé.
 - **17 spans** du gold restent inatteignables (12 formes synthétiques, 4 GP du gold sans
   préposition, une tokenisation) — la couverture est 0,9289, pas 1,0.
-- **`cascade_pos`** : la fusion avec le contrat passe sous l'heuristique (rouge documentée).
+- **`cascade_pos`** : la fusion avec le contrat rend 0,7465, sous l'heuristique (0,7581) — le verdict est un **plancher 0,70**, pas une comparaison ; la porte est verte.
 
 ## 4. Ce que ce banc ne dit pas
 

@@ -4163,3 +4163,331 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md 
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |", "old_string": "| **la rouge tolérée** et les … [114 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"rouge\\|cascade_pos\\|plancher\" docs/produit/README.md", "description": "Verify no stale red claims remain"}`
+
+  ```
+55:**Les contre-épreuves.** Le CLI imprime son propre plancher : **cible exacte tirée au hasard
+190:**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un
+191:**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte
+345:| **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
+363:| **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"sort 1\\|sort \\*\\*1\\|sort 0\\|exit 1\\|cascade\" docs/produit/README.md | head -20", "description": "Check exit-code claims consistency"}`
+
+  ```
+134:le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade
+190:**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un
+191:**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte
+192:`porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
+196:`drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
+339:| **`--mode` / la cascade** | le CLI n'expose que l'heuristique ; `parallele` et `cascade` demandent le code Python |
+345:| **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
+347:| **le chemin neuronal** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; pas de chemin neuronal livré |
+362:| **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |
+363:| **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final des sorties de la notice après les changements du hub.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 -- tools/drave.py; sha256sum tools/drave.py; echo \"=== analyser ===\"; python3 tools/drave.py analyser \"Le chat dort.\" | head -8; echo \"=== rejouer ===\"; python3 tools/drave.py rejouer \"Le chat de la voisin … [175 caractères tronqués]`
+
+  ```
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+59a06f3e4f7d633ae8caa30412fd4c01e14374914226f5e54629f544e47aea8c  tools/drave.py
+=== analyser ===
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+=== rejouer ===
+  étiquettes : 59
+  JSON       : 11700 octets · sha256 b0a1709a97abe8d4…
+=== evaluer ===
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
+SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)
+  tête      F1 73.36 %  (P 81.00 % / R 67.04 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  tête      couverture 100.00 % · top-k 99.55 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernières retouches de forme et vérification du diff.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md", "new_string": "Un filtre de lecture (à définir une fois dans le terminal ; les exemples ci-dessous adaptent\nparfois la liste des niveaux) :", "old_string": "Le filtre utilisé (à définir une fois dans le termin … [7 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l --time-style=full-iso docs/produit/exemples.md; sed -n 28,36p docs/produit/exemples.md; git diff --numstat -- docs/produit/exemples.md", "description": "Check exemples.md state after write"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 19249 2026-11-06 10:45:46.381206630 -0500 docs/produit/exemples.md
+```bash
+FILTRE='{langue, script, refus, fraction_semantique,
+  pos: [.etiquettes[] | select(.niveau=="pos")
+        | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}],
+  syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
+        | {valeur, type, debut, fin, confiance, role:.meta.role,
+           cible:.meta.attachement.cible, union:.meta.union, candidats}],
+  phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
+  pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}],
+579	52	docs/produit/exemples.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md", "offset": 20, "limit": 20}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md</path>
+<type>file</type>
+<content>
+20: - `candidats` : des **chaînes d'affichage** (parfois « « qui dort » → voisine »), pas des objets.
+21: - `null` : pas d'attachement publié pour ce syntagme.
+22: - `union: true` : seconde lecture qui chevauche un syntagme plus court. Dans la sortie lisible du
+23:   CLI, elle apparaît comme un **doublon REL** ; pour une lecture unique, filtrer les segments qui
+24:   en contiennent un autre (ou garder `union: null`).
+25: 
+26: Le filtre utilisé (à définir une fois dans le terminal) :
+27: 
+28: ```bash
+29: FILTRE='{langue, script, refus, fraction_semantique,
+30:   pos: [.etiquettes[] | select(.niveau=="pos")
+31:         | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}],
+32:   syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
+33:         | {valeur, type, debut, fin, confiance, role:.meta.role,
+34:            cible:.meta.attachement.cible, union:.meta.union, candidats}],
+35:   phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
+36:   pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}],
+37:   unites_semantiques}'
+
+… [81 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md", "new_string": "Un filtre de lecture (à définir une fois dans le terminal ; les exemples ci-dessous adaptent\nparfois la liste des niveaux) :", "old_string": "Le filtre utilisé (à définir une fois dans le termin … [7 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final du diff, des liens, de la revue et des compteurs.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== diff stat ===\"; git diff --stat -- docs/produit/; echo \"=== diff check ===\"; git diff --check -- docs/produit/ && echo \"pas d'erreur d'espace\"; echo \"=== statut ===\"; git status --porcelain docs/produit/; echo \"=== … [107 caractères tronqués]`
+
+  ```
+=== diff stat ===
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+=== diff check ===
+pas d'erreur d'espace
+=== statut ===
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+=== mtime ===
+total 44
+-rw-r--r--. 1 stephane stephane 19315 2026-11-06 10:57:02.709369547 -0500 exemples.md
+-rw-r--r--. 1 stephane stephane 22452 2026-11-06 10:55:08.986850852 -0500 README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -5; echo \"revue_exit=${PIPESTATUS[0]}\"; bash tools/porte-tableaux.sh 2>&1 | tail -4; echo \"tableaux_exit=${PIPESTATUS[0]}\"", "description": "Final review and tables gate"}`
+
+  ```
+revue de documentation · 679 fiche(s) · 773 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue_exit=0
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+tableaux_exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Renvoi explicite vers l'exemple JSON qui montre le champ `union`.
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "large) : dans la sortie lisible, elle apparaît comme un **doublon REL** ; le JSON la marque\n`union: true`, à filtrer pour une lecture unique (voir [`exemples.md`](exemples.md) § 2).", "old_string" … [147 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière passe de vérification avant le rapport au parent.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"revue_exit=${PIPESTATUS[0]}\"; bash tools/porte-tableaux.sh 2>&1 | tail -3; echo \"tableaux_exit=${PIPESTATUS[0]}\"; git diff --check -- docs/produit/ && echo \"diff_check=o … [152 caractères tronqués]`
+
+  ```
+revue de documentation · 679 fiche(s) · 773 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue_exit=0
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+tableaux_exit=0
+diff_check=ok
+  370 docs/produit/README.md
+  630 docs/produit/exemples.md
+ 1000 total
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --numstat -- docs/produit/; echo \"=== HEAD ===\"; git log -1 --format='%h %s' -- docs/produit/; echo \"=== liens entrants ===\"; grep -n \"produit/\" docs/README.md; echo \"=== en-cours ===\"; grep -n \"doc d'usage\\|docs/p … [110 caractères tronqués]`
+
+  ```
+155	144	docs/produit/README.md
+580	52	docs/produit/exemples.md
+=== HEAD ===
+9952a330 PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES
+=== liens entrants ===
+94:| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave — à qui, quoi, comment, limites |
+95:| [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels (entrée → sortie), dont un cas d'échec connu |
+=== en-cours ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 66,76p docs/pilotage/en-cours.md; echo \"=== compteurs ===\"; grep -n \"portes\\|documents de\\|fichiers / JSON\" docs/pilotage/en-cours.md | head -6", "description": "Inspect en-cours product mention and counters"}`
+
+  ```
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13, bloc linguistique.
+- **Stratégie** : v0 mesuré.
+- **Ambition** : un runtime cognitif tracé.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0** et sa porte.
+- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.
+- **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
+- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ; `cascade_pos` (rouge documentée).
+=== compteurs ===
+97:- **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
+107:| portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+109:| fichiers / 
+… [1117 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de la porte `bloc-linguistique` et du seuil `cascade_pos` après le changement.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-bloc-linguistique.sh 2>&1 | tail -6; echo \"exit=${PIPESTATUS[0]}\"; echo \"=== evaluer_gold exit ===\"; python3 tools/tests/linguistique/evaluer_gold.py >/dev/null 2>&1; echo \"exit=$?\"", "description": "Run block  … [33 caractères tronqués]`
+
+  ```
+"inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+exit=0
+=== evaluer_gold exit ===
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat complet au parent.
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "**Livré** (aucun commit) : `docs/produit/README.md` (370 l.) et `docs/produit/exemples.md` (630 l.), réconciliés avec le CLI réel `tools/drave.py` 0.1.0.\n\n**Vérifications lancées**\n- `python3 tools/revue_documentation.py` → exit 0 ( … [2354 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification ultime que les deux fichiers n'ont plus bougé.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum docs/produit/README.md docs/produit/exemples.md; grep -n \"^## \" docs/produit/README.md; echo \"---\"; grep -n \"^## \" docs/produit/exemples.md; echo \"---\"; grep -c \"exemples.md\" docs/produit/README.md", "description" … [36 caractères tronqués]`
+
+  ```
+d77bf93a05caae955fcfcd42132962ec9d74afeaaa7ce9262037578c3f25d749  docs/produit/README.md
+eb0e6385732a9d0d47b3cb7cd1f4839b07778512eb7e77092146db0cfa4b3f0d  docs/produit/exemples.md
+17:## 1. À qui s'adresse le produit
+32:## 2. Ce que le produit fait
+66:## 3. Comment l'utiliser — cinq exemples réels
+171:## 4. Ce que le produit ne fait pas encore
+231:## 5. Performance
+253:## 6. Garanties
+285:## 7. Le CLI livré — contrat et manques
+353:## 8. Où aller ensuite
+---
+12:## 0. Comment lire les JSON
+43:## 1. Une déclarative simple — `g001`
+173:## 2. Un attachement de REL — `g011`
+296:## 3. L'anglais et le marqueur ambigu — `r241`
+442:## 4. Le refus — texte vide
+494:## 5. L'échec connu — un span non prédit (`r035`)
+606:## 6. Ce que ces exemples ne montrent pas
+622:## 7. Où aller ensuite
+---
+4
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison des deux fichiers et du bilan de vérification.
+
+**Livré (aucun commit)**
+- `docs/produit/README.md` — **370 lignes**, 8 sections.
+- `docs/produit/exemples.md` — **630 lignes**, 5 cas + synthèse.
+
+**README — sections**
+1. À qui s'adresse le produit · 2. Ce qu'il fait (POS, syntagmes, attachement, pragmatique, unités, coût) · 3. Cinq exemples réels · 4. Ce qu'il ne fait pas encore · 5. Performance · 6. Garanties et codes de sortie · 7. Le CLI livré et ses manques · 8. Où aller ensuite.
+
+**`exemples.md` — les cinq cas** (commande exacte au-dessus de chaque sortie)
+1. `g001` « Le chat dort. » — POS, syntagmes, acte, couverture.
+2. `g011` « Le livre que j'ai lu est intéressant. » — REL → `livre`, **doublon REL de l'union** (`union: true`, à filtrer).
+3. `r241` « The day when we left was beautiful. » — `when` après GN → REL → `day` ; POS `left/NOUN` visible.
+4. Texte vide — CLI : `stderr` + code 1 ; API : `refus: "vide"`, 0 étiquette.
+5. `r035` « The film she talks about is out. » — **échec connu** : aucune REL prédite ; 222/222 conditionnel vs couverture 0,9289.
+
+**Vérifications**
+- `python3 tools/revue_documentation.py` → **exit 0** (679 fiches, 773 JSON, 121 docs, 84 portes).
+- `bash tools/porte-tableaux.sh` → **exit 0** (1723 fichiers, 3499 liens).
+- `bash tools/porte-produit.sh` → **✅ verte** (6 tests, 183/183).
+- `bash tools/porte-bloc-linguistique.sh` → **✅ verte** (`cascade_pos` plancher 0,70 ; rend 0,7465).
+- Rejeu des 5 blocs JSON : **5/5 identiques** aux commandes exécutées ; `git diff --check` propre.
+
+**Liens à déclarer dans l'état**
+- `docs/produit/README.md`
+- `docs/produit/exemples.md`
+- Déjà en place : `docs/README.md` l. 94–95 → les deux fichiers ; `docs/produit/README.md` → `exemples.md` (3 liens). La revue passe donc sans `en-cours`. Si tu veux la ligne d'état : `[doc d'usage](../../docs/produit/README.md)` et `[exemples](../../docs/produit/exemples.md)`.
+
+**Diff** (HEAD `9952a330` portait les brouillons antérieurs)
+```
+git diff --stat -- docs/produit/
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+```
+Détail : `git diff -- docs/produit/`.
+
+**Points de vigilance hors périmètre**
+- `docs/pilotage/en-cours.md` l. 75 dit encore « `cascade_pos` (rouge documentée) » ; le code et `references-non-regression.md` disent plancher 0,70 / porte verte.
+- `reports/rapport-produit-v0.md` §3 répète « cascade_pos rouge » et l'ancienne décomposition 12 formes / 4 GP / tokenisation ; son en-tête dit « 5 contrôles », son §2 « 6 ».
+- L'exemple `s160` de l'ancienne version (« `GP [10:20] rôle=instrument` ») était faux ; il est remplacé par des sorties vérifiées.
+
+Je n'ai modifié aucun fichier hors `docs/produit/` et je n'ai rien commité.
+

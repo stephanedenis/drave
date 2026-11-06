@@ -51171,3 +51171,172 @@ ven 06 nov 2026 10:54:07 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1039 caractères tronqués]`
+
+  ```
+679 773
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[still running after 60000ms; moved to background job bash-3061]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3061", "timeout_ms": 600000, "wait": true}`
+
+  ```
+19 files changed, 1062 insertions(+), 79 deletions(-)
+COMMIT OK 1
+f6c8132b A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET
+ven 06 nov 2026 10:57:07 EST
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; git status --porcelain docs/produit/ | head -3; head -14 docs/produit/README.md | cut -c1-160", "description": "Attendre P2 et voir sa version", "timeoutMs": 600000}`
+
+  ```
+ven 06 nov 2026 11:05:21 EST
+ M docs/produit/README.md
+ M docs/produit/exemples.md
+# Le premier produit — analyser un texte avec Drave
+
+> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+> linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+> il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+> qu'il garantit.
+>
+> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
+> porte produit est verte. Les exemples du § 3 sont réels : ils ont été lancés pour ce document.
+> Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+>
+> **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
+> classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
+  ```
+
+### 👤 Utilisateur
+
+background job bash-3034 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()
+t=t.replace(" ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**, porte produit et doc d'usage.",
+            " ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0**.")
+p.write_text(t)
+PY
+python3 tools/taille_documents.py 2>&1 | tail -1
+for i in 1 2 3; do
+  git add docs/pilotage/en-cours.md
+  timeout 240 git commit -m "ÉTAT — T0 À 4 000" -- docs/pilotage/en-cours.md 2>&1 | tail -1
+  if git log -1 --format='%s' | grep -q "T0 À 4 000"; then echo "COMMIT OK $i"; break; fi
+  sleep 5
+done; git log -1 --format='%h %s'; sleep 300; date; ls -la docs/produit/; ls reports/ | grep produit-bloc-l) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+Agent 1555bdd3-27e9-4779-b1e7-716e32399c11 sent a message: 
+**Livré** (aucun commit) : `docs/produit/README.md` (370 l.) et `docs/produit/exemples.md` (630 l.), réconciliés avec le CLI réel `tools/drave.py` 0.1.0.
+
+**Vérifications lancées**
+- `python3 tools/revue_documentation.py` → exit 0 (679 fiches, 773 JSON, 121 docs, 84 portes).
+- `bash tools/porte-tableaux.sh` → exit 0 (1723 fichiers, 3499 liens).
+- `bash tools/porte-produit.sh` → ✅ verte (6 tests, 183/183).
+- `bash tools/porte-bloc-linguistique.sh` → ✅ verte (`cascade_pos` plancher 0,70 ; rend 0,7465).
+- Rejeu automatique des 5 blocs JSON de `exemples.md` : 5/5 identiques aux commandes exécutées.
+- `git diff --check` → ok.
+
+**Contenu**
+- README : publics, 5 exemples réels (`analyser`, JSON + attachement, `evaluer`, `rejouer`, refus), limites (restitution/traduction/neuronal absents, 17 spans, doublon REL de l'union, `cascade_pos` plancher, classes ouvertes, langue non forcée), perf (0,36 s / 612 ; ×139 conditionnel), garanties + codes 0/1/2, CLI livré + manques.
+- `exemples.md` : 5 cas, commande exacte au-dessus de chaque sortie, JSON commenté, cas d'échec `r035` (REL « she talks about » non prédite ; 222/222 conditionnel vs couverture 0,9289). L'ancien exemple `s160` (faux : `GP [10:20] rôle=instrument`) est remplacé par des sorties vérifiées.
+
+**Liens / état**
+- Entrants déjà présents : `docs/README.md` l. 94–95 → `produit/README.md` et `produit/exemples.md` ; `docs/produit/README.md` → `exemples.md` (3 liens). La revue passe donc **sans** `en-cours`.
+- Si tu veux la ligne d'état : ajouter `[doc d'usage](../../docs/produit/README.md)` et `[exemples](../../docs/produit/exemples.md)`.
+- Compteurs déjà à jour : 84 portes, 121 docs, 679 / 773.
+
+**Diff** (HEAD `9952a330`, qui portait les brouillons antérieurs) :
+```
+git diff --stat -- docs/produit/
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+```
+Détail : `git diff -- docs/produit/`.
+
+**Incohérences à corriger hors de mon périmètre**
+- `docs/pilotage/en-cours.md` l. 75 dit encore « `cascade_pos` (rouge documentée) » ; le code (`evaluer_gold.py` l. 283) et `references-non-regression.md` l. 67 disent plancher 0,70 / porte verte.
+- `reports/rapport-produit-v0.md` §3 répète « cascade_pos rouge documentée » et l'ancienne décomposition 12 formes / 4 GP / tokenisation ; son en-tête dit « 5 contrôles », son §2 « 6 ». À aligner si tu réutilises cette fiche.
+
+Je n'ai modifié aucun fichier hors `docs/produit/` et je n'ai rien commité.
+
+### 👤 Utilisateur
+
+Background subagent 1555bdd3-27e9-4779-b1e7-716e32399c11 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison des deux fichiers et du bilan de vérification.
+
+**Livré (aucun commit)**
+- `docs/produit/README.md` — **370 lignes**, 8 sections.
+- `docs/produit/exemples.md` — **630 lignes**, 5 cas + synthèse.
+
+**README — sections**
+1. À qui s'adresse le produit · 2. Ce qu'il fait (POS, syntagmes, attachement, pragmatique, unités, coût) · 3. Cinq exemples réels · 4. Ce qu'il ne fait pas encore · 5. Performance · 6. Garanties et codes de sortie · 7. Le CLI livré et ses manques · 8. Où aller ensuite.
+
+**`exemples.md` — les cinq cas** (commande exacte au-dessus de chaque sortie)
+1. `g001` « Le chat dort. » — POS, syntagmes, acte, couverture.
+2. `g011` « Le livre que j'ai lu est intéressant. » — REL → `livre`, **doublon REL de l'union** (`union: true`, à filtrer).
+3. `r241` « The day when we left was beautiful. » — `when` après GN → REL → `day` ; POS `left/NOUN` visible.
+4. Texte vide — CLI : `stderr` + code 1 ; API : `refus: "vide"`, 0 étiquette.
+5. `r035` « The film she talks about is out. » — **échec connu** : aucune REL prédite ; 222/222 conditionnel vs couverture 0,9289.
+
+**Vérifications**
+- `python3 tools/revue_documentation.py` → **exit 0** (679 fiches, 773 JSON, 121 docs, 84 portes).
+- `bash tools/porte-tableaux.sh` → **exit 0** (1723 fichiers, 3499 liens).
+- `bash tools/porte-produit.sh` → **✅ verte** (6 tests, 183/183).
+- `bash tools/porte-bloc-linguistique.sh` → **✅ verte** (`cascade_pos` plancher 0,70 ; rend 0,7465).
+- Rejeu des 5 blocs JSON : **5/5 identiques** aux commandes exécutées ; `git diff --check` propre.
+
+**Liens à déclarer dans l'état**
+- `docs/produit/README.md`
+- `docs/produit/exemples.md`
+- Déjà en place : `docs/README.md` l. 94–95 → les deux fichiers ; `docs/produit/README.md` → `exemples.md` (3 liens). La revue passe donc sans `en-cours`. Si tu veux la ligne d'état : `[doc d'usage](../../docs/produit/README.md)` et `[exemples](../../docs/produit/exemples.md)`.
+
+**Diff** (HEAD `9952a330` portait les brouillons antérieurs)
+```
+git diff --stat -- docs/produit/
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+```
+Détail : `git diff -- docs/produit/`.
+
+**Points de vigilance hors périmètre**
+- `docs/pilotage/en-cours.md` l. 75 dit encore « `cascade_pos` (rouge documentée) » ; le code et `references-non-regression.md` disent plancher 0,70 / porte verte.
+- `reports/rapport-produit-v0.md` §3 répète « cascade_pos rouge » et l'ancienne décomposition 12 formes / 4 GP / tokenisation ; son en-tête dit « 5 contrôles », son §2 « 6 ».
+- L'exemple `s160` de l'ancienne version (« `GP [10:20] rôle=instrument` ») était faux ; il est remplacé par des sorties vérifiées.
+
+Je n'ai modifié aucun fichier hors `docs/produit/` et je n'ai rien commité.
+
+### 🤖 Assistant
+
+⏵ P2 a livré des sorties vérifiées (5/5 rejouées). Je vérifie, commite, et corrige les deux incohérences signalées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -1; bash tools/porte-tableaux.sh 2>&1 | tail -1; grep -n \"cascade_pos\" docs/pilotage/en-cours.md reports/rapport-produit-v0.md | cut -c1-160; grep -n \"5 contrôles\\|6 contrôles\" re … [100 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 679 fichiers, le disque en a 680
+  ✅ la page vivante date du dernier commit (2026-11-06)
+docs/pilotage/en-cours.md:76:- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ; `cascade_pos` (rouge documentée).
+reports/rapport-produit-v0.md:41:- **`cascade_pos`** : la fusion avec le contrat passe sous l'heuristique (rouge documentée).
+25:`bash tools/porte-produit.sh` : **6 contrôles**, **~1 min 56** (dont l'autotest parallèle
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# 1) en-cours : cascade_pos n'est plus une rouge\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ;  … [1602 caractères tronqués]`
+
+  ```
+incohérences corrigées
+reports/rapport-produit-v0.md:41:- **`cascade_pos`** : la fusion avec le contrat rend 0,7465, sous l'heuristique (0,7581
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add docs/produit/README.md docs/produit/exemples.md docs/pilotage/en-cours.md reports/rapport-produit-v0.md\n  timeout 240 git commit -m \"PRODUIT — LA DOC D'USAGE ET LES 5 EXEMPLES VÉRIFIÉS (5/5 REJOUÉS) ;  … [447 caractères tronqués]`

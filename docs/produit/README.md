@@ -5,11 +5,10 @@
 > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
 > qu'il garantit.
 >
-> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le CLI unifié **`tools/drave.py`** est
-> **livré** : `analyser`, `evaluer`, `rejouer`, `--version` ; la **porte produit**
-> (`bash tools/porte-produit.sh`) le vérifie en **6 contrôles** et **1 min 56** ; le smoke test
-> `tools/tests/test_produit.py` passe **6 tests en 1,2 s**. Les exemples du § 3 sont réels : ils
-> ont été lancés pour ce document.
+> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
+> porte produit est verte. Les exemples du § 3 sont réels : ils ont été lancés pour ce document.
+> Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
 >
 > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
@@ -37,13 +36,13 @@ le produit en expose cinq, plus le coût et la trace.
 
 | ce que vous demandez | ce que vous obtenez | mesure du 06/11 |
 |---|---|---|
-| **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (UDHR, article 15 tenu à part) |
+| **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
 | **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |
 | **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,5849** ; tête **0,7336** (vivant 612) |
 | **attachement** | par syntagme : `role`, `cible`, `candidats` | **222/222** exacts sur les spans prédits ; couverture **0,9289** |
 | **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,9444** |
 | **unités sémantiques** | les spans candidats à la RSN et la fraction du texte | **55,4 %** du texte en moyenne |
-| **coût et trace** | octets, caractères, étiquettes, durée (`--duree`), étapes | local, sans réseau |
+| **coût et trace** | octets, caractères, étiquettes, étapes | local, sans réseau |
 
 **Ce que « attachement » veut dire.** Pour un syntagme, le bloc publie la **cible** à laquelle il
 le rattache — le verbe pour un GN sujet ou un GP, l'antécédent pour une REL — et une liste de
@@ -51,10 +50,13 @@ le rattache — le verbe pour un GN sujet ou un GP, l'antécédent pour une REL 
 
 **Comment on le sait.** Le banc est le **gold 612** : 20 phrases `hand`, 432 réelles, 160
 synthétiques ; **239 cibles** d'attachement ; **3 179 tokens**. Les règles ont été dessinées sur
-ce gold : la mesure est **in-sample**, limitée par un split dev/test (153/153 et 69/69). Les
-contre-épreuves sont publiées : permutation des cibles **1,997/220 = 0,908 %** (p = 0), candidat
-aléatoire **42,14 %** de top-1 (contrôle de l'audit v10, 220 labels ; la fiche v12 donne une
-marge du même ordre). Un chiffre sans sa contre-épreuve n'est pas un résultat.
+ce gold : la mesure est **in-sample**, limitée par un split dev/test (153/153 et 69/69).
+
+**Les contre-épreuves.** Le CLI imprime son propre plancher : **cible exacte tirée au hasard
+1,67 %** (graine 0, 239 cibles). L'audit v10 publie un contrôle plus dur — un **candidat
+aléatoire** dans les listes donne **42,14 %** de top-1 — et la **permutation des cibles**
+**1,997/220 = 0,908 %** ; les deux donnent p = 0. Un chiffre sans sa contre-épreuve n'est pas un
+résultat.
 
 **Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le
 banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
@@ -70,89 +72,101 @@ elles n'utilisent ni modèle, ni GPU, ni réseau. Les JSON complets et commenté
 ### 3.1 Analyser une phrase
 
 ```bash
-python3 tools/bloc_linguistique.py --texte "Le chat dort." --json \
-  | jq -r '"\(.langue) \(.script) · " + ([.etiquettes[] | select(.niveau=="syntagme")
-           | "\(.type) \(.valeur) [\(.debut):\(.fin)] → \(.meta.attachement.cible // "—")"]
-           | join(" · "))'
+python3 tools/drave.py analyser "Le chat dort."
 ```
 ```
-fr Latn · GN Le chat [0:7] → dort · GV dort [8:12] → chat
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
 ```
 
 **Lecture.** La phrase est reconnue comme française, deux syntagmes sont posés, chacun avec sa
-cible : le GN « Le chat » est rattaché à « dort », le GV « dort » à « chat ». `jq` ne sert qu'à
-l'affichage ; le produit n'en dépend pas. Le JSON complet contient aussi les niveaux `graphème`,
-`mot`, `morphème`, `discours` et `document`, la `phrase` et la `pragmatique`.
+cible : le GN « Le chat » est rattaché à « dort », le GV « dort » à « chat ». Le gold `g001`
+attend exactement ces deux spans et `assertion`. `POS` est la suite des mots ; `COUVERTURE` est
+la **confiance maximale déclarée** par niveau, pas une précision.
 
-### 3.2 Analyser un fichier et garder le JSON
+### 3.2 Analyser en JSON et lire l'attachement
 
 ```bash
-printf "Le livre que j'ai lu est intéressant.\n" > /tmp/page.txt
-python3 tools/bloc_linguistique.py --fichier /tmp/page.txt --json > /tmp/page.json
-jq -r '"\(.langue) · \(.etiquettes|length) étiquettes · " + ([.etiquettes[]
-       | select(.niveau=="syntagme")
-       | "\(.type) \(.valeur) → \(.meta.attachement.cible // "—")"] | join(" · "))' /tmp/page.json
+python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json \
+  | jq -r '[.etiquettes[] | select(.niveau=="syntagme")
+           | "\(.type) \(.valeur) → \(.meta.attachement.cible // "—")"] | join(" · ")'
 ```
 ```
-fr · 42 étiquettes · GN Le livre → intéressant · REL que j'ai lu → livre · REL que j'ai lu est intéressant → livre · GV est intéressant → livre
+GN Le livre → intéressant · REL que j'ai lu → livre · REL que j'ai lu est intéressant → livre · GV est intéressant → livre
 ```
 
-**Lecture.** Un fichier = **une annotation** ; les phrases sont des étiquettes de niveau
-`phrase`, pas des objets séparés. La REL « que j'ai lu » est bien rattachée à « livre » (cas
-`g011` du gold). Le bloc publie aussi une **seconde lecture d'union** (`union: true`, span plus
-large) : c'est une lecture concurrente, pas un doublon à consommer naïvement.
+**Lecture.** Un appel = **une annotation** ; les phrases sont des étiquettes de niveau `phrase`,
+pas des objets séparés. La REL « que j'ai lu » est bien rattachée à « livre » (cas `g011` du
+gold). Le JSON publie aussi une **seconde lecture d'union** (`meta.union: true`, span plus
+large) : dans la sortie lisible, elle apparaît comme un **doublon REL** ; le JSON la marque
+`union: true`, à filtrer pour une lecture unique (voir [`exemples.md`](exemples.md) § 2).
 
 ### 3.3 Mesurer sur le gold
 
 ```bash
-python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/gold.json >/dev/null; echo "exit=$?"
-jq -r '.heuristique.all | "POS \(.pos.exactitude) · F1 \(.syntagme.f1) · tête \(.syntagme.tete.f1) · attachement \(.attachement.exact)/\(.attachement.labels) (couverture \(.attachement.couverture))"' /tmp/gold.json
+python3 tools/drave.py evaluer
 ```
 ```
-exit=1
-POS 0.7581 · F1 0.5849 · tête 0.7336 · attachement 222/222 (couverture 0.9289)
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
+SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)
+  tête      F1 73.36 %  (P 81.00 % / R 67.04 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  tête      couverture 100.00 % · top-k 99.55 %
+PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
+FRACTION SÉMANTIQUE 55.37 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 ```
 
-**Lecture.** Le banc mesure **20 combinaisons** (4 lectures × 5 sources) et écrit un JSON de
-recherche ; ici on lit la ligne `heuristique.all`. Le **code de sortie est 1** parce qu'une seule
-rouge est ouverte : `cascade_pos` (voir § 4). Ce n'est pas un échec de l'analyse : c'est une
-comparaison défavorable entre l'heuristique et la cascade de contrat.
+**Lecture.** `exact 92.89 %` est le **rendement** (222/239 cibles) ; `exact sur span 100 %` est
+l'**exactitude** sur les 222 segments dont le span est prédit. Les 17 cibles restantes n'ont pas
+de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. `--gold` mesure
+le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade
+(voir § 4).
 
 ### 3.4 Rejouer et vérifier le déterminisme
 
 ```bash
-python3 tools/bloc_linguistique.py --fichier /tmp/page.txt --json > /tmp/a.json
-python3 tools/bloc_linguistique.py --fichier /tmp/page.txt --json > /tmp/b.json
-cmp /tmp/a.json /tmp/b.json && echo "identique · $(sha256sum /tmp/a.json | cut -c1-16)…"
+python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
 ```
 ```
-identique · c1f3c76a5a40fcbd…
+rejeu identique : oui
+  texte      : 'Le chat de la voisine qui dort sur le toit se réveille.'
+  langue     : fr
+  étiquettes : 59
+  JSON       : 11700 octets · sha256 b0a1709a97abe8d4…
 ```
 
-**Lecture.** Deux exécutions indépendantes rendent le **même octet** : l'analyse est
-déterministe. C'est la garantie de base du rejeu. Attention : `--duree` ajoute un champ
-`cout.duree_s` volatil ; pour comparer, ne pas l'utiliser (ou l'ignorer).
+**Lecture.** La commande analyse **deux fois**, compare le JSON **canonique** (clés triées,
+durée exclue) et rend une empreinte sha256. Deux exécutions indépendantes rendent le même octet :
+l'analyse est déterministe. C'est la garantie de base du rejeu.
 
 ### 3.5 Le refus, et la langue inconnue
 
 ```bash
-python3 tools/bloc_linguistique.py --texte "" --json \
-  | jq '{langue, script, refus, etiquettes: (.etiquettes|length)}'
+python3 tools/drave.py analyser ""; echo "exit=$?"
 ```
-```json
-{
-  "langue": "und",
-  "script": "Zyyy",
-  "refus": "vide",
-  "etiquettes": 0
-}
+```
+drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+exit=1
 ```
 
-**Lecture.** Un texte vide (ou de la ponctuation seule) est **refusé** : `refus: "vide"`, zéro
-étiquette. Le produit **n'invente pas**. Aujourd'hui la commande sort **0** ; le CLI cible doit
-sortir **3** (§ 6). Tant que ce n'est pas fait, un script doit tester `.refus`, pas le code de
-sortie. Pour la langue, `und` est une réponse honnête : « Élodie sourit. » rend `und` (confiance
-0,04 < seuil 0,12), même avec `--langue fr` — l'indice n'est pas une contrainte (§ 4).
+**Lecture.** Le CLI traite le refus comme une **erreur** : message sur `stderr`, **rien sur
+`stdout`**, code **1**. Le bloc, lui, rend un JSON avec `refus: "vide"` (voir `exemples.md` § 4) :
+c'est l'API qui porte l'état, le CLI qui le traduit en code. Un texte vide n'est jamais une
+annotation « comme les autres ». Pour la langue, `und` est une réponse honnête : « Élodie
+sourit. » rend `langue=und` (confiance 0,04 < seuil 0,12), même avec `--langue fr` — l'indice
+n'est pas une contrainte. Et `--langue de` sort **2** : le CLI n'accepte que `fr` et `en`.
 
 ## 4. Ce que le produit ne fait pas encore
 
@@ -168,27 +182,35 @@ l'audit v10 (`r035`, `r255`, `r264`, `g017`), les autres viennent du gold synth�
 lexique est disjoint. Conséquence : **222/222 (1,0000)** est l'exactitude **conditionnelle aux
 spans prédits**, pas la couverture du langage. Lire les deux ensemble.
 
-**3. La rouge `cascade_pos`.** La cascade (heuristique + `MockNeuronal`) donne **0,7465** en POS,
-sous l'heuristique **0,7581** : la fusion par confiance laisse gagner le stub. C'est une **rouge
-tolérée**, listée dans les références de non-régression. Elle améliore pourtant les syntagmes
-(F1 **0,6141** contre **0,5849**, tête **0,7432** contre **0,7336**) : c'est un **échange**, pas
-un gain. Le produit par défaut reste l'heuristique. La cascade avec le vrai tagger 7B a été
-mesurée à **0,9415** en POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11
-interdit aujourd'hui : ce n'est pas un chemin livré.
+**Le doublon REL de l'union.** Deux REL peuvent se chevaucher : la plus longue porte
+`meta.union: true`. C'est une **lecture concurrente** publiée par l'union, pas un second
+attachement ; la sortie lisible la montre comme un **doublon REL**, et il faut la filtrer pour
+une lecture unique (garder `union: null`, ou le segment qui en contient un autre).
+
+**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un
+**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte
+`porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
+**sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
+pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
+**0,5849**, tête **0,7432** contre **0,7336**). Le produit par défaut reste l'heuristique, et
+`drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
+en POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit
+aujourd'hui : ce n'est pas un chemin livré.
 
 **4. Pas de neuronal.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de qualité.
 Le vrai adaptateur (`NeuronalLLM`, `NeuronalLLMPOS`) parle à un serveur local ; il n'est ni requis
-ni utilisé par défaut.
+ni utilisé par défaut, et le CLI ne l'expose pas.
 
 **5. Les classes ouvertes sont fragiles.** POS fermé **0,9004**, ouvert **0,6234** : les mots
 inconnus tombent souvent en NOUN. Exemple réel : dans « Le livre que j'ai lu… », `lu` est tagué
 NOUN ; dans « The day when we left… », `left` est NOUN. Un lexique plus large améliorerait ces
 cas, pas une règle.
 
-**6. La langue n'est pas forcée.** `--langue` est un **indice** : sous le seuil de confiance, la
-sortie reste `und`. Il n'y a pas de `--langue-forcee`. Les profils UDHR (398 langues, 0,9687)
-ne sont pas versionnés : `data/` est hors dépôt, et le corpus XML source est externe. Sans eux,
-la détection se rabat sur les indices internes.
+**6. La langue n'est pas forcée.** `--langue` est un **indice**, limité à `fr` et `en` dans le
+CLI ; sous le seuil de confiance, la sortie reste `und`. Il n'y a pas de `--langue-forcee`. Les
+profils UDHR (398 langues, 0,9687) ne sont pas exposés par le CLI et ne sont pas versionnés :
+`data/` est hors dépôt, et le corpus XML source est externe. Sans eux, la détection se rabat sur
+les indices internes.
 
 **7. Pas de RSN, pas de DRVM, pas de serveur.** Le bloc a le contrat, la trace et le coût ; il
 ne produit pas le corps de la RSN, n'est pas un port DRVM et n'expose pas d'API HTTP. La couche
@@ -211,7 +233,8 @@ JSON change de forme — d'où le rejeu et le contrôle par un gold à soi (§ 7
 | ce qui est mesuré | valeur | conditions |
 |---|---|---|
 | **612 phrases du gold** | **0,36 s** (mesure du 06/11) ; **0,45–0,55 s** (audit) ; **~0,6 s** (chiffre rond publié) | heuristique, un cœur, 3 179 tokens |
-| **une phrase** | ~0,6 ms en régime | après le démarrage Python |
+| **`drave evaluer`** | **0,55 s** au total | une lecture (heuristique), démarrage Python compris |
+| **`drave analyser`** | **0,15 s** au total | une phrase, démarrage compris |
 | **cache du chunker** | **×138,7** à 160 répétitions (9 817,7 → 70,8 ms) | banc de texte **répété**, chemin chunker |
 | **cache, chemin par défaut** | ×5,8 à 20 répétitions, puis **×1,0** à 80 et 160 | S domine le coût |
 | **cache, corpus réel** | **×1,2** | phrases réelles, 6,1 tokens/phrase |
@@ -231,113 +254,101 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 
 | garantie | ce que ça veut dire | contrôle |
 |---|---|---|
-| **déterminisme** | même entrée → même JSON, octet pour octet | deux exécutions + `cmp` (§ 3.4) ; `--duree` ajoute un champ volatil |
+| **déterminisme** | même entrée → même JSON, octet pour octet | `drave rejouer` (§ 3.4) ; `tools/tests/test_produit.py` compare deux sorties |
 | **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; les adaptateurs neuronaux sont locaux et non utilisés |
-| **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | `bloc_linguistique.py --texte ""` |
+| **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : `stderr` + code 1 |
 | **pas d'invention** | chaque étiquette porte `source`, `confiance`, `candidats` ; `und` plutôt qu'une langue forcée | JSON ; `--langue` est un indice |
 | **spans lisibles** | indices en **points de code Unicode**, 0-based, `[debut:fin)` | « Élodie » → `[0:6]` ; emoji = 1 point |
-| **UTF-8** | le JSON est en UTF-8, non échappé | `--json` |
+| **UTF-8** | le JSON est en UTF-8, non échappé, sans durée | `--json` ; `test_produit.py` vérifie l'absence de `duree_s` |
 | **gold versionné** | les 4 gold sont dans le dépôt ; `evaluer` rejoue hors ligne | `tools/tests/linguistique/gold*.json` |
+| **porte produit** | version, JSON fr/en, rejeu, smoke test, autotest | `bash tools/porte-produit.sh` → ✅ |
 
-**Codes de sortie — contrat cible.** Ils ne sont pas tous implémentés aujourd'hui (voir § 7) :
+**La porte produit, mesurée le 06/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
+étiqueté en `fr` et `en`, `sha256 6b6def477a493444` deux fois, **6 tests** de fumée,
+**183/183** portes d'autotest. Le smoke test est `tools/tests/test_produit.py`.
+
+**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2** ; le contrat cible **3 / 4**
+n'est pas encore là :
 
 | code | sens | aujourd'hui |
 |---:|---|---|
-| **0** | succès : annotation rendue, évaluation conforme, rejeu identique | `bloc_linguistique.py` sort 0, **même sur refus** |
-| **1** | résultat non conforme : seuil manqué, divergence de rejeu | `evaluer_gold.py` sort **1** à cause de `cascade_pos` |
-| **2** | usage invalide : argument, fichier, JSON | `argparse` sort 2 |
-| **3** | refus d'analyse (`refus` non vide) | **non implémenté** |
+| **0** | succès : annotation rendue, évaluation rendue, rejeu identique | `analyser`, `evaluer`, `rejouer` |
+| **1** | erreur ou **refus d'analyse** | `analyser ""` ; `rejouer ""` ; divergence de rejeu |
+| **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
+| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | **non implémenté** |
 | **4** | dépendance absente : modèle, profils | **non implémenté** |
 
 **Ce qui n'est pas garanti** : le chemin neuronal, un texte hors domaine, la calibration des
 confiances, la stabilité du schéma (pas de champ `version`), et le comportement sur un lot de
 textes (une invocation = un texte).
 
-## 7. Le CLI en préparation — contrat et manques
+## 7. Le CLI livré — contrat et manques
 
-Le prototype *tools/drave.py* est **en cours d'écriture** par une autre session. Ce qui suit est
-le **contrat attendu** ; rien n'est supposé livré. Chaque commande a son **équivalent
-exécutable** dans le tableau plus bas.
+Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendance externe.
 
 ```bash
 python3 tools/drave.py --version
-python3 tools/drave.py analyser "Le chat dort."
-python3 tools/drave.py analyser --fichier page.txt --json --sortie page.json
-python3 tools/drave.py evaluer
-python3 tools/drave.py rejouer page.json
+python3 tools/drave.py --aide
+python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json]
+python3 tools/drave.py evaluer [--gold] [--json]
+python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 ```
 
-**Sorties attendues** (forme cible ; les valeurs sont celles du 06/11) :
+**Sorties réelles des commandes** (06/11) :
 
 ```
 $ python3 tools/drave.py --version
-drave 0.1.0 · schéma annotation/1 · commit bdeca168 · s/v7 · Python 3.13.16
+drave 0.1.0
 
-$ python3 tools/drave.py analyser "Le chat dort."
-fr · Latn · refus=- · 3 mots · 2 syntagmes · acte=assertion
-  POS        Le/DET   chat/NOUN   dort/VERB
-  syntagmes  GN « Le chat » [0:7] agent → dort
-             GV « dort »     [8:12] predicat → chat
-  unités     2 (61,5 %)
+$ python3 tools/drave.py evaluer --gold
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold gelé (référence figée) · 602 phrases · 3141 tokens · 239 cibles d'attachement
+...
+SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)
+  tête      F1 73.92 %  (P 81.36 % / R 67.72 %)
+...
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 
-$ python3 tools/drave.py evaluer
-gold vivant 612 · 239 cibles · 3 179 tokens
-attachement  222/222 exact (1,0000) · couverture 0,9289 · top-k 221/239
-syntagmes    F1 0,5849 · tête 0,7336
-POS          0,7581 (fermé 0,9004 · ouvert 0,6234)
-pragmatique  acte 0,9967 · négation 0,9771 · modalité 0,9886 · double sens 0,9444
-spans        17 non attachés (8 REL, 5 SUB, 4 GP)
-verdict      conforme · 1 rouge tolérée : cascade_pos (0,7465 < 0,7581)
-
-$ python3 tools/drave.py rejouer page.json
-rejeu : 1 annotation · 42 étiquettes · identique · sha256 c1f3c76a5a40fcbd…
+$ python3 tools/drave.py rejouer "Le chat dort."
+rejeu identique : oui
+  texte      : 'Le chat dort.'
+  langue     : fr
+  étiquettes : 19
+  JSON       : 4013 octets · sha256 6b6def477a493444…
 ```
 
-`0.1.0` est la **seule version du dépôt** (`drave-core/Cargo.toml`) : il n'existe encore ni
-version Python ni champ `schema` dans le JSON. Le `commit` et la branche viennent de Git ; le
-reste est à figer.
-
-**Options minimales du contrat** :
+**Options du CLI** :
 
 | option | commande | sens |
 |---|---|---|
-| `--fichier F` | `analyser` | lire un fichier au lieu du texte |
-| `--langue L` | `analyser` | **indice** de langue, pas une contrainte |
-| `--mode M` | `analyser` | `heuristique` (défaut), `parallele`, `cascade` |
-| `--profils F` | `analyser` | profils UDHR (`data/udhr/articles.jsonl`, non versionné) |
-| `--json` | `analyser`, `evaluer`, `rejouer` | sortie machine UTF-8 |
-| `--sortie F` | `analyser`, `evaluer` | écrire dans F (aujourd'hui : redirection shell) |
-| `--duree` | `analyser` | ajouter `cout.duree_s` (volatil) |
-| `--gold vivant\|gele` | `evaluer` | base 612 ou 602 (défaut : vivant) |
-| `--bloc heuristique\|cascade` | `evaluer` | lecture mesurée (défaut : heuristique) |
-| `--strict` | `evaluer` | une rouge tolérée devient fatale (sortie 1) |
+| `--langue fr\|en` | `analyser`, `rejouer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
+| `--json` | `analyser`, `evaluer` | sortie machine UTF-8 |
+| `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
+| `-V`, `--version` | global | `drave 0.1.0` |
+| `-h`, `--aide` | global | l'aide, largeur fixe |
 
-**Équivalents exécutables aujourd'hui** :
-
-| commande cible | équivalent réel | état |
-|---|---|---|
-| `--version` | `git log -1 --format='%h %s'` + `python3 --version` | pas de version produit |
-| `analyser TEXTE` | `python3 tools/bloc_linguistique.py --texte TEXTE --json` | livré |
-| `analyser --fichier F` | `python3 tools/bloc_linguistique.py --fichier F --json` | livré |
-| `evaluer` | `python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/gold.json` | livré, sortie de recherche |
-| `rejouer F` | deux exécutions + `cmp` (§ 3.4) | manuel |
-
-**Ce qui manque pour livrer le CLI** :
+**Ce qui manque encore** (le contrat cible, non livré) :
 
 | manque | conséquence |
 |---|---|
-| **le fichier *tools/drave.py*** | pas de point d'entrée unique ; il faut connaître deux scripts |
-| **`--version` et un champ `schema`** | impossible d'épingler un rejeu à une version de format ; aucun consommateur ne peut vérifier ce qu'il lit |
-| **`rejouer`** | le déterminisme se vérifie à la main (deux fichiers + `cmp`) |
-| **les codes 3 et 4** | un refus ressemble à un succès ; une dépendance absente n'est pas distinguée |
-| **une sortie produit stable** | le JSON expose les 9 niveaux internes ; `meta.attachement` et `candidats` n'ont pas de schéma publié |
+| **`--fichier` / l'entrée standard** | on ne peut analyser qu'un texte passé en argument ; pas de pipe, pas de fichier |
+| **`--sortie`** | pas d'écriture directe d'un JSON ; il faut rediriger le shell |
+| **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |
+| **les codes 3 et 4** | le refus est confondu avec une erreur (code 1) et n'a pas de JSON sur `stdout` ; une dépendance absente n'est pas distinguée |
+| **un champ `schema` / une version de format** | impossible d'épingler un rejeu à une version ; `--version` ne donne que `0.1.0`, sans commit ni schéma |
+| **`--mode` / la cascade** | le CLI n'expose que l'heuristique ; `parallele` et `cascade` demandent le code Python |
+| **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
+| **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
+| **un lot de textes** | une invocation = un texte ; pas de JSONL, pas de répertoire |
 | **`candidats` structurés** | ce sont des **chaînes d'affichage** (« « qui dort » → voisine »), pas des objets `{span, cible}` ; un programme doit les reparser |
 | **`role` normalisé** | les valeurs mélangent `predicat`/`prédicat` et `qualite`/`qualité` ; fragile pour un filtre |
-| **un `evaluer` qui ne confond pas rouge tolérée et échec** | aujourd'hui `evaluer_gold.py` sort 1 à cause de `cascade_pos` ; la cible sort 0, et 1 seulement avec `--strict` |
-| **un schéma de gold publié** | un utilisateur ne peut pas mesurer son propre corpus sans lire le code |
-| **un test de fumée et une porte** | le commit du 06/11 annonce le smoke test et la porte ; ils ne sont pas encore là |
+| **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
 | **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dépôt |
 | **le chemin neuronal** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; pas de chemin neuronal livré |
+
+**Ce qui est déjà tenu** : `--version`, `--aide`, les trois sous-commandes, le JSON déterministe,
+le rejeu par empreinte, la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
+être présenté comme acquis.
 
 ## 8. Où aller ensuite
 
@@ -349,7 +360,7 @@ reste est à figer.
 | **l'audit des mesures** (contrôles, spans, bases) | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |
 | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
 | **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |
-| **la rouge tolérée** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
+| **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
 | **l'ancien constat « pas de produit »** (27/10) | [`docs/pilotage/utilisation.md`](../pilotage/utilisation.md) |
 | **la théorie de la couche heuristique** | [`docs/theorie/pre-traitement-linguistique.md`](../theorie/pre-traitement-linguistique.md) |
 

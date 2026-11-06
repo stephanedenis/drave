@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-06, 11 h 00 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-06, 11 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -73,7 +73,7 @@
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.
 - **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
-- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+** ; `cascade_pos` (rouge documentée).
+- **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
 ### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
@@ -106,7 +106,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **679** / **773** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **680** / **773** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **121** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

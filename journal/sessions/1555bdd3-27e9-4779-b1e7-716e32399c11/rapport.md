@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 126 |
-| Appels d'outils | 151 |
+| Messages | 139 |
+| Appels d'outils | 164 |
 | Fichiers touchés | 2 |
-| Commandes | 122 |
+| Commandes | 130 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*151 appels d'outils.* Actions notables :
+*164 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,51 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 124 autres
+- … et 135 autres
 
 **Synthèse produite :**
 
-⏵ Contrôle final des sorties de la notice après les changements du hub.
+⏵ Livraison des deux fichiers et du bilan de vérification.
+
+**Livré (aucun commit)**
+- `docs/produit/README.md` — **370 lignes**, 8 sections.
+- `docs/produit/exemples.md` — **630 lignes**, 5 cas + synthèse.
+
+**README — sections**
+1. À qui s'adresse le produit · 2. Ce qu'il fait (POS, syntagmes, attachement, pragmatique, unités, coût) · 3. Cinq exemples réels · 4. Ce qu'il ne fait pas encore · 5. Performance · 6. Garanties et codes de sortie · 7. Le CLI livré et ses manques · 8. Où aller ensuite.
+
+**`exemples.md` — les cinq cas** (commande exacte au-dessus de chaque sortie)
+1. `g001` « Le chat dort. » — POS, syntagmes, acte, couverture.
+2. `g011` « Le livre que j'ai lu est intéressant. » — REL → `livre`, **doublon REL de l'union** (`union: true`, à filtrer).
+3. `r241` « The day when we left was beautiful. » — `when` après GN → REL → `day` ; POS `left/NOUN` visible.
+4. Texte vide — CLI : `stderr` + code 1 ; API : `refus: "vide"`, 0 étiquette.
+5. `r035` « The film she talks about is out. » — **échec connu** : aucune REL prédite ; 222/222 conditionnel vs couverture 0,9289.
+
+**Vérifications**
+- `python3 tools/revue_documentation.py` → **exit 0** (679 fiches, 773 JSON, 121 docs, 84 portes).
+- `bash tools/porte-tableaux.sh` → **exit 0** (1723 fichiers, 3499 liens).
+- `bash tools/porte-produit.sh` → **✅ verte** (6 tests, 183/183).
+- `bash tools/porte-bloc-linguistique.sh` → **✅ verte** (`cascade_pos` plancher 0,70 ; rend 0,7465).
+- Rejeu des 5 blocs JSON : **5/5 identiques** aux commandes exécutées ; `git diff --check` propre.
+
+**Liens à déclarer dans l'état**
+- `docs/produit/README.md`
+- `docs/produit/exemples.md`
+- Déjà en place : `docs/README.md` l. 94–95 → les deux fichiers ; `docs/produit/README.md` → `exemples.md` (3 liens). La revue passe donc sans `en-cours`. Si tu veux la ligne d'état : `[doc d'usage](../../docs/produit/README.md)` et `[exemples](../../docs/produit/exemples.md)`.
+
+**Diff** (HEAD `9952a330` portait les brouillons antérieurs)
+```
+git diff --stat -- docs/produit/
+ docs/produit/README.md   | 299 +++++++++++-----------
+ docs/produit/exemples.md | 632 +++++++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 735 insertions(+), 196 deletions(-)
+```
+Détail : `git diff -- docs/produit/`.
+
+**Points de vigilance hors périmètre**
+- `docs/pilotage/en-cours.md` l. 75 dit encore « `cascade_pos` (rouge documentée) » ; le code et `references-non-regression.md` disent plancher 0,70 / porte verte.
+- `reports/rapport-produit-v0.md` §3 répète « cascad
+… [331 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -53,8 +93,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 6 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 2 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +138,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 82 autres
+- … et 90 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -179,6 +219,7 @@
 - **T1** `| `drave.py evaluer` | POS 75,81 %, F1 syntagmes 58,49 %, tête 73,36 % | attachement exact 92,89 %, couverture 92,89 % |`
 - **T1** `- **La mémoire** : ~50 Mo pour le module.`
 - **T1** `134:le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade`
+- **T1** `131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** `
 
 ## 5. Erreurs rencontrées
 

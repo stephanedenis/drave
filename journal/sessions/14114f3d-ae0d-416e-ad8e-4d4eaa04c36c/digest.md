@@ -2507,3 +2507,104 @@ JSON VALIDE
 … [18 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche d'audit produit
+
+- **write** `{"content": "# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat\n\n> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·\n> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Date** : 2026-11-06 ·\n> **Verdict** : ⚠ … [31266 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-bloc-l.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys\nRACINE='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nsys.path.insert(0, RACINE); sys.path.insert(0, RACINE+'/tools')\nimport bloc_linguistique as bl\nfrom tools.tests.linguistique import evaluer_gold as eg\nh=bl.Heuristique( … [445 caractères tronqués]`
+
+  ```
+vivant 612 F1 0.5849 P 0.6292 R 0.5464 tete 0.7336 POS 0.7581 couverture 0.9289 labels 222
+gele 602 F1 0.5893 P 0.6319 R 0.5522 tete 0.7392 POS 0.7603 couverture 0.9289 labels 222
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-produit-bloc-l.md')\ns=p.read_text()\ns=s.replace(\"> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et\",\n            \"> **Aucun fichier ex … [3133 caractères tronqués]`
+
+  ```
+ok
+6:> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+56:Le rejeu du 2026-11-06 redonne l'**état fourni** (vivant 612) ; la fiche v12 publie, elle, les
+57:valeurs du **gelé 602** pour le F1 et la tête :
+65:| F1 syntagmes (vivant 612) | **0,5849** (P 0,6292 ; R 0,5464) |
+66:| tête (vivant 612) | **0,7336** |
+67:| F1 / tête gelé 602 | **0,5893** (P 0,6319 ; R 0,5522) / **0,7392** ; POS 0,7603 |
+72:**Vivant 612 vs gelé 602.** L'exact (222/222) et la couverture (0,9289) sont **identiques** sur
+86:**Les quatre modes** (vivant 612). Le mock est le double de contrat, pas un modèle :
+308:| **P1-11** | **Petites incohérences de valeurs et de candidats** | **8/134** morphèmes normalisés ; **4/50** actes `exclamation` hors candidats ; **4/50** listes avec doublons | 626-638, 1045-1048, 1078, 1142-1150, 1172-1176, 1199-1203 | **2 h** | faible : casse d'origine, ajouter `exclamation`, dédupliquer |
+371:- Les chiffres `222/222`, `0,9289`, `0,5849`, `0,7581`, `17` sont ceux du **vivant 612** au
+372:  commit `fa1b0c6e` ; la fiche v12 publie le F1/tête du **gelé 602** (0,5893/0,7392, POS 0,7603).
+386:- **Aucun fichier existant modifié par cet audit, aucun c
+… [40 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('construire_json.py'); s=p.read_text()\nold='''        \"f1\": 0.5849, \"precision\": 0.6292, \"rappel\": 0.5464, \"tete\": 0.7336,\n        \"pos\": 0.7581, \"pos_ferme\": 0.9004, \"pos_ouvert\": 0.6234,'''\nn … [1055 caractères tronqués]`
+
+  ```
+patch
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json 81756 octets
+JSON VALIDE
+{"f1": 0.5893, "precision": 0.6319, "rappel": 0.5522, "tete": 0.7392, "pos": 0.7603, "exact": 222, "couverture": 0.9289, "note": "la fiche v12 publie le gelé pour F1/tête ; l'exact et la couverture sont identiques au vivant"}
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-bloc-l.md", "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-bloc-l.md</path>
+<type>file</type>
+<content>
+1: # Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+4: > **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **Date** : 2026-11-06 ·
+5: > **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+6: > **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+7: > [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+8: >
+9: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+10: > [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+11: > [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+12: > l'audit (textes dans le JSON) ; harnais local non committé dans `/tmp/audit_produit_bl`.
+13: > **Porte** : `bash tools/porte-bloc-linguistique.sh` → **verte** (16 tests, autotest UDHR
+14: > **0,9687**, profils permutés **0,0022**).
+15: 
+16: **En une phrase.** Sur 50 phrase
+… [14584 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-bloc-l.md", "offset": 220, "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-produit-bloc-l.md</path>
+<type>file</type>
+<content>
+220: - **Déterminisme** : même instance, instances fraîches, graines de hash **0/1/42** → **mêmes
+221:   digests** ; `json()` par défaut **exclut `duree_s`** ; `json(avec_duree=True)` ne diffère que par
+222:   la durée. Deux textes différents ont des digests différents.
+223: 
+224: ## 5. Stabilité du contrat
+225: 
+226: **Ce qui est stable.** `Annotation.json()` a **toujours les 11 mêmes clés** et `Etiquette.json()`
+227: les **11 mêmes clés** sur les 50 textes et les quatre modes. Les spans sont dans le texte,
+228: `debut <= fin`, **aucun span vide**, `niveau` dans les neuf, `type` non vide, `source` d'étiquette
+229: dans `{heuristique, neuronal, humain}`, `confiance` dans [0,1] pour l'heuristique, unités triées
+230: et disjointes, fraction recalculable, **0 cible absente**.
+231: 
+232: **Ce qui peut être vide ou absent.**
+233: 
+234: | élément | constat sur 50 textes |
+235: |---|---|
+236: | `etiquettes` | vide seulement sur refus (0/50 ici) |
+237: | `unites_semantiques`, `fraction_semantique` | peuvent être vides / 0,0 (pas sur ce banc, mais sur du texte sans clas
+… [17194 caractères tronqués]
+  ```
+
