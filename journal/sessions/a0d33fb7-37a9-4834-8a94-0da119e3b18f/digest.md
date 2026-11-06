@@ -2985,3 +2985,145 @@ tesseract 5.5.3
 … [935 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Écriture des deux fichiers neufs (rapport + JSON)
+Je génère les tableaux et le JSON depuis une structure unique pour garantir leur cohérence.
+
+- **bash** `{"command": "cat > /tmp/gen_file_taches.py <<'PY'\n# -*- coding: utf-8 -*-\nimport json, pathlib\n\nROOT = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\n\ndef T(id, file, chantier, action, outil, dep, bloc, cmd, prio, preuve):\n    return dict(id=id, file=file, chantier=chantier … [38681 caractères tronqués]`
+
+  ```
+OK 215 lignes MD ; 29 taches
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation des deux fichiers (JSON, tableaux, liens, revue)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-file-taches.json >/dev/null && echo \"JSON OK\"; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-file-taches.json'))\nprint(\"taches\",len(d['taches']),\"A\",sum(t['file']=='A' for … [342 caractères tronqués]`
+
+  ```
+JSON OK
+taches 29 A 8 B 11 C 10
+doublons 6 perimes 18 deps 12
+ids uniques 29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-tableaux.sh >/tmp/pt2.out 2>&1; echo \"TABLES_EXIT=$?\"; tail -5 /tmp/pt2.out; echo \"=== LIENS ===\"; timeout 120 python3 tools/verifier_liens.py >/tmp/liens2.out 2>&1; echo \"LIENS_EXIT=$?\"; tail -4 /t … [80 caractères tronqués]`
+
+  ```
+TABLES_EXIT=0
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+=== LIENS ===
+LIENS_EXIT=0
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+### 🤖 Assistant
+
+⏵ Revue documentaire : identifier exactement ce que le commit devra corriger
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/revue_documentation.py >/tmp/revue2.out 2>&1; echo \"EXIT=$?\"; cat /tmp/revue2.out | tail -20", "description": "Run doc review after adding fiche", "timeoutMs": 320000}`
+
+  ```
+EXIT=1
+  revue de documentation · 679 fiche(s) · 772 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 678 fichiers, le disque en a 679
+     · compteurs : en-cours.md dit 771 JSON, le disque en a 772
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture du rapport généré (qualité, chiffres, liens)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md", "limit": 90}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md</path>
+<type>file</type>
+<content>
+1: # La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h
+2: 
+3: > **Ligne de roadmap** : B13 (moteur de pensée) · **Date** : 2026-11-06, 10 h 20 HNE · **Branche** : `s/v7` · **HEAD mesuré** : `7679a2d4`.
+4: > **Mission** : inventer toutes les prochaines actions nommées dans `roadmap.md`, `en-cours.md`, `plan-travail.md` § 9 et § 12, `backlog/index.md`, `backlog/dependances.md`, `references-non-regression.md` et les 12 fiches récentes ; les classer en trois files ; détecter doublons et périmées ; proposer l'ordre de la fenêtre.
+5: > **Verdict** : **29 tâches** — **8 autonomes**, **11 en coordination**, **10 bloquées** ; **6 doublons**, **18 périmées**, **12 dépendances cachées**.
+6: > **Ce que cette fiche n'est pas** : un commit, une modification d'existant, ou une mesure nouvelle sur S/D/N2. Elle ne crée que deux fichiers neufs.
+7: 
+8: ## 1. Résumé exécutif
+9: 
+10: La file est **courte** une fois les doublons retirés : **8 tâches sont exécutables en autonomie** dans le territoire L/B13 et le pilotage, **11 demandent une coordination** (S, D, 
+… [13729 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'un défaut du tableau (colonne « Ce qu'il faudrait »)
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md", "offset": 91, "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md</path>
+<type>file</type>
+<content>
+91: | D6 | A2.6 experts | roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; backlog/A2.6 | rapport-a26-bilan.md:30 | Une seule ligne, bloquée A6.2 ; retirer de la frontière |
+92: 
+93: ## 7. Périmées (18)
+94: 
+95: La tâche est encore listée alors que la mesure ou le commit qui la ferme existe. La preuve est soit un commit, soit une commande rejouée, soit un fichier présent sur disque.
+96: 
+97: | # | tâche encore listée | où | preuve | statut réel |
+98: |---|---|---|---|---|
+99: | P1 | T132/T133 2/5 | roadmap:178 ; chantiers:90 | autotest : 5/5 et 5/5 | Verts ; mention périmée |
+100: | P2 | B13 178/178 et 183/183 portes | en-cours:98 et 131 ; roadmap:31 | v12 : 222/222 ; autotest : 183/183 | 222/222 ; 183/183 |
+101: | P3 | dev/test à re-mesurer | v9, v10, v11 §6 | v12 : 153/153 et 69/69 | Fait |
+102: | P4 | Merge master si autorisé | v9 §6.3 | commit fa1b0c6e (master à jour, 375 commits) | Fait |
+103: | P5 | Passe complète après les runs | plan:401 ; en-cours:131 | commit ea7d3275 ; registre 06/11 | Faite (79 vertes, 4 rouges) |
+104: | P6 | Les 43,
+… [13953 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction du tableau C et de trois imprécisions, puis régénération
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/gen_file_taches.py')\ns=p.read_text(encoding='utf-8')\nold='rows_c = [[t[\"id\"],t[\"chantier\"],t[\"action\"],t[\"bloquant\"],\"Ce qu\\'il faudrait\",t[\"preuve\"]] for t in C]' … [2049 caractères tronqués]`
+
+  ```
+patched
+OK 215 lignes MD ; 29 taches
+  ```
+
+### 🤖 Assistant
+
+⏵ Nouvelle validation et contrôle du tableau C corrigé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-file-taches.json >/dev/null && echo \"JSON OK\"; timeout 120 bash tools/porte-tableaux.sh >/tmp/pt3.out 2>&1; echo \"TABLES_EXIT=$?\"; tail -3 /tmp/pt3.out; timeout 120 python3 tools/verifier_liens … [141 caractères tronqués]`
+
+  ```
+JSON OK
+TABLES_EXIT=0
+  ✅ 1723 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+LIENS_EXIT=0
+  ✅ 3499 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '67,79p' reports/rapport-file-taches.md; echo \"--- extrait JSON T12 ---\"; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-file-taches.json'))\nfor t in d['taches']:\n    if t['id'] in ('T12','T26'):\n        … [77 caractères tronqués]`
+
+  ```
+| id | chantier | action | bloquant | Ce qu'il faudrait | preuve |
+|---|---|---|---|---|---|
+| T20 | A3.4 | Démonstration Colab | compte et runtime Colab | un compte et un runtime Colab ; la recette est dans docs/archive/colab-reparti.md | roadmap:351 ; backlog/A3.4-colab.md |
+| T21 | A5.4 | Opérateur FPGA complet | carte Stratix V absente | la carte Stratix V ; le design existe | roadmap:352 ; backlog/A5.4-fpga.md |
+| T22 | A6.2 | Routage MoE appris | aucun MoE local ne tient dans 16 Go | un MoE qui tient dans 16 Go, ou une machine plus grande | roadmap:353 ; backlog/A6.2-moe-local.md |
+| T23 | A2.6 | Experts de l'ordonnanceur | A6.2 (MoE local) | un MoE local (A6.2) | rapport-a26-bilan.md:30 |
+| T24 | B1.5 | Prose scientifique : corpus parallèle humain FR/EN | aucun corpus parallèle humain | un corpus licite (revue, actes, manuel) traduit par des humains | roadmap:350 ; backlog/B1.5-prose-scientifique.md |
+| T25 | B10.3 | Raisonnement sur z gelé | décodeur sous le plancher chrF 39,6 | une attention croisée, 20–30 articles, 3 graines | roadmap:354 ; backlog/B10.3-raisonnement-z.md |
+| T26 | R44 | 10 pages scannées réelles avec vérité humaine | pas de vérité humaine ; fax 1 bit et 
+… [1845 caractères tronqués]
+  ```
+

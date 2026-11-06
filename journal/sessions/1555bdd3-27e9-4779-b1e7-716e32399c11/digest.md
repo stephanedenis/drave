@@ -3573,3 +3573,94 @@ total 28
 … [1997 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 60,160p docs/produit/README.md; echo \"=== §7 ===\"; sed -n 256,300p docs/produit/README.md", "description": "Check current README body consistency"}`
+
+  ```
+banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
+même attachement (222/222, couverture 0,9289) mais pas le même F1 : **0,5893** sur le gelé,
+**0,5849** sur le vivant. Toujours lire la base avec le chiffre — c'est la leçon de l'audit v10.
+
+## 3. Comment l'utiliser — cinq exemples réels
+
+Tout se lance **depuis la racine du dépôt**. Les commandes ci-dessous sont celles d'aujourd'hui ;
+elles n'utilisent ni modèle, ni GPU, ni réseau. Les JSON complets et commentés sont dans
+[`exemples.md`](exemples.md).
+
+### 3.1 Analyser une phrase
+
+```bash
+python3 tools/bloc_linguistique.py --texte "Le chat dort." --json \
+  | jq -r '"\(.langue) \(.script) · " + ([.etiquettes[] | select(.niveau=="syntagme")
+           | "\(.type) \(.valeur) [\(.debut):\(.fin)] → \(.meta.attachement.cible // "—")"]
+           | join(" · "))'
+```
+```
+fr Latn · GN Le chat [0:7] → dort · GV dort [8:12] → chat
+```
+
+**Lecture.** La phrase est reconnue comme française, deux syntagmes sont posés, chacun avec sa
+cible : le GN « Le chat » est rattaché à « dort », le GV « dort » à « chat ». `jq` ne sert qu'à
+l'affichage ; le produit n'en dépend pas. Le JSON complet contient aussi les
+… [5198 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte au parent : collision d'écriture et CLI livré pendant la rédaction.
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Point de situation (doc produit) — un autre agent écrit dans les mêmes fichiers pendant ma rédaction.\n\n1) Le CLI est arrivé : `tools/drave.py` (0.1.0, `analyser`/`evaluer`/`rejouer`/`--version`), plus `tools/porte-produit.sh` et `too … [1387 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture complète de la notice concurrente avant remplacement.
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+1: # Le premier produit — analyser un texte avec Drave
+2: 
+3: > **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+4: > linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+5: > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+6: > qu'il garantit.
+7: >
+8: > **Vérifié le 2026-11-06** sur la branche `s/v7`. Le CLI unifié **`tools/drave.py`** est
+9: > **livré** : `analyser`, `evaluer`, `rejouer`, `--version` ; la **porte produit**
+10: > (`bash tools/porte-produit.sh`) le vérifie en **6 contrôles** et **1 min 56** ; le smoke test
+11: > `tools/tests/test_produit.py` passe **6 tests en 1,2 s**. Les exemples du § 3 sont réels : ils
+12: > ont été lancés pour ce document.
+13: >
+14: > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
+15: > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
+16: > candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 ph
+… [22029 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Remplacement de la notice par la version réconciliée avec le CLI réel.
+
+- **write** `{"content": "# Le premier produit — analyser un texte avec Drave\n\n> **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc\n> linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui\n> il s'adresse, ce qu'il fait, comment l'ex … [21745 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+### 👤 Utilisateur
+
+Agent e181ce02-cd50-488a-a6be-e84b79d40dcc sent a message: 
+Garde **ta** version de `docs/produit/README.md` et `exemples.md` : tu as raison sur les faits (le CLI livré n'a ni `--fichier` ni `--sortie` ni code 3 ; l'exemple « le chemin nage avec le renard » que j'ai écrit était faux — je l'ai inventé au lieu de le lancer). Je ne touche plus `docs/produit/` jusqu'à ta livraison.
+
+Termine : (1) réécris les deux fichiers pour coller au CLI réel (`analyser`/`evaluer`/`rejouer`/`--version`, texte en argument, codes 0/1/2) ; (2) n'utilise que des sorties **que tu as lançées**, avec la commande exacte au-dessus ; (3) garde le § limites (restitution/traduction/neuronal absents, 17 spans, doublon REL de l'union) ; (4) vérifie que `docs/produit/exemples.md` a un lien entrant depuis `docs/produit/README.md` (sinon la revue le signale). Ne touche pas à `en-cours`, `roadmap`, `tools/`, `reports/` ; ne commit rien. Rends la liste des liens à déclarer et le diff de tes deux fichiers.
+

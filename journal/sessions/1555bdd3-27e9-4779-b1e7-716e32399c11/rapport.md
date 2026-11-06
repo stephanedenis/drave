@@ -7,12 +7,12 @@
 | Identifiant | `1555bdd3-27e9-4779-b1e7-716e32399c11` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 09:31 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 99 |
-| Appels d'outils | 119 |
+| Messages | 102 |
+| Appels d'outils | 121 |
 | Fichiers touchés | 2 |
-| Commandes | 99 |
+| Commandes | 100 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, dépôt Drave). Mission : écrir … [2435 caractères tronqués]
 
-*119 appels d'outils.* Actions notables :
+*121 appels d'outils.* Actions notables :
 
 - bash — List repo root, docs and tools
 - read
@@ -41,11 +41,11 @@
 - bash — Search performance claim 0.6s for 612 corpus
 - bash — Find evaluer_gold module
 - bash — Read attachment audit header and timing
-- … et 93 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
-⏵ Relecture complète de la notice concurrente avant remplacement.
+⏵ Réécriture de `exemples.md` avec les sorties CLI exactes, commande au-dessus.
 
 ## 3. Travail accompli
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 3 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/exemples.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
@@ -98,7 +98,7 @@
 - **T1** Inspect state change and parent plan
 - **T1** Read parent session plan
 - **T1** Read existing usage document
-- … et 59 autres
+- … et 60 autres
 
 ## 4. Mesures et résultats marquants
 

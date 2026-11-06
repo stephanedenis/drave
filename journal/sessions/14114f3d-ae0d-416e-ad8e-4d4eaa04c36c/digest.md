@@ -2142,3 +2142,126 @@ dev phrases 422 POS 0.7547 F1 0.582 exact 153 labels 153 couverture 0.9387 spans
 test phrases 190 POS 0.7656 F1 0.5914 exact 69 labels 69 couverture 0.9079 spans 7
   ```
 
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json\nd=json.load(open('resultats.json'))\nfor c in d['cas_limites']['cas']:\n    if c['nom']=='surrogate': print(json.dumps(c,ensure_ascii=False,indent=1))\nprint(json.dumps(d['cas_limites']['hors_type'],ensure_ascii=False,indent=1)) … [65 caractères tronqués]`
+
+  ```
+{
+ "nom": "surrogate",
+ "n_chars": 4,
+ "crash": true,
+ "traceback": "UnicodeEncodeError: 'utf-8' codec can't encode character '\\ud800' in position 0: surrogates not allowed"
+}
+[
+ {
+  "nom": "None",
+  "crash": false,
+  "exception": "",
+  "refus": "vide"
+ },
+ {
+  "nom": "bytes",
+  "crash": true,
+  "exception": "AttributeError: 'int' object has no attribute 'isalpha'",
+  "refus": null
+ },
+ {
+  "nom": "int",
+  "crash": true,
+  "exception": "AttributeError: 'int' object has no attribute 'strip'",
+  "refus": null
+ },
+ {
+  "nom": "liste",
+  "crash": true,
+  "exception": "AttributeError: 'list' object has no attribute 'strip'",
+  "refus": null
+ }
+]
+  ```
+
+- **write** `{"content": "# -*- coding: utf-8 -*-\n\"\"\"Mesures complémentaires de l'audit produit (langue, attachements, dédup, contrôles).\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport copy\nimport json\nimport pathlib\nimport random\nimport re\nimport sys\n\nRACINE = pathlib.Path(\" … [12732 caractères tronqués]`
+
+  ```
+<path>/tmp/audit_produit_bl/extra.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && time python3 extra.py > extra_stdout.txt 2> extra_stderr.txt; echo \"exit=$?\"; tail -30 extra_stdout.txt; echo \"---stderr---\"; tail -20 extra_stderr.txt", "description": "Exécuter les mesures complémentaires", "timeoutMs": 900000}`
+
+  ```
+exit=0
+   "confiance": 0.2222
+  },
+  {
+   "id": "e29",
+   "origine": "en",
+   "melange": "de",
+   "confiance": 0.5
+  },
+  {
+   "id": "e30",
+   "origine": "en",
+   "melange": "it",
+   "confiance": 0.4286
+  },
+  {
+   "id": "e31",
+   "origine": "en",
+   "melange": "und",
+   "confiance": 0.0
+  },
+  {
+   "id": "e39",
+   "origine": "en",
+   "melange": "en",
+   "confiance": 0.25
+  }
+ ]
+}
+langue_profils 50/50 39/50 2/50
+dedupe_gold {"avant": {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "tp": 1018, "fp": 600, "fn": 845, "tete": 0.7336, "att_exact": 222, "att_cibles": 239, "att_labels": 222, "couverture": 0.9289, "labels": 17847, "attachements": 946}, "apres": {"f1": 0.6141, "precision": 0.7283, "rappel": 0.5309, "tp": 989, "fp": 369, "fn": 874, "tete": 0.7432, "att_exact": 208, "att_cibles": 239, "att_labels": 208, "couverture": 0.8703, "labels": 17587, "attachements": 812}}
+---stderr---
+[stderr]
+
+real	0m2,986s
+user	0m2,926s
+sys	0m0,059s
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport json, collections\ne=json.load(open('extra.json'))\nlp=e['langue_profils']\nprint(lp['sans_profils'],lp['avec_profils'],lp['avec_profils_egalite_stricte'])\nc=collections.Counter((d['attendu'],d['avec_profils'],d['avec_profils_mappe'] … [646 caractères tronqués]`
+
+  ```
+50/50 39/50 2/50
+('en', 'eng', 'en') 7
+('en', 'pcm', 'pcm') 1
+('en', 'sco', 'sco') 3
+('en', 'und', 'und') 3
+('fr', 'fra', 'fr') 28
+('fr', 'hns', 'hns') 1
+('fr', 'oci', 'fr') 2
+('fr', 'und', 'und') 3
+('und', 'und', 'und') 2
+
+non corrects:
+{'id': 'f01', 'attendu': 'fr', 'sans_profils': 'fr', 'avec_profils': 'hns', 'avec_profils_mappe': 'hns'}
+{'id': 'f03', 'attendu': 'fr', 'sans_profils': 'fr', 'avec_profils': 'und', 'avec_profils_mappe': 'und'}
+{'id': 'f23', 'attendu': 'fr', 'sans_profils': 'fr', 'avec_profils': 'und', 'avec_profils_mappe': 'und'}
+{'id': 'e29', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'sco', 'avec_profils_mappe': 'sco'}
+{'id': 'e32', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'und', 'avec_profils_mappe': 'und'}
+{'id': 'e35', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'sco', 'avec_profils_mappe': 'sco'}
+{'id': 'e36', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'und', 'avec_profils_mappe': 'und'}
+{'id': 'e37', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'pcm', 'avec_profils_mappe': 'pcm'}
+{'id': 'e40', 'attendu': 'en', 'sans_profils': 'en', 'avec_profils': 'und', 'avec_profils_mappe': 'und'}
+{'id': 'e42', 'at
+… [2955 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/audit_produit_bl && python3 - <<'PY'\nimport sys,random\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nsys.path.insert(0,'.')\nimport bloc_linguistique as bl\nfrom phrases import PHRASES\nh=bl.Heuristique(); rng=random.Random(0); non=0; res=[]\nfor  … [434 caractères tronqués]`
+
+  ```
+[('f01', 'fr', 0.333, 'fr'), ('f02', 'fr', 0.091, 'und'), ('f03', 'en', 0.235, 'en'), ('f20', 'fr', 0.222, 'fr'), ('e29', 'de', 0.5, 'de'), ('e30', 'it', 0.429, 'it'), ('e31', 'und', 0.0, 'und'), ('e39', 'en', 0.25, 'en')] non-und au niveau bloc 6 /8
+  ```
+

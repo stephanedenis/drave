@@ -1,0 +1,854 @@
+{
+ "date": "2026-11-06",
+ "heure": "10:20 EST",
+ "branche": "s/v7",
+ "head": "7679a2d4",
+ "mission": "Inventorier toutes les tâches restantes, les classer en trois files, détecter doublons et périmées, proposer l'ordre 09 h 30 → 12 h.",
+ "methode": {
+  "sources": [
+   "docs/pilotage/roadmap.md",
+   "docs/pilotage/en-cours.md",
+   "docs/pilotage/plan-travail.md §9 et §12",
+   "docs/pilotage/backlog/index.md",
+   "docs/pilotage/backlog/dependances.md",
+   "docs/pilotage/references-non-regression.md",
+   "12 fiches reports/rapport-*.md les plus récentes",
+   "fiches produit et blocages"
+  ],
+  "mesures_rejouees": [
+   "python3 -m tools.pensee.autotest",
+   "python3 tools/tests/linguistique/evaluer_gold.py --json",
+   "bash tools/porte-bloc-linguistique.sh",
+   "bash tools/porte-produit.sh",
+   "bash tools/porte-sessions.sh",
+   "bash tools/porte-ressources.sh",
+   "suite documentaire",
+   "python3 tools/drave.py --help"
+  ],
+  "arbre_sale_avant": true,
+  "head_a_change_pendant": "62dad657 -> 7679a2d4",
+  "aucun_existant_modifie": true,
+  "accident_restaure": "tools/index_reports.py --help a réécrit reports/INDEX.md ; restauré par git restore"
+ },
+ "comptes": {
+  "taches": 29,
+  "A": 8,
+  "B": 11,
+  "C": 10,
+  "doublons": 6,
+  "perimes": 18,
+  "dependances_cachees": 12,
+  "vagues": 3,
+  "sous_agents_max_par_vague": 4
+ },
+ "taches": [
+  {
+   "id": "T01",
+   "file": "A",
+   "chantier": "L",
+   "action": "Rendre verte la porte bloc-linguistique : cascade_pos à 0,7465 contre l'heuristique 0,7581",
+   "outil": "tools/bloc_linguistique.py (MockNeuronal, Cascade), tools/tests/linguistique/evaluer_gold.py",
+   "dependance": "aucune (mesure locale)",
+   "bloquant": "aucun ; choix de méthode (Mock ou fusion), T138 attend 0,7465",
+   "commande": "bash tools/porte-bloc-linguistique.sh ; python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json",
+   "prio": "P0",
+   "preuve": "exit 1 reproduit ; verdict cascade_pos=false ; avec DEEPSEEK_KEY_FILE : 0,3454 (pire)"
+  },
+  {
+   "id": "T02",
+   "file": "A",
+   "chantier": "L",
+   "action": "_pos anglais : 176 VERB tagués NOUN (A14), 450 confusions VERB vers NOUN dans la matrice",
+   "outil": "tools/bloc_linguistique.py, tools/tests/linguistique/gold_reel.py et .json, reports/pensee-pos-anglais.json",
+   "dependance": "T01 non requis",
+   "bloquant": "aucun",
+   "commande": "python3 -m tools.pensee.autotest ; python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold.json",
+   "prio": "P1",
+   "preuve": "sortie heuristique all ; rapport-pensee-couverture-v5.md §5.3 ; rapport-gold-split.md §5.2"
+  },
+  {
+   "id": "T03",
+   "file": "A",
+   "chantier": "B13",
+   "action": "Trancher les 17 spans : corriger les 4 GP du gold sans préposition, acter les 12 formes synthétiques et la tokenisation qu'il ; fiche v13",
+   "outil": "tools/tests/linguistique/gold_reel.py et .json ; reports/rapport-pensee-v13.md et JSON",
+   "dependance": "v12 (222/222)",
+   "bloquant": "aucun ; interdiction d'étendre le lexique synthétique (ajustement au test)",
+   "commande": "python3 -m tools.pensee.autotest ; python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold.json",
+   "prio": "P1",
+   "preuve": "rapport-pensee-v12.md §6 ; T166 : 8 REL, 5 SUB, 4 GP ; exact 222/222"
+  },
+  {
+   "id": "T04",
+   "file": "A",
+   "chantier": "L",
+   "action": "Refus r353 : la fusion par niveau refuse 1 phrase ; reproduire par l'API et corriger",
+   "outil": "tools/bloc_linguistique.py (_fusion) ; tools/tests/linguistique/qualifier_quatre_modes.py",
+   "dependance": "clé API présente (36 o)",
+   "bloquant": "API non déterministe",
+   "commande": "DEEPSEEK_KEY_FILE=$HOME/.config/drave/deepseek.key python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie /tmp/qm.json",
+   "prio": "P2",
+   "preuve": "pensee-quatre-modes-niveau.json : refus 1, détail r353 ; rapport-pensee-fusion-reparee.md §68"
+  },
+  {
+   "id": "T05",
+   "file": "A",
+   "chantier": "PRODUIT",
+   "action": "Écrire la doc d'usage docs/produit/ : commandes, exemples, limites, codes de sortie",
+   "outil": "docs/produit/ (neuf) ; tools/drave.py",
+   "dependance": "produit v0 (62dad657)",
+   "bloquant": "aucun",
+   "commande": "python3 tools/drave.py --help ; python3 tools/drave.py analyser \"Le chat dort sur le toit.\" ; python3 tools/drave.py evaluer ; python3 tools/drave.py rejouer \"Le chat dort.\" ; python3 tools/verifier_liens.py",
+   "prio": "P0",
+   "preuve": "rapport-produit-v0.md §6.1 ; bash tools/porte-produit.sh vert"
+  },
+  {
+   "id": "T06",
+   "file": "A",
+   "chantier": "PILOTAGE",
+   "action": "Mettre l'état B13 à jour : 222/222, T132/T133 verts, 17 spans, passe du 06/11, prochaine action",
+   "outil": "docs/pilotage/en-cours.md, roadmap.md, chantiers.md, plan-travail.md",
+   "dependance": "T03, T05",
+   "bloquant": "un seul écrivain (agent principal)",
+   "commande": "python3 tools/revue_documentation.py ; python3 tools/verifie_en_cours.py ; python3 tools/taille_documents.py",
+   "prio": "P0",
+   "preuve": "en-cours:98 et :131 disent 178/178 ; autotest 183/183 ; v12 222/222"
+  },
+  {
+   "id": "T07",
+   "file": "A",
+   "chantier": "PILOTAGE",
+   "action": "Références de non-régression : 84 portes, ligne porte-produit, 4 rouges nommées (indice, melange, sessions, bloc-linguistique), lecteur vert",
+   "outil": "docs/pilotage/references-non-regression.md",
+   "dependance": "T01",
+   "bloquant": "aucun",
+   "commande": "ls tools/porte-*.sh ; bash tools/porte-produit.sh ; bash tools/porte-sessions.sh ; bash tools/porte-bloc-linguistique.sh",
+   "prio": "P1",
+   "preuve": "84 scripts sur disque ; references:49 dit 83 ; passe 06/11 : 4 rouges"
+  },
+  {
+   "id": "T08",
+   "file": "A",
+   "chantier": "DOC",
+   "action": "Corriger le double ## 9 de plan-travail.md (lignes 163 et 403) ; corriger le commentaire « 81 portes » de toutes-les-portes.sh",
+   "outil": "docs/pilotage/plan-travail.md ; tools/toutes-les-portes.sh (commentaire seulement)",
+   "dependance": "aucune",
+   "bloquant": "aucun ; ne toucher que le commentaire de la porte",
+   "commande": "grep -n '^## 9' docs/pilotage/plan-travail.md ; bash tools/porte-tableaux.sh",
+   "prio": "P2",
+   "preuve": "deux sections 9 ; toutes-les-portes.sh:21 dit 81"
+  },
+  {
+   "id": "T09",
+   "file": "B",
+   "chantier": "N2",
+   "action": "La porte propre (0,29 manquant à 2,7856) : données ou capacité",
+   "outil": "reports/n2-*, work/n2ac/, tools/entrainer_native.py, GPU",
+   "dependance": "recette N2 1 024",
+   "bloquant": "aucun externe ; GPU libres (0 %)",
+   "commande": "python3 tools/eval_n2_propre.py <checkpoint> (pas de commande unique)",
+   "prio": "P0",
+   "preuve": "backlog/N2-distillation.md §Prochaine action ; en-cours:122 ; nvidia-smi"
+  },
+  {
+   "id": "T10",
+   "file": "B",
+   "chantier": "R1",
+   "action": "Aiguille native >= 15/18 à 4 000 non atteinte (copie 0,0078) : décider R11 close ou passer à R2.1 (tampon en entrée)",
+   "outil": "reports/rapport-n2-r12-2048.md ; backlog/R11-contexte-hierarchique.md ; backlog/R21-memoire-travail-gist.md",
+   "dependance": "R11/R12 mesurées",
+   "bloquant": "décision d'architecture",
+   "commande": "python3 tools/verifie_backlog.py",
+   "prio": "P1",
+   "preuve": "r12-2048 §4 « le miroir de copie reste muet »"
+  },
+  {
+   "id": "T11",
+   "file": "B",
+   "chantier": "N4",
+   "action": "Consigne courte : construire le jeu, entraîner, évaluer tenu à l'écart (24/24 vus, 0/4 tenus)",
+   "outil": "backlog/N4-usage-sft.md ; reports/n4-* ; N2/GPU",
+   "dependance": "recette N2",
+   "bloquant": "aucun externe ; GPU libres",
+   "commande": "python3 tools/eval_n2_propre.py <checkpoint> (pas de commande unique)",
+   "prio": "P1",
+   "preuve": "roadmap:199 ; en-cours:122 ; backlog/N4-usage-sft.md"
+  },
+  {
+   "id": "T12",
+   "file": "B",
+   "chantier": "S",
+   "action": "Inventorier et proposer l'intégration des verdicts humains : 19 validations sur les 9 paragraphes, 150 sur la banque ; vérifier la couverture, S écrit et commite le pointeur",
+   "outil": "tools/structures/donnees/paragraphes-validations.jsonl ; validations.jsonl ; page /paragraphes",
+   "dependance": "sous-module S",
+   "bloquant": "route /paragraphes en 404 sur 8765 ; sous-module modifié non committé",
+   "commande": "ls tools/structures/donnees/*validations*.jsonl ; curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8765/paragraphes",
+   "prio": "P1",
+   "preuve": "19 enregistrements, 9 phrases ; 150 enregistrements, auteur humain ; en-cours:59 dit 3 faits et 8 restants"
+  },
+  {
+   "id": "T13",
+   "file": "B",
+   "chantier": "S",
+   "action": "Proposer la règle du nom après un adjectif hors lexique (« Le fait divers surprend ») ; S l'écrit",
+   "outil": "tools/structures/generateur.py ; tools/structures/donnees/",
+   "dependance": "T12",
+   "bloquant": "sous-module S, territoire",
+   "commande": "pas de commande unique ; test dans le sous-module",
+   "prio": "P2",
+   "preuve": "rapport-s-paragraphes.md §La suite"
+  },
+  {
+   "id": "T14",
+   "file": "B",
+   "chantier": "B9",
+   "action": "Resserrer la transition 9,23–9,96 M ; porter le masque dans le trainer",
+   "outil": "reports/b9-* (absent) ; tools/entrainer_native.py",
+   "dependance": "N2",
+   "bloquant": "objet non défini dans une fiche",
+   "commande": "pas de commande nommée",
+   "prio": "P2",
+   "preuve": "roadmap:174 ; aucune fiche B9 dans reports/"
+  },
+  {
+   "id": "T15",
+   "file": "B",
+   "chantier": "B13",
+   "action": "gold 200+ : définir l'objet (gold linguistique 432 ou gold de pensée) avant d'exécuter",
+   "outil": "tools/tests/linguistique/gold_reel.* ; docs/pilotage/roadmap.md",
+   "dependance": "v12",
+   "bloquant": "libellé ambigu, 7 occurrences, aucune définition",
+   "commande": "grep -rn 'gold 200+' docs/pilotage",
+   "prio": "P1",
+   "preuve": "7 occurrences dans roadmap et chantiers ; en-cours:131"
+  },
+  {
+   "id": "T16",
+   "file": "B",
+   "chantier": "PRODUIT",
+   "action": "Appliquer les correctifs de l'audit de fiabilité du produit",
+   "outil": "reports/rapport-produit-bloc-l.md (absent) ; reports/pensee-produit-bloc-l.json (absent) ; tools/drave.py",
+   "dependance": "audit 14114f3d en cours",
+   "bloquant": "artefact absent",
+   "commande": "bash tools/porte-produit.sh (après l'audit)",
+   "prio": "P1",
+   "preuve": "rapport-produit-v0.md §6.3 ; fichier absent ; session 14114f3d"
+  },
+  {
+   "id": "T17",
+   "file": "B",
+   "chantier": "DOC",
+   "action": "Régénérer reports/INDEX.md (625 fiches annoncées, 678 sur disque) et vérifier les compteurs",
+   "outil": "reports/INDEX.md (généré) ; tools/index_reports.py",
+   "dependance": "hub",
+   "bloquant": "l'outil réécrit l'INDEX et n'a pas de --help",
+   "commande": "python3 tools/index_reports.py (hub seulement) ; python3 tools/revue_documentation.py",
+   "prio": "P2",
+   "preuve": "INDEX:3 dit 625 ; ls reports/*.md donne 678 ; --help a réécrit l'INDEX (restauré)"
+  },
+  {
+   "id": "T18",
+   "file": "B",
+   "chantier": "A2.6",
+   "action": "Trancher la frontière : A2.6 n'est pas libre (experts bloqués A6.2, tête refusée, A8.3a fait, lot répondu) ; le retirer de la frontière du graphe",
+   "outil": "docs/pilotage/backlog/dependances.md ; backlog/A2.6-ordonnanceur.md ; reports/rapport-a26-bilan.md",
+   "dependance": "A6.2",
+   "bloquant": "A6.2 (MoE local)",
+   "commande": "python3 tools/verifie_backlog.py",
+   "prio": "P1",
+   "preuve": "bilan:30 ; a26-lot-disque : 503 Mio constant ; frontière 3 : A2.6, N2, N4"
+  },
+  {
+   "id": "T19",
+   "file": "B",
+   "chantier": "DOC",
+   "action": "Appliquer les 42 écarts de cohérence v8 (5 lignes README, en-têtes historiques)",
+   "outil": "reports/README.md ; 8 fiches et 8 JSON",
+   "dependance": "hub",
+   "bloquant": "fiches existantes à modifier (hors fenêtre)",
+   "commande": "python3 tools/revue_documentation.py",
+   "prio": "P2",
+   "preuve": "rapport-coherence-fiches-v8.md §12"
+  },
+  {
+   "id": "T20",
+   "file": "C",
+   "chantier": "A3.4",
+   "action": "Démonstration Colab",
+   "outil": "—",
+   "dependance": "A3 (acquis)",
+   "bloquant": "compte et runtime Colab",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:351 ; backlog/A3.4-colab.md"
+  },
+  {
+   "id": "T21",
+   "file": "C",
+   "chantier": "A5.4",
+   "action": "Opérateur FPGA complet",
+   "outil": "—",
+   "dependance": "A5 (acquis)",
+   "bloquant": "carte Stratix V absente",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:352 ; backlog/A5.4-fpga.md"
+  },
+  {
+   "id": "T22",
+   "file": "C",
+   "chantier": "A6.2",
+   "action": "Routage MoE appris",
+   "outil": "—",
+   "dependance": "A6 (acquis)",
+   "bloquant": "aucun MoE local ne tient dans 16 Go",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:353 ; backlog/A6.2-moe-local.md"
+  },
+  {
+   "id": "T23",
+   "file": "C",
+   "chantier": "A2.6",
+   "action": "Experts de l'ordonnanceur",
+   "outil": "—",
+   "dependance": "A2.6",
+   "bloquant": "A6.2 (MoE local)",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "rapport-a26-bilan.md:30"
+  },
+  {
+   "id": "T24",
+   "file": "C",
+   "chantier": "B1.5",
+   "action": "Prose scientifique : corpus parallèle humain FR/EN",
+   "outil": "—",
+   "dependance": "B1 (acquis)",
+   "bloquant": "aucun corpus parallèle humain",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:350 ; backlog/B1.5-prose-scientifique.md"
+  },
+  {
+   "id": "T25",
+   "file": "C",
+   "chantier": "B10.3",
+   "action": "Raisonnement sur z gelé",
+   "outil": "—",
+   "dependance": "B10.2bis (négatif)",
+   "bloquant": "décodeur sous le plancher chrF 39,6",
+   "commande": "aucune",
+   "prio": "P2",
+   "preuve": "roadmap:354 ; backlog/B10.3-raisonnement-z.md"
+  },
+  {
+   "id": "T26",
+   "file": "C",
+   "chantier": "R44",
+   "action": "10 pages scannées réelles avec vérité humaine",
+   "outil": "—",
+   "dependance": "R41, R42, R43",
+   "bloquant": "pas de vérité humaine ; fax 1 bit et exposant fusionné",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:355 ; backlog/R44 ; OCR 5.5.3 dans work/ocr/root"
+  },
+  {
+   "id": "T27",
+   "file": "C",
+   "chantier": "N5",
+   "action": "L'échelle 50–100 M",
+   "outil": "—",
+   "dependance": "N2, N4",
+   "bloquant": "gelé jusqu'au verdict de R11",
+   "commande": "aucune",
+   "prio": "P3",
+   "preuve": "roadmap:340 ; dependances:207"
+  },
+  {
+   "id": "T28",
+   "file": "C",
+   "chantier": "R21",
+   "action": "Chaîne mémoire vers restitution vers lecture croisée (R21, R31, R51)",
+   "outil": "—",
+   "dependance": "R11, N4, R31",
+   "bloquant": "R11 non close, N4 ouvert, R31/R32 spécifiés",
+   "commande": "aucune",
+   "prio": "P2",
+   "preuve": "dependances:106-115 ; programme-r:288"
+  },
+  {
+   "id": "T29",
+   "file": "C",
+   "chantier": "L",
+   "action": "Neuronal réel local (7B) et restitution/traduction",
+   "outil": "—",
+   "dependance": "poids, service, API",
+   "bloquant": "règle 11 interdit un 7B local ; la restitution attend R31",
+   "commande": "aucune",
+   "prio": "P2",
+   "preuve": "AGENTS règle 11 ; porte-ressources vert ; rapport-produit-v0.md §3"
+  }
+ ],
+ "doublons": [
+  {
+   "id": "D1",
+   "action": "dev/test à re-mesurer",
+   "ou": "v9, v10, v11 §6 ; plan-travail §9 vague 7",
+   "preuve": "v12 : dev 153/153, test 69/69 ; rapport-dev-test-v10",
+   "decision": "Une seule mesure, faite ; retirer des suites"
+  },
+  {
+   "id": "D2",
+   "action": "Les N spans",
+   "ou": "v5 (52), v7 (43), r1r3 (27), v9 (20), v10 (19), v11 (18), v12 (17)",
+   "preuve": "v12 §2 : 17 spans (8 REL, 5 SUB, 4 GP)",
+   "decision": "Seul 17 est vivant ; les autres sont historiques"
+  },
+  {
+   "id": "D3",
+   "action": "T132/T133",
+   "ou": "roadmap:178 ; chantiers:90 ; plan:39 et 195 ; en-cours:131",
+   "preuve": "autotest : T132 5/5, T133 5/5",
+   "decision": "Fermer ; retirer les 5 mentions"
+  },
+  {
+   "id": "D4",
+   "action": "Passe complète",
+   "ou": "en-cours:131 ; plan:401 ; references:3",
+   "preuve": "ea7d3275 ; registre 06/11 (79/4)",
+   "decision": "Une seule passe de référence ; la prochaine sera 84 portes"
+  },
+  {
+   "id": "D5",
+   "action": "gold 200+",
+   "ou": "roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195",
+   "preuve": "7 occurrences, aucune définition",
+   "decision": "Définir l'objet avant d'en faire une tâche"
+  },
+  {
+   "id": "D6",
+   "action": "A2.6 experts",
+   "ou": "roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; backlog/A2.6",
+   "preuve": "rapport-a26-bilan.md:30",
+   "decision": "Une seule ligne, bloquée A6.2 ; retirer de la frontière"
+  }
+ ],
+ "perimes": [
+  {
+   "id": "P1",
+   "tache": "T132/T133 2/5",
+   "ou": "roadmap:178 ; chantiers:90",
+   "preuve": "autotest : 5/5 et 5/5",
+   "statut": "Verts ; mention périmée"
+  },
+  {
+   "id": "P2",
+   "tache": "B13 178/178 et 183/183 portes",
+   "ou": "en-cours:98 et 131 ; roadmap:31",
+   "preuve": "v12 : 222/222 ; autotest : 183/183",
+   "statut": "222/222 ; 183/183"
+  },
+  {
+   "id": "P3",
+   "tache": "dev/test à re-mesurer",
+   "ou": "v9, v10, v11 §6",
+   "preuve": "v12 : 153/153 et 69/69",
+   "statut": "Fait"
+  },
+  {
+   "id": "P4",
+   "tache": "Merge master si autorisé",
+   "ou": "v9 §6.3",
+   "preuve": "commit fa1b0c6e (master à jour, 375 commits)",
+   "statut": "Fait"
+  },
+  {
+   "id": "P5",
+   "tache": "Passe complète après les runs",
+   "ou": "plan:401 ; en-cours:131",
+   "preuve": "commit ea7d3275 ; registre 06/11",
+   "statut": "Faite (79 vertes, 4 rouges)"
+  },
+  {
+   "id": "P6",
+   "tache": "Les 43, 52, 27, 20, 19, 18 spans",
+   "ou": "v5, v7, r1r3, v9, v10, v11 §6",
+   "preuve": "v12 §2 : 17 spans",
+   "statut": "17 ; les autres sont des instantanés"
+  },
+  {
+   "id": "P7",
+   "tache": "200 000 pas N2",
+   "ou": "roadmap:197 (la même cellule dit 200k fait puis le redemande)",
+   "preuve": "en-cours:122 ; roadmap:197",
+   "statut": "Fait"
+  },
+  {
+   "id": "P8",
+   "tache": "R1.2-1024",
+   "ou": "en-cours:131",
+   "preuve": "rapport-n2-r12-2048 ; rope1024-20k",
+   "statut": "Fait (20 000 pas)"
+  },
+  {
+   "id": "P9",
+   "tache": "Ce qui reste des opérations N3",
+   "ou": "dependances:88 et 164",
+   "preuve": "en-cours:97 ; porte-n3-inventaire",
+   "statut": "N3 clos"
+  },
+  {
+   "id": "P10",
+   "tache": "R44 bloquée par l'absence d'OCR",
+   "ou": "dependances:113",
+   "preuve": "R44 fiche ; tesseract 5.5.3 ; porte-ocr-scans verte",
+   "statut": "OCR installé ; reste la vérité humaine"
+  },
+  {
+   "id": "P11",
+   "tache": "S : aucun verdict humain, validations.jsonl absent",
+   "ou": "roadmap:356",
+   "preuve": "150 enregistrements humains ; 19 sur les paragraphes",
+   "statut": "Verdicts présents ; à intégrer"
+  },
+  {
+   "id": "P12",
+   "tache": "S : a001–a003 faits, 8 restants",
+   "ou": "en-cours:59",
+   "preuve": "9 phrases ont des verdicts (19 enregistrements)",
+   "statut": "Les 9 ont des verdicts ; couverture à vérifier"
+  },
+  {
+   "id": "P13",
+   "tache": "A2.6 libre : experts et tête",
+   "ou": "roadmap:30 ; dependances:162",
+   "preuve": "rapport-a26-bilan ; a26-lot-disque",
+   "statut": "Experts bloqués ; tête refusée ; A8.3a fait ; lot répondu"
+  },
+  {
+   "id": "P14",
+   "tache": "A8.3 : réduire le lot ou l'assumer",
+   "ou": "roadmap:152 ; chantiers:84",
+   "preuve": "a26-lot-disque : 503 Mio constant, +27 % tok/s, PPL -0,006 %",
+   "statut": "Lot >= 2 assumé"
+  },
+  {
+   "id": "P15",
+   "tache": "83 portes",
+   "ou": "references:49 ; en-cours (version 09 h 35) ; toutes-les-portes:21",
+   "preuve": "84 scripts ; porte-produit commitée et verte",
+   "statut": "84"
+  },
+  {
+   "id": "P16",
+   "tache": "625 fiches (INDEX)",
+   "ou": "reports/INDEX.md:3",
+   "preuve": "678 fiches sur disque",
+   "statut": "678 ; INDEX à régénérer"
+  },
+  {
+   "id": "P17",
+   "tache": "R0.7 tagger",
+   "ou": "en-cours:131",
+   "preuve": "roadmap R0.7 : tagger 7B POS 0,9440 ; règle 11",
+   "statut": "Mesuré ; le local 7B est interdit"
+  },
+  {
+   "id": "P18",
+   "tache": "e181ce02 : l'API rejoue le gold",
+   "ou": "en-cours:72",
+   "preuve": "produit v0 (62dad657) ; autotest 183/183",
+   "statut": "Fait ; mention périmée"
+  }
+ ],
+ "dependances_cachees": [
+  {
+   "id": "H1",
+   "dependance": "DEEPSEEK_KEY_FILE change la priorité de fusion",
+   "preuve": "sans clé : None, cascade par confiance 0,7465 ; avec clé : niveau 0,3454",
+   "consequence": "La porte est rouge dans les deux cas ; ne pas « corriger » en posant la clé"
+  },
+  {
+   "id": "H2",
+   "dependance": "A2.6 est à la frontière mais son action est bloquée",
+   "preuve": "rapport-a26-bilan.md:30",
+   "consequence": "Le graphe annonce 3 items libres, dont un bloqué"
+  },
+  {
+   "id": "H3",
+   "dependance": "R44 est dite bloquée par l'OCR, qui est installé",
+   "preuve": "tesseract 5.5.3 dans work/ocr/root ; porte-ocr-scans verte",
+   "consequence": "Le vrai blocage est la vérité humaine"
+  },
+  {
+   "id": "H4",
+   "dependance": "La 84e porte n'est ni dans la passe ni dans les références",
+   "preuve": "porte-produit.sh commitée (62dad657), verte ; refs:49 dit 83",
+   "consequence": "Toute passe complète suivante sera à 84"
+  },
+  {
+   "id": "H5",
+   "dependance": "Les validations S existent mais l'état dit bloqué",
+   "preuve": "150 + 19 enregistrements humains ; sous-module modifié",
+   "consequence": "S n'est pas bloquée par l'humain ; elle est à intégrer"
+  },
+  {
+   "id": "H6",
+   "dependance": "index_reports.py n'a pas de --help et réécrit l'INDEX",
+   "preuve": "--help a modifié reports/INDEX.md (restauré)",
+   "consequence": "Ne jamais lancer cet outil sur l'arbre partagé sans commit"
+  },
+  {
+   "id": "H7",
+   "dependance": "L'arbre bouge pendant l'inventaire",
+   "preuve": "HEAD 62dad657 vers 7679a2d4 ; en-cours réécrit à 10 h 20",
+   "consequence": "Toute mesure doit nommer son HEAD ; les compteurs changent"
+  },
+  {
+   "id": "H8",
+   "dependance": "Collisions d'identifiants",
+   "preuve": "manques.md N3/N4/N5 (modèle) contre roadmap N3/N4/N5",
+   "consequence": "Une tâche peut être prise pour une autre ; toujours nommer le document"
+  },
+  {
+   "id": "H9",
+   "dependance": "La passe complète coûte 2 h 29",
+   "preuve": "references:5-6",
+   "consequence": "Incompatible avec la fenêtre ; ne lancer que des sous-ensembles légers"
+  },
+  {
+   "id": "H10",
+   "dependance": "Chaque fiche neuve change les compteurs",
+   "preuve": "678/771 ; cette fiche : 679/772 ; trois fiches de vague : 682/775",
+   "consequence": "La revue échoue au prochain commit si en-cours n'est pas mis à jour"
+  },
+  {
+   "id": "H11",
+   "dependance": "Les heartbeats sont un prérequis de commit",
+   "preuve": "porte-sessions : e181ce02 391 min, hub 1941 min",
+   "consequence": "Rouge de coordination, pas de code"
+  },
+  {
+   "id": "H12",
+   "dependance": "eval_n2_propre.py exige un checkpoint",
+   "preuve": "argparse : point positionnel",
+   "consequence": "Pas de commande unique pour N2 ; nommer le checkpoint"
+  }
+ ],
+ "ordre": {
+  "vague_0": {
+   "creneau": "09:31-09:56",
+   "fait": "drave v0, smoke test, porte-produit (84e), autotest parallèle",
+   "commits": [
+    "bdeca168",
+    "a9907a1b",
+    "62dad657",
+    "7679a2d4"
+   ]
+  },
+  "vagues": [
+   {
+    "vague": 1,
+    "creneau": "10:30-11:00",
+    "sous_agents": [
+     "cascade",
+     "doc-produit",
+     "audit-portes",
+     "pos-anglais"
+    ],
+    "mesure": "bloc-linguistique verte, docs/produit écrit, 84 portes auditées, POS anglais diagnostiqué",
+    "fiche": "reports/rapport-vague-1.md",
+    "portes": [
+     "porte-bloc-linguistique",
+     "porte-produit",
+     "autotest",
+     "revue"
+    ],
+    "commit": "1 commit : correctif + doc + fiche + état"
+   },
+   {
+    "vague": 2,
+    "creneau": "11:00-11:35",
+    "sous_agents": [
+     "spans-gold",
+     "r353",
+     "s-validations",
+     "doc-index"
+    ],
+    "mesure": "17 spans tranchés, r353 qualifié, validations S inventoriées, INDEX planifié",
+    "fiche": "reports/rapport-vague-2.md",
+    "portes": [
+     "autotest",
+     "evaluer_gold",
+     "revue",
+     "liens"
+    ],
+    "commit": "1 commit : décision spans + fiche + état + références 84"
+   },
+   {
+    "vague": 3,
+    "creneau": "11:35-12:10",
+    "sous_agents": [
+     "etat-final",
+     "produit-final",
+     "file-taches",
+     "passe-legere"
+    ],
+    "mesure": "état B13 clos, doc produit finalisée, file livrée, passe légère verte",
+    "fiche": "reports/rapport-vague-3.md",
+    "portes": [
+     "revue",
+     "tableaux",
+     "verifie_en_cours",
+     "taille_documents",
+     "porte-sessions"
+    ],
+    "commit": "1 commit : état + doc + file + passe"
+   }
+  ],
+  "protocole": [
+   "git add explicite, jamais -A",
+   "index alterné puis git read-tree HEAD",
+   "ne pas committer tools/structures",
+   "mettre à jour les compteurs dans le même commit",
+   "lier la fiche depuis reports/README.md ou l'INDEX"
+  ]
+ },
+ "commandes_verifiees": [
+  {
+   "commande": "bash tools/toutes-les-portes.sh",
+   "existe": "oui",
+   "executee": "non (2 h 29)",
+   "etat": "84 portes ; la passe du 06/11 a 79 vertes et 4 rouges"
+  },
+  {
+   "commande": "bash tools/porte-bloc-linguistique.sh",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 1 ; cascade_pos 0,7465 < 0,7581"
+  },
+  {
+   "commande": "bash tools/porte-produit.sh",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; 6 contrôles, autotest 183/183"
+  },
+  {
+   "commande": "bash tools/porte-sessions.sh",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 1 ; heartbeats e181ce02 et 1e7ef596"
+  },
+  {
+   "commande": "bash tools/porte-ressources.sh",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; aucun serveur local, GPU libres"
+  },
+  {
+   "commande": "bash tools/porte-tableaux.sh",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0"
+  },
+  {
+   "commande": "python3 -m tools.pensee.autotest",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "183/183 ; T132 5/5, T133 5/5, T140 7 mots"
+  },
+  {
+   "commande": "python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/x.json",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 1 ; verdict cascade_pos=false"
+  },
+  {
+   "commande": "python3 tools/revue_documentation.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 à 10 h 20 ; exit 1 à 10 h 15 (compteurs)"
+  },
+  {
+   "commande": "python3 tools/taille_documents.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0"
+  },
+  {
+   "commande": "python3 tools/verifie_en_cours.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0"
+  },
+  {
+   "commande": "python3 tools/verifie_journal.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0"
+  },
+  {
+   "commande": "python3 tools/verifier_liens.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; 3 487 liens"
+  },
+  {
+   "commande": "python3 tools/verifier_schemas.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; 67 SVG"
+  },
+  {
+   "commande": "python3 tools/verifie_backlog.py",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; frontière 3 : A2.6, N2, N4"
+  },
+  {
+   "commande": "python3 tools/sessions.py --check --strict",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "signale les deux heartbeats ; porte-sessions sort 1"
+  },
+  {
+   "commande": "python3 tools/drave.py --help",
+   "existe": "oui",
+   "executee": "oui",
+   "etat": "exit 0 ; analyser, evaluer, rejouer"
+  },
+  {
+   "commande": "python3 tools/eval_n2_propre.py",
+   "existe": "oui",
+   "executee": "non",
+   "etat": "argparse exige un checkpoint positionnel"
+  },
+  {
+   "commande": "python3 tools/index_reports.py",
+   "existe": "oui",
+   "executee": "non",
+   "etat": "pas de --help ; réécrit reports/INDEX.md"
+  },
+  {
+   "commande": "bash tools/porte-n2.sh",
+   "existe": "non",
+   "executee": "non",
+   "etat": "Absente : l'exemple de la mission est fictif"
+  }
+ ],
+ "limites": [
+  "Instantané 10 h 20, HEAD 7679a2d4 ; l'arbre bouge.",
+  "Pas de passe complète (2 h 29) ; 4 rouges du registre du 06/11, seuls bloc-linguistique et sessions rejouées.",
+  "S lu, pas rejoué : 19 + 150 verdicts ; couverture par phrase à vérifier.",
+  "gold 200+ non défini : classé en coordination, pas inventé.",
+  "L'audit de fiabilité produit est en cours (14114f3d), sa fiche est absente.",
+  "Cette fiche change les compteurs : 679/772 ; trois fiches de vague : 682/775.",
+  "Aucun existant modifié ; INDEX restauré après un --help destructif."
+ ],
+ "fichiers": [
+  "reports/rapport-file-taches.md",
+  "reports/pensee-file-taches.json"
+ ]
+}

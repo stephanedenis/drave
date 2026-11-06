@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 138.0 h |
 | Tours | 179 |
-| Messages | 3005 |
-| Appels d'outils | 2654 |
+| Messages | 3014 |
+| Appels d'outils | 2663 |
 | Fichiers touchés | 25 |
-| Commandes | 2173 |
+| Commandes | 2180 |
 | Sous-agents | 29 |
-| Commits | 330 |
+| Commits | 331 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9620,7 +9620,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 
 ### Tour 179 — push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vi … [60 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*64 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Pousser et voir les branches distantes
@@ -9636,11 +9636,11 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - bash — Consigner l'objectif produit
 - job_output
 - bash — Attendre la vague produit
-- … et 34 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation finale : la roadmap acte le produit, les références passent à 84 portes (3 rouges)
+⏵ J'intègre la file des tâches (29 tâches, 8 autonomes) et je corrige la ligne S de la roadmap
 
 ## 3. Travail accompli
 
@@ -9748,7 +9748,7 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2133 autres
+- … et 2140 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10226,4 +10226,5 @@ Toute la tranche : **l'attachement à 222/222 (1,0000)** sur 222 labels (couvert
 - ÉTAT — LE COMPTEUR DES DOCUMENTS REVIENT À 121" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "COMPTEUR DES DOCUMENTS"; th
 - PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
 - PILOTAGE — LE PREMIER PRODUIT EST DEBOUT : DRAVE, PORTE PRODUIT, DOC D'USAGE ; 84 PORTES, 3 ROUGES" -- docs/pilotage/references-non-regression.md docs/pilotage/
+- ROADMAP — LA LIGNE S CORRIGÉE (150 VERDICTS HUMAINS, 19 SUR LES PARAGRAPHES) ; LA FILE DES 29 TÂCHES INTÉGRÉE (8 AUTONOMES)" -- reports/rapport-file-taches.md r
 
