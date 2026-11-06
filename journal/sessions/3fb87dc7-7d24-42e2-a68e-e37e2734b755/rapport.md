@@ -9,10 +9,10 @@
 | Début | 2026-11-05 23:24 |
 | Durée | 1.6 h |
 | Tours | 1 |
-| Messages | 74 |
-| Appels d'outils | 81 |
+| Messages | 90 |
+| Appels d'outils | 98 |
 | Fichiers touchés | 3 |
-| Commandes | 68 |
+| Commandes | 75 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-mesur … [1686 caractères tronqués]
 
-*81 appels d'outils.* Actions notables :
+*98 appels d'outils.* Actions notables :
 
 - bash — Show branch, HEAD and status
 - bash — List linguistique tools and reports
@@ -41,11 +41,11 @@
 - bash — Trace origin of -ée handling
 - bash — Inspect autotest changes in v10
 - bash — Inspect Annotation and analyser API
-- … et 61 autres
+- … et 72 autres
 
 **Synthèse produite :**
 
-⏵ Le parent a commité l'essai (HEAD 653a7981) — vérification de l'état courant
+⏵ Contrôles finaux après les mises à jour d'ancrage
 
 ## 3. Travail accompli
 
@@ -55,7 +55,7 @@
 |---|---|---|
 | `/tmp/v10/harnais.py` | 1 | 0 |
 | `/tmp/v10/construire_json.py` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md` | 1 | 7 |
 
 ### Commandes exécutées (échantillon)
 
@@ -99,7 +99,7 @@
 - **T1** Compute GN/GV F1 and three-split per-type values
 - **T1** Compute per-type F1 including GN/GV
 - **T1** Compute GN/GV F1 and print splits
-- … et 28 autres
+- … et 35 autres
 
 ## 5. Erreurs rencontrées
 

@@ -23,7 +23,21 @@
    "SUB": 5,
    "GP": 4,
    "total": 18
-  }
+  },
+  "dev": {
+   "exact": 152,
+   "labels": 152,
+   "couverture": 0.9325,
+   "f1": 0.5812
+  },
+  "test": {
+   "exact": 69,
+   "labels": 69,
+   "couverture": 0.9079,
+   "f1": 0.5914
+  },
+  "pos": 0.7581,
+  "tete": 0.733
  },
  "corrections": [
   "R2 : relative en tête = REL",

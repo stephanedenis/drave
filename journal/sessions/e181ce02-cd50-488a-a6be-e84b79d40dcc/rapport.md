@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 128.3 h |
+| Durée | 128.4 h |
 | Tours | 177 |
-| Messages | 2861 |
-| Appels d'outils | 2518 |
+| Messages | 2867 |
+| Appels d'outils | 2524 |
 | Fichiers touchés | 25 |
-| Commandes | 2073 |
+| Commandes | 2078 |
 | Sous-agents | 25 |
-| Commits | 305 |
+| Commits | 307 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9498,7 +9498,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 
 ### Tour 177 — oui, continue en autonomie jusqu'à demain 8h.
 
-*277 appels d'outils.* Actions notables :
+*283 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Créer le goal et inspecter le lexique du chunker
@@ -9514,11 +9514,11 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - bash — Lister les échecs anglais au span exact
 - bash — Étendre hors_span et mesurer
 - bash — Lister les échecs restants
-- … et 223 autres
+- … et 228 autres
 
 **Synthèse produite :**
 
-⏵ Je commite les versions finales de l'audit v10 et j'aligne les 11 docstrings
+⏵ Consolidation finale : la v11 avec dev/test, le README, l'état et le journal
 
 ## 3. Travail accompli
 
@@ -9622,7 +9622,7 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2033 autres
+- … et 2038 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10075,4 +10075,6 @@ Voulez-vous que j'enchaîne sur **le verbe du GV-phrase** ?
 - JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)" -- journal/2026-11-06/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "FO
 - B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183" -- tools/bl
 - PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183" -- tools/pensee/autotest.py reports/rapport-audi
+- B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES" -- reports/rapport-pensee-v11.md repo
+- B13 — LA CLÔTURE DE LA NUIT : EXACT 221/221, COUVERTURE 0,9247, DEV 152/152, TEST 69/69 ; 18 SPANS DONT 17 INATTEIGNABLES" -- reports/rapport-pensee-v11.md repo
 

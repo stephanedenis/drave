@@ -2038,3 +2038,199 @@ remaining control chars: []
 line: "  4 d'entre eux sont « hors périmètre » (récupérables en changeant le gold/le lexique), 13 sont"
   ```
 
+### 🤖 Assistant
+
+⏵ Derniers contrôles (porte tableaux, statut, tailles) avant remontée au parent
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && CIBLES=\"reports/rapport-dev-test-v10.md\" bash tools/porte-tableaux.sh >/tmp/v10/porte_tableaux.log 2>&1; echo \"porte tables exit=$?\"; tail -3 /tmp/v10/porte_tableaux.log; echo '---'; wc -l -w reports/rapport-dev-test-v10.md; ls - … [416 caractères tronqués]`
+
+  ```
+porte tables exit=0
+  ✅ 1 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3475 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-06)
+---
+  490  6077 reports/rapport-dev-test-v10.md
+-rw-r--r--. 1 stephane stephane 144821  6 nov 00:54 reports/pensee-dev-test-v10.json
+-rw-------. 1 stephane stephane  34289  6 nov 00:56 reports/rapport-dev-test-v10.md
+--- status (mes fichiers) ---
+?? reports/pensee-dev-test-v10.json
+?? reports/rapport-dev-test-v10.md
+--- status code/gold ---
+--- head ---
+653a7981
+  ```
+
+### 🤖 Assistant
+
+⏵ Le parent a commité l'essai (HEAD 653a7981) — vérification de l'état courant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo '--- HEAD stat ---'; git show --stat --oneline HEAD | head -15; echo '--- module diff depuis 710ec7f9 ---'; git diff --stat 710ec7f9..HEAD -- tools/bloc_linguistique.py; echo '--- mesure HEAD ---'; python3  … [1013 caractères tronqués]`
+
+  ```
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+68a8717b JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES)
+41cae3e5 JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS
+4d34c37a PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL
+77ed0856 THÉORIE ET JOURNAL — LE DÉCOUPAGE D'ABORD : LA COUVERTURE EST UN PLAFOND, UN GOLD SE VÉRIFIE AVANT DE JUGER
+--- HEAD stat ---
+653a7981 B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183
+ docs/pilotage/en-cours.md                          |    4 +-
+ journal/2026-11-06/README.md                       |   11 +-
+ journal/2026-11-06/distribue.md                    |    9 +-
+ journal/README.md                                  |    8 +-
+ .../3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md |  297 +++++
+ .../rapport.md                                     |   22 +-
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d4
+… [933 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la note d'arbre : l'essai est désormais commité en 653a7981
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 28, "offset": 1}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+1: # B13 — dev/test en v10 : dev 152/152, test 68/68, l'exact est saturé et le split ne bouge plus que par la couverture
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+4: > **Commit mesuré** : `710ec7f9` (branche `s/v7`) · **Verdict** : ✅ chiffres justes,
+5: > **3 énoncés de la fiche v10 à corriger**, et une **régression nouvelle** (`r303`).
+6: > **dev 152/152 (1,0000)**, **test 68/68 (1,0000)**, tout **220/220** ; couverture
+7: > **0,9325 / 0,8947 / 0,9205** ; F1 **0,5812 / 0,5890 / 0,5836** (vivant 612) ;
+8: > tête **0,7330 / 0,7337 / 0,7332** ; POS **0,7547 / 0,7656 / 0,7581**. **19 spans**
+9: > restants (9 REL, 6 SUB, 4 GP). Sur les trois découpages `%3==0/1/2`, l'exact/labels
+10: > reste **1,0 partout** ; l'étendue est de **0** sur le taux exact, **3,25 pts (dev) /
+11: > 6,03 pts (test)** sur la couverture, **1,07 / 2,09** sur la F1, **0,69 / 1,31** sur la
+12: > tête, **0,55 / 1,11** sur la POS — toutes dans la bande Monte-Carlo (p 0,30–0,86).
+13: > L'écart dev/test n'est plus un écart d'exactitude (**0**) ; la 
+… [1140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Arbre mouvant\\|Re-mesurer quand\" reports/rapport-dev-test-v10.md", "description": "Locate tree note bullets"}`
+
+  ```
+435:- **Arbre mouvant** : la mesure est épinglée sur `710ec7f9` ; `HEAD` est `68a8717b` et le
+470:6. **Re-mesurer quand le module sera stabilisé** : l'arbre sale est une exploration
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 14, "offset": 435}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 6, "offset": 468}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+435: - **Arbre mouvant** : la mesure est épinglée sur `710ec7f9` ; `HEAD` est `68a8717b` et le
+436:   module est sale. L'arbre sale essaie de corriger `s037` (R2) et `r303` (retrait de la garde
+437:   d'adverbe), mais il **perd `g017` et `r241`** : `g017` (« would come yesterday ») veut
+438:   l'adverbe **exclu**, `r288` (« comes tomorrow ») veut l'adverbe **inclus** ; `r241`
+439:   (« The day when we left ») devient SUB alors que le gold attend REL, parce que `est_sub`
+440:   ajoute `when` aux subordonnants. Le couple `g017`/`r288` est un **ballant** : une garde
+441:   unique ne peut pas satisfaire les deux sans une distinction sémantique (adverbe de phrase
+442:   vs complément du prédicat, ou lexique temporel). L'arbre sale donne **221/221, 18 spans**,
+443:   mais ce n'est pas l'état mesuré ici.
+444: - **Rejeu des anciens commits** : les modules sont copiés dans `/tmp` avec `RACINE` du dépôt ;
+445:   le `generateur` S est celui du dépôt (**le même pour tous les rejeux**), et le gold n'a pas
+446:   changé entre `69bd865e` et `710ec7f9` (vérifié : aucun diff de `
+… [276 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+468:    la source** avant de conclure sur une langue. La couverture est la mesure primaire ; le
+469:    taux exact est saturé.
+470: 6. **Re-mesurer quand le module sera stabilisé** : l'arbre sale est une exploration
+471:    (`g017`/`r241`), pas l'état de la fiche.
+472: 
+473: ## 10. Fichiers
+
+(Showing lines 468-473 of 490. Use offset=474 to continue.)
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l'ancrage d'arbre dans la fiche (HEAD 653a7981)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "> **Ancrage d'arbre.** La mesure est faite sur le **module épinglé de `710ec7f9`** (copie\n> `/tmp`, `RACINE` du dépôt), pas sur l'arbre courant : depuis, `HEAD` a avancé à `653a7981`\n> ( … [1300 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 14, "offset": 438}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+438:   type (y compris les non-cibles) et inclut GN/GV dans l'agrégat. Elle ne remplace pas
+439:   l'exact/couverture. Les types ADJ/ADV/PONCT, jamais prédits, pèsent 74 fn.
+440: - **Arbre mouvant** : la mesure est épinglée sur `710ec7f9` ; `HEAD` est `68a8717b` et le
+441:   module est sale. L'arbre sale essaie de corriger `s037` (R2) et `r303` (retrait de la garde
+442:   d'adverbe), mais il **perd `g017` et `r241`** : `g017` (« would come yesterday ») veut
+443:   l'adverbe **exclu**, `r288` (« comes tomorrow ») veut l'adverbe **inclus** ; `r241`
+444:   (« The day when we left ») devient SUB alors que le gold attend REL, parce que `est_sub`
+445:   ajoute `when` aux subordonnants. Le couple `g017`/`r288` est un **ballant** : une garde
+446:   unique ne peut pas satisfaire les deux sans une distinction sémantique (adverbe de phrase
+447:   vs complément du prédicat, ou lexique temporel). L'arbre sale donne **221/221, 18 spans**,
+448:   mais ce n'est pas l'état mesuré ici.
+449: - **Rejeu des anciens commits** : les modules sont copiés dans `/tmp` avec `RACINE` du dépô
+… [274 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "- **Arbre mouvant** : la mesure est épinglée sur `710ec7f9` ; `HEAD` a avancé à `653a7981`,\n  qui committe l'essai R2 + retrait de la garde d'adverbe. Cet état corrige `s037` (R2) et\n  ` … [1490 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Re-mesurer quand\" reports/rapport-dev-test-v10.md", "description": "Locate final point"}`
+
+  ```
+476:6. **Re-mesurer quand le module sera stabilisé** : l'arbre sale est une exploration
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "limit": 4, "offset": 476}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md</path>
+<type>file</type>
+<content>
+476: 6. **Re-mesurer quand le module sera stabilisé** : l'arbre sale est une exploration
+477:    (`g017`/`r241`), pas l'état de la fiche.
+478: 
+479: ## 10. Fichiers
+
+(Showing lines 476-479 of 496. Use offset=480 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md", "new_string": "6. **Re-mesurer quand le module sera stabilisé** : l'état `653a7981` est une exploration\n   (`g017`/`r241`), pas l'état de la fiche.", "old_string": "6. **Re-mesurer quand le module sera  … [93 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-dev-test-v10.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour du JSON (ancrage 653a7981, réserve d'arbre)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/pensee-dev-test-v10.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['meta']['ancrage']=\"commit 710ec7f9 ; HEAD ultérieur 653a7981 (essai R2 + retrait de la gard … [1255 caractères tronqués]`
+
+  ```
+ancrage: commit 710ec7f9 ; HEAD ultérieur 653a7981 (essai R2 + retrait de la garde d'adverbe, commité) non mesuré ici
+reserve: l'arbre a bougé après la mesure : HEAD 653a7981 (68a8717b puis 653a7981) ; l'essai R2 + retrait de la garde d'adverbe y est commité. Cet état donne, mesuré, dev 152/152, test 69/69, tout 221/221, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, 18 spans (g017, r035, r241, r255, r264, s010, s027, s035, s044, s061, s065, s112, s114, s125, s141, s146, s148, s160 ; s037, r303, r288 récupérés) — ce n'est pas l'état 710ec7f9 mesuré ici
+octets 145289
+json OK
+  ```
+

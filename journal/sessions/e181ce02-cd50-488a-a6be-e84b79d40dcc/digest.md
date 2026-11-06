@@ -48653,3 +48653,87 @@ MM reports/rapport-audit-v10.md
 background job bash-2568 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep dev-test-v10) finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep dev-test-v10; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; 18 spans ; vagues 5-7 au plan-travail.\", \" ; 18 spans ; audits A19/A21 intégrés.\ … [1089 caractères tronqués]`
+
+  ```
+pensee-dev-test-v10.json
+rapport-dev-test-v10.md
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[still running after 60000ms; moved to background job bash-2581]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-2581", "timeout_ms": 900000, "wait": true}`
+
+  ```
+create mode 100644 journal/2026-11-06/mesures.md
+COMMIT OK 1
+9a1b3914 PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La re-mesure dev/test v10 est livrée : je lis et j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-dev-test-v10.md", "description": "Lire dev/test v10"}`
+
+  ```
+# B13 — dev/test en v10 : dev 152/152, test 68/68, l'exact est saturé et le split ne bouge plus que par la couverture
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-05 ·
+> **Commit mesuré** : `710ec7f9` (branche `s/v7`) · **Verdict** : ✅ chiffres justes,
+> **3 énoncés de la fiche v10 à corriger**, et une **régression nouvelle** (`r303`).
+> **dev 152/152 (1,0000)**, **test 68/68 (1,0000)**, tout **220/220** ; couverture
+> **0,9325 / 0,8947 / 0,9205** ; F1 **0,5812 / 0,5890 / 0,5836** (vivant 612) ;
+> tête **0,7330 / 0,7337 / 0,7332** ; POS **0,7547 / 0,7656 / 0,7581**. **19 spans**
+> restants (9 REL, 6 SUB, 4 GP). Sur les trois découpages `%3==0/1/2`, l'exact/labels
+> reste **1,0 partout** ; l'étendue est de **0** sur le taux exact, **3,25 pts (dev) /
+> 6,03 pts (test)** sur la couverture, **1,07 / 2,09** sur la F1, **0,69 / 1,31** sur la
+> tête, **0,55 / 1,11** sur la POS — toutes dans la bande Monte-Carlo (p 0,30–0,86).
+> L'écart dev/test n'est plus un écart d'exactitude (**0**) ; la couverture **+3,78 pts**
+> au canonique **s'inverse** aux décalés (**−5,51 / +2,19**) et n'est pas significative
+> (z=1,005 ; p=0,315).
+>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfrom tools.tests.linguistique.gold_split import dev, tes … [402 caractères tronqués]`
+
+  ```
+dev exact 152 / 152 | couv 0.9325 | F1 0.5812 | tête 0.7324 | POS 0.7547
+test exact 69 / 69 | couv 0.9079 | F1 0.5914 | tête 0.7344 | POS 0.7656
+tout exact 221 / 221 | couv 0.9247 | F1 0.5843 | tête 0.733 | POS 0.7581
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation finale : la v11 avec dev/test, le README, l'état et le journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-pensee-v11.md'); t=p.read_text()\nt=t.replace(\"> **F1 0,5843** (union), **18 spans** (9 REL, 5 SUB, 4 GP), **top-k 220/239 (0,9205)**.\",\n\"> **F1 0,5843** (un … [1933 caractères tronqués]`
+
+  ```
+v11 + README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"**État au 05/11 21 h 20.\")), None)\nif ligne:\n    t=t.replace(ligne, \"**É … [2943 caractères tronqués]`
+
+  ```
+roadmap + plan + journal
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+9a1b3914 PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183
+ven 06 nov 2026 01:00:32 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 01 h 15 HNE\", t)\np.write_text( … [1014 caractères tronqués]`

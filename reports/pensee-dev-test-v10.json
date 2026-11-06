@@ -1,0 +1,7394 @@
+{
+ "meta": {
+  "ligne": "B13",
+  "commit": "710ec7f9",
+  "sha": "710ec7f982ea3a85a3ca2cb8afc8e3390a129c9c",
+  "branche": "s/v7",
+  "date": "2026-11-05",
+  "verdict": "dev/test re-mesurés ; stabilité vérifiée ; 3 écarts de fiche",
+  "ancrage": "commit 710ec7f9 ; HEAD ultérieur 653a7981 (essai R2 + retrait de la garde d'adverbe, commité) non mesuré ici",
+  "aucun_commit": true,
+  "aucun_fichier_existant_modifie": true,
+  "fichiers": [
+   "reports/rapport-dev-test-v10.md",
+   "reports/pensee-dev-test-v10.json"
+  ],
+  "note_fiche_v10_corrigee": "la fiche v10 a été corrigée dans 653a7981 (message « audit v10 intégré, v10 corrigée ») ; les trois énoncés de § 6.1 restent l'audit de l'état 710ec7f9"
+ },
+ "dispositif": {
+  "gold_vivant": 612,
+  "gold_gele": 602,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "cibles": {
+   "REL": 74,
+   "SUB": 69,
+   "GP": 96,
+   "total": 239
+  },
+  "split": "crc32(str(id)) % 3 == 0 -> test ; dev = complement",
+  "mesure": "evaluer_bloc(Heuristique(), sous-ensemble)",
+  "validation": "0 écart vs evaluer_bloc sur 612/dev/test",
+  "bases": {
+   "vivant_612": {
+    "f1": 0.5836,
+    "tete": 0.7332,
+    "pos": 0.7581
+   },
+   "gele_602": {
+    "f1": 0.588,
+    "tete": 0.7388,
+    "pos": 0.7603
+   },
+   "exact_couverture": "identiques sur les deux bases (les 10 phrases ajoutées après le gel n'ont pas de cible)"
+  },
+  "saturation_exact": "220/220 labels exacts ; le taux exact vaut 1,0 dans tout sous-ensemble ; la couverture est le seul levier"
+ },
+ "synthese": {
+  "dev": {
+   "phrases": 422,
+   "cibles": 163,
+   "labels": 152,
+   "exact": 152,
+   "couverture": 0.9325,
+   "f1": 0.5812,
+   "tete": 0.733,
+   "pos": 0.7547
+  },
+  "test": {
+   "phrases": 190,
+   "cibles": 76,
+   "labels": 68,
+   "exact": 68,
+   "couverture": 0.8947,
+   "f1": 0.589,
+   "tete": 0.7337,
+   "pos": 0.7656
+  },
+  "tout": {
+   "phrases": 612,
+   "cibles": 239,
+   "labels": 220,
+   "exact": 220,
+   "couverture": 0.9205,
+   "f1": 0.5836,
+   "tete": 0.7332,
+   "pos": 0.7581
+  },
+  "gele_602": {
+   "phrases": 602,
+   "pos": 0.7603,
+   "f1": 0.588,
+   "tete": 0.7388,
+   "labels": 220,
+   "exact": 220,
+   "couverture": 0.9205,
+   "topk": 219
+  },
+  "ecart_dev_test": {
+   "exact_taux": 0.0,
+   "couverture": 0.0378,
+   "f1": -0.0078,
+   "tete": -0.0007,
+   "pos": -0.0109
+  },
+  "stabilite": {
+   "exact_taux_span": {
+    "dev": 0.0,
+    "test": 0.0
+   },
+   "exact": {
+    "dev": 18,
+    "test": 18
+   },
+   "labels": {
+    "dev": 18,
+    "test": 18
+   },
+   "couverture": {
+    "dev": 0.0325,
+    "test": 0.0603
+   },
+   "f1": {
+    "dev": 0.0107,
+    "test": 0.0209
+   },
+   "tete": {
+    "dev": 0.0069,
+    "test": 0.0131
+   },
+   "pos": {
+    "dev": 0.0055,
+    "test": 0.0111
+   }
+  },
+  "corrections": [
+   "la garde DET du GP est la seule correction de code du commit 710ec7f9 sur le bloc ; elle fixe r153 (+1 label, test) et retire 4 faux positifs dans g004 et r147",
+   "la correction -ée annoncée est inerte : la règle existe depuis a408a909, `acheter` n'est pas dans VERBES_CONNUS, `achetée` n'est pas reconnu et r255 reste perdu ; le diff 710ec7f9 sur le bloc ne touche pas `_est_verbe`",
+   "r303 (« car il est tard ») est une régression nouvelle de 160d08ca : la garde `predicat_vu` exclut l'adverbe final, la SUB devient [8:18] au lieu de [8:23] ; g017 est récupéré par la même garde, r303 perdu",
+   "s037 reste perdu : la règle R2 (relatif initial sans précédent) n'est pas intégrée ; la décomposition correcte des 19 est 17 inatteignables + s037 (R2) + r303 (régression R1c), pas 17 + r255 + r264",
+   "la fiche v10 compare 0,5822 (F1 vivante v9) à 0,5880 (F1 gelée v10) ; sur base gelée, v9 0,5866 -> v10 0,5880 (+0,0014) ; sur base vivante, 0,5822 -> 0,5836 (+0,0014)"
+  ],
+  "reserves": [
+   "in-sample : les règles ont été dessinées sur tout le gold, test compris ; le split mesure la fragilité au découpage, pas le surajustement global",
+   "exact/labels saturé à 1,0 : 220/220 ; le taux exact est identique dans tous les sous-ensembles et ne peut plus distinguer dev et test ; la couverture (19 spans perdus) est le seul levier restant",
+   "petit échantillon : 68 labels au test, 1 cas = 1,47 point ; REL test 17 cibles, REL/en test 5, hand test 3 ; les IC Wilson se recouvrent",
+   "confond source/langue : le synthétique est français seulement ; la couverture française globale (0,8874) est un effet de composition ; sur le réel, fr 0,9688 vs en 0,9773 (écart 0,85 point, p=0,72)",
+   "l'arbre a bougé après la mesure : HEAD 653a7981 (68a8717b puis 653a7981) ; l'essai R2 + retrait de la garde d'adverbe y est commité. Cet état donne, mesuré, dev 152/152, test 69/69, tout 221/221, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, 18 spans (g017, r035, r241, r255, r264, s010, s027, s035, s044, s061, s065, s112, s114, s125, s141, s146, s148, s160 ; s037, r303, r288 récupérés) — ce n'est pas l'état 710ec7f9 mesuré ici"
+  ]
+ },
+ "validation": {
+  "tout": {
+   "phrases": 612,
+   "reference": {
+    "pos": {
+     "exactitude": 0.7581,
+     "exactitude_ferme": 0.9004,
+     "exactitude_ouvert": 0.6234,
+     "tokens": 3179,
+     "confusions": {
+      "ADJ": {
+       "ADJ": 50,
+       "NOUN": 80,
+       "VERB": 4
+      },
+      "ADV": {
+       "ADV": 117,
+       "NOUN": 20,
+       "PREP": 2,
+       "ADJ": 1,
+       "?": 1
+      },
+      "AUX": {
+       "PREP": 4,
+       "AUX": 118,
+       "?": 3,
+       "NOUN": 3
+      },
+      "CONJ": {
+       "CONJ": 44,
+       "PRON": 25,
+       "DET": 12,
+       "?": 13,
+       "PREP": 2,
+       "NOUN": 2
+      },
+      "DET": {
+       "DET": 586,
+       "?": 2
+      },
+      "NOUN": {
+       "NOUN": 657,
+       "ADJ": 17,
+       "VERB": 7,
+       "?": 1
+      },
+      "NUM": {
+       "NUM": 2
+      },
+      "PONCT": {
+       "?": 25
+      },
+      "PREP": {
+       "PREP": 114
+      },
+      "PRON": {
+       "PRON": 411,
+       "NOUN": 8,
+       "?": 30,
+       "DET": 25,
+       "CONJ": 1
+      },
+      "VERB": {
+       "VERB": 311,
+       "NOUN": 450,
+       "ADJ": 5,
+       "PREP": 2,
+       "?": 16,
+       "AUX": 7,
+       "ADV": 1
+      }
+     }
+    },
+    "syntagme": {
+     "precision": 0.6275,
+     "rappel": 0.5454,
+     "f1": 0.5836,
+     "tp": 1016,
+     "fp": 603,
+     "fn": 847,
+     "tete": {
+      "precision": 0.8089,
+      "rappel": 0.6704,
+      "f1": 0.7332,
+      "tp": 1249,
+      "fp": 295,
+      "fn": 614
+     }
+    },
+    "pragmatique": {
+     "acte": 0.9967,
+     "negation": 0.9771,
+     "modalite": 0.9886,
+     "double_sens": 0.9444
+    },
+    "fraction_semantique": 0.5537,
+    "attachement": {
+     "cibles": 239,
+     "labels": 220,
+     "top1": 220,
+     "topk": 219,
+     "exact": 220,
+     "top1_taux": 0.9205,
+     "topk_taux": 0.9163,
+     "exact_taux": 0.9205,
+     "exact_any": 220,
+     "exact_any_taux_span": 1.0,
+     "top1_taux_span": 1.0,
+     "topk_taux_span": 0.9955,
+     "topk_exact": 219,
+     "topk_exact_taux": 0.9163,
+     "topk_exact_taux_span": 0.9955,
+     "exact_taux_span": 1.0,
+     "verbe": {
+      "cibles": 149,
+      "justes": 149,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 71,
+      "justes": 71,
+      "taux": 1.0
+     },
+     "couverture": 0.9205,
+     "par_langue": {
+      "fr": {
+       "cibles": 151,
+       "labels": 134,
+       "exact": 134,
+       "topk": 133,
+       "exact_taux_span": 1.0
+      },
+      "en": {
+       "cibles": 88,
+       "labels": 86,
+       "exact": 86,
+       "topk": 86,
+       "exact_taux_span": 1.0
+      }
+     }
+    },
+    "attachement_tete": {
+     "cibles": 220,
+     "labels": 220,
+     "top1": 220,
+     "topk": 219,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9955,
+     "couverture": 1.0
+    }
+   },
+   "harnais": {
+    "pos": {
+     "exactitude": 0.7581,
+     "exactitude_ferme": 0.9004,
+     "exactitude_ouvert": 0.6234,
+     "justes": 2410,
+     "tokens": 3179
+    },
+    "syntagme": {
+     "precision": 0.6275,
+     "rappel": 0.5454,
+     "f1": 0.5836,
+     "tp": 1016,
+     "fp": 603,
+     "fn": 847
+    },
+    "pragmatique": {
+     "acte": 0.9967,
+     "negation": 0.9771,
+     "modalite": 0.9886,
+     "double_sens": 0.9444
+    },
+    "fraction_semantique": 0.5537,
+    "attachement": {
+     "cibles": 239,
+     "labels": 220,
+     "exact": 220,
+     "exact_any": 220,
+     "top1": 220,
+     "topk": 219,
+     "topk_exact": 219,
+     "couverture": 0.9205,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9205,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9205,
+     "topk_taux": 0.9163,
+     "topk_taux_span": 0.9955,
+     "topk_exact_taux": 0.9163,
+     "verbe": {
+      "cibles": 149,
+      "justes": 149,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 71,
+      "justes": 71,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 220,
+     "labels": 220,
+     "top1": 220,
+     "topk": 219,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9955,
+     "couverture": 1.0
+    }
+   },
+   "ecart_max": 0.0
+  },
+  "dev": {
+   "phrases": 422,
+   "reference": {
+    "pos": {
+     "exactitude": 0.7547,
+     "exactitude_ferme": 0.8952,
+     "exactitude_ouvert": 0.6201,
+     "tokens": 2185,
+     "confusions": {
+      "ADJ": {
+       "ADJ": 35,
+       "NOUN": 49,
+       "VERB": 4
+      },
+      "ADV": {
+       "ADV": 85,
+       "NOUN": 12,
+       "PREP": 2,
+       "?": 1
+      },
+      "AUX": {
+       "PREP": 4,
+       "AUX": 83,
+       "?": 2,
+       "NOUN": 3
+      },
+      "CONJ": {
+       "CONJ": 30,
+       "PRON": 18,
+       "DET": 9,
+       "?": 9,
+       "PREP": 2,
+       "NOUN": 1
+      },
+      "DET": {
+       "DET": 402,
+       "?": 2
+      },
+      "NOUN": {
+       "NOUN": 455,
+       "ADJ": 11,
+       "VERB": 4,
+       "?": 1
+      },
+      "PONCT": {
+       "?": 18
+      },
+      "PREP": {
+       "PREP": 73
+      },
+      "PRON": {
+       "PRON": 284,
+       "?": 20,
+       "NOUN": 5,
+       "CONJ": 1,
+       "DET": 21
+      },
+      "VERB": {
+       "VERB": 202,
+       "NOUN": 316,
+       "ADJ": 4,
+       "PREP": 1,
+       "AUX": 4,
+       "?": 11,
+       "ADV": 1
+      }
+     }
+    },
+    "syntagme": {
+     "precision": 0.6289,
+     "rappel": 0.5401,
+     "f1": 0.5812,
+     "tp": 700,
+     "fp": 413,
+     "fn": 596,
+     "tete": {
+      "precision": 0.8116,
+      "rappel": 0.6682,
+      "f1": 0.733,
+      "tp": 866,
+      "fp": 201,
+      "fn": 430
+     }
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9787,
+     "modalite": 0.9929,
+     "double_sens": 0.9336
+    },
+    "fraction_semantique": 0.5509,
+    "attachement": {
+     "cibles": 163,
+     "labels": 152,
+     "top1": 152,
+     "topk": 152,
+     "exact": 152,
+     "top1_taux": 0.9325,
+     "topk_taux": 0.9325,
+     "exact_taux": 0.9325,
+     "exact_any": 152,
+     "exact_any_taux_span": 1.0,
+     "top1_taux_span": 1.0,
+     "topk_taux_span": 1.0,
+     "topk_exact": 152,
+     "topk_exact_taux": 0.9325,
+     "topk_exact_taux_span": 1.0,
+     "exact_taux_span": 1.0,
+     "verbe": {
+      "cibles": 97,
+      "justes": 97,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 55,
+      "justes": 55,
+      "taux": 1.0
+     },
+     "couverture": 0.9325,
+     "par_langue": {
+      "fr": {
+       "cibles": 101,
+       "labels": 91,
+       "exact": 91,
+       "topk": 91,
+       "exact_taux_span": 1.0
+      },
+      "en": {
+       "cibles": 62,
+       "labels": 61,
+       "exact": 61,
+       "topk": 61,
+       "exact_taux_span": 1.0
+      }
+     }
+    },
+    "attachement_tete": {
+     "cibles": 152,
+     "labels": 152,
+     "top1": 152,
+     "topk": 152,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "harnais": {
+    "pos": {
+     "exactitude": 0.7547,
+     "exactitude_ferme": 0.8952,
+     "exactitude_ouvert": 0.6201,
+     "justes": 1649,
+     "tokens": 2185
+    },
+    "syntagme": {
+     "precision": 0.6289,
+     "rappel": 0.5401,
+     "f1": 0.5812,
+     "tp": 700,
+     "fp": 413,
+     "fn": 596
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9787,
+     "modalite": 0.9929,
+     "double_sens": 0.9336
+    },
+    "fraction_semantique": 0.5509,
+    "attachement": {
+     "cibles": 163,
+     "labels": 152,
+     "exact": 152,
+     "exact_any": 152,
+     "top1": 152,
+     "topk": 152,
+     "topk_exact": 152,
+     "couverture": 0.9325,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9325,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9325,
+     "topk_taux": 0.9325,
+     "topk_taux_span": 1.0,
+     "topk_exact_taux": 0.9325,
+     "verbe": {
+      "cibles": 97,
+      "justes": 97,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 55,
+      "justes": 55,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 152,
+     "labels": 152,
+     "top1": 152,
+     "topk": 152,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "ecart_max": 0.0
+  },
+  "test": {
+   "phrases": 190,
+   "reference": {
+    "pos": {
+     "exactitude": 0.7656,
+     "exactitude_ferme": 0.9119,
+     "exactitude_ouvert": 0.6306,
+     "tokens": 994,
+     "confusions": {
+      "ADJ": {
+       "ADJ": 15,
+       "NOUN": 31
+      },
+      "ADV": {
+       "ADV": 32,
+       "NOUN": 8,
+       "ADJ": 1
+      },
+      "AUX": {
+       "AUX": 35,
+       "?": 1
+      },
+      "CONJ": {
+       "PRON": 7,
+       "DET": 3,
+       "CONJ": 14,
+       "?": 4,
+       "NOUN": 1
+      },
+      "DET": {
+       "DET": 184
+      },
+      "NOUN": {
+       "NOUN": 202,
+       "VERB": 3,
+       "ADJ": 6
+      },
+      "NUM": {
+       "NUM": 2
+      },
+      "PONCT": {
+       "?": 7
+      },
+      "PREP": {
+       "PREP": 41
+      },
+      "PRON": {
+       "PRON": 127,
+       "NOUN": 3,
+       "DET": 4,
+       "?": 10
+      },
+      "VERB": {
+       "VERB": 109,
+       "NOUN": 134,
+       "ADJ": 1,
+       "?": 5,
+       "AUX": 3,
+       "PREP": 1
+      }
+     }
+    },
+    "syntagme": {
+     "precision": 0.6245,
+     "rappel": 0.5573,
+     "f1": 0.589,
+     "tp": 316,
+     "fp": 190,
+     "fn": 251,
+     "tete": {
+      "precision": 0.8029,
+      "rappel": 0.6755,
+      "f1": 0.7337,
+      "tp": 383,
+      "fp": 94,
+      "fn": 184
+     }
+    },
+    "pragmatique": {
+     "acte": 0.9895,
+     "negation": 0.9737,
+     "modalite": 0.9789,
+     "double_sens": 0.9684
+    },
+    "fraction_semantique": 0.56,
+    "attachement": {
+     "cibles": 76,
+     "labels": 68,
+     "top1": 68,
+     "topk": 67,
+     "exact": 68,
+     "top1_taux": 0.8947,
+     "topk_taux": 0.8816,
+     "exact_taux": 0.8947,
+     "exact_any": 68,
+     "exact_any_taux_span": 1.0,
+     "top1_taux_span": 1.0,
+     "topk_taux_span": 0.9853,
+     "topk_exact": 67,
+     "topk_exact_taux": 0.8816,
+     "topk_exact_taux_span": 0.9853,
+     "exact_taux_span": 1.0,
+     "verbe": {
+      "cibles": 52,
+      "justes": 52,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 16,
+      "justes": 16,
+      "taux": 1.0
+     },
+     "couverture": 0.8947,
+     "par_langue": {
+      "fr": {
+       "cibles": 50,
+       "labels": 43,
+       "exact": 43,
+       "topk": 42,
+       "exact_taux_span": 1.0
+      },
+      "en": {
+       "cibles": 26,
+       "labels": 25,
+       "exact": 25,
+       "topk": 25,
+       "exact_taux_span": 1.0
+      }
+     }
+    },
+    "attachement_tete": {
+     "cibles": 68,
+     "labels": 68,
+     "top1": 68,
+     "topk": 67,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9853,
+     "couverture": 1.0
+    }
+   },
+   "harnais": {
+    "pos": {
+     "exactitude": 0.7656,
+     "exactitude_ferme": 0.9119,
+     "exactitude_ouvert": 0.6306,
+     "justes": 761,
+     "tokens": 994
+    },
+    "syntagme": {
+     "precision": 0.6245,
+     "rappel": 0.5573,
+     "f1": 0.589,
+     "tp": 316,
+     "fp": 190,
+     "fn": 251
+    },
+    "pragmatique": {
+     "acte": 0.9895,
+     "negation": 0.9737,
+     "modalite": 0.9789,
+     "double_sens": 0.9684
+    },
+    "fraction_semantique": 0.56,
+    "attachement": {
+     "cibles": 76,
+     "labels": 68,
+     "exact": 68,
+     "exact_any": 68,
+     "top1": 68,
+     "topk": 67,
+     "topk_exact": 67,
+     "couverture": 0.8947,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8947,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.8947,
+     "topk_taux": 0.8816,
+     "topk_taux_span": 0.9853,
+     "topk_exact_taux": 0.8816,
+     "verbe": {
+      "cibles": 52,
+      "justes": 52,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 16,
+      "justes": 16,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 68,
+     "labels": 68,
+     "top1": 68,
+     "topk": 67,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9853,
+     "couverture": 1.0
+    }
+   },
+   "ecart_max": 0.0
+  }
+ },
+ "valide_contre_evaluer_gold": true,
+ "global": {
+  "phrases": 612,
+  "tokens": 3179,
+  "pos": {
+   "exactitude": 0.7581,
+   "exactitude_ferme": 0.9004,
+   "exactitude_ouvert": 0.6234,
+   "justes": 2410,
+   "tokens": 3179
+  },
+  "syntagme": {
+   "precision": 0.6275,
+   "rappel": 0.5454,
+   "f1": 0.5836,
+   "tp": 1016,
+   "fp": 603,
+   "fn": 847
+  },
+  "tete": {
+   "precision": 0.8089,
+   "rappel": 0.6704,
+   "f1": 0.7332,
+   "tp": 1249,
+   "fp": 295,
+   "fn": 614
+  },
+  "pragmatique": {
+   "acte": 0.9967,
+   "negation": 0.9771,
+   "modalite": 0.9886,
+   "double_sens": 0.9444
+  },
+  "fraction_semantique": 0.5537,
+  "attachement": {
+   "cibles": 239,
+   "labels": 220,
+   "exact": 220,
+   "exact_any": 220,
+   "top1": 220,
+   "topk": 219,
+   "topk_exact": 219,
+   "couverture": 0.9205,
+   "exact_taux_span": 1.0,
+   "exact_taux_cibles": 0.9205,
+   "exact_any_taux_span": 1.0,
+   "top1_taux": 0.9205,
+   "topk_taux": 0.9163,
+   "topk_taux_span": 0.9955,
+   "topk_exact_taux": 0.9163,
+   "verbe": {
+    "cibles": 149,
+    "justes": 149,
+    "taux": 1.0
+   },
+   "nom": {
+    "cibles": 71,
+    "justes": 71,
+    "taux": 1.0
+   }
+  },
+  "attachement_tete": {
+   "cibles": 220,
+   "labels": 220,
+   "top1": 220,
+   "topk": 219,
+   "top1_taux": 1.0,
+   "topk_taux": 0.9955,
+   "couverture": 1.0
+  },
+  "perdus": {
+   "total": 19,
+   "par_type": {
+    "REL": 9,
+    "SUB": 6,
+    "GP": 4
+   },
+   "par_langue": {
+    "en": 2,
+    "fr": 17
+   },
+   "par_source": {
+    "reel": 5,
+    "synthetique": 14
+   }
+  },
+  "par_langue": {
+   "fr": {
+    "cibles": 151,
+    "labels": 134,
+    "exact": 134,
+    "exact_any": 134,
+    "top1": 134,
+    "topk": 133,
+    "topk_exact": 133,
+    "couverture": 0.8874,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.8874,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.8874,
+    "topk_taux": 0.8808,
+    "topk_taux_span": 0.9925,
+    "topk_exact_taux": 0.8808,
+    "verbe": {
+     "cibles": 92,
+     "justes": 92,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 42,
+     "justes": 42,
+     "taux": 1.0
+    },
+    "phrases": 402
+   },
+   "en": {
+    "cibles": 88,
+    "labels": 86,
+    "exact": 86,
+    "exact_any": 86,
+    "top1": 86,
+    "topk": 86,
+    "topk_exact": 86,
+    "couverture": 0.9773,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9773,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9773,
+    "topk_taux": 0.9773,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.9773,
+    "verbe": {
+     "cibles": 57,
+     "justes": 57,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 29,
+     "justes": 29,
+     "taux": 1.0
+    },
+    "phrases": 210
+   }
+  },
+  "par_type": {
+   "REL": {
+    "cibles": 74,
+    "labels": 65,
+    "exact": 65,
+    "exact_any": 65,
+    "top1": 65,
+    "topk": 65,
+    "topk_exact": 65,
+    "couverture": 0.8784,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.8784,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.8784,
+    "topk_taux": 0.8784,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.8784,
+    "verbe": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    },
+    "nom": {
+     "cibles": 65,
+     "justes": 65,
+     "taux": 1.0
+    },
+    "syntagme": {
+     "precision": 0.6915,
+     "rappel": 0.8784,
+     "f1": 0.7738,
+     "tp": 65,
+     "fp": 29,
+     "fn": 9
+    },
+    "tete": {
+     "precision": 0.9241,
+     "rappel": 0.9865,
+     "f1": 0.9542,
+     "tp": 73,
+     "fp": 6,
+     "fn": 1
+    }
+   },
+   "SUB": {
+    "cibles": 69,
+    "labels": 63,
+    "exact": 63,
+    "exact_any": 63,
+    "top1": 63,
+    "topk": 62,
+    "topk_exact": 62,
+    "couverture": 0.913,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.913,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.913,
+    "topk_taux": 0.8986,
+    "topk_taux_span": 0.9841,
+    "topk_exact_taux": 0.8986,
+    "verbe": {
+     "cibles": 63,
+     "justes": 63,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    },
+    "syntagme": {
+     "precision": 0.8889,
+     "rappel": 0.9143,
+     "f1": 0.9014,
+     "tp": 64,
+     "fp": 8,
+     "fn": 6
+    },
+    "tete": {
+     "precision": 0.9437,
+     "rappel": 0.9571,
+     "f1": 0.9504,
+     "tp": 67,
+     "fp": 4,
+     "fn": 3
+    }
+   },
+   "GP": {
+    "cibles": 96,
+    "labels": 92,
+    "exact": 92,
+    "exact_any": 92,
+    "top1": 92,
+    "topk": 92,
+    "topk_exact": 92,
+    "couverture": 0.9583,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9583,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9583,
+    "topk_taux": 0.9583,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.9583,
+    "verbe": {
+     "cibles": 86,
+     "justes": 86,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 6,
+     "justes": 6,
+     "taux": 1.0
+    },
+    "syntagme": {
+     "precision": 0.771,
+     "rappel": 0.9619,
+     "f1": 0.8559,
+     "tp": 101,
+     "fp": 30,
+     "fn": 4
+    },
+    "tete": {
+     "precision": 0.7829,
+     "rappel": 0.9619,
+     "f1": 0.8632,
+     "tp": 101,
+     "fp": 28,
+     "fn": 4
+    }
+   }
+  },
+  "par_type_langue": {
+   "REL/fr": {
+    "cibles": 46,
+    "labels": 38,
+    "exact": 38,
+    "exact_any": 38,
+    "top1": 38,
+    "topk": 38,
+    "topk_exact": 38,
+    "couverture": 0.8261,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.8261,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.8261,
+    "topk_taux": 0.8261,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.8261,
+    "verbe": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    },
+    "nom": {
+     "cibles": 38,
+     "justes": 38,
+     "taux": 1.0
+    }
+   },
+   "REL/en": {
+    "cibles": 28,
+    "labels": 27,
+    "exact": 27,
+    "exact_any": 27,
+    "top1": 27,
+    "topk": 27,
+    "topk_exact": 27,
+    "couverture": 0.9643,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9643,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9643,
+    "topk_taux": 0.9643,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.9643,
+    "verbe": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    },
+    "nom": {
+     "cibles": 27,
+     "justes": 27,
+     "taux": 1.0
+    }
+   },
+   "SUB/fr": {
+    "cibles": 43,
+    "labels": 38,
+    "exact": 38,
+    "exact_any": 38,
+    "top1": 38,
+    "topk": 37,
+    "topk_exact": 37,
+    "couverture": 0.8837,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.8837,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.8837,
+    "topk_taux": 0.8605,
+    "topk_taux_span": 0.9737,
+    "topk_exact_taux": 0.8605,
+    "verbe": {
+     "cibles": 38,
+     "justes": 38,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    }
+   },
+   "SUB/en": {
+    "cibles": 26,
+    "labels": 25,
+    "exact": 25,
+    "exact_any": 25,
+    "top1": 25,
+    "topk": 25,
+    "topk_exact": 25,
+    "couverture": 0.9615,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9615,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9615,
+    "topk_taux": 0.9615,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.9615,
+    "verbe": {
+     "cibles": 25,
+     "justes": 25,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 0,
+     "justes": 0,
+     "taux": null
+    }
+   },
+   "GP/fr": {
+    "cibles": 62,
+    "labels": 58,
+    "exact": 58,
+    "exact_any": 58,
+    "top1": 58,
+    "topk": 58,
+    "topk_exact": 58,
+    "couverture": 0.9355,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9355,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9355,
+    "topk_taux": 0.9355,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.9355,
+    "verbe": {
+     "cibles": 54,
+     "justes": 54,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 4,
+     "justes": 4,
+     "taux": 1.0
+    }
+   },
+   "GP/en": {
+    "cibles": 34,
+    "labels": 34,
+    "exact": 34,
+    "exact_any": 34,
+    "top1": 34,
+    "topk": 34,
+    "topk_exact": 34,
+    "couverture": 1.0,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 1.0,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 1.0,
+    "verbe": {
+     "cibles": 32,
+     "justes": 32,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 2,
+     "justes": 2,
+     "taux": 1.0
+    }
+   }
+  },
+  "par_source": {
+   "hand": {
+    "cibles": 13,
+    "labels": 13,
+    "exact": 13,
+    "exact_any": 13,
+    "top1": 13,
+    "topk": 13,
+    "topk_exact": 13,
+    "couverture": 1.0,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 1.0,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 1.0,
+    "topk_taux": 1.0,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 1.0,
+    "verbe": {
+     "cibles": 8,
+     "justes": 8,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 5,
+     "justes": 5,
+     "taux": 1.0
+    }
+   },
+   "reel": {
+    "cibles": 171,
+    "labels": 166,
+    "exact": 166,
+    "exact_any": 166,
+    "top1": 166,
+    "topk": 165,
+    "topk_exact": 165,
+    "couverture": 0.9708,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.9708,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.9708,
+    "topk_taux": 0.9649,
+    "topk_taux_span": 0.994,
+    "topk_exact_taux": 0.9649,
+    "verbe": {
+     "cibles": 109,
+     "justes": 109,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 57,
+     "justes": 57,
+     "taux": 1.0
+    }
+   },
+   "synthetique": {
+    "cibles": 55,
+    "labels": 41,
+    "exact": 41,
+    "exact_any": 41,
+    "top1": 41,
+    "topk": 41,
+    "topk_exact": 41,
+    "couverture": 0.7455,
+    "exact_taux_span": 1.0,
+    "exact_taux_cibles": 0.7455,
+    "exact_any_taux_span": 1.0,
+    "top1_taux": 0.7455,
+    "topk_taux": 0.7455,
+    "topk_taux_span": 1.0,
+    "topk_exact_taux": 0.7455,
+    "verbe": {
+     "cibles": 32,
+     "justes": 32,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 9,
+     "justes": 9,
+     "taux": 1.0
+    }
+   }
+  },
+  "f1_langue": {
+   "fr": {
+    "precision": 0.5639,
+    "rappel": 0.5512,
+    "f1": 0.5575,
+    "tp": 640,
+    "fp": 495,
+    "fn": 521
+   },
+   "en": {
+    "precision": 0.7769,
+    "rappel": 0.5356,
+    "f1": 0.6341,
+    "tp": 376,
+    "fp": 108,
+    "fn": 326
+   }
+  },
+  "tete_langue": {
+   "fr": {
+    "precision": 0.7425,
+    "rappel": 0.6779,
+    "f1": 0.7087,
+    "tp": 787,
+    "fp": 273,
+    "fn": 374
+   },
+   "en": {
+    "precision": 0.9545,
+    "rappel": 0.6581,
+    "f1": 0.7791,
+    "tp": 462,
+    "fp": 22,
+    "fn": 240
+   }
+  },
+  "pos_langue": {
+   "fr": {
+    "exactitude": 0.7543,
+    "tokens": 2031
+   },
+   "en": {
+    "exactitude": 0.7648,
+    "tokens": 1148
+   }
+  }
+ },
+ "equilibre_global": {
+  "phrases": 612,
+  "ids_uniques": 612,
+  "tokens": 3179,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synthetique": 160
+  },
+  "langues": {
+   "fr": 402,
+   "en": 210
+  },
+  "types_tout": {
+   "GN": 828,
+   "GV": 712,
+   "GP": 105,
+   "SUB": 70,
+   "REL": 74,
+   "ADJ": 35,
+   "ADV": 30,
+   "PONCT": 9
+  },
+  "types_cibles": {
+   "GP": 96,
+   "SUB": 69,
+   "REL": 74
+  },
+  "cibles": 239,
+  "cibles_par_langue": {
+   "fr": 151,
+   "en": 88
+  },
+  "cibles_par_source": {
+   "hand": 13,
+   "reel": 171,
+   "synthetique": 55
+  },
+  "cibles_par_type_langue": {
+   "GP/fr": 62,
+   "SUB/fr": 43,
+   "REL/fr": 46,
+   "GP/en": 34,
+   "SUB/en": 26,
+   "REL/en": 28
+  },
+  "cibles_par_source_type": {
+   "hand/GP": 10,
+   "hand/SUB": 2,
+   "hand/REL": 1,
+   "reel/GP": 62,
+   "reel/REL": 57,
+   "reel/SUB": 52,
+   "synthetique/GP": 24,
+   "synthetique/REL": 16,
+   "synthetique/SUB": 15
+  },
+  "cibles_par_source_langue": {
+   "hand/fr": 10,
+   "hand/en": 3,
+   "reel/fr": 86,
+   "reel/en": 85,
+   "synthetique/fr": 55
+  }
+ },
+ "tailles_buckets": {
+  "0": 190,
+  "1": 229,
+  "2": 193
+ },
+ "splits": {
+  "canonique": {
+   "regle": "crc32(id)%3==0 -> test",
+   "dev": {
+    "phrases": 422,
+    "tokens": 2185,
+    "pos": {
+     "exactitude": 0.7547,
+     "exactitude_ferme": 0.8952,
+     "exactitude_ouvert": 0.6201,
+     "justes": 1649,
+     "tokens": 2185
+    },
+    "syntagme": {
+     "precision": 0.6289,
+     "rappel": 0.5401,
+     "f1": 0.5812,
+     "tp": 700,
+     "fp": 413,
+     "fn": 596
+    },
+    "tete": {
+     "precision": 0.8116,
+     "rappel": 0.6682,
+     "f1": 0.733,
+     "tp": 866,
+     "fp": 201,
+     "fn": 430
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9787,
+     "modalite": 0.9929,
+     "double_sens": 0.9336
+    },
+    "fraction_semantique": 0.5509,
+    "attachement": {
+     "cibles": 163,
+     "labels": 152,
+     "exact": 152,
+     "exact_any": 152,
+     "top1": 152,
+     "topk": 152,
+     "topk_exact": 152,
+     "couverture": 0.9325,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9325,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9325,
+     "topk_taux": 0.9325,
+     "topk_taux_span": 1.0,
+     "topk_exact_taux": 0.9325,
+     "verbe": {
+      "cibles": 97,
+      "justes": 97,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 55,
+      "justes": 55,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 152,
+     "labels": 152,
+     "top1": 152,
+     "topk": 152,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 11,
+     "par_type": {
+      "REL": 6,
+      "SUB": 3,
+      "GP": 2
+     },
+     "par_langue": {
+      "en": 1,
+      "fr": 10
+     },
+     "par_source": {
+      "reel": 2,
+      "synthetique": 9
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 101,
+      "labels": 91,
+      "exact": 91,
+      "exact_any": 91,
+      "top1": 91,
+      "topk": 91,
+      "topk_exact": 91,
+      "couverture": 0.901,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.901,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.901,
+      "topk_taux": 0.901,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.901,
+      "verbe": {
+       "cibles": 59,
+       "justes": 59,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 32,
+       "justes": 32,
+       "taux": 1.0
+      },
+      "phrases": 277
+     },
+     "en": {
+      "cibles": 62,
+      "labels": 61,
+      "exact": 61,
+      "exact_any": 61,
+      "top1": 61,
+      "topk": 61,
+      "topk_exact": 61,
+      "couverture": 0.9839,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9839,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9839,
+      "topk_taux": 0.9839,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9839,
+      "verbe": {
+       "cibles": 38,
+       "justes": 38,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 23,
+       "justes": 23,
+       "taux": 1.0
+      },
+      "phrases": 145
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 57,
+      "labels": 51,
+      "exact": 51,
+      "exact_any": 51,
+      "top1": 51,
+      "topk": 51,
+      "topk_exact": 51,
+      "couverture": 0.8947,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8947,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8947,
+      "topk_taux": 0.8947,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8947,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 51,
+       "justes": 51,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7083,
+       "rappel": 0.8947,
+       "f1": 0.7907,
+       "tp": 51,
+       "fp": 21,
+       "fn": 6
+      },
+      "tete": {
+       "precision": 0.9333,
+       "rappel": 0.9825,
+       "f1": 0.9573,
+       "tp": 56,
+       "fp": 4,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 45,
+      "labels": 42,
+      "exact": 42,
+      "exact_any": 42,
+      "top1": 42,
+      "topk": 42,
+      "topk_exact": 42,
+      "couverture": 0.9333,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9333,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9333,
+      "topk_taux": 0.9333,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9333,
+      "verbe": {
+       "cibles": 42,
+       "justes": 42,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.9149,
+       "rappel": 0.9348,
+       "f1": 0.9247,
+       "tp": 43,
+       "fp": 4,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.9362,
+       "rappel": 0.9565,
+       "f1": 0.9462,
+       "tp": 44,
+       "fp": 3,
+       "fn": 2
+      }
+     },
+     "GP": {
+      "cibles": 61,
+      "labels": 59,
+      "exact": 59,
+      "exact_any": 59,
+      "top1": 59,
+      "topk": 59,
+      "topk_exact": 59,
+      "couverture": 0.9672,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9672,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9672,
+      "topk_taux": 0.9672,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9672,
+      "verbe": {
+       "cibles": 55,
+       "justes": 55,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 4,
+       "justes": 4,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7647,
+       "rappel": 0.9701,
+       "f1": 0.8553,
+       "tp": 65,
+       "fp": 20,
+       "fn": 2
+      },
+      "tete": {
+       "precision": 0.7738,
+       "rappel": 0.9701,
+       "f1": 0.8609,
+       "tp": 65,
+       "fp": 19,
+       "fn": 2
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 34,
+      "labels": 29,
+      "exact": 29,
+      "exact_any": 29,
+      "top1": 29,
+      "topk": 29,
+      "topk_exact": 29,
+      "couverture": 0.8529,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8529,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8529,
+      "topk_taux": 0.8529,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8529,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 29,
+       "justes": 29,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 23,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "top1": 22,
+      "topk": 22,
+      "topk_exact": 22,
+      "couverture": 0.9565,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9565,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9565,
+      "topk_taux": 0.9565,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9565,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 29,
+      "labels": 26,
+      "exact": 26,
+      "exact_any": 26,
+      "top1": 26,
+      "topk": 26,
+      "topk_exact": 26,
+      "couverture": 0.8966,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8966,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8966,
+      "topk_taux": 0.8966,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8966,
+      "verbe": {
+       "cibles": 26,
+       "justes": 26,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 16,
+      "labels": 16,
+      "exact": 16,
+      "exact_any": 16,
+      "top1": 16,
+      "topk": 16,
+      "topk_exact": 16,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 16,
+       "justes": 16,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 38,
+      "labels": 36,
+      "exact": 36,
+      "exact_any": 36,
+      "top1": 36,
+      "topk": 36,
+      "topk_exact": 36,
+      "couverture": 0.9474,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9474,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9474,
+      "topk_taux": 0.9474,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9474,
+      "verbe": {
+       "cibles": 33,
+       "justes": 33,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      }
+     },
+     "GP/en": {
+      "cibles": 23,
+      "labels": 23,
+      "exact": 23,
+      "exact_any": 23,
+      "top1": 23,
+      "topk": 23,
+      "topk_exact": 23,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 10,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "top1": 10,
+      "topk": 10,
+      "topk_exact": 10,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 7,
+       "justes": 7,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      }
+     },
+     "reel": {
+      "cibles": 121,
+      "labels": 119,
+      "exact": 119,
+      "exact_any": 119,
+      "top1": 119,
+      "topk": 119,
+      "topk_exact": 119,
+      "couverture": 0.9835,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9835,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9835,
+      "topk_taux": 0.9835,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9835,
+      "verbe": {
+       "cibles": 73,
+       "justes": 73,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 46,
+       "justes": 46,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 32,
+      "labels": 23,
+      "exact": 23,
+      "exact_any": 23,
+      "top1": 23,
+      "topk": 23,
+      "topk_exact": 23,
+      "couverture": 0.7188,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7188,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.7188,
+      "topk_taux": 0.7188,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.7188,
+      "verbe": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 6,
+       "justes": 6,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5642,
+      "rappel": 0.5397,
+      "f1": 0.5517,
+      "tp": 435,
+      "fp": 336,
+      "fn": 371
+     },
+     "en": {
+      "precision": 0.7749,
+      "rappel": 0.5408,
+      "f1": 0.637,
+      "tp": 265,
+      "fp": 77,
+      "fn": 225
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.7434,
+      "rappel": 0.6687,
+      "f1": 0.7041,
+      "tp": 539,
+      "fp": 186,
+      "fn": 267
+     },
+     "en": {
+      "precision": 0.9561,
+      "rappel": 0.6673,
+      "f1": 0.7861,
+      "tp": 327,
+      "fp": 15,
+      "fn": 163
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7558,
+      "tokens": 1384
+     },
+     "en": {
+      "exactitude": 0.7528,
+      "tokens": 801
+     }
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "tokens": 994,
+    "pos": {
+     "exactitude": 0.7656,
+     "exactitude_ferme": 0.9119,
+     "exactitude_ouvert": 0.6306,
+     "justes": 761,
+     "tokens": 994
+    },
+    "syntagme": {
+     "precision": 0.6245,
+     "rappel": 0.5573,
+     "f1": 0.589,
+     "tp": 316,
+     "fp": 190,
+     "fn": 251
+    },
+    "tete": {
+     "precision": 0.8029,
+     "rappel": 0.6755,
+     "f1": 0.7337,
+     "tp": 383,
+     "fp": 94,
+     "fn": 184
+    },
+    "pragmatique": {
+     "acte": 0.9895,
+     "negation": 0.9737,
+     "modalite": 0.9789,
+     "double_sens": 0.9684
+    },
+    "fraction_semantique": 0.56,
+    "attachement": {
+     "cibles": 76,
+     "labels": 68,
+     "exact": 68,
+     "exact_any": 68,
+     "top1": 68,
+     "topk": 67,
+     "topk_exact": 67,
+     "couverture": 0.8947,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8947,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.8947,
+     "topk_taux": 0.8816,
+     "topk_taux_span": 0.9853,
+     "topk_exact_taux": 0.8816,
+     "verbe": {
+      "cibles": 52,
+      "justes": 52,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 16,
+      "justes": 16,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 68,
+     "labels": 68,
+     "top1": 68,
+     "topk": 67,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9853,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 8,
+     "par_type": {
+      "REL": 3,
+      "SUB": 3,
+      "GP": 2
+     },
+     "par_langue": {
+      "fr": 7,
+      "en": 1
+     },
+     "par_source": {
+      "reel": 3,
+      "synthetique": 5
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 50,
+      "labels": 43,
+      "exact": 43,
+      "exact_any": 43,
+      "top1": 43,
+      "topk": 42,
+      "topk_exact": 42,
+      "couverture": 0.86,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.86,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.86,
+      "topk_taux": 0.84,
+      "topk_taux_span": 0.9767,
+      "topk_exact_taux": 0.84,
+      "verbe": {
+       "cibles": 33,
+       "justes": 33,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 10,
+       "justes": 10,
+       "taux": 1.0
+      },
+      "phrases": 125
+     },
+     "en": {
+      "cibles": 26,
+      "labels": 25,
+      "exact": 25,
+      "exact_any": 25,
+      "top1": 25,
+      "topk": 25,
+      "topk_exact": 25,
+      "couverture": 0.9615,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9615,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9615,
+      "topk_taux": 0.9615,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9615,
+      "verbe": {
+       "cibles": 19,
+       "justes": 19,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 6,
+       "justes": 6,
+       "taux": 1.0
+      },
+      "phrases": 65
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 17,
+      "labels": 14,
+      "exact": 14,
+      "exact_any": 14,
+      "top1": 14,
+      "topk": 14,
+      "topk_exact": 14,
+      "couverture": 0.8235,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8235,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8235,
+      "topk_taux": 0.8235,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8235,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 14,
+       "justes": 14,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.6364,
+       "rappel": 0.8235,
+       "f1": 0.7179,
+       "tp": 14,
+       "fp": 8,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.8947,
+       "rappel": 1.0,
+       "f1": 0.9444,
+       "tp": 17,
+       "fp": 2,
+       "fn": 0
+      }
+     },
+     "SUB": {
+      "cibles": 24,
+      "labels": 21,
+      "exact": 21,
+      "exact_any": 21,
+      "top1": 21,
+      "topk": 20,
+      "topk_exact": 20,
+      "couverture": 0.875,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.875,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.875,
+      "topk_taux": 0.8333,
+      "topk_taux_span": 0.9524,
+      "topk_exact_taux": 0.8333,
+      "verbe": {
+       "cibles": 21,
+       "justes": 21,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.84,
+       "rappel": 0.875,
+       "f1": 0.8571,
+       "tp": 21,
+       "fp": 4,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.9583,
+       "rappel": 0.9583,
+       "f1": 0.9583,
+       "tp": 23,
+       "fp": 1,
+       "fn": 1
+      }
+     },
+     "GP": {
+      "cibles": 35,
+      "labels": 33,
+      "exact": 33,
+      "exact_any": 33,
+      "top1": 33,
+      "topk": 33,
+      "topk_exact": 33,
+      "couverture": 0.9429,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9429,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9429,
+      "topk_taux": 0.9429,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9429,
+      "verbe": {
+       "cibles": 31,
+       "justes": 31,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7826,
+       "rappel": 0.9474,
+       "f1": 0.8571,
+       "tp": 36,
+       "fp": 10,
+       "fn": 2
+      },
+      "tete": {
+       "precision": 0.8,
+       "rappel": 0.9474,
+       "f1": 0.8675,
+       "tp": 36,
+       "fp": 9,
+       "fn": 2
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 12,
+      "labels": 9,
+      "exact": 9,
+      "exact_any": 9,
+      "top1": 9,
+      "topk": 9,
+      "topk_exact": 9,
+      "couverture": 0.75,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.75,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.75,
+      "topk_taux": 0.75,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.75,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 9,
+       "justes": 9,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 5,
+      "labels": 5,
+      "exact": 5,
+      "exact_any": 5,
+      "top1": 5,
+      "topk": 5,
+      "topk_exact": 5,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 5,
+       "justes": 5,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 14,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "top1": 12,
+      "topk": 11,
+      "topk_exact": 11,
+      "couverture": 0.8571,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8571,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8571,
+      "topk_taux": 0.7857,
+      "topk_taux_span": 0.9167,
+      "topk_exact_taux": 0.7857,
+      "verbe": {
+       "cibles": 12,
+       "justes": 12,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 10,
+      "labels": 9,
+      "exact": 9,
+      "exact_any": 9,
+      "top1": 9,
+      "topk": 9,
+      "topk_exact": 9,
+      "couverture": 0.9,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9,
+      "topk_taux": 0.9,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9,
+      "verbe": {
+       "cibles": 9,
+       "justes": 9,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 24,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "top1": 22,
+      "topk": 22,
+      "topk_exact": 22,
+      "couverture": 0.9167,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9167,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9167,
+      "topk_taux": 0.9167,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9167,
+      "verbe": {
+       "cibles": 21,
+       "justes": 21,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     },
+     "GP/en": {
+      "cibles": 11,
+      "labels": 11,
+      "exact": 11,
+      "exact_any": 11,
+      "top1": 11,
+      "topk": 11,
+      "topk_exact": 11,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 10,
+       "justes": 10,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 3,
+      "labels": 3,
+      "exact": 3,
+      "exact_any": 3,
+      "top1": 3,
+      "topk": 3,
+      "topk_exact": 3,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      }
+     },
+     "reel": {
+      "cibles": 50,
+      "labels": 47,
+      "exact": 47,
+      "exact_any": 47,
+      "top1": 47,
+      "topk": 46,
+      "topk_exact": 46,
+      "couverture": 0.94,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.94,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.94,
+      "topk_taux": 0.92,
+      "topk_taux_span": 0.9787,
+      "topk_exact_taux": 0.92,
+      "verbe": {
+       "cibles": 36,
+       "justes": 36,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 11,
+       "justes": 11,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 23,
+      "labels": 18,
+      "exact": 18,
+      "exact_any": 18,
+      "top1": 18,
+      "topk": 18,
+      "topk_exact": 18,
+      "couverture": 0.7826,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7826,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.7826,
+      "topk_taux": 0.7826,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.7826,
+      "verbe": {
+       "cibles": 15,
+       "justes": 15,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5632,
+      "rappel": 0.5775,
+      "f1": 0.5702,
+      "tp": 205,
+      "fp": 159,
+      "fn": 150
+     },
+     "en": {
+      "precision": 0.7817,
+      "rappel": 0.5236,
+      "f1": 0.6271,
+      "tp": 111,
+      "fp": 31,
+      "fn": 101
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.7403,
+      "rappel": 0.6986,
+      "f1": 0.7188,
+      "tp": 248,
+      "fp": 87,
+      "fn": 107
+     },
+     "en": {
+      "precision": 0.9507,
+      "rappel": 0.6368,
+      "f1": 0.7627,
+      "tp": 135,
+      "fp": 7,
+      "fn": 77
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7512,
+      "tokens": 647
+     },
+     "en": {
+      "exactitude": 0.7925,
+      "tokens": 347
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 422,
+     "ids_uniques": 422,
+     "tokens": 2185,
+     "sources": {
+      "hand": 15,
+      "reel": 302,
+      "synthetique": 105
+     },
+     "langues": {
+      "fr": 277,
+      "en": 145
+     },
+     "types_tout": {
+      "GN": 580,
+      "GV": 491,
+      "GP": 67,
+      "SUB": 46,
+      "REL": 57,
+      "ADJ": 30,
+      "ADV": 18,
+      "PONCT": 7
+     },
+     "types_cibles": {
+      "GP": 61,
+      "SUB": 45,
+      "REL": 57
+     },
+     "cibles": 163,
+     "cibles_par_langue": {
+      "fr": 101,
+      "en": 62
+     },
+     "cibles_par_source": {
+      "hand": 10,
+      "reel": 121,
+      "synthetique": 32
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 38,
+      "SUB/fr": 29,
+      "REL/fr": 34,
+      "GP/en": 23,
+      "SUB/en": 16,
+      "REL/en": 23
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 7,
+      "hand/SUB": 2,
+      "hand/REL": 1,
+      "reel/GP": 43,
+      "reel/REL": 45,
+      "reel/SUB": 33,
+      "synthetique/GP": 11,
+      "synthetique/REL": 11,
+      "synthetique/SUB": 10
+     },
+     "cibles_par_source_langue": {
+      "hand/fr": 8,
+      "hand/en": 2,
+      "reel/fr": 61,
+      "reel/en": 60,
+      "synthetique/fr": 32
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "ids_uniques": 190,
+     "tokens": 994,
+     "sources": {
+      "hand": 5,
+      "reel": 130,
+      "synthetique": 55
+     },
+     "langues": {
+      "fr": 125,
+      "en": 65
+     },
+     "types_tout": {
+      "GN": 248,
+      "GP": 38,
+      "GV": 221,
+      "REL": 17,
+      "SUB": 24,
+      "ADJ": 5,
+      "ADV": 12,
+      "PONCT": 2
+     },
+     "types_cibles": {
+      "GP": 35,
+      "REL": 17,
+      "SUB": 24
+     },
+     "cibles": 76,
+     "cibles_par_langue": {
+      "fr": 50,
+      "en": 26
+     },
+     "cibles_par_source": {
+      "hand": 3,
+      "reel": 50,
+      "synthetique": 23
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 24,
+      "GP/en": 11,
+      "REL/fr": 12,
+      "REL/en": 5,
+      "SUB/fr": 14,
+      "SUB/en": 10
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 3,
+      "reel/REL": 12,
+      "reel/GP": 19,
+      "reel/SUB": 19,
+      "synthetique/GP": 13,
+      "synthetique/REL": 5,
+      "synthetique/SUB": 5
+     },
+     "cibles_par_source_langue": {
+      "hand/fr": 2,
+      "hand/en": 1,
+      "reel/fr": 25,
+      "reel/en": 25,
+      "synthetique/fr": 23
+     }
+    }
+   },
+   "chi2": {
+    "sources": {
+     "gof_test_vs_tout": {
+      "chi2": 0.9331,
+      "p": 0.6272,
+      "dof": 2,
+      "min_attendu": 6.209
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 1.3532,
+      "p": 0.5083,
+      "dof": 2,
+      "min_attendu": 6.209
+     }
+    },
+    "langues": {
+     "gof_test_vs_tout": {
+      "chi2": 0.0009,
+      "p": 0.9761,
+      "dof": 1,
+      "min_attendu": 65.196
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 0.0013,
+      "p": 0.9712,
+      "dof": 1,
+      "min_attendu": 65.196
+     }
+    },
+    "types_cibles": {
+     "gof_test_vs_tout": {
+      "chi2": 2.6613,
+      "p": 0.2643,
+      "dof": 2,
+      "min_attendu": 21.941
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 3.9022,
+      "p": 0.1421,
+      "dof": 2,
+      "min_attendu": 21.941
+     }
+    },
+    "types_langues": {
+     "gof_test_vs_tout": {
+      "chi2": 3.4887,
+      "p": 0.6251,
+      "dof": 5,
+      "min_attendu": 8.268
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 5.1153,
+      "p": 0.402,
+      "dof": 5,
+      "min_attendu": 8.268
+     }
+    }
+   },
+   "absents": {
+    "dev": {
+     "absents": [],
+     "minces": [
+      "dev:source×type:hand/REL=1",
+      "dev:source×type:hand/SUB=2",
+      "dev:source×langue:hand/en=2"
+     ],
+     "compte": {
+      "phrases": 422,
+      "ids_uniques": 422,
+      "tokens": 2185,
+      "sources": {
+       "hand": 15,
+       "reel": 302,
+       "synthetique": 105
+      },
+      "langues": {
+       "fr": 277,
+       "en": 145
+      },
+      "types_tout": {
+       "GN": 580,
+       "GV": 491,
+       "GP": 67,
+       "SUB": 46,
+       "REL": 57,
+       "ADJ": 30,
+       "ADV": 18,
+       "PONCT": 7
+      },
+      "types_cibles": {
+       "GP": 61,
+       "SUB": 45,
+       "REL": 57
+      },
+      "cibles": 163,
+      "cibles_par_langue": {
+       "fr": 101,
+       "en": 62
+      },
+      "cibles_par_source": {
+       "hand": 10,
+       "reel": 121,
+       "synthetique": 32
+      },
+      "cibles_par_type_langue": {
+       "GP/fr": 38,
+       "SUB/fr": 29,
+       "REL/fr": 34,
+       "GP/en": 23,
+       "SUB/en": 16,
+       "REL/en": 23
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 7,
+       "hand/SUB": 2,
+       "hand/REL": 1,
+       "reel/GP": 43,
+       "reel/REL": 45,
+       "reel/SUB": 33,
+       "synthetique/GP": 11,
+       "synthetique/REL": 11,
+       "synthetique/SUB": 10
+      },
+      "cibles_par_source_langue": {
+       "hand/fr": 8,
+       "hand/en": 2,
+       "reel/fr": 61,
+       "reel/en": 60,
+       "synthetique/fr": 32
+      }
+     }
+    },
+    "test": {
+     "absents": [
+      "test:source×type:hand/REL",
+      "test:source×type:hand/SUB"
+     ],
+     "minces": [
+      "test:source×type:hand/GP=3",
+      "test:source×langue:hand/fr=2",
+      "test:source×langue:hand/en=1"
+     ],
+     "compte": {
+      "phrases": 190,
+      "ids_uniques": 190,
+      "tokens": 994,
+      "sources": {
+       "hand": 5,
+       "reel": 130,
+       "synthetique": 55
+      },
+      "langues": {
+       "fr": 125,
+       "en": 65
+      },
+      "types_tout": {
+       "GN": 248,
+       "GP": 38,
+       "GV": 221,
+       "REL": 17,
+       "SUB": 24,
+       "ADJ": 5,
+       "ADV": 12,
+       "PONCT": 2
+      },
+      "types_cibles": {
+       "GP": 35,
+       "REL": 17,
+       "SUB": 24
+      },
+      "cibles": 76,
+      "cibles_par_langue": {
+       "fr": 50,
+       "en": 26
+      },
+      "cibles_par_source": {
+       "hand": 3,
+       "reel": 50,
+       "synthetique": 23
+      },
+      "cibles_par_type_langue": {
+       "GP/fr": 24,
+       "GP/en": 11,
+       "REL/fr": 12,
+       "REL/en": 5,
+       "SUB/fr": 14,
+       "SUB/en": 10
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 3,
+       "reel/REL": 12,
+       "reel/GP": 19,
+       "reel/SUB": 19,
+       "synthetique/GP": 13,
+       "synthetique/REL": 5,
+       "synthetique/SUB": 5
+      },
+      "cibles_par_source_langue": {
+       "hand/fr": 2,
+       "hand/en": 1,
+       "reel/fr": 25,
+       "reel/en": 25,
+       "synthetique/fr": 23
+      }
+     }
+    }
+   }
+  },
+  "decale_1": {
+   "regle": "crc32(id)%3==1 -> test",
+   "dev": {
+    "phrases": 383,
+    "tokens": 2018,
+    "pos": {
+     "exactitude": 0.7602,
+     "exactitude_ferme": 0.9017,
+     "exactitude_ouvert": 0.6273,
+     "justes": 1534,
+     "tokens": 2018
+    },
+    "syntagme": {
+     "precision": 0.6208,
+     "rappel": 0.543,
+     "f1": 0.5793,
+     "tp": 632,
+     "fp": 386,
+     "fn": 532
+    },
+    "tete": {
+     "precision": 0.8023,
+     "rappel": 0.6692,
+     "f1": 0.7297,
+     "tp": 779,
+     "fp": 192,
+     "fn": 385
+    },
+    "pragmatique": {
+     "acte": 0.9948,
+     "negation": 0.9791,
+     "modalite": 0.9896,
+     "double_sens": 0.953
+    },
+    "fraction_semantique": 0.5558,
+    "attachement": {
+     "cibles": 150,
+     "labels": 135,
+     "exact": 135,
+     "exact_any": 135,
+     "top1": 135,
+     "topk": 134,
+     "topk_exact": 134,
+     "couverture": 0.9,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9,
+     "topk_taux": 0.8933,
+     "topk_taux_span": 0.9926,
+     "topk_exact_taux": 0.8933,
+     "verbe": {
+      "cibles": 95,
+      "justes": 95,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 40,
+      "justes": 40,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 135,
+     "labels": 135,
+     "top1": 135,
+     "topk": 134,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9926,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 15,
+     "par_type": {
+      "REL": 6,
+      "SUB": 6,
+      "GP": 3
+     },
+     "par_langue": {
+      "en": 2,
+      "fr": 13
+     },
+     "par_source": {
+      "reel": 5,
+      "synthetique": 10
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 95,
+      "labels": 82,
+      "exact": 82,
+      "exact_any": 82,
+      "top1": 82,
+      "topk": 81,
+      "topk_exact": 81,
+      "couverture": 0.8632,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8632,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8632,
+      "topk_taux": 0.8526,
+      "topk_taux_span": 0.9878,
+      "topk_exact_taux": 0.8526,
+      "verbe": {
+       "cibles": 59,
+       "justes": 59,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 23,
+       "justes": 23,
+       "taux": 1.0
+      },
+      "phrases": 252
+     },
+     "en": {
+      "cibles": 55,
+      "labels": 53,
+      "exact": 53,
+      "exact_any": 53,
+      "top1": 53,
+      "topk": 53,
+      "topk_exact": 53,
+      "couverture": 0.9636,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9636,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9636,
+      "topk_taux": 0.9636,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9636,
+      "verbe": {
+       "cibles": 36,
+       "justes": 36,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      },
+      "phrases": 131
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 43,
+      "labels": 37,
+      "exact": 37,
+      "exact_any": 37,
+      "top1": 37,
+      "topk": 37,
+      "topk_exact": 37,
+      "couverture": 0.8605,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8605,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8605,
+      "topk_taux": 0.8605,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8605,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 37,
+       "justes": 37,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.6981,
+       "rappel": 0.8605,
+       "f1": 0.7708,
+       "tp": 37,
+       "fp": 16,
+       "fn": 6
+      },
+      "tete": {
+       "precision": 0.875,
+       "rappel": 0.9767,
+       "f1": 0.9231,
+       "tp": 42,
+       "fp": 6,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 47,
+      "labels": 41,
+      "exact": 41,
+      "exact_any": 41,
+      "top1": 41,
+      "topk": 40,
+      "topk_exact": 40,
+      "couverture": 0.8723,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8723,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8723,
+      "topk_taux": 0.8511,
+      "topk_taux_span": 0.9756,
+      "topk_exact_taux": 0.8511,
+      "verbe": {
+       "cibles": 41,
+       "justes": 41,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.875,
+       "rappel": 0.875,
+       "f1": 0.875,
+       "tp": 42,
+       "fp": 6,
+       "fn": 6
+      },
+      "tete": {
+       "precision": 0.9574,
+       "rappel": 0.9375,
+       "f1": 0.9474,
+       "tp": 45,
+       "fp": 2,
+       "fn": 3
+      }
+     },
+     "GP": {
+      "cibles": 60,
+      "labels": 57,
+      "exact": 57,
+      "exact_any": 57,
+      "top1": 57,
+      "topk": 57,
+      "topk_exact": 57,
+      "couverture": 0.95,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.95,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.95,
+      "topk_taux": 0.95,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.95,
+      "verbe": {
+       "cibles": 54,
+       "justes": 54,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7654,
+       "rappel": 0.9538,
+       "f1": 0.8493,
+       "tp": 62,
+       "fp": 19,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.775,
+       "rappel": 0.9538,
+       "f1": 0.8552,
+       "tp": 62,
+       "fp": 18,
+       "fn": 3
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 27,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "top1": 22,
+      "topk": 22,
+      "topk_exact": 22,
+      "couverture": 0.8148,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8148,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8148,
+      "topk_taux": 0.8148,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8148,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 16,
+      "labels": 15,
+      "exact": 15,
+      "exact_any": 15,
+      "top1": 15,
+      "topk": 15,
+      "topk_exact": 15,
+      "couverture": 0.9375,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9375,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9375,
+      "topk_taux": 0.9375,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9375,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 15,
+       "justes": 15,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 29,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "top1": 24,
+      "topk": 23,
+      "topk_exact": 23,
+      "couverture": 0.8276,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8276,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8276,
+      "topk_taux": 0.7931,
+      "topk_taux_span": 0.9583,
+      "topk_exact_taux": 0.7931,
+      "verbe": {
+       "cibles": 24,
+       "justes": 24,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 18,
+      "labels": 17,
+      "exact": 17,
+      "exact_any": 17,
+      "top1": 17,
+      "topk": 17,
+      "topk_exact": 17,
+      "couverture": 0.9444,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9444,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9444,
+      "topk_taux": 0.9444,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9444,
+      "verbe": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 39,
+      "labels": 36,
+      "exact": 36,
+      "exact_any": 36,
+      "top1": 36,
+      "topk": 36,
+      "topk_exact": 36,
+      "couverture": 0.9231,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9231,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9231,
+      "topk_taux": 0.9231,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9231,
+      "verbe": {
+       "cibles": 35,
+       "justes": 35,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     },
+     "GP/en": {
+      "cibles": 21,
+      "labels": 21,
+      "exact": 21,
+      "exact_any": 21,
+      "top1": 21,
+      "topk": 21,
+      "topk_exact": 21,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 19,
+       "justes": 19,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 5,
+      "labels": 5,
+      "exact": 5,
+      "exact_any": 5,
+      "top1": 5,
+      "topk": 5,
+      "topk_exact": 5,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      }
+     },
+     "reel": {
+      "cibles": 105,
+      "labels": 100,
+      "exact": 100,
+      "exact_any": 100,
+      "top1": 100,
+      "topk": 99,
+      "topk_exact": 99,
+      "couverture": 0.9524,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9524,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9524,
+      "topk_taux": 0.9429,
+      "topk_taux_span": 0.99,
+      "topk_exact_taux": 0.9429,
+      "verbe": {
+       "cibles": 67,
+       "justes": 67,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 33,
+       "justes": 33,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 40,
+      "labels": 30,
+      "exact": 30,
+      "exact_any": 30,
+      "top1": 30,
+      "topk": 30,
+      "topk_exact": 30,
+      "couverture": 0.75,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.75,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.75,
+      "topk_taux": 0.75,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.75,
+      "verbe": {
+       "cibles": 25,
+       "justes": 25,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 5,
+       "justes": 5,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5554,
+      "rappel": 0.5463,
+      "f1": 0.5508,
+      "tp": 401,
+      "fp": 321,
+      "fn": 333
+     },
+     "en": {
+      "precision": 0.7804,
+      "rappel": 0.5372,
+      "f1": 0.6364,
+      "tp": 231,
+      "fp": 65,
+      "fn": 199
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.7333,
+      "rappel": 0.6744,
+      "f1": 0.7026,
+      "tp": 495,
+      "fp": 180,
+      "fn": 239
+     },
+     "en": {
+      "precision": 0.9595,
+      "rappel": 0.6605,
+      "f1": 0.7824,
+      "tp": 284,
+      "fp": 12,
+      "fn": 146
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7554,
+      "tokens": 1300
+     },
+     "en": {
+      "exactitude": 0.7688,
+      "tokens": 718
+     }
+    }
+   },
+   "test": {
+    "phrases": 229,
+    "tokens": 1161,
+    "pos": {
+     "exactitude": 0.7545,
+     "exactitude_ferme": 0.8981,
+     "exactitude_ouvert": 0.6166,
+     "justes": 876,
+     "tokens": 1161
+    },
+    "syntagme": {
+     "precision": 0.6389,
+     "rappel": 0.5494,
+     "f1": 0.5908,
+     "tp": 384,
+     "fp": 217,
+     "fn": 315
+    },
+    "tete": {
+     "precision": 0.8202,
+     "rappel": 0.6724,
+     "f1": 0.739,
+     "tp": 470,
+     "fp": 103,
+     "fn": 229
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9738,
+     "modalite": 0.9869,
+     "double_sens": 0.9301
+    },
+    "fraction_semantique": 0.5502,
+    "attachement": {
+     "cibles": 89,
+     "labels": 85,
+     "exact": 85,
+     "exact_any": 85,
+     "top1": 85,
+     "topk": 85,
+     "topk_exact": 85,
+     "couverture": 0.9551,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9551,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9551,
+     "topk_taux": 0.9551,
+     "topk_taux_span": 1.0,
+     "topk_exact_taux": 0.9551,
+     "verbe": {
+      "cibles": 54,
+      "justes": 54,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 31,
+      "justes": 31,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 85,
+     "labels": 85,
+     "top1": 85,
+     "topk": 85,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 4,
+     "par_type": {
+      "REL": 3,
+      "GP": 1
+     },
+     "par_langue": {
+      "fr": 4
+     },
+     "par_source": {
+      "synthetique": 4
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 56,
+      "labels": 52,
+      "exact": 52,
+      "exact_any": 52,
+      "top1": 52,
+      "topk": 52,
+      "topk_exact": 52,
+      "couverture": 0.9286,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9286,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9286,
+      "topk_taux": 0.9286,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9286,
+      "verbe": {
+       "cibles": 33,
+       "justes": 33,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 19,
+       "justes": 19,
+       "taux": 1.0
+      },
+      "phrases": 150
+     },
+     "en": {
+      "cibles": 33,
+      "labels": 33,
+      "exact": 33,
+      "exact_any": 33,
+      "top1": 33,
+      "topk": 33,
+      "topk_exact": 33,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 21,
+       "justes": 21,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 12,
+       "justes": 12,
+       "taux": 1.0
+      },
+      "phrases": 79
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 31,
+      "labels": 28,
+      "exact": 28,
+      "exact_any": 28,
+      "top1": 28,
+      "topk": 28,
+      "topk_exact": 28,
+      "couverture": 0.9032,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9032,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9032,
+      "topk_taux": 0.9032,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9032,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 28,
+       "justes": 28,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.6829,
+       "rappel": 0.9032,
+       "f1": 0.7778,
+       "tp": 28,
+       "fp": 13,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 1.0,
+       "rappel": 1.0,
+       "f1": 1.0,
+       "tp": 31,
+       "fp": 0,
+       "fn": 0
+      }
+     },
+     "SUB": {
+      "cibles": 22,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "top1": 22,
+      "topk": 22,
+      "topk_exact": 22,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.9167,
+       "rappel": 1.0,
+       "f1": 0.9565,
+       "tp": 22,
+       "fp": 2,
+       "fn": 0
+      },
+      "tete": {
+       "precision": 0.9167,
+       "rappel": 1.0,
+       "f1": 0.9565,
+       "tp": 22,
+       "fp": 2,
+       "fn": 0
+      }
+     },
+     "GP": {
+      "cibles": 36,
+      "labels": 35,
+      "exact": 35,
+      "exact_any": 35,
+      "top1": 35,
+      "topk": 35,
+      "topk_exact": 35,
+      "couverture": 0.9722,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9722,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9722,
+      "topk_taux": 0.9722,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9722,
+      "verbe": {
+       "cibles": 32,
+       "justes": 32,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.78,
+       "rappel": 0.975,
+       "f1": 0.8667,
+       "tp": 39,
+       "fp": 11,
+       "fn": 1
+      },
+      "tete": {
+       "precision": 0.7959,
+       "rappel": 0.975,
+       "f1": 0.8764,
+       "tp": 39,
+       "fp": 10,
+       "fn": 1
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 19,
+      "labels": 16,
+      "exact": 16,
+      "exact_any": 16,
+      "top1": 16,
+      "topk": 16,
+      "topk_exact": 16,
+      "couverture": 0.8421,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8421,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8421,
+      "topk_taux": 0.8421,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8421,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 16,
+       "justes": 16,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 12,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "top1": 12,
+      "topk": 12,
+      "topk_exact": 12,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 12,
+       "justes": 12,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 14,
+      "labels": 14,
+      "exact": 14,
+      "exact_any": 14,
+      "top1": 14,
+      "topk": 14,
+      "topk_exact": 14,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 14,
+       "justes": 14,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 8,
+      "labels": 8,
+      "exact": 8,
+      "exact_any": 8,
+      "top1": 8,
+      "topk": 8,
+      "topk_exact": 8,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 8,
+       "justes": 8,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 23,
+      "labels": 22,
+      "exact": 22,
+      "exact_any": 22,
+      "top1": 22,
+      "topk": 22,
+      "topk_exact": 22,
+      "couverture": 0.9565,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9565,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9565,
+      "topk_taux": 0.9565,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9565,
+      "verbe": {
+       "cibles": 19,
+       "justes": 19,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      }
+     },
+     "GP/en": {
+      "cibles": 13,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "top1": 13,
+      "topk": 13,
+      "topk_exact": 13,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 13,
+       "justes": 13,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 8,
+      "labels": 8,
+      "exact": 8,
+      "exact_any": 8,
+      "top1": 8,
+      "topk": 8,
+      "topk_exact": 8,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 5,
+       "justes": 5,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 3,
+       "justes": 3,
+       "taux": 1.0
+      }
+     },
+     "reel": {
+      "cibles": 66,
+      "labels": 66,
+      "exact": 66,
+      "exact_any": 66,
+      "top1": 66,
+      "topk": 66,
+      "topk_exact": 66,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 42,
+       "justes": 42,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 24,
+       "justes": 24,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 15,
+      "labels": 11,
+      "exact": 11,
+      "exact_any": 11,
+      "top1": 11,
+      "topk": 11,
+      "topk_exact": 11,
+      "couverture": 0.7333,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7333,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.7333,
+      "topk_taux": 0.7333,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.7333,
+      "verbe": {
+       "cibles": 7,
+       "justes": 7,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 4,
+       "justes": 4,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5787,
+      "rappel": 0.5597,
+      "f1": 0.569,
+      "tp": 239,
+      "fp": 174,
+      "fn": 188
+     },
+     "en": {
+      "precision": 0.7713,
+      "rappel": 0.5331,
+      "f1": 0.6304,
+      "tp": 145,
+      "fp": 43,
+      "fn": 127
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.7584,
+      "rappel": 0.6838,
+      "f1": 0.7192,
+      "tp": 292,
+      "fp": 93,
+      "fn": 135
+     },
+     "en": {
+      "precision": 0.9468,
+      "rappel": 0.6544,
+      "f1": 0.7739,
+      "tp": 178,
+      "fp": 10,
+      "fn": 94
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7524,
+      "tokens": 731
+     },
+     "en": {
+      "exactitude": 0.7581,
+      "tokens": 430
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 383,
+     "ids_uniques": 383,
+     "tokens": 2018,
+     "sources": {
+      "hand": 9,
+      "reel": 272,
+      "synthetique": 102
+     },
+     "langues": {
+      "fr": 252,
+      "en": 131
+     },
+     "types_tout": {
+      "GN": 518,
+      "GP": 65,
+      "GV": 446,
+      "SUB": 48,
+      "REL": 43,
+      "ADJ": 19,
+      "ADV": 19,
+      "PONCT": 6
+     },
+     "types_cibles": {
+      "GP": 60,
+      "SUB": 47,
+      "REL": 43
+     },
+     "cibles": 150,
+     "cibles_par_langue": {
+      "fr": 95,
+      "en": 55
+     },
+     "cibles_par_source": {
+      "hand": 5,
+      "reel": 105,
+      "synthetique": 40
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 39,
+      "GP/en": 21,
+      "SUB/en": 18,
+      "REL/fr": 27,
+      "REL/en": 16,
+      "SUB/fr": 29
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 4,
+      "hand/SUB": 1,
+      "reel/GP": 37,
+      "reel/REL": 34,
+      "reel/SUB": 34,
+      "synthetique/GP": 19,
+      "synthetique/SUB": 12,
+      "synthetique/REL": 9
+     },
+     "cibles_par_source_langue": {
+      "hand/fr": 2,
+      "hand/en": 3,
+      "reel/fr": 53,
+      "reel/en": 52,
+      "synthetique/fr": 40
+     }
+    },
+    "test": {
+     "phrases": 229,
+     "ids_uniques": 229,
+     "tokens": 1161,
+     "sources": {
+      "hand": 11,
+      "reel": 160,
+      "synthetique": 58
+     },
+     "langues": {
+      "fr": 150,
+      "en": 79
+     },
+     "types_tout": {
+      "GN": 310,
+      "GV": 266,
+      "GP": 40,
+      "SUB": 22,
+      "REL": 31,
+      "ADJ": 16,
+      "ADV": 11,
+      "PONCT": 3
+     },
+     "types_cibles": {
+      "GP": 36,
+      "SUB": 22,
+      "REL": 31
+     },
+     "cibles": 89,
+     "cibles_par_langue": {
+      "fr": 56,
+      "en": 33
+     },
+     "cibles_par_source": {
+      "hand": 8,
+      "reel": 66,
+      "synthetique": 15
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 23,
+      "SUB/fr": 14,
+      "REL/fr": 19,
+      "GP/en": 13,
+      "REL/en": 12,
+      "SUB/en": 8
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 6,
+      "hand/SUB": 1,
+      "hand/REL": 1,
+      "reel/GP": 25,
+      "reel/REL": 23,
+      "reel/SUB": 18,
+      "synthetique/GP": 5,
+      "synthetique/REL": 7,
+      "synthetique/SUB": 3
+     },
+     "cibles_par_source_langue": {
+      "hand/fr": 8,
+      "reel/fr": 33,
+      "reel/en": 33,
+      "synthetique/fr": 15
+     }
+    }
+   },
+   "chi2": {
+    "sources": {
+     "gof_test_vs_tout": {
+      "chi2": 1.7274,
+      "p": 0.4216,
+      "dof": 2,
+      "min_attendu": 7.484
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 2.7602,
+      "p": 0.2516,
+      "dof": 2,
+      "min_attendu": 7.484
+     }
+    },
+    "langues": {
+     "gof_test_vs_tout": {
+      "chi2": 0.0034,
+      "p": 0.9532,
+      "dof": 1,
+      "min_attendu": 78.578
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 0.0055,
+      "p": 0.9409,
+      "dof": 1,
+      "min_attendu": 78.578
+     }
+    },
+    "types_cibles": {
+     "gof_test_vs_tout": {
+      "chi2": 0.9633,
+      "p": 0.6178,
+      "dof": 2,
+      "min_attendu": 25.695
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 1.5349,
+      "p": 0.4642,
+      "dof": 2,
+      "min_attendu": 25.695
+     }
+    },
+    "types_langues": {
+     "gof_test_vs_tout": {
+      "chi2": 0.9961,
+      "p": 0.9629,
+      "dof": 5,
+      "min_attendu": 9.682
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 1.5872,
+      "p": 0.9028,
+      "dof": 5,
+      "min_attendu": 9.682
+     }
+    }
+   },
+   "absents": {
+    "dev": {
+     "absents": [
+      "dev:source×type:hand/REL"
+     ],
+     "minces": [
+      "dev:source×type:hand/SUB=1",
+      "dev:source×langue:hand/fr=2",
+      "dev:source×langue:hand/en=3"
+     ],
+     "compte": {
+      "phrases": 383,
+      "ids_uniques": 383,
+      "tokens": 2018,
+      "sources": {
+       "hand": 9,
+       "reel": 272,
+       "synthetique": 102
+      },
+      "langues": {
+       "fr": 252,
+       "en": 131
+      },
+      "types_tout": {
+       "GN": 518,
+       "GP": 65,
+       "GV": 446,
+       "SUB": 48,
+       "REL": 43,
+       "ADJ": 19,
+       "ADV": 19,
+       "PONCT": 6
+      },
+      "types_cibles": {
+       "GP": 60,
+       "SUB": 47,
+       "REL": 43
+      },
+      "cibles": 150,
+      "cibles_par_langue": {
+       "fr": 95,
+       "en": 55
+      },
+      "cibles_par_source": {
+       "hand": 5,
+       "reel": 105,
+       "synthetique": 40
+      },
+      "cibles_par_type_langue": {
+       "GP/fr": 39,
+       "GP/en": 21,
+       "SUB/en": 18,
+       "REL/fr": 27,
+       "REL/en": 16,
+       "SUB/fr": 29
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 4,
+       "hand/SUB": 1,
+       "reel/GP": 37,
+       "reel/REL": 34,
+       "reel/SUB": 34,
+       "synthetique/GP": 19,
+       "synthetique/SUB": 12,
+       "synthetique/REL": 9
+      },
+      "cibles_par_source_langue": {
+       "hand/fr": 2,
+       "hand/en": 3,
+       "reel/fr": 53,
+       "reel/en": 52,
+       "synthetique/fr": 40
+      }
+     }
+    },
+    "test": {
+     "absents": [
+      "test:source×langue:hand/en"
+     ],
+     "minces": [
+      "test:source×type:hand/REL=1",
+      "test:source×type:hand/SUB=1",
+      "test:source×type:synthetique/SUB=3"
+     ],
+     "compte": {
+      "phrases": 229,
+      "ids_uniques": 229,
+      "tokens": 1161,
+      "sources": {
+       "hand": 11,
+       "reel": 160,
+       "synthetique": 58
+      },
+      "langues": {
+       "fr": 150,
+       "en": 79
+      },
+      "types_tout": {
+       "GN": 310,
+       "GV": 266,
+       "GP": 40,
+       "SUB": 22,
+       "REL": 31,
+       "ADJ": 16,
+       "ADV": 11,
+       "PONCT": 3
+      },
+      "types_cibles": {
+       "GP": 36,
+       "SUB": 22,
+       "REL": 31
+      },
+      "cibles": 89,
+      "cibles_par_langue": {
+       "fr": 56,
+       "en": 33
+      },
+      "cibles_par_source": {
+       "hand": 8,
+       "reel": 66,
+       "synthetique": 15
+      },
+      "cibles_par_type_langue": {
+       "GP/fr": 23,
+       "SUB/fr": 14,
+       "REL/fr": 19,
+       "GP/en": 13,
+       "REL/en": 12,
+       "SUB/en": 8
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 6,
+       "hand/SUB": 1,
+       "hand/REL": 1,
+       "reel/GP": 25,
+       "reel/REL": 23,
+       "reel/SUB": 18,
+       "synthetique/GP": 5,
+       "synthetique/REL": 7,
+       "synthetique/SUB": 3
+      },
+      "cibles_par_source_langue": {
+       "hand/fr": 8,
+       "reel/fr": 33,
+       "reel/en": 33,
+       "synthetique/fr": 15
+      }
+     }
+    }
+   }
+  },
+  "decale_2": {
+   "regle": "crc32(id)%3==2 -> test",
+   "dev": {
+    "phrases": 419,
+    "tokens": 2155,
+    "pos": {
+     "exactitude": 0.7596,
+     "exactitude_ferme": 0.9044,
+     "exactitude_ouvert": 0.6231,
+     "justes": 1637,
+     "tokens": 2155
+    },
+    "syntagme": {
+     "precision": 0.6323,
+     "rappel": 0.5529,
+     "f1": 0.59,
+     "tp": 700,
+     "fp": 407,
+     "fn": 566
+    },
+    "tete": {
+     "precision": 0.8124,
+     "rappel": 0.6738,
+     "f1": 0.7366,
+     "tp": 853,
+     "fp": 197,
+     "fn": 413
+    },
+    "pragmatique": {
+     "acte": 0.9952,
+     "negation": 0.9737,
+     "modalite": 0.9833,
+     "double_sens": 0.9475
+    },
+    "fraction_semantique": 0.5547,
+    "attachement": {
+     "cibles": 165,
+     "labels": 153,
+     "exact": 153,
+     "exact_any": 153,
+     "top1": 153,
+     "topk": 152,
+     "topk_exact": 152,
+     "couverture": 0.9273,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9273,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9273,
+     "topk_taux": 0.9212,
+     "topk_taux_span": 0.9935,
+     "topk_exact_taux": 0.9212,
+     "verbe": {
+      "cibles": 106,
+      "justes": 106,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 47,
+      "justes": 47,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 153,
+     "labels": 153,
+     "top1": 153,
+     "topk": 152,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9935,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 12,
+     "par_type": {
+      "REL": 6,
+      "SUB": 3,
+      "GP": 3
+     },
+     "par_langue": {
+      "fr": 11,
+      "en": 1
+     },
+     "par_source": {
+      "reel": 3,
+      "synthetique": 9
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 106,
+      "labels": 95,
+      "exact": 95,
+      "exact_any": 95,
+      "top1": 95,
+      "topk": 94,
+      "topk_exact": 94,
+      "couverture": 0.8962,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8962,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8962,
+      "topk_taux": 0.8868,
+      "topk_taux_span": 0.9895,
+      "topk_exact_taux": 0.8868,
+      "verbe": {
+       "cibles": 66,
+       "justes": 66,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 29,
+       "justes": 29,
+       "taux": 1.0
+      },
+      "phrases": 275
+     },
+     "en": {
+      "cibles": 59,
+      "labels": 58,
+      "exact": 58,
+      "exact_any": 58,
+      "top1": 58,
+      "topk": 58,
+      "topk_exact": 58,
+      "couverture": 0.9831,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9831,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9831,
+      "topk_taux": 0.9831,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9831,
+      "verbe": {
+       "cibles": 40,
+       "justes": 40,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 18,
+       "justes": 18,
+       "taux": 1.0
+      },
+      "phrases": 144
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 48,
+      "labels": 42,
+      "exact": 42,
+      "exact_any": 42,
+      "top1": 42,
+      "topk": 42,
+      "topk_exact": 42,
+      "couverture": 0.875,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.875,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.875,
+      "topk_taux": 0.875,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.875,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 42,
+       "justes": 42,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.6667,
+       "rappel": 0.875,
+       "f1": 0.7568,
+       "tp": 42,
+       "fp": 21,
+       "fn": 6
+      },
+      "tete": {
+       "precision": 0.96,
+       "rappel": 1.0,
+       "f1": 0.9796,
+       "tp": 48,
+       "fp": 2,
+       "fn": 0
+      }
+     },
+     "SUB": {
+      "cibles": 46,
+      "labels": 43,
+      "exact": 43,
+      "exact_any": 43,
+      "top1": 43,
+      "topk": 42,
+      "topk_exact": 42,
+      "couverture": 0.9348,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9348,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9348,
+      "topk_taux": 0.913,
+      "topk_taux_span": 0.9767,
+      "topk_exact_taux": 0.913,
+      "verbe": {
+       "cibles": 43,
+       "justes": 43,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.8776,
+       "rappel": 0.9348,
+       "f1": 0.9053,
+       "tp": 43,
+       "fp": 6,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.9375,
+       "rappel": 0.9783,
+       "f1": 0.9574,
+       "tp": 45,
+       "fp": 3,
+       "fn": 1
+      }
+     },
+     "GP": {
+      "cibles": 71,
+      "labels": 68,
+      "exact": 68,
+      "exact_any": 68,
+      "top1": 68,
+      "topk": 68,
+      "topk_exact": 68,
+      "couverture": 0.9577,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9577,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9577,
+      "topk_taux": 0.9577,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9577,
+      "verbe": {
+       "cibles": 63,
+       "justes": 63,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 5,
+       "justes": 5,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7812,
+       "rappel": 0.9615,
+       "f1": 0.8621,
+       "tp": 75,
+       "fp": 21,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.7979,
+       "rappel": 0.9615,
+       "f1": 0.8721,
+       "tp": 75,
+       "fp": 19,
+       "fn": 3
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 31,
+      "labels": 25,
+      "exact": 25,
+      "exact_any": 25,
+      "top1": 25,
+      "topk": 25,
+      "topk_exact": 25,
+      "couverture": 0.8065,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8065,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8065,
+      "topk_taux": 0.8065,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8065,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 25,
+       "justes": 25,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 17,
+      "labels": 17,
+      "exact": 17,
+      "exact_any": 17,
+      "top1": 17,
+      "topk": 17,
+      "topk_exact": 17,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 28,
+      "labels": 26,
+      "exact": 26,
+      "exact_any": 26,
+      "top1": 26,
+      "topk": 25,
+      "topk_exact": 25,
+      "couverture": 0.9286,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9286,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9286,
+      "topk_taux": 0.8929,
+      "topk_taux_span": 0.9615,
+      "topk_exact_taux": 0.8929,
+      "verbe": {
+       "cibles": 26,
+       "justes": 26,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 18,
+      "labels": 17,
+      "exact": 17,
+      "exact_any": 17,
+      "top1": 17,
+      "topk": 17,
+      "topk_exact": 17,
+      "couverture": 0.9444,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9444,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9444,
+      "topk_taux": 0.9444,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9444,
+      "verbe": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 47,
+      "labels": 44,
+      "exact": 44,
+      "exact_any": 44,
+      "top1": 44,
+      "topk": 44,
+      "topk_exact": 44,
+      "couverture": 0.9362,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9362,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9362,
+      "topk_taux": 0.9362,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9362,
+      "verbe": {
+       "cibles": 40,
+       "justes": 40,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 4,
+       "justes": 4,
+       "taux": 1.0
+      }
+     },
+     "GP/en": {
+      "cibles": 24,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "top1": 24,
+      "topk": 24,
+      "topk_exact": 24,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 23,
+       "justes": 23,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 11,
+      "labels": 11,
+      "exact": 11,
+      "exact_any": 11,
+      "top1": 11,
+      "topk": 11,
+      "topk_exact": 11,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 6,
+       "justes": 6,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 5,
+       "justes": 5,
+       "taux": 1.0
+      }
+     },
+     "reel": {
+      "cibles": 116,
+      "labels": 113,
+      "exact": 113,
+      "exact_any": 113,
+      "top1": 113,
+      "topk": 112,
+      "topk_exact": 112,
+      "couverture": 0.9741,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9741,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9741,
+      "topk_taux": 0.9655,
+      "topk_taux_span": 0.9912,
+      "topk_exact_taux": 0.9655,
+      "verbe": {
+       "cibles": 78,
+       "justes": 78,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 35,
+       "justes": 35,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 38,
+      "labels": 29,
+      "exact": 29,
+      "exact_any": 29,
+      "top1": 29,
+      "topk": 29,
+      "topk_exact": 29,
+      "couverture": 0.7632,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7632,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.7632,
+      "topk_taux": 0.7632,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.7632,
+      "verbe": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 7,
+       "justes": 7,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5714,
+      "rappel": 0.5678,
+      "f1": 0.5696,
+      "tp": 444,
+      "fp": 333,
+      "fn": 338
+     },
+     "en": {
+      "precision": 0.7758,
+      "rappel": 0.5289,
+      "f1": 0.629,
+      "tp": 256,
+      "fp": 74,
+      "fn": 228
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.75,
+      "rappel": 0.6905,
+      "f1": 0.719,
+      "tp": 540,
+      "fp": 180,
+      "fn": 242
+     },
+     "en": {
+      "precision": 0.9485,
+      "rappel": 0.6467,
+      "f1": 0.769,
+      "tp": 313,
+      "fp": 17,
+      "fn": 171
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7518,
+      "tokens": 1378
+     },
+     "en": {
+      "exactitude": 0.7735,
+      "tokens": 777
+     }
+    }
+   },
+   "test": {
+    "phrases": 193,
+    "tokens": 1024,
+    "pos": {
+     "exactitude": 0.7549,
+     "exactitude_ferme": 0.892,
+     "exactitude_ouvert": 0.624,
+     "justes": 773,
+     "tokens": 1024
+    },
+    "syntagme": {
+     "precision": 0.6172,
+     "rappel": 0.5293,
+     "f1": 0.5699,
+     "tp": 316,
+     "fp": 196,
+     "fn": 281
+    },
+    "tete": {
+     "precision": 0.8016,
+     "rappel": 0.6633,
+     "f1": 0.7259,
+     "tp": 396,
+     "fp": 98,
+     "fn": 201
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9845,
+     "modalite": 1.0,
+     "double_sens": 0.9378
+    },
+    "fraction_semantique": 0.5517,
+    "attachement": {
+     "cibles": 74,
+     "labels": 67,
+     "exact": 67,
+     "exact_any": 67,
+     "top1": 67,
+     "topk": 67,
+     "topk_exact": 67,
+     "couverture": 0.9054,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9054,
+     "exact_any_taux_span": 1.0,
+     "top1_taux": 0.9054,
+     "topk_taux": 0.9054,
+     "topk_taux_span": 1.0,
+     "topk_exact_taux": 0.9054,
+     "verbe": {
+      "cibles": 43,
+      "justes": 43,
+      "taux": 1.0
+     },
+     "nom": {
+      "cibles": 24,
+      "justes": 24,
+      "taux": 1.0
+     }
+    },
+    "attachement_tete": {
+     "cibles": 67,
+     "labels": 67,
+     "top1": 67,
+     "topk": 67,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "couverture": 1.0
+    },
+    "perdus": {
+     "total": 7,
+     "par_type": {
+      "REL": 3,
+      "SUB": 3,
+      "GP": 1
+     },
+     "par_langue": {
+      "en": 1,
+      "fr": 6
+     },
+     "par_source": {
+      "reel": 2,
+      "synthetique": 5
+     }
+    },
+    "par_langue": {
+     "fr": {
+      "cibles": 45,
+      "labels": 39,
+      "exact": 39,
+      "exact_any": 39,
+      "top1": 39,
+      "topk": 39,
+      "topk_exact": 39,
+      "couverture": 0.8667,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8667,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8667,
+      "topk_taux": 0.8667,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8667,
+      "verbe": {
+       "cibles": 26,
+       "justes": 26,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 13,
+       "justes": 13,
+       "taux": 1.0
+      },
+      "phrases": 127
+     },
+     "en": {
+      "cibles": 29,
+      "labels": 28,
+      "exact": 28,
+      "exact_any": 28,
+      "top1": 28,
+      "topk": 28,
+      "topk_exact": 28,
+      "couverture": 0.9655,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9655,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9655,
+      "topk_taux": 0.9655,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9655,
+      "verbe": {
+       "cibles": 17,
+       "justes": 17,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 11,
+       "justes": 11,
+       "taux": 1.0
+      },
+      "phrases": 66
+     }
+    },
+    "par_type": {
+     "REL": {
+      "cibles": 26,
+      "labels": 23,
+      "exact": 23,
+      "exact_any": 23,
+      "top1": 23,
+      "topk": 23,
+      "topk_exact": 23,
+      "couverture": 0.8846,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8846,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8846,
+      "topk_taux": 0.8846,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8846,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 23,
+       "justes": 23,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7419,
+       "rappel": 0.8846,
+       "f1": 0.807,
+       "tp": 23,
+       "fp": 8,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.8621,
+       "rappel": 0.9615,
+       "f1": 0.9091,
+       "tp": 25,
+       "fp": 4,
+       "fn": 1
+      }
+     },
+     "SUB": {
+      "cibles": 23,
+      "labels": 20,
+      "exact": 20,
+      "exact_any": 20,
+      "top1": 20,
+      "topk": 20,
+      "topk_exact": 20,
+      "couverture": 0.8696,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8696,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8696,
+      "topk_taux": 0.8696,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8696,
+      "verbe": {
+       "cibles": 20,
+       "justes": 20,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "syntagme": {
+       "precision": 0.913,
+       "rappel": 0.875,
+       "f1": 0.8936,
+       "tp": 21,
+       "fp": 2,
+       "fn": 3
+      },
+      "tete": {
+       "precision": 0.9565,
+       "rappel": 0.9167,
+       "f1": 0.9362,
+       "tp": 22,
+       "fp": 1,
+       "fn": 2
+      }
+     },
+     "GP": {
+      "cibles": 25,
+      "labels": 24,
+      "exact": 24,
+      "exact_any": 24,
+      "top1": 24,
+      "topk": 24,
+      "topk_exact": 24,
+      "couverture": 0.96,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.96,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.96,
+      "topk_taux": 0.96,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.96,
+      "verbe": {
+       "cibles": 23,
+       "justes": 23,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      },
+      "syntagme": {
+       "precision": 0.7429,
+       "rappel": 0.963,
+       "f1": 0.8387,
+       "tp": 26,
+       "fp": 9,
+       "fn": 1
+      },
+      "tete": {
+       "precision": 0.7429,
+       "rappel": 0.963,
+       "f1": 0.8387,
+       "tp": 26,
+       "fp": 9,
+       "fn": 1
+      }
+     }
+    },
+    "par_type_langue": {
+     "REL/fr": {
+      "cibles": 15,
+      "labels": 13,
+      "exact": 13,
+      "exact_any": 13,
+      "top1": 13,
+      "topk": 13,
+      "topk_exact": 13,
+      "couverture": 0.8667,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8667,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8667,
+      "topk_taux": 0.8667,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8667,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 13,
+       "justes": 13,
+       "taux": 1.0
+      }
+     },
+     "REL/en": {
+      "cibles": 11,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "top1": 10,
+      "topk": 10,
+      "topk_exact": 10,
+      "couverture": 0.9091,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9091,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9091,
+      "topk_taux": 0.9091,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9091,
+      "verbe": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      },
+      "nom": {
+       "cibles": 10,
+       "justes": 10,
+       "taux": 1.0
+      }
+     },
+     "SUB/fr": {
+      "cibles": 15,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "top1": 12,
+      "topk": 12,
+      "topk_exact": 12,
+      "couverture": 0.8,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.8,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.8,
+      "topk_taux": 0.8,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.8,
+      "verbe": {
+       "cibles": 12,
+       "justes": 12,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "SUB/en": {
+      "cibles": 8,
+      "labels": 8,
+      "exact": 8,
+      "exact_any": 8,
+      "top1": 8,
+      "topk": 8,
+      "topk_exact": 8,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 8,
+       "justes": 8,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/fr": {
+      "cibles": 15,
+      "labels": 14,
+      "exact": 14,
+      "exact_any": 14,
+      "top1": 14,
+      "topk": 14,
+      "topk_exact": 14,
+      "couverture": 0.9333,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9333,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9333,
+      "topk_taux": 0.9333,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9333,
+      "verbe": {
+       "cibles": 14,
+       "justes": 14,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "GP/en": {
+      "cibles": 10,
+      "labels": 10,
+      "exact": 10,
+      "exact_any": 10,
+      "top1": 10,
+      "topk": 10,
+      "topk_exact": 10,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 9,
+       "justes": 9,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 1,
+       "justes": 1,
+       "taux": 1.0
+      }
+     }
+    },
+    "par_source": {
+     "hand": {
+      "cibles": 2,
+      "labels": 2,
+      "exact": 2,
+      "exact_any": 2,
+      "top1": 2,
+      "topk": 2,
+      "topk_exact": 2,
+      "couverture": 1.0,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 1.0,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 1.0,
+      "verbe": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 0,
+       "justes": 0,
+       "taux": null
+      }
+     },
+     "reel": {
+      "cibles": 55,
+      "labels": 53,
+      "exact": 53,
+      "exact_any": 53,
+      "top1": 53,
+      "topk": 53,
+      "topk_exact": 53,
+      "couverture": 0.9636,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.9636,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.9636,
+      "topk_taux": 0.9636,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.9636,
+      "verbe": {
+       "cibles": 31,
+       "justes": 31,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 22,
+       "justes": 22,
+       "taux": 1.0
+      }
+     },
+     "synthetique": {
+      "cibles": 17,
+      "labels": 12,
+      "exact": 12,
+      "exact_any": 12,
+      "top1": 12,
+      "topk": 12,
+      "topk_exact": 12,
+      "couverture": 0.7059,
+      "exact_taux_span": 1.0,
+      "exact_taux_cibles": 0.7059,
+      "exact_any_taux_span": 1.0,
+      "top1_taux": 0.7059,
+      "topk_taux": 0.7059,
+      "topk_taux_span": 1.0,
+      "topk_exact_taux": 0.7059,
+      "verbe": {
+       "cibles": 10,
+       "justes": 10,
+       "taux": 1.0
+      },
+      "nom": {
+       "cibles": 2,
+       "justes": 2,
+       "taux": 1.0
+      }
+     }
+    },
+    "f1_langue": {
+     "fr": {
+      "precision": 0.5475,
+      "rappel": 0.5172,
+      "f1": 0.5319,
+      "tp": 196,
+      "fp": 162,
+      "fn": 183
+     },
+     "en": {
+      "precision": 0.7792,
+      "rappel": 0.5505,
+      "f1": 0.6452,
+      "tp": 120,
+      "fp": 34,
+      "fn": 98
+     }
+    },
+    "tete_langue": {
+     "fr": {
+      "precision": 0.7265,
+      "rappel": 0.6517,
+      "f1": 0.6871,
+      "tp": 247,
+      "fp": 93,
+      "fn": 132
+     },
+     "en": {
+      "precision": 0.9675,
+      "rappel": 0.6835,
+      "f1": 0.8011,
+      "tp": 149,
+      "fp": 5,
+      "fn": 69
+     }
+    },
+    "pos_langue": {
+     "fr": {
+      "exactitude": 0.7596,
+      "tokens": 653
+     },
+     "en": {
+      "exactitude": 0.7466,
+      "tokens": 371
+     }
+    }
+   },
+   "equilibre": {
+    "dev": {
+     "phrases": 419,
+     "ids_uniques": 419,
+     "tokens": 2155,
+     "sources": {
+      "hand": 16,
+      "reel": 290,
+      "synthetique": 113
+     },
+     "langues": {
+      "fr": 275,
+      "en": 144
+     },
+     "types_tout": {
+      "GN": 558,
+      "GV": 487,
+      "GP": 78,
+      "SUB": 46,
+      "REL": 48,
+      "ADJ": 21,
+      "ADV": 23,
+      "PONCT": 5
+     },
+     "types_cibles": {
+      "GP": 71,
+      "SUB": 46,
+      "REL": 48
+     },
+     "cibles": 165,
+     "cibles_par_langue": {
+      "fr": 106,
+      "en": 59
+     },
+     "cibles_par_source": {
+      "hand": 11,
+      "reel": 116,
+      "synthetique": 38
+     },
+     "cibles_par_type_langue": {
+      "GP/fr": 47,
+      "SUB/fr": 28,
+      "REL/fr": 31,
+      "GP/en": 24,
+      "REL/en": 17,
+      "SUB/en": 18
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 9,
+      "hand/SUB": 1,
+      "hand/REL": 1,
+      "reel/GP": 44,
+      "reel/REL": 35,
+      "reel/SUB": 37,
+      "synthetique/GP": 18,
+      "synthetique/REL": 12,
+      "synthetique/SUB": 8
+     },
+     "cibles_par_source_langue": {
+      "hand/fr": 10,
+      "hand/en": 1,
+      "reel/fr": 58,
+      "reel/en": 58,
+      "synthetique/fr": 38
+     }
+    },
+    "test": {
+     "phrases": 193,
+     "ids_uniques": 193,
+     "tokens": 1024,
+     "sources": {
+      "hand": 4,
+      "reel": 142,
+      "synthetique": 47
+     },
+     "langues": {
+      "fr": 127,
+      "en": 66
+     },
+     "types_tout": {
+      "GN": 270,
+      "GV": 225,
+      "GP": 27,
+      "SUB": 24,
+      "REL": 26,
+      "ADJ": 14,
+      "ADV": 7,
+      "PONCT": 4
+     },
+     "types_cibles": {
+      "GP": 25,
+      "SUB": 23,
+      "REL": 26
+     },
+     "cibles": 74,
+     "cibles_par_langue": {
+      "en": 29,
+      "fr": 45
+     },
+     "cibles_par_source": {
+      "hand": 2,
+      "reel": 55,
+      "synthetique": 17
+     },
+     "cibles_par_type_langue": {
+      "GP/en": 10,
+      "SUB/en": 8,
+      "GP/fr": 15,
+      "REL/en": 11,
+      "REL/fr": 15,
+      "SUB/fr": 15
+     },
+     "cibles_par_source_type": {
+      "hand/GP": 1,
+      "hand/SUB": 1,
+      "reel/GP": 18,
+      "reel/REL": 22,
+      "reel/SUB": 15,
+      "synthetique/SUB": 7,
+      "synthetique/REL": 4,
+      "synthetique/GP": 6
+     },
+     "cibles_par_source_langue": {
+      "hand/en": 2,
+      "reel/fr": 28,
+      "reel/en": 27,
+      "synthetique/fr": 17
+     }
+    }
+   },
+   "chi2": {
+    "sources": {
+     "gof_test_vs_tout": {
+      "chi2": 1.3248,
+      "p": 0.5156,
+      "dof": 2,
+      "min_attendu": 6.307
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 1.9351,
+      "p": 0.38,
+      "dof": 2,
+      "min_attendu": 6.307
+     }
+    },
+    "langues": {
+     "gof_test_vs_tout": {
+      "chi2": 0.0012,
+      "p": 0.9727,
+      "dof": 1,
+      "min_attendu": 66.225
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 0.0017,
+      "p": 0.967,
+      "dof": 1,
+      "min_attendu": 66.225
+     }
+    },
+    "types_cibles": {
+     "gof_test_vs_tout": {
+      "chi2": 1.2922,
+      "p": 0.5241,
+      "dof": 2,
+      "min_attendu": 21.364
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 1.8717,
+      "p": 0.3923,
+      "dof": 2,
+      "min_attendu": 21.364
+     }
+    },
+    "types_langues": {
+     "gof_test_vs_tout": {
+      "chi2": 1.8245,
+      "p": 0.8729,
+      "dof": 5,
+      "min_attendu": 8.05
+     },
+     "contingence_test_vs_dev": {
+      "chi2": 2.6427,
+      "p": 0.7549,
+      "dof": 5,
+      "min_attendu": 8.05
+     }
+    }
+   },
+   "absents": {
+    "dev": {
+     "absents": [],
+     "minces": [
+      "dev:source×type:hand/REL=1",
+      "dev:source×type:hand/SUB=1",
+      "dev:source×langue:hand/en=1"
+     ],
+     "compte": {
+      "phrases": 419,
+      "ids_uniques": 419,
+      "tokens": 2155,
+      "sources": {
+       "hand": 16,
+       "reel": 290,
+       "synthetique": 113
+      },
+      "langues": {
+       "fr": 275,
+       "en": 144
+      },
+      "types_tout": {
+       "GN": 558,
+       "GV": 487,
+       "GP": 78,
+       "SUB": 46,
+       "REL": 48,
+       "ADJ": 21,
+       "ADV": 23,
+       "PONCT": 5
+      },
+      "types_cibles": {
+       "GP": 71,
+       "SUB": 46,
+       "REL": 48
+      },
+      "cibles": 165,
+      "cibles_par_langue": {
+       "fr": 106,
+       "en": 59
+      },
+      "cibles_par_source": {
+       "hand": 11,
+       "reel": 116,
+       "synthetique": 38
+      },
+      "cibles_par_type_langue": {
+       "GP/fr": 47,
+       "SUB/fr": 28,
+       "REL/fr": 31,
+       "GP/en": 24,
+       "REL/en": 17,
+       "SUB/en": 18
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 9,
+       "hand/SUB": 1,
+       "hand/REL": 1,
+       "reel/GP": 44,
+       "reel/REL": 35,
+       "reel/SUB": 37,
+       "synthetique/GP": 18,
+       "synthetique/REL": 12,
+       "synthetique/SUB": 8
+      },
+      "cibles_par_source_langue": {
+       "hand/fr": 10,
+       "hand/en": 1,
+       "reel/fr": 58,
+       "reel/en": 58,
+       "synthetique/fr": 38
+      }
+     }
+    },
+    "test": {
+     "absents": [
+      "test:source×type:hand/REL",
+      "test:source×langue:hand/fr"
+     ],
+     "minces": [
+      "test:source×type:hand/SUB=1",
+      "test:source×type:hand/GP=1",
+      "test:source×langue:hand/en=2"
+     ],
+     "compte": {
+      "phrases": 193,
+      "ids_uniques": 193,
+      "tokens": 1024,
+      "sources": {
+       "hand": 4,
+       "reel": 142,
+       "synthetique": 47
+      },
+      "langues": {
+       "fr": 127,
+       "en": 66
+      },
+      "types_tout": {
+       "GN": 270,
+       "GV": 225,
+       "GP": 27,
+       "SUB": 24,
+       "REL": 26,
+       "ADJ": 14,
+       "ADV": 7,
+       "PONCT": 4
+      },
+      "types_cibles": {
+       "GP": 25,
+       "SUB": 23,
+       "REL": 26
+      },
+      "cibles": 74,
+      "cibles_par_langue": {
+       "en": 29,
+       "fr": 45
+      },
+      "cibles_par_source": {
+       "hand": 2,
+       "reel": 55,
+       "synthetique": 17
+      },
+      "cibles_par_type_langue": {
+       "GP/en": 10,
+       "SUB/en": 8,
+       "GP/fr": 15,
+       "REL/en": 11,
+       "REL/fr": 15,
+       "SUB/fr": 15
+      },
+      "cibles_par_source_type": {
+       "hand/GP": 1,
+       "hand/SUB": 1,
+       "reel/GP": 18,
+       "reel/REL": 22,
+       "reel/SUB": 15,
+       "synthetique/SUB": 7,
+       "synthetique/REL": 4,
+       "synthetique/GP": 6
+      },
+      "cibles_par_source_langue": {
+       "hand/en": 2,
+       "reel/fr": 28,
+       "reel/en": 27,
+       "synthetique/fr": 17
+      }
+     }
+    }
+   }
+  }
+ },
+ "stabilite": {
+  "exact_taux_span": {
+   "dev": {
+    "canonique": 1.0,
+    "decale_1": 1.0,
+    "decale_2": 1.0,
+    "etendue": 0.0
+   },
+   "test": {
+    "canonique": 1.0,
+    "decale_1": 1.0,
+    "decale_2": 1.0,
+    "etendue": 0.0
+   }
+  },
+  "exact": {
+   "dev": {
+    "canonique": 152,
+    "decale_1": 135,
+    "decale_2": 153,
+    "etendue": 18
+   },
+   "test": {
+    "canonique": 68,
+    "decale_1": 85,
+    "decale_2": 67,
+    "etendue": 18
+   }
+  },
+  "labels": {
+   "dev": {
+    "canonique": 152,
+    "decale_1": 135,
+    "decale_2": 153,
+    "etendue": 18
+   },
+   "test": {
+    "canonique": 68,
+    "decale_1": 85,
+    "decale_2": 67,
+    "etendue": 18
+   }
+  },
+  "couverture": {
+   "dev": {
+    "canonique": 0.9325,
+    "decale_1": 0.9,
+    "decale_2": 0.9273,
+    "etendue": 0.0325
+   },
+   "test": {
+    "canonique": 0.8947,
+    "decale_1": 0.9551,
+    "decale_2": 0.9054,
+    "etendue": 0.0603
+   }
+  },
+  "f1": {
+   "dev": {
+    "canonique": 0.5812,
+    "decale_1": 0.5793,
+    "decale_2": 0.59,
+    "etendue": 0.0107
+   },
+   "test": {
+    "canonique": 0.589,
+    "decale_1": 0.5908,
+    "decale_2": 0.5699,
+    "etendue": 0.0209
+   }
+  },
+  "tete": {
+   "dev": {
+    "canonique": 0.733,
+    "decale_1": 0.7297,
+    "decale_2": 0.7366,
+    "etendue": 0.0069
+   },
+   "test": {
+    "canonique": 0.7337,
+    "decale_1": 0.739,
+    "decale_2": 0.7259,
+    "etendue": 0.0131
+   }
+  },
+  "pos": {
+   "dev": {
+    "canonique": 0.7547,
+    "decale_1": 0.7602,
+    "decale_2": 0.7596,
+    "etendue": 0.0055
+   },
+   "test": {
+    "canonique": 0.7656,
+    "decale_1": 0.7545,
+    "decale_2": 0.7549,
+    "etendue": 0.0111
+   }
+  }
+ },
+ "monte_carlo": {
+  "n_iter": 2000,
+  "graine": 0,
+  "tailles": [
+   190,
+   229,
+   193
+  ],
+  "rangs_test": {
+   "f1": {
+    "p05": 0.0101,
+    "mediane": 0.0365,
+    "p95": 0.0743
+   },
+   "tete": {
+    "p05": 0.0076,
+    "mediane": 0.0268,
+    "p95": 0.0543
+   },
+   "pos": {
+    "p05": 0.0051,
+    "mediane": 0.0184,
+    "p95": 0.0378
+   },
+   "couverture": {
+    "p05": 0.0143,
+    "mediane": 0.0494,
+    "p95": 0.1008
+   },
+   "couv_REL": {
+    "p05": 0.0299,
+    "mediane": 0.1105,
+    "p95": 0.2208
+   },
+   "couv_SUB": {
+    "p05": 0.0283,
+    "mediane": 0.0964,
+    "p95": 0.1905
+   },
+   "couv_GP": {
+    "p05": 0.0204,
+    "mediane": 0.0645,
+    "p95": 0.1111
+   },
+   "couv_fr": {
+    "p05": 0.0204,
+    "mediane": 0.0726,
+    "p95": 0.1498
+   },
+   "couv_en": {
+    "p05": 0.0323,
+    "mediane": 0.0417,
+    "p95": 0.0769
+   }
+  },
+  "rangs_dev": {
+   "f1": {
+    "p05": 0.0051,
+    "mediane": 0.0184,
+    "p95": 0.0377
+   },
+   "tete": {
+    "p05": 0.0038,
+    "mediane": 0.0134,
+    "p95": 0.0275
+   },
+   "pos": {
+    "p05": 0.0025,
+    "mediane": 0.0092,
+    "p95": 0.0192
+   },
+   "couverture": {
+    "p05": 0.0069,
+    "mediane": 0.0248,
+    "p95": 0.051
+   },
+   "couv_REL": {
+    "p05": 0.0142,
+    "mediane": 0.0547,
+    "p95": 0.1126
+   },
+   "couv_SUB": {
+    "p05": 0.013,
+    "mediane": 0.0475,
+    "p95": 0.0963
+   },
+   "couv_GP": {
+    "p05": 0.0117,
+    "mediane": 0.0285,
+    "p95": 0.0547
+   },
+   "couv_fr": {
+    "p05": 0.01,
+    "mediane": 0.0361,
+    "p95": 0.0767
+   },
+   "couv_en": {
+    "p05": 0.0129,
+    "mediane": 0.0196,
+    "p95": 0.0385
+   }
+  }
+ },
+ "monte_carlo_observe": {
+  "f1": {
+   "test_valeurs": [
+    0.589,
+    0.5908,
+    0.5699
+   ],
+   "test_etendue": 0.0209,
+   "dev_valeurs": [
+    0.5812,
+    0.5793,
+    0.59
+   ],
+   "dev_etendue": 0.0107,
+   "p_mc_test": 0.7965,
+   "p_mc_dev": 0.789
+  },
+  "tete": {
+   "test_valeurs": [
+    0.7337,
+    0.739,
+    0.7259
+   ],
+   "test_etendue": 0.0131,
+   "dev_valeurs": [
+    0.733,
+    0.7297,
+    0.7366
+   ],
+   "dev_etendue": 0.0069,
+   "p_mc_test": 0.86,
+   "p_mc_dev": 0.8425
+  },
+  "pos": {
+   "test_valeurs": [
+    0.7656,
+    0.7545,
+    0.7549
+   ],
+   "test_etendue": 0.0111,
+   "dev_valeurs": [
+    0.7547,
+    0.7602,
+    0.7596
+   ],
+   "dev_etendue": 0.0055,
+   "p_mc_test": 0.7635,
+   "p_mc_dev": 0.766
+  },
+  "couverture": {
+   "test_valeurs": [
+    0.8947,
+    0.9551,
+    0.9054
+   ],
+   "test_etendue": 0.0603,
+   "dev_valeurs": [
+    0.9325,
+    0.9,
+    0.9273
+   ],
+   "dev_etendue": 0.0325,
+   "p_mc_test": 0.345,
+   "p_mc_dev": 0.295
+  },
+  "couv_REL": {
+   "test_valeurs": [
+    0.8235,
+    0.9032,
+    0.8846
+   ],
+   "test_etendue": 0.0797,
+   "dev_valeurs": [
+    0.8947,
+    0.8605,
+    0.875
+   ],
+   "dev_etendue": 0.0343,
+   "p_mc_test": 0.693,
+   "p_mc_dev": 0.7505
+  },
+  "couv_SUB": {
+   "test_valeurs": [
+    0.875,
+    1.0,
+    0.8696
+   ],
+   "test_etendue": 0.1304,
+   "dev_valeurs": [
+    0.9333,
+    0.8723,
+    0.9348
+   ],
+   "dev_etendue": 0.0624,
+   "p_mc_test": 0.316,
+   "p_mc_dev": 0.3085
+  },
+  "couv_GP": {
+   "test_valeurs": [
+    0.9429,
+    0.9722,
+    0.96
+   ],
+   "test_etendue": 0.0294,
+   "dev_valeurs": [
+    0.9672,
+    0.95,
+    0.9577
+   ],
+   "dev_etendue": 0.0172,
+   "p_mc_test": 0.8415,
+   "p_mc_dev": 0.8015
+  },
+  "couv_fr": {
+   "test_valeurs": [
+    0.86,
+    0.9286,
+    0.8667
+   ],
+   "test_etendue": 0.0686,
+   "dev_valeurs": [
+    0.901,
+    0.8632,
+    0.8962
+   ],
+   "dev_etendue": 0.0378,
+   "p_mc_test": 0.5445,
+   "p_mc_dev": 0.469
+  },
+  "couv_en": {
+   "test_valeurs": [
+    0.9615,
+    1.0,
+    0.9655
+   ],
+   "test_etendue": 0.0385,
+   "dev_valeurs": [
+    0.9839,
+    0.9636,
+    0.9831
+   ],
+   "dev_etendue": 0.0202,
+   "p_mc_test": 0.662,
+   "p_mc_dev": 0.4775
+  }
+ },
+ "spans": {
+  "total": 19,
+  "par_type": {
+   "REL": 9,
+   "SUB": 6,
+   "GP": 4
+  },
+  "par_langue": {
+   "en": 2,
+   "fr": 17
+  },
+  "par_seau": {
+   "2": 7,
+   "0": 8,
+   "1": 4
+  },
+  "liste": [
+   {
+    "id": "r035",
+    "langue": "en",
+    "type": "REL",
+    "source": "reel",
+    "debut": 9,
+    "fin": 24,
+    "span": "she talks about",
+    "cible": "film",
+    "cibles": [
+     "film"
+    ],
+    "seau": 2,
+    "audit": [
+     "en",
+     "REL",
+     "reel",
+     "A17 hors perimetre (relative zero)"
+    ]
+   },
+   {
+    "id": "r255",
+    "langue": "fr",
+    "type": "REL",
+    "source": "reel",
+    "debut": 11,
+    "fin": 27,
+    "span": "que j'ai achetée",
+    "cible": "voiture",
+    "cibles": [
+     "voiture"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "REL",
+     "reel",
+     "A17 hors perimetre (lexique reel)"
+    ]
+   },
+   {
+    "id": "r264",
+    "langue": "fr",
+    "type": "SUB",
+    "source": "reel",
+    "debut": 8,
+    "fin": 26,
+    "span": "qu'il vient demain",
+    "cible": "sais",
+    "cibles": [
+     "sais"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "SUB",
+     "reel",
+     "A17 hors perimetre (tokenisation)"
+    ]
+   },
+   {
+    "id": "r288",
+    "langue": "en",
+    "type": "SUB",
+    "source": "reel",
+    "debut": 7,
+    "fin": 29,
+    "span": "that he comes tomorrow",
+    "cible": "know",
+    "cibles": [
+     "know"
+    ],
+    "seau": 0,
+    "audit": [
+     "en",
+     "SUB",
+     "reel",
+     "A17 hors perimetre (adverbe final)"
+    ]
+   },
+   {
+    "id": "r303",
+    "langue": "fr",
+    "type": "SUB",
+    "source": "reel",
+    "debut": 8,
+    "fin": 23,
+    "span": "car il est tard",
+    "cible": "pars",
+    "cibles": [
+     "pars"
+    ],
+    "seau": 2,
+    "audit": [
+     "?",
+     "?",
+     "?",
+     "nouveau"
+    ]
+   },
+   {
+    "id": "s010",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 10,
+    "fin": 18,
+    "span": "qui nage",
+    "cible": "chemin",
+    "cibles": [
+     "chemin"
+    ],
+    "seau": 1,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s027",
+    "langue": "fr",
+    "type": "GP",
+    "source": "synthetique",
+    "debut": 31,
+    "fin": 33,
+    "span": "il",
+    "cible": "marche",
+    "cibles": [
+     "marche",
+     "village"
+    ],
+    "seau": 1,
+    "audit": [
+     "fr",
+     "GP",
+     "synthetique",
+     "A17 non recuperable (gold)"
+    ]
+   },
+   {
+    "id": "s035",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 10,
+    "fin": 19,
+    "span": "qui ferme",
+    "cible": "papier",
+    "cibles": [
+     "papier"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s037",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 5,
+    "fin": 15,
+    "span": "qui marche",
+    "cible": "Paul",
+    "cibles": [
+     "Paul"
+    ],
+    "seau": 1,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "regression R2"
+    ]
+   },
+   {
+    "id": "s044",
+    "langue": "fr",
+    "type": "SUB",
+    "source": "synthetique",
+    "debut": 17,
+    "fin": 29,
+    "span": "que ils crie",
+    "cible": "nage",
+    "cibles": [
+     "nage"
+    ],
+    "seau": 2,
+    "audit": [
+     "fr",
+     "SUB",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s061",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 9,
+    "fin": 18,
+    "span": "qui saute",
+    "cible": "nuage",
+    "cibles": [
+     "nuage"
+    ],
+    "seau": 2,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s065",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 5,
+    "fin": 17,
+    "span": "qui commence",
+    "cible": "elle",
+    "cibles": [
+     "elle"
+    ],
+    "seau": 2,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s112",
+    "langue": "fr",
+    "type": "SUB",
+    "source": "synthetique",
+    "debut": 24,
+    "fin": 39,
+    "span": "que Lucas ferme",
+    "cible": "nage",
+    "cibles": [
+     "nage"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "SUB",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s114",
+    "langue": "fr",
+    "type": "SUB",
+    "source": "synthetique",
+    "debut": 22,
+    "fin": 43,
+    "span": "que les avocat compte",
+    "cible": "dessine",
+    "cibles": [
+     "dessine"
+    ],
+    "seau": 2,
+    "audit": [
+     "fr",
+     "SUB",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s125",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 11,
+    "fin": 21,
+    "span": "qui compte",
+    "cible": "renard",
+    "cibles": [
+     "renard"
+    ],
+    "seau": 1,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s141",
+    "langue": "fr",
+    "type": "REL",
+    "source": "synthetique",
+    "debut": 5,
+    "fin": 15,
+    "span": "qui trouve",
+    "cible": "Emma",
+    "cibles": [
+     "Emma"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "REL",
+     "synthetique",
+     "A17 non recuperable (lexique)"
+    ]
+   },
+   {
+    "id": "s146",
+    "langue": "fr",
+    "type": "GP",
+    "source": "synthetique",
+    "debut": 25,
+    "fin": 35,
+    "span": "les jardin",
+    "cible": "observe",
+    "cibles": [
+     "observe",
+     "montagne"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "GP",
+     "synthetique",
+     "A17 non recuperable (gold)"
+    ]
+   },
+   {
+    "id": "s148",
+    "langue": "fr",
+    "type": "GP",
+    "source": "synthetique",
+    "debut": 20,
+    "fin": 39,
+    "span": "les ancienne lettre",
+    "cible": "nage",
+    "cibles": [
+     "nage",
+     "voyage"
+    ],
+    "seau": 2,
+    "audit": [
+     "fr",
+     "GP",
+     "synthetique",
+     "A17 non recuperable (gold)"
+    ]
+   },
+   {
+    "id": "s160",
+    "langue": "fr",
+    "type": "GP",
+    "source": "synthetique",
+    "debut": 20,
+    "fin": 29,
+    "span": "le renard",
+    "cible": "nage",
+    "cibles": [
+     "nage",
+     "chemin"
+    ],
+    "seau": 0,
+    "audit": [
+     "fr",
+     "GP",
+     "synthetique",
+     "A17 non recuperable (gold)"
+    ]
+   }
+  ],
+  "recuperes_depuis_audit": [
+   "r273",
+   "s032",
+   "s069",
+   "s072",
+   "s115",
+   "s135",
+   "g017",
+   "r153",
+   "r280"
+  ],
+  "recuperes_detail": {
+   "r273": "regression R1a",
+   "s032": "regression R1a",
+   "s069": "regression R1a",
+   "s072": "regression R1a",
+   "s115": "regression R1a",
+   "s135": "regression R1a",
+   "g017": "A17 non integre (R1c)",
+   "r153": "A17 non integre (R3b)",
+   "r280": "A17 non integre (R3a)"
+  },
+  "nouveaux_depuis_audit": [
+   "r303"
+  ],
+  "par_source": {
+   "reel": 5,
+   "synthetique": 14
+  }
+ },
+ "comparaison": {
+  "commits_mesures": {
+   "v7_69bd865e": {
+    "sha": "69bd865e",
+    "dev": {
+     "phrases": 422,
+     "cibles": 163,
+     "labels": 134,
+     "exact": 133,
+     "exact_any": 133,
+     "topk": 111,
+     "couverture": 0.8221,
+     "exact_taux_span": 0.9925,
+     "exact_taux_cibles": 0.816,
+     "f1": 0.5512,
+     "precision": 0.5953,
+     "rappel": 0.5131,
+     "tete": 0.7132,
+     "tete_precision": 0.7893,
+     "tete_rappel": 0.6505,
+     "pos": 0.7547
+    },
+    "test": {
+     "phrases": 190,
+     "cibles": 76,
+     "labels": 62,
+     "exact": 62,
+     "exact_any": 62,
+     "topk": 55,
+     "couverture": 0.8158,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8158,
+     "f1": 0.5651,
+     "precision": 0.5972,
+     "rappel": 0.5362,
+     "tete": 0.7196,
+     "tete_precision": 0.7866,
+     "tete_rappel": 0.6631,
+     "pos": 0.7656
+    },
+    "tout": {
+     "phrases": 612,
+     "cibles": 239,
+     "labels": 196,
+     "exact": 195,
+     "exact_any": 195,
+     "topk": 166,
+     "couverture": 0.8201,
+     "exact_taux_span": 0.9949,
+     "exact_taux_cibles": 0.8159,
+     "f1": 0.5555,
+     "precision": 0.5959,
+     "rappel": 0.5201,
+     "tete": 0.7152,
+     "tete_precision": 0.7885,
+     "tete_rappel": 0.6543,
+     "pos": 0.7581
+    },
+    "gele": {
+     "phrases": 602,
+     "cibles": 239,
+     "labels": 196,
+     "exact": 195,
+     "exact_any": 195,
+     "topk": 166,
+     "couverture": 0.8201,
+     "exact_taux_span": 0.9949,
+     "exact_taux_cibles": 0.8159,
+     "f1": 0.5595,
+     "precision": 0.5983,
+     "rappel": 0.5254,
+     "tete": 0.7205,
+     "tete_precision": 0.7919,
+     "tete_rappel": 0.6608,
+     "pos": 0.7603
+    }
+   },
+   "audit_f908d7b0": {
+    "sha": "f908d7b0",
+    "dev": {
+     "phrases": 422,
+     "cibles": 163,
+     "labels": 148,
+     "exact": 148,
+     "exact_any": 148,
+     "topk": 120,
+     "couverture": 0.908,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.908,
+     "f1": 0.5723,
+     "precision": 0.6196,
+     "rappel": 0.5316,
+     "tete": 0.727,
+     "tete_precision": 0.8051,
+     "tete_rappel": 0.6628,
+     "pos": 0.7547
+    },
+    "test": {
+     "phrases": 190,
+     "cibles": 76,
+     "labels": 64,
+     "exact": 64,
+     "exact_any": 64,
+     "topk": 57,
+     "couverture": 0.8421,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8421,
+     "f1": 0.5714,
+     "precision": 0.6071,
+     "rappel": 0.5397,
+     "tete": 0.7241,
+     "tete_precision": 0.7925,
+     "tete_rappel": 0.6667,
+     "pos": 0.7656
+    },
+    "tout": {
+     "phrases": 612,
+     "cibles": 239,
+     "labels": 212,
+     "exact": 212,
+     "exact_any": 212,
+     "topk": 177,
+     "couverture": 0.887,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.887,
+     "f1": 0.572,
+     "precision": 0.6157,
+     "rappel": 0.5341,
+     "tete": 0.7262,
+     "tete_precision": 0.8012,
+     "tete_rappel": 0.664,
+     "pos": 0.7581
+    },
+    "gele": {
+     "phrases": 602,
+     "cibles": 239,
+     "labels": 212,
+     "exact": 212,
+     "exact_any": 212,
+     "topk": 177,
+     "couverture": 0.887,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.887,
+     "f1": 0.5763,
+     "precision": 0.6183,
+     "rappel": 0.5396,
+     "tete": 0.7316,
+     "tete_precision": 0.8047,
+     "tete_rappel": 0.6707,
+     "pos": 0.7603
+    }
+   },
+   "v9_160d08ca": {
+    "sha": "160d08ca",
+    "dev": {
+     "phrases": 422,
+     "cibles": 163,
+     "labels": 152,
+     "exact": 152,
+     "exact_any": 152,
+     "topk": 152,
+     "couverture": 0.9325,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9325,
+     "f1": 0.5807,
+     "precision": 0.6278,
+     "rappel": 0.5401,
+     "tete": 0.7327,
+     "tete_precision": 0.8109,
+     "tete_rappel": 0.6682,
+     "pos": 0.7547
+    },
+    "test": {
+     "phrases": 190,
+     "cibles": 76,
+     "labels": 67,
+     "exact": 67,
+     "exact_any": 67,
+     "topk": 66,
+     "couverture": 0.8816,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8816,
+     "f1": 0.5855,
+     "precision": 0.6189,
+     "rappel": 0.5556,
+     "tete": 0.7323,
+     "tete_precision": 0.7996,
+     "tete_rappel": 0.6755,
+     "pos": 0.7656
+    },
+    "tout": {
+     "phrases": 612,
+     "cibles": 239,
+     "labels": 219,
+     "exact": 219,
+     "exact_any": 219,
+     "topk": 218,
+     "couverture": 0.9163,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9163,
+     "f1": 0.5822,
+     "precision": 0.625,
+     "rappel": 0.5448,
+     "tete": 0.7326,
+     "tete_precision": 0.8074,
+     "tete_rappel": 0.6704,
+     "pos": 0.7581
+    },
+    "gele": {
+     "phrases": 602,
+     "cibles": 239,
+     "labels": 219,
+     "exact": 219,
+     "exact_any": 219,
+     "topk": 218,
+     "couverture": 0.9163,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9163,
+     "f1": 0.5866,
+     "precision": 0.6276,
+     "rappel": 0.5505,
+     "tete": 0.7381,
+     "tete_precision": 0.811,
+     "tete_rappel": 0.6772,
+     "pos": 0.7603
+    }
+   },
+   "v10_710ec7f9": {
+    "sha": "710ec7f9",
+    "dev": {
+     "phrases": 422,
+     "cibles": 163,
+     "labels": 152,
+     "exact": 152,
+     "exact_any": 152,
+     "topk": 152,
+     "couverture": 0.9325,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9325,
+     "f1": 0.5812,
+     "precision": 0.6289,
+     "rappel": 0.5401,
+     "tete": 0.733,
+     "tete_precision": 0.8116,
+     "tete_rappel": 0.6682,
+     "pos": 0.7547
+    },
+    "test": {
+     "phrases": 190,
+     "cibles": 76,
+     "labels": 68,
+     "exact": 68,
+     "exact_any": 68,
+     "topk": 67,
+     "couverture": 0.8947,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.8947,
+     "f1": 0.589,
+     "precision": 0.6245,
+     "rappel": 0.5573,
+     "tete": 0.7337,
+     "tete_precision": 0.8029,
+     "tete_rappel": 0.6755,
+     "pos": 0.7656
+    },
+    "tout": {
+     "phrases": 612,
+     "cibles": 239,
+     "labels": 220,
+     "exact": 220,
+     "exact_any": 220,
+     "topk": 219,
+     "couverture": 0.9205,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9205,
+     "f1": 0.5836,
+     "precision": 0.6275,
+     "rappel": 0.5454,
+     "tete": 0.7332,
+     "tete_precision": 0.8089,
+     "tete_rappel": 0.6704,
+     "pos": 0.7581
+    },
+    "gele": {
+     "phrases": 602,
+     "pos": 0.7603,
+     "f1": 0.588,
+     "tete": 0.7388,
+     "labels": 220,
+     "exact": 220,
+     "couverture": 0.9205,
+     "topk": 219,
+     "exact_taux_span": 1.0,
+     "exact_taux_cibles": 0.9205
+    }
+   }
+  },
+  "deltas": {
+   "v7_69bd865e": {
+    "dev": {
+     "labels": 18,
+     "exact": 19,
+     "couverture": 0.1104,
+     "f1": 0.03,
+     "tete": 0.0198,
+     "pos": 0.0
+    },
+    "test": {
+     "labels": 6,
+     "exact": 6,
+     "couverture": 0.0789,
+     "f1": 0.0239,
+     "tete": 0.0141,
+     "pos": 0.0
+    },
+    "tout": {
+     "labels": 24,
+     "exact": 25,
+     "couverture": 0.1004,
+     "f1": 0.0281,
+     "tete": 0.018,
+     "pos": 0.0
+    },
+    "gele": {
+     "labels": 24,
+     "exact": 25,
+     "couverture": 0.1004,
+     "f1": 0.0285,
+     "tete": 0.0183,
+     "pos": 0.0
+    }
+   },
+   "audit_f908d7b0": {
+    "dev": {
+     "labels": 4,
+     "exact": 4,
+     "couverture": 0.0245,
+     "f1": 0.0089,
+     "tete": 0.006,
+     "pos": 0.0
+    },
+    "test": {
+     "labels": 4,
+     "exact": 4,
+     "couverture": 0.0526,
+     "f1": 0.0176,
+     "tete": 0.0096,
+     "pos": 0.0
+    },
+    "tout": {
+     "labels": 8,
+     "exact": 8,
+     "couverture": 0.0335,
+     "f1": 0.0116,
+     "tete": 0.007,
+     "pos": 0.0
+    },
+    "gele": {
+     "labels": 8,
+     "exact": 8,
+     "couverture": 0.0335,
+     "f1": 0.0117,
+     "tete": 0.0072,
+     "pos": 0.0
+    }
+   },
+   "v9_160d08ca": {
+    "dev": {
+     "labels": 0,
+     "exact": 0,
+     "couverture": 0.0,
+     "f1": 0.0005,
+     "tete": 0.0003,
+     "pos": 0.0
+    },
+    "test": {
+     "labels": 1,
+     "exact": 1,
+     "couverture": 0.0131,
+     "f1": 0.0035,
+     "tete": 0.0014,
+     "pos": 0.0
+    },
+    "tout": {
+     "labels": 1,
+     "exact": 1,
+     "couverture": 0.0042,
+     "f1": 0.0014,
+     "tete": 0.0006,
+     "pos": 0.0
+    },
+    "gele": {
+     "labels": 1,
+     "exact": 1,
+     "couverture": 0.0042,
+     "f1": 0.0014,
+     "tete": 0.0007,
+     "pos": 0.0
+    }
+   }
+  },
+  "fiches": {
+   "v7_rapport_dev_test_v7": {
+    "dev": {
+     "labels": 134,
+     "exact": 133,
+     "couverture": 0.8221,
+     "f1": 0.5512,
+     "tete": 0.7132,
+     "pos": 0.7547
+    },
+    "test": {
+     "labels": 62,
+     "exact": 62,
+     "couverture": 0.8158,
+     "f1": 0.5651,
+     "tete": 0.7196,
+     "pos": 0.7656
+    },
+    "tout": {
+     "labels": 196,
+     "exact": 195,
+     "couverture": 0.8201,
+     "f1": 0.5555,
+     "tete": 0.7152,
+     "pos": 0.7581
+    },
+    "gele": {
+     "f1": 0.5595,
+     "tete": 0.7205,
+     "pos": 0.7603
+    }
+   },
+   "audit_r1r3": {
+    "dev": {
+     "labels": 148,
+     "exact": 148,
+     "couverture": 0.908,
+     "f1": 0.5723,
+     "tete": 0.727
+    },
+    "test": {
+     "labels": 64,
+     "exact": 64,
+     "couverture": 0.8421,
+     "f1": 0.5714,
+     "tete": 0.7241
+    },
+    "tout": {
+     "labels": 212,
+     "exact": 212,
+     "couverture": 0.887,
+     "f1": 0.572,
+     "tete": 0.7262
+    },
+    "gele": {
+     "f1": 0.5763,
+     "tete": 0.7316
+    }
+   },
+   "v10_rapport_pensee": {
+    "dev": {
+     "labels": 152,
+     "exact": 152
+    },
+    "test": {
+     "labels": 67,
+     "exact": 67
+    },
+    "tout": {
+     "labels": 219,
+     "exact": 219
+    },
+    "gele": {
+     "f1": 0.5822,
+     "tete": 0.7381
+    },
+    "note": "0,5822 est la F1 vivante v9 ; la F1 gelée v9 est 0,5866"
+   }
+  },
+  "notes": [
+   "les valeurs v7/audit/v9 sont rejouées avec le même evaluer_bloc et le même gold ; elles reproduisent les fiches au chiffre près",
+   "F1/tête vivantes 612 pour v7/audit/v9/v10 ; les valeurs gelées 602 sont données à part (v7 0,5595/0,7205 ; audit 0,5763/0,7316 ; v9 0,5866/0,7381 ; v10 0,5880/0,7388)",
+   "la fiche v10 écrit « F1 (union, 602) 0,5822 » pour v9 : 0,5822 est la valeur vivante ; la gelée est 0,5866 ; le delta v9->v10 sur base gelée est +0,0014, pas +0,0058",
+   "le delta exact v7->v10 est +24 labels et +25 exacts : le +1 vient de r102, l'erreur unique de la v7, devenue exacte"
+  ]
+ },
+ "controles": {
+  "wilson_95": {
+   "dev": [
+    0.8832,
+    0.9619
+   ],
+   "test": [
+    0.8058,
+    0.9457
+   ],
+   "tout": [
+    0.8792,
+    0.9485
+   ],
+   "REL_dev": [
+    0.7888,
+    0.9509
+   ],
+   "REL_test": [
+    0.5897,
+    0.9381
+   ],
+   "SUB_dev": [
+    0.8214,
+    0.9771
+   ],
+   "SUB_test": [
+    0.69,
+    0.9566
+   ],
+   "GP_dev": [
+    0.8881,
+    0.991
+   ],
+   "GP_test": [
+    0.8139,
+    0.9842
+   ],
+   "fr_dev": [
+    0.8273,
+    0.9453
+   ],
+   "fr_test": [
+    0.7381,
+    0.9305
+   ],
+   "en_dev": [
+    0.9141,
+    0.9971
+   ],
+   "en_test": [
+    0.8111,
+    0.9932
+   ]
+  },
+  "z_test_proportion": {
+   "couverture": {
+    "z": 1.0054,
+    "p": 0.3147
+   },
+   "REL": {
+    "z": 0.7884,
+    "p": 0.4305
+   },
+   "SUB": {
+    "z": 0.819,
+    "p": 0.4128
+   },
+   "GP": {
+    "z": 0.5748,
+    "p": 0.5654
+   },
+   "fr": {
+    "z": 0.75,
+    "p": 0.4533
+   },
+   "en": {
+    "z": 0.6414,
+    "p": 0.5213
+   }
+  },
+  "couverture_test_standardisee_dev": {
+   "valeur": 0.8824,
+   "gap_vs_dev": -0.0501,
+   "lecture": "le test brut (0,8947) est au-dessus de sa valeur standardisée (0,8824) parce qu'il est GP-riche ; l'écart restant n'est pas significatif (z=1,005 ; p=0,315)"
+  },
+  "chi2_tailles_seaux": {
+   "sizes": {
+    "0": 190,
+    "1": 229,
+    "2": 193
+   },
+   "chi2": 4.6176,
+   "p": 0.0994,
+   "dof": 2
+  },
+  "chi2_spans_perdus_seaux": {
+   "observes": [
+    8,
+    4,
+    7
+   ],
+   "attendus": [
+    6.0418,
+    7.0753,
+    5.8828
+   ],
+   "cibles": [
+    76,
+    89,
+    74
+   ],
+   "chi2": 2.3721,
+   "p": 0.3054,
+   "dof": 2
+  },
+  "reel_vs_synthetique": {
+   "reel": {
+    "phrases": 452,
+    "cibles": 184,
+    "labels": 179,
+    "exact": 179,
+    "couverture": 0.9728,
+    "f1": 0.5798,
+    "tete": 0.7239,
+    "pos": 0.7661,
+    "fr": {
+     "phrases": 242,
+     "cibles": 96,
+     "labels": 93,
+     "exact": 93,
+     "couverture": 0.9688,
+     "f1": 0.5379,
+     "tete": 0.6804,
+     "pos": 0.7673
+    },
+    "en": {
+     "phrases": 210,
+     "cibles": 88,
+     "labels": 86,
+     "exact": 86,
+     "couverture": 0.9773,
+     "f1": 0.6341,
+     "tete": 0.7791,
+     "pos": 0.7648
+    }
+   },
+   "synthetique": {
+    "phrases": 160,
+    "cibles": 55,
+    "labels": 41,
+    "exact": 41,
+    "couverture": 0.7455,
+    "f1": 0.5969,
+    "tete": 0.7682,
+    "pos": 0.7296
+   },
+   "par_moitie": {
+    "dev": {
+     "reel": {
+      "phrases": 317,
+      "cibles": 131,
+      "labels": 129,
+      "exact": 129,
+      "couverture": 0.9847,
+      "f1": 0.5788,
+      "tete": 0.7275,
+      "pos": 0.7609
+     },
+     "synthetique": {
+      "phrases": 105,
+      "cibles": 32,
+      "labels": 23,
+      "exact": 23,
+      "couverture": 0.7188,
+      "f1": 0.5904,
+      "tete": 0.756,
+      "pos": 0.73
+     }
+    },
+    "test": {
+     "reel": {
+      "phrases": 135,
+      "cibles": 53,
+      "labels": 50,
+      "exact": 50,
+      "couverture": 0.9434,
+      "f1": 0.5823,
+      "tete": 0.7152,
+      "pos": 0.7787
+     },
+     "synthetique": {
+      "phrases": 55,
+      "cibles": 23,
+      "labels": 18,
+      "exact": 18,
+      "couverture": 0.7826,
+      "f1": 0.6078,
+      "tete": 0.7893,
+      "pos": 0.729
+     }
+    }
+   }
+  },
+  "garde_gp_effets": [
+   {
+    "id": "g004",
+    "langue": "fr",
+    "seau": 1,
+    "retires": [
+     [
+      "GP",
+      11,
+      27
+     ],
+     [
+      "GV",
+      28,
+      31
+     ]
+    ],
+    "ajoutes": []
+   },
+   {
+    "id": "r147",
+    "langue": "fr",
+    "seau": 0,
+    "retires": [
+     [
+      "GP",
+      22,
+      31
+     ],
+     [
+      "GV",
+      32,
+      37
+     ]
+    ],
+    "ajoutes": []
+   },
+   {
+    "id": "r153",
+    "langue": "en",
+    "seau": 0,
+    "retires": [
+     [
+      "GP",
+      8,
+      15
+     ],
+     [
+      "GV",
+      16,
+      19
+     ]
+    ],
+    "ajoutes": [
+     [
+      "GP",
+      8,
+      19
+     ]
+    ]
+   }
+  ],
+  "nb_phrases_changees_v9_v10": 3,
+  "validation_evaluer_gold": {
+   "tout": 0.0,
+   "dev": 0.0,
+   "test": 0.0
+  },
+  "determinisme": true
+ },
+ "corrections": [
+  "la garde DET du GP est la seule correction de code du commit 710ec7f9 sur le bloc ; elle fixe r153 (+1 label, test) et retire 4 faux positifs dans g004 et r147",
+  "la correction -ée annoncée est inerte : la règle existe depuis a408a909, `acheter` n'est pas dans VERBES_CONNUS, `achetée` n'est pas reconnu et r255 reste perdu ; le diff 710ec7f9 sur le bloc ne touche pas `_est_verbe`",
+  "r303 (« car il est tard ») est une régression nouvelle de 160d08ca : la garde `predicat_vu` exclut l'adverbe final, la SUB devient [8:18] au lieu de [8:23] ; g017 est récupéré par la même garde, r303 perdu",
+  "s037 reste perdu : la règle R2 (relatif initial sans précédent) n'est pas intégrée ; la décomposition correcte des 19 est 17 inatteignables + s037 (R2) + r303 (régression R1c), pas 17 + r255 + r264",
+  "la fiche v10 compare 0,5822 (F1 vivante v9) à 0,5880 (F1 gelée v10) ; sur base gelée, v9 0,5866 -> v10 0,5880 (+0,0014) ; sur base vivante, 0,5822 -> 0,5836 (+0,0014)"
+ ],
+ "reserves": [
+  "in-sample : les règles ont été dessinées sur tout le gold, test compris ; le split mesure la fragilité au découpage, pas le surajustement global",
+  "exact/labels saturé à 1,0 : 220/220 ; le taux exact est identique dans tous les sous-ensembles et ne peut plus distinguer dev et test ; la couverture (19 spans perdus) est le seul levier restant",
+  "petit échantillon : 68 labels au test, 1 cas = 1,47 point ; REL test 17 cibles, REL/en test 5, hand test 3 ; les IC Wilson se recouvrent",
+  "confond source/langue : le synthétique est français seulement ; la couverture française globale (0,8874) est un effet de composition ; sur le réel, fr 0,9688 vs en 0,9773 (écart 0,85 point, p=0,72)",
+  "l'arbre a bougé après la mesure : HEAD 68a8717b, tools/bloc_linguistique.py sale ; l'arbre sale donne 221/221 et 18 spans (s037, r303, r288 récupérés ; g017, r241 perdus) — ce n'est pas l'état 710ec7f9 mesuré ici"
+ ]
+}

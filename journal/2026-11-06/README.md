@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**3 commits** · **3 session(s)** · **2 thème(s)**
+**4 commits** · **3 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,13 +13,14 @@
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
 | mesures | 1 | [mesures.md](mesures.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.6 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 128.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 128.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -29,6 +30,7 @@
 | 00:09 | `41cae3e5` | JOURNAL — LE 06/11 S'OUVRE SUR LA NUIT DU DÉCOUPAGE : 220/220, COUVERTURE 0,9205, 19 SPANS |
 | 00:12 | `68a8717b` | JOURNAL — LE 06/11 AU FORMAT DE L'INDEX (EN-TÊTE, LIENS, BLOC NOTES) |
 | 00:28 | `653a7981` | B13 — LES DEUX DERNIÈRES RÉGRESSIONS (s037, r303) : EXACT 221/221 (1,0000), COUVERTURE 0,9247, 18 SPANS ; AUDIT V10 INTÉGRÉ, V10 CORRIGÉE ; 183/183 |
+| 00:56 | `9a1b3914` | PORTES — 11 DOCSTRINGS ALIGNÉES SUR LA V11 (221/221, 18 SPANS, TOP-K 220) ; AUDIT V10 FINAL COMMITTÉ ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -46,4 +48,10 @@ tokenisation `qu'il`).
 **Les fiches du jour** : `rapport-pensee-v9.md` (la garde PRON), `rapport-pensee-v10.md` (le `-ée`
 et la garde déterminant du GP), `rapport-audit-r1r3.md` (l'audit A19 : +17 net, 7 régressions
 corrigées depuis), et les audits de cohérence `rapport-coherence-fiches-v8.md`.
+**La clôture de la nuit (1 h 15).** L'exact est **saturé** : **221/221 (1,0000)** sur les labels
+prédits, **couverture 0,9247**, **F1 0,5843**, **dev 152/152, test 69/69**. Les **18 spans**
+restants sont, pour 17, inatteignables (12 formes synthétiques, 4 GP du gold sans préposition, une
+tokenisation `qu'il`) ; le dernier (`g017`) est un arbitrage d'adverbe assumé. Les fiches
+`rapport-pensee-v9.md`, `-v10.md`, `-v11.md` et les audits `rapport-audit-r1r3.md`,
+`rapport-audit-v10.md`, `rapport-dev-test-v10.md` portent les mesures et les corrections.
 <!-- /notes -->

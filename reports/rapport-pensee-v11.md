@@ -7,7 +7,8 @@
 > est tard » : la règle de l'adverbe final coupait avant `tard`). L'adverbe final est **retiré**
 > (arbitrage : `g017` est perdu, `r303` et `r264` gagnés, net **+1**). Résultat : **221 labels**
 > sur 239, **exact 221/221 = 1,0000** (fr **136/136**, en **85/85**), **couverture 0,9247**,
-> **F1 0,5843** (union), **18 spans** (9 REL, 5 SUB, 4 GP), **top-k 220/239 (0,9205)**.
+> **F1 0,5843** (union), **18 spans** (9 REL, 5 SUB, 4 GP), **top-k 220/239 (0,9205)** ;
+> **dev 152/152 (0,9325)**, **test 69/69 (0,9079)** — l'écart dev/test d'exactitude est **nul**.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (R2, adverbe final),
 > [`autotest.py`](../tools/pensee/autotest.py) (14 assertions) ; JSON [`pensee-v11.json`](pensee-v11.json).
@@ -31,6 +32,7 @@
 | anglais | 86/86 | **85/85** |
 | spans perdus | 19 | **18** (9 REL, 5 SUB, 4 GP) |
 | top-k | 219 | **220/239 (0,9205)** |
+| dev / test | 152/152, 68/68 | **152/152, 69/69** |
 
 **Ce que ça dit** :
 
