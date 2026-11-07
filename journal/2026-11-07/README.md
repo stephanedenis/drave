@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**9 commits** · **3 session(s)** · **3 thème(s)**
+**10 commits** · **3 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,15 +13,15 @@
 |---|---|---|
 | docs | 3 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
-| portes | 3 | [portes.md](portes.md) |
+| portes | 4 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `77d26bc7-1657-4c96-83c9-bba7c25dd828` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.1 h | [rapport](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) · [digest](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/digest.md) |
-| `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.1 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 152.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `77d26bc7-1657-4c96-83c9-bba7c25dd828` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.2 h | [rapport](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) · [digest](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/digest.md) |
+| `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.2 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 152.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -36,6 +36,7 @@
 | 00:39 | `5b9c18ef` | PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS |
 | 00:45 | `149ecc5d` | FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535 |
 | 00:50 | `318ea0dc` | PILOTAGE — B13 AUX CHIFFRES DE LA NUIT (86,25 / 0,7535 / 236-237) ET § 14 : LA VAGUE DE SEGMENTATION |
+| 00:53 | `00411abc` | ÉTAT — LE BLOC B13 AUX CHIFFRES COURANTS (86,25 / 0,7535 / 236-237, 16 TESTS) |
 
 ## Le récit de la journée (écrit à la main)
 

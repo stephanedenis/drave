@@ -58801,3 +58801,19 @@ sam 07 nov 2026 00:52:33 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contra … [1358 caractères tronqués]`
+
+  ```
+bloc B13 à jour
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+ 13 files changed, 1008 insertions(+), 39 deletions(-)
+COMMIT OK 1
+00411abc ÉTAT — LE BLOC B13 AUX CHIFFRES COURANTS (86,25 / 0,7535 / 236-237, 16 TESTS)
+   318ea0dc..00411abc  s/v7 -> s/v7
+   318ea0dc..00411abc  master -> master
+sam 07 nov 2026 00:55:30 EST
+sam 07 nov 2026 01:00:30 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **contrat v1** publié et validé ; frontières (0/40), partition étiquetée, PONCT/R4/« que », GN du sujet ; **`drave` v0** … [788 caractères tronqués]`

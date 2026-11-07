@@ -911,3 +911,353 @@ keys item ['apres', 'attendu', 'avant', 'cat', 'effet', 'id', 'texte']
   prag: [('type', 'déclarative', 0, 14), ('acte', 'assertion', 0, 14), ('type', 'déclarative', 15, 23), ('acte', 'assertion', 15, 23)]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1297,1400p tools/bloc_linguistique.py", "description": "Lire le pipeline d'analyse"}`
+
+  ```
+def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        if not isinstance(texte, str):
+            # une entrée non textuelle est **refusée** proprement (le produit ne plante pas)
+            return Annotation(texte=str(texte)[:200], refus="non_texte", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "non_texte",
+                                      "type": type(texte).__name__}],
+                              cout={"octets": 0, "duree_s": round(time.perf_counter() - t0, 6)})
+        texte = texte or ""
+        trace: list[dict] = []
+        if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+            return Annotation(texte=texte, refus="vide", source=self.nom,
+                              trace=[{"etape": "refus", "raison": "vide"}],
+                              cout={"octets": len(texte.encode("utf-8", "replace")), "duree_s": round(time.perf_counter() - t0, 6)})
+
+        lg, conf_lg, script = self._langue(texte, langue)
+        trace.append({"etape": "langue", "langue": lg, "script": script, "confiance": conf_l
+… [5068 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nfor r in d['corpus_40']:\n    print(r['id'], r['cat'], '|', repr(r['texte'])[:100])\n    if r.get('effet',{}).get('acte_labels_differents'):\ … [105 caractères tronqués]`
+
+  ```
+n01 négatif/2 phrases | 'Il part. Elle reste.'
+   effet acte diff: {'pos_identique': True, 'syntagme_identique': True, 'attachement_identique': True, 'phr_avant': 2, 'phr_apres': 2, 'phrase_labels_differents': True, 'acte_labels_differents': True, 'syntagmes_traversants_avant': 0, 'syntagmes_traversants_apres': 0, 'pos_labels': 4, 'syntagme_labels': 4}
+n02 négatif/3 phrases | 'Il part. Elle reste. Nous attendons.'
+   effet acte diff: {'pos_identique': True, 'syntagme_identique': True, 'attachement_identique': True, 'phr_avant': 3, 'phr_apres': 3, 'phrase_labels_differents': True, 'acte_labels_differents': True, 'syntagmes_traversants_avant': 0, 'syntagmes_traversants_apres': 0, 'pos_labels': 6, 'syntagme_labels': 6}
+d01 décimal | 'Le prix est 12.5 euros.'
+   effet acte diff: {'pos_identique': True, 'syntagme_identique': True, 'attachement_identique': True, 'phr_avant': 2, 'phr_apres': 1, 'phrase_labels_differents': True, 'acte_labels_differents': True, 'syntagmes_traversants_avant': 0, 'syntagmes_traversants_apres': 0, 'pos_labels': 4, 'syntagme_labels': 3}
+d02 décimal+milliers | 'La remise est de 12,5 % sur 1.234,56 euros.'
+   effet acte diff: {'pos_identique': True, 'syntagme_ide
+… [13129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 215,245p reports/rapport-frontieres-phrase.md && sed -n 300,345p reports/rapport-frontieres-phrase.md", "description": "Lire la définition des actes faux"}`
+
+  ```
+Après : **2** phrase(s) — `1. Ouvrir le fichier.` | `2. Lire la première ligne.`
+
+
+**x01 — ellipse minuscule**
+~~~text
+Il hésite... puis il part.
+~~~
+
+Attendu : **1** phrase(s) — `Il hésite... puis il part.`
+
+Avant : **2** phrase(s) — `Il hésite...` | ` puis il part.`
+
+Après : **1** phrase(s) — `Il hésite... puis il part.`
+
+
+### 2.4 Effet sur POS, syntagmes et attachement
+
+- **Le patch de frontières ne change aucun POS, aucun syntagme, aucun attachement** : **0/40** textes
+  modifiés sur ces trois niveaux, et **0/612** sur le gold. C'est structurel : `_pos` et `_syntagmes_*`
+  ne lisent pas `_phrases` ; seuls `phrase`, `pragmatique` et `discourse` en dépendent.
+- **38/40** textes changent de libellés `phrase` et de spans d'acte ; **5/40** changent de connecteurs
+  `discours` (fragments d'URL supprimés, spans corrigés). Les **actes faux** passent de **63/102** à
+  **0/59**.
+- **Syntagmes traversant une frontière** : **0 → 2** (`t01`, `t02`). Ce n'est pas la frontière qui est
+  fausse : le chunker S traite `de réunion\n\nLe budget` et `les coûts\n- Échéance` comme des syntagmes.
+  La règle (f) révèle ce défaut du chunker (P0-3/P1-4), elle ne le crée pas.
+- **Patch B (tokénisation)** 
+… [3065 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"acte\" reports/rapport-frontieres-phrase.md | head -30", "description": "Chercher actes dans le rapport"}`
+
+  ```
+23:phrase** se décalent d'un espace (r308, r318), **0 valeur d'acte** change. **Le gain dev/test est donc
+26:libre : **63 actes faux sur 102 phrases → 0 sur 59**.
+76:| actes faux par phrase | 63/102 | **0/59** | 0 |
+235:- **38/40** textes changent de libellés `phrase` et de spans d'acte ; **5/40** changent de connecteurs
+236:  `discours` (fragments d'URL supprimés, spans corrigés). Les **actes faux** passent de **63/102** à
+272:| lecture | POS dev | F1 dev | att dev | acte dev | POS test | F1 test | att test | acte test |
+285:F1 syntagmes, attachement et acte, sur dev comme sur test. Le seul déplacement est le **span** de
+286:2 phrases du gold (r308, r318), dû à la règle (e) ; **la valeur d'acte ne change pas**. C'est le
+321:| valeurs d'acte | référence | identique | 0 texte différent |
+329:métrique ne bouge (POS 0,8490 / 0,8511 ; F1 0,6439 / 0,6552 ; att 0,9816 / 0,9868 ; acte 1,0000 /
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"34\\|anomal\" reports/rapport-fiabilite-produit.md | head -30", "description": "Chercher le chiffre 34/50 dans le rapport"}`
+
+  ```
+15:> **11 h 34** le correctif « non-str / surrogate » (`c1a08588`) ; le banc a tourné à **11 h 40**,
+88:| anomalie | mesure | où / exemple |
+94:| `POS —` | **1/46** | f18, `1234567890` |
+100:| faux titres de document | **2/49** | f18 (`1234567890`), f31 (`ÇA NE MARCHE PAS !!!`) |
+126:une limite ou un texte sans structure. Même chose pour `1234567890` (`POS —`, `SYNTAGMES —`,
+156:Le **démarrage** (`--version`, 10 passages) coûte **134–192 ms**, médiane **146 ms**. Pour une
+186:| texte commençant par `--` (`--bonjour`) | 0 | **2** | 0 | **anomalie** : pris pour une option |
+257:| `candidats` | **3470/4501** étiquettes : graphème, mot, phrase, document, POS fermées |
+422:    "1234567890",
+583:| **P1-7** | **Compacité et lot** : `--compact`, JSONL, `--fichier`/stdin | **2,76 Mo** pour 10 k ; **11,5 Mo** pour 50 k ; 1 texte par appel | `drave.py` 50-52, 329-341 | **0,5–1 j** | faible : option additive |
+593:| **P2-3** | `contexte` : l'exposer ou le retirer | **46/46** vide ; aucune option CLI | `bloc_linguistique.py` 1237-1239 ; `drave.py` 329-341 | **1 h** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\n# current spans for 40\nexact=0; ff=0; extra=0; missing=0; overlap=0; leading … [1307 caractères tronqués]`
+
+  ```
+phrases 59 exact 0 ff 0 extra 0 missing 0 overlaps 0 leading 20 fq 0 types_faux 59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nexact=0; ff=0; extra=0; missing=0; overlap=0; leading=0; fq=0; typf=0; phrase … [1541 caractères tronqués]`
+
+  ```
+phrases 59 exact 40 ff 0 extra 0 missing 0 overlaps 0 leading 20 fq 0 types_faux 0 actes_faux 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -V && uname -srm && nproc && python3 tools/drave.py analyser --json -- \"test\" >/dev/null; echo \"sep rc=$?\"; python3 tools/drave.py analyser --json -- \"-3 degrés\" >/dev/null; echo \"neg rc=$?\"", "description": "Vérifier … [33 caractères tronqués]`
+
+  ```
+Python 3.13.16
+Linux 7.2.6-1-default x86_64
+40
+sep rc=0
+neg rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nlead=0\nfor r in d['corpus_40']:\n    for a,b,tx,ty in bl.decouper_phrases(r[ … [203 caractères tronqués]`
+
+  ```
+phrases commençant par espace: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\ndef walk(o,p=''):\n    if isinstance(o,dict):\n        for k,v in o.items(): walk(v,p+'/'+str(k))\n    elif isinstance(o,list) and o and isin … [280 caractères tronqués]`
+
+  ```
+/robustesse/synthese/anomalies = 9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"34/50\\|34 / 50\\|anomalies\" reports/rapport-fiabilite-produit.md reports/*.md | head -20", "description": "Chercher 34/50 dans les rapports"}`
+
+  ```
+reports/INDEX.md:622:| [rapport-produit-bloc-l.md](rapport-produit-bloc-l.md) | Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat |
+reports/rapport-etat-a.md:139:- `rapport-produit-bloc-l.md` : **50 phrases**, **0 plantage**, **34/50** avec au moins une anomalie,
+reports/rapport-gold-anglais.md:342:- [`pensee-gold-anglais.json`](pensee-gold-anglais.json) — chiffres, spans, cibles, anomalies, contrôles.
+reports/rapport-produit-bloc-l.md:1:# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+reports/rapport-produit-bloc-l.md:20:jamais une sortie vide** et garde **tous les offsets** ; mais **34/50 textes** portent au moins une
+reports/rapport-produit-bloc-l.md:124:| textes avec au moins une anomalie | **34/50** |
+reports/rapport-produit-bloc-l.md:125:| anomalies détectées | **149** |
+reports/rapport-produit-bloc-l.md:318:| **P1-9** | **Rendre le repli S visible** | sans générateur S : **34/50** sorties changent, **132 syntagmes** et **119 attachements** perdus, sans trace | 641-650, 652-667 | **2 h** | faible : trace `repli_s` + champ de mode, ou échec explicite |
+reports/rapport-produit-b
+… [104 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,160p reports/rapport-produit-bloc-l.md", "description": "Lire le rapport produit-bloc-l (34/50)"}`
+
+  ```
+# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD vérifié en fin d'audit** : `c6904284`
+> (le HEAD a bougé pendant l'audit ; module `bloc_linguistique.py` inchangé ; `evaluer_gold.py`
+> modifié en `7f73c17f`) ·
+> **Date** : 2026-11-06 ·
+> **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+> [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+> l'audit (textes dans le JSON) ; harnais local non committé dans `/tmp/audit_produit_bl`.
+> **Porte** : `bash tools/porte-bloc-linguistique.sh` → **verte** (16 tests, autotest UDHR
+> **0,9687**, profils permutés **0,0022**).
+
+**En une phrase.** Sur 50 phrases libres
+… [9453 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/ && git log -1 --format='%h %ad %s' --date=iso -- tools/drave.py && sha256sum tools/drave.py tools/bloc_linguistique.py && grep -rn \"8 champs\\|drave.annotation\\|schema.*version\\|version.*1.0\" docs/ READM … [86 caractères tronqués]`
+
+  ```
+m tools/structures
+5b9c18ef 2026-11-07 00:39:21 -0500 PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS
+88ce03da9d9e11e48bc352083aaa94dd492b80798ef31268a1219689a78d463c  tools/drave.py
+858197f736d758be2ca97e1ccd71a5045fd47d19d31c50afaf13fd669893b47f  tools/bloc_linguistique.py
+docs/archive/cerveau-facultes.md:137:*(La première version mesurait la perplexité sur les **1 024 premiers jetons** — c'est-à-dire le
+docs/schemas/decision.puml.svg:2:<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" data-diagram-type="ACTIVITY" style="width:462px;height:426px;background:#FFFFFF;" width="462px" height="426px" viewBox="0 0 462 426" zoomAndPan="magnify" preserveAspectRatio="none" contentStyleType="text/css"><title>Diagramme PlantUML</title><desc>Généré par PlantUML</desc><?plantuml 1.2026.9?><defs/><g font-family="sans-serif" lengthAdjust="spacing"><g class="title" data-source-line="1"><text x="126.595" y="34.966" fill="#000" font-size="14" textLength="206.849" font-weight="700">Choisir la source d'un schéma</text></g><ellipse cx="228.26" cy="65.068" rx="10" ry="10" fill="#222" style="stroke:#222;stroke-wid
+… [7260 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/pensee-produit-bloc-l.json && python3 - <<'EOF'\nimport json\na=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\nb=json.load(open('reports/pensee-produit-bloc-l.json'))['banc_50']['detail'] … [219 caractères tronqués]`
+
+  ```
+reports/pensee-produit-bloc-l.json
+new 50 old 50 intersection 0
+old keys ['anomalies', 'anomalies_n', 'attachements', 'attendu', 'cat', 'etiquettes', 'fraction', 'id', 'langue', 'mots', 'niveaux', 'niveaux_absents', 'script', 'texte']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,45p README.md && echo === && sed -n 350,380p docs/produit/README.md", "description": "Lire le contrat publié"}`
+
+  ```
+```bash
+python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se réveille."
+python3 tools/drave.py analyser "The cat that sleeps on the roof is black." --langue en --json
+python3 tools/drave.py evaluer        # la mesure sur le gold (POS, F1, attachement)
+python3 tools/drave.py rejouer "Le chat dort."   # vérifie le déterminisme (sha256)
+```
+
+Sortie : une **annotation** — langue, classes de mots, syntagmes avec rôle et **cible
+d'attachement**, acte de parole — avec ses spans et sa confiance, de façon **déterministe**. Le
+**format est versionné** (`schema: "drave.annotation"`, `version: 1`, schéma publié dans
+[`tools/schemas/`](tools/schemas/), un refus est une réponse JSON avec le code 3). La notice
+complète est [`docs/produit/README.md`](docs/produit/README.md), les exemples vérifiés
+[`docs/produit/exemples.md`](docs/produit/exemples.md), et la porte produit
+`bash tools/porte-produit.sh` (10 contrôles, ~2 min).
+
+**Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**
+(couverture **0,9874**), 183/183 portes. Les limites sont dites : 3 spans inatteignables, la
+restitution et la traduction ne sont pas encore là.
+
+## L'origine
+
+Dra
+… [2772 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"drave.annotation\" --include='*.py' --include='*.md' . | grep -v archive | head -20", "description": "Chercher les usages du schéma"}`
+
+  ```
+./reports/rapport-fiabilite-produit.md:295:Le schéma **`drave.annotation` v1.0** garde **8 champs obligatoires** et laisse les autres en
+./reports/rapport-fiabilite-produit.md:300:| 1 | `schema` | `"drave.annotation"` | famille de format |
+./reports/rapport-fiabilite-produit.md:317:  "title": "drave.annotation v1.0",
+./reports/rapport-fiabilite-produit.md:322:    "schema": {"const": "drave.annotation"},
+./reports/rapport-fiabilite-produit.md:383:- **cible v1** (`schema: "drave.annotation"`, `version: "1.0"`, 8 champs requis) : il est
+./reports/rapport-fiabilite-produit.md:404:SCHEMA = "drave.annotation"
+./reports/rapport-schema-v1.md:8:> **Ce qui change pour un client** : le JSON porte désormais **`schema`** (`"drave.annotation"`)
+./reports/rapport-schema-v1.md:12:> **Le schéma est publié** : [`tools/schemas/drave-annotation-v1.json`](../tools/schemas/drave-annotation-v1.json)
+./reports/rapport-schema-v1.md:33:| 1 | **format versionné** | 11 clés sans `schema`/`version` | **13 clés**, `schema="drave.annotation"`, `version=1` |
+./reports/rapport-schema-v1.md:58:1. ~~Publier le schéma~~ — **fait** (`tools/schemas/drave-annotation-v1.json`, validé, 9e contrôle).
+./tools/tests/test_pro
+… [1086 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/schemas/drave-annotation-v1.json | head -120 && echo === && sed -n 1,80p reports/rapport-schema-v1.md", "description": "Lire le schéma v1 publié"}`
+
+  ```
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://drave.local/schema/annotation-v1.json",
+ "title": "drave.annotation v1",
+ "description": "L'annotation du bloc linguistique heuristique : un texte, ses étiquettes par niveau, ses unités sémantiques et son refus éventuel.",
+ "type": "object",
+ "required": [
+  "schema",
+  "version",
+  "texte",
+  "langue",
+  "script",
+  "refus",
+  "etiquettes",
+  "unites_semantiques"
+ ],
+ "properties": {
+  "schema": {
+   "const": "drave.annotation"
+  },
+  "version": {
+   "const": 1
+  },
+  "texte": {
+   "type": "string"
+  },
+  "langue": {
+   "type": "string",
+   "pattern": "^[a-z]{2,3}$|^und$"
+  },
+  "script": {
+   "type": "string"
+  },
+  "source": {
+   "type": "string"
+  },
+  "refus": {
+   "type": "string",
+   "enum": [
+    "",
+    "vide",
+    "non_texte",
+    "trop_long",
+    "neuronal"
+   ]
+  },
+  "etiquettes": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "niveau",
+     "type",
+     "valeur",
+     "debut",
+     "fin",
+     "source",
+     "confiance"
+    ],
+    "properties": {
+     "niveau": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string"
+     },
+     "valeur": {
+ 
+… [4627 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p tools/verifier_schema_produit.py && echo === && sed -n 1,80p tools/tests/test_schema_produit.py", "description": "Lire le vérificateur et le test du schéma"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifier_schema_produit.py — valide une annotation `drave.annotation` contre le schéma v1.
+
+Le schéma publié est `tools/schemas/drave-annotation-v1.json` (Draft 2020-12). Ce vérificateur compile le
+schéma une fois, puis valide les annotations de cas choisis : français, anglais, refus (texte
+vide), entrée non textuelle, texte très long. Il ne dépend que de `fastjsonschema` (sinon il se
+rabat sur une validation minimale des 8 champs obligatoires).
+
+Usage :
+    python3 tools/verifier_schema_produit.py              # 5 cas, sortie 0/1
+    python3 tools/verifier_schema_produit.py --json       # le détail des cas
+    python3 tools/verifier_schema_produit.py --aide
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+
+RACINE = pathlib.Path(__file__).resolve().parents[1]
+SCHEMA = RACINE / "tools" / "schemas" / "drave-annotation-v1.json"
+OBLIGATOIRES = ("schema", "version", "texte", "langue", "script", "refus",
+                "etiquettes", "unites_semantiques")
+
+CAS = [
+    ("fr", "Le chat de la voisine qui dort sur le toit se réveille.", "fr"),
+    ("en", "The cat that sleeps on the roof is black.", "en"),
+    ("vide", "",
+… [5453 caractères tronqués]
+  ```
+

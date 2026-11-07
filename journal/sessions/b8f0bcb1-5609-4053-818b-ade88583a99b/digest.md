@@ -873,3 +873,237 @@ pos: [('She', 'PRON'), ('said', 'VERB'), ('that', 'CONJ'), ('she', 'PRON'), ('wo
   mots: [(0, 3, 'She', 'mot'), (4, 8, 'said', 'mot'), (9, 13, 'that', 'mot'), (14, 17, 'she', 'mot'), (18, 23, 'would', 'mot'), (24, 28, 'come', 'mot'), (29, 38, 'yesterday', 'mot'), (38, 39, '.', 'ponctuation')]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/pensee-audit-r1r3.json').read_text())\nprint(list(d.keys()))\nfor k,v in d.items():\n    if isinstance(v,(str,int,float,bool)):\n        print(k,'=',v)\nEOF", … [52 caractères tronqués]`
+
+  ```
+['rapport', 'ligne', 'branche', 'commit_audite', 'commit_parent', 'date', 'objet', 'methode', 'verdict', 'rejeu', 'ablations', 'decomposition', 'spans_27', 'controle_negatif', 'dev_test', 'portes_autotest', 'ecarts', 'limites', 'fichiers_ecrits', 'commit']
+rapport = audit-r1r3
+ligne = B13
+branche = s/v7
+commit_audite = f908d7b0613c8a5eb8fae7fab514bfdc5fa4668b
+commit_parent = 69bd865ec1bae1958b6f617bde4bf685a15d7d67
+date = 2026-11-05
+objet = Audit du round R1/R2/R3 : rejeu des valeurs, ablations par règle, contrôles négatifs, dev/test, portes.
+commit = False
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/pensee-audit-r1r3.json').read_text())\nprint(json.dumps({k:d[k] for k in ('methode','verdict','rejeu','ablations','dev_test','controle_negatif')},ensure_ascii … [81 caractères tronqués]`
+
+  ```
+{
+ "methode": {
+  "gold_vivant": {
+   "source": "evaluer_gold.charger",
+   "phrases": 612,
+   "cibles": 239,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synthetique": 160
+   }
+  },
+  "gold_gele": {
+   "source": "evaluer_gold.charger_gelé",
+   "phrases": 602,
+   "cibles": 239,
+   "note": "les 10 phrases ajoutees apres le gel n'ont aucune cible"
+  },
+  "mesure": "evaluer_gold.evaluer_bloc pour les valeurs officielles ; harnais local pour les ensembles d'ids et les ablations",
+  "ablations": "copie du module dans /tmp, une seule modification reintroduite par variante, puis import et mesure",
+  "fidelite": "la variante tout-eteint ne differe du parent 69bd865e que par deux constantes inutilisees ; elle redonne 196/195, 0,5555 vivant / 0,5595 gelé, 43 spans, top-k 166",
+  "portes": "PYTHONPATH=. python3 -m tools.pensee.autotest",
+  "aucune_modification": true,
+  "aucun_commit": true,
+  "note_arbre_de_travail": {
+   "mesures_prises": "2026-11-05 entre 21:27 et 21:44",
+   "etat_mesure": "tools/bloc_linguistique.py identique a f908d7b0 (copie de base byte-identique)",
+   "effet_arbre_courant": "labels 212, exact 212, couverture 0,887 inchangés ; top-k 211 au lieu de 177 ; portes 
+… [4800 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,pathlib\nd=json.loads(pathlib.Path('reports/pensee-audit-r1r3.json').read_text())\nprint(json.dumps(d['ablations']['regles'].get('R1c'),ensure_ascii=False,indent=1))\nprint('---- spans_27 keys/lecture - … [273 caractères tronqués]`
+
+  ```
+{
+ "ablation": "sans_r1c",
+ "labels": 209,
+ "exact": 209,
+ "delta_labels": -3,
+ "delta_exact": -3,
+ "gains": {
+  "dev": 2,
+  "test": 2,
+  "total": 4
+ },
+ "pertes": {
+  "dev": 1,
+  "test": 0,
+  "total": 1
+ },
+ "effet_net": 3,
+ "f1_vivant": 0.5685,
+ "delta_f1": -0.0035,
+ "gains_ids": [
+  "r224:REL",
+  "r291:REL",
+  "r115:REL",
+  "r239:REL"
+ ],
+ "pertes_ids": [
+  "g017:SUB"
+ ],
+ "lecture": "Le nouveau scan redige gagne 4 mais perd g017 : verbes_vus n'est pas incremente apres un AUX, donc la garde d'adverbe final ne s'applique pas et yesterday reste dans la SUB."
+}
+---- spans_27 keys/lecture ----
+{
+ "counts": {
+  "total": 27,
+  "REL": 16,
+  "SUB": 6,
+  "GP": 5,
+  "fr": 22,
+  "en": 5,
+  "synthetique": 19,
+  "reel": 7,
+  "hand": 1
+ },
+ "classes": [
+  {
+   "classe": "A17 non récupérable (13) + hors périmètre (4)",
+   "n": 17,
+   "types": {
+    "REL": 8,
+    "SUB": 5,
+    "GP": 4
+   },
+   "ids": [
+    "r035",
+    "r255",
+    "r264",
+    "r288",
+    "s010",
+    "s027",
+    "s035",
+    "s044",
+    "s061",
+    "s065",
+    "s112",
+    "s114",
+    "s125",
+    "s141",
+    "s146",
+    "s148",
+    "s160"
+   ]
+  },
+  {
+   "classe": "Régressions nouvelles",
+   "n": 7,
+   "types": {
+    "REL": 7,
+   
+… [5688 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Ventilation des erreurs par type de syntagme
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nfrom gold_split import dev, test\nph = eg.charger(); h  … [558 caractères tronqués]`
+
+  ```
+TP {'GN': 684, 'GV': 532, 'GP': 105, 'SUB': 69, 'REL': 73} 1463
+FP {'GP': 25, 'GV': 322, 'SUB': 4, 'REL': 32, 'GN': 175} 558
+FN {'GV': 180, 'SUB': 1, 'GN': 144, 'REL': 1, 'ADJ': 35, 'ADV': 30, 'PONCT': 9} 400
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 160, "offset": 1480}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1480:                                             langue=lg, script=script))
+1481: 
+1482:         # 5. syntagmes : le générateur S (candidats) ou un chunker simple
+1483:         verbes = [(e.debut, e.fin, e.valeur) for e in etiquettes
+1484:                   if e.niveau == "pos" and e.type == "VERB"]
+1485:         # le générateur S est **français** : il ne segmente pas l'anglais (A14) — on ne
+1486:         # l'interroge que pour le français, sinon ses segments polluent l'union.
+1487:         cands = self._syntagmes_s(texte) if (langue or lg) == "fr" else []
+1488:         cibles_s = self._cibles_s(texte) if cands else {}
+1489:         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+1490:         # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
+1491:         # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
+1492:         pos_verbes = {e.debut for e in etiquettes if e.niveau == "pos" and e.type == "VERB"}
+1493:         simples = self._syntagmes_simple(texte, lg, pos_verbes)
+1494:      
+… [10429 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Heuristique\" -A 40 tools/bloc_linguistique.py | head -60", "description": "Read Heuristique constructor defaults"}`
+
+  ```
+788:class Heuristique:
+789-    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+790-
+791-    nom = "heuristique"
+792-
+793-    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+794-                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+795-                 union: bool = True, partition: str = "alternative"):
+796-        self.profils = profils
+797-        self.segmenter_s = segmenter_s
+798-        self.seuil_ouvert = seuil_ouvert
+799-        self.seuil_langue = seuil_langue
+800-        self.union = union
+801-        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
+802-        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
+803-        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+804-        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+805-        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
+806-        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+807-            raise ValueError("partition atten
+… [1085 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection d'échantillons de GV faux positifs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph = eg.charger(); h = bl.Heuristique()\nn=0\nfor p in  … [871 caractères tronqués]`
+
+  ```
+g003  fr GV [9:21] "a vu l'homme" conf=[(0.4, None), (0.3, True), (0.4, None)]
+     gold   : [('GN', 0, 8, 'La femme'), ('GV', 9, 13, 'a vu'), ('GN', 14, 21, "l'homme"), ('GP', 22, 34, 'dans le parc')]
+     pred   : [('GN', 0, 8, 'La femme'), ('GV', 9, 13, 'a vu'), ('GV', 9, 21, "a vu l'homme"), ('GN', 14, 21, "l'homme"), ('GP', 22, 34, 'dans le parc')]
+g004  fr GV [0:10] 'Il a couru' conf=[(0.3, True), (0.4, None), (0.3, True)]
+     gold   : [('GN', 0, 2, 'Il'), ('GV', 3, 10, 'a couru'), ('GP', 11, 31, 'pour attraper le bus')]
+     pred   : [('GN', 0, 2, 'Il'), ('GV', 0, 10, 'Il a couru'), ('GV', 3, 10, 'a couru'), ('GP', 11, 31, 'pour attraper le bus')]
+g005  fr GV [0:10] 'Elle a dit' conf=[(0.3, True), (0.55, None), (0.3, True)]
+     gold   : [('GN', 0, 4, 'Elle'), ('GV', 5, 10, 'a dit'), ('SUB', 11, 28, "qu'elle viendrait")]
+     pred   : [('GN', 0, 4, 'Elle'), ('GV', 0, 10, 'Elle a dit'), ('GV', 5, 10, 'a dit'), ('SUB', 11, 28, "qu'elle viendrait"), ('SUB', 11, 33, "qu'elle viendrait hier"), ('GP', 29, 33, 'hier')]
+g008  fr GV [0:9] 'Marie lit' conf=[(0.3, True), (0.55, None), (0.3, True)]
+     gold   : [('GN', 0, 5, 'Marie'), ('GV', 6, 9, 'lit'), ('GN', 10, 18, 'un livre')]
+ 
+… [11008 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Traçage des origines S/chunker des GV en double
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nh = bl.Heuristique()\nfor txt in [\"Il a couru.\", \"Elle a dit qu'elle viendrait.\", \"Marie l … [372 caractères tronqués]`
+
+  ```
+=== Il a couru.
+ simples: [('GN', 0, 2, 'Il'), ('GV', 3, 10, 'a couru')]
+ S      : [('GV', 0, 10, 'Il a couru')]
+=== Elle a dit qu'elle viendrait.
+ simples: [('GN', 0, 4, 'Elle'), ('GV', 5, 10, 'a dit'), ('SUB', 11, 28, "qu'elle viendrait")]
+ S      : [('GV', 0, 10, 'Elle a dit'), ('SUB', 11, 28, "qu'elle viendrait")]
+=== Marie lit un livre.
+ simples: [('GN', 10, 18, 'un livre')]
+ S      : [('GV', 0, 9, 'Marie lit'), ('GN', 10, 18, 'un livre')]
+  ```
+

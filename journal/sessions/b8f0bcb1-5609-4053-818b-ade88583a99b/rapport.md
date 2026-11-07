@@ -7,12 +7,12 @@
 | Identifiant | `b8f0bcb1-5609-4053-818b-ade88583a99b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 21 |
-| Appels d'outils | 23 |
+| Messages | 30 |
+| Appels d'outils | 32 |
 | Fichiers touchés | 0 |
-| Commandes | 16 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans resta … [2125 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*32 appels d'outils.* Actions notables :
 
 - bash — Check branch and workspace state
 - bash — List reports and linguistic test tools
@@ -41,11 +41,11 @@
 - bash — Inspect prior measurement JSON
 - bash — Measure baseline F1 on all/dev/test
 - bash — Measure baseline F1 on all/dev/test (typo fix)
-- … et 2 autres
+- … et 10 autres
 
 **Synthèse produite :**
 
-⏵ Mesure de la ligne de base (F1 all/dev/test, attachement)
+⏵ Classification mesurée des 322 FP / 180 FN de GV
 
 ## 3. Travail accompli
 
@@ -72,12 +72,21 @@
 - **T1** Measure baseline F1 on all/dev/test
 - **T1** Reproduce r035 and g017 segmentation
 - **T1** Reproduce both cases (attr fix)
+- **T1** Inspect audit r1r3 JSON structure
+- **T1** Read audit method and ablations
+- **T1** Read R1c ablation and spans details
+- **T1** FP/FN counts per syntagm type
+- **T1** Read Heuristique constructor defaults
+- **T1** Print first 45 GV false positives with context
+- **T1** Compare chunker and S generator segmentations
+- **T1** Classify 322 GV FPs
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
 - **T1** : === The film she talks about is out. pos: [('The', 'DET'), ('film', 'NOUN'), ('she', 'PRON'), ('talks', 'VERB'), ('about', 'PREP'), ('is', 'AUX'), ('out', 'ADV'), ('.', 'PONCT')] [stderr] Traceback (m
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module> TypeError: tuple indices must be integers or slices, not str [exit code: 1]
 

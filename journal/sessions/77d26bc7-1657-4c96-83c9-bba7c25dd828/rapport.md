@@ -7,12 +7,12 @@
 | Identifiant | `77d26bc7-1657-4c96-83c9-bba7c25dd828` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 16 |
-| Appels d'outils | 24 |
+| Messages | 26 |
+| Appels d'outils | 41 |
 | Fichiers touchés | 0 |
-| Commandes | 22 |
+| Commandes | 39 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le pro … [2091 caractères tronqués]
 
-*24 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Vérifier existence des fichiers clés
@@ -41,7 +41,7 @@
 - bash — Lire le découpage de phrases actuel
 - bash — Lire le dispositif des 40 frontières
 - bash — Tester la CLI actuelle
-- … et 9 autres
+- … et 26 autres
 
 **Synthèse produite :**
 
@@ -78,6 +78,23 @@
 - **T1** Lister les 40 textes et effets
 - **T1** Lire la définition des actes faux
 - **T1** Chercher actes dans le rapport
+- **T1** Chercher le chiffre 34/50 dans le rapport
+- **T1** Rejouer les 40 frontières avec le code actuel
+- **T1** Rejouer les 40 frontières corrigé
+- **T1** Vérifier environnement et séparateur --
+- **T1** Vérifier espaces de tête
+- **T1** Chercher une définition d'anomalie dans le JSON
+- **T1** Chercher 34/50 dans les rapports
+- **T1** Lire le rapport produit-bloc-l (34/50)
+- **T1** État des fichiers et contrat documenté
+- **T1** Comparer les deux bancs de 50 textes
+- **T1** Lire le contrat publié
+- **T1** Chercher les usages du schéma
+- **T1** Lire le schéma v1 publié
+- **T1** Lire le vérificateur et le test du schéma
+- **T1** Confirmer les chiffres courants du produit
+- **T1** Vérifier disponibilité et lancer le validateur
+- **T1** Préciser F1 et vérifier les hash HEAD
 
 ## 4. Mesures et résultats marquants
 
@@ -114,4 +131,12 @@
 - **T1** `- **Temps** : `_phrases` sur 10 000 caractères : **2,98 ms → 8,47 ms** (×2,8). L'analyse complète de`
 - **T1** `l'audit était à 590–765 ms sur 10 000 caractères ; l'ajout est négligeable à cette échelle.`
 - **T1** `- **Patch B** : 8,97 ms contre 12,96 ms pour `_mots` sur le même texte (moins de tokens).`
+- **T1** `156:Le **démarrage** (`--version`, 10 passages) coûte **134–192 ms**, médiane **146 ms**. Pour une`
+- **T1** `583:| **P1-7** | **Compacité et lot** : `--compact`, JSONL, `--fichier`/stdin | **2,76 Mo** pour 10 k ; **11,5 Mo** pour 50 k ; 1 texte par appel | `drave.py` 50-52, 329-341 | **0,5–1 j** | faible : o`
+- **T1** `| graphème, mot | ✅ | 0 crash, 0 span hors texte, `valeur = texte[debut:fin]` à **100 %**, couverture **49/50 à 100 %** (x46 : 95,14 %, newlines) |`
+- **T1** ``reel_new` + 160 `synthétique`), soit **100 %**. Sur `all` : **612/612**.`
+- **T1** `syntagme (51,9 %)** sont impliquées, dans **31/50 textes** ; 113 sont des **inclusions**, 19 des`
+- **T1** `**graphème** : 49/50 textes à 100 %, x46 à **95,14 %** (7 newlines, catégorie `Cc`, non couvertes).`
+- **T1** `**Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**`
+- **T1** `> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,`
 

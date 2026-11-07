@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 236/237 (0,9916)**, **F1 0,7535** (linéaire 0,8104), **2 spans** ; **contrat v1** publié et validé ; frontières (0/40), partition étiquetée, PONCT/R4/« que », GN du sujet ; **`drave` v0** (16 tests, 10 contrôles) ; `master` poussé.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 236/237 (0,9916)**, **F1 0,7535** (linéaire 0,8104), **2 spans** ; **contrat v1** validé ; frontières, partition, GN du sujet ; **`drave` v0**.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.
