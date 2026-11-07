@@ -58663,3 +58663,117 @@ EXP-ADJADV POS 0.8625 | F1 0.7464 | exact 236/237 | cov 0.9916
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"## 5. Ce qui pourrait rendre cette fiche fausse\",\"\"\"## 4 bis. Les règles **rejetées** (mesurées puis non intég … [1424 caractères tronqués]`
+
+  ```
+négatifs documentés
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 10 files changed, 77 insertions(+), 18 deletions(-)
+COMMIT OK 1
+149ecc5d FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535
+   5b9c18ef..149ecc5d  s/v7 -> s/v7
+   5b9c18ef..149ecc5d  master -> master
+sam 07 nov 2026 00:47:25 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [391 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 00:47:48 EST
+HEAD 149ecc5d
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_backlog.py           EXIT=0
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ État du round 4 (07/11 00 h 50) : le produit gagne `--fichier` / `--jsonl`, tout reste vert
+
+## Ce que ce round a ajouté
+
+- **`--fichier`** : analyser un fichier UTF-8 au lieu d'un argument.
+- **`--jsonl`** : une **ligne JSON par phrase** — le format des traitements de corpus, chaque ligne portant le schéma v1 complet.
+- **`evaluer` publie les deux vues** (fidèle F1 75,33 / linéaire 81,04, couverture 93,31) : le compromis est visible, plus subi.
+- **16 tests** produit (dont 2 sur le corpus).
+- **trois règles de segmentation rejetées et documentées** (adverbe final, rognage des GV de S, ADJ/ADV) — le F1 reste à 0,7535, et on sait pourquoi.
+
+## L'état
+
+`HEAD 149ecc5d`, `master` = `s/v7` **poussés**, 0 divergence ; **toutes les portes légères vertes**, **183/183** d'autotest, **porte produit verte** (10 contrôles, 16 tests).
+
+| mesure | matin | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 (fidèle / linéaire) | 58,49 % / — | **75,33 % / 81,04 %** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** |
+
+## Le point sur l'objectif
+
+Les livrables nommés sont **tous faits et vérifiés** : schéma v1 publié et validé, frontières de phrase (0/40), partition étiquetée, R4 + classes fermées, et le produit `drave` (CLI, contrat, porte). Ce qui **reste** est hors de mon territoire ou bloqué : les **11 verdicts S** (territoire S), le **tagger sur 612 via l'API** (clé absente — décision à prendre), **`porte-n2.sh`** (N2), **R2.1** (libre, mais gros œuvre).
+
+Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront de la **maintenance vérifiée** (portes, états, petites améliorations sûres) plutôt que des changements structurels, sauf si vous me redonnez une priorité.
+
+
+## Tour 189
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 5/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **subagent** `{"description": "Spans restants et convention GV", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans restants et la convention des GV** — diagnostic et règles candidates mesurées, sans modifier le code du dépôt.\n\nContexte  … [1558 caractères tronqués]`
+- **subagent** `{"description": "Re-audit produit du code de la nuit", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le produit sur les textes libres** avec le code de la nuit (23 h 30 → 00 h 50), en lecture seule.\n\nContexte : `tools/d … [1529 caractères tronqués]`
+
+  ```
+started subagent b8f0bcb1-5609-4053-818b-ade88583a99b
+  ```
+
+
+  ```
+started subagent 77d26bc7-1657-4c96-83c9-bba7c25dd828
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-80; ls reports/ | grep -E \"segmentation-restante|re-audit\"", "description": "Ancrer l'état du round"}`
+
+  ```
+sam 07 nov 2026 00:49:21 EST
+149ecc5d FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNA
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la vague : remise à jour des chantiers (B13) et du plan de travail
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B13\" docs/pilotage/chantiers.md | head -4 | cut -c1-200", "description": "Voir la ligne B13 des chantiers"}`
+
+  ```
+4:> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+30:| 31/10 22 h 22 | « le RSN (le pluriel sera plus approprié car tu dois avoir plusieurs candidats) est une représentation de données interne qui te permet d'itérer indéfiniment dans des cycles de pe
+78:**B13** ont une fiche de session et des rapports ; **L** et **D** sont les deux chantiers que les
+84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '84p' docs/pilotage/chantiers.md | cut -c1-400", "description": "Voir la ligne B complète"}`
+
+  ```
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + AC-3/alpha-bêta + DRVF + banc, **183/183 portes** (6 S fixés ; T132/T133 2/5) | B10.3 (encodeur) ; **B13** : T132/T133, gold 200+ ; porte 183/183 ; pragmatique | A, N1, D (corpus) | R (R5), S/L (sémantique, pragmatique) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 … [2357 caractères tronqués]`

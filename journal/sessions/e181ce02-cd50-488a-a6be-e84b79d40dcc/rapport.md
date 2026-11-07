@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 152.1 h |
-| Tours | 188 |
-| Messages | 3469 |
-| Appels d'outils | 3079 |
+| Durée | 152.2 h |
+| Tours | 189 |
+| Messages | 3476 |
+| Appels d'outils | 3086 |
 | Fichiers touchés | 25 |
-| Commandes | 2574 |
-| Sous-agents | 38 |
-| Commits | 416 |
+| Commandes | 2579 |
+| Sous-agents | 40 |
+| Commits | 417 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -435,6 +435,8 @@
 **Tour 187** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 **Tour 188** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 189** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10141,7 +10143,7 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 
 ### Tour 188 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Voir cmd_analyser
 - bash — Ajouter fichier et jsonl
@@ -10153,10 +10155,51 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - bash — Porte produit complète
 - bash — Tester les ADJ/ADV attributs
 - bash — Documenter les rejets
+- bash — Vérification complète du round
 
 **Synthèse produite :**
 
-⏵ Veine suivante : les ADJ/ADV du gold (65 manquants) — test en copie
+⏵ État du round 4 (07/11 00 h 50) : le produit gagne `--fichier` / `--jsonl`, tout reste vert
+
+\## Ce que ce round a ajouté
+
+- **`--fichier`** : analyser un fichier UTF-8 au lieu d'un argument.
+- **`--jsonl`** : une **ligne JSON par phrase** — le format des traitements de corpus, chaque ligne portant le schéma v1 complet.
+- **`evaluer` publie les deux vues** (fidèle F1 75,33 / linéaire 81,04, couverture 93,31) : le compromis est visible, plus subi.
+- **16 tests** produit (dont 2 sur le corpus).
+- **trois règles de segmentation rejetées et documentées** (adverbe final, rognage des GV de S, ADJ/ADV) — le F1 reste à 0,7535, et on sait pourquoi.
+
+\## L'état
+
+`HEAD 149ecc5d`, `master` = `s/v7` **poussés**, 0 divergence ; **toutes les portes légères vertes**, **183/183** d'autotest, **porte produit verte** (10 contrôles, 16 tests).
+
+| mesure | matin | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 (fidèle / linéaire) | 58,49 % / — | **75,33 % / 81,04 %** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** |
+
+\## Le point sur l'objectif
+
+Les livrables nommés sont **tous faits et vérifiés** : schéma v1 publié et validé, frontières de phrase (0/40), partition étiquetée, R4 + classes fermées, et le produit `drave` (CLI, contrat, porte). Ce qui **reste** est hors de mon territoire ou bloqué : les **11 verdicts S** (territoire S), le **tagger sur 612 via l'API** (clé absente — décision à prendre), **`porte-n2.sh`** (N2), **R2.1** (libre, mais gros œuvre).
+
+Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront de la **maintenance vérifiée** (portes, états, petites améliorations sûres) plutôt que des changements structurels, sauf si vous me redonnez une priorité.
+
+### Tour 189 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- sous-agent — Spans restants et convention GV
+- sous-agent — Re-audit produit du code de la nuit
+- bash — Ancrer l'état du round
+- bash — Voir la ligne B13 des chantiers
+- bash — Voir la ligne B complète
+- bash — Mettre à jour chantiers/plan
+
+**Synthèse produite :**
+
+⏵ Pendant la vague : remise à jour des chantiers (B13) et du plan de travail
 
 ## 3. Travail accompli
 
@@ -10230,6 +10273,8 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - tour 184 — État S et rétro-traduction
 - tour 184 — État R et tagger
 - tour 184 — État A et frontière
+- tour 189 — Spans restants et convention GV
+- tour 189 — Re-audit produit du code de la nuit
 
 ### Commandes exécutées (échantillon)
 
@@ -10273,7 +10318,7 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2534 autres
+- … et 2539 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10401,7 +10446,7 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 
 ## 5. Erreurs rencontrées
 
-71 sorties en erreur ou divergentes. Les premières :
+72 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10837,4 +10882,5 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produ
 - PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produit/README.m
 - FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535" -- reports/rapport-gn-pronom-sujet.md docs/pilotag
+- PILOTAGE — B13 AUX CHIFFRES DE LA NUIT (86,25 / 0,7535 / 236-237) ET § 14 : LA VAGUE DE SEGMENTATION" -- docs/pilotage/chantiers.md docs/pilotage/plan-travail.m
 

@@ -448,6 +448,7 @@ les sous-agents rendent des **fiches** et des **JSON**, jamais de commit.
 | 0 (produit) | CLI, doc, audit, file | `drave` v0, porte produit 9 contrôles, 10 tests |
 | 1 (P0) | frontières, partition, POS R4 | 32/40 → 0 frontières fausses ; `meta.alternative` ; **POS 85,00 %** |
 | 2 (états) | N2, S, R, A | inventaires en lecture seule |
+| 3 (nuit) | segmentation, produit | GN du pronom/nom propre (**+10,2 de F1**), `r264`, `--fichier`/`--jsonl`, deux vues |
 
 **Intégré** : schéma v1 publié (`tools/schemas/`), gold corrigé (4 GP), morphologie du 1er groupe
 (235/236, couverture **0,9874**), compositions sans perte, frontières, partition, NUM.
