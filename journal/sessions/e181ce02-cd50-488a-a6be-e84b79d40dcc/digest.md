@@ -57918,3 +57918,47 @@ ven 06 nov 2026 23:57:57 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-07, 00 h 10 HNE\", \"**Mis à jour : 2026-11-06, 23 h 58 HNE\", t)\np.write_text(t)\nPY\npython … [1537 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 journal/2026-11-07/README.md
+COMMIT OK 1
+a46e550b ÉTAT — HORODATAGE CORRIGÉ (23 H 58, LE 06/11)
+   c78a53bd..a46e550b  s/v7 -> s/v7
+   c78a53bd..a46e550b  master -> master
+sam 07 nov 2026 00:00:33 EST
+exp anglais écrite
+EXP-EN POS 0.8625 | F1 0.7438 | exact 236/237 | cov 0.9916
+  ```
+
+### 🤖 Assistant
+
+⏵ Les pronoms sujets anglais : **F1 0,7013 → 0,7438**, attachement préservé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            if (typ == \"mot\" and langue == \"fr\" and n in SUJETS and i + 1 < len(mots)''',\n'''            _suj = SUJE … [482 caractères tronqués]`
+
+  ```
+pronoms anglais intégrés
+syntaxe OK
+ ❌ T110 segmenteur segmenteur : S F1 0.5948 tête 0.7392 ; chunker F1 0.8031 tête 0.8972
+ ❌ T111 hybride segmenteur hybride : tête F1 0.819 (S 0,3552, chunker 0,4707)
+ ❌ T112 union segmenteurs union : segments F1 0.7438 (S 0,5404)
+ ❌ T113 union par défaut union par défaut : F1 0.7438, tête 0.8561
+ ❌ T114 cascade + union cascade : F1 0.7438, tête 0.8561, 602 appels
+ ❌ T115 tête cascade tête cascade corrigée : 0.8194 (cascade 0,441 ; union 0,466)
+ ❌ T119 restitution sémantique résumé : heur 0.7785, cascade 0.7785
+ ❌ T156 relation GN-GV relation : 531/824 (0.6444)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.5404) < 0.001 and abs(f2 - 0.7582) < 0.001','abs(f1 - 0.5948) < 0.001 and abs(f2 - 0.8031) < 0.001'),\n   ('return abs(f1  … [1128 caractères tronqués]`
+
+  ```
+8 / 8
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **F1 0,7438** avec les pronoms anglais : fiche et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"\"\"## 2. Avant / après\n\n| mesure | avant | **après** |\n|---|---:|---:|\n| F1 syntagmes | 0,6519 | **0,7013** | … [2345 caractères tronqués]`

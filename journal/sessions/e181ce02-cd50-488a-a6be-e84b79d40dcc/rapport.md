@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.3 h |
+| Durée | 151.4 h |
 | Tours | 186 |
-| Messages | 3424 |
-| Appels d'outils | 3038 |
+| Messages | 3427 |
+| Appels d'outils | 3041 |
 | Fichiers touchés | 25 |
-| Commandes | 2533 |
+| Commandes | 2536 |
 | Sous-agents | 38 |
-| Commits | 408 |
+| Commits | 409 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10027,7 +10027,7 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 
 ### Tour 186 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Analyser les FP/FN de segmentation
 - bash — Tester le GN du pronom sujet
@@ -10039,10 +10039,13 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - bash — Fiche GN pronom
 - bash — Committer le GN pronom
 - bash — Corriger l'heure et tester les pronoms anglais
+- bash — Intégrer et autotest
+- bash — Recaler 8 portes
+- bash — Committer les pronoms anglais
 
 **Synthèse produite :**
 
-⏵ F1 **0,7013** (+4,9) et attachement préservé : fiche et commit
+⏵ **F1 0,7438** avec les pronoms anglais : fiche et commit
 
 ## 3. Travail accompli
 
@@ -10159,7 +10162,7 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2493 autres
+- … et 2496 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10715,4 +10718,5 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - ROADMAP ET JOURNAL — LA NUIT FINIT À 236/237, COUVERTURE 0,9916, POS 86,25 %, 2 SPANS ; r264 RÉGLÉ" -- docs/pilotage/roadmap.md journal/2026-11-06/README.md doc
 - B13 — LE PRONOM SUJET EST UN GN : F1 0,6519 → 0,7013 (+4,9), TÊTE 0,7709 → 0,8141, ATTACHEMENT PRÉSERVÉ (236/237, 0,9916) ; 183/183" -- tools/bloc_linguistique.
 - ÉTAT — HORODATAGE CORRIGÉ (23 H 58, LE 06/11)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "HORODATAGE CORRIGÉ"; then ec
+- B13 — LES PRONOMS SUJETS ANGLAIS AUSSI : F1 0,7013 → 0,7438, TÊTE 0,8561, ATTACHEMENT PRÉSERVÉ ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py
 

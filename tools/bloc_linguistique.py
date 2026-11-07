@@ -1232,7 +1232,8 @@ class Heuristique:
                 continue
             # un **pronom sujet** devant le verbe est un GN (« Il | a couru ») : c'est la
             # convention du gold (FN GN 417) — mesuré F1 0,6519 → 0,7013, attachement inchangé.
-            if (typ == "mot" and langue == "fr" and n in SUJETS and i + 1 < len(mots)
+            _suj = SUJETS if langue == "fr" else {"i", "you", "he", "she", "it", "we", "they"}
+            if (typ == "mot" and n in _suj and i + 1 < len(mots)
                     and (est_verbe(mots[i + 1][0], mots[i + 1][2])
                          or _normaliser(mots[i + 1][2]) in lex.get("AUX", set())
                          or _normaliser(mots[i + 1][2]) in {"ne", "n'", "n’"})):

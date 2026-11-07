@@ -27,13 +27,16 @@ devenait un GN et le GP était perdu (r070).
 
 ## 2. Avant / après
 
-| mesure | avant | **après** |
-|---|---:|---:|
-| F1 syntagmes | 0,6519 | **0,7013** |
-| F1 dev / test | 0,6482 / 0,6601 | **0,6986 / 0,7073** |
-| exact / labels | 236/237 | **236/237** |
-| couverture | 0,9916 | **0,9916** |
-| tête | 0,7709 | **0,8141** |
+| mesure | avant | français seul | **+ anglais** |
+|---|---:|---:|---:|
+| F1 syntagmes | 0,6519 | 0,7013 | **0,7438** |
+| F1 dev / test | 0,6482 / 0,6601 | 0,6986 / 0,7073 | **0,7438** |
+| exact / labels | 236/237 | 236/237 | **236/237** |
+| couverture | 0,9916 | 0,9916 | **0,9916** |
+| tête | 0,7709 | 0,8141 | **0,8561** |
+
+**L'anglais** a ses propres pronoms sujets (`i, you, he, she, it, we, they`) : la même règle lui
+donne **+4,25 points de F1** (0,7013 → 0,7438) sans perdre un attachement.
 
 **Ce que ça dit** :
 

@@ -1682,7 +1682,7 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.5404) < 0.001 and abs(f2 - 0.7582) < 0.001
+    return (abs(f1 - 0.5948) < 0.001 and abs(f2 - 0.8031) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
@@ -1708,7 +1708,7 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.7705) < 0.001, (
+    return abs(f1 - 0.819) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
@@ -1729,7 +1729,7 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.7013) < 0.001, f"union : segments F1 {f1} (S 0,5404)"
+    return abs(f1 - 0.7438) < 0.001, f"union : segments F1 {f1} (S 0,5948)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
@@ -1741,7 +1741,7 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.7013) < 0.001 and abs(tete - 0.8141) < 0.001, (
+    return abs(f1 - 0.7438) < 0.001 and abs(tete - 0.8561) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
@@ -1755,7 +1755,7 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.7013) < 0.001 and abs(tete - 0.8141) < 0.001
+    return (abs(f1 - 0.7438) < 0.001 and abs(tete - 0.8561) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
@@ -1781,7 +1781,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.7741) < 0.001, (
+    return abs(f1 - 0.8194) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
@@ -1832,7 +1832,7 @@ def t119_miroir_resume() -> tuple[bool, str]:
     cas = bl.Cascade(h, bl.MockNeuronal())
     rap_c = sum(rappel_resume(cas.analyser(p["texte"], p["langue"]), p["texte"])
                 for p in ph) / max(1, len(ph))
-    return (abs(rap_h - 0.7477) < 0.001 and abs(rap_c - 0.7477) < 0.001), (
+    return (abs(rap_h - 0.7785) < 0.001 and abs(rap_c - 0.7785) < 0.001), (
         f"résumé : heur {round(rap_h, 4)}, cascade {round(rap_c, 4)}")
 
 
@@ -2272,7 +2272,7 @@ def t156_relation() -> tuple[bool, str]:
                 n += 1
                 if gv and (e.meta or {}).get("role") in ("agent", "patient", "destinataire"):
                     avec += 1
-    return n == 712 and avec == 419, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+    return n == 824 and avec == 531, f"relation : {avec}/{n} ({round(avec/n, 4)})"
 
 
 def t157_roles() -> tuple[bool, str]:
