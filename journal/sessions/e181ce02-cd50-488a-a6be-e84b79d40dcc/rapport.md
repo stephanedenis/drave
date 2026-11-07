@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.1 h |
-| Tours | 185 |
-| Messages | 3412 |
-| Appels d'outils | 3028 |
+| Durée | 151.3 h |
+| Tours | 186 |
+| Messages | 3423 |
+| Appels d'outils | 3037 |
 | Fichiers touchés | 25 |
-| Commandes | 2523 |
+| Commandes | 2532 |
 | Sous-agents | 38 |
-| Commits | 406 |
+| Commits | 407 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -429,6 +429,8 @@
 **Tour 184** — oui, continue en mode autonome jusqu'à 9h demain
 
 **Tour 185** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 186** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9993,7 +9995,53 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 **Synthèse produite :**
 
-⏵ Consolidation finale de la nuit avec les chiffres à jour
+⏵ Nuit 06/11 close : **POS 86,25 %**, **236/237**, couverture **0,9916**, tout poussé
+
+\## Le état final (23 h 45)
+
+`HEAD 5a067ba5`, `master` = `s/v7` **poussés**, 0 divergence ; **183/183** portes ; **porte produit verte** (10 contrôles, 13 tests) ; toutes les portes légères passent.
+
+| mesure | ce matin 09 h 20 | **cette nuit** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 0,5849 | **0,6519** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** (`r035`, `g017`) |
+| miroir | 0,196 | 0,2276 |
+
+\## Ce que la nuit a produit
+
+**Le produit** : CLI `drave` (`analyser`/`evaluer`/`rejouer`, `--json`, `--langue`, `--partition`, `--contexte`), **contrat v1** publié et validé (`tools/schemas/`, `schema`/`version`, refus JSON code 3), **porte produit à 10 contrôles** (~2 min), 13 + 6 + 4 tests, doc d'usage, 5 exemples rejoués, `README` « Essayez ».
+
+**Les mesures** : gold corrigé (4 GP), morphologie du 1er groupe, frontières de phrase (32/40 → 0), partition étiquetée, compositions sans perte, POS (R2a/R3/R2b, R4-en, classes fermées, `NUM`, `PONCT`, R4-fr filtré, « que », `r264`), plus **trois règles rejetées et documentées**.
+
+**Les quatre états** : N2 (porte propre 2,7856, bug du mètre RoPE signalé), S (`/paragraphes` fini, 11 verdicts non committés, rétro-traduction absente), R (le tagger n'est pas à 0,944 contre 0,85 : +6,35 sur 432), A (**A6.2 libre** — le MoE local existe).
+
+\## Ce qui reste
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe) — deux cas isolés.
+2. **Coordination** : les 11 verdicts S (territoire S), le tagger sur 612 via l'API (décision), `porte-n2.sh` (proposée, deux seuils), R2.1 (libre).
+3. **La restitution** (annotation → texte) : la brique produit suivante.
+
+La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans retrouvés**, un **contrat versionné** et une **porte produit** — mesuré, contrôlé, poussé. Le goal reste actif jusqu'à 9 h ; je continue si vous le souhaitez.
+
+### Tour 186 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*9 appels d'outils.* Actions notables :
+
+- bash — Analyser les FP/FN de segmentation
+- bash — Tester le GN du pronom sujet
+- bash — Expérience avec le stype élidé
+- bash — Identifier le span perdu
+- bash — Expérience avec garde de langue
+- bash — Intégrer et lancer l'autotest
+- bash — Recaler 7 portes
+- bash — Fiche GN pronom
+- bash — Committer le GN pronom
+
+**Synthèse produite :**
+
+⏵ F1 **0,7013** (+4,9) et attachement préservé : fiche et commit
 
 ## 3. Travail accompli
 
@@ -10110,7 +10158,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2483 autres
+- … et 2492 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10664,4 +10712,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS" -- tools/tests/test_produit.py docs/produit/README.md docs/pilotage/en-cours.md 2>
 - B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183" -- tools/bloc_linguistique.py 
 - ROADMAP ET JOURNAL — LA NUIT FINIT À 236/237, COUVERTURE 0,9916, POS 86,25 %, 2 SPANS ; r264 RÉGLÉ" -- docs/pilotage/roadmap.md journal/2026-11-06/README.md doc
+- B13 — LE PRONOM SUJET EST UN GN : F1 0,6519 → 0,7013 (+4,9), TÊTE 0,7709 → 0,8141, ATTACHEMENT PRÉSERVÉ (236/237, 0,9916) ; 183/183" -- tools/bloc_linguistique.
 

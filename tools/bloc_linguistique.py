@@ -1171,6 +1171,7 @@ class Heuristique:
                         stype = "REL"   # « The day when we left »
                     else:
                         stype = "SUB" if (est_sub(n) or n in SUBORDONNANTS
+                                          or est_sub(_n_elic_e) or _n_elic_e in SUBORDONNANTS
                                           or precedent == "GV") else "REL"
                     j = i + 1
                     verbes_vus = 0
@@ -1228,6 +1229,16 @@ class Heuristique:
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
                 i = j
+                continue
+            # un **pronom sujet** devant le verbe est un GN (« Il | a couru ») : c'est la
+            # convention du gold (FN GN 417) — mesuré F1 0,6519 → 0,7013, attachement inchangé.
+            if (typ == "mot" and langue == "fr" and n in SUJETS and i + 1 < len(mots)
+                    and (est_verbe(mots[i + 1][0], mots[i + 1][2])
+                         or _normaliser(mots[i + 1][2]) in lex.get("AUX", set())
+                         or _normaliser(mots[i + 1][2]) in {"ne", "n'", "n’"})):
+                segments.append({"type": "GN", "role": "agent", "niveau": 0,
+                                 "debut": d, "fin": f, "texte": texte[d:f], "candidats": []})
+                i += 1
                 continue
             if typ == "mot" and (n in lex.get("AUX", set()) or est_verbe(d, t)
                                  or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):

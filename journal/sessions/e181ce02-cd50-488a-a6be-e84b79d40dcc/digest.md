@@ -57747,3 +57747,161 @@ ven 06 nov 2026 23:44:56 EST
 ⏵ Consolidation finale de la nuit avec les chiffres à jour
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"**État au 06/11 23 h 10.\")), None)\nif ligne:\n    t=t.replace(ligne, \"**É … [2171 caractères tronqués]`
+
+  ```
+roadmap + journal
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 16 files changed, 52 insertions(+), 26 deletions(-)
+COMMIT OK 1
+5a067ba5 ROADMAP ET JOURNAL — LA NUIT FINIT À 236/237, COUVERTURE 0,9916, POS 86,25 %, 2 SPANS ; r264 RÉGLÉ
+   5d2fa775..5a067ba5  s/v7 -> s/v7
+   5d2fa775..5a067ba5  master -> master
+ven 06 nov 2026 23:47:42 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit 06/11 close : **POS 86,25 %**, **236/237**, couverture **0,9916**, tout poussé
+
+## Le état final (23 h 45)
+
+`HEAD 5a067ba5`, `master` = `s/v7` **poussés**, 0 divergence ; **183/183** portes ; **porte produit verte** (10 contrôles, 13 tests) ; toutes les portes légères passent.
+
+| mesure | ce matin 09 h 20 | **cette nuit** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 0,5849 | **0,6519** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** (`r035`, `g017`) |
+| miroir | 0,196 | 0,2276 |
+
+## Ce que la nuit a produit
+
+**Le produit** : CLI `drave` (`analyser`/`evaluer`/`rejouer`, `--json`, `--langue`, `--partition`, `--contexte`), **contrat v1** publié et validé (`tools/schemas/`, `schema`/`version`, refus JSON code 3), **porte produit à 10 contrôles** (~2 min), 13 + 6 + 4 tests, doc d'usage, 5 exemples rejoués, `README` « Essayez ».
+
+**Les mesures** : gold corrigé (4 GP), morphologie du 1er groupe, frontières de phrase (32/40 → 0), partition étiquetée, compositions sans perte, POS (R2a/R3/R2b, R4-en, classes fermées, `NUM`, `PONCT`, R4-fr filtré, « que », `r264`), plus **trois règles rejetées et documentées**.
+
+**Les quatre états** : N2 (porte propre 2,7856, bug du mètre RoPE signalé), S (`/paragraphes` fini, 11 verdicts non committés, rétro-traduction absente), R (le tagger n'est pas à 0,944 contre 0,85 : +6,35 sur 432), A (**A6.2 libre** — le MoE local existe).
+
+## Ce qui reste
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe) — deux cas isolés.
+2. **Coordination** : les 11 verdicts S (territoire S), le tagger sur 612 via l'API (décision), `porte-n2.sh` (proposée, deux seuils), R2.1 (libre).
+3. **La restitution** (annotation → texte) : la brique produit suivante.
+
+La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans retrouvés**, un **contrat versionné** et une **porte produit** — mesuré, contrôlé, poussé. Le goal reste actif jusqu'à 9 h ; je continue si vous le souhaitez.
+
+
+## Tour 186
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 2/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfp=collections.Counter(); fn=collecti … [709 caractères tronqués]`
+
+  ```
+FP 565 {'GP': 25, 'GV': 333, 'SUB': 4, 'REL': 32, 'GN': 171}
+FN 689 {'GN': 417, 'GV': 196, 'SUB': 1, 'REL': 1, 'ADJ': 35, 'ADV': 30, 'PONCT': 9}
+--- exemples FP
+('GP', 'Le chat de la voisine dort.', 'fr', 8, 26)
+('GV', "La femme a vu l'homme dans le parc.", 'fr', 9, 21)
+('GV', 'Il a couru pour attraper le bus.', 'fr', 0, 10)
+('GV', 'Il a couru pour attraper le bus.', 'fr', 0, 2)
+('GV', "Elle a dit qu'elle viendrait hier.", 'fr', 0, 10)
+('SUB', "Elle a dit qu'elle viendrait hier.", 'fr', 11, 33)
+('GP', "Elle a dit qu'elle viendrait hier.", 'fr', 29, 33)
+('GV', "Elle a dit qu'elle viendrait hier.", 'fr', 0, 4)
+--- exemples FN
+('GN', 'Il a couru pour attraper le bus.', 'fr', 0, 2)
+('GN', "Elle a dit qu'elle viendrait hier.", 'fr', 0, 4)
+('GN', 'Marie lit un livre.', 'fr', 0, 5)
+('GN', 'Il ne dort pas.', 'fr', 0, 2)
+('GV', "J'ai vu l'homme avec le télescope.", 'fr', 5, 7)
+('GN', "J'ai vu l'homme avec le télescope.", 'fr', 0, 4)
+('SUB', 'She said that she would come yesterday.', 'en', 9, 28)
+('GN', 'She said that she would come yesterday.', 'en', 0, 3)
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience : le GN du pronom sujet (FN GN 417) — test en copie avant intégration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\n# dans la branche GV : si le GV commence par un pronom sujet, émettre un GN et décaler le GV\nancien = '''            if typ == \"mot\" and … [1718 caractères tronqués]`
+
+  ```
+copie expérimentale écrite
+EXP POS 0.8625 | F1 0.7431 | exact 235/236 | cov 0.9874
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nancien = '''            if typ == \"mot\" and (n in lex.get(\"AUX\", set()) or est_verbe(d, t)\n                                 or (i + 1  … [2197 caractères tronqués]`
+
+  ```
+exp 2 écrite
+EXP POS 0.8625 | F1 0.7431 | exact 235/236 | cov 0.9874
+dev F1 0.7364 | exact 160/161
+test F1 0.7580 | exact 75/75
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nancien = '''            if typ == \"mot\" and (n in lex.get(\"AUX\", set()) or est_verbe(d, t)\n                                 or (i + 1  … [2043 caractères tronqués]`
+
+  ```
+SPAN MANQUANT g017 SUB that she would come | She said that she would come yesterday.
+SPAN MANQUANT r035 REL she talks about | The film she talks about is out.
+SPAN MANQUANT r070 GP on vacation | We leave on vacation.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nancien = '''            if typ == \"mot\" and (n in lex.get(\"AUX\", set()) or est_verbe(d, t)\n                                 or (i + 1  … [2181 caractères tronqués]`
+
+  ```
+exp 3 (garde fr)
+EXP POS 0.8625 | F1 0.7013 | exact 236/237 | cov 0.9916
+dev F1 0.6986 | exact 160/161
+test F1 0.7073 | exact 76/76
+  ```
+
+### 🤖 Assistant
+
+⏵ **F1 0,6519 → 0,7013** sans perte d'attachement : j'intègre le GN du pronom sujet
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nancien = '''            if typ == \"mot\" and (n in lex.get(\"AUX\", set()) or est_verbe(d, t)\n                                 or (i + … [1871 caractères tronqués]`
+
+  ```
+GN du pronom sujet intégré
+syntaxe OK
+ ❌ T110 segmenteur segmenteur : S F1 0.5404 tête 0.6879 ; chunker F1 0.7582 tête 0.8536
+ ❌ T111 hybride segmenteur hybride : tête F1 0.7705 (S 0,3552, chunker 0,4707)
+ ❌ T112 union segmenteurs union : segments F1 0.7013 (S 0,5404)
+ ❌ T113 union par défaut union par défaut : F1 0.7013, tête 0.8141
+ ❌ T114 cascade + union cascade : F1 0.7013, tête 0.8141, 602 appels
+ ❌ T115 tête cascade tête cascade corrigée : 0.7741 (cascade 0,441 ; union 0,466)
+ ❌ T156 relation GN-GV relation : 419/712 (0.5885)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.5404) < 0.001 and abs(f2 - 0.7079) < 0.001','abs(f1 - 0.5404) < 0.001 and abs(f2 - 0.7582) < 0.001'),\n   ('return abs(f1  … [998 caractères tronqués]`
+
+  ```
+7 / 7
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ F1 **0,7013** (+4,9) et attachement préservé : fiche et commit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gn-pronom-sujet.md <<'MD'\n# B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-07 · **Verdict** : ✅\n> **La pl … [4950 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 796 JSON, le disque en a 797
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1169 caractères tronqués]`

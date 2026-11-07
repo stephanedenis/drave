@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "regle": "pronom sujet → GN (langue fr), GV commence après",
+ "cause": "convention du gold : 417 GN manquants, 333 GV en trop",
+ "avant": {
+  "f1": 0.6519,
+  "f1_dev": 0.6482,
+  "f1_test": 0.6601,
+  "exact": "236/237",
+  "couverture": 0.9916,
+  "tete": 0.7709
+ },
+ "apres": {
+  "f1": 0.7013,
+  "f1_dev": 0.6986,
+  "f1_test": 0.7073,
+  "exact": "236/237",
+  "couverture": 0.9916,
+  "tete": 0.8141
+ },
+ "controles": {
+  "autotest": "183/183",
+  "assertions": 7,
+  "garde_langue": "on anglais protégé (r070)"
+ },
+ "limites": [
+  "anglais non couvert",
+  "GN non pronominaux manquants",
+  "gold templaté"
+ ]
+}

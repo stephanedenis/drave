@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **700 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **701 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -170,6 +170,7 @@
 | [rapport-frontieres-phrase.md](rapport-frontieres-phrase.md) | Frontières de phrase — P0-4 du bloc linguistique |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
+| [rapport-gn-pronom-sujet.md](rapport-gn-pronom-sujet.md) | B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé |
 | [rapport-gold-anglais.md](rapport-gold-anglais.md) | B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause |
 | [rapport-gold-gp-corrige.md](rapport-gold-gp-corrige.md) | B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456 |
 | [rapport-gold-split.md](rapport-gold-split.md) | B13 — le gold coupé en dev/test : les gains généralisent (test 0,9815, dev 0,9811) |
