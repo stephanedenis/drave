@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 27 |
-| Appels d'outils | 51 |
+| Messages | 31 |
+| Appels d'outils | 58 |
 | Fichiers touchés | 0 |
-| Commandes | 39 |
+| Commandes | 45 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*51 appels d'outils.* Actions notables :
+*58 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -41,7 +41,7 @@
 - bash — Localiser le registre des portes
 - bash — Chercher les usages de eval_n2_propre et porte-n2
 - bash — Lire le registre des portes le plus récent
-- … et 28 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
@@ -97,6 +97,8 @@ Les deux évaluations sont terminées ; je récupère leurs sorties.
 - **T1** Contrôle eval_n2_propre sur un checkpoint absolu N2.h
 - **T1** Tableau des métadonnées des checkpoints
 - **T1** Inventaire des fiches N2 (titre, date, verdict)
+- **T1** Mesurer la porte avec le mauvais mètre (absolu)
+- … et 5 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -171,4 +173,13 @@ Les deux évaluations sont terminées ; je récupère leurs sorties.
 - **T1** `date=2026-11-01 | entraîné sur **186 Mo** de`
 - **T1** `date=2026-11-02/03 | à **octets constants** (20,5 Mo vus), entraîner sur des`
 - **T1** `# N2.j2 — Positions aléatoires sur 186 Mo : le verrou de longueur tombe encore (÷2,4 à 512)`
+- **T1** `| 200 k × 128 | 205 Mo | 3,1591 | 3,6577 | 8,2262 | 12,8723 | 5,6056 | 7,2770 | 8,0018 |`
+- **T1** `| **1 024, 30 k pas** | **307 Mo** | **2,9943** | **2,7221** | **2,6143** | **2,5628** | **5,3122** | **6,5118** | **7,1544** |`
+- **T1** `La recette de production poussée une fois de plus (30 000 → **60 000 pas**, **552 Mo** au total) :`
+- **T1** `| 7 500 | 122 Mo | 3,1489 | 2,9103 | 2,7858 | 2,7342 | 5,5173 | 7,1904 | 7,9521 |`
+- **T1** `| 30 000 | 307 Mo | 2,9943 | 2,7221 | 2,6143 | 2,5628 | 5,3122 | 6,5118 | 7,1544 |`
+- **T1** `| **60 000** | **552 Mo** | **2,9121** | **2,6341** | **2,5276** | **2,4761** | **5,1254** | **6,2043** | **6,7874** |`
+- **T1** `**Chaque doublement des pas vaut ~−0,085 en domaine** (le pas de 7 500 à 30 000, ×4, valait`
+- **T1** `−0,155 ; celui de 30 000 à 60 000, ×2, vaut −0,082) : c'est une loi **géométrique** en pas, et`
+- **T1** `mieux, comme à toutes les tailles de la nuit. À 552 Mo vus, la PPL de queue est à **2,34** et la`
 

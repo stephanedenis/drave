@@ -1278,3 +1278,144 @@ started background job bash-4042
 started background job bash-4044
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib, datetime\nrows=[]\nfor j in pathlib.Path('work').rglob('*.pt.json'):\n    p=j.with_suffix('')  # remove .json -> .pt\n    try:\n        d=json.loads(j.read_text())\n    except Exception as e:\n        continue\n    mtime=datetime.datetime.fromtime … [847 caractères tronqués]`
+
+  ```
+date               taille      param    pas   seq   win   pos  ppl_val  checkpoint  (corpus, init)
+2026-11-02 04:27   130.89   34301224  20000   128  None  None 3.683441  work/n2j/base-34m-canal.pt
+                 corpus=data/wiki_fr/propre/train.txt init=None
+2026-11-02 05:38   130.89   34301224  20000   128  None  None 3.689124  work/n2j/base-34m-canal-g2.pt
+                 corpus=data/wiki_fr/propre/train.txt init=None
+2026-11-02 10:48   130.89   34301224  20000   128  None  None 3.823934  work/n2w/base-big.pt
+                 corpus=data/wiki_big/propre/train.txt init=None
+2026-11-02 11:09   130.89   34301224  20000   128  None  None 3.393584  work/n2w/base-big-canal.pt
+                 corpus=data/wiki_big/propre/train.txt init=None
+2026-11-02 12:10   130.89   34301224  60000   128  None  None 3.260694  work/n2w/big-60k.pt
+                 corpus=data/wiki_big/propre/train.txt init=None
+2026-11-02 12:10   130.88   34301224  60000   128  None  None 3.597846  work/n2w/fr-60k.pt
+                 corpus=data/wiki_fr/propre/train.txt init=None
+2026-11-02 13:23   130.89   34301224  60000   128  None  None 3.355563  work/n2w/mix-60k.pt
+                 corpus=data/wiki_mix/propre/t
+… [6544 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, re\nfor p in sorted(pathlib.Path('reports').glob('rapport-n2-*.md')):\n    t=p.read_text(errors='replace')\n    lines=t.splitlines()\n    titre=next((l for l in lines if l.startswith('# ')), '')[:120]\n    date=''\n    for l in lines[:12]:\n        m=re … [413 caractères tronqués]`
+
+  ```
+rapport-n2-200k.md
+  # N2.ae — 200 000 pas sur le mélange 1 Go : −0,33 en domaine, −1,06 en largeur, et la porte 2,5 à un million de pas
+  date=2026-11-02 | à recette constante (34,3 M,
+rapport-n2-34m-distille.md
+  # N2.r — Le 34,3 M distillé : **3,69**, le meilleur modèle de la nuit, et la courbe plate
+  date=2026-11-02 | le modèle de **34,3 M** distillé
+rapport-n2-anglais-34m.md
+  # N2.w — L'anglais à 34,3 M distillé : 3,77, et 4,18 à 512 octets
+  date=2026-11-02 | la chaîne anglaise complète
+rapport-n2-anglais-distille.md
+  # N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo
+  date=2026-11-01 | le professeur 23,57 M entraîné
+rapport-n2-anglais.md
+  # N2.m — L'anglais seul : 4,42 sur 204 Mo, et ce que le multilingue coûte (1,6 PPL)
+  date=2026-11-01 | la base **anglaise
+rapport-n2-budget.md
+  # N2 — le budget paie, les quatre sources coûtent, et la validation n'est pas tenue à l'écart
+  date=2026-10-31 | le budget
+rapport-n2-canal-34m.md
+  # N2.z — Le canal à 34,3 M : 4,00 → 3,51, le meilleur modèle de la nuit
+  date=2026-11-02 | le canal de structure, qui
+rapport-n2-canal-distille.md
+  # N2.x — La distillation du canal : −0,03 en domaine, +0,24 à 512 o
+… [5069 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4042 (bash: date '+%Y-%m-%d %H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre; echo "EXIT=$?"; date '+%Y-%m-%d %H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-3915 (bash: grep -rn "eval_n2_propre\|porte-n2\|porte propre" --include='*.sh' --include='*.md' --include='*.txt' --include='*.py' . 2>/dev/null | grep -v '^\./\.git' | head -50) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-4044 (bash: date '+%Y-%m-%d %H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2h/A-propre-g1.pt --device cuda; echo "EXIT=$?"; date '+%Y-%m-%d %H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4042"}`
+
+  ```
+2026-11-06 21:28:03
+  L128 : 2.9726
+  L256 : 2.8988
+  L512 : 2.8443
+  L1024 : 2.7856
+{"fichier": "propre512-8k.pt", "val": "data/corpus_propre", "positions": "rope", "L128": 2.9726, "L256": 2.8988, "L512": 2.8443, "L1024": 2.7856}
+EXIT=0
+2026-11-06 21:28:15
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-4044"}`
+
+  ```
+2026-11-06 21:28:04
+{"fichier": "A-propre-g1.pt", "params": 11816136, "val": 3.0971, "test": 3.2098, "litterature": 15.9854, "litterature_propre": 17.0838, "anglais": 60.6957, "wikitext2": 59.729, "permute": 1356.6433}
+EXIT=0
+2026-11-06 21:28:26
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-3915"}`
+
+  ```
+./reports/rapport-n2-propre.md:143:  [`tools/eval_n2_propre.py`](../tools/eval_n2_propre.py) · agrégat
+./reports/rapport-n2-diversite.md:74:  [`tools/eval_n2_propre.py`](../tools/eval_n2_propre.py).
+./reports/rapport-n2-combine.md:57:  [`tools/eval_n2_propre.py`](../tools/eval_n2_propre.py).
+./reports/rapport-n2-corpus-elargi.md:63:  [`tools/eval_n2_propre.py`](../tools/eval_n2_propre.py).
+./reports/rapport-file-taches.md:51:| T09 | N2 | La porte propre (0,29 manquant à 2,7856) : données ou capacité | reports/n2-*, work/n2ac/, tools/entrainer_native.py, GPU | recette N2 1 024 | aucun externe ; GPU libres (0 %) | python3 tools/eval_n2_propre.py <checkpoint> (pas de commande unique) | P0 |
+./reports/rapport-file-taches.md:53:| T11 | N4 | Consigne courte : construire le jeu, entraîner, évaluer tenu à l'écart (24/24 vus, 0/4 tenus) | backlog/N4-usage-sft.md ; reports/n4-* ; N2/GPU | recette N2 | aucun externe ; GPU libres | python3 tools/eval_n2_propre.py <checkpoint> (pas de commande unique) | P1 |
+./reports/rapport-file-taches.md:135:| H12 | eval_n2_propre.py exige un checkpoint | argparse : point positionnel | Pas de commande unique pour N2 ; nommer le checkpoint |
+./reports/rapport
+… [21706 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2ac/propre512-8k.pt --device cuda; echo \"EXIT=$?\"; date '+%H:%M:%S'", "description": "Mesurer la porte avec le mauvais mètre (absolu)", "run_in_background … [8 caractères tronqués]`
+
+  ```
+started background job bash-4073
+  ```
+
+- **bash** `{"command": "echo '--- tracked?'; git ls-files work/n2ac/rope_model.py work/n2ac/eval_longueurs.py work/n2ac/entrainer_rope.py tools/eval_n2_propre.py; echo '--- ignore'; git check-ignore -v work/n2ac/rope_model.py work/n2ac/eval_longueurs.py 2>&1; echo '--- gitignore work'; grep -n \"work\" .gitign … [86 caractères tronqués]`
+
+  ```
+--- tracked?
+tools/eval_n2_propre.py
+--- ignore
+.gitignore:23:work/	work/n2ac/rope_model.py
+.gitignore:23:work/	work/n2ac/eval_longueurs.py
+--- gitignore work
+23:work/
+  ```
+
+- **bash** `{"command": "sed -n '78,125p' reports/rapport-n2-production-fenetre.md; echo '=== per-seed A-propre'; cat work/n2h/A-propre-g1.json 2>&1 | head -30", "description": "Lire les deux validations de production et le JSON A-propre-g1"}`
+
+  ```
+| run | octets totaux | 128 | 512 | 1 000 | 2 000 | litt. | angl. | wt2 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 200 k × 128 | 205 Mo | 3,1591 | 3,6577 | 8,2262 | 12,8723 | 5,6056 | 7,2770 | 8,0018 |
+| **1 024, 30 k pas** | **307 Mo** | **2,9943** | **2,7221** | **2,6143** | **2,5628** | **5,3122** | **6,5118** | **7,1544** |
+| écart | | −0,165 | −0,936 | −5,612 | −10,310 | −0,293 | −0,765 | −0,847 |
+
+Trois choses :
+1. **à 128 octets, le compute paie encore** : 3,1591 → 2,9943 (−0,165) pour 1,5× les octets ;
+2. **au-delà, l'écart n'est plus une marge** : −0,94 à 512, −5,6 à 1 000, −10,3 à 2 000 ;
+3. **le hors domaine s'améliore avec lui** : anglais 7,28 → **6,51**, wikitext2 8,00 → **7,15**,
+   littérature 5,61 → **5,31**. La fenêtre entraînée **ne coûte pas la largeur** : elle la sert.
+
+Et le fait le plus net : sur la **validation du grand corpus**, ce modèle passe **sous 2,5**
+à partir de 1 000 octets — **2,4759** à 1 000, **2,4373** à 2 000. Ce n'est pas la porte (qui se
+mesure sur le corpus propre, fiche [`n2-porte-propre`](rapport-n2-porte-propre.md)) mais c'est la
+première fois qu'un modèle natif passe 2,5 sur une validation tenue à part, et il le fait **avec
+la fenê
+… [2572 caractères tronqués]
+  ```
+

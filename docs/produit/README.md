@@ -38,7 +38,7 @@ le produit en expose cinq, plus le coût et la trace.
 |---|---|---|
 | **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
 | **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |
-| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6474** ; tête **0,7671** (vivant 612) |
+| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6482** ; tête **0,7671** (vivant 612) |
 | **attachement** | par syntagme : `role`, `cible`, `candidats` | **235/236** exacts sur les spans prédits ; couverture **0,9874** |
 | **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,9444** |
 | **unités sémantiques** | les spans candidats à la RSN et la fraction du texte | **55,4 %** du texte en moyenne |
@@ -61,7 +61,7 @@ résultat.
 **Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le
 banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
 même attachement (235/236, couverture 0,9874 ; le gelé : 231/232, 0,9707) mais pas le même F1 :
-**0,6503** sur le gelé, **0,6474** sur le vivant. Toujours lire la base avec le chiffre.
+**0,6511** sur le gelé, **0,6482** sur le vivant. Toujours lire la base avec le chiffre.
 
 ## 3. Comment l'utiliser — cinq exemples réels
 
@@ -118,20 +118,20 @@ python3 tools/drave.py evaluer
 drave 0.1.0 — évaluation de l'heuristique sur le gold
 gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
 
-POS         exactitude 83.83 %  (fermé 91.33 %, ouvert 76.73 %)
-SYNTAGMES   F1 64.74 %  (P 67.05 % / R 62.59 %)
-  tête      F1 76.71 %  (P 82.03 % / R 72.03 %)
+POS         exactitude 85.00 %  (fermé 92.95 %, ouvert 77.46 %)
+SYNTAGMES   F1 64.82 %  (P 67.15 % / R 62.64 %)
+  tête      F1 76.73 %  (P 82.08 % / R 72.03 %)
 ATTACHEMENT exact 98.33 % · couverture 98.74 % · exact sur span 99.58 % · top-k 97.91 %
   tête      couverture 100.00 % · top-k 99.15 %
 PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
-FRACTION SÉMANTIQUE 55.37 %
+FRACTION SÉMANTIQUE 54.82 %
 CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 ```
 
 **Lecture.** `exact 98.33 %` est le **rendement** (235/239 cibles) ; `exact sur span 99.58 %` est
 l'**exactitude** sur les 236 segments dont le span est prédit. Les 3 cibles restantes n'ont pas
 de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. `--gold` mesure
-le gold gelé 602 (F1 65,03 %, POS 84,15 %). La commande sort **0** : elle ne teste pas la cascade
+le gold gelé 602 (F1 65,11 %, POS 85,32 %). La commande sort **0** : elle ne teste pas la cascade
 (voir § 4).
 
 ### 3.3 bis La vue des syntagmes qui se chevauchent
@@ -203,7 +203,7 @@ une lecture unique (garder `union: null`, ou le segment qui en contient un autre
 `porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
 **sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
 pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
-**0,6474**, tête **0,7707** contre **0,7671**). Le produit par défaut reste l'heuristique, et
+**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique, et
 `drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
 en POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit
 aujourd'hui : ce n'est pas un chemin livré.

@@ -56010,3 +56010,54 @@ section Essayez ajoutée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nt=pathlib.Path('README.md').read_text()\nmots=len(re.findall(r\"\\S+\", t))\nprint('README mots :', mots, '(budget T1 2800)')\nPY\nfor i in 1 2 3; do\n  git add README.md docs/pilotage/en-cours.m … [537 caractères tronqués]`
+
+  ```
+README mots : 3310 (budget T1 2800)
+ 21 files changed, 3975 insertions(+), 95 deletions(-)
+COMMIT OK 1
+9e4cde3b README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11
+   ea1a68a2..9e4cde3b  s/v7 -> s/v7
+   ea1a68a2..9e4cde3b  master -> master
+ven 06 nov 2026 21:30:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat HEAD | head -8; python3 - <<'PY'\nimport pathlib, re\nt=pathlib.Path('tools/taille_documents.py').read_text()\nm=re.search(r'README[^\\n]*\\n[^\\n]*', t)\nprint(t[:1500].split('\\n')[0:30])\nPY", "description": "Voir  … [29 caractères tronqués]`
+
+  ```
+commit 9e4cde3b63f8e022d577b20ee24b404d06267436
+Author: Stéphane <stephane@localhost>
+Date:   Fri Nov 6 21:28:25 2026 -0500
+
+    README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11
+
+ README.md                                          |   23 +
+ journal/2026-11-06/README.md                       |   15 +-
+['#!/usr/bin/env python3', '"""taille_documents.py — le budget de contexte et la cohésion des documents.', '', "Ce que l'outil vérifie :", '  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;', '  2. la cohésion minimale : un titre, un résumé en tête, et pour les documents datés un', '     « Résumé » + « ne pas charger par défaut » ;', "  3. les fiches de résultats trop longues pour être lues d'un bloc (avertissement, pas échec) ;", '  4. le classement des plus gros documents, pour voir où le contexte part.', '', 'Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :', "ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens", 'est donnée à titre indicatif (≈ caractères / 4).', '', 'Les **sources de diagrammes** (
+… [648 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La doc produit a encore les chiffres d'avant la nuit : je la resynchronise
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/drave.py evaluer 2>&1 | tail -11 > /tmp/ev.txt; head -4 /tmp/ev.txt; python3 - <<'PY'\nimport pathlib, re, subprocess, sys\nsortie = subprocess.run([sys.executable,\"tools/drave.py\",\"evaluer\"],capture_out … [1254 caractères tronqués]`
+
+  ```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 85.00 %  (fermé 92.95 %, ouvert 77.46 %)
+bloc evaluer remplacé
+3 remplacements
+41:| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6482** ; tête **0,7671** (vivant 612) |
+64:**0,6503** sur le gelé, **0,6474** sur le vivant. Toujours lire la base avec le chiffre.
+206:**0,6474**, tête **0,7707** contre **0,7671**). Le produit par défaut reste l'heuristique, et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger_gele, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger_gele( … [256 caractères tronqués]`
+
+  ```
+GELÉ POS 0.8532 | F1 0.6511 | tête 0.7709 | exact 231 / 232 | couv 0.9707
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"le gold gelé 602 (F1 65,03 %, POS 84,15 %)\",\"le gold gelé 602 (F1 65,11 %, POS 85,32 %)\")\nt=t.replace(\"**0,6503** sur le  … [1204 caractères tronqués]`

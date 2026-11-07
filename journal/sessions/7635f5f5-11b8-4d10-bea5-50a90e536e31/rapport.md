@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 35 |
-| Appels d'outils | 58 |
+| Messages | 43 |
+| Appels d'outils | 69 |
 | Fichiers touchés | 0 |
-| Commandes | 46 |
+| Commandes | 54 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 34 autres
+- … et 42 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 6 autres
+- … et 14 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -156,4 +156,26 @@
 - **T1** `> porte 1 est franchie sur le lexical** (rappel@10 **0,984** ≥ 0,95) à **0,1 ms par requête** ;`
 - **T1** `46:✅ à 30 % du budget, la lecture contrôlée récupère ≥ 90 % des passages de la`
 - **T1** `{"modele": "drave-n0 34,3 M (384/512), RoPE, seq = fenêtre", "corpus": "data/wiki_fr/propre/train.txt (186 Mo) + canal", "budget": "20,5 Mo vus pour la loi (20 000 / 5 000 / 2 500 / 1 250 pas) ; 164 M`
+- **T1** `1. ≥ 80 % des instructions tenues à l'écart`
+- **T1** `reports/rapport-c8-peripherie.md:117:| **récurrent + tampon de 8 pas** | R² +0,852 | R² **+0,283** |`
+- **T1** `> RoPE est invariant au décalage absolu (Δ **0,0017**) quand la table absolue **×4,8** (3,8468 →`
+- **T1** `- **Recette** : 20 000 pas × 8 × 128, lr 3e-4, graine 1, canal — exactement N2.z`
+- **T1** `- **Corpus** : `data/wiki_fr/propre/train.txt` (186 Mo) et son canal ; validation appariée`
+- **T1** `--- 2. les colonnes (10 pages × 2 versions × 3 familles)`
+- **T1** `✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)`
+- **T1** `✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)`
+- **T1** `✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)`
+- **T1** `✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)`
+- **T1** `✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)`
+- **T1** `✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)`
+- **T1** `✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)`
+- **T1** `✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)`
+- **T1** `✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)`
+- **T1** `--- 3. les tableaux (10 pages × 3 familles)`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module> AttributeError: module 'evaluer_gold' has no attribute '_score' [exit code: 1]
 

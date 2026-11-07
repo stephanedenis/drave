@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 148.8 h |
+| Durée | 148.9 h |
 | Tours | 184 |
-| Messages | 3298 |
-| Appels d'outils | 2923 |
+| Messages | 3302 |
+| Appels d'outils | 2927 |
 | Fichiers touchés | 25 |
-| Commandes | 2419 |
+| Commandes | 2423 |
 | Sous-agents | 38 |
-| Commits | 375 |
+| Commits | 376 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*169 appels d'outils.* Actions notables :
+*173 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 155 autres
+- … et 159 autres
 
 **Synthèse produite :**
 
-⏵ Le README racine ne montre pas encore le produit : j'ajoute « Essayez »
+⏵ La doc produit a encore les chiffres d'avant la nuit : je la resynchronise
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2379 autres
+- … et 2383 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10579,4 +10579,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1" -- docs/pilotage/en-cours.md journal/2026
 - ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET (NUIT"; then echo
 - README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11" -- README.md 2>&1 | tail -1   if git show HEAD:REA
+- DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE" -- docs/produit/README.md 2>&1 | tai
 

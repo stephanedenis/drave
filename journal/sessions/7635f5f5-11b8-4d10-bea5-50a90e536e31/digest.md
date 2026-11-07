@@ -1519,3 +1519,165 @@ modele fichiers:
   /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf 689872288
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/qualifier_neuronal.py --limite 1 --sortie /tmp/tagger-essai.json 2>&1 | head -5; echo exit=${PIPESTATUS[0]}", "description": "Vérifier que le tagger est rejouable"}`
+
+  ```
+modèle absent : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+exit=1
+  ```
+
+- **bash** `{"command": "ls -lh /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct/snapshots/*/ 2>/dev/null | head -20; echo '---'; du -sh /home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct 2>/dev/null", "description": "Vérifier le cache HF du 7B"}`
+
+  ```
+total 16K
+lrwxrwxrwx. 1 stephane stephane 52 19 oct 07:31 config.json -> ../../blobs/0178295f88afc3c7f279ed284f961f8c1be00654
+lrwxrwxrwx. 1 stephane stephane 52 19 oct 07:31 generation_config.json -> ../../blobs/0eb3c536657dcd12626e09eca4b6198c0cbcde1e
+lrwxrwxrwx. 1 stephane stephane 52 19 oct 07:31 LICENSE -> ../../blobs/6634c8cc3133b3848ec74b9f275acaaa1ea618ab
+lrwxrwxrwx. 1 stephane stephane 52 19 oct 07:31 merges.txt -> ../../blobs/20024bfe7c83998e9aeaf98a0cd6a2ce6306c2f0
+lrwxrwxrwx. 1 stephane stephane 76 19 oct 07:33 model-00001-of-00004.safetensors -> ../../blobs/a1333e6293854747c481288ea83b348226af178dd565c49b6f9495ba1966aba7
+lrwxrwxrwx. 1 stephane stephane 76 19 oct 07:33 model-00002-of-00004.safetensors -> ../../blobs/f5d25a2772cb825164a2a2c0fb6d51a87e282abf21e4dd75bc5cfb3cd0ea6185
+lrwxrwxrwx. 1 stephane stephane 76 19 oct 07:33 model-00003-of-00004.safetensors -> ../../blobs/8efdec4c1bc12317ae1a38dc42b595ce777738a64deea3fcb8a0a91381bcdfd5
+lrwxrwxrwx. 1 stephane stephane 76 19 oct 07:33 model-00004-of-00004.safetensors -> ../../blobs/1a72d403cdf0c1ec3cb7f289f17b394a01e64394c2e9b3c0f94dbce3faf879bd
+lrwxrwxrwx. 1 stephane stephane 52 19 oct 07:31 model.safetensors.index.json
+… [612 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-4003"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in R21-memoire-travail-gist R22-memoire-episodique R31-restitution-sft R32-citations-provenance R51-lecture-croisee R52-multilingue-decodeur; do echo \"##### $f\"; sed -n '1,42p' docs/pilotage/backlog/$f.md; echo; done", "descr … [38 caractères tronqués]`
+
+  ```
+##### R21-memoire-travail-gist
+# R21 — Mémoire de travail et gist
+
+> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, R11 · **Contraint par** : la mémoire à 8 pas est négative (mesuré)
+> **Ligne de roadmap** : R2.1 · **Fiche de résultat attendue** : rapport-r21-memoire-gist.md (à créer dans `reports/`)
+> **Résumé** : Tenir un état de résumé, une table d'entités et de faits, et un tampon en entrée.
+> **Glossaire** : [gist](../../theorie/glossaire/entrees/gist.md) · [closed-book](../../theorie/glossaire/entrees/closed-book.md) · [span](../../theorie/glossaire/entrees/span.md).
+
+## Le besoin
+
+Sans gist, le modèle ne comprend pas un document en plusieurs sections. N5 est négatif : le réseau ne retient pas le signal à 8 pas, mais le tampon gelé lit +0,879. Il faut donc commencer par le tampon, pas par un entraînement de mémoire.
+
+## Le contrat
+
+| élément | contenu |
+|---|---|
+| **entrée** | les sections lues (R01), les états de section (R11) et une question éventuelle |
+| **sortie** | un gist : résumé, entités, faits, dates, citations ; état borné |
+| **coût** | coût linéaire en sections ; le gist ne dépasse pas une taille fixée |
+| **trace** | chaqu
+… [9605 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'N4\\|24/24\\|0/4' reports/rapport-n4* reports/*n4* 2>/dev/null | head -20; echo '---'; ls reports/ | grep -i 'n4\\|restitution'", "description": "Vérifier l'état N4 et restitution"}`
+
+  ```
+reports/rapport-n4-dessin-b.md:1:# N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure
+reports/rapport-n4-dessin-b.md:3:> Campagne : **cerveau** · expérience : dessin **B** de N4 (« les couches basses apprennent »), et
+reports/rapport-n4-porte-execution.md:1:# N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24)
+reports/rapport-n4-dessin-b.md:1:# N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure
+reports/rapport-n4-dessin-b.md:3:> Campagne : **cerveau** · expérience : dessin **B** de N4 (« les couches basses apprennent »), et
+reports/rapport-n4-porte-execution.md:1:# N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24)
+---
+rapport-n4-dessin-b.md
+rapport-n4-porte-execution.md
+rapport-restitution.md
+restitution-fra-flux.json
+restitution-fra.json
+restitution.json
+restitution-mesures.json
+restitution-udhr-flux.json
+restitution-udhr.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '0,879\\|0.879' reports/ docs/ --include='*.md' | head -10; echo '---'; grep -rn 'tampon' docs/pilotage/roadmap.md docs/theorie/lecture-rapide.md reports/rapport-*.md | grep -i '0,8\\|entrée\\|R2' | head -10", "description": … [40 caractères tronqués]`
+
+  ```
+reports/rapport-memoire-travail-n5.md:11:> déjà `v[t−8]` à **+0,879** et l'entraînement le porte à **+0,964** — et le moteur, mesuré par
+reports/rapport-memoire-travail-n5.md:26:| **gelé** (sonde seule) | **−1,091** | **+0,879** |
+reports/rapport-memoire-travail-n5.md:36:* **avec la structure, le passé est lisible sans entraîner le réseau** (+0,879) : le tampon écrit
+reports/rapport-memoire-travail-n5.md:57:  **+0,879 en linéaire** et le moteur à **−0,338 en linéaire / +0,766 en non linéaire**. Les deux
+reports/rapport-memoire-travail-n5.md:76:  Un LoRA entraîné pour lire ce tampon apporte **+0,085** de R² (0,879 → 0,964) au prix de 1,4 M de
+reports/rapport-memoire-travail-n5.md:78:* **ce qui reste vrai** : le réseau *peut* apprendre à **lire** une structure (0,879 → 0,964), donc
+reports/rapport-pensee-pragmatique-neuronale.md:18:| syntagmes F1 | 0,8795 |
+reports/rapport-pensee-quatre-modes-run2.md:6:> gagne encore** : POS **0,9389** (+0,008), syntagmes **0,8241**, tête **0,8797**, acte 0,9954.
+reports/rapport-pensee-quatre-modes-run2.md:18:| neuronal | 0,9309 | **0,9389** | 0,8241 | 0,8797 | 0,0000 |
+reports/rapport-pensee-quatre-modes-run2.md:21:| **parallele_niveau** | 0,9309 | 
+… [1734 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'mémoire à 8 pas\\|8 pas' reports/*.md | head -10; echo '---'; sed -n '1,35p' reports/rapport-n2-r11.md", "description": "Trouver le négatif mémoire à 8 pas"}`
+
+  ```
+reports/INDEX.md:568:| [rapport-pensee-seule.md](rapport-pensee-seule.md) | B13 — la politique seule : 8 pas, 15/15 buts, sans A* |
+reports/rapport-budget-decision.md:69:* **un seul contexte** (8 pas) : le coût des clés croît avec la position, donc la part de
+reports/rapport-c2-recurrence.md:9:> (α = 0,5) et **0,125** (α = 1,0) ; la lecture du signal d'il y a 8 pas passe de **−0,350** à
+reports/rapport-c8-peripherie.md:10:> **pas** le signal d'il y a 8 pas (R² = **−0,973**) : le modèle ne garde rien de linéairement
+reports/rapport-c8-peripherie.md:89:| **ligne à retard de 8 pas** (tampon) | **+1,000** (exact par construction) |
+reports/rapport-c8-peripherie.md:93:1. la tâche **n'est pas dure** : un tampon de 8 pas la résout exactement. Le plancher existe et il
+reports/rapport-c8-peripherie.md:117:| **récurrent + tampon de 8 pas** | R² +0,852 | R² **+0,283** |
+reports/rapport-cerveau-corrections.md:175:**Mesure du 2026-10-29.** Le pipeline M1 → M4 → M8 passait `ItemType.contexte` — un **résumé**
+reports/rapport-memoire-travail-n5.md:5:> Question : le réseau peut-il **apprendre** à retenir un scalaire injecté 8 pas plus tôt — ou
+reports/rapport-memoire-travail-n5.md:8:> 2 048 pas, ob
+… [2528 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-4003", "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -15 /tmp/porte-ocr-scans.log; echo '---'; ps -o pid,etime,cmd -C python3 2>/dev/null | grep -E 'mesurer|ocr|scan' | head -5", "description": "Suivre la porte OCR"}`
+
+  ```
+100 mesures en 107 s → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/mesure.json
+--- 2. les colonnes (10 pages × 2 versions × 3 familles)
+
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)
+  ✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/colonnes.json
+--- 3. les tableaux (10 pages × 3 familles)
+---
+3621255       02:32 python3 tools/mesurer_tables.py --porte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-etat-r.json'))\nfor part in ('hand','reel_new','synthetique'):\n    print('==',part)\n    for lecture in ('heuristique','cascade'):\n        a=d[lecture][part]\n       … [576 caractères tronqués]`
+
+  ```
+== hand
+  heuristique POS 0.8952 ferme 0.8947 ouvert 0.8958 tokens 105
+   synt F1 0.7288 tete F1 0.8288 acte 1.0
+  cascade POS 0.8952 ferme 0.8947 ouvert 0.8958 tokens 105
+   synt F1 0.7288 tete F1 0.8288 acte 1.0
+== reel_new
+  heuristique POS 0.8754 ferme 0.9277 ouvert 0.8204 tokens 2375
+   synt F1 0.6251 tete F1 0.7458 acte 0.9954
+  cascade POS 0.8754 ferme 0.9277 ouvert 0.8204 tokens 2375
+   synt F1 0.6251 tete F1 0.7458 acte 0.9954
+== synthetique
+  heuristique POS 0.7568 ferme 0.9449 ouvert 0.637 tokens 699
+   synt F1 0.7113 tete F1 0.8336 acte 1.0
+  cascade POS 0.7568 ferme 0.9449 ouvert 0.637 tokens 699
+   synt F1 0.7113 tete F1 0.8336 acte 1.0
+--- langues
+['date', 'niveaux', 'langue', 'controle_permute', 'echantillons', 'niveaux_vus', 'niveaux_manquants', 'controles', 'verdicts', 'ok']
+langue {"langues_profil": 398, "articles_test": 447, "accuracy": 0.9687, "accuracy_script": 1.0, "duree_s": 4.882, "langues": {"hus": [3, 3], "oci": [7, 6], "roh": [7, 7], "ron": [3, 3]}}
+niveaux ["graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours", "pragmatique", "document"]
+  ```
+

@@ -1981,3 +1981,184 @@ drwxr-xr-x. 1 stephane stephane  138 15 oct 09:02 vision
 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf 709883360
   ```
 
+- **bash** `{"command": "sed -n '1,80p' tools/porte-flux.sh", "description": "Inspect porte-flux script"}`
+
+  ```
+#!/bin/bash
+# Porte du DÉCOUPAGE : deux nœuds, un petit modèle, cinq modes de flux.
+#
+# Pourquoi elle existe : le défaut de la `pre` reçue (sprint 13) a vécu jusqu'à
+# ce qu'on compare des tenseurs à la main sur un modèle de 365 Go et quatre
+# minutes par passe. Aucune porte ne couvrait un COUPLE DE NŒUDS ; celle-ci le
+# fait en quelques secondes, sur Qwen2.5-0.5B, et elle attrape trois familles de
+# défauts d'un coup :
+#   · la couture (l'état rendu par le second nœud doit être celui de la passe
+#     complète — pour les modes exacts, au bit près) ;
+#   · le cadriciel de flux lui-même (en-tête, mode, compte `np`, positions) ;
+#   · l'accord entre les modes (un mode avec perte ne doit pas coûter plus que
+#     son codec).
+#
+# Les modes 0 (f32 dense), 1 et 3 (lot dense) sont EXACTS : écart attendu 0,00e0.
+# Les modes 2 et 4 passent par le codec quantifié (indices par écarts, valeurs i8,
+# une échelle par bloc de 32 canaux) : leur écart est une perte assumée, et la
+# porte vérifie qu'il reste sous un plafond mesuré, pas qu'il est nul.
+#
+#   THREADS=N (défaut 8) : nombre de threads ; A8.3d a montré que l'écart de lot
+#   survit à 1 thread — ce n'est pas le pool, c'est le noyau par lot
+… [2481 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4046 (bash: CARGO_TARGET_DIR=/tmp/etat-a-target timeout 300 cargo test --manifest-path drave-core/Cargo.toml placement -- --nocapture 2>&1 | tail -25; echo "exit=${PIPESTATUS[0]}") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4046", "wait": true, "timeout_ms": 60000}`
+
+  ```
+warning: the `ids:` in this pattern is redundant
+    --> src/main.rs:1751:9
+     |
+1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+     |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`
+     |
+     = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave" test) generated 65 warnings (run `cargo fix --bin "drave" -p drave-core --tests` to apply 37 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.57s
+     Running unittests src/main.rs (/tmp/etat-a-target/debug/deps/drave-0fde18393e99a236)
+
+running 8 tests
+test placement::tests::choisir_respecte_la_place ... ok
+test placement::tests::la_regle_place_perte_choisit_le_kv_par_couche ... ok
+test placement::tests::la_perte_decide_aussi ... ok
+test placement::tests::la_tete_en_4_bits_est_refusee_par_un_budget_de_5_pour_cent ... ok
+test placement::tests::la_vram_est_le_support_le_moins_cher_pour_un_gros_lecteur ... ok
+test placement::tests::le_cout_est_proportionnel_aux_octets ... ok
+test placement::tests::un_budget_nul_interdit_toute_quantification ... ok
+test placement::tests::le_kv_tient_si_la_reserve_est_re
+… [153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l drave-core/target/release/drave 2>&1; nvidia-smi --query-gpu=index,memory.used,memory.total,utilization.gpu --format=csv,noheader 2>&1 | head", "description": "Check release binary and GPU state"}`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 3187480 30 oct 08:39 drave-core/target/release/drave
+0, 154 MiB, 16384 MiB, 0 %
+1, 4 MiB, 16384 MiB, 0 %
+  ```
+
+### 🤖 Assistant
+
+⏵ Rejeu d'une porte A8.3a en régime 1 % pour vérifier le chiffre épinglé
+Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en régime 1 %.
+
+- **bash** `{"command": "DRAVE_PERTE_MAX=1 timeout 300 bash tools/porte-flux.sh > /tmp/etat-a-porte-flux.txt 2>&1; echo \"exit=$?\"; tail -20 /tmp/etat-a-porte-flux.txt", "description": "Run porte-flux with 1% loss regime", "run_in_background": true}`
+
+  ```
+started background job bash-4059
+  ```
+
+- **bash** `{"command": "cat reports/a83a-flux.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['gates'], d['decision'])\"; echo '--- a80 audit json ---'; python3 -c \"import json; d=json.load(open('reports/a80-audit-final.json')); print(type(d), list(d)[:10])\"", "description": "Inspect A8. … [28 caractères tronqués]`
+
+  ```
+{'f32': 'exit 0', 'perte1': 'exit 0'} A8.3a flux fait ; pont/coupe restent ; A8.3 opt-in
+--- a80 audit json ---
+<class 'dict'> ['date', 'ligne', 'total', 'epinglees', 'restantes', 'pinned', 'restantes_categories', 'verdict', 'controle', 'limites']
+  ```
+
+- **bash** `{"command": "python3 -c \"\nimport json\nd=json.load(open('reports/a80-audit-final.json'))\nprint('date',d['date']); print('total',d['total']); print('epinglees',len(d['epinglees']) if isinstance(d['epinglees'],list) else d['epinglees']); print('pinned',d.get('pinned')); print('restantes',d.get('res … [92 caractères tronqués]`
+
+  ```
+date 2026-10-30
+total 33
+epinglees 19
+pinned ['adaptateur-sortie', 'budget', 'bus-socket', 'bus', 'c4-retard', 'consolidation', 'coupe', 'cycle-c2', 'delais', 'flux', 'fusion', 'gain', 'pannes', 'pont', 'profondeur-routee', 'reflexe', 'reparti-moteur', 'topologie', 'trace']
+restantes 14
+verdict 19/33 épinglées ; 3 comparatifs intra-run, 2 rouges qualifiées, 1 verte sans PPL, 8 sans PPL
+  ```
+
+- **bash** `{"command": "python3 -c \"\nimport json\nfor f in ['a26-bilan.json','a83-defaut.json','a83b-decision.json','a83c-lot.json','a83d-lot-threads.json']:\n    d=json.load(open('reports/'+f))\n    print('==',f)\n    print({k:v for k,v in d.items() if k in ('date','ligne','verdict','decision','controle')}) … [58 caractères tronqués]`
+
+  ```
+== a26-bilan.json
+{'date': '2026-10-29', 'ligne': 'A2.6', 'verdict': 'partielle', 'controle': 'choisir_avec_perte refuse la tête 4 bits à 5 % (test) ; sans MoE local, les experts ne sont pas mesurables'}
+== a83-defaut.json
+{'date': '2026-10-29', 'ligne': 'A8.3', 'verdict': 'opt-in conserve'}
+== a83b-decision.json
+{'date': '2026-10-29', 'ligne': 'A8.3b/c', 'decision': 'opt-in maintenu', 'controle': '24 exécutions ctx × lot × régime ; lot 1 = mode 0 ; lot ≥2 identique'}
+== a83c-lot.json
+{'date': '2026-10-29', 'ligne': 'A8.3c', 'verdict': 'non-monotonie expliquée : effet par chemin, pas anomalie de la règle'}
+== a83d-lot-threads.json
+{'ligne': 'A8.3d', 'date': '2026-10-30', 'verdict': "le lot n'est pas les threads : l'ecart de 1,90 % survit a 1 thread"}
+  ```
+
+- **bash** `{"command": "grep -rn \"A3B\\|OLMoE\\|DeepSeek-V2-Lite\\|Mixtral\\|MoE local\" docs/pilotage/backlog/A6.2-moe-local.md reports/rapport-a26-bilan.md docs/pilotage/roadmap.md reports/rapport-a83c-lot.md 2>/dev/null | head -20; echo '--- model files ---'; find models data -maxdepth 4 -iname '*moe*' -o  … [97 caractères tronqués]`
+
+  ```
+docs/pilotage/backlog/A6.2-moe-local.md:1:# A6.2 — Routage MoE appris (MoE local)
+docs/pilotage/backlog/A6.2-moe-local.md:3:> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A6 · **Bloqué par** : aucun MoE local dans 16 Go de VRAM
+docs/pilotage/backlog/A6.2-moe-local.md:10:Aucun MoE local ne tient dans 16 Go de VRAM ; le routage appris reste donc non mesuré.
+reports/rapport-a26-bilan.md:5:> **A6.2** (pas de MoE local). A2.6 ne peut pas être « complétée » sans cette brique.
+reports/rapport-a26-bilan.md:18:| experts | 🧱 bloqué | **A6.2** — pas de MoE local à router |
+reports/rapport-a26-bilan.md:25:- Sans MoE local, les experts ne sont **pas mesurables** : ce n’est pas un échec de la règle, c’est
+reports/rapport-a26-bilan.md:39:- **Les experts** ne sont pas mesurables sans A6.2 ; le jour où le MoE local existe, A2.6 rouvre.
+docs/pilotage/roadmap.md:150:| **A6** | apprendre des flux : capteur hebbien, routage MoE, [élagage](../theorie/glossaire/entrees/elagage.md) | ✅ / ⏳ | **A6.2 bloqué** (pas de MoE local) ; A6.1/A6.3 ont rendu leurs négatifs |
+docs/pilotage/roadmap.md:341:- **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA)
+… [1205 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"Qwen3-30B-A3B\" reports/*.md | head -10; echo '--- df ---'; df -h /home/stephane/Data13TB | tail -1", "description": "Find Qwen3-30B-A3B evidence and disk space"}`
+
+  ```
+reports/aiguille-30b.md:1:# aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+reports/INDEX.md:10:| [aiguille-30b.md](aiguille-30b.md) | aiguille v2 — /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf |
+reports/rapport-a83c-lot.md:40:Mesuré sur Qwen3-30B-A3B : PPL **19,143 contre 19,172** (0,15 %), argmax identique sur
+reports/rapport-aiguille.md:13:échec sur Qwen3-30B-A3B. Le test a été arrêté à l'époque, faute de budget.
+reports/rapport-aiguille.md:61:* **Qwen3-30B-A3B-Instruct-2507** (MoE, 3 B actifs), contexte 2048, `--lot 256`,
+reports/rapport-aiguille.md:71:| **Qwen3-30B-A3B** | 2 048 | ✅ | ✅ | ✅ | 651-691 |
+reports/rapport-aiguille-topk.md:30:| Qwen3-30B-A3B | 2 048 | ~670 |
+reports/rapport-c9-echange-experts.md:15:> Protocole : Qwen3-30B-A3B (48 couches, 128 experts, 8 utilisés), `--ppl --ctx 512 --limit 32`,
+reports/rapport-cache-experts-vram.md:47:| | K3 (896 experts/couche, 16/jeton) | Qwen3-30B-A3B (128, 8/jeton) |
+reports/rapport-chargement-paresseux.md:24:| Qwen3-30B-A3B | défaut (auto) | **26,95 s** | 2,69 Go |
+--- df ---
+/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane
+… [9 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4059 (bash: DRAVE_PERTE_MAX=1 timeout 300 bash tools/porte-flux.sh > /tmp/etat-a-porte-flux.txt 2>&1; echo "exit=$?"; tail -20 /tmp/etat-a-porte-flux.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4059", "wait": true, "timeout_ms": 60000}`
+
+  ```
+exit=0
+  mode 0 — f32 dense               0.00e0  ✅  (réf 58.3200 / deux nœuds 58.3200)
+  mode 1 — listes quantifiées     0.00e0  ✅  (réf 58.3200 / deux nœuds 58.3200)
+  mode 2 — listes par blocs        1.14e-1  ✅  (réf 58.3200 / deux nœuds 64.9975)
+  mode 3 — lot dense f32           0.00e0  ✅  (réf 62.7357 / deux nœuds 62.7357)
+  mode 4 — lot en listes           3.49e-2  ✅  (réf 62.7357 / deux nœuds 64.9228)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "ls -lh /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf 2>&1; echo '--- chargement paresseux ---'; sed -n '1,45p' reports/rapport-chargement-paresseux.md", "description": "Verify local MoE model and lazy-load report"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 18G 25 sep 08:26 /home/stephane/Data13TB/stephane/modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+--- chargement paresseux ---
+# Le chargement construisait 2,7 Go de « listes » que personne ne lisait
+
+> Campagne : **machine et moteur** · expérience 01 — le coût du chargement
+> Question : une passe `--ppl` sur Qwen3-30B passe **27 s** à charger avant de calculer 1 s par
+> jeton. Que fait le chargeur pendant ces 27 s, et le faut-il ?
+> Verdict : **non, il ne le faut pas.** Le chargeur construisait **par défaut** la représentation
+> « listes » des projections (`PushMat`), **2,69 Go** pour Qwen3-30B et **0,71 Go** pour
+> Qwen2.5-0.5B — alors que le chemin qui l'utilise n'est choisi que si la densité d'activation
+> passe sous `seuil_push` (0,22), et que les passes mesurées ne l'utilisent **jamais**
+> (« dont en listes : 0,0 M », dit le moteur lui-même). Rendre cette construction **paresseuse**
+> (au premier usage réel) fait passer le chargement de **26,95 s à 7,36 s** (Qwen3-30B) et de
+> **6,85 s à 0,60 s** (Qwen2.5-0.5B), **sans déplacer un chiffre**.
+> Date réelle : 2026-10-12, 22 h 30-22 h 47 HAE (heure lue sur la machine ; source : git, commits `
+… [1695 caractères tronqués]
+  ```
+

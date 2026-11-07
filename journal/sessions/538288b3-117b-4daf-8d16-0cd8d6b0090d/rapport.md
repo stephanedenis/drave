@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 43 |
-| Appels d'outils | 76 |
+| Messages | 47 |
+| Appels d'outils | 82 |
 | Fichiers touchés | 0 |
-| Commandes | 45 |
+| Commandes | 50 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier A** (le  … [1650 caractères tronqués]
 
-*76 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Show repo root, branch, recent commits
 - glob
@@ -41,7 +41,7 @@
 - bash — Extract A2.6 mentions with context from A23 report
 - bash — List verification tools and placement tests
 - bash — Run backlog verification read-only
-- … et 35 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
@@ -97,7 +97,7 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** Run placement unit tests in /tmp target
 - **T1** Locate local GGUF models
 - **T1** Inspect porte-flux script
-- … et 5 autres
+- … et 10 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -172,6 +172,40 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** `1, 4 MiB, 16384 MiB, 0 %`
 - **T1** `{'date': '2026-10-29', 'ligne': 'A2.6', 'verdict': 'partielle', 'controle': 'choisir_avec_perte refuse la tête 4 bits à 5 % (test) ; sans MoE local, les experts ne sont pas mesurables'}`
 - **T1** `{'ligne': 'A8.3d', 'date': '2026-10-30', 'verdict': "le lot n'est pas les threads : l'ecart de 1,90 % survit a 1 thread"}`
+- **T1** `reports/rapport-a83c-lot.md:40:Mesuré sur Qwen3-30B-A3B : PPL **19,143 contre 19,172** (0,15 %), argmax identique sur`
+- **T1** `/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB`
+- **T1** `> Verdict : **non — et la mesure a d'abord menti.** Le premier essai donnait **×0,81** (une`
+- **T1** `> amélioration de 19 % !) en imposant à A le routage de B à la dernière couche. Les contrôles l'ont`
+- **T1** `> démonté : **tout** routage différent y fait varier la perplexité de ±20 à 50 %, **le signe dépend`
+- **T1** `> du texte** (A : ×0,81 · A2 : ×1,46 · B en sens inverse : ×1,26), et l'ordre « le routage réel fait`
+- **T1** `> ×0,94 contre réel ×1,26). Il n'y a **pas** de gain latéral.`
+- **T1** `(0,006 %) — parce que la trace **trie** les experts (« l'ordre de `select_nth` est arbitraire ») et`
+- **T1** `(±20 %) aurait baigné dans un artefact de 0,006 % — petit, mais du même genre que ce qu'on cherche.`
+- **T1** `**Réponse courte : non.** ×1,09 prédit, pour un plafond absolu de ×1,41 — contre`
+- **T1** `un plafond de ×3,1 pour le chantier du dense, qui est déjà nommé.`
+- **T1** `| **experts routés** (16 sur 896) | 25,83 | 29,3 % |`
+- **T1** `| experts partagés (2 par couche) | 12,40 | 14,1 % |`
+- **T1** `| **dense Q8_0** (attention, KDA, MLA, routage) | 48,56 | **55,1 %** |`
+- **T1** `| tête de sortie | 1,30 | 1,5 % |`
+- **T1** `| 100 % (impossible) | **×1,41** |`
+- **T1** `| 70 % | ×1,26 |`
+- **T1** `| 47 % | ×1,16 |`
+- **T1** `| 25 % | ×1,08 |`
+- **T1** `2 × 16 Go = 32 Go. Une matrice d'expert K3 (3 × 3072 × 3584 à 4,25 bits) pèse`
+- **T1** `**17,5 Mo** → **1 828 matrices**, soit **19,7 par couche sur 896**.`
+- **T1** `reports/rapport-c9-echange-experts.md:9:> amélioration de 19 % !) en imposant à A le routage de B à la dernière couche. Les contrôles l'ont`
+- **T1** `reports/rapport-c9-echange-experts.md:10:> démonté : **tout** routage différent y fait varier la perplexité de ±20 à 50 %, **le signe dépend`
+- **T1** `reports/rapport-c9-echange-experts.md:11:> du texte** (A : ×0,81 · A2 : ×1,46 · B en sens inverse : ×1,26), et l'ordre « le routage réel fait`
+- **T1** `reports/rapport-c9-echange-experts.md:41:| A avec **son** routage (référence) | **37,2013** | ×1,00 |`
+- **T1** `reports/rapport-c9-echange-experts.md:42:| A + le routage de **B** (autre texte) | **3 445,03** | **×92,6** |`
+- **T1** `reports/rapport-c9-echange-experts.md:43:| A + routage **aléatoire** | 13 958,96 | ×375 |`
+- **T1** `reports/rapport-c9-echange-experts.md:44:| A + routage de B **décalé d'une couche** | 37 825,73 | ×1 017 |`
+- **T1** `reports/rapport-c9-echange-experts.md:70:| rien (son propre routage) | 37,2013 (×1,00) | 92,4832 (×1,00) | 84,6539 (×1,00) |`
+- **T1** `reports/rapport-c9-echange-experts.md:71:| **le routage de l'autre instance** | **30,1705 (×0,81)** | **135,0935 (×1,46)** | **107,0258 (×1,26)** |`
+- **T1** `reports/rapport-c9-echange-experts.md:72:| routage **aléatoire** | 35,4832 (×0,95) | 143,1992 (×1,55) | **79,4284 (×0,94)** |`
+- **T1** `reports/rapport-c9-echange-experts.md:73:| routage de l'autre **décalé** d'une couche | 37,9628 (×1,02) | — | — |`
+- **T1** `reports/rapport-c9-echange-experts.md:80:* **tout** routage différent à la dernière couche fait bouger la perplexité de ±20 à 50 %, y`
+- **T1** `reports/rapport-c9-echange-experts.md:86:* le contrôle **décalé** (×1,02) montre qu'un routage cohérent mais mal apparié est inerte — c'est`
 
 ## 5. Erreurs rencontrées
 

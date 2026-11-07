@@ -1332,3 +1332,163 @@ tools/domaine_ou_langue.py:15:exactem
 … [2167 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Lecture des fiches S (limites, banque, arbre) et du README structures
+
+- **bash** `{"command": "cat reports/rapport-s-limites-v6.md; echo \"======\"; cat reports/rapport-s-banque-partielle.md", "description": "Lis fiches limites et banque partielle"}`
+
+  ```
+# S — Les trois limites de la v4 sont fermées : h050, h053 et « si fort que » ; 60/60 types, 142/142 rôles
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : les trois limites nommées du
+> cycle précédent sont **fermées**. `h050` (« le triste **fait** demeure ») et `h053` (« le grand
+> **lit** ») trouvaient un nom après un adjectif ; le « **si fort que** » était étiqueté
+> hypothèse alors que la traduction anglaise en faisait une **conséquence**. Le gold passe de
+> **55 à 60 phrases** (la vague 5, `h056–h060`, écrite après les règles et mesurée une fois) et la
+> mesure donne **60/60 types**, **142/142 rôles**, **50/50 compléments**, couverture **1,00** ;
+> les contrôles restent à **102/142**, **104/142** et **0,10**. Le corpus réel re-mesuré garde ses
+> taux (65,5 % de GN+GV sur la littérature propre contre 9,1 % pour le mélange) et compte
+> **596/1 184** homographes.
+
+## Les trois fermetures
+
+La première est un **nom après un adjectif devant un verbe** : « Le triste **fait** demeure. »
+L'analyseur s'arrêtait au déterminant parce que « fait » est dans le lexique des verbes ; la règle
+v6 regarde le mot **précédent** (l'adjectif « triste », ou le déterminant) et le m
+… [10322 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat tools/structures/README.md; echo \"===\"; ls tools/structures/tests/; echo \"===\"; cd tools/structures && git status --porcelain 2>/dev/null | head; git log --oneline -5 2>/dev/null", "description": "Lis README et état git du sous-module"}`
+
+  ```
+# Structures — le banc d'interprétations candidates
+
+> **Ce que c'est.** Un outil **pour humain** : il affiche, pour une phrase, plusieurs **structures
+> d'interprétation candidates** (attachements, rôles, portées), permet de les **valider**, de
+> demander l'avis d'un **grand modèle** (DeepSeek), et d'**exporter une banque** de structures
+> validées — un corpus d'entraînement pour le projet Drave.
+
+> **Ce que ce n'est pas.** Pas un analyseur syntaxique complet : les candidats sont **générés par
+> une heuristique** (`generateur.py`) ou fournis par le fichier de données ; l'outil les fait
+> valider, il ne prétend pas les avoir compris. Depuis la v2, l'heuristique **nomme le rôle** par
+> le contexte, **coupe les subordonnées** et traite le passif et la copule — et un **gold** mesure
+> ce qu'elle sait faire, échecs compris (voir « La mesure de l'analyseur »).
+
+## Lancer
+
+```bash
+python3 serveur.py                 # http://127.0.0.1:8765
+python3 serveur.py --port 9000 --hote 0.0.0.0   # sur le réseau local
+```
+
+Aucune dépendance : la bibliothèque standard suffit (serveur HTTP, JSON, `urllib`).
+
+## Le niveau pragmatique
+
+Une phrase hors contexte est **ambiguë** — même pour un humain. Et 
+… [20632 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des outils LLM, de la clé API et de l'état git
+
+- **bash** `{"command": "test -n \"${DEEPSEEK_API_KEY:-}\" && echo \"DEEPSEEK_API_KEY: présent (longueur ${#DEEPSEEK_API_KEY})\" || echo \"DEEPSEEK_API_KEY: absent\"; echo \"---\"; ls tools/llm/ 2>/dev/null; echo \"---\"; grep -rn \"deepseek\\|DEEPSEEK\\|chat/completions\" tools/llm/ tools/structures/llm.py 2>/ … [69 caractères tronqués]`
+
+  ```
+DEEPSEEK_API_KEY: absent
+---
+deepseek.py
+distillation.py
+enseignant.py
+entrainer_masque.py
+__init__.py
+masque.py
+mesure.py
+prompts_publics_300.jsonl
+prompts_publics.jsonl
+prompts_publics.py
+__pycache__
+tests
+---
+tools/llm/deepseek.py:2:"""deepseek.py — le professeur externe, sans poids locaux.
+tools/llm/deepseek.py:18:- `DEEPSEEK_API_KEY` (ou `DSH_API_KEY`) : la clé, lue dans l'environnement ;
+tools/llm/deepseek.py:19:- `DEEPSEEK_BASE_URL` (ou `DSH_BASE_URL`) : `https://api.deepseek.com` par défaut ;
+tools/llm/deepseek.py:20:- `DEEPSEEK_MODEL` (ou `DSH_MODEL`) : `deepseek-chat` par défaut ;
+tools/llm/deepseek.py:21:- cache : `data/deepseek/cache/<sha256>.json` (gitignoré), clé = modèle + messages
+tools/llm/deepseek.py:26:    python3 tools/llm/deepseek.py --prompt "Explique le ko au go." --json
+tools/llm/deepseek.py:27:    DEEPSEEK_API_KEY=... python3 tools/llm/deepseek.py --prompt ... --json
+tools/llm/deepseek.py:28:    python3 tools/llm/deepseek.py --prompt ... --dry-run --json
+tools/llm/deepseek.py:44:CACHE_DEFAUT = RACINE / "data" / "deepseek" / "cache"
+tools/llm/deepseek.py:45:BASE_DEFAUT = "https://api.deepseek.com"
+tools/llm/deepseek.py:46:MODELE_DEFAUT = "deepseek-chat"
+tool
+… [830 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools/structures && git status -sb && echo \"---\" && git diff --stat && echo \"---\" && git diff -- donnees/paragraphes-validations.jsonl | head -30; echo \"===\"; cd ../.. && git submodule status 2>/dev/null | head; git status --short tools/structures 2>/dev/null | head", "descript … [41 caractères tronqués]`
+
+  ```
+## master...origin/master
+ M donnees/paragraphes-validations.jsonl
+---
+ donnees/paragraphes-validations.jsonl | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+---
+diff --git a/donnees/paragraphes-validations.jsonl b/donnees/paragraphes-validations.jsonl
+index 2ada51b..b34f8f5 100644
+--- a/donnees/paragraphes-validations.jsonl
++++ b/donnees/paragraphes-validations.jsonl
+@@ -6,3 +6,14 @@
+ {"phrase_id": "a003", "candidat_id": "a003-c1", "statut": "exclu", "referents": {"Elle": "Alice", "sa": "Alice", "elle": "Alice", "se": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "niveau": 2, "auteur": "humain", "horodatage": "2026-11-03T17:05:31"}
+ {"phrase_id": "a003", "candidat_id": "a003-c2", "statut": "resolu", "referents": {"Elle": "Alice", "sa": "Alice", "elle": "Alice", "se": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "niveau": 2, "auteur": "humain", "horodatage": "2026-11-03T17:05:40"}
+ {"phrase_id": "a003", "candidat_id": "a003-c3", "statut": "exclu", "referents": {"Elle": "Alice", "sa": "Alice", "elle": "Alice", "se": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, 
+… [3911 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/llm/deepseek.py; echo \"===\"; sed -n '180,280p' tools/llm/deepseek.py", "description": "Lis l'API DeepSeek et son CLI"}`
+
+  ```
+#!/usr/bin/env python3
+"""deepseek.py — le professeur externe, sans poids locaux.
+
+POURQUOI CE MODULE. Le dépôt garde ses GPU et ses CPU pour le **modèle natif**
+Drave (`entrainer_moteur.py`, `drave-core`) et pour les mesures **boîte blanche**
+(perplexité, activations, flux, sondes). Le **langage** — traduire, juger,
+générer, évaluer — passe par une API : on ne charge plus un Qwen de 7/14/32 B
+pour cela. DeepSeek est ce **professeur externe** ; ses sorties peuvent servir à
+entraîner/distiller l'élève natif (autorisation explicite du propriétaire de la
+licence).
+
+CE QUE LE MODULE NE FAIT PAS. Il ne remplace pas les mesures d'états internes :
+une API ne donne pas les poids ni les activations. Il ne met **jamais** la clé
+dans le dépôt, dans un cache ou dans un message d'erreur. Il ne dépend d'aucun
+paquet externe : `urllib` suffit.
+
+CONTRAT.
+- `DEEPSEEK_API_KEY` (ou `DSH_API_KEY`) : la clé, lue dans l'environnement ;
+- `DEEPSEEK_BASE_URL` (ou `DSH_BASE_URL`) : `https://api.deepseek.com` par défaut ;
+- `DEEPSEEK_MODEL` (ou `DSH_MODEL`) : `deepseek-chat` par défaut ;
+- cache : `data/deepseek/cache/<sha256>.json` (gitignoré), clé = modèle + messages
+  + température + max_tokens, **jamais
+… [6057 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"tradu\\|translate\\|retro\\|rétro\" tools/llm/ tools/*.py reports/rapport-s-*.md 2>/dev/null | head -30", "description": "Cherche une fonction de traduction existante"}`
+
+  ```
+tools/llm/deepseek.py:6:(perplexité, activations, flux, sondes). Le **langage** — traduire, juger,
+tools/llm/tests/test_pipeline.py:28:        self.assertEqual(sum(1 for p in prompts if p["meta"]["categorie"] == "traduction"), 50)
+tools/llm/tests/test_mesure.py:26:             "meta": {"categorie": "traduction", "cible_iso3": "fra",
+tools/llm/tests/test_mesure.py:34:             "meta": {"categorie": "traduction"}},
+tools/llm/tests/test_mesure.py:40:        self.assertEqual(r["traductions"], 1)
+tools/llm/prompts_publics.py:6:   domaine public) : cinq articles en anglais, traduits vers dix langues, avec la
+tools/llm/prompts_publics.py:7:   **traduction humaine officielle** comme référence pour le chrF ;
+tools/llm/prompts_publics.py:68:                "system": "Tu es un traducteur professionnel. Réponds uniquement par la traduction, sans commentaire.",
+tools/llm/prompts_publics.py:70:                           f"des droits de l'homme. Réponds uniquement par la traduction.\n\n{source}"),
+tools/llm/prompts_publics.py:73:                         "categorie": "traduction"},
+tools/llm/prompts_publics.jsonl:1:{"id": "udhr-01-fra", "system": "Tu es un traducteur professionnel. Réponds uniq
+… [22618 caractères tronqués]
+  ```
+
