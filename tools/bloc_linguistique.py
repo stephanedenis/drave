@@ -473,6 +473,12 @@ would must can could should will shall may might ought cannot
 """.split())
 
 
+# adverbes de **temps** (circonstants finaux) : le gold les laisse hors du GV
+# (« Tu viens | demain », r010, r030) ; la négation (« ne dort pas ») n'en est pas un.
+ADVERBES_TEMPS = {"hier", "demain", "aujourd'hui", "maintenant", "yesterday", "tomorrow",
+                  "today", "now", "later", "soon", "tonight"}
+
+
 ADVERBES_SEULS = {"peut-être", "vite", "bien", "mal", "hier", "demain", "aujourd'hui", "ici",
                   "là", "souvent", "toujours", "jamais", "déjà", "encore", "enfin", "alors",
                   "puis", "donc", "aussi", "très", "trop", "plus", "moins", "maybe", "perhaps"}
@@ -899,6 +905,82 @@ class Heuristique:
         return sortie
 
     # -- syntagmes ----------------------------------------------------------
+
+    def _sujet_hors_gv(self, texte: str, langue: str, cands: list[dict] | None,
+                       pos_verbes: set[int] | None = None) -> list[dict] | None:
+        """La convention du gold : le sujet est un **GN**, pas le début du GV.
+
+        Le générateur S rend « Il a couru », « Il ne dort pas », « Marie lit » comme un
+        seul GV : il inclut le sujet. Le gold sépare le GN agent du GV. On **déplace**
+        le sujet (pronom, clitique ou nom propre) hors du GV, sans toucher au générateur
+        S. Le GN sujet n'est créé que si un GN ne précède pas déjà immédiatement le GV.
+        """
+        if not cands:
+            return cands
+        pos_verbes = pos_verbes or set()
+        lex = POS_FERME.get(langue, POS_FERME["fr"])
+        _suj = SUJETS if langue == "fr" else {"i", "you", "he", "she", "it", "we", "they"}
+        _elisions = {"j": "je", "t": "tu", "m": "me"}
+        _clitiques = {"s'", "s’", "m'", "m’", "t'", "t’", "l'", "l’", "d'", "d’"}
+        for c in cands:
+            segs = c.get("segments") or []
+            sortie: list[dict] = []
+            for s in segs:
+                if s.get("type") != "GV":
+                    sortie.append(s)
+                    continue
+                d, f = s.get("debut", 0), s.get("fin", 0)
+                mots = [(d + a, d + b, t, typ) for a, b, t, typ in self._mots(texte[d:f])]
+                if len(mots) < 2:
+                    sortie.append(s)
+                    continue
+                # un GN sujet précède immédiatement : le GV est déjà conforme
+                if any(x.get("type") == "GN" and x.get("fin", 0) <= d
+                       and not texte[x.get("fin", 0):d].strip() for x in segs):
+                    sortie.append(s)
+                    continue
+                n0 = _normaliser(mots[0][2])
+                n0e = _elisions.get(n0.split("'")[0], n0)
+                # le prédicat peut commencer par un clitique élidé (« elle s'ouvre »,
+                # « il l'aime ») : on saute le clitique pour trouver le verbe, mais le GV
+                # commence au clitique (il en fait partie).
+                k = 1
+                while k < len(mots) and _normaliser(mots[k][2]) in _clitiques:
+                    k += 1
+                if k >= len(mots):
+                    sortie.append(s)
+                    continue
+                suivant = mots[k]
+                ns = _normaliser(suivant[2])
+                sv = (suivant[0] in pos_verbes or _est_verbe(suivant[2])
+                      or ns in AUXILIAIRES
+                      or self._pos(langue, suivant[2])[0] == "VERB"
+                      or ns in {"ne", "n'", "n’"})
+                # un nom propre sujet : un seul mot, majuscule, pas un mot fermé ; la
+                # forme inversée « Peux-tu » est un verbe + enclitique, pas un sujet.
+                nom_propre = ("-" not in mots[0][2] and mots[0][2][:1].isupper()
+                              and not _est_verbe(mots[0][2])
+                              and self._pos(langue, mots[0][2])[0] != "VERB"
+                              and n0 not in lex.get("DET", set())
+                              and n0 not in lex.get("PREP", set())
+                              and n0 not in lex.get("CONJ", set())
+                              and n0 not in lex.get("PRON", set()))
+                if (n0e in _suj or nom_propre) and sv:
+                    fin_sujet = mots[0][1]
+                    if fin_sujet < f:
+                        gn = dict(s)
+                        gn.update({"type": "GN", "role": "agent", "niveau": 0,
+                                   "fin": fin_sujet,
+                                   "texte": texte[d:fin_sujet], "parent": None})
+                        gv = dict(s)
+                        debut_gv = mots[1][0]
+                        gv.update({"debut": debut_gv, "texte": texte[debut_gv:f]})
+                        sortie.extend([gn, gv])
+                        continue
+                sortie.append(s)
+            c["segments"] = sortie
+        return cands
+
     def _syntagmes_s(self, texte: str) -> list[dict] | None:
         if not self.segmenter_s:
             return None
@@ -1307,6 +1389,10 @@ class Heuristique:
                        and _normaliser(mots[j][2]) not in lex.get("DET", set())
                        and _normaliser(mots[j][2]) not in RELATIFS
                        and _normaliser(mots[j][2]) not in SUBORDONNANTS
+                       # l'adverbe **final** de la phrase n'est pas dans le GV
+                       # (« viens | demain »), sauf la négation (« ne dort pas »)
+                       and not (_normaliser(mots[j][2]) in ADVERBES_TEMPS
+                                and (j + 1 >= len(mots) or mots[j + 1][3] != "mot"))
                        # un marqueur **élidé** arrête aussi le GV (« sais | qu'il vient ») :
                        # le radical « qu » + « e » = « que »
                        and (_normaliser(mots[j][2]).split("'")[0] + "e"
@@ -1532,12 +1618,17 @@ class Heuristique:
                   if e.niveau == "pos" and e.type == "VERB"]
         # le générateur S est **français** : il ne segmente pas l'anglais (A14) — on ne
         # l'interroge que pour le français, sinon ses segments polluent l'union.
+        # le POS **contextuel** a déjà tranché les verbes inconnus (« Elle téléphone »)
+        pos_verbes = {e.debut for e in etiquettes if e.niveau == "pos" and e.type == "VERB"}
         cands = self._syntagmes_s(texte) if (langue or lg) == "fr" else []
+        # convention du gold : le sujet est un GN, pas le début du GV (le générateur S
+        # l'inclut : « Il a couru », « Marie lit »). On déplace le sujet hors du GV ;
+        # S n'est pas modifié (lecture seule).
+        cands = self._sujet_hors_gv(texte, lg, cands, pos_verbes)
         cibles_s = self._cibles_s(texte) if cands else {}
         cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
         # **un seul chunking par analyse**, partagé par les trois chemins (S, union, chunker) :
         # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
-        pos_verbes = {e.debut for e in etiquettes if e.niveau == "pos" and e.type == "VERB"}
         simples = self._syntagmes_simple(texte, lg, pos_verbes)
         gvs_simple = [x for x in simples if x["type"] == "GV"]
         if cands:

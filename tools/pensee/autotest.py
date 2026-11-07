@@ -1669,7 +1669,7 @@ def t109_anaphore_103() -> tuple[bool, str]:
 
 
 def t110_segmenteur() -> tuple[bool, str]:
-    """Le segmenteur : S F1 0,5396 (français seul), chunker 0,7013 ; tête 0,6877 / 0,8035 (gelé 602)."""
+    """Le segmenteur : S F1 0,7353 (sujet hors du GV), chunker 0,8169 ; tête 0,8767 / 0,9077 (gelé 602)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1682,13 +1682,13 @@ def t110_segmenteur() -> tuple[bool, str]:
     f2 = round(r2["syntagme"]["f1"], 4)
     t1 = round(r1["syntagme"]["tete"]["f1"], 4)
     t2 = round(r2["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.6007) < 0.001 and abs(f2 - 0.8152) < 0.001
+    return (abs(f1 - 0.7353) < 0.001 and abs(f2 - 0.8169) < 0.001
             and t1 < t2), (
         f"segmenteur : S F1 {f1} tête {t1} ; chunker F1 {f2} tête {t2}")
 
 
 def t111_hybride_seg() -> tuple[bool, str]:
-    """L'hybride frontières/têtes : tête F1 0,7402 (S 0,3552, chunker 0,4707)."""
+    """L'hybride frontières/têtes : tête F1 0,8726 (S 0,3552, chunker 0,4707)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, _tete
     ph = charger()
@@ -1708,12 +1708,12 @@ def t111_hybride_seg() -> tuple[bool, str]:
             pred.add((t, cand[0] if cand else d))
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.8242) < 0.001, (
+    return abs(f1 - 0.8726) < 0.001, (
         f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
 
 
 def t112_union() -> tuple[bool, str]:
-    """L'union des segmenteurs : segments F1 0,5595 (S 0,4741)."""
+    """L'union des segmenteurs : segments F1 0,7882 (S 0,6007)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, _seg, _tete
     ph = charger()
@@ -1729,11 +1729,11 @@ def t112_union() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.7551) < 0.001, f"union : segments F1 {f1} (S 0,6007)"
+    return abs(f1 - 0.7882) < 0.001, f"union : segments F1 {f1} (S 0,6007)"
 
 
 def t113_union_defaut() -> tuple[bool, str]:
-    """L'union par défaut : F1 0,5595, tête 0,7205 dans l'analyseur."""
+    """L'union par défaut : F1 0,7882, tête 0,9025 dans l'analyseur."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1741,12 +1741,12 @@ def t113_union_defaut() -> tuple[bool, str]:
     r = evaluer_bloc("h", h, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return abs(f1 - 0.7551) < 0.001 and abs(tete - 0.8661) < 0.001, (
+    return abs(f1 - 0.7882) < 0.001 and abs(tete - 0.9025) < 0.001, (
         f"union par défaut : F1 {f1}, tête {tete}")
 
 
 def t114_cascade_union() -> tuple[bool, str]:
-    """La cascade avec l'union : F1 0,5864, tête 0,7285, 602 appels neuronaux."""
+    """La cascade avec l'union : F1 0,7882, tête 0,9025, 602 appels neuronaux."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger, evaluer_bloc
     ph = charger()
@@ -1755,7 +1755,7 @@ def t114_cascade_union() -> tuple[bool, str]:
     r = evaluer_bloc("c", cascade, ph)
     f1 = round(r["syntagme"]["f1"], 4)
     tete = round(r["syntagme"]["tete"]["f1"], 4)
-    return (abs(f1 - 0.7551) < 0.001 and abs(tete - 0.8661) < 0.001
+    return (abs(f1 - 0.7882) < 0.001 and abs(tete - 0.9025) < 0.001
             and cascade.appels_neuronal == 602), (
         f"cascade : F1 {f1}, tête {tete}, {cascade.appels_neuronal} appels")
 
@@ -1781,7 +1781,7 @@ def t115_tete_cascade() -> tuple[bool, str]:
         tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
     p = tp / max(1, tp + fp); r = tp / max(1, tp + fn)
     f1 = round(2 * p * r / max(1e-9, p + r), 4)
-    return abs(f1 - 0.8299) < 0.001, (
+    return abs(f1 - 0.9082) < 0.001, (
         f"tête cascade corrigée : {f1} (cascade 0,441 ; union 0,466)")
 
 
@@ -2259,7 +2259,7 @@ def t155_cibles_500() -> tuple[bool, str]:
 
 
 def t156_relation() -> tuple[bool, str]:
-    """La relation GN → GV : 257/546 (0,4707)."""
+    """La relation GN → GV : 570/863 (0,6605) après le sujet hors du GV."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger
     h = bl.Heuristique()
@@ -2272,7 +2272,7 @@ def t156_relation() -> tuple[bool, str]:
                 n += 1
                 if gv and (e.meta or {}).get("role") in ("agent", "patient", "destinataire"):
                     avec += 1
-    return n == 859 and avec == 566, f"relation : {avec}/{n} ({round(avec/n, 4)})"
+    return n == 863 and avec == 570, f"relation : {avec}/{n} ({round(avec/n, 4)})"
 
 
 def t157_roles() -> tuple[bool, str]:

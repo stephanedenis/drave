@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 162.6 h |
-| Tours | 192 |
-| Messages | 3559 |
-| Appels d'outils | 3163 |
+| Durée | 165.0 h |
+| Tours | 193 |
+| Messages | 3579 |
+| Appels d'outils | 3179 |
 | Fichiers touchés | 25 |
-| Commandes | 2647 |
+| Commandes | 2658 |
 | Sous-agents | 42 |
 | Commits | 434 |
 | Compactages de contexte | 8 |
@@ -443,6 +443,8 @@
 **Tour 191** — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
 **Tour 192** — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas si DSH est à la hauteur ou s'il faut un méta harnais pour gérer a en autonomie totale pendant plusieurs jours.
+
+**Tour 193** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -10332,7 +10334,61 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 **Synthèse produite :**
 
-⏵ L'inventaire Panini est arrivé (14 dépôts, 3 intégrations mûres) : je l'intègre au plan et je commite
+⏵ Réponse : DSH seul ne suffit pas — le méta-harnais est en place et **testé de bout en bout**
+
+\## 1. La réponse à votre question
+
+**DSH ne fournit que l'agent.** Il donne les rounds, la session reprenable (`--session-id`), la compaction, les sous-agents et le mode `headless`. Il **ne donne pas** : une file de tâches, une acceptation indépendante, un budget, la reprise après crash, l'escalade, un journal d'audit. C'est exactement ce que j'ai construit.
+
+**Le fait décisif, mesuré ce matin** : `dsh --profile headless` **exige `DEEPSEEK_API_KEY`** et rend `MISSING_CREDENTIAL` sans elle. C'est la clé qui débloque l'autonomie scriptable — le superviseur la lit dans `~/.config/drave/deepseek.key` et la passe au processus fils.
+
+\## 2. Le méta-harnais (committé et testé)
+
+| pièce | rôle |
+|---|---|
+| **[`tools/chantier/superviseur.py`](tools/chantier/superviseur.py)** | la boucle : prochaine tâche → `dsh headless` (clé lue) → **acceptation exécutée par le superviseur** → état → suivante |
+| **[`tools/chantier/plan.json`](tools/chantier/plan.json)** | **15 tâches** (J0 de contrôle + J1–J5) avec mandat, acceptation, budget |
+| `work/chantier/etat.json` + `journal.log` | l'état persistant et l'audit horodaté, écrits **après chaque étape** |
+| `work/chantier/STOP` | l'arrêt propre (`superviseur.py stop`) |
+| **[`docs/methode/chantier-autonome.md`](docs/methode/chantier-autonome.md)** | la doctrine : ce que DSH donne, ce qui manque, les 7 modes de panne et leurs parades |
+
+**Test réel J0** : `statut: fait`, code agent 0, sortie « OK », 3,5 s — après **deux corrections** que seul un test réel révèle (la clé, et le worktree jamais propre dans un dépôt multi-sessions). C'est pour cela que chaque tâche a une acceptation exécutable.
+
+**Les commandes** :
+```bash
+python3 tools/chantier/superviseur.py etat          # où en est-on
+python3 tools/chantier/superviseur.py boucle --budget 21600 --timeout 5400
+tail -f work/chantier/journal.log                    # surveiller
+python3 tools/chantier/superviseur.py stop           # arrêter proprement
+```
+
+\## 3. Le chantier d'une semaine
+
+**[`docs/pilotage/semaine-autonome.md`](docs/pilotage/semaine-autonome.md)** — 5 jours × 2 vagues, et l'inventaire Panini y est intégré :
+
+- **14 dépôts** inventoriés (Panini hôte non propre, `research` pinné 6f8b67b alors que le checkout est e10d695, Panini-FS en retard de 140 commits, 7 échafaudages, `ExecutionOrchestrator` seul exécutable).
+- **7 axes**, les **14 atomes V14** (source canonique `hardw
+… [1910 caractères tronqués]
+
+### Tour 193 — go
+
+*16 appels d'outils.* Actions notables :
+
+- bash — Lancer la boucle du chantier
+- bash — Surveiller J1.1
+- bash — Attendre J1.1
+- job_output
+- bash — Lire la fiche r035
+- bash — Attendre J1.2
+- bash — Attendre la fin de J1.2
+- bash — Voir l'état de J1.2
+- bash — Voir si l'agent avance
+- bash — Attendre le verdict J1.2
+- bash — Attendre le timeout ou le verdict
+
+**Synthèse produite :**
+
+⏵ Première tâche réelle réussie : `r035` réglé (exact 236 → 237), J1.2 en cours. Je lis la fiche
 
 ## 3. Travail accompli
 
@@ -10453,7 +10509,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2607 autres
+- … et 2618 autres
 
 ## 4. Mesures et résultats marquants
 

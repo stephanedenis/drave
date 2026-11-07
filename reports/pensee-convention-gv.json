@@ -1,0 +1,706 @@
+{
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "tache": "J1.2",
+ "objet": "la convention des GV",
+ "baseline_commit": "25a6c0ff",
+ "dispositif": {
+  "code": "tools/bloc_linguistique.py",
+  "classement": "tools/tests/linguistique/classer_gv.py",
+  "mesure": "tools/tests/linguistique/evaluer_gold.py",
+  "fiche": "reports/rapport-convention-gv.md"
+ },
+ "gold": {
+  "phrases": 612,
+  "tokens": 3179,
+  "dev": 422,
+  "test": 190,
+  "note": "gold vivant 612 (hand 20 + reel 200 + synthetique 392) ; split crc32(id)%3"
+ },
+ "convention_du_gold": {
+  "gv_total": 712,
+  "debut_verbe": 590,
+  "debut_aux": 97,
+  "debut_adv": 25,
+  "debut_sujet": 0,
+  "verdict": "712/712 GV du gold commencent par VERB, AUX ou ADV (négation) ; aucun par un sujet.",
+  "adverbe_final": {
+   "gv_finissant_par_adv": 39,
+   "adv_hors_gv": 72,
+   "contradictions_exactes": [
+    {
+     "phrase": "Le vent souffle fort.",
+     "ids": [
+      "r019",
+      "r186"
+     ],
+     "annotations": {
+      "r019": "GV « souffle »",
+      "r186": "GV « souffle fort »"
+     }
+    },
+    {
+     "phrase": "La voiture roule vite.",
+     "ids": [
+      "r051",
+      "r189"
+     ],
+     "annotations": {
+      "r051": "GV « roule »",
+      "r189": "GV « roule vite »"
+     }
+    }
+   ],
+   "verdict": "le gold n'a pas une convention unique pour l'adverbe final : 39 GV l'incluent, 72 ADV sont hors GV, et deux phrases identiques sont annotées différemment."
+  }
+ },
+ "avant_plan": {
+  "all": {
+   "phrases": 612,
+   "f1": 0.7533,
+   "precision": 0.7239,
+   "rappel": 0.7853,
+   "tp": 1463,
+   "fp": 558,
+   "fn": 400,
+   "tete_f1": 0.864,
+   "pos": 0.8625,
+   "att_exact": 236,
+   "att_labels": 237,
+   "att_cibles": 239,
+   "att_couverture": 0.9916
+  },
+  "dev": {
+   "phrases": 422,
+   "f1": 0.7476,
+   "precision": 0.7223,
+   "rappel": 0.7747,
+   "tp": 1004,
+   "fp": 386,
+   "fn": 292,
+   "tete_f1": 0.8603,
+   "pos": 0.8618,
+   "att_exact": 160,
+   "att_labels": 161,
+   "att_cibles": 163,
+   "att_couverture": 0.9877
+  },
+  "test": {
+   "phrases": 190,
+   "f1": 0.7663,
+   "precision": 0.7274,
+   "rappel": 0.8095,
+   "tp": 459,
+   "fp": 172,
+   "fn": 108,
+   "tete_f1": 0.8724,
+   "pos": 0.8642,
+   "att_exact": 76,
+   "att_labels": 76,
+   "att_cibles": 76,
+   "att_couverture": 1.0
+  },
+  "classement": {
+   "fp_total": 322,
+   "fp": {
+    "objet": 73,
+    "sujet": 144,
+    "adverbe": 16,
+    "tronque": 39,
+    "parasite": 17,
+    "gauche_autre": 6,
+    "deux_cotes": 27
+   },
+   "fn_total": 180,
+   "fn": {
+    "chev_deux": 28,
+    "avale_GN": 51,
+    "chev_droite": 75,
+    "chev_gauche": 7,
+    "tronque": 19
+   },
+   "doublons_total": 153,
+   "doublons": {
+    "objet": 4,
+    "sujet": 133,
+    "adverbe": 1,
+    "tronque": 11,
+    "deux_cotes": 1,
+    "gauche_autre": 3
+   },
+   "origine": {
+    "chunker": 98,
+    "S": 224
+   }
+  }
+ },
+ "avant_courant": {
+  "all": {
+   "phrases": 612,
+   "f1": 0.7549,
+   "precision": 0.7254,
+   "rappel": 0.7869,
+   "tp": 1466,
+   "fp": 555,
+   "fn": 397,
+   "tete_f1": 0.8651,
+   "pos": 0.8625,
+   "att_exact": 237,
+   "att_labels": 238,
+   "att_cibles": 239,
+   "att_couverture": 0.9958
+  },
+  "dev": {
+   "phrases": 422,
+   "f1": 0.7498,
+   "precision": 0.7245,
+   "rappel": 0.777,
+   "tp": 1007,
+   "fp": 383,
+   "fn": 289,
+   "tete_f1": 0.8618,
+   "pos": 0.8618,
+   "att_exact": 161,
+   "att_labels": 162,
+   "att_cibles": 163,
+   "att_couverture": 0.9939
+  },
+  "test": {
+   "phrases": 190,
+   "f1": 0.7663,
+   "precision": 0.7274,
+   "rappel": 0.8095,
+   "tp": 459,
+   "fp": 172,
+   "fn": 108,
+   "tete_f1": 0.8724,
+   "pos": 0.8642,
+   "att_exact": 76,
+   "att_labels": 76,
+   "att_cibles": 76,
+   "att_couverture": 1.0
+  },
+  "classement": {
+   "fp_total": 320,
+   "fp": {
+    "objet": 73,
+    "sujet": 144,
+    "adverbe": 16,
+    "tronque": 39,
+    "parasite": 16,
+    "deux_cotes": 27,
+    "gauche_autre": 5
+   },
+   "fn_total": 179,
+   "fn": {
+    "chev_deux": 28,
+    "avale_GN": 51,
+    "chev_droite": 75,
+    "chev_gauche": 6,
+    "tronque": 19
+   },
+   "doublons_total": 153,
+   "doublons": {
+    "objet": 4,
+    "sujet": 133,
+    "adverbe": 1,
+    "tronque": 11,
+    "deux_cotes": 1,
+    "gauche_autre": 3
+   },
+   "origine": {
+    "chunker": 96,
+    "S": 224
+   }
+  }
+ },
+ "regles": {
+  "sujet_hors_gv": {
+   "definition": "Un GV ne commence pas par son sujet : si un GV du générateur S commence par un pronom sujet, un clitique ou un nom propre suivi de son verbe, le sujet est émis comme GN et le GV commence au prédicat.",
+   "portee": "français (générateur S) ; le chunker n'est pas modifié",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.7881,
+     "precision": 0.7828,
+     "rappel": 0.7933,
+     "tp": 1478,
+     "fp": 410,
+     "fn": 385,
+     "tete_f1": 0.9029,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.7861,
+     "precision": 0.7867,
+     "rappel": 0.7855,
+     "tp": 1018,
+     "fp": 276,
+     "fn": 278,
+     "tete_f1": 0.9019,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7924,
+     "precision": 0.7744,
+     "rappel": 0.8113,
+     "tp": 460,
+     "fp": 134,
+     "fn": 107,
+     "tete_f1": 0.9052,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    },
+    "classement": {
+     "fp_total": 174,
+     "fp": {
+      "objet": 75,
+      "adverbe": 16,
+      "tronque": 42,
+      "parasite": 16,
+      "gauche_autre": 3,
+      "sujet": 4,
+      "deux_cotes": 18
+     },
+     "fn_total": 170,
+     "fn": {
+      "avale_GN": 51,
+      "chev_droite": 80,
+      "chev_gauche": 3,
+      "chev_deux": 17,
+      "tronque": 19
+     },
+     "doublons_total": 31,
+     "doublons": {
+      "objet": 7,
+      "adverbe": 4,
+      "tronque": 16,
+      "gauche_autre": 1,
+      "sujet": 3
+     },
+     "origine": {
+      "chunker": 89,
+      "S": 85
+     }
+    }
+   },
+   "delta": {
+    "f1": "+0,0332",
+    "dev": "+0,0363",
+    "test": "+0,0261",
+    "tp": "+12",
+    "fp": "-145",
+    "fn": "-12"
+   },
+   "phrases_changees": 147,
+   "phrases_gagnantes": 140,
+   "phrases_perdantes": 0
+  },
+  "adverbe_final": {
+   "definition": "Un adverbe de temps final (hier, demain, aujourd'hui, maintenant, yesterday, tomorrow, today, now, later, soon, tonight) n'est pas dans le GV ; la négation (ne, pas…) n'est pas concernée.",
+   "portee": "chunker (toutes langues), GV seulement",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.7575,
+     "precision": 0.7279,
+     "rappel": 0.7896,
+     "tp": 1471,
+     "fp": 550,
+     "fn": 392,
+     "tete_f1": 0.8651,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.752,
+     "precision": 0.7266,
+     "rappel": 0.7793,
+     "tp": 1010,
+     "fp": 380,
+     "fn": 286,
+     "tete_f1": 0.8618,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7696,
+     "precision": 0.7306,
+     "rappel": 0.8131,
+     "tp": 461,
+     "fp": 170,
+     "fn": 106,
+     "tete_f1": 0.8724,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    },
+    "classement": {
+     "fp_total": 315,
+     "fp": {
+      "objet": 73,
+      "sujet": 145,
+      "adverbe": 10,
+      "tronque": 40,
+      "parasite": 16,
+      "deux_cotes": 25,
+      "gauche_autre": 6
+     },
+     "fn_total": 174,
+     "fn": {
+      "chev_deux": 23,
+      "avale_GN": 51,
+      "chev_droite": 72,
+      "chev_gauche": 9,
+      "tronque": 19
+     },
+     "doublons_total": 155,
+     "doublons": {
+      "objet": 4,
+      "sujet": 135,
+      "adverbe": 1,
+      "tronque": 11,
+      "deux_cotes": 1,
+      "gauche_autre": 3
+     },
+     "origine": {
+      "chunker": 91,
+      "S": 224
+     }
+    }
+   },
+   "delta": {
+    "f1": "+0,0026",
+    "dev": "+0,0022",
+    "test": "+0,0033",
+    "tp": "+5",
+    "fp": "-5",
+    "fn": "-5"
+   },
+   "phrases_changees": 10,
+   "phrases_gagnantes": 6,
+   "phrases_perdantes": 1,
+   "phrase_perdante": {
+    "id": "r190",
+    "texte": "Ils arrivent demain.",
+    "note": "le gold r190 inclut « demain » dans le GV ; c'est la contradiction r019/r186."
+   }
+  },
+  "combinaison": {
+   "definition": "les deux règles, mesurées ensemble",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.7902,
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383,
+     "tete_f1": 0.9029,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.7875,
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277,
+     "tete_f1": 0.9019,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7962,
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106,
+     "tete_f1": 0.9052,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    },
+    "classement": {
+     "fp_total": 167,
+     "fp": {
+      "objet": 75,
+      "adverbe": 10,
+      "tronque": 42,
+      "parasite": 16,
+      "gauche_autre": 4,
+      "sujet": 5,
+      "deux_cotes": 15
+     },
+     "fn_total": 168,
+     "fn": {
+      "avale_GN": 51,
+      "chev_droite": 77,
+      "tronque": 20,
+      "chev_gauche": 5,
+      "chev_deux": 15
+     },
+     "doublons_total": 27,
+     "doublons": {
+      "objet": 7,
+      "adverbe": 1,
+      "tronque": 15,
+      "gauche_autre": 1,
+      "sujet": 3
+     },
+     "origine": {
+      "chunker": 82,
+      "S": 85
+     }
+    }
+   },
+   "delta": {
+    "f1": "+0,0353",
+    "dev": "+0,0377",
+    "test": "+0,0299",
+    "tp": "+14",
+    "fp": "-152",
+    "fn": "-14"
+   },
+   "phrases_changees": 152,
+   "phrases_gagnantes": 144,
+   "phrases_perdantes": 1
+  }
+ },
+ "controles_negatifs": {
+  "placebo_sujet": {
+   "regle": "déplacer le premier token sans condition (même un verbe ou un DET)",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.7758,
+     "precision": 0.76,
+     "rappel": 0.7923,
+     "tp": 1476,
+     "fp": 466,
+     "fn": 387,
+     "tete_f1": 0.8933,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.7728,
+     "precision": 0.7612,
+     "rappel": 0.7847,
+     "tp": 1017,
+     "fp": 319,
+     "fn": 279,
+     "tete_f1": 0.8903,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7826,
+     "precision": 0.7574,
+     "rappel": 0.8095,
+     "tp": 459,
+     "fp": 147,
+     "fn": 108,
+     "tete_f1": 0.9001,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    }
+   },
+   "verdict": "F1 0,7758 < 0,7881 ; 38 phrases perdantes contre 0 pour la règle conditionnelle."
+  },
+  "placebo_adverbe": {
+   "regle": "arrêter le GV au dernier token, sans condition de classe",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.744,
+     "precision": 0.7017,
+     "rappel": 0.7917,
+     "tp": 1475,
+     "fp": 627,
+     "fn": 388,
+     "tete_f1": 0.8566,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.7473,
+     "precision": 0.7102,
+     "rappel": 0.7886,
+     "tp": 1022,
+     "fp": 417,
+     "fn": 274,
+     "tete_f1": 0.8551,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7366,
+     "precision": 0.6833,
+     "rappel": 0.7989,
+     "tp": 453,
+     "fp": 210,
+     "fn": 114,
+     "tete_f1": 0.8601,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    }
+   },
+   "verdict": "F1 0,7440 < 0,7549 (base) ; 627 FP contre 555 : tronquer au hasard détruit des GV."
+  },
+  "adverbe_large": {
+   "regle": "tout adverbe final hors du GV (POS ADV), pas seulement les circonstants de temps",
+   "mesures": {
+    "all": {
+     "phrases": 612,
+     "f1": 0.7552,
+     "precision": 0.7255,
+     "rappel": 0.7874,
+     "tp": 1467,
+     "fp": 555,
+     "fn": 396,
+     "tete_f1": 0.8649,
+     "pos": 0.8625,
+     "att_exact": 237,
+     "att_labels": 238,
+     "att_cibles": 239,
+     "att_couverture": 0.9958
+    },
+    "dev": {
+     "phrases": 422,
+     "f1": 0.7506,
+     "precision": 0.7252,
+     "rappel": 0.7778,
+     "tp": 1008,
+     "fp": 382,
+     "fn": 288,
+     "tete_f1": 0.8618,
+     "pos": 0.8618,
+     "att_exact": 161,
+     "att_labels": 162,
+     "att_cibles": 163,
+     "att_couverture": 0.9939
+    },
+    "test": {
+     "phrases": 190,
+     "f1": 0.7656,
+     "precision": 0.7263,
+     "rappel": 0.8095,
+     "tp": 459,
+     "fp": 173,
+     "fn": 108,
+     "tete_f1": 0.8717,
+     "pos": 0.8642,
+     "att_exact": 76,
+     "att_labels": 76,
+     "att_cibles": 76,
+     "att_couverture": 1.0
+    }
+   },
+   "verdict": "F1 0,7552 (+0,0003) mais test 0,7656 < 0,7663 : ne généralise pas ; 12 FP d'adverbe corrigés, 11 FP de troncature créés."
+  },
+  "attachement": {
+   "avant": "237/238 (0,9958)",
+   "apres": "237/238 (0,9958)",
+   "perdus": 0,
+   "gagnes": 0,
+   "spans_perdus": 0,
+   "note": "diff segment par segment sur les 239 cibles : les 237 mêmes cibles restent justes ; POS 0,8625 inchangée (0 token)."
+  },
+  "gold_convention": {
+   "sujet": "712/712 GV commencent par VERB/AUX/ADV, 0 par un sujet : la règle est la convention, pas une correction locale.",
+   "adverbe": "convention contradictoire (r019 vs r186, r051 vs r189) : la règle est un choix, pas une vérité du gold."
+  }
+ },
+ "partition_lineaire": {
+  "note": "partition « filtrer » (un segment par groupe, la vue linéaire du plan) ; la référence du plan (0,8104) est un instantané antérieur, la base mesurée ici est 0,8120",
+  "reference_plan": 0.8104,
+  "avant": {
+   "f1": 0.812,
+   "tp": 1443,
+   "fp": 248,
+   "fn": 420,
+   "att": "223/224"
+  },
+  "apres": {
+   "f1": 0.8144,
+   "tp": 1450,
+   "fp": 248,
+   "fn": 413,
+   "att": "223/224"
+  },
+  "delta": "+0,0024"
+ },
+ "portes": {
+  "autotest": "183/183",
+  "porte_bloc_linguistique": "verte",
+  "tests_unitaires": 19,
+  "toutes_les_portes": "en cours : 28/84 vertes à 13 h 42, 0 rouge"
+ },
+ "limites": [
+  "la règle du sujet est française : le générateur S ne segmente pas l'anglais ; le gain anglais (+0,0044) vient de la seule règle d'adverbe",
+  "la règle est écrite après avoir vu les erreurs : le gain dev/test est in-sample (le test n'a pas servi à choisir)",
+  "5 FP de sujet restent : deux conjonctions de propositions (r252, r277), une inversion anglaise (r314), deux verbes à suffixe nominal (r354, r389)",
+  "le gold contredit la convention d'adverbe final (r019/r186, r051/r189) : le gain de +0,0026 peut s'inverser sur un autre échantillon",
+  "l'attachement est mesuré sur 239 cibles ; une règle qui changerait un span cible sans changer le compte ne serait pas vue par l'agrégat — le diff segment par segment la couvre",
+  "les 75 FP d'objet et les 51 FN « avale_GN » ne sont pas traités : la règle d'objet du 05/11 perdait du F1 (0,7531) et n'est pas reprise"
+ ]
+}

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **703 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **704 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -115,6 +115,7 @@
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
 | [rapport-contrat-s.md](rapport-contrat-s.md) | B13 — Contrat d'interface L ↔ S : les subordonnées REL/SUB |
+| [rapport-convention-gv.md](rapport-convention-gv.md) | B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902 |
 | [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
 | [rapport-corpus-pdf.md](rapport-corpus-pdf.md) | Le corpus PDF local — les livres et les cours |
@@ -629,6 +630,7 @@
 | [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |
 | [rapport-r03-banc-durci.md](rapport-r03-banc-durci.md) | R0.3 durci — 19 puis 84 paraphrases : le lexique tombe, le modèle prend la tête (de moins en moins) |
 | [rapport-r03-lecteur-modele.md](rapport-r03-lecteur-modele.md) | R0.3 (première tranche) — le lecteur modèle : 0,500 contre 0,400, et le GPU |
+| [rapport-r035.md](rapport-r035.md) | B13 — la relative zéro (r035) : exact 236 → 237, POS inchangée |
 | [rapport-r04-tete-survol.md](rapport-r04-tete-survol.md) | R0.4 — la tête de survol perd contre BM25 (0,540 contre 0,720 sur le corpus gelé) |
 | [rapport-r05-balayage.md](rapport-r05-balayage.md) | R05 — le balayage : 0,984 de rappel@10 sur le lexical, 0,702 sur les paraphrases |
 | [rapport-r06-calibration.md](rapport-r06-calibration.md) | R06 v5 — la courbe de calibration : ~50 golds suffisent, les poids appris n'ajoutent rien |
@@ -648,7 +650,6 @@
 | [rapport-r13.2-vocab1024.md](rapport-r13.2-vocab1024.md) | R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux |
 | [rapport-r13.3-anglais.md](rapport-r13.3-anglais.md) | R13.3 — anglais 100 Mo : le BPE perd encore à octets égaux |
 | [rapport-r13.4-graines.md](rapport-r13.4-graines.md) | R13.4 — deux graines : le BPE 512 est dans le bruit, le 1024 perd |
-| [rapport-r035.md](rapport-r035.md) | B13 — la relative zéro (r035) : exact 236 → 237, POS inchangée |
 | [rapport-r264-elision.md](rapport-r264-elision.md) | B13 — `r264` réglé : le GV s'arrête au marqueur élidé (`qu'il`), couverture 0,9916 |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |

@@ -60166,3 +60166,289 @@ sam 07 nov 2026 11:16:07 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-07, 11 h 20 HNE\", t)\np.write_text( … [705 caractères tronqués]`
+
+  ```
+13 files changed, 71 insertions(+), 22 deletions(-)
+COMMIT OK 1
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+   34fdd4ef..d7469b5c  s/v7 -> s/v7
+   34fdd4ef..d7469b5c  master -> master
+index EXIT=0
+0
+sam 07 nov 2026 11:18:37 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : DSH seul ne suffit pas — le méta-harnais est en place et **testé de bout en bout**
+
+## 1. La réponse à votre question
+
+**DSH ne fournit que l'agent.** Il donne les rounds, la session reprenable (`--session-id`), la compaction, les sous-agents et le mode `headless`. Il **ne donne pas** : une file de tâches, une acceptation indépendante, un budget, la reprise après crash, l'escalade, un journal d'audit. C'est exactement ce que j'ai construit.
+
+**Le fait décisif, mesuré ce matin** : `dsh --profile headless` **exige `DEEPSEEK_API_KEY`** et rend `MISSING_CREDENTIAL` sans elle. C'est la clé qui débloque l'autonomie scriptable — le superviseur la lit dans `~/.config/drave/deepseek.key` et la passe au processus fils.
+
+## 2. Le méta-harnais (committé et testé)
+
+| pièce | rôle |
+|---|---|
+| **[`tools/chantier/superviseur.py`](tools/chantier/superviseur.py)** | la boucle : prochaine tâche → `dsh headless` (clé lue) → **acceptation exécutée par le superviseur** → état → suivante |
+| **[`tools/chantier/plan.json`](tools/chantier/plan.json)** | **15 tâches** (J0 de contrôle + J1–J5) avec mandat, acceptation, budget |
+| `work/chantier/etat.json` + `journal.log` | l'état persistant et l'audit horodaté, écrits **après chaque étape** |
+| `work/chantier/STOP` | l'arrêt propre (`superviseur.py stop`) |
+| **[`docs/methode/chantier-autonome.md`](docs/methode/chantier-autonome.md)** | la doctrine : ce que DSH donne, ce qui manque, les 7 modes de panne et leurs parades |
+
+**Test réel J0** : `statut: fait`, code agent 0, sortie « OK », 3,5 s — après **deux corrections** que seul un test réel révèle (la clé, et le worktree jamais propre dans un dépôt multi-sessions). C'est pour cela que chaque tâche a une acceptation exécutable.
+
+**Les commandes** :
+```bash
+python3 tools/chantier/superviseur.py etat          # où en est-on
+python3 tools/chantier/superviseur.py boucle --budget 21600 --timeout 5400
+tail -f work/chantier/journal.log                    # surveiller
+python3 tools/chantier/superviseur.py stop           # arrêter proprement
+```
+
+## 3. Le chantier d'une semaine
+
+**[`docs/pilotage/semaine-autonome.md`](docs/pilotage/semaine-autonome.md)** — 5 jours × 2 vagues, et l'inventaire Panini y est intégré :
+
+- **14 dépôts** inventoriés (Panini hôte non propre, `research` pinné 6f8b67b alors que le checkout est e10d695, Panini-FS en retard de 140 commits, 7 échafaudages, `ExecutionOrchestrator` seul exécutable).
+- **7 axes**, les **14 atomes V14** (source canonique `hardware_mapping.py`, utilisables en JSON plat), les **9 dhātus**, la généalogie (29 langues) et l'**UDHR 532 langues** — la **même source XML** que nos 456.
+- **Trois intégrations mûres**, chacune avec son contrôle négatif : **UDHR + généalogie**, **atomes V14 ↔ niveaux** (44 œuvres × 14 flottants), **corpus d'or CIC** (42 verdicts, le plus vérifiable).
+- **Trop immature** : le produit NIPADA (DTP arrêté depuis juillet, 54 tests cassés), le noyau comme service, l'API REST.
+
+## 4. Trois choses à savoir avant votre départ
+
+1. **L'effet de bord Panini** : l'inventaire a checkpointé le WAL d'un fichier SQLite (`Panini/research/data/mass_ingestion/corpus_expansion.db`) — 381 lignes intactes, le fichier est `M`. **Ne le restaurez pas par `git checkout`** (les lignes du WAL seraient perdues). C'est le seul effet de bord, signalé par le sous-agent.
+2. **Le lien cassé côté Panini** : leur README renvoie à `Qtrinet/docs/agent/panini-nipada.md`, qui n'existe pas ; le document réel est `docs/methode/panini-nipada.md`. À corriger chez eux (je n'écris pas dans Panini).
+3. **La clé** : le tagger sur 612 et la rétro-traduction de S restent bloqués par l'absence de clé côté **session** ; le méta-harnais, lui, sait la lire pour `headless`. Si vous voulez ces deux chantiers, il faut la clé dans l'environnement de la session.
+
+## 5. L'état
+
+`HEAD d7469b5c`, `master` = `s/v7` **poussés**, 0 divergence ; toutes les portes légères vertes ; **183/183** d'autotest ; porte produit verte (10 contrôles, 16 tests). Les résultats de la nuit restent : **POS 86,25 %**, **F1 0,7535**, **attachement 236/237 (0,9916)**, 2 spans.
+
+**Ce qui reste à décider avant de lancer la semaine** : (a) j'utilise le superviseur tel quel, ou (b) vous voulez d'abord que je le rende plus prudent (budget par jour, revue humaine simulée par des acceptations plus strictes, poussée automatique désactivée par défaut — c'est déjà le cas) ?
+
+
+## Tour 193
+
+### 👤 Utilisateur
+
+go
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -f work/chantier/STOP; ls work/chantier/; python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('work/chantier/etat.json')\nif p.exists():\n    d=json.loads(p.read_text())\n    print('état :', {k: v.get('statut') for k,v in d.get … [456 caractères tronqués]`
+
+  ```
+etat.json
+journal.log
+état : {'J1.1': 'a_faire', 'J0': 'fait'}
+lancements 2 | budget 5.7
+=== lancement :
+PID 216359
+2026-11-07 10:47:58 · ▶ J0 — Le contrôle du superviseur (timeout 300 s)
+2026-11-07 10:48:02 · ✔ J0 en 3.5 s (code 0) — ✅ python3 -c "print('LIAISON-OK')"
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chantier est lancé : J1.1 (relative zéro) tourne dans le méta-harnais. Je surveille sans toucher au dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; echo \"=== journal :\"; tail -4 work/chantier/journal.log; echo \"=== boucle :\"; tail -3 work/chantier/boucle.log; echo \"=== git :\"; git log --oneline -2 | cut -c1-90; git status --porcelain | grep -vE \"^\\?\\?|j … [76 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 12:27:23 EST
+=== journal :
+2026-11-07 10:47:58 · ↺ J0 remise en file
+2026-11-07 10:47:58 · ▶ J0 — Le contrôle du superviseur (timeout 300 s)
+2026-11-07 10:48:02 · ✔ J0 en 3.5 s (code 0) — ✅ python3 -c "print('LIAISON-OK')"
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+=== boucle :
+=== git :
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+34fdd4ef DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES)
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+  ```
+
+- **bash** `{"command": "ps aux | grep -c \"[d]sh --profile headless\"; ps aux | grep \"[s]uperviseur.py\" | head -2; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-90; ls reports/ | grep -E \"r035\"", "description": "Atte … [33 caractères tronqués]`
+
+  ```
+1
+stephane  216359  0.0  0.0   5848  2508 ?        S    12:18   0:00 timeout 25200 python3 tools/chantier/superviseur.py boucle --budget 21600 --timeout 5400
+stephane  216362  0.2  0.0  20400 17436 ?        S    12:18   0:01 python3 tools/chantier/superviseur.py boucle --budget 21600 --timeout 5400
+[still running after 600000ms; moved to background job bash-4784]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4784", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 12:42:34 EST
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+pensee-r035.json
+rapport-r035.md
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Première tâche réelle réussie : `r035` réglé (exact 236 → 237), J1.2 en cours. Je lis la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -25 reports/rapport-r035.md | cut -c1-160; echo \"=== état superviseur :\"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"J1.1|budget|session\"", "description": "Lire la fiche r035"}`
+
+  ```
+# B13 — la relative zéro (r035) : exact 236 → 237, POS inchangée
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J1.1 · **Date** : 2026-11-07 ·
+> **Verdict** : ✅
+> **`r035` est réglé** : « The film **she talks about** is out. » n'a aucun marqueur de relative.
+> La règle **structurelle** `[GN antécédent] [pronom sujet] [verbe] [préposition orpheline] → REL`
+> retrouve le span **[9:24]**, cible **`film`**. L'attachement exact passe de **236 à 237**,
+> les labels de **237 à 238**, la couverture de **0,9916 à 0,9958** ; **POS inchangée**
+> (0,8625), **F1 0,7533 → 0,7549**. **183/183 portes**.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_syntagmes_simple`,
+> `relative_zero`), [`test_bloc_linguistique.py`](../tools/tests/linguistique/test_bloc_linguistique.py)
+> (test unitaire), [`autotest.py`](../tools/pensee/autotest.py) (183 portes, valeurs recalées) ;
+> JSON [`pensee-r035.json`](pensee-r035.json).
+
+## 1. Le cas, reproduit
+
+Gold de `r035` (`tools/tests/linguistique/gold_reel.json`) :
+
+| segment | span | texte | cible |
+|---|---|---|---|
+| GN | [0:8] | « The film » | — |
+| **REL** | **[9:24]** | **« she talks about »** | **`film`** 
+… [202 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -5 work/chantier/journal.log; git log --oneline -2 | cut -c1-95; ls reports/ | grep -E \"convention-gv\"", "description": "Attendre J1.2", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4786]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4786", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+sam 07 nov 2026 13:03:05 EST
+2026-11-07 10:47:58 · ▶ J0 — Le contrôle du superviseur (timeout 300 s)
+2026-11-07 10:48:02 · ✔ J0 en 3.5 s (code 0) — ✅ python3 -c "print('LIAISON-OK')"
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+pensee-convention-gv.json
+rapport-convention-gv.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-95", "description": "Attendre la fin de J1.2", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4787]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4787", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 13:13:14 EST
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4787 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-95) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[d]sh --profile headless\"; head -14 reports/rapport-convention-gv.md | cut -c1-150; git status --porcelain | grep -vE \"journal/\" | head -5; date", "description": "Voir l'état de J1.2"}`
+
+  ```
+1
+# B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J1.2 · **Date** : 2026-11-07 ·
+> **Verdict** : ✅
+> Les **322 FP / 180 FN** du plan sont les erreurs **de GV** du gold d'avant `r035` (F1 0,7533) ;
+> après `r035` (J1.1), la base courante est **320 FP / 179 FN** (F1 0,7549). Le classement ne
+> change pas : **144 FP de sujet (45 %)** dominent, puis 73 d'objet, 39 de troncature. Deux règles
+> candidates sont mesurées : **le sujet hors du GV** (F1 **+0,0332**, 0 perte d'attachement) et
+> **l'arrêt à l'adverbe final de temps** (F1 **+0,0026**). Les deux sont **gardées** et combinées :
+> **F1 0,7549 → 0,7902** (dev **0,7875**, test **0,7962**), **POS 0,8625 inchangée**, **attachement
+> 237/238 inchangé** (0 cible perdue), **183/183 portes**. S/D/N2 intouchés.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_sujet_hors_gv`,
+> `ADVERBES_TEMPS`, la condition d'adverbe du GV), [`autotest.py`](../tools/pensee/autotest.py)
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M docs/pilotage/semaine-autonome.md
+ M reports/INDEX.md
+ M reports/README.md
+sam 07 nov 2026 13:1
+… [8 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-100", "description": "Attendre la fin de J1.2", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4789]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4789", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 13:23:40 EST
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4789 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-100) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep \"[d]sh --profile headless\" | awk '{print $2, $10, $11, $12, $13}' | head -2; git status --porcelain | grep -vE \"journal/\" | wc -l; git log --oneline -2 | cut -c1-90; date", "description": "Voir si l'agent avance"}`
+
+  ```
+228591 1:23 node26 /home/stephane/.local/share/../bin/dsh --profile
+21
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+sam 07 nov 2026 13:23:56 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 work/chantier/journal.log; git log --oneline -1 | cut -c1-100; ps aux | grep -c \"[d]sh --profile headless\"", "description": "Attendre le verdict J1.2", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4791]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4791", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 13:39:04 EST
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-100; ps aux | grep -c \"[d]sh --profile headless\"", "description": "Attendre le timeout ou le verdict", "timeoutMs": 1300000}`

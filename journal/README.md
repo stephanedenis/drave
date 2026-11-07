@@ -209,7 +209,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 162.6 h | 192 | 3163 | 25 | 434 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 165.0 h | 193 | 3179 | 25 | 434 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -230,5 +230,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-6af74924-89c1-4b96-aa02-b70bd77ab178/rapport.md) |
 | `session-` | Réponds exactement le mot OK, | 2026-11-07 10:45 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-78f03aed-fb9d-4009-8625-e1186078059c/rapport.md) |
+| `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
+| `session-` | Rapport convention GV et règles candidates | 2026-11-07 12:41 | 1.1 h | 1 | 237 | 9 | 1 | [rapport](sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md) |
 | `session-` | Test de liaison du superviseur | 2026-11-07 10:48 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-f30f0289-2506-4596-be01-4e10f2a2073c/rapport.md) |

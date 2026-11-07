@@ -54,6 +54,46 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertFalse([s for s in syntagmes("Le film elle parle est sorti.", "fr")
                           if s[0] == "REL"])
 
+    def test_sujet_hors_du_gv(self):
+        """La convention du gold : le sujet est un GN, le GV commence au prédicat.
+
+        Le générateur S inclut le sujet ; on le déplace, sans le modifier. Les formes
+        inversées (`Peux-tu`) et les clitiques (`s'ouvre`) sont couverts.
+        """
+        h = bl.Heuristique()
+
+        def syntagmes(txt, lg="fr"):
+            a = h.analyser(txt, lg)
+            return [(e.type, txt[e.debut:e.fin]) for e in a.etiquettes
+                    if e.niveau == "syntagme"]
+
+        for phrase, gn, gv in (
+                ("Il a couru.", "Il", "a couru"),
+                ("Il ne dort pas.", "Il", "ne dort pas"),
+                ("Marie lit un livre.", "Marie", "lit"),
+                ("Elle s'ouvre.", "Elle", "s'ouvre")):
+            seg = syntagmes(phrase)
+            self.assertIn(("GN", gn), seg, phrase)
+            self.assertIn(("GV", gv), seg, phrase)
+            self.assertNotIn(("GV", gn + " " + gv), seg, phrase)
+        # l'inversion n'est pas un sujet : le GV du S reste entier
+        self.assertIn(("GV", "Peux-tu venir"), syntagmes("Peux-tu venir ?"))
+
+    def test_adverbe_final_hors_du_gv(self):
+        """Un circonstant de temps final hors du GV ; la négation et l'adverbe non final restent."""
+        h = bl.Heuristique(segmenter_s=False)
+
+        def syntagmes(txt, lg="fr"):
+            a = h.analyser(txt, lg)
+            return [(e.type, txt[e.debut:e.fin]) for e in a.etiquettes
+                    if e.niveau == "syntagme"]
+
+        self.assertIn(("GV", "viens"), syntagmes("Tu viens demain ?"))
+        self.assertNotIn(("GV", "viens demain"), syntagmes("Tu viens demain ?"))
+        self.assertIn(("GV", "ne dort pas"), syntagmes("Il ne dort pas."))
+        # « demain matin » : l'adverbe n'est pas final, le GV n'est pas coupé
+        self.assertIn(("GV", "viens demain matin"), syntagmes("Tu viens demain matin."))
+
     def test_langue_et_script(self):
         for texte, langue in (("Le chat dort dans la maison.", "fr"),
                               ("The cat sleeps in the house.", "en"),

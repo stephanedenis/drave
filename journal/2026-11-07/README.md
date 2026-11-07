@@ -5,16 +5,16 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**23 commits** · **5 session(s)** · **6 thème(s)**
+**25 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 10 | [docs.md](docs.md) |
+| docs | 11 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 4 | [mesures.md](mesures.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -26,7 +26,7 @@
 | `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 02:09 | 0.1 h | [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md) |
 | `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.3 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
 | `bdefb627-485e-44d1-b11c-d15dd2e6b640` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 1.2 h | [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 162.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 165.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -55,6 +55,8 @@
 | 10:58 | `f93ddc60` | DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU |
 | 11:09 | `fffbbe5d` | PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEURS CONTRÔLES NÉGATIFS |
 | 11:12 | `34fdd4ef` | DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES) |
+| 11:16 | `d7469b5c` | INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ |
+| 12:40 | `25a6c0ff` | B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
