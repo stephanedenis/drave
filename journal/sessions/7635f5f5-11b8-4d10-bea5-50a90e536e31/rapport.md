@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 98 |
-| Appels d'outils | 149 |
+| Messages | 100 |
+| Appels d'outils | 151 |
 | Fichiers touchés | 2 |
-| Commandes | 114 |
+| Commandes | 116 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*149 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 114 autres
+- … et 116 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 74 autres
+- … et 76 autres
 
 ## 4. Mesures et résultats marquants
 

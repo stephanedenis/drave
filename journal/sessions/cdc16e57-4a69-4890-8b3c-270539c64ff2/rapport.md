@@ -9,7 +9,7 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 65 |
+| Messages | 66 |
 | Appels d'outils | 111 |
 | Fichiers touchés | 2 |
 | Commandes | 97 |
@@ -45,7 +45,29 @@
 
 **Synthèse produite :**
 
-⏵ Validation finale et envoi du résumé au parent
+Les deux livrables sont écrits :
+
+- `reports/rapport-etat-s.md` (502 lignes)
+- `reports/pensee-etat-s.json` (JSON valide, 24 clés)
+
+Aucun commit de ma part ; le commit concurrent `0a9381f0` a pris la version initiale, mes corrections de chronologie sont dans le working tree, non committées. Aucun existant modifié.
+
+\## Les 71 langues
+
+Ce sont les **libellés B7** de `tools/jeux/lexique_multilingue.json` : **71 langues**, **35 concepts**, **1 433 couples** (1 429 canoniques + 4 variantes). Mesure rejouée : **71/71** ont ≥ 1 label, **66/71** un item du corpus, **62/71** un item fort, **32/71** sont « fortes » ; **5** n'ont aucun item (`mt`, `ky`, `lo`, `si`, `yo`). Corpus **449/449**, invariance **11/11**, notation **5 112/5 112**, détection des jeux **315/315**, permutation **12/275** items forts.
+
+**Ce ne sont pas « les 71 langues de l'UDHR »** : l'UDHR a **456 langues**, 13 996 articles, et aucun sous-ensemble à 71 n'existe dans le dépôt. Surtout, le lexique B7 ne contient **aucune phrase ni anaphore** : il ne peut pas tester les référents. **S ne l'a pas testé : 0/71.**
+
+\## La rétro-traduction
+
+**Elle n'existe pas** : 0 script, 0 JSONL, 0 mesure, **0/9 paragraphe**, 0 appel. Cinq fiches la mentionnent « quand la clé sera là ». Les briques existent (`deepseek.py`, `enseignant.py`, `mesure.py`, prompts UDHR), mais aucune ne fait FR → EN → FR sur les 9 paragraphes d'Alice. `DEEPSEEK_API_KEY` est absente ; la règle 11 interdit un serveur local. Le protocole mesurable (9 prompts, 9 retours, chrF aller-retour, 2 relectures) est dans la fiche, avec les commandes exactes des briques.
+
+\## Les 3 prochaines actions
+
+1. **A1 — Débloquer la banque `/` (P0)** : la page sert encore les **369 candidats stockés le 02/11**, sans `profondeur` ; la v7 donne **359 candidats, 99 à ≥ 3**. Préparer une copie v7 et une migration **par signature** dans `work/banque-v7/` : **0 verdict perdu**, 5 verdicts à risque remappés, 304 identiques / 55 changés / 10 orphelins. Ne pas régénérer par index (`p006-c2`, `c023-c3`, `c056-c2`, `c056-c3`, `c064-c2` seraient perdus).
+2. **A2 — Auditer les 28 référents des 19 verdicts (P1)** : **12/28 mappings faux**, **2 formes manquantes** (`les` → les conseils, `l'` → la boîte) ; le « 14/14 » est côté traduction, pas humain. Produire `work/referents/verdicts-corriges.jsonl` : **14/14** occurrences, 0 faux, 0 manquant.
+3. **A3 — Rétro-traduction (P2, conditionnelle)** : 9 paragraphes, 18 appels, chrF aller-retour, 2 relectures. Bloquée par l'absence d
+… [872 caractères tronqués]
 
 ## 3. Travail accompli
 

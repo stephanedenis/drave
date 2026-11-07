@@ -2618,3 +2618,72 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json has been updated successfully.
   ```
 
+### 🤖 Assistant
+
+⏵ Validation finale et envoi du résumé au parent
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-s.json > /dev/null && echo \"JSON valide\"; echo \"---\"; git diff --stat -- reports/rapport-etat-s.md reports/pensee-etat-s.json; echo \"---\"; git status --porcelain -- reports/rapport-etat-s.md reports/pensee-etat-s.json; echo \"---\"; sed -n  … [94 caractères tronqués]`
+
+  ```
+JSON valide
+---
+ reports/pensee-etat-s.json |  8 +++++---
+ reports/rapport-etat-s.md  | 15 ++++++++++-----
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+---
+ M reports/pensee-etat-s.json
+ M reports/rapport-etat-s.md
+---
+# S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-06 · **Verdict** : le chantier S a deux couches
+> désormais séparées. La passe de validation des candidats sur **`/paragraphes`** est **finie** :
+> 9 paragraphes, 19 candidats,
+> **19 verdicts**, **0 restant**, **11 acceptés** (10 `resolu` + 1 `compatible`) et **8 exclus**.
+> La **banque de phrases** (`/`) ne l'est pas : **150 verdicts** sur **74 des 207 phrases**
+> (35,7 %), **84 lectures acceptées**, mais la page sert les **369 candidats stockés le 02/11**,
+> **sans `profondeur`** ; la mesure v7, elle, donne **359 candidats** et **99 à profondeur ≥ 3**.
+> Les référents des 19 verdicts **ne sont pas un gold** : **12 des 28 mappings contredisent la
+> source anglaise**, **2 formes manquent** ; le « 14/14 » de la fiche de traduction est un
+> résultat **côté traduction**, pas 
+… [394 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Les deux fichiers sont écrits : reports/rapport-etat-s.md et reports/pensee-etat-s.json (JSON valide, 24 clés). Ton commit 0a9381f0 a déjà pris la version initiale ; mes corrections de chronologie (36 s, pas 3 min) sont dans le working … [1009 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+Les deux livrables sont écrits :
+
+- `reports/rapport-etat-s.md` (502 lignes)
+- `reports/pensee-etat-s.json` (JSON valide, 24 clés)
+
+Aucun commit de ma part ; le commit concurrent `0a9381f0` a pris la version initiale, mes corrections de chronologie sont dans le working tree, non committées. Aucun existant modifié.
+
+## Les 71 langues
+
+Ce sont les **libellés B7** de `tools/jeux/lexique_multilingue.json` : **71 langues**, **35 concepts**, **1 433 couples** (1 429 canoniques + 4 variantes). Mesure rejouée : **71/71** ont ≥ 1 label, **66/71** un item du corpus, **62/71** un item fort, **32/71** sont « fortes » ; **5** n'ont aucun item (`mt`, `ky`, `lo`, `si`, `yo`). Corpus **449/449**, invariance **11/11**, notation **5 112/5 112**, détection des jeux **315/315**, permutation **12/275** items forts.
+
+**Ce ne sont pas « les 71 langues de l'UDHR »** : l'UDHR a **456 langues**, 13 996 articles, et aucun sous-ensemble à 71 n'existe dans le dépôt. Surtout, le lexique B7 ne contient **aucune phrase ni anaphore** : il ne peut pas tester les référents. **S ne l'a pas testé : 0/71.**
+
+## La rétro-traduction
+
+**Elle n'existe pas** : 0 script, 0 JSONL, 0 mesure, **0/9 paragraphe**, 0 appel. Cinq fiches la mentionnent « quand la clé sera là ». Les briques existent (`deepseek.py`, `enseignant.py`, `mesure.py`, prompts UDHR), mais aucune ne fait FR → EN → FR sur les 9 paragraphes d'Alice. `DEEPSEEK_API_KEY` est absente ; la règle 11 interdit un serveur local. Le protocole mesurable (9 prompts, 9 retours, chrF aller-retour, 2 relectures) est dans la fiche, avec les commandes exactes des briques.
+
+## Les 3 prochaines actions
+
+1. **A1 — Débloquer la banque `/` (P0)** : la page sert encore les **369 candidats stockés le 02/11**, sans `profondeur` ; la v7 donne **359 candidats, 99 à ≥ 3**. Préparer une copie v7 et une migration **par signature** dans `work/banque-v7/` : **0 verdict perdu**, 5 verdicts à risque remappés, 304 identiques / 55 changés / 10 orphelins. Ne pas régénérer par index (`p006-c2`, `c023-c3`, `c056-c2`, `c056-c3`, `c064-c2` seraient perdus).
+2. **A2 — Auditer les 28 référents des 19 verdicts (P1)** : **12/28 mappings faux**, **2 formes manquantes** (`les` → les conseils, `l'` → la boîte) ; le « 14/14 » est côté traduction, pas humain. Produire `work/referents/verdicts-corriges.jsonl` : **14/14** occurrences, 0 faux, 0 manquant.
+3. **A3 — Rétro-traduction (P2, conditionnelle)** : 9 paragraphes, 18 appels, chrF aller-retour, 2 relectures. Bloquée par l'absence de clé et de harnais ; à écrire dans `work/retro-traduction/`.
+
+## Les points durs
+
+- **`/paragraphes` est fini** : 9/9 paragraphes, **19/19 candidats**, 0 restant ; 10 `resolu`, 8 `exclu`, 1 `compatible`. Mais **8 verdicts sont committés, 11 non** : un clone à `523d8c1` n'en voit que 8.
+- **Le « 8 restants » est faux** : 9 paragraphes, pas 17 ; après a001–a003 il restait 6 paragraphes. Le 8 est le nombre de **verdicts** committés sur a001–a003.
+- **La banque** : 150 verdicts, **147 paires**, **74/207 phrases** (35,7 %), **84 acceptées / 63 exclues** ; export **84/67** (SHA `3ca1ac20…`) alors que la fiche dit encore 81/65 (SHA `2d27b712…`).
+- **Le vrai blocage** n'est pas le nombre de verdicts : c'est que la page `/` affiche l'ancien arbre plat, alors que la mesure v7 (et `/paragraphes`) montre l'arbre profond. Le motif d'arrêt humain reste donc valide sur `/`.
+

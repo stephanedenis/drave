@@ -12,7 +12,7 @@
 > résultat **côté traduction**, pas une validation humaine. La **rétro-traduction n'existe pas** :
 > 0 script, 0 mesure, 0/9 paragraphe, et `DEEPSEEK_API_KEY` est absente. Enfin, les **71 langues**
 > sont le **lexique B7** (35 concepts, 1 433 couples), **pas l'UDHR** (456 langues) et **pas un
-> corpus de référents** : **0/71** n'est testée par S.
+> corpus de référents** : **0/71** testée par S.
 
 ## Ce que dit l'état, en un tableau
 
@@ -28,7 +28,9 @@
 | rétro-traduction | **0/9**, 0 script, 0 mesure, clé absente | `grep`, environnement |
 | analyseur | **61/61** types, **144/144** rôles, **50/50** compléments, **56 tests** | `mesure-analyseur.json`, tests |
 
-Le dépôt est sur **`s/v7`**, HEAD **`de7c9113`** (2026-11-06) ; le sous-module `tools/structures`
+Le dépôt est sur **`s/v7`**, HEAD **`de7c9113`** au moment de l'audit ; un commit concurrent
+**`0a9381f0`** a depuis pris la version initiale de ce rapport — mes corrections de chronologie
+sont dans le working tree, non committées. Le sous-module `tools/structures`
 est sur **`master`**, HEAD **`523d8c1`** (2026-11-04), avec **un fichier modifié** :
 `donnees/paragraphes-validations.jsonl` (+11 lignes).
 
@@ -199,7 +201,8 @@ jugées ; les 200 phrases de littérature sont **67/200** (33,5 %).
 | notes | **1/150** (0,7 %) |
 
 **Les révisions.** Deux paires ont été revues : `p002-c2` (`double_sens` → `compatible`, 31 s
-plus tard) et `p003-c2` (`exclu` → `resolu` → `exclu`, 3 min plus tard). Cinq lignes pour deux
+plus tard) et `p003-c2` (`exclu` → `resolu` → `exclu`, les deux derniers à 36 s d'intervalle ; la première
+exclusion était à 10 h 32). Cinq lignes pour deux
 paires, **3 lignes supersédées** (2 % des lignes). Le seul `double_sens` n'a pas survécu : la
 banque finale n'en porte **aucun**. La note unique est `p002-c2` : « il est préférable de dire
 l'homme au téléscope » — une préférence sémantique, pas une erreur.
@@ -317,7 +320,7 @@ formes, dont 9 justes. **Le « 14/14 » est un résultat de traduction, pas de v
 journée (2026-11-03) pour les 150 verdicts, deux journées (03–04/11) pour les 19 paragraphes ;
 **1 note** sur 169 verdicts (150 + 19), **0 note** sur les paragraphes. Il n'y a **aucun
 double-codage**, aucune mesure d'accord inter-annotateurs, aucun test-retest — seulement deux
-paires révisées, dont un flip-flop `exclu → resolu → exclu` en 3 minutes. La stabilité des
+paires révisées, dont un flip-flop `exclu → resolu → exclu` en 36 s. La stabilité des
 statuts n'est donc pas mesurée.
 
 **Le contexte est un décor.** 141/147 verdicts finaux au niveau 0, 6 avec contexte (4,1 %). Le
@@ -498,4 +501,6 @@ traductions. Ne pas appeler un serveur local (règle 11).
 - Commandes rejouées : `python3 -m unittest discover -s tests` (56 OK, 4,3 s) ;
   `python3 -m tools.jeux.mesure_langues --complet` (3,5 s) ;
   `python3 -c 'import mesure_arbre; …'` (359 candidats, 99 à ≥ 3, 294/371).
-- **Aucun existant modifié ; aucun commit ; seuls les deux fichiers de ce rapport sont neufs.**
+- **Aucun existant modifié ; aucun commit de ma part ; seuls les deux fichiers de ce rapport sont
+  neufs.** Un commit concurrent `0a9381f0` a pris la version initiale ; les corrections de
+  chronologie (36 s) sont dans le working tree, non committées.

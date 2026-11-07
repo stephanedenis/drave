@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**77 commits** · **16 session(s)** · **8 thème(s)**
+**78 commits** · **16 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 23 | [distribue.md](distribue.md) |
 | docs | 17 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 17 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -122,6 +122,7 @@
 | 22:25 | `89f5b728` | ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ |
 | 22:32 | `550d6d07` | PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES |
 | 22:35 | `0a9381f0` | S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE |
+| 22:39 | `027abba4` | PRODUIT — --contexte DANS LA CLI (MÉMOIRE DE DISCOURS PORTÉE DANS LE JSON), 11 TESTS |
 
 ## Le récit de la journée (écrit à la main)
 

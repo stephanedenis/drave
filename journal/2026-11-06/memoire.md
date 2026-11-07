@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 20:52 | `4e6de0ee` | P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET | `en-cours.md`, `README.md`, `mesures.md` (+9) |
+| 22:39 | `027abba4` | PRODUIT — --contexte DANS LA CLI (MÉMOIRE DE DISCOURS PORTÉE DANS LE JSON), 11 TESTS | `README.md`, `README.md`, `distribue.md` (+17) |
 
 ## Sessions actives ce jour
 

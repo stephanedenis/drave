@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 150.0 h |
 | Tours | 184 |
-| Messages | 3355 |
-| Appels d'outils | 2977 |
+| Messages | 3357 |
+| Appels d'outils | 2978 |
 | Fichiers touchés | 25 |
-| Commandes | 2472 |
+| Commandes | 2473 |
 | Sous-agents | 38 |
-| Commits | 393 |
+| Commits | 394 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*223 appels d'outils.* Actions notables :
+*224 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 208 autres
+- … et 209 autres
 
 **Synthèse produite :**
 
-⏵ Dernière brique produit : exposer le contexte dans la CLI (`--contexte`)
+⏵ Je commite les corrections de l'état S (chronologie)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2432 autres
+- … et 2433 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10597,4 +10597,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES" -- tools/tests/test_produit_libre.py tools/port
 - S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE" -- reports/rapport-etat-s.
 - PRODUIT — --contexte DANS LA CLI (MÉMOIRE DE DISCOURS PORTÉE DANS LE JSON), 11 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produit/README.md 2>&1 
+- S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS)" -- reports/rapport-etat-s.md reports/pensee-etat-s.j
 

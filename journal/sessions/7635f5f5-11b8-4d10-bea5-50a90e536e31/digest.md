@@ -2999,3 +2999,25 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.
 … [7718 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-etat-r.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"\"\"- **Mesure** : POS exact sur 612, ventilé **432 réel / 160 synthétique / 20 hand** ; écart contre\n  ** … [962 caractères tronqués]`
+
+  ```
+ok
+346:  **0,8500** ; contrôles **majoritaire** et **permutation** recalculés sur le 612 (référence 180 :
+396:| 2 | `roadmap.md` R0.7 | tagger **0,9440** dans la même ligne que le gold **360 / 0,765** | 0,9440 est sur **180** (heuristique **0,7749** aujourd'hui) ; sur 432, **0,9389** contre **0,8754** ; sur 612, non mesuré |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-etat-r.json'\nd=json.load(open(p))\na=d['prochaines_actions'][0]\na['mesure']=\"POS exact sur 612, ventile 432 reel / 160 synthetique / 20 hand ; ecart contre 0,8500 ; controles majori … [307 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-etat-r.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et quatre bancs** :\",\"Le tagger n … [230 caractères tronqués]`
+
+  ```
+ok
+238:Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et trois bancs** :
+  ```
+
