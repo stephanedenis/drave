@@ -60122,3 +60122,47 @@ sam 07 nov 2026 11:12:21 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\n# raccourcir la ligne 15 (la plus longue)\nfor i,l in enumerate(lignes):\n    if l.startswith(\"| **savoir où l'o … [1354 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 7 files changed, 42 insertions(+), 14 deletions(-)
+COMMIT OK 1
+34fdd4ef DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES)
+   fffbbe5d..34fdd4ef  s/v7 -> s/v7
+   fffbbe5d..34fdd4ef  master -> master
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+sam 07 nov 2026 11:15:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [314 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 11:15:20 EST
+HEAD 34fdd4ef
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=1
+python3 tools/chantier/superviseur.py etat EXIT=0
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py; python3 tools/index_reports.py --verifier; echo \"index EXIT=$?\"\nfor i in 1 2 3; do\n  git add reports/INDEX.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"INDEX — RÉGÉNÉRÉ A … [411 caractères tronqués]`
+
+  ```
+702 fiches → reports/INDEX.md
+index EXIT=0
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+34fdd4ef DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES)
+Everything up-to-date
+Everything up-to-date
+sam 07 nov 2026 11:16:07 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-07, 11 h 20 HNE\", t)\np.write_text( … [705 caractères tronqués]`

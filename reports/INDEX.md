@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **701 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **702 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -192,6 +192,7 @@
 | [rapport-hybride.md](rapport-hybride.md) | Rapport — hybride codec + mémoire, et le contexte |
 | [rapport-ie-sous-familles.md](rapport-ie-sous-familles.md) | C3.2d — l'indo-européen à 14,7 % est un effet de composition |
 | [rapport-inference.md](rapport-inference.md) | Inférence complète en Rust — Qwen2.5-0.5B sans GPU, sans BLAS, sans dépendance |
+| [rapport-inventaire-panini.md](rapport-inventaire-panini.md) | Inventaire Panini — état daté du 7 novembre 2026 |
 | [rapport-jeux-symboliques.md](rapport-jeux-symboliques.md) | B5/B6 — les jeux symboliques : 112 surfaces, 100 % au niveau 4, 33/33 paires invariantes |
 | [rapport-kv-attention.md](rapport-kv-attention.md) | A7.11 — le KV int8 change 2,3 % des argmax d'attention |
 | [rapport-kv-cache-fenetre.md](rapport-kv-cache-fenetre.md) | A7.22 — fenêtre f32 glissante : pire que le cache mixte |
