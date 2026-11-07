@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**70 commits** · **16 session(s)** · **7 thème(s)**
+**71 commits** · **16 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 21 | [distribue.md](distribue.md) |
+| distribue | 22 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 17 | [mesures.md](mesures.md) |
@@ -36,7 +36,7 @@
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
 | `cdc16e57-4a69-4890-8b3c-270539c64ff2` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.9 h | [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 149.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 149.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 | `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.3 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
 
@@ -114,6 +114,7 @@
 | 21:54 | `5940ea53` | B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183 |
 | 21:57 | `97256b8f` | PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE) |
 | 22:08 | `3caa8938` | ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS) |
+| 22:11 | `b57940c8` | ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A |
 
 ## Le récit de la journée (écrit à la main)
 

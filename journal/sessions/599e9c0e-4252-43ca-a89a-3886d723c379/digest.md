@@ -2156,3 +2156,16 @@ pt: 123 avec sidecar: 67
 … [164 caractères tronqués]
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "new_string": "seule graine, aucun réentraînement.", "old_string": "seule graine, aucune réentraînement."}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "new_string": "longue** (la note de passage N2 → R1 le demandait déjà) ; ou un **autre corpus de porte** — sur le\ngrand corpus, la fenêtre 1 024 passe **sous 2,5** (2,4759 / 2,4373 à 1 000 / 2 000, run 30 k  … [809 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "PYTHONDONTWRITEBYTECODE=1 ~/gpu-env/bin/python - <<'PY'\nimport torch\na = torch.load('work/n2ac/propre512-8k.pt', map_location='cpu', weights_only=False)['state']\nb = torch.load('work/n2j/base-wiki-45m.pt', map_location='cpu', weights_only=False)['state']\nprint('pos.weight identique  … [303 caractères tronqués]`

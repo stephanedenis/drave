@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 57 |
-| Appels d'outils | 99 |
+| Messages | 60 |
+| Appels d'outils | 103 |
 | Fichiers touchés | 2 |
-| Commandes | 69 |
+| Commandes | 72 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -41,7 +41,7 @@
 - bash — Localiser le registre des portes
 - bash — Chercher les usages de eval_n2_propre et porte-n2
 - bash — Lire le registre des portes le plus récent
-- … et 67 autres
+- … et 70 autres
 
 **Synthèse produite :**
 
@@ -100,7 +100,7 @@ J'ai les mesures et les contrôles ; je rédige les deux livrables.
 - **T1** Tableau des métadonnées des checkpoints
 - **T1** Inventaire des fiches N2 (titre, date, verdict)
 - **T1** Mesurer la porte avec le mauvais mètre (absolu)
-- … et 29 autres
+- … et 32 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -206,4 +206,6 @@ J'ai les mesures et les contrôles ; je rédige les deux livrables.
 - **T1** `2. **À pas constants (20 000), 2 048 gagne** — 328 Mo contre 164 : **−0,083 à 128, −0,094 à 512,`
 - **T1** `**Synthèse de la loi de la fenêtre** (à 33 Mo pour les tailles, à 20,5 Mo pour la loi) : le saut`
 - **T1** `bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE`
+- **T1** `| capacité 34,30 M | `work/n2ac/propre-3430m-512z.pt` | 03/11 14:35 | 130,89 | 34,30 M | 8 k × 512, aléatoire | 3,4682 |`
+- **T1** `| **le plus récent** | **`work/n2ac/rope2048-20k.pt`** | **04/11 21:09** | **130,89** | **34,30 M** | **20 k × 2 048, init 10 k** | **2,4953** |`
 

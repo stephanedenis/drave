@@ -2798,3 +2798,70 @@ json_exit=0
 … [1957 caractères tronqués]
   ```
 
+- **bash** `{"command": "git status --porcelain | grep -E 'etat-a|rapport-etat' ; echo '--- cached ---'; git diff --cached --stat -- reports/rapport-etat-a.md reports/pensee-etat-a.json; echo '--- unstaged ---'; git diff --stat -- reports/rapport-etat-a.md reports/pensee-etat-a.json", "description": "Check stag … [24 caractères tronqués]`
+
+  ```
+--- cached ---
+--- unstaged ---
+ reports/pensee-etat-a.json | 4 ++--
+ reports/rapport-etat-a.md  | 8 +++++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+  ```
+
+- **bash** `{"command": "git ls-files --stage reports/rapport-etat-a.md reports/pensee-etat-a.json; echo '--- log ---'; git log --oneline -3 -- reports/rapport-etat-a.md reports/pensee-etat-a.json; echo '--- status short ---'; git status --short -- reports/rapport-etat-a.md reports/pensee-etat-a.json", "descrip … [58 caractères tronqués]`
+
+  ```
+100644 f222f05a7cd3a5bef33484325868dd1c0efc985b 0	reports/pensee-etat-a.json
+100644 3bfdb02826190afa887a94aaeebfa610a0dc4f11 0	reports/rapport-etat-a.md
+--- log ---
+3caa8938 ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)
+--- status short ---
+ M reports/pensee-etat-a.json
+ M reports/rapport-etat-a.md
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %ci %s'; git status --porcelain | head -3", "description": "Check latest commit and status"}`
+
+  ```
+3caa8938 2026-11-06 22:08:15 -0500 ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+  ```
+
+- **bash** `{"command": "git diff -- reports/rapport-etat-a.md reports/pensee-etat-a.json | head -80", "description": "Review unstaged edits to the two files"}`
+
+  ```
+diff --git a/reports/pensee-etat-a.json b/reports/pensee-etat-a.json
+index f222f05a..65220ccd 100644
+--- a/reports/pensee-etat-a.json
++++ b/reports/pensee-etat-a.json
+@@ -4,7 +4,7 @@
+   "head": "7a876f70",
+   "head_note": "le HEAD a bougé pendant l'audit (d31aa9a2 → 7a876f70) ; les chiffres sont horodatés",
+   "mission": "état du chantier A (le moteur) — lecture seule, aucun code, deux fichiers neufs",
+-  "verdict": "A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (le MoE local existe), A3.4 et A5.4 sont les deux seuls bloqués réels.",
++  "verdict": "A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (aucune ressource ne manque : le MoE local existe), A3.4 et A5.4 sont les deux seuls bloqués réels.",
+   "methode": {
+     "lecture": [
+       "docs/pilotage/roadmap.md",
+@@ -196,7 +196,7 @@
+     },
+     {
+       "id": "A6.2",
+-      "etat": "libre (mal classé bloqué)",
++      "etat": "li
+… [2726 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat au parent et clôture
+Les deux fichiers sont écrits et validés ; je transmets la synthèse au parent.
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "ÉTAT A — terminé. Deux fichiers neufs : `reports/rapport-etat-a.md` (246 l.) et `reports/pensee-etat-a.json` (JSON valide). Ils ont été commités par une autre session dans `3caa8938` avant mes deux dernières nuances (A6.2 « ressource a … [3816 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+

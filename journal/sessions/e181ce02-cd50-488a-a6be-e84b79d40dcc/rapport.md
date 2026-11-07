@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.5 h |
+| Durée | 149.6 h |
 | Tours | 184 |
-| Messages | 3331 |
-| Appels d'outils | 2956 |
+| Messages | 3333 |
+| Appels d'outils | 2958 |
 | Fichiers touchés | 25 |
-| Commandes | 2452 |
+| Commandes | 2454 |
 | Sous-agents | 38 |
-| Commits | 384 |
+| Commits | 385 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*202 appels d'outils.* Actions notables :
+*204 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 188 autres
+- … et 190 autres
 
 **Synthèse produite :**
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2412 autres
+- … et 2414 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10588,4 +10588,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)" -- docs/pilotage/plan-travail.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "LA NUIT DES P0
 - ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)" -- reports/rapport-etat-n2.m
 - ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS LES ÉTATS N2/A"; then 
+- DOCS — LE README DES FICHES DANS LE BUDGET T1" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DANS LE BU
 

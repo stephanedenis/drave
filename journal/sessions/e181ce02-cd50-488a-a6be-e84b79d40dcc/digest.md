@@ -56440,3 +56440,21 @@ ven 06 nov 2026 22:10:32 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0** ; états N2/S/R/A inventoriés.\", \" ; **`drave` v0**.\")\np.write_text(t)\nPY\npython3 tools/taille_docum … [531 caractères tronqués]`
+
+  ```
+· reports/README.md : 2814 mots > budget 2800 (T1)
+ 19 files changed, 280 insertions(+), 54 deletions(-)
+COMMIT OK 1
+b57940c8 ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A
+   3caa8938..b57940c8  s/v7 -> s/v7
+   3caa8938..b57940c8  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 : porte propre 2,97/2,86, proposition `porte-n2.sh` |\",\n    … [761 caractères tronqués]`
+
+  ```
+· reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |\",\n … [1262 caractères tronqués]`

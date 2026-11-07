@@ -15,17 +15,17 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 : porte propre 2,97/2,86, proposition `porte-n2.sh` |
-| [`rapport-etat-a.md`](rapport-etat-a.md) | **B13** — l'état de A : frontière corrigée (A2.6/A6.2 libres) |
-| [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test : 50 textes, `filtrer` = **0** chevauchement |
+| [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 (porte propre, `porte-n2.sh`) |
+| [`rapport-etat-a.md`](rapport-etat-a.md) | **B13** — l'état de A (frontière) |
+| [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test des 50 textes |
 | [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (NUM) |
 | [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
 | [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |
 | [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières : 32/40 → **0/40** |
 | [`rapport-frontieres-phrase.md`](rapport-frontieres-phrase.md) | **B13** — frontières (A28) |
-| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |
+| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr, **84,96 %** |
 | [`rapport-pos-r4.md`](rapport-pos-r4.md) | **B13** — R4 et classes (A27) |
-| [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — la cascade ne perd plus (0,8383, 235/236) |
+| [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — cascade = heuristique |
 | [`rapport-morphologie-verbes.md`](rapport-morphologie-verbes.md) | **B13** — la morphologie du 1er groupe : exact **235/236**, couverture **0,9874**, 3 spans |
 | [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : couverture **0,9456** |
 | [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
