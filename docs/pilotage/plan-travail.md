@@ -437,3 +437,19 @@ dite, pas cachée).
 `tools/structures/` (S), `data/` (D), `tools/entrainer_native.py`/`native_model.py` (N2) ;
 n'écrire **que** les fichiers de sa sortie ; rendre un résumé chiffré et les commandes
 exactes pour reproduire ; si une mesure ne reproduit pas, le dire au lieu de l'arrondir.
+
+## 14. La nuit du 06/11 (18 h 20 → 09 h 00) — les P0 du produit
+
+**L'agent principal tient le dossier** (`en-cours`, `roadmap`, `chantiers`, ce plan, le `journal`) ;
+les sous-agents rendent des **fiches** et des **JSON**, jamais de commit.
+
+| vague | sous-agents | résultat mesuré |
+|---|---|---|
+| 0 (produit) | CLI, doc, audit, file | `drave` v0, porte produit 9 contrôles, 10 tests |
+| 1 (P0) | frontières, partition, POS R4 | 32/40 → 0 frontières fausses ; `meta.alternative` ; **POS 85,00 %** |
+| 2 (états) | N2, S, R, A | inventaires en lecture seule |
+
+**Intégré** : schéma v1 publié (`tools/schemas/`), gold corrigé (4 GP), morphologie du 1er groupe
+(235/236, couverture **0,9874**), compositions sans perte, frontières, partition, NUM.
+
+**Reste** : 3 spans (`r035`, `r264`, `g017`), les inventaires N2/S/R/A, la restitution.

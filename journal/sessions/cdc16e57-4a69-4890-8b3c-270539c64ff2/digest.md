@@ -2129,3 +2129,39 @@ p 14 Counter({'resolu': 7, 'compatible': 4, 'exclu': 3})
 c 133 Counter({'resolu': 66, 'exclu': 60, 'compatible': 7})
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification des noms de fichiers et des compteurs UDHR
+
+- **bash** `{"command": "ls -la reports/rapport-etat-s.md reports/pensee-etat-s.json 2>&1; echo \"---\"; python3 - <<'EOF'\nimport json\nlangs=[json.loads(l) for l in open('data/udhr/langues.jsonl',encoding='utf-8') if l.strip()]\narts=[json.loads(l) for l in open('data/udhr/articles.jsonl',encoding='utf-8') if … [458 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/rapport-etat-s.md': No such file or directory
+ls: cannot access 'reports/pensee-etat-s.json': No such file or directory
+---
+UDHR langues 456 articles 13996 propres 13222
+scripts 42 sens 2
+langues uniques iso3 400 fichiers 456
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nlangs=d['langues']\nnoms={'ar':'arabe','bn':'bengali','ca':'catalan','cs':'tchèque','da':'danois','de':'allemand','el':'grec','en':'anglais','eo':'espéranto','es':'espagnol','et':'esto … [1184 caractères tronqués]`
+
+  ```
+noms 71 langues 71 manquants [] en trop []
+ar arabe | bn bengali | ca catalan | cs tchèque | da danois | de allemand | el grec | en anglais | eo espéranto | es espagnol | et estonien | eu basque | fa persan | fi finnois | fr français | gl galicien | he hébreu | hi hindi | hr croate | hu hongrois | id indonésien | is islandais | it italien | ja japonais | ka géorgien | kk kazakh | ko coréen | lt lituanien | lv letton | mk macédonien | ms malais | mt maltais | nb norvégien (bokmål) | nl néerlandais | nn norvégien (nynorsk) | pl polonais | pt portugais | ro roumain | ru russe | sk slovaque | sl slovène | sq albanais | sr serbe | sv suédois | sw swahili | ta tamoul | th thaï | tr turc | uk ukrainien | ur ourdou | vi vietnamien | zh chinois | af afrikaans | am amharique | az azéri | be biélorusse | bs bosnien | cy gallois | ga irlandais | hy arménien | km khmer | ky kirghize | lo lao | mn mongol | ne népalais | pa pendjabi | si cingalais | so somali | uz ouzbek | yo yoruba | zu zoulou
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nlast={}\nfor r in rows: last[(r['phrase_id'],r['candidat_id'])]=r\nctx=[(k,v) for k,v in last.items() if v.get('contexte')]\nprint('avec contex … [334 caractères tronqués]`
+
+  ```
+avec contexte final 6
+('p001', 'p001-c1') resolu 2 La voisine est partie en vacances. Son chat, lui, est resté 
+('p001', 'p001-c2') exclu 2 La voisine est partie en vacances. Son chat, lui, est resté 
+('p002', 'p002-c1') resolu 2 Le détective surveille la maison d'en face. Il a vu l'homme 
+('p002', 'p002-c2') compatible 2 Le détective surveille la maison d'en face. Il a vu l'homme 
+('p007', 'p007-c1') resolu 3 Dans ce dessin animé, le canard parle et réclame son dîner :
+('p007', 'p007-c2') compatible 3 Dans ce dessin animé, le canard parle et réclame son dîner :
+niveaux final {0: 141, 1: 0, 2: 4, 3: 2, 4: 0}
+contexte non vide lignes 7
+  ```
+

@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 44 |
-| Appels d'outils | 78 |
+| Messages | 46 |
+| Appels d'outils | 81 |
 | Fichiers touchés | 0 |
-| Commandes | 77 |
+| Commandes | 80 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*78 appels d'outils.* Actions notables :
+*81 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 64 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des noms de fichiers et des compteurs UDHR
+⏵ Vérification des commandes de traduction existantes (aller simple)
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 37 autres
+- … et 40 autres
 
 ## 4. Mesures et résultats marquants
 

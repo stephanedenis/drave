@@ -2410,3 +2410,88 @@ phrases 432 tokens 2375 sources {'reel'}
 heur POS 0.8754 ferme 0.9277 ouvert 0.8204 tokens 2375
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/aiguille.py --help 2>&1 | head -30; echo '---'; grep -n 'aiguille\\|4 000\\|4000\\|15/18' reports/rapport-n2-r11.md reports/rapport-n2-fenetre-r1.md | head -20", "description": "Vérifier le banc aiguille R1.1"}`
+
+  ```
+usage: aiguille.py [-h] [--n N] [--threads THREADS] [--lot LOT]
+                   [--timeout TIMEOUT] [--gpu] [--gpu-kv]
+                   [--attn-topk ATTN_TOPK] [--gpu-topk] [--journal JOURNAL]
+                   modele longueurs profondeurs
+
+positional arguments:
+  modele
+  longueurs
+  profondeurs
+
+options:
+  -h, --help            show this help message and exit
+  --n N                 jetons générés (réponse)
+  --threads THREADS
+  --lot LOT             lot de préremplissage
+  --timeout TIMEOUT
+  --gpu                 DRAVE_GPU=1 (déport des projections)
+  --gpu-kv              DRAVE_GPU=1 DRAVE_GPU_KV=1 (KV en VRAM)
+  --attn-topk ATTN_TOPK
+                        --attn-topk N (0 = attention complète)
+  --gpu-topk            DRAVE_GPU=1 DRAVE_GPU_KV=1 DRAVE_GPU_TOPK=1
+  --journal JOURNAL
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' tools/aiguille.py; echo '---'; grep -n 'def main\\|add_argument' tools/aiguille.py | head -20", "description": "Lire le banc aiguille"}`
+
+  ```
+#!/usr/bin/env python3
+"""Aiguille dans la botte de foin — version 2, celle qui mesure vraiment.
+
+La perplexité ne dit pas si un modèle RETROUVE une information. Ce script plante
+un code à une profondeur donnée dans un contexte long, puis le redemande.
+
+Ce qui a changé par rapport à la v1 (mesurée et arrêtée) :
+
+1. **le remplissage est du vrai texte VARIÉ** (`data/wikitext2_test.txt`), et non
+   la même phrase recopiée jusqu'à la longueur voulue. Un remplissage répété ne
+   teste rien : le modèle pouvait répondre en devinant la structure. Chaque sonde
+   prend en plus une FENÊTRE DIFFÉRENTE du corpus, pour que les sondes ne
+   partagent pas leur remplissage ;
+2. **la réponse est longue** (`--n 40` par défaut) : un code peut sortir au
+   deuxième ou troisième jeton, et s'arrêter à 8 jetons faisait échouer des
+   sondes que le modèle savait résoudre ;
+3. **le préremplissage par lots** (`--lot`) rend chaque sonde abordable : le
+   moteur ne l'utilisait que pour la perplexité ;
+   ⚠️ et depuis le sprint 4, le décalage de fenêtre est RÉELLEMENT appliqué (il
+   comparait à une marge de 400 000 caractères pour un corpus qui en fait 353 778,
+   donc il remettait l'offset à zéro à chaque so
+… [2352 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'aiguille' reports/rapport-n2-*.md reports/rapport-r1-*.md | head -20; echo '---'; grep -rn 'aiguille\\|15/18\\|4 000' docs/pilotage/backlog/R11-contexte-hierarchique.md | head -20", "description": "Tracer l'aiguille native" … [1 caractères tronqués]`
+
+  ```
+reports/rapport-n2-r12-2048.md:122:limite dure de R1 — et la raison pour laquelle la porte « aiguille native ≥ 15/18 à 4 000 octets »
+---
+6:> **Glossaire** : [perplexité](../../theorie/glossaire/entrees/perplexite.md) · [test de l'aiguille](../../theorie/glossaire/entrees/test-de-l-aiguille.md) · [graphe de document](../../theorie/glossaire/entrees/graphe-de-document.md).
+12:**Ordre arrêté le 2026-10-29** : c'est **N2** qui porte la hiérarchie (l'état de section, 3 graines) ; R11 mesure la fenêtre qui en résulte et n'ouvre donc qu'après N2. La mesure reste ici : PPL à 1 000 octets, aiguille native, stabilité.
+26:- aiguille native à 4 000 octets
+32:2. aiguille native ≥ 15/18 à 4 000 octets
+50:3. mesurer PPL, aiguille, stabilité ; écrire la fiche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'copie\\|miroir\\|0,0078\\|0.0078' reports/rapport-n2-r12-2048.md reports/rapport-n2-r11.md | head -20", "description": "Tracer le miroir de copie"}`
+
+  ```
+reports/rapport-n2-r12-2048.md:35:4 000 octets. Contrôles : même texte (contexte 256 → 2 000), permutation, miroir de copie.
+reports/rapport-n2-r12-2048.md:117:## 4. Le miroir de copie reste muet
+reports/rapport-n2-r12-2048.md:119:Sur tous les modèles de la nuit, la justesse de copie à distance est **0,0078** au mieux (le
+reports/rapport-n2-r12-2048.md:121:ne crée pas de circuit de copie** : la PPL baisse, la restitution ne vient pas avec. C'est la
+reports/rapport-n2-r11.md:41:  (`eval_fenetre.py`), et le **miroir de copie** à distance (`miroir_copie.py`).
+reports/rapport-n2-r11.md:165:## 6. Le miroir de sortie est muet — et c'est un résultat
+reports/rapport-n2-r11.md:167:`miroir_copie.py` plante un code de 16 octets deux fois dans du texte réel (8 sondes, remplissages
+reports/rapport-n2-r11.md:168:différents) et demande au modèle de **prédire** la seconde occurrence : justesse top-1 **0,0078**
+reports/rapport-n2-r11.md:171:copie** à 34,3 M / 20 000 pas. Conséquence à ne pas dépasser : **la PPL n'est pas la lecture** ;
+reports/rapport-n2-r11.md:173:ne crée pas la copie.
+reports/rapport-n2-r11.md:212:  `work/n2ac/miroir_copie.py`, `work/n2ac/agrege_r11.py`.
+reports/rapport-n2-r11.md
+… [23 caractères tronqués]
+  ```
+

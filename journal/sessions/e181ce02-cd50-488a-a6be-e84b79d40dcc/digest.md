@@ -56341,3 +56341,19 @@ POS 0.85 | F1 0.6482 | exact 235 / 236 | cov 0.9874
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183\" -- tools/bloc_linguistique.p … [422 caractères tronqués]`
+
+  ```
+21 files changed, 577 insertions(+), 85 deletions(-)
+COMMIT OK 1
+5940ea53 B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183
+   7a876f70..5940ea53  s/v7 -> s/v7
+   7a876f70..5940ea53  master -> master
+ven 06 nov 2026 21:56:27 EST
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'inscris la nuit au plan de travail et j'attends la vague
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nbloc = \"\"\"\n## 14. La nuit du 06/11 (18 h 20 → 09 h 00) — les P0 du produit\n\n**L'agent principal tient le dossier** (`en-cours`, … [1631 caractères tronqués]`
