@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 152.7 h |
-| Tours | 189 |
-| Messages | 3487 |
-| Appels d'outils | 3096 |
+| Durée | 161.3 h |
+| Tours | 191 |
+| Messages | 3516 |
+| Appels d'outils | 3123 |
 | Fichiers touchés | 25 |
-| Commandes | 2588 |
-| Sous-agents | 40 |
-| Commits | 421 |
+| Commandes | 2609 |
+| Sous-agents | 42 |
+| Commits | 422 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -437,6 +437,10 @@
 **Tour 188** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 **Tour 189** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 190** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 191** — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
 ## 2. Déroulé, étape par étape
 
@@ -10188,7 +10192,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 
 ### Tour 189 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - sous-agent — Spans restants et convention GV
 - sous-agent — Re-audit produit du code de la nuit
@@ -10204,11 +10208,73 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - bash — Attendre la vague
 - job_output
 - bash — Voir l'état des autres sessions
-- … et 2 autres
+- … et 3 autres
 
 **Synthèse produite :**
 
-⏵ Pendant la vague : remise à jour des chantiers (B13) et du plan de travail
+⏵ Round 5 (07/11 01 h 30) : pilotage et mandat à jour, deux sous-agents en vol
+
+\## Ce que ce round a fait
+
+- **`chantiers.md`** : B13 passe aux chiffres de la nuit (POS 86,25 %, F1 0,7535, 236/237, 2 spans), la ligne « prochaine action » nomme le reste (2 spans, convention des GV, coordination).
+- **`plan-travail.md` § 14** : la vague de segmentation est consignée.
+- **`en-cours`** : le bloc B13 et l'horodatage sont à jour.
+- **mon mandat de session** (`e181ce02`) rafraîchi : heartbeat 01 h 25, prochaine action = `r035`/`g017` et la convention des GV (le hub `1e7ef596` reste périmé — pas mon mandat).
+- **journal du 07/11** : la note de la nuit (la convention du sujet, `r264`, `--fichier`/`--jsonl`, les trois règles rejetées).
+
+\## En vol
+
+Deux sous-agents travaillent :
+1. **segmentation restante** — `r035` (relative zéro), `g017` (arbitrage d'adverbe), la convention des GV (322 FP / 180 FN), avec règles candidates mesurées sur dev/test ;
+2. **re-audit produit** — les 50 textes libres et les 40 textes de frontières rejoués avec le code de la nuit, plus 20 nouveaux cas limites.
+
+Leurs livrables (fiches + JSON) seront intégrés au prochain round.
+
+\## L'état
+
+`HEAD caeb730c`, `master` = `s/v7` **poussés**, 0 divergence ; **toutes les portes légères vertes**, **183/183** d'autotest, porte produit verte (10 contrôles, 16 tests). Le goal reste actif jusqu'à 9 h.
+
+### Tour 190 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Vérifier les livrables des sous-agents
+- bash — Attendre les sous-agents
+- job_output
+- bash — Passe complète des portes
+- bash — Lire le log de la passe
+- sous-agent — Spans r035 g017 diagnostic
+- bash — Relancer la passe complète en fond
+- send_message
+- bash — Suivre la passe et les agents
+
+**Synthèse produite :**
+
+⏵ Je lance la passe complète des portes (84) pendant que la vague travaille
+
+### Tour 191 — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
+
+*15 appels d'outils.* Actions notables :
+
+- bash — Lire la méthode Panini et localiser le projet
+- bash — Explorer Panini
+- bash — Trouver les dépôts Panini
+- bash — Explorer le dépôt Panini principal
+- bash — Explorer Panini (sans pkill)
+- bash — Voir le lien Drave dans Panini
+- bash — Lire la section Drave de Panini
+- sous-agent — Inventaire écosystème Panini
+- bash — Lire la théorie généalogie de Drave
+- bash — Trouver les mesures de généalogie/retrieval
+- bash — Lire les mesures de la couche commune
+- bash — Explorer Panini-Research
+- bash — Écrire le plan de la semaine
+- bash — Corriger le lien et l'index
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Je rédige le chantier d'une semaine (structure, vagues, règles, intégration Panini)
 
 ## 3. Travail accompli
 
@@ -10284,6 +10350,8 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - tour 184 — État A et frontière
 - tour 189 — Spans restants et convention GV
 - tour 189 — Re-audit produit du code de la nuit
+- tour 190 — Spans r035 g017 diagnostic
+- tour 191 — Inventaire écosystème Panini
 
 ### Commandes exécutées (échantillon)
 
@@ -10327,7 +10395,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2548 autres
+- … et 2569 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10455,7 +10523,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 
 ## 5. Erreurs rencontrées
 
-76 sorties en erreur ou divergentes. Les premières :
+80 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10896,4 +10964,5 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
 - JOURNAL — LA NUIT DU 07/11 : LA CONVENTION DU SUJET (+10,2 DE F1), r264, --fichier/--jsonl, TROIS RÈGLES REJETÉES" -- journal/2026-11-07/README.md docs/pilotage
 - SESSION — MANDAT E181CE02 RAFRAÎCHI (236/237, 0,9916, 86,25, 0,7535 ; PROCHAINE ACTION : r035/g017 ET LA CONVENTION DES GV)" -- journal/sessions/e181ce02-cd50-4
+- PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLE
 

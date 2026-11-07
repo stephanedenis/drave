@@ -58929,3 +58929,494 @@ session.v4.jsonl.zstd
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\\n\", \"- **Heartbeat** : 2026-11-07 01:25 EST\\n\", t,  … [1678 caractères tronqués]`
+
+  ```
+mandat rafraîchi
+  ⚠ mandat périmé (2850 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 15 files changed, 386 insertions(+), 54 deletions(-)
+COMMIT OK 1
+caeb730c SESSION — MANDAT E181CE02 RAFRAÎCHI (236/237, 0,9916, 86,25, 0,7535 ; PROCHAINE ACTION : r035/g017 ET LA CONVENTION DES GV)
+   76d12a74..caeb730c  s/v7 -> s/v7
+   76d12a74..caeb730c  master -> master
+sam 07 nov 2026 01:27:11 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [269 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 01:27:24 EST
+HEAD caeb730c
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Round 5 (07/11 01 h 30) : pilotage et mandat à jour, deux sous-agents en vol
+
+## Ce que ce round a fait
+
+- **`chantiers.md`** : B13 passe aux chiffres de la nuit (POS 86,25 %, F1 0,7535, 236/237, 2 spans), la ligne « prochaine action » nomme le reste (2 spans, convention des GV, coordination).
+- **`plan-travail.md` § 14** : la vague de segmentation est consignée.
+- **`en-cours`** : le bloc B13 et l'horodatage sont à jour.
+- **mon mandat de session** (`e181ce02`) rafraîchi : heartbeat 01 h 25, prochaine action = `r035`/`g017` et la convention des GV (le hub `1e7ef596` reste périmé — pas mon mandat).
+- **journal du 07/11** : la note de la nuit (la convention du sujet, `r264`, `--fichier`/`--jsonl`, les trois règles rejetées).
+
+## En vol
+
+Deux sous-agents travaillent :
+1. **segmentation restante** — `r035` (relative zéro), `g017` (arbitrage d'adverbe), la convention des GV (322 FP / 180 FN), avec règles candidates mesurées sur dev/test ;
+2. **re-audit produit** — les 50 textes libres et les 40 textes de frontières rejoués avec le code de la nuit, plus 20 nouveaux cas limites.
+
+Leurs livrables (fiches + JSON) seront intégrés au prochain round.
+
+## L'état
+
+`HEAD caeb730c`, `master` = `s/v7` **poussés**, 0 divergence ; **toutes les portes légères vertes**, **183/183** d'autotest, porte produit verte (10 contrôles, 16 tests). Le goal reste actif jusqu'à 9 h.
+
+
+## Tour 190
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 6/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la reports/rapport-segmentation-restante.md reports/pensee-segmentation-restante.json reports/rapport-re-audit-produit.md reports/pensee-re-audit-produit.json 2>/dev/null | awk '{print $5, $9}'; git log -1 --format='%h'", " … [55 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 01:28:23 EST
+caeb730c
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; ls reports/ | grep -E \"segmentation-restante|re-audit\"", "description": "Attendre les sous-agents", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4524]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4524", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 01:43:33 EST
+[status: completed, exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance la passe complète des portes (84) pendant que la vague travaille
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1500 bash tools/toutes-les-portes.sh > /tmp/passe_complete.log 2>&1; echo \"EXIT=$?\"; tail -15 /tmp/passe_complete.log; echo \"=== rouges :\"; grep -E \"❌|rouge\" /tmp/passe_complete.log | head -10", "description": "Passe co … [41 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-4546]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4546", "timeout_ms": 900000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4546", "timeout_ms": 900000, "wait": true}`
+
+  ```
+EXIT=124
+  porte-bus-socket       ✅                         102 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          35 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                           9 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          87 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         153 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-cycle-c2         ✅                         141 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           0 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+  porte-delais           ✅                          24 s    ✅ le temps, lui, augmente : 8.14 s → 11.38 s (+3.2 s ≈ 50 ms × 64 pas)
+  porte-diff-couche      ✅                         
+… [807 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Background subagent b8f0bcb1-5609-4053-818b-ade88583a99b failed before it finished.
+It left no closing message.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -cE \"✅|❌\" /tmp/passe_complete.log; grep -E \"❌\" /tmp/passe_complete.log | head -8; tail -3 /tmp/passe_complete.log; date; ls reports/ | grep -E \"segmentation-restante|re-audit\"", "description": "Lire le log de la passe"}`
+
+  ```
+25
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          28 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+sam 07 nov 2026 02:09:11 EST
+[exit code: 1]
+  ```
+
+- **subagent** `{"description": "Spans r035 g017 diagnostic", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission **courte et ciblée** : les **2 spans restants** de l'attachement, diagnostic et règles candidates mesurées — sans modifier le code du dépôt.\n\n … [1298 caractères tronqués]`
+
+  ```
+started subagent 7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 3000 bash tools/toutes-les-portes.sh > /tmp/passe2.log 2>&1 &\necho \"passe lancée en arrière-plan\"; sleep 5; date", "description": "Relancer la passe complète en fond"}`
+
+  ```
+passe lancée en arrière-plan
+sam 07 nov 2026 02:09:39 EST
+  ```
+
+- **send_message** `{"agent_id": "77d26bc7-1657-4c96-83c9-bba7c25dd828", "message": "Point de synchronisation : où en es-tu ? Si tu as les mesures principales (les 50 textes, les 40 frontières, les 20 cas limites), **écris tes deux fichiers maintenant** (`reports/rapport-re-audit-produit.md`, `reports/pensee-re-audit-p … [78 caractères tronqués]`
+
+  ```
+message delivered to agent 77d26bc7-1657-4c96-83c9-bba7c25dd828
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; date; tail -4 /tmp/passe2.log 2>/dev/null; grep -cE \"✅|❌\" /tmp/passe2.log 2>/dev/null; grep -E \"❌\" /tmp/passe2.log 2>/dev/null | head -5; ls reports/ | grep -E \"re-audit|spans-restants\"", "description": "Suivre la pa … [40 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 02:16:55 EST
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          52 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          86 s    ✅ le canal diffusé par fichier change la région du milieu
+10
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0 failed before it finished.
+Its closing message:
+⏵ Lecture des branches de segmentation et d'attachement
+
+
+## Tour 191
+
+### 👤 Utilisateur
+
+prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
+
+### 🤖 Assistant
+
+⏵ Nouvelle priorité : le chantier d'une semaine et l'intégration Panini. Je localise d'abord Panini et Nipada
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 docs/methode/panini-nipada.md | cut -c1-160; echo \"=== recherche Panini :\"; ls .. | head -20; ls ../*panini* ../*Panini* 2>/dev/null | head -5", "description": "Lire la méthode Panini et localiser le projet"}`
+
+  ```
+# Étudier Panini et Nipada, régulièrement
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **à chaque cycle**, avant de conclure sur
+> la généalogie, les styles ou les familles de langues.
+
+## Pourquoi
+
+Les projets **`../Panini/`** et **`../Panini-Research/`** poursuivent le **même objectif par une approche
+complémentaire** : Panini décompose le texte en **14 atomes sémantiques**, Nipada le fait tourner comme un tissu
+computationnel — *algébrique, là où Drave est statistique*. Ils tiennent le **système linguistique** et généralisent
+une **généalogie des langues, dialectes et styles**.
+
+## La règle
+
+À chaque cycle, **lire ce qui a bougé chez eux** (docs, publications, journaux de bord, `git log`) et **confronter
+leurs résultats aux nôtres**. Ce qui en sort va dans [`docs/theorie/genealogie-des-langues.md`](../theorie/genealogie-des-langues.md)
+(la théorie) — **jamais les chiffres** (ils vont dans `reports/`).
+
+## Leur avertissement, à ne pas oublier ✗✓
+
+Leur signature lexicale capte **l'époque** (β **+0,138**) bien plus que la **filiation** (β **+0,049**) — *la
+surface transmet les signifiants, pas la généalogie*.
+
+Conséquences pour nos tests :
+
+- tout test
+… [1007 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB && ls Panini/ | head -15; echo \"=== CONTEXTE :\"; head -30 Panini/CONTEXTE-IA.md 2>/dev/null | cut -c1-150; echo \"=== git log Panini :\"; cd Panini && git log --oneline -5 2>/dev/null | cut -c1-100", "description": "Explorer Panini"}`
+
+  ```
+=== CONTEXTE :
+=== git log Panini :
+[stderr]
+ls: cannot access 'Panini/': No such file or directory
+bash: line 1: cd: Panini: No such file or directory
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB && ls -d */ 2>/dev/null | grep -i panini; ls -d /home/stephane/Data13TB/stephane/GitHub/* 2>/dev/null | grep -i panini; find /home/stephane -maxdepth 3 -iname \"*panini*\" -type d 2>/dev/null | head -5", "description": "Trouver les dépôts Panini"}`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/consolider_panini_research.sh
+/home/stephane/Data13TB/stephane/GitHub/Panini
+/home/stephane/Data13TB/stephane/GitHub/Panini-AttributionRegistry
+/home/stephane/Data13TB/stephane/GitHub/Panini-AutonomousMissions
+/home/stephane/Data13TB/stephane/GitHub/Panini-CloudOrchestrator
+/home/stephane/Data13TB/stephane/GitHub/Panini-CoLabController
+/home/stephane/Data13TB/stephane/GitHub/Panini-CopilotageShared
+/home/stephane/Data13TB/stephane/GitHub/Panini-DatasetsIngestion
+/home/stephane/Data13TB/stephane/GitHub/Panini-ExecutionOrchestrator
+/home/stephane/Data13TB/stephane/GitHub/Panini-FS
+/home/stephane/Data13TB/stephane/GitHub/Panini-PublicationEngine
+/home/stephane/Data13TB/stephane/GitHub/Panini-Research
+/home/stephane/Data13TB/stephane/GitHub/Panini-SemanticCore
+/home/stephane/Data13TB/stephane/GitHub/Panini-SpecKit-Shared
+/home/stephane/Data13TB/stephane/GitHub/Panini-UltraReactive
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini-Research--
+/home/stephane/.dsh/sessions/--home-stephane-Data13TB-stephane-GitHub-Panini-research--
+  ```
+
+- **bash** `{"command": "pkill -f \"toutes-les-portes\" 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Panini && ls | head -20; echo \"=== README :\"; head -25 README.md 2>/dev/null | cut -c1-140; echo \"=== git :\"; git log --oneline -5 2>/dev/null | cut -c1-100; echo \"=== CONTEXTE :\"; ls CONTEXTE*  … [117 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "ps aux | grep -c \"toutes-les-portes\" ; cd /home/stephane/Data13TB/stephane/GitHub/Panini 2>/dev/null && ls | head -20 && echo \"=== README :\" && head -20 README.md 2>/dev/null | cut -c1-140 && echo \"=== git :\" && git log --oneline -3 2>/dev/null | cut -c1-100", "description": "Expl … [26 caractères tronqués]`
+
+  ```
+2
+config
+CONTEXTE-IA.md
+copilotage
+corpus
+data
+Dockerfile.template
+docs
+experiments
+experiments.json
+legacy
+modules
+notebooks
+outputs
+Panini-AttributionRegistry
+Panini.code-workspace
+PHILOSOPHIE.md
+pyproject.toml
+README.md
+research
+scripts
+=== README :
+# Panini — noyau formel et sémantique computationnelle
+
+[![Python](https://img.shields.io/badge/Python-3.13-green)](pyproject.toml)
+[![Noyau](https://img.shields.io/badge/Noyau-CIC--lite_·_ℝ_localisé-blue)](research/docs/noyau/J4_CATALOGUE.md)
+[![Licence](https://img.shields.io/badge/Licence-Voir_LICENSE-lightgrey)](LICENSE)
+
+> Ce README décrit l'état **réel** du projet. Les chiffres vivent dans les rapports
+> (`research/docs/noyau/VALIDATIONS.md`, `docs/journal-de-bord/`) — pas ici : un
+> README qui vieillit ment.
+
+## 1. Ce qu'est Panini
+
+Deux niveaux, une seule discipline : **ce qui est affirmé doit être prouvé ou mesuré**.
+
+- **Le noyau** — un système formel (CIC-lite en Python) qui *infère* et ne décrit jamais :
+  termes, types dépendants, tactiques, et les **fondations mathématiques** (ℝ localisé par
+  coupures de Dedekind). Ses certitudes sont des **théorèmes clos, vérifiés par la machine**.
+- **NIPADA** — la couche *descriptiv
+… [439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && grep -n -i \"drave\" README.md | head -10; echo \"===\"; sed -n \"$(grep -n -i 'drave' README.md | head -1 | cut -d: -f1),+25p\" README.md | cut -c1-160", "description": "Voir le lien Drave dans Panini"}`
+
+  ```
+35:| **Moteur d'inférence (Drave)** | flots de données, AER, modèles décomposables | dépôt [`drave`](https://github.com/stephanedenis/drave) (`../Qtrinet/`) | **actif, projet lié** |
+87:## 6. Drave — le pendant statistique
+89:**Drave** ([`github.com/stephanedenis/drave`](https://github.com/stephanedenis/drave),
+101:> computationnel — **algébrique, là où Drave est statistique**. Ils tiennent le système
+106:| Panini / NIPADA apporte | Drave apporte en retour |
+112:Règle de fonctionnement côté Drave : **à chaque cycle**, lire ce que Panini/NIPADA ont
+===
+| **Moteur d'inférence (Drave)** | flots de données, AER, modèles décomposables | dépôt [`drave`](https://github.com/stephanedenis/drave) (`../Qtrinet/`) | **ac
+| **Infrastructure** | colab/cloud, FPGA, attribution, visualisation (OntoWave) | `modules/`, `research/panini-fs/` | selon chantier |
+
+## 3. Le noyau formel — le cœur du projet
+
+C'est le chantier le plus lourd et le plus vérifiable : un **assistant de preuve** minimal
+(Python, sans dépendance) et ses mathématiques.
+
+**Ce qui est prouvé à ce jour** (chaque énoncé est re-vérifié par le noyau, souvent sur
+plusieurs niveaux : kit léger, chaîne réelle, validation lourde de plusieu
+… [1005 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && sed -n '87,120p' README.md | cut -c1-170", "description": "Lire la section Drave de Panini"}`
+
+  ```
+## 6. Drave — le pendant statistique
+
+**Drave** ([`github.com/stephanedenis/drave`](https://github.com/stephanedenis/drave),
+checkout local `../Qtrinet/`) est un **moteur d'inférence centré sur les flots de données** :
+les activations d'un réseau sont des **faits** (« le neurone 2 539 de la couche 23 a valu
+27,8 ») regroupés en **listes valuées poussées** vers leurs lecteurs (AER des architectures
+neuromorphiques). Conséquence : le coût du calcul devient proportionnel à l'**activité**,
+pas à la taille du modèle ; le modèle devient **décomposable**, **répartissable** et
+**observable** (rejouable, comparable).
+
+**Le lien, tel que les deux projets le formulent** (source : `Qtrinet/docs/agent/panini-nipada.md`) :
+
+> Panini et NIPADA poursuivent le **même objectif par une approche complémentaire** :
+> Panini décompose le texte en 14 atomes sémantiques, NIPADA le fait tourner comme un tissu
+> computationnel — **algébrique, là où Drave est statistique**. Ils tiennent le système
+> linguistique et généralisent une généalogie des langues, dialectes et styles.
+
+Concrètement :
+
+| Panini / NIPADA apporte | Drave apporte en retour |
+|---|---|
+| la **théorie** : atomes, universaux, généalogie des
+… [768 caractères tronqués]
+  ```
+
+- **subagent** `{"description": "Inventaire écosystème Panini", "prompt": "Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : **inventaire complet et daté** des dépôts Panini, pour préparer un chantier autonome d'une semaine d'intégration avec Drav … [1754 caractères tronqués]`
+
+  ```
+started subagent bdefb627-485e-44d1-b11c-d15dd2e6b640
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -50 docs/theorie/genealogie-des-langues.md | cut -c1-150; echo \"=== rapports généalogie/retrieval :\"; ls reports/ | grep -iE \"genealog|retrieval|glottolog|panini|nipada\" | head -10", "description": "Lire la théorie généalogi … [12 caractères tronqués]`
+
+  ```
+# La généalogie des langues, des dialectes et des styles
+
+> **Ce que cette page est.** La **théorie** de la structure généalogique qui doit organiser l'**étage entrée-sortie** (nom historique : « couche commu
+> entrée-sortie de Drave, et ce que les projets complémentaires **Panini** et **Nipada** ont établi sur elle. Les
+> mesures de Drave sont dans [`reports/07-mesures-couche-commune.md`](../../reports/07-mesures-couche-commune.md).
+> *À relire et à mettre à jour à chaque cycle : Panini et Nipada sont des sources vivantes.*
+
+## 1. Pourquoi une généalogie
+
+Une couche entrée-sortie ne peut pas être « riche en langues » au sens d'une **liste**. Les langues forment une
+**structure** : des familles, des branches, des dialectes, des styles, et des **traductions** qui traversent tout
+cela. Si la structure est réelle, elle doit se voir dans les états du modèle — et si elle ne s'y voit pas, c'est le
+modèle qui est incomplet.
+
+La hiérarchie à couvrir, du plus large au plus fin :
+
+| niveau | exemple | ce qui varie |
+|---|---|---|
+| **famille** | indo-européen, nigéro-congolais, austronésien | le système, la morphologie |
+| **branche** | roman, slave, germanique | le lexique, la syntaxe |
+| *
+… [1927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rl \"Glottolog\\|retrieval\" reports/*.md 2>/dev/null | head -6; grep -l \"généalogie\" reports/*.md 2>/dev/null | head -4; ls reports/ | grep -iE \"07-|mesures-couche\" | head -4", "description": "Trouver les mesures de généal … [16 caractères tronqués]`
+
+  ```
+reports/campagne-benefices.md
+reports/fiche-nuit-17-10.md
+reports/rapport-etat-r.md
+reports/rapport-miroir-blocs.md
+reports/rapport-pensee-sans-verbaliser.md
+reports/rapport-r41-bloc-tableaux.md
+reports/07-mesures-couche-commune.md
+reports/rapport-pont-generatif.md
+07-mesures-couche-commune.md
+r07-routeur.json
+rapport-r07-routeur.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 reports/07-mesures-couche-commune.md | cut -c1-160; echo \"=== état :\"; grep -n \"retrieval\\|Glottolog\\|71 langues\\|14 atomes\" reports/07-mesures-couche-commune.md | head -6 | cut -c1-140", "description": "Lire les mesu … [26 caractères tronqués]`
+
+  ```
+> **Fiche de résultats** — ce document est le journal des mesures de la couche commune entrée-sortie
+> (168 mesures, 6 erratums, les pièges d'instrument). La **théorie** et l'**état** sont dans
+> [`docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md`](../docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md).
+
+# 7. Les modèles alternatifs pour l'entrée et la sortie — vers une couche commune
+
+> **Vocabulaire** : « couche commune » est le **nom historique** de l'**étage entrée-sortie** (voir le
+> [glossaire](../docs/theorie/glossaire.md)) ; « couche 1 » désigne, lui, une **couche de neurones**. Les deux ne se
+> confondent pas.
+
+> **La question.** Peut-on arriver **plus vite** à une couche d'entrée-sortie **commune**, qui fasse
+> **abstraction de la langue** — la langue, le dialecte, le style n'étant plus que des **paramètres** ?
+> Cette note examine les familles de solutions, avec pour chacune : ce qu'elle gagne, ce qu'elle coûte, et
+> **comment on le mesure**.
+
+![Une couche commune, et la langue comme paramètre](../docs/theorie/synthese/schemas/couche-commune.svg)
+
+
+## Les parties — les mesures, de la première à la dernière
+
+Le chapitre fait **5 972 lignes** et **1
+… [932 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini-Research 2>/dev/null && ls | head -12 && echo \"=== git :\" && git log --oneline -3 2>/dev/null | cut -c1-100 && echo \"=== README :\" && head -18 README.md 2>/dev/null | cut -c1-140", "description": "Explorer Panini-Research"}`
+
+  ```
+AGENTS.md
+archives
+archives_scripts_v1
+autonomous-agents
+colab_results
+config
+conftest.py
+copilotage
+data
+deployments
+diagrams_dhatu_cycles
+docs
+=== git :
+e10d695e6 docs(incident): la classe vue depuis les KITS — un False rapide est un kit incomplet, pas 
+610a75d3b docs(catalogue): §3septiesdecies — localisation du produit : 2 pieces prouvees, le mur = D
+e89594b79 docs(chantiers): incident — la DISTRIBUTIVITE Q manque (936 s de construction, >39 min de 
+=== README :
+# NIPADA — Sémantique computationnelle : noyau iso + couche descriptive
+
+**Panini-Research** est le laboratoire de recherche fondamentale de l'écosystème Panini sur les
+primitives sémantiques universelles. C'est ici que vivent et sont testés le **noyau** (moteur
+rigide/mathématique) et sa **NIPADA** (couche descriptive en logique floue), ainsi que le produit
+qui les assemble.
+
+## Architecture sémantique — deux niveaux (référence unique)
+
+**Noyau** : système formel (termes, unification, inférence tri-état, fondations mathématiques) — il
+infère et ne décrit jamais ; ses **certitudes** sont des énoncés clos et démontrés.
+**NIPADA — couche descriptive** : description de la réalité observable (encyclopédie, corpus,
+lexiques 
+… [327 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je rédige le chantier d'une semaine (structure, vagues, règles, intégration Panini)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/pilotage/semaine-autonome.md <<'MD'\n# Le chantier autonome — une semaine (7 → 14 novembre 2026)\n\n> **Ce que ce document est.** Le **plan du chantier d'une semaine** : tous les travaux ouverts du\n> dépôt et l'**intégrat … [8123 caractères tronqués]`
+
+  ```
+· annotation : docs/pilotage/semaine-autonome.md → ../../reports/rapport-segmentation-restante.md (cassé)
+     · navigation : docs/pilotage/semaine-autonome.md n'a aucun lien entrant
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ 3757 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/semaine-autonome.md'); t=p.read_text()\nt=t.replace(\"[`rapport-segmentation-restante.md`](../../reports/rapport-segmentation-restante.md)\",\n            \"[`rapport-gn … [752 caractères tronqués]`
+
+  ```
+lien entrant ajouté
+     · compteurs : en-cours.md dit 121 documents, le disque en a 122
+     · docs/README.md : 1031 mots > budget 1000 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# T1 du docs/README : raccourcir la nouvelle section\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"\"\"## Pilotage — le chantier de la semaine\n\n| document | pour quoi |\n|-- … [1696 caractères tronqués]`

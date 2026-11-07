@@ -7,12 +7,12 @@
 | Identifiant | `77d26bc7-1657-4c96-83c9-bba7c25dd828` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.6 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 43 |
-| Appels d'outils | 62 |
-| Fichiers touchés | 3 |
-| Commandes | 57 |
+| Messages | 66 |
+| Appels d'outils | 94 |
+| Fichiers touchés | 6 |
+| Commandes | 86 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le pro … [2091 caractères tronqués]
 
-*62 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Vérifier existence des fichiers clés
@@ -41,7 +41,7 @@
 - bash — Lire le découpage de phrases actuel
 - bash — Lire le dispositif des 40 frontières
 - bash — Tester la CLI actuelle
-- … et 47 autres
+- … et 79 autres
 
 **Synthèse produite :**
 
@@ -56,6 +56,9 @@
 | `/tmp/reaudit/explorer.py` | 1 | 0 |
 | `/tmp/reaudit/commun.py` | 1 | 0 |
 | `/tmp/reaudit/run50.py` | 1 | 0 |
+| `/tmp/reaudit/run40.py` | 1 | 0 |
+| `/tmp/reaudit/run20.py` | 1 | 0 |
+| `/tmp/reaudit/run_probes.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -99,7 +102,7 @@
 - **T1** Vérifier disponibilité et lancer le validateur
 - **T1** Préciser F1 et vérifier les hash HEAD
 - **T1** Comprendre les étiquettes document
-- … et 17 autres
+- … et 46 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -149,4 +152,77 @@
 - **T1** `3/5 f03 rc=0 labels=41 t=151ms chev=3 filtrer=0 api=1.76ms`
 - **T1** `4/5 f04 rc=0 labels=40 t=147ms chev=0 filtrer=0 api=2.16ms`
 - **T1** `5/5 f05 rc=0 labels=31 t=154ms chev=1 filtrer=0 api=2.54ms`
+- **T1** `1/50 f01 rc=0 labels=20 t=151ms chev=0 filtrer=0 api=1.58ms`
+- **T1** `2/50 f02 rc=0 labels=60 t=163ms chev=2 filtrer=0 api=3.48ms`
+- **T1** `3/50 f03 rc=0 labels=41 t=158ms chev=3 filtrer=0 api=3.56ms`
+- **T1** `4/50 f04 rc=0 labels=40 t=157ms chev=0 filtrer=0 api=1.11ms`
+- **T1** `5/50 f05 rc=0 labels=31 t=162ms chev=1 filtrer=0 api=1.28ms`
+- **T1** `6/50 f06 rc=0 labels=67 t=158ms chev=6 filtrer=0 api=2.55ms`
+- **T1** `7/50 f07 rc=0 labels=33 t=147ms chev=0 filtrer=0 api=1.61ms`
+- **T1** `8/50 f08 rc=0 labels=39 t=166ms chev=0 filtrer=0 api=0.91ms`
+- **T1** `9/50 f09 rc=0 labels=34 t=150ms chev=0 filtrer=0 api=0.81ms`
+- **T1** `10/50 f10 rc=0 labels=58 t=170ms chev=1 filtrer=0 api=4.62ms`
+- **T1** `11/50 f11 rc=0 labels=48 t=157ms chev=1 filtrer=0 api=1.65ms`
+- **T1** `12/50 f12 rc=0 labels=70 t=159ms chev=2 filtrer=0 api=2.38ms`
+- **T1** `13/50 f13 rc=0 labels=30 t=148ms chev=0 filtrer=0 api=1.07ms`
+- **T1** `14/50 f14 rc=3 labels=0 t=169ms chev=0 filtrer=0 api=0.03ms`
+- **T1** `15/50 f15 rc=3 labels=0 t=149ms chev=0 filtrer=0 api=0.01ms`
+- **T1** `16/50 f16 rc=3 labels=0 t=153ms chev=0 filtrer=0 api=0.02ms`
+- **T1** `17/50 f17 rc=3 labels=0 t=166ms chev=0 filtrer=0 api=0.02ms`
+- **T1** `18/50 f18 rc=0 labels=7 t=144ms chev=0 filtrer=0 api=0.42ms`
+- **T1** `19/50 f19 rc=0 labels=46 t=161ms chev=0 filtrer=0 api=2.17ms`
+- **T1** `20/50 f20 rc=0 labels=72 t=171ms chev=3 filtrer=0 api=4.21ms`
+- **T1** `21/50 f21 rc=0 labels=64 t=151ms chev=4 filtrer=0 api=3.36ms`
+- **T1** `22/50 f22 rc=0 labels=59 t=159ms chev=2 filtrer=0 api=3.38ms`
+- **T1** `23/50 f23 rc=0 labels=57 t=183ms chev=2 filtrer=0 api=3.46ms`
+- **T1** `24/50 f24 rc=0 labels=75 t=164ms chev=6 filtrer=0 api=1.83ms`
+- **T1** `25/50 f25 rc=0 labels=27 t=172ms chev=0 filtrer=0 api=1.61ms`
+- **T1** `26/50 f26 rc=0 labels=53 t=160ms chev=2 filtrer=0 api=1.93ms`
+- **T1** `27/50 f27 rc=0 labels=14 t=154ms chev=0 filtrer=0 api=0.93ms`
+- **T1** `28/50 f28 rc=0 labels=49 t=145ms chev=0 filtrer=0 api=2.76ms`
+- **T1** `29/50 f29 rc=0 labels=49 t=154ms chev=2 filtrer=0 api=1.51ms`
+- **T1** `30/50 f30 rc=0 labels=43 t=164ms chev=2 filtrer=0 api=2.90ms`
+- **T1** `31/50 f31 rc=0 labels=31 t=148ms chev=2 filtrer=0 api=1.79ms`
+- **T1** `32/50 f32 rc=0 labels=65 t=161ms chev=1 filtrer=0 api=4.30ms`
+- **T1** `33/50 f33 rc=0 labels=36 t=146ms chev=0 filtrer=0 api=1.91ms`
+- **T1** `34/50 f34 rc=0 labels=57 t=157ms chev=4 filtrer=0 api=2.96ms`
+- **T1** `35/50 f35 rc=0 labels=45 t=161ms chev=0 filtrer=0 api=1.78ms`
+- **T1** `36/50 f36 rc=0 labels=50 t=160ms chev=0 filtrer=0 api=1.25ms`
+- **T1** `37/50 f37 rc=0 labels=66 t=148ms chev=0 filtrer=0 api=1.75ms`
+- **T1** `38/50 f38 rc=0 labels=110 t=166ms chev=1 filtrer=0 api=3.67ms`
+- **T1** `39/50 f39 rc=0 labels=79 t=172ms chev=2 filtrer=0 api=3.87ms`
+- **T1** `40/50 f40 rc=0 labels=96 t=160ms chev=0 filtrer=0 api=1.75ms`
+- **T1** `41/50 f41 rc=0 labels=85 t=152ms chev=3 filtrer=0 api=4.55ms`
+- **T1** `42/50 f42 rc=0 labels=34 t=151ms chev=0 filtrer=0 api=2.04ms`
+- **T1** `43/50 f43 rc=0 labels=357 t=166ms chev=11 filtrer=0 api=14.30ms`
+- **T1** `44/50 f44 rc=0 labels=62 t=143ms chev=2 filtrer=0 api=2.11ms`
+- **T1** `45/50 f45 rc=0 labels=65 t=155ms chev=4 filtrer=0 api=2.43ms`
+- **T1** `46/50 f46 rc=0 labels=58 t=162ms chev=5 filtrer=0 api=3.49ms`
+- **T1** `47/50 f47 rc=0 labels=46 t=147ms chev=0 filtrer=0 api=2.53ms`
+- **T1** `48/50 f48 rc=0 labels=92 t=166ms chev=0 filtrer=0 api=2.66ms`
+- **T1** `49/50 f49 rc=0 labels=64 t=152ms chev=0 filtrer=0 api=3.53ms`
+- **T1** `50/50 f50 rc=0 labels=2149 t=248ms chev=75 filtrer=0 api=55.49ms`
+- **T1** `x17 json rc 0 ms 182.0 out 42528`
+- **T1** `x17 readable rc 0 ms 168.2 out 10457 maxligne 10010`
+- **T1** `1/20 x01 html               rc=0 phr=  2 labels=81 t=172ms json=23054 schema=True zone=0 q=False`
+- **T1** `2/20 x02 html               rc=0 phr=  2 labels=281 t=169ms json=73464 schema=True zone=0 q=False`
+- **T1** `3/20 x03 html               rc=0 phr=  4 labels=176 t=159ms json=45812 schema=True zone=0 q=True`
+- **T1** `4/20 x04 markdown           rc=0 phr=  5 labels=151 t=165ms json=42458 schema=True zone=0 q=False`
+- **T1** `5/20 x05 markdown-tableau   rc=0 phr=  4 labels=102 t=155ms json=25116 schema=True zone=0 q=False`
+- **T1** `6/20 x06 markdown-code      rc=0 phr=  4 labels=103 t=157ms json=28504 schema=True zone=2 q=False`
+- **T1** `7/20 x07 code-python        rc=0 phr=  2 labels=152 t=175ms json=39096 schema=True zone=0 q=False`
+- **T1** `8/20 x08 code-json          rc=0 phr=  2 labels=141 t=152ms json=34656 schema=True zone=0 q=False`
+- **T1** `9/20 x09 code-shell         rc=0 phr=  2 labels=99 t=156ms json=24703 schema=True zone=0 q=False`
+- **T1** `10/20 x10 tableau-tsv        rc=0 phr=  1 labels=67 t=148ms json=16844 schema=True zone=0 q=False`
+- **T1** `11/20 x11 tableau-ascii      rc=0 phr=  5 labels=173 t=159ms json=42016 schema=True zone=0 q=False`
+- **T1** `12/20 x12 arabe              rc=0 phr=  2 labels=39 t=162ms json=10477 schema=True zone=0 q=False`
+- **T1** `13/20 x13 chinois            rc=0 phr=  1 labels=16 t=156ms json=4814 schema=True zone=0 q=False`
+- **T1** `14/20 x14 russe              rc=0 phr=  2 labels=39 t=158ms json=10503 schema=True zone=0 q=True`
+- **T1** `15/20 x15 hébreu             rc=0 phr=  2 labels=43 t=151ms json=11429 schema=True zone=0 q=True`
+- **T1** `16/20 x16 très-long          rc=0 phr=320 labels=18911 t=1657ms json=5803495 schema=True zone=0 q=False`
+- **T1** `17/20 x17 très-long-un-token rc=0 phr=  1 labels=7 t=166ms json=42528 schema=True zone=0 q=False`
+- **T1** `18/20 x18 nfd                rc=0 phr=  2 labels=54 t=151ms json=14954 schema=True zone=0 q=False`
+- **T1** `19/20 x19 nfd-url            rc=0 phr=  1 labels=70 t=157ms json=20961 schema=True zone=0 q=False`
+- **T1** `20/20 x20 url-parametres     rc=0 phr=  1 labels=143 t=151ms json=35685 schema=True zone=0 q=False`
+- **T1** `| **P1-7** | **Compacité et lot** : `--compact`, JSONL, `--fichier`/stdin | **2,76 Mo** pour 10 k ; **11,5 Mo** pour 50 k ; 1 texte par appel | `drave.py` 50-52, 329-341 | **0,5–1 j** | faible : optio`
 

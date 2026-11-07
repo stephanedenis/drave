@@ -1637,3 +1637,556 @@ Created file
 </content>
   ```
 
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Rejeu des 50 textes du banc fiabilite-produit par la CLI actuelle.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport statistics\nimport sys\nimport time\n\nsys.path.insert(0, \"/tmp/reaudit\")\nimport commun as C\n\nSORTIE = p … [5586 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/run50.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/reaudit/run50.py 5 2>&1 | tail -20", "description": "Tester le harnais sur 5 textes"}`
+
+  ```
+1/5 f01 rc=0 labels=20 t=149ms chev=0 filtrer=0 api=2.56ms
+ 2/5 f02 rc=0 labels=60 t=163ms chev=2 filtrer=0 api=1.35ms
+ 3/5 f03 rc=0 labels=41 t=151ms chev=3 filtrer=0 api=1.76ms
+ 4/5 f04 rc=0 labels=40 t=147ms chev=0 filtrer=0 api=2.16ms
+ 5/5 f05 rc=0 labels=31 t=154ms chev=1 filtrer=0 api=2.54ms
+écrit /tmp/reaudit/banc50.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/banc50.json'))\nfor r in d[:2]:\n    m=r['metriques']\n    print(r['id'],'schema',r['schema_valide'],r['contrat'])\n    print(' trous',m['trous_pos'],'pos_zone',m['pos_zo … [391 caractères tronqués]`
+
+  ```
+f01 schema True {'manquants': [], 'erreurs': [], 'schema': '', 'ok': True}
+ trous {'mot': {'total': 3, 'sans_pos': 0}, 'ponctuation': {'total': 1, 'sans_pos': 0}} pos_zone {} url 0 emoji 0
+ phrases [{'debut': 0, 'fin': 13, 'valeur': 'déclarative'}] unites 2 True True
+ vues {'alternative': (0, 2, 0), 'brut': (0, 2, 0), 'filtrer_union': (0, 2, 0), 'filtrer': (0, 2, 0)}
+ readable {'rc': 0, 'stdout_octets': 593, 'stderr': '', 'temps_ms': 144.89, 'traceback': False}
+f02 schema True {'manquants': [], 'erreurs': [], 'schema': '', 'ok': True}
+ trous {'mot': {'total': 12, 'sans_pos': 0}, 'ponctuation': {'total': 1, 'sans_pos': 0}} pos_zone {} url 0 emoji 0
+ phrases [{'debut': 0, 'fin': 55, 'valeur': 'déclarative'}] unites 5 True True
+ vues {'alternative': (0, 5, 2), 'brut': (0, 5, 2), 'filtrer_union': (0, 5, 2), 'filtrer': (0, 3, 0)}
+ readable {'rc': 0, 'stdout_octets': 1013, 'stderr': '', 'temps_ms': 148.82, 'traceback': False}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 /tmp/reaudit/run50.py 2>&1 | tail -55", "description": "Rejouer les 50 textes par la CLI", "timeoutMs": 900000}`
+
+  ```
+1/50 f01 rc=0 labels=20 t=151ms chev=0 filtrer=0 api=1.58ms
+ 2/50 f02 rc=0 labels=60 t=163ms chev=2 filtrer=0 api=3.48ms
+ 3/50 f03 rc=0 labels=41 t=158ms chev=3 filtrer=0 api=3.56ms
+ 4/50 f04 rc=0 labels=40 t=157ms chev=0 filtrer=0 api=1.11ms
+ 5/50 f05 rc=0 labels=31 t=162ms chev=1 filtrer=0 api=1.28ms
+ 6/50 f06 rc=0 labels=67 t=158ms chev=6 filtrer=0 api=2.55ms
+ 7/50 f07 rc=0 labels=33 t=147ms chev=0 filtrer=0 api=1.61ms
+ 8/50 f08 rc=0 labels=39 t=166ms chev=0 filtrer=0 api=0.91ms
+ 9/50 f09 rc=0 labels=34 t=150ms chev=0 filtrer=0 api=0.81ms
+10/50 f10 rc=0 labels=58 t=170ms chev=1 filtrer=0 api=4.62ms
+11/50 f11 rc=0 labels=48 t=157ms chev=1 filtrer=0 api=1.65ms
+12/50 f12 rc=0 labels=70 t=159ms chev=2 filtrer=0 api=2.38ms
+13/50 f13 rc=0 labels=30 t=148ms chev=0 filtrer=0 api=1.07ms
+14/50 f14 rc=3 labels=0 t=169ms chev=0 filtrer=0 api=0.03ms
+15/50 f15 rc=3 labels=0 t=149ms chev=0 filtrer=0 api=0.01ms
+16/50 f16 rc=3 labels=0 t=153ms chev=0 filtrer=0 api=0.02ms
+17/50 f17 rc=3 labels=0 t=166ms chev=0 filtrer=0 api=0.02ms
+18/50 f18 rc=0 labels=7 t=144ms chev=0 filtrer=0 api=0.42ms
+19/50 f19 rc=0 labels=46 t=161ms chev=0 filtrer=0 api=2.17ms
+20/50 f20 rc=0 labels=72 t=171ms chev=3 filtrer
+… [1935 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Rejeu des 40 textes du banc frontieres-phrase par la CLI actuelle.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport re\nimport statistics\nimport sys\nimport time\n\nsys.path.insert(0, \"/tmp/reaudit\")\nimport commun as C\n\ … [7074 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/run40.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/reaudit && python3 - <<'EOF'\nimport re, pathlib\np=pathlib.Path('run40.py')\ns=p.read_text()\ns=s.replace('def evaluer(texte: str, pred: list[dict], attendu: list[dict], acts: dict) -> dict:',\n            'def evaluer(texte: str, pred: list[dict], attendu: list[dict], acts: di … [598 caractères tronqués]`
+
+  ```
+ok
+ 1/40 n01  phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=2
+ 2/40 n02  phr= 3/ 3 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=3
+ 3/40 d01  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+ 4/40 d02  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+ 5/40 d03  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+ 6/40 d04  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+ 7/40 u01  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+ 8/40 u02  phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=2
+ 9/40 e01  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+10/40 e02  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+11/40 c01  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+12/40 c02  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+13/40 c03  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+14/40 c04  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+15/40 a01  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=1
+16/40 a02  p
+… [1999 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/reaudit && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('run40.py'); s=p.read_text()\ns=s.replace('cands[(e[\"debut\"], e[\"fin\"], \"candidats\")] = e.get(\"candidats\") or []',\n            'cands[(e[\"debut\"], e[\"fin\"])] = e.get(\"candidats\") or []')\np.write_text(s) … [200 caractères tronqués]`
+
+  ```
+ok
+                     ~~~~^^
+  File "/tmp/reaudit/run40.py", line 119, in main
+    ev = evaluer(texte, pred, attendu, acts, cands) if d is not None else {
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/reaudit/run40.py", line 74, in evaluer
+    cands = set((cands or {}).get((cle[0], cle[1]), []))
+                ^^^^^^^^^^^^^^^^^
+AttributeError: 'set' object has no attribute 'get'
+  ```
+
+- **bash** `{"command": "cd /tmp/reaudit && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('run40.py'); s=p.read_text()\ns=s.replace('        cands = set((cands or {}).get((cle[0], cle[1]), []))\\n        if act not in cands:\\n            actes_candidats_ko.append({\"debut\": a[\"debut\"], \"acte\": act, \" … [469 caractères tronqués]`
+
+  ```
+ok
+34/40 en01 phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+35/40 en02 phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+36/40 en03 phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+37/40 u03  phr= 1/ 1 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+38/40 s03  phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+39/40 d05  phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+40/40 u04  phr= 2/ 2 exact=True ff=False extra=0 miss=0 actes_faux=0 cand_ko=0
+écrit /tmp/reaudit/frontieres40.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections\nd=json.load(open('/tmp/reaudit/frontieres40.json'))\nagg=collections.Counter()\nfor r in d:\n    for k in ('phrases','exact','frontiere_fausse','casse','actes_presents','actes_faux','actes … [814 caractères tronqués]`
+
+  ```
+{'phrases': 59, 'exact': 40, 'frontiere_fausse': 0, 'casse': 0, 'actes_presents': 59, 'actes_faux': 0, 'actes_faux_type': 0, 'actes_candidats_ko': 0, 'extra': 0, 'missing': 0, 'overlaps': 0, 'leading': 0, 'vides': 0, 'fausses_questions': 0, 'types_faux': 0}
+temps 145.67 171.46
+json bytes 7929 27781
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, unicodedata, json\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\ncas = {\n 'ar': 'القطة تنام على السطح. هل ترى القمر؟',\n 'zh': '猫在屋顶上睡觉。你看见月亮了吗？',\n 'ru': 'Кошка спит на крыше. Ты видишь  … [549 caractères tronqués]`
+
+  ```
+ar phr [(0, 21, "'القطة تنام على السطح.'", 'القطة تنام على السطح.'), (22, 35, "'هل ترى القمر؟'", 'هل ترى القمر؟')]
+  zones []
+zh phr [(0, 16, "'猫在屋顶上睡觉。你看见月亮了吗？'", '猫在屋顶上睡觉。你看见月亮了吗？')]
+  zones []
+ru phr [(0, 20, "'Кошка спит на крыше.'", 'Кошка спит на крыше.'), (21, 36, "'Ты видишь луну?'", 'Ты видишь луну?')]
+  zones []
+he phr [(0, 17, "'החתול ישן על הגג.'", 'החתול ישן על הגג.'), (18, 35, "'אתה רואה את הירח?'", 'אתה רואה את הירח?')]
+  zones []
+json phr [(0, 18, '\'{"schema": "drave.\'', '{"schema": "drave.'), (18, 94, '\'annotation", "version": 1, "url": "https://example.com/a?b=2", "prix": 12.5}\'', 'annotation", "version": 1, "url": "https://example.com/a?b=2", "prix": 12.5}')]
+  zones [(53, 78, "'https://example.com/a?b=2'")]
+url phr [(0, 89, "'Voir https://example.com/docs?page=2&lang=fr#section-3, puis https://a.b/c?d=e%20f&g=h+i.'", 'Voir https://example.com/docs?page=2&lang=fr#section-3, puis https://a.b/c?d=e%20f&g=h+i.')]
+  zones [(5, 54, "'https://example.com/docs?page=2&lang=fr#section-3'"), (61, 88, "'https://a.b/c?d=e%20f&g=h+i'")]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess,sys,json\nfor t in ['', '...', '🚀', 'Il part. Elle reste.']:\n    p=subprocess.run([sys.executable,'tools/drave.py','analyser','--jsonl','--',t],capture_output=True,text=True,cwd='.')\n    print(r … [295 caractères tronqués]`
+
+  ```
+'' rc 3 lines 0 err drave: refus d'analyse : vide
+'...' rc 0 lines 1 err 
+    '...' refus 'vide' schema drave.annotation
+'🚀' rc 0 lines 1 err 
+    '🚀' refus 'vide' schema drave.annotation
+'Il part. Elle reste.' rc 0 lines 2 err 
+    'Il part.' refus '' schema drave.annotation
+    'Elle reste.' refus '' schema drave.annotation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, unicodedata, json\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\nfor s in [\"Élodie sourit. Le café est prêt.\", \"Visitez https://exemple.fr/café?x=1 à Paris.\"]:\n    t=unicodedata.norma … [550 caractères tronqués]`
+
+  ```
+NFC? False NFD? True
+lang fr phr [(0, 15, "'Élodie sourit.'", 'Élodie sourit.'), (16, 35, "'Le café est prêt.'", 'Le café est prêt.')]
+tokens [(0, 1, "'E'", 'mot'), (1, 2, "'́'", 'ponctuation'), (2, 7, "'lodie'", 'mot'), (8, 14, "'sourit'", 'mot'), (14, 15, "'.'", 'ponctuation'), (16, 18, "'Le'", 'mot'), (19, 23, "'cafe'", 'mot'), (23, 24, "'́'", 'ponctuation'), (25, 28, "'est'", 'mot'), (29, 32, "'pre'", 'mot'), (32, 33, "'̂'", 'ponctuation'), (33, 34, "'t'", 'mot'), (34, 35, "'.'", 'ponctuation')]
+pos [('E', 'NOUN', 0, 1), ('́', 'PONCT', 1, 2), ('lodie', 'NOUN', 2, 7), ('sourit', 'NOUN', 8, 14), ('.', 'PONCT', 14, 15), ('Le', 'DET', 16, 18), ('cafe', 'NOUN', 19, 23), ('́', 'PONCT', 23, 24), ('est', 'AUX', 25, 28), ('pre', 'NOUN', 29, 32), ('̂', 'PONCT', 32, 33), ('t', 'PRON', 33, 34), ('.', 'PONCT', 34, 35)]
+zones []
+NFC? False NFD? True
+lang fr phr [(0, 46, "'Visitez https://exemple.fr/café?x=1 à Paris.'", 'Visitez https://exemple.fr/café?x=1 à Paris.')]
+tokens [(0, 7, "'Visitez'", 'mot'), (8, 13, "'https'", 'mot'), (13, 14, "':'", 'ponctuation'), (14, 15, "'/'", 'ponctuation'), (15, 16, "'/'", 'ponctuation'), (16, 23, "'exemple'", 'mot'), (23, 24, "'.'", 'ponctuation'
+… [871 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess,sys,tempfile,pathlib,json\nfor contenu in [b'a\\xffb', b'\\xef\\xbb\\xbfLe chat dort.', b'Il part.\\r\\nElle reste.\\r\\n']:\n    p=pathlib.Path('/tmp/reaudit/probe.txt'); p.write_bytes(contenu)\n … [484 caractères tronqués]`
+
+  ```
+b'a\xffb' rc 0 err 
+  texte 'a�b' len 3 phr [(0, 3)]
+b'\xef\xbb\xbfLe chat dort.' rc 0 err 
+  texte '\ufeffLe chat dort.' len 14 phr [(0, 14)]
+b'Il part.\r\nElle reste.\r\n' rc 0 err 
+  texte 'Il part.\nElle reste.\n' len 21 phr [(0, 8), (9, 20)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,json\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\ncas={\n'html1':'<p>Le chat <strong>dort</strong> sur le toit.</p>',\n'html2':'<html><head><style>body { color: red; }</style></head><body … [1464 caractères tronqués]`
+
+  ```
+html1 lang fr script Latn phr [(0, 45, "'<p>Le chat <strong>dort</strong> sur le toit.'", '<p>Le chat <strong>dort</strong> sur le toit.'), (45, 49, "'</p>'", '</p>')] synt 7
+  labels 81 refus  zones []
+html2 lang fr script Latn phr [(0, 146, '\'<html><head><style>body { color: red; }</style></head><body><h1>Titre</h1><p>Un texte &amp; une <a href="https://example.com?a=1&amp;b=2">URL</a>.\'', '<html><head><style>body { color: red; }</style></head><body><h1>Titre</h1><p>Un texte &amp; une <a href="https://example.com?a=1&amp;b=2">URL</a>.'), (146, 164, "'</p></body></html>'", '</p></body></html>')] synt 15
+  labels 281 refus  zones [(105, 136, "'https://example.com?a=1&amp;b=2'")]
+html3 lang fr script Latn phr [(0, 2, "'<!'", '<!'), (2, 65, '\'-- commentaire --><script>if (a < b && c > d) { console.log("x?\'', '-- commentaire --><script>if (a < b && c > d) { console.log("x?'), (65, 89, '\'y=1"); }</script><p>Fin.\'', 'y=1"); }</script><p>Fin.'), (89, 93, "'</p>'", '</p>')] synt 11
+  labels 176 refus  zones [(50, 61, "'console.log'")]
+md1 lang fr script Latn phr [(0, 7, "'# Notes'", '# Notes'), (9, 38, "'Le **chat** dort sur le toit.'", 'Le **chat** dort sur le toit.'), (40, 50, "'-
+… [2371 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,time,json\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\nt16=(\"\\n\\n\".join([\"Le chat de la voisine qui dort sur le toit se réveille. \" * 20]*16)).strip()\nt17=\"a\"*10000\nfor k,t in [ … [481 caractères tronqués]`
+
+  ```
+x16 len 17949
+  alternative ms 1228.8 labels 18911 phr 320 synt 1600
+  filtrer ms 1267.0 labels 18271 phr 320 synt 960
+x17 len 10000
+  alternative ms 26.4 labels 7 phr 1 synt 0
+  filtrer ms 16.1 labels 7 phr 1 synt 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess,sys,time,json\nt=\"a\"*10000\nt0=time.perf_counter(); p=subprocess.run([sys.executable,'tools/drave.py','analyser','--json','--',t],capture_output=True,cwd='.'); dt=time.perf_counter()-t0\nprint(' … [415 caractères tronqués]`
+
+  ```
+x17 json rc 0 ms 182.0 out 42528
+x17 readable rc 0 ms 168.2 out 10457 maxligne 10010
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Les 20 nouveaux cas limites du re-audit produit (lecture seule).\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport pathlib\nimport statistics\nimport sys\nimport unicodedata\n\nsys.path.insert(0, \"/tmp/reaudit\")\nimport commun as C\n\nSORTI … [9987 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/run20.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 /tmp/reaudit/run20.py 2>&1 | tail -25", "description": "Rejouer les 20 cas limites", "timeoutMs": 900000}`
+
+  ```
+1/20 x01 html               rc=0 phr=  2 labels=81 t=172ms json=23054 schema=True zone=0 q=False
+ 2/20 x02 html               rc=0 phr=  2 labels=281 t=169ms json=73464 schema=True zone=0 q=False
+ 3/20 x03 html               rc=0 phr=  4 labels=176 t=159ms json=45812 schema=True zone=0 q=True
+ 4/20 x04 markdown           rc=0 phr=  5 labels=151 t=165ms json=42458 schema=True zone=0 q=False
+ 5/20 x05 markdown-tableau   rc=0 phr=  4 labels=102 t=155ms json=25116 schema=True zone=0 q=False
+ 6/20 x06 markdown-code      rc=0 phr=  4 labels=103 t=157ms json=28504 schema=True zone=2 q=False
+ 7/20 x07 code-python        rc=0 phr=  2 labels=152 t=175ms json=39096 schema=True zone=0 q=False
+ 8/20 x08 code-json          rc=0 phr=  2 labels=141 t=152ms json=34656 schema=True zone=0 q=False
+ 9/20 x09 code-shell         rc=0 phr=  2 labels=99 t=156ms json=24703 schema=True zone=0 q=False
+10/20 x10 tableau-tsv        rc=0 phr=  1 labels=67 t=148ms json=16844 schema=True zone=0 q=False
+11/20 x11 tableau-ascii      rc=0 phr=  5 labels=173 t=159ms json=42016 schema=True zone=0 q=False
+12/20 x12 arabe              rc=0 phr=  2 labels=39 t=162ms json=10477 schema=True zone=0 q=False
+13/20 x13 chinois 
+… [851 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/cas20.json'))\nfor r in d:\n    if 'fichier' in r:\n        print(r['id'],'fichier', {k:r['fichier'].get(k) for k in ('rc','json_valide','texte_identique','sortie_identiq … [268 caractères tronqués]`
+
+  ```
+x03 fichier {'rc': 0, 'json_valide': True, 'texte_identique': True, 'sortie_identique_argv': True, 'octets': 93, 'labels': 176} args 45812
+x04 jsonl {'rc': 0, 'lignes': 5, 'lignes_ok': 5, 'refus': 0, 'phrases_attendues': 5, 'octets': 33265}
+x05 jsonl {'rc': 0, 'lignes': 4, 'lignes_ok': 4, 'refus': 1, 'phrases_attendues': 4, 'octets': 17905}
+x06 jsonl {'rc': 0, 'lignes': 4, 'lignes_ok': 4, 'refus': 1, 'phrases_attendues': 4, 'octets': 22091}
+x10 jsonl {'rc': 0, 'lignes': 1, 'lignes_ok': 1, 'refus': 0, 'phrases_attendues': 1, 'octets': 13791}
+x11 jsonl {'rc': 0, 'lignes': 5, 'lignes_ok': 5, 'refus': 3, 'phrases_attendues': 5, 'octets': 12308}
+x16 fichier {'rc': 0, 'json_valide': True, 'texte_identique': True, 'sortie_identique_argv': True, 'octets': 18269, 'labels': 18911} args 5803495
+x16 jsonl {'rc': 0, 'lignes': 320, 'lignes_ok': 320, 'refus': 0, 'phrases_attendues': 320, 'octets': 4771840}
+x17 fichier {'rc': 0, 'json_valide': True, 'texte_identique': True, 'sortie_identique_argv': True, 'octets': 10000, 'labels': 7} args 42528
+x18 fichier {'rc': 0, 'json_valide': True, 'texte_identique': True, 'sortie_identique_argv': True, 'octets': 38, 'labels': 54} args 14954
+x19 fichier {'rc'
+… [222 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/cas20.json'))\nfor r in d:\n    if r['id'] in ('x01','x02','x03','x06','x07','x08','x09','x11','x12','x13','x18','x19'):\n        print(r['id'], r['cat'])\n        for p  … [159 caractères tronqués]`
+
+  ```
+x01 html
+    0 45 déclarative '<p>Le chat <strong>dort</strong> sur le toit.'
+    45 49 déclarative '</p>'
+x02 html
+    0 146 déclarative '<html><head><style>body { color: red; }</style></head><body><h1>Titre<'
+    146 164 déclarative '</p></body></html>'
+x03 html
+    0 2 exclamative '<!'
+    2 65 interrogative '-- commentaire --><script>if (a < b && c > d) { console.log("x?'
+    65 89 déclarative 'y=1"); }</script><p>Fin.'
+    89 93 déclarative '</p>'
+x06 markdown-code
+    0 25 déclarative '> Citation : « Il part. »'
+    27 36 déclarative '```python'
+    37 63 déclarative 'def f(x):\n    return x + 1'
+    64 67 déclarative '```'
+x07 code-python
+    0 64 déclarative 'def analyse(texte: str) -> dict:\n    """Analyse le texte (v1.2).'
+    64 112 déclarative '"""\n    return {"texte": texte, "n": len(texte)}'
+x08 code-json
+    0 18 déclarative '{"schema": "drave.'
+    18 94 déclarative 'annotation", "version": 1, "url": "https://example.com/a?b=2", "prix":'
+x09 code-shell
+    0 21 déclarative 'grep -n "TODO" src/*.'
+    21 63 déclarative 'py | head -5 && echo "fini" > /tmp/out.txt'
+x11 tableau-ascii
+    0 17 déclarative '+-------+-------+'
+    18 35 déclarative '| nom   | prix  |'
+   
+… [440 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/cas20.json'))\nfor r in d:\n    if r['id'] in ('x12','x13','x14','x15','x18','x19'):\n        m=r['metriques']\n        print(r['id'],r['cat'],'langue',m['langue'],'scrip … [336 caractères tronqués]`
+
+  ```
+x12 arabe langue und script Arab refus '' labels 39
+  niveaux {'graphème': 15, 'mot': 9, 'pos': 9, 'phrase': 2, 'pragmatique': 2, 'discours': 1, 'document': 1} trous {'mot': {'total': 7, 'sans_pos': 0}, 'ponctuation': {'total': 2, 'sans_pos': 0}} pos_zone {} sans_syntagme True
+  phrases [(0, 21, 'déclarative'), (22, 35, 'déclarative')]
+x13 chinois langue und script Hani refus '' labels 16
+  niveaux {'graphème': 4, 'mot': 4, 'pos': 4, 'discours': 1, 'document': 1, 'phrase': 1, 'pragmatique': 1} trous {'mot': {'total': 2, 'sans_pos': 0}, 'ponctuation': {'total': 2, 'sans_pos': 0}} pos_zone {} sans_syntagme True
+  phrases [(0, 16, 'déclarative')]
+x14 russe langue und script Cyrl refus '' labels 39
+  niveaux {'graphème': 15, 'mot': 9, 'pos': 9, 'phrase': 2, 'pragmatique': 2, 'discours': 1, 'document': 1} trous {'mot': {'total': 7, 'sans_pos': 0}, 'ponctuation': {'total': 2, 'sans_pos': 0}} pos_zone {} sans_syntagme True
+  phrases [(0, 20, 'déclarative'), (21, 36, 'interrogative')]
+x15 hébreu langue und script Hebr refus '' labels 43
+  niveaux {'graphème': 17, 'mot': 10, 'pos': 10, 'phrase': 2, 'pragmatique': 2, 'discours': 1, 'document': 1} trous {'mot': {'total': 8, 'sans_pos': 0}, 'p
+… [883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\nd=json.load(open('/tmp/reaudit/cas20.json'))\nfor r in d:\n    if r['id'] in ('x18','x19'):\n        t=r['texte']\n        print(r['id'], … [463 caractères tronqués]`
+
+  ```
+x18 NFD? True texte_identique True
+ tokens []
+ mots [('E', 'mot', 0, 1), ('́', 'ponctuation', 1, 2), ('lodie', 'mot', 2, 7), ('sourit', 'mot', 8, 14), ('.', 'ponctuation', 14, 15), ('Le', 'mot', 16, 18), ('cafe', 'mot', 19, 23), ('́', 'ponctuation', 23, 24), ('est', 'mot', 25, 28), ('pre', 'mot', 29, 32), ('̂', 'ponctuation', 32, 33), ('t', 'mot', 33, 34), ('.', 'ponctuation', 34, 35)]
+ pos [('E', 'NOUN'), ('́', 'PONCT'), ('lodie', 'NOUN'), ('sourit', 'NOUN'), ('.', 'PONCT'), ('Le', 'DET'), ('cafe', 'NOUN'), ('́', 'PONCT'), ('est', 'AUX'), ('pre', 'NOUN'), ('̂', 'PONCT'), ('t', 'PRON'), ('.', 'PONCT')]
+x19 NFD? True texte_identique True
+ tokens []
+ mots [('Visitez', 'mot', 0, 7), ('https', 'mot', 8, 13), (':', 'ponctuation', 13, 14), ('/', 'ponctuation', 14, 15), ('/', 'ponctuation', 15, 16), ('exemple', 'mot', 16, 23), ('.', 'ponctuation', 23, 24), ('fr', 'mot', 24, 26), ('/', 'ponctuation', 26, 27), ('cafe', 'mot', 27, 31), ('́', 'ponctuation', 31, 32), ('?', 'ponctuation', 32, 33), ('x', 'mot', 33, 34), ('=', 'ponctuation', 34, 35), ('1', 'nombre', 35, 36), ('a', 'mot', 37, 38), ('̀', 'ponctuation', 38, 39), ('Paris', 'mot', 40, 45), ('.', 'ponctuation', 45, 46)]
+ pos [('Visitez
+… [308 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Sondes CLI et contrat : codes, refus, --jsonl, --fichier, encodages, vues.\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport os\nimport pathlib\nimport sys\n\nsys.path.insert(0, \"/tmp/reaudit\")\nimport commun as C\n\nSORTIE = pathlib.Path(\ … [10578 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/run_probes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 /tmp/reaudit/run_probes.py 2>&1 | tail -10", "description": "Lancer les sondes CLI et contrat", "timeoutMs": 600000}`
+
+  ```
+**kw).encode(obj)
+          ~~~~~~^^^^^
+  File "/usr/lib64/python3.13/json/encoder.py", line 202, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib64/python3.13/json/encoder.py", line 263, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/lib64/python3.13/json/encoder.py", line 182, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type bytes is not JSON serializable
+[stderr]
+
+real	0m12,469s
+user	0m11,197s
+sys	0m1,206s
+  ```
+
+- **bash** `{"command": "cd /tmp/reaudit && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('run_probes.py'); s=p.read_text()\ns=s.replace('n[\"fichier_brut\"] = chemin.read_bytes()[:40] if chemin.is_file() else None',\n            'n[\"fichier_brut_hex\"] = chemin.read_bytes()[:40].hex() if chemin.is_file()  … [246 caractères tronqués]`
+
+  ```
+ok
+écrit /tmp/reaudit/probes.json
+[stderr]
+
+real	0m11,650s
+user	0m10,487s
+sys	0m1,174s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/probes.json'))\nprint('== VERSION'); print(json.dumps(d['version'],ensure_ascii=False,indent=1)[:800])\nprint('== USAGE')\nfor k,v in d['usage'].items():\n    print(k,'rc … [577 caractères tronqués]`
+
+  ```
+== VERSION
+{
+ "--version": {
+  "rc": 0,
+  "stdout_octets": 12,
+  "stderr": "",
+  "json_valide": false,
+  "erreur_json": "JSONDecodeError : Expecting value: line 1 column 1 (char 0)",
+  "temps_ms": 184.55,
+  "stdout": "drave 0.1.0"
+ },
+ "--aide": {
+  "rc": 0,
+  "stdout_octets": 875,
+  "stderr": "",
+  "json_valide": false,
+  "erreur_json": "JSONDecodeError : Expecting value: line 1 column 1 (char 0)",
+  "temps_ms": 159.97,
+  "stdout": 875,
+  "traceback": false
+ },
+ "-V": {
+  "rc": 0,
+  "stdout_octets": 12,
+  "stderr": "",
+  "json_valide": false,
+  "erreur_json": "JSONDecodeError : Expecting value: line 1 column 1 (char 0)",
+  "temps_ms": 155.86,
+  "stdout": "drave 0.1.0"
+ }
+}
+== USAGE
+aucune_commande rc 2 out 0 json False refus None err usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+drave:
+commande_inconnue rc 2 out 0 json False refus None err usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+drave:
+option_inconnue rc 2 out 0 json False refus None err usage: drave [-h] [-V] {analyser,evaluer,rejouer} ...
+drave:
+langue_de rc 2 out 0 json False refus None err usage: drave analyser [-h] [--partition {brut,alternative,fi
+partition_inconnue rc 2 out 0 json False refus None err 
+… [1319 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit/probes.json'))\nprint('== FICHIER')\nfor k,v in d['fichier'].items():\n    print(k,'rc',v.get('rc'),'json',v.get('json_valide'),'texte',repr(v.get('texte'))[:60],'labels' … [642 caractères tronqués]`
+
+  ```
+== FICHIER
+normal rc 0 json True texte 'Élodie sourit.' labels 14 octets 15 err 
+vide rc 3 json True texte '' labels 0 octets 0 err 
+inexistant rc 1 json False texte None labels None octets None err drave: erreur : FileNotFoundError : [Errno 2] No s
+crlf rc 0 json True texte 'Il part.\nElle reste.\n' labels 33 octets 23 err 
+bom rc 0 json True texte '\ufeffLe chat dort.' labels 22 octets 16 err 
+invalide rc 0 json True texte 'a�b' labels 15 octets 3 err 
+jsonl rc 0 json None texte None labels None octets None err 
+== ENCODAGES
+stdout_ascii_json {"rc": 0, "stdout_octets": 4186, "stderr": "", "json_valide": true, "erreur_json": "", "temps_ms": 162.36, "contrat": {"manquants": [], "erreurs": [], "schema": "", "ok": true}, "schema": "drave.annotation", "version": 1, "refus": "", "langue": "und", "script": "Latn", "texte": "Élodie sourit.", "la
+stdout_ascii_lisible {"rc": 0, "stdout_octets": 481, "stderr": "", "traceback": false, "temps_ms": 153.49}
+LC_ALL_C {"rc": 0, "stdout_octets": 4186, "stderr": "", "json_valide": true, "erreur_json": "", "temps_ms": 170.82, "contrat": {"manquants": [], "erreurs": [], "schema": "", "ok": true}, "schema": "drave.annotation", "version": 1, "refus": "
+… [3195 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections\nd=json.load(open('/tmp/reaudit/banc50.json'))\nfor part in ('alternative','brut','filtrer_union','filtrer'):\n    pairs=sum(r['vues'][part]['metriques'].get('chevauchements_syntagme',0) fo … [1176 caractères tronqués]`
+
+  ```
+alternative pairs 149 textes 26 segs 408 union 129 alt 226
+brut pairs 149 textes 26 segs 408 union 129 alt 0
+filtrer_union pairs 41 textes 12 segs 350 union 129 alt 168
+filtrer pairs 0 textes 0 segs 310 union 129 alt 128
+temps_cli_ms min 142.63 med 158.805 mean 159.7 p95 172.29 max 248.44
+temps_api_ms min 0.01 med 2.0765000000000002 mean 3.5 p95 4.619 max 55.487
+json_octets min 330 med 15033.5 mean 29176.5 p95 29672 max 655792
+OLD temps_cli_ms min 136.77 med 152.725 mean 157.3 p95 181.6 max 226.64
+OLD temps_api_ms min 0.177 med 1.009 mean 2.2 p95 2.414 max 45.088
+OLD json_octets min 0 med 12355.5 mean 24108.4 p95 27206 max 533611
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections\nd=json.load(open('/tmp/reaudit/cas20.json'))\nfor part in ('alternative','filtrer'):\n    pairs=sum(r['metriques' if part=='alternative' else 'filtrer']['metriques'].get('chevauchements_sy … [1028 caractères tronqués]`
+
+  ```
+alternative pairs 657 textes 8
+filtrer pairs 0 textes 0
+schema 20 / 20
+deterministe 20 / 20
+rc0 20 / 20
+frontieres zone 2
+phrases sans lettre 6
+file parite [('x03', True, True), ('x16', True, True), ('x17', True, True), ('x18', True, True), ('x19', True, True)]
+jsonl [('x04', 5, 5, 0, 5), ('x05', 4, 4, 1, 4), ('x06', 4, 4, 1, 4), ('x10', 1, 1, 0, 1), ('x11', 5, 5, 3, 5), ('x16', 320, 320, 0, 320), ('x20', 1, 1, 0, 1)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections, statistics\nd=json.load(open('/tmp/reaudit/banc50.json'))\nagg=collections.Counter(); roles=collections.Counter(); non=collections.Counter(); zones=collections.Counter()\nlangues=collectio … [2505 caractères tronqués]`
+
+  ```
+AGG
+{'labels': 4833, 'mots': 1068, 'pos': 1068, 'syntagmes': 408, 'attaches': 321, 'sans_attachement': 87, 'syntagmes_union': 129, 'syntagmes_alternative': 226, 'phrases': 67, 'phrases_espaces_initiaux': 0, 'phrases_vides': 0, 'documents': 49, 'doc_tronquees': 17, 'cibles': 321, 'cibles_absentes': 0, 'cibles_fermees': 18, 'cibles_ambigues': 60, 'cibles_un_caractere': 23, 'unites': 407, 'spans_hors_texte': 0, 'spans_vides': 0, 'valeurs_vides': 0, 'valeur_hors_surface': 0, 'doublons': 0, 'non_surface': 245, 'url_tokens': 0, 'emoji_tokens': 0, 'pos_emoji_ponct': 4, 'schema_ok': 50, 'texte_identique': 50, 'deterministe': 50, 'json_valide': 50, 'stderr_succes': 0, 'stdout_vide_succes': 0}
+ROLES {'agent': 41, 'predicat': 106, 'possession': 10, 'qualite': 17, 'qualité': 12, 'prédicat': 53, 'temps': 11, 'patient': 60, 'hypothese': 4, 'destinataire': 15, 'contenu': 3, 'complément': 8, 'groupe nominal': 18, 'lieu': 12, 'but': 9, 'theme': 19, 'cause': 3, 'concession': 1, 'moyen': 5, 'maniere': 1}
+NON_SURFACE {'discours': 67, 'phrase': 80, 'pragmatique': 77, 'morphème': 4, 'document': 17}
+ZONES {'chemin': 35, 'url': 50, 'courriel': 10}
+HOLES {'mot_total': 766, 'mot_sans': 0, 'ponctuation_total
+… [1023 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, collections, sys\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\nd=json.load(open('/tmp/reaudit/banc50.json'))\nun=[]; ferm=[]; amb=[]\nfor r in d:\n    t=r['texte']\n    for s in r.get('s … [613 caractères tronqués]`
+
+  ```
+UN CARACTERE 23
+[('f20', 'M', 'GV', 'Dupont'), ('f38', 'c', 'GN', 'Les URL'), ('f38', 'c', 'GP', 'd=e#f'), ('f38', 'f', 'GV', 'http'), ('f38', 'f', 'GV', 'x'), ('f38', 'f', 'GV', 'y sont parfois coupées'), ('f39', 'C', 'GV', 'Windows\\System'), ('f41', 'ß', 'GN', 'Le texte contient'), ('f41', 'ß', 'GP', 'des accents é'), ('f41', 'ß', 'GP', 'des ligatures œ æ'), ('f50', 'h', 'GV', 'en notant chaque passage'), ('f50', 'h', 'GN', 'le'), ('f50', 'h', 'GV', 'trois chats sont entrés'), ('f50', 'ß', 'GP', 'à ç ù'), ('f50', 'ø', 'GN', 'les ligatures œ æ aussi'), ('f50', 'ø', 'GN', 'les emojis'), ('f50', 'ø', 'GV', 'restent lisibles'), ('f50', 'ø', 'GV', 'Ne supprimez pas'), ('f50', 'ø', 'GN', 'les lignes vides'), ('f50', 'ø', 'GV', 'elles séparent'), ('f50', 'ø', 'GN', 'les paragraphes'), ('f50', 'ø', 'GV', 'changent'), ('f50', 'ø', 'GN', 'la lecture')]
+FERMEES 17
+[('f05', 'pas', 'GP'), ('f05', 'pas', 'GN'), ('f10', 'est', 'GN'), ('f10', 'est', 'GP'), ('f10', 'est', 'GP'), ('f30', 'hier', 'GV'), ('f32', 'pas', 'GN'), ('f32', 'pas', 'GN'), ('f41', 'et', 'GP'), ('f43', 'ce', 'REL'), ('f43', 'ce', 'REL'), ('f50', 'Nous', 'GP'), ('f50', 'est', 'GP'), ('f50', 'ici', 'GN'), ('f50', 'Ce', 'REL'),
+… [448 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\ntextes=[]\nb=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\ntextes += [('50',r['id'],r['te … [1537 caractères tronqués]`
+
+  ```
+labels 27788 meta_vide 19232 cand_vide 22010 actes 491
+actes hors candidats 5
+[('50', 'f03', 'exclamation', ['assertion', 'question', 'ordre']), ('50', 'f05', 'exclamation', ['assertion', 'question', 'ordre']), ('50', 'f31', 'exclamation', ['assertion', 'question', 'ordre']), ('50', 'f36', 'exclamation', ['assertion', 'question', 'ordre']), ('20', 'x03', 'exclamation', ['assertion', 'question', 'ordre'])]
+doublons candidats 5
+[('50', 'f06', 'syntagme', 'SUB', ['SUB', 'pense', 'pense', 'verrons']), ('50', 'f24', 'syntagme', 'REL', ['REL', 'fille', 'fille', 'au', 'était']), ('50', 'f43', 'syntagme', 'REL', ['REL', 'phrase', 'phrase', 'est', 'même']), ('50', 'f50', 'syntagme', 'SUB', ['SUB', 'dès', 'dès', 'descend', 'réveille']), ('50', 'f50', 'syntagme', 'SUB', ['SUB', 'sait', 'sait', 'tout'])]
+meta schemas 11
+  () 19232
+  ('ouvert',) 6185
+  ('attachement', 'niveau', 'role') 914
+  ('alternative', 'attachement', 'niveau', 'partition', 'role') 761
+  ('alternative', 'attachement', 'niveau', 'partition', 'role', 'union') 438
+  ('alternative', 'niveau', 'partition', 'role', 'union') 86
+  ('contexte', 'ouvert') 76
+  ('niveau', 'role') 61
+  ('alternative', 'niveau', 'partition', 'role') 26
+
+… [78 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"P0-\\|P1-\\|P2-\" reports/rapport-fiabilite-produit.md | head -40 && sed -n 540,620p reports/rapport-fiabilite-produit.md", "description": "Lire la liste P0/P1 de l'audit précédent"}`
+
+  ```
+373:`TestSchemaV1` est sautée tant que `schema` n'existe pas. Elle deviendra stricte dès P0-1 livré.
+450:                # peuvent s'ajouter sans casser ce test (transition P0-1).
+513:    """Le schéma cible versionné — sauté tant que P0-1 n'est pas livré."""
+568:| **P0-1** | **Versionner le format** : `schema` + `version` dans chaque annotation, `--version` les affiche | **0/46** annotations ; impossible d'épingler un rejeu | `drave.py` 50-52, 324 ; `bloc_linguistique.py` 116-127 | **2 h** | faible : champs additifs, test de schéma à ajouter |
+569:| **P0-2** | **Refus en JSON + code 3** (le refus n'est plus une erreur) | **6 refus CLI** : stdout 0 octet, code 1 ; code 3 absent | `drave.py` 154-164, 265-272, 310-311 ; `bloc_linguistique.py` 1012-1017 | **2 h** | faible : JSON d'annotation sur stdout, code 3, docs/tests |
+570:| **P0-3** | **Partition explicite des syntagmes** : `meta.alternative` + filtre `union` documenté (ou suppression mesurée) | **107 paires / 23 textes** ; 85 `union` ; 0 conflit après filtre | `bloc_linguistique.py` 1099-1156, 1179-1204, 1820-1849 | **0,5–1 j** | moyen : change F1/attachement ; préférer l'alternative étiquetée à la suppression |
+571:| **P0-4** |
+… [10991 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"P0\" docs/pilotage/en-cours.md | head -20", "description": "Voir les P0 courants dans l'état"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,json\nsys.path.insert(0,'/tmp/reaudit'); import commun as C\nprint(json.dumps(C.snapshot(),ensure_ascii=False,indent=1))\nEOF", "description": "Prendre le snapshot du code et de la machine"}`
+
+  ```
+{
+ "commit": "caeb730c7df6216c872348cb701b8188bb481c77",
+ "commit_court": "caeb730c",
+ "commit_date": "2026-11-07 01:24:53 -0500",
+ "branche": "s/v7",
+ "date_mesure": "2026-11-07T02:07:25-0500",
+ "drave_sha256": "88ce03da9d9e11e48bc352083aaa94dd492b80798ef31268a1219689a78d463c",
+ "bloc_sha256": "858197f736d758be2ca97e1ccd71a5045fd47d19d31c50afaf13fd669893b47f",
+ "schema_sha256": "87d0bdb8527869cb1c92f0aa0318677c9beeade679682080ca222685c86cf04a",
+ "python": "3.13.16",
+ "machine": "Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz",
+ "nproc": "40",
+ "os": "Linux-7.2.6-1-default-x86_64-with-glibc2.44",
+ "statut_git": ""
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools'); import bloc_linguistique as bl\nd=json.load(open('reports/pensee-frontieres-phrase.json'))['corpus_40']\nident=0; schema=0; labels=0\nfor r in d:\n    a=bl.H … [404 caractères tronqués]`
+
+  ```
+texte identique 40 / 40 schema 40 labels 2107
+  ```
+

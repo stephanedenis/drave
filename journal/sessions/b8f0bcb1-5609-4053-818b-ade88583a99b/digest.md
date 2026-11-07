@@ -1365,3 +1365,643 @@ r106 dev
 … [72 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Banc de mesure : variantes patchées en /tmp et métriques dev/test
+
+- **write** `{"file_path": "/tmp/seg/measure.py", "content": "\"\"\"Mesure une variante de bloc_linguistique (copie patchée en /tmp/seg/variants/<nom>).\"\"\"\nimport json\nimport pathlib\nimport sys\n\nREPO = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nVAR = pathlib.Path(sys.argv[1])\nsys … [1443 caractères tronqués]`
+
+  ```
+<path>/tmp/seg/measure.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "\"\"\"Construit les variantes patchées de bloc_linguistique.py et mesure chacune.\n\nChaque variante = copie du fichier du dépôt + patchs textuels exacts (old→new), appliqués\nune seule fois chacun. Le module de la variante est importé dans un sous-processus (pas de\ncache de module), e … [12267 caractères tronqués]`
+
+  ```
+<path>/tmp/seg/variantes.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _pos\\b\" -A 30 tools/bloc_linguistique.py", "description": "Read _pos method"}`
+
+  ```
+855:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+856-        lex = POS_FERME.get(langue, POS_FERME["fr"])
+857-        n = _normaliser(mot).split("'")[0].split("’")[0]
+858-        # élision : « j' » → « je », « l' » → « le », « qu' » → « que » (10 tokens sans POS)
+859-        _ELISIONS = {"j": "je", "l": "le", "d": "de", "qu": "que", "n": "ne",
+860-                     "s": "se", "c": "ce", "m": "me", "t": "te"}
+861-        n = _ELISIONS.get(n, n)
+862-        # les **nombres** ont une classe (l'audit produit : 45 nombres sans POS)
+863-        if re.fullmatch(r"\d+(?:[.,]\d+)*", n):
+864-            return "NUM", False, 0.9
+865-        for classe, mots in lex.items():
+866-            if n in mots:
+867-                return classe, False, 0.92
+868-        if n in VERBES.get(langue, VERBES["fr"]):
+869-            return "VERB", True, 0.72
+870-        if n in ADJECTIFS.get(langue, ADJECTIFS["fr"]):
+871-            return "ADJ", True, 0.68
+872-        if re.fullmatch(r"\d+(?:[.,]\d+)*", mot):
+873-            return "NUM", False, 0.95
+874-        if mot[:1].isupper() and mot[1:].islower() and mot not in {"Le", "La", "Les", "Un", "Une", "The"}:
+875-            retu
+… [591 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('measure.py'); t=p.read_text()\nt=t.replace('h = bl.Heuristique()','part = sys.argv[2] if len(sys.argv) > 2 else \"alternative\"\\nh = bl.Heuristique(partition=part)')\nt=t.replace('sortie = {\"variante\": VAR.name,','sort … [151 caractères tronqués]`
+
+  ```
+"""Mesure une variante de bloc_linguistique (copie patchée en /tmp/seg/variants/<nom>)."""
+import json
+import pathlib
+import sys
+
+REPO = pathlib.Path("/home/stephane/Data13TB/stephane/GitHub/Qtrinet")
+VAR = pathlib.Path(sys.argv[1])
+sys.path.insert(0, str(VAR / "tools"))
+sys.path.insert(0, str(REPO / "tools/tests/linguistique"))
+
+import bloc_linguistique as bl  # noqa: E402
+import evaluer_gold as eg  # noqa: E402
+from gold_split import dev, test  # noqa: E402
+
+assert str(bl.__file__).startswith(str(VAR)), bl.__file__
+
+phrases = eg.charger()
+part = sys.argv[2] if len(sys.argv) > 2 else "alternative"
+h = bl.Heuristique(partition=part)
+sortie = {"variante": VAR.name, "partition": part, "module": str(bl.__file__), "mesures": {}, "phrases": {}}
+for nom, ps in [("all", phrases), ("dev", dev(phrases)), ("test", test(phrases))]:
+    r = eg.evaluer_bloc(nom, h, ps)
+    s, a, t = r["syntagme"], r[
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\n# 1) retirer la variante cassee\nt=t.replace('    \"g017_G1_sans_const\": [(G1_OLD, G1_NEW)],\\n','')\n# 2) G-A : _pos_mot + garde AUX\nt=t.replace('''                       # le GV ne pre … [2312 caractères tronqués]`
+
+  ```
+ok
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1                  all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+r035_P1P2                all 0.7549 (P 0.7254 R 0.7869 tp 1466 fp 555 fn 397) dev 0.7498 test 0.7663 att 237/238
+r035_P2                  all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+g017_G1                  all 0.7541 (P 0.7248 R 0.7858 tp 1464 fp 556 fn 399) dev 0.7486 test 0.7663 att 237/238
+gv_A_objet               all 0.7531 (P 0.7202 R 0.7890 tp 1470 fp 571 fn 393) dev 0.7450 test 0.7711 att 236/237
+gv_B_adverbe             all 0.7559 (P 0.7264 R 0.7880 tp 1468 fp 553 fn 395) dev 0.7498 test 0.7696 att 236/237
+gv_C_prep                all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+gv_E_pos                 all 0.7832 (P 0.7369 R 0.8357 tp 1557 fp 556 fn 306) dev 0.7802 test 0.7899 att 236/237
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse des différences phrase à phrase pour chaque règle
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json, pathlib, sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg\nph={p['id']:p f … [1060 caractères tronqués]`
+
+  ```
+==================== r035_P1 0.7537 dev 0.748 test 0.7663
+ gains nets {'GN': 1}  pertes nettes {'GN': 1}
+   + r035 ('GN', 0, 8) | The film she talks about is out.
+   - r035 ('GN', 9, 12) | The film she talks about is out.
+==================== r035_P1P2 0.7549 dev 0.7498 test 0.7663
+ gains nets {'GV': 1, 'GN': 1, 'REL': 1}  pertes nettes {}
+   + r035 ('GV', 25, 31) | The film she talks about is out.
+   + r035 ('GN', 0, 8) | The film she talks about is out.
+   + r035 ('REL', 9, 24) | The film she talks about is out.
+==================== g017_G1 0.7541 dev 0.7486 test 0.7663
+ gains nets {'SUB': 1}  pertes nettes {}
+   + g017 ('SUB', 9, 28) | She said that she would come yesterday.
+==================== gv_A_objet 0.7531 dev 0.745 test 0.7711
+ gains nets {'GV': 24}  pertes nettes {'GV': 42}
+   + r023 ('GV', 3, 7) | We love music.
+   + r051 ('GV', 11, 16) | La voiture roule vite.
+   + r065 ('GV', 4, 11) | She watches television.
+   + r066 ('GV', 8, 14) | The cat drinks milk.
+   + r071 ('GV', 8, 14) | The car drives fast.
+   + r105 ('GV', 10, 15) | The baker sells bread.
+   + r109 ('GV', 6, 13) | Music softens manners.
+   + r151 ('GV', 13, 19) | The gardener plants flowers.
+   - g014 ('GV
+… [1793 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg\nfor p in eg.charger():\n    if p['id'] in ('r190','r314','r418','r422','r010','r030','r310','r320',' … [262 caractères tronqués]`
+
+  ```
+r010 Tu viens demain ?
+   gold [('GN', 'Tu'), ('GV', 'viens')]
+   mots [('Tu', 'PRON'), ('viens', 'VERB'), ('demain', 'ADV')]
+r030 You come tomorrow?
+   gold [('GN', 'You'), ('GV', 'come')]
+   mots [('You', 'PRON'), ('come', 'VERB'), ('tomorrow', 'ADV')]
+r190 Ils arrivent demain.
+   gold [('GN', 'Ils'), ('GV', 'arrivent demain')]
+   mots [('Ils', 'PRON'), ('arrivent', 'VERB'), ('demain', 'ADV')]
+r310 Je dois partir maintenant.
+   gold [('GN', 'Je'), ('GV', 'dois partir'), ('ADV', 'maintenant')]
+   mots [('Je', 'PRON'), ('dois', 'VERB'), ('partir', 'VERB'), ('maintenant', 'ADV')]
+r314 Do you come tomorrow?
+   gold [('GN', 'you'), ('GV', 'come'), ('ADV', 'tomorrow')]
+   mots [('Do', 'AUX'), ('you', 'PRON'), ('come', 'VERB'), ('tomorrow', 'ADV')]
+r320 I must leave now.
+   gold [('GN', 'I'), ('GV', 'must leave'), ('ADV', 'now')]
+   mots [('I', 'PRON'), ('must', 'AUX'), ('leave', 'VERB'), ('now', 'ADV')]
+r423 Tu viens demain.
+   gold [('GN', 'Tu'), ('GV', 'viens'), ('ADV', 'demain'), ('PONCT', '.')]
+   mots [('Tu', 'PRON'), ('viens', 'VERB'), ('demain', 'ADV'), ('.', 'PONCT')]
+r427 You come tomorrow.
+   gold [('GN', 'You'), ('GV', 'come'), ('ADV', 'tomorrow'), ('PONCT', '.')]
+   mots [(
+… [505 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\nadd = '''\n# G-E2 : comme G-E mais le NOUN candidat doit suivre immédiatement le premier NOM\n# du GN (prevprev DET/ADJ/NUM) — évite « La cloche sonne | midi » (r135)\nGE2_OLD = GE_OLD\nGE … [2290 caractères tronqués]`
+
+  ```
+ok
+gv_E_pos2                all 0.7836 (P 0.7376 R 0.8357 tp 1557 fp 554 fn 306) dev 0.7802 test 0.7912 att 236/237
+gv_E_pos3                all 0.7663 (P 0.7296 R 0.8068 tp 1503 fp 557 fn 360) dev 0.7608 test 0.7785 att 236/237
+comb_g017_E2             all 0.7843 (P 0.7384 R 0.8363 tp 1558 fp 552 fn 305) dev 0.7812 test 0.7912 att 237/238
+comb_g017_GB_E2          all 0.7868 (P 0.7408 R 0.8390 tp 1563 fp 547 fn 300) dev 0.7834 test 0.7944 att 237/238
+comb_r035_g017           all 0.7556 (P 0.7262 R 0.7874 tp 1467 fp 553 fn 396) dev 0.7508 test 0.7663 att 238/239
+comb_tout                all 0.7883 (P 0.7422 R 0.8406 tp 1566 fp 544 fn 297) dev 0.7856 test 0.7944 att 238/239
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('measure.py'); t=p.read_text()\nt=t.replace('''        \"att_exact_any\": a[\"exact_any\"],''','''        \"att_exact_any\": a[\"exact_any\"],\n        \"pos\": r[\"pos\"][\"exactitude\"], \"pos_ferme\": r[\"pos\"][\"exact … [1236 caractères tronqués]`
+
+  ```
+ok
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+gv_E_pos                 all 0.7832 (P 0.7369 R 0.8357 tp 1557 fp 556 fn 306) dev 0.7802 test 0.7899 att 236/237
+gv_E_pos2                all 0.7836 (P 0.7376 R 0.8357 tp 1557 fp 554 fn 306) dev 0.7802 test 0.7912 att 236/237
+comb_tout                all 0.7883 (P 0.7422 R 0.8406 tp 1566 fp 544 fn 297) dev 0.7856 test 0.7944 att 238/239
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json,pathlib\nR=json.loads(pathlib.Path('resultats.json').read_text())\nfor k in ('base','gv_E_pos2','comb_tout'):\n    m=R[k]['mesures']\n    print(k)\n    for s in ('all','dev','test','hand','reel','synthetique','fr','en'):\n        d=m[s]\n    … [170 caractères tronqués]`
+
+  ```
+base
+  all          f1 0.7533 tp 1463 fp 558 fn 400 pos 0.8625
+  dev          f1 0.7476 tp 1004 fp 386 fn 292 pos 0.8618
+  test         f1 0.7663 tp 459 fp 172 fn 108 pos 0.8642
+  hand         f1 0.8571 tp 54 fp 16 fn 2 pos None
+  reel         f1 0.7483 tp 1088 fp 375 fn 357 pos None
+  synthetique  f1 0.7553 tp 321 fp 167 fn 41 pos None
+  fr           f1 0.698 tp 883 fp 486 fn 278 pos None
+  en           f1 0.8567 tp 580 fp 72 fn 122 pos None
+gv_E_pos2
+  all          f1 0.7836 tp 1557 fp 554 fn 306 pos 0.8871
+  dev          f1 0.7802 tp 1074 fp 383 fn 222 pos 0.887
+  test         f1 0.7912 tp 483 fp 171 fn 84 pos 0.8873
+  hand         f1 0.8571 tp 54 fp 16 fn 2 pos None
+  reel         f1 0.7885 tp 1182 fp 371 fn 263 pos None
+  synthetique  f1 0.7553 tp 321 fp 167 fn 41 pos None
+  fr           f1 0.7424 tp 971 fp 484 fn 190 pos None
+  en           f1 0.863 tp 586 fp 70 fn 116 pos None
+comb_tout
+  all          f1 0.7883 tp 1566 fp 544 fn 297 pos 0.8871
+  dev          f1 0.7856 tp 1081 fp 375 fn 215 pos 0.887
+  test         f1 0.7944 tp 485 fp 169 fn 82 pos 0.8873
+  hand         f1 0.88 tp 55 fp 14 fn 1 pos None
+  reel         f1 0.7939 tp 1190 fp 363 fn 255 pos None
+  synthetique  f1
+… [145 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json, pathlib, sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg\nph={p['id']:p f … [1029 caractères tronqués]`
+
+  ```
+E2 gains {'GN': 56, 'GV': 38} pertes {}
+exemples de gains (10):
+   r004 ('GN', 0, 9) | Le soleil brille. | gold: [('GN', 'Le soleil'), ('GV', 'brille')]
+   r004 ('GV', 10, 16) | Le soleil brille. | gold: [('GN', 'Le soleil'), ('GV', 'brille')]
+   r046 ('GV', 8, 12) | Le chat boit du lait. | gold: [('GN', 'Le chat'), ('GV', 'boit'), ('GN', 'du lait')]
+   r046 ('GN', 0, 7) | Le chat boit du lait. | gold: [('GN', 'Le chat'), ('GV', 'boit'), ('GN', 'du lait')]
+   r047 ('GN', 0, 10) | Les fleurs poussent dans le jardin. | gold: [('GN', 'Les fleurs'), ('GV', 'poussent'), ('GP', 'dans le jardin')]
+   r047 ('GV', 11, 19) | Les fleurs poussent dans le jardin. | gold: [('GN', 'Les fleurs'), ('GV', 'poussent'), ('GP', 'dans le jardin')]
+   r081 ('GN', 0, 10) | Le facteur apporte une lettre. | gold: [('GN', 'Le facteur'), ('GV', 'apporte'), ('GN', 'une lettre')]
+   r081 ('GV', 11, 18) | Le facteur apporte une lettre. | gold: [('GN', 'Le facteur'), ('GV', 'apporte'), ('GN', 'une lettre')]
+   r081 ('GN', 19, 29) | Le facteur apporte une lettre. | gold: [('GN', 'Le facteur'), ('GV', 'apporte'), ('GN', 'une lettre')]
+   r088 ('GV', 8, 14) | Le chat grimpe sur le toit. | gold: [('GN', 'Le chat'), (
+… [385 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle négatif (condition inversée) et modes de partition
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\nadd='''\n# placebo : le **même** déclencheur, mais une frontière qui n'en est pas une\nGPL_OLD = GE2_OLD\nGPL_NEW = GE2_NEW.replace('_su.type in (\"PONCT\", \"PREP\", \"DET\")', '_su.type  … [890 caractères tronqués]`
+
+  ```
+gv_E_pos2                all 0.7836 (P 0.7376 R 0.8357 tp 1557 fp 554 fn 306) dev 0.7802 test 0.7912 att 236/237
+placebo_E2               all 0.7389 (P 0.7032 R 0.7783 tp 1450 fp 612 fn 413) dev 0.7359 test 0.7455 att 231/232
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+--- partition filtrer_union
+all 0.8044 tp 1456 fp 301 fn 407 att 230 / 231 couv 0.9665
+dev 0.7982 tp 999 fp 208 fn 297 att 155 / 156 couv 0.9571
+test 0.8183 tp 457 fp 93 fn 110 att 75 / 75 couv 0.9868
+--- partition filtrer
+all 0.8104 tp 1440 fp 251 fn 423 att 222 / 223 couv 0.9331
+dev 0.8003 tp 984 fp 179 fn 312 att 148 / 149 couv 0.9141
+test 0.8329 tp 456 fp 72 fn 111 att 74 / 74 couv 0.9737
+--- partition brut
+all 0.7533 tp 1463 fp 558 fn 400 att 236 / 237 couv 0.9916
+dev 0.7476 tp 1004 fp 386 fn 292 att 160 / 161 couv 0.9877
+test 0.7663 tp 459 fp 172 fn 108 att 76 / 76 couv 1.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-mesure complète de toutes les variantes avec POS/sources
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\nt=t.replace('''    \"comb_r035_g017\": [''','''    \"comb_r035_g017_E2\": [(P1_OLD, P1_NEW), (P2_OLD, P2_NEW), (CONST_OLD, CONST_NEW), (G1_OLD, G1_NEW), (GE2_OLD, GE2_NEW)],\n    \"comb_r0 … [306 caractères tronqués]`
+
+  ```
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1                  all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+r035_P1P2                all 0.7549 (P 0.7254 R 0.7869 tp 1466 fp 555 fn 397) dev 0.7498 test 0.7663 att 237/238
+r035_P2                  all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1_P3               all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+g017_G1                  all 0.7541 (P 0.7248 R 0.7858 tp 1464 fp 556 fn 399) dev 0.7486 test 0.7663 att 237/238
+gv_A_objet               all 0.7531 (P 0.7202 R 0.7890 tp 1470 fp 571 fn 393) dev 0.7450 test 0.7711 att 236/237
+gv_B_adverbe             all 0.7559 (P 0.7264 R 0.7880 tp 1468 fp 553 fn 395) dev 0.7498 test 0.7696 att 236/237
+gv_A_B                   all 0.7551 (P 0.7222 R 0.7912 tp 1474 fp 567 fn 389) dev 0.7472 test 0.7728 att 236/237
+gv_C_prep                all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+gv_E_pos                 all 0.7832 (P 0.7369 R 0.8357 tp 1557 fp 556 
+… [1059 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Tableau final : erreurs GV par règle et par classe
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json, pathlib, sys, collections\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique')\nsys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport evaluer_gold as eg\nph={p['id']:p f … [1064 caractères tronqués]`
+
+  ```
+variante                    F1     dev    test     POS  GVfp  GVfn      att    couv
+base                    0.7533  0.7476  0.7663  0.8625   322   180 236/237    0.9916
+r035_P1                 0.7537  0.7480  0.7663  0.8625   322   180 236/237    0.9916
+r035_P1P2               0.7549  0.7498  0.7663  0.8625   320   179 237/238    0.9958
+g017_G1                 0.7541  0.7486  0.7663  0.8625   322   180 237/238    0.9958
+gv_B_adverbe            0.7559  0.7498  0.7696  0.8625   317   175 236/237    0.9916
+gv_E_pos2               0.7836  0.7802  0.7912  0.8871   322   142 236/237    0.9916
+gv_E_pos3               0.7663  0.7608  0.7785  0.8795   322   160 236/237    0.9916
+placebo_E2              0.7389  0.7359  0.7455  0.8566   347   184 231/232    0.9707
+gv_A_objet              0.7531  0.7450  0.7711  0.8625   335   173 236/237    0.9916
+gv_A_B                  0.7551  0.7472  0.7728  0.8625   331   169 236/237    0.9916
+gv_C_prep               0.7533  0.7476  0.7663  0.8625   321   180 236/237    0.9916
+gv_E_pos                0.7832  0.7802  0.7899  0.8915   323   142 236/237    0.9916
+comb_r035_g017          0.7556  0.7508  0.7663  0.8625   320   179 238/239    1.0000
+comb_E2_GB 
+… [328 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Génération des diffs exacts par règle et du diff combiné
+
+- **bash** `{"command": "cd /tmp/seg && for v in r035_P1 r035_P1P2 g017_G1 gv_B_adverbe gv_E_pos2 gv_A_objet gv_C_prep placebo_E2 comb_tout; do\n  echo \"########## $v\"\n  diff -u /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py variants/$v/tools/bloc_linguistique.py | sed -e '1s|.*|- … [206 caractères tronqués]`
+
+  ```
+377 diffs.txt
+9
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && sed -n '1,120p' diffs.txt", "description": "Inspect first diffs"}`
+
+  ```
+########## r035_P1
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -1217,7 +1217,16 @@
+                        and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set())
+                        and _normaliser(mots[j][2]) not in RELATIFS
+                        and not est_sub(_normaliser(mots[j][2]))
+-                       and (j == i + 1 or not est_verbe(mots[j][0], mots[j][2]))):
++                       and (j == i + 1 or not est_verbe(mots[j][0], mots[j][2]))
++                       # le GN ne traverse pas un **pronom sujet** devant un verbe :
++                       # « The film | she talks about » (relative zéro, r035)
++                       and not (j > i + 1
++                                and _normaliser(mots[j][2]) in (
++                                    SUJETS if langue == "fr"
++                                    else {"i", "you", "he", "she", "it", "we", "they"})
++                                and j + 1 < len(mots)
++                                and (est_verbe(mots[j + 1][0], mots[j + 1][2])
++                                     or _normaliser(mots[j + 1][2]) in lex.get("AUX", set())))):
+    
+… [6110 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de robustesse du patch g017 (segments vide) et re-mesure
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\nt=t.replace('''def _derniere_tete(segment: dict, texte: str) -> str:\n    \"\"\"Le dernier mot du segment précédent (le gouverneur probable d'une SUB).\"\"\"\n    mots = re.findall(r\"[\\\ … [884 caractères tronqués]`
+
+  ```
+True True
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1                  all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+r035_P1P2                all 0.7549 (P 0.7254 R 0.7869 tp 1466 fp 555 fn 397) dev 0.7498 test 0.7663 att 237/238
+r035_P2                  all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1_P3               all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+g017_G1                  all 0.7541 (P 0.7248 R 0.7858 tp 1464 fp 556 fn 399) dev 0.7486 test 0.7663 att 237/238
+gv_A_objet               all 0.7531 (P 0.7202 R 0.7890 tp 1470 fp 571 fn 393) dev 0.7450 test 0.7711 att 236/237
+gv_B_adverbe             all 0.7559 (P 0.7264 R 0.7880 tp 1468 fp 553 fn 395) dev 0.7498 test 0.7696 att 236/237
+gv_A_B                   all 0.7551 (P 0.7222 R 0.7912 tp 1474 fp 567 fn 389) dev 0.7472 test 0.7728 att 236/237
+gv_C_prep                all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+gv_E_pos                 all 0.7832 (P 0.7369 R 0.8357 tp 15
+… [1069 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Classification finale et effectifs pour la fiche
+
+- **bash** `{"command": "cd /tmp/seg && cat > classer.py <<'EOF'\n\"\"\"Classe les erreurs GV (FP/FN) du gold 612, sur une variante donnée.\"\"\"\nimport collections\nimport json\nimport pathlib\nimport sys\n\nREPO = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nVAR = pathlib.Path(sys.argv[ … [4277 caractères tronqués]`
+
+  ```
+== base FP 322 {'objet': 73, 'gauche_autre': 150, 'adverbe': 16, 'tronque': 39, 'parasite': 17, 'deux_cotes': 27} | FN 180 {'chev_deux': 28, 'avale_GN': 51, 'chev_droite': 75, 'chev_gauche': 7, 'tronque': 19}
+   double 153 {'objet': 4, 'gauche_autre': 136, 'adverbe': 1, 'tronque': 11, 'deux_cotes': 1} | origine {'chunker': 98, 'S': 224}
+== comb_tout FP 315 {'objet': 73, 'gauche_autre': 151, 'adverbe': 10, 'tronque': 40, 'parasite': 16, 'deux_cotes': 25} | FN 136 {'chev_deux': 23, 'chev_droite': 72, 'avale_GN': 13, 'chev_gauche': 9, 'tronque': 19}
+   double 155 {'objet': 4, 'gauche_autre': 138, 'adverbe': 1, 'tronque': 11, 'deux_cotes': 1} | origine {'chunker': 91, 'S': 224}
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && sed -i 's/dans_gn = any(g\\[0\\] <= d and g\\[1\\] >= gd for g in gn_gold)/dans_gn = any(g[0] >= d and g[1] <= gd and g[1] > g[0] for g in gn_gold)/' classer.py && python3 classer.py /tmp/seg/variants/base > class_base.json && python3 classer.py /tmp/seg/variants/comb_tou … [375 caractères tronqués]`
+
+  ```
+== base FP 322 {'objet': 73, 'sujet': 144, 'adverbe': 16, 'tronque': 39, 'parasite': 17, 'gauche_autre': 6, 'deux_cotes': 27} | FN 180 {'chev_deux': 28, 'avale_GN': 51, 'chev_droite': 75, 'chev_gauche': 7, 'tronque': 19}
+   double 153 {'objet': 4, 'sujet': 133, 'adverbe': 1, 'tronque': 11, 'deux_cotes': 1, 'gauche_autre': 3} | origine {'chunker': 98, 'S': 224}
+== comb_tout FP 315 {'objet': 73, 'sujet': 145, 'adverbe': 10, 'tronque': 40, 'parasite': 16, 'deux_cotes': 25, 'gauche_autre': 6} | FN 136 {'chev_deux': 23, 'chev_droite': 72, 'avale_GN': 13, 'chev_gauche': 9, 'tronque': 19}
+   double 155 {'objet': 4, 'sujet': 135, 'adverbe': 1, 'tronque': 11, 'deux_cotes': 1, 'gauche_autre': 3} | origine {'chunker': 91, 'S': 224}
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json\nd=json.load(open('class_base.json'))\nfor cat, items in d['exemples'].items():\n    print('##',cat)\n    for e in items: print('   ',e)\nEOF", "description": "Show examples per GV error class"}`
+
+  ```
+## objet
+    {'id': 'g003', 'span': "a vu l'homme", 'sens': 'fp', 'origine': 'chunker', 'phrase': "La femme a vu l'homme dans le parc."}
+    {'id': 'g014', 'span': "vu l'homme", 'sens': 'fp', 'origine': 'chunker', 'phrase': "J'ai vu l'homme avec le télescope."}
+    {'id': 'r023', 'span': 'love music', 'sens': 'fp', 'origine': 'chunker', 'phrase': 'We love music.'}
+    {'id': 'r056', 'span': 'arrivent demain matin', 'sens': 'fp', 'origine': 'chunker', 'phrase': 'Ils arrivent demain matin.'}
+    {'id': 'r065', 'span': 'watches television', 'sens': 'fp', 'origine': 'chunker', 'phrase': 'She watches television.'}
+## sujet
+    {'id': 'g004', 'span': 'Il a couru', 'sens': 'fp', 'origine': 'S', 'phrase': 'Il a couru pour attraper le bus.'}
+    {'id': 'g005', 'span': 'Elle a dit', 'sens': 'fp', 'origine': 'S', 'phrase': "Elle a dit qu'elle viendrait hier."}
+    {'id': 'g008', 'span': 'Marie lit', 'sens': 'fp', 'origine': 'S', 'phrase': 'Marie lit un livre.'}
+    {'id': 'g009', 'span': 'Il ne dort pas', 'sens': 'fp', 'origine': 'S', 'phrase': 'Il ne dort pas.'}
+    {'id': 'g014', 'span': "J'ai vu", 'sens': 'fp', 'origine': 'S', 'phrase': "J'ai vu l'homme avec le télescope."}
+## adverbe
+    
+… [4790 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && cat > croisements.py <<'EOF'\nimport collections, json, pathlib, sys\nREPO = pathlib.Path(\"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\")\nVAR = pathlib.Path(sys.argv[1])\nsys.path.insert(0, str(VAR / \"tools\")); sys.path.insert(0, str(REPO / \"tools/tests/linguisti … [2716 caractères tronqués]`
+
+  ```
+[stderr]
+  File "/tmp/seg/croisements.py", line 19
+    return [pm.get((m["debut"],m["fin"]),"?"") if False else pm.get((m["debut"],m["fin"]),"?") for m in p["mots"] if d<=m["debut"] and m["fin"]<=f]
+                                                                                                                                             ^
+SyntaxError: unterminated string literal (detected at line 19)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('croisements.py'); t=p.read_text()\nimport re\nt=re.sub(r'    def extras\\(d,f\\):\\n.*\\n', '    def extras(d,f):\\n        return [pm.get((m[\"debut\"],m[\"fin\"]),\"?\") for m in p[\"mots\"] if d<=m[\"debut\"] and m[\"f … [144 caractères tronqués]`
+
+  ```
+FP par classe×origine: {'adverbe|S': 2, 'adverbe|chunker': 14, 'deux_cotes|S': 21, 'deux_cotes|chunker': 6, 'gauche_autre|S': 3, 'gauche_autre|chunker': 3, 'objet|S': 20, 'objet|chunker': 53, 'parasite|S': 11, 'parasite|chunker': 6, 'sujet|S': 142, 'sujet|chunker': 2, 'tronque|S': 25, 'tronque|chunker': 14}
+doublons par classe×origine: {'adverbe|chunker': 1, 'deux_cotes|S': 1, 'gauche_autre|S': 3, 'objet|S': 3, 'objet|chunker': 1, 'sujet|S': 133, 'tronque|S': 10, 'tronque|chunker': 1}
+FN: {'chev_deux': 28, 'avale_GN': 51, 'chev_droite': 75, 'chev_gauche': 7, 'tronque': 19}
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du style des fiches/JSON existants et de la date
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date -I && ls -t reports/*.json | head -5 && echo '---' && python3 -c \"\nimport json,pathlib\np=pathlib.Path('reports/pensee-r264-elision.json'); print(p.read_text()[:1500])\n\"", "description": "Check date and JSON style"}`
+
+  ```
+2026-11-07
+reports/pensee-gn-pronom-sujet.json
+reports/pensee-r264-elision.json
+reports/pensee-pos-ponctuation.json
+reports/pensee-etat-r.json
+reports/pensee-etat-s.json
+---
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "bug": "GV : endswith(qu) sur le token entier au lieu du radical",
+ "avant": {
+  "exact": 235,
+  "labels": 236,
+  "couverture": 0.9874,
+  "spans": 3,
+  "f1": 0.6482
+ },
+ "apres": {
+  "exact": 236,
+  "labels": 237,
+  "couverture": 0.9916,
+  "spans": 2,
+  "f1": 0.6519,
+  "pos": 0.8625,
+  "dev": "160/161",
+  "test": "76/76"
+ },
+ "spans_restants": [
+  "r035 relative zéro",
+  "g017 arbitrage d'adverbe"
+ ],
+ "controles": {
+  "autotest": "183/183",
+  "assertions": 17
+ }
+}
+
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+### 🤖 Assistant
+
+⏵ Extraction du tableau final complet et des diff exacts
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json,pathlib\nR=json.loads(pathlib.Path('resultats.json').read_text())\nV=('base','r035_P1','r035_P1P2','g017_G1','gv_B_adverbe','gv_E_pos2','gv_E_pos3','gv_A_objet','gv_A_B','gv_C_prep','placebo_E2','comb_r035_g017','comb_E2_GB','comb_g017_E2',' … [778 caractères tronqués]`
+
+  ```
+variante                   F1      P      R   tp   fp   fn    POS    dev   test   tete      att   couv
+base                   0.7533 0.7239 0.7853 1463  558  400 0.8625 0.7476 0.7663 0.8640 236/237   0.9916
+r035_P1                0.7537 0.7240 0.7858 1464  558  399 0.8625 0.7480 0.7663 0.8638 236/237   0.9916
+r035_P1P2              0.7549 0.7254 0.7869 1466  555  397 0.8625 0.7498 0.7663 0.8651 237/238   0.9958
+g017_G1                0.7541 0.7248 0.7858 1464  556  399 0.8625 0.7486 0.7663 0.8640 237/238   0.9958
+gv_B_adverbe           0.7559 0.7264 0.7880 1468  553  395 0.8625 0.7498 0.7696 0.8640 236/237   0.9916
+gv_E_pos2              0.7836 0.7376 0.8357 1557  554  306 0.8871 0.7802 0.7912 0.8806 236/237   0.9916
+gv_E_pos3              0.7663 0.7296 0.8068 1503  557  360 0.8795 0.7608 0.7785 0.8700 236/237   0.9916
+gv_A_objet             0.7531 0.7202 0.7890 1470  571  393 0.8625 0.7450 0.7711 0.8620 236/237   0.9916
+gv_A_B                 0.7551 0.7222 0.7912 1474  567  389 0.8625 0.7472 0.7728 0.8620 236/237   0.9916
+gv_C_prep              0.7533 0.7239 0.7853 1463  558  400 0.8625 0.7476 0.7663 0.8640 236/237   0.9916
+placebo_E2             0.7389 0.7032 0.7783 1450  612  41
+… [1033 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"0\\.7535\\|0,7535\\|0\\.7533\\|0,7533\" tools/ reports/pensee-gn-pronom-sujet.json docs/pilotage/en-cours.md 2>/dev/null | head -20", "description": "Search for the headline F1 value in code/tests"}`
+
+  ```
+tools/pensee/autotest.py:1732:    return abs(f1 - 0.7535) < 0.001, f"union : segments F1 {f1} (S 0,5988)"
+tools/pensee/autotest.py:1744:    return abs(f1 - 0.7535) < 0.001 and abs(tete - 0.865) < 0.001, (
+tools/pensee/autotest.py:1758:    return (abs(f1 - 0.7535) < 0.001 and abs(tete - 0.865) < 0.001
+reports/pensee-gn-pronom-sujet.json:15:  "f1": 0.7535,
+reports/pensee-gn-pronom-sujet.json:34: "gain_total": "0,6519 → 0,7535 (+10,2 pts)"
+docs/pilotage/en-cours.md:71:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 236/237 (0,9916)**, **F1 0,7535** (linéaire 0,8104), **2 spans** ; **contrat v1** validé ; frontières, partition, GN du sujet ; **`drave` v0**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1700,1775p' tools/pensee/autotest.py", "description": "Read autotest assertions around F1 0.7535"}`
+
+  ```
+a1 = h1.analyser(phrase["texte"], phrase["langue"])
+        a2 = h2.analyser(phrase["texte"], phrase["langue"])
+        gold = {(s["type"], s["debut"]) for s in phrase["segments"]}
+        seg_s = [(e.type, e.debut, e.fin) for e in a1.etiquettes if e.niveau == "syntagme"]
+        seg_c = [(e.type, e.debut, e.fin) for e in a2.etiquettes if e.niveau == "syntagme"]
+        pred = set()
+        for (t, d, f) in seg_s:
+            cand = [cd for (ct, cd, cf) in seg_c if ct == t and d <= cd < f]
+            pred.add((t, cand[0] if cand else d))
+        tp += len(pred & gold); fp += len(pred - gold); fn += len(gold - pred)
+    p = tp / max(1, tp + fp); r = tp / max(1, tp + fn); f1 = round(2 * p * r / max(1e-9, p + r), 4)
+    return abs(f1 - 0.823) < 0.001, (
+        f"hybride : tête F1 {f1} (S 0,3552, chunker 0,4707)")
+
+
+def t112_union() -> tuple[bool, str]:
+    """L'union des segmenteurs : segments F1 0,5595 (S 0,4741)."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger, _seg, _tete
+    ph = charger()
+    h1 = bl.Heuristique(union=False)
+    h2 = bl.Heuristique(union=False)
+    h2.segmenter_s = False
+    tp = fp = fn = 0
+
+… [2394 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure aussi sur le gold gelé 602 (référence officielle des portes)
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('measure.py'); t=p.read_text()\nt=t.replace('''for nom, ps in [(\"all\", phrases), (\"dev\", dev(phrases)), (\"test\", test(phrases))]:''',\n'''gele = eg.charger_gele()\nfor nom, ps in [(\"all\", phrases), (\"gele\", gele) … [192 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-4572]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4572", "wait": true, "timeout_ms": 120000}`
+
+  ```
+base                     all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1                  all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+r035_P1P2                all 0.7549 (P 0.7254 R 0.7869 tp 1466 fp 555 fn 397) dev 0.7498 test 0.7663 att 237/238
+r035_P2                  all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+r035_P1_P3               all 0.7537 (P 0.7240 R 0.7858 tp 1464 fp 558 fn 399) dev 0.7480 test 0.7663 att 236/237
+g017_G1                  all 0.7541 (P 0.7248 R 0.7858 tp 1464 fp 556 fn 399) dev 0.7486 test 0.7663 att 237/238
+gv_A_objet               all 0.7531 (P 0.7202 R 0.7890 tp 1470 fp 571 fn 393) dev 0.7450 test 0.7711 att 236/237
+gv_B_adverbe             all 0.7559 (P 0.7264 R 0.7880 tp 1468 fp 553 fn 395) dev 0.7498 test 0.7696 att 236/237
+gv_A_B                   all 0.7551 (P 0.7222 R 0.7912 tp 1474 fp 567 fn 389) dev 0.7472 test 0.7728 att 236/237
+gv_C_prep                all 0.7533 (P 0.7239 R 0.7853 tp 1463 fp 558 fn 400) dev 0.7476 test 0.7663 att 236/237
+gv_E_pos                 all 0.7832 (P 0.7369 R 0.8357 tp 1557 fp 556 
+… [1093 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4572 (bash: cd /tmp/seg && python3 - <<'EOF'
+import pathlib
+p=pathlib.Path('measure.py'); t=p.read_text()
+t=t.replace('''for nom, ps in [("all", phrases), ("dev", dev(phrases)), ("test", test(phrases))]:''',
+'''gele = eg.charger_gele()
+for nom, ps in [("all", phrases), ("gele", gele), ("dev", dev(phrases)), ("test", test(phrases))]:''')
+p.write_text(t)
+EOF
+cd /tmp/seg && python3 variantes.py 2>&1 | tail -25) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Extraction des valeurs gelées (référence officielle) par règle
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport json,pathlib\nR=json.loads(pathlib.Path('resultats.json').read_text())\nV=('base','r035_P1','r035_P1P2','g017_G1','gv_B_adverbe','gv_E_pos2','gv_E_pos3','gv_A_objet','gv_A_B','gv_C_prep','placebo_E2','comb_r035_g017','comb_E2_GB','comb_g017_E2',' … [579 caractères tronqués]`
+
+  ```
+variante                gelé F1   tp   fp   fn   tete    POS |  viv F1     dev    test      att   couv
+base                     0.7535 1440  551  391 0.8650 0.8625 |  0.7533  0.7476  0.7663 232/233   0.9749
+r035_P1                  0.7539 1441  551  390 0.8647 0.8625 |  0.7537  0.7480  0.7663 232/233   0.9749
+r035_P1P2                0.7551 1443  548  388 0.8661 0.8625 |  0.7549  0.7498  0.7663 233/234   0.9791
+g017_G1                  0.7543 1441  549  390 0.8650 0.8625 |  0.7541  0.7486  0.7663 233/234   0.9791
+gv_B_adverbe             0.7551 1443  548  388 0.8650 0.8625 |  0.7559  0.7498  0.7696 232/233   0.9749
+gv_E_pos2                0.7843 1534  547  297 0.8818 0.8873 |  0.7836  0.7802  0.7912 232/233   0.9749
+gv_E_pos3                0.7666 1480  550  351 0.8711 0.8797 |  0.7663  0.7608  0.7785 232/233   0.9749
+gv_A_objet               0.7533 1447  564  384 0.8629 0.8625 |  0.7531  0.7450  0.7711 232/233   0.9749
+gv_A_B                   0.7543 1449  562  382 0.8629 0.8625 |  0.7551  0.7472  0.7728 232/233   0.9749
+gv_C_prep                0.7535 1440  551  391 0.8650 0.8625 |  0.7533  0.7476  0.7663 232/233   0.9749
+placebo_E2               0.7388 1427  605  404 0.8571 0.8
+… [670 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Règle chirurgicale pour les GV du S qui incluent le sujet (suffixe chunker)
+
+- **bash** `{"command": "cd /tmp/seg && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('variantes.py'); t=p.read_text()\nadd = '''\n# G-D : un GV de S qui **inclut le sujet** est remplacé par le GV du chunker (même fin,\n# début plus tardif) — la forme chirurgicale du filtre union, limitée aux GV\nGD_OLD = \ … [1462 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/seg/variantes.py", line 246, in <module>
+    d = ecrire(nom, VARIANTS[nom])
+                    ~~~~~~~~^^^^^
+KeyError: 'gv_D_suffixe'
+[stderr]
+  File "<stdin>", line 8
+    GD_OLD = \'\'\'                for s in c.get("segments", []):
+              ^
+SyntaxError: unexpected character after line continuation character
+  ```
+
+- **read** `{"file_path": "/tmp/seg/variantes.py", "offset": 150, "limit": 100}`
+
+  ```
+<path>/tmp/seg/variantes.py</path>
+<type>file</type>
+<content>
+150: 
+151:         # 3 a bis. une forme en -s/-es après un NOM sujet est un verbe (« the cat sleeps »).'''
+152: 
+153: 
+154: # G-E2 : comme G-E mais le NOUN candidat doit suivre immédiatement le premier NOM
+155: # du GN (prevprev DET/ADJ/NUM) — évite « La cloche sonne | midi » (r135)
+156: GE2_OLD = GE_OLD
+157: GE2_NEW = '''        # 3 a quater. un mot inconnu (NOUN, confiance ≤ 0,45) **juste après le
+158:         # premier NOM d'un GN** et devant une frontière de clause (PONCT, PREP, DET) est
+159:         # le verbe de la proposition : « Le soleil brille. », « Le chat boit du lait ».
+160:         for _k, _i in enumerate(pos_idx):
+161:             _e = etiquettes[_i]
+162:             if _k < 2 or _e.type != "NOUN" or _e.confiance > 0.45:
+163:                 continue
+164:             _av = etiquettes[pos_idx[_k - 1]]
+165:             _av2 = etiquettes[pos_idx[_k - 2]]
+166:             _su = etiquettes[pos_idx[_k + 1]] if _k + 1 < len(pos_idx) else None
+167:             if (_av.type == "NOUN" and _av2.type in ("DET", "ADJ", "NUM")
+168:                     and _su is not None and _su.type in ("PONCT", "PREP", "DET")):
+169: 
+… [4409 caractères tronqués]
+  ```
+

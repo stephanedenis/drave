@@ -7,12 +7,12 @@
 | Identifiant | `b8f0bcb1-5609-4053-818b-ade88583a99b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.6 h |
+| Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 41 |
-| Appels d'outils | 43 |
-| Fichiers touchés | 1 |
-| Commandes | 34 |
+| Messages | 72 |
+| Appels d'outils | 73 |
+| Fichiers touchés | 2 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans resta … [2125 caractères tronqués]
 
-*43 appels d'outils.* Actions notables :
+*73 appels d'outils.* Actions notables :
 
 - bash — Check branch and workspace state
 - bash — List reports and linguistic test tools
@@ -41,11 +41,11 @@
 - bash — Inspect prior measurement JSON
 - bash — Measure baseline F1 on all/dev/test
 - bash — Measure baseline F1 on all/dev/test (typo fix)
-- … et 21 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
-⏵ Banc de mesure : variantes patchées en /tmp et métriques dev/test
+⏵ Règle chirurgicale pour les GV du S qui incluent le sujet (suffixe chunker)
 
 ## 3. Travail accompli
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/seg/measure.py` | 1 | 0 |
+| `/tmp/seg/variantes.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -91,13 +92,26 @@
 - **T1** Inspect gold ADV boundary exceptions
 - **T1** Check dev/test membership of key ids
 - **T1** Check r004 POS and chunker output
+- **T1** Read _pos method
+- **T1** Add partition argument to measure runner
+- **T1** Build variants and run first measurement batch
+- **T1** Diff per phrase and type for each variant
+- **T1** Inspect gold for adverb-rule gains/losses
+- **T1** Measure refined POS rule and combinations
+- … et 21 autres
+
+## 4. Mesures et résultats marquants
+
+- **T1** `docs/pilotage/en-cours.md:71:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 236/237 (0,9916)**, **F1 0,7535** (linéaire 0,8104), **2 spans** ; **contrat v1** validé ; frontières, partit`
+- **T1** `[still running after 60000ms; moved to background job bash-4572]`
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
 - **T1** : === The film she talks about is out. pos: [('The', 'DET'), ('film', 'NOUN'), ('she', 'PRON'), ('talks', 'VERB'), ('about', 'PREP'), ('is', 'AUX'), ('out', 'ADV'), ('.', 'PONCT')] [stderr] Traceback (m
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module> TypeError: tuple indices must be integers or slices, not str [exit code: 1]
+- **T1** : [stderr]   File "/tmp/seg/croisements.py", line 19     return [pm.get((m["debut"],m["fin"]),"?"") if False else pm.get((m["debut"],m["fin"]),"?") for m in p["mots"] if d<=m["debut"] and m["fin"]<=f]  
 

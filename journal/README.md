@@ -145,10 +145,11 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `7263ca42` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 0.7 h | 1 | 58 | 1 | 0 | [rapport](sessions/7263ca42-cd56-4c36-a6dd-8ff2d1024a43/rapport.md) |
 | `7557cea8` | — | 2026-10-28 15:21 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/7557cea8-bca5-4702-811a-5c2374adebbb/rapport.md) |
 | `7635f5f5` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.7 h | 1 | 159 | 2 | 0 | [rapport](sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) |
-| `77d26bc7` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.6 h | 1 | 62 | 3 | 0 | [rapport](sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) |
+| `77d26bc7` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.4 h | 1 | 94 | 6 | 0 | [rapport](sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) |
 | `7a63b441` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 12:03 | 0.6 h | 1 | 81 | 3 | 0 | [rapport](sessions/7a63b441-9131-42c8-9f21-da97ea1dbaaa/rapport.md) |
 | `7c876089` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 13:10 | 0.3 h | 1 | 62 | 2 | 0 | [rapport](sessions/7c876089-605c-4836-930e-925a66028509/rapport.md) |
 | `7d0d2578` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.1 h | 1 | 53 | 1 | 0 | [rapport](sessions/7d0d2578-0048-4998-8494-7d2daef56769/rapport.md) |
+| `7f247e9c` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 02:09 | 0.1 h | 1 | 8 | 0 | 0 | [rapport](sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) |
 | `7f3f463f` | Tu es un vérificateur ADVERSARIAL | 2026-10-02 19:29 | 0.1 h | 1 | 28 | 1 | 0 | [rapport](sessions/7f3f463f-9213-4721-b9a7-82858ef93f8c/rapport.md) |
 | `8156fdcb` | Réviser roadmap et backlog, établir priorités | 2026-10-29 08:40 | 28.9 h | 23 | 805 | 58 | 40 | [rapport](sessions/8156fdcb-5033-4ba4-a5f3-f8a078e6e57e/rapport.md) |
 | `8288d350` | You are doing an ADVERSARIAL | 2026-10-01 05:52 | 0.1 h | 1 | 51 | 0 | 0 | [rapport](sessions/8288d350-b68e-4245-b903-5ef6d71910b4/rapport.md) |
@@ -176,7 +177,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `b6a672ec` | Git push to origin remote | 2026-11-01 13:28 | 25.2 h | 2 | 59 | 0 | 0 | [rapport](sessions/b6a672ec-3349-4a4c-9e23-4478aa823170/rapport.md) |
 | `b7d4678e` | Reprise session L/B13 et vérification stricte | 2026-11-02 16:16 | 26.4 h | 83 | 826 | 25 | 40 | [rapport](sessions/b7d4678e-2143-4daa-a9a4-a456c5aa8dab/rapport.md) |
 | `b80df26d` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:52 | 0.3 h | 1 | 43 | 2 | 0 | [rapport](sessions/b80df26d-3dc3-49ea-98b8-fa5a7e0c4cdf/rapport.md) |
-| `b8f0bcb1` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 0.6 h | 1 | 43 | 1 | 0 | [rapport](sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) |
+| `b8f0bcb1` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.3 h | 1 | 73 | 2 | 0 | [rapport](sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) |
 | `b9ea3904` | Tu travailles dans le dépôt | 2026-11-05 14:47 | 1.5 h | 1 | 118 | 2 | 0 | [rapport](sessions/b9ea3904-889c-4497-a781-694da7d4987c/rapport.md) |
 | `bbc0b8e2` | Avis sur le dépôt GitHub Strata | 2026-10-12 08:44 | 0.2 h | 2 | 52 | 2 | 3 | [rapport](sessions/bbc0b8e2-1c7f-4d43-b1e5-7b7b72bd6ccf/rapport.md) |
 | `bbd6969f` | Continue avec REPRISE.md | 2026-09-28 14:46 | 222.5 h | 205 | 9050 | 220 | 706 | [rapport](sessions/bbd6969f-0f70-42b2-8951-64d1f2f36d2e/rapport.md) |
@@ -184,6 +185,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `bcfe0b97` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 12:20 | 0.3 h | 1 | 110 | 0 | 0 | [rapport](sessions/bcfe0b97-1795-4610-8e8b-b598ca1ba6cb/rapport.md) |
 | `bd15cc5b` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 12:44 | 0.2 h | 1 | 28 | 0 | 0 | [rapport](sessions/bd15cc5b-58b9-4b6f-9439-022d486e8a0a/rapport.md) |
 | `bd6322ed` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | 1 | 65 | 2 | 0 | [rapport](sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) |
+| `bdefb627` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 0.1 h | 1 | 10 | 0 | 0 | [rapport](sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) |
 | `bf49d867` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | 1 | 105 | 2 | 0 | [rapport](sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) |
 | `c25f97d1` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.2 h | 1 | 104 | 1 | 0 | [rapport](sessions/c25f97d1-9a4d-41da-b983-004f793afe43/rapport.md) |
 | `c27ff712` | Tu travailles dans le dépôt | 2026-11-05 19:25 | 0.9 h | 1 | 67 | 3 | 0 | [rapport](sessions/c27ff712-ac49-4750-90d4-76f59bedb5ca/rapport.md) |
@@ -207,7 +209,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 152.7 h | 189 | 3096 | 25 | 421 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 161.3 h | 191 | 3123 | 25 | 422 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
