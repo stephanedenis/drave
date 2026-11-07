@@ -57905,3 +57905,16 @@ README + état
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1169 caractères tronqués]`
+
+  ```
+704 797
+     · fraîcheur : en-cours.md dit 2026-11-07, le dernier commit date du 2026-11-06
+ create mode 100644 reports/rapport-gn-pronom-sujet.md
+COMMIT OK 1
+c78a53bd B13 — LE PRONOM SUJET EST UN GN : F1 0,6519 → 0,7013 (+4,9), TÊTE 0,7709 → 0,8141, ATTACHEMENT PRÉSERVÉ (236/237, 0,9916) ; 183/183
+   5a067ba5..c78a53bd  s/v7 -> s/v7
+   5a067ba5..c78a53bd  master -> master
+ven 06 nov 2026 23:57:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : 2026-11-07, 00 h 10 HNE\", \"**Mis à jour : 2026-11-06, 23 h 58 HNE\", t)\np.write_text(t)\nPY\npython … [1537 caractères tronqués]`
