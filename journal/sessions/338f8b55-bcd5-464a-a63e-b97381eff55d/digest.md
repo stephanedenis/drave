@@ -1581,3 +1581,32 @@ r4_en_large {'corrections': 12, 'casses': 1, 'faux_faux': 8, 'corrections_en': 1
 … [3129 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/compute_aux.py <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.gold_split import _est_test\n\nB13_S … [10167 caractères tronqués]`
+
+  ```
+base totals pos/seg/att 766 386 295 audit 766 360 284
+FREE r4_en 0 0 {'justes': 0, 'faux': 0, 'non_revus': 0}
+FREE r4_bilingue 6 8 {'justes': 3, 'faux': 5, 'non_revus': 0}
+FREE cc_core 1 1 {'justes': 0, 'faux': 1, 'non_revus': 0}
+FREE cc_fast 1 1 {'justes': 0, 'faux': 1, 'non_revus': 0}
+FREE cc_sans_where 0 0 {'justes': 0, 'faux': 0, 'non_revus': 0}
+FREE r4_en+cc_core 1 1 {'justes': 0, 'faux': 1, 'non_revus': 0}
+FREE r4_bilingue+cc_core 7 9 {'justes': 3, 'faux': 6, 'non_revus': 0}
+FREE r4_bilingue+cc_sans_where 6 8 {'justes': 3, 'faux': 5, 'non_revus': 0}
+CTRL He is a doctor. | doctor NOUN | base:NOUN r4_en:NOUN r4_bilingue:NOUN r4_en_large:NOUN cc_core:NOUN cc_fast:NOUN r4_en+cc_core:NOUN r4_bilingue+cc_core:NOUN
+CTRL He is running. | running VERB | base:VERB r4_en:VERB r4_bilingue:VERB r4_en_large:VERB cc_core:VERB cc_fast:VERB r4_en+cc_core:VERB r4_bilingue+cc_core:VERB
+CTRL He is doctor. | doctor NOUN | base:NOUN r4_en:ADJ! r4_bilingue:ADJ! r4_en_large:ADJ! cc_core:NOUN cc_fast:NOUN r4_en+cc_core:ADJ! r4_bilingue+cc_core:ADJ!
+CTRL She is president. | president NOUN | base:NOUN r4_en:ADJ! r4_bilingue:ADJ! r4_en_large:ADJ! cc_core:NOUN cc_fast:NOUN r4_en+cc_core:ADJ! r4_bilingue+
+… [4281 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/assemble_json.py <<'PY'\nimport json, pathlib, hashlib, sys\nRACINE=pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nCORE=json.load(open('/tmp/pos_r4/final_core.json'))\nAUX=json.load(open('/tmp/pos_ … [17590 caractères tronqués]`
+
+  ```
+patch checks {'copules_en': True, 'copules_fr': True, 'insert': True, 'bloc_en': True}
+wrote /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-pos-r4.json 169663
+{
+ "verdict": "R4 bilingue reproduit +0,74 dev / +0,71 test (23 correctifs, 0 cassé), mais 17 faux→faux et 5 faux positifs français sur 8 changements libres. Les classes fermées valent +0,78 / +0,81 (25 correctifs, 0 cassé), F1 +0,0007. Le paquet sûr (R4-en + classes fermées) vaut +1,19 dev / +1,11 test, 37/0, F1 +0,0007, attachement inchangé, 1 faux positif libre (`where`). Le paquet max (R4 bilingue) vaut +1,51/+1,51 mais 11 faux→faux et 6 faux positifs libres."
+}
+  ```
+

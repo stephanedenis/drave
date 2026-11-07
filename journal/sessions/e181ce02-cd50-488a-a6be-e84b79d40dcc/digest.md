@@ -54606,3 +54606,127 @@ ven 06 nov 2026 19:59:41 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"(../reports/rapport-composition-sans-perte.md)\",\"(../../reports/rapport-composition-sans-perte.md)\" … [904 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 19 files changed, 199 insertions(+), 51 deletions(-)
+COMMIT OK 1
+d73e7d1f DOCS — LE LIEN DE LA FICHE COMPOSITION CORRIGÉ
+   2b3e1796..d73e7d1f  s/v7 -> s/v7
+   2b3e1796..d73e7d1f  master -> master
+ven 06 nov 2026 20:02:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '918,960p' tools/bloc_linguistique.py", "description": "Lire la boucle du marqueur en entier"}`
+
+  ```
+_n_elic = n.split("'")[0] if "'" in n else n
+            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS or est_sub(n)):
+                suivant = mots[i + 1] if i + 1 < len(mots) else None
+                # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
+                prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
+                                or not (_normaliser(suivant[2]) in lex.get("PRON", set())
+                                        or est_verbe(suivant[0], suivant[2]))))
+                ambigu = n in lex.get("DET", set())
+                marqueur = (not prep_ambigue) and ((not ambigu) or (suivant is not None and (
+                    _normaliser(suivant[2]) in lex.get("PRON", set())
+                    or _normaliser(suivant[2]) in lex.get("AUX", set())
+                    or est_verbe(suivant[0], suivant[2]))))
+                if marqueur:
+                    precedent = segments[-1]["type"] if segments else None
+                    # R2 : un **subordonnant** ouvre une SUB (« When it rains ») ; une relative
+                    # en tête reste une REL (« Paul qui marche »)
+                    if precedent == "GN" and n in A
+… [1432 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '960,990p' tools/bloc_linguistique.py", "description": "Suite de la boucle"}`
+
+  ```
+if predicat_vu or verbes_vus == 2:
+                                break  # second prédicat : la principale commence
+                            predicat_vu = True
+                        else:
+                            if prec_aux:
+                                predicat_vu = True   # « is red » : copule + attribut
+                            prec_aux = False
+
+                        j += 1
+                    segments.append({"type": stype,
+                                     "role": "complément" if stype == "SUB" else "qualité",
+                                     "niveau": 1, "debut": d, "fin": mots[j - 1][1],
+                                     "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                    i = j
+                    continue
+            # déterminant élidé : « L'homme », « d'Artagnan » (le token garde l'apostrophe)
+            det_elicite = ("'" in n and n.split("'")[0] in lex.get("DET", set()))
+            if typ == "mot" and (n in lex.get("DET", set()) or det_elicite):
+                j = i + 1
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get(
+… [658 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"union\": True' tools/bloc_linguistique.py | head -3; sed -n \"$(grep -n 'def _supprimer_chevauchements' tools/bloc_linguistique.py | cut -d: -f1),+22p\" tools/bloc_linguistique.py | tail -12", "description": "Voir meta.uni … [14 caractères tronqués]`
+
+  ```
+1270:                meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
+             "discours": "type", "document": "type"}
+    gardees: list[Etiquette] = [e for e in etiquettes if e.niveau not in modes]
+    for niveau, mode in modes.items():
+        groupes = {}
+        for e in (x for x in etiquettes if x.niveau == niveau):
+            groupes.setdefault(e.type if mode == "type" else "", []).append(e)
+        for _, es in groupes.items():
+            if niveau == "syntagme" and priorite_syntagme == "heuristique":
+                # la segmentation heuristique est **authoritaire**, y compris ses alternatives
+                # (l'union S+chunker) : on ne la filtre pas, on n'ajoute que le non-chevauchement
+                gardees.extend(e for e in es if e.source == "heuristique")
+                for e in sorted((x for x in es if x.source != "heuristique"),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            if niveau == \"syntagme\" and priorite_syntagme == \"heuristique\":\n                # la segmentation heuris … [1906 caractères tronqués]`
+
+  ```
+tri : chunker avant union
+syntaxe OK
+heur POS 0.8383 | F1 0.6474 | exact 235 / 236 | cov 0.9874
+parallèle POS 0.8383 | F1 0.5356 | exact 202 / 202 | cov 0.8452
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- tools/bloc_linguistique.py && timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nh=bl.Heuri … [408 caractères tronqués]`
+
+  ```
+heur POS 0.8383 | F1 0.6474 | exact 235 / 236
+parallèle POS 0.8383 | F1 0.6474 | exact 235 / 236
+ven 06 nov 2026 20:05:05 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Je consigne la soirée au journal et à la roadmap
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/2026-11-06/README.md'); t=p.read_text()\nnote = \"\"\"\n**La soirée des P0 (18 h 30 → 20 h 05).** Le contrat est publié — `docs/produit/schema-v1.json`\ndevenu `tools/sche … [1696 caractères tronqués]`
+
+  ```
+journal + roadmap
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add journal/2026-11-06/README.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORP … [528 caractères tronqués]`
+
+  ```
+git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+d73e7d1f DOCS — LE LIEN DE LA FICHE COMPOSITION CORRIGÉ
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 20:06:17 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 20 h 10 HNE\", t)\np.write_text( … [780 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `338f8b55-bcd5-464a-a63e-b97381eff55d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.5 h |
+| Durée | 1.6 h |
 | Tours | 1 |
-| Messages | 63 |
-| Appels d'outils | 67 |
+| Messages | 66 |
+| Appels d'outils | 70 |
 | Fichiers touchés | 0 |
-| Commandes | 58 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux … [2002 caractères tronqués]
 
-*67 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — List reports and tools
@@ -41,7 +41,7 @@
 - bash — Find producer of fiabilite JSON
 - bash — Inspect banc_50 entries
 - bash — Locate classes and attachment logic
-- … et 47 autres
+- … et 50 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Run variants on 50 free texts and diff
 - **T1** Print free-text change contexts
 - **T1** Compute full metrics for selected variants
-- … et 18 autres
+- … et 21 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -119,6 +119,7 @@
 - **T1** `r4_bilingue+cc_fast      POS all=0.8537 dev=0.8531 (+1.56%) test=0.8551 (+1.51%) en=0.9434 fr=0.8031`
 - **T1** `r4_en+cc_core            POS all=0.8500 dev=0.8494 (+1.19%) test=0.8511 (+1.11%) en=0.9425 fr=0.7976`
 - **T1** `r4_en+cc_fast            POS all=0.8503 dev=0.8499 (+1.24%) test=0.8511 (+1.11%) en=0.9434 fr=0.7976`
+- **T1** `patch checks {'checks': {'copules_en': True, 'copules_fr': True, 'insert': True, 'bloc_en': True}, 'patch_applique_a': '/tmp/pos_r4/bloc_patche.py', 'sha256': '0bf4d3eb0e2a51603534001284718e625346a61c`
 
 ## 5. Erreurs rencontrées
 

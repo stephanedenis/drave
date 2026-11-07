@@ -2279,3 +2279,114 @@ class TestBlocLinguistique(unittest.TestCase):
 … [1508 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\no=json.load(open('options_audit3.json'))\nfor v in ['base','filtrer_chunker','garder_chunker','dedup','filtrer_contenu','union_any','widest','glouton_att_union','regle_mix_E']:\n    g=o['gold'][v]; b=o['bancs'][v]\n    print( … [237 caractères tronqués]`
+
+  ```
+base {'f1': 0.5849, 'precision': 0.6292, 'rappel': 0.5464, 'tete_f1': 0.7336, 'att_exact': 222, 'att_couverture': 0.9289, 'att_topk': 221, 'pos': 0.7581} bancs paires 239 seg 722 att 549
+filtrer_chunker {'f1': 0.6163, 'precision': 0.7122, 'rappel': 0.5432, 'tete_f1': 0.7545, 'att_exact': 217, 'att_couverture': 0.9079, 'att_topk': 216, 'pos': 0.7581} bancs paires 91 seg 636 att 481
+garder_chunker {'f1': 0.6172, 'precision': 0.7445, 'rappel': 0.5271, 'tete_f1': 0.7605, 'att_exact': 205, 'att_couverture': 0.8577, 'att_topk': 204, 'pos': 0.7581} bancs paires 0 seg 545 att 397
+dedup {'f1': 0.6141, 'precision': 0.7283, 'rappel': 0.5309, 'tete_f1': 0.7432, 'att_exact': 208, 'att_couverture': 0.8703, 'att_topk': 207, 'pos': 0.7581} bancs paires 0 seg 584 att 444
+filtrer_contenu {'f1': 0.5006, 'precision': 0.5899, 'rappel': 0.4348, 'tete_f1': 0.6731, 'att_exact': 208, 'att_couverture': 0.8703, 'att_topk': 207, 'pos': 0.7581} bancs paires 112 seg 595 att 484
+union_any {'f1': 0.4959, 'precision': 0.6003, 'rappel': 0.4224, 'tete_f1': 0.661, 'att_exact': 199, 'att_couverture': 0.8326, 'att_topk': 198, 'pos': 0.7581} bancs paires 3 seg 543 att 447
+widest {'f1': 0.4967, 'precision': 0.6059, 'rapp
+… [528 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nt=json.load(open('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json'))['banc_50']['detail'][1]['texte']\na=bp.Heuristique(par … [466 caractères tronqués]`
+
+  ```
+{
+ "niveau": "syntagme",
+ "type": "GP",
+ "valeur": "du jardin chaque matin avant de",
+ "debut": 29,
+ "fin": 60,
+ "source": "heuristique",
+ "confiance": 0.3,
+ "candidats": [
+  "GP",
+  "fleurs",
+  "partir",
+  "au",
+  "rentre"
+ ],
+ "langue": "fr",
+ "script": "Latn",
+ "meta": {
+  "role": "theme",
+  "niveau": 1,
+  "union": true,
+  "attachement": {
+   "segment": "du jardin chaque matin avant de",
+   "cible": "fleurs"
+  },
+  "partition": {
+   "groupe": 0,
+   "rang": 1,
+   "membres": 4,
+   "vue": "alternative"
+  },
+  "alternative": [
+   {
+    "type": "GV",
+    "debut": 61,
+    "fin": 67,
+    "source": "heuristique",
+    "union": true,
+    "relation": "croise",
+    "rang": 2,
+    "role": "prédicat"
+   },
+   {
+    "type": "GP",
+    "debut": 29,
+    "fin": 51,
+    "source": "heuristique",
+    "union": false,
+    "relation": "inclut",
+    "rang": 3,
+    "attachement": {
+     "segment": "du jardin chaque matin",
+     "cible": "partir"
+    },
+    "role": "possession"
+   },
+   {
+    "type": "GP",
+    "debut": 58,
+    "fin": 67,
+    "source": "heuristique",
+    "union": false,
+    "relation": "croise",
+    "rang": 4,
+    "attachement": {
+     "segment": "de partir",
+     "cible": "au"
+    },
+    "
+… [1339 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && sha256sum tools/bloc_linguistique.py tools/bloc_partition.py tools/tests/linguistique/gold.json /tmp/partition_syntagmes/drave_orig.py /tmp/partition_syntagmes/drave_patche.py /tmp/partition_syntagmes/patch_final.diff /tmp/partition_syntagmes/drave.diff && cd /home/ … [120 caractères tronqués]`
+
+  ```
+5954d0870bb957472662047ba40d027ea8f64e9434ecb24217faa9337437b08f  tools/bloc_linguistique.py
+57f464e5eb69345d0c707c7eb1b884da4f86814187c7a4d9b9909da20236e49c  tools/bloc_partition.py
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  tools/tests/linguistique/gold.json
+d4d94c6a0938046ca42ef502b985cd53b6cb7babe2d47c831a37d191ae1eb29a  /tmp/partition_syntagmes/drave_orig.py
+8cf617726fc71f2ef43506b8af7401edc2e73b77c5798de99a751ac7818fe622  /tmp/partition_syntagmes/drave_patche.py
+875e9628a40752577068ab7d529da34e5ab933e463a06e3b2b927a178de1baa7  /tmp/partition_syntagmes/patch_final.diff
+5e37d49f463a811db571f0116425bcd42829bb2e3bfc06b0b9f68f71d6628668  /tmp/partition_syntagmes/drave.diff
+d73e7d1fd7028dbf3e955ad16f1c9448562f670e
+  ```
+
+- **bash** `{"command": "set -e\nR=/home/stephane/Data13TB/stephane/GitHub/Qtrinet\nrm -rf /tmp/head_patch_test; mkdir -p /tmp/head_patch_test/tools\ncd \"$R\"\ngit show HEAD:tools/bloc_linguistique.py > /tmp/head_patch_test/tools/bloc_linguistique.py\ngit show HEAD:tools/drave.py > /tmp/head_patch_test/tools/d … [211 caractères tronqués]`
+
+  ```
+checking file tools/bloc_linguistique.py
+Hunk #1 succeeded at 558 (offset 29 lines).
+Hunk #2 succeeded at 1326 (offset 81 lines).
+Hunk #3 succeeded at 1906 (offset 83 lines).
+checking file tools/drave.py
+  ```
+

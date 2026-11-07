@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 147.3 h |
+| Durée | 147.4 h |
 | Tours | 184 |
-| Messages | 3206 |
-| Appels d'outils | 2836 |
+| Messages | 3214 |
+| Appels d'outils | 2844 |
 | Fichiers touchés | 25 |
-| Commandes | 2338 |
+| Commandes | 2346 |
 | Sous-agents | 34 |
-| Commits | 362 |
+| Commits | 364 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*82 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 68 autres
+- … et 76 autres
 
 **Synthèse produite :**
 
-⏵ La cascade ne dégrade plus : je fige la fiche et je corrige les références
+⏵ Je consigne la soirée au journal et à la roadmap
 
 ## 3. Travail accompli
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2298 autres
+- … et 2306 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10180,7 +10180,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-59 sorties en erreur ou divergentes. Les premières :
+60 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10562,4 +10562,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOC PRODUIT — LES CHIFFRES À JOUR : POS 83,83 %, F1 64,74 %, ATTACHEMENT 235/236 (98,33 %), 3 SPANS ; SORTIE D'EVALUER REJOUÉE" -- docs/produit/README.md docs/p
 - B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183" -- tools/bloc_linguistique.py tools/tes
 - DOCS — LE LIEN DE LA FICHE COMPOSITION CORRIGÉ" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
+- JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE" -- journal/2026-11-06/README.md docs
+- JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE ; ÉTAT HORODATÉ" -- journal/2026-11-0
 

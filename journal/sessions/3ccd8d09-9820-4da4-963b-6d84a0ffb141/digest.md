@@ -1888,3 +1888,99 @@ false+leading: ['u02', 'a01', 'a02', 'a03', 'a04', 'a05', 'a06', 'a07', 'a08', '
 Counter({'négatif': 2, 'décimal': 1, 'décimal+milliers': 1, 'date': 1, 'version+IP': 1, 'URL+query': 1, 'URL+phrase': 1, 'courriel': 1, 'courriel+URL': 1, 'chemin+code': 1, 'chemin relatif': 1, 'code inline': 1, 'identifiant pointé': 1, 'abréviation M.': 1, 'abréviation Dr.': 1, 'etc. minuscule': 1, 'etc. majuscule': 1, 'abréviation cf.': 1, 'abréviation p. ex.': 1, 'initiales': 1, 'titre en fin de phrase': 1, 'titre markdown': 1, 'liste sans point': 1, 'liste avec points': 1, 'guillemets': 1, 'guillemets+question': 1, 'ellipse minuscule': 1, 'ellipse majuscule': 1, 'ponctuation répétée': 1, 'ellipse finale': 1, 'sans point final': 1, 'espaces initiaux': 1, 'anglais Dr.': 1, 'anglais e.g.': 1, 'anglais etc.': 1, 'URL entre parenthèses': 1, 'point-virgule': 1, 'date+phrase': 1, 'URL+question réelle': 1})
   ```
 
+### 🤖 Assistant
+
+⏵ Génération du JSON de pensée et du rapport mesuré
+
+- **bash** `{"command": "cat > /tmp/frontieres/final/genere_json.py <<'PY'\nfrom __future__ import annotations\nimport json\nimport pathlib\n\nBASE = pathlib.Path(\"/tmp/frontieres/final\")\nM = json.loads((BASE / \"mesures.json\").read_text(encoding=\"utf-8\"))\nG = json.loads(pathlib.Path(\"/tmp/frontieres/go … [16750 caractères tronqués]`
+
+  ```
+JSON 141425 octets
+JSON_OK
+-rw-r--r--. 1 stephane stephane 139K  6 nov 20:02 pensee-frontieres-phrase.json
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport json\nd=json.load(open('pensee-frontieres-phrase.json'))\nprint(json.dumps(d['resume_40'],ensure_ascii=False,indent=1))\nprint('regles',len(d['regles']),'corpus',len(d['corpus_40']))\nprint(json.dumps(d['regles'][0],ensure_ascii=False … [295 caractères tronqués]`
+
+  ```
+{
+ "avant": {
+  "phrases": 102,
+  "textes_exacts": 2,
+  "textes_frontiere_fausse": 32,
+  "textes_casses": 38,
+  "extra": 47,
+  "missing": 4,
+  "overlaps": 9,
+  "leading": 31,
+  "vides": 0,
+  "fausses_questions": 5,
+  "types_faux": 63
+ },
+ "apres": {
+  "phrases": 59,
+  "textes_exacts": 40,
+  "textes_frontiere_fausse": 0,
+  "textes_casses": 0,
+  "extra": 0,
+  "missing": 0,
+  "overlaps": 0,
+  "leading": 0,
+  "vides": 0,
+  "fausses_questions": 0,
+  "types_faux": 0
+ }
+}
+regles 6 corpus 40
+{
+ "id": "a",
+ "nom": "décimaux, dates, versions, IP, numéros de liste",
+ "mecanisme": "un point entre deux chiffres n'est pas une frontière (12.5, 12.03.2024, 192.168.1.10) ; un nombre de 1 à 3 chiffres en début de ligne suivi d'un espace est un numéro de liste (1. Ouvrir).",
+ "mesure_40": {
+  "phrases": 87,
+  "textes_exacts": 6,
+  "textes_sans_frontiere_fausse": 19,
+  "textes_sans_defaut": 6,
+  "extra": 30,
+  "missing": 2,
+  "overlaps": 0,
+  "leading": 29,
+  "fausses_questions": 5
+ },
+ "dev": {
+  "delta_pos": 0.0,
+  "delta_f1": 0.0,
+  "delta_att": 0.0,
+  "delta_acte": 0.0
+ },
+ "test": {
+  "delta_pos": 0.0,
+  "delta_f1": 0.0,
+  "delta_att": 0.0,
+  "delta_acte": 0.0
+ },
+ "risque": "« 12. Il part. » en 
+… [270 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, patch_frontieres, patch_mots\nc … [696 caractères tronqués]`
+
+  ```
+avant 47
+  ('u01', 8, 39, 5, 'https://example.com/docs?page=2')
+  ('u02', 12, 39, 6, 'https://example.com/a.b?x=1')
+  ('e01', 10, 27, 3, 'alice@example.org')
+  ('e02', 10, 28, 3, 'support@exemple.fr')
+  ('e02', 39, 70, 6, 'https://exemple.fr/aide?lang=fr')
+  ('c01', 7, 37, 4, 'src/tools/bloc_linguistique.py')
+  ('c01', 52, 62, 1, '`_phrases`')
+  ('c02', 11, 27, 3, './data/gold.json')
+  ('c03', 8, 37, 3, '`Heuristique._phrases(texte)`')
+  ('c04', 8, 28, 2, 'Heuristique._phrases')
+apres 6
+  ('c01', 52, 62, 1, '`_phrases`')
+  ('c03', 8, 37, 2, '`Heuristique._phrases(texte)`')
+  ('c04', 8, 28, 1, 'Heuristique._phrases')
+  ('en02', 12, 15, 2, 'e.g')
+  ```
+
