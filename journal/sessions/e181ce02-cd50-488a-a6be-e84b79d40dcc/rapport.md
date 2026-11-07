@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 162.3 h |
 | Tours | 192 |
-| Messages | 3547 |
-| Appels d'outils | 3153 |
+| Messages | 3548 |
+| Appels d'outils | 3154 |
 | Fichiers touchés | 25 |
-| Commandes | 2638 |
+| Commandes | 2639 |
 | Sous-agents | 42 |
-| Commits | 428 |
+| Commits | 429 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10312,7 +10312,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 192 — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas … [111 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Inspecter DSH
 - bash — Voir la CLI de DSH
@@ -10328,7 +10328,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Insérer git_avant et tester J0
 - bash — Tester dsh headless directement
 - bash — Chercher la clé DeepSeek
-- … et 8 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -10453,7 +10453,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2598 autres
+- … et 2599 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11029,4 +11029,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPRE
 - DOCS — README T1 ET COMPTEURS APRÈS LE MÉTA-HARNAIS" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS L
 - DOCS — README T1 SOUS 1 000 MOTS ET COMPTEUR DES DOCUMENTS À 123" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | gre
+- DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BUD
 

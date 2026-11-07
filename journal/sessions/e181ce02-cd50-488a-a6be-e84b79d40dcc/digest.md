@@ -59963,3 +59963,16 @@ trim
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents, la discipline de `en-cours` |\",\n            \" … [1021 caractères tronqués]`
+
+  ```
+· docs/README.md : 1005 mots > budget 1000 (T1)
+ 15 files changed, 143 insertions(+), 32 deletions(-)
+COMMIT OK 1
+f1b837a3 DOCS — README T1 SOUS 1 000 MOTS ET COMPTEUR DES DOCUMENTS À 123
+   fae117e5..f1b837a3  s/v7 -> s/v7
+   fae117e5..f1b837a3  master -> master
+     · docs/README.md : 1005 mots > budget 1000 (T1)
+sam 07 nov 2026 10:58:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de plusieurs jours |\",\n            \"| [`methode/chan … [1360 caractères tronqués]`

@@ -3685,3 +3685,91 @@ avance research: 193
 ancêtre OK
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport io,json\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\nsubs=[\n (\"| **non** : 23 lignes (15 M, 8 ??) |\", \"| **non** : 23 lignes (16 M, 7 ??) |\"),\n (\"- **Panini (hôte)* … [2183 caractères tronqués]`
+
+  ```
+ok
+JSON valide 14
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md", "limit": 130, "offset": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md</path>
+<type>file</type>
+<content>
+180: **Comment ils vérifient (les 4 portes, et le noyau à 4 niveaux).**
+181: 
+182: | Porte | Commande | Résultat publié |
+183: |---|---|---|
+184: | **G1** environnement | `pytest tests/` | 589 passed (07/09), puis **722 passed / 1 skipped** (08/09) |
+185: | **G2** DTP | `python -m nipada.benchmark` | **48/48 = 100 % identité, 0 % WER** ; `genre_accuracy` 0,25 |
+186: | **G3** calibrage R² | script §334 | 0,907849/648 reproduit vs 0,909139/655 officiel (écart documenté) |
+187: | **G4** hold-out | `nipada/falsification/nipada_holdout_v1.json` | 23/114 textes vierges, gelé |
+188: 
+189: Et pour le noyau seul, **quatre niveaux** : kit (secondes-minutes) → chaîne ℝ réelle (10-40 min) →
+190: validation lourde (1-3 h) → **audit global des constantes** (`scripts/noyau/audit_consts.py
+191: --toutes`), qui exige « aucune manquante » (dernier : 296 defs, 412 consts, 25/10). Les tests
+192: formels complets : **339 passés / 16 sautés / 0 échec en 47 min** (audit du 19/10).
+193: 
+194: **Chiffres publiés.** 722 tests ; DTP 48/48 ; R² 0,909139 (655 paires, 114 textes, α = 0,6
+… [7860 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport io\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\ns=s.replace(\"**Où ils sont définis — quatre couches, une seule source de vérité.**\",\"**Où ils sont définis — six couches … [207 caractères tronqués]`
+
+  ```
+ok
+| 12 | **STRUCTURE** | ⊞ | 37 | organisation, agencement | porteur modéré |
+| 13 | **SYMÉTRIE** | ≍ | 41 | symétrie, équilibre | **meilleur candidat au retrait** |
+| 14 | **ÉQUATION** | ≡ | 43 | égalité, équivalence | faible en philo, fort en technique |
+
+**Sont-ils utilisables par Drave ? Oui, à trois conditions.**
+
+1. **En lecture directe** : `analytic_sigs_v1.json` est un `{texte: {14 flottants}}` pur, sans
+   dépendance ; `v14_lexicon_enriched.json` est un dictionnaire par langue. Un script Drave peut
+   les charger aujourd'hui.
+2. **Par API** : `POST /decompose` renvoie `{text, lang, v14_signature: dict[str,float],
+   active_atoms, dominant_atom, time_ms}` (`research/src/nipada/api/api.py`). FastAPI + un graphe de
+   33-58 Mo à charger : **à tester avant de s'y engager**.
+3. **Avec un avertissement** : la signature est **lexicale** (projection de mots sur des listes),
+   donc **de surface** — c'est précisément ce que leur §150 mesure (β époque +0,138 vs filiation
+   +0,049). Toute mesure Drave doit contrôler la date et la surface.
+
+**Les 9 dhātus** (instructions, `hardware_mapping.DHATUS`) : `EXIST, TRANS, EVAL, LOCATE, FEEL,
+ACT, QUAL, REL, KNOW`.
+
+### 3.3 La généalogie de
+… [7860 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && python3 - <<'EOF'\nimport json\nd=json.load(open('nipada/falsification/analytic_sigs_v1.json'))\nprint('textes signatures:', len(d))\nk=list(d)[0]\nprint(k, 'somme', round(sum(d[k].values()),4), 'dim', len(d[k]))\np=json.load … [307 caractères tronqués]`
+
+  ```
+textes signatures: 44
+2_esdras somme 1.0 dim 14
+paires 655 n_pairs 655
+langues dans 334: ['', 'eng', 'fra']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && python3 - <<'EOF'\nimport json, collections\np=json.load(open('nipada/falsification/pairs334_axes_v1.json'))\nprint('lang_a:', collections.Counter(x['lang_a'] for x in p['pairs']).most_common(8))\nprint('trad_a:', collections … [420 caractères tronqués]`
+
+  ```
+lang_a: [('eng', 408), ('', 245), ('fra', 2)]
+trad_a: [('', 199), ('BUDDHIST_AXIAL', 107), ('GRECO_PLATONIC', 56), ('FUZZY_LOGIC', 35), ('MANY_VALUED_LOGIC', 34), ('RECURSIVE_FUNCTIONS', 33), ('COMBINATORY_LOGIC', 32), ('SEMANTIC_NETWORKS', 31), ('CONCEPTUAL_DEPENDENCY', 30), ('INDIAN_AXIAL', 26), ('CHINESE_AXIAL', 25), ('CONFUCIAN_AXIAL', 24)]
+nipada/falsification/modern_corpus_sigs_v2.json dict 39 ['2_esdras', 'aristotle_categories', 'aristotle_de_caelo', 'aristotle_nicomachean_ethics', 'aristotle_parts_of_animals']
+nipada/falsification/modern_sigs_v1.json dict 35 ['2_esdras', 'aristotle_categories', 'aristotle_nicomachean_ethics', 'aristotle_prior_analytics', 'bengio_2003']
+nipada/falsification/nipada_holdout_v1.json dict 14 ['version', 'created', 'purpose', 'corpus_reference', 'fraction_target']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"114 textes\\|114 textes ×\\|114\" reports/rapport-inventaire-panini.md | head -12", "description": "Repère les mentions de 114 textes"}`
+
+  ```
+125:DTP 48/48 = 0 % WER ; R² = 0,909139 sur 655 paires et 114 textes (`nipada/falsification/
+187:| **G4** hold-out | `nipada/falsification/nipada_holdout_v1.json` | 23/114 textes vierges, gelé |
+194:**Chiffres publiés.** 722 tests ; DTP 48/48 ; R² 0,909139 (655 paires, 114 textes, α = 0,67, graphe
+355:**Ses corpus.** Le corpus §334 (114 textes : 104 traditions + 10 références ; 655 paires ;
+366:| **§334 (philosophie/religion)** | 114 textes ; 102 fichiers `sources/` (9,5 Mo) | `.txt` un fichier par œuvre + signatures JSON | en, fr, de, la, gr, ar, sa, pi, zh… | `research/nipada/corpus/_cache/sources/`, `nipada/falsification/` | **oui** (textes du domaine public), avec la fiche `pairs334_axes_v1.json` |
+404:2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table
+  ```
+

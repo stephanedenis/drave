@@ -7,12 +7,12 @@
 | Identifiant | `bdefb627-485e-44d1-b11c-d15dd2e6b640` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 09:56 |
-| Durée | 1.0 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 85 |
-| Appels d'outils | 140 |
+| Messages | 90 |
+| Appels d'outils | 145 |
 | Fichiers touchés | 2 |
-| Commandes | 123 |
+| Commandes | 128 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*140 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -41,7 +41,7 @@
 - bash — Fichiers suivis par git
 - bash — Repère les documents clés
 - bash — Échantillon des modifications non commitées
-- … et 114 autres
+- … et 119 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@
 - **T1** Données généalogiques Panini
 - **T1** Rapports NIPADA
 - **T1** Synthèse du pipeline sémantique
-- … et 83 autres
+- … et 88 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,6 +186,10 @@
 - **T1** `| API REST | `src/nipada/api/api.py`, `server.py` | FastAPI : `/decompose`, `/reconstruct`, `/roundtrip`, `/compare`, `/atoms`, `/dhatus`, `/benchmark`, `/search`, `/hypotheses`, `/api/v1/*` | fastapi`
 - **T1** `2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table`
 - **T1** `cassés, backlog P0 entièrement « À faire ». **Ne pas promettre du 0 % WER.**`
+- **T1** `125:DTP 48/48 = 0 % WER ; R² = 0,909139 sur 655 paires et 114 textes (`nipada/falsification/`
+- **T1** `194:**Chiffres publiés.** 722 tests ; DTP 48/48 ; R² 0,909139 (655 paires, 114 textes, α = 0,67, graphe`
+- **T1** `366:| **§334 (philosophie/religion)** | 114 textes ; 102 fichiers `sources/` (9,5 Mo) | `.txt` un fichier par œuvre + signatures JSON | en, fr, de, la, gr, ar, sa, pi, zh… | `research/nipada/corpus/_c`
+- **T1** `404:2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table`
 
 ## 5. Erreurs rencontrées
 

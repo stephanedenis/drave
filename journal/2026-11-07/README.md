@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **5 session(s)** · **6 thème(s)**
+**20 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 8 | [docs.md](docs.md) |
+| docs | 9 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -25,7 +25,7 @@
 | `77d26bc7-1657-4c96-83c9-bba7c25dd828` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.4 h | [rapport](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) · [digest](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/digest.md) |
 | `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 02:09 | 0.1 h | [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md) |
 | `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.3 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
-| `bdefb627-485e-44d1-b11c-d15dd2e6b640` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 1.0 h | [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md) |
+| `bdefb627-485e-44d1-b11c-d15dd2e6b640` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 1.1 h | [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 162.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -51,6 +51,7 @@
 | 10:08 | `a2ad039d` | DOCS — README T1 : UN MOT DE MOINS |
 | 10:50 | `c49367e0` | CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPREMENT ; DOCTRINE ET MODES DE PANNE |
 | 10:53 | `fae117e5` | DOCS — README T1 ET COMPTEURS APRÈS LE MÉTA-HARNAIS |
+| 10:56 | `f1b837a3` | DOCS — README T1 SOUS 1 000 MOTS ET COMPTEUR DES DOCUMENTS À 123 |
 
 ## Le récit de la journée (écrit à la main)
 
