@@ -256,6 +256,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-03](2026-11-03/moteur.md) | — |
 | [2026-11-04](2026-11-04/moteur.md) | — |
 | [2026-11-05](2026-11-05/moteur.md) | `×1,0` |
+| [2026-11-06](2026-11-06/moteur.md) | `18 Go` |
 
 ### `mesures` — Campagnes et mesures
 

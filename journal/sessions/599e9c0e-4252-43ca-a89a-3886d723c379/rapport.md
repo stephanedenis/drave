@@ -9,7 +9,7 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 64 |
+| Messages | 65 |
 | Appels d'outils | 107 |
 | Fichiers touchés | 2 |
 | Commandes | 73 |
@@ -45,9 +45,16 @@
 
 **Synthèse produite :**
 
-⏵ Envoi du bilan au parent et vérification finale
+⏵ Bilan N2 rendu : porte reproductible, mètre RoPE vérifié
 
-Je transmets le résultat consolidé au parent, avec les corrections non committées.
+**Livrables** : `reports/rapport-etat-n2.md` et `reports/pensee-etat-n2.json` (JSON valide, 19 liens résolus). Aucun commit, aucun existant modifié. À noter : tu as committé les deux à `3caa8938` ; depuis, j'ai corrigé la fiche (12+/11−, non committé — la version HEAD attribue à tort 2,3911/2,3522 à la validation française ; ce sont les chiffres du grand corpus à 60 k, la validation française vaut 2,53/2,48). Faire `git add reports/rapport-etat-n2.md` au prochain commit.
+
+**Les checkpoints.** 123 `.pt` sous `work/` (9,52 Go), 67 sidecars `.pt.json`, **tous gitignorés** (`work/` et `data/`). L'essentiel : la porte est `work/n2ac/propre512-8k.pt` (03/11 02:01, 137 248 474 o, 34 301 224 params, 8 k×512, init `base-wiki-45m`, `ppl_val` 3,3639, sha256 `37c5673b…`) ; le bras court `propre128-32k.pt` (3,1107 à 1 024) ; la capacité `propre-1147m/2165m/3430m-512z.pt` (2,8960 / 2,8688 / 2,8662) ; la production `mix1024-60k.pt`. Le **plus récent** est `rope2048-20k.pt` (04/11 21:09, 20 k×2 048, `ppl_val` 2,4953), mais c'est un modèle du **grand corpus** (`wiki_fr`, 186 Mo), pas celui de la porte. 40 fiches N2 ; lien checkpoint→fiche manuel. Constat : `rapport-n2-r12-2048.md` § Fichiers dit que `rope2048-20k.pt` n'a pas été écrit — il existe et reproduit exactement sa table (2,9121 / 2,6360 / 2,5375 / 2,4779 / 2,4383). Le registre de passe n'a **aucune porte N2** ; ses 4 rouges sont `bloc-linguistique`, `indice`, `melange`, `sessions`.
+
+**La porte propre.** Commande : `PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre`. Seuil **2,5**. Résultat **reproduit à l'identique** : val **2,9726 / 2,8988 / 2,8443 / 2,7856**, test **3,0649 / 2,8875 / 2,8566** (test reconstruit via `/tmp/propre_test`) ; **manque 0,2856** en validation, **0,3566** en test. Contrôle négatif : val permutée, même canal, 1 024 → **1 692,3919** ; déterminisme : 2,7856 deux fois ; 12 s pour les quatre longueurs. Le 0,29 = 2,7856 − 2,5 : N2.h valait 3,0904 (0,59), la fenêtre + l'init ont repris 0,30 ; les pas sont épuisés (3,24 Mo vus 33 Mo), la capacité sature à 21,65 M (0,37 restant), la distillation ne gagne rien à parité stricte, la fenêtre 2 048 ne paie pas à octets constants. **0,29 est optimiste** : c'est un best-of-lengths sur la validation ; le test donne 0,36.
+
+**`eval_n2_propre.py`.** Il **tourne** mais **ne mesure
+… [1324 caractères tronqués]
 
 ## 3. Travail accompli
 

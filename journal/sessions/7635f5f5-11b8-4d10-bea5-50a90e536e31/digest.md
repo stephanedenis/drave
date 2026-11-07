@@ -2686,3 +2686,9 @@ Created file
 </content>
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "old_string": "**Lecture d'ensemble** : sur **19 lignes R**, **8 sont faites et vérifiées** (R0.1, R0.2, R0.3,\nR0.6, R0.7 heuristique, R1.3, R4.1, R4.2, R4.3 — 9 si l'on compte R4.4-pilote), **2 sont closes\n … [721 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+

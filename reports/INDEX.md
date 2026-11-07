@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **696 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **697 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -159,6 +159,7 @@
 | [rapport-eparsite.md](rapport-eparsite.md) | Drave — élagage et approche par événement |
 | [rapport-etat-a.md](rapport-etat-a.md) | État du chantier A — le moteur : deux bloqués réels, un faux bloqué, une frontière à requalifier |
 | [rapport-etat-n2.md](rapport-etat-n2.md) | N2 — l'état du chantier et de sa porte : inventaire, vérification, proposition |
+| [rapport-etat-r.md](rapport-etat-r.md) | État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine |
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |

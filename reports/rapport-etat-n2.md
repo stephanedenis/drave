@@ -18,7 +18,7 @@ vit la « porte propre » ; (2) **ce que vaut `tools/eval_n2_propre.py`** sur le
 récent, et ce qu'il mesure vraiment ; (3) **ce que devrait faire** une `tools/porte-n2.sh`, seuil
 et coût compris. Les mesures de cette fiche ont été prises à `HEAD = bfd98892` (l'arbre a bougé
 pendant l'audit : `d31aa9a2` au départ), le **06/11 entre 21 h 25 et 21 h 41**, GPU libre, une
-seule graine, aucune réentraînement.
+seule graine, aucun réentraînement.
 
 ## 1. Inventaire — les checkpoints
 
@@ -52,6 +52,9 @@ leur **recette** et leur `ppl_val` **interne** (contexte d'entraînement — pas
 | capacité 21,65 M | `work/n2ac/propre-2165m-512z.pt` | 03/11 14:10 | 82,62 | 21,65 M | 8 k × 512, aléatoire | 3,4394 |
 | capacité 34,30 M | `work/n2ac/propre-3430m-512z.pt` | 03/11 14:35 | 130,89 | 34,30 M | 8 k × 512, aléatoire | 3,4682 |
 | **le plus récent** | **`work/n2ac/rope2048-20k.pt`** | **04/11 21:09** | **130,89** | **34,30 M** | **20 k × 2 048, init 10 k** | **2,4953** |
+
+*Note de lecture : les noms de la fiche de capacité (« 11,47 M ») désignent la configuration
+224/288 ; le compte réel des paramètres est 11,82 M — la colonne `params` donne le compte réel.*
 
 Le **checkpoint de la porte** est `propre512-8k.pt` : 137 248 474 octets, sha256
 `37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc`, config `d_model = 384`,
@@ -153,11 +156,10 @@ repris **0,30**. Les leviers déjà fermés :
 
 Les leviers restants sont donc **un corpus propre plus large** ou **une distillation à fenêtre
 longue** (la note de passage N2 → R1 le demandait déjà) ; ou un **autre corpus de porte** — sur le
-grand corpus, la fenêtre 1 024 passe **sous 2,5** (2,4759 / 2,4373 à 1 000 / 2 000 sur la
-validation du grand corpus, run 30 k ; 2,3911 / 2,3522 sur la validation du grand corpus, run
-60 k — et 2,53 / 2,48 sur la validation française),
-mais ce n'est **pas** le corpus propre. Enfin, **0,29 est optimiste** : c'est le meilleur de quatre
-longueurs choisi sur la validation ; le **test** donne 2,8566, soit **0,36** de manque.
+grand corpus, la fenêtre 1 024 passe **sous 2,5** (2,4759 / 2,4373 à 1 000 / 2 000, run 30 k ;
+2,3911 / 2,3522, run 60 k ; 2,53 / 2,48 sur la validation française), mais ce n'est **pas** le
+corpus propre. Enfin, **0,29 est optimiste** : c'est le meilleur de quatre longueurs choisi sur la
+validation ; le **test** donne 2,8566, soit **0,36** de manque.
 
 ## 4. `tools/eval_n2_propre.py` sur le checkpoint le plus récent
 
@@ -224,11 +226,10 @@ qu'on ne confonde pas « pas de régression » avec « N2 est fini ».
    mètre, pas un progrès de N2.
 
 **Temps.** Mesuré : 12 s (val 4 longueurs), 8 s (test 3 longueurs), 13 s (permutation + double
-val), ~2 s (sha256) → **30–40 s** avec une seule charge ; `timeout 300` suffit. La porte complète
-coûte ~30 s de plus qu'une passe de 2 h — négligeable. Le mètre actuel est **CUDA-only**
-(`evalue_canal.fenetres` fait `.cuda()`) : pas de repli CPU sans un refactor ; si CUDA manque, la
-porte doit sortir **2** (artefact ou device absent), jamais 0. Ajouter cette porte à la passe
-complète (2 h) coûte **~30 s**.
+val), ~2 s (sha256) → **30–40 s** avec une seule charge ; `timeout 300` suffit. Le mètre actuel
+est **CUDA-only** (`evalue_canal.fenetres` fait `.cuda()`) : pas de repli CPU sans un refactor ;
+si CUDA manque, la porte doit sortir **2** (artefact ou device absent), jamais 0. Ajouter cette
+porte à la passe complète (2 h) coûte **~30 s**.
 
 **Dépendances.** `~/gpu-env/bin/python` (torch 2.11.0+cu130), un GPU, `bash`. Fichiers :
 `work/n2ac/eval_longueurs.py`, `work/n2ac/rope_model.py`, `work/n2j/evalue_canal.py`,

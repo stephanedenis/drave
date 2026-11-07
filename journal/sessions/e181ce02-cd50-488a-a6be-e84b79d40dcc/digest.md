@@ -56583,3 +56583,99 @@ ven 06 nov 2026 22:17:37 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 22 h 25 HNE\", t)\np.write_text( … [816 caractères tronqués]`
+
+  ```
+23 files changed, 388 insertions(+), 80 deletions(-)
+COMMIT OK 1
+5c23ba13 A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS ; dependances.md CORRIGÉ ; ÉTAT HORODATÉ
+   2a6a8346..5c23ba13  s/v7 -> s/v7
+   2a6a8346..5c23ba13  master -> master
+ven 06 nov 2026 22:20:15 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent 599e9c0e-4252-43ca-a89a-3886d723c379 sent a message: 
+ÉTAT N2 — terminé. Deux fichiers : reports/rapport-etat-n2.md et reports/pensee-etat-n2.json (JSON valide, 19 liens OK). Aucun commit, aucun existant modifié par moi. ATTENTION : tu as committé les deux à 3caa8938 ; depuis, j'ai corrigé la fiche (12+/11−, non committé) — la version HEAD contient une ERREUR : « 2,3911 / 2,3522 sur la validation française » ; ce sont les chiffres du GRAND CORPUS (60 k) ; la validation française vaut 2,53 / 2,48. Le fichier sur disque est corrigé ; ne cite pas la version HEAD, et `git add reports/rapport-etat-n2.md` au prochain commit.
+
+1) CHECKPOINTS. 123 .pt sous work/ (9,52 Go), 67 sidecars .pt.json, TOUS gitignorés (work/ et data/ le sont). Familles : work/n2ac 7,7 Go, n2j 2,8, n2k 1,9, n2h 1,5, n2w 1,3. Clés : porte propre = work/n2ac/propre512-8k.pt (03/11 02:01, 137 248 474 o, 34 301 224 params, 8 k×512, init base-wiki-45m, ppl_val 3,3639, sha256 37c5673b…) ; bras court propre128-32k.pt (3,1107 à 1 024) ; capacité propre-1147m/2165m/3430m-512z.pt (2,8960 / 2,8688 / 2,8662 à 1 024) ; production mix1024-60k.pt ; LE PLUS RÉCENT = work/n2ac/rope2048-20k.pt (04/11 21:09, 20 k×2 048, init 10k, ppl_val 2,4953) — mais c'est un modèle du grand corpus (wiki_fr, 186 Mo), PAS celui de la porte. 40 fiches N2 ; lien checkpoint→fiche manuel. Constat : rapport-n2-r12-2048.md § Fichiers dit « rope2048-20k.pt n'a pas été écrit — interrompu » ; le fichier existe et reproduit exactement sa table (2,9121 / 2,6360 / 2,5375 / 2,4779 / 2,4383 à 128/512/1000/2000/4000). Le registre de passe n'a AUCUNE porte N2 ; ses 4 rouges sont bloc-linguistique, indice, melange, sessions. A23 T09/H12 confirmé : pas de porte-n2.sh, pas de commande unique.
+
+2) PORTE PROPRE. Commande : PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre. Seuil 2,5. Résultat REPRODUIT À L'IDENTIQUE : val 2,9726 / 2,8988 / 2,8443 / 2,7856 ; test 3,0649 / 2,8875 / 2,8566 (test reconstruit via /tmp/propre_test, test.txt→val.txt, test.canal→val.canal). Manque 0,2856 val / 0,3566 test. Contrôle négatif : val permutée VDC, même canal, 1 024 → 1 692,3919. Déterminisme : 2,7856 deux fois. Temps : 12 s (4 longueurs), 8 s test, 13 s contrôle. POURQUOI 0,29 : 2,7856−2,5 ; N2.h valait 3,0904 (0,59) → fenêtre+init reprennent 0,30 ; pas fermés : corpus épuisé (3,24 Mo vus 33 Mo, ~10 époques), capacité saturée à 21,65 M (0,37 restant), distillation nulle à parité stricte, fenêtre 2 048 sans gain à octets constants, bras 128 pire (3,1107). 2,7856 est un best-of-lengths sur la VAL ; le test (2,8566) donne 0,36 — le 0,29 est optimiste.
+
+3) eval_n2_propre.py : TOURNE mais NE MESURE PAS les checkpoints RoPE. rope2048-20k : val 12,9098 / test 12,5881 (pire que l'uniforme 5,545) ; propre512-8k : 8,0225 / 8,0126 alors que le mètre RoPE donne 2,9726 à 128 et 2,7856 à 1 024 ; contrôle A-propre-g1.pt (absolu N2.h) : 3,0971 / 3,2098, cohérent avec 3,0904 / 3,1960. Cause : charge() construit NativeModel (pos absolue), les checkpoints sont NativeModelRoPE ; load_state_dict(strict=False) charge les 127 tenseurs sans alerte. Correctif minimal (hors mission) : --rope (ou lire positions=rope dans le sidecar), avertir si chargement partiel, exposer 1 024. La commande A23 `python3 tools/eval_n2_propre.py <checkpoint>` sur un checkpoint N2 récent ferait conclure à 8–13 de PPL au lieu de 2,79.
+
+4) PROPOSITION porte-n2.sh (non écrite) : identité (34 301 224 params, window 512, sha256 .pt, sidecar corpus/positions) ; courbe val 128/256/512/1024 (2,9726/2,8988/2,8443/2,7856, ±0,01) ; test 1 024 (2,8566) ; forme PPL(1024)<PPL(128)−0,15 ; contrôle permuté >100 ; déterminisme exact ; statut absolu imprimé (manque 0,2856/0,3566). DEUX SEUILS : scientifique <2,5 (rouge aujourd'hui, mode chantier N2_SEUIL=2.5) et non-régression par défaut ≤2,80 val / ≤2,87 test (vert aujourd'hui), pour ne pas ajouter une rouge permanente à toutes-les-portes.sh. Temps 30–40 s GPU (timeout 300) ; deps : gpu-env/torch, work/n2ac/{eval_longueurs,rope_model}.py, work/n2j/evalue_canal.py, propre512-8k.pt, data/corpus_propre/{val,test}.{txt,canal} — TOUS NON SUIVIS ; tools/eval_n2_propre.py, tools/vdc.py, reports/n2-porte-propre.json suivis. Sortie 2 si artefact/device absent. Point dur : work/ et data/ gitignorés → promouvoir le mètre dans tools/ et épingler le sha256 pour la rendre durable. Elle ferait 84→85 portes (references-non-regression.md en compte 83 : porte-produit déjà en retard).
+
+Autres constats : HEAD a bougé d31aa9a2→bfd98892 pendant l'audit ; mesures prises 21 h 25–21 h 41, une graine. Le titre du commit 3caa8938 « porte propre 2,97/2,86 » est trompeur : 2,9726 est la valeur à 128 octets, la porte est 2,7856 à 1 024 (test 2,8566).
+
+### 🤖 Assistant
+
+⏵ Je commite la version corrigée de l'état N2 (l'erreur des chiffres français) et je note le bug de `eval_n2_propre`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/rapport-etat-n2.md'); t=p.read_text()\nif \"eval_n2_propre.py\" in t and \"bug\" not in t.lower()[:2000]:\n    # ajouter un encadré sur le bug\n    t=t.replace(\"# L'état  … [1453 caractères tronqués]`
+
+  ```
+encadré bug ajouté
+     · compteurs : en-cours.md dit 699 fichiers, le disque en a 700
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+5c23ba13 A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS ; dependances.md CORRIGÉ ; ÉTAT HORODATÉ
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 22:21:36 EST
+rapport-etat-r.md
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 599e9c0e-4252-43ca-a89a-3886d723c379 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Bilan N2 rendu : porte reproductible, mètre RoPE vérifié
+
+**Livrables** : `reports/rapport-etat-n2.md` et `reports/pensee-etat-n2.json` (JSON valide, 19 liens résolus). Aucun commit, aucun existant modifié. À noter : tu as committé les deux à `3caa8938` ; depuis, j'ai corrigé la fiche (12+/11−, non committé — la version HEAD attribue à tort 2,3911/2,3522 à la validation française ; ce sont les chiffres du grand corpus à 60 k, la validation française vaut 2,53/2,48). Faire `git add reports/rapport-etat-n2.md` au prochain commit.
+
+**Les checkpoints.** 123 `.pt` sous `work/` (9,52 Go), 67 sidecars `.pt.json`, **tous gitignorés** (`work/` et `data/`). L'essentiel : la porte est `work/n2ac/propre512-8k.pt` (03/11 02:01, 137 248 474 o, 34 301 224 params, 8 k×512, init `base-wiki-45m`, `ppl_val` 3,3639, sha256 `37c5673b…`) ; le bras court `propre128-32k.pt` (3,1107 à 1 024) ; la capacité `propre-1147m/2165m/3430m-512z.pt` (2,8960 / 2,8688 / 2,8662) ; la production `mix1024-60k.pt`. Le **plus récent** est `rope2048-20k.pt` (04/11 21:09, 20 k×2 048, `ppl_val` 2,4953), mais c'est un modèle du **grand corpus** (`wiki_fr`, 186 Mo), pas celui de la porte. 40 fiches N2 ; lien checkpoint→fiche manuel. Constat : `rapport-n2-r12-2048.md` § Fichiers dit que `rope2048-20k.pt` n'a pas été écrit — il existe et reproduit exactement sa table (2,9121 / 2,6360 / 2,5375 / 2,4779 / 2,4383). Le registre de passe n'a **aucune porte N2** ; ses 4 rouges sont `bloc-linguistique`, `indice`, `melange`, `sessions`.
+
+**La porte propre.** Commande : `PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre`. Seuil **2,5**. Résultat **reproduit à l'identique** : val **2,9726 / 2,8988 / 2,8443 / 2,7856**, test **3,0649 / 2,8875 / 2,8566** (test reconstruit via `/tmp/propre_test`) ; **manque 0,2856** en validation, **0,3566** en test. Contrôle négatif : val permutée, même canal, 1 024 → **1 692,3919** ; déterminisme : 2,7856 deux fois ; 12 s pour les quatre longueurs. Le 0,29 = 2,7856 − 2,5 : N2.h valait 3,0904 (0,59), la fenêtre + l'init ont repris 0,30 ; les pas sont épuisés (3,24 Mo vus 33 Mo), la capacité sature à 21,65 M (0,37 restant), la distillation ne gagne rien à parité stricte, la fenêtre 2 048 ne paie pas à octets constants. **0,29 est optimiste** : c'est un best-of-lengths sur la validation ; le test donne 0,36.
+
+**`eval_n2_propre.py`.** Il **tourne** mais **ne mesure pas** les checkpoints RoPE : `rope2048-20k.pt` → val 12,9098 / test 12,5881 (pire que l'uniforme 5,545) ; `propre512-8k.pt` → 8,0225 / 8,0126 au lieu de 2,9726 à 128 et 2,7856 à 1 024 ; le contrôle absolu `A-propre-g1.pt` → 3,0971 / 3,2098, cohérent avec 3,0904 / 3,1960. Cause : `charge()` construit `NativeModel` (positions absolues), les checkpoints sont `NativeModelRoPE`, et `strict=False` charge les 127 tenseurs sans alerte. Correctif minimal : `--rope` (ou lire `positions=rope` dans le sidecar), avertir si le chargement est partiel, exposer 1 024. La commande A23 `python3 tools/eval_n2_propre.py <checkpoint>` ferait conclure à 8–13 de PPL au lieu de 2,79.
+
+**Proposition `porte-n2.sh`** (non écrite) : identité (params, `window`, sha256, sidecar), courbe val 128→1 024 (2,9726→2,7856), test 1 024 (2,8566), forme `PPL(1024) < PPL(128) − 0,15`, contrôle permuté > 100, déterminisme, statut absolu imprimé (manque 0,2856/0,3566). **Deux seuils** : scientifique **< 2,5** (rouge, mode `N2_SEUIL=2.5`) et **non-régression ≤ 2,80 / ≤ 2,87** par défaut (vert), pour ne pas ajouter une rouge permanente à `toutes-les-portes.sh`. **30–40 s** GPU, `timeout 300` ; dépendances `work/` + `data/` **non suivies** (promouvoir le mètre dans `tools/` pour la rendre durable) ; sortie 2 si artefact absent ; 84 → **85 portes**.
+
+### 🤖 Assistant
+
+⏵ Je corrige les compteurs, commit N2 corrigé + l'état R
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-etat-r.json'))\nprint('clés:', list(d.keys())[:12])\nfor k in ('verdict','resume','constats'):\n    if k in d: print(k.upper(),':',str(d[k])[:500])\nPY", "description":  … [16 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: 'reports/pensee-etat-r.json'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/rapport-etat-r.md | cut -c1-150; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path( … [403 caractères tronqués]`
+
+  ```
+# État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine
+
+> **Ligne de roadmap** : **R** (le lecteur) · **Date** : 2026-11-06, 22 h 10 HNE · **Branche** :
+> `s/v7` · **HEAD** : `97256b8f` (le HEAD a bougé pendant l'audit : `de7c9113` → `7a876f70` →
+> `97256b8f` ; les mesures de POS ont été refaites au HEAD final, à l'identique) ·
+> **Mission** : lecture seule, aucun code, aucun fichier existant modifié ; **deux fichiers neufs**.
+>
+> **Verdict** : ⚠️ **la chaîne R est saine là où elle est mesurée, et trois récits sont en retard.**
+> **R0.1–R0.6 sont vertes ou closes avec leur négatif** ; **R4.1–R4.3 sont vertes** ; **R4.4 est
+> mesurée et gardée par deux portes vertes**, mais sa porte « **10 pages réelles avec vérité
+> humaine** » n'est pas atteinte — **l'OCR n'est plus le blocage, la vérité humaine l'est**.
+> **R1.2-1024 est un run fait et documenté** (20 000 pas, **2,6256** à 1 000 octets, artifact
+> présent), mais **la ligne n'est pas close** dans la roadmap et **le miroir de copie du modèle
+> 20 k n'existe pas**. Le **tagger** a deux mesures, pas une : **7B local sur 180 phrases**
+> (POS **0,8483**, cascade 
+… [540 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-etat-r.md`](rapport-etat-r. … [1262 caractères tronqués]`

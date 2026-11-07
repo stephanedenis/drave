@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.6 h |
+| Durée | 149.7 h |
 | Tours | 184 |
-| Messages | 3338 |
-| Appels d'outils | 2961 |
+| Messages | 3344 |
+| Appels d'outils | 2965 |
 | Fichiers touchés | 25 |
-| Commandes | 2457 |
+| Commandes | 2461 |
 | Sous-agents | 38 |
-| Commits | 387 |
+| Commits | 389 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*207 appels d'outils.* Actions notables :
+*211 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 193 autres
+- … et 197 autres
 
 **Synthèse produite :**
 
-⏵ Je requalifie la frontière A dans `dependances.md` et je commite les rapports
+⏵ Je corrige les compteurs, commit N2 corrigé + l'état R
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2417 autres
+- … et 2421 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-68 sorties en erreur ou divergentes. Les premières :
+69 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10591,4 +10591,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOCS — LE README DES FICHES DANS LE BUDGET T1" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DANS LE BU
 - A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS, A8.3a 3/19 ; dependances.md CORRIGÉ" -- reports/rapport-e
 - A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS ; dependances.md CORRIGÉ ; ÉTAT HORODATÉ" -- reports/rappo
+- N2 — LA FICHE CORRIGÉE (VALIDATION FRANÇAISE 2,53/2,48, PAS 2,39/2,35) ; BUG SIGNALÉ : eval_n2_propre LIT LES CHECKPOINTS RoPE COMME ABSOLUS (8,02 AU LIEU DE 2,
+- ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)" -- reports/rapport-etat-n2.md reports/pensee-etat-n2.js
 
