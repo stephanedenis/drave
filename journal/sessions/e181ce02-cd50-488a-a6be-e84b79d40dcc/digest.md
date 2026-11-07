@@ -56791,3 +56791,59 @@ rapport-etat-s.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-etat-s.md`](rapport-etat-s. … [2760 caractères tronqués]`
+
+  ```
+ligne S corrigée
+     · compteurs : en-cours.md dit 792 JSON, le disque en a 794
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+701 794
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/rapport-etat-s.md
+COMMIT OK 1
+0a9381f0 S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE
+   550d6d07..0a9381f0  s/v7 -> s/v7
+   550d6d07..0a9381f0  master -> master
+ven 06 nov 2026 22:37:51 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière brique produit : exposer le contexte dans la CLI (`--contexte`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"contexte\" tools/bloc_linguistique.py | grep -i \"def analyser\\|contexte: str\" | head -3; sed -n \"$(grep -n 'def analyser' tools/bloc_linguistique.py | tail -1 | cut -d: -f1),+3p\" tools/bloc_linguistique.py", "descripti … [34 caractères tronqués]`
+
+  ```
+107:    contexte: str = ""
+140:                 contexte: str | None = None) -> Annotation: ...
+1272:                 contexte: str | None = None) -> Annotation:
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.h.analyser(texte, langue, contexte)
+        couv = a.couverture()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('    annotation = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue)',\n            '    annotation = bl.Heurist … [1166 caractères tronqués]`
+
+  ```
+--contexte exposé
+syntaxe OK
+contexte: 'Le chat est sur le toit.'
+étiquettes: 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestContexte(unittest.TestCase):\n    \"\"\"Le contexte est un champ de première classe (mémoire de discours).\"\" … [776 caractères tronqués]`
+
+  ```
+test contexte ajouté
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+130:class TestPartition(unittest.TestCase):
+150:class TestContexte(unittest.TestCase):
+159:if __name__ == "__main__":
+161:if __name__ == "__main__":
+Ran 11 tests in 1.989s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main()\n\n\nif __name__ == \"__main__\":\n    unittest.main()''','''if __name … [1497 caractères tronqués]`

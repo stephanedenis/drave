@@ -145,6 +145,15 @@ dit lequel est préféré — **aucune perte**), `filtrer` (vue linéaire : **F1
 attachements en moins**), `filtrer_union` (variante économique, 91 paires résiduelles) et `brut`
 (l'ancienne sortie). Le défaut est `alternative`.
 
+### 3.3 ter Le contexte (mémoire de discours)
+
+```bash
+python3 tools/drave.py analyser "Il dort." --contexte "Le chat est sur le toit."
+```
+
+Le champ `contexte` est porté dans le JSON ; il alimente la mémoire de discours (coréférence,
+connecteurs) sans changer le texte analysé.
+
 ### 3.4 Rejouer et vérifier le déterminisme
 
 ```bash

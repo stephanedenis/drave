@@ -2497,3 +2497,124 @@ reports/pensee-etat-s.json:17: "verdict": "La page /paragraphes est finie (9/9 p
 … [1201 caractères tronqués]
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "new_string": "> corpus de référents** : **0/71** testée par S.", "old_string": "> corpus de référents** : **0/71** n'est testée par S."}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "new_string": "paires révisées, dont un flip-flop `exclu → resolu → exclu` en 36 s. La stabilité des", "old_string": "paires révisées, dont un flip-flop `exclu → resolu → exclu` en 3 minutes. La stabilité des" … [1 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json", "new_string": " \"verdict\": \"La passe de validation des candidats sur /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne sont pas committ … [1354 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json", "new_string": "    \"p003-c2 : exclu -> resolu -> exclu (36 s entre les deux derniers)\"", "old_string": "    \"p003-c2 : exclu -> resolu -> exclu (3 min)\""}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json", "new_string": "  \"fiabilite\": \"2 paires révisées, 5 lignes, 3 supersédées ; p002-c2 double_sens -> compatible ; p003-c2 exclu -> resolu -> exclu, les deux derniers à 36 s ; aucun double-codage, aucun accor … [242 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale des deux livrables
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-s.json > /dev/null && echo \"JSON valide\"; grep -n \"3 min\\|n'est testée\\|page .*paragraphes.* est finie\" reports/rapport-etat-s.md reports/pensee-etat-s.json || echo \"formulations corrigées\"; echo \"---\"; wc -l reports/rapport-etat-s.md r … [179 caractères tronqués]`
+
+  ```
+JSON valide
+formulations corrigées
+---
+  502 reports/rapport-etat-s.md
+  374 reports/pensee-etat-s.json
+  876 total
+---
+ M reports/pensee-etat-s.json
+ M reports/rapport-etat-s.md
+ M tools/structures
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-etat-s.json'))\nprint('verdict:',d['verdict'][:160])\nprint('paragraphes:',d['paragraphes']['n'],d['paragraphes']['candidats'],d['paragraphes']['verdicts'],d['paragraphes']['acceptes'],d['paragraphes']['exclus'])\nprint('r … [596 caractères tronqués]`
+
+  ```
+verdict: La passe de validation des candidats sur /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne
+paragraphes: 9 19 19 11 8
+refs: 16 / 28 faux 12
+banque: 150 74 / 207 84
+langues: 71 66 32 ['mt', 'ky', 'lo', 'si', 'yo']
+retro: False 0
+actions: ['A1', 'A2', 'A3']
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle : les deux fichiers apparaissent suivis, vérifions si un commit concurrent est passé
+
+- **bash** `{"command": "git rev-parse --short HEAD; git log --oneline -3; echo \"---\"; git status --short; echo \"---\"; git ls-files -s reports/rapport-etat-s.md reports/pensee-etat-s.json; echo \"---\"; git log --oneline -2 -- reports/rapport-etat-s.md reports/pensee-etat-s.json; echo \"---\"; git diff --st … [88 caractères tronqués]`
+
+  ```
+0a9381f0
+0a9381f0 S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE
+550d6d07 PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES
+89f5b728 ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ
+---
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/2026-11-06/README.md
+D  journal/2026-11-06/distribue.md
+D  journal/2026-11-06/docs.md
+D  journal/2026-11-06/memoire.md
+D  journal/2026-11-06/mesures.md
+D  journal/2026-11-06/modele.md
+D  journal/2026-11-06/moteur.md
+D  journal/2026-11-06/outils.md
+D  journal/2026-11-06/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md
+MM journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/rapport.md
+D  journal/s
+… [17365 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Un commit concurrent a pris la version initiale ; je note l'écart dans les deux fichiers
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "new_string": "Le dépôt est sur **`s/v7`**, HEAD **`de7c9113`** au moment de l'audit ; un commit concurrent\n**`0a9381f0`** a depuis pris la version initiale de ce rapport — mes corrections de chronologie\nson … [190 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "new_string": "- **Aucun existant modifié ; aucun commit de ma part ; seuls les deux fichiers de ce rapport sont\n  neufs.** Un commit concurrent `0a9381f0` a pris la version initiale ; les corrections de\n  c … [175 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json", "new_string": " \"head\": \"de7c9113\",\n \"head_apres\": \"0a9381f0\",\n \"commit_concurrent\": \"Le commit 0a9381f0 a pris la version initiale de ce rapport ; les corrections de chronologie (36 s) sont dans … [105 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json has been updated successfully.
+  ```
+

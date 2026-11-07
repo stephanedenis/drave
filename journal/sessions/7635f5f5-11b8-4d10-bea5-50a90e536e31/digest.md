@@ -2855,3 +2855,147 @@ links 5
 done
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -12 -- tools/tests/linguistique/evaluer_gold.py; echo '---'; git log --oneline --since='2026-11-04' -- tools/tests/linguistique/evaluer_gold.py tools/bloc_linguistique.py | head -20", "description": "Historique du b … [25 caractères tronqués]`
+
+  ```
+2b3e1796 B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183
+9952a330 PRODUIT — LA DOC D'USAGE ET LES EXEMPLES ; cascade_pos DEVIENT UN PLANCHER (0,70) ET LA PORTE BLOC REPASSE VERTE ; 84 PORTES
+841e0e71 B13 — LA MESURE PAR LANGUE : FR 113/117 (0,9658), EN 28/28 (1,000) MAIS 28 LABELS SUR 88 CIBLES ; 183/183
+e59ba071 B13 — MULTI-CIBLES (EXACT_ANY 143/145), AUDITS A8/A10/A13 INTÉGRÉS, DOCSTRINGS ET CODE MORT NETTOYÉS ; 182/182
+9d5337ce B13 — L'ATTACHEMENT V2 : EXACT SPANS 0,8483 → 0,9448, TOP-K STRICT 0,6069 → 0,9724 ; 3 SOUS-AGENTS INTÉGRÉS, LE MODÈLE APPRIS REJETÉ ; 180/180
+e223a98d B13 — LE TOP-K STRICT : 0,6069 EN ÉGALITÉ EXACTE, PAS 0,9241 (SOUS-CHAÎNES) ; 176/176
+f70a1b2a B13 — LES DEUX CONVENTIONS DU GOLD : VERBES 37/51 (0,7255), NOMS 57/95 (0,6000) ; 172/172
+f8f5bc04 B13 — LE DÉNOMINATEUR DE L'ATTACHEMENT : RENDEMENT (÷239) ET EXACTITUDE SPANS (÷146), 0,7877/0,9041/0,2260 ; 170/170
+20194fb1 B13 — LE GOLD GELÉ : 602 PHRASES, 21 PORTES PROTÉGÉES ; 133/133
+41c7d1f1 B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112
+4d8c9905 B13 — LA CORÉFÉRENCE À 68 LIENS : LE RÔLE PASSE DEVANT (5
+… [2750 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes-432-run2.json'))\nh=d['modes']['heuristique']['all']['pos']\nprint('tokens',h['tokens'],'exact',h['exactitude'])\nprint(json.dumps(h.get('confusions'),ensur … [85 caractères tronqués]`
+
+  ```
+tokens 2375 exact 0.7444
+{"ADJ": {"NOUN": 26, "ADJ": 47, "VERB": 4}, "ADV": {"ADV": 69, "NOUN": 21, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"AUX": 109, "?": 3, "NOUN": 3, "PREP": 1}, "CONJ": {"PRON": 9, "DET": 11, "CONJ": 43, "?": 13, "PREP": 2, "NOUN": 2}, "DET": {"DET": 422}, "NOUN": {"NOUN": 444, "ADJ": 11, "VERB": 42, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 78, "NOUN": 3}, "PRON": {"PRON": 359, "NOUN": 8, "?": 30, "DET": 25, "CONJ": 1}, "VERB": {"VERB": 195, "NOUN": 332, "ADJ": 5, "PREP": 2, "?": 16, "AUX": 7, "ADV": 1}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-etat-r.json'\nd=json.load(open(p))\nfor l in d['lignes']:\n    if l['id']=='R0.7':\n        l['chiffre']=l['chiffre'].replace('tagger : voir section tagger','tagger : voir l\\'objet ta … [398 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "limit": 60}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md</path>
+<type>file</type>
+<content>
+1: # État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine
+2: 
+3: > **Ligne de roadmap** : **R** (le lecteur) · **Date** : 2026-11-06, 22 h 10 HNE · **Branche** :
+4: > `s/v7` · **HEAD** : `97256b8f` (le HEAD a bougé pendant l'audit : `de7c9113` → `7a876f70` →
+5: > `97256b8f` ; les mesures de POS ont été refaites au HEAD final, à l'identique) ·
+6: > **Mission** : lecture seule, aucun code, aucun fichier existant modifié ; **deux fichiers neufs**.
+7: >
+8: > **Verdict** : ⚠️ **la chaîne R est saine là où elle est mesurée, et trois récits sont en retard.**
+9: > **R0.1–R0.6 sont vertes ou closes avec leur négatif** ; **R4.1–R4.3 sont vertes** ; **R4.4 est
+10: > mesurée et gardée par deux portes vertes**, mais sa porte « **10 pages réelles avec vérité
+11: > humaine** » n'est pas atteinte — **l'OCR n'est plus le blocage, la vérité humaine l'est**.
+12: > **R1.2-1024 est un run fait et documenté** (20 000 pas, **2,6256** à 1 000 octets, artifact
+13: > présent), mais **la ligne n'est pas close** dans la roa
+… [4903 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "> **Ce que cette fiche n'est pas** : un nouveau résultat expérimental. Elle **rejoue** des\n> commandes existantes, **lit** les mesures déjà publiées et **date** ce qui est fait, ce qui\n> est m … [327 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "| `bash tools/porte-ocr-scans.sh` | **exit 0** · 5 familles, colonnes, tableaux | R4.4-scans tient sur le simulé ; les 3 vrais livres sont **hors porte** |", "old_string": "| `bash tools/porte-o … [116 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "limit": 110, "offset": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md</path>
+<type>file</type>
+<content>
+120:   2 500 du run court (donc **20 000 pas**), **164 Mo vus**, init `work/n2ac/rope1024-2.5k.pt`,
+121:   perte finale **1,0206**, PPL interne **2,6609**, **8 000 s** de calcul ;
+122: - **artifact** : `work/n2ac/rope1024-20k.pt` (**131 Mo**), `.drvm` (SHA
+123:   `76628995a51cd54d52d564112f557bacfbea5f6119947c7b20f710e060f4e9af`), `.pt.json`, `.log` ;
+124: - **évaluation** (`reports/n2-r12-2048.json`) : `val_fr` **2,9955** à 128, **2,6256** à 1 000,
+125:   **2,5429** à 4 000 ; `val_big` **3,3086 / 2,9055 / 2,8828** ; littérature **5,6071** ; anglais
+126:   **7,8817** ; wikitext2 **8,7751** ; corpus propre **7,7208** ; contrôle permuté **195,3449** ;
+127: - **fiche** : [`rapport-n2-r12-2048`](rapport-n2-r12-2048.md) § 5, et la loi de la fenêtre dans
+128:   [`rapport-n2-fenetre`](rapport-n2-fenetre.md) ; **commit** `c7ef9bc4` ;
+129: - **marqueur d'audit** : `rapport-file-taches.md` P8 dit **« Fait (20 000 pas) »**.
+130: 
+131: ### 3.2 Ce qui reste
+132: 
+133: 1. **La ligne n'est pas close dans les documents.** La roadmap dit **⏳ R1.2**, l'`en-cours` dit
+134:    « **R1 — R1
+… [6867 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "limit": 115, "offset": 230}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md</path>
+<type>file</type>
+<content>
+230: « Close » au sens des limites nommées (fax, exposant, tableaux sans traits) est défendable ;
+231: « close » au sens de la porte (10 pages réelles avec vérité humaine) ne l'est pas. Les deux
+232: phrases de la même fiche ne peuvent pas être vraies ensemble.
+233: 
+234: ## 5. Le tagger — où il est, ce qu'il mesure, sur quel corpus, quel écart
+235: 
+236: ### 5.1 Où il est
+237: 
+238: Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et quatre bancs** :
+239: 
+240: | pièce | rôle |
+241: |---|---|
+242: | `tools/bloc_linguistique.py` → **`NeuronalLLMPOS`** (l. 1727) | le tagger POS : tokenise avec `Heuristique._mots`, envoie la liste des tokens, impose une classe par token par **grammaire GBNF** ; les spans sont ceux du bloc, pas ceux du modèle |
+243: | `tools/tests/linguistique/qualifier_neuronal.py` | le banc **local** : lance `llama-server`, 180 phrases, heuristique / neuronal / cascade, contrôles, JSON |
+244: | `tools/tests/linguistique/qualifier_cascade.py` | le banc **local** de la cascade complète (POS + syntagmes), 180 phrases |
+245: | `tools/
+… [8331 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "**Pourquoi la baseline a monté** : l'heuristique du bloc L a gagné **+13,1 pts** sur le réel 432\n(0,7444 → 0,8754) et **+2,4 pts** sur le 180 (0,7512 → 0,7749) entre le 04/11 et le 06/11\n(POS  … [645 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "limit": 110, "offset": 333}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md</path>
+<type>file</type>
+<content>
+333: 
+334: ### Action 1 — Re-mesurer le tagger POS sur le gold 612 (R0.7), et publier l'écart contre 0,8500
+335: 
+336: - **Pourquoi** : c'est le seul trou du tagger ; le 0,9440 est sur 180, le 0,9389 sur 432, le
+337:   0,8500 sur 612. Sans ce chiffre, la ligne R0.7 reste « mesurée deux fois, jamais sur le gold
+338:   courant ».
+339: - **Commande** : `DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key python3
+340:   tools/tests/linguistique/qualifier_quatre_modes.py --sortie /tmp/tagger-612.json` **après**
+341:   extension du chargeur au gold 612 (le banc charge aujourd'hui `gold_reel.json` seul ; il faut
+342:   ajouter `gold.json` + `gold_synthetique.json`, ou lancer 432 + 180 et agréger). Le run 432
+343:   coûte **858 appels, 254 454 tokens, 807,6 s** ; le 612 en coûtera ~**1 200 appels, ~360 k
+344:   tokens, ~20 min**.
+345: - **Mesure** : POS exact sur 612, ventilé **432 réel / 160 synthétique / 20 hand** ; écart contre
+346:   **0,8500** ; contrôles **majoritaire 0,2289**, **permutation 0,1729** ; refus ; coût.
+347: - **Seuil de décision** : si l'écart est **< +2 pts**, 
+… [7718 caractères tronqués]
+  ```
+

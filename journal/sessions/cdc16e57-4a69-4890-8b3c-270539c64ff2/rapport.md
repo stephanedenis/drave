@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 60 |
-| Appels d'outils | 103 |
+| Messages | 65 |
+| Appels d'outils | 111 |
 | Fichiers touchés | 2 |
-| Commandes | 93 |
+| Commandes | 97 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*103 appels d'outils.* Actions notables :
+*111 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 89 autres
+- … et 97 autres
 
 **Synthèse produite :**
 
-⏵ Correction de trois formulations (chronologie, périmètre, grammaire)
+⏵ Validation finale et envoi du résumé au parent
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md` | 1 | 4 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json` | 1 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md` | 1 | 6 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json` | 1 | 4 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +98,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 53 autres
+- … et 57 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -187,6 +187,7 @@
 - **T1** `42:  (51,0 % / 65,5 %) est **très au-dessus**.`
 - **T1** `52:mélange (8,5 % contre 9,1 % sur les phrases) : l'analyseur n'y « lit » pas plus de structure que`
 - **T1** `reports/pensee-etat-s.json:17: "verdict": "La page /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne sont pas committés. La banque`
+- **T1** `> (35,7 %), **84 lectures acceptées**, mais la page sert les **369 candidats stockés le 02/11**,`
 
 ## 5. Erreurs rencontrées
 

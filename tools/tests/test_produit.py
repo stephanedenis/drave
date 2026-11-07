@@ -147,5 +147,16 @@ class TestPartition(unittest.TestCase):
         self.assertTrue(any("alternative" in (e.get("meta") or {}) for e in segs))
 
 
+class TestContexte(unittest.TestCase):
+    """Le contexte est un champ de première classe (mémoire de discours)."""
+
+    def test_contexte_porte_dans_le_json(self):
+        sortie = drave("analyser", "Il dort.", "--contexte", "Le chat est sur le toit.", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        self.assertEqual(json.loads(sortie.stdout)["contexte"], "Le chat est sur le toit.")
+
+
+if __name__ == "__main__":
+    unittest.main()
 if __name__ == "__main__":
     unittest.main()

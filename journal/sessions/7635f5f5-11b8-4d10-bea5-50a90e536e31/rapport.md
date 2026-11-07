@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 90 |
-| Appels d'outils | 140 |
+| Messages | 98 |
+| Appels d'outils | 149 |
 | Fichiers touchés | 2 |
-| Commandes | 112 |
+| Commandes | 114 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*140 appels d'outils.* Actions notables :
+*149 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 109 autres
+- … et 114 autres
 
 **Synthèse produite :**
 
@@ -53,7 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md` | 1 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md` | 1 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-r.json` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
@@ -98,7 +98,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 72 autres
+- … et 74 autres
 
 ## 4. Mesures et résultats marquants
 
