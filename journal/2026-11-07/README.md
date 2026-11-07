@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**28 commits** · **5 session(s)** · **6 thème(s)**
+**29 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 3 | [distribue.md](distribue.md) |
+| distribue | 4 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
@@ -26,7 +26,7 @@
 | `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 02:09 | 0.1 h | [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md) |
 | `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.3 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
 | `bdefb627-485e-44d1-b11c-d15dd2e6b640` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 1.2 h | [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 166.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 167.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -60,6 +60,7 @@
 | 13:44 | `92652984` | B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEMENT 237/238 ; 183/183 |
 | 14:23 | `9a259953` | B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE |
 | 14:45 | `8eb0cc49` | B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE |
+| 14:55 | `9c7f71dc` | PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -82,4 +83,37 @@ perdait ses **10 sauts de ligne** (45/46, 0,9783) ; le correctif `C` les annote 
 revient à 46/46. Le contrôle négatif (mélange, troncature) casse **46/46**. C'est un **codec de
 surface**, pas un décodeur : la fidélité sémantique reste à mesurer.
 [Fiche](../../reports/rapport-restitution-v0.md).
+
+**L'après-midi du 07/11 (J2.2).** Le **corpus commun Panini/NIPADA ↔ Drave** est construit sur
+l'**article 1 de la DUDH** : **21 textes** (20 langues stratifiées, 5 familles × 4, plus le
+français pivot), **10 écritures**, **42 phrases**. Sur **532** langues Panini et **456** Drave,
+**453** fichiers communs, **438** appariables article 1, **418 paires exactes (95,4 %)** ; les
+**20 écarts de surface** (apostrophes, cédilles, virgules, ordre des diacritiques) sont **exclus,
+pas corrigés**. Le corpus normalisé (UTF-8, une phrase par ligne, métadonnées langue/époque) est
+dans `work/corpus-commun/` (non versionné) ; la fiche et le JSON sont versionnés. Contrôles :
+**8/8 tests conformes** (6 rejets, 2 témoins), source Panini **SHA-256 `531bc75c…` inchangée** avant/après (fichier non
+suivi par git). [Fiche](../../reports/rapport-corpus-commun.md).
+
+**L'après-midi du 07/11 (J3.1).** Le **retrieval inter-langues à époque contrôlée** est mesuré sur trois
+corpus : **B7** (71 langues, 35 concepts, 2026), **UDHR** (21 langues, 30 articles, 1948) et **BIBLE**
+(12 traductions datées de 1744 à 2019, 1 000 versets). Le résultat renverse la lecture naïve de
+l'avertissement de Panini : **l'écriture domine** (+0,609), la **famille** compte (+0,181), et l'**écart
+d'années ne pèse pas** à écriture contrôlée (−0,034 par siècle, IC [−0,075 ; +0,009], p=0,19 par
+permutation). Le brut (0,238 contemporain vs 0,427 décalé) est un **effet de composition** : les couples
+décalés contiennent 60 % de paires de même écriture, les contemporains 33 %. **Contrôles négatifs** :
+cibles mélangées et années permutées, tous au hasard. [Fiche](../../reports/rapport-retrieval-epoque.md).
+
+**La fin d'après-midi du 07/11 (J3.2).** La **généalogie à deux faces** confronte la théorie de Panini
+(14 atomes, 9 dhātus, une échelle de distance) à nos mesures d'alignement (Glottolog + retrieval) sur le
+corpus commun. Résultat : **les deux faces ne mesurent pas le même objet**. La « filiation » de Panini
+§150 est une distance de **tradition** (3 paires sur 655 ont deux langues connues différentes ; 479 ont
+une langue vide) ; sa fonction `lang_distance` couvre **5/21** langues et code **200/210** paires
+« inconnu » ; ses métadonnées UDHR couvrent **15/21** ; Glottolog **21/21**. Sur le corpus commun,
+**154/154 paires hors script sont au hasard exact** (MRR 0,1332 = H₃₀/30 ; top-1 0,0333 = 1/30) ; le
+signal de famille ne vit que dans **56 paires de même script**, et il est porté par **2-3 paires**
+(`eng–fra` 0,952, `ind–jav` 0,918). Sur les 105 paires couvertes, Panini UDHR et Glottolog prédisent le
+retrieval aussi bien l'un que l'autre (R² 0,256 contre 0,230) ; la différence de couverture, elle, est
+décisive. La face atomes n'est pas disponible (V14 : **3/21** langues) et les 9 dhātus sont des macros
+sans matrice V14 publiée. [Fiche](../../reports/rapport-genealogie-deux-faces.md) ·
+[JSON](../../reports/genealogie-deux-faces.json).
 <!-- /notes -->

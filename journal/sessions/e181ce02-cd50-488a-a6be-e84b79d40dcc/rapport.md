@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 166.3 h |
+| Durée | 167.1 h |
 | Tours | 193 |
-| Messages | 3592 |
-| Appels d'outils | 3191 |
+| Messages | 3599 |
+| Appels d'outils | 3197 |
 | Fichiers touchés | 25 |
-| Commandes | 2665 |
+| Commandes | 2668 |
 | Sous-agents | 42 |
 | Commits | 434 |
 | Compactages de contexte | 8 |
@@ -10372,7 +10372,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 
 ### Tour 193 — go
 
-*28 appels d'outils.* Actions notables :
+*34 appels d'outils.* Actions notables :
 
 - bash — Lancer la boucle du chantier
 - bash — Surveiller J1.1
@@ -10388,11 +10388,41 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 - bash — Verdict J1.2 et état
 - bash — Attendre le verdict du timeout
 - bash — Vérifier les résultats des deux tâches
-- … et 4 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Première tâche réelle réussie : `r035` réglé (exact 236 → 237), J1.2 en cours. Je lis la fiche
+⏵ Le méta-harnais tourne en production : **5 tâches livrées et poussées**, J2.2 en cours
+
+\## Ce qui s'est passé depuis votre « go »
+
+J'ai lancé le superviseur à 12 h 18. Il a enchaîné **6 tâches** (budget consommé : **9 617 s sur 21 600**, soit 45 %). Les agents `headless` ont travaillé dans le dépôt, commité, et le superviseur a vérifié chaque acceptation :
+
+| tâche | résultat | commit |
+|---|---|---|
+| **J0** contrôle | liaison OK (3,5 s) | — |
+| **J1.1 r035** (relative zéro) | **exact 236 → 237**, couverture 0,9916 → **0,9958**, labels 238 | `25a6c0ff` |
+| **J1.2 convention des GV** | **F1 0,7549 → 0,7902** (sujet hors du GV + adverbe), attachement intact | `92652984` |
+| **J1.3 schéma v2** | `meta.partition` + `meta.alternative`, **26 cas validés**, v1 rétro-compatible | `9a259953` |
+| **J1.4 restitution v0** | `drave.py restituer` : **46/46 surfaces exactes**, miroir strict 0,1087 | `8eb0cc49` |
+| **J2.1 atomes ↔ niveaux** | **14/14 lignes**, 33 paires colinéaires, 8 niveaux | `9c7f71dc` |
+
+**Vérifié par moi** (le pilote, pas l'agent) : `exact 237/238`, couverture **0,9958**, F1 **0,7902**, POS 0,8625 ; le schéma v2 existe et valide ; `restituer` rend une surface identique ; la table des atomes porte les 14 symboles. Les 5 commits sont **poussés** (`9c7f71dc`, `master` = `s/v7`).
+
+\## Trois corrections apprises en production
+
+1. **La clé** : `dsh headless` exige `DEEPSEEK_API_KEY` ; le superviseur lit `~/.config/drave/deepseek.key` (sinon `MISSING_CREDENTIAL`).
+2. **Le worktree n'est jamais propre** (dépôt multi-sessions) : le superviseur ne bloque plus dessus ; il note le HEAD et les fichiers modifiés.
+3. **Le timeout ne doit pas invalider un travail fait** : J1.2 a dépassé les 90 min **après** avoir commité et passé son acceptation → le verdict est désormais **acceptation d'abord** (code 124 noté, pas pénalisé). *Correction dans le code, pas encore committée — le processus en cours a l'ancienne logique.*
+
+\## La suite
+
+- **J2.2** (le corpus commun) tourne depuis 14 h 59 ; puis **J3** (retrieval à époque contrôlée, généalogie à deux faces), **J4** (coordination N2/S/R/A), **J5** (rapport de semaine, passe complète, tag).
+- Le budget (21 600 s) devrait couvrir ~4 tâches de plus ; la boucle s'arrêtera **proprement** au budget, et il suffira de la relancer.
+- **Pour surveiller** : `tail -f work/chantier/journal.log` · **pour arrêter** : `python3 tools/chantier/superviseur.py stop`.
+
+Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
+… [156 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -10513,7 +10543,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2625 autres
+- … et 2628 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10641,7 +10671,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 
 ## 5. Erreurs rencontrées
 
-84 sorties en erreur ou divergentes. Les premières :
+85 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]

@@ -28,7 +28,7 @@
 - `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 02:09, 0.1 h) → [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md)
 - `b8f0bcb1-5609-4053-818b-ade88583a99b` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.3 h) → [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md)
 - `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 1.2 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 166.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 167.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -50,4 +50,21 @@ gold est **unanime** sur le sujet (**712/712 GV** commencent par VERB/AUX/ADV, a
 mais **contradictoire** sur l'adverbe final (`r019`/`r186`, `r051`/`r189`). Fiche
 [rapport-convention-gv.md](../../reports/rapport-convention-gv.md) · JSON
 [pensee-convention-gv.json](../../reports/pensee-convention-gv.json).
+
+**18 h 30 — J3.2, la généalogie à deux faces.** La confrontation de la théorie de Panini (14 atomes,
+9 dhātus) et de nos mesures d'alignement (Glottolog + retrieval) sur les 21 langues du corpus commun
+donne trois résultats. **Ce qui converge** : la surface passe avant la filiation des deux côtés, et le
+rapport filiation/surface est du même ordre (β 0,049/0,138 = 0,355 chez Panini ; famille 0,181/script
+0,609 = 0,297 en J3.1) ; là où les deux généalogies existent, elles sont le même arbre (15/15 familles
+appariées, 14/15 branches au nœud exact) et prédisent le retrieval aussi bien l'une que l'autre
+(R² 0,256 contre 0,230 sur 105 paires). **Ce qui diverge** : l'objet de la « filiation » (tradition chez
+Panini — 3/655 paires inter-langues, 479 avec une langue vide —, famille de langues chez Drave), la
+couverture (5/21 langues pour `LANG_TREE`, 15/21 pour les métadonnées UDHR, 21/21 pour Glottolog), la
+granularité (4 niveaux, dont un « inconnu » qui est une valeur manquante), et le confondant dominant
+(époque chez Panini, écriture chez Drave). **Le résultat le plus net** : **154/154 paires hors script
+sont au hasard exact** (MRR 0,1332 = H₃₀/30 ; top-1 0,0333 = 1/30) ; le signal de famille ne vit que dans
+56 paires de même script, et il est porté par 2-3 paires. La face atomes n'est pas disponible sur le
+corpus commun (V14 : 3/21 langues) ; les 9 dhātus sont des macros sans matrice V14 publiée. La prochaine
+mesure est une **signature V14 multilingue des 21 langues**. [Fiche](../../reports/rapport-genealogie-deux-faces.md) ·
+[JSON](../../reports/genealogie-deux-faces.json) · [Outil](../../tools/genealogie_deux_faces.py).
 <!-- /notes -->

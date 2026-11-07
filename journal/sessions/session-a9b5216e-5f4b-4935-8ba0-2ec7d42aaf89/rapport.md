@@ -9,10 +9,10 @@
 | Début | 2026-11-07 14:46 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 69 |
-| Appels d'outils | 100 |
+| Messages | 74 |
+| Appels d'outils | 106 |
 | Fichiers touchés | 2 |
-| Commandes | 85 |
+| Commandes | 89 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J2.1 : la table de correspondance entre les **14 atomes** de Panini (∃ ∆ ∼ ↗ ⊙ ⧖ ◇ № ⊕ ⊗ λ ⊞ ≍ ≡) et nos **niveaux … [329 caractères tronqués]
 
-*100 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — List workspace and Panini directories
 - bash — Check Qtrinet repo status and reports
@@ -41,7 +41,35 @@
 - bash — Read genealogie doc head
 - bash — Find docs with syntagme
 - bash — Find docs with grapheme level
-- … et 86 autres
+- … et 90 autres
+
+**Synthèse produite :**
+
+**J2.1 terminé.** Deux livrables :
+
+- [`reports/rapport-atomes-niveaux.md`](reports/rapport-atomes-niveaux.md) — la table **14 atomes × 8 niveaux**, avec pour chaque atome : ce qu’il capte, son **ancrage**, son **porteur**, sa **portée**, une **mesure possible** et son **contrôle négatif**.
+- [`reports/atomes-niveaux.json`](reports/atomes-niveaux.json) — les 14 objets structurés, les 8 niveaux, la calibration des 44 œuvres et le protocole de mesure.
+
+**Ce que dit la table**
+
+| porteur | atomes |
+|---|---|
+| **phrase** | ∃, ∆, ⧖, ≡ |
+| **syntagme** | ∼, ⊙, ⊕, λ |
+| **discours** | ↗, ≍ |
+| **mot** | № |
+| **pos** | ⊗ |
+| **pragmatique** | ◇ |
+| **document** | ⊞ |
+| **graphème** | aucun porteur — ancrage de ∆ et ≍ |
+
+Le graphème est un **ancrage minimal**, pas un porteur sémantique : c’est un résultat explicite, pas un oubli.
+
+**Calibration (lecture seule, 44 œuvres Panini)** : **33 paires** d’atomes à |r| ≥ 0,5 en brut, **4 composantes > 1**, **80,7 %** de variance sur les trois premières en CLR. Les parts sont compositionnelles : № ↔ ≡ passe de **+0,923** (brut) à **+0,577** (CLR), d’où le protocole CLR + permutations + corrélations partielles + corpus négatif.
+
+**Limite nommée** : aucune mesure atome ↔ niveau n’est encore faite. La fiche livre la table, la calibration et le protocole ; **J2.2** construira le corpus commun et exécutera la mesure.
+
+**Contrôles** : `FICHE-OK`, `grep '∃'` = 12, revue documentaire verte, `porte-tableaux` verte, budget T0 **3996/4000**. État mis à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (compteurs **710/803**, ligne J2.1). Commit **`9c7f71dc`**. Aucune écriture dans Panini.
 
 ## 3. Travail accompli
 
@@ -94,7 +122,7 @@
 - **T1** Inspect supervisor state JSON
 - **T1** Find J2.1 task definition
 - **T1** Read supervisor head
-- … et 45 autres
+- … et 49 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -179,6 +207,7 @@
 - **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
 - **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
 - **T1** `[still running after 60000ms; moved to background job bash-85]`
+- **T1** `9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE`
 
 ## 5. Erreurs rencontrées
 

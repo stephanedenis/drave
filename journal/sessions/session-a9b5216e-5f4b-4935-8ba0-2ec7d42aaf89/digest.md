@@ -2255,3 +2255,155 @@ state-check=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE\" -m \"Table de correspondance V14 (Research) × 8 niveaux Drave : pour chaque atome, ce qu'il capte, son ancrage, s … [615 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-85]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-85", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 9c7f71dc] PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE
+ 21 files changed, 7928 insertions(+), 34 deletions(-)
+ create mode 100644 journal/sessions/session-9cb32ff9-6fb5-489f-a41e-0e2df9aeb32f/digest.md
+ create mode 100644 journal/sessions/session-9cb32ff9-6fb5-489f-a41e-0e2df9aeb32f/rapport.md
+ create mode 100644 journal/sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/digest.md
+ create mode 100644 journal/sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md
+ create mode 100644 reports/atomes-niveaux.json
+ create mode 100644 reports/rapport-atomes-niveaux.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -30; echo ===; git status --short | head -20", "description": "Verify commit contents and status"}`
+
+  ```
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE
+ docs/pilotage/en-cours.md                          |    7 +-
+ journal/2026-11-07/README.md                       |    8 +-
+ journal/2026-11-07/distribue.md                    |    2 +-
+ journal/2026-11-07/docs.md                         |    2 +-
+ journal/2026-11-07/memoire.md                      |    2 +-
+ journal/2026-11-07/mesures.md                      |   10 +-
+ journal/2026-11-07/modele.md                       |    2 +-
+ journal/2026-11-07/portes.md                       |    2 +-
+ journal/README.md                                  |    6 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   46 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      |  102 +
+ .../rapport.md                                     |   40 +-
+ .../digest.md                                      | 3929 ++++++++++++++++++++
+ .../rapport.md                                     |  277 ++
+ .../digest.md     
+… [678 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -10; echo ===; bash tools/porte-tableaux.sh 2>&1 | tail -5", "description": "Re-run review after commit"}`
+
+  ```
+revue de documentation · 710 fiche(s) · 803 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+===
+  ✅ 1766 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3813 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-atomes-niveaux.md", "offset": 80, "limit": 80}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-atomes-niveaux.md</path>
+<type>file</type>
+<content>
+80: 4. la **mesure possible** : un signal, une métrique, un contrôle négatif, et ce qui la rendrait fausse.
+81: 
+82: Le choix du porteur est un **choix de mesure**, pas une essence. Un même atome peut avoir un autre porteur dans
+83: une autre tâche : ∆ est graphémique pour l'orthographe et phrastique pour la négation ; ⊕ est syntagmatique pour
+84: le sens spatial et documentaire pour la mise en page. Le JSON conserve le choix et les alternatives.
+85: 
+86: ## 3. La table — 14 atomes, 14 lignes
+87: 
+88: > **Lecture.** `Ancrage → porteur` : le niveau minimal où l'atome a une marque, puis le niveau où il est mesuré.
+89: > `Portée` : `direct`, `distribué` ou `émergent` (voir § 1). Les mesures sont des **propositions** : elles
+90: > décrivent le dispositif à construire en J2.2, pas un résultat.
+91: 
+92: | # | Atome | Ce qu'il capte (V14) | Ancrage → porteur | Portée | Mesure possible | Contrôle négatif |
+93: |---:|---|---|---|---|---|---|
+94: | 1 | **∃ ÊTRE** (2) | présence, substrat, existence ; copule, « il y a », subsomption | mot → phrase | distribué | copules et
+… [6615 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-atomes-niveaux.md", "limit": 80, "offset": 235}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-atomes-niveaux.md</path>
+<type>file</type>
+<content>
+235: ### 6.4 Les contrôles négatifs
+236: 
+237: 1. **Permutation des colonnes** : les 14 parts sont mélangées entre textes ; les ρ doivent tomber à ~0. Si une
+238:    corrélation survit, elle est portée par la longueur ou par le genre, pas par l'atome.
+239: 2. **Placebo** : une variable de niveau aléatoire, ou la longueur du texte ; le ρ de l'atome avec le placebo
+240:    doit être plus faible qu'avec sa variable principale.
+241: 3. **Corpus négatif** : on retire la marque du niveau sans toucher au texte — négations supprimées pour ∆,
+242:    chiffres remplacés par des mots pour №, sections aplaties pour ⊞, parallélisme cassé pour ≍. Si le ρ ne
+243:    baisse pas, la mesure ne mesure pas le niveau.
+244: 4. **Texte sans la langue** : pour les atomes lexicaux (№, ⊗), une version traduite ou un texte de genre
+245:    différent ; le ρ doit rester stable si l'atome est structurel, chuter s'il est lexical.
+246: 
+247: ### 6.5 La règle de décision
+248: 
+249: Un atome est **ancré** au niveau proposé si, et seulement si :
+250: 
+251: - ρ principal **≥ 0,30** et **p_perm < 
+… [4451 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && test -f reports/rapport-atomes-niveaux.md && echo FICHE-OK; grep -c '∃' reports/rapport-atomes-niveaux.md; python3 tools/verifie_en_cours.py 2>&1 | tail -4", "description": "Run J2.1 acceptance checks"}`
+
+  ```
+FICHE-OK
+12
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s'; echo ===; git status --short | wc -l; git status --short | grep -E 'atomes-niveaux|rapport-atomes|en-cours' || true", "description": "Confirm commit and clean deliverable status"}`
+
+  ```
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE
+===
+11
+  ```
+
+### 🤖 Assistant
+
+**J2.1 terminé.** Deux livrables :
+
+- [`reports/rapport-atomes-niveaux.md`](reports/rapport-atomes-niveaux.md) — la table **14 atomes × 8 niveaux**, avec pour chaque atome : ce qu’il capte, son **ancrage**, son **porteur**, sa **portée**, une **mesure possible** et son **contrôle négatif**.
+- [`reports/atomes-niveaux.json`](reports/atomes-niveaux.json) — les 14 objets structurés, les 8 niveaux, la calibration des 44 œuvres et le protocole de mesure.
+
+**Ce que dit la table**
+
+| porteur | atomes |
+|---|---|
+| **phrase** | ∃, ∆, ⧖, ≡ |
+| **syntagme** | ∼, ⊙, ⊕, λ |
+| **discours** | ↗, ≍ |
+| **mot** | № |
+| **pos** | ⊗ |
+| **pragmatique** | ◇ |
+| **document** | ⊞ |
+| **graphème** | aucun porteur — ancrage de ∆ et ≍ |
+
+Le graphème est un **ancrage minimal**, pas un porteur sémantique : c’est un résultat explicite, pas un oubli.
+
+**Calibration (lecture seule, 44 œuvres Panini)** : **33 paires** d’atomes à |r| ≥ 0,5 en brut, **4 composantes > 1**, **80,7 %** de variance sur les trois premières en CLR. Les parts sont compositionnelles : № ↔ ≡ passe de **+0,923** (brut) à **+0,577** (CLR), d’où le protocole CLR + permutations + corrélations partielles + corpus négatif.
+
+**Limite nommée** : aucune mesure atome ↔ niveau n’est encore faite. La fiche livre la table, la calibration et le protocole ; **J2.2** construira le corpus commun et exécutera la mesure.
+
+**Contrôles** : `FICHE-OK`, `grep '∃'` = 12, revue documentaire verte, `porte-tableaux` verte, budget T0 **3996/4000**. État mis à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (compteurs **710/803**, ligne J2.1). Commit **`9c7f71dc`**. Aucune écriture dans Panini.
+

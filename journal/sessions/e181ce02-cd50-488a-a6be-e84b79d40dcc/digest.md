@@ -60581,3 +60581,126 @@ budget consommé : 8823.199999999999 s · lancements : 6
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -4", "description": "Attendre J2.1", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4799]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4799", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4799", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+sam 07 nov 2026 15:17:49 EST
+2026-11-07 14:46:05 · ✔ J1.4 en 1196.3 s (code 0) — ✅ python3 tools/drave.py restituer 'Le chat dort.' >/dev/null 2>&1; echo REST-$?; ✅ test -f reports/rapport-restitution-v0.md && echo FICHE-OK
+2026-11-07 14:46:05 · ▶ J2.1 — Panini I — la table atomes ↔ niveaux (timeout 5400 s)
+2026-11-07 14:59:19 · ✔ J2.1 en 794.2 s (code 0) — ✅ test -f reports/rapport-atomes-niveaux.md && echo FICHE-OK; ✅ grep -c '∃' reports/rapport-atomes-niveaux.md
+2026-11-07 14:59:19 · ▶ J2.2 — Panini I — le corpus commun (timeout 5400 s)
+budget consommé : 9617.4 s · lancements : 7
+  [a_faire ] J2.2   j2 — Panini I — le corpus commun
+  [a_faire ] J3.1   j3 — Panini II — le retrieval à époque contrôlée
+  [a_faire ] J3.2   j3 — Panini II — la généalogie à deux faces
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chantier tourne : 5 tâches faites (r035, GV, schéma v2, restitution, atomes↔niveaux), J2.2 en cours
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|fait\" | head -8", "description": "Attendre J2.2", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4800]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4800", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4800", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+sam 07 nov 2026 15:43:07 EST
+2026-11-07 14:46:05 · ▶ J2.1 — Panini I — la table atomes ↔ niveaux (timeout 5400 s)
+2026-11-07 14:59:19 · ✔ J2.1 en 794.2 s (code 0) — ✅ test -f reports/rapport-atomes-niveaux.md && echo FICHE-OK; ✅ grep -c '∃' reports/rapport-atomes-niveaux.md
+2026-11-07 14:59:19 · ▶ J2.2 — Panini I — le corpus commun (timeout 5400 s)
+budget consommé : 9617.4 s · lancements : 7
+  [fait    ] J0     j0 — Le contrôle du superviseur
+  [fait    ] J1.1   j1 — r035 : la relative zéro
+  [fait    ] J1.3   j1 — Le schéma v2
+  [fait    ] J1.4   j1 — La restitution v0
+  [fait    ] J2.1   j2 — Panini I — la table atomes ↔ niveaux
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/schemas/ | head -3; timeout 60 python3 tools/drave.py restituer \"Le chat dort.\" 2>&1 | head -4; grep -c \"∃\\|∆\\|∼\" reports/rapport-atomes-niveaux.md 2>/dev/null; git log --oneline -6 | cut -c1-90", "description": "Vérif … [31 caractères tronqués]`
+
+  ```
+drave-annotation-v1.json
+drave-annotation-v2.json
+restitution (annotation → surface)
+source      : 'Le chat dort.'
+surface     : 'Le chat dort.'
+fidélité    : exacte 1.0000 · caractères 1.0000 · couverture 100.00%
+28
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, 
+8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TR
+9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-list --count origin/master..s/v7; git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7; date", "description" … [57 caractères tronqués]`
+
+  ```
+5
+   d7469b5c..9c7f71dc  s/v7 -> s/v7
+   d7469b5c..9c7f71dc  master -> master
+0
+sam 07 nov 2026 15:43:49 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le méta-harnais tourne en production : **5 tâches livrées et poussées**, J2.2 en cours
+
+## Ce qui s'est passé depuis votre « go »
+
+J'ai lancé le superviseur à 12 h 18. Il a enchaîné **6 tâches** (budget consommé : **9 617 s sur 21 600**, soit 45 %). Les agents `headless` ont travaillé dans le dépôt, commité, et le superviseur a vérifié chaque acceptation :
+
+| tâche | résultat | commit |
+|---|---|---|
+| **J0** contrôle | liaison OK (3,5 s) | — |
+| **J1.1 r035** (relative zéro) | **exact 236 → 237**, couverture 0,9916 → **0,9958**, labels 238 | `25a6c0ff` |
+| **J1.2 convention des GV** | **F1 0,7549 → 0,7902** (sujet hors du GV + adverbe), attachement intact | `92652984` |
+| **J1.3 schéma v2** | `meta.partition` + `meta.alternative`, **26 cas validés**, v1 rétro-compatible | `9a259953` |
+| **J1.4 restitution v0** | `drave.py restituer` : **46/46 surfaces exactes**, miroir strict 0,1087 | `8eb0cc49` |
+| **J2.1 atomes ↔ niveaux** | **14/14 lignes**, 33 paires colinéaires, 8 niveaux | `9c7f71dc` |
+
+**Vérifié par moi** (le pilote, pas l'agent) : `exact 237/238`, couverture **0,9958**, F1 **0,7902**, POS 0,8625 ; le schéma v2 existe et valide ; `restituer` rend une surface identique ; la table des atomes porte les 14 symboles. Les 5 commits sont **poussés** (`9c7f71dc`, `master` = `s/v7`).
+
+## Trois corrections apprises en production
+
+1. **La clé** : `dsh headless` exige `DEEPSEEK_API_KEY` ; le superviseur lit `~/.config/drave/deepseek.key` (sinon `MISSING_CREDENTIAL`).
+2. **Le worktree n'est jamais propre** (dépôt multi-sessions) : le superviseur ne bloque plus dessus ; il note le HEAD et les fichiers modifiés.
+3. **Le timeout ne doit pas invalider un travail fait** : J1.2 a dépassé les 90 min **après** avoir commité et passé son acceptation → le verdict est désormais **acceptation d'abord** (code 124 noté, pas pénalisé). *Correction dans le code, pas encore committée — le processus en cours a l'ancienne logique.*
+
+## La suite
+
+- **J2.2** (le corpus commun) tourne depuis 14 h 59 ; puis **J3** (retrieval à époque contrôlée, généalogie à deux faces), **J4** (coordination N2/S/R/A), **J5** (rapport de semaine, passe complète, tag).
+- Le budget (21 600 s) devrait couvrir ~4 tâches de plus ; la boucle s'arrêtera **proprement** au budget, et il suffira de la relancer.
+- **Pour surveiller** : `tail -f work/chantier/journal.log` · **pour arrêter** : `python3 tools/chantier/superviseur.py stop`.
+
+Je reste en veille sur la boucle : je vérifie chaque livraison, je corrige les verdicts et je pousse. Si vous lisez ceci au retour, l'état complet est dans `work/chantier/etat.json` et le journal dans `work/chantier/journal.log`.
+
