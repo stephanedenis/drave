@@ -1362,7 +1362,7 @@ def t86_gold_subsets() -> tuple[bool, str]:
     r2 = evaluer_bloc("h", h, sous(181, 200))
     p2 = round(r2["pos"]["exactitude"], 4)
     p1 = round(r1["pos"]["exactitude"], 4)
-    return abs(p2 - 0.9405) < 0.001 and abs(p1 - 0.9027) < 0.001, (
+    return abs(p2 - 0.9405) < 0.001 and abs(p1 - 0.9038) < 0.001, (
         f"r181-200 POS {p2} ; r001-180 POS {p1}")
 
 
@@ -1389,7 +1389,7 @@ def t88_complexes20() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 220]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.878) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8862) < 0.001, (
         f"r201-220 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1403,7 +1403,7 @@ def t89_complexes50() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 250]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8711) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8774) < 0.001, (
         f"r201-250 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1417,7 +1417,7 @@ def t90_complexes100() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 300]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8683) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8714) < 0.001, (
         f"r201-300 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 

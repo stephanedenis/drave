@@ -57155,3 +57155,52 @@ ven 06 nov 2026 22:57:36 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1272 caractères tronqués]`
+
+  ```
+702 795
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-pos-ponctuation.md
+COMMIT OK 1
+7a45325f B13 — LA PONCTUATION A UNE POS (PONCT) : POS 85,00 → 85,75 %, MIROIR 0,196 → 0,2276, F1 ET ATTACHEMENT INCHANGÉS ; 183/183
+   f48d5d81..7a45325f  s/v7 -> s/v7
+   f48d5d81..7a45325f  master -> master
+ven 06 nov 2026 23:00:08 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit : je teste un R4 français **filtré** (adjectifs connus ou suffixe adjectival seulement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        # 4. phrase + pragmatique''',\n'''        # 3 d. R4-fr **filtré** : après une copule, un mot inconnu n'est un ADJ … [2130 caractères tronqués]`
+
+  ```
+R4-fr filtré ajouté
+syntaxe OK
+TOUT POS 0.8584 | F1 0.6482 | exact 235/236
+dev POS 0.8581 | F1 0.6450
+test POS 0.8592 | F1 0.6552
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor p in (\"La voiture est rapide.\",\"Il est médecin.\",\"La réunion est reportée.\",\"Elle est arrivée.\",\ … [306 caractères tronqués]`
+
+  ```
+La voiture est rapide. -> [('La', 'DET'), ('voiture', 'NOUN'), ('est', 'AUX'), ('rapide', 'NOUN'), ('.', 'PONCT')]
+Il est médecin. -> [('Il', 'PRON'), ('est', 'AUX'), ('médecin', 'NOUN'), ('.', 'PONCT')]
+La réunion est reportée. -> [('La', 'DET'), ('réunion', 'NOUN'), ('est', 'AUX'), ('reportée', 'NOUN'), ('.', 'PONCT')]
+Elle est arrivée. -> [('Elle', 'PRON'), ('est', 'AUX'), ('arrivée', 'NOUN'), ('.', 'PONCT')]
+Le livre est passionnant. -> [('Le', 'DET'), ('livre', 'NOUN'), ('est', 'AUX'), ('passionnant', 'ADJ'), ('.', 'PONCT')]
+  ❌ T86 sous-ensembles     r181-200 POS 0.9405 ; r001-180 POS 0.9038
+  ❌ T88 20 complexes       r201-220 : POS 0.8862, syntagme 0.6822
+  ❌ T89 50 complexes       r201-250 : POS 0.8774, syntagme 0.675
+  ❌ T90 100 complexes      r201-300 : POS 0.8714, syntagme 0.6395
+  179/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(p1 - 0.9027) < 0.001','abs(p1 - 0.9038) < 0.001'),\n   ('abs(r[\"pos\"][\"exactitude\"] - 0.878) < 0.001','abs(r[\"pos\"][\"exact … [548 caractères tronqués]`
+
+  ```
+4 / 4
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-ponctuation.md'); t=p.read_text()\nt=t.replace(\"\"\"## 4. La suite\n\n1. **Les participes irréguliers** (testés : F1 −0,0023 → **non intégrés**).\n2. **Les adject … [1622 caractères tronqués]`

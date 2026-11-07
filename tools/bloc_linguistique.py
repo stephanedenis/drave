@@ -1403,6 +1403,25 @@ class Heuristique:
                                                0.85, candidats=["adj"], langue=lg, script=script,
                                                meta={"ouvert": True, "contexte": "copule"})
 
+        # 3 d. R4-fr **filtré** : après une copule, un mot inconnu n'est un ADJECTIF **que** s'il
+        # est connu comme adjectif ou s'il a un suffixe adjectival (pas les noms nus ni les
+        # participes : « Il est médecin », « la réunion est reportée »).
+        if lg == "fr":
+            _cop_fr = {"est", "sont", "était", "étaient", "semble", "semblent", "paraît",
+                       "paraissent", "devient", "deviennent", "reste", "restent"}
+            _suf_adj = ("eux", "euse", "if", "ive", "able", "ible", "ant", "ent")
+            for _k, _i in enumerate(pos_idx):
+                _e = etiquettes[_i]
+                if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                    continue
+                _av = etiquettes[pos_idx[_k - 1]]
+                _n = _normaliser(_e.valeur)
+                if (_normaliser(_av.valeur) in _cop_fr
+                        and (_n in ADJECTIFS.get("fr", set()) or _n.endswith(_suf_adj))):
+                    etiquettes[_i] = Etiquette("pos", "ADJ", _e.valeur, _e.debut, _e.fin, self.nom,
+                                               0.85, candidats=["adj"], langue=lg, script=script,
+                                               meta={"ouvert": True, "contexte": "copule_fr"})
+
         # 4. phrase + pragmatique
         for d, f, p, typ in self._phrases(texte):
             etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,

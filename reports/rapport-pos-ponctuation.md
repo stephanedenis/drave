@@ -36,7 +36,7 @@ gold (les tokens du gold ne sont pas les mêmes), gardé pour la robustesse.
 ## 4. La suite
 
 1. **Les participes irréguliers** (testés : F1 −0,0023 → **non intégrés**).
-2. **Les adjectifs après copule en français** (R4-fr rejeté : 5/8 faux).
+2. **R4-fr filtré** (adjectif connu ou suffixe) : **intégré**, POS 85,75 → **85,84 %**.
 3. **`que` CONJ vs PRON** (28 confusions) : une règle de position.
 
 ## 5. Fichiers

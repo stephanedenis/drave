@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 150.3 h |
+| Durée | 150.4 h |
 | Tours | 184 |
-| Messages | 3371 |
-| Appels d'outils | 2989 |
+| Messages | 3375 |
+| Appels d'outils | 2993 |
 | Fichiers touchés | 25 |
-| Commandes | 2484 |
+| Commandes | 2488 |
 | Sous-agents | 38 |
-| Commits | 397 |
+| Commits | 398 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*235 appels d'outils.* Actions notables :
+*239 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 220 autres
+- … et 224 autres
 
 **Synthèse produite :**
 
-⏵ PONCT améliore aussi le miroir (0,196 → 0,2276) : je recale les 5 portes et je fige
+⏵ Nuit : je teste un R4 français **filtré** (adjectifs connus ou suffixe adjectival seulement)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2444 autres
+- … et 2448 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10601,4 +10601,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS)" -- reports/rapport-etat-r.md reports/pe
 - B13 — LA PONCTUATION A UNE POS (PONCT) : POS 85,00 → 85,75 %, MIROIR 0,196 → 0,2276, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/
 - B13 — LA PONCTUATION A UNE POS (PONCT) : POS 85,00 → 85,75 %, MIROIR 0,196 → 0,2276, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/
+- B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest
 
