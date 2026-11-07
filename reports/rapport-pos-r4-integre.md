@@ -1,5 +1,9 @@
 # B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 %
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Deux leviers mesurés et intégrés** (fiche A27 : [`rapport-pos-r4.md`](rapport-pos-r4.md)) :
 > la complétion des **classes fermées anglaises** (`where`, `whose`, `mine` PRON ; `as` CONJ ;

@@ -1,5 +1,9 @@
 # B13 — les compositions ne perdent plus : cascade = heuristique (0,8383, 235/236)
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le défaut de composition** (audit A26 : « la fusion dégrade le POS de 1,16 pt et perd 14 spans
 > d'attachement ») est **fermé** : `Parallele` et `Cascade` rendent désormais **exactement** les

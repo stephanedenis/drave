@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.7 h |
+| Durée | 151.8 h |
 | Tours | 187 |
-| Messages | 3444 |
-| Appels d'outils | 3056 |
+| Messages | 3446 |
+| Appels d'outils | 3058 |
 | Fichiers touchés | 25 |
-| Commandes | 2551 |
+| Commandes | 2553 |
 | Sous-agents | 38 |
-| Commits | 412 |
+| Commits | 413 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10087,7 +10087,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 
 ### Tour 187 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Comparer gold et prédiction sur des cas
 - bash — Tester l'arrêt à l'adverbe final
@@ -10097,10 +10097,12 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - bash — Vérifier l'état de départ du round
 - bash — Voir les modifications
 - bash — Committer le validateur --gold
+- bash — Trouver les fiches aux anciens chiffres
+- bash — Annoter les fiches historiques
 
 **Synthèse produite :**
 
-⏵ Expérience : rogner le sujet en tête des GV du générateur S (convention)
+⏵ Passe d'honnêteté : j'annote les fiches aux chiffres dépassés (« instantané historique »)
 
 ## 3. Travail accompli
 
@@ -10217,7 +10219,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2511 autres
+- … et 2513 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10777,4 +10779,5 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - B13 — LE NOM PROPRE SUJET EST UN GN : F1 0,7438 → 0,7535, TÊTE 0,865, ATTACHEMENT 236/237 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py repo
 - ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET" -- docs/pilotage/roadmap.md journal/2026-11-06
 - PRODUIT — LE VALIDATEUR PORTE --gold (20 PHRASES DU CORPUS VALIDÉES CONTRE LE SCHÉMA V1) : LA PORTE L'UTILISE" -- tools/verifier_schema_produit.py docs/pilotage
+- FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'ÉTAT COURANT EST 86,25 / 0,7535 / 236-237)" -- reports/rapport-pos-anglais-v2.md reports/rapport-produ
 

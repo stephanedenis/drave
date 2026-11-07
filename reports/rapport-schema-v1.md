@@ -1,5 +1,9 @@
 # B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Ce qui change pour un client** : le JSON porte désormais **`schema`** (`"drave.annotation"`)
 > et **`version`** (`1`) ; un **refus** est une **réponse** (JSON avec `refus`, code de sortie

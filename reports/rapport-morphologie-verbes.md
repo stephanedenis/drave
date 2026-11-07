@@ -1,5 +1,9 @@
 # B13 — la morphologie du 1er groupe : `nage` → `nager`, 10 spans retrouvés, couverture 0,9874
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Une règle générale, pas une liste d'exceptions** : une forme en `-e`, `-es`, `-ent`, `-ait`,
 > `-aient`, `-ais`, `-ons`, `-ez` dont l'**infinitif en `-er`** est connu est un **verbe**

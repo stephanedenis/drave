@@ -1,5 +1,9 @@
 # B13 — la vérification parallèle : 183/183 en 1 min 54 (×2,4)
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Ce que ça règle** : l'autotest était **mono-processus** — ~4 min 40 de CPU et ~4 min 40 de
 > temps mural sur un poste à 40 cœurs, alors que **183 portes indépendantes** pouvaient tourner de

@@ -1,5 +1,9 @@
 # B13 — la partition des syntagmes : les alternatives sont étiquetées, les mesures ne bougent pas
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le P0-3 est fermé sans perte** : les **239 paires** de chevauchement des deux audits sont
 > **toutes** des paires S × chunker (53,1 % de S qui contient le chunker, 33,5 % l'inverse,

@@ -1,5 +1,9 @@
 # B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
+> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
+> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+
 > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le P0-4 est fermé** : sur **40 textes libres** (URL, courriels, chemins, décimaux, dates,
 > abréviations, ellipses, listes, code inline), les frontières passent de **32/40 faux** à

@@ -58234,3 +58234,45 @@ index ae6af2f7..40a9ded5 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-07, 00 h 35 HNE\", t)\np.write_text( … [719 caractères tronqués]`
+
+  ```
+create mode 100644 journal/2026-11-07/docs.md
+COMMIT OK 1
+e9088d45 PRODUIT — LE VALIDATEUR PORTE --gold (20 PHRASES DU CORPUS VALIDÉES CONTRE LE SCHÉMA V1) : LA PORTE L'UTILISE
+   26c7b7ab..e9088d45  s/v7 -> s/v7
+   26c7b7ab..e9088d45  master -> master
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -l \"222/222\\|0,9289\\|17 spans\" reports/rapport-*.md 2>/dev/null | head -12; echo \"---\"; for f in $(grep -l \"222/222\" reports/rapport-*.md 2>/dev/null | head -6); do grep -q \"Instantané historique\" $f && echo \"OK-annot … [98 caractères tronqués]`
+
+  ```
+reports/rapport-coherence-fiches-v8.md
+reports/rapport-etat-a.md
+reports/rapport-fiabilite-produit.md
+reports/rapport-file-taches.md
+reports/rapport-gold-gp-corrige.md
+reports/rapport-partition-syntagmes.md
+reports/rapport-pensee-v12.md
+reports/rapport-pos-anglais.md
+reports/rapport-pos-anglais-v2.md
+reports/rapport-pos-r4.md
+reports/rapport-produit-bloc-l.md
+reports/rapport-produit-v0.md
+---
+OK-annotée reports/rapport-coherence-fiches-v8.md
+À ANNOTER reports/rapport-fiabilite-produit.md
+À ANNOTER reports/rapport-file-taches.md
+À ANNOTER reports/rapport-gold-gp-corrige.md
+OK-annotée reports/rapport-pensee-v12.md
+À ANNOTER reports/rapport-pos-anglais-v2.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe d'honnêteté : j'annote les fiches aux chiffres dépassés (« instantané historique »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nactuelles = {\"rapport-gn-pronom-sujet.md\",\"rapport-pos-ponctuation.md\",\"rapport-r264-elision.md\",\"rapport-gold-gp-corrige.md\"}\nnote = (\"> **Instantané historique** — les chiffres publié … [2593 caractères tronqués]`
