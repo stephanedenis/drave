@@ -7,7 +7,7 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
 | Messages | 53 |
 | Appels d'outils | 91 |

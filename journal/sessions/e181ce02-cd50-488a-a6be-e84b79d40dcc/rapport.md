@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.7 h |
+| Durée | 149.8 h |
 | Tours | 184 |
-| Messages | 3344 |
-| Appels d'outils | 2965 |
+| Messages | 3346 |
+| Appels d'outils | 2968 |
 | Fichiers touchés | 25 |
-| Commandes | 2461 |
+| Commandes | 2463 |
 | Sous-agents | 38 |
-| Commits | 389 |
+| Commits | 390 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*211 appels d'outils.* Actions notables :
+*214 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 197 autres
+- … et 199 autres
 
 **Synthèse produite :**
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2421 autres
+- … et 2423 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-69 sorties en erreur ou divergentes. Les premières :
+70 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10593,4 +10593,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS ; dependances.md CORRIGÉ ; ÉTAT HORODATÉ" -- reports/rappo
 - N2 — LA FICHE CORRIGÉE (VALIDATION FRANÇAISE 2,53/2,48, PAS 2,39/2,35) ; BUG SIGNALÉ : eval_n2_propre LIT LES CHECKPOINTS RoPE COMME ABSOLUS (8,02 AU LIEU DE 2,
 - ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)" -- reports/rapport-etat-n2.md reports/pensee-etat-n2.js
+- ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ" -- docs/pilotage/r
 

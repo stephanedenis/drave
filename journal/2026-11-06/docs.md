@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,10 +22,11 @@
 | 21:32 | `bfd98892` | DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE | `README.md`, `README.md`, `distribue.md` (+18) |
 | 21:54 | `5940ea53` | B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183 | `README.md`, `distribue.md`, `docs.md` (+18) |
 | 21:57 | `97256b8f` | PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE) | `plan-travail.md`, `README.md`, `distribue.md` (+15) |
+| 22:22 | `d3134849` | ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4) | `en-cours.md`, `README.md`, `distribue.md` (+20) |
 
 ## Chiffres du jour
 
-`85,00 %` · `0,6482` · `0,6511` · `83,83 %` · `64,74 %` · `98,33 %` · `0,9289`
+`0,8483` · `0,9440` · `85,00 %` · `0,6482` · `0,6511` · `83,83 %` · `64,74 %` · `98,33 %` · `0,9289`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -39,18 +40,21 @@
 - `3fb87dc7-7d24-42e2-a68e-e37e2734b755` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.7 h) → [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md)
 - `538288b3-117b-4daf-8d16-0cd8d6b0090d` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.0 h) → [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md)
 - `599e9c0e-4252-43ca-a89a-3886d723c379` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.1 h) → [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md)
-- `7635f5f5-11b8-4d10-bea5-50a90e536e31` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.1 h) → [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md)
+- `7635f5f5-11b8-4d10-bea5-50a90e536e31` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.2 h) → [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md)
 - `a0d33fb7-37a9-4834-8a94-0da119e3b18f` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 1.3 h) → [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md)
 - `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 0.6 h) → [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md)
 - `bf49d867-4b23-49e1-b214-9a2fd542fb1b` — Tu travailles dans le dépôt (début 2026-11-06 11:17, 1.8 h) → [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md)
-- `cdc16e57-4a69-4890-8b3c-270539c64ff2` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.1 h) → [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 149.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `cdc16e57-4a69-4890-8b3c-270539c64ff2` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.2 h) → [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 149.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.3 h) → [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md)
 - `eedb7a58-2a33-4caa-8509-f46d9e328080` — Tu travailles dans le dépôt (début 2026-11-06 18:33, 2.3 h) → [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-etat-n2.md](../../reports/rapport-etat-n2.md)
+- [reports/rapport-etat-r.md](../../reports/rapport-etat-r.md)
 - [reports/rapport-produit-v0.md](../../reports/rapport-produit-v0.md)
 
 <!-- notes -->
