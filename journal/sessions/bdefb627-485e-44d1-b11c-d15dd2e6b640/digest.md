@@ -484,3 +484,131 @@ Panini-ExecutionOrchestrator 68K
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini-FS Panini-UltraReactive Panini-PublicationEngine Panini-SpecKit-Shared Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageShared Panini-Da … [224 caractères tronqués]`
+
+  ```
+[still running after 180000ms; moved to background job bash-4611]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-4611", "reason": "trop lent"}`
+
+  ```
+requested cancellation of job bash-4611
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini Panini/research Panini-FS Panini-UltraReactive Panini-PublicationEngine Panini-SpecKit-Shared Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-Cop … [211 caractères tronqués]`
+
+  ```
+Panini: tracked=4645
+Panini/research: tracked=74708
+Panini-FS: tracked=697
+Panini-UltraReactive: tracked=9
+Panini-PublicationEngine: tracked=9
+Panini-SpecKit-Shared: tracked=23
+Panini-SemanticCore: tracked=9
+Panini-AttributionRegistry: tracked=9
+Panini-AutonomousMissions: tracked=9
+Panini-CloudOrchestrator: tracked=4
+Panini-CoLabController: tracked=5
+Panini-CopilotageShared: tracked=11
+Panini-DatasetsIngestion: tracked=9
+Panini-ExecutionOrchestrator: tracked=17
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && wc -l Panini/README.md Panini/CONTEXTE-IA.md Panini/PHILOSOPHIE.md Panini/research/AGENTS.md 2>/dev/null; echo \"--- docs ---\"; ls Panini/docs; echo \"--- research docs ---\"; ls Panini/research/docs | head -40", "description": "Repère les  … [16 caractères tronqués]`
+
+  ```
+199 Panini/README.md
+  384 Panini/CONTEXTE-IA.md
+  240 Panini/PHILOSOPHIE.md
+   47 Panini/research/AGENTS.md
+  870 total
+--- docs ---
+architecture
+ARCHITECTURE_REAL_6PROJECTS.md
+ARCHITECTURE_STANDARD.md
+archive
+ARCHIVE-INSIGHTS.md
+DONNEES_PHONETIQUE_DEVELOPPEMENTALE.md
+ETAT-TRIANGLE-RECHERCHE.md
+EVOLUTION_PANINI_SPEAK_SESSIONS.md
+GIT_REGISTRY_ARCHITECTURE.md
+index.md
+journal-de-bord
+maintenance
+ouvrage
+panini
+PLAN_ETUDE_PROTOATHEISTES_v0.1.0.md
+PLAN_STRATEGIQUE_RECHERCHES_CROISEES.md
+PROJECT_OVERVIEW.md
+PROJECT_RESPONSIBILITY_MATRIX.md
+RAPPORT_REALISATION_v0.2.1.md
+rapports
+README.md
+research
+ROADMAP_PHASED_4PHASES.md
+ROADMAP-RECHERCHE.md
+SYNTHESE_CONCEPTUELLE_INTEGRATIVE.md
+SYNTHESE-RECHERCHE.md
+TESTS_OPTIMISES.md
+--- research docs ---
+ARCHITECTURE_NOYAU_NIPADA_v1.0.md
+ARCHITECTURE_NOYAU_NIPADA_v2.0.md
+CADRES_THEORIQUES_ET_IDEES_ORIGINALES.md
+CRITIQUE_NIPADA_2026-07-14.md
+DEMO_NIPADA_UDHR_Article1_COMPARAISON.md
+DEMO_NIPADA_UDHR_Article1_EN.md
+DEMO_NIPADA_UDHR_Article1_FR.md
+DEMO_NIPADA_UDHR_Article1.md
+directives
+ETUDE_PROJET_PARENT_v1.0.md
+images
+journal-de-bord
+MEMO_ARCHITECTURE_NIPADA_v1.md
+NIPADA_SESSION_476_478c_FINAL_REPORT.md
+NIPADA_SESSION_478d_479_FINAL_REPORT.md
+NIPADA_
+… [190 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && git --no-optional-locks -C Panini status --porcelain | head -40; echo \"=== research dirty sample ===\"; git --no-optional-locks -C Panini/research status --porcelain | head -20; echo \"=== count by status ===\"; git --no-optional-locks -C P … [147 caractères tronqués]`
+
+  ```
+M .github/copilot-instructions.md
+ M docs/index.md
+ M modules/core/filesystem
+ M modules/core/knowledge
+ M modules/core/semantic
+ M modules/data/attribution
+ M modules/data/ingestion
+ M modules/missions/autonomous
+ M modules/ontowave
+ M modules/orchestration/cloud
+ M modules/orchestration/colab
+ M modules/orchestration/execution
+ M modules/publication/engine
+ M modules/reactive/ultra-reactive
+ M modules/shared/speckit
+ M research
+?? CONTEXTE-IA.md
+?? PHILOSOPHIE.md
+?? docs/ouvrage/
+?? notebooks/formation/
+?? signwriting-bloc-complet.png
+?? signwriting-mains.png
+?? signwriting-unicode-inventory.txt
+=== research dirty sample ===
+ M .vscode/settings.json
+ M data/mass_ingestion/backlog_wikipedia_de.db
+ M nipada/closure/closure_report_v1.json
+ M nipada/encyclopedia/v2/backlog_status.json
+ M nipada/encyclopedia/v2/corpus_ingest_index.json
+ M nipada/encyclopedia/v2/corpus_ingest_progress.json
+ M nipada/encyclopedia/v2/ontowave_graph_wordnet_enriched.json
+ M nipada/encyclopedia/v2/pipeline_progress.json
+ M nipada/encyclopedia/v2/reports/external_ingestion_service/health_report.json
+ M nipada/encyclopedia/v2/reports/external_ingestion_service/service.lock
+ M nipada/encyclopedia/v2/reports/e
+… [503 caractères tronqués]
+  ```
+

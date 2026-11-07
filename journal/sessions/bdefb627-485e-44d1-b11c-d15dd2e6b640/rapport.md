@@ -7,12 +7,12 @@
 | Identifiant | `bdefb627-485e-44d1-b11c-d15dd2e6b640` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 09:56 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 10 |
-| Appels d'outils | 12 |
+| Messages | 18 |
+| Appels d'outils | 26 |
 | Fichiers touchés | 0 |
-| Commandes | 9 |
+| Commandes | 20 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -38,6 +38,10 @@
 - job_kill
 - bash — Tailles par dépôt avec timeout
 - bash — Nombre de fichiers par dépôt
+- bash — Fichiers suivis par git
+- bash — Repère les documents clés
+- bash — Échantillon des modifications non commitées
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -63,10 +67,22 @@ Je commence par vérifier l'état des lieux et les dépôts.
 - **T1** Tailles hors .git
 - **T1** Tailles par dépôt avec timeout
 - **T1** Nombre de fichiers par dépôt
+- **T1** Fichiers suivis par git
+- **T1** Repère les documents clés
+- **T1** Échantillon des modifications non commitées
+- **T1** Localise les définitions des 14 atomes
+- **T1** Liste philosophy-theory et data
+- **T1** Mentions V14 dans le document de contexte
+- **T1** Cherche la définition machine des atomes
+- **T1** Fichiers V14/atomes
+- **T1** Définition V14_ATOMS
+- **T1** Inspecte lexique V14 et UDHR décomposé
+- **T1** Où vit la généalogie des langues
 
 ## 4. Mesures et résultats marquants
 
 - **T1** `/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB`
 - **T1** `[still running after 60000ms; moved to background job bash-4601]`
 - **T1** `[still running after 180000ms; moved to background job bash-4606]`
+- **T1** `[still running after 180000ms; moved to background job bash-4611]`
 

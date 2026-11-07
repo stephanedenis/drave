@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 161.4 h |
 | Tours | 191 |
-| Messages | 3518 |
-| Appels d'outils | 3125 |
+| Messages | 3520 |
+| Appels d'outils | 3127 |
 | Fichiers touchés | 25 |
-| Commandes | 2611 |
+| Commandes | 2613 |
 | Sous-agents | 42 |
-| Commits | 423 |
+| Commits | 424 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10254,7 +10254,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 191 — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
-*17 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Lire la méthode Panini et localiser le projet
 - bash — Explorer Panini
@@ -10270,7 +10270,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Explorer Panini-Research
 - bash — Écrire le plan de la semaine
 - bash — Corriger le lien et l'index
-- … et 3 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
@@ -10395,7 +10395,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2571 autres
+- … et 2573 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10523,7 +10523,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ## 5. Erreurs rencontrées
 
-80 sorties en erreur ou divergentes. Les premières :
+81 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10966,4 +10966,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - SESSION — MANDAT E181CE02 RAFRAÎCHI (236/237, 0,9916, 86,25, 0,7535 ; PROCHAINE ACTION : r035/g017 ET LA CONVENTION DES GV)" -- journal/sessions/e181ce02-cd50-4
 - PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLE
 - DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BU
+- DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES)" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T1 À 1 000 MOTS"; then echo "
 

@@ -59443,3 +59443,30 @@ a407381c 2026-11-07 10:00:17 -0500
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine, l'intégration Panini |\",\n            \ … [1123 caractères tronqués]`
+
+  ```
+· docs/README.md : 1010 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 14 files changed, 105 insertions(+), 28 deletions(-)
+COMMIT OK 1
+9bb298af DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE
+   a407381c..9bb298af  s/v7 -> s/v7
+   a407381c..9bb298af  master -> master
+sam 07 nov 2026 10:05:35 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pilotage/\" docs/README.md | head -8 | cut -c1-160", "description": "Voir les lignes pilotage du README"}`
+
+  ```
+15:| **faire** (résultat, [porte](theorie/glossaire/entrees/porte.md), rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](method
+16:| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [le plan de travail](pilotage/plan-travail.md) · [la roadmap](pilotage/roadmap.md) · [les chan
+41:| [`pilotage/README.md`](pilotage/README.md) | la **carte du pilotage** : ordre de [lecture](theorie/glossaire/entrees/lecture.md), qui écrit quoi, outils |
+42:| [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, sessions actives |
+43:| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine + Panini |
+44:| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence, surveillance |
+45:| [`pilotage/roadmap.md`](pilotage/roadmap.md) | l'**ordre** : chantiers [A/B](theorie/glossaire/entrees/a-b.md)/N/R/S, état et prochaine action par ligne |
+46:| [`pilotage/chantiers.md`](pilotage/chantiers.md) | les **relations** entre chantiers, la vision à jour, la capacité |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence … [1059 caractères tronqués]`

@@ -23,7 +23,7 @@
 - `77d26bc7-1657-4c96-83c9-bba7c25dd828` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.4 h) → [rapport](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/rapport.md) · [digest](../sessions/77d26bc7-1657-4c96-83c9-bba7c25dd828/digest.md)
 - `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 02:09, 0.1 h) → [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md)
 - `b8f0bcb1-5609-4053-818b-ade88583a99b` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.3 h) → [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md)
-- `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 0.1 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
+- `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 0.2 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 161.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés

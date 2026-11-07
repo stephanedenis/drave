@@ -41,9 +41,9 @@
 | [`pilotage/README.md`](pilotage/README.md) | la **carte du pilotage** : ordre de [lecture](theorie/glossaire/entrees/lecture.md), qui écrit quoi, outils |
 | [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, sessions actives |
 | [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine + Panini |
-| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence, surveillance |
+| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le plan multi-sessions : sessions, territoires, cadence |
 | [`pilotage/roadmap.md`](pilotage/roadmap.md) | l'**ordre** : chantiers [A/B](theorie/glossaire/entrees/a-b.md)/N/R/S, état et prochaine action par ligne |
-| [`pilotage/chantiers.md`](pilotage/chantiers.md) | les **relations** entre chantiers, la vision à jour, la capacité |
+| [`pilotage/chantiers.md`](pilotage/chantiers.md) | les relations entre chantiers, la capacité |
 | [`pilotage/programme-r.md`](pilotage/programme-r.md) | la **charte du programme R** : six phases, lois, dépendances |
 | [`pilotage/backlog/index.md`](pilotage/backlog/index.md) | le **backlog** : une fiche par fonctionnalité (R, et lignes ouvertes A/B/N) |
 | [`pilotage/utilisation.md`](pilotage/utilisation.md) | ce qui marche aujourd'hui, avec la commande exacte |
