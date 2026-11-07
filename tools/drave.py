@@ -231,6 +231,8 @@ def _formater_evaluation(rapport: dict) -> str:
         f"(P {_pct(syn['precision'])} / R {_pct(syn['rappel'])})",
         f"  tête      F1 {_pct(tete['f1'])}  "
         f"(P {_pct(tete['precision'])} / R {_pct(tete['rappel'])})",
+        f"  vue linéaire (partition filtrer) F1 {_pct(rapport['syntagmes_lineaire']['f1'])}  "
+        f"· attachement {_pct(rapport['attachement_lineaire']['couverture'])} de couverture",
         f"ATTACHEMENT exact {_pct(att['exact_taux'])} · couverture {_pct(att['couverture'])} "
         f"· exact sur span {_pct(att['exact_taux_span'])} · top-k {_pct(att['topk_taux'])}",
         f"  tête      couverture {_pct(att_tete['couverture'])} "
@@ -247,6 +249,8 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
     evaluateur = _module_evaluation()
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
     mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
+    # transparence : la vue **fidèle** (défaut) et la vue **linéaire** (partition filtrer)
+    _lineaire = evaluateur.evaluer_bloc("lineaire", bl.Heuristique(partition="filtrer"), phrases)
     hasard = _controle_hasard(phrases)
     rapport = {
         "version": VERSION,
@@ -258,6 +262,10 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
             "cibles_attachement": mesure["attachement"]["cibles"],
         },
         "heuristique": mesure,
+        "syntagmes_lineaire": _lineaire["syntagme"],
+        "attachement_lineaire": {"exact": _lineaire["attachement"]["exact"],
+                                 "labels": _lineaire["attachement"]["labels"],
+                                 "couverture": _lineaire["attachement"]["couverture"]},
         "controle_negatif": {
             "nom": "cible exacte tirée au hasard dans le gold",
             "graine": 0,

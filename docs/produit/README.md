@@ -118,13 +118,14 @@ python3 tools/drave.py evaluer
 drave 0.1.0 — évaluation de l'heuristique sur le gold
 gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
 
-POS         exactitude 85.00 %  (fermé 92.95 %, ouvert 77.46 %)
-SYNTAGMES   F1 64.82 %  (P 67.15 % / R 62.64 %)
-  tête      F1 76.73 %  (P 82.08 % / R 72.03 %)
-ATTACHEMENT exact 98.33 % · couverture 98.74 % · exact sur span 99.58 % · top-k 97.91 %
-  tête      couverture 100.00 % · top-k 99.15 %
+POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+SYNTAGMES   F1 75.33 %  (P 72.39 % / R 78.53 %)
+  tête      F1 86.40 %  (P 85.19 % / R 87.65 %)
+  vue linéaire (partition filtrer) F1 81.04 %  · attachement 93.31 % de couverture
+ATTACHEMENT exact 98.74 % · couverture 99.16 % · exact sur span 99.58 % · top-k 98.33 %
+  tête      couverture 100.00 % · top-k 99.16 %
 PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
-FRACTION SÉMANTIQUE 54.82 %
+FRACTION SÉMANTIQUE 54.76 %
 CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 ```
 

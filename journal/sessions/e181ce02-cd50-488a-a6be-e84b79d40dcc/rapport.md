@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.8 h |
+| Durée | 151.9 h |
 | Tours | 187 |
-| Messages | 3446 |
-| Appels d'outils | 3058 |
+| Messages | 3456 |
+| Appels d'outils | 3068 |
 | Fichiers touchés | 25 |
-| Commandes | 2553 |
+| Commandes | 2563 |
 | Sous-agents | 38 |
-| Commits | 413 |
+| Commits | 414 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10087,7 +10087,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 
 ### Tour 187 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Comparer gold et prédiction sur des cas
 - bash — Tester l'arrêt à l'adverbe final
@@ -10099,10 +10099,15 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - bash — Committer le validateur --gold
 - bash — Trouver les fiches aux anciens chiffres
 - bash — Annoter les fiches historiques
+- bash — F1 des deux vues
+- bash — Voir cmd_evaluer
+- bash — Ajouter les deux vues au rapport
+- bash — Voir le bloc de sortie
+- … et 6 autres
 
 **Synthèse produite :**
 
-⏵ Passe d'honnêteté : j'annote les fiches aux chiffres dépassés (« instantané historique »)
+⏵ Transparence : `evaluer` publie les **deux vues** (fidèle 0,7533 / linéaire 0,8104)
 
 ## 3. Travail accompli
 
@@ -10219,7 +10224,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2513 autres
+- … et 2523 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10347,7 +10352,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 
 ## 5. Erreurs rencontrées
 
-70 sorties en erreur ou divergentes. Les premières :
+71 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10780,4 +10785,5 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET" -- docs/pilotage/roadmap.md journal/2026-11-06
 - PRODUIT — LE VALIDATEUR PORTE --gold (20 PHRASES DU CORPUS VALIDÉES CONTRE LE SCHÉMA V1) : LA PORTE L'UTILISE" -- tools/verifier_schema_produit.py docs/pilotage
 - FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'ÉTAT COURANT EST 86,25 / 0,7535 / 236-237)" -- reports/rapport-pos-anglais-v2.md reports/rapport-produ
+- PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produ
 

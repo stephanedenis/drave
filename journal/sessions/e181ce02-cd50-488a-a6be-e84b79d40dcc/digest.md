@@ -58276,3 +58276,163 @@ OK-annotée reports/rapport-pensee-v12.md
 ⏵ Passe d'honnêteté : j'annote les fiches aux chiffres dépassés (« instantané historique »)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\nactuelles = {\"rapport-gn-pronom-sujet.md\",\"rapport-pos-ponctuation.md\",\"rapport-r264-elision.md\",\"rapport-gold-gp-corrige.md\"}\nnote = (\"> **Instantané historique** — les chiffres publié … [2593 caractères tronqués]`
+
+  ```
+10 fiches annotées
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-07)
+ create mode 100644 journal/2026-11-07/portes.md
+COMMIT OK 1
+1f61caaa FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'ÉTAT COURANT EST 86,25 / 0,7535 / 236-237)
+   e9088d45..1f61caaa  s/v7 -> s/v7
+   e9088d45..1f61caaa  master -> master
+sam 07 nov 2026 00:29:53 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfor mode in (\"alternative\",\"filtrer\"):\n    h=bl.Heu … [244 caractères tronqués]`
+
+  ```
+alternative F1 0.7533 | exact 236/237 | cov 0.9916
+filtrer F1 0.8104 | exact 222/223 | cov 0.9331
+  ```
+
+### 🤖 Assistant
+
+⏵ Transparence : `evaluer` publie les **deux vues** (fidèle 0,7533 / linéaire 0,8104)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def cmd_evaluer\" -A 12 tools/drave.py | head -14", "description": "Voir cmd_evaluer"}`
+
+  ```
+246:def cmd_evaluer(args: argparse.Namespace) -> int:
+247-    evaluateur = _module_evaluation()
+248-    phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+249-    mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
+250-    hasard = _controle_hasard(phrases)
+251-    rapport = {
+252-        "version": VERSION,
+253-        "gold": {
+254-            "nom": "gelé (référence figée)" if args.gold else "vivant (hand + reel + synthétique)",
+255-            "gele": bool(args.gold),
+256-            "phrases": len(phrases),
+257-            "tokens": mesure["pos"]["tokens"],
+258-            "cibles_attachement": mesure["attachement"]["cibles"],
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''    mesure = evaluateur.evaluer_bloc(\"heuristique\", bl.Heuristique(), phrases)''',\n'''    mesure = evaluateur.evaluer_bloc(\"heuri … [1017 caractères tronqués]`
+
+  ```
+deux vues dans le rapport
+syntaxe OK
+230:        f"SYNTAGMES   F1 {_pct(syn['f1'])}  "
+232:        f"  tête      F1 {_pct(tete['f1'])}  "
+def _formater_evaluation(rapport: dict) -> str:
+    gold = rapport["gold"]
+    mesure = rapport["heuristique"]
+    pos = mesure["pos"]
+    syn = mesure["syntagme"]
+    tete = syn["tete"]
+    att = mesure["attachement"]
+    att_tete = mesure["attachement_tete"]
+    prag = mesure["pragmatique"]
+    controle = rapport["controle_negatif"]
+    return "\n".join([
+        f"{NOM} {VERSION} — évaluation de l'heuristique sur le gold",
+        f"gold {gold['nom']} · {gold['phrases']} phrases · {gold['tokens']} tokens · "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''        f\"SYNTAGMES   F1 {_pct(syn['f1'])}  \"''',\n'''        f\"SYNTAGMES   F1 {_pct(syn['f1'])}  \"''')\n# ligne supplémentaire a … [241 caractères tronqués]`
+
+  ```
+f"POS         exactitude {_pct(pos['exactitude'])}  "
+        f"(fermé {_pct(pos['exactitude_ferme'])}, ouvert {_pct(pos['exactitude_ouvert'])})",
+        f"SYNTAGMES   F1 {_pct(syn['f1'])}  "
+        f"(P {_pct(syn['precision'])} / R {_pct(syn['rappel'])})",
+        f"  tête      F1 {_pct(tete['f1'])}  "
+        f"(P {_pct(tete['precision'])} / R {_pct(tete['rappel'])})",
+        f"ATTACHEMENT exact {_pct(att['exact_taux'])} · couverture {_pct(att['couverture'])} "
+        f"· exact sur span {_pct(att['exact_taux_span'])} · top-k {_pct(att['topk_taux'])}",
+        f"  tête      couverture {_pct(att_tete['couverture'])} "
+        f"· top-k {_pct(att_tete['topk_taux'])}",
+        f"PRAGMATIQUE acte {_pct(prag['acte'])} · négation {_pct(prag['negation'])} "
+        f"· modalité {_pct(prag['modalite'])} · double sens {_pct(prag['double_sens'])}",
+        f"FRACTION SÉMANTIQUE {_pct(mesure['fraction_semantique'])}",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''        f\"  tête      F1 {_pct(tete['f1'])}  \"\n        f\"(P {_pct(tete['precision'])} / R {_pct(tete['rappel'])})\",''',\n'''     … [591 caractères tronqués]`
+
+  ```
+ligne des deux vues
+syntaxe OK
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/drave.py evaluer 2>&1 | tail -12", "description": "Voir l'erreur éventuelle"}`
+
+  ```
+drave: erreur : KeyError : 'syntagmes_lineaire'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '250,300p' tools/drave.py", "description": "Voir le rapport"}`
+
+  ```
+phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+    mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
+    # transparence : la vue **fidèle** (défaut) et la vue **linéaire** (partition filtrer)
+    _lineaire = evaluateur.evaluer_bloc("lineaire", bl.Heuristique(partition="filtrer"), phrases)
+    hasard = _controle_hasard(phrases)
+    rapport = {
+        "version": VERSION,
+        "gold": {
+            "nom": "gelé (référence figée)" if args.gold else "vivant (hand + reel + synthétique)",
+            "gele": bool(args.gold),
+            "phrases": len(phrases),
+            "tokens": mesure["pos"]["tokens"],
+            "cibles_attachement": mesure["attachement"]["cibles"],
+        },
+        "heuristique": mesure,
+        "controle_negatif": {
+            "nom": "cible exacte tirée au hasard dans le gold",
+            "graine": 0,
+            "cibles": len(_cibles_gold(phrases)),
+            "exact_taux": hasard,
+        },
+    }
+    if args.json:
+        sys.stdout.write(_dumps(rapport))
+    else:
+        print(_formater_evaluation(rapport))
+    return 0
+
+
+def cmd_rejouer(args: argparse.Namespace) -> int:
+    premiere = bl.Heuristi
+… [1074 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''        \"heuristique\": mesure,''',\n'''        \"heuristique\": mesure,\n        \"syntagmes_lineaire\": _lineaire[\"syntagme\"],\n … [546 caractères tronqués]`
+
+  ```
+clés au bon niveau
+syntaxe OK
+SYNTAGMES   F1 75.33 %  (P 72.39 % / R 78.53 %)
+  vue linéaire (partition filtrer) F1 81.04 %  · attachement 93.31 % de couverture
+ATTACHEMENT exact 98.74 % · couverture 99.16 % · exact sur span 99.58 % · top-k 98.33 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re, subprocess, sys\nsortie = subprocess.run([sys.executable,\"tools/drave.py\",\"evaluer\"],capture_output=True,text=True).stdout\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nm=re.sea … [1706 caractères tronqués]`
+
+  ```
+bloc evaluer remplacé
+test ajouté
+nettoyé
+159:class TestSortieHostile(unittest.TestCase):
+182:class TestDeuxVues(unittest.TestCase):
+193:if __name__ == "__main__":
+195:if __name__ == "__main__":
+Ran 14 tests in 3.482s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main()\n\n\nif __name__ == \"__main__\":\n    unittest.main()''','''if __name … [1265 caractères tronqués]`

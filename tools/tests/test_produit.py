@@ -179,6 +179,17 @@ class TestSortieHostile(unittest.TestCase):
         self.assertEqual(json.loads(sortie.stdout)["schema"], "drave.annotation")
 
 
+class TestDeuxVues(unittest.TestCase):
+    """`evaluer` publie la vue fidèle **et** la vue linéaire (transparence)."""
+
+    def test_deux_vues(self):
+        sortie = drave("evaluer", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        self.assertIn("syntagmes_lineaire", d)
+        self.assertGreaterEqual(d["syntagmes_lineaire"]["f1"], d["heuristique"]["syntagme"]["f1"])
+
+
 if __name__ == "__main__":
     unittest.main()
 if __name__ == "__main__":
