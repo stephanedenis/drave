@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **684 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **685 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -230,6 +230,7 @@
 | [rapport-modele-reel.md](rapport-modele-reel.md) | Drave — le modèle réel expose-t-il ses grappes ? |
 | [rapport-modules-famille.md](rapport-modules-famille.md) | C3.2b — un module de restitution par famille : l'indo-européen recopie à 100 % |
 | [rapport-morcellement-experts.md](rapport-morcellement-experts.md) | Rapport — peut-on « morceler » un modèle ? L'élagage par fréquence, mesuré |
+| [rapport-morphologie-verbes.md](rapport-morphologie-verbes.md) | B13 — la morphologie du 1er groupe : `nage` → `nager`, 10 spans retrouvés, couverture 0,9874 |
 | [rapport-multicibles.md](rapport-multicibles.md) | Multi-cibles du gold et mesure d'attachement — 43 GP, +2 exact en V2 et V3 |
 | [rapport-multilingue.md](rapport-multilingue.md) | B15 — M1 sur 66 langues : invariance et exactitude |
 | [rapport-mur-memoire-4bits.md](rapport-mur-memoire-4bits.md) | Le mur mémoire, et ce que les 4 bits achètent vraiment |

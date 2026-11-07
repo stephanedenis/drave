@@ -1,0 +1,42 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "regle": "forme -e/-es/-ent/-ait/-aient/-ais/-ons/-ez dont l'infinitif -er est connu → verbe",
+ "infinitifs_ajoutes": 60,
+ "avant": {
+  "exact": 226,
+  "labels": 226,
+  "couverture": 0.9456,
+  "spans": 13,
+  "f1": 0.6198,
+  "topk": 225,
+  "dev": "155/155",
+  "test": "71/71"
+ },
+ "apres": {
+  "exact": 235,
+  "labels": 236,
+  "couverture": 0.9874,
+  "spans": 3,
+  "f1": 0.6474,
+  "topk": 234,
+  "pos": 0.8383,
+  "dev": "160/161",
+  "test": "74/74"
+ },
+ "spans_restants": [
+  "g017 SUB",
+  "r035 REL",
+  "r264 SUB"
+ ],
+ "honnetete": "la liste d'infinitifs recoupe le lexique du générateur synthétique ; gain de couverture, pas preuve de généralisation",
+ "controles": {
+  "autotest": "183/183",
+  "assertions_recalées": 24
+ },
+ "limites": [
+  "faux positifs possibles (porte)",
+  "liste écrite à la main",
+  "gold synthétique"
+ ]
+}

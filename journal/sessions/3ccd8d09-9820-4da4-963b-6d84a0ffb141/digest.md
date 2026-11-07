@@ -983,3 +983,397 @@ user	0m0,416s
 sys	0m0,028s
   ```
 
+- **bash** `{"command": "mkdir -p /tmp/frontieres && cat > /tmp/frontieres/proto.py <<'PY'\n\"\"\"Prototype local des frontières de phrase — aucune écriture dans le dépôt.\"\"\"\nfrom __future__ import annotations\nimport re\nimport sys\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools … [11485 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.' -> 1
+    0 23 'Le prix est 12.5 euros.' déclarative
+'Rendez-vous le 12.03.2024 à 9h.' -> 1
+    0 31 'Rendez-vous le 12.03.2024 à 9h.' déclarative
+'Écrivez à alice@example.org.' -> 1
+    0 28 'Écrivez à alice@example.org.' déclarative
+'Visitez https://example.com/docs?page=2' -> 1
+    0 39 'Visitez https://example.com/docs?page=2' déclarative
+'Ouvrez src/tools/bloc_linguistique.py.' -> 1
+    0 38 'Ouvrez src/tools/bloc_linguistique.py.' déclarative
+'M. Dupont…' -> 1
+    0 10 'M. Dupont…' déclarative
+'Il part. Elle reste.' -> 2
+    0 8 'Il part.' déclarative
+    9 20 'Elle reste.' déclarative
+'Bonjour. Il part.' -> 2
+    0 8 'Bonjour.' déclarative
+    9 17 'Il part.' déclarative
+'Il hésite... puis il part.' -> 1
+    0 26 'Il hésite... puis il part.' déclarative
+'Vraiment ?!' -> 1
+    0 11 'Vraiment ?!' interrogative
+'« Bonjour. » Elle part.' -> 2
+    0 12 '« Bonjour. »' déclarative
+    13 23 'Elle part.' déclarative
+'Le Dr. Martin arrive.' -> 1
+    0 21 'Le Dr. Martin arrive.' déclarative
+'des pommes, des poires, etc. Il part.' -> 2
+    0 28 'des pommes, des poires, etc.' déclarative
+    29 37 'Il part.' déclarative
+'cf. la note 3.' -> 1
+    0 14 'cf. la not
+… [2118 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport proto\nt=\"Le lien est https://example.com/a.b?x=1. Cliquez ensuite.\"\nprint(len(t), [(i,c) for i,c in enumerate(t)])\nprint(proto._zones_protegees(t))\nfor i,c in enumerate(t):\n    if c=='.': print('dot',i, 'dans', proto._dans(proto._zon … [108 caractères tronqués]`
+
+  ```
+57 [(0, 'L'), (1, 'e'), (2, ' '), (3, 'l'), (4, 'i'), (5, 'e'), (6, 'n'), (7, ' '), (8, 'e'), (9, 's'), (10, 't'), (11, ' '), (12, 'h'), (13, 't'), (14, 't'), (15, 'p'), (16, 's'), (17, ':'), (18, '/'), (19, '/'), (20, 'e'), (21, 'x'), (22, 'a'), (23, 'm'), (24, 'p'), (25, 'l'), (26, 'e'), (27, '.'), (28, 'c'), (29, 'o'), (30, 'm'), (31, '/'), (32, 'a'), (33, '.'), (34, 'b'), (35, '?'), (36, 'x'), (37, '='), (38, '1'), (39, '.'), (40, ' '), (41, 'C'), (42, 'l'), (43, 'i'), (44, 'q'), (45, 'u'), (46, 'e'), (47, 'z'), (48, ' '), (49, 'e'), (50, 'n'), (51, 's'), (52, 'u'), (53, 'i'), (54, 't'), (55, 'e'), (56, '.')]
+[(12, 39)]
+dot 27 dans True
+dot 33 dans True
+dot 39 dans False
+dot 56 dans False
+[(0, 57, 'Le lien est https://example.com/a.b?x=1. Cliquez ensuite.', 'déclarative')]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport re\np='proto.py'\ns=open(p).read()\ns=s.replace('''# identifiant pointé : os.path, Heuristique._phrases, example.com (point suivi d'une minuscule)\n_IDENT_POINTE = re.compile(r\"\\\\b[A-Za-z_]\\\\w*(?:\\\\.[a-z_]\\\\w*)+(?![\\\\w])\")\n_POI … [1019 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.' -> 1
+    0 23 'Le prix est 12.5 euros.' déclarative
+'Rendez-vous le 12.03.2024 à 9h.' -> 1
+    0 31 'Rendez-vous le 12.03.2024 à 9h.' déclarative
+'Écrivez à alice@example.org.' -> 1
+    0 28 'Écrivez à alice@example.org.' déclarative
+'Visitez https://example.com/docs?page=2' -> 1
+    0 39 'Visitez https://example.com/docs?page=2' déclarative
+'Ouvrez src/tools/bloc_linguistique.py.' -> 1
+    0 38 'Ouvrez src/tools/bloc_linguistique.py.' déclarative
+'M. Dupont…' -> 1
+    0 10 'M. Dupont…' déclarative
+'Il part. Elle reste.' -> 2
+    0 8 'Il part.' déclarative
+    9 20 'Elle reste.' déclarative
+'Bonjour. Il part.' -> 2
+    0 8 'Bonjour.' déclarative
+    9 17 'Il part.' déclarative
+'Il hésite... puis il part.' -> 1
+    0 26 'Il hésite... puis il part.' déclarative
+'Vraiment ?!' -> 1
+    0 11 'Vraiment ?!' interrogative
+'« Bonjour. » Elle part.' -> 2
+    0 12 '« Bonjour. »' déclarative
+    13 23 'Elle part.' déclarative
+'Le Dr. Martin arrive.' -> 1
+    0 21 'Le Dr. Martin arrive.' déclarative
+'des pommes, des poires, etc. Il part.' -> 2
+    0 28 'des pommes, des poires, etc.' déclarative
+    29 37 'Il part.' déclarative
+'cf. la note 3.' -> 1
+    0 14 'cf. la not
+… [2167 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport proto\nt=\"use a tool, e.g. a hammer, to fix it.\"\nprint([(i,c) for i,c in enumerate(t) if c in '.'])\nprint(proto._zones_protegees(t))\nfor i,c in enumerate(t):\n    if c=='.': print(i, proto._dans(proto._zones_protegees(t), i, i+1))\nPY" … [41 caractères tronqués]`
+
+  ```
+[(13, '.'), (15, '.'), (36, '.')]
+[]
+13 False
+15 False
+36 False
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && sed -i 's/_ABREV_POINTEE = re.compile(r\"\\\\b(?:\\[A-Za-z\\]\\\\.){2,}\\[A-Za-z\\]\\\\b\")/_ABREV_POINTEE = re.compile(r\"\\\\b(?:[A-Za-z]\\\\.)+[A-Za-z]\\\\b\")/' proto.py && grep -n \"_ABREV_POINTEE\" proto.py && python3 - <<'PY'\nimport proto\nfor t in [\"use a … [236 caractères tronqués]`
+
+  ```
+51:_ABREV_POINTEE = re.compile(r"\b(?:[A-Za-z]\.)+[A-Za-z]\b")
+69:    for motif in (_URL, _EMAIL, _DOMAINE, _CHEMIN, _EXTENSION, _CODE_BLOC, _CODE_INLINE, _ABREV_POINTEE, _IDENT_POINTE):
+'use a tool, e.g. a hammer, to fix it.' [(0, 37, 'use a tool, e.g. a hammer, to fix it.', 'déclarative')]
+'i.e. ceci.' [(0, 10, 'i.e. ceci.', 'déclarative')]
+'U.S.A. Il part.' [(0, 6, 'U.S.A.', 'déclarative'), (7, 15, 'Il part.', 'déclarative')]
+'U.S.A. Paris.' [(0, 13, 'U.S.A. Paris.', 'déclarative')]
+'il part.elle reste.' [(0, 8, 'il part.', 'déclarative'), (8, 19, 'elle reste.', 'déclarative')]
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/corpus.py <<'PY'\n\"\"\"Les 40 textes libres de la cartographie P0-4.\"\"\"\nfrom __future__ import annotations\n\nTEXTES = [\n {\"id\":\"n01\",\"cat\":\"négatif/2 phrases\",\"texte\":\"Il part. Elle reste.\",\"attendu\":[\"Il part.\",\"Elle reste.\"],\"types\":[\" … [8530 caractères tronqués]`
+
+  ```
+40 textes, 59 phrases attendues
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\np='proto.py'\ns=open(p).read()\ns=s.replace('''                if self.regles[\"f\"] and self._nouvelle_ligne(texte, i, j):\n                    d = debut\n                    while d < i and texte[d].isspace():\n                        d += 1\n   … [2624 caractères tronqués]`
+
+  ```
+DIFF t03 '1. Ouvrir le fichier.\n2. Lire la première ligne.'
+  att [(0, 21), (22, 48)]
+  got [(0, 2, '1.', 'déclarative'), (3, 21, 'Ouvrir le fichier.', 'déclarative'), (22, 24, '2.', 'déclarative'), (25, 48, 'Lire la première ligne.', 'déclarative')]
+TYPE t03 ['déclarative', 'déclarative', 'déclarative', 'déclarative'] ['déclarative', 'déclarative']
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\np='proto.py'\ns=open(p).read()\ns=s.replace('''        # (a) décimaux : un point entre deux chiffres\n        if self.regles[\"a\"] and run == \".\" and 0 < i < n - 1 \\\\\n                and texte[i - 1].isdigit() and texte[i + 1].isdigit():\n   … [1157 caractères tronqués]`
+
+  ```
+écarts: 0
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/mesure40.py <<'PY'\n\"\"\"Mesures P0-4 : avant/après sur les 40 textes, POS/syntagmes et frontières.\"\"\"\nfrom __future__ import annotations\nimport json\nimport sys\nsys.path.insert(0, \"/tmp/frontieres\")\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/G … [8647 caractères tronqués]`
+
+  ```
+== 40 textes ==
+original     phrases=102 exacts= 2/40 cassés=38 extra=47 missing= 4 chev= 9 esp=31 fq= 5
+neutre       phrases=102 exacts= 2/40 cassés=38 extra=45 missing= 2 chev= 0 esp=31 fq= 5
+regle_a      phrases= 87 exacts= 6/40 cassés=34 extra=30 missing= 2 chev= 0 esp=29 fq= 5
+regle_b      phrases= 92 exacts= 8/40 cassés=32 extra=35 missing= 2 chev= 0 esp=21 fq= 5
+regle_c      phrases= 83 exacts=10/40 cassés=30 extra=26 missing= 2 chev= 0 esp=31 fq= 0
+regle_d      phrases=101 exacts= 3/40 cassés=37 extra=44 missing= 2 chev= 0 esp=30 fq= 5
+regle_e      phrases=102 exacts=13/40 cassés=27 extra=45 missing= 2 chev= 0 esp= 0 fq= 5
+regle_f      phrases=104 exacts= 4/40 cassés=36 extra=45 missing= 0 chev= 0 esp=30 fq= 5
+toutes       phrases= 59 exacts=40/40 cassés= 0 extra= 0 missing= 0 chev= 0 esp= 0 fq= 0
+
+== effet POS/syntagmes/actes ==
+original     pos_diff= 0 syn_diff= 0 att_diff= 0 phr_diff= 0 acte_diff= 0 traversants=0->0 actes_faux=63/102
+neutre       pos_diff= 0 syn_diff= 0 att_diff= 0 phr_diff=11 acte_diff=11 traversants=0->0 actes_faux=63/102
+regle_a      pos_diff= 0 syn_diff= 0 att_diff= 0 phr_diff=17 acte_diff=17 traversants=0->0 actes_faux=48/87
+regle_b      pos_diff= 0
+… [625 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport json, mesure40 as m\nr=m.mesurer_40()\nfor nom in ('original','toutes'):\n    ts=r[nom]['textes']\n    print('\\n==',nom)\n    for x in ts:\n        if x['extra'] or x['missing'] or x['overlaps'] or x['fausses_questions'] or x['leading']:\n … [434 caractères tronqués]`
+
+  ```
+== original
+n01 négatif/2 phrases phr 2 extra [] missing [] chev 0 esp 1 fq 0
+n02 négatif/3 phrases phr 3 extra [] missing [] chev 0 esp 2 fq 0
+d01 décimal phr 2 extra [15] missing [] chev 0 esp 0 fq 0
+d02 décimal+milliers phr 2 extra [30] missing [] chev 0 esp 0 fq 0
+d03 date phr 5 extra [17, 20, 46, 49] missing [] chev 0 esp 0 fq 0
+d04 version+IP phr 6 extra [13, 15, 32, 36, 38] missing [] chev 0 esp 0 fq 0
+u01 URL+query phr 3 extra [24, 33] missing [] chev 0 esp 0 fq 1
+u02 URL+phrase phr 5 extra [28, 34, 36] missing [] chev 0 esp 1 fq 1
+e01 courriel phr 2 extra [24] missing [] chev 0 esp 0 fq 0
+e02 courriel+URL phr 4 extra [26, 55, 63] missing [] chev 0 esp 0 fq 1
+c01 chemin+code phr 2 extra [35] missing [] chev 0 esp 0 fq 0
+c02 chemin relatif phr 3 extra [12, 23] missing [] chev 0 esp 0 fq 0
+c03 code inline phr 2 extra [21] missing [] chev 0 esp 0 fq 0
+c04 identifiant pointé phr 2 extra [20] missing [] chev 0 esp 0 fq 0
+a01 abréviation M. phr 2 extra [3] missing [] chev 1 esp 1 fq 0
+a02 abréviation Dr. phr 2 extra [7] missing [] chev 1 esp 1 fq 0
+a03 etc. minuscule phr 2 extra [29] missing [] chev 1 esp 1 fq 0
+a04 etc. majuscule phr 2 extra [] missing [] chev 1 esp 1 fq 0
+a05 a
+… [1474 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres')\nimport bloc_linguistique as bl, corpus, proto, mesure40 as m\nh0=bl.Heuristique(); h=m.HPatchee(**{r:True for r in 'abcdef'})\nfor t in corpus.TEXTES:\n    a0=h0.analyser(t['texte']); a=h.analyser( … [450 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ModuleNotFoundError: No module named 'bloc_linguistique'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, proto, mesure40 as m\nh0=bl.Heuristique(); h=m.HPatchee(**{r:True for r in 'abcde … [521 caractères tronqués]`
+
+  ```
+t01 '# Notes de réunion\n\nLe budget 2025 a été validé.'
+  frontières [20]
+    ('GP', 8, 29, 'de réunion\n\nLe budget')
+t02 '- Priorité : réduire les coûts\n- Échéance : fin mars'
+  frontières [31]
+    ('GN', 21, 41, 'les coûts\n- Échéance')
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/mesure_gold.py <<'PY'\n\"\"\"Mesure dev/test par règle + contrôle négatif sur le gold (612 phrases).\"\"\"\nfrom __future__ import annotations\nimport json\nimport sys\nsys.path.insert(0, \"/tmp/frontieres\")\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/G … [3367 caractères tronqués]`
+
+  ```
+split {'phrases': 422, 'cibles': 163, 'sources': {'hand': 15, 'reel': 302, 'synthetique': 105}, 'langues': {'fr': 277, 'en': 145}} {'phrases': 190, 'cibles': 76, 'sources': {'hand': 5, 'reel': 130, 'synthetique': 55}, 'langues': {'fr': 125, 'en': 65}}
+original     dev  POS=0.8375 F1=0.6439 P=0.6703 R=0.6196 att_exact=0.9816 att_top1=0.9816 couv=0.9877 acte=1.0000
+original     test POS=0.8400 F1=0.6552 P=0.6710 R=0.6402 att_exact=0.9868 att_top1=0.9868 couv=0.9868 acte=0.9895
+             diff 612 : {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+neutre       dev  POS=0.8375 F1=0.6439 P=0.6703 R=0.6196 att_exact=0.9816 att_top1=0.9816 couv=0.9877 acte=1.0000
+neutre       test POS=0.8400 F1=0.6552 P=0.6710 R=0.6402 att_exact=0.9868 att_top1=0.9868 couv=0.9868 acte=0.9895
+             diff 612 : {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+regle_a      dev  POS=0.8375 F1=0.6439 P=0.6703 R=0.6196 att_exact=0.9816 att_top1=0.9816 couv=0.9877 acte=1.0000
+regle_a      test POS=0.8400 F1=0.6552 P=0.6710 R=0.6402 att_exact=0.9868 att_top1=0.9868 couv=0.9868 acte=0.9895
+             diff 612 : {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+regle_b      dev  POS=0.8375 F1=0.64
+… [1838 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nmotif = re.compile(r\"\\b[ldmtsnLDMTNS]['’](?=\\w)|\\w+(?:['’\\-]\\w+)*|\\d+(?:[.,]\\d+)*|https?://\\S+|[\\U0001F300-\\U0001FAFF]|[^\\w\\s]\")\nfor t in ['😊','Merci 😊 !','12.5','https://example.com/a?b=1' … [177 caractères tronqués]`
+
+  ```
+'😊' [(0, 1, '😊')]
+'Merci 😊 !' [(0, 5, 'Merci'), (6, 7, '😊'), (8, 9, '!')]
+'12.5' [(0, 2, '12'), (2, 3, '.'), (3, 4, '5')]
+'https://example.com/a?b=1' [(0, 5, 'https'), (5, 6, ':'), (6, 7, '/'), (7, 8, '/'), (8, 15, 'example'), (15, 16, '.'), (16, 19, 'com'), (19, 20, '/'), (20, 21, 'a'), (21, 22, '?'), (22, 23, 'b'), (23, 24, '='), (24, 25, '1')]
+'alice@example.org' [(0, 5, 'alice'), (5, 6, '@'), (6, 13, 'example'), (13, 14, '.'), (14, 17, 'org')]
+'Heuristique._phrases' [(0, 11, 'Heuristique'), (11, 12, '.'), (12, 20, '_phrases')]
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/mots_patch.py <<'PY'\n\"\"\"Patch B (tokénisation) — prototype local, hors dépôt.\"\"\"\nfrom __future__ import annotations\nimport re\n\n_MOTIF_MOTS = re.compile(\n    r\"https?://[^\\s<>\\\"'`]*[^\\s<>\\\"'`.,;:!?]\"          # URL entière (ponctuation finale exc … [2251 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.'
+   [(0, 2, 'Le', 'mot'), (3, 7, 'prix', 'mot'), (8, 11, 'est', 'mot'), (12, 16, '12.5', 'nombre'), (17, 22, 'euros', 'mot'), (22, 23, '.', 'ponctuation')]
+'Rendez-vous le 12.03.2024.'
+   [(0, 11, 'Rendez-vous', 'mot'), (12, 14, 'le', 'mot'), (15, 25, '12.03.2024', 'nombre'), (25, 26, '.', 'ponctuation')]
+'alice@example.org'
+   [(0, 17, 'alice@example.org', 'courriel')]
+'https://example.com/docs?page=2'
+   [(0, 31, 'https://example.com/docs?page=2', 'url')]
+'src/tools/bloc_linguistique.py'
+   [(0, 30, 'src/tools/bloc_linguistique.py', 'chemin')]
+'Appelez Heuristique._phrases(texte)'
+   [(0, 7, 'Appelez', 'mot'), (8, 28, 'Heuristique._phrases', 'mot'), (28, 29, '(', 'ponctuation'), (29, 34, 'texte', 'mot'), (34, 35, ')', 'ponctuation')]
+'Use os.path.join ici.'
+   [(0, 3, 'Use', 'mot'), (4, 16, 'os.path.join', 'mot'), (17, 20, 'ici', 'mot'), (20, 21, '.', 'ponctuation')]
+'Merci 😊 !'
+   [(0, 5, 'Merci', 'mot'), (6, 7, '😊', 'emoji'), (8, 9, '!', 'ponctuation')]
+'et/ou'
+   [(0, 2, 'et', 'mot'), (2, 3, '/', 'chemin'), (3, 5, 'ou', 'mot')]
+'Le chat dort.'
+   [(0, 2, 'Le', 'mot'), (3, 7, 'chat', 'mot'), (8, 12, 'dort', 'mot'), (12, 13, '.', 'ponctuation')]
+'Le lien
+… [183 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\np='mots_patch.py'\ns=open(p).read()\ns=s.replace('''    r\"|(?:\\\\\\\\.{0,2}/)?(?:[\\\\\\\\w.@+-]+/)+[\\\\\\\\w.@+-]+\\\\\\\\.(?:[A-Za-z0-9]{1,8})\"  # chemin avec extension''','''    r\"|(?:\\\\\\\\.{0,2}/)?(?:[\\\\\\\\w.@+-]+/)+[\\\\\\\\w.@+-]+ … [999 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.'
+   [(0, 2, 'Le', 'mot'), (3, 7, 'prix', 'mot'), (8, 11, 'est', 'mot'), (12, 16, '12.5', 'nombre'), (17, 22, 'euros', 'mot'), (22, 23, '.', 'ponctuation')]
+'Rendez-vous le 12.03.2024.'
+   [(0, 11, 'Rendez-vous', 'mot'), (12, 14, 'le', 'mot'), (15, 25, '12.03.2024', 'nombre'), (25, 26, '.', 'ponctuation')]
+'alice@example.org'
+   [(0, 17, 'alice@example.org', 'courriel')]
+'https://example.com/docs?page=2'
+   [(0, 31, 'https://example.com/docs?page=2', 'url')]
+'src/tools/bloc_linguistique.py'
+   [(0, 30, 'src/tools/bloc_linguistique.py', 'chemin')]
+'Appelez Heuristique._phrases(texte)'
+   [(0, 7, 'Appelez', 'mot'), (8, 28, 'Heuristique._phrases', 'mot'), (28, 29, '(', 'ponctuation'), (29, 34, 'texte', 'mot'), (34, 35, ')', 'ponctuation')]
+'Use os.path.join ici.'
+   [(0, 3, 'Use', 'mot'), (4, 16, 'os.path.join', 'mot'), (17, 20, 'ici', 'mot'), (20, 21, '.', 'ponctuation')]
+'Merci 😊 !'
+   [(0, 5, 'Merci', 'mot'), (6, 7, '😊', 'emoji'), (8, 9, '!', 'ponctuation')]
+'et/ou'
+   [(0, 2, 'et', 'mot'), (2, 3, '/', 'ponctuation'), (3, 5, 'ou', 'mot')]
+'Le chat dort.'
+   [(0, 2, 'Le', 'mot'), (3, 7, 'chat', 'mot'), (8, 12, 'dort', 'mot'), (12, 13, '.', 'ponctuation')]
+'Le
+… [188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/mesure_mots.py <<'PY'\n\"\"\"Mesure du patch B (tokénisation) seul et combiné au patch A (frontières).\"\"\"\nfrom __future__ import annotations\nimport json\nimport sys\nsys.path.insert(0, \"/tmp/frontieres\")\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane … [5053 caractères tronqués]`
+
+  ```
+== 40 textes : patch B ==
+original {"tokens": 477, "types": {"mot": 273, "ponctuation": 171, "nombre": 33}, "pos": 273, "pos_diff_textes": 0, "pos_perdus": 0, "pos_gagnes": 0, "syn_diff_textes": 0, "syn_labels": 176, "att_diff_textes": 0, "phr": 102, "unites": 172, "fraction": 21.728700000000003, "zones_pos_avant": 47, "tokens_par_texte": 11.93, "fraction_moyenne": 0.5432}
+mots {"tokens": 362, "types": {"mot": 232, "ponctuation": 107, "nombre": 14, "url": 5, "courriel": 2, "chemin": 2}, "pos": 232, "pos_diff_textes": 10, "pos_perdus": 44, "pos_gagnes": 3, "syn_diff_textes": 7, "syn_labels": 173, "att_diff_textes": 7, "phr": 102, "unites": 133, "fraction": 19.0148, "zones_pos_avant": 47, "tokens_par_texte": 9.05, "fraction_moyenne": 0.4754}
+complet {"tokens": 362, "types": {"mot": 232, "ponctuation": 107, "nombre": 14, "url": 5, "courriel": 2, "chemin": 2}, "pos": 232, "pos_diff_textes": 10, "pos_perdus": 44, "pos_gagnes": 3, "syn_diff_textes": 7, "syn_labels": 173, "att_diff_textes": 7, "phr": 59, "unites": 133, "fraction": 19.0148, "zones_pos_avant": 47, "tokens_par_texte": 9.05, "fraction_moyenne": 0.4754}
+
+== gold : patch B ==
+mots tokens_diff_textes: 0 exemples: []
+  dev: POS=0
+… [311 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, mots_patch, mesure_mots as mm\nh0=bl.Heuristique(); hb=mm.HMots()\nfor t in corpu … [675 caractères tronqués]`
+
+  ```
+u01 'Visitez https://example.com/docs?page=2 pour la documentation.'
+  perdu: [('GV', 8, 13, 'https'), ('GV', 28, 32, 'docs')]
+  gagne: []
+
+ u02 'Le lien est https://example.com/a.b?x=1. Cliquez ensuite sur « Connexion ».'
+  perdu: [('GV', 32, 33, 'a')]
+  gagne: [('GV', 8, 11, 'est')]
+
+ e01 'Écrivez à alice@example.org avant vendredi.'
+  perdu: [('GP', 8, 15, 'à alice')]
+  gagne: [('GP', 8, 9, 'à')]
+
+ e02 'Contactez support@exemple.fr ou ouvrez https://exemple.fr/aide?lang=fr.'
+  perdu: []
+  gagne: [('GV', 32, 38, 'ouvrez')]
+
+ c01 'Ouvrez src/tools/bloc_linguistique.py puis cherchez `_phrases`.'
+  perdu: [('GV', 0, 10, 'Ouvrez src'), ('GV', 11, 16, 'tools'), ('GV', 38, 51, 'puis cherchez')]
+  gagne: [('GV', 0, 6, 'Ouvrez'), ('GV', 43, 51, 'cherchez')]
+POS gagnes c01 [(38, 42, 'NOUN')]
+POS gagnes c03 [(9, 29, 'NOUN')]
+POS gagnes c04 [(8, 28, 'NOUN')]
+
+ u03 "Voir la page (https://example.com/a?b=1) pour plus d'informations."
+  perdu: [('GV', 34, 35, 'a')]
+  gagne: []
+
+ u04 'Visitez https://example.com?q=1. Que voyez-vous ?'
+  perdu: [('GV', 8, 13, 'https')]
+  gagne: [('REL', 33, 47, 'Que voyez-vous')]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport json, mesure40 as m\nr=m.mesurer_40()\norig=r['original']['textes']\nbyid={x['id']:x for x in orig}\nprint('rule, exacts, sans_frontiere_fausse, repares_frontiere, repares_exact, extra, missing, chev, fq, leading, phrases')\nfor nom,d in r. … [1063 caractères tronqués]`
+
+  ```
+rule, exacts, sans_frontiere_fausse, repares_frontiere, repares_exact, extra, missing, chev, fq, leading, phrases
+original    2  8  0  0 47  4  9  5 31 102
+neutre      2 13  5  0 45  2  0  5 31 102
+regle_a     6 19 11  4 30  2  0  5 29  87
+regle_b     8 20 12  6 35  2  0  5 21  92
+regle_c    10 23 15  8 26  2  0  0 31  83
+regle_d     3 14  6  1 44  2  0  5 30 101
+regle_e    13 13  5 11 45  2  0  5  0 102
+regle_f     4 15  7  2 45  0  0  5 30 104
+toutes     40 40 32 38  0  0  0  0  0  59
+Counter({'extra': 27, 'leading': 24, 'overlaps': 9, 'fq': 5, 'missing': 4})
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, proto\nfor tid in ['d03','u01','a01','a03','a04','g01','t01','t03','x01','d05','u … [389 caractères tronqués]`
+
+  ```
+d03 'La réunion du 12.03.2024 a été reportée au 15.04.2024.'
+  attendu [(0, 54)] ['La réunion du 12.03.2024 a été reportée au 15.04.2024.']
+  avant   [(0, 17, 'La réunion du 12.', 'déclarative'), (17, 20, '03.', 'déclarative'), (20, 46, '2024 a été reportée au 15.', 'déclarative'), (46, 49, '04.', 'déclarative'), (49, 54, '2024.', 'déclarative')]
+  apres   [(0, 54, 'La réunion du 12.03.2024 a été reportée au 15.04.2024.', 'déclarative')]
+
+ u01 'Visitez https://example.com/docs?page=2 pour la documentation.'
+  attendu [(0, 62)] ['Visitez https://example.com/docs?page=2 pour la documentation.']
+  avant   [(0, 24, 'Visitez https://example.', 'déclarative'), (24, 33, 'com/docs?', 'interrogative'), (33, 62, 'page=2 pour la documentation.', 'déclarative')]
+  apres   [(0, 62, 'Visitez https://example.com/docs?page=2 pour la documentation.', 'déclarative')]
+
+ a01 'M. Dupont, le directeur, a annoncé sa retraite.'
+  attendu [(0, 47)] ['M. Dupont, le directeur, a annoncé sa retraite.']
+  avant   [(0, 47, 'M. Dupont, le directeur, a annoncé sa retraite.', 'déclarative'), (2, 47, ' Dupont, le directeur, a annoncé sa retraite.', 'déclarative')]
+  apres   [(0, 47, 'M. Dupont, le directeur, a anno
+… [2837 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Finalisation des deux patchs et test sur le gold
+
+- **bash** `{"command": "mkdir -p /tmp/frontieres/final && cat > /tmp/frontieres/final/patch_frontieres.py <<'PY'\n# --------------------------------------------------------------------------- frontières de phrase\n# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de\n# list … [12472 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+ModuleNotFoundError: No module named 'corpus'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, patch_frontieres, patch_mots\np … [556 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "/tmp/frontieres/final/patch_frontieres.py", line 27, in <module>
+    _MARQUEUR = re.compile(
+                ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+[exit code: 1]
+  ```
+

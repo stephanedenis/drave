@@ -1508,3 +1508,359 @@ filtrer_contenu {"f1": 0.5006, "precision": 0.5899, "rappel": 0.4348, "att_exact
 … [1704 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='options.py'\ns=open(p).read()\ns=s.replace('''def dedup(a: bl.Annotation) -> int:''', '''def _classe_paire(union: bl.Etiquette, s: bl.Etiquette) -> str:\n    rel = _relation(union, s)\n    return {\"inclus\": \"C1_union_dans_s\", \"inc … [5502 caractères tronqués]`
+
+  ```
+patched
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && PIN=/tmp/pin_audit OUT=/tmp/partition_syntagmes/options_audit3.json timeout 2400 python3 /tmp/partition_syntagmes/options.py 2>&1 | tail -22", "description": "Measure per-class partition rules"}`
+
+  ```
+alternative {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_chunker {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_large {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+filtrer_chunker {"f1": 0.6163, "precision": 0.7122, "rappel": 0.5432, "att_exact": 217, "att_labels": 217, "att_couverture": 0.9079, "pos": 0.7581, "fraction": 0.5537} bancs 91 636 libres 29 214 retires 197
+filtrer_contenu {"f1": 0.5006, "precision": 0.5899, "rappel": 0.4348, "att_exact": 208, "att_labels": 208, "att_couverture": 0.8703, "pos": 0.7581, "fraction": 0.5537} bancs 112 595 libres 35 209 retires 245
+union_any {"f1": 0.4959, "precision": 0.6003, "rappel": 0.4224, "att_exact": 199, "att_labels": 199, "att_couverture": 0.8326, "pos": 0.7581, "fraction": 0.5537} ban
+… [3334 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\no=json.load(open('options_audit3.json'))\nfor v in ['base','filtrer_chunker','garder_chunker_c1c2','garder_chunker_c1c2c3','garder_chunker','regle_mix_A','regle_mix_E','glouton_att_union','dedup']:\n    b=o['bancs'][v]\n    p … [646 caractères tronqués]`
+
+  ```
+base                   paires=239 seg=722 union=183 att=549 textes=54 classes={'union_contenu': 127, 'inclusion_s_dans_union': 80, 'croisement': 26, 'meme_span_union': 6}
+                       libres paires=59 seg=233 textes=10 classes={'union_contenu': 24, 'inclusion_s_dans_union': 24, 'croisement': 8, 'meme_span_union': 3}
+filtrer_chunker        paires= 91 seg=636 union=183 att=481 textes=33 classes={'inclusion_s_dans_union': 80, 'meme_span_union': 6, 'croisement': 5}
+                       libres paires=29 seg=214 textes= 7 classes={'inclusion_s_dans_union': 24, 'meme_span_union': 3, 'croisement': 2}
+garder_chunker_c1c2    paires= 11 seg=556 union=183 att=406 textes= 9 classes={'meme_span_union': 6, 'croisement': 5}
+                       libres paires= 5 seg=190 textes= 3 classes={'meme_span_union': 3, 'croisement': 2}
+garder_chunker_c1c2c3  paires=  5 seg=550 union=183 att=400 textes= 5 classes={'croisement': 5}
+                       libres paires= 2 seg=187 textes= 2 classes={'croisement': 2}
+garder_chunker         paires=  0 seg=545 union=183 att=397 textes= 0 classes={}
+                       libres paires= 0 seg=185 textes= 0 classes={}
+regle_mix_A            paires=  0 
+… [2722 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Writing the proposed patch on a pinned copy and validating it end-to-end
+
+- **write** `{"content": "\"\"\"Construit une copie patchée du module épinglé (aucune modification du dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport pathlib\n\nSRC = pathlib.Path(\"/tmp/pin_audit/tools/bloc_linguistique.py\")\nDST = pathlib.Path(\"/tmp/pin_audit/tools/bloc_partition.py\")\ns = SRC.r … [6811 caractères tronqués]`
+
+  ```
+<path>/tmp/partition_syntagmes/construire_patch.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 /tmp/partition_syntagmes/construire_patch.py && python3 -c \"\nimport sys; sys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nh=bp.Heuristique()\na=h.analyser('Le chat de la voisine qui dort sur le toit se réveille.', 'fr')\nprint(len(a. … [186 caractères tronqués]`
+
+  ```
+écrit /tmp/pin_audit/tools/bloc_partition.py 2298 lignes
+59 
+GN 0 7 'Le chat' {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le chat', 'cible': 'réveille'}}
+GP 8 21 'de la voisine' {'role': 'possession', 'niveau': 2, 'attachement': {'segment': 'de la voisine', 'cible': 'réveille'}}
+REL 22 42 'qui dort sur le toit' {'role': 'qualite', 'niveau': 2, 'attachement': {'segment': 'qui dort sur le toit', 'cible': 'voisine'}, 'partition': {'groupe': 0, 'rang': 3, 'membres': 3, 'vue': 'alternative'}, 'alternative': [{'type': 'REL', 'debut': 22, 'fin': 54, 'source': 'heuristique', 'union': True, 'relation': 'inclus', 'rang': 1, 'attachement': {'segment': 'qui dort sur le toit se réveille', 'cible': 'réveille'}, 'role': 'qualité'}, {'type': 'GV', 'debut': 43, 'fin': 54, 'source': 'heuristique', 'union': False, 'relation': 'croise', 'rang': 2, 'attachement': {'segment': 'se réveille', 'cible': 'voisine'}, 'role': 'predicat'}]}
+REL 22 54 'qui dort sur le toit se réveille' {'role': 'qualité', 'niveau': 1, 'union': True, 'attachement': {'segment': 'qui dort sur le toit se réveille', 'cible': 'réveille'}, 'partition': {'groupe': 0, 'rang': 1, 'membres': 3, 'vue': 'alternative'}, 'altern
+… [1048 caractères tronqués]
+  ```
+
+- **write** `{"content": "\"\"\"Évalue le patch proposé sur la copie épinglée (aucune modification du dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport copy\nimport hashlib\nimport json\nimport random\nimport sys\nfrom collections import Counter, defaultdict\n\nRACINE = \"/tmp/pin_audit\"\nDEPOT = \"/h … [12218 caractères tronqués]`
+
+  ```
+<path>/tmp/partition_syntagmes/patch_eval.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && timeout 2400 python3 /tmp/partition_syntagmes/patch_eval.py 2>&1 | tail -80", "description": "Evaluate proposed patch, payload, controls"}`
+
+  ```
+brut {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 1928458 vues 0
+alternative {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 2129150 vues 894
+filtrer {"f1": 0.5953, "att_exact": 189, "att_cibles": 239, "pos": 0.7581} bancs 0 libres 0 octets 1894470 vues 239
+preference {'groupes': 244, 'rang1_gold': 177, 'un_gold': 207, 'groupes_sans_gold': 37}
+pos {'brut': 'cb4757217465da39', 'alternative': 'cb4757217465da39', 'filtrer': 'cb4757217465da39'} det True
+EXEMPLE BRUT
+  GN  [0:28] 'La voisine arrose les fleurs' -> partir
+  GP  [29:51] 'du jardin chaque matin' -> partir
+  GP  [29:60] 'du jardin chaque matin avant de' -> fleurs
+  GP  [58:67] 'de partir' -> au
+  GV  [61:67] 'partir' -> —
+  GP  [68:78] 'au travail' -> partir
+  GV  [68:78] 'au travail' -> —
+  GV  [80:96] 'puis elle rentre' -> travail
+  GV  [90:96] 'rentre' -> —
+  GP  [97:117] 'vers dix-huit heures' -> rentre
+  GP  [97:159] 'vers dix-huit heures et prépare le dîner pour ses deux enfants' -> rentre
+  GV  [121:128] 'prépare' -> heures
+  GN  [129:137] 'le dîner' -> heures
+  GP  [138:159] 'pour ses deux enfants' -> prépare
+EXEMPLE ALTERN
+… [3986 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nt=json.load(open('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json'))['banc_50']['detail'][1]['texte']\nprint(t)\na=bp.Heuri … [289 caractères tronqués]`
+
+  ```
+La voisine arrose les fleurs du jardin chaque matin avant de partir au travail, puis elle rentre vers dix-huit heures et prépare le dîner pour ses deux enfants.
+GN 0 28 'La voisine arrose les fleurs' union= None att= True
+GP 29 51 'du jardin chaque matin' union= None att= True
+GP 29 60 'du jardin chaque matin avant de' union= True att= True
+GP 58 67 'de partir' union= None att= True
+GV 61 67 'partir' union= True att= False
+GP 68 78 'au travail' union= None att= True
+GV 68 78 'au travail' union= True att= False
+GV 80 96 'puis elle rentre' union= None att= True
+GV 90 96 'rentre' union= True att= False
+GP 97 117 'vers dix-huit heures' union= None att= True
+GP 97 159 'vers dix-huit heures et prépare le dîner pour ses deux enfants' union= True att= True
+GV 121 128 'prépare' union= None att= True
+GN 129 137 'le dîner' union= None att= True
+GP 138 159 'pour ses deux enfants' union= None att= True
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nt=json.load(open('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json'))['banc_50']['detail'][1]['texte']\na=bp.Heuristique(par … [914 caractères tronqués]`
+
+  ```
+base 9
+rest 6 paires 0
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_patch.py'\ns=open(p).read()\nold = '''    for gid, groupe in enumerate(groupes):\n        ordre = sorted(groupe, key=_cle_preferee)\n        rangs = {id(e): i + 1 for i, e in enumerate(ordre)}\n        pref = ordre[0]\n      … [2870 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **write** `{"content": "\"\"\"Construit une copie patchée du module épinglé (aucune modification du dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport pathlib\n\nSRC = pathlib.Path(\"/tmp/pin_audit/tools/bloc_linguistique.py\")\nDST = pathlib.Path(\"/tmp/pin_audit/tools/bloc_partition.py\")\ns = SRC.r … [7991 caractères tronqués]`
+
+  ```
+Error: cannot write "/tmp/partition_syntagmes/construire_patch.py": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/tmp/partition_syntagmes/construire_patch.py", "limit": 20}`
+
+  ```
+<path>/tmp/partition_syntagmes/construire_patch.py</path>
+<type>file</type>
+<content>
+1: """Construit une copie patchée du module épinglé (aucune modification du dépôt)."""
+2: from __future__ import annotations
+3: 
+4: import pathlib
+5: 
+6: SRC = pathlib.Path("/tmp/pin_audit/tools/bloc_linguistique.py")
+7: DST = pathlib.Path("/tmp/pin_audit/tools/bloc_partition.py")
+8: s = SRC.read_text(encoding="utf-8")
+9: 
+10: # 1. le paramètre de politique, dans __init__
+11: old = '''    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+12:                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+13:                  union: bool = True):
+14:         self.profils = profils
+15:         self.segmenter_s = segmenter_s
+16:         self.seuil_ouvert = seuil_ouvert
+17:         self.seuil_langue = seuil_langue
+18:         self.union = union
+19: '''
+20: new = '''    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+
+(Showing lines 1-20 of 186. Use offset=21 to continue.)
+</content>
+  ```
+
+- **write** `{"content": "\"\"\"Construit une copie patchée du module épinglé (aucune modification du dépôt).\"\"\"\nfrom __future__ import annotations\n\nimport pathlib\n\nSRC = pathlib.Path(\"/tmp/pin_audit/tools/bloc_linguistique.py\")\nDST = pathlib.Path(\"/tmp/pin_audit/tools/bloc_partition.py\")\ns = SRC.r … [7991 caractères tronqués]`
+
+  ```
+<path>/tmp/partition_syntagmes/construire_patch.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 /tmp/partition_syntagmes/construire_patch.py && timeout 2400 python3 /tmp/partition_syntagmes/patch_eval.py 2>&1 | tail -60", "description": "Rebuild patch and re-evaluate"}`
+
+  ```
+écrit /tmp/pin_audit/tools/bloc_partition.py 2317 lignes
+brut {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 1928458 vues 0
+alternative {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 2129150 vues 894
+filtrer {"f1": 0.6172, "att_exact": 205, "att_cibles": 239, "pos": 0.7581} bancs 0 libres 0 octets 1967190 vues 466
+preference {'groupes': 244, 'rang1_gold': 177, 'un_gold': 207, 'groupes_sans_gold': 37}
+pos {'brut': 'cb4757217465da39', 'alternative': 'cb4757217465da39', 'filtrer': 'cb4757217465da39'} det True
+EXEMPLE BRUT
+  GN  [0:28] 'La voisine arrose les fleurs' -> partir
+  GP  [29:51] 'du jardin chaque matin' -> partir
+  GP  [29:60] 'du jardin chaque matin avant de' -> fleurs
+  GP  [58:67] 'de partir' -> au
+  GV  [61:67] 'partir' -> —
+  GP  [68:78] 'au travail' -> partir
+  GV  [68:78] 'au travail' -> —
+  GV  [80:96] 'puis elle rentre' -> travail
+  GV  [90:96] 'rentre' -> —
+  GP  [97:117] 'vers dix-huit heures' -> rentre
+  GP  [97:159] 'vers dix-huit heures et prépare le dîner pour ses deux enfants' -> rentre
+  GV  [121:128] 'prépare' -> heures
+  GN  [129:137] 'le dîner' -> heures
+  GP  [1
+… [4194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/pin_audit/tools/tests/linguistique')\nimport bloc_partition as bp, evaluer_gold as eg\nfrom collections import Counter\nph=eg.charger()\nh=bp.Heuristique(partition … [2333 caractères tronqués]`
+
+  ```
+tailles Counter({2: 148, 3: 75, 4: 19, 5: 2}) multi_union 60
+union_court {'n': 207, 'gold': 0, 'rang1': 177, 'au_moins_un_gold_dans_gardes': 181}
+union_long {'n': 207, 'gold': 0, 'rang1': 179, 'au_moins_un_gold_dans_gardes': 181}
+union_att {'n': 207, 'gold': 0, 'rang1': 178, 'au_moins_un_gold_dans_gardes': 181}
+court {'n': 207, 'gold': 0, 'rang1': 169, 'au_moins_un_gold_dans_gardes': 181}
+long {'n': 207, 'gold': 0, 'rang1': 19, 'au_moins_un_gold_dans_gardes': 181}
+att_court {'n': 207, 'gold': 0, 'rang1': 137, 'au_moins_un_gold_dans_gardes': 181}
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit/tools && diff -u --label a/tools/bloc_linguistique.py --label b/tools/bloc_linguistique.py bloc_linguistique.py bloc_partition.py > /tmp/partition_syntagmes/patch.diff; wc -l /tmp/partition_syntagmes/patch.diff; sed -n 1,220p /tmp/partition_syntagmes/patch.diff", "desc … [58 caractères tronqués]`
+
+  ```
+155 /tmp/partition_syntagmes/patch.diff
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -529,12 +529,18 @@
+ 
+     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+-                 union: bool = True):
++                 union: bool = True, partition: str = "alternative"):
+         self.profils = profils
+         self.segmenter_s = segmenter_s
+         self.seuil_ouvert = seuil_ouvert
+         self.seuil_langue = seuil_langue
+         self.union = union
++        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
++        # les deux segments restent, `meta.alternative` dit lequel est préféré ; "filtrer" :
++        # une seule vue par groupe, l'autre est conservée dans `meta.alternative` (`retire`).
++        if partition not in ("brut", "alternative", "filtrer"):
++            raise ValueError("partition attend 'brut', 'alternative' ou 'filtrer'")
++        self.partition = partition
+ 
+     # -- langues / script ---------------------------------------------------
+     def _langue(self, texte: str, indice: str | None) -> tuple[str,
+… [6418 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_patch.py'\ns=open(p).read()\ns=s.replace('''    \"\"\"La vue préférée : le segment du chunker (union), puis le plus court, puis le plus sûr.\n\n    Mesuré sur le gold 612 : le chunker est le span du gold dans 177/244 groupes … [999 caractères tronqués]`
+
+  ```
+ok
+écrit /tmp/pin_audit/tools/bloc_partition.py 2318 lignes
+brut {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 1928458 vues 0
+alternative {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 2129150 vues 894
+filtrer {"f1": 0.6172, "att_exact": 205, "att_cibles": 239, "pos": 0.7581} bancs 0 libres 0 octets 1967190 vues 466
+preference {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}
+pos {'brut': 'cb4757217465da39', 'alternative': 'cb4757217465da39', 'filtrer': 'cb4757217465da39'} det True
+EXEMPLE BRUT
+  GN  [0:28] 'La voisine arrose les fleurs' -> partir
+  GP  [29:51] 'du jardin chaque matin' -> partir
+  GP  [29:60] 'du jardin chaque matin avant de' -> fleurs
+  GP  [58:67] 'de partir' -> au
+  GV  [61:67] 'partir' -> —
+  GP  [68:78] 'au travail' -> partir
+  GV  [68:78] 'au travail' -> —
+  GV  [80:96] 'puis elle rentre' -> travail
+  GV  [90:96] 'rentre' -> —
+  GP  [97:117] 'vers dix-huit heures' -> rentre
+  GP  [97:159] 'vers dix-huit heures et prépare le dîner pour ses deux enfants' -> rentre
+  GV  [121:128] 'prépare' -> heures
+  GN  [129:137] 'le dîner' -> heures
+  GP 
+… [45 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 88,160p tools/drave.py && sed -n 335,355p tools/drave.py", "description": "Read formatter and CLI argument block for patch"}`
+
+  ```
+super().__init__(prog, **kwargs)
+
+
+def formater_annotation(a: bl.Annotation) -> str:
+    """La sortie lisible : POS compact, syntagmes (rôle + cible), pragmatique, couverture."""
+    lignes = [f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)"]
+    lignes.append(
+        f"langue={a.langue} script={a.script} source={a.source} · {len(a.etiquettes)} étiquettes "
+        f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"
+    )
+
+    pos = [e for e in a.etiquettes if e.niveau == "pos"]
+    if pos:
+        lignes.extend(_envelopper("POS  ", " ".join(f"{e.valeur}/{e.type}" for e in pos)))
+    else:
+        lignes.append("POS  —")
+
+    syntagmes = [e for e in a.etiquettes if e.niveau == "syntagme"]
+    if syntagmes:
+        valeurs = [_valeur_affichee(e.valeur, 46) for e in syntagmes]
+        roles = [str(e.meta.get("role") or "—") for e in syntagmes]
+        cibles = [str((e.meta.get("attachement") or {}).get("cible") or "—") for e in syntagmes]
+        spans = [f"[{e.debut}:{e.fin}]" for e in syntagmes]
+        lt = max(3, max(len(e.type) for e in syntagmes))
+        lsp = max(len(s) for s in spans)
+        lv = max(len(v) for v in valeurs)
+… [3098 caractères tronqués]
+  ```
+
+- **write** `{"content": "\"\"\"Statistiques de lisibilité et contrôles complémentaires (copie épinglée).\"\"\"\nfrom __future__ import annotations\n\nimport json\nimport sys\nfrom collections import Counter, defaultdict\n\nRACINE = \"/tmp/pin_audit\"\nDEPOT = \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"\ … [4703 caractères tronqués]`
+
+  ```
+<path>/tmp/partition_syntagmes/stats_finales.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && timeout 1200 python3 /tmp/partition_syntagmes/stats_finales.py 2>&1 | tail -20", "description": "Compute readability stats and controls"}`
+
+  ```
+Traceback (most recent call last):
+  File "/tmp/partition_syntagmes/stats_finales.py", line 94, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/tmp/partition_syntagmes/stats_finales.py", line 41, in main
+    "ligne_max": max(longues + [0]), "ligne_mediane": sorted(longues)[len(longues) // 2],
+                                                      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+IndexError: list index out of range
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='stats_finales.py'\ns=open(p).read()\ns=s.replace('            longues = [len(l) for l in txt.splitlines()]',\n            '            longues = [len(l) for l in txt.splitlines()] or [0]')\nopen(p,'w').write(s)\nPY\ncd /tmp/pin_audit & … [136 caractères tronqués]`
+
+  ```
+{"brut": {"max": 132, "mediane": 38, "p95": 67, "lignes_sup_100": 7}, "alternative": {"max": 251, "mediane": 60, "p95": 171, "lignes_sup_100": 288}, "filtrer": {"max": 237, "mediane": 42, "p95": 178, "lignes_sup_100": 152}}
+{"brut": 6, "alternative": 6, "filtrer": 6}
+{"brut": {"0": 121}, "alternative": {"0": 57, "1": 31, "2": 19, "3": 8, "4": 2, "6": 2, "32": 1, "8": 1}, "filtrer": {"0": 57, "1": 31, "2": 19, "3": 8, "4": 2, "6": 2, "32": 1, "8": 1}}
+{"chunker_seul": {"paires": 0, "segments": 611}, "s_sans_union": {"paires": 0, "segments": 725}}
+{"s_dans_union:GP/GP": 45, "union_contenu:GV/GV": 42, "union_contenu:GP/GP": 15, "union_contenu:GN/GN": 13, "s_dans_union:GV/GV": 10, "s_dans_union:REL/REL": 9, "union_contenu:REL/REL": 9, "union_contenu:REL/GP": 9, "s_dans_union:GV/GP": 8, "union_contenu:REL/GV": 8, "union_contenu:SUB/GV": 8, "union_contenu:GN/GV": 7, "union_contenu:GP/GV": 7, "s_dans_union:GN/GN": 7, "s_dans_union:GP/GN": 6, "croisement:GV/GV": 6, "meme_span:GP/GV": 6, "union_contenu:REL/GN": 5, "union_contenu:SUB/GP": 5, "union_contenu:GV/GN": 4, "croisement:GP/GP": 4, "union_contenu:GP/GN": 4, "s_dans_union:GP/GV": 4, "union_contenu:SUB/SUB": 4, "s_dans_union:REL/GV": 3
+… [768 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nfrom collections import Counter\nDEPOT='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\na=json.load(open(DEPOT+'/reports/pensee-fiabilite-produit.json'))\nb … [2007 caractères tronqués]`
+
+  ```
+fiabilite {'textes': 46, 'chev': 23, 'paires': 107, 'segs': 360, 'union': 85, 'att': 284, 'classes': {'s_dans_union': 37, 'croisement': 7, 'union_contenu': 60, 'meme_span': 3}, 'impliques': 162, 'memes_types': 70, 'types_diff': 37}
+  part labels impliques 0.45
+bloc_l {'textes': 50, 'chev': 31, 'paires': 132, 'segs': 362, 'union': 98, 'att': 265, 'classes': {'s_dans_union': 43, 'croisement': 19, 'union_contenu': 67, 'meme_span': 3}, 'impliques': 152, 'memes_types': 61, 'types_diff': 71}
+  part labels impliques 0.42
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nDEPOT='/home/stephane/Data13TB/stephane/GitHub/Qtrinet'\nb=json.load(open(DEPOT+'/reports/pensee-produit-bloc-l.json'))\na=json.load(open(DEPOT+'/reports/pens … [945 caractères tronqués]`
+
+  ```
+fiab segs 360 involved 170 labels in overlapping texts 314 texts_chev 23
+bloc segs 362 involved 188 labels in overlapping texts 287 texts_chev 31
+  ```
+

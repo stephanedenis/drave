@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 146.4 h |
+| Durée | 146.9 h |
 | Tours | 184 |
-| Messages | 3149 |
-| Appels d'outils | 2783 |
+| Messages | 3178 |
+| Appels d'outils | 2808 |
 | Fichiers touchés | 25 |
-| Commandes | 2286 |
+| Commandes | 2311 |
 | Sous-agents | 34 |
-| Commits | 357 |
-| Compactages de contexte | 7 |
+| Commits | 359 |
+| Compactages de contexte | 8 |
 
 ## Objectifs déclarés
 
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*29 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 15 autres
+- … et 40 autres
 
 **Synthèse produite :**
 
-⏵ **183/183** : le gold corrigé donne **226/226** et 13 spans. Je fige la fiche
+⏵ **235/236, couverture 0,9874, 3 spans** : je fige la fiche de la morphologie
 
 ## 3. Travail accompli
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2246 autres
+- … et 2271 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10180,7 +10180,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-50 sorties en erreur ou divergentes. Les premières :
+53 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10557,4 +10557,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183" -- tools/schemas/drav
 - POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py 2>&1 | tail -1   if git log -1 
 - B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183" -- tools/tests/linguistique/gold_sy
+- FICHE — LA V12 ANNOTÉE : L'ÉTAT COURANT EST 226/226 APRÈS LE GOLD CORRIGÉ" -- reports/rapport-pensee-v12.md 2>&1 | tail -1   if git log -1 --format='%s' | grep 
+- B13 — LA MORPHOLOGIE DU 1ER GROUPE : 10 SPANS RETROUVÉS, EXACT 235/236, COUVERTURE 0,9874, 3 SPANS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotes
 

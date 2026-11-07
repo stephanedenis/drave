@@ -7,12 +7,12 @@
 | Identifiant | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.5 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 30 |
-| Appels d'outils | 36 |
+| Messages | 53 |
+| Appels d'outils | 59 |
 | Fichiers touchés | 0 |
-| Commandes | 34 |
+| Commandes | 57 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*36 appels d'outils.* Actions notables :
+*59 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,11 +41,11 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 21 autres
+- … et 44 autres
 
 **Synthèse produite :**
 
-⏵ Prototype des règles de frontière et banc d'essai local
+⏵ Finalisation des deux patchs et test sur le gold
 
 ## 3. Travail accompli
 
@@ -90,6 +90,13 @@
 - **T1** Check exclamations and non-final questions
 - **T1** Benchmark gold evaluation time
 - **T1** Prototype sentence boundary rules
+- **T1** Debug URL final period protection
+- **T1** Patch prototype and rerun
+- **T1** Debug e.g. protection
+- **T1** Fix dotted abbreviation zone
+- **T1** Create 40-text corpus with expected spans
+- **T1** Validate patched splitter on 40 texts
+- … et 17 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -104,7 +111,10 @@
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : #!/usr/bin/env python3 """bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.  Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :    -
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module> ModuleNotFoundError: No module named 'bloc_linguistique' [exit code: 1]
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module> ModuleNotFoundError: No module named 'corpus' [exit code: 1]
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module>   File "/tmp/frontieres/final/patch_frontieres.py", line 27, in <module>     _MARQUEUR = re.compile(                 ^
 

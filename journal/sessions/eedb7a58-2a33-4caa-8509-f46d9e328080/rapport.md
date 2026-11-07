@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.5 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 45 |
-| Appels d'outils | 59 |
-| Fichiers touchés | 2 |
-| Commandes | 55 |
+| Messages | 68 |
+| Appels d'outils | 82 |
+| Fichiers touchés | 5 |
+| Commandes | 72 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*59 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 45 autres
+- … et 68 autres
 
 **Synthèse produite :**
 
-⏵ Pinning the audit commit in /tmp because the shared repo is moving under concurrent agents
+⏵ Writing the proposed patch on a pinned copy and validating it end-to-end
 
 ## 3. Travail accompli
 
@@ -55,6 +55,9 @@
 |---|---|---|
 | `/tmp/partition_syntagmes/inventaire.py` | 1 | 0 |
 | `/tmp/partition_syntagmes/options.py` | 1 | 2 |
+| `/tmp/partition_syntagmes/construire_patch.py` | 3 | 0 |
+| `/tmp/partition_syntagmes/patch_eval.py` | 1 | 0 |
+| `/tmp/partition_syntagmes/stats_finales.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +101,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 15 autres
+- … et 32 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -109,4 +112,31 @@
 - **T1** `diff idx 33 "Bien que fatigué, il continue à travailler jusqu'à minuit." || 'The prices rose by 12.5% between January and March 2024, three points more than expected.'`
 - **T1** `2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183`
 - **T1** `f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"`
+- **T1** `preference {'groupes': 244, 'rang1_gold': 177, 'un_gold': 207, 'groupes_sans_gold': 37}`
+- **T1** `GP  [29:51] 'du jardin chaque matin' -> partir   [groupe 0 rang 4/4] | alt croise GV 61:67 | alt inclus GP 29:60 | alt croise GP 58:67`
+- **T1** `GP  [29:60] 'du jardin chaque matin avant de' -> fleurs   [groupe 0 rang 2/4] | alt croise GV 61:67 | alt croise GP 58:67 | alt inclut GP 29:51`
+- **T1** `GP  [58:67] 'de partir' -> au   [groupe 0 rang 3/4] | alt inclut GV 61:67 | alt croise GP 29:60 | alt croise GP 29:51`
+- **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 1/4] | alt croise GP 29:60 | alt inclus GP 58:67 | alt croise GP 29:51`
+- **T1** `GP  [68:78] 'au travail' -> partir   [groupe 1 rang 2/2] | alt meme_span GV 68:78`
+- **T1** `GV  [68:78] 'au travail' -> —   [groupe 1 rang 1/2] | alt meme_span GP 68:78`
+- **T1** `GV  [80:96] 'puis elle rentre' -> travail   [groupe 2 rang 2/2] | alt inclut GV 90:96`
+- **T1** `GV  [90:96] 'rentre' -> —   [groupe 2 rang 1/2] | alt inclus GV 80:96`
+- **T1** `GP  [97:117] 'vers dix-huit heures' -> rentre   [groupe 3 rang 4/5] | alt inclus GP 97:159 | alt croise GV 121:128 | alt croise GN 129:137 | alt croise GP 138:159`
+- **T1** `GP  [97:159] 'vers dix-huit heures et prépare le dîner pour ses deux enfants' -> rentre   [groupe 3 rang 1/5] | alt inclut GV 121:128 | alt inclut GN 129:137 | alt inclut GP 97:117 | alt inclut GP 138`
+- **T1** `GV  [121:128] 'prépare' -> heures   [groupe 3 rang 2/5] | alt inclus GP 97:159 | alt croise GN 129:137 | alt croise GP 97:117 | alt croise GP 138:159`
+- **T1** `GN  [129:137] 'le dîner' -> heures   [groupe 3 rang 3/5] | alt inclus GP 97:159 | alt croise GV 121:128 | alt croise GP 97:117 | alt croise GP 138:159`
+- **T1** `GP  [138:159] 'pour ses deux enfants' -> prépare   [groupe 3 rang 5/5] | alt inclus GP 97:159 | alt croise GV 121:128 | alt croise GN 129:137 | alt croise GP 97:117`
+- **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 1/4] | alt croise GP 29:60 RETIRÉ | alt inclus GP 58:67 RETIRÉ | alt croise GP 29:51 RETIRÉ`
+- **T1** `GV  [68:78] 'au travail' -> —   [groupe 1 rang 1/2] | alt meme_span GP 68:78 RETIRÉ`
+- **T1** `GV  [90:96] 'rentre' -> —   [groupe 2 rang 1/2] | alt inclus GV 80:96 RETIRÉ`
+- **T1** `GP  [97:159] 'vers dix-huit heures et prépare le dîner pour ses deux enfants' -> rentre   [groupe 3 rang 1/5] | alt inclut GV 121:128 RETIRÉ | alt inclut GN 129:137 RETIRÉ | alt inclut GP 97:117 RETIR`
+- **T1** `GP  [29:60] 'du jardin chaque matin avant de' -> fleurs   [groupe 0 rang 2/4] | alt croise GV 61:67 | alt croise GP 58:67 RETIRÉ | alt inclut GP 29:51 RETIRÉ`
+- **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 1/4] | alt croise GP 29:60 | alt inclus GP 58:67 RETIRÉ | alt croise GP 29:51 RETIRÉ`
+- **T1** `union_court {'n': 207, 'gold': 0, 'rang1': 177, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `union_long {'n': 207, 'gold': 0, 'rang1': 179, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `union_att {'n': 207, 'gold': 0, 'rang1': 178, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `court {'n': 207, 'gold': 0, 'rang1': 169, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `long {'n': 207, 'gold': 0, 'rang1': 19, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `att_court {'n': 207, 'gold': 0, 'rang1': 137, 'au_moins_un_gold_dans_gardes': 181}`
+- **T1** `preference {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}`
 

@@ -1060,3 +1060,395 @@ dev 0.8375 0.9093 0.7688 0.617 155 155 163 0.9509
 test 0.84 0.9224 0.764 0.628 71 71 76 0.9342
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/pos_r4/gold_b13 && for f in gold.json gold_reel.json gold_synthetique.json gold_gele.json; do git show 2ba393b0:tools/tests/linguistique/$f > /tmp/pos_r4/gold_b13/$f 2>/dev/null || echo \"absent $f\"; done && python3 -  … [1146 caractères tronqués]`
+
+  ```
+n 612 3179
+all 0.8383 0.9133 0.7673 0.6181 222 222 239 0.9289
+dev 0.8375 0.9093 0.7688 0.6153 153 153 163 0.9387
+test 0.84 0.9224 0.764 0.6243 69 69 76 0.9079
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure des variantes R4 et classes fermées sur la référence B13
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/run_matrix.py <<'PY'\nimport sys, json, copy\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nfrom tools.tests.linguistique.gold_split import de … [6407 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/pos_r4/run_matrix.py", line 4, in <module>
+    from tools.tests.linguistique.evaluer_gold import evaluer_bloc
+ModuleNotFoundError: No module named 'tools'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re,pathlib\np=pathlib.Path('/tmp/pos_r4/run_matrix.py')\ns=p.read_text()\ns=s.replace(\"import harness as H\\n\", \"import harness as H\\nsys.path.insert(0, str(H.RACINE))\\n\")\np.write_text(s)\nPY\npython3  … [75 caractères tronqués]`
+
+  ```
+B13 done 16 variants
+HEAD done 16 variants
+
+== B13 base {'pos': 0.8383, 'ferme': 0.9133, 'ouvert': 0.7673, 'f1': 0.6181, 'tete': 0.7511, 'att_exact': 222, 'att_labels': 222, 'att_cibles': 239, 'att_couv': 0.9289}
+r4_en                        pos=0.8421 dev=0.8416 (+0.41) test=0.8431 (+0.31) en=0.9207 fr=0.7976 f1=0.6181 att=222/222 couv=0.9289
+r4_fr                        pos=0.8418 dev=0.8407 (+0.32) test=0.8441 (+0.41) en=0.9103 fr=0.8031 f1=0.6181 att=222/222 couv=0.9289
+r4_bilingue                  pos=0.8455 dev=0.8449 (+0.74) test=0.8471 (+0.71) en=0.9207 fr=0.8031 f1=0.6181 att=222/222 couv=0.9289
+r4_bilingue_guard            pos=0.8452 dev=0.8449 (+0.74) test=0.8461 (+0.61) en=0.9207 fr=0.8026 f1=0.6181 att=222/222 couv=0.9289
+r4_en_large                  pos=0.8418 dev=0.8412 (+0.37) test=0.8431 (+0.31) en=0.9199 fr=0.7976 f1=0.6181 att=222/222 couv=0.9289
+cc_core                      pos=0.8462 dev=0.8453 (+0.78) test=0.8481 (+0.81) en=0.9321 fr=0.7976 f1=0.6188 att=222/222 couv=0.9289
+cc_fast                      pos=0.8468 dev=0.8458 (+0.83) test=0.8491 (+0.91) en=0.9338 fr=0.7976 f1=0.6188 att=222/222 couv=0.9289
+cc_when                      pos=0.8452 dev=0.8439 (+0.6
+… [3439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/analyze.py <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.gold_split import dev, test, _est_test\n … [3645 caractères tronqués]`
+
+  ```
+### r4_en: corrigés=12 cassés=0 faux->faux=8
+  corr {('en', 'test'): 3, ('en', 'dev'): 9}
+    [(('right', 'NOUN', 'ADJ', 'ADJ'), 2), (('fast', 'NOUN', 'ADJ', 'ADJ'), 1), (('calm', 'NOUN', 'ADJ', 'ADJ'), 1), (('dark', 'NOUN', 'ADJ', 'ADJ'), 1), (('absent', 'NOUN', 'ADJ', 'ADJ'), 1), (('mean', 'NOUN', 'ADJ', 'ADJ'), 1), (('fresh', 'NOUN', 'ADJ', 'ADJ'), 1), (('quiet', 'NOUN', 'ADJ', 'ADJ'), 1), (('alone', 'NOUN', 'ADJ', 'ADJ'), 1), (('rare', 'NOUN', 'ADJ', 'ADJ'), 1), (('hungry', 'NOUN', 'ADJ', 'ADJ'), 1)]
+    r032 en NOUN->ADJ gold=ADJ :: The car is fast.
+    r112 en NOUN->ADJ gold=ADJ :: The sea is calm.
+    r174 en NOUN->ADJ gold=ADJ :: The room is dark.
+    r205 en NOUN->ADJ gold=ADJ :: I think that you are right.
+    r217 en NOUN->ADJ gold=ADJ :: The student whom I mention is absent.
+    r240 en NOUN->ADJ gold=ADJ :: I believe that he is right.
+    r246 en NOUN->ADJ gold=ADJ :: The dog that barks is mean.
+    r278 en NOUN->ADJ gold=ADJ :: The bread that you eat is fresh.
+  cass {}
+    []
+  ww {('en', 'dev'): 7, ('en', 'test'): 1}
+    [(('late', 'NOUN', 'ADJ', 'ADV'), 2), (('out', 'NOUN', 'ADJ', 'ADV'), 1), (('maybe', 'NOUN', 'ADJ', 'ADV'), 1), (('born', 'NOUN', 'ADJ', 'VERB'), 1
+… [10583 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle placebo : mêmes actions, positions aléatoires
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/placebo.py <<'PY'\nimport sys, json, copy, random, statistics\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\ … [4085 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-3547]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse des 50 textes libres (baseline reproductible)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/free_base.py <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nprod=json.load(open('reports/pensee-fiabilite-produit.json'))\ntexts=prod['banc_50']['r … [788 caractères tronqués]`
+
+  ```
+match 46 / 46
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/free_variants.py <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nprod=json.load(open('reports/pensee-fiability-produit.json')) if … [4611 caractères tronqués]`
+
+  ```
+### r4_bilingue textes 6 pos 8 transitions {('NOUN', 'ADJ'): 8} seg 0 att 0 inval 0
+   ('f20', 'fr', 'arrivés', 'NOUN', 'ADJ', 42, 49)
+   ('f28', 'fr', 'gratuite', 'NOUN', 'ADJ', 29, 37)
+   ('f38', 'fr', 'parfois', 'NOUN', 'ADJ', 53, 60)
+   ('f43', 'fr', 'cohérent', 'NOUN', 'ADJ', 241, 249)
+   ('f49', 'fr', 'reportée', 'NOUN', 'ADJ', 15, 23)
+   ('f50', 'fr', 'entrés', 'NOUN', 'ADJ', 847, 853)
+   ('f50', 'fr', 'ouverte', 'NOUN', 'ADJ', 1207, 1214)
+   ('f50', 'fr', 'acceptés', 'NOUN', 'ADJ', 1937, 1945)
+
+### r4_en textes 0 pos 0 transitions {} seg 0 att 0 inval 0
+
+### cc_core textes 1 pos 1 transitions {('NOUN', 'PRON'): 1} seg 0 att 0 inval 0
+   ('f08', 'en', 'Where', 'NOUN', 'PRON', 0, 5)
+
+### cc_fast textes 1 pos 1 transitions {('NOUN', 'PRON'): 1} seg 0 att 0 inval 0
+   ('f08', 'en', 'Where', 'NOUN', 'PRON', 0, 5)
+
+### r4b+cc_core textes 7 pos 9 transitions {('NOUN', 'PRON'): 1, ('NOUN', 'ADJ'): 8} seg 0 att 0 inval 0
+   ('f08', 'en', 'Where', 'NOUN', 'PRON', 0, 5)
+   ('f20', 'fr', 'arrivés', 'NOUN', 'ADJ', 42, 49)
+   ('f28', 'fr', 'gratuite', 'NOUN', 'ADJ', 29, 37)
+   ('f38', 'fr', 'parfois', 'NOUN', 'ADJ', 53, 60)
+   ('f43', 'fr', 'cohérent', 'NOUN', 'ADJ', 241, 249)
+   ('f49',
+… [1801 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-3547 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/placebo.py <<'PY'
+import sys, json, copy, random, statistics
+sys.path.insert(0,'/tmp/pos_r4')
+import harness as H
+sys.path.insert(0,str(H.RACINE))
+from tools.tests.linguistique.evaluer_gold import evaluer_bloc
+from tools.tests.linguistique.gold_split import dev, test
+
+def charger(dirpath):
+    import pathlib
+    d=pathlib.Path(dirpath)
+    return json.loads((d/'gold.json').read_text())['phrases'] + \
+           json.loads((d/'gold_reel.json').read_text())['phrases'] + \
+           json.loads((d/'gold_synthetique.json').read_text())['phrases']
+
+src=open('/tmp/pos_r4/bloc_b13.py').read()
+ph=charger('/tmp/pos_r4/gold_b13')
+base=H.load_source(src, r4=True, name='pl_base'); base.R4_COPULES={}
+base_pos=evaluer_bloc('base',base.Heuristique(),ph)['pos']['exactitude']
+
+# plans derived from real variants
+r4mod=H.load_source(src, r4=True, name='pl_r4'); r4mod.R4_COPULES={'en':H.EN_COP_STRICT,'fr':H.FR_COP_STRICT}
+CC_CORE = {
+    'add': {'PRON': {'where','whose','mine'}, 'CONJ': {'as'}, 'AUX': {'am'},
+            'ADV': {'late','out','maybe','hard','far','again','now','down','outside'}},
+    'remove': {'PREP': {'outside'}},
+}
+ccmod=H.load_source(src, r4=True, name='pl_cc'); ccmod.R4_COPULES={}
+lex=copy.deepcopy(ccmod.POS_FERME['en'])
+for cls,words in CC_CORE['add'].items(): lex.setdefault(cls,set()).update(words)
+for cls,words in CC_CORE['remove'].items(): lex.get(cls,set()).discard(words)
+ccmod.POS_FERME['en']=lex
+
+def posmap(mod,texte,langue):
+    a=mod.Heuristique().analyser(texte,langue)
+    return {(e.debut,e.fin):(e.type,e) for e in a.etiquettes if e.niveau=='pos'}
+
+# plans: key text/lang -> list of (span, target_class), plus exclude set
+def build_plan(base_mod,var_mod):
+    plan={}
+    for p in ph:
+        key=(p['texte'],p['langue'])
+        b=posmap(base_mod,p['texte'],p['langue']); v=posmap(var_mod,p['texte'],p['langue'])
+        actions=[]
+        for span,(bt,be) in b.items():
+            vt=v[span][0]
+            if bt!=vt:
+                actions.append((span,bt,vt))
+        plan[key]=actions
+    return plan
+
+r4_plan=build_plan(base,r4mod)
+cc_plan=build_plan(base,ccmod)
+print('r4 actions',sum(len(v) for v in r4_plan.values()),'cc actions',sum(len(v) for v in cc_plan.values()))
+
+OPEN={'NOUN','VERB','ADJ','MOT'}
+class Placebo:
+    def __init__(self, base_mod, plan, mode, seed, exclude_actual=True):
+        self.base=base_mod; self.plan=plan; self.mode=mode; self.rng=random.Random(seed)
+        self.exclude=exclude_actual
+    def analyser(self, texte, langue=None):
+        a=self.base.Heuristique().analyser(texte,langue)
+        actions=self.plan.get((texte,langue),[])
+        if not actions: return a
+        pos=[e for e in a.etiquettes if e.niveau=='pos']
+        targets={span for span,bt,vt in actions}
+        if self.mode=='r4':
+            cand=[e for e in pos if e.type=='NOUN' and ((e.debut,e.fin) not in targets or not self.exclude)]
+            k=len(actions)
+            chosen=self.rng.sample(cand,min(k,len(cand)))
+            for e in chosen:
+                e.type='ADJ'; e.candidats=['adj']; e.meta={'ouvert':True,'contexte':'placebo'}
+        else:
+            cand=[e for e in pos if (e.debut,e.fin) not in targets and e.type in OPEN]
+            k=len(actions)
+            chosen=self.rng.sample(cand,min(k,len(cand)))
+            classes=[vt for span,bt,vt in actions]
+            for e,cls in zip(chosen,classes):
+                e.type=cls; e.candidats=[cls.lower()]; e.meta={'ouvert':False,'contexte':'placebo'}
+        return a
+
+def run(mode,plan,seed,phrases):
+    p=Placebo(base,plan,mode,seed)
+    return evaluer_bloc('pl',p,phrases)['pos']['exactitude']
+
+for mode,plan in [('r4',r4_plan),('cc',cc_plan)]:
+    vals=[]
+    for seed in range(200):
+        vals.append(run(mode,plan,seed,ph))
+    vals.sort()
+    print(mode, 'base',base_pos,'mean %.4f'%statistics.mean(vals),'min %.4f'%min(vals),'p05 %.4f'%vals[10],'p95 %.4f'%vals[189],'max %.4f'%max(vals),'delta mean %.2f'%((statistics.mean(vals)-base_pos)*100),'delta max %.2f'%((max(vals)-base_pos)*100))
+    print('  counts', {k:sum(1 for v in vals if v>base_pos+k*0.0001) for k in (0,)})
+PY
+python3 /tmp/pos_r4/placebo.py) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-3547"}`
+
+  ```
+r4 actions 40 cc actions 24
+r4 base 0.8383 mean 0.8303 min 0.8292 p05 0.8295 p95 0.8311 max 0.8314 delta mean -0.80 delta max -0.69
+  counts {0: 0}
+cc base 0.8383 mean 0.8320 min 0.8314 p05 0.8314 p95 0.8327 max 0.8330 delta mean -0.63 delta max -0.53
+  counts {0: 0}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-fiabilite-produit.json'))\ntexts={r['id']:r['texte'] for r in p['banc_50']['resultats']}\nfor tid,span in [('f20',(42,49)),('f28',(29,37)),('f38',(53,60)),('f43',(241,24 … [227 caractères tronqués]`
+
+  ```
+f20 'M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.'
+
+ f28 "Le café coûte 2 €, l'eau est gratuite."
+
+ f38 'Les URL comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.'
+
+ f43 'ints-virgules ; des parenthèses (comme ici), des tirets — et même des guillemets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans dépasser la fin, ce qui serait un défaut grave pour un client qui découpe '
+
+ f49 'La réunion est reportée à demain, 10 h 30, salle B12.'
+
+ f50 "tocole\nNous avons observé pendant 30 jours, de 6 h 30 à 9 h, en notant chaque passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; le 15, un seul, mais il portait un collier bleu que nous n'avions jamais vu"
+
+ f50 "nt dans le fichier /home/observateur/notes.txt ; la synthèse est ici.\n\n## Ce que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l'odeur, la chaleur, l'habitude, ou quelque chose"
+
+ f50 'trouvez une erreur, ou appelez le +33 6 12 34 56 78. Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß 
+… [134 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Métriques complètes (F1, attachement, par langue) des paquets retenus
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/full_metrics.py <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nf … [4248 caractères tronqués]`
+
+  ```
+B13 done
+HEAD done
+
+=== B13
+base                     POS all=0.8383 dev=0.8375 (+0.00%) test=0.8400 (+0.00%) en=0.9103 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_en                    POS all=0.8421 dev=0.8416 (+0.41%) test=0.8431 (+0.31%) en=0.9207 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_fr                    POS all=0.8418 dev=0.8407 (+0.32%) test=0.8441 (+0.41%) en=0.9103 fr=0.8031
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_bilingue              POS all=0.8455 dev=0.8449 (+0.74%) test=0.8471 (+0.71%) en=0.9207 fr=0.8031
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+cc_core                  POS all=0.8459 dev=0.8449 (+0.74%) test=0.8481 (+0.81%) en=0.9312 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+cc_fast                  POS all=0.8465 dev=0.8453 (+0.78%) test=0.8491 (+0.91%) en=0.9329 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.
+… [2977 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git -C tools/structures status --short | head -20 && git -C tools/structures log -1 --format='%H %s' && ls -l tools/structures/generateur.py 2>/dev/null; find tools/structures -maxdepth 1 -name '*.py' -newermt '-30 minutes' -printf ' … [97 caractères tronqués]`
+
+  ```
+M donnees/paragraphes-validations.jsonl
+523d8c1e8c6ca29ca415360a71bfab6c5b56102c S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+-rw-r--r--. 1 stephane stephane 30580  4 nov 11:41 tools/structures/generateur.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for seed in 0 1 2 3 4; do PYTHONHASHSEED=$seed python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_blo … [408 caractères tronqués]`
+
+  ```
+F1 0.6474 fr 0.6474 att 235 236 POS 0.8383
+F1 0.6474 fr 0.6474 att 235 236 POS 0.8383
+F1 0.6474 fr 0.6474 att 235 236 POS 0.8383
+F1 0.6474 fr 0.6474 att 235 236 POS 0.8383
+F1 0.6474 fr 0.6474 att 235 236 POS 0.8383
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && python3 /tmp/pos_r4/run_matrix.py 2>&1 | tail -25", "description": "Rerun matrix and compare HEAD baseline"}`
+
+  ```
+dd0e5e47d522c6a1a1adb799cfa727c54d43b569d542bc2fc9166ae74992d346  tools/bloc_linguistique.py
+cc_large                     pos=0.8459 dev=0.8453 (+0.78) test=0.8471 (+0.71) en=0.9312 fr=0.7976 f1=0.6177 att=221/221 couv=0.9247
+r4_en+cc_core                pos=0.8500 dev=0.8494 (+1.19) test=0.8511 (+1.11) en=0.9425 fr=0.7976 f1=0.6188 att=222/222 couv=0.9289
+r4_en+cc_fast                pos=0.8503 dev=0.8499 (+1.24) test=0.8511 (+1.11) en=0.9434 fr=0.7976 f1=0.6188 att=222/222 couv=0.9289
+r4_bilingue+cc_core          pos=0.8534 dev=0.8526 (+1.51) test=0.8551 (+1.51) en=0.9425 fr=0.8031 f1=0.6188 att=222/222 couv=0.9289
+r4_bilingue+cc_fast          pos=0.8537 dev=0.8531 (+1.56) test=0.8551 (+1.51) en=0.9434 fr=0.8031 f1=0.6188 att=222/222 couv=0.9289
+r4_bilingue_guard+cc_core    pos=0.8531 dev=0.8526 (+1.51) test=0.8541 (+1.41) en=0.9425 fr=0.8026 f1=0.6188 att=222/222 couv=0.9289
+r4_bilingue_guard+cc_fast    pos=0.8534 dev=0.8531 (+1.56) test=0.8541 (+1.41) en=0.9434 fr=0.8026 f1=0.6188 att=222/222 couv=0.9289
+
+== HEAD base {'pos': 0.8383, 'ferme': 0.9133, 'ouvert': 0.7673, 'f1': 0.6474, 'tete': 0.7671, 'att_exact': 235, 'att_labels': 236, 'att_cibles': 239, 'att_couv': 0.9874}
+r4_en
+… [2122 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Gel d'un instantané HEAD : le dépôt est modifié en parallèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/pos_r4/bloc_head_snapshot.py && sha256sum /tmp/pos_r4/bloc_head_snapshot.py /tmp/pos_r4/bloc_b13.py /tmp/pos_r4/gold_b13/*.json && git log -1 --format='%H %s' && git status --short tools/bloc_lingui … [61 caractères tronqués]`
+
+  ```
+dd0e5e47d522c6a1a1adb799cfa727c54d43b569d542bc2fc9166ae74992d346  /tmp/pos_r4/bloc_head_snapshot.py
+f3db75fcaf0ced187c8ddc204e2b8509f34e080c3b81021b1e7ca66327afcc87  /tmp/pos_r4/bloc_b13.py
+f2632969fbe38f67320deae3dc0052b607ffd79fcbeec29cb55d08dbb34105f1  /tmp/pos_r4/gold_b13/gold_gele.json
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  /tmp/pos_r4/gold_b13/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  /tmp/pos_r4/gold_b13/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  /tmp/pos_r4/gold_b13/gold_synthetique.json
+c5b80dd83ee4364df348903796fcaf5fd1071f82 B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183
+ M tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/pos_r4/gold_head_snapshot && cp tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json /tmp/pos_r4/gold_head_snapshot/ && sha256sum /tmp/pos_r4/gold_hea … [204 caractères tronqués]`
+
+  ```
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  /tmp/pos_r4/gold_head_snapshot/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  /tmp/pos_r4/gold_head_snapshot/gold_reel.json
+e159dbfaa97a12907f79f5440981db39232c1ec4d96d48dfcafc33c4bba6dd7d  /tmp/pos_r4/gold_head_snapshot/gold_synthetique.json
+ M tools/bloc_linguistique.py
+ tools/bloc_linguistique.py | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/pos_r4/full_metrics.py')\ns=p.read_text()\ns=s.replace(\"for cls,words in cc['remove'].items(): lex.get(cls,set()).discard(words)\",\n            \"for cls,words in cc['remove']. … [709 caractères tronqués]`
+
+  ```
+patched
+B13 done
+HEAD done
+
+=== B13
+base                     POS all=0.8383 dev=0.8375 (+0.00%) test=0.8400 (+0.00%) en=0.9103 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_en                    POS all=0.8421 dev=0.8416 (+0.41%) test=0.8431 (+0.31%) en=0.9207 fr=0.7976
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_fr                    POS all=0.8418 dev=0.8407 (+0.32%) test=0.8441 (+0.41%) en=0.9103 fr=0.8031
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+r4_bilingue              POS all=0.8455 dev=0.8449 (+0.74%) test=0.8471 (+0.71%) en=0.9207 fr=0.8031
+    F1 all=0.6181 dev=0.6153 test=0.6243 en=0.7273 fr=0.5595 tete=0.7511 att=222/222 couv=0.9289 topk=221
+cc_core                  POS all=0.8462 dev=0.8453 (+0.78%) test=0.8481 (+0.81%) en=0.9321 fr=0.7976
+    F1 all=0.6188 dev=0.6164 test=0.6243 en=0.7295 fr=0.5595 tete=0.7513 att=222/222 couv=0.9289 topk=221
+cc_fast                  POS all=0.8468 dev=0.8458 (+0.83%) test=0.8491 (+0.91%) en=0.9338 fr=0.7976
+    F1 all=0.6188 dev=0.6164
+… [2985 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Comptabilité détaillée des correctifs/pertes et des segments
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/detail.py <<'PY'\nimport sys, json, copy, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nfrom to … [3022 caractères tronqués]`
+
+  ```
+### cc_core: corr=25 cass=0 ww=0
+  corr {('en', 'dev'): 17, ('en', 'test'): 8}
+   forms [(('where', 'NOUN', 'PRON', 'PRON'), 6), (('late', 'NOUN', 'ADV', 'ADV'), 4), (('out', 'NOUN', 'ADV', 'ADV'), 2), (('As', 'NOUN', 'CONJ', 'CONJ'), 2), (('maybe', 'NOUN', 'ADV', 'ADV'), 1), (('hard', 'NOUN', 'ADV', 'ADV'), 1), (('outside', 'PREP', 'ADV', 'ADV'), 1), (('whose', 'NOUN', 'PRON', 'PRON'), 1), (('far', 'NOUN', 'ADV', 'ADV'), 1), (('mine', 'NOUN', 'PRON', 'PRON'), 1), (('am', 'VERB', 'AUX', 'AUX'), 1), (('again', 'NOUN', 'ADV', 'ADV'), 1), (('Maybe', 'NOUN', 'ADV', 'ADV'), 1), (('now', 'NOUN', 'ADV', 'ADV'), 1), (('down', 'VERB', 'ADV', 'ADV'), 1)]
+    r035 en NOUN->ADV gold=ADV :: The film she talks about is out.
+    r036 en NOUN->ADV gold=ADV :: She is maybe tired.
+    r039 en NOUN->ADV gold=ADV :: The wind blows hard.
+    r075 en NOUN->PRON gold=PRON :: The city where we live is beautiful.
+    r115 en NOUN->PRON gold=PRON :: The house where I was born is small.
+    r197 en PREP->ADV gold=ADV :: The children play outside.
+    r199 en NOUN->ADV gold=ADV :: The train arrives late.
+    r218 en NOUN->ADV gold=ADV :: Although it is late, he works.
+    r236 en NOUN->PRON gold=PRON :: The v
+… [11969 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pos_r4/full_metrics.json'))\nfor state in ['B13','HEAD']:\n    print('\\n',state)\n    for label in ['base','r4_bilingue','cc_core','cc_fast','r4_bilingue+cc_core','r4_bilingue+cc … [467 caractères tronqués]`
+
+  ```
+B13
+base                       all POS 0.8383 ferme 0.9133 ouvert 0.7673 | dev 0.8375 ferme 0.9093 ouvert 0.7688 | test 0.8400 ferme 0.9224 ouvert 0.7640 | F1 en 0.7273 fr 0.5595
+r4_bilingue                all POS 0.8455 ferme 0.9133 ouvert 0.7814 | dev 0.8449 ferme 0.9093 ouvert 0.7832 | test 0.8471 ferme 0.9224 ouvert 0.7776 | F1 en 0.7273 fr 0.5595
+cc_core                    all POS 0.8462 ferme 0.9295 ouvert 0.7673 | dev 0.8453 ferme 0.9252 ouvert 0.7688 | test 0.8481 ferme 0.9392 ouvert 0.7640 | F1 en 0.7295 fr 0.5595
+cc_fast                    all POS 0.8468 ferme 0.9308 ouvert 0.7673 | dev 0.8458 ferme 0.9261 ouvert 0.7688 | test 0.8491 ferme 0.9413 ouvert 0.7640 | F1 en 0.7295 fr 0.5595
+r4_bilingue+cc_core        all POS 0.8534 ferme 0.9295 ouvert 0.7814 | dev 0.8526 ferme 0.9252 ouvert 0.7832 | test 0.8551 ferme 0.9392 ouvert 0.7776 | F1 en 0.7295 fr 0.5595
+r4_bilingue+cc_fast        all POS 0.8537 ferme 0.9308 ouvert 0.7808 | dev 0.8531 ferme 0.9261 ouvert 0.7832 | test 0.8551 ferme 0.9413 ouvert 0.7756 | F1 en 0.7295 fr 0.5595
+r4_en+cc_core              all POS 0.8500 ferme 0.9295 ouvert 0.7746 | dev 0.8494 ferme 0.9252 ouvert 0.7769 | test 0.8511 ferme 0.9392 ouvert 0.7
+… [1260 caractères tronqués]
+  ```
+

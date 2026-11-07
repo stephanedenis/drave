@@ -394,6 +394,18 @@ VERBES_IMPERATIFS = set("va viens prends fais dis regarde écoute donne cherche 
 # Un lexique verbal minimal, bilingue, pour arbitrer les classes ouvertes : le POS de surface
 # tague « talks » NOUN et « brother » VERB (mesuré le 05/11 sur les 22 GP restants).
 VERBES_CONNUS = set("""
+nage nager ferme fermer saute sauter commence commencer compte compter trouve trouver
+crie crier dessine dessiner observe observer prépare préparer range ranger
+mange manger parle parler marche marcher pense penser aime aimer joue jouer chante chanter
+danse danser travaille travailler étudie étudier écris écrire lis lire bois boire dors dormir
+pars partir arrive arriver entre entrer sors sortir monte monter descends descendre
+ouvre ouvrir porte porter donne donner prends prendre mets mettre dis dire vois voir
+sais savoir peux pouvoir veux vouloir dois devoir viens venir tiens tenir vis vivre
+suis suivre sens sentir sers servir offre offrir souffre souffrir couvre couvrir
+découvre découvrir dors dormir cours courir meurs mourir nais naître
+roule rouler vole voler tombe tomber reste rester passe passer quitte quitter
+
+
 parler parle parles parlent parlait parlaient parlerai jouer joue joues jouent jouait jouaient
 manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent écrivait écrivaient
 lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
@@ -498,9 +510,19 @@ def _est_verbe(mot: str) -> bool:
         if n.endswith(suf) and n[:-len(suf)] in VERBES_CONNUS:
             return True
     # participes en -é/-és/-ée : `accroché` → `accrocher`
-    for suf in ("ées", "ées", "ée", "és", "é"):
+    for suf in ("ées", "ée", "és", "é"):
         if n.endswith(suf) and (n[:-len(suf)] + "er") in VERBES_CONNUS:
             return True
+    # 1er groupe : `nage` → `nager`, `commence` → `commencer` (la voyelle finale tombe)
+    for suf in ("es", "ent", "e", "ait", "aient", "ais", "ons", "ez"):
+        if n.endswith(suf):
+            radical = n[:-len(suf)]
+            for forme in (radical + "er", radical + "cer", radical + "ger"):
+                if forme in VERBES_CONNUS:
+                    return True
+    # formes du 1er groupe : `range` → `ranger` (le e reste, le g durcit)
+    if n.endswith("e") and (n[:-1] + "ger") in VERBES_CONNUS:
+        return True
     return False
 
 

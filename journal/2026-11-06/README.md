@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**47 commits** · **12 session(s)** · **6 thème(s)**
+**48 commits** · **12 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 17 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 12 | [portes.md](portes.md) |
@@ -25,15 +25,15 @@
 | `082fe8ca-3e1e-4454-b91b-12586843e880` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.7 h | [rapport](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/rapport.md) · [digest](../sessions/082fe8ca-3e1e-4454-b91b-12586843e880/digest.md) |
 | `14114f3d-ae0d-416e-ad8e-4d4eaa04c36c` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 2.1 h | [rapport](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/rapport.md) · [digest](../sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/digest.md) |
 | `1555bdd3-27e9-4779-b1e7-716e32399c11` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.5 h | [rapport](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/rapport.md) · [digest](../sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/digest.md) |
-| `338f8b55-bcd5-464a-a63e-b97381eff55d` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 0.5 h | [rapport](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/rapport.md) · [digest](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md) |
-| `3ccd8d09-9820-4da4-963b-6d84a0ffb141` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 0.5 h | [rapport](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/rapport.md) · [digest](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md) |
+| `338f8b55-bcd5-464a-a63e-b97381eff55d` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 1.0 h | [rapport](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/rapport.md) · [digest](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md) |
+| `3ccd8d09-9820-4da4-963b-6d84a0ffb141` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 1.1 h | [rapport](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/rapport.md) · [digest](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 146.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 146.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
-| `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 0.5 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
+| `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 1.0 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -86,6 +86,7 @@
 | 18:14 | `037fe041` | PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183 |
 | 18:39 | `97918c05` | PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183 |
 | 18:52 | `e6fad714` | POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183 |
+| 19:03 | `c5b80dd8` | B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
