@@ -1,0 +1,4118 @@
+{
+ "titre": "J3.2 — La généalogie à deux faces : la théorie de Panini et l'alignement Glottolog sur le corpus commun",
+ "version": "1.0",
+ "date": "2026-11-07",
+ "ligne_roadmap": "R0.7 (le bloc langue) / L",
+ "chantier": "semaine Panini, J3.2",
+ "statut": "mesuré, écrit, contrôlé",
+ "question": "Ce que la théorie de Panini (14 atomes, 9 dhātus, une échelle de distance) et nos mesures d'alignement (Glottolog + retrieval) disent de la même généalogie sur les 21 langues du corpus commun : ce qui converge, ce qui diverge, ce qui reste à mesurer.",
+ "sources": {
+  "corpus_commun": "reports/corpus-commun.json (21 textes, 21/11/07)",
+  "retrieval": "reports/retrieval-epoque.json (J3.1, 420 paires ordonnées)",
+  "panini_udhr": "../Panini/research/data/udhr_corpus.json (532 langues)",
+  "panini_lang_tree": "../Panini/research/src/nipada/signing/language_genealogy.py (29 langues)",
+  "panini_signatures": "../Panini/research/nipada/falsification/analytic_sigs_v1.json (44 œuvres)",
+  "panini_validation": "../Panini/research/nipada/falsification/nipada_v150_validation.json",
+  "panini_paires334": "../Panini/research/nipada/falsification/pairs334_axes_v1.json (655 paires)",
+  "panini_v14_udhr": "../Panini/research/data/udhr_decomposed_v14.json ; udhr_convergence_v14.json",
+  "glottolog": "../data/udhr/genealogie.json (441 langues, chemins de glottocodes)"
+ },
+ "corpus_commun": {
+  "n_textes": 21,
+  "n_familles": 5,
+  "n_ecritures": 10,
+  "familles": [
+   "Afro-Asiatic",
+   "Atlantic-Congo",
+   "Austronesian",
+   "Indo-European",
+   "Sino-Tibetan"
+  ],
+  "ecritures": [
+   "Adlm",
+   "Arab",
+   "Cyrl",
+   "Deva",
+   "Ethi",
+   "Grek",
+   "Hant",
+   "Hebr",
+   "Latn",
+   "Mymr"
+  ],
+  "n_paires_non_ordonnees": 210,
+  "n_paires_ordonnees": 420,
+  "textes": [
+   {
+    "id": "udhr_eng",
+    "iso3": "eng",
+    "langue": "English",
+    "script": "Latn",
+    "famille": "Indo-European",
+    "branche_feuille": "macr1271",
+    "famille_panini": "Indo-European",
+    "branche_panini": "Germanic",
+    "tradition_panini": "western_modern"
+   },
+   {
+    "id": "udhr_hin",
+    "iso3": "hin",
+    "langue": "Hindi",
+    "script": "Deva",
+    "famille": "Indo-European",
+    "branche_feuille": "hind1270",
+    "famille_panini": "Indo-European",
+    "branche_panini": "Indo-Iranian",
+    "tradition_panini": "indian"
+   },
+   {
+    "id": "udhr_bel",
+    "iso3": "bel",
+    "langue": "Belarusan",
+    "script": "Cyrl",
+    "famille": "Indo-European",
+    "branche_feuille": "east1426",
+    "famille_panini": "Indo-European",
+    "branche_panini": "Slavic",
+    "tradition_panini": "western_modern"
+   },
+   {
+    "id": "udhr_ell_monotonic",
+    "iso3": "ell",
+    "langue": "Greek (monotonic)",
+    "script": "Grek",
+    "famille": "Indo-European",
+    "branche_feuille": "nucl1783",
+    "famille_panini": "Indo-European",
+    "branche_panini": "Hellenic",
+    "tradition_panini": "western_classical"
+   },
+   {
+    "id": "udhr_kin",
+    "iso3": "kin",
+    "langue": "Rwanda",
+    "script": "Latn",
+    "famille": "Atlantic-Congo",
+    "branche_feuille": "rwan1241",
+    "famille_panini": "Niger-Congo",
+    "branche_panini": "Bantu",
+    "tradition_panini": "african"
+   },
+   {
+    "id": "udhr_ewe",
+    "iso3": "ewe",
+    "langue": "Éwé",
+    "script": "Latn",
+    "famille": "Atlantic-Congo",
+    "branche_feuille": "ewei1234",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_ibo",
+    "iso3": "ibo",
+    "langue": "Igbo",
+    "script": "Latn",
+    "famille": "Atlantic-Congo",
+    "branche_feuille": "cent2417",
+    "famille_panini": "Niger-Congo",
+    "branche_panini": "Volta-Niger",
+    "tradition_panini": "african"
+   },
+   {
+    "id": "udhr_fuf_adlm",
+    "iso3": "fuf",
+    "langue": "Pular (Adlam)",
+    "script": "Adlm",
+    "famille": "Atlantic-Congo",
+    "branche_feuille": "fula1264",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_ind",
+    "iso3": "ind",
+    "langue": "Indonesian",
+    "script": "Latn",
+    "famille": "Austronesian",
+    "branche_feuille": "stan1327",
+    "famille_panini": "Austronesian",
+    "branche_panini": "Malayo-Polynesian",
+    "tradition_panini": "southeast_asian"
+   },
+   {
+    "id": "udhr_tgl",
+    "iso3": "tgl",
+    "langue": "Tagalog",
+    "script": "Latn",
+    "famille": "Austronesian",
+    "branche_feuille": "taga1269",
+    "famille_panini": "Austronesian",
+    "branche_panini": "Malayo-Polynesian",
+    "tradition_panini": "southeast_asian"
+   },
+   {
+    "id": "udhr_mly_arab",
+    "iso3": "zlm",
+    "langue": "Malay (Arabic)",
+    "script": "Arab",
+    "famille": "Austronesian",
+    "branche_feuille": "sing1270",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_jav",
+    "iso3": "jav",
+    "langue": "Javanese (Latin)",
+    "script": "Latn",
+    "famille": "Austronesian",
+    "branche_feuille": "glob1245",
+    "famille_panini": "Austronesian",
+    "branche_panini": "Malayo-Polynesian",
+    "tradition_panini": "southeast_asian"
+   },
+   {
+    "id": "udhr_mya",
+    "iso3": "mya",
+    "langue": "Burmese",
+    "script": "Mymr",
+    "famille": "Sino-Tibetan",
+    "branche_feuille": "nucl1811",
+    "famille_panini": "Sino-Tibetan",
+    "branche_panini": "Tibeto-Burman",
+    "tradition_panini": "buddhist"
+   },
+   {
+    "id": "udhr_cmn_hant",
+    "iso3": "cmn",
+    "langue": "Chinese, Mandarin (Traditional)",
+    "script": "Hant",
+    "famille": "Sino-Tibetan",
+    "branche_feuille": "mand1471",
+    "famille_panini": "Sino-Tibetan",
+    "branche_panini": "Sinitic",
+    "tradition_panini": "confucean"
+   },
+   {
+    "id": "udhr_cnh",
+    "iso3": "cnh",
+    "langue": "Chin, Haka",
+    "script": "Latn",
+    "famille": "Sino-Tibetan",
+    "branche_feuille": "laic1236",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_ctd",
+    "iso3": "ctd",
+    "langue": "Chin, Tedim",
+    "script": "Latn",
+    "famille": "Sino-Tibetan",
+    "branche_feuille": "thad1239",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_arb",
+    "iso3": "arb",
+    "langue": "Arabic, Standard",
+    "script": "Arab",
+    "famille": "Afro-Asiatic",
+    "branche_feuille": "arab1395",
+    "famille_panini": "Other",
+    "branche_panini": "Unknown",
+    "tradition_panini": "other"
+   },
+   {
+    "id": "udhr_amh",
+    "iso3": "amh",
+    "langue": "Amharic",
+    "script": "Ethi",
+    "famille": "Afro-Asiatic",
+    "branche_feuille": "amha1244",
+    "famille_panini": "Afro-Asiatic",
+    "branche_panini": "Semitic",
+    "tradition_panini": "african"
+   },
+   {
+    "id": "udhr_heb",
+    "iso3": "heb",
+    "langue": "Hebrew",
+    "script": "Hebr",
+    "famille": "Afro-Asiatic",
+    "branche_feuille": "hebr1246",
+    "famille_panini": "Afro-Asiatic",
+    "branche_panini": "Semitic",
+    "tradition_panini": "western_modern"
+   },
+   {
+    "id": "udhr_hau_NE",
+    "iso3": "hau",
+    "langue": "Hausa (Niger)",
+    "script": "Latn",
+    "famille": "Afro-Asiatic",
+    "branche_feuille": "west2718",
+    "famille_panini": "Afro-Asiatic",
+    "branche_panini": "Chadic",
+    "tradition_panini": "african"
+   },
+   {
+    "id": "udhr_fra",
+    "iso3": "fra",
+    "langue": "French",
+    "script": "Latn",
+    "famille": "Indo-European",
+    "branche_feuille": "glob1239",
+    "famille_panini": "Indo-European",
+    "branche_panini": "Romance",
+    "tradition_panini": "western_modern"
+   }
+  ]
+ },
+ "theorie_panini": {
+  "atomes": [
+   {
+    "nom": "ÊTRE",
+    "rang": 1
+   },
+   {
+    "nom": "DIFFÉRENCE",
+    "rang": 2
+   },
+   {
+    "nom": "RAPPORT",
+    "rang": 3
+   },
+   {
+    "nom": "ORIENTATION",
+    "rang": 4
+   },
+   {
+    "nom": "SUJET",
+    "rang": 5
+   },
+   {
+    "nom": "TEMPS",
+    "rang": 6
+   },
+   {
+    "nom": "MODALITÉ",
+    "rang": 7
+   },
+   {
+    "nom": "NOMBRE",
+    "rang": 8
+   },
+   {
+    "nom": "ESPACE",
+    "rang": 9
+   },
+   {
+    "nom": "OPÉRATION",
+    "rang": 10
+   },
+   {
+    "nom": "FONCTION",
+    "rang": 11
+   },
+   {
+    "nom": "STRUCTURE",
+    "rang": 12
+   },
+   {
+    "nom": "SYMÉTRIE",
+    "rang": 13
+   },
+   {
+    "nom": "ÉQUATION",
+    "rang": 14
+   }
+  ],
+  "dhatus": {
+   "sanskrit": [
+    "BHŪ",
+    "KR",
+    "STHĀ",
+    "DĀ",
+    "JÑĀ",
+    "BUDH",
+    "MAN",
+    "VAC",
+    "DṚŚ"
+   ],
+   "computationnels": [
+    "EXIST",
+    "TRANS",
+    "EVAL",
+    "LOCATE",
+    "FEEL",
+    "ACT",
+    "QUAL",
+    "REL",
+    "KNOW"
+   ],
+   "statut_panini": "macros (patterns nommés) dans l'espace V14, pas un second jeu d'atomes",
+   "matrice_v14_publiee": false,
+   "consequence": "les 9 dhātus ne sont pas identifiables à partir des seules signatures de 14 atomes ; il faudrait publier leur décomposition V14. Le nombre 9 est architectural, pas mesuré."
+  },
+  "distance": {
+   "echelle": {
+    "meme_langue": 0.0,
+    "meme_branche": 0.15,
+    "meme_famille": 0.4,
+    "familles_differentes": 0.75,
+    "inconnu": 1.0
+   },
+   "lang_tree_n": 29,
+   "lang_tree_communs": [
+    "ell",
+    "eng",
+    "fra",
+    "heb",
+    "hin"
+   ],
+   "lang_tree_couverture": 0.23809523809523808
+  },
+  "metadonnees_udhr": {
+   "n_langues": 532,
+   "n_famille_connue": 111,
+   "n_famille_other": 421,
+   "familles": {
+    "Other": 421,
+    "Indo-European": 53,
+    "Afro-Asiatic": 8,
+    "Sino-Tibetan": 11,
+    "Uralic": 3,
+    "Isolate": 1,
+    "Niger-Congo": 9,
+    "Austronesian": 7,
+    "Japonic": 3,
+    "Dravidian": 6,
+    "Kartvelian": 1,
+    "Turkic": 3,
+    "Austroasiatic": 3,
+    "Koreanic": 1,
+    "Tai-Kadai": 2
+   },
+   "communs_couverts": [
+    "amh",
+    "bel",
+    "cmn",
+    "ell",
+    "eng",
+    "fra",
+    "hau",
+    "heb",
+    "hin",
+    "ibo",
+    "ind",
+    "jav",
+    "kin",
+    "mya",
+    "tgl"
+   ],
+   "communs_non_couverts": [
+    "arb",
+    "cnh",
+    "ctd",
+    "ewe",
+    "fuf",
+    "zlm"
+   ],
+   "couverture": 0.7142857142857143
+  },
+  "v14_udhr": {
+   "decompose": {
+    "n": 11,
+    "langues": [
+     "bul",
+     "cat",
+     "dan",
+     "eng",
+     "fra",
+     "ind",
+     "ita",
+     "nld",
+     "pol",
+     "spa",
+     "swe"
+    ],
+    "communs": [
+     "eng",
+     "fra",
+     "ind"
+    ],
+    "couverture_communs": 0.14285714285714285
+   },
+   "convergence": {
+    "n": 4,
+    "langues": [
+     "cat",
+     "dan",
+     "eng",
+     "nld"
+    ],
+    "communs": [
+     "eng"
+    ],
+    "couverture_communs": 0.047619047619047616
+   }
+  },
+  "avertissement_150": {
+   "source": "nipada_v150_validation.json",
+   "n_paires": 655,
+   "betas": {
+    "constante": 0.1594,
+    "d_graph": 0.0489,
+    "dyear_par_1000_ans": 0.1378,
+    "meme_tradition": 0.0022
+   },
+   "r2": 0.3004,
+   "ratio_filiation_epoque": 0.35486211901306236,
+   "n_paires_deux_langues_connues_differentes": 3,
+   "n_paires_meme_langue": 173,
+   "n_paires_avec_une_langue_vide": 479,
+   "lecture": "Le coefficient « filiation » est un d_graph de tradition, pas une distance de famille de langues : 3 paires seulement ont deux langues connues différentes.",
+   "verdict_panini": {
+    "H1_strong_vs_weak_transmission": "KO",
+    "H2_loocv_tradition": "KO",
+    "H3_ols_regression": "OK",
+    "go_no_go_phase_religieuse": "NO-GO",
+    "rationale": "Phase religieuse §151+ SUSPENDUE — la signature V14 (binaire ou fréquentielle) ne reproduit pas suffisamment le graphe d'héritage. Cela ne réfute pas V14 en soi, mais exige soit (a) un extracteur sémantique au-delà du lexical (embeddings, parseurs philosophiques), soit (b) un corpus avec ≥ 20 fragments par auteur."
+   }
+  }
+ },
+ "accord_genealogies": {
+  "n_langues_labelisees": 15,
+  "famille_brute": {
+   "accord": 13,
+   "n": 15,
+   "taux": 0.8666666666666667,
+   "desaccords": [
+    {
+     "id": "udhr_kin",
+     "panini": "Niger-Congo",
+     "glottolog": "Atlantic-Congo",
+     "note": "nomenclature : Niger-Congo est la famille large, Atlantic-Congo le nœud Glottolog"
+    },
+    {
+     "id": "udhr_ibo",
+     "panini": "Niger-Congo",
+     "glottolog": "Atlantic-Congo",
+     "note": "nomenclature : Niger-Congo est la famille large, Atlantic-Congo le nœud Glottolog"
+    }
+   ]
+  },
+  "famille_mappee": {
+   "accord": 15,
+   "n": 15,
+   "taux": 1.0,
+   "desaccords": []
+  },
+  "branche_exacte": {
+   "accord": 14,
+   "n": 15,
+   "taux": 0.9333333333333333,
+   "desaccords": [
+    {
+     "id": "udhr_mya",
+     "panini": "Tibeto-Burman",
+     "noeud": "burm1265",
+     "note": "le nœud exact tibe1272 n'est pas dans le chemin Glottolog ; burm1265 est le descendant le plus proche"
+    }
+   ]
+  },
+  "branche_proche": {
+   "accord": 15,
+   "n": 15,
+   "taux": 1.0
+  },
+  "distances_p2_glottolog": {
+   "n_paires": 105,
+   "spearman": {
+    "rho": 0.6567319679304343,
+    "p": 2.8079707377579747e-14
+   },
+   "pearson": {
+    "r": 0.9181587261283043,
+    "p": 3.29165402400434e-43
+   }
+  },
+  "p1_p2": {
+   "n_paires": 10,
+   "valeurs_identiques": true,
+   "exemple": [
+    {
+     "p1": 0.4,
+     "p2": 0.4
+    },
+    {
+     "p1": 0.4,
+     "p2": 0.4
+    },
+    {
+     "p1": 0.75,
+     "p2": 0.75
+    },
+    {
+     "p1": 0.4,
+     "p2": 0.4
+    },
+    {
+     "p1": 0.4,
+     "p2": 0.4
+    }
+   ]
+  }
+ },
+ "alignement": {
+  "mrr_moyen": 0.1509748095221739,
+  "top1_moyen": 0.049444444444444444,
+  "hasard_mrr": 0.13316623769734637,
+  "hasard_top1": 0.03333333333333333,
+  "script": {
+   "n_meme": 56,
+   "n_different": 154,
+   "mrr_meme": 0.1999483820404497,
+   "mrr_different": 0.13316623769734637,
+   "top1_meme": 0.09375,
+   "top1_different": 0.03333333333333333,
+   "hors_script_au_hasard": true,
+   "mrr_hors_script_unique": 0.13316624
+  },
+  "groupes": {
+   "panini_lang_tree": {
+    "0.40": {
+     "n": 6,
+     "moyenne": 0.2695631345890585,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.9515476190476191,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 0.16666666666666666,
+     "moyenne_au_dessus": 0.9515476190476191,
+     "script_meme": 0.16666666666666666,
+     "top1_moyen": 0.18333333333333338
+    },
+    "0.75": {
+     "n": 4,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.00": {
+     "n": 200,
+     "moyenne": 0.14777333120666394,
+     "mediane": 0.13316623769734637,
+     "min": 0.10482049827147305,
+     "max": 0.9178240740740741,
+     "au_dessus_du_hasard": 43,
+     "part_au_dessus_du_hasard": 0.215,
+     "moyenne_au_dessus": 0.20368322400952402,
+     "script_meme": 0.275,
+     "top1_moyen": 0.04574999999999999
+    }
+   },
+   "panini_udhr": {
+    "0.15": {
+     "n": 4,
+     "moyenne": 0.3589388754914747,
+     "mediane": 0.1923825950972392,
+     "min": 0.13316623769734637,
+     "max": 0.9178240740740741,
+     "au_dessus_du_hasard": 3,
+     "part_au_dessus_du_hasard": 0.75,
+     "moyenne_au_dessus": 0.4341964214228508,
+     "script_meme": 0.75,
+     "top1_moyen": 0.2666666666666667
+    },
+    "0.40": {
+     "n": 14,
+     "moyenne": 0.19147118766024843,
+     "mediane": 0.13316623769734637,
+     "min": 0.1310541558277025,
+     "max": 0.9515476190476191,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 0.07142857142857142,
+     "moyenne_au_dessus": 0.9515476190476191,
+     "script_meme": 0.14285714285714285,
+     "top1_moyen": 0.09642857142857146
+    },
+    "0.75": {
+     "n": 87,
+     "moyenne": 0.1480813027407362,
+     "mediane": 0.13316623769734637,
+     "min": 0.11714038565594001,
+     "max": 0.3500840651171143,
+     "au_dessus_du_hasard": 18,
+     "part_au_dessus_du_hasard": 0.20689655172413793,
+     "moyenne_au_dessus": 0.2071097865824224,
+     "script_meme": 0.26436781609195403,
+     "top1_moyen": 0.045785440613026814
+    },
+    "1.00": {
+     "n": 105,
+     "moyenne": 0.1400503288762199,
+     "mediane": 0.13316623769734637,
+     "min": 0.10482049827147305,
+     "max": 0.3456082647591334,
+     "au_dessus_du_hasard": 22,
+     "part_au_dessus_du_hasard": 0.20952380952380953,
+     "moyenne_au_dessus": 0.16944605498442628,
+     "script_meme": 0.26666666666666666,
+     "top1_moyen": 0.03793650793650793
+    }
+   },
+   "glottolog": {
+    "0.20": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.45": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.60": {
+     "n": 2,
+     "moyenne": 0.2393872512282399,
+     "mediane": 0.2393872512282399,
+     "min": 0.13316623769734637,
+     "max": 0.3456082647591334,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 0.5,
+     "moyenne_au_dessus": 0.3456082647591334,
+     "script_meme": 0.5,
+     "top1_moyen": 0.11666666666666667
+    },
+    "0.64": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.75": {
+     "n": 1,
+     "moyenne": 0.1310541558277025,
+     "mediane": 0.1310541558277025,
+     "min": 0.1310541558277025,
+     "max": 0.1310541558277025,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 1.0,
+     "top1_moyen": 0.016666666666666666
+    },
+    "0.78": {
+     "n": 3,
+     "moyenne": 0.4093593262474651,
+     "mediane": 0.1770876669709749,
+     "min": 0.13316623769734637,
+     "max": 0.9178240740740741,
+     "au_dessus_du_hasard": 2,
+     "part_au_dessus_du_hasard": 0.6666666666666666,
+     "moyenne_au_dessus": 0.5474558705225245,
+     "script_meme": 0.6666666666666666,
+     "top1_moyen": 0.3166666666666667
+    },
+    "0.80": {
+     "n": 3,
+     "moyenne": 0.17801201779316944,
+     "mediane": 0.1931922924586585,
+     "min": 0.13316623769734637,
+     "max": 0.2076775232235035,
+     "au_dessus_du_hasard": 2,
+     "part_au_dessus_du_hasard": 0.6666666666666666,
+     "moyenne_au_dessus": 0.20043490784108098,
+     "script_meme": 0.6666666666666666,
+     "top1_moyen": 0.08333333333333333
+    },
+    "0.83": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.86": {
+     "n": 2,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.88": {
+     "n": 1,
+     "moyenne": 0.15852612245010744,
+     "mediane": 0.15852612245010744,
+     "min": 0.15852612245010744,
+     "max": 0.15852612245010744,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 1.0,
+     "moyenne_au_dessus": 0.15852612245010744,
+     "script_meme": 1.0,
+     "top1_moyen": 0.05
+    },
+    "0.89": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.90": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.91": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "0.92": {
+     "n": 2,
+     "moyenne": 0.5423569283724827,
+     "mediane": 0.5423569283724827,
+     "min": 0.13316623769734637,
+     "max": 0.9515476190476191,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 0.5,
+     "moyenne_au_dessus": 0.9515476190476191,
+     "script_meme": 0.5,
+     "top1_moyen": 0.48333333333333334
+    },
+    "1.00": {
+     "n": 11,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.08": {
+     "n": 1,
+     "moyenne": 0.13275171250015327,
+     "mediane": 0.13275171250015327,
+     "min": 0.13275171250015327,
+     "max": 0.13275171250015327,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 1.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.10": {
+     "n": 10,
+     "moyenne": 0.1716443179178488,
+     "mediane": 0.13316623769734637,
+     "min": 0.10482049827147305,
+     "max": 0.3500840651171143,
+     "au_dessus_du_hasard": 4,
+     "part_au_dessus_du_hasard": 0.4,
+     "moyenne_au_dessus": 0.23653238284263,
+     "script_meme": 0.6,
+     "top1_moyen": 0.06833333333333333
+    },
+    "1.11": {
+     "n": 1,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.12": {
+     "n": 12,
+     "moyenne": 0.1399432369905622,
+     "mediane": 0.13316623769734637,
+     "min": 0.12163743083352357,
+     "max": 0.1967266667089215,
+     "au_dessus_du_hasard": 3,
+     "part_au_dessus_du_hasard": 0.25,
+     "moyenne_au_dessus": 0.16411717049148392,
+     "script_meme": 0.3333333333333333,
+     "top1_moyen": 0.041666666666666664
+    },
+    "1.13": {
+     "n": 23,
+     "moyenne": 0.14859030603739526,
+     "mediane": 0.13316623769734637,
+     "min": 0.12639426008979351,
+     "max": 0.3068916661781439,
+     "au_dessus_du_hasard": 6,
+     "part_au_dessus_du_hasard": 0.2608695652173913,
+     "moyenne_au_dessus": 0.19440037984006697,
+     "script_meme": 0.34782608695652173,
+     "top1_moyen": 0.04710144927536231
+    },
+    "1.14": {
+     "n": 6,
+     "moyenne": 0.16462672595169817,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.2806772320797833,
+     "au_dessus_du_hasard": 2,
+     "part_au_dessus_du_hasard": 0.3333333333333333,
+     "moyenne_au_dessus": 0.22754770246040176,
+     "script_meme": 0.3333333333333333,
+     "top1_moyen": 0.05833333333333333
+    },
+    "1.15": {
+     "n": 12,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.17": {
+     "n": 3,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.18": {
+     "n": 16,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    },
+    "1.20": {
+     "n": 42,
+     "moyenne": 0.13910270415933898,
+     "mediane": 0.13316623769734637,
+     "min": 0.10980300742725335,
+     "max": 0.26952160294483174,
+     "au_dessus_du_hasard": 10,
+     "part_au_dessus_du_hasard": 0.23809523809523808,
+     "moyenne_au_dessus": 0.1619658371479787,
+     "script_meme": 0.30952380952380953,
+     "top1_moyen": 0.036111111111111115
+    },
+    "1.22": {
+     "n": 27,
+     "moyenne": 0.1421903141341854,
+     "mediane": 0.13316623769734637,
+     "min": 0.11714038565594001,
+     "max": 0.18830411218473359,
+     "au_dessus_du_hasard": 8,
+     "part_au_dessus_du_hasard": 0.2962962962962963,
+     "moyenne_au_dessus": 0.16571709981111873,
+     "script_meme": 0.37037037037037035,
+     "top1_moyen": 0.037037037037037035
+    },
+    "1.25": {
+     "n": 11,
+     "moyenne": 0.1345267563182295,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.14813194252706077,
+     "au_dessus_du_hasard": 1,
+     "part_au_dessus_du_hasard": 0.09090909090909091,
+     "moyenne_au_dessus": 0.14813194252706077,
+     "script_meme": 0.09090909090909091,
+     "top1_moyen": 0.0303030303030303
+    },
+    "1.29": {
+     "n": 3,
+     "moyenne": 0.13316623769734637,
+     "mediane": 0.13316623769734637,
+     "min": 0.13316623769734637,
+     "max": 0.13316623769734637,
+     "au_dessus_du_hasard": 0,
+     "part_au_dessus_du_hasard": 0.0,
+     "moyenne_au_dessus": null,
+     "script_meme": 0.0,
+     "top1_moyen": 0.03333333333333333
+    }
+   }
+  },
+  "table_script_famille": [
+   {
+    "famille_meme": true,
+    "script_meme": true,
+    "n": 8,
+    "moyenne": 0.3853147148514717,
+    "mediane": 0.20043490784108098,
+    "min": 0.1310541558277025,
+    "max": 0.9515476190476191,
+    "au_dessus_du_hasard": 7,
+    "part_au_dessus_du_hasard": 0.875,
+    "moyenne_au_dessus": 0.4216376518548672
+   },
+   {
+    "famille_meme": true,
+    "script_meme": false,
+    "n": 26,
+    "moyenne": 0.13316623769734637,
+    "mediane": 0.13316623769734637,
+    "min": 0.13316623769734637,
+    "max": 0.13316623769734637,
+    "au_dessus_du_hasard": 0,
+    "part_au_dessus_du_hasard": 0.0,
+    "moyenne_au_dessus": null
+   },
+   {
+    "famille_meme": false,
+    "script_meme": true,
+    "n": 48,
+    "moyenne": 0.1690539932386127,
+    "mediane": 0.1482892219508003,
+    "min": 0.10482049827147305,
+    "max": 0.3500840651171143,
+    "au_dessus_du_hasard": 37,
+    "part_au_dessus_du_hasard": 0.7708333333333334,
+    "moyenne_au_dessus": 0.1826611537425157
+   },
+   {
+    "famille_meme": false,
+    "script_meme": false,
+    "n": 128,
+    "moyenne": 0.13316623769734637,
+    "mediane": 0.13316623769734637,
+    "min": 0.13316623769734637,
+    "max": 0.13316623769734637,
+    "au_dessus_du_hasard": 0,
+    "part_au_dessus_du_hasard": 0.0,
+    "moyenne_au_dessus": null
+   }
+  ],
+  "paires_famille_script": [
+   {
+    "a": "udhr_eng",
+    "b": "udhr_fra",
+    "mrr": 0.9515476190476191,
+    "top1": 0.9333333333333333,
+    "panini": 0.4,
+    "branche_a": "Germanic",
+    "branche_b": "Romance"
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ewe",
+    "mrr": 0.15852612245010744,
+    "top1": 0.05,
+    "panini": 1.0,
+    "branche_a": "Bantu",
+    "branche_b": "Unknown"
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ibo",
+    "mrr": 0.1310541558277025,
+    "top1": 0.016666666666666666,
+    "panini": 0.4,
+    "branche_a": "Bantu",
+    "branche_b": "Volta-Niger"
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_ibo",
+    "mrr": 0.1931922924586585,
+    "top1": 0.1,
+    "panini": 1.0,
+    "branche_a": "Unknown",
+    "branche_b": "Volta-Niger"
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_tgl",
+    "mrr": 0.2076775232235035,
+    "top1": 0.11666666666666667,
+    "panini": 0.15,
+    "branche_a": "Malayo-Polynesian",
+    "branche_b": "Malayo-Polynesian"
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_jav",
+    "mrr": 0.9178240740740741,
+    "top1": 0.8666666666666667,
+    "panini": 0.15,
+    "branche_a": "Malayo-Polynesian",
+    "branche_b": "Malayo-Polynesian"
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_jav",
+    "mrr": 0.1770876669709749,
+    "top1": 0.05,
+    "panini": 0.15,
+    "branche_a": "Malayo-Polynesian",
+    "branche_b": "Malayo-Polynesian"
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_ctd",
+    "mrr": 0.3456082647591334,
+    "top1": 0.2,
+    "panini": 1.0,
+    "branche_a": "Unknown",
+    "branche_b": "Unknown"
+   }
+  ],
+  "regressions": {
+   "toutes": [
+    {
+     "nom": "script",
+     "n": 210,
+     "coef_script": 0.06678214434310357,
+     "p_script": 1.8463667994517152e-07,
+     "r2": 0.12280053618310405,
+     "aic": -1062.4591309082941
+    },
+    {
+     "nom": "script+panini_lang_tree",
+     "n": 210,
+     "coef_script": 0.06977453435914231,
+     "p_script": 2.3016811123710568e-08,
+     "r2": 0.1820928947975473,
+     "aic": -1075.156114986561,
+     "coef_distance": -0.19609704785956372,
+     "p_distance": 0.00014375566925362016
+    },
+    {
+     "nom": "script+panini_udhr",
+     "n": 210,
+     "coef_script": 0.06518655524535885,
+     "p_script": 1.1530892329858489e-07,
+     "r2": 0.19801982096860682,
+     "aic": -1079.2857384625843,
+     "coef_distance": -0.11841962460370757,
+     "p_distance": 1.6872990043603764e-05
+    },
+    {
+     "nom": "script+glottolog",
+     "n": 210,
+     "coef_script": 0.06508635112237102,
+     "p_script": 2.1238117553501468e-07,
+     "r2": 0.16378935558001195,
+     "aic": -1070.5084408664914,
+     "coef_distance": -0.11610562761939969,
+     "p_distance": 0.0016690833890988799
+    }
+   ],
+   "labelisees": [
+    {
+     "nom": "script",
+     "n": 105,
+     "coef_script": 0.1077489467654305,
+     "p_script": 1.1391458640597207e-05,
+     "r2": 0.17131192899414494,
+     "aic": -469.7028428285117
+    },
+    {
+     "nom": "script+panini_lang_tree",
+     "n": 105,
+     "coef_script": 0.11369266329624447,
+     "p_script": 2.3129020378931386e-06,
+     "r2": 0.23098512631650003,
+     "aic": -475.54986053993406,
+     "coef_distance": -0.19475156292454351,
+     "p_distance": 0.0058830660939956925
+    },
+    {
+     "nom": "script+panini_udhr",
+     "n": 105,
+     "coef_script": 0.10203521809916559,
+     "p_script": 1.3314764464755768e-05,
+     "r2": 0.25636023086085236,
+     "aic": -479.07298587237943,
+     "coef_distance": -0.21202752159151683,
+     "p_distance": 0.0009151785549226243
+    },
+    {
+     "nom": "script+glottolog",
+     "n": 105,
+     "coef_script": 0.1005035704495561,
+     "p_script": 2.5335467831233416e-05,
+     "r2": 0.2296853459480931,
+     "aic": -475.3725405201997,
+     "coef_distance": -0.22593193071870554,
+     "p_distance": 0.006470556667917071
+    }
+   ]
+  },
+  "decomposition_inconnu": [
+   {
+    "nom": "panini_udhr",
+    "coef_script": 0.06381765451860782,
+    "coef_distance": -0.22001514842041292,
+    "coef_inconnu": -0.17156403133608442,
+    "p_distance": 3.433018574527935e-06,
+    "p_inconnu": 4.906223651790498e-07,
+    "r2": 0.22528903010001167,
+    "aic": -1084.5504522982185,
+    "n": 210
+   },
+   {
+    "nom": "glottolog",
+    "coef_script": 0.06291331262688848,
+    "coef_distance": -0.2412828764615394,
+    "coef_inconnu": -0.289914178369434,
+    "p_distance": 8.228208760252542e-05,
+    "p_inconnu": 2.716266498548059e-05,
+    "r2": 0.20213223661374935,
+    "aic": -1078.3653525492516,
+    "n": 210
+   }
+  ],
+  "permutations": {
+   "panini_lang_tree": {
+    "representation": "panini_lang_tree",
+    "n_permutations": 1000,
+    "resultats": {
+     "toutes": {
+      "observe": -0.19609704785956372,
+      "p": 0.01998001998001998,
+      "nul_moyenne": 0.0010407694115787145,
+      "nul_2_5": -0.18729835929382044,
+      "nul_97_5": 0.06438036806288013
+     },
+     "labelisees": {
+      "observe": -0.19475156292454351,
+      "p": 0.04495504495504495,
+      "nul_moyenne": 0.003307429165315674,
+      "nul_2_5": -0.2893888067257596,
+      "nul_97_5": 0.17793446386991174
+     }
+    }
+   },
+   "panini_udhr": {
+    "representation": "panini_udhr",
+    "n_permutations": 1000,
+    "resultats": {
+     "toutes": {
+      "observe": -0.11841962460370757,
+      "p": 0.002997002997002997,
+      "nul_moyenne": -0.001186358883659448,
+      "nul_2_5": -0.07202835710318183,
+      "nul_97_5": 0.04604467733333119
+     },
+     "labelisees": {
+      "observe": -0.21202752159151683,
+      "p": 0.005994005994005994,
+      "nul_moyenne": -0.003120471635396158,
+      "nul_2_5": -0.14661212291895265,
+      "nul_97_5": 0.08736004441627886
+     }
+    }
+   },
+   "glottolog": {
+    "representation": "glottolog",
+    "n_permutations": 1000,
+    "resultats": {
+     "toutes": {
+      "observe": -0.11610562761939969,
+      "p": 0.016983016983016984,
+      "nul_moyenne": -0.0008771965530478924,
+      "nul_2_5": -0.09772355969279233,
+      "nul_97_5": 0.05108216828159361
+     },
+     "labelisees": {
+      "observe": -0.22593193071870554,
+      "p": 0.01898101898101898,
+      "nul_moyenne": -0.002707623836837741,
+      "nul_2_5": -0.20880125995738538,
+      "nul_97_5": 0.10725421682149437
+     }
+    }
+   }
+  },
+  "leave_one_out": {
+   "panini_udhr_labelisees": {
+    "n_langues_retirees": 21,
+    "coef_min": -0.2958475023299252,
+    "coef_mediane": -0.21202752159151683,
+    "coef_max": -0.10338377043457361,
+    "r2_min": 0.16484706562804585,
+    "r2_mediane": 0.25636023086085236,
+    "r2_max": 0.31713463682813736,
+    "langue_la_plus_influente": "udhr_tgl",
+    "langue_la_moins_influente": "udhr_ind"
+   },
+   "glottolog_labelisees": {
+    "n_langues_retirees": 21,
+    "coef_min": -0.2944198216170745,
+    "coef_mediane": -0.22593193071870554,
+    "coef_max": -0.10041754479544623,
+    "r2_min": 0.15388646644793136,
+    "r2_mediane": 0.2296853459480931,
+    "r2_max": 0.30067919825500666,
+    "langue_la_plus_influente": "udhr_bel",
+    "langue_la_moins_influente": "udhr_ind"
+   },
+   "panini_udhr_toutes": {
+    "n_langues_retirees": 21,
+    "coef_min": -0.137113465093644,
+    "coef_mediane": -0.12891178991668412,
+    "coef_max": -0.0570277311124262,
+    "r2_min": 0.14098860574660055,
+    "r2_mediane": 0.20433713421060395,
+    "r2_max": 0.23279739740534522,
+    "langue_la_plus_influente": "udhr_tgl",
+    "langue_la_moins_influente": "udhr_ind"
+   },
+   "glottolog_toutes": {
+    "n_langues_retirees": 21,
+    "coef_min": -0.15837804188726914,
+    "coef_mediane": -0.12228130583216448,
+    "coef_max": -0.06515328302300959,
+    "r2_min": 0.13796988184009829,
+    "r2_mediane": 0.163160944898618,
+    "r2_max": 0.19444440039756805,
+    "langue_la_plus_influente": "udhr_mly_arab",
+    "langue_la_moins_influente": "udhr_jav"
+   }
+  },
+  "paires": [
+   {
+    "a": "udhr_eng",
+    "b": "udhr_hin",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.9,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_bel",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8571428571428571,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_ell_monotonic",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8888888888888888,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_kin",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.0952380952380953,
+    "mrr": 0.14190582604431076,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_ewe",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.12728693426969948,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_ibo",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13683965750058244,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_ind",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.3068916661781439,
+    "top1": 0.2
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_tgl",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.2682373456341464,
+    "top1": 0.15
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.2806772320797833,
+    "top1": 0.15
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.14978871424049417,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.14560233459158184,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 0.75,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.17441817284102024,
+    "top1": 0.06666666666666667
+   },
+   {
+    "a": "udhr_eng",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.92,
+    "mrr": 0.9515476190476191,
+    "top1": 0.9333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_bel",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8571428571428571,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_ell_monotonic",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8888888888888888,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_kin",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.0952380952380953,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_ewe",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_ibo",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_ind",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_tgl",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_jav",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 0.75,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hin",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.92,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_ell_monotonic",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8333333333333334,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_kin",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_ewe",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_ibo",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2857142857142858,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_ind",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_tgl",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_jav",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_bel",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 0.8947368421052632,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_kin",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.105263157894737,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_ewe",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_ibo",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_ind",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_tgl",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_jav",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1666666666666667,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1538461538461537,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 0.75,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1428571428571428,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1666666666666667,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ell_monotonic",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 0.4,
+    "panini_udhr": 0.4,
+    "glottolog": 0.9130434782608695,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ewe",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.875,
+    "mrr": 0.15852612245010744,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ibo",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 0.75,
+    "mrr": 0.1310541558277025,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ind",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.1967266667089215,
+    "top1": 0.1
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_tgl",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.14158256950304599,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.15904256089545316,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1176470588235294,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.125,
+    "mrr": 0.12163743083352357,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.125,
+    "mrr": 0.15404227526248424,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.125,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1176470588235294,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1333333333333333,
+    "mrr": 0.12639426008979351,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_kin",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.0769230769230769,
+    "mrr": 0.13275171250015327,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_ibo",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.8,
+    "mrr": 0.1931922924586585,
+    "top1": 0.1
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_ind",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.10980300742725335,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_tgl",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.14766798871971942,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13243525662322803,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.14770771035350472,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.14409420975213005,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.1859544765715353,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ewe",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1,
+    "mrr": 0.14452534381406343,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_fuf_adlm",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_ind",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.12334341033728724,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_tgl",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.16060207921877742,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.11714038565594001,
+    "top1": 0.0
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.14759177116192979,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.16766189948553545,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.1582929216458139,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ibo",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1,
+    "mrr": 0.13282819874710947,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_ind",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_tgl",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_jav",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2857142857142858,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.25,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2857142857142858,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_fuf_adlm",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1111111111111112,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_tgl",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.15,
+    "glottolog": 0.8,
+    "mrr": 0.2076775232235035,
+    "top1": 0.11666666666666667
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.15,
+    "glottolog": 0.7777777777777778,
+    "mrr": 0.9178240740740741,
+    "top1": 0.8666666666666667
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.1581230497231239,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.127687892224866,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.18830411218473359,
+    "top1": 0.08333333333333334
+   },
+   {
+    "a": "udhr_ind",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1,
+    "mrr": 0.3500840651171143,
+    "top1": 0.21666666666666667
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_mly_arab",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.8,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_jav",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.15,
+    "glottolog": 0.7777777777777778,
+    "mrr": 0.1770876669709749,
+    "top1": 0.05
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.1395312821801547,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.1371567779400796,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.1725371707278312,
+    "top1": 0.06666666666666667
+   },
+   {
+    "a": "udhr_tgl",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1,
+    "mrr": 0.28065114655006806,
+    "top1": 0.18333333333333335
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_jav",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.7777777777777778,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_arb",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.26952160294483174,
+    "top1": 0.15000000000000002
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mly_arab",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_mya",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_cnh",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.1560104119004069,
+    "top1": 0.016666666666666666
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.16647078681063335,
+    "top1": 0.06666666666666667
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.25,
+    "mrr": 0.14813194252706077,
+    "top1": 0.0
+   },
+   {
+    "a": "udhr_jav",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.105263157894737,
+    "mrr": 0.31460452175225667,
+    "top1": 0.21666666666666667
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_cmn_hant",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1666666666666667,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_mya",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.0952380952380953,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_cnh",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_ctd",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cmn_hant",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_ctd",
+    "script_meme": true,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.6,
+    "mrr": 0.3456082647591334,
+    "top1": 0.2
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.13599539800191118,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_cnh",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1,
+    "mrr": 0.1708689758892742,
+    "top1": 0.08333333333333333
+   },
+   {
+    "a": "udhr_ctd",
+    "b": "udhr_arb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ctd",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ctd",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1818181818181819,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ctd",
+    "b": "udhr_hau_NE",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.2222222222222223,
+    "mrr": 0.16217152064608445,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_ctd",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1,
+    "mrr": 0.10482049827147305,
+    "top1": 0.0
+   },
+   {
+    "a": "udhr_arb",
+    "b": "udhr_amh",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.6,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_arb",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 0.45454545454545453,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_arb",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_arb",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 1.0,
+    "glottolog": 1.1,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_amh",
+    "b": "udhr_heb",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.15,
+    "glottolog": 0.6363636363636364,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_amh",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_amh",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.1,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_heb",
+    "b": "udhr_hau_NE",
+    "script_meme": false,
+    "famille_glottolog_meme": true,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.4,
+    "glottolog": 1.0,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_heb",
+    "b": "udhr_fra",
+    "script_meme": false,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 0.75,
+    "panini_udhr": 0.75,
+    "glottolog": 1.0952380952380953,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   {
+    "a": "udhr_hau_NE",
+    "b": "udhr_fra",
+    "script_meme": true,
+    "famille_glottolog_meme": false,
+    "panini_lang_tree": 1.0,
+    "panini_udhr": 0.75,
+    "glottolog": 1.105263157894737,
+    "mrr": 0.14844650137453985,
+    "top1": 0.05
+   }
+  ]
+ },
+ "atomes": {
+  "n_oeuvres": 44,
+  "n_atomes": 14,
+  "pca_correlation_clr": {
+   "valeurs_propres": [
+    6.966841869403353,
+    2.8449090046578394,
+    1.4910560531584485,
+    1.2596436016619108,
+    0.5284581741433065,
+    0.38068869708930636,
+    0.2068387599134215,
+    0.14036046669030539,
+    0.0839714754669645,
+    0.04702830495199223,
+    0.032132060159987916,
+    0.01270382882584821,
+    0.005367703877314375,
+    -2.3915964703581944e-16
+   ],
+   "variance": [
+    0.49763156210023946,
+    0.2032077860469885,
+    0.10650400379703202,
+    0.08997454297585077,
+    0.037747012438807605,
+    0.027192049792093307,
+    0.014774197136672962,
+    0.010025747620736098,
+    0.005997962533354606,
+    0.0033591646394280157,
+    0.002295147154284851,
+    0.0009074163447034434,
+    0.0003834074198081696,
+    -1.708283193112996e-17
+   ],
+   "variance_cumulee": [
+    0.49763156210023946,
+    0.700839348147228,
+    0.80734335194426,
+    0.8973178949201107,
+    0.9350649073589183,
+    0.9622569571510117,
+    0.9770311542876847,
+    0.9870569019084208,
+    0.9930548644417755,
+    0.9964140290812035,
+    0.9987091762354883,
+    0.9996165925801918,
+    1.0,
+    1.0
+   ],
+   "n_valeurs_propres_sup_1": 4,
+   "n_pour_80_pct": 3,
+   "n_pour_90_pct": 5,
+   "n_pour_95_pct": 6
+  },
+  "pca_covariance_clr": {
+   "valeurs_propres": [
+    1.4992237098525407,
+    0.5604119669926032,
+    0.31462058564596146,
+    0.22202438294575852,
+    0.0979884129341246,
+    0.07595289621722649,
+    0.02941584819974366,
+    0.018759050311018436,
+    0.014589992376186392,
+    0.007770800357755797,
+    0.005447719798201996,
+    0.0018585685051531377,
+    0.0006905704182710885,
+    3.2808568300592545e-17
+   ],
+   "variance": [
+    0.5262733968320558,
+    0.19672174843308715,
+    0.1104414526218215,
+    0.07793735212732066,
+    0.0343969312825876,
+    0.02666179065124571,
+    0.010325862812226904,
+    0.006585000666440983,
+    0.005121533762512752,
+    0.0027277887039167323,
+    0.0019123163436836218,
+    0.0006524144155565832,
+    0.00024241134754399333,
+    1.1516811381303198e-17
+   ],
+   "n_valeurs_propres_sup_1": 1,
+   "variance_premiere": 0.5262733968320558
+  },
+  "charges": [
+   {
+    "pc": 1,
+    "valeur_propre": 6.966841869403353,
+    "variance": 0.49763156210023946,
+    "charges": [
+     {
+      "atome": "RAPPORT",
+      "charge": 0.36258329359785374
+     },
+     {
+      "atome": "SUJET",
+      "charge": 0.3401499247927291
+     },
+     {
+      "atome": "FONCTION",
+      "charge": 0.33587180304376957
+     },
+     {
+      "atome": "STRUCTURE",
+      "charge": 0.3302061446871444
+     },
+     {
+      "atome": "ESPACE",
+      "charge": -0.3226749256673816
+     },
+     {
+      "atome": "DIFFÉRENCE",
+      "charge": -0.31196923954079137
+     }
+    ]
+   },
+   {
+    "pc": 2,
+    "valeur_propre": 2.8449090046578394,
+    "variance": 0.2032077860469885,
+    "charges": [
+     {
+      "atome": "OPÉRATION",
+      "charge": 0.48138216205630063
+     },
+     {
+      "atome": "NOMBRE",
+      "charge": -0.4716890364751891
+     },
+     {
+      "atome": "ÉQUATION",
+      "charge": -0.4712055561189629
+     },
+     {
+      "atome": "TEMPS",
+      "charge": 0.2744891226276499
+     },
+     {
+      "atome": "MODALITÉ",
+      "charge": 0.2563310023923794
+     },
+     {
+      "atome": "SYMÉTRIE",
+      "charge": 0.22063893888177188
+     }
+    ]
+   },
+   {
+    "pc": 3,
+    "valeur_propre": 1.4910560531584485,
+    "variance": 0.10650400379703202,
+    "charges": [
+     {
+      "atome": "ÊTRE",
+      "charge": 0.6939827857091353
+     },
+     {
+      "atome": "OPÉRATION",
+      "charge": -0.37454202172774725
+     },
+     {
+      "atome": "ÉQUATION",
+      "charge": -0.3555863069997138
+     },
+     {
+      "atome": "MODALITÉ",
+      "charge": -0.30922277390085023
+     },
+     {
+      "atome": "DIFFÉRENCE",
+      "charge": 0.23051310984715462
+     },
+     {
+      "atome": "SYMÉTRIE",
+      "charge": 0.1685919892803781
+     }
+    ]
+   },
+   {
+    "pc": 4,
+    "valeur_propre": 1.2596436016619108,
+    "variance": 0.08997454297585077,
+    "charges": [
+     {
+      "atome": "SYMÉTRIE",
+      "charge": 0.7384552526509944
+     },
+     {
+      "atome": "ORIENTATION",
+      "charge": -0.415070881166177
+     },
+     {
+      "atome": "FONCTION",
+      "charge": -0.2803194170337737
+     },
+     {
+      "atome": "STRUCTURE",
+      "charge": -0.2194003246790325
+     },
+     {
+      "atome": "ESPACE",
+      "charge": -0.21855936901548623
+     },
+     {
+      "atome": "NOMBRE",
+      "charge": 0.18758466395715842
+     }
+    ]
+   }
+  ],
+  "split_half": {
+   "n": 1000,
+   "cos_pc1_moyen": 0.9298534195838952,
+   "cos_pc1_2_5": 0.2980023077754733,
+   "cos_pc1_97_5": 0.9927013353229699,
+   "recouvrement_sous_espace3_moyen": 0.6124073592698589,
+   "recouvrement_sous_espace3_2_5": 0.48402234365492663,
+   "recouvrement_sous_espace3_97_5": 0.7163539755080889,
+   "n_sup_1_median": 3
+  },
+  "permutation_colonnes": {
+   "n": 1000,
+   "n_sup_1_moyen": 6.253,
+   "n_sup_1_observe": 4,
+   "p_n_sup_1": 0.000999000999000999,
+   "var3_moyenne": 0.3925005642740731,
+   "var3_observee": 0.80734335194426,
+   "p_var3": 0.000999000999000999
+  },
+  "dhatus": {
+   "sanskrit": [
+    "BHŪ",
+    "KR",
+    "STHĀ",
+    "DĀ",
+    "JÑĀ",
+    "BUDH",
+    "MAN",
+    "VAC",
+    "DṚŚ"
+   ],
+   "computationnels": [
+    "EXIST",
+    "TRANS",
+    "EVAL",
+    "LOCATE",
+    "FEEL",
+    "ACT",
+    "QUAL",
+    "REL",
+    "KNOW"
+   ],
+   "statut_panini": "macros (patterns nommés) dans l'espace V14, pas un second jeu d'atomes",
+   "matrice_v14_publiee": false,
+   "consequence": "les 9 dhātus ne sont pas identifiables à partir des seules signatures de 14 atomes ; il faudrait publier leur décomposition V14. Le nombre 9 est architectural, pas mesuré."
+  }
+ },
+ "convergence": [
+  {
+   "constat": "La surface passe avant la filiation, des deux côtés.",
+   "preuve": "Panini §150 : β époque 0,1378 > β filiation 0,0489 (R² 0,30). Drave : le script est une porte (154/154 paires hors script au hasard exact), la famille ne vit que dans 56 paires de même script.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 3.1"
+  },
+  {
+   "constat": "Le rapport filiation/surface est du même ordre : environ un tiers.",
+   "preuve": "Panini : 0,0489/0,1378 = 0,355. J3.1 Bible : famille 0,181 / script 0,609 = 0,297.",
+   "ou": "reports/rapport-retrieval-epoque.md § 4.3 et § 5"
+  },
+  {
+   "constat": "Les deux généalogies sont le même arbre sur les langues couvertes.",
+   "preuve": "15/15 familles après appariement Niger-Congo→Atlantic-Congo ; 14/15 branches au nœud exact (15/15 si l'on accepte le descendant le plus proche pour Tibeto-Burman) ; Spearman 0,657 et Pearson 0,918 entre les distances P2 et Glottolog sur les 105 paires.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 2.2"
+  },
+  {
+   "constat": "Les deux généalogies prédisent le retrieval de façon comparable.",
+   "preuve": "Sur les 105 paires couvertes : R² 0,256 (Panini UDHR) contre 0,230 (Glottolog) ; l'écart est petit mais stable (positif dans les 21 retraits, 0,007–0,055).",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 3.3"
+  },
+  {
+   "constat": "Un signal de filiation résiduel est détectable quand la surface est contrôlée.",
+   "preuve": "Panini : β filiation 0,0489 (H3 OK). Drave : coefficient de distance −0,212 sur les 105 paires couvertes, p=0.006 par permutation des labels.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 3.2"
+  }
+ ],
+ "divergence": [
+  {
+   "constat": "Les deux « filiations » ne sont pas le même objet.",
+   "preuve": "Panini §150 : 3/655 paires ont deux langues connues différentes, 173 sont eng-eng, 479 ont au moins une langue vide ; leur d_graph est une distance de tradition. Drave : 5 familles, 210 paires, une distance de famille de langues.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 2.1"
+  },
+  {
+   "constat": "La couverture de la théorie est très inférieure à celle de la mesure.",
+   "preuve": "LANG_TREE de Panini : 5/21 langues (200/210 paires à 1,0, « inconnu »). Métadonnées UDHR de Panini : 15/21 (105/210 inconnues). Glottolog : 21/21. Les 6 langues sans label Panini sont toutes non indo-européennes.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 2.1"
+  },
+  {
+   "constat": "L'échelle à quatre niveaux n'est pas une distance.",
+   "preuve": "Sur les 21 langues, LANG_TREE n'utilise jamais le niveau 0,15 ; son niveau 0,40 mélange eng-fra (MRR 0,952) et cinq paires au plancher (0,133). Le niveau 0,40 des métadonnées UDHR contient une seule paire au-dessus du hasard sur 14. Les 4 paires de même branche sont précisément celles que LANG_TREE code 1,0.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 2.3"
+  },
+  {
+   "constat": "Le confondant dominant n'est pas le même : époque chez Panini, écriture chez Drave.",
+   "preuve": "Le corpus commun est mono-époque (1948) : il ne peut pas tester l'époque. J3.1, à écriture contrôlée, trouve −0,034/siècle (p=0,19). Le script, lui, est une porte exacte : 154/154 paires hors script sont au hasard.",
+   "ou": "reports/rapport-retrieval-epoque.md § 4.3 ; rapport-genealogie-deux-faces.md § 3.1"
+  },
+  {
+   "constat": "Le signal de famille tient à peu de paires.",
+   "preuve": "Les 8 paires même famille + même script ont 7/8 au-dessus du hasard, mais deux paires (eng-fra 0,952, ind-jav 0,918) portent la moyenne ; les six autres vont de 0,131 à 0,346. Le leave-one-language-out du coefficient va de −0,296 à −0,103.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 3.2"
+  },
+  {
+   "constat": "La face « atomes » n'est pas une généalogie de langues.",
+   "preuve": "V14 couvre 3/21 langues (décomposition) et 1/21 (convergence). Les 14 atomes ont 4 dimensions effectives (ACP sur la corrélation des parts CLR) ou 1 (ACP sur la covariance) ; les 9 dhātus sont des macros, avec deux nomenclatures non réconciliées et aucune matrice V14 publiée.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 4"
+  },
+  {
+   "constat": "Le code « inconnu = 1,0 » est une valeur manquante, pas une distance.",
+   "preuve": "Il n'est pas missing at random : les 6 langues non labellisées sont toutes non-IE, et les paires inconnues ont un MRR plus bas (0,140 contre 0,162). Séparer l'indicateur d'inconnu laisse le coefficient de distance à −0,22 et ajoute un effet d'inconnu de −0,172 ; le R² « toutes » de 0,198 est donc un artefact de couverture, pas une supériorité généalogique.",
+   "ou": "reports/rapport-genealogie-deux-faces.md § 3.4"
+  }
+ ],
+ "a_mesurer": [
+  {
+   "mesure": "Signature V14 des 21 langues du corpus commun",
+   "pourquoi": "La face atomes n'existe que pour 3/21 langues ; sans elle, la confrontation atomes ↔ généalogie sur le même corpus n'est pas possible.",
+   "dispositif": "Projection multilingue (wordnets ou embeddings alignés) des 14 atomes sur les 21 textes, puis test : les parts d'atomes sont-elles invariantes entre traductions (universalité) ou clustérisent-elles par famille (filiation) ?",
+   "controle": "Traduire un même texte dans deux langues de la même famille et dans deux familles différentes ; l'invariance doit être plus forte dans le premier cas si les atomes sont universaux."
+  },
+  {
+   "mesure": "Matrice 9 dhātus → 14 atomes",
+   "pourquoi": "Les 9 dhātus sont déclarés macros ; sans matrice publiée, ils ne sont pas mesurables. Deux nomenclatures coexistent (BHŪ…DṚŚ et EXIST…KNOW).",
+   "dispositif": "Publier la décomposition de chaque dhātu en V14, puis projeter les signatures de 44 œuvres sur les 9 dhātus et comparer la variance expliquée à celle des 14 atomes.",
+   "controle": "Permutation des colonnes de la matrice : si la projection n'explique pas plus que le hasard, les dhātus ne sont pas identifiables."
+  },
+  {
+   "mesure": "Distance Panini continue et étendue aux 21 langues",
+   "pourquoi": "LANG_TREE couvre 5/21 et l'échelle à quatre niveaux sature ; 200/210 paires sont « inconnues ».",
+   "dispositif": "Étendre LANG_TREE aux 21 langues (ou apprendre une distance continue sur Glottolog) et refaire la régression sur 210 paires.",
+   "controle": "Comparer à la distance discrète actuelle : si le R² ne bouge pas, le gain de granularité est nul."
+  },
+  {
+   "mesure": "Corpus équilibré même script / familles différentes",
+   "pourquoi": "Les 21 langues ne donnent que 56 paires de même script et 8 paires de même famille + même script ; le signal tient à 2-3 paires.",
+   "dispositif": "Choisir 6 familles × 6 langues de même écriture (latin, cyrillique, arabe…), avec plusieurs branches par famille et plusieurs familles par écriture.",
+   "controle": "Le coefficient de famille doit rester stable quand on retire une langue (leave-one-out) et ne pas s'effondrer quand on retire les deux paires extrêmes."
+  },
+  {
+   "mesure": "Retrieval neuronal (états cachés)",
+   "pourquoi": "Le retrieval de J3.1/J3.2 est de surface ; la porte du script peut être une propriété des n-grammes, pas du sens.",
+   "dispositif": "Refaire le retrieval UDHR avec les états cachés d'un modèle multilingue, à contenu identique et script contrôlé.",
+   "controle": "Mêmes paires, même découpage ; si le modèle traverse le script, la conclusion « la surface d'abord » est propre à l'instrument."
+  },
+  {
+   "mesure": "Corpus multi-époques avec les mêmes langues",
+   "pourquoi": "Le corpus commun est mono-époque (1948) ; l'avertissement de Panini sur l'époque ne peut pas y être testé.",
+   "dispositif": "Bible ou corpus daté dans un sous-ensemble des 21 langues, avec plusieurs traductions par langue et des écarts de plus d'un siècle.",
+   "controle": "Permutation des années ; le coefficient d'époque doit sortir de la distribution nulle pour être retenu."
+  },
+  {
+   "mesure": "Poids des arêtes Glottolog",
+   "pourquoi": "La distance de chemin traite toutes les arêtes comme égales ; l'arbre est très déséquilibré (IE > 10 niveaux, austronésien > 5).",
+   "dispositif": "Calibrer les longueurs de branches (temps de séparation, distance lexicale) et refaire la régression.",
+   "controle": "Comparer aux arêtes uniformes : si le classement des paires ne change pas, le gain est cosmétique."
+  }
+ ],
+ "limites": [
+  "Le retrieval est de surface (n-grammes de caractères, TF-IDF, cosinus) : il ne teste pas le sens. La porte du script peut être une propriété de l'instrument, pas de la langue.",
+  "Le corpus commun est mono-époque (1948), mono-genre (déclaration), 21 langues, 5 familles, 10 écritures. Il ne permet ni le contrôle de l'époque ni une estimation de famille stable.",
+  "Les paires ne sont pas indépendantes (chaque langue apparaît dans 20 paires) : les p-values OLS sont descriptives ; les tests d'inférence sont les permutations de labels et le leave-one-out.",
+  "La distance Glottolog est une distance de chemin à arêtes uniformes ; l'arbre est très déséquilibré, et le choix de normalisation (division par |a|+|b|-2) est une convention.",
+  "Les métadonnées UDHR de Panini et LANG_TREE sont deux représentations différentes : la première couvre 111/532 langues, la seconde 29 langues. Leur accord n'est vérifié que sur 5 langues.",
+  "L'ACP des 14 atomes porte sur 44 œuvres philosophiques et religieuses, pas sur les 21 langues : c'est une propriété de la signature de Panini, pas du corpus commun.",
+  "Le coefficient de famille est un effet moyen sur des paires hétérogènes ; il ne dit pas quelles langues sont proches, et il est porté par 2-3 paires.",
+  "La huitième et la neuvième langues de la même branche (ind/tgl/jav, amh/heb) sont codées 1,0 par LANG_TREE : la fonction de distance de Panini ne voit pas ses propres paires les plus proches."
+ ],
+ "controles_negatifs": {
+  "retrieval_hors_script": {
+   "attendu": "Au hasard exact (MRR 1/30, top1 1/30)",
+   "obtenu": {
+    "n": 154,
+    "mrr": 0.13316623769734637,
+    "top1": 0.03333333333333333
+   },
+   "verdict": "PASS"
+  },
+  "permutation_labels_panini": {
+   "attendu": "Coefficient ~0",
+   "obtenu": {
+    "observe": -0.21202752159151683,
+    "p": 0.005994005994005994,
+    "nul_moyenne": -0.003120471635396158,
+    "nul_2_5": -0.14661212291895265,
+    "nul_97_5": 0.08736004441627886
+   },
+   "verdict": "PASS"
+  },
+  "permutation_chemins_glottolog": {
+   "attendu": "Coefficient ~0",
+   "obtenu": {
+    "observe": -0.22593193071870554,
+    "p": 0.01898101898101898,
+    "nul_moyenne": -0.002707623836837741,
+    "nul_2_5": -0.20880125995738538,
+    "nul_97_5": 0.10725421682149437
+   },
+   "verdict": "PASS"
+  },
+  "permutation_colonnes_atomes": {
+   "attendu": "Plus de valeurs propres > 1 que l'observé (les colonnes indépendantes sont moins colinéaires)",
+   "obtenu": {
+    "n": 1000,
+    "n_sup_1_moyen": 6.253,
+    "n_sup_1_observe": 4,
+    "p_n_sup_1": 0.000999000999000999,
+    "var3_moyenne": 0.3925005642740731,
+    "var3_observee": 0.80734335194426,
+    "p_var3": 0.000999000999000999
+   },
+   "verdict": "PASS"
+  },
+  "split_half_atomes": {
+   "attendu": "PC1 stable ; sous-espace 3 partiellement stable",
+   "obtenu": {
+    "n": 1000,
+    "cos_pc1_moyen": 0.9298534195838952,
+    "cos_pc1_2_5": 0.2980023077754733,
+    "cos_pc1_97_5": 0.9927013353229699,
+    "recouvrement_sous_espace3_moyen": 0.6124073592698589,
+    "recouvrement_sous_espace3_2_5": 0.48402234365492663,
+    "recouvrement_sous_espace3_97_5": 0.7163539755080889,
+    "n_sup_1_median": 3
+   },
+   "verdict": "PASS"
+  }
+ },
+ "fichiers": {
+  "fiche": "reports/rapport-genealogie-deux-faces.md",
+  "json": "reports/genealogie-deux-faces.json",
+  "outil": "tools/genealogie_deux_faces.py"
+ }
+}

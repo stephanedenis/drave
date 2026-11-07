@@ -229,7 +229,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
-| `session-` | Généalogie à deux faces : Panini vs Glottolog | 2026-11-07 17:59 | 0.2 h | 1 | 109 | 0 | 1 | [rapport](sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md) |
+| `session-` | Généalogie à deux faces : Panini vs Glottolog | 2026-11-07 17:59 | 0.3 h | 1 | 133 | 0 | 4 | [rapport](sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md) |
 | `session-` | Schéma annotation v2 et validation | 2026-11-07 14:11 | 0.2 h | 1 | 171 | 12 | 1 | [rapport](sessions/session-614644be-9315-4734-9b97-236a792f4dc5/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-6af74924-89c1-4b96-aa02-b70bd77ab178/rapport.md) |
 | `session-` | Réponds exactement le mot OK, | 2026-11-07 10:45 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-78f03aed-fb9d-4009-8625-e1186078059c/rapport.md) |

@@ -4,11 +4,18 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 10:50 | `c49367e0` | CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPREMENT ; DOCTRINE ET MODES DE PANNE | `README.md`, `chantier-autonome.md`, `en-cours.md` (+22) |
+| 18:12 | `c3467170` | PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19) | `en-cours.md`, `roadmap.md`, `README.md` (+26) |
+
+## Chiffres du jour
+
+`0,609` · `0,034`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -17,6 +24,12 @@
 - `b8f0bcb1-5609-4053-818b-ade88583a99b` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.3 h) → [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md)
 - `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 1.2 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 167.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/rapport-corpus-commun.md](../../reports/rapport-corpus-commun.md)
+- [reports/rapport-retrieval-epoque.md](../../reports/rapport-retrieval-epoque.md)
 
 <!-- notes -->
 

@@ -7,14 +7,14 @@
 | Identifiant | `session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 17:59 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 79 |
-| Appels d'outils | 109 |
+| Messages | 104 |
+| Appels d'outils | 133 |
 | Fichiers touchés | 0 |
-| Commandes | 102 |
+| Commandes | 123 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J3.2 : la généalogie à deux faces — confronter la théorie de Panini (14 atomes, 9 dhātus) à nos mesures d'aligneme … [262 caractères tronqués]
 
-*109 appels d'outils.* Actions notables :
+*133 appels d'outils.* Actions notables :
 
 - bash — Inspect workspace root and recent history
 - bash — List theory, method and reports directories
@@ -41,7 +41,7 @@
 - bash — Inspect Panini repository
 - bash — Find signature computation scripts in Panini
 - bash — Find dhātu documentation
-- … et 90 autres
+- … et 111 autres
 
 ## 3. Travail accompli
 
@@ -92,7 +92,7 @@
 - **T1** Inspect Panini UDHR corpus structure fully
 - **T1** Inspect selection structure
 - **T1** List 21 texts with both genealogies
-- … et 62 autres
+- … et 83 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -232,4 +232,7 @@
 ## 6. Commits
 
 - PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19
+- J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES" 2>&1 | tail -30
+- git commit --amend --no-edit 2>&1 | tail -20
+- git commit --amend --no-edit 2>&1 | tail -20
 

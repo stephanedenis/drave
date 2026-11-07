@@ -166,7 +166,7 @@ trace brute (`session*.jsonl.zstd`) reste sur disque et n'est pas suivie par git
 | `ff7e786c` | 2026-11-05 13:11 | 1.2 Mo | 200 Ko | 1 | 165 | 194 | 2 | 0 |
 | `fff7ca81` | 2026-11-05 21:12 | 0.7 Mo | 97 Ko | 1 | 75 | 81 | 0 | 0 |
 | `session-` | 2026-11-07 16:29 | 1.0 Mo | 234 Ko | 1 | 211 | 249 | 0 | 0 |
-| `session-` | 2026-11-07 17:59 | 0.7 Mo | 138 Ko | 1 | 78 | 108 | 0 | 0 |
+| `session-` | 2026-11-07 17:59 | 0.8 Mo | 162 Ko | 1 | 104 | 133 | 0 | 0 |
 | `session-` | 2026-11-07 14:11 | 0.6 Mo | 151 Ko | 1 | 146 | 171 | 2 | 0 |
 | `session-` | 2026-11-07 10:46 | 0.0 Mo | 12 Ko | 1 | 5 | 0 | 0 | 0 |
 | `session-` | 2026-11-07 10:45 | 0.0 Mo | 12 Ko | 1 | 4 | 0 | 0 | 0 |
@@ -178,4 +178,4 @@ trace brute (`session*.jsonl.zstd`) reste sur disque et n'est pas suivie par git
 | `session-` | 2026-11-07 12:41 | 1.0 Mo | 250 Ko | 1 | 214 | 245 | 1 | 0 |
 | `session-` | 2026-11-07 10:48 | 0.0 Mo | 12 Ko | 1 | 5 | 0 | 0 | 0 |
 
-Total : 339.8 Mo de traces brutes.
+Total : 339.9 Mo de traces brutes.

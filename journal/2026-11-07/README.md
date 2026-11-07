@@ -5,15 +5,15 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **5 session(s)** · **6 thème(s)**
+**31 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 4 | [distribue.md](distribue.md) |
+| distribue | 5 | [distribue.md](distribue.md) |
 | docs | 12 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
+| memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -61,6 +61,8 @@
 | 14:23 | `9a259953` | B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE |
 | 14:45 | `8eb0cc49` | B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE |
 | 14:55 | `9c7f71dc` | PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE |
+| 18:12 | `c3467170` | PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19) |
+| 18:15 | `23a0decf` | J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES |
 
 ## Le récit de la journée (écrit à la main)
 

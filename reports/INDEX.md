@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **709 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **710 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -171,6 +171,7 @@
 | [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
 | [rapport-frontieres-integrees.md](rapport-frontieres-integrees.md) | B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas |
 | [rapport-frontieres-phrase.md](rapport-frontieres-phrase.md) | Frontières de phrase — P0-4 du bloc linguistique |
+| [rapport-genealogie-deux-faces.md](rapport-genealogie-deux-faces.md) | J3.2 — La généalogie à deux faces : Panini et Glottolog sur le corpus commun |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
 | [rapport-gn-pronom-sujet.md](rapport-gn-pronom-sujet.md) | B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé |

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 10:03 | `9bb298af` | DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE | `README.md`, `en-cours.md`, `README.md` (+11) |
 | 10:58 | `f93ddc60` | DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU | `README.md`, `en-cours.md`, `README.md` (+12) |
 | 14:55 | `9c7f71dc` | PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE | `en-cours.md`, `README.md`, `distribue.md` (+18) |
+| 18:15 | `23a0decf` | J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES | `en-cours.md`, `roadmap.md`, `genealogie-des-langues.md` (+11) |
 
 ## Chiffres du jour
 
@@ -29,7 +30,9 @@
 
 ## Mesures et rapports touchés
 
+- [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/rapport-atomes-niveaux.md](../../reports/rapport-atomes-niveaux.md)
+- [reports/rapport-genealogie-deux-faces.md](../../reports/rapport-genealogie-deux-faces.md)
 
 <!-- notes -->
 

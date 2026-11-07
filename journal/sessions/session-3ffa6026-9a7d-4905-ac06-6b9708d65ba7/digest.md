@@ -2402,3 +2402,407 @@ revue de documentation · 713 fiche(s) · 806 JSON · 123 doc(s) · 84 porte(s) 
   ```
 
 - **bash** `{"command": "git commit -m \"PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19)\" 2>&1 | tail -30", "description": "Commit J2.2 and J3.1 staged deliverables"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-102]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-102", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 c3467170] PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19)
+ 29 files changed, 106115 insertions(+), 39 deletions(-)
+ create mode 100644 journal/sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/digest.md
+ create mode 100644 journal/sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md
+ create mode 100644 journal/sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/digest.md
+ create mode 100644 journal/sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md
+ create mode 100644 journal/sessions/session-932afd57-1363-4133-b6f1-64f7d937f38d/digest.md
+ create mode 100644 journal/sessions/session-932afd57-1363-4133-b6f1-64f7d937f38d/rapport.md
+ create mode 100644 reports/corpus-commun.json
+ create mode 100644 reports/rapport-corpus-commun.md
+ create mode 100644 reports/rapport-retrieval-epoque.md
+ create mode 100644 reports/retrieval-epoque.json
+ create mode 100755 tools/corpus_commun.py
+ create mode 100644 tools/retrieval_epoque.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git status --short | head -40; echo '---'; git log --oneline -3", "description": "Check status after first commit"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+ M docs/pilotage/roadmap.md
+ M docs/theorie/genealogie-des-langues.md
+ M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/superviseur.py
+ m tools/structures
+?? reports/genealogie-deux-faces.json
+?? reports/rapport-genealogie-deux-faces.md
+?? reports/rapport-s-paragraphes.md
+?? tools/genealogie_deux_faces.py
+---
+c3467170 PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19)
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE
+8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE
+  ```
+
+- **bash** `{"command": "for f in journal/2026-11-07/README.md journal/2026-11-07/mesures.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md; do echo \"== $f\"; git show HEAD:$f 2>/dev/null | grep -c \"J3.2\" || true; done", "description": "Check what J3.2 content was committed"}`
+
+  ```
+== journal/2026-11-07/README.md
+1
+== journal/2026-11-07/mesures.md
+1
+== docs/pilotage/en-cours.md
+0
+== docs/pilotage/roadmap.md
+2
+  ```
+
+- **bash** `{"command": "git diff --stat; echo '---EN-COURS DIFF---'; git diff -- docs/pilotage/en-cours.md | head -40; echo '---ROADMAP DIFF---'; git diff -- docs/pilotage/roadmap.md | head -40; echo '---INDEX DIFF---'; git diff -- reports/INDEX.md | head -20", "description": "Inspect remaining diffs"}`
+
+  ```
+docs/pilotage/en-cours.md                  |   8 +-
+ docs/pilotage/references-non-regression.md |   2 +-
+ docs/pilotage/roadmap.md                   |   8 +-
+ docs/theorie/genealogie-des-langues.md     | 167 +++++--
+ reports/INDEX.md                           |   3 +-
+ reports/pensee-coherence-fiches-v7.json    |  19 +
+ reports/pensee-dev-test-v10.json           |   2 +-
+ reports/pensee-quatre-modes.json           | 734 ++++++++++++++++-------------
+ reports/rapport-audit-v7.md                |   6 +-
+ reports/rapport-coherence-fiches-v7.md     |  17 +-
+ reports/rapport-dev-test-v10.md            |   2 +-
+ reports/rapport-pensee-v12.md              |   4 +-
+ reports/rapport-spans-chunker.md           |  13 +-
+ tools/chantier/superviseur.py              |   5 +-
+ tools/structures                           |   0
+ 15 files changed, 601 insertions(+), 389 deletions(-)
+---EN-COURS DIFF---
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 5a197a0a..38c89773 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-07, 17 h 05 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-07, 18 h 30 HNE (he
+… [19116 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40", "description": "Inspect first commit file list"}`
+
+  ```
+c3467170 PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19)
+ docs/pilotage/en-cours.md                          |    10 +-
+ docs/pilotage/roadmap.md                           |     4 +-
+ journal/2026-11-07/README.md                       |    40 +-
+ journal/2026-11-07/distribue.md                    |    15 +-
+ journal/2026-11-07/docs.md                         |     2 +-
+ journal/2026-11-07/memoire.md                      |     2 +-
+ journal/2026-11-07/mesures.md                      |    19 +-
+ journal/2026-11-07/modele.md                       |     2 +-
+ journal/2026-11-07/portes.md                       |     2 +-
+ journal/README.md                                  |     7 +-
+ journal/THEMES.md                                  |     2 +-
+ journal/sessions/MANIFEST.md                       |     9 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   123 +
+ .../rapport.md                                     |    48 +-
+ .../digest.md                                      |  4520 +
+ .../rapport.md                                     |   230 +
+ .../digest.md          
+… [859 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/theorie/genealogie-des-langues.md reports/INDEX.md reports/genealogie-deux-faces.json reports/rapport-genealogie-deux-faces.md tools/genealogie_deux_faces.py && git status --short | head -30", "description": "Stage J3.2 fil … [15 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+M  docs/pilotage/roadmap.md
+M  docs/theorie/genealogie-des-langues.md
+M  reports/INDEX.md
+A  reports/genealogie-deux-faces.json
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+A  reports/rapport-genealogie-deux-faces.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/superviseur.py
+A  tools/genealogie_deux_faces.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "git commit -m \"J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES\" 2>&1 | tail -30", "description": "Commit J3.2 deliverables", "run_in_background": true}`
+
+  ```
+started background job bash-108
+  ```
+
+- **job_output** `{"job_id": "bash-108", "wait": true, "timeout_ms": 180000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 23a0decf] J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+ 14 files changed, 5733 insertions(+), 64 deletions(-)
+ create mode 100644 reports/genealogie-deux-faces.json
+ create mode 100644 reports/rapport-genealogie-deux-faces.md
+ create mode 100644 tools/genealogie_deux_faces.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -30; echo '---STATUS---'; git status --short | head -30; echo '---LOG---'; git log --oneline -4", "description": "Inspect J3.2 commit and status"}`
+
+  ```
+23a0decf J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/pilotage/roadmap.md                           |    8 +-
+ docs/theorie/genealogie-des-langues.md             |  167 +-
+ journal/2026-11-07/README.md                       |    5 +-
+ journal/2026-11-07/memoire.md                      |   15 +-
+ journal/README.md                                  |    2 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    2 +-
+ .../digest.md                                      |  155 +
+ .../rapport.md                                     |   17 +-
+ reports/INDEX.md                                   |    3 +-
+ reports/genealogie-deux-faces.json                 | 4118 ++++++++++++++++++++
+ reports/rapport-genealogie-deux-faces.md           |  390 ++
+ tools/genealogie_deux_faces.py                     |  905 +++++
+ 14 files changed, 5733 insertions(+), 64 deletions(-)
+---STATUS---
+ M docs/pilotage/references-non-regression.md
+ M reports/pensee-coherence-fiches-v7.json
+ M rep
+… [886 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/##' | tr '\\n' ' '; echo; echo '---'; sed -n '1,120p' docs/methode/portes.md", "description": "List gates and read gate procedure"}`
+
+  ```
+porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh porte-bus.sh porte-bus-socket.sh porte-c4-retard.sh porte-cerveau.sh porte-consolidation.sh porte-coupe.sh porte-cycle-c2.sh porte-deepseek.sh porte-delais.sh porte-diff-couche.sh porte-document.sh porte-echange-experts.sh porte-episodique.sh porte-etat.sh porte-flux.sh porte-fusion.sh porte-gain.sh porte-greffe.sh porte-harnais-invariants.sh porte-homeostasie.sh porte-horloge.sh porte-indice.sh porte-jeux.sh porte-jumeaux.sh porte-lecteur.sh porte-lecture.sh porte-m5-brouillon.sh porte-melange.sh porte-memoire.sh porte-miroir-blocs.sh porte-mistral.sh porte-n3-cache.sh porte-n3-composition.sh porte-n3-deux-processus.sh porte-n3-deux-regions.sh porte-n3-generation.sh porte-n3-inventaire.sh porte-n3-placement.sh porte-n3-pont.sh porte-n3-positions.sh porte-n3-profondeur.sh porte-n3-refus.sh porte-n3-reseau.sh porte-n3-routes.sh porte-n3-service-briques.sh porte-n3-service.sh porte-n3-seuil.sh porte-n3-sparsite-compte.sh porte-n3-sparsite.sh porte-occupation-elagage.sh porte-occupation-mote
+… [5609 caractères tronqués]
+  ```
+
+- **bash** `{"command": "PORTES=\"tableaux registre sessions etat document bloc-tableaux\" DELAI=600 bash tools/toutes-les-portes.sh 2>&1 | tail -40", "description": "Run documentary gate subset"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (6 portes, borne 600 s) ===
+    journaux : work/portes-1107-18h17
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-document         ✅                           8 s  ✅ porte document verte
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-registre         ✅                          17 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (1013 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  porte-tableaux         ✅                           1 s    ✅ la page vivante date du dernier commit (2026-11-07)
+--- 5 vertes, 1 rouges ---
+À RELIRE (les six dernières lignes de chaque rouge) :
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+      ❌ mandat périmé (3863 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+      ❌ mandat périmé (1013 min) : e1
+… [102 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"sessions\\|indice\\|melange\" docs/pilotage/references-non-regression.md | head -20", "description": "Check tolerated red gates"}`
+
+  ```
+7:> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+8:> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
+10:> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+16:> (`indice` 821 s, `melange` 102 s), 1 h 48, GPU libres.
+19:> `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
+28:> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+29:> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
+92:| `porte-indice.sh` | 821 s | ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui  |
+98:| `porte-melange.sh` | 102 s | ❌ l'état de A ne rend pas le code de A dans une |
+138:| `porte-sessions.sh` | 0 s | PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict |
+  ```
+
+- **bash** `{"command": "set -e\ntest -f reports/rapport-genealogie-deux-faces.md && echo FICHE-OK\npython3 tools/index_reports.py --verifier && echo INDEX-OK\npython3 tools/revue_documentation.py 2>&1 | tail -3\npython3 tools/taille_documents.py 2>&1 | tail -3\npython3 tools/verifie_en_cours.py 2>&1 | tail -3\ … [205 caractères tronqués]`
+
+  ```
+FICHE-OK
+INDEX-OK
+  revue de documentation · 713 fiche(s) · 806 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · 42 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 44 jour(s) · 173 session(s) · 2376 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ 1769 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3839 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  schémas · 463 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML
+… [50 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short | head -30; echo '---'; git log --oneline -3; echo '---'; git show --stat --oneline HEAD | tail -20", "description": "Final status and commit summary"}`
+
+  ```
+M docs/pilotage/references-non-regression.md
+ M journal/sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/superviseur.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---
+23a0decf J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+c3467170 PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETRIEVAL À ÉPOQUE CONTRÔLÉE (SCRIPT +0,609, ÉPOQUE −0,034/SIÈCLE, p=0,19)
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MESURE ENCORE
+---
+23a0decf J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/pilotage/roadmap.md                       
+… [832 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, numpy as np\nfrom scipy import stats\nd=json.load(open('reports/genealogie-deux-faces.json'))\nps=d['alignement']['paires']\nids=sorted({p['a'] for p in ps})\n# labelled = panini_udhr != 1.0\nlab=[p for p in ps if p['panini_udhr']!=1.0]\ndef r2(sub):\n     … [987 caractères tronqués]`
+
+  ```
+all labelled (np.float64(0.25636023086085236), np.float64(0.2296853459480931)) delta 0.026674884912759267
+delta min/median/max 0.007443844113714793 0.026674884912759267 0.054512362780675616
+most negative ('udhr_kin', np.float64(0.007443844113714793)) most positive ('udhr_tgl', np.float64(0.054512362780675616))
+n positive 20 n negative 0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/genealogie_deux_faces.py'\ns=open(p).read()\ns=s.replace('''         \"preuve\": \"Sur les 105 paires couvertes : R² 0,256 (Panini UDHR) contre 0,230 (Glottolog) ; les \"\n                   \"intervalles du leave-one-language-out se recouvrent ; la différence … [655 caractères tronqués]`
+
+  ```
+couverture : LANG_TREE 5/21 ; métadonnées UDHR 15/21 ; Glottolog 21/21
+  V14 : décomposition 3/21 ; convergence 1/21
+  accord familles (mappé) : 15/15 ; branches exactes : 14/15
+  retrieval : MRR 0.1510 ; hors script 0.1332 (hasard 0.1332), même script 0.1999
+  régression labelisées : R² Panini 0.2564 ; Glottolog 0.2297
+  atomes : 4 valeurs propres > 1 (corrélation), 1 (covariance) ; 90 % à 5 composantes
+  §150 : 3/655 paires inter-langues ; β filiation/époque = 0.355
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/genealogie-deux-faces.json
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-genealogie-deux-faces.md'\ns=open(p).read()\ns=s.replace(\"La différence de 0,027 n'est pas significative. **Ce n'est pas Glottolog\\nqui gagne, ni Panini : c'est la même information, à deux granularités.**\",\n\"La différence de 0,027 est **petite m … [902 caractères tronqués]`
+
+  ```
+172:0,165–0,317 ; G : 0,154–0,301). La différence de 0,027 est **petite mais stable** : l'écart de R² reste positif dans les 21 retraits
+294:5. **Les deux généalogies prédisent le retrieval de façon comparable.** R² 0,256 (P2) contre 0,230 (G)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/genealogie-deux-faces.json'))\nfor c in d['convergence']:\n    print('-',c['constat'])\n    print(' ',c['preuve'][:250])\nPY", "description": "Verify updated JSON convergence text"}`
+
+  ```
+- La surface passe avant la filiation, des deux côtés.
+  Panini §150 : β époque 0,1378 > β filiation 0,0489 (R² 0,30). Drave : le script est une porte (154/154 paires hors script au hasard exact), la famille ne vit que dans 56 paires de même script.
+- Le rapport filiation/surface est du même ordre : environ un tiers.
+  Panini : 0,0489/0,1378 = 0,355. J3.1 Bible : famille 0,181 / script 0,609 = 0,297.
+- Les deux généalogies sont le même arbre sur les langues couvertes.
+  15/15 familles après appariement Niger-Congo→Atlantic-Congo ; 14/15 branches au nœud exact (15/15 si l'on accepte le descendant le plus proche pour Tibeto-Burman) ; Spearman 0,657 et Pearson 0,918 entre les distances P2 et Glottolog sur les 105 paire
+- Les deux généalogies prédisent le retrieval de façon comparable.
+  Sur les 105 paires couvertes : R² 0,256 (Panini UDHR) contre 0,230 (Glottolog) ; l'écart est petit mais stable (positif dans les 21 retraits, 0,007–0,055).
+- Un signal de filiation résiduel est détectable quand la surface est contrôlée.
+  Panini : β filiation 0,0489 (H3 OK). Drave : coefficient de distance −0,212 sur les 105 paires couvertes, p=0,002 par permutation des labels.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='tools/genealogie_deux_faces.py'\ns=open(p).read()\ns=s.replace('''         \"preuve\": \"Panini : β filiation 0,0489 (H3 OK). Drave : coefficient de distance −0,212 sur les 105 \"\n                   \"paires couvertes, p=0,002 par permutation des labels.\",''',\n'' … [606 caractères tronqués]`
+
+  ```
+Panini : β filiation 0,0489 (H3 OK). Drave : coefficient de distance −0,212 sur les 105 paires couvertes, p=0.006 par permutation des labels.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; bash tools/porte-tableaux.sh 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -3; git add reports/rapport-genealogie-deux-faces.md reports/genealogie-deux-faces.json tools/genealogie_deux_faces.py && git status --short |  … [65 caractères tronqués]`
+
+  ```
+revue de documentation · 713 fiche(s) · 806 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 1769 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3839 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+     · 42 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ M docs/pilotage/references-non-regression.md
+ M journal/README.md
+ M journal/sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md
+M  reports/genealogie-deux-faces.json
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapp
+… [199 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git commit --amend --no-edit 2>&1 | tail -20", "description": "Amend J3.2 commit with corrected wording", "run_in_background": true}`
+
+  ```
+started background job bash-121
+  ```
+
+- **job_output** `{"job_id": "bash-121", "wait": true, "timeout_ms": 180000}`
+
+  ```
+❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/genealogie-deux-faces.json
+     · reports/rapport-genealogie-deux-faces.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-121 (bash: git commit --amend --no-edit 2>&1 | tail -20) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'PY'\np='docs/pilotage/en-cours.md'\ns=open(p).read().replace(\"**Mis à jour : 2026-11-07, 18 h 30 HNE (heure locale, EST).**\",\n                        \"**Mis à jour : 2026-11-07, 18 h 35 HNE (heure locale, EST).**\")\nopen(p,'w').write(s)\nPY\ngit add docs/pilotage/en-co … [207 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M docs/pilotage/references-non-regression.md
+ M journal/README.md
+ M journal/sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md
+M  reports/genealogie-deux-faces.json
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-genealogie-deux-faces.md
+  ```
+
+- **bash** `{"command": "git commit --amend --no-edit 2>&1 | tail -20", "description": "Retry amended J3.2 commit", "run_in_background": true}`
+
+  ```
+started background job bash-123
+  ```
+
+- **job_output** `{"job_id": "bash-123", "wait": true, "timeout_ms": 180000}`

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-07, 17 h 05 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-07, 18 h 35 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -89,7 +89,7 @@
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
 - **Pensée — B13 (actif)** : **183/183**, gold 432, DRVM 114/114 + 5/5, sto 5/5 ; pragmatique 130/432 ; **`r035` réglé** (237/238, 0,9958) ; **convention des GV réglée** (F1 **0,7902**, 0 perte d'attachement) ; **schéma v2** publié (26 cas, 0 échec ; `meta.partition`/`meta.alternative`, v1 lue) ; **restitution v0** : **46/46 surfaces**, miroir **0,1087** ; [fiche](../../reports/rapport-restitution-v0.md).
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
-- **Panini J2.1/J2.2/J3.1** : table **14 atomes** ; UDHR **418/438 exactes** ; **J3.1 : l'écriture domine, l'époque ne pèse pas à écriture contrôlée (−0,034/siècle, p=0,19), le brut est un effet de composition** ; [fiches](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md).
+- **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : l'écriture domine, l'époque ne pèse pas à écriture contrôlée ; **J3.2** : les deux faces diffèrent — `lang_distance` couvre **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, la famille vit dans **2-3 paires**, **V14 : 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
 
 ## Les chiffres de l'état
 
@@ -99,7 +99,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 07/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **712** / **805** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **713** / **806** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**) ; N3 **17/17** à 11 h 32 | `docs/pilotage/references-non-regression.md` |
 
@@ -121,7 +121,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 183/183 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md) ; **la passe complète est finie** (`work/portes/passe-2404-23h45` ; **79 vertes, 4 rouges** : `indice`, `melange` tolérées ; `lecteur` corrigée ; `sessions` → heartbeat de `e181ce02` à rafraîchir).
+**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **J3.2** — fait : [deux faces](../../reports/rapport-genealogie-deux-faces.md) ; la prochaine mesure est la **signature V14 multilingue des 21 langues** ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 183/183 ; **R0.7** — tagger ; **D** — corpus CEGEP **62 documents** en place (`data/corpus_ocr_cegep`), **passe finie** (79 vertes, 4 rouges : `indice`, `melange` tolérées ; `sessions` → heartbeat à rafraîchir) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
 
 ## Les questions ouvertes
 
