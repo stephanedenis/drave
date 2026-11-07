@@ -353,7 +353,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 | B10.3 raisonnement sur `z` | le décodeur est sous le plancher chrF | une attention croisée, 20–30 articles, 3 graines |
 | R4.4 les scans | pas de **vérité humaine** sur les scans réels : trois vrais scans (Internet Archive) donnent des **accords**, pas des vérités | 10 pages **scannées** avec vérité humaine ; le fax 1 bit reste une limite d'information |
-| S — la banque validée | **150 verdicts humains** (`tools/structures/donnees/validations.jsonl`) et **19 verdicts sur les paragraphes** (`paragraphes-validations.jsonl`, 10 résolus / 8 exclus / 1 compatible) | poursuivre la validation sur `/paragraphes` (a001–a009 faits) et la rétro-traduction |
+| S — la banque validée | **`/paragraphes` fini** : 9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, **11 verdicts non committés** ; **banque 150 verdicts / 74 des 207 phrases** (35,7 %), mais la page sert les **369 candidats du 02/11** sans `profondeur` ; **rétro-traduction absente** ; **71 langues = lexique B7**, pas l'UDHR, **0/71 testée** | committer les 11 verdicts (session S), servir la v7 (359 candidats, 99 à profondeur ≥ 3), décider la rétro-traduction |
 
 ## Les questions ouvertes
 

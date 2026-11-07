@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 149.9 h |
 | Tours | 184 |
-| Messages | 3349 |
-| Appels d'outils | 2971 |
+| Messages | 3351 |
+| Appels d'outils | 2973 |
 | Fichiers touchés | 25 |
-| Commandes | 2466 |
+| Commandes | 2468 |
 | Sous-agents | 38 |
-| Commits | 391 |
+| Commits | 392 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*217 appels d'outils.* Actions notables :
+*219 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 202 autres
+- … et 204 autres
 
 **Synthèse produite :**
 
-⏵ J'ajoute le test de non-régression sur les 50 textes libres (vue linéaire = 0 chevauchement)
+⏵ L'état S est livré : je lis le verdict et j'intègre
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2426 autres
+- … et 2428 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10595,4 +10595,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)" -- reports/rapport-etat-n2.md reports/pensee-etat-n2.js
 - ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ" -- docs/pilotage/r
 - PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES" -- tools/tests/test_produit_libre.py tools/port
+- S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE" -- reports/rapport-etat-s.
 

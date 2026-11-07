@@ -2792,3 +2792,66 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/mesurer_reel.py --help 2>&1 | head -25", "description": "Voir la commande des scans réels"}`
+
+  ```
+usage: mesurer_reel.py [-h] --pdf PDF [--pages PAGES] [--langue LANGUE]
+                       [--djvu-xml DJVU_XML] [--sortie SORTIE]
+
+mesurer_reel.py — R4.4 : un VRAI scan, et un jumeau qui n'est pas parfait.
+POURQUOI CE FICHIER. Les scans de `simuler_scan.py` sont des dégradations
+**simulées** : ils mesurent la robustesse, pas la réalité du papier. Il n'y a
+pas de scanner sur la machine, mais il y a des scans publics : ce banc prend
+un PDF **réellement scanné** (Internet Archive, OCR d'éditeur) et compare
+notre lecture à la **couche texte du PDF** — page par page, même page. CE QUE
+LA MESURE VAUT, ET CE QU'ELLE NE VAUT PAS. La référence est la couche OCR
+d'Internet Archive : ce n'est PAS une vérité humaine, c'est un **autre
+moteur**. Le WER mesure donc un **accord entre moteurs** sur un vrai scan, pas
+une exactitude absolue — c'est écrit dans la fiche. Ce que ce banc prouve : la
+chaîne tourne sur du papier réel, sans vérité terrain fabriquée, et le
+prétraitement y fait (ou n'y fait pas) ce qu'il promet. SOURCE UTILISÉE
+(domaine public) : https://archive.org/download/voyageaucentrede00vernuoft/voy
+ageaucentrede00vernuoft.pdf Jules Verne, *Voyage au centre de la terre* — scan
+Lura
+… [253 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'livre\\|def main\\|add_argument' tools/mesurer_reel.py | head -25", "description": "Lire les arguments de mesurer_reel"}`
+
+  ```
+20:  python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --pages 30,50,70 --sortie work/r44/reel.json
+154:def main() -> int:
+156:    ap.add_argument("--pdf", type=pathlib.Path, required=True)
+157:    ap.add_argument("--pages", default="30,50,70,90,110,130,150,170,190,210")
+158:    ap.add_argument("--langue", default="fra")
+159:    ap.add_argument("--djvu-xml", type=pathlib.Path,
+161:    ap.add_argument("--sortie", type=pathlib.Path, default=RACINE / "work/r44/reel.json")
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "| **R4.4** vision / OCR | 🔬 **partiel** : mesuré et gardé, porte humaine non atteinte | 5 familles : photo **55,9 → 6,7 %** de WER (test **5,7 %**) ; préservation **96,7 / 93,3 / 90,0 / 90,0 / 5 … [1110 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/pensee-etat-r.json'\nd=json.load(open(p))\nfor r in d['rejeux']:\n    if r['commande'].startswith('bash tools/porte-ocr-scans'):\n        r['prouve']='R4.4-scans sur le simule ; les 30 pages  … [592 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_liens.py 2>&1 | tail -15; echo exit=${PIPESTATUS[0]}", "description": "Vérifier les liens"}`
+
+  ```
+✅ 3725 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re\nt=open('reports/rapport-etat-r.md',encoding='utf-8').read()\nlinks=re.findall(r'\\]\\(([^)]+)\\)',t)\nprint('links',len(links))\nimport pathlib\nfor l in links:\n    if l.startswith('http'): print('http', … [167 caractères tronqués]`
+
+  ```
+links 5
+done
+  ```
+

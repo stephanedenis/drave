@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.3 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 57 |
-| Appels d'outils | 95 |
+| Messages | 60 |
+| Appels d'outils | 103 |
 | Fichiers touchés | 2 |
-| Commandes | 92 |
+| Commandes | 93 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*95 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 81 autres
+- … et 89 autres
 
 **Synthèse produite :**
 
-⏵ Validation du JSON et contrôle qu'aucun existant n'a bougé
+⏵ Correction de trois formulations (chronologie, périmètre, grammaire)
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json` | 1 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +98,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 52 autres
+- … et 53 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,6 +186,7 @@
 - **T1** `41:  l'heuristique. Le CEGEP (3,6 % / 8,5 %) est **à ce plancher** ; la littérature propre`
 - **T1** `42:  (51,0 % / 65,5 %) est **très au-dessus**.`
 - **T1** `52:mélange (8,5 % contre 9,1 % sur les phrases) : l'analyseur n'y « lit » pas plus de structure que`
+- **T1** `reports/pensee-etat-s.json:17: "verdict": "La page /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne sont pas committés. La banque`
 
 ## 5. Erreurs rencontrées
 

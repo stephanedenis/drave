@@ -2442,3 +2442,58 @@ Created file
 </content>
   ```
 
+### 🤖 Assistant
+
+⏵ Validation du JSON et contrôle qu'aucun existant n'a bougé
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-s.json > /dev/null && echo \"JSON valide\"; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-etat-s.json'))\nprint('cles',len(d),list(d))\nprint('actions',[a['id'] for a in d['actions']])\nprint('blocages',len(d['blocages']),'faus … [272 caractères tronqués]`
+
+  ```
+JSON valide
+cles 23 ['rapport', 'ligne', 'objet', 'date', 'heure', 'fuseau', 'branche', 'head', 'sous_module', 'verdict', 'comptes', 'langues_71', 'paragraphes', 'banque', 'retro_traduction', 'qualite_verdicts', 'blocages', 'fausses_pistes', 'actions', 'controles', 'limites', 'commandes_verifiees', 'fichiers']
+actions ['A1', 'A2', 'A3']
+blocages 10 fausses pistes 5
+langues codes 71 fortes 32
+---
+  500 reports/rapport-etat-s.md
+  374 reports/pensee-etat-s.json
+  874 total
+  ```
+
+- **bash** `{"command": "git status --porcelain | grep -E \"rapport-etat-s|pensee-etat-s|tools/structures\" ; echo \"---\"; cd tools/structures && git status --porcelain", "description": "Vérifie les nouveaux fichiers et l'état du sous-module"}`
+
+  ```
+M tools/structures
+?? reports/pensee-etat-s.json
+?? reports/rapport-etat-s.md
+---
+ M donnees/paragraphes-validations.jsonl
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction de trois formulations (chronologie, périmètre, grammaire)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "old_string": "> **Ligne de roadmap** : S · **Date** : 2026-11-06 · **Verdict** : le chantier S a deux couches\n> désormais séparées. La page **`/paragraphes`** est **finie** : 9 paragraphes, 19 candidats,", " … [242 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md", "old_string": "`p003-c2` (`exclu` → `resolu` → `exclu`, 3 min plus tard). Cinq lignes pour deux", "new_string": "`p003-c2` (`exclu` → `resolu` → `exclu`, les deux derniers à 36 s d'intervalle ; la première\nex … [49 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"0/71\\|3 min\\|page /paragraphes est finie\\|La page .*paragraphes.* est finie\" reports/rapport-etat-s.md reports/pensee-etat-s.json | head -20", "description": "Localise les formulations à corriger"}`
+
+  ```
+reports/rapport-etat-s.md:15:> corpus de référents** : **0/71** n'est testée par S.
+reports/rapport-etat-s.md:88:testées : 0/71.** Les fiches S répètent « les 71 langues de l'UDHR (le travail L) » : c'est un
+reports/rapport-etat-s.md:321:paires révisées, dont un flip-flop `exclu → resolu → exclu` en 3 minutes. La stabilité des
+reports/rapport-etat-s.md:347:| **les 71 langues ne testent pas les référents** | 35 concepts, 0 phrase, **0/71** par S ; UDHR = 456 langues | retirer la ligne « 71 langues de l'UDHR » du plan S ; si besoin, annoter l'UDHR |
+reports/pensee-etat-s.json:17: "verdict": "La page /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne sont pas committés. La banque de phrases a 150 verdicts sur 74 des 207 phrases (35,7 %), 84 lectures acceptées, et sa page / sert encore les 369 candidats stockés le 02/11, sans profondeur ; la v7 donne 359 candidats et 99 à >=3. Les référents des 19 verdicts ne sont pas un gold : 12/28 mappings contredisent la source anglaise, 2 formes manquent ; le 14/14 de la fiche est côté traduction. La rétro-traduction n'existe pas (0 script, 0 mesure, 0/9, clé absente). Les 71 lan
+… [1201 caractères tronqués]
+  ```
+

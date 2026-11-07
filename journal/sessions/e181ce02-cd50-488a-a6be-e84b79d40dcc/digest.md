@@ -56751,3 +56751,43 @@ porte : test des 50 textes
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# les fiches et docs : 9 → 10 contrôles\nfor f in ('reports/rapport-schema-v1.md','reports/rapport-produit-v0.md','docs/produit/README.md','README.md'):\n    p=pathlib.Path(f); t=p.read_text()\n  … [1929 caractères tronqués]`
+
+  ```
+10 contrôles partout
+     · compteurs : en-cours.md dit 792 JSON, le disque en a 793
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 tools/tests/test_produit_libre.py
+COMMIT OK 1
+550d6d07 PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES
+   89f5b728..550d6d07  s/v7 -> s/v7
+   89f5b728..550d6d07  master -> master
+ven 06 nov 2026 22:34:31 EST
+pensee-etat-s.json
+rapport-etat-s.md
+  ```
+
+### 🤖 Assistant
+
+⏵ L'état S est livré : je lis le verdict et j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-etat-s.md | cut -c1-160; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-etat-s.json'))\nprint('clés:', list(d.keys())[:14])\nfor k in ('verdict','resume'):\n    if k in d: print(k.upper(),':' … [55 caractères tronqués]`
+
+  ```
+# S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-06 · **Verdict** : le chantier S a deux couches
+> désormais séparées. La page **`/paragraphes`** est **finie** : 9 paragraphes, 19 candidats,
+> **19 verdicts**, **0 restant**, **11 acceptés** (10 `resolu` + 1 `compatible`) et **8 exclus**.
+> La **banque de phrases** (`/`) ne l'est pas : **150 verdicts** sur **74 des 207 phrases**
+> (35,7 %), **84 lectures acceptées**, mais la page sert les **369 candidats stockés le 02/11**,
+> **sans `profondeur`** ; la mesure v7, elle, donne **359 candidats** et **99 à profondeur ≥ 3**.
+> Les référents des 19 verdicts **ne sont pas un gold** : **12 des 28 mappings contredisent la
+> source anglaise**, **2 formes manquent** ; le « 14/14 » de la fiche de traduction est un
+> résultat **côté traduction**, pas une validation humaine. La **rétro-traduction n'existe pas** :
+> 0 script, 0 mesure, 0/9 paragraphe, et `DEEPSEEK_API_KEY` est absente. Enfin, les **71 langues**
+> sont le **lexique B7** (35 concepts, 1 433 couples), **pas l'UDHR** (456 langues) et **pas un
+> 
+… [758 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| fichier | ce qu'il porte |\\n|---|---|\\n\", \"| fichier | ce qu'il porte |\\n|---|---|\\n| [`rapport-etat-s.md`](rapport-etat-s. … [2760 caractères tronqués]`

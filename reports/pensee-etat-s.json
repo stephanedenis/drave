@@ -1,0 +1,374 @@
+{
+ "rapport": "reports/rapport-etat-s.md",
+ "ligne": "S",
+ "objet": "état du chantier S : page /paragraphes, banque de phrases, rétro-traduction, 71 langues",
+ "date": "2026-11-06",
+ "heure": "21:49",
+ "fuseau": "EST",
+ "branche": "s/v7",
+ "head": "de7c9113",
+ "sous_module": {
+  "chemin": "tools/structures",
+  "branche": "master",
+  "head": "523d8c1",
+  "statut": "M donnees/paragraphes-validations.jsonl",
+  "verdicts_non_committes": 11
+ },
+ "verdict": "La page /paragraphes est finie (9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, 0 restant), mais 11 verdicts sur 19 ne sont pas committés. La banque de phrases a 150 verdicts sur 74 des 207 phrases (35,7 %), 84 lectures acceptées, et sa page / sert encore les 369 candidats stockés le 02/11, sans profondeur ; la v7 donne 359 candidats et 99 à >=3. Les référents des 19 verdicts ne sont pas un gold : 12/28 mappings contredisent la source anglaise, 2 formes manquent ; le 14/14 de la fiche est côté traduction. La rétro-traduction n'existe pas (0 script, 0 mesure, 0/9, clé absente). Les 71 langues sont le lexique B7 (35 concepts, 1 433 couples), pas l'UDHR (456 langues), et ne testent pas les référents (0/71 par S).",
+ "comptes": {
+  "langues": 71,
+  "paragraphes": 9,
+  "verdicts_paragraphes": 19,
+  "verdicts_banque": 150,
+  "phrases_banque": 207,
+  "candidats_stockes": 369,
+  "candidats_v7": 359,
+  "retro_traduction_paragraphes": 0
+ },
+ "langues_71": {
+  "source": "tools/jeux/lexique_multilingue.json (Wikidata CC0, version 1, 2026-10-26)",
+  "fichiers": [
+   "tools/jeux/lexique_multilingue.json",
+   "tools/jeux/lexique_multilingue.py",
+   "tools/jeux/mesure_langues.py",
+   "tools/jeux/corpus_multilingue.py",
+   "reports/rapport-langues-maitres.md",
+   "reports/jeux-langues-mesures.json",
+   "docs/theorie/jeux-symboliques.md"
+  ],
+  "codes": [
+   "ar", "bn", "ca", "cs", "da", "de", "el", "en", "eo", "es", "et", "eu", "fa", "fi", "fr", "gl", "he", "hi", "hr", "hu", "id", "is", "it", "ja", "ka", "kk", "ko", "lt", "lv", "mk", "ms", "mt", "nb", "nl", "nn", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "sw", "ta", "th", "tr", "uk", "ur", "vi", "zh", "af", "am", "az", "be", "bs", "cy", "ga", "hy", "km", "ky", "lo", "mn", "ne", "pa", "si", "so", "uz", "yo", "zu"
+  ],
+  "declarees": 71,
+  "cles_labels": 75,
+  "variantes": ["pt-br", "sr-ec", "zh-hans", "zh-hant"],
+  "concepts": 35,
+  "couples": 1433,
+  "couples_canoniques": 1429,
+  "couples_variantes": 4,
+  "moyenne_concepts_par_langue": 20.13,
+  "avec_label": 71,
+  "avec_item": 66,
+  "avec_item_fort": 62,
+  "fortes": 32,
+  "fortes_codes": [
+   "ar", "bn", "ca", "cs", "da", "de", "el", "en", "eo", "es", "et", "eu", "fa", "fi", "fr", "hu", "it", "ja", "lv", "nb", "nl", "pl", "pt", "ru", "sl", "sq", "sr", "sv", "uk", "vi", "zh", "af"
+  ],
+  "sans_item": ["mt", "ky", "lo", "si", "yo"],
+  "mesures": {
+   "corpus_items": 449,
+   "corpus_bons": 449,
+   "corpus_langues": 66,
+   "corpus_langues_fortes": 62,
+   "invariance_paires": 11,
+   "invariance_invariantes": 11,
+   "permutation_items": 449,
+   "permutation_bons": 186,
+   "permutation_forts": 275,
+   "permutation_forts_bons": 12,
+   "detection_jeux": 315,
+   "detection_jeux_bons": 315,
+   "notation_items": 72,
+   "notation_langues": 71,
+   "notation_parses": 5112,
+   "notation_bons": 5112,
+   "langue_detectee": "340-344/449 selon le run ; non reproductible au cas près",
+   "langue_detectee_runs": [340, 342, 343, 343, 344]
+  },
+  "udhr": {
+   "langues": 456,
+   "fichiers": 456,
+   "iso3_uniques": 400,
+   "articles": 13996,
+   "articles_propres": 13222,
+   "sous_ensemble_71": false
+  },
+  "teste_par_s": 0,
+  "verdict": "Les 71 langues sont des libellés de 35 concepts de jeu, pas des phrases : elles mesurent la couche lexicale (449/449, 11/11, 5 112/5 112), pas la référence. Aucun sous-ensemble UDHR à 71 langues n'existe ; l'UDHR a 456 langues. S ne les a pas testées (0/71)."
+ },
+ "paragraphes": {
+  "page": "/paragraphes",
+  "fichiers": [
+   "tools/structures/donnees/paragraphes.json",
+   "tools/structures/donnees/paragraphes-validations.jsonl",
+   "tools/structures/static/paragraphes.html",
+   "tools/structures/static/paragraphes.js",
+   "tools/structures/serveur.py"
+  ],
+  "n": 9,
+  "candidats": 19,
+  "verdicts": 19,
+  "statuts": {"resolu": 10, "exclu": 8, "compatible": 1, "double_sens": 0},
+  "acceptes": 11,
+  "exclus": 8,
+  "paragraphes_avec_accepte": 9,
+  "candidats_restants": 0,
+  "committes": 8,
+  "non_committes": 11,
+  "non_committes_ids": ["a004", "a005", "a006", "a007", "a008", "a009"],
+  "notes": 0,
+  "par_paragraphe": {
+   "a001": {"candidats": 2, "verdicts": 2, "acceptes": 2, "exclus": 0, "referents_justes": 4, "referents_total": 5},
+   "a002": {"candidats": 3, "verdicts": 3, "acceptes": 1, "exclus": 2, "referents_justes": 1, "referents_total": 3},
+   "a003": {"candidats": 3, "verdicts": 3, "acceptes": 1, "exclus": 2, "referents_justes": 4, "referents_total": 4},
+   "a004": {"candidats": 2, "verdicts": 2, "acceptes": 1, "exclus": 1, "referents_justes": 1, "referents_total": 1},
+   "a005": {"candidats": 2, "verdicts": 2, "acceptes": 1, "exclus": 1, "referents_justes": 2, "referents_total": 3},
+   "a006": {"candidats": 1, "verdicts": 1, "acceptes": 1, "exclus": 0, "referents_justes": 3, "referents_total": 4},
+   "a007": {"candidats": 2, "verdicts": 2, "acceptes": 1, "exclus": 1, "referents_justes": 0, "referents_total": 0},
+   "a008": {"candidats": 1, "verdicts": 1, "acceptes": 1, "exclus": 0, "referents_justes": 0, "referents_total": 5, "statut": "compatible"},
+   "a009": {"candidats": 3, "verdicts": 3, "acceptes": 2, "exclus": 1, "referents_justes": 1, "referents_total": 3}
+  },
+  "referents": {
+   "mappings": 28,
+   "corrects": 16,
+   "faux": 12,
+   "manquants": 2,
+   "a001_a003": {"mappings": 12, "corrects": 9, "faux": 3, "manquants": 2},
+   "paragraphes_avec_faux": 6,
+   "paragraphes_propres": ["a003", "a004", "a007"],
+   "manquants_detail": [
+    {"paragraphe": "a001", "forme": "les", "attendu": "les conseils", "raison": "l'outil classe DET ; l'anglais dit it"},
+    {"paragraphe": "a002", "forme": "l'", "attendu": "la boîte", "raison": "l'outil classe DET ; l'anglais dit it"}
+   ],
+   "faux_detail": [
+    {"paragraphe": "a001", "forme": "en", "enregistre": "Alice", "attendu": "partitif (les larmes), non référent"},
+    {"paragraphe": "a002", "forme": "en", "enregistre": "Alice", "attendu": "préposition (en verre), non référent"},
+    {"paragraphe": "a002", "forme": "y", "enregistre": "Alice", "attendu": "la boîte"},
+    {"paragraphe": "a005", "forme": "en", "enregistre": "coup", "attendu": "la salle"},
+    {"paragraphe": "a006", "forme": "cela", "enregistre": "Comme", "attendu": "attendre à la petite porte"},
+    {"paragraphe": "a008", "forme": "Je", "enregistre": "le contenu", "attendu": "Alice"},
+    {"paragraphe": "a008", "forme": "me", "enregistre": "le contenu", "attendu": "Alice"},
+    {"paragraphe": "a008", "forme": "on", "enregistre": "Je me sens toute drôle", "attendu": "indéfini, non référent"},
+    {"paragraphe": "a008", "forme": "je", "enregistre": "Je me sens toute drôle", "attendu": "Alice"},
+    {"paragraphe": "a008", "forme": "en", "enregistre": "Je me sens toute drôle", "attendu": "préposition, non référent"},
+    {"paragraphe": "a009", "forme": "se", "enregistre": "Un moment", "attendu": "Alice"},
+    {"paragraphe": "a009", "forme": "en", "enregistre": "Un moment", "attendu": "préposition, non référent"}
+   ],
+   "verdict": "Les 19 verdicts valident la structure, pas la référence. Les valeurs sont cohérentes avec les défauts de la page (antécédent pour les personnels, premier candidat pour les clitiques) ; le 14/14 de la fiche est un résultat côté traduction, absent du journal humain."
+  },
+  "claim_8_restants": {
+   "sources": [
+    "docs/pilotage/en-cours.md:59",
+    "docs/pilotage/roadmap.md:34",
+    "docs/pilotage/chantiers.md:87"
+   ],
+   "contredit_par": "9 paragraphes, 19/19 verdicts ; après a001-a003 il restait 6 paragraphes, pas 8",
+   "explication": "8 est le nombre de verdicts committés sur a001-a003 (commit 7ccc60f), pas le nombre de paragraphes restants ; les 11 verdicts a004-a009 sont dans le working tree, non committés.",
+   "roadmap_a_jour": "docs/pilotage/roadmap.md:356 (a001-a009)"
+  },
+  "verdict": "9/9 paragraphes et 19/19 candidats sont jugés dans le working tree, 0 restant. 8 verdicts sont dans git, 11 ne le sont pas."
+ },
+ "banque": {
+  "page": "/",
+  "fichiers": [
+   "tools/structures/donnees/validations.jsonl",
+   "tools/structures/donnees/phrases.json",
+   "tools/structures/donnees/phrases_generees.json",
+   "tools/structures/donnees/llm.jsonl",
+   "data/structures/banque-validee.jsonl",
+   "reports/s-banque-validee.json",
+   "reports/rapport-s-banque-partielle.md"
+  ],
+  "phrases": 207,
+  "candidats_stockes": 369,
+  "verdicts": 150,
+  "paires": 147,
+  "phrases_jugees": 74,
+  "phrases_sans_verdict": 133,
+  "couverture_phrases": 0.357,
+  "couverture_candidats": 0.398,
+  "p_jugees": 7,
+  "p_total": 7,
+  "c_jugees": 67,
+  "c_total": 200,
+  "statuts_dernier": {"resolu": 73, "exclu": 63, "compatible": 11, "double_sens": 0},
+  "statuts_toutes_lignes": {"resolu": 74, "exclu": 64, "compatible": 11, "double_sens": 1},
+  "acceptes": 84,
+  "exclus": 63,
+  "acceptes_resolu": 73,
+  "acceptes_compatible": 11,
+  "taux_acceptation": 0.571,
+  "taux_exclusion": 0.429,
+  "niveaux": {"0": 141, "2": 4, "3": 2},
+  "verdicts_avec_contexte": 6,
+  "notes": 1,
+  "note_detail": "p002-c2 : il est préférable de dire l'homme au téléscope",
+  "revisions": {
+   "paires": 2,
+   "lignes": 5,
+   "lignes_supersedees": 3,
+   "detail": [
+    "p002-c2 : double_sens -> compatible (31 s)",
+    "p003-c2 : exclu -> resolu -> exclu (3 min)"
+   ]
+  },
+  "export": {
+   "fichier": "data/structures/banque-validee.jsonl",
+   "lignes": 84,
+   "phrases": 67,
+   "sha256": "3ca1ac2002e225f69d689a929ab6bb9c6c8b6a06c6b3895af71e1406830c79f2",
+   "date": "2026-11-04T08:42:21"
+  },
+  "fiche_banque": {
+   "fichier": "reports/rapport-s-banque-partielle.md",
+   "lignes": 81,
+   "phrases": 65,
+   "sha256": "2d27b712269735d01ad091303f76bfba34cf491d7775c84c2cc63ad460297525",
+   "statut": "périmée : 3 lectures acceptées et 2 phrases de retard"
+  },
+  "llm": {"lignes": 2, "fournisseur": "baseline", "mode": "local", "deepseek": 0},
+  "stocke_vs_v7": {
+   "stockes": 369,
+   "stockes_sans_profondeur": 369,
+   "profondeur_stockee_max": {"0": 10, "1": 277, "2": 82},
+   "dynamiques": 359,
+   "profondeur_v7_max": {"0": 2, "1": 37, "2": 221, "3": 84, "4": 13, "5": 2},
+   "a_plus_de_3": 99,
+   "identiques": 304,
+   "changes": 55,
+   "orphelins": 10,
+   "phrases_compte_different": 9,
+   "verdicts_a_risque": 5,
+   "verdicts_a_risque_detail": [
+    {"candidat": "p006-c2", "statut": "compatible"},
+    {"candidat": "c023-c3", "statut": "exclu"},
+    {"candidat": "c056-c2", "statut": "exclu"},
+    {"candidat": "c056-c3", "statut": "resolu"},
+    {"candidat": "c064-c2", "statut": "exclu"}
+   ],
+   "mesure_arbre_v7": {
+    "phrases": 207,
+    "candidats": 359,
+    "segments": 2308,
+    "referents": 371,
+    "phrases_avec_referent": 170,
+    "avec_candidat": 294,
+    "sans_candidat": 77
+   }
+  },
+  "verdict": "La page / charge les candidats stockés le 02/11 (369, aucun champ profondeur) ; la mesure v7 sur les mêmes 207 phrases donne 359 candidats et 99 à >=3. Le motif d'arrêt humain (arbre plat, référents non résolus) est toujours vrai sur /. Il faut migrer par signature avant de reprendre : 5 verdicts seraient perdus par index."
+ },
+ "retro_traduction": {
+  "existe": false,
+  "script": null,
+  "mesure": null,
+  "paragraphes_testes": 0,
+  "appels": 0,
+  "cle_deepseek": "absente",
+  "mentions": [
+   "reports/rapport-s-traductions.md",
+   "reports/rapport-s-limites-v6.md",
+   "reports/rapport-s-paragraphes.md",
+   "reports/rapport-s-fait-divers.md",
+   "tools/structures/README.md"
+  ],
+  "briques_existantes": [
+   "tools/llm/deepseek.py (client API, --dry-run)",
+   "tools/llm/enseignant.py (lot de prompts)",
+   "tools/llm/prompts_publics.jsonl (5 articles UDHR x 10 langues, référence humaine)",
+   "tools/llm/mesure.py (chrF, plancher, tokens, latence)"
+  ],
+  "manque": "harnais FR -> EN -> FR et les 9 prompts d'Alice",
+  "protocole": [
+   "9 prompts FR -> EN dans work/retro-traduction/prompts-fr-en.jsonl",
+   "enseignant.py -> work/retro-traduction/fr-en.jsonl",
+   "construire prompts-en-fr.jsonl à partir des réponses EN",
+   "enseignant.py -> work/retro-traduction/fr-en-fr.jsonl",
+   "mesure.py -> chrF aller-retour ; 2 relectures humaines"
+  ],
+  "mesurable": "9/9 paragraphes, 18/18 appels, chrF moyen/min/max, 2 relectures ; aucun seuil fixé",
+  "blocage": "DEEPSEEK_API_KEY absente au 2026-11-06 21:49 ; harnais absent ; règle 11 (API seulement, jamais de serveur local)"
+ },
+ "qualite_verdicts": {
+  "structure": "Les 19 verdicts couvrent tous les candidats : 11 acceptés, 8 exclus, 9/9 paragraphes avec une lecture préférée ; le seul compatible (a008) est le paragraphe non tranché (0/5 référents).",
+  "banque": "84/147 acceptées (57,1 %, dont 73 resolu = 49,7 % et 11 compatible = 7,5 %) ; 63/147 exclues (42,9 %) : l'heuristique propose souvent une lecture plausible, mais 4 fois sur 10 une lecture rejetée.",
+  "reference": "12/28 mappings faux, 2 formes absentes, 0 note : le journal des 19 verdicts n'est pas un gold de référents ; le 14/14 est côté traduction.",
+  "couverture": "74/207 phrases (35,7 %), 147/369 candidats (39,8 %), 133 phrases jamais vues ; 1 annotateur, 1 journée (150 verdicts), 2 journées (19 paragraphes) ; 1 note sur 169 verdicts.",
+  "contexte": "141/147 verdicts finaux au niveau 0 ; 6 avec contexte (4,1 %) ; la mesure du niveau minimal repose sur 6 verdicts.",
+  "fiabilite": "2 paires révisées, 5 lignes, 3 supersédées ; p002-c2 double_sens -> compatible ; p003-c2 exclu -> resolu -> exclu en 3 min ; aucun double-codage, aucun accord inter-annotateurs.",
+  "analyseur": "61/61 types, 144/144 rôles, 50/50 compléments, couverture 1,00, 56 tests ; contrôles 104/144, 106/144, 0,10 ; corpus 65,5 % vs 9,1 % ; CEGEP 8,5 % au plancher ; gold de la même main."
+ },
+ "blocages": [
+  {"id": "B1", "blocage": "La page / sert l'ancien arbre plat", "preuve": "369 candidats stockés, 369/369 sans profondeur ; 10/277/82 vs 359/2/37/221/84/13/2 ; 5 verdicts à risque", "il_faudrait": "migrer par signature, puis régénérer phrases_generees.json (hors mission)"},
+  {"id": "B2", "blocage": "Les référents ne sont pas validés", "preuve": "12/28 faux, 2 manquants, 0 note ; valeurs = défauts de la page", "il_faudrait": "auditer/corriger les 14 formes ; forcer la résolution avant le verdict"},
+  {"id": "B3", "blocage": "La rétro-traduction n'existe pas", "preuve": "0 script, 0 mesure, 0/9 ; DEEPSEEK_API_KEY absente", "il_faudrait": "harnais work/ + clé API"},
+  {"id": "B4", "blocage": "11 verdicts non committés", "preuve": "sous-module M donnees/paragraphes-validations.jsonl (+11) ; parent 523d8c1", "il_faudrait": "commit (hors mission) ; sinon un clone ne voit que 8 verdicts"},
+  {"id": "B5", "blocage": "La banque est partielle", "preuve": "133/207 phrases sans verdict ; 1 annotateur ; 1 jour", "il_faudrait": "reprendre après B1, avec un second lecteur"},
+  {"id": "B6", "blocage": "Les 71 langues ne testent pas les référents", "preuve": "35 concepts, 0 phrase, 0/71 par S ; UDHR = 456 langues", "il_faudrait": "retirer la ligne « 71 langues de l'UDHR » du plan S"},
+  {"id": "B7", "blocage": "La comparaison au grand modèle est absente", "preuve": "llm.jsonl : 2 baselines, 0 DeepSeek", "il_faudrait": "clé API"},
+  {"id": "B8", "blocage": "La fiche de banque est périmée", "preuve": "81/65 SHA 2d27b712 vs export 84/67 SHA 3ca1ac20", "il_faudrait": "mettre la fiche à jour"},
+  {"id": "B9", "blocage": "Les docs S sont en retard", "preuve": "en-cours:59 et roadmap:34 disent a001-a003 ; roadmap:356 dit a001-a009", "il_faudrait": "corriger après commit des 11 verdicts"},
+  {"id": "B10", "blocage": "Le gold est de la même main", "preuve": "61/61, contrôles 104/106/0,10 ; corpus 65,5 % vs 9,1 %", "il_faudrait": "nouvelle vague holdout, autre main"}
+ ],
+ "fausses_pistes": [
+  {"piste": "les 71 langues de l'UDHR", "realite": "les 71 sont le lexique B7 (35 concepts, 1 433 couples) ; l'UDHR a 456 langues ; aucun sous-ensemble à 71 n'existe ; 0/71 testée par S"},
+  {"piste": "a001-a003 faits, 8 restants", "realite": "9 paragraphes, 19/19 verdicts ; 8 est le nombre de verdicts committés sur a001-a003, pas le nombre de paragraphes restants"},
+  {"piste": "la banque est validée à 150 verdicts", "realite": "150 verdicts = 147 paires sur 74/207 phrases ; 84 lectures acceptées / 67 phrases ; 133 phrases jamais vues"},
+  {"piste": "la page / montre l'arbre v7", "realite": "la page / charge les 369 candidats stockés le 02/11, sans profondeur ; seul /paragraphes régénère à la volée"},
+  {"piste": "le 14/14 est une validation humaine", "realite": "le 14/14 est côté traduction ; le journal humain porte 12 formes, 9 justes sur a001-a003, 16/28 sur les 9"}
+ ],
+ "actions": [
+  {
+   "id": "A1",
+   "priorite": "P0",
+   "titre": "Débloquer la banque / : préparer la migration v7",
+   "objectif": "Préparer une copie v7 des 207 phrases et une correspondance par signature, sans toucher tools/structures/data.",
+   "livrable": "work/banque-v7/phrases_generees-v7.json + work/banque-v7/migration.json",
+   "mesure": "369 -> 359 candidats ; 0 verdict perdu (5 à risque remappés) ; 304 identiques / 55 changés / 10 orphelins ; 99 à >=3",
+   "commande_existe": "partiellement",
+   "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 -c 'import json, mesure_arbre; print(json.dumps(mesure_arbre.mesurer(), ensure_ascii=False, indent=1))' ; puis cd tools/structures && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 ../../work/banque-v7/preparer.py (harnais à écrire)",
+   "garde_fou": "ne pas régénérer par index : p006-c2, c023-c3, c056-c2, c056-c3, c064-c2 seraient perdus"
+  },
+  {
+   "id": "A2",
+   "priorite": "P1",
+   "titre": "Auditer les 28 référents des 19 verdicts",
+   "objectif": "Comparer les 28 mappings à la source anglaise, corriger les 12 faux, ajouter les 2 formes manquantes, produire un gold de 14 occurrences.",
+   "livrable": "work/referents/verdicts-corriges.jsonl + reports/rapport-s-referents-verdicts.md",
+   "mesure": "28 mappings audités ; 14/14 occurrences avec un verdict ; 0 mapping faux ; 0 forme manquante ; 6/9 paragraphes fautifs -> 0/9",
+   "commande_existe": "non (extraction par snippet)",
+   "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY' ... (extraction des référents et de source_en, cf. rapport § 7)",
+   "garde_fou": "en/y/on/cela ne sont pas des anaphores par défaut ; une correction peut retirer un référent, pas seulement le changer"
+  },
+  {
+   "id": "A3",
+   "priorite": "P2",
+   "titre": "Rétro-traduction des 9 paragraphes",
+   "objectif": "FR -> EN -> FR par l'API DeepSeek, 9 paragraphes, mesure chrF aller-retour et 2 relectures.",
+   "livrable": "work/retro-traduction/ (prompts, réponses, mesure.json)",
+   "mesure": "9/9 paragraphes ; 18/18 appels ; chrF moyen/min/max ; 2 relectures ; aucun seuil fixé",
+   "commande_existe": "partiellement (briques deepseek.py, enseignant.py, mesure.py ; harnais FR->EN->FR absent)",
+   "commande": "DEEPSEEK_CACHE=\"$PWD/work/deepseek-cache\" DEEPSEEK_API_KEY=... python3 tools/llm/enseignant.py --prompts work/retro-traduction/prompts-fr-en.jsonl --sortie work/retro-traduction/fr-en.jsonl ; puis mesure.py --entree ... --json ...",
+   "garde_fou": "pas de --dry-run comme mesure ; pas de serveur local (règle 11)"
+  }
+ ],
+ "controles": [
+  "Le « 8 restants » est réfuté par 19/19 verdicts et 0 candidat restant.",
+  "Le « 14/14 » humain est réfuté par 12 formes, 9 justes sur a001-a003, 16/28 sur les 9.",
+  "La page / n'est pas en v7 : 0/369 candidats stockés ont un champ profondeur.",
+  "Les 71 langues ne sont pas un corpus de référents : 35 concepts, 0 phrase ; la permutation fait tomber les items forts de 275 à 12.",
+  "150 verdicts ne sont pas 150 phrases : 147 paires sur 74 phrases."
+ ],
+ "limites": [
+  "Le jugement « faux » sur les 12 référents est le nôtre, fondé sur la source anglaise et la table de la fiche ; une convention différente déplacerait quelques cas.",
+  "Les 19 verdicts sont un instantané : 11 sont non committés ; un clone à 523d8c1 en voit 8.",
+  "Le taux d'acceptation n'est pas une accuracy : un seul annotateur, une seule journée, pas de double-codage.",
+  "La détection de langue des 71 langues varie de 340 à 344/449 selon le run ; seul le taux ~76 % est robuste.",
+  "Les 1 433 couples incluent 4 variantes ; le compte canonique est 1 429 ; les 5 langues vides peuvent changer.",
+  "Les mesures dynamiques datent du 06/11 ; generateur.py a été modifié le 04/11 11:41.",
+  "Pas de passe complète des portes : les 56 tests du sous-module passent, mais bash tools/toutes-les-portes.sh n'a pas été lancé.",
+  "Le corpus multilingue est lexical (lemmes, mots-clés) ; le 100 % ne dit rien de la syntaxe."
+ ],
+ "commandes_verifiees": [
+  {"commande": "cd tools/structures && python3 -m unittest discover -s tests", "executee": "oui", "etat": "56 tests OK, 4,343 s"},
+  {"commande": "python3 -m tools.jeux.mesure_langues --complet", "executee": "oui", "etat": "71 langues, 449/449, 11/11, 5 112/5 112, 3,5 s"},
+  {"commande": "python3 -c 'import json, mesure_arbre; print(json.dumps(mesure_arbre.mesurer()))'", "executee": "oui", "etat": "207 phrases, 359 candidats, 99 à >=3, 294/371 référents"},
+  {"commande": "cd tools/structures && git status --porcelain", "executee": "oui", "etat": "M donnees/paragraphes-validations.jsonl (+11), HEAD 523d8c1"},
+  {"commande": "test -n \"$DEEPSEEK_API_KEY\"", "executee": "oui", "etat": "absente"},
+  {"commande": "bash tools/toutes-les-portes.sh", "executee": "non", "etat": "hors périmètre lecture seule"}
+ ],
+ "fichiers": [
+  "reports/rapport-etat-s.md",
+  "reports/pensee-etat-s.json"
+ ]
+}
