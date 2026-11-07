@@ -55412,3 +55412,80 @@ sha256 87949ff264a10b31
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/rapport-partition-integree.md'); t=p.read_text()\nt=t.replace(\"\"\"## 3. Contrôles (A29)\"\"\",\n\"\"\"## 2 bis. Le strip de la fusion\n\nLa fusion **déduplique** les seg … [1367 caractères tronqués]`
+
+  ```
+· reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 446 insertions(+), 39 deletions(-)
+COMMIT OK 1
+97f41554 B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES (0,85 / 0,6482 / 235-236)
+   5c0d5329..97f41554  s/v7 -> s/v7
+   5c0d5329..97f41554  master -> master
+ven 06 nov 2026 20:51:40 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent eedb7a58-2a33-4caa-8509-f46d9e328080 sent a message: 
+P0-3 — état final et action requise sur le commit.
+
+Mesures épinglées à fa1b0c6e (audits reproduits exactement : 107 paires/23 textes, 132/31, 188 impliqués, 61/71 mêmes types-différents, 113 inclusions/19 partiels). 239 paires, toutes S × chunker : 127 « S contient le chunker » (53,1 %), 80 « chunker plus large que S » (33,5 %), 6 mêmes bornes (2,5 %), 26 croisements (10,9 %). Libres : 59 paires / 10 textes.
+
+Options (gold 612, 239 cibles) :
+- A explicite : F1 0,5849, exact 222/239, POS 0,7581, +10,4 % JSON.
+- B1 filtre union : F1 0,6163, exact 217/239, reste 91 paires (33/96), +7,2 % JSON.
+- B2 partition stricte : F1 0,6172, exact 205/239, 0 paire, +2,0 % JSON.
+- déduplication : F1 0,6141, exact 208/239, 0 paire, silencieuse.
+Contrôle négatif : 299 suppressions au hasard → F1 0,5519 (max 0,5638), exact 193,15 (max 198) ; le gain est ciblé, pas un effet « moins de segments ».
+
+Recommandation : A par défaut, B2 en option « partition », B1 documenté comme variante économique partielle ; patch exact (4 hunks, modes alternative/filtrer_union/filtrer) + schéma meta.partition/meta.alternative dans le rapport.
+
+Fichiers : reports/rapport-partition-syntagmes.md (729 lignes) et reports/pensee-partition-syntagmes.json (final).
+
+⚠️ Action requise : le commit 015d7c56 contient la version ANTÉRIEURE de P0-3 — le module y est sans le strip `_fusion` (280 vues mortes / 220 étiquettes mesurées en Cascade/Parallele), et les deux rapports y sont plus anciens. L'arbre de travail contient maintenant la version corrigée : tools/bloc_linguistique.py +7 lignes (strip, 0 référence morte, cascade/parallèle F1 0,6141 / exact 208 / POS 0,7465 inchangés), rapports finaux, hash du patch e9444daf…2e0e39d. Merci de commiter/amender ces changements ; je ne commite rien et je n'ai modifié aucun existant moi-même.
+
+Note : le message du commit 015d7c56 annonce « F1 +0,047 » ; mes chiffres sont ceux du commit d'audit fa1b0c6e (+0,0323 pour B2), pas du HEAD courant (gold/POS ont bougé).
+
+### 👤 Utilisateur
+
+Background subagent eedb7a58-2a33-4caa-8509-f46d9e328080 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison du rapport, du JSON et du résumé mesuré
+
+**Livré** (deux fichiers neufs, aucun existant modifié par moi, aucun commit) :
+- `reports/rapport-partition-syntagmes.md`
+- `reports/pensee-partition-syntagmes.json`
+
+Mesures épinglées au commit d'audit `fa1b0c6e` ; les chiffres des deux audits sont reproduits exactement (107 paires/23 textes, 132/31, 188 étiquettes impliquées, 61/71 mêmes types-différents, 113 inclusions/19 partiels).
+
+### Classes de chevauchement (239 paires, 54/96 textes)
+
+| classe | effectif | part |
+|---|---:|---:|
+| le S contient le chunker | 127 | 53,1 % |
+| le chunker est plus large que le S | 80 | 33,5 % |
+| mêmes bornes, types différents | 6 | 2,5 % |
+| croisements | 26 | 10,9 % |
+| **total** | **239** | 100 % |
+
+**Toutes** les paires opposent un segment S à un segment `union` : aucune paire S×S ni chunker×chunker. Chunker seul = 0 paire, S sans union = 0 paire : le défaut vient de la composition. Sur 25 paragraphes libres : 59 paires, 10/25 textes.
+
+### Options mesurées (gold 612, 239 cibles)
+
+| option | F1 | exact | paires restantes | Δ JSON |
+|---|---:|---:|---:|---:|
+| base | 0,5849 | 222/239 | 239 | — |
+| **A — alternative explicite** | 0,5849 | **222/239** | 239 | +10,4 % |
+| **B1 — filtre union partiel** | 0,6163 | **217/239** | **91** | +7,2 % |
+| **B2 — partition stricte** | 0,6172 | **205/239** | **0** | +2,0 % |
+| déduplication silencieuse | 0,6141 | 208/239 | 0 | — |
+
+POS et fraction identiques partout (0,7581 ; 0,5537). Contrôle négatif : 299 suppressions au hasard donnent F1 0,5519 et 193,15 exacts en moyenne (max 198), donc B1/B2 ne gagnent pas par simple réduction du nombre de segments.
+
+### Recommandation
+
+**A par défaut** (aucune perte, le client choisit, rang 1 = chunker le plus large), **B2 en option « partition »** (vue linéaire, 0 paire, alternatives conservées avec `retire: true`), **B1 documenté comme variante économique partielle** : c'est le « filtre union » du P0-3, moins cher que la déduplication (217 vs 208) mais il laisse 91 paires, donc pas une partition. Le patch exact (4 hunks, modes `alternative`/`filtrer_union`/`filtrer`, strip `_fusion`) et le schéma de `meta.partition`/`meta.alternative` sont dans le rapport.
+
+⚠️ Le commit `015d7c56` contient une version antérieure du patch, sans le strip `_fusion` (280 vues mortes / 220 étiquettes en Cascade/Parallèle). L'arbre de travail contient la version finale corrigée (module +7 lignes, rapports finaux, hash `e9444daf…2e0e39d`, 0 référence morte) : à commiter/amender — je ne commite rien.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json tools/bloc_linguistique.py | head -3; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.r … [1396 caractères tronqués]`

@@ -35,7 +35,7 @@ Harnais local non committé dans `/tmp/pin_audit` et `/tmp/partition_syntagmes`.
 ### 1.1 Pourquoi épingler
 
 Les deux audits ont été mesurés à des commits différents, et le dépôt a continué de bouger pendant
-cette étude (HEAD `5c5d3b52` au moment de la rédaction ; le gold a été corrigé après l'audit,
+cette étude (HEAD `ba39a7b1` au moment de la rédaction ; le gold a été corrigé après l'audit,
 le commit `c5b80dd8` annonce 226/226 attachements exacts). Pour comparer les options **au même état** et
 retrouver les chiffres publiés, tout est épinglé à `fa1b0c6e` :
 
@@ -47,8 +47,8 @@ retrouver les chiffres publiés, tout est épinglé à `fa1b0c6e` :
 | bancs | les 46 succès de `pensee-fiabilite-produit.json` + les 50 de `pensee-produit-bloc-l.json` |
 | textes libres | 25 paragraphes de `data/corpus_fr_litterature.txt`, échantillon déterministe, hors gold |
 
-Le patch proposé s'applique aussi au HEAD `5c5d3b52` (`patch -p1 --dry-run` : hunks à +29/+96/+98
-lignes ; testé aussi à `d73e7d1f` : +29/+81/+83). Les chiffres de ce rapport sont ceux du commit d'audit, pas ceux du HEAD.
+Le patch proposé s'applique aussi au HEAD `ba39a7b1` (`patch -p1 --dry-run` : hunks à
++262/+312/+314/+321 lignes ; testé aussi à `d73e7d1f` et `5c5d3b52`). Les chiffres de ce rapport sont ceux du commit d'audit, pas ceux du HEAD.
 
 ### 1.2 Validation du harnais : les chiffres des audits sont reproduits
 
@@ -79,7 +79,7 @@ python3 /tmp/partition_syntagmes/stats_finales.py                   # lisibilit�
 ```
 
 Les scripts lisent les JSON d'audit du dépôt et n'écrivent que dans `/tmp`. **Aucun fichier existant
-n'est modifié, aucun commit n'est fait.**
+n'est modifié par cette étude, aucun commit n'est fait.**
 
 ## 2. Cartographie des chevauchements
 
@@ -174,9 +174,11 @@ porte un attachement, puis le chunker, puis le plus long) — partition stricte 
 | **B2 — filtrer** | **0,6172** | **0,7445** | 0,5271 | **0,7605** | 0,7581 | 0,5537 | **205** | 0,8577 | 204 |
 | déduplication | 0,6141 | 0,7283 | 0,5309 | 0,7432 | 0,7581 | 0,5537 | 208 | 0,8703 | 207 |
 | glouton attachement | 0,5892 | 0,7048 | 0,5062 | 0,7260 | 0,7581 | 0,5537 | **213** | 0,8912 | 212 |
-| partition mix_E | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
+| partition mix_E (sensibilité) | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
 
-La POS et la fraction sont **identiques dans toutes les variantes** (0,7581 ; 0,5537) : les options
+`mix_E` est une variante de sensibilité par classe (mêmes bornes → garder le S) : elle
+dépasse B2 de 0,0007 de F1 pour un attachement de plus, ce qui ne justifie pas un cas particulier
+dans le patch. La POS et la fraction sont **identiques dans toutes les variantes** (0,7581 ; 0,5537) : les options
 ne touchent que des étiquettes `syntagme`, jamais les POS, et les syntagmes ne sont pas dans
 `unites_semantiques`. Le hash des POS est le même (`cb4757217465da39`) dans les quatre modes.
 
@@ -310,9 +312,9 @@ suppression de tous les union montrent que le sens et la cible du filtre compten
 
 Le patch ajoute un paramètre `partition` (`brut`, `alternative` par défaut, `filtrer_union`,
 `filtrer`), quatre fonctions (`_relation_partition`, `_cle_preferee`, `_groupes_partition`,
-`_expliciter_partition`) et l'appel en fin de `Heuristique.analyser`, après le tri et avant le
-`trace`. Il s'applique à `fa1b0c6e` et, avec offsets (+29/+96/+98), au HEAD `5c5d3b52`. La copie
-patchée est `/tmp/pin_audit/tools/bloc_partition.py` (sha256 `57f464e5…236e49c`).
+`_expliciter_partition`), l'appel en fin de `Heuristique.analyser` (après le tri, avant le
+`trace`) et un **strip** dans `_fusion` (voir § 4.6). Il s'applique à `fa1b0c6e` et, avec offsets (+262/+312/+314/+321), au HEAD `ba39a7b1`. La copie
+patchée est `/tmp/pin_audit/tools/bloc_partition.py` (sha256 `e9444daf…2e0e39d`).
 
 ```diff
 --- a/tools/bloc_linguistique.py
@@ -486,11 +488,25 @@ patchée est `/tmp/pin_audit/tools/bloc_partition.py` (sha256 `57f464e5…236e49
  def _supprimer_chevauchements(etiquettes: list[Etiquette],
                                priorite_syntagme: str = "heuristique") -> list[Etiquette]:
      """Les alternatives se suppriment **par type** quand les types sont complémentaires.
+@@ -1905,6 +2046,13 @@
+                 etiquettes.append(e)
+         # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
+     else:
++        # la déduplication de la fusion retire des segments : les `meta.alternative` de
++        # l'heuristique pointeraient vers des absents. On les retire de la copie fusionnée
++        # plutôt que de laisser des références mortes ; la vue explicite des compositions
++        # est le suivi P0-3b.
++        for e in meilleures.values():
++            e.meta = {k: v for k, v in e.meta.items()
++                      if k not in ("partition", "alternative")}
+         etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
+     if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
+         lg, script = a.langue, a.script
 ```
 
 ### 4.4 Patch exact — `tools/drave.py`
 
-`drave.py` n'existe pas à `fa1b0c6e` ; ce diff s'applique au HEAD `5c5d3b52` (sha256 de la copie
+`drave.py` n'existe pas à `fa1b0c6e` ; ce diff s'applique au HEAD `ba39a7b1` (sha256 de la copie
 patchée `8cf61772…18fe622`).
 
 ```diff
@@ -637,8 +653,8 @@ Exemple A (porteur `GP 29-60`, groupe de 4, rang 1, trois alternatives) :
 }
 ```
 
-Même porteur en B2 (`vue: "filtrer"`) : le `GV 61-67` reste (`retire: false`), les deux `GP` sont
-retirés (`retire: true`) mais restent lisibles avec leur attachement et leur rôle. **Aucune
+Même porteur en B2 (`vue: "filtrer"`) : le `GV 61-67` reste (`retire: false`), les deux autres `GP`
+sont retirés (`retire: true`) mais restent lisibles avec leur attachement et leur rôle. **Aucune
 information n'est perdue** : un client peut reconstruire la vue A depuis la vue B2.
 
 ### 4.6 CLI, compatibilité, tests
@@ -649,8 +665,11 @@ information n'est perdue** : un client peut reconstruire la vue A depuis la vue 
   comparent des octets.
 - Pas de bump de `VERSION_ANNOTATION` : les champs sont **additifs** dans `meta` ; le schéma
   `docs/produit/schema-v1.json` doit les déclarer optionnels (suivi, non modifié ici).
-- `Parallele`/`Cascade` : le patch ne couvre que `Heuristique.analyser` ; quand
+- `Parallele`/`Cascade` : le patch ne couvre pas leur déduplication ; quand
   `priorite_par_niveau=None`, `_fusion` appelle toujours `_supprimer_chevauchements` en silence.
+  Il **retire d'abord** `partition`/`alternative` des étiquettes fusionnées : sans ce strip, 280
+  vues pointeraient vers des segments absents (220 étiquettes) ; avec, **0 référence morte**.
+  Métriques de composition inchangées (cascade/parallèle : F1 0,6141, exact 208, POS 0,7465).
   Suivi **P0-3b** : appeler `_expliciter_partition` après la fusion, ou propager la politique.
 - Tests à ajouter : 0 paire après `filtrer` sur 96 + 25 textes ; réciprocité des relations ;
   permutation des rangs ; `retire` cohérent ; F1/attachement inchangés en `alternative` ; mesurer
@@ -696,7 +715,7 @@ patch -p1 --dry-run < /tmp/partition_syntagmes/drave.diff
 
 Fichiers produits par cette étude : **ce rapport** et
 [`pensee-partition-syntagmes.json`](pensee-partition-syntagmes.json). **Aucun fichier existant
-n'a été modifié, aucun commit n'a été fait.** Les scripts et la copie épinglée vivent dans `/tmp`.
+n'a été modifié par cette étude, aucun commit n'a été fait.** Les scripts et la copie épinglée vivent dans `/tmp`.
 
 ## 7. Ligne de roadmap et suite
 

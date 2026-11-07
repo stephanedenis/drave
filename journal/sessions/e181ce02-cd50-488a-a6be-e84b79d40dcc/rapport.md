@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 148.2 h |
 | Tours | 184 |
-| Messages | 3258 |
-| Appels d'outils | 2882 |
+| Messages | 3261 |
+| Appels d'outils | 2883 |
 | Fichiers touchés | 25 |
-| Commandes | 2383 |
+| Commandes | 2384 |
 | Sous-agents | 34 |
-| Commits | 369 |
+| Commits | 370 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*128 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 114 autres
+- … et 115 autres
 
 **Synthèse produite :**
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2343 autres
+- … et 2344 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10569,4 +10569,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %" 
 - FICHE — LES PERTES DE R4 DITES HONNÊTEMENT (5/8 FAUX EN FRANÇAIS, NOMS NUS, PARTICIPES) ; README DANS LE BUDGET T1" -- reports/rapport-pos-r4-integre.md reports
 - B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES (0,85 / 0,6482 / 235-236)" -- tools/bloc_linguistique.py r
+- P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET" -- reports/rapport-partition-syntagmes.md reports/pensee-part
 

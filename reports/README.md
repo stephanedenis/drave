@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : `meta.alternative` par défaut, `filtrer` en option |
+| [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
 | [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |
 | [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières : 32/40 → **0/40** |
 | [`rapport-frontieres-phrase.md`](rapport-frontieres-phrase.md) | **B13** — frontières (A28) |

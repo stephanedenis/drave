@@ -3088,3 +3088,49 @@ reports/pensee-partition-syntagmes.json | 41 +++++++++++++++++++++-------
 … [2000 caractères tronqués]
   ```
 
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "P0-3 — état final et action requise sur le commit.\n\nMesures épinglées à fa1b0c6e (audits reproduits exactement : 107 paires/23 textes, 132/31, 188 impliqués, 61/71 mêmes types-différents, 113 inclusions/19 partiels). 239 paires, tout … [1769 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison du rapport, du JSON et du résumé mesuré
+
+**Livré** (deux fichiers neufs, aucun existant modifié par moi, aucun commit) :
+- `reports/rapport-partition-syntagmes.md`
+- `reports/pensee-partition-syntagmes.json`
+
+Mesures épinglées au commit d'audit `fa1b0c6e` ; les chiffres des deux audits sont reproduits exactement (107 paires/23 textes, 132/31, 188 étiquettes impliquées, 61/71 mêmes types-différents, 113 inclusions/19 partiels).
+
+### Classes de chevauchement (239 paires, 54/96 textes)
+
+| classe | effectif | part |
+|---|---:|---:|
+| le S contient le chunker | 127 | 53,1 % |
+| le chunker est plus large que le S | 80 | 33,5 % |
+| mêmes bornes, types différents | 6 | 2,5 % |
+| croisements | 26 | 10,9 % |
+| **total** | **239** | 100 % |
+
+**Toutes** les paires opposent un segment S à un segment `union` : aucune paire S×S ni chunker×chunker. Chunker seul = 0 paire, S sans union = 0 paire : le défaut vient de la composition. Sur 25 paragraphes libres : 59 paires, 10/25 textes.
+
+### Options mesurées (gold 612, 239 cibles)
+
+| option | F1 | exact | paires restantes | Δ JSON |
+|---|---:|---:|---:|---:|
+| base | 0,5849 | 222/239 | 239 | — |
+| **A — alternative explicite** | 0,5849 | **222/239** | 239 | +10,4 % |
+| **B1 — filtre union partiel** | 0,6163 | **217/239** | **91** | +7,2 % |
+| **B2 — partition stricte** | 0,6172 | **205/239** | **0** | +2,0 % |
+| déduplication silencieuse | 0,6141 | 208/239 | 0 | — |
+
+POS et fraction identiques partout (0,7581 ; 0,5537). Contrôle négatif : 299 suppressions au hasard donnent F1 0,5519 et 193,15 exacts en moyenne (max 198), donc B1/B2 ne gagnent pas par simple réduction du nombre de segments.
+
+### Recommandation
+
+**A par défaut** (aucune perte, le client choisit, rang 1 = chunker le plus large), **B2 en option « partition »** (vue linéaire, 0 paire, alternatives conservées avec `retire: true`), **B1 documenté comme variante économique partielle** : c'est le « filtre union » du P0-3, moins cher que la déduplication (217 vs 208) mais il laisse 91 paires, donc pas une partition. Le patch exact (4 hunks, modes `alternative`/`filtrer_union`/`filtrer`, strip `_fusion`) et le schéma de `meta.partition`/`meta.alternative` sont dans le rapport.
+
+⚠️ Le commit `015d7c56` contient une version antérieure du patch, sans le strip `_fusion` (280 vues mortes / 220 étiquettes en Cascade/Parallèle). L'arbre de travail contient la version finale corrigée (module +7 lignes, rapports finaux, hash `e9444daf…2e0e39d`, 0 référence morte) : à commiter/amender — je ne commite rien.
+

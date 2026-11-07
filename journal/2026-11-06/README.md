@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**57 commits** · **12 session(s)** · **6 thème(s)**
+**58 commits** · **12 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 19 | [distribue.md](distribue.md) |
 | docs | 10 | [docs.md](docs.md) |
-| mesures | 14 | [mesures.md](mesures.md) |
+| mesures | 15 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 12 | [portes.md](portes.md) |
@@ -96,6 +96,7 @@
 | 20:26 | `ba39a7b1` | B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183 |
 | 20:39 | `015d7c56` | B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 % |
 | 20:42 | `5c0d5329` | FICHE — LES PERTES DE R4 DITES HONNÊTEMENT (5/8 FAUX EN FRANÇAIS, NOMS NUS, PARTICIPES) ; README DANS LE BUDGET T1 |
+| 20:49 | `97f41554` | B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES (0,85 / 0,6482 / 235-236) |
 
 ## Le récit de la journée (écrit à la main)
 

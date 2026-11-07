@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,10 +22,11 @@
 | 20:18 | `5c5d3b52` | B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+23) |
 | 20:26 | `ba39a7b1` | B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+23) |
 | 20:39 | `015d7c56` | B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 % | `en-cours.md`, `README.md`, `distribue.md` (+23) |
+| 20:49 | `97f41554` | B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES (0,85 / 0,6482 / 235-236) | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 
 ## Chiffres du jour
 
-`85,00 %` · `0,047` · `84,96 %` · `0,8383` · `0,9874` · `1,0000` · `0,9289` · `0,9456` · `83,83 %` · `0,5849` · `0,6181` · `0,6341`
+`0,6482` · `85,00 %` · `0,047` · `84,96 %` · `0,8383` · `0,9874` · `1,0000` · `0,9289` · `0,9456` · `83,83 %` · `0,5849` · `0,6181`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
