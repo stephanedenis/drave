@@ -1240,3 +1240,271 @@ class Cascade:
 … [4688 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E 'lru_cache|cache|global |subprocess|_S_' tools/bloc_linguistique.py | head -40", "description": "Look for global caches or subprocesses in module"}`
+
+  ```
+40:import subprocess
+797:    def _verbe_gv(texte: str, g: dict, verbes, cache: dict | None = None):
+800:        if cache is not None and cle in cache:
+801:            return cache[cle]
+803:        if cache is not None:
+804:            cache[cle] = v
+810:                      cache: dict | None = None) -> str | None:
+836:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+840:        return Heuristique._verbe_gv(texte, g, verbes, cache)
+845:                        cache: dict | None = None) -> list[str]:
+857:            v = Heuristique._verbe_gv(texte, g, verbes, cache)
+1152:        cache_gv: dict = {}  # un GV n'est analysé qu'une fois par analyse
+1185:                        cible = self._cible_proche(texte, s, gvs, verbes, cache_gv)
+1195:                                 or self._cible_proche(texte, s, gvs, verbes, cache_gv))
+1202:                        texte, s, gvs, verbes=verbes, cache=cache_gv)
+1218:            cache_gv: dict = {}
+1224:                         or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
+1234:                                                           texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
+1251:                         or sel
+… [1222 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'def _syntagmes_s\\|def _syntagmes_simple' tools/bloc_linguistique.py && sed -n 640,700p tools/bloc_linguistique.py", "description": "Read S generator entry points"}`
+
+  ```
+648:    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+862:    def _syntagmes_simple(self, texte: str, langue: str,
+                break
+        for pre in PREFIXES:
+            if len(n) > len(pre) + 2 and n.startswith(pre):
+                sortie.append(("préfixe", 0, len(pre), pre))
+                break
+        return sortie
+
+    # -- syntagmes ----------------------------------------------------------
+    def _syntagmes_s(self, texte: str) -> list[dict] | None:
+        if not self.segmenter_s:
+            return None
+        try:
+            if str(RACINE / "tools/structures") not in sys.path:
+                sys.path.insert(0, str(RACINE / "tools/structures"))
+            import generateur  # le générateur S, importé en lecture seule
+            return generateur.analyser(texte)
+        except Exception:
+            return None
+
+    def _cibles_s(self, texte: str) -> dict:
+        """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+
+        Lecture seule de l'API interne du S : `_tokens`/`_segmente` rendent les `Segment` avec
+        `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+        (GP, puis GN, 
+… [1791 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E 'cache|_CACHE|lru|global ' tools/structures/generateur.py | head -30 && grep -n 'def analyser' tools/structures/generateur.py", "description": "Check S generator for caches/global state"}`
+
+  ```
+516:def analyser(texte: str, max_candidats: int = 4) -> list[dict]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/structures/ tools/bloc_linguistique.py tools/tests/linguistique/ && ls -la --time-style=full-iso tools/structures/generateur.py tools/bloc_linguistique.py tools/tests/linguistique/gold.json | cat && date", "d … [61 caractères tronqués]`
+
+  ```
+M  tools/bloc_linguistique.py
+ m tools/structures
+-rw-------. 1 stephane stephane 120781 2026-11-06 18:45:48.848740129 -0500 tools/bloc_linguistique.py
+-rw-r--r--. 1 stephane stephane  30580 2026-11-04 11:41:49.129836555 -0500 tools/structures/generateur.py
+-rw-r--r--. 1 stephane stephane  20009 2026-11-06 18:17:22.233772666 -0500 tools/tests/linguistique/gold.json
+ven 06 nov 2026 18:53:25 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- tools/bloc_linguistique.py | head -80 && echo '--- cached ---' && git diff --cached --stat -- tools/bloc_linguistique.py", "description": "Inspect concurrent staged changes to module"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index b9598d42..fdde29b5 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -442,6 +442,7 @@ cry cries cried crying go goes went gone going come comes came coming
+ leave leaves left leaving read reads reading sleep sleeps slept sleeping
+ rain rains rained raining hang hangs hung hanging paint paints painted painting
+ live lives lived living continue continues continued continuing
++acheter achète achètes achètent achetait acheté achetée achetés achetées
+ fall falls fell fallen falling call calls called calling
+ speak speaks spoke spoken speaking voler vole voles volent volait
+ rêver rêve rêves rêvent rêvait sauter saute sautes sautent sautait
+@@ -892,7 +893,8 @@ class Heuristique:
+         while i < len(mots):
+             d, f, t, typ = mots[i]
+             n = _normaliser(t)
+-            if typ == "mot" and (n in RELATIFS or est_sub(n)):
++            _n_elic = n.split("'")[0] if "'" in n else n
++            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS or est_sub(n)):
+                 suivant = mots[i + 1] if i + 1 < len(mots) else None
+                 # « since/before/after/
+… [226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,40p tools/structures/generateur.py && echo '--- imports ---' && grep -n '^import\\|^from' tools/structures/generateur.py", "description": "Check S generator imports and paths"}`
+
+  ```
+#!/usr/bin/env python3
+"""generateur.py — une phrase brute → des structures candidates (v0 heuristique).
+
+Ce n'est pas un analyseur syntaxique : c'est un **générateur de candidats** à faire valider par
+un humain. Il segmente (GN, GV, GP, REL, SUB), devine des rôles par la préposition, puis produit
+plusieurs candidats en variant l'**attachement** de chaque segment ambigu (GN le plus proche ou
+GV le plus proche).
+
+    python3 generateur.py "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 generateur.py --json "..."     # la structure complète
+"""
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+
+DET = set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses "
+          "notre nos votre vos leur leurs quel quelle quels quelles".split())
+PREP = set("a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis "
+           "pendant durant contre malgre selon pres loin devant derriere apres avant".split())
+RELATIFS = set("qui que qu dont ou quoi".split())
+CONJ = set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant quoique".split())
+COORD = set("et ou mais donc or ni car".split())
+SU
+… [1365 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git show HEAD:tools/bloc_linguistique.py | sha256sum && sha256sum tools/bloc_linguistique.py tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.j … [54 caractères tronqués]`
+
+  ```
+e6fad714b3339bb6c1a4e4592c4d07af14dff6fc
+c4d8f09b6038fb26829517d62b9ea421dff43452bea2e20fc944a5dcff0544dd  -
+c4d8f09b6038fb26829517d62b9ea421dff43452bea2e20fc944a5dcff0544dd  tools/bloc_linguistique.py
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  tools/tests/linguistique/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  tools/tests/linguistique/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  tools/tests/linguistique/gold_synthetique.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-tree HEAD tools/structures && git ls-tree fa1b0c6e tools/structures && git ls-files -s tools/structures/generateur.py | cat && git log --oneline -3 -- tools/structures && echo '--- audit commit files ---' && git ls-tree -r --n … [114 caractères tronqués]`
+
+  ```
+160000 commit 523d8c1e8c6ca29ca415360a71bfab6c5b56102c	tools/structures
+160000 commit 523d8c1e8c6ca29ca415360a71bfab6c5b56102c	tools/structures
+8189c4f3 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+4449646d B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+047945c5 S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS
+--- audit commit files ---
+tools/tests/linguistique/anaphore.py
+tools/tests/linguistique/classement_cible.py
+tools/tests/linguistique/evaluer_gold.py
+tools/tests/linguistique/gold.json
+tools/tests/linguistique/gold.py
+tools/tests/linguistique/gold_gele.json
+tools/tests/linguistique/gold_reel.json
+tools/tests/linguistique/gold_reel.py
+tools/tests/linguistique/gold_split.py
+tools/tests/linguistique/gold_synthetique.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Pinning the audit commit in /tmp because the shared repo is moving under concurrent agents
+
+- **bash** `{"command": "set -e\nR=/home/stephane/Data13TB/stephane/GitHub/Qtrinet\nP=/tmp/pin_audit\nrm -rf \"$P\"; mkdir -p \"$P/tools/structures\" \"$P/tools/tests/linguistique\"\ncd \"$R\"\ngit show fa1b0c6e:tools/bloc_linguistique.py > \"$P/tools/bloc_linguistique.py\"\ngit show fa1b0c6e:tools/tests/lingui … [641 caractères tronqués]`
+
+  ```
+5954d0870bb957472662047ba40d027ea8f64e9434ecb24217faa9337437b08f  /tmp/pin_audit/tools/bloc_linguistique.py
+291df65a43693aac4cdd3fb7fd25955b5eb7f103e24e57d8c505e31d765202d5  /tmp/pin_audit/tools/structures/generateur.py
+f2632969fbe38f67320deae3dc0052b607ffd79fcbeec29cb55d08dbb34105f1  /tmp/pin_audit/tools/tests/linguistique/gold_gele.json
+3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a  /tmp/pin_audit/tools/tests/linguistique/gold.json
+05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11  /tmp/pin_audit/tools/tests/linguistique/gold_reel.json
+e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654  /tmp/pin_audit/tools/tests/linguistique/gold_synthetique.json
+  2192 /tmp/pin_audit/tools/bloc_linguistique.py
+   648 /tmp/pin_audit/tools/structures/generateur.py
+  2840 total
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport re\np='inventaire.py'\ns=open(p).read()\ns=s.replace('RACINE = \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"\\nsys.path.insert(0, RACINE + \"/tools\")',\n            'import os\\nRACINE = os.environ.get(\"PIN\", \"/home/steph … [1751 caractères tronqués]`
+
+  ```
+ok
+13:RACINE = os.environ.get("PIN", "/home/stephane/Data13TB/stephane/GitHub/Qtrinet")
+14:DEPOT = "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"
+15:sys.path.insert(0, RACINE + "/tools")
+71:        ("fiabilite", DEPOT + "/reports/pensee-fiabilite-produit.json", "resultats",
+73:        ("bloc_l", DEPOT + "/reports/pensee-produit-bloc-l.json", "detail",
+20:RACINE = os.environ.get("PIN", "/home/stephane/Data13TB/stephane/GitHub/Qtrinet")
+21:DEPOT = "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"
+22:sys.path.insert(0, RACINE + "/tools")
+23:sys.path.insert(0, RACINE + "/tools/tests/linguistique")
+243:    a = json.load(open(DEPOT + "/reports/pensee-fiabilite-produit.json", encoding="utf-8"))
+244:    b = json.load(open(DEPOT + "/reports/pensee-produit-bloc-l.json", encoding="utf-8"))
+257:    brut = open(DEPOT + "/data/corpus_fr_litterature.txt", encoding="utf-8",
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && PIN=/tmp/pin_audit OUT=/tmp/partition_syntagmes/inventaire_audit.json timeout 900 python3 /tmp/partition_syntagmes/inventaire.py 2>&1 | tail -15", "description": "Run inventory on pinned audit commit"}`
+
+  ```
+fiabilite {"textes": 46, "textes_avec_chevauchement": 23, "paires": 107, "syntagmes": 360, "union": 85, "attaches": 284, "classes": {"union_contenu": 60, "inclusion_s_dans_union": 37, "croisement": 7, "meme_span_union": 3}}
+  ex inclusion_s_dans_union f02 'qui dort sur le toit' | 'qui dort sur le toit se réveille' {'type': 'REL', 'debut': 22, 'fin': 42, 'union': False, 'att': True} {'type': 'REL', 'debut': 22, 'fin': 54, 'union': True, 'att': True}
+  ex croisement f06 'Je ne pense pas' | "ne pense pas qu'il viendra demain" {'type': 'GV', 'debut': 0, 'fin': 15, 'union': False, 'att': False} {'type': 'GV', 'debut': 3, 'fin': 36, 'union': True, 'att': False}
+  ex union_contenu f06 'nous verrons bien' | 'verrons bien' {'type': 'GV', 'debut': 43, 'fin': 60, 'union': False, 'att': False} {'type': 'GV', 'debut': 48, 'fin': 60, 'union': True, 'att': False}
+  ex meme_span_union f50 "où il passe l'après-midi" | "où il passe l'après-midi" {'type': 'REL', 'debut': 209, 'fin': 233, 'union': False, 'att': True} {'type': 'SUB', 'debut': 209, 'fin': 233, 'union': True, 'att': True}
+bloc_l {"textes": 50, "textes_avec_chevauchement": 31, "paires": 132, "syntagmes": 362, "union": 98, "attaches": 265,
+… [1034 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && PIN=/tmp/pin_audit OUT=/tmp/partition_syntagmes/options_audit.json timeout 1800 python3 /tmp/partition_syntagmes/options.py 2>&1 | tail -30", "description": "Run options measured at pinned audit commit"}`
+
+  ```
+base {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_chunker {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_large {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+filtrer_chunker {"f1": 0.6163, "precision": 0.7122, "rappel": 0.5432, "att_exact": 217, "att_labels": 217, "att_couverture": 0.9079, "pos": 0.7581, "fraction": 0.5537} bancs 91 636 libres 29 214 retires 197
+filtrer_contenu {"f1": 0.5006, "precision": 0.5899, "rappel": 0.4348, "att_exact": 208, "att_labels": 208, "att_couverture": 0.8703, "pos": 0.7581, "fraction": 0.5537} bancs 112 
+… [870 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\no=json.load(open('options_audit.json'))\nfor v in ['base','filtrer_chunker','filtrer_contenu','union_any','widest','dedup']:\n    b=o['bancs'][v]\n    print(f\"{v:18} paires={b['paires']:3} segments={b['segments']:3} union={b … [741 caractères tronqués]`
+
+  ```
+base               paires=239 segments=722 union=183 att=549 textes_chev=54 classes={'inclusion_s_dans_union': 127, 'union_contenu': 80, 'croisement': 26, 'meme_span_union': 6}
+   par banc {'fiabilite': {'paires': 107, 'textes': 23, 'segments': 360}, 'bloc_l': {'paires': 132, 'textes': 31, 'segments': 362}}
+filtrer_chunker    paires= 91 segments=636 union=183 att=481 textes_chev=33 classes={'union_contenu': 80, 'meme_span_union': 6, 'croisement': 5}
+   par banc {'fiabilite': {'paires': 42, 'textes': 11, 'segments': 316}, 'bloc_l': {'paires': 49, 'textes': 22, 'segments': 320}}
+filtrer_contenu    paires=112 segments=595 union= 56 att=484 textes_chev=35 classes={'union_contenu': 80, 'croisement': 26, 'meme_span_union': 6}
+   par banc {'fiabilite': {'paires': 47, 'textes': 11, 'segments': 300}, 'bloc_l': {'paires': 65, 'textes': 24, 'segments': 295}}
+union_any          paires=  3 segments=543 union=  4 att=447 textes_chev= 2 classes={'croisement': 3}
+   par banc {'fiabilite': {'paires': 0, 'textes': 0, 'segments': 276}, 'bloc_l': {'paires': 3, 'textes': 2, 'segments': 267}}
+widest             paires= 32 segments=515 union= 56 att=409 textes_chev=24 classes={'croisement': 26, 'meme_spa
+… [2231 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='options.py'\ns=open(p).read()\n# corriger l'inversion petit/grand\ns=s.replace('petit, grand = (x, y) if rel == \"inclut\" else (y, x)',\n            'petit, grand = (y, x) if rel == \"inclut\" else (x, y)')\n# ajouter les variantes \" … [2117 caractères tronqués]`
+
+  ```
+patched
+206:def garder_chunker(a: bl.Annotation, portee: tuple[str, ...]) -> int:
+255:        elif self.mode.startswith("garder_chunker"):
+256:            portee = {"garder_chunker_c1": ("inclus",),
+257:                      "garder_chunker_c1c2": ("inclus", "inclut"),
+258:                      "garder_chunker_c1c2c3": ("inclus", "inclut", "meme_span"),
+259:                      "garder_chunker": ("inclus", "inclut", "meme_span", "croise")}[self.mode]
+260:            self.stats["retires"] += garder_chunker(a, portee)
+367:        ("garder_chunker_c1", "garder_chunker_c1", "s_long"),
+368:        ("garder_chunker_c1c2", "garder_chunker_c1c2", "s_long"),
+369:        ("garder_chunker_c1c2c3", "garder_chunker_c1c2c3", "s_long"),
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && PIN=/tmp/pin_audit OUT=/tmp/partition_syntagmes/options_audit2.json timeout 1800 python3 /tmp/partition_syntagmes/options.py 2>&1 | tail -20", "description": "Measure progressive chunker-preserving filters"}`
+
+  ```
+base {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_chunker {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+alternative_large {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "att_exact": 222, "att_labels": 222, "att_couverture": 0.9289, "pos": 0.7581, "fraction": 0.5537} bancs 239 722 libres 59 233 retires 0
+filtrer_chunker {"f1": 0.6163, "precision": 0.7122, "rappel": 0.5432, "att_exact": 217, "att_labels": 217, "att_couverture": 0.9079, "pos": 0.7581, "fraction": 0.5537} bancs 91 636 libres 29 214 retires 197
+filtrer_contenu {"f1": 0.5006, "precision": 0.5899, "rappel": 0.4348, "att_exact": 208, "att_labels": 208, "att_couverture": 0.8703, "pos": 0.7581, "fraction": 0.5537} bancs 112 
+… [1704 caractères tronqués]
+  ```
+

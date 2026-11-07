@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 146.2 h |
+| Durée | 146.4 h |
 | Tours | 184 |
-| Messages | 3140 |
-| Appels d'outils | 2774 |
+| Messages | 3149 |
+| Appels d'outils | 2783 |
 | Fichiers touchés | 25 |
-| Commandes | 2277 |
+| Commandes | 2286 |
 | Sous-agents | 34 |
-| Commits | 356 |
+| Commits | 357 |
 | Compactages de contexte | 7 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*20 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 6 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Je traite les 4 échecs réels : `acheter`, l'élision `qu'il`, et le bug du gold (GP sans préposition)
+⏵ **183/183** : le gold corrigé donne **226/226** et 13 spans. Je fige la fiche
 
 ## 3. Travail accompli
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2237 autres
+- … et 2246 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10556,4 +10556,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183" -- tools/bloc_linguistique.py to
 - PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183" -- tools/schemas/drav
 - POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py 2>&1 | tail -1   if git log -1 
+- B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183" -- tools/tests/linguistique/gold_sy
 

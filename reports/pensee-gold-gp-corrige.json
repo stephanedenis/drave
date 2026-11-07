@@ -1,0 +1,40 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "defaut": {
+  "fichier": "gold_synthetique.py",
+  "mode": "sv",
+  "avant": "GP sans préposition (i = v+index+1)",
+  "apres": "GP avec préposition (i = v+index)"
+ },
+ "gp_corriges": [
+  "s027",
+  "s146",
+  "s148",
+  "s160"
+ ],
+ "avant": {
+  "exact": 222,
+  "couverture": 0.9289,
+  "spans": 17
+ },
+ "apres": {
+  "exact": 226,
+  "labels": 226,
+  "couverture": 0.9456,
+  "spans": 13,
+  "par_type": {
+   "REL": 8,
+   "SUB": 5,
+   "GP": 0
+  },
+  "dev": "155/155",
+  "test": "71/71",
+  "f1": 0.6198
+ },
+ "limites": [
+  "9 synthétiques non tranchés",
+  "4 réels",
+  "autres modes non audités"
+ ]
+}

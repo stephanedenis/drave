@@ -95,8 +95,9 @@ class P:
             gv, gps = self.gv(); tokens += gv; v = s + len(gn); segs.append(("GV", v, len(tokens)))
             v_txt = next((t for t, p in gv if p == "VERB"), gv[-1][0])
             for prep, g in gps:
-                i = v + [t[0] for t in gv].index(prep) + 1
-                segs.append(("GP", i, i + len(g), [v_txt, gn[-1][0]]))
+                # le GP **inclut** sa préposition (comme le mode sv_gp) : le span partait après
+                i = v + [t[0] for t in gv].index(prep)
+                segs.append(("GP", i, i + 1 + len(g), [v_txt, gn[-1][0]]))
         elif mode == "sv_gp":
             gn, _ = self.gn(); tokens += gn; segs.append(("GN", 0, len(tokens)))
             v = self.verbe(); tokens.append((v, "VERB")); segs.append(("GV", len(tokens) - 1, len(tokens)))

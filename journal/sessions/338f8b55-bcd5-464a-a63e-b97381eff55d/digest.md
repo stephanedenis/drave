@@ -900,3 +900,163 @@ f15 refus refus langue= None rc= 1 pos= None mots= None ''
 … [3340 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _normaliser\" -A15 tools/bloc_linguistique.py && sed -n '480,530p' tools/bloc_linguistique.py", "description": "Read normalizer and _est_verbe"}`
+
+  ```
+150:def _normaliser(texte: str) -> str:
+151-    return unicodedata.normalize("NFC", texte).casefold()
+152-
+153-
+154-def _trigrammes(texte: str) -> list[str]:
+155-    t = _normaliser(texte)
+156-    return [t[i:i + 3] for i in range(max(0, len(t) - 2))]
+157-
+158-
+159-def _profil(texte: str, top: int = 200) -> dict[str, int]:
+160-    c = collections.Counter(_trigrammes(texte))
+161-    return dict(c.most_common(top))
+162-
+163-
+164-def charger_profils_udhr(chemin: pathlib.Path, train=(0, 14), test=(15, 30),
+165-                         min_train: int = 5, min_test: int = 3,
+def _sans_enclitique(mot: str) -> str:
+    """`appelle-moi` → `appelle` (les enclitiques ne font pas partie de la tête)."""
+    for suf in ENCLITIQUES:
+        if mot.endswith(suf) and len(mot) > len(suf):
+            return mot[: -len(suf)]
+    return mot
+
+
+def _est_verbe(mot: str) -> bool:
+    """Le mot est-il un verbe ? Lexique + désinences courantes (fr/en)."""
+    n = _normaliser(_sans_enclitique(mot))
+    if not n:
+        return False
+    if n in VERBES_CONNUS:
+        return True
+    for suf in ("er", "ir", "e", "es", "ent", "ait", "aient", "é", "ée", "és", "i", "u",
+                "ez", "ons", "iez", "ais",
+… [1318 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor w in ['reportée','coupées','calme','calmes','fatigué','fatiguée','intéressant','génial','ouverte','parti','médecin','tired','running','fast … [285 caractères tronqués]`
+
+  ```
+reportée       est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+coupées        est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+calme          est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+calmes         est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+fatigué        est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+fatiguée       est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+intéressant    est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('ADJ', True, 0.68)
+génial         est_verbe=False pos_en=('ADJ', True, 0.38) pos_fr=('ADJ', True, 0.38)
+ouverte        est_verbe=True  pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+parti          est_verbe=True  pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+médecin        est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+tired          est_verbe=False pos_en=('VERB', True, 0.4) pos_fr=('VERB', True, 0.4)
+running        est_verbe=True  pos_en=('VERB', True, 0.4) pos_fr=('VERB', True, 0.4)
+fast           est_verbe=False pos_en=('NOUN', True, 0.3) pos_fr=('NOUN', True, 0.3)
+late      
+… [839 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du harnais hors dépôt (copie en mémoire)
+
+- **bash** `{"command": "mkdir -p /tmp/pos_r4 && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/harness.py <<'PY'\n\"\"\"Harnais local hors dépôt : copie en mémoire de bloc_linguistique.py + variantes R4/CC.\"\"\"\nfrom __future__ import annotations\nimport copy, json, pathlib, random,  … [4981 caractères tronqués]`
+
+  ```
+loaded 13 ('NOUN', True, 0.3)
+r4 ('NOUN', True, 0.3)
+[('She', 'PRON'), ('is', 'AUX'), ('calm', 'ADJ')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, time\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfrom tools.tests.linguistique.gold_split import dev, test\n\nph=charg … [1530 caractères tronqués]`
+
+  ```
+BASE 0.8383 0.9133 0.7673 0.6198 226 226 0.8375 0.84
+r4_en POS 0.8421 dev 0.8416 test 0.8431 delta dev 0.41 test 0.31 F1 0.6198 att 226 226 ferme 0.9133 ouvert 0.7746
+r4_fr POS 0.8418 dev 0.8407 test 0.8441 delta dev 0.32 test 0.41 F1 0.6198 att 226 226 ferme 0.9133 ouvert 0.774
+r4_bilingue POS 0.8455 dev 0.8449 test 0.8471 delta dev 0.74 test 0.71 F1 0.6198 att 226 226 ferme 0.9133 ouvert 0.7814
+r4_bilingue_guard POS 0.8452 dev 0.8449 test 0.8461 delta dev 0.74 test 0.61 F1 0.6198 att 226 226 ferme 0.9133 ouvert 0.7808
+r4_en_large POS 0.8418 dev 0.8412 test 0.8431 delta dev 0.37 test 0.31 F1 0.6198 att 226 226 ferme 0.9133 ouvert 0.774
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/tmp/pos_r4'); sys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport harness as H\nimport bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gol … [913 caractères tronqués]`
+
+  ```
+import 0.6198 226 226 239
+exec 0.6198 226 226 239
+files /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+racine /home/stephane/Data13TB/stephane/GitHub/Qtrinet /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+init sig (None, True, 0.55, 0.12, True)
+h1 segmenter_s True h2 True
+g001 True {('GV', 8, 12), ('GN', 0, 7)} {('GV', 8, 12), ('GN', 0, 7)}
+g002 True {('GV', 22, 26), ('GP', 8, 26), ('GP', 8, 21), ('GN', 0, 7)} {('GV', 22, 26), ('GP', 8, 26), ('GP', 8, 21), ('GN', 0, 7)}
+g003 True {('GV', 9, 13), ('GP', 22, 34), ('GV', 9, 21), ('GN', 0, 8), ('GN', 14, 21)} {('GV', 9, 13), ('GP', 22, 34), ('GV', 9, 21), ('GN', 0, 8), ('GN', 14, 21)}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git log --oneline -5 -- tools/bloc_linguistique.py && git diff HEAD --stat -- tools/bloc_linguistique.py && git status --short tools/bloc_linguistique.py tools/structures && git -C tools/struct … [84 caractères tronqués]`
+
+  ```
+c4d8f09b6038fb26829517d62b9ea421dff43452bea2e20fc944a5dcff0544dd  tools/bloc_linguistique.py
+e6fad714 POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183
+037fe041 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183
+2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183
+1962eb15 PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS)
+0911ae29 B13 — 222/222 (1,0000) : LE DERNIER MARQUEUR AMBIGU (when APRÈS UN GN), COUVERTURE 0,9289, 17 SPANS TOUS INATTEIGNABLES ; 183/183
+ m tools/structures
+ M donnees/paragraphes-validations.jsonl
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline e6fad714 && git show e6fad714 -- tools/bloc_linguistique.py | head -80 && git log -1 --format='%H %s'", "description": "Inspect latest POS commit"}`
+
+  ```
+e6fad714 POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183
+ journal/2026-11-06/README.md                       |  13 +-
+ journal/2026-11-06/distribue.md                    |   8 +-
+ journal/2026-11-06/docs.md                         |   8 +-
+ journal/2026-11-06/mesures.md                      |   8 +-
+ journal/2026-11-06/modele.md                       |   8 +-
+ journal/2026-11-06/outils.md                       |   8 +-
+ journal/2026-11-06/portes.md                       |  11 +-
+ journal/README.md                                  |   8 +-
+ .../338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md | 129 ++++++++
+ .../rapport.md                                     |  19 +-
+ .../3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md | 270 ++++++++++++++++
+ .../rapport.md                                     |  28 +-
+ journal/sessions/MANIFEST.md                       |  10 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md | 107 +++++++
+ .../rapport.md                                     |  20 +-
+ .../eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md | 353 +++++++++++++++++++++
+ .../rapport.md                                     |  29 +-
+ tools/bloc_linguistique.py          
+… [1782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 2ba393b0:tools/bloc_linguistique.py > /tmp/pos_r4/bloc_b13.py && sha256sum /tmp/pos_r4/bloc_b13.py && grep -n \"# 4. phrase + pragmatique\" /tmp/pos_r4/bloc_b13.py && git diff 2ba393b0 -- tools/tests/linguistique/gold.json t … [156 caractères tronqués]`
+
+  ```
+f3db75fcaf0ced187c8ddc204e2b8509f34e080c3b81021b1e7ca66327afcc87  /tmp/pos_r4/bloc_b13.py
+1114:        # 4. phrase + pragmatique
+diff --git a/tools/tests/linguistique/gold_synthetique.json b/tools/tests/linguistique/gold_synthetique.json
+index 4307946c..079562ee 100644
+--- a/tools/tests/linguistique/gold_synthetique.json
++++ b/tools/tests/linguistique/gold_synthetique.json
+@@ -1577,9 +1577,9 @@
+     },
+     {
+      "type": "GP",
+-     "texte": "il",
++     "texte": "avec il",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat >> /tmp/pos_r4/harness.py <<'PY'\n\ndef load_source(src, r4=False, name='bl_src', file_path=None):\n    if r4:\n        assert src.count(R4_ANCHOR) == 1, src.count(R4_ANCHOR)\n        src = src.replace(R4_ANCHOR, R4_BLOCK + R4_AN … [1078 caractères tronqués]`
+
+  ```
+all 0.8383 0.9133 0.7673 0.6204 226 226 239 0.9456
+dev 0.8375 0.9093 0.7688 0.617 155 155 163 0.9509
+test 0.84 0.9224 0.764 0.628 71 71 76 0.9342
+  ```
+

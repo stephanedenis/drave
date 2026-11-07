@@ -53341,3 +53341,139 @@ T114/T115 recalées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183\" -- tool … [418 caractères tronqués]`
+
+  ```
+19 files changed, 974 insertions(+), 71 deletions(-)
+COMMIT OK 1
+e6fad714 POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183
+   97918c05..e6fad714  s/v7 -> s/v7
+   97918c05..e6fad714  master -> master
+ven 06 nov 2026 18:54:28 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le bug du gold (GP sans préposition) : j'analyse la conversion token → caractères
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"debut\\|fin\" tools/tests/linguistique/gold_synthetique.py | sed -n '10,30p'; grep -n \"def phrase\\|def construire\\|texte\\[\" tools/tests/linguistique/gold_synthetique.py | head -8", "description": "Voir la conversion de … [9 caractères tronqués]`
+
+  ```
+87:    def phrase(self, pid):
+162:def construire(n=160, graine=42) -> dict:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '162,210p' tools/tests/linguistique/gold_synthetique.py", "description": "Lire construire()"}`
+
+  ```
+def construire(n=160, graine=42) -> dict:
+    rng = random.Random(graine)
+    p = P(rng)
+    vus, phrases = set(), []
+    essais = 0
+    while len(phrases) < n and essais < n * 20:
+        essais += 1
+        d = p.phrase(f"s{len(phrases) + 1:03d}")
+        if d["texte"] in vus:
+            continue
+        vus.add(d["texte"])
+        # spans des mots et des segments
+        mots, curseur = [], 0
+        for t, pos in d.pop("tokens"):
+            i = d["texte"].find(t, curseur)
+            assert i >= 0, (d["texte"], t)
+            mots.append({"texte": t, "pos": pos, "debut": i, "fin": i + len(t)})
+            curseur = i + len(t)
+        segments = []
+        for item in d.pop("segments_idx"):
+            typ, a, b = item[:3]
+            cible = item[3] if len(item) > 3 else None
+            cibles = cible if isinstance(cible, list) else ([cible] if cible else [])
+            debut = mots[a]["debut"]
+            fin = mots[b - 1]["fin"]
+            seg = {"type": typ, "texte": d["texte"][debut:fin], "role": typ.lower(),
+                   "debut": debut, "fin": fin}
+            if cibles:
+                seg["cibles"] = cibles
+                seg["cible"] = cibles[0]
+            
+… [557 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/gold_synthetique.py'); t=p.read_text()\nt=t.replace('''                i = v + [t[0] for t in gv].index(prep) + 1\n                segs.append((\"GP\", i, i + … [722 caractères tronqués]`
+
+  ```
+générateur corrigé
+s027 mon sombre village marche avec il [('GN', 0, 18, 'mon sombre village'), ('GV', 19, 33, 'marche avec il'), ('GP', 31, 33, 'il')]
+s146 ma montagne observe avec les jardin [('GN', 0, 11, 'ma montagne'), ('GV', 12, 35, 'observe avec les jardin'), ('GP', 25, 35, 'les jardin')]
+s148 le voyage nage pour les ancienne lettre [('GN', 0, 9, 'le voyage'), ('GV', 10, 39, 'nage pour les ancienne lettre'), ('GP', 20, 39, 'les ancienne lettre')]
+s160 le chemin nage avec le renard [('GN', 0, 9, 'le chemin'), ('GV', 10, 29, 'nage avec le renard'), ('GP', 20, 29, 'le renard')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/tests/linguistique/gold_synthetique.json 2>/dev/null | awk '{print $5, $9}'; timeout 300 python3 - <<'PY'\nimport sys, json; sys.path.insert(0,'.')\nimport pathlib\nfrom tools.tests.linguistique import gold_synthetique a … [808 caractères tronqués]`
+
+  ```
+149191 tools/tests/linguistique/gold_synthetique.json
+avant : phrases 160 | ids uniques 160
+neuf  : phrases 160
+phrases avec un nombre de segments différent : 0
+GP corrigés : 4 [('s027', 31, 26), ('s146', 25, 20), ('s148', 20, 15), ('s160', 20, 15)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le gold corrigé : mêmes 160 phrases, **4 GP réparés**. Je régénère et mesure
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/linguistique/gold_synthetique.py; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, eval … [564 caractères tronqués]`
+
+  ```
+gold synthétique écrit → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+TOUT exact 226 / 226 | couv 0.9456 | F1 0.6198 | spans 13
+dev exact 155 / 155 | couv 0.9509
+test exact 71 / 71 | couv 0.9342
+  ```
+
+### 🤖 Assistant
+
+⏵ **226/226 (1,0000)**, couverture **0,9456**, 13 spans. Je recale les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après le gold corrigé", "timeoutMs": 1900000}`
+
+  ```
+❌ T153 attachement       attachement : top1 0.9456, exact 0.9456, couverture 0.9456
+  ❌ T161 cible proximité   proximité : top1 226/239, exact 226/239, tête 226/145
+  ❌ T162 candidats verbes  candidats : top-k 225/239 (0.9414), tête 225/226
+  ❌ T163 échecs attachement échecs : 13 de span, 1 de cible (33 avant les correctifs)
+  ❌ T164 verbe du GV       verbe du GV : saw (attendu saw) ; exact 226/239
+  ❌ T166 spans perdus      spans : 8 REL, 5 SUB, 0 GP
+  ❌ T167 dénominateur      dénominateur : spans 1.0 / 0.9956 / 1.0
+  ❌ T168 classement        classement : exact 226/226 ; cibles 154 verbes, 72 noms
+  ❌ T169 conventions       conventions : verbes 154/154 (1.0), noms 72/72 (1.0)
+  ❌ T171 lexique élargi    lexique élargi : vu True, accroché True, couru True ; exact 226/226
+  ❌ T173 top-k strict      top-k : 225 sous-chaîne, 225 exacts (0.9956)
+  ❌ T177 candidats têtes   candidats têtes : 225/226 (0.9956)
+  ❌ T179 multi-cibles      multi-cibles : exact 226/226, exact_any 226/226
+  ❌ T180 par langue        langues : fr 140/140, en 86/86 (86/88 labels)
+  169/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(r[\"top1_taux\"] - 0.9289) < 0.001\\n            and abs(r[\"exact_taux\"] - 0.9289) < 0.001','abs(r[\"top1_taux\"] - 0.9456) < 0 … [3360 caractères tronqués]`
+
+  ```
+14 / 14
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **183/183** : le gold corrigé donne **226/226** et 13 spans. Je fige la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gold-gp-corrige.md <<'MD'\n# B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Un défa … [6162 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état 687 780
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/tests/linguistique/gold_synthetique.py tools/tests/linguistique/gold_synthetique.json tools/pensee/autotest.py reports/rapport-gold-gp-corrige.md reports/pensee-gold-gp-corrige.json reports/README. … [983 caractères tronqués]`

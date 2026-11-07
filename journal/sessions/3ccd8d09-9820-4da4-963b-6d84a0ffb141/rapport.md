@@ -7,12 +7,12 @@
 | Identifiant | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 31 |
+| Messages | 30 |
+| Appels d'outils | 36 |
 | Fichiers touchés | 0 |
-| Commandes | 29 |
+| Commandes | 34 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*31 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,11 +41,11 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 16 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Lecture du bloc linguistique et des audits
+⏵ Prototype des règles de frontière et banc d'essai local
 
 ## 3. Travail accompli
 
@@ -85,6 +85,11 @@
 - **T1** Inspect multi-sentence gold entries
 - **T1** Probe current tokenization
 - **T1** Check digits in gold
+- **T1** Check abbreviations in gold
+- **T1** Check questions in gold
+- **T1** Check exclamations and non-final questions
+- **T1** Benchmark gold evaluation time
+- **T1** Prototype sentence boundary rules
 
 ## 4. Mesures et résultats marquants
 

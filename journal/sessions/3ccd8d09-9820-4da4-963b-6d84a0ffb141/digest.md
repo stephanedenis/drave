@@ -895,3 +895,91 @@ gold_synthetique.json 160 multi-ponctuation: 0
 … [1011 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys; sys.path.insert(0,'tools')\nfrom bloc_linguistique import Heuristique\nfor t in [\"Le prix est 12.5 euros.\",\"alice@example.org\",\"https://example.com/docs?page=2\",\"src/tools/bloc_linguistique.py\",\ … [164 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.'
+   [(0, 2, 'Le', 'mot'), (3, 7, 'prix', 'mot'), (8, 11, 'est', 'mot'), (12, 14, '12', 'nombre'), (14, 15, '.', 'ponctuation'), (15, 16, '5', 'nombre'), (17, 22, 'euros', 'mot'), (22, 23, '.', 'ponctuation')]
+'alice@example.org'
+   [(0, 5, 'alice', 'mot'), (5, 6, '@', 'ponctuation'), (6, 13, 'example', 'mot'), (13, 14, '.', 'ponctuation'), (14, 17, 'org', 'mot')]
+'https://example.com/docs?page=2'
+   [(0, 5, 'https', 'mot'), (5, 6, ':', 'ponctuation'), (6, 7, '/', 'ponctuation'), (7, 8, '/', 'ponctuation'), (8, 15, 'example', 'mot'), (15, 16, '.', 'ponctuation'), (16, 19, 'com', 'mot'), (19, 20, '/', 'ponctuation'), (20, 24, 'docs', 'mot'), (24, 25, '?', 'ponctuation'), (25, 29, 'page', 'mot'), (29, 30, '=', 'ponctuation'), (30, 31, '2', 'nombre')]
+'src/tools/bloc_linguistique.py'
+   [(0, 3, 'src', 'mot'), (3, 4, '/', 'ponctuation'), (4, 9, 'tools', 'mot'), (9, 10, '/', 'ponctuation'), (10, 27, 'bloc_linguistique', 'mot'), (27, 28, '.', 'ponctuation'), (28, 30, 'py', 'mot')]
+'Rendez-vous le 12.03.2024.'
+   [(0, 11, 'Rendez-vous', 'mot'), (12, 14, 'le', 'mot'), (15, 17, '12', 'nombre'), (17, 18, '.', 'ponctuation'), (18, 20, '03', 'nombre'), (20, 21, '.', 'po
+… [255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    d=[x for x in p['phrases'] if re.search(r'\\d',x['texte'])]\n    print(f,le … [141 caractères tronqués]`
+
+  ```
+gold.json 0
+gold_reel.json 0
+gold_synthetique.json 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    for x in p['phrases']:\n        if re.search(r'\\b(M|MM|Mme|Dr|Pr|etc|cf|p| … [150 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    q=[x for x in p['phrases'] if '?' in x['texte']]\n    print(f,len(q))\n     … [123 caractères tronqués]`
+
+  ```
+gold.json 1
+   g013 'Peux-tu venir ?' {'acte': 'question', 'reponse': 'oui'}
+gold_reel.json 19
+   r010 'Tu viens demain ?' {'acte': 'question', 'reponse': 'oui'}
+   r030 'You come tomorrow?' {'acte': 'question', 'reponse': 'yes'}
+   r304 'Viens-tu demain ?' {'acte': 'question', 'reponse': 'oui'}
+   r314 'Do you come tomorrow?' {'acte': 'question', 'reponse': 'yes'}
+   r408 'Ne viens-tu pas demain ?' {'acte': 'question', 'reponse': 'si'}
+   r409 'Ne mange-t-il pas ?' {'acte': 'question', 'reponse': 'si'}
+   r410 'Ne dort-elle pas ?' {'acte': 'question', 'reponse': 'si'}
+   r411 'Ne partent-ils pas ?' {'acte': 'question', 'reponse': 'si'}
+   r412 'Ne lis-tu pas ?' {'acte': 'question', 'reponse': 'si'}
+   r413 'Ne parle-t-elle pas ?' {'acte': 'question', 'reponse': 'si'}
+gold_synthetique.json 14
+   s009 'le lent village cherche?' {'acte': 'question', 'negation': False, 'modalite': False, 'double_sens': False, 'reponse': 'oui'}
+   s043 'Hugo écoute?' {'acte': 'question', 'negation': False, 'modalite': False, 'double_sens': False, 'reponse': 'oui'}
+   s046 'le canard observe?' {'acte': 'question', 'negation': False, 'modalite': False, 'double_sens': False, 'reponse': 'oui'}
+   s062 'Emm
+… [883 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,re\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json']:\n    p=json.load(open('tools/tests/linguistique/'+f))\n    for x in p['phrases']:\n        if '!' in x['texte'] or '?' in x['texte'][: … [140 caractères tronqués]`
+
+  ```
+gold.json g010 'Viens ici !' {'acte': 'exclamation'}
+gold_reel.json r305 'Ferme la porte !' {'acte': 'ordre'}
+gold_reel.json r315 'Close the door!' {'acte': 'ordre'}
+gold_synthetique.json s005 'un rapide chemin crie!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s006 'la forêt crie!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s007 'Nage!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s025 'Cherche!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s028 'elle dessine!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s034 'Marche!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s036 'Commence!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s038 'ils commence!' {'acte': 'exclamation', 'negation': False, 'modalite': False, 'double_sens': False}
+gold_synthetique.json s057 'Fin
+… [2508 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Prototype des règles de frontière et banc d'essai local
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 - <<'PY'\nimport sys; sys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaluer_gold import charger, evaluer_bloc\nfrom gold_split import dev, test\np=charger … [251 caractères tronqués]`
+
+  ```
+612 422 190
+0.8375 0.6165 0.9509 {'acte': 1.0, 'negation': 0.9787, 'modalite': 0.9929, 'double_sens': 0.9336}
+[stderr]
+
+real	0m0,444s
+user	0m0,416s
+sys	0m0,028s
+  ```
+

@@ -1577,9 +1577,9 @@
     },
     {
      "type": "GP",
-     "texte": "il",
+     "texte": "avec il",
      "role": "gp",
-     "debut": 31,
+     "debut": 26,
      "fin": 33,
      "cibles": [
       "marche",
@@ -8710,9 +8710,9 @@
     },
     {
      "type": "GP",
-     "texte": "les jardin",
+     "texte": "avec les jardin",
      "role": "gp",
-     "debut": 25,
+     "debut": 20,
      "fin": 35,
      "cibles": [
       "observe",
@@ -8842,9 +8842,9 @@
     },
     {
      "type": "GP",
-     "texte": "les ancienne lettre",
+     "texte": "pour les ancienne lettre",
      "role": "gp",
-     "debut": 20,
+     "debut": 15,
      "fin": 39,
      "cibles": [
       "nage",
@@ -9538,9 +9538,9 @@
     },
     {
      "type": "GP",
-     "texte": "le renard",
+     "texte": "avec le renard",
      "role": "gp",
-     "debut": 20,
+     "debut": 15,
      "fin": 29,
      "cibles": [
       "nage",

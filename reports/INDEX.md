@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **683 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **684 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -164,6 +164,7 @@
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
 | [rapport-gold-anglais.md](rapport-gold-anglais.md) | B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause |
+| [rapport-gold-gp-corrige.md](rapport-gold-gp-corrige.md) | B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456 |
 | [rapport-gold-split.md](rapport-gold-split.md) | B13 — le gold coupé en dev/test : les gains généralisent (test 0,9815, dev 0,9811) |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
