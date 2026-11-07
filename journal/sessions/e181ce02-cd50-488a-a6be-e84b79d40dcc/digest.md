@@ -57578,3 +57578,155 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main()\n\n\nif __name__ == \"__main__\":\n    unittest.main()''','''if __name … [1431 caractères tronqués]`
+
+  ```
+doublon retiré
+
+OK
+docs
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 15 files changed, 210 insertions(+), 26 deletions(-)
+COMMIT OK 1
+081aa7e8 PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS
+   ba42d4cc..081aa7e8  s/v7 -> s/v7
+   ba42d4cc..081aa7e8  master -> master
+ven 06 nov 2026 23:35:23 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1132,1160p' tools/bloc_linguistique.py", "description": "Voir le code autour du marqueur"}`
+
+  ```
+return True
+            n2 = _normaliser(m)
+            # A17 (R1a) : un pronom n'est jamais un verbe **par la position** (« that I read »)
+            if n2 in lex.get("PRON", set()):
+                return False
+            if n2 in lex.get("DET", set()) or n2 in lex.get("PREP", set()) or n2 in lex.get("CONJ", set()):
+                return False
+            idx = par_debut.get(d)
+            if idx is not None and idx > 0:
+                avant = _normaliser(mots[idx - 1][2])
+                if avant in SUJETS:
+                    return True
+            return False
+        segments: list[dict] = []
+        i = 0
+        while i < len(mots):
+            d, f, t, typ = mots[i]
+            n = _normaliser(t)
+            _n_elic = n.split("'")[0] if "'" in n else n
+            # « qu'il » : le marqueur est « que » élidé (le token garde l'apostrophe)
+            _n_elic_e = (_n_elic + "e") if _n_elic.endswith("qu") else _n_elic
+            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS
+                                 or _n_elic_e in RELATIFS or _n_elic_e in SUBORDONNANTS
+                                 or est_sub(n) or est_sub(_n_elic_e)):
+                suivant = mot
+… [374 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nsrc=src.replace('''            if typ == \"mot\" and (n in RELATIFS or _n_elic in RELATIFS''',\n'''            if n.startswith(\"qu'\"): pr … [748 caractères tronqués]`
+
+  ```
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 26, "sais qu'il vient demain"), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nsrc=src.replace('''        while i < len(mots):\n            d, f, t, typ = mots[i]\n            n = _normaliser(t)''','''        while i < … [448 caractères tronqués]`
+
+  ```
+TOK 0 'Je' mot
+TOK 1 'sais' mot
+TOK 5 '.' ponctuation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1245,1290p' tools/bloc_linguistique.py", "description": "Voir la fin de la branche GV"}`
+
+  ```
+_normaliser(mots[j][2])) not in RELATIFS
+                       and (_normaliser(mots[j][2]).split("'")[0] + "e"
+                            if _normaliser(mots[j][2]).endswith("qu") else
+                            _normaliser(mots[j][2])) not in SUBORDONNANTS):
+                    j += 1
+                segments.append({"type": "GV", "role": "prédicat", "niveau": 0,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+                continue
+            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
+                j = i + 1
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and not (est_verbe(mots[j][0], mots[j][2])
+                                and not (j > i + 1 and _normaliser(mots[j - 1][2]) in lex.get("DET", set())))
+                       and _normaliser(mots[j][2]) not in RELATIFS):
+                    j += 1
+        
+… [1648 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nancien = '''                       # un marqueur **élidé** arrête aussi le GV (« sais | qu'il vient »)\n                       and (_nor … [1623 caractères tronqués]`
+
+  ```
+condition corrigée
+syntaxe OK
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 7, 'sais'), ('SUB', 8, 19, "qu'il vient"), ('SUB', 8, 26, "qu'il vient demain"), ('GP', 20, 26, 'demain')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nfrom tools.tests.linguistique.gold_split import dev, tes … [545 caractères tronqués]`
+
+  ```
+TOUT POS 0.8625 | F1 0.6519 | exact 236/237 | cov 0.9916
+dev POS 0.8618 | F1 0.6482 | exact 160/161
+test POS 0.8642 | F1 0.6601 | exact 76/76
+  ```
+
+### 🤖 Assistant
+
+⏵ **236/237, couverture 0,9916** : `r264` est réglé. Je recale les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌\" | sed 's/  */ /g'", "description": "Portes après r264", "timeoutMs": 1900000}`
+
+  ```
+❌ T110 segmenteur segmenteur : S F1 0.5404 tête 0.6879 ; chunker F1 0.7079 tête 0.8062
+ ❌ T112 union segmenteurs union : segments F1 0.6548 (S 0,5396)
+ ❌ T113 union par défaut union par défaut : F1 0.6548, tête 0.7711
+ ❌ T114 cascade + union cascade : F1 0.6548, tête 0.7711, 602 appels
+ ❌ T153 attachement attachement : top1 0.9874, exact 0.9874, couverture 0.9916
+ ❌ T161 cible proximité proximité : top1 236/239, exact 236/239, tête 236/145
+ ❌ T162 candidats verbes candidats : top-k 235/239 (0.9833), tête 235/237
+ ❌ T163 échecs attachement échecs : 2 de span, 2 de cible (33 avant les correctifs)
+ ❌ T164 verbe du GV verbe du GV : saw (attendu saw) ; exact 236/239
+ ❌ T166 spans perdus spans : 1 REL, 1 SUB, 0 GP
+ ❌ T167 dénominateur dénominateur : spans 0.9958 / 0.9916 / 0.9958
+ ❌ T168 classement classement : exact 236/237 ; cibles 158 verbes, 79 noms
+ ❌ T169 conventions conventions : verbes 158/158 (1.0), noms 78/79 (0.9873)
+ ❌ T171 lexique élargi lexique élargi : vu True, accroché True, couru True ; exact 236/237
+ ❌ T173 top-k strict top-k : 235 sous-chaîne, 235 exacts (0.9916)
+ ❌ T177 candidats têtes candidats têtes : 235/237 (0.9916)
+ ❌ T179 multi-cibles multi-cibles : exact 236/23
+… [85 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.5396) < 0.001 and abs(f2 - 0.7013) < 0.001','abs(f1 - 0.5404) < 0.001 and abs(f2 - 0.7079) < 0.001'),\n   ('abs(f1 - 0.650 … [3874 caractères tronqués]`
+
+  ```
+NON TROUVÉ abs(f1 - 0.6879) < 0.001 and abs(tete - 0.7812) < 0.001
+17 / 18
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **183/183** à couverture 0,9916 : fiche et commit du `r264`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-r264-elision.md <<'MD'\n# B13 — `r264` réglé : le GV s'arrête au marqueur élidé (`qu'il`), couverture 0,9916\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> ** … [4157 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 795 JSON, le disque en a 796
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1134 caractères tronqués]`

@@ -1239,12 +1239,13 @@ class Heuristique:
                        and _normaliser(mots[j][2]) not in lex.get("DET", set())
                        and _normaliser(mots[j][2]) not in RELATIFS
                        and _normaliser(mots[j][2]) not in SUBORDONNANTS
-                       # un marqueur **élidé** arrête aussi le GV (« sais | qu'il vient »)
+                       # un marqueur **élidé** arrête aussi le GV (« sais | qu'il vient ») :
+                       # le radical « qu » + « e » = « que »
                        and (_normaliser(mots[j][2]).split("'")[0] + "e"
-                            if _normaliser(mots[j][2]).endswith("qu") else
+                            if _normaliser(mots[j][2]).split("'")[0] == "qu" else
                             _normaliser(mots[j][2])) not in RELATIFS
                        and (_normaliser(mots[j][2]).split("'")[0] + "e"
-                            if _normaliser(mots[j][2]).endswith("qu") else
+                            if _normaliser(mots[j][2]).split("'")[0] == "qu" else
                             _normaliser(mots[j][2])) not in SUBORDONNANTS):
                     j += 1
                 segments.append({"type": "GV", "role": "prédicat", "niveau": 0,

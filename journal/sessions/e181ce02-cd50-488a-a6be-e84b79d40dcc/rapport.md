@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 150.9 h |
+| Durée | 151.0 h |
 | Tours | 185 |
-| Messages | 3401 |
-| Appels d'outils | 3017 |
+| Messages | 3411 |
+| Appels d'outils | 3027 |
 | Fichiers touchés | 25 |
-| Commandes | 2512 |
+| Commandes | 2522 |
 | Sous-agents | 38 |
-| Commits | 404 |
+| Commits | 405 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9974,11 +9974,25 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 185 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*3 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Test du stdout ASCII
 - bash — Réparer et tester
 - bash — Nettoyer et committer les tests
+- bash — Voir le code autour du marqueur
+- bash — Sonder le marqueur avec le code actuel
+- bash — Tracer les tokens du chunker
+- bash — Voir la fin de la branche GV
+- bash — Corriger la condition élidée du GV
+- bash — Mesurer après le fix r264
+- bash — Portes après r264
+- bash — Recaler 18 portes
+- bash — Fiche r264
+- bash — Committer r264
+
+**Synthèse produite :**
+
+⏵ **183/183** à couverture 0,9916 : fiche et commit du `r264`
 
 ## 3. Travail accompli
 
@@ -10095,7 +10109,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2472 autres
+- … et 2482 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10647,4 +10661,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/pens
 - FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 %" -- reports/rapport-pos-ponctuation.md docs/pilotag
 - PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS" -- tools/tests/test_produit.py docs/produit/README.md docs/pilotage/en-cours.md 2>
+- B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183" -- tools/bloc_linguistique.py 
 

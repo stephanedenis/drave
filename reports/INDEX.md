@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **699 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **700 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -646,6 +646,7 @@
 | [rapport-r13.2-vocab1024.md](rapport-r13.2-vocab1024.md) | R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux |
 | [rapport-r13.3-anglais.md](rapport-r13.3-anglais.md) | R13.3 — anglais 100 Mo : le BPE perd encore à octets égaux |
 | [rapport-r13.4-graines.md](rapport-r13.4-graines.md) | R13.4 — deux graines : le BPE 512 est dans le bruit, le 1024 perd |
+| [rapport-r264-elision.md](rapport-r264-elision.md) | B13 — `r264` réglé : le GV s'arrête au marqueur élidé (`qu'il`), couverture 0,9916 |
 | [rapport-r41-bloc-tableaux.md](rapport-r41-bloc-tableaux.md) | R4.1 — le bloc tableaux : 996 cellules, 802 exactes à leur place, le texte plat rate 3/3 |
 | [rapport-r42-bloc-code.md](rapport-r42-bloc-code.md) | R4.2 — le bloc code : 294 fichiers, 453 038 nœuds, 24/24 extraits exécutés |
 | [rapport-r43-bloc-maths.md](rapport-r43-bloc-maths.md) | R4.3 — le bloc maths : 32 formules exactes, 10/10 dérivées, l'oracle sympy d'accord |
