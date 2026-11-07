@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.1 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 74 |
-| Appels d'outils | 88 |
+| Messages | 91 |
+| Appels d'outils | 105 |
 | Fichiers touchés | 5 |
-| Commandes | 78 |
+| Commandes | 95 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*88 appels d'outils.* Actions notables :
+*105 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 74 autres
+- … et 91 autres
 
 **Synthèse produite :**
 
-⏵ Writing the proposed patch on a pinned copy and validating it end-to-end
+⏵ Adding the partial union filter (b1) to the patch and measuring both filter variants
 
 ## 3. Travail accompli
 
@@ -101,7 +101,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 38 autres
+- … et 55 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -140,6 +140,11 @@
 - **T1** `att_court {'n': 207, 'gold': 0, 'rang1': 137, 'au_moins_un_gold_dans_gardes': 181}`
 - **T1** `preference {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}`
 - **T1** `pref {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}`
+- **T1** `GP  [29:51] 'du jardin chaque matin' -> partir   [groupe 0 rang 3/4] | alt inclus GP 29:60 | alt croise GV 61:67 | alt croise GP 58:67`
+- **T1** `GP  [29:60] 'du jardin chaque matin avant de' -> fleurs   [groupe 0 rang 1/4] | alt croise GV 61:67 | alt inclut GP 29:51 | alt croise GP 58:67`
+- **T1** `GP  [58:67] 'de partir' -> au   [groupe 0 rang 4/4] | alt croise GP 29:60 | alt inclut GV 61:67 | alt croise GP 29:51`
+- **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 2/4] | alt croise GP 29:60 | alt croise GP 29:51 | alt inclus GP 58:67`
+- **T1** `+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois.`
 
 ## 5. Erreurs rencontrées
 

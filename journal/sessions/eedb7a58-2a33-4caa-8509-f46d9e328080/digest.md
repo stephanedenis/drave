@@ -1917,3 +1917,274 @@ filtrer max 143 mediane 48 p95 96 >100 28
 1861-    "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
   ```
 
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres\ntextes=textes_bancs()+textes_libres()+[{'banc':'refus','id' … [3057 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 47, in <module>
+KeyError: 'alternative'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json, traceback\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres\ntextes=textes_bancs()+textes_libres()\nfor mode  … [894 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json, traceback\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres\ntextes=textes_bancs()+textes_libres()+[{'banc':' … [1067 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres\ntextes=textes_bancs()+textes_libres()+[{'banc':'refus','id' … [2844 caractères tronqués]`
+
+  ```
+segments 2640 groupes 306 vues 1644 erreurs 574
+('alts_len', 'filtrer', 'f02', 0, 2, 1)
+('ref', 'filtrer', 'f02', 0, ('REL', 22, 54), {'type': 'REL', 'debut': 22, 'fin': 42, 'source': 'heuristique', 'union': False, 'relation': 'inclut', 'rang': 2, 'retire': True, 'attachement': {'segment': 'qui dort sur le toit', 'cible': 'voisine'}, 'role': 'qualite'})
+('ref', 'filtrer', 'f02', 0, ('REL', 22, 54), {'type': 'GV', 'debut': 43, 'fin': 54, 'source': 'heuristique', 'union': False, 'relation': 'inclut', 'rang': 3, 'retire': True, 'attachement': {'segment': 'se réveille', 'cible': 'voisine'}, 'role': 'predicat'})
+('alts_len', 'filtrer', 'f05', 0, 1, 1)
+('ref', 'filtrer', 'f05', 0, ('GP', 14, 18), {'type': 'GN', 'debut': 16, 'fin': 18, 'source': 'heuristique', 'union': False, 'relation': 'inclut', 'rang': 2, 'retire': True, 'attachement': {'segment': 'ça', 'cible': 'pas'}, 'role': 'patient'})
+('alts_len', 'filtrer', 'f06', 0, 3, 1)
+('ref', 'filtrer', 'f06', 0, ('GV', 3, 36), {'type': 'GV', 'debut': 0, 'fin': 15, 'source': 'heuristique', 'union': False, 'relation': 'croise', 'rang': 2, 'retire': True, 'role': 'predicat'})
+('ref', 'filtrer', 'f06', 0, ('GV', 3, 36), {'type': 'SUB', 'debut':
+… [706 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres\ntextes=textes_bancs()+textes_libres()+[{'banc':'refus','id':'r',' … [3766 caractères tronqués]`
+
+  ```
+alternative segments 955 groupes 153 vues 1084 erreurs 0
+filtrer segments 730 groupes 153 vues 560 erreurs 0
+brut segments 955 groupes 0 vues 0 erreurs 0
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools')\nimport bloc_partition as bp\nt=json.load(open('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-produit-bloc-l.json'))['banc_50']['detail'][1]['texte']\nfor mode in ['altern … [526 caractères tronqués]`
+
+  ```
+=== alternative
+GN 0 28 'La voisine arrose les fleurs' g None r None / None att True
+GP 29 51 'du jardin chaque matin' g 0 r 3 / 4 att True
+    alt {'type': 'GP', 'debut': 29, 'fin': 60, 'source': 'heuristique', 'union': True, 'relation': 'inclus', 'rang': 1, 'attachement': {'segment': 'du jardin chaque matin avant de', 'cible': 'fleurs'}, 'role': 'theme'}
+    alt {'type': 'GV', 'debut': 61, 'fin': 67, 'source': 'heuristique', 'union': True, 'relation': 'croise', 'rang': 2, 'role': 'prédicat'}
+    alt {'type': 'GP', 'debut': 58, 'fin': 67, 'source': 'heuristique', 'union': False, 'relation': 'croise', 'rang': 4, 'attachement': {'segment': 'de partir', 'cible': 'au'}, 'role': 'possession'}
+GP 29 60 'du jardin chaque matin avant de' g 0 r 1 / 4 att True
+    alt {'type': 'GV', 'debut': 61, 'fin': 67, 'source': 'heuristique', 'union': True, 'relation': 'croise', 'rang': 2, 'role': 'prédicat'}
+    alt {'type': 'GP', 'debut': 29, 'fin': 51, 'source': 'heuristique', 'union': False, 'relation': 'inclut', 'rang': 3, 'attachement': {'segment': 'du jardin chaque matin', 'cible': 'partir'}, 'role': 'possession'}
+    alt {'type': 'GP', 'debut': 58, 'fin': 67, 'source': 'heuristique', 'union': F
+… [9851 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Adding the partial union filter (b1) to the patch and measuring both filter variants
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_patch.py'\ns=open(p).read()\n# __init__\ns=s.replace('''                 union: bool = True, partition: str = \"alternative\"):''',\n            '''                 union: bool = True, partition: str = \"alternative\"):''')\ … [4882 caractères tronqués]`
+
+  ```
+ok
+30:        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+31:        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+33:        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+34:            raise ValueError("partition attend 'brut', 'alternative', 'filtrer_union' ou 'filtrer'")
+46:            _expliciter_partition(etiquettes, filtrer=(
+48:                else "union" if self.partition == "filtrer_union" else "strict"))
+103:def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> None:
+104:    """Documente (et, si `filtrer`, linéarise) les chevauchements de syntagmes.
+107:    autres segments du groupe, leur relation vue du porteur et, en mode `filtrer`, le
+110:    En mode `filtrer`, le chunker est la partition : **tous** les segments `union` sont
+122:    if filtrer == "union":
+130:    elif filtrer == "strict":
+150:            if filtrer and id(e) in retirees:
+155:                                 "vue": ("alternative" if not filtrer
+156:                                         else "filtrer_union" if filtrer == "union"
+157:                                         else "f
+… [41 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 100,185p /tmp/partition_syntagmes/construire_patch.py", "description": "Inspect updated patch function source"}`
+
+  ```
+min(e.type for e in g)))
+
+
+def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> None:
+    """Documente (et, si `filtrer`, linéarise) les chevauchements de syntagmes.
+
+    `meta.partition` porte le groupe, le rang et la vue ; `meta.alternative` porte les
+    autres segments du groupe, leur relation vue du porteur et, en mode `filtrer`, le
+    drapeau `retire`. Aucun segment n'est supprimé en mode `alternative`.
+
+    En mode `filtrer`, le chunker est la partition : **tous** les segments `union` sont
+    conservés, et les segments S qui les chevauchent sont retirés (ils restent lisibles
+    dans `meta.alternative` du segment conservé, avec `retire: true`). Si deux segments
+    conservés se chevauchaient encore (union-union), le moins bien classé céderait.
+    """
+    segs = [e for e in etiquettes if e.niveau == "syntagme"]
+    groupes = _groupes_partition(segs)
+    rangs: dict[int, tuple[int, int]] = {}
+    for gid, groupe in enumerate(groupes):
+        for i, e in enumerate(sorted(groupe, key=_cle_preferee)):
+            rangs[id(e)] = (gid, i + 1)
+    retirees: set[int] = set()
+    if filtrer == "union":
+        for groupe in groupes:
+            unions = [e 
+… [3028 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='patch_eval.py'\ns=open(p).read()\ns=s.replace('''    filt = bp.Heuristique(partition=\"filtrer\")\n''','''    filt = bp.Heuristique(partition=\"filtrer\")\n    filt_u = bp.Heuristique(partition=\"filtrer_union\")\n''')\ns=s.replace(''' … [1006 caractères tronqués]`
+
+  ```
+écrit /tmp/pin_audit/tools/bloc_partition.py 2332 lignes
+brut {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 1928458 vues 0
+alternative {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 2129150 vues 894
+filtrer_union {"f1": 0.6163, "att_exact": 217, "att_cibles": 239, "pos": 0.7581} bancs 91 libres 29 octets 2066365 vues 714
+filtrer {"f1": 0.6172, "att_exact": 205, "att_cibles": 239, "pos": 0.7581} bancs 0 libres 0 octets 1967190 vues 466
+preference {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}
+pos {'brut': 'cb4757217465da39', 'alternative': 'cb4757217465da39', 'filtrer_union': 'cb4757217465da39', 'filtrer': 'cb4757217465da39'} det True
+EXEMPLE BRUT
+  GN  [0:28] 'La voisine arrose les fleurs' -> partir
+  GP  [29:51] 'du jardin chaque matin' -> partir
+  GP  [29:60] 'du jardin chaque matin avant de' -> fleurs
+  GP  [58:67] 'de partir' -> au
+  GV  [61:67] 'partir' -> —
+  GP  [68:78] 'au travail' -> partir
+  GV  [68:78] 'au travail' -> —
+  GV  [80:96] 'puis elle rentre' -> travail
+  GV  [90:96] 'rentre' -> —
+  GP  [97:117] 'vers dix-huit heures' -> rentre
+  GP  [97:
+… [1047 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='stats_finales.py'\ns=open(p).read()\ns=s.replace('''    hs = {\"brut\": bp.Heuristique(partition=\"brut\"),\n          \"alternative\": bp.Heuristique(),\n          \"filtrer\": bp.Heuristique(partition=\"filtrer\")}''',\n            ' … [421 caractères tronqués]`
+
+  ```
+{"brut": {"max": 132, "mediane": 38, "p95": 67, "lignes_sup_100": 7}, "alternative": {"max": 251, "mediane": 60, "p95": 171, "lignes_sup_100": 288}, "filtrer_union": {"max": 237, "mediane": 47, "p95": 173, "lignes_sup_100": 245}, "filtrer": {"max": 237, "mediane": 42, "p95": 178, "lignes_sup_100": 152}}
+{"brut": 6, "alternative": 6, "filtrer_union": 6, "filtrer": 6}
+{"brut": {"0": 121}, "alternative": {"0": 57, "1": 31, "2": 19, "3": 8, "4": 2, "6": 2, "32": 1, "8": 1}, "filtrer_union": {"0": 57, "1": 31, "2": 19, "3": 8, "4": 2, "6": 2, "32": 1, "8": 1}, "filtrer": {"0": 57, "1": 31, "2": 19, "3": 8, "4": 2, "6": 2, "32": 1, "8": 1}}
+{"chunker_seul": {"paires": 0, "segments": 611}, "s_sans_union": {"paires": 0, "segments": 725}}
+{"s_dans_union:GP/GP": 45, "union_contenu:GV/GV": 42, "union_contenu:GP/GP": 15, "union_contenu:GN/GN": 13, "s_dans_union:GV/GV": 10, "s_dans_union:REL/REL": 9, "union_contenu:REL/REL": 9, "union_contenu:REL/GP": 9, "s_dans_union:GV/GP": 8, "union_contenu:REL/GV": 8, "union_contenu:SUB/GV": 8, "union_contenu:GN/GV": 7, "union_contenu:GP/GV": 7, "s_dans_union:GN/GN": 7, "s_dans_union:GP/GN": 6, "croisement:GV/GV": 6, "meme_span:GP/GV": 6, "union_contenu:REL
+… [956 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres, syntagmes\nfrom collections import Counter\nfor nom,textes  … [956 caractères tronqués]`
+
+  ```
+bancs segs 722 paires 239 groupes 119 tailles {3: 38, 2: 53, 4: 9, 6: 5, 5: 13, 7: 1} impliques 341 part 0.472
+libres segs 233 paires 59 groupes 34 tailles {2: 18, 3: 9, 4: 5, 5: 2} impliques 93 part 0.399
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_libres, syntagmes\nh=bp.Heuristique(); same=diff=0\nfor t in textes_libres():\n   … [378 caractères tronqués]`
+
+  ```
+free same/diff 35 24 0.5932203389830508
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/pin_audit/tools/tests/linguistique')\nimport bloc_partition as bp, evaluer_gold as eg\nclass SansUnion:\n    nom='sans_union'\n    def __init__(self): self.h=bp.Heuristi … [599 caractères tronqués]`
+
+  ```
+F1 0.4957 P 0.6009 R 0.4219 exact 199 couv 0.8326 labels 199
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit/tools && diff -u --label a/tools/bloc_linguistique.py --label b/tools/bloc_linguistique.py bloc_linguistique.py bloc_partition.py > /tmp/partition_syntagmes/patch_final.diff; wc -l /tmp/partition_syntagmes/patch_final.diff; sed -n 1,60p /tmp/partition_syntagmes/patch_f … [78 caractères tronqués]`
+
+  ```
+170 /tmp/partition_syntagmes/patch_final.diff
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -529,12 +529,20 @@
+ 
+     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+-                 union: bool = True):
++                 union: bool = True, partition: str = "alternative"):
+         self.profils = profils
+         self.segmenter_s = segmenter_s
+         self.seuil_ouvert = seuil_ouvert
+         self.seuil_langue = seuil_langue
+         self.union = union
++        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
++        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
++        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
++        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
++        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
++        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
++            raise ValueError("partition attend 'brut', 'alternative', 'filtrer_u
+… [1912 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_patch.py'\ns=open(p).read()\nold='''    En mode `filtrer`, le chunker est la partition : **tous** les segments `union` sont\n    conservés, et les segments S qui les chevauchent sont retirés (ils restent lisibles\n    dans ` … [1181 caractères tronqués]`
+
+  ```
+ok
+écrit /tmp/pin_audit/tools/bloc_partition.py 2333 lignes
+171 /tmp/partition_syntagmes/patch_final.diff
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor p in ['reports/pensee-produit-bloc-l.json','reports/pensee-fiabilite-produit.json']:\n    d=json.load(open(p))\n    print('====',p)\n    for k in ['rapport','ligne','branche','commit','date','objet' … [139 caractères tronqués]`
+
+  ```
+==== reports/pensee-produit-bloc-l.json
+rapport : "produit-bloc-l"
+ligne : "B13"
+branche : "s/v7"
+commit : "fa1b0c6eb90b3d27ec78f946d677817ba08b419e"
+date : "2026-11-06"
+objet : "Audit de fiabilité produit du bloc linguistique : robustesse hors gold (50 phrases libres), performance, stabilité du contrat, cas limites, compositions et liste de correctifs chiffrés."
+verdict : "⚠️ utilisable en surface (graphème, mot, POS fermées, phrase, document) sur du français/anglais propre ; fragile en structure (syntagmes qui se chevauchent, frontières de phrase, compositions, langue). 0 plantage sur 50 phrases, mais 34/50 avec au moins une anomalie de contrat et 1 plantage sur 25 
+==== reports/pensee-fiabilite-produit.json
+rapport : "fiabilite-produit"
+ligne : "B13"
+branche : "s/v7"
+commit : null
+date : "2026-11-06"
+objet : "Audit de fiabilité du produit hors gold : 50 phrases libres via la CLI, robustesse des entrées, contrat de sortie, schéma minimal versionné et test de non-régression."
+verdict : "⚠️ surface fiable (0 plantage, 0 JSON invalide, 0 span hors texte, 50/50 déterminisme) ; contrat non versionné et structure fragile (107 chevauchements, 302 tokens sans POS, 6/46 frontières de phra
+… [30 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\np=json.load(open('patch_eval.json'))\nprint('gold:')\nfor k,v in p['gold'].items():\n    print(k, {x:v[x] for x in ('f1','precision','rappel','tete_f1','att_exact','att_cibles','att_couverture','att_topk','pos','fraction','tp … [570 caractères tronqués]`
+
+  ```
+gold:
+brut {'f1': 0.5849, 'precision': 0.6292, 'rappel': 0.5464, 'tete_f1': 0.7336, 'att_exact': 222, 'att_cibles': 239, 'att_couverture': 0.9289, 'att_topk': 221, 'pos': 0.7581, 'fraction': 0.5537, 'tp': 1018, 'fp': 600, 'fn': 845}
+alternative {'f1': 0.5849, 'precision': 0.6292, 'rappel': 0.5464, 'tete_f1': 0.7336, 'att_exact': 222, 'att_cibles': 239, 'att_couverture': 0.9289, 'att_topk': 221, 'pos': 0.7581, 'fraction': 0.5537, 'tp': 1018, 'fp': 600, 'fn': 845}
+filtrer_union {'f1': 0.6163, 'precision': 0.7122, 'rappel': 0.5432, 'tete_f1': 0.7545, 'att_exact': 217, 'att_cibles': 239, 'att_couverture': 0.9079, 'att_topk': 216, 'pos': 0.7581, 'fraction': 0.5537, 'tp': 1012, 'fp': 409, 'fn': 851}
+filtrer {'f1': 0.6172, 'precision': 0.7445, 'rappel': 0.5271, 'tete_f1': 0.7605, 'att_exact': 205, 'att_cibles': 239, 'att_couverture': 0.8577, 'att_topk': 204, 'pos': 0.7581, 'fraction': 0.5537, 'tp': 982, 'fp': 337, 'fn': 881}
+
+bancs:
+brut {'paires': 239, 'textes_avec_chevauchement': 54, 'segments': 722, 'union': 183, 'attachements': 549, 'octets_json': 1928458, 'vues_alternative': 0} {'union_contenu': 127, 'inclusion_s_dans_union': 80, 'croisement': 26, 'meme_span_union': 6}
+alternative {'
+… [1392 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json 2>&1; git status --short reports/ | head", "description": "Confirm target files do not exist"}`
+
+  ```
+ls: cannot access 'reports/rapport-partition-syntagmes.md': No such file or directory
+ls: cannot access 'reports/pensee-partition-syntagmes.json': No such file or directory
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "set -e\nR=/home/stephane/Data13TB/stephane/GitHub/Qtrinet\nrm -rf /tmp/head_patch_test; mkdir -p /tmp/head_patch_test/tools\ncd \"$R\"\ngit show HEAD:tools/bloc_linguistique.py > /tmp/head_patch_test/tools/bloc_linguistique.py\ncd /tmp/head_patch_test\npatch -p1 --dry-run < /tmp/partiti … [102 caractères tronqués]`
+
+  ```
+checking file tools/bloc_linguistique.py
+Hunk #1 succeeded at 558 (offset 29 lines).
+Hunk #2 succeeded at 1326 (offset 81 lines).
+Hunk #3 succeeded at 1904 (offset 81 lines).
+  ```
+

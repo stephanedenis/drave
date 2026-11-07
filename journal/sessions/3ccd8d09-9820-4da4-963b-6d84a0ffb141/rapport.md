@@ -7,12 +7,12 @@
 | Identifiant | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.1 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 62 |
-| Appels d'outils | 68 |
+| Messages | 83 |
+| Appels d'outils | 89 |
 | Fichiers touchés | 0 |
-| Commandes | 66 |
+| Commandes | 87 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*68 appels d'outils.* Actions notables :
+*89 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,7 +41,7 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 53 autres
+- … et 74 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Fix dotted abbreviation zone
 - **T1** Create 40-text corpus with expected spans
 - **T1** Validate patched splitter on 40 texts
-- … et 26 autres
+- … et 47 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -108,13 +108,19 @@
 - **T1** `langue=und script=Latn source=heuristique · 13 étiquettes · unités sémantiques=2 (85.7% du texte)`
 - **T1** `| **P1-7** | **Compacité et lot** : `--compact`, JSONL, `--fichier`/stdin | **2,76 Mo** pour 10 k ; **11,5 Mo** pour 50 k ; 1 texte par appel | `drave.py` 50-52, 329-341 | **0,5–1 j** | faible : optio`
 - **T1** `f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"`
+- **T1** `baseline phrases 923 temps 2.98 ms`
+- **T1** `patch phrases 462 temps 8.47 ms`
+- **T1** `baseline 4101 12.96 ms`
+- **T1** `patch 1029 8.97 ms`
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : #!/usr/bin/env python3 """bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.  Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :    -
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module> ModuleNotFoundError: No module named 'bloc_linguistique' [exit code: 1]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module> ModuleNotFoundError: No module named 'corpus' [exit code: 1]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module>   File "/tmp/frontieres/final/patch_frontieres.py", line 27, in <module>     _MARQUEUR = re.compile(                 ^
+- **T1** : (no output) [exit code: 2]
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<frozen importlib._bootstrap_external>", line 1027, in exec_module   File "<frozen importlib._bootstrap>", lin
 

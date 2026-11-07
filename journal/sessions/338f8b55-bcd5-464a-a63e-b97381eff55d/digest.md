@@ -1491,3 +1491,64 @@ He feels pain.                                     [('He', 'PRON'), ('feels', 'V
 … [1338 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Contrôles complémentaires : placebo combiné, variante large, paquet sûr
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/extra.py <<'PY'\nimport sys, json, copy, random, statistics, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import ev … [3942 caractères tronqués]`
+
+  ```
+base att 222 222
+large+ PRON POS 0.8462 dev 0.8453 test 0.8481 F1 0.6188 att 222 222
+large+ CONJ POS 0.8462 dev 0.8453 test 0.8481 F1 0.6188 att 222 222
+large+ AUX POS 0.8462 dev 0.8453 test 0.8481 F1 0.6188 att 222 222
+large+ ADV POS 0.8462 dev 0.8453 test 0.8481 F1 0.6188 att 222 222
+large+ DET POS 0.8459 dev 0.8453 test 0.8471 F1 0.6177 att 221 221
+large all POS 0.8459 dev 0.8453 test 0.8471 F1 0.6177 att 221 221
+SAFE POS 0.85 dev 0.8494 test 0.8511 F1 0.6188 att 222 222
+SAFE corr 37 cass 0 ww 2 Counter({('NOUN', 'ADJ'): 2})
+  ww r115 born NOUN -> ADJ gold VERB
+  ww r162 hung NOUN -> ADJ gold VERB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/placebo_final.py <<'PY'\nimport sys, json, copy, random, statistics\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.gold_split import _est_test … [4517 caractères tronqués]`
+
+  ```
+actions r4e 20 r4b 40 cc 25
+base {'all': 0.8383139351997484, 'dev': 0.8375286041189931, 'test': 0.8400402414486922}
+r4e all mean 0.8349 min 0.8339 p05 0.8342 p95 0.8355 max 0.8358
+   dev {'mean': 0.8336315789473684, 'min': 0.8324942791762013, 'p05': 0.8329519450800915, 'p95': 0.8343249427917621, 'max': 0.8347826086956521, 'values': [0.8324942791762013, 0.8324942791762013, 0.8324942791762013, 0.8324942791762013, 0.8324942791762013, 0.8324942791762013, 0.8324942791762013, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8329519450800915, 0.8334096109839817, 0.8334096109839817, 0.8334096109839817, 0.8334096109839817, 0.8334096109839817, 0.8334096109839817, 0.8334096109839817, 0.833
+… [41401 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, copy\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nfrom tools.tests.linguistique.gold_spl … [1615 caractères tronqués]`
+
+  ```
+cc_sans_where POS 0.8443 dev 0.8435 test 0.8461 en 0.9268 fr 0.7976 F1 0.6188 att 222 222
+r4en+cc_sans_where POS 0.8481 dev 0.8476 test 0.8491 en 0.9373 fr 0.7976 F1 0.6188 att 222 222
+r4b+cc_sans_where POS 0.8515 dev 0.8508 test 0.8531 en 0.9373 fr 0.8031 F1 0.6188 att 222 222
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nprod=json.load(open('reports/pensee-fiabilite-produit.json'))\ntexts=[r for r in prod['banc_50']['resultats' … [822 caractères tronqués]`
+
+  ```
+match triple 42 / 46
+('f12', (9, 5, 4), (9, 7, 4))
+('f35', (9, 2, 0), (9, 3, 2))
+('f41', (18, 5, 4), (18, 6, 5))
+('f50', (347, 171, 150), (347, 193, 158))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pos_r4/full_metrics.json'))['HEAD']\nfor label in ['base','r4_en','r4_bilingue','cc_core','cc_fast','r4_en+cc_core','r4_bilingue+cc_core','r4_bilingue+cc_fast']:\n    r=d[label]\n … [396 caractères tronqués]`
+
+  ```
+base                     POS 0.8383 dev 0.8375 test 0.8400 F1 0.6474 dev 0.6439 test 0.6552 en 0.7273 fr 0.6059 tete 0.7671 att 235/236 couv 0.9874
+r4_en                    POS 0.8421 dev 0.8416 test 0.8431 F1 0.6474 dev 0.6439 test 0.6552 en 0.7273 fr 0.6059 tete 0.7671 att 235/236 couv 0.9874
+r4_bilingue              POS 0.8455 dev 0.8449 test 0.8471 F1 0.6474 dev 0.6439 test 0.6552 en 0.7273 fr 0.6059 tete 0.7671 att 235/236 couv 0.9874
+cc_core                  POS 0.8462 dev 0.8453 test 0.8481 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
+cc_fast                  POS 0.8468 dev 0.8458 test 0.8491 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
+r4_en+cc_core            POS 0.8500 dev 0.8494 test 0.8511 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
+r4_bilingue+cc_core      POS 0.8534 dev 0.8526 test 0.8551 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
+r4_bilingue+cc_fast      POS 0.8537 dev 0.8531 test 0.8551 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
+  ```
+

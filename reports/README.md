@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — la cascade ne perd plus : 0,8383 et 235/236 comme l'heuristique |
 | [`rapport-morphologie-verbes.md`](rapport-morphologie-verbes.md) | **B13** — la morphologie du 1er groupe : exact **235/236**, couverture **0,9874**, 3 spans |
 | [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : exact **226/226**, couverture **0,9456**, 13 spans |
 | [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
@@ -149,7 +150,6 @@
 | [`rapport-native-best-2.md`](rapport-native-best-2.md) | **N0.15/N4.7** — meilleur **2,6998** servi : parité native, **650 ms** |
 | [`rapport-native-best-service.md`](rapport-native-best-service.md) | **N4.5** — meilleur student **2,708** servi : 53 octets, **589 ms** |
 | [`rapport-native-service-auth.md`](rapport-native-service-auth.md) | **N4.4** — service durci : **401/200**, corps 64 Ko, n ≤ 256 ; pas de SFT |
-| [`rapport-native-service-rust.md`](rapport-native-service-rust.md) | **N4.3** — service Rust natif avec cache : **611 ms**, 53 octets |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

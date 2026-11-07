@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **685 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **686 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -110,6 +110,7 @@
 | [rapport-coherence-fiches.md](rapport-coherence-fiches.md) | Cohérence des fiches B13 du 2026-11-05 — vérification |
 | [rapport-coherence-vision.md](rapport-coherence-vision.md) | Cohérence des `docs/` avec la vision Drave — révision du 02/10 |
 | [rapport-compacite-trace.md](rapport-compacite-trace.md) | Compacité de la trace — le disque paie trois fois le câble |
+| [rapport-composition-sans-perte.md](rapport-composition-sans-perte.md) | B13 — les compositions ne perdent plus : cascade = heuristique (0,8383, 235/236) |
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |

@@ -1093,7 +1093,7 @@ class Heuristique:
             avant = etiquettes[pos_idx[k - 1]]
             if avant.type in ("DET", "PREP", "ADJ"):
                 etiquettes[i] = Etiquette("pos", "NOUN", e.valeur, e.debut, e.fin, self.nom,
-                                          e.confiance, candidats=["noun"], langue=lg,
+                                          0.85, candidats=["noun"], langue=lg,
                                           script=script, meta={"ouvert": True, "contexte": avant.type})
 
         # 3 a. après un pronom sujet, un mot inconnu est un verbe (« she sings ») ; l'exception
@@ -1107,7 +1107,7 @@ class Heuristique:
             if (_av.type == "PRON" and _normaliser(_av.valeur) in SUJETS
                     and not _normaliser(_e.valeur).endswith(_nominales)):
                 etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
-                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           0.85, candidats=["verb"], langue=lg, script=script,
                                            meta={"ouvert": True, "contexte": "pron_sujet"})
 
         # 3 b. un DET **ambigu** sans nom à sa droite n'est pas un DET (« the book that I
@@ -1126,7 +1126,7 @@ class Heuristique:
                 continue
             _av = etiquettes[pos_idx[_k - 1]] if _k else None
             _cls = "CONJ" if (_av is not None and _av.type in ("VERB", "AUX")) else "PRON"
-            etiquettes[_i] = Etiquette("pos", _cls, _e.valeur, _e.debut, _e.fin, self.nom, 0.6,
+            etiquettes[_i] = Etiquette("pos", _cls, _e.valeur, _e.debut, _e.fin, self.nom, 0.85,
                                        candidats=[_cls.lower()], langue=lg, script=script,
                                        meta={"ouvert": False, "contexte": "det_sans_nom"})
 
@@ -1138,7 +1138,7 @@ class Heuristique:
             _av = etiquettes[pos_idx[_k - 1]]
             if _av.type == "NOUN" and _normaliser(_e.valeur).endswith(("s", "es")):
                 etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
-                                           0.5, candidats=["verb"], langue=lg, script=script,
+                                           0.85, candidats=["verb"], langue=lg, script=script,
                                            meta={"ouvert": True, "contexte": "nom_sujet_3s"})
 
         # 4. phrase + pragmatique
@@ -1367,14 +1367,16 @@ class MockNeuronal:
         for d, f, t, typ in h._mots(texte):
             if typ == "mot":
                 classe, _, _ = h._pos(lg, t)
-                if classe in {"NOUN", "VERB", "ADJ", "ADV", "MOT"}:
-                    etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, 0.82,
-                                                langue=lg, script=script, meta={"ouvert": True}))
-                    unites.append(Span(d, f))
-                    for genre, md, mf, aff in h._morphemes(t):
-                        etiquettes.append(Etiquette("morphème", genre, aff, d + md, d + mf,
-                                                    self.nom, 0.8, candidats=[genre],
-                                                    langue=lg, script=script))
+                # le contrat rend **toutes** les classes, fermées comprises : sinon la fusion
+                # avec l'heuristique perd les DET/PREP/PRON/CONJ/AUX/NUM (POS cascade 0,7465).
+                etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, 0.82,
+                                            langue=lg, script=script,
+                                            meta={"ouvert": classe not in POS_FERME.get(lg, {})}))
+                unites.append(Span(d, f))
+                for genre, md, mf, aff in h._morphemes(t):
+                    etiquettes.append(Etiquette("morphème", genre, aff, d + md, d + mf,
+                                                self.nom, 0.8, candidats=[genre],
+                                                langue=lg, script=script))
         for d, f, p, typ in h._phrases(texte):
             etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.9,
                                         langue=lg, script=script))
@@ -1911,8 +1913,15 @@ def _supprimer_chevauchements(etiquettes: list[Etiquette],
             groupes.setdefault(e.type if mode == "type" else "", []).append(e)
         for _, es in groupes.items():
             if niveau == "syntagme" and priorite_syntagme == "heuristique":
-                candidates = sorted(es, key=lambda e: (0 if e.source == "heuristique" else 1,
-                                                       e.fin - e.debut, -e.confiance))
+                # la segmentation heuristique est **authoritaire**, y compris ses alternatives
+                # (l'union S+chunker) : on ne la filtre pas, on n'ajoute que le non-chevauchement
+                gardees.extend(e for e in es if e.source == "heuristique")
+                for e in sorted((x for x in es if x.source != "heuristique"),
+                                key=lambda e: (-e.confiance, e.debut, e.fin)):
+                    if not any(not (e.fin <= g.debut or e.debut >= g.fin) for g in gardees
+                               if g.niveau == "syntagme"):
+                        gardees.append(e)
+                continue
             else:
                 candidates = sorted(es, key=lambda e: (-e.confiance, e.debut, e.fin))
             retenues: list[Etiquette] = []

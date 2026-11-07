@@ -7,12 +7,12 @@
 | Identifiant | `338f8b55-bcd5-464a-a63e-b97381eff55d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.1 h |
+| Durée | 1.4 h |
 | Tours | 1 |
-| Messages | 55 |
-| Appels d'outils | 59 |
+| Messages | 62 |
+| Appels d'outils | 66 |
 | Fichiers touchés | 0 |
-| Commandes | 50 |
+| Commandes | 57 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux … [2002 caractères tronqués]
 
-*59 appels d'outils.* Actions notables :
+*66 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — List reports and tools
@@ -41,11 +41,11 @@
 - bash — Find producer of fiabilite JSON
 - bash — Inspect banc_50 entries
 - bash — Locate classes and attachment logic
-- … et 39 autres
+- … et 46 autres
 
 **Synthèse produite :**
 
-⏵ Validation du patch exact sur une copie locale
+⏵ Assemblage des mesures finales dans le JSON
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Run variants on 50 free texts and diff
 - **T1** Print free-text change contexts
 - **T1** Compute full metrics for selected variants
-- … et 10 autres
+- … et 17 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -122,8 +122,9 @@
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "/tmp/pos_r4/run_matrix.py", line 4, in <module>     from tools.tests.linguistique.evaluer_gold import evaluer_bloc ModuleNotFoundError: No module na
 - **T1** : ### r4_bilingue textes 6 pos 8 transitions {('NOUN', 'ADJ'): 8} seg 0 att 0 inval 0    ('f20', 'fr', 'arrivés', 'NOUN', 'ADJ', 42, 49)    ('f28', 'fr', 'gratuite', 'NOUN', 'ADJ', 29, 37)    ('f38', 'f
+- **T1** : [stderr] Traceback (most recent call last):   File "/tmp/pos_r4/compute_final.py", line 32, in <module>     CC_LARGE['add']['DET'].update("some any no every each either neither both all another other 
 

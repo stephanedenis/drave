@@ -1544,3 +1544,339 @@ c5b80dd8
 APPLY_OK
   ```
 
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tool … [917 caractères tronqués]`
+
+  ```
+r308 'Marie lit. Elle aime les livres.'
+  avant [(0, 10, 'déclarative'), (10, 32, 'déclarative')] ['assertion', 'assertion']
+  apres [(0, 10, 'déclarative'), (11, 32, 'déclarative')] ['assertion', 'assertion']
+r318 'Marie reads. She loves books.'
+  avant [(0, 12, 'déclarative'), (12, 29, 'déclarative')] ['assertion', 'assertion']
+  apres [(0, 12, 'déclarative'), (13, 29, 'déclarative')] ['assertion', 'assertion']
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/final/mesure_final.py <<'PY'\n\"\"\"Mesures consolidées P0-4 — patchs finaux, 40 textes + gold dev/test.\"\"\"\nfrom __future__ import annotations\nimport hashlib\nimport json\nimport pathlib\nimport sys\n\nRACINE = pathlib.Path(\"/home/stephane/Data13TB/stephane/G … [12860 caractères tronqués]`
+
+  ```
+{
+ "commit": "e8d746e2593abf509130722fb97ba60fb7e757a7",
+ "module_sha256": "dd0e5e47d522c6a1a1adb799cfa727c54d43b569d542bc2fc9166ae74992d346",
+ "quarante": "...",
+ "ablations": "...",
+ "gold": "...",
+ "tokens": "..."
+}
+40 avant {'phrases': 102, 'textes_exacts': 2, 'textes_frontiere_fausse': 32, 'textes_casses': 38, 'extra': 47, 'missing': 4, 'overlaps': 9, 'leading': 31, 'vides': 0, 'fausses_questions': 5, 'types_faux': 63}
+40 apres {'phrases': 59, 'textes_exacts': 40, 'textes_frontiere_fausse': 0, 'textes_casses': 0, 'extra': 0, 'missing': 0, 'overlaps': 0, 'leading': 0, 'vides': 0, 'fausses_questions': 0, 'types_faux': 0}
+ablations {
+ "original": {
+  "phrases": 102,
+  "textes_exacts": 2,
+  "textes_sans_frontiere_fausse": 8,
+  "textes_sans_defaut": 2,
+  "extra": 47,
+  "missing": 4,
+  "overlaps": 9,
+  "leading": 31,
+  "fausses_questions": 5
+ },
+ "neutre": {
+  "phrases": 102,
+  "textes_exacts": 2,
+  "textes_sans_frontiere_fausse": 13,
+  "textes_sans_defaut": 2,
+  "extra": 45,
+  "missing": 2,
+  "overlaps": 0,
+  "leading": 31,
+  "fausses_questions": 5
+ },
+ "regle_a": {
+  "phrases": 87,
+  "textes_exacts": 6,
+  "textes_sans_frontiere_fausse": 19,
+  "textes_sans_defaut": 6,
+  "extra": 30
+… [3231 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 - <<'PY'\nimport json\ng=json.load(open('gold_resultats.json'))\nfor nom,d in g.items():\n    print(nom, 'diff', d['diff_vs_original'])\n    for sp in ('dev','test'):\n        x=d[sp]\n        print(' ',sp, 'POS',x['pos']['exactitude'],'F1',x['syntagme']['f … [418 caractères tronqués]`
+
+  ```
+original diff {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+  dev POS 0.8375 F1 0.6439 P 0.6703 R 0.6196 att_exact 0.9816 att_top1 0.9816 att_topk 0.9816 couv 0.9877 acte 1.0 neg 0.9787 mod 0.9929
+  test POS 0.84 F1 0.6552 P 0.671 R 0.6402 att_exact 0.9868 att_top1 0.9868 att_topk 0.9737 couv 0.9868 acte 0.9895 neg 0.9737 mod 0.9789
+neutre diff {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+  dev POS 0.8375 F1 0.6439 P 0.6703 R 0.6196 att_exact 0.9816 att_top1 0.9816 att_topk 0.9816 couv 0.9877 acte 1.0 neg 0.9787 mod 0.9929
+  test POS 0.84 F1 0.6552 P 0.671 R 0.6402 att_exact 0.9868 att_top1 0.9868 att_topk 0.9737 couv 0.9868 acte 0.9895 neg 0.9737 mod 0.9789
+regle_a diff {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+  dev POS 0.8375 F1 0.6439 P 0.6703 R 0.6196 att_exact 0.9816 att_top1 0.9816 att_topk 0.9816 couv 0.9877 acte 1.0 neg 0.9787 mod 0.9929
+  test POS 0.84 F1 0.6552 P 0.671 R 0.6402 att_exact 0.9868 att_top1 0.9868 att_topk 0.9737 couv 0.9868 acte 0.9895 neg 0.9737 mod 0.9789
+regle_b diff {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+  dev POS 0.8375 F1 0.6439 P 0.6703 R 0.6196 att_exact 0.9816 att_top1 0.9816 att_topk 0.9816 couv 0.9877 acte 1.0 
+… [1858 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport pathlib\nracine = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsrc = (racine/'tools/bloc_linguistique.py').read_text(encoding='utf-8')\na = pathlib.Path('patch_frontieres.py').read_text(encoding='utf-8').replace('i … [1862 caractères tronqués]`
+
+  ```
+ok
+  269 patch_A.diff
+   80 patch_B.diff
+  336 patch_complet.diff
+  685 total
+A_OK
+B_OK
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 -m py_compile bloc_linguistique_A.py bloc_linguistique_B.py && echo SYNTAX_OK && grep -n \"^@@\\|^---\\|^+++\" patch_A.diff patch_B.diff", "description": "Syntax-check separate patched copies"}`
+
+  ```
+SYNTAX_OK
+patch_A.diff:1:--- a/tools/bloc_linguistique.py
+patch_A.diff:2:+++ b/tools/bloc_linguistique.py
+patch_A.diff:3:@@ -551,6 +551,239 @@
+patch_A.diff:243:@@ -595,25 +828,7 @@
+patch_B.diff:1:--- a/tools/bloc_linguistique.py
+patch_B.diff:2:+++ b/tools/bloc_linguistique.py
+patch_B.diff:3:@@ -551,6 +551,53 @@
+patch_B.diff:57:@@ -576,22 +623,7 @@
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys, time, random, string\nsys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, patch_frontieres, … [1727 caractères tronqués]`
+
+  ```
+baseline phrases 923 temps 2.98 ms
+patch phrases 462 temps 8.47 ms
+fuzz 500 OK
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys,time\nsys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, patch_mots\nbase=\"Le chat dort. https://example.com/a?b=1 alice@example … [289 caractères tronqués]`
+
+  ```
+baseline 4101 12.96 ms
+patch 1029 8.97 ms
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, patch_frontieres\nclass HA(bl.H … [598 caractères tronqués]`
+
+  ```
+textes discours differents 5
+u01 ([(0, 62, 'paragraphe', 'suite'), (33, 62, 'connecteur', 'pour')], [(0, 62, 'connecteur', 'pour'), (0, 62, 'paragraphe', 'suite')])
+a05 ([(0, 31, 'connecteur', 'pour'), (0, 31, 'paragraphe', 'suite'), (3, 31, 'connecteur', 'pour')], [(0, 31, 'connecteur', 'pour'), (0, 31, 'paragraphe', 'suite')])
+en02 ([(0, 37, 'paragraphe', 'suite'), (16, 37, 'connecteur', 'to')], [(0, 37, 'connecteur', 'to'), (0, 37, 'paragraphe', 'suite')])
+u03 ([(0, 66, 'paragraphe', 'suite'), (36, 66, 'connecteur', 'pour')], [(0, 66, 'connecteur', 'pour'), (0, 66, 'paragraphe', 'suite')])
+u04 ([(0, 49, 'paragraphe', 'suite'), (32, 49, 'connecteur', 'que')], [(0, 49, 'paragraphe', 'suite'), (33, 49, 'connecteur', 'que')])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"fronti\\|pensee-front\" || true && git status --short reports/ | grep -i \"fronti\" || true", "description": "Check target report names are free"}`
+
+  ```
+pensee-frontiere-71.json
+rapport-loi-frontiere-fenetre.md
+rapport-pensee-frontiere-71.md
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && ls -lh mesures.json patch_A.diff patch_B.diff patch_complet.diff && python3 - <<'PY'\nimport json\nm=json.load(open('mesures.json'))\nprint(m.keys())\nprint('quarante keys',m['quarante'].keys(), len(m['quarante']['detail']['avant']))\nprint('gold keys',m['gol … [134 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  92K  6 nov 19:43 mesures.json
+-rw-r--r--. 1 stephane stephane  11K  6 nov 19:45 patch_A.diff
+-rw-r--r--. 1 stephane stephane 3,3K  6 nov 19:45 patch_B.diff
+-rw-r--r--. 1 stephane stephane  14K  6 nov 19:37 patch_complet.diff
+dict_keys(['commit', 'module_sha256', 'quarante', 'ablations', 'gold', 'tokens'])
+quarante keys dict_keys(['detail', 'totaux']) 40
+gold keys dict_keys(['split', 'mesures']) dict_keys(['original', 'patch_a', 'patch_b', 'patch_ab'])
+tokens dict_keys(['original', 'patch_b', 'patch_ab', 'zones_pos_avant'])
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"mot\\|type\\|url\\|emoji\\|courriel\\|chemin\" docs/produit/schema-v1.json 2>/dev/null | head -40 && sed -n '1,80p' docs/produit/schema-v1.json 2>/dev/null", "description": "Check schema constraints on token types"}`
+
+  ```
+(no output)
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/produit 2>/dev/null | head && find . -name \"schema-v1.json\" -not -path \"./.git/*\" 2>/dev/null | head", "description": "Locate schema v1"}`
+
+  ```
+exemples.md
+README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"courriel\\|chemin\\|\\\"url\\\"\\|'url'\\|emoji\" tools/*.py docs/produit/*.md | head -40", "description": "Check token type expectations"}`
+
+  ```
+tools/adaptateur_langue.py:111:    def encoder(chemin):
+tools/adaptateur_langue.py:112:        texte = pathlib.Path(chemin).read_text(errors="ignore")
+tools/aiguille.py:32:    aiguille.py /chemin/gpt-oss-120b-MXFP4.gguf 4096 0.1,0.5,0.9 --lot 512 --gpu
+tools/aiguille.py:111:        # Le moteur n'a pas démarré (chemin de modèle, option refusée…) : le
+tools/aligneur_litteraire.py:346:def lire_gutenberg(chemin: Path) -> str:
+tools/aligneur_litteraire.py:348:    brut = chemin.read_text(encoding="utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+tools/aligneur_litteraire.py:530:            raise RuntimeError(f"chemin d'alignement interrompu en ({i}, {j})")
+tools/aligneur_litteraire.py:999:def rediger_rapport(donnees: dict, chemin: Path) -> None:
+tools/aligneur_litteraire.py:1460:    chemin.parent.mkdir(parents=True, exist_ok=True)
+tools/aligneur_litteraire.py:1461:    chemin.write_text("\n".join(L) + "\n", encoding="utf-8")
+tools/analyse_empreinte.py:34:def charge(chemin, limite=None):
+tools/analyse_empreinte.py:36:    for ligne in open(chemin):
+tools/analyse_engram.py:25:def lire(chemin):
+tools/analyse_engram.py:26:    with open(chemin, "rb") as f:
+tools/analyse_experts_statique.py
+… [1970 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport importlib.util, sys\nspec=importlib.util.spec_from_file_location('bl_patche','/tmp/frontieres/final/bloc_linguistique_patche.py')\nmod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)\nh=mod.Heuristique(segmenter_s= … [507 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/tmp/frontieres/final/bloc_linguistique_patche.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport importlib.util, sys\nspec=importlib.util.spec_from_file_location('bl_patche','/tmp/frontieres/final/bloc_linguistique_patche.py')\nmod=importlib.util.module_from_spec(spec); sys.modules['bl_patche']=mod; spec.loader.exec_module(mod)\n … [556 caractères tronqués]`
+
+  ```
+'Le prix est 12.5 euros.' [(0, 23, 'déclarative', 'type')]
+'Visitez https://example.com/docs?page=2' [(0, 39, 'déclarative', 'type')]
+'M. Dupont…' [(0, 10, 'déclarative', 'type')]
+'Il part. Elle reste.' [(0, 8, 'déclarative', 'type'), (9, 20, 'déclarative', 'type')]
+'« Bonjour. » Elle part.' [(0, 12, 'déclarative', 'type'), (13, 23, 'déclarative', 'type')]
+'# Notes\n\nUn texte.' [(0, 7, 'déclarative', 'type'), (9, 18, 'déclarative', 'type')]
+'1. Ouvrir.\n2. Lire.' [(0, 10, 'déclarative', 'type'), (11, 19, 'déclarative', 'type')]
+module patché OK
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, patch_frontieres\ncas = [\n (\"Il part. … [834 caractères tronqués]`
+
+  ```
+OK 2 2 'Il part. Elle reste.' ['Il part.', 'Elle reste.']
+OK 3 3 'Il part. Elle reste. Nous attendons.' ['Il part.', 'Elle reste.', 'Nous attendons.']
+OK 2 2 'Il hésite... Elle part.' ['Il hésite...', 'Elle part.']
+OK 1 1 'Il hésite... puis il part.' ['Il hésite... puis il part.']
+OK 2 2 'M. Dupont est là. Il part.' ['M. Dupont est là.', 'Il part.']
+OK 2 2 'Le Dr. Martin arrive. Il repart.' ['Le Dr. Martin arrive.', 'Il repart.']
+OK 2 2 'Il consulte le Dr. Elle est partie.' ['Il consulte le Dr.', 'Elle est partie.']
+OK 2 2 'Il a vu le Dr. Puis il part.' ['Il a vu le Dr.', 'Puis il part.']
+OK 2 2 'des pommes, etc. Il part.' ['des pommes, etc.', 'Il part.']
+OK 1 1 'des pommes, etc. et des poires.' ['des pommes, etc. et des poires.']
+OK 2 2 'Le prix est 12.5. Il part.' ['Le prix est 12.5.', 'Il part.']
+OK 2 2 'Rendez-vous le 12.03.2024. Il part.' ['Rendez-vous le 12.03.2024.', 'Il part.']
+OK 2 2 'Visitez https://example.com?q=1. Que voyez-vous ?' ['Visitez https://example.com?q=1.', 'Que voyez-vous ?']
+OK 2 2 '« Bonjour. » Elle part.' ['« Bonjour. »', 'Elle part.']
+OK 1 1 'M. Dupont…' ['M. Dupont…']
+OK 2 2 'Il part. Elle reste. ' ['Il part.', 'Elle reste.']
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools')\nimport bloc_linguistique as bl, corpus, patch_frontieres\nclass HA(bl.H … [802 caractères tronqués]`
+
+  ```
+avant 102 63
+apres 59 0
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport json\nm=json.load(open('mesures.json'))\na=m['quarante']['detail']['avant']\nprint('textes leading',sum(1 for x in a if x['leading']))\nprint('phrases leading',sum(len(x['leading']) for x in a))\nprint('textes extra',sum(1 for x in a  … [383 caractères tronqués]`
+
+  ```
+textes leading 24
+phrases leading 31
+textes extra 27
+textes missing 4
+textes overlaps 9
+textes fq 5
+textes frontiere fausse 32
+textes casses 38
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && sed -n '1,20p' patch_A.diff && echo '...' && sed -n '235,280p' patch_A.diff && echo '===== B =====' && sed -n '1,90p' patch_B.diff", "description": "Inspect patch diffs formatting"}`
+
+  ```
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -551,6 +551,239 @@
+ # --------------------------------------------------------------------------- heuristique
+ 
+ 
++# --------------------------------------------------------------------------- frontières de phrase
++# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de
++# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel
++# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
++_FERMANTS = "»”’)]}›"
++_OUVRANTS = "«“‘([{‹"
++_TITRES = frozenset({
++    "M", "MM", "Mme", "Mmes", "Mlle", "Mlles", "Me", "Mgr", "St", "Ste",
++    "Dr", "Drs", "Pr", "Prs", "Rév", "Père", "Sr", "Sœur",
++})
++_ABREV_TOUJOURS = frozenset({
++    "cf", "p", "pp", "ex", "réf", "ref", "éd", "ed", "trad", "fig", "chap",
++    "sect", "env", "av", "al", "ibid", "id", "infra", "supra", "coll", "pl",
++    "sq", "suiv", "op", "ca", "n", "no", "nos", "vs", "art", "vol",
+...
++        i = j
++    ajouter(n, "déclarative")
++    return sortie
++
++
+ class Heuristique:
+     """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couv
+… [4477 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && sed -i 's/if t.startswith((\"http:\\/\\/\", \"https:\\/\\/\")):/if t.lower().startswith((\"http:\\/\\/\", \"https:\\/\\/\")):/' patch_mots.py && grep -n \"startswith\" patch_mots.py && python3 - <<'PY'\nimport pathlib\nracine = pathlib.Path('/home/stephane/Da … [2288 caractères tronqués]`
+
+  ```
+29:        if t.lower().startswith(("http://", "https://")):
+ok
+APPLY_OK
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 verifier.py && python3 mesure_final.py | tail -20", "description": "Re-run verification and final measurements"}`
+
+  ```
+40 textes exacts: 40
+A dev 0.8375 0.6439 0.9816 1.0
+A test 0.84 0.6552 0.9868 0.9895
+B dev 0.8375 0.6439 0.9816 1.0
+B test 0.84 0.6552 0.9868 0.9895
+AB dev 0.8375 0.6439 0.9816 1.0
+AB test 0.84 0.6552 0.9868 0.9895
+   "mot": 232,
+   "ponctuation": 107,
+   "nombre": 14,
+   "url": 5,
+   "courriel": 2,
+   "chemin": 2
+  },
+  "pos": 232,
+  "syn": 173,
+  "phr": 59,
+  "pos_diff_textes": 10,
+  "pos_perdus": 44,
+  "pos_gagnes": 3,
+  "syn_diff_textes": 7,
+  "att_diff_textes": 7,
+  "unites": 133,
+  "fraction_moyenne": 0.4754
+ },
+ "zones_pos_avant": 47
+}
+  ```
+
