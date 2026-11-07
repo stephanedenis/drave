@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (19)
+## Commits du jour (20)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -27,10 +27,11 @@
 | 22:35 | `0a9381f0` | S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE | `en-cours.md`, `roadmap.md`, `README.md` (+20) |
 | 22:42 | `56e5ce48` | S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS) | `en-cours.md`, `README.md`, `memoire.md` (+10) |
 | 22:51 | `f48d5d81` | R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS) | `en-cours.md`, `README.md`, `distribue.md` (+16) |
+| 23:09 | `6432bdb9` | JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉE (A6.2 LIBRE), POS 85,84 %, PONCT, R4-FR ; ÉTAT HORODATÉ | `en-cours.md`, `roadmap.md`, `README.md` (+13) |
 
 ## Chiffres du jour
 
-`0,8483` · `0,9389` · `36 s` · `0,944` · `0,9440` · `85,00 %` · `0,6482` · `0,6511` · `83,83 %` · `64,74 %` · `98,33 %` · `0,9289`
+`85,84 %` · `0,8483` · `0,9389` · `36 s` · `0,944` · `0,9440` · `85,00 %` · `0,6482` · `0,6511` · `83,83 %` · `64,74 %` · `98,33 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -49,7 +50,7 @@
 - `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 0.6 h) → [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md)
 - `bf49d867-4b23-49e1-b214-9a2fd542fb1b` — Tu travailles dans le dépôt (début 2026-11-06 11:17, 1.8 h) → [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md)
 - `cdc16e57-4a69-4890-8b3c-270539c64ff2` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.5 h) → [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 150.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 150.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.3 h) → [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md)
 - `eedb7a58-2a33-4caa-8509-f46d9e328080` — Tu travailles dans le dépôt (début 2026-11-06 18:33, 2.3 h) → [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md)
 

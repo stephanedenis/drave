@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 150.5 h |
+| Durée | 150.6 h |
 | Tours | 184 |
-| Messages | 3378 |
-| Appels d'outils | 2996 |
+| Messages | 3386 |
+| Appels d'outils | 3004 |
 | Fichiers touchés | 25 |
-| Commandes | 2491 |
+| Commandes | 2499 |
 | Sous-agents | 38 |
-| Commits | 400 |
+| Commits | 401 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*242 appels d'outils.* Actions notables :
+*250 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 227 autres
+- … et 235 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation de la nuit : journal, état, vérification complète
+⏵ Vérification complète de l'état de nuit
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2451 autres
+- … et 2459 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10604,4 +10604,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest
 - JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉE (A6.2 LIBRE), POS 85,84 %, PONCT, R4-FR" -- journal/2026-11-06/README.md docs/
 - JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉE (A6.2 LIBRE), POS 85,84 %, PONCT, R4-FR ; ÉTAT HORODATÉ" -- journal/2026-11-06
+- DOCS — LES DEUX TABLEAUX CORRIGÉS (SÉPARATEUR 6 COLONNES, ∣ DANS LE CODE) ; PORTE TABLEAUX VERTE" -- reports/rapport-pos-r4.md reports/rapport-etat-a.md docs/pi
 

@@ -144,7 +144,7 @@ fait passer le test de +0,71 à +0,61 : rejeté.
 ### 3.3 Les contrôles : les deux sondes demandées passent, la propriété générale non
 
 | sonde | attendu | base | R4-en | R4 bilingue | verdict |
-|---|---|---|---:|---:|---:|---|
+|---|---|---|---:|---:|---|
 | `He is a doctor.` | `doctor` NOUN | NOUN | NOUN | NOUN | ✅ |
 | `He is running.` | `running` VERB | VERB | VERB | VERB | ✅ |
 | `He is doctor.` | `doctor` NOUN | NOUN | **ADJ** | **ADJ** | ❌ |

@@ -185,7 +185,7 @@ la liste des bloqués.**
   pas « à venir » ; A6.2 → « libre, MoE local 18 Go ; le blocage est la résidence mono-GPU 16 Go » ;
   A8.3b2 → ligne nommée ; `dependances.md` § 5 : **4 → 2/3** items ; roadmap A8 : **6 → 19** pins.
 - **Mesure** : `python3 tools/verifie_backlog.py` (frontière sans A2.6 en tête ; A6.2 hors bloqués) ;
-  `grep -R "aucun MoE local\|4 tests\|A8.3a à venir"` → **0** occurrence dans les fiches A.
+  `grep -R "aucun MoE local∣4 tests∣A8.3a à venir"` → **0** occurrence dans les fiches A.
 - **Cible** : **2 bloqués** (A3.4, A5.4), **3 libres** (A2.6 P2, A6.2, A8.3b2), **0 faux bloqué**.
 - **Contrôle négatif** : si A2.6 est marqué « bloquée par A6.2 », le graphe sera cohérent mais
   **faux** — c'est exactement le défaut actuel.

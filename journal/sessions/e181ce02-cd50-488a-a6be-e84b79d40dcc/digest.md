@@ -57244,3 +57244,111 @@ ven 06 nov 2026 23:09:02 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 23 h 15 HNE\", t)\np.write_text( … [736 caractères tronqués]`
+
+  ```
+16 files changed, 78 insertions(+), 27 deletions(-)
+COMMIT OK 1
+6432bdb9 JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉE (A6.2 LIBRE), POS 85,84 %, PONCT, R4-FR ; ÉTAT HORODATÉ
+   6b976cb1..6432bdb9  s/v7 -> s/v7
+   6b976cb1..6432bdb9  master -> master
+ven 06 nov 2026 23:11:30 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification complète de l'état de nuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [426 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 23:11:38 EST
+HEAD 6432bdb9
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=1
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_backlog.py           EXIT=0
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -5", "description": "Voir l'erreur des tableaux"}`
+
+  ```
+reports/rapport-pos-r4.md:161 — 6 cellules ≠ 7 attendues
+     reports/rapport-pos-r4.md:162 — 6 cellules ≠ 7 attendues
+     reports/rapport-pos-r4.md:163 — 6 cellules ≠ 7 attendues
+     reports/rapport-pos-r4.md:164 — 6 cellules ≠ 7 attendues
+  1749 fichier(s) examiné(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '155,166p' reports/rapport-pos-r4.md | cut -c1-200", "description": "Voir le tableau fautif"}`
+
+  ```
+| `The painting is hung on the wall.` | `hung` VERB | NOUN | **ADJ** | **ADJ** | ❌ |
+| `She seems calm.` | `calm` ADJ | NOUN | ADJ | ADJ | ✅ |
+| `It looks quiet.` | `quiet` ADJ | NOUN | ADJ | ADJ | ✅ |
+| `The car is fast.` | `fast` ADJ | NOUN | ADJ | ADJ | ✅ |
+| `He feels pain.` | `pain` NOUN | NOUN | NOUN | NOUN | ✅ (liste stricte) |
+| `The farmers grow wheat.` | `wheat` NOUN | NOUN | NOUN | NOUN | ✅ (liste stricte) |
+| `Il est médecin.` | `médecin` NOUN | NOUN | NOUN | **ADJ** | ❌ (fr) |
+| `La réunion est reportée.` | `reportée` VERB | NOUN | NOUN | **ADJ** | ❌ (fr) |
+| `Les enfants sont arrivés.` | `arrivés` VERB | NOUN | NOUN | **ADJ** | ❌ (fr) |
+| `Elle est calme.` | `calme` ADJ | NOUN | NOUN | ADJ | ✅ (fr) |
+
+**Lecture.** Les deux contrôles demandés passent **par accident de surface** : `a` est un DET,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^| phrase\\|^|---|---\" reports/rapport-pos-r4.md | sed -n '1,6p'; sed -n '150,154p' reports/rapport-pos-r4.md | cut -c1-200", "description": "Voir l'en-tête du tableau"}`
+
+  ```
+53:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+64:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+99:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+120:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+147:|---|---|---|---:|---:|---:|---|
+175:|---|---:|---:|---|---:|---:|---:|---|
+| `He is doctor.` | `doctor` NOUN | NOUN | **ADJ** | **ADJ** | ❌ |
+| `She is president.` | `president` NOUN | NOUN | **ADJ** | **ADJ** | ❌ |
+| `He remains president.` | `president` NOUN | NOUN | **ADJ** | **ADJ** | ❌ |
+| `They became members.` | `members` NOUN | NOUN | **ADJ** | **ADJ** | ❌ |
+| `The house where I was born is small.` | `born` VERB | NOUN | **ADJ** | **ADJ** | ❌ |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '144,148p' reports/rapport-pos-r4.md | cut -c1-160", "description": "Voir l'en-tête exact"}`
+
+  ```
+### 3.3 Les contrôles : les deux sondes demandées passent, la propriété générale non
+
+| sonde | attendu | base | R4-en | R4 bilingue | verdict |
+|---|---|---|---:|---:|---:|---|
+| `He is a doctor.` | `doctor` NOUN | NOUN | NOUN | NOUN | ✅ |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-r4.md'); t=p.read_text()\nt=t.replace(\"| sonde | attendu | base | R4-en | R4 bilingue | verdict |\\n|---|---|---|---:|---:|---:|---|\",\n            \"| sonde | a … [268 caractères tronqués]`
+
+  ```
+séparateur corrigé
+     reports/rapport-etat-a.md:188 — « \| » DANS un espace de code : il s'affiche littéralement — écrire ∣ (U+2223)
+  1749 fichier(s) examiné(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '186,190p' reports/rapport-etat-a.md | cut -c1-160", "description": "Voir le `\\|` dans le code"}`
+
+  ```
+A8.3b2 → ligne nommée ; `dependances.md` § 5 : **4 → 2/3** items ; roadmap A8 : **6 → 19** pins.
+- **Mesure** : `python3 tools/verifie_backlog.py` (frontière sans A2.6 en tête ; A6.2 hors bloqués) ;
+  `grep -R "aucun MoE local\|4 tests\|A8.3a à venir"` → **0** occurrence dans les fiches A.
+- **Cible** : **2 bloqués** (A3.4, A5.4), **3 libres** (A2.6 P2, A6.2, A8.3b2), **0 faux bloqué**.
+- **Contrôle négatif** : si A2.6 est marqué « bloquée par A6.2 », le graphe sera cohérent mais
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-etat-a.md'); t=p.read_text()\nt=t.replace('`grep -R \"aucun MoE local\\\\|4 tests\\\\|A8.3a à venir\"`', '`grep -R \"aucun MoE local∣4 tests∣A8.3a à venir\"`')\np.writ … [1074 caractères tronqués]`
