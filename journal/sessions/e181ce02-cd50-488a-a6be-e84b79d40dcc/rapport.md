@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.9 h |
-| Tours | 187 |
-| Messages | 3456 |
-| Appels d'outils | 3068 |
+| Durée | 152.0 h |
+| Tours | 188 |
+| Messages | 3466 |
+| Appels d'outils | 3076 |
 | Fichiers touchés | 25 |
-| Commandes | 2563 |
+| Commandes | 2571 |
 | Sous-agents | 38 |
-| Commits | 414 |
+| Commits | 415 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -433,6 +433,8 @@
 **Tour 186** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 **Tour 187** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 188** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10087,7 +10089,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 
 ### Tour 187 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*21 appels d'outils.* Actions notables :
 
 - bash — Comparer gold et prédiction sur des cas
 - bash — Tester l'arrêt à l'adverbe final
@@ -10103,11 +10105,55 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - bash — Voir cmd_evaluer
 - bash — Ajouter les deux vues au rapport
 - bash — Voir le bloc de sortie
-- … et 6 autres
+- … et 7 autres
 
 **Synthèse produite :**
 
-⏵ Transparence : `evaluer` publie les **deux vues** (fidèle 0,7533 / linéaire 0,8104)
+⏵ État au 07/11 00 h 35 : tout est vert, le produit publie ses deux vues
+
+\## Le point
+
+`HEAD 662a3698`, `master` = `s/v7` **poussés**, 0 divergence. **Toutes les portes** passent (revue, taille, tableaux, en-cours, journal, sessions, bloc, index, schémas, backlog), **183/183** d'autotest, **porte produit verte** (10 contrôles, **14 tests**).
+
+| mesure | matin | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes (fidèle) | 58,49 % | **75,33 %** |
+| F1 (linéaire, `filtrer`) | — | **81,04 %** (couverture 93,31 %) |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** |
+
+\## Ce que ce round a ajouté
+
+- **la convention du sujet** (les trois règles : pronom fr, pronom en, nom propre) — **+10,2 points de F1**, attachement intact ;
+- **`r264`** réglé (le GV s'arrêtait sur le token `qu'il` au lieu de son radical `qu`) — couverture 0,9916 ;
+- **`evaluer` publie les deux vues** (fidèle et linéaire) : un client voit le compromis F1/attachement au lieu de le subir ;
+- **dix fiches annotées « instantané historique »** : les anciens chiffres ne se lisent plus comme l'état courant.
+
+\## Ce qui reste, honnêtement
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe) — deux cas isolés.
+2. **La convention des GV** (322 FP / 180 FN) et les **ADJ/ADV du gold** (65) : c'est la prochaine veine de F1, mais elle touche la structure même du segmenteur.
+3. **La coordination** : les 11 verdicts S (territoire S), le tagger sur 612 via l'API (décision), `porte-n2.sh`, R2.1.
+4. **La restitution** (annotation → texte) : la brique produit qui manque.
+
+Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la convention des GV) si vous ne m'arrêtez pas — sinon, dites-moi où porter l'effort.
+
+### Tour 188 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Voir cmd_analyser
+- bash — Ajouter fichier et jsonl
+- bash — Tester fichier et jsonl
+- bash — Tests du corpus
+- bash — Voir la structure
+- bash — Nettoyer le doublon
+- bash — Committer --fichier/--jsonl
+
+**Synthèse produite :**
+
+⏵ Feature produit : `--fichier` et `--jsonl` (traiter un corpus, une ligne JSON par phrase)
 
 ## 3. Travail accompli
 
@@ -10224,7 +10270,7 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2523 autres
+- … et 2531 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10786,4 +10832,5 @@ Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
 - PRODUIT — LE VALIDATEUR PORTE --gold (20 PHRASES DU CORPUS VALIDÉES CONTRE LE SCHÉMA V1) : LA PORTE L'UTILISE" -- tools/verifier_schema_produit.py docs/pilotage
 - FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'ÉTAT COURANT EST 86,25 / 0,7535 / 236-237)" -- reports/rapport-pos-anglais-v2.md reports/rapport-produ
 - PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produ
+- PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produit/README.m
 

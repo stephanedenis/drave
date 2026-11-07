@@ -58436,3 +58436,185 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main()\n\n\nif __name__ == \"__main__\":\n    unittest.main()''','''if __name … [1265 caractères tronqués]`
+
+  ```
+OK
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 13 files changed, 229 insertions(+), 28 deletions(-)
+COMMIT OK 1
+662a3698 PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS
+   1f61caaa..662a3698  s/v7 -> s/v7
+   1f61caaa..662a3698  master -> master
+sam 07 nov 2026 00:34:15 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [426 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 00:34:29 EST
+HEAD 662a3698
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_backlog.py           EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ État au 07/11 00 h 35 : tout est vert, le produit publie ses deux vues
+
+## Le point
+
+`HEAD 662a3698`, `master` = `s/v7` **poussés**, 0 divergence. **Toutes les portes** passent (revue, taille, tableaux, en-cours, journal, sessions, bloc, index, schémas, backlog), **183/183** d'autotest, **porte produit verte** (10 contrôles, **14 tests**).
+
+| mesure | matin | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes (fidèle) | 58,49 % | **75,33 %** |
+| F1 (linéaire, `filtrer`) | — | **81,04 %** (couverture 93,31 %) |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** |
+
+## Ce que ce round a ajouté
+
+- **la convention du sujet** (les trois règles : pronom fr, pronom en, nom propre) — **+10,2 points de F1**, attachement intact ;
+- **`r264`** réglé (le GV s'arrêtait sur le token `qu'il` au lieu de son radical `qu`) — couverture 0,9916 ;
+- **`evaluer` publie les deux vues** (fidèle et linéaire) : un client voit le compromis F1/attachement au lieu de le subir ;
+- **dix fiches annotées « instantané historique »** : les anciens chiffres ne se lisent plus comme l'état courant.
+
+## Ce qui reste, honnêtement
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe) — deux cas isolés.
+2. **La convention des GV** (322 FP / 180 FN) et les **ADJ/ADV du gold** (65) : c'est la prochaine veine de F1, mais elle touche la structure même du segmenteur.
+3. **La coordination** : les 11 verdicts S (territoire S), le tagger sur 612 via l'API (décision), `porte-n2.sh`, R2.1.
+4. **La restitution** (annotation → texte) : la brique produit qui manque.
+
+Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la convention des GV) si vous ne m'arrêtez pas — sinon, dites-moi où porter l'effort.
+
+
+## Tour 188
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 4/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Feature produit : `--fichier` et `--jsonl` (traiter un corpus, une ligne JSON par phrase)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def cmd_analyser' tools/drave.py | cut -d: -f1),+16p\" tools/drave.py", "description": "Voir cmd_analyser"}`
+
+  ```
+def cmd_analyser(args: argparse.Namespace) -> int:
+    annotation = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue,
+                                                                   args.contexte)
+    if annotation.refus:
+        # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
+        if args.json:
+            sys.stdout.write(_dumps(annotation.json()))
+        else:
+            print(f"{NOM}: refus d'analyse : {annotation.refus} "
+                  "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
+        return 3
+    if args.json:
+        sys.stdout.write(_dumps(annotation.json()))
+    else:
+        print(_sur(formater_annotation(annotation)))
+    return 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) lire le fichier ou le texte\nt=t.replace('''def cmd_analyser(args: argparse.Namespace) -> int:\n    annotation = bl.Heuristique(partition=args. … [2427 caractères tronqués]`
+
+  ```
+--fichier et --jsonl
+382:    analyser.add_argument("texte", metavar="TEXTE", help="texte à analyser (entre guillemets)")
+420:    rejouer.add_argument("texte", metavar="TEXTE", help="texte à rejouer (entre guillemets)")
+    analyser = sous.add_parser(
+        "analyser",
+        help="étiqueter un texte (POS, syntagmes, pragmatique)",
+        description="Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON.",
+        epilog="Exemple : python3 tools/drave.py analyser \"Le chat dort.\" --json",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''    analyser.add_argument(\"texte\", metavar=\"TEXTE\", help=\"texte à analyser (entre guillemets)\")''',\n'''    analyser.add_argume … [905 caractères tronqués]`
+
+  ```
+texte optionnel
+syntaxe OK
+=== fichier + jsonl :
+3 lignes | Le chat dort. | La voisine parle au chat.
+=== fichier + texte :
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 71 étiquettes · unités sémantiques=6 (49.1% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT La/DET voisine/NOUN parle/VERB au/PREP chat/NOUN ./PONCT
+=== sans argument :
+drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestCorpus(unittest.TestCase):\n    \"\"\"`--fichier` et `--jsonl` : le traitement de corpus.\"\"\"\n\n    def tes … [2144 caractères tronqués]`
+
+  ```
+2
+Ran 16 tests in 3.681s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Test\\|if __name__\" tools/tests/test_produit.py; sed -n '190,200p' tools/tests/test_produit.py", "description": "Voir la structure"}`
+
+  ```
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+130:class TestPartition(unittest.TestCase):
+150:class TestContexte(unittest.TestCase):
+159:class TestSortieHostile(unittest.TestCase):
+182:class TestDeuxVues(unittest.TestCase):
+193:class TestCorpus(unittest.TestCase):
+223:if __name__ == "__main__":
+225:if __name__ == "__main__":
+        self.assertGreaterEqual(d["syntagmes_lineaire"]["f1"], d["heuristique"]["syntagme"]["f1"])
+
+
+class TestCorpus(unittest.TestCase):
+    """`--fichier` et `--jsonl` : le traitement de corpus."""
+
+    def test_fichier_et_jsonl(self):
+        import tempfile, pathlib as _p
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
+            f.write("Le chat dort.\n\nLa voisine parle au chat. Il dort encore.\n")
+            chemin = f.name
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '220,228p' tools/tests/test_produit.py; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); lignes=p.read_text().splitlines(keepends=True)\n# garder uniquement le dernier couple if __name__ + unitt … [541 caractères tronqués]`
+
+  ```
+_p.Path(chemin).unlink(missing_ok=True)
+
+
+if __name__ == "__main__":
+    unittest.main()
+if __name__ == "__main__":
+    unittest.main()
+nettoyé
+1
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_produit.py 2>&1 | tail -3; python3 - <<'PY'\nimport pathlib, re\n# doc produit : --fichier / --jsonl\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.3 bis La vu … [1603 caractères tronqués]`

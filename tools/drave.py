@@ -156,8 +156,35 @@ def formater_annotation(a: bl.Annotation) -> str:
 # --------------------------------------------------------------------------- commandes
 
 
+def _lire_entree(args: argparse.Namespace) -> str:
+    """Le texte : l'argument, ou le **fichier** (`--fichier`)."""
+    if getattr(args, "fichier", None):
+        return pathlib.Path(args.fichier).read_text(encoding="utf-8", errors="replace")
+    return args.texte or ""
+
+
+def _analyser_jsonl(texte: str, args: argparse.Namespace) -> int:
+    """Une **ligne JSON par phrase** (traitement de corpus : `--jsonl`)."""
+    h = bl.Heuristique(partition=args.partition)
+    n = 0
+    for debut, fin, _typ, _ in h._phrases(texte):
+        phrase = texte[debut:fin]
+        if not phrase.strip():
+            continue
+        a = h.analyser(phrase, args.langue, args.contexte)
+        sys.stdout.write(_sur(json.dumps(a.json(), ensure_ascii=False)) + "\n")
+        n += 1
+    if n == 0:
+        print(f"{NOM}: refus d'analyse : vide", file=sys.stderr)
+        return 3
+    return 0
+
+
 def cmd_analyser(args: argparse.Namespace) -> int:
-    annotation = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue,
+    texte = _lire_entree(args)
+    if args.jsonl:
+        return _analyser_jsonl(texte, args)
+    annotation = bl.Heuristique(partition=args.partition).analyser(texte, args.langue,
                                                                    args.contexte)
     if annotation.refus:
         # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
@@ -352,10 +379,15 @@ def construire_parseur() -> argparse.ArgumentParser:
         epilog="Exemple : python3 tools/drave.py analyser \"Le chat dort.\" --json",
         formatter_class=_Formateur,
     )
-    analyser.add_argument("texte", metavar="TEXTE", help="texte à analyser (entre guillemets)")
+    analyser.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
+                          help="texte à analyser (entre guillemets) ou --fichier")
     analyser.add_argument("--partition", choices=("brut", "alternative", "filtrer_union", "filtrer"),
                           default="alternative",
                           help="la vue des syntagmes qui se chevauchent (défaut : alternative)")
+    analyser.add_argument("--fichier", default=None, metavar="CHEMIN",
+                          help="lire le texte dans un fichier UTF-8 (au lieu de l'argument)")
+    analyser.add_argument("--jsonl", action="store_true",
+                          help="une ligne JSON par phrase (traitement de corpus)")
     analyser.add_argument("--contexte", default=None,
                           help="le texte qui précède (mémoire de discours : coréférence, connecteurs)")
     analyser.add_argument("--langue", choices=("fr", "en"), default=None,

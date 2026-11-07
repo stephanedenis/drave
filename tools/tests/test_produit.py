@@ -190,7 +190,35 @@ class TestDeuxVues(unittest.TestCase):
         self.assertGreaterEqual(d["syntagmes_lineaire"]["f1"], d["heuristique"]["syntagme"]["f1"])
 
 
-if __name__ == "__main__":
-    unittest.main()
+class TestCorpus(unittest.TestCase):
+    """`--fichier` et `--jsonl` : le traitement de corpus."""
+
+    def test_fichier_et_jsonl(self):
+        import tempfile, pathlib as _p
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
+            f.write("Le chat dort.\n\nLa voisine parle au chat. Il dort encore.\n")
+            chemin = f.name
+        try:
+            sortie = drave("analyser", "--fichier", chemin, "--jsonl")
+            self.assertEqual(sortie.returncode, 0, detail(sortie))
+            lignes = [json.loads(l) for l in sortie.stdout.splitlines() if l.strip()]
+            self.assertEqual(len(lignes), 3)
+            self.assertEqual(lignes[0]["schema"], "drave.annotation")
+        finally:
+            _p.Path(chemin).unlink(missing_ok=True)
+
+    def test_fichier_seul(self):
+        import tempfile, pathlib as _p
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
+            f.write("Le chat dort.")
+            chemin = f.name
+        try:
+            sortie = drave("analyser", "--fichier", chemin, "--json")
+            self.assertEqual(sortie.returncode, 0, detail(sortie))
+            self.assertIn("Le chat", json.loads(sortie.stdout)["texte"])
+        finally:
+            _p.Path(chemin).unlink(missing_ok=True)
+
+
 if __name__ == "__main__":
     unittest.main()

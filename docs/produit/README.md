@@ -135,6 +135,16 @@ de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. 
 le gold gelé 602 (F1 65,11 %, POS 85,32 %). La commande sort **0** : elle ne teste pas la cascade
 (voir § 4).
 
+### 3.3 quater Traiter un corpus
+
+```bash
+python3 tools/drave.py analyser --fichier corpus.txt --jsonl   # une ligne JSON par phrase
+python3 tools/drave.py analyser --fichier corpus.txt --json    # le texte entier
+```
+
+`--fichier` lit un texte UTF-8 ; `--jsonl` rend une **ligne JSON par phrase** (le format des
+traitements de corpus), chaque ligne portant le schéma v1 complet.
+
 ### 3.3 bis La vue des syntagmes qui se chevauchent
 
 ```bash
