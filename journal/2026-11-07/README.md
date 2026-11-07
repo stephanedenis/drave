@@ -68,4 +68,16 @@
 `r264` (le GV s'arrêtant sur le radical `qu`) a rendu la couverture ; le produit gagne `--fichier`,
 `--jsonl` et les **deux vues** dans `evaluer`. Trois règles de segmentation ont été **testées puis
 rejetées** (adverbe final, rognage S, ADJ/ADV) — elles sont documentées.
+
+**L'après-midi du 07/11 (J1.3 → J1.4).** Le **schéma v2** publie `meta.partition` et
+`meta.alternative` (26 cas, 0 échec ; v1 toujours lue). La **restitution v0** ajoute
+`python3 tools/drave.py restituer TEXTE` : la surface est reconstruite depuis le niveau
+`graphème`, **sans lire `Annotation.texte`**, puis comparée à la source. Sur les **50 textes
+libres**, **46 annotations** (4 refus) et **46/46 surfaces exactes** ; le **miroir strict**
+(minimum surface/mots/POS) vaut **0,1087** — la ponctuation séparée des mots fait tomber mots et
+POS, alors que la fidélité de caractères reste à 0,9506. Le miroir a trouvé un vrai trou : `f50`
+perdait ses **10 sauts de ligne** (45/46, 0,9783) ; le correctif `C` les annote et la surface
+revient à 46/46. Le contrôle négatif (mélange, troncature) casse **46/46**. C'est un **codec de
+surface**, pas un décodeur : la fidélité sémantique reste à mesurer.
+[Fiche](../../reports/rapport-restitution-v0.md).
 <!-- /notes -->

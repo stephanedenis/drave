@@ -6,7 +6,8 @@
 > qu'il garantit.
 >
 > **Vérifié le 2026-11-07** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
-> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
+> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
+> existent, et la
 > porte produit est verte. Le format est **version 2** (`schema: "drave.annotation"`,
 > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
 > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
@@ -209,12 +210,41 @@ honnête : « Élodie sourit. » rend `langue=und` (confiance 0,04 < seuil 0,12)
 `--langue fr` — l'indice n'est pas une contrainte. Et `--langue de` sort **2** : le CLI n'accepte
 que `fr` et `en`.
 
+### 3.6 Restituer la surface (v0)
+
+```bash
+python3 tools/drave.py restituer "Le chat dort."
+```
+```
+restitution (annotation → surface)
+source      : 'Le chat dort.'
+surface     : 'Le chat dort.'
+fidélité    : exacte 1.0000 · caractères 1.0000 · couverture 100.00%
+mots        : exacte 0.0000 · caractères 0.9286 · couverture 84.62%
+pos         : exacte 0.0000 · caractères 0.9286 · couverture 84.62%
+miroir      : 0.0000 (non exact) — minimum des fidélités binaires de la surface (graphème),
+              des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement
+              la source
+contrôle négatif : mélange exacte 0.0000 (caractères 0.3077) · troncature exacte 0.0000
+                   (caractères 0.9231)
+```
+
+**Lecture.** La commande **analyse** le texte, puis **reconstruit** la surface depuis le niveau
+`graphème` de l'annotation — sans lire `Annotation.texte` — et la compare à la source. La
+**surface est exacte** ; le **miroir strict** est le minimum des fidélités surface/mots/POS, et
+il tombe ici parce que mots et POS séparent le point (`dort .`). `--json` publie le détail,
+`--banc reports/pensee-fiabilite-produit.json` rejoue les **50 textes libres** : **46/46
+surfaces exactes**, miroir strict **0,1087**, contrôle négatif **46/46**. C'est un **codec de
+surface**, pas un décodeur neuronal : il ne prouve pas la fidélité sémantique. La fiche est
+[`rapport-restitution-v0.md`](../../reports/rapport-restitution-v0.md).
+
 ## 4. Ce que le produit ne fait pas encore
 
-**1. Il n'écrit pas de texte.** Pas de restitution, pas de traduction, pas de génération : le
-produit rend des **étiquettes**, jamais une phrase. Les résultats de traduction de la vitrine
-([`README.md`](../../README.md)) sont une recherche sur un modèle externe ; ils ne sont pas dans
-ce produit.
+**1. Il ne génère pas de texte.** `restituer` reconstruit la **surface** depuis l'annotation
+(codec), mais il n'y a **pas de génération** : pas de traduction, pas de réponse libre, pas de
+paraphrase. Le produit rend des **étiquettes** et, avec `restituer`, la surface qu'elles
+portent. Les résultats de traduction de la vitrine ([`README.md`](../../README.md)) sont une
+recherche sur un modèle externe ; ils ne sont pas dans ce produit.
 
 **2. Trois spans restent inatteignables.** Sur **239 cibles**, **235** sont attachées
 (couverture **0,9874**) ; **3** ne le sont pas : **1 REL, 2 SUB, 0 GP**. Elles sont
@@ -308,18 +338,19 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 
 **La porte produit, mesurée le 07/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
 étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **16 tests** de fumée, **8 tests**
-de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **183/183** portes
-d'autotest. Le smoke test est `tools/tests/test_produit.py`.
+de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **11 tests** de
+restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test est
+`tools/tests/test_produit.py`.
 
 **Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3** ; le code **4** (dépendance
 absente) n'est pas encore là :
 
 | code | sens | aujourd'hui |
 |---:|---|---|
-| **0** | succès : annotation rendue, évaluation rendue, rejeu identique | `analyser`, `evaluer`, `rejouer` |
+| **0** | succès : annotation rendue, évaluation rendue, rejeu identique, restitution rendue | `analyser`, `evaluer`, `rejouer`, `restituer` |
 | **1** | erreur | argument illisible, divergence de rejeu, exception |
 | **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
-| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""` |
+| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""`, `restituer "..."` |
 | **4** | dépendance absente : modèle, profils | **non implémenté** |
 
 **Ce qui n'est pas garanti** : le chemin neuronal, un texte hors domaine, la calibration des
@@ -338,6 +369,8 @@ python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] \
 python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json]
 python3 tools/drave.py evaluer [--gold] [--json]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
+python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
+python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json [--json]
 ```
 
 **Sorties réelles des commandes** (07/11 pour le format ; les valeurs d'`evaluer` sont celles
@@ -368,12 +401,13 @@ rejeu identique : oui
 
 | option | commande | sens |
 |---|---|---|
-| `--langue fr\|en` | `analyser`, `rejouer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
-| `--json` | `analyser`, `evaluer` | sortie machine UTF-8 |
+| `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
+| `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |
 | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
-| `--fichier CHEMIN` | `analyser` | lit un texte UTF-8 au lieu de l'argument |
+| `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
+| `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
 | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
-| `--contexte TEXTE` | `analyser` | mémoire de discours portée dans le JSON |
+| `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
 | `-V`, `--version` | global | `drave 0.1.0` |
 | `-h`, `--aide` | global | l'aide, largeur fixe |
@@ -395,11 +429,13 @@ rejeu identique : oui
 | **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
 | **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dépôt |
 | **le chemin neuronal** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; pas de chemin neuronal livré |
+| **la restitution sémantique** | `restituer` est un **codec de surface** (graphème) ; il ne restitue pas le sens, ne traduit pas, ne génère pas |
 
-**Ce qui est déjà tenu** : `--version`, `--aide`, les trois sous-commandes, le JSON déterministe,
-le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue), `--fichier`/`--jsonl`,
-`--partition`, la porte produit et le smoke test. Le reste est nommé ci-dessus, sans être
-présenté comme acquis.
+**Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
+déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue),
+`--fichier`/`--jsonl`, `--banc`, `--partition`, la **restitution v0** (46/46 surfaces exactes,
+miroir strict 0,1087), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
+être présenté comme acquis.
 
 ## 8. Où aller ensuite
 

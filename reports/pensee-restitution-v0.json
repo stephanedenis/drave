@@ -1,0 +1,3362 @@
+{
+ "schema": "drave.restitution.banc",
+ "version": 1,
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "tache": "J1.4",
+ "titre": "La restitution v0 — annotation → surface, et le miroir",
+ "banc": "reports/pensee-fiabilite-produit.json",
+ "banc_sha256": "bd54b1ff7fa14e203dcfeaced908b8dec699995c2ff3fe910c7956ac64d18a48",
+ "commande": "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json",
+ "dispositif": {
+  "outil": "tools/restitution.py",
+  "cli": "python3 tools/drave.py restituer TEXTE",
+  "analyse": "bloc_linguistique.Heuristique().analyser(texte, langue=None)",
+  "niveau_surface": "graphème",
+  "correctif": "catégorie Unicode C (contrôle) annotée comme graphème ; sans lui, f50 perd ses 10 sauts de ligne (45/46)",
+  "fidelite": "binaire (rendu == source) + Levenshtein normalisé",
+  "miroir": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source"
+ },
+ "synthese": {
+  "n": 50,
+  "annotations": 46,
+  "refus": 4,
+  "refus_ids": [
+   "f14",
+   "f15",
+   "f16",
+   "f17"
+  ],
+  "surface": {
+   "exacts": 46,
+   "fidelite": 1.0,
+   "fidelite_caractere": 1.0
+  },
+  "surface_sans_controle": {
+   "exacts": 45,
+   "fidelite": 0.9783,
+   "fidelite_caractere": 0.9999
+  },
+  "mots": {
+   "exacts": 5,
+   "fidelite": 0.1087,
+   "fidelite_caractere": 0.9506
+  },
+  "pos": {
+   "exacts": 5,
+   "fidelite": 0.1087,
+   "fidelite_caractere": 0.9506
+  },
+  "miroir": {
+   "exacts": 5,
+   "fidelite": 0.1087
+  },
+  "controle_negatif": {
+   "melange_exacts": 0,
+   "melange_fidelite": 0.0,
+   "melange_fidelite_caractere": 0.263,
+   "tronque_exacts": 0,
+   "tronque_fidelite_caractere": 0.9506,
+   "detectes": 46
+  }
+ },
+ "resultats": [
+  {
+   "id": "f01",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 13,
+   "etiquettes": 20,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 13,
+    "octets": 13,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Le chat dort.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 13,
+    "octets": 13
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9286,
+    "caracteres": 14,
+    "octets": 14,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Le chat dort .",
+    "couverture": 0.8462
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9286,
+    "caracteres": 14,
+    "octets": 14,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Le chat dort .",
+    "couverture": 0.8462
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3077,
+     "caracteres": 13,
+     "octets": 13
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9231,
+     "caracteres": 12,
+     "octets": 12
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f02",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 55,
+   "etiquettes": 60,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 55,
+    "octets": 56,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Le chat de la voisine qui dort sur le toit se réveille.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 55,
+    "octets": 56
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9821,
+    "caracteres": 56,
+    "octets": 57,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Le chat de la voisine qui dort sur le toit se réveille .",
+    "couverture": 0.8
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9821,
+    "caracteres": 56,
+    "octets": 57,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Le chat de la voisine qui dort sur le toit se réveille .",
+    "couverture": 0.8
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2909,
+     "caracteres": 55,
+     "octets": 56
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9818,
+     "caracteres": 54,
+     "octets": 55
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f03",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 42,
+   "etiquettes": 40,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 42,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Bonjour ! Comment allez-vous aujourd'hui ?",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 42
+   },
+   "mots": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 42,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Bonjour ! Comment allez-vous aujourd'hui ?",
+    "couverture": 0.881
+   },
+   "pos": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 42,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Bonjour ! Comment allez-vous aujourd'hui ?",
+    "couverture": 0.881
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 1.0,
+    "exact": true
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2381,
+     "caracteres": 42,
+     "octets": 42
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9762,
+     "caracteres": 41,
+     "octets": 41
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f04",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 30,
+   "etiquettes": 40,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 30,
+    "octets": 31,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Ferme la porte, s'il te plaît.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 30,
+    "octets": 31
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9091,
+    "caracteres": 33,
+    "octets": 34,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Ferme la porte , s' il te plaît .",
+    "couverture": 0.8333
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9091,
+    "caracteres": 33,
+    "octets": 34,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Ferme la porte , s' il te plaît .",
+    "couverture": 0.8333
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.4,
+     "caracteres": 30,
+     "octets": 31
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9667,
+     "caracteres": 29,
+     "octets": 30
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f05",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 20,
+   "etiquettes": 31,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 22,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Ne touche pas à ça !",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 22
+   },
+   "mots": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 22,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Ne touche pas à ça !",
+    "couverture": 0.75
+   },
+   "pos": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 22,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Ne touche pas à ça !",
+    "couverture": 0.75
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 1.0,
+    "exact": true
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.4,
+     "caracteres": 20,
+     "octets": 22
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.95,
+     "caracteres": 19,
+     "octets": 21
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f06",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 61,
+   "etiquettes": 65,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Je ne pense pas qu'il viendra demain, mais nous verrons bien.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9683,
+    "caracteres": 63,
+    "octets": 63,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Je ne pense pas qu'il viendra demain , mais nous verrons bien .",
+    "couverture": 0.8361
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9683,
+    "caracteres": 63,
+    "octets": 63,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Je ne pense pas qu'il viendra demain , mais nous verrons bien .",
+    "couverture": 0.8361
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.4262,
+     "caracteres": 61,
+     "octets": 61
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9836,
+     "caracteres": 60,
+     "octets": 60
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f07",
+   "refus": "",
+   "langue": "en",
+   "caracteres": 27,
+   "etiquettes": 33,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 27,
+    "octets": 27,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "The cat sleeps on the roof.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 27,
+    "octets": 27
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9643,
+    "caracteres": 28,
+    "octets": 28,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "The cat sleeps on the roof .",
+    "couverture": 0.8148
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9643,
+    "caracteres": 28,
+    "octets": 28,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "The cat sleeps on the roof .",
+    "couverture": 0.8148
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3333,
+     "caracteres": 27,
+     "octets": 27
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.963,
+     "caracteres": 26,
+     "octets": 26
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f08",
+   "refus": "",
+   "langue": "en",
+   "caracteres": 43,
+   "etiquettes": 39,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 43,
+    "octets": 43,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Where is the nearest train station, please?",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 43,
+    "octets": 43
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9556,
+    "caracteres": 45,
+    "octets": 45,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Where is the nearest train station , please ?",
+    "couverture": 0.8605
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9556,
+    "caracteres": 45,
+    "octets": 45,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Where is the nearest train station , please ?",
+    "couverture": 0.8605
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2326,
+     "caracteres": 43,
+     "octets": 43
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9767,
+     "caracteres": 42,
+     "octets": 42
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f09",
+   "refus": "",
+   "langue": "en",
+   "caracteres": 36,
+   "etiquettes": 34,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 36,
+    "octets": 36,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Don't forget to bring your passport.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 36,
+    "octets": 36
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.973,
+    "caracteres": 37,
+    "octets": 37,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Don't forget to bring your passport .",
+    "couverture": 0.8611
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.973,
+    "caracteres": 37,
+    "octets": 37,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Don't forget to bring your passport .",
+    "couverture": 0.8611
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3889,
+     "caracteres": 36,
+     "octets": 36
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9722,
+     "caracteres": 35,
+     "octets": 35
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f10",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 42,
+   "etiquettes": 58,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 44,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Le prix est de 1 234,56 € pour 3 articles.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 42,
+    "octets": 44
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9333,
+    "caracteres": 45,
+    "octets": 47,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Le prix est de 1 234 , 56 € pour 3 articles .",
+    "couverture": 0.7857
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9333,
+    "caracteres": 45,
+    "octets": 47,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Le prix est de 1 234 , 56 € pour 3 articles .",
+    "couverture": 0.7857
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2143,
+     "caracteres": 42,
+     "octets": 44
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9762,
+     "caracteres": 41,
+     "octets": 43
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f11",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 34,
+   "etiquettes": 48,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 34,
+    "octets": 35,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Rendez-vous le 12/03/2026 à 14h30.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 34,
+    "octets": 35
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8718,
+    "caracteres": 39,
+    "octets": 40,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Rendez-vous le 12 / 03 / 2026 à 14h30 .",
+    "couverture": 0.8824
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8718,
+    "caracteres": 39,
+    "octets": 40,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Rendez-vous le 12 / 03 / 2026 à 14h30 .",
+    "couverture": 0.8824
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2647,
+     "caracteres": 34,
+     "octets": 35
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9706,
+     "caracteres": 33,
+     "octets": 34
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f12",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 62,
+   "etiquettes": 69,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 62,
+    "octets": 62,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Visitez https://example.com/docs?page=2 pour la documentation.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 62,
+    "octets": 62
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8267,
+    "caracteres": 75,
+    "octets": 75,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Visitez https : / / example . com / docs ? page = 2 pour la documentation .",
+    "couverture": 0.9355
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8267,
+    "caracteres": 75,
+    "octets": 75,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Visitez https : / / example . com / docs ? page = 2 pour la documentation .",
+    "couverture": 0.9355
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.0968,
+     "caracteres": 62,
+     "octets": 62
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9839,
+     "caracteres": 61,
+     "octets": 61
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f13",
+   "refus": "",
+   "langue": "und",
+   "caracteres": 24,
+   "etiquettes": 30,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 24,
+    "octets": 33,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "J'ai trouvé ça génial 😍🔥",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 24,
+    "octets": 33
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.96,
+    "caracteres": 25,
+    "octets": 34,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "J'ai trouvé ça génial 😍 🔥",
+    "couverture": 0.8333
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.96,
+    "caracteres": 25,
+    "octets": 34,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "J'ai trouvé ça génial 😍 🔥",
+    "couverture": 0.8333
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.125,
+     "caracteres": 24,
+     "octets": 33
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9167,
+     "caracteres": 22,
+     "octets": 25
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f14",
+   "refus": "vide",
+   "caracteres": 1,
+   "langue": "und"
+  },
+  {
+   "id": "f15",
+   "refus": "vide",
+   "caracteres": 0,
+   "langue": "und"
+  },
+  {
+   "id": "f16",
+   "refus": "vide",
+   "caracteres": 3,
+   "langue": "und"
+  },
+  {
+   "id": "f17",
+   "refus": "vide",
+   "caracteres": 3,
+   "langue": "und"
+  },
+  {
+   "id": "f18",
+   "refus": "",
+   "langue": "und",
+   "caracteres": 10,
+   "etiquettes": 7,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 10,
+    "octets": 10,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "1234567890",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 10,
+    "octets": 10
+   },
+   "mots": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 10,
+    "octets": 10,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "1234567890",
+    "couverture": 1.0
+   },
+   "pos": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 10,
+    "octets": 10,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "1234567890",
+    "couverture": 1.0
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 1.0,
+    "exact": true
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.0,
+     "caracteres": 10,
+     "octets": 10
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.0,
+     "caracteres": 0,
+     "octets": 0
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f19",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 52,
+   "etiquettes": 46,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 52,
+    "octets": 53,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "COVID-19 : la situation s'améliore-t-elle vraiment ?",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 52,
+    "octets": 53
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9811,
+    "caracteres": 53,
+    "octets": 54,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "COVID-19 : la situation s' améliore-t-elle vraiment ?",
+    "couverture": 0.8846
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9811,
+    "caracteres": 53,
+    "octets": 54,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "COVID-19 : la situation s' améliore-t-elle vraiment ?",
+    "couverture": 0.8846
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1731,
+     "caracteres": 52,
+     "octets": 53
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9808,
+     "caracteres": 51,
+     "octets": 52
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f20",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 59,
+   "etiquettes": 72,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 59,
+    "octets": 60,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 59,
+    "octets": 60
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9516,
+    "caracteres": 62,
+    "octets": 63,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "M . Dupont , le Dr Martin et Mme Leroy sont arrivés vers 9 h .",
+    "couverture": 0.7966
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9516,
+    "caracteres": 62,
+    "octets": 63,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "M . Dupont , le Dr Martin et Mme Leroy sont arrivés vers 9 h .",
+    "couverture": 0.7966
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3729,
+     "caracteres": 59,
+     "octets": 60
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9831,
+     "caracteres": 58,
+     "octets": 59
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f21",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 56,
+   "etiquettes": 63,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 56,
+    "octets": 60,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "« Je ne sais pas », répondit-il en haussant les épaules.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 56,
+    "octets": 60
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9655,
+    "caracteres": 58,
+    "octets": 62,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "« Je ne sais pas » , répondit-il en haussant les épaules .",
+    "couverture": 0.8214
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9655,
+    "caracteres": 58,
+    "octets": 62,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "« Je ne sais pas » , répondit-il en haussant les épaules .",
+    "couverture": 0.8214
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3571,
+     "caracteres": 56,
+     "octets": 60
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9821,
+     "caracteres": 55,
+     "octets": 59
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f22",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 55,
+   "etiquettes": 59,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 55,
+    "octets": 57,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "C'est l'été ; les oiseaux chantent, les enfants jouent.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 55,
+    "octets": 57
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9483,
+    "caracteres": 58,
+    "octets": 60,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "C'est l' été ; les oiseaux chantent , les enfants jouent .",
+    "couverture": 0.8545
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9483,
+    "caracteres": 58,
+    "octets": 60,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "C'est l' été ; les oiseaux chantent , les enfants jouent .",
+    "couverture": 0.8545
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2364,
+     "caracteres": 55,
+     "octets": 57
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9818,
+     "caracteres": 54,
+     "octets": 56
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f23",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 61,
+   "etiquettes": 57,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Attention : ce produit peut contenir des traces de noisettes.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9839,
+    "caracteres": 62,
+    "octets": 62,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Attention : ce produit peut contenir des traces de noisettes .",
+    "couverture": 0.8525
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9839,
+    "caracteres": 62,
+    "octets": 62,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Attention : ce produit peut contenir des traces de noisettes .",
+    "couverture": 0.8525
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2131,
+     "caracteres": 61,
+     "octets": 61
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9836,
+     "caracteres": 60,
+     "octets": 60
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f24",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 68,
+   "etiquettes": 75,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 68,
+    "octets": 70,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Il était une fois une petite fille qui vivait au bord de la forêt...",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 68,
+    "octets": 70
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9577,
+    "caracteres": 71,
+    "octets": 73,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Il était une fois une petite fille qui vivait au bord de la forêt . . .",
+    "couverture": 0.8088
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9577,
+    "caracteres": 71,
+    "octets": 73,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Il était une fois une petite fille qui vivait au bord de la forêt . . .",
+    "couverture": 0.8088
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2941,
+     "caracteres": 68,
+     "octets": 70
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9559,
+     "caracteres": 65,
+     "octets": 67
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f25",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 21,
+   "etiquettes": 27,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 21,
+    "octets": 21,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Pourquoi ? Parce que.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 21,
+    "octets": 21
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9545,
+    "caracteres": 22,
+    "octets": 22,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Pourquoi ? Parce que .",
+    "couverture": 0.8571
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9545,
+    "caracteres": 22,
+    "octets": 22,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Pourquoi ? Parce que .",
+    "couverture": 0.8571
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2857,
+     "caracteres": 21,
+     "octets": 21
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9524,
+     "caracteres": 20,
+     "octets": 20
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f26",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 54,
+   "etiquettes": 52,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 54,
+    "octets": 55,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Où sont les toilettes ? Je cherche depuis dix minutes.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 54,
+    "octets": 55
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9818,
+    "caracteres": 55,
+    "octets": 56,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Où sont les toilettes ? Je cherche depuis dix minutes .",
+    "couverture": 0.8333
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9818,
+    "caracteres": 55,
+    "octets": 56,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Où sont les toilettes ? Je cherche depuis dix minutes .",
+    "couverture": 0.8333
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1667,
+     "caracteres": 54,
+     "octets": 55
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9815,
+     "caracteres": 53,
+     "octets": 54
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f27",
+   "refus": "",
+   "langue": "und",
+   "caracteres": 14,
+   "etiquettes": 14,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 14,
+    "octets": 15,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Élodie sourit.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 14,
+    "octets": 15
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9333,
+    "caracteres": 15,
+    "octets": 16,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Élodie sourit .",
+    "couverture": 0.9286
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9333,
+    "caracteres": 15,
+    "octets": 16,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Élodie sourit .",
+    "couverture": 0.9286
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2143,
+     "caracteres": 14,
+     "octets": 15
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9286,
+     "caracteres": 13,
+     "octets": 14
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f28",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 38,
+   "etiquettes": 49,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 38,
+    "octets": 42,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Le café coûte 2 €, l'eau est gratuite.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 38,
+    "octets": 42
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9268,
+    "caracteres": 41,
+    "octets": 45,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Le café coûte 2 € , l' eau est gratuite .",
+    "couverture": 0.8158
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9268,
+    "caracteres": 41,
+    "octets": 45,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Le café coûte 2 € , l' eau est gratuite .",
+    "couverture": 0.8158
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2632,
+     "caracteres": 38,
+     "octets": 42
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9737,
+     "caracteres": 37,
+     "octets": 41
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f29",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 35,
+   "etiquettes": 48,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 35,
+    "octets": 37,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Il a dit : « Rentre avant minuit. »",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 35,
+    "octets": 37
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9722,
+    "caracteres": 36,
+    "octets": 38,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Il a dit : « Rentre avant minuit . »",
+    "couverture": 0.7714
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9722,
+    "caracteres": 36,
+    "octets": 38,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Il a dit : « Rentre avant minuit . »",
+    "couverture": 0.7714
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2286,
+     "caracteres": 35,
+     "octets": 37
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9714,
+     "caracteres": 34,
+     "octets": 35
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f30",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 40,
+   "etiquettes": 42,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 40,
+    "octets": 40,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Nous avons lu Le Petit Prince hier soir.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 40,
+    "octets": 40
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9756,
+    "caracteres": 41,
+    "octets": 41,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Nous avons lu Le Petit Prince hier soir .",
+    "couverture": 0.825
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9756,
+    "caracteres": 41,
+    "octets": 41,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Nous avons lu Le Petit Prince hier soir .",
+    "couverture": 0.825
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.275,
+     "caracteres": 40,
+     "octets": 40
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.975,
+     "caracteres": 39,
+     "octets": 39
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f31",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 20,
+   "etiquettes": 31,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 21,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "ÇA NE MARCHE PAS !!!",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 20,
+    "octets": 21
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9091,
+    "caracteres": 22,
+    "octets": 23,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "ÇA NE MARCHE PAS ! ! !",
+    "couverture": 0.8
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9091,
+    "caracteres": 22,
+    "octets": 23,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "ÇA NE MARCHE PAS ! ! !",
+    "couverture": 0.8
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.4,
+     "caracteres": 20,
+     "octets": 21
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.85,
+     "caracteres": 17,
+     "octets": 18
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f32",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 61,
+   "etiquettes": 65,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "J'aime les pommes, les poires et les bananes ; pas les kiwis.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 61,
+    "octets": 61
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9683,
+    "caracteres": 63,
+    "octets": 63,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "J'aime les pommes , les poires et les bananes ; pas les kiwis .",
+    "couverture": 0.8197
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9683,
+    "caracteres": 63,
+    "octets": 63,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "J'aime les pommes , les poires et les bananes ; pas les kiwis .",
+    "couverture": 0.8197
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2787,
+     "caracteres": 61,
+     "octets": 61
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9836,
+     "caracteres": 60,
+     "octets": 60
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f33",
+   "refus": "",
+   "langue": "it",
+   "caracteres": 32,
+   "etiquettes": 36,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 32,
+    "octets": 32,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Si tu viens, apporte le dessert.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 32,
+    "octets": 32
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9412,
+    "caracteres": 34,
+    "octets": 34,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Si tu viens , apporte le dessert .",
+    "couverture": 0.8438
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9412,
+    "caracteres": 34,
+    "octets": 34,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Si tu viens , apporte le dessert .",
+    "couverture": 0.8438
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3125,
+     "caracteres": 32,
+     "octets": 32
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9688,
+     "caracteres": 31,
+     "octets": 31
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f34",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 58,
+   "etiquettes": 56,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 58,
+    "octets": 61,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Bien que fatigué, il continue à travailler jusqu'à minuit.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 58,
+    "octets": 61
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9667,
+    "caracteres": 60,
+    "octets": 63,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Bien que fatigué , il continue à travailler jusqu'à minuit .",
+    "couverture": 0.8621
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9667,
+    "caracteres": 60,
+    "octets": 63,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Bien que fatigué , il continue à travailler jusqu'à minuit .",
+    "couverture": 0.8621
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3276,
+     "caracteres": 58,
+     "octets": 61
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9828,
+     "caracteres": 57,
+     "octets": 60
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f35",
+   "refus": "",
+   "langue": "en",
+   "caracteres": 44,
+   "etiquettes": 45,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 44,
+    "octets": 44,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "The quick brown fox jumps over the lazy dog.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 44,
+    "octets": 44
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9778,
+    "caracteres": 45,
+    "octets": 45,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "The quick brown fox jumps over the lazy dog .",
+    "couverture": 0.8182
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9778,
+    "caracteres": 45,
+    "octets": 45,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "The quick brown fox jumps over the lazy dog .",
+    "couverture": 0.8182
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3182,
+     "caracteres": 44,
+     "octets": 44
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9773,
+     "caracteres": 43,
+     "octets": 43
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f36",
+   "refus": "",
+   "langue": "en",
+   "caracteres": 47,
+   "etiquettes": 50,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 47,
+    "octets": 49,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "I can't believe it's already 2026 — time flies!",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 47,
+    "octets": 49
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9792,
+    "caracteres": 48,
+    "octets": 50,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "I can't believe it's already 2026 — time flies !",
+    "couverture": 0.8298
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9792,
+    "caracteres": 48,
+    "octets": 50,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "I can't believe it's already 2026 — time flies !",
+    "couverture": 0.8298
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3404,
+     "caracteres": 47,
+     "octets": 49
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9787,
+     "caracteres": 46,
+     "octets": 48
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f37",
+   "refus": "",
+   "langue": "und",
+   "caracteres": 51,
+   "etiquettes": 66,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 51,
+    "octets": 51,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Email: alice@example.org, phone: +33 6 12 34 56 78.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 51,
+    "octets": 51
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.85,
+    "caracteres": 60,
+    "octets": 60,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Email : alice @ example . org , phone : + 33 6 12 34 56 78 .",
+    "couverture": 0.8431
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.85,
+    "caracteres": 60,
+    "octets": 60,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Email : alice @ example . org , phone : + 33 6 12 34 56 78 .",
+    "couverture": 0.8431
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3922,
+     "caracteres": 51,
+     "octets": 51
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9804,
+     "caracteres": 50,
+     "octets": 50
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f38",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 69,
+   "etiquettes": 110,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 69,
+    "octets": 70,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Les URL comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 69,
+    "octets": 70
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.7667,
+    "caracteres": 90,
+    "octets": 91,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Les URL comme https : / / a . b / c ? d = e # f et http : / / x . y sont parfois coupées .",
+    "couverture": 0.8841
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.7667,
+    "caracteres": 90,
+    "octets": 91,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Les URL comme https : / / a . b / c ? d = e # f et http : / / x . y sont parfois coupées .",
+    "couverture": 0.8841
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2174,
+     "caracteres": 69,
+     "octets": 70
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9855,
+     "caracteres": 68,
+     "octets": 69
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f39",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 65,
+   "etiquettes": 79,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 65,
+    "octets": 65,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Un fichier /home/user/notes.txt et un chemin C:\\Windows\\System32.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 65,
+    "octets": 65
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8333,
+    "caracteres": 78,
+    "octets": 78,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Un fichier / home / user / notes . txt et un chemin C : \\ Windows \\ System32 .",
+    "couverture": 0.9077
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.8333,
+    "caracteres": 78,
+    "octets": 78,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Un fichier / home / user / notes . txt et un chemin C : \\ Windows \\ System32 .",
+    "couverture": 0.9077
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3231,
+     "caracteres": 65,
+     "octets": 65
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9846,
+     "caracteres": 64,
+     "octets": 64
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f40",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 63,
+   "etiquettes": 96,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 63,
+    "octets": 65,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Les caractères spéciaux : @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 63,
+    "octets": 65
+   },
+   "mots": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 63,
+    "octets": 65,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Les caractères spéciaux : @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^",
+    "couverture": 0.6508
+   },
+   "pos": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 63,
+    "octets": 65,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Les caractères spéciaux : @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^",
+    "couverture": 0.6508
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 1.0,
+    "exact": true
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1429,
+     "caracteres": 63,
+     "octets": 65
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9841,
+     "caracteres": 62,
+     "octets": 64
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f41",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 67,
+   "etiquettes": 85,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 67,
+    "octets": 77,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Le texte contient des accents é à ç ù ß ñ ø å et des ligatures œ æ.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 67,
+    "octets": 77
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9853,
+    "caracteres": 68,
+    "octets": 78,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Le texte contient des accents é à ç ù ß ñ ø å et des ligatures œ æ .",
+    "couverture": 0.7463
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9853,
+    "caracteres": 68,
+    "octets": 78,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Le texte contient des accents é à ç ù ß ñ ø å et des ligatures œ æ .",
+    "couverture": 0.7463
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2836,
+     "caracteres": 67,
+     "octets": 77
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9851,
+     "caracteres": 66,
+     "octets": 76
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f42",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 45,
+   "etiquettes": 34,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 45,
+    "octets": 46,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Un mot très long : anticonstitutionnellement.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 45,
+    "octets": 46
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9783,
+    "caracteres": 46,
+    "octets": 47,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Un mot très long : anticonstitutionnellement .",
+    "couverture": 0.8889
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9783,
+    "caracteres": 46,
+    "octets": 47,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Un mot très long : anticonstitutionnellement .",
+    "couverture": 0.8889
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.3333,
+     "caracteres": 45,
+     "octets": 46
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9778,
+     "caracteres": 44,
+     "octets": 45
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f43",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 390,
+   "etiquettes": 357,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 390,
+    "octets": 403,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation, avec des virgules, des points-virgules ; des parenthèses (comme ici), des tirets — et même des guillemets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans dépasser la fin, ce qui serait un défaut grave pour un client qui découpe le texte par indices.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 390,
+    "octets": 403
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9774,
+    "caracteres": 399,
+    "octets": 412,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation , avec des virgules , des points-virgules ; des parenthèses ( comme ici ) , des tirets — et même des guillemets « français » — pour voir si tout reste cohérent , et si les spans restent dans le texte , sans dépasser la fin , ce qui serait un défaut grave pour un client qui découpe le texte par indices .",
+    "couverture": 0.8205
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9774,
+    "caracteres": 399,
+    "octets": 412,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation , avec des virgules , des points-virgules ; des parenthèses ( comme ici ) , des tirets — et même des guillemets « français » — pour voir si tout reste cohérent , et si les spans restent dans le texte , sans dépasser la fin , ce qui serait un défaut grave pour un client qui découpe le texte par indices .",
+    "couverture": 0.8205
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2359,
+     "caracteres": 390,
+     "octets": 403
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9974,
+     "caracteres": 389,
+     "octets": 402
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f44",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 74,
+   "etiquettes": 62,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 74,
+    "octets": 75,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Question rhétorique : qui peut bien croire que cela fonctionne sans test ?",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 74,
+    "octets": 75
+   },
+   "mots": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 74,
+    "octets": 75,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Question rhétorique : qui peut bien croire que cela fonctionne sans test ?",
+    "couverture": 0.8378
+   },
+   "pos": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 74,
+    "octets": 75,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Question rhétorique : qui peut bien croire que cela fonctionne sans test ?",
+    "couverture": 0.8378
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 1.0,
+    "exact": true
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2703,
+     "caracteres": 74,
+     "octets": 75
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9865,
+     "caracteres": 73,
+     "octets": 74
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f45",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 72,
+   "etiquettes": 65,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 72,
+    "octets": 73,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "N'oublie jamais de sauvegarder tes données avant de fermer le programme.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 72,
+    "octets": 73
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.973,
+    "caracteres": 74,
+    "octets": 75,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "N' oublie jamais de sauvegarder tes données avant de fermer le programme .",
+    "couverture": 0.8611
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.973,
+    "caracteres": 74,
+    "octets": 75,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "N' oublie jamais de sauvegarder tes données avant de fermer le programme .",
+    "couverture": 0.8611
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1806,
+     "caracteres": 72,
+     "octets": 73
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9861,
+     "caracteres": 71,
+     "octets": 72
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f46",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 47,
+   "etiquettes": 58,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 47,
+    "octets": 49,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Il n'y a ni pain ni lait dans le réfrigérateur.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 47,
+    "octets": 49
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9592,
+    "caracteres": 49,
+    "octets": 51,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Il n' y a ni pain ni lait dans le réfrigérateur .",
+    "couverture": 0.8085
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9592,
+    "caracteres": 49,
+    "octets": 51,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Il n' y a ni pain ni lait dans le réfrigérateur .",
+    "couverture": 0.8085
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1064,
+     "caracteres": 47,
+     "octets": 49
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9787,
+     "caracteres": 46,
+     "octets": 48
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f47",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 43,
+   "etiquettes": 46,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 43,
+    "octets": 43,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "C'est le meilleur film que j'aie jamais vu.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 43,
+    "octets": 43
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9773,
+    "caracteres": 44,
+    "octets": 44,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "C'est le meilleur film que j'aie jamais vu .",
+    "couverture": 0.8372
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9773,
+    "caracteres": 44,
+    "octets": 44,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "C'est le meilleur film que j'aie jamais vu .",
+    "couverture": 0.8372
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1395,
+     "caracteres": 43,
+     "octets": 43
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9767,
+     "caracteres": 42,
+     "octets": 42
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f48",
+   "refus": "",
+   "langue": "und",
+   "caracteres": 123,
+   "etiquettes": 92,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 123,
+    "octets": 123,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 123,
+    "octets": 123
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9762,
+    "caracteres": 126,
+    "octets": 126,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "Lorem ipsum dolor sit amet , consectetur adipiscing elit , sed do eiusmod tempor incididunt ut labore et dolore magna aliqua .",
+    "couverture": 0.8537
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9762,
+    "caracteres": 126,
+    "octets": 126,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "Lorem ipsum dolor sit amet , consectetur adipiscing elit , sed do eiusmod tempor incididunt ut labore et dolore magna aliqua .",
+    "couverture": 0.8537
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2683,
+     "caracteres": 123,
+     "octets": 123
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9919,
+     "caracteres": 122,
+     "octets": 122
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f49",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 53,
+   "etiquettes": 64,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 53,
+    "octets": 56,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "La réunion est reportée à demain, 10 h 30, salle B12.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 53,
+    "octets": 56
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9464,
+    "caracteres": 56,
+    "octets": 59,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "La réunion est reportée à demain , 10 h 30 , salle B12 .",
+    "couverture": 0.8113
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9464,
+    "caracteres": 56,
+    "octets": 59,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "La réunion est reportée à demain , 10 h 30 , salle B12 .",
+    "couverture": 0.8113
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.2453,
+     "caracteres": 53,
+     "octets": 56
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9811,
+     "caracteres": 52,
+     "octets": 55
+    },
+    "detecte": true
+   }
+  },
+  {
+   "id": "f50",
+   "refus": "",
+   "langue": "fr",
+   "caracteres": 2144,
+   "etiquettes": 2152,
+   "surface": {
+    "exact": true,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0,
+    "caracteres": 2144,
+    "octets": 2204,
+    "niveau": "graphème",
+    "nom": "surface",
+    "rendu": "# Notes de terrain\nLe chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour, contourne le vieux puits et disparaît sous la haie. Personne ne sait vraiment où il passe l'après-midi, mais tout le monde a une théorie. La voisine affirme qu'il dort dans la grange, son fils jure qu'il chasse derrière l'école, et la boulangère, qui le voit chaque matin vers 7 h 15, pense qu'il a simplement deux maisons. Cette hypothèse, aussi étrange qu'elle paraisse, n'est pas la plus invraisemblable : les chats du quartier semblent tous connaître les mêmes raccourcis, les mêmes murs chauds, les mêmes fenêtres entrouvertes, et ils se retrouvent parfois à six sur le même toit.\n\n## Le protocole\nNous avons observé pendant 30 jours, de 6 h 30 à 9 h, en notant chaque passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; le 15, un seul, mais il portait un collier bleu que nous n'avions jamais vu. Le protocole prévoit 3 relevés par jour, 2 observateurs, 1 tableau et 0 conclusion hâtive. Les données brutes sont dans le fichier /home/observateur/notes.txt ; la synthèse est ici.\n\n## Ce que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l'odeur, la chaleur, l'habitude, ou quelque chose de plus difficile à nommer ? Nous ne prétendons pas répondre ; nous constatons, nous comparons, nous doutons. La science commence par un doute bien tenu, et finit parfois par une phrase simple : « Le chat dort. » Cette phrase, banale, contient déjà une langue, un sujet, un verbe, un présent, une habitude, et tout un monde de choses qui ne sont pas dites.\n\n## Annexes\nVisitez https://example.org/corpus/2026?page=3 pour les données complètes ; écrivez à corpus@example.org si vous trouvez une erreur, ou appelez le +33 6 12 34 56 78. Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å et les ligatures œ æ aussi, et les emojis 🐈 🐾 restent lisibles. Ne supprimez pas les lignes vides : elles séparent les paragraphes et changent la lecture.",
+    "couverture": 1.0
+   },
+   "surface_sans_controle": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9953,
+    "caracteres": 2134,
+    "octets": 2194
+   },
+   "mots": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9556,
+    "caracteres": 2230,
+    "octets": 2290,
+    "niveau": "mot",
+    "nom": "mots",
+    "rendu": "# Notes de terrain Le chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour , contourne le vieux puits et disparaît sous la haie . Personne ne sait vraiment où il passe l' après-midi , mais tout le monde a une théorie . La voisine affirme qu'il dort dans la grange , son fils jure qu'il chasse derrière l' école , et la boulangère , qui le voit chaque matin vers 7 h 15 , pense qu'il a simplement deux maisons . Cette hypothèse , aussi étrange qu'elle paraisse , n' est pas la plus invraisemblable : les chats du quartier semblent tous connaître les mêmes raccourcis , les mêmes murs chauds , les mêmes fenêtres entrouvertes , et ils se retrouvent parfois à six sur le même toit . # # Le protocole Nous avons observé pendant 30 jours , de 6 h 30 à 9 h , en notant chaque passage : le 12 / 03 / 2026 , trois chats sont entrés par la porte de service ; le 14 / 03 , aucun ; le 15 , un seul , mais il portait un collier bleu que nous n' avions jamais vu . Le protocole prévoit 3 relevés par jour , 2 observateurs , 1 tableau et 0 conclusion hâtive . Les données brutes sont dans le fichier / home / observateur / notes . txt ; la synthèse est ici . # # Ce que nous croyons savoir Une question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l' odeur , la chaleur , l' habitude , ou quelque chose de plus difficile à nommer ? Nous ne prétendons pas répondre ; nous constatons , nous comparons , nous doutons . La science commence par un doute bien tenu , et finit parfois par une phrase simple : « Le chat dort . » Cette phrase , banale , contient déjà une langue , un sujet , un verbe , un présent , une habitude , et tout un monde de choses qui ne sont pas dites . # # Annexes Visitez https : / / example . org / corpus / 2026 ? page = 3 pour les données complètes ; écrivez à corpus @ example . org si vous trouvez une erreur , ou appelez le + 33 6 12 34 56 78 . Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes , les accents é à ç ù ß ñ ø å et les ligatures œ æ aussi , et les emojis 🐈 🐾 restent lisibles . Ne supprimez pas les lignes vides : elles séparent les paragraphes et changent la lecture .",
+    "couverture": 0.8167
+   },
+   "pos": {
+    "exact": false,
+    "fidelite": 0.0,
+    "fidelite_caractere": 0.9556,
+    "caracteres": 2230,
+    "octets": 2290,
+    "niveau": "pos",
+    "nom": "pos",
+    "rendu": "# Notes de terrain Le chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour , contourne le vieux puits et disparaît sous la haie . Personne ne sait vraiment où il passe l' après-midi , mais tout le monde a une théorie . La voisine affirme qu'il dort dans la grange , son fils jure qu'il chasse derrière l' école , et la boulangère , qui le voit chaque matin vers 7 h 15 , pense qu'il a simplement deux maisons . Cette hypothèse , aussi étrange qu'elle paraisse , n' est pas la plus invraisemblable : les chats du quartier semblent tous connaître les mêmes raccourcis , les mêmes murs chauds , les mêmes fenêtres entrouvertes , et ils se retrouvent parfois à six sur le même toit . # # Le protocole Nous avons observé pendant 30 jours , de 6 h 30 à 9 h , en notant chaque passage : le 12 / 03 / 2026 , trois chats sont entrés par la porte de service ; le 14 / 03 , aucun ; le 15 , un seul , mais il portait un collier bleu que nous n' avions jamais vu . Le protocole prévoit 3 relevés par jour , 2 observateurs , 1 tableau et 0 conclusion hâtive . Les données brutes sont dans le fichier / home / observateur / notes . txt ; la synthèse est ici . # # Ce que nous croyons savoir Une question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l' odeur , la chaleur , l' habitude , ou quelque chose de plus difficile à nommer ? Nous ne prétendons pas répondre ; nous constatons , nous comparons , nous doutons . La science commence par un doute bien tenu , et finit parfois par une phrase simple : « Le chat dort . » Cette phrase , banale , contient déjà une langue , un sujet , un verbe , un présent , une habitude , et tout un monde de choses qui ne sont pas dites . # # Annexes Visitez https : / / example . org / corpus / 2026 ? page = 3 pour les données complètes ; écrivez à corpus @ example . org si vous trouvez une erreur , ou appelez le + 33 6 12 34 56 78 . Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes , les accents é à ç ù ß ñ ø å et les ligatures œ æ aussi , et les emojis 🐈 🐾 restent lisibles . Ne supprimez pas les lignes vides : elles séparent les paragraphes et changent la lecture .",
+    "couverture": 0.8167
+   },
+   "miroir": {
+    "definition": "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; une sortie n'est fidèle que si elle reproduit exactement la source",
+    "fidelite": 0.0,
+    "exact": false
+   },
+   "controle_negatif": {
+    "graine": 0,
+    "definition": "mélange des graphèmes (ou retournement/substitution s'il n'y en a qu'un) et troncature d'un span (contenu)",
+    "melange": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.1838,
+     "caracteres": 2144,
+     "octets": 2204
+    },
+    "tronque": {
+     "exact": false,
+     "fidelite": 0.0,
+     "fidelite_caractere": 0.9995,
+     "caracteres": 2143,
+     "octets": 2203
+    },
+    "detecte": true
+   }
+  }
+ ],
+ "limites": [
+  "4 refus sans annotation (f14 emoji, f15 vide, f16 espaces, f17 « ... ») : la surface n'est pas reconstructible, ils sont comptés à part.",
+  "La fidélité binaire du miroir compare la sortie à la source exacte : la ponctuation séparée des mots fait tomber mots et POS à 5/46, alors que la fidélité de caractères reste à 0,9506. Les deux mesures disent des choses différentes.",
+  "La surface est le niveau `graphème` ; les niveaux `mot` et `pos` ne portent ni les espaces ni les sauts de ligne. La restitution v0 est un codec de surface, pas un décodeur neuronal : elle ne prouve pas la fidélité sémantique.",
+  "Le contrôle négatif mélange les graphèmes (ou les retourne s'il n'y en a qu'un) et retire le dernier : il teste l'ordre et le contenu, pas le sens.",
+  "Le banc est écrit à la main (audit A26) et n'a pas de gold de restitution : la mesure est un invariant de surface, pas une exactitude linguistique."
+ ]
+}

@@ -25,7 +25,7 @@ vérifié** — jamais une intention.
 | 1 span (`g017` arbitrage d'adverbe) ; `r035` relative zéro **réglé** | attachement exact **237/238 (0,9958)** | [`rapport-r035.md`](../../reports/rapport-r035.md) |
 | la convention des GV (322 FP / 180 FN) — **réglée** (sujet hors du GV + adverbe final) | F1 **0,7902** (linéaire 0,8144) ; attachement **237/238** | [`rapport-convention-gv.md`](../../reports/rapport-convention-gv.md) |
 | `meta.alternative` / `meta.partition` — **publiés en v2** (v1 lue) | 26 cas, 0 échec | [`rapport-schema-v2.md`](../../reports/rapport-schema-v2.md) |
-| la restitution (annotation → texte) | miroir **0,2276** | [`../methode/miroir.md`](../methode/miroir.md) |
+| la restitution (annotation → texte) — **v0 faite** | surface **46/46**, miroir strict **0,1087** (50 textes libres) | [`rapport-restitution-v0.md`](../../reports/rapport-restitution-v0.md) |
 
 ### 2.2 Drave — les chantiers voisins (coordination)
 

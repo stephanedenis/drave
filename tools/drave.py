@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
 """drave.py — le point d'entrée produit du bloc linguistique.
 
-Une seule commande, trois gestes, hors ligne et déterministe :
+Une seule commande, quatre gestes, hors ligne et déterministe :
 
     python3 tools/drave.py analyser "Le chat dort."
     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
     python3 tools/drave.py evaluer
     python3 tools/drave.py evaluer --gold --json
     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+    python3 tools/drave.py restituer "Le chat dort."
+    python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json
     python3 tools/drave.py --version
 
 Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
-avec rôle et cible d'attachement, pragmatique, unités sémantiques — et sa mesure sur le gold.
-Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la restitution
-(annotation → texte), la traduction et la génération : ils demandent des poids, un service ou
-un GPU, alors que ce prototype est hors ligne, CPU et sans réseau.
+avec rôle et cible d'attachement, pragmatique, unités sémantiques —, sa mesure sur le gold et la
+**restitution v0** (annotation → surface, avec la fidélité du miroir). La restitution est un
+**codec de surface** : elle reconstruit depuis le niveau `graphème`, pas un décodeur neuronal.
+Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la traduction et la
+génération : ils demandent des poids, un service ou un GPU, alors que ce prototype est hors ligne,
+CPU et sans réseau.
 
-Codes de sortie : 0 succès · 2 usage · 1 erreur (ou refus d'analyse).
+Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 1 erreur.
 """
 from __future__ import annotations
 
@@ -38,6 +42,7 @@ sys.path.insert(0, str(RACINE / "tools"))
 sys.path.insert(0, str(RACINE))
 
 import bloc_linguistique as bl  # noqa: E402  (import après l'installation des chemins)
+import restitution  # noqa: E402  (la restitution v0 : annotation → surface)
 
 NOM = "drave"
 VERSION = "0.1.0"
@@ -332,6 +337,56 @@ def cmd_rejouer(args: argparse.Namespace) -> int:
     return 0
 
 
+# --------------------------------------------------------------------------- restitution
+
+
+def cmd_restituer(args: argparse.Namespace) -> int:
+    """Reconstruit la surface depuis l'annotation et rend la fidélité du miroir.
+
+    Deux modes : un **texte** (ou un fichier), ou un **banc** JSON de textes
+    (`--banc`, le format de `reports/pensee-fiabilite-produit.json`). Le mode banc
+    laisse le bloc détecter la langue, comme le CLI sans `--langue`.
+    """
+    if args.banc:
+        if args.texte is not None or args.fichier:
+            print(f"{NOM}: erreur d'usage : --banc est exclusif de TEXTE et --fichier",
+                  file=sys.stderr)
+            return 2
+        try:
+            donnees = json.loads(pathlib.Path(args.banc).read_text(encoding="utf-8"))
+            items = restitution.items_banc(donnees)
+        except (OSError, ValueError) as exc:
+            print(f"{NOM}: erreur : banc illisible : {exc}", file=sys.stderr)
+            return 1
+        rapport = restitution.mesurer_banc(items, args.langue)
+        rapport["banc"] = args.banc
+        if args.json:
+            sys.stdout.write(_dumps(rapport))
+        else:
+            print(_sur(restitution.formater_banc(rapport, args.banc)))
+        return 0
+
+    texte = _lire_entree(args)
+    if args.texte is None and not args.fichier:
+        print(f"{NOM}: erreur d'usage : TEXTE ou --fichier requis", file=sys.stderr)
+        return 2
+    annotation = bl.Heuristique().analyser(texte, args.langue, args.contexte)
+    if annotation.refus:
+        print(f"{NOM}: refus d'analyse : {annotation.refus} "
+              "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
+        return 3
+    mesure = restitution.mesurer_annotation(annotation, texte)
+    if args.json:
+        sys.stdout.write(_dumps({
+            "schema": restitution.SCHEMA,
+            "version": restitution.VERSION,
+            **mesure,
+        }))
+    else:
+        print(_sur(restitution.formater_mesure(mesure, texte)))
+    return 0
+
+
 # --------------------------------------------------------------------------- CLI
 
 
@@ -353,23 +408,28 @@ class _Parseur(argparse.ArgumentParser):
 
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
+        "Commandes : analyser, evaluer, rejouer, restituer.\n"
         "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) · 1 erreur.\n"
-        "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer, --contexte.\n"
-        "Limites : heuristique CPU, hors ligne, déterministe ; ni neuronal, ni restitution, "
-        "ni traduction.\n"
+        "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
+        "--contexte, --banc.\n"
+        "Limites : heuristique CPU, hors ligne, déterministe ; la restitution est un codec de\n"
+        "surface (graphème), pas un décodeur neuronal ; ni traduction ni génération.\n"
         "Exemples :\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\"\n"
         "  python3 tools/drave.py evaluer --gold --json\n"
+        "  python3 tools/drave.py restituer \"Le chat dort.\"\n"
+        "  python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json\n"
     )
     parseur = _Parseur(
         prog=NOM,
-        description="Point d'entrée produit du bloc linguistique (analyse heuristique).",
+        description="Point d'entrée produit du bloc linguistique (analyse et restitution).",
         epilog=epilogue,
         formatter_class=_Formateur,
     )
     parseur.add_argument("-V", "--version", action="version", version=f"{NOM} {VERSION}",
                          help="afficher la version et quitter")
-    sous = parseur.add_subparsers(dest="commande", metavar="{analyser,evaluer,rejouer}",
+    sous = parseur.add_subparsers(dest="commande",
+                                  metavar="{analyser,evaluer,rejouer,restituer}",
                                   required=True)
 
     analyser = sous.add_parser(
@@ -424,6 +484,31 @@ def construire_parseur() -> argparse.ArgumentParser:
     rejouer.add_argument("--langue", choices=("fr", "en"), default=None,
                          help="indice de langue (fr/en) ; sans lui, le bloc détecte")
     rejouer.set_defaults(fonction=cmd_rejouer)
+
+    restituer = sous.add_parser(
+        "restituer",
+        help="reconstruire la surface depuis l'annotation et mesurer le miroir",
+        description="Analyse un texte, reconstruit la surface depuis le niveau `graphème` "
+                    "(sans lire le champ `texte` de l'annotation) et compare à la source. "
+                    "Affiche la fidélité binaire du miroir, la fidélité de caractères et un "
+                    "contrôle négatif. Avec --banc, mesure un JSON de textes (50 textes libres).",
+        epilog="Exemples : python3 tools/drave.py restituer \"Le chat dort.\" ; "
+               "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json",
+        formatter_class=_Formateur,
+    )
+    restituer.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
+                           help="texte à restituer (entre guillemets) ou --fichier")
+    restituer.add_argument("--banc", default=None, metavar="CHEMIN",
+                           help="mesurer un banc JSON de textes (ex. les 50 textes libres)")
+    restituer.add_argument("--fichier", default=None, metavar="CHEMIN",
+                           help="lire le texte dans un fichier UTF-8 (au lieu de l'argument)")
+    restituer.add_argument("--langue", choices=("fr", "en"), default=None,
+                           help="indice de langue (fr/en) ; sans lui, le bloc détecte")
+    restituer.add_argument("--contexte", default=None,
+                           help="le texte qui précède (mémoire de discours)")
+    restituer.add_argument("--json", action="store_true",
+                           help="sortie JSON (restitution, miroir, contrôle négatif)")
+    restituer.set_defaults(fonction=cmd_restituer)
     return parseur
 
 

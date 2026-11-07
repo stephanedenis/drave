@@ -53,6 +53,19 @@ else
   dit ❌ "50 textes libres en échec (voir /tmp/porte-produit-libre.log)"; ko=1
 fi
 
+if sortie=$(python3 tools/drave.py restituer "Le chat dort." 2>&1) \
+   && printf '%s' "$sortie" | grep -q "exacte 1.0000"; then
+  dit ✅ "restitution v0 : surface exacte (miroir affiché)"
+else
+  dit ❌ "restitution v0 : sortie inattendue : $sortie"; ko=1
+fi
+
+if python3 tools/tests/test_restitution.py >/tmp/porte-produit-restitution.log 2>&1; then
+  dit ✅ "restitution v0 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-restitution.log | head -1)"
+else
+  dit ❌ "restitution v0 en échec (voir /tmp/porte-produit-restitution.log)"; ko=1
+fi
+
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then
   dit ✅ "schéma v2 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-schema.log | head -1)"
 else

@@ -1452,9 +1452,12 @@ class Heuristique:
         etiquettes: list[Etiquette] = []
         unites: list[Span] = []
 
-        # 1. graphème — des plages de classes, pas un caractère par étiquette
+        # 1. graphème — des plages de classes, pas un caractère par étiquette.
+        # `C` couvre les **contrôles** (saut de ligne, tabulation, BOM, marques de format) :
+        # sans eux, la surface n'est pas reconstructible à l'identique — le miroir de la
+        # restitution v0 (J1.4) a trouvé le trou sur le texte multiligne `f50`.
         classes = {"L": "lettres", "N": "chiffres", "P": "ponctuation", "Z": "espace",
-                   "S": "symbole", "M": "marque"}
+                   "S": "symbole", "M": "marque", "C": "contrôle"}
         i = 0
         while i < len(texte):
             cat = unicodedata.category(texte[i])[0]

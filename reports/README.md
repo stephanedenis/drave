@@ -25,6 +25,7 @@
 | [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 (porte propre, `porte-n2.sh`) |
 | [`rapport-etat-a.md`](rapport-etat-a.md) | **B13** — l'état de A (frontière) |
 | [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test des 50 textes |
+| [`rapport-restitution-v0.md`](rapport-restitution-v0.md) | **B13** — restitution v0 : **46/46** surfaces, miroir strict **0,1087** |
 | [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (NUM) |
 | [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
 | [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |
@@ -186,6 +187,3 @@ titre de chaque fiche.
 L'index **exhaustif** et **généré** est [`INDEX.md`](INDEX.md) : une ligne par fiche, triée par nom.
 Les fiches qui ne sont pas dans « Les fiches courantes » sont des fiches de campagne, de mesure ou
 d'histoire ; on les ouvre par leur **verdict**, pas en entier.
-
-> Les JSON ajoutés après coup sont dans le dossier ; leur description est dans la fiche de la
-> mesure correspondante (`reports/INDEX.md` donne le titre de chaque fiche).
