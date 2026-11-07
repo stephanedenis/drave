@@ -53,9 +53,21 @@ def _valider_minimal(d: dict) -> list[str]:
     return erreurs
 
 
+def _gold(n: int) -> list[tuple[str, dict]]:
+    """Les `n` premières phrases du gold, analysées par l'heuristique (validation du corpus)."""
+    sys.path.insert(0, str(RACINE))
+    from tools.tests.linguistique.evaluer_gold import charger
+    import tools.bloc_linguistique as bl
+    h = bl.Heuristique()
+    return [(f"gold:{p['id']}", h.analyser(p["texte"], p["langue"]).json())
+            for p in charger()[:max(0, n)]]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Valide drave.annotation contre le schéma v1.")
     ap.add_argument("--json", action="store_true", help="détail JSON des cas")
+    ap.add_argument("--gold", type=int, default=0, metavar="N",
+                    help="valide aussi les N premières phrases du gold (0 = aucune)")
     ap.add_argument("--aide", action="store_true", help="affiche cette aide et sort")
     args = ap.parse_args()
     if args.aide:
@@ -71,8 +83,11 @@ def main() -> int:
         valider = fastjsonschema.compile(schema)
     except Exception:  # noqa: BLE001 — repli minimal si le validateur manque
         valider = None
+    cas = list(_annotations())
+    if args.gold > 0:
+        cas += _gold(args.gold)
     resultats = []
-    for nom, annotation in _annotations():
+    for nom, annotation in cas:
         if valider is not None:
             try:
                 valider(annotation)
@@ -89,7 +104,9 @@ def main() -> int:
         for r in resultats:
             print(f"  {'✅' if r['ok'] else '❌'} {r['cas']}"
                   + (f" — {r['erreurs'][0]}" if r["erreurs"] else ""))
-        print(f"  {'✅ validateur JSON Schema' if valider else '⚠️ validation minimale (fastjsonschema absent)'}")
+        print(f"  {'✅ validateur JSON Schema' if valider else '⚠️ validation minimale (fastjsonschema absent)'}"
+              f" · {len(cas)} cas")
+
     return 0 if all(r["ok"] for r in resultats) else 1
 
 

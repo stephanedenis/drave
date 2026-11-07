@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.6 h |
-| Tours | 186 |
-| Messages | 3434 |
-| Appels d'outils | 3048 |
+| Durée | 151.7 h |
+| Tours | 187 |
+| Messages | 3444 |
+| Appels d'outils | 3056 |
 | Fichiers touchés | 25 |
-| Commandes | 2543 |
+| Commandes | 2551 |
 | Sous-agents | 38 |
-| Commits | 411 |
+| Commits | 412 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -431,6 +431,8 @@
 **Tour 185** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 **Tour 186** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
+
+**Tour 187** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10047,7 +10049,58 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 
 **Synthèse produite :**
 
-⏵ Consolidation : la nuit finit à **F1 0,7535** — je mets à jour roadmap et journal
+⏵ Nuit 06/11 → 07/11 : **F1 0,7535**, **POS 86,25 %**, **236/237**, couverture **0,9916**
+
+\## Les chiffres de la nuit (comparés au matin)
+
+| mesure | matin 09 h 20 | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 58,49 % | **75,35 %** |
+| tête (F1) | 73,36 % | **86,50 %** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** (`r035`, `g017`) |
+| miroir | 0,196 | 0,2276 |
+
+\## Ce que cette dernière heure a donné
+
+**Le sujet est un GN** — trois règles de la même famille, mesurées une à une, avec la garde de langue qui évite le « on » anglais :
+
+1. **pronom sujet français** → F1 0,6519 → **0,7013** ;
+2. **pronom sujet anglais** → **0,7438** ;
+3. **nom propre sujet** (« Marie lit ») → **0,7535**.
+
+**L'attachement n'a pas bougé** (236/237, couverture 0,9916) : +10,2 points de F1 **sans** perdre une seule cible. C'était la plus grosse erreur de segmentation — une **convention** (le sujet est un GN), pas une reconnaissance.
+
+\## L'état vérifié
+
+`HEAD 26c7b7ab`, `master` = `s/v7` **poussés**, 0 divergence ; **183/183** portes ; porte produit verte (10 contrôles, 13 tests) ; toutes les portes légères passent (`revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `bloc`, `index`, `schemas`, `backlog`).
+
+\## Ce qui reste
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe).
+2. **Les GV en double** (322 FP / 180 FN) et les **ADJ/ADV du gold** (65) — la convention de segmentation des prédicats.
+3. **La coordination** : les 11 verdicts S, le tagger sur 612 via l'API, `porte-n2.sh`, R2.1.
+4. **La restitution** (annotation → texte), la brique produit suivante.
+
+Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
+
+### Tour 187 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Comparer gold et prédiction sur des cas
+- bash — Tester l'arrêt à l'adverbe final
+- bash — Voir la génération S
+- bash — Voir l'ajout des segments S
+- bash — Tester le rognage du sujet S
+- bash — Vérifier l'état de départ du round
+- bash — Voir les modifications
+- bash — Committer le validateur --gold
+
+**Synthèse produite :**
+
+⏵ Expérience : rogner le sujet en tête des GV du générateur S (convention)
 
 ## 3. Travail accompli
 
@@ -10164,7 +10217,7 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2503 autres
+- … et 2511 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10723,4 +10776,5 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - B13 — LES PRONOMS SUJETS ANGLAIS AUSSI : F1 0,7013 → 0,7438, TÊTE 0,8561, ATTACHEMENT PRÉSERVÉ ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py
 - B13 — LE NOM PROPRE SUJET EST UN GN : F1 0,7438 → 0,7535, TÊTE 0,865, ATTACHEMENT 236/237 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py repo
 - ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET" -- docs/pilotage/roadmap.md journal/2026-11-06
+- PRODUIT — LE VALIDATEUR PORTE --gold (20 PHRASES DU CORPUS VALIDÉES CONTRE LE SCHÉMA V1) : LA PORTE L'UTILISE" -- tools/verifier_schema_produit.py docs/pilotage
 

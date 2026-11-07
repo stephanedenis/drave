@@ -58057,3 +58057,180 @@ FN 400 {'GV': 180, 'SUB': 1, 'GN': 144, 'REL': 1, 'ADJ': 35, 'ADV': 30, 'PONCT':
 ⏵ Consolidation : la nuit finit à **F1 0,7535** — je mets à jour roadmap et journal
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"**État au 06/11 23 h 45.\")), None)\nif ligne:\n    t=t.replace(ligne, \"**É … [2166 caractères tronqués]`
+
+  ```
+roadmap + journal
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 10 files changed, 67 insertions(+), 21 deletions(-)
+COMMIT OK 1
+26c7b7ab ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET
+   efbae885..26c7b7ab  s/v7 -> s/v7
+   efbae885..26c7b7ab  master -> master
+sam 07 nov 2026 00:18:49 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit 06/11 → 07/11 : **F1 0,7535**, **POS 86,25 %**, **236/237**, couverture **0,9916**
+
+## Les chiffres de la nuit (comparés au matin)
+
+| mesure | matin 09 h 20 | **maintenant** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 58,49 % | **75,35 %** |
+| tête (F1) | 73,36 % | **86,50 %** |
+| attachement | 222/222 (0,9289) | **236/237 (0,9916)** |
+| spans perdus | 17 | **2** (`r035`, `g017`) |
+| miroir | 0,196 | 0,2276 |
+
+## Ce que cette dernière heure a donné
+
+**Le sujet est un GN** — trois règles de la même famille, mesurées une à une, avec la garde de langue qui évite le « on » anglais :
+
+1. **pronom sujet français** → F1 0,6519 → **0,7013** ;
+2. **pronom sujet anglais** → **0,7438** ;
+3. **nom propre sujet** (« Marie lit ») → **0,7535**.
+
+**L'attachement n'a pas bougé** (236/237, couverture 0,9916) : +10,2 points de F1 **sans** perdre une seule cible. C'était la plus grosse erreur de segmentation — une **convention** (le sujet est un GN), pas une reconnaissance.
+
+## L'état vérifié
+
+`HEAD 26c7b7ab`, `master` = `s/v7` **poussés**, 0 divergence ; **183/183** portes ; porte produit verte (10 contrôles, 13 tests) ; toutes les portes légères passent (`revue`, `taille`, `tableaux`, `en-cours`, `journal`, `sessions`, `bloc`, `index`, `schemas`, `backlog`).
+
+## Ce qui reste
+
+1. **2 spans** : `r035` (relative zéro), `g017` (arbitrage d'adverbe).
+2. **Les GV en double** (322 FP / 180 FN) et les **ADJ/ADV du gold** (65) — la convention de segmentation des prédicats.
+3. **La coordination** : les 11 verdicts S, le tagger sur 612 via l'API, `porte-n2.sh`, R2.1.
+4. **La restitution** (annotation → texte), la brique produit suivante.
+
+Le goal reste actif ; je continue jusqu'à 9 h si la session le permet.
+
+
+## Tour 187
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 3/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique()\nfor pid in (\"g031\",\"r001\",\"r010\"):\n    for  … [415 caractères tronqués]`
+
+  ```
+r001 Le chien mange une pomme.
+  gold [('GN', 0, 8, 'Le chien'), ('GN', 15, 24, 'une pomme'), ('GV', 9, 14, 'mange')]
+  pred [('GN', 0, 8, 'Le chien'), ('GN', 15, 24, 'une pomme'), ('GV', 9, 14, 'mange')]
+r010 Tu viens demain ?
+  gold [('GN', 0, 2, 'Tu'), ('GV', 3, 8, 'viens')]
+  pred [('GN', 0, 2, 'Tu'), ('GP', 9, 15, 'demain'), ('GV', 0, 8, 'Tu viens'), ('GV', 3, 15, 'viens demain')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience : le GV s'arrête à l'adverbe final (« viens | demain »)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nancien = '''                       and _normaliser(mots[j][2]) not in lex.get(\"PREP\", set())\n                       and _normaliser(mots … [1356 caractères tronqués]`
+
+  ```
+exp adverbe final
+EXP-ADV POS 0.8625 | F1 0.7505 | exact 236/237 | cov 0.9916
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"segmenter_s\\|def _segments_s\\|rouge_s\\|s_segments\" tools/bloc_linguistique.py | head -6; grep -n \"union.*True\" tools/bloc_linguistique.py | head -3", "description": "Voir la génération S"}`
+
+  ```
+793:    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+797:        self.segmenter_s = segmenter_s
+903:        if not self.segmenter_s:
+920:        if not self.segmenter_s:
+1685:        h = Heuristique(segmenter_s=False)
+795:                 union: bool = True, partition: str = "alternative"):
+1585:                meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1555,1600p' tools/bloc_linguistique.py", "description": "Voir l'ajout des segments S"}`
+
+  ```
+cache_gv: dict = {}
+            prec = None
+            for s in simples:
+                meta = {"role": s["role"], "niveau": s["niveau"]}
+                cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
+                cible = self._cible_hors_span(texte, s, gvs_s, cible)
+                cible = self._repli_verbe_propre(texte, s, cible)
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.35,
+                                            candidats=([s["type"]]
+                                                       + self._candidats_precedent(texte, s, prec)
+                                                       + self._verbes_proches(
+                                                           texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
+                                            l
+… [1803 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Expérience : rogner le sujet en tête des GV du générateur S (convention)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\n# avant d'ajouter les segments S (boucle de la ligne ~1560), rogner le sujet en tête des GV\nancien = '''                meta = {\"role\":  … [1639 caractères tronqués]`
+
+  ```
+exp rognage S
+EXP-ROGNE POS 0.8625 | F1 0.7533 | exact 236/237 | cov 0.9916
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain tools/ | head -3; timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc( … [642 caractères tronqués]`
+
+  ```
+M tools/structures
+ M tools/verifier_schema_produit.py
+ÉTAT POS 0.8625 | F1 0.7533 | exact 236/237 | cov 0.9916
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+26c7b7ab ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET
+0
+sam 07 nov 2026 00:21:31 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff tools/verifier_schema_produit.py | head -20; echo \"=== structures :\"; git diff --stat tools/structures | tail -2", "description": "Voir les modifications"}`
+
+  ```
+diff --git a/tools/verifier_schema_produit.py b/tools/verifier_schema_produit.py
+index ae6af2f7..40a9ded5 100644
+--- a/tools/verifier_schema_produit.py
++++ b/tools/verifier_schema_produit.py
+@@ -53,9 +53,21 @@ def _valider_minimal(d: dict) -> list[str]:
+     return erreurs
+ 
+ 
++def _gold(n: int) -> list[tuple[str, dict]]:
++    """Les `n` premières phrases du gold, analysées par l'heuristique (validation du corpus)."""
++    sys.path.insert(0, str(RACINE))
++    from tools.tests.linguistique.evaluer_gold import charger
++    import tools.bloc_linguistique as bl
++    h = bl.Heuristique()
++    return [(f"gold:{p['id']}", h.analyser(p["texte"], p["langue"]).json())
++            for p in charger()[:max(0, n)]]
++
++
+ def main() -> int:
+     ap = argparse.ArgumentParser(description="Valide drave.annotation contre le schéma v1.")
+=== structures :
+ tools/structures | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-07, 00 h 35 HNE\", t)\np.write_text( … [719 caractères tronqués]`
