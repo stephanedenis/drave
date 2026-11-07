@@ -56879,3 +56879,160 @@ Les deux fichiers sont écrits : reports/rapport-etat-s.md et reports/pensee-eta
 ⏵ Je commite les corrections de l'état S (chronologie)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-etat-s.md reports/pensee-etat-s.json | head -2; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\ … [801 caractères tronqués]`
+
+  ```
+M reports/pensee-etat-s.json
+ M reports/rapport-etat-s.md
+ 13 files changed, 188 insertions(+), 33 deletions(-)
+COMMIT OK 1
+56e5ce48 S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS)
+   027abba4..56e5ce48  s/v7 -> s/v7
+   027abba4..56e5ce48  master -> master
+ven 06 nov 2026 22:44:55 EST
+  ```
+
+### 👤 Utilisateur
+
+Background subagent cdc16e57-4a69-4890-8b3c-270539c64ff2 finished and will do no further work unless you send it more.
+Its closing message:
+Les deux livrables sont écrits :
+
+- `reports/rapport-etat-s.md` (502 lignes)
+- `reports/pensee-etat-s.json` (JSON valide, 24 clés)
+
+Aucun commit de ma part ; le commit concurrent `0a9381f0` a pris la version initiale, mes corrections de chronologie sont dans le working tree, non committées. Aucun existant modifié.
+
+## Les 71 langues
+
+Ce sont les **libellés B7** de `tools/jeux/lexique_multilingue.json` : **71 langues**, **35 concepts**, **1 433 couples** (1 429 canoniques + 4 variantes). Mesure rejouée : **71/71** ont ≥ 1 label, **66/71** un item du corpus, **62/71** un item fort, **32/71** sont « fortes » ; **5** n'ont aucun item (`mt`, `ky`, `lo`, `si`, `yo`). Corpus **449/449**, invariance **11/11**, notation **5 112/5 112**, détection des jeux **315/315**, permutation **12/275** items forts.
+
+**Ce ne sont pas « les 71 langues de l'UDHR »** : l'UDHR a **456 langues**, 13 996 articles, et aucun sous-ensemble à 71 n'existe dans le dépôt. Surtout, le lexique B7 ne contient **aucune phrase ni anaphore** : il ne peut pas tester les référents. **S ne l'a pas testé : 0/71.**
+
+## La rétro-traduction
+
+**Elle n'existe pas** : 0 script, 0 JSONL, 0 mesure, **0/9 paragraphe**, 0 appel. Cinq fiches la mentionnent « quand la clé sera là ». Les briques existent (`deepseek.py`, `enseignant.py`, `mesure.py`, prompts UDHR), mais aucune ne fait FR → EN → FR sur les 9 paragraphes d'Alice. `DEEPSEEK_API_KEY` est absente ; la règle 11 interdit un serveur local. Le protocole mesurable (9 prompts, 9 retours, chrF aller-retour, 2 relectures) est dans la fiche, avec les commandes exactes des briques.
+
+## Les 3 prochaines actions
+
+1. **A1 — Débloquer la banque `/` (P0)** : la page sert encore les **369 candidats stockés le 02/11**, sans `profondeur` ; la v7 donne **359 candidats, 99 à ≥ 3**. Préparer une copie v7 et une migration **par signature** dans `work/banque-v7/` : **0 verdict perdu**, 5 verdicts à risque remappés, 304 identiques / 55 changés / 10 orphelins. Ne pas régénérer par index (`p006-c2`, `c023-c3`, `c056-c2`, `c056-c3`, `c064-c2` seraient perdus).
+2. **A2 — Auditer les 28 référents des 19 verdicts (P1)** : **12/28 mappings faux**, **2 formes manquantes** (`les` → les conseils, `l'` → la boîte) ; le « 14/14 » est côté traduction, pas humain. Produire `work/referents/verdicts-corriges.jsonl` : **14/14** occurrences, 0 faux, 0 manquant.
+3. **A3 — Rétro-traduction (P2, conditionnelle)** : 9 paragraphes, 18 appels, chrF aller-retour, 2 relectures. Bloquée par l'absence de clé et de harnais ; à écrire dans `work/retro-traduction/`.
+
+## Les points durs
+
+- **`/paragraphes` est fini** : 9/9 paragraphes, **19/19 candidats**, 0 restant ; 10 `resolu`, 8 `exclu`, 1 `compatible`. Mais **8 verdicts sont committés, 11 non** : un clone à `523d8c1` n'en voit que 8.
+- **Le « 8 restants » est faux** : 9 paragraphes, pas 17 ; après a001–a003 il restait 6 paragraphes. Le 8 est le nombre de **verdicts** committés sur a001–a003.
+- **La banque** : 150 verdicts, **147 paires**, **74/207 phrases** (35,7 %), **84 acceptées / 63 exclues** ; export **84/67** (SHA `3ca1ac20…`) alors que la fiche dit encore 81/65 (SHA `2d27b712…`).
+- **Le vrai blocage** n'est pas le nombre de verdicts : c'est que la page `/` affiche l'ancien arbre plat, alors que la mesure v7 (et `/paragraphes`) montre l'arbre profond. Le motif d'arrêt humain reste donc valide sur `/`.
+
+### 🤖 Assistant
+
+⏵ La nuit continue : je reprends la POS ouverte (0,7746) avec la matrice de confusion actuelle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); conf=collections.Counter(); ex=collec … [634 caractères tronqués]`
+
+  ```
+top confusions :
+VERB -> NOUN: 218 | ex [('couru', 'fr', 'Il a couru pour attraper le bus.'), ('attraper', 'fr', 'Il a couru pour attraper le bus.'), ('lu', 'fr', "Le livre que j'ai lu est intéressant."), ('manger', 'fr', 'Le canard est prêt à manger.')]
+ADJ -> NOUN: 68 | ex [('rapide', 'fr', 'La voiture est rapide.'), ('passionnant', 'fr', "Le livre que j'ai lu est passionnant."), ('fatiguée', 'fr', 'Elle est peut-être fatiguée.'), ('ouverte', 'fr', 'La porte est ouverte.')]
+PRON -> ?: 30 | ex [("j'", 'fr', "Le livre que j'ai lu est bon."), ("j'", 'fr', "Le chat que j'ai vu dormait."), ('il', 'fr', "Elle dit qu'il vient."), ('il', 'fr', "Bien qu'il soit tard, il travaille.")]
+CONJ -> PRON: 28 | ex [('que', 'fr', "Le livre que j'ai lu est intéressant."), ('que', 'fr', "Le livre que j'ai lu est passionnant."), ('that', 'en', 'The book that I read is exciting.'), ('que', 'fr', 'Le livre que tu lis est long.')]
+PONCT -> ?: 25 | ex [('?', 'fr', 'Ne viens-tu pas demain ?'), ('?', 'fr', 'Ne mange-t-il pas ?'), ('?', 'fr', 'Ne dort-elle pas ?'), ('?', 'fr', 'Ne partent-ils pas ?')]
+NOUN -> ADJ: 17 | ex [('journal', 'fr', 'La fille lit le journal.'), ('meal', 'en', 'The mother prepares the
+… [579 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Trois règles POS : pronoms élidés, ponctuation, participes irréguliers
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) pronoms élidés : j' → je, l' → le, d' → de, qu' → que, n' → ne, s' → se, c' → ce, m' → me, t' → te\nt=t.replace('''        n = _nor … [965 caractères tronqués]`
+
+  ```
+élisions
+syntaxe OK
+POS 0.8496 | F1 0.6482 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            if typ in (\"mot\", \"nombre\"):\n                classe, ouvert, conf = self._pos(lg, t)''',\n'''            … [957 caractères tronqués]`
+
+  ```
+PONCT
+syntaxe OK
+POS 0.8575 | F1 0.6482 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''roule rouler vole voler tombe tomber reste rester passe passer quitte quitter''',\n'''roule rouler vole voler tombe tombe … [1139 caractères tronqués]`
+
+  ```
+participes ajoutés
+syntaxe OK
+POS 0.8575 | F1 0.6459 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''roule rouler vole voler tombe tomber reste rester passe passer quitte quitter\ncouru courir lu lire bu boire vu voir su s … [1063 caractères tronqués]`
+
+  ```
+participes retirés (F1 -0,0023)
+POS 0.8575 | F1 0.6482 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après PONCT", "timeoutMs": 1900000}`
+
+  ```
+❌ T107 gold complet      gold complet : 602 phrases, POS 0.8577, tête 0.7709
+  ❌ T116 miroir            miroir : surface 1,0, sortie POS 0.2276 (fluidité 1.0)
+  ❌ T117 sortie POS        sortie POS : fidélité 0.2276
+  ❌ T138 défaut fusion     défaut : confiance 0.8575, niveau 0.754
+  ❌ T141 élision           élision : POS 0.8575
+  178/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent 7635f5f5-11b8-4d10-bea5-50a90e536e31 sent a message: 
+État du chantier R — terminé, lecture seule. Deux fichiers neufs : `reports/rapport-etat-r.md` et `reports/pensee-etat-r.json` (JSON valide). Aucun existant modifié, aucun commit de ma part. Attention : le hub a committé une version antérieure de la fiche dans `d3134849` ; le worktree contient la version finale corrigée (diff +22/−13, non committé) et le JSON est non suivi. HEAD d'audit `97256b8f`, HEAD courant `56e5ce48` (S, sans effet R). Les 3 726 liens résolvent, `revue_documentation.py` passe.
+
+1) LES LIGNES R (20)
+- R0.1 ✅ 51 pages, 1 466 régions, fidélité 1,000 — `porte-document` vert.
+- R0.2 ✅ 1,000 à 30 % sur 5 types — `porte-lecteur` vert.
+- R0.3 ✅ 249 selon la fiche, **248** dans le banc vérifié ; extractif 1,000 à 30 % ; modèle 0,231 vs début 0,042 ; durci 84 paraphrases : modèle 0,375, lexical 0,269 — `banc_complet.py --verifie` vert.
+- R0.4 ⚠️ partiel : survol ❌ 0,540 vs BM25 0,720 ; balayage ✅ 0,984/0,702 ; relecture ❌ 0/249 ; cascade calibrée 0,911/0,415 — `porte-balayage` vert.
+- R0.5 ❌ close négative : AUC 0,839 ; transfert 0,819/0,313 vs fixe 0,871/0,373 — `routeur.py` rejoué.
+- R0.6 ✅ 12/20, 9/10 refusés (le titre dit 10/10), 7/8 modèle ; 7/7 contrôles — `porte-lecture` vert.
+- R0.7 ✅ heuristique : 398 langues 0,9687, script 1,0 ; gold **612** : POS **0,8500**, syntagmes F1 0,6482, tête 0,7673, attachement 235/236, pragmatique 0,9967/0,9771/0,9886/0,9444 — `porte-bloc-linguistique` vert. La roadmap (gold 360, POS 0,765) est périmée.
+- R1.1 🔬 PPL 3,2545 à 1 000 (0,97× la PPL à 129) mais aiguille ≥15/18 non atteinte ; miroir 0,0078 — non rejoué.
+- R1.2 🔬 **run 1024-20k fait** : 2,9955 à 128, 2,6256 à 1 000, 2,5429 à 4 000 ; artifact `work/n2ac/rope1024-20k.pt` (131 Mo), JSON + fiche + commit `c7ef9bc4` ; **ligne non close** dans la roadmap, miroir du 20k absent ; 2048 à octets constants perd, à pas constants gagne −0,083/−0,088/−0,105.
+- R1.3 ✅ octets : BPE 512 +0,39 %, BPE 1024 +3,92/+4,09 %, anglais +4,22/+6,59 % — non rejoué (GPU).
+- R2.1 ⏳ à faire, **non bloquée par N5** : tampon gelé +0,879, LoRA +0,964, réseau seul −1,091→−2,773 ; porte : indice section 2 après section 5 + citation, closed-book échoue.
+- R2.2 ⏳ après R2.1.
+- R3.1 🧱 bloquée par N4 (24/24 vus, 0/4 tenus) + R2.1 ; porte ≥80 % tenu à l'écart.
+- R3.2 ⏳ après R3.1.
+- R4.1 ✅ porte : 35 tableaux, 970 cellules, provenance 776/776, 8/8 ; la roadmap (996/802) est antérieure.
+- R4.2 ✅ 342/342 fichiers, 24/24 exécutions, 7/7 refus ; la roadmap dit 294.
+- R4.3 ✅ 32/32 formules, 10/10 dérivées, 6/6 équations, 8/8 refus.
+- R4.4 🔬 **partiel** : les deux portes OCR vertes ; 100 scans simulés (photo 55,9→6,7 % WER, test 5,7 % ; préservation 96,7/93,3/90/90/56,7 ; colonnes 89,4→0,5 ; tableaux 92,6) ; **3 vrais livres × 10 pages** (WER 7,10/36,26/8,73 contre la couche OCR ; ordre des colonnes 15,32/7,09/12,80 vs 97,98/96,06/99,20). La porte « 10 pages réelles avec **vérité humaine** » n'est pas atteinte : **l'OCR n'est plus le blocage**, la vérité humaine l'est. Les docs se contredisent (roadmap « ouvert », en-cours « close », backlog « partiel », fiche « ouverte » puis « close »).
+- R5.1 ⏳ après R3 (M4 manque).
+- R5.2 🧱 bloquée par B10.3 : chrF 12,7/5,3 contre le plancher 39,6.
+
+2) LE TAGGER (le point qui change la lecture)
+Deux routes, deux corpus, pas un chiffre :
+- **7B local** (Qwen2.5-7B-Instruct Q4_K_M, `llama-server`, CPU) sur **180 phrases / 804 jetons** (20 réelles + 160 synthétiques) : POS **0,8483** seul, cascade 0,6 **0,9440**. L'heuristique sur ce même gold, **aujourd'hui**, vaut **0,7749** → +0,0734 seul, +0,1691 en cascade (l'écart cascade est arithmétique, pas un re-run). Le modèle GGUF est **absent** de `models/` (le cache HF a 15 Go de safetensors) ; la commande échoue « modèle absent » ; règle 11 : serveur local interdit, mesure historique.
+- **API DeepSeek** (`qualifier_quatre_modes.py`, règle 11) sur le **gold réel 432 / 2 375 jetons** : POS **0,9389** (run 2 ; run 1 0,9309 ; t03 0,9385), syntagmes 0,8241, tête 0,8797, acte 0,0. L'heuristique sur ce même 432, **aujourd'hui**, vaut **0,8754** → **+0,0635**, pas +0,19.
+- Le **0,85** est l'heuristique sur le **gold 612 / 3 179 jetons** ; le tagger n'a **jamais** été mesuré sur ces 612. Donc **0,9440 − 0,85 = +0,0940 est une erreur de corpus** ; l'écart honnête est +6,35 pts sur le réel 432 et +7,34 pts sur le 180, avec la réserve que la baseline a monté (0,7444→0,8754 sur 432 ; 0,7512→0,7749 sur 180, POS des verbes, classes fermées, NUM).
+- Classes mesurées : les 12 du bloc (DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM, INTJ, PUNCT), au token, exact ; pas UD, pas de morphologie.
+
+3) LES TROIS PROCHAINES ACTIONS
+1. **R0.7 — tagger POS sur le gold 612 via l'API** : étendre le chargeur de `qualifier_quatre_modes.py` (aujourd'hui `gold_reel.json` seul) puis `DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie /tmp/tagger-612.json`. Mesure : POS sur 612 ventilé 432/160/20, écart vs 0,8500, contrôles recalculés, refus, coût (~1 200 appels, ~360 k tokens, ~20 min). Décision : < +2 pts → fermer le tagger comme négatif nommé ; ≥ +5 pts → l'intégrer via l'API.
+2. **R1.1 — miroir de copie sur `rope1024-20k` et `rope2048-20k`** : `PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/mirroir_copie.py work/n2ac/rope1024-20k.pt --rope --sortie /tmp/mirroir-1024-20k.json` (fichier réel `mirroir_copie.py`, deux r ; les fiches citent `miroir_copie.py`). Si ≤0,01 partout (attendu), clore R1.1 « aiguille non atteinte, copie non créée par la fenêtre » ; si >0,5 à d≤240, rouvrir. Coût : minutes, GPU libre.
+3. **R2.1 — gist v0 + tampon en entrée** : sections/offsets R0.1, tampon `--entree-memoire 8`, gist (résumé, entités, faits, citations), banc à créer. Mesure : question indice section 2 après section 5, gist vs closed-book (marge proposée +10 pts), citation exacte ≥0,90, aucune perte sur documents courts ; contrôles closed-book, gist aléatoire, oracle.
+R4.4 n'est pas dans les 3 : bloquée par la **vérité humaine** sur 10 pages réelles, pas par l'OCR.
+
+4) ÉCARTS DOCS À CORRIGER (hors mon territoire)
+- roadmap R0.7 : gold 360/POS 0,765 → gold 612/POS 0,8500 ; tagger 0,9440 est sur 180 (0,7749) et 0,9389 sur 432 (0,8754), pas contre 0,85.
+- en-cours R : « R1 — R1.2-1024 » et « 1 024 octets entraînés » (le run existe) ; « R4.4 close » (porte humaine ouverte) ; « R2/R3 attendent N5/N4 » (R2.1 n'attend ni N5 ni N4) ; B13 178/178 → 183/183.
+- R0.3 : fiche 249 vs banc 248 ; R0.6 : titre 10/10 vs corps 9/10 ; R4.1 : 996/802 vs 970/776 ; R4.2 : 294 vs 342 ; `rapport-n2-*` : `miroir_copie.py` vs `mirroir_copie.py`.
+
+Détail, chiffres, commandes et limites : `reports/rapport-etat-r.md` § 1–10 ; données : `reports/pensee-etat-r.json`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-etat-r.md reports/pensee-etat-r.json | head -2; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nif \"pensee-etat-r.json\" not in t:\n    pass\np.write_tex … [971 caractères tronqués]`

@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**78 commits** · **16 session(s)** · **8 thème(s)**
+**79 commits** · **16 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 23 | [distribue.md](distribue.md) |
-| docs | 17 | [docs.md](docs.md) |
+| docs | 18 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 17 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -32,12 +32,12 @@
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
 | `538288b3-117b-4daf-8d16-0cd8d6b0090d` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.0 h | [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md) |
 | `599e9c0e-4252-43ca-a89a-3886d723c379` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.1 h | [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md) |
-| `7635f5f5-11b8-4d10-bea5-50a90e536e31` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md) |
+| `7635f5f5-11b8-4d10-bea5-50a90e536e31` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.7 h | [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
 | `cdc16e57-4a69-4890-8b3c-270539c64ff2` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 | `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.3 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
 
@@ -123,6 +123,7 @@
 | 22:32 | `550d6d07` | PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES |
 | 22:35 | `0a9381f0` | S — L'ÉTAT : /paragraphes FINI (19/19, 11 VERDICTS NON COMMITTÉS), BANQUE 150/207, 71 LANGUES = LEXIQUE B7, RÉTRO-TRADUCTION ABSENTE |
 | 22:39 | `027abba4` | PRODUIT — --contexte DANS LA CLI (MÉMOIRE DE DISCOURS PORTÉE DANS LE JSON), 11 TESTS |
+| 22:42 | `56e5ce48` | S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS) |
 
 ## Le récit de la journée (écrit à la main)
 

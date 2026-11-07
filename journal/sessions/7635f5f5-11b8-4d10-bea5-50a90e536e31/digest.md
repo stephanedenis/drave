@@ -3021,3 +3021,127 @@ ok
 238:Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et trois bancs** :
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %ci %s'; echo '---'; git status --short -- reports/rapport-etat-r.md reports/pensee-etat-r.json; echo '---'; python3 -m json.tool reports/pensee-etat-r.json >/dev/null && echo 'JSON OK'; python3 tools/verifier … [87 caractères tronqués]`
+
+  ```
+56e5ce48 2026-11-06 22:42:36 -0500 S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS)
+---
+ M reports/rapport-etat-r.md
+?? reports/pensee-etat-r.json
+---
+JSON OK
+  ✅ 3726 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -5; echo exit=${PIPESTATUS[0]}; echo '---'; wc -w reports/rapport-etat-r.md; grep -c '^|' reports/rapport-etat-r.md", "description": "Revue documentaire et taille"}`
+
+  ```
+revue de documentation · 701 fiche(s) · 794 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+---
+6083 reports/rapport-etat-r.md
+107
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5 -- reports/rapport-etat-r.md; echo '---'; git show --stat --oneline HEAD -- reports/rapport-etat-r.md | head; echo '---'; git show HEAD:reports/rapport-etat-r.md 2>&1 | head -12; echo '---'; git diff --stat -- re … [78 caractères tronqués]`
+
+  ```
+d3134849 ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)
+---
+---
+# État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine
+
+> **Ligne de roadmap** : **R** (le lecteur) · **Date** : 2026-11-06, 22 h 10 HNE · **Branche** :
+> `s/v7` · **HEAD** : `97256b8f` (le HEAD a bougé pendant l'audit : `de7c9113` → `7a876f70` →
+> `97256b8f` ; les mesures de POS ont été refaites au HEAD final, à l'identique) ·
+> **Mission** : lecture seule, aucun code, aucun fichier existant modifié ; **deux fichiers neufs**.
+>
+> **Verdict** : ⚠️ **la chaîne R est saine là où elle est mesurée, et trois récits sont en retard.**
+> **R0.1–R0.6 sont vertes ou closes avec leur négatif** ; **R4.1–R4.3 sont vertes** ; **R4.4 est
+> mesurée et gardée par deux portes vertes**, mais sa porte « **10 pages réelles avec vérité
+> humaine** » n'est pas atteinte — **l'OCR n'est plus le blocage, la vérité humaine l'est**.
+> **R1.2-1024 est un run fait et documenté** (20 000 pas, **2,6256** à 1 000 octets, artifact
+---
+ reports/rapport-etat-r.md | 35 ++++++++++++++++++++++-------------
+ 1 file changed, 22 in
+… [28 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline d3134849 | head -20; echo '---'; git show --name-status --oneline d3134849 | head -20; echo '---'; git status --short -- reports/rapport-etat-r.md reports/pensee-etat-r.json", "description": "Voir ce que le  … [16 caractères tronqués]`
+
+  ```
+d3134849 ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-06/README.md                       |   6 +-
+ journal/2026-11-06/distribue.md                    |   2 +-
+ journal/2026-11-06/docs.md                         |   2 +-
+ journal/2026-11-06/memoire.md                      |   2 +-
+ journal/2026-11-06/mesures.md                      |   2 +-
+ journal/2026-11-06/modele.md                       |   2 +-
+ journal/2026-11-06/moteur.md                       |  44 ++
+ journal/2026-11-06/outils.md                       |   2 +-
+ journal/2026-11-06/portes.md                       |   2 +-
+ journal/README.md                                  |   4 +-
+ journal/THEMES.md                                  |   1 +
+ .../599e9c0e-4252-43ca-a89a-3886d723c379/digest.md |  37 ++
+ .../rapport.md                                     |  13 +-
+ .../7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md |   6 +
+ .../rapport.md                                     |  10 +-
+ journal/sessions/MANIFEST.md                       |   8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md 
+… [1032 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '118,140p' docs/pilotage/en-cours.md; echo '---'; git log -1 --format='%h %ci %s'", "description": "Lire l'état en-cours après le hub"}`
+
+  ```
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 178/178, gold 432, 116 liens** | **B13 : T132/T133, gold 200+** ; **B10.3 bloquée** |
+| **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |
+| **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+| **Backlog — graphe** | **37 fiches, 43 arêtes, 3 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
+
+**C1** · **C2** · **C3** · **C4** · **C5** · **C6** · **C7** — hors graphe.
+
+## Ce qui reste
+
+**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T13
+… [1306 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "État du chantier R — terminé, lecture seule. Deux fichiers neufs : `reports/rapport-etat-r.md` et `reports/pensee-etat-r.json` (JSON valide). Aucun existant modifié, aucun commit de ma part. Attention : le hub a committé une version an … [6536 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-etat-r.md reports/pensee-etat-r.json; echo '---'; git status --short -- reports/rapport-etat-r.md reports/pensee-etat-r.json; echo '---'; python3 -m json.tool reports/pensee-etat-r.json >/dev/null && echo 'JSON  … [96 caractères tronqués]`
+
+  ```
+-rw-------. 1 stephane stephane 33181  6 nov 22:42 reports/pensee-etat-r.json
+-rw-------. 1 stephane stephane 38536  6 nov 22:42 reports/rapport-etat-r.md
+---
+ M reports/rapport-etat-r.md
+?? reports/pensee-etat-r.json
+---
+JSON valide
+  (`tools/mesurer_reel.py` et les JSON `r44-reel*` non rejoués).
+- **Aucun code, aucun commit, aucun existant modifié** ; les portes écrivent dans `work/`
+  (ignoré) et `/tmp`.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-etat-r.md')\nt=p.read_text(encoding='utf-8')\nt=t.replace(\"\"\"- **Aucun code, aucun commit, aucun existant modifié** ; les portes écrivent dans `work/`\n  (ign … [983 caractères tronqués]`
+
+  ```
+ok
+JSON OK
+- **Aucun code, aucun commit, aucun existant modifié par mes soins** ; les portes écrivent dans
+  `work/` (ignoré) et `/tmp`. Le hub a committé une version antérieure de cette fiche dans
+  `d3134849` pendant la rédaction : la version courante du worktree est la version finale
+  corrigée (non committée), et `pensee-etat-r.json` est non suivi.
+  ```
+

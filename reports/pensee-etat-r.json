@@ -1,0 +1,805 @@
+{
+  "fiche": "reports/rapport-etat-r.md",
+  "date": "2026-11-06",
+  "heure": "22:10 HNE",
+  "branche": "s/v7",
+  "head": "97256b8f",
+  "head_au_debut": "de7c9113",
+  "mission": "Etat du chantier R (le lecteur) en lecture seule : inventaire des lignes, verification de R1.2-1024 et R4.4, etat du tagger, chaine R2/R3/R5, trois prochaines actions mesurables. Deux fichiers neufs, aucun code, aucun existant modifie, aucun commit.",
+  "verdict": "La chaine R est saine la ou elle est mesuree ; trois recits sont en retard. R0.1-R0.6 sont vertes ou closes avec leur negatif, R4.1-R4.3 sont vertes, R4.4 est mesuree et gardee par deux portes vertes mais sa porte '10 pages reelles avec verite humaine' n'est pas atteinte (l'OCR n'est plus le blocage). R1.2-1024 est un run fait et documente (20 000 pas, 2,6256 a 1 000 octets, artifact present) mais la ligne n'est pas close et le miroir de copie du modele 20 k manque. Le tagger a deux mesures : 7B local sur 180 phrases (POS 0,8483, cascade 0,9440) et API DeepSeek sur 432 phrases reelles (POS 0,9389). Le 0,85 est l'heuristique sur 612 phrases ; le tagger n'a jamais ete mesure sur ces 612. L'ecart honnete est +0,0734 sur le gold 180 (heuristique 0,7749 aujourd'hui) et +0,0635 sur le reel 432 (heuristique 0,8754 aujourd'hui), pas +0,0940 (0,9440 - 0,8500), qui comparerait deux corpus. R2.1 n'est pas bloquee par N5 (tampon en entree a +0,879) ; R3.1 est bloquee par N4 (24/24 vus, 0/4 tenus) ; R5.2 par le chrF 39,6.",
+  "methode": {
+    "lectures": [
+      "docs/pilotage/roadmap.md (programme R)",
+      "docs/pilotage/en-cours.md",
+      "docs/pilotage/backlog/R01..R52",
+      "reports/rapport-r*.md",
+      "reports/rapport-n2-*.md",
+      "reports/rapport-pensee-gold-*.md",
+      "reports/rapport-pensee-quatre-modes-*.md",
+      "reports/rapport-memoire-travail-n5.md",
+      "reports/rapport-file-taches.md"
+    ],
+    "rejeux": [
+      "bash tools/porte-document.sh",
+      "bash tools/porte-lecteur.sh",
+      "bash tools/porte-lecture.sh",
+      "bash tools/porte-balayage.sh",
+      "bash tools/porte-bloc-tableaux.sh",
+      "bash tools/porte-bloc-code.sh",
+      "bash tools/porte-bloc-maths.sh",
+      "bash tools/porte-bloc-linguistique.sh",
+      "bash tools/porte-ocr.sh",
+      "bash tools/porte-ocr-scans.sh",
+      "python3 tools/routeur.py --json /tmp/routeur-etat-r.json",
+      "python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json",
+      "python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-etat-r.json"
+    ],
+    "non_rejouees": [
+      "tools/tete_survol.py (etats precoces Qwen)",
+      "work/n2ac/eval_fenetre.py (checkpoints work/)",
+      "work/n2ac/mirroir_copie.py (fichier reel mirroir_copie.py)",
+      "bash tools/porte-r13-bpe.sh (GPU)",
+      "les scans reels R4.4 (portes rejouees depuis le cache work/r44/)"
+    ],
+    "head_note": "Les portes R ont tourne a de7c9113 ; la POS a ete refaite a 97256b8f (identique). Les commits intermediaires 5940ea53 ('aucun effet mesure') et 7a876f70 (produit) ne touchent pas les mesures R."
+  },
+  "rejeux": [
+    {
+      "commande": "bash tools/porte-document.sh",
+      "exit": 0,
+      "resultat": "30 documents, 51 pages, 1466 regions, fidelite 1.000",
+      "prouve": "R0.1 : partition, provenance, rejeu, 3 controles negatifs"
+    },
+    {
+      "commande": "bash tools/porte-lecteur.sh",
+      "exit": 0,
+      "resultat": "1.000 a 30 % du budget sur les 5 types",
+      "prouve": "R0.2 : la lecture controlee preserve la lecture integrale"
+    },
+    {
+      "commande": "bash tools/porte-lecture.sh",
+      "exit": 0,
+      "resultat": "7/7 controles ; seuils 0.168 / 0.394 reproductibles",
+      "prouve": "R0.6 : budget, provenance, refus, rejeu, calibration"
+    },
+    {
+      "commande": "bash tools/porte-balayage.sh",
+      "exit": 0,
+      "resultat": "223 spans, 6/6 controles",
+      "prouve": "R0.4-balayage : offsets exacts, rejeu, negatifs"
+    },
+    {
+      "commande": "bash tools/porte-bloc-tableaux.sh",
+      "exit": 0,
+      "resultat": "35 tableaux, 970 cellules, provenance 776/776, operations 8/8",
+      "prouve": "R4.1 ; la roadmap (996/802) est anterieure"
+    },
+    {
+      "commande": "bash tools/porte-bloc-code.sh",
+      "exit": 0,
+      "resultat": "342/342 fichiers, 24/24 executions, 7/7 refus",
+      "prouve": "R4.2 ; la roadmap dit 294 fichiers"
+    },
+    {
+      "commande": "bash tools/porte-bloc-maths.sh",
+      "exit": 0,
+      "resultat": "32/32 formules, 10/10 derivees, 6/6 equations, 8/8 refus",
+      "prouve": "R4.3"
+    },
+    {
+      "commande": "bash tools/porte-bloc-linguistique.sh",
+      "exit": 0,
+      "resultat": "10 verdicts vrais, POS 0.85",
+      "prouve": "R0.7 heuristique ; le tagger n'y est pas"
+    },
+    {
+      "commande": "bash tools/porte-ocr.sh",
+      "exit": 0,
+      "resultat": "WER 4.48 %, parite 90 %, degrade 26.67 %",
+      "prouve": "R4.4-pilote ; les 10 pages sont des rendus"
+    },
+    {
+      "commande": "bash tools/porte-ocr-scans.sh",
+      "exit": 0,
+      "resultat": "5 familles, colonnes, tableaux",
+      "prouve": "R4.4-scans sur le simule ; les 30 pages reelles sont hors porte (mesurer_reel.py)"
+    },
+    {
+      "commande": "python3 tools/routeur.py --json /tmp/routeur-etat-r.json",
+      "exit": 0,
+      "resultat": "AUC 0.839 ; fixe 0.871 / 0.373 ; transfert 0.819 / 0.313",
+      "prouve": "R0.5 close negative"
+    },
+    {
+      "commande": "python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json",
+      "exit": 0,
+      "resultat": "248 questions, 30 documents, 5 types, 0 probleme",
+      "prouve": "banc R0.3 coherent ; la fiche dit 249"
+    },
+    {
+      "commande": "python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-etat-r.json",
+      "exit": 0,
+      "resultat": "POS 0.8500 (ferme 0.9295, ouvert 0.7746) sur 3179 jetons ; syntagmes F1 0.6482, tete 0.7673 ; attachement 235/236 ; pragmatique 0.9967 / 0.9771 / 0.9886 / 0.9444",
+      "prouve": "R0.7 heuristique au gold 612 ; la roadmap (gold 360 / POS 0.765) est perimee"
+    }
+  ],
+  "lignes": [
+    {
+      "id": "R0.1",
+      "etat": "fait",
+      "chiffre": "51 pages, fidelite 1.000, partition exacte, 3 controles",
+      "commande": "bash tools/porte-document.sh",
+      "rejeu": "vert : 30 docs, 51 pages, 1466 regions"
+    },
+    {
+      "id": "R0.2",
+      "etat": "fait",
+      "chiffre": "1.000 a 30 % sur 5 types",
+      "commande": "bash tools/porte-lecteur.sh",
+      "rejeu": "vert : 5/5 types a 1.000 a 30 %"
+    },
+    {
+      "id": "R0.3",
+      "etat": "fait",
+      "chiffre": "249 questions selon la fiche (banc : 248) ; extractif 1.000 a 30 % ; modele 0.231 contre debut 0.042 ; durci 84 paraphrases : modele 0.375, lexical 0.269",
+      "commande": "python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json",
+      "rejeu": "vert : 248 questions, 0 probleme"
+    },
+    {
+      "id": "R0.4",
+      "etat": "partiel : survol close negative, balayage fait, relecture negative",
+      "chiffre": "survol v4 0.540 contre BM25 0.720 ; balayage rappel@10 0.984 / 0.702 ; relecture 0/249 ; cascade calibree = oracle 0.911 / 0.415 (la roadmap cite 0.894)",
+      "commande": "bash tools/porte-balayage.sh ; python3 tools/tete_survol.py (non rejoue) ; lecture.py --cascade (fiche r06-cascade-confiance)",
+      "rejeu": "balayage vert : 223 spans, 6/6"
+    },
+    {
+      "id": "R0.5",
+      "etat": "close negative",
+      "chiffre": "AUC 0.839 ; transfert 0.819 / 0.313 contre fixe 0.871 / 0.373",
+      "commande": "python3 tools/routeur.py --json /tmp/routeur.json",
+      "rejeu": "rejoue : AUC 0.839, 331 questions"
+    },
+    {
+      "id": "R0.6",
+      "etat": "fait",
+      "chiffre": "12/20 au pilote, 9/10 refuses (le titre dit 10/10), 7/8 au modele ; 7/7 controles",
+      "commande": "bash tools/porte-lecture.sh",
+      "rejeu": "vert : 7/7, calibration 0.168 / 0.394"
+    },
+    {
+      "id": "R0.7",
+      "etat": "fait (heuristique) ; tagger mesure non branche",
+      "chiffre": "398 langues a 0.9687, script 1.0000 ; gold 612 : POS 0.8500, syntagmes F1 0.6482, tete 0.7673, attachement 235/236, pragmatique 0.9967 / 0.9771 / 0.9886 / 0.9444 ; tagger : voir l'objet tagger",
+      "commande": "bash tools/porte-bloc-linguistique.sh ; python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/gold.json ; qualifier_neuronal.py / qualifier_quatre_modes.py",
+      "rejeu": "vert : POS 0.85 ; roadmap perimee (gold 360 / POS 0.765)"
+    },
+    {
+      "id": "R1.1",
+      "etat": "partiel : porte PPL tenue, porte aiguille non tenue",
+      "chiffre": "PPL a 1000 octets 3.2545 (fenetre 256) contre 8.2024 (absolu), soit 0.97x la PPL a 129 (porte 1.5x) ; aiguille native >= 15/18 a 4000 non atteinte ; miroir de copie 0.0078 au mieux",
+      "commande": "work/n2ac/eval_fenetre.py ; work/n2ac/mirroir_copie.py (reel : mirroir_copie.py) ; work/n2ac/eval_production.py",
+      "rejeu": "non rejoue (checkpoints work/, GPU) ; chiffres des fiches n2-r11 / n2-r12-2048"
+    },
+    {
+      "id": "R1.2",
+      "etat": "run 1024-20k fait et documente ; ligne non close",
+      "chiffre": "1024 / 20 000 pas : 2.9955 a 128, 2.6256 a 1000, 2.5429 a 4000 sur val_fr ; 2048 a octets constants ne bat pas 1024 (3.0466 / 2.6501 / 2.5513), a pas constants gagne -0.083 / -0.088 / -0.105",
+      "commande": "python3 work/n2ac/eval_production.py work/n2ac/rope1024-20k.pt (banc de la fiche) ; artifact work/n2ac/rope1024-20k.pt",
+      "rejeu": "non rejoue ; artifact, JSON et fiche presents"
+    },
+    {
+      "id": "R1.3",
+      "etat": "decidee : octets",
+      "chiffre": "a octets egaux : BPE 512 +0.39 % (bruit), BPE 1024 +3.92 / +4.09 %, anglais +4.22 / +6.59 %",
+      "commande": "bash tools/porte-r13-bpe.sh (GPU) ; fiches r13-decision / r13.2-vocab1024",
+      "rejeu": "non rejoue (GPU) ; decision inchangee"
+    },
+    {
+      "id": "R2.1",
+      "etat": "a faire, non bloquee par N5",
+      "chiffre": "porte : indice en section 2 apres lecture de la section 5, avec citation ; closed-book echoue ; tampon gele +0.879, LoRA +0.964, reseau seul -1.091 -> -2.773",
+      "commande": "aucune ; a creer (banc gist + tampon tools/memoire_travail.py --entree-memoire 8)",
+      "rejeu": "non applicable"
+    },
+    {
+      "id": "R2.2",
+      "etat": "apres R2.1",
+      "chiffre": "la relecture recupere ce que le gist a perdu ; sans store, echec ; store borne sur 50 documents",
+      "commande": "aucune",
+      "rejeu": "non applicable"
+    },
+    {
+      "id": "R3.1",
+      "etat": "bloquee par N4 et R2.1",
+      "chiffre": "porte : >= 80 % des instructions tenues a l'ecart ; le controle 24/24 vus ne compte pas ; N4 est 0/4 tenu",
+      "commande": "aucune ; jeu tenu a l'ecart a construire",
+      "rejeu": "non applicable"
+    },
+    {
+      "id": "R3.2",
+      "etat": "apres R3.1",
+      "chiffre": "chaque citation pointe un span exact ; le controle sans citation est plus bas",
+      "commande": "aucune",
+      "rejeu": "non applicable"
+    },
+    {
+      "id": "R4.1",
+      "etat": "fait",
+      "chiffre": "roadmap : 996 cellules, 802 exactes ; porte actuelle : 970 cellules, provenance 776/776, 8/8 operations",
+      "commande": "bash tools/porte-bloc-tableaux.sh",
+      "rejeu": "vert : 35 tableaux, 970 cellules, 8/8, controles 3/3"
+    },
+    {
+      "id": "R4.2",
+      "etat": "fait",
+      "chiffre": "roadmap : 294 fichiers ; porte actuelle : 342/342 fichiers, 24/24 executions, 7/7 refus",
+      "commande": "bash tools/porte-bloc-code.sh",
+      "rejeu": "vert : 342/342, 24/24, 7/7"
+    },
+    {
+      "id": "R4.3",
+      "etat": "fait",
+      "chiffre": "32 formules, 10/10 derivees, 6/6 equations, surface 0/3",
+      "commande": "bash tools/porte-bloc-maths.sh",
+      "rejeu": "vert : 32/32, 10/10, 6/6, 8/8 refus"
+    },
+    {
+      "id": "R4.4",
+      "etat": "partiel : mesure et gardee, porte humaine non atteinte",
+      "chiffre": "photo 55.9 -> 6.7 % de WER (test 5.7 %) ; preservation 96.7 / 93.3 / 90.0 / 90.0 / 56.7 % ; colonnes 89.4 -> 0.5 % ; tableaux 92.6 % ; 3 vrais livres x 10 pages : WER 7.10 / 36.26 / 8.73 % contre la couche OCR ; ordre des colonnes 15.32 / 7.09 / 12.80 % contre 97.98 / 96.06 / 99.20 % en ordre inverse",
+      "commande": "bash tools/porte-ocr.sh ; bash tools/porte-ocr-scans.sh ; python3 tools/mesurer_reel.py --pdf ... --pages ... (reel, non rejoue)",
+      "rejeu": "les deux vertes ; la porte 10 pages reelles avec verite humaine reste ouverte"
+    },
+    {
+      "id": "R5.1",
+      "etat": "apres R3",
+      "chiffre": "reponse comparative avec deux sources citees ; le controle a une seule source echoue",
+      "commande": "aucune",
+      "rejeu": "non applicable"
+    },
+    {
+      "id": "R5.2",
+      "etat": "bloquee par B10.3",
+      "chiffre": "chrF > 39.6 ; la reponse ne depend pas de la langue source ; decodeur a 12.7 / 5.3 contre le plancher 39.6",
+      "commande": "aucune",
+      "rejeu": "non applicable"
+    }
+  ],
+  "r1_2_1024": {
+    "statut": "run fait et documente ; ligne non close",
+    "entrainement": {
+      "modele": "drave-n0-rope 34,3 M (384/512)",
+      "seq": 1024,
+      "fenetre": 1024,
+      "pas_total": 20000,
+      "pas_ajoutes": 17500,
+      "init": "work/n2ac/rope1024-2.5k.pt",
+      "corpus": "data/wiki_fr/propre/train.txt (186 Mo)",
+      "octets_vus_mo": 164,
+      "perte_finale": 1.0206,
+      "ppl_val_interne": 2.6609,
+      "duree_s": 8000.27,
+      "drvm_sha256": "76628995a51cd54d52d564112f557bacfbea5f6119947c7b20f710e060f4e9af"
+    },
+    "artefacts": {
+      "pt": "work/n2ac/rope1024-20k.pt (131 Mo)",
+      "drvm": "work/n2ac/rope1024-20k.drvm",
+      "metadata": "work/n2ac/rope1024-20k.pt.json",
+      "log": "work/n2ac/rope1024-20k.log",
+      "json": "reports/n2-r12-2048.json",
+      "fiche": "reports/rapport-n2-r12-2048.md (section 5) + reports/rapport-n2-fenetre.md",
+      "commit": "c7ef9bc4",
+      "marqueur_audit": "reports/rapport-file-taches.md P8 : Fait (20 000 pas)"
+    },
+    "eval": {
+      "val_fr": {
+        "128": 2.9955,
+        "1000": 2.6256,
+        "4000": 2.5429
+      },
+      "val_big": {
+        "128": 3.3086,
+        "1000": 2.9055,
+        "4000": 2.8828
+      },
+      "litterature": 5.6071,
+      "anglais": 7.8817,
+      "wikitext2": 8.7751,
+      "corpus_propre": 7.7208,
+      "permutation": 195.3449
+    },
+    "loi": {
+      "256_20k": {
+        "1000": 3.2545,
+        "4000": 3.2305
+      },
+      "512_5k": {
+        "1000": 3.0107,
+        "4000": 2.9447
+      },
+      "1024_2.5k": {
+        "1000": 2.995,
+        "4000": 2.9108
+      },
+      "1024_20k": {
+        "1000": 2.6256,
+        "4000": 2.5429
+      },
+      "2048_1.25k": {
+        "1000": 3.0202,
+        "4000": 2.9265
+      },
+      "2048_20k": {
+        "1000": 2.5375,
+        "4000": 2.4383
+      },
+      "2048_vs_1024_octets_constants": {
+        "128": 0.051,
+        "1000": 0.0245,
+        "4000": 0.0084
+      },
+      "2048_vs_1024_pas_constants": {
+        "128": -0.083,
+        "1000": -0.088,
+        "4000": -0.105
+      }
+    },
+    "ce_qui_reste": [
+      "La ligne n'est pas close dans roadmap/en-cours : retard de statut, pas de mesure ; correction au hub.",
+      "Le miroir de copie du modele 20 k n'existe pas : les miroirs presents sont 1024-2.5k, mix1024-60k, rope512, etc. ; c'est le controle qui dit si la fenetre sert a lire.",
+      "La stabilite n'est pas multi-graines : une courbe 128-4000 stable et un controle meme texte qui sature a 1024, mais un lancement par point.",
+      "Le 2048 est fini et negatif a octets constants : 3.0466 / 2.6501 / 2.5513 contre 2.9955 / 2.6256 / 2.5429 ; a pas constants il gagne -0.083 / -0.088 / -0.105 avec 328 Mo vus.",
+      "Le 1024-20k n'est pas le modele de production : wiki_fr seul, val_big 2.9055 a 1000 ; les 2.4759 / 2.4373 de l'en-cours sont un autre modele (production 1024, 30 k pas)."
+    ],
+    "pieges": [
+      "Ne pas attribuer a R1.2-1024 les 2.4759 / 2.4373 de l'en-cours : ce sont ceux de la production, pas de rope1024-20k.",
+      "Ne pas lire le 0.9440 du tagger comme un ecart a 0.85 : corpus differents (180 vs 612).",
+      "Ne pas confondre 249 (fiche R0.3) et 248 (banc verifie)."
+    ]
+  },
+  "r44": {
+    "statut": "partiel : mesure faite et gardee, porte humaine non atteinte",
+    "portes": {
+      "porte_ocr": "verte (exit 0)",
+      "porte_ocr_scans": "verte (exit 0)",
+      "couverture": "les deux portes couvrent le pilote de rendus et le simule ; les 30 pages reelles sont mesurees par tools/mesurer_reel.py, hors porte",
+      "mesurer_reel": "python3 tools/mesurer_reel.py --pdf work/r44/reel/livre.pdf --pages 30,50,... --sortie work/r44/reel.json (non rejoue)"
+    },
+    "pilote": {
+      "pages": 10,
+      "pdf": 6,
+      "langues": [
+        "fr",
+        "en",
+        "es"
+      ],
+      "wer": 0.0448,
+      "rappel": 0.9737,
+      "parite_passage": "27/30",
+      "valeur_stricte": "25/30",
+      "sans_ocr": "0/30",
+      "degrade_wer": 0.1708,
+      "degrade_parite": 0.2667
+    },
+    "scans_simules": {
+      "n": 100,
+      "familles": 5,
+      "wer_dev": {
+        "propre": 0.0414,
+        "photocopie": 0.0634,
+        "photo": 0.0668,
+        "papier": 0.0687,
+        "fax": 0.219
+      },
+      "wer_test": {
+        "propre": 0.0301,
+        "photocopie": 0.0469,
+        "photo": 0.0568,
+        "papier": 0.0638,
+        "fax": 0.1552
+      },
+      "preservation_dev": {
+        "propre": 0.967,
+        "photocopie": 0.933,
+        "photo": 0.9,
+        "papier": 0.9,
+        "fax": 0.567
+      },
+      "photo_brut": 0.5585,
+      "colonnes": {
+        "deux_colonnes_propre": [
+          0.8944,
+          0.0054
+        ],
+        "deux_colonnes_photocopie": [
+          0.9011,
+          0.0103
+        ],
+        "deux_colonnes_photo": [
+          0.8832,
+          0.0652
+        ],
+        "mono_ecart": 0.0
+      },
+      "tableaux": {
+        "propre": 0.926,
+        "photocopie": 0.691,
+        "photo": 0.624,
+        "sans_redressement": 0.0,
+        "texte_plat": "0/54"
+      }
+    },
+    "reel": {
+      "livres": [
+        {
+          "nom": "Voyage au centre de la terre",
+          "pages": 10,
+          "wer": 0.071,
+          "rappel": 0.9372
+        },
+        {
+          "nom": "Vingt mille lieues sous les mers (1902)",
+          "pages": 10,
+          "wer": 0.3626,
+          "rappel": 0.8838
+        },
+        {
+          "nom": "Germinal (1900)",
+          "pages": 10,
+          "wer": 0.0873,
+          "rappel": 0.9189
+        }
+      ],
+      "reference": "couche OCR du PDF (Internet Archive) — pas une verite humaine",
+      "verite_humaine": false,
+      "colonnes_preuve": {
+        "15.32 / 7.09 / 12.80 %": "ordre des colonnes",
+        "97.98 / 96.06 / 99.20 %": "ordre inverse (controle)"
+      }
+    },
+    "limites": [
+      "fax 1 bit : 21.90 % de WER dev, 56.7 % de preservation",
+      "exposant fusionne (developpement 10) non recupere",
+      "tableaux sans traits non traites",
+      "3 colonnes : 52.5 % de WER (une seule gouttiere)",
+      "flou fort sigma = 4 : 49.63 -> 53.24 %",
+      "scans simules : 5 familles choisies et reglees par l'auteur ; seuils posterieurs a la mesure"
+    ],
+    "blocage": "verite humaine sur 10 pages scannees reelles ; l'OCR est installe (tesseract 5.5.3, work/ocr/root) et les deux portes sont vertes. Le corpus OCR CEGEP est restaure a 62 documents (train 4 440 987 o, val 12 536, test 10 524 ; SHA f57154df / dd605833 / 1c9ab734 verifies).",
+    "statut_contradictoire": {
+      "roadmap_R4_4": "mesure sur scans simules ; ouvert sur les scans reels",
+      "roadmap_bloques": "R4.4 bloquee par l'absence de verite humaine",
+      "en_cours": "R4.4 close",
+      "backlog_R44": "partiel ; la porte reste ouverte",
+      "fiche_verdict": "la ligne reste ouverte pour les scans reels de bout en bout",
+      "fiche_derniere_section": "R4.4 est close avec ses limites nommees"
+    }
+  },
+  "tagger": {
+    "ou": {
+      "classe": "tools/bloc_linguistique.py -> NeuronalLLMPOS (l. 1727)",
+      "banc_local": "tools/tests/linguistique/qualifier_neuronal.py",
+      "banc_cascade": "tools/tests/linguistique/qualifier_cascade.py",
+      "banc_api": "tools/tests/linguistique/qualifier_quatre_modes.py",
+      "json": [
+        "reports/pensee-gold-neuronal.json",
+        "reports/pensee-gold-cascade.json",
+        "reports/pensee-quatre-modes-432-run2.json"
+      ],
+      "fiches": [
+        "reports/rapport-pensee-gold-neuronal.md",
+        "reports/rapport-pensee-gold-syntagmes.md",
+        "reports/rapport-pensee-gold-cascade.md",
+        "reports/rapport-pensee-quatre-modes-432.md",
+        "reports/rapport-pensee-quatre-modes-run2.md"
+      ]
+    },
+    "classes_pos": [
+      "DET",
+      "NOUN",
+      "VERB",
+      "ADJ",
+      "ADV",
+      "PREP",
+      "PRON",
+      "AUX",
+      "CONJ",
+      "NUM",
+      "INTJ",
+      "PUNCT"
+    ],
+    "ce_qu_il_mesure": "POS au token, exactitude exacte, sur les 12 classes du bloc ; pas le jeu UD (17 etiquettes), pas de morphologie ni de traits ; tokenisation Heuristique._mots ; spans du bloc.",
+    "corpus": {
+      "local_7b": {
+        "phrases": 180,
+        "tokens": 804,
+        "hand": 20,
+        "synthetique": 160,
+        "langues_hand": {
+          "fr": 14,
+          "en": 6
+        }
+      },
+      "api_432": {
+        "phrases": 432,
+        "tokens": 2375,
+        "langues": {
+          "fr": 228,
+          "en": 204
+        }
+      },
+      "gold_612": {
+        "phrases": 612,
+        "tokens": 3179,
+        "hand": 20,
+        "reel": 432,
+        "synthetique": 160
+      }
+    },
+    "mesures": {
+      "local_7b_180": {
+        "date": "2026-11-02",
+        "heuristique_publiee": 0.7512,
+        "heuristique_aujourdhui": 0.7749,
+        "neuronal": 0.8483,
+        "cascade": 0.944,
+        "ferme": {
+          "heuristique": 0.9392,
+          "neuronal": 0.766,
+          "cascade": 0.9392
+        },
+        "ouvert": {
+          "heuristique": 0.6211,
+          "neuronal": 0.9053,
+          "cascade": 0.9474
+        },
+        "hand": 0.9238,
+        "synthetique": 0.9471,
+        "refus": 0,
+        "appels": 180,
+        "latence_moyenne_s": 3.043,
+        "duree_totale_s": 548,
+        "controles": {
+          "majoritaire": 0.2289,
+          "uniforme": 0.0833,
+          "permutation": 0.1729
+        },
+        "modele": "Qwen2.5-7B-Instruct Q4_K_M, 2 shards, 4 683 073 632 octets, llama-server b11017, CPU -ngl 0",
+        "modele_present": false
+      },
+      "api_432": {
+        "date": "2026-11-04",
+        "heuristique_publiee": 0.7444,
+        "heuristique_aujourdhui": 0.8754,
+        "neuronal": 0.9389,
+        "run1": 0.9309,
+        "soustype_t03": 0.9385,
+        "syntagmes": 0.8241,
+        "tete": 0.8797,
+        "acte": 0.0,
+        "acte_heuristique": 0.9954,
+        "appels": 858,
+        "tokens_api": 254454,
+        "duree_s": 807.6,
+        "modele": "deepseek-chat, temperature 0, API DeepSeek (regle 11)"
+      },
+      "gold_612": {
+        "heuristique": 0.85,
+        "heuristique_ferme": 0.9295,
+        "heuristique_ouvert": 0.7746,
+        "tagger": null
+      }
+    },
+    "ecarts": {
+      "local_180_neuronal": 0.0734,
+      "local_180_cascade": 0.1691,
+      "api_432_neuronal": 0.0635,
+      "gold_612": null,
+      "invalides": {
+        "0.9440_moins_0.8500": 0.094,
+        "0.9389_moins_0.8500": 0.0889,
+        "raison": "corpus differents : 180 ou 432 contre 612"
+      }
+    },
+    "reproductibilite": {
+      "local": "non rejouable aujourd'hui : les shards GGUF 7B sont absents de models/ (seuls les 0.5B sont la) ; le cache HF a le 7B en safetensors (15 Go), pas en GGUF ; la commande echoue avec 'modele absent'.",
+      "api": "rejouable : DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key python3 tools/tests/linguistique/qualifier_quatre_modes.py (432 phrases, 858 appels, 254 454 tokens, 807.6 s).",
+      "regle_11": "le 7B local utilise llama-server, interdit pour les professeurs par la regle 11 ; la mesure a ete faite sur CPU (-ngl 0) sans GPU, mais la route autorisee est l'API DeepSeek."
+    }
+  },
+  "chaine_r2_r3_r5": [
+    {
+      "id": "R2.1",
+      "depend": [
+        "R0.1",
+        "R1 (mesuree)"
+      ],
+      "etat": "libre",
+      "chiffre": "tampon gele +0.879 ; LoRA +0.964 ; reseau seul -1.091 -> -2.773",
+      "blocage": null,
+      "prochaine": "tampon en entree + gist (resume, entites, faits, offsets) ; question multi-sections avec citation"
+    },
+    {
+      "id": "R2.2",
+      "depend": [
+        "R2.1"
+      ],
+      "etat": "apres R2.1",
+      "chiffre": "relecture > gist perdu ; sans store, echec ; store borne sur 50 documents",
+      "blocage": "R2.1",
+      "prochaine": "store de regions, eviction, declencheur"
+    },
+    {
+      "id": "R3.1",
+      "depend": [
+        "R2.1",
+        "N4"
+      ],
+      "etat": "bloquee",
+      "chiffre": ">= 80 % tenu a l'ecart ; 24/24 vus, 0/4 tenus",
+      "blocage": "N4 (et R2.1)",
+      "prochaine": "N4 (consigne courte) + jeu tenu a l'ecart par document"
+    },
+    {
+      "id": "R3.2",
+      "depend": [
+        "R3.1"
+      ],
+      "etat": "apres R3.1",
+      "chiffre": "citation exacte ; le controle sans citation est plus bas",
+      "blocage": "R3.1",
+      "prochaine": "reponse + citation + support"
+    },
+    {
+      "id": "R5.1",
+      "depend": [
+        "R3.1",
+        "R3.2",
+        "M4"
+      ],
+      "etat": "apres R3",
+      "chiffre": "deux sources citees ; le controle a une seule source echoue",
+      "blocage": "R3 et M4",
+      "prochaine": "index, retrieval, comparaison, provenance, contradictions"
+    },
+    {
+      "id": "R5.2",
+      "depend": [
+        "B10.3"
+      ],
+      "etat": "bloquee",
+      "chiffre": "chrF > 39.6 ; decodeur a 12.7 / 5.3",
+      "blocage": "B10.3 (chrF)",
+      "prochaine": "un decodeur au-dessus du plancher"
+    }
+  ],
+  "prochaines_actions": [
+    {
+      "id": 1,
+      "ligne": "R0.7",
+      "action": "Re-mesurer le tagger POS sur le gold 612 via l'API DeepSeek et publier l'ecart contre 0,8500.",
+      "pourquoi": "Le seul trou du tagger : 0,9440 sur 180, 0,9389 sur 432, 0,8500 sur 612 ; sans ce chiffre R0.7 reste 'mesure deux fois, jamais sur le gold courant'.",
+      "commande": "DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie /tmp/tagger-612.json, apres extension du chargeur au gold 612 (aujourd'hui gold_reel.json seul ; ajouter gold.json + gold_synthetique.json, ou lancer 432 + 180 et agreger).",
+      "mesure": "POS exact sur 612, ventile 432 reel / 160 synthetique / 20 hand ; ecart contre 0,8500 ; controles majoritaire et permutation recalcules sur le 612 (reference 180 : 0,2289 et 0,1729) ; refus ; cout.",
+      "seuil": "Si l'ecart est < +2 pts, le tagger n'est pas additif : le fermer comme negatif nomme et garder l'heuristique. Si >= +5 pts, l'integrer a la cascade via l'API (jamais le 7B local, regle 11).",
+      "cout": "~1 200 appels, ~360 k tokens, ~20 min API ; le run 432 actuel fait 858 appels, 254 454 tokens, 807,6 s.",
+      "statut": "a lancer (parent ou sous-agent)"
+    },
+    {
+      "id": 2,
+      "ligne": "R1.1",
+      "action": "Rejouer le miroir de copie sur rope1024-20k et rope2048-20k, puis trancher R1.1.",
+      "pourquoi": "R1.2-1024 est mesure mais le controle de lecture du modele 20 k manque ; tous les miroirs presents sont au hasard (0,0078 au mieux), meme a 16 octets ; c'est le controle qui dit si la fenetre sert a lire ou seulement a baisser la PPL.",
+      "commande": "PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/mirroir_copie.py work/n2ac/rope1024-20k.pt --rope --sortie /tmp/mirroir-1024-20k.json ; refaire avec rope2048-20k.pt. Le fichier reel est mirroir_copie.py (deux r).",
+      "mesure": "Justesse top-1 a 16, 64, 128, 200, 240, 255, 300, 400 octets ; 8 sondes.",
+      "seuil": "Si <= 0,01 partout (attendu), enregistrer le negatif et clore R1.1 'aiguille non atteinte, copie non creee par la fenetre'. Si > 0,5 a d <= 240, la fenetre cree un circuit de copie : rouvrir R1.1 et refaire l'aiguille a 4 000.",
+      "cout": "Quelques minutes, GPU libre, 8 sondes.",
+      "statut": "a lancer (N2/parent)"
+    },
+    {
+      "id": 3,
+      "ligne": "R2.1",
+      "action": "Construire le gist v0 avec tampon en entree et mesurer sa porte.",
+      "pourquoi": "R1 est mesure (R1.2-1024) ; R2.1 est la frontiere suivante et n'est pas bloquee par N5 : le tampon gele lit deja +0,879, le reseau seul est a -1,091 et l'entrainement l'aggrave (-2,773). C'est la structure qu'il faut mettre en entree.",
+      "commande": "A creer : sections et offsets de R0.1, tampon --entree-memoire 8 de tools/memoire_travail.py, gist (resume par section + entites/faits/dates + citations), banc tools/banc_gist.py ou equivalent.",
+      "mesure": "Question dont l'indice est en section 2 apres lecture de la section 5 ; exactitude gist contre closed-book ; citation exacte ; taux d'oubli ; documents courts sans perte.",
+      "seuil": "Le gist doit battre le closed-book d'une marge pre-enregistree (proposition +10 pts), avec citation exacte >= 0,90 et aucune perte sur les documents courts ; sinon le gist n'est pas une memoire, c'est un fichier.",
+      "controles": [
+        "closed-book",
+        "gist aleatoire",
+        "gist complet (oracle)",
+        "question dont la reponse est dans une seule section"
+      ],
+      "statut": "a construire (parent ou sous-agent)"
+    }
+  ],
+  "ecarts_documentaires": [
+    {
+      "ou": "roadmap.md R0.7",
+      "ecrit": "gold 360, POS 0,765",
+      "mesure": "gold 612, POS 0,8500"
+    },
+    {
+      "ou": "roadmap.md R0.7",
+      "ecrit": "tagger 0,9440 comme s'il valait contre 0,85",
+      "mesure": "0,9440 est sur 180, contre 0,7749 aujourd'hui ; sur 432, 0,9389 contre 0,8754"
+    },
+    {
+      "ou": "en-cours.md R",
+      "ecrit": "R0.7 — tagger dans ce qui reste",
+      "mesure": "le tagger est mesure (7B local + API) ; il reste a re-mesurer sur 612 et a decider"
+    },
+    {
+      "ou": "en-cours.md R",
+      "ecrit": "R1 — R1.2-1024, 1 024 octets entraines",
+      "mesure": "le run existe (20 000 pas, 2,6256 a 1 000) ; c'est le statut qui est en retard"
+    },
+    {
+      "ou": "en-cours.md R",
+      "ecrit": "R4.4 close",
+      "mesure": "la porte humaine est ouverte ; la fiche elle-meme dit 'reste ouverte'"
+    },
+    {
+      "ou": "en-cours.md R",
+      "ecrit": "R2/R3 attendent N5/N4",
+      "mesure": "R2.1 n'attend ni N5 ni N4 ; R3.1 attend N4"
+    },
+    {
+      "ou": "en-cours.md B13",
+      "ecrit": "178/178",
+      "mesure": "183/183 au HEAD ; la porte L est verte"
+    },
+    {
+      "ou": "rapport-r03-banc-complet.md",
+      "ecrit": "249 questions",
+      "mesure": "le banc verifie 248"
+    },
+    {
+      "ou": "rapport-r06-pipeline.md (titre)",
+      "ecrit": "10/10 refuses",
+      "mesure": "le corps dit 9/10 ; la roadmap dit 9/10"
+    },
+    {
+      "ou": "roadmap.md R4.1",
+      "ecrit": "996 cellules, 802 exactes",
+      "mesure": "la porte : 970 cellules, 776/776 de provenance"
+    },
+    {
+      "ou": "roadmap.md R4.2",
+      "ecrit": "294 fichiers",
+      "mesure": "la porte : 342/342"
+    },
+    {
+      "ou": "rapport-n2-r11.md / rapport-n2-fenetre.md",
+      "ecrit": "work/n2ac/miroir_copie.py",
+      "mesure": "le fichier reel est work/n2ac/mirroir_copie.py (deux r)"
+    },
+    {
+      "ou": "rapport-r44-scans.md",
+      "ecrit": "la ligne reste ouverte ET R4.4 est close",
+      "mesure": "les deux ne peuvent pas etre vrais ; statut juste : partielle"
+    }
+  ],
+  "limites": [
+    "Le tagger API n'a pas ete rejoue : les 0,9389 / 0,8241 / 0,8797 sont du 2026-11-04 (run 2) ; deepseek-chat peut avoir change ; deux passes seulement (0,9389, 0,9389, 0,9385).",
+    "Le 7B local n'est pas reproductible : les shards GGUF sont absents de models/ ; le cache HF est en safetensors ; les 0,8483 / 0,9440 sont historiques.",
+    "Les 0,7749 et 0,8754 sont mes re-runs de l'heuristique au HEAD 97256b8f, sur les memes golds (inches depuis le 02/11) ; les 0,7512 / 0,7444 des fiches sont les memes golds avec l'ancien code.",
+    "Le 0,8500 est l'heuristique, pas le tagger ; le tagger n'a jamais vu les 612 ; le +6,35 est sur 432 reelles, le +7,34 sur 180 (dont 160 synthetiques).",
+    "R0.3, R0.4-survol, R1.1, R1.2, R1.3 n'ont pas ete rejoues (GPU, checkpoints work/) ; leurs chiffres sont ceux des fiches, dates, et les commandes sont nommees.",
+    "R4.4 : les portes tournent sur des caches work/r44/ ; les scans reels sont compares a la couche OCR, pas a l'humain ; les 30 pages ne valent pas 10 pages avec verite humaine.",
+    "Le HEAD a bouge pendant l'audit (de7c9113 -> 7a876f70 -> 97256b8f) ; les portes R ont tourne a de7c9113, la POS a ete refaite a 97256b8f (identique).",
+    "La date de reference est le 2026-11-06 ; les chiffres de l'en-cours et de la roadmap peuvent avoir bouge depuis."
+  ],
+  "fichiers": {
+    "fiche": "reports/rapport-etat-r.md",
+    "json": "reports/pensee-etat-r.json",
+    "modifies": [],
+    "commits": [],
+    "nouveaux": [
+      "reports/rapport-etat-r.md",
+      "reports/pensee-etat-r.json"
+    ],
+    "portes_ecrivent": "work/ (ignore) et /tmp",
+    "etat_git": "Le hub a committe une version anterieure de la fiche dans d3134849 pendant la redaction ; la version finale du worktree est non commitee ; pensee-etat-r.json est non suivi."
+  }
+}

@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.5 h |
+| Durée | 1.7 h |
 | Tours | 1 |
-| Messages | 100 |
-| Appels d'outils | 151 |
+| Messages | 108 |
+| Appels d'outils | 159 |
 | Fichiers touchés | 2 |
-| Commandes | 116 |
+| Commandes | 123 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*151 appels d'outils.* Actions notables :
+*159 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,11 +41,40 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 116 autres
+- … et 124 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction de la fiche d'état R et du JSON
+\## Livrables
+
+- **`reports/rapport-etat-r.md`** — fiche complète (38,5 Ko). Le hub a committé une **version antérieure** dans `d3134849` pendant la rédaction ; la version finale corrigée est dans le worktree (non committée).
+- **`reports/pensee-etat-r.json`** — données structurées (33 Ko, JSON valide, non suivi).
+
+Aucun code, **aucun commit de ma part**. HEAD d'audit `97256b8f` ; HEAD courant `56e5ce48` (S, sans effet R). Liens : 3 726 OK ; `revue_documentation.py` passe.
+
+\## État des 20 lignes R
+
+| ligne | état | chiffre clé / vérification |
+|---|---|---|
+| **R0.1** | ✅ fait | 51 pages, 1 466 régions, fidélité **1,000** — `porte-document` verte |
+| **R0.2** | ✅ fait | **1,000** à 30 % sur **5 types** — `porte-lecteur` verte |
+| **R0.3** | ✅ fait | **248** questions (la fiche dit 249) ; extractif **1,000** à 30 % ; modèle **0,231** vs début **0,042** ; durci **0,375 / 0,269** |
+| **R0.4** | ⚠️ partiel | survol ❌ **0,540 vs 0,720** ; balayage ✅ **0,984 / 0,702** ; relecture ❌ **0/249** ; cascade calibrée **0,911 / 0,415** |
+| **R0.5** | ❌ close négative | AUC **0,839** ; transfert **0,819 / 0,313** vs fixe **0,871 / 0,373** — rejoué |
+| **R0.6** | ✅ fait | 12/20, **9/10** refusés (titre : 10/10), 7/8 modèle ; **7/7** contrôles |
+| **R0.7** | ✅ heuristique ; 🔬 tagger | 398 langues **0,9687** ; gold **612** : POS **0,8500**, syntagmes F1 **0,6482**, tête **0,7673**, attachement **235/236** |
+| **R1.1** | 🔬 partiel | PPL 1 000 = **3,2545** (0,97× la PPL à 129) ; **aiguille ≥15/18 non atteinte** ; miroir **0,0078** |
+| **R1.2** | 🔬 run fait, ligne non close | **1024-20k** : **2,9955** à 128, **2,6256** à 1 000, **2,5429** à 4 000 ; artifact 131 Mo, fiche/JSON/commit ; 2048 perd à octets constants |
+| **R1.3** | ✅ décidée | octets ; BPE 512 +0,39 %, 1024 **+3,92/+4,09 %**, anglais **+4,22/+6,59 %** |
+| **R2.1** | ⏳ libre | tampon gelé **+0,879**, LoRA **+0,964**, réseau seul **−1,091→−2,773** ; **pas bloquée par N5** |
+| **R2.2** | ⏳ après R2.1 | store/éviction |
+| **R3.1** | 🧱 bloquée | **N4 : 24/24 vus, 0/4 tenus** ; + R2.1 |
+| **R3.2** | ⏳ après R3.1 | citations exactes |
+| **R4.1** | ✅ fait | **970 cellules**, provenance **776/776**, 8/8 (roadmap : 996/802) |
+| **R4.2** | ✅ fait | **342/342** fichiers, 24/24 exécutions, 7/7 refus (roadmap : 294) |
+| **R4.3** | ✅ fait | 32/32 formules, 10/10 dérivées, 6/6 équations, 8/8 refus |
+| **R4.4** | 🔬 partiel | les 2 portes OCR **vertes** ; 100 simulés + **30 pages réelles** vs couche OCR ; **vérité humaine manquante*
+… [2663 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +127,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 76 autres
+- … et 83 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -218,6 +247,11 @@
 - **T1** `| `DRAVE_PERTE_MAX=1 bash tools/porte-flux.sh` | **exit 0**, modes 0–4, réf. **58.3200 / 62.7357** | A8.3a tient sur `porte-flux` : le régime 1 % est bien épinglé |`
 - **T1** `123:| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
 - **T1** `131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** `
+- **T1** `| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
+- **T1** `**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 17`
+- **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
+- **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 

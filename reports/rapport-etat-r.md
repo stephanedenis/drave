@@ -30,7 +30,7 @@
 > entraînement, aucun commit, aucun existant modifié.
 >
 > **Ce que cette fiche n'est pas** : un nouveau résultat expérimental. Elle **rejoue** des
-> commandes existantes, **lit** les mesures déjà publiées et **dater** ce qui est fait, ce qui
+> commandes existantes, **lit** les mesures déjà publiées et **date** ce qui est fait, ce qui
 > est mesuré sans être clos, ce qui est bloqué et ce qui reste.
 
 ## 1. Ce que j'ai rejoué (et ce que ça donne)
@@ -46,15 +46,16 @@
 | `bash tools/porte-bloc-maths.sh` | **exit 0** · **32/32** formules, **10/10** dérivées, **6/6** équations, **8/8** refus | R4.3 tient |
 | `bash tools/porte-bloc-linguistique.sh` | **exit 0** · 10 verdicts vrais, POS **0,85** | R0.7 heuristique tient ; le tagger n'y est pas |
 | `bash tools/porte-ocr.sh` | **exit 0** · WER **4,48 %**, parité **90 %**, dégradé **26,67 %** | R4.4-pilote tient ; les 10 pages sont des **rendus**, pas des scans |
-| `bash tools/porte-ocr-scans.sh` | **exit 0** · 5 familles, colonnes, tableaux | R4.4-scans tient sur le simulé + les 3 vrais livres |
+| `bash tools/porte-ocr-scans.sh` | **exit 0** · 5 familles, colonnes, tableaux | R4.4-scans tient sur le simulé ; les 3 vrais livres sont **hors porte** |
 | `python3 tools/routeur.py --json /tmp/routeur-etat-r.json` | **exit 0** · AUC **0,839** ; fixe **0,871 / 0,373** ; transfert **0,819 / 0,313** | R0.5 est **close (négatif)** : le signal prédit, la règle ne transfère pas |
 | `python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json` | **exit 0** · **248 questions**, 30 documents, 5 types, 0 problème | le banc R0.3 est cohérent ; la fiche dit **249** |
 | `python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/…` | **exit 0** · POS **0,8500** (fermé **0,9295**, ouvert **0,7746**) sur **3 179 jetons** ; syntagmes F1 **0,6482**, tête **0,7673** ; attachement **235/236** ; pragmatique **0,9967 / 0,9771 / 0,9886 / 0,9444** | R0.7 heuristique est à **0,85** sur le gold **612** — le chiffre « 0,765 / gold 360 » de la roadmap est périmé |
 
 **Ce que je n'ai pas rejoué** : le modèle du banc R0.3 (GPU, Qwen2.5-0.5B), la tête de survol
 R0.4 (états précoces Qwen), les entraînements R1.1/R1.2 (checkpoints `work/`), la porte BPE
-R1.3 (GPU), les scans réels R4.4 (les portes les rejouent depuis le cache). Les commandes sont
-nommées dans les tableaux ; les chiffres de ces lignes sont ceux des fiches, datés.
+R1.3 (GPU), les scans réels R4.4 (mesures `mesurer_reel.py` ; les deux portes couvrent le pilote
+et le simulé, pas les 30 pages réelles). Les commandes sont nommées dans les tableaux ; les
+chiffres de ces lignes sont ceux des fiches, datés.
 
 ## 2. Inventaire — chaque ligne R, son état, sa commande, son chiffre
 
@@ -94,7 +95,7 @@ nommées dans les tableaux ; les chiffres de ces lignes sont ceux des fiches, da
 | **R4.1** tableaux | ✅ **fait** | roadmap : **996 cellules**, **802** exactes, texte plat **0/3** ; porte actuelle : **970 cellules**, provenance **776/776**, **8/8** opérations | `bash tools/porte-bloc-tableaux.sh` | **vert** : 35 tableaux, 970 cellules, 8/8, contrôles 3/3 |
 | **R4.2** code | ✅ **fait** | roadmap : **294 fichiers**, **24/24** extraits, texte seul **0/3** ; porte actuelle : **342/342** fichiers, **24/24** exécutions, **7/7** refus | `bash tools/porte-bloc-code.sh` | **vert** : 342/342, 24/24, 7/7 |
 | **R4.3** maths | ✅ **fait** | **32 formules**, **10/10** dérivées, **6/6** équations, surface **0/3** | `bash tools/porte-bloc-maths.sh` | **vert** : 32/32, 10/10, 6/6, 8/8 refus |
-| **R4.4** vision / OCR | 🔬 **partiel** : mesuré et gardé, porte humaine non atteinte | 5 familles : photo **55,9 → 6,7 %** de WER (test **5,7 %**) ; préservation **96,7 / 93,3 / 90,0 / 90,0 / 56,7 %** ; colonnes **89,4 → 0,5 %** ; tableaux **92,6 %** ; **3 vrais livres × 10 pages** : WER **7,10 / 36,26 / 8,73 %** contre la couche OCR ; ordre des colonnes **15,32 / 7,09 / 12,80 %** contre **97,98 / 96,06 / 99,20 %** en ordre inverse | `bash tools/porte-ocr.sh` ; `bash tools/porte-ocr-scans.sh` | **les deux vertes** ; la porte « **10 pages réelles avec vérité humaine** » reste ouverte ; voir § 4 |
+| **R4.4** vision / OCR | 🔬 **partiel** : mesuré et gardé, porte humaine non atteinte | 5 familles : photo **55,9 → 6,7 %** de WER (test **5,7 %**) ; préservation **96,7 / 93,3 / 90,0 / 90,0 / 56,7 %** ; colonnes **89,4 → 0,5 %** ; tableaux **92,6 %** ; **3 vrais livres × 10 pages** : WER **7,10 / 36,26 / 8,73 %** contre la couche OCR ; ordre des colonnes **15,32 / 7,09 / 12,80 %** contre **97,98 / 96,06 / 99,20 %** en ordre inverse | `bash tools/porte-ocr.sh` ; `bash tools/porte-ocr-scans.sh` ; `python3 tools/mesurer_reel.py --pdf … --pages …` (réel, non rejoué) | **les deux portes vertes** ; la porte « **10 pages réelles avec vérité humaine** » reste ouverte ; voir § 4 |
 
 ### R5 — la lecture croisée et le multilingue
 
@@ -171,6 +172,11 @@ tienne sur un autre corpus (le `val_big` le rappelle).
   mono-colonne **écart 0,00**, sans redressement **0 %** de cellules, texte à plat **0 cellule
   localisée**.
 
+> **Ce que les portes ne couvrent pas** : les **30 pages réelles** (3 livres) sont mesurées par
+> `tools/mesurer_reel.py` et les JSON `r44-reel*`, **hors porte**. Les deux portes couvrent le
+> **pilote de rendus** et le **simulé** ; c'est une des raisons pour lesquelles R4.4 n'est pas
+> « close » au sens de la porte humaine.
+
 ### 4.2 Les chiffres publiés (et ce qu'ils ne sont pas)
 
 | famille | WER dev | WER test | préservation dev (auto + exp) |
@@ -229,7 +235,7 @@ phrases de la même fiche ne peuvent pas être vraies ensemble.
 
 ### 5.1 Où il est
 
-Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et quatre bancs** :
+Le tagger n'est pas un fichier unique ; c'est **une classe, deux routes et trois bancs** :
 
 | pièce | rôle |
 |---|---|
@@ -251,7 +257,7 @@ le bloc coïncident sur **180/180** phrases (vérifié dans la fiche).
 
 | route | corpus | phrases / jetons | ce qui est mesuré |
 |---|---|---:|---|
-| **7B local** (Qwen2.5-7B-Instruct Q4_K_M, `llama-server` b11017, **CPU** `-ngl 0`) | `gold.json` **20 réelles** (14 fr / 6 en) + `gold_synthetique.json` **160 synthétiques** (fr) | **180 / 804** | POS **0,8483** seul, cascade 0,6 **0,9440** ; 20 réelles **0,9238**, 160 synthétiques **0,9471** ; 0 refus, 180 appels, 3,043 s de moyenne, 548 s |
+| **7B local** (Qwen2.5-7B-Instruct Q4_K_M, `llama-server` b11017, **CPU** `-ngl 0`) | `gold.json` **20 réelles** (14 fr / 6 en) + `gold_synthetique.json` **160 synthétiques** (fr) | **180 / 804** | POS **0,8483** seul, cascade 0,6 **0,9440** ; cascade : 20 réelles **0,9238**, 160 synthétiques **0,9471** ; 0 refus, 180 appels, 3,043 s de moyenne, 548 s |
 | **API DeepSeek** (`deepseek-chat`, température 0, règle 11) | `gold_reel.json` **432 réelles** (228 fr / 204 en) | **432 / 2 375** | POS **0,9389** (run 2 ; run 1 **0,9309** ; t03 **0,9385**), syntagmes **0,8241**, tête **0,8797**, acte **0,0** (l'heuristique garde **0,9954**) ; 858 appels, 254 454 tokens, 807,6 s |
 | **gold courant** (le 0,85) | 20 + 432 + 160 | **612 / 3 179** | **l'heuristique seulement** : POS **0,8500** (fermé 0,9295, ouvert 0,7746) ; le tagger n'y a **jamais** été mesuré |
 
@@ -280,8 +286,10 @@ vieilli** :
 
 **Pourquoi la baseline a monté** : l'heuristique du bloc L a gagné **+13,1 pts** sur le réel 432
 (0,7444 → 0,8754) et **+2,4 pts** sur le 180 (0,7512 → 0,7749) entre le 04/11 et le 06/11
-(paquet POS sûr, classes fermées, `NUM`). Le tagger, lui, n'a pas été rejoué. **L'avantage du
-tagger a donc fondu** : il reste **+6 à +7 pts** sur le réel, pas **+19**.
+(POS des verbes de `2ba393b0`, paquet POS sûr, classes fermées, `NUM`). Le tagger, lui, n'a pas
+été rejoué. **L'avantage du
+tagger a donc fondu** : il reste **+6,35 pts sur le réel 432** et **+7,34 pts sur le gold
+180**, pas **+19**.
 
 **Ce que cela ne dit pas** : le tagger n'est **pas** inutile — 0,9389 contre 0,8754 reste un
 gain, et la cascade peut encore valoir plus que le seul POS. Mais **le +19 pts est un artefact
@@ -335,7 +343,8 @@ et R2.1 ; **R5.1** attend R3 ; **R5.2** attend B10.3. La frontière réelle est 
   coûte **858 appels, 254 454 tokens, 807,6 s** ; le 612 en coûtera ~**1 200 appels, ~360 k
   tokens, ~20 min**.
 - **Mesure** : POS exact sur 612, ventilé **432 réel / 160 synthétique / 20 hand** ; écart contre
-  **0,8500** ; contrôles **majoritaire 0,2289**, **permutation 0,1729** ; refus ; coût.
+  **0,8500** ; contrôles **majoritaire** et **permutation** recalculés sur le 612 (référence 180 :
+  0,2289 et 0,1729) ; refus ; coût.
 - **Seuil de décision** : si l'écart est **< +2 pts**, le tagger POS n'est **pas additif** au
   gold courant → le **fermer** comme négatif nommé et garder l'heuristique ; si **≥ +5 pts**,
   l'intégrer à la cascade **via l'API** (jamais le 7B local, règle 11).
@@ -384,7 +393,7 @@ Je n'ai modifié aucun document de pilotage ; voici ce que le hub doit corriger 
 | # | où | ce qui est écrit | ce qui est mesuré |
 |---|---|---|---|
 | 1 | `roadmap.md` R0.7 | gold **360**, POS **0,765** | gold **612**, POS **0,8500** |
-| 2 | `roadmap.md` R0.7 | tagger **0,9440** comme s'il valait contre 0,85 | 0,9440 est sur **180**, contre **0,7749** aujourd'hui ; sur 432, **0,9389** contre **0,8754** |
+| 2 | `roadmap.md` R0.7 | tagger **0,9440** dans la même ligne que le gold **360 / 0,765** | 0,9440 est sur **180** (heuristique **0,7749** aujourd'hui) ; sur 432, **0,9389** contre **0,8754** ; sur 612, non mesuré |
 | 3 | `en-cours.md` R | « **R0.7 — tagger** » dans ce qui reste | le tagger est mesuré (7B local + API) ; il reste **à re-mesurer sur 612** et à **décider** |
 | 4 | `en-cours.md` R | « **R1 — R1.2-1024** », « 1 024 octets entraînés » | le run **existe** (20 000 pas, 2,6256 à 1 000) ; c'est le **statut** qui est en retard |
 | 5 | `en-cours.md` R | « **R4.4 close** » | la porte **humaine** est ouverte ; la fiche elle-même dit « reste ouverte » |
@@ -437,7 +446,9 @@ Je n'ai modifié aucun document de pilotage ; voici ce que le hub doit corriger 
   `python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json` ;
   `python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-etat-r.json`.
 - **Non rejouées** : `tools/tete_survol.py` ; `work/n2ac/eval_fenetre.py` ;
-  `work/n2ac/mirroir_copie.py` ; `bash tools/porte-r13-bpe.sh` ; les scans réels (portes
-  rejouées depuis le cache).
-- **Aucun code, aucun commit, aucun existant modifié** ; les portes écrivent dans `work/`
-  (ignoré) et `/tmp`.
+  `work/n2ac/mirroir_copie.py` ; `bash tools/porte-r13-bpe.sh` ; les scans réels
+  (`tools/mesurer_reel.py` et les JSON `r44-reel*` non rejoués).
+- **Aucun code, aucun commit, aucun existant modifié par mes soins** ; les portes écrivent dans
+  `work/` (ignoré) et `/tmp`. Le hub a committé une version antérieure de cette fiche dans
+  `d3134849` pendant la rédaction : la version courante du worktree est la version finale
+  corrigée (non committée), et `pensee-etat-r.json` est non suivi.

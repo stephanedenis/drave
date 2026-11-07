@@ -143,7 +143,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `71d57f53` | Évaluation des techniques de lecture rapide pour Drave | 2026-10-29 07:42 | 29.9 h | 55 | 1128 | 18 | 98 | [rapport](sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/rapport.md) |
 | `7263ca42` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 0.7 h | 1 | 58 | 1 | 0 | [rapport](sessions/7263ca42-cd56-4c36-a6dd-8ff2d1024a43/rapport.md) |
 | `7557cea8` | — | 2026-10-28 15:21 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/7557cea8-bca5-4702-811a-5c2374adebbb/rapport.md) |
-| `7635f5f5` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | 1 | 151 | 2 | 0 | [rapport](sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) |
+| `7635f5f5` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.7 h | 1 | 159 | 2 | 0 | [rapport](sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) |
 | `7a63b441` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 12:03 | 0.6 h | 1 | 81 | 3 | 0 | [rapport](sessions/7a63b441-9131-42c8-9f21-da97ea1dbaaa/rapport.md) |
 | `7c876089` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 13:10 | 0.3 h | 1 | 62 | 2 | 0 | [rapport](sessions/7c876089-605c-4836-930e-925a66028509/rapport.md) |
 | `7d0d2578` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.1 h | 1 | 53 | 1 | 0 | [rapport](sessions/7d0d2578-0048-4998-8494-7d2daef56769/rapport.md) |
@@ -204,7 +204,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.0 h | 184 | 2978 | 25 | 394 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.2 h | 184 | 2985 | 25 | 395 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
