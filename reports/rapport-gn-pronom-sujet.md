@@ -61,6 +61,14 @@ majuscule initiale devant un verbe émet un GN — **F1 0,7438 → 0,7535**. Tot
 - **Les GN sans pronom** (« Marie lit ») restent manquants (le gold les segmente).
 - **La F1** est mesurée sur le gold templaté.
 
+## 4 bis. Les règles **rejetées** (mesurées puis non intégrées)
+
+| règle | effet | décision |
+|---|---|---|
+| GV arrêté à l'**adverbe final** (« viens ∣ demain ») | F1 0,7535 → **0,7505** | rejetée |
+| **rogner le sujet** des GV du générateur S | F1 0,7533 | rejetée (neutre) |
+| **ADJ/ADV attributs** (65 segments du gold) | F1 0,7535 → **0,7464** | rejetée (trop de faux) |
+
 ## 5. Ce qui pourrait rendre cette fiche fausse
 
 - **la garde fr** : un pronom sujet anglais reste dans le GV ;

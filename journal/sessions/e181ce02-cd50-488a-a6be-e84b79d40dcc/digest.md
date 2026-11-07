@@ -58618,3 +58618,48 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_produit.py 2>&1 | tail -3; python3 - <<'PY'\nimport pathlib, re\n# doc produit : --fichier / --jsonl\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.3 bis La vu … [1603 caractères tronqués]`
+
+  ```
+Ran 16 tests in 3.805s
+
+OK
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 12 files changed, 326 insertions(+), 25 deletions(-)
+COMMIT OK 1
+5b9c18ef PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS
+   662a3698..5b9c18ef  s/v7 -> s/v7
+   662a3698..5b9c18ef  master -> master
+sam 07 nov 2026 00:41:39 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -12; echo \"===\"; timeout 300 python3 tools/index_reports.py --verifier; echo \"index EXIT=$?\"", "description": "Porte produit complète", "timeoutMs": 900000}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 ad6841f02df41edf deux fois
+  ✅ smoke test : Ran 16 tests
+  ✅ schéma v1 validé (5 cas + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+===
+index EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Veine suivante : les ADJ/ADV du gold (65 manquants) — test en copie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\n# après la boucle des syntagmes simples (dans analyser), ajouter les ADJ/ADV attributs\nancien = '''        # 4. phrase + pragmatique'''\nn … [1867 caractères tronqués]`
+
+  ```
+exp ADJ/ADV
+EXP-ADJADV POS 0.8625 | F1 0.7464 | exact 236/237 | cov 0.9916
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"## 5. Ce qui pourrait rendre cette fiche fausse\",\"\"\"## 4 bis. Les règles **rejetées** (mesurées puis non intég … [1424 caractères tronqués]`

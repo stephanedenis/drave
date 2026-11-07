@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 152.0 h |
+| Durée | 152.1 h |
 | Tours | 188 |
-| Messages | 3466 |
-| Appels d'outils | 3076 |
+| Messages | 3469 |
+| Appels d'outils | 3079 |
 | Fichiers touchés | 25 |
-| Commandes | 2571 |
+| Commandes | 2574 |
 | Sous-agents | 38 |
-| Commits | 415 |
+| Commits | 416 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10141,7 +10141,7 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 
 ### Tour 188 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*10 appels d'outils.* Actions notables :
 
 - bash — Voir cmd_analyser
 - bash — Ajouter fichier et jsonl
@@ -10150,10 +10150,13 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - bash — Voir la structure
 - bash — Nettoyer le doublon
 - bash — Committer --fichier/--jsonl
+- bash — Porte produit complète
+- bash — Tester les ADJ/ADV attributs
+- bash — Documenter les rejets
 
 **Synthèse produite :**
 
-⏵ Feature produit : `--fichier` et `--jsonl` (traiter un corpus, une ligne JSON par phrase)
+⏵ Veine suivante : les ADJ/ADV du gold (65 manquants) — test en copie
 
 ## 3. Travail accompli
 
@@ -10270,7 +10273,7 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2531 autres
+- … et 2534 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10833,4 +10836,5 @@ Le goal reste actif jusqu'à 9 h. Je continue sur la veine suivante (la conventi
 - FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'ÉTAT COURANT EST 86,25 / 0,7535 / 236-237)" -- reports/rapport-pos-anglais-v2.md reports/rapport-produ
 - PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produ
 - PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS" -- tools/drave.py tools/tests/test_produit.py docs/produit/README.m
+- FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535" -- reports/rapport-gn-pronom-sujet.md docs/pilotag
 
