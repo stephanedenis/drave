@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-07, 01 h 05 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-07, 01 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contrat v1** publié (schéma validé, refus code 3) ; frontières (0/40) ; **`drave` v0**. `master` poussé ; POS **83,83 %**.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 236/237 (0,9916)**, **F1 0,7535** (linéaire 0,8104), **2 spans** ; **contrat v1** publié et validé ; frontières (0/40), partition étiquetée, PONCT/R4/« que », GN du sujet ; **`drave` v0** (16 tests, 10 contrôles) ; `master` poussé.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.

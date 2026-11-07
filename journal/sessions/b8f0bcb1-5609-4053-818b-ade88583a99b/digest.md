@@ -452,3 +452,424 @@ rapport-r43-bloc-maths.md
 … [1070 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Localisation des fonctions clés dans le bloc linguistique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _syntagmes_simple\\|def _cible_precedent\\|def est_verbe\\|def _est_verbe\\|def _normaliser\\|SUJETS\\s*=\\|_syntagmes_simple(\" tools/bloc_linguistique.py", "description": "Locate key functions and SUJETS list"}`
+
+  ```
+150:def _normaliser(texte: str) -> str:
+378:SUJETS = {"i", "you", "he", "she", "it", "we", "they", "there", "who", "that", "which",
+501:def _est_verbe(mot: str) -> bool:
+931:    def _cible_precedent(texte: str, segment: dict, precedent: dict | None, verbes) -> str | None:
+1116:    def _syntagmes_simple(self, texte: str, langue: str,
+1129:        def est_verbe(d: int, m: str) -> bool:
+1493:        simples = self._syntagmes_simple(texte, lg, pos_verbes)
+1706:        for s in h._syntagmes_simple(texte, lg):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"r035\\|g017\" -r tools/tests/linguistique/ reports/*.json 2>/dev/null | head -20", "description": "Find r035 and g017 references"}`
+
+  ```
+tools/tests/linguistique/gold.py:71:    ("g017", "en", "She said that she would come yesterday.",
+tools/tests/linguistique/gold.json:1080:   "id": "g017",
+tools/tests/linguistique/gold_reel.py:143:    ("r035", "en", "The film she talks about is out.",
+tools/tests/linguistique/gold_reel.json:2105:   "id": "r035",
+tools/tests/linguistique/gold_gele.json:1096:"id": "g017",
+tools/tests/linguistique/gold_gele.json:3449:"id": "r035",
+reports/pensee-audit-r1r3.json:277:     "g017:SUB"
+reports/pensee-audit-r1r3.json:279:    "lecture": "Le nouveau scan redige gagne 4 mais perd g017 : verbes_vus n'est pas incremente apres un AUX, donc la garde d'adverbe final ne s'applique pas et yesterday reste dans la SUB."
+reports/pensee-audit-r1r3.json:545:   "g017",
+reports/pensee-audit-r1r3.json:616:     "r035",
+reports/pensee-audit-r1r3.json:662:     "g017",
+reports/pensee-audit-r1r3.json:670:    "id": "r035",
+reports/pensee-audit-r1r3.json:934:    "id": "g017",
+reports/pensee-audit-r1r3.json:967:  "lecture": "Les 27 contiennent les 17 ids de A17 (meme ensemble, memes types) ; les 10 autres sont 7 régressions nouvelles (6 R1a + 1 R2) et 3 gains A17 non intégrés (g017, r153, r280)."
+reports/pensee-audi
+… [1095 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 330, "limit": 200}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 900, "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+330:               "arrivent pleut pleuvoir habite habites habitent parle parlons parlez parlent explique "
+331:               "expliquons expliquez expliquent souffle soufflent chante chantent chantes peut peux "
+332:               "pouvons pouvez peuvent doit devons devez doivent pourrait pourrais pourrions pourriez "
+333:               "pourraient devrait devrais voudrais voudrait veux veut voulons voulez veulent prend "
+334:               "prends prenons prenez prennent donne donnes donnons donnez donnent trouve trouves "
+335:               "trouvons trouvez trouvent cherche cherches cherchons cherchez cherchent regarde "
+336:               "regardes regardons regardez regardent écoute écoutes écoutons écoutez écoutent ouvre "
+337:               "ouvres ouvrons ouvrez ouvrent ferme fermes fermons fermez ferment commence commences "
+338:               "commençons commencez commencent essaie essaies essayons essayez essaient attrape "
+339:               "attrapes attrapons attrapez attrapent".split()),
+340:     "en": set("sleeps sleep slept saw see seen says said co
+… [12898 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+900: 
+901:     # -- syntagmes ----------------------------------------------------------
+902:     def _syntagmes_s(self, texte: str) -> list[dict] | None:
+903:         if not self.segmenter_s:
+904:             return None
+905:         try:
+906:             if str(RACINE / "tools/structures") not in sys.path:
+907:                 sys.path.insert(0, str(RACINE / "tools/structures"))
+908:             import generateur  # le générateur S, importé en lecture seule
+909:             return generateur.analyser(texte)
+910:         except Exception:
+911:             return None
+912: 
+913:     def _cibles_s(self, texte: str) -> dict:
+914:         """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+915: 
+916:         Lecture seule de l'API interne du S : `_tokens`/`_segmente` rendent les `Segment` avec
+917:         `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+918:         (GP, puis GN, puis GV), comme le premier candidat de `analyser`.
+919:         """
+920:         if not self.segmenter_s:
+921:             return {
+… [5583 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 320, "offset": 1100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+1100:         """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
+1101:         if segment.get("type") == "GV" or not gvs:
+1102:             return []
+1103:         def ecart(g: dict) -> int:
+1104:             if g["fin"] <= segment["debut"]:
+1105:                 return segment["debut"] - g["fin"]
+1106:             if g["debut"] >= segment["fin"]:
+1107:                 return g["debut"] - segment["fin"]
+1108:             return 0
+1109:         proches: list[str] = []
+1110:         for g in sorted(gvs, key=ecart)[:k]:
+1111:             v = Heuristique._verbe_gv(texte, g, verbes, cache)
+1112:             if v and v not in proches:
+1113:                 proches.append(v)
+1114:         return proches
+1115: 
+1116:     def _syntagmes_simple(self, texte: str, langue: str,
+1117:                           pos_verbes: set[int] | None = None) -> list[dict]:
+1118:         mots = self._mots(texte)
+1119:         lex = POS_FERME.get(langue, POS_FERME["fr"])
+1120:         pos_verbes = pos_verbes or set()
+1121:         par_debut = {m[0]: k for k, m in enum
+… [19913 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reproduction des deux cas perdus sur le gold
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\ng = json.loads(pathlib.Path('tools/tests/linguistique/gold_reel.json').read_text())\nfor p in g['phrases']:\n    if p['id'] in ('r035',):\n        print(json.dumps(p, ensure_ascii=False, inden … [270 caractères tronqués]`
+
+  ```
+{
+ "id": "r035",
+ "langue": "en",
+ "texte": "The film she talks about is out.",
+ "mots": [
+  {
+   "texte": "The",
+   "pos": "DET",
+   "debut": 0,
+   "fin": 3
+  },
+  {
+   "texte": "film",
+   "pos": "NOUN",
+   "debut": 4,
+   "fin": 8
+  },
+  {
+   "texte": "she",
+   "pos": "PRON",
+   "debut": 9,
+   "fin": 12
+  },
+  {
+   "texte": "talks",
+   "pos": "VERB",
+   "debut": 13,
+   "fin": 18
+  },
+  {
+   "texte": "about",
+   "pos": "PREP",
+   "debut": 19,
+   "fin": 24
+  },
+  {
+   "texte": "is",
+   "pos": "AUX",
+   "debut": 25,
+   "fin": 27
+  },
+  {
+   "texte": "out",
+   "pos": "ADV",
+   "debut": 28,
+   "fin": 31
+  }
+ ],
+ "segments": [
+  {
+   "type": "GN",
+   "texte": "The film",
+   "role": "patient",
+   "debut": 0,
+   "fin": 8
+  },
+  {
+   "type": "REL",
+   "texte": "she talks about",
+   "role": "qualité",
+   "debut": 9,
+   "fin": 24,
+   "cibles": [
+    "film"
+   ],
+   "cible": "film"
+  },
+  {
+   "type": "GV",
+   "texte": "is out",
+   "role": "prédicat",
+   "debut": 25,
+   "fin": 31
+  }
+ ],
+ "pragma": {
+  "acte": "assertion"
+ },
+ "source": "reel"
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\ng2 = json.loads(pathlib.Path('tools/tests/linguistique/gold_synthetique.json').read_text())\nprint(len(g2['phrases']))\nfor p in g2['phrases']:\n    if 'yesterday' in p['texte'] and 'would com … [138 caractères tronqués]`
+
+  ```
+160
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\nfor fn in ('gold.json','gold_reel.json','gold_synthetique.json','gold_gele.json'):\n    g = json.loads(pathlib.Path('tools/tests/linguistique/'+fn).read_text())\n    hits=[p for p in g['phrase … [179 caractères tronqués]`
+
+  ```
+gold.json 20 1 ['g017']
+gold_reel.json 432 0 []
+gold_synthetique.json 160 0 []
+gold_gele.json 602 1 ['g017']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json, pathlib\ng = json.loads(pathlib.Path('tools/tests/linguistique/gold.json').read_text())\nfor p in g['phrases']:\n    if p['id']=='g017':\n        print(json.dumps(p, ensure_ascii=False, indent=1))\nEOF … [41 caractères tronqués]`
+
+  ```
+{
+ "id": "g017",
+ "langue": "en",
+ "texte": "She said that she would come yesterday.",
+ "mots": [
+  {
+   "texte": "She",
+   "pos": "PRON",
+   "debut": 0,
+   "fin": 3
+  },
+  {
+   "texte": "said",
+   "pos": "VERB",
+   "debut": 4,
+   "fin": 8
+  },
+  {
+   "texte": "that",
+   "pos": "CONJ",
+   "debut": 9,
+   "fin": 13
+  },
+  {
+   "texte": "she",
+   "pos": "PRON",
+   "debut": 14,
+   "fin": 17
+  },
+  {
+   "texte": "would",
+   "pos": "AUX",
+   "debut": 18,
+   "fin": 23
+  },
+  {
+   "texte": "come",
+   "pos": "VERB",
+   "debut": 24,
+   "fin": 28
+  },
+  {
+   "texte": "yesterday",
+   "pos": "ADV",
+   "debut": 29,
+   "fin": 38
+  }
+ ],
+ "segments": [
+  {
+   "type": "GN",
+   "texte": "She",
+   "role": "agent",
+   "debut": 0,
+   "fin": 3
+  },
+  {
+   "type": "GV",
+   "texte": "said",
+   "role": "prédicat",
+   "debut": 4,
+   "fin": 8
+  },
+  {
+   "type": "SUB",
+   "texte": "that she would come",
+   "role": "contenu",
+   "debut": 9,
+   "fin": 28,
+   "cibles": [
+    "said"
+   ],
+   "cible": "said"
+  }
+ ],
+ "pragma": {
+  "acte": "assertion",
+  "modalite": true
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/pensee-*.json | tail -30 && echo '---' && python3 -c \"\nimport json,pathlib\np=pathlib.Path('reports/pensee-gn-pronom-sujet.json')\nprint(p.exists())\nif p.exists():\n    d=json.loads(p.read_text())\n    print(json.dumps( … [93 caractères tronqués]`
+
+  ```
+reports/pensee-seuil-fin.json
+reports/pensee-seuil-graines.json
+reports/pensee-seuil.json
+reports/pensee-seuil-parallele.json
+reports/pensee-shaping.json
+reports/pensee-si.json
+reports/pensee-soustype-variance.json
+reports/pensee-spans-chunker.json
+reports/pensee-spans.json
+reports/pensee-spans-v7.json
+reports/pensee-stochastique.json
+reports/pensee-tirages.json
+reports/pensee-topk-diagnostic.json
+reports/pensee-topk-strict.json
+reports/pensee-topk-v8.json
+reports/pensee-tres-rare.json
+reports/pensee-troisieme-passe.json
+reports/pensee-ultra-rare.json
+reports/pensee-un-look.json
+reports/pensee-v10.json
+reports/pensee-v11.json
+reports/pensee-v12.json
+reports/pensee-v9.json
+reports/pensee-variance.json
+reports/pensee-verbe-gv.json
+reports/pensee-verite.json
+reports/pensee-votante3.json
+reports/pensee-votante.json
+reports/pensee-vote.json
+reports/pensee-vrais-absents.json
+---
+True
+{
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "regle": "pronom sujet (fr/en) et nom propre devant un verbe → GN",
+ "cause": "convention du gold : 417 GN manquants, 333 GV en trop",
+ "avant": {
+  "f1": 0.6519,
+  "f1_dev": 0.6482,
+  "f1_test": 0.6601,
+  "exact": "236/237",
+  "couverture": 0.9916,
+  "tete": 0.7709
+… [432 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de la ligne de base (F1 all/dev/test, attachement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib, json\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nfrom evaler_gold import charger, evaluer_bloc\nfrom gold_split import dev, test, … [517 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ModuleNotFoundError: No module named 'evaler_gold'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, pathlib, json\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaler_gold as eg\nfrom gold_split import dev, test\nph = eg.charger()\np … [529 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+ModuleNotFoundError: No module named 'evaler_gold'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nfrom gold_split import dev, test\nph = eg.charger()\nprint('phrases' … [504 caractères tronqués]`
+
+  ```
+phrases 612 dev 422 test 190
+all f1 0.7533 P 0.7239 R 0.7853 tp 1463 fp 558 fn 400 att 236 / 239 0.9916 exact 236 tete 0.864
+dev f1 0.7476 P 0.7223 R 0.7747 tp 1004 fp 386 fn 292 att 160 / 163 0.9877 exact 160 tete 0.8603
+test f1 0.7663 P 0.7274 R 0.8095 tp 459 fp 172 fn 108 att 76 / 76 1.0 exact 76 tete 0.8724
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nh = bl.Heuristique()\nfor txt in [\"The film she talks about is out.\", \"She said that she wou … [518 caractères tronqués]`
+
+  ```
+=== The film she talks about is out.
+pos: [('The', 'DET'), ('film', 'NOUN'), ('she', 'PRON'), ('talks', 'VERB'), ('about', 'PREP'), ('is', 'AUX'), ('out', 'ADV'), ('.', 'PONCT')]
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+AttributeError: 'Etiquette' object has no attribute 'role'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nh = bl.Heuristique()\nfor txt in [\"The film she talks about is out.\", \"She said that she wou … [497 caractères tronqués]`
+
+  ```
+=== The film she talks about is out.
+pos: [('The', 'DET'), ('film', 'NOUN'), ('she', 'PRON'), ('talks', 'VERB'), ('about', 'PREP'), ('is', 'AUX'), ('out', 'ADV'), ('.', 'PONCT')]
+  SEG GN 'The film she' 0 12 cible= 'talks' cands= ['GN', 'talks', 'out']
+  SEG GV 'talks' 13 18 cible= None cands= ['GV']
+  SEG GV 'about is out' 19 31 cible= None cands= ['GV']
+  mots: [(0, 3, 'The', 'mot'), (4, 8, 'film', 'mot'), (9, 12, 'she', 'mot'), (13, 18, 'talks', 'mot'), (19, 24, 'about', 'mot'), (25, 27, 'is', 'mot'), (28, 31, 'out', 'mot'), (31, 32, '.', 'ponctuation')]
+=== She said that she would come yesterday.
+pos: [('She', 'PRON'), ('said', 'VERB'), ('that', 'CONJ'), ('she', 'PRON'), ('would', 'AUX'), ('come', 'VERB'), ('yesterday', 'ADV'), ('.', 'PONCT')]
+  SEG GN 'She' 0 3 cible= 'said' cands= ['GN', 'said']
+  SEG GV 'said' 4 8 cible= None cands= ['GV']
+  SEG SUB 'that she would come yesterday' 9 38 cible= 'said' cands= ['SUB', 'said', 'said']
+  mots: [(0, 3, 'She', 'mot'), (4, 8, 'said', 'mot'), (9, 13, 'that', 'mot'), (14, 17, 'she', 'mot'), (18, 23, 'would', 'mot'), (24, 28, 'come', 'mot'), (29, 38, 'yesterday', 'mot'), (38, 39, '.', 'ponctuation')]
+  ```
+

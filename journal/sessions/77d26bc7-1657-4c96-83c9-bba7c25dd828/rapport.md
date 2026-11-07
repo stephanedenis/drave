@@ -7,12 +7,12 @@
 | Identifiant | `77d26bc7-1657-4c96-83c9-bba7c25dd828` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 12 |
-| Appels d'outils | 16 |
+| Messages | 16 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 14 |
+| Commandes | 22 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le pro … [2091 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Vérifier existence des fichiers clés
@@ -41,7 +41,7 @@
 - bash — Lire le découpage de phrases actuel
 - bash — Lire le dispositif des 40 frontières
 - bash — Tester la CLI actuelle
-- … et 1 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -70,6 +70,14 @@
 - **T1** Lire le dispositif des 40 frontières
 - **T1** Tester la CLI actuelle
 - **T1** Lister les 50 textes du banc
+- **T1** Inspecter le corpus 40 et ses règles
+- **T1** Lire définitions du rapport frontières
+- **T1** Lire la logique d'actes pragmatiques
+- **T1** Tester frontières et actes sur cas connus
+- **T1** Lire le pipeline d'analyse
+- **T1** Lister les 40 textes et effets
+- **T1** Lire la définition des actes faux
+- **T1** Chercher actes dans le rapport
 
 ## 4. Mesures et résultats marquants
 
@@ -100,4 +108,10 @@
 - **T1** `bfd98892 06 21:32 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE`
 - **T1** `bb67dd59 06 21:14 ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1`
 - **T1** `"Taille : 2,76 Mo de JSON pour 10 000 caractères (10 362 étiquettes) ; pas de JSONL, pas de lot, une invocation = un texte.",`
+- **T1** `"texte": "La remise est de 12,5 % sur 1.234,56 euros.",`
+- **T1** `"texte": "La remise est de 12,5 % sur 1.",`
+- **T1** `d02 décimal+milliers | 'La remise est de 12,5 % sur 1.234,56 euros.'`
+- **T1** `- **Temps** : `_phrases` sur 10 000 caractères : **2,98 ms → 8,47 ms** (×2,8). L'analyse complète de`
+- **T1** `l'audit était à 590–765 ms sur 10 000 caractères ; l'ajout est négligeable à cette échelle.`
+- **T1** `- **Patch B** : 8,97 ms contre 12,96 ms pour `_mots` sur le même texte (moins de tokens).`
 

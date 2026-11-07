@@ -58777,3 +58777,27 @@ grep: write error: Broken pipe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 … [2357 caractères tronqués]`
+
+  ```
+chantiers B13 à jour
+plan § 14
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 journal/sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md
+COMMIT OK 1
+318ea0dc PILOTAGE — B13 AUX CHIFFRES DE LA NUIT (86,25 / 0,7535 / 236-237) ET § 14 : LA VAGUE DE SEGMENTATION
+   149ecc5d..318ea0dc  s/v7 -> s/v7
+   149ecc5d..318ea0dc  master -> master
+sam 07 nov 2026 00:52:33 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-260; grep -n \"Prochaine action\" docs/pilotage/en-cours.md | head -2 | cut -c1-200", "description": "Voir le bloc B13 de l'état"}`
+
+  ```
+71:- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contrat v1** publié (schéma validé, refus code 3) ; frontières (0/40) ; **`drave` v0**. `master` poussé ; POS **83,83 %**.
+18:- **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+44:- **Prochaine action** : reprise par le hub `1e7ef596` ; l'état du 04/11 est la source.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contra … [1358 caractères tronqués]`

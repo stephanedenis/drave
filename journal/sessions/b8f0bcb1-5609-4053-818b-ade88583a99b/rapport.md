@@ -7,12 +7,12 @@
 | Identifiant | `b8f0bcb1-5609-4053-818b-ade88583a99b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 16 |
-| Appels d'outils | 18 |
+| Messages | 21 |
+| Appels d'outils | 23 |
 | Fichiers touchés | 0 |
-| Commandes | 11 |
+| Commandes | 16 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans resta … [2125 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Check branch and workspace state
 - bash — List reports and linguistic test tools
@@ -39,10 +39,13 @@
 - bash — Search all gold files for g017 sentence
 - bash — Dump g017 gold entry
 - bash — Inspect prior measurement JSON
+- bash — Measure baseline F1 on all/dev/test
+- bash — Measure baseline F1 on all/dev/test (typo fix)
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Reproduction des deux cas perdus sur le gold
+⏵ Mesure de la ligne de base (F1 all/dev/test, attachement)
 
 ## 3. Travail accompli
 
@@ -64,4 +67,17 @@
 - **T1** Search all gold files for g017 sentence
 - **T1** Dump g017 gold entry
 - **T1** Inspect prior measurement JSON
+- **T1** Measure baseline F1 on all/dev/test
+- **T1** Measure baseline F1 on all/dev/test (typo fix)
+- **T1** Measure baseline F1 on all/dev/test
+- **T1** Reproduce r035 and g017 segmentation
+- **T1** Reproduce both cases (attr fix)
+
+## 5. Erreurs rencontrées
+
+3 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
+- **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> ModuleNotFoundError: No module named 'evaler_gold' [exit code: 1]
+- **T1** : === The film she talks about is out. pos: [('The', 'DET'), ('film', 'NOUN'), ('she', 'PRON'), ('talks', 'VERB'), ('about', 'PREP'), ('is', 'AUX'), ('out', 'ADV'), ('.', 'PONCT')] [stderr] Traceback (m
 

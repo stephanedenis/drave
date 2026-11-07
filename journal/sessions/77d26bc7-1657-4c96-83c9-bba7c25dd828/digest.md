@@ -422,3 +422,492 @@ c78a53bd 06 23:55 B13 — LE PRONOM SUJET EST UN GN : F1 0,6519 → 0,7013 (+4,9
 … [3641 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Annotation\\|def json\\|SCHEMA\\|schema\\|version\\|def _phrases\\|def couverture\\|NIVEAUX\\|def analyser\" tools/bloc_linguistique.py | head -60", "description": "Repérer contrat et frontières dans le module"}`
+
+  ```
+50:NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+63:    def json(self) -> dict:
+81:    def json(self) -> dict:
+91:SCHEMA_ANNOTATION = "drave.annotation"
+96:class Annotation:
+115:    def couverture(self) -> dict[str, float]:
+120:    def json(self, avec_duree: bool = False) -> dict:
+125:            # le **format** est versionné : un client peut vérifier ce qu'il reçoit
+126:            "schema": SCHEMA_ANNOTATION, "version": VERSION_ANNOTATION,
+139:    def analyser(self, texte: str, langue: str | None = None,
+170:    de test. Un profil est une donnée, pas un prompt : il se versionne et se rejoue.
+839:    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:
+1297:    def analyser(self, texte: str, langue: str | None = None,
+1676:    def analyser(self, texte: str, langue: str | None = None,
+1747:    def analyser(self, texte: str, langue: str | None = None,
+1774:            if e.get("niveau") not in NIVEAUX:
+1857:    def analyser(self, texte: str, langue: str | None = None,
+1991:    def analyser(self, texte: str, langue: str | None = None,
+2083:    def analyser(self, texte: str, langue: str | None = None,
+2161:    def analyser(self, texte: str,
+… [483 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nprint(json.dumps(d['contrat'],ensure_ascii=False,indent=1)[:4000])\nprint('---ROBUSTESSE---')\nprint(json.dumps(d['robustesse']['synthese'],ensur … [90 caractères tronqués]`
+
+  ```
+{
+ "enveloppe_actuelle": [
+  "texte",
+  "langue",
+  "script",
+  "source",
+  "refus",
+  "etiquettes",
+  "unites_semantiques",
+  "fraction_semantique",
+  "trace",
+  "cout",
+  "contexte"
+ ],
+ "etiquette_actuelle": [
+  "niveau",
+  "type",
+  "valeur",
+  "debut",
+  "fin",
+  "source",
+  "confiance",
+  "candidats",
+  "langue",
+  "script",
+  "meta"
+ ],
+ "invariants_tenus": {
+  "cles_racine": "46/46",
+  "cles_etiquette": "4501/4501",
+  "labels_tries": "46/46",
+  "doublons_exacts": 0,
+  "spans_dans_texte": "4501/4501",
+  "spans_vides": 0,
+  "confiance_0_1": "4501/4501",
+  "source_dans_enum": "4501/4501",
+  "niveau_dans_enum": "4501/4501",
+  "texte_roundtrip": "46/46",
+  "determinisme": "46/46",
+  "stderr_vide": "46/46"
+ },
+ "peut_etre_vide": {
+  "etiquettes": "seulement sur refus (0/46 succès)",
+  "unites_semantiques": "f18 (chiffres) : 0 ; fraction 0,0",
+  "fraction_semantique": "0,0 sur f18 ; max 0,8571 sur f03",
+  "syntagmes": "4/46 succès : f13, f18, f27 (Élodie sourit.), f37",
+  "pos": "1/46 : f18 (chiffres) ; sinon 3 à 200 POS",
+  "candidats": "3470/4501 étiquettes : graphème, mot, phrase, document, POS fermées",
+  "meta": "3375/4501 étiquettes : graphème, mot, phrase, pragmatique, disc
+… [2051 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "offset": 40, "limit": 160}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+40: import subprocess
+41: import sys
+42: import threading
+43: import time
+44: import unicodedata
+45: import urllib.request
+46: from dataclasses import dataclass, field
+47: from typing import Protocol, Sequence
+48: 
+49: RACINE = pathlib.Path(__file__).resolve().parent.parent
+50: NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
+51:            "pragmatique", "document")
+52: SOURCES = ("heuristique", "neuronal", "humain")
+53: SCRIPT_NEUTRE = "Zyyy"
+54: 
+55: # --------------------------------------------------------------------------- types
+56: 
+57: 
+58: @dataclass(frozen=True)
+59: class Span:
+60:     debut: int
+61:     fin: int
+62: 
+63:     def json(self) -> dict:
+64:         return {"debut": self.debut, "fin": self.fin}
+65: 
+66: 
+67: @dataclass
+68: class Etiquette:
+69:     niveau: str
+70:     type: str
+71:     valeur: str
+72:     debut: int
+73:     fin: int
+74:     source: str = "heuristique"
+75:     confiance: float = 0.5
+76:     candidats: list[str] = field(default_factory=list)
+77:     langue: str = "und"
+78:     script: str = SCRIPT_
+… [5472 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 780,980p tools/bloc_linguistique.py", "description": "Lire la logique de frontières de phrase"}`
+
+  ```
+j += 1
+        if not _dans_zone(zones, i, j) and _est_frontiere(texte, i, j, zones):
+            ajouter(_absorber_fermants(texte, j), _type_phrase(texte[i:j]))
+        i = j
+    ajouter(n, "déclarative")
+    return sortie
+
+
+class Heuristique:
+    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+
+    nom = "heuristique"
+
+    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+                 union: bool = True, partition: str = "alternative"):
+        self.profils = profils
+        self.segmenter_s = segmenter_s
+        self.seuil_ouvert = seuil_ouvert
+        self.seuil_langue = seuil_langue
+        self.union = union
+        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
+        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
+        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+        # Dans les deux filtres, le segment retiré reste dans `meta.alter
+… [8514 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 640,790p tools/bloc_linguistique.py", "description": "Lire le découpage de phrases actuel"}`
+
+  ```
+if d >= fin:
+            break
+        if f > debut:
+            return True
+    return False
+
+
+def _mot_avant(texte: str, i: int) -> str:
+    j = i
+    while j > 0 and (texte[j - 1].isalnum() or texte[j - 1] in "'’"):
+        j -= 1
+    return texte[j:i]
+
+
+def _apres_ponctuation(texte: str, j: int) -> int:
+    n = len(texte)
+    while j < n and (texte[j].isspace() or texte[j] in _FERMANTS):
+        j += 1
+    return j
+
+
+def _mot_suivant(texte: str, p: int) -> str:
+    m = re.match(r"[^\W\d_][\w'’\-]*", texte[p:p + 80], re.UNICODE)
+    return m.group() if m else ""
+
+
+def _absorber_fermants(texte: str, j: int) -> int:
+    """Absorbe « . » », « . ) » : le fermant appartient à la phrase qui se termine."""
+    n = len(texte)
+    while True:
+        k = j
+        while k < n and texte[k] in " \t":
+            k += 1
+        if k < n and texte[k] in _FERMANTS:
+            j = k + 1
+            continue
+        return j
+
+
+def _nouvelle_ligne_structurelle(texte: str, i: int, j: int) -> bool:
+    """Un saut de ligne coupe la phrase s'il est vide ou s'il borde un titre / une liste."""
+    if texte.count("\n", i, j) >= 2:
+        return True
+    avant = texte[texte.rfind("\n", 0, i) + 1:i]
+  
+… [4036 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nprint(json.dumps(d['resume_40'],ensure_ascii=False,indent=1))\nprint('--- verdict')\nprint(json.dumps(d['verdict'],ensure_ascii=False,indent=1))\ … [371 caractères tronqués]`
+
+  ```
+{
+ "avant": {
+  "phrases": 102,
+  "textes_exacts": 2,
+  "textes_frontiere_fausse": 32,
+  "textes_casses": 38,
+  "extra": 47,
+  "missing": 4,
+  "overlaps": 9,
+  "leading": 31,
+  "vides": 0,
+  "fausses_questions": 5,
+  "types_faux": 63
+ },
+ "apres": {
+  "phrases": 59,
+  "textes_exacts": 40,
+  "textes_frontiere_fausse": 0,
+  "textes_casses": 0,
+  "extra": 0,
+  "missing": 0,
+  "overlaps": 0,
+  "leading": 0,
+  "vides": 0,
+  "fausses_questions": 0,
+  "types_faux": 0
+ }
+}
+--- verdict
+{
+ "frontieres": "40/40 textes exacts après patch (2/40 avant), 32/40 frontières fausses avant, 0 après",
+ "dev_test": "delta 0 sur POS, F1 syntagmes, attachement et tokens ; 2 spans de phrase du gold corrigés ; 0 valeur d'acte changée",
+ "tokénisation": "patch B : 477 → 362 tokens, 273 → 232 POS, 47 POS dans des fragments URL/courriel/chemin supprimés, 0 token du gold changé",
+ "recommandation": "appliquer A (frontières) ; B est indépendant et additif, à appliquer si le contrat accepte les types courriel/chemin"
+}
+--- dispositif
+{
+ "banc": "40 textes libres écrits pour l'analyse (59 phrases attendues), catégories URL, courriel, chemin, décimaux, dates, versions/IP, abréviations, ellipses, guillemets, listes,
+… [2786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py analyser \"Le chat dort.\" --json | head -40 && echo \"---\" && python3 tools/drave.py analyser \"\" --json; echo \"rc=$?\"", "description": "Tester la CLI actuelle"}`
+
+  ```
+{
+ "schema": "drave.annotation",
+ "version": 1,
+ "texte": "Le chat dort.",
+ "langue": "fr",
+ "script": "Latn",
+ "source": "heuristique",
+ "refus": "",
+ "etiquettes": [
+  {
+   "niveau": "graphème",
+   "type": "lettres",
+   "valeur": "Le",
+   "debut": 0,
+   "fin": 2,
+   "source": "heuristique",
+   "confiance": 0.99,
+   "candidats": [],
+   "langue": "fr",
+   "script": "Latn",
+   "meta": {}
+  },
+  {
+   "niveau": "mot",
+   "type": "mot",
+   "valeur": "Le",
+   "debut": 0,
+   "fin": 2,
+   "source": "heuristique",
+   "confiance": 0.98,
+   "candidats": [],
+   "langue": "fr",
+   "script": "Latn",
+   "meta": {}
+  },
+  {
+   "niveau": "pos",
+   "type": "DET",
+   "valeur": "Le",
+   "debut": 0,
+---
+{
+ "schema": "drave.annotation",
+ "version": 1,
+ "texte": "",
+ "langue": "und",
+ "script": "Zyyy",
+ "source": "heuristique",
+ "refus": "vide",
+ "etiquettes": [],
+ "unites_semantiques": [],
+ "fraction_semantique": 0.0,
+ "trace": [
+  {
+   "etape": "refus",
+   "raison": "vide"
+  }
+ ],
+ "cout": {
+  "octets": 0
+ },
+ "contexte": ""
+}
+rc=3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nfor r in d['banc_50']['resultats']:\n    print(r['id'], r['categorie'], repr(r['texte'])[:90])\n\"", "description": "Lister les 50 textes du banc … [2 caractères tronqués]`
+
+  ```
+f01 fr 'Le chat dort.'
+f02 fr 'Le chat de la voisine qui dort sur le toit se réveille.'
+f03 fr "Bonjour ! Comment allez-vous aujourd'hui ?"
+f04 fr "Ferme la porte, s'il te plaît."
+f05 fr 'Ne touche pas à ça !'
+f06 fr "Je ne pense pas qu'il viendra demain, mais nous verrons bien."
+f07 en 'The cat sleeps on the roof.'
+f08 en 'Where is the nearest train station, please?'
+f09 en "Don't forget to bring your passport."
+f10 fr 'Le prix est de 1 234,56 € pour 3 articles.'
+f11 fr 'Rendez-vous le 12/03/2026 à 14h30.'
+f12 fr 'Visitez https://example.com/docs?page=2 pour la documentation.'
+f13 fr "J'ai trouvé ça génial 😍🔥"
+f14 refus '🚀'
+f15 refus ''
+f16 refus '   '
+f17 refus '...'
+f18 fr '1234567890'
+f19 fr "COVID-19 : la situation s'améliore-t-elle vraiment ?"
+f20 fr 'M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.'
+f21 fr '« Je ne sais pas », répondit-il en haussant les épaules.'
+f22 fr "C'est l'été ; les oiseaux chantent, les enfants jouent."
+f23 fr 'Attention : ce produit peut contenir des traces de noisettes.'
+f24 fr 'Il était une fois une petite fille qui vivait au bord de la forêt...'
+f25 fr 'Pourquoi ? Parce que.'
+f26 fr 'Où sont les toilettes ? Je cherche depuis dix minute
+… [1555 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nc=d['corpus_40']\nprint('keys item', sorted(set(k for r in c for k in r)))\nfor r in c[:4]:\n    print(json.dumps(r,ensure_ascii=False,indent=1)[ … [239 caractères tronqués]`
+
+  ```
+keys item ['apres', 'attendu', 'avant', 'cat', 'effet', 'id', 'texte']
+{
+ "id": "n01",
+ "cat": "négatif/2 phrases",
+ "texte": "Il part. Elle reste.",
+ "attendu": [
+  {
+   "debut": 0,
+   "fin": 8,
+   "texte": "Il part.",
+   "type": "déclarative"
+  },
+  {
+   "debut": 9,
+   "fin": 20,
+   "texte": "Elle reste.",
+   "type": "déclarative"
+  }
+ ],
+ "avant": {
+  "phrases": 2,
+  "exact": false,
+  "frontiere_fausse": false,
+  "casse": true,
+  "extra": [],
+  "missing": [],
+  "overlaps": [],
+  "leading": [
+   8
+  ],
+  "vides": [],
+  "fausses_questions": [],
+  "spans": [
+   {
+    "debut": 0,
+    "fin": 8,
+    "texte": "Il part.",
+    "type": "déclarative"
+   },
+   {
+    "debut": 8,
+    "fin": 20,
+    "texte": " Elle reste.",
+    "type": "déclarative"
+   }
+  ]
+ },
+ "apres": {
+  "phrases": 2,
+  "exact": true,
+  "frontiere_fausse": false,
+  "casse": false,
+  "extra": [],
+  "missing": [],
+  "overlaps": [],
+  "leading": [],
+  "vides": [],
+  "fausses_questions": [],
+  "spans": [
+   {
+    "debut": 0,
+    "fin": 8,
+    "texte": "Il part.",
+    "type": "déclarative"
+   },
+   {
+    "debut": 9,
+    "fin": 20,
+    "texte": "Elle reste.",
+    "type": "déclarative"
+   }
+  ]
+ },
+ "effet": {
+  "pos_identique":
+… [6503 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"acte\\|frontiere_fausse\\|textes_casses\\|exact\" reports/rapport-frontieres-phrase.md | head -40 && echo ---- && sed -n 1,80p reports/rapport-frontieres-phrase.md", "description": "Lire définitions du rapport frontières"}`
+
+  ```
+12:> les mesures et les patchs exacts).
+21:textes sont exacts, **0** défaut, **0** chevauchement, **0** fausse question. Sur le **gold 612**, POS,
+23:phrase** se décalent d'un espace (r308, r318), **0 valeur d'acte** change. **Le gain dev/test est donc
+26:libre : **63 actes faux sur 102 phrases → 0 sur 59**.
+67:| textes exacts (spans + types) | 2/40 | **40/40** | 40/40 |
+76:| actes faux par phrase | 63/102 | **0/59** | 0 |
+235:- **38/40** textes changent de libellés `phrase` et de spans d'acte ; **5/40** changent de connecteurs
+236:  `discours` (fragments d'URL supprimés, spans corrigés). Les **actes faux** passent de **63/102** à
+250:| règle | textes exacts (seule) | coupures retirées* | fusions réparées* | espaces retirés* | fausses questions retirées* | Δ dev POS / F1 / att | Δ test POS / F1 / att |
+267:gain de textes exacts à lui seul, 13/40) ; (f) les titres et listes sans ponctuation finale. **Toutes**
+272:| lecture | POS dev | F1 dev | att dev | acte dev | POS test | F1 test | att test | acte test |
+285:F1 syntagmes, attachement et acte, sur dev comme sur test. Le seul déplacement est le **span** de
+286:2 phrases du gold (r308, r318), dû à la règle (e) ; **la valeur d'acte n
+… [5538 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"acte\"\\|acte=\\|def _pragmatique\\|assertion\\|exclamation' tools/bloc_linguistique.py | head -30 && sed -n '/def _pragmatique/,/return/p' tools/bloc_linguistique.py | head -80", "description": "Lire la logique d'actes pr … [12 caractères tronqués]`
+
+  ```
+1471:                    "exclamation" if typ == "exclamative" else
+1472:                    "ordre" if premier.casefold() in VERBES_IMPERATIFS else "assertion")
+1473:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.45,
+1474:                                        candidats=["assertion", "question", "ordre"],
+1703:                    "exclamation" if typ == "exclamative" else "assertion")
+1704:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.8,
+2103:ACTES = ("assertion", "question", "exclamation")
+2119:    `grammaire_pragma` : l'acte (`assertion`, `question`, `exclamation`), puis trois
+2144:                "UNIQUEMENT par un objet JSON {\"acte\":\"assertion|question|exclamation\","
+2179:            acte = str(donnees.get("acte", "")).lower()
+2186:            etiquettes = [Etiquette("pragmatique", "acte", acte, 0, n, self.nom,
+2406:    ("pragmatique", "acte"): "neuronal",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor t in [\"Il part. Elle reste.\",\"Le prix est 12.5 euros.\",\"Pourquoi ? Parce que.\",\"M. Dupont…\",\"Le 12.03.2024. Il part.\"]:\n   … [294 caractères tronqués]`
+
+  ```
+'Il part. Elle reste.' [(0, 8, 'déclarative', 'Il part.'), (9, 20, 'déclarative', 'Elle reste.')]
+  prag: [('type', 'déclarative', 0, 8), ('acte', 'assertion', 0, 8), ('type', 'déclarative', 9, 20), ('acte', 'assertion', 9, 20)]
+'Le prix est 12.5 euros.' [(0, 23, 'déclarative', 'Le prix est 12.5 euros.')]
+  prag: [('type', 'déclarative', 0, 23), ('acte', 'assertion', 0, 23)]
+'Pourquoi ? Parce que.' [(0, 10, 'interrogative', 'Pourquoi ?'), (11, 21, 'déclarative', 'Parce que.')]
+  prag: [('type', 'interrogative', 0, 10), ('acte', 'question', 0, 10), ('type', 'déclarative', 11, 21), ('acte', 'assertion', 11, 21)]
+'M. Dupont…' [(0, 10, 'déclarative', 'M. Dupont…')]
+  prag: [('type', 'déclarative', 0, 10), ('acte', 'assertion', 0, 10)]
+'Le 12.03.2024. Il part.' [(0, 14, 'déclarative', 'Le 12.03.2024.'), (15, 23, 'déclarative', 'Il part.')]
+  prag: [('type', 'déclarative', 0, 14), ('acte', 'assertion', 0, 14), ('type', 'déclarative', 15, 23), ('acte', 'assertion', 15, 23)]
+  ```
+
