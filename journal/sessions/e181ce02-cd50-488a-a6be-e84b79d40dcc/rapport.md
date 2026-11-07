@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 152.3 h |
+| Durée | 152.5 h |
 | Tours | 189 |
-| Messages | 3479 |
-| Appels d'outils | 3089 |
+| Messages | 3481 |
+| Appels d'outils | 3091 |
 | Fichiers touchés | 25 |
-| Commandes | 2582 |
+| Commandes | 2584 |
 | Sous-agents | 40 |
-| Commits | 419 |
+| Commits | 420 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10188,7 +10188,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 
 ### Tour 189 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*9 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - sous-agent — Spans restants et convention GV
 - sous-agent — Re-audit produit du code de la nuit
@@ -10199,6 +10199,8 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - bash — Voir le bloc B13 de l'état
 - bash — Bloc B13 et attente des sous-agents
 - bash — Trim T0 et attendre
+- bash — Voir le journal du 07/11
+- bash — Journal du 07/11
 
 **Synthèse produite :**
 
@@ -10321,7 +10323,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2542 autres
+- … et 2544 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10449,7 +10451,7 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 
 ## 5. Erreurs rencontrées
 
-74 sorties en erreur ou divergentes. Les premières :
+75 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10888,4 +10890,5 @@ Je garde le goal actif jusqu'à 9 h comme demandé : les rounds suivants seront 
 - PILOTAGE — B13 AUX CHIFFRES DE LA NUIT (86,25 / 0,7535 / 236-237) ET § 14 : LA VAGUE DE SEGMENTATION" -- docs/pilotage/chantiers.md docs/pilotage/plan-travail.m
 - ÉTAT — LE BLOC B13 AUX CHIFFRES COURANTS (86,25 / 0,7535 / 236-237, 16 TESTS)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep 
 - ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
+- JOURNAL — LA NUIT DU 07/11 : LA CONVENTION DU SUJET (+10,2 DE F1), r264, --fichier/--jsonl, TROIS RÈGLES REJETÉES" -- journal/2026-11-07/README.md docs/pilotage
 

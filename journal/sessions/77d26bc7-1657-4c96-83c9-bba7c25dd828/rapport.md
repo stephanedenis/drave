@@ -7,12 +7,12 @@
 | Identifiant | `77d26bc7-1657-4c96-83c9-bba7c25dd828` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.2 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 26 |
-| Appels d'outils | 41 |
-| Fichiers touchés | 0 |
-| Commandes | 39 |
+| Messages | 35 |
+| Appels d'outils | 53 |
+| Fichiers touchés | 1 |
+| Commandes | 50 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le pro … [2091 caractères tronqués]
 
-*41 appels d'outils.* Actions notables :
+*53 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Vérifier existence des fichiers clés
@@ -41,11 +41,11 @@
 - bash — Lire le découpage de phrases actuel
 - bash — Lire le dispositif des 40 frontières
 - bash — Tester la CLI actuelle
-- … et 26 autres
+- … et 38 autres
 
 **Synthèse produite :**
 
-⏵ Cartographie du dépôt et des audits existants avant de rejouer les textes
+⏵ Construction du harnais de rejeu dans /tmp (lecture seule du dépôt)
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/reaudit/explorer.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -95,6 +96,8 @@
 - **T1** Confirmer les chiffres courants du produit
 - **T1** Vérifier disponibilité et lancer le validateur
 - **T1** Préciser F1 et vérifier les hash HEAD
+- **T1** Comprendre les étiquettes document
+- … et 10 autres
 
 ## 4. Mesures et résultats marquants
 

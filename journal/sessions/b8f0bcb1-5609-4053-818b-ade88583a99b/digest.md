@@ -1107,3 +1107,120 @@ g008  fr GV [0:9] 'Marie lit' conf=[(0.3, True), (0.55, None), (0.3, True)]
  S      : [('GV', 0, 9, 'Marie lit'), ('GN', 10, 18, 'un livre')]
   ```
 
+### 🤖 Assistant
+
+⏵ Classification mesurée des 322 FP / 180 FN de GV
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections, json\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph = eg.charger(); h = bl.Heuristique()\n\ndef po … [2424 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+TypeError: tuple indices must be integers or slices, not str
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph = eg.charger(); h = bl.Heuristique()\n\ndef pos_map( … [2142 caractères tronqués]`
+
+  ```
+FP GV total 322
+par catégorie: {'droite_autre': 49, 'sujet': 148, 'adverbe': 16, 'tronque': 39, 'objet': 24, 'parasite': 17, 'gauche_autre': 2, 'deux_cotes': 27}
+dont voisine TP (double): {'droite_autre': 1, 'sujet': 135, 'adverbe': 1, 'tronque': 11, 'objet': 3, 'parasite': 0, 'gauche_autre': 1, 'deux_cotes': 1}
+
+## droite_autre 49
+    g003 "a vu l'homme" | La femme a vu l'homme dans le parc. | double= True
+    g014 "vu l'homme" | J'ai vu l'homme avec le télescope. | double= False
+    r203 'est bon' | Le livre que j'ai lu est bon. | double= False
+    r209 'est absent' | L'élève dont je parle est absent. | double= False
+## sujet 148
+    g004 'Il a couru' | Il a couru pour attraper le bus. | double= True
+    g005 'Elle a dit' | Elle a dit qu'elle viendrait hier. | double= True
+    g008 'Marie lit' | Marie lit un livre. | double= True
+    g009 'Il ne dort pas' | Il ne dort pas. | double= True
+## adverbe 16
+    g010 'Viens ici' | Viens ici ! | double= True
+    r010 'viens demain' | Tu viens demain ? | double= False
+    r019 'souffle fort' | Le vent souffle fort. | double= False
+    r030 'come tomorrow' | You come tomorrow? | double= False
+## tronque 39
+    g013 'venir' | Peux-tu venir 
+… [1279 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/bloc_linguistique.py", "description": "Read module header and RACINE"}`
+
+  ```
+#!/usr/bin/env python3
+"""bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.
+
+Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :
+
+  - `Heuristique` : CPU, déterministe, ultra-rapide ; elle étiquette la surface et produit des
+    **candidats** pour l'ambigu ; elle déclare sa couverture et sa confiance ;
+  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+    substitution et le parallèle sans GPU ;
+  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+    même type d'annotation ;
+  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+    POS alignés par grammaire GBNF ; c'est l'implémentation qualifiée sur le gold ;
+  - `Parallele` et `Cascade` : les deux modes de composition. Le parallèle fusionne les
+    étiquettes par confiance ; la cascade n'envoie au neuronal que le **résidu** des niveaux
+    que l'heuristique ne couvre pas.
+
+La sortie est une **annotation typée** — pas le corps de la RSN : chaque étiquette porte son
+`niveau`, son `span`, sa `source`, sa `confiance`, sa `langue`, son `script`
+… [1731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"RACINE\" tools/bloc_linguistique.py", "description": "List RACINE uses"}`
+
+  ```
+49:RACINE = pathlib.Path(__file__).resolve().parent.parent
+906:            if str(RACINE / "tools/structures") not in sys.path:
+907:                sys.path.insert(0, str(RACINE / "tools/structures"))
+2708:    ap.add_argument("--modele", default=str(RACINE / "models/Qwen2.5-0.5B-Q4_0.gguf"))
+2713:    ap.add_argument("--udhr", default=str(RACINE / "data/udhr/articles.jsonl"))
+  ```
+
+### 🤖 Assistant
+
+⏵ Classification des 180 GV manquants
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph = eg.charger(); h = bl.Heuristique()\nstats=collecti … [1416 caractères tronqués]`
+
+  ```
+FN GV total 180
+## chevauche 110
+    g014 'vu' | J'ai vu l'homme avec le télescope. | (5, 7)
+    r010 'viens' | Tu viens demain ? | (3, 8)
+    r019 'souffle' | Le vent souffle fort. | (8, 15)
+    r023 'love' | We love music. | (3, 7)
+## avale_GN 51
+    r004 'brille' | Le soleil brille. | (10, 16)
+    r046 'boit' | Le chat boit du lait. | (8, 12)
+    r047 'poussent' | Les fleurs poussent dans le jardin. | (11, 19)
+    r081 'apporte' | Le facteur apporte une lettre. | (11, 18)
+## tronque 19
+    s026 'ne écoute pas' | le sombre voyage ne écoute pas | (17, 30)
+    s027 'marche avec il' | mon sombre village marche avec il | (19, 33)
+    s049 'ouvre le cheval' | une lente fenêtre ouvre le cheval | (18, 33)
+    s051 'cherche ma lettre' | une douce montagne cherche ma lettre | (19, 36)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph = eg.charger(); h = bl.Heuristique()\nstats=collecti … [1307 caractères tronqués]`
+
+  ```
+FN GV total 180
+## chev_droite 75
+    [('r019', 'fr', 'souffle'), ('r023', 'en', 'love'), ('r030', 'en', 'come'), ('r039', 'en', 'blows'), ('r049', 'fr', 'dort'), ('r051', 'fr', 'roule')]
+## avale_GN 51
+    [('r004', 'fr', 'brille'), ('r046', 'fr', 'boit'), ('r047', 'fr', 'poussent'), ('r081', 'fr', 'apporte'), ('r088', 'fr', 'grimpe'), ('r089', 'fr', 'adoucit')]
+## chev_deux 28
+    [('g014', 'fr', 'vu'), ('r010', 'fr', 'viens'), ('r056', 'fr', 'arrivent'), ('r252', 'fr', 'lit'), ('r310', 'fr', 'dois partir'), ('r314', 'en', 'come')]
+## tronque 19
+    [('s026', 'fr', 'ne écoute pas'), ('s027', 'fr', 'marche avec il'), ('s049', 'fr', 'ouvre le cheval'), ('s051', 'fr', 'cherche ma lettre'), ('s063', 'fr', 'ne prépare pas'), ('s066', 'fr', 'ne trouve pas')]
+## chev_gauche 7
+    [('r035', 'en', 'is out'), ('r252', 'fr', 'écrit'), ('r277', 'en', 'writes'), ('s029', 'fr', 'ne commence pas'), ('s094', 'fr', 'ne prépare pas'), ('s095', 'fr', 'ne écoute pas')]
+  ```
+

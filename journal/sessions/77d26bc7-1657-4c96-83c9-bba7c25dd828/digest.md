@@ -1261,3 +1261,286 @@ CAS = [
 … [5453 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/drave.py evaluer --json > /tmp/reaudit_evaluer.json; echo rc=$?; python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit_evaluer.json'))\nm=d['heuristique']\nprint('POS',m['pos']['exactitude'],'ferme' … [453 caractères tronqués]`
+
+  ```
+rc=0
+POS 0.8625 ferme 0.9373 ouvert 0.7918
+F1 0.7533 tete 0.864
+att {"cibles": 239, "labels": 237, "top1": 236, "topk": 235, "exact": 236, "top1_taux": 0.9874, "topk_taux": 0.9833, "exact_taux": 0.9874, "exact_any": 236, "exact_any_taux_span": 0.9958, "top1_taux_span": 0.9958, "topk_taux_span": 0.9916, "topk_exact": 235, "topk_exact_taux": 0.9833, "topk_exact_taux_span": 0.9916, "exact_taux_span": 0.9958, "verbe": {"cibles": 158, "justes": 158, "taux": 1.0}, "nom": {"cibles": 79, "justes": 78, "taux": 0.9873}, "couverture": 0.9916, "par_langue": {"fr": {"cibles": 151, "labels": 151, "exact": 150, "topk": 149, "exact_taux_span": 0.9934}, "en": {"cibles": 88, "labels": 86, "exact": 86, "topk": 86, "exact_taux_span": 1.0}}}
+lineaire F1 0.8104 cov 0.9331
+prag {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}
+gold {'nom': 'vivant (hand + reel + synthétique)', 'gele': False, 'phrases': 612, 'tokens': 3179, 'cibles_attachement': 239}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import fastjsonschema; print('fastjsonschema',fastjsonschema.__version__)\" 2>&1; python3 -c \"import jsonschema; print('jsonschema',jsonschema.__version__)\" 2>&1 | head -2; python3 tools/verifier_schema_produit.py; ech … [87 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import fastjsonschema; print('fastjsonschema',fastjsonschema.__version__)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'fastjsonschema' has no attribute '__version__'
+<string>:1: DeprecationWarning: Accessing jsonschema.__version__ is deprecated and will be removed in a future release. Use importlib.metadata directly to query for jsonschema's version.
+jsonschema 4.26.0
+  ✅ fr
+  ✅ en
+  ✅ vide
+  ✅ ponctuation
+  ✅ long
+  ✅ validateur JSON Schema · 5 cas
+verifier rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/reaudit_evaluer.json'))\nprint(json.dumps(d['heuristique']['syntagme'],ensure_ascii=False,indent=1))\nEOF\ngit show HEAD:tools/bloc_linguistique.py | sha256sum; sha256sum tools/b … [181 caractères tronqués]`
+
+  ```
+{
+ "precision": 0.7239,
+ "rappel": 0.7853,
+ "f1": 0.7533,
+ "tp": 1463,
+ "fp": 558,
+ "fn": 400,
+ "tete": {
+  "precision": 0.8519,
+  "rappel": 0.8765,
+  "f1": 0.864,
+  "tp": 1633,
+  "fp": 284,
+  "fn": 230
+ }
+}
+858197f736d758be2ca97e1ccd71a5045fd47d19d31c50afaf13fd669893b47f  -
+858197f736d758be2ca97e1ccd71a5045fd47d19d31c50afaf13fd669893b47f  tools/bloc_linguistique.py
+88ce03da9d9e11e48bc352083aaa94dd492b80798ef31268a1219689a78d463c  -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"document\"' tools/bloc_linguistique.py | head -10 && sed -n '/# 7\\. document/,/return Annotation/p' tools/bloc_linguistique.py | head -60 && grep -n \"60\" tools/bloc_linguistique.py | grep -i \"titre\\|document\\|trunc\\ … [74 caractères tronqués]`
+
+  ```
+51:           "pragmatique", "document")
+1624:            etiquettes.append(Etiquette("document", "titre" if titre else "paragraphe",
+2356:             "discours": "type", "document": "type"}
+2399:    "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
+1625:                                        p.strip()[:60], d, f, self.nom, 0.7,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport subprocess,sys,json,time\ntexts=[\"\", \"   \", \"...\", \"🚀\", \"a\", \"-3 degrés\"]\nfor t in texts:\n    p=subprocess.run([sys.executable,'tools/drave.py','analyser','--json','--',t],capture_output=True,t … [192 caractères tronqués]`
+
+  ```
+'' rc 3 out 330 err  json? {
+'   ' rc 3 out 333 err  json? {
+'...' rc 3 out 333 err  json? {
+'🚀' rc 3 out 331 err  json? {
+'a' rc 0 out 2686 err  json? {
+'-3 degrés' rc 0 out 4086 err  json? {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1580,1675p tools/bloc_linguistique.py", "description": "Lire la génération des documents et titres"}`
+
+  ```
+prec = None
+            for s in simples:
+                if (s["type"], s["debut"], s["fin"]) in deja:
+                    prec = s
+                    continue
+                meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
+                cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
+                cible = self._cible_hors_span(texte, s, gvs_u, cible)
+                cible = self._repli_verbe_propre(texte, s, cible)
+                if cible:
+                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
+                                            s["fin"], self.nom, 0.30,
+                                            candidats=([s["type"]]
+                                                       + self._candidats_precedent(texte, s, prec)
+                                                       + self._verbes_proches(
+                                                   
+… [4019 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'Etiquette(\"phrase\"\\|Etiquette(\"pragmatique\"' tools/bloc_linguistique.py | head -20 && sed -n 1440,1490p tools/bloc_linguistique.py", "description": "Lire l'émission des phrases et actes"}`
+
+  ```
+1461:            etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,
+1464:                etiquettes.append(Etiquette("phrase", "négation", "oui", d, f, self.nom, 0.65,
+1467:                etiquettes.append(Etiquette("phrase", "modalité", "oui", d, f, self.nom, 0.55,
+1473:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.45,
+1478:                etiquettes.append(Etiquette("pragmatique", "double_sens", "candidat", d, f,
+1628:            etiquettes.append(Etiquette("pragmatique", "contexte", contexte[:200], 0, len(texte),
+1700:            etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.9,
+1704:            etiquettes.append(Etiquette("pragmatique", "acte", acte, d, f, self.nom, 0.8,
+2186:            etiquettes = [Etiquette("pragmatique", "acte", acte, 0, n, self.nom,
+2189:                etiquettes.append(Etiquette("phrase", "négation", "", 0, n, self.nom,
+2192:                etiquettes.append(Etiquette("phrase", "modalité", "", 0, n, self.nom,
+2195:                etiquettes.append(Etiquette("pragmatique", "double_sens", "", 0, n, self.nom,
+                if (_normaliser(_av.valeur) in _cop_fr
+        
+… [3428 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,120p tools/porte-produit.sh", "description": "Lire la porte produit pour les contrôles existants"}`
+
+  ```
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit ✅ "analyser $langue : JSON valide, étiquettes et syntagmes"
+  else
+    dit ❌ "analyser $langue : JSON invalide 
+… [2116 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,240p tools/tests/test_produit_libre.py", "description": "Lire le test des 50 textes libres"}`
+
+  ```
+#!/usr/bin/env python3
+"""test_produit_libre.py — non-régression sur les **50 textes libres** de l'audit A26.
+
+Ce que le test fige :
+- la vue **`filtrer`** ne produit **aucun** chevauchement de syntagmes (0/50) ;
+- la vue **`alternative`** (défaut) documente les chevauchements dans `meta.alternative` ;
+- les **5 textes non linguistiques** (emoji, vide, espaces, ponctuation, nombre nu) n'ont
+  **aucun** syntagme ;
+- l'analyse est **déterministe** (deux passes identiques).
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+import sys
+import unittest
+
+RACINE = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RACINE))
+
+BANC = RACINE / "reports" / "pensee-fiabilite-produit.json"
+NON_LINGUISTIQUES = {"f14", "f15", "f16", "f17", "f18"}
+
+
+def _textes() -> list[tuple[str, str]]:
+    donnees = json.loads(BANC.read_text(encoding="utf-8"))
+    return [(item["id"], item["texte"]) for item in donnees["banc_50"]["resultats"]]
+
+
+def _segments(annotation) -> list:
+    return [e for e in annotation.etiquettes if e.niveau == "syntagme"]
+
+
+def _chevauchements(segments: list) -> int:
+    return sum(1 for i, a in enumerate(segments) for b in segments[i + 1:]
+           
+… [1439 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _expliciter_partition\" tools/bloc_linguistique.py && sed -n '/def _expliciter_partition/,/^def /p' tools/bloc_linguistique.py | head -80", "description": "Lire la partition étiquetée"}`
+
+  ```
+2262:def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> None:
+def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> None:
+    """Documente (et, si `filtrer`, linéarise) les chevauchements de syntagmes.
+
+    `meta.partition` porte le groupe, le rang et la vue ; `meta.alternative` porte les
+    autres segments du groupe, leur relation vue du porteur et, en mode `filtrer`, le
+    drapeau `retire`. Aucun segment n'est supprimé en mode `alternative`.
+
+    `filtrer="union"` : on retire le S qui **contient** un segment chunker (le filtre
+    union du P0-3) ; les autres chevauchements restent documentés. `filtrer="strict"` :
+    le chunker est la partition — **tous** les segments `union` sont conservés, et tous
+    les S qui les chevauchent sont retirés. Dans les deux cas, le retiré reste lisible
+    dans `meta.alternative` du segment conservé, avec `retire: true`.
+    """
+    segs = [e for e in etiquettes if e.niveau == "syntagme"]
+    groupes = _groupes_partition(segs)
+    rangs: dict[int, tuple[int, int]] = {}
+    for gid, groupe in enumerate(groupes):
+        for i, e in enumerate(sorted(groupe, key=_cle_preferee)):
+            rangs[id(
+… [3019 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction du harnais de rejeu dans /tmp (lecture seule du dépôt)
+
+- **write** `{"file_path": "/tmp/reaudit/explorer.py", "content": "#!/usr/bin/env python3\n\"\"\"Exploration rapide des 50 textes via l'API (pas la CLI).\"\"\"\nimport json, sys, time, collections\n\nRACINE = \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet\"\nsys.path.insert(0, RACINE)\nsys.path.insert(0, RACI … [2353 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/explorer.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 /tmp/reaudit/explorer.py 2>&1 | head -110", "description": "Explorer les métriques des 50 textes"}`
+
+  ```
+== alternative
+textes avec chevauchement 26 / 50
+  alt: 226
+  cibles: 321
+  documents: 49
+  labels: 4833
+  non_surface: 245
+  paires: 149
+  phrases: 67
+  sans_cible: 87
+  syntagmes: 408
+  tokens_mot: 766
+  tokens_nombre: 45
+  tokens_ponctuation: 257
+  union: 129
+  unites: 407
+== filtrer
+textes avec chevauchement 0 / 50
+  alt: 128
+  cibles: 236
+  documents: 49
+  labels: 4735
+  non_surface: 245
+  paires: 0
+  phrases: 67
+  sans_cible: 74
+  syntagmes: 310
+  tokens_mot: 766
+  tokens_nombre: 45
+  tokens_ponctuation: 257
+  union: 129
+  unites: 407
+
+Détail alternative:
+f02 2 [('GN', 0, 7, 'Le chat'), ('GP', 8, 21, 'de la voisine'), ('REL', 22, 42, 'qui dort sur le toit'), ('REL', 22, 54, 'qui dort sur le toit se réveil'), ('GV', 43, 54, 'se réveille')]
+f03 3 [('GV', 0, 7, 'Bonjour'), ('GN', 10, 17, 'Comment'), ('GV', 10, 28, 'Comment allez-vous'), ('GV', 18, 40, "allez-vous aujourd'hui"), ('GP', 29, 40, "aujourd'hui")]
+f05 1 [('GV', 0, 13, 'Ne touche pas'), ('GP', 14, 18, 'à ça'), ('GN', 16, 18, 'ça')]
+f06 6 [('GN', 0, 2, 'Je'), ('GV', 0, 15, 'Je ne pense pas'), ('GV', 3, 15, 'ne pense pas'), ('SUB', 16, 29, "qu'il viendra"), ('SUB', 16, 36, "qu'il viendra demain"), ('GP', 30, 36, 'demain'
+… [4828 caractères tronqués]
+  ```
+

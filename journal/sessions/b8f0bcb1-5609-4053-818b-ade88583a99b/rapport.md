@@ -7,12 +7,12 @@
 | Identifiant | `b8f0bcb1-5609-4053-818b-ade88583a99b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 30 |
-| Appels d'outils | 32 |
+| Messages | 35 |
+| Appels d'outils | 37 |
 | Fichiers touchés | 0 |
-| Commandes | 24 |
+| Commandes | 29 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans resta … [2125 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*37 appels d'outils.* Actions notables :
 
 - bash — Check branch and workspace state
 - bash — List reports and linguistic test tools
@@ -41,11 +41,11 @@
 - bash — Inspect prior measurement JSON
 - bash — Measure baseline F1 on all/dev/test
 - bash — Measure baseline F1 on all/dev/test (typo fix)
-- … et 10 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
-⏵ Classification mesurée des 322 FP / 180 FN de GV
+⏵ Classification des 180 GV manquants
 
 ## 3. Travail accompli
 
@@ -80,6 +80,11 @@
 - **T1** Print first 45 GV false positives with context
 - **T1** Compare chunker and S generator segmentations
 - **T1** Classify 322 GV FPs
+- **T1** Classify 322 GV FPs (fixed)
+- **T1** Read module header and RACINE
+- **T1** List RACINE uses
+- **T1** Classify 180 GV false negatives
+- **T1** Full FN classification with side split
 
 ## 5. Erreurs rencontrées
 
