@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.0 h |
+| Durée | 151.1 h |
 | Tours | 185 |
-| Messages | 3411 |
-| Appels d'outils | 3027 |
+| Messages | 3412 |
+| Appels d'outils | 3028 |
 | Fichiers touchés | 25 |
-| Commandes | 2522 |
+| Commandes | 2523 |
 | Sous-agents | 38 |
-| Commits | 405 |
+| Commits | 406 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9974,7 +9974,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 185 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Test du stdout ASCII
 - bash — Réparer et tester
@@ -9989,10 +9989,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Recaler 18 portes
 - bash — Fiche r264
 - bash — Committer r264
+- bash — Consolidation finale
 
 **Synthèse produite :**
 
-⏵ **183/183** à couverture 0,9916 : fiche et commit du `r264`
+⏵ Consolidation finale de la nuit avec les chiffres à jour
 
 ## 3. Travail accompli
 
@@ -10109,7 +10110,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2482 autres
+- … et 2483 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10662,4 +10663,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 %" -- reports/rapport-pos-ponctuation.md docs/pilotag
 - PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS" -- tools/tests/test_produit.py docs/produit/README.md docs/pilotage/en-cours.md 2>
 - B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183" -- tools/bloc_linguistique.py 
+- ROADMAP ET JOURNAL — LA NUIT FINIT À 236/237, COUVERTURE 0,9916, POS 86,25 %, 2 SPANS ; r264 RÉGLÉ" -- docs/pilotage/roadmap.md journal/2026-11-06/README.md doc
 

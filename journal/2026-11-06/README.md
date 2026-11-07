@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**87 commits** · **16 session(s)** · **8 thème(s)**
+**88 commits** · **16 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 23 | [distribue.md](distribue.md) |
 | docs | 20 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 21 | [mesures.md](mesures.md) |
+| mesures | 22 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -37,7 +37,7 @@
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
 | `cdc16e57-4a69-4890-8b3c-270539c64ff2` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 151.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 151.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 | `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.3 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
 
@@ -132,6 +132,7 @@
 | 23:23 | `c43dd5cc` | B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183 |
 | 23:26 | `ba42d4cc` | FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 % |
 | 23:33 | `081aa7e8` | PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS |
+| 23:42 | `5d2fa775` | B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -189,4 +190,8 @@ RoPE comme absolus — bug signalé), **S** (`/paragraphes` fini 19/19, 11 verdi
 corpus différents, +6,35 sur 432), **A** (A6.2 libre — le MoE local existe ; seuls A3.4 et A5.4
 bloqués). Côté produit, la **ponctuation** a une POS (85,75 %) et un **R4-fr filtré** (85,84 %) ;
 le miroir passe de 0,196 à 0,2276.
+**Le dernier span réglé (23 h 30 → 23 h 45).** `r264` : le GV testait `endswith("qu")` sur le
+token entier (`qu'il`) au lieu du radical (`qu`) — la SUB n'était produite qu'au span court de S.
+Corrigé : **236/237**, couverture **0,9916**, F1 **0,6519**, **2 spans** restants (`r035`, `g017`).
+La nuit finit sur **POS 86,25 %**, +10,4 points depuis le matin.
 <!-- /notes -->

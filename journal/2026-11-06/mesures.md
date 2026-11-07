@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (21)
+## Commits du jour (22)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -29,10 +29,11 @@
 | 23:05 | `6b976cb1` | B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+15) |
 | 23:23 | `c43dd5cc` | B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+14) |
 | 23:26 | `ba42d4cc` | FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 % | `en-cours.md`, `README.md`, `distribue.md` (+13) |
+| 23:42 | `5d2fa775` | B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+17) |
 
 ## Chiffres du jour
 
-`86,25 %` · `85,84 %` · `85,75 %` · `0,196` · `0,2276` · `0,6482` · `85,00 %` · `0,047` · `84,96 %` · `0,8383` · `0,9874` · `1,0000`
+`0,9874` · `0,9916` · `0,6519` · `86,25 %` · `85,84 %` · `85,75 %` · `0,196` · `0,2276` · `0,6482` · `85,00 %` · `0,047` · `84,96 %`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -51,7 +52,7 @@
 - `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 0.6 h) → [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md)
 - `bf49d867-4b23-49e1-b214-9a2fd542fb1b` — Tu travailles dans le dépôt (début 2026-11-06 11:17, 1.8 h) → [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md)
 - `cdc16e57-4a69-4890-8b3c-270539c64ff2` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.5 h) → [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 151.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 151.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 - `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.3 h) → [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md)
 - `eedb7a58-2a33-4caa-8509-f46d9e328080` — Tu travailles dans le dépôt (début 2026-11-06 18:33, 2.3 h) → [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md)
 
@@ -81,6 +82,7 @@
 - [reports/rapport-pos-r4-integre.md](../../reports/rapport-pos-r4-integre.md)
 - [reports/rapport-pos-r4.md](../../reports/rapport-pos-r4.md)
 - [reports/rapport-produit-v0.md](../../reports/rapport-produit-v0.md)
+- [reports/rapport-r264-elision.md](../../reports/rapport-r264-elision.md)
 - [reports/rapport-re-test-produit.md](../../reports/rapport-re-test-produit.md)
 
 <!-- notes -->

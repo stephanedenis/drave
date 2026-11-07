@@ -57730,3 +57730,20 @@ README + état
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1134 caractères tronqués]`
+
+  ```
+703 796
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-r264-elision.md
+COMMIT OK 1
+5d2fa775 B13 — r264 RÉGLÉ : LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (RADICAL qu), EXACT 236/237, COUVERTURE 0,9874 → 0,9916, F1 0,6519 ; 183/183
+   081aa7e8..5d2fa775  s/v7 -> s/v7
+   081aa7e8..5d2fa775  master -> master
+ven 06 nov 2026 23:44:56 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation finale de la nuit avec les chiffres à jour
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"**État au 06/11 23 h 10.\")), None)\nif ligne:\n    t=t.replace(ligne, \"**É … [2171 caractères tronqués]`
