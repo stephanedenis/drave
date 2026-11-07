@@ -157,7 +157,7 @@ def formater_annotation(a: bl.Annotation) -> str:
 
 
 def cmd_analyser(args: argparse.Namespace) -> int:
-    annotation = bl.Heuristique().analyser(args.texte, args.langue)
+    annotation = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue)
     if annotation.refus:
         # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
         if args.json:
@@ -272,8 +272,8 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
 
 
 def cmd_rejouer(args: argparse.Namespace) -> int:
-    premiere = bl.Heuristique().analyser(args.texte, args.langue)
-    seconde = bl.Heuristique().analyser(args.texte, args.langue)
+    premiere = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue)
+    seconde = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue)
     if premiere.refus or seconde.refus:
         refus = premiere.refus or seconde.refus
         print(f"{NOM}: refus d'analyse : {refus} "
@@ -318,6 +318,7 @@ class _Parseur(argparse.ArgumentParser):
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
         "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) · 1 erreur.\n"
+        "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer.\n"
         "Limites : heuristique CPU, hors ligne, déterministe ; ni neuronal, ni restitution, "
         "ni traduction.\n"
         "Exemples :\n"
@@ -343,6 +344,9 @@ def construire_parseur() -> argparse.ArgumentParser:
         formatter_class=_Formateur,
     )
     analyser.add_argument("texte", metavar="TEXTE", help="texte à analyser (entre guillemets)")
+    analyser.add_argument("--partition", choices=("brut", "alternative", "filtrer_union", "filtrer"),
+                          default="alternative",
+                          help="la vue des syntagmes qui se chevauchent (défaut : alternative)")
     analyser.add_argument("--langue", choices=("fr", "en"), default=None,
                           help="indice de langue (fr/en) ; sans lui, le bloc détecte")
     analyser.add_argument("--json", action="store_true",
@@ -372,6 +376,8 @@ def construire_parseur() -> argparse.ArgumentParser:
         formatter_class=_Formateur,
     )
     rejouer.add_argument("texte", metavar="TEXTE", help="texte à rejouer (entre guillemets)")
+    rejouer.add_argument("--partition", choices=("brut", "alternative", "filtrer_union", "filtrer"),
+                         default="alternative")
     rejouer.add_argument("--langue", choices=("fr", "en"), default=None,
                          help="indice de langue (fr/en) ; sans lui, le bloc détecte")
     rejouer.set_defaults(fonction=cmd_rejouer)

@@ -134,6 +134,17 @@ de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. 
 le gold gelé 602 (F1 65,03 %, POS 84,15 %). La commande sort **0** : elle ne teste pas la cascade
 (voir § 4).
 
+### 3.3 bis La vue des syntagmes qui se chevauchent
+
+```bash
+python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se réveille." --partition filtrer
+```
+
+Quatre vues (`--partition`) : `alternative` (défaut : les deux segments restent, `meta.alternative`
+dit lequel est préféré — **aucune perte**), `filtrer` (vue linéaire : **F1 +0,047** mais **18
+attachements en moins**), `filtrer_union` (variante économique, 91 paires résiduelles) et `brut`
+(l'ancienne sortie). Le défaut est `alternative`.
+
 ### 3.4 Rejouer et vérifier le déterminisme
 
 ```bash

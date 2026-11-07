@@ -126,5 +126,26 @@ class TestRobustesse(unittest.TestCase):
             self.assertEqual(a.etiquettes, [])
 
 
+
+class TestPartition(unittest.TestCase):
+    """La vue des syntagmes est un choix explicite (`--partition`)."""
+
+    def test_filtrer_donne_une_vue_lineaire(self):
+        sortie = drave("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+                      "--partition", "filtrer", "--json")
+        self.assertEqual(sortie.returncode, 0, sortie.stderr[:300])
+        segs = [e for e in json.loads(sortie.stdout)["etiquettes"] if e["niveau"] == "syntagme"]
+        self.assertTrue(segs)
+        for a, b in zip(segs, segs[1:]):
+            self.assertTrue(a["fin"] <= b["debut"], (a, b))
+
+    def test_alternative_etiquette_les_chevauchements(self):
+        sortie = drave("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+                      "--json")
+        self.assertEqual(sortie.returncode, 0, sortie.stderr[:300])
+        segs = [e for e in json.loads(sortie.stdout)["etiquettes"] if e["niveau"] == "syntagme"]
+        self.assertTrue(any("alternative" in (e.get("meta") or {}) for e in segs))
+
+
 if __name__ == "__main__":
     unittest.main()

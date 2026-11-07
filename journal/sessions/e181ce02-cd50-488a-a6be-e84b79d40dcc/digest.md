@@ -55569,3 +55569,159 @@ POS 0.85 | F1 0.6482 | exact 235 / 236
 ⏵ Prochaine tâche autonome : **T04** (la fusion par niveau refuse `r353`)
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183\" -- … [856 caractères tronqués]`
+
+  ```
+create mode 100644 journal/2026-11-06/memoire.md
+no changes added to commit (use "git add" and/or "git commit -a")
+[still running after 400000ms; moved to background job bash-3856]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-3856", "timeout_ms": 300000, "wait": true}`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+phrase r353 : Le professeur parle ; les élèves l'écoutent.
+heur refus= '' | étiquettes 42
+par_niveau refus= '' | étiquettes 41
+cascade refus= '' | étiquettes 43
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -3 --format='%h %s' | cut -c1-110; git status --porcelain tools/bloc_linguistique.py journal/2026-11-06/memoire.md | head -3; grep -n \"qu'e\\\" in\\|_n_elic_e\" tools/bloc_linguistique.py | head -2", "description": "Vérifier … [13 caractères tronqués]`
+
+  ```
+6a1148c2 B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/18
+4e6de0ee P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET
+97f41554 B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES
+D  journal/2026-11-06/memoire.md
+?? journal/2026-11-06/memoire.md
+1144:            _n_elic_e = (_n_elic + "e") if _n_elic.endswith("qu") else _n_elic
+1146:                                 or _n_elic_e in RELATIFS or _n_elic_e in SUBORDONNANTS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; timeout 120 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nfrom tools.tests.linguist … [327 caractères tronqués]`
+
+  ```
+4e6de0ee..6a1148c2  s/v7 -> s/v7
+   4e6de0ee..6a1148c2  master -> master
+Counter({'NUM_gold': 2})
+  ```
+
+### 🤖 Assistant
+
+⏵ Je expose `--partition` dans la CLI (le contrat, pas seulement l'API)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument.*langue\\|def cmd_analyser\" tools/drave.py | head -4; sed -n \"$(grep -n 'def cmd_analyser' tools/drave.py | cut -d: -f1),+4p\" tools/drave.py", "description": "Voir l'argument langue"}`
+
+  ```
+159:def cmd_analyser(args: argparse.Namespace) -> int:
+346:    analyser.add_argument("--langue", choices=("fr", "en"), default=None,
+375:    rejouer.add_argument("--langue", choices=("fr", "en"), default=None,
+def cmd_analyser(args: argparse.Namespace) -> int:
+    annotation = bl.Heuristique().analyser(args.texte, args.langue)
+    if annotation.refus:
+        # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
+        if args.json:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('    annotation = bl.Heuristique().analyser(args.texte, args.langue)',\n            '    annotation = bl.Heuristique(partition=args.part … [1633 caractères tronqués]`
+
+  ```
+--partition exposé
+syntaxe OK
+filter: syntagmes 3
+alternative: syntagmes 5 | avec meta.alternative 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# rejouer : passer --partition aux deux analyses\nt=t.replace('    premiere = bl.Heuristique().analyser(args.texte, args.langue)',\n            '    … [2411 caractères tronqués]`
+
+  ```
+rejouer --partition
+2 tests partition
+Ran 8 tests in 1.582s
+
+OK
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Test\\|if __name__\" tools/tests/test_produit.py; tail -5 tools/tests/test_produit.py", "description": "Voir la structure du test"}`
+
+  ```
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+129:if __name__ == "__main__":
+132:class TestPartition(unittest.TestCase):
+152:if __name__ == "__main__":
+        self.assertTrue(any("alternative" in (e.get("meta") or {}) for e in segs))
+
+
+if __name__ == "__main__":
+    unittest.main()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\n# supprimer le premier bloc if __name__ (ligne 129-130)\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main(verbosity=2)\n\ … [277 caractères tronqués]`
+
+  ```
+bloc intermédiaire retiré
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+129:if __name__ == "__main__":
+132:class TestPartition(unittest.TestCase):
+152:if __name__ == "__main__":
+Ran 8 tests in 1.470s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); lignes=p.read_text().splitlines(keepends=True)\nsortie=[]; i=0\nwhile i < len(lignes):\n    if lignes[i].startswith('if __name__'):\n        # garder se … [567 caractères tronqués]`
+
+  ```
+nettoyé
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+130:class TestPartition(unittest.TestCase):
+150:if __name__ == "__main__":
+Ran 10 tests in 1.543s
+
+FAILED (errors=2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_produit.py 2>&1 | grep -A 4 \"ERROR\" | head -14", "description": "Voir les erreurs"}`
+
+  ```
+ERROR: test_alternative_etiquette_les_chevauchements (__main__.TestPartition.test_alternative_etiquette_les_chevauchements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py", line 143, in test_alternative_etiquette_les_chevauchements
+    sortie = _cli("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+--
+ERROR: test_filtrer_donne_une_vue_lineaire (__main__.TestPartition.test_filtrer_donne_une_vue_lineaire)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_produit.py", line 134, in test_filtrer_donne_une_vue_lineaire
+    sortie = _cli("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_cli\\|def drave\\|^def \" tools/tests/test_produit.py | head -6; timeout 300 python3 tools/tests/test_produit.py 2>&1 | grep -B1 \"NameError\" | head -3", "description": "Voir les helpers du test"}`
+
+  ```
+20:def drave(*arguments: str) -> subprocess.CompletedProcess[str]:
+32:def detail(resultat: subprocess.CompletedProcess[str]) -> str:
+134:        sortie = _cli("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+143:        sortie = _cli("analyser", "Le chat de la voisine qui dort sur le toit se réveille.",
+             ^^^^
+NameError: name '_cli' is not defined
+--
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('_cli(\"analyser\", \"Le chat de la voisine qui dort sur le toit se réveille.\",',\n            'drave(\"analyser\", \"Le c … [205 caractères tronqués]`
+
+  ```
+helper corrigé
+Ran 10 tests in 1.821s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.4 Rejouer et vérifier le déterminisme\"\"\",\n\"\"\"### 3.3 bis La vue des syntagmes qui se chevauchent\n\n```bash\n … [1717 caractères tronqués]`
