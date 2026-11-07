@@ -54590,3 +54590,19 @@ README + état 689 782
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"[correctif de composition](rapport-composition-sans-perte.md)\",\"[correctif de composition](../reports/ra … [1374 caractères tronqués]`
+
+  ```
+lien corrigé
+     · annotation : docs/pilotage/references-non-regression.md → ../reports/rapport-composition-sans-perte.md (cassé)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/pensee-composition-sans-perte.json
+ create mode 100644 reports/rapport-composition-sans-perte.md
+COMMIT OK 1
+2b3e1796 B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183
+   e2258fb9..2b3e1796  s/v7 -> s/v7
+   e2258fb9..2b3e1796  master -> master
+ven 06 nov 2026 19:59:41 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"(../reports/rapport-composition-sans-perte.md)\",\"(../../reports/rapport-composition-sans-perte.md)\" … [904 caractères tronqués]`

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 147.3 h |
 | Tours | 184 |
-| Messages | 3205 |
-| Appels d'outils | 2835 |
+| Messages | 3206 |
+| Appels d'outils | 2836 |
 | Fichiers touchés | 25 |
-| Commandes | 2337 |
+| Commandes | 2338 |
 | Sous-agents | 34 |
-| Commits | 361 |
+| Commits | 362 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*81 appels d'outils.* Actions notables :
+*82 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 67 autres
+- … et 68 autres
 
 **Synthèse produite :**
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2297 autres
+- … et 2298 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10180,7 +10180,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-58 sorties en erreur ou divergentes. Les premières :
+59 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10561,4 +10561,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — LA MORPHOLOGIE DU 1ER GROUPE : 10 SPANS RETROUVÉS, EXACT 235/236, COUVERTURE 0,9874, 3 SPANS ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotes
 - DOC PRODUIT — LES CHIFFRES À JOUR : POS 83,83 %, F1 64,74 %, ATTACHEMENT 235/236 (98,33 %), 3 SPANS ; SORTIE D'EVALUER REJOUÉE" -- docs/produit/README.md docs/p
 - B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183" -- tools/bloc_linguistique.py tools/tes
+- DOCS — LE LIEN DE LA FICHE COMPOSITION CORRIGÉ" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 

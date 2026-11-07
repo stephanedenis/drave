@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 91 |
-| Appels d'outils | 105 |
+| Messages | 95 |
+| Appels d'outils | 109 |
 | Fichiers touchés | 5 |
-| Commandes | 95 |
+| Commandes | 99 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*105 appels d'outils.* Actions notables :
+*109 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,7 +41,7 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 91 autres
+- … et 95 autres
 
 **Synthèse produite :**
 
@@ -101,7 +101,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 55 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 

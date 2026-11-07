@@ -1880,3 +1880,11 @@ AB test 0.84 0.6552 0.9868 0.9895
 }
   ```
 
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport json\nm=json.load(open('mesures.json'))['quarante']['detail']['avant']\nprint('leading only:',[x['id'] for x in m if x['leading'] and not x['frontiere_fausse']])\nprint('false+leading:',[x['id'] for x in m if x['leading'] and x['front … [208 caractères tronqués]`
+
+  ```
+leading only: ['n01', 'n02', 'x02', 'x03', 's02', 's03']
+false+leading: ['u02', 'a01', 'a02', 'a03', 'a04', 'a05', 'a06', 'a07', 'a08', 't03', 'g01', 'g02', 'x01', 'en01', 'en02', 'en03', 'd05', 'u04']
+Counter({'négatif': 2, 'décimal': 1, 'décimal+milliers': 1, 'date': 1, 'version+IP': 1, 'URL+query': 1, 'URL+phrase': 1, 'courriel': 1, 'courriel+URL': 1, 'chemin+code': 1, 'chemin relatif': 1, 'code inline': 1, 'identifiant pointé': 1, 'abréviation M.': 1, 'abréviation Dr.': 1, 'etc. minuscule': 1, 'etc. majuscule': 1, 'abréviation cf.': 1, 'abréviation p. ex.': 1, 'initiales': 1, 'titre en fin de phrase': 1, 'titre markdown': 1, 'liste sans point': 1, 'liste avec points': 1, 'guillemets': 1, 'guillemets+question': 1, 'ellipse minuscule': 1, 'ellipse majuscule': 1, 'ponctuation répétée': 1, 'ellipse finale': 1, 'sans point final': 1, 'espaces initiaux': 1, 'anglais Dr.': 1, 'anglais e.g.': 1, 'anglais etc.': 1, 'URL entre parenthèses': 1, 'point-virgule': 1, 'date+phrase': 1, 'URL+question réelle': 1})
+  ```
+

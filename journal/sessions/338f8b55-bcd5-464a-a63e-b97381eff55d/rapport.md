@@ -7,12 +7,12 @@
 | Identifiant | `338f8b55-bcd5-464a-a63e-b97381eff55d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.4 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 62 |
-| Appels d'outils | 66 |
+| Messages | 63 |
+| Appels d'outils | 67 |
 | Fichiers touchés | 0 |
-| Commandes | 57 |
+| Commandes | 58 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux … [2002 caractères tronqués]
 
-*66 appels d'outils.* Actions notables :
+*67 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — List reports and tools
@@ -41,7 +41,7 @@
 - bash — Find producer of fiabilite JSON
 - bash — Inspect banc_50 entries
 - bash — Locate classes and attachment logic
-- … et 46 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Run variants on 50 free texts and diff
 - **T1** Print free-text change contexts
 - **T1** Compute full metrics for selected variants
-- … et 17 autres
+- … et 18 autres
 
 ## 4. Mesures et résultats marquants
 

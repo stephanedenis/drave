@@ -1552,3 +1552,32 @@ r4_bilingue+cc_core      POS 0.8534 dev 0.8526 test 0.8551 F1 0.6482 dev 0.6450 
 r4_bilingue+cc_fast      POS 0.8537 dev 0.8531 test 0.8551 F1 0.6482 dev 0.6450 test 0.6552 en 0.7295 fr 0.6059 tete 0.7673 att 235/236 couv 0.9874
   ```
 
+### 🤖 Assistant
+
+⏵ Assemblage des mesures finales dans le JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/compute_final.py <<'PY'\nimport sys, json, copy, collections, itertools\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import eva … [8416 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/pos_r4/compute_final.py", line 32, in <module>
+    CC_LARGE['add']['DET'].update("some any no every each either neither both all another other such what which whose".split())
+    ~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'DET'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/pos_r4/compute_final.py')\ns=p.read_text().replace(\"CC_LARGE['add']['DET'].update(\", \"CC_LARGE['add'].setdefault('DET',set()).update(\")\np.write_text(s)\nPY\npython3 /tmp/pos … [84 caractères tronqués]`
+
+  ```
+B13 base {'pos': 0.8383, 'ferme': 0.9133, 'ouvert': 0.7673, 'f1': 0.6181, 'prec': 0.655, 'rap': 0.5851, 'tete': 0.7511, 'att_exact': 222, 'att_labels': 222, 'att_cibles': 239, 'att_couv': 0.9289, 'att_topk': 221}
+HEAD base {'pos': 0.8383, 'ferme': 0.9133, 'ouvert': 0.7673, 'f1': 0.6474, 'prec': 0.6705, 'rap': 0.6259, 'tete': 0.7671, 'att_exact': 235, 'att_labels': 236, 'att_cibles': 239, 'att_couv': 0.9874, 'att_topk': 234}
+r4_en {'corrections': 12, 'casses': 0, 'faux_faux': 8, 'corrections_en': 12, 'corrections_fr': 0, 'corrections_dev': 9, 'corrections_test': 3, 'casses_detail': []}
+r4_fr {'corrections': 11, 'casses': 0, 'faux_faux': 9, 'corrections_en': 0, 'corrections_fr': 11, 'corrections_dev': 7, 'corrections_test': 4, 'casses_detail': []}
+r4_bilingue {'corrections': 23, 'casses': 0, 'faux_faux': 17, 'corrections_en': 12, 'corrections_fr': 11, 'corrections_dev': 16, 'corrections_test': 7, 'casses_detail': []}
+r4_bilingue_guard {'corrections': 22, 'casses': 0, 'faux_faux': 9, 'corrections_en': 12, 'corrections_fr': 10, 'corrections_dev': 16, 'corrections_test': 6, 'casses_detail': []}
+r4_en_large {'corrections': 12, 'casses': 1, 'faux_faux': 8, 'corrections_en': 12, 'correctio
+… [3129 caractères tronqués]
+  ```
+

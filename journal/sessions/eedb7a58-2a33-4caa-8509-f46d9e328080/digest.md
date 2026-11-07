@@ -2188,3 +2188,94 @@ Hunk #2 succeeded at 1326 (offset 81 lines).
 Hunk #3 succeeded at 1904 (offset 81 lines).
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show fa1b0c6e:tools/drave.py > /tmp/partition_syntagmes/drave_orig.py && python3 - <<'PY'\np='/tmp/partition_syntagmes/drave_orig.py'\ns=open(p).read()\ns=s.replace('''    annotation = bl.Heuristique().analyser(args.texte, args.l … [2396 caractères tronqués]`
+
+  ```
+0 /tmp/partition_syntagmes/drave.diff
+[stderr]
+fatal: path 'tools/drave.py' exists on disk, but not in 'fa1b0c6e'
+[Errno 2] No such file or directory: '/tmp/partition_syntagmes/drave_patche.py'diff: /tmp/partition_syntagmes/drave_patche.py: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/drave.py > /tmp/partition_syntagmes/drave_orig.py && python3 - <<'PY'\np='/tmp/partition_syntagmes/drave_orig.py'\ns=open(p).read()\ns=s.replace('''    annotation = bl.Heuristique().analyser(args.texte, args.langu … [2417 caractères tronqués]`
+
+  ```
+written 415
+compile ok
+42 /tmp/partition_syntagmes/drave.diff
+--- a/tools/drave.py
++++ b/tools/drave.py
+@@ -114,9 +114,17 @@
+         lr = max(len(r) for r in roles)
+         lignes.append("SYNTAGMES")
+         for e, valeur, role, cible, span in zip(syntagmes, valeurs, roles, cibles, spans):
++            part = (e.meta or {}).get("partition")
++            suffixe = ""
++            if part:
++                alts = (e.meta or {}).get("alternative") or []
++                retires = sum(1 for v in alts if v.get("retire"))
++                suffixe = (f"  [g{part['groupe']} r{part['rang']}/{part['membres']}"
++                           f" · alt={len(alts)}"
++                           + (f" · {retires} retiré(s)" if retires else "") + "]")
+             lignes.append(
+                 f"  {e.type:<{lt}}  {span:<{lsp}}  {valeur:<{lv}}  "
+-                f"rôle={role:<{lr}}  → {cible}"
++                f"rôle={role:<{lr}}  → {cible}{suffixe}"
+             )
+     else:
+         lignes.append("SYNTAGMES —")
+@@ -157,7 +165,7 @@
+ 
+ 
+ def cmd_analyser(args: argparse.Namespace) -> int:
+-    annotation = bl.Heuristique().analyser(args.texte, args.langue)
++    annotation = bl.Heuristique(partitio
+… [1022 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E 'meta|union|chevauche|alternative' tools/tests/linguistique/test_bloc_linguistique.py | head -40 && grep -n -E 'meta|chevauche' tools/porte-bloc-linguistique.sh 2>/dev/null | head", "description": "Check tests sensitive to … [15 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/tests/linguistique/test_bloc_linguistique.py && head -60 tools/tests/linguistique/test_bloc_linguistique.py && ls tools/porte-bloc-linguistique.sh 2>&1", "description": "Inspect bloc tests and gate"}`
+
+  ```
+191 tools/tests/linguistique/test_bloc_linguistique.py
+"""Tests du bloc linguistique — contrat, substitution, parallèle, cascade, activation."""
+import json
+import pathlib
+import stat
+import sys
+import tempfile
+import unittest
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl
+
+TEXTE = "Le chat de la voisine qui dort sur le toit se réveille. Va voir le chat !"
+
+
+class TestBlocLinguistique(unittest.TestCase):
+    def setUp(self):
+        self.h = bl.Heuristique(segmenter_s=False)
+        self.n = bl.MockNeuronal()
+
+    def test_niveaux_et_spans(self):
+        a = self.h.analyser(TEXTE, "fr")
+        niveaux = {e.niveau for e in a.etiquettes}
+        self.assertEqual(set(bl.NIVEAUX) - niveaux, set(), f"niveaux manquants : {set(bl.NIVEAUX)-niveaux}")
+        for e in a.etiquettes:
+            self.assertGreaterEqual(e.debut, 0)
+            self.assertLessEqual(e.fin, len(TEXTE))
+            self.assertLessEqual(e.debut, e.fin)
+
+    def test_langue_et_script(self):
+        for texte, langue in (("Le chat dort dans la maison.", "fr"),
+                              ("The cat sleeps in the house.", "en"),
+        
+… [1508 caractères tronqués]
+  ```
+
