@@ -7,12 +7,12 @@
 | Identifiant | `bdefb627-485e-44d1-b11c-d15dd2e6b640` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 09:56 |
-| Durée | 1.1 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 90 |
-| Appels d'outils | 145 |
+| Messages | 106 |
+| Appels d'outils | 160 |
 | Fichiers touchés | 2 |
-| Commandes | 128 |
+| Commandes | 141 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*145 appels d'outils.* Actions notables :
+*160 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -41,11 +41,37 @@
 - bash — Fichiers suivis par git
 - bash — Repère les documents clés
 - bash — Échantillon des modifications non commitées
-- … et 119 autres
+- … et 133 autres
 
 **Synthèse produite :**
 
-⏵ Rédaction du rapport d'inventaire
+⏵ Inventaire terminé, livrables écrits et contrôlés
+
+**Deux fichiers neufs, aucun commit** : `Qtrinet/reports/rapport-inventaire-panini.md` (5 560 mots) et `Qtrinet/reports/pensee-inventaire-panini.json` (version machine). Aucun fichier de code, de doc ou de configuration Panini modifié.
+
+⚠️ **Un seul effet de bord, à ne pas corriger à l'aveugle** : mon `sqlite3` de lecture a checkpointé le WAL de `Panini/research/data/mass_ingestion/corpus_expansion.db` (4 096 → 57 344 octets, 381 lignes intactes). Le fichier est désormais `M`. **Ne pas le restaurer par `git checkout`** : les lignes qui n'existaient que dans le WAL seraient perdues.
+
+\## État des 14 dépôts
+
+| | Verdict |
+|---|---|
+| **Panini** (hôte) | main, `9b80c32`, 22/10/2026, **34 G**, non propre (16 M / 7 ??) — `CONTEXTE-IA.md`, `PHILOSOPHIE.md` et `docs/ouvrage/` **non committés** |
+| **Panini-Research** | HEAD détachée, `e10d695`, **25/10/2026**, 25 G, 182 194 l. Python — **le seul dépôt vivant** ; 37 M + 545 971 fichiers non suivis |
+| **Panini-FS** | master, `b90d3bd` (13/04/2026) mais origin/master à `9588bd5` (08/09/2026, **+140 commits**) : clone gelé ; ligne divergente 7 dhātu/34 atomes |
+| **7 échafaudages** | SemanticCore, AttributionRegistry, AutonomousMissions, CloudOrchestrator, DatasetsIngestion, PublicationEngine, UltraReactive : LICENSE + README de 1-4 lignes |
+| **4 outillages** | CoLabController (doc seule), CopilotageShared (règles), SpecKit (templates), ExecutionOrchestrator (seul squelette exécutable) |
+
+Piège majeur : **les pins de sous-modules (08/09/2026) sont plus récents que les clones standalone** — lire `../Panini-FS` donne un état vieux de sept mois.
+
+\## Les 7 axes
+Noyau formel J4 (**actif**) · NIPADA (**code actif, produit bloqué**) · linguistique (actif) · corpus (actif mais non consolidé) · philosophie (actif) · **Drave (déclaré, non instrumenté)** · infrastructure (arrêté).
+
+\## Les 14 atomes (V14)
+Source : `hardware_mapping.py` ; sémantique : `GRILLE_ABLATION_V14`. ÊTRE∃2 · DIFFÉRENCE∆3 · RAPPORT∼5 · ORIENTATION↗7 · SUJET⊙11 · TEMPS⧖13 · MODALITÉ◇17 · NOMBRE№19 · ESPACE⊕23 · OPÉRATION⊗29 · FONCTIONλ31 · STRUCTURE⊞37 · SYMÉTRIE≍41 · ÉQUATION≡43. **Utilisables par Drave** : oui en JSON plat (44 œuvres × 14 flottants), API `/decompose` à tester.
+
+\## Les corpus
+UDHR **532 langues** (art. 1, **même source XML** que les 456 langues × 30 articles déjà chez Drave) · §334 : 114 textes / 655 paires (axe **tradition**, pas langue) · Gutenberg 1 943 téléchargés (332 fichiers, 271
+… [854 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +124,7 @@
 - **T1** Données généalogiques Panini
 - **T1** Rapports NIPADA
 - **T1** Synthèse du pipeline sémantique
-- … et 88 autres
+- … et 101 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -190,6 +216,8 @@
 - **T1** `194:**Chiffres publiés.** 722 tests ; DTP 48/48 ; R² 0,909139 (655 paires, 114 textes, α = 0,67, graphe`
 - **T1** `366:| **§334 (philosophie/religion)** | 114 textes ; 102 fichiers `sources/` (9,5 Mo) | `.txt` un fichier par œuvre + signatures JSON | en, fr, de, la, gr, ar, sa, pi, zh… | `research/nipada/corpus/_c`
 - **T1** `404:2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table`
+- **T1** `368:| **§334 (philosophie/religion)** | 114 textes actifs ; 102 fichiers `sources/` (9,5 Mo) ; signatures de 44 œuvres | `.txt` un fichier par œuvre + signatures JSON | surtout **anglais** (408 paires`
+- **T1** `406:2. **Signatures 14 atomes** : **44 œuvres** × 14 flottants (somme 1), en JSON pur. Livrable : table`
 
 ## 5. Erreurs rencontrées
 

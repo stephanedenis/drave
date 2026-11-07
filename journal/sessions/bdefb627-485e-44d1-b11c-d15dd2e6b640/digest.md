@@ -3773,3 +3773,266 @@ nipada/falsification/nipada_holdout_v1.json dict 14 ['version', 'created', 'purp
 404:2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport io, json\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\n\nsubs=[\n (\"| **Signatures** | `research/nipada/falsification/analytic_sigs_v1.json` | `{œuvre: {ATOME: fréquence}} … [3627 caractères tronqués]`
+
+  ```
+JSON OK
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 16, in <module>
+AssertionError: **Ses corpus.** Le corpus §334 (114 textes : 104 traditions + 10 référ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '352,362p' reports/rapport-inventaire-panini.md | cat -A | sed -n '1,12p' | cut -c1-200", "description": "Inspecte les lignes exactes à remplacer"}`
+
+  ```
+**NO-GO**. Autrement dit : *la signature de surface capte l'M-CM-)poque, pas la filiation* M-bM-^@M-^T et leur$
+propre test de parentM-CM-) est un M-CM-)chec assumM-CM-).$
+$
+**Ses corpus.** Le corpus M-BM-'334 (114 textes : 104 traditions + 10 rM-CM-)fM-CM-)rences ; 655 paires ;$
+philosophie et religion, du brahmanisme au matM-CM-)rielisme grec) et, pour la gM-CM-)nM-CM-)alogie comparM-CM-)e,$
+l'UDHR (532 langues, mM-CM-*me article) et les 27 catalogues d'acquisition (`catalog_*_v206*.json`,$
+70 M-EM-^Suvres chacun M-bM-^IM-^H 1 890 candidats par tradition et par M-CM-)poque).$
+$
+### 3.4 Les corpus disponibles$
+$
+| Corpus | Volume | Format | Langues | OM-CM-9 | Partageable ? |$
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport io\ns=io.open('reports/rapport-inventaire-panini.md',encoding='utf-8').read()\ni=s.find('**Ses corpus.**')\nprint(repr(s[i:i+330]))\nEOF", "description": "Affiche la chaîne exacte en repr"}`
+
+  ```
+"**Ses corpus.** Le corpus §334 (114 textes : 104 traditions + 10 références ; 655 paires ;\nphilosophie et religion, du brahmanisme au matérielisme grec) et, pour la généalogie comparée,\nl'UDHR (532 langues, même article) et les 27 catalogues d'acquisition (`catalog_*_v206*.json`,\n70 œuvres chacun ≈ 1 890 candidats par tradition "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport io, json\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\nsubs=[\n (\"`{œuvre: {ATOME: fréquence}}` (somme 1) |\", \"`{œuvre: {ATOME: fréquence}}` — **44 œuvres**, somme 1 | … [2472 caractères tronqués]`
+
+  ```
+done
+JSON OK
+292:| **Signatures** | `research/nipada/falsification/analytic_sigs_v1.json` | `{œuvre: {ATOME: fréquence}}` — **44 œuvres**, somme 1 |
+360:2 fois ; les signatures V14 exportées couvrent **44 œuvres**.
+368:| **§334 (philosophie/religion)** | 114 textes actifs ; 102 fichiers `sources/` (9,5 Mo) ; signatures de 44 œuvres | `.txt` un fichier par œuvre + signatures JSON | surtout **anglais** (408 paires), 245 sans étiquette, 2 en français ; les œuvres grecques, arabes, sanskrites et chinoises sont comparées en traduction | `research/nipada/corpus/_cache/sources/`, `nipada/falsification/` | **oui** (textes du domaine public), avec la fiche `pairs334_axes_v1.json` |
+406:2. **Signatures 14 atomes** : **44 œuvres** × 14 flottants (somme 1), en JSON pur. Livrable : table
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && echo \"Panini status: $(git --no-optional-locks -C Panini status --porcelain | wc -l) (attendu 23)\"; echo \"Research status: $(git --no-optional-locks -C Panini/research status --porcelain | wc -l) (attendu 546007)\"; echo \"=== Qtrinet nou … [162 caractères tronqués]`
+
+  ```
+Panini status: 23 (attendu 23)
+Research status: 546008 (attendu 546007)
+=== Qtrinet nouveaux fichiers ===
+?? reports/pensee-inventaire-panini.json
+?? reports/rapport-inventaire-panini.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && find . -newermt '-60 minutes' -type f -not -path './.git/*' 2>/dev/null | head -20", "description": "Cherche les fichiers créés récemment", "timeoutMs": 180000}`
+
+  ```
+./data/mass_ingestion/corpus_expansion.db
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && ls -la data/mass_ingestion/corpus_expansion.db* 2>/dev/null; echo \"=== status de ce fichier ===\"; git --no-optional-locks status --porcelain data/mass_ingestion/ | head", "description": "Inspecte le fichier SQLite modifié"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 57344  7 nov 10:28 data/mass_ingestion/corpus_expansion.db
+=== status de ce fichier ===
+ M data/mass_ingestion/backlog_wikipedia_de.db
+ M data/mass_ingestion/corpus_expansion.db
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && echo \"total: $(git --no-optional-locks status --porcelain | wc -l)\"; echo \"M: $(git --no-optional-locks status --porcelain | grep -c '^ M')\"; echo \"??: $(git --no-optional-locks status --porcelain | grep -c '^??')\"", "d … [64 caractères tronqués]`
+
+  ```
+total: 546008
+M: 37
+??: 545971
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && git diff --numstat data/mass_ingestion/corpus_expansion.db; echo \"---\"; git diff --stat data/mass_ingestion/corpus_expansion.db; echo \"--- service en cours ? ---\"; ls -la nipada/encyclopedia/v2/reports/external_ingestion_ … [219 caractères tronqués]`
+
+  ```
+-	-	data/mass_ingestion/corpus_expansion.db
+---
+ data/mass_ingestion/corpus_expansion.db | Bin 4096 -> 57344 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+--- service en cours ? ---
+-rw-r--r--. 1 stephane stephane 7  7 sep 12:47 nipada/encyclopedia/v2/reports/external_ingestion_service/service.pid
+    PID CMD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport io, json\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\n\nanchor = \"7. **Le dépôt « vivant » est un sous-module en HEAD détachée**\"\nadd = \"\"\"7. **Une lecture SQLite  … [2114 caractères tronqués]`
+
+  ```
+ok
+JSON OK {'rapport': 'reports/rapport-inventaire-panini.md', 'json': 'reports/pensee-inventaire-panini.json', 'modifies_dans_panini': 1, 'commits': 0, 'modifies_dans_panini_detail': '1 fichier de donnees (corpus_expansion.db), checkpoint SQLite involontaire ; 0 fichier de code, doc ou config'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport io\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\nsubs=[\n (\"> **Lecture seule** : aucun fichier Panini modifié, aucun commit, `git status` lancé avec\\n> `--no-optional- … [858 caractères tronqués]`
+
+  ```
+ok
+
+# le corpus d'or
+python3 -c "import json,collections;d=json.load(open('Panini/research/nipada/falsification/corpus_dor_cic_v1.json'));print(len(d['entrees']), collections.Counter(e['verdict'] for e in d['entrees']))"
+
+# l'UDHR des deux côtés
+python3 -c "import json;d=json.load(open('Panini/research/data/udhr_corpus.json'));print(d['total_languages'], d['article'])"
+wc -l Qtrinet/data/udhr/langues.jsonl
+```
+
+---
+
+## 7. Annexe — les deux fichiers écrits
+
+- `Qtrinet/reports/rapport-inventaire-panini.md` (ce fichier)
+- `Qtrinet/reports/pensee-inventaire-panini.json` (version machine : dépôts, axes, atomes, corpus,
+  interfaces, maturité, actions)
+
+**Aucun commit. Aucun fichier de code, de doc ou de configuration modifié dans `Panini*`. Un seul
+fichier de données a bougé** (`research/data/mass_ingestion/corpus_expansion.db`, checkpoint SQLite
+involontaire, §5.7) — à ne pas restaurer par `git checkout`.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport io,re\nlines=io.open('reports/rapport-inventaire-panini.md',encoding='utf-8').read().split('\\n')\n# vérifie les tableaux : nb de | constant par bloc\ni=0; bad=0; tables=0\nwhile i < len(lines):\n    l=lin … [786 caractères tronqués]`
+
+  ```
+tableaux: 11 lignes incoherentes: 0
+16:## 0. Ce qu'il faut retenir
+38:## 1. État des 14 dépôts
+57:### 1.1 Deux états pour un même dépôt — le piège de lecture
+72:### 1.2 Propreté : ce que « non propre » veut dire
+85:## 2. Les dépôts, un par un
+87:### 2.1 `Panini/` — l'hôte (le plus détaillé)
+141:### 2.2 `Panini-Research/` — le laboratoire (le cœur)
+210:### 2.3 `Panini-FS/` — le FS sémantique (ligne divergente)
+237:### 2.4 Les onze modules d'infrastructure
+252:### 2.5 Deux sous-modules hors liste, à connaître
+262:## 3. Synthèse
+264:### 3.1 Les 7 axes de recherche
+283:### 3.2 Les 14 atomes sémantiques (V14)
+330:### 3.3 La généalogie des langues
+363:### 3.4 Les corpus disponibles
+388:### 3.5 Interfaces et données partageables (ce que Drave peut consommer)
+400:### 3.6 Prêt à intégrer dans la semaine vs trop immature
+431:## 4. Les trois intégrations les plus mûres
+433:### 4.1 Le corpus UDHR et la généalogie — **la plus mûre, à faire en J2**
+447:### 4.2 Les signatures 14 atomes — **la plus utile pour la table atomes ↔ niveaux**
+461:### 4.3 Le corpus d'or CIC — **la plus vérifiable**
+480:## 5. Pièges et écarts documentaires
+510:## 6. Annexe — commandes de rejeu (lecture seule)
+540:## 7. An
+… [31 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md", "limit": 45, "offset": 478}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md</path>
+<type>file</type>
+<content>
+478: ---
+479: 
+480: ## 5. Pièges et écarts documentaires
+481: 
+482: 1. **Le lien Drave du README Panini pointe vers un fichier absent** :
+483:    `Qtrinet/docs/agent/panini-nipada.md` n'existe pas (le dossier `docs/agent/` est vide) ; le
+484:    document réel est `Qtrinet/docs/methode/panini-nipada.md`. À corriger côté Panini — ou côté
+485:    Drave, en créant le chemin attendu.
+486: 2. **Les documents normatifs de l'hôte ne sont pas committés** : `CONTEXTE-IA.md`,
+487:    `PHILOSOPHIE.md`, `docs/ouvrage/` sont `??`. Un `git clean` les emporte.
+488: 3. **Deux états par dépôt** : clones standalone gelés (2025-09 → 2026-04) contre pins de
+489:    sous-modules (2026-09-08). Lire le clone donne une image fausse de `Panini-FS`.
+490: 4. **Trois vocabulaires** : 14/9 (Research) / 34/7 (Panini-FS) / 9 (docs hôte). La table J2 doit
+491:    dire « V14 de Research ».
+492: 5. **Le R² est un instrument, pas un résultat publiable** : leur propre critique du 14/07
+493:    (`CRITIQUE_NIPADA_2026-07-14.md`) note l'absence de hold-out, et le hold-out v1 (23 textes) est
+494:  
+… [1927 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport io,re,json\nfor f in ['reports/rapport-inventaire-panini.md','reports/pensee-inventaire-panini.json']:\n    s=io.open(f,encoding='utf-8').read()\n    cjk=[c for c in s if '\\u4e00'<=c<='\\u9fff']\n    prin … [505 caractères tronqués]`
+
+  ```
+reports/rapport-inventaire-panini.md lignes 548 mots 5562 CJK []
+reports/pensee-inventaire-panini.json lignes 844 mots 3797 CJK []
+clés: ['fiche', 'date', 'heure', 'branche', 'head', 'head_date', 'mission', 'verdict', 'methode', 'perimetre', 'depots', 'sous_modules_hors_liste', 'axes_recherche', 'atomes_v14', 'genealogie', 'corpus', 'interfaces', 'pret', 'immature', 'ecarts_documentaires', 'prochaines_actions', 'limites', 'fichiers', 'incident_lecture_seule']
+dépôts 14 | axes 7 | atomes 14 | corpus 9 | interfaces 7 | prêt 3 | immature 5 | intégrations 3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\nq='reports/pensee-inventaire-panini.json'\nd=json.load(open(q,encoding='utf-8'))\nd['pret'].append({\n  \"integration\": \"genealogie comparee (fusionnee avec l'UDHR dans l'integration 1)\",\n  \"pou … [867 caractères tronqués]`
+
+  ```
+pret: 4
+JSON OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-inventaire-panini.md reports/pensee-inventaire-panini.json && echo \"---\" && head -12 reports/pensee-inventaire-panini.json", "description": "Contrôle final des deux fichiers"}`
+
+  ```
+-rw-------. 1 stephane stephane 37094  7 nov 11:06 reports/pensee-inventaire-panini.json
+-rw-------. 1 stephane stephane 38331  7 nov 11:05 reports/rapport-inventaire-panini.md
+---
+{
+  "fiche": "reports/rapport-inventaire-panini.md",
+  "date": "2026-11-07",
+  "heure": "10:35 HNE",
+  "branche": "s/v7",
+  "head": "a2ad039d",
+  "head_date": "2026-11-07",
+  "mission": "Inventaire complet et date des 14 depots Panini, en lecture seule, pour preparer le chantier autonome d'une semaine d'integration avec Drave (7-14/11/2026) : etat git, role, docs cles, chantiers ouverts, portes et chiffres publies, lien Drave, donnees partageables. Deux fichiers neufs, aucun fichier Panini modifie, aucun commit.",
+  "verdict": "Un seul depot est vivant au sens fort : Panini/research (= Panini-Research, symlink), 1622 commits, dernier le 2026-10-25, 182194 lignes de Python, noyau formel + NIPADA. L'hote Panini est un conteneur de sous-modules, actif jusqu'au 2026-10-22. Sept des treize autres depots sont des echafaudages (LICENSE + README de 1 a 4 lignes + templates GitHub) ; seuls Panini-FS (Rust, 581 fichiers, ligne divergente 7 dhatu / 34 atomes), OntoWave (TS, 81 fichiers, sous-module sans clone stand
+… [713 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PYEOF'\nimport json\nq='reports/pensee-inventaire-panini.json'\nd=json.load(open(q,encoding='utf-8'))\nd['mission']=d['mission'].replace(\"Deux fichiers neufs, aucun fichier Panini modifie, aucun commit.\",\n \"Deux fich … [399 caractères tronqués]`
+
+  ```
+ok
+bles. Deux fichiers neufs, aucun commit, aucun fichier de code/doc/config modifie ; seul effet de bord, un checkpoint SQLite sur une base de corpus (documente).
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "INVENTAIRE PANINI TERMINÉ (lecture seule, 2026-11-07 11:05 HNE). Deux fichiers neufs, aucun commit :\n- Qtrinet/reports/rapport-inventaire-panini.md (5 560 mots, 11 tableaux)\n- Qtrinet/reports/pensee-inventaire-panini.json (machine :  … [4479 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire terminé, livrables écrits et contrôlés
+
+**Deux fichiers neufs, aucun commit** : `Qtrinet/reports/rapport-inventaire-panini.md` (5 560 mots) et `Qtrinet/reports/pensee-inventaire-panini.json` (version machine). Aucun fichier de code, de doc ou de configuration Panini modifié.
+
+⚠️ **Un seul effet de bord, à ne pas corriger à l'aveugle** : mon `sqlite3` de lecture a checkpointé le WAL de `Panini/research/data/mass_ingestion/corpus_expansion.db` (4 096 → 57 344 octets, 381 lignes intactes). Le fichier est désormais `M`. **Ne pas le restaurer par `git checkout`** : les lignes qui n'existaient que dans le WAL seraient perdues.
+
+## État des 14 dépôts
+
+| | Verdict |
+|---|---|
+| **Panini** (hôte) | main, `9b80c32`, 22/10/2026, **34 G**, non propre (16 M / 7 ??) — `CONTEXTE-IA.md`, `PHILOSOPHIE.md` et `docs/ouvrage/` **non committés** |
+| **Panini-Research** | HEAD détachée, `e10d695`, **25/10/2026**, 25 G, 182 194 l. Python — **le seul dépôt vivant** ; 37 M + 545 971 fichiers non suivis |
+| **Panini-FS** | master, `b90d3bd` (13/04/2026) mais origin/master à `9588bd5` (08/09/2026, **+140 commits**) : clone gelé ; ligne divergente 7 dhātu/34 atomes |
+| **7 échafaudages** | SemanticCore, AttributionRegistry, AutonomousMissions, CloudOrchestrator, DatasetsIngestion, PublicationEngine, UltraReactive : LICENSE + README de 1-4 lignes |
+| **4 outillages** | CoLabController (doc seule), CopilotageShared (règles), SpecKit (templates), ExecutionOrchestrator (seul squelette exécutable) |
+
+Piège majeur : **les pins de sous-modules (08/09/2026) sont plus récents que les clones standalone** — lire `../Panini-FS` donne un état vieux de sept mois.
+
+## Les 7 axes
+Noyau formel J4 (**actif**) · NIPADA (**code actif, produit bloqué**) · linguistique (actif) · corpus (actif mais non consolidé) · philosophie (actif) · **Drave (déclaré, non instrumenté)** · infrastructure (arrêté).
+
+## Les 14 atomes (V14)
+Source : `hardware_mapping.py` ; sémantique : `GRILLE_ABLATION_V14`. ÊTRE∃2 · DIFFÉRENCE∆3 · RAPPORT∼5 · ORIENTATION↗7 · SUJET⊙11 · TEMPS⧖13 · MODALITÉ◇17 · NOMBRE№19 · ESPACE⊕23 · OPÉRATION⊗29 · FONCTIONλ31 · STRUCTURE⊞37 · SYMÉTRIE≍41 · ÉQUATION≡43. **Utilisables par Drave** : oui en JSON plat (44 œuvres × 14 flottants), API `/decompose` à tester.
+
+## Les corpus
+UDHR **532 langues** (art. 1, **même source XML** que les 456 langues × 30 articles déjà chez Drave) · §334 : 114 textes / 655 paires (axe **tradition**, pas langue) · Gutenberg 1 943 téléchargés (332 fichiers, 271 Mo) · Wikipédia 151 191 fichiers (2,6 Go) · corpus d'or CIC : 42 verdicts portables.
+
+## Les 3 intégrations les plus mûres
+1. **Alignement UDHR + généalogie** — données déjà des deux côtés ; contrôle négatif : familles différentes vs langues sœurs.
+2. **Table atomes V14 ↔ niveaux Drave** — JSON pur, 20 exemples mesurés ; contrôle négatif : permuter les colonnes doit tuer le signal.
+3. **Vérification croisée du corpus d'or CIC** — 42 verdicts de Bruijn + sha256 ; contrôle négatif : altérer un octet → rejet.
+
+**Trop immature** : le produit NIPADA (DTP arrêté depuis juillet, 54 tests cassés — ne pas promettre de 0 % WER), le noyau comme service, les 11 modules, l'API REST.
+
+**Lien cassé à réparer** : le README Panini renvoie à `Qtrinet/docs/agent/panini-nipada.md`, qui n'existe pas ; le document réel est `Qtrinet/docs/methode/panini-nipada.md`.
+

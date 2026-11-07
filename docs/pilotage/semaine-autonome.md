@@ -39,13 +39,33 @@ vérifié** — jamais une intention.
 
 ### 2.3 Panini — l'écosystème (intégration)
 
-- **14 dépôts** (`Panini`, `Panini-Research`, `Panini-SemanticCore`, …) ; le **noyau** (CIC-lite,
-  ℝ localisé) et **NIPADA** (la couche descriptive) sont les deux niveaux.
-- **7 axes de recherche**, les **14 atomes sémantiques** (∃ ∆ ∼ ↗ ⊙ ⧖ ◇ № ⊕ ⊗ λ ⊞ ≍ ≡), les
-  **9 dhātus**, la **généalogie des langues, dialectes et styles**.
-- Leur **avertissement** (à ne jamais oublier) : la signature de surface capte **l'époque**
-  (β +0,138) bien plus que la **filiation** (β +0,049) — tout test de style contrôle la date, tout
-  test de famille contrôle la surface.
+- **14 dépôts**, inventoriés le 07/11 ([`rapport-inventaire-panini.md`](../../reports/rapport-inventaire-panini.md)) :
+  **Panini** (hôte, non propre, `research` pinné 6f8b67b alors que le checkout est e10d695),
+  **Panini-Research** (NIPADA, 182 194 l. Python, 546 k fichiers non suivis),
+  **Panini-FS** (retard de 140 commits), 7 échafaudages, et **ExecutionOrchestrator** (seul
+  squelette exécutable).
+- **7 axes** ; le noyau J4 (ℝ, CIC-lite) est **actif** ; NIPADA (produit) est **bloqué** (DTP arrêté
+  depuis le 3 juillet, 54 tests cassés) ; **l'axe 6 « Drave » est déclaré mais non instrumenté**.
+- Les **14 atomes V14** (source canonique `research/src/nipada/core/hardware_mapping.py` ;
+  ∃ ÊTRE, ∆ DIFFÉRENCE, ∼ RAPPORT, ↗ ORIENTATION, ⊙ SUJET, ⧖ TEMPS, ◇ MODALITÉ, № NOMBRE,
+  ⊕ ESPACE, ⊗ OPÉRATION, λ FONCTION, ⊞ STRUCTURE, ≍ SYMÉTRIE, ≡ ÉQUATION) et les **9 dhātus**.
+  Utilisables par Drave **en JSON plat, sans dépendance**.
+- **La généalogie** : `src/nipada/signing/language_genealogy.py` (29 langues) et l'**UDHR 532
+  langues** — la **même source XML** que Drave (456 langues avec glottocodes).
+- Leur **avertissement** (à ne jamais oublier) : β **époque +0,138** vs **filiation +0,049**
+  (R² 0,30) — la surface capte l'époque ; tout test de style contrôle la date, tout test de famille
+  contrôle la surface.
+
+**Les trois intégrations les plus mûres** (inventaire du 07/11) :
+
+| # | intégration | livrable | contrôle négatif | risque |
+|---|---|---|---|---|
+| 1 | **UDHR + généalogie** (même source XML des deux côtés) | table iso3/famille/branche + échantillon 20 langues | familles différentes = retrieval faible ; sœurs = fort | codes ISO (007/008 vs iso3) |
+| 2 | **atomes V14 ↔ niveaux** (44 œuvres × 14 flottants, JSON pur) | table + 20 exemples mesurés | permuter les colonnes doit tuer le prédictif | signature lexicale : contrôler la date |
+| 3 | **corpus d'or CIC** (42 verdicts, preuve + sha256) | vérificateur indépendant, 42/42 | altérer un octet doit être rejeté | aucun (le plus vérifiable) |
+
+**Trop immature pour la semaine** : le produit NIPADA, le noyau comme service, les 11 modules,
+Panini-FS, l'API REST.
 
 ### 2.4 La surface d'intégration
 

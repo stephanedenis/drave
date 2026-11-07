@@ -59976,3 +59976,125 @@ sam 07 nov 2026 10:58:21 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de plusieurs jours |\",\n            \"| [`methode/chan … [1360 caractères tronqués]`
+
+  ```
+· docs/README.md : 1003 mots > budget 1000 (T1)
+ 15 files changed, 139 insertions(+), 31 deletions(-)
+COMMIT OK 1
+f93ddc60 DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU
+   f1b837a3..f93ddc60  s/v7 -> s/v7
+   f1b837a3..f93ddc60  master -> master
+     · docs/README.md : 1003 mots > budget 1000 (T1)
+sam 07 nov 2026 11:01:11 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| **faire** (résultat, [porte](theorie/glossaire/entrees/porte.md), rangement, Panini, miroir, ressources) | [`methode/`](methode/) ·  … [849 caractères tronqués]`
+
+  ```
+· docs/README.md : 1003 mots > budget 1000 (T1)
+no changes added to commit (use "git add" and/or "git commit -a")
+[still running after 240000ms; moved to background job bash-4762]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4762", "timeout_ms": 300000, "wait": true}`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
+f93ddc60 DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU
+Everything up-to-date
+Everything up-to-date
+     · docs/README.md : 1003 mots > budget 1000 (T1)
+sam 07 nov 2026 11:08:37 EST
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Agent bdefb627-485e-44d1-b11c-d15dd2e6b640 sent a message: 
+INVENTAIRE PANINI TERMINÉ (lecture seule, 2026-11-07 11:05 HNE). Deux fichiers neufs, aucun commit :
+- Qtrinet/reports/rapport-inventaire-panini.md (5 560 mots, 11 tableaux)
+- Qtrinet/reports/pensee-inventaire-panini.json (machine : 14 dépôts, 7 axes, 14 atomes, 9 corpus, 7 interfaces, 4 prêts, 5 immatures, 3 intégrations)
+Aucun fichier de code/doc/config Panini modifié. UN effet de bord à connaître : mon sqlite3 de lecture a checkpointé le WAL de `Panini/research/data/mass_ingestion/corpus_expansion.db` (4 096 → 57 344 octets, `-wal` disparu, 381 lignes intactes) ; le fichier est désormais `M` dans git status. NE PAS le restaurer par `git checkout` (les lignes du WAL seraient perdues).
+
+ÉTAT DES 14 DÉPÔTS
+- Panini (hôte) : main, 9b80c32, 2026-10-22, 34 G, 4 645 fichiers, NON propre (16 M / 7 ??). Ses documents normatifs (CONTEXTE-IA.md, PHILOSOPHIE.md) et l'ouvrage docs/ouvrage/ ne sont PAS committés. research pinné 6f8b67b (19/10) alors que le checkout est e10d695 (25/10, +193 commits).
+- Panini-Research : HEAD détachée (symlink vers Panini/research), e10d695, 2026-10-25, 25 G, 74 708 suivis, 182 194 l. Python, noyau 50 124 l. NON propre : 37 M + 545 971 ?? (encyclopedia 8,1 G / 568 k fichiers ; wiki 2,6 G / 151 k).
+- Panini-FS : master local b90d3bd (2026-04-13, 332 commits) mais origin/master = 9588bd5 (2026-09-08, 472 commits) : clone en retard de 140 commits. Ligne divergente 7 dhātu / 34 atomes, arrêtée.
+- 7 échafaudages (LICENSE + README 1-4 lignes) : SemanticCore, AttributionRegistry, AutonomousMissions, CloudOrchestrator, DatasetsIngestion, PublicationEngine, UltraReactive.
+- CoLabController : README 227 l., aucun code. CopilotageShared : règles. SpecKit : templates. ExecutionOrchestrator : seul squelette exécutable (CLI + 3 drivers).
+
+7 AXES (README Panini §2) : 1 noyau formel J4 (actif) · 2 NIPADA (code actif, PRODUIT BLOQUÉ) · 3 linguistique (actif) · 4 corpus (actif mais non consolidé) · 5 philosophie (actif) · 6 Drave (déclaré, pas instrumenté) · 7 infrastructure (arrêté depuis septembre).
+
+14 ATOMES V14 : source canonique `research/src/nipada/core/hardware_mapping.py` ; sémantique dans `GRILLE_ABLATION_V14_v0.1.md` (premiers) ; lexiques 3,9 Mo ; signatures 44 œuvres ; API /decompose. ÊTRE∃2, DIFFÉRENCE∆3, RAPPORT∼5, ORIENTATION↗7, SUJET⊙11, TEMPS⧖13, MODALITÉ◇17, NOMBRE№19, ESPACE⊕23, OPÉRATION⊗29, FONCTIONλ31, STRUCTURE⊞37, SYMÉTRIE≍41, ÉQUATION≡43. Utilisables par Drave : OUI en JSON plat (aucune dépendance), API à tester. 9 dhātus : EXIST TRANS EVAL LOCATE FEEL ACT QUAL REL KNOW.
+
+GÉNÉALOGIE : `src/nipada/signing/language_genealogy.py` (LANG_TREE, 29 langues, epoch/morphologie/distance normalisée) ; UDHR 532 langues étiquetées ; côté Drave `data/udhr/genealogie.json` (456 langues, glottocodes). Leur résultat : β époque +0,138 vs filiation +0,049 (R² 0,30), H1/H2 KO — l'axe comparé du §334 est la TRADITION, pas la langue (lang_a = eng 408/655, vide 245).
+
+CORPUS : UDHR art. 1, 532 langues, 229 Ko JSON (source eric-muller/udhr, MÊME source XML que Drave qui a 456 langues × 30 articles) · §334 : 114 textes, 655 paires, 102 sources txt (9,5 Mo), signatures de 44 œuvres · Gutenberg 1 999 métadonnées/1 943 téléchargés/332 fichiers (271 Mo) SQLite+txt · Wikipédia 151 191 fichiers 2,6 Go · sacred_texts/suttacentral/MIT 36 Mo · corpus d'or CIC 42 verdicts (36 accepte/6 rejette) portable.
+
+3 INTÉGRATIONS LES PLUS MÛRES (J2-J3)
+1. Alignement UDHR + généalogie : même source XML des deux côtés, tout est sur disque. Livrable : table iso3/famille/branche + échantillon 20 langues. Contrôle négatif : familles différentes = retrieval faible, langues sœurs = fort. Risque : codes ISO (Panini utilise 007/008, Drave a normalisé iso3).
+2. Table atomes V14 ↔ niveaux Drave : 44 œuvres × 14 flottants en JSON pur. Livrable : table + 20 exemples mesurés. Contrôle négatif : permuter les colonnes doit tuer le pouvoir prédictif. Risque : signature lexicale, contrôler la date.
+3. Corpus d'or CIC (le plus vérifiable) : 42 entrées, preuve/type de Bruijn hex + sha256, doctrine « toute implémentation doit reproduire ces verdicts ». Livrable : vérificateur indépendant, 42/42. Contrôle négatif : altérer un octet doit être rejeté.
+
+TROP IMMATURE : produit NIPADA (DTP arrêté depuis le 3 juillet, 54 tests cassés, backlog P0 « À faire » — ne pas promettre 0 % WER) ; noyau comme service (lent, ℝ non clos) ; les 11 modules ; Panini-FS ; l'API REST.
+
+PIÈGE UTILE : le README Panini renvoie à `Qtrinet/docs/agent/panini-nipada.md` qui n'existe pas (le dossier docs/agent/ est vide) ; le document réel est `Qtrinet/docs/methode/panini-nipada.md`. Côté Panini, « Drave » n'apparaît nulle part ailleurs (0 occurrence dans research/).
+
+### 🤖 Assistant
+
+⏵ L'inventaire Panini est arrivé (14 dépôts, 3 intégrations mûres) : je l'intègre au plan et je commite
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-inventaire-panini.md reports/pensee-inventaire-panini.json 2>/dev/null | awk '{print $5, $9}'; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/semaine-autonome.md'); t=p.read_text()\nt=t.rep … [3115 caractères tronqués]`
+
+  ```
+37184 reports/pensee-inventaire-panini.json
+38331 reports/rapport-inventaire-panini.md
+plan enrichi
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/README.md : 1003 mots > budget 1000 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+### 👤 Utilisateur
+
+Background subagent bdefb627-485e-44d1-b11c-d15dd2e6b640 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Inventaire terminé, livrables écrits et contrôlés
+
+**Deux fichiers neufs, aucun commit** : `Qtrinet/reports/rapport-inventaire-panini.md` (5 560 mots) et `Qtrinet/reports/pensee-inventaire-panini.json` (version machine). Aucun fichier de code, de doc ou de configuration Panini modifié.
+
+⚠️ **Un seul effet de bord, à ne pas corriger à l'aveugle** : mon `sqlite3` de lecture a checkpointé le WAL de `Panini/research/data/mass_ingestion/corpus_expansion.db` (4 096 → 57 344 octets, 381 lignes intactes). Le fichier est désormais `M`. **Ne pas le restaurer par `git checkout`** : les lignes qui n'existaient que dans le WAL seraient perdues.
+
+## État des 14 dépôts
+
+| | Verdict |
+|---|---|
+| **Panini** (hôte) | main, `9b80c32`, 22/10/2026, **34 G**, non propre (16 M / 7 ??) — `CONTEXTE-IA.md`, `PHILOSOPHIE.md` et `docs/ouvrage/` **non committés** |
+| **Panini-Research** | HEAD détachée, `e10d695`, **25/10/2026**, 25 G, 182 194 l. Python — **le seul dépôt vivant** ; 37 M + 545 971 fichiers non suivis |
+| **Panini-FS** | master, `b90d3bd` (13/04/2026) mais origin/master à `9588bd5` (08/09/2026, **+140 commits**) : clone gelé ; ligne divergente 7 dhātu/34 atomes |
+| **7 échafaudages** | SemanticCore, AttributionRegistry, AutonomousMissions, CloudOrchestrator, DatasetsIngestion, PublicationEngine, UltraReactive : LICENSE + README de 1-4 lignes |
+| **4 outillages** | CoLabController (doc seule), CopilotageShared (règles), SpecKit (templates), ExecutionOrchestrator (seul squelette exécutable) |
+
+Piège majeur : **les pins de sous-modules (08/09/2026) sont plus récents que les clones standalone** — lire `../Panini-FS` donne un état vieux de sept mois.
+
+## Les 7 axes
+Noyau formel J4 (**actif**) · NIPADA (**code actif, produit bloqué**) · linguistique (actif) · corpus (actif mais non consolidé) · philosophie (actif) · **Drave (déclaré, non instrumenté)** · infrastructure (arrêté).
+
+## Les 14 atomes (V14)
+Source : `hardware_mapping.py` ; sémantique : `GRILLE_ABLATION_V14`. ÊTRE∃2 · DIFFÉRENCE∆3 · RAPPORT∼5 · ORIENTATION↗7 · SUJET⊙11 · TEMPS⧖13 · MODALITÉ◇17 · NOMBRE№19 · ESPACE⊕23 · OPÉRATION⊗29 · FONCTIONλ31 · STRUCTURE⊞37 · SYMÉTRIE≍41 · ÉQUATION≡43. **Utilisables par Drave** : oui en JSON plat (44 œuvres × 14 flottants), API `/decompose` à tester.
+
+## Les corpus
+UDHR **532 langues** (art. 1, **même source XML** que les 456 langues × 30 articles déjà chez Drave) · §334 : 114 textes / 655 paires (axe **tradition**, pas langue) · Gutenberg 1 943 téléchargés (332 fichiers, 271 Mo) · Wikipédia 151 191 fichiers (2,6 Go) · corpus d'or CIC : 42 verdicts portables.
+
+## Les 3 intégrations les plus mûres
+1. **Alignement UDHR + généalogie** — données déjà des deux côtés ; contrôle négatif : familles différentes vs langues sœurs.
+2. **Table atomes V14 ↔ niveaux Drave** — JSON pur, 20 exemples mesurés ; contrôle négatif : permuter les colonnes doit tuer le signal.
+3. **Vérification croisée du corpus d'or CIC** — 42 verdicts de Bruijn + sha256 ; contrôle négatif : altérer un octet → rejet.
+
+**Trop immature** : le produit NIPADA (DTP arrêté depuis juillet, 54 tests cassés — ne pas promettre de 0 % WER), le noyau comme service, les 11 modules, l'API REST.
+
+**Lien cassé à réparer** : le README Panini renvoie à `Qtrinet/docs/agent/panini-nipada.md`, qui n'existe pas ; le document réel est `Qtrinet/docs/methode/panini-nipada.md`.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\n# retirer une ligne redondante (la carte de la documentation elle-même)\nt=t.replace(\"| [`README.md`](README.md) | la carte de la documentation |\\ … [1787 caractères tronqués]`

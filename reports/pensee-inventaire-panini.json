@@ -1,0 +1,853 @@
+{
+  "fiche": "reports/rapport-inventaire-panini.md",
+  "date": "2026-11-07",
+  "heure": "10:35 HNE",
+  "branche": "s/v7",
+  "head": "a2ad039d",
+  "head_date": "2026-11-07",
+  "mission": "Inventaire complet et date des 14 depots Panini, en lecture seule, pour preparer le chantier autonome d'une semaine d'integration avec Drave (7-14/11/2026) : etat git, role, docs cles, chantiers ouverts, portes et chiffres publies, lien Drave, donnees partageables. Deux fichiers neufs, aucun commit, aucun fichier de code/doc/config modifie ; seul effet de bord, un checkpoint SQLite sur une base de corpus (documente).",
+  "verdict": "Un seul depot est vivant au sens fort : Panini/research (= Panini-Research, symlink), 1622 commits, dernier le 2026-10-25, 182194 lignes de Python, noyau formel + NIPADA. L'hote Panini est un conteneur de sous-modules, actif jusqu'au 2026-10-22. Sept des treize autres depots sont des echafaudages (LICENSE + README de 1 a 4 lignes + templates GitHub) ; seuls Panini-FS (Rust, 581 fichiers, ligne divergente 7 dhatu / 34 atomes), OntoWave (TS, 81 fichiers, sous-module sans clone standalone) et ExecutionOrchestrator (CLI + 3 drivers) ont du code. Le lien avec Drave n'existe que dans le paragraphe 6 du README Panini, et il pointe vers un chemin absent (Qtrinet/docs/agent/panini-nipada.md) ; dans Panini/research, 'Drave' n'apparait nulle part. La surface partageable est neanmoins reelle : corpus UDHR (532 langues cote Panini, 456 + Glottolog cote Drave, meme source XML), signatures 14 atomes en JSON pur, corpus d'or CIC portable (42 verdicts). Trois integrations sont mures dans la semaine : alignement UDHR + genealogie, table atomes V14 <-> niveaux Drave, verification croisee du corpus d'or CIC.",
+  "methode": {
+    "lectures": [
+      "Panini/README.md (199 l., 7 axes, section Drave)",
+      "Panini/CONTEXTE-IA.md et PHILOSOPHIE.md (non committes, non lus en entier)",
+      "Panini/docs/index.md, ROADMAP_PHASED_4PHASES.md, ROADMAP-RECHERCHE.md, ETAT-TRIANGLE-RECHERCHE.md",
+      "Panini/.github/copilot-instructions.md",
+      "Panini/research/README.md, AGENTS.md, NIPADA_BACKLOG.md, GATES_G1_G3_REPORT_2026-09-07.md, INTEGRITE_REPO_2026-10-18.md",
+      "Panini/research/docs/noyau/{J4_CATALOGUE,CHANTIERS,VALIDATIONS}.md",
+      "Panini/research/docs/{ROADMAP_v3_2026-07-15,SYNTHESE_PIPELINE_SEMANTIQUE_v1.0,NIPADA_SESSION_480_481_FINAL_REPORT}.md",
+      "Panini/research/docs/journal-de-bord/2026-10-24.md, 2026-10-25.md",
+      "Panini/research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md, DOCUMENT_DE_CONTEXTE_v3.0.md",
+      "Panini/research/src/nipada/core/hardware_mapping.py, src/nipada/signing/language_genealogy.py, src/nipada/api/api.py, src/nipada/api/server.py",
+      "Panini/research/nipada/falsification/{pairs334_axes_v1,corpus_dor_cic_v1,nipada_v150_validation,nipada_v334_revalidation_v35,r2_divers_results_v1,analytic_sigs_v1}.json",
+      "Panini-FS/README.md, docs/avancement.md, docs/dhatu-framework.md",
+      "Qtrinet/docs/methode/panini-nipada.md, docs/theorie/genealogie-des-langues.md, docs/pilotage/semaine-autonome.md",
+      "Qtrinet/data/udhr/{meta.json,langues.jsonl,genealogie.json}"
+    ],
+    "rejeux": [
+      "git --no-optional-locks log/status/submodule status sur les 14 depots",
+      "du -sh et find -type f sur les depots et sous-repertoires",
+      "python3 : lecture des JSON d'artefacts (paires 334, corpus d'or, UDHR, registre V14)",
+      "sqlite3 : comptage des tables books/backlog des bases mass_ingestion"
+    ],
+    "non_rejouees": [
+      "pytest tests/ (Panini-Research) : 589 a 722 tests, 45 min a plusieurs heures",
+      "tests/formal (noyau) : 339 passes / 16 sautes / 47 min",
+      "python -m nipada.benchmark (DTP 48 textes)",
+      "API FastAPI /decompose (non demarree : fastapi + graphe 33-58 Mo)",
+      "cargo test / e2e Playwright (Panini-FS)"
+    ]
+  },
+  "perimetre": {
+    "racine": "/home/stephane/Data13TB/stephane/GitHub",
+    "depots": 14,
+    "date_mesure": "2026-11-07T10:31:00-05:00",
+    "note_deux_etats": "Les clones standalone ../Panini-* sont geles (dernier fetch 2025-09 a 2026-04) ; les 12 pins de Panini/modules/* datent tous du 2026-09-08, plus research pinne 6f8b67b (19/10) et checkout e10d695 (25/10, +193). Panini-FS local = 332 commits au 2026-04-13, origin/master = 472 commits au 2026-09-08 (+140, commits absents du clone).",
+    "note_proprete": "Panini : 23 lignes (16 M dont 14 sous-modules + docs/index.md + copilot-instructions ; 7 ?? dont CONTEXTE-IA.md, PHILOSOPHIE.md, docs/ouvrage/). Panini-Research : 36 M suivis + 545971 ?? (nipada/encyclopedia 8,1 G / 568441 fichiers ; _cache/wikipedia_dump 2,6 G / 151191 fichiers)."
+  },
+  "depots": [
+    {
+      "nom": "Panini",
+      "chemin": "Panini/",
+      "role": "hote : sous-modules + documentation d'ecosysteme + plomberie (panini_engine, cloud, github_sync)",
+      "branche": "main",
+      "head": "9b80c323",
+      "date": "2026-10-22",
+      "commits": 690,
+      "propre": false,
+      "lignes_status": 23,
+      "taille": "34G",
+      "taille_detail": {
+        "research": "25G",
+        "modules": "1,7G",
+        "data": "78M",
+        "docs": "56M",
+        "corpus": "36M",
+        "src": "26M",
+        "legacy": "15M",
+        "tests": "14M"
+      },
+      "fichiers_suivis": 4645,
+      "docs_cles": [
+        "README.md (7 axes + section Drave)",
+        "CONTEXTE-IA.md (normatif, non committe)",
+        "PHILOSOPHIE.md (non committe)",
+        "docs/index.md",
+        "docs/ouvrage/ (ouvrage de reference, non committe)",
+        "docs/journal-de-bord/ (35 fichiers, 126367 lignes, dernier 2026-09-08)",
+        ".github/copilot-instructions.md"
+      ],
+      "ouvert": [
+        "commit de l'ouvrage, du contexte normatif et de la philosophie",
+        "bump du pointeur research 6f8b67b (2026-10-19) -> e10d695 (2026-10-25), 193 commits",
+        "trancher les docs 2025 perimees (ROADMAP_PHASED_4PHASES, ETAT-TRIANGLE, ROADMAP-RECHERCHE en 9 dhatu)",
+        "aucune porte d'ensemble (un seul workflow CI : async_compression.yml)"
+      ],
+      "portes": "deleguees au sous-module research ; journal 2026-09-08 : G1-G4 vertes (722 tests, DTP 48/48, R2 0,909139 reproduit)",
+      "chiffres": {
+        "tests": "722 passes / 1 saute (research/README.md, 2026-09-08)",
+        "dtp": "48/48 = 0 % WER",
+        "r2": 0.909139
+      },
+      "drave": "un seul endroit, README.md section 6 ; renvoie a Qtrinet/docs/agent/panini-nipada.md (absent) ; aucune donnee de l'hote destinee a Drave",
+      "donnees_partageables": [
+        "corpus/protoatheism_tokens/*.jsonl (120K)",
+        "corpus/protoatheism (36M, acquisition inachevee : STATUS_PENDING)"
+      ],
+      "maturite": "conteneur ; vivant jusqu'au 2026-10-22"
+    },
+    {
+      "nom": "Panini-Research",
+      "chemin": "Panini-Research -> Panini/research",
+      "role": "laboratoire : noyau formel (CIC-lite, R localise) + NIPADA (couche descriptive) + corpus + theorie",
+      "branche": "HEAD detachee",
+      "head": "e10d695e",
+      "date": "2026-10-25",
+      "commits": 1622,
+      "propre": false,
+      "lignes_status": 546007,
+      "taille": "25G",
+      "fichiers_suivis": 74708,
+      "code": {
+        "python_lignes": 182194,
+        "python_fichiers": 357,
+        "formalkernel_lignes": 50124,
+        "tests_fichiers": 60
+      },
+      "docs_cles": [
+        "README.md (architecture 2 niveaux, loi H0, etat 2026-09-08)",
+        "AGENTS.md (routage)",
+        "docs/noyau/J4_CATALOGUE.md",
+        "docs/noyau/CHANTIERS.md",
+        "docs/noyau/VALIDATIONS.md",
+        "docs/ARCHITECTURE_NOYAU_NIPADA_v2.0.md",
+        "philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md",
+        "NIPADA_BACKLOG.md",
+        "docs/journal-de-bord/ (81 fichiers, 50902 lignes, dernier 2026-10-25)"
+      ],
+      "ouvert": [
+        "noyau : C4d/C5 avances, C6 (continuite) en cours, C7 et C8 TODO ; mul_cut_located / c6j en cours (cloture de R_loc par le produit manquante)",
+        "NIPADA produit : backlog P0 du 2026-07-14 entierement 'A faire' (A1-A4, R1-R4 : 54 tests casses, imports compiler/compute, DTP et beam search a restaurer)",
+        "545971 fichiers non suivis (donnees de travail, risque git clean / disque)"
+      ],
+      "portes": [
+        "G1 pytest : 589 passed (2026-09-07) puis 722 passed / 1 skipped (2026-09-08)",
+        "G2 DTP : 48/48 = 100 % identite, 0 % WER, genre_accuracy 0,25",
+        "G3 calibrage R2 : 0,907849/648 reproduit vs 0,909139/655 officiel (ecart de 7 paires documente)",
+        "G4 hold-out : 23/114 textes vierges, gele",
+        "noyau a 4 niveaux : kit / chaine R reelle / validation lourde / audit global des consts (296 defs, 412 consts, 'aucune manquante', 2026-10-25)",
+        "tests formels complets : 339 passes / 16 sautes / 0 echec en 47 min (audit 2026-10-19)"
+      ],
+      "chiffres": {
+        "r2_officiel": 0.909139,
+        "paires": 655,
+        "textes": 114,
+        "graphe_v35": {
+          "noeuds": 1753,
+          "aretes": 19951
+        },
+        "graphe_encyclopedique": {
+          "noeuds": 15881,
+          "liens": 43931
+        },
+        "cache_noyau": "52 s -> 5 ms (x10000) ; noyau R 1 h 23 -> 0,23 s",
+        "tactique_q": "x180-190 (178,6 s -> 0,9 s)",
+        "langues_differenciees": 15
+      },
+      "drave": "aucune occurrence de Drave/Qtrinet dans research/ ; le lien passe par les donnees (UDHR, signatures) et par l'avertissement beta recopie chez Drave (issu de nipada_v150_validation.json)",
+      "maturite": "le depot vivant ; noyau mur comme artefact, produit immature"
+    },
+    {
+      "nom": "Panini-FS",
+      "chemin": "Panini-FS/ (pin : Panini/modules/core/filesystem)",
+      "role": "FS semantique Rust (RocksDB, Tantivy, FUSE3) + exploitation (Colab, deploiements, docs, web-ui) ; vocabulaire propre : 7 dhatu, 34 atomes",
+      "branche": "master",
+      "head": "b90d3bd",
+      "date": "2026-04-13",
+      "commits": 332,
+      "head_remote": "9588bd5",
+      "date_remote": "2026-09-08",
+      "commits_remote": 472,
+      "propre": true,
+      "lignes_status": 0,
+      "taille": "~1,7G (sous-module)",
+      "fichiers_suivis": 697,
+      "docs_cles": [
+        "README.md (159 l., ecosysteme en 7 dossiers)",
+        "docs/avancement.md (resultats 02/2026)",
+        "docs/dhatu-framework.md (7 dhatu + 34 atomes)",
+        "docs/vision.md",
+        "docs/publications.md",
+        "e2e/"
+      ],
+      "ouvert": [
+        "chantier d'exploitation arrete au 2026-09-08",
+        "clone local en retard de 140 commits",
+        "aucune mention de Drave"
+      ],
+      "chiffres": {
+        "atomes": 34,
+        "langues": 14,
+        "couverture_europeenne": "7/7 >= 90 % (anglais 94,4 %, francais 90,1 %)",
+        "gutenberg": "62 textes, ~3M mots",
+        "wikipedia": "973 articles, 2,2M mots",
+        "couverture_globale": "76,8 % sur ~8M mots",
+        "dolt": "~215 Mo",
+        "paniniweb": "Rust v0.1, 4 crates, 71 tests"
+      },
+      "drave": "aucun lien ; ne pas melanger ses 7 dhatu / 34 atomes avec V14 de Research",
+      "maturite": "ligne divergente, a l'arret ; utile comme precedent de couverture multilingue"
+    },
+    {
+      "nom": "Panini-SemanticCore",
+      "branche": "main",
+      "head": "6ba7b8b",
+      "date": "2025-09-06",
+      "commits": 3,
+      "propre": true,
+      "taille": "40K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage (LICENSE, README 2 lignes, templates GitHub, CI)",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-AttributionRegistry",
+      "branche": "main",
+      "head": "ad635ad",
+      "date": "2025-09-06",
+      "commits": 2,
+      "propre": true,
+      "taille": "36K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-AutonomousMissions",
+      "branche": "main",
+      "head": "c85a240",
+      "date": "2025-09-06",
+      "commits": 4,
+      "propre": true,
+      "taille": "40K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage ; note de migration vers ExecutionOrchestrator (jamais executee)",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-CloudOrchestrator",
+      "branche": "main",
+      "head": "e3baee3",
+      "date": "2025-08-30",
+      "commits": 3,
+      "propre": true,
+      "taille": "20K",
+      "fichiers_suivis": 4,
+      "role": "echafaudage ; fusion annoncee dans ExecutionOrchestrator",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-CoLabController",
+      "branche": "main",
+      "head": "87f6dde",
+      "date": "2025-11-12",
+      "commits": 5,
+      "propre": true,
+      "taille": "28K",
+      "fichiers_suivis": 5,
+      "role": "README de 227 lignes (strategie Colab Pro : T4/P100/V100/A100, sessions 24 h) + 1 journal ; aucun code",
+      "maturite": "documentation seule"
+    },
+    {
+      "nom": "Panini-CopilotageShared",
+      "branche": "main",
+      "head": "270f197",
+      "date": "2025-09-07",
+      "commits": 3,
+      "propre": true,
+      "taille": "44K",
+      "fichiers_suivis": 11,
+      "role": "config.yml + rules/ + workflows/ci-standard.yml",
+      "maturite": "outillage de conventions"
+    },
+    {
+      "nom": "Panini-DatasetsIngestion",
+      "branche": "main",
+      "head": "23ed336",
+      "date": "2025-09-06",
+      "commits": 2,
+      "propre": true,
+      "taille": "36K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-ExecutionOrchestrator",
+      "branche": "main",
+      "head": "08fa790",
+      "date": "2025-09-06",
+      "commits": 5,
+      "propre": true,
+      "taille": "68K",
+      "fichiers_suivis": 17,
+      "role": "squelette : cli.py, drivers/{local,colab,cloud}.py, missions/echo.py, README avec roadmap",
+      "maturite": "seul squelette executable des modules"
+    },
+    {
+      "nom": "Panini-PublicationEngine",
+      "branche": "main",
+      "head": "65462cf",
+      "date": "2025-09-06",
+      "commits": 3,
+      "propre": true,
+      "taille": "40K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage",
+      "maturite": "vide"
+    },
+    {
+      "nom": "Panini-SpecKit-Shared",
+      "branche": "main",
+      "head": "e965fcf",
+      "date": "2025-10-02",
+      "commits": 1,
+      "propre": true,
+      "taille": "164K",
+      "fichiers_suivis": 23,
+      "role": "constitutions/panini-universal-constitution.md, rules/, templates/, .specify/ (prompts et scripts)",
+      "maturite": "outillage de specification utilisable tel quel"
+    },
+    {
+      "nom": "Panini-UltraReactive",
+      "branche": "main",
+      "head": "8fb776b",
+      "date": "2025-09-06",
+      "commits": 4,
+      "propre": true,
+      "taille": "40K",
+      "fichiers_suivis": 9,
+      "role": "echafaudage ; renomme fonctionnellement MonitoringWatchdog",
+      "maturite": "vide"
+    }
+  ],
+  "sous_modules_hors_liste": [
+    {
+      "nom": "modules/ontowave",
+      "role": "visualisation ontologique (TypeScript/Vue)",
+      "pin": "2c1f60d",
+      "date": "2026-09-08",
+      "fichiers": 81,
+      "maturite": "seul composant produit vivant hors Research"
+    },
+    {
+      "nom": "copilotage",
+      "role": "journal d'agents",
+      "pin": "bde5c5e",
+      "date": "2026-05-19",
+      "maturite": "a ne jamais deplacer"
+    }
+  ],
+  "axes_recherche": [
+    {
+      "n": 1,
+      "nom": "Noyau formel (J4)",
+      "objet": "R localise : ordre, corps, distance, completude",
+      "ou": "research/src/nipada/formalkernel/",
+      "etat_declare": "actif",
+      "etat_observe": "actif (commits quotidiens en octobre) ; 50124 lignes, 296 defs / 412 consts"
+    },
+    {
+      "n": 2,
+      "nom": "NIPADA",
+      "objet": "moteur de semantique computationnelle (graphe, dhatus, DTP)",
+      "ou": "research/src/nipada/",
+      "etat_declare": "actif",
+      "etat_observe": "code actif, produit bloque : pipeline DTP arrete depuis le 2026-07-03, backlog P0"
+    },
+    {
+      "n": 3,
+      "nom": "Linguistique",
+      "objet": "14 atomes (V14), universaux, genealogie des langues",
+      "ou": "research/philosophy-theory/, research/data/",
+      "etat_declare": "actif",
+      "etat_observe": "actif : V14, grille d'ablation, registre de 29 langues"
+    },
+    {
+      "n": 4,
+      "nom": "Corpus & ingestion",
+      "objet": "Gutenberg, UDHR, Wikipedia, multilingue",
+      "ou": "research/data/, corpus/",
+      "etat_declare": "actif",
+      "etat_observe": "ingestion active mais non consolidee (545971 fichiers non suivis ; hote protoatheism inacheve)"
+    },
+    {
+      "n": 5,
+      "nom": "Philosophie & theorie",
+      "objet": "epistemologie du noyau, L3, cadres theoriques",
+      "ou": "research/philosophy-theory/",
+      "etat_declare": "actif",
+      "etat_observe": "actif : DOCUMENT_DE_CONTEXTE_v3.0, critique interne, portefeuille de candidats"
+    },
+    {
+      "n": 6,
+      "nom": "Moteur d'inference (Drave)",
+      "objet": "flots de donnees, AER, modeles decomposables",
+      "ou": "../Qtrinet/",
+      "etat_declare": "actif, projet lie",
+      "etat_observe": "declare, non instrumente : 0 occurrence dans research/, lien casse dans le README"
+    },
+    {
+      "n": 7,
+      "nom": "Infrastructure",
+      "objet": "colab/cloud, FPGA, attribution, visualisation (OntoWave)",
+      "ou": "modules/, research/panini-fs/",
+      "etat_declare": "selon chantier",
+      "etat_observe": "a l'arret depuis 2026-09-08 ; modules = coquilles"
+    }
+  ],
+  "atomes_v14": {
+    "source_verite": "research/src/nipada/core/hardware_mapping.py (V14_ATOMS, ordre canonique)",
+    "autres_lieux": [
+      "research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md (premiers, roles, predictions d'ablation)",
+      "research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md (statut : vocabulaire candidat revisable)",
+      "research/data/v14_lexicon_enriched.json (3,9 Mo : {langue: {ATOME: [mots]}})",
+      "research/nipada/falsification/analytic_sigs_v1.json ({oeuvre: {ATOME: frequence}})",
+      "research/data/udhr_demo.nipada (format .nipada v0.3.0, auto-portant)",
+      "research/src/nipada/api/api.py (endpoints /atoms et /decompose)"
+    ],
+    "liste": [
+      {
+        "atome": "ETRE",
+        "symbole": "∃",
+        "premier": 2,
+        "role": "existence, substrat",
+        "porteur_predit": "temoin : retrait catastrophique"
+      },
+      {
+        "atome": "DIFFERENCE",
+        "symbole": "∆",
+        "premier": 3,
+        "role": "gradient entre etats",
+        "porteur_predit": "temoin : casse"
+      },
+      {
+        "atome": "RAPPORT",
+        "symbole": "∼",
+        "premier": 5,
+        "role": "relation",
+        "porteur_predit": "temoin : casse"
+      },
+      {
+        "atome": "ORIENTATION",
+        "symbole": "↗",
+        "premier": 7,
+        "role": "direction du flux",
+        "porteur_predit": "temoin : degrade (lien H0)"
+      },
+      {
+        "atome": "SUJET",
+        "symbole": "⊙",
+        "premier": 11,
+        "role": "agent, experienceur",
+        "porteur_predit": "porteur modere"
+      },
+      {
+        "atome": "TEMPS",
+        "symbole": "⧖",
+        "premier": 13,
+        "role": "duree, sequence",
+        "porteur_predit": "porteur modere"
+      },
+      {
+        "atome": "MODALITE",
+        "symbole": "◇",
+        "premier": 17,
+        "role": "possible / necessaire (L3)",
+        "porteur_predit": "speculatif"
+      },
+      {
+        "atome": "NOMBRE",
+        "symbole": "№",
+        "premier": 19,
+        "role": "quantite, cardinalite",
+        "porteur_predit": "faible (candidat au retrait)"
+      },
+      {
+        "atome": "ESPACE",
+        "symbole": "⊕",
+        "premier": 23,
+        "role": "localisation, metaphore spatiale",
+        "porteur_predit": "porteur modere"
+      },
+      {
+        "atome": "OPERATION",
+        "symbole": "⊗",
+        "premier": 29,
+        "role": "action, acte (les dhatus ACT)",
+        "porteur_predit": "temoin : casse"
+      },
+      {
+        "atome": "FONCTION",
+        "symbole": "λ",
+        "premier": 31,
+        "role": "finalite, usage",
+        "porteur_predit": "speculatif"
+      },
+      {
+        "atome": "STRUCTURE",
+        "symbole": "⊞",
+        "premier": 37,
+        "role": "organisation, agencement",
+        "porteur_predit": "porteur modere"
+      },
+      {
+        "atome": "SYMETRIE",
+        "symbole": "≍",
+        "premier": 41,
+        "role": "symetrie, equilibre",
+        "porteur_predit": "meilleur candidat au retrait"
+      },
+      {
+        "atome": "EQUATION",
+        "symbole": "≡",
+        "premier": 43,
+        "role": "egalite, equivalence",
+        "porteur_predit": "faible en philosophie, fort en technique"
+      }
+    ],
+    "utilisable_par_drave": {
+      "verdict": "oui, a trois conditions",
+      "lecture_directe": "analytic_sigs_v1.json ({texte: 14 flottants}) et v14_lexicon_enriched.json sont des JSON plats sans dependance",
+      "api": "POST /decompose renvoie v14_signature (dict[str,float]), active_atoms, dominant_atom ; FastAPI + graphe 33-58 Mo, non testee ici",
+      "avertissement": "signature lexicale, donc de surface ; l'epoque domine (beta +0,138 vs +0,049) : controler date et langue"
+    },
+    "dhatus_9": [
+      "EXIST",
+      "TRANS",
+      "EVAL",
+      "LOCATE",
+      "FEEL",
+      "ACT",
+      "QUAL",
+      "REL",
+      "KNOW"
+    ]
+  },
+  "genealogie": {
+    "ou": [
+      {
+        "piece": "registre",
+        "chemin": "research/src/nipada/signing/language_genealogy.py",
+        "forme": "LANG_TREE: dict[code, LangInfo(code, family, branch, epoch, morphological_type, script, closest_kin, notes)]",
+        "volume": 29
+      },
+      {
+        "piece": "distance",
+        "chemin": "meme fichier, lang_distance(l1,l2)",
+        "forme": "0 meme langue / 0,15 meme branche / 0,40 meme famille / 0,75 familles differentes / 1,00 inconnu",
+        "volume": null
+      },
+      {
+        "piece": "chaines de transfert",
+        "chemin": "research/src/nipada/compute/cross_lingual_projector.py",
+        "forme": "LANGUAGE_GENEALOGY_TREE + projection X -> ancetre -> V14",
+        "volume": null
+      },
+      {
+        "piece": "etiquettes de corpus",
+        "chemin": "research/data/udhr_corpus.json",
+        "forme": "family / branch / tradition par langue",
+        "volume": 532
+      },
+      {
+        "piece": "genealogie reelle",
+        "chemin": "Qtrinet/data/udhr/genealogie.json + familles/*.jsonl",
+        "forme": "famille + branche (chemin de glottocodes) + niveau",
+        "volume": 456
+      },
+      {
+        "piece": "theorie",
+        "chemin": "Qtrinet/docs/theorie/genealogie-des-langues.md",
+        "forme": "6 niveaux (famille -> traducteur) + avertissement",
+        "volume": null
+      }
+    ],
+    "etat": "Registre Panini petit mais propre (29 langues, familles indo-europeenne, ouralienne, semitique, sino-tibetaine, japonique, coreenne, turcique) avec epoque et type morphologique : utile pour choisir un proxy, pas pour prouver une parente. La genealogie complete (Glottolog, 456 langues) est deja chez Drave : l'integration est un alignement de representations.",
+    "resultat_publie": {
+      "fichier": "research/nipada/falsification/nipada_v150_validation.json",
+      "modele": "OLS de la dissimilarite de signature sur d_graph, dyear/1000 ans, same_tradition",
+      "beta_epoque": 0.1378,
+      "beta_filiation": 0.0489,
+      "beta_tradition": 0.0022,
+      "r2": 0.3004,
+      "verdicts": {
+        "H1_stratification": "KO",
+        "H2_loocv_tradition": "KO",
+        "H3_ols_regression": "OK",
+        "go_no_go_phase_religieuse": "NO-GO"
+      },
+      "lecture": "la signature de surface capte l'epoque, pas la filiation ; leur propre test de parente est un echec assume"
+    },
+    "corpus": [
+      "corpus 334 (114 textes actifs, 655 paires) : l'axe compare est la tradition, pas la langue (lang_a = eng 408, vide 245, fra 2)",
+      "UDHR 532 langues (meme article)",
+      "27 catalogues d'acquisition x 70 oeuvres ~ 1890 candidats par tradition et epoque"
+    ]
+  },
+  "corpus": [
+    {
+      "nom": "UDHR article 1",
+      "volume": "229 Ko, 532 langues",
+      "format": "JSON udhr-v2.0-xml : {name, iso, script, dir, text, family, branch, tradition}",
+      "langues": 532,
+      "ou": "Panini/research/data/udhr_corpus.json (+ udhr_decomposed_v14.json, udhr_convergence_v14.json)",
+      "partageable": "oui, immediatement (meme source XML que Drave)",
+      "source": "eric-muller/udhr (Unicode UDHR XML Project)"
+    },
+    {
+      "nom": "UDHR 30 articles",
+      "volume": "28 Mo",
+      "format": "XML udhr_XXX.xml + langues.jsonl + genealogie.json + familles/*.jsonl",
+      "langues": 456,
+      "ou": "Qtrinet/data/udhr/",
+      "partageable": "deja integre cote Drave",
+      "source": "meme projet"
+    },
+    {
+      "nom": "corpus 334 (philosophie/religion)",
+      "volume": "114 textes ; 102 fichiers sources (9,5 Mo)",
+      "format": ".txt un fichier par oeuvre + signatures JSON + table de 655 paires (d_topo, d_lex, d_H, cos)",
+      "langues": "surtout anglais (408 paires sur 655), 245 sans etiquette, 2 en francais ; les oeuvres grecques, arabes, sanskrites et chinoises sont comparees en traduction",
+      "ou": "Panini/research/nipada/corpus/_cache/sources/, nipada/falsification/pairs334_axes_v1.json",
+      "partageable": "oui (domaine public), avec sa fiche",
+      "source": "Gutenberg, MIT Classics, SuttaCentral, sacred-texts, archive.org"
+    },
+    {
+      "nom": "Gutenberg",
+      "volume": "1999 metadonnees ; 1943 telecharges ; 332 textes (271 Mo) ; 5 curates",
+      "format": "SQLite books(id,title,lang,authors,subjects,downloads,url,fetched) + .txt",
+      "langues": "en, fr, de, es",
+      "ou": "Panini/research/data/mass_ingestion/*.db, _cache/public_domain_auto/gutendex/, _cache/gutenberg_curated/",
+      "partageable": "oui (domaine public)",
+      "source": "Gutendex / Project Gutenberg"
+    },
+    {
+      "nom": "Wikipedia",
+      "volume": "151191 fichiers, 2,6 Go + backlogs (en 20935, de 18740, fr 15636)",
+      "format": "un .txt par article",
+      "langues": "en, de, fr",
+      "ou": "Panini/research/nipada/corpus/_cache/wikipedia_dump/",
+      "partageable": "oui mais non suivi par git",
+      "source": "dumps Wikipedia"
+    },
+    {
+      "nom": "sacred_texts / suttacentral / MIT Classics",
+      "volume": "21 Mo + 13 Mo + 2 Mo",
+      "format": ".txt par section",
+      "langues": "pi, en, gr",
+      "ou": "Panini/research/nipada/corpus/_cache/{sacred_texts,suttacentral,mit_aristotle_*}",
+      "partageable": "oui",
+      "source": "sacred-texts.com, suttacentral.net, classics.mit.edu"
+    },
+    {
+      "nom": "protoatheisme (hote)",
+      "volume": "36 Mo, 42 oeuvres",
+      "format": "dossiers + STATUS_PENDING.txt",
+      "langues": "en, fr, la...",
+      "ou": "Panini/corpus/protoatheism/",
+      "partageable": "non : acquisition inachevee",
+      "source": "plan d'acquisition"
+    },
+    {
+      "nom": "tokens protoatheisme",
+      "volume": "120 Ko",
+      "format": "JSONL",
+      "langues": null,
+      "ou": "Panini/corpus/protoatheism_tokens/",
+      "partageable": "oui",
+      "source": "Panini"
+    },
+    {
+      "nom": "corpus d'or CIC",
+      "volume": "46 Ko + TSV",
+      "format": "JSON : {doctrine, defs, consts, entrees[{nom, verdict, preuve_hex, type_hex, empreinte}]} ; 42 entrees (36 accepte, 6 rejette)",
+      "langues": null,
+      "ou": "Panini/research/nipada/falsification/corpus_dor_cic_v1.json",
+      "partageable": "oui : artefact auto-portant de validation croisee",
+      "source": "Panini (noyau CIC-lite)"
+    }
+  ],
+  "interfaces": [
+    {
+      "surface": "signatures V14 par texte",
+      "chemin": "Panini/research/nipada/falsification/analytic_sigs_v1.json",
+      "format": "{texte: {ATOME: float}} — 44 oeuvres, somme 1",
+      "dependances": "aucune",
+      "maturite": "haute",
+      "volume": 44
+    },
+    {
+      "surface": "lexiques V14",
+      "chemin": "Panini/research/data/v14_lexicon_enriched.json",
+      "format": "{lang: {ATOME: [mots]}} (3,9 Mo)",
+      "dependances": "aucune",
+      "maturite": "haute (qualite a verifier)"
+    },
+    {
+      "surface": "paires 334",
+      "chemin": "Panini/research/nipada/falsification/pairs334_axes_v1.json",
+      "format": "655 objets {section,a,b,d_topo,d_lex,d_H,cos,trad_a,trad_b,lang_a,lang_b}",
+      "dependances": "aucune",
+      "maturite": "haute"
+    },
+    {
+      "surface": "corpus d'or CIC",
+      "chemin": "Panini/research/nipada/falsification/corpus_dor_cic_v1.{json,tsv}",
+      "format": "preuve/type de Bruijn en hex + verdict + sha256",
+      "dependances": "aucune",
+      "maturite": "haute"
+    },
+    {
+      "surface": "genealogie",
+      "chemin": "Panini/research/src/nipada/signing/language_genealogy.py",
+      "format": "Python (dataclass), pas d'export JSON",
+      "dependances": "nipada",
+      "maturite": "moyenne (export a faire)"
+    },
+    {
+      "surface": "API REST",
+      "chemin": "Panini/research/src/nipada/api/{api,server}.py",
+      "format": "FastAPI : /decompose, /reconstruct, /roundtrip, /compare, /atoms, /dhatus, /benchmark, /search, /hypotheses, /api/v1/*",
+      "dependances": "fastapi + graphe 33-58 Mo",
+      "maturite": "moyenne (non testee)"
+    },
+    {
+      "surface": "format .nipada",
+      "chemin": "Panini/research/data/udhr_demo.nipada",
+      "format": "texte auto-portant v0.3.0 (atomes, dhatus, donnees)",
+      "dependances": "aucune",
+      "maturite": "moyenne (spec incomplete)"
+    }
+  ],
+  "pret": [
+    {
+      "integration": "alignement UDHR + genealogie",
+      "pourquoi": "meme source XML des deux cotes, donnees deja sur disque, aucune dependance",
+      "livrable": "table iso3 -> fichier -> famille -> branche -> tradition, echantillon de 20 langues (5 familles x 4), mesure de recouvrement",
+      "mesure": "langues appariees, taux d'accord des familles, langues orphelines",
+      "controle_negatif": "deux langues de familles differentes doivent donner un retrieval faible, deux langues soeurs un retrieval fort",
+      "risque": "codes ISO non alignes (Panini utilise des variantes 007, 008... ; Drave a normalise en iso3)"
+    },
+    {
+      "integration": "table atomes V14 <-> niveaux Drave",
+      "pourquoi": "analytic_sigs_v1.json est un JSON plat de 44 oeuvres x 14 flottants (somme 1) ; les 14 atomes ont un ordre, un symbole et un premier ; Drave a POS, syntagmes, pragmatique",
+      "livrable": "table atome -> niveau(x) + 20 exemples mesures sur des textes presents des deux cotes",
+      "mesure": "20 exemples, coefficient par atome, cas contradictoires listes",
+      "controle_negatif": "permuter les colonnes de la matrice de signatures : la table doit perdre son pouvoir predictif",
+      "risque": "signature lexicale ; l'epoque domine (beta +0,138), controler date et langue"
+    },
+    {
+      "integration": "verification croisee du corpus d'or CIC",
+      "pourquoi": "seul artefact Panini auto-portant et falsifiable : 42 entrees, preuve et type en de Bruijn hex, empreinte SHA-256, doctrine de validation croisee (deux checkers independants : cic et cic_named)",
+      "livrable": "verificateur Drave independant (ou rejeu du checker) reproduisant les 42 verdicts",
+      "mesure": "42/42 attendus, nombre d'ecarts, temps de rejeu",
+      "controle_negatif": "alterer un octet d'une preuve doit produire un rejet",
+      "risque": "reimplementer la serialisation de Bruijn : plus couteux que l'UDHR, mais le resultat est un verrou commun"
+    },
+    {
+      "integration": "genealogie comparee (fusionnee avec l'UDHR dans l'integration 1)",
+      "pourquoi": "LANG_TREE (29 langues, epoque et type morphologique) + genealogie.json (456 langues, glottocodes) + l'avertissement beta deja recopie chez Drave",
+      "livrable": "fiche de genealogie a deux faces du J3",
+      "mesure": "niveau de desaccord entre les deux representations, langues couvertes par les deux",
+      "controle_negatif": "deux langues de familles differentes doivent etre plus distantes que deux langues soeurs dans les deux representations",
+      "risque": "le registre Panini ne prouve rien (H1/H2 KO) : il sert a choisir un proxy, pas a etablir une parente"
+    }
+  ],
+  "immature": [
+    {
+      "objet": "produit NIPADA (DTP, reconstruction)",
+      "raison": "pipeline arrete depuis le 2026-07-03, 54 tests casses, backlog P0 (A1-A4, R1-R4) entierement 'A faire'",
+      "consequence": "ne pas promettre de 0 % WER"
+    },
+    {
+      "objet": "noyau formel comme service",
+      "raison": "assistant de preuve lent (1-3 h par validation lourde) ; le produit de R n'est pas clos (mul_cut_located en cours)",
+      "consequence": "pret comme artefact (corpus d'or), pas comme executeur"
+    },
+    {
+      "objet": "les 11 modules d'infrastructure",
+      "raison": "coquilles (LICENSE + README + templates) ; seul ExecutionOrchestrator a un squelette, CoLabController n'a que de la doc",
+      "consequence": "ne pas engager la semaine"
+    },
+    {
+      "objet": "Panini-FS",
+      "raison": "ligne divergente (7 dhatu / 34 atomes), clone local en retard de 140 commits, aucun lien Drave",
+      "consequence": "ne pas melanger les vocabulaires"
+    },
+    {
+      "objet": "API REST",
+      "raison": "depend de fastapi et d'un graphe de 33-58 Mo, non testee ici",
+      "consequence": "bonus, pas socle"
+    }
+  ],
+  "ecarts_documentaires": [
+    "Panini/README.md section 6 renvoie a Qtrinet/docs/agent/panini-nipada.md : dossier docs/agent/ vide, document reel = Qtrinet/docs/methode/panini-nipada.md",
+    "Panini : CONTEXTE-IA.md, PHILOSOPHIE.md et docs/ouvrage/ non committes alors qu'ils font autorite",
+    "Deux etats par depot : clones standalone geles (2025-09 a 2026-04) contre pins de sous-modules (2026-09-08) ; Panini-FS local +140 commits de retard",
+    "Trois vocabulaires : 14 atomes + 9 dhatus (Research) / 34 atomes + 7 dhatu (Panini-FS) / 9 dhatu (docs hote 2025)",
+    "Le R2 est un instrument, pas un resultat publiable : absence de hold-out notee par leur critique du 2026-07-14, hold-out v1 gele (23 textes)",
+    "La genealogie Panini ne prouve rien (H1/H2 KO, NO-GO religieux) : ce qui est vrai est l'avertissement epoque > filiation",
+    "Le depot vivant est un sous-module en HEAD detachee : un commit accidentel peut etre perdu"
+  ],
+  "prochaines_actions": [
+    {
+      "j": "J2 08/11 matin",
+      "action": "inventaire croise et table atomes V14 <-> niveaux : charger analytic_sigs_v1.json, choisir 20 textes presents des deux cotes",
+      "preuve": "table + 20 exemples mesures"
+    },
+    {
+      "j": "J2 08/11 apres-midi",
+      "action": "corpus commun : aligner udhr_corpus.json (532) et Qtrinet/data/udhr/langues.jsonl (456), produire la table iso3 et l'echantillon de 20 langues",
+      "preuve": "table de correspondance + taux d'appariement"
+    },
+    {
+      "j": "J3 09/11 matin",
+      "action": "retrieval a epoque controlee sur les paires 334 (d_topo, d_lex, d_H) avec appariement des dates",
+      "preuve": "mesure double controle"
+    },
+    {
+      "j": "J3 09/11 apres-midi",
+      "action": "fiche de genealogie a deux faces : LANG_TREE (29) + genealogie Glottolog (456) + avertissement beta",
+      "preuve": "fiche + JSON"
+    },
+    {
+      "j": "bonus",
+      "action": "verificateur du corpus d'or CIC (42 verdicts) si le temps le permet",
+      "preuve": "42/42 + controle negatif"
+    }
+  ],
+  "limites": [
+    "Aucune suite de tests executee : les chiffres sont ceux publies par Panini, avec leur date et leur chemin",
+    "L'API REST n'a pas ete demarree ; sa disponibilite reelle n'est pas verifiee",
+    "Les tailles sont des du -sh approximatifs (systeme de fichiers lent, certains du ont ete abandonnes)",
+    "Le clone Panini-FS etant en retard de 140 commits, l'etat de Panini-FS est celui du pin de sous-module (2026-09-08)",
+    "Les 545971 fichiers non suivis de research n'ont pas ete inspectes un par un : structuration par repertoire (awk sur git status)",
+    "Les documents normatifs non committes (CONTEXTE-IA.md, PHILOSOPHIE.md) n'ont pas ete lus en entier",
+    "Un sqlite3 de lecture sur research/data/mass_ingestion/corpus_expansion.db (mode WAL) a checkpointe le WAL dans le fichier principal : 4096 -> 57344 octets, le fichier est desormais M dans git status ; les 381 lignes sont intactes, ne pas restaurer par git checkout (perte des lignes du WAL)"
+  ],
+  "fichiers": {
+    "rapport": "reports/rapport-inventaire-panini.md",
+    "json": "reports/pensee-inventaire-panini.json",
+    "modifies_dans_panini": 1,
+    "commits": 0,
+    "modifies_dans_panini_detail": "1 fichier de donnees (corpus_expansion.db), checkpoint SQLite involontaire ; 0 fichier de code, doc ou config"
+  },
+  "incident_lecture_seule": {
+    "fichier": "Panini/research/data/mass_ingestion/corpus_expansion.db",
+    "cause": "ouverture sqlite3 en lecture d'une base en mode WAL : checkpoint du WAL dans le fichier principal",
+    "effet": "4 096 -> 57 344 octets ; le fichier passe de non modifie a M dans git status ; -wal supprime",
+    "integrite": "381 lignes preservees ; aucune perte ; ne pas restaurer par git checkout",
+    "autres_fichiers_touches": 0
+  }
+}
