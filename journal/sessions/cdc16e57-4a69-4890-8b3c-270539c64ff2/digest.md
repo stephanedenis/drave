@@ -2379,3 +2379,33 @@ Counter({'13': 41, '11': 40, '12': 34, '10': 27, '16': 8})
 {'phrase_id': 'p002', 'candidat_id': 'p002-c2', 'statut': 'compatible', 'note': "il est préférable de dire l'homme au téléscope", 'contexte': "Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait d'acheter — un instrument neuf, encore dans sa boîte.", 'niveau': 2, 'auteur': 'humain', 'horodatage': '2026-11-03T10:32:17'}
   ```
 
+### 🤖 Assistant
+
+⏵ Mesure complète des 71 langues (notation 5 112 lectures)
+
+- **bash** `{"command": "PYTHONDONTWRITEBYTECODE=1 timeout 300 python3 -m tools.jeux.mesure_langues --complet > /tmp/mesure_langues_complet.json 2>/tmp/mesure_langues_complet.err; echo \"exit $?\"; tail -5 /tmp/mesure_langues_complet.err; python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/mesure_langues_com … [676 caractères tronqués]`
+
+  ```
+exit 0
+couverture {'langues': 71, 'concepts': 35, 'couples': 1433, 'n_langues_fortes': 32}
+corpus {'items': 449, 'bons': 449, 'langues_avec_items': 66, 'langues_avec_items_forts': 62}
+invariance 11 11
+permutation {'items': 449, 'bons': 186, 'forts': 275, 'forts_bons': 12}
+detection 315 315
+langue {'items': 449, 'exacts': 340}
+notation {'items': 72, 'langues': 71, 'parses': 5112, 'bons': 5112}
+duree 3.504
+  ```
+
+### 🤖 Assistant
+
+⏵ Test de reproductibilité de la détection de langue
+
+- **bash** `{"command": "for i in 1 2 3; do PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF'\nfrom tools.jeux.mesure_langues import mesure_langues\nr=mesure_langues(rapide=True)\nprint(r['langue_detectee'])\nEOF\ndone", "description": "Répète la détection de langue (rapide)", "timeoutMs": 120000}`
+
+  ```
+{'items': 449, 'exacts': 344}
+{'items': 449, 'exacts': 343}
+{'items': 449, 'exacts': 343}
+  ```
+

@@ -2169,3 +2169,88 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2
   ```
 
 - **bash** `{"command": "PYTHONDONTWRITEBYTECODE=1 ~/gpu-env/bin/python - <<'PY'\nimport torch\na = torch.load('work/n2ac/propre512-8k.pt', map_location='cpu', weights_only=False)['state']\nb = torch.load('work/n2j/base-wiki-45m.pt', map_location='cpu', weights_only=False)['state']\nprint('pos.weight identique  … [303 caractères tronqués]`
+
+  ```
+pos.weight identique à l init : True
+pos.weight identique à rope2048-20k : True
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-n2.json > /dev/null && echo 'JSON valide'; git status --porcelain | grep -E 'rapport-etat-n2|pensee-etat-n2'", "description": "Revalider le JSON et le statut des deux fichiers"}`
+
+  ```
+JSON valide
+ M reports/rapport-etat-n2.md
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo '--- dernier commit, fichiers N2'; git log -1 --name-only --pretty=format:'%h %s' | head -20; echo '--- suivi'; git ls-files reports/rapport-etat-n2.md reports/pensee-etat-n2.json; echo '--- diff du rapport'; git diff --stat reports/rapport-etat-n2.md; git dif … [109 caractères tronqués]`
+
+  ```
+b57940c8 ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A
+3caa8938 ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)
+97256b8f PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)
+--- dernier commit, fichiers N2
+b57940c8 ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A
+docs/pilotage/en-cours.md
+journal/2026-11-06/README.md
+journal/2026-11-06/distribue.md
+journal/2026-11-06/docs.md
+journal/2026-11-06/memoire.md
+journal/2026-11-06/mesures.md
+journal/2026-11-06/modele.md
+journal/2026-11-06/outils.md
+journal/2026-11-06/portes.md
+journal/README.md
+journal/sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md
+journal/sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md
+journal/sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md
+journal/sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md
+journal/sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md
+journal/sessions/MANIFEST.md
+journal/sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+--- suivi
+reports/pensee-etat-
+… [2769 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 86, "offset": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+180: **table de positions apprises absolue** (`self.pos`) et une attention sans RoPE. Les checkpoints
+181: N2 depuis le 02/11 sont des `NativeModelRoPE` (`work/n2ac/rope_model.py`) : mêmes noms de
+182: paramètres, **q/k tournés**, pas de table utilisée. `load_state_dict(..., strict=False)` charge
+183: donc les 127 tenseurs **sans rien signaler**, et le `pos.weight` du checkpoint (figé depuis
+184: l'init) est appliqué à un modèle qui ne l'a jamais appris : d'où 12,91, pire qu'un modèle
+185: uniforme. Le contrôle sur `A-propre-g1.pt` (absolu) rend 3,0971 / 3,2098, dans la classe des
+186: 3,0904 / 3,1960 publiés : **l'outil n'est pas cassé, il est attaché à l'ancienne architecture**.
+187: Trois raisons de plus pour qu'il ne soit pas la porte : il **exige** un checkpoint positionnel,
+188: il n'a **pas** de `--rope`, et ses `--longueurs` s'arrêtent à **512** (129, 192, 256, 384, 512) —
+189: la porte se mesure à **1 024**.
+190: 
+191: **Conséquence pratique.** La commande que A23 donne pour N2 (`python3 tools/eval_n2_propre.py
+192: <checkpoint>`) appliquée à un checkpoint N2
+… [5577 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "new_string": "**Temps.** Mesuré : 12 s (val 4 longueurs), 8 s (test 3 longueurs), 13 s (permutation + double\nval), ~2 s (sha256) → **30–40 s** avec une seule charge ; `timeout 300` suffit. Le mètre actuel\n … [773 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-n2.json > /dev/null && echo 'JSON valide'; python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-etat-n2.md')\nt = p.read_text()\nko = []\nfor l in re.findall(r'\\]\\(([^)]+)\\)', t):\n    if l.startswith(('http://','https://',' … [406 caractères tronqués]`
+
+  ```
+JSON valide
+liens manquants: aucun | lignes: 280 | mots: 2986
+--- statut
+ M reports/rapport-etat-n2.md
+--- diff stat
+ reports/rapport-etat-n2.md | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+  ```
+

@@ -4,7 +4,7 @@
   "head": "7a876f70",
   "head_note": "le HEAD a bougé pendant l'audit (d31aa9a2 → 7a876f70) ; les chiffres sont horodatés",
   "mission": "état du chantier A (le moteur) — lecture seule, aucun code, deux fichiers neufs",
-  "verdict": "A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (le MoE local existe), A3.4 et A5.4 sont les deux seuls bloqués réels.",
+  "verdict": "A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (aucune ressource ne manque : le MoE local existe), A3.4 et A5.4 sont les deux seuls bloqués réels.",
   "methode": {
     "lecture": [
       "docs/pilotage/roadmap.md",
@@ -196,7 +196,7 @@
     },
     {
       "id": "A6.2",
-      "etat": "libre (mal classé bloqué)",
+      "etat": "libre de ressource (mal classé bloqué)",
       "dependance": "A6",
       "chiffre_publie": "aucun chiffre A6.2 ; MoE local : PPL 37,2013 (C9), 19,143 / 19,172 (A8.3c) ; chargement 2,69 Go / 26,95 s",
       "commande": "bash tools/porte-echange-experts.sh (défaut : $HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf, présent)",

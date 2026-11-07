@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.9 h |
+| Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 51 |
-| Appels d'outils | 89 |
+| Messages | 53 |
+| Appels d'outils | 91 |
 | Fichiers touchés | 0 |
-| Commandes | 88 |
+| Commandes | 90 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*89 appels d'outils.* Actions notables :
+*91 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 75 autres
+- … et 77 autres
 
 **Synthèse produite :**
 
-⏵ Identification des 5 verdicts à risque lors d'une régénération
+⏵ Test de reproductibilité de la détection de langue
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 48 autres
+- … et 50 autres
 
 ## 4. Mesures et résultats marquants
 

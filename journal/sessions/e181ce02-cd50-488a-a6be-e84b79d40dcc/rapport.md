@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 149.6 h |
 | Tours | 184 |
-| Messages | 3333 |
-| Appels d'outils | 2958 |
+| Messages | 3338 |
+| Appels d'outils | 2961 |
 | Fichiers touchés | 25 |
-| Commandes | 2454 |
+| Commandes | 2457 |
 | Sous-agents | 38 |
-| Commits | 385 |
+| Commits | 387 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*204 appels d'outils.* Actions notables :
+*207 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 190 autres
+- … et 193 autres
 
 **Synthèse produite :**
 
-⏵ J'intègre les états N2 et A dans la roadmap (frontière corrigée)
+⏵ Je requalifie la frontière A dans `dependances.md` et je commite les rapports
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2414 autres
+- … et 2417 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-67 sorties en erreur ou divergentes. Les premières :
+68 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10589,4 +10589,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)" -- reports/rapport-etat-n2.m
 - ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS LES ÉTATS N2/A"; then 
 - DOCS — LE README DES FICHES DANS LE BUDGET T1" -- reports/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "DANS LE BU
+- A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS, A8.3a 3/19 ; dependances.md CORRIGÉ" -- reports/rapport-e
+- A — LA FRONTIÈRE REQUALIFIÉE : A6.2 LIBRE (MoE LOCAL 18 Go, RÉSIDENCE MONO-GPU), A2.6 PARTIEL/8 TESTS ; dependances.md CORRIGÉ ; ÉTAT HORODATÉ" -- reports/rappo
 

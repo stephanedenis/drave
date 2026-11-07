@@ -9,7 +9,8 @@
 > partiel mais libre** — sa tête est **décidée** (refusée), ses experts ne sont **pas** bloqués par
 > l'absence d'un MoE : un **Qwen3-30B-A3B Q4 de 18 Go est présent et tourne**. Les **deux seuls
 > bloqués réels** de A sont **A3.4** (compte Colab) et **A5.4** (carte Stratix V). **A6.2 est
-> mal classé** : il est libre, pas bloqué. **A23 a raison sur l'effet** (A2.6 ne doit pas être la
+> mal classé** : aucune ressource ne manque (le MoE local existe) ; c'est une tâche de code/mesure,
+> pas un bloqué. **A23 a raison sur l'effet** (A2.6 ne doit pas être la
 > tête de frontière) **mais tort sur la cause** (les experts ne sont pas bloqués par A6.2).
 >
 > **Dispositif** : lecture de `docs/pilotage/roadmap.md`, `en-cours.md`, `backlog/index.md`,
@@ -84,7 +85,8 @@ nommé par la fiche A8.3b et absent du graphe.
 - **Experts** : **pas mesurés**, mais **pas bloqués par A6.2** : le MoE local existe (18 Go) et le
   moteur sait capturer/imposer le routage. Ce qui manque est le **code de placement des experts**
   (cache/VRAM/RAM), pas la brique d'entrée.
-- **Chiffre à corriger** : la fiche et le JSON disent **4 tests** ; il y en a **8**.
+- **Chiffre à corriger** : la fiche et le JSON disent **4 tests** ; `placement.rs` en a **8**
+  (les 4 de `choisir` + 4 autres), tous verts au HEAD.
 
 ### A6.2 — le faux bloqué
 
@@ -157,7 +159,7 @@ une arête dure. L'outil est cohérent avec les fiches ; ce sont les fiches qui 
 | ligne | libre ? | pourquoi | suite |
 |---|---|---|---|
 | **A2.6** | **oui, mais P2** | tête décidée ; experts mesurables sur le MoE local ; le travail restant est du **code de placement** | à ne pas mettre en tête de frontière ; suite de A6.2 |
-| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage existent | **action 2** |
+| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage existent ; le MoE tourne en offload/CPU, le blocage « 16 Go » est une résidence mono-GPU | **action 2** |
 | **A8.3b2** | **oui** | instrumenter `forward_lot` ; aucune ressource externe | **action 3** |
 | **A3.4** | **non** | compte et runtime Colab | bloqué réel |
 | **A5.4** | **non** | carte Stratix V | bloqué réel |

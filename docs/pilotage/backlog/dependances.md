@@ -65,7 +65,7 @@ contrat, donc pas de porte ni de contrôle négatif.
 | **A3.3** | mesurée | A3.2 (dure) | — | — | [A3.3-seuil.md](A3.3-seuil.md) |
 | **A3.4** | bloquée | A3 (acquis) | bloqué : le compte et le runtime Colab | — | [A3.4-colab.md](A3.4-colab.md) |
 | **A5.4** | bloquée | A5 (acquis) | bloqué : la carte Stratix V | — | [A5.4-fpga.md](A5.4-fpga.md) |
-| **A6.2** | bloquée | A6 (acquis) | bloqué : aucun MoE local dans 16 Go de VRAM | — | [A6.2-moe-local.md](A6.2-moe-local.md) |
+| **A6.2** | libre | A6 (acquis) | **pas** « aucun MoE local » : le MoE existe (Qwen3-30B-A3B Q4, 18 Go) ; le blocage est la **résidence mono-GPU 16 Go**, relevé le 06/11 | — | [A6.2-moe-local.md](A6.2-moe-local.md) |
 | **A8.0** | mesurée | A8 (acquis) | — | A8.3 | [A8.0-portes-ppl.md](A8.0-portes-ppl.md) |
 | **A8.3** | mesurée | A8.0 (dure) | — | — | [A8.3-defaut.md](A8.3-defaut.md) |
 
@@ -159,7 +159,7 @@ négatif de B10.2bis, R44 par l'OCR) en sont exclues par leur statut.
 
 | item | état | pourquoi c'est libre | la prochaine action |
 |---|---|---|---|
-| **A2.6** | partiel | `A2` mesuré ; `A6.2` est un plafond, pas une arête | experts et tête dans la règle `choisir` |
+| **A2.6** | partiel | `A2` mesuré ; `A6.2` est un plafond, pas une arête ; tête **refusée par décision**, `placement.rs` a **8 tests** | experts et placement dans la règle `choisir` |
 | **N2** | en cours | `N1` acquis | la **hiérarchie** (état de section, 3 graines) ; porte **< 2,5** |
 | **N3** | partiel | `N1` mesuré ; le service composé existe (N3.6) | ce qui reste des opérations natives, brique par brique |
 | **N4** | partiel | aucune arête dure ; `N2` est un plafond | la **consigne courte**, tenue à l'écart |
@@ -205,7 +205,7 @@ Le critère n'est pas la date : c'est **valeur / coût / dépendances**. Trois r
 | **P2** | `N3`, `B11.10`, `B12.10`, `A2.6`, `A3.2`, `A8.0` | lignes autonomes, utiles, non bloquantes |
 | **P3** | `R43`, `R44`, `R51`, `R52`, `B10.3`, `B10.2bis`, `A3.3`, `A8.3` | plus tard, ou dépend d'un bloc absent |
 | **gelé** | `N5` | 50–100 M : après le verdict de `R11` sur le schéma |
-| **bloqués** | `A3.4`, `A5.4`, `A6.2`, `B1.5` | ressource externe nommée : on prend la ligne suivante |
+| **bloqués** | `A3.4`, `A5.4`, `B1.5` | ressource externe nommée : on prend la ligne suivante (`A6.2` est **libre** — voir l'état A du 06/11) |
 
 **Ce que ces choix coûtent.** `N2` est le point de charge du plan : il porte sa porte et la
 hiérarchie. `R31` attend `R21`, donc la restitution ne se mesure pas avant la mémoire. `R03`

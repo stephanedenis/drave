@@ -56458,3 +56458,128 @@ b57940c8 ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |\",\n … [1262 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 18 files changed, 179 insertions(+), 44 deletions(-)
+COMMIT OK 1
+2a6a8346 DOCS — LE README DES FICHES DANS LE BUDGET T1
+   b57940c8..2a6a8346  s/v7 -> s/v7
+   b57940c8..2a6a8346  master -> master
+  ```
+
+### 👤 Utilisateur
+
+Agent 538288b3-117b-4daf-8d16-0cd8d6b0090d sent a message: 
+ÉTAT A — terminé. Deux fichiers neufs : `reports/rapport-etat-a.md` (246 l.) et `reports/pensee-etat-a.json` (JSON valide). Ils ont été commités par une autre session dans `3caa8938` avant mes deux dernières nuances (A6.2 « ressource absente » vs « résidence mono-GPU » ; 8 tests vs 4) : le diff non indexé fait 7+/5−, je n'ai rien commité ni stagé. Liens : 3719 OK.
+
+VERDICT : l'état A est sain, le récit A est en retard.
+
+Ce qui est vraiment fait :
+- A2.6 : règle générique + KV faits ; `placement.rs` a **8 tests, pas 4** (rejoués 8/8). Tête **refusée par décision** (`TETE_4BIT.perte_ppl=10.0`, test à 5 %) — **pas de run courant** ; la fiche se contredit (étape 2 ✅ tête refusée / étape 4 ⏳ tête à faire). Experts **non mesurés** mais **pas bloqués par A6.2**.
+- A6.2 : **faux bloqué**. Le MoE local existe : `Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf` 18 Go, 48 couches/128 experts/8 utilisés, machine 2×16 Go VRAM + 125 Go RAM ; `porte-echange-experts.sh` le prend par défaut ; C9 et A8.3c l'ont fait tourner (PPL 37,2013 ; 19,143/19,172). Le « 16 Go » est une **résidence mono-GPU**, pas une absence de modèle.
+- A8.3a : **fait 3/19**, pas « fait ». `DRAVE_PERTE_MAX=1 porte-flux` rejoué **exit 0** (58,3200/62,7357) ; pont 111,8003/115,6406 ; coupe variance 8,9→2,4 %. Les 16 autres pins n'ont pas de régime dual ; le défaut reste refusé. `a83a-flux.json` dit encore « pont/coupe restent » (périmé).
+- A17 : diagnostic historique (222/239, 0,9289, 17 spans ; harnais /tmp non committé). État courant rejoué : POS **0,85**, F1 **0,6482**, exact **235/236**, couverture **0,9874**, **3 spans** (g017, r035, r264). Cible atteinte et dépassée ; A17 n'est pas une ligne A.
+- A23 : 29 tâches (8/11/10), 6 doublons, 18 périmées ; T18 **non appliqué** (`verifie_backlog.py` liste toujours A2.6). Juste sur l'effet (A2.6 hors tête de frontière), faux sur la cause (experts bloqués A6.2).
+- A24 : audit 50 phrases, 0 plantage, 34/50 anomalies, 132 chevauchements, 18 correctifs ; 2 bugs robustesse corrigés ; frontières 0/40, compositions sans perte, partition `alternative` par défaut ; `filtrer` = 0 chevauchement/297 segments, `alternative` = 145 sur le re-test. A24 n'est pas une ligne A ; collision « A26 » (audit CLI) avec A2.6.
+
+FRONTIÈRE :
+- Outil : **3** (A2.6, N2, N4). Doc `dependances.md` §5 : **4** (A2.6, N2, N3, N4) — N3 est mesurée, doc périmée.
+- A2.6 y est parce que `Dépend de A2` et pas de `Bloqué par` ; A6.2 est un plafond, pas une arête dure.
+- Réellement libre en A : **A2.6 (P2, suite de A6.2)**, **A6.2**, **A8.3b2**. Bloqués réels : **A3.4** (compte Colab), **A5.4** (carte Stratix V). Fermés/décidés : A1, A3.2, A3.3, A4, A5.1–3, A6.1, A6.3, A7, A8.0, A8.3, A8.3a (3/19), A8.3b/c/d, tête A2.6.
+
+3 PROCHAINES ACTIONS :
+1. **Requalifier la frontière A** (docs) : A2.6 partiel P2/tête décidée/8 tests/A8.3a 3-19 ; A6.2 libre (blocage = résidence mono-GPU) ; A8.3b2 nommé ; `dependances.md` 4→2/3 ; roadmap A8 6→19 pins. Mesure : `python3 tools/verifie_backlog.py` + grep des mentions fausses ; cible 2 bloqués / 3 libres / 0 faux bloqué.
+2. **A6.2 — routage sur le MoE local** : `bash tools/porte-echange-experts.sh` + `DRAVE_TRACE_EXPERTS`/`DRAVE_ROUTAGE_FORCER` ; invariant exact, routage étranger ≠, cache/octets ; cible qualité ±0,1 PPL et coût ÷10 ou borne nommée ; livrable `reports/rapport-a62-moe.md`. Contrôle : routage aléatoire, trace vide.
+3. **A8.3b2 — instrumenter `forward_lot`** : `LOT=1/4 bash tools/porte-flux.sh` ; cible écart 1,90 % → <0,1 % ou cause nommée ; 19/19 pins duales ; livrable `reports/rapport-a83b2-lot.md`. Contrôle : `THREADS=1`, `LOT=1` = mode 0.
+
+Rejeux : cargo 8/8 ; porte-flux 1 % exit 0 ; autotest 183/183 ; gold exit 0 ; porte-produit exit 0 ; porte-bloc exit 0 ; verifie_backlog exit 0. Non rejoués : pont/coupe 1 %, LOT/THREADS, porte-echange-experts, harnais A17, passe complète.
+
+Limites : HEAD a bougé (d31aa9a2→7a876f70) ; A24/A26 sont des instantanés ; le MoE n'a pas été relancé ici ; « libre » pour A6.2 = aucune ressource absente, pas « travail fait ».
+
+### 👤 Utilisateur
+
+Background subagent 538288b3-117b-4daf-8d16-0cd8d6b0090d finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture : résumé de l'état A
+
+## Fichiers
+
+Deux fichiers neufs, écrits seuls :
+- `reports/rapport-etat-a.md` — l'état détaillé, les tableaux, les commandes de vérification.
+- `reports/pensee-etat-a.json` — la version machine (JSON valide, 398 lignes).
+
+Je n'ai rien commité ni stagé. Une autre session a intégré les deux fichiers dans `3caa8938` pendant que je finissais ; mes deux dernières nuances (A6.2 « ressource absente » vs « résidence mono-GPU » ; 8 tests vs 4) sont restées non indexées. Aucun existant modifié, liens vérifiés (3 719 OK).
+
+## L'état des lignes A
+
+| ligne | état réel | le chiffre |
+|---|---|---|
+| **A1, A4, A7** | ✅ faits | trace 45,1 Mo, PPL 28,4015 ; 19,3885/15,6017 ; greffe 648 s |
+| **A2** | ✅ / ⚠️ A2.6 partiel | KV ×1,93/×5,8 ; lot 503/502 Mio, +27 %, −0,006 % |
+| **A3** | ✅ / 🧱 A3.4 bloqué | 1 608 o/flux ; attente 1,01/1,99/4,89 |
+| **A5** | ✅ / 🧱 A5.4 bloqué | int8 +3,0 %, f16 +0,018 %, int4 +364 % |
+| **A6** | ✅ / A6.2 mal classé | hebbien +3,0 % ; 0 neurone mort/116 736 |
+| **A8** | ✅ opt-in, A8.3a **3/19** | 19 pins, 3 duales ; défaut −5,9 → +19,5 % |
+
+**A2.6** : règle générique et KV faits ; `placement.rs` a **8 tests, pas 4** (rejoués 8/8). La tête est **refusée par décision** (`TETE_4BIT.perte_ppl = 10`, test à 5 %), pas par une mesure courante — la fiche se contredit (étape 2 ✅ tête refusée, étape 4 ⏳ tête à faire). Les experts ne sont **pas bloqués par A6.2**.
+
+**A6.2** : **faux bloqué**. Le MoE local existe : `Qwen3-30B-A3B Q4`, 18 Go, 48 couches/128 experts/8 utilisés, machine **2×16 Go VRAM + 125 Go RAM** ; `porte-echange-experts.sh` le prend par défaut. Le « 16 Go » est une **résidence mono-GPU**, pas une absence de modèle.
+
+**A8.3a** : **fait 3/19**, pas « fait ». `DRAVE_PERTE_MAX=1 porte-flux` rejoué **exit 0** (58,3200/62,7357) ; pont 111,8003/115,6406 ; coupe variance 8,9 → 2,4 %. Les 16 autres pins n'ont pas de régime dual ; le défaut reste refusé.
+
+**A17/A23/A24** : ce sont des **identifiants d'audit**, pas des lignes A. A17 = 222/239, 0,9289, 17 spans (historique ; état courant 235/236, 0,9874, 3 spans). A23 = 29 tâches, 6 doublons, 18 périmées ; T18 non appliqué. A24 = 50 phrases, 0 plantage, 34/50 anomalies, 132 chevauchements, 18 correctifs (partiellement appliqués). Collision « A26 » (audit CLI) avec A2.6.
+
+## La frontière réelle
+
+- **Outil** : `verifie_backlog.py` → **3** (A2.6, N2, N4). **Doc** : **4** (A2.6, N2, N3, N4) — N3 est mesurée, doc périmée.
+- **A2.6 y est** parce que `Dépend de A2` et pas de `Bloqué par` ; A6.2 est un plafond, pas une arête dure.
+- **Libres en A** : **A2.6 (P2, suite de A6.2)**, **A6.2**, **A8.3b2**. **Bloqués réels** : **A3.4** (Colab), **A5.4** (Stratix V). Fermés/décidés : A1, A3.2, A3.3, A4, A5.1–3, A6.1, A6.3, A7, A8.0, A8.3, A8.3a (3/19), A8.3b/c/d, tête A2.6.
+
+**A23 a raison sur l'effet** (A2.6 ne doit pas être la tête de frontière) **mais tort sur la cause** : les experts ne sont pas bloqués par A6.2. Le vrai correctif est de retirer A6.2 de la liste des bloqués, pas de marquer A2.6 bloquée.
+
+## Les 3 prochaines actions
+
+1. **Requalifier la frontière A** (docs) : A2.6 partiel P2/tête décidée/8 tests/A8.3a 3-19 ; A6.2 libre (blocage = résidence mono-GPU) ; A8.3b2 nommé ; `dependances.md` 4→2/3 ; roadmap A8 6→19 pins. Mesure : `verifie_backlog.py` + grep des mentions fausses ; cible **2 bloqués / 3 libres / 0 faux bloqué**.
+2. **A6.2 — routage sur le MoE local** : `porte-echange-experts.sh` + `DRAVE_TRACE_EXPERTS`/`DRAVE_ROUTAGE_FORCER` ; invariant exact, routage étranger ≠, cache/octets ; cible qualité ±0,1 PPL et coût ÷10 ou borne nommée ; livrable `rapport-a62-moe.md`.
+3. **A8.3b2 — instrumenter `forward_lot`** : `LOT=1/4 porte-flux.sh` ; cible écart 1,90 % → <0,1 % ou cause nommée ; 19/19 pins duales ; livrable `rapport-a83b2-lot.md`.
+
+**Rejeux** : cargo 8/8 ; porte-flux 1 % exit 0 ; autotest 183/183 ; gold exit 0 ; porte-produit exit 0 ; porte-bloc exit 0 ; verifie_backlog exit 0. **Non rejoués** : pont/coupe 1 %, LOT/THREADS, porte-echange-experts, harnais A17, passe complète. **Limites** : HEAD a bougé (`d31aa9a2` → `7a876f70`), le MoE n'a pas été relancé ici ; « libre » pour A6.2 signifie « aucune ressource absente », pas « travail fait ».
+
+### 🤖 Assistant
+
+⏵ Je requalifie la frontière A dans `dependances.md` et je commite les rapports
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"A2.6\\|A6.2\\|N3\\|§ 5\" docs/pilotage/backlog/dependances.md | head -10 | cut -c1-170", "description": "Voir dependances §5"}`
+
+  ```
+63:| **A2.6** | partiel | A2 (acquis) | — | — | [A2.6-ordonnanceur.md](A2.6-ordonnanceur.md) |
+68:| **A6.2** | bloquée | A6 (acquis) | bloqué : aucun MoE local dans 16 Go de VRAM | — | [A6.2-moe-local.md](A6.2-moe-local.md) |
+88:| **N3** | partiel | N1 (acquis) | — | — | [N3-operations-natives.md](N3-operations-natives.md) |
+125:   nommé « la mémoire à 8 pas est négative ». Même dette pour `N3` (opérations natives /
+162:| **A2.6** | partiel | `A2` mesuré ; `A6.2` est un plafond, pas une arête | experts et tête dans la règle `choisir` |
+164:| **N3** | partiel | `N1` mesuré ; le service composé existe (N3.6) | ce qui reste des opérations natives, brique par brique |
+167:**Ce qui n'y est pas, et pourquoi** : `A3.4`, `A5.4`, `A6.2`, `B1.5` sont bloqués par une
+172:## 6. Les priorités (instantané du 2026-10-29 ; la frontière vivante est § 5)
+205:| **P2** | `N3`, `B11.10`, `B12.10`, `A2.6`, `A3.2`, `A8.0` | lignes autonomes, utiles, non bloquantes |
+208:| **bloqués** | `A3.4`, `A5.4`, `A6.2`, `B1.5` | ressource externe nommée : on prend la ligne suivante |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/backlog/dependances.md'); t=p.read_text()\nt=t.replace(\"| **A6.2** | bloquée | A6 (acquis) | bloqué : aucun MoE local dans 16 Go de VRAM | — | [A6.2-moe-local.md](A6.2- … [1904 caractères tronqués]`
+
+  ```
+dependances corrigé
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+68:| **A6.2** | libre | A6 (acquis) | **pas** « aucun MoE local » : le MoE existe (Qwen3-30B-A3B Q4, 18 Go) ; le blocage est la **résidence 
+162:| **A2.6** | partiel | `A2` mesuré ; `A6.2` est un plafond, pas une arête ; tête **refusée par décision**, `placement.rs` a **8 tests** 
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+2a6a8346 DOCS — LE README DES FICHES DANS LE BUDGET T1
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 22:17:37 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 22 h 25 HNE\", t)\np.write_text( … [816 caractères tronqués]`
