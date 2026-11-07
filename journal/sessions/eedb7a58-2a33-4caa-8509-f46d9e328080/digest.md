@@ -2413,3 +2413,168 @@ classes [{'code': 'union_contenu', 'definition': 'S ⊃ chunker (le S contient l
 … [435 caractères tronqués]
   ```
 
+- **write** `{"content": "# Partition des syntagmes — cartographie, deux options mesurées, recommandation\n\n**P0-3 · ligne B13 · branche `s/v7` · 6 novembre 2026**\n\n**Mesures épinglées au commit `fa1b0c6eb90b3d27ec78f946d677817ba08b419e`** (le dépôt a bougé\npendant la mesure ; voir § 1.1). Module épinglé :\n … [40311 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, difflib\nr=open('reports/rapport-partition-syntagmes.md',encoding='utf-8').read()\nblocks=re.findall(r'```diff\\n(.*?)\\n```',r,re.S)\nprint('blocks',len(blocks),[len(b.splitlines()) for b in blocks])\np= … [603 caractères tronqués]`
+
+  ```
+blocks 2 [171, 42]
+block 0 equals patch False equals drave False
+--- 
++++ 
+@@ -33,7 +33,7 @@
+          trace.append({"etape": "niveaux", "etiquettes": len(etiquettes),
+                        "niveaux": sorted({e.niveau for e in etiquettes}),
+                        "unites_semantiques": len(unites), "fraction": round(fraction, 4)})
+-@@ -1811,6 +1823,135 @@
++@@ -1811,6 +1823,134 @@
+  # --------------------------------------------------------------------------- compositions
+  
+  
+@@ -52,8 +52,8 @@
+ +    """La vue préférée : le segment du chunker (union), le plus large, puis le plus sûr.
+ +
+ +    Mesuré sur le gold 612 : dans 179/207 groupes ambigus qui portent un span du gold, le
+-+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.
+-+    La préférence ne supprime rien par défaut : elle **classe**.
+++    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois
+++    sur 244. La préférence ne supprime rien par défaut : elle **classe**.
+ +    """
+block 1 equals patch False equals drave True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\npatch=pathlib.Path('/tmp/partition_syntagmes/patch_final.diff').read_text(encoding='utf-8').rstrip('\\n' … [1724 caractères tronqués]`
+
+  ```
+écrit 709 lignes
+patch exact True drave exact True
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md</path>
+<type>file</type>
+<content>
+1: # Partition des syntagmes — cartographie, deux options mesurées, recommandation
+2: 
+3: **P0-3 · ligne B13 · branche `s/v7` · 6 novembre 2026**
+4: 
+5: **Mesures épinglées au commit `fa1b0c6eb90b3d27ec78f946d677817ba08b419e`** (le dépôt a bougé
+6: pendant la mesure ; voir § 1.1). Module épinglé :
+7: `tools/bloc_linguistique.py`, sha256 `5954d0870bb957472662047ba40d027ea8f64e9434ecb24217faa9337437b08f`.
+8: Harnais local non committé dans `/tmp/pin_audit` et `/tmp/partition_syntagmes`.
+9: 
+10: > **Verdict.** Les **239 paires** de chevauchement des deux bancs (107 + 132) sont **toutes** des
+11: > paires **S × chunker** : aucune paire S×S, aucune paire chunker×chunker. **53,1 %** sont le cas
+12: > canonique « le S contient le chunker », **33,5 %** l'inverse, **2,5 %** des mêmes bornes
+13: > multi-label, **10,9 %** des croisements. L'alternative étiquetée **(A)** ne perd rien
+14: > (F1 0,5849, exact **222/239**) ; le filtre union **partiel (B1)** coûte **5** attachements exacts
+15: > (222→217) et laisse **91** paires ; la **partition stricte (B2)** coûte **17*
+… [6951 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md", "offset": 120, "limit": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md</path>
+<type>file</type>
+<content>
+120: 
+121: | classe | texte | segment S | segment union | lecture |
+122: |---|---|---|---|---|
+123: | `union_contenu` | audit 1 `f06` | `GV 43-60` « nous verrons bien » | `GV 48-60` « verrons bien » | le chunker est un **fragment** du GV S |
+124: | `inclusion_s_dans_union` | audit 1 `f02` | `REL 22-42` « qui dort sur le toit » | `REL 22-54` « qui dort sur le toit se réveille » | le chunker **ajoute** « se réveille » à la relative |
+125: | `meme_span_union` | audit 2 `f02` | `GP 68-78` « au travail » | `GV 68-78` « au travail » | même span, deux **lectures** (lieu / GV) |
+126: | `croisement` | audit 1 `f06` | `GV 0-15` « Je ne pense pas » | `GV 3-36` « ne pense pas qu'il viendra demain » | le chunker absorbe la complétive et rogne le sujet |
+127: 
+128: Le cas `meme_span_union` n'est pas une erreur de span : c'est un **multi-label assumé** (un GP et un
+129: GV sur le même texte), que le client doit pouvoir distinguer. Les 6 paires de ce type sont toutes
+130: `union` contre S ; il n'y a aucune paire de mêmes bornes entre deux S.
+131: 
+132: ### 2.4 Ce que la c
+… [11369 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md", "limit": 160, "offset": 300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md</path>
+<type>file</type>
+<content>
+300: | besoin | mode | F1 | exact | paires | Δ JSON |
+301: |---|---|---:|---:|---:|---:|
+302: | je veux tout, je choisis | `alternative` (défaut) | 0,5849 | 222/239 | 239 | +10,4 % |
+303: | moins de chevauchements, coût minimal | `filtrer_union` | 0,6163 | 217/239 | 91 | +7,2 % |
+304: | partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |
+305: | partition stricte, attachement d'abord | `glouton_att_union` (sensibilité) | 0,5892 | 213/239 | 0 | n. m. |
+306: | compatibilité / mesure d'avant | `brut` | 0,5849 | 222/239 | 239 | 0 |
+307: 
+308: ### 4.3 Patch exact — `tools/bloc_linguistique.py`
+309: 
+310: Le patch ajoute un paramètre `partition` (`brut`, `alternative` par défaut, `filtrer_union`,
+311: `filtrer`), trois fonctions (`_relation_partition`, `_cle_preferee`, `_groupes_partition`,
+312: `_expliciter_partition`) et l'appel en fin de `Heuristique.analyser`, après le tri et avant le
+313: `trace`. Il s'applique à `fa1b0c6e` et, avec offsets (+29/+81/+83), au HEAD `d73e7d1f`. La copie
+314: patchée est `/tmp/pin_audit/tools/bloc_partiti
+… [8018 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"cette étude (HEAD `d73e7d1f` au moment de la rédaction ; le gold a même été corrigé après l'au … [1456 caractères tronqués]`
+
+  ```
+ok
+39:le commit `c5b80dd8` annonce 226/226 attachements exacts). Pour comparer les options **au même état** et
+111:1. **Toutes les paires opposent exactement un S et exactement un segment union.** Il n'y a ni paire S×S, ni
+199:précisément les cas où le S porte souvent l'attachement (B2 ne garde que 397 attachements de
+311:`filtrer`), quatre fonctions (`_relation_partition`, `_cle_preferee`, `_groupes_partition`,
+661:  le commit `c5b80dd8` annonce 226/226 attachements exacts). Les chiffres du HEAD seront différents.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md", "limit": 250, "offset": 460}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md</path>
+<type>file</type>
+<content>
+460: +                if autre is e:
+461: +                    continue
+462: +                vue = {"type": autre.type, "debut": autre.debut, "fin": autre.fin,
+463: +                       "source": autre.source,
+464: +                       "union": bool((autre.meta or {}).get("union")),
+465: +                       "relation": _relation_partition(e, autre),
+466: +                       "rang": rangs[id(autre)][1]}
+467: +                if filtrer:
+468: +                    vue["retire"] = id(autre) in retirees
+469: +                att = (autre.meta or {}).get("attachement")
+470: +                if att:
+471: +                    vue["attachement"] = {"segment": att.get("segment", ""),
+472: +                                          "cible": att.get("cible", "")}
+473: +                role = (autre.meta or {}).get("role")
+474: +                if role:
+475: +                    vue["role"] = role
+476: +                vues.append(vue)
+477: +            vues.sort(key=lambda v: (v["rang"], v["debut"], v["fin"], v["type"]))
+478: +            meta["alternat
+… [12318 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\ns=json.load(open('stats_finales.json'))\nfor nom in ['brut']:\n    for k,v in s['par_texte'][nom].items():\n        if v['sans_syntagme']: print(k)\nPY", "description": "List texts without syntagmes"}`
+
+  ```
+fiabilite/f13
+fiabilite/f18
+fiabilite/f27
+fiabilite/f37
+bloc_l/x47
+bloc_l/x48
+  ```
+

@@ -551,6 +551,239 @@ def _role_gp(prep: str) -> str:
 # --------------------------------------------------------------------------- heuristique
 
 
+# --------------------------------------------------------------------------- frontières de phrase
+# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de
+# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel
+# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
+_FERMANTS = "»”’)]}›"
+_OUVRANTS = "«“‘([{‹"
+_TITRES = frozenset({
+    "M", "MM", "Mme", "Mmes", "Mlle", "Mlles", "Me", "Mgr", "St", "Ste",
+    "Dr", "Drs", "Pr", "Prs", "Rév", "Père", "Sr", "Sœur",
+})
+_ABREV_TOUJOURS = frozenset({
+    "cf", "p", "pp", "ex", "réf", "ref", "éd", "ed", "trad", "fig", "chap",
+    "sect", "env", "av", "al", "ibid", "id", "infra", "supra", "coll", "pl",
+    "sq", "suiv", "op", "ca", "n", "no", "nos", "vs", "art", "vol",
+})
+_ABREV_MINUSCULE = frozenset({"etc"})
+# après un titre ou une initiale, ces mots ouvrent presque sûrement une phrase
+_DEBUTS = frozenset({
+    "il", "elle", "on", "nous", "vous", "ils", "elles", "je", "tu", "ce",
+    "cette", "ces", "cet", "mais", "or", "donc", "pourtant", "cependant",
+    "toutefois", "néanmoins", "enfin", "ensuite", "puis", "alors", "ainsi",
+    "quand", "lorsque", "comme", "si", "après", "avant", "dans", "sur",
+    "sous", "avec", "sans", "pour", "par", "the", "he", "she", "it", "we",
+    "they", "you", "i", "this", "that", "but", "then", "however", "when",
+    "if", "after", "before", "finally", "thus",
+})
+_MARQUEUR = re.compile(
+    r"^\s*(?:#{1,6}\s|[-*+]\s|\d+[.)]\s|[A-Za-z][.)]\s|>\s|\||```|---\s*$)"
+)
+_URL = re.compile(r"https?://[^\s<>\"'`]+", re.I)
+_EMAIL = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w-]+(?:\.[A-Za-z]{2,})+(?![\w-])")
+_DOMAINE = re.compile(
+    r"(?<![\w.-])(?:[\w-]+\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)(?![\w-])",
+    re.I,
+)
+_CHEMIN = re.compile(
+    r"(?<![\w])(?:[A-Za-z]:[\\/]|\.{0,2}/)?(?:[\w.@+-]+[\\/])+[\w.@+-]+(?:\.[A-Za-z0-9]{1,8})?(?![\w])"
+)
+_EXTENSION = re.compile(
+    r"(?<![\w])(?:[\w.-]+)\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)(?![\w])",
+    re.I,
+)
+_IDENT_POINTE = re.compile(
+    r"\b[A-Za-z_]\w*(?:\.[a-z_]\w*){2,}(?![\w])|\b[A-Za-z_]\w*\.[_]\w*(?![\w])"
+)
+_ABREV_POINTEE = re.compile(r"\b(?:[A-Za-z]\.)+[A-Za-z]\b")
+_CODE_INLINE = re.compile(r"`[^`\n]+`")
+_CODE_BLOC = re.compile(r"```.*?```", re.S)
+_POINTEE = re.compile(r"(?:[A-Za-z]\.)+[A-Za-z]$")
+_MOTIFS_A_COUPER = (_URL, _EMAIL, _CHEMIN, _EXTENSION)
+
+
+def _couper_fin(texte: str, debut: int, fin: int) -> int:
+    """Retire la ponctuation de phrase collée à la fin d'une URL, d'un courriel, d'un chemin."""
+    while fin > debut and texte[fin - 1] in ".,;:!?»\"”’":
+        fin -= 1
+    while fin > debut and texte[fin - 1] == ")" and "(" not in texte[debut:fin - 1]:
+        fin -= 1
+    return fin
+
+
+def _zones_protegees(texte: str) -> list[tuple[int, int]]:
+    """Les tranches où une ponctuation n'est jamais une frontière de phrase."""
+    zones: list[tuple[int, int]] = []
+    for motif in (_URL, _EMAIL, _DOMAINE, _CHEMIN, _EXTENSION,
+                  _CODE_BLOC, _CODE_INLINE, _ABREV_POINTEE, _IDENT_POINTE):
+        for m in motif.finditer(texte):
+            debut, fin = m.start(), m.end()
+            if motif in _MOTIFS_A_COUPER:
+                fin = _couper_fin(texte, debut, fin)
+            if fin > debut:
+                zones.append((debut, fin))
+    zones.sort()
+    fusion: list[tuple[int, int]] = []
+    for debut, fin in zones:
+        if fusion and debut <= fusion[-1][1]:
+            fusion[-1] = (fusion[-1][0], max(fusion[-1][1], fin))
+        else:
+            fusion.append((debut, fin))
+    return fusion
+
+
+def _dans_zone(zones: list[tuple[int, int]], debut: int, fin: int) -> bool:
+    """Vrai si la ponctuation [debut, fin) touche une zone protégée."""
+    for d, f in zones:
+        if d >= fin:
+            break
+        if f > debut:
+            return True
+    return False
+
+
+def _mot_avant(texte: str, i: int) -> str:
+    j = i
+    while j > 0 and (texte[j - 1].isalnum() or texte[j - 1] in "'’"):
+        j -= 1
+    return texte[j:i]
+
+
+def _apres_ponctuation(texte: str, j: int) -> int:
+    n = len(texte)
+    while j < n and (texte[j].isspace() or texte[j] in _FERMANTS):
+        j += 1
+    return j
+
+
+def _mot_suivant(texte: str, p: int) -> str:
+    m = re.match(r"[^\W\d_][\w'’\-]*", texte[p:p + 80], re.UNICODE)
+    return m.group() if m else ""
+
+
+def _absorber_fermants(texte: str, j: int) -> int:
+    """Absorbe « . » », « . ) » : le fermant appartient à la phrase qui se termine."""
+    n = len(texte)
+    while True:
+        k = j
+        while k < n and texte[k] in " \t":
+            k += 1
+        if k < n and texte[k] in _FERMANTS:
+            j = k + 1
+            continue
+        return j
+
+
+def _nouvelle_ligne_structurelle(texte: str, i: int, j: int) -> bool:
+    """Un saut de ligne coupe la phrase s'il est vide ou s'il borde un titre / une liste."""
+    if texte.count("\n", i, j) >= 2:
+        return True
+    avant = texte[texte.rfind("\n", 0, i) + 1:i]
+    fin = texte.find("\n", j)
+    apres = texte[j:fin if fin >= 0 else len(texte)]
+    return bool(_MARQUEUR.match(avant) or _MARQUEUR.match(apres))
+
+
+def _type_phrase(ponctuation: str) -> str:
+    if "?" in ponctuation:
+        return "interrogative"
+    if "!" in ponctuation:
+        return "exclamative"
+    return "déclarative"
+
+
+def _est_frontiere(texte: str, i: int, j: int, zones: list[tuple[int, int]]) -> bool:
+    n = len(texte)
+    terme = texte[i:j]
+    # (a) un point entre deux chiffres est décimal (12.5, 12.03.2024, 192.168.1.10)
+    if terme == "." and 0 < i < n - 1 and texte[i - 1].isdigit() and texte[i + 1].isdigit():
+        return False
+    # (a bis) un numéro de liste en début de ligne (1. Ouvrir) n'est pas une phrase
+    if terme == "." and 0 < i < n - 1 and texte[i + 1].isspace():
+        avant = texte[texte.rfind("\n", 0, i) + 1:i].strip()
+        if avant.isdigit() and len(avant) <= 3:
+            return False
+    # (d) une ponctuation répétée ne fait qu'une frontière ; une ellipse suivie d'une
+    # minuscule continue la phrase (« Il hésite... puis il part. »)
+    if terme == "…" or (len(terme) >= 2 and set(terme) <= {".", "…"}):
+        p = _apres_ponctuation(texte, j)
+        if p < n and (texte[p].islower() or texte[p].isdigit()):
+            return False
+    # (b) abréviations : minuscule après « etc. » n'ouvre pas une phrase ; « M. Dupont »,
+    # « Dr. Martin », « p. ex. » et « cf. » ne coupent pas.
+    if terme == ".":
+        mot = _mot_avant(texte, i)
+        p = _apres_ponctuation(texte, j)
+        suivant = texte[p] if p < n else ""
+        if mot:
+            if mot in _TITRES or (len(mot) == 1 and mot.isupper()):
+                if not suivant:
+                    return True
+                if not (suivant.isalnum() or suivant in _OUVRANTS):
+                    return True
+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:
+                    return True
+                return False
+            if mot in _ABREV_MINUSCULE:
+                return not (suivant.islower() or suivant.isdigit())
+            if mot in _ABREV_TOUJOURS:
+                return not (suivant.isalnum() or suivant in _OUVRANTS)
+            if _POINTEE.search(texte[max(0, i - 16):i]):
+                if not suivant:
+                    return True
+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:
+                    return True
+                return not (suivant.isalpha() or suivant.isdigit())
+            if suivant == "-" and len(mot) == 1:
+                return False
+    return True
+
+
+def decouper_phrases(texte: str) -> list[tuple[int, int, str, str]]:
+    """Les phrases d'un texte libre, sans chevauchement et sans blanc de tête."""
+    n = len(texte)
+    if not n:
+        return []
+    zones = _zones_protegees(texte)
+    sortie: list[tuple[int, int, str, str]] = []
+    debut = 0
+    i = 0
+
+    def ajouter(fin: int, typ: str) -> None:
+        nonlocal debut
+        d, f = debut, fin
+        while d < f and texte[d].isspace():
+            d += 1
+        while f > d and texte[f - 1].isspace():
+            f -= 1
+        if f > d and texte[d:f].strip():
+            sortie.append((d, f, texte[d:f], typ))
+        debut = fin
+
+    while i < n:
+        ch = texte[i]
+        if ch in "\r\n":
+            j = i
+            while j < n and texte[j].isspace():
+                j += 1
+            if _nouvelle_ligne_structurelle(texte, i, j):
+                ajouter(i, "déclarative")
+            i = j
+            continue
+        if ch not in ".!?…":
+            i += 1
+            continue
+        j = i + 1
+        while j < n and texte[j] in ".!?…":
+            j += 1
+        if not _dans_zone(zones, i, j) and _est_frontiere(texte, i, j, zones):
+            ajouter(_absorber_fermants(texte, j), _type_phrase(texte[i:j]))
+        i = j
+    ajouter(n, "déclarative")
+    return sortie
+
+
 class Heuristique:
     """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
 
@@ -595,25 +828,8 @@ class Heuristique:
 
     @staticmethod
     def _phrases(texte: str) -> list[tuple[int, int, str, str]]:
-        # frontières : ponctuation forte + espace ; on protège les abréviations et les décimales
-        motif = re.compile(r"[^.!?…]+(?:[.!?…]+|$)", re.S)
-        sortie = []
-        for m in motif.finditer(texte):
-            morceau = m.group()
-            if not morceau.strip():
-                continue
-            debut = m.start()
-            fin = m.end()
-            # une phrase qui finit par une abréviation connue n'est pas finie
-            while re.search(r"\b(?:M|MM|Mme|Dr|Pr|etc|cf|p|pp|art|vol)\.\s*$", texte[debut:fin]):
-                suivant = motif.search(texte, fin)
-                if not suivant:
-                    break
-                fin = suivant.end()
-                morceau = texte[debut:fin]
-            typ = "interrogative" if "?" in morceau else ("exclamative" if "!" in morceau else "déclarative")
-            sortie.append((debut, fin, morceau, typ))
-        return sortie
+        return decouper_phrases(texte)
+
 
     @staticmethod
     def _negation(phrase: str) -> bool:

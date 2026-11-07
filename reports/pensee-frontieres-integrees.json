@@ -1,0 +1,44 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "patch": "A (frontières), B (tokenisation) non intégré",
+ "textes": 40,
+ "avant": {
+  "frontieres_fausses": "32/40",
+  "phrases": 102,
+  "coupures": 47,
+  "fusions": 4,
+  "chevauchements": 9,
+  "fausses_questions": 5,
+  "espaces_tete": 31,
+  "actes_faux": "63/102"
+ },
+ "apres": {
+  "frontieres_fausses": "0/40",
+  "phrases": 59,
+  "coupures": 0,
+  "fusions": 0,
+  "chevauchements": 0,
+  "fausses_questions": 0,
+  "espaces_tete": 0,
+  "actes_faux": "0/59"
+ },
+ "gold": {
+  "pos": 0.8496,
+  "f1": 0.6474,
+  "attachement": "235/236",
+  "delta": "0 (aucun cas dans le gold)",
+  "spans_corriges": [
+   "r308",
+   "r318"
+  ]
+ },
+ "controles": {
+  "autotest": "183/183"
+ },
+ "limites": [
+  "gold sans ces cas",
+  "40 textes écrits à la main",
+  "patch B non intégré"
+ ]
+}

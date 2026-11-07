@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.7 h |
+| Durée | 1.9 h |
 | Tours | 1 |
-| Messages | 100 |
-| Appels d'outils | 114 |
-| Fichiers touchés | 6 |
-| Commandes | 103 |
+| Messages | 112 |
+| Appels d'outils | 126 |
+| Fichiers touchés | 7 |
+| Commandes | 110 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*114 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,7 +41,7 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 100 autres
+- … et 108 autres
 
 **Synthèse produite :**
 
@@ -59,6 +59,7 @@
 | `/tmp/partition_syntagmes/patch_eval.py` | 1 | 0 |
 | `/tmp/partition_syntagmes/stats_finales.py` | 1 | 0 |
 | `/tmp/partition_syntagmes/construire_pensee.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-partition-syntagmes.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -102,7 +103,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 63 autres
+- … et 70 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -147,6 +148,9 @@
 - **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 2/4] | alt croise GP 29:60 | alt croise GP 29:51 | alt inclus GP 58:67`
 - **T1** `+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois.`
 - **T1** `verdict Les 239 paires des deux bancs sont **toutes** des paires S × chunker : 53,1 % de S qui contient le chunker, 33,5 % l'inverse, 2,5 % de mêmes bornes, 10,9 % de croisements. L'alternative étique`
+- **T1** `-+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.`
+- **T1** `++    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois`
+- **T1** `Fri Nov 6 20:18:29 2026 -0500 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
 
 ## 5. Erreurs rencontrées
 

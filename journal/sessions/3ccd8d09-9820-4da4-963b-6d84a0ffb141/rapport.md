@@ -9,7 +9,7 @@
 | Début | 2026-11-06 18:33 |
 | Durée | 1.8 h |
 | Tours | 1 |
-| Messages | 112 |
+| Messages | 113 |
 | Appels d'outils | 117 |
 | Fichiers touchés | 0 |
 | Commandes | 114 |
@@ -45,7 +45,14 @@
 
 **Synthèse produite :**
 
-⏵ Écriture des deux livrables dans `reports/` puis vérification
+Livré — P0-4 frontières terminé, sans commit ni modification d’existant.
+
+- **Fichiers neufs** : `reports/rapport-frontieres-phrase.md` (753 l.) et `reports/pensee-frontieres-phrase.json` (40 textes, spans avant/après, patchs exacts).
+- **40 textes** : 102 → 59 phrases ; 32/40 frontières fausses → 0 ; 47 coupures, 4 fusions, 9 chevauchements, 5 fausses questions, 31 espaces de tête → 0 ; 40/40 exacts ; actes faux 63/102 → 0/59.
+- **Gold dev/test** : delta 0 sur POS, F1 syntagmes, attachement et tokens ; 2 spans de phrase corrigés (r308/r318, espace de tête), 0 valeur d’acte changée. Valeurs rejouées : POS 0,8490/0,8511 ; F1 0,6439/0,6552 ; att 0,9816/0,9868.
+- **Gain dev/test par règle = 0 par construction** : le gold ne contient aucun cas traité ; c’est un contrôle de non-régression, le gain est mesuré sur les 40 textes.
+- **Patch A** = `_phrases` (frontières) ; **Patch B** = `_mots` (tokénisation optionnelle : 477→362 tokens, 273→232 POS, 0 token gold changé).
+- **Attention** : `tools/bloc_linguistique.py` porte un `M` d’un autre agent ; base mesurée = HEAD `ed8f9414` + sha module `12e73b7a`. Si le fichier bouge, utiliser les blocs `code` + `methode_apres` du JSON plutôt que le diff.
 
 ## 3. Travail accompli
 

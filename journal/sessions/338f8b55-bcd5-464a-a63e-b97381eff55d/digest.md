@@ -1671,3 +1671,237 @@ chars 31497 tables 93 code fences 8
 … [7417 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md", "offset": 120, "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md</path>
+<type>file</type>
+<content>
+120: |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+121: | R4-en | 84,16 | +0,41 | 84,31 | +0,31 | 12 | 0 | 8 | 0,6181 | 222/222 |
+122: | R4-fr | 84,07 | +0,32 | 84,41 | +0,41 | 11 | 0 | 9 | 0,6181 | 222/222 |
+123: | **R4 bilingue** | **84,49** | **+0,74** | **84,71** | **+0,71** | **23** | **0** | **17** | 0,6181 | 222/222 |
+124: | R4 bilingue + garde `_est_verbe` | 84,49 | +0,74 | 84,61 | +0,61 | 22 | 0 | 9 | 0,6181 | 222/222 |
+125: | R4-en « large » | 84,12 | +0,37 | 84,31 | +0,31 | 12 | **1** | 8 | 0,6181 | 222/222 |
+126: 
+127: **Les 23 correctifs** : 12 anglais (`fast`, `calm`, `dark`, `right` ×2, `absent`, `mean`, `fresh`,
+128: `quiet`, `alone`, `rare`, `hungry`) et 11 français (`calme` ×2, `rapide`, `passionnant`, `ouverte`,
+129: `sombre`, `absent`, `méchant`, `frais`, `seule`, `rare`). **0 cassé** au sens strict : aucun jeton
+130: gold-juste ne devient faux.
+131: 
+132: **Mais 17 faux→faux** : des jetons déjà faux changent de classe fausse. Anglais : `late` ×2, `out`,
+133: `maybe`, `far`, `mine`, `born`, `hung`. Français : `sorti`, `accroché`, `là`, `venue`,
+… [13393 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md", "limit": 200, "offset": 340}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md</path>
+<type>file</type>
+<content>
+340: effet de nombre ou de direction.
+341: 
+342: ### 6.2 Attachement
+343: 
+344: - **B13** : 222/222 exact, 239 cibles, couverture 0,9289, top-k 221. **Strictement inchangé** pour
+345:   R4, les classes, le paquet sûr et le paquet max.
+346: - **Exception** : le bloc « large » des classes fermées perd 1 attachement (221/221, couverture
+347:   0,9247) — cause : le bloc DET. C’est le seul perdant du lot.
+348: - **HEAD instantané** : 235/236, couverture 0,9874, top-k 234 ; **inchangé** par les deux leviers.
+349: 
+350: ### 6.3 Les 50 textes libres
+351: 
+352: - **Base** : 46 textes mesurables (4 refus), **766 POS** ; les comptes POS reproduisent **46/46**
+353:   ceux de l’audit `pensee-fiabilite-produit.json`. Les comptages de syntagmes/attachements
+354:   diffèrent sur 4 textes (386 vs 360 syntagmes, 295 vs 284 attachements) : état de
+355:   `tools/structures`/mode CLI. Les effets sont donc mesurés **en différentiel** base→variante.
+356: - **R4-en** : 0 changement, 0 segment, 0 attachement, 0 invariant.
+357: - **R4 bilingue** : 6 textes, 8 POS, 0 segment, 0 attachement, 0 in
+… [10123 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-pos-r4.json'))\nprint('controles',len(p['controles']))\nprint('free detail',len(p['libres_50']['detail']))\nprint('r4 corrections',len(p['r4']['variantes']['r4_bilingue' … [546 caractères tronqués]`
+
+  ```
+controles 29
+free detail 28
+r4 corrections 23 ww 17
+cc corrections 25
+safe corrections 37 ww 2
+max corrections 48 ww 11
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-r4.md')\ns=p.read_text()\ns=s.replace('sert de contrôle de reproductibilité (§ 2.3)', 'sert de contrôle de reproductibilité (§ 2.2)')\ns=s.replace('Ces six mots (` … [463 caractères tronqués]`
+
+  ```
+fixed
+14:> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.2),
+271:Ces mots (`where`, `as`, `late`, `outside`, `hard`, `down`, et `fast`) sont **contextuels**. La liste
+506:Les 29 sondes (nom/verbe, adjectif, ambiguïtés `where`/`as`/`late`/`outside`/`hard`/`down`) sont
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-pos-r4.json')\nd=json.loads(p.read_text())\nd['perimetre']=\"Mesure hors clôture : aucun fichier existant modifié, aucun commit, pas de journal/en-cours/roadmap/I … [1874 caractères tronqués]`
+
+  ```
+perimetre Mesure hors clôture : aucun fichier existant modifié, aucun commit, pas de journal/en-cours/roadmap/
+report note added
+keys ['patchs_exacts', 'limites', 'recommandation', 'perimetre', 'fichiers']
+True Mesure hors clôture : aucun fichier existant modifié, aucun commit, pas de journ
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation finale : JSON, patch, liens et périmètre git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re, hashlib\nJ=json.load(open('reports/pensee-pos-r4.json'))\nR=pathlib.Path('reports/rapport-pos-r4.md').read_text()\nprint('JSON keys:',list(J))\nprint('baseline:',J['baseline']['B13']['all'] … [2152 caractères tronqués]`
+
+  ```
+JSON keys: ['rapport', 'ligne', 'date', 'branche', 'objet', 'verdict', 'snapshot', 'protocole', 'baseline', 'r4', 'classes_fermees', 'paquets', 'placebo', 'libres_50', 'controles', 'head_controle', 'patchs_exacts', 'limites', 'recommandation', 'perimetre', 'fichiers']
+baseline: 0.8383 0.6181 222 222
+r4 bilingue: {'all': 0.8455, 'dev': 0.8449, 'test': 0.8471, 'ferme': 0.9133, 'ouvert': 0.7814, 'en': 0.9207, 'fr': 0.8031} {'dev': 0.74, 'test': 0.71, 'all': 0.72} 23 17
+cc core: {'all': 0.8462, 'dev': 0.8453, 'test': 0.8481, 'ferme': 0.9295, 'ouvert': 0.7673, 'en': 0.9321, 'fr': 0.7976} {'dev': 0.78, 'test': 0.81, 'all': 0.79} 25
+safe: {'all': 0.85, 'dev': 0.8494, 'test': 0.8511, 'ferme': 0.9295, 'ouvert': 0.7746, 'en': 0.9425, 'fr': 0.7976} {'dev': 1.19, 'test': 1.11, 'all': 1.17} 37 2
+max: {'all': 0.8534, 'dev': 0.8526, 'test': 0.8551, 'ferme': 0.9295, 'ouvert': 0.7814, 'en': 0.9425, 'fr': 0.8031} {'dev': 1.51, 'test': 1.51, 'all': 1.51} 48 11
+controls: 29 free detail: 28
+patch checks: {'copules_en': True, 'copules_fr': True, 'insert': True, 'bloc_en': True}
+patched sha: 0bf4d3eb0e2a51603534001284718e625346a61c299ff9d488aae87bc17acfb1
+actual patched sha: 0bf4d3eb0e2a51603534001284718
+… [486 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-files -s reports/rapport-pos-r4.md reports/pensee-pos-r4.json && echo '--- HEAD content ---' && git show HEAD:reports/rapport-pos-r4.md 2>&1 | head -20 && echo '--- HEAD json ---' && git show HEAD:reports/pensee-pos-r4.json 2> … [180 caractères tronqués]`
+
+  ```
+100644 528171cb83c238e4f2d2c65edccb9ad3bdfe5237 0	reports/pensee-pos-r4.json
+100644 070c9d329e707726f775077abe138bdad8334b1e 0	reports/rapport-pos-r4.md
+--- HEAD content ---
+# POS — R4 + classes fermées : +1,19 pt dev / +1,11 test en paquet sûr, +1,51/+1,51 en paquet max
+
+> **Ligne de roadmap** : **A25** (gold anglais) · **B13** (moteur de pensée) · **Date** : 2026-11-06 ·
+> **Verdict** : ✅ les deux derniers leviers POS sont mesurés. **R4 bilingue** vaut **+0,74 dev /
+> +0,71 test** (23 correctifs, 0 cassé), **les classes fermées** **+0,78 / +0,81** (25 correctifs,
+> 0 cassé). Le **paquet sûr** (R4-en + classes fermées) vaut **+1,19 / +1,11**, **37/0**, F1
+> **+0,0007**, attachement **222/222**. Le **paquet max** (R4 bilingue) vaut **+1,51 / +1,51**,
+> 48/0, mais **11 faux→faux** et **5 faux positifs français** sur les 50 textes libres. R4 n’est
+> donc **pas « 0 perte »** : « 0 cassé » est une propriété d’exactitude, pas de sens.
+>
+> **Snapshot** : référence **B13** commit `2ba393b0`, `bloc_linguistique.py` SHA
+> `f3db75fc…`, gold `3663be6c…` / `05d4f6df…` / `e3e704ce…` ; split `gold_split.py`
+> (`crc32(id) % 3 == 0` → test). Le dépôt a bougé **pendant** la mesure (correctif d’élis
+… [741 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat HEAD -- reports/rapport-pos-r4.md reports/pensee-pos-r4.json && git diff HEAD -- reports/rapport-pos-r4.md | head -60 && echo '--- json diff keys ---' && git diff HEAD -- reports/pensee-pos-r4.json | head -40", "descr … [58 caractères tronqués]`
+
+  ```
+reports/pensee-pos-r4.json |  1 +
+ reports/rapport-pos-r4.md  | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+diff --git a/reports/rapport-pos-r4.md b/reports/rapport-pos-r4.md
+index 070c9d32..04351788 100644
+--- a/reports/rapport-pos-r4.md
++++ b/reports/rapport-pos-r4.md
+@@ -11,7 +11,7 @@
+ > **Snapshot** : référence **B13** commit `2ba393b0`, `bloc_linguistique.py` SHA
+ > `f3db75fc…`, gold `3663be6c…` / `05d4f6df…` / `e3e704ce…` ; split `gold_split.py`
+ > (`crc32(id) % 3 == 0` → test). Le dépôt a bougé **pendant** la mesure (correctif d’élision,
+-> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.3),
++> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.2),
+ > pas de référence.
+ >
+ > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_pos`, `POS_FERME`,
+@@ -268,7 +268,7 @@ lot ; il ne faut pas le lire comme un gain général de segmentation.
+ | `He walks down the street.` | `down` PREP | **ADV** | ❌ |
+ | `The car is fast.` | `fast` ADJ | NOUN (core) / **ADV** (`fast`) | core ✅, `fast` ❌ |
+ 
+-Ces six mots (`where`, `as`, `late`, `outside`, `hard`, `down`) sont **c
+… [2080 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- tools/bloc_linguistique.py | head -120", "description": "Inspect parallel modification to POS module"}`
+
+  ```
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index c2bb392d..c0473345 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -551,6 +551,239 @@ def _role_gp(prep: str) -> str:
+ # --------------------------------------------------------------------------- heuristique
+ 
+ 
++# --------------------------------------------------------------------------- frontières de phrase
++# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de
++# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel
++# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
++_FERMANTS = "»”’)]}›"
++_OUVRANTS = "«“‘([{‹"
++_TITRES = frozenset({
++    "M", "MM", "Mme", "Mmes", "Mlle", "Mlles", "Me", "Mgr", "St", "Ste",
++    "Dr", "Drs", "Pr", "Prs", "Rév", "Père", "Sr", "Sœur",
++})
++_ABREV_TOUJOURS = frozenset({
++    "cf", "p", "pp", "ex", "réf", "ref", "éd", "ed", "trad", "fig", "chap",
++    "sect", "env", "av", "al", "ibid", "id", "infra", "supra", "coll", "pl",
++    "sq", "suiv", "op", "ca", "n", "no", "nos", "vs", "art", "vol",
++})
++_ABREV_MINUSCULE = frozenset({"etc"})
++# aprè
+… [3771 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"# 4. phrase + pragmatique\\|3 a bis\\|\\\"en\\\": {\\|MOTS_DOUBLE_SENS\" tools/bloc_linguistique.py | head -20 && python3 - <<'PY'\nimport pathlib\ns=pathlib.Path('tools/bloc_linguistique.py').read_text()\nold='''    \"en\" … [1135 caractères tronqués]`
+
+  ```
+314:    "en": {
+356:MOTS_DOUBLE_SENS = set("canard avocat livre temps voler glace note carte point mousse manche mode "
+388:                  "en": {"because", "although", "though", "if", "while", "as", "since",
+1349:        # 3 a bis. une forme en -s/-es après un NOM sujet est un verbe (« the cat sleeps »).
+1375:        # 4. phrase + pragmatique
+1393:                    or any(m in _normaliser(p) for m in MOTS_DOUBLE_SENS)):
+old en block present False
+r4 anchor count 1
+adj anchor count 1
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 30, "offset": 304}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+304: POS_FERME = {
+305:     "fr": {
+306:         "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
+307:         "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant au-dessus au-dessous vis-à-vis en-dehors".split()),
+308:         "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
+309:         "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant qu".split()),
+310:         "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir suis es sommes êtes".split()),
+311:         "ADV": set("ne n pas plus jamais rien très bien mal ici hier demain aujourd'hui peut-être fort souvent toujours déjà encore tard tôt ainsi alors aussi".split()),
+312:         "NUM": set("deux trois quatre cinq six sept huit neuf dix".split()),
+313:    
+… [1937 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"COPULES\\|3 c\\. R4\\|contexte.*copule\\|R4\" tools/bloc_linguistique.py | head -20 && sed -n '350,380p' tools/bloc_linguistique.py && sed -n '1360,1390p' tools/bloc_linguistique.py", "description": "Check if R4 is integrat … [17 caractères tronqués]`
+
+  ```
+1360:        # 3 c. R4-en : après une **copule**, un mot inconnu (NOUN, confiance ≤ 0,45) est un
+1373:                                               meta={"ouvert": True, "contexte": "copule"})
+              "joli jolie bon bonne bons bonnes mauvais mauvaise jeune jeunes nouveau nouvelle "
+              "nouveaux nouvelles chaud chaude froid froide noir noire blanc blanche vert verte bleu "
+              "bleue long longue court courte facile difficile important importante".split()),
+    "en": set("ready interesting old young big small red blue green black white good bad happy sad "
+              "beautiful nice long short easy difficult important".split()),
+}
+MOTS_DOUBLE_SENS = set("canard avocat livre temps voler glace note carte point mousse manche mode "
+                       "duck".split())
+
+SUFFIXES = ("ment", "tions", "tion", "ités", "ité", "eux", "euse", "ables", "able", "isme",
+            "istes", "iste", "ance", "ence", "er", "ir", "ez", "ons", "ait", "aient", "ing",
+            "ed", "ly", "ness", "ful", "less", "ship", "ous", "ive", "al")
+PREFIXES = ("re", "ré", "dé", "des", "pré", "pro", "anti", "auto", "co", "con", "in", "im",
+            "un", "non", "sur", "sous",
+… [2977 caractères tronqués]
+  ```
+

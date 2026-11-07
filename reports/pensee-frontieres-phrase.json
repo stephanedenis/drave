@@ -1,0 +1,4989 @@
+{
+ "schema": "pensee-frontieres-phrase/v1",
+ "objet": "P0-4 — frontières de phrase et tokénisation du bloc linguistique",
+ "branche": "s/v7",
+ "commit_mesure": "ed8f9414a83d0ad424ab449996b897ff1bf2c311",
+ "module": "tools/bloc_linguistique.py",
+ "module_sha256": "12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1",
+ "gold_commit": "c5b80dd8",
+ "date": "2026-11-06",
+ "statut": "mesuré sur une copie locale, non appliqué au dépôt ; aucun commit",
+ "fichiers_modifies": [],
+ "dispositif": {
+  "banc": "40 textes libres écrits pour l'analyse (59 phrases attendues), catégories URL, courriel, chemin, décimaux, dates, versions/IP, abréviations, ellipses, guillemets, listes, titres, code inline, anglais, négatifs",
+  "simulation": "sous-classe de Heuristique : les règles sont commutables ; le patch final est testé comme module copié localement, puis par git apply --check",
+  "gold": "gold vivant 612 phrases (hand 20 + reel 432 + synthétique 160), split gold_split dev 422 / test 190",
+  "evaluateur": "tools/tests/linguistique/evaluer_gold.py (POS, F1 syntagmes, attachement, pragmatique) ; pas de modèle, pas de GPU",
+  "ce_qui_n_est_pas_mesure": "la justesse sémantique sur texte libre, un corpus aléatoire, l'accord inter-annotateurs, la qualité du chunker sur les lignes"
+ },
+ "verdict": {
+  "frontieres": "40/40 textes exacts après patch (2/40 avant), 32/40 frontières fausses avant, 0 après",
+  "dev_test": "delta 0 sur POS, F1 syntagmes, attachement et tokens ; 2 spans de phrase du gold corrigés ; 0 valeur d'acte changée",
+  "tokénisation": "patch B : 477 → 362 tokens, 273 → 232 POS, 47 POS dans des fragments URL/courriel/chemin supprimés, 0 token du gold changé",
+  "recommandation": "appliquer A (frontières) ; B est indépendant et additif, à appliquer si le contrat accepte les types courriel/chemin"
+ },
+ "resume_40": {
+  "avant": {
+   "phrases": 102,
+   "textes_exacts": 2,
+   "textes_frontiere_fausse": 32,
+   "textes_casses": 38,
+   "extra": 47,
+   "missing": 4,
+   "overlaps": 9,
+   "leading": 31,
+   "vides": 0,
+   "fausses_questions": 5,
+   "types_faux": 63
+  },
+  "apres": {
+   "phrases": 59,
+   "textes_exacts": 40,
+   "textes_frontiere_fausse": 0,
+   "textes_casses": 0,
+   "extra": 0,
+   "missing": 0,
+   "overlaps": 0,
+   "leading": 0,
+   "vides": 0,
+   "fausses_questions": 0,
+   "types_faux": 0
+  }
+ },
+ "ablations_40": {
+  "original": {
+   "phrases": 102,
+   "textes_exacts": 2,
+   "textes_sans_frontiere_fausse": 8,
+   "textes_sans_defaut": 2,
+   "extra": 47,
+   "missing": 4,
+   "overlaps": 9,
+   "leading": 31,
+   "fausses_questions": 5
+  },
+  "neutre": {
+   "phrases": 102,
+   "textes_exacts": 2,
+   "textes_sans_frontiere_fausse": 13,
+   "textes_sans_defaut": 2,
+   "extra": 45,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 31,
+   "fausses_questions": 5
+  },
+  "regle_a": {
+   "phrases": 87,
+   "textes_exacts": 6,
+   "textes_sans_frontiere_fausse": 19,
+   "textes_sans_defaut": 6,
+   "extra": 30,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 29,
+   "fausses_questions": 5
+  },
+  "regle_b": {
+   "phrases": 92,
+   "textes_exacts": 8,
+   "textes_sans_frontiere_fausse": 20,
+   "textes_sans_defaut": 8,
+   "extra": 35,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 21,
+   "fausses_questions": 5
+  },
+  "regle_c": {
+   "phrases": 83,
+   "textes_exacts": 10,
+   "textes_sans_frontiere_fausse": 23,
+   "textes_sans_defaut": 10,
+   "extra": 26,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 31,
+   "fausses_questions": 0
+  },
+  "regle_d": {
+   "phrases": 101,
+   "textes_exacts": 3,
+   "textes_sans_frontiere_fausse": 14,
+   "textes_sans_defaut": 3,
+   "extra": 44,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 30,
+   "fausses_questions": 5
+  },
+  "regle_e": {
+   "phrases": 102,
+   "textes_exacts": 13,
+   "textes_sans_frontiere_fausse": 13,
+   "textes_sans_defaut": 13,
+   "extra": 45,
+   "missing": 2,
+   "overlaps": 0,
+   "leading": 0,
+   "fausses_questions": 5
+  },
+  "regle_f": {
+   "phrases": 104,
+   "textes_exacts": 4,
+   "textes_sans_frontiere_fausse": 15,
+   "textes_sans_defaut": 4,
+   "extra": 45,
+   "missing": 0,
+   "overlaps": 0,
+   "leading": 30,
+   "fausses_questions": 5
+  },
+  "toutes": {
+   "phrases": 59,
+   "textes_exacts": 40,
+   "textes_sans_frontiere_fausse": 40,
+   "textes_sans_defaut": 40,
+   "extra": 0,
+   "missing": 0,
+   "overlaps": 0,
+   "leading": 0,
+   "fausses_questions": 0
+  }
+ },
+ "regles": [
+  {
+   "id": "a",
+   "nom": "décimaux, dates, versions, IP, numéros de liste",
+   "mecanisme": "un point entre deux chiffres n'est pas une frontière (12.5, 12.03.2024, 192.168.1.10) ; un nombre de 1 à 3 chiffres en début de ligne suivi d'un espace est un numéro de liste (1. Ouvrir).",
+   "mesure_40": {
+    "phrases": 87,
+    "textes_exacts": 6,
+    "textes_sans_frontiere_fausse": 19,
+    "textes_sans_defaut": 6,
+    "extra": 30,
+    "missing": 2,
+    "overlaps": 0,
+    "leading": 29,
+    "fausses_questions": 5
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "« 12. Il part. » en début de ligne est traité comme un numéro de liste ; un point décimal suivi d'une espace reste une frontière."
+  },
+  {
+   "id": "b",
+   "nom": "abréviations et civilités",
+   "mecanisme": "M./MM./Mme./Dr./Pr., etc. + minuscule, cf., p. ex., art., vol., initiales J. K. et abréviations pointées e.g./i.e./U.S.A. ; un titre garde la phrase ouverte si le mot suivant n'est pas un mot de début de phrase (Il, Elle, Puis, …).",
+   "mesure_40": {
+    "phrases": 92,
+    "textes_exacts": 8,
+    "textes_sans_frontiere_fausse": 20,
+    "textes_sans_defaut": 8,
+    "extra": 35,
+    "missing": 2,
+    "overlaps": 0,
+    "leading": 21,
+    "fausses_questions": 5
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "un titre en fin de phrase suivi d'un mot inconnu (Dr. Paul) reste ouvert ; la liste _DEBUTS est finie."
+  },
+  {
+   "id": "c",
+   "nom": "URL, courriels, chemins, code inline, identifiants pointés",
+   "mecanisme": "zones protégées : https?://…, adresse@hôte.tld, chemins avec / et extension, domaines nus, `code`, ```bloc```, os.path.join, Heuristique._phrases ; la ponctuation finale collée à l'URL est rendue à la phrase.",
+   "mesure_40": {
+    "phrases": 83,
+    "textes_exacts": 10,
+    "textes_sans_frontiere_fausse": 23,
+    "textes_sans_defaut": 10,
+    "extra": 26,
+    "missing": 2,
+    "overlaps": 0,
+    "leading": 31,
+    "fausses_questions": 0
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "une URL très longue ou un token pointé non reconnu peut encore être coupé ; les types ajoutés (courriel, chemin) sont additifs."
+  },
+  {
+   "id": "d",
+   "nom": "ponctuation répétée et ellipse",
+   "mecanisme": "?!, ..., … ne font qu'une frontière (déjà le cas) ; une ellipse suivie d'une minuscule continue la phrase (Il hésite... puis il part.), suivie d'une majuscule elle coupe (Il hésite... Elle part.).",
+   "mesure_40": {
+    "phrases": 101,
+    "textes_exacts": 3,
+    "textes_sans_frontiere_fausse": 14,
+    "textes_sans_defaut": 3,
+    "extra": 44,
+    "missing": 2,
+    "overlaps": 0,
+    "leading": 30,
+    "fausses_questions": 5
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "style : un SMS qui commence une phrase par une minuscule après une ellipse est fusionné ; retirer la branche ellipse de _est_frontiere pour revenir au comportement strict."
+  },
+  {
+   "id": "e",
+   "nom": "espaces et phrases vides",
+   "mecanisme": "les spans sont rognés à gauche et à droite ; aucun span vide ; une phrase qui n'a que des blancs n'est pas comptée.",
+   "mesure_40": {
+    "phrases": 102,
+    "textes_exacts": 13,
+    "textes_sans_frontiere_fausse": 13,
+    "textes_sans_defaut": 13,
+    "extra": 45,
+    "missing": 2,
+    "overlaps": 0,
+    "leading": 0,
+    "fausses_questions": 5
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "deux spans de phrase du gold (r308, r318) se décalent d'un espace ; aucune valeur d'acte ni métrique ne change."
+  },
+  {
+   "id": "f",
+   "nom": "saut de ligne structurel (extension)",
+   "mecanisme": "une ligne vide ou une ligne qui commence par #, -, *, +, 1., A., >, | ou ``` coupe la phrase ; un simple retour à la ligne dans un paragraphe ne coupe pas.",
+   "mesure_40": {
+    "phrases": 104,
+    "textes_exacts": 4,
+    "textes_sans_frontiere_fausse": 15,
+    "textes_sans_defaut": 4,
+    "extra": 45,
+    "missing": 0,
+    "overlaps": 0,
+    "leading": 30,
+    "fausses_questions": 5
+   },
+   "dev": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "test": {
+    "delta_pos": 0.0,
+    "delta_f1": 0.0,
+    "delta_att": 0.0,
+    "delta_acte": 0.0
+   },
+   "risque": "deux syntagmes du chunker S traversent désormais une frontière (t01, t02) : le chunker ignore les lignes, pas la frontière."
+  }
+ ],
+ "corpus_40": [
+  {
+   "id": "n01",
+   "cat": "négatif/2 phrases",
+   "texte": "Il part. Elle reste.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 8,
+     "texte": "Il part.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 9,
+     "fin": 20,
+     "texte": "Elle reste.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     8
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 8,
+      "texte": "Il part.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 8,
+      "fin": 20,
+      "texte": " Elle reste.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 8,
+      "texte": "Il part.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 9,
+      "fin": 20,
+      "texte": "Elle reste.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "n02",
+   "cat": "négatif/3 phrases",
+   "texte": "Il part. Elle reste. Nous attendons.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 8,
+     "texte": "Il part.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 9,
+     "fin": 20,
+     "texte": "Elle reste.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 21,
+     "fin": 36,
+     "texte": "Nous attendons.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     8,
+     20
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 8,
+      "texte": "Il part.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 8,
+      "fin": 20,
+      "texte": " Elle reste.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 20,
+      "fin": 36,
+      "texte": " Nous attendons.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 3,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 8,
+      "texte": "Il part.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 9,
+      "fin": 20,
+      "texte": "Elle reste.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 21,
+      "fin": 36,
+      "texte": "Nous attendons.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 3,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 6
+   }
+  },
+  {
+   "id": "d01",
+   "cat": "décimal",
+   "texte": "Le prix est 12.5 euros.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 23,
+     "texte": "Le prix est 12.5 euros.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     15
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 15,
+      "texte": "Le prix est 12.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 15,
+      "fin": 23,
+      "texte": "5 euros.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 23,
+      "texte": "Le prix est 12.5 euros.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "d02",
+   "cat": "décimal+milliers",
+   "texte": "La remise est de 12,5 % sur 1.234,56 euros.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 43,
+     "texte": "La remise est de 12,5 % sur 1.234,56 euros.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     30
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 30,
+      "texte": "La remise est de 12,5 % sur 1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 30,
+      "fin": 43,
+      "texte": "234,56 euros.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 43,
+      "texte": "La remise est de 12,5 % sur 1.234,56 euros.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "d03",
+   "cat": "date",
+   "texte": "La réunion du 12.03.2024 a été reportée au 15.04.2024.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 54,
+     "texte": "La réunion du 12.03.2024 a été reportée au 15.04.2024.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 5,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     17,
+     20,
+     46,
+     49
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 17,
+      "texte": "La réunion du 12.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 17,
+      "fin": 20,
+      "texte": "03.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 20,
+      "fin": 46,
+      "texte": "2024 a été reportée au 15.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 46,
+      "fin": 49,
+      "texte": "04.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 49,
+      "fin": 54,
+      "texte": "2024.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 54,
+      "texte": "La réunion du 12.03.2024 a été reportée au 15.04.2024.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 5,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "d04",
+   "cat": "version+IP",
+   "texte": "La version 2.1.3 tourne sur 192.168.1.10.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 41,
+     "texte": "La version 2.1.3 tourne sur 192.168.1.10.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 6,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     13,
+     15,
+     32,
+     36,
+     38
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 13,
+      "texte": "La version 2.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 13,
+      "fin": 15,
+      "texte": "1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 15,
+      "fin": 32,
+      "texte": "3 tourne sur 192.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 32,
+      "fin": 36,
+      "texte": "168.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 36,
+      "fin": 38,
+      "texte": "1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 38,
+      "fin": 41,
+      "texte": "10.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 41,
+      "texte": "La version 2.1.3 tourne sur 192.168.1.10.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 6,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "u01",
+   "cat": "URL+query",
+   "texte": "Visitez https://example.com/docs?page=2 pour la documentation.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 62,
+     "texte": "Visitez https://example.com/docs?page=2 pour la documentation.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     24,
+     33
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [
+     [
+      24,
+      33,
+      "com/docs?"
+     ]
+    ],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 24,
+      "texte": "Visitez https://example.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 24,
+      "fin": 33,
+      "texte": "com/docs?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 33,
+      "fin": 62,
+      "texte": "page=2 pour la documentation.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 62,
+      "texte": "Visitez https://example.com/docs?page=2 pour la documentation.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 9,
+    "syntagme_labels": 7
+   }
+  },
+  {
+   "id": "u02",
+   "cat": "URL+phrase",
+   "texte": "Le lien est https://example.com/a.b?x=1. Cliquez ensuite sur « Connexion ».",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 40,
+     "texte": "Le lien est https://example.com/a.b?x=1.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 41,
+     "fin": 75,
+     "texte": "Cliquez ensuite sur « Connexion ».",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 5,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     28,
+     34,
+     36
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     40
+    ],
+    "vides": [],
+    "fausses_questions": [
+     [
+      34,
+      36,
+      "b?"
+     ]
+    ],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 28,
+      "texte": "Le lien est https://example.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 28,
+      "fin": 34,
+      "texte": "com/a.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 34,
+      "fin": 36,
+      "texte": "b?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 36,
+      "fin": 40,
+      "texte": "x=1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 40,
+      "fin": 75,
+      "texte": " Cliquez ensuite sur « Connexion ».",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 40,
+      "texte": "Le lien est https://example.com/a.b?x=1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 41,
+      "fin": 75,
+      "texte": "Cliquez ensuite sur « Connexion ».",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 5,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 13,
+    "syntagme_labels": 10
+   }
+  },
+  {
+   "id": "e01",
+   "cat": "courriel",
+   "texte": "Écrivez à alice@example.org avant vendredi.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 43,
+     "texte": "Écrivez à alice@example.org avant vendredi.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     24
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 24,
+      "texte": "Écrivez à alice@example.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 24,
+      "fin": 43,
+      "texte": "org avant vendredi.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 43,
+      "texte": "Écrivez à alice@example.org avant vendredi.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "e02",
+   "cat": "courriel+URL",
+   "texte": "Contactez support@exemple.fr ou ouvrez https://exemple.fr/aide?lang=fr.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 71,
+     "texte": "Contactez support@exemple.fr ou ouvrez https://exemple.fr/aide?lang=fr.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 4,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     26,
+     55,
+     63
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [
+     [
+      55,
+      63,
+      "fr/aide?"
+     ]
+    ],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 26,
+      "texte": "Contactez support@exemple.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 26,
+      "fin": 55,
+      "texte": "fr ou ouvrez https://exemple.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 55,
+      "fin": 63,
+      "texte": "fr/aide?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 63,
+      "fin": 71,
+      "texte": "lang=fr.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 71,
+      "texte": "Contactez support@exemple.fr ou ouvrez https://exemple.fr/aide?lang=fr.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 4,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 12,
+    "syntagme_labels": 6
+   }
+  },
+  {
+   "id": "c01",
+   "cat": "chemin+code",
+   "texte": "Ouvrez src/tools/bloc_linguistique.py puis cherchez `_phrases`.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 63,
+     "texte": "Ouvrez src/tools/bloc_linguistique.py puis cherchez `_phrases`.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     35
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 35,
+      "texte": "Ouvrez src/tools/bloc_linguistique.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 35,
+      "fin": 63,
+      "texte": "py puis cherchez `_phrases`.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 63,
+      "texte": "Ouvrez src/tools/bloc_linguistique.py puis cherchez `_phrases`.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 8,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "c02",
+   "cat": "chemin relatif",
+   "texte": "Le fichier ./data/gold.json contient 612 phrases.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 49,
+     "texte": "Le fichier ./data/gold.json contient 612 phrases.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     12,
+     23
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 12,
+      "texte": "Le fichier .",
+      "type": "déclarative"
+     },
+     {
+      "debut": 12,
+      "fin": 23,
+      "texte": "/data/gold.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 23,
+      "fin": 49,
+      "texte": "json contient 612 phrases.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 49,
+      "texte": "Le fichier ./data/gold.json contient 612 phrases.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "c03",
+   "cat": "code inline",
+   "texte": "Appelez `Heuristique._phrases(texte)` dans le module.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 53,
+     "texte": "Appelez `Heuristique._phrases(texte)` dans le module.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     21
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 21,
+      "texte": "Appelez `Heuristique.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 21,
+      "fin": 53,
+      "texte": "_phrases(texte)` dans le module.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 53,
+      "texte": "Appelez `Heuristique._phrases(texte)` dans le module.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "c04",
+   "cat": "identifiant pointé",
+   "texte": "Appelez Heuristique._phrases(texte) dans le module.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 51,
+     "texte": "Appelez Heuristique._phrases(texte) dans le module.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     20
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 20,
+      "texte": "Appelez Heuristique.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 20,
+      "fin": 51,
+      "texte": "_phrases(texte) dans le module.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 51,
+      "texte": "Appelez Heuristique._phrases(texte) dans le module.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "a01",
+   "cat": "abréviation M.",
+   "texte": "M. Dupont, le directeur, a annoncé sa retraite.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 47,
+     "texte": "M. Dupont, le directeur, a annoncé sa retraite.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     3
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      47,
+      2,
+      47
+     ]
+    ],
+    "leading": [
+     2
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 47,
+      "texte": "M. Dupont, le directeur, a annoncé sa retraite.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 2,
+      "fin": 47,
+      "texte": " Dupont, le directeur, a annoncé sa retraite.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 47,
+      "texte": "M. Dupont, le directeur, a annoncé sa retraite.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 8,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "a02",
+   "cat": "abréviation Dr.",
+   "texte": "Le Dr. Martin arrive à 9 h.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 27,
+     "texte": "Le Dr. Martin arrive à 9 h.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     7
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      27,
+      6,
+      27
+     ]
+    ],
+    "leading": [
+     6
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 27,
+      "texte": "Le Dr. Martin arrive à 9 h.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 6,
+      "fin": 27,
+      "texte": " Martin arrive à 9 h.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 27,
+      "texte": "Le Dr. Martin arrive à 9 h.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "a03",
+   "cat": "etc. minuscule",
+   "texte": "des pommes, des poires, etc. et des fraises.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 44,
+     "texte": "des pommes, des poires, etc. et des fraises.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     29
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      44,
+      28,
+      44
+     ]
+    ],
+    "leading": [
+     28
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 44,
+      "texte": "des pommes, des poires, etc. et des fraises.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 28,
+      "fin": 44,
+      "texte": " et des fraises.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 44,
+      "texte": "des pommes, des poires, etc. et des fraises.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 8,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "a04",
+   "cat": "etc. majuscule",
+   "texte": "Il y a des pommes, des poires, etc. Il part demain.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 35,
+     "texte": "Il y a des pommes, des poires, etc.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 36,
+     "fin": 51,
+     "texte": "Il part demain.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      51,
+      35,
+      51
+     ]
+    ],
+    "leading": [
+     35
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 51,
+      "texte": "Il y a des pommes, des poires, etc. Il part demain.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 35,
+      "fin": 51,
+      "texte": " Il part demain.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 35,
+      "texte": "Il y a des pommes, des poires, etc.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 36,
+      "fin": 51,
+      "texte": "Il part demain.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 11,
+    "syntagme_labels": 9
+   }
+  },
+  {
+   "id": "a05",
+   "cat": "abréviation cf.",
+   "texte": "cf. la note 3 pour les détails.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 31,
+     "texte": "cf. la note 3 pour les détails.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     4
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      31,
+      3,
+      31
+     ]
+    ],
+    "leading": [
+     3
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 31,
+      "texte": "cf. la note 3 pour les détails.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 3,
+      "fin": 31,
+      "texte": " la note 3 pour les détails.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 31,
+      "texte": "cf. la note 3 pour les détails.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "a06",
+   "cat": "abréviation p. ex.",
+   "texte": "p. ex. ce cas limite.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 21,
+     "texte": "p. ex. ce cas limite.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     3,
+     7
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      6,
+      2,
+      6
+     ]
+    ],
+    "leading": [
+     2,
+     6
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 6,
+      "texte": "p. ex.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 2,
+      "fin": 6,
+      "texte": " ex.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 6,
+      "fin": 21,
+      "texte": " ce cas limite.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 21,
+      "texte": "p. ex. ce cas limite.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 5,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "a07",
+   "cat": "initiales",
+   "texte": "J. K. Rowling a écrit Harry Potter.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 35,
+     "texte": "J. K. Rowling a écrit Harry Potter.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     3,
+     6
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     2,
+     5
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 2,
+      "texte": "J.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 2,
+      "fin": 5,
+      "texte": " K.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 5,
+      "fin": 35,
+      "texte": " Rowling a écrit Harry Potter.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 35,
+      "texte": "J. K. Rowling a écrit Harry Potter.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "a08",
+   "cat": "titre en fin de phrase",
+   "texte": "Il consulte le Dr. Elle est partie.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 18,
+     "texte": "Il consulte le Dr.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 19,
+     "fin": 35,
+     "texte": "Elle est partie.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      35,
+      18,
+      35
+     ]
+    ],
+    "leading": [
+     18
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 35,
+      "texte": "Il consulte le Dr. Elle est partie.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 18,
+      "fin": 35,
+      "texte": " Elle est partie.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 18,
+      "texte": "Il consulte le Dr.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 19,
+      "fin": 35,
+      "texte": "Elle est partie.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "t01",
+   "cat": "titre markdown",
+   "texte": "# Notes de réunion\n\nLe budget 2025 a été validé.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 18,
+     "texte": "# Notes de réunion",
+     "type": "déclarative"
+    },
+    {
+     "debut": 20,
+     "fin": 48,
+     "texte": "Le budget 2025 a été validé.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 1,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [],
+    "missing": [
+     20
+    ],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 48,
+      "texte": "# Notes de réunion\n\nLe budget 2025 a été validé.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 18,
+      "texte": "# Notes de réunion",
+      "type": "déclarative"
+     },
+     {
+      "debut": 20,
+      "fin": 48,
+      "texte": "Le budget 2025 a été validé.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 1,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 1,
+    "pos_labels": 8,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "t02",
+   "cat": "liste sans point",
+   "texte": "- Priorité : réduire les coûts\n- Échéance : fin mars",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 30,
+     "texte": "- Priorité : réduire les coûts",
+     "type": "déclarative"
+    },
+    {
+     "debut": 31,
+     "fin": 52,
+     "texte": "- Échéance : fin mars",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 1,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [],
+    "missing": [
+     31
+    ],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 52,
+      "texte": "- Priorité : réduire les coûts\n- Échéance : fin mars",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 30,
+      "texte": "- Priorité : réduire les coûts",
+      "type": "déclarative"
+     },
+     {
+      "debut": 31,
+      "fin": 52,
+      "texte": "- Échéance : fin mars",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 1,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 1,
+    "pos_labels": 7,
+    "syntagme_labels": 6
+   }
+  },
+  {
+   "id": "t03",
+   "cat": "liste avec points",
+   "texte": "1. Ouvrir le fichier.\n2. Lire la première ligne.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 21,
+     "texte": "1. Ouvrir le fichier.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 22,
+     "fin": 48,
+     "texte": "2. Lire la première ligne.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 4,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     3,
+     25
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     2,
+     21,
+     24
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 2,
+      "texte": "1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 2,
+      "fin": 21,
+      "texte": " Ouvrir le fichier.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 21,
+      "fin": 24,
+      "texte": "\n2.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 24,
+      "fin": 48,
+      "texte": " Lire la première ligne.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 21,
+      "texte": "1. Ouvrir le fichier.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 22,
+      "fin": 48,
+      "texte": "2. Lire la première ligne.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 4,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "g01",
+   "cat": "guillemets",
+   "texte": "« Bonjour. » Elle part.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 12,
+     "texte": "« Bonjour. »",
+     "type": "déclarative"
+    },
+    {
+     "debut": 13,
+     "fin": 23,
+     "texte": "Elle part.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     11
+    ],
+    "missing": [
+     13
+    ],
+    "overlaps": [],
+    "leading": [
+     10
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 10,
+      "texte": "« Bonjour.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 10,
+      "fin": 23,
+      "texte": " » Elle part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 12,
+      "texte": "« Bonjour. »",
+      "type": "déclarative"
+     },
+     {
+      "debut": 13,
+      "fin": 23,
+      "texte": "Elle part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 3,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "g02",
+   "cat": "guillemets+question",
+   "texte": "Il demande : « Viens-tu ? » Puis il part.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 27,
+     "texte": "Il demande : « Viens-tu ? »",
+     "type": "interrogative"
+    },
+    {
+     "debut": 28,
+     "fin": 41,
+     "texte": "Puis il part.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     26
+    ],
+    "missing": [
+     28
+    ],
+    "overlaps": [],
+    "leading": [
+     25
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 25,
+      "texte": "Il demande : « Viens-tu ?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 25,
+      "fin": 41,
+      "texte": " » Puis il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 27,
+      "texte": "Il demande : « Viens-tu ? »",
+      "type": "interrogative"
+     },
+     {
+      "debut": 28,
+      "fin": 41,
+      "texte": "Puis il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 5
+   }
+  },
+  {
+   "id": "x01",
+   "cat": "ellipse minuscule",
+   "texte": "Il hésite... puis il part.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 26,
+     "texte": "Il hésite... puis il part.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     13
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     12
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 12,
+      "texte": "Il hésite...",
+      "type": "déclarative"
+     },
+     {
+      "debut": 12,
+      "fin": 26,
+      "texte": " puis il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 26,
+      "texte": "Il hésite... puis il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 5,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "x02",
+   "cat": "ellipse majuscule",
+   "texte": "Il hésite... Elle part.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 12,
+     "texte": "Il hésite...",
+     "type": "déclarative"
+    },
+    {
+     "debut": 13,
+     "fin": 23,
+     "texte": "Elle part.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     12
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 12,
+      "texte": "Il hésite...",
+      "type": "déclarative"
+     },
+     {
+      "debut": 12,
+      "fin": 23,
+      "texte": " Elle part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 12,
+      "texte": "Il hésite...",
+      "type": "déclarative"
+     },
+     {
+      "debut": 13,
+      "fin": 23,
+      "texte": "Elle part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "x03",
+   "cat": "ponctuation répétée",
+   "texte": "Vraiment ?! Je ne savais pas.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 11,
+     "texte": "Vraiment ?!",
+     "type": "interrogative"
+    },
+    {
+     "debut": 12,
+     "fin": 29,
+     "texte": "Je ne savais pas.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     11
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 11,
+      "texte": "Vraiment ?!",
+      "type": "interrogative"
+     },
+     {
+      "debut": 11,
+      "fin": 29,
+      "texte": " Je ne savais pas.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 11,
+      "texte": "Vraiment ?!",
+      "type": "interrogative"
+     },
+     {
+      "debut": 12,
+      "fin": 29,
+      "texte": "Je ne savais pas.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 5,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "x04",
+   "cat": "ellipse finale",
+   "texte": "Je ne sais pas…",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 15,
+     "texte": "Je ne sais pas…",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 15,
+      "texte": "Je ne sais pas…",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 15,
+      "texte": "Je ne sais pas…",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 1,
+    "phr_apres": 1,
+    "phrase_labels_differents": false,
+    "acte_labels_differents": false,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 2
+   }
+  },
+  {
+   "id": "s01",
+   "cat": "sans point final",
+   "texte": "Ceci est une phrase sans ponctuation finale",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 43,
+     "texte": "Ceci est une phrase sans ponctuation finale",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 43,
+      "texte": "Ceci est une phrase sans ponctuation finale",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 43,
+      "texte": "Ceci est une phrase sans ponctuation finale",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 1,
+    "phr_apres": 1,
+    "phrase_labels_differents": false,
+    "acte_labels_differents": false,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 4
+   }
+  },
+  {
+   "id": "s02",
+   "cat": "espaces initiaux",
+   "texte": "  Première phrase.   Deuxième phrase.  ",
+   "attendu": [
+    {
+     "debut": 2,
+     "fin": 18,
+     "texte": "Première phrase.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 21,
+     "fin": 37,
+     "texte": "Deuxième phrase.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     0,
+     18
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 18,
+      "texte": "  Première phrase.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 18,
+      "fin": 37,
+      "texte": "   Deuxième phrase.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 2,
+      "fin": 18,
+      "texte": "Première phrase.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 21,
+      "fin": 37,
+      "texte": "Deuxième phrase.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 4,
+    "syntagme_labels": 0
+   }
+  },
+  {
+   "id": "en01",
+   "cat": "anglais Dr.",
+   "texte": "Dr. Smith arrived. He was tired.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 18,
+     "texte": "Dr. Smith arrived.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 19,
+     "fin": 32,
+     "texte": "He was tired.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     4
+    ],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      18,
+      3,
+      18
+     ]
+    ],
+    "leading": [
+     3,
+     18
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 18,
+      "texte": "Dr. Smith arrived.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 3,
+      "fin": 18,
+      "texte": " Smith arrived.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 18,
+      "fin": 32,
+      "texte": " He was tired.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 18,
+      "texte": "Dr. Smith arrived.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 19,
+      "fin": 32,
+      "texte": "He was tired.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 2
+   }
+  },
+  {
+   "id": "en02",
+   "cat": "anglais e.g.",
+   "texte": "Use a tool, e.g. a hammer, to fix it.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 37,
+     "texte": "Use a tool, e.g. a hammer, to fix it.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     14,
+     17
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     16
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 14,
+      "texte": "Use a tool, e.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 14,
+      "fin": 16,
+      "texte": "g.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 16,
+      "fin": 37,
+      "texte": " a hammer, to fix it.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 37,
+      "texte": "Use a tool, e.g. a hammer, to fix it.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 10,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "en03",
+   "cat": "anglais etc.",
+   "texte": "Bring apples, pears, etc. Then leave.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 25,
+     "texte": "Bring apples, pears, etc.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 26,
+     "fin": 37,
+     "texte": "Then leave.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [
+     [
+      0,
+      37,
+      25,
+      37
+     ]
+    ],
+    "leading": [
+     25
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 37,
+      "texte": "Bring apples, pears, etc. Then leave.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 25,
+      "fin": 37,
+      "texte": " Then leave.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 25,
+      "texte": "Bring apples, pears, etc.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 26,
+      "fin": 37,
+      "texte": "Then leave.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 6,
+    "syntagme_labels": 2
+   }
+  },
+  {
+   "id": "u03",
+   "cat": "URL entre parenthèses",
+   "texte": "Voir la page (https://example.com/a?b=1) pour plus d'informations.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 66,
+     "texte": "Voir la page (https://example.com/a?b=1) pour plus d'informations.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 3,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     30,
+     36
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [
+     [
+      30,
+      36,
+      "com/a?"
+     ]
+    ],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 30,
+      "texte": "Voir la page (https://example.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 30,
+      "fin": 36,
+      "texte": "com/a?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 36,
+      "fin": 66,
+      "texte": "b=1) pour plus d'informations.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 1,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 66,
+      "texte": "Voir la page (https://example.com/a?b=1) pour plus d'informations.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 3,
+    "phr_apres": 1,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 12,
+    "syntagme_labels": 9
+   }
+  },
+  {
+   "id": "s03",
+   "cat": "point-virgule",
+   "texte": "Il ouvre la porte ; il entre. Puis il s'assoit.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 29,
+     "texte": "Il ouvre la porte ; il entre.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 30,
+     "fin": 47,
+     "texte": "Puis il s'assoit.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 2,
+    "exact": false,
+    "frontiere_fausse": false,
+    "casse": true,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     29
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 29,
+      "texte": "Il ouvre la porte ; il entre.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 29,
+      "fin": 47,
+      "texte": " Puis il s'assoit.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 29,
+      "texte": "Il ouvre la porte ; il entre.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 30,
+      "fin": 47,
+      "texte": "Puis il s'assoit.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 2,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 10,
+    "syntagme_labels": 7
+   }
+  },
+  {
+   "id": "d05",
+   "cat": "date+phrase",
+   "texte": "Le 12.03.2024. Il part.",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 14,
+     "texte": "Le 12.03.2024.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 15,
+     "fin": 23,
+     "texte": "Il part.",
+     "type": "déclarative"
+    }
+   ],
+   "avant": {
+    "phrases": 4,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     6,
+     9
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     14
+    ],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 6,
+      "texte": "Le 12.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 6,
+      "fin": 9,
+      "texte": "03.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 9,
+      "fin": 14,
+      "texte": "2024.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 14,
+      "fin": 23,
+      "texte": " Il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 14,
+      "texte": "Le 12.03.2024.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 15,
+      "fin": 23,
+      "texte": "Il part.",
+      "type": "déclarative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 4,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 3,
+    "syntagme_labels": 3
+   }
+  },
+  {
+   "id": "u04",
+   "cat": "URL+question réelle",
+   "texte": "Visitez https://example.com?q=1. Que voyez-vous ?",
+   "attendu": [
+    {
+     "debut": 0,
+     "fin": 32,
+     "texte": "Visitez https://example.com?q=1.",
+     "type": "déclarative"
+    },
+    {
+     "debut": 33,
+     "fin": 49,
+     "texte": "Que voyez-vous ?",
+     "type": "interrogative"
+    }
+   ],
+   "avant": {
+    "phrases": 4,
+    "exact": false,
+    "frontiere_fausse": true,
+    "casse": true,
+    "extra": [
+     24,
+     28
+    ],
+    "missing": [],
+    "overlaps": [],
+    "leading": [
+     32
+    ],
+    "vides": [],
+    "fausses_questions": [
+     [
+      24,
+      28,
+      "com?"
+     ]
+    ],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 24,
+      "texte": "Visitez https://example.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 24,
+      "fin": 28,
+      "texte": "com?",
+      "type": "interrogative"
+     },
+     {
+      "debut": 28,
+      "fin": 32,
+      "texte": "q=1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 32,
+      "fin": 49,
+      "texte": " Que voyez-vous ?",
+      "type": "interrogative"
+     }
+    ]
+   },
+   "apres": {
+    "phrases": 2,
+    "exact": true,
+    "frontiere_fausse": false,
+    "casse": false,
+    "extra": [],
+    "missing": [],
+    "overlaps": [],
+    "leading": [],
+    "vides": [],
+    "fausses_questions": [],
+    "spans": [
+     {
+      "debut": 0,
+      "fin": 32,
+      "texte": "Visitez https://example.com?q=1.",
+      "type": "déclarative"
+     },
+     {
+      "debut": 33,
+      "fin": 49,
+      "texte": "Que voyez-vous ?",
+      "type": "interrogative"
+     }
+    ]
+   },
+   "effet": {
+    "pos_identique": true,
+    "syntagme_identique": true,
+    "attachement_identique": true,
+    "phr_avant": 4,
+    "phr_apres": 2,
+    "phrase_labels_differents": true,
+    "acte_labels_differents": true,
+    "syntagmes_traversants_avant": 0,
+    "syntagmes_traversants_apres": 0,
+    "pos_labels": 7,
+    "syntagme_labels": 6
+   }
+  }
+ ],
+ "gold": {
+  "split": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "sources": {
+     "hand": 15,
+     "reel": 302,
+     "synthetique": 105
+    },
+    "langues": {
+     "fr": 277,
+     "en": 145
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "sources": {
+     "hand": 5,
+     "reel": 130,
+     "synthetique": 55
+    },
+    "langues": {
+     "fr": 125,
+     "en": 65
+    }
+   },
+   "total": {
+    "phrases": 612,
+    "cibles": 239,
+    "sources": {
+     "hand": 20,
+     "reel": 432,
+     "synthetique": 160
+    },
+    "langues": {
+     "fr": 402,
+     "en": 210
+    }
+   }
+  },
+  "reference": {
+   "dev": {
+    "phrases": 422,
+    "pos": {
+     "exactitude": 0.849,
+     "ferme": 0.9242,
+     "ouvert": 0.7769,
+     "tokens": 2185
+    },
+    "syntagme": {
+     "f1": 0.6439,
+     "precision": 0.6703,
+     "rappel": 0.6196
+    },
+    "attachement": {
+     "exact_taux": 0.9816,
+     "top1_taux": 0.9816,
+     "topk_taux": 0.9816,
+     "couverture": 0.9877
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 0.9787,
+     "modalite": 0.9929
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos": {
+     "exactitude": 0.8511,
+     "ferme": 0.9392,
+     "ouvert": 0.7698,
+     "tokens": 994
+    },
+    "syntagme": {
+     "f1": 0.6552,
+     "precision": 0.671,
+     "rappel": 0.6402
+    },
+    "attachement": {
+     "exact_taux": 0.9868,
+     "top1_taux": 0.9868,
+     "topk_taux": 0.9737,
+     "couverture": 0.9868
+    },
+    "pragmatique": {
+     "acte": 0.9895,
+     "negation": 0.9737,
+     "modalite": 0.9789
+    }
+   }
+  },
+  "mesures": {
+   "original": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    }
+   },
+   "patch_a": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    }
+   },
+   "patch_b": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    }
+   },
+   "patch_ab": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    }
+   }
+  },
+  "diff_vs_original": {
+   "original": {
+    "pos": 0,
+    "syntagme": 0,
+    "attachement": 0,
+    "tokens": 0,
+    "phr_n": 0,
+    "phr_spans": 0,
+    "acte_valeurs": 0,
+    "acte_spans": 0
+   },
+   "patch_a": {
+    "pos": 0,
+    "syntagme": 0,
+    "attachement": 0,
+    "tokens": 0,
+    "phr_n": 0,
+    "phr_spans": 2,
+    "acte_valeurs": 0,
+    "acte_spans": 2
+   },
+   "patch_b": {
+    "pos": 0,
+    "syntagme": 0,
+    "attachement": 0,
+    "tokens": 0,
+    "phr_n": 0,
+    "phr_spans": 0,
+    "acte_valeurs": 0,
+    "acte_spans": 0
+   },
+   "patch_ab": {
+    "pos": 0,
+    "syntagme": 0,
+    "attachement": 0,
+    "tokens": 0,
+    "phr_n": 0,
+    "phr_spans": 2,
+    "acte_valeurs": 0,
+    "acte_spans": 2
+   }
+  },
+  "phrases_corrigees": [
+   {
+    "id": "r308",
+    "texte": "Marie lit. Elle aime les livres.",
+    "avant": [
+     [
+      0,
+      10,
+      "déclarative"
+     ],
+     [
+      10,
+      32,
+      "déclarative"
+     ]
+    ],
+    "apres": [
+     [
+      0,
+      10,
+      "déclarative"
+     ],
+     [
+      11,
+      32,
+      "déclarative"
+     ]
+    ],
+    "effet": "le second span commence à l'espace au lieu de M ; la valeur d'acte reste assertion."
+   },
+   {
+    "id": "r318",
+    "texte": "Marie reads. She loves books.",
+    "avant": [
+     [
+      0,
+      12,
+      "déclarative"
+     ],
+     [
+      12,
+      29,
+      "déclarative"
+     ]
+    ],
+    "apres": [
+     [
+      0,
+      12,
+      "déclarative"
+     ],
+     [
+      13,
+      29,
+      "déclarative"
+     ]
+    ],
+    "effet": "idem ; aucune valeur d'acte changée."
+   }
+  ],
+  "par_regle": {
+   "original": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "neutre": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "regle_a": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "regle_b": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "regle_c": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "regle_d": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "regle_e": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 2,
+     "acte": 2
+    }
+   },
+   "regle_f": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 0,
+     "acte": 0
+    }
+   },
+   "toutes": {
+    "dev": {
+     "phrases": 422,
+     "pos": {
+      "exactitude": 0.849,
+      "ferme": 0.9242,
+      "ouvert": 0.7769,
+      "tokens": 2185
+     },
+     "syntagme": {
+      "f1": 0.6439,
+      "precision": 0.6703,
+      "rappel": 0.6196
+     },
+     "attachement": {
+      "exact_taux": 0.9816,
+      "top1_taux": 0.9816,
+      "topk_taux": 0.9816,
+      "couverture": 0.9877
+     },
+     "pragmatique": {
+      "acte": 1.0,
+      "negation": 0.9787,
+      "modalite": 0.9929
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "pos": {
+      "exactitude": 0.8511,
+      "ferme": 0.9392,
+      "ouvert": 0.7698,
+      "tokens": 994
+     },
+     "syntagme": {
+      "f1": 0.6552,
+      "precision": 0.671,
+      "rappel": 0.6402
+     },
+     "attachement": {
+      "exact_taux": 0.9868,
+      "top1_taux": 0.9868,
+      "topk_taux": 0.9737,
+      "couverture": 0.9868
+     },
+     "pragmatique": {
+      "acte": 0.9895,
+      "negation": 0.9737,
+      "modalite": 0.9789
+     }
+    },
+    "diff_vs_original": {
+     "pos": 0,
+     "syn": 0,
+     "att": 0,
+     "phr": 2,
+     "acte": 2
+    }
+   }
+  }
+ },
+ "tokens_40": {
+  "original": {
+   "tokens": 477,
+   "types": {
+    "mot": 273,
+    "ponctuation": 171,
+    "nombre": 33
+   },
+   "pos": 273,
+   "syn": 176,
+   "phr": 102,
+   "pos_diff_textes": 0,
+   "pos_perdus": 0,
+   "pos_gagnes": 0,
+   "syn_diff_textes": 0,
+   "att_diff_textes": 0,
+   "unites": 172,
+   "fraction_moyenne": 0.5432
+  },
+  "patch_b": {
+   "tokens": 362,
+   "types": {
+    "mot": 232,
+    "ponctuation": 107,
+    "nombre": 14,
+    "url": 5,
+    "courriel": 2,
+    "chemin": 2
+   },
+   "pos": 232,
+   "syn": 173,
+   "phr": 102,
+   "pos_diff_textes": 10,
+   "pos_perdus": 44,
+   "pos_gagnes": 3,
+   "syn_diff_textes": 7,
+   "att_diff_textes": 7,
+   "unites": 133,
+   "fraction_moyenne": 0.4754
+  },
+  "patch_ab": {
+   "tokens": 362,
+   "types": {
+    "mot": 232,
+    "ponctuation": 107,
+    "nombre": 14,
+    "url": 5,
+    "courriel": 2,
+    "chemin": 2
+   },
+   "pos": 232,
+   "syn": 173,
+   "phr": 59,
+   "pos_diff_textes": 10,
+   "pos_perdus": 44,
+   "pos_gagnes": 3,
+   "syn_diff_textes": 7,
+   "att_diff_textes": 7,
+   "unites": 133,
+   "fraction_moyenne": 0.4754
+  },
+  "zones_pos_avant": 47
+ },
+ "controles_negatifs": [
+  {
+   "id": "n01",
+   "texte": "Il part. Elle reste.",
+   "attendu": 2,
+   "avant": 2,
+   "apres": 2,
+   "verdict": "deux phrases réelles restent deux phrases"
+  },
+  {
+   "id": "n02",
+   "texte": "Il part. Elle reste. Nous attendons.",
+   "attendu": 3,
+   "avant": 3,
+   "apres": 3,
+   "verdict": "aucune fusion"
+  },
+  {
+   "id": "x02",
+   "texte": "Il hésite... Elle part.",
+   "attendu": 2,
+   "avant": 2,
+   "apres": 2,
+   "verdict": "ellipse + majuscule coupe"
+  },
+  {
+   "id": "a04",
+   "texte": "Il y a des pommes, des poires, etc. Il part demain.",
+   "attendu": 2,
+   "avant": 2,
+   "apres": 2,
+   "verdict": "etc. + majuscule coupe ; la règle « minuscule » ne fusionne pas"
+  },
+  {
+   "id": "a08",
+   "texte": "Il consulte le Dr. Elle est partie.",
+   "attendu": 2,
+   "avant": 2,
+   "apres": 2,
+   "verdict": "un titre suivi d'un pronom de début de phrase coupe"
+  },
+  {
+   "id": "d05",
+   "texte": "Le 12.03.2024. Il part.",
+   "attendu": 2,
+   "avant": 4,
+   "apres": 2,
+   "verdict": "le point final de la date coupe, les points internes non"
+  },
+  {
+   "id": "u04",
+   "texte": "Visitez https://example.com?q=1. Que voyez-vous ?",
+   "attendu": 2,
+   "avant": 4,
+   "apres": 2,
+   "verdict": "le ? de la requête n'est pas une question ; le ? final oui"
+  },
+  {
+   "id": "a01",
+   "texte": "M. Dupont…",
+   "attendu": 1,
+   "avant": 2,
+   "apres": 1,
+   "verdict": "plus de chevauchement"
+  },
+  {
+   "id": "g01",
+   "texte": "« Bonjour. » Elle part.",
+   "attendu": 2,
+   "avant": 2,
+   "apres": 2,
+   "verdict": "le guillemet fermant reste avec la première phrase"
+  }
+ ],
+ "patchs": {
+  "a_frontieres": {
+   "fichier": "tools/bloc_linguistique.py",
+   "point": "insérer le bloc avant `class Heuristique:` ; remplacer le corps de `_phrases`",
+   "methode_apres": "    @staticmethod\n    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:\n        return decouper_phrases(texte)\n",
+   "code": "# --------------------------------------------------------------------------- frontières de phrase\n# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de\n# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel\n# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.\n_FERMANTS = \"»”’)]}›\"\n_OUVRANTS = \"«“‘([{‹\"\n_TITRES = frozenset({\n    \"M\", \"MM\", \"Mme\", \"Mmes\", \"Mlle\", \"Mlles\", \"Me\", \"Mgr\", \"St\", \"Ste\",\n    \"Dr\", \"Drs\", \"Pr\", \"Prs\", \"Rév\", \"Père\", \"Sr\", \"Sœur\",\n})\n_ABREV_TOUJOURS = frozenset({\n    \"cf\", \"p\", \"pp\", \"ex\", \"réf\", \"ref\", \"éd\", \"ed\", \"trad\", \"fig\", \"chap\",\n    \"sect\", \"env\", \"av\", \"al\", \"ibid\", \"id\", \"infra\", \"supra\", \"coll\", \"pl\",\n    \"sq\", \"suiv\", \"op\", \"ca\", \"n\", \"no\", \"nos\", \"vs\", \"art\", \"vol\",\n})\n_ABREV_MINUSCULE = frozenset({\"etc\"})\n# après un titre ou une initiale, ces mots ouvrent presque sûrement une phrase\n_DEBUTS = frozenset({\n    \"il\", \"elle\", \"on\", \"nous\", \"vous\", \"ils\", \"elles\", \"je\", \"tu\", \"ce\",\n    \"cette\", \"ces\", \"cet\", \"mais\", \"or\", \"donc\", \"pourtant\", \"cependant\",\n    \"toutefois\", \"néanmoins\", \"enfin\", \"ensuite\", \"puis\", \"alors\", \"ainsi\",\n    \"quand\", \"lorsque\", \"comme\", \"si\", \"après\", \"avant\", \"dans\", \"sur\",\n    \"sous\", \"avec\", \"sans\", \"pour\", \"par\", \"the\", \"he\", \"she\", \"it\", \"we\",\n    \"they\", \"you\", \"i\", \"this\", \"that\", \"but\", \"then\", \"however\", \"when\",\n    \"if\", \"after\", \"before\", \"finally\", \"thus\",\n})\n_MARQUEUR = re.compile(\n    r\"^\\s*(?:#{1,6}\\s|[-*+]\\s|\\d+[.)]\\s|[A-Za-z][.)]\\s|>\\s|\\||```|---\\s*$)\"\n)\n_URL = re.compile(r\"https?://[^\\s<>\\\"'`]+\", re.I)\n_EMAIL = re.compile(r\"(?<![\\w.+-])[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+(?![\\w-])\")\n_DOMAINE = re.compile(\n    r\"(?<![\\w.-])(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)(?![\\w-])\",\n    re.I,\n)\n_CHEMIN = re.compile(\n    r\"(?<![\\w])(?:[A-Za-z]:[\\\\/]|\\.{0,2}/)?(?:[\\w.@+-]+[\\\\/])+[\\w.@+-]+(?:\\.[A-Za-z0-9]{1,8})?(?![\\w])\"\n)\n_EXTENSION = re.compile(\n    r\"(?<![\\w])(?:[\\w.-]+)\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)(?![\\w])\",\n    re.I,\n)\n_IDENT_POINTE = re.compile(\n    r\"\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}(?![\\w])|\\b[A-Za-z_]\\w*\\.[_]\\w*(?![\\w])\"\n)\n_ABREV_POINTEE = re.compile(r\"\\b(?:[A-Za-z]\\.)+[A-Za-z]\\b\")\n_CODE_INLINE = re.compile(r\"`[^`\\n]+`\")\n_CODE_BLOC = re.compile(r\"```.*?```\", re.S)\n_POINTEE = re.compile(r\"(?:[A-Za-z]\\.)+[A-Za-z]$\")\n_MOTIFS_A_COUPER = (_URL, _EMAIL, _CHEMIN, _EXTENSION)\n\n\ndef _couper_fin(texte: str, debut: int, fin: int) -> int:\n    \"\"\"Retire la ponctuation de phrase collée à la fin d'une URL, d'un courriel, d'un chemin.\"\"\"\n    while fin > debut and texte[fin - 1] in \".,;:!?»\\\"”’\":\n        fin -= 1\n    while fin > debut and texte[fin - 1] == \")\" and \"(\" not in texte[debut:fin - 1]:\n        fin -= 1\n    return fin\n\n\ndef _zones_protegees(texte: str) -> list[tuple[int, int]]:\n    \"\"\"Les tranches où une ponctuation n'est jamais une frontière de phrase.\"\"\"\n    zones: list[tuple[int, int]] = []\n    for motif in (_URL, _EMAIL, _DOMAINE, _CHEMIN, _EXTENSION,\n                  _CODE_BLOC, _CODE_INLINE, _ABREV_POINTEE, _IDENT_POINTE):\n        for m in motif.finditer(texte):\n            debut, fin = m.start(), m.end()\n            if motif in _MOTIFS_A_COUPER:\n                fin = _couper_fin(texte, debut, fin)\n            if fin > debut:\n                zones.append((debut, fin))\n    zones.sort()\n    fusion: list[tuple[int, int]] = []\n    for debut, fin in zones:\n        if fusion and debut <= fusion[-1][1]:\n            fusion[-1] = (fusion[-1][0], max(fusion[-1][1], fin))\n        else:\n            fusion.append((debut, fin))\n    return fusion\n\n\ndef _dans_zone(zones: list[tuple[int, int]], debut: int, fin: int) -> bool:\n    \"\"\"Vrai si la ponctuation [debut, fin) touche une zone protégée.\"\"\"\n    for d, f in zones:\n        if d >= fin:\n            break\n        if f > debut:\n            return True\n    return False\n\n\ndef _mot_avant(texte: str, i: int) -> str:\n    j = i\n    while j > 0 and (texte[j - 1].isalnum() or texte[j - 1] in \"'’\"):\n        j -= 1\n    return texte[j:i]\n\n\ndef _apres_ponctuation(texte: str, j: int) -> int:\n    n = len(texte)\n    while j < n and (texte[j].isspace() or texte[j] in _FERMANTS):\n        j += 1\n    return j\n\n\ndef _mot_suivant(texte: str, p: int) -> str:\n    m = re.match(r\"[^\\W\\d_][\\w'’\\-]*\", texte[p:p + 80], re.UNICODE)\n    return m.group() if m else \"\"\n\n\ndef _absorber_fermants(texte: str, j: int) -> int:\n    \"\"\"Absorbe « . » », « . ) » : le fermant appartient à la phrase qui se termine.\"\"\"\n    n = len(texte)\n    while True:\n        k = j\n        while k < n and texte[k] in \" \\t\":\n            k += 1\n        if k < n and texte[k] in _FERMANTS:\n            j = k + 1\n            continue\n        return j\n\n\ndef _nouvelle_ligne_structurelle(texte: str, i: int, j: int) -> bool:\n    \"\"\"Un saut de ligne coupe la phrase s'il est vide ou s'il borde un titre / une liste.\"\"\"\n    if texte.count(\"\\n\", i, j) >= 2:\n        return True\n    avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i]\n    fin = texte.find(\"\\n\", j)\n    apres = texte[j:fin if fin >= 0 else len(texte)]\n    return bool(_MARQUEUR.match(avant) or _MARQUEUR.match(apres))\n\n\ndef _type_phrase(ponctuation: str) -> str:\n    if \"?\" in ponctuation:\n        return \"interrogative\"\n    if \"!\" in ponctuation:\n        return \"exclamative\"\n    return \"déclarative\"\n\n\ndef _est_frontiere(texte: str, i: int, j: int, zones: list[tuple[int, int]]) -> bool:\n    n = len(texte)\n    terme = texte[i:j]\n    # (a) un point entre deux chiffres est décimal (12.5, 12.03.2024, 192.168.1.10)\n    if terme == \".\" and 0 < i < n - 1 and texte[i - 1].isdigit() and texte[i + 1].isdigit():\n        return False\n    # (a bis) un numéro de liste en début de ligne (1. Ouvrir) n'est pas une phrase\n    if terme == \".\" and 0 < i < n - 1 and texte[i + 1].isspace():\n        avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i].strip()\n        if avant.isdigit() and len(avant) <= 3:\n            return False\n    # (d) une ponctuation répétée ne fait qu'une frontière ; une ellipse suivie d'une\n    # minuscule continue la phrase (« Il hésite... puis il part. »)\n    if terme == \"…\" or (len(terme) >= 2 and set(terme) <= {\".\", \"…\"}):\n        p = _apres_ponctuation(texte, j)\n        if p < n and (texte[p].islower() or texte[p].isdigit()):\n            return False\n    # (b) abréviations : minuscule après « etc. » n'ouvre pas une phrase ; « M. Dupont »,\n    # « Dr. Martin », « p. ex. » et « cf. » ne coupent pas.\n    if terme == \".\":\n        mot = _mot_avant(texte, i)\n        p = _apres_ponctuation(texte, j)\n        suivant = texte[p] if p < n else \"\"\n        if mot:\n            if mot in _TITRES or (len(mot) == 1 and mot.isupper()):\n                if not suivant:\n                    return True\n                if not (suivant.isalnum() or suivant in _OUVRANTS):\n                    return True\n                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n                    return True\n                return False\n            if mot in _ABREV_MINUSCULE:\n                return not (suivant.islower() or suivant.isdigit())\n            if mot in _ABREV_TOUJOURS:\n                return not (suivant.isalnum() or suivant in _OUVRANTS)\n            if _POINTEE.search(texte[max(0, i - 16):i]):\n                if not suivant:\n                    return True\n                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n                    return True\n                return not (suivant.isalpha() or suivant.isdigit())\n            if suivant == \"-\" and len(mot) == 1:\n                return False\n    return True\n\n\ndef decouper_phrases(texte: str) -> list[tuple[int, int, str, str]]:\n    \"\"\"Les phrases d'un texte libre, sans chevauchement et sans blanc de tête.\"\"\"\n    n = len(texte)\n    if not n:\n        return []\n    zones = _zones_protegees(texte)\n    sortie: list[tuple[int, int, str, str]] = []\n    debut = 0\n    i = 0\n\n    def ajouter(fin: int, typ: str) -> None:\n        nonlocal debut\n        d, f = debut, fin\n        while d < f and texte[d].isspace():\n            d += 1\n        while f > d and texte[f - 1].isspace():\n            f -= 1\n        if f > d and texte[d:f].strip():\n            sortie.append((d, f, texte[d:f], typ))\n        debut = fin\n\n    while i < n:\n        ch = texte[i]\n        if ch in \"\\r\\n\":\n            j = i\n            while j < n and texte[j].isspace():\n                j += 1\n            if _nouvelle_ligne_structurelle(texte, i, j):\n                ajouter(i, \"déclarative\")\n            i = j\n            continue\n        if ch not in \".!?…\":\n            i += 1\n            continue\n        j = i + 1\n        while j < n and texte[j] in \".!?…\":\n            j += 1\n        if not _dans_zone(zones, i, j) and _est_frontiere(texte, i, j, zones):\n            ajouter(_absorber_fermants(texte, j), _type_phrase(texte[i:j]))\n        i = j\n    ajouter(n, \"déclarative\")\n    return sortie\n",
+   "diff": "--- a/tools/bloc_linguistique.py\n+++ b/tools/bloc_linguistique.py\n@@ -551,6 +551,239 @@\n # --------------------------------------------------------------------------- heuristique\n \n \n+# --------------------------------------------------------------------------- frontières de phrase\n+# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de\n+# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel\n+# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.\n+_FERMANTS = \"»”’)]}›\"\n+_OUVRANTS = \"«“‘([{‹\"\n+_TITRES = frozenset({\n+    \"M\", \"MM\", \"Mme\", \"Mmes\", \"Mlle\", \"Mlles\", \"Me\", \"Mgr\", \"St\", \"Ste\",\n+    \"Dr\", \"Drs\", \"Pr\", \"Prs\", \"Rév\", \"Père\", \"Sr\", \"Sœur\",\n+})\n+_ABREV_TOUJOURS = frozenset({\n+    \"cf\", \"p\", \"pp\", \"ex\", \"réf\", \"ref\", \"éd\", \"ed\", \"trad\", \"fig\", \"chap\",\n+    \"sect\", \"env\", \"av\", \"al\", \"ibid\", \"id\", \"infra\", \"supra\", \"coll\", \"pl\",\n+    \"sq\", \"suiv\", \"op\", \"ca\", \"n\", \"no\", \"nos\", \"vs\", \"art\", \"vol\",\n+})\n+_ABREV_MINUSCULE = frozenset({\"etc\"})\n+# après un titre ou une initiale, ces mots ouvrent presque sûrement une phrase\n+_DEBUTS = frozenset({\n+    \"il\", \"elle\", \"on\", \"nous\", \"vous\", \"ils\", \"elles\", \"je\", \"tu\", \"ce\",\n+    \"cette\", \"ces\", \"cet\", \"mais\", \"or\", \"donc\", \"pourtant\", \"cependant\",\n+    \"toutefois\", \"néanmoins\", \"enfin\", \"ensuite\", \"puis\", \"alors\", \"ainsi\",\n+    \"quand\", \"lorsque\", \"comme\", \"si\", \"après\", \"avant\", \"dans\", \"sur\",\n+    \"sous\", \"avec\", \"sans\", \"pour\", \"par\", \"the\", \"he\", \"she\", \"it\", \"we\",\n+    \"they\", \"you\", \"i\", \"this\", \"that\", \"but\", \"then\", \"however\", \"when\",\n+    \"if\", \"after\", \"before\", \"finally\", \"thus\",\n+})\n+_MARQUEUR = re.compile(\n+    r\"^\\s*(?:#{1,6}\\s|[-*+]\\s|\\d+[.)]\\s|[A-Za-z][.)]\\s|>\\s|\\||```|---\\s*$)\"\n+)\n+_URL = re.compile(r\"https?://[^\\s<>\\\"'`]+\", re.I)\n+_EMAIL = re.compile(r\"(?<![\\w.+-])[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+(?![\\w-])\")\n+_DOMAINE = re.compile(\n+    r\"(?<![\\w.-])(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)(?![\\w-])\",\n+    re.I,\n+)\n+_CHEMIN = re.compile(\n+    r\"(?<![\\w])(?:[A-Za-z]:[\\\\/]|\\.{0,2}/)?(?:[\\w.@+-]+[\\\\/])+[\\w.@+-]+(?:\\.[A-Za-z0-9]{1,8})?(?![\\w])\"\n+)\n+_EXTENSION = re.compile(\n+    r\"(?<![\\w])(?:[\\w.-]+)\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)(?![\\w])\",\n+    re.I,\n+)\n+_IDENT_POINTE = re.compile(\n+    r\"\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}(?![\\w])|\\b[A-Za-z_]\\w*\\.[_]\\w*(?![\\w])\"\n+)\n+_ABREV_POINTEE = re.compile(r\"\\b(?:[A-Za-z]\\.)+[A-Za-z]\\b\")\n+_CODE_INLINE = re.compile(r\"`[^`\\n]+`\")\n+_CODE_BLOC = re.compile(r\"```.*?```\", re.S)\n+_POINTEE = re.compile(r\"(?:[A-Za-z]\\.)+[A-Za-z]$\")\n+_MOTIFS_A_COUPER = (_URL, _EMAIL, _CHEMIN, _EXTENSION)\n+\n+\n+def _couper_fin(texte: str, debut: int, fin: int) -> int:\n+    \"\"\"Retire la ponctuation de phrase collée à la fin d'une URL, d'un courriel, d'un chemin.\"\"\"\n+    while fin > debut and texte[fin - 1] in \".,;:!?»\\\"”’\":\n+        fin -= 1\n+    while fin > debut and texte[fin - 1] == \")\" and \"(\" not in texte[debut:fin - 1]:\n+        fin -= 1\n+    return fin\n+\n+\n+def _zones_protegees(texte: str) -> list[tuple[int, int]]:\n+    \"\"\"Les tranches où une ponctuation n'est jamais une frontière de phrase.\"\"\"\n+    zones: list[tuple[int, int]] = []\n+    for motif in (_URL, _EMAIL, _DOMAINE, _CHEMIN, _EXTENSION,\n+                  _CODE_BLOC, _CODE_INLINE, _ABREV_POINTEE, _IDENT_POINTE):\n+        for m in motif.finditer(texte):\n+            debut, fin = m.start(), m.end()\n+            if motif in _MOTIFS_A_COUPER:\n+                fin = _couper_fin(texte, debut, fin)\n+            if fin > debut:\n+                zones.append((debut, fin))\n+    zones.sort()\n+    fusion: list[tuple[int, int]] = []\n+    for debut, fin in zones:\n+        if fusion and debut <= fusion[-1][1]:\n+            fusion[-1] = (fusion[-1][0], max(fusion[-1][1], fin))\n+        else:\n+            fusion.append((debut, fin))\n+    return fusion\n+\n+\n+def _dans_zone(zones: list[tuple[int, int]], debut: int, fin: int) -> bool:\n+    \"\"\"Vrai si la ponctuation [debut, fin) touche une zone protégée.\"\"\"\n+    for d, f in zones:\n+        if d >= fin:\n+            break\n+        if f > debut:\n+            return True\n+    return False\n+\n+\n+def _mot_avant(texte: str, i: int) -> str:\n+    j = i\n+    while j > 0 and (texte[j - 1].isalnum() or texte[j - 1] in \"'’\"):\n+        j -= 1\n+    return texte[j:i]\n+\n+\n+def _apres_ponctuation(texte: str, j: int) -> int:\n+    n = len(texte)\n+    while j < n and (texte[j].isspace() or texte[j] in _FERMANTS):\n+        j += 1\n+    return j\n+\n+\n+def _mot_suivant(texte: str, p: int) -> str:\n+    m = re.match(r\"[^\\W\\d_][\\w'’\\-]*\", texte[p:p + 80], re.UNICODE)\n+    return m.group() if m else \"\"\n+\n+\n+def _absorber_fermants(texte: str, j: int) -> int:\n+    \"\"\"Absorbe « . » », « . ) » : le fermant appartient à la phrase qui se termine.\"\"\"\n+    n = len(texte)\n+    while True:\n+        k = j\n+        while k < n and texte[k] in \" \\t\":\n+            k += 1\n+        if k < n and texte[k] in _FERMANTS:\n+            j = k + 1\n+            continue\n+        return j\n+\n+\n+def _nouvelle_ligne_structurelle(texte: str, i: int, j: int) -> bool:\n+    \"\"\"Un saut de ligne coupe la phrase s'il est vide ou s'il borde un titre / une liste.\"\"\"\n+    if texte.count(\"\\n\", i, j) >= 2:\n+        return True\n+    avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i]\n+    fin = texte.find(\"\\n\", j)\n+    apres = texte[j:fin if fin >= 0 else len(texte)]\n+    return bool(_MARQUEUR.match(avant) or _MARQUEUR.match(apres))\n+\n+\n+def _type_phrase(ponctuation: str) -> str:\n+    if \"?\" in ponctuation:\n+        return \"interrogative\"\n+    if \"!\" in ponctuation:\n+        return \"exclamative\"\n+    return \"déclarative\"\n+\n+\n+def _est_frontiere(texte: str, i: int, j: int, zones: list[tuple[int, int]]) -> bool:\n+    n = len(texte)\n+    terme = texte[i:j]\n+    # (a) un point entre deux chiffres est décimal (12.5, 12.03.2024, 192.168.1.10)\n+    if terme == \".\" and 0 < i < n - 1 and texte[i - 1].isdigit() and texte[i + 1].isdigit():\n+        return False\n+    # (a bis) un numéro de liste en début de ligne (1. Ouvrir) n'est pas une phrase\n+    if terme == \".\" and 0 < i < n - 1 and texte[i + 1].isspace():\n+        avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i].strip()\n+        if avant.isdigit() and len(avant) <= 3:\n+            return False\n+    # (d) une ponctuation répétée ne fait qu'une frontière ; une ellipse suivie d'une\n+    # minuscule continue la phrase (« Il hésite... puis il part. »)\n+    if terme == \"…\" or (len(terme) >= 2 and set(terme) <= {\".\", \"…\"}):\n+        p = _apres_ponctuation(texte, j)\n+        if p < n and (texte[p].islower() or texte[p].isdigit()):\n+            return False\n+    # (b) abréviations : minuscule après « etc. » n'ouvre pas une phrase ; « M. Dupont »,\n+    # « Dr. Martin », « p. ex. » et « cf. » ne coupent pas.\n+    if terme == \".\":\n+        mot = _mot_avant(texte, i)\n+        p = _apres_ponctuation(texte, j)\n+        suivant = texte[p] if p < n else \"\"\n+        if mot:\n+            if mot in _TITRES or (len(mot) == 1 and mot.isupper()):\n+                if not suivant:\n+                    return True\n+                if not (suivant.isalnum() or suivant in _OUVRANTS):\n+                    return True\n+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n+                    return True\n+                return False\n+            if mot in _ABREV_MINUSCULE:\n+                return not (suivant.islower() or suivant.isdigit())\n+            if mot in _ABREV_TOUJOURS:\n+                return not (suivant.isalnum() or suivant in _OUVRANTS)\n+            if _POINTEE.search(texte[max(0, i - 16):i]):\n+                if not suivant:\n+                    return True\n+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n+                    return True\n+                return not (suivant.isalpha() or suivant.isdigit())\n+            if suivant == \"-\" and len(mot) == 1:\n+                return False\n+    return True\n+\n+\n+def decouper_phrases(texte: str) -> list[tuple[int, int, str, str]]:\n+    \"\"\"Les phrases d'un texte libre, sans chevauchement et sans blanc de tête.\"\"\"\n+    n = len(texte)\n+    if not n:\n+        return []\n+    zones = _zones_protegees(texte)\n+    sortie: list[tuple[int, int, str, str]] = []\n+    debut = 0\n+    i = 0\n+\n+    def ajouter(fin: int, typ: str) -> None:\n+        nonlocal debut\n+        d, f = debut, fin\n+        while d < f and texte[d].isspace():\n+            d += 1\n+        while f > d and texte[f - 1].isspace():\n+            f -= 1\n+        if f > d and texte[d:f].strip():\n+            sortie.append((d, f, texte[d:f], typ))\n+        debut = fin\n+\n+    while i < n:\n+        ch = texte[i]\n+        if ch in \"\\r\\n\":\n+            j = i\n+            while j < n and texte[j].isspace():\n+                j += 1\n+            if _nouvelle_ligne_structurelle(texte, i, j):\n+                ajouter(i, \"déclarative\")\n+            i = j\n+            continue\n+        if ch not in \".!?…\":\n+            i += 1\n+            continue\n+        j = i + 1\n+        while j < n and texte[j] in \".!?…\":\n+            j += 1\n+        if not _dans_zone(zones, i, j) and _est_frontiere(texte, i, j, zones):\n+            ajouter(_absorber_fermants(texte, j), _type_phrase(texte[i:j]))\n+        i = j\n+    ajouter(n, \"déclarative\")\n+    return sortie\n+\n+\n class Heuristique:\n     \"\"\"L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas.\"\"\"\n \n@@ -595,25 +828,7 @@\n \n     @staticmethod\n     def _phrases(texte: str) -> list[tuple[int, int, str, str]]:\n-        # frontières : ponctuation forte + espace ; on protège les abréviations et les décimales\n-        motif = re.compile(r\"[^.!?…]+(?:[.!?…]+|$)\", re.S)\n-        sortie = []\n-        for m in motif.finditer(texte):\n-            morceau = m.group()\n-            if not morceau.strip():\n-                continue\n-            debut = m.start()\n-            fin = m.end()\n-            # une phrase qui finit par une abréviation connue n'est pas finie\n-            while re.search(r\"\\b(?:M|MM|Mme|Dr|Pr|etc|cf|p|pp|art|vol)\\.\\s*$\", texte[debut:fin]):\n-                suivant = motif.search(texte, fin)\n-                if not suivant:\n-                    break\n-                fin = suivant.end()\n-                morceau = texte[debut:fin]\n-            typ = \"interrogative\" if \"?\" in morceau else (\"exclamative\" if \"!\" in morceau else \"déclarative\")\n-            sortie.append((debut, fin, morceau, typ))\n-        return sortie\n+        return decouper_phrases(texte)\n \n     @staticmethod\n     def _negation(phrase: str) -> bool:\n",
+   "apply_check": true
+  },
+  "b_tokenisation": {
+   "fichier": "tools/bloc_linguistique.py",
+   "point": "insérer le bloc avant `class Heuristique:` ; remplacer le corps de `_mots`",
+   "methode_apres": "    @staticmethod\n    def _mots(texte: str) -> list[tuple[int, int, str, str]]:\n        return decouper_mots(texte)\n",
+   "code": "# --------------------------------------------------------------------------- tokens\n# P0-4 / P1-6 : l'URL, le courriel, le chemin, le nombre et l'emoji sont **un** token ;\n# les alternatives mortes `url` et `emoji` redeviennent atteignables.\n_MOTIF_MOTS = re.compile(\n    r\"https?://[^\\s<>\\\"'`]*[^\\s<>\\\"'`.,;:!?]\"\n    r\"|[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\"\n    r\"|\\b(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\\b\"\n    r\"|(?:\\.{0,2}/)?(?:[\\w.@+-]+/)+[\\w.@+-]+\\.[A-Za-z0-9]{1,8}\"\n    r\"|/(?:[\\w.@+-]+/)+[\\w.@+-]+\"\n    r\"|\\b[\\w.@+-]+\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)\\b\"\n    r\"|\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}\\b|\\b[A-Za-z_]\\w*\\.[_]\\w*\\b\"\n    r\"|\\d+(?:[.,]\\d+)*\"\n    r\"|\\b[ldmtsnLDMTNS]['’](?=\\w)\"\n    r\"|\\w+(?:['’\\-]\\w+)*\"\n    r\"|[\\U0001F300-\\U0001FAFF]\"\n    r\"|[^\\w\\s]\",\n    re.I,\n)\n_DOMAINE_SEUL = re.compile(\n    r\"(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\", re.I)\n\n\ndef decouper_mots(texte: str) -> list[tuple[int, int, str, str]]:\n    \"\"\"Les tokens du bloc : la surface, son span et son type, sans recouvrement.\"\"\"\n    sortie: list[tuple[int, int, str, str]] = []\n    for m in _MOTIF_MOTS.finditer(texte):\n        t = m.group()\n        if t.lower().startswith((\"http://\", \"https://\")):\n            typ = \"url\"\n        elif re.fullmatch(r\"[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\", t):\n            typ = \"courriel\"\n        elif _DOMAINE_SEUL.fullmatch(t):\n            typ = \"url\"\n        elif re.fullmatch(r\"\\d+(?:[.,]\\d+)*\", t):\n            typ = \"nombre\"\n        elif len(t) == 1 and ord(t) >= 0x1F300:\n            typ = \"emoji\"\n        elif re.fullmatch(r\"[^\\w\\s]\", t):\n            typ = \"ponctuation\"\n        elif len(t) > 1 and (\"/\" in t or \"\\\\\" in t):\n            typ = \"chemin\"\n        else:\n            typ = \"mot\"\n        sortie.append((m.start(), m.end(), t, typ))\n    return sortie\n",
+   "diff": "--- a/tools/bloc_linguistique.py\n+++ b/tools/bloc_linguistique.py\n@@ -551,6 +551,53 @@\n # --------------------------------------------------------------------------- heuristique\n \n \n+# --------------------------------------------------------------------------- tokens\n+# P0-4 / P1-6 : l'URL, le courriel, le chemin, le nombre et l'emoji sont **un** token ;\n+# les alternatives mortes `url` et `emoji` redeviennent atteignables.\n+_MOTIF_MOTS = re.compile(\n+    r\"https?://[^\\s<>\\\"'`]*[^\\s<>\\\"'`.,;:!?]\"\n+    r\"|[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\"\n+    r\"|\\b(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\\b\"\n+    r\"|(?:\\.{0,2}/)?(?:[\\w.@+-]+/)+[\\w.@+-]+\\.[A-Za-z0-9]{1,8}\"\n+    r\"|/(?:[\\w.@+-]+/)+[\\w.@+-]+\"\n+    r\"|\\b[\\w.@+-]+\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)\\b\"\n+    r\"|\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}\\b|\\b[A-Za-z_]\\w*\\.[_]\\w*\\b\"\n+    r\"|\\d+(?:[.,]\\d+)*\"\n+    r\"|\\b[ldmtsnLDMTNS]['’](?=\\w)\"\n+    r\"|\\w+(?:['’\\-]\\w+)*\"\n+    r\"|[\\U0001F300-\\U0001FAFF]\"\n+    r\"|[^\\w\\s]\",\n+    re.I,\n+)\n+_DOMAINE_SEUL = re.compile(\n+    r\"(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\", re.I)\n+\n+\n+def decouper_mots(texte: str) -> list[tuple[int, int, str, str]]:\n+    \"\"\"Les tokens du bloc : la surface, son span et son type, sans recouvrement.\"\"\"\n+    sortie: list[tuple[int, int, str, str]] = []\n+    for m in _MOTIF_MOTS.finditer(texte):\n+        t = m.group()\n+        if t.lower().startswith((\"http://\", \"https://\")):\n+            typ = \"url\"\n+        elif re.fullmatch(r\"[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\", t):\n+            typ = \"courriel\"\n+        elif _DOMAINE_SEUL.fullmatch(t):\n+            typ = \"url\"\n+        elif re.fullmatch(r\"\\d+(?:[.,]\\d+)*\", t):\n+            typ = \"nombre\"\n+        elif len(t) == 1 and ord(t) >= 0x1F300:\n+            typ = \"emoji\"\n+        elif re.fullmatch(r\"[^\\w\\s]\", t):\n+            typ = \"ponctuation\"\n+        elif len(t) > 1 and (\"/\" in t or \"\\\\\" in t):\n+            typ = \"chemin\"\n+        else:\n+            typ = \"mot\"\n+        sortie.append((m.start(), m.end(), t, typ))\n+    return sortie\n+\n+\n class Heuristique:\n     \"\"\"L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas.\"\"\"\n \n@@ -576,22 +623,7 @@\n     # -- tokens -------------------------------------------------------------\n     @staticmethod\n     def _mots(texte: str) -> list[tuple[int, int, str, str]]:\n-        motif = re.compile(r\"\\b[ldmtsnLDMTNS]['’](?=\\w)|\\w+(?:['’\\-]\\w+)*|\\d+(?:[.,]\\d+)*|https?://\\S+|[\\U0001F300-\\U0001FAFF]|[^\\w\\s]\")\n-        sortie = []\n-        for m in motif.finditer(texte):\n-            t = m.group()\n-            if t.startswith((\"http://\", \"https://\")):\n-                typ = \"url\"\n-            elif t[0].isdigit():\n-                typ = \"nombre\"\n-            elif re.fullmatch(r\"[^\\w\\s]\", t):\n-                typ = \"ponctuation\"\n-            elif len(t) == 1 and ord(t) >= 0x1F300:\n-                typ = \"emoji\"\n-            else:\n-                typ = \"mot\"\n-            sortie.append((m.start(), m.end(), t, typ))\n-        return sortie\n+        return decouper_mots(texte)\n \n     @staticmethod\n     def _phrases(texte: str) -> list[tuple[int, int, str, str]]:\n",
+   "apply_check": true
+  },
+  "complet": {
+   "diff": "--- a/tools/bloc_linguistique.py\n+++ b/tools/bloc_linguistique.py\n@@ -551,6 +551,286 @@\n # --------------------------------------------------------------------------- heuristique\n \n \n+# --------------------------------------------------------------------------- frontières de phrase\n+# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de\n+# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel\n+# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.\n+_FERMANTS = \"»”’)]}›\"\n+_OUVRANTS = \"«“‘([{‹\"\n+_TITRES = frozenset({\n+    \"M\", \"MM\", \"Mme\", \"Mmes\", \"Mlle\", \"Mlles\", \"Me\", \"Mgr\", \"St\", \"Ste\",\n+    \"Dr\", \"Drs\", \"Pr\", \"Prs\", \"Rév\", \"Père\", \"Sr\", \"Sœur\",\n+})\n+_ABREV_TOUJOURS = frozenset({\n+    \"cf\", \"p\", \"pp\", \"ex\", \"réf\", \"ref\", \"éd\", \"ed\", \"trad\", \"fig\", \"chap\",\n+    \"sect\", \"env\", \"av\", \"al\", \"ibid\", \"id\", \"infra\", \"supra\", \"coll\", \"pl\",\n+    \"sq\", \"suiv\", \"op\", \"ca\", \"n\", \"no\", \"nos\", \"vs\", \"art\", \"vol\",\n+})\n+_ABREV_MINUSCULE = frozenset({\"etc\"})\n+# après un titre ou une initiale, ces mots ouvrent presque sûrement une phrase\n+_DEBUTS = frozenset({\n+    \"il\", \"elle\", \"on\", \"nous\", \"vous\", \"ils\", \"elles\", \"je\", \"tu\", \"ce\",\n+    \"cette\", \"ces\", \"cet\", \"mais\", \"or\", \"donc\", \"pourtant\", \"cependant\",\n+    \"toutefois\", \"néanmoins\", \"enfin\", \"ensuite\", \"puis\", \"alors\", \"ainsi\",\n+    \"quand\", \"lorsque\", \"comme\", \"si\", \"après\", \"avant\", \"dans\", \"sur\",\n+    \"sous\", \"avec\", \"sans\", \"pour\", \"par\", \"the\", \"he\", \"she\", \"it\", \"we\",\n+    \"they\", \"you\", \"i\", \"this\", \"that\", \"but\", \"then\", \"however\", \"when\",\n+    \"if\", \"after\", \"before\", \"finally\", \"thus\",\n+})\n+_MARQUEUR = re.compile(\n+    r\"^\\s*(?:#{1,6}\\s|[-*+]\\s|\\d+[.)]\\s|[A-Za-z][.)]\\s|>\\s|\\||```|---\\s*$)\"\n+)\n+_URL = re.compile(r\"https?://[^\\s<>\\\"'`]+\", re.I)\n+_EMAIL = re.compile(r\"(?<![\\w.+-])[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+(?![\\w-])\")\n+_DOMAINE = re.compile(\n+    r\"(?<![\\w.-])(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)(?![\\w-])\",\n+    re.I,\n+)\n+_CHEMIN = re.compile(\n+    r\"(?<![\\w])(?:[A-Za-z]:[\\\\/]|\\.{0,2}/)?(?:[\\w.@+-]+[\\\\/])+[\\w.@+-]+(?:\\.[A-Za-z0-9]{1,8})?(?![\\w])\"\n+)\n+_EXTENSION = re.compile(\n+    r\"(?<![\\w])(?:[\\w.-]+)\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)(?![\\w])\",\n+    re.I,\n+)\n+_IDENT_POINTE = re.compile(\n+    r\"\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}(?![\\w])|\\b[A-Za-z_]\\w*\\.[_]\\w*(?![\\w])\"\n+)\n+_ABREV_POINTEE = re.compile(r\"\\b(?:[A-Za-z]\\.)+[A-Za-z]\\b\")\n+_CODE_INLINE = re.compile(r\"`[^`\\n]+`\")\n+_CODE_BLOC = re.compile(r\"```.*?```\", re.S)\n+_POINTEE = re.compile(r\"(?:[A-Za-z]\\.)+[A-Za-z]$\")\n+_MOTIFS_A_COUPER = (_URL, _EMAIL, _CHEMIN, _EXTENSION)\n+\n+\n+def _couper_fin(texte: str, debut: int, fin: int) -> int:\n+    \"\"\"Retire la ponctuation de phrase collée à la fin d'une URL, d'un courriel, d'un chemin.\"\"\"\n+    while fin > debut and texte[fin - 1] in \".,;:!?»\\\"”’\":\n+        fin -= 1\n+    while fin > debut and texte[fin - 1] == \")\" and \"(\" not in texte[debut:fin - 1]:\n+        fin -= 1\n+    return fin\n+\n+\n+def _zones_protegees(texte: str) -> list[tuple[int, int]]:\n+    \"\"\"Les tranches où une ponctuation n'est jamais une frontière de phrase.\"\"\"\n+    zones: list[tuple[int, int]] = []\n+    for motif in (_URL, _EMAIL, _DOMAINE, _CHEMIN, _EXTENSION,\n+                  _CODE_BLOC, _CODE_INLINE, _ABREV_POINTEE, _IDENT_POINTE):\n+        for m in motif.finditer(texte):\n+            debut, fin = m.start(), m.end()\n+            if motif in _MOTIFS_A_COUPER:\n+                fin = _couper_fin(texte, debut, fin)\n+            if fin > debut:\n+                zones.append((debut, fin))\n+    zones.sort()\n+    fusion: list[tuple[int, int]] = []\n+    for debut, fin in zones:\n+        if fusion and debut <= fusion[-1][1]:\n+            fusion[-1] = (fusion[-1][0], max(fusion[-1][1], fin))\n+        else:\n+            fusion.append((debut, fin))\n+    return fusion\n+\n+\n+def _dans_zone(zones: list[tuple[int, int]], debut: int, fin: int) -> bool:\n+    \"\"\"Vrai si la ponctuation [debut, fin) touche une zone protégée.\"\"\"\n+    for d, f in zones:\n+        if d >= fin:\n+            break\n+        if f > debut:\n+            return True\n+    return False\n+\n+\n+def _mot_avant(texte: str, i: int) -> str:\n+    j = i\n+    while j > 0 and (texte[j - 1].isalnum() or texte[j - 1] in \"'’\"):\n+        j -= 1\n+    return texte[j:i]\n+\n+\n+def _apres_ponctuation(texte: str, j: int) -> int:\n+    n = len(texte)\n+    while j < n and (texte[j].isspace() or texte[j] in _FERMANTS):\n+        j += 1\n+    return j\n+\n+\n+def _mot_suivant(texte: str, p: int) -> str:\n+    m = re.match(r\"[^\\W\\d_][\\w'’\\-]*\", texte[p:p + 80], re.UNICODE)\n+    return m.group() if m else \"\"\n+\n+\n+def _absorber_fermants(texte: str, j: int) -> int:\n+    \"\"\"Absorbe « . » », « . ) » : le fermant appartient à la phrase qui se termine.\"\"\"\n+    n = len(texte)\n+    while True:\n+        k = j\n+        while k < n and texte[k] in \" \\t\":\n+            k += 1\n+        if k < n and texte[k] in _FERMANTS:\n+            j = k + 1\n+            continue\n+        return j\n+\n+\n+def _nouvelle_ligne_structurelle(texte: str, i: int, j: int) -> bool:\n+    \"\"\"Un saut de ligne coupe la phrase s'il est vide ou s'il borde un titre / une liste.\"\"\"\n+    if texte.count(\"\\n\", i, j) >= 2:\n+        return True\n+    avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i]\n+    fin = texte.find(\"\\n\", j)\n+    apres = texte[j:fin if fin >= 0 else len(texte)]\n+    return bool(_MARQUEUR.match(avant) or _MARQUEUR.match(apres))\n+\n+\n+def _type_phrase(ponctuation: str) -> str:\n+    if \"?\" in ponctuation:\n+        return \"interrogative\"\n+    if \"!\" in ponctuation:\n+        return \"exclamative\"\n+    return \"déclarative\"\n+\n+\n+def _est_frontiere(texte: str, i: int, j: int, zones: list[tuple[int, int]]) -> bool:\n+    n = len(texte)\n+    terme = texte[i:j]\n+    # (a) un point entre deux chiffres est décimal (12.5, 12.03.2024, 192.168.1.10)\n+    if terme == \".\" and 0 < i < n - 1 and texte[i - 1].isdigit() and texte[i + 1].isdigit():\n+        return False\n+    # (a bis) un numéro de liste en début de ligne (1. Ouvrir) n'est pas une phrase\n+    if terme == \".\" and 0 < i < n - 1 and texte[i + 1].isspace():\n+        avant = texte[texte.rfind(\"\\n\", 0, i) + 1:i].strip()\n+        if avant.isdigit() and len(avant) <= 3:\n+            return False\n+    # (d) une ponctuation répétée ne fait qu'une frontière ; une ellipse suivie d'une\n+    # minuscule continue la phrase (« Il hésite... puis il part. »)\n+    if terme == \"…\" or (len(terme) >= 2 and set(terme) <= {\".\", \"…\"}):\n+        p = _apres_ponctuation(texte, j)\n+        if p < n and (texte[p].islower() or texte[p].isdigit()):\n+            return False\n+    # (b) abréviations : minuscule après « etc. » n'ouvre pas une phrase ; « M. Dupont »,\n+    # « Dr. Martin », « p. ex. » et « cf. » ne coupent pas.\n+    if terme == \".\":\n+        mot = _mot_avant(texte, i)\n+        p = _apres_ponctuation(texte, j)\n+        suivant = texte[p] if p < n else \"\"\n+        if mot:\n+            if mot in _TITRES or (len(mot) == 1 and mot.isupper()):\n+                if not suivant:\n+                    return True\n+                if not (suivant.isalnum() or suivant in _OUVRANTS):\n+                    return True\n+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n+                    return True\n+                return False\n+            if mot in _ABREV_MINUSCULE:\n+                return not (suivant.islower() or suivant.isdigit())\n+            if mot in _ABREV_TOUJOURS:\n+                return not (suivant.isalnum() or suivant in _OUVRANTS)\n+            if _POINTEE.search(texte[max(0, i - 16):i]):\n+                if not suivant:\n+                    return True\n+                if suivant.isalpha() and _mot_suivant(texte, p).casefold() in _DEBUTS:\n+                    return True\n+                return not (suivant.isalpha() or suivant.isdigit())\n+            if suivant == \"-\" and len(mot) == 1:\n+                return False\n+    return True\n+\n+\n+def decouper_phrases(texte: str) -> list[tuple[int, int, str, str]]:\n+    \"\"\"Les phrases d'un texte libre, sans chevauchement et sans blanc de tête.\"\"\"\n+    n = len(texte)\n+    if not n:\n+        return []\n+    zones = _zones_protegees(texte)\n+    sortie: list[tuple[int, int, str, str]] = []\n+    debut = 0\n+    i = 0\n+\n+    def ajouter(fin: int, typ: str) -> None:\n+        nonlocal debut\n+        d, f = debut, fin\n+        while d < f and texte[d].isspace():\n+            d += 1\n+        while f > d and texte[f - 1].isspace():\n+            f -= 1\n+        if f > d and texte[d:f].strip():\n+            sortie.append((d, f, texte[d:f], typ))\n+        debut = fin\n+\n+    while i < n:\n+        ch = texte[i]\n+        if ch in \"\\r\\n\":\n+            j = i\n+            while j < n and texte[j].isspace():\n+                j += 1\n+            if _nouvelle_ligne_structurelle(texte, i, j):\n+                ajouter(i, \"déclarative\")\n+            i = j\n+            continue\n+        if ch not in \".!?…\":\n+            i += 1\n+            continue\n+        j = i + 1\n+        while j < n and texte[j] in \".!?…\":\n+            j += 1\n+        if not _dans_zone(zones, i, j) and _est_frontiere(texte, i, j, zones):\n+            ajouter(_absorber_fermants(texte, j), _type_phrase(texte[i:j]))\n+        i = j\n+    ajouter(n, \"déclarative\")\n+    return sortie\n+\n+\n+# --------------------------------------------------------------------------- tokens\n+# P0-4 / P1-6 : l'URL, le courriel, le chemin, le nombre et l'emoji sont **un** token ;\n+# les alternatives mortes `url` et `emoji` redeviennent atteignables.\n+_MOTIF_MOTS = re.compile(\n+    r\"https?://[^\\s<>\\\"'`]*[^\\s<>\\\"'`.,;:!?]\"\n+    r\"|[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\"\n+    r\"|\\b(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\\b\"\n+    r\"|(?:\\.{0,2}/)?(?:[\\w.@+-]+/)+[\\w.@+-]+\\.[A-Za-z0-9]{1,8}\"\n+    r\"|/(?:[\\w.@+-]+/)+[\\w.@+-]+\"\n+    r\"|\\b[\\w.@+-]+\\.(?:py|pyi|md|rst|txt|json|jsonl|csv|tsv|ya?ml|toml|ini|cfg|sh|bash|zsh|html?|css|js|ts|jsx|tsx|svg|png|jpe?g|gif|pdf|docx?|xlsx?|pptx?|zip|tar|gz|log|sql|xml)\\b\"\n+    r\"|\\b[A-Za-z_]\\w*(?:\\.[a-z_]\\w*){2,}\\b|\\b[A-Za-z_]\\w*\\.[_]\\w*\\b\"\n+    r\"|\\d+(?:[.,]\\d+)*\"\n+    r\"|\\b[ldmtsnLDMTNS]['’](?=\\w)\"\n+    r\"|\\w+(?:['’\\-]\\w+)*\"\n+    r\"|[\\U0001F300-\\U0001FAFF]\"\n+    r\"|[^\\w\\s]\",\n+    re.I,\n+)\n+_DOMAINE_SEUL = re.compile(\n+    r\"(?:[\\w-]+\\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)\", re.I)\n+\n+\n+def decouper_mots(texte: str) -> list[tuple[int, int, str, str]]:\n+    \"\"\"Les tokens du bloc : la surface, son span et son type, sans recouvrement.\"\"\"\n+    sortie: list[tuple[int, int, str, str]] = []\n+    for m in _MOTIF_MOTS.finditer(texte):\n+        t = m.group()\n+        if t.lower().startswith((\"http://\", \"https://\")):\n+            typ = \"url\"\n+        elif re.fullmatch(r\"[\\w.+-]+@[\\w-]+(?:\\.[A-Za-z]{2,})+\", t):\n+            typ = \"courriel\"\n+        elif _DOMAINE_SEUL.fullmatch(t):\n+            typ = \"url\"\n+        elif re.fullmatch(r\"\\d+(?:[.,]\\d+)*\", t):\n+            typ = \"nombre\"\n+        elif len(t) == 1 and ord(t) >= 0x1F300:\n+            typ = \"emoji\"\n+        elif re.fullmatch(r\"[^\\w\\s]\", t):\n+            typ = \"ponctuation\"\n+        elif len(t) > 1 and (\"/\" in t or \"\\\\\" in t):\n+            typ = \"chemin\"\n+        else:\n+            typ = \"mot\"\n+        sortie.append((m.start(), m.end(), t, typ))\n+    return sortie\n+\n+\n class Heuristique:\n     \"\"\"L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas.\"\"\"\n \n@@ -576,44 +856,11 @@\n     # -- tokens -------------------------------------------------------------\n     @staticmethod\n     def _mots(texte: str) -> list[tuple[int, int, str, str]]:\n-        motif = re.compile(r\"\\b[ldmtsnLDMTNS]['’](?=\\w)|\\w+(?:['’\\-]\\w+)*|\\d+(?:[.,]\\d+)*|https?://\\S+|[\\U0001F300-\\U0001FAFF]|[^\\w\\s]\")\n-        sortie = []\n-        for m in motif.finditer(texte):\n-            t = m.group()\n-            if t.startswith((\"http://\", \"https://\")):\n-                typ = \"url\"\n-            elif t[0].isdigit():\n-                typ = \"nombre\"\n-            elif re.fullmatch(r\"[^\\w\\s]\", t):\n-                typ = \"ponctuation\"\n-            elif len(t) == 1 and ord(t) >= 0x1F300:\n-                typ = \"emoji\"\n-            else:\n-                typ = \"mot\"\n-            sortie.append((m.start(), m.end(), t, typ))\n-        return sortie\n+        return decouper_mots(texte)\n \n     @staticmethod\n     def _phrases(texte: str) -> list[tuple[int, int, str, str]]:\n-        # frontières : ponctuation forte + espace ; on protège les abréviations et les décimales\n-        motif = re.compile(r\"[^.!?…]+(?:[.!?…]+|$)\", re.S)\n-        sortie = []\n-        for m in motif.finditer(texte):\n-            morceau = m.group()\n-            if not morceau.strip():\n-                continue\n-            debut = m.start()\n-            fin = m.end()\n-            # une phrase qui finit par une abréviation connue n'est pas finie\n-            while re.search(r\"\\b(?:M|MM|Mme|Dr|Pr|etc|cf|p|pp|art|vol)\\.\\s*$\", texte[debut:fin]):\n-                suivant = motif.search(texte, fin)\n-                if not suivant:\n-                    break\n-                fin = suivant.end()\n-                morceau = texte[debut:fin]\n-            typ = \"interrogative\" if \"?\" in morceau else (\"exclamative\" if \"!\" in morceau else \"déclarative\")\n-            sortie.append((debut, fin, morceau, typ))\n-        return sortie\n+        return decouper_phrases(texte)\n \n     @staticmethod\n     def _negation(phrase: str) -> bool:\n",
+   "apply_check": true
+  },
+  "base": {
+   "commit": "ed8f9414a83d0ad424ab449996b897ff1bf2c311",
+   "module_sha256": "12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1"
+  },
+  "note": "A seul suffit pour les frontières ; A+B est le patch complet P0-4. Les diffs sont générés contre le fichier de travail au commit ed8f9414 (module 12e73b7ab2cd…) et vérifiés par git apply --check, sans modification du dépôt."
+ },
+ "controle_negatif_gold": {
+  "phrases": 612,
+  "textes": {
+   "pos_differents": 0,
+   "syntagmes_differents": 0,
+   "attachements_differents": 0,
+   "tokens_differents": 0,
+   "nombre_de_phrases_different": 0,
+   "spans_de_phrase_differents": 2,
+   "valeurs_d_acte_differentes": 0
+  },
+  "detail_spans": [
+   {
+    "id": "r308",
+    "texte": "Marie lit. Elle aime les livres.",
+    "avant": [
+     [
+      0,
+      10,
+      "déclarative"
+     ],
+     [
+      10,
+      32,
+      "déclarative"
+     ]
+    ],
+    "apres": [
+     [
+      0,
+      10,
+      "déclarative"
+     ],
+     [
+      11,
+      32,
+      "déclarative"
+     ]
+    ],
+    "effet": "le second span commence à l'espace au lieu de M ; la valeur d'acte reste assertion."
+   },
+   {
+    "id": "r318",
+    "texte": "Marie reads. She loves books.",
+    "avant": [
+     [
+      0,
+      12,
+      "déclarative"
+     ],
+     [
+      12,
+      29,
+      "déclarative"
+     ]
+    ],
+    "apres": [
+     [
+      0,
+      12,
+      "déclarative"
+     ],
+     [
+      13,
+      29,
+      "déclarative"
+     ]
+    ],
+    "effet": "idem ; aucune valeur d'acte changée."
+   }
+  ],
+  "dev_test_identique": true
+ },
+ "limites": [
+  "Les 40 textes sont écrits par l'auteur de l'analyse : les catégories pathologiques sont surreprésentées par rapport à de la prose ordinaire ; aucun accord inter-annotateurs.",
+  "Le gold ne contient aucun chiffre, aucune URL, aucun courriel, aucun chemin, aucune abréviation, aucune ellipse et aucun saut de ligne : il ne peut pas mesurer le gain, seulement la non-régression.",
+  "La règle f (saut de ligne structurel) crée 2 frontières qui traversent des syntagmes du chunker S (t01, t02) ; le chunker doit être rendu sensible aux lignes (P0-3/P1-4), la frontière n'est pas en cause.",
+  "L'ellipse + minuscule est un choix de style : elle fusionne « Il hésite... puis il part. » mais fusionnerait aussi un SMS qui commence une phrase par une minuscule.",
+  "Un titre en fin de phrase suivi d'un mot inconnu de _DEBUTS reste ouvert (Dr. Paul) ; la liste est finie.",
+  "Un numéro de 1 à 3 chiffres en début de ligne suivi d'une espace est pris pour un numéro de liste (12. Il part. peut fusionner).",
+  "Patch B ajoute les types de token courriel et chemin : additif, mais à vérifier si un client impose une énumération fermée.",
+  "Le découpage est ~2,8× plus lent que l'ancien sur 10 000 caractères (2,98 ms → 8,47 ms) ; négligeable devant les 590–765 ms de l'analyse complète, mais à surveiller si _phrases est appelé seul en boucle."
+ ]
+}

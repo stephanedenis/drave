@@ -2301,3 +2301,58 @@ JSON_OK
 ?? reports/rapport-frontieres-phrase.md
   ```
 
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "P0-4 frontières terminé — 2 fichiers neufs écrits, aucun existant modifié, aucun commit.\n- `reports/rapport-frontieres-phrase.md` (753 l.) + `reports/pensee-frontieres-phrase.json` (40 textes, spans avant/après, patchs exacts).\n- 40  … [1134 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -30 reports/rapport-frontieres-phrase.md && echo '--- fences ---' && grep -n '^````' reports/rapport-frontieres-phrase.md && echo '--- status ---' && git status --short reports/rapport-frontieres-phrase.md reports/pensee-frontie … [73 caractères tronqués]`
+
+  ```
+## 6. Ce qui pourrait rendre ce résultat faux
+
+- **Banc écrit par l'auteur** : 40 textes choisis pour couvrir les cas de l'audit, pas un échantillon
+  aléatoire. Les catégories pathologiques sont surreprésentées ; le taux de 32/40 n'est pas une
+  prévalence.
+- **Gold aveugle au phénomène** : 0 chiffre, 0 URL, 0 courriel, 0 chemin, 0 abréviation, 0 ellipse,
+  0 saut de ligne dans les 612 phrases. Le delta 0 dev/test ne prouve pas que la règle est bonne, il
+  prouve qu'elle ne casse pas ce gold.
+- **Règle (f) et chunker** : les 2 syntagmes qui traversent une ligne (`t01`, `t02`) sont un défaut du
+  chunker S, pas de la frontière ; si le chunker est réparé, ce compteur doit revenir à 0.
+- **Ellipse + minuscule** : choix de style. Un SMS qui commence une phrase par une minuscule après
+  `...` sera fusionné. Retirer la branche ellipse de `_est_frontiere` rétablit la coupure stricte.
+- **Abréviations** : `_DEBUTS` est une liste finie ; `Le Dr. Paul arrive` reste ouvert (voulu), mais un
+  titre suivi d'un mot inconnu qui ouvre une phrase peut fusionner. `12. Il part.` en début de ligne est
+  pris pour un numéro de liste.
+- **Tokénisation** : les types `courriel` et `chemin` sont **additif
+… [1144 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '/^### 2.2/,/^### 2.3/' reports/rapport-frontieres-phrase.md | grep -c '^| `' && grep -n \"32/40\\|40/40\\|47 coupures\" reports/rapport-frontieres-phrase.md | head", "description": "Verify 32-row table and headline numbers"}`
+
+  ```
+32
+19:**32/40** textes avaient une **frontière fausse** (47 coupures en trop, 4 fusions, 9 chevauchements,
+20:5 fausses questions), **24 textes / 31 phrases** commençaient par un espace ; après le patch, **40/40**
+67:| textes exacts (spans + types) | 2/40 | **40/40** | 40/40 |
+68:| textes avec au moins une frontière fausse | 32/40 | **0/40** | 0/40 |
+258:| **toutes** | **40/40** | 45 | 2 | 31 | 5 | 0 / 0 / 0 | 0 / 0 / 0 |
+268:les règles donnent **40/40**.
+334:- **Déterminisme** : 40/40 textes identiques sur deux passes ; 500 textes aléatoires (lettres, chiffres,
+721:4. rejouer les 40 cas du JSON (ou les ajouter à la porte) : **40/40 exacts** ;
+727:  aléatoire. Les catégories pathologiques sont surreprésentées ; le taux de 32/40 n'est pas une
+747:- **P0-4 frontières** : corrigé sur le banc (40/40), **sans régression gold** ; le patch A est prêt.
+  ```
+
+### 🤖 Assistant
+
+Livré — P0-4 frontières terminé, sans commit ni modification d’existant.
+
+- **Fichiers neufs** : `reports/rapport-frontieres-phrase.md` (753 l.) et `reports/pensee-frontieres-phrase.json` (40 textes, spans avant/après, patchs exacts).
+- **40 textes** : 102 → 59 phrases ; 32/40 frontières fausses → 0 ; 47 coupures, 4 fusions, 9 chevauchements, 5 fausses questions, 31 espaces de tête → 0 ; 40/40 exacts ; actes faux 63/102 → 0/59.
+- **Gold dev/test** : delta 0 sur POS, F1 syntagmes, attachement et tokens ; 2 spans de phrase corrigés (r308/r318, espace de tête), 0 valeur d’acte changée. Valeurs rejouées : POS 0,8490/0,8511 ; F1 0,6439/0,6552 ; att 0,9816/0,9868.
+- **Gain dev/test par règle = 0 par construction** : le gold ne contient aucun cas traité ; c’est un contrôle de non-régression, le gain est mesuré sur les 40 textes.
+- **Patch A** = `_phrases` (frontières) ; **Patch B** = `_mots` (tokénisation optionnelle : 477→362 tokens, 273→232 POS, 0 token gold changé).
+- **Attention** : `tools/bloc_linguistique.py` porte un `M` d’un autre agent ; base mesurée = HEAD `ed8f9414` + sha module `12e73b7a`. Si le fichier bouge, utiliser les blocs `code` + `methode_apres` du JSON plutôt que le diff.
+

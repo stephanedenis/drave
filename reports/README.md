@@ -15,11 +15,13 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières : 32/40 → **0/40** |
+| [`rapport-frontieres-phrase.md`](rapport-frontieres-phrase.md) | **B13** — les frontières (A28) |
 | [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |
 | [`rapport-pos-r4.md`](rapport-pos-r4.md) | **B13** — R4 et classes fermées (A27) |
 | [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — la cascade ne perd plus (0,8383, 235/236) |
 | [`rapport-morphologie-verbes.md`](rapport-morphologie-verbes.md) | **B13** — la morphologie du 1er groupe : exact **235/236**, couverture **0,9874**, 3 spans |
-| [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : exact **226/226**, couverture **0,9456**, 13 spans |
+| [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : couverture **0,9456** |
 | [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
 | [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — POS **83,83 %** (R2a/R3/R2b), F1 **0,6181** |
 | [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS (A25) |
@@ -150,7 +152,6 @@
 | [`rapport-native-sft.md`](rapport-native-sft.md) | **N4.6** — SFT minimal : **24/24** vus, **0/4** tenus |
 | [`rapport-native-consignes.md`](rapport-native-consignes.md) | **N4.8** — consignes courtes : **0/40** sur mots tenus |
 | [`rapport-native-best-2.md`](rapport-native-best-2.md) | **N0.15/N4.7** — meilleur **2,6998** servi : parité native, **650 ms** |
-| [`rapport-native-best-service.md`](rapport-native-best-service.md) | **N4.5** — meilleur student **2,708** servi : 53 octets, **589 ms** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

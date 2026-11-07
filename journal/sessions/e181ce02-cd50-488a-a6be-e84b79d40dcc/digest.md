@@ -54899,3 +54899,127 @@ README + état 692 786
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — le paquet POS sûr : classes fermées + R4-en, POS **84,96 %** … [1928 caractères tronqués]`
+
+  ```
+· reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-pos-r4-integre.md
+ create mode 100644 reports/rapport-pos-r4.md
+COMMIT OK 1
+5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183
+   ed8f9414..5c5d3b52  s/v7 -> s/v7
+   ed8f9414..5c5d3b52  master -> master
+ven 06 nov 2026 20:20:48 EST
+pensee-frontieres-phrase.json
+pensee-partition-syntagmes.json
+rapport-frontieres-phrase.md
+  ```
+
+### 👤 Utilisateur
+
+Agent 3ccd8d09-9820-4da4-963b-6d84a0ffb141 sent a message: 
+P0-4 frontières terminé — 2 fichiers neufs écrits, aucun existant modifié, aucun commit.
+- `reports/rapport-frontieres-phrase.md` (753 l.) + `reports/pensee-frontieres-phrase.json` (40 textes, spans avant/après, patchs exacts).
+- 40 textes : 102 → 59 phrases ; 32/40 frontières fausses → 0 ; 47 coupures, 4 fusions, 9 chevauchements, 5 fausses questions, 31 espaces de tête → 0 ; 40/40 exacts ; actes faux 63/102 → 0/59.
+- Gold dev/test : delta 0 sur POS/F1 syntagmes/attachement/tokens ; 2 spans de phrase corrigés (r308/r318, espace de tête), 0 valeur d'acte changée. Valeurs rejouées : POS 0,8490/0,8511 ; F1 0,6439/0,6552 ; att 0,9816/0,9868.
+- Gain dev/test par règle = 0 par construction : le gold ne contient aucun cas (chiffre/URL/abréviation/ellipse/newline) ; c'est un contrôle de non-régression, le gain est sur les 40 textes.
+- Patch A = `_phrases` (frontières) ; Patch B = `_mots` (tokénisation optionnelle : 477→362 tokens, 273→232 POS, 0 token gold changé).
+- Diffs exacts dans le JSON + annexes du rapport ; `git apply --check` OK sur l'arbre courant.
+- Attention : `tools/bloc_linguistique.py` est modifié (M) par un autre agent ; base mesurée = HEAD ed8f9414 + sha module 12e73b7a. Si le fichier bouge, utiliser les blocs `code` + `methode_apres` du JSON plutôt que le diff.
+- Aucun `git apply`, aucun commit, aucun fichier existant modifié.
+
+### 👤 Utilisateur
+
+Background subagent 3ccd8d09-9820-4da4-963b-6d84a0ffb141 finished and will do no further work unless you send it more.
+Its closing message:
+Livré — P0-4 frontières terminé, sans commit ni modification d’existant.
+
+- **Fichiers neufs** : `reports/rapport-frontieres-phrase.md` (753 l.) et `reports/pensee-frontieres-phrase.json` (40 textes, spans avant/après, patchs exacts).
+- **40 textes** : 102 → 59 phrases ; 32/40 frontières fausses → 0 ; 47 coupures, 4 fusions, 9 chevauchements, 5 fausses questions, 31 espaces de tête → 0 ; 40/40 exacts ; actes faux 63/102 → 0/59.
+- **Gold dev/test** : delta 0 sur POS, F1 syntagmes, attachement et tokens ; 2 spans de phrase corrigés (r308/r318, espace de tête), 0 valeur d’acte changée. Valeurs rejouées : POS 0,8490/0,8511 ; F1 0,6439/0,6552 ; att 0,9816/0,9868.
+- **Gain dev/test par règle = 0 par construction** : le gold ne contient aucun cas traité ; c’est un contrôle de non-régression, le gain est mesuré sur les 40 textes.
+- **Patch A** = `_phrases` (frontières) ; **Patch B** = `_mots` (tokénisation optionnelle : 477→362 tokens, 273→232 POS, 0 token gold changé).
+- **Attention** : `tools/bloc_linguistique.py` porte un `M` d’un autre agent ; base mesurée = HEAD `ed8f9414` + sha module `12e73b7a`. Si le fichier bouge, utiliser les blocs `code` + `methode_apres` du JSON plutôt que le diff.
+
+### 🤖 Assistant
+
+⏵ Le sous-agent frontières a livré (32/40 → 0) : j'applique le patch A depuis le JSON
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nprint('clés :', list(d.keys()))\ndef cherche(o, prefixe=''):\n    if isinstance(o, dict):\n        for k,v in o.items():\n            if k in  … [283 caractères tronqués]`
+
+  ```
+clés : ['schema', 'objet', 'branche', 'commit_mesure', 'module', 'module_sha256', 'gold_commit', 'date', 'statut', 'fichiers_modifies', 'dispositif', 'verdict', 'resume_40', 'ablations_40', 'regles', 'corpus_40', 'gold', 'tokens_40', 'controles_negatifs', 'patchs', 'controle_negatif_gold', 'limites']
+--- /patchs dict
+{'a_frontieres': {'fichier': 'tools/bloc_linguistique.py', 'point': 'insérer le bloc avant `class Heuristique:` ; remplacer le corps de `_phrases`', 'methode_apres': '    @staticmethod\n    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:\n        return decouper_phrases(texte)\n', 'code': '# --------------------------------------------------------------------------- frontières de phrase\n# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de\n# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel\n# la coupe. Le
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nprint(d['patchs']['a_frontieres']['code'][:3500])\nPY", "description": "Lire le code du patch A"}`
+
+  ```
+# --------------------------------------------------------------------------- frontières de phrase
+# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de
+# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel
+# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
+_FERMANTS = "»”’)]}›"
+_OUVRANTS = "«“‘([{‹"
+_TITRES = frozenset({
+    "M", "MM", "Mme", "Mmes", "Mlle", "Mlles", "Me", "Mgr", "St", "Ste",
+    "Dr", "Drs", "Pr", "Prs", "Rév", "Père", "Sr", "Sœur",
+})
+_ABREV_TOUJOURS = frozenset({
+    "cf", "p", "pp", "ex", "réf", "ref", "éd", "ed", "trad", "fig", "chap",
+    "sect", "env", "av", "al", "ibid", "id", "infra", "supra", "coll", "pl",
+    "sq", "suiv", "op", "ca", "n", "no", "nos", "vs", "art", "vol",
+})
+_ABREV_MINUSCULE = frozenset({"etc"})
+# après un titre ou une initiale, ces mots ouvrent presque sûrement une phrase
+_DEBUTS = frozenset({
+    "il", "elle", "on", "nous", "vous", "ils", "elles", "je", "tu", "ce",
+    "cette", "ces", "cet", "mais", "or", "donc", "pourtant", "cependant",
+    "toutefois", "néanmoins", "enfin", "ensuite", "puis", "alors", "ainsi",
+    "quand", "
+… [2300 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\ncode=d['patchs']['a_frontieres']['code']\napres=d['patchs']['a_frontieres']['methode_apres']\nprint('code', len(code.splitlines()), ' … [927 caractères tronqués]`
+
+  ```
+code 231 lignes | methode_apres 3 lignes
+patch A appliqué
+syntaxe OK
+32:import os
+34:import argparse
+35:import collections
+36:import copy
+37:import json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^import re\" tools/bloc_linguistique.py | head -1 || echo \"PAS DE import re\"; grep -n \"re\\.\" tools/bloc_linguistique.py | head -2 | cut -c1-80; timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport t … [589 caractères tronqués]`
+
+  ```
+39:import re
+223:    mots = set(re.findall(r"[a-zà-ÿ']+", _normaliser(texte)))
+580:_MARQUEUR = re.compile(
+POS 0.8496 | F1 0.6474 | exact 235 / 236
+2 ['déclarative', 'déclarative'] | Le prix est 12.5 euros. Il part.
+2 ['déclarative', 'déclarative'] | Voir https://exemple.fr/a.b. Il part.
+2 ['déclarative', 'déclarative'] | M. Dupont arrive. Il part.
+2 ['déclarative', 'déclarative'] | Il part. Elle reste.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après les frontières", "timeoutMs": 1900000}`
+
+  ```
+183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-frontieres-integrees.md <<'MD'\n# B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Le P … [5637 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état 694 787
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières de phrase : 32/40 → **0/40**, gold in … [1902 caractères tronqués]`

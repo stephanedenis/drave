@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **689 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **691 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -162,6 +162,7 @@
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
 | [rapport-fiabilite-produit.md](rapport-fiabilite-produit.md) | Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes |
 | [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
+| [rapport-frontieres-integrees.md](rapport-frontieres-integrees.md) | B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas |
 | [rapport-frontieres-phrase.md](rapport-frontieres-phrase.md) | Frontières de phrase — P0-4 du bloc linguistique |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
@@ -368,6 +369,7 @@
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |
 | [rapport-parcimonie-imposee.md](rapport-parcimonie-imposee.md) | Parcimonie imposée à l'inférence — la frontière mesurée |
+| [rapport-partition-syntagmes.md](rapport-partition-syntagmes.md) | Partition des syntagmes — cartographie, deux options mesurées, recommandation |
 | [rapport-passage-a-l-echelle.md](rapport-passage-a-l-echelle.md) | Passer aux gros modèles : ce qui bloque, chiffré |
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |
 | [rapport-passe-complete-portes.md](rapport-passe-complete-portes.md) | Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN |

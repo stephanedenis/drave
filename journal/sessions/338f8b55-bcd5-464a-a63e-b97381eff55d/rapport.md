@@ -7,12 +7,12 @@
 | Identifiant | `338f8b55-bcd5-464a-a63e-b97381eff55d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.8 h |
+| Durée | 1.9 h |
 | Tours | 1 |
-| Messages | 71 |
-| Appels d'outils | 75 |
+| Messages | 80 |
+| Appels d'outils | 84 |
 | Fichiers touchés | 0 |
-| Commandes | 63 |
+| Commandes | 71 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les deux … [2002 caractères tronqués]
 
-*75 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - bash — Check git status and repo layout
 - bash — List reports and tools
@@ -41,11 +41,11 @@
 - bash — Find producer of fiabilite JSON
 - bash — Inspect banc_50 entries
 - bash — Locate classes and attachment logic
-- … et 52 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Relecture de la fiche et cohérence avec le JSON
+⏵ Validation finale : JSON, patch, liens et périmètre git
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Run variants on 50 free texts and diff
 - **T1** Print free-text change contexts
 - **T1** Compute full metrics for selected variants
-- … et 23 autres
+- … et 31 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -120,6 +120,7 @@
 - **T1** `r4_en+cc_core            POS all=0.8500 dev=0.8494 (+1.19%) test=0.8511 (+1.11%) en=0.9425 fr=0.7976`
 - **T1** `r4_en+cc_fast            POS all=0.8503 dev=0.8499 (+1.24%) test=0.8511 (+1.11%) en=0.9434 fr=0.7976`
 - **T1** `patch checks {'checks': {'copules_en': True, 'copules_fr': True, 'insert': True, 'bloc_en': True}, 'patch_applique_a': '/tmp/pos_r4/bloc_patche.py', 'sha256': '0bf4d3eb0e2a51603534001284718e625346a61c`
+- **T1** `5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
 
 ## 5. Erreurs rencontrées
 
