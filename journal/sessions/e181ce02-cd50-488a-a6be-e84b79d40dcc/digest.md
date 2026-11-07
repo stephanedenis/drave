@@ -60535,3 +60535,49 @@ budget consommé : 6753.5 s · lancements : 4
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-95; ls reports/ | grep -E \"schema-v2\"", "description": "Attendre J1.3", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4797]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4797", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4797", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+sam 07 nov 2026 14:47:09 EST
+2026-11-07 14:26:08 · ▶ J1.4 — La restitution v0 (timeout 5400 s)
+2026-11-07 14:46:05 · ✔ J1.4 en 1196.3 s (code 0) — ✅ python3 tools/drave.py restituer 'Le chat dort.' >/dev/null 2>&1; echo REST-$?; ✅ test -f reports/rapport-restitution-v0.md && echo FICHE-OK
+2026-11-07 14:46:05 · ▶ J2.1 — Panini I — la table atomes ↔ niveaux (timeout 5400 s)
+8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE 
+pensee-schema-v2.json
+rapport-schema-v2.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 work/chantier/journal.log; echo \"=== état :\"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"fait|echec|budget|a_faire\" | head -8", "description": "Voir le journal complet"}`
+
+  ```
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+2026-11-07 14:11:35 · ✘ J1.2 en 5400.1 s (code 124) — ✅ test -f reports/rapport-convention-gv.md && echo FICHE-OK; ✅ bash tools/porte-bloc-linguistique.sh 2>&1 | tail -1
+2026-11-07 14:11:35 · ▶ J1.3 — Le schéma v2 (timeout 5400 s)
+2026-11-07 14:26:08 · ✔ J1.3 en 873.4 s (code 0) — ✅ test -f tools/schemas/drave-annotation-v2.json && echo V2-OK; ✅ python3 tools/verifier_schema_produit.py --gold 20 >/dev/null 2>&1; echo VALIDE-$?
+2026-11-07 14:26:08 · ▶ J1.4 — La restitution v0 (timeout 5400 s)
+2026-11-07 14:46:05 · ✔ J1.4 en 1196.3 s (code 0) — ✅ python3 tools/drave.py restituer 'Le chat dort.' >/dev/null 2>&1; echo REST-$?; ✅ test -f reports/rapport-restitution-v0.md && echo FICHE-OK
+2026-11-07 14:46:05 · ▶ J2.1 — Panini I — la table atomes ↔ niveaux (timeout 5400 s)
+=== état :
+budget consommé : 8823.199999999999 s · lancements : 6
+  [fait    ] J0     j0 — Le contrôle du superviseur
+  [fait    ] J1.1   j1 — r035 : la relative zéro
+  [echec   ] 
+… [228 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -4", "description": "Attendre J2.1", "timeoutMs": 1900000}`

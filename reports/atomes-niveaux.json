@@ -1,0 +1,740 @@
+{
+ "fiche": "reports/rapport-atomes-niveaux.md",
+ "version": "1.0",
+ "date": "2026-11-07",
+ "titre": "Table de correspondance — 14 atomes V14 de Panini et 8 niveaux Drave",
+ "statut": "hypothese_de_lecture_et_protocole_non_mesure",
+ "sources": {
+  "atomes": {
+   "depot": "../../Panini/research",
+   "head": "e10d695",
+   "head_date": "2026-10-25",
+   "fichiers": [
+    "../../Panini/README.md",
+    "../../Panini/research/docs/CADRES_THEORIQUES_ET_IDEES_ORIGINALES.md",
+    "../../Panini/research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md",
+    "../../Panini/research/nipada/falsification/analytic_sigs_v1.json"
+   ],
+   "note": "V14 de Research uniquement ; les 34 atomes de Panini-FS et les 9 dhatus de l'ancien docs/ de l'hote ne sont pas utilises."
+  },
+  "niveaux": {
+   "fichiers": [
+    "../docs/theorie/contrat-bloc-langue.md",
+    "../docs/theorie/pre-traitement-linguistique.md",
+    "rapport-bloc-linguistique.md"
+   ],
+   "note": "Le contrat compte 9 niveaux avec morphème ; le mandat J2.1 en liste 8. Le morphème reste un ancrage possible pour ∆ et λ, pas un porteur."
+  }
+ },
+ "niveaux": [
+  "graphème",
+  "mot",
+  "pos",
+  "syntagme",
+  "phrase",
+  "pragmatique",
+  "discours",
+  "document"
+ ],
+ "niveaux_du_contrat": [
+  "graphème",
+  "morphème",
+  "mot",
+  "pos",
+  "syntagme",
+  "phrase",
+  "discours",
+  "pragmatique",
+  "document"
+ ],
+ "principe": {
+  "non_bijection": true,
+  "ancrage": "plus petite unite ou l'atome a une marque observable dediee",
+  "porteur": "niveau ou l'atome est une contribution semantique mesurable",
+  "portee": [
+   "direct",
+   "distribué",
+   "émergent"
+  ],
+  "note": "Le porteur est un choix de mesure, pas une essence ; le JSON conserve les niveaux secondaires et la portee."
+ },
+ "atomes": [
+  {
+   "rang": 1,
+   "symbole": "∃",
+   "nom": "ÊTRE",
+   "prime": 2,
+   "colonne": "Dynamique",
+   "periode": "I",
+   "capte": "présence, substrat, existence ; copule, « il y a », subsomption",
+   "ancrage": "mot",
+   "porteur": "phrase",
+   "niveaux_secondaires": [
+    "document"
+   ],
+   "portee": "distribué",
+   "signal": "copules et existentiels par phrase ; présence d'un référent",
+   "mesure": {
+    "nom": "taux de prédications existentielles",
+    "formule": "# phrases à copule/existentiel / # phrases",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "part pour 1 000 tokens",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "paraphrase en verbes lexicaux ; permutation de la colonne ∃",
+   "falsification": "rho(∃, taux existentiel) ≤ rho(∃, taux de verbes) : l'atome est lexical, pas phrastique.",
+   "exemple": "Il y a un chat sur le toit."
+  },
+  {
+   "rang": 2,
+   "symbole": "∆",
+   "nom": "DIFFÉRENCE",
+   "prime": 3,
+   "colonne": "Discernabilité",
+   "periode": "I",
+   "capte": "distinction, négation, privatif, écart, seuil",
+   "ancrage": "graphème",
+   "porteur": "phrase",
+   "niveaux_secondaires": [
+    "mot",
+    "pos",
+    "discours"
+   ],
+   "portee": "distribué",
+   "signal": "paires minimales (diacritique, casse, lettre) ; négations, antonymes, contrastes",
+   "mesure": {
+    "nom": "taux de paires minimales discriminées ; taux de négation",
+    "formule": "# paires discriminées / # paires ; # phrases négatives / # phrases",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "neutraliser diacritiques et casse ; retirer les négations ; permutation",
+   "falsification": "rho(∆, paires minimales) ≈ 0 et rho(∆, négation) ≈ 0 : la distinction n'est pas captée.",
+   "exemple": "Le chat n'est pas sur le toit."
+  },
+  {
+   "rang": 3,
+   "symbole": "∼",
+   "nom": "RAPPORT",
+   "prime": 5,
+   "colonne": "Configuration",
+   "periode": "I",
+   "capte": "mise en relation, préposition/cas, lien orienté",
+   "ancrage": "pos",
+   "porteur": "syntagme",
+   "niveaux_secondaires": [
+    "discours",
+    "phrase"
+   ],
+   "portee": "distribué",
+   "signal": "dépendances, attachements, prépositions, distance",
+   "mesure": {
+    "nom": "F1 d'attachement ; densité d'arêtes ; distance moyenne",
+    "formule": "F1(attachement) ; # arêtes / # tokens ; moyenne des distances",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; arêtes/token ; tokens",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "mélanger les têtes ; arbre aléatoire ; permutation",
+   "falsification": "rho(∼, F1 attachement) ≤ rho(∼, longueur) : la relation n'est que densité de tokens.",
+   "exemple": "Le chat de la voisine."
+  },
+  {
+   "rang": 4,
+   "symbole": "↗",
+   "nom": "ORIENTATION",
+   "prime": 7,
+   "colonne": "Dynamique",
+   "periode": "II",
+   "capte": "direction du flux, visée, transmission",
+   "ancrage": "syntagme",
+   "porteur": "discours",
+   "niveaux_secondaires": [
+    "phrase",
+    "document"
+   ],
+   "portee": "distribué",
+   "signal": "sens des attachements, ordre temporel/causal, connecteurs",
+   "mesure": {
+    "nom": "accuracy d'ordre ; ratio avant/arrière",
+    "formule": "# paires d'événements dans le bon ordre / # paires ; # connecteurs avant / # arrière",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "accuracy ; ratio",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "inverser l'ordre ; mélanger les phrases ; permutation",
+   "falsification": "rho(↗, ordre) ≤ rho(↗, nombre de connecteurs) : l'orientation n'est que connecteurs.",
+   "exemple": "Il dort, puis il se réveille."
+  },
+  {
+   "rang": 5,
+   "symbole": "⊙",
+   "nom": "SUJET",
+   "prime": 11,
+   "colonne": "Discernabilité",
+   "periode": "II",
+   "capte": "agent, expérienceur, point de vue situé",
+   "ancrage": "pos",
+   "porteur": "syntagme",
+   "niveaux_secondaires": [
+    "phrase",
+    "discours"
+   ],
+   "portee": "distribué",
+   "signal": "rôle sujet/agent, personne, accord",
+   "mesure": {
+    "nom": "F1 du rôle sujet ; taux de sujets agentifs",
+    "formule": "F1(rôle sujet) ; # sujets agentifs / # clauses",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "passiver ou impersonnaliser ; permutation",
+   "falsification": "rho(⊙, rôle sujet) ≤ rho(⊙, fréquence des pronoms) : l'agent n'est que pronom.",
+   "exemple": "La voisine dort."
+  },
+  {
+   "rang": 6,
+   "symbole": "⧖",
+   "nom": "TEMPS",
+   "prime": 13,
+   "colonne": "Configuration",
+   "periode": "II",
+   "capte": "durée, séquence, ancrage temporel",
+   "ancrage": "pos",
+   "porteur": "phrase",
+   "niveaux_secondaires": [
+    "discours",
+    "mot"
+   ],
+   "portee": "distribué",
+   "signal": "temps/aspect, adverbes temporels, ordre",
+   "mesure": {
+    "nom": "F1 temps/aspect ; densité temporelle",
+    "formule": "F1(temps/aspect) ; # marques temporelles / # clauses",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; marques/clause",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "retirer la morphologie temporelle ; texte sans temps ; permutation",
+   "falsification": "rho(⧖, temps/aspect) ≤ rho(⧖, genre) : le temps n'est que genre.",
+   "exemple": "Il a dormi toute la journée."
+  },
+  {
+   "rang": 7,
+   "symbole": "◇",
+   "nom": "MODALITÉ",
+   "prime": 17,
+   "colonne": "Dynamique",
+   "periode": "III",
+   "capte": "possible, nécessaire, obligation, engagement",
+   "ancrage": "pos",
+   "porteur": "pragmatique",
+   "niveaux_secondaires": [
+    "phrase",
+    "discours"
+   ],
+   "portee": "distribué",
+   "signal": "auxiliaires modaux, hedges, actes de parole",
+   "mesure": {
+    "nom": "F1 modalité/acte ; taux de modaux ; kappa",
+    "formule": "F1(modalité) ; # modaux / # clauses ; κ inter-annotateurs",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; taux ; κ",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "retirer modaux et hedges ; permutation",
+   "falsification": "rho(◇, modalité) ≤ rho(◇, négation) : la modalité n'est que négation.",
+   "exemple": "Il peut dormir."
+  },
+  {
+   "rang": 8,
+   "symbole": "№",
+   "nom": "NOMBRE",
+   "prime": 19,
+   "colonne": "Discernabilité",
+   "periode": "III",
+   "capte": "quantité, cardinalité, comptage",
+   "ancrage": "mot",
+   "porteur": "mot",
+   "niveaux_secondaires": [
+    "pos",
+    "phrase"
+   ],
+   "portee": "direct",
+   "signal": "numéraux, quantifieurs, dates",
+   "mesure": {
+    "nom": "exact match nombres/dates ; taux de numéraux",
+    "formule": "# nombres/dates exacts / # nombres/dates ; # NUM / # POS",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "exact match ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "remplacer les chiffres par des mots ; obfusquer ; permutation",
+   "falsification": "rho(№, numéraux) ≈ 0 : la quantité n'est pas captée par les numéraux.",
+   "exemple": "Trois chats dorment."
+  },
+  {
+   "rang": 9,
+   "symbole": "⊕",
+   "nom": "ESPACE",
+   "prime": 23,
+   "colonne": "Configuration",
+   "periode": "III",
+   "capte": "localisation, topologie, étendue, métaphore spatiale",
+   "ancrage": "pos",
+   "porteur": "syntagme",
+   "niveaux_secondaires": [
+    "phrase",
+    "document"
+   ],
+   "portee": "distribué",
+   "signal": "PP locatifs, deixis here/there, rôles lieu",
+   "mesure": {
+    "nom": "F1 rôle lieu ; taux de PP locatifs",
+    "formule": "F1(rôle lieu) ; # PP locatifs / # PP",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "retirer les prépositions spatiales ; permutation",
+   "falsification": "rho(⊕, rôle lieu) ≤ rho(⊕, mise en page) : l'espace n'est que layout.",
+   "exemple": "Le chat est sur le toit."
+  },
+  {
+   "rang": 10,
+   "symbole": "⊗",
+   "nom": "OPÉRATION",
+   "prime": 29,
+   "colonne": "Dynamique",
+   "periode": "IV",
+   "capte": "action, acte, application d'un opérateur",
+   "ancrage": "mot",
+   "porteur": "pos",
+   "niveaux_secondaires": [
+    "phrase",
+    "syntagme"
+   ],
+   "portee": "direct",
+   "signal": "VERB/AUX, prédicats, aktionsart",
+   "mesure": {
+    "nom": "accuracy VERB/AUX ; taux de verbes ; F1 prédicat",
+    "formule": "accuracy(POS VERB/AUX) ; # VERB/AUX / # POS ; F1(prédicat)",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "accuracy ; taux ; F1",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "nominaliser les verbes ; permutation",
+   "falsification": "rho(⊗, VERB/AUX) ≤ rho(⊗, longueur) : l'action n'est que longueur.",
+   "exemple": "La voisine ouvre la porte."
+  },
+  {
+   "rang": 11,
+   "symbole": "λ",
+   "nom": "FONCTION",
+   "prime": 31,
+   "colonne": "Discernabilité",
+   "periode": "IV",
+   "capte": "finalité, usage, téléologie, morphisme typé",
+   "ancrage": "pos",
+   "porteur": "syntagme",
+   "niveaux_secondaires": [
+    "phrase",
+    "document"
+   ],
+   "portee": "distribué",
+   "signal": "but, moyen, fonction d'un constituant",
+   "mesure": {
+    "nom": "F1 rôle but/fonction ; taux de constructions finales",
+    "formule": "F1(rôle but) ; # constructions finales / # clauses",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "retirer les marqueurs de but ; permutation",
+   "falsification": "rho(λ, rôle but) ≤ rho(λ, prépositions) : la finalité n'est que préposition.",
+   "exemple": "Il dort pour récupérer."
+  },
+  {
+   "rang": 12,
+   "symbole": "⊞",
+   "nom": "STRUCTURE",
+   "prime": 37,
+   "colonne": "Configuration",
+   "periode": "IV",
+   "capte": "organisation, agencement, ensemble + axiomes",
+   "ancrage": "syntagme",
+   "porteur": "document",
+   "niveaux_secondaires": [
+    "discours",
+    "phrase"
+   ],
+   "portee": "émergent",
+   "signal": "régions, TOC, hiérarchie, structure argumentale",
+   "mesure": {
+    "nom": "F1 frontières de régions ; profondeur de l'arbre ; couverture TOC",
+    "formule": "F1(régions) ; profondeur ; # sections TOC / # sections",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; niveaux ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "aplatir ou mélanger les sections ; permutation",
+   "falsification": "rho(⊞, régions) ≤ rho(⊞, longueur) : la structure n'est que longueur.",
+   "exemple": "Section 1, puis section 2, puis section 3."
+  },
+  {
+   "rang": 13,
+   "symbole": "≍",
+   "nom": "SYMÉTRIE",
+   "prime": 41,
+   "colonne": "Dynamique",
+   "periode": "V",
+   "capte": "équilibre, invariance, harmonie, répétition équilibrée",
+   "ancrage": "graphème",
+   "porteur": "discours",
+   "niveaux_secondaires": [
+    "phrase",
+    "document"
+   ],
+   "portee": "émergent",
+   "signal": "parallélisme, coordination, sections équilibrées, palindromes",
+   "mesure": {
+    "nom": "score de parallélisme ; variance des longueurs",
+    "formule": "# constructions parallèles / # phrases ; CV(longueur des sections)",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "taux ; CV",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "casser le parallélisme ; permutation",
+   "falsification": "rho(≍, parallélisme) ≤ rho(≍, répétition de mots) : la symétrie n'est que répétition lexicale.",
+   "exemple": "Il dort, elle veille."
+  },
+  {
+   "rang": 14,
+   "symbole": "≡",
+   "nom": "ÉQUATION",
+   "prime": 43,
+   "colonne": "Discernabilité",
+   "periode": "V",
+   "capte": "égalité, équivalence, identité, définition",
+   "ancrage": "syntagme",
+   "porteur": "phrase",
+   "niveaux_secondaires": [
+    "document",
+    "discours"
+   ],
+   "portee": "émergent",
+   "signal": "copule équative, définitions, « = », renvois",
+   "mesure": {
+    "nom": "F1 définition/équation ; taux de copules équatives",
+    "formule": "F1(définition) ; # phrases équatives / # phrases",
+    "metrique": "Spearman rho (CLR)",
+    "unite": "F1 ; taux",
+    "sens_attendu": "positif"
+   },
+   "controle_negatif": "remplacer les définitions par des descriptions ; permutation",
+   "falsification": "rho(≡, définition) ≤ rho(≡, copule) : l'équation n'est que copule (∃).",
+   "exemple": "Un chat est un félin."
+  }
+ ],
+ "calibration_44_oeuvres": {
+  "source": "../../Panini/research/nipada/falsification/analytic_sigs_v1.json",
+  "n_oeuvres": 44,
+  "parts_somme_1": true,
+  "statistiques": {
+   "ÊTRE": {
+    "moyenne": 0.107443,
+    "ecart_type": 0.032566,
+    "min": 0.050592,
+    "max": 0.165658,
+    "cv": 0.3031
+   },
+   "DIFFÉRENCE": {
+    "moyenne": 0.023207,
+    "ecart_type": 0.010585,
+    "min": 0.004031,
+    "max": 0.043502,
+    "cv": 0.4561
+   },
+   "RAPPORT": {
+    "moyenne": 0.088174,
+    "ecart_type": 0.034694,
+    "min": 0.033223,
+    "max": 0.175124,
+    "cv": 0.3935
+   },
+   "ORIENTATION": {
+    "moyenne": 0.006197,
+    "ecart_type": 0.00308,
+    "min": 0.000913,
+    "max": 0.014632,
+    "cv": 0.4971
+   },
+   "SUJET": {
+    "moyenne": 0.189031,
+    "ecart_type": 0.028152,
+    "min": 0.087297,
+    "max": 0.233076,
+    "cv": 0.1489
+   },
+   "TEMPS": {
+    "moyenne": 0.080068,
+    "ecart_type": 0.023334,
+    "min": 0.018835,
+    "max": 0.127257,
+    "cv": 0.2914
+   },
+   "MODALITÉ": {
+    "moyenne": 0.03647,
+    "ecart_type": 0.019462,
+    "min": 0.002513,
+    "max": 0.098077,
+    "cv": 0.5336
+   },
+   "NOMBRE": {
+    "moyenne": 0.095984,
+    "ecart_type": 0.033624,
+    "min": 0.056852,
+    "max": 0.224591,
+    "cv": 0.3503
+   },
+   "ESPACE": {
+    "moyenne": 0.048242,
+    "ecart_type": 0.019247,
+    "min": 0.0069,
+    "max": 0.090297,
+    "cv": 0.399
+   },
+   "OPÉRATION": {
+    "moyenne": 0.083131,
+    "ecart_type": 0.022033,
+    "min": 0.017325,
+    "max": 0.136002,
+    "cv": 0.265
+   },
+   "FONCTION": {
+    "moyenne": 0.096161,
+    "ecart_type": 0.023734,
+    "min": 0.038304,
+    "max": 0.139951,
+    "cv": 0.2468
+   },
+   "STRUCTURE": {
+    "moyenne": 0.11703,
+    "ecart_type": 0.020444,
+    "min": 0.087314,
+    "max": 0.160806,
+    "cv": 0.1747
+   },
+   "SYMÉTRIE": {
+    "moyenne": 0.002897,
+    "ecart_type": 0.001621,
+    "min": 0.000334,
+    "max": 0.008963,
+    "cv": 0.5595
+   },
+   "ÉQUATION": {
+    "moyenne": 0.025965,
+    "ecart_type": 0.01701,
+    "min": 0.004382,
+    "max": 0.100399,
+    "cv": 0.6551
+   }
+  },
+  "correlations_brutes": {
+   "n_paires_abs_r_sup_0_5": 33,
+   "top": [
+    {
+     "a": "NOMBRE",
+     "b": "ÉQUATION",
+     "r": 0.9232
+    },
+    {
+     "a": "ÊTRE",
+     "b": "DIFFÉRENCE",
+     "r": 0.8574
+    },
+    {
+     "a": "ÊTRE",
+     "b": "RAPPORT",
+     "r": -0.8463
+    },
+    {
+     "a": "RAPPORT",
+     "b": "ESPACE",
+     "r": -0.8286
+    },
+    {
+     "a": "ÊTRE",
+     "b": "ESPACE",
+     "r": 0.7958
+    },
+    {
+     "a": "RAPPORT",
+     "b": "MODALITÉ",
+     "r": -0.7598
+    },
+    {
+     "a": "DIFFÉRENCE",
+     "b": "RAPPORT",
+     "r": -0.7581
+    },
+    {
+     "a": "RAPPORT",
+     "b": "STRUCTURE",
+     "r": 0.7322
+    },
+    {
+     "a": "ORIENTATION",
+     "b": "ESPACE",
+     "r": 0.7274
+    },
+    {
+     "a": "MODALITÉ",
+     "b": "STRUCTURE",
+     "r": -0.7228
+    }
+   ],
+   "note": "Correlations de Pearson sur les parts brutes ; elles sont contraintes par la somme 1."
+  },
+  "correlations_clr": {
+   "n_paires_abs_r_sup_0_5": 44,
+   "top": [
+    {
+     "a": "RAPPORT",
+     "b": "STRUCTURE",
+     "r": 0.9249
+    },
+    {
+     "a": "SUJET",
+     "b": "ESPACE",
+     "r": -0.8856
+    },
+    {
+     "a": "RAPPORT",
+     "b": "FONCTION",
+     "r": 0.8769
+    },
+    {
+     "a": "MODALITÉ",
+     "b": "STRUCTURE",
+     "r": -0.8748
+    },
+    {
+     "a": "FONCTION",
+     "b": "STRUCTURE",
+     "r": 0.8619
+    },
+    {
+     "a": "RAPPORT",
+     "b": "MODALITÉ",
+     "r": -0.8155
+    },
+    {
+     "a": "SUJET",
+     "b": "TEMPS",
+     "r": 0.809
+    },
+    {
+     "a": "SUJET",
+     "b": "FONCTION",
+     "r": 0.8063
+    },
+    {
+     "a": "RAPPORT",
+     "b": "SUJET",
+     "r": 0.7966
+    },
+    {
+     "a": "TEMPS",
+     "b": "ESPACE",
+     "r": -0.7948
+    }
+   ],
+   "note": "CLR avec remplacement des zeros par 1e-6 ; c'est la transformation a utiliser pour le protocole."
+  },
+  "comparaison_brut_clr": [
+   {
+    "a": "NOMBRE",
+    "b": "ÉQUATION",
+    "r_brut": 0.9232,
+    "r_clr": 0.5771
+   },
+   {
+    "a": "ÊTRE",
+    "b": "DIFFÉRENCE",
+    "r_brut": 0.8574,
+    "r_clr": 0.581
+   },
+   {
+    "a": "ÊTRE",
+    "b": "RAPPORT",
+    "r_brut": -0.8463,
+    "r_clr": -0.4195
+   },
+   {
+    "a": "RAPPORT",
+    "b": "ESPACE",
+    "r_brut": -0.8286,
+    "r_clr": -0.7513
+   }
+  ],
+  "acp_clr": {
+   "valeurs_propres": [
+    6.9668,
+    2.8449,
+    1.4911,
+    1.2596,
+    0.5285,
+    0.3807
+   ],
+   "composantes_sup_1": 4,
+   "variance_3_premiers": 0.8073,
+   "variance_brute_3_premiers": [
+    0.4976,
+    0.2032,
+    0.1065
+   ]
+  },
+  "lecture": "Les 44 oeuvres sont majoritairement philosophiques et religieuses ; les correlations refletent le genre, l'epoque et le lexique, pas la structure linguistique. Les parts sont compositionnelles : passer au CLR change la structure (NOMBRE-EQUATION +0,923 -> +0,577 ; ETRE-RAPPORT -0,846 -> -0,420). Quatre composantes ont une valeur propre > 1 ; les trois premieres expliquent 80,7 % de la variance : les 14 atomes n'occupent que quatre dimensions effectives dans ce corpus."
+ },
+ "protocole": {
+  "corpus": "20 textes minimum, mêmes identifiants des deux côtés, premiers 10 000 mots, mêmes métadonnées (date, langue, famille, genre), au moins 5 genres et 3 familles.",
+  "variables": "X = 14 parts d'atomes en CLR/ALR ; Y = une variable principale pré-enregistrée par atome, plus les variables secondaires et un placebo (longueur, colonne aléatoire).",
+  "statistique": "Spearman rho + 10 000 permutations des colonnes ; corrélation partielle contrôlant log(longueur), date, langue/famille, genre et les 13 autres atomes ; Benjamini-Hochberg sur 14 tests ; split-half découverte/confirmation.",
+  "controles_negatifs": [
+   "permutation des colonnes d'atomes : les rho doivent tomber à ~0",
+   "placebo : variable de niveau aléatoire ou longueur du texte",
+   "corpus négatif : retirer la marque du niveau sans toucher au texte (négations, chiffres, sections, parallélisme)",
+   "texte de genre/langue différent : le rho doit rester stable si l'atome est structurel, chuter s'il est lexical"
+  ],
+  "regle_de_decision": {
+   "rho_principal_min": 0.3,
+   "p_perm_max": 0.05,
+   "conditions": [
+    "rho principal > rho de chaque variable secondaire",
+    "rho principal > rho du placebo",
+    "le corpus négatif fait chuter |rho| de >= 50 % ou le rend non significatif",
+    "la corrélation partielle (contrôles + autres atomes) reste du même signe et >= 0.20"
+   ],
+   "sinon": "atome déclaré non ancré à ce niveau ; on révise la table, pas les données"
+  },
+  "avertissement_epoque": "La signature lexicale capte l'époque (beta +0,138) bien plus que la filiation (beta +0,049) : tout test doit contrôler la date ; une similarité de surface est une hypothèse, pas une preuve."
+ },
+ "limites": [
+  "La table est une grille de lecture, pas une preuve que V14 est minimal (dette D2 chez Panini).",
+  "Les niveaux sont ceux de Drave, pas des universaux linguistiques ; POS et syntagme sont FR/EN-centrés.",
+  "Le morphème est omis (8 niveaux au lieu de 9) ; si on l'ajoute, ∆ et λ sont à réexaminer.",
+  "La calibration est déséquilibrée : 44 œuvres philosophiques et religieuses, pas 44 genres.",
+  "Aucune mesure atome ↔ niveau n'est encore faite : la fiche livre la table, le protocole et la calibration.",
+  "La signature de Panini est lexicale : elle peut ne pas capter l'atome ; le contrôle négatif est là pour le détecter."
+ ],
+ "prochaine_etape": "J2.2 : construire le corpus commun (20 textes, mêmes identifiants), pré-enregistrer les 14 paires atome -> variable principale, exécuter le protocole (CLR, permutations, partielles, BH, split-half, corpus négatif), publier rapport-atomes-niveaux-v2.md + JSON.",
+ "fichiers": {
+  "fiche": "reports/rapport-atomes-niveaux.md",
+  "json": "reports/atomes-niveaux.json",
+  "inventaire": "reports/rapport-inventaire-panini.md",
+  "plan_semaine": "../docs/pilotage/semaine-autonome.md"
+ }
+}

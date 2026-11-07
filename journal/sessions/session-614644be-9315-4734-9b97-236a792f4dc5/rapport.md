@@ -9,10 +9,10 @@
 | Début | 2026-11-07 14:11 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 141 |
-| Appels d'outils | 166 |
+| Messages | 146 |
+| Appels d'outils | 171 |
 | Fichiers touchés | 12 |
-| Commandes | 91 |
+| Commandes | 95 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J1.3 : le schéma v2 de l'annotation — publier `tools/schemas/drave-annotation-v2.json` (ajout de `meta.alternative … [171 caractères tronqués]
 
-*166 appels d'outils.* Actions notables :
+*171 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — List schemas and tools
@@ -41,7 +41,31 @@
 - bash — Inspect chantier plan for J1 tasks
 - bash — Print J1.3 task object
 - bash — Read first part of product README
-- … et 135 autres
+- … et 139 autres
+
+**Synthèse produite :**
+
+**J1.3 terminée et committée** (`9a259953`).
+
+\### Livré
+- **`tools/schemas/drave-annotation-v2.json`** : schéma Draft 2020-12, `version: 2`, avec `meta.partition` (`groupe`, `rang`, `membres`, `vue`) et `meta.alternative` (type, span, source, union, relation, rang, `retire`, rôle, attachement).
+- **`tools/bloc_linguistique.py`** : `VERSION_ANNOTATION = 2` ; le JSON produit porte désormais `version: 2`.
+- **`tools/verifier_schema_produit.py`** : choix du schéma d’après `version` ; **v1 reste lue** avec le schéma v1. Contrôle négatif intégré : le schéma v2 refuse bien une annotation v1.
+- **Tests / porte** : `test_schema_produit.py` passé à 8 tests (v2 + rétro-compatibilité), labels de `porte-produit.sh` mis à jour.
+- **Doc produit** : `docs/produit/README.md`, `docs/produit/exemples.md` (schéma v2, `meta.partition`/`meta.alternative`, refus code 3, options réelles).
+- **Fiche** : `reports/rapport-schema-v2.md` + `reports/pensee-schema-v2.json`.
+- **État / roadmap** : `en-cours`, `roadmap`, `semaine-autonome`, index des reports mis à jour.
+
+\### Validation
+```text
+python3 tools/verifier_schema_produit.py --gold 20
+→ 26 cas, 0 échec
+→ 5 cas v2 + 1 cas v1 + 20 phrases du gold
+→ ✅ v1 lue par le schéma v1
+→ ✅ contrôle négatif : v2 refuse v1
+```
+
+Contrôles complémentaires : `porte-produit` **verte** (16 tests produit, 8 tests schéma, 4 tests libres, autotest **183/183**), revue doc ✅, journal ✅, budget ✅, état ✅. Les modifications préexistantes hors périmètre (`reports/pensee-*`, `tools/chantier/superviseur.py`, `tools/structures`, etc.) sont restées non committées.
 
 ## 3. Travail accompli
 
@@ -104,7 +128,7 @@
 - **T1** Run schema product tests
 - **T1** Run product smoke tests
 - **T1** Rename test class for v2
-- … et 51 autres
+- … et 55 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -205,9 +229,11 @@
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : ✅ fr   ✅ en   ✅ vide   ✅ ponctuation   ✅ long   ✅ gold:g001   ✅ gold:g002   ✅ gold:g003   ✅ gold:g004   ✅ gold:g005   ✅ gold:g006   ✅ gold:g007   ✅ gold:g008   ✅ gold:g009   ✅ gold:g010   ✅ gold:g011 
+- **T1** : ✅ index : aucun fait stagé sans état [s/v7 9a259953] B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE  30 files changed, 3978 insertions(+), 134 deletions
+- **T1** : 9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE  docs/pilotage/en-cours.md                          |   19 +-  docs/pilotage/roadmap.md         
 
 ## 6. Commits
 

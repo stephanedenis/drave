@@ -2839,3 +2839,105 @@ exit=0
   ```
 
 - **bash** `{"command": "git commit -m \"B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE\" 2>&1 | tail -40; echo \"exit=${PIPESTATUS[0]}\"", "description": "Commit schema v2 task", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 9a259953] B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE
+ 30 files changed, 3978 insertions(+), 134 deletions(-)
+ create mode 100644 journal/sessions/session-614644be-9315-4734-9b97-236a792f4dc5/digest.md
+ create mode 100644 journal/sessions/session-614644be-9315-4734-9b97-236a792f4dc5/rapport.md
+ create mode 100644 reports/pensee-schema-v2.json
+ create mode 100644 reports/rapport-schema-v2.md
+ create mode 100644 tools/schemas/drave-annotation-v2.json
+exit=0
+  ```
+
+- **bash** `{"command": "git show --stat --oneline -1 | sed -n '1,50p'; echo '---status---'; git status --short", "description": "Review commit contents and remaining changes"}`
+
+  ```
+9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE
+ docs/pilotage/en-cours.md                          |   19 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ docs/pilotage/semaine-autonome.md                  |    2 +-
+ docs/produit/README.md                             |  102 +-
+ docs/produit/exemples.md                           |   19 +-
+ journal/2026-11-07/README.md                       |    7 +-
+ journal/2026-11-07/distribue.md                    |    2 +-
+ journal/2026-11-07/docs.md                         |    9 +-
+ journal/2026-11-07/memoire.md                      |    2 +-
+ journal/2026-11-07/mesures.md                      |    2 +-
+ journal/2026-11-07/modele.md                       |    2 +-
+ journal/2026-11-07/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   83 +
+ .../rapport.md                                     |   16 +-
+ .../digest.md                             
+… [1227 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -10; echo \"exit=${PIPESTATUS[0]}\"; python3 tools/revue_documentation.py 2>&1 | tail -5; echo \"exit=${PIPESTATUS[0]}\"", "description": "Post-commit journal and doc checks"}`
+
+  ```
+journal · 44 jour(s) · 168 session(s) · 2351 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+exit=0
+  revue de documentation · 708 fiche(s) · 801 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_schema_produit.py --gold 20 >/tmp/final-v.log 2>&1; echo \"verifier=$?\"; tail -4 /tmp/final-v.log; python3 tools/taille_documents.py >/tmp/final-t.log 2>&1; echo \"taille=$?\"; tail -2 /tmp/final-t.log; python3 tools/verifie_en_cours.py >/tmp/final-e.log 2>&1; ec … [95 caractères tronqués]`
+
+  ```
+verifier=0
+  ✅ gold:g020 (v2)
+  ✅ rétro-compatibilité : annotation v1 lue par le schéma v1
+  ✅ contrôle négatif : le schéma v2 refuse une annotation v1
+  ✅ validateur JSON Schema · 26 cas
+taille=0
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+etat=0
+  en-cours · 1602 mots · 7 sections · 4 session(s) · 5 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport sys,json\nsys.path.insert(0,'.')\nimport fastjsonschema\nimport tools.bloc_linguistique as bl\nv=fastjsonschema.compile(json.load(open('tools/schemas/drave-annotation-v2.json')))\nbanc=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultat … [521 caractères tronqués]`
+
+  ```
+annotations 50 textes x 4 modes: 200 ok
+total 204 ok
+  ```
+
+- **todo_write** `{"todos": [{"content": "Publier le schéma v2 (meta.alternative, meta.partition) et passer le produit en version 2", "status": "completed"}, {"content": "Adapter le vérificateur pour lire v1 et v2 (rétro-compatibilité) et valider --gold 20", "status": "completed"}, {"content": "Mettre à jour les test … [253 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+**J1.3 terminée et committée** (`9a259953`).
+
+### Livré
+- **`tools/schemas/drave-annotation-v2.json`** : schéma Draft 2020-12, `version: 2`, avec `meta.partition` (`groupe`, `rang`, `membres`, `vue`) et `meta.alternative` (type, span, source, union, relation, rang, `retire`, rôle, attachement).
+- **`tools/bloc_linguistique.py`** : `VERSION_ANNOTATION = 2` ; le JSON produit porte désormais `version: 2`.
+- **`tools/verifier_schema_produit.py`** : choix du schéma d’après `version` ; **v1 reste lue** avec le schéma v1. Contrôle négatif intégré : le schéma v2 refuse bien une annotation v1.
+- **Tests / porte** : `test_schema_produit.py` passé à 8 tests (v2 + rétro-compatibilité), labels de `porte-produit.sh` mis à jour.
+- **Doc produit** : `docs/produit/README.md`, `docs/produit/exemples.md` (schéma v2, `meta.partition`/`meta.alternative`, refus code 3, options réelles).
+- **Fiche** : `reports/rapport-schema-v2.md` + `reports/pensee-schema-v2.json`.
+- **État / roadmap** : `en-cours`, `roadmap`, `semaine-autonome`, index des reports mis à jour.
+
+### Validation
+```text
+python3 tools/verifier_schema_produit.py --gold 20
+→ 26 cas, 0 échec
+→ 5 cas v2 + 1 cas v1 + 20 phrases du gold
+→ ✅ v1 lue par le schéma v1
+→ ✅ contrôle négatif : v2 refuse v1
+```
+
+Contrôles complémentaires : `porte-produit` **verte** (16 tests produit, 8 tests schéma, 4 tests libres, autotest **183/183**), revue doc ✅, journal ✅, budget ✅, état ✅. Les modifications préexistantes hors périmètre (`reports/pensee-*`, `tools/chantier/superviseur.py`, `tools/structures`, etc.) sont restées non committées.
+

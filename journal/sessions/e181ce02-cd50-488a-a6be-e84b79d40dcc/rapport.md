@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 165.6 h |
+| Durée | 166.3 h |
 | Tours | 193 |
-| Messages | 3587 |
-| Appels d'outils | 3186 |
+| Messages | 3592 |
+| Appels d'outils | 3191 |
 | Fichiers touchés | 25 |
-| Commandes | 2663 |
+| Commandes | 2665 |
 | Sous-agents | 42 |
 | Commits | 434 |
 | Compactages de contexte | 8 |
@@ -10372,7 +10372,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 
 ### Tour 193 — go
 
-*23 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Lancer la boucle du chantier
 - bash — Surveiller J1.1
@@ -10388,7 +10388,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 - bash — Verdict J1.2 et état
 - bash — Attendre le verdict du timeout
 - bash — Vérifier les résultats des deux tâches
-- … et 2 autres
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -10513,7 +10513,7 @@ python3 tools/chantier/superviseur.py stop           # arrêter proprement
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2623 autres
+- … et 2625 autres
 
 ## 4. Mesures et résultats marquants
 

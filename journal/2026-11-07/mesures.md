@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,10 +13,12 @@
 | 00:45 | `149ecc5d` | FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535 | `en-cours.md`, `README.md`, `docs.md` (+7) |
 | 11:09 | `fffbbe5d` | PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEURS CONTRÔLES NÉGATIFS | `en-cours.md`, `semaine-autonome.md`, `README.md` (+14) |
 | 12:40 | `25a6c0ff` | B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183 | `en-cours.md`, `roadmap.md`, `semaine-autonome.md` (+7) |
+| 14:23 | `9a259953` | B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS LUE | `en-cours.md`, `roadmap.md`, `semaine-autonome.md` (+27) |
+| 14:45 | `8eb0cc49` | B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE | `en-cours.md`, `roadmap.md`, `semaine-autonome.md` (+12) |
 
 ## Chiffres du jour
 
-`0,7535` · `0,7438` · `0,865` · `0,7013` · `0,8561`
+`0,1087` · `0,7535` · `0,7438` · `0,865` · `0,7013` · `0,8561`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -26,7 +28,7 @@
 - `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 02:09, 0.1 h) → [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md)
 - `b8f0bcb1-5609-4053-818b-ade88583a99b` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.3 h) → [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md)
 - `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 1.2 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 165.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 166.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -35,6 +37,8 @@
 - [reports/rapport-gn-pronom-sujet.md](../../reports/rapport-gn-pronom-sujet.md)
 - [reports/rapport-inventaire-panini.md](../../reports/rapport-inventaire-panini.md)
 - [reports/rapport-r035.md](../../reports/rapport-r035.md)
+- [reports/rapport-restitution-v0.md](../../reports/rapport-restitution-v0.md)
+- [reports/rapport-schema-v2.md](../../reports/rapport-schema-v2.md)
 
 <!-- notes -->
 **13 h 30 — la convention des GV.** Le classement des erreurs de GV (320 FP / 179 FN après
