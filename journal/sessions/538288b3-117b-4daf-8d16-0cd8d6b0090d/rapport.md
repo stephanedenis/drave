@@ -7,12 +7,12 @@
 | Identifiant | `538288b3-117b-4daf-8d16-0cd8d6b0090d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 57 |
-| Appels d'outils | 101 |
+| Messages | 61 |
+| Appels d'outils | 108 |
 | Fichiers touchés | 0 |
-| Commandes | 67 |
+| Commandes | 73 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier A** (le  … [1650 caractères tronqués]
 
-*101 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - bash — Show repo root, branch, recent commits
 - glob
@@ -41,7 +41,7 @@
 - bash — Extract A2.6 mentions with context from A23 report
 - bash — List verification tools and placement tests
 - bash — Run backlog verification read-only
-- … et 57 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
@@ -97,7 +97,7 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** Run placement unit tests in /tmp target
 - **T1** Locate local GGUF models
 - **T1** Inspect porte-flux script
-- … et 27 autres
+- … et 33 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -215,6 +215,8 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** `bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE`
 - **T1** `# S'il est faux, les effets mesurés (±20 %) baignent dans un artefact — et c'est arrivé : la`
 - **T1** `57:| 24 | 37,1813 | ×1,00 |`
+- **T1** `reports/rapport-partition-syntagmes.md:306:| moins de chevauchements, coût minimal | `filtrer_union` | 0,6163 | 217/239 | 91 | +7,2 % |`
+- **T1** `reports/rapport-partition-syntagmes.md:307:| partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |`
 
 ## 5. Erreurs rencontrées
 

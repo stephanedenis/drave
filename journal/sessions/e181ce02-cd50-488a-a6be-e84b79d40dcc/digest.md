@@ -56270,3 +56270,74 @@ ven 06 nov 2026 21:47:23 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1218 caractères tronqués]`
+
+  ```
+697 790
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-re-test-produit.md
+COMMIT OK 1
+7a876f70 PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES
+   de7c9113..7a876f70  s/v7 -> s/v7
+   de7c9113..7a876f70  master -> master
+ven 06 nov 2026 21:50:04 EST
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière tentative sur `r264` : la GV ne doit pas avaler un marqueur élidé
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1215,1232p' tools/bloc_linguistique.py", "description": "Voir l'extension du GV"}`
+
+  ```
+j += 1
+                role = "groupe nominal"
+                # le passif sans `par` : GN + AUX (être) + participe → le sujet est un patient
+                if j < len(mots) and _normaliser(mots[j][2]) in {
+                        "est", "sont", "était", "étaient", "été", "sera", "seront",
+                        "suis", "es", "sommes", "êtes"}:
+                    role = "patient"
+                segments.append({"type": "GN", "role": role, "niveau": 0,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+                continue
+            if typ == "mot" and (n in lex.get("AUX", set()) or est_verbe(d, t)
+                                 or (i + 1 < len(mots) and _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
+                j = i + 1
+                # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
+                # par clause (« joue | au ballon », « saw | the cat »).
+                while (j < len(mots) and mots[j][3] == "mot"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                while (j < len(mots) and mots[j][3] == \"mot\"\n                       and not (est_verbe(mots[j][0], mot … [737 caractères tronqués]`
+
+  ```
+bloc GV repéré
+                # le GV s'arrête à la préposition, au déterminant, au relatif : un prédicat
+                # par clause (« joue | au ballon », « saw | the cat »).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and _normaliser(mots[j][2]) not in lex.get("PREP", set())
+                       and _normaliser(mots[j][2]) not in lex.get("DET", set())
+                       and _normaliser(mots[j][2]) not in RELATIFS
+                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
+                    j += 1
+                segments.append({"type": "GV", "role": "prédicat", "niveau": 0,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''                while (j < len(mots) and mots[j][3] == \"mot\"\n                       and _normaliser(mots[j][2]) not in … [1719 caractères tronqués]`
+
+  ```
+GV arrêté au marqueur élidé
+syntaxe OK
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 26, "sais qu'il vient demain"), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger()); a=r['a … [310 caractères tronqués]`
+
+  ```
+POS 0.85 | F1 0.6482 | exact 235 / 236 | cov 0.9874
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183\" -- tools/bloc_linguistique.p … [422 caractères tronqués]`

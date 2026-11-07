@@ -2493,3 +2493,148 @@ Swap:             62           0          62
 57:| 24 | 37,1813 | ×1,00 |
   ```
 
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M:%S %Z'; echo '--- HEAD ---'; git log -1 --format='%h %s'; echo '--- branch ---'; git branch --show-current; echo '--- dirty count ---'; git status --porcelain | wc -l", "description": "Get current date, HEAD, branch"}`
+
+  ```
+2026-11-06 21:51:08 EST
+--- HEAD ---
+7a876f70 PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES
+--- branch ---
+s/v7
+--- dirty count ---
+159
+  ```
+
+- **bash** `{"command": "git show --stat --oneline 7a876f70 | head -20; echo '--- latest reports ---'; ls -lt reports/*.md | head -5", "description": "Inspect latest commit and reports"}`
+
+  ```
+7a876f70 PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-06/README.md                       |  13 +-
+ journal/2026-11-06/distribue.md                    |   8 +-
+ journal/2026-11-06/docs.md                         |   8 +-
+ journal/2026-11-06/memoire.md                      |   8 +-
+ journal/2026-11-06/mesures.md                      |  12 +-
+ journal/2026-11-06/modele.md                       |   8 +-
+ journal/2026-11-06/outils.md                       |   8 +-
+ journal/2026-11-06/portes.md                       |   8 +-
+ journal/README.md                                  |  10 +-
+ .../538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md |  28 +++
+ .../rapport.md                                     |  15 +-
+ .../599e9c0e-4252-43ca-a89a-3886d723c379/digest.md | 107 ++++++++++
+ .../rapport.md                                     |  12 +-
+ .../7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md | 202 ++++++++++++++++++
+ .../rapport.md                                     |  34 ++-
+ journal/sessions/MANIFEST.md                       |  12 +-
+ .../cdc1
+… [586 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n -E \"0 chevauchement|297|filtrer|5 sans\" reports/rapport-partition-syntagmes.md reports/rapport-partition-integree.md 2>/dev/null | head -15", "description": "Check latest partition figures"}`
+
+  ```
+reports/rapport-partition-syntagmes.md:173:| **B1 — filtrer_union** | **0,6163** | 0,7122 | 0,5432 | 0,7545 | 0,7581 | 0,5537 | **217** | 0,9079 | 216 |
+reports/rapport-partition-syntagmes.md:174:| **B2 — filtrer** | **0,6172** | **0,7445** | 0,5271 | **0,7605** | 0,7581 | 0,5537 | **205** | 0,8577 | 204 |
+reports/rapport-partition-syntagmes.md:288:2. **Option « vue partition » : B2 — `partition="filtrer"`.** 0 paire, F1 0,6172, exact 205/239,
+reports/rapport-partition-syntagmes.md:291:3. **Option économique : B1 — `partition="filtrer_union"`.** Le filtre union du P0-3 : F1 0,6163,
+reports/rapport-partition-syntagmes.md:306:| moins de chevauchements, coût minimal | `filtrer_union` | 0,6163 | 217/239 | 91 | +7,2 % |
+reports/rapport-partition-syntagmes.md:307:| partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |
+reports/rapport-partition-syntagmes.md:313:Le patch ajoute un paramètre `partition` (`brut`, `alternative` par défaut, `filtrer_union`,
+reports/rapport-partition-syntagmes.md:314:`filtrer`), quatre fonctions (`_relation_partition`, `_cle_preferee`, `_groupes_partition`,
+reports/rapport-partition-syntagmes.md:335:+        # "filtrer_union" : on retire l
+… [804 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-re-test-produit.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-re-test-produit.md</path>
+<type>file</type>
+<content>
+1: # B13 — re-test produit : 50 textes libres, la vue linéaire supprime les chevauchements
+2: 
+3: > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
+4: > **Ce que le produit fait sur les 50 textes de l'audit A26**, rejoués sur le code du 06/11 21 h :
+5: > en vue **`alternative`** (défaut), 405 segments et **145 chevauchements** ; en vue **`filtrer`**,
+6: > 297 segments et **0 chevauchement**. Les **5 textes sans syntagme** sont l'emoji, le texte vide,
+7: > les espaces, `...` et un nombre nu — des entrées **non linguistiques**, pas des échecs.
+8: >
+9: > **Dispositif** : `tools/bloc_linguistique.py` (`Heuristique(partition=...)`), les 50 textes de
+10: > [`pensee-fiabilite-produit.json`](pensee-fiabilite-produit.json) ; JSON
+11: > [`pensee-re-test-produit.json`](pensee-re-test-produit.json).
+12: 
+13: ## 1. Les chiffres
+14: 
+15: | vue | segments | chevauchements | textes sans syntagme |
+16: |---|---:|---:|---:|
+17: | **`alternative`** (défaut) | 405 | **145** | 5 |
+18: | **`filtrer`** (linéaire) | 297 | **0** | 5 |
+19: 
+20: **Ce q
+… [1466 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,35p' reports/rapport-pos-nombres.md", "description": "Read latest POS numbers report"}`
+
+  ```
+# B13 — les nombres ont une POS : 45 tokens réparés, zéro perte
+
+> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Le P1-6 de l'audit produit** : les **nombres** n'avaient aucun POS (`typ == "nombre"` n'entrait
+> pas dans la boucle POS). Ils sont désormais **NUM** (confiance 0,90) ; le gold est **inchangé**
+> (POS 0,85 ; F1 0,6482 ; attachement 235/236 ; **183/183**).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_pos` : règle
+> `\d+([.,]\d+)*` ; la boucle POS accepte `typ == "nombre"`) ; JSON
+> [`pensee-pos-nombres.json`](pensee-pos-nombres.json).
+
+## 1. Ce que ça répare
+
+| avant | après |
+|---|---|
+| `12`, `2024` : aucun POS | **NUM** (0,90) |
+| l'audit : **45 nombres** sans POS sur 1 068 tokens | 0 (hors ponctuation) |
+
+**Ce que ça ne répare pas** : `12.5` est encore **tokenisé** `12` `.` `5` (la frontière de phrase
+est protégée, pas le token) — c'est le patch B de la fiche des frontières, non intégré.
+
+## 2. Ce que ce banc ne dit pas
+
+- **Le gold n'a que 2 NUM** : le gain n'est pas mesuré sur le gold, il est **produit**.
+- **`a`** reste PREP dans « il y a 12.5 euros » (l'ambiguïté avoir/préposition n'est pa
+… [385 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -20 reports/rapport-fiabilite-produit.md; echo '=== audit A26? ==='; grep -rn \"audit A26\\|A29\\|A24\" reports/rapport-fiabilite-produit.md reports/rapport-re-test-produit.md reports/rapport-partition-syntagmes.md | head -10", "description": "Check audit ID labels for A24/A26/A29" … [1 caractères tronqués]`
+
+  ```
+# Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `56eb43af` (module `c1a08588`, `tools/drave.py` `59a06f3e`) ·
+> **Date** : 2026-11-06 · **Verdict** : ⚠️ **la surface est fiable ; le contrat ne l'est pas encore.**
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-fiabilite-produit.json`](pensee-fiabilite-produit.json).
+>
+> **Dispositif** : [`tools/drave.py`](../tools/drave.py) (CLI : `analyser`, `evaluer`, `rejouer`,
+> `--version`) et [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py) ;
+> **50 phrases libres** écrites pour l'audit (textes dans le JSON) ; harnais local non committé
+> dans `/tmp` ; machine **Xeon E5-2687W v3**, Python **3.13.16**.
+>
+> **Snapshot.** HEAD a bougé pendant l'audit (`6ef2a3f5` → `56eb43af`). Le module a reçu à
+> **11 h 34** le correctif « non-str / surrogate » (`c1a08588`) ; le banc a tourné à **11 h 40**,
+> après ce correctif, et `drave.py` n'a pas changé. Les chiffres portent sur ce couple de hash ;
+> un audit futur doit repa
+… [760 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"A17\\|A23\\|A24\\|A26\\|A29\" journal/2026-11-06/README.md | head -20", "description": "Check audit ID usage in journal"}`
+
+  ```
+53:| 01:29 | `5523de51` | JOURNAL ET ROADMAP — LA CIBLE DE A17 ATTEINTE : 222/222, COUVERTURE 0,9289, 17 SPANS INATTEIGNABLES |
+75:| 10:54 | `f6c8132b` | A23 — LES 6 CORRECTIONS FACTUELLES DE LA FILE (GOLD 200+ = 13 OCCURRENCES, PASSES 2 H 11 À 2 H 29) ; T0 DANS LE BUDGET |
+82:| 11:43 | `1962eb15` | PRODUIT — LA ROBUSTESSE : SURROGATE ET NON-STR FERMÉS (refus non_texte), 8 TESTS ; L'AUDIT A24 (50 PHRASES, 132 CHEVAUCHEMENTS, 18 CORRECTIFS) |
+83:| 11:45 | `3601764a` | ÉTAT — T0 DANS LE BUDGET (AUDIT A24) |
+136:**La cible de A17 (1 h 30).** Le dernier écart était un marqueur ambigu : « when » après un GN est
+  ```
+

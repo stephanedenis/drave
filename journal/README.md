@@ -123,13 +123,13 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `4f3e8570` | Configuration RAID0 NVMe pour modèles IA | 2026-10-12 15:30 | 25.5 h | 13 | 822 | 41 | 57 | [rapport](sessions/4f3e8570-3d81-41e0-a055-1002702a6959/rapport.md) |
 | `5185ccb1` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 17:03 | 0.4 h | 1 | 123 | 9 | 0 | [rapport](sessions/5185ccb1-be24-4716-89df-62621e790444/rapport.md) |
 | `536cd5d6` | Étude des sessions et du pilotage | 2026-11-02 15:33 | 24.9 h | 79 | 501 | 17 | 51 | [rapport](sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/rapport.md) |
-| `538288b3` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.5 h | 1 | 101 | 0 | 0 | [rapport](sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) |
+| `538288b3` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.6 h | 1 | 108 | 0 | 0 | [rapport](sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) |
 | `53bc3288` | Tu travailles dans le dépôt | 2026-11-05 13:16 | 1.0 h | 1 | 105 | 6 | 0 | [rapport](sessions/53bc3288-f2c1-4a7d-b1db-88d794074f70/rapport.md) |
 | `54621513` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.7 h | 1 | 78 | 4 | 0 | [rapport](sessions/54621513-76ae-401e-87df-a5084cacb359/rapport.md) |
 | `564fbe3a` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:07 | 0.1 h | 1 | 35 | 0 | 0 | [rapport](sessions/564fbe3a-a859-4b3b-bd17-4da73a2f4e22/rapport.md) |
 | `56879594` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.1 h | 1 | 29 | 0 | 0 | [rapport](sessions/56879594-1434-4e34-83cc-de42cdf192a1/rapport.md) |
 | `56f3ba0f` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:30 | 0.9 h | 1 | 144 | 7 | 0 | [rapport](sessions/56f3ba0f-66b3-4728-a4cd-201951538ed1/rapport.md) |
-| `599e9c0e` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.5 h | 1 | 77 | 0 | 0 | [rapport](sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) |
+| `599e9c0e` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.6 h | 1 | 79 | 0 | 0 | [rapport](sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) |
 | `5c1bbea7` | Tu es relecteur ADVERSE. Tu | 2026-10-02 09:52 | 0.1 h | 1 | 52 | 0 | 0 | [rapport](sessions/5c1bbea7-1d14-47b6-a48c-fea15f2b857e/rapport.md) |
 | `5ce3f080` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 15:32 | 0.3 h | 1 | 77 | 9 | 0 | [rapport](sessions/5ce3f080-2d3d-467a-8ee1-df697f3f3e68/rapport.md) |
 | `63d4c619` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 0.6 h | 1 | 70 | 1 | 0 | [rapport](sessions/63d4c619-63e8-41b9-a183-5c6f1ac05a21/rapport.md) |
@@ -143,7 +143,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `71d57f53` | Évaluation des techniques de lecture rapide pour Drave | 2026-10-29 07:42 | 29.9 h | 55 | 1128 | 18 | 98 | [rapport](sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/rapport.md) |
 | `7263ca42` | Tu travailles dans le dépôt | 2026-11-05 14:22 | 0.7 h | 1 | 58 | 1 | 0 | [rapport](sessions/7263ca42-cd56-4c36-a6dd-8ff2d1024a43/rapport.md) |
 | `7557cea8` | — | 2026-10-28 15:21 | 0.0 h | 0 | 0 | 0 | 0 | [rapport](sessions/7557cea8-bca5-4702-811a-5c2374adebbb/rapport.md) |
-| `7635f5f5` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.6 h | 1 | 98 | 0 | 0 | [rapport](sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) |
+| `7635f5f5` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.6 h | 1 | 102 | 0 | 0 | [rapport](sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) |
 | `7a63b441` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 12:03 | 0.6 h | 1 | 81 | 3 | 0 | [rapport](sessions/7a63b441-9131-42c8-9f21-da97ea1dbaaa/rapport.md) |
 | `7c876089` | Tu es relecteur ADVERSARIAL dans | 2026-09-30 13:10 | 0.3 h | 1 | 62 | 2 | 0 | [rapport](sessions/7c876089-605c-4836-930e-925a66028509/rapport.md) |
 | `7d0d2578` | Tu travailles dans le dépôt | 2026-09-30 11:47 | 0.1 h | 1 | 53 | 1 | 0 | [rapport](sessions/7d0d2578-0048-4998-8494-7d2daef56769/rapport.md) |
@@ -189,7 +189,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c5910cba` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.2 h | 1 | 105 | 1 | 0 | [rapport](sessions/c5910cba-e10a-4e08-8ac7-449ce150899c/rapport.md) |
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
 | `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 26.5 h | 34 | 624 | 6 | 36 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
-| `cdc16e57` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.6 h | 1 | 74 | 0 | 0 | [rapport](sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) |
+| `cdc16e57` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.7 h | 1 | 78 | 0 | 0 | [rapport](sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
 | `d093c795` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 14:55 | 0.2 h | 1 | 40 | 0 | 0 | [rapport](sessions/d093c795-b4c9-4270-bea8-e2673f86057b/rapport.md) |
@@ -204,7 +204,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 149.1 h | 184 | 2944 | 25 | 380 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 149.2 h | 184 | 2949 | 25 | 381 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |

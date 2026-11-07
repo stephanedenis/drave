@@ -1888,3 +1888,27 @@ dict ['A', 'C', 'D', 'R', 'longueurs_A', 'longueurs_R', 'decomposition_A', 'base
 37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc  work/n2ac/propre512-8k.pt
   ```
 
+- **bash** `{"command": "find . -path ./.git -prune -o -name '*.pt' -print 2>/dev/null | grep -v '^\\./work/' | head -20; echo '--- total tous'; find . -path ./.git -prune -o -name '*.pt' -printf '%s\\n' 2>/dev/null | awk '{s+=$1; n++} END {printf \"%d fichiers, %.2f Go\\n\", n, s/2^30}'; echo '--- total work'; … [181 caractères tronqués]`
+
+  ```
+./data/adaptateurs/bilingue-1600/tete.pt
+--- total tous
+124 fichiers, 9.52 Go
+--- total work
+123 fichiers, 9.52 Go
+  ```
+
+- **bash** `{"command": "git ls-files reports/n2-porte-propre.json reports/rapport-n2-porte-propre.md reports/rapport-file-taches.md tools/eval_n2_propre.py; echo '--- date fiche porte'; stat -c '%y %n' reports/rapport-n2-porte-propre.md reports/n2-porte-propre.json; echo '--- date A23'; stat -c '%y %n' reports … [87 caractères tronqués]`
+
+  ```
+reports/n2-porte-propre.json
+reports/rapport-file-taches.md
+reports/rapport-n2-porte-propre.md
+tools/eval_n2_propre.py
+--- date fiche porte
+2026-11-03 14:39:11.014577605 -0500 reports/rapport-n2-porte-propre.md
+2026-11-03 14:39:06.705357590 -0500 reports/n2-porte-propre.json
+--- date A23
+2026-11-06 10:44:06.779462131 -0500 reports/rapport-file-taches.md
+  ```
+

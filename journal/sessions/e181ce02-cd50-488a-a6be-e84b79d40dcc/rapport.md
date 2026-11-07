@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.1 h |
+| Durée | 149.2 h |
 | Tours | 184 |
-| Messages | 3319 |
-| Appels d'outils | 2944 |
+| Messages | 3324 |
+| Appels d'outils | 2949 |
 | Fichiers touchés | 25 |
-| Commandes | 2440 |
+| Commandes | 2445 |
 | Sous-agents | 38 |
-| Commits | 380 |
+| Commits | 381 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*190 appels d'outils.* Actions notables :
+*195 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 176 autres
+- … et 181 autres
 
 **Synthèse produite :**
 
-⏵ Fiche du re-test produit (les 50 textes, deux vues)
+⏵ Dernière tentative sur `r264` : la GV ne doit pas avaler un marqueur élidé
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2400 autres
+- … et 2405 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-64 sorties en erreur ou divergentes. Les premières :
+65 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10584,4 +10584,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183" -- tools/bloc_linguistique.py reports/rapport-pos-nombres.m
 - PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES" -- reports/rapport-re-test-produit.md re
 - PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES" -- reports/rapport-re-test-produit.md re
+- B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183" -- tools/bloc_linguistique.py 2>&1 | tail -1   if git log -1 --format='%s' | grep 
 

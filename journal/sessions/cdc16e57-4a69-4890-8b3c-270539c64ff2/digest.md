@@ -2099,3 +2099,33 @@ profondeur max stockée {0: 10, 1: 277, 2: 82}
 profondeur max dynamique {0: 2, 1: 37, 2: 221, 3: 84, 4: 13, 5: 2}
   ```
 
+### 🤖 Assistant
+
+⏵ Collecte des identifiants de version et de la date
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'; echo \"---\"; git rev-parse --short HEAD; git log -1 --format='%h %ad %s' --date=short; echo \"---\"; cd tools/structures && git rev-parse --short HEAD && git log -1 --format='%h %ad %s' --date=short && git status --porcelain", "description": "Date et HEAD des … [9 caractères tronqués]`
+
+  ```
+2026-11-06 21:49 EST
+---
+de7c9113
+de7c9113 2026-11-06 B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183
+---
+523d8c1
+523d8c1 2026-11-04 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; LA TÊTE DU GN ARRÊTE LE VERBE
+ M donnees/paragraphes-validations.jsonl
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\n# accepted phrases / exports reconciliation\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nlast={}\nfor r in rows: last[(r['phrase_id'],r['candidat_id'])]=r\nacc=[(k,v) for k,v … [965 caractères tronqués]`
+
+  ```
+acceptés 84 phrases 67
+exclus 63
+paires 147
+phrases 207 candidats stockés 369
+phrases jugées entièrement 74
+phrases avec >=1 verdict 74
+p 14 Counter({'resolu': 7, 'compatible': 4, 'exclu': 3})
+c 133 Counter({'resolu': 66, 'exclu': 60, 'compatible': 7})
+  ```
+

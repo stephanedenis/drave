@@ -2201,3 +2201,212 @@ docs/implantation/bloc-linguistique.md:318:2. **Un modèle neuronal qualifié** 
 … [8548 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/tests/linguistique/qualifier_quatre_modes.py; echo '---'; sed -n '80,140p' tools/tests/linguistique/qualifier_quatre_modes.py", "description": "Lire le banc API des quatre modes"}`
+
+  ```
+#!/usr/bin/env python3
+"""qualifier_quatre_modes.py — la porte des quatre modes du contrat de L sur le gold 432.
+
+Les quatre modes du contrat (`docs/theorie/contrat-bloc-langue.md`) mesurés sur le
+**même** gold réel 432 :
+
+  1. heuristique seule ;
+  2. neuronal seul (le composite POS + syntagmes, via l'API DeepSeek — règle 11) ;
+  3. parallèle (`Parallele`) ;
+  4. cascade (`Cascade`, seuil 0,6).
+
+Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, refus.
+Le coût est mesuré : appels du tagger, tokens API, latence, durée.
+
+Usage :
+    DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key \
+    python3 tools/tests/linguistique/qualifier_quatre_modes.py --limite 3
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import statistics
+import sys
+import time
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE))
+
+from tools.bloc_linguistique import (PRIORITE_NIVEAU, PRIORITE_TYPE, Cascade, Heuristique,
+                                     NeuronalLLMChunks, NeuronalLLMCompose,
+                                     NeuronalLLMPOS, NeuronalLLMPragmatique, Parallele)
+from tools.llm.deepseek import DeepSeek
+from tool
+… [5341 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '120,180p' docs/implantation/bloc-linguistique.md", "description": "Lire la doc du tagger et de l'API"}`
+
+  ```
+modalité ;
+- **discours** : les paragraphes, les connecteurs (contraste, cause, conséquence, but) et une
+  relation candidate ;
+- **pragmatique** : l'acte de parole (question, exclamation, ordre, assertion) à basse
+  confiance, le double sens possible (`ou`, guillemets, question), le contexte fourni ;
+- **document** : les paragraphes, les titres Markdown/numérotés, la provenance.
+
+### 5.2 La version neuronale
+
+Six objets, un même contrat :
+
+- **`MockNeuronal`** : le **double de contrat**. Il est déterministe, sans GPU, et rend les
+  niveaux profonds (morphème, POS ouverte, syntagme, pragmatique) avec `source = neuronal`. Il
+  ne prétend pas être un modèle : il prouve que le contrat accepte une autre implémentation,
+  que le parallèle fusionne et que la cascade n'appelle le neuronal que sur le résidu.
+- **`NeuronalLLM`** : l'**adaptateur réel**. Il construit un prompt JSON, appelle un modèle local
+  (`llama-cli`), parse la réponse et la convertit en `Annotation` ; si le modèle est absent, ne
+  répond pas ou rend un JSON invalide, il lève `RefusNeuronal` — il ne simule pas.
+- **`NeuronalLLMPOS`** : le **tagger réel qualifié**. Il tokenise avec `Heuristique._mots` (mots
+  et nombres),
+… [3283 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' reports/rapport-pensee-quatre-modes-run2.md; echo '---'; sed -n '1,60p' reports/rapport-pensee-quatre-modes.md 2>/dev/null", "description": "Lire les quatre modes API"}`
+
+  ```
+# B13 — la confirmation (run 2) : refus 0, le niveau gagne encore
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règles 6 et 11) · **Date** : 2026-11-04 ·
+> **Verdict** : ✅ **145/145 portes** : la passe API est **rejouée** sur le gold 432 après le
+> correctif d'élision. **Aucun refus** (`aucun_refus: True`), le `r353` passe, et le **niveau
+> gagne encore** : POS **0,9389** (+0,008), syntagmes **0,8241**, tête **0,8797**, acte 0,9954.
+> Le réel confirme le réel.
+>
+> **Dispositif** : [`qualifier_quatre_modes.py`](../tools/tests/linguistique/qualifier_quatre_modes.py),
+> [`pensee-quatre-modes-432-run2.json`](pensee-quatre-modes-432-run2.json),
+> [`autotest.py`](../tools/pensee/autotest.py).
+
+## 1. Run 1 contre run 2
+
+| mode | POS (run 1) | **POS (run 2)** | syntagmes | tête | acte |
+|---|---:|---:|---:|---:|---:|
+| heuristique | 0,7394 | **0,7444** | 0,2520 | 0,4511 | 0,9954 |
+| neuronal | 0,9309 | **0,9389** | 0,8241 | 0,8797 | 0,0000 |
+| parallèle | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| cascade | 0,9280 | 0,9326 | 0,8029 | 0,8571 | 0,9954 |
+| **parallele_niveau** | 0,9309 | **0,9389** | **0,8241** | **0,8797** | 0,9954 |
+| **cascade_niveau** | 0,9309 | **0,9389** | **
+… [5140 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i 'quatre-modes'; echo '---'; python3 - <<'PY'\nimport json\nfor f in ('reports/pensee-quatre-modes.json','reports/pensee-quatre-modes-run2.json'):\n    try:\n        d=json.load(open(f)); print('==',f, list(d)[:1 … [414 caractères tronqués]`
+
+  ```
+pensee-quatre-modes-432.json
+pensee-quatre-modes-432-pragma.json
+pensee-quatre-modes-432-run2.json
+pensee-quatre-modes-432-run3.json
+pensee-quatre-modes-432-soustype.json
+pensee-quatre-modes-432-soustype-t03b.json
+pensee-quatre-modes-432-soustype-t03c.json
+pensee-quatre-modes-432-soustype-t03.json
+pensee-quatre-modes-432-t03.json
+pensee-quatre-modes.json
+pensee-quatre-modes-niveau.json
+pensee-quatre-modes-run2.json
+rapport-pensee-quatre-modes-432.md
+rapport-pensee-quatre-modes.md
+rapport-pensee-quatre-modes-run2.md
+---
+== reports/pensee-quatre-modes.json ['date', 'gold', 'modes', 'seuils', 'refus', 'refus_detail', 'appels', 'api', 'latence_s', 'duree_totale_s']
+gold {'phrases': 3, 'tokens': 14, 'modalite': 'api-deepseek (deepseek-chat), aucun serveur local'}
+  heuristique POS 0.8571 synt 0.7368 tete 0.8235 acte 1.0
+  neuronal POS 1.0 synt 1.0 tete 1.0 acte 0.0
+  parallele POS 1.0 synt 1.0 tete 1.0 acte 1.0
+  cascade POS 1.0 synt 1.0 tete 1.0 acte 1.0
+  parallele_niveau POS 1.0 synt 1.0 tete 1.0 acte 1.0
+  cascade_niveau POS 1.0 synt 1.0 tete 1.0 acte 1.0
+== reports/pensee-quatre-modes-run2.json ['date', 'ligne', 'portes', 'run1', 'run2', 'refus', 'seuils', 'api', 'limites']
+gold No
+… [2 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,55p' reports/rapport-pensee-quatre-modes-432.md; echo '---'; python3 - <<'PY'\nimport json,glob\nfor f in sorted(glob.glob('reports/pensee-quatre-modes-432*.json')):\n    d=json.load(open(f))\n    print('==',f, 'date',d.get … [558 caractères tronqués]`
+
+  ```
+# B13 — les quatre modes sur le gold 432 : le niveau gagne avec le réel
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6 et règle 11) · **Date** : 2026-11-04 ·
+> **Verdict** : ✅ **143/143 portes** : les **six modes** du contrat de L sont mesurés sur le
+> **gold réel 432**, avec le **neuronal réel** (l'API DeepSeek, `deepseek-chat`, température 0).
+> Le **niveau** (`PRIORITE_NIVEAU`) gagne : POS **0,9309**, syntagmes **0,8226**, tête **0,8784**,
+> et garde la pragmatique de l'heuristique (**0,9954**). Le **mock** avait conclu l'inverse :
+> le défaut par défaut reste la confiance **faute de clé dans les portes**, pas par choix.
+>
+> **Dispositif** : [`qualifier_quatre_modes.py`](../tools/tests/linguistique/qualifier_quatre_modes.py),
+> [`pensee-quatre-modes-432.json`](pensee-quatre-modes-432.json),
+> [`autotest.py`](../tools/pensee/autotest.py).
+
+## 1. Les six modes (432 phrases, API réelle)
+
+| mode | POS | syntagmes F1 | tête F1 | acte |
+|---|---:|---:|---:|---:|
+| heuristique | 0,7394 | 0,2520 | 0,4511 | **0,9954** |
+| neuronal (compose) | **0,9309** | **0,8226** | **0,8784** | 0,0000 |
+| parallèle (confiance) | 0,9280 | 0,8020 | 0,8570 | 0,9954 |
+| cascade (confiance) |
+… [4570 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'def charger\\|def _sources\\|gold_reel\\|REEL\\|phrases' tools/tests/linguistique/qualifier_cascade.py | head -20; echo '---'; sed -n '1,60p' tools/tests/linguistique/qualifier_cascade.py", "description": "Comprendre le corp … [16 caractères tronqués]`
+
+  ```
+38:GOLD_REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+41:def charger(reel: bool = False) -> list[dict]:
+43:        ph = json.loads(GOLD_REEL.read_text(encoding="utf-8"))["phrases"]
+47:    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+48:    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+56:def _lecture(nom: str, bloc, phrases: list[dict]) -> dict:
+57:    r = evaluer_bloc(nom, bloc, phrases)
+62:def _sources(bloc, phrases: list[dict]) -> dict:
+63:    hand = [p for p in phrases if p["source"] == "hand"]
+64:    synth = [p for p in phrases if p["source"] == "synth"]
+66:            for nom, ps in (("all", phrases), ("hand", hand), ("synth", synth))}
+78:                    help="charger gold_reel.json (432 phrases réelles)")
+82:    phrases = charger(args.gold_reel)
+84:        phrases = phrases[:args.limite]
+102:        mesures = {"neuronal": _sources(compose, phrases)}
+103:        mesures["heuristique"] = _sources(h, phrases)
+104:        mesures["cascade_pos"] = _sources(bl.Cascade(h, pos), phrases)
+106:            bl.Cascade(h, chunks, priorite_syntagme="confiance"), phrases)
+108:            bl.Cascade(h, compose, priorite_syntagme="confianc
+… [2403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -8 -- tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold.json tools/tests/linguistique/gold_synthetique.json; echo '---'; git log -1 --format='%h %ci' -- tools/tests/linguistique/gold_reel.json; e … [383 caractères tronqués]`
+
+  ```
+c5b80dd8 B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183
+702b368c B13 — LES VRAIS ABSENTS : 5 PHRASES, 0 LIEN, GOLD 432 ; 140/140
+651c1fc0 B13 — LE LIEN AUTOMATIQUE RÉPARÉ : 5/5 APRÈS RÉORDONNANCEMENT ET REPLI PRON/NOUN ; 136/136
+297c4f17 B13 — LA RÉPONSE CONTEXTUELLE : 5/5, LA PHRASE PRÉCÉDENTE TRANCHE ; 134/134
+26e4df27 B13 — LES QUESTIONS PIÈGES : 29/34, LE SI EST UNE CONVENTION ; 132/132
+866fcaa7 B13 — LES QUESTIONS NÉGATIVES : 19/29, LA RÈGLE DE SURFACE NE S'INVERSE PAS ; 130/130
+56b22212 B13 — LES 19 RÉPONSES DE RÉFÉRENCE : COUVERTURE 19/19, LE JUGE EST UTILISABLE ; 127/127
+41c7d1f1 B13 — LA CORÉFÉRENCE À 103 LIENS : 86/103, CIBLE 100 ATTEINTE, GOLD 407 ; 112/112
+---
+702b368c 2026-11-02 15:57:58 -0500
+---
+gold_reel.json 1 reel 200 phrases réelles. 432
+  keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source'] mots 5
+gold.json 1 None Gold v0, écrit à la main ; spans calculés par sous-chaîne. 20
+  keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma'] mots 3
+gold_synthetique.json 1 synthetique 160 phrases d'une grammaire indépendante ; lexique disjoint de l'heuristique. 160
+  keys ['
+… [70 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib\nsys.path.insert(0,str(pathlib.Path('.').resolve()))\nsys.path.insert(0,str(pathlib.Path('.').resolve()/'tools'))\nsys.path.insert(0,str(pathlib.Path('.').resolve()/'tools/tests/linguistique'))\n … [534 caractères tronqués]`
+
+  ```
+phrases 432 tokens 2375 sources {'reel'}
+heur POS 0.8754 ferme 0.9277 ouvert 0.8204 tokens 2375
+  ```
+
