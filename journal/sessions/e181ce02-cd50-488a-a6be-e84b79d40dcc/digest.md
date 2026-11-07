@@ -59937,3 +59937,29 @@ sam 07 nov 2026 10:52:43 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# T1 : raccourcir docs/README (1014 → ≤1000)\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de pl … [1535 caractères tronqués]`
+
+  ```
+trims
+     · docs/README.md : 1013 mots > budget 1000 (T1)
+     · compteurs : en-cours.md dit 122 documents, le disque en a 123
+ create mode 100644 journal/2026-11-07/memoire.md
+COMMIT OK 1
+fae117e5 DOCS — README T1 ET COMPTEURS APRÈS LE MÉTA-HARNAIS
+   c49367e0..fae117e5  s/v7 -> s/v7
+   c49367e0..fae117e5  master -> master
+sam 07 nov 2026 10:55:26 EST
+etat.json
+journal.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"continuite\\|chantier-autonome\" docs/README.md | cut -c1-170; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/continuite.md`](methode/continuite.md) | les cycl … [766 caractères tronqués]`
+
+  ```
+33:| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de plusieurs jours : file, superviseur, STOP |
+34:| [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents, la discipline de `en-cours` |
+trim
+     · docs/README.md : 1009 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents, la discipline de `en-cours` |\",\n            \" … [1021 caractères tronqués]`

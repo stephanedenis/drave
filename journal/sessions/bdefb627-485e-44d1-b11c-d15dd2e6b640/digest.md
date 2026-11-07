@@ -3617,3 +3617,71 @@ dépôts: 14 | atomes: 14 | axes: 7 | corpus: 9
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-inventaire-panini.json has been updated successfully.
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && git -C modules/core/knowledge log -1 --format='%h %ad %s' --date=short 2>/dev/null; echo \"---\"; git -C modules/core/knowledge rev-list --count HEAD 2>/dev/null", "description": "Date du pin nipada-public"}`
+
+  ```
+f9c3ca8 2026-09-08 docs: README clarifié — NIPADA noyau iso + couche descriptive, store d'artefacts
+---
+9
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"5 familles\\|332 textes\\|1,7 G\" reports/rapport-inventaire-panini.md", "description": "Repère les imprécisions à corriger"}`
+
+  ```
+41:| **Panini** (hôte) | main | `9b80c32` docs(readme) : réécriture complète — état réel, 7 axes, lien Drave | 2026-10-22 22:16 | **non** : 23 lignes (15 M, 8 ??) | **34 G** (dont `research` 25 G, `modules` 1,7 G) | 4 645 | hôte : sous-modules + docs + ouvrage |
+43:| **Panini-FS** | master | `b90d3bd` test(e2e) : accept live modules docs title variant | 2026-04-13 | oui (0) | ~1,7 G (sous-module) | 697 (local) / 581 (pin) | FS sémantique Rust + déploiements |
+336:| **Distance** | même fichier, `lang_distance(l1,l2)` | 0 même langue / 0,15 même branche / 0,40 même famille / 0,75 familles différentes / 1,00 inconnu | fonction |
+342:**Son état.** Le registre Panini est **petit mais propre** (29 langues, 5 familles : indo-européen,
+367:| **Gutenberg** | 1 999 métadonnées ; **1 943 téléchargés** ; 332 textes (271 Mo) ; 5 curatés | SQLite `books(id,title,lang,authors,subjects,downloads,url,fetched)` + `.txt` | en, fr, de, es | `research/data/mass_ingestion/*.db`, `_cache/public_domain_auto/gutendex/`, `_cache/gutenberg_curated/` | oui (domaine public) |
+437:tradition`, échantillon de 20 langues (5 familles × 4), et une mesure de recouvrement des codes.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport io\np='reports/rapport-inventaire-panini.md'\ns=io.open(p,encoding='utf-8').read()\nsubs=[\n (\"~1,7 G (sous-module)\", \"1,7 G (modules, FS inclus)\"),\n (\"(29 langues, 5 familles : indo-européen,\\nourali … [660 caractères tronqués]`
+
+  ```
+ok
+64:- **Les pins sont plus récents** : les 12 pins de `Panini/modules/*` datent tous du **2026-09-08**
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md", "offset": 1, "limit": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md</path>
+<type>file</type>
+<content>
+1: # Inventaire Panini — état daté du 7 novembre 2026
+2: 
+3: > **Mission.** Inventaire complet et daté des 14 dépôts de l'écosystème Panini pour préparer le
+4: > chantier autonome d'une semaine d'intégration avec Drave (`../Qtrinet/`, 7 → 14/11/2026).
+5: > **Lecture seule** : aucun fichier Panini modifié, aucun commit, `git status` lancé avec
+6: > `--no-optional-locks`. Les deux seuls fichiers écrits sont ce rapport et son JSON.
+7: >
+8: > **Méthode.** `git log` / `status` / `submodule status`, lecture des README, docs et journaux de
+9: > bord, comptages (`find`, `du`, `wc`), lecture directe des artefacts JSON. **Aucune suite de tests
+10: > n'a été exécutée** : les leurs coûtent de 45 min à 3 h 30. Les chiffres cités sont ceux que
+11: > Panini **publie**, avec leur date et leur chemin — ils sont repris, pas re-mesurés.
+12: 
+13: ---
+14: 
+15: ## 0. Ce qu'il faut retenir
+16: 
+17: 1. **Un seul dépôt est vivant au sens fort : `Panini/research`** (= `Panini-Research`, qui est un
+18:    lien symbolique vers lui). 1 622 commits, dernier le **25/10/2026**, 182 194 lig
+… [6553 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && echo \"M=$(git --no-optional-locks status --porcelain | cut -c1-2 | grep -c '^ M')\"; echo \"QM=$(git --no-optional-locks status --porcelain | cut -c1-2 | grep -c '^??')\"; echo \"avance research: $(git -C research rev-list --count 6f … [83 caractères tronqués]`
+
+  ```
+M=16
+QM=7
+avance research: 193
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && git log -1 --format='%h %ad %s' --date=short 6f8b67b 2>/dev/null; git merge-base --is-ancestor 6f8b67b HEAD && echo \"ancêtre OK\"", "description": "Date du commit pinné pour research"}`
+
+  ```
+6f8b67b14 2026-10-19 docs: 7e contrôle d'intégrité (fsck 0, HEAD = origin, submodule synchronisé)
+ancêtre OK
+  ```
+

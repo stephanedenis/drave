@@ -9,10 +9,10 @@
 | Début | 2026-11-07 09:56 |
 | Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 79 |
-| Appels d'outils | 134 |
+| Messages | 85 |
+| Appels d'outils | 140 |
 | Fichiers touchés | 2 |
-| Commandes | 118 |
+| Commandes | 123 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*134 appels d'outils.* Actions notables :
+*140 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -41,7 +41,7 @@
 - bash — Fichiers suivis par git
 - bash — Repère les documents clés
 - bash — Échantillon des modifications non commitées
-- … et 109 autres
+- … et 114 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@
 - **T1** Données généalogiques Panini
 - **T1** Rapports NIPADA
 - **T1** Synthèse du pipeline sémantique
-- … et 78 autres
+- … et 83 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -172,6 +172,20 @@
 - **T1** `R² = 0.909139 reproduit · hold-out v1 gelé (`nipada/falsification/nipada_holdout_v1.json`, 23/114`
 - **T1** `367:| **Gutenberg** | 1 999 métadonnées ; **1 943 téléchargés** ; 332 textes (271 Mo) ; 5 curatés | SQLite `books(id,title,lang,authors,subjects,downloads,url,fetched)` + `.txt` | en, fr, de, es | `re`
 - **T1** `437:tradition`, échantillon de 20 langues (5 familles × 4), et une mesure de recouvrement des codes.`
+- **T1** `33-58 Mo à charger : **à tester avant de s'y engager**.`
+- **T1** `**époque +0,1378**, **filiation +0,0489**, tradition +0,0022, R² = 0,3004. H1 (stratification) et H2`
+- **T1** `| **UDHR, article 1** | 229 Ko, 532 langues | JSON `udhr-v2.0-xml` : `{name, iso, script, dir, text, family, branch, tradition}` | **532** | `research/data/udhr_corpus.json` (+ `udhr_decomposed_v14.js`
+- **T1** `| **UDHR, 30 articles** | 28 Mo | XML `udhr_XXX.xml` + `langues.jsonl`, `genealogie.json`, `familles/*.jsonl` | 456 | `Qtrinet/data/udhr/` | déjà intégré côté Drave |`
+- **T1** `| **§334 (philosophie/religion)** | 114 textes ; 102 fichiers `sources/` (9,5 Mo) | `.txt` un fichier par œuvre + signatures JSON | en, fr, de, la, gr, ar, sa, pi, zh… | `research/nipada/corpus/_cache`
+- **T1** `| **Gutenberg** | 1 999 métadonnées ; **1 943 téléchargés** ; 332 fichiers (271 Mo) ; 5 curatés | SQLite `books(id,title,lang,authors,subjects,downloads,url,fetched)` + `.txt` | en, fr, de, es | `rese`
+- **T1** `| **Textes sacrés / suttacentral / MIT Classics** | 21 Mo + 13 Mo + 2 Mo | `.txt` par section | pi, en, gr | `_cache/sacred_texts/`, `_cache/suttacentral/`, `_cache/mit_aristotle_*` | oui |`
+- **T1** `| **Protoathéisme (hôte)** | 36 Mo, 42 œuvres | dossiers + `STATUS_PENDING.txt` | en, fr, la… | `Panini/corpus/protoatheism/` | **non : acquisition inachevée** |`
+- **T1** `| **Tokens protoathéisme** | 120 Ko | JSONL | — | `Panini/corpus/protoatheism_tokens/` | oui |`
+- **T1** `- Le plus « prêt à prouver » : **corpus d'or CIC** (`corpus_dor_cic_v1.json`, 46 Ko + TSV) : 3 defs,`
+- **T1** `| Lexiques V14 | `data/v14_lexicon_enriched.json` (3,9 Mo) | `{lang: {ATOME: [mots]}}` | aucune | haute (qualité à vérifier) |`
+- **T1** `| API REST | `src/nipada/api/api.py`, `server.py` | FastAPI : `/decompose`, `/reconstruct`, `/roundtrip`, `/compare`, `/atoms`, `/dhatus`, `/benchmark`, `/search`, `/hypotheses`, `/api/v1/*` | fastapi`
+- **T1** `2. **Signatures 14 atomes** : 114 textes × 14 flottants, en JSON pur. Livrable : table`
+- **T1** `cassés, backlog P0 entièrement « À faire ». **Ne pas promettre du 0 % WER.**`
 
 ## 5. Erreurs rencontrées
 
