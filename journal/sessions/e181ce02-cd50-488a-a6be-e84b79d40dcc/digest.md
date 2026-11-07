@@ -55489,3 +55489,83 @@ POS et fraction identiques partout (0,7581 ; 0,5537). Contrôle négatif : 299 s
 ⚠️ Le commit `015d7c56` contient une version antérieure du patch, sans le strip `_fusion` (280 vues mortes / 220 étiquettes en Cascade/Parallèle). L'arbre de travail contient la version finale corrigée (module +7 lignes, rapports finaux, hash `e9444daf…2e0e39d`, 0 référence morte) : à commiter/amender — je ne commite rien.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json tools/bloc_linguistique.py | head -3; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.r … [1396 caractères tronqués]`
+
+  ```
+M reports/pensee-partition-syntagmes.json
+ M reports/rapport-partition-syntagmes.md
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 12 files changed, 208 insertions(+), 40 deletions(-)
+COMMIT OK 1
+4e6de0ee P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET
+   97f41554..4e6de0ee  s/v7 -> s/v7
+   97f41554..4e6de0ee  master -> master
+ven 06 nov 2026 20:54:21 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Je débogue le span `r264` (élision `qu'il`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nt=\"Je sais qu'il vient demain.\"\nprint('mots :', [(d,f,x,typ) for d,f,x,typ in h._mots(t)])\na=h.analyser(t … [200 caractères tronqués]`
+
+  ```
+mots : [(0, 2, 'Je', 'mot'), (3, 7, 'sais', 'mot'), (8, 13, "qu'il", 'mot'), (14, 19, 'vient', 'mot'), (20, 26, 'demain', 'mot'), (26, 27, '.', 'ponctuation')]
+segments : [('GV', 0, 7, 'Je sais', None), ('GV', 3, 26, "sais qu'il vient demain", True), ('SUB', 8, 19, "qu'il vient", None), ('GP', 20, 26, 'demain', None)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            if typ == \"mot\" and (n in RELATIFS or _n_elic in RELATIFS or est_sub(n)):''',\n'''            _n_elic = n.s … [971 caractères tronqués]`
+
+  ```
+élision que → qu
+1142:            _n_elic = n.split("'")[0] if "'" in n else n
+1143:            _n_elic = n.split("'")[0] if "'" in n else n
+1145:            _n_elic_e = (_n_elic + "e") if _n_elic.endswith("qu") else _n_elic
+1146:            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS
+syntaxe OK
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 26, "sais qu'il vient demain"), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nprint('RELATIFS contient que ?', 'que' in bl.RELATIFS, '| SUBORDONNANTS contient que ?', 'que' in bl.SUBORDONNANTS)\nprint('est_s … [239 caractères tronqués]`
+
+  ```
+RELATIFS contient que ? True | SUBORDONNANTS contient que ? False
+1115:        def est_sub(n: str) -> bool:
+1116-            """Le mot est-il un subordonnant **dans cette langue** ? (« car » est un nom anglais)"""
+1117-            if n in SUB_PAR_LANGUE.get(langue, set()):
+1118-                return True
+1119-            return n in SUBORDONNANTS and not (langue == "en" and n == "car")
+1120-
+1121-        def est_verbe(d: int, m: str) -> bool:
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+AttributeError: module 'tools.bloc_linguistique' has no attribute 'est_sub'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            _n_elic = n.split(\"'\")[0] if \"'\" in n else n\n            _n_elic = n.split(\"'\")[0] if \"'\" in n else  … [619 caractères tronqués]`
+
+  ```
+doublon retiré
+syntaxe OK
+POS 0.85 | F1 0.6482 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; grep -n \"T01\\|T02\\|T03\\|T04\\|T05\\|T06\\|T07\\|T08\" reports/rapport-file-taches.md | head -12 | cut -c1-180", "description": "Aut … [45 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+36:| T01 | L | Rendre verte la porte bloc-linguistique : cascade_pos à 0,7465 contre l'heuristique 0,7581 | tools/bloc_linguistique.py (MockNeuronal, Cascade), tools/tests/linguist
+37:| T02 | L | _pos anglais : 176 VERB tagués NOUN (A14), 450 confusions VERB vers NOUN dans la matrice | tools/bloc_linguistique.py, tools/tests/linguistique/gold_reel.py et .json
+38:| T03 | B13 | Trancher les 17 spans : corriger les 4 GP du gold sans préposition, acter les 12 formes synthétiques et la tokenisation qu'il ; fiche v13 | tools/tests/linguistiqu
+39:| T04 | L | Refus r353 : la fusion par niveau refuse 1 phrase ; reproduire par l'API et corriger | tools/bloc_linguistique.py (_fusion) ; tools/tests/linguistique/qualifier_quat
+40:| T05 | PRODUIT | Écrire la doc d'usage docs/produit/ : commandes, exemples, limites, codes de sortie | docs/produit/ (neuf) ; tools/drave.py | produit v0 (62dad657) | aucun | p
+41:| T06 | PILOTAGE | Mettre l'état B13 à jour : 222/222, T132/T133 verts, 17 spans, passe du 06/11, prochaine action | docs/pilotage/en-cours.md, roadmap.md, chantiers.md, plan-tr
+42:| T07 | PILOTAGE | Références de non-régression : 84 portes, ligne porte-produit, 4 rouge
+… [993 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Prochaine tâche autonome : **T04** (la fusion par niveau refuse `r353`)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183\" -- … [856 caractères tronqués]`

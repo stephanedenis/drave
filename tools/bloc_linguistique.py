@@ -1140,7 +1140,11 @@ class Heuristique:
             d, f, t, typ = mots[i]
             n = _normaliser(t)
             _n_elic = n.split("'")[0] if "'" in n else n
-            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS or est_sub(n)):
+            # « qu'il » : le marqueur est « que » élidé (le token garde l'apostrophe)
+            _n_elic_e = (_n_elic + "e") if _n_elic.endswith("qu") else _n_elic
+            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS
+                                 or _n_elic_e in RELATIFS or _n_elic_e in SUBORDONNANTS
+                                 or est_sub(n) or est_sub(_n_elic_e)):
                 suivant = mots[i + 1] if i + 1 < len(mots) else None
                 # « since/before/after/until/as » : SUB devant une clause, PRÉP devant un GN
                 prep_ambigue = (n in AMBIGUES_PREP and (suivant is None
