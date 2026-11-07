@@ -1,0 +1,225 @@
+{
+ "nom": "Semaine 07/11 → 14/11 — le produit et l'intégration Panini",
+ "principe": "Une tâche n'est finie que si son acceptation passe ; l'agent commite, le superviseur vérifie.",
+ "taches": [
+  {
+   "id": "J0",
+   "jour": 0,
+   "titre": "Le contrôle du superviseur",
+   "mandat": "Réponds exactement le mot OK, sans autre texte. C'est un test de liaison du superviseur.",
+   "budget_min": 2,
+   "acceptation": [
+    {
+     "commande": "python3 -c \"print('LIAISON-OK')\"",
+     "attendu": "LIAISON-OK"
+    }
+   ]
+  },
+  {
+   "id": "J1.1",
+   "jour": 1,
+   "titre": "r035 : la relative zéro",
+   "mandat": "Tâche J1.1 du chantier : la relative zéro (r035, « The film she talks about is out. »). Reproduis, explique, propose UNE règle générale mesurée sur dev/test ; si elle tient (attachement 236→237, POS/F1 stables), intègre-la et commite avec une fiche `reports/rapport-r035.md` + `reports/pensee-r035.json`. Sinon, écris la fiche du rejet (chiffres, raison) et commite-la. Règles : ne touche pas S/D/N2 ; 183/183 portes ; en-cours à jour.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-r035.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
+  },
+  {
+   "id": "J1.2",
+   "jour": 1,
+   "titre": "La convention des GV",
+   "mandat": "Tâche J1.2 : la convention des GV (322 FP / 180 FN). Classe les erreurs, mesure 2 règles candidates (arrêt à l'adverbe final, sujet hors du GV) sur dev/test, garde celles qui font monter le F1 sans perdre d'attachement, fiche `reports/rapport-convention-gv.md` + JSON, commit. Règles : S/D/N2 intouchés ; 183/183.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-convention-gv.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "bash tools/porte-bloc-linguistique.sh 2>&1 | tail -1",
+     "attendu": "verte"
+    }
+   ]
+  },
+  {
+   "id": "J1.3",
+   "jour": 1,
+   "titre": "Le schéma v2",
+   "mandat": "Tâche J1.3 : le schéma v2 de l'annotation — publier `tools/schemas/drave-annotation-v2.json` (ajout de `meta.alternative` et `meta.partition`), version 2, valider avec `tools/verifier_schema_produit.py --gold 20`, mettre à jour la doc produit, commit. Rétro-compatible : version 1 reste lue.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f tools/schemas/drave-annotation-v2.json && echo V2-OK",
+     "attendu": "V2-OK"
+    },
+    {
+     "commande": "python3 tools/verifier_schema_produit.py --gold 20 >/dev/null 2>&1; echo VALIDE-$?",
+     "attendu": "VALIDE-0"
+    }
+   ]
+  },
+  {
+   "id": "J1.4",
+   "jour": 1,
+   "titre": "La restitution v0",
+   "mandat": "Tâche J1.4 : la restitution v0 — une commande `python3 tools/drave.py restituer TEXTE` qui reconstruit la surface depuis l'annotation et affiche la fidélité (miroir). Mesure le miroir sur les 50 textes libres, fiche `reports/rapport-restitution-v0.md` + JSON, tests, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "python3 tools/drave.py restituer 'Le chat dort.' >/dev/null 2>&1; echo REST-$?",
+     "attendu": "REST-0"
+    },
+    {
+     "commande": "test -f reports/rapport-restitution-v0.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J2.1",
+   "jour": 2,
+   "titre": "Panini I — la table atomes ↔ niveaux",
+   "mandat": "Tâche J2.1 : la table de correspondance entre les **14 atomes** de Panini (∃ ∆ ∼ ↗ ⊙ ⧖ ◇ № ⊕ ⊗ λ ⊞ ≍ ≡) et nos **niveaux** (graphème, mot, pos, syntagme, phrase, pragmatique, discours, document). Lis `../Panini/README.md`, `../Panini-Research/`, `docs/theorie/genealogie-des-langues.md`. Produis `reports/rapport-atomes-niveaux.md` + JSON : 14 lignes, ce que chaque atome capte, quel niveau le porte, la mesure possible. Aucune écriture dans Panini.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-atomes-niveaux.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "grep -c '∃' reports/rapport-atomes-niveaux.md",
+     "attendu": ""
+    }
+   ]
+  },
+  {
+   "id": "J2.2",
+   "jour": 2,
+   "titre": "Panini I — le corpus commun",
+   "mandat": "Tâche J2.2 : le corpus commun — choisir un échantillon (10-50 textes) présent des deux côtés (Panini/NIPADA et Drave), le normaliser (UTF-8, une phrase par ligne, métadonnées langue/époque), l'écrire dans `work/corpus-commun/` (non versionné) + une fiche `reports/rapport-corpus-commun.md` + JSON. Lire les corpus Panini sans les modifier.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-corpus-commun.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J3.1",
+   "jour": 3,
+   "titre": "Panini II — le retrieval à époque contrôlée",
+   "mandat": "Tâche J3.1 : le retrieval inter-langues **à époque contrôlée** (l'avertissement de Panini : l'époque domine). Sur le lexique B7 (71 langues) et/ou le corpus commun, mesure le retrieval avec un contrôle de date (couples contemporains vs décalés) et la surface (écriture, famille). Fiche `reports/rapport-retrieval-epoque.md` + JSON, contrôle négatif.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-retrieval-epoque.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J3.2",
+   "jour": 3,
+   "titre": "Panini II — la généalogie à deux faces",
+   "mandat": "Tâche J3.2 : la généalogie à deux faces — confronter la théorie de Panini (14 atomes, 9 dhātus) à nos mesures d'alignement (Glottolog) sur le corpus commun. Fiche `reports/rapport-genealogie-deux-faces.md` + JSON : ce qui converge, ce qui diverge, ce qui reste à mesurer. La théorie va dans `docs/theorie/genealogie-des-langues.md` (mise à jour), les chiffres restent dans reports/.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-genealogie-deux-faces.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J4.1",
+   "jour": 4,
+   "titre": "Coordination N2 — le mètre RoPE",
+   "mandat": "Tâche J4.1 : la coordination N2 — le mètre `eval_n2_propre.py` lit les checkpoints RoPE comme des positions absolues (8,02 au lieu de 2,79). **Ne modifie rien dans N2** (ni `entrainer_native.py`, ni `native_model.py`, ni `work/`). Écris une fiche de coordination `reports/rapport-coordination-n2.md` + JSON : le bug, le correctif proposé (--rope), les chiffres, la commande exacte pour la session N2.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-n2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J4.2",
+   "jour": 4,
+   "titre": "Coordination S — les 11 verdicts",
+   "mandat": "Tâche J4.2 : la coordination S — 11 verdicts de `/paragraphes` non committés. **Ne touche pas `tools/structures/`**. Fiche `reports/rapport-coordination-s.md` + JSON : la liste exacte des 11 verdicts (fichier, lignes, statuts), la commande de commit pour la session S, le risque d'un clone à 523d8c1.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-s.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J4.3",
+   "jour": 4,
+   "titre": "Coordination R — le tagger sur 612",
+   "mandat": "Tâche J4.3 : la coordination R — décider le tagger POS sur le gold 612 via l'API DeepSeek (clé absente). Fiche `reports/rapport-coordination-r.md` + JSON : le coût (~1 200 appels, ~360 k tokens, ~20 min), la décision (mesure < +2 pts → négatif nommé ; ≥ +5 → intégrer), la commande exacte avec la clé.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-r.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J4.4",
+   "jour": 4,
+   "titre": "Coordination A — A6.2 et A8.3b2",
+   "mandat": "Tâche J4.4 : la coordination A — A6.2 est libre (le MoE local 18 Go existe ; le blocage est la résidence mono-GPU) et A8.3b2 est nommée. **Ne modifie rien dans A** (ni natifs, ni données). Fiche `reports/rapport-coordination-a.md` + JSON : l'état des deux lignes, les commandes, les décisions à prendre.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-a.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J5.1",
+   "jour": 5,
+   "titre": "Le rapport de semaine",
+   "mandat": "Tâche J5.1 : le rapport de semaine — relis les fiches des jours 1 à 4, écris `reports/rapport-semaine.md` + JSON : les chiffres avant/après (POS, F1, attachement, le produit, l'intégration), les décisions, les rejets, ce qui reste. Mets à jour `docs/pilotage/semaine-autonome.md` (l'état de chaque jour).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-semaine.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J5.2",
+   "jour": 5,
+   "titre": "La passe complète et le tag",
+   "mandat": "Tâche J5.2 : la passe complète des portes (`bash tools/toutes-les-portes.sh`), le relevé des rouges, la mise à jour de `docs/pilotage/references-non-regression.md`, et un **tag annoté** `semaine-2026-11-14` sur le dernier commit vert. Ne pas forcer : si des rouges non nommées apparaissent, écris la fiche et ne tague pas.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "git tag -l 'semaine-2026-11-14'",
+     "attendu": "semaine-2026-11-14"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
+  }
+ ]
+}

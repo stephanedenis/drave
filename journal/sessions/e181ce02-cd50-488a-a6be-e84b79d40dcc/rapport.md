@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 161.5 h |
-| Tours | 191 |
-| Messages | 3521 |
-| Appels d'outils | 3128 |
+| Durée | 162.2 h |
+| Tours | 192 |
+| Messages | 3544 |
+| Appels d'outils | 3150 |
 | Fichiers touchés | 25 |
-| Commandes | 2614 |
+| Commandes | 2635 |
 | Sous-agents | 42 |
-| Commits | 425 |
+| Commits | 426 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -441,6 +441,8 @@
 **Tour 190** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 **Tour 191** — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
+
+**Tour 192** — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas si DSH est à la hauteur ou s'il faut un méta harnais pour gérer a en autonomie totale pendant plusieurs jours.
 
 ## 2. Déroulé, étape par étape
 
@@ -10254,7 +10256,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 191 — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
-*20 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - bash — Lire la méthode Panini et localiser le projet
 - bash — Explorer Panini
@@ -10270,11 +10272,67 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Explorer Panini-Research
 - bash — Écrire le plan de la semaine
 - bash — Corriger le lien et l'index
-- … et 6 autres
+- … et 9 autres
 
 **Synthèse produite :**
 
-⏵ Je rédige le chantier d'une semaine (structure, vagues, règles, intégration Panini)
+⏵ Le chantier d'une semaine est écrit et committé — voici le plan
+
+\## Le document
+
+**[`docs/pilotage/semaine-autonome.md`](docs/pilotage/semaine-autonome.md)** (120 lignes, commit `a407381c`), dans la carte de `docs/README.md`, revue de documentation verte.
+
+\## Ce qu'il contient
+
+**1. L'objet** — une semaine, un système utilisable, une intégration mesurée ; le produit `drave` en priorité, Panini/Nipada en second axe, N2/S/R/A en coordination.
+
+**2. L'inventaire de tout ce qui est ouvert**
+- **Drave / produit** : les 2 spans (`r035`, `g017`), la convention des GV (322 FP / 180 FN), `meta.alternative` hors schéma, la restitution.
+- **Les chantiers voisins** : N2 (porte propre 2,7856, manque 0,29 ; le mètre RoPE à corriger), S (`/paragraphes` fini, **11 verdicts non committés**, la page `/` sert la v7, la rétro-traduction), R (le tagger sur 612 — **clé absente**, R1.1, R2.1), A (**A6.2 libre** : le MoE local 18 Go), B10.3 (bloqué).
+- **Panini** : les 14 dépôts, le noyau CIC-lite et ℝ, NIPADA, les **7 axes**, les **14 atomes** (∃ ∆ ∼ ↗ ⊙ ⧖ ◇ № ⊕ ⊗ λ ⊞ ≍ ≡), les **9 dhātus**, la généalogie, et leur **avertissement** (époque β +0,138 vs filiation β +0,049 — contrôler la date dans tout test de style, la surface dans tout test de famille).
+- **La surface d'intégration** : une table **atomes ↔ niveaux**, un **corpus commun**, le **retrieval à époque contrôlée**, la **généalogie à deux faces** (leur théorie + notre alignement Glottolog), un **schéma JSON** validé des deux côtés.
+
+**3. La semaine** — 5 jours × 2 vagues :
+- **J1** : le produit (les 2 spans, la convention des GV ; le schéma v2 + la restitution v0) ;
+- **J2** : Panini I (la table atomes ↔ niveaux, le corpus commun) ;
+- **J3** : Panini II (le retrieval à époque contrôlée, la généalogie à deux faces) ;
+- **J4** : la coordination N2/S/R/A ;
+- **J5** : la consolidation, la passe complète, le tag et la release.
+
+**4. Les règles** — le pilote tient le dossier, les sous-agents ne committent pas, **S/D/N2 en lecture seule**, chaque vague = mesure + contrôle négatif + fiche + JSON + état + commit, les rouges tolérées nommées, l'honnêteté des bases, la file « jamais en attente ».
+
+**5. Les risques nommés** — la clé DeepSeek (tagger, rétro-traduction), les GPU (N2, A6.2), la concurrence des sessions, les sous-agents (40-90 min), le gold (les 2 spans isolés).
+
+**6. Ce que la semaine doit avoir produit** — le produit, l'intégration, la coordination, la consolidation.
+
+\## Deux limites, dites
+
+1. **L'inventaire Panini
+… [570 caractères tronqués]
+
+### Tour 192 — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas … [111 caractères tronqués]
+
+*19 appels d'outils.* Actions notables :
+
+- bash — Inspecter DSH
+- bash — Voir la CLI de DSH
+- bash — Options headless et scripts existants
+- bash — Chercher un superviseur existant
+- bash — Écrire le superviseur
+- bash — Écrire le plan machine et tester l'état
+- bash — Tester les commandes du superviseur
+- bash — Tester le superviseur avec une vraie tâche
+- bash — Corriger et relancer J0
+- bash — Assouplir et retester J0
+- bash — Voir la fonction
+- bash — Insérer git_avant et tester J0
+- bash — Tester dsh headless directement
+- bash — Chercher la clé DeepSeek
+- … et 5 autres
+
+**Synthèse produite :**
+
+⏵ Le méta-harnais fonctionne de bout en bout. J'écris la doctrine et je commite
 
 ## 3. Travail accompli
 
@@ -10395,7 +10453,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2574 autres
+- … et 2595 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10523,7 +10581,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ## 5. Erreurs rencontrées
 
-81 sorties en erreur ou divergentes. Les premières :
+84 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10968,4 +11026,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BU
 - DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES)" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T1 À 1 000 MOTS"; then echo "
 - DOCS — README T1 : UN MOT DE MOINS" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then echo "COMMIT OK $i"; break;
+- CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPRE
 
