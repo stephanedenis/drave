@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 151.5 h |
+| Durée | 151.6 h |
 | Tours | 186 |
-| Messages | 3432 |
-| Appels d'outils | 3046 |
+| Messages | 3434 |
+| Appels d'outils | 3048 |
 | Fichiers touchés | 25 |
-| Commandes | 2541 |
+| Commandes | 2543 |
 | Sous-agents | 38 |
-| Commits | 410 |
+| Commits | 411 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10027,7 +10027,7 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 
 ### Tour 186 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
 
-*18 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Analyser les FP/FN de segmentation
 - bash — Tester le GN du pronom sujet
@@ -10043,11 +10043,11 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - bash — Recaler 8 portes
 - bash — Committer les pronoms anglais
 - bash — Voir les sujets noms propres
-- … et 3 autres
+- … et 5 autres
 
 **Synthèse produite :**
 
-⏵ **F1 0,7533** avec le nom propre sujet : j'intègre
+⏵ Consolidation : la nuit finit à **F1 0,7535** — je mets à jour roadmap et journal
 
 ## 3. Travail accompli
 
@@ -10164,7 +10164,7 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2501 autres
+- … et 2503 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10722,4 +10722,5 @@ La nuit a transformé le bloc : **+10,4 pts de POS**, **+6,7 de F1**, **15 spans
 - ÉTAT — HORODATAGE CORRIGÉ (23 H 58, LE 06/11)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "HORODATAGE CORRIGÉ"; then ec
 - B13 — LES PRONOMS SUJETS ANGLAIS AUSSI : F1 0,7013 → 0,7438, TÊTE 0,8561, ATTACHEMENT PRÉSERVÉ ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py
 - B13 — LE NOM PROPRE SUJET EST UN GN : F1 0,7438 → 0,7535, TÊTE 0,865, ATTACHEMENT 236/237 ; 183/183" -- tools/bloc_linguistique.py tools/pensee/autotest.py repo
+- ROADMAP ET JOURNAL — LA NUIT FINIT À F1 0,7535, POS 86,25 %, 236/237, COUVERTURE 0,9916 ; LA CONVENTION DU SUJET" -- docs/pilotage/roadmap.md journal/2026-11-06
 

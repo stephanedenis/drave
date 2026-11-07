@@ -58018,3 +58018,42 @@ syntaxe OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"\"\"**L'anglais** a ses propres pronoms sujets (`i, you, he, she, it, we, they`) : la même règle lui\ndonne  … [2167 caractères tronqués]`
+
+  ```
+docs à jour
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 journal/2026-11-07/mesures.md
+COMMIT OK 1
+efbae885 B13 — LE NOM PROPRE SUJET EST UN GN : F1 0,7438 → 0,7535, TÊTE 0,865, ATTACHEMENT 236/237 ; 183/183
+   295e0d7b..efbae885  s/v7 -> s/v7
+   295e0d7b..efbae885  master -> master
+sam 07 nov 2026 00:15:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, collections; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger\nh=bl.Heuristique(); fp=collections.Counter(); fn=collecti … [631 caractères tronqués]`
+
+  ```
+FP 558 {'GP': 25, 'GV': 322, 'SUB': 4, 'REL': 32, 'GN': 175}
+FN 400 {'GV': 180, 'SUB': 1, 'GN': 144, 'REL': 1, 'ADJ': 35, 'ADV': 30, 'PONCT': 9}
+--- FP
+('GP', 'Le chat de la voisine dort.')
+('GV', "La femme a vu l'homme dans le parc.")
+('GV', 'Il a couru pour attraper le bus.')
+('GP', "Elle a dit qu'elle viendrait hier.")
+('SUB', "Elle a dit qu'elle viendrait hier.")
+('GV', "Elle a dit qu'elle viendrait hier.")
+--- FN
+('GV', "J'ai vu l'homme avec le télescope.")
+('SUB', 'She said that she would come yesterday.')
+('GN', 'Le soleil brille.')
+('GV', 'Le soleil brille.')
+('GV', 'Tu viens demain ?')
+('GV', 'Le vent souffle fort.')
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation : la nuit finit à **F1 0,7535** — je mets à jour roadmap et journal
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"**État au 06/11 23 h 45.\")), None)\nif ligne:\n    t=t.replace(ligne, \"**É … [2166 caractères tronqués]`

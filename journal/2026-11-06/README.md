@@ -195,4 +195,8 @@ le miroir passe de 0,196 à 0,2276.
 token entier (`qu'il`) au lieu du radical (`qu`) — la SUB n'était produite qu'au span court de S.
 Corrigé : **236/237**, couverture **0,9916**, F1 **0,6519**, **2 spans** restants (`r035`, `g017`).
 La nuit finit sur **POS 86,25 %**, +10,4 points depuis le matin.
+**La convention de segmentation (00 h 00 → 00 h 25, 07/11).** Trois règles de la même famille — le
+**sujet est un GN** : pronom français, pronom anglais, nom propre devant un verbe. **F1 0,6519 →
+0,7535** (+10,2 points), tête 0,7709 → **0,865**, **attachement intact** (236/237, 0,9916). La
+garde de langue évite le « on » anglais.
 <!-- /notes -->
