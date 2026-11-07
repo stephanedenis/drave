@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 148.5 h |
+| Durée | 148.6 h |
 | Tours | 184 |
-| Messages | 3280 |
-| Appels d'outils | 2902 |
+| Messages | 3285 |
+| Appels d'outils | 2910 |
 | Fichiers touchés | 25 |
-| Commandes | 2402 |
-| Sous-agents | 34 |
-| Commits | 372 |
+| Commandes | 2406 |
+| Sous-agents | 38 |
+| Commits | 373 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*148 appels d'outils.* Actions notables :
+*156 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 134 autres
+- … et 142 autres
 
 **Synthèse produite :**
 
-⏵ Je expose `--partition` dans la CLI (le contrat, pas seulement l'API)
+⏵ Pendant la vague : consolidation de l'état (en-cours, chantiers, journal)
 
 ## 3. Travail accompli
 
@@ -10009,6 +10009,10 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - tour 184 — Frontières de phrase
 - tour 184 — Partition des syntagmes
 - tour 184 — POS R4 et classes fermées
+- tour 184 — État N2 et porte propre
+- tour 184 — État S et rétro-traduction
+- tour 184 — État R et tagger
+- tour 184 — État A et frontière
 
 ### Commandes exécutées (échantillon)
 
@@ -10052,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2362 autres
+- … et 2366 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10572,4 +10576,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET" -- reports/rapport-partition-syntagmes.md reports/pensee-part
 - B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183" -- tools/bloc_linguistique.py 2>&1 | tail -1   if git lo
 - PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR" -- tools/drave.py tools/tests/test_produit.py docs/produit/
+- ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1" -- docs/pilotage/en-cours.md journal/2026
 

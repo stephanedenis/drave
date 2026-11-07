@@ -55725,3 +55725,85 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.4 Rejouer et vérifier le déterminisme\"\"\",\n\"\"\"### 3.3 bis La vue des syntagmes qui se chevauchent\n\n```bash\n … [1717 caractères tronqués]`
+
+  ```
+doc produit : --partition
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 15 files changed, 223 insertions(+), 26 deletions(-)
+COMMIT OK 1
+d31aa9a2 PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR
+   6a1148c2..d31aa9a2  s/v7 -> s/v7
+   6a1148c2..d31aa9a2  master -> master
+ven 06 nov 2026 21:10:19 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Porte produit (10 tests) et nouvelle vague : N2, S, R, A (analyses en lecture seule)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -11", "description": "Porte produit complète", "timeoutMs": 900000}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 10 tests
+  ✅ schéma v1 validé (5 cas + 20 phrases du gold)
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **subagent** `{"description": "État N2 et porte propre", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte** — lecture seule, aucun code.\n\nContexte : `docs/pilotage/roadmap.md` (chantier N2), `docs/pilotage/en-cours.md` (session N … [1234 caractères tronqués]`
+- **subagent** `{"description": "État S et rétro-traduction", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le lecteur) — lecture seule, aucun code.\n\nContexte : `docs/pilotage/roadmap.md` (chantier S), `docs/pilotage/en-cours.md` (s … [1069 caractères tronqués]`
+- **subagent** `{"description": "État R et tagger", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le lecteur : R0.7 tagger, R1.2-1024, R44, R2/R3/R5) — lecture seule, aucun code.\n\nContexte : `docs/pilotage/roadmap.md` (R), `docs/pil … [997 caractères tronqués]`
+- **subagent** `{"description": "État A et frontière", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier A** (le moteur) — lecture seule, aucun code.\n\nContexte : `docs/pilotage/roadmap.md` (A : A2.6 experts/tête, A6.2, A8.3a, A17, A23, A24…) … [1072 caractères tronqués]`
+
+  ```
+started subagent 599e9c0e-4252-43ca-a89a-3886d723c379
+  ```
+
+
+  ```
+started subagent cdc16e57-4a69-4890-8b3c-270539c64ff2
+  ```
+
+
+  ```
+started subagent 7635f5f5-11b8-4d10-bea5-50a90e536e31
+  ```
+
+
+  ```
+started subagent 538288b3-117b-4daf-8d16-0cd8d6b0090d
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant la vague : consolidation de l'état (en-cours, chantiers, journal)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-200; grep -n \"B13\" docs/pilotage/chantiers.md | head -3 | cut -c1-160", "description": "Voir l'état B13"}`
+
+  ```
+71:- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153/153, test 69/69 ; **17 spans** inatteignables ; **`drave` v0** documenté ; `m
+4:> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+30:| 31/10 22 h 22 | « le RSN (le pluriel sera plus approprié car tu dois avoir plusieurs candidats) est une représentation de données interne qui te permet d'i
+78:**B13** ont une fiche de session et des rapports ; **L** et **D** sont les deux chantiers que les
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"- **Fait** : B13 **183/183** ; **attachement 222/222 (1,0000)** (fr 136/136, en 86/86), **couverture 0,9289** ; dev 153 … [1532 caractères tronqués]`
+
+  ```
+état + journal
+     · T0 : 4015 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **frontières de phrase** (0/40) ; **partition étiquetée** ; compositions sans perte ; **`drave` v0** (10 tests, porte à  … [903 caractères tronqués]`
