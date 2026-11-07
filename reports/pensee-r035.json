@@ -1,0 +1,191 @@
+{
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "tache": "J1.1",
+ "cas": "r035",
+ "phrase": "The film she talks about is out.",
+ "regle": "relative zéro à préposition orpheline : [GN antécédent] [pronom sujet] [verbe] [préposition sans complément nominal] → REL ; la cible est la tête du GN. Anglais seulement.",
+ "avant": {
+  "all": {
+   "phrases": 612,
+   "pos": 0.8625,
+   "f1": 0.7533,
+   "precision": 0.7239,
+   "rappel": 0.7853,
+   "tete": 0.864,
+   "exact": 236,
+   "labels": 237,
+   "cibles": 239,
+   "couverture": 0.9916
+  },
+  "dev": {
+   "phrases": 422,
+   "pos": 0.8618,
+   "f1": 0.7476,
+   "precision": 0.7223,
+   "rappel": 0.7747,
+   "tete": 0.8603,
+   "exact": 160,
+   "labels": 161,
+   "cibles": 163,
+   "couverture": 0.9877
+  },
+  "test": {
+   "phrases": 190,
+   "pos": 0.8642,
+   "f1": 0.7663,
+   "precision": 0.7274,
+   "rappel": 0.8095,
+   "tete": 0.8724,
+   "exact": 76,
+   "labels": 76,
+   "cibles": 76,
+   "couverture": 1.0
+  }
+ },
+ "apres": {
+  "all": {
+   "phrases": 612,
+   "pos": 0.8625,
+   "f1": 0.7549,
+   "precision": 0.7254,
+   "rappel": 0.7869,
+   "tete": 0.8651,
+   "exact": 237,
+   "labels": 238,
+   "cibles": 239,
+   "couverture": 0.9958
+  },
+  "dev": {
+   "phrases": 422,
+   "pos": 0.8618,
+   "f1": 0.7498,
+   "precision": 0.7245,
+   "rappel": 0.777,
+   "tete": 0.8618,
+   "exact": 161,
+   "labels": 162,
+   "cibles": 163,
+   "couverture": 0.9939
+  },
+  "test": {
+   "phrases": 190,
+   "pos": 0.8642,
+   "f1": 0.7663,
+   "precision": 0.7274,
+   "rappel": 0.8095,
+   "tete": 0.8724,
+   "exact": 76,
+   "labels": 76,
+   "cibles": 76,
+   "couverture": 1.0
+  }
+ },
+ "delta": {
+  "exact": "236 → 237",
+  "labels": "237 → 238",
+  "couverture": "0,9916 → 0,9958",
+  "pos": "0,8625 → 0,8625",
+  "f1": "0,7533 → 0,7549",
+  "dev_exact": "160/161 → 161/162",
+  "test_exact": "76/76 → 76/76"
+ },
+ "gold": {
+  "phrases": 612,
+  "tokens": 3179,
+  "cibles": 239,
+  "phrases_modifiees": [
+   "r035"
+  ],
+  "nb_phrases_modifiees": 1,
+  "tokens_pos_modifies": 0,
+  "diff_segments": {
+   "ajoutes": [
+    [
+     "GN",
+     0,
+     8
+    ],
+    [
+     "REL",
+     9,
+     24
+    ],
+    [
+     "GV",
+     25,
+     31
+    ]
+   ],
+   "retires": [
+    [
+     "GN",
+     0,
+     12
+    ],
+    [
+     "GV",
+     13,
+     18
+    ],
+    [
+     "GV",
+     19,
+     31
+    ]
+   ]
+  }
+ },
+ "controles_negatifs": [
+  {
+   "phrase": "The film she talks about the book is out.",
+   "attendu": "pas de REL (complément nominal)",
+   "observe": "pas de REL"
+  },
+  {
+   "phrase": "The film she talks about it is out.",
+   "attendu": "pas de REL (pronom objet)",
+   "observe": "pas de REL"
+  },
+  {
+   "phrase": "The film she talks about today is out.",
+   "attendu": "pas de REL (adverbe complément)",
+   "observe": "pas de REL"
+  },
+  {
+   "phrase": "The film talks about is out.",
+   "attendu": "pas de REL (pas de pronom sujet)",
+   "observe": "pas de REL"
+  },
+  {
+   "phrase": "Le film elle parle est sorti.",
+   "attendu": "pas de REL (français, pas de relative zéro)",
+   "observe": "pas de REL"
+  }
+ ],
+ "generalisation": {
+  "phrase": "The book he reads about is good.",
+  "rel": [
+   9,
+   23
+  ],
+  "cible": "book"
+ },
+ "portes": {
+  "autotest": "183/183",
+  "tests_unitaires": 17,
+  "porte_bloc_linguistique": "verte",
+  "porte_produit": "verte"
+ },
+ "reste": {
+  "span_manquant": "g017 (SUB, « that she would come »)",
+  "cible_fausse": "s065 (REL synthétique : cible gold elle, prédite nage)"
+ },
+ "limites": [
+  "un seul cas dans le gold, en dev : le gain est in-sample ; le test ne bouge pas (pas de relative zéro)",
+  "listes fermées de pronoms et de prépositions ; un complément nominal non reconnu pourrait déclencher à tort",
+  "la garde de frontière du GN s'applique à tout GN + pronom sujet + verbe ; sur le gold seul r035 change",
+  "la relative zéro est une convention d'annotation unique, sans accord inter-annotateurs",
+  "gain F1 de 0,0016 : un span, pas un gain général de segmentation"
+ ]
+}

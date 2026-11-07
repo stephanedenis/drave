@@ -27,6 +27,33 @@ class TestBlocLinguistique(unittest.TestCase):
             self.assertLessEqual(e.fin, len(TEXTE))
             self.assertLessEqual(e.debut, e.fin)
 
+    def test_relative_zero(self):
+        """Relative zéro : [GN] [pronom sujet] [verbe] [préposition orpheline] → REL.
+
+        La règle est **structurelle** : elle ne dépend ni du nom, ni du pronom, ni du verbe,
+        ni de la préposition. Une préposition avec complément, un adverbe ou l'absence de
+        pronom ne déclenchent pas ; le français ne fabrique pas de relative zéro à
+        préposition finale.
+        """
+        def syntagmes(txt, lg="en"):
+            a = self.h.analyser(txt, lg)
+            return [(e.type, e.debut, e.fin, txt[e.debut:e.fin],
+                     ((e.meta or {}).get("attachement") or {}).get("cible"))
+                    for e in a.etiquettes if e.niveau == "syntagme"]
+
+        rel = [s for s in syntagmes("The film she talks about is out.") if s[0] == "REL"]
+        self.assertEqual([(s[1], s[2], s[4]) for s in rel], [(9, 24, "film")])
+        # la règle généralise : autre nom, pronom, verbe, préposition
+        rel = [s for s in syntagmes("The book he reads about is good.") if s[0] == "REL"]
+        self.assertEqual([(s[1], s[2], s[4]) for s in rel], [(9, 23, "book")])
+        for txt in ("The film she talks about the book is out.",
+                    "The film she talks about it is out.",
+                    "The film she talks about today is out.",
+                    "The film talks about is out."):
+            self.assertFalse([s for s in syntagmes(txt) if s[0] == "REL"], txt)
+        self.assertFalse([s for s in syntagmes("Le film elle parle est sorti.", "fr")
+                          if s[0] == "REL"])
+
     def test_langue_et_script(self):
         for texte, langue in (("Le chat dort dans la maison.", "fr"),
                               ("The cat sleeps in the house.", "en"),

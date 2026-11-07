@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-r035.md`](rapport-r035.md) | **B13** — relative zéro : **236 → 237**, **0,9958** |
 | [`rapport-gn-pronom-sujet.md`](rapport-gn-pronom-sujet.md) | **B13** — le pronom sujet est un GN : **F1 0,7013** |
 | [`rapport-r264-elision.md`](rapport-r264-elision.md) | **B13** — `r264` : 236/237, couverture **0,9916** |
 | [`rapport-pos-ponctuation.md`](rapport-pos-ponctuation.md) | **B13** — PONCT : POS **85,75 %**, miroir 0,2276 |

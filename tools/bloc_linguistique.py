@@ -1142,6 +1142,38 @@ class Heuristique:
                 if avant in SUJETS:
                     return True
             return False
+
+        _suj = SUJETS if langue == "fr" else {"i", "you", "he", "she", "it", "we", "they"}
+
+        def relative_zero(j: int) -> tuple[int, int] | None:
+            """Relative zéro : [GN antécédent] [pronom sujet] [verbe] [préposition orpheline].
+
+            « The film [Ø] she talks about | is out. » : aucune marque de relative. Le signal
+            structurel est la **préposition finale** : elle n'a pas de complément nominal et
+            le mot suivant est un auxiliaire, un verbe, une ponctuation ou la fin. On ne
+            déclenche donc pas devant un objet (« about the film », « about it ») ni devant
+            un adverbe (« about today »), qui sont des GP ordinaires. La règle est limitée à
+            l'anglais : le français marque la relative par `dont`/`que`, et une préposition
+            orpheline y est agrammaticale.
+            """
+            if langue != "en" or j + 3 > len(mots):
+                return None
+            if mots[j][3] != "mot" or _normaliser(mots[j][2]) not in _suj:
+                return None
+            verbe = mots[j + 1]
+            if not (est_verbe(verbe[0], verbe[2])
+                    or _normaliser(verbe[2]) in lex.get("AUX", set())):
+                return None
+            prep = mots[j + 2]
+            if _normaliser(prep[2]) not in lex.get("PREP", set()):
+                return None
+            suivant = mots[j + 3] if j + 3 < len(mots) else None
+            if suivant is not None and suivant[3] == "mot":
+                if not (est_verbe(suivant[0], suivant[2])
+                        or _normaliser(suivant[2]) in lex.get("AUX", set())):
+                    return None
+            return j, j + 2
+
         segments: list[dict] = []
         i = 0
         while i < len(mots):
@@ -1217,6 +1249,12 @@ class Heuristique:
                        and _normaliser(mots[j][2]) not in lex.get("PREP", set()) | lex.get("CONJ", set()) | lex.get("AUX", set())
                        and _normaliser(mots[j][2]) not in RELATIFS
                        and not est_sub(_normaliser(mots[j][2]))
+                       # une relative zéro ne laisse pas le GN avaler son pronom sujet
+                       # (« The film | she talks about ») : le pronom ouvre la clause
+                       and not (j > i + 1 and _normaliser(mots[j][2]) in _suj
+                                and j + 1 < len(mots)
+                                and (est_verbe(mots[j + 1][0], mots[j + 1][2])
+                                     or _normaliser(mots[j + 1][2]) in lex.get("AUX", set())))
                        and (j == i + 1 or not est_verbe(mots[j][0], mots[j][2]))):
                     j += 1
                 role = "groupe nominal"
@@ -1228,6 +1266,17 @@ class Heuristique:
                 segments.append({"type": "GN", "role": role, "niveau": 0,
                                  "debut": d, "fin": mots[j - 1][1],
                                  "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                # relative zéro : le GN antécédent est suivi du pronom, du verbe et de la
+                # préposition orpheline ; on émet la REL et on reprend après la préposition.
+                _rz = relative_zero(j)
+                if _rz:
+                    _k, _p = _rz
+                    segments.append({"type": "REL", "role": "qualité", "niveau": 1,
+                                     "debut": mots[_k][0], "fin": mots[_p][1],
+                                     "texte": texte[mots[_k][0]:mots[_p][1]],
+                                     "candidats": []})
+                    i = _p + 1
+                    continue
                 i = j
                 continue
             # un **pronom sujet** devant le verbe est un GN (« Il | a couru ») : c'est la
@@ -1240,7 +1289,6 @@ class Heuristique:
                                  "debut": d, "fin": f, "texte": texte[d:f], "candidats": []})
                 i += 1
                 continue
-            _suj = SUJETS if langue == "fr" else {"i", "you", "he", "she", "it", "we", "they"}
             if (typ == "mot" and n in _suj and i + 1 < len(mots)
                     and (est_verbe(mots[i + 1][0], mots[i + 1][2])
                          or _normaliser(mots[i + 1][2]) in lex.get("AUX", set())

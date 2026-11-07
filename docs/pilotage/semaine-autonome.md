@@ -22,8 +22,8 @@ vérifié** — jamais une intention.
 
 | reste | mesure | où |
 |---|---|---|
-| 2 spans inatteignables (`r035` relative zéro, `g017` arbitrage d'adverbe) | attachement **236/237 (0,9916)** | [`rapport-gn-pronom-sujet.md`](../../reports/rapport-gn-pronom-sujet.md) |
-| la convention des GV (322 FP / 180 FN) | F1 **0,7535** (linéaire 0,8104) | [`rapport-gn-pronom-sujet.md`](../../reports/rapport-gn-pronom-sujet.md) |
+| 1 span (`g017` arbitrage d'adverbe) ; `r035` relative zéro **réglé** | attachement exact **237/238 (0,9958)** | [`rapport-r035.md`](../../reports/rapport-r035.md) |
+| la convention des GV (322 FP / 180 FN) | F1 **0,7549** (linéaire 0,8104) | [`rapport-r035.md`](../../reports/rapport-r035.md) |
 | `meta.alternative` hors schéma v1 | le schéma publié | [`tools/schemas/`](../../tools/schemas/) |
 | la restitution (annotation → texte) | miroir **0,2276** | [`../methode/miroir.md`](../methode/miroir.md) |
 
@@ -84,7 +84,7 @@ sous-agents ne committent jamais).
 
 | jour | vague | objet | livrable mesuré |
 |---|---|---|---|
-| **J1 · 07/11** | matin | le produit : les **2 spans**, la **convention des GV** | attachement et F1, fiche v13 |
+| **J1 · 07/11** | matin | le produit : le **span `g017`**, la **convention des GV** | attachement et F1, fiche v13 |
 | | après-midi | le **schéma v2** (`meta.alternative`, `meta.partition`) et la **restitution v0** | schéma validé, miroir mesuré |
 | **J2 · 08/11** | matin | **Panini I** : l'inventaire croisé, la **table atomes ↔ niveaux** | la table, 20 exemples mesurés |
 | | après-midi | **Panini I** : le **corpus commun** (format, échantillon) | un corpus partagé + sa fiche |
