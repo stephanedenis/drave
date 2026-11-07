@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.8 h |
+| Durée | 149.9 h |
 | Tours | 184 |
-| Messages | 3346 |
-| Appels d'outils | 2968 |
+| Messages | 3349 |
+| Appels d'outils | 2971 |
 | Fichiers touchés | 25 |
-| Commandes | 2463 |
+| Commandes | 2466 |
 | Sous-agents | 38 |
-| Commits | 390 |
+| Commits | 391 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*214 appels d'outils.* Actions notables :
+*217 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 199 autres
+- … et 202 autres
 
 **Synthèse produite :**
 
-⏵ Je corrige les compteurs, commit N2 corrigé + l'état R
+⏵ J'ajoute le test de non-régression sur les 50 textes libres (vue linéaire = 0 chevauchement)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2423 autres
+- … et 2426 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10594,4 +10594,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - N2 — LA FICHE CORRIGÉE (VALIDATION FRANÇAISE 2,53/2,48, PAS 2,39/2,35) ; BUG SIGNALÉ : eval_n2_propre LIT LES CHECKPOINTS RoPE COMME ABSOLUS (8,02 AU LIEU DE 2,
 - ÉTATS — N2 CORRIGÉ (VALIDATION FRANÇAISE 2,53/2,48) ET R (TAGGER 0,8483/0,9440, R1.2-1024 MESURÉ, R4.4)" -- reports/rapport-etat-n2.md reports/pensee-etat-n2.js
 - ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ" -- docs/pilotage/r
+- PRODUIT — LE TEST DES 50 TEXTES LIBRES (0 CHEVAUCHEMENT EN filtrer, 4 TESTS) ENTRE DANS LA PORTE : 10 CONTRÔLES" -- tools/tests/test_produit_libre.py tools/port
 

@@ -31,7 +31,7 @@ d'attachement**, acte de parole — avec ses spans et sa confiance, de façon **
 [`tools/schemas/`](tools/schemas/), un refus est une réponse JSON avec le code 3). La notice
 complète est [`docs/produit/README.md`](docs/produit/README.md), les exemples vérifiés
 [`docs/produit/exemples.md`](docs/produit/exemples.md), et la porte produit
-`bash tools/porte-produit.sh` (9 contrôles, ~2 min).
+`bash tools/porte-produit.sh` (10 contrôles, ~2 min).
 
 **Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**
 (couverture **0,9874**), 183/183 portes. Les limites sont dites : 3 spans inatteignables, la

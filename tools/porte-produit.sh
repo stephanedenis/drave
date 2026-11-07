@@ -41,10 +41,16 @@ else
   dit ❌ "smoke test en échec (voir /tmp/porte-produit-tests.log)"; ko=1
 fi
 
-if python3 tools/verifier_schema_produit.py >/tmp/porte-produit-valide.log 2>&1; then
-  dit ✅ "schéma v1 validé : $(tail -1 /tmp/porte-produit-valide.log)"
+if python3 tools/verifier_schema_produit.py --gold 20 >/tmp/porte-produit-valide.log 2>&1; then
+  dit ✅ "schéma v1 validé (5 cas + 20 phrases du gold)"
 else
   dit ❌ "schéma v1 : validation en échec (voir /tmp/porte-produit-valide.log)"; ko=1
+fi
+
+if python3 tools/tests/test_produit_libre.py >/tmp/porte-produit-libre.log 2>&1; then
+  dit ✅ "50 textes libres : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-libre.log | head -1)"
+else
+  dit ❌ "50 textes libres en échec (voir /tmp/porte-produit-libre.log)"; ko=1
 fi
 
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then

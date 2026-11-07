@@ -8,7 +8,7 @@
 > **Le schéma est publié** : [`tools/schemas/drave-annotation-v1.json`](../tools/schemas/drave-annotation-v1.json)
 > (Draft 2020-12) et **validé** par `tools/verifier_schema_produit.py` (5 cas : fr, en, vide,
 > ponctuation, long) avec `fastjsonschema`.
-> **Porte produit** : **9 contrôles** (dont le **validateur de schéma**), **verte** ;
+> **Porte produit** : **10 contrôles** (dont le **validateur de schéma**), **verte** ;
 > **183/183** portes d'autotest.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`SCHEMA_ANNOTATION`,

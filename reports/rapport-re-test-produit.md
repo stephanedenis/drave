@@ -41,7 +41,7 @@
 ## 4. La suite
 
 1. **Trancher le défaut produit** : `alternative` (fidèle) ou `filtrer` (linéaire).
-2. **Un test** de non-régression sur les 50 textes (chevauchements = 0 en `filtrer`).
+2. ~~Un test de non-régression sur les 50 textes~~ — **fait** : `tools/tests/test_produit_libre.py` (4 tests, 10e contrôle de la porte).
 3. **Le décompte** à définition constante avec l'audit.
 
 ## 5. Fichiers

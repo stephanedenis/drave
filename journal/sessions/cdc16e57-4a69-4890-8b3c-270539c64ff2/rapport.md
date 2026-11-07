@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 1.2 h |
+| Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 53 |
-| Appels d'outils | 91 |
-| Fichiers touchés | 0 |
-| Commandes | 90 |
+| Messages | 57 |
+| Appels d'outils | 95 |
+| Fichiers touchés | 2 |
+| Commandes | 92 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*91 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 77 autres
+- … et 81 autres
 
 **Synthèse produite :**
 
-⏵ Test de reproductibilité de la détection de langue
+⏵ Validation du JSON et contrôle qu'aucun existant n'a bougé
 
 ## 3. Travail accompli
 
@@ -53,6 +53,8 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-s.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-s.json` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +98,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 50 autres
+- … et 52 autres
 
 ## 4. Mesures et résultats marquants
 

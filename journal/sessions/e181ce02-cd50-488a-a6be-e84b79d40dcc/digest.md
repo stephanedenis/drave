@@ -56707,3 +56707,47 @@ message delivered to agent cdc16e57-4a69-4890-8b3c-270539c64ff2
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nt=t.replace(\"| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitut … [1495 caractères tronqués]`
+
+  ```
+ligne R corrigée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 18 files changed, 92 insertions(+), 57 deletions(-)
+COMMIT OK 1
+89f5b728 ROADMAP — LA LIGNE R CORRIGÉE : LE TAGGER N'EST PAS À 0,944 CONTRE 0,85 (CORPUS DIFFÉRENTS : +7,34 SUR 180, +6,35 SUR 432), R1.2-1024 MESURÉ
+   d3134849..89f5b728  s/v7 -> s/v7
+   d3134849..89f5b728  master -> master
+ven 06 nov 2026 22:28:05 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ajoute le test de non-régression sur les 50 textes libres (vue linéaire = 0 chevauchement)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/tests/test_produit_libre.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"test_produit_libre.py — non-régression sur les **50 textes libres** de l'audit A26.\n\nCe que le test fige :\n- la vue **`filtrer`** ne produit **aucun** c … [2707 caractères tronqués]`
+
+  ```
+----------------------------------------------------------------------
+Ran 4 tests in 0.286s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# la porte produit : un 10e contrôle (le test des 50 textes libres)\np=pathlib.Path('tools/porte-produit.sh'); t=p.read_text()\nt=t.replace('''if python3 tools/tests/test_schema_produit.py >/tmp/port … [584 caractères tronqués]`
+
+  ```
+porte : test des 50 textes
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 10 tests
+  ✅ schéma v1 validé (5 cas + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# les fiches et docs : 9 → 10 contrôles\nfor f in ('reports/rapport-schema-v1.md','reports/rapport-produit-v0.md','docs/produit/README.md','README.md'):\n    p=pathlib.Path(f); t=p.read_text()\n  … [1929 caractères tronqués]`

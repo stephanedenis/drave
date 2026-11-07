@@ -2692,3 +2692,103 @@ Created file
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
   ```
 
+- **write** `{"content": "{\n  \"fiche\": \"reports/rapport-etat-r.md\",\n  \"date\": \"2026-11-06\",\n  \"heure\": \"22:10 HNE\",\n  \"branche\": \"s/v7\",\n  \"head\": \"97256b8f\",\n  \"head_au_debut\": \"de7c9113\",\n  \"mission\": \"Etat du chantier R (le lecteur) en lecture seule : inventaire des lignes, v … [31488 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-r.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-etat-r.json >/dev/null && echo 'JSON OK'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-etat-r.json'))\nprint('lignes',len(d['lignes']),'rejeux',len(d['rejeux']),'actions',len(d[' … [273 caractères tronqués]`
+
+  ```
+JSON OK
+lignes 20 rejeux 13 actions 3 ecarts 13
+ids ['R0.1', 'R0.2', 'R0.3', 'R0.4', 'R0.5', 'R0.6', 'R0.7', 'R1.1', 'R1.2', 'R1.3', 'R2.1', 'R2.2', 'R3.1', 'R3.2', 'R4.1', 'R4.2', 'R4.3', 'R4.4', 'R5.1', 'R5.2']
+verdict len 1024
+---
+  443  5967 reports/rapport-etat-r.md
+  341  3768 reports/pensee-etat-r.json
+  784  9735 total
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -30; echo exit=${PIPESTATUS[0]}", "description": "Revue documentaire"}`
+
+  ```
+revue de documentation · 700 fiche(s) · 793 JSON · 121 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 792 JSON, le disque en a 793
+exit=1
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "**Ce que je n'ai pas rejoué** : le modèle du banc R0.3 (GPU, Qwen2.5-0.5B), la tête de survol\nR0.4 (états précoces Qwen), les entraînements R1.1/R1.2 (checkpoints `work/`), la porte BPE\nR1.3 ( … [623 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '20 réelles 0,9238\\|il reste +6 à +7\\|les scans réels R4.4' reports/rapport-etat-r.md", "description": "Localiser les formulations à corriger"}`
+
+  ```
+56:R1.3 (GPU), les scans réels R4.4 (mesures `mesurer_reel.py` ; les deux portes couvrent le pilote
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '0,9238\\|0,9471\\|reste.*6\\|réel 432' reports/rapport-etat-r.md | head -10", "description": "Chercher les passages du tagger"}`
+
+  ```
+18:> (heuristique **0,7749** aujourd'hui) et **+6,35 pts** sur le réel 432 (heuristique **0,8754**
+240:| `tools/tests/linguistique/qualifier_quatre_modes.py` | le banc **API DeepSeek** (`deepseek-chat`), **gold réel 432**, six modes (heuristique, neuronal, parallèle, cascade, parallèle_niveau, cascade_niveau) |
+255:| **7B local** (Qwen2.5-7B-Instruct Q4_K_M, `llama-server` b11017, **CPU** `-ngl 0`) | `gold.json` **20 réelles** (14 fr / 6 en) + `gold_synthetique.json` **160 synthétiques** (fr) | **180 / 804** | POS **0,8483** seul, cascade 0,6 **0,9440** ; 20 réelles **0,9238**, 160 synthétiques **0,9471** ; 0 refus, 180 appels, 3,043 s de moyenne, 548 s |
+282:**Pourquoi la baseline a monté** : l'heuristique du bloc L a gagné **+13,1 pts** sur le réel 432
+285:tagger a donc fondu** : il reste **+6 à +7 pts** sur le réel, pas **+19**.
+389:| 3 | `en-cours.md` R | « **R0.7 — tagger** » dans ce qui reste | le tagger est mesuré (7B local + API) ; il reste **à re-mesurer sur 612** et à **décider** |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "| **7B local** (Qwen2.5-7B-Instruct Q4_K_M, `llama-server` b11017, **CPU** `-ngl 0`) | `gold.json` **20 réelles** (14 fr / 6 en) + `gold_synthetique.json` **160 synthétiques** (fr) | **180 / 804 … [528 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "tagger a donc fondu** : il reste **+6,35 pts sur le réel 432** et **+7,34 pts sur le gold\n180**, pas **+19**.", "old_string": "tagger a donc fondu** : il reste **+6 à +7 pts** sur le réel, pas  … [10 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'Non rejouées\\|scans réels' reports/rapport-etat-r.md | tail -6; sed -n '430,443p' reports/rapport-etat-r.md", "description": "Voir la fin de la fiche"}`
+
+  ```
+56:R1.3 (GPU), les scans réels R4.4 (mesures `mesurer_reel.py` ; les deux portes couvrent le pilote
+217:| `roadmap.md` (R4.4) | 🔬 **« mesuré sur scans simulés ; ouvert sur les scans réels »** |
+221:| `rapport-r44-scans.md` (verdict) | **« la ligne reste ouverte pour les scans réels de bout en bout »** |
+417:- **R4.4** : les portes tournent sur des **caches** (`work/r44/`) ; les scans réels sont
+441:- **Non rejouées** : `tools/tete_survol.py` ; `work/n2ac/eval_fenetre.py` ;
+442:  `work/n2ac/mirroir_copie.py` ; `bash tools/porte-r13-bpe.sh` ; les scans réels (portes
+  `reports/rapport-r01…r07`, `r13*`, `r44-*`, `n2-r11`, `n2-fenetre`, `n2-r12-2048`,
+  `pensee-gold-neuronal`, `pensee-gold-syntagmes`, `pensee-gold-cascade`,
+  `pensee-quatre-modes-432`, `pensee-quatre-modes-run2`, `memoire-travail-n5`, `file-taches`.
+- **Rejouées** : `bash tools/porte-document.sh` ; `bash tools/porte-lecteur.sh` ;
+  `bash tools/porte-lecture.sh` ; `bash tools/porte-balayage.sh` ;
+  `bash tools/porte-bloc-tableaux.sh` ; `bash tools/porte-bloc-code.sh` ;
+  `bash tools/porte-bloc-maths.sh` ; `bash tools/porte-bloc-linguistique.sh` ;
+  `bash tools/porte-ocr.sh` ; `bash tools/porte-ocr-scans.sh` ;
+  `python3
+… [423 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "- **Non rejouées** : `tools/tete_survol.py` ; `work/n2ac/eval_fenetre.py` ;\n  `work/n2ac/mirroir_copie.py` ; `bash tools/porte-r13-bpe.sh` ; les scans réels\n  (`tools/mesurer_reel.py` et les J … [244 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md", "new_string": "- **`porte-ocr-scans.sh`** (5 familles, colonnes, tableaux) : **exit 0** ; les 5 familles\n  tiennent leurs planchers, les colonnes et les tableaux aussi ; page noire **0 mot**,\n  mono-colonne  … [855 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-r.md has been updated successfully.
+  ```
+
