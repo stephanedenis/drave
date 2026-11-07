@@ -2365,3 +2365,17 @@ n 28 corrects 15 faux 13
 ('c064', 'c064-c2') exclu | stockés 2 dyn 1 | Heureusement pour lui, la gare n'avait ni portes ni barrières.
   ```
 
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nlangs=set(d['langues'])\ncanon=sum(1 for v in d['concepts'].values() for l in v['labels'] if l in langs)\nvar=sum(1 for v in d['concepts'].values() for l in v['labels'] if l not in langs)\nprint('c … [221 caractères tronqués]`
+
+  ```
+canon 1429 variantes 4 total 1433
+langues avec label canon 71
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\n# time distribution\nfrom collections import Counter\nprint(Counter(r['horodatage'][11:13] for r in rows))\n# notes detail\nfor r in rows:\n    … [79 caractères tronqués]`
+
+  ```
+Counter({'13': 41, '11': 40, '12': 34, '10': 27, '16': 8})
+{'phrase_id': 'p002', 'candidat_id': 'p002-c2', 'statut': 'compatible', 'note': "il est préférable de dire l'homme au téléscope", 'contexte': "Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait d'acheter — un instrument neuf, encore dans sa boîte.", 'niveau': 2, 'auteur': 'humain', 'horodatage': '2026-11-03T10:32:17'}
+  ```
+

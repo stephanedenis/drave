@@ -2653,3 +2653,22 @@ started background job bash-4237
 [status: running]
   ```
 
+- **job_output** `{"job_id": "bash-4237", "timeout_ms": 60000}`
+
+  ```
+exit=0
+}
+✅ porte bloc linguistique verte
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4237 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-bloc-linguistique.sh >/tmp/porte-bl-head.log 2>&1; echo exit=$?; tail -2 /tmp/porte-bl-head.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-complet.json'))\ns=sum(len(doc.get('questions',[])) for doc in d['documents'])\nprint('field',d['questions'],'sum per doc',s,'docs',len(d['documents']))\nPY … [55 caractères tronqués]`
+
+  ```
+field 248 sum per doc 248 docs 30
+  ```
+

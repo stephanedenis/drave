@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**69 commits** · **16 session(s)** · **7 thème(s)**
+**70 commits** · **16 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,7 +17,7 @@
 | mesures | 17 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 14 | [portes.md](portes.md) |
+| portes | 15 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
@@ -29,8 +29,8 @@
 | `338f8b55-bcd5-464a-a63e-b97381eff55d` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.1 h | [rapport](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/rapport.md) · [digest](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md) |
 | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 1.8 h | [rapport](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/rapport.md) · [digest](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
-| `538288b3-117b-4daf-8d16-0cd8d6b0090d` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.9 h | [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md) |
-| `599e9c0e-4252-43ca-a89a-3886d723c379` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.9 h | [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md) |
+| `538288b3-117b-4daf-8d16-0cd8d6b0090d` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.0 h | [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md) |
+| `599e9c0e-4252-43ca-a89a-3886d723c379` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.0 h | [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md) |
 | `7635f5f5-11b8-4d10-bea5-50a90e536e31` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.9 h | [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
@@ -113,6 +113,7 @@
 | 21:47 | `7a876f70` | PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES |
 | 21:54 | `5940ea53` | B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183 |
 | 21:57 | `97256b8f` | PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE) |
+| 22:08 | `3caa8938` | ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS) |
 
 ## Le récit de la journée (écrit à la main)
 

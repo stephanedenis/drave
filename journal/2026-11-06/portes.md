@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,6 +22,7 @@
 | 18:39 | `97918c05` | PRODUIT — LE SCHÉMA V1 PUBLIÉ (tools/schemas/drave-annotation-v1.json, Draft 2020-12) ET VALIDÉ SUR 5 CAS ; PORTE À 9 CONTRÔLES ; 183/183 | `en-cours.md`, `README.md`, `distribue.md` (+20) |
 | 21:08 | `d31aa9a2` | PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR | `README.md`, `README.md`, `distribue.md` (+12) |
 | 21:28 | `9e4cde3b` | README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11 | `README.md`, `README.md`, `distribue.md` (+18) |
+| 22:08 | `3caa8938` | ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS) | `en-cours.md`, `roadmap.md`, `README.md` (+25) |
 
 ## Chiffres du jour
 
@@ -37,8 +38,8 @@
 - `338f8b55-bcd5-464a-a63e-b97381eff55d` — Tu travailles dans le dépôt (début 2026-11-06 18:33, 2.1 h) → [rapport](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/rapport.md) · [digest](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md)
 - `3ccd8d09-9820-4da4-963b-6d84a0ffb141` — Tu travailles dans le dépôt (début 2026-11-06 18:33, 1.8 h) → [rapport](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/rapport.md) · [digest](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md)
 - `3fb87dc7-7d24-42e2-a68e-e37e2734b755` — Tu travailles dans le dépôt (début 2026-11-05 23:24, 1.7 h) → [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md)
-- `538288b3-117b-4daf-8d16-0cd8d6b0090d` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 0.9 h) → [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md)
-- `599e9c0e-4252-43ca-a89a-3886d723c379` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 0.9 h) → [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md)
+- `538288b3-117b-4daf-8d16-0cd8d6b0090d` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.0 h) → [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md)
+- `599e9c0e-4252-43ca-a89a-3886d723c379` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 1.0 h) → [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md)
 - `7635f5f5-11b8-4d10-bea5-50a90e536e31` — Tu travailles dans /home/stephane/Data13 (début 2026-11-06 21:13, 0.9 h) → [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md)
 - `a0d33fb7-37a9-4834-8a94-0da119e3b18f` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 1.3 h) → [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md)
 - `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` — Tu travailles dans le dépôt (début 2026-11-06 09:31, 0.6 h) → [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md)
@@ -53,6 +54,8 @@
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-audit-v10.md](../../reports/rapport-audit-v10.md)
+- [reports/rapport-etat-a.md](../../reports/rapport-etat-a.md)
+- [reports/rapport-etat-n2.md](../../reports/rapport-etat-n2.md)
 - [reports/rapport-produit-v0.md](../../reports/rapport-produit-v0.md)
 - [reports/rapport-schema-v1.md](../../reports/rapport-schema-v1.md)
 

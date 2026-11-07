@@ -2045,3 +2045,114 @@ manquants: aucun
 lignes: 279 | mots ~ 2978
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 55, "offset": 35}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+35: | `work/n2w/` | 1,3 Go | corpus élargi (wiki_big, 60 k pas) |
+36: | `work/n2d/`, `work/n2i/` | 633 Mo, 316 Mo | les premières bases et le corpus élargi |
+37: 
+38: Les checkpoints qui comptent pour N2, avec leur **date**, leur **taille**, leurs **paramètres**,
+39: leur **recette** et leur `ppl_val` **interne** (contexte d'entraînement — pas la PPL de la porte) :
+40: 
+41: | rôle | checkpoint | date | MiB | params | recette | `ppl_val` |
+42: |---|---|---|---:|---:|---|---:|
+43: | N2.ac, production 1 Go | `work/n2ac/mix-60k.pt` | 02/11 13:23 | 130,89 | 34,30 M | 60 k × 128 | 3,3556 |
+44: | 200 000 pas | `work/n2ac/mix-200k.pt` | 02/11 19:33 | 130,89 | 34,30 M | 200 k × 128 | 2,9801 |
+45: | fenêtre 512 (61,4 Mo) | `work/n2ac/mix512-15k.pt` | 02/11 20:54 | 130,89 | 34,30 M | 15 k × 512 | 2,7312 |
+46: | fenêtre 1 024 (61,4 Mo) | `work/n2ac/mix1024-7.5k.pt` | 02/11 21:50 | 130,89 | 34,30 M | 7,5 k × 1 024 | 2,6579 |
+47: | production 1 024, 30 k | `work/n2ac/mix1024-30k.pt` | 03/11 02:45 | 130,89 | 34,30 M | 30 k × 1 024 | 2,4828 |
+48: | production 1 024, 60 k | `work/n2ac
+… [3445 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "new_string": "| **le plus récent** | **`work/n2ac/rope2048-20k.pt`** | **04/11 21:09** | **130,89** | **34,30 M** | **20 k × 2 048, init 10 k** | **2,4953** |\n\n*Note de lecture : les noms de la fiche de ca … [313 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 36}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 80, "offset": 100}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+1: # N2 — l'état du chantier et de sa porte : inventaire, vérification, proposition
+2: 
+3: > **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-06 · **Verdict** :
+4: > N2 n'a **pas** de porte unique dans la passe : sa rouge est une **mesure** — **2,7856** de PPL
+5: > sur le corpus propre à 1 024 octets contre la porte **< 2,5**, soit **0,29** en validation
+6: > (**0,36** en test). Le mètre est **reproductible** (2,7856 / 2,8566 à l'identique, contrôle
+7: > permuté **1 692,39**, deux exécutions égales) et tient en **12 s** de GPU. `tools/eval_n2_propre.py`
+8: > **tourne** sur le checkpoint le plus récent mais **ne le mesure pas** : il charge l'architecture à
+9: > positions **absolues** et rend **12,91** (pire que l'uniforme, 5,55) là où le mètre RoPE rend
+10: > **4,63** ; sur le checkpoint de la porte, **8,02** contre **2,97** à 128 octets. Une
+11: > `tools/porte-n2.sh` est **proposable** : non-régression **≤ 2,80** par défaut, seuil **2,5** en
+12: > mode chantier, **~30–40 s** de GPU, dépendante de `work/` et `data/` **non suivis**.
+13: 
+14: ## La
+… [1513 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+100: « la porte propre (0,29 manquant à 2,7856) ». Le registre de la dernière passe
+101: (`work/portes-1106-01h28/registre.txt`, 79 vertes / 4 rouges) ne contient **aucune porte N2** :
+102: les 4 rouges sont `bloc-linguistique`, `indice`, `melange`, `sessions`. La « rouge de N2 » n'est
+103: donc **pas** une porte de la passe — c'est le **résultat publié** 2,7856 > 2,5.
+104: 
+105: ## 3. Où est la porte propre
+106: 
+107: **Le dispositif.** Corpus `data/corpus_propre/` (train 3 244 858 octets, val 180 224, test
+108: 180 224 ; 397 / 22 / 22 chunks de 8 192 octets ; **0 % de contamination**, manifeste
+109: [`corpus-propre.json`](corpus-propre.json)), mètre `work/n2ac/eval_longueurs.py --rope` (qui
+110: charge le modèle par `charge_rope`, `work/n2ac/rope_model.py`, et mesure avec
+111: `work/n2j/evalue_canal.py` : 8 lots × 16 fenêtres tirées par Van der Corput **dans** les chunks,
+112: canal fourni, ~131 ko évalués par longueur), checkpoint `work/n2ac/propre512-8k.pt`.
+113: 
+114: **La commande exacte** (rejouée le 06/11 à 21 h 28) :
+115: 
+116: ```bash
+117: PYTHONPATH=. CUDA_
+… [4130 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\njs = list(pathlib.Path('work').rglob('*.pt.json'))\norph = [str(j) for j in js if not j.with_suffix('').exists()]\nprint('sidecars:', len(js), 'orphelins:', len(orph), orph[:5])\npts = list(pathlib.Path('work').rglob('*.pt'))\navec = [p for p in pts if  … [159 caractères tronqués]`
+
+  ```
+sidecars: 67 orphelins: 0 []
+pt: 123 avec sidecar: 67
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 20, "offset": 266}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+266:   la première fois.
+267: - **L'arbre bouge** : `HEAD` est passé de `d31aa9a2` à `bfd98892` pendant l'audit ; les fiches
+268:   citées peuvent avoir changé après 21 h 41. La contradiction R1.2 (`rope2048-20k` « non écrit »)
+269:   en est un exemple.
+270: - **PPL n'est pas lecture** : la porte mesure une perplexité, pas la restitution ; un chiffre sous
+271:   2,5 ne prouverait pas que le modèle lit (règle du miroir).
+272: 
+273: ## 7. Fichiers
+274: 
+275: - Cette fiche : `reports/rapport-etat-n2.md` ; le condensé machine : `reports/pensee-etat-n2.json`.
+276: - Porte et mesure : [`rapport-n2-porte-propre`](rapport-n2-porte-propre.md),
+277:   [`n2-porte-propre.json`](n2-porte-propre.json), `work/n2ac/chaine_porte.sh`,
+278:   `work/n2ac/eval_longueurs.py`, `work/n2ac/rope_model.py`.
+279: - Production et fenêtre : [`rapport-n2-production-fenetre`](rapport-n2-production-fenetre.md),
+280:   [`rapport-n2-fenetre`](rapport-n2-fenetre.md), [`rapport-n2-r12-2048`](rapport-n2-r12-2048.md).
+281: - Contexte : [`roadmap`](../docs/pilotage/roadmap.md), [`en-cours`](../docs/pilotage
+… [164 caractères tronqués]
+  ```
+

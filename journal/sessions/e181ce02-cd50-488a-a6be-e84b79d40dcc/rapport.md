@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 149.5 h |
 | Tours | 184 |
-| Messages | 3330 |
-| Appels d'outils | 2955 |
+| Messages | 3331 |
+| Appels d'outils | 2956 |
 | Fichiers touchés | 25 |
-| Commandes | 2451 |
+| Commandes | 2452 |
 | Sous-agents | 38 |
-| Commits | 383 |
+| Commits | 384 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*201 appels d'outils.* Actions notables :
+*202 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 187 autres
+- … et 188 autres
 
 **Synthèse produite :**
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2411 autres
+- … et 2412 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-66 sorties en erreur ou divergentes. Les premières :
+67 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10587,4 +10587,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183" -- tools/bloc_linguistique.py 2>&1 | tail -1   if git log -1 --format='%s' | grep 
 - PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)" -- docs/pilotage/plan-travail.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "LA NUIT DES P0
 - ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)" -- reports/rapport-etat-n2.m
+- ÉTAT — T0 DANS LE BUDGET APRÈS LES ÉTATS N2/A" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS LES ÉTATS N2/A"; then 
 

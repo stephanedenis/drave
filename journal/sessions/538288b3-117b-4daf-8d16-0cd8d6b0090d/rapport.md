@@ -7,12 +7,12 @@
 | Identifiant | `538288b3-117b-4daf-8d16-0cd8d6b0090d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.9 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 66 |
-| Appels d'outils | 115 |
+| Messages | 71 |
+| Appels d'outils | 125 |
 | Fichiers touchés | 2 |
-| Commandes | 77 |
+| Commandes | 83 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier A** (le  … [1650 caractères tronqués]
 
-*115 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — Show repo root, branch, recent commits
 - glob
@@ -41,7 +41,7 @@
 - bash — Extract A2.6 mentions with context from A23 report
 - bash — List verification tools and placement tests
 - bash — Run backlog verification read-only
-- … et 70 autres
+- … et 80 autres
 
 **Synthèse produite :**
 
@@ -54,8 +54,8 @@ Je précise deux nuances (A6.2 « ressource absente » vs « résidence mono-GPU
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `reports/rapport-etat-a.md` | 1 | 1 |
-| `reports/pensee-etat-a.json` | 1 | 0 |
+| `reports/rapport-etat-a.md` | 1 | 3 |
+| `reports/pensee-etat-a.json` | 1 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -99,7 +99,7 @@ Je précise deux nuances (A6.2 « ressource absente » vs « résidence mono-GPU
 - **T1** Run placement unit tests in /tmp target
 - **T1** Locate local GGUF models
 - **T1** Inspect porte-flux script
-- … et 37 autres
+- … et 43 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -219,6 +219,11 @@ Je précise deux nuances (A6.2 « ressource absente » vs « résidence mono-GPU
 - **T1** `57:| 24 | 37,1813 | ×1,00 |`
 - **T1** `reports/rapport-partition-syntagmes.md:306:| moins de chevauchements, coût minimal | `filtrer_union` | 0,6163 | 217/239 | 91 | +7,2 % |`
 - **T1** `reports/rapport-partition-syntagmes.md:307:| partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |`
+- **T1** `48:| **A6** apprendre des flux | ✅ / ⏳ **A6.2 mal classé** | A1, A2 | hebbien +**3,0 %**, produits **+0,0045** de R² ; **0 neurone mort** sur 116 736 ; 63 % < 0,1 % ; top 10 % → **19 %** de la masse |`
+- **T1** `60:| **A2.6** | **partiel, libre (P2)** | A2 acquis ; **pas** A6.2 pour les experts ; tête décidée | KV ×1,93/×5,8 ; lot **503/502 Mio**, **24,0 → 30,5 tok/s** (+27 %), PPL **15,8452 → 15,8443** (−0,0`
+- **T1** `162:| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage existent ; le MoE tourne en offload/CPU, le blocage « 16 Go » est une résidence mono-GPU | **actio`
+- **T1** `-| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage existent | **action 2** |`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 

@@ -56425,3 +56425,18 @@ roadmap A corrigée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [2108 caractères tronqués]`
+
+  ```
+README + état
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-etat-n2.md
+COMMIT OK 1
+3caa8938 ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)
+   97256b8f..3caa8938  s/v7 -> s/v7
+   97256b8f..3caa8938  master -> master
+ven 06 nov 2026 22:10:32 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0** ; états N2/S/R/A inventoriés.\", \" ; **`drave` v0**.\")\np.write_text(t)\nPY\npython3 tools/taille_docum … [531 caractères tronqués]`

@@ -2741,3 +2741,60 @@ tools/__pycache__
 … [483 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Ajustement de la formulation sur A6.2 et les tests de placement
+Je précise deux nuances (A6.2 « ressource absente » vs « résidence mono-GPU » ; 8 tests vs 4) avant de rendre.
+
+- **edit** `{"file_path": "reports/rapport-etat-a.md", "old_string": "bloqués réels** de A sont **A3.4** (compte Colab) et **A5.4** (carte Stratix V). **A6.2 est\n> mal classé** : il est libre, pas bloqué. **A23 a raison sur l'effet** (A2.6 ne doit pas être la", "new_string": "bloqués réels** de A sont **A3.4** … [233 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-a.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-etat-a.md", "old_string": "- **Chiffre à corriger** : la fiche et le JSON disent **4 tests** ; il y en a **8**.", "new_string": "- **Chiffre à corriger** : la fiche et le JSON disent **4 tests** ; `placement.rs` en a **8**\n  (les 4 de `choisir` + 4 autres), tous verts … [11 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-a.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-etat-a.md", "old_string": "| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage existent | **action 2** |", "new_string": "| **A6.2** | **oui** | MoE local 18 Go, 2×16 Go VRAM, 125 Go RAM ; trace et imposition du routage exi … [104 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-a.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/pensee-etat-a.json", "new_string": "  \"verdict\": \"A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (aucune ressource ne ma … [390 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-a.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/pensee-etat-a.json", "new_string": "      \"etat\": \"libre de ressource (mal classé bloqué)\",", "old_string": "      \"etat\": \"libre (mal classé bloqué)\","}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-a.json has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-a.json > /dev/null 2>&1; echo \"json_exit=$?\"; python3 tools/verifier_liens.py 2>&1 | tail -2; echo '--- status ---'; git status --porcelain -- reports/rapport-etat-a.md reports/pensee-etat-a.json", "description": "Revalidate JSON and links"}`
+
+  ```
+json_exit=0
+  ✅ 3719 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+--- status ---
+ M reports/pensee-etat-a.json
+ M reports/rapport-etat-a.md
+  ```
+
+- **bash** `{"command": "grep -n \"A6.2\\|8 tests\\|4 tests\" reports/rapport-etat-a.md | head -20; echo '---'; grep -c \"A2.6\" reports/rapport-etat-a.md", "description": "Spot-check edited report"}`
+
+  ```
+11:> bloqués réels** de A sont **A3.4** (compte Colab) et **A5.4** (carte Stratix V). **A6.2 est
+14:> tête de frontière) **mais tort sur la cause** (les experts ne sont pas bloqués par A6.2).
+27:| `CARGO_TARGET_DIR=/tmp/etat-a-target cargo test --manifest-path drave-core/Cargo.toml placement` | **8/8**, exit 0 | la règle `choisir` / `choisir_avec_perte` / `kv_precision` est testée — **8 tests, pas 4** |
+48:| **A6** apprendre des flux | ✅ / ⏳ **A6.2 mal classé** | A1, A2 | hebbien +**3,0 %**, produits **+0,0045** de R² ; **0 neurone mort** sur 116 736 ; 63 % < 0,1 % ; top 10 % → **19 %** de la masse | `bash tools/porte-echange-experts.sh` ; `bash tools/porte-occupation-elagage.sh` |
+60:| **A2.6** | **partiel, libre (P2)** | A2 acquis ; **pas** A6.2 pour les experts ; tête décidée | KV ×1,93/×5,8 ; lot **503/502 Mio**, **24,0 → 30,5 tok/s** (+27 %), PPL **15,8452 → 15,8443** (−0,006 %) ; tête **+10 % PPL** (constante, pas de run courant) | `cargo test placement` (8/8) ; `bash tools/mesure_lot_disque.sh models/Qwen2.5-0.5B-Q8_0.gguf <ids>` | règle générique + KV **faits** ; tête **refusée par décision** ; experts **non mesurés** mais **mesurables** sur le MoE local |
+65:| **A6.2** | *
+… [1957 caractères tronqués]
+  ```
+
