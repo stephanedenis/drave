@@ -854,6 +854,9 @@ class Heuristique:
     def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
         lex = POS_FERME.get(langue, POS_FERME["fr"])
         n = _normaliser(mot).split("'")[0].split("’")[0]
+        # les **nombres** ont une classe (l'audit produit : 45 nombres sans POS)
+        if re.fullmatch(r"\d+(?:[.,]\d+)*", n):
+            return "NUM", False, 0.9
         for classe, mots in lex.items():
             if n in mots:
                 return classe, False, 0.92
@@ -1298,7 +1301,7 @@ class Heuristique:
         mots = self._mots(texte)
         for d, f, t, typ in mots:
             etiquettes.append(Etiquette("mot", typ, t, d, f, self.nom, 0.98, langue=lg, script=script))
-            if typ == "mot":
+            if typ in ("mot", "nombre"):
                 classe, ouvert, conf = self._pos(lg, t)
                 etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, conf,
                                             candidats=[] if not ouvert else [classe.lower()],

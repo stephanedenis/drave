@@ -56061,3 +56061,129 @@ GELÉ POS 0.8532 | F1 0.6511 | tête 0.7709 | exact 231 / 232 | couv 0.9707
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"le gold gelé 602 (F1 65,03 %, POS 84,15 %)\",\"le gold gelé 602 (F1 65,11 %, POS 85,32 %)\")\nt=t.replace(\"**0,6503** sur le  … [1204 caractères tronqués]`
+
+  ```
+doc resynchronisée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 21 files changed, 828 insertions(+), 63 deletions(-)
+COMMIT OK 1
+bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE
+   9e4cde3b..bfd98892  s/v7 -> s/v7
+   9e4cde3b..bfd98892  master -> master
+ven 06 nov 2026 21:34:57 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ P1 produit : POS des nombres et des textes sans syntagme (les 4/46 de l'audit)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _pos\" -A 8 tools/bloc_linguistique.py | head -10; timeout 120 python3 - <<'PY'\nimport sys, json; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor t in (\"Élodie sourit.\",\"Il y a  … [229 caractères tronqués]`
+
+  ```
+854:    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
+855-        lex = POS_FERME.get(langue, POS_FERME["fr"])
+856-        n = _normaliser(mot).split("'")[0].split("’")[0]
+857-        for classe, mots in lex.items():
+858-            if n in mots:
+859-                return classe, False, 0.92
+860-        if n in VERBES.get(langue, VERBES["fr"]):
+861-            return "VERB", True, 0.72
+862-        if n in ADJECTIFS.get(langue, ADJECTIFS["fr"]):
+--
+'Élodie sourit.' -> [('pos', 'NOUN', 'Élodie'), ('syntagme', 'GV', 'Élodie sourit'), ('pos', 'NOUN', 'sourit')]
+'Il y a 12.5 euros.' -> [('pos', 'PRON', 'Il'), ('syntagme', 'GN', 'Il y'), ('pos', 'PRON', 'y'), ('syntagme', 'GV', 'y'), ('pos', 'PREP', 'a'), ('syntagme', 'GV', 'a'), ('pos', 'NOUN', 'euros'), ('syntagme', 'GV', 'euros')]
+'f37@exemple.fr' -> [('pos', 'NOUN', 'f37'), ('syntagme', 'GV', 'f37@exemple'), ('pos', 'NOUN', 'exemple'), ('pos', 'NOUN', 'fr'), ('syntagme', 'GV', 'fr')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''    def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:\n        lex = POS_FERME.get(langue, POS_FERME[\"fr … [1130 caractères tronqués]`
+
+  ```
+NUM ajouté
+syntaxe OK
+POS 0.85 | F1 0.6482 | exact 235 / 236
+[('Il', 'PRON'), ('y', 'PRON'), ('a', 'PREP'), ('euros', 'NOUN'), ('en', 'PREP')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"nombre\\|isdigit\" tools/bloc_linguistique.py | head -6; timeout 60 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nprint(bl.Heuristique()._mots(\"Il y a 12.5 euros en 2024.\"))\n … [57 caractères tronqués]`
+
+  ```
+700:    if terme == "." and 0 < i < n - 1 and texte[i - 1].isdigit() and texte[i + 1].isdigit():
+705:        if avant.isdigit() and len(avant) <= 3:
+711:        if p < n and (texte[p].islower() or texte[p].isdigit()):
+729:                return not (suivant.islower() or suivant.isdigit())
+737:                return not (suivant.isalpha() or suivant.isdigit())
+826:            elif t[0].isdigit():
+[(0, 2, 'Il', 'mot'), (3, 4, 'y', 'mot'), (5, 6, 'a', 'mot'), (7, 9, '12', 'nombre'), (9, 10, '.', 'ponctuation'), (10, 11, '5', 'nombre'), (12, 17, 'euros', 'mot'), (18, 20, 'en', 'mot'), (21, 25, '2024', 'nombre'), (25, 26, '.', 'ponctuation')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'typ == \"mot\":' tools/bloc_linguistique.py | head -3; sed -n \"$(grep -n 'for d, f, t, typ in h._mots(texte)' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+4p\" tools/bloc_linguistique.py; grep -n \"for d, f, t, typ  … [121 caractères tronqués]`
+
+  ```
+1304:            if typ == "mot":
+1618:            if typ == "mot":
+        for d, f, t, typ in h._mots(texte):
+            if typ == "mot":
+                classe, _, _ = h._pos(lg, t)
+                # le contrat rend **toutes** les classes, fermées comprises : sinon la fusion
+                # avec l'heuristique perd les DET/PREP/PRON/CONJ/AUX/NUM (POS cascade 0,7465).
+1302:        for d, f, t, typ in mots:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1300,1320p' tools/bloc_linguistique.py", "description": "Voir la boucle POS de l'analyseur"}`
+
+  ```
+# 2. mot + POS fermées / ouvertes
+        mots = self._mots(texte)
+        for d, f, t, typ in mots:
+            etiquettes.append(Etiquette("mot", typ, t, d, f, self.nom, 0.98, langue=lg, script=script))
+            if typ == "mot":
+                classe, ouvert, conf = self._pos(lg, t)
+                etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, conf,
+                                            candidats=[] if not ouvert else [classe.lower()],
+                                            langue=lg, script=script, meta={"ouvert": ouvert}))
+                if ouvert:
+                    unites.append(Span(d, f))
+                # 3. morphème (candidat, basse confiance)
+                for genre, md, mf, aff in self._morphemes(t):
+                    etiquettes.append(Etiquette("morphème", genre, aff, d + md, d + mf,
+                                                self.nom, 0.32, candidats=[genre],
+                                                langue=lg, script=script))
+
+        # 3 bis. le contexte tranche les suffixes ambigus : un mot après DET/PRÉP/ADJ est un
+        # nom (« brother », « chair » ne sont pas des verbes) — A14 : 176 VERB gold en NOUN.
+        po
+… [106 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''            if typ == \"mot\":\n                classe, ouvert, conf = self._pos(lg, t)\n                etiquettes.appen … [947 caractères tronqués]`
+
+  ```
+POS des nombres
+syntaxe OK
+POS 0.85 | F1 0.6482 | exact 235 / 236
+[('Il', 'PRON'), ('y', 'PRON'), ('a', 'PREP'), ('12', 'NUM'), ('5', 'NUM'), ('euros', 'NOUN'), ('en', 'PREP'), ('2024', 'NUM')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après NUM", "timeoutMs": 1900000}`
+
+  ```
+183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pos-nombres.md <<'MD'\n# B13 — les nombres ont une POS : 45 tokens réparés, zéro perte\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Le P1-6 de l'audit produit** :  … [3927 caractères tronqués]`
+
+  ```
+fiche + JSON
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+     · compteurs : en-cours.md dit 788 JSON, le disque en a 789
+     git add docs/pilotage/en-cours.md
+COMMIT OK 1
+bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 21:40:42 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (**NUM**) : 45 tokens réparés |\",\n   … [1656 caractères tronqués]`

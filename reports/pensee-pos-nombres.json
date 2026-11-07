@@ -1,0 +1,22 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "regle": "d+([.,]d+)* → NUM, confiance 0,90",
+ "avant": "45 nombres sans POS (audit)",
+ "apres": "NUM pour les tokens numériques",
+ "gold": {
+  "pos": 0.85,
+  "f1": 0.6482,
+  "attachement": "235/236",
+  "autotest": "183/183"
+ },
+ "non_repare": [
+  "12.5 tokenisé 12 . 5",
+  "ponctuation sans POS",
+  "a avoir/préposition"
+ ],
+ "limites": [
+  "gold n'a que 2 NUM",
+  "NUM hors POS_FERME"
+ ]
+}

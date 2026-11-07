@@ -1419,3 +1419,365 @@ la fenê
 … [2572 caractères tronqués]
   ```
 
+- **bash** `{"command": "ls reports/pensee-*.json 2>/dev/null | tail -10; echo '--- exemple'; python3 -c \"\nimport json,pathlib\nfor p in sorted(pathlib.Path('reports').glob('pensee-*.json'))[-2:]:\n    print('###',p)\n    d=json.loads(p.read_text())\n    print(type(d).__name__, list(d)[:20] if isinstance(d,di … [133 caractères tronqués]`
+
+  ```
+reports/pensee-v11.json
+reports/pensee-v12.json
+reports/pensee-v9.json
+reports/pensee-variance.json
+reports/pensee-verbe-gv.json
+reports/pensee-verite.json
+reports/pensee-votante3.json
+reports/pensee-votante.json
+reports/pensee-vote.json
+reports/pensee-vrais-absents.json
+--- exemple
+### reports/pensee-vote.json
+dict ['date', 'ligne', 'portes', 'looks', 'erreurs', 'cause', 'limites']
+{"date": "2026-11-02", "ligne": "B13", "portes": "84/84", "looks": {"3": {"but0": 0, "but1": 20}, "5": {"but0": 0, "but1": 20}, "9": {"but0": 0, "but1": 19}}, "erreurs": {"3": 0.028, "5": 0.009, "9": 0.001}, "cause": "cycle (3,0)<->(4,0)", "limites": ["un seul tirage", "toy"]}
+### reports/pensee-vrais-absents.json
+dict ['date', 'ligne', 'portes', 'phrases_reelles', 'liens', 'absents_mesures', 'absents_reels', 'limites']
+{"date": "2026-11-02", "ligne": "B13", "portes": "140/140", "phrases_reelles": 432, "liens": 116, "absents_mesures": 0, "absents_reels": 5, "limites": ["le coref n'est pas annoté pour les absents", "5 phrases", "heuristique seule"]}
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' docs/methode/portes.md", "description": "Lire la méthode des portes"}`
+
+  ```
+# Les portes : lancer, lire le verdict, ne pas se tromper de rouge
+
+> Document de tâche, chargé depuis [`AGENTS.md`](../../AGENTS.md). À lire **avant de lancer ou de lire les portes**.
+
+## La commande
+
+```bash
+bash tools/toutes-les-portes.sh
+```
+
+Elle lance **toutes** les `tools/porte-*.sh`, séquentiellement, **sans s'arrêter à la première rouge** (on veut le
+[tableau](../theorie/glossaire/entrees/tableau.md), pas la première tuile), et borne **chaque** [porte](../theorie/glossaire/entrees/porte.md) à `DELAI=1800` s. Durée observée d'une passe complète :
+**1 h 30 – 2 h** sur Hauru (**83 portes** ; certaines entraînent de petits modèles, d'autres utilisent les [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md) ;
+`porte-deepseek` est **hors réseau** et rapide). La dernière passe complète à **82 portes** (03/11 11 h 30, **machine au repos**, **1 h 48**) a donné
+**80 vertes, 2 rouges** (les 2 connues : `indice`, `melange`) ;
+`porte-reparti-moteur` (ré-étalonnée à 8,7434) et `porte-homeostasie` (auto-générée) sont **vertes** ;
+la liste et le diagnostic sont dans
+[`references-non-regression.md`](../pilotage/references-non-regression.md). `porte-deepseek` est **
+… [3931 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/porte-produit.sh", "description": "Lire une porte récente comme modèle de style"}`
+
+  ```
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit ✅ "analyser $langue : JSON valide, étiquettes et syntagmes"
+  else
+    dit ❌ "analyser $langue : JSON invalide 
+… [1844 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4073 (bash: date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2ac/propre512-8k.pt --device cuda; echo "EXIT=$?"; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4073"}`
+
+  ```
+21:32:07
+{"fichier": "propre512-8k.pt", "params": 34301224, "val": 8.0225, "test": 8.0126, "litterature": 18.5021, "litterature_propre": 18.8906, "anglais": 43.2434, "wikitext2": 47.3566, "permute": 1404.2994}
+EXIT=0
+21:32:28
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sed -n '40,60p' reports/rapport-file-taches.md; echo '...'; sed -n '125,145p' reports/rapport-file-taches.md; echo '...'; sed -n '185,200p' reports/rapport-file-taches.md", "description": "Lire les constats A23 sur N2"}`
+
+  ```
+| T05 | PRODUIT | Écrire la doc d'usage docs/produit/ : commandes, exemples, limites, codes de sortie | docs/produit/ (neuf) ; tools/drave.py | produit v0 (62dad657) | aucun | python3 tools/drave.py --help ; python3 tools/drave.py analyser "Le chat dort sur le toit." ; python3 tools/drave.py evaluer ; python3 tools/drave.py rejouer "Le chat dort." ; python3 tools/verifier_liens.py | P0 |
+| T06 | PILOTAGE | Mettre l'état B13 à jour : 222/222, T132/T133 verts, 17 spans, passe du 06/11, prochaine action | docs/pilotage/en-cours.md, roadmap.md, chantiers.md, plan-travail.md | T03, T05 | un seul écrivain (agent principal) | python3 tools/revue_documentation.py ; python3 tools/verifie_en_cours.py ; python3 tools/taille_documents.py | P0 |
+| T07 | PILOTAGE | Références de non-régression : 84 portes, ligne porte-produit, 4 rouges nommées (indice, melange, sessions, bloc-linguistique), lecteur vert | docs/pilotage/references-non-regression.md | T01 | aucun | ls tools/porte-*.sh ; bash tools/porte-produit.sh ; bash tools/porte-sessions.sh ; bash tools/porte-bloc-linguistique.sh | P1 |
+| T08 | DOC | Corriger le double ## 9 de plan-travail.md (lignes 163 et 403) ; corriger le commentaire « 81 
+… [7717 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"N2\\|n2\" docs/pilotage/references-non-regression.md | head -20; echo '---'; sed -n '1,40p' docs/pilotage/references-non-regression.md", "description": "Vérifier les rouges tolérées et N2"}`
+
+  ```
+19:> `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
+28:> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
+33:> (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-ocr` (48 s) était verte.
+---
+# Références de non-régression
+
+> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
+
+> **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+> 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
+> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
+> échouait sur une ancre du banc pilote (« < 2,5 ») que la réécriture de la roadmap du 04/11
+> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+> signale les heartbeats périmés du hub et de `e181ce02` au moment de la passe — le hub l'a rafraîchi
+> à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
+> `hom
+… [1606 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"pensee-\\*\\|pensee-\" tools/*.py docs/methode/*.md 2>/dev/null | head -20; echo '--- corpus propre header'; sed -n '1,50p' tools/corpus_propre.py", "description": "Chercher le validateur des pensée et l'origine du corpus propre"}`
+
+  ```
+tools/pas_de_pensee_contracte.py:43:    ap.add_argument("--sortie", default="reports/pas-de-pensee-contracte.json")
+tools/pas_de_pensee_mlp.py:29:    ap.add_argument("--sortie", default="reports/pas-de-pensee-mlp.json")
+tools/pas_de_pensee_recurrent.py:45:    ap.add_argument("--sortie", default="reports/pas-de-pensee-recurrent.json")
+tools/pas_latent.py:6:     rien** ✗✓ : ce n'est pas une question d'échelle (`rapport-pensee-silencieuse.md` § 2) ;
+tools/pensee_multilingue.py:71:    ap.add_argument("--sortie", default="reports/pensee-multilingue.json")
+tools/pensee_multilingue.py:72:    ap.add_argument("--etats", default="reports/pensee-multilingue-etats.npz")
+tools/pensee_silencieuse.py:166:    travail = pathlib.Path(tempfile.mkdtemp(prefix="pensee-"))
+tools/pont_abstrait.py:6:`rapport-pensee-silencieuse.md` § 2 ✓). C'est un **mode de fonctionnement différent** ✓ : il faut un
+--- corpus propre header
+#!/usr/bin/env python3
+"""corpus_propre.py — un corpus sans répétition, et un split qui ne fuit pas.
+
+POURQUOI. N2.d a mesuré que **32,8 %** des fenêtres du protocole de validation
+apparaissent **verbatim** dans l'entraînement : le corpus empile des passages qui se
+recopient (127 blocs 
+… [1850 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"rope2048-20k\\|20 000\\|2,4953\\|2.4953\" reports/rapport-n2-r12-2048.md reports/rapport-n2-fenetre.md 2>/dev/null | head -20; echo '--- files'; grep -n \"Fichiers\" -A 15 reports/rapport-n2-r12-2048.md", "description": "Relier le checkpoint récent à sa fiche"}`
+
+  ```
+reports/rapport-n2-r12-2048.md:9:> à 128 octets, 2,4383 contre 2,5429 à 4 000). À **pas constants** (20 000), la même
+reports/rapport-n2-r12-2048.md:21:compute** (la même recette à 20 000 pas).
+reports/rapport-n2-r12-2048.md:27:| fenêtre 256 | 128 | 20 000 | 20,5 Mo | `base-wiki-45m` |
+reports/rapport-n2-r12-2048.md:31:| **fenêtre 1 024, 20 k pas** | 1 024 | 20 000 | 164 Mo | `base-wiki-45m` (puis suite) |
+reports/rapport-n2-r12-2048.md:43:| 256 (20 000 pas) | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |
+reports/rapport-n2-r12-2048.md:59:Même recette (RoPE, 1 024), mais **20 000 pas** — donc **8× plus d'octets** que le run à
+reports/rapport-n2-r12-2048.md:64:| fenêtre 256, 20 000 pas | 20,5 Mo | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |
+reports/rapport-n2-r12-2048.md:65:| **fenêtre 1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |
+reports/rapport-n2-r12-2048.md:70:(20 000 pas, fenêtre 256, **20,5 Mo**) contre celui-ci (20 000 pas, fenêtre 1 024, **164 Mo**) :
+reports/rapport-n2-r12-2048.md:139:  (20 000 / 5 000 / 2 500 / 1 250) : c'est précisément ce que le § 2 mesure, mais chaque point de
+reports/rapport-n2-r12-2048.md:144:- **L
+… [1743 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | wc -l; echo '--- checkpoints'; find work -name '*.pt' | wc -l; du -sh work/n2ac work/n2h work/n2j work/n2k work/n2w work/n2d work/n2i 2>/dev/null; echo '--- total .pt'; find work -name '*.pt' -printf '%s\\n' | awk '{s+=$1} END {printf \"%.2f Go\\n\", s/2^30}'; echo … [116 caractères tronqués]`
+
+  ```
+84
+--- checkpoints
+123
+7,7G	work/n2ac
+1,5G	work/n2h
+2,8G	work/n2j
+1,9G	work/n2k
+1,3G	work/n2w
+633M	work/n2d
+316M	work/n2i
+--- total .pt
+9.52 Go
+--- json metadata
+67
+  ```
+
+- **bash** `{"command": "cat reports/corpus-propre.json 2>/dev/null | head -40; echo '--- sha corpus'; sha256sum data/corpus_propre/val.txt data/corpus_propre/test.txt data/corpus_propre/train.txt 2>/dev/null", "description": "Lire le manifeste du corpus propre"}`
+
+  ```
+{
+ "source": "data/corpus_fr.txt",
+ "source_octets": 4633889,
+ "source_sha256": "1e39f1a8aeac403d7b7ff5adc598fd8dd14233287707d5849a37c3e667f145d4",
+ "methode": {
+  "deduplication": "shingles de Rabin-Karp (base 257, mod 2^61−1), première occurrence gardée, runs gardés ≥ 64 octets, joints par \\n",
+  "fenetre_shingle": 96,
+  "chunk_octets": 8192,
+  "split": "un chunk sur 20 en validation, le suivant sur 20 en test"
+ },
+ "propre_octets": 3605306,
+ "deduplication": {
+  "retires": 1029993,
+  "runs": 1411,
+  "plus_long_run": 540086,
+  "retires_pct": 22.23
+ },
+ "train_octets": 3244858,
+ "val_octets": 180224,
+ "test_octets": 180224,
+ "chunks": {
+  "train": 397,
+  "val": 22,
+  "test": 22
+ },
+ "sha256": {
+  "train": "8a1856022ed5eb58e773652fb2fcba827cb9d30958a39c3f2cf05c69efb73a71",
+  "val": "d9ffb0bb49d5fe088062d411e0b1b7b1d373c2d602e2c6f4556c93a101819f57",
+  "test": "566d467e3c7ecdbd280fbc6766627adc6d8d37560c04a69d6b8c554be6983531"
+ },
+ "contamination": {
+  "validation": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+  },
+  "test": {
+   "fenetres": 2814,
+   "contaminees": 0,
+   "taux": 0.0
+--- sha corpus
+d9ffb0bb49d5fe088062d411e0b1b7b1d373c2d602e2c6f4556c93a101819f57  data/co
+… [208 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '145,195p' reports/rapport-n2-r12-2048.md", "description": "Lire la section 2048 20k de la fiche R12"}`
+
+  ```
+l'effet isolé de la fenêtre (les octets ont été multipliés par 8).
+- **La validation interne et les validations d'évaluation** ne sont pas le même texte ; les
+  écarts inférieurs à 0,05 ne sont pas interprétables.
+**Le coût d'inférence ne quadruple pas.** Mesuré à batch 8 (`work/n2ac/cout_fenetre.py`),
+le débit passe de **22 306** octets/s (fenêtre 256) à **22 730** (512), **21 156** (1 024) et
+**19 405** (2 048) : l'attention quadruple à chaque doublement, mais le FFN **domine** à 34,3 M,
+donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette
+taille — elle ne le resterait pas à plus grande échelle.
+
+## 5. Le complément 2 048, mesuré en deux moitiés (10 000 puis 20 000 pas)
+
+Le reboot du 03/11 et la contention du 04/11 avaient interrompu ce complément deux fois ; il a
+été relancé **en deux segments de 10 000 pas** (un point de contrôle par segment) et mesuré :
+
+| run (wiki_fr, RoPE, init `base-wiki-45m`) | octets vus | 128 | 512 | 1 000 | 2 000 | 4 000 |
+|---|---:|---:|---:|---:|---:|---:|
+| fenêtre 1 024, 2 500 pas | 20,5 Mo | 3,3878 | 3,1098 | 2,9950 | 2,9449 | 2,9108 |
+| **fenêtre 2 048, 10 000 pas** | **164 Mo** | 3,0466 | 2,7581 | 2,6501 | 2
+… [1760 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -30 work/n2ac/rope2048-20k.log; echo '...'; tail -50 work/n2ac/rope2048-20k.log; echo '--- stat'; stat -c '%y %s %n' work/n2ac/rope2048-20k.pt work/n2ac/rope2048-20k.pt.json work/n2ac/rope2048-20k.log work/n2ac/rope2048-10k.pt", "description": "Lire le log du run 2048 20k et ses da … [5 caractères tronqués]`
+
+  ```
+init : work/n2ac/rope2048-10k.pt
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/n2ac/entrainer_rope.py:89: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  pertes.append(float(perte))
+pas      1 · perte 1.0549 · PPL val 2.515 · 2 s
+pas     50 · perte 1.0010 · PPL val 2.500 · 52 s
+pas    100 · perte 1.0009 · PPL val 2.507 · 103 s
+pas    150 · perte 0.9622 · PPL val 2.507 · 154 s
+pas    200 · perte 1.0191 · PPL val 2.501 · 205 s
+pas    250 · perte 0.9889 · PPL val 2.494 · 256 s
+pas    300 · perte 0.9273 · PPL val 2.502 · 307 s
+pas    350 · perte 0.9944 · PPL val 2.497 · 358 s
+pas    400 · perte 0.9712 · PPL val 2.498 · 409 s
+pas    450 · perte 1.0159 · PPL val 2.492 · 460 s
+pas    500 · perte 0.9825 · PPL val 2.496 · 511 s
+pas    550 · perte 1.0514 · PPL val 2.493 · 562 s
+pas    600 · perte 0.9751 · PPL val 2.492 · 614 s
+pas    650 · perte 0.9593 · PPL val 2.502 · 665 s
+pas    700 · perte 0.9692 · PPL val 2.494 · 716 s
+pas    750 · perte 1.1020 · PPL val 2.500 · 767 s
+pas    800 · perte 1.0
+… [2796 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la data/wiki_fr/propre/val.txt data/wiki_fr/propre/val.canal 2>&1; date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope2048-20k.pt --rope --longueurs 128,512,1000,2000,4000 --val data/wiki_fr/ … [137 caractères tronqués]`
+
+  ```
+started background job bash-4123
+  ```
+
+- **bash** `{"command": "set -u; test -d /tmp/propre_test && { echo '/tmp/propre_test existe déjà — abandon'; exit 3; }; mkdir -p /tmp/propre_test && cp data/corpus_propre/test.txt /tmp/propre_test/val.txt && cp data/corpus_propre/test.canal /tmp/propre_test/val.canal && echo 'temp prêt'; date '+%H:%M:%S'; PYTH … [422 caractères tronqués]`
+
+  ```
+started background job bash-4124
+  ```
+
+- **job_output** `{"job_id": "bash-4123"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 10330112  1 nov 18:35 data/wiki_fr/propre/val.canal
+-rw-r--r--. 1 stephane stephane 10330112  1 nov 11:54 data/wiki_fr/propre/val.txt
+21:37:42
+  L128 : 2.9121
+  L512 : 2.636
+  L1000 : 2.5375
+  L2000 : 2.4779
+  L4000 : 2.4383
+{"fichier": "rope2048-20k.pt", "val": "data/wiki_fr/propre", "positions": "rope", "L128": 2.9121, "L512": 2.636, "L1000": 2.5375, "L2000": 2.4779, "L4000": 2.4383}
+EXIT=0
+21:38:13
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-4124"}`
+
+  ```
+temp prêt
+21:37:43
+  L128 : 3.0649
+  L512 : 2.8875
+  L1024 : 2.8566
+{"fichier": "propre512-8k.pt", "val": "/tmp/propre_test", "positions": "rope", "L128": 3.0649, "L512": 2.8875, "L1024": 2.8566}
+EXIT=0
+21:37:51
+temp supprimé
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4124 (bash: set -u; test -d /tmp/propre_test && { echo '/tmp/propre_test existe déjà — abandon'; exit 3; }; mkdir -p /tmp/propre_test && cp data/corpus_propre/test.txt /tmp/propre_test/val.txt && cp data/corpus_propre/test.canal /tmp/propre_test/val.canal && echo 'temp prêt'; date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=1 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,512,1024 --val /tmp/propre_test; code=$?; echo "EXIT=$code"; date '+%H:%M:%S'; test -d /tmp/propre_test && rm -rf /tmp/propre_test && echo 'temp supprimé'; exit $code) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+background job bash-4123 (bash: ls -la data/wiki_fr/propre/val.txt data/wiki_fr/propre/val.canal 2>&1; date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/rope2048-20k.pt --rope --longueurs 128,512,1000,2000,4000 --val data/wiki_fr/propre; echo "EXIT=$?"; date '+%H:%M:%S') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "date '+%H:%M:%S'; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python - <<'PY'\nimport json, pathlib, sys, torch\nsys.path.insert(0, '.')\nsys.path.insert(0, 'work/n2j')\nfrom work.n2ac.rope_model import charge_rope\nfrom tools.eval_n2_propre import charge … [790 caractères tronqués]`
+
+  ```
+21:41:02
+{"checkpoint": "propre512-8k.pt", "val_L1024_a": 2.7856, "val_L1024_b": 2.7856, "identique": true, "permute_L1024": 1692.3919}
+EXIT=0
+21:41:15
+  ```
+
+- **bash** `{"command": "echo '--- corpus suivi ?'; git ls-files data/corpus_propre/ | head; echo '--- HEAD'; git rev-parse --short HEAD; echo '--- fiches N2'; ls reports/rapport-n2-*.md | wc -l; echo '--- rapports total'; ls reports/rapport-*.md | wc -l; echo '--- json total'; ls reports/*.json | wc -l; echo ' … [105 caractères tronqués]`
+
+  ```
+--- corpus suivi ?
+--- HEAD
+bfd98892
+--- fiches N2
+40
+--- rapports total
+683
+--- json total
+789
+--- date du jour
+2026-11-06
+  ```
+

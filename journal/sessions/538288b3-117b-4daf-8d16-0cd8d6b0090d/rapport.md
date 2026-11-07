@@ -7,12 +7,12 @@
 | Identifiant | `538288b3-117b-4daf-8d16-0cd8d6b0090d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 47 |
-| Appels d'outils | 82 |
+| Messages | 56 |
+| Appels d'outils | 99 |
 | Fichiers touchés | 0 |
-| Commandes | 50 |
+| Commandes | 65 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier A** (le  … [1650 caractères tronqués]
 
-*82 appels d'outils.* Actions notables :
+*99 appels d'outils.* Actions notables :
 
 - bash — Show repo root, branch, recent commits
 - glob
@@ -41,7 +41,7 @@
 - bash — Extract A2.6 mentions with context from A23 report
 - bash — List verification tools and placement tests
 - bash — Run backlog verification read-only
-- … et 40 autres
+- … et 55 autres
 
 **Synthèse produite :**
 
@@ -97,7 +97,7 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** Run placement unit tests in /tmp target
 - **T1** Locate local GGUF models
 - **T1** Inspect porte-flux script
-- … et 10 autres
+- … et 25 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -206,6 +206,14 @@ Le code compile et les 8 tests de placement passent ; je lance `porte-flux` en r
 - **T1** `reports/rapport-c9-echange-experts.md:73:| routage de l'autre **décalé** d'une couche | 37,9628 (×1,02) | — | — |`
 - **T1** `reports/rapport-c9-echange-experts.md:80:* **tout** routage différent à la dernière couche fait bouger la perplexité de ±20 à 50 %, y`
 - **T1** `reports/rapport-c9-echange-experts.md:86:* le contrôle **décalé** (×1,02) montre qu'un routage cohérent mais mal apparié est inerte — c'est`
+- **T1** `bb67dd59 ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1`
+- **T1** `015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %`
+- **T1** `5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
+- **T1** `e2258fb9 DOC PRODUIT — LES CHIFFRES À JOUR : POS 83,83 %, F1 64,74 %, ATTACHEMENT 235/236 (98,33 %), 3 SPANS ; SORTIE D'EVALUER REJOUÉE`
+- **T1** `reports/rapport-partition-integree.md:8:> exact 235/236, POS 85,00 %** — les mesures de la base, **sans déduplication silencieuse**. Le mode`
+- **T1** `reports/rapport-partition-integree.md:21:| **`alternative`** (défaut) | 239 | **0,6482** | **235/236** | +10,4 % |`
+- **T1** `bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE`
+- **T1** `# S'il est faux, les effets mesurés (±20 %) baignent dans un artefact — et c'est arrivé : la`
 
 ## 5. Erreurs rencontrées
 

@@ -1492,3 +1492,377 @@ tools/llm/prompts_publics.jsonl:1:{"id": "udhr-01-fra", "system": "Tu es un trad
 … [22618 caractères tronqués]
   ```
 
+- **bash** `{"command": "sed -n '1,70p' tools/llm/mesure.py; echo \"===\"; grep -n \"def main\\|argparse\\|__main__\\|chrF\\|chrf\" tools/llm/mesure.py | head -20; echo \"===\"; sed -n '1,45p' tools/llm/prompts_publics.py", "description": "Examine l'outil de mesure de traduction"}`
+
+  ```
+#!/usr/bin/env python3
+"""mesure.py — ce que le banc DeepSeek coûte et ce qu'il rend.
+
+Deux mesures, sans dépendance :
+- **coût** : tokens d'entrée/sortie, latence, taux de cache ;
+- **qualité des traductions** : chrF (n-grammes de caractères, β=2) contre la
+  traduction humaine officielle de l'UDHR, avec le **plancher** source→référence
+  (le même chrF sans traduction). On ne prétend pas mesurer « la compréhension » :
+  on mesure une reproduction de traduction humaine sur cinq articles publics.
+
+Les entrées `dry_run` sont ignorées : elles ne sont pas des sorties du professeur.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import pathlib
+from collections import Counter, defaultdict
+
+
+def chrf(hyp: str, ref: str, n_max: int = 6, beta: float = 2.0) -> float:
+    from collections import Counter
+    hyp = " ".join(hyp.split())
+    ref = " ".join(ref.split())
+    if not hyp or not ref:
+        return 0.0
+    prec, rec = [], []
+    for n in range(1, n_max + 1):
+        H = [hyp[i:i + n] for i in range(max(0, len(hyp) - n + 1))]
+        R = [ref[i:i + n] for i in range(max(0, len(ref) - n + 1))]
+        ch, cr = Counter(H), Counter(R)
+        inter = sum((ch & cr).val
+… [4976 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests 2>&1 | tail -15", "description": "Lance les 56 tests du banc S", "timeoutMs": 180000}`
+
+  ```
+.  127.0.0.1 · "GET /api/paragraphes HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider-paragraphe HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/paragraphes HTTP/1.1" 200 -
+.  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+.  127.0.0.1 · "GET / HTTP/1.1" 200 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 400 -
+.  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "POST /api/valider HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/phrases HTTP/1.1" 200 -
+  127.0.0.1 · "GET /api/export HTTP/1.1" 200 -
+.
+----------------------------------------------------------------------
+Ran 56 tests in 4.343s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle d'intégrité après les tests (aucune écriture attendue)
+
+- **bash** `{"command": "cd tools/structures && wc -l donnees/paragraphes-validations.jsonl && git status --porcelain && git diff --stat", "description": "Vérifie si les tests ont écrit dans les données"}`
+
+  ```
+19 donnees/paragraphes-validations.jsonl
+ M donnees/paragraphes-validations.jsonl
+ donnees/paragraphes-validations.jsonl | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+  ```
+
+- **bash** `{"command": "grep -n \"TemporaryDirectory\\|tempfile\\|dossier\\|donnees\\|paragraphes-validations\" tools/structures/tests/test_serveur.py | head -30", "description": "Vérifie le répertoire des tests serveur"}`
+
+  ```
+5:import tempfile
+18:        self.dossier = pathlib.Path(tempfile.mkdtemp())
+19:        shutil.copy(RACINE / "donnees" / "phrases.json", self.dossier / "phrases.json")
+20:        if (RACINE / "donnees" / "paragraphes.json").exists():
+21:            shutil.copy(RACINE / "donnees" / "paragraphes.json", self.dossier / "paragraphes.json")
+23:        self.serveur.donnees = serveur.Donnees(self.dossier)
+32:        shutil.rmtree(self.dossier, ignore_errors=True)
+112:            self.assertTrue((b.dossier / "paragraphes-validations.jsonl").exists())
+154:            self.assertTrue((b.dossier / "llm.jsonl").exists())
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture des 9 paragraphes et de leurs référents enregistrés
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/structures/donnees/paragraphes.json'))\nrows=[json.loads(l) for l in open('tools/structures/donnees/paragraphes-validations.jsonl',encoding='utf-8') if l.strip()]\nfor p in d['paragraphes']:\n    print('='*80)\n    print(p['id'],'| … [374 caractères tronqués]`
+
+  ```
+================================================================================
+a001 | antécédent: Alice
+CIBLE: Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois elle se grondait si fort que les larmes lui en venaient aux yeux.
+CTX  : Allons, à quoi bon pleurer ainsi, se dit Alice vivement.
+EN   : She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people.
+   a001-c1 resolu | refs: {'Elle': 'Alice', 'se': 'Alice', 'elle': 'Alice', 'lui': 'Alice', 'en': 'Alice'}
+   a001-c2 resolu | refs: {'Elle': 'Alice', 'se': 'Alice', 'elle': 'Alice', 'lui': 'Alice', 'en': 'Alice'}
+================================================================================
+a002 | antécédent: Alice
+CIBLE: Elle aperçut alors une petite boîte en verre qui était sous la table, l'ouvrit et y trouva un tout petit gâteau sur lequel les mots "MANGEZ-MOI" étai
+… [5347 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification de l'export de la banque et des 8 derniers verdicts
+
+- **bash** `{"command": "ls -la data/structures/ 2>/dev/null; echo \"---\"; wc -l data/structures/banque-validee.jsonl 2>/dev/null; sha256sum data/structures/banque-validee.jsonl 2>/dev/null; echo \"---\"; cat reports/s-banque-validee.json 2>/dev/null | head -30; echo \"---\"; cat tools/structures/donnees/llm.j … [73 caractères tronqués]`
+
+  ```
+total 136
+drwxr-xr-x. 1 stephane stephane   264  2 nov 16:27 .
+drwxr-xr-x. 1 stephane stephane  2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane 27387  2 nov 20:36 banque.jsonl
+-rw-r--r--. 1 stephane stephane   395  2 nov 20:36 banque-manifest.json
+-rw-r--r--. 1 stephane stephane  4857  2 nov 16:27 banque-reference.jsonl
+-rw-r--r--. 1 stephane stephane   388  2 nov 16:27 banque-reference-manifest.json
+-rw-r--r--. 1 stephane stephane 89016  4 nov 08:42 banque-validee.jsonl
+-rw-r--r--. 1 stephane stephane   411  4 nov 08:42 banque-validee-manifest.json
+---
+84 data/structures/banque-validee.jsonl
+3ca1ac2002e225f69d689a929ab6bb9c6c8b6a06c6b3895af71e1406830c79f2  data/structures/banque-validee.jsonl
+---
+{
+ "version": 2,
+ "mode": "banque",
+ "date": "2026-11-04T08:42:21",
+ "source": "tools/structures/donnees",
+ "sortie": "data/structures/banque-validee.jsonl",
+ "phrases": 67,
+ "candidats_acceptes": 84,
+ "sha256": "3ca1ac2002e225f69d689a929ab6bb9c6c8b6a06c6b3895af71e1406830c79f2",
+ "note": "verdicts du banc (`resolu`, `compatible`, `double_sens`) ; le dernier verdict d'un candidat gagne ; spans vérifiés."
+}
+---
+{"phrase_id": "c001", "fournisseur": "baseline", "modele": "attachement-le-
+… [581 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nfor r in rows:\n    if r['horodatage'] >= '2026-11-03T16:30':\n        print(r['horodatage'],r['phrase_id'],r['candidat_id'],r['st … [204 caractères tronqués]`
+
+  ```
+2026-11-03T16:39:24 p003 p003-c2 resolu 0 
+2026-11-03T16:40:00 p003 p003-c2 exclu 0 
+2026-11-03T16:40:38 c010 c010-c1 resolu 0 
+2026-11-03T16:43:06 c066 c066-c1 exclu 0 
+2026-11-03T16:44:55 c066 c066-c2 resolu 0 
+2026-11-03T16:45:08 c066 c066-c3 compatible 0 
+2026-11-03T16:46:37 c067 c067-c1 exclu 0 
+2026-11-03T16:46:42 c067 c067-c2 exclu 0 
+--- 8 derniers ids phrases ['p003', 'p003', 'c010', 'c066', 'c066', 'c066', 'c067', 'c067']
+total 150
+  ```
+
+### 🤖 Assistant
+
+⏵ Lecture ciblée des fiches analyseur et arbre/référents
+
+- **bash** `{"command": "sed -n '1,35p' reports/rapport-s-analyseur.md; echo \"======\"; sed -n '1,40p' reports/rapport-s-arbre-referents.md; echo \"======\"; sed -n '1,25p' reports/rapport-s-fait-divers.md", "description": "Lis les verdicts des fiches analyseur/arbre/fait divers"}`
+
+  ```
+# S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur les **7 phrases** du banc,
+> l'analyseur heuristique retrouve la **séquence de types 7/7** et couvre **93,9 %** des octets des
+> structures écrites à la main (94–97 % par phrase, sauf une à 42 % avant correction). Le reste
+> est l'**espace de tête** des segments (convention du banc) et trois cas corrigés en chemin.
+
+## Le dispositif
+
+- Structures de référence : les **7 phrases** du banc (`donnees/phrases.json`), une structure
+  écrite à la main chacune (la première lecture).
+- Analyseur : [`tools/structures/generateur.py`](../tools/structures/generateur.py) — lexique de
+  mots grammaticaux, frontières de proposition, rôles par préposition.
+- Mesure : la **séquence de types** (GN, GV, GP, REL, SUB) et la **couverture** des octets de la
+  référence par les segments générés **du même type**.
+
+## Ce qui est mesuré
+
+| phrase | types | couverture | segments (réf / gén) |
+|---|---|---:|---|
+| p001 — « Le chat de la voisine qui dort… » | **OK** | 94 % | 4 / 4 |
+| p002 — « J'ai vu l'homme avec le télescope. » | **OK** | 94 % 
+… [5255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nfrom tools.jeux.lexique_multilingue import MULTI\nfrom tools.jeux.corpus_multilingue import construire_corpus_multilingue\ncov=MULTI.couverture()\npar=cov['par_langue']\ncor=construire_corpus_multilingue()\nitems=collections.Counter(); forts= … [739 caractères tronqués]`
+
+  ```
+langues couverture 71 fortes 32
+fortes list ['ar', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'hu', 'it', 'ja', 'lv', 'nb', 'nl', 'pl', 'pt', 'ru', 'sl', 'sq', 'sr', 'sv', 'uk', 'vi', 'zh', 'af']
+sans item ['mt', 'ky', 'lo', 'si', 'yo']
+avec item 66 avec fort 62
+top par items [('de', 11), ('en', 11), ('es', 11), ('fr', 11), ('it', 11), ('ja', 11), ('nl', 11), ('pl', 11), ('pt', 11), ('ru', 11)]
+bas [('am', 1), ('km', 1), ('pa', 1), ('so', 1), ('zu', 1), ('kk', 2), ('ne', 2), ('sw', 3), ('ga', 3), ('hi', 4)]
+ar	28	8	4
+bn	20	8	7
+ca	31	8	5
+cs	31	10	7
+da	27	10	7
+de	34	11	7
+el	22	6	4
+en	35	11	7
+eo	32	10	7
+es	33	11	7
+et	25	10	7
+eu	22	8	5
+fa	26	10	7
+fi	32	10	7
+fr	35	11	7
+gl	16	5	2
+he	24	5	2
+hi	16	4	2
+hr	15	5	2
+hu	26	10	7
+id	19	5	2
+is	14	4	2
+it	28	11	7
+ja	31	11	7
+ka	14	4	2
+kk	9	2	0
+ko	27	6	2
+lt	15	5	2
+lv	21	7	4
+mk	19	4	2
+ms	16	5	2
+mt	4	0	0
+nb	28	10	7
+nl	32	11	7
+nn	16	4	2
+pl	30	11	7
+pt	31	11	7
+ro	19	5	2
+ru	34	11	7
+sk	23	6	3
+sl	30	10	7
+sq	21	9	7
+sr	25	10	7
+sv	31	10	7
+sw	11	3	2
+ta	17	4	2
+th	18	6	3
+tr	27	7	3
+uk	32	10	7
+ur	14	4	2
+vi	26	10	7
+zh	32	11	7
+af	20	8	7
+am	4	1	0
+az	15	4	2
+be	23	8	5
+bs	18	4	2
+cy	14	4	2
+ga	12	3	2
+hy	16	5	2
+km	3	1	1
+ky	2	0	0
+lo	1	0	
+… [76 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche exhaustive de la rétro-traduction et des mesures associées
+
+- **bash** `{"command": "grep -rniE \"r[ée]tro[- ]?traduction|retro[- ]?traduction|back[- ]?translation|round[- ]?trip\" --include=\"*.py\" --include=\"*.md\" --include=\"*.json\" --include=\"*.sh\" --include=\"*.js\" --include=\"*.html\" . 2>/dev/null | grep -v \"/archive/\" | grep -v \"journal/sessions\" | he … [75 caractères tronqués]`
+
+  ```
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:15:- **round-trip 300/300** — relire avec sa propre clé rend l'état écrit, au bit près,
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:36:- **à petit k, l'invariant de round-trip CASSE.** k = 8 : **81 des 300 états
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:37:  partagent la clé d'un autre** (pire multiplicité 7) et le round-trip tombe à
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:97:- round-trip : **300/300 au bit près**, y compris à travers le disque. Le magasin
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:118:| round-trip | 300/300 | **240/240 au bit près** |
+./reports/campagne-benefices/027-24-memoire-episodique-c6-ce-qui-marche-et-c.md:154:Sur ce même magasin de **2 048 épisodes** : round-trip **2 048/2 048 au bit près**,
+./reports/rapport-consolidation-c7.md:82:  deux mécanismes sont mesurés séparément (C6 : rappel 96,3 %, round-trip exact), pas côte à côte
+./reports/07/p4.md:427:- **la source fra→eng est elle-même une traduction officielle** ✓✗ : la paire fr
+… [3878 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls reports/ | grep -iE \"traduc|tradu|langue|udhr|retro\" ; echo \"---\"; find reports -maxdepth 2 -iname \"*tradu*\" -o -iname \"*retro*\" -o -iname \"*udhr*\" | head -20; echo \"---\"; ls data/udhr/", "description": "Cherche fiches/JSON de traduction et UDHR"}`
+
+  ```
+carte-24langues-3b.json
+carte-24langues.json
+contamination-udhr-A.json
+contamination-udhr-B.json
+jeux-langues-mesures.json
+pensee-par-langue.json
+rapport-c8-inter-langue.md
+rapport-langues-maitres.md
+rapport-pensee-par-langue.md
+rapport-s-traductions.md
+restitution-udhr-flux.json
+restitution-udhr.json
+toutes-langues
+toutes-langues.md
+traduction-24langues-3b-A.json
+traduction-24langues-3b-B.json
+traduction-24langues-A.json
+traduction-24langues-B.json
+traduction-eurlex-0.5b.json
+traduction-eurlex-14b.json
+traduction-eurlex-1.5b.json
+traduction-eurlex2509-3b.json
+traduction-eurlex2509-7b.json
+traduction-eurlex-3b-fraeng.json
+traduction-eurlex-3b.json
+traduction-eurlex-7b-fraeng.json
+traduction-eurlex-7b.json
+traduction-jw-A.json
+traduction-jw-B.json
+traduction-langues-3b.json
+traduction-langues-7b.json
+traduction-legal-0.5b-6.json
+traduction-legal-1.5b.json
+traduction-legal-3b.json
+traduction-legal-7b.json
+traduction-legal.json
+traduction-litteraire-3b.json
+traduction-litteraire-7b.json
+traduction-onu-3b.json
+traduction-onu6-3b.json
+traduction-onu6-7b.json
+traduction-onu-7b.json
+traduction-pidgin-14b.json
+traduction-pidgin-7b.json
+traduction-presse-3b.json
+traduction-presse-7b.json
+tr
+… [1156 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification d'un éventuel corpus UDHR à 71 langues dans reports
+
+- **bash** `{"command": "sed -n '1,60p' reports/toutes-langues.md; echo \"===\"; ls reports/toutes-langues | head; echo \"===\"; wc -l reports/toutes-langues.md; grep -n \"71\\|456\\|392\" reports/toutes-langues.md | head -20", "description": "Inspecte le rapport toutes-langues"}`
+
+  ```
+# Extension à toutes les langues, puis aux grands corpus
+
+Objectif : passer de **46 langues** à **toutes celles disponibles**, puis aux grands
+corpus multilingues pour obtenir des professeurs plus riches.
+
+Professeur unique : **Qwen2.5-0.5B, couche 10**. Boîte noire : on ne lit de lui que
+la couche à émuler. Aucune rétropropagation : `A` et `B` aléatoires et gelés, seule
+la lecture s'ajuste en forme fermée.
+
+---
+
+## Index des expériences
+
+| # | expérience | date réelle (git) | fichier |
+|---|---|---|---|
+| 001 · 01 | 1. Le périmètre, inventorié | 2026-10-05 23:50 HAE (`1424c5d`) | [001-01-le-perimetre-inventorie.md](toutes-langues/001-01-le-perimetre-inventorie.md) |
+| 002 · 02 | 2. La convention de traçage, unique et vérifiée | 2026-10-05 23:50 HAE (`1424c5d`) | [002-02-la-convention-de-tracage-unique-et-verif.md](toutes-langues/002-02-la-convention-de-tracage-unique-et-verif.md) |
+| 003 · 03 | 3. Le découpage : stratifié par écriture, déduit du texte | 2026-10-05 23:50 HAE (`1424c5d`) | [003-03-le-decoupage-stratifie-par-ecriture-dedu.md](toutes-langues/003-03-le-decoupage-stratifie-par-ecriture-dedu.md) |
+| 004 · 04 | 4. Les cinq phases, chaînées | 2026-10-05 23:50 HAE (`1424c5d
+… [11668 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nfor p in ['reports/traduction-udhr-propre-7b-fraeng.json','reports/traduction-24langues-3b-A.json','reports/carte-24langues.json']:\n    try:\n        d=json.load(open(p))\n        print('='*10,p,type(d).__name__)\n        if isinstance(d,dict): print('cl … [194 caractères tronqués]`
+
+  ```
+========== reports/traduction-udhr-propre-7b-fraeng.json list
+n 1 ex {'paire': 'fra:eng', 'n': 30, 'chrf': 80.00454879409124, 'ic95': [76.3, 83.6], 'plancher_source': 31.577068379460247, 'hasard': 27.139249347650605, 'tronque': 0, 'recopie': 24, 'ratio_longueur': 1.04,
+========== reports/traduction-24langues-3b-A.json list
+n 12 ex {'paire': 'eng:bul', 'n': 40, 'chrf': 46.53022980281709, 'ic95': [44.2, 48.8], 'plancher_source': 4.1348331752632745, 'hasard': 24.43019806240859, 'tronque': 3, 'recopie': 5, 'ratio_longueur': 0.94, '
+========== reports/carte-24langues.json dict
+cles ['langues', 'moyenne_annoncees', 'moyenne_non_annoncees', 'correlation_chrf_plancher']
+  ```
+

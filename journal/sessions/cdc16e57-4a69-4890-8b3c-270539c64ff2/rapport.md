@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 33 |
-| Appels d'outils | 58 |
+| Messages | 38 |
+| Appels d'outils | 67 |
 | Fichiers touchés | 0 |
-| Commandes | 57 |
+| Commandes | 66 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*67 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 44 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
-⏵ Contrôle d'intégrité après les tests (aucune écriture attendue)
+⏵ Vérification d'un éventuel corpus UDHR à 71 langues dans reports
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 17 autres
+- … et 26 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -147,6 +147,22 @@
 - **T1** `phrase) — **fermées en v6**. La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature`
 - **T1** `propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
 - **T1** `(65,5 % contre 9,1 %), les homographes passent à **596/1 184**. **55 tests**.`
+- **T1** `# S — L'analyseur contre les structures écrites à la main : 7/7 séquences, 93,9 % de couverture`
+- **T1** `> l'analyseur heuristique retrouve la **séquence de types 7/7** et couvre **93,9 %** des octets des`
+- **T1** `> structures écrites à la main (94–97 % par phrase, sauf une à 42 % avant correction). Le reste`
+- **T1** `| p001 — « Le chat de la voisine qui dort… » | **OK** | 94 % | 4 / 4 |`
+- **T1** `| p002 — « J'ai vu l'homme avec le télescope. » | **OK** | 94 % | 3 / 3 |`
+- **T1** `| p003 — « La femme a vu l'homme dans le parc. » | **OK** | 91 % | 4 / 4 |`
+- **T1** `| p004 — « Il a couru pour attraper le bus. » | **OK** | 97 % | 2 / 2 |`
+- **T1** `| p005 — « Il a parlé à Marie de son projet. » | **OK** | 94 % | 3 / 3 |`
+- **T1** `| p006 — « Elle a dit qu'elle viendrait hier. » | **OK** | 94 % | 3 / 3 |`
+- **T1** `| p007 — « Le canard est prêt à manger. » | **OK** | 93 % | 3 / 3 |`
+- **T1** `| **global** | **7/7** | **93,9 %** | — |`
+- **T1** `p006 passe de 30 % à 42 %, puis à 94 % avec la correction suivante.`
+- **T1** `2 à 5** — 99 candidats, soit 27,6 %, ont enfin une vraie profondeur.`
+- **T1** `**170 phrases** ; **294 ont au moins un candidat** (79,2 %) et **77 n'en ont aucun** (20,8 %) :`
+- **T1** `./reports/rapport-consolidation-c7.md:82:  deux mécanismes sont mesurés séparément (C6 : rappel 96,3 %, round-trip exact), pas côte à côte`
+- **T1** `./reports/rapport-routeur-confiance.md:21:- Le round-trip M1 **détecte 31 %** des typos (part M2) ; les 69 % restants sont des typos qui`
 
 ## 5. Erreurs rencontrées
 

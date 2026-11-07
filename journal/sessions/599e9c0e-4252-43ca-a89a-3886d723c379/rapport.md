@@ -7,12 +7,12 @@
 | Identifiant | `599e9c0e-4252-43ca-a89a-3886d723c379` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 31 |
-| Appels d'outils | 58 |
+| Messages | 41 |
+| Appels d'outils | 75 |
 | Fichiers touchés | 0 |
-| Commandes | 45 |
+| Commandes | 60 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*75 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -41,7 +41,7 @@
 - bash — Localiser le registre des portes
 - bash — Chercher les usages de eval_n2_propre et porte-n2
 - bash — Lire le registre des portes le plus récent
-- … et 34 autres
+- … et 49 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@ Les deux évaluations sont terminées ; je récupère leurs sorties.
 - **T1** Tableau des métadonnées des checkpoints
 - **T1** Inventaire des fiches N2 (titre, date, verdict)
 - **T1** Mesurer la porte avec le mauvais mètre (absolu)
-- … et 5 autres
+- … et 20 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -182,4 +182,26 @@ Les deux évaluations sont terminées ; je récupère leurs sorties.
 - **T1** `**Chaque doublement des pas vaut ~−0,085 en domaine** (le pas de 7 500 à 30 000, ×4, valait`
 - **T1** `−0,155 ; celui de 30 000 à 60 000, ×2, vaut −0,082) : c'est une loi **géométrique** en pas, et`
 - **T1** `mieux, comme à toutes les tailles de la nuit. À 552 Mo vus, la PPL de queue est à **2,34** et la`
+- **T1** `| T09 | N2 | La porte propre (0,29 manquant à 2,7856) : données ou capacité | reports/n2-*, work/n2ac/, tools/entrainer_native.py, GPU | recette N2 1 024 | aucun externe ; GPU libres (0 %) | python3 t`
+- **T1** `POURQUOI. N2.d a mesuré que **32,8 %** des fenêtres du protocole de validation`
+- **T1** `recopient (127 blocs contigus, jusqu'à 1,8 Ko). Toute PPL mesurée sur ce jeu est donc`
+- **T1** `reports/rapport-n2-r12-2048.md:27:| fenêtre 256 | 128 | 20 000 | 20,5 Mo | `base-wiki-45m` |`
+- **T1** `reports/rapport-n2-r12-2048.md:31:| **fenêtre 1 024, 20 k pas** | 1 024 | 20 000 | 164 Mo | `base-wiki-45m` (puis suite) |`
+- **T1** `reports/rapport-n2-r12-2048.md:64:| fenêtre 256, 20 000 pas | 20,5 Mo | 3,3696 | 3,2892 | 3,2545 | 3,2459 | 3,2305 |`
+- **T1** `reports/rapport-n2-r12-2048.md:65:| **fenêtre 1 024, 20 000 pas** | **164 Mo** | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |`
+- **T1** `reports/rapport-n2-r12-2048.md:70:(20 000 pas, fenêtre 256, **20,5 Mo**) contre celui-ci (20 000 pas, fenêtre 1 024, **164 Mo**) :`
+- **T1** `reports/rapport-n2-r12-2048.md:163:| fenêtre 1 024, 20 000 pas | 164 Mo | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |`
+- **T1** `reports/rapport-n2-r12-2048.md:164:| **fenêtre 2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,6360** | **2,5375** | **2,4779** | **2,4383** |`
+- **T1** `reports/rapport-n2-r12-2048.md:172:2. **À pas constants (20 000), 2 048 gagne** — 328 Mo contre 164 : **−0,083 à 128, −0,094 à 512,`
+- **T1** `reports/rapport-n2-fenetre.md:30:| R1.1 | `data/wiki_fr` | 128 / 256 | 20 000 | 20,5 Mo | `base-wiki-45m` |`
+- **T1** `reports/rapport-n2-fenetre.md:33:| R1.2-1 024 long | `data/wiki_fr` | 1 024 / 1 024 | 20 000 | 164 Mo | (suite du précédent) |`
+- **T1** `donc le débit ne perd que **13 %** de 256 à 2 048. La fenêtre est presque gratuite à cette`
+- **T1** `| fenêtre 1 024, 2 500 pas | 20,5 Mo | 3,3878 | 3,1098 | 2,9950 | 2,9449 | 2,9108 |`
+- **T1** `| **fenêtre 2 048, 10 000 pas** | **164 Mo** | 3,0466 | 2,7581 | 2,6501 | 2,5914 | 2,5513 |`
+- **T1** `| fenêtre 1 024, 20 000 pas | 164 Mo | **2,9955** | **2,7201** | **2,6256** | **2,5757** | **2,5429** |`
+- **T1** `| **fenêtre 2 048, 20 000 pas** | **328 Mo** | **2,9121** | **2,6360** | **2,5375** | **2,4779** | **2,4383** |`
+- **T1** `1. **À octets constants (164 Mo), 2 048 ne bat pas 1 024** — il est **derrière partout**`
+- **T1** `2. **À pas constants (20 000), 2 048 gagne** — 328 Mo contre 164 : **−0,083 à 128, −0,094 à 512,`
+- **T1** `**Synthèse de la loi de la fenêtre** (à 33 Mo pour les tailles, à 20,5 Mo pour la loi) : le saut`
+- **T1** `bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE`
 

@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 43 |
-| Appels d'outils | 69 |
+| Messages | 54 |
+| Appels d'outils | 86 |
 | Fichiers touchés | 0 |
-| Commandes | 54 |
+| Commandes | 70 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*69 appels d'outils.* Actions notables :
+*86 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 42 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 14 autres
+- … et 30 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -172,10 +172,32 @@
 - **T1** `✅ contrôle sans gouttière · photocopie : ≥ 50 % (mesuré 90.1%)`
 - **T1** `✅ mono-colonne · photocopie : écart ≤ 0,5 pt (mesuré 0.00%)`
 - **T1** `--- 3. les tableaux (10 pages × 3 familles)`
+- **T1** `✅ fax · dev : WER ≤ 25% (mesuré 21.9%)`
+- **T1** `✅ fax · dev : préservation ≥ 30% (mesuré 56.7%)`
+- **T1** `✅ fax · test : WER ≤ 25% (mesuré 15.5%)`
+- **T1** `✅ papier · dev : WER ≤ 10% (mesuré 6.9%)`
+- **T1** `✅ papier · dev : préservation ≥ 55% (mesuré 90.0%)`
+- **T1** `✅ papier · test : WER ≤ 10% (mesuré 6.4%)`
+- **T1** `✅ photo · dev : WER ≤ 10% (mesuré 6.7%)`
+- **T1** `✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)`
+- **T1** `✅ photo · test : WER ≤ 10% (mesuré 5.7%)`
+- **T1** `✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)`
+- **T1** `✅ photocopie · dev : préservation ≥ 60% (mesuré 93.3%)`
+- **T1** `✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)`
+- **T1** `✅ propre · dev : WER ≤ 6% (mesuré 4.1%)`
+- **T1** `✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)`
+- **T1** `✅ propre · test : WER ≤ 6% (mesuré 3.0%)`
+- **T1** `✅ propre : cellules exactes ≥ 90% (mesuré 92.6%)`
+- **T1** `✅ propre : grilles de bonne forme ≥ 100% (mesuré 10/10)`
+- **T1** `✅ photocopie : cellules exactes ≥ 65% (mesuré 69.1%)`
+- **T1** `✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)`
+- **T1** `✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)`
+- **T1** `✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module> AttributeError: module 'evaluer_gold' has no attribute '_score' [exit code: 1]
+- **T1** : <class 'dict'> ['version', 'date', 'note', 'documents', 'questions'] [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> TypeError: object of type 'int' has no len() [exi
 

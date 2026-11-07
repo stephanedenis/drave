@@ -1681,3 +1681,321 @@ langue {"langues_profil": 398, "articles_test": 447, "accuracy": 0.9687, "accura
 niveaux ["graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours", "pragmatique", "document"]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys, pathlib\nRACINE=pathlib.Path('.').resolve()\nsys.path.insert(0,str(RACINE/'tools'))\nsys.path.insert(0,str(RACINE/'tools/tests/linguistique'))\nimport bloc_linguistique as bl\nimport evaluer_gold a … [813 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+AttributeError: module 'evaluer_gold' has no attribute '_score'
+[exit code: 1]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4003 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-ocr-scans.sh >/tmp/porte-ocr-scans.log 2>&1; echo exit=$?; tail -3 /tmp/porte-ocr-scans.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4003"}`
+
+  ```
+exit=0
+
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/r44/tables.json
+✅ porte OCR-scans verte : familles, colonnes et tableaux tiennent leurs planchers
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '^def ' tools/tests/linguistique/evaluer_gold.py | head -20", "description": "Lister les fonctions d'évaluation"}`
+
+  ```
+24:def charger() -> list[dict]:
+38:def charger_gele() -> list[dict]:
+47:def par_source(phrases: list[dict], source: str) -> list[dict]:
+51:def _pos_map(a: bl.Annotation) -> dict[tuple[int, int], str]:
+55:def _seg(a: bl.Annotation) -> set[tuple[str, int, int]]:
+59:def _tete(a: bl.Annotation) -> set[tuple[str, int]]:
+64:def _pragma(a: bl.Annotation) -> dict:
+72:def _prf(tp: int, fp: int, fn: int) -> dict:
+80:def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+225:def main() -> int:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys, pathlib\nRACINE=pathlib.Path('.').resolve()\nsys.path.insert(0,str(RACINE/'tools'))\nsys.path.insert(0,str(RACINE/'tools/tests/linguistique'))\nimport bloc_linguistique as bl\nimport evaluer_gold a … [816 caractères tronqués]`
+
+  ```
+heuristique 180: 0.7749 ferme 0.9362 ouvert 0.6632 tokens 804
+syntagme 0.7135 tete 0.8329 acte 1.0
+hand 0 0.0 0
+synth 0 0.0 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E '✅|❌|WER|préservation|cellules|lignes|formes|page noire' /tmp/porte-ocr-scans.log | tail -35", "description": "Extraire le bilan de la porte OCR"}`
+
+  ```
+✅ tesseract 5.5.3 · langues : eng fra osd spa 
+  contrôle page noire : 0 mot(s) lu(s), 0 région(s)
+  ✅ page noire : aucun mot lu
+  ✅ fax · dev : WER ≤ 25% (mesuré 21.9%)
+  ✅ fax · dev : préservation ≥ 30% (mesuré 56.7%)
+  ✅ fax · test : WER ≤ 25% (mesuré 15.5%)
+  ✅ papier · dev : WER ≤ 10% (mesuré 6.9%)
+  ✅ papier · dev : préservation ≥ 55% (mesuré 90.0%)
+  ✅ papier · test : WER ≤ 10% (mesuré 6.4%)
+  ✅ photo · dev : WER ≤ 10% (mesuré 6.7%)
+  ✅ photo · dev : préservation ≥ 60% (mesuré 90.0%)
+  ✅ photo · test : WER ≤ 10% (mesuré 5.7%)
+  ✅ photocopie · dev : WER ≤ 8% (mesuré 6.3%)
+  ✅ photocopie · dev : préservation ≥ 60% (mesuré 93.3%)
+  ✅ photocopie · test : WER ≤ 8% (mesuré 4.7%)
+  ✅ propre · dev : WER ≤ 6% (mesuré 4.1%)
+  ✅ propre · dev : préservation ≥ 85% (mesuré 96.7%)
+  ✅ propre · test : WER ≤ 6% (mesuré 3.0%)
+  ✅ deux colonnes · propre : WER ≤ 3% (mesuré 0.5%)
+  ✅ deux colonnes · photocopie : WER ≤ 6% (mesuré 1.0%)
+  ✅ deux colonnes · photo : WER ≤ 20% (mesuré 6.5%)
+  ✅ contrôle sans gouttière · photo : ≥ 50 % (mesuré 88.3%)
+  ✅ mono-colonne · photo : écart ≤ 0,5 pt (mesuré 0.00%)
+  ✅ contrôle sans gouttière · propre : ≥ 50 % (mesuré 89.4%)
+  ✅ mono-colonne · propre : écart ≤
+… [562 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/banc_complet.py; echo '---'; grep -n 'def main\\|--verifie\\|--ecrit\\|verifie' tools/banc_complet.py | head -20", "description": "Comprendre banc_complet"}`
+
+  ```
+#!/usr/bin/env python3
+"""banc_complet.py — R0.3 : 30 documents, 10 questions par document, générées et vérifiées.
+
+POURQUOI GÉNÉRER. Trois cents questions annotées à la main, ce n'est pas une heure de travail :
+c'est une semaine. Le banc **pilote** (20 questions main, R0.2) reste la référence de difficulté ;
+le banc **complet** mesure la **sélection** à l'échelle, avec des questions **gabarit** :
+
+  - on prend un passage qui porte une **valeur** (un nombre, une date) ;
+  - on demande cette valeur par **deux mots rares** du passage (les moins fréquents du document,
+    donc les plus discriminants) ;
+  - le passage est le gold, la valeur est la réponse attendue.
+
+Ce que ce banc mesure donc : le contrôleur va-t-il chercher le bon passage quand le document en
+compte des centaines ? Ce qu'il ne mesure pas : la paraphrase — un gabarit partage forcément des
+mots avec son gold. Les questions de paraphrase restent le banc pilote, et R0.3 « durci » est la
+suite.
+
+Usage :
+  python3 tools/banc_complet.py --ecrit tools/tests/documents/bench-complet.json
+  python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json
+"""
+from __future__ import annotations
+
+import argparse
+imp
+… [1032 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/routeur.py --json /tmp/routeur-etat-r.json 2>&1 | tail -25; echo exit=${PIPESTATUS[0]}", "description": "Rejouer le routeur R0.5"}`
+
+  ```
+=== ROUTEUR EXTRACTIF / GÉNÉRATIF ===
+  331 questions · 203 où les deux lecteurs diffèrent
+  AUC du signal BM25   : 0.839
+  AUC couverture       : 0.584
+  AUC z                : 0.793
+  AUC ratio            : 0.727
+  AUC etendue          : 0.265
+  AUC longueur (faux)  : 0.453
+  AUC aléatoire        : 0.510
+  exactitude : fixe extractif 0.719 · fixe modèle 0.269 · oracle 0.801
+  testé sur lexical     (n=248) · fixe ext 0.871 · fixe modèle 0.234 · oracle 0.915
+     seuil appris ailleurs · z           (seuil   4.62) → exactitude 0.819
+     seuil appris ailleurs · ratio       (seuil  24.76) → exactitude 0.706
+     seuil appris ailleurs · etendue     (seuil   0.17) → exactitude 0.234
+     seuil appris ailleurs · couverture  (seuil   0.83) → exactitude 0.234
+     seuil appris ailleurs · signal      (seuil   6.30) → exactitude 0.754
+  testé sur paraphrase  (n= 83) · fixe ext 0.265 · fixe modèle 0.373 · oracle 0.458
+     seuil appris ailleurs · z           (seuil   3.12) → exactitude 0.313
+     seuil appris ailleurs · ratio       (seuil   8.03) → exactitude 0.313
+     seuil appris ailleurs · etendue     (seuil   0.01) → exactitude 0.289
+     seuil appris ailleurs · couverture  (seuil   0.4
+… [142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh tools/tests/documents/bench-complet.json 2>&1; python3 tools/banc_complet.py --verifie tools/tests/documents/bench-complet.json 2>&1 | tail -8; echo exit=${PIPESTATUS[0]}", "description": "Vérifier le banc complet R0.3"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 96K 29 oct 17:05 tools/tests/documents/bench-complet.json
+248 questions · 30 documents · 5 types · 0 problème(s)
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh work/n2ac/miroir_copie.py work/n2ac/eval_production.py work/n2ac/eval_fenetre.py work/n2ac/chaine_1024.sh 2>&1; echo '---'; grep -n 'argparse\\|add_argument\\|def main' work/n2ac/miroir_copie.py 2>/dev/null | head -15", "descr … [43 caractères tronqués]`
+
+  ```
+ls: cannot access 'work/n2ac/miroir_copie.py': No such file or directory
+-rw-------. 1 stephane stephane 1,5K  2 nov 19:56 work/n2ac/chaine_1024.sh
+-rw-------. 1 stephane stephane 3,4K  2 nov 20:23 work/n2ac/eval_fenetre.py
+-rw-------. 1 stephane stephane 3,1K  2 nov 20:03 work/n2ac/eval_production.py
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find . -name 'miroir_copie.py' -not -path './tools/docwatch/*' 2>/dev/null | head; echo '---'; ls work/n2ac/ | head -60", "description": "Chercher miroir_copie"}`
+
+  ```
+---
+absolu-pos1152.drvm
+absolu-pos1152.log
+absolu-pos1152.pt
+absolu-pos1152.pt.json
+agrege_fenetre.py
+agrege_production.py
+agrege_r11.py
+cap-1147m-128.drvm
+cap-1147m-128.log
+cap-1147m-128.pt
+cap-1147m-128.pt.json
+cap-1147m-512.drvm
+cap-1147m-512.log
+cap-1147m-512.pt
+cap-1147m-512.pt.json
+cap1147.out
+cap-2165m-128.drvm
+cap-2165m-128.log
+cap-2165m-128.pt
+cap-2165m-128.pt.json
+cap-2165m-512.drvm
+cap-2165m-512.log
+cap-2165m-512.pt
+cap-2165m-512.pt.json
+cap2165.out
+cappropre.out
+chaine_1024.out
+chaine_1024.sh
+chaine_2048_10k.sh
+chaine_2048_20k.sh
+chaine_2048_2x10k.sh
+chaine_2048_mix.out
+chaine_2048_mix.sh
+chaine_2048.sh
+chaine_2048_wiki.out
+chaine_2048_wiki.sh
+chaine_capacite_propre.sh
+chaine_capacite.sh
+chaine_kd_60k.sh
+chaine_kd_controle.sh
+chaine_kd_production_propre.sh
+chaine_kd_production.sh
+chaine_kd.sh
+chaine_mix2048_long.sh
+chaine_porte.out
+chaine_porte.sh
+chaine_prod1024_60k.sh
+chaine_prod1024_long.out
+chaine_prod1024_long.sh
+chaine_production.out
+chaine_production.sh
+chaine_prod_zero.out
+chaine_prod_zero.sh
+chaine_r1.out
+chaine_r1.sh
+chaine_zero.out
+chaine_zero.sh
+courbe-absolu.json
+courbe-absolu.log
+courbe-absolu-pos1152.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-complet.json'))\nprint(type(d), list(d)[:8] if isinstance(d,dict) else len(d))\nqs=d.get('questions') if isinstance(d,dict) else d\nprint('questions', len(q … [110 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'date', 'note', 'documents', 'questions']
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+TypeError: object of type 'int' has no len()
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/documents/bench-complet.json'))\nprint({k:(type(v).__name__, len(v) if hasattr(v,'__len__') else v) for k,v in d.items()})\nprint('questions field', d['questions'])\nfor k  … [199 caractères tronqués]`
+
+  ```
+{'version': ('int', 1), 'date': ('str', 10), 'note': ('str', 218), 'documents': ('list', 30), 'questions': ('int', 248)}
+questions field 248
+documents len 30 first keys ['chemin', 'source', 'type', 'questions']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find journal/sessions -name '*miroir*' -o -name '*aiguille*' 2>/dev/null | head -20; echo '---'; ls journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/ 2>/dev/null | head -30", "description": "Chercher les bancs dans la sessi … [7 caractères tronqués]`
+
+  ```
+---
+agrege_fenetre.py
+agrege_production.py
+agrege_r11.py
+chaine_1024.sh
+chaine_2048_mix.sh
+chaine_2048.sh
+chaine_2048_wiki.sh
+chaine_capacite.sh
+chaine_kd.sh
+chaine_mix2048_long.sh
+chaine_porte.sh
+chaine_prod1024_long.sh
+chaine_production.sh
+chaine_prod_zero.sh
+chaine_r1.sh
+chaine_zero.sh
+cout_fenetre.py
+distiller_natif.py
+entrainer_rope.py
+eval_200k.py
+eval_fenetre.py
+eval_longueurs.py
+eval_production.py
+init_figee.py
+mirroir_copie.py
+rope_model.py
+table_200k.py
+trajectoire.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'miroir_copie' reports/rapport-n2-*.md journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/ 2>/dev/null | head -10", "description": "Tracer le banc miroir"}`
+
+  ```
+reports/rapport-n2-fenetre.md:39:contexte 256/512/1 000/2 000), `miroir_copie.py`. Le témoin `mix-60k` repassé dans le même mètre
+reports/rapport-n2-fenetre.md:144:- Bancs : `work/n2ac/eval_production.py`, `eval_fenetre.py`, `miroir_copie.py`,
+reports/rapport-n2-r11.md:41:  (`eval_fenetre.py`), et le **miroir de copie** à distance (`miroir_copie.py`).
+reports/rapport-n2-r11.md:167:`miroir_copie.py` plante un code de 16 octets deux fois dans du texte réel (8 sondes, remplissages
+reports/rapport-n2-r11.md:212:  `work/n2ac/miroir_copie.py`, `work/n2ac/agrege_r11.py`.
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_r11.py:28:    "miroir_copie_rope": "miroir-rope.json",
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_r11.py:66:            "miroir de copie à distance (miroir_copie) — muet, voir la fiche",
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/mirroir_copie.py:2:"""miroir_copie.py — le miroir de sortie de R1 : le modèle **restitue-t-il** un code vu ?
+journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/agrege_fenetre.py:62:            "miroir de copie à distance (miroir_copie)",
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/ | grep -i 'mirro\\|aiguille'; echo '---'; sed -n '1,40p' journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/code/mirroir_copie.py", "description": "Vérifier le nom réel du miroir"}`
+
+  ```
+mirroir_copie.py
+---
+#!/usr/bin/env python3
+"""miroir_copie.py — le miroir de sortie de R1 : le modèle **restitue-t-il** un code vu ?
+
+La PPL est une mesure d'**entrée** : elle dit que la suite est moins surprenante, pas que le
+modèle a **lu** l'octet lointain. Ici, on plante un code de 16 octets **deux fois** dans du
+texte réel (un remplissage différent par sonde), à `d` octets d'écart, et on demande au modèle
+(teacher forcing) de **prédire** la seconde occurrence : justesse top-1 sur les 16 octets.
+
+Attendu si la **fenêtre d'attention** est la contrainte (256 pour R1.1, 512 pour R1.2) :
+  d ≤ 240 → le code est copiable (justesse élevée) ;
+  d > 240 → justesse au hasard (1/256 ≈ 0,004).
+C'est le **contrôle négatif** de R1.1 : le RoPE ne fait pas lire au-delà de la fenêtre ; il
+fait seulement disparaître la table de positions absolues.
+
+Le contexte fait 512 octets et les codes restent sous la position 512, donc **les deux schémas
+de position sont dans leur plage entraînée** : l'écart mesuré ne peut pas venir d'une ligne de
+table non entraînée.
+
+Usage :
+  PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/mirroir_copie.py <point.pt> [--rope] [--sortie x.json]
+"""
+from __future__ import ann
+… [393 caractères tronqués]
+  ```
+

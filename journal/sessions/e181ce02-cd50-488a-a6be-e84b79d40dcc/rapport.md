@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 148.9 h |
+| Durée | 149.0 h |
 | Tours | 184 |
-| Messages | 3302 |
-| Appels d'outils | 2927 |
+| Messages | 3311 |
+| Appels d'outils | 2936 |
 | Fichiers touchés | 25 |
-| Commandes | 2423 |
+| Commandes | 2432 |
 | Sous-agents | 38 |
-| Commits | 376 |
+| Commits | 378 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*173 appels d'outils.* Actions notables :
+*182 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 159 autres
+- … et 168 autres
 
 **Synthèse produite :**
 
-⏵ La doc produit a encore les chiffres d'avant la nuit : je la resynchronise
+⏵ P1 produit : POS des nombres et des textes sans syntagme (les 4/46 de l'audit)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2383 autres
+- … et 2392 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10184,7 +10184,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ## 5. Erreurs rencontrées
 
-63 sorties en erreur ou divergentes. Les premières :
+64 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -10580,4 +10580,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET (NUIT"; then echo
 - README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11" -- README.md 2>&1 | tail -1   if git show HEAD:REA
 - DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE" -- docs/produit/README.md 2>&1 | tai
+- B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183" -- tools/bloc_linguistique.py reports/rapport-pos-nombres.m
+- B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183" -- tools/bloc_linguistique.py reports/rapport-pos-nombres.m
 

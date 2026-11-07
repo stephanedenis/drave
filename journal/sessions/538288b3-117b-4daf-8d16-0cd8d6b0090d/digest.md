@@ -2162,3 +2162,306 @@ exit=0
 … [1695 caractères tronqués]
   ```
 
+- **bash** `{"command": "head -35 reports/rapport-c9-echange-experts.md; echo '=== cache experts ==='; head -35 reports/rapport-cache-experts-vram.md", "description": "Read MoE exchange and cache reports"}`
+
+  ```
+# C9 sur un modèle routé : échanger les choix d'experts ne transfère RIEN d'utilisable
+
+> Campagne : **cerveau** · expérience : `--echange experts` (la « variante la plus plausible » du § 6.8)
+> Question : la latéralité entre deux instances jumelles ne gagnait rien en échangeant des **états**
+> (`rapport-c9-lateralite.md`). La suite nommée était d'échanger des **choix d'experts** sur un
+> modèle **routé** : là, les deux instances voient des choses différentes, donc leurs routages
+> pourraient porter une information que l'autre n'a pas.
+> Verdict : **non — et la mesure a d'abord menti.** Le premier essai donnait **×0,81** (une
+> amélioration de 19 % !) en imposant à A le routage de B à la dernière couche. Les contrôles l'ont
+> démonté : **tout** routage différent y fait varier la perplexité de ±20 à 50 %, **le signe dépend
+> du texte** (A : ×0,81 · A2 : ×1,46 · B en sens inverse : ×1,26), et l'ordre « le routage réel fait
+> moins de mal que l'aléatoire » ne tient que **2 fois sur 3** (le sens inverse l'inverse : aléatoire
+> ×0,94 contre réel ×1,26). Il n'y a **pas** de gain latéral.
+> Date réelle : **2026-10-13, 12 h 57-13 h 20 HAE** (heure lue sur la machine)
+> Protocole : Qwen3-30
+… [2731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"A6.2\\|routage\" reports/rapport-c9-echange-experts.md reports/rapport-cache-experts-vram.md reports/rapport-chargement-paresseux.md | head -20; echo '--- expert flags ---'; grep -n \"expert\" drave-core/src/main.rs | head -20", "description": "Check MoE routing support and A … [14 caractères tronqués]`
+
+  ```
+reports/rapport-c9-echange-experts.md:6:> modèle **routé** : là, les deux instances voient des choses différentes, donc leurs routages
+reports/rapport-c9-echange-experts.md:9:> amélioration de 19 % !) en imposant à A le routage de B à la dernière couche. Les contrôles l'ont
+reports/rapport-c9-echange-experts.md:10:> démonté : **tout** routage différent y fait varier la perplexité de ±20 à 50 %, **le signe dépend
+reports/rapport-c9-echange-experts.md:11:> du texte** (A : ×0,81 · A2 : ×1,46 · B en sens inverse : ×1,26), et l'ordre « le routage réel fait
+reports/rapport-c9-echange-experts.md:16:> textes A/B/A2 tirés de trois fenêtres du même corpus ; routage **capturé** par
+reports/rapport-c9-echange-experts.md:28:**L'invariant, et il a fallu le rendre EXACT** : imposer à une instance **son propre** routage doit
+reports/rapport-c9-echange-experts.md:41:| A avec **son** routage (référence) | **37,2013** | ×1,00 |
+reports/rapport-c9-echange-experts.md:42:| A + le routage de **B** (autre texte) | **3 445,03** | **×92,6** |
+reports/rapport-c9-echange-experts.md:43:| A + routage **aléatoire** | 13 958,96 | ×375 |
+reports/rapport-c9-echange-experts.md:44:| A + routage de B **décalé d'une co
+… [3015 caractères tronqués]
+  ```
+
+- **bash** `{"command": "timeout 180 bash tools/porte-bloc-linguistique.sh > /tmp/etat-a-porte-bloc.txt 2>&1; echo \"exit=$?\"; tail -15 /tmp/etat-a-porte-bloc.txt", "description": "Run language block gate", "run_in_background": true}`
+
+  ```
+started background job bash-4101
+  ```
+
+- **bash** `{"command": "timeout 180 bash tools/porte-produit.sh > /tmp/etat-a-porte-produit.txt 2>&1; echo \"exit=$?\"; tail -20 /tmp/etat-a-porte-produit.txt", "description": "Run product gate", "run_in_background": true}`
+
+  ```
+started background job bash-4102
+  ```
+
+- **bash** `{"command": "git log --oneline -15", "description": "List latest commits"}`
+
+  ```
+9e4cde3b README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11
+ea1a68a2 ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)
+bb67dd59 ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1
+d31aa9a2 PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR
+6a1148c2 B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183
+4e6de0ee P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET
+97f41554 B13 — LE STRIP DE LA FUSION : PLUS DE RÉFÉRENCE MORTE VERS UN SEGMENT DÉDUPLIQUÉ ; MESURES INCHANGÉES (0,85 / 0,6482 / 235-236)
+5c0d5329 FICHE — LES PERTES DE R4 DITES HONNÊTEMENT (5/8 FAUX EN FRANÇAIS, NOMS NUS, PARTICIPES) ; README DANS LE BUDGET T1
+015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %
+ba39a7b1 B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183
+5c5d3b52 B13
+… [592 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rln \"3 spans\" reports/*.md | head; echo '---'; grep -rn \"3 spans\\|235/236\" reports/rapport-morphologie-verbes.md reports/rapport-pensee-v12.md reports/rapport-partition-integree.md 2>/dev/null | head -10", "description": "Locate current 3-spans state report"}`
+
+  ```
+reports/INDEX.md
+reports/rapport-audit-attachement.md
+reports/rapport-audit-r1r3.md
+reports/rapport-audit-v10.md
+reports/rapport-audit-v7.md
+reports/rapport-coherence-fiches.md
+reports/rapport-coherence-fiches-v7.md
+reports/rapport-dev-test-v7.md
+reports/rapport-gold-gp-corrige.md
+reports/rapport-morphologie-verbes.md
+---
+reports/rapport-morphologie-verbes.md:7:> (~60 verbes du français usuel), l'attachement passe de **226/226 (couv. 0,9456, 13 spans)** à
+reports/rapport-morphologie-verbes.md:8:> **235/236 (couv. 0,9874, 3 spans)** ; la **F1 syntagmes** de 0,6198 à **0,6474** ; le POS reste
+reports/rapport-morphologie-verbes.md:41:| exact / labels | 226/226 | **235/236** |
+reports/rapport-morphologie-verbes.md:56:- **Il reste 3 spans** : `g017` (arbitrage d'adverbe), `r035` (relative zéro), `r264` (tokenisation
+reports/rapport-morphologie-verbes.md:63:- **Contrôle négatif** : les 3 spans restants sont antérieurs à la règle et inchangés.
+reports/rapport-morphologie-verbes.md:71:- **Les 3 spans restants** ne sont pas près de tomber (relative zéro, tokenisation).
+reports/rapport-pensee-v12.md:6:> **0,9456**, 13 spans — voir [le gold corrigé](rapport-gold-gp-corrige.md).*
+reports/rappo
+… [331 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --porcelain | grep -E '^.. reports/' | head -20; echo '--- HEAD now ---'; git log -1 --format='%h %s'", "description": "Check reports modifications in tree"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+?? reports/rapport-s-paragraphes.md
+--- HEAD now ---
+bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4101 (bash: timeout 180 bash tools/porte-bloc-linguistique.sh > /tmp/etat-a-porte-bloc.txt 2>&1; echo "exit=$?"; tail -15 /tmp/etat-a-porte-bloc.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4101", "wait": true, "timeout_ms": 60000}`
+
+  ```
+exit=0
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -25 /tmp/etat-a-porte-bloc.txt", "description": "Read language gate output"}`
+
+  ```
+"syntagme"
+ ],
+ "niveaux_manquants": [],
+ "controles": {
+  "vide_refus": "vide",
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **job_output** `{"job_id": "bash-4102", "wait": true, "timeout_ms": 120000}`
+
+  ```
+exit=0
+  ✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 10 tests
+  ✅ schéma v1 validé (5 cas + 20 phrases du gold)
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -25 /tmp/etat-a-porte-produit.txt 2>/dev/null", "description": "Read product gate output"}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f387bcab5d90d528 deux fois
+  ✅ smoke test : Ran 10 tests
+  ✅ schéma v1 validé (5 cas + 20 phrases du gold)
+  ✅ schéma v1 : Ran 6 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/porte-##;s#\\.sh##' | tr '\\n' ' '; echo", "description": "List all gate names"}`
+
+  ```
+adaptateur-sortie audit-drapeaux b1110-hybride balayage bloc-code bloc-linguistique bloc-maths bloc-tableaux budget bus bus-socket c4-retard cerveau consolidation coupe cycle-c2 deepseek delais diff-couche document echange-experts episodique etat flux fusion gain greffe harnais-invariants homeostasie horloge indice jeux jumeaux lecteur lecture m5-brouillon melange memoire miroir-blocs mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-inventaire n3-placement n3-pont n3-positions n3-profondeur n3-refus n3-reseau n3-routes n3-service-briques n3-service n3-seuil n3-sparsite-compte n3-sparsite occupation-elagage occupation-moteur ocr-scans ocr pannes peripherie poids-creux pont prechargement produit profondeur-routee push-paresseux r13-bpe recurrence reflexe registre reparti-moteur ressources sauvegarde-modele sessions speculatif tableaux tokenizer-kimi topologie trace vision
+  ```
+
+- **bash** `{"command": "grep -rn \"porte-\" docs/archive/roadmap-detail-2026-10-29.md | grep -oE 'porte-[a-z0-9-]+' | sort -u | tr '\\n' ' '; echo", "description": "List gates cited in archived A roadmap"}`
+
+  ```
+porte-coupe porte-deepseek porte-diff-couche porte-topologie
+  ```
+
+- **bash** `{"command": "head -35 docs/pilotage/backlog/A3.4-colab.md; echo '=== A5.4 ==='; head -35 docs/pilotage/backlog/A5.4-fpga.md", "description": "Read A3.4 and A5.4 blocker fiches"}`
+
+  ```
+# A3.4 — Démonstration Colab (préremplissage réparti)
+
+> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A3 · **Bloqué par** : le compte et le runtime Colab
+> **Ligne de roadmap** : A3.4 · **Fiche de résultat attendue** : rapport-a34-colab.md (à créer dans `reports/`)
+> **Résumé** : Exécuter le préremplissage réparti sur un runtime Colab.
+> **Glossaire** : [préremplissage](../../theorie/glossaire/entrees/preremplissage.md) · [Colab](../../theorie/glossaire/entrees/colab-notebook-tunnel.md) · [fidélité](../../theorie/glossaire/entrees/fidelite.md).
+
+## Le besoin
+
+Le préremplissage par lots est fidèle (0,00e0) ; il reste à le faire tourner sur le runtime Colab. La ligne est bloquée par le compte.
+
+## L'état
+
+Préremplissage par lots fait et fidèle ; runtime absent.
+
+## La porte
+
+Le même résultat local/distant sur le même lot, avec la trace et le débit.
+
+## Contrôles négatifs
+
+- même lot local ; réseau simulé ; version incompatible refusée
+
+## Prochaine action
+
+Dès qu'un compte est disponible, rejouer la recette de `docs/archive/colab-reparti.md` et écrire la fiche.
+
+## Voir aussi
+
+- [Programme A](../roadmap.md#programme-a--le-moteur-la-drave-les-flux)
+- 
+… [1233 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -30 docs/pilotage/backlog/A3.4-colab.md | grep -n \"Bloqué\\|Dépend\\|Ligne\"; echo '---'; head -30 docs/pilotage/backlog/A5.4-fpga.md | grep -n \"Bloqué\\|Dépend\\|Ligne\"", "description": "Extract blocker fields"}`
+
+  ```
+3:> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A3 · **Bloqué par** : le compte et le runtime Colab
+4:> **Ligne de roadmap** : A3.4 · **Fiche de résultat attendue** : rapport-a34-colab.md (à créer dans `reports/`)
+---
+3:> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A5 · **Bloqué par** : la carte Stratix V
+4:> **Ligne de roadmap** : A5.4 · **Fiche de résultat attendue** : rapport-a54-fpga.md (à créer dans `reports/`)
+  ```
+
+- **bash** `{"command": "head -45 tools/porte-echange-experts.sh; echo '=== A6.2 mentions in gate ==='; grep -n \"A6\\.2\\|routage\\|expert\" tools/porte-echange-experts.sh | head -20", "description": "Read expert exchange gate"}`
+
+  ```
+#!/bin/bash
+# porte-echange-experts.sh — le routage imposé fait-il EXACTEMENT ce qu'il annonce ?
+#
+# POURQUOI CETTE PORTE. `DRAVE_ROUTAGE_FORCER` (13/10) permet d'imposer à un modèle routé les
+# experts qu'une autre instance a choisis — c'est l'expérience C9 « échange d'experts »
+# (`reports/rapport-c9-echange-experts.md`). Toute la mesure repose sur **un** invariant :
+# **imposer à une instance SON PROPRE routage doit rendre la perplexité de référence, au bit près.**
+# S'il est faux, les effets mesurés (±20 %) baignent dans un artefact — et c'est arrivé : la
+# première version donnait 37,2013 contre 37,1990, parce que la trace TRIE les experts et que
+# l'accumulation flottante change avec l'ordre (`DRAVE_TRACE_EXPERTS_ORDRE=1` corrige ça).
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, dans cet ordre) :
+#   1. **inerte par défaut** : sans variable, la trace ne change RIEN à la perplexité ;
+#   2. **exact sur son propre routage** : capturé puis imposé, même perplexité au chiffre près ;
+#   3. **vivant sur un autre routage** : avec les experts d'une autre couche, la perplexité CHANGE
+#      (sinon la porte ne mesure pas ce qu'elle croit — un mécanisme mort passerait les deux
+#      premi
+… [2989 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"A2.6\\|A6.2\" reports/rapport-c9-echange-experts.md reports/rapport-cache-experts-vram.md reports/rapport-chargement-paresseux.md reports/rapport-aiguille-30b.md 2>/dev/null | head", "description": "Check A2.6/A6.2 cross-references in MoE reports"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "ls -lh /home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf /home/stephane/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt 2>&1; echo '---'; ls -ld /home/stephane/IA 2>&1", "description": "Check gate default MoE path"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane  18G  3 oct 13:17 /home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf
+-rw-r--r--. 1 stephane stephane 386K 12 oct 19:56 /home/stephane/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt
+---
+drwxr-xr-x 14 stephane stephane 4096 21 oct 16:30 /home/stephane/IA
+  ```
+
+- **bash** `{"command": "grep -n \"expert\" docs/archive/roadmap-detail-2026-10-29.md | head -20; echo '--- n3 inventaire ---'; head -30 reports/rapport-n3-inventaire.md 2>/dev/null", "description": "Check expert placement in archived roadmap"}`
+
+  ```
+60:| A2.4 | **Cache d'experts MXFP4** | ✅ mesuré, **verdict : non** | +6 % — on ne l'active pas tel quel, et c'est écrit |
+62:| A2.6 | **Ordonnanceur de placement** : chaque opérateur là où son flux coûte le moins cher (2 GPU, CPU, VRAM, RAM, NVMe) | 🔬 — la règle écrite **et appliquée** | le module [`placement.rs`](../../drave-core/src/placement.rs) (les bandes mesurées, `cout`, `classement`, `kv_en_vram`, et la **règle générale `choisir`** — le moins cher **où ça tient**, **4 tests verts**) ; la décision du **KV** y passe ; la **tête** a été essayée par la règle puis **revertée** (le 4 bits coûte +10 % de PPL : la place n'est pas la qualité) ; la mesure à 8 k : **×1,93** / **×5,8** — [`reports/rapport-placement-kv-8k.md`](../../reports/rapport-placement-kv-8k.md) ; reste l'ordonnanceur complet (experts, tête) |
+71:| A3.2 | **Granularité** : par couche, par bloc, par expert | ✅ | listes i16, échelles par bloc, indices par écarts : **1 608 octets par flux** à 256 jetons ; le mode « lot en listes » : 1,5 ko/jeton contre 3,5 en dense (÷2,3) |
+109:| A6.2 | **Routage appris** (MoE) : les experts choisis par les logs | ⏳ | qualité égale, coût de routage ÷10 |
+143:place reste à appliquer 
+… [2403 caractères tronqués]
+  ```
+
