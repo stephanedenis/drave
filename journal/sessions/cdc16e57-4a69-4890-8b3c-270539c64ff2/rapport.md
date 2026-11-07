@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 28 |
+| Messages | 29 |
+| Appels d'outils | 50 |
 | Fichiers touchés | 0 |
-| Commandes | 27 |
+| Commandes | 49 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*28 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 14 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
-⏵ Cartographie des 19 verdicts et logique de validation de la page
+⏵ Lecture des fiches S (limites, banque, arbre) et du README structures
 
 ## 3. Travail accompli
 
@@ -83,6 +83,20 @@
 - **T1** Lis la structure HTML et le début du serveur
 - **T1** Lis la construction des candidats de paragraphes
 - **T1** Lis tout le JS paragraphes
+- **T1** Cherche les 8 restants et a010
+- **T1** Génère les candidats actuels et mesure la couverture
+- **T1** Analyse détaillée des 150 verdicts
+- **T1** Compte phrases et candidats de la banque
+- **T1** Vérifie couverture réelle et révisions
+- **T1** Distribution temporelle et contextes des verdicts
+- **T1** Lis niveaux minimaux et export du serveur
+- **T1** Statuts par type de phrase et par phrase contextuelle
+- **T1** Liste et couverture des 71 langues
+- **T1** Compte les fichiers UDHR
+- **T1** Comprend structure du lexique et couverture
+- **T1** Inspecte les données UDHR
+- **T1** Compte exact des couples et langues fortes
+- … et 9 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -105,10 +119,39 @@
 - **T1** `docs/theorie/synthese/index.md:123:| **B7/B8 — les langues et les maîtres** : 71 langues, 449 surfaces, la permutation, la notation ; 17 principes, le livre, le go 9×9, les cartes | [le concept](../je`
 - **T1** `docs/theorie/lecture-rapide.md:213:- le **codec 100 %** et les **71 langues** — la base d'une lecture multilingue, si le décodeur remonte.`
 - **T1** `[still running after 60000ms; moved to background job bash-3904]`
+- **T1** `docs/pilotage/roadmap.md:34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v7** : **61/61** types, **144/144** rôles, **56 tests** ; le fait divers tr`
+- **T1** `candidats jugés 147 / 369 = 39.8 %`
+- **T1** `phrases touchées 207 / 207 = 100.0 %`
+- **T1** `| bons au niveau 4 | **449 / 449** (**100 %**) |`
+- **T1** `| paires invariantes | **11 / 11** (**100 %**) |`
+- **T1** `(**98,2 %**) ; les deux échecs sont `e4` et `E4`, des cases **réellement ambiguës** entre échecs et go, nommées`
+- **T1** `et non maquillées. **Langue détectée** : **343/449** (**76,4 %**) ; les confusions viennent des libellés`
+- **T1** `| permutation des libellés entre concepts, items forts | **12 / 275** restants (**4,4 %**) |`
+- **T1** `| notation : 72 items × 71 langues | **5 112 / 5 112** (**100 %**) |`
+- **T1** `| accord avec le coup du maître (101 positions) | **41 / 101** (40,6 %) | **42 / 101** (41,6 %) |`
+- **T1** `> taux (65,5 % de GN+GV sur la littérature propre contre 9,1 % pour le mélange) et compte`
+- **T1** `sert de second contrôle : les taux de GN+GV ne bougent pas (65,5 % sur la littérature propre,`
+- **T1** `9,1 % pour le mélange, 8,5 % sur le CEGEP OCR), mais les homographes nominaux passent de 1 134 à`
+- **T1** `> « pour ce qui est de la validation de la banque, après moins de 20 %, j'arrête car j'ai trop de`
+- **T1** `| ligne | CEGEP | 3,6 % | 0,5 % | 0,94 | 21 |`
+- **T1** `| ligne | propre | 51,0 % | 10,3 % | 0,88 | 596 |`
+- **T1** `| ligne | mélange | 3,8 % | 0,5 % | 0,94 | 20 |`
+- **T1** `| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 28 |`
+- **T1** `| phrase | propre | 65,5 % | 8,0 % | 0,88 | 1 184 |`
+- **T1** `| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 23 |`
+- **T1** `**Ce que ça dit.** Sur la **littérature propre**, l'analyseur trouve un GN+GV dans **65,5 %** des`
+- **T1** `phrases contre **9,1 %** pour les mots mélangés : le signal est la **langue**. Sur le **CEGEP`
+- **T1** `OCR**, il est au **plancher du mélange** (8,5 % contre 9,1 %) : ce corpus est **multilingue et`
+- **T1** `compte aussi : la ligne coupe les phrases (3,6 % contre 51,0 %), la phrase reconstruite double le`
+- **T1** `dans le cadre — 1 020 × 550 pour l'exemple, 1 398 et 1 613 px pour les deux autres paragraphes),`
+- **T1** `phrase) — **fermées en v6**. La **mesure sur corpus réel** ajoute le contraste : 65,5 % de GN+GV sur la littérature`
+- **T1** `propre contre 9,1 % pour les mots mélangés, 8,5 % contre 9,1 % sur le CEGEP OCR (multilingue et`
+- **T1** `(65,5 % contre 9,1 %), les homographes passent à **596/1 184**. **55 tests**.`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : arbre_svg.py candidats_corpus.py construire_donnees.py donnees exporter_corpus.py generateur.py llm.py mesure_analyseur.py mesure_arbre.py mesure_corpus.py __pycache__ README.md serveur.py static test
+- **T1** : COUVERTURE cles: ['langues', 'concepts', 'couples', 'par_concept', 'par_langue', 'moyenne_concepts_par_langue', 'langues_fortes', 'n_langues_fortes', 'pieces', 'rangs', 'couleurs', 'jeux'] langues 71 
 

@@ -55820,3 +55820,193 @@ ven 06 nov 2026 21:16:59 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; frontières (0/40) ; partition étiquetée ; **`drave` v0** (10 tests, porte 9 contrôles) ; `m\",\n            \" ; frontiè … [692 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 22 files changed, 1152 insertions(+), 71 deletions(-)
+COMMIT OK 1
+ea1a68a2 ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)
+   bb67dd59..ea1a68a2  s/v7 -> s/v7
+   bb67dd59..ea1a68a2  master -> master
+ven 06 nov 2026 21:19:40 EST
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je reprends `r264` avec une instrumentation locale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/bloc_linguistique.py /tmp/bloc_dbg.py && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/bloc_dbg.py'); t=p.read_text()\nt=t.replace('''                if marqueur:\n                    precedent = segments[-1][\"type … [1031 caractères tronqués]`
+
+  ```
+debug prêt
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/tmp/bloc_dbg.py", line 58, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 1344, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib64/python3.13/dataclasses.py", line 997, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/dataclasses.py", line 757, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bloc_dbg.py tools/bloc_dbg.py && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_dbg as m\nh=m.Heuristique()\nprint([(e.type,e.debut,e.fin,e.valeur) for e in h.analyser(\"Je sais qu'il vien … [152 caractères tronqués]`
+
+  ```
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 26, "sais qu'il vient demain"), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+nettoyé
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfor x in (\"qu'il\",\"l'homme\",\"d'Artagnan\",\"aujourd'hui\"):\n    print(repr(x), '->', repr(bl._normaliser(x)))\nPY", "descrip … [40 caractères tronqués]`
+
+  ```
+"qu'il" -> "qu'il"
+"l'homme" -> "l'homme"
+"d'Artagnan" -> "d'artagnan"
+"aujourd'hui" -> "aujourd'hui"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -c \"MARQUEUR\" /tmp/bloc_dbg.py; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/bloc_dbg.py'); t=p.read_text()\nif \"MARQUEUR2\" not in t:\n    t=t.replace('''            if typ == \"mot\" and (n in RELATIFS or _n_elic  … [695 caractères tronqués]`
+
+  ```
+3
+sonde ajoutée
+[('GV', 0, 7, 'Je sais'), ('GV', 3, 26, "sais qu'il vient demain"), ('SUB', 8, 19, "qu'il vient"), ('GP', 20, 26, 'demain')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n in RELATIFS\\|_n_elic\" tools/bloc_linguistique.py | head -8; grep -n \"def _syntagmes_simple\" tools/bloc_linguistique.py", "description": "Chercher les boucles de marqueurs"}`
+
+  ```
+1142:            _n_elic = n.split("'")[0] if "'" in n else n
+1144:            _n_elic_e = (_n_elic + "e") if _n_elic.endswith("qu") else _n_elic
+1145:            if typ == "mot" and (n in RELATIFS or _n_elic in RELATIFS
+1146:                                 or _n_elic_e in RELATIFS or _n_elic_e in SUBORDONNANTS
+1147:                                 or est_sub(n) or est_sub(_n_elic_e)):
+1108:    def _syntagmes_simple(self, texte: str, langue: str,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1108,1145p' tools/bloc_linguistique.py", "description": "Lire le début de _syntagmes_simple"}`
+
+  ```
+def _syntagmes_simple(self, texte: str, langue: str,
+                          pos_verbes: set[int] | None = None) -> list[dict]:
+        mots = self._mots(texte)
+        lex = POS_FERME.get(langue, POS_FERME["fr"])
+        pos_verbes = pos_verbes or set()
+        par_debut = {m[0]: k for k, m in enumerate(mots)}
+
+        def est_sub(n: str) -> bool:
+            """Le mot est-il un subordonnant **dans cette langue** ? (« car » est un nom anglais)"""
+            if n in SUB_PAR_LANGUE.get(langue, set()):
+                return True
+            return n in SUBORDONNANTS and not (langue == "en" and n == "car")
+
+        def est_verbe(d: int, m: str) -> bool:
+            """Le verbe : le lexique, le POS, ou la **position** après un pronom sujet."""
+            if _est_verbe(m) or d in pos_verbes:
+                return True
+            n2 = _normaliser(m)
+            # A17 (R1a) : un pronom n'est jamais un verbe **par la position** (« that I read »)
+            if n2 in lex.get("PRON", set()):
+                return False
+            if n2 in lex.get("DET", set()) or n2 in lex.get("PREP", set()) or n2 in lex.get("CONJ", set()):
+                return False
+            idx = par_debut.ge
+… [630 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('/tmp/bloc_dbg.py'); t=p.read_text()\nt=t.replace('''        while i < len(mots):\n            d, f, t, typ = mots[i]\n            n = _normaliser(t)''','''        while i < len(mots): … [422 caractères tronqués]`
+
+  ```
+TOK 0 'Je' mot
+TOK 1 'sais' mot
+TOK 5 '.' ponctuation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1230,1275p' tools/bloc_linguistique.py", "description": "Lire la branche GV"}`
+
+  ```
+and _normaliser(mots[j][2]) not in lex.get("PREP", set())
+                       and _normaliser(mots[j][2]) not in lex.get("DET", set())
+                       and _normaliser(mots[j][2]) not in RELATIFS
+                       and _normaliser(mots[j][2]) not in SUBORDONNANTS):
+                    j += 1
+                segments.append({"type": "GV", "role": "prédicat", "niveau": 0,
+                                 "debut": d, "fin": mots[j - 1][1],
+                                 "texte": texte[d:mots[j - 1][1]], "candidats": []})
+                i = j
+                continue
+            if typ == "mot" and n in lex.get("PREP", set()) and i + 1 < len(mots):
+                j = i + 1
+                # le GP s'arrête au verbe ou au relatif : « de la voisine | dort » et non
+                # « de la voisine dort » (mesuré : 25 spans « plus large » sur le gold).
+                while (j < len(mots) and mots[j][3] == "mot"
+                       and not (est_verbe(mots[j][0], mots[j][2])
+                                and not (j > i + 1 and _normaliser(mots[j - 1][2]) in lex.get("DET", set())))
+                       and _normaliser(mots[j][2]) not in RELATIFS):
+                    
+… [1663 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls reports/ | grep -E \"etat-n2|etat-s|etat-r|etat-a\"; sleep 240; date; ls reports/ | grep -E \"etat-n2|etat-s|etat-r|etat-a\"", "description": "Attendre la vague des 4 états", "timeoutMs": 400000}`
+
+  ```
+ven 06 nov 2026 21:23:17 EST
+ven 06 nov 2026 21:27:17 EST
+[exit code: 1]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le README racine ne montre pas encore le produit : j'ajoute « Essayez »
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 README.md | cut -c1-140", "description": "Voir le README racine"}`
+
+  ```
+# Drave
+
+> **Ce que ce document est.** La vitrine publique de Drave : la vision, les cinq axes, les deux
+> étages, six résultats et l'état du dépôt. Les chiffres sont cités comme état ; les fiches sont
+> dans [`reports/`](reports/). **Chargement :** T1 — ce résumé, puis la section utile.
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Un moteur qui traite les
+activations d'un réseau de neurones comme des **faits** — « le neurone 2 539 de la couche 23 a valu 27,8 » — et non
+comme des cases dans une matrice. Le coût du calcul devient proportionnel à l'**activité**, pas à la taille du
+modèle ; le modèle devient **décomposable**, **répartissable** sur du matériel divers, et **observable** — on peut le
+tracer, le rejouer, le comparer.
+
+*« Stream of logs » : le flux des listes. Et « la drave » — ces billots qu'on confiait à la rivière au printemps,
+qu'on guidait de l'estacade jusqu'à la scierie. Le nom dit ce que fait le moteur : il ne lit pas des matrices, il
+conduit un flux.*
+
+## L'origine
+
+Drave est né d'un besoin concret : faire fonctionner des modèles neuronaux **de types différents** sur des machines
+dont les **ressources sont limitées** 
+… [884 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('README.md'); t=p.read_text()\nbloc = \"\"\"## Essayez — le premier produit\n\nLe bloc linguistique s'utilise **aujourd'hui**, hors ligne, sur un CPU, sans modèle ni réseau :\n\n```bas … [1591 caractères tronqués]`
+
+  ```
+section Essayez ajoutée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nt=pathlib.Path('README.md').read_text()\nmots=len(re.findall(r\"\\S+\", t))\nprint('README mots :', mots, '(budget T1 2800)')\nPY\nfor i in 1 2 3; do\n  git add README.md docs/pilotage/en-cours.m … [537 caractères tronqués]`

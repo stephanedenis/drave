@@ -671,3 +671,664 @@ note_en str 222
 source_en_url str 43
   ```
 
+### 🤖 Assistant
+
+⏵ Cartographie des 19 verdicts et logique de validation de la page
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\np='tools/structures/donnees/paragraphes-validations.jsonl'\nrows=[json.loads(l) for l in open(p,encoding='utf-8') if l.strip()]\nfor r in rows:\n    print(r['horodatage'], r['phrase_id'], r['candidat_id'], r['statut'], '|', r.get('note',''),  … [296 caractères tronqués]`
+
+  ```
+2026-11-03T16:49:32 a001 a001-c1 resolu |  | [('Elle', 'Alice'), ('se', 'Alice'), ('elle', 'Alice'), ('lui', 'Alice')]
+2026-11-03T16:49:59 a001 a001-c2 resolu |  | [('Elle', 'Alice'), ('se', 'Alice'), ('elle', 'Alice'), ('lui', 'Alice')]
+2026-11-03T17:02:06 a002 a002-c1 resolu |  | [('Elle', 'Alice'), ('en', 'Alice'), ('y', 'Alice')]
+2026-11-03T17:02:30 a002 a002-c2 exclu |  | [('Elle', 'Alice'), ('en', 'Alice'), ('y', 'Alice')]
+2026-11-03T17:02:43 a002 a002-c3 exclu |  | [('Elle', 'Alice'), ('en', 'Alice'), ('y', 'Alice')]
+2026-11-03T17:05:31 a003 a003-c1 exclu |  | [('Elle', 'Alice'), ('sa', 'Alice'), ('elle', 'Alice'), ('se', 'Alice')]
+2026-11-03T17:05:40 a003 a003-c2 resolu |  | [('Elle', 'Alice'), ('sa', 'Alice'), ('elle', 'Alice'), ('se', 'Alice')]
+2026-11-03T17:06:16 a003 a003-c3 exclu |  | [('Elle', 'Alice'), ('sa', 'Alice'), ('elle', 'Alice'), ('se', 'Alice')]
+2026-11-04T15:03:43 a004 a004-c1 resolu |  | [('sa', 'ALICE')]
+2026-11-04T15:04:02 a004 a004-c2 exclu |  | [('sa', 'ALICE')]
+2026-11-04T15:06:12 a005 a005-c1 resolu |  | [('elle', 'Alice'), ('son', 'Alice'), ('en', 'coup')]
+2026-11-04T15:06:26 a005 a005-c2 exclu |  | [('elle', 'Alice'), ('son', 'Alice'), ('en', 'coup
+… [1230 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"valid\\|paragraphe\\|candidat\" tools/structures/serveur.py | head -60", "description": "Cherche la logique de validation dans serveur.py"}`
+
+  ```
+4:Le serveur expose les phrases et leurs interprétations candidates, enregistre les verdicts
+5:humains (`donnees/validations.jsonl`), interroge un grand modèle (`donnees/llm.jsonl`) et exporte
+6:la banque validée (`/api/export`).
+10:    #   /paragraphes les paragraphes complets : arbre SVG, référents, verdict
+33:NIVEAUX = {0: "sans contexte", 1: "phrase d'avant", 2: "paragraphe", 3: "section / document",
+41:    """Les phrases fixes + deux journaux append-only : validations humaines et évaluations LLM."""
+47:        self.fichier_paragraphes = self.dossier / "paragraphes.json"
+53:    def paragraphes(self) -> list[dict]:
+54:        """Les paragraphes complets : cible, contexte, antécédent, candidats, référents, arbre SVG."""
+55:        if not self.fichier_paragraphes.exists():
+57:        source = json.loads(self.fichier_paragraphes.read_text(encoding="utf-8"))
+58:        validations = self._journal("paragraphes-validations.jsonl")
+60:        for p in source.get("paragraphes", []):
+70:                "candidats": cands, "referents": refs,
+73:                "validations": [v for v in validations if v.get("phrase_id") == p["id"]],
+77:    def valider_paragraphe(self, phrase_id: str, cand
+… [3009 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"valid\\|statut\\|restant\\|fait\\|référent\\|structure\\|candidat\" tools/structures/static/paragraphes.html | head -60; echo \"===\"; wc -l tools/structures/static/paragraphes.html tools/structures/static/paragraphes.js", "description": "Examine la page paragraphes"}`
+
+  ```
+43:  .refs-validees { color: #6b4f12; font-size: .88em; margin: 0 20px 12px; }
+50:    <p class="sous">Neuf paragraphes complets : l'arbre, les référents à trancher, puis le verdict.
+56:    <div><strong id="s-valides">–</strong><span>verdicts</span></div>
+69:  <span class="astuce">l'indentation = la profondeur réelle ; les flèches pointillées = référents → antécédent ; l'arbre défile dans son cadre</span>
+71:  <span class="astuce">tranchez d'abord les référents, puis la structure ; le verdict garde les deux</span>
+===
+  77 tools/structures/static/paragraphes.html
+ 117 tools/structures/static/paragraphes.js
+ 194 total
+  ```
+
+- **bash** `{"command": "grep -n \"statut\\|valid\\|restant\\|fetch\\|api\" tools/structures/static/paragraphes.js | head -80", "description": "Examine le JS de la page"}`
+
+  ```
+26:  const v = (p.validations || []).filter((x) => x.candidat_id === c.id);
+59:  const vals = ps.reduce((n, p) => n + (p.validations || []).length, 0);
+60:  const ok = ps.reduce((n, p) => n + (p.validations || [])
+61:    .filter((v) => ["resolu", "compatible", "double_sens"].includes(v.statut)).length, 0);
+63:  $("#s-valides").textContent = vals;
+68:      const badge = v ? `<span class="verdict ${v.statut}">${v.statut.replace("_", " ")}</span>` : "";
+81:        ${refsV ? `<p class="refs-validees">référents enregistrés : ${refsV}</p>` : ""}
+96:  etat = await (await fetch("/api/paragraphes")).json();
+109:  await fetch("/api/valider-paragraphe", {
+112:      statut: b.dataset.s, referents, note }),
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/structures/donnees/paragraphes.json'))\ntot=0\nfor p in d['paragraphes']:\n    print(p['id'], len(p.get('candidats',[])), [c['id'] for c in p.get('candidats',[])], '| refs:', len(p.get('referents',{})))\n    tot+=len(p.get('candida … [99 caractères tronqués]`
+
+  ```
+a001 0 [] | refs: 0
+a002 0 [] | refs: 0
+a003 0 [] | refs: 0
+a004 0 [] | refs: 0
+a005 0 [] | refs: 0
+a006 0 [] | refs: 0
+a007 0 [] | refs: 0
+a008 0 [] | refs: 0
+a009 0 [] | refs: 0
+total candidats 0
+  ```
+
+- **bash** `{"command": "sed -n '50,85p' tools/structures/static/paragraphes.html; echo \"===\"; sed -n '1,60p' tools/structures/serveur.py", "description": "Lis la structure HTML et le début du serveur"}`
+
+  ```
+<p class="sous">Neuf paragraphes complets : l'arbre, les référents à trancher, puis le verdict.
+      Le contexte ne se devine plus, il est là.</p>
+    <p class="nav"><a href="/">← le banc de phrases</a></p>
+  </div>
+  <div class="stats">
+    <div><strong id="s-par">–</strong><span>paragraphes</span></div>
+    <div><strong id="s-valides">–</strong><span>verdicts</span></div>
+    <div><strong id="s-ok">–</strong><span>acceptés</span></div>
+    <a class="export" href="/api/paragraphes-export" download>⤓ exporter les verdicts</a>
+  </div>
+</header>
+
+<section class="legende">
+  <span class="leg t-GN">GN</span> groupe nominal
+  <span class="leg t-GV">GV</span> groupe verbal
+  <span class="leg t-GP">GP</span> groupe prépositionnel
+  <span class="leg t-REL">REL</span> relative
+  <span class="leg t-SUB">SUB</span> subordonnée
+  <span class="sep">·</span>
+  <span class="astuce">l'indentation = la profondeur réelle ; les flèches pointillées = référents → antécédent ; l'arbre défile dans son cadre</span>
+  <span class="sep">·</span>
+  <span class="astuce">tranchez d'abord les référents, puis la structure ; le verdict garde les deux</span>
+</section>
+
+<main id="paragraphes"></main>
+<script src
+… [2705 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '53,130p' tools/structures/serveur.py", "description": "Lis la construction des candidats de paragraphes"}`
+
+  ```
+def paragraphes(self) -> list[dict]:
+        """Les paragraphes complets : cible, contexte, antécédent, candidats, référents, arbre SVG."""
+        if not self.fichier_paragraphes.exists():
+            return []
+        source = json.loads(self.fichier_paragraphes.read_text(encoding="utf-8"))
+        validations = self._journal("paragraphes-validations.jsonl")
+        sortie = []
+        for p in source.get("paragraphes", []):
+            cands = generateur.analyser(p["cible"])
+            for k, c in enumerate(cands, 1):
+                c["id"] = f'{p["id"]}-c{k}'
+            refs = generateur.referents(p["cible"], p.get("contexte", ""))
+            liens = tuple(dict.fromkeys(r["forme"] for r in refs))
+            sortie.append({
+                "id": p["id"], "contexte": p.get("contexte", ""), "cible": p["cible"],
+                "antecedent": p.get("antecedent", ""),
+                "contexte_en": p.get("contexte_en", ""), "source_en": p.get("source_en", ""),
+                "candidats": cands, "referents": refs,
+                "svg": arbre_svg.svg_arbre(p["cible"], p.get("contexte", ""),
+                                           p.get("antecedent", ""), liens=liens),
+       
+… [3066 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,117p' tools/structures/static/paragraphes.js", "description": "Lis tout le JS paragraphes"}`
+
+  ```
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const STATUTS = [["resolu", "✓ résolu"], ["compatible", "~ compatible"],
+                 ["exclu", "✗ exclu"], ["double_sens", "⇄ double sens"]];
+let etat = { paragraphes: [] };
+
+function phraseColoree(p, cand) {
+  let html = "", curseur = 0;
+  for (const s of cand.segments) {
+    if (s.debut > curseur) html += esc(p.cible.slice(curseur, s.debut));
+    html += `<span class="seg t-${s.type}" title="${s.type} · ${s.role}">${esc(s.texte)}</span>`;
+    curseur = s.fin;
+  }
+  if (curseur < p.cible.length) html += esc(p.cible.slice(curseur));
+  return html;
+}
+
+function blocs(cand) {
+  return cand.segments.map((s) =>
+    `<div class="bloc" style="margin-left:${s.niveau * 1.4}em">
+       <span class="t-${s.type}">${esc(s.texte.trim())}</span>
+       <em>${s.type} · ${s.role} · profondeur ${s.profondeur ?? s.niveau}</em></div>`).join("");
+}
+
+function dernier(p, c) {
+  const v = (p.validations || []).filter((x) => x.candidat_id === c.id);
+  return v.length ? v[v.length - 1] : null;
+}
+
+function referentsDe(p) {
+  const uniques = new Map();
+  for (const 
+… [4018 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"8 restants\\|a010\\|a001–a009\\|a001-a009\\|a001–a003\" docs/ reports/ journal/ tools/ 2>/dev/null | head -20", "description": "Cherche les 8 restants et a010"}`
+
+  ```
+docs/pilotage/chantiers.md:87:| **S — les structures** | quelles structures d'interprétation candidates, et lesquelles un humain valide ? | ✅ **v7** : **61/61** types, **144/144** rôles, **56 tests**, gold **60**, corpus **60**, banque **84/67**, page **`/paragraphes`** ; **h050/h053** et le fait divers **fermés** | **poursuivre la validation sur `/paragraphes`** (a001–a003 faits) ; rétro-traduction API | L (annotations), D (corpus), B (sens) | L (banque), B (pragmatique), D (corpus) |
+docs/pilotage/roadmap.md:34:| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v7** : **61/61** types, **144/144** rôles, **56 tests** ; le fait divers tranché (la tête du GN arrête le verbe) ; [fiche](../../reports/rapport-s-fait-divers.md). **v6** : h050, h053 et « si fort que » **fermés**, gold **60** (vague 5) ; **60/60** types, **142/142** rôles, **50/50** compléments, couverture 1,00 ; corpus 65,5 %/9,1 %, 596/1 184 homographes ; **55 tests**. **v5** : arbre parent/enfant (**99 candidats à ≥3**, 37 à 1) et **référents proposés** (294/371 formes, 77 sans contexte) ; **SVG** d'Alice, page **`/paragraphes`** (arbre, référents, verdict), **traduction** 
+… [6054 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools/structures && python3 - <<'EOF'\nimport json, generateur\nsrc=json.load(open('donnees/paragraphes.json'))\nvals=[json.loads(l) for l in open('donnees/paragraphes-validations.jsonl',encoding='utf-8') if l.strip()]\nfor p in src['paragraphes']:\n    cands=generateur.analyser(p['c … [396 caractères tronqués]`
+
+  ```
+a001 candidats 2 ['a001-c1', 'a001-c2'] | vus 2 | restants []
+   noms: ['« de très-bons conseils » → habitude', '« de très-bons conseils » → se donner']
+a002 candidats 3 ['a002-c1', 'a002-c2', 'a002-c3'] | vus 3 | restants []
+   noms: ['« de Corinthe » → raisins', '« de Corinthe » → un tout petit gâteau', '« de Corinthe » → étaient admirablement tracés']
+a003 candidats 3 ['a003-c1', 'a003-c2', 'a003-c3'] | vus 3 | restants []
+   noms: ['« sur sa tête » → gâteau', '« sur sa tête » → sa main', '« sur sa tête » → portant']
+a004 candidats 2 ['a004-c1', 'a004-c2'] | vus 2 | restants []
+   noms: ['« à ne rien faire » → rester', '« à ne rien faire » → commençait']
+a005 candidats 2 ['a005-c1', 'a005-c2'] | vus 2 | restants []
+   noms: ['« à trois pieds » → table', '« à trois pieds » → elle rencontra']
+a006 candidats 1 ['a006-c1'] | vus 1 | restants []
+   noms: ['« vers la table » → elle retourna']
+a007 candidats 2 ['a007-c1', 'a007-c2'] | vus 2 | restants []
+   noms: ["« à l'aveuglette » → obéir", "« à l'aveuglette » → Alice était trop fine"]
+a008 candidats 1 ['a008-c1'] | vus 1 | restants []
+   noms: ['structure la plus proche']
+a009 candidats 3 ['a009-c1', 'a009-c2', 'a009-c3'] | vus 3 |
+… [116 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse fine des 150 verdicts et de la couverture de la banque
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nprint('n lignes',len(rows))\n# unique pairs & last\nlast={}\nfor r in rows: last[(r['phrase_id'],r['candidat_id'])]=r\nprint('pair … [1303 caractères tronqués]`
+
+  ```
+n lignes 150
+paires uniques 147
+phrases uniques 74
+candidats uniques 147
+statuts derniers: Counter({'resolu': 73, 'exclu': 63, 'compatible': 11})
+statuts toutes lignes: Counter({'resolu': 74, 'exclu': 64, 'compatible': 11, 'double_sens': 1})
+niveaux derniers: Counter({0: 141, 2: 4, 3: 2})
+avec contexte: 6
+avec note: 1
+auteurs: Counter({'humain': 150})
+paires revues >1: [(('p002', 'p002-c2'), 2), (('p003', 'p003-c2'), 3)]
+niveau 0 {'resolu': 70, 'exclu': 62, 'compatible': 9} n= 141
+niveau 2 {'exclu': 1, 'resolu': 2, 'compatible': 1} n= 4
+niveau 3 {'resolu': 1, 'compatible': 1} n= 2
+phrases avec 1/2/3 candidats jugés: Counter({2: 39, 1: 18, 3: 17})
+phrases >1 candidat: [('p001', ['p001-c1', 'p001-c2']), ('p002', ['p002-c1', 'p002-c2']), ('p003', ['p003-c1', 'p003-c2']), ('p004', ['p004-c1', 'p004-c2']), ('p005', ['p005-c1', 'p005-c2']), ('p006', ['p006-c1', 'p006-c2']), ('p007', ['p007-c1', 'p007-c2']), ('c002', ['c002-c1', 'c002-c2']), ('c004', ['c004-c1', 'c004-c2']), ('c007', ['c007-c1', 'c007-c2']), ('c008', ['c008-c1', 'c008-c2']), ('c009', ['c009-c1', 'c009-c2', 'c009-c3']), ('c011', ['c011-c1', 'c011-c2']), ('c013', ['c013-c1', 'c013-c2', 'c013-c3']), ('c014', ['c014-c1', 'c01
+… [189 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nfixe=json.load(open('tools/structures/donnees/phrases.json'))\ngen=json.load(open('tools/structures/donnees/phrases_generees.json'))\nprint('phrases.json cles',list(fixe.keys()),'n',len(fixe['phrases']))\nprint('gen cles',list(gen.keys()),'n',len(gen['phr … [459 caractères tronqués]`
+
+  ```
+phrases.json cles ['version', 'note', 'phrases'] n 7
+gen cles ['version', 'note', 'source', 'phrases'] n 200
+total phrases 207
+total candidats 369
+phrase ids ex ['p001', 'p002', 'p003', 'p004', 'p005', 'p006', 'p007', 'c001', 'c002', 'c003']
+gen ids ex ['c001', 'c002', 'c003', 'c004', 'c005', 'c006', 'c007', 'c008', 'c009', 'c010']
+candidats/phrase Counter({1: 86, 2: 80, 3: 41})
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nfixe=json.load(open('tools/structures/donnees/phrases.json'))\ngen=json.load(open('tools/structures/donnees/phrases_generees.json' … [1580 caractères tronqués]`
+
+  ```
+verdicts sur candidats inconnus/actuels: 0 []
+phrases jugees en entier 74 partielles 0 sans verdict 133
+candidats jugés 147 / 369 = 39.8 %
+phrases touchées 207 / 207 = 100.0 %
+p jugées 7 /7; c jugées 200 /200
+p full 7 c full 67
+
+REVISIONS:
+2026-11-03T10:31:46 p002 p002-c2 double_sens 2 Le détective surveille la maison d'en face. Il a v
+2026-11-03T10:32:17 p002 p002-c2 compatible 2 Le détective surveille la maison d'en face. Il a v
+2026-11-03T10:32:37 p003 p003-c2 exclu 0 
+2026-11-03T16:39:24 p003 p003-c2 resolu 0 
+2026-11-03T16:40:00 p003 p003-c2 exclu 0
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\n# distribution over time, per day, per phrase prefix\nprint('jours:',collections.Counter(r['horodatage'][:10] for r in rows))\npri … [464 caractères tronqués]`
+
+  ```
+jours: Counter({'2026-11-03': 150})
+heures 11-03: Counter({'13': 41, '11': 40, '12': 34, '10': 27, '16': 8})
+prefixes phrases: Counter({'c': 133, 'p': 17})
+2026-11-03T10:31:17 p001 p001-c2 exclu niv 2 | La voisine est partie en vacances. Son chat, lui, est resté sur le toit : il y dort toute 
+2026-11-03T10:31:18 p001 p001-c1 resolu niv 2 | La voisine est partie en vacances. Son chat, lui, est resté sur le toit : il y dort toute 
+2026-11-03T10:31:42 p002 p002-c1 resolu niv 2 | Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait
+2026-11-03T10:31:46 p002 p002-c2 double_sens niv 2 | Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait
+2026-11-03T10:32:17 p002 p002-c2 compatible niv 2 | Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait
+2026-11-03T10:34:04 p007 p007-c1 resolu niv 3 | Dans ce dessin animé, le canard parle et réclame son dîner : il est prêt à manger, et il l
+2026-11-03T10:34:09 p007 p007-c2 compatible niv 3 | Dans ce dessin animé, le canard parle et réclame son dîner : il est prêt à manger, et il l
+  ```
+
+- **bash** `{"command": "sed -n '128,180p' tools/structures/serveur.py; echo \"===\"; sed -n '180,240p' tools/structures/serveur.py", "description": "Lis niveaux minimaux et export du serveur"}`
+
+  ```
+def niveaux_minimaux(self) -> dict:
+        """Le plus petit niveau de contexte où une lecture a été *tranchée* (résolue ou exclue).
+
+        C'est la mesure de « combien de contexte il faut » : 0 = la phrase seule suffit,
+        2 = il faut le paragraphe, 3 = le document, 4 = le genre.
+        """
+        decisifs = {}
+        for v in self._journal("validations.jsonl"):
+            if v.get("statut") not in ("resolu", "exclu"):
+                continue
+            pid = v["phrase_id"]
+            n = int(v.get("niveau", 0))
+            decisifs[pid] = min(decisifs.get(pid, 9), n)
+        return decisifs
+
+    def evaluer(self, phrase_id: str, fournisseur: str = "baseline", contexte: str = "",
+                niveau: int = 0) -> dict:
+        phrase = next((p for p in self.phrases if p["id"] == phrase_id), None)
+        if phrase is None:
+            raise KeyError(f"phrase inconnue : {phrase_id}")
+        r = llm.evaluer(phrase["texte"], phrase["candidats"], fournisseur, contexte, niveau)
+        ligne = {"phrase_id": phrase_id, **r, "horodatage": time.strftime("%Y-%m-%dT%H:%M:%S")}
+        with self.verrou:
+            with (self.dossier / "llm.jsonl").open("a", encoding="utf-8"
+… [4125 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nrows=[json.loads(l) for l in open('tools/structures/donnees/validations.jsonl',encoding='utf-8') if l.strip()]\nlast={}\nfor r in rows: last[(r['phrase_id'],r['candidat_id'])]=r\nfor pref in ['p','c']:\n    sub=[v for (p,c),v in last.items()  … [492 caractères tronqués]`
+
+  ```
+p 14 Counter({'resolu': 7, 'compatible': 4, 'exclu': 3})
+  contextes: Counter({False: 8, True: 6})
+c 133 Counter({'resolu': 66, 'exclu': 60, 'compatible': 7})
+  contextes: Counter({False: 133})
+
+phrases contexte:
+p001 [('p001-c2', 'exclu'), ('p001-c1', 'resolu')]
+p002 [('p002-c1', 'resolu'), ('p002-c2', 'compatible')]
+p003 [('p003-c1', 'resolu'), ('p003-c2', 'exclu')]
+p004 [('p004-c1', 'resolu'), ('p004-c2', 'compatible')]
+p005 [('p005-c2', 'resolu'), ('p005-c1', 'exclu')]
+p006 [('p006-c1', 'resolu'), ('p006-c2', 'compatible')]
+p007 [('p007-c1', 'resolu'), ('p007-c2', 'compatible')]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire des 71 langues, de l'UDHR et des mesures B7
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nlangs=d['langues']\nprint('n langues',len(langs))\nprint(langs)\nprint('concepts',len(d['concepts']),'couples',sum(len(v) for v in d['concepts'].values()) if isinstance(d['concepts'],dict) else '?' … [537 caractères tronqués]`
+
+  ```
+n langues 71
+['ar', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'he', 'hi', 'hr', 'hu', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'ko', 'lt', 'lv', 'mk', 'ms', 'mt', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'sw', 'ta', 'th', 'tr', 'uk', 'ur', 'vi', 'zh', 'af', 'am', 'az', 'be', 'bs', 'cy', 'ga', 'hy', 'km', 'ky', 'lo', 'mn', 'ne', 'pa', 'si', 'so', 'uz', 'yo', 'zu']
+concepts 35 couples 105
+variantes {'zh': ['zh-hans', 'zh-cn', 'zh-sg', 'zh-hant'], 'pt': ['pt-br'], 'sr': ['sr-ec', 'sr-el']}
+source Wikidata (CC0), wbgetentities props=labels ; pageprops Wikipédia pour les QID ; libellés normalisés (NFKC, casse pliée, accents retirés, parenthèses retirées)
+langues avec items: 4 min 1 max 35
+fortes (>=?): [('qid', 35), ('qids', 34), ('labels', 35)]
+distribution Counter({35: 2, 34: 1, 1: 1})
+  ```
+
+- **bash** `{"command": "ls data/udhr | head -5; echo \"...\"; ls data/udhr | wc -l; echo \"===\"; ls data/udhr/*.jsonl 2>/dev/null | head; find data/udhr -maxdepth 1 -type f | sed 's/.*\\.//' | sort | uniq -c", "description": "Compte les fichiers UDHR"}`
+
+  ```
+articles.jsonl
+articles_propres.jsonl
+_eng.txt
+familles
+_fra.txt
+...
+18
+===
+data/udhr/articles.jsonl
+data/udhr/articles_propres.jsonl
+data/udhr/langues.jsonl
+      2 json
+      3 jsonl
+     12 txt
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nprint(type(d['concepts']), len(d['concepts']))\nk=next(iter(d['concepts']))\nprint('ex concept',k, type(d['concepts'][k]), json.dumps(d['concepts'][k],ensure_ascii=False)[:300])\nprint … [676 caractères tronqués]`
+
+  ```
+<class 'dict'> 35
+ex concept jeu.morpion <class 'dict'> {"qid": "Q210339", "qids": ["Q210339"], "labels": {"ar": ["لعبة اكس-او"], "ca": ["tres en ratlla"], "cs": ["piskvorky"], "da": ["kryds og bolle"], "de": ["tic-tac-toe"], "en": ["tic-tac-toe"], "eo": ["tiktakto"], "es": ["tres en raya"], "et": ["trips-traps-trull"], "eu": ["hiruko artzain-joko"], "fa
+keys first ['jeu.morpion', 'jeu.echecs', 'jeu.dames', 'jeu.go', 'jeu.cartes']
+langues avec >=1 concept: 4 couples concept-langue: 105 items 106
+distribution concepts/langue: Counter({35: 2, 34: 1, 1: 1})
+fortes >=5: 3
+langues faibles: [('manuel', 1)]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nfor p in ['data/udhr/langues.jsonl','data/udhr/articles_propres.jsonl','data/udhr/articles.jsonl']:\n    rows=[json.loads(l) for l in open(p,encoding='utf-8') if l.strip()]\n    print('='*10,p,len(rows))\n    print('cles',list(rows[0].keys()))\n    print( … [96 caractères tronqués]`
+
+  ```
+========== data/udhr/langues.jsonl 456
+cles ['fichier', 'iso3', 'nom', 'script', 'sens', 'titre', 'nb_articles', 'preambule_car', 'attrs']
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "sens": "ltr", "titre": "Declaraçón Universal di Dirêtu di Hómé", "nb_articles": 30, "preambule_car": 1593, "attrs": "iso639-3=cri key=007 n=Sãotomense dir=ltr iso15924=Latn"}
+========== data/udhr/articles_propres.jsonl 13222
+cles ['fichier', 'iso3', 'nom', 'script', 'art', 'texte', 'variante']
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 1, "texte": "Tudu nguê di mundu ca nancê livli e igual ni dignidade e ni dirêtu. Punda nen ca pensá e nen tê cunxensa, selá nen fé tudu cuá cu tençón de lumón.", "variante": "007"}
+========== data/udhr/articles.jsonl 13996
+cles ['fichier', 'iso3', 'nom', 'script', 'art', 'titre', 'texte']
+{"fichier": "udhr_007.xml", "iso3": "cri", "nom": "Sãotomense", "script": "Latn", "art": 0, "titre": "Préambule", "texte": "Punda dignidade di tudo nguê di mundu e dirêtu d'inem igual e andeji cu a na pô bêndê fa sá stê di liberdade, di justiça e di paz ni mundu; Punda fata di conheximentu e displêzu di
+… [95 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nlangs=d['langues']\nc=collections.Counter(); items=0; manuel=0\nfor concept,v in d['concepts'].items():\n    labels=v.get('labels',{})\n    for l,forms in labels.items():\n        c[l] … [588 caractères tronqués]`
+
+  ```
+langues déclarées: 71
+langues avec >=1 label: 75
+couples concept-langue: 1433
+formes (surfaces): 1491
+distribution labels/langue: [(1, 5), (2, 1), (3, 2), (4, 3), (5, 1), (6, 2), (9, 1), (10, 2), (11, 1), (12, 1), (13, 1), (14, 4), (15, 3), (16, 5), (17, 1), (18, 2), (19, 3), (20, 2), (21, 2), (22, 2), (23, 2), (24, 1), (25, 2), (26, 3), (27, 3), (28, 3), (30, 2), (31, 5), (32, 5), (33, 1), (34, 2), (35, 2)]
+fortes >=? {1: 75, 5: 64, 10: 60, 15: 51, 20: 37, 25: 28, 30: 17, 34: 4}
+faibles <=2: 2 ['ky', 'lo']
+absentes: []
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' tools/jeux/mesure_langues.py", "description": "Lis le script de mesure des langues"}`
+
+  ```
+#!/usr/bin/env python3
+"""mesure_langues.py — 71 langues, le même sens.
+
+Trois mesures, trois contrôles :
+1. **couverture** : combien de concepts du lexique ont un libellé dans combien
+   de langues (Wikidata, 35 concepts, 71 langues) ;
+2. **corpus** : les surfaces multilingues du corpus (pièces, cartes, noms de
+   jeux + coordonnées), lues au niveau 4, comparées à la RSN attendue ;
+3. **invariance** : les variantes d'une même paire (le même coup dans toutes
+   les langues) doivent donner la même empreinte.
+
+Contrôles : **permutation** des libellés entre concepts (le sens doit
+s'effondrer), **notation** (les 112 items de notation sont lus dans chacune des
+71 langues : la notation ne dépend pas de la langue), et **détection** des noms
+de jeux.
+"""
+from __future__ import annotations
+
+import time
+from collections import Counter, defaultdict
+
+from .codecs import base as B
+from .codecs import cartes as CC
+from .codecs import dames as CD
+from .codecs import echecs as CE
+from .codecs import go as CG
+from .codecs import morpion as CM
+from .codecs import detecte_jeu, lit
+from .corpus import construire_corpus
+from .corpus_multilingue import construire_corpus_multilingue
+from .lexique_multili
+… [3209 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '120,260p' tools/jeux/mesure_langues.py", "description": "Lis la fin du script de mesure des langues"}`
+
+  ```
+return {"total": total, "bons": bons, "par_jeu": par_jeu}
+
+
+def _langue_detectee() -> dict:
+    corpus = construire_corpus_multilingue()
+    exacts = 0
+    for it in corpus.items:
+        lec = lit(it.texte, jeu=it.jeu, niveau=4, contexte=it.contexte)
+        if lec.langue == it.langue:
+            exacts += 1
+    return {"items": len(corpus.items), "exacts": exacts}
+
+
+_NOTATION_CARTE = __import__("re").compile(r"^[2-9TJQKA][CDHS]$")
+
+
+def _est_notation(it) -> bool:
+    """La surface est-elle une notation, indépendante de la langue ?"""
+    import re
+    t = it.texte.strip()
+    f = it.format
+    if f in ("fen", "grille", "diagramme", "compact", "donne", "pgn", "sgf",
+             "gtp", "uci", "algebrique"):
+        return True
+    if f == "san":
+        return bool(re.fullmatch(r"(?:O-O(?:-O)?|[KQRBNCDFT]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?)", t))
+    if f == "numerique":
+        return bool(re.fullmatch(r"[a-h]?[1-9][0-9]?(?:x[a-h]?[1-9][0-9]?)*(?:[-][1-9][0-9]?)?", t))
+    if f == "cellule":
+        return bool(re.fullmatch(r"[A-Ca-c][1-3]|\(\d,\d\)|\d \d", t))
+    if f == "carte":
+        return bool(_NOTATION_CARTE.fullmatch(t))
+    if f == "liste":
+        return all(_
+… [2488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/jeux/lexique_multilingue.json'))\nlangs=set(d['langues'])\nalll=set()\nfor v in d['concepts'].values(): alll|=set(v.get('labels',{}))\nprint('déclarées',len(langs),'labels',len(alll))\nprint('hors liste:',sorted(alll-langs))\nprint … [248 caractères tronqués]`
+
+  ```
+déclarées 71 labels 75
+hors liste: ['pt-br', 'sr-ec', 'zh-hans', 'zh-hant']
+déclarées sans label: []
+pt-br 1
+sr-ec 1
+zh-hans 1
+zh-hant 1
+  ```
+
+### 🤖 Assistant
+
+⏵ Exécution lecture-seule de la mesure des 71 langues
+
+- **bash** `{"command": "PYTHONDONTWRITEBYTECODE=1 timeout 180 python3 -m tools.jeux.mesure_langues 2>&1 | tail -120", "description": "Mesure les 71 langues sans écrire", "timeoutMs": 200000}`
+
+  ```
+},
+   "ga": {
+    "items": 3,
+    "bons": 3,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "hy": {
+    "items": 5,
+    "bons": 5,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "km": {
+    "items": 1,
+    "bons": 1,
+    "forts": 1,
+    "forts_bons": 1
+   },
+   "mn": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "ne": {
+    "items": 2,
+    "bons": 2,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "pa": {
+    "items": 1,
+    "bons": 1,
+    "forts": 0,
+    "forts_bons": 0
+   },
+   "so": {
+    "items": 1,
+    "bons": 1,
+    "forts": 1,
+    "forts_bons": 1
+   },
+   "uz": {
+    "items": 4,
+    "bons": 4,
+    "forts": 2,
+    "forts_bons": 2
+   },
+   "zu": {
+    "items": 1,
+    "bons": 1,
+    "forts": 0,
+    "forts_bons": 0
+   }
+  },
+  "minimum": 1.0,
+  "maximum": 1.0
+ },
+ "invariance": {
+  "paires": 11,
+  "invariantes": 11,
+  "detail": {
+   "ml-cartes-10h": 1,
+   "ml-cartes-ah": 1,
+   "ml-cartes-jc": 1,
+   "ml-cartes-ks": 1,
+   "ml-cartes-qd": 1,
+   "ml-dames-b6c5": 1,
+   "ml-echecs-e4": 1,
+   "ml-echecs-nf3": 1,
+   "ml-go-d4": 1,
+   "ml-go-passe": 1,
+   "ml-morpion-a1": 1
+  }
+ },
+ "permutation": {
+  "items": 449,
+  "bons": 186,
+  "forts": 275,
+  "forts_bons": 1
+… [495 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' reports/rapport-langues-maitres.md", "description": "Lis la fiche langues et maîtres"}`
+
+  ```
+# B7/B8 — 71 langues pour les jeux, et les livres des maîtres mesurés
+
+> Mesure du **26/10/2026**, sur `Hauru` (Python 3.13, sans GPU), `tools/jeux/` et
+> `tools/porte-jeux.sh`. Deux extensions de B5/B6 : un **lexique multilingue** de 35 concepts dans
+> **71 langues** (Wikidata, CC0) et une **base de 17 principes** tirés de neuf sources (sept ouvrages du
+> domaine public, les proverbes traditionnels du go, le morpion résolu), avec leurs évaluations, leur livre,
+> leurs parties et leurs politiques. JSON bruts :
+> [`jeux-langues-mesures.json`](jeux-langues-mesures.json) et
+> [`jeux-maitres-mesures.json`](jeux-maitres-mesures.json). Concept :
+> [`docs/theorie/jeux-symboliques.md`](../docs/theorie/jeux-symboliques.md). Durées : **3,1 s** (langues), **468,8 s**
+> (maîtres), **188,7 s** (jeux, régénéré avec le lexique Unicode).
+
+## Ce qui est mesuré
+
+1. **Les langues** — le même sens (pièce + cases, rang + enseigne, nom du jeu + coordonnée) dans 71 langues ;
+   couverture du corpus au niveau 4, invariance inter-langues, contrôle par permutation des libellés,
+   notation indépendante de la langue, détection des noms de jeux.
+2. **Les maîtres** — 17 principes encodés dans la pensée, et ce 
+… [5148 caractères tronqués]
+  ```
+
+- **bash** `{"command": "PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF'\nimport json\nfrom tools.jeux.mesure_langues import mesure_langues\nr=mesure_langues(rapide=True)\nc=r['couverture']\nprint('COUVERTURE cles:',list(c.keys()))\nfor k in ['langues','concepts','couples','moyenne_concepts_par_langue','n_langues_f … [913 caractères tronqués]`
+
+  ```
+COUVERTURE cles: ['langues', 'concepts', 'couples', 'par_concept', 'par_langue', 'moyenne_concepts_par_langue', 'langues_fortes', 'n_langues_fortes', 'pieces', 'rangs', 'couleurs', 'jeux']
+langues 71
+concepts 35
+couples 1433
+moyenne_concepts_par_langue 20.13
+n_langues_fortes 32
+langues_fortes 32 ['ar', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es']
+pieces {'K': 62, 'Q': 63, 'R': 61, 'B': 60, 'N': 61, 'P': 61}
+rangs {14: 36, 13: 33, 12: 32, 11: 32}
+couleurs {'C': 35, 'D': 34, 'H': 36, 'S': 35}
+jeux {'morpion': 42, 'echecs': 69, 'dames': 60, 'go': 62, 'cartes': 59, 'whist': 27}
+CORPUS items 449 bons 449 langues_avec_items 66 fortes 62 min/max 1.0 1.0
+INVARIANCE 11 11
+PERMUTATION {'items': 449, 'bons': 186, 'forts': 275, 'forts_bons': 12}
+DETECTION 315 315
+LANGUE {'items': 449, 'exacts': 342}
+NOTATION {'items': 72, 'langues': 12, 'parses': 864, 'bons': 864}
+DUREE 1.833
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+TypeError: 'int' object is not iterable
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "grep -rn \"data/udhr\\|extrait_udhr\\|UDHR\" tools/ docs/pilotage/ reports/ --include=\"*.py\" --include=\"*.md\" --include=\"*.sh\" 2>/dev/null | grep -v \"archive\" | head -30", "description": "Cherche usages de l'UDHR"}`
+
+  ```
+tools/extrait_udhr.py:2:"""extrait_udhr.py — l'UDHR en unités alignées, prêtes à passer dans le moteur.
+tools/extrait_udhr.py:4:L'UDHR est le premier corpus parce que l'alignement y est **par construction** :
+tools/extrait_udhr.py:14:    extrait_udhr.py <dossier_udhr_xml> <sortie.jsonl> [--min-langues 50]
+tools/extrait_wikipedia.py:9:apparié. L'invariance reste mesurée sur l'UDHR et les œuvres traduites.
+tools/corpus_neuf.py:4:LE DOUTE, ET IL EST SÉRIEUX. L'UDHR est UN SEUL texte traduit en 392 langues. À la
+tools/corpus_neuf.py:110:    print(f"#   rappel UDHR (texte ALIGNÉ) : C_quad 0,6536 · A40 0,5972 "
+tools/position_seule.py:2:"""LA POSITION SEULE — de combien l'alignement de l'UDHR gonfle-t-il la fidélité ?
+tools/position_seule.py:4:LE DOUTE À LEVER. L'UDHR est UN texte traduit en 392 langues : à la position t,
+tools/position_seule.py:15:Sur l'UDHR il devrait être élevé (le contenu est le même partout). Sur Wikipedia, où
+tools/profil_langues.py:157:        # l'UDHR aligne d'une langue à l'autre, et le périmètre du résultat de tête.
+tools/wiki_apparie.py:4:POURQUOI. Le pont a été mesuré sur l'UDHR : **un seul texte** traduit en 392 langues.
+tools/domaine_ou_langue.py:15:exactem
+… [2167 caractères tronqués]
+  ```
+

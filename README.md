@@ -14,6 +14,29 @@ tracer, le rejouer, le comparer.
 qu'on guidait de l'estacade jusqu'à la scierie. Le nom dit ce que fait le moteur : il ne lit pas des matrices, il
 conduit un flux.*
 
+## Essayez — le premier produit
+
+Le bloc linguistique s'utilise **aujourd'hui**, hors ligne, sur un CPU, sans modèle ni réseau :
+
+```bash
+python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se réveille."
+python3 tools/drave.py analyser "The cat that sleeps on the roof is black." --langue en --json
+python3 tools/drave.py evaluer        # la mesure sur le gold (POS, F1, attachement)
+python3 tools/drave.py rejouer "Le chat dort."   # vérifie le déterminisme (sha256)
+```
+
+Sortie : une **annotation** — langue, classes de mots, syntagmes avec rôle et **cible
+d'attachement**, acte de parole — avec ses spans et sa confiance, de façon **déterministe**. Le
+**format est versionné** (`schema: "drave.annotation"`, `version: 1`, schéma publié dans
+[`tools/schemas/`](tools/schemas/), un refus est une réponse JSON avec le code 3). La notice
+complète est [`docs/produit/README.md`](docs/produit/README.md), les exemples vérifiés
+[`docs/produit/exemples.md`](docs/produit/exemples.md), et la porte produit
+`bash tools/porte-produit.sh` (9 contrôles, ~2 min).
+
+**Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**
+(couverture **0,9874**), 183/183 portes. Les limites sont dites : 3 spans inatteignables, la
+restitution et la traduction ne sont pas encore là.
+
 ## L'origine
 
 Drave est né d'un besoin concret : faire fonctionner des modèles neuronaux **de types différents** sur des machines

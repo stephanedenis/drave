@@ -648,3 +648,874 @@ tools/tests/linguistique/qualifier_neurona
 … [10025 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's|tools/||'; echo '---'; ls tools/ | grep -E 'lecteur|banc|graphe|doc|controleur|routeur|survol|balayage|relecture|pipeline|tableau|code|maths|ocr|scan|fenetre|eval' | head -80", "description": "Lister port … [16 caractères tronqués]`
+
+  ```
+porte-adaptateur-sortie.sh
+porte-audit-drapeaux.sh
+porte-b1110-hybride.sh
+porte-balayage.sh
+porte-bloc-code.sh
+porte-bloc-linguistique.sh
+porte-bloc-maths.sh
+porte-bloc-tableaux.sh
+porte-budget.sh
+porte-bus.sh
+porte-bus-socket.sh
+porte-c4-retard.sh
+porte-cerveau.sh
+porte-consolidation.sh
+porte-coupe.sh
+porte-cycle-c2.sh
+porte-deepseek.sh
+porte-delais.sh
+porte-diff-couche.sh
+porte-document.sh
+porte-echange-experts.sh
+porte-episodique.sh
+porte-etat.sh
+porte-flux.sh
+porte-fusion.sh
+porte-gain.sh
+porte-greffe.sh
+porte-harnais-invariants.sh
+porte-homeostasie.sh
+porte-horloge.sh
+porte-indice.sh
+porte-jeux.sh
+porte-jumeaux.sh
+porte-lecteur.sh
+porte-lecture.sh
+porte-m5-brouillon.sh
+porte-melange.sh
+porte-memoire.sh
+porte-miroir-blocs.sh
+porte-mistral.sh
+porte-n3-cache.sh
+porte-n3-composition.sh
+porte-n3-deux-processus.sh
+porte-n3-deux-regions.sh
+porte-n3-generation.sh
+porte-n3-inventaire.sh
+porte-n3-placement.sh
+porte-n3-pont.sh
+porte-n3-positions.sh
+porte-n3-profondeur.sh
+porte-n3-refus.sh
+porte-n3-reseau.sh
+porte-n3-routes.sh
+porte-n3-service-briques.sh
+porte-n3-service.sh
+porte-n3-seuil.sh
+porte-n3-sparsite-compte.sh
+porte-n3-sparsite.sh
+porte-occupation-elagage.sh
+porte-occupation-mote
+… [1402 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '^#\\|^##' reports/rapport-pensee-gold-syntagmes.md reports/rapport-pensee-gold-cascade.md reports/rapport-pensee-pragmatique-neuronale.md | head -50", "description": "Structure des fiches tagger"}`
+
+  ```
+reports/rapport-pensee-gold-syntagmes.md:1:# B13 — les syntagmes neuronaux : BIO, tête 0,7606, et la politique de fusion
+reports/rapport-pensee-gold-syntagmes.md:13:## 1. Ce qui était mesuré
+reports/rapport-pensee-gold-syntagmes.md:21:## 2. Le dispositif
+reports/rapport-pensee-gold-syntagmes.md:43:## 3. Les résultats
+reports/rapport-pensee-gold-syntagmes.md:66:## 4. Les contrôles négatifs
+reports/rapport-pensee-gold-syntagmes.md:79:## 5. Le coût
+reports/rapport-pensee-gold-syntagmes.md:87:## 6. Ce qui pourrait rendre ce résultat faux
+reports/rapport-pensee-gold-syntagmes.md:108:## 7. Ce que la politique de fusion dit
+reports/rapport-pensee-gold-syntagmes.md:122:## 8. La suite
+reports/rapport-pensee-gold-syntagmes.md:135:## 9. Fichiers
+reports/rapport-pensee-gold-cascade.md:1:# B13 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0
+reports/rapport-pensee-gold-cascade.md:14:## 1. Ce qui était mesuré
+reports/rapport-pensee-gold-cascade.md:23:## 2. Le dispositif
+reports/rapport-pensee-gold-cascade.md:41:## 3. Les résultats
+reports/rapport-pensee-gold-cascade.md:63:## 4. Les ablations et la politique
+reports/rapport-pensee-gold-cascade.md:80:## 5. Les contrôles négatifs
+repo
+… [768 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '85,00\\|84,96\\|0,8500\\|0.8500' reports/*.md | tail -30; echo '---'; ls tools/tests/linguistique/ | grep -v pycache", "description": "Chercher POS 85 et fichiers gold"}`
+
+  ```
+reports/INDEX.md:608:| [rapport-pos-r4-integre.md](rapport-pos-r4-integre.md) | B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 % |
+reports/rapport-partition-integree.md:8:> exact 235/236, POS 85,00 %** — les mesures de la base, **sans déduplication silencieuse**. Le mode
+reports/rapport-pos-r4-integre.md:1:# B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 %
+reports/rapport-pos-r4.md:31:- **Paquet sûr** (R4-en + classes fermées) : **+1,19 dev / +1,11 test**, POS **85,00 %**, **37/0**,
+reports/rapport-pos-r4.md:65:| **R4-en + classes** | **85,00** | **84,94** | **+1,19** | **85,11** | **+1,11** | **37 / 0** | **2** | 0,6188 | 222/222 | 1 faux (`Where`) |
+reports/rapport-pos-r4.md:310:| R4-en + classes | 85,00 | 84,94 | +1,19 | 85,11 | +1,11 | 37 / 0 | 2 | 0,6188 | 222/222 | 92,95 | 77,46 | 94,25 | 79,76 |
+reports/rapport-pos-r4.md:408:   POS 85,00 %, 37/0, 2 faux→faux, F1 +0,0007, attachement 222/222. C’est le meilleur rapport
+reports/rapport-pos-r4.md:457:85,00 %** (dev 84,94 / test 85,11), **37 correctifs / 0 cassé / 2 faux→faux** : c’est exactement le
+reports/README.md:22:| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **
+… [460 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md", "limit": 130}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-cascade.md</path>
+<type>file</type>
+<content>
+1: # B13 — la cascade complète : POS 0,9415, syntagmes 0,7539, acte 1,0
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·
+4: > **Verdict** : ✅ **la cascade complète est mesurée** — POS **0,9415**, syntagmes exacts **0,6088**,
+5: > **tête 0,7539**, acte **1,0**, fraction **0,6381**, **0 refus**, **180 + 180 appels**. Les
+6: > **ablations sont exactes** : la cascade complète vaut la cascade POS (0,9415) **et** la cascade
+7: > syntagmes (0,6088 / 0,7539) ; les parties s'additionnent sans perte. La politique de fusion
+8: > reste le levier : **0,5670** avec la priorité heuristique contre **0,7539** avec `confiance`.
+9: >
+10: > **Dispositif** : [`qualifier_cascade.py`](../tools/tests/linguistique/qualifier_cascade.py) ;
+11: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`NeuronalLLMCompose`) ; JSON
+12: > [`pensee-gold-cascade.json`](pensee-gold-cascade.json).
+13: 
+14: ## 1. Ce qui était mesuré
+15: 
+16: Les deux taggers étaient qualifiés séparément : POS **0,8483** seul / cascade **0,94
+… [7536 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'class Neuronal\\|class Cascade\\|class Heuristique\\|def priorite_par_defaut\\|DeepSeek\\|deepseek' tools/bloc_linguistique.py | head -40; echo '---'; grep -n 'Neuronal' tools/bloc_linguistique.py | head -30", "description": … [36 caractères tronqués]`
+
+  ```
+787:class Heuristique:
+1648:class NeuronalLLM:
+1727:class NeuronalLLMPOS:
+1858:class NeuronalLLMChunks:
+1993:class NeuronalLLMCompose:
+2043:class NeuronalLLMPragmatique:
+2315:def priorite_par_defaut() -> dict | None:
+2316:    """La fusion par niveau si un neuronal réel est joignable (clé DeepSeek), sinon la confiance.
+2423:class Cascade:
+---
+8:  - `MockNeuronal` : une implémentation neuronale **de contrat**, déterministe, pour tester la
+10:  - `NeuronalLLM` : l'adaptateur réel, qui interroge un modèle local (`llama-cli`) et rend le
+12:  - `NeuronalLLMPOS` : le **tagger** neuronal réel — un modèle local, une liste de tokens, des
+143:class RefusNeuronal(RuntimeError):
+1592:class MockNeuronal:
+1648:class NeuronalLLM:
+1652:    `RefusNeuronal`. Le `MockNeuronal` sert aux tests de contrat, pas à la qualité.
+1679:            raise RefusNeuronal(f"modèle absent : {self.modele}")
+1686:            raise RefusNeuronal(str(e)) from e
+1691:            raise RefusNeuronal(f"pas de JSON : {texte_sortie[:120]!r}")
+1695:            raise RefusNeuronal(f"JSON invalide : {e}") from e
+1727:class NeuronalLLMPOS:
+1858:class NeuronalLLMChunks:
+1869:    le niveau `syntagme` seulement ; le POS et la pragma
+… [345 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' reports/rapport-pos-r4.md", "description": "Lire l'intro du paquet POS 85 %"}`
+
+  ```
+# POS — R4 + classes fermées : +1,19 pt dev / +1,11 test en paquet sûr, +1,51/+1,51 en paquet max
+
+> **Ligne de roadmap** : **A25** (gold anglais) · **B13** (moteur de pensée) · **Date** : 2026-11-06 ·
+> **Verdict** : ✅ les deux derniers leviers POS sont mesurés. **R4 bilingue** vaut **+0,74 dev /
+> +0,71 test** (23 correctifs, 0 cassé), **les classes fermées** **+0,78 / +0,81** (25 correctifs,
+> 0 cassé). Le **paquet sûr** (R4-en + classes fermées) vaut **+1,19 / +1,11**, **37/0**, F1
+> **+0,0007**, attachement **222/222**. Le **paquet max** (R4 bilingue) vaut **+1,51 / +1,51**,
+> 48/0, mais **11 faux→faux** et **5 faux positifs français** sur les 50 textes libres. R4 n’est
+> donc **pas « 0 perte »** : « 0 cassé » est une propriété d’exactitude, pas de sens.
+>
+> **Snapshot** : référence **B13** commit `2ba393b0`, `bloc_linguistique.py` SHA
+> `f3db75fc…`, gold `3663be6c…` / `05d4f6df…` / `e3e704ce…` ; split `gold_split.py`
+> (`crc32(id) % 3 == 0` → test). Le dépôt a bougé **pendant** la mesure (correctif d’élision,
+> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.2),
+> pas de référence.
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools
+… [4623 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --help 2>&1 | head -40; echo '---'; sed -n '1,60p' tools/tests/linguistique/evaluer_gold.py", "description": "Voir le banc d'évaluation POS"}`
+
+  ```
+usage: evaluer_gold.py [-h] [--json JSON] [--reel]
+
+evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) +
+synthétique (160). Trois niveaux : POS (token, exact), syntagmes (exact +
+**par tête**), pragmatique. Quatre lectures : heuristique, mock neuronal,
+parallèle, cascade. Le vrai modèle est optionnel (`--reel`) : s'il ne répond
+pas, il est refusé, pas simulé.
+
+options:
+  -h, --help   show this help message and exit
+  --json JSON
+  --reel
+---
+"""evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+
+Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+from collections import Counter, defaultdict
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl  # noqa: E402
+
+GOLD = pathlib.Path(__file__).with_name("gold.json")
+REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+SYNTH = pathli
+… [1368 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ['tools/tests/linguistique/gold.json','tools/tests/linguistique/gold_synthetique.json','tools/tests/linguistique/gold_reel.json','tools/tests/linguistique/gold_gele.json']:\n    try:\n        d … [432 caractères tronqués]`
+
+  ```
+tools/tests/linguistique/gold.json dict keys ['version', 'phrases', 'note'] len 3
+  version <class 'int'> 
+  phrases <class 'list'> 20
+  note <class 'str'> 58
+tools/tests/linguistique/gold_synthetique.json dict keys ['version', 'source', 'graine', 'note', 'phrases'] len 5
+  version <class 'int'> 
+  source <class 'str'> 11
+  graine <class 'int'> 
+tools/tests/linguistique/gold_reel.json dict keys ['version', 'source', 'note', 'phrases'] len 4
+  version <class 'int'> 
+  source <class 'str'> 4
+  note <class 'str'> 20
+tools/tests/linguistique/gold_gele.json dict keys ['gele', 'phrases'] len 2
+  gele <class 'str'> 10
+  phrases <class 'list'> 602
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-etat-r.json 2>&1 | tail -40", "description": "Rejouer l'évaluation POS du bloc L", "timeoutMs": 300000}`
+
+  ```
+"top1_taux_span": 0.9958,
+    "topk_taux_span": 0.9915,
+    "topk_exact": 234,
+    "topk_exact_taux": 0.9791,
+    "topk_exact_taux_span": 0.9915,
+    "exact_taux_span": 0.9958,
+    "verbe": {
+     "cibles": 157,
+     "justes": 157,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 79,
+     "justes": 78,
+     "taux": 0.9873
+    },
+    "couverture": 0.9874,
+    "par_langue": {
+     "fr": {
+      "cibles": 151,
+      "labels": 150,
+      "exact": 149,
+      "topk": 148,
+      "exact_taux_span": 0.9933
+     },
+     "en": {
+      "cibles": 88,
+      "labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 236,
+    "labels": 236,
+    "top1": 235,
+    "topk": 234
+heuristique all: {"pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 119, "?": 3, "NOUN": 1, "VERB": 1}, "CONJ": {"CONJ": 55, "PRON": 28, "?": 13, "PREP": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2
+… [512 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json,collections\nfor f in ['gold.json','gold_reel.json','gold_synthetique.json','gold_gele.json']:\n    d=json.load(open('tools/tests/linguistique/'+f))\n    ph=d['phrases']\n    lang=collections.Counter(p.g … [239 caractères tronqués]`
+
+  ```
+gold.json 20 phrases 0 tokens {'fr': 14, 'en': 6}
+  keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma']
+gold_reel.json 432 phrases 0 tokens {'fr': 228, 'en': 204}
+  keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source']
+gold_synthetique.json 160 phrases 0 tokens {'fr': 160}
+  keys ['id', 'langue', 'texte', 'pragma', 'source', 'mots', 'segments']
+gold_gele.json 602 phrases 0 tokens {'fr': 394, 'en': 208}
+  keys ['id', 'langue', 'texte', 'mots', 'segments', 'pragma', 'source']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-etat-r.json'))\nprint('top keys',list(d))\nfor k,v in d.items():\n    if isinstance(v,dict) and 'pos' in v:\n        p=v['pos']; print(k, 'POS',p.get('exactitude'),'fe … [312 caractères tronqués]`
+
+  ```
+top keys ['date', 'heuristique', 'mock_neuronal', 'parallele', 'cascade', 'reel', 'attachement_hasard', 'gold', 'verdict', 'ok']
+--- meta
+gold {"phrases": 612, "reel": 452, "hand": 20, "reel_new": 432, "synthetique": 160, "tokens": 3179}
+date "2026-11-01"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\ng=json.load(open('tools/tests/linguistique/gold.json'))['phrases']\ns=json.load(open('tools/tests/linguistique/gold_synthetique.json'))['phrases']\nr=json.load(open('tools/tests/linguistique/gold_reel.j … [334 caractères tronqués]`
+
+  ```
+20+160 (180, 804)
+20+432+160 (612, 3179)
+reel432 (432, 2375)
+gele (602, 3141)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-etat-r.json'))\nfor k in ('heuristique','mock_neuronal','parallele','cascade','reel'):\n    v=d.get(k)\n    if not isinstance(v,dict): print(k,v); continue\n    p=v.ge … [223 caractères tronqués]`
+
+  ```
+heuristique {'exactitude': None, 'exactitude_ferme': None, 'exactitude_ouvert': None, 'tokens': None}
+mock_neuronal {'exactitude': None, 'exactitude_ferme': None, 'exactitude_ouvert': None, 'tokens': None}
+parallele {'exactitude': None, 'exactitude_ferme': None, 'exactitude_ouvert': None, 'tokens': None}
+cascade {'exactitude': None, 'exactitude_ferme': None, 'exactitude_ouvert': None, 'tokens': None}
+reel {'exactitude': None, 'exactitude_ferme': None, 'exactitude_ouvert': None, 'tokens': None}
+verdict {'pos_hand': True, 'pos_reel': True, 'pos_synthetique': True, 'syntagme_hand': True, 'syntagme_reel': True, 'syntagme_synthetique': True, 'tete': True, 'acte': True, 'cascade_pos': True, 'cascade_syntagme': True, 'attachement_topk': True, 'attachement_hasard': True, 'attachement_tete_couverture': True, 'attachement_tete_topk': True, 'attachement_tete_hasard': True, 'reel_non_requis': True} ok True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-bloc-linguistique.sh | head -40; echo '---'; bash tools/porte-bloc-linguistique.sh >/tmp/porte-bl.log 2>&1; echo exit=$?; tail -20 /tmp/porte-bl.log", "description": "Rejouer la porte du bloc linguistique", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+#!/usr/bin/env bash
+# Porte du bloc linguistique — tests de contrat + mesure UDHR (langue/script).
+set -u
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+echo "=== PORTE BLOC LINGUISTIQUE ==="
+python3 -m unittest discover -s tools/tests/linguistique -p 'test_bloc_linguistique.py' || { echo "❌ tests"; exit 1; }
+python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+python3 tools/tests/linguistique/gold.py >/dev/null || { echo "❌ gold"; exit 1; }
+python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-porte.json >/dev/null || { echo "❌ évaluation gold"; exit 1; }
+echo "✅ porte bloc linguistique verte"
+---
+exit=0
+  "ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-etat-r.json'))\nfor k in ('heuristique','cascade'):\n    print('==',k, list(d[k])[:20])\n    print(json.dumps(d[k],ensure_ascii=False)[:800])\nprint('== reel keys', li … [133 caractères tronqués]`
+
+  ```
+== heuristique ['all', 'reel', 'hand', 'reel_new', 'synthetique']
+{"all": {"bloc": "heuristique", "phrases": 612, "pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 119, "?": 3, "NOUN": 1, "VERB": 1}, "CONJ": {"CONJ": 55, "PRON": 28, "?": 13, "PREP": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 430, "?": 30, "CONJ": 1, "DET": 14}, "VERB": {"VERB": 546, "NOUN": 218, "PREP": 2, "ADJ": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6715, "rappel": 0.6264, "f1": 0.6482, "tp": 1167, "fp": 571, "fn": 696, "tete": {"precision": 0.8208, 
+== cascade ['all', 'reel', 'hand', 'reel_new', 'synthetique', 'appels_neuronal']
+{"all": {"bloc": "cascade", "phrases": 612, "pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 
+… [598 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh work/n2ac/rope1024-20k.pt work/n2ac/rope1024-2.5k.pt work/n2ac/mix512-15k.pt work/n2ac/mix1024-7.5k.pt work/n2ac/rope2048-20k.pt 2>&1; echo '---'; find work -maxdepth 3 -name '*1024*' -o -name '*2048*' 2>/dev/null | head -20;  … [131 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 131M  2 nov 21:50 work/n2ac/mix1024-7.5k.pt
+-rw-r--r--. 1 stephane stephane 131M  2 nov 20:54 work/n2ac/mix512-15k.pt
+-rw-r--r--. 1 stephane stephane 131M  2 nov 22:30 work/n2ac/rope1024-20k.pt
+-rw-r--r--. 1 stephane stephane 131M  2 nov 20:16 work/n2ac/rope1024-2.5k.pt
+-rw-r--r--. 1 stephane stephane 131M  4 nov 21:09 work/n2ac/rope2048-20k.pt
+---
+work/r44/ocr/98c10248fe3c032c-fra-3.json
+work/r44/ocr/98c10248fe3c032c-fra-3-col.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m3.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m3-col.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m4.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m4-col.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m5.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m5-col.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m6.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m6-col.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m7.json
+work/r44/ocr/98c10248fe3c032c-fra-3-m7-col.json
+work/n2ac/chaine_1024.sh
+work/n2ac/chaine_1024.out
+work/n2ac/rope1024-2.5k.log
+work/n2ac/rope1024-2.5k.pt
+work/n2ac/rope1024-2.5k.drvm
+work/n2ac/rope1024-2.5k.pt.json
+work/n2ac/rope1024-20k.log
+work/n2ac/eval-rope1024-2.5k.json
+---
+/home/stephane/.local/bin/llama-server
+
+… [195 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ['reports/n2-r12-2048.json','reports/n2-fenetre.json','reports/pensee-gold-neuronal.json']:\n    d=json.load(open(f))\n    print('==',f, list(d)[:15])\n    for k in ('date','verdict','gold','ta … [185 caractères tronqués]`
+
+  ```
+== reports/n2-r12-2048.json ['loi_256', 'loi_512', 'loi_1024', 'loi_2048', 'loi_1024_20k', 'meme_texte_1024', 'miroir_1024', 'entrainement_2048', 'entrainement_1024_20k', 'dispositif', 'loi_2048_15k', 'loi_2048_10k', 'loi_2048_20k']
+== reports/n2-fenetre.json ['loi_fenetre_256', 'loi_fenetre_512', 'loi_fenetre_1024', 'meme_texte_256', 'meme_texte_512', 'meme_texte_1024', 'production_n2ac', 'production_200k', 'production_512', 'production_512_meme_texte', 'production_1024', 'production_1024_meme_texte', 'miroir_1024', 'miroir_production_512', 'miroir_256']
+== reports/pensee-gold-neuronal.json ['date', 'modele', 'gold', 'tagger', 'mesures', 'controles', 'seuils', 'verdict', 'duree_totale_s', 'limites']
+  date "2026-11-02 16:52 EST"
+  verdict true
+  gold {"phrases": 180, "tokens": 804, "hand": 20, "synth": 160}
+  tagger {"classe": "NeuronalLLMPOS", "confiance": 0.6, "tokenisation": "Heuristique._mots (mot/nombre)", "contrainte": "grammaire GBNF, une classe par token"}
+  modele {"nom": "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf", "fichiers": [{"nom": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf", "octets": 3993201344, "sha2
+… [600 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh models/ | head -20; echo '---'; find /home/stephane -maxdepth 5 -iname '*qwen2.5-7b*' 2>/dev/null | head -10", "description": "Vérifier présence du 7B"}`
+
+  ```
+total 844M
+-rw-r--r--. 1 stephane stephane 337M 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 507M 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane  138 15 oct 09:02 vision
+---
+/home/stephane/IA/cache/huggingface/hub/models--Qwen--Qwen2.5-7B-Instruct
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-neuronal.json'))\nm=d['mesures']\nfor k,v in m.items():\n    a=v.get('all',{}) if isinstance(v,dict) else {}\n    print(k, {x:a.get(x) for x in ('tokens','exactitud … [221 caractères tronqués]`
+
+  ```
+heuristique {'tokens': 804, 'exactitude': 0.7512, 'ferme': 0.9392, 'ouvert': 0.6211}
+neuronal {'tokens': 804, 'exactitude': 0.8483, 'ferme': 0.766, 'ouvert': 0.9053}
+cascade {'tokens': 804, 'exactitude': 0.944, 'ferme': 0.9392, 'ouvert': 0.9474}
+controles {"majoritaire": {"description": "toujours NOUN", "exactitude": 0.2289}, "uniforme": {"description": "tirage uniforme sur les 12 classes", "exactitude": 0.0833}, "permutation": {"description": "les POS prédits sont permutés entre tokens (graine 0)", "exactitude": 0.1729}, "hasard": {"graine": 0, "tokens": 804}}
+limites ["POS seulement : le tagger ne rend ni syntagmes ni pragmatique.", "20 phrases réelles (hand) ont servi au choix du modèle et du prompt ; les 160 synthétiques sont le jeu de test.", "Le seuil 0,6 de la cascade vient du seuil ouvert de l'heuristique (0,55), pas d'un balayage sur le gold.", "CPU seulement (les GPU de N2 sont réservés) ; pas de mesure GPU.", "Le gold utilise la même tokenisation que le bloc (vérifié : 180/180)."]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in porte-document porte-lecteur porte-lecture porte-balayage porte-tableaux porte-bloc-tableaux porte-bloc-code porte-bloc-maths porte-ocr-scans porte-ocr porte-r13-bpe; do echo \"=== $f\"; sed -n '1,12p' tools/$f.sh; done", "d … [43 caractères tronqués]`
+
+  ```
+=== porte-document
+#!/bin/bash
+# porte-document.sh — R0.1 : le document est un graphe, et le graphe se vérifie.
+#
+# POURQUOI CETTE PORTE EXISTE. Une découpe de document qui « a l'air bonne » n'est pas une
+# découpe : sans partition exacte, un offset faux ne se voit pas ; sans extraction
+# indépendante, un extracteur qui invente des mots ne se voit pas non plus. Cette porte
+# exige donc les trois choses ensemble — partition, fidélité, rejeu — plus trois contrôles
+# négatifs qui doivent ÉCHOUER (texte plat, deux colonnes, notes hors corps).
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE R0.1 — LE GRAPHE DE DOCUMENT ==="
+python3 tools/graphe_document.py --porte
+=== porte-lecteur
+#!/bin/bash
+# porte-lecteur.sh — R0.2 : à 30 % du budget, le contrôleur retrouve la réponse.
+#
+# POURQUOI CETTE PORTE EXISTE. Un contrôleur de lecture peut sembler bon et ne rien
+# sélectionner : sans comparaison à la lecture intégrale, sans contrôle aléatoire et sans
+# contrôle « sans but », on mesure une impression. Cette porte exige les quatre à la fois :
+# récupération ≥ 90 % à 30 % du budget, réponse préservée, hasard nettement plus bas, et
+# closed-book silencieux.
+set -u
+cd "$(dirname "$0")/.."
+echo "==
+… [6715 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' reports/rapport-r44-ocr-pilote.md", "description": "Lire la fiche pilote OCR"}`
+
+  ```
+# R4.4 — l'OCR lit dix pages à 4,48 % de WER, parité 90 %, et la page « photo » tombe à 26,7 %
+
+> **Objet.** La ligne R4.4 était **bloquée** par une ressource absente, pas par une question
+> ouverte : « aucun OCR installé (ni tesseract ni pytesseract) ». Ce pilote installe l'OCR sans
+> root, le branche sur le graphe de document de R0.1 et mesure ce qu'il vaut : WER contre le
+> texte natif de la **même page**, parité des réponses sur les questions du banc R0.3, et deux
+> contrôles négatifs. **Il ne clôt pas R4.4** : les pages sont des **rendus propres**, pas des
+> scans — le contrôle dégradé mesure exactement ce qui manque encore.
+
+## Dispositif
+
+- **Dix pages** rendues à **300 dpi** depuis **6 PDF** du corpus gelé, **3 langues** (fr, en, es) :
+  les 9 pages qui portent les **30 questions** du banc `bench-complet.json` (type juridique) et
+  une page de plus (`A_RES_80_1-en` p2) pour le WER.
+- **OCR** : tesseract **5.5.3** (leptonica 1.87.0), langues `fra`, `eng`, `spa`, installé **sans
+  root** par [`tools/installer_ocr.sh`](../tools/installer_ocr.sh) dans `work/ocr/root`.
+- **Lecture** : sortie TSV de tesseract (mots, boîtes, **confiance**) → blocs
+  ([`graphe_document_ocr.py`](../
+… [6194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in document lecteur lecture balayage bloc-tableaux bloc-code bloc-maths; do echo \"=== $p\"; bash tools/porte-$p.sh >/tmp/porte-$p.log 2>&1; echo \"exit=$? $(tail -1 /tmp/porte-$p.log)\"; done", "description": "Rejouer les port … [41 caractères tronqués]`
+
+  ```
+started background job bash-4002
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-ocr-scans.sh >/tmp/porte-ocr-scans.log 2>&1; echo exit=$?; tail -3 /tmp/porte-ocr-scans.log", "description": "Rejouer la porte des scans OCR", "run_in_background": true}`
+
+  ```
+started background job bash-4003
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/pilotage/backlog/ | grep -i '^R' ; echo '---'; ls docs/pilotage/backlog/ | grep -i 'R0\\|R1\\|R2\\|R3\\|R4\\|R5' | head -40", "description": "Lister les fiches backlog R"}`
+
+  ```
+R01-graphe-document.md
+R02-controleur-lecture.md
+R03-banc-lecture-rapide.md
+R04-tete-survol.md
+R05-tete-balayage.md
+R06-tete-relecture.md
+R07-routeur-extractif-generatif.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+R13-tokenisation-bpe.md
+R21-memoire-travail-gist.md
+R22-memoire-episodique.md
+R31-restitution-sft.md
+R32-citations-provenance.md
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+R51-lecture-croisee.md
+R52-multilingue-decodeur.md
+---
+R01-graphe-document.md
+R02-controleur-lecture.md
+R03-banc-lecture-rapide.md
+R04-tete-survol.md
+R05-tete-balayage.md
+R06-tete-relecture.md
+R07-routeur-extractif-generatif.md
+R11-contexte-hierarchique.md
+R12-curriculum-contexte.md
+R13-tokenisation-bpe.md
+R21-memoire-travail-gist.md
+R22-memoire-episodique.md
+R31-restitution-sft.md
+R32-citations-provenance.md
+R41-bloc-tableaux.md
+R42-bloc-code.md
+R43-bloc-maths.md
+R44-encodeur-visuel.md
+R51-lecture-croisee.md
+R52-multilingue-decodeur.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep-64.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-ocr-cegep-64.md</path>
+<type>file</type>
+<content>
+1: # D — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train
+2: 
+3: > **Ligne de roadmap** : D · **Date** : 2026-11-04 · **Verdict** : ⛔ **le re-split 64 (2/1/1) est
+4: > contaminé** — **DOC2**, placé en **val**, a **18/20 fenêtres de 500 o** déjà dans l'ancien train
+5: > (**17 001 o contigus**, offsets 4 026 047 → 4 044 047) ; **DOC1** (train) est un quasi-doublon
+6: > intra-train (**24/26** fenêtres, une fenêtre de **8 188 o exacte**). Le contrôle **8 Ko exact est
+7: > à 0** et **ne le voit pas** (les deux scans du même document ont été OCRisés deux fois, le texte
+8: > diffère légèrement). ✅ **le corpus propre à 62 documents est prêt et vérifié** :
+9: > `work/ocr/cegep64/propre/` — 60 anciens + **Choquette** (6 p) + **Assurance** (1 p), DOC1/DOC2
+10: > écartés ; 8 Ko 0, 500 o 0, val/test anciens intacts.
+11: >
+12: > **Dispositif** : `tools/verifie_contamination.py` (fenêtres de 8 192 o) + contrôle exact de
+13: > fenêtres de 500 o (pas de 1 000) ; corpus `data/corpus_ocr_cegep/` (état 15 h 57) ; corpus propre
+14: > préparé ; d
+… [5397 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/R44-encodeur-visuel.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/R44-encodeur-visuel.md</path>
+<type>file</type>
+<content>
+1: # R44 — Encodeur visuel / OCR (scans, figures, layout)
+2: 
+3: > **Statut** : partiel · **Priorité** : P3 · **Programme** : R · **Dépend de** : R41, R42, R43 · **Bloqué par** : — (l'OCR est installé ; restent les scans réels, le layout et les exposants)
+4: > **Ligne de roadmap** : R4.4 · **Fiche de résultat attendue** : rapport-r44-encodeur-visuel.md (à créer dans `reports/`)
+5: > **Résumé** : Lire les pages scannées, les figures et le layout, et retrouver la réponse du texte natif.
+6: > **Glossaire** : [OCR](../../theorie/glossaire/entrees/ocr.md) · [layout](../../theorie/glossaire/entrees/layout.md) · [WER](../../theorie/glossaire/entrees/wer.md).
+7: 
+8: ## Le besoin
+9: 
+10: Une partie des documents n'existe qu'en image. Sans OCR et layout, Drave ne lit que le texte déjà extrait. C'est le dernier bloc de R4, après les blocs structurels classiques.
+11: 
+12: ## Le contrat
+13: 
+14: | élément | contenu |
+15: |---|---|
+16: | **entrée** | une image ou une page PDF et une question |
+17: | **sortie** | des régions, du texte et un layout ; la même réponse
+… [3728 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum data/corpus_ocr_cegep/train.txt data/corpus_ocr_cegep/val.txt data/corpus_ocr_cegep/test.txt 2>&1; echo '---'; wc -c data/corpus_ocr_cegep/train.txt data/corpus_ocr_cegep/val.txt data/corpus_ocr_cegep/test.txt 2>&1; echo '- … [94 caractères tronqués]`
+
+  ```
+f57154df3ca5ecbd487c649c9177fddc7b4ffc2073f3488b8a2d1ad436d3da47  data/corpus_ocr_cegep/train.txt
+dd605833f27eab63df46de3437b1e74b479c2c3abcd6ea683365647063ccd0e1  data/corpus_ocr_cegep/val.txt
+1c9ab73459c1e44ae7c1e23e46210091c54a5be360df698bdad150e9c1153b84  data/corpus_ocr_cegep/test.txt
+---
+4440987 data/corpus_ocr_cegep/train.txt
+  12536 data/corpus_ocr_cegep/val.txt
+  10524 data/corpus_ocr_cegep/test.txt
+4464047 total
+---
+test.txt
+train.txt
+val.txt
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4002 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in document lecteur lecture balayage bloc-tableaux bloc-code bloc-maths; do echo "=== $p"; bash tools/porte-$p.sh >/tmp/porte-$p.log 2>&1; echo "exit=$? $(tail -1 /tmp/porte-$p.log)"; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4002"}`
+
+  ```
+=== document
+exit=0 ✅ porte document verte
+=== lecteur
+exit=0 ✅ porte lecteur verte
+=== lecture
+exit=0 ✅ porte lecture verte
+=== balayage
+exit=0 ✅ porte balayage verte
+=== bloc-tableaux
+exit=0 ✅ porte bloc tableaux verte
+=== bloc-code
+exit=0 ✅ porte bloc code verte
+=== bloc-maths
+exit=0 ✅ porte bloc maths verte
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in document lecteur lecture balayage bloc-tableaux bloc-code bloc-maths; do echo \"=== $p\"; grep -E '✅|❌|fidélité|exactitude|rappel|WER|préservation|cellules|questions|pages|langues|0\\.[0-9]{3}|[0-9]+/[0-9]+' /tmp/porte-$p.lo … [78 caractères tronqués]`
+
+  ```
+=== document
+  30 documents · 51 pages · 1466 régions
+    data/onu/pdf/A_RES_80_1-en.pdf                         85 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-es.pdf                         93 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-fr.pdf                         91 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-ru.pdf                         95 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-zh.pdf                         83 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_10-en.pdf                       155 régions  fidélité 1.000
+✅ les 50 pages sont découpées, les partitions exactes, le rejeu identique,
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+=== lecteur
+  tableau    sans_but           0.000  0.000   0.000     2153
+  tableau    closed_book        0.000  0.000   0.000        0
+  technique  integrale          1.000  0.784   0.750    10441
+  technique  controlee_0.10     0.750  0.784   0.750      908
+  technique  controlee_0.30     1.000  0.784   0.750     2567
+  technique  controlee_0.50     1.000  0.784   0.750     3764
+  technique  aleatoire_0.30     0.500  0.538   0.500     3131
+  tec
+… [2828 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/pilotage/backlog/R11-contexte-hierarchique.md docs/pilotage/backlog/R12-curriculum-contexte.md docs/pilotage/backlog/R21-memoire-travail-gist.md docs/pilotage/backlog/R31-restitution-sft.md docs/pilotage/backlog/R51-lec … [168 caractères tronqués]`
+
+  ```
+=== docs/pilotage/backlog/R11-contexte-hierarchique.md
+1:# R11 — Contexte hiérarchique et état de section
+3:> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R01, N1, N2
+5:> **Résumé** : Lire par sections avec un état de section, sans exiger que l'attention voie toute la page.
+10:Le natif surapprend 129 octets et échoue à 130–256. Avant d'allonger le contexte brut, il faut une hiérarchie : span → paragraphe → section → document, avec un état qui résume chaque section.
+12:**Ordre arrêté le 2026-10-29** : c'est **N2** qui porte la hiérarchie (l'état de section, 3 graines) ; R11 mesure la fenêtre qui en résulte et n'ouvre donc qu'après N2. La mesure reste ici : PPL à 1 000 octets, aiguille native, stabilité.
+18:| **entrée** | des octets, des frontières de section (R01) et un état courant |
+19:| **sortie** | un état de section et un état de document, utilisables par le décodeur |
+20:| **coût** | coût linéaire en octets, mémoire d'état bornée |
+=== docs/pilotage/backlog/R12-curriculum-contexte.md
+3:> **Statut** : spécifiée · **Priorité** : P1 · **Programme** : R · **Dépend de** : R11 · **Contraint par** : les cinq négatifs 129–256
+10:Les essais 130, 136,
+… [1282 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-r01-graphe-document rapport-r02-controleur rapport-r03-banc-complet rapport-r03-banc-durci rapport-r04-tete-survol rapport-r05-balayage rapport-r06-pipeline rapport-r07-routeur; do echo \"##### $f\"; sed -n '1,14p' r … [76 caractères tronqués]`
+
+  ```
+##### rapport-r01-graphe-document
+# R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000
+
+> **Ligne de roadmap** : R0.1 · **Date** : 2026-10-29 · **Verdict** : ✅ la découpe est
+> mesurée — partition exacte, provenance exacte, rejeu identique, et les trois contrôles
+> négatifs se comportent comme prévu.
+>
+> **Dispositif** : 30 documents, **51 pages**, 5 formats ; `tools/graphe_document.py` ;
+> porte `tools/porte-document.sh` ; JSON brut
+> [`r01-graphe-document.json`](r01-graphe-document.json) ; spécification
+> [`document-graph.md`](../docs/implantation/document-graph.md).
+
+## La question
+
+Un document peut-il être découpé en **régions typées** (titre, section, paragraphe, tableau,
+
+##### rapport-r02-controleur
+# R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget
+
+> **Ligne de roadmap** : R0.2 (et première tranche de R0.3) · **Date** : 2026-10-29 ·
+> **Verdict** : ✅ le contrôleur **préserve la lecture intégrale** à **30 %** du budget sur
+> les **5 types** — et le plafond n'est pas le contrôleur, c'est le **lecteur**.
+>
+> **Dispositif** : 20 questions, 5 types, 5 documents ; `tools/lecteur_controleur.py` +
+> `tools/banc_lecture.py` ; porte `
+… [5750 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE 'récupère|agrégat|moyenne|1,000|0,231|0,375|249|331|0,871|0,373' /tmp/porte-lecteur.log | head -20; echo '---'; python3 tools/banc_complet.py --help 2>&1 | head -20; echo '---'; python3 tools/routeur.py --help 2>&1 | head -2 … [54 caractères tronqués]`
+
+  ```
+30:  tableau    controlee_0.10     1.000  0.030   0.250     3312
+46:✅ à 30 % du budget, la lecture contrôlée récupère ≥ 90 % des passages de la
+---
+usage: banc_complet.py [-h] [--ecrit ECRIT] [--verifie VERIFIE]
+
+R0.3 — le banc complet (30 documents).
+
+options:
+  -h, --help         show this help message and exit
+  --ecrit ECRIT
+  --verifie VERIFIE
+---
+usage: routeur.py [-h] [--json JSON]
+
+R0.5 — le routeur extractif/génératif.
+
+options:
+  -h, --help   show this help message and exit
+  --json JSON
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -30 /tmp/porte-lecteur.log; echo '---'; sed -n '1,35p' reports/rapport-lecteur-multifichiers.md", "description": "Agrégat R0.2 et fiche multifichiers"}`
+
+  ```
+juridique  sans_but           0.500  0.000   0.000      315
+  juridique  closed_book        0.000  0.000   0.000        0
+  prose      integrale          1.000  0.750   0.750     7082
+  prose      controlee_0.10     1.000  0.750   0.750      463
+  prose      controlee_0.30     1.000  0.750   0.750      463
+  prose      controlee_0.50     1.000  0.750   0.750      463
+  prose      aleatoire_0.30     0.000  0.000   0.000     2117
+  prose      melangee_0.30      1.000  0.750   0.750      463
+  prose      sans_but           0.750  0.000   0.000     1730
+  prose      closed_book        0.000  0.000   0.000        0
+  tableau    integrale          1.000  0.030   0.250    39239
+  tableau    controlee_0.10     1.000  0.030   0.250     3312
+  tableau    controlee_0.30     1.000  0.030   0.250     8599
+  tableau    controlee_0.50     1.000  0.030   0.250    10682
+  tableau    aleatoire_0.30     0.250  0.074   0.250    11765
+  tableau    melangee_0.30      1.000  0.030   0.250     8601
+  tableau    sans_but           0.000  0.000   0.000     2153
+  tableau    closed_book        0.000  0.000   0.000        0
+  technique  integrale          1.000  0.784   0.750    10441
+  technique  controlee_0
+… [1874 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-4003"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lh work/n2ac/*.json 2>/dev/null | tail -20; echo '---'; cat work/n2ac/rope1024-20k.pt.json 2>/dev/null | head -40; echo '---'; tail -5 work/n2ac/rope1024-20k.log 2>/dev/null", "description": "Vérifier métadonnées du run 1024-20k" … [1 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 199  2 nov 20:29 work/n2ac/queue-rope256-2000.json
+-rw-r--r--. 1 stephane stephane 201  2 nov 20:30 work/n2ac/queue-rope512-2000.json
+-rw-r--r--. 1 stephane stephane 134  2 nov 17:53 work/n2ac/queue-rope512.json
+-rw-r--r--. 1 stephane stephane 132  2 nov 17:02 work/n2ac/queue-rope.json
+-rw-r--r--. 1 stephane stephane 137  2 nov 18:49 work/n2ac/queue-zero-rope-40k.json
+-rw-r--r--. 1 stephane stephane 133  2 nov 18:27 work/n2ac/queue-zero-rope.json
+-rw-r--r--. 1 stephane stephane 529  2 nov 22:30 work/n2ac/rope1024-20k.pt.json
+-rw-r--r--. 1 stephane stephane 531  2 nov 20:16 work/n2ac/rope1024-2.5k.pt.json
+-rw-r--r--. 1 stephane stephane 532  4 nov 18:18 work/n2ac/rope2048-10k.pt.json
+-rw-r--r--. 1 stephane stephane 531  2 nov 22:22 work/n2ac/rope2048-1.25k.pt.json
+-rw-r--r--. 1 stephane stephane 536  3 nov 01:33 work/n2ac/rope2048-12.5k.pt.json
+-rw-r--r--. 1 stephane stephane 532  4 nov 21:09 work/n2ac/rope2048-20k.pt.json
+-rw-r--r--. 1 stephane stephane 527  2 nov 17:20 work/n2ac/rope-20k-g2.pt.json
+-rw-r--r--. 1 stephane stephane 524  2 nov 16:44 work/n2ac/rope-20k.pt.json
+-rw-r--r--. 1 stephane stephane 525  2 nov 17:51 work/n2ac/rope512-5k.pt.json
+… [1093 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/n2-r12-2048.json'))\nfor k in ('loi_1024_20k','entrainement_1024_20k','dispositif','miroir_1024'):\n    print('==',k)\n    print(json.dumps(d.get(k),ensure_ascii=False)[:900])\ … [49 caractères tronqués]`
+
+  ```
+== loi_1024_20k
+{"fichier": "rope1024-20k.pt", "params": 34301224, "positions": "rope", "ppl": {"val_fr": {"128": 2.9955, "256": 2.8513, "512": 2.7201, "1000": 2.6256, "2000": 2.5757, "4000": 2.5429}, "val_big": {"128": 3.3086, "256": 3.1437, "512": 3.015, "1000": 2.9055, "2000": 2.8726, "4000": 2.8828}}, "permute_fr": 195.3449, "litterature": 5.6071, "anglais": 7.8817, "wikitext2": 8.7751, "corpus_propre": 7.7208}
+== entrainement_1024_20k
+{"modele": "drave-n0-rope", "parametres": 34301224, "corpus": "data/wiki_fr/propre/train.txt", "octets": 186089472, "pas": 17500, "seq": 1024, "lot": 8, "lr": 0.0003, "graine": 1, "window": 1024, "positions": "rope", "init": "work/n2ac/rope1024-2.5k.pt", "perte_finale": 1.0205986499786377, "ppl_val": 2.66090749837826, "jetons_val": 65536, "tetes": true, "drvm": "work/n2ac/rope1024-20k.drvm", "sha256_drvm": "76628995a51cd54d52d564112f557bacfbea5f6119947c7b20f710e060f4e9af", "duree_s": 8000.274173498154}
+== dispositif
+{"modele": "drave-n0 34,3 M (384/512), RoPE, seq = fenêtre", "corpus": "data/wiki_fr/propre/train.txt (186 Mo) + canal", "budget": "20,5 Mo vus pour la loi (20 000 / 5 000 / 2 500 / 1 250 pas) ; 164 Mo pour le run à 20 000 pas", "cont
+… [516 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'gold\\|GOLD\\|REEL\\|charger\\|phrases' tools/tests/linguistique/qualifier_neuronal.py | head -30; echo '---'; sed -n '185,235p' tools/tests/linguistique/qualifier_neuronal.py", "description": "Vérifier le corpus du banc tag … [5 caractères tronqués]`
+
+  ```
+2:"""qualifier_neuronal.py — qualifie un tagger neuronal local sur le gold (180 phrases, 804 tokens).
+8:passe ; le JSON sort dans `reports/` et la fiche dans `reports/rapport-pensee-gold-neuronal.md`.
+10:    python3 tools/tests/linguistique/qualifier_neuronal.py --demarrer --sortie reports/pensee-gold-neuronal.json
+34:GOLD = pathlib.Path(__file__).with_name("gold.json")
+35:SYNTH = pathlib.Path(__file__).with_name("gold_synthetique.json")
+40:def charger() -> list[dict]:
+41:    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+42:    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+54:def _score(annotations: dict[str, bl.Annotation], phrases: list[dict]) -> dict:
+59:    for p in phrases:
+90:def _sources(annotations: dict[str, bl.Annotation], phrases: list[dict]) -> dict:
+91:    hand = [p for p in phrases if p["source"] == "hand"]
+92:    synth = [p for p in phrases if p["source"] == "synth"]
+93:    return {"all": _score(annotations, phrases), "hand": _score(annotations, hand),
+97:def _controles(phrases: list[dict]) -> dict:
+99:    n = sum(len(p["mots"]) for p in phrases)
+100:    majoritaire = sum(1 for p in phrases for m in p["mots"] if m["pos"] == "NOUN")
+… [3144 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-gold-neuronal.json'))\nprint(json.dumps({k:d[k] for k in ('date','gold','tagger','seuils','verdict')},ensure_ascii=False,indent=1)[:1200])\nprint('modele fichiers:')\nfo … [116 caractères tronqués]`
+
+  ```
+{
+ "date": "2026-11-02 16:52 EST",
+ "gold": {
+  "phrases": 180,
+  "tokens": 804,
+  "hand": 20,
+  "synth": 160
+ },
+ "tagger": {
+  "classe": "NeuronalLLMPOS",
+  "confiance": 0.6,
+  "tokenisation": "Heuristique._mots (mot/nombre)",
+  "contrainte": "grammaire GBNF, une classe par token"
+ },
+ "seuils": {
+  "neuronal_all": true,
+  "cascade_all": true,
+  "cascade_synth": true,
+  "cascade_hand_sans_regression": true,
+  "aucun_refus": true,
+  "controles_sous_0_40": true
+ },
+ "verdict": true
+}
+modele fichiers:
+  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf 3993201344
+  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/qwen2.5-7b-instruct-q4_k_m-00002-of-00002.gguf 689872288
+  ```
+

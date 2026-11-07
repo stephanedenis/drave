@@ -7,12 +7,12 @@
 | Identifiant | `599e9c0e-4252-43ca-a89a-3886d723c379` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 11 |
-| Appels d'outils | 22 |
+| Messages | 27 |
+| Appels d'outils | 51 |
 | Fichiers touchés | 0 |
-| Commandes | 15 |
+| Commandes | 39 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*22 appels d'outils.* Actions notables :
+*51 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -41,13 +41,13 @@
 - bash — Localiser le registre des portes
 - bash — Chercher les usages de eval_n2_propre et porte-n2
 - bash — Lire le registre des portes le plus récent
-- … et 4 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
-⏵ Inventaire des checkpoints N2 et de la porte propre
+⏵ Lecture des résultats de la porte propre et du mètre RoPE
 
-Je commence par explorer le dépôt : checkpoints, rapports N2, et les outils cités.
+Les deux évaluations sont terminées ; je récupère leurs sorties.
 
 ## 3. Travail accompli
 
@@ -73,6 +73,30 @@ Je commence par explorer le dépôt : checkpoints, rapports N2, et les outils ci
 - **T1** Lire mesures et chaîne de la porte propre
 - **T1** Lire métadonnées des checkpoints récents et l'état git
 - **T1** Lire la chaîne et le log du checkpoint récent
+- **T1** Vérifier claims GPU et garde-fous
+- **T1** Lire eval_longueurs.py
+- **T1** Lire les sections N2 de roadmap et en-cours
+- **T1** Inspecter NativeConfig/NativeModel
+- **T1** Lire rope_model.py et vdc
+- **T1** Inspecter la config et les clés du checkpoint récent
+- **T1** Vérifier l'architecture utilisée par entrainer_rope.py
+- **T1** Vérifier le corpus test temporaire et usages d'eval_n2_propre
+- **T1** Lire la fiche N2 propre (référence)
+- **T1** Lire le garde-fou GPU
+- **T1** Lire la porte ressources
+- **T1** Lire le mètre ppl et le corpus wiki
+- **T1** Lire le mètre evalue_canal
+- **T1** Test de chargement du checkpoint récent avec eval_n2_propre
+- **T1** Évaluer le checkpoint récent avec eval_n2_propre.py
+- **T1** Mesurer le checkpoint récent au mètre RoPE sur corpus propre
+- **T1** Vérifier checkpoints absolus disponibles
+- **T1** Traquer les chiffres de la fenêtre 1024
+- **T1** Lire la fiche production fenêtre
+- **T1** Chercher la note A23
+- **T1** Reproduire la porte propre 2,7856 sur propre512-8k
+- **T1** Contrôle eval_n2_propre sur un checkpoint absolu N2.h
+- **T1** Tableau des métadonnées des checkpoints
+- **T1** Inventaire des fiches N2 (titre, date, verdict)
 
 ## 4. Mesures et résultats marquants
 
@@ -92,4 +116,59 @@ Je commence par explorer le dépôt : checkpoints, rapports N2, et les outils ci
 - **T1** `# Deux bras à OCTETS ÉGAUX (33 Mo vus), init base-wiki-45m, canal :`
 - **T1** `#   1. fenêtre 512, 8 000 pas × 8 × 512`
 - **T1** `#   2. fenêtre 256 (seq 128), 32 000 pas × 8 × 128`
+- **T1** `dans des chunks de 8192 octets, 8 lots × 16 fenêtres. On peut demander n'importe quelle`
+- **T1** `30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont`
+- **T1** `**100 scans simulés** : la photo passe de **55,9 %** à **6,7 %** de [WER](../theorie/glossaire/entrees/wer.md) (test **5,7 %**) et la`
+- **T1** `**préservation** du lecteur atteint **90–97 %** sur **4 familles sur 5** (propre **96,7 %** ;`
+- **T1** `fax **56,7 %**, la limite d'information) ; les **colonnes** tombent de **89,4 %** à **0,5 %**,`
+- **T1** `les **tableaux** donnent **92,6 %** de cellules exactes, et **trois vrais scans** s'accordent à`
+- **T1** `**7,10 %** et **88,4 %** de mots, l'**ordre des colonnes** prouvé (**15,3 %** contre **98,0 %**`
+- **T1** `611 ms. La restitution depuis un document lu est **R31**.`
+- **T1** `suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 1`
+- **T1** `[A1–A8] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[A8.0/A8.3a] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[A8.3b/c] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[A2.6] lasts 2 days and is 30% complete and is colored in #b26a00`
+- **T1** `- **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** (2×10 000 pas ; drvm `c50beff6` + `91a3028…`) ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propre (`
+- **T1** `| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
+- **T1** `**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 17`
+- **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
+- **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
+- **T1** `> (**32,8 %** des fenêtres de validation étaient verbatim dans l'entraînement) ; dédupliqué, il`
+- **T1** `> perd **22,2 %** de son texte et la contamination tombe à **zéro**. La chaîne refaite vaut`
+- **T1** `| octets | 4 633 889 | **3 605 306** (−22,2 %) |`
+- **T1** `| validation verbatim dans l'entraînement | **32,8 %** (42 / 128 fenêtres) | **0 / 2 814** |`
+- **T1** `| fenêtres de validation partageant 64 octets avec l'entraînement | — | 2,3 % (résidu de formules) |`
+- **T1** `| distillation | 20 000 pas × 16 × 128 = 41 Mo vus, lr 1e-4 puis 3e-5, **3 graines** |`
+- **T1** `> à **octets ajoutés constants** (61,4 Mo, le budget de N2.ac), les trois fenêtres écrasent N2.ac`
+- **T1** `> seulement). En poussant la fenêtre 1 024 à **30 000 pas (307 Mo)**, le modèle de production`
+- **T1** `> atteint **2,9121** en domaine à 128 octets (60 000 pas, 552 Mo), **2,5276** à 1 000, **2,4761** à`
+- **T1** `> à fenêtre 128 (200 k pas, 205 Mo) donne 3,1591 à 128 et **8,2262** à 1 000 : la fenêtre n'est pas`
+- **T1** `(61,4 Mo, le budget même de N2.ac) affiner le modèle de production avec **RoPE et une fenêtre`
+- **T1** `de 200 000 pas avec 60 % de son compute. Trois questions restaient :`
+- **T1** `| `+ RoPE 512` | 512 | 15 000 | 61,4 Mo | `mix-60k` (N2.ac) |`
+- **T1** `| `+ RoPE 1 024` | 1 024 | 7 500 | 61,4 Mo | `mix-60k` (N2.ac) |`
+- **T1** `| **`+ RoPE 2 048`** | 2 048 | 3 750 | 61,4 Mo | `mix-60k` (N2.ac) |`
+- **T1** `| **`30 000 pas`** | 1 024 | +22 500 | +184 Mo | `mix1024-7.5k` |`
+- **T1** `| **`depuis zéro`** | 512 | 15 000 | 61,4 Mo | `init-figee` (aléatoire) |`
+- **T1** `| **N2.ac** (témoin) | 61 Mo | 3,4902 | 3,5169 | 7,9201 | 12,4065 | 6,0283 | 8,3352 | 9,0525 |`
+- **T1** `| 200 k × 128 (témoin) | 205 Mo | 3,1591 | 3,6577 | 8,2262 | 12,8723 | 5,6056 | 7,2770 | 8,0018 |`
+- **T1** `| **+ RoPE 512** | 123 Mo | **3,1588** | **2,9096** | 2,8018 | 2,7607 | **5,5247** | **7,0507** | **7,9023** |`
+- **T1** `| **+ RoPE 1 024** | 123 Mo | **3,1489** | 2,9103 | **2,7858** | **2,7342** | **5,5173** | 7,1904 | 7,9521 |`
+- **T1** `| **+ RoPE 2 048** | 123 Mo | 3,1862 | 2,9325 | 2,7980 | 2,7372 | 5,5485 | 7,2908 | 8,0135 |`
+- **T1** `| **1 024, 30 000 pas** | **307 Mo** | **2,9943** | **2,7221** | **2,6143** | **2,5628** | **5,3122** | **6,5118** | **7,1544** |`
+- **T1** `économe et sûre hors domaine ; 2 048 ne paie pas à 61,4 Mo.`
+- **T1** `lp9qnz4jPO6DHumXX3daNRBjD0YJqv1OAJ3SqHZ2jK0M1zu3hx0cKBBUthjZl8s366ZzfjSXfsw97BhCAOEGJI4c79y54rehwrbXqvqiGfl5b4mx53sHpsKSbj+6MCu8PorXNdwKGJKiZdkBcoiK8/6CsqxWpyItjcHduqhEANAUF/AIJMovlXYzJVP9AWkt5ySp0BEr`
+- **T1** `wd2pawMXcayjjw4GgTRJKrS6isYm3XmAg2TMvrxsrFZblAmnA0aFeh7xSoXCuMIMyZ5Xl+6WiXZAbVuwG9KFUxE0ul8kWbSUwLhi8iBH0kW/o/0e8miX7Qw5c6g0LVep2bOnWaEfT87YKb9BdA92R/CQIA0E0WrFu8PydFQ5aGm8nZI/atouUr8+GSMHnCgW0cyF7pcp`
+- **T1** `# N2.n — La distillation anglaise : 4,42 → 3,94, la chaîne complète sur 204 Mo`
+- **T1** `# N2.m — L'anglais seul : 4,42 sur 204 Mo, et ce que le multilingue coûte (1,6 PPL)`
+- **T1** `# N2.l — Le canal de structure : +5 % de PPL, et le même alphabet`
+- **T1** `date=2026-11-01 | sur les 186 Mo du corpus réel,`
+- **T1** `# N2.j3 — La capacité sur 186 Mo : 21,65 M paie (4,39 → 4,20, et mieux partout)`
+- **T1** `# N2.aa — Le corpus de 831 Mo à compute constant : un autre domaine, pas plus de savoir`
+- **T1** `# N2.i — Le corpus élargi : 4,84 Mo uniques au lieu de 3,24`
+- **T1** `# N2.j — Du vrai français : 186 Mo de Wikipédia, et ce que vaut le filtre « non ambigu »`
+- **T1** `date=2026-11-01 | entraîné sur **186 Mo** de`
+- **T1** `date=2026-11-02/03 | à **octets constants** (20,5 Mo vus), entraîner sur des`
+- **T1** `# N2.j2 — Positions aléatoires sur 186 Mo : le verrou de longueur tombe encore (÷2,4 à 512)`
 

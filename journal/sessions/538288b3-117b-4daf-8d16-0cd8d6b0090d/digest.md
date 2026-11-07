@@ -862,3 +862,1122 @@ Je lis maintenant les fiches et artefacts de A2.6, A8.3a et A6.2.
 … [1581 caractères tronqués]
   ```
 
+- **grep** `{"path": "reports/rapport-file-taches.md", "pattern": "A2\\.6|frontière|experts|tête"}`
+
+  ```
+Found 8 matches
+
+reports/rapport-file-taches.md
+Line 16: - **A2.6 n'est pas une ligne libre** : ses experts sont bloqués par A6.2, sa tête est refusée, A8.3a est fait et la question du lot est répondue. Le graphe la garde pourtant à la frontière.
+Line 60: | T18 | A2.6 | Trancher la frontière : A2.6 n'est pas libre (experts bloqués A6.2, tête refusée, A8.3a fait, lot répondu) ; le retirer de la frontière du graphe | docs/pilotage/backlog/dependances.md ; backlog/A2.6-ordonnanceur.md ; reports/rapport-a26-bilan.md | A6.2 | A6.2 (MoE local) | python3 tools/verifie_backlog.py | P1 |
+Line 61: | T19 | DOC | Appliquer les 42 écarts de cohérence v8 (5 lignes README, en-têtes historiques) | reports/README.md ; 8 fiches et 8 JSON | hub | fiches existantes à modifier (hors fenêtre) | python3 tools/revue_documentation.py | P2 |
+Line 72: | T23 | A2.6 | Experts de l'ordonnanceur | A6.2 (MoE local) | un MoE local (A6.2) | rapport-a26-bilan.md:30 |
+Line 91: | D6 | A2.6 experts | roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; backlog/A2.6 | rapport-a26-bilan.md:30 | Une seule ligne, bloquée A6.2 ; retirer de la frontière |
+Line 111: | P13 | A2.6 libre : experts et tête | roadma
+… [366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n -o '.\\{0,300\\}A2\\.6.\\{0,500\\}' reports/rapport-file-taches.md | head -20", "description": "Extract A2.6 mentions with context from A23 report"}`
+
+  ```
+16:- **A2.6 n'est pas une ligne libre** : ses experts sont bloqués par A6.2, sa tête est refusée, A8.3a est fait et la question du lot est répondue. Le graphe la garde pourtant à la frontière.
+60:| T18 | A2.6 | Trancher la frontière : A2.6 n'est pas libre (experts bloqués A6.2, tête refusée, A8.3a fait, lot répondu) ; le retirer de la frontière du graphe | docs/pilotage/backlog/dependances.md ; backlog/A2.6-ordonnanceur.md ; reports/rapport-a26-bilan.md | A6.2 | A6.2 (MoE local) | python3 tools/verifie_backlog.py | P1 |
+72:| T23 | A2.6 | Experts de l'ordonnanceur | A6.2 (MoE local) | un MoE local (A6.2) | rapport-a26-bilan.md:30 |
+91:| D6 | A2.6 experts | roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; backlog/A2.6 | rapport-a26-bilan.md:30 | Une seule ligne, bloquée A6.2 ; retirer de la frontière |
+111:| P13 | A2.6 libre : experts et tête | roadmap:30 ; dependances:162 | rapport-a26-bilan ; a26-lot-disque | Experts bloqués ; tête refusée ; A8.3a fait ; lot répondu |
+125:| H2 | A2.6 est à la frontière mais son action est bloquée | rapport-a26-bilan.md:30 | Le graphe annonce 3 items libres, dont un bloqué |
+190:| python3 tools/verifie_backlog.py | oui | oui | exi
+… [34 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls tools/ | grep -Ei 'a26|a8|lot|porte-flux|porte-pont|porte-coupe|file_taches|file-taches|fiabilite|produit|spans|gold|pensee' | head -60; echo '--- drave-core placement ---'; ls drave-core/src/ | head -40; grep -rn \"fn test\" drave-core/src/placement.rs | head -20", "description": "L … [44 caractères tronqués]`
+
+  ```
+hebbien_produits.py
+index_spans.py
+mesure_lot_disque.sh
+mesure-prefill-lot.sh
+operateur_pensee.py
+pas_de_pensee_contracte.py
+pas_de_pensee_corrige.py
+pas_de_pensee_mlp.py
+pas_de_pensee_non_lineaire.py
+pas_de_pensee.py
+pas_de_pensee_recurrent.py
+pensee
+pensee_multilingue.py
+pensee_silencieuse.py
+porte-coupe.sh
+porte-flux.sh
+porte-pont.sh
+porte-produit.sh
+verifier_schema_produit.py
+--- drave-core placement ---
+bus.rs
+clusters.rs
+drvm.rs
+engine.rs
+engram.rs
+episodique.rs
+formats.rs
+gguf.rs
+gpu.rs
+kimi_k3.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+mrope.rs
+native.rs
+placement.rs
+tokenizer.rs
+topologie.rs
+trace_globale.rs
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_backlog.py 2>&1 | tail -40; echo \"exit=$?\"", "description": "Run backlog verification read-only"}`
+
+  ```
+=== GRAPHE DU BACKLOG ===
+  fiches 37 · lignes sans fiche 1 · arêtes dures 43 · plafonds 3
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+exit=0
+  ```
+
+- **bash** `{"command": "grep -n \"mod tests\" -A80 drave-core/src/placement.rs | head -120", "description": "Inspect placement tests"}`
+
+  ```
+177:mod tests {
+178-    use super::*;
+179-
+180-    #[test]
+181-    fn la_vram_est_le_support_le_moins_cher_pour_un_gros_lecteur() {
+182-        // Un KV de 1 M de jetons sur un 0,5 B : ~100 Mo lus par jeton.
+183-        let octets = 100 * 1024 * 1024u64;
+184-        let c = classement(octets);
+185-        assert_eq!(c[0], Support::Vram);
+186-        assert_eq!(c[3], Support::Reseau);
+187-        assert!(cout(octets, Support::Vram) < cout(octets, Support::Ram));
+188-    }
+189-
+190-    #[test]
+191-    fn le_kv_tient_si_la_reserve_est_respectee() {
+192-        assert!(kv_en_vram(4 << 30, 8 << 30));
+193-        assert!(kv_en_vram(7 << 30, 8 << 30));      // 7 + 1 = 8 : la réserve tient juste
+194-        assert!(!kv_en_vram(8 << 30, 8 << 30));     // 8 + 1 > 8
+195-        assert!(!kv_en_vram((7 << 30) + 1, 8 << 30));
+196-    }
+197-
+198-    #[test]
+199-    fn choisir_respecte_la_place() {
+200-        // Le KV d'un contexte de 1 M (~25 Go) ne tient pas en VRAM (16 Go) : RAM.
+201-        assert_eq!(choisir(25 << 30, 25 << 30, 16 << 30, 64 << 30), Support::Ram);
+202-        // Un petit KV (100 Mo) va en VRAM.
+203-        assert_eq!(choisir(100 << 20, 100 << 20, 4 << 30, 64 << 30), Support::
+… [2354 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat reports/a26-bilan.json; echo '---'; cat reports/a83a-flux.json | head -60", "description": "Read A2.6 and A8.3a JSON artifacts"}`
+
+  ```
+{
+ "date": "2026-10-29",
+ "ligne": "A2.6",
+ "verdict": "partielle",
+ "parties": {
+  "choisir_generique": {
+   "etat": "fait",
+   "preuve": "placement.rs, 4 tests ; kv_en_vram appliqué dans model.rs"
+  },
+  "kv_vram": {
+   "etat": "fait",
+   "preuve": "rapport-placement-kv-8k.md, ×1,93 / ×5,8"
+  },
+  "tete_4bits": {
+   "etat": "refusee",
+   "preuve": "TETE_4BIT +10 % PPL ; choisir_avec_perte la refuse à 5 %"
+  },
+  "experts": {
+   "etat": "bloque",
+   "preuve": "A6.2 — pas de MoE local"
+  },
+  "place_et_perte": {
+   "etat": "opt-in",
+   "preuve": "A8.3 refusé par la mesure ; A8.3a à venir"
+  }
+ },
+ "controle": "choisir_avec_perte refuse la tête 4 bits à 5 % (test) ; sans MoE local, les experts ne sont pas mesurables",
+ "limites": [
+  "bilan, pas une nouvelle mesure",
+  "la tête 4 bits a été essayée puis revertée ; pas de chiffre courant",
+  "experts non mesurables sans A6.2"
+ ]
+}
+---
+{
+ "date": "2026-10-29",
+ "ligne": "A8.3a",
+ "porte": "porte-flux.sh",
+ "regime": "DRAVE_PERTE_MAX=1",
+ "f32": {
+  "mode0": {
+   "ref": 61.992,
+   "ecart": 0.0
+  },
+  "mode1": {
+   "ref": 61.992,
+   "ecart": 0.0
+  },
+  "mode2": {
+   "ref": 61.992,
+   "ecart": 0.0365
+  },
+  "mode3": {
+   "ref": 60.8135,
+
+… [724 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -40 drave-core/Cargo.toml; echo '---'; ls reports/ | grep -E 'placement|regle-placement|a8'", "description": "Inspect cargo package and placement reports"}`
+
+  ```
+[package]
+name = "drave-core"
+version = "0.1.0"
+edition = "2021"
+description = "Drave — moteur d'exécution par listes d'activation (stream of logs) pour modèles quantifiés"
+
+[[bin]]
+name = "drave"
+path = "src/main.rs"
+
+[dependencies]
+# aucune : std seul, pour rester sans dépendance réseau
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+---
+a80-audit-final.json
+a80-indice-qualifie.json
+a80-melange-qualifie.json
+a80-pannes-ppl.json
+a80-porte-adaptateur.json
+a80-porte-budget.json
+a80-porte-bus.json
+a80-porte-bus-socket.json
+a80-porte-c4-retard.json
+a80-porte-consolidation.json
+a80-porte-cycle-c2.json
+a80-porte-delais.json
+a80-porte-flux.json
+a80-porte-fusion.json
+a80-porte-gain.json
+a80-porte-pont.json
+a80-porte-profondeur.json
+a80-porte-reflexe.json
+a80-porte-reparti.json
+a80-portes-ppl.json
+a80-porte-topologie.json
+a80-porte-trace.json
+a83a-coupe.json
+a83a-flux.json
+a83a-pont.json
+a83b-decision.json
+a83b-lot.json
+a83b-regimes.json
+a83c-ctx.json
+a83c-lot.json
+a83-defaut.json
+a83d-lot-threads.json
+n3.4c-placement.json
+rapport-a80-audit-final.md
+rapport-a80-indice-qualifie.md
+rapport-a80-melange-qualifie.md
+rapport-a80-pannes-ppl.md
+rapport-a80-porte-adapt
+… [836 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -30 reports/rapport-placement-kv-8k.md; echo '=== regle ==='; head -40 reports/rapport-regle-placement-perte.md", "description": "Read placement KV and loss rule reports"}`
+
+  ```
+# Le placement du KV à 8 k : ×1,93 sur le préremplissage, ×5,8 sur l'attention
+
+> Mesure du 24/10/2026, Qwen2.5-0.5B Q8_0, contexte 8192, **5 337 jetons** de prompt, 8 jetons générés,
+> 20 fils, binaire du dépôt. Deux exécutions, même prompt, même contexte : seul le **placement du cache KV** change
+> (RAM par défaut, VRAM avec `DRAVE_GPU_KV=1`).
+
+## La question
+
+L'axe 2 de la vision tient en une règle : **on place un opérateur là où son flux coûte le moins cher**. Le cache KV
+est le cas type : sa **lecture par jeton** croît linéairement avec le contexte (5 337 jetons × 24 couches × 2 têtes
+KV × 64 dim × 4 octets ≈ **65,6 Mo par jeton**), et la bande passante de la RAM (~22,5 Go/s mesurés) contre celle
+de la VRAM (~84,9 Go/s mesurés) décide du coût. À quel point la règle se voit-elle sur un contexte long ?
+
+## La mesure
+
+| | KV en RAM (défaut) | KV en VRAM | gain |
+|---|---:|---:|---:|
+| **préremplissage** (5 337 jetons) | 297,0 s (18,0 tok/s) | **153,7 s (34,7 tok/s)** | **×1,93** |
+| **attention** (par jeton) | 32,3 ms | **5,6 ms** | **×5,8** |
+| décodage (8 jetons) | 0,696 s (11,5 tok/s) | **0,278 s (28,7 tok/s)** | ×2,5 |
+| total mesuré (par jeton) | 59,0 ms | **32,2 ms** | ×1,8
+… [2802 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-a83-defaut.md"}`
+- **read** `{"file_path": "reports/rapport-a83b-regimes.md"}`
+- **read** `{"file_path": "reports/rapport-a83c-lot.md"}`
+- **read** `{"file_path": "reports/rapport-a83d-lot-threads.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83-defaut.md</path>
+<type>file</type>
+<content>
+1: # A8.3 — le défaut place+perte n'est pas neutre : les portes épinglées bougent de −5,9 % à +19,5 %
+2: 
+3: > **Ligne de roadmap** : A8.3 (et A8.0) · **Date** : 2026-10-29 · **Verdict** : ❌ **le
+4: > passage par défaut est refusé, chiffres en main** — la règle place+perte déplace la PPL
+5: > des portes épinglées de **−5,9 %** (flux mode 0, budget 1 %) à **+19,5 %** (flux mode 3,
+6: > budget 10 %). Elle **reste opt-in** ; ce qui manque n'est pas une porte, c'est un
+7: > **régime** de référence.
+8: >
+9: > **Dispositif** : `DRAVE_PERTE_MAX` (budget en %) sur les portes déjà épinglées par A8.0 ;
+10: > trois budgets — **0,001 %** (aucune couche ne passe en int8), **1 %** (le défaut prévu),
+11: > **10 %** (toutes les couches) ; CPU/GPU comme les portes ; JSON
+12: > [`a83-defaut.json`](a83-defaut.json) ; porte
+13: > [`porte-flux.sh`](../tools/porte-flux.sh) et [`porte-pont.sh`](../tools/porte-pont.sh).
+14: 
+15: ## La question
+16: 
+17: A8.0 a épinglé deux portes qui mesurent une PPL (flux **61,9920 / 60,8135**, pont
+18: **113,0068**). A8.3 demandait : la règle **place et 
+… [3495 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83b-regimes.md</path>
+<type>file</type>
+<content>
+1: # A8.3b — les trois régimes de KV : le mélange tardif est meilleur que le f32, l'int8 partout est pire
+2: 
+3: > **Ligne de roadmap** : A8.3 (suite d'A8.3 et d'A8.0) · **Date** : 2026-10-29 · **Verdict** :
+4: > ✅ **la non-monotonie est réelle et reproductible** — trois régimes, trois chiffres :
+5: > f32 (**61,9920 / 60,8135 / 113,0068**), mélange tardif 1 % (**58,3200 / 62,7357 / 111,8003**),
+6: > int8 partout (**66,6195 / 72,6501 / 120,0813**). Le mélange améliore **deux mesures sur
+7: > trois** ; l'int8 partout dégrade **partout**. Ce n'est pas un artefact de la règle : le
+8: > chemin explicite (`DRAVE_KV_BITS=8`) redonne exactement les chiffres du budget 10 %.
+9: >
+10: > **Dispositif** : Qwen2.5-0.5B-Q8_0, portes `porte-flux` et `porte-pont`, GPU ; trois régimes
+11: > par variable d'environnement (`DRAVE_KV_BITS`, `DRAVE_PERTE_MAX`) ; JSON
+12: > [`a83b-regimes.json`](a83b-regimes.json) ; suite d'[A8.3](rapport-a83-defaut.md).
+13: 
+14: ## La question
+15: 
+16: A8.3 a montré que le défaut place+perte déplace les portes de −5,9 % à +19,5 %. Le signe
+17: positif 
+… [3708 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83c-lot.md</path>
+<type>file</type>
+<content>
+1: # A8.3c — le lot n'est pas neutre : la « non-monotonie » du KV était un effet de chemin
+2: 
+3: > **Ligne de roadmap** : A8.3 (suite d'A8.3b) · **Date** : 2026-10-29 · **Verdict** : ✅
+4: > **expliqué** — le régime du KV a un effet **cohérent sur chaque chemin** : **−5,9 %** sur le
+5: > chemin jeton par jeton, **+3,2 %** sur le chemin par lots. La « non-monotonie » d'A8.3b
+6: > n'était pas la règle : c'étaient **deux chemins différents**, et le lot déplace à lui seul la
+7: > PPL de **1,90 %** (61,9920 à lot 1 contre 60,8135 à lot ≥ 2, en f32).
+8: >
+9: > **Dispositif** : `porte-flux`, mode 3 (`--lot`), deux régimes de KV (f32 ; mélange 1 % par
+10: > `DRAVE_PERTE_MAX=1`), trois lots (1, 2, 4) ; Qwen2.5-0.5B-Q8_0, GPU ; JSON
+11: > [`a83c-lot.json`](a83c-lot.json) ; suite d'[A8.3](rapport-a83-defaut.md) et
+12: > [A8.3b](rapport-a83b-regimes.md).
+13: 
+14: ## La question
+15: 
+16: A8.3b a montré que le mélange KV « améliore » le mode 0 (−5,9 %) et « dégrade » le mode 3
+17: (+3,2 %) — un signe qui n'est pas celui d'une quantification. D'où vient-il : de la règle, du
+18: nom
+… [3443 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83d-lot-threads.md</path>
+<type>file</type>
+<content>
+1: # A8.3d — le lot n'est pas les threads : l'écart de 1,90 % survit à 1 thread
+2: 
+3: > **Ligne de roadmap** : A8.3 (suite d'A8.3c) · **Date** : 2026-10-30 · **Verdict** : ✅
+4: > **condition affinée** — l'écart de PPL entre lot 1 et lot 4 (**1,90 %**) est **le même à 1 et à
+5: > 8 threads**. Ce n'est donc pas le pool de threads : c'est le **noyau par lots** lui-même.
+6: >
+7: > **Dispositif** : `tools/porte-flux.sh` (mode 3, `--lot`), quatre réglages `THREADS` 1/8 ×
+8: > `LOT` 1/4, Qwen2.5-0.5B-Q8_0, 24 ids, ctx 64 ; JSON
+9: > [`a83d-lot-threads.json`](a83d-lot-threads.json).
+10: 
+11: ## La question
+12: 
+13: A8.3c a montré que le lot déplace la PPL à lui seul : **61,9920** au lot 1 contre **60,8135** au lot
+14: ≥ 2 (−1,90 %), et l'a attribué aux « sommes réordonnées ». Deux causes restaient possibles : le
+15: **pool de threads** (8 par défaut) ou le **noyau par lots** (sommes par bloc). Passer à **1 thread**
+16: sépare les deux.
+17: 
+18: ## Ce qui est mesuré
+19: 
+20: | threads | lot 1 | lot 4 | écart |
+21: |---:|---:|---:|---:|
+22: | **8** | **61,9920** | **6
+… [2238 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-a83b-decision.md"}`
+- **read** `{"file_path": "reports/rapport-a83b-lot.md"}`
+- **read** `{"file_path": "reports/rapport-a83c-ctx.md"}`
+- **read** `{"file_path": "docs/pilotage/backlog/A8.0-portes-ppl.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83b-decision.md</path>
+<type>file</type>
+<content>
+1: # A8.3b/c — décision : le défaut reste opt-in, la cause est le chemin lot
+2: 
+3: > **Ligne de roadmap** : A8.3b/c · **Date** : 2026-10-29 · **Verdict** : ⛔ **défaut refusé** —
+4: > le signe du mélange 1 % bascule avec le **chemin lot binaire** (lot 1 contre lot ≥ 2), pas
+5: > avec la taille du cache (ctx 64/256/512 identiques). A8.3 reste **opt-in**.
+6: >
+7: > **Dispositif** : synthèse des mesures A8.3a/b/c, aucun nouveau run ; données
+8: > [`a83b-decision.json`](a83b-decision.json).
+9: 
+10: ## Les chiffres qui décident
+11: 
+12: | régime | lot 1 | lot 2 | lot 4 |
+13: |---|---:|---:|---:|
+14: | f32 | **61,9920** | **60,8135** | **60,8135** |
+15: | 1 % | **58,3200** | **62,7357** | **62,7357** |
+16: 
+17: - **Lot 1 = pas de lot** : les chiffres redonnent le mode 0.
+18: - **Lot ≥ 2** : identiques ; la taille de lot ne porte pas l’effet.
+19: - **Ctx 64/256/512** : 24 exécutions, aucune ligne ne bouge — le cache n’est pas la cause.
+20: - Le signe **bascule avec le chemin** : f32 lotte mieux, 1 % lotte moins bien.
+21: 
+22: ## Pourquoi le défaut est refusé
+23: 
+24: -
+… [1672 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83b-lot.md</path>
+<type>file</type>
+<content>
+1: # A8.3b.1 — le signe du mélange vient du **chemin lot**, pas de la taille de lot
+2: 
+3: > **Ligne de roadmap** : A8.3b · **Date** : 2026-10-29 · **Verdict** : ✅ **le basculement est
+4: > binaire** — `--lot 1` (pas de lot) et `--lot ≥ 2` sont deux régimes ; à l’intérieur de `≥ 2`, la
+5: > taille ne change rien à quatre décimales. Le signe du mélange 1 % bascule avec ce chemin.
+6: >
+7: > **Dispositif** : `drave --ppl-reparti`, Qwen2.5-0.5B Q8_0, 12 couches locales, 24 jetons,
+8: > ctx 64 ; cinq tailles de lot × deux régimes ; données [`a83b-lot.json`](a83b-lot.json).
+9: 
+10: ## Ce qui est mesuré
+11: 
+12: | lot | f32 | mélange 1 % |
+13: |---:|---:|---:|
+14: | **1** | **61,9920** | **58,3200** |
+15: | 2 | **60,8135** | **62,7357** |
+16: | 4 | **60,8135** | **62,7357** |
+17: | 8 | **60,8135** | **62,7357** |
+18: | 16 | **60,8135** | **62,7357** |
+19: 
+20: - **Lot 1 = pas de lot** : les valeurs sont exactement celles du mode 0 de `porte-flux`.
+21: - **Lot ≥ 2** : identiques à quatre décimales dans chaque régime ; la taille de lot ne porte pas
+22:   l’effet.
+23: - En f32
+… [1549 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a83c-ctx.md</path>
+<type>file</type>
+<content>
+1: # A8.3c.1 — le signe du mélange ne dépend pas de la taille du contexte
+2: 
+3: > **Ligne de roadmap** : A8.3b/c · **Date** : 2026-10-29 · **Verdict** : ✅ **le cache n’est pas
+4: > la cause** — à ctx 64, 256 et 512, les PPL sont **identiques** : f32 lot 0/1 = **61,9920**,
+5: > lot 2/4 = **60,8135** ; 1 % lot 0/1 = **58,3200**, lot 2/4 = **62,7357**. Le basculement est
+6: > le **chemin lot** (lot 1 contre lot ≥ 2), pas la capacité du cache.
+7: >
+8: > **Dispositif** : `--ppl-reparti`, Qwen2.5-0.5B Q8_0, 12 couches locales, 24 jetons, ctx variable ;
+9: > 24 exécutions ; données [`a83c-ctx.json`](a83c-ctx.json).
+10: 
+11: ## Ce qui est mesuré
+12: 
+13: | régime | ctx | lot 0 | lot 1 | lot 2 | lot 4 |
+14: |---|---:|---:|---:|---:|---:|
+15: | f32 | 64 | 61,9920 | 61,9920 | 60,8135 | 60,8135 |
+16: | f32 | 256 | 61,9920 | 61,9920 | 60,8135 | 60,8135 |
+17: | f32 | 512 | 61,9920 | 61,9920 | 60,8135 | 60,8135 |
+18: | 1 % | 64 | 58,3200 | 58,3200 | 62,7357 | 62,7357 |
+19: | 1 % | 256 | 58,3200 | 58,3200 | 62,7357 | 62,7357 |
+20: | 1 % | 512 | 58,3200 | 58,3200 | 62,7357 | 62,7357
+… [1162 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A8.0-portes-ppl.md</path>
+<type>file</type>
+<content>
+1: # A8.0 — Épingler les portes qui mesurent une PPL
+2: 
+3: > **Statut** : mesurée · **Priorité** : P2 · **Programme** : A · **Dépend de** : A8
+4: > **Ligne de roadmap** : A8.0 · **Fiches de résultat** :
+5: > [`a80-flux`](../../../reports/rapport-a80-porte-flux.md),
+6: > [`a80-pont`](../../../reports/rapport-a80-porte-pont.md),
+7: > [`a80-topologie`](../../../reports/rapport-a80-porte-topologie.md).
+8: > **Résumé** : une porte qui mesure une PPL doit avoir une **référence chiffrée** avant qu'on
+9: > touche à un défaut — sinon on ne sait pas ce qu'on casse.
+10: 
+11: ## Le besoin
+12: 
+13: A8.3 (« opt-in → défaut ») exigeait d'épingler les portes qui mesurent une PPL. Cette
+14: condition n'avait ni identifiant ni fiche : un changement de défaut déplaçait des chiffres
+15: sans qu'aucune porte ne le dise. A8.0 est cette condition, nommée.
+16: 
+17: ## L'état
+18: 
+19: **Mesurée** — les portes qui mesurent une PPL sont épinglées :
+20: 
+21: | porte | référence épinglée |
+22: |---|---|
+23: | [`porte-flux`](../../../tools/porte-flux.sh) | **61,9920 / 60,8135** (mod
+… [1751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls reports/rapport-a80-porte-*.md | wc -l; ls reports/rapport-a80-porte-*.md | sed 's#reports/rapport-a80-porte-##;s#\\.md##' | tr '\\n' ' '; echo; echo '--- tools porte list ---'; ls tools/porte-*.sh | wc -l; echo '--- a80 audit counts ---'; grep -n -E \"18|portes|PPL\" reports/rapport … [91 caractères tronqués]`
+
+  ```
+17
+adaptateur budget bus bus-socket c4-retard consolidation cycle-c2 delais flux fusion gain pont profondeur reflexe reparti topologie trace 
+--- tools porte list ---
+84
+--- a80 audit counts ---
+4:> portes PPL épinglées**, **14 restantes classées** : 3 comparatifs intra-run non épinglés,
+5:> 2 rouges qualifiées, 1 verte sans PPL, 8 sans PPL. Aucune porte mesurable n’est laissée dans
+8:> **Dispositif** : inventaire statique des 33 portes, recoupé avec les 19 fiches de pin ; données
+19:| catégorie | portes | raison |
+22:| verte sans PPL | `homeostasie` | mesure des normes, pas une perplexité |
+24:| sans PPL | `diff-couche`, `echange-experts`, `harnais-invariants`, `jumeaux`, `mistral`, `occupation-moteur`, `prechargement`, `push-paresseux` | aucune PPL à épingler |
+32:- **Les 8 sans PPL** ne peuvent pas être épinglées sans changer ce qu’elles mesurent.
+41:- **La PPL n’est pas la qualité** : 19 pins protègent une valeur, pas un jugement.
+46:qualifiées, 8 sans PPL. A8.3 reste opt-in ; la condition duale pour les 19 pins n’est pas remplie.
+  ```
+
+- **bash** `{"command": "grep -rn \"DRAVE_PERTE_MAX\" tools/porte-*.sh | cut -d: -f1 | sort -u; echo '--- refs in tools ---'; grep -ln \"61.9920\\|113.0068\\|17.4702\" tools/porte-*.sh | tr '\\n' ' '; echo; echo '--- audit final head ---'; head -50 reports/rapport-a80-audit-final.md", "description": "Check whic … [29 caractères tronqués]`
+
+  ```
+tools/porte-coupe.sh
+tools/porte-flux.sh
+tools/porte-pont.sh
+--- refs in tools ---
+tools/porte-bus-socket.sh tools/porte-coupe.sh tools/porte-flux.sh tools/porte-fusion.sh tools/porte-pont.sh tools/porte-topologie.sh 
+--- audit final head ---
+# A8.0 — audit final : 19/33, les 14 restantes classées
+
+> **Ligne de roadmap** : A8.0 · **Date** : 2026-10-30 · **Verdict** : ✅ **audit clos** — **19
+> portes PPL épinglées**, **14 restantes classées** : 3 comparatifs intra-run non épinglés,
+> 2 rouges qualifiées, 1 verte sans PPL, 8 sans PPL. Aucune porte mesurable n’est laissée dans
+> un flou non nommé.
+>
+> **Dispositif** : inventaire statique des 33 portes, recoupé avec les 19 fiches de pin ; données
+> [`a80-audit-final.json`](a80-audit-final.json).
+
+## Les 19 épinglées
+
+`adaptateur-sortie`, `budget`, `bus-socket`, `bus`, `c4-retard`, `consolidation`, `coupe`,
+`cycle-c2`, `delais`, `flux`, `fusion`, `gain`, `pannes`, `pont`, `profondeur-routee`, `reflexe`,
+`reparti-moteur`, `topologie`, `trace`.
+
+## Les 14 restantes
+
+| catégorie | portes | raison |
+|---|---|---|
+| comparatif intra-run, non épinglé | `horloge`, `poids-creux`, `registre` | compare deux bras, pas une valeur externe |
+| verte 
+… [1405 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-file-taches.md", "limit": 70}`
+- **read** `{"file_path": "reports/rapport-robustesse-produit.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md</path>
+<type>file</type>
+<content>
+1: # La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h
+2: 
+3: > **Ligne de roadmap** : B13 (moteur de pensée) · **Date** : 2026-11-06, 10 h 20 HNE · **Branche** : `s/v7` · **HEAD mesuré** : `7679a2d4`.
+4: > **Mission** : inventer toutes les prochaines actions nommées dans `roadmap.md`, `en-cours.md`, `plan-travail.md` § 9 et § 12, `backlog/index.md`, `backlog/dependances.md`, `references-non-regression.md` et les 12 fiches récentes ; les classer en trois files ; détecter doublons et périmées ; proposer l'ordre de la fenêtre.
+5: > **Verdict** : **29 tâches** — **8 autonomes**, **11 en coordination**, **10 bloquées** ; **6 doublons**, **18 périmées**, **12 dépendances cachées**.
+6: > **Ce que cette fiche n'est pas** : un commit, une modification d'existant, ou une mesure nouvelle sur S/D/N2. Elle ne crée que deux fichiers neufs.
+7: 
+8: ## 1. Résumé exécutif
+9: 
+10: La file est **courte** une fois les doublons retirés : **8 tâches sont exécutables en autonomie** dans le territoire L/B13 et le pilotage, **11 demandent une coordination** (S, D, 
+… [11375 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-robustesse-produit.md</path>
+<type>file</type>
+<content>
+1: # B13 — la robustesse du produit : un surrogate ne plante plus, une entrée non-str est refusée
+2: 
+3: > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅ **deux bugs
+4: > produit fermés** — un **surrogate isolé** faisait planter `analyser` (`UnicodeEncodeError` sur
+5: > `len(texte.encode())`) et une entrée **non-str** (`bytes`, `int`, `list`) levait
+6: > `AttributeError`. Désormais : l'encodage utilise `errors="replace"` et une entrée non textuelle
+7: > rend `refus="non_texte"` (0 étiquette, pas d'exception). **Huit tests** produit passent.
+8: >
+9: > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`analyser`,
+10: > encodages), [`test_produit.py`](../tools/tests/test_produit.py) (`TestRobustesse`) ; audit
+11: > amont [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) (A24 : 50 phrases libres, 18
+12: > correctifs) ; JSON [`pensee-robustesse-produit.json`](pensee-robustesse-produit.json).
+13: 
+14: ## 1. Les deux bugs
+15: 
+16: | entrée | avant | après |
+17: |---|---|---|
+18: | `"Le chat \ud800 
+… [2226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -60 reports/rapport-produit-bloc-l.md; echo '=== grep reproduce ==='; grep -n -A12 \"Reproduire\\|Vérifier\\|Commande\" reports/rapport-produit-bloc-l.md | head -60", "description": "Read A24 audit report head and commands"}`
+
+  ```
+# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `fa1b0c6e` (2026-11-06 09:16) · **HEAD vérifié en fin d'audit** : `c6904284`
+> (le HEAD a bougé pendant l'audit ; module `bloc_linguistique.py` inchangé ; `evaluer_gold.py`
+> modifié en `7f73c17f`) ·
+> **Date** : 2026-11-06 ·
+> **Verdict** : ⚠️ **la surface est utilisable en autonomie ; la structure ne l'est pas encore.**
+> **Aucun fichier existant modifié par cet audit ; aucun commit.** Sorties : ce rapport et
+> [`pensee-produit-bloc-l.json`](pensee-produit-bloc-l.json).
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py),
+> [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+> l'audit (textes dans le JSON) ; harnais local non committé dans `/tmp/audit_produit_bl`.
+> **Porte** : `bash tools/porte-bloc-linguistique.sh` → **verte** (16 tests, autotest UDHR
+> **0,9687**, profils permutés **0,0022**).
+
+**En une phrase.** Sur 50 phrases libres
+… [3567 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -70 reports/rapport-spans-v7.md; echo '=== grep reproduce ==='; grep -n -A10 \"Reproduire\\|Vérifier\\|commande\" reports/rapport-spans-v7.md | head -40", "description": "Read A17 spans report head and commands"}`
+
+  ```
+# Rapport — les 43 spans non prédits de l'attachement v7
+
+> **Ligne de roadmap** : **B13** (attachement, règle 6) · **Date** : 2026-11-05 ·
+> **Commit de départ** : `69bd865ec1bae1958b6f617bde4bf685a15d7d67` (branche `s/v7`) ·
+> **Périmètre** : `tools/bloc_linguistique.py` (`Heuristique`, `_syntagmes_simple`,
+> `_cible_precedent`), `tools/tests/linguistique/evaluer_gold.py` (`charger`, `evaluer_bloc`),
+> `tools/tests/linguistique/gold_split.py` (`dev`, `test`).
+> **Livrables** : ce rapport + [`pensee-spans-v7.json`](pensee-spans-v7.json).
+> **Aucun fichier existant n'a été modifié par cette session** ; les mesures viennent d'une copie locale
+> (`/tmp/spans/sim3.py`, sous-classe de `Heuristique` + copie instrumentée de
+> `_syntagmes_simple`), non commitée. Le dispositif officiel (`evaluer_bloc`) redonne
+> **exactement** la ligne de base 196/195 et F1 0,5555 sur le gold vivant 612.
+
+## 1. Résumé
+
+**État de départ** : 239 cibles, **196 labels au bon span**, **195 exacts / 196** (0,9949),
+43 non prédits = **21 REL, 17 SUB, 5 GP**. **État final** de la meilleure combinaison :
+**222 labels, 222 exacts / 222** (1,0000), soit **222/239 = 0,9289** des cibles ; il reste
+**17 cibles non couve
+… [3289 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification en exécution des chiffres A17/A23
+Je rejoue les mesures citées (gold, autotest) pour distinguer le publié du réel.
+
+- **bash** `{"command": "python3 tools/tests/linguistique/evaluer_gold.py --help 2>&1 | head -20; echo '---'; head -50 tools/tests/linguistique/evaluer_gold.py", "description": "Inspect gold evaluator usage"}`
+
+  ```
+usage: evaluer_gold.py [-h] [--json JSON] [--reel]
+
+evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) +
+synthétique (160). Trois niveaux : POS (token, exact), syntagmes (exact +
+**par tête**), pragmatique. Quatre lectures : heuristique, mock neuronal,
+parallèle, cascade. Le vrai modèle est optionnel (`--reel`) : s'il ne répond
+pas, il est refusé, pas simulé.
+
+options:
+  -h, --help   show this help message and exit
+  --json JSON
+  --reel
+---
+"""evaluer_gold.py — mesure le bloc linguistique sur le gold réel (20) + synthétique (160).
+
+Trois niveaux : POS (token, exact), syntagmes (exact + **par tête**), pragmatique. Quatre
+lectures : heuristique, mock neuronal, parallèle, cascade. Le vrai modèle est optionnel
+(`--reel`) : s'il ne répond pas, il est refusé, pas simulé.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import sys
+from collections import Counter, defaultdict
+
+RACINE = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(RACINE / "tools"))
+import bloc_linguistique as bl  # noqa: E402
+
+GOLD = pathlib.Path(__file__).with_name("gold.json")
+REEL = pathlib.Path(__file__).with_name("gold_reel.json")
+SYNTH = pathli
+… [951 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 -m tools.pensee.autotest 2>&1 | tail -8; echo \"exit=$?\"", "description": "Run thought engine autotest"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-3979]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "timeout 300 python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/etat-a-gold.json > /tmp/etat-a-gold.txt 2>&1; echo \"exit=$?\"; tail -5 /tmp/etat-a-gold.txt", "description": "Run gold evaluator to /tmp", "run_in_background": true}`
+
+  ```
+started background job bash-3994
+  ```
+
+- **bash** `{"command": "grep -n \"fronti\\|libre\\|bloqu\\|Dépend de\\|plafond\" tools/verifie_backlog.py | head -50", "description": "Inspect frontier computation logic"}`
+
+  ```
+13:  1. chaque identifiant cité dans « Dépend de » existe (fiche, ligne acquise, ou ligne
+15:  2. le graphe est acyclique (les arêtes dures et les plafonds) ;
+19:  6. il calcule la **frontière** : ce qui est réellement non bloqué aujourd'hui, et la
+23:  - **dure** (`Dépend de`)   : l'artefact d'entrée n'existe pas ; la fiche est bloquée ;
+26:    rien. Confondre « fait » et « dure » fait croire bloqué ce qui est libre : `R21`
+46:    "bloquée", "abandonnée",
+61:# (elles bloquent des fiches) mais elles ne portent ni porte ni contrôle négatif : c'est un
+123:            "dures": liste(c.get("Dépend de")),
+128:            "bloque": c.get("Bloqué par", ""),
+136:            "bloque": "", "sans_fiche": True, "note": note,
+204:    # 3. acyclicité (arêtes dures + plafonds)
+256:def frontiere(noeuds: dict) -> list[str]:
+259:    non bloquée ne veut pas dire non commencée."""
+263:        if d["statut"] in leve or d["statut"] == "bloquée" or d["bloque"]:
+265:        libre = True
+268:                libre = False
+269:        if libre:
+351:    # Chaque arête reçoit un couloir : les segments horizontaux vivent dans la bande libre
+398:        "pleines sont des dépendances dures, les pointillés des pla
+… [913 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '240,280p' tools/verifie_backlog.py; echo '--- parse champs ---'; sed -n '100,145p' tools/verifie_backlog.py", "description": "Read frontier and fiche parsing logic"}`
+
+  ```
+if int(noeuds[cible]["prio"][1]) > int(d["prio"][1]):
+                    avert.append(
+                        f"priorité : {n} ({d['prio']}) dépend de {cible} "
+                        f"({noeuds[cible]['prio']}) — l'urgent attend le moins urgent"
+                    )
+
+    # 6. les dépendances dures sans fiche : un trou nommé, pas une erreur
+    for n, d in noeuds.items():
+        for cible, _ in d["dures"]:
+            if cible in noeuds and noeuds[cible]["sans_fiche"]:
+                avert.append(f"trou : {n} dépend de {cible}, qui n'a pas de fiche")
+
+    controler_index(noeuds, erreurs)
+    return erreurs, avert, niveau
+
+
+def frontiere(noeuds: dict) -> list[str]:
+    """Ce sur quoi on peut travailler aujourd'hui : aucune dépendance dure non levée, et
+    aucun blocage externe nommé. Une ligne « en cours » ou « partielle » en fait partie :
+    non bloquée ne veut pas dire non commencée."""
+    leve = {"mesurée", "abandonnée"}
+    out = []
+    for n, d in sorted(noeuds.items()):
+        if d["statut"] in leve or d["statut"] == "bloquée" or d["bloque"]:
+            continue
+        libre = True
+        for cible, _ in d["dures"]:
+            if cible in noeuds and noeuds[cible]
+… [2201 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-3994 (bash: timeout 300 python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/etat-a-gold.json > /tmp/etat-a-gold.txt 2>&1; echo "exit=$?"; tail -5 /tmp/etat-a-gold.txt) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-3994", "wait": true, "timeout_ms": 120000}`
+
+  ```
+exit=0
+    "cibles": 236,
+    "labels": 236,
+    "top1": 235,
+    "topk": 234
+heuristique all: {"pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 119, "?": 3, "NOUN": 1, "VERB": 1}, "CONJ": {"CONJ": 55, "PRON": 28, "?": 13, "PREP": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 430, "?": 30, "CONJ": 1, "DET": 14}, "VERB": {"VERB": 546, "NOUN": 218, "PREP": 2, "ADJ": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6715, "rappel": 0.6264, "f1": 0.6482, "tp": 1167, "fp": 571, "fn": 696, "tete": {"precision": 0.8208, "rappel": 0.7203, "f1": 0.7673, "tp": 1342, "fp": 293, "fn": 521}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5482}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cat /tmp/etat-a-gold.txt 2>/dev/null | tail -40", "description": "Read gold evaluator output"}`
+
+  ```
+"top1_taux_span": 0.9958,
+    "topk_taux_span": 0.9915,
+    "topk_exact": 234,
+    "topk_exact_taux": 0.9791,
+    "topk_exact_taux_span": 0.9915,
+    "exact_taux_span": 0.9958,
+    "verbe": {
+     "cibles": 157,
+     "justes": 157,
+     "taux": 1.0
+    },
+    "nom": {
+     "cibles": 79,
+     "justes": 78,
+     "taux": 0.9873
+    },
+    "couverture": 0.9874,
+    "par_langue": {
+     "fr": {
+      "cibles": 151,
+      "labels": 150,
+      "exact": 149,
+      "topk": 148,
+      "exact_taux_span": 0.9933
+     },
+     "en": {
+      "cibles": 88,
+      "labels": 86,
+      "exact": 86,
+      "topk": 86,
+      "exact_taux_span": 1.0
+     }
+    }
+   },
+   "attachement_tete": {
+    "cibles": 236,
+    "labels": 236,
+    "top1": 235,
+    "topk": 234
+heuristique all: {"pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 119, "?": 3, "NOUN": 1, "VERB": 1}, "CONJ": {"CONJ": 55, "PRON": 28, "?": 13, "PREP": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2
+… [512 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -40 reports/rapport-pensee-v12.md; echo '=== file taches verification ==='; sed -n '175,215p' reports/rapport-file-taches.md", "description": "Read v12 verdict and A23 verification section"}`
+
+  ```
+# B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables
+
+> **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-06 ·
+> **Instantané historique** · **Verdict** : ✅ — **la cible de A17 est atteinte**.
+> *Depuis, le gold a été corrigé (4 GP sans préposition) : l'état courant est **226/226**, couverture
+> **0,9456**, 13 spans — voir [le gold corrigé](rapport-gold-gp-corrige.md).*
+> **183/183 portes** : le dernier écart était un **marqueur ambigu** — « when » après un GN est
+> une **relative** (« The day when we left »), ailleurs une **subordonnée** (« When it rains »).
+> Résultat : **222 labels** sur 239, **exact 222/222 = 1,0000** (fr **136/136**, en **86/86**),
+> **couverture 0,9289**, **F1 0,5893** (union ; S 0,5014, chunker 0,6203), tête **0,7392** ;
+> **17 spans** restants (8 REL, 5 SUB, 4 GP) — **tous inatteignables** sans corriger le gold ou
+> le lexique (12 formes synthétiques, 4 GP du gold sans préposition, une tokenisation `qu'il`).
+> **dev 153/153, test 69/69.**
+>
+> **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`AMBIGUES_REL`,
+> branche REL/SUB), [`autotest.py`](../tools/pensee/autotest.py) (16 
+… [5034 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l reports/pensee-produit-bloc-l.json reports/pensee-spans-v7.json reports/pensee-file-taches.json 2>&1; echo '--- test produit ---'; grep -n \"class TestRobustesse\\|def test_\" tools/tests/test_produit.py | head -20", "description": "Check A17/A23/A24 JSON artifacts and product tes … [4 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 28685  6 nov 10:44 reports/pensee-file-taches.json
+-rw-r--r--. 1 stephane stephane 82893  6 nov 11:33 reports/pensee-produit-bloc-l.json
+-rw-r--r--. 1 stephane stephane 39678  5 nov 20:50 reports/pensee-spans-v7.json
+--- test produit ---
+41:    def test_version_et_aide(self) -> None:
+52:    def test_analyser_francais(self) -> None:
+64:    def test_analyser_anglais(self) -> None:
+73:    def test_json_valide_et_deterministe(self) -> None:
+90:    def test_rejouer_deterministe(self) -> None:
+99:    def test_codes_usage(self) -> None:
+109:class TestRobustesse(unittest.TestCase):
+112:    def test_surrogate_isole(self):
+119:    def test_entrees_non_textuelles(self):
+133:    def test_filtrer_donne_une_vue_lineaire(self):
+142:    def test_alternative_etiquette_les_chevauchements(self):
+  ```
+
+- **bash** `{"command": "grep -n -E \"18 |18\\b|correctif|132|50 phrases|0 plantage\" reports/rapport-produit-bloc-l.md | head -40", "description": "Locate A24 key figures and fixes"}`
+
+  ```
+1:# Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat
+14:> [`gold_split.py`](../tools/tests/linguistique/gold_split.py) ; **50 phrases libres** écrites pour
+19:**En une phrase.** Sur 50 phrases libres, le bloc **ne plante pas**, **ne refuse pas**, **ne rend
+32:| syntagme | ❌ | **132 paires** de chevauchement dans **31/50** textes, **188/362** étiquettes ; F1 gold **0,5849** |
+36:| compositions | ❌ | refus et contexte perdus, cascade **50/50** appels ; POS **0,7465 < 0,7581** (verdict `cascade_pos` vert par plancher 0,70 depuis `7f73c17f`, pas par correctif) |
+41:- **Banc libre** : 50 phrases écrites à la main pour cet audit — 29 françaises, 14 anglaises,
+46:  `MockNeuronal`, `Parallele`, `Cascade` pour les compositions. Les 50 phrases passent par
+106:  un correctif.
+113:## 3. Robustesse hors gold : les 50 phrases libres
+141:| **chevauchement de syntagmes** | **132 paires** | **31/50** | f02 : `GP 29-51` et `GP 29-60` ; `GV 80-96` et `GV 90-96` |
+148:**Le chevauchement de syntagmes est le problème n° 1.** 132 paires, **188 des 362 étiquettes
+215:| parallèle | 1,51 ms | 6,18 ms | 27,22 ms | 0,136 |
+218:- **Débit** : 923 phrases/s à 10 
+… [1881 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n -A25 \"correctifs\" reports/rapport-produit-bloc-l.md | head -80", "description": "Read A24 fixes list"}`
+
+  ```
+399:  limites, les 18 correctifs, tous les chiffres et les contrôles.
+400-- Harnais local **non committé** : `/tmp/audit_produit_bl/` (`phrases.py`, `audit.py`,
+401-  `performance_final.py`, `extra.py`, `construire_json.py`).
+402-- Rejeu : `PYTHONPATH=. python3 tools/tests/linguistique/evaluer_gold.py` ;
+403-  `bash tools/porte-bloc-linguistique.sh` (verte).
+404-- **Aucun fichier existant modifié par cet audit, aucun commit, `reports/README.md` non modifié**
+405-  (consigne).
+406-
+407:## 11. Les 5 correctifs prioritaires
+408-
+409-1. **P0-1 — Expliciter les alternatives de syntagmes** : 132 paires dans 31/50 textes, 188/362
+410-   étiquettes ; ne pas dédupliquer en silence — `meta.alternative` + vue « partition » mesurée
+411-   (F1 +0,0292, mais 222 → 208 attachements exacts).
+412-2. **P0-2 — Réparer les frontières de phrase** (décimaux, dates, URL/emails, abréviations, espace
+413-   initial) et les types `url`/`emoji` morts : une URL crée 3–4 phrases, `12.5` coupe une phrase
+414-   en deux fragments (`12.03.2024` en trois), `M./Dr./etc.` duplique la phrase.
+415-3. **P0-3 — Compositions** : propager `refus` et `contexte`, rattraper `RefusNeuronal`, garder
+416-   `MockNeuronal` sur v
+… [748 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '336,365p' reports/rapport-produit-bloc-l.md; echo '=== section 8/9 ==='; sed -n '280,305p' reports/rapport-produit-bloc-l.md", "description": "Read A24 before/after table and sections"}`
+
+  ```
+- **Les 6 mutations sont détectées (6/6)** : span hors texte, cible absente, chevauchement,
+  confiance 1,7, valeur hors span, fraction incohérente. Le détecteur d'anomalies n'est pas
+  complaisant ; noter que l'annotation de base porte déjà un chevauchement, donc le test de
+  mutation ajoute une anomalie à un état déjà imparfait.
+- **Le chunker seul ne chevauche pas** : 0 paire avec `segmenter_s=False, union=False`, contre 132
+  avec le générateur S + union. Le défaut vient bien de la composition des segments, pas du
+  détecteur.
+- **La déduplication simulée** (`_supprimer_chevauchements`, politique actuelle de la fusion) :
+
+| base | paires | syntagmes | attachements | F1 | P | R | tête | exact | couverture |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 50 phrases, avant | 132 | 362 | 265 | — | — | — | — | — | — |
+| 50 phrases, après | **0** | 292 | 215 | — | — | — | — | — | — |
+| gold 612, avant | — | — | — | **0,5849** | 0,6292 | 0,5464 | 0,7336 | **222** | **0,9289** |
+| gold 612, après | — | — | — | **0,6141** | 0,7283 | 0,5309 | 0,7432 | **208** | **0,8703** |
+
+La déduplication **gagne 0,0292 de F1 et 0,0096 de tête**, mais **perd 14 spans d'attachement
+exacts** (222 
+… [3255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -45 docs/pilotage/backlog/A3.2-granularite.md; echo '=== A3.3 ==='; head -45 docs/pilotage/backlog/A3.3-seuil.md", "description": "Read A3.2 and A3.3 fiches"}`
+
+  ```
+# A3.2 — Granularité du flux : par couche, par bloc, par expert
+
+> **Statut** : mesurée · **Priorité** : P2 · **Programme** : A · **Dépend de** : A3
+> **Ligne de roadmap** : A3.2 · **Fiche de résultat** : archive
+> [`roadmap-detail-2026-10-29.md`](../../archive/roadmap-detail-2026-10-29.md) · rapports
+> [`compacite-trace`](../../../reports/rapport-compacite-trace.md) et
+> [`engram-etat`](../../../reports/rapport-engram-etat.md).
+> **Résumé** : ce qui traverse le lien est une **liste valuée** (indices par écarts, valeurs
+> i16, une échelle par bloc), pas un vecteur dense.
+
+## Le besoin
+
+Un flux d'activations transporté en dense coûte 3,5 ko par jeton. La vision dit que le coût
+doit être proportionnel à l'**activité** : seules les activations non nulles doivent voyager,
+et leur précision doit suivre leur importance. La granularité (couche, bloc, expert) décide de
+ce qui est encodé ensemble.
+
+## L'état
+
+**Mesurée** — listes i16, échelles **par bloc de 32 canaux**, indices par écarts : **1 608
+octets par flux** à 256 jetons ; le mode « lot en listes » : **1,5 ko/jeton contre 3,5 en
+dense (÷2,3)**. La liste est réversible et rejouée par la porte
+[`porte-flux`](../../../tools/porte-flux.
+… [2786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n -E \"^\\| \\*\\*A[1-8]|^## A|A[1-8]\\b\" docs/archive/roadmap-detail-2026-10-29.md | head -60", "description": "Locate A details in archived roadmap"}`
+
+  ```
+28:| **A — le moteur** | A1–A8 : les formats, le placement, le transport, le rejeu, les matériels | A3.4 (Colab), A5.4 (FPGA), A6.2 (MoE local) — **bloqués** |
+39:### A1 — Observer et régler, neurone par neurone
+45:| A1.1 | **Format de trace** (DRVF v2/v3) : par couche et position, les neurones actifs (indice + valeur) | ✅ | 132 Mo pour 512 jetons (258 ko/jeton) et +8 % de temps ; la v3 (i8, échelle par bloc de 32) fait 45,1 Mo contre 66,4, au prix de +0,074 % de perplexité au rejeu |
+46:| A1.2 | **Diff par couche** : où deux exécutions divergent, à quel jeton, quels neurones | ✅ | KV f32 contre int8 → première divergence **couche 1, jeton 0**, 896 neurones, 2,9e-3 de dynamique ; couche la plus touchée : FFN 2 |
+47:| A1.3 | **Le format EST le contrat d'échange** (A3) : versionné, en-tête + paires | ✅ | codec de référence : aller-retour identique sur 132 Mo ; le rejeu redonne les mêmes logits |
+48:| A1.4 | **Profilage par neurone** : densité par couche, part des 10 % les plus forts, neurones dominants | ✅ | densité **20 à 56 %** selon la couche ; top 10 % → **33,1 %** de la magnitude ; **0,08 %** de neurones chauds > 90 % du temps |
+49:| A1.5 | **La décision par couche** : la quanti
+… [10393 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -lt reports/ | head -30; echo '--- gold reports ---'; ls reports/ | grep -Ei 'gold|pensee-v1[2-9]|spans'", "description": "List latest reports and gold-related fiches"}`
+
+  ```
+total 20320
+-rw-r--r--. 1 stephane stephane   23652  6 nov 20:52 README.md
+-rw-r--r--. 1 stephane stephane    3765  6 nov 20:49 rapport-partition-integree.md
+-rw-------. 1 stephane stephane   41402  6 nov 20:46 rapport-partition-syntagmes.md
+-rw-r--r--. 1 stephane stephane    3949  6 nov 20:42 rapport-pos-r4-integre.md
+-rw-r--r--. 1 stephane stephane   44454  6 nov 20:40 pensee-partition-syntagmes.json
+-rw-r--r--. 1 stephane stephane   95817  6 nov 20:39 INDEX.md
+-rw-r--r--. 1 stephane stephane     959  6 nov 20:39 pensee-partition-integrees.json
+-rw-r--r--. 1 stephane stephane   33905  6 nov 20:38 rapport-pos-r4.md
+-rw-r--r--. 1 stephane stephane  171282  6 nov 20:38 pensee-pos-r4.json
+-rw-r--r--. 1 stephane stephane     816  6 nov 20:25 pensee-frontieres-integrees.json
+-rw-r--r--. 1 stephane stephane    3328  6 nov 20:25 rapport-frontieres-integrees.md
+-rw-r--r--. 1 stephane stephane  142486  6 nov 20:18 pensee-frontieres-phrase.json
+-rw-r--r--. 1 stephane stephane   36124  6 nov 20:18 rapport-frontieres-phrase.md
+-rw-r--r--. 1 stephane stephane     676  6 nov 20:17 pensee-pos-r4-integration.json
+-rw-r--r--. 1 stephane stephane     778  6 nov 19:56 pensee-composition-sans-perte.j
+… [2407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -30 reports/rapport-gold-gp-corrige.md 2>/dev/null; echo '=== v13? ==='; head -25 reports/rapport-pensee-v13.md 2>/dev/null", "description": "Read latest gold correction report"}`
+
+  ```
+# B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Un défaut du générateur de gold**, pas du bloc : dans le mode `sv` de
+> `gold_synthetique.py`, le span d'un GP partait **après** la préposition (`i = v + index(prep) + 1`)
+> alors que le mode `sv_gp` l'inclut (`i - 1`). Quatre GP du gold étaient donc **sans préposition** —
+> inatteignables par construction. Corrigé, le gold garde **les mêmes 160 phrases** (mêmes ids,
+> mêmes segments) et **4 GP** sont réparés : l'attachement passe de **222/222 à 226/226**,
+> la **couverture de 0,9289 à 0,9456**, les **spans perdus de 17 à 13** (les 4 GP ont disparu de
+> la liste). **dev 155/155, test 71/71.**
+>
+> **Dispositif** : [`gold_synthetique.py`](../tools/tests/linguistique/gold_synthetique.py) (mode
+> `sv`), [`gold_synthetique.json`](../tools/tests/linguistique/gold_synthetique.json) régénéré
+> (graine 42, 160 phrases), [`autotest.py`](../tools/pensee/autotest.py) (14 assertions) ;
+> JSON [`pensee-gold-gp-corrige.json`](pensee-gold-gp-corrige.json).
+
+## 1. Le défaut
+
+```python
+# avant (mode sv) : le span commence après 
+… [443 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-3979", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ T174 convention documentée convention : ['GN', 'GP', 'GV', 'REL', 'SUB'] documentée
+  ✅ T175 audit attachement audit : 14/14, écarts 0
+  ✅ T176 segment précédent segment précédent : s052 ouvre, s012 écoute
+  ✅ T177 candidats têtes   candidats têtes : 234/236 (0.9915)
+  ✅ T178 cache chunker     cache : 1 chunking chunker, 1 défaut (1+2S avant)
+  ✅ T179 multi-cibles      multi-cibles : exact 235/236, exact_any 235/236
+  ✅ T180 par langue        langues : fr 149/150, en 86/86 (86/88 labels)
+  183/183 portes tenues
+exit=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "grep -n -E \"183|portes|172|spans\" reports/rapport-pensee-v12.md | head -20; echo '=== current partition report ==='; head -30 reports/rapport-partition-integree.md", "description": "Check autotest and latest partition state"}`
+
+  ```
+1:# B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables
+6:> **0,9456**, 13 spans — voir [le gold corrigé](rapport-gold-gp-corrige.md).*
+7:> **183/183 portes** : le dernier écart était un **marqueur ambigu** — « when » après un GN est
+11:> **17 spans** restants (8 REL, 5 SUB, 4 GP) — **tous inatteignables** sans corriger le gold ou
+36:| spans perdus | 18 | **17** (8 REL, 5 SUB, 4 GP) |
+42:- **Les 17 spans restants sont inatteignables** : 12 formes synthétiques (le lexique du gold
+57:- **Les 17 spans** : non prédits, donc hors mesure d'attachement.
+70:1. **Les 17 spans** : corriger le gold (GP sans préposition) et étendre le lexique réel, ou les
+77:- [`autotest.py`](../tools/pensee/autotest.py) — 183/183.
+=== current partition report ===
+# B13 — la partition des syntagmes : les alternatives sont étiquetées, les mesures ne bougent pas
+
+> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Le P0-3 est fermé sans perte** : les **239 paires** de chevauchement des deux audits sont
+> **toutes** des paires S × chunker (53,1 % de S qui contient le chunker, 33,5 % l'inverse,
+> 2,5 % de mêmes bornes, 10,9 % de croisements). Le mode
+… [1297 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"TETE_4BIT\\|perte\" drave-core/src/placement.rs | head -30; echo '--- script head ---'; head -40 tools/mesure_lot_disque.sh", "description": "Inspect head 4-bit constant and lot script"}`
+
+  ```
+105:/// Une précision et **son coût mesuré** : les octets par valeur et la perte de
+111:    pub perte_ppl: f64,
+114:/// Le f32 : la référence, aucune perte.
+115:pub const F32: Precision = Precision { nom: "f32", octets_par_valeur: 4.0, perte_ppl: 0.0 };
+117:pub const INT8_TARDIF: Precision = Precision { nom: "int8 tardif", octets_par_valeur: 1.0, perte_ppl: 0.03 };
+119:pub const INT4_TARDIF: Precision = Precision { nom: "int4 tardif", octets_par_valeur: 0.5, perte_ppl: 2.7 };
+122:pub const TETE_4BIT: Precision = Precision { nom: "tête 4 bits", octets_par_valeur: 0.5, perte_ppl: 10.0 };
+124:pub const INT4_GLOBAL: Precision = Precision { nom: "int4 global", octets_par_valeur: 0.5, perte_ppl: 364.0 };
+127:pub const PRECISIONS: [Precision; 5] = [F32, INT8_TARDIF, INT4_TARDIF, TETE_4BIT, INT4_GLOBAL];
+129:/// Choisit **(support, précision)** : le moins cher **dont la perte tient dans
+133:/// ici on répond à « où ça tient **sans payer plus que `perte_max`** ». Un 4 bits
+136:pub fn choisir_avec_perte(
+141:    perte_max: f64,
+145:        if p.perte_ppl > perte_max {
+160:/// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :
+163:pub fn perte_kv_int8(couche:
+… [2768 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cargo --version 2>&1; rustc --version 2>&1; wc -l drave-core/src/placement.rs", "description": "Check Rust toolchain availability"}`
+
+  ```
+cargo 1.99.1 (5f94df478 2026-08-27)
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+253 drave-core/src/placement.rs
+  ```
+
+- **bash** `{"command": "CARGO_TARGET_DIR=/tmp/etat-a-target timeout 300 cargo test --manifest-path drave-core/Cargo.toml placement -- --nocapture 2>&1 | tail -25; echo \"exit=${PIPESTATUS[0]}\"", "description": "Run placement unit tests in /tmp target", "run_in_background": true}`
+
+  ```
+started background job bash-4046
+  ```
+
+- **bash** `{"command": "ls -lh models/ 2>/dev/null | head; find /home/stephane/Data13TB/stephane/GitHub/Qtrinet -maxdepth 3 -iname '*.gguf' -printf '%p %s\\n' 2>/dev/null | head -10", "description": "Locate local GGUF models"}`
+
+  ```
+total 844M
+-rw-r--r--. 1 stephane stephane 337M 25 sep 17:13 Qwen2.5-0.5B-Q4_0.gguf
+-rw-r--r--. 1 stephane stephane 507M 25 sep 16:52 Qwen2.5-0.5B-Q8_0.gguf
+drwxr-xr-x. 1 stephane stephane  138 15 oct 09:02 vision
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q8_0.gguf 531068480
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/Qwen2.5-0.5B-Q4_0.gguf 352972352
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/vision/Qwen2-VL-2B-Instruct-Q4_K_M.gguf 986046944
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf 709883360
+  ```
+
