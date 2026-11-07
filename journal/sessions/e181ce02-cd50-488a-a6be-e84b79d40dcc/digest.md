@@ -57459,3 +57459,122 @@ POS 0.8625 | F1 0.6482 | exact 235/236
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-ponctuation.md'); t=p.read_text()\nt=t.replace(\"## 5. Fichiers\",\"\"\"## 4 bis. Les règles **rejetées** (mesurées puis retirées)\n\n| règle | effet | décision |\ … [1341 caractères tronqués]`
+
+  ```
+négatifs documentés
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 16 files changed, 73 insertions(+), 26 deletions(-)
+COMMIT OK 1
+ba42d4cc FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 %
+   c43dd5cc..ba42d4cc  s/v7 -> s/v7
+   c43dd5cc..ba42d4cc  master -> master
+ven 06 nov 2026 23:28:37 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale de la nuit et bilan
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [466 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 23:28:49 EST
+HEAD ba42d4cc
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+python3 tools/verifier_schemas.py          EXIT=0
+python3 tools/verifie_backlog.py           EXIT=0
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+0
+0
+  ```
+
+### 🤖 Assistant
+
+⏵ Nuit close au vert : POS 86,25 %, contrat v1, quatre états intégrés, tout poussé
+
+## Où en est le dépôt (23 h 30)
+
+`HEAD ba42d4cc`, `master` = `s/v7` **poussés**, 0 divergence. **Toutes les portes légères passent**, la **porte produit est verte** (10 contrôles), l'**autotest tient 183/183**.
+
+| mesure | ce matin | **cette nuit** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 0,5849 | **0,6482** |
+| attachement | 222/222 (0,9289) | **235/236 (0,9874)** |
+| spans perdus | 17 | **3** (`r035`, `r264`, `g017`) |
+| miroir (sortie POS) | 0,196 | **0,2276** |
+
+## Ce qui a été livré
+
+**Le produit** — `tools/drave.py` (`analyser`/`evaluer`/`rejouer`, `--json`, `--langue`, `--partition`, `--contexte`), **contrat v1** publié et validé (`tools/schemas/drave-annotation-v1.json`, `schema`/`version`, refus en JSON code 3), **porte produit à 10 contrôles** (~2 min), **11 + 6 + 4 tests**, doc d'usage + 5 exemples rejoués, `README` avec « Essayez ».
+
+**Les correctifs mesurés** — gold corrigé (4 GP du générateur sans préposition), **morphologie du 1er groupe** (10 spans), **frontières de phrase** (32/40 textes faux → 0), **partition étiquetée** (`meta.alternative`, `filtrer` = 0 chevauchement), **compositions sans perte** (cascade = heuristique), **POS** : R2a/R3/R2b, R4-en + classes fermées, `NUM`, `PONCT`, R4-fr filtré, règle « que ».
+
+**Les quatre états** (lecture seule, intégrés et corrigés) — **N2** (porte propre 2,7856 à 1 024, manque 0,29 ; bug du mètre RoPE signalé), **S** (`/paragraphes` fini 19/19, 11 verdicts non committés ; 71 langues = lexique B7 ; rétro-traduction absente), **R** (le tagger n'est pas à 0,944 contre 0,85 : corpus différents, **+6,35 pts** sur 432), **A** (A6.2 **libre** — le MoE local existe ; seuls A3.4 et A5.4 bloqués).
+
+**Les négatifs documentés** — trois règles testées puis **retirées** (participes irréguliers, R4-fr générique, participe après `avoir`), et la déduplication silencieuse remplacée par les alternatives étiquetées.
+
+## Ce qui reste, nommé
+
+1. **3 spans** : `r035` (relative zéro), `r264` (le GV avale le marqueur élidé), `g017` (arbitrage d'adverbe).
+2. **Les items de coordination** : les **11 verdicts S** à committer (territoire S), le **tagger sur 612 via l'API** (décision : < +2 pts → négatif nommé), `porte-n2.sh` (proposée, deux seuils), **R2.1** (gist, libre).
+3. **Les deux `UnicodeEncodeError` hors banc** signalés par l'audit (UTF-8 invalide à l'écriture JSON, stdout ASCII) — non reproduits depuis `_sur()` ; à vérifier par un test dédié.
+
+La nuit a transformé le bloc : **+10,4 points de POS**, **+6,3 de F1**, **14 spans retrouvés**, un **contrat versionné** et une **porte produit** — le tout mesuré, contrôlé et poussé.
+
+
+## Tour 185
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie."
+Round: 1/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestSortieHostile(unittest.TestCase):\n    \"\"\"Un stdout ASCII ne doit pas faire planter l'en-tête (audit A26, h … [1339 caractères tronqués]`
+
+  ```
+test ASCII ajouté
+Ran 11 tests in 1.949s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Test\\|if __name__\" tools/tests/test_produit.py; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); lignes=p.read_text().splitlines(keepends=True)\nsortie=[]\nfor i,l in enumerate(lignes … [621 caractères tronqués]`
+
+  ```
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+130:class TestPartition(unittest.TestCase):
+150:class TestContexte(unittest.TestCase):
+159:if __name__ == "__main__":
+161:class TestSortieHostile(unittest.TestCase):
+184:if __name__ == "__main__":
+186:if __name__ == "__main__":
+nettoyé
+38:class TestProduit(unittest.TestCase):
+109:class TestRobustesse(unittest.TestCase):
+130:class TestPartition(unittest.TestCase):
+150:class TestContexte(unittest.TestCase):
+159:class TestSortieHostile(unittest.TestCase):
+182:if __name__ == "__main__":
+184:if __name__ == "__main__":
+Ran 13 tests in 2.327s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''if __name__ == \"__main__\":\n    unittest.main()\n\n\nif __name__ == \"__main__\":\n    unittest.main()''','''if __name … [1431 caractères tronqués]`

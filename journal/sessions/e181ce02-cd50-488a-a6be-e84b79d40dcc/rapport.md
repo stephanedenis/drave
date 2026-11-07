@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 150.8 h |
-| Tours | 184 |
-| Messages | 3395 |
-| Appels d'outils | 3013 |
+| Durée | 150.9 h |
+| Tours | 185 |
+| Messages | 3401 |
+| Appels d'outils | 3017 |
 | Fichiers touchés | 25 |
-| Commandes | 2508 |
+| Commandes | 2512 |
 | Sous-agents | 38 |
-| Commits | 403 |
+| Commits | 404 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -427,6 +427,8 @@
 **Tour 183** — oui
 
 **Tour 184** — oui, continue en mode autonome jusqu'à 9h demain
+
+**Tour 185** — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaise … [877 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -9919,7 +9921,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*259 appels d'outils.* Actions notables :
+*260 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9937,48 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 244 autres
+- … et 245 autres
 
 **Synthèse produite :**
 
-⏵ Règle du participe passé après « avoir » (a couru, j'ai lu)
+⏵ Nuit close au vert : POS 86,25 %, contrat v1, quatre états intégrés, tout poussé
+
+\## Où en est le dépôt (23 h 30)
+
+`HEAD ba42d4cc`, `master` = `s/v7` **poussés**, 0 divergence. **Toutes les portes légères passent**, la **porte produit est verte** (10 contrôles), l'**autotest tient 183/183**.
+
+| mesure | ce matin | **cette nuit** |
+|---|---:|---:|
+| POS | 75,81 % | **86,25 %** |
+| F1 syntagmes | 0,5849 | **0,6482** |
+| attachement | 222/222 (0,9289) | **235/236 (0,9874)** |
+| spans perdus | 17 | **3** (`r035`, `r264`, `g017`) |
+| miroir (sortie POS) | 0,196 | **0,2276** |
+
+\## Ce qui a été livré
+
+**Le produit** — `tools/drave.py` (`analyser`/`evaluer`/`rejouer`, `--json`, `--langue`, `--partition`, `--contexte`), **contrat v1** publié et validé (`tools/schemas/drave-annotation-v1.json`, `schema`/`version`, refus en JSON code 3), **porte produit à 10 contrôles** (~2 min), **11 + 6 + 4 tests**, doc d'usage + 5 exemples rejoués, `README` avec « Essayez ».
+
+**Les correctifs mesurés** — gold corrigé (4 GP du générateur sans préposition), **morphologie du 1er groupe** (10 spans), **frontières de phrase** (32/40 textes faux → 0), **partition étiquetée** (`meta.alternative`, `filtrer` = 0 chevauchement), **compositions sans perte** (cascade = heuristique), **POS** : R2a/R3/R2b, R4-en + classes fermées, `NUM`, `PONCT`, R4-fr filtré, règle « que ».
+
+**Les quatre états** (lecture seule, intégrés et corrigés) — **N2** (porte propre 2,7856 à 1 024, manque 0,29 ; bug du mètre RoPE signalé), **S** (`/paragraphes` fini 19/19, 11 verdicts non committés ; 71 langues = lexique B7 ; rétro-traduction absente), **R** (le tagger n'est pas à 0,944 contre 0,85 : corpus différents, **+6,35 pts** sur 432), **A** (A6.2 **libre** — le MoE local existe ; seuls A3.4 et A5.4 bloqués).
+
+**Les négatifs documentés** — trois règles testées puis **retirées** (participes irréguliers, R4-fr générique, participe après `avoir`), et la déduplication silencieuse remplacée par les alternatives étiquetées.
+
+\## Ce qui reste, nommé
+
+1. **3 spans** : `r035` (relative zéro), `r264` (le GV avale le marqueur élidé), `g017` (arbitrage d'adverbe).
+2. **Les items de coordination** : les **11 verdicts S** à committer (territoire S), le **tagger sur 612 via l'API** (décision : < +2 pts → négatif nommé), `porte-n2.sh` (proposée, deux seuils), **R2.1** (gist, libre).
+3. **Les deux `UnicodeEncodeError` hors banc** signalés par l'audit (UTF-8 invalide à l'écriture JSON, stdout ASCII) — non reproduits depuis `_sur()
+… [218 caractères tronqués]
+
+### Tour 185 — <goal_round> Objective: "Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en … [1157 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Test du stdout ASCII
+- bash — Réparer et tester
+- bash — Nettoyer et committer les tests
 
 ## 3. Travail accompli
 
@@ -10056,7 +10095,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2468 autres
+- … et 2472 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10607,4 +10646,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOCS — LES DEUX TABLEAUX CORRIGÉS (SÉPARATEUR 6 COLONNES, ∣ DANS LE CODE) ; PORTE TABLEAUX VERTE" -- reports/rapport-pos-r4.md reports/rapport-etat-a.md docs/pi
 - B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/pens
 - FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 %" -- reports/rapport-pos-ponctuation.md docs/pilotag
+- PRODUIT — DEUX TESTS DE SORTIE HOSTILE (STDOUT ASCII, JSON ASCII) : 13 TESTS" -- tools/tests/test_produit.py docs/produit/README.md docs/pilotage/en-cours.md 2>
 

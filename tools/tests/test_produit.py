@@ -156,6 +156,29 @@ class TestContexte(unittest.TestCase):
         self.assertEqual(json.loads(sortie.stdout)["contexte"], "Le chat est sur le toit.")
 
 
+class TestSortieHostile(unittest.TestCase):
+    """Un stdout ASCII ne doit pas faire planter l'en-tête (audit A26, hors banc)."""
+
+    def test_stdout_ascii(self):
+        import os
+        env = dict(os.environ, PYTHONIOENCODING="ascii")
+        sortie = subprocess.run(
+            [sys.executable, str(RACINE / "tools/drave.py"), "analyser", "Le chat dort."],
+            capture_output=True, text=True, env=env, cwd=str(RACINE))
+        self.assertEqual(sortie.returncode, 0, sortie.stderr[:300])
+        self.assertIn("drave", sortie.stdout)
+
+    def test_stdout_ascii_json(self):
+        import os
+        env = dict(os.environ, PYTHONIOENCODING="ascii")
+        sortie = subprocess.run(
+            [sys.executable, str(RACINE / "tools/drave.py"), "analyser",
+             "Le chat de la voisine qui dort sur le toit se réveille.", "--json"],
+            capture_output=True, text=True, env=env, cwd=str(RACINE))
+        self.assertEqual(sortie.returncode, 0, sortie.stderr[:300])
+        self.assertEqual(json.loads(sortie.stdout)["schema"], "drave.annotation")
+
+
 if __name__ == "__main__":
     unittest.main()
 if __name__ == "__main__":
