@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 162.5 h |
 | Tours | 192 |
-| Messages | 3554 |
-| Appels d'outils | 3158 |
+| Messages | 3556 |
+| Appels d'outils | 3160 |
 | Fichiers touchés | 25 |
-| Commandes | 2642 |
+| Commandes | 2644 |
 | Sous-agents | 42 |
-| Commits | 431 |
+| Commits | 432 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10312,7 +10312,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 192 — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas … [111 caractères tronqués]
 
-*27 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Inspecter DSH
 - bash — Voir la CLI de DSH
@@ -10328,7 +10328,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Insérer git_avant et tester J0
 - bash — Tester dsh headless directement
 - bash — Chercher la clé DeepSeek
-- … et 13 autres
+- … et 15 autres
 
 **Synthèse produite :**
 
@@ -10453,7 +10453,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2602 autres
+- … et 2604 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11032,4 +11032,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BUD
 - DOCS — README T1 : TROIS MOTS DE MOINS" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "TROIS MOTS DE MOINS"; then echo "COMMIT OK $i"
 - PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEUR
+- DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES)" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "REA
 

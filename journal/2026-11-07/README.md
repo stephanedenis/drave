@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **5 session(s)** · **6 thème(s)**
+**22 commits** · **5 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
+| mesures | 4 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
 
@@ -53,6 +53,7 @@
 | 10:53 | `fae117e5` | DOCS — README T1 ET COMPTEURS APRÈS LE MÉTA-HARNAIS |
 | 10:56 | `f1b837a3` | DOCS — README T1 SOUS 1 000 MOTS ET COMPTEUR DES DOCUMENTS À 123 |
 | 10:58 | `f93ddc60` | DOCS — README T1 : DEUX LIGNES RACCOURCIES, BUDGET TENU |
+| 11:09 | `fffbbe5d` | PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEURS CONTRÔLES NÉGATIFS |
 
 ## Le récit de la journée (écrit à la main)
 

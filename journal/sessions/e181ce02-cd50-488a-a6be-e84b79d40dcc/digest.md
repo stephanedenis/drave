@@ -60098,3 +60098,27 @@ UDHR **532 langues** (art. 1, **même source XML** que les 456 langues × 30 art
 **Lien cassé à réparer** : le README Panini renvoie à `Qtrinet/docs/agent/panini-nipada.md`, qui n'existe pas ; le document réel est `Qtrinet/docs/methode/panini-nipada.md`.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\n# retirer une ligne redondante (la carte de la documentation elle-même)\nt=t.replace(\"| [`README.md`](README.md) | la carte de la documentation |\\ … [1787 caractères tronqués]`
+
+  ```
+· docs/README.md : 1003 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-07)
+705 798
+ create mode 100644 reports/rapport-inventaire-panini.md
+COMMIT OK 1
+fffbbe5d PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEURS CONTRÔLES NÉGATIFS
+   f93ddc60..fffbbe5d  s/v7 -> s/v7
+   f93ddc60..fffbbe5d  master -> master
+sam 07 nov 2026 11:12:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\n# les 3 lignes les plus longues (hors titres)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\ … [162 caractères tronqués]`
+
+  ```
+15 32 | **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [le plan de travail](pilotage/plan-travail.md) 
+13 21 | **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole
+95 19 | [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave — à qui, qu
+2 18 > **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'i
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\n# raccourcir la ligne 15 (la plus longue)\nfor i,l in enumerate(lignes):\n    if l.startswith(\"| **savoir où l'o … [1354 caractères tronqués]`

@@ -13,7 +13,7 @@
 |---|---|
 | **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole sémantique](theorie/protocole-semantique.md) · [le glossaire](theorie/glossaire.md) · [la synthèse](theorie/synthese/index.md) |
 | **faire** (résultat, [porte](theorie/glossaire/entrees/porte.md), rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](methode/organisation-du-depot.md) · [l'utilisation](pilotage/utilisation.md) |
-| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [le plan de travail](pilotage/plan-travail.md) · [la roadmap](pilotage/roadmap.md) · [les chantiers](pilotage/chantiers.md) · [le backlog](pilotage/backlog/index.md) · [les résultats](../reports/README.md) · [les portes](pilotage/references-non-regression.md) · [le journal](../journal/README.md) |
+| **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [les chantiers](pilotage/chantiers.md) |
 
 ## Méthode — comment on travaille
 
@@ -93,7 +93,7 @@
 
 | document | pour quoi |
 |---|---|
-| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave — à qui, quoi, comment, limites |
+| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave |
 | [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels (entrée → sortie), dont un cas d'échec connu |
 
 ## Transversal et archive

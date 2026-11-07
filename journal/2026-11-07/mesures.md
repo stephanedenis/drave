@@ -4,13 +4,14 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (3)
+## Commits du jour (4)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:05 | `295e0d7b` | B13 — LES PRONOMS SUJETS ANGLAIS AUSSI : F1 0,7013 → 0,7438, TÊTE 0,8561, ATTACHEMENT PRÉSERVÉ ; 183/183 | `en-cours.md`, `README.md`, `README.md` (+7) |
 | 00:13 | `efbae885` | B13 — LE NOM PROPRE SUJET EST UN GN : F1 0,7438 → 0,7535, TÊTE 0,865, ATTACHEMENT 236/237 ; 183/183 | `en-cours.md`, `README.md`, `mesures.md` (+9) |
 | 00:45 | `149ecc5d` | FICHE — LES TROIS RÈGLES DE SEGMENTATION REJETÉES (ADVERBE FINAL, ROGNAGE S, ADJ/ADV) ; LE F1 RESTE À 0,7535 | `en-cours.md`, `README.md`, `docs.md` (+7) |
+| 11:09 | `fffbbe5d` | PANINI — L'INVENTAIRE INTÉGRÉ AU PLAN : 14 DÉPÔTS, 7 AXES, 14 ATOMES, 9 CORPUS, TROIS INTÉGRATIONS MÛRES (UDHR+GÉNÉALOGIE, ATOMES↔NIVEAUX, CORPUS CIC) AVEC LEURS CONTRÔLES NÉGATIFS | `en-cours.md`, `semaine-autonome.md`, `README.md` (+14) |
 
 ## Chiffres du jour
 
@@ -29,6 +30,7 @@
 ## Mesures et rapports touchés
 
 - [reports/rapport-gn-pronom-sujet.md](../../reports/rapport-gn-pronom-sujet.md)
+- [reports/rapport-inventaire-panini.md](../../reports/rapport-inventaire-panini.md)
 
 <!-- notes -->
 
