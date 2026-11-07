@@ -15,6 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 : porte propre 2,97/2,86, proposition `porte-n2.sh` |
+| [`rapport-etat-a.md`](rapport-etat-a.md) | **B13** — l'état de A : frontière corrigée (A2.6/A6.2 libres) |
 | [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test : 50 textes, `filtrer` = **0** chevauchement |
 | [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (NUM) |
 | [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
@@ -152,7 +154,6 @@
 | [`rapport-native-professeur-30k.md`](rapport-native-professeur-30k.md) | **N2.20** — professeur 30 000 pas : **0,794 bit/octet**, PPL **1,734** |
 | [`rapport-native-professeur-20k.md`](rapport-native-professeur-20k.md) | **N2.15** — professeur 20 000 pas : **0,904 bit/octet**, PPL **1,869** |
 | [`rapport-native-professeur-10k.md`](rapport-native-professeur-10k.md) | **N2.10** — professeur 10 000 pas : **1,073 bit/octet**, PPL **2,104** |
-| [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

@@ -2495,3 +2495,161 @@ reports/rapport-n2-r11.md
 … [23 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/ | grep -i 'miroir\\|mirroir'; echo '---'; python3 - <<'PY'\nimport json,glob\nfor f in sorted(glob.glob('work/n2ac/miroir*.json'))+sorted(glob.glob('work/n2ac/mirroir*.json')):\n    d=json.load(open(f)); print(f, d.get( … [84 caractères tronqués]`
+
+  ```
+miroir-kd-mix512-15k.json
+miroir-mix1024-60k.json
+miroir-mix512-15k.json
+miroir-rope1024-2.5k.json
+miroir-rope512.json
+miroir-rope.json
+mirroir_copie.py
+---
+work/n2ac/miroir-kd-mix512-15k.json kd-mix512-15k.pt {'16': 0.0, '64': 0.0, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0078, '300': 0.0, '400': 0.0}
+work/n2ac/miroir-mix1024-60k.json mix1024-60k.pt {'16': 0.0, '64': 0.0, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0078, '300': 0.0, '400': 0.0}
+work/n2ac/miroir-mix512-15k.json mix512-15k.pt {'16': 0.0078, '64': 0.0078, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0078, '300': 0.0, '400': 0.0}
+work/n2ac/miroir-rope.json rope-20k.pt {'16': 0.0078, '64': 0.0, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0, '300': 0.0, '400': 0.0}
+work/n2ac/miroir-rope1024-2.5k.json rope1024-2.5k.pt {'16': 0.0078, '64': 0.0, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0, '300': 0.0156, '400': 0.0}
+work/n2ac/miroir-rope512.json rope512-5k.pt {'16': 0.0, '64': 0.0, '128': 0.0, '200': 0.0, '240': 0.0, '255': 0.0, '300': 0.0078, '400': 0.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- reports/ tools/ data/ docs/ | head -30; echo '---'; git check-ignore -v work/r44/mesure.json work/n2ac/rope1024-20k.pt 2>&1 | head -5; echo '---'; git diff --stat -- tools/bloc_linguistique.py tools/tests/lingui … [84 caractères tronqués]`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/porte-produit.sh
+ m tools/structures
+ M tools/verifier_schema_produit.py
+?? reports/rapport-etat-a.md
+?? reports/rapport-etat-n2.md
+?? reports/rapport-s-paragraphes.md
+---
+.gitignore:23:work/	work/r44/mesure.json
+.gitignore:23:work/	work/n2ac/rope1024-20k.pt
+---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,35p' reports/rapport-etat-a.md; echo '===='; sed -n '1,25p' reports/rapport-etat-n2.md", "description": "Regarder les fiches sœurs A/N2"}`
+
+  ```
+# État du chantier A — le moteur : deux bloqués réels, un faux bloqué, une frontière à requalifier
+
+> **Ligne de roadmap** : **A** (le moteur) · **Date** : 2026-11-06, 21 h 51 HNE · **Branche** : `s/v7` ·
+> **HEAD** : `7a876f70` (le HEAD a bougé pendant l'audit : `d31aa9a2` → `7a876f70`) ·
+> **Mission** : lecture seule, aucun code, aucun fichier existant modifié ; deux fichiers neufs.
+>
+> **Verdict** : ⚠️ **l'état A est sain, le récit A est en retard.** Les lignes fermées le sont
+> réellement ; **A8.3a est fait pour 3 portes sur 19** (et non « fait » tout court) ; **A2.6 est
+> partiel mais libre** — sa tête est **décidée** (refusée), ses experts ne sont **pas** bloqués par
+> l'absence d'un MoE : un **Qwen3-30B-A3B Q4 de 18 Go est présent et tourne**. Les **deux seuls
+> bloqués réels** de A sont **A3.4** (compte Colab) et **A5.4** (carte Stratix V). **A6.2 est
+> mal classé** : il est libre, pas bloqué. **A23 a raison sur l'effet** (A2.6 ne doit pas être la
+> tête de frontière) **mais tort sur la cause** (les experts ne sont pas bloqués par A6.2).
+>
+> **Dispositif** : lecture de `docs/pilotage/roadmap.md`, `en-cours.md`, `backlog/index.md`,
+> `backlog/dependances.md`, des fiches `bac
+… [3472 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-etat-a.md reports/rapport-etat-n2.md reports/rapport-etat-r.md reports/pensee-etat-r.json 2>&1", "description": "Vérifier si les fichiers R existent déjà"}`
+
+  ```
+ls: cannot access 'reports/rapport-etat-r.md': No such file or directory
+ls: cannot access 'reports/pensee-etat-r.json': No such file or directory
+-rw-------. 1 stephane stephane 20802  6 nov 22:01 reports/rapport-etat-a.md
+-rw-------. 1 stephane stephane 19438  6 nov 21:59 reports/rapport-etat-n2.md
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %ci %s'; echo '---'; git status --short -- docs/pilotage/ docs/pilotage/roadmap.md docs/pilotage/en-cours.md | head; echo '---'; grep -n 'R — le lecteur\\|R1.2\\|R0.7\\|R4.4' docs/pilotage/en-cours.md | head - … [47 caractères tronqués]`
+
+  ```
+97256b8f 2026-11-06 21:57:10 -0500 PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)
+---
+---
+123:| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |
+131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 178/178 ; **R0.7** — tagger ; **D** — **restauré** : le corpus à **62 documents** (Choquette + Assurance ; DOC1/DOC2, quasi-doublons, écartés) est en place (`data/corpus_ocr_cegep` : train 4 440 987, val 12 536, test 10 524 ; 8 Ko 0, 500 o 0) ; [fiche](../../reports/rapport-ocr-cegep-64.md) ; **la passe complète est finie** (`work/portes/passe-2404-23h45` ; **79 vertes, 4 rouges** : `indice`, `melange` tolérées ; `lecteur` corrigée ; `sessions` → heartbeat de `e181ce02` à rafraîchir).
+135:- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline de7c9113..HEAD 2>/dev/null | head -10; echo '---'; git diff --stat de7c9113..HEAD -- docs/pilotage 2>/dev/null | head", "description": "Voir les commits depuis ma mesure"}`
+
+  ```
+97256b8f PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)
+5940ea53 B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183
+7a876f70 PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES
+---
+ docs/pilotage/en-cours.md     |  4 ++--
+ docs/pilotage/plan-travail.md | 16 ++++++++++++++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py --json /tmp/pensee-gold-etat-r-head.json 2>&1 | tail -1; python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-etat-r-head.json'))\np=d['heuristique']['all']['pos']\nprint( … [266 caractères tronqués]`
+
+  ```
+heuristique all: {"pos": {"exactitude": 0.85, "exactitude_ferme": 0.9295, "exactitude_ouvert": 0.7746, "tokens": 3179, "confusions": {"ADJ": {"ADJ": 62, "NOUN": 68, "VERB": 4}, "ADV": {"ADV": 131, "NOUN": 7, "PREP": 1, "ADJ": 1, "?": 1}, "AUX": {"PREP": 4, "AUX": 119, "?": 3, "NOUN": 1, "VERB": 1}, "CONJ": {"CONJ": 55, "PRON": 28, "?": 13, "PREP": 2}, "DET": {"DET": 586, "?": 2}, "NOUN": {"NOUN": 657, "ADJ": 17, "VERB": 7, "?": 1}, "NUM": {"NUM": 2}, "PONCT": {"?": 25}, "PREP": {"PREP": 114}, "PRON": {"PRON": 430, "?": 30, "CONJ": 1, "DET": 14}, "VERB": {"VERB": 546, "NOUN": 218, "PREP": 2, "ADJ": 2, "?": 16, "AUX": 7, "ADV": 1}}}, "syntagme": {"precision": 0.6715, "rappel": 0.6264, "f1": 0.6482, "tp": 1167, "fp": 571, "fn": 696, "tete": {"precision": 0.8208, "rappel": 0.7203, "f1": 0.7673, "tp": 1342, "fp": 293, "fn": 521}}, "pragmatique": {"acte": 0.9967, "negation": 0.9771, "modalite": 0.9886, "double_sens": 0.9444}, "fraction_semantique": 0.5482}
+heuristique HEAD: 0.85 0.9295 0.7746 3179
+synt 0.6482 tete 0.7673
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat de7c9113..HEAD -- tools/bloc_linguistique.py tools/tests/linguistique/gold_reel.json tools/tests/linguistique/evaluer_gold.py; echo '---'; git diff de7c9113..HEAD -- docs/pilotage/en-cours.md | head -30", "description … [55 caractères tronqués]`
+
+  ```
+tools/bloc_linguistique.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+---
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 4fc69f89..aa319080 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-06, 21 h 45 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-06, 21 h 50 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -106,7 +106,7 @@
+ |---|---|---|
+ | portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **696** / **789** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **697** / **790** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **121** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E 'juridique  controlee_0.30|code       controlee_0.30|prose      controlee_0.30|tableau    controlee_0.30|technique  controlee_0.30' /tmp/porte-lecteur.log; echo '---'; grep -E 'refus|12/20|9/10|7/8|20/20' /tmp/porte-lecture.l … [68 caractères tronqués]`
+
+  ```
+code       controlee_0.30     1.000  0.522   0.500     1244
+  juridique  controlee_0.30     1.000  0.306   0.250      837
+  prose      controlee_0.30     1.000  0.750   0.750      463
+  tableau    controlee_0.30     1.000  0.030   0.250     8599
+  technique  controlee_0.30     1.000  0.784   0.750     2567
+---
+✅ refus : « meilleur score 0.00 < seuil 1.00 — la question ne partage ri… »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-bloc-linguistique.sh >/tmp/porte-bl-head.log 2>&1; echo exit=$?; tail -2 /tmp/porte-bl-head.log", "description": "Rejouer la porte L au HEAD courant", "run_in_background": true}`
+
+  ```
+started background job bash-4237
+  ```
+
+- **job_output** `{"job_id": "bash-4237", "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+

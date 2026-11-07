@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-06, 21 h 50 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-06, 22 h 15 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -68,7 +68,7 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contrat v1** publié (schéma validé, refus code 3) ; frontières (0/40) ; **`drave` v0** ; `master` poussé ; POS **83,83 %**.
+- **Fait** : B13 **183/183** ; **POS 85,00 %**, **attachement 235/236 (0,9874)**, **F1 0,6482**, **3 spans** ; **contrat v1** publié (schéma validé, refus code 3) ; frontières (0/40) ; **`drave` v0** ; états N2/S/R/A inventoriés. `master` poussé ; POS **83,83 %**.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Prochaine action** : les **17 spans inatteignables** (gold, lexique) et la **restitution**.
@@ -106,7 +106,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 06/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **697** / **790** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **699** / **792** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **121** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**, les 2 connues) ; **04/11 08 h 40 arrêtée** ; N3 **17/17** à 11 h 32 ; complète après les runs | `docs/pilotage/references-non-regression.md` |
 

@@ -1,0 +1,222 @@
+{
+ "date": "2026-11-06",
+ "ligne": "N2",
+ "head": "bfd98892",
+ "objet": "état de N2 et de sa porte",
+ "checkpoints": {
+  "total_work": 123,
+  "taille_go": 9.52,
+  "avec_metadonnees": 67,
+  "suivis_git": false,
+  "note": "work/ et data/ sont gitignorés ; un 124e .pt vit sous data/adaptateurs/ (hors N2)",
+  "plus_recent": {
+   "fichier": "work/n2ac/rope2048-20k.pt",
+   "date": "2026-11-04 21:09",
+   "octets": 137248474,
+   "parametres": 34301224,
+   "corpus": "data/wiki_fr/propre/train.txt",
+   "pas": 20000,
+   "pas_segment": 10000,
+   "seq": 2048,
+   "window": 2048,
+   "positions": "rope",
+   "init": "work/n2ac/rope2048-10k.pt",
+   "ppl_val_interne": 2.4953,
+   "fiche": "reports/rapport-n2-r12-2048.md"
+  },
+  "porte_propre": {
+   "fichier": "work/n2ac/propre512-8k.pt",
+   "date": "2026-11-03 02:01",
+   "octets": 137248474,
+   "sha256": "37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc",
+   "parametres": 34301224,
+   "corpus": "data/corpus_propre/train.txt",
+   "pas": 8000,
+   "seq": 512,
+   "window": 512,
+   "positions": "rope",
+   "init": "work/n2j/base-wiki-45m.pt",
+   "perte_finale": 0.8525,
+   "ppl_val_interne": 3.3639,
+   "duree_s": 1561
+  },
+  "bras_court": {
+   "fichier": "work/n2ac/propre128-32k.pt",
+   "pas": 32000,
+   "seq": 128,
+   "window": 256,
+   "ppl_val_interne": 3.45,
+   "ppl_L1024": 3.1107
+  },
+  "capacite": [
+   {"parametres": 11816136, "fichier": "work/n2ac/propre-1147m-512z.pt", "ppl_L1024": 2.896},
+   {"parametres": 21648000, "fichier": "work/n2ac/propre-2165m-512z.pt", "ppl_L1024": 2.8688},
+   {"parametres": 34301224, "fichier": "work/n2ac/propre-3430m-512z.pt", "ppl_L1024": 2.8662}
+  ],
+  "production": {
+   "fichier": "work/n2ac/mix1024-60k.pt",
+   "pas": 60000,
+   "ppl_val_interne": 2.4038,
+   "grand_corpus": {
+    "30k_L1000": 2.4759,
+    "30k_L2000": 2.4373,
+    "60k_L1000": 2.3911,
+    "60k_L2000": 2.3522
+   }
+  }
+ },
+ "runs_documentes": {
+  "fiches_n2": 40,
+  "lien_checkpoint_fiche": "manuel (sections Fichiers des fiches)",
+  "familles": [
+   "N2.h1-h5 (corpus propre, diversité, longueur, combinaison, capacité)",
+   "N2.i-j4 (corpus élargi, corpus réel, positions, capacité, distillation)",
+   "N2.k-q (multilingue, capacité)",
+   "N2.r-z (34,3 M, anglais, canal, distillation)",
+   "N2.aa-ae (831 Mo, pas vs texte, mélange, 200 k)",
+   "R1.1/R1.2, fenêtre, production, porte propre, erratum distillation"
+  ],
+  "contradictions": [
+   "rapport-n2-r12-2048.md § Fichiers dit « rope2048-20k.pt n'a pas été écrit — interrompu » ; le fichier existe (2026-11-04 21:09, 10 000 pas, init rope2048-10k) et reproduit exactement la table 2,9121 / 2,6360 / 2,5375 / 2,4779 / 2,4383.",
+   "references-non-regression.md compte 83 portes ; ls tools/porte-*.sh en donne 84 (porte-produit), 85 avec porte-n2.",
+   "Le registre de la passe (work/portes-1106-01h28/registre.txt) n'a aucune porte N2 ; les 4 rouges sont bloc-linguistique, indice, melange, sessions."
+  ]
+ },
+ "porte_propre": {
+  "commande": "PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre",
+  "seuil": 2.5,
+  "val": {"L128": 2.9726, "L256": 2.8988, "L512": 2.8443, "L1024": 2.7856},
+  "test": {"L128": 3.0649, "L512": 2.8875, "L1024": 2.8566},
+  "manque_val": 0.2856,
+  "manque_test": 0.3566,
+  "reproduit": true,
+  "fidelite": "identique au chiffre près à reports/n2-porte-propre.json",
+  "controle_negatif_permute_L1024": 1692.3919,
+  "deterministe": true,
+  "temps_val_s": 12,
+  "temps_test_s": 8,
+  "test_reconstitution": "mkdir /tmp/propre_test ; cp test.txt val.txt ; cp test.canal val.canal ; --val /tmp/propre_test",
+  "pourquoi_0_29": [
+   "2,7856 - 2,5000 = 0,2856 (validation) ; le test donne 2,8566, soit 0,3566.",
+   "N2.h valait 3,0904 (0,59) ; la fenêtre 512 + init base-wiki-45m reprend 0,30.",
+   "Plus de pas : corpus épuisé (3,24 Mo de train vus 33 Mo, ~10 époques ; validation disjointe à 0 %).",
+   "Capacité saturée à 21,65 M : 2,8960 / 2,8688 / 2,8662 à 1 024, encore 0,37.",
+   "Distillation : rien à parité stricte (erratum -0,03 / -0,01 / -0,004).",
+   "Fenêtre 2 048 : ne paie pas à octets constants ; le bras 128 est pire (3,1107 à 1 024).",
+   "Leviers restants : corpus propre plus large, distillation à fenêtre longue, ou autre corpus de porte (grand corpus : 2,4759 / 2,4373 à 30 k, 2,3911 / 2,3522 à 60 k)."
+  ]
+ },
+ "eval_n2_propre": {
+  "verdict": "tourne sur le checkpoint le plus récent mais ne le mesure pas (positions absolues au lieu de RoPE)",
+  "runs": [
+   {
+    "checkpoint": "work/n2ac/rope2048-20k.pt",
+    "architecture": "rope",
+    "val": 12.9098,
+    "test": 12.5881,
+    "litterature": 11.5343,
+    "litterature_propre": 11.942,
+    "anglais": 16.9982,
+    "wikitext2": 17.8491,
+    "permute": 272.4992,
+    "temps_s": 23,
+    "jugement": "non-sens : pire que l'uniforme ln(256) = 5,545"
+   },
+   {
+    "checkpoint": "work/n2ac/propre512-8k.pt",
+    "architecture": "rope",
+    "val": 8.0225,
+    "test": 8.0126,
+    "litterature": 18.5021,
+    "litterature_propre": 18.8906,
+    "anglais": 43.2434,
+    "wikitext2": 47.3566,
+    "permute": 1404.2994,
+    "temps_s": 21,
+    "jugement": "faux : le mètre RoPE donne 2,9726 à 128 et 2,7856 à 1 024"
+   },
+   {
+    "checkpoint": "work/n2h/A-propre-g1.pt",
+    "architecture": "absolue",
+    "val": 3.0971,
+    "test": 3.2098,
+    "litterature": 15.9854,
+    "litterature_propre": 17.0838,
+    "anglais": 60.6957,
+    "wikitext2": 59.729,
+    "permute": 1356.6433,
+    "temps_s": 23,
+    "jugement": "cohérent avec 3,0904 / 3,1960 (moyenne de 3 graines) : l'outil n'est pas cassé, il est attaché à l'ancienne architecture"
+   }
+  ],
+  "cause": "charge() construit NativeModel (table de positions absolue) ; les checkpoints N2 depuis le 02/11 sont NativeModelRoPE ; load_state_dict(strict=False) charge les 127 tenseurs sans alerte",
+  "correctif": "ajouter --rope (ou lire positions=rope dans le sidecar .pt.json), avertir si le chargement est partiel, exposer 1 024 dans --longueurs"
+ },
+ "proposition_porte_n2": {
+  "nom": "tools/porte-n2.sh",
+  "mesures": [
+   "identité : params 34 301 224, window 512, sha256 .pt 37c5673b…, sidecar corpus=data/corpus_propre/train.txt, positions=rope",
+   "courbe val 128/256/512/1024 : 2,9726 / 2,8988 / 2,8443 / 2,7856 (tolérance ±0,01)",
+   "test 1 024 : 2,8566 (tolérance ±0,01), split temporaire reconstruit",
+   "forme : PPL(1024) < PPL(128) - 0,15 (levier de longueur)",
+   "contrôle négatif : val permutée VDC, même canal, 1 024 > 100 (référence 1 692,39)",
+   "déterminisme : val 1 024 deux fois, égalité exacte",
+   "statut absolu imprimé : manque 0,2856 (val), 0,3566 (test)"
+  ],
+  "seuil_absolu": 2.5,
+  "seuil_non_regression_val": 2.8,
+  "seuil_non_regression_test": 2.87,
+  "modes": {
+   "defaut": "non-régression ≤ 2,80 (val) / ≤ 2,87 (test), vert aujourd'hui",
+   "chantier": "N2_SEUIL=2.5, rouge aujourd'hui"
+  },
+  "temps_s_min": 30,
+  "temps_s_max": 40,
+  "timeout_s": 300,
+  "dependances_suivies": [
+   "tools/eval_n2_propre.py",
+   "tools/vdc.py",
+   "reports/n2-porte-propre.json"
+  ],
+  "dependances_non_suivies": [
+   "work/n2ac/eval_longueurs.py",
+   "work/n2ac/rope_model.py",
+   "work/n2j/evalue_canal.py",
+   "work/n2ac/propre512-8k.pt",
+   "work/n2ac/propre512-8k.pt.json",
+   "data/corpus_propre/val.txt",
+   "data/corpus_propre/val.canal",
+   "data/corpus_propre/test.txt",
+   "data/corpus_propre/test.canal"
+  ],
+  "code_retour": {
+   "0": "vert",
+   "1": "mesure hors tolérance, contrôle négatif ou non-déterminisme",
+   "2": "artefact ou device absent"
+  },
+  "inclusion": "toutes-les-portes.sh la prend par globbing ; 84 → 85 portes",
+  "point_dur": "work/ et data/ sont gitignorés ; promouvoir le mètre dans tools/ et épingler le sha256 pour la rendre durable",
+  "interdits": [
+   "réentraîner (8 000 pas = 26 min)",
+   "télécharger",
+   "toucher en-cours ou roadmap",
+   "mesurer le grand corpus à la place du corpus propre",
+   "utiliser eval_n2_propre.py sans --rope"
+  ]
+ },
+ "constats": [
+  "tools/porte-n2.sh n'existe pas (A23 T09/H12) ; le registre de la passe n'a aucune porte N2 ; la rouge de N2 est une mesure, pas une porte.",
+  "40 fiches N2, 67/123 checkpoints avec .pt.json, lien checkpoint → fiche manuel.",
+  "rapport-n2-r12-2048.md § Fichiers dit rope2048-20k.pt non écrit ; le fichier existe et reproduit la table de la fiche.",
+  "Le checkpoint le plus récent (rope2048-20k) n'est pas celui de la porte (propre512-8k) : l'un est un modèle du grand corpus, l'autre du corpus propre.",
+  "eval_n2_propre.py rend 12,91 sur rope2048-20k et 8,02 sur propre512-8k, contre 4,63 et 2,97 au mètre RoPE.",
+  "La porte est reproductible à l'identique (val 2,7856, test 2,8566) et déterministe ; le contrôle permuté vaut 1 692,39."
+ ],
+ "limites": [
+  "Une graine, un run, une machine ; pas de barre d'erreur sur la porte.",
+  "2,7856 est un best-of-lengths choisi sur la validation ; le test 2,8566 (manque 0,3566) est la mesure honnête.",
+  "work/ et data/ sont gitignorés : rejeu local seulement ; le sha256 du .pt est donné ici pour la première fois.",
+  "HEAD a bougé de d31aa9a2 à bfd98892 pendant l'audit ; les fiches citées peuvent avoir changé après 21 h 41.",
+  "La PPL n'est pas la lecture : un chiffre sous 2,5 ne prouverait pas la restitution (règle du miroir)."
+ ]
+}

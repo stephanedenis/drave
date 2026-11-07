@@ -2638,3 +2638,106 @@ est protégée, pas le token) — c'est le patch B de la fiche des frontières, 
 136:**La cible de A17 (1 h 30).** Le dernier écart était un marqueur ambigu : « when » après un GN est
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction du rapport d'état A et du JSON de pensée
+J'ai les vérifications ; je rédige les deux fichiers neufs, sans toucher au reste.
+
+- **write** `{"file_path": "reports/rapport-etat-a.md", "content": "# État du chantier A — le moteur : deux bloqués réels, un faux bloqué, une frontière à requalifier\n\n> **Ligne de roadmap** : **A** (le moteur) · **Date** : 2026-11-06, 21 h 51 HNE · **Branche** : `s/v7` ·\n> **HEAD** : `7a876f70` (le HEAD a bo … [20225 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-a.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "{\n  \"date\": \"2026-11-06T21:51:00-05:00\",\n  \"branche\": \"s/v7\",\n  \"head\": \"7a876f70\",\n  \"head_note\": \"le HEAD a bougé pendant l'audit (d31aa9a2 → 7a876f70) ; les chiffres sont horodatés\",\n  \"mission\": \"état du chantier A (le moteur) — lecture seule, aucun code, deu … [20948 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-a.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-a.json > /tmp/etat-a-json-check.txt 2>&1; echo \"json_exit=$?\"; tail -3 /tmp/etat-a-json-check.txt; echo '--- new files ---'; git status --porcelain -- reports/rapport-etat-a.md reports/pensee-etat-a.json; echo '--- other new untracked (top) --- … [112 caractères tronqués]`
+
+  ```
+json_exit=0
+        "reports/pensee-etat-a.json"
+    ]
+}
+--- new files ---
+?? reports/pensee-etat-a.json
+?? reports/rapport-etat-a.md
+--- other new untracked (top) ---
+?? journal/2026-11-05/attention.md
+?? journal/2026-11-06/distribue.md
+?? journal/2026-11-06/docs.md
+?? journal/2026-11-06/memoire.md
+?? journal/2026-11-06/mesures.md
+?? journal/2026-11-06/modele.md
+?? journal/2026-11-06/outils.md
+?? journal/2026-11-06/portes.md
+?? journal/sessions/082fe8ca-3e1e-4454-b91b-12586843e880/
+?? journal/sessions/14114f3d-ae0d-416e-ad8e-4d4eaa04c36c/
+?? journal/sessions/1555bdd3-27e9-4779-b1e7-716e32399c11/
+?? journal/sessions/1b0cf09a-a77a-443d-82e2-68a5d6cacdf0/
+?? journal/sessions/24001907-4f19-4ea5-87f6-98334496719f/
+?? journal/sessions/24529ced-6556-4491-9633-9401c2dffb0c/
+?? journal/sessions/2cc1ad4a-373e-4362-a341-3c4a630c2e0c/
+?? journal/sessions/3144cf23-6004-46ef-bc3d-f05d81c0cff6/
+?? journal/sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/
+?? journal/sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/
+?? journal/sessions/3f8f2bb8-781b-44a6-9e14-58025004b6fc/
+?? journal/sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens.py 2>&1 | tail -15; echo \"liens_exit=$?\"", "description": "Check links resolve"}`
+
+  ```
+✅ 3716 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+liens_exit=0
+  ```
+
+- **bash** `{"command": "find tools reports -name '__pycache__' -newermt '2026-11-06 21:30' -print 2>/dev/null | head; echo '--- new files in reports (untracked) ---'; git status --porcelain -- reports/ | grep '^??' | head -20; echo '--- new files in docs ---'; git status --porcelain -- docs/ | grep '^??' | hea … [64 caractères tronqués]`
+
+  ```
+tools/__pycache__
+--- new files in reports (untracked) ---
+?? reports/pensee-etat-a.json
+?? reports/pensee-etat-n2.json
+?? reports/rapport-etat-a.md
+?? reports/rapport-etat-n2.md
+?? reports/rapport-s-paragraphes.md
+--- new files in docs ---
+  ```
+
+- **bash** `{"command": "wc -l reports/rapport-etat-a.md reports/pensee-etat-a.json; echo '--- report head ---'; head -20 reports/rapport-etat-a.md", "description": "Check report size and head"}`
+
+  ```
+246 reports/rapport-etat-a.md
+  398 reports/pensee-etat-a.json
+  644 total
+--- report head ---
+# État du chantier A — le moteur : deux bloqués réels, un faux bloqué, une frontière à requalifier
+
+> **Ligne de roadmap** : **A** (le moteur) · **Date** : 2026-11-06, 21 h 51 HNE · **Branche** : `s/v7` ·
+> **HEAD** : `7a876f70` (le HEAD a bougé pendant l'audit : `d31aa9a2` → `7a876f70`) ·
+> **Mission** : lecture seule, aucun code, aucun fichier existant modifié ; deux fichiers neufs.
+>
+> **Verdict** : ⚠️ **l'état A est sain, le récit A est en retard.** Les lignes fermées le sont
+> réellement ; **A8.3a est fait pour 3 portes sur 19** (et non « fait » tout court) ; **A2.6 est
+> partiel mais libre** — sa tête est **décidée** (refusée), ses experts ne sont **pas** bloqués par
+> l'absence d'un MoE : un **Qwen3-30B-A3B Q4 de 18 Go est présent et tourne**. Les **deux seuls
+> bloqués réels** de A sont **A3.4** (compte Colab) et **A5.4** (carte Stratix V). **A6.2 est
+> mal classé** : il est libre, pas bloqué. **A23 a raison sur l'effet** (A2.6 ne doit pas être la
+> tête de frontière) **mais tort sur la cause** (les experts ne sont pas bloqués par A6.2).
+>
+> **Dispositif** : lecture de `docs/pilot
+… [483 caractères tronqués]
+  ```
+

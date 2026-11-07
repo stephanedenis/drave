@@ -56357,3 +56357,71 @@ ven 06 nov 2026 21:56:27 EST
 ⏵ J'inscris la nuit au plan de travail et j'attends la vague
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/plan-travail.md'); t=p.read_text()\nbloc = \"\"\"\n## 14. La nuit du 06/11 (18 h 20 → 09 h 00) — les P0 du produit\n\n**L'agent principal tient le dossier** (`en-cours`, … [1631 caractères tronqués]`
+
+  ```
+§ 14 ajouté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 18 files changed, 224 insertions(+), 67 deletions(-)
+COMMIT OK 1
+97256b8f PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)
+   5940ea53..97256b8f  s/v7 -> s/v7
+   5940ea53..97256b8f  master -> master
+ven 06 nov 2026 21:59:28 EST
+ven 06 nov 2026 22:06:28 EST
+pensee-etat-a.json
+pensee-etat-n2.json
+rapport-etat-a.md
+rapport-etat-n2.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Les états N2 et A sont livrés : je lis les verdicts
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ('pensee-etat-n2.json','pensee-etat-a.json'):\n    d=json.load(open('reports/'+f))\n    print('='*20, f)\n    for k in ('verdict','resume','etat','constats'):\n        if k in d: print(k.upper( … [116 caractères tronqués]`
+
+  ```
+==================== pensee-etat-n2.json
+CONSTATS : ["tools/porte-n2.sh n'existe pas (A23 T09/H12) ; le registre de la passe n'a aucune porte N2 ; la rouge de N2 est une mesure, pas une porte.", '40 fiches N2, 67/123 checkpoints avec .pt.json, lien checkpoint → fiche manuel.', 'rapport-n2-r12-2048.md § Fichiers dit rope2048-20k.pt non écrit ; le fichier existe et reproduit la table de la fiche.', "Le checkpoint le plus récent (rope2048-20k) n'est pas celui de la porte (propre512-8k) : l'un est un modèle du grand corpus, l'autre du corpus propre.", 'eval_n2_propre.py rend 12,91 sur rope2048-20k et 8,02 sur propre512-8k, contre 4,63 et 2,97 au mè
+clés : ['date', 'ligne', 'head', 'objet', 'checkpoints', 'runs_documentes', 'porte_propre', 'eval_n2_propre', 'proposition_porte_n2', 'constats', 'limites']
+==================== pensee-etat-a.json
+VERDICT : A est sain dans ses lignes fermées et faux dans sa frontière : A8.3a est fait pour 3 portes sur 19, A2.6 est partiel mais libre (tête décidée, experts mesurables sur le MoE local), A6.2 est mal classé (le MoE local existe), A3.4 et A5.4 sont les deux seuls bloqués réels.
+clés : ['date', 'branche', 'head', 'head_note', 'mission', 'verdict'
+… [82 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-etat-n2.json'))\nprint('PORTE PROPRE:', json.dumps(d['porte_propre'], ensure_ascii=False)[:600])\nprint('EVAL:', json.dumps(d['eval_n2_propre'], ensure_ascii=False)[:500 … [354 caractères tronqués]`
+
+  ```
+PORTE PROPRE: {"commande": "PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre", "seuil": 2.5, "val": {"L128": 2.9726, "L256": 2.8988, "L512": 2.8443, "L1024": 2.7856}, "test": {"L128": 3.0649, "L512": 2.8875, "L1024": 2.8566}, "manque_val": 0.2856, "manque_test": 0.3566, "reproduit": true, "fidelite": "identique au chiffre près à reports/n2-porte-propre.json", "controle_negatif_permute_L1024": 1692.3919, "deterministe": true, "temps_val_s": 12, "temps_test_s": 8, "test_reconstitution": "
+EVAL: {"verdict": "tourne sur le checkpoint le plus récent mais ne le mesure pas (positions absolues au lieu de RoPE)", "runs": [{"checkpoint": "work/n2ac/rope2048-20k.pt", "architecture": "rope", "val": 12.9098, "test": 12.5881, "litterature": 11.5343, "litterature_propre": 11.942, "anglais": 16.9982, "wikitext2": 17.8491, "permute": 272.4992, "temps_s": 23, "jugement": "non-sens : pire que l'uniforme ln(256) = 5,545"}, {"checkpoint": "work/n2ac/propre512-8k.pt", "architecture": "rope", "val": 8.0225
+PROPOSITION: {"nom": "tools/porte-n2.sh", "mesures": ["identité : params 34 30
+… [1881 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'intègre les états N2 et A dans la roadmap (frontière corrigée)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2 — \\|N2 |\" docs/pilotage/roadmap.md | head -3 | cut -c1-200; grep -n \"A2.6\\|A6.2\" docs/pilotage/roadmap.md | head -4 | cut -c1-180", "description": "Voir les lignes N2 et A"}`
+
+  ```
+71:2. **N2 — la fenêtre est la recette** (clôturée le 03/11) : **N2.ac** (1,02 Go, 60 k pas) donnait
+236:| **R1 — la fenêtre native** | contexte hiérarchique, curriculum, tokenisation | PPL à 1 000 octets, aiguille native, stabilité | R0, N1 ; plafonné par N2 |
+30:| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4, A6.2 bloqués** ; A2.6 part
+36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intég
+82:8. **Les bloqués** : A3.4 ([Colab](../theorie/glossaire/entrees/colab-notebook-tunnel.md)), A5.4 ([FPGA](../theorie/glossaire/entrees/fpga.md)), A6.2 ([MoE](../theorie/glossaire
+99:[A2.6] lasts 2 days and is 30% complete and is colored in #b26a00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nt=t.replace(\"| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur … [890 caractères tronqués]`
+
+  ```
+roadmap A corrigée
+     · compteurs : en-cours.md dit 790 JSON, le disque en a 792
+30:| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués
+82:8. **Les bloqués** : A3.4 ([Colab](../theorie/glossaire/entrees/colab-notebook-tunnel.md)), A5.4 ([FPGA](../theorie/glossaire/entrees/fpga.md)) ; A6.2 ([MoE]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [2108 caractères tronqués]`

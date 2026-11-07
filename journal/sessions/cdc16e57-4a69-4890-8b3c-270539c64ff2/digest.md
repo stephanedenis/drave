@@ -2165,3 +2165,203 @@ niveaux final {0: 141, 1: 0, 2: 4, 3: 2, 4: 0}
 contexte non vide lignes 7
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification des commandes de traduction existantes (aller simple)
+
+- **bash** `{"command": "sed -n '100,140p' tools/llm/mesure.py; echo \"===\"; sed -n '1,45p' tools/llm/enseignant.py; echo \"===\"; grep -n \"argparse\\|__main__\\|--\" tools/llm/enseignant.py | head -20", "description": "Lis CLI mesure et enseignant"}`
+
+  ```
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--entree", default="data/deepseek/enseignant.jsonl")
+    ap.add_argument("--json", default=None)
+    a = ap.parse_args()
+    r = mesure(a.entree)
+    if a.json:
+        pathlib.Path(a.json).write_text(json.dumps(r, ensure_ascii=False, indent=1) + "\n",
+                                        encoding="utf-8")
+    print(json.dumps(r, ensure_ascii=False, indent=1))
+    raise SystemExit(0 if not r.get("vide") else 1)
+===
+#!/usr/bin/env python3
+"""enseignant.py — construire le corpus du professeur DeepSeek.
+
+Le corpus est un **JSONL** : chaque ligne porte le prompt, la réponse du professeur,
+l'usage (tokens), la latence et le cache. Il ne contient **aucune clé**. Les
+réponses peuvent ensuite servir à entraîner/distiller l'élève natif `route`
+(autorisation explicite de la licence DeepSeek).
+
+Le script est **reprenable** : une ligne déjà présente n'est pas redemandée. Le
+mode `--dry-run` ne fait aucune requête : il écrit des réponses factices, que
+`distillation.py` ignore — un dry-run ne doit jamais devenir un corpus
+d'entraînement.
+
+Usage :
+    python3 tools/llm/enseignant.py --prompts
+… [1998 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"prompts_publics\\|mesure.py\\|enseignant.py\" tools/*.sh tools/*.py docs/ --include=\"*.sh\" --include=\"*.py\" --include=\"*.md\" 2>/dev/null | grep -v archive | head -20", "description": "Cherche l'usage du banc de traduction"}`
+
+  ```
+tools/porte-deepseek.sh:34:python3 - "$PWD/tools/llm/prompts_publics.jsonl" "$PWD/tools/llm/prompts_publics_300.jsonl" <<'PY' || exit 1
+tools/porte-deepseek.sh:47:python3 tools/llm/enseignant.py --sortie "$T/enseignant-dry.jsonl" --limite 2 --dry-run >/dev/null || exit 1
+tools/mesure_jeux.py:7:Le module est `tools/jeux/mesure.py` ; ce pilote ne fait que rendre l'appel
+docs/methode/ressources.md:94:(annotation, distillation, corpus) passent par l'**API DeepSeek en ligne** — `tools/llm/enseignant.py`
+docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md:195:validation alignée. **Où** : `tools/llm/enseignant.py`, `tools/llm/distillation.py`,
+docs/theorie/jeux-symboliques.md:176:| [`tools/jeux/mesure.py`](../../tools/jeux/mesure.py) | les séries et les contrôles |
+docs/theorie/contrat-bloc-langue.md:146:- Le neuronal passe par l'**API DeepSeek** (`tools/llm/enseignant.py`) ou le **DRVM natif** ; les
+docs/implantation/llm-externe.md:27:   `tools/llm/enseignant.py`.
+docs/implantation/llm-externe.md:29:   `tools/llm/mesure.py`.
+docs/implantation/llm-externe.md:72:| [`tools/llm/prompts_publics.jsonl`](../../tools/llm/prompts_publics.jsonl) | 60 prompts (pilote) et 310 (`prompts_public
+… [259 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Inspection du JSON de mesure des langues et de ses chiffres
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/jeux-langues-mesures.json'))\nprint('cles',list(d.keys()))\nfor k in ['couverture','corpus','invariance','permutation','detection','langue_detectee','notation','duree_s']:\n    v=d.get(k)\n    if isinstance(v,dict):\n        prin … [184 caractères tronqués]`
+
+  ```
+cles ['couverture', 'corpus', 'invariance', 'permutation', 'detection', 'langue_detectee', 'notation', 'duree_s']
+couverture {'langues': 71, 'concepts': 35, 'couples': 1433, 'moyenne_concepts_par_langue': 20.13, 'n_langues_fortes': 32}
+corpus {'items': 449, 'bons': 449, 'langues_avec_items': 66, 'langues_avec_items_forts': 62, 'minimum': 1.0, 'maximum': 1.0}
+invariance {'paires': 11, 'invariantes': 11}
+permutation {'items': 449, 'bons': 186, 'forts': 275, 'forts_bons': 12}
+detection {'total': 315, 'bons': 315}
+langue_detectee {'items': 449, 'exacts': 343}
+notation {'items': 72, 'langues': 71, 'parses': 5112, 'bons': 5112}
+duree_s 3.136
+date? None
+  ```
+
+- **bash** `{"command": "grep -n \"53 langues\" tools/jeux/lexique_multilingue.py; grep -n \"71\" tools/jeux/lexique_multilingue.py | head -5; echo \"---\"; sed -n '1,15p' reports/rapport-s-fait-divers.md; echo \"---\"; sed -n '35,50p' reports/rapport-s-fait-divers.md", "description": "Vérifie docstring 53 et s … [24 caractères tronqués]`
+
+  ```
+2:"""lexique_multilingue.py — les libellés des jeux, en 53 langues.
+---
+# S — Le fait divers est tranché : 61/61 types, 144/144 rôles ; la tête du GN arrête le verbe
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : « Le fait divers surprend »
+> ne coupe plus le verbe dans le GN. La règle v7 suit la **tête du GN** — dès qu'un nom est vu,
+> un homographe qui suit un adjectif n'est plus le nom — et accepte un adjectif après
+> l'homographe quand le verbe vient après. Le gold gagne `h061` (sixième vague) : **61/61
+> types**, **144/144 rôles**, **50/50 compléments**, couverture **1,00** ; les contrôles restent
+> à **104/144**, **106/144** et **0,10**. Les **56 tests** passent.
+
+## La règle
+
+L'analyseur butait sur « Le fait divers surprend » : « fait » est un homographe nom/verbe,
+« divers » est un adjectif, et « surprend » un verbe. La v6 traitait « surprend » comme le nom
+final (règle « adjectif + fin de phrase »), avalant tout le groupe. La v7 introduit la **tête du
+GN** : dès que le GN a un nom (« fait », ou « lit » après « grand »), l'homographe suivant qui
+---
+« Lequel est-ce ? » (*Which way?*).
+
+## La suite
+
+La validation des neuf paragraphes sur `/paragraphes` (
+… [495 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière lecture des fiches corpus et rôles pour les chiffres de l'analyseur
+
+- **bash** `{"command": "sed -n '1,25p' reports/rapport-s-corpus-reel.md; echo \"===\"; sed -n '1,20p' reports/rapport-s-analyseur-roles.md", "description": "Lis verdicts corpus réel et rôles"}`
+
+  ```
+# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur **50 000 lignes** et
+> **20 799 phrases** du corpus **CEGEP OCR** (D/R/A, 4,41 M car.) et **50 000** lignes/phrases de
+> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des
+> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur
+> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP
+> est **multilingue et technique** (les scans anglais de réseaux et d'algorithmique) et
+> l'analyseur est **français** : ce n'est pas une mesure du français OCR, c'est une mesure de ce
+> que le corpus n'est pas. L'unité compte : la ligne coupe les phrases (3,6 % contre 51,0 %).
+
+## Le dispositif
+
+- **CEGEP** : `data/corpus_ocr_cegep/train.txt` (D/R/A, 4,41 M car., OCR) ; **propre** :
+  `data/corpus_fr_litterature.txt` (17 M car., texte natif).
+- **Filtre** : lignes de 20–300 caractères (phrases 20–400), au moins 4 mots alphabétiques, au
+  moins 80 % de lettres/espace/ponctuation ; échantillon **régulier**
+… [2193 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"61/61\\|144/144\\|56 tests\\|gold\" reports/rapport-s-analyseur-roles.md | head -15; echo \"===\"; grep -n \"65,5\\|9,1\\|8,5\\|596\\|1 184\" reports/rapport-s-corpus-reel.md | head -15", "description": "Vérifie les chiffres dans les fiches"}`
+
+  ```
+3:> **Ligne de roadmap** : S · **Date** : 2026-11-02 · **Verdict** : sur un gold de **55 phrases**
+15:- **Gold** : [`tools/structures/donnees/gold-analyseur.json`](../tools/structures/donnees/gold-analyseur.json),
+73:**Les deux limites sont fermées en v6** (le nom après adjectif devant un verbe, et en fin de phrase) ; la v6 ajoute la vague 5, le gold de 60 phrases (60/60 types, 142/142 rôles), et corrige le « si fort que » de conséquence — voir [`rapport-s-limites-v6.md`](rapport-s-limites-v6.md).
+85:| **gold** (défaut) | `data/structures/banque.jsonl` | **55** | `reference` | `76accf9d…49dd1ac6` |
+114:- **Le gold est de la même main que les règles** : les 16 `test` sont antérieurs, mais la vague 4
+126:- Gold : `tools/structures/donnees/gold-analyseur.json` ; mesure :
+136:3. **gold plus large** (voix, causatives, verbes à double complément) ;
+===
+1:# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)
+5:> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des
+6:> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur
+7:> le CEGEP OCR, il est au **plan
+… [730 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Construction de la table d'audit des 28 référents
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nsrc={p['id']:p for p in json.load(open('tools/structures/donnees/paragraphes.json'))['paragraphes']}\nvals=[json.loads(l) for l in open('tools/structures/donnees/paragraphes-validations.jsonl',encoding='utf-8') if l.strip()]\n# valeurs attendues (jugement … [1700 caractères tronqués]`
+
+  ```
+n 28 corrects 15 faux 13
+('a001', 'Elle', 'Alice', 'Alice', True)
+('a001', 'se', 'Alice', 'Alice', True)
+('a001', 'elle', 'Alice', 'Alice', True)
+('a001', 'lui', 'Alice', 'Alice', True)
+('a001', 'en', 'Alice', None, False)
+('a002', 'Elle', 'Alice', 'Alice', True)
+('a002', 'en', 'Alice', None, False)
+('a002', 'y', 'Alice', 'la boîte', False)
+('a003', 'Elle', 'Alice', 'Alice', True)
+('a003', 'sa', 'Alice', 'Alice', True)
+('a003', 'elle', 'Alice', 'Alice', True)
+('a003', 'se', 'Alice', 'Alice', True)
+('a004', 'sa', 'ALICE', 'Alice', True)
+('a005', 'elle', 'Alice', 'Alice', True)
+('a005', 'son', 'Alice', 'Alice', True)
+('a005', 'en', 'coup', 'la salle', False)
+('a006', 'cela', 'Comme', 'attendre à la petite porte', False)
+('a006', 'son', 'Alice', 'Alice', True)
+('a006', 'elle', 'Alice', 'Alice', True)
+('a006', 'y', 'table', 'la table', False)
+('a008', 'Je', 'le contenu', 'Alice', False)
+('a008', 'me', 'le contenu', 'Alice', False)
+('a008', 'on', 'Je me sens toute drôle', None, False)
+('a008', 'je', 'Je me sens toute drôle', 'Alice', False)
+('a008', 'en', 'Je me sens toute drôle', None, False)
+('a009', 'se', 'Un moment', 'Alice', False)
+('a009', 'elle', 'Alice', 'Alice', True)
+('a009', 
+… [180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Identification des 5 verdicts à risque lors d'une régénération
+
+- **bash** `{"command": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF'\nimport json, generateur\nfixe=json.load(open('donnees/phrases.json'))['phrases']\ngen=json.load(open('donnees/phrases_generees.json'))['phrases']\nrows=[json.loads(l) for l in open('donnees/validations.jsonl',encoding=' … [458 caractères tronqués]`
+
+  ```
+('p006', 'p006-c2') compatible | stockés 2 dyn 1 | Elle a dit qu'elle viendrait hier.
+('c023', 'c023-c3') exclu | stockés 3 dyn 2 | Le temps était assez beau, mais l'air froid, par ce vent d'est.
+('c056', 'c056-c2') exclu | stockés 3 dyn 1 | Une fois à San Francisco, il verrait à se tirer d'affaire.
+('c056', 'c056-c3') resolu | stockés 3 dyn 1 | Une fois à San Francisco, il verrait à se tirer d'affaire.
+('c064', 'c064-c2') exclu | stockés 2 dyn 1 | Heureusement pour lui, la gare n'avait ni portes ni barrières.
+  ```
+

@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.7 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 67 |
-| Appels d'outils | 107 |
+| Messages | 76 |
+| Appels d'outils | 119 |
 | Fichiers touchés | 0 |
-| Commandes | 90 |
+| Commandes | 100 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*107 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 78 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 50 autres
+- … et 60 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -213,11 +213,15 @@
 - **T1** `33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)**`
 - **T1** `178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes`
 - **T1** `253:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
+- **T1** `| `DRAVE_PERTE_MAX=1 bash tools/porte-flux.sh` | **exit 0**, modes 0–4, réf. **58.3200 / 62.7357** | A8.3a tient sur `porte-flux` : le régime 1 % est bien épinglé |`
+- **T1** `123:| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
+- **T1** `131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** `
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 12, in <module> AttributeError: module 'evaluer_gold' has no attribute '_score' [exit code: 1]
 - **T1** : <class 'dict'> ['version', 'date', 'note', 'documents', 'questions'] [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> TypeError: object of type 'int' has no len() [exi
+- **T1** : ls: cannot access 'reports/rapport-etat-r.md': No such file or directory ls: cannot access 'reports/pensee-etat-r.json': No such file or directory -rw-------. 1 stephane stephane 20802  6 nov 22:01 re
 

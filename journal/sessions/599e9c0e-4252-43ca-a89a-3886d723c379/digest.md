@@ -1912,3 +1912,136 @@ tools/eval_n2_propre.py
 2026-11-06 10:44:06.779462131 -0500 reports/rapport-file-taches.md
   ```
 
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche d'état N2 et du JSON
+
+J'ai les mesures et les contrôles ; je rédige les deux livrables.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "content": "# N2 — l'état du chantier et de sa porte : inventaire, vérification, proposition\n\n> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-06 · **Verdict** :\n> N2 n'a **pas** d … [19050 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"unclone\\|rougne\\|rouge de plus\\|de plus à déclarer\" reports/rapport-etat-n2.md", "description": "Repérer les coquilles"}`
+
+  ```
+218:   `toutes-les-portes.sh` serait une rougne de plus à déclarer dans
+259:- **Les artefacts sont non suivis** : `work/` et `data/` sont gitignorés ; unclone neuf ne peut
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "offset": 200, "limit": 70}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+200: 
+201: **Ce qu'elle doit mesurer** (une seule charge du modèle, puis les mesures) :
+202: 
+203: | mesure | comment | attendu (référence) | tolérance |
+204: |---|---|---:|---:|
+205: | identité du checkpoint | params 34 301 224, `window = 512`, sha256 `.pt` `37c5673b…`, sidecar `corpus = data/corpus_propre/train.txt`, `positions = rope` | exact | 0 |
+206: | courbe val 128 / 256 / 512 / 1 024 | `charge_rope` + `evalue_canal.ppl`, `data/corpus_propre/val.*` | 2,9726 / 2,8988 / 2,8443 / **2,7856** | ±0,01 |
+207: | test 1 024 | split temporaire `test.txt` → `val.txt`, `test.canal` → `val.canal` | **2,8566** | ±0,01 |
+208: | forme de la courbe | `PPL(1 024) < PPL(128) − 0,15` (le levier de longueur) | −0,187 | — |
+209: | contrôle négatif | val **permutée** (VDC), même canal, 1 024 | **1 692,39** | > 100 |
+210: | déterminisme | val 1 024 deux fois | 2,7856 = 2,7856 | exact |
+211: | **statut absolu** | `2,7856 − 2,5` | **manque 0,2856** (val), **0,3566** (test) | imprimé |
+212: 
+213: **Les deux seuils, et pourquoi deux.**
+214: 
+215: 1. **Seuil scientifique : PPL < 2,5** (la
+… [4126 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "old_string": "   `toutes-les-portes.sh` serait une rougne de plus à déclarer dans", "new_string": "   `toutes-les-portes.sh` serait une rouge de plus à déclarer dans"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "old_string": "`evalue_canal.fenetres` fait `.cuda()`) : pas de repli CPU sans un refactor ; si CUDA manque, la\nporte doit sortir **2** (artefact ou device absent), jamais 0.", "new_string": "`evalue_canal.f … [211 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "old_string": "- **Les artefacts sont non suivis** : `work/` et `data/` sont gitignorés ; unclone neuf ne peut", "new_string": "- **Les artefacts sont non suivis** : `work/` et `data/` sont gitignorés ; un cl … [18 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **write** `{"content": "{\n \"date\": \"2026-11-06\",\n \"ligne\": \"N2\",\n \"head\": \"bfd98892\",\n \"objet\": \"état de N2 et de sa porte\",\n \"checkpoints\": {\n  \"total_work\": 123,\n  \"taille_go\": 9.52,\n  \"avec_metadonnees\": 67,\n  \"suivis_git\": false,\n  \"note\": \"work/ et data/ sont gitigno … [9844 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-etat-n2.json</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"2,3911\" reports/rapport-etat-n2.md", "description": "Localiser la phrase des chiffres 60k"}`
+
+  ```
+157:validation du grand corpus, run 30 k ; 2,3911 / 2,3522 sur la validation française, run 60 k),
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "limit": 14, "offset": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md</path>
+<type>file</type>
+<content>
+150:   +0,14–0,18 était une repondération) ; la paire propre de production vaut −0,06 ;
+151: - **la fenêtre 128** : 3,1107 à 1 024 → la fenêtre large est **nécessaire**, pas suffisante ;
+152: - **la fenêtre 2 048** : à octets constants, elle **ne paie pas** (2,048 derrière 1 024 à 61,4 Mo).
+153: 
+154: Les leviers restants sont donc **un corpus propre plus large** ou **une distillation à fenêtre
+155: longue** (la note de passage N2 → R1 le demandait déjà) ; ou un **autre corpus de porte** — sur le
+156: grand corpus, la fenêtre 1 024 passe **sous 2,5** (2,4759 / 2,4373 à 1 000 / 2 000 sur la
+157: validation du grand corpus, run 30 k ; 2,3911 / 2,3522 sur la validation française, run 60 k),
+158: mais ce n'est **pas** le corpus propre. Enfin, **0,29 est optimiste** : c'est le meilleur de quatre
+159: longueurs choisi sur la validation ; le **test** donne 2,8566, soit **0,36** de manque.
+160: 
+161: ## 4. `tools/eval_n2_propre.py` sur le checkpoint le plus récent
+162: 
+163: Le script **tourne** (code 0, 23 s) sur `work/n2ac/rope2048-20k.pt` :
+
+(Showing lines 150-163 of 278. 
+… [39 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md", "new_string": "validation du grand corpus, run 30 k ; 2,3911 / 2,3522 sur la validation du grand corpus, run\n60 k — et 2,53 / 2,48 sur la validation française),", "old_string": "validation du grand corpus, r … [67 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-etat-n2.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/pensee-etat-n2.json > /dev/null && echo 'JSON valide'; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-etat-n2.json'))\nprint('clés:', list(d))\nprint('checkpoints:', d['checkpoints']['total_work'], '| porte:', d['porte_propre']['val']['L1024 … [356 caractères tronqués]`
+
+  ```
+JSON valide
+clés: ['date', 'ligne', 'head', 'objet', 'checkpoints', 'runs_documentes', 'porte_propre', 'eval_n2_propre', 'proposition_porte_n2', 'constats', 'limites']
+checkpoints: 123 | porte: 2.7856 | manque: 0.2856
+eval runs: 3 | proposition mesures: 7
+--- git status (mes fichiers)
+?? reports/pensee-etat-n2.json
+?? reports/rapport-etat-n2.md
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('reports/rapport-etat-n2.md')\nt = p.read_text()\nliens = re.findall(r'\\]\\(([^)]+)\\)', t)\nprint('liens:', len(liens))\nko = []\nfor l in liens:\n    if l.startswith(('http://','https://','#')):\n        continue\n    cible = (p. … [346 caractères tronqués]`
+
+  ```
+liens: 19
+manquants: aucun
+lignes: 279 | mots ~ 2978
+  ```
+

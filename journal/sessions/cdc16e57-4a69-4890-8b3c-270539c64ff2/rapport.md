@@ -7,12 +7,12 @@
 | Identifiant | `cdc16e57-4a69-4890-8b3c-270539c64ff2` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.7 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 46 |
-| Appels d'outils | 81 |
+| Messages | 51 |
+| Appels d'outils | 89 |
 | Fichiers touchés | 0 |
-| Commandes | 80 |
+| Commandes | 88 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*81 appels d'outils.* Actions notables :
+*89 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 67 autres
+- … et 75 autres
 
 **Synthèse produite :**
 
-⏵ Vérification des commandes de traduction existantes (aller simple)
+⏵ Identification des 5 verdicts à risque lors d'une régénération
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Comprend structure du lexique et couverture
 - **T1** Inspecte les données UDHR
 - **T1** Compte exact des couples et langues fortes
-- … et 40 autres
+- … et 48 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -163,6 +163,27 @@
 - **T1** `**170 phrases** ; **294 ont au moins un candidat** (79,2 %) et **77 n'en ont aucun** (20,8 %) :`
 - **T1** `./reports/rapport-consolidation-c7.md:82:  deux mécanismes sont mesurés séparément (C6 : rappel 96,3 %, round-trip exact), pas côte à côte`
 - **T1** `./reports/rapport-routeur-confiance.md:21:- Le round-trip M1 **détecte 31 %** des typos (part M2) ; les 69 % restants sont des typos qui`
+- **T1** `# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)`
+- **T1** `> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des`
+- **T1** `> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur`
+- **T1** `> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP`
+- **T1** `> que le corpus n'est pas. L'unité compte : la ligne coupe les phrases (3,6 % contre 51,0 %).`
+- **T1** `moins 80 % de lettres/espace/ponctuation ; échantillon **régulier** (pas de hasard) de`
+- **T1** `- **Baseline** : un segment par unité couvre 100 % des octets et donne **0 %** de GN+GV — la`
+- **T1** `> de types 54/55** (98,2 %), les **rôles 131/131** (100 %), les **compléments 47/47**, et couvre`
+- **T1** `> **1 466/1 475 octets** (99,4 % ; holdout **762/771**, 98,8 %). La **règle de contexte** corrige`
+- **T1** `1:# S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange)`
+- **T1** `5:> **littérature propre** (17 M car.), l'analyseur trouve un **GN et un GV** dans **65,5 %** des`
+- **T1** `6:> phrases propres contre **9,1 %** quand les mots sont mélangés — le signal est la **langue**. Sur`
+- **T1** `7:> le CEGEP OCR, il est au **plancher du mélange** : **8,5 %** contre **9,1 %**. Le corpus CEGEP`
+- **T1** `32:| ligne | propre | **51,0 %** | 10,3 % | 0,88 | 596 | 592 |`
+- **T1** `34:| phrase | CEGEP | 8,5 % | 0,8 % | 0,94 | 28 | 28 |`
+- **T1** `35:| phrase | propre | **65,5 %** | 8,0 % | 0,88 | 1 184 | 1 150 |`
+- **T1** `36:| phrase | mélange | 9,1 % | 0,4 % | 0,93 | 23 | 23 |`
+- **T1** `40:- **Mélange des mots** : 3,8 % (lignes) et 9,1 % (phrases) — le plancher structurel de`
+- **T1** `41:  l'heuristique. Le CEGEP (3,6 % / 8,5 %) est **à ce plancher** ; la littérature propre`
+- **T1** `42:  (51,0 % / 65,5 %) est **très au-dessus**.`
+- **T1** `52:mélange (8,5 % contre 9,1 % sur les phrases) : l'analyseur n'y « lit » pas plus de structure que`
 
 ## 5. Erreurs rencontrées
 

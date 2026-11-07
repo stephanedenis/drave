@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.3 h |
+| Durée | 149.5 h |
 | Tours | 184 |
-| Messages | 3325 |
-| Appels d'outils | 2950 |
+| Messages | 3330 |
+| Appels d'outils | 2955 |
 | Fichiers touchés | 25 |
-| Commandes | 2446 |
+| Commandes | 2451 |
 | Sous-agents | 38 |
-| Commits | 382 |
+| Commits | 383 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*196 appels d'outils.* Actions notables :
+*201 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 182 autres
+- … et 187 autres
 
 **Synthèse produite :**
 
-⏵ J'inscris la nuit au plan de travail et j'attends la vague
+⏵ J'intègre les états N2 et A dans la roadmap (frontière corrigée)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2406 autres
+- … et 2411 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10586,4 +10586,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES" -- reports/rapport-re-test-produit.md re
 - B13 — LE GV S'ARRÊTE AU MARQUEUR ÉLIDÉ (qu'il) ; AUCUN EFFET MESURÉ, 183/183" -- tools/bloc_linguistique.py 2>&1 | tail -1   if git log -1 --format='%s' | grep 
 - PLAN — § 14 : LA NUIT DES P0 (VAGUES, RÉSULTATS, RESTE)" -- docs/pilotage/plan-travail.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "LA NUIT DES P0
+- ÉTATS — N2 (PORTE PROPRE 2,97/2,86, PROPOSITION porte-n2.sh) ET A (FRONTIÈRE CORRIGÉE : A2.6/A6.2 LIBRES, A3.4/A5.4 SEULS BLOQUÉS)" -- reports/rapport-etat-n2.m
 
