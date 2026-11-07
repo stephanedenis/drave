@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "regle": "typ ponctuation → PONCT (0,95)",
+ "avant": {
+  "pos": 0.85,
+  "miroir": 0.196
+ },
+ "apres": {
+  "pos": 0.8575,
+  "miroir": 0.2276,
+  "f1": 0.6482,
+  "attachement": "235/236"
+ },
+ "elisions": "j'→je, l'→le, qu'→que (neutre sur le gold)",
+ "participes": "testés, F1 -0,0023 → retirés",
+ "controles": {
+  "autotest": "183/183"
+ },
+ "limites": [
+  "PONCT hors POS_FERME",
+  "miroir = surface",
+  "25 tokens"
+ ]
+}

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **698 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **699 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -610,6 +610,7 @@
 | [rapport-pos-anglais-v2.md](rapport-pos-anglais-v2.md) | B13 — la POS passe à 83,83 % : la position du sujet tranche (R2a + R3 + R2b) |
 | [rapport-pos-anglais.md](rapport-pos-anglais.md) | POS anglaise — les 176 VERB gold tagués NOUN viennent du défaut nominal, pas de la règle de contexte |
 | [rapport-pos-nombres.md](rapport-pos-nombres.md) | B13 — les nombres ont une POS : 45 tokens réparés, zéro perte |
+| [rapport-pos-ponctuation.md](rapport-pos-ponctuation.md) | B13 — la ponctuation a une POS (PONCT) : POS 85,75 %, miroir 0,2276 |
 | [rapport-pos-r4-integre.md](rapport-pos-r4-integre.md) | B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 % |
 | [rapport-pos-r4.md](rapport-pos-r4.md) | POS — R4 + classes fermées : +1,19 pt dev / +1,11 test en paquet sûr, +1,51/+1,51 en paquet max |
 | [rapport-precision.md](rapport-precision.md) | Drave — la sparsité peut-elle acheter de la précision ? |

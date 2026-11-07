@@ -406,6 +406,7 @@ découvre découvrir dors dormir cours courir meurs mourir nais naître
 roule rouler vole voler tombe tomber reste rester passe passer quitte quitter
 
 
+
 parler parle parles parlent parlait parlaient parlerai jouer joue joues jouent jouait jouaient
 manger mange manges mangent mangeait mangeaient écrire écrit écris écrivent écrivait écrivaient
 lire lis lisent lisait lisaient dormir dort dorment dormait dormaient partir part pars partent
@@ -854,6 +855,10 @@ class Heuristique:
     def _pos(self, langue: str, mot: str) -> tuple[str, bool, float]:
         lex = POS_FERME.get(langue, POS_FERME["fr"])
         n = _normaliser(mot).split("'")[0].split("’")[0]
+        # élision : « j' » → « je », « l' » → « le », « qu' » → « que » (10 tokens sans POS)
+        _ELISIONS = {"j": "je", "l": "le", "d": "de", "qu": "que", "n": "ne",
+                     "s": "se", "c": "ce", "m": "me", "t": "te"}
+        n = _ELISIONS.get(n, n)
         # les **nombres** ont une classe (l'audit produit : 45 nombres sans POS)
         if re.fullmatch(r"\d+(?:[.,]\d+)*", n):
             return "NUM", False, 0.9
@@ -1308,6 +1313,10 @@ class Heuristique:
         mots = self._mots(texte)
         for d, f, t, typ in mots:
             etiquettes.append(Etiquette("mot", typ, t, d, f, self.nom, 0.98, langue=lg, script=script))
+            if typ == "ponctuation":
+                # la ponctuation a une classe dans le gold (PONCT) : 25 tokens sans POS
+                etiquettes.append(Etiquette("pos", "PONCT", t, d, f, self.nom, 0.95,
+                                            langue=lg, script=script, meta={"ouvert": False}))
             if typ in ("mot", "nombre"):
                 classe, ouvert, conf = self._pos(lg, t)
                 etiquettes.append(Etiquette("pos", classe, t, d, f, self.nom, conf,

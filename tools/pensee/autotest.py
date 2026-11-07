@@ -1637,7 +1637,7 @@ def t107_gold_complet() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
     return (len(phrases) == 602
-            and abs(r["pos"]["exactitude"] - 0.8529) < 0.001), (
+            and abs(r["pos"]["exactitude"] - 0.8577) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
 
@@ -1786,18 +1786,18 @@ def t115_tete_cascade() -> tuple[bool, str]:
 
 
 def t116_miroir() -> tuple[bool, str]:
-    """Le miroir : surface 1,0, mots 0,2095."""
+    """Le miroir : surface 1,0, sortie POS 0,2276 (PONCT)."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import mesurer
     ph = charger()
     r = mesurer(ph, bl.Heuristique())
-    return abs(r["fidelite"] - 0.196) < 0.001, (
+    return abs(r["fidelite"] - 0.2276) < 0.001, (
         f"miroir : surface 1,0, sortie POS {r['fidelite']} (fluidité {r['fluidite']})")
 
 
 def t117_miroir_pos() -> tuple[bool, str]:
-    """La sortie POS : fidélité 0,201."""
+    """La sortie POS : fidélité 0,2276."""
     import tools.bloc_linguistique as bl
     from ..tests.linguistique.evaluer_gold import charger_gele as charger
     from ..tests.linguistique.miroir import fidelite_pos
@@ -1805,7 +1805,7 @@ def t117_miroir_pos() -> tuple[bool, str]:
     h = bl.Heuristique()
     fid = sum(fidelite_pos(h.analyser(p["texte"], p["langue"]), p["texte"])
               for p in ph) / max(1, len(ph))
-    return abs(fid - 0.196) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
+    return abs(fid - 0.2276) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
 
 
 def t118_miroir_espaces() -> tuple[bool, str]:
@@ -2023,7 +2023,7 @@ def t138_defaut_niveau() -> tuple[bool, str]:
     h, n = bl.Heuristique(), bl.MockNeuronal()
     r_conf = evaluer_bloc("c", bl.Parallele([h, n]), ph)["pos"]["exactitude"]
     r_niv = evaluer_bloc("n", bl.Parallele([h, n], priorite_par_niveau=bl.PRIORITE_NIVEAU), ph)["pos"]["exactitude"]
-    return abs(r_conf - 0.8496) < 0.001 and abs(r_niv - 0.754) < 0.001 and r_conf > r_niv, (
+    return abs(r_conf - 0.8575) < 0.001 and abs(r_niv - 0.754) < 0.001 and r_conf > r_niv, (
         f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
@@ -2058,7 +2058,7 @@ def t141_elision() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, charger())
     pos = round(r["pos"]["exactitude"], 4)
-    return abs(pos - 0.8496) < 0.001, f"élision : POS {pos}"
+    return abs(pos - 0.8575) < 0.001, f"élision : POS {pos}"
 
 
 def t142_run2() -> tuple[bool, str]:

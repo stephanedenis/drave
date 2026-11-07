@@ -57036,3 +57036,122 @@ R4.4 n'est pas dans les 3 : bloquée par la **vérité humaine** sur 10 pages r�
 Détail, chiffres, commandes et limites : `reports/rapport-etat-r.md` § 1–10 ; données : `reports/pensee-etat-r.json`.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-etat-r.md reports/pensee-etat-r.json | head -2; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nif \"pensee-etat-r.json\" not in t:\n    pass\np.write_tex … [971 caractères tronqués]`
+
+  ```
+M reports/rapport-etat-r.md
+?? reports/pensee-etat-r.json
+ create mode 100644 reports/pensee-etat-r.json
+COMMIT OK 1
+f48d5d81 R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS)
+   56e5ce48..f48d5d81  s/v7 -> s/v7
+   56e5ce48..f48d5d81  master -> master
+ven 06 nov 2026 22:54:10 EST
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 7635f5f5-11b8-4d10-bea5-50a90e536e31 finished and will do no further work unless you send it more.
+Its closing message:
+## Livrables
+
+- **`reports/rapport-etat-r.md`** — fiche complète (38,5 Ko). Le hub a committé une **version antérieure** dans `d3134849` pendant la rédaction ; la version finale corrigée est dans le worktree (non committée).
+- **`reports/pensee-etat-r.json`** — données structurées (33 Ko, JSON valide, non suivi).
+
+Aucun code, **aucun commit de ma part**. HEAD d'audit `97256b8f` ; HEAD courant `56e5ce48` (S, sans effet R). Liens : 3 726 OK ; `revue_documentation.py` passe.
+
+## État des 20 lignes R
+
+| ligne | état | chiffre clé / vérification |
+|---|---|---|
+| **R0.1** | ✅ fait | 51 pages, 1 466 régions, fidélité **1,000** — `porte-document` verte |
+| **R0.2** | ✅ fait | **1,000** à 30 % sur **5 types** — `porte-lecteur` verte |
+| **R0.3** | ✅ fait | **248** questions (la fiche dit 249) ; extractif **1,000** à 30 % ; modèle **0,231** vs début **0,042** ; durci **0,375 / 0,269** |
+| **R0.4** | ⚠️ partiel | survol ❌ **0,540 vs 0,720** ; balayage ✅ **0,984 / 0,702** ; relecture ❌ **0/249** ; cascade calibrée **0,911 / 0,415** |
+| **R0.5** | ❌ close négative | AUC **0,839** ; transfert **0,819 / 0,313** vs fixe **0,871 / 0,373** — rejoué |
+| **R0.6** | ✅ fait | 12/20, **9/10** refusés (titre : 10/10), 7/8 modèle ; **7/7** contrôles |
+| **R0.7** | ✅ heuristique ; 🔬 tagger | 398 langues **0,9687** ; gold **612** : POS **0,8500**, syntagmes F1 **0,6482**, tête **0,7673**, attachement **235/236** |
+| **R1.1** | 🔬 partiel | PPL 1 000 = **3,2545** (0,97× la PPL à 129) ; **aiguille ≥15/18 non atteinte** ; miroir **0,0078** |
+| **R1.2** | 🔬 run fait, ligne non close | **1024-20k** : **2,9955** à 128, **2,6256** à 1 000, **2,5429** à 4 000 ; artifact 131 Mo, fiche/JSON/commit ; 2048 perd à octets constants |
+| **R1.3** | ✅ décidée | octets ; BPE 512 +0,39 %, 1024 **+3,92/+4,09 %**, anglais **+4,22/+6,59 %** |
+| **R2.1** | ⏳ libre | tampon gelé **+0,879**, LoRA **+0,964**, réseau seul **−1,091→−2,773** ; **pas bloquée par N5** |
+| **R2.2** | ⏳ après R2.1 | store/éviction |
+| **R3.1** | 🧱 bloquée | **N4 : 24/24 vus, 0/4 tenus** ; + R2.1 |
+| **R3.2** | ⏳ après R3.1 | citations exactes |
+| **R4.1** | ✅ fait | **970 cellules**, provenance **776/776**, 8/8 (roadmap : 996/802) |
+| **R4.2** | ✅ fait | **342/342** fichiers, 24/24 exécutions, 7/7 refus (roadmap : 294) |
+| **R4.3** | ✅ fait | 32/32 formules, 10/10 dérivées, 6/6 équations, 8/8 refus |
+| **R4.4** | 🔬 partiel | les 2 portes OCR **vertes** ; 100 simulés + **30 pages réelles** vs couche OCR ; **vérité humaine manquante** |
+| **R5.1** | ⏳ après R3 | M4 manque |
+| **R5.2** | 🧱 bloquée | chrF **12,7 / 5,3** contre **39,6** |
+
+## Le tagger
+
+Deux routes, deux corpus — d'où le piège :
+
+- **7B local** (`NeuronalLLMPOS`, `qualifier_neuronal.py`) sur **180 phrases / 804 jetons** (20 réelles + 160 synthétiques) : POS **0,8483** seul, cascade **0,9440**. L'heuristique sur ce même gold, **aujourd'hui**, vaut **0,7749** → **+0,0734** seul, **+0,1691** en cascade. Modèle GGUF **absent** de `models/`, serveur local interdit par la règle 11 : mesure historique.
+- **API DeepSeek** (`qualifier_quatre_modes.py`) sur le **gold réel 432 / 2 375 jetons** : POS **0,9389** (run 2), syntagmes **0,8241**, tête **0,8797**, acte 0,0. L'heuristique sur ce même 432, **aujourd'hui**, vaut **0,8754** → **+0,0635**, pas +0,19.
+- Le **0,85** est l'heuristique sur le **gold 612** ; le tagger n'a **jamais** été mesuré sur ces 612. Donc **0,9440 − 0,85 = +0,0940 est une erreur de corpus**. L'écart honnête : **+6,35 pts** sur le réel 432, **+7,34 pts** sur le 180. La baseline a monté (0,7444→0,8754 sur 432 ; 0,7512→0,7749 sur 180) : POS des verbes, classes fermées, `NUM`.
+
+## Les 3 prochaines actions
+
+1. **R0.7 — tagger POS sur le gold 612 via l'API** : étendre le chargeur de `qualifier_quatre_modes.py`, puis `DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key python3 tools/tests/linguistique/qualifier_quatre_modes.py --sortie /tmp/tagger-612.json`. Mesure : POS 612 ventilé 432/160/20, écart vs **0,8500**, contrôles recalculés, coût (~1 200 appels, ~360 k tokens, ~20 min). Décision : **< +2 pts** → fermer le tagger comme négatif nommé ; **≥ +5 pts** → intégrer via l'API.
+2. **R1.1 — miroir de copie sur `rope1024-20k` et `rope2048-20k`** : `PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/mirroir_copie.py work/n2ac/rope1024-20k.pt --rope --sortie /tmp/mirroir-1024-20k.json` (vrai nom : `mirroir_copie.py`). Si **≤ 0,01 partout**, clore R1.1 « aiguille non atteinte, copie non créée par la fenêtre » ; si **> 0,5 à d ≤ 240**, rouvrir.
+3. **R2.1 — gist v0 + tampon en entrée** : sections/offsets R0.1, tampon `--entree-memoire 8`, gist (résumé, entités, faits, citations), banc à créer. Mesure : indice en section 2 après section 5, gist vs closed-book (marge proposée **+10 pts**), citation **≥ 0,90**, aucune perte sur documents courts ; contrôles closed-book, gist aléatoire, oracle.
+
+**R4.4 n'est pas dans les 3** : bloquée par la **vérité humaine** sur 10 pages réelles, pas par l'OCR (tesseract 5.5.3 installé, deux portes vertes). Les documents se contredisent : roadmap « ouvert », en-cours « close », backlog « partiel », fiche « ouverte » puis « close » — statut juste : **partielle**.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n 'def t116_' tools/pensee/autotest.py | cut -d: -f1),+12p\" tools/pensee/autotest.py; sed -n \"$(grep -n 'def t117_' tools/pensee/autotest.py | cut -d: -f1),+10p\" tools/pensee/autotest.py", "description": "Voir T11 … [8 caractères tronqués]`
+
+  ```
+def t116_miroir() -> tuple[bool, str]:
+    """Le miroir : surface 1,0, mots 0,2095."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
+    from ..tests.linguistique.miroir import mesurer
+    ph = charger()
+    r = mesurer(ph, bl.Heuristique())
+    return abs(r["fidelite"] - 0.196) < 0.001, (
+        f"miroir : surface 1,0, sortie POS {r['fidelite']} (fluidité {r['fluidite']})")
+
+
+def t117_miroir_pos() -> tuple[bool, str]:
+    """La sortie POS : fidélité 0,201."""
+def t117_miroir_pos() -> tuple[bool, str]:
+    """La sortie POS : fidélité 0,201."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger_gele as charger
+    from ..tests.linguistique.miroir import fidelite_pos
+    ph = charger()
+    h = bl.Heuristique()
+    fid = sum(fidelite_pos(h.analyser(p["texte"], p["langue"]), p["texte"])
+              for p in ph) / max(1, len(ph))
+    return abs(fid - 0.196) < 0.001, f"sortie POS : fidélité {round(fid, 4)}"
+  ```
+
+### 🤖 Assistant
+
+⏵ PONCT améliore aussi le miroir (0,196 → 0,2276) : je recale les 5 portes et je fige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(r[\"fidelite\"] - 0.196) < 0.001','abs(r[\"fidelite\"] - 0.2276) < 0.001'),\n   ('\"\"\"Le miroir : surface 1,0, mots 0,2095.\"\" … [987 caractères tronqués]`
+
+  ```
+7 / 7
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pos-ponctuation.md <<'MD'\n# B13 — la ponctuation a une POS (PONCT) : POS 85,75 %, miroir 0,2276\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Le P1-6 de l … [4113 caractères tronqués]`
+
+  ```
+fiche + JSON
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 794 JSON, le disque en a 795
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+f48d5d81 R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS)
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 22:57:36 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1272 caractères tronqués]`
