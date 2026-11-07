@@ -1232,6 +1232,14 @@ class Heuristique:
                 continue
             # un **pronom sujet** devant le verbe est un GN (« Il | a couru ») : c'est la
             # convention du gold (FN GN 417) — mesuré F1 0,6519 → 0,7013, attachement inchangé.
+            # un **nom propre** sujet (majuscule initiale) devant un verbe est un GN
+            if (typ == "mot" and t[:1].isupper() and i + 1 < len(mots)
+                    and (est_verbe(mots[i + 1][0], mots[i + 1][2])
+                         or _normaliser(mots[i + 1][2]) in lex.get("AUX", set()))):
+                segments.append({"type": "GN", "role": "agent", "niveau": 0,
+                                 "debut": d, "fin": f, "texte": texte[d:f], "candidats": []})
+                i += 1
+                continue
             _suj = SUJETS if langue == "fr" else {"i", "you", "he", "she", "it", "we", "they"}
             if (typ == "mot" and n in _suj and i + 1 < len(mots)
                     and (est_verbe(mots[i + 1][0], mots[i + 1][2])

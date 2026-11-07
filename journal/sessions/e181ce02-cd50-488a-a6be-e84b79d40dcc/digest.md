@@ -57962,3 +57962,59 @@ syntaxe OK
 ⏵ **F1 0,7438** avec les pronoms anglais : fiche et commit
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"\"\"## 2. Avant / après\n\n| mesure | avant | **après** |\n|---|---:|---:|\n| F1 syntagmes | 0,6519 | **0,7013** | … [2345 caractères tronqués]`
+
+  ```
+fiche + JSON à jour
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · fraîcheur : en-cours.md dit 2026-11-07, le dernier commit date du 2026-11-06
+ 10 files changed, 89 insertions(+), 34 deletions(-)
+COMMIT OK 1
+295e0d7b B13 — LES PRONOMS SUJETS ANGLAIS AUSSI : F1 0,7013 → 0,7438, TÊTE 0,8561, ATTACHEMENT PRÉSERVÉ ; 183/183
+   a46e550b..295e0d7b  s/v7 -> s/v7
+   a46e550b..295e0d7b  master -> master
+sam 07 nov 2026 00:07:55 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nh=bl.Heuristique()\nfor t in (\"Marie lit un livre.\",\"Paul mange une pomme.\",\"Élodie sourit.\",\"Paris brille.\"):\n    print … [150 caractères tronqués]`
+
+  ```
+Marie lit un livre. -> [('GV', 'Marie lit'), ('GV', 'lit'), ('GN', 'un livre')]
+Paul mange une pomme. -> [('GV', 'Paul mange'), ('GV', 'mange'), ('GN', 'une pomme')]
+Élodie sourit. -> [('GV', 'Élodie sourit')]
+Paris brille. -> [('GV', 'Paris brille')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc=pathlib.Path('tools/bloc_linguistique.py').read_text()\nancien = '''            _suj = SUJETS if langue == \"fr\" else {\"i\", \"you\", \"he\", \"she\", \"it\", \"we\", \"they\"}'''\nneuf = '''   … [1268 caractères tronqués]`
+
+  ```
+exp nom propre
+EXP-NP POS 0.8625 | F1 0.7533 | exact 236/237 | cov 0.9916
+  ```
+
+### 🤖 Assistant
+
+⏵ **F1 0,7533** avec le nom propre sujet : j'intègre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nancien = '''            _suj = SUJETS if langue == \"fr\" else {\"i\", \"you\", \"he\", \"she\", \"it\", \"we\", \"they\"}'''\nneuf = '' … [1047 caractères tronqués]`
+
+  ```
+nom propre intégré
+syntaxe OK
+ ❌ T110 segmenteur segmenteur : S F1 0.5988 tête 0.7428 ; chunker F1 0.8135 tête 0.9066
+ ❌ T111 hybride segmenteur hybride : tête F1 0.823 (S 0,3552, chunker 0,4707)
+ ❌ T112 union segmenteurs union : segments F1 0.7535 (S 0,5948)
+ ❌ T113 union par défaut union par défaut : F1 0.7535, tête 0.865
+ ❌ T114 cascade + union cascade : F1 0.7535, tête 0.865, 602 appels
+ ❌ T115 tête cascade tête cascade corrigée : 0.8288 (cascade 0,441 ; union 0,466)
+ ❌ T119 restitution sémantique résumé : heur 0.7816, cascade 0.7816
+ ❌ T156 relation GN-GV relation : 566/859 (0.6589)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(f1 - 0.5948) < 0.001 and abs(f2 - 0.8031) < 0.001','abs(f1 - 0.5988) < 0.001 and abs(f2 - 0.8135) < 0.001'),\n   ('return abs(f1  … [1125 caractères tronqués]`
+
+  ```
+8 / 8
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('reports/rapport-gn-pronom-sujet.md'); t=p.read_text()\nt=t.replace(\"\"\"**L'anglais** a ses propres pronoms sujets (`i, you, he, she, it, we, they`) : la même règle lui\ndonne  … [2167 caractères tronqués]`

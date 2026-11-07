@@ -38,6 +38,10 @@ devenait un GN et le GP était perdu (r070).
 **L'anglais** a ses propres pronoms sujets (`i, you, he, she, it, we, they`) : la même règle lui
 donne **+4,25 points de F1** (0,7013 → 0,7438) sans perdre un attachement.
 
+**Le nom propre sujet** (« Marie lit », « Paris brille ») suit la même convention : un mot à
+majuscule initiale devant un verbe émet un GN — **F1 0,7438 → 0,7535**. Total de la règle :
+**0,6519 → 0,7535** (+10,2 points), attachement toujours **236/237 (0,9916)**.
+
 **Ce que ça dit** :
 
 - **La convention de segmentation** (le pronom sujet est un GN) valait **4,9 points de F1** et
