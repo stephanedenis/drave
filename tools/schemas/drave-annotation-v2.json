@@ -1,0 +1,252 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://drave.local/schema/annotation-v2.json",
+ "title": "drave.annotation v2",
+ "description": "L'annotation du bloc linguistique heuristique, version 2 : identique à la v1 et documente, dans `meta`, la partition des syntagmes qui se chevauchent (`meta.partition`) et les segments alternatifs du groupe (`meta.alternative`). Les deux champs sont additifs et optionnels : v1 reste lue.",
+ "type": "object",
+ "required": [
+  "schema",
+  "version",
+  "texte",
+  "langue",
+  "script",
+  "refus",
+  "etiquettes",
+  "unites_semantiques"
+ ],
+ "properties": {
+  "schema": {
+   "const": "drave.annotation"
+  },
+  "version": {
+   "const": 2
+  },
+  "texte": {
+   "type": "string"
+  },
+  "langue": {
+   "type": "string",
+   "pattern": "^[a-z]{2,3}$|^und$"
+  },
+  "script": {
+   "type": "string"
+  },
+  "source": {
+   "type": "string"
+  },
+  "refus": {
+   "type": "string",
+   "enum": [
+    "",
+    "vide",
+    "non_texte",
+    "trop_long",
+    "neuronal"
+   ]
+  },
+  "etiquettes": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "niveau",
+     "type",
+     "valeur",
+     "debut",
+     "fin",
+     "source",
+     "confiance"
+    ],
+    "properties": {
+     "niveau": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string"
+     },
+     "valeur": {
+      "type": "string"
+     },
+     "debut": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "fin": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "source": {
+      "type": "string"
+     },
+     "confiance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     },
+     "candidats": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "langue": {
+      "type": "string"
+     },
+     "script": {
+      "type": "string"
+     },
+     "meta": {
+      "type": "object",
+      "properties": {
+       "partition": {
+        "type": "object",
+        "required": [
+         "groupe",
+         "rang",
+         "membres",
+         "vue"
+        ],
+        "properties": {
+         "groupe": {
+          "type": "integer",
+          "minimum": 0
+         },
+         "rang": {
+          "type": "integer",
+          "minimum": 1
+         },
+         "membres": {
+          "type": "integer",
+          "minimum": 2
+         },
+         "vue": {
+          "enum": [
+           "alternative",
+           "filtrer_union",
+           "filtrer"
+          ]
+         }
+        },
+        "additionalProperties": true
+       },
+       "alternative": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "type": "object",
+         "required": [
+          "type",
+          "debut",
+          "fin",
+          "source",
+          "union",
+          "relation",
+          "rang"
+         ],
+         "properties": {
+          "type": {
+           "enum": [
+            "GN",
+            "GV",
+            "GP",
+            "REL",
+            "SUB"
+           ]
+          },
+          "debut": {
+           "type": "integer",
+           "minimum": 0
+          },
+          "fin": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "source": {
+           "enum": [
+            "heuristique",
+            "neuronal",
+            "humain"
+           ]
+          },
+          "union": {
+           "type": "boolean"
+          },
+          "relation": {
+           "enum": [
+            "inclut",
+            "inclus",
+            "meme_span",
+            "croise"
+           ]
+          },
+          "rang": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "retire": {
+           "type": "boolean"
+          },
+          "attachement": {
+           "type": "object",
+           "required": [
+            "segment",
+            "cible"
+           ],
+           "properties": {
+            "segment": {
+             "type": "string"
+            },
+            "cible": {
+             "type": "string"
+            }
+           },
+           "additionalProperties": false
+          },
+          "role": {
+           "type": "string"
+          }
+         },
+         "additionalProperties": false
+        }
+       }
+      },
+      "additionalProperties": true
+     }
+    }
+   }
+  },
+  "unites_semantiques": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "debut",
+     "fin"
+    ],
+    "properties": {
+     "debut": {
+      "type": "integer"
+     },
+     "fin": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  "fraction_semantique": {
+   "type": "number",
+   "minimum": 0,
+   "maximum": 1
+  },
+  "trace": {
+   "type": "array"
+  },
+  "cout": {
+   "type": "object"
+  },
+  "contexte": {
+   "type": "string"
+  }
+ },
+ "additionalProperties": true
+}

@@ -7,12 +7,12 @@
 | Identifiant | `session-e1ad947b-50b1-4758-a921-5267225bf642` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 12:41 |
-| Durée | 1.1 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 205 |
-| Appels d'outils | 237 |
+| Messages | 214 |
+| Appels d'outils | 245 |
 | Fichiers touchés | 9 |
-| Commandes | 184 |
+| Commandes | 192 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J1.2 : la convention des GV (322 FP / 180 FN). Classe les erreurs, mesure 2 règles candidates (arrêt à l'adverbe f … [193 caractères tronqués]
 
-*237 appels d'outils.* Actions notables :
+*245 appels d'outils.* Actions notables :
 
 - bash — List repository root
 - bash — Show git status and recent commits
@@ -41,7 +41,7 @@
 - bash — Read r035 report
 - bash — Find FP FN reports
 - bash — List linguistique tests and find numbers
-- … et 195 autres
+- … et 200 autres
 
 ## 3. Travail accompli
 
@@ -101,7 +101,7 @@
 - **T1** Find F1 assertions in autotest
 - **T1** Read measure.py
 - **T1** Inspect gold segments and targets
-- … et 144 autres
+- … et 152 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -173,6 +173,7 @@
 - **T1** `+**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035` et convention des GV faits**, reste `g017` (J1.3/J1.4) ; **S** — poursuivre `
 - **T1** `-**État au 07/11 12 h 34.** B13 : **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7549**, **1 span (`g017`) + 1 cible fausse (`s065`)** ; **183/183** ; **`r035`** (relative zéro) réglé`
 - **T1** `+**État au 07/11 13 h 30.** B13 : **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7902**, **1 span (`g017`) + 1 cible fausse (`s065`)** ; **183/183** ; **`r035`** (relative zéro) réglé`
+- **T1** `[still running after 600000ms; moved to background job bash-189]`
 
 ## 5. Erreurs rencontrées
 

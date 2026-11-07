@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **704 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **705 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -677,6 +677,7 @@
 | [rapport-s-traductions.md](rapport-s-traductions.md) | S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-schema-v1.md](rapport-schema-v1.md) | B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées |
+| [rapport-schema-v2.md](rapport-schema-v2.md) | B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
 | [rapport-sessions-plans.md](rapport-sessions-plans.md) | Sessions — le plan avant l'état |

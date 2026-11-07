@@ -4,6 +4,9 @@
 > complète la notice [`README.md`](README.md) : la notice dit *quoi* faire, ce document dit
 > *comment lire* ce qui sort. Les sorties ont été produites le **2026-11-06** sur la branche
 > `s/v7`, avec le CLI `tools/drave.py` (version **0.1.0**), sans modèle, sans GPU et sans réseau.
+> Le **format est passé en v2** le 07/11 : `version: 2` et, sur un syntagme qui chevauche un
+> autre, `meta.partition`/`meta.alternative` ; ces sorties v1 restent lisibles, v1 étant toujours
+> lue ([schéma v2](../../tools/schemas/drave-annotation-v2.json)).
 >
 > **Une commande, un JSON.** `python3 tools/drave.py analyser "…" --json` rend l'annotation
 > complète (neuf niveaux). Pour la lire, ce document filtre avec `jq` ; le produit, lui, n'a pas
@@ -17,6 +20,10 @@
   `morphème`, `discours` et `document` sont omis (ils existent dans le JSON complet).
 - `confiance` : **déclarée**, pas calibrée. 0,3 pour un NOUN ouvert, 0,92 pour un DET.
 - `meta.attachement` : `{segment, cible}` ; `cible` est une **chaîne**, pas un span.
+- `meta.partition` : `{groupe, rang, membres, vue}` — présent sur un syntagme d'un groupe de
+  chevauchement (v2) ; `rang: 1` est la vue préférée, pas une suppression.
+- `meta.alternative` : la liste des autres segments du groupe (`type`, `debut`, `fin`, `source`,
+  `union`, `relation`, `rang`, `role`, `attachement`, `retire` en vue filtrée) — v2.
 - `candidats` : des **chaînes d'affichage** (parfois « « qui dort » → voisine »), pas des objets.
 - `null` : pas d'attachement publié pour ce syntagme.
 - `union: true` : seconde lecture qui chevauche un syntagme plus court. Dans la sortie lisible du
@@ -32,7 +39,8 @@ FILTRE='{langue, script, refus, fraction_semantique,
         | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}],
   syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
         | {valeur, type, debut, fin, confiance, role:.meta.role,
-           cible:.meta.attachement.cible, union:.meta.union, candidats}],
+           cible:.meta.attachement.cible, union:.meta.union,
+           partition:.meta.partition, alternative:.meta.alternative, candidats}],
   phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
   pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}],
   unites_semantiques}'
@@ -613,17 +621,20 @@ comme « 100 % du langage » : c'est 100 % des spans prédits, sur **92,89 %** d
    l'exemple `r035` en est un cas réel.
 4. **Pas de lecture unique garantie** : le **doublon REL de l'union** (`union: true`) est publié ;
    il faut le filtrer si l'on veut un seul segment par span.
-5. **Pas de schéma stable** : `candidats` sont des chaînes, `role` n'est pas normalisé, et le JSON
-   n'a pas de champ `version` (notice § 7).
+5. **Pas de valeurs normalisées** : `candidats` sont des chaînes et `role` n'est pas normalisé
+   (`predicat`/`prédicat`). Le **format** est versionné (v2 ; v1 reste lue), mais le vocabulaire
+   des valeurs, lui, n'a pas de schéma.
 
 Pour mesurer sur votre propre corpus, il faut le format du gold (mots + segments + pragma) : il
-n'est pas publié comme schéma — c'est un des manques du CLI (notice § 7).
+n'est pas publié comme schéma — c'est un des manques du CLI (notice § 7). Le schéma de
+l'**annotation** du produit, lui, est publié : [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json).
 
 ## 7. Où aller ensuite
 
 | si vous voulez… | allez à |
 |---|---|
 | **la notice d'usage** | [`README.md`](README.md) |
+| **le schéma du JSON (v2, v1)** | [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [`drave-annotation-v1.json`](../../tools/schemas/drave-annotation-v1.json) |
 | **le contrat du bloc** | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
 | **les chiffres et les 17 spans** | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) |
 | **l'audit et les contrôles** | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |

@@ -35,15 +35,16 @@
 | [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — cascade = heuristique |
 | [`rapport-morphologie-verbes.md`](rapport-morphologie-verbes.md) | **B13** — la morphologie du 1er groupe : exact **235/236**, couverture **0,9874**, 3 spans |
 | [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : couverture **0,9456** |
-| [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
+| [`rapport-schema-v2.md`](rapport-schema-v2.md) | **B13** — schéma v2 : `meta.partition`, `meta.alternative`, v1 lue |
+| [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — contrat v1 : refus JSON code 3, 9 contrôles |
 | [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — POS **83,83 %** (R2a/R3/R2b), F1 **0,6181** |
 | [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS (A25) |
 | [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold |
 | [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
 | [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
 | [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : index 625 → **677** |
-| [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — la file des 29 tâches : 8 autonomes, 11 en coordination, 10 bloquées ; 18 périmées |
-| [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — le premier produit : **`drave` v0** (analyser/evaluer/rejouer), porte produit, 6 tests |
+| [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — file des 29 tâches : 18 périmées |
+| [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — `drave` v0 : anal., éval., rejeu ; 6 tests |
 | [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 min 54** (×2,4), mêmes verdicts |
 | [`rapport-pensee-v12.md`](rapport-pensee-v12.md) | **B13** — **222/222 (1,0000)**, couverture **0,9289**, 17 spans inatteignables |
 | [`rapport-dev-test-v10.md`](rapport-dev-test-v10.md) | **B13** — dev/test v10 : dev 152/152, test 68/68, l'exact est saturé |

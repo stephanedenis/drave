@@ -1,0 +1,63 @@
+{
+ "date": "2026-11-07",
+ "ligne": "B13",
+ "tache": "J1.3",
+ "objet": "le schéma v2 de l'annotation",
+ "schema": "drave.annotation",
+ "version": 2,
+ "schemas": {
+  "v2": "tools/schemas/drave-annotation-v2.json",
+  "v1": "tools/schemas/drave-annotation-v1.json"
+ },
+ "champs_ajoutes": {
+  "meta.partition": {
+   "obligatoires": ["groupe", "rang", "membres", "vue"],
+   "vue": ["alternative", "filtrer_union", "filtrer"]
+  },
+  "meta.alternative": {
+   "obligatoires": ["type", "debut", "fin", "source", "union", "relation", "rang"],
+   "type": ["GN", "GV", "GP", "REL", "SUB"],
+   "relation": ["inclut", "inclus", "meme_span", "croise"],
+   "source": ["heuristique", "neuronal", "humain"],
+   "optionnels": ["retire", "attachement", "role"]
+  }
+ },
+ "retrocompatibilite": {
+  "v1_lue": true,
+  "schema_v1_inchange": true,
+  "v2_refuse_v1": true,
+  "selection": "le vérificateur lit `version` et choisit le schéma correspondant"
+ },
+ "validation": {
+  "commande": "python3 tools/verifier_schema_produit.py --gold 20",
+  "cas": 26,
+  "echecs": 0,
+  "detail": {
+   "base_v2": 5,
+   "retro_v1": 1,
+   "gold_v2": 20
+  },
+  "validateur": "fastjsonschema",
+  "repli_minimal": "champs obligatoires + version si fastjsonschema absent"
+ },
+ "validation_complementaire": {
+  "phrases_gold": 612,
+  "vues": ["alternative", "filtrer_union", "filtrer"],
+  "annotations": 1836,
+  "echecs": 0
+ },
+ "gold_alternative": {
+  "groupes": 146,
+  "porteurs": 437,
+  "alternatives": 930,
+  "types": {"GN": 393, "GV": 357, "REL": 103, "GP": 49, "SUB": 28},
+  "relations": {"croise": 386, "inclus": 263, "inclut": 263, "meme_span": 18},
+  "retires": 0
+ },
+ "limites": [
+  "le schéma valide la forme, pas les invariants sémantiques",
+  "le bump v1 -> v2 change les octets et le sha256 de rejeu",
+  "l'énumération des types est celle du gold (5 types)",
+  "sans fastjsonschema, la validation est minimale"
+ ]
+}

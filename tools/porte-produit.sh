@@ -42,9 +42,9 @@ else
 fi
 
 if python3 tools/verifier_schema_produit.py --gold 20 >/tmp/porte-produit-valide.log 2>&1; then
-  dit ✅ "schéma v1 validé (5 cas + 20 phrases du gold)"
+  dit ✅ "schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)"
 else
-  dit ❌ "schéma v1 : validation en échec (voir /tmp/porte-produit-valide.log)"; ko=1
+  dit ❌ "schéma v2 : validation en échec (voir /tmp/porte-produit-valide.log)"; ko=1
 fi
 
 if python3 tools/tests/test_produit_libre.py >/tmp/porte-produit-libre.log 2>&1; then
@@ -54,9 +54,9 @@ else
 fi
 
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then
-  dit ✅ "schéma v1 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-schema.log | head -1)"
+  dit ✅ "schéma v2 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-schema.log | head -1)"
 else
-  dit ❌ "schéma v1 en échec (voir /tmp/porte-produit-schema.log)"; ko=1
+  dit ❌ "schéma v2 en échec (voir /tmp/porte-produit-schema.log)"; ko=1
 fi
 
 refus=$(python3 tools/drave.py analyser "" --json 2>/dev/null); code=$?

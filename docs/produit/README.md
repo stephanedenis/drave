@@ -5,10 +5,14 @@
 > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
 > qu'il garantit.
 >
-> **Vérifié le 2026-11-06** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **Vérifié le 2026-11-07** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
 > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer` et `--version` existent, et la
-> porte produit est verte. Les exemples du § 3 sont réels : ils ont été lancés pour ce document.
-> Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+> porte produit est verte. Le format est **version 2** (`schema: "drave.annotation"`,
+> `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
+> reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
+> § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 et du § 3.3
+> datent du **06/11**, quand le format était v1. Ce qui manque encore au contrat est nommé au § 7,
+> sans être présenté comme acquis.
 >
 > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
@@ -19,7 +23,7 @@
 | vous êtes… | ce que vous obtenez | ce qu'il faut savoir |
 |---|---|---|
 | **linguiste, enseignant, curieux** | une analyse immédiate : POS, syntagmes, rôles, attachement, acte de parole | c'est une **annotation**, pas une traduction ni une correction |
-| **développeur NLP** | un JSON déterministe, des spans, une confiance, des candidats | le schéma n'est pas encore versionné (§ 7) |
+| **développeur NLP** | un JSON déterministe, des spans, une confiance, des candidats | le format est **versionné** (schéma v2) ; v1 reste lue (§ 7) |
 | **chercheur du dépôt** | le banc des fiches : gold 612, 239 cibles, rejeu | les règles sont dessinées sur ce gold : lire la **couverture**, pas seulement l'exactitude |
 
 **Prérequis** : le dépôt, Python 3.10+ (testé en 3.13), **aucune dépendance externe**, aucun GPU,
@@ -32,7 +36,9 @@ un serveur. Le produit **lit** et **étiquette** ; il n'écrit pas de texte.
 ## 2. Ce que le produit fait
 
 Une seule opération : `analyser(texte, langue)` → une **annotation**. Elle porte neuf niveaux ;
-le produit en expose cinq, plus le coût et la trace.
+le produit en expose cinq, plus le coût et la trace. Le JSON est estampillé `schema`
+(`"drave.annotation"`) et `version` (`2`) ; en v2, `meta.partition` et `meta.alternative`
+documentent les syntagmes qui se chevauchent.
 
 | ce que vous demandez | ce que vous obtenez | mesure du 06/11 |
 |---|---|---|
@@ -76,14 +82,14 @@ python3 tools/drave.py analyser "Le chat dort."
 ```
 ```
 drave 0.1.0 — analyse heuristique (CPU, hors ligne)
-langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
-POS  Le/DET chat/NOUN dort/VERB
+langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
 SYNTAGMES
   GN   [0:7]   Le chat  rôle=agent     → dort
   GV   [8:12]  dort     rôle=predicat  → chat
 PRAGMATIQUE
   phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
-COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.92 · syntagme=0.55 ·
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·
             phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
 ```
 
@@ -143,7 +149,7 @@ python3 tools/drave.py analyser --fichier corpus.txt --json    # le texte entier
 ```
 
 `--fichier` lit un texte UTF-8 ; `--jsonl` rend une **ligne JSON par phrase** (le format des
-traitements de corpus), chaque ligne portant le schéma v1 complet.
+traitements de corpus), chaque ligne portant le schéma **v2** complet (`version: 2`).
 
 ### 3.3 bis La vue des syntagmes qui se chevauchent
 
@@ -154,7 +160,10 @@ python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se r
 Quatre vues (`--partition`) : `alternative` (défaut : les deux segments restent, `meta.alternative`
 dit lequel est préféré — **aucune perte**), `filtrer` (vue linéaire : **F1 +0,047** mais **18
 attachements en moins**), `filtrer_union` (variante économique, 91 paires résiduelles) et `brut`
-(l'ancienne sortie). Le défaut est `alternative`.
+(l'ancienne sortie). Le défaut est `alternative`. Un segment qui appartient à un groupe de
+chevauchement porte `meta.partition` (`{groupe, rang, membres, vue}`) et `meta.alternative`
+(`[{type, debut, fin, source, union, relation, rang, …}]`) ; les deux champs sont typés dans le
+[schéma v2](../../tools/schemas/drave-annotation-v2.json).
 
 ### 3.3 ter Le contexte (mémoire de discours)
 
@@ -174,8 +183,8 @@ python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se r�
 rejeu identique : oui
   texte      : 'Le chat de la voisine qui dort sur le toit se réveille.'
   langue     : fr
-  étiquettes : 59
-  JSON       : 11700 octets · sha256 b0a1709a97abe8d4…
+  étiquettes : 60
+  JSON       : 13284 octets · sha256 31f3798beebe22f7…
 ```
 
 **Lecture.** La commande analyse **deux fois**, compare le JSON **canonique** (clés triées,
@@ -189,15 +198,16 @@ python3 tools/drave.py analyser ""; echo "exit=$?"
 ```
 ```
 drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)
-exit=1
+exit=3
 ```
 
-**Lecture.** Le CLI traite le refus comme une **erreur** : message sur `stderr`, **rien sur
-`stdout`**, code **1**. Le bloc, lui, rend un JSON avec `refus: "vide"` (voir `exemples.md` § 4) :
-c'est l'API qui porte l'état, le CLI qui le traduit en code. Un texte vide n'est jamais une
-annotation « comme les autres ». Pour la langue, `und` est une réponse honnête : « Élodie
-sourit. » rend `langue=und` (confiance 0,04 < seuil 0,12), même avec `--langue fr` — l'indice
-n'est pas une contrainte. Et `--langue de` sort **2** : le CLI n'accepte que `fr` et `en`.
+**Lecture.** Le refus est une **réponse** : le CLI écrit un **JSON d'annotation** sur `stdout`
+(`refus: "vide"`, `schema: "drave.annotation"`, `version: 2`, `etiquettes: []`) et sort avec le
+code **3**, distinct des erreurs (1) et de l'usage (2). Le message reste sur `stderr`. Un texte
+vide n'est jamais une annotation « comme les autres ». Pour la langue, `und` est une réponse
+honnête : « Élodie sourit. » rend `langue=und` (confiance 0,04 < seuil 0,12), même avec
+`--langue fr` — l'indice n'est pas une contrainte. Et `--langue de` sort **2** : le CLI n'accepte
+que `fr` et `en`.
 
 ## 4. Ce que le produit ne fait pas encore
 
@@ -257,7 +267,8 @@ décision automatique sans contrôle.
 
 **10. Pas de texte arbitraire garanti.** Les mesures sont sur le gold ; les règles y ont été
 dessinées. Sur un texte hors domaine, la couverture et la précision peuvent baisser sans que le
-JSON change de forme — d'où le rejeu et le contrôle par un gold à soi (§ 7, manque de schéma).
+JSON change de forme — d'où le rejeu et le contrôle par un gold à soi. Le **format** est versionné
+(v2 ; v1 reste lue), la **qualité linguistique** ne l'est pas.
 
 ## 5. Performance
 
@@ -287,31 +298,33 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 |---|---|---|
 | **déterminisme** | même entrée → même JSON, octet pour octet | `drave rejouer` (§ 3.4) ; `tools/tests/test_produit.py` compare deux sorties |
 | **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; les adaptateurs neuronaux sont locaux et non utilisés |
-| **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : `stderr` + code 1 |
+| **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : JSON sur `stdout` + code 3 |
 | **pas d'invention** | chaque étiquette porte `source`, `confiance`, `candidats` ; `und` plutôt qu'une langue forcée | JSON ; `--langue` est un indice |
 | **spans lisibles** | indices en **points de code Unicode**, 0-based, `[debut:fin)` | « Élodie » → `[0:6]` ; emoji = 1 point |
 | **UTF-8** | le JSON est en UTF-8, non échappé, sans durée | `--json` ; `test_produit.py` vérifie l'absence de `duree_s` |
 | **gold versionné** | les 4 gold sont dans le dépôt ; `evaluer` rejoue hors ligne | `tools/tests/linguistique/gold*.json` |
+| **format versionné** | `schema: "drave.annotation"`, `version: 2` ; v1 reste lue | `tools/schemas/` ; `python3 tools/verifier_schema_produit.py --gold 20` |
 | **porte produit** | version, JSON fr/en, rejeu, smoke test, autotest | `bash tools/porte-produit.sh` → ✅ |
 
-**La porte produit, mesurée le 06/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
-étiqueté en `fr` et `en`, `sha256 6b6def477a493444` deux fois, **6 tests** de fumée,
-**183/183** portes d'autotest. Le smoke test est `tools/tests/test_produit.py`.
+**La porte produit, mesurée le 07/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
+étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **16 tests** de fumée, **8 tests**
+de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **183/183** portes
+d'autotest. Le smoke test est `tools/tests/test_produit.py`.
 
-**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2** ; le contrat cible **3 / 4**
-n'est pas encore là :
+**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3** ; le code **4** (dépendance
+absente) n'est pas encore là :
 
 | code | sens | aujourd'hui |
 |---:|---|---|
 | **0** | succès : annotation rendue, évaluation rendue, rejeu identique | `analyser`, `evaluer`, `rejouer` |
-| **1** | erreur ou **refus d'analyse** | `analyser ""` ; `rejouer ""` ; divergence de rejeu |
+| **1** | erreur | argument illisible, divergence de rejeu, exception |
 | **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
-| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | **non implémenté** |
+| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""` |
 | **4** | dépendance absente : modèle, profils | **non implémenté** |
 
 **Ce qui n'est pas garanti** : le chemin neuronal, un texte hors domaine, la calibration des
-confiances, la stabilité du schéma (pas de champ `version`), et le comportement sur un lot de
-textes (une invocation = un texte).
+confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le JSON),
+et la qualité sur un lot de textes hétérogènes (une invocation = un texte).
 
 ## 7. Le CLI livré — contrat et manques
 
@@ -320,12 +333,15 @@ Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendanc
 ```bash
 python3 tools/drave.py --version
 python3 tools/drave.py --aide
-python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json]
+python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] \
+    [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
+python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json]
 python3 tools/drave.py evaluer [--gold] [--json]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 ```
 
-**Sorties réelles des commandes** (06/11) :
+**Sorties réelles des commandes** (07/11 pour le format ; les valeurs d'`evaluer` sont celles
+mesurées le 06/11) :
 
 ```
 $ python3 tools/drave.py --version
@@ -344,8 +360,8 @@ $ python3 tools/drave.py rejouer "Le chat dort."
 rejeu identique : oui
   texte      : 'Le chat dort.'
   langue     : fr
-  étiquettes : 19
-  JSON       : 4013 octets · sha256 6b6def477a493444…
+  étiquettes : 20
+  JSON       : 4227 octets · sha256 f4b7822076a4203d…
 ```
 
 **Options du CLI** :
@@ -354,6 +370,10 @@ rejeu identique : oui
 |---|---|---|
 | `--langue fr\|en` | `analyser`, `rejouer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
 | `--json` | `analyser`, `evaluer` | sortie machine UTF-8 |
+| `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
+| `--fichier CHEMIN` | `analyser` | lit un texte UTF-8 au lieu de l'argument |
+| `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
+| `--contexte TEXTE` | `analyser` | mémoire de discours portée dans le JSON |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
 | `-V`, `--version` | global | `drave 0.1.0` |
 | `-h`, `--aide` | global | l'aide, largeur fixe |
@@ -362,15 +382,14 @@ rejeu identique : oui
 
 | manque | conséquence |
 |---|---|
-| **`--fichier` / l'entrée standard** | on ne peut analyser qu'un texte passé en argument ; pas de pipe, pas de fichier |
+| **l'entrée standard** | `--fichier` lit un fichier, mais pas de pipe (`cat corpus.txt \| drave analyser`) |
 | **`--sortie`** | pas d'écriture directe d'un JSON ; il faut rediriger le shell |
 | **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |
-| **les codes 3 et 4** | le refus est confondu avec une erreur (code 1) et n'a pas de JSON sur `stdout` ; une dépendance absente n'est pas distinguée |
-| **un champ `schema` / une version de format** | impossible d'épingler un rejeu à une version ; `--version` ne donne que `0.1.0`, sans commit ni schéma |
+| **le code 4** | une dépendance absente n'est pas distinguée d'une erreur (code 1) |
 | **`--mode` / la cascade** | le CLI n'expose que l'heuristique ; `parallele` et `cascade` demandent le code Python |
 | **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
 | **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
-| **un lot de textes** | une invocation = un texte ; pas de JSONL, pas de répertoire |
+| **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
 | **`candidats` structurés** | ce sont des **chaînes d'affichage** (« « qui dort » → voisine »), pas des objets `{span, cible}` ; un programme doit les reparser |
 | **`role` normalisé** | les valeurs mélangent `predicat`/`prédicat` et `qualite`/`qualité` ; fragile pour un filtre |
 | **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
@@ -378,14 +397,17 @@ rejeu identique : oui
 | **le chemin neuronal** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; pas de chemin neuronal livré |
 
 **Ce qui est déjà tenu** : `--version`, `--aide`, les trois sous-commandes, le JSON déterministe,
-le rejeu par empreinte, la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
-être présenté comme acquis.
+le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue), `--fichier`/`--jsonl`,
+`--partition`, la porte produit et le smoke test. Le reste est nommé ci-dessus, sans être
+présenté comme acquis.
 
 ## 8. Où aller ensuite
 
 | si vous voulez… | allez à |
 |---|---|
 | **voir cinq JSON commentés** | [`exemples.md`](exemples.md) |
+| **le schéma du JSON** (v2 : `meta.partition`, `meta.alternative`) | [`tools/schemas/drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [v1](../../tools/schemas/drave-annotation-v1.json) |
+| **la fiche du schéma v2** | [`reports/rapport-schema-v2.md`](../../reports/rapport-schema-v2.md) |
 | **le contrat du bloc** (9 niveaux, substitution, activation) | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
 | **les chiffres de l'attachement** (v12, instantané) | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) · [`reports/pensee-v12.json`](../../reports/pensee-v12.json) |
 | **l'audit des mesures** (contrôles, spans, bases) | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |

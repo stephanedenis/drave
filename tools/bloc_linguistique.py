@@ -89,7 +89,9 @@ class Etiquette:
 
 
 SCHEMA_ANNOTATION = "drave.annotation"
-VERSION_ANNOTATION = 1
+# v2 : ajoute `meta.partition` et `meta.alternative` (partition des syntagmes qui se
+# chevauchent). Le format reste additif ; le vérificateur lit encore les annotations v1.
+VERSION_ANNOTATION = 2
 
 
 @dataclass

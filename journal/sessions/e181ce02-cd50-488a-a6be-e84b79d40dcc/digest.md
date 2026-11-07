@@ -60452,3 +60452,86 @@ sam 07 nov 2026 13:39:04 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-100; ps aux | grep -c \"[d]sh --profile headless\"", "description": "Attendre le timeout ou le verdict", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4792]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4792", "timeout_ms": 900000, "wait": true}`
+
+  ```
+sam 07 nov 2026 13:59:20 EST
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEM
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; ps aux | grep -c \"[d]sh --profile headless\"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"J1|J2|budget\"", "description": "Verdict J1.2 et état", "timeoutMs": 70000 … [2 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-4793]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4793", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 07 nov 2026 14:09:37 EST
+2026-11-07 12:18:48 · ▶ J1.1 — r035 : la relative zéro (timeout 5400 s)
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+1
+budget consommé : 1353.4 s · lancements : 3
+  [fait    ] J1.1   j1 — r035 : la relative zéro
+  [a_faire ] J1.2   j1 — La convention des GV
+  [a_faire ] J1.3   j1 — Le schéma v2
+  [a_faire ] J1.4   j1 — La restitution v0
+  [a_faire ] J2.1   j2 — Panini I — la table atomes ↔ niveaux
+  [a_faire ] J2.2   j2 — Panini I — le corpus commun
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4793 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; ps aux | grep -c "[d]sh --profile headless"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E "J1|J2|budget") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 360; date; tail -4 work/chantier/journal.log; ps aux | grep -c \"[d]sh --profile headless\"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"J1.2|budget\"", "description": "Attendre le verdict du timeout", "timeoutM … [11 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 14:15:55 EST
+2026-11-07 12:41:17 · ✔ J1.1 en 1347.7 s (code 0) — ✅ test -f reports/rapport-r035.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-07 12:41:17 · ▶ J1.2 — La convention des GV (timeout 5400 s)
+2026-11-07 14:11:35 · ✘ J1.2 en 5400.1 s (code 124) — ✅ test -f reports/rapport-convention-gv.md && echo FICHE-OK; ✅ bash tools/porte-bloc-linguistique.sh 2>&1 | tail -1
+2026-11-07 14:11:35 · ▶ J1.3 — Le schéma v2 (timeout 5400 s)
+1
+budget consommé : 6753.5 s · lancements : 4
+  [echec   ] J1.2   j1 — La convention des GV
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger()); a=r['a … [282 caractères tronqués]`
+
+  ```
+ÉTAT POS 0.8625 | F1 0.7902 | exact 237/238 | cov 0.9958
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEM
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+d7469b5c INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/chantier/superviseur.py'); t=p.read_text()\n# l'acceptation prime sur le code de sortie de l'agent (un timeout après un commit réussi est un succès)\nt=t.replace('''    resultat … [1144 caractères tronqués]`
+
+  ```
+verdict assoupli
+syntaxe OK
+J1.2 reclassé fait
+budget consommé : 6753.5 s · lancements : 4
+  [fait    ] J1.1   j1 — r035 : la relative zéro
+  [fait    ] J1.2   j1 — La convention des GV
+  [a_faire ] J1.3   j1 — Le schéma v2
+  [a_faire ] J1.4   j1 — La restitution v0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-95; ls reports/ | grep -E \"schema-v2\"", "description": "Attendre J1.3", "timeoutMs": 1900000}`

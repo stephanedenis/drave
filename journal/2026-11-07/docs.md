@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,10 +19,11 @@
 | 10:56 | `f1b837a3` | DOCS — README T1 SOUS 1 000 MOTS ET COMPTEUR DES DOCUMENTS À 123 | `README.md`, `en-cours.md`, `README.md` (+12) |
 | 11:12 | `34fdd4ef` | DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES) | `README.md`, `README.md`, `mesures.md` (+4) |
 | 11:16 | `d7469b5c` | INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 13:44 | `92652984` | B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEMENT 237/238 ; 183/183 | `en-cours.md`, `roadmap.md`, `semaine-autonome.md` (+23) |
 
 ## Chiffres du jour
 
-`0,7535` · `86,25 %` · `0,9916`
+`0,7549` · `0,7902` · `0,7535` · `86,25 %` · `0,9916`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -32,13 +33,15 @@
 - `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 02:09, 0.1 h) → [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md)
 - `b8f0bcb1-5609-4053-818b-ade88583a99b` — Tu travailles dans /home/stephane/Data13 (début 2026-11-07 00:49, 1.3 h) → [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md)
 - `bdefb627-485e-44d1-b11c-d15dd2e6b640` — Tu travailles en **lecture seule** (début 2026-11-07 09:56, 1.2 h) → [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 165.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 165.6 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
 - [reports/rapport-autotest-parallele.md](../../reports/rapport-autotest-parallele.md)
 - [reports/rapport-composition-sans-perte.md](../../reports/rapport-composition-sans-perte.md)
+- [reports/rapport-convention-gv.md](../../reports/rapport-convention-gv.md)
 - [reports/rapport-frontieres-integrees.md](../../reports/rapport-frontieres-integrees.md)
 - [reports/rapport-morphologie-verbes.md](../../reports/rapport-morphologie-verbes.md)
 - [reports/rapport-partition-integree.md](../../reports/rapport-partition-integree.md)

@@ -4495,3 +4495,152 @@ etat_index=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEMENT 237/238 ; 183/183\" 2>&1 | tail -30", "description": "Commit J1.2 result", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 92652984] B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEMENT 237/238 ; 183/183
+ 26 files changed, 9280 insertions(+), 50 deletions(-)
+ create mode 100644 journal/sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/digest.md
+ create mode 100644 journal/sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md
+ create mode 100644 journal/sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/digest.md
+ create mode 100644 journal/sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md
+ create mode 100644 reports/pensee-convention-gv.json
+ create mode 100644 reports/rapport-convention-gv.md
+ create mode 100644 tools/tests/linguistique/classer_gv.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 92652984 | head -40 && echo \"---status---\" && git status --short | head -20", "description": "Inspect commit and remaining status"}`
+
+  ```
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEMENT 237/238 ; 183/183
+ docs/pilotage/en-cours.md                          |   14 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ docs/pilotage/semaine-autonome.md                  |    2 +-
+ journal/2026-11-07/README.md                       |   10 +-
+ journal/2026-11-07/distribue.md                    |    2 +-
+ journal/2026-11-07/docs.md                         |    6 +-
+ journal/2026-11-07/memoire.md                      |    2 +-
+ journal/2026-11-07/mesures.md                      |   18 +-
+ journal/2026-11-07/modele.md                       |    2 +-
+ journal/2026-11-07/portes.md                       |    2 +-
+ journal/README.md                                  |    4 +-
+ journal/sessions/MANIFEST.md                       |    6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  286 ++
+ .../rapport.md                                     |   70 +-
+ .../digest.md                                      | 2764 ++++++++++++
+ .../rapport.md                                     |  189 +
+ .../digest.md                                      | 4497 ++++++++++++++++++
+… [974 caractères tronqués]
+  ```
+
+- **bash** `{"command": "d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -8 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running---\"; ps -eo … [120 caractères tronqués]`
+
+  ```
+13:47:16
+28 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-1107-12h58/registre.txt
+porte-echange-experts 0 58
+porte-episodique 0 200
+porte-etat 0 0
+porte-flux 0 27
+porte-fusion 0 9
+porte-gain 0 240
+porte-greffe 0 727
+porte-harnais-invariants 0 118
+---reds---
+---running---
+ 410878     537 timeout 1800 bash tools/porte-homeostasie.sh
+ 410879     537 bash tools/porte-homeostasie.sh
+  ```
+
+- **bash** `{"command": "sleep 300; d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -8 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running-- … [145 caractères tronqués]`
+
+  ```
+13:52:19
+30 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-1107-12h58/registre.txt
+porte-etat 0 0
+porte-flux 0 27
+porte-fusion 0 9
+porte-gain 0 240
+porte-greffe 0 727
+porte-harnais-invariants 0 118
+porte-homeostasie 0 571
+porte-horloge 0 28
+---reds---
+---running---
+ 502564     241 timeout 1800 bash tools/porte-indice.sh
+ 502565     241 bash tools/porte-indice.sh
+  ```
+
+- **bash** `{"command": "tail -8 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-1107-12h58/porte-indice.log 2>/dev/null; echo \"---\"; ps -eo pid,etimes,pcpu,pmem,args | grep -E \"porte-indice|indice\" | grep -v grep | head -4", "description": "Check porte-indice progress"}`
+
+  ```
+=== 0. deux invites qui ne diffèrent que d'une phrase ===
+  A 1470 jetons · B 1440 · aiguille (fin du code) au jeton 669
+=== 1. A répond le code, B non ===
+  A : Answer: ZQ-447
+  B : Answer: 12345
+  ✅ les deux invites diffèrent bien par l'aiguille seule
+=== 2. indice EXTÉRIEUR : l'état de la question de B (pas dans le magasin de A) ===
+    capture d'état    : position(s) [1439] écrite(s) dans /tmp/tmp.tNtrqKe7QU/etatB.*
+---
+ 502564     245  0.0  0.0 timeout 1800 bash tools/porte-indice.sh
+ 502565     245  0.0  0.0 bash tools/porte-indice.sh
+  ```
+
+- **bash** `{"command": "sleep 600; d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -10 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running- … [147 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-189]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -10 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running---\"; ps -e … [108 caractères tronqués]`
+
+  ```
+14:02:31
+30 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-1107-12h58/registre.txt
+porte-echange-experts 0 58
+porte-episodique 0 200
+porte-etat 0 0
+porte-flux 0 27
+porte-fusion 0 9
+porte-gain 0 240
+porte-greffe 0 727
+porte-harnais-invariants 0 118
+porte-homeostasie 0 571
+porte-horloge 0 28
+---reds---
+---running---
+ 502564     853 timeout 1800 bash tools/porte-indice.sh
+ 502565     853 bash tools/porte-indice.sh
+  ```
+
+### 👤 Utilisateur
+
+background job bash-189 (bash: sleep 600; d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l "$d/registre.txt"; tail -10 "$d/registre.txt"; echo "---reds---"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' "$d/registre.txt"; echo "---running---"; ps -eo pid,etimes,args | grep -E "porte-[a-z]" | grep -v grep | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 420; d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -12 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running- … [146 caractères tronqués]`
+
+  ```
+14:09:37
+36 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-1107-12h58/registre.txt
+porte-fusion 0 9
+porte-gain 0 240
+porte-greffe 0 727
+porte-harnais-invariants 0 118
+porte-homeostasie 0 571
+porte-horloge 0 28
+porte-indice 1 1101
+porte-jeux 0 125
+porte-jumeaux 0 32
+porte-lecteur 0 1
+porte-lecture 0 2
+porte-m5-brouillon 0 0
+---reds---
+porte-indice 1 1101
+---running---
+ 570542      18 timeout 1800 bash tools/porte-melange.sh
+ 570543      18 bash tools/porte-melange.sh
+  ```
+
+- **bash** `{"command": "sleep 180; d=$(ls -dt /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/portes-j12-* 2>/dev/null | head -1); date '+%H:%M:%S'; wc -l \"$d/registre.txt\"; tail -12 \"$d/registre.txt\"; echo \"---reds---\"; awk '$1 ~ /^porte-/ && $2 != 0 {print}' \"$d/registre.txt\"; echo \"---running- … [146 caractères tronqués]`
