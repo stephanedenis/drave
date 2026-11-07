@@ -55188,3 +55188,44 @@ Agent 338f8b55-bcd5-464a-a63e-b97381eff55d sent a message:
 Suivi POS R4/classes : les deux écarts de l’intégration live sont corrigés dans l’instantané courant (`tools/bloc_linguistique.py` SHA `83821c9e…`, HEAD `ba39a7b1`) : `outside` n’est plus dans PREP et `_copules` n’inclut plus `feel`. Sur le gold B13, le live donne maintenant **POS 85,00 % (dev 84,94 / test 85,11), 37 correctifs / 0 cassé / 2 faux→faux** — exactement le paquet sûr mesuré. F1/att live (0,6459 / 231-232) diffèrent de B13 à cause des changements de frontières de phrase, pas du paquet POS. J’ai mis à jour `reports/rapport-pos-r4.md` (§ 9.1) et `reports/pensee-pos-r4.json` (`etat_live`) avec cet instantané. La mesure de référence reste B13 (83,83 / 0,6181 / 222-222).
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : `meta.alternative` par défaut (mesures i … [2243 caractères tronqués]`
+
+  ```
+· reports/README.md : 2811 mots > budget 2800 (T1)
+ create mode 100644 reports/rapport-partition-integree.md
+ create mode 100644 reports/rapport-partition-syntagmes.md
+COMMIT OK 1
+015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %
+   ba39a7b1..015d7c56  s/v7 -> s/v7
+   ba39a7b1..015d7c56  master -> master
+ven 06 nov 2026 20:42:07 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent 338f8b55-bcd5-464a-a63e-b97381eff55d sent a message: 
+POS R4/classes fermées — résultat final (référence B13 : module 2ba393b0 + gold B13, 83,83 % / F1 0,6181 / 222-222).
+
+Gains POS dev/test :
+- R4 bilingue : +0,74 / +0,71 (84,49 / 84,71), 23 correctifs / 0 cassé, F1 inchangé, att 222/222 ; 17 faux→faux.
+- R4-en : +0,41 / +0,31 (12/0, 8 faux→faux) ; R4-fr : +0,32 / +0,41 (11/0, 9 faux→faux).
+- Classes fermées core : +0,78 / +0,81 (84,53 / 84,81), 25 correctifs / 0 cassé, F1 0,6188 (+0,0007 ; anglais 0,7273→0,7295), att 222/222 ; 0 faux→faux.
+- Paquet sûr R4-en + classes : +1,19 / +1,11 (POS 85,00), 37/0, 2 faux→faux (born, hung), F1 0,6188, att 222/222 ; 1 faux libre (Where interrogatif).
+- Paquet max R4 bilingue + classes : +1,51 / +1,51 (POS 85,34), 48/0, 11 faux→faux, F1 0,6188, att 222/222 ; 9 changements libres (3 justes / 6 faux).
+
+Pertes / limites :
+- R4 n’est pas « 0 perte » : 17 faux→faux, dont 9 français ; sur les 50 textes libres, 5 des 8 changements français sont faux (arrivés, parfois, reportée, entrés, acceptés) contre 3 justes (gratuite, cohérent, ouverte). Les contrôles demandés passent (`He is a doctor` NOUN, `He is running` VERB) mais les noms nus (`He is doctor`, `She is president`) et les participes irréguliers (`born`, `hung`) deviennent ADJ.
+- Classes fermées : 1 faux libre (`Where` interrogatif) ; where/as/late/outside/hard/down/fast sont ambigus (la liste choisit la majorité du gold). Le bloc « large » perd 1 attachement (221/221) à cause du bloc DET ; `when` en PRON vaut −3 ; `fast` en ADV bloque le ADJ de « The car is fast ». F1 ne gagne que +0,0007 (un segment, « play outside »).
+
+Placebo 200 tirages : R4-en −0,34 (max −0,25), R4 bilingue −0,80 (max −0,69), classes −0,64 (max −0,57), paquet sûr −0,96 (max −0,82), paquet max −1,42 (max −1,29) ; tous les gains observés sont au-dessus du max.
+
+Patchs exacts : `reports/pensee-pos-r4.json` clé `patchs_exacts` ; rapport annexes A.1 (COPULES + boucle R4 après « 3 a bis ») et A.2 (bloc `"en"` de POS_FERME, `outside` retiré de PREP). Le patch appliqué à `/tmp/pos_r4/bloc_patche.py` (SHA 0bf4d3eb…) reproduit 85,34 / 0,6188 / 222-222 / 48-0.
+
+État live : SHA 83821c9e (HEAD ba39a7b1 + modifs) → POS 85,00, 37/0/2 sur le gold B13, exactement le paquet sûr ; les deux écarts (outside dans PREP, feel dans _copules) sont corrigés. F1/att live 0,6459 / 231-232 à cause des frontières de phrase, non comparables à B13.
+
+Livrables : `reports/rapport-pos-r4.md` + `reports/pensee-pos-r4.json`. Aucun commit de ma part ; ces deux chemins étaient déjà suivis à HEAD 5c5d3b52, je les ai mis à jour (diff : 53 insertions / 7 suppressions vs HEAD). Aucun autre fichier existant modifié par moi ; `tools/bloc_linguistique.py` est modifié par un autre chantier.
+
+### 🤖 Assistant
+
+⏵ Le sous-agent précise les pertes de R4 : je complète la fiche honnêtement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-r4-integre.md'); t=p.read_text()\nt=t.replace(\"\"\"## 3. Contrôles (A27)\"\"\",\n\"\"\"## 2 bis. Ce que R4 **ne** fait pas — les pertes (A27, § 9)\n\n- **17 faux→ … [2417 caractères tronqués]`

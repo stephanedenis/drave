@@ -9,7 +9,7 @@
 | Début | 2026-11-06 18:33 |
 | Durée | 2.1 h |
 | Tours | 1 |
-| Messages | 97 |
+| Messages | 98 |
 | Appels d'outils | 101 |
 | Fichiers touchés | 0 |
 | Commandes | 84 |
@@ -45,7 +45,31 @@
 
 **Synthèse produite :**
 
-⏵ Contrôle final des deux livrables et de l’état du dépôt
+⏵ Mesures terminées : deux livrables écrits, aucun commit
+
+**Référence mesurée** : B13 (`2ba393b0` + gold B13) → **POS 83,83 % / F1 0,6181 / attachement 222-222**. Le dépôt a bougé pendant la mesure ; un instantané HEAD a servi de contrôle, et les gains POS sont identiques.
+
+\## Gains POS / F1 dev-test
+
+| levier / paquet | POS dev | Δ dev | POS test | Δ test | corr. / cassés | faux→faux | F1 | att. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| R4-en | 84,16 | +0,41 | 84,31 | +0,31 | 12 / 0 | 8 | 0,6181 | 222/222 |
+| R4-fr | 84,07 | +0,32 | 84,41 | +0,41 | 11 / 0 | 9 | 0,6181 | 222/222 |
+| **R4 bilingue** | **84,49** | **+0,74** | **84,71** | **+0,71** | **23 / 0** | **17** | 0,6181 | 222/222 |
+| **Classes fermées** | **84,53** | **+0,78** | **84,81** | **+0,81** | **25 / 0** | **0** | **0,6188** | 222/222 |
+| **Paquet sûr** (R4-en + classes) | **84,94** | **+1,19** | **85,11** | **+1,11** | **37 / 0** | **2** | 0,6188 | 222/222 |
+| **Paquet max** (R4 bilingue + classes) | **85,26** | **+1,51** | **85,51** | **+1,51** | **48 / 0** | **11** | 0,6188 | 222/222 |
+
+- **F1** : R4 n’ajoute **rien** (0,6181 inchangé) ; les classes ajoutent **+0,0007** (0,6188 ; anglais 0,7273 → 0,7295), dû à un seul segment (`The children play outside`). Le levier est POS, pas F1.
+- **Attachement** : strictement **222/222** partout (couverture 0,9289). Seule la variante « large » des classes perd 1 attachement (221/221), à cause du bloc DET.
+
+\## Les pertes, sans maquillage
+
+- **R4 « 0 cassé » n’est pas « 0 perte »** : 17 jetons déjà faux changent de classe fausse (late, out, maybe, far, mine, born, hung ; 9 participes/verbes français).
+- Les deux contrôles demandés passent — `He is a doctor.` → NOUN, `He is running.` → VERB — **mais par accident de surface** : `a` est un DET, `running` est VERB par `-ing`. Les noms nus (`He is doctor`, `She is president`, `He remains president`, `They became members`) et les participes irréguliers (`born`, `hung`) deviennent ADJ. En français : `Il est médecin`, `La réunion est reportée`, `Les enfants sont arrivés` aussi.
+- Sur les **50 textes libres** : R4 bilingue change 8 tokens français, **3 justes / 5 faux** (faux : arrivés, parfois, reportée, entrés, acceptés). R4-en ne change **rien** sur les 5 textes anglais.
+- Classes fermées : `where`/`as`/`late`/`outside`/`hard`/`down`/`fast` sont ambigus. `Where is…` → PRON (faux), `He works as a teacher` → CONJ (faux), `The late president` → ADV (faux), `outside the house` → ADV (faux). `when` en PR
+… [3390 caractères tronqués]
 
 ## 3. Travail accompli
 

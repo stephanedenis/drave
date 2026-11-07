@@ -38,6 +38,18 @@
   changements).
 - **L'attachement ne bouge pas** : ces tags ne changent pas les frontières des segments.
 
+## 2 bis. Ce que R4 **ne** fait pas — les pertes (A27, § 9)
+
+- **17 faux→faux** sur le gold (dont 9 français) : des tokens déjà faux qui le restent.
+- Sur les **50 textes libres**, **5 des 8 changements français sont faux** (`arrivés`, `parfois`,
+  `reportée`, `entrés`, `acceptés`) contre 3 justes (`gratuite`, `cohérent`, `ouverte`) — c'est
+  pourquoi **R4-fr n'est pas intégré**.
+- Les **noms nus** (`He is doctor`, `She is president`) et les **participes irréguliers** (`born`,
+  `hung`) deviennent ADJ.
+- **Classes fermées** : 1 faux positif libre (`Where` interrogatif) ; `where`, `as`, `late`,
+  `outside`, `hard`, `down`, `fast` sont **ambigus** (la liste choisit la majorité du gold) ;
+  `when` en PRON vaut −3.
+
 ## 3. Contrôles (A27)
 
 **Placebo** (mêmes actions, jetons aléatoires) : −0,25 à −0,44 pt — les règles gagnent par le

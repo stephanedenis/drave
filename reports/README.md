@@ -27,10 +27,10 @@
 | [`rapport-schema-v1.md`](rapport-schema-v1.md) | **B13** — le contrat v1 : `schema`/`version`, refus JSON code 3, schéma publié, 9 contrôles |
 | [`rapport-pos-anglais-v2.md`](rapport-pos-anglais-v2.md) | **B13** — POS **83,83 %** (R2a/R3/R2b), F1 **0,6181** |
 | [`rapport-pos-anglais.md`](rapport-pos-anglais.md) | **B13** — diagnostic POS (A25) |
-| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité : 0 plantage, contrat à versionner |
+| [`rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md) | **B13** — fiabilité hors gold |
 | [`rapport-robustesse-produit.md`](rapport-robustesse-produit.md) | **B13** — robustesse produit : surrogate et non-str fermés, 8 tests |
 | [`rapport-produit-bloc-l.md`](rapport-produit-bloc-l.md) | **B13** — audit de fiabilité (A24) : temps, contrat, 18 correctifs |
-| [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : `--aide` sans écriture, index 625 → **677** |
+| [`rapport-outillage-index.md`](rapport-outillage-index.md) | **B13** — outillage : index 625 → **677** |
 | [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — la file des 29 tâches : 8 autonomes, 11 en coordination, 10 bloquées ; 18 périmées |
 | [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — le premier produit : **`drave` v0** (analyser/evaluer/rejouer), porte produit, 6 tests |
 | [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 min 54** (×2,4), mêmes verdicts |

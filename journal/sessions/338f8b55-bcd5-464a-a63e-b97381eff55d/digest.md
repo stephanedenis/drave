@@ -2123,3 +2123,111 @@ table col mismatches [] count 0
 json load ok True
   ```
 
+### 🤖 Assistant
+
+⏵ Contrôle final des deux livrables et de l’état du dépôt
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l reports/rapport-pos-r4.md reports/pensee-pos-r4.json && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-pos-r4.json'))\nprint('JSON keys',len(p),'controls',len(p['controles']),'free detail',len(p['libres_50']['d … [411 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 171282  6 nov 20:38 reports/pensee-pos-r4.json
+-rw-r--r--. 1 stephane stephane  33905  6 nov 20:38 reports/rapport-pos-r4.md
+JSON keys 22 controls 29 free detail 28
+safe {'all': 0.85, 'dev': 0.8494, 'test': 0.8511, 'ferme': 0.9295, 'ouvert': 0.7746, 'en': 0.9425, 'fr': 0.7976} {'dev': 1.19, 'test': 1.11, 'all': 1.17}
+max {'all': 0.8534, 'dev': 0.8526, 'test': 0.8551, 'ferme': 0.9295, 'ouvert': 0.7814, 'en': 0.9425, 'fr': 0.8031} {'dev': 1.51, 'test': 1.51, 'all': 1.51}
+live {'pos': 0.85, 'dev': 0.8494, 'test': 0.8511, 'f1': 0.6459, 'att_exact': 231, 'att_labels': 232, 'corrections': 37, 'casses': 0, 'faux_faux': 2}
+M  reports/pensee-pos-r4.json
+M  reports/rapport-pos-r4.md
+M  tools/bloc_linguistique.py
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "POS R4/classes fermées — résultat final (référence B13 : module 2ba393b0 + gold B13, 83,83 % / F1 0,6181 / 222-222).\n\nGains POS dev/test :\n- R4 bilingue : +0,74 / +0,71 (84,49 / 84,71), 23 correctifs / 0 cassé, F1 inchangé, att 222/ … [2484 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures terminées : deux livrables écrits, aucun commit
+
+**Référence mesurée** : B13 (`2ba393b0` + gold B13) → **POS 83,83 % / F1 0,6181 / attachement 222-222**. Le dépôt a bougé pendant la mesure ; un instantané HEAD a servi de contrôle, et les gains POS sont identiques.
+
+## Gains POS / F1 dev-test
+
+| levier / paquet | POS dev | Δ dev | POS test | Δ test | corr. / cassés | faux→faux | F1 | att. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| R4-en | 84,16 | +0,41 | 84,31 | +0,31 | 12 / 0 | 8 | 0,6181 | 222/222 |
+| R4-fr | 84,07 | +0,32 | 84,41 | +0,41 | 11 / 0 | 9 | 0,6181 | 222/222 |
+| **R4 bilingue** | **84,49** | **+0,74** | **84,71** | **+0,71** | **23 / 0** | **17** | 0,6181 | 222/222 |
+| **Classes fermées** | **84,53** | **+0,78** | **84,81** | **+0,81** | **25 / 0** | **0** | **0,6188** | 222/222 |
+| **Paquet sûr** (R4-en + classes) | **84,94** | **+1,19** | **85,11** | **+1,11** | **37 / 0** | **2** | 0,6188 | 222/222 |
+| **Paquet max** (R4 bilingue + classes) | **85,26** | **+1,51** | **85,51** | **+1,51** | **48 / 0** | **11** | 0,6188 | 222/222 |
+
+- **F1** : R4 n’ajoute **rien** (0,6181 inchangé) ; les classes ajoutent **+0,0007** (0,6188 ; anglais 0,7273 → 0,7295), dû à un seul segment (`The children play outside`). Le levier est POS, pas F1.
+- **Attachement** : strictement **222/222** partout (couverture 0,9289). Seule la variante « large » des classes perd 1 attachement (221/221), à cause du bloc DET.
+
+## Les pertes, sans maquillage
+
+- **R4 « 0 cassé » n’est pas « 0 perte »** : 17 jetons déjà faux changent de classe fausse (late, out, maybe, far, mine, born, hung ; 9 participes/verbes français).
+- Les deux contrôles demandés passent — `He is a doctor.` → NOUN, `He is running.` → VERB — **mais par accident de surface** : `a` est un DET, `running` est VERB par `-ing`. Les noms nus (`He is doctor`, `She is president`, `He remains president`, `They became members`) et les participes irréguliers (`born`, `hung`) deviennent ADJ. En français : `Il est médecin`, `La réunion est reportée`, `Les enfants sont arrivés` aussi.
+- Sur les **50 textes libres** : R4 bilingue change 8 tokens français, **3 justes / 5 faux** (faux : arrivés, parfois, reportée, entrés, acceptés). R4-en ne change **rien** sur les 5 textes anglais.
+- Classes fermées : `where`/`as`/`late`/`outside`/`hard`/`down`/`fast` sont ambigus. `Where is…` → PRON (faux), `He works as a teacher` → CONJ (faux), `The late president` → ADV (faux), `outside the house` → ADV (faux). `when` en PRON vaut **−3** ; `n't` est inerte ; `fast` en ADV bloque le ADJ de `The car is fast`.
+- **Paquet max** : 11 faux→faux et 6 faux libres (3 justes) ; c’est un plafond POS, pas un paquet produit.
+
+## Placebo et contrôles
+
+200 tirages, mêmes actions/mêmes nombres, jetons aléatoires dans la même phrase :
+
+| levier | actions | placebo moyen | max placebo | observé dev/test |
+|---|---:|---:|---:|---:|
+| R4-en | 20 | −0,34 | −0,25 | **+0,41 / +0,31** |
+| R4 bilingue | 40 | −0,80 | −0,69 | **+0,74 / +0,71** |
+| Classes | 25 | −0,64 | −0,57 | **+0,78 / +0,81** |
+| Paquet sûr | 37 | −0,96 | −0,82 | **+1,19 / +1,11** |
+| Paquet max | 65 | −1,42 | −1,29 | **+1,51 / +1,51** |
+
+Tous les gains observés sont **au-dessus du maximum** du placebo.
+
+## Patchs exacts
+
+**R4** — après la boucle « 3 a bis » (R2b), avant `# 4. phrase + pragmatique` :
+
+```python
+        _copules = COPULES.get(lg, set())
+        if _copules:
+            for _k, _i in enumerate(pos_idx):
+                _e = etiquettes[_i]
+                if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                    continue
+                _av = etiquettes[pos_idx[_k - 1]]
+                if _normaliser(_av.valeur) not in _copules:
+                    continue
+                etiquettes[_i] = Etiquette("pos", "ADJ", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["adj"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "copule"})
+```
+
+avec `COPULES["en"] = {is, are, was, were, am, be, been, being, seem(s/ed/ing), look(s/ed/ing), appear(s/ed/ing), become(s)/became/becoming, remain(s/ed/ing)}` et, pour la variante bilingue seulement, `COPULES["fr"] = {est, sont, était, étaient, semble…, paraît…, devient…, reste…, demeure…}`. **Liste stricte** : pas de `feel/taste/smell/grow/turn/get/keep` (ils convertissent des noms : `grow wheat` → `wheat` ADJ).
+
+**Classes fermées** — dans `POS_FERME["en"]` :
+
+```text
+PRON  += where whose mine
+CONJ  += as
+AUX   += am
+ADV   += late out maybe hard far again now down outside
+PREP  -= outside
+```
+
+`when` reste CONJ ; `n't` non ajouté (tokeniseur) ; `fast` non ajouté dans le paquet recommandé.
+
+Les blocs complets, les 29 sondes de contrôle et les hashes sont dans **`reports/pensee-pos-r4.json`** (`patchs_exacts`, `controles`) et dans les annexes A.1–A.2 de **`reports/rapport-pos-r4.md`**. Le patch appliqué à une copie reproduit **85,34 / 0,6188 / 222-222 / 48-0**.
+
+## État live et périmètre
+
+- L’intégration live (SHA `83821c9e`, HEAD `ba39a7b1` + modifs) donne sur le gold B13 **POS 85,00 / 37-0 / 2 faux→faux**, exactement le paquet sûr ; `outside` et `feel` ont été corrigés. Son F1/att (0,6459 / 231-232) diffère à cause des changements de frontières de phrase, pas du paquet POS.
+- **Livrables** : `reports/rapport-pos-r4.md` et `reports/pensee-pos-r4.json`. Aucun commit de ma part ; ces deux chemins étaient déjà suivis à HEAD `5c5d3b52`, je les ai mis à jour. Aucun autre fichier existant modifié par moi ; `tools/bloc_linguistique.py` est modifié par un autre chantier.
+
+**Recommandation** : intégrer le **paquet sûr** (R4-en + classes, avec `where`) → **+1,19/+1,11**, 37/0, 2 faux→faux, F1 +0,0007, att 222/222. Si zéro régression libre : **sans `where`** → +1,01/+0,91, 0 changement sur les 50 textes. Garder R4-fr derrière un garde participe/adverbe.
+

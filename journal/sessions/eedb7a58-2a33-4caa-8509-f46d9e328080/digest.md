@@ -2875,3 +2875,47 @@ generator updated
 écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-partition-syntagmes.json 44454 octets
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib, json\nr=pathlib.Path('reports/rapport-partition-syntagmes.md').read_text(encoding='utf-8')\nblocks=re.findall(r'```diff\\n(.*?)\\n```', r, re.S)\np=pathlib.Path('/tmp/partition_syntagmes/patch_fi … [1000 caractères tronqués]`
+
+  ```
+diff blocks 2 185 42
+patch exact True drave exact True
+hash in report True
+head refs ["cette étude (HEAD `ba39a7b1` au moment de la rédaction ; le gold a été corrigé après l'audit,", "Le patch proposé s'applique aussi au HEAD `ba39a7b1` (`patch -p1 --dry-run` : hunks à", "`trace`) et un **strip** dans `_fusion` (voir § 4.6). Il s'applique à `fa1b0c6e` et, avec offsets (+262/+312/+314/+321), au HEAD `ba39a7b1`. La copie", "`drave.py` n'existe pas à `fa1b0c6e` ; ce diff s'applique au HEAD `ba39a7b1` (sha256 de la copie"]
+composition paragraph True True
+json commit_head ba39a7b162d2f62db911f1552231196bbcdee400
+json patch hash e9444dafdfca30f99923928bf476a088bab4e3b5618f6148a7947118d2e0e39d
+json head {'commit': 'ba39a7b162d2f62db911f1552231196bbcdee400', 'dry_run': 'oui, offsets 262/312/314/321', 'teste_aussi_sur': 'd73e7d1f (29/81/83), 5c5d3b52 (29/96/98)'}
+json comp {'sans_strip': {'etiquettes_avec_partition': 220, 'vues_mortes': 280}, 'avec_strip': {'etiquettes_avec_partition': 0, 'vues_mortes': 0}, 'cascade': {'f1': 0.6141, 'exact': 208, 'pos': 0.7465, 'segments': 584}, 'parallele': {'f1': 0.6141, 'exact': 208, 'pos': 0.7465, 'segments': 584}, 'lecture': "sans le strip de _fusion, 
+… [206 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nr=pathlib.Path('reports/rapport-partition-syntagmes.md').read_text(encoding='utf-8')\nprint('fences',r.count('```'),'lines',len(r.splitlines()),'chars',len(r))\n# verify tables have consistent column … [328 caractères tronqués]`
+
+  ```
+fences 14 lines 727 chars 40565
+done
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres, syntagmes\nfrom collections import Counter\nDEPOT='/home/st … [1058 caractères tronqués]`
+
+  ```
+bancs {'S-union': 136, 'union-S': 103}
+libres {'S-union': 37, 'union-S': 22}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"Même porteur en B2 (`vue: \\\"filtrer\\\"`) : le `GV 61-67` reste (`retire: false`), les deux  … [355 caractères tronqués]`
+
+  ```
+ok
+654:Même porteur en B2 (`vue: "filtrer"`) : le `GV 61-67` reste (`retire: false`), les deux autres `GP`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\nprint(d['recommandation']['compositions'])\nprint(d['patch']['bloc_linguistique']['applique_sur_head'])\nprint(len(d['patch']['bloc_linguistiqu … [100 caractères tronqués]`
+
+  ```
+Parallele et Cascade avec priorite_par_niveau=None appellent encore _supprimer_chevauchements : la politique doit y être propagée, sinon le défaut de la CLI est explicite mais la composition reste silencieuse. Le patch retire au moins les métadonnées de partition avant la déduplication (0 référence morte mesurée). Suivi P0-3b.
+{'commit': 'ba39a7b162d2f62db911f1552231196bbcdee400', 'dry_run': 'oui, offsets 262/312/314/321', 'teste_aussi_sur': 'd73e7d1f (29/81/83), 5c5d3b52 (29/96/98)'}
+185
+  ```
+
