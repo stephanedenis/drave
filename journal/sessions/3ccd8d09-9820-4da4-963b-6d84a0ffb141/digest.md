@@ -1377,3 +1377,170 @@ NameError: name 're' is not defined. Did you forget to import 're'?
 [exit code: 1]
   ```
 
+- **bash** `{"command": "cd /tmp/frontieres/final && sed -i '1i import re  # retiré à l’insertion : bloc_linguistique.py importe déjà re' patch_frontieres.py patch_mots.py && python3 - <<'PY'\nimport sys; sys.path.insert(0,'/tmp/frontieres/final'); sys.path.insert(0,'/tmp/frontieres'); sys.path.insert(0,'/home/ … [678 caractères tronqués]`
+
+  ```
+phrases 40: 59
+mots 40: 362
+'Le chat dort.' [(0, 13, 'Le chat dort.', 'déclarative')] [(0, 2, 'Le', 'mot'), (3, 7, 'chat', 'mot'), (8, 12, 'dort', 'mot'), (12, 13, '.', 'ponctuation')]
+'Il part. Elle reste.' [(0, 8, 'Il part.', 'déclarative'), (9, 20, 'Elle reste.', 'déclarative')] [(0, 2, 'Il', 'mot'), (3, 7, 'part', 'mot'), (7, 8, '.', 'ponctuation'), (9, 13, 'Elle', 'mot'), (14, 19, 'reste', 'mot'), (19, 20, '.', 'ponctuation')]
+'M. Dupont…' [(0, 10, 'M. Dupont…', 'déclarative')] [(0, 1, 'M', 'mot'), (1, 2, '.', 'ponctuation'), (3, 9, 'Dupont', 'mot'), (9, 10, '…', 'ponctuation')]
+'12.5' [(0, 4, '12.5', 'déclarative')] [(0, 4, '12.5', 'nombre')]
+'alice@example.org' [(0, 17, 'alice@example.org', 'déclarative')] [(0, 17, 'alice@example.org', 'courriel')]
+'https://example.com/a?b=1' [(0, 25, 'https://example.com/a?b=1', 'déclarative')] [(0, 25, 'https://example.com/a?b=1', 'url')]
+'src/tools/bloc_linguistique.py' [(0, 30, 'src/tools/bloc_linguistique.py', 'déclarative')] [(0, 30, 'src/tools/bloc_linguistique.py', 'chemin')]
+'Heuristique._phrases' [(0, 20, 'Heuristique._phrases', 'déclarative')] [(0, 20, 'Heuristique._phrases', 'mot')]
+'Merci 😊 !' [(0, 9, 'Merci 😊 !', 'exclamative')
+… [188 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat > /tmp/frontieres/final/verifier.py <<'PY'\nimport sys\nsys.path.insert(0, \"/tmp/frontieres/final\")\nsys.path.insert(0, \"/tmp/frontieres\")\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools\")\nsys.path.insert(0, \"/home/stephane/Data13TB/stephane/GitHub … [1459 caractères tronqués]`
+
+  ```
+40 textes exacts: 40
+A dev 0.8375 0.6439 0.9816 1.0
+A test 0.84 0.6552 0.9868 0.9895
+B dev 0.8375 0.6439 0.9816 1.0
+B test 0.84 0.6552 0.9868 0.9895
+AB dev 0.8375 0.6439 0.9816 1.0
+AB test 0.84 0.6552 0.9868 0.9895
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _type_phrase\\|def decouper_phrases\\|def decouper_mots\\|_FERMANTS\\|_TITRES\\|_DEBUTS\\|_MARQUEUR\\|_ZONES\" tools/bloc_linguistique.py | head -20", "description": "Check helper name collisions"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport pathlib, re\nsrc = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py').read_text(encoding='utf-8')\na = pathlib.Path('patch_frontieres.py').read_text(encoding='utf-8')\nb = pathlib.Path('patch_mo … [1697 caractères tronqués]`
+
+  ```
+écrit 130879 octets
+SYNTAXE_OK
+diff exit 1
+336 patch_complet.diff
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -551,6 +551,286 @@
+ # --------------------------------------------------------------------------- heuristique
+ 
+ 
++# --------------------------------------------------------------------------- frontières de phrase
++# P0-4 : un point décimal, une URL, un courriel, un chemin, une abréviation, un numéro de
++# liste ou une ponctuation répétée ne coupent pas la phrase ; un saut de ligne structurel
++# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
++_FERMANTS = "»”’)]}›"
++_OUVRANTS = "«“‘([{‹"
++_TITRES = frozenset({
++    "M", "MM", "Mme", "Mmes", "Mlle", "Mlles", "Me", "Mgr", "St", "Ste",
++    "Dr", "Drs", "Pr", "Prs", "Rév", "Père", "Sr", "Sœur",
++})
++_ABREV_TOUJOURS = frozenset({
++    "cf", "p", "pp", "ex", "réf", "ref", "éd", "ed", "trad", "fig", "chap",
++    "sect", "env", "av", "al", "ibid", "id", "infra", "supra", "coll", "pl",
++    "sq", "suiv", "op", "ca", "n", "no", "nos", "vs", "art", "vol",
++})
++_ABREV_MINUSCULE = frozenset({"etc"})
++# après un titre ou une initiale, ces mots ouvrent presque sûrement une p
+… [909 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && grep -n \"^@@\\|^---\\|^+++\" patch_complet.diff && sed -n '250,336p' patch_complet.diff", "description": "Inspect diff hunks and method replacements"}`
+
+  ```
+1:--- a/tools/bloc_linguistique.py
+2:+++ b/tools/bloc_linguistique.py
+3:@@ -551,6 +551,286 @@
+290:@@ -576,44 +856,11 @@
++    r"|\b[A-Za-z_]\w*(?:\.[a-z_]\w*){2,}\b|\b[A-Za-z_]\w*\.[_]\w*\b"
++    r"|\d+(?:[.,]\d+)*"
++    r"|\b[ldmtsnLDMTNS]['’](?=\w)"
++    r"|\w+(?:['’\-]\w+)*"
++    r"|[\U0001F300-\U0001FAFF]"
++    r"|[^\w\s]",
++    re.I,
++)
++_DOMAINE_SEUL = re.compile(
++    r"(?:[\w-]+\.)+(?:com|org|net|fr|io|dev|ai|edu|gov|co|uk|de|ch|be|ca|info|eu)", re.I)
++
++
++def decouper_mots(texte: str) -> list[tuple[int, int, str, str]]:
++    """Les tokens du bloc : la surface, son span et son type, sans recouvrement."""
++    sortie: list[tuple[int, int, str, str]] = []
++    for m in _MOTIF_MOTS.finditer(texte):
++        t = m.group()
++        if t.startswith(("http://", "https://")):
++            typ = "url"
++        elif re.fullmatch(r"[\w.+-]+@[\w-]+(?:\.[A-Za-z]{2,})+", t):
++            typ = "courriel"
++        elif _DOMAINE_SEUL.fullmatch(t):
++            typ = "url"
++        elif re.fullmatch(r"\d+(?:[.,]\d+)*", t):
++            typ = "nombre"
++        elif len(t) == 1 and ord(t) >= 0x1F300:
++            typ = "emoji"
++        elif re.fullmatch(r"[^\w\s]", t):
++            typ = "ponc
+… [2345 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Heuristique\\|def _mots\\|def _phrases\\|def _negation\" tools/bloc_linguistique.py | head && wc -l tools/bloc_linguistique.py && sed -n '545,560p' tools/bloc_linguistique.py", "description": "Recheck current line num … [6 caractères tronqués]`
+
+  ```
+554:class Heuristique:
+578:    def _mots(texte: str) -> list[tuple[int, int, str, str]]:
+597:    def _phrases(texte: str) -> list[tuple[int, int, str, str]]:
+619:    def _negation(phrase: str) -> bool:
+2273 tools/bloc_linguistique.py
+        return "destinataire"
+    if p in {"de", "du", "des", "of", "from"}:
+        return "theme"
+    return "complément"
+
+
+# --------------------------------------------------------------------------- heuristique
+
+
+class Heuristique:
+    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+
+    nom = "heuristique"
+
+    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/bloc_linguistique.py && git diff --stat -- tools/bloc_linguistique.py && git diff -- tools/bloc_linguistique.py | head -120", "description": "Check concurrent changes to target file"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%H %ad %s' && git status --short | head -5 && git rev-parse HEAD", "description": "Check HEAD movement"}`
+
+  ```
+e8d746e2593abf509130722fb97ba60fb7e757a7 Fri Nov 6 19:35:27 2026 -0500 B13 — LA MORPHOLOGIE DU 1ER GROUPE : 10 SPANS RETROUVÉS, EXACT 235/236, COUVERTURE 0,9874, 3 SPANS ; 183/183
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+e8d746e2593abf509130722fb97ba60fb7e757a7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -3 --format='%h %ad %s' -- tools/bloc_linguistique.py && sha256sum tools/bloc_linguistique.py && git log -1 --format='%h' -- tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/ … [76 caractères tronqués]`
+
+  ```
+e8d746e2 Fri Nov 6 19:35:27 2026 -0500 B13 — LA MORPHOLOGIE DU 1ER GROUPE : 10 SPANS RETROUVÉS, EXACT 235/236, COUVERTURE 0,9874, 3 SPANS ; 183/183
+e6fad714 Fri Nov 6 18:52:14 2026 -0500 POS — DEUX AJOUTS DE LEXIQUE GÉNÉRAUX (acheter, élision qu'il) ; 183/183
+037fe041 Fri Nov 6 18:14:19 2026 -0500 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183
+dd0e5e47d522c6a1a1adb799cfa727c54d43b569d542bc2fc9166ae74992d346  tools/bloc_linguistique.py
+c5b80dd8
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git apply --check /tmp/frontieres/final/patch_complet.diff && echo APPLY_OK", "description": "Verify patch applies cleanly without modifying"}`
+
+  ```
+APPLY_OK
+  ```
+

@@ -38,8 +38,8 @@ le produit en expose cinq, plus le coût et la trace.
 |---|---|---|
 | **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
 | **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |
-| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,5849** ; tête **0,7336** (vivant 612) |
-| **attachement** | par syntagme : `role`, `cible`, `candidats` | **222/222** exacts sur les spans prédits ; couverture **0,9289** |
+| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6474** ; tête **0,7671** (vivant 612) |
+| **attachement** | par syntagme : `role`, `cible`, `candidats` | **235/236** exacts sur les spans prédits ; couverture **0,9874** |
 | **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,9444** |
 | **unités sémantiques** | les spans candidats à la RSN et la fraction du texte | **55,4 %** du texte en moyenne |
 | **coût et trace** | octets, caractères, étiquettes, étapes | local, sans réseau |
@@ -60,8 +60,8 @@ résultat.
 
 **Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le
 banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
-même attachement (222/222, couverture 0,9289) mais pas le même F1 : **0,5893** sur le gelé,
-**0,5849** sur le vivant. Toujours lire la base avec le chiffre — c'est la leçon de l'audit v10.
+même attachement (235/236, couverture 0,9874 ; le gelé : 231/232, 0,9707) mais pas le même F1 :
+**0,6503** sur le gelé, **0,6474** sur le vivant. Toujours lire la base avec le chiffre.
 
 ## 3. Comment l'utiliser — cinq exemples réels
 
@@ -118,20 +118,20 @@ python3 tools/drave.py evaluer
 drave 0.1.0 — évaluation de l'heuristique sur le gold
 gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
 
-POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
-SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)
-  tête      F1 73.36 %  (P 81.00 % / R 67.04 %)
-ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
-  tête      couverture 100.00 % · top-k 99.55 %
+POS         exactitude 83.83 %  (fermé 91.33 %, ouvert 76.73 %)
+SYNTAGMES   F1 64.74 %  (P 67.05 % / R 62.59 %)
+  tête      F1 76.71 %  (P 82.03 % / R 72.03 %)
+ATTACHEMENT exact 98.33 % · couverture 98.74 % · exact sur span 99.58 % · top-k 97.91 %
+  tête      couverture 100.00 % · top-k 99.15 %
 PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
 FRACTION SÉMANTIQUE 55.37 %
 CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 ```
 
-**Lecture.** `exact 92.89 %` est le **rendement** (222/239 cibles) ; `exact sur span 100 %` est
-l'**exactitude** sur les 222 segments dont le span est prédit. Les 17 cibles restantes n'ont pas
+**Lecture.** `exact 98.33 %` est le **rendement** (235/239 cibles) ; `exact sur span 99.58 %` est
+l'**exactitude** sur les 236 segments dont le span est prédit. Les 3 cibles restantes n'ont pas
 de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. `--gold` mesure
-le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade
+le gold gelé 602 (F1 65,03 %, POS 84,15 %). La commande sort **0** : elle ne teste pas la cascade
 (voir § 4).
 
 ### 3.4 Rejouer et vérifier le déterminisme
@@ -175,11 +175,11 @@ produit rend des **étiquettes**, jamais une phrase. Les résultats de traductio
 ([`README.md`](../../README.md)) sont une recherche sur un modèle externe ; ils ne sont pas dans
 ce produit.
 
-**2. Dix-sept spans restent inatteignables.** Sur **239 cibles**, **222** sont attachées
-(couverture **0,9289**) ; **17** ne le sont pas : **8 REL, 5 SUB, 4 GP**. Elles sont
+**2. Trois spans restent inatteignables.** Sur **239 cibles**, **235** sont attachées
+(couverture **0,9874**) ; **3** ne le sont pas : **1 REL, 2 SUB, 0 GP**. Elles sont
 **inatteignables sans corriger le gold ou le lexique** — quatre sont des cas réels nommés dans
 l'audit v10 (`r035`, `r255`, `r264`, `g017`), les autres viennent du gold synthétique, dont le
-lexique est disjoint. Conséquence : **222/222 (1,0000)** est l'exactitude **conditionnelle aux
+lexique est disjoint. Conséquence : **235/236 (0,9958)** est l'exactitude **conditionnelle aux
 spans prédits**, pas la couverture du langage. Lire les deux ensemble.
 
 **Le doublon REL de l'union.** Deux REL peuvent se chevaucher : la plus longue porte
@@ -192,7 +192,7 @@ une lecture unique (garder `union: null`, ou le segment qui en contient un autre
 `porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
 **sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
 pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
-**0,5849**, tête **0,7432** contre **0,7336**). Le produit par défaut reste l'heuristique, et
+**0,6474**, tête **0,7707** contre **0,7671**). Le produit par défaut reste l'heuristique, et
 `drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
 en POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit
 aujourd'hui : ce n'est pas un chemin livré.
@@ -356,7 +356,7 @@ le rejeu par empreinte, la porte produit et le smoke test. Le reste est nommé c
 |---|---|
 | **voir cinq JSON commentés** | [`exemples.md`](exemples.md) |
 | **le contrat du bloc** (9 niveaux, substitution, activation) | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
-| **les chiffres de l'attachement** (v12, 222/222) | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) · [`reports/pensee-v12.json`](../../reports/pensee-v12.json) |
+| **les chiffres de l'attachement** (v12, instantané) | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) · [`reports/pensee-v12.json`](../../reports/pensee-v12.json) |
 | **l'audit des mesures** (contrôles, spans, bases) | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |
 | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
 | **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |

@@ -54120,3 +54120,133 @@ README + état 688 781
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add tools/bloc_linguistique.py tools/pensee/autotest.py reports/rapport-morphologie-verbes.md reports/pensee-morphologie-verbes.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md\n  timeout 24 … [802 caractères tronqués]`
+
+  ```
+create mode 100644 reports/pensee-morphologie-verbes.json
+ create mode 100644 reports/rapport-morphologie-verbes.md
+COMMIT OK 1
+e8d746e2 B13 — LA MORPHOLOGIE DU 1ER GROUPE : 10 SPANS RETROUVÉS, EXACT 235/236, COUVERTURE 0,9874, 3 SPANS ; 183/183
+   c5b80dd8..e8d746e2  s/v7 -> s/v7
+   c5b80dd8..e8d746e2  master -> master
+0
+ven 06 nov 2026 19:37:44 EST
+[exit code: 1]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+df1b1098-d54e-4763-bfc2-2a8cc1498cec [inactive] — Revue visuelle des 7 schémas
+f55ccb7b-481e-4ab6-b5b4-331dc6ff2238 [inactive] — Prototype classement appris
+ff7e786c-3ece-4eae-864e-19dddfead93c [inactive] — Cohérence fiches JSON portes
+a8035275-c7b9-4713-a6ab-7b859cd72306 [inactive] — Diagnostic du top-k strict
+63d4c619-63e8-41b9-a183-5c6f1ac05a21 [inactive] — Audit reproductibilité attachement
+53bc3288-f2c1-4a7d-b1db-88d794074f70 [inactive] — Annotation indépendante d'un échantillon
+c4796573-e2dc-48c2-b832-96f8bfab22c3 [inactive] — Contrat S pour les REL/SUB
+65495a29-10c0-4571-96be-e7729f1efebf [inactive] — Coût et cache du chunker
+3f8f2bb8-781b-44a6-9e14-58025004b6fc [inactive] — Audit de l'attachement v2
+d300542e-6e9d-47ac-875b-b44a192eec35 [inactive] — Prototype de la cible vide
+7263ca42-cd56-4c36-a6dd-8ff2d1024a43 [inactive] — Qualifier les 8 échecs restants
+1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 [inactive] — Cache du chunker mesuré
+3144cf23-6004-46ef-bc3d-f05d81c0cff6 [inactive] — Couverture des spans sans S
+b3d82ad5-bff2-49ec-9ad6-2230e68d8071 [inactive] — Mesure multi-cibles du gold
+b9ea3904-889c-4497-a781-694da7d4987c [inactive] — Qualité du gold anglais
+24001907-4f19-4ea5-8
+… [1285 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La doc produit publie encore les anciens chiffres : je la mets à jour et je vérifie
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0,9289\\|0.9289\\|222\\|17 spans\\|75,81\\|58,49\\|0,5849\" docs/produit/README.md docs/produit/exemples.md | head -12 | cut -c1-150; timeout 120 python3 tools/drave.py evaluer 2>&1 | grep -E \"POS|SYNTAGMES|ATTACHEMENT|CON … [63 caractères tronqués]`
+
+  ```
+docs/produit/README.md:41:| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,5849** ; tête **0,7336** (vivant 612) |
+docs/produit/README.md:42:| **attachement** | par syntagme : `role`, `cible`, `candidats` | **222/222** exacts sur les spans prédits ; couverture **0,
+docs/produit/README.md:63:même attachement (222/222, couverture 0,9289) mais pas le même F1 : **0,5893** sur le gelé,
+docs/produit/README.md:64:**0,5849** sur le vivant. Toujours lire la base avec le chiffre — c'est la leçon de l'audit v10.
+docs/produit/README.md:131:**Lecture.** `exact 92.89 %` est le **rendement** (222/239 cibles) ; `exact sur span 100 %` est
+docs/produit/README.md:132:l'**exactitude** sur les 222 segments dont le span est prédit. Les 17 cibles restantes n'ont pas
+docs/produit/README.md:178:**2. Dix-sept spans restent inatteignables.** Sur **239 cibles**, **222** sont attachées
+docs/produit/README.md:179:(couverture **0,9289**) ; **17** ne le sont pas : **8 REL, 5 SUB, 4 GP**. Elles sont
+docs/produit/README.md:182:lexique est disjoint. Conséquence : **222/222 (1,0000)** est l'exactitude **conditionnelle aux
+docs/produit/README.md:195:**0,5849**, tête **0,7432** contre **0,7336**). Le pro
+… [586 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger_gele, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger_gele( … [247 caractères tronqués]`
+
+  ```
+GELÉ POS 0.8415 | F1 0.6503 | tête 0.7707 | exact 231 / 232 | couv 0.9707
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nR=[\n(\"| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,5849** ; tête **0,7336** (vivant 612) |\",\n \"| **syntagmes** | GN, … [3268 caractères tronqués]`
+
+  ```
+NON TROUVÉ deux mesures sont séparées (POS **0,7581** ; attachement **2
+7 / 8 remplacements README
+3 remplacements exemples
+docs/produit/README.md:121:POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
+docs/produit/README.md:359:| **les chiffres de l'attachement** (v12, 222/222) | [`reports/rapport-pensee-v12.md`](../../
+docs/produit/exemples.md:596:- `222/222 = 1,0000` est donc une exactitude **conditionnelle aux spans prédits** ; la
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '112,140p' docs/produit/README.md", "description": "Voir le bloc evaluer du README"}`
+
+  ```
+### 3.3 Mesurer sur le gold
+
+```bash
+python3 tools/drave.py evaluer
+```
+```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 75.81 %  (fermé 90.04 %, ouvert 62.34 %)
+SYNTAGMES   F1 58.49 %  (P 62.92 % / R 54.64 %)
+  tête      F1 73.36 %  (P 81.00 % / R 67.04 %)
+ATTACHEMENT exact 92.89 % · couverture 92.89 % · exact sur span 100.00 % · top-k 92.47 %
+  tête      couverture 100.00 % · top-k 99.55 %
+PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
+FRACTION SÉMANTIQUE 55.37 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
+```
+
+**Lecture.** `exact 98.33 %` est le **rendement** (235/239 cibles) ; `exact sur span 99.58 %` est
+l'**exactitude** sur les 236 segments dont le span est prédit. Les 3 cibles restantes n'ont pas
+de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. `--gold` mesure
+le gold gelé 602 (F1 58,93 %, POS 76,03 %). La commande sort **0** : elle ne teste pas la cascade
+(voir § 4).
+
+### 3.4 Rejouer et vérifier le déterminisme
+
+```bash
+python3 tools/drave.py rejoue
+… [59 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/drave.py evaluer 2>&1 | tail -12 > /tmp/eval_actuel.txt; cat /tmp/eval_actuel.txt; python3 - <<'PY'\nimport pathlib, subprocess, sys\nsortie = subprocess.run([sys.executable, \"tools/drave.py\", \"evaluer\"] … [1603 caractères tronqués]`
+
+  ```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+
+POS         exactitude 83.83 %  (fermé 91.33 %, ouvert 76.73 %)
+SYNTAGMES   F1 64.74 %  (P 67.05 % / R 62.59 %)
+  tête      F1 76.71 %  (P 82.03 % / R 72.03 %)
+ATTACHEMENT exact 98.33 % · couverture 98.74 % · exact sur span 99.58 % · top-k 97.91 %
+  tête      couverture 100.00 % · top-k 99.15 %
+PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
+FRACTION SÉMANTIQUE 55.37 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
+bloc evaluer remplacé
+exemples : 235/236
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+docs/produit/README.md:359:| **les chiffres de l'attachement** (v12, 222/222) | [`reports/rapport-pensee-v12.m
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"| **les chiffres de l'attachement** (v12, 222/222) |\", \"| **les chiffres de l'attachement** (v12, instantané) |\")\np.write_ … [763 caractères tronqués]`

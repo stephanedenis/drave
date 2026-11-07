@@ -436,7 +436,7 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
 
 **Ce qu'il faut en conclure.** Le produit n'est pas monolingue : il analyse l'anglais et publie
 les mêmes champs. Mais une réussite d'attachement peut coexister avec des erreurs de POS ; les
-deux mesures sont séparées (POS **0,7581** ; attachement **222/222** conditionnel). Ne pas
+deux mesures sont séparées (POS **0,8383** ; attachement **235/236** conditionnel). Ne pas
 conclure « tout est bon » à partir d'une seule ligne.
 
 ## 4. Le refus — texte vide
@@ -593,8 +593,8 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
   `when` après un GN…) ; sans marqueur, elle ne la voit pas.
 - C'est l'un des **17 spans inatteignables** (8 REL, 5 SUB, 4 GP). Le segment gold n'est pas
   seulement mal attaché : il n'est **pas prédit**, donc il sort du dénominateur de l'exactitude.
-- `222/222 = 1,0000` est donc une exactitude **conditionnelle aux spans prédits** ; la
-  couverture est **0,9289** (222/239). Les deux chiffres doivent être lus ensemble.
+- `235/236 = 0,9958` est donc une exactitude **conditionnelle aux spans prédits** ; la
+  couverture est **0,9874** (235/239). Les deux chiffres doivent être lus ensemble.
 - Le gold attend aussi `GN « The film » [0:8]` ; le bloc le coupe à `[0:12]`. Même un attachement
   correct n'aurait pas compté : le **span** doit être exact.
 

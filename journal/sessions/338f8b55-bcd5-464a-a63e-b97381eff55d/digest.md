@@ -1452,3 +1452,42 @@ r4_en+cc_core              all POS 0.8500 ferme 0.9295 ouvert 0.7746 | dev 0.849
 … [1260 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Placebo recalculé par phrase (sans doublons de texte)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/placebo2.py <<'PY'\nimport sys, json, copy, random, statistics\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.gold_split import _est_test\n\nd … [3763 caractères tronqués]`
+
+  ```
+actions 40 25
+base (0.8383139351997484, 0.8375286041189931, 0.8400402414486922)
+r4 all mean 0.8303 min 0.8292 p05 0.8295 p95 0.8311 max 0.8314 delta_mean -0.80 delta_max -0.69
+r4 dev ('r4', 'dev', 'mean 0.8297 min 0.8279 p05 0.8284 p95 0.8307 max 0.8316')
+r4 test ('r4', 'test', 'mean 0.8315 min 0.8310 p05 0.8310 p95 0.8320 max 0.8320')
+cc all mean 0.8319 min 0.8311 p05 0.8314 p95 0.8323 max 0.8327 delta_mean -0.64 delta_max -0.57
+cc dev ('cc', 'dev', 'mean 0.8311 min 0.8302 p05 0.8302 p95 0.8320 max 0.8320')
+cc test ('cc', 'test', 'mean 0.8336 min 0.8330 p05 0.8330 p95 0.8350 max 0.8350')
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du patch exact sur une copie locale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/pos_r4/build_patch.py <<'PY'\nimport pathlib, re, sys\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsrc=(H.RACINE/'tools/bloc_linguistique.py').read_text() if False else open('/tmp/pos_r4/bloc_b13.py').read()\n\n … [5757 caractères tronqués]`
+
+  ```
+written 121180
+patched exact POS 0.8534 dev 0.8526 test 0.8551 F1 0.6188 att 222 222 ferme 0.9295 ouvert 0.7814
+He is a doctor.                                    [('He', 'PRON'), ('is', 'AUX'), ('a', 'DET'), ('doctor', 'NOUN')]
+He is running.                                     [('He', 'PRON'), ('is', 'AUX'), ('running', 'VERB')]
+He is doctor.                                      [('He', 'PRON'), ('is', 'AUX'), ('doctor', 'ADJ')]
+She is president.                                  [('She', 'PRON'), ('is', 'AUX'), ('president', 'ADJ')]
+He remains president.                              [('He', 'PRON'), ('remains', 'VERB'), ('president', 'ADJ')]
+They became members.                               [('They', 'PRON'), ('became', 'VERB'), ('members', 'ADJ')]
+The farmers grow wheat.                            [('The', 'DET'), ('farmers', 'NOUN'), ('grow', 'NOUN'), ('wheat', 'NOUN')]
+She seems calm.                                    [('She', 'PRON'), ('seems', 'VERB'), ('calm', 'ADJ')]
+It looks quiet.                                    [('It', 'PRON'), ('looks', 'VERB'), ('quiet', 'ADJ')]
+He feels pain.                                     [('He', 'PRON'), ('feels', 'VERB'), ('pain', 'NOUN'
+… [1338 caractères tronqués]
+  ```
+

@@ -9,10 +9,10 @@
 | Début | 2026-11-06 18:33 |
 | Durée | 1.1 h |
 | Tours | 1 |
-| Messages | 53 |
-| Appels d'outils | 59 |
+| Messages | 62 |
+| Appels d'outils | 68 |
 | Fichiers touchés | 0 |
-| Commandes | 57 |
+| Commandes | 66 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*59 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,7 +41,7 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 44 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Fix dotted abbreviation zone
 - **T1** Create 40-text corpus with expected spans
 - **T1** Validate patched splitter on 40 texts
-- … et 17 autres
+- … et 26 autres
 
 ## 4. Mesures et résultats marquants
 

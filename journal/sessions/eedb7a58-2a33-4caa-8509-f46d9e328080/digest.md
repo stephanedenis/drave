@@ -1864,3 +1864,56 @@ fiab segs 360 involved 170 labels in overlapping texts 314 texts_chev 23
 bloc segs 362 involved 188 labels in overlapping texts 287 texts_chev 31
   ```
 
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/pin_audit/tools/tests/linguistique'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp, evaluer_gold as eg\nfrom patch_eval import textes … [2120 caractères tronqués]`
+
+  ```
+gold F1 0.6163 P 0.7122 R 0.5432 exact 217 couv 0.9079 pos 0.7581
+bancs paires 91 textes 33 segments 636 att 481 octets 2064733 vues 714 classes {'inclusion_s_dans_union': 80, 'croisement': 5, 'meme_span_union': 6}
+libres paires 29 textes 7 segments 214 att 161 octets 959342 vues 155 classes {'inclusion_s_dans_union': 24, 'meme_span_union': 3, 'croisement': 2}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git log -1 --format='%H %cd %s' && git status --short tools/bloc_linguistique.py tools/tests/linguistique/gold.json | cat", "description": "Check current HEAD and module status"}`
+
+  ```
+c5b80dd83ee4364df348903796fcaf5fd1071f82
+c5b80dd83ee4364df348903796fcaf5fd1071f82 Fri Nov 6 19:03:16 2026 -0500 B13 — LE GOLD CORRIGÉ (4 GP SANS PRÉPOSITION) : EXACT 226/226 (1,0000), COUVERTURE 0,9289 → 0,9456, 17 → 13 SPANS ; 183/183
+M  tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\nimport json\np=json.load(open('patch_eval.json'))\nfor k in ['brut','alternative','filtrer']:\n    for b in ['gold','bancs','libres']:\n        print(k,b,json.dumps(p[b][k],ensure_ascii=False)[:600])\n    print()\nprint('pref',p['preferen … [233 caractères tronqués]`
+
+  ```
+brut gold {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "tete_f1": 0.7336, "tp": 1018, "fp": 600, "fn": 845, "pos": 0.7581, "fraction": 0.5537, "att_cibles": 239, "att_labels": 222, "att_exact": 222, "att_exact_taux": 0.9289, "att_couverture": 0.9289, "att_topk": 221, "att_tete_topk": 0.9955}
+brut bancs {"variante": "brut", "textes": 96, "paires": 239, "textes_avec_chevauchement": 54, "segments": 722, "union": 183, "attachements": 549, "classes": {"union_contenu": 127, "inclusion_s_dans_union": 80, "croisement": 26, "meme_span_union": 6}, "octets_json": 1928458, "vues_alternative": 0, "vues_par_segment_ambigu": 0.0}
+brut libres {"variante": "brut", "textes": 25, "paires": 59, "textes_avec_chevauchement": 10, "segments": 233, "union": 47, "attachements": 179, "classes": {"union_contenu": 24, "inclusion_s_dans_union": 24, "croisement": 8, "meme_span_union": 3}, "octets_json": 928683, "vues_alternative": 0, "vues_par_segment_ambigu": 0.0}
+
+alternative gold {"f1": 0.5849, "precision": 0.6292, "rappel": 0.5464, "tete_f1": 0.7336, "tp": 1018, "fp": 600, "fn": 845, "pos": 0.7581, "fraction": 0.5537, "att_cibles": 239, "att_labels": 222, "att_exact": 222, "att_exact_taux": 0.9289, 
+… [1875 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs, textes_libres, syntagmes\ntextes=textes_bancs()+textes_libres()\nfor nom,h … [1022 caractères tronqués]`
+
+  ```
+brut max 138 mediane 44 p95 74 >100 9
+alternative max 157 mediane 55 p95 88 >100 19
+filtrer max 143 mediane 48 p95 96 >100 28
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && grep -n 'def priorite_par_defaut' -A 12 tools/bloc_linguistique.py", "description": "Check default source priority for compositions"}`
+
+  ```
+1849:def priorite_par_defaut() -> dict | None:
+1850-    """La fusion par niveau si un neuronal réel est joignable (clé DeepSeek), sinon la confiance.
+1851-
+1852-    Le mock a montré que le niveau perd (0,3432) ; le réel (deux passes) a montré qu'il gagne
+1853-    (0,9389). Le défaut suit donc la **présence d'un réel**, pas une doctrine.
+1854-    """
+1855-    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+1856-
+1857-
+1858-PRIORITE_NIVEAU = {
+1859-    "graphème": "heuristique", "morphème": "heuristique", "mot": "heuristique",
+1860-    "pos": "neuronal", "syntagme": "neuronal", "phrase": "heuristique",
+1861-    "pragmatique": "heuristique", "discours": "heuristique", "document": "heuristique",
+  ```
+
