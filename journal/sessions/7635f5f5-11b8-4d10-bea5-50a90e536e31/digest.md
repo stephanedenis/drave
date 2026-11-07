@@ -1999,3 +1999,205 @@ from __future__ import ann
 … [393 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-ocr.sh >/tmp/porte-ocr.log 2>&1; echo exit=$?; tail -5 /tmp/porte-ocr.log", "description": "Rejouer la porte OCR pilote", "run_in_background": true}`
+
+  ```
+started background job bash-4154
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in ('reports/r44-reel.json','reports/r44-reel-second.json','reports/r44-scans.json'):\n    d=json.load(open(f))\n    print('==',f, list(d)[:12])\n    for k in ('reference','livres','pages','agrega … [151 caractères tronqués]`
+
+  ```
+== reports/r44-reel.json ['date', 'ligne', 'nature', 'reference', 'djvu', 'source', 'note_colonnes', 'agregat', 'pages', 'dispositif']
+  reference "couche OCR du PDF (Internet Archive) — pas une vérité humaine"
+  pages [{"page": 30, "mots_reference": 482, "mots_ocr": 476, "wer": 0.0768, "wer_brut": 0.0768, "rappel": 0.9253, "precision": 0.937, "confiance": 89.9, "trace": ["recadrage"], "wer_colonnes": 0.9212, "wer_colonnes_inverse": 0.9274, "mots_reference_colonnes": 482}, {"page": 50, "mots_reference": 383, "mots_ocr": 381, "wer": 0.0731, "wer_brut": 0.0731, "rappel": 0.9269, "precision": 0.9318, "confiance": 9
+  agregat {"pages": 10, "mots_reference": 4494, "wer": 0.071, "wer_brut": 0.0705, "rappel": 0.9372, "confiance": 91.1, "wer_colonnes": 0.8996, "wer_colonnes_inverse": 0.9101}
+  dispositif "tools/mesurer_reel.py (couche OCR du PDF comme référence ; ordre des colonnes depuis les coordonnées DjVu)"
+== reports/r44-reel-second.json ['date', 'ligne', 'nature', 'reference', 'djvu', 'source', 'note_colonnes', 'agregat', 'pages', 'dispositif']
+  reference "couche OCR du PDF (Internet Archive) — pas une vérité humaine"
+  pages [{"page": 40, "mots_reference": 303, "mots_ocr": 295, "we
+… [1279 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/r44*; echo '---'; python3 - <<'PY'\nimport json\nfor f in ('reports/r44-reel-troisieme.json','reports/r44-reel-3.json'):\n    try:\n        d=json.load(open(f)); print(f, d.get('reference'), d.get('agregat'))\n    except E … [69 caractères tronqués]`
+
+  ```
+reports/r44-colonnes.json
+reports/r44-cout.json
+reports/r44-ocr-pilote.json
+reports/r44-petit.json
+reports/r44-reel.json
+reports/r44-reel-second.json
+reports/r44-reel-third.json
+reports/r44-rotation.json
+reports/r44-sans-exposants.json
+reports/r44-scans.json
+reports/r44-seed2.json
+reports/r44-seed3.json
+reports/r44-tableaux.json
+---
+reports/r44-reel-troisieme.json [Errno 2] No such file or directory: 'reports/r44-reel-troisieme.json'
+reports/r44-reel-3.json [Errno 2] No such file or directory: 'reports/r44-reel-3.json'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/r44-reel-third.json'))\nprint('reference:',d.get('reference'))\nprint('agregat:',json.dumps(d.get('agregat'),ensure_ascii=False)[:500])\nprint('pages:',len(d.get('pages',[])))\ … [145 caractères tronqués]`
+
+  ```
+reference: couche OCR du PDF (Internet Archive) — pas une vérité humaine
+agregat: {"pages": 10, "mots_reference": 3071, "wer": 0.0873, "wer_brut": 0.0938, "rappel": 0.9189, "confiance": 90.9, "wer_colonnes": 0.9095, "wer_colonnes_inverse": 0.9163}
+pages: 10
+---
+  ✅ tesseract 5.5.3 · langues : eng fra osd spa
+  ```
+
+- **job_output** `{"job_id": "bash-4154", "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-r13-decision rapport-r13.2-vocab1024 rapport-r06-relecture rapport-r06-cascade-confiance; do echo \"##### $f\"; sed -n '1,12p' reports/$f.md; echo; done", "description": "Lire R1.3 et relecture"}`
+
+  ```
+##### rapport-r13-decision
+# R13 — la décision : rester en octets, parce que le BPE ne gagne pas à octets égaux
+
+> **Ligne de roadmap** : R13 / R1.3 · **Date** : 2026-10-30 · **Verdict** : ✅ **décision
+> mesurée — le natif reste en octets** (`vocab = 256`). À budget d'**octets** égal, le BPE perd
+> partout : **+0,39 %** (512, deux graines), **+3,92 à +4,09 %** (1024 selon la graine), **+4,22 % / +6,59 %** (anglais).
+> Le « gain de 11 % » du pilote était un **artefact de budget** : à pas égaux, le BPE voit deux
+> fois plus d'octets.
+>
+> **Dispositif** : synthèse de six fiches et de six JSON — français (4,4 Mo) et anglais
+> (100 Mo), vocabulaires 512 et 1024, deux graines ; comparaison en **bits/octet** à octets vus
+> égaux, train/val séparés ; `tools/tokenizer_bpe.py`, `tools/entrainer_native_tokens.py`,
+> `tools/r13_anglais.py` ; données [`r13-tokenisation.json`](r13-tokenisation.json),
+
+##### rapport-r13.2-vocab1024
+# R13.2 — vocab 1024 : le BPE perd encore plus à octets égaux
+
+> **Ligne de roadmap** : R13.2 · **Date** : 2026-10-29 · **Verdict** : ⛔ **négatif** — à budget
+> d’octets égal, BPE 1024 fait **1,8726** bits/octet contre **1,8021** pour bytes : il **perd
+> 3,9 %**. Le vo
+… [1870 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE '249|248' reports/rapport-r03-banc-complet.md reports/rapport-r02-controleur.md reports/rapport-r06-pipeline.md | head -20; echo '---'; grep -nE '0,894|0.894|oracle' reports/rapport-r06-relecture.md reports/rapport-r06-casca … [76 caractères tronqués]`
+
+  ```
+reports/rapport-r03-banc-complet.md:1:# R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU
+reports/rapport-r03-banc-complet.md:9:> **Dispositif** : 30 documents, 5 types, **249 questions** générées à valeur numérique ;
+reports/rapport-r03-banc-complet.md:24:juridique (résolutions ONU), code (documents à blocs de code). **249 questions** construites par
+reports/rapport-r03-banc-complet.md:36:## Ce qui est mesuré — le lecteur extractif (249 questions, 3 s)
+reports/rapport-r03-banc-complet.md:52:## Ce qui est mesuré — le modèle sur GPU (249 questions, ~13 min)
+reports/rapport-r03-banc-complet.md:102:   des cas sur 249 questions et 5 types. R0.2 n'a plus besoin d'être amélioré pour cela.
+reports/rapport-r03-banc-complet.md:111:- `tools/banc_complet.py` — le corpus de 30 documents et le générateur de questions (249).
+reports/rapport-r06-pipeline.md:68:| lexical (249, questions à valeur) | **0,944** | 0,835 | **+0,109** |
+---
+reports/rapport-r06-cascade-confiance.md:1:# R06 v4 — la cascade à confiance calibrée égale l'oracle, hors échantillon
+reports/rapport-r06-cascade-confiance.md:5:> atteint **0,911** sur le lexical (fixe 0,870, oracle 0,911) et **0,415** sur l
+… [727 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4154 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-ocr.sh >/tmp/porte-ocr.log 2>&1; echo exit=$?; tail -5 /tmp/porte-ocr.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4154"}`
+
+  ```
+exit=0
+  ✅ exactitude natif ≥ 90%
+  ✅ sans OCR : aucune réponse
+  ✅ le WER MONTE sur la page dégradée
+  ✅ la parité de région BAISSE sur la page dégradée
+✅ porte OCR verte : 10 pages lues, WER sous le seuil, parité tenue et contrôles en échec
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '0,894\\|0.894' reports/*.md | head -10; echo '---'; grep -E '✅|❌|WER|parité|page noire' /tmp/porte-ocr.log | tail -15", "description": "Trouver 0.894 et bilan porte OCR"}`
+
+  ```
+reports/rapport-audit-r1r3.md:281:| **fr** | 151 | 135 → **129** (−6) | 135 → **129** (−6) | 0,8940 → **0,8543** |
+reports/rapport-audit-r1r3.md:393:7. **Majeure — le français recule** : 135 → 129 exacts (couverture 0,894 → 0,854), masqué par
+reports/rapport-audit-v10.md:103:   le **test v10 est 68/68** (couverture 0,8947), le **dev reste 152/152** (0,9325). Le
+reports/rapport-audit-v10.md:267:| **test** | 190 | 76 | 64/64 | 67/67 | **68/68** | **0,8947** | **0,5890** | **0,7337** |
+reports/rapport-coherence-fiches-v8.md:117:0,9432**. Pour la v7 : fr **135/151 = 0,8940**, en **61/88 = 0,6932** — la couverture anglaise
+reports/rapport-dev-test-v10.md:7:> **0,9325 / 0,8947 / 0,9205** ; F1 **0,5812 / 0,5890 / 0,5836** (vivant 612) ;
+reports/rapport-dev-test-v10.md:65:| **test** | 190 | 994 | 76 | 68 | 68/76 = **0,8947** | **68/68 = 1,0** | 0,5890 | 0,7337 | 0,7656 |
+reports/rapport-dev-test-v10.md:87:| **REL** | 57 | 51 | 0,8947 | 51/51 | 0,7907 | 0,9573 | 17 | 14 | **0,8235** | 14/14 | 0,7179 | 0,9444 |
+reports/rapport-dev-test-v10.md:239:| canonique | `%3==0` | 422 | 163 | 152 | 152 | 0,9325 | 0,5812 | 0,7330 | 0,7547 | 190 | 76 | 68 | 68 | 0,8947 | 0,5890 | 0,7337 | 0,7656 |
+report
+… [717 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '36,75p' reports/rapport-r03-banc-complet.md; echo '---'; sed -n '1,20p' reports/rapport-memoire-travail-n5.md; echo '---'; git log -1 --format='%h %ci %s'; git status --short | grep -v '^ M journal\\|^M  journal\\|^D  journal … [101 caractères tronqués]`
+
+  ```
+## Ce qui est mesuré — le lecteur extractif (249 questions, 3 s)
+
+| type | récup. 10 % | récup. 30 % | récup. 50 % | valeur 30 % | valeur 100 % | aléatoire 30 % |
+|---|---:|---:|---:|---:|---:|---:|
+| code | 0,89 | **1,00** | 1,00 | 0,72 | 0,72 | 0,39 |
+| juridique | 0,87 | **1,00** | 1,00 | 1,00 | 1,00 | 0,20 |
+| prose | 1,00 | **1,00** | 1,00 | 0,76 | 0,76 | 0,33 |
+| tableau | 0,98 | **1,00** | 1,00 | 0,93 | 0,93 | 0,29 |
+| technique | 1,00 | **1,00** | 1,00 | 0,90 | 0,90 | 0,30 |
+
+À **30 %** du budget, le passage gold est lu dans **100 %** des cas sur les cinq types — la
+courbe est plate entre 30 et 50 %, et commence à mordre à 10 % (0,87–1,00). Le **hasard** reste
+à 0,20–0,39. Le taux de réponse est **exactement** celui de la lecture intégrale : c'est
+structurel (le lecteur est le même, ancré sur l'index du document entier), et c'est le contrôle
+qui dit que la sélection ne coûte rien.
+
+## Ce qui est mesuré — le modèle sur GPU (249 questions, ~13 min)
+
+| type | contrôleur 30 % | début 30 % | closed-book |
+|---|---:|---:|---:|
+| code | **0,204** | 0,056 | 0,000 |
+| juridique | **0,167** | 0,100 | 0,000 |
+| prose | **0,265** | 0,000 | 0,000 |
+| tableau | **0,220** | 0,017 | 0,000 
+… [3487 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/pensee-gold-porte.json'))\nh=d['heuristique']['all']\nprint('heur POS',h['pos']['exactitude'],h['pos']['exactitude_ferme'],h['pos']['exactitude_ouvert'],h['pos']['tokens'])\nprint … [203 caractères tronqués]`
+
+  ```
+heur POS 0.85 0.9295 0.7746 3179
+heur synt 0.6482 0.7673
+heur pragma {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444}
+att tete {'cibles': 236, 'labels': 236, 'top1': 235, 'topk': 234, 'top1_taux': 0.9958, 'topk_taux': 0.9915, 'couverture': 1.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'DEEPSEEK\\|deepseek\\|enseignant' tools/tests/linguistique/*.py tools/bloc_linguistique.py | head -20; echo '---'; ls -l ~/.config/drave/deepseek.key 2>&1", "description": "Vérifier la voie API DeepSeek du tagger"}`
+
+  ```
+tools/tests/linguistique/qualifier_quatre_modes.py:16:    DEEPSEEK_KEY_FILE=~/.config/drave/deepseek.key \
+tools/tests/linguistique/qualifier_quatre_modes.py:34:from tools.llm.deepseek import DeepSeek
+tools/tests/linguistique/qualifier_quatre_modes.py:52:        raise SystemExit("clé DeepSeek absente : exporter DEEPSEEK_KEY_FILE")
+tools/tests/linguistique/qualifier_quatre_modes.py:64:    pos = NeuronalLLMPOS("deepseek-chat", transport=transport)
+tools/tests/linguistique/qualifier_quatre_modes.py:65:    chunks = NeuronalLLMChunks("deepseek-chat", transport=transport)
+tools/tests/linguistique/qualifier_quatre_modes.py:66:    pragma = NeuronalLLMPragmatique("deepseek-chat", transport=transport)
+tools/tests/linguistique/qualifier_quatre_modes.py:109:                 "modalite": "api-deepseek (deepseek-chat), aucun serveur local"},
+tools/bloc_linguistique.py:2324:    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+---
+-rw-------. 1 stephane stephane 36  3 nov 11:15 /home/stephane/.config/drave/deepseek.key
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'NeuronalLLMPOS\\|tagger' docs/implantation/bloc-linguistique.md docs/produit/*.md 2>/dev/null | head -15; echo '---'; grep -n 'R0.7\\|tagger\\|0,944\\|0.944' docs/pilotage/roadmap.md | head -10", "description": "Vérifier la … [16 caractères tronqués]`
+
+  ```
+docs/implantation/bloc-linguistique.md:138:- **`NeuronalLLMPOS`** : le **tagger réel qualifié**. Il tokenise avec `Heuristique._mots` (mots
+docs/implantation/bloc-linguistique.md:144:- **`NeuronalLLMChunks`** : le **tagger de syntagmes**. Il demande une étiquette **BIO** par token
+docs/implantation/bloc-linguistique.md:150:  Il appelle les deux taggers (chacun avec son cache), réunit leurs étiquettes et laisse la
+docs/implantation/bloc-linguistique.md:153:- **`NeuronalLLMPragmatique`** : le **tagger de pragmatique**. Un prompt d'analyse, une grammaire
+docs/implantation/bloc-linguistique.md:163:sans régression sur les réelles). Le **tagger de syntagmes** est qualifié sur le même gold :
+docs/implantation/bloc-linguistique.md:166:tagger de syntagmes ne rend que ce niveau. La **cascade complète** (composite + politique
+docs/implantation/bloc-linguistique.md:189:et `bloc` peut être `Heuristique`, `MockNeuronal`, `NeuronalLLM`, `NeuronalLLMPOS`,
+docs/implantation/bloc-linguistique.md:204:  nécessaire quand le tagger réel est meilleur (mesure : 0,6168 / 0,7592 contre 0,2137 / 0,5670
+docs/implantation/bloc-linguistique.md:318:2. **Un modèle neuronal qualifié** (tagger ou LLM) sur ce gold ;
+… [8548 caractères tronqués]
+  ```
+

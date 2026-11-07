@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 41 |
-| Appels d'outils | 75 |
+| Messages | 42 |
+| Appels d'outils | 77 |
 | Fichiers touchés | 0 |
-| Commandes | 60 |
+| Commandes | 62 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*75 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -41,7 +41,7 @@
 - bash — Localiser le registre des portes
 - bash — Chercher les usages de eval_n2_propre et porte-n2
 - bash — Lire le registre des portes le plus récent
-- … et 49 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
@@ -98,7 +98,7 @@ Les deux évaluations sont terminées ; je récupère leurs sorties.
 - **T1** Tableau des métadonnées des checkpoints
 - **T1** Inventaire des fiches N2 (titre, date, verdict)
 - **T1** Mesurer la porte avec le mauvais mètre (absolu)
-- … et 20 autres
+- … et 22 autres
 
 ## 4. Mesures et résultats marquants
 

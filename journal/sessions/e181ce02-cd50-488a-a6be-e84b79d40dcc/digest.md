@@ -56187,3 +56187,86 @@ ven 06 nov 2026 21:40:42 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (**NUM**) : 45 tokens réparés |\",\n   … [1656 caractères tronqués]`
+
+  ```
+696 789
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-pos-nombres.md
+COMMIT OK 1
+de7c9113 B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183
+   bfd98892..de7c9113  s/v7 -> s/v7
+   bfd98892..de7c9113  master -> master
+ven 06 nov 2026 21:43:34 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Re-test produit : je rejoue les 50 textes de l'audit sur le code d'aujourd'hui
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, json, time; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\ntextes = d.get('textes') or d.get('banc') or []\nprint('c … [1027 caractères tronqués]`
+
+  ```
+clés : ['rapport', 'ligne', 'branche', 'commit_mesure', 'commit_module', 'date', 'objet', 'verdict', 'snapshot', 'dispositif', 'banc_50', 'robustesse'] | textes trouvés : 0
+textes 0 | segments 0 | paires chevauchantes 0 | textes avec chevauchement 0 | temps total s 0.0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nb=d.get('banc_50')\nprint(type(b), len(b) if hasattr(b,'__len__') else '')\nif isinstance(b, list): print(json.dumps(b[0], ensure_ … [117 caractères tronqués]`
+
+  ```
+<class 'dict'> 2
+['synthese', 'resultats']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nr=d['banc_50']['resultats']\nprint(type(r), len(r))\nif isinstance(r, list): print(json.dumps(r[0], ensure_ascii=False)[:400])\nel … [94 caractères tronqués]`
+
+  ```
+<class 'list'> 50
+{"id": "f01", "categorie": "fr", "attendu": "fr", "texte": "Le chat dort.", "caracteres": 13, "octets_utf8": 13, "rc": 0, "temps_cli_ms": 150.79, "temps_api_ms": 0.796, "deterministe": true, "json_octets": 5561, "json_valide": true, "langue": "fr", "script": "Latn", "labels": 19, "mots": 4, "pos": 3, "syntagmes": 2, "attaches": 2, "sans_attachement": 0, "chevauchements_syntagme": 0, "chevauchement
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 python3 - <<'PY'\nimport sys, json, time; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nres=d['banc_50']['resultats']\nh=bl.Heuristique(partition … [1448 caractères tronqués]`
+
+  ```
+temps total 0.13 s
+AVANT (audit) : syntagmes 360 | chevauchements 107 | textes avec 23 | sans syntagme 4
+APRÈS (live)  : syntagmes 405 | chevauchements 145 | textes avec 32 | sans syntagme 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys, json, time; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nres=d['banc_50']['resultats']\nfor mode in (\"alternative … [524 caractères tronqués]`
+
+  ```
+alternative : segments 405 | chevauchements 145 | textes sans syntagme 5
+filtrer : segments 297 | chevauchements 0 | textes sans syntagme 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 - <<'PY'\nimport sys, json; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nh=bl.Heuristique(partition=\"filtrer\")\nfor item in d['banc_50 … [236 caractères tronqués]`
+
+  ```
+f14 '🚀'
+f15 ''
+f16 '   '
+f17 '...'
+f18 '1234567890'
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche du re-test produit (les 50 textes, deux vues)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-re-test-produit.md <<'MD'\n# B13 — re-test produit : 50 textes libres, la vue linéaire supprime les chevauchements\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅\n> **Ce  … [4320 caractères tronqués]`
+
+  ```
+fiche + JSON
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 789 JSON, le disque en a 790
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+de7c9113 B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 21:47:23 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1218 caractères tronqués]`

@@ -1781,3 +1781,110 @@ bfd98892
 2026-11-06
   ```
 
+- **bash** `{"command": "git log --oneline -3; echo '--- statut'; git status --porcelain | head -15; echo '--- corpus ignoré ?'; git check-ignore -v data/corpus_propre/val.txt data/corpus_propre/train.txt 2>&1; echo '--- diff n2 récent'; git log --oneline -3 --name-only | head -40", "description": "Vérifier le  … [31 caractères tronqués]`
+
+  ```
+bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE
+9e4cde3b README — LA SECTION « ESSAYEZ » : LA CLI drave, LE FORMAT VERSIONNÉ, LA PORTE PRODUIT, LES CHIFFRES DU 06/11
+ea1a68a2 ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)
+--- statut
+M  docs/pilotage/en-cours.md
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+MM journal/2026-11-05/portes.md
+MM journal/2026-11-06/README.md
+D  journal/2026-11-06/distribue.md
+D  journal/2026-11-06/docs.md
+D  journal/2026-11-06/memoire.md
+D  journal/2026-11-06/mesures.md
+--- corpus ignoré ?
+.gitignore:5:data/	data/corpus_propre/val.txt
+.gitignore:5:data/	data/corpus_propre/train.txt
+--- diff n2 récent
+bfd98892 DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE
+docs/produit/README.md
+journal/2026-11-06/README.md
+journal/2026-11-06/distribue.md
+journal/2026-11-06/docs.md
+journal/2026-11-06/memoire.md
+… [1606 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -ln \"PPL\\|perplex\" tools/porte-*.sh | head; echo '--- dépendances work/'; grep -l \"work/\" tools/porte-*.sh | head -20; echo '--- absents'; grep -n \"absent\\|introuvable\\|! -f\\|! -e\" tools/porte-*.sh | head -30", "description": "Voir comment les portes gèrent les artefacts  … [8 caractères tronqués]`
+
+  ```
+tools/porte-adaptateur-sortie.sh
+tools/porte-budget.sh
+tools/porte-bus.sh
+tools/porte-bus-socket.sh
+tools/porte-c4-retard.sh
+tools/porte-consolidation.sh
+tools/porte-coupe.sh
+tools/porte-cycle-c2.sh
+tools/porte-delais.sh
+tools/porte-diff-couche.sh
+--- dépendances work/
+tools/porte-ocr-scans.sh
+--- absents
+tools/porte-adaptateur-sortie.sh:28:[ -s "$M" ] || { echo "  ❌ modèle absent : $M"; exit 2; }
+tools/porte-adaptateur-sortie.sh:29:[ -x "$D" ] || { echo "  ❌ binaire du moteur absent : $D"; exit 2; }
+tools/porte-adaptateur-sortie.sh:120:refus "fichier absent" "--couches 0:$COUCHES --tete-partielle --adaptateur-sortie $T/inexistant.f32"
+tools/porte-balayage.sh:7:# contrôles négatifs (terme absent, terme d'un autre document).
+tools/porte-budget.sh:24:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-bus.sh:25:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-bus-socket.sh:50:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-c4-retard.sh:27:[ -s "$M" ] && [ -s "$IDS" ] || { echo "  modèle ou identifiants absents"; exit 2; }
+tools/porte-cerveau.sh
+… [2298 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' tools/porte-melange.sh", "description": "Lire porte-melange comme modèle de porte de mesure"}`
+
+  ```
+#!/bin/bash
+# porte-melange.sh — C2 : DEUX ENTRÉES, UNE RÈGLE DE MÉLANGE. Que fait une somme ?
+#
+# LA QUESTION DE C2, SANS TOUCHER AU MOTEUR. Deux flux qui se rencontrent : que devient
+# leur contenu ? La greffe d'état a fourni l'instrument (`--fusion-etat`), et une somme
+# de deux états prélevés s'écrit sans une ligne de code de plus. Il y a deux réponses
+# possibles, très différentes :
+#   · la somme ARBITRE entre les deux contenus (l'un ou l'autre) ⇒ il y a un POINT DE
+#     BASCULE à mesurer, et la fusion par somme est utilisable ;
+#   · la somme produit un TROISIÈME contenu (ni l'un ni l'autre) ⇒ elle DÉTRUIT
+#     l'information, et aucune architecture ne peut fusionner ainsi.
+#
+# LA CALIBRATION, ET POURQUOI ELLE EST LÀ. Prélever « la dernière position » ne va pas
+# de soi : `--tokenize` et `--prompt` ne comptent PAS les mêmes jetons pour un texte qui
+# finit par un saut de ligne (17 contre 16, mesuré), et la première version de cette
+# porte a donc prélevé l'état qui prédit le DERNIER JETON DU TEXTE au lieu de celui qui
+# prédit le code — les deux états purs rendaient alors « 1234 », et la porte a échoué
+# pour cette raison, pas pour une raison de fond. La porte CALIBRE donc 
+… [5529 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/n2-propre.json'))\nprint(type(d).__name__, list(d)[:12] if isinstance(d,dict) else len(d))\nprint(json.dumps(d, ensure_ascii=False)[:1800])\nPY", "description": "Lire les résultats N2.h par graine"}`
+
+  ```
+dict ['A', 'C', 'D', 'R', 'longueurs_A', 'longueurs_R', 'decomposition_A', 'base_propre']
+{"A": {"val": 3.0904, "test": 3.1959666666666666, "litterature_propre": 16.703433333333333, "anglais": 57.577333333333335, "wikitext2": 56.8821}, "C": {"val": 3.080433333333333, "test": 3.1878666666666664, "litterature_propre": 16.817233333333334}, "D": {"val": 3.2625333333333333, "test": 3.3221333333333334, "litterature_propre": 3.8546, "anglais": 25.6755, "wikitext2": 26.058933333333332}, "R": {"val": 3.2380999999999998, "test": 3.3426666666666667, "litterature_propre": 16.816466666666667}, "longueurs_A": {"129": 3.1318, "192": 8.5551, "256": 14.105333333333332, "384": 23.902633333333334, "512": 32.4114}, "longueurs_R": {"129": 3.2429333333333332, "192": 3.2338666666666667, "256": 3.2482666666666664, "384": 5.057666666666667, "512": 5.9328}, "decomposition_A": {"apres_2_blocs": 3.8244666666666665, "apres_4_blocs": 3.2237666666666667, "apres_6_blocs": 3.0462333333333333, "complete": 3.1161666666666665, "sans_pensee": 23632397.258}, "base_propre": {"val": 3.2402, "test": 3.288, "litterature_propre": 12.2861, "anglais": 32.9009, "wikitext2": 33.2883}}
+  ```
+
+- **bash** `{"command": "echo '--- models suivi ?'; git ls-files models/ | head -3; echo '--- data suivi ?'; git ls-files data/ | head -3; echo '--- taille porte propre artifact'; ls -la work/n2ac/propre512-8k.pt work/n2ac/propre512-8k.pt.json work/n2ac/propre512-8k.drvm 2>&1; echo '--- sha pt (peut prendre 2 s … [119 caractères tronqués]`
+
+  ```
+--- models suivi ?
+--- data suivi ?
+--- taille porte propre artifact
+-rw-r--r--. 1 stephane stephane 137224476  3 nov 02:01 work/n2ac/propre512-8k.drvm
+-rw-r--r--. 1 stephane stephane 137248474  3 nov 02:01 work/n2ac/propre512-8k.pt
+-rw-r--r--. 1 stephane stephane       524  3 nov 02:01 work/n2ac/propre512-8k.pt.json
+--- sha pt (peut prendre 2 s)
+37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc  work/n2ac/propre512-8k.pt
+  ```
+

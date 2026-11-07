@@ -1866,3 +1866,236 @@ n 12 ex {'paire': 'eng:bul', 'n': 40, 'chrf': 46.53022980281709, 'ic95': [44.2, 
 cles ['langues', 'moyenne_annoncees', 'moyenne_non_annoncees', 'correlation_chrf_plancher']
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection du format des JSON « pensée » existants
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nfor p in ['reports/pensee-file-taches.json','reports/pensee-fiabilite-produit.json','reports/pensee-par-langue.json']:\n    try:\n        d=json.load(open(p))\n        print('='*20,p,type(d).__name__)\n        if isinstance(d,dict):\n            print('cl … [366 caractères tronqués]`
+
+  ```
+==================== reports/pensee-file-taches.json dict
+cles ['date', 'heure', 'branche', 'head', 'mission', 'methode', 'comptes', 'taches', 'doublons', 'perimes', 'dependances_cachees', 'ordre', 'commandes_verifiees', 'limites', 'fichiers']
+  date str 10
+  heure str 9
+  branche str 4
+  head str 8
+==================== reports/pensee-fiabilite-produit.json dict
+cles ['rapport', 'ligne', 'branche', 'commit_mesure', 'commit_module', 'date', 'objet', 'verdict', 'snapshot', 'dispositif', 'banc_50', 'robustesse', 'contrat', 'schema_propose', 'test_non_regression', 'correctifs', 'controle_negatif', 'limites', 'fichiers']
+  rapport str 17
+  ligne str 3
+  branche str 4
+  commit_mesure str 8
+==================== reports/pensee-par-langue.json dict
+cles ['date', 'ligne', 'portes', 'fr', 'en', 'tout', 'limites']
+  date str 10
+  ligne str 3
+  portes str 7
+  fr dict 5
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/structures/mesure_arbre.py; echo \"===\"; grep -n \"argparse\\|__main__\\|json\" tools/structures/mesure_arbre.py | tail -15", "description": "Lis mesure_arbre et son CLI"}`
+
+  ```
+#!/usr/bin/env python3
+"""mesure_arbre.py — la profondeur actuelle de l'arbre et les référents non résolus de la banque.
+
+Le retour humain du 03/11 : « il manque trop souvent de profondeur » et « les référents ne
+semblent pas résolus avant que je tranche ». Ce script mesure les deux sur les 207 phrases du
+banc : la distribution de `niveau` (l'indentation) et des profondeurs maximales des candidats, et
+les pronoms/possessifs qui n'ont aucun antécédent proposé. C'est le dispositif du négatif, pas un
+jugement : il dit ce que l'outil ne montrait pas.
+
+    python3 mesure_arbre.py
+"""
+from __future__ import annotations
+
+import json
+import pathlib
+from collections import Counter
+
+import generateur
+
+RACINE = pathlib.Path(__file__).resolve().parent
+DONNEES = RACINE / "donnees"
+SORTIE = DONNEES / "mesure-arbre.json"
+POSSESSIFS = set("mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs".split())
+
+
+def phrases() -> list[dict]:
+    sortie = json.loads((DONNEES / "phrases.json").read_text(encoding="utf-8"))["phrases"]
+    g = DONNEES / "phrases_generees.json"
+    if g.exists():
+        sortie += json.loads(g.read_text(encoding="utf-8"))["phrases"]
+    return sortie
+
+
+def mesurer() ->
+… [2205 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 -c 'import json, mesure_arbre; r=mesure_arbre.mesurer(); print(json.dumps({k:r[k] for k in [\"phrases\",\"candidats\",\"segments\",\"profondeur_max\",\"niveaux\",\"phrases_avec_referent\",\"referents\",\"avec_candidat\",\"sans_can … [139 caractères tronqués]`
+
+  ```
+{
+ "phrases": 207,
+ "candidats": 359,
+ "segments": 2308,
+ "profondeur_max": {
+  "0": 2,
+  "1": 37,
+  "2": 221,
+  "3": 84,
+  "4": 13,
+  "5": 2
+ },
+ "niveaux": {
+  "0": 359,
+  "1": 1268,
+  "2": 556,
+  "3": 108,
+  "4": 15,
+  "5": 2
+ },
+ "phrases_avec_referent": 170,
+ "referents": 371,
+ "avec_candidat": 294,
+ "sans_candidat": 77,
+ "formes": {
+  "y": 109,
+  "en": 67,
+  "se": 44,
+  "me": 19,
+  "il": 18,
+  "son": 18,
+  "elle": 9,
+  "je": 9,
+  "vous": 9,
+  "lui": 8,
+  "sa": 8,
+  "on": 5,
+  "nous": 5,
+  "tu": 5,
+  "ses": 4,
+  "leurs": 4,
+  "te": 4,
+  "vos": 4,
+  "ils": 3,
+  "moi": 3,
+  "nos": 3,
+  "cela": 2,
+  "votre": 2,
+  "mon": 2,
+  "notre": 2,
+  "leur": 2,
+  "j'ai": 1,
+  "j'avais": 1,
+  "j'aurais": 1
+ }
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-file-taches.json'))\nfor k in ['comptes','limites','fichiers','commandes_verifiees']:\n    print('==',k); print(json.dumps(d.get(k),ensure_ascii=False,indent=1)[:1200])\nprint('== tache ex'); print(json.dumps(d['taches'][0 … [117 caractères tronqués]`
+
+  ```
+== comptes
+{
+ "taches": 29,
+ "A": 8,
+ "B": 11,
+ "C": 10,
+ "doublons": 6,
+ "perimes": 18,
+ "dependances_cachees": 12,
+ "vagues": 3,
+ "sous_agents_max_par_vague": 4
+}
+== limites
+[
+ "Instantané 10 h 20, HEAD 7679a2d4 ; l'arbre bouge.",
+ "Pas de passe complète (2 h 11 à 2 h 29) ; 4 rouges du registre du 06/11, seuls bloc-linguistique et sessions rejouées.",
+ "S lu, pas rejoué : 19 + 150 verdicts ; couverture par phrase à vérifier.",
+ "gold 200+ non défini : classé en coordination, pas inventé.",
+ "L'audit de fiabilité produit est en cours (14114f3d), sa fiche est absente.",
+ "Cette fiche change les compteurs : 679/772 ; trois fiches de vague : 682/775.",
+ "Aucun existant modifié ; INDEX restauré après un --help destructif."
+]
+== fichiers
+[
+ "reports/rapport-file-taches.md",
+ "reports/pensee-file-taches.json"
+]
+== commandes_verifiees
+[
+ {
+  "commande": "bash tools/toutes-les-portes.sh",
+  "existe": "oui",
+  "executee": "non (2 h 11 à 2 h 29)",
+  "etat": "84 portes ; la passe du 06/11 a 79 vertes et 4 rouges"
+ },
+ {
+  "commande": "bash tools/porte-bloc-linguistique.sh",
+  "existe": "oui",
+  "executee": "oui",
+  "etat": "exit 1 ; cascade_pos 0,7465 < 0,7581"
+ },
+ {
+  "commande": "bash too
+… [1487 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification si la page banque sert les anciens candidats ou la v7
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\ng=json.load(open('tools/structures/donnees/phrases_generees.json'))\np=g['phrases'][0]\nc=p['candidats'][0]\nprint('phrase',p['id'],'stored candidats',len(p['candidats']))\nprint('cles candidat',sorted(c.keys()))\nprint('cles segment',sorted(c['segments'] … [595 caractères tronqués]`
+
+  ```
+phrase c001 stored candidats 1
+cles candidat ['attachement', 'id', 'lecture', 'nom', 'segments']
+cles segment ['debut', 'fin', 'niveau', 'role', 'texte', 'type']
+ex segment {"debut": 0, "fin": 47, "texte": "Au lecteur Cette version électronique reproduit", "type": "GP", "role": "destinataire", "niveau": 1}
+===
+dyn candidats 1
+cles candidat ['attachement', 'lecture', 'nom', 'segments']
+cles segment ['debut', 'fin', 'niveau', 'parent', 'profondeur', 'role', 'texte', 'type']
+ex segment {"debut": 0, "fin": 47, "texte": "Au lecteur Cette version électronique reproduit", "type": "GP", "role": "destinataire", "niveau": 0, "parent": null, "profondeur": 0}
+  ```
+
+- **bash** `{"command": "stat -c '%y %n' tools/structures/donnees/phrases_generees.json tools/structures/donnees/mesure-arbre.json tools/structures/generateur.py 2>/dev/null; echo \"===\"; grep -n \"candidats\\|analyser\\|phrases_generees\" tools/structures/serveur.py | head -20", "description": "Dates des donn … [27 caractères tronqués]`
+
+  ```
+2026-11-02 20:35:33.102281270 -0500 tools/structures/donnees/phrases_generees.json
+2026-11-03 16:23:01.747926807 -0500 tools/structures/donnees/mesure-arbre.json
+2026-11-04 11:41:49.129836555 -0500 tools/structures/generateur.py
+===
+46:        self.fichier_generees = self.dossier / "phrases_generees.json"
+54:        """Les paragraphes complets : cible, contexte, antécédent, candidats, référents, arbre SVG."""
+61:            cands = generateur.analyser(p["cible"])
+70:                "candidats": cands, "referents": refs,
+84:        if not any(c["id"] == candidat_id for c in p["candidats"]):
+117:        if not any(c["id"] == candidat_id for c in phrase["candidats"]):
+148:        r = llm.evaluer(phrase["texte"], phrase["candidats"], fournisseur, contexte, niveau)
+156:        """Génère les candidats d'une phrase libre et la persiste dans phrases_generees.json."""
+160:        candidats = generateur.analyser(texte)
+161:        if not candidats:
+168:                      "candidats": [{"id": f"{pid}-c{i + 1}", **c}
+169:                                    for i, c in enumerate(candidats)]}
+188:        par_id = {(p["id"], c["id"]): (p, c) for p in self.phrases for c in p["candidats"]}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de l'écart entre les candidats stockés (page /) et la v7
+
+- **bash** `{"command": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF'\nimport json, hashlib, collections\nimport generateur\nfixe=json.load(open('donnees/phrases.json'))['phrases']\ngen=json.load(open('donnees/phrases_generees.json'))['phrases']\nstored={p['id']:p for p in fixe+gen}\ndiff_ … [2035 caractères tronqués]`
+
+  ```
+phrases 207 candidats stockés 369 dynamiques 359
+candidats stockés sans profondeur 369 / 369
+phrases avec compte différent 9 [('p006', 2, 1), ('c023', 3, 2), ('c056', 3, 1), ('c064', 2, 1), ('c084', 2, 1), ('c176', 2, 1), ('c185', 2, 1), ('c194', 3, 2), ('c198', 3, 2)]
+appariés identiques 304 changés 55 orphelins 10
+verdicts dont l index n existe plus en dynamique 5
+profondeur max stockée {0: 10, 1: 277, 2: 82}
+profondeur max dynamique {0: 2, 1: 37, 2: 221, 3: 84, 4: 13, 5: 2}
+  ```
+

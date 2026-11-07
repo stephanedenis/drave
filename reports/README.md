@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test : 50 textes, `filtrer` = **0** chevauchement |
 | [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (NUM) |
 | [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
 | [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |
@@ -152,7 +153,6 @@
 | [`rapport-native-professeur-20k.md`](rapport-native-professeur-20k.md) | **N2.15** — professeur 20 000 pas : **0,904 bit/octet**, PPL **1,869** |
 | [`rapport-native-professeur-10k.md`](rapport-native-professeur-10k.md) | **N2.10** — professeur 10 000 pas : **1,073 bit/octet**, PPL **2,104** |
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
-| [`rapport-native-sft.md`](rapport-native-sft.md) | **N4.6** — SFT minimal : **24/24** vus, **0/4** tenus |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

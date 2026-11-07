@@ -1,0 +1,28 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "banc": "50 textes de pensee-fiabilite-produit.json",
+ "alternative": {
+  "segments": 405,
+  "chevauchements": 145,
+  "sans_syntagme": 5
+ },
+ "filtrer": {
+  "segments": 297,
+  "chevauchements": 0,
+  "sans_syntagme": 5
+ },
+ "sans_syntagme": [
+  "🚀",
+  "",
+  "   ",
+  "...",
+  "1234567890"
+ ],
+ "temps_s": 0.13,
+ "limites": [
+  "justesse non mesurée",
+  "définition du chevauchement",
+  "comparaison audit non à définition constante"
+ ]
+}

@@ -2465,3 +2465,31 @@ drwxr-xr-x 14 stephane stephane 4096 21 oct 16:30 /home/stephane/IA
 … [2403 caractères tronqués]
   ```
 
+- **bash** `{"command": "free -g; echo '--- gpu ---'; nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader; echo '--- engine gpu default ---'; grep -n \"DRAVE_GPU\\|CUDA_VISIBLE\\|n_gpu\\|multi\" drave-core/src/gpu.rs | head -20", "description": "Check RAM, GPUs, and multi-GPU support"}`
+
+  ```
+total        used        free      shared  buff/cache   available
+Mem:             125          22           3           8         109         103
+Swap:             62           0          62
+--- gpu ---
+0, Quadro RTX 5000, 16384 MiB
+1, Quadro RTX 5000, 16384 MiB
+--- engine gpu default ---
+197:            // Piège courant : `CUDA_VISIBLE_DEVICES=` (vide) masque TOUS les
+200:            if std::env::var("CUDA_VISIBLE_DEVICES").map(|v| v.trim().is_empty()).unwrap_or(false) {
+201:                std::env::remove_var("CUDA_VISIBLE_DEVICES");
+202:                eprintln!("[gpu] CUDA_VISIBLE_DEVICES vide : ignoré (les GPU redeviennent visibles)");
+586:        // `q` doit être un multiple exact de n_kv × hd : une division tronquée
+1549:/// Instance unique du processus. `DRAVE_GPU` active le déport ; sans lui, aucune
+1559:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+1585:        // `DRAVE_GPU=0` force le CPU ; `DRAVE_GPU=1` force la tentative GPU.
+1586:        if std::env::var("DRAVE_GPU").map(|v| v.trim() == "0").unwrap_or(false) {
+  ```
+
+- **bash** `{"command": "grep -n \"18\\|30B\\|mémoire\\|RAM\\|VRAM\\|CPU\" reports/rapport-c9-echange-experts.md | head -15", "description": "Check C9 execution context"}`
+
+  ```
+15:> Protocole : Qwen3-30B-A3B (48 couches, 128 experts, 8 utilisés), `--ppl --ctx 512 --limit 32`,
+57:| 24 | 37,1813 | ×1,00 |
+  ```
+

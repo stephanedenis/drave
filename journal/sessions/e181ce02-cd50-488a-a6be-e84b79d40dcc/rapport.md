@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 149.0 h |
+| Durée | 149.1 h |
 | Tours | 184 |
-| Messages | 3311 |
-| Appels d'outils | 2936 |
+| Messages | 3319 |
+| Appels d'outils | 2944 |
 | Fichiers touchés | 25 |
-| Commandes | 2432 |
+| Commandes | 2440 |
 | Sous-agents | 38 |
-| Commits | 378 |
+| Commits | 380 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*182 appels d'outils.* Actions notables :
+*190 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 168 autres
+- … et 176 autres
 
 **Synthèse produite :**
 
-⏵ P1 produit : POS des nombres et des textes sans syntagme (les 4/46 de l'audit)
+⏵ Fiche du re-test produit (les 50 textes, deux vues)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2392 autres
+- … et 2400 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10582,4 +10582,6 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOC PRODUIT — RESYNCHRONISÉE : POS 85,00 %, F1 0,6482, ATTACHEMENT 235/236, GELÉ 85,32 / 0,6511 ; SORTIE D'EVALUER REJOUÉE" -- docs/produit/README.md 2>&1 | tai
 - B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183" -- tools/bloc_linguistique.py reports/rapport-pos-nombres.m
 - B13 — LES NOMBRES ONT UNE POS (NUM, 45 TOKENS) ; GOLD INCHANGÉ (85,00 / 0,6482 / 235-236) ; 183/183" -- tools/bloc_linguistique.py reports/rapport-pos-nombres.m
+- PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES" -- reports/rapport-re-test-produit.md re
+- PRODUIT — RE-TEST DES 50 TEXTES : filtrer = 0 CHEVAUCHEMENT (297 SEGMENTS), LES 5 SANS SYNTAGME SONT NON LINGUISTIQUES" -- reports/rapport-re-test-produit.md re
 

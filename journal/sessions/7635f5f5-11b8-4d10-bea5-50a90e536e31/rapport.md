@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 54 |
-| Appels d'outils | 86 |
+| Messages | 61 |
+| Appels d'outils | 98 |
 | Fichiers touchés | 0 |
-| Commandes | 70 |
+| Commandes | 81 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*86 appels d'outils.* Actions notables :
+*98 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -41,7 +41,7 @@
 - bash — Localiser le code du tagger
 - bash — Lister portes et outils R
 - bash — Structure des fiches tagger
-- … et 58 autres
+- … et 69 autres
 
 **Synthèse produite :**
 
@@ -96,7 +96,7 @@
 - **T1** Lire les en-têtes des fiches R0
 - **T1** Chiffres R0.2 et aides R0.3/R0.5
 - **T1** Agrégat R0.2 et fiche multifichiers
-- … et 30 autres
+- … et 41 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -193,6 +193,26 @@
 - **T1** `✅ photocopie : grilles de bonne forme ≥ 100% (mesuré 10/10)`
 - **T1** `✅ photo : cellules exactes ≥ 45% (mesuré 62.4%)`
 - **T1** `✅ photo : grilles de bonne forme ≥ 50% (mesuré 8/10)`
+- **T1** `> partout : **+0,39 %** (512, deux graines), **+3,92 à +4,09 %** (1024 selon la graine), **+4,22 % / +6,59 %** (anglais).`
+- **T1** `> Le « gain de 11 % » du pilote était un **artefact de budget** : à pas égaux, le BPE voit deux`
+- **T1** `> **Dispositif** : synthèse de six fiches et de six JSON — français (4,4 Mo) et anglais`
+- **T1** `> (100 Mo), vocabulaires 512 et 1024, deux graines ; comparaison en **bits/octet** à octets vus`
+- **T1** `> 3,9 %**. Le vocab 512 perdait 0,7 % ; augmenter le vocabulaire n’aide pas ici.`
+- **T1** `> modes 30 % et 100 % du banc ; JSON [`r06-relecture.json`](r06-relecture.json) ; spec`
+- **T1** `WER 4.48% · rappel 97.37% · précision 97.82% · confiance 93.2`
+- **T1** `page dégradée : WER 17.08% · exactitude 50.00% · parité région 26.67%`
+- **T1** `✅ WER ≤ 10%`
+- **T1** `✅ rappel ≥ 90%`
+- **T1** `✅ parité de région ≥ 90%`
+- **T1** `✅ exactitude natif ≥ 90%`
+- **T1** `| type | récup. 10 % | récup. 30 % | récup. 50 % | valeur 30 % | valeur 100 % | aléatoire 30 % |`
+- **T1** `À **30 %** du budget, le passage gold est lu dans **100 %** des cas sur les cinq types — la`
+- **T1** `courbe est plate entre 30 et 50 %, et commence à mordre à 10 % (0,87–1,00). Le **hasard** reste`
+- **T1** `| type | contrôleur 30 % | début 30 % | closed-book |`
+- **T1** `> Verdict : **la structure.** Entraîné huit époques (LoRA rang 8 sur les 24 couches, 4 séquences de`
+- **T1** `33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)**`
+- **T1** `178:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes`
+- **T1** `253:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
 
 ## 5. Erreurs rencontrées
 
