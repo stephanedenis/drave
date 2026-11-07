@@ -612,3 +612,390 @@ M .github/copilot-instructions.md
 … [503 caractères tronqués]
   ```
 
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Panini/README.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Panini/README.md</path>
+<type>file</type>
+<content>
+1: # Panini — noyau formel et sémantique computationnelle
+2: 
+3: [![Python](https://img.shields.io/badge/Python-3.13-green)](pyproject.toml)
+4: [![Noyau](https://img.shields.io/badge/Noyau-CIC--lite_·_ℝ_localisé-blue)](research/docs/noyau/J4_CATALOGUE.md)
+5: [![Licence](https://img.shields.io/badge/Licence-Voir_LICENSE-lightgrey)](LICENSE)
+6: 
+7: > Ce README décrit l'état **réel** du projet. Les chiffres vivent dans les rapports
+8: > (`research/docs/noyau/VALIDATIONS.md`, `docs/journal-de-bord/`) — pas ici : un
+9: > README qui vieillit ment.
+10: 
+11: ## 1. Ce qu'est Panini
+12: 
+13: Deux niveaux, une seule discipline : **ce qui est affirmé doit être prouvé ou mesuré**.
+14: 
+15: - **Le noyau** — un système formel (CIC-lite en Python) qui *infère* et ne décrit jamais :
+16:   termes, types dépendants, tactiques, et les **fondations mathématiques** (ℝ localisé par
+17:   coupures de Dedekind). Ses certitudes sont des **théorèmes clos, vérifiés par la machine**.
+18: - **NIPADA** — la couche *descriptive* : le tissu computationnel (graphe, dhātus, DTP),
+19:   l'encyclopédie, les corpus, les le
+… [10602 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && grep -rl \"V14\\|14 atomes\\|atomes sémantiques\" --include=\"*.md\" --include=\"*.json\" --include=\"*.py\" --include=\"*.yaml\" research/philosophy-theory research/docs research/data research/src 2>/dev/null | head -40", "descriptio … [45 caractères tronqués]`
+
+  ```
+research/philosophy-theory/APPROCHE_NOYAU_REVERIFIEE_v1.0.md
+research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v2.0.md
+research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md
+research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md
+research/philosophy-theory/PORTEFEUILLE_CANDIDATS_NOYAU_v1.0.md
+research/philosophy-theory/PROPOSITION_CANDIDAT_ORIGINAL_V15_TRANSMISSION_v0.1.md
+research/philosophy-theory/RECHERCHE_INITIATIVES_NOYAU_DEDUCTIF_v1.0.md
+research/philosophy-theory/REVISION_FONDATIONS_CORE_CERTITUDES_v1.0.md
+research/philosophy-theory/REVISION_FONDATIONS_NOYAU_QUESTIONNEMENTS_v1.0.md
+research/philosophy-theory/REVISION_NOYAU_FORMEL_PROLOG_v1.0.md
+research/philosophy-theory/SPEC_EXPERIMENTALE_ALPHA_2_3_v0.1.md
+research/philosophy-theory/SPEC_R2_CORPUS_DIVERS_v0.1.md
+research/philosophy-theory/SYNTHESE_CAMPAGNE_PORTEFEUILLE_2026-09-08.md
+research/philosophy-theory/THEORIE_ALPHA_2_3_ET_PONTS_v0.1.md
+research/philosophy-theory/THEORIE_DERIVATION_ALPHA_2_3_v0.2.md
+research/philosophy-theory/THEORIE_FAISCEAUX_ET_FIBRATION_v0.3.md
+research/philosophy-theory/VERIFICATION_FONDATIONS_PAR_NIVEAUX_v0.1.md
+research/docs/journal-de-bord/2026-04-25.md
+research/docs/journal-de-bord/2026-04-26.m
+… [952 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && ls research/philosophy-theory/ && echo \"--- data ---\" && ls research/data/ | head -40", "description": "Liste philosophy-theory et data"}`
+
+  ```
+ANALYSE_INCOHERENCES_THEORIQUES_v0.1.md
+APPROCHE_NOYAU_REVERIFIEE_v1.0.md
+AUDIT_BIBLIOGRAPHIQUE_SYSTEMATIQUE_v0.1.md
+DOCUMENT_DE_CONTEXTE_v2.0.md
+DOCUMENT_DE_CONTEXTE_v3.0.md
+GRILLE_ABLATION_V14_v0.1.md
+LANGAGES_CONTENEURS_v1.0.md
+LEXIQUE_TRANSMISSION_V15_MULTILINGUE_v0.1.md
+PANINI_PHILOSOPHY_ANALYSIS.md
+PANINI_WHITEPAPER.md
+PORTEFEUILLE_CANDIDATS_NOYAU_v1.0.md
+PREDICTION_V16_CORPUS_334_v0.1.md
+PROPOSITION_CANDIDAT_ORIGINAL_V15_TRANSMISSION_v0.1.md
+RECHERCHE_INITIATIVES_NOYAU_DEDUCTIF_v1.0.md
+REVISION_FONDATIONS_CORE_CERTITUDES_v1.0.md
+REVISION_FONDATIONS_NOYAU_QUESTIONNEMENTS_v1.0.md
+REVISION_MODELE_ANALYTIQUE_GENERATIF_v1.0.md
+REVISION_NOYAU_FORMEL_PROLOG_v1.0.md
+ROADMAP_NOYAU_v1.0.md
+SPEC_EXPERIMENTALE_ALPHA_2_3_v0.1.md
+SPEC_R2_CORPUS_DIVERS_v0.1.md
+SYNTHESE_CAMPAGNE_PORTEFEUILLE_2026-09-08.md
+THEORIE_ALPHA_2_3_ET_PONTS_v0.1.md
+THEORIE_DERIVATION_ALPHA_2_3_v0.2.md
+THEORIE_FAISCEAUX_ET_FIBRATION_v0.3.md
+VERIFICATION_FONDATIONS_PAR_NIVEAUX_v0.1.md
+VISION_GREENFIELD_v1.0.md
+VISION_TECHNIQUE_NOYAU_v1.0.md
+--- data ---
+acceleration_config.json
+analyse_20250922_085336_en.json
+analyse_20250922_085336_fr.json
+ANALYSE_DETAILLEE_CONCEPTS_20250922.json
+ANALYSE_FONCTIONS_LEXICALES_DHATU_202
+… [968 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Panini/research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Panini/research/philosophy-theory/GRILLE_ABLATION_V14_v0.1.md</path>
+<type>file</type>
+<content>
+1: # Grille d'Ablation V14 — prédictions a priori (v0.1)
+2: 
+3: **Date** : 2026-08-28 (préparé à distance, téléphone)
+4: **Statut** : prédictions **a priori** à comparer au verdict A1 du portefeuille (ablation systématique 14×, exécution station de travail)
+5: **Références** : `PORTEFEUILLE_CANDIDATS_NOYAU_v1.0.md` (A1) · `DOCUMENT_DE_CONTEXTE_v2.0.md` (critère de sortie, iso) · corpus §334 (114 textes, 655 paires, R²=0.909139)
+6: > **Note de cohérence (2026-09-09)** — la vision de référence est désormais `DOCUMENT_DE_CONTEXTE_v3.0.md` : le noyau y est défini comme **système formel** (les atomes V14 et consorts sont des **candidats révisables**), et le critère de sortie est la **fidélité générative** (sans copie de tokens) complétée d'invariants structurels, et non la restitution identique par ré-émission. Les renvois à la v2.0 ci-dessous sont conservés comme contexte historique.
+7: 
+8: 
+9: ---
+10: 
+11: ## 1. Objet et protocole
+12: 
+13: **Question** : lequel des 14 atomes de V14 est-il **non porteur** — retirable sans perte (ni pour la loi H
+… [7153 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && grep -n \"V14\\|atome\" research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md | head -40", "description": "Mentions V14 dans le document de contexte"}`
+
+  ```
+19:| Définition du noyau | un **vocabulaire** d'universaux (14 atomes V14, atomes-mères, dhātus) | un **système formel** : termes, unification, dérivation, tri-état, fondations mathématiques ; le vocabulaire (V14…) devient un **candidat révisable** de la couche linguistique |
+21:| Nature de la sémantique | représentations du pipeline (atomes, signatures, densités) | **forme logique + dérivation** : le sens d'un énoncé est sa preuve |
+24:| Statut de V14 | « fondation unique » et immuable (règle d'or 8) | **vocabulaire candidat révisable**, à justifier par la grammaire et l'ablation |
+26:| Pont entre les niveaux | implicite (les deux couches partagent les atomes) | **outillé** : tri-état (prouvé / réfuté / inconnu), promotion conjecture → certitude, réfutation seulement sur négation exprimée |
+120:- **Vocabulaires candidats** (atomes V14, dhātus, lexiques V15-τ, projections analytiques) : ce sont
+133:| **Atomes V14** (14 primitives, ω_V14, ordre canonique) | **vocabulaire candidat** de la couche linguistique, révisable | la contrainte d'un petit jeu de primitives ; l'usage comme conjecture NIPADA |
+142:| **« V14 immuable », règle d'or 8 de la v2.0** | **abrogée** : les primitives son
+… [194 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && grep -rln \"SYMÉTRIE\\|SYMETRIE\" --include=\"*.json\" --include=\"*.py\" --include=\"*.yaml\" research/data research/src research/config 2>/dev/null | head -20; echo \"=== prime keys ===\"; grep -rn \"orientation.*7\\|ATOMES_V14\\|at … [189 caractères tronqués]`
+
+  ```
+str","value":"total_cycles"},{".class":"LiteralType","fallback":"builtins.str","value":"total_time_us"},{".class":"LiteralType","fallback":"builtins.str","value":"input_queue"},{".class":"LiteralType","fallback":"builtins.str","value":"output_queue"}],"partial_fallback":{".class":"Instance","args":[{".class":"AnyType","missing_import_name":null,"source_any":null,"type_of_any":6}],"extra_attrs":null,"type_ref":"builtins.tuple"}}},"plugin_generated":true},"__mypy-replace":{".class":"SymbolTableNode","kind":"Mdef","node":{".class":"Decorator","func":{".class":"FuncDef","abstract_status":0,"arg_kinds":[5,5,5,5,5,5,5,5,5,5,5,5,5],"arg_names":["name","circuit","registers","memory","state","cycle","pc","stats","total_gates","total_cycles","total_time_us","input_queue","output_queue"],"dataclass_transform_spec":null,"deprecated":null,"flags":["is_static","is_decorated"],"fullname":"src.nipada.compute.trinary_simulator.NipadaVM.__mypy-replace","name":"__mypy-replace","type":{".class":"CallableType","arg_kinds":[5,5,5,5,5,5,5,5,5,5,5,5,5],"arg_names":["name","circuit","registers","memory","state","cycle","pc","stats","total_gates","total_cycles","total_time_us","input_queue","output_queue"],
+… [48731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && find research -iname \"*v14*\" -o -iname \"*atome*\" -o -iname \"*atom*\" 2>/dev/null | grep -v \".git/\" | head -40", "description": "Fichiers V14/atomes"}`
+
+  ```
+research/archives/filesystem_archive/cleanup/backup_20250906_154458/CORE/panini-fs/src/core/atom.rs
+research/archives/filesystem_archive/cleanup/backup_20250906_154458/OPERATIONS/DevOps/PaniniFS-2/src/core/atom.rs
+research/archives/filesystem_archive/cleanup/backup_20250906_154458/DHATU_ATOMES_CONCEPTUELS_REVISION.md
+research/archives/filesystem_experiments/RESEARCH_from_fs/discoveries/dhatu-universals/DHATU_ATOMES_CONCEPTUELS_REVISION.md
+research/archives/pre_v14_unification_20260521
+research/archives/scripts_v2/nipada_add_v14_atoms_v385a.py
+research/archives/scripts_v2/nipada_s423_v14_signatures.py
+research/archives/scripts_v2/nipada_s462_morpho_v14_delta.py
+research/archives/scripts_v2/nipada_s483_parallel_concept_v14.py
+research/archives/scripts_v2/nipada_v14_semantic_analyzer.py
+research/archives/scripts_v2/nipada_v391_fix_atoms.py
+research/archives/2025_prototypes/ecosystem-analysis/tools/analyseur_reduction_atomique.py
+research/archives/2025_prototypes/panlang/versions/reduction_atomique
+research/archives/2025_prototypes/panlang/versions/reduction_atomique/primitives_atomiques.db
+research/archives/2025_prototypes/panlang/versions/reduction_atomique/rapport_reduction_atomique
+… [1376 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && grep -n \"V14_ATOMS\" -A 25 src/nipada/core/hardware_mapping.py | head -50", "description": "Définition V14_ATOMS"}`
+
+  ```
+27:# The core V14_ATOMS and DHATUS definitions are independent of trinary hardware.
+28-try:
+29-    from nipada.compute.trinary_machine import (
+30-        Trit, N, Z, P,
+31-        TrinaryCircuit, TrinaryGate,
+32-        ANDGate, ORGate, NOTGate, MAJGate, IMPGate, CONSGate, MUXGate, CMPGate,
+33-    )
+34-    _HAS_TRINARY = True
+35-except ImportError:
+36-    # Repli de secours : tentative via l'ancien chemin absolu (compat import-ordre)
+37-    try:
+38-        from src.nipada.compute.trinary_machine import (
+39-            Trit, N, Z, P,
+40-            TrinaryCircuit, TrinaryGate,
+41-            ANDGate, ORGate, NOTGate, MAJGate, IMPGate, CONSGate, MUXGate, CMPGate,
+42-        )
+43-        _HAS_TRINARY = True
+44-    except ImportError:
+45-        _HAS_TRINARY = False
+46-    # Stubs sûrs : Enum minimal pour que les `default_value: Trit = Trit.ZRO`
+47-    # des dataclasses s'évaluent même si le vrai trinary_machine n'est pas importé
+48-    # (robustesse à l'ordre d'import ; le comportement réel utilise le vrai Trit).
+49-    class _TritStub(Enum):
+50-        NEG = -1
+51-        ZRO = 0
+52-        POS = 1
+--
+64:V14_ATOMS: list[str] = [
+65-    "ÊTRE", "DIFFÉRENCE", "RAPPORT", "ORIENTATION"
+… [834 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini/research && ls -la data/v14_lexicon_enriched.json data/udhr_decomposed_v14.json data/udhr_convergence_v14.json 2>/dev/null && echo \"--- head lexicon ---\" && head -c 1200 data/v14_lexicon_enriched.json && echo && echo \"--- head udhr -- … [107 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane    6045  5 aoû 14:03 data/udhr_convergence_v14.json
+-rw-r--r--. 1 stephane stephane    2409  5 aoû 14:03 data/udhr_decomposed_v14.json
+-rw-r--r--. 1 stephane stephane 3869584  4 jui 13:04 data/v14_lexicon_enriched.json
+--- head lexicon ---
+{
+  "en": {
+    "ÊTRE": [
+      "a",
+      "abilities",
+      "abolish",
+      "acknowledged",
+      "actual",
+      "ago",
+      "albedo",
+      "algonkin",
+      "all",
+      "am",
+      "amerika",
+      "an",
+      "anarchism",
+      "angelika",
+      "any",
+      "appear",
+      "are",
+      "arrows",
+      "astronomical",
+      "authority",
+      "baudykin",
+      "be",
+      "been",
+      "being",
+      "beingness",
+      "best",
+      "bharyadhikarika",
+      "biomarkers",
+      "body",
+      "both",
+      "branchi",
+      "buckin",
+      "buryan",
+      "by",
+      "call",
+      "cardiovascular",
+      "claims",
+      "coercion",
+      "competere",
+      "daciere",
+      "damerika",
+      "derna",
+      "dhatreyika",
+      "diabetes",
+      "diffuse",
+      "duckin",
+      "each",
+      "eaer",
+      "eddicatin",
+      "edos",
+      "effekts",
+      "eglecopala",
+      "ehrenvolle",
+      "eingekauften",
+  
+… [1090 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && grep -rli \"généalogie\\|genealogie\" --include=\"*.md\" --include=\"*.json\" research/docs research/philosophy-theory research/data research/src docs 2>/dev/null | grep -v archives | head -30", "description": "Où vit la généalogie de … [11 caractères tronqués]`
+
+  ```
+research/docs/journal-de-bord/2026-04-22.md
+research/docs/journal-de-bord/2026-04-25.md
+research/docs/journal-de-bord/2026-04-26.md
+research/docs/journal-de-bord/2026-05-21.md
+research/docs/journal-de-bord/2026-06-01.md
+research/docs/journal-de-bord/2026-06-03.md
+research/docs/journal-de-bord/2026-06-04.md
+research/docs/journal-de-bord/2026-06-28.md
+research/docs/journal-de-bord/2026-06-29.md
+research/docs/journal-de-bord/2026-06-30.md
+research/docs/journal-de-bord/2026-07-01.md
+research/docs/journal-de-bord/2026-07-02.md
+research/docs/journal-de-bord/2026-07-03.md
+research/docs/journal-de-bord/2026-07-07.md
+research/docs/journal-de-bord/2026-08-04.md
+research/docs/journal-de-bord/2026-08-05.md
+research/docs/journal-de-bord/2026-09-08.md
+research/docs/journal-de-bord/2026-09-09.md
+research/docs/CADRES_THEORIQUES_ET_IDEES_ORIGINALES.md
+research/docs/directives/PRODUIT_NIPADA.md
+research/philosophy-theory/DOCUMENT_DE_CONTEXTE_v3.0.md
+research/philosophy-theory/LANGAGES_CONTENEURS_v1.0.md
+research/philosophy-theory/LEXIQUE_TRANSMISSION_V15_MULTILINGUE_v0.1.md
+research/philosophy-theory/REVISION_FONDATIONS_NOYAU_QUESTIONNEMENTS_v1.0.md
+research/data/incremental_corpus/turbo_batch_20250
+… [345 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Panini && echo \"=== corpus/ hôte ===\"; ls corpus/ 2>/dev/null | head -20; echo \"=== research/data corpus dirs ===\"; find research/data -maxdepth 1 -type d | head -40; echo \"=== gutenberg ===\"; find research -maxdepth 4 -iname \"*gutenberg … [197 caractères tronqués]`
+
+  ```
+=== corpus/ hôte ===
+protoatheism
+protoatheism_tokens
+=== research/data corpus dirs ===
+research/data
+research/data/archives
+research/data/configs
+research/data/incremental_corpus
+research/data/logs
+research/data/author_profiles
+research/data/autonomous_loop
+research/data/biographies
+research/data/collocation
+research/data/mass_ingestion
+research/data/parallel_pipeline
+research/data/pubmed_ingestion
+research/data/reconstruction_guard
+research/data/scientific_ingestion
+research/data/wikipedia_ingestion
+research/data/dictionaries
+=== gutenberg ===
+research/data/author_profiles/gutenberg_texts
+research/data/mass_ingestion/backlog_gutenberg_de.db
+research/data/mass_ingestion/backlog_gutenberg_de.db-shm
+research/data/mass_ingestion/backlog_gutenberg_de.db-wal
+research/data/mass_ingestion/backlog_gutenberg_en.db
+research/data/mass_ingestion/backlog_gutenberg_en.db-shm
+research/data/mass_ingestion/backlog_gutenberg_en.db-wal
+research/data/mass_ingestion/backlog_gutenberg_es.db
+research/data/mass_ingestion/backlog_gutenberg_es.db-shm
+research/data/mass_ingestion/backlog_gutenberg_es.db-wal
+research/data/mass_ingestion/backlog_gutenberg_fr.db
+research/data/mass_ingestion/backlog_gutenberg_f
+… [1716 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageShared Panini-DatasetsIngestion Panini-ExecutionOrchestrator Panini-PublicationEngine Panini-S … [201 caractères tronqués]`
+
+  ```
+############ Panini-SemanticCore/README.md (2 lignes)
+# PaniniFS-SemanticCore
+PaniniFS-SemanticCore - module PaniniFS
+
+############ Panini-AttributionRegistry/README.md (1 lignes)
+# PaniniFS Attribution Registry
+
+############ Panini-AutonomousMissions/README.md (4 lignes)
+# PaniniFS-AutonomousMissions
+PaniniFS-AutonomousMissions - module PaniniFS
+
+> Note de migration (2025-08-30): ce module sera intégré sous `missions/` au sein de `ExecutionOrchestrator`. Voir `ARCHITECTURE/ADR-2025-08-30-modular-restructuring-option-b.md`.
+
+############ Panini-CloudOrchestrator/README.md (4 lignes)
+# PaniniFS-CloudOrchestrator
+PaniniFS-CloudOrchestrator - module PaniniFS
+
+> Note de migration (2025-08-30): ce module sera fusionné avec `modules/colab-controller` dans un nouveau module `ExecutionOrchestrator` (drivers: local, colab, cloud). Voir `ARCHITECTURE/ADR-2025-08-30-modular-restructuring-option-b.md`.
+
+############ Panini-CoLabController/README.md (227 lignes)
+# Module Colab Controller
+
+**Status**: 🚧 En développement actif  
+**Priorité**: ⭐⭐⭐ Haute (Abonnement Colab Pro disponible)  
+**Dernière mise à jour**: 2025-11-12
+
+> **Note de migration (2025-08-30)**: Ce module sera fusionné avec `modu
+… [3217 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && echo \"############ Panini-FS/README.md ($(wc -l < Panini-FS/README.md 2>/dev/null) lignes)\"; head -60 Panini-FS/README.md 2>/dev/null; echo; echo \"=== FS docs ===\"; ls Panini-FS/docs 2>/dev/null | head -30", "description": "README Panini … [5 caractères tronqués]`
+
+  ```
+############ Panini-FS/README.md (159 lignes)
+# 🎌 PaniniFS - Écosystème de Compression Sémantique Universelle
+
+[![Build Docs](https://github.com/stephanedenis/PaniniFS/actions/workflows/docs-build.yml/badge.svg)](https://github.com/stephanedenis/PaniniFS/actions/workflows/docs-build.yml)
+[![Modules Index](https://github.com/stephanedenis/PaniniFS/actions/workflows/update-modules-index.yml/badge.svg)](https://github.com/stephanedenis/PaniniFS/actions/workflows/update-modules-index.yml)
+
+> Contribution et workflow: voir `Copilotage/CONTRIBUTING.md` et `Copilotage/COPILOTAGE_WORKFLOW.md`.
+
+**PaniniFS** est un écosystème révolutionnaire de systèmes de fichiers basé sur l'analyse linguistique et la compression sémantique des contenus. Inspiré des travaux de Pāṇini et de la découverte des **dhātu informationnels** - les atomes conceptuels universels de l'information.
+
+## 🏗️ Architecture d'Entreprise Moderne
+
+L'écosystème PaniniFS est organisé en modules spécialisés pour une architecture scalable et maintenable :
+
+```
+🏛️ GOVERNANCE/     - Gouvernance, audits et processus
+📚 RESEARCH/       - Publications, découvertes et méthodologie  
+🔧 CORE/           - Cœur technique PaniniFS et analyseu
+… [1747 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini Panini-Research Panini-FS Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageShared Panini-DatasetsIngestion Panini-ExecutionOrchestrator  … [436 caractères tronqués]`

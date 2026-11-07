@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 161.4 h |
+| Durée | 161.5 h |
 | Tours | 191 |
-| Messages | 3520 |
-| Appels d'outils | 3127 |
+| Messages | 3521 |
+| Appels d'outils | 3128 |
 | Fichiers touchés | 25 |
-| Commandes | 2613 |
+| Commandes | 2614 |
 | Sous-agents | 42 |
-| Commits | 424 |
+| Commits | 425 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10254,7 +10254,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 191 — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Lire la méthode Panini et localiser le projet
 - bash — Explorer Panini
@@ -10270,7 +10270,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Explorer Panini-Research
 - bash — Écrire le plan de la semaine
 - bash — Corriger le lien et l'index
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -10395,7 +10395,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2573 autres
+- … et 2574 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10967,4 +10967,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLE
 - DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BU
 - DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES)" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T1 À 1 000 MOTS"; then echo "
+- DOCS — README T1 : UN MOT DE MOINS" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then echo "COMMIT OK $i"; break;
 

@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**15 commits** · **5 session(s)** · **5 thème(s)**
+**16 commits** · **5 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 5 | [docs.md](docs.md) |
+| docs | 6 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 4 | [portes.md](portes.md) |
@@ -25,7 +25,7 @@
 | `7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 02:09 | 0.1 h | [rapport](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/rapport.md) · [digest](../sessions/7f247e9c-00ab-4bdf-bfba-2dc5c20d7cf0/digest.md) |
 | `b8f0bcb1-5609-4053-818b-ade88583a99b` | Tu travailles dans /home/stephane/Data13 | 2026-11-07 00:49 | 1.3 h | [rapport](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/rapport.md) · [digest](../sessions/b8f0bcb1-5609-4053-818b-ade88583a99b/digest.md) |
 | `bdefb627-485e-44d1-b11c-d15dd2e6b640` | Tu travailles en **lecture seule** | 2026-11-07 09:56 | 0.2 h | [rapport](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md) · [digest](../sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 161.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 161.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -46,6 +46,7 @@
 | 01:24 | `caeb730c` | SESSION — MANDAT E181CE02 RAFRAÎCHI (236/237, 0,9916, 86,25, 0,7535 ; PROCHAINE ACTION : r035/g017 ET LA CONVENTION DES GV) |
 | 10:00 | `a407381c` | PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLES ET LES RISQUES |
 | 10:03 | `9bb298af` | DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE |
+| 10:06 | `a3712842` | DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES) |
 
 ## Le récit de la journée (écrit à la main)
 

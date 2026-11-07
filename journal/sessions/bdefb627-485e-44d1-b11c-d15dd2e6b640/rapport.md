@@ -9,10 +9,10 @@
 | Début | 2026-11-07 09:56 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 26 |
+| Messages | 20 |
+| Appels d'outils | 30 |
 | Fichiers touchés | 0 |
-| Commandes | 20 |
+| Commandes | 24 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -41,7 +41,7 @@
 - bash — Fichiers suivis par git
 - bash — Repère les documents clés
 - bash — Échantillon des modifications non commitées
-- … et 9 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
@@ -78,6 +78,10 @@ Je commence par vérifier l'état des lieux et les dépôts.
 - **T1** Définition V14_ATOMS
 - **T1** Inspecte lexique V14 et UDHR décomposé
 - **T1** Où vit la généalogie des langues
+- **T1** Localise les corpus
+- **T1** README des modules d'infrastructure
+- **T1** README Panini-FS
+- **T1** Compte les mentions de Drave par dépôt
 
 ## 4. Mesures et résultats marquants
 

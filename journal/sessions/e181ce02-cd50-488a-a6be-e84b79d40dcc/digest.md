@@ -59470,3 +59470,16 @@ sam 07 nov 2026 10:05:35 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence … [1059 caractères tronqués]`
+
+  ```
+· docs/README.md : 1001 mots > budget 1000 (T1)
+ 13 files changed, 202 insertions(+), 28 deletions(-)
+COMMIT OK 1
+a3712842 DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES)
+   9bb298af..a3712842  s/v7 -> s/v7
+   9bb298af..a3712842  master -> master
+     · docs/README.md : 1001 mots > budget 1000 (T1)
+sam 07 nov 2026 10:08:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine + Panini |\",\n            \"| [`pilotage … [778 caractères tronqués]`
