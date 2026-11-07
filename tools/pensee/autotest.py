@@ -1362,7 +1362,7 @@ def t86_gold_subsets() -> tuple[bool, str]:
     r2 = evaluer_bloc("h", h, sous(181, 200))
     p2 = round(r2["pos"]["exactitude"], 4)
     p1 = round(r1["pos"]["exactitude"], 4)
-    return abs(p2 - 0.9286) < 0.001 and abs(p1 - 0.9027) < 0.001, (
+    return abs(p2 - 0.9405) < 0.001 and abs(p1 - 0.9027) < 0.001, (
         f"r181-200 POS {p2} ; r001-180 POS {p1}")
 
 

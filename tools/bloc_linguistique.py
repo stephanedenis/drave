@@ -313,7 +313,7 @@ POS_FERME = {
     },
     "en": {
         "DET": set("the a an this that these those my your his her its our their".split()),
-        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside outside toward towards until upon within".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside toward towards until upon within".split()),
         "PRON": set("i you he she it we they me him her us them who whom which that where whose mine".split()),
         "CONJ": set("and or but nor for so yet because although while if when as".split()),
         "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must am".split()),
@@ -791,12 +791,20 @@ class Heuristique:
 
     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
-                 union: bool = True):
+                 union: bool = True, partition: str = "alternative"):
         self.profils = profils
         self.segmenter_s = segmenter_s
         self.seuil_ouvert = seuil_ouvert
         self.seuil_langue = seuil_langue
         self.union = union
+        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
+        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
+        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
+        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+            raise ValueError("partition attend 'brut', 'alternative', 'filtrer_union' ou 'filtrer'")
+        self.partition = partition
 
     # -- langues / script ---------------------------------------------------
     def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
@@ -1360,7 +1368,7 @@ class Heuristique:
         # 3 c. R4-en : après une **copule**, un mot inconnu (NOUN, confiance ≤ 0,45) est un
         # ADJECTIF attribut (« the car is fast ») — mesuré +0,41 dev / +0,31 test, 0 cassé.
         _copules = {"is", "are", "was", "were", "am", "be", "been", "being", "seems", "seem",
-                    "looks", "look", "feels", "feel", "becomes", "become"}
+                    "looks", "look", "becomes", "become"}
         if lg == "en":
             for _k, _i in enumerate(pos_idx):
                 _e = etiquettes[_i]
@@ -1549,6 +1557,10 @@ class Heuristique:
         longueur = sum(u.fin - u.debut for u in unites)
         fraction = longueur / max(1, len(texte))
         etiquettes.sort(key=lambda e: (e.debut, e.fin, e.niveau))
+        if self.partition != "brut":
+            _expliciter_partition(etiquettes, filtrer=(
+                "" if self.partition == "alternative"
+                else "union" if self.partition == "filtrer_union" else "strict"))
         trace.append({"etape": "niveaux", "etiquettes": len(etiquettes),
                       "niveaux": sorted({e.niveau for e in etiquettes}),
                       "unites_semantiques": len(unites), "fraction": round(fraction, 4)})
@@ -2123,6 +2135,135 @@ class NeuronalLLMPragmatique:
 
 
 # --------------------------------------------------------------------------- compositions
+
+
+def _relation_partition(x: Etiquette, y: Etiquette) -> str:
+    """La relation de `y` vue **depuis** `x` : `inclut` = x contient y."""
+    if x.debut == y.debut and x.fin == y.fin:
+        return "meme_span"
+    if x.debut <= y.debut and x.fin >= y.fin:
+        return "inclut"
+    if y.debut <= x.debut and y.fin >= x.fin:
+        return "inclus"
+    return "croise"
+
+
+def _cle_preferee(e: Etiquette) -> tuple:
+    """La vue préférée : le segment du chunker (union), le plus large, puis le plus sûr.
+
+    Mesuré sur le gold 612 : dans 179/207 groupes ambigus qui portent un span du gold, le
+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.
+    La préférence ne supprime rien par défaut : elle **classe**.
+    """
+    return (0 if (e.meta or {}).get("union") else 1, -(e.fin - e.debut), -e.confiance,
+            e.debut, e.fin, e.type)
+
+
+def _groupes_partition(segs: list[Etiquette]) -> list[list[Etiquette]]:
+    """Les composantes connexes du graphe de chevauchement, ordonnées par position."""
+    parent = list(range(len(segs)))
+
+    def trouver(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(segs)):
+        for j in range(i + 1, len(segs)):
+            if max(segs[i].debut, segs[j].debut) < min(segs[i].fin, segs[j].fin):
+                ri, rj = trouver(i), trouver(j)
+                if ri != rj:
+                    parent[rj] = ri
+    groupes: dict[int, list[Etiquette]] = {}
+    for i, e in enumerate(segs):
+        groupes.setdefault(trouver(i), []).append(e)
+    return sorted((g for g in groupes.values() if len(g) > 1),
+                  key=lambda g: (min(e.debut for e in g), min(e.fin for e in g),
+                                 min(e.type for e in g)))
+
+
+def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> None:
+    """Documente (et, si `filtrer`, linéarise) les chevauchements de syntagmes.
+
+    `meta.partition` porte le groupe, le rang et la vue ; `meta.alternative` porte les
+    autres segments du groupe, leur relation vue du porteur et, en mode `filtrer`, le
+    drapeau `retire`. Aucun segment n'est supprimé en mode `alternative`.
+
+    `filtrer="union"` : on retire le S qui **contient** un segment chunker (le filtre
+    union du P0-3) ; les autres chevauchements restent documentés. `filtrer="strict"` :
+    le chunker est la partition — **tous** les segments `union` sont conservés, et tous
+    les S qui les chevauchent sont retirés. Dans les deux cas, le retiré reste lisible
+    dans `meta.alternative` du segment conservé, avec `retire: true`.
+    """
+    segs = [e for e in etiquettes if e.niveau == "syntagme"]
+    groupes = _groupes_partition(segs)
+    rangs: dict[int, tuple[int, int]] = {}
+    for gid, groupe in enumerate(groupes):
+        for i, e in enumerate(sorted(groupe, key=_cle_preferee)):
+            rangs[id(e)] = (gid, i + 1)
+    retirees: set[int] = set()
+    if filtrer == "union":
+        for groupe in groupes:
+            unions = [e for e in groupe if (e.meta or {}).get("union")]
+            for e in groupe:
+                if not (e.meta or {}).get("union") and any(
+                        u.debut >= e.debut and u.fin <= e.fin
+                        and (u.fin - u.debut) < (e.fin - e.debut) for u in unions):
+                    retirees.add(id(e))
+    elif filtrer == "strict":
+        for groupe in groupes:
+            unions = [e for e in groupe if (e.meta or {}).get("union")]
+            for e in groupe:
+                if not (e.meta or {}).get("union") and any(
+                        max(e.debut, u.debut) < min(e.fin, u.fin) for u in unions):
+                    retirees.add(id(e))
+        while True:  # sécurité : union-union, ou tout chevauchement résiduel
+            gardes = [e for e in etiquettes
+                      if e.niveau == "syntagme" and id(e) not in retirees]
+            paires = [(x, y) for i, x in enumerate(gardes) for y in gardes[i + 1:]
+                      if max(x.debut, y.debut) < min(x.fin, y.fin)]
+            if not paires:
+                break
+            for x, y in paires:
+                rx = rangs.get(id(x), (0, 99))[1]
+                ry = rangs.get(id(y), (0, 99))[1]
+                retirees.add(id(x if rx >= ry else y))
+    for gid, groupe in enumerate(groupes):
+        for e in groupe:
+            if filtrer and id(e) in retirees:
+                continue
+            meta = dict(e.meta or {})
+            meta["partition"] = {"groupe": gid, "rang": rangs[id(e)][1],
+                                 "membres": len(groupe),
+                                 "vue": ("alternative" if not filtrer
+                                         else "filtrer_union" if filtrer == "union"
+                                         else "filtrer")}
+            vues = []
+            for autre in groupe:
+                if autre is e:
+                    continue
+                vue = {"type": autre.type, "debut": autre.debut, "fin": autre.fin,
+                       "source": autre.source,
+                       "union": bool((autre.meta or {}).get("union")),
+                       "relation": _relation_partition(e, autre),
+                       "rang": rangs[id(autre)][1]}
+                if filtrer:
+                    vue["retire"] = id(autre) in retirees
+                att = (autre.meta or {}).get("attachement")
+                if att:
+                    vue["attachement"] = {"segment": att.get("segment", ""),
+                                          "cible": att.get("cible", "")}
+                role = (autre.meta or {}).get("role")
+                if role:
+                    vue["role"] = role
+                vues.append(vue)
+            vues.sort(key=lambda v: (v["rang"], v["debut"], v["fin"], v["type"]))
+            meta["alternative"] = vues
+            e.meta = meta
+    if retirees:
+        etiquettes[:] = [e for e in etiquettes
+                         if not (e.niveau == "syntagme" and id(e) in retirees)]
 
 
 def _supprimer_chevauchements(etiquettes: list[Etiquette],

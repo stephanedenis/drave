@@ -1,0 +1,56 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "defaut": "alternative",
+ "paires": {
+  "total": 239,
+  "s_contient_chunker": 0.531,
+  "chunker_contient_s": 0.335,
+  "meme_span": 0.025,
+  "croise": 0.109
+ },
+ "modes": {
+  "alternative": {
+   "f1": 0.6482,
+   "exact": "235/236",
+   "pos": 0.85,
+   "paires": 239,
+   "cout_json": "+10,4 %"
+  },
+  "filtrer_union": {
+   "f1": 0.6163,
+   "exact": "217/218",
+   "paires": 91
+  },
+  "filtrer": {
+   "f1": 0.6954,
+   "exact": "217/218",
+   "paires": 0
+  },
+  "brut": {
+   "f1": 0.6482,
+   "exact": "235/236",
+   "paires": 239
+  }
+ },
+ "rejetes": {
+  "supprimer_tous_union": {
+   "f1": 0.4957,
+   "exact": 199
+  },
+  "dedup_silencieuse": {
+   "f1": 0.6141,
+   "exact": 208
+  }
+ },
+ "controles": {
+  "autotest": "183/183",
+  "chunker_seul": "0 chevauchement",
+  "placebo": "hasard même nombre"
+ },
+ "limites": [
+  "gold ne tranche pas",
+  "meta.alternative hors schéma v1",
+  "coût JSON non mesuré côté client"
+ ]
+}

@@ -11,13 +11,13 @@
 > **Snapshot** : référence **B13** commit `2ba393b0`, `bloc_linguistique.py` SHA
 > `f3db75fc…`, gold `3663be6c…` / `05d4f6df…` / `e3e704ce…` ; split `gold_split.py`
 > (`crc32(id) % 3 == 0` → test). Le dépôt a bougé **pendant** la mesure (correctif d’élision,
-> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.3),
+> gold corrigé) : un instantané HEAD `dd0e5e47…` sert de contrôle de reproductibilité (§ 2.2),
 > pas de référence.
 >
 > **Dispositif** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_pos`, `POS_FERME`,
 > boucles 3 a/3 b/3 a bis), [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
 > [`gold_split.py`](../tools/tests/linguistique/gold_split.py). Copies **en mémoire** du module ;
-> patches appliqués à des copies `/tmp` ; **aucun fichier du dépôt modifié**.
+> patches appliqués à des copies `/tmp` ; **aucun fichier de code modifié**. Les deux livrables demandés étaient déjà suivis à HEAD `5c5d3b52` (intégration par un autre chantier) ; ils sont mis à jour ici.
 >
 > **JSON** : [`pensee-pos-r4.json`](pensee-pos-r4.json) (patchs exacts inclus).
 
@@ -268,7 +268,7 @@ lot ; il ne faut pas le lire comme un gain général de segmentation.
 | `He walks down the street.` | `down` PREP | **ADV** | ❌ |
 | `The car is fast.` | `fast` ADJ | NOUN (core) / **ADV** (`fast`) | core ✅, `fast` ❌ |
 
-Ces six mots (`where`, `as`, `late`, `outside`, `hard`, `down`) sont **contextuels**. La liste
+Ces mots (`where`, `as`, `late`, `outside`, `hard`, `down`, et `fast`) sont **contextuels**. La liste
 fermée est un choix majoritaire, pas une règle ; les 50 textes libres n’en exercent qu’un
 (`Where` interrogatif). Il faut des règles contextuelles pour les six.
 
@@ -441,9 +441,25 @@ python3 /tmp/pos_r4/compute_aux.py
 python3 /tmp/pos_r4/assemble_json.py
 ```
 
-Aucun fichier du dépôt n’a été modifié par cette session : les deux livrables sont
-`reports/rapport-pos-r4.md` et `reports/pensee-pos-r4.json`. Les patches n’ont été appliqués
-qu’à des copies `/tmp`.
+> **Périmètre de clôture.** La mission interdisait de modifier l’existant et de committer :
+> pas de journal, pas de `docs/pilotage/`, pas de mise à jour d’`INDEX.md`. Aucun commit, aucun
+> fichier de code modifié. Les deux livrables demandés étaient déjà suivis à HEAD `5c5d3b52`
+> (intégration par un autre chantier) ; ils sont mis à jour ici. Les portes ne sont pas lancées.
+
+Aucun fichier existant **hors les deux livrables** n’a été modifié par cette session : les deux
+fichiers sont `reports/rapport-pos-r4.md` et `reports/pensee-pos-r4.json`. Les patches n’ont été
+appliqués qu’à des copies `/tmp`.
+
+### 9.1 État live (information, hors mesure de référence)
+
+Instantané de fin de session : `tools/bloc_linguistique.py` SHA `83821c9e…`, HEAD `ba39a7b1`
+(frontières de phrase) plus des modifications en cours. Sur le gold **B13**, il donne **POS
+85,00 %** (dev 84,94 / test 85,11), **37 correctifs / 0 cassé / 2 faux→faux** : c’est exactement le
+paquet sûr mesuré. Les deux écarts signalés pendant la mesure ont été corrigés : `outside` n’est
+plus dans PREP (le correctif gold ADV est retrouvé) et `_copules` n’inclut plus `feel`
+(`He feels pain.` reste NOUN). Le live omet encore `appear`/`remain` (sans effet sur ce gold) et
+ajoute les changements de frontières de phrase : F1/attachement live (0,6459 / 231-232) ne sont
+donc pas comparables à B13. La mesure de référence reste B13 ; le live est un contrôle.
 
 ### Annexe A.1 — R4 (deux insertions)
 
@@ -503,10 +519,12 @@ Remplacer le bloc `"en"` par :
 
 ### Annexe A.3 — les sondes de contrôle
 
-Les 30 sondes (nom/verbe, adjectif, ambiguïtés `where`/`as`/`late`/`outside`/`hard`/`down`) sont
+Les 29 sondes (nom/verbe, adjectif, ambiguïtés `where`/`as`/`late`/`outside`/`hard`/`down`) sont
 dans le JSON, clé `controles`, avec les colonnes `base`, `r4_en`, `r4_bilingue`, `r4_en_large`,
 `cc_core`, `cc_fast`, `r4_en+cc_core`, `r4_bilingue+cc_core`. Les jugements y sont `ok` / `ko`.
 
-> **Non intégré.** Ces patches sont des propositions mesurées, pas du code appliqué : la mission
-> interdisait de modifier l’existant. Les lignes citées sont celles du snapshot B13 `2ba393b0` ;
-> toute évolution de `_pos`, de la boucle 3 bis ou de `POS_FERME` décale les ancres, pas les règles.
+> **État.** Ces patches sont des propositions mesurées ; cette session n’a modifié aucun fichier
+> existant. Un autre chantier a intégré une variante depuis (voir § 9.1) : elle diffère sur
+> `outside` (resté dans PREP) et sur `feel` (ajouté à `_copules`). Les lignes citées sont celles du
+> snapshot B13 `2ba393b0` ; toute évolution de `_pos`, de la boucle 3 bis ou de `POS_FERME` décale
+> les ancres, pas les règles.

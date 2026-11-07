@@ -55023,3 +55023,168 @@ README + état 694 787
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières de phrase : 32/40 → **0/40**, gold in … [1902 caractères tronqués]`
+
+  ```
+· reports/README.md : 2804 mots > budget 2800 (T1)
+ create mode 100644 reports/rapport-frontieres-integrees.md
+ create mode 100644 reports/rapport-frontieres-phrase.md
+COMMIT OK 1
+ba39a7b1 B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183
+   5c5d3b52..ba39a7b1  s/v7 -> s/v7
+   5c5d3b52..ba39a7b1  master -> master
+ven 06 nov 2026 20:28:27 EST
+pensee-partition-syntagmes.json
+rapport-partition-syntagmes.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Le sous-agent partition a livré : je lis sa recommandation
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\nfor k in d:\n    print(k, ':', str(d[k])[:300] if not isinstance(d[k],(dict,list)) else (list(d[k])[:8] if isinstance(d[k],dict) else len(d[ … [52 caractères tronqués]`
+
+  ```
+rapport : partition-syntagmes
+ligne : B13
+branche : s/v7
+commit : fa1b0c6eb90b3d27ec78f946d677817ba08b419e
+commit_head : 5c5d3b527bf337d7c4374b3050fd97ae70ae3c2a
+date : 2026-11-06
+objet : P0-3 : expliciter la partition des syntagmes du bloc linguistique (S + chunker), classer les 107 + 132 paires des deux audits, mesurer deux options (alternative étiquetée, filtre union) et recommander un défaut avec patch exact et schéma de meta.alternative.
+verdict : Les 239 paires des deux bancs sont **toutes** des paires S × chunker : 53,1 % de S qui contient le chunker, 33,5 % l'inverse, 2,5 % de mêmes bornes, 10,9 % de croisements. L'alternative étiquetée ne perd rien (F1 0,5849, exact 222/239) ; le filtre union partiel perd 5 attachements (222→217) et laiss
+dispositif : ['pin', 'corpus', 'harnais', 'reproduction']
+cartographie : ['synthese', 'par_audit', 'classes', 'exemples', 'groupes', 'controles']
+options : ['definitions', 'gold', 'bancs', 'libres', 'lecture', 'preference']
+controles : ['reproduction_audits', 'chunker_seul', 's_sans_union', 'supprimer_tous_les_union', 'filtre_inverse', 'filtres_agressifs', 'hasard_meme_nombre', 'pos_et_determinisme']
+recommandation : ['choix', 'defaut', '
+… [265 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\nprint('VERDICT:', d['verdict'])\nprint('--- recommandation'); print(json.dumps(d['recommandation'], ensure_ascii=False)[:1500])\nprint('---  … [125 caractères tronqués]`
+
+  ```
+VERDICT: Les 239 paires des deux bancs sont **toutes** des paires S × chunker : 53,1 % de S qui contient le chunker, 33,5 % l'inverse, 2,5 % de mêmes bornes, 10,9 % de croisements. L'alternative étiquetée ne perd rien (F1 0,5849, exact 222/239) ; le filtre union partiel perd 5 attachements (222→217) et laisse 91 paires ; la partition stricte perd 17 (222→205) et supprime les 239 paires ; la déduplication silencieuse en perd 14 (222→208). Recommandation : A par défaut, B2 en option, B1 documenté comme variante économique partielle.
+--- recommandation
+{"choix": "A par défaut, B2 en option « partition », B1 documenté comme variante économique partielle", "defaut": {"mode": "alternative", "pourquoi": "aucune perte : F1 0,5849 et exact 222/239 sont ceux de la base ; le client choisit, le rang 1 est le chunker le plus large (179/207 groupes avec gold) ; coût +10,4 % de JSON sur les 96 textes."}, "option_partition": {"mode": "filtrer", "pourquoi": "0 paire, F1 0,6172 (+0,0323), exact 205/239 (0,8577), +2,0 % de JSON ; les S retirés restent dans meta.alternative avec retire=true : la vue est linéaire, la donnée n'est pas perdue."}, "option_economique": {"mode": "filtrer_union", "pourquoi":
+… [2067 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\ndiff=d['patch']['bloc_linguistique']['diff']\nprint(diff[:4000])\nPY", "description": "Voir le diff du patch A"}`
+
+  ```
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -529,12 +529,20 @@
+ 
+     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+-                 union: bool = True):
++                 union: bool = True, partition: str = "alternative"):
+         self.profils = profils
+         self.segmenter_s = segmenter_s
+         self.seuil_ouvert = seuil_ouvert
+         self.seuil_langue = seuil_langue
+         self.union = union
++        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
++        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
++        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
++        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
++        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
++        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
++            raise ValueError("partition attend 'brut', 'alternative', 'filtrer_union' ou 'filtrer'")
++        self.partition =
+… [2786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\nopen('/tmp/partition.patch','w').write(d['patch']['bloc_linguistique']['diff'])\nprint('patch écrit', len(d['patch']['bloc_linguistique']['d … [363 caractères tronqués]`
+
+  ```
+patch écrit 171 lignes
+check EXIT=0
+APPLIQUÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import ast; ast.parse(open('tools/bloc_linguistique.py').read()); print('syntaxe OK')\" && timeout 900 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguist … [745 caractères tronqués]`
+
+  ```
+syntaxe OK
+défaut (alternative) : POS 0.8496 | F1 0.6474 | exact 235 / 236 | couv 0.9874
+partition stricte    : F1 0.6954 | exact 217 / 218 | couv 0.9121
+meta.alternative présent : True
+  ```
+
+### 🤖 Assistant
+
+⏵ Le patch partition est intégré (défaut = alternatives étiquetées, **mesures inchangées**). Autotest
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après partition", "timeoutMs": 1900000}`
+
+  ```
+183/183 portes tenues
+  ```
+
+### 👤 Utilisateur
+
+Agent 338f8b55-bcd5-464a-a63e-b97381eff55d sent a message: 
+POS R4/classes fermées — mesures terminées, mais l’intégration live diverge du patch mesuré.
+
+Référence mesurée : B13 (module 2ba393b0 + gold B13) → 83,83 % / F1 0,6181 / 222-222.
+- R4 bilingue : +0,74 dev / +0,71 test, 23 correctifs / 0 cassé, 17 faux→faux, F1 inchangé, att 222/222.
+- Classes fermées core : +0,78 / +0,81, 25 correctifs / 0 cassé, F1 0,6188, att 222/222.
+- Paquet sûr R4-en + classes : +1,19 / +1,11, POS 85,00, 37/0, 2 faux→faux (born, hung), F1 0,6188, att 222/222 ; 1 faux libre (Where interrogatif).
+- Paquet max R4 bilingue + classes : +1,51 / +1,51, POS 85,34, 48/0, 11 faux→faux, F1 0,6188, att 222/222 ; 9 changements libres (3 justes / 6 faux).
+
+Deux écarts dans le code live (`tools/bloc_linguistique.py`, HEAD 5c5d3b52 + modifs parallèles) :
+1. `outside` est toujours dans PREP **et** a été ajouté à ADV. Comme PREP est testé avant ADV, `outside` reste PREP : le correctif `outside` (gold ADV, « play outside ») est perdu. Sur le gold B13, le code live donne 36 correctifs (84,96) au lieu de 37 (85,00). Le patch mesuré (A.2 du rapport) **retire `outside` de PREP**.
+2. Le R4 inline contient `feel/feels/becomes/become` (et pas `appear/remain`). Or `feel` est justement exclu de la liste stricte mesurée : « He feels pain. » → `pain` ADJ (faux positif). Les deux contrôles demandés passent bien (`He is a doctor`, `He is running`), mais pas cette sonde.
+
+À faire côté intégration : retirer `outside` de PREP (1 correctif, +0,03 pt) ; retirer `feel`/`feels` de `_copules` (ou assumer le faux positif). Les F1/att live (0,6452 / 231-232) diffèrent de B13 à cause des changements parallèles de frontières de phrase, pas du paquet POS.
+
+Livrables : `reports/rapport-pos-r4.md` + `reports/pensee-pos-r4.json` (patchs exacts, contrôles, placebo 200 tirages, 50 textes libres). Aucun commit, aucun fichier existant modifié par moi ; les deux fichiers sont déjà suivis (commit 5c5d3b52) et je les ai mis à jour de quelques corrections de cohérence. Le JSON contient la clé `perimetre` et les patchs exacts.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('beside beyond despite except inside toward towards until upon within\",',\n            'beside beyond despite except inside … [1431 caractères tronqués]`
+
+  ```
+outside retiré de PREP ; feel retiré des copules
+1
+POS 0.85 | F1 0.6482 | exact 235 / 236
+[('The', 'DET'), ('car', 'NOUN'), ('is', 'AUX'), ('fast', 'ADJ')]
+[('He', 'PRON'), ('feels', 'VERB'), ('pain', 'NOUN')]
+[('He', 'PRON'), ('is', 'AUX'), ('a', 'DET'), ('doctor', 'NOUN')]
+[('He', 'PRON'), ('is', 'AUX'), ('running', 'VERB')]
+[('Play', 'NOUN'), ('outside', 'NOUN')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après outside/feel", "timeoutMs": 1900000}`
+
+  ```
+❌ T86 sous-ensembles     r181-200 POS 0.9405 ; r001-180 POS 0.9027
+  182/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nt=t.replace('abs(p2 - 0.9286) < 0.001 and abs(p1 - 0.9027) < 0.001','abs(p2 - 0.9405) < 0.001 and abs(p1 - 0.9027) < 0.001')\np.write_text … [181 caractères tronqués]`
+
+  ```
+T86 recalée
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **POS 85,00 %**, partition intégrée : je fige la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-partition-integree.md <<'MD'\n# B13 — la partition des syntagmes : les alternatives sont étiquetées, les mesures ne bougent pas\n\n> **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** … [5932 caractères tronqués]`
+
+  ```
+fiche + JSON
+README + état 695 788
+     · reports/README.md : 2822 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 👤 Utilisateur
+
+Agent 338f8b55-bcd5-464a-a63e-b97381eff55d sent a message: 
+Suivi POS R4/classes : les deux écarts de l’intégration live sont corrigés dans l’instantané courant (`tools/bloc_linguistique.py` SHA `83821c9e…`, HEAD `ba39a7b1`) : `outside` n’est plus dans PREP et `_copules` n’inclut plus `feel`. Sur le gold B13, le live donne maintenant **POS 85,00 % (dev 84,94 / test 85,11), 37 correctifs / 0 cassé / 2 faux→faux** — exactement le paquet sûr mesuré. F1/att live (0,6459 / 231-232) diffèrent de B13 à cause des changements de frontières de phrase, pas du paquet POS. J’ai mis à jour `reports/rapport-pos-r4.md` (§ 9.1) et `reports/pensee-pos-r4.json` (`etat_live`) avec cet instantané. La mesure de référence reste B13 (83,83 / 0,6181 / 222-222).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : `meta.alternative` par défaut (mesures i … [2243 caractères tronqués]`

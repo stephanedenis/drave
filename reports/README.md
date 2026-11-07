@@ -15,10 +15,12 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : `meta.alternative` par défaut, `filtrer` en option |
+| [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |
 | [`rapport-frontieres-integrees.md`](rapport-frontieres-integrees.md) | **B13** — frontières : 32/40 → **0/40** |
-| [`rapport-frontieres-phrase.md`](rapport-frontieres-phrase.md) | **B13** — les frontières (A28) |
+| [`rapport-frontieres-phrase.md`](rapport-frontieres-phrase.md) | **B13** — frontières (A28) |
 | [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |
-| [`rapport-pos-r4.md`](rapport-pos-r4.md) | **B13** — R4 et classes fermées (A27) |
+| [`rapport-pos-r4.md`](rapport-pos-r4.md) | **B13** — R4 et classes (A27) |
 | [`rapport-composition-sans-perte.md`](rapport-composition-sans-perte.md) | **B13** — la cascade ne perd plus (0,8383, 235/236) |
 | [`rapport-morphologie-verbes.md`](rapport-morphologie-verbes.md) | **B13** — la morphologie du 1er groupe : exact **235/236**, couverture **0,9874**, 3 spans |
 | [`rapport-gold-gp-corrige.md`](rapport-gold-gp-corrige.md) | **B13** — le gold corrigé (4 GP) : couverture **0,9456** |
@@ -151,7 +153,6 @@
 | [`rapport-native-professeur.md`](rapport-native-professeur.md) | **N2.2** — professeur byte-level 23,76 M : **1,236 bit/octet**, PPL **2,355** |
 | [`rapport-native-sft.md`](rapport-native-sft.md) | **N4.6** — SFT minimal : **24/24** vus, **0/4** tenus |
 | [`rapport-native-consignes.md`](rapport-native-consignes.md) | **N4.8** — consignes courtes : **0/40** sur mots tenus |
-| [`rapport-native-best-2.md`](rapport-native-best-2.md) | **N0.15/N4.7** — meilleur **2,6998** servi : parité native, **650 ms** |
 | [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`fiche-nuit-17-10.md`](fiche-nuit-17-10.md) | les mesures de la couche commune / la synthèse de la nuit |
 | [`alignement-verne.md`](alignement-verne.md) | l'alignement phrase à phrase du *Tour du monde*, validé aux ancres |

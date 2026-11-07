@@ -2578,3 +2578,300 @@ bloc_l/x47
 bloc_l/x48
   ```
 
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_pensee.py'\ns=open(p).read()\ns=s.replace('''    \"sans_syntagme\": {\"brut\": 6, \"alternative\": 6, \"filtrer_union\": 6, \"filtrer\": 6},''',\n            '''    \"sans_syntagme\": {\"brut\": 6, \"alternative\": 6, \"filt … [1361 caractères tronqués]`
+
+  ```
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-partition-syntagmes.json 42800 octets
+ok
+['fiabilite/f13', 'fiabilite/f18', 'fiabilite/f27', 'fiabilite/f37', 'bloc_l/x47', 'bloc_l/x48']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git log -1 --format='%cd %s' && ls -la reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json", "description": "Check current HEAD and new files"}`
+
+  ```
+5c5d3b527bf337d7c4374b3050fd97ae70ae3c2a
+Fri Nov 6 20:18:29 2026 -0500 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183
+-rw-r--r--. 1 stephane stephane 42800  6 nov 20:26 reports/pensee-partition-syntagmes.json
+-rw-------. 1 stephane stephane 39911  6 nov 20:26 reports/rapport-partition-syntagmes.md
+  ```
+
+- **bash** `{"command": "set -e\nR=/home/stephane/Data13TB/stephane/GitHub/Qtrinet\nrm -rf /tmp/head_patch_test; mkdir -p /tmp/head_patch_test/tools\ncd \"$R\"\ngit show HEAD:tools/bloc_linguistique.py > /tmp/head_patch_test/tools/bloc_linguistique.py\ngit show HEAD:tools/drave.py > /tmp/head_patch_test/tools/d … [218 caractères tronqués]`
+
+  ```
+checking file tools/bloc_linguistique.py
+Hunk #1 succeeded at 558 (offset 29 lines).
+Hunk #2 succeeded at 1341 (offset 96 lines).
+Hunk #3 succeeded at 1921 (offset 98 lines).
+checking file tools/drave.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"(HEAD `d73e7d1f` au moment de la rédaction ; le gold a été corrigé après l'audit,\",\n         … [1605 caractères tronqués]`
+
+  ```
+ok
+38:cette étude (HEAD `5c5d3b52` au moment de la rédaction ; le gold a été corrigé après l'audit,
+50:Le patch proposé s'applique aussi au HEAD `5c5d3b52` (`patch -p1 --dry-run` : hunks à +29/+96/+98
+51:lignes ; testé aussi à `d73e7d1f` : +29/+81/+83). Les chiffres de ce rapport sont ceux du commit d'audit, pas ceux du HEAD.
+314:`trace`. Il s'applique à `fa1b0c6e` et, avec offsets (+29/+96/+98), au HEAD `5c5d3b52`. La copie
+493:`drave.py` n'existe pas à `fa1b0c6e` ; ce diff s'applique au HEAD `5c5d3b52` (sha256 de la copie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- our files ---' && git status --short reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json && echo '--- json valid ---' && python3 -m json.tool reports/pensee-partition-syntagmes.json >/dev/null &&  … [285 caractères tronqués]`
+
+  ```
+--- our files ---
+?? reports/pensee-partition-syntagmes.json
+?? reports/rapport-partition-syntagmes.md
+--- json valid ---
+OK
+--- fences ---
+14
+--- stale d73 ---
+reports/rapport-partition-syntagmes.md:51:lignes ; testé aussi à `d73e7d1f` : +29/+81/+83). Les chiffres de ce rapport sont ceux du commit d'audit, pas ceux du HEAD.
+reports/pensee-partition-syntagmes.json:852:    "teste_aussi_sur": "d73e7d1f (29/81/83)"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib\nr=pathlib.Path('reports/rapport-partition-syntagmes.md').read_text(encoding='utf-8')\n# fences\nprint('fences', r.count('```'), 'even' if r.count('```')%2==0 else 'ODD')\n# table separator count  … [538 caractères tronqués]`
+
+  ```
+fences 14 even
+link exists True
+headings ['# Partition des syntagmes — cartographie, deux options mesurées, recommandation', '## 0. Résumé en une page', '## 1. Dispositif', '### 1.1 Pourquoi épingler', '### 1.2 Validation du harnais : les chiffres des audits sont reproduits', '### 1.3 Harnais et reproduction', '## 2. Cartographie des chevauchements', '### 2.1 Effectifs', '### 2.2 Les quatre classes', '### 2.3 Exemples, un par classe', '### 2.4 Ce que la cartographie impose au produit', '## 3. Deux options mesurées']
+lines 710 chars 39394
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\n# classes sums\ntot=sum(c['total'] for c in d['cartographie']['classes'])\nprint('classes total',tot)\nfor k in ['audit_1','audit_2','libres … [649 caractères tronqués]`
+
+  ```
+classes total 239
+audit_1 107
+audit_2 132
+libres 59
+fiabilite classes sum 107 paires 107
+bloc_l classes sum 132 paires 132
+libres classes sum 59 paires 59
+base 0.5849 222 239
+alternative 0.5849 222 239
+filtrer_union 0.6163 217 239
+filtrer 0.6172 205 239
+dedup 0.6141 208 239
+glouton_att_union 0.5892 213 239
+regle_mix_E 0.6179 206 239
+sans_union 0.4957 199 None
+filtrer_contenu 0.5006 208 None
+union_any 0.4959 199 None
+widest 0.4967 200 None
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -E '222|217|205|208|239|0,5849|0,6163|0,6172|0,6141|10,4|7,2|2,0|91 paires|299|193,15' reports/rapport-partition-syntagmes.md | tail -40", "description": "Grep key numbers for consistency"}`
+
+  ```
+171:| base (S + union, brut) | 0,5849 | 0,6292 | 0,5464 | 0,7336 | 0,7581 | 0,5537 | **222** | **0,9289** | 221 |
+172:| **A — alternative** | 0,5849 | 0,6292 | 0,5464 | 0,7336 | 0,7581 | 0,5537 | **222** | **0,9289** | 221 |
+173:| **B1 — filtrer_union** | **0,6163** | 0,7122 | 0,5432 | 0,7545 | 0,7581 | 0,5537 | **217** | 0,9079 | 216 |
+174:| **B2 — filtrer** | **0,6172** | **0,7445** | 0,5271 | **0,7605** | 0,7581 | 0,5537 | **205** | 0,8577 | 204 |
+175:| déduplication | 0,6141 | 0,7283 | 0,5309 | 0,7432 | 0,7581 | 0,5537 | 208 | 0,8703 | 207 |
+177:| partition mix_E | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
+181:`unites_semantiques`. Le hash des POS est le même (`cb4757217465da39`) dans les quatre modes.
+185:| variante | exact | perte vs 222 | paires supprimées | perte par paire | gain F1 | gain F1 par attache perdu |
+187:| base | 222 | — | — | — | — | — |
+188:| A | 222 | **0** | 0 | 0 | 0 | — |
+189:| B1 | 217 | **5** | 148 | **0,034** | +0,0314 | **0,0063** |
+190:| B2 | 205 | **17** | 239 | 0,071 | +0,0323 | 0,0019 |
+191:| déduplication | 208 | **14** | 239 | 0,059 | +0,0292 | 0,0021 |
+192:| glouton attachement | 213 | **9** | 239 | 0,038 | +0,00
+… [2420 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, json, os\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp\nfrom patch_eval import textes_bancs\nos.environ.pop('DEEPSEEK_KEY_FILE',None)\nh=bp.Heuristique(); n=bp.Moc … [793 caractères tronqués]`
+
+  ```
+cascade syntagmes 584 avec meta.partition 220 alternatives dangling 280
+parallele syntagmes 584 avec meta.partition 220 alternatives dangling 280
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && sed -n 1950,1995p tools/bloc_linguistique.py", "description": "Locate fusion else block for metadata strip"}`
+
+  ```
+class Cascade:
+    """L'heuristique d'abord ; le neuronal seulement si un niveau reste sous le seuil."""
+
+    nom = "cascade"
+
+    def __init__(self, heuristique: BlocLinguistique, neuronal: BlocLinguistique,
+                 seuil: float = 0.6, niveaux=("morphème", "pos", "syntagme", "discours", "pragmatique"),
+                 priorite_syntagme: str = "heuristique",
+                 priorite_par_niveau: dict | None = None,
+                 priorite_par_type: dict | None = None):
+        self.h = heuristique
+        self.n = neuronal
+        self.seuil = seuil
+        self.niveaux = niveaux
+        self.priorite_syntagme = priorite_syntagme
+        self.priorite_par_niveau = (priorite_par_niveau if priorite_par_niveau is not None
+                                     else priorite_par_defaut())
+        self.priorite_par_type = dict(priorite_par_type or {})
+        self.appels_neuronal = 0
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        a = self.h.analyser(texte, langue, contexte)
+        couv = a.couverture()
+        residuel = [n for n in self.niveaux if couv.get(n, 0.0) < self.seuil]
+        if no
+… [880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && grep -n 'etiquettes = _supprimer_chevauchements' -B 5 -A 5 tools/bloc_linguistique.py", "description": "Locate fusion dedup line"}`
+
+  ```
+1903-            src = types.get((e.niveau, e.type), choisis.get(e.niveau))
+1904-            if src is None or e.source == src:
+1905-                etiquettes.append(e)
+1906-        # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
+1907-    else:
+1908:        etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
+1909-    if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
+1910-        lg, script = a.langue, a.script
+1911-    else:
+1912-        lg, script = b.langue, b.script
+1913-    unites = _fusionner(a.unites_semantiques + b.unites_semantiques)
+  ```
+
+### 🤖 Assistant
+
+⏵ Fixing a real composition edge case: stale alternatives after `_fusion` dedup
+
+- **bash** `{"command": "cd /tmp/partition_syntagmes && python3 - <<'PY'\np='construire_patch.py'\ns=open(p).read()\nold = '''DST.write_text(s, encoding=\"utf-8\")\nprint(\"écrit\", DST, len(s.splitlines()), \"lignes\")'''\nnew = '''# 4. ne pas laisser de références mortes dans les compositions qui dédupliquent … [1330 caractères tronqués]`
+
+  ```
+patched generator
+écrit /tmp/pin_audit/tools/bloc_partition.py 2340 lignes
+185 /tmp/partition_syntagmes/patch_final.diff
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && timeout 2400 python3 /tmp/partition_syntagmes/patch_eval.py 2>&1 | head -8", "description": "Re-evaluate patch after fusion strip"}`
+
+  ```
+brut {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 1928458 vues 0
+alternative {"f1": 0.5849, "att_exact": 222, "att_cibles": 239, "pos": 0.7581} bancs 239 libres 59 octets 2129150 vues 894
+filtrer_union {"f1": 0.6163, "att_exact": 217, "att_cibles": 239, "pos": 0.7581} bancs 91 libres 29 octets 2066365 vues 714
+filtrer {"f1": 0.6172, "att_exact": 205, "att_cibles": 239, "pos": 0.7581} bancs 0 libres 0 octets 1967190 vues 466
+preference {'groupes': 244, 'rang1_gold': 179, 'un_gold': 207, 'groupes_sans_gold': 37}
+pos {'brut': 'cb4757217465da39', 'alternative': 'cb4757217465da39', 'filtrer_union': 'cb4757217465da39', 'filtrer': 'cb4757217465da39'} det True
+EXEMPLE BRUT
+  GN  [0:28] 'La voisine arrose les fleurs' -> partir
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && python3 - <<'PY'\nimport sys, os, json\nsys.path.insert(0,'/tmp/pin_audit/tools'); sys.path.insert(0,'/tmp/pin_audit/tools/tests/linguistique'); sys.path.insert(0,'/tmp/partition_syntagmes')\nimport bloc_partition as bp, evaluer_gold as eg\nfrom patch_eval import te … [971 caractères tronqués]`
+
+  ```
+heuristique F1 0.5849 exact 222 POS 0.7581 segs 722 meta 358 dangling 0
+cascade F1 0.6141 exact 208 POS 0.7465 segs 584 meta 0 dangling 0
+parallele F1 0.6141 exact 208 POS 0.7465 segs 584 meta 0 dangling 0
+  ```
+
+- **bash** `{"command": "cd /tmp/pin_audit && sha256sum tools/bloc_partition.py /tmp/partition_syntagmes/patch_final.diff && cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/head_patch_test && mkdir -p /tmp/head_patch_test/tools && git show HEAD:tools/bloc_linguistique.py > /tmp/head_patch_test … [316 caractères tronqués]`
+
+  ```
+e9444dafdfca30f99923928bf476a088bab4e3b5618f6148a7947118d2e0e39d  tools/bloc_partition.py
+0577c2acba1d29a1c04607f7dbdbff7a1ad1b2f5ab4289ffb5a212c96a479215  /tmp/partition_syntagmes/patch_final.diff
+checking file tools/bloc_linguistique.py
+Hunk #1 succeeded at 791 (offset 262 lines).
+Hunk #2 succeeded at 1557 (offset 312 lines).
+Hunk #3 succeeded at 2137 (offset 314 lines).
+Hunk #4 succeeded at 2367 (offset 321 lines).
+checking file tools/drave.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git log --oneline -3 -- tools/bloc_linguistique.py && grep -n 'partition\\|alternative\\|chevauche' tools/bloc_linguistique.py | head -30 && git diff HEAD --stat -- tools/bloc_linguistique.py", "description": "I … [53 caractères tronqués]`
+
+  ```
+ba39a7b162d2f62db911f1552231196bbcdee400
+ba39a7b1 B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183
+5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183
+2b3e1796 B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183
+557:# la coupe. Le balayage est **unique** : aucun span ne se chevauche, aucune phrase vide.
+744:    """Les phrases d'un texte libre, sans chevauchement et sans blanc de tête."""
+794:                 union: bool = True, partition: str = "alternative"):
+800:        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
+801:        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
+803:        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+804:        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
+805:        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+806:            raise ValueError("partition attend 'br
+… [1751 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/bloc_linguistique.py tools/drave.py && git diff HEAD -- tools/bloc_linguistique.py | head -80 && echo '--- drave ---' && git diff HEAD --stat -- tools/drave.py && git diff HEAD -- tools/drave.py | head -40",  … [57 caractères tronqués]`
+
+  ```
+M tools/bloc_linguistique.py
+diff --git a/tools/bloc_linguistique.py b/tools/bloc_linguistique.py
+index c0473345..d348842c 100644
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -313,7 +313,7 @@ POS_FERME = {
+     },
+     "en": {
+         "DET": set("the a an this that these those my your his her its our their".split()),
+-        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside outside toward towards until upon within".split()),
++        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside toward towards until upon within".split()),
+         "PRON": set("i you he she it we they me him her us them who whom which that where whose mine".split()),
+         "CONJ": set("and or but nor for so yet because although while if when as".split()),
+         "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must am".split()),
+@@ -791,12 +791,20 @@ class Heuristique:
+ 
+
+… [3612 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n 'références mortes\\|k not in (\"partition\"' tools/bloc_linguistique.py | head && git diff HEAD -- tools/bloc_linguistique.py | grep -n 'partition.*alternative\\|références' | tail -10", "description": "Check if working tree … [30 caractères tronqués]`
+
+  ```
+19:+                 union: bool = True, partition: str = "alternative"):
+30:+        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+31:+            raise ValueError("partition attend 'brut', 'alternative', 'filtrer_union' ou 'filtrer'")
+51:+                "" if self.partition == "alternative"
+109:+    `meta.partition` porte le groupe, le rang et la vue ; `meta.alternative` porte les
+  ```
+
+- **bash** `{"command": "sed -n 120,190p /tmp/partition_syntagmes/patch_final.diff", "description": "Inspect new fusion strip hunk"}`
+
+  ```
++                    retirees.add(id(e))
++        while True:  # sécurité : union-union, ou tout chevauchement résiduel
++            gardes = [e for e in etiquettes
++                      if e.niveau == "syntagme" and id(e) not in retirees]
++            paires = [(x, y) for i, x in enumerate(gardes) for y in gardes[i + 1:]
++                      if max(x.debut, y.debut) < min(x.fin, y.fin)]
++            if not paires:
++                break
++            for x, y in paires:
++                rx = rangs.get(id(x), (0, 99))[1]
++                ry = rangs.get(id(y), (0, 99))[1]
++                retirees.add(id(x if rx >= ry else y))
++    for gid, groupe in enumerate(groupes):
++        for e in groupe:
++            if filtrer and id(e) in retirees:
++                continue
++            meta = dict(e.meta or {})
++            meta["partition"] = {"groupe": gid, "rang": rangs[id(e)][1],
++                                 "membres": len(groupe),
++                                 "vue": ("alternative" if not filtrer
++                                         else "filtrer_union" if filtrer == "union"
++                                         else "filtrer")}
++            vues = []
++           
+… [2263 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib, json\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\n# replace first diff block with final patch\nnewpatch=pathlib.Path('/tmp/partition_syntagmes/patch … [5688 caractères tronqués]`
+
+  ```
+report updated
+generator updated
+écrit /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-partition-syntagmes.json 44454 octets
+  ```
+

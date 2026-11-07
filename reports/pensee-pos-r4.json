@@ -8250,6 +8250,28 @@
    "condition": "à mesurer sur un gold disjoint ; ne pas les vendre avant."
   }
  ],
+ "perimetre": "Mesure hors clôture : aucun commit ; aucun fichier de code modifié ; pas de journal/en-cours/roadmap/INDEX. Les deux livrables demandés (reports/rapport-pos-r4.md, reports/pensee-pos-r4.json) étaient déjà suivis à HEAD 5c5d3b52 (intégration par un autre chantier) et sont mis à jour ici ; aucun autre fichier existant n’est touché. Aucune porte n’est lancée (aucun code modifié par cette session).",
+ "etat_live": {
+  "commit": "ba39a7b1 (frontières de phrase) + modifications en cours",
+  "module_sha256": "83821c9e6bd49942394673dc25ef18d05a6c442e3090407957bf706aa54f0db1",
+  "note": "Instantané de fin de session ; le module live contient aussi les changements de frontières de phrase, donc F1/attachement ne sont pas comparables à B13.",
+  "mesure_sur_gold_b13": {
+   "pos": 0.85,
+   "dev": 0.8494,
+   "test": 0.8511,
+   "f1": 0.6459,
+   "att_exact": 231,
+   "att_labels": 232,
+   "corrections": 37,
+   "casses": 0,
+   "faux_faux": 2
+  },
+  "ecarts": [
+   "Les deux écarts signalés pendant la mesure ont été corrigés dans cet instantané : outside n’est plus dans PREP (le correctif gold ADV est retrouvé) et _copules n’inclut plus feel (He feels pain reste NOUN).",
+   "Le POS live coïncide avec le paquet sûr mesuré (85,00 / 37-0 / 2 faux→faux). Le live omet encore appear/remain (sans effet sur ce gold) et ajoute les changements de frontières de phrase, d’où F1/att différents."
+  ],
+  "recommandation": "La mesure de référence reste B13 ; le live est un contrôle. Pour aligner F1/att, re-mesurer sur le gold courant avec les frontières de phrase."
+ },
  "fichiers": [
   "reports/rapport-pos-r4.md",
   "reports/pensee-pos-r4.json"

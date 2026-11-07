@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **691 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **692 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -369,6 +369,7 @@
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |
 | [rapport-parcimonie-imposee.md](rapport-parcimonie-imposee.md) | Parcimonie imposée à l'inférence — la frontière mesurée |
+| [rapport-partition-integree.md](rapport-partition-integree.md) | B13 — la partition des syntagmes : les alternatives sont étiquetées, les mesures ne bougent pas |
 | [rapport-partition-syntagmes.md](rapport-partition-syntagmes.md) | Partition des syntagmes — cartographie, deux options mesurées, recommandation |
 | [rapport-passage-a-l-echelle.md](rapport-passage-a-l-echelle.md) | Passer aux gros modèles : ce qui bloque, chiffré |
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |

@@ -1,0 +1,1151 @@
+{
+ "rapport": "partition-syntagmes",
+ "ligne": "B13",
+ "branche": "s/v7",
+ "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+ "commit_head": "5c5d3b527bf337d7c4374b3050fd97ae70ae3c2a",
+ "date": "2026-11-06",
+ "objet": "P0-3 : expliciter la partition des syntagmes du bloc linguistique (S + chunker), classer les 107 + 132 paires des deux audits, mesurer deux options (alternative étiquetée, filtre union) et recommander un défaut avec patch exact et schéma de meta.alternative.",
+ "verdict": "Les 239 paires des deux bancs sont **toutes** des paires S × chunker : 53,1 % de S qui contient le chunker, 33,5 % l'inverse, 2,5 % de mêmes bornes, 10,9 % de croisements. L'alternative étiquetée ne perd rien (F1 0,5849, exact 222/239) ; le filtre union partiel perd 5 attachements (222→217) et laisse 91 paires ; la partition stricte perd 17 (222→205) et supprime les 239 paires ; la déduplication silencieuse en perd 14 (222→208). Recommandation : A par défaut, B2 en option, B1 documenté comme variante économique partielle.",
+ "dispositif": {
+  "pin": {
+   "commit": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+   "module": "tools/bloc_linguistique.py",
+   "module_sha256": "5954d0870bb957472662047ba40d027ea8f64e9434ecb24217faa9337437b08f",
+   "generateur_sha256": "291df65a43693aac4cdd3fb7fd25955b5eb7f103e24e57d8c505e31d765202d5",
+   "gold_sha256": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "gold_phrases": 612,
+   "gold_cibles_attachement": 239,
+   "raison": "reproduire exactement les chiffres des audits (107 et 132 paires, F1 0,5849, déduplication 0,6141 et 208) ; le dépôt a bougé pendant la mesure (HEAD 5c5d3b52 au moment de la rédaction), d'où l'épinglage."
+  },
+  "corpus": {
+   "audit_1": "46 succès / 50 textes de reports/pensee-fiabilite-produit.json",
+   "audit_2": "50 / 50 textes de reports/pensee-produit-bloc-l.json",
+   "libres": "25 paragraphes de data/corpus_fr_litterature.txt (échantillon déterministe, hors gold)",
+   "total_analyse": 121
+  },
+  "harnais": [
+   "/tmp/pin_audit (copie épinglée, non committée)",
+   "/tmp/partition_syntagmes/inventaire.py (cartographie)",
+   "/tmp/partition_syntagmes/options.py (variantes mesurées)",
+   "/tmp/partition_syntagmes/construire_patch.py (patch)",
+   "/tmp/partition_syntagmes/patch_eval.py (évaluation du patch)",
+   "/tmp/partition_syntagmes/stats_finales.py (lisibilité, contrôles)"
+  ],
+  "reproduction": {
+   "commande": "PIN=/tmp/pin_audit python3 /tmp/partition_syntagmes/inventaire.py ; PIN=/tmp/pin_audit python3 /tmp/partition_syntagmes/options.py ; python3 /tmp/partition_syntagmes/patch_eval.py",
+   "note": "les scripts lisent les JSON d'audit du dépôt et n'écrivent que /tmp."
+  }
+ },
+ "cartographie": {
+  "synthese": {
+   "textes_bancs": 96,
+   "textes_avec_chevauchement": 54,
+   "paires": 239,
+   "paires_audit_1": 107,
+   "paires_audit_2": 132,
+   "paires_libres": 59,
+   "segments_bancs": 722,
+   "segments_libres": 233,
+   "labels_impliques": 358,
+   "part_labels_impliques": 0.496,
+   "groupes": 119,
+   "taille_max_groupe": 7,
+   "toutes_paires_s_x_chunker": true,
+   "aucune_paire_s_s_ni_chunker_chunker": true,
+   "lecture": "toutes les paires opposent un segment du générateur S à un segment du chunker ; le défaut est la composition (union), pas l'un des deux segmenteurs (0 paire avec chacun seul)."
+  },
+  "par_audit": {
+   "fiabilite": {
+    "fichier": "reports/pensee-fiabilite-produit.json",
+    "textes": 50,
+    "succes": 46,
+    "refus": 4,
+    "textes_avec_chevauchement": 23,
+    "paires": 107,
+    "segments": 360,
+    "union": 85,
+    "attachements": 284,
+    "labels_impliques": 170,
+    "part_labels_impliques": 0.472,
+    "memes_types": 70,
+    "types_differents": 37,
+    "classes": {
+     "union_contenu": 60,
+     "inclusion_s_dans_union": 37,
+     "meme_span_union": 3,
+     "croisement": 7
+    },
+    "reproduction_audit": {
+     "paires": 107,
+     "textes": 23,
+     "syntagmes": 360,
+     "union": 85,
+     "attachements": 284,
+     "exact": true
+    }
+   },
+   "bloc_l": {
+    "fichier": "reports/pensee-produit-bloc-l.json",
+    "textes": 50,
+    "succes": 50,
+    "refus": 0,
+    "textes_avec_chevauchement": 31,
+    "paires": 132,
+    "segments": 362,
+    "union": 98,
+    "attachements": 265,
+    "labels_impliques": 188,
+    "part_labels_impliques": 0.519,
+    "memes_types": 61,
+    "types_differents": 71,
+    "classes": {
+     "union_contenu": 67,
+     "inclusion_s_dans_union": 43,
+     "meme_span_union": 3,
+     "croisement": 19
+    },
+    "reproduction_audit": {
+     "paires": 132,
+     "textes": 31,
+     "syntagmes": 362,
+     "union": 98,
+     "attachements": 265,
+     "impliques": 188,
+     "memes_types": 61,
+     "types_differents": 71,
+     "inclusions": 113,
+     "partiels": 19,
+     "exact": true
+    }
+   },
+   "libres": {
+    "fichier": "data/corpus_fr_litterature.txt (25 paragraphes)",
+    "textes": 25,
+    "textes_avec_chevauchement": 10,
+    "paires": 59,
+    "segments": 233,
+    "union": 47,
+    "attachements": 179,
+    "labels_impliques": 93,
+    "part_labels_impliques": 0.399,
+    "memes_types": 35,
+    "types_differents": 24,
+    "classes": {
+     "union_contenu": 24,
+     "inclusion_s_dans_union": 24,
+     "meme_span_union": 3,
+     "croisement": 8
+    }
+   }
+  },
+  "classes": [
+   {
+    "code": "union_contenu",
+    "definition": "S ⊃ chunker (le S contient le segment union)",
+    "audit_1": 60,
+    "audit_2": 67,
+    "total": 127,
+    "libres": 24,
+    "part_total": 0.531,
+    "part_audit_1": 0.561,
+    "part_audit_2": 0.508,
+    "part_libres": 0.407
+   },
+   {
+    "code": "inclusion_s_dans_union",
+    "definition": "chunker ⊃ S (le chunker est plus large que le S)",
+    "audit_1": 37,
+    "audit_2": 43,
+    "total": 80,
+    "libres": 24,
+    "part_total": 0.335,
+    "part_audit_1": 0.346,
+    "part_audit_2": 0.326,
+    "part_libres": 0.407
+   },
+   {
+    "code": "meme_span_union",
+    "definition": "mêmes bornes, types différents, un union",
+    "audit_1": 3,
+    "audit_2": 3,
+    "total": 6,
+    "libres": 3,
+    "part_total": 0.025,
+    "part_audit_1": 0.028,
+    "part_audit_2": 0.023,
+    "part_libres": 0.051
+   },
+   {
+    "code": "croisement",
+    "definition": "spans qui se croisent sans inclusion",
+    "audit_1": 7,
+    "audit_2": 19,
+    "total": 26,
+    "libres": 8,
+    "part_total": 0.109,
+    "part_audit_1": 0.065,
+    "part_audit_2": 0.144,
+    "part_libres": 0.136
+   }
+  ],
+  "exemples": [
+   {
+    "classe": "union_contenu",
+    "definition": "le segment S contient le segment chunker (union)",
+    "audit": "fiabilite",
+    "id": "f06",
+    "porteur": {
+     "type": "GV",
+     "debut": 43,
+     "fin": 60,
+     "valeur": "nous verrons bien",
+     "union": false
+    },
+    "autre": {
+     "type": "GV",
+     "debut": 48,
+     "fin": 60,
+     "valeur": "verrons bien",
+     "union": true
+    },
+    "lecture": "le chunker « verrons bien » est un fragment du GV S « nous verrons bien »"
+   },
+   {
+    "classe": "inclusion_s_dans_union",
+    "definition": "le segment chunker (union) est plus large que le S",
+    "audit": "fiabilite",
+    "id": "f02",
+    "porteur": {
+     "type": "REL",
+     "debut": 22,
+     "fin": 42,
+     "valeur": "qui dort sur le toit",
+     "union": false
+    },
+    "autre": {
+     "type": "REL",
+     "debut": 22,
+     "fin": 54,
+     "valeur": "qui dort sur le toit se réveille",
+     "union": true
+    },
+    "lecture": "le chunker ajoute « se réveille » à la relative : c'est l'inclusion inverse"
+   },
+   {
+    "classe": "meme_span_union",
+    "definition": "mêmes bornes, types différents, dont un union",
+    "audit": "bloc_l",
+    "id": "f02",
+    "porteur": {
+     "type": "GP",
+     "debut": 68,
+     "fin": 78,
+     "valeur": "au travail",
+     "union": false
+    },
+    "autre": {
+     "type": "GV",
+     "debut": 68,
+     "fin": 78,
+     "valeur": "au travail",
+     "union": true
+    },
+    "lecture": "même span, deux lectures (GP lieu / GV) ; le client doit choisir la lecture"
+   },
+   {
+    "classe": "croisement",
+    "definition": "ni inclusion ni mêmes bornes : les spans se croisent",
+    "audit": "fiabilite",
+    "id": "f06",
+    "porteur": {
+     "type": "GV",
+     "debut": 0,
+     "fin": 15,
+     "valeur": "Je ne pense pas",
+     "union": false
+    },
+    "autre": {
+     "type": "GV",
+     "debut": 3,
+     "fin": 36,
+     "valeur": "ne pense pas qu'il viendra demain",
+     "union": true
+    },
+    "lecture": "le chunker absorbe la complétive et rogne le sujet : aucun des deux ne contient l'autre"
+   }
+  ],
+  "groupes": {
+   "bancs": {
+    "taille_2": 53,
+    "taille_3": 38,
+    "taille_4": 9,
+    "taille_5": 13,
+    "taille_6": 5,
+    "taille_7": 1,
+    "total": 119
+   },
+   "libres": {
+    "taille_2": 18,
+    "taille_3": 9,
+    "taille_4": 5,
+    "taille_5": 2,
+    "total": 34
+   },
+   "lecture": "une paire n'est pas isolée : 66/119 groupes font 3 segments ou plus ; le plus gros groupe du banc fait 7 segments (f50)."
+  },
+  "controles": {
+   "chunker_seul": {
+    "paires": 0,
+    "segments": 611,
+    "condition": "segmenter_s=False, union=False"
+   },
+   "s_sans_union": {
+    "paires": 0,
+    "segments": 725,
+    "condition": "segmenter_s=True, union=False"
+   },
+   "audit_2_reproduit": true,
+   "audit_1_reproduit": true,
+   "lecture": "les deux segmenteurs seuls ne chevauchent jamais ; la composition S + union crée 100 % des paires."
+  }
+ },
+ "options": {
+  "definitions": {
+   "base": "Heuristique() d'avant le patch : S + union, chevauchements non documentés",
+   "alternative": "A — les deux segments restent ; meta.partition + meta.alternative documentent le groupe, la relation et la vue préférée. Aucune suppression. Rang 1 = chunker le plus large.",
+   "filtrer_union": "B1 — le filtre union du P0-3 : quand le chunker est contenu dans un S plus large, le S est retiré et conservé dans meta.alternative (retire=true). Les autres classes restent documentées.",
+   "filtrer": "B2 — partition stricte : tous les segments union sont conservés, tous les S qui les chevauchent sont retirés (retire=true) ; la vue de premier niveau ne contient plus aucune paire.",
+   "dedup": "référence : _supprimer_chevauchements, la politique actuelle de la fusion",
+   "glouton_att_union": "sensibilité : sélection gloutonne par groupe, le segment qui porte un attachement d'abord, puis le chunker, puis le plus long ; partition stricte, orientée attachement.",
+   "regle_mix_E": "sensibilité : partition stricte par classe, mêmes bornes → garder le S ; meilleur F1 strict mesuré."
+  },
+  "gold": {
+   "base": {
+    "f1": 0.5849,
+    "precision": 0.6292,
+    "rappel": 0.5464,
+    "tete_f1": 0.7336,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "alternative": {
+    "f1": 0.5849,
+    "precision": 0.6292,
+    "rappel": 0.5464,
+    "tete_f1": 0.7336,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "filtrer_union": {
+    "f1": 0.6163,
+    "precision": 0.7122,
+    "rappel": 0.5432,
+    "tete_f1": 0.7545,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 217,
+    "cibles": 239,
+    "couverture": 0.9079,
+    "topk": 216
+   },
+   "filtrer": {
+    "f1": 0.6172,
+    "precision": 0.7445,
+    "rappel": 0.5271,
+    "tete_f1": 0.7605,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 205,
+    "cibles": 239,
+    "couverture": 0.8577,
+    "topk": 204
+   },
+   "dedup": {
+    "f1": 0.6141,
+    "precision": 0.7283,
+    "rappel": 0.5309,
+    "tete_f1": 0.7432,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 208,
+    "cibles": 239,
+    "couverture": 0.8703,
+    "topk": 207
+   },
+   "glouton_att_union": {
+    "f1": 0.5892,
+    "precision": 0.7048,
+    "rappel": 0.5062,
+    "tete_f1": 0.726,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 213,
+    "cibles": 239,
+    "couverture": 0.8912,
+    "topk": 212
+   },
+   "regle_mix_E": {
+    "f1": 0.6179,
+    "precision": 0.7453,
+    "rappel": 0.5276,
+    "tete_f1": 0.7612,
+    "pos": 0.7581,
+    "fraction": 0.5537,
+    "exact": 206,
+    "cibles": 239,
+    "couverture": 0.8619,
+    "topk": 205
+   },
+   "sans_union": {
+    "f1": 0.4957,
+    "precision": 0.6009,
+    "rappel": 0.4219,
+    "exact": 199,
+    "couverture": 0.8326
+   },
+   "filtrer_contenu": {
+    "f1": 0.5006,
+    "precision": 0.5899,
+    "rappel": 0.4348,
+    "exact": 208,
+    "couverture": 0.8703
+   },
+   "union_any": {
+    "f1": 0.4959,
+    "precision": 0.6003,
+    "rappel": 0.4224,
+    "exact": 199,
+    "couverture": 0.8326
+   },
+   "widest": {
+    "f1": 0.4967,
+    "precision": 0.6059,
+    "rappel": 0.4208,
+    "exact": 200,
+    "couverture": 0.8368
+   }
+  },
+  "bancs": {
+   "base": {
+    "paires": 239,
+    "textes_avec_chevauchement": 54,
+    "segments": 722,
+    "union": 183,
+    "attachements": 549,
+    "octets_json": 1928458,
+    "vues": 0
+   },
+   "alternative": {
+    "paires": 239,
+    "textes_avec_chevauchement": 54,
+    "segments": 722,
+    "union": 183,
+    "attachements": 549,
+    "octets_json": 2129150,
+    "vues": 894
+   },
+   "filtrer_union": {
+    "paires": 91,
+    "textes_avec_chevauchement": 33,
+    "segments": 636,
+    "union": 183,
+    "attachements": 481,
+    "octets_json": 2066365,
+    "vues": 714
+   },
+   "filtrer": {
+    "paires": 0,
+    "textes_avec_chevauchement": 0,
+    "segments": 545,
+    "union": 183,
+    "attachements": 397,
+    "octets_json": 1967190,
+    "vues": 466
+   },
+   "dedup": {
+    "paires": 0,
+    "textes_avec_chevauchement": 0,
+    "segments": 584,
+    "union": 131,
+    "attachements": 444,
+    "octets_json": null,
+    "vues": 0
+   },
+   "glouton_att_union": {
+    "paires": 0,
+    "textes_avec_chevauchement": 0,
+    "segments": 556,
+    "union": 152,
+    "attachements": 432,
+    "octets_json": null,
+    "vues": 0
+   }
+  },
+  "libres": {
+   "base": {
+    "paires": 59,
+    "textes_avec_chevauchement": 10,
+    "segments": 233,
+    "union": 47,
+    "attachements": 179,
+    "octets_json": 928683,
+    "vues": 0
+   },
+   "alternative": {
+    "paires": 59,
+    "textes_avec_chevauchement": 10,
+    "segments": 233,
+    "union": 47,
+    "attachements": 179,
+    "octets_json": 974128,
+    "vues": 190
+   },
+   "filtrer_union": {
+    "paires": 29,
+    "textes_avec_chevauchement": 7,
+    "segments": 214,
+    "union": 47,
+    "attachements": 161,
+    "octets_json": 959786,
+    "vues": 155
+   },
+   "filtrer": {
+    "paires": 0,
+    "textes_avec_chevauchement": 0,
+    "segments": 185,
+    "union": 47,
+    "attachements": 132,
+    "octets_json": 929427,
+    "vues": 94
+   },
+   "dedup": {
+    "paires": 0,
+    "textes_avec_chevauchement": 0,
+    "segments": 194,
+    "union": null,
+    "attachements": null,
+    "octets_json": null,
+    "vues": 0
+   }
+  },
+  "lecture": {
+   "json_bancs": {
+    "base": 1928458,
+    "alternative": 2129150,
+    "filtrer_union": 2066365,
+    "filtrer": 1967190
+   },
+   "json_bancs_delta_pct": {
+    "alternative": 10.41,
+    "filtrer_union": 7.15,
+    "filtrer": 2.01
+   },
+   "json_libres": {
+    "base": 928683,
+    "alternative": 974128,
+    "filtrer_union": 959786,
+    "filtrer": 929427
+   },
+   "json_libres_delta_pct": {
+    "alternative": 4.89,
+    "filtrer_union": 3.35,
+    "filtrer": 0.08
+   },
+   "vues": {
+    "alternative": 894,
+    "filtrer_union": 714,
+    "filtrer": 466
+   },
+   "vues_par_groupe": {
+    "alternative": 7.51,
+    "filtrer_union": 6.0,
+    "filtrer": 3.92
+   },
+   "rendu_inline": {
+    "brut": {
+     "max": 132,
+     "mediane": 38,
+     "p95": 67,
+     "lignes_sup_100": 7
+    },
+    "alternative": {
+     "max": 251,
+     "mediane": 60,
+     "p95": 171,
+     "lignes_sup_100": 288
+    },
+    "filtrer_union": {
+     "max": 237,
+     "mediane": 47,
+     "p95": 173,
+     "lignes_sup_100": 245
+    },
+    "filtrer": {
+     "max": 237,
+     "mediane": 42,
+     "p95": 178,
+     "lignes_sup_100": 152
+    }
+   },
+   "rendu_compact": {
+    "brut": {
+     "max": 138,
+     "mediane": 44,
+     "p95": 74,
+     "lignes_sup_100": 9
+    },
+    "alternative": {
+     "max": 157,
+     "mediane": 55,
+     "p95": 88,
+     "lignes_sup_100": 19
+    },
+    "filtrer": {
+     "max": 143,
+     "mediane": 48,
+     "p95": 96,
+     "lignes_sup_100": 28
+    }
+   },
+   "sans_syntagme": {
+    "brut": 6,
+    "alternative": 6,
+    "filtrer_union": 6,
+    "filtrer": 6
+   },
+   "sans_syntagme_ids": [
+    "fiabilite/f13",
+    "fiabilite/f18",
+    "fiabilite/f27",
+    "fiabilite/f37",
+    "bloc_l/x47",
+    "bloc_l/x48"
+   ],
+   "pire_texte": {
+    "id": "fiabilite/f50",
+    "paires": 50,
+    "segments": 171,
+    "vues_alternative": 152,
+    "vues_filtrer": 77
+   }
+  },
+  "preference": {
+   "groupes_gold": 244,
+   "groupes_avec_gold": 207,
+   "groupes_sans_gold": 37,
+   "regles": {
+    "chunker_le_plus_large": {
+     "rang1_gold": 179,
+     "sur_avec_gold": 0.865,
+     "sur_total": 0.734
+    },
+    "chunker_le_plus_court": {
+     "rang1_gold": 177,
+     "sur_avec_gold": 0.855
+    },
+    "chunker_avec_attachement": {
+     "rang1_gold": 178,
+     "sur_avec_gold": 0.86
+    },
+    "le_plus_court_toutes_sources": {
+     "rang1_gold": 169,
+     "sur_avec_gold": 0.816
+    },
+    "s_le_plus_large": {
+     "rang1_gold": 25,
+     "sur_total": 0.102
+    },
+    "le_plus_large_toutes_sources": {
+     "rang1_gold": 19,
+     "sur_total": 0.078
+    }
+   },
+   "filtre_garde_au_moins_un_gold": {
+    "groupes": 181,
+    "sur_avec_gold": 0.874,
+    "groupes_perdant_le_gold": 26
+   },
+   "lecture": "le chunker est le span du gold dans 179/207 groupes ambigus qui en portent un (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244. Le rang 1 est une préférence, pas une partition : en mode filtrer, c'est `retire` qui fait foi."
+  }
+ },
+ "controles": {
+  "reproduction_audits": {
+   "audit_2": {
+    "paires": 132,
+    "textes": 31,
+    "syntagmes": 362,
+    "union": 98,
+    "attachements": 265,
+    "impliques": 188,
+    "memes_types": 61,
+    "types_differents": 71,
+    "inclusions": 113,
+    "partiels": 19,
+    "exact": true
+   },
+   "audit_1": {
+    "paires": 107,
+    "textes": 23,
+    "syntagmes": 360,
+    "union": 85,
+    "attachements": 284,
+    "exact": true
+   },
+   "note": "les chiffres des deux audits sont reproduits exactement au commit fa1b0c6e ; l'audit 2 compte 113 inclusions = 110 inclusions strictes + 3 mêmes bornes, et 19 croisements."
+  },
+  "chunker_seul": {
+   "segmenter_s": false,
+   "union": false,
+   "paires": 0,
+   "segments": 611
+  },
+  "s_sans_union": {
+   "segmenter_s": true,
+   "union": false,
+   "paires": 0,
+   "segments": 725
+  },
+  "supprimer_tous_les_union": {
+   "paires": 0,
+   "f1": 0.4957,
+   "exact": 199,
+   "couverture": 0.8326
+  },
+  "filtre_inverse": {
+   "variante": "filtrer_contenu (retirer le chunker contenu)",
+   "paires": 112,
+   "f1": 0.5006,
+   "exact": 208
+  },
+  "filtres_agressifs": {
+   "union_any": {
+    "paires": 3,
+    "f1": 0.4959,
+    "exact": 199
+   },
+   "widest": {
+    "paires": 32,
+    "f1": 0.4967,
+    "exact": 200
+   }
+  },
+  "hasard_meme_nombre": {
+   "retires": 299,
+   "n": 20,
+   "f1_moyen": 0.5519,
+   "f1_min": 0.5431,
+   "f1_max": 0.5638,
+   "exact_moyen": 193.15,
+   "exact_min": 184,
+   "exact_max": 198,
+   "lecture": "retirer 299 syntagmes au hasard ne donne jamais le F1 ni l'attachement du filtre (0,6172 / 205) : le gain vient du choix des segments, pas de la diminution du nombre."
+  },
+  "pos_et_determinisme": {
+   "pos": 0.7581,
+   "fraction": 0.5537,
+   "pos_hash": {
+    "brut": "cb4757217465da39",
+    "alternative": "cb4757217465da39",
+    "filtrer_union": "cb4757217465da39",
+    "filtrer": "cb4757217465da39"
+   },
+   "pos_identique": true,
+   "determinisme_alternative": true,
+   "note": "les modes ne touchent que les syntagmes ; POS et fraction sont identiques."
+  },
+  "invariants_schema": {
+   "textes": 125,
+   "segments_alternative": 955,
+   "groupes": 153,
+   "vues_alternative": 1084,
+   "segments_filtrer": 730,
+   "vues_filtrer": 560,
+   "violations": 0,
+   "verifies": [
+    "span dans le texte",
+    "rang 1..membres",
+    "réciprocité des relations",
+    "retire présent seulement en mode filtrer",
+    "aucun doublon",
+    "aucun chevauchement après filtrer",
+    "membres = porteur + alternatives"
+   ]
+  }
+ },
+ "recommandation": {
+  "choix": "A par défaut, B2 en option « partition », B1 documenté comme variante économique partielle",
+  "defaut": {
+   "mode": "alternative",
+   "pourquoi": "aucune perte : F1 0,5849 et exact 222/239 sont ceux de la base ; le client choisit, le rang 1 est le chunker le plus large (179/207 groupes avec gold) ; coût +10,4 % de JSON sur les 96 textes."
+  },
+  "option_partition": {
+   "mode": "filtrer",
+   "pourquoi": "0 paire, F1 0,6172 (+0,0323), exact 205/239 (0,8577), +2,0 % de JSON ; les S retirés restent dans meta.alternative avec retire=true : la vue est linéaire, la donnée n'est pas perdue."
+  },
+  "option_economique": {
+   "mode": "filtrer_union",
+   "pourquoi": "le filtre union du P0-3 : F1 0,6163 (+0,0314), exact 217/239 (0,9079), +7,2 % de JSON ; il ne reste que 91 paires (33/96 textes), donc ce n'est pas une partition stricte : à ne pas vendre comme telle.",
+   "quand": "client qui accepte des chevauchements résiduels et veut le meilleur coût d'attachement."
+  },
+  "non_retenu": [
+   {
+    "quoi": "supprimer tous les union (le « filtre meta.union » de l'audit)",
+    "chiffres": {
+     "paires": 0,
+     "f1": 0.4957,
+     "exact": 199
+    },
+    "raison": "0 conflit, mais 23 attachements exacts perdus et F1 −0,0892 : le remède est pire que le mal."
+   },
+   {
+    "quoi": "déduplication silencieuse _supprimer_chevauchements",
+    "chiffres": {
+     "paires": 0,
+     "f1": 0.6141,
+     "exact": 208
+    },
+    "raison": "14 attachements exacts perdus sans trace ; c'est ce que P0-3 doit supprimer."
+   },
+   {
+    "quoi": "filtre inverse (retirer le chunker contenu)",
+    "chiffres": {
+     "paires": 112,
+     "f1": 0.5006,
+     "exact": 208
+    },
+    "raison": "le F1 s'effondre : la direction du filtre est décisive."
+   },
+   {
+    "quoi": "filtres agressifs (union_any, widest)",
+    "chiffres": {
+     "f1": 0.4959,
+     "exact": 199
+    },
+    "raison": "ils coupent des segments gold et ne laissent presque plus de structure."
+   }
+  ],
+  "compositions": "Parallele et Cascade avec priorite_par_niveau=None appellent encore _supprimer_chevauchements : la politique doit y être propagée, sinon le défaut de la CLI est explicite mais la composition reste silencieuse. Suivi P0-3b."
+ },
+ "patch": {
+  "bloc_linguistique": {
+   "fichier": "tools/bloc_linguistique.py",
+   "base": "fa1b0c6eb90b3d27ec78f946d677817ba08b419e",
+   "sha256_cible": "57f464e5eb69345d0c707c7eb1b884da4f86814187c7a4d9b9909da20236e49c",
+   "modes": [
+    "brut",
+    "alternative (défaut)",
+    "filtrer_union",
+    "filtrer"
+   ],
+   "applique_sur_head": {
+    "commit": "5c5d3b527bf337d7c4374b3050fd97ae70ae3c2a",
+    "dry_run": "oui, offsets 29/96/98",
+    "teste_aussi_sur": "d73e7d1f (29/81/83)"
+   },
+   "diff": "--- a/tools/bloc_linguistique.py\n+++ b/tools/bloc_linguistique.py\n@@ -529,12 +529,20 @@\n \n     def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,\n                  seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,\n-                 union: bool = True):\n+                 union: bool = True, partition: str = \"alternative\"):\n         self.profils = profils\n         self.segmenter_s = segmenter_s\n         self.seuil_ouvert = seuil_ouvert\n         self.seuil_langue = seuil_langue\n         self.union = union\n+        # \"brut\" : la sortie d'avant (chevauchements non documentés) ; \"alternative\" :\n+        # les deux segments restent, `meta.alternative` dit lequel est préféré ;\n+        # \"filtrer_union\" : on retire le S qui **contient** un segment chunker (le filtre\n+        # union du P0-3) ; \"filtrer\" : partition stricte, le chunker est la partition.\n+        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).\n+        if partition not in (\"brut\", \"alternative\", \"filtrer_union\", \"filtrer\"):\n+            raise ValueError(\"partition attend 'brut', 'alternative', 'filtrer_union' ou 'filtrer'\")\n+        self.partition = partition\n \n     # -- langues / script ---------------------------------------------------\n     def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:\n@@ -1237,6 +1245,10 @@\n         longueur = sum(u.fin - u.debut for u in unites)\n         fraction = longueur / max(1, len(texte))\n         etiquettes.sort(key=lambda e: (e.debut, e.fin, e.niveau))\n+        if self.partition != \"brut\":\n+            _expliciter_partition(etiquettes, filtrer=(\n+                \"\" if self.partition == \"alternative\"\n+                else \"union\" if self.partition == \"filtrer_union\" else \"strict\"))\n         trace.append({\"etape\": \"niveaux\", \"etiquettes\": len(etiquettes),\n                       \"niveaux\": sorted({e.niveau for e in etiquettes}),\n                       \"unites_semantiques\": len(unites), \"fraction\": round(fraction, 4)})\n@@ -1811,6 +1823,135 @@\n # --------------------------------------------------------------------------- compositions\n \n \n+def _relation_partition(x: Etiquette, y: Etiquette) -> str:\n+    \"\"\"La relation de `y` vue **depuis** `x` : `inclut` = x contient y.\"\"\"\n+    if x.debut == y.debut and x.fin == y.fin:\n+        return \"meme_span\"\n+    if x.debut <= y.debut and x.fin >= y.fin:\n+        return \"inclut\"\n+    if y.debut <= x.debut and y.fin >= x.fin:\n+        return \"inclus\"\n+    return \"croise\"\n+\n+\n+def _cle_preferee(e: Etiquette) -> tuple:\n+    \"\"\"La vue préférée : le segment du chunker (union), le plus large, puis le plus sûr.\n+\n+    Mesuré sur le gold 612 : dans 179/207 groupes ambigus qui portent un span du gold, le\n+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.\n+    La préférence ne supprime rien par défaut : elle **classe**.\n+    \"\"\"\n+    return (0 if (e.meta or {}).get(\"union\") else 1, -(e.fin - e.debut), -e.confiance,\n+            e.debut, e.fin, e.type)\n+\n+\n+def _groupes_partition(segs: list[Etiquette]) -> list[list[Etiquette]]:\n+    \"\"\"Les composantes connexes du graphe de chevauchement, ordonnées par position.\"\"\"\n+    parent = list(range(len(segs)))\n+\n+    def trouver(i: int) -> int:\n+        while parent[i] != i:\n+            parent[i] = parent[parent[i]]\n+            i = parent[i]\n+        return i\n+\n+    for i in range(len(segs)):\n+        for j in range(i + 1, len(segs)):\n+            if max(segs[i].debut, segs[j].debut) < min(segs[i].fin, segs[j].fin):\n+                ri, rj = trouver(i), trouver(j)\n+                if ri != rj:\n+                    parent[rj] = ri\n+    groupes: dict[int, list[Etiquette]] = {}\n+    for i, e in enumerate(segs):\n+        groupes.setdefault(trouver(i), []).append(e)\n+    return sorted((g for g in groupes.values() if len(g) > 1),\n+                  key=lambda g: (min(e.debut for e in g), min(e.fin for e in g),\n+                                 min(e.type for e in g)))\n+\n+\n+def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = \"\") -> None:\n+    \"\"\"Documente (et, si `filtrer`, linéarise) les chevauchements de syntagmes.\n+\n+    `meta.partition` porte le groupe, le rang et la vue ; `meta.alternative` porte les\n+    autres segments du groupe, leur relation vue du porteur et, en mode `filtrer`, le\n+    drapeau `retire`. Aucun segment n'est supprimé en mode `alternative`.\n+\n+    `filtrer=\"union\"` : on retire le S qui **contient** un segment chunker (le filtre\n+    union du P0-3) ; les autres chevauchements restent documentés. `filtrer=\"strict\"` :\n+    le chunker est la partition — **tous** les segments `union` sont conservés, et tous\n+    les S qui les chevauchent sont retirés. Dans les deux cas, le retiré reste lisible\n+    dans `meta.alternative` du segment conservé, avec `retire: true`.\n+    \"\"\"\n+    segs = [e for e in etiquettes if e.niveau == \"syntagme\"]\n+    groupes = _groupes_partition(segs)\n+    rangs: dict[int, tuple[int, int]] = {}\n+    for gid, groupe in enumerate(groupes):\n+        for i, e in enumerate(sorted(groupe, key=_cle_preferee)):\n+            rangs[id(e)] = (gid, i + 1)\n+    retirees: set[int] = set()\n+    if filtrer == \"union\":\n+        for groupe in groupes:\n+            unions = [e for e in groupe if (e.meta or {}).get(\"union\")]\n+            for e in groupe:\n+                if not (e.meta or {}).get(\"union\") and any(\n+                        u.debut >= e.debut and u.fin <= e.fin\n+                        and (u.fin - u.debut) < (e.fin - e.debut) for u in unions):\n+                    retirees.add(id(e))\n+    elif filtrer == \"strict\":\n+        for groupe in groupes:\n+            unions = [e for e in groupe if (e.meta or {}).get(\"union\")]\n+            for e in groupe:\n+                if not (e.meta or {}).get(\"union\") and any(\n+                        max(e.debut, u.debut) < min(e.fin, u.fin) for u in unions):\n+                    retirees.add(id(e))\n+        while True:  # sécurité : union-union, ou tout chevauchement résiduel\n+            gardes = [e for e in etiquettes\n+                      if e.niveau == \"syntagme\" and id(e) not in retirees]\n+            paires = [(x, y) for i, x in enumerate(gardes) for y in gardes[i + 1:]\n+                      if max(x.debut, y.debut) < min(x.fin, y.fin)]\n+            if not paires:\n+                break\n+            for x, y in paires:\n+                rx = rangs.get(id(x), (0, 99))[1]\n+                ry = rangs.get(id(y), (0, 99))[1]\n+                retirees.add(id(x if rx >= ry else y))\n+    for gid, groupe in enumerate(groupes):\n+        for e in groupe:\n+            if filtrer and id(e) in retirees:\n+                continue\n+            meta = dict(e.meta or {})\n+            meta[\"partition\"] = {\"groupe\": gid, \"rang\": rangs[id(e)][1],\n+                                 \"membres\": len(groupe),\n+                                 \"vue\": (\"alternative\" if not filtrer\n+                                         else \"filtrer_union\" if filtrer == \"union\"\n+                                         else \"filtrer\")}\n+            vues = []\n+            for autre in groupe:\n+                if autre is e:\n+                    continue\n+                vue = {\"type\": autre.type, \"debut\": autre.debut, \"fin\": autre.fin,\n+                       \"source\": autre.source,\n+                       \"union\": bool((autre.meta or {}).get(\"union\")),\n+                       \"relation\": _relation_partition(e, autre),\n+                       \"rang\": rangs[id(autre)][1]}\n+                if filtrer:\n+                    vue[\"retire\"] = id(autre) in retirees\n+                att = (autre.meta or {}).get(\"attachement\")\n+                if att:\n+                    vue[\"attachement\"] = {\"segment\": att.get(\"segment\", \"\"),\n+                                          \"cible\": att.get(\"cible\", \"\")}\n+                role = (autre.meta or {}).get(\"role\")\n+                if role:\n+                    vue[\"role\"] = role\n+                vues.append(vue)\n+            vues.sort(key=lambda v: (v[\"rang\"], v[\"debut\"], v[\"fin\"], v[\"type\"]))\n+            meta[\"alternative\"] = vues\n+            e.meta = meta\n+    if retirees:\n+        etiquettes[:] = [e for e in etiquettes\n+                         if not (e.niveau == \"syntagme\" and id(e) in retirees)]\n+\n+\n def _supprimer_chevauchements(etiquettes: list[Etiquette],\n                               priorite_syntagme: str = \"heuristique\") -> list[Etiquette]:\n     \"\"\"Les alternatives se suppriment **par type** quand les types sont complémentaires.\n"
+  },
+  "drave": {
+   "fichier": "tools/drave.py",
+   "base": "HEAD 5c5d3b52",
+   "sha256_cible": "8cf617726fc71f2ef43506b8af7401edc2e73b77c5798de99a751ac7818fe622",
+   "diff": "--- a/tools/drave.py\n+++ b/tools/drave.py\n@@ -114,9 +114,17 @@\n         lr = max(len(r) for r in roles)\n         lignes.append(\"SYNTAGMES\")\n         for e, valeur, role, cible, span in zip(syntagmes, valeurs, roles, cibles, spans):\n+            part = (e.meta or {}).get(\"partition\")\n+            suffixe = \"\"\n+            if part:\n+                alts = (e.meta or {}).get(\"alternative\") or []\n+                retires = sum(1 for v in alts if v.get(\"retire\"))\n+                suffixe = (f\"  [g{part['groupe']} r{part['rang']}/{part['membres']}\"\n+                           f\" · alt={len(alts)}\"\n+                           + (f\" · {retires} retiré(s)\" if retires else \"\") + \"]\")\n             lignes.append(\n                 f\"  {e.type:<{lt}}  {span:<{lsp}}  {valeur:<{lv}}  \"\n-                f\"rôle={role:<{lr}}  → {cible}\"\n+                f\"rôle={role:<{lr}}  → {cible}{suffixe}\"\n             )\n     else:\n         lignes.append(\"SYNTAGMES —\")\n@@ -157,7 +165,7 @@\n \n \n def cmd_analyser(args: argparse.Namespace) -> int:\n-    annotation = bl.Heuristique().analyser(args.texte, args.langue)\n+    annotation = bl.Heuristique(partition=args.partition).analyser(args.texte, args.langue)\n     if annotation.refus:\n         # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur\n         if args.json:\n@@ -345,6 +353,11 @@\n     analyser.add_argument(\"texte\", metavar=\"TEXTE\", help=\"texte à analyser (entre guillemets)\")\n     analyser.add_argument(\"--langue\", choices=(\"fr\", \"en\"), default=None,\n                           help=\"indice de langue (fr/en) ; sans lui, le bloc détecte\")\n+    analyser.add_argument(\"--partition\",\n+                          choices=(\"alternative\", \"filtrer_union\", \"filtrer\", \"brut\"),\n+                          default=\"alternative\",\n+                          help=\"vue des syntagmes : alternative (défaut), \"\n+                               \"filtrer_union (filtre union), filtrer (partition stricte), brut\")\n     analyser.add_argument(\"--json\", action=\"store_true\",\n                           help=\"sortie JSON complète (annotation, sans durée)\")\n     analyser.set_defaults(fonction=cmd_analyser)\n"
+  },
+  "schema": {
+   "champ": "meta.partition + meta.alternative",
+   "present_si": "le syntagme appartient à un groupe de chevauchement (au moins deux segments)",
+   "json_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "meta.partition et meta.alternative d'une étiquette syntagme",
+    "type": "object",
+    "properties": {
+     "partition": {
+      "type": "object",
+      "required": [
+       "groupe",
+       "rang",
+       "membres",
+       "vue"
+      ],
+      "properties": {
+       "groupe": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "rang": {
+        "type": "integer",
+        "minimum": 1
+       },
+       "membres": {
+        "type": "integer",
+        "minimum": 2
+       },
+       "vue": {
+        "enum": [
+         "alternative",
+         "filtrer_union",
+         "filtrer"
+        ]
+       }
+      },
+      "additionalProperties": true
+     },
+     "alternative": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "object",
+       "required": [
+        "type",
+        "debut",
+        "fin",
+        "source",
+        "union",
+        "relation",
+        "rang"
+       ],
+       "properties": {
+        "type": {
+         "enum": [
+          "GN",
+          "GV",
+          "GP",
+          "REL",
+          "SUB"
+         ]
+        },
+        "debut": {
+         "type": "integer",
+         "minimum": 0
+        },
+        "fin": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "source": {
+         "enum": [
+          "heuristique",
+          "neuronal",
+          "humain"
+         ]
+        },
+        "union": {
+         "type": "boolean"
+        },
+        "relation": {
+         "enum": [
+          "inclut",
+          "inclus",
+          "meme_span",
+          "croise"
+         ]
+        },
+        "rang": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "retire": {
+         "type": "boolean"
+        },
+        "attachement": {
+         "type": "object",
+         "required": [
+          "segment",
+          "cible"
+         ],
+         "properties": {
+          "segment": {
+           "type": "string"
+          },
+          "cible": {
+           "type": "string"
+          }
+         },
+         "additionalProperties": false
+        },
+        "role": {
+         "type": "string"
+        }
+       },
+       "additionalProperties": false
+      }
+     }
+    },
+    "additionalProperties": true
+   },
+   "invariants": [
+    "les spans sont valides : 0 ≤ debut < fin ≤ len(texte) ; valeur = texte[debut:fin]",
+    "groupe est unique par annotation ; deux groupes ne partagent aucun segment",
+    "rang est une permutation de 1..membres dans le groupe",
+    "relation est réciproque : inclut ↔ inclus ; meme_span ↔ meme_span ; croise ↔ croise",
+    "alternative ne contient ni le porteur ni deux fois le même (type, debut, fin)",
+    "retire n'est présent qu'en vue filtrer_union ou filtrer",
+    "en vue filtrer, tout retire=true est absent des étiquettes de premier niveau, tout retire=false y est présent",
+    "membres = porteur + alternatives, sans doublon",
+    "le rang 1 est la vue préférée ; ce n'est pas la partition : en mode filtrer, tous les union sont conservés et c'est retire qui fait foi"
+   ],
+   "exemple_alternative": {
+    "type": "GP",
+    "debut": 29,
+    "fin": 60,
+    "valeur": "du jardin chaque matin avant de",
+    "meta": {
+     "partition": {
+      "groupe": 0,
+      "rang": 1,
+      "membres": 4,
+      "vue": "alternative"
+     },
+     "alternative": [
+      {
+       "type": "GV",
+       "debut": 61,
+       "fin": 67,
+       "source": "heuristique",
+       "union": true,
+       "relation": "croise",
+       "rang": 2,
+       "role": "prédicat"
+      },
+      {
+       "type": "GP",
+       "debut": 29,
+       "fin": 51,
+       "source": "heuristique",
+       "union": false,
+       "relation": "inclut",
+       "rang": 3,
+       "attachement": {
+        "segment": "du jardin chaque matin",
+        "cible": "partir"
+       },
+       "role": "possession"
+      },
+      {
+       "type": "GP",
+       "debut": 58,
+       "fin": 67,
+       "source": "heuristique",
+       "union": false,
+       "relation": "croise",
+       "rang": 4,
+       "attachement": {
+        "segment": "de partir",
+        "cible": "au"
+       },
+       "role": "possession"
+      }
+     ]
+    }
+   },
+   "exemple_filtrer": {
+    "type": "GP",
+    "debut": 29,
+    "fin": 60,
+    "valeur": "du jardin chaque matin avant de",
+    "meta": {
+     "partition": {
+      "groupe": 0,
+      "rang": 1,
+      "membres": 4,
+      "vue": "filtrer"
+     },
+     "alternative": [
+      {
+       "type": "GV",
+       "debut": 61,
+       "fin": 67,
+       "source": "heuristique",
+       "union": true,
+       "relation": "croise",
+       "rang": 2,
+       "retire": false,
+       "role": "prédicat"
+      },
+      {
+       "type": "GP",
+       "debut": 29,
+       "fin": 51,
+       "source": "heuristique",
+       "union": false,
+       "relation": "inclut",
+       "rang": 3,
+       "retire": true,
+       "attachement": {
+        "segment": "du jardin chaque matin",
+        "cible": "partir"
+       },
+       "role": "possession"
+      },
+      {
+       "type": "GP",
+       "debut": 58,
+       "fin": 67,
+       "source": "heuristique",
+       "union": false,
+       "relation": "croise",
+       "rang": 4,
+       "retire": true,
+       "attachement": {
+        "segment": "de partir",
+        "cible": "au"
+       },
+       "role": "possession"
+      }
+     ]
+    }
+   }
+  },
+  "tests_attendus": [
+   "test_bloc_linguistique.py : les tests existants ne lisent pas meta ; le défaut alternative ne change ni POS ni les spans",
+   "ajouter un test : 0 paire après filtrer sur les 96 textes des audits + 25 paragraphes",
+   "ajouter un test : réciprocité des relations et permutation des rangs",
+   "ajouter un test : retire=true ⇒ segment absent du premier niveau ; retire=false ⇒ présent",
+   "gold : F1 et attachement inchangés en alternative ; mesurer les nouveaux chiffres en filtrer"
+  ],
+  "compatibilite": {
+   "defaut": "alternative (change le JSON, pas les étiquettes)",
+   "brut": "reproduit la sortie d'avant le patch (méta absente)",
+   "version_annotation": "pas de bump : champs optionnels dans meta, les clients qui ignorent meta lisent comme avant",
+   "consommateurs": "le formateur de drave.py ignore meta.alternative aujourd'hui ; le patch propose un suffixe compact [g0 r1/4 · alt=3 · 2 retiré(s)] au lieu d'inliner les vues (sinon 251 caractères de ligne max)."
+  }
+ },
+ "limites": [
+  "mesures épinglées à fa1b0c6e : le HEAD a bougé (gold corrigé, exact 226/226) ; les chiffres ne sont pas ceux du HEAD.",
+  "gold in-sample (612 phrases, 239 cibles) : le F1 et l'attachement sont des mesures de gold, pas de texte libre.",
+  "les textes libres (25 paragraphes) n'ont pas de gold : ils servent à la cartographie et à la lisibilité, pas à l'exactitude.",
+  "l'attachement exact ne compte que les spans du gold ; un segment alternatif peut porter la bonne cible sans être compté.",
+  "le rendu humain est simulé localement : le formateur drave.py actuel n'affiche pas meta.alternative ; les longueurs de ligne sont celles d'un rendu candidat.",
+  "le client arbre/index n'est pas testé : 0 paire est une propriété structurelle, pas une preuve d'usage.",
+  "le rang 1 est une préférence de groupe (179/207 avec gold), pas une vérité sémantique ; le filtre strict garde tous les union.",
+  "le payload est mesuré sur 96 + 25 textes ; f50 (152 vues) est le pire cas, pas une borne.",
+  "les compositions Parallele/Cascade restent silencieuses quand priorite_par_niveau=None ; le patch est limité à Heuristique.analyser.",
+  "pas de mesure GPU/neuronal : le mock et le vrai tagger ne sont pas dans ce banc."
+ ],
+ "fichiers": {
+  "rapport": "reports/rapport-partition-syntagmes.md",
+  "pensee": "reports/pensee-partition-syntagmes.json",
+  "lus": [
+   "tools/bloc_linguistique.py",
+   "tools/drave.py",
+   "reports/rapport-fiabilite-produit.md",
+   "reports/rapport-produit-bloc-l.md",
+   "reports/pensee-fiabilite-produit.json",
+   "reports/pensee-produit-bloc-l.json"
+  ],
+  "non_committes": [
+   "/tmp/pin_audit/",
+   "/tmp/partition_syntagmes/"
+  ],
+  "aucun_existant_modifie": true,
+  "aucun_commit": true
+ }
+}

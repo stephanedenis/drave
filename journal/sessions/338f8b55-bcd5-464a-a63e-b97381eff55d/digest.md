@@ -1905,3 +1905,221 @@ PREFIXES = ("re", "ré", "dé", "des", "pré", "pro", "anti", "auto", "co", "con
 … [2977 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, pathlib, hashlib\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nfrom tools.tests.linguisti … [2140 caractères tronqués]`
+
+  ```
+live sha c0467d16213fa1987f1cfee8a69f831e4d9b1130315c8fe1b86488f106136d02
+live integrated on B13 gold: POS 0.8496 dev 0.849 test 0.8511 F1 0.6452 att 231 232 ferme 0.9288 ouvert 0.7746
+live corr 36 cass 0 ww 2
+corr forms [(('where', 'NOUN', 'PRON'), 6), (('late', 'NOUN', 'ADV'), 4), (('out', 'NOUN', 'ADV'), 2), (('right', 'NOUN', 'ADJ'), 2), (('As', 'NOUN', 'CONJ'), 2), (('fast', 'NOUN', 'ADJ'), 1), (('maybe', 'NOUN', 'ADV'), 1), (('hard', 'NOUN', 'ADV'), 1), (('calm', 'NOUN', 'ADJ'), 1), (('dark', 'NOUN', 'ADJ'), 1), (('absent', 'NOUN', 'ADJ'), 1), (('whose', 'NOUN', 'PRON'), 1), (('mean', 'NOUN', 'ADJ'), 1), (('far', 'NOUN', 'ADV'), 1), (('fresh', 'NOUN', 'ADJ'), 1), (('quiet', 'NOUN', 'ADJ'), 1), (('alone', 'NOUN', 'ADJ'), 1), (('mine', 'NOUN', 'PRON'), 1), (('rare', 'NOUN', 'ADJ'), 1), (('am', 'VERB', 'AUX'), 1), (('again', 'NOUN', 'ADV'), 1), (('Maybe', 'NOUN', 'ADV'), 1), (('now', 'NOUN', 'ADV'), 1), (('down', 'VERB', 'ADV'), 1), (('hungry', 'NOUN', 'ADJ'), 1)]
+ww [('r115', 'born', 'NOUN', 'ADJ', 'VERB'), ('r162', 'hung', 'NOUN', 'ADJ', 'VERB')]
+He feels pain. pain ['ADJ']
+He is a doctor. doctor ['NOUN']
+He is running. running ['VERB']
+She seems calm. calm ['ADJ']
+It looks qu
+… [132 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Alerte au parent : l’intégration live diverge du patch mesuré
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "POS R4/classes fermées — mesures terminées, mais l’intégration live diverge du patch mesuré.\n\nRéférence mesurée : B13 (module 2ba393b0 + gold B13) → 83,83 % / F1 0,6181 / 222-222.\n- R4 bilingue : +0,74 dev / +0,71 test, 23 correctif … [1809 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-pos-r4.json')\nd=json.loads(p.read_text())\nd['etat_live']={\n 'commit':'5c5d3b52',\n 'module_sha256':'c0467d16213fa1987f1cfee8a69f831e4d9b1130315c8fe1b86488f1061 … [3447 caractères tronqués]`
+
+  ```
+json etat_live added ['recommandation', 'perimetre', 'etat_live', 'fichiers']
+report etat live added
+452:### 9.1 État live (information, hors mesure de référence)
+etat_live keys ['commit', 'module_sha256', 'note', 'mesure_sur_gold_b13', 'ecarts', 'recommandation']
+fichiers None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-pos-r4.json')\nd=json.loads(p.read_text())\nd['fichiers']=['reports/rapport-pos-r4.md','reports/pensee-pos-r4.json']\n# ensure order: keep existing, move fichiers … [308 caractères tronqués]`
+
+  ```
+['recommandation', 'perimetre', 'etat_live', 'fichiers'] ['reports/rapport-pos-r4.md', 'reports/pensee-pos-r4.json']
+ok 131367 ['reports/rapport-pos-r4.md', 'reports/pensee-pos-r4.json']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))\nprint(list(d))\nfor k in ['controles','libres_50','r4','classes_fermees','paquets','placebo','patchs_exacts']:\n    v=d[k]\n    print(k, type(v).__name__ … [468 caractères tronqués]`
+
+  ```
+['rapport', 'ligne', 'date', 'branche', 'objet', 'verdict', 'snapshot', 'protocole', 'baseline', 'r4', 'classes_fermees', 'paquets', 'placebo', 'libres_50', 'controles', 'head_controle', 'patchs_exacts', 'limites', 'recommandation', 'perimetre', 'etat_live', 'fichiers']
+controles list 29
+libres_50 dict 3
+r4 dict 5
+classes_fermees dict 6
+paquets dict 9
+placebo dict 8
+patchs_exacts dict 3
+free detail 28
+r4 corrections 23
+cc corrections 25
+safe corrections 37
+ reports/pensee-pos-r4.json | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-r4.md')\ns=p.read_text()\nold='''> **Non intégré.** Ces patches sont des propositions mesurées, pas du code appliqué : la mission\n> interdisait de modifier l’exis … [787 caractères tronqués]`
+
+  ```
+annex note updated
+dans le JSON, clé `controles`, avec les colonnes `base`, `r4_en`, `r4_bilingue`, `r4_en_large`,
+`cc_core`, `cc_fast`, `r4_en+cc_core`, `r4_bilingue+cc_core`. Les jugements y sont `ok` / `ko`.
+
+> **État.** Ces patches sont des propositions mesurées ; cette session n’a modifié aucun fichier
+> existant. Un autre chantier a intégré une variante depuis (voir § 9.1) : elle diffère sur
+> `outside` (resté dans PREP) et sur `feel` (ajouté à `_copules`). Les lignes citées sont celles du
+> snapshot B13 `2ba393b0` ; toute évolution de `_pos`, de la boucle 3 bis ou de `POS_FERME` décale
+> les ancres, pas les règles.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re\nJ=json.load(open('reports/pensee-pos-r4.json'))\nR=pathlib.Path('reports/rapport-pos-r4.md').read_text()\n# required top-level keys\nreq=['rapport','ligne','date','branche','objet','verdict … [2104 caractères tronqués]`
+
+  ```
+keys ok True []
+baseline B13 POS 83,83 True
+baseline B13 F1 0,6181 True
+safe dev delta +1,19 True
+safe test delta +1,11 True
+max dev delta +1,51 True
+cc dev delta +0,78 True
+r4 dev delta +0,74 True
+safe POS 85,00 True
+max POS 85,34 True
+cc POS 84,62 True
+controls 29 free variants ['r4_en', 'r4_bilingue', 'cc_core', 'cc_fast', 'cc_sans_where', 'r4_en+cc_core', 'r4_bilingue+cc_core', 'r4_bilingue+cc_sans_where']
+etat live {'pos': 0.8496, 'dev': 0.849, 'test': 0.8511, 'f1': 0.6452, 'att_exact': 231, 'att_labels': 232, 'corrections': 36, 'casses': 0, 'faux_faux': 2}
+fichiers ['reports/rapport-pos-r4.md', 'reports/pensee-pos-r4.json']
+perimetre Mesure hors clôture : aucun fichier existant modifié, aucun 
+('baseline', 'B13', 'all', 'pos') 0.8383
+('paquets', 'r4_en+cc_core', 'pos', 'all') 0.85
+('classes_fermees', 'variantes', 'cc_core', 'pos', 'all') 0.8462
+--- git status of deliverables ---
+ M reports/pensee-pos-r4.json
+ M reports/rapport-pos-r4.md
+ M tools/bloc_linguistique.py
+--- diff stat vs HEAD ---
+ reports/pensee-pos-r4.json | 22 ++++++++++++++++++++++
+ reports/rapport-pos-r4.md  | 38 +++++++++++++++++++++++++++++++-------
+ 2 files changed, 53 insertions(+), 7 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-pos-r4.json')\nd=json.loads(p.read_text())\nd['perimetre']=(\"Mesure hors clôture : aucun commit ; aucun fichier de code modifié ; pas de journal/en-cours/roadmap … [2257 caractères tronqués]`
+
+  ```
+perimetre updated
+report perimeter updated
+20:> patches appliqués à des copies `/tmp` ; **aucun fichier de code modifié**. Les deux livrables demandés étaient déjà suivis à HEAD `5c5d3b52` (intégration par un autre chantier) ; ils sont mis à jour ici.
+444:> **Périmètre de clôture.** La mission interdisait de modifier l’existant et de committer :
+449:Aucun fichier existant **hors les deux livrables** n’a été modifié par cette session : les deux
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md", "limit": 60, "offset": 438}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md</path>
+<type>file</type>
+<content>
+438: python3 /tmp/pos_r4/placebo_final.py
+439: python3 /tmp/pos_r4/compute_final.py
+440: python3 /tmp/pos_r4/compute_aux.py
+441: python3 /tmp/pos_r4/assemble_json.py
+442: ```
+443: 
+444: > **Périmètre de clôture.** La mission interdisait de modifier l’existant et de committer :
+445: > pas de journal, pas de `docs/pilotage/`, pas de mise à jour d’`INDEX.md`. Aucun commit, aucun
+446: > fichier de code modifié. Les deux livrables demandés étaient déjà suivis à HEAD `5c5d3b52`
+447: > (intégration par un autre chantier) ; ils sont mis à jour ici. Les portes ne sont pas lancées.
+448: 
+449: Aucun fichier existant **hors les deux livrables** n’a été modifié par cette session : les deux
+450: fichiers sont `reports/rapport-pos-r4.md` et `reports/pensee-pos-r4.json`. Les patches n’ont été
+451: appliqués qu’à des copies `/tmp`.
+452: 
+453: ### 9.1 État live (information, hors mesure de référence)
+454: 
+455: Au moment de la clôture, `tools/bloc_linguistique.py` contient déjà une intégration (commit
+456: `5c5d3b52`, module live SHA `c0467d16…`, plus des changements de frontières de ph
+… [2507 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git status --short tools/bloc_linguistique.py && git log -1 --format='%H %s'", "description": "Check live module hash again"}`
+
+  ```
+83821c9e6bd49942394673dc25ef18d05a6c442e3090407957bf706aa54f0db1  tools/bloc_linguistique.py
+ M tools/bloc_linguistique.py
+ba39a7b162d2f62db911f1552231196bbcdee400 B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '314,322p' tools/bloc_linguistique.py && grep -n \"_copules = \" -A8 tools/bloc_linguistique.py | head -12 && git status --short tools/bloc_linguistique.py", "description": "Check current live CC/R4 after new commit"}`
+
+  ```
+"en": {
+        "DET": set("the a an this that these those my your his her its our their".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside toward towards until upon within".split()),
+        "PRON": set("i you he she it we they me him her us them who whom which that where whose mine".split()),
+        "CONJ": set("and or but nor for so yet because although while if when as".split()),
+        "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must am".split()),
+        "ADV": set("not never very well here yesterday today tomorrow often always already still too late out maybe hard far again now down outside".split()),
+        "NUM": set("one two three four five six seven eight nine ten".split()),
+    },
+1370:        _copules = {"is", "are", "was", "were", "am", "be", "been", "being", "seems", "seem",
+1371-                    "looks", "look", "becomes", "become"}
+1372-        if lg == "en":
+1373-            for _k, _i in enumerate(pos_idx):
+1374-                _e = etiquettes[_i]
+1
+… [255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, pathlib, hashlib, collections\nsys.path.insert(0,'/tmp/pos_r4')\nimport harness as H\nsys.path.insert(0,str(H.RACINE))\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\nfrom tools.te … [1858 caractères tronqués]`
+
+  ```
+sha 83821c9e6bd49942394673dc25ef18d05a6c442e3090407957bf706aa54f0db1
+POS 0.85 dev 0.8494 test 0.8511 F1 0.6459 att 231 232 ferme 0.9295 ouvert 0.7746
+corr 37 cass 0 ww 2
+corr forms [(('where', 'NOUN', 'PRON'), 6), (('late', 'NOUN', 'ADV'), 4), (('out', 'NOUN', 'ADV'), 2), (('right', 'NOUN', 'ADJ'), 2), (('As', 'NOUN', 'CONJ'), 2), (('fast', 'NOUN', 'ADJ'), 1), (('maybe', 'NOUN', 'ADV'), 1), (('hard', 'NOUN', 'ADV'), 1), (('calm', 'NOUN', 'ADJ'), 1), (('dark', 'NOUN', 'ADJ'), 1), (('outside', 'PREP', 'ADV'), 1), (('absent', 'NOUN', 'ADJ'), 1), (('whose', 'NOUN', 'PRON'), 1), (('mean', 'NOUN', 'ADJ'), 1), (('far', 'NOUN', 'ADV'), 1), (('fresh', 'NOUN', 'ADJ'), 1), (('quiet', 'NOUN', 'ADJ'), 1), (('alone', 'NOUN', 'ADJ'), 1), (('mine', 'NOUN', 'PRON'), 1), (('rare', 'NOUN', 'ADJ'), 1), (('am', 'VERB', 'AUX'), 1), (('again', 'NOUN', 'ADV'), 1), (('Maybe', 'NOUN', 'ADV'), 1), (('now', 'NOUN', 'ADV'), 1), (('down', 'VERB', 'ADV'), 1), (('hungry', 'NOUN', 'ADJ'), 1)]
+ww [('r115', 'born', 'NOUN', 'ADJ', 'VERB'), ('r162', 'hung', 'NOUN', 'ADJ', 'VERB')]
+He feels pain. ['NOUN']
+He is a doctor. ['NOUN']
+He is running. ['VERB']
+Where is the nearest station? ['PRON']
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de l’état live : les deux écarts sont corrigés
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/pensee-pos-r4.json')\nd=json.loads(p.read_text())\nd['etat_live']={\n 'commit':'ba39a7b1 (frontières de phrase) + modifications en cours',\n 'module_sha256':'83821c9e6bd … [2482 caractères tronqués]`
+
+  ```
+json live updated
+report live section replaced
+159:| `He feels pain.` | `pain` NOUN | NOUN | NOUN | NOUN | ✅ (liste stricte) |
+455:Instantané de fin de session : `tools/bloc_linguistique.py` SHA `83821c9e…`, HEAD `ba39a7b1`
+460:(`He feels pain.` reste NOUN). Le live omet encore `appear`/`remain` (sans effet sur ce gold) et
+{'pos': 0.85, 'dev': 0.8494, 'test': 0.8511, 'f1': 0.6459, 'att_exact': 231, 'att_labels': 232, 'corrections': 37, 'casses': 0, 'faux_faux': 2}
+  ```
+
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Suivi POS R4/classes : les deux écarts de l’intégration live sont corrigés dans l’instantané courant (`tools/bloc_linguistique.py` SHA `83821c9e…`, HEAD `ba39a7b1`) : `outside` n’est plus dans PREP et `_copules` n’inclut plus `feel`. S … [453 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --check HEAD -- reports/rapport-pos-r4.md reports/pensee-pos-r4.json; echo \"diff-check exit $?\"; python3 - <<'PY'\nimport re, pathlib, json\nR=pathlib.Path('reports/rapport-pos-r4.md').read_text()\n# fenced code blocks bal … [979 caractères tronqués]`
+
+  ```
+diff-check exit 0
+fences 8 even True
+table col mismatches [] count 0
+json load ok True
+  ```
+

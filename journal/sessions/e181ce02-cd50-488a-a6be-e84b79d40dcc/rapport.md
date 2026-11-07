@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 147.8 h |
+| Durée | 148.0 h |
 | Tours | 184 |
-| Messages | 3235 |
-| Appels d'outils | 2864 |
+| Messages | 3248 |
+| Appels d'outils | 2875 |
 | Fichiers touchés | 25 |
-| Commandes | 2365 |
+| Commandes | 2376 |
 | Sous-agents | 34 |
-| Commits | 366 |
+| Commits | 367 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*110 appels d'outils.* Actions notables :
+*121 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 96 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ Le sous-agent frontières a livré (32/40 → 0) : j'applique le patch A depuis le JSON
+⏵ **POS 85,00 %**, partition intégrée : je fige la fiche
 
 ## 3. Travail accompli
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2325 autres
+- … et 2336 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10566,4 +10566,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE ; ÉTAT HORODATÉ" -- journal/2026-11-0
 - B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183" -- tools/bloc_linguistique.py to
 - B13 — LES FRONTIÈRES DE PHRASE (P0-4) : 32/40 TEXTES FAUX → 0/40, 102 → 59 PHRASES, GOLD INCHANGÉ (POS 84,96, 235/236) ; 183/183" -- tools/bloc_linguistique.py 
+- B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %" 
 

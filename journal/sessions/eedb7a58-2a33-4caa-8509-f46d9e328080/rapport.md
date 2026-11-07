@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.9 h |
+| Durée | 2.1 h |
 | Tours | 1 |
-| Messages | 112 |
-| Appels d'outils | 126 |
+| Messages | 129 |
+| Appels d'outils | 145 |
 | Fichiers touchés | 7 |
-| Commandes | 110 |
+| Commandes | 129 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*126 appels d'outils.* Actions notables :
+*145 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 108 autres
+- … et 127 autres
 
 **Synthèse produite :**
 
-⏵ Assembling the machine-readable findings and the report from the pinned measurements
+⏵ Fixing a real composition edge case: stale alternatives after `_fusion` dedup
 
 ## 3. Travail accompli
 
@@ -103,7 +103,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 70 autres
+- … et 89 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -151,6 +151,18 @@
 - **T1** `-+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.`
 - **T1** `++    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois`
 - **T1** `Fri Nov 6 20:18:29 2026 -0500 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
+- **T1** `211:| A | 239 | 54 | 722 | 549 | 2 129 150 | **+10,4 %** | 894 |`
+- **T1** `212:| B1 | 91 | 33 | 636 | 481 | 2 066 365 | **+7,2 %** | 714 |`
+- **T1** `213:| B2 | 0 | 0 | 545 | 397 | 1 967 190 | **+2,0 %** | 466 |`
+- **T1** `256:**26**, ce qui explique l'essentiel de la perte 222→205. Le rang 1 est une **préférence**, pas une`
+- **T1** `285:   F1 0,5849 et exact 222/239 sont **inchangés** ; le client choisit. Coût : **+10,4 %** de JSON.`
+- **T1** `287:   **+2,0 %** de JSON. Les S retirés restent dans `meta.alternative` (`retire: true`) : la vue est`
+- **T1** `290:   exact **217/239**, **+7,2 %** de JSON, mais **91 paires** restantes (33/96 textes). À ne vendre`
+- **T1** `303:| je veux tout, je choisis | `alternative` (défaut) | 0,5849 | 222/239 | 239 | +10,4 % |`
+- **T1** `304:| moins de chevauchements, coût minimal | `filtrer_union` | 0,6163 | 217/239 | 91 | +7,2 % |`
+- **T1** `305:| partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |`
+- **T1** `5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
+- **T1** `+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.`
 
 ## 5. Erreurs rencontrées
 
