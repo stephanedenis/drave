@@ -39,6 +39,14 @@ gold (les tokens du gold ne sont pas les mêmes), gardé pour la robustesse.
 2. **R4-fr filtré** (adjectif connu ou suffixe) : **intégré**, POS 85,75 → **85,84 %**.
 3. **`que` CONJ vs PRON** : **intégré** (PRON après un nom, CONJ ailleurs) — POS 85,84 → **86,25 %**.
 
+## 4 bis. Les règles **rejetées** (mesurées puis retirées)
+
+| règle | effet | décision |
+|---|---|---|
+| participes irréguliers dans le lexique | F1 −0,0023 | retirée |
+| **R4-fr générique** (toute copule) | 5/8 changements faux sur les textes libres | rejetée (A27) |
+| **participe après `avoir`** (NOUN → VERB) | POS 86,25 → **86,06** (−0,19) : « Il a faim » | retirée |
+
 ## 5. Fichiers
 
 - [`bloc_linguistique.py`](../tools/bloc_linguistique.py) — PONCT et les élisions.

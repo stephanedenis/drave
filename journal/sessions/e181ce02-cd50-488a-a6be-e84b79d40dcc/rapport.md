@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 150.7 h |
+| Durée | 150.8 h |
 | Tours | 184 |
-| Messages | 3392 |
-| Appels d'outils | 3010 |
+| Messages | 3395 |
+| Appels d'outils | 3013 |
 | Fichiers touchés | 25 |
-| Commandes | 2505 |
+| Commandes | 2508 |
 | Sous-agents | 38 |
-| Commits | 402 |
+| Commits | 403 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*256 appels d'outils.* Actions notables :
+*259 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 241 autres
+- … et 244 autres
 
 **Synthèse produite :**
 
-⏵ **POS 86,25 %** avec la règle « que » : autotest et commit
+⏵ Règle du participe passé après « avoir » (a couru, j'ai lu)
 
 ## 3. Travail accompli
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2465 autres
+- … et 2468 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10606,4 +10606,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉE (A6.2 LIBRE), POS 85,84 %, PONCT, R4-FR ; ÉTAT HORODATÉ" -- journal/2026-11-06
 - DOCS — LES DEUX TABLEAUX CORRIGÉS (SÉPARATEUR 6 COLONNES, ∣ DANS LE CODE) ; PORTE TABLEAUX VERTE" -- reports/rapport-pos-r4.md reports/rapport-etat-a.md docs/pi
 - B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183" -- tools/bloc_linguistique.py tools/pens
+- FICHE — LES TROIS RÈGLES REJETÉES (PARTICIPES, R4-FR GÉNÉRIQUE, PARTICIPE APRÈS AVOIR) ; POS RESTE À 86,25 %" -- reports/rapport-pos-ponctuation.md docs/pilotag
 

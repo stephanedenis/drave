@@ -57423,3 +57423,39 @@ test POS 0.8642 | F1 0.6552
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-ponctuation.md'); t=p.read_text()\nt=t.replace(\"2. **R4-fr filtré** (adjectif connu ou suffixe) : **intégré**, POS 85,75 → **85,84 %**.\\n3. **`que` CONJ vs PRON* … [1439 caractères tronqués]`
+
+  ```
+docs
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 17 files changed, 120 insertions(+), 32 deletions(-)
+COMMIT OK 1
+c43dd5cc B13 — LA RÈGLE « QUE » (PRON APRÈS UN NOM, CONJ AILLEURS) : POS 85,84 → 86,25 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183
+   9093c73e..c43dd5cc  s/v7 -> s/v7
+   9093c73e..c43dd5cc  master -> master
+ven 06 nov 2026 23:25:16 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Règle du participe passé après « avoir » (a couru, j'ai lu)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('''        # 4. phrase + pragmatique''',\n'''        # 3 f. participe passé après **avoir** : « Il a couru », « j'ai lu » —  … [1774 caractères tronqués]`
+
+  ```
+participe après avoir
+syntaxe OK
+TOUT POS 0.8606 | F1 0.6482 | exact 235/236
+dev POS 0.8622 | F1 0.6450
+test POS 0.8571 | F1 0.6552
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\ndebut=t.find(\"        # 3 f. participe passé après **avoir**\")\nfin=t.find(\"        # 4. phrase + pragmatique\")\nif debut>0 and fin> … [637 caractères tronqués]`
+
+  ```
+règle retirée (-0,19)
+syntaxe OK
+POS 0.8625 | F1 0.6482 | exact 235/236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-ponctuation.md'); t=p.read_text()\nt=t.replace(\"## 5. Fichiers\",\"\"\"## 4 bis. Les règles **rejetées** (mesurées puis retirées)\n\n| règle | effet | décision |\ … [1341 caractères tronqués]`
