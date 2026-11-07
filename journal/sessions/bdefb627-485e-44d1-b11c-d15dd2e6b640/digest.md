@@ -437,3 +437,50 @@ dirty: 0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && du -sh --exclude=.git Panini-FS Panini-UltraReactive Panini-PublicationEngine Panini-SpecKit-Shared Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageSha … [128 caractères tronqués]`
+
+  ```
+[still running after 180000ms; moved to background job bash-4606]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-4601", "reason": "du trop lent"}`
+
+  ```
+requested cancellation of job bash-4601
+  ```
+
+- **job_kill** `{"job_id": "bash-4606", "reason": "du trop lent"}`
+
+  ```
+requested cancellation of job bash-4606
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini-FS Panini-UltraReactive Panini-PublicationEngine Panini-SpecKit-Shared Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageShared Panini-Da … [345 caractères tronqués]`
+
+  ```
+Panini-FS   objects: 54.96
+Panini-UltraReactive 40K
+  objects: 12.93
+Panini-PublicationEngine 40K
+  objects: 12.45
+Panini-SpecKit-Shared 164K
+  objects: 46.04
+Panini-SemanticCore 40K
+  objects: 12.45
+Panini-AttributionRegistry 36K
+  objects: 9.06
+Panini-AutonomousMissions 40K
+  objects: 12.93
+Panini-CloudOrchestrator 20K
+  objects: 5.90
+Panini-CoLabController 28K
+  objects: 10.99
+Panini-CopilotageShared 44K
+  objects: 11.50
+Panini-DatasetsIngestion 36K
+  objects: 9.06
+Panini-ExecutionOrchestrator 68K
+  objects: 23.59
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub && for d in Panini-FS Panini-UltraReactive Panini-PublicationEngine Panini-SpecKit-Shared Panini-SemanticCore Panini-AttributionRegistry Panini-AutonomousMissions Panini-CloudOrchestrator Panini-CoLabController Panini-CopilotageShared Panini-Da … [224 caractères tronqués]`

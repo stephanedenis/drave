@@ -59420,3 +59420,26 @@ lien entrant ajouté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# T1 du docs/README : raccourcir la nouvelle section\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"\"\"## Pilotage — le chantier de la semaine\n\n| document | pour quoi |\n|-- … [1696 caractères tronqués]`
+
+  ```
+T1 et compteur
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · docs/README.md : 1011 mots > budget 1000 (T1)
+ create mode 100644 journal/sessions/bdefb627-485e-44d1-b11c-d15dd2e6b640/rapport.md
+COMMIT OK 1
+a407381c PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLES ET LES RISQUES
+   caeb730c..a407381c  s/v7 -> s/v7
+   caeb730c..a407381c  master -> master
+sam 07 nov 2026 10:02:41 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %ci'; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine et l' … [514 caractères tronqués]`
+
+  ```
+sam 07 nov 2026 10:02:53 EST
+a407381c 2026-11-07 10:00:17 -0500
+  ❌ 1 violation(s) :
+     · docs/README.md : 1010 mots > budget 1000 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine, l'intégration Panini |\",\n            \ … [1123 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 161.3 h |
+| Durée | 161.4 h |
 | Tours | 191 |
-| Messages | 3516 |
-| Appels d'outils | 3123 |
+| Messages | 3518 |
+| Appels d'outils | 3125 |
 | Fichiers touchés | 25 |
-| Commandes | 2609 |
+| Commandes | 2611 |
 | Sous-agents | 42 |
-| Commits | 422 |
+| Commits | 423 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10254,7 +10254,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 191 — prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini
 
-*15 appels d'outils.* Actions notables :
+*17 appels d'outils.* Actions notables :
 
 - bash — Lire la méthode Panini et localiser le projet
 - bash — Explorer Panini
@@ -10270,7 +10270,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Explorer Panini-Research
 - bash — Écrire le plan de la semaine
 - bash — Corriger le lien et l'index
-- … et 1 autres
+- … et 3 autres
 
 **Synthèse produite :**
 
@@ -10395,7 +10395,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2569 autres
+- … et 2571 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10965,4 +10965,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - JOURNAL — LA NUIT DU 07/11 : LA CONVENTION DU SUJET (+10,2 DE F1), r264, --fichier/--jsonl, TROIS RÈGLES REJETÉES" -- journal/2026-11-07/README.md docs/pilotage
 - SESSION — MANDAT E181CE02 RAFRAÎCHI (236/237, 0,9916, 86,25, 0,7535 ; PROCHAINE ACTION : r035/g017 ET LA CONVENTION DES GV)" -- journal/sessions/e181ce02-cd50-4
 - PILOTAGE — LE CHANTIER AUTONOME D'UNE SEMAINE : TRAVAUX OUVERTS, INTÉGRATION PANINI (14 ATOMES, GÉNÉALOGIE, CORPUS), CINQ JOURS, DEUX VAGUES PAR JOUR, LES RÈGLE
+- DOCS — README DANS LE BUDGET T1 APRÈS LE PLAN DE SEMAINE" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "BU
 

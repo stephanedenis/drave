@@ -40,7 +40,7 @@
 |---|---|
 | [`pilotage/README.md`](pilotage/README.md) | la **carte du pilotage** : ordre de [lecture](theorie/glossaire/entrees/lecture.md), qui écrit quoi, outils |
 | [`pilotage/en-cours.md`](pilotage/en-cours.md) | l'**état courant** : synthèse, chantiers, sessions actives |
-| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine et l'intégration Panini |
+| [`pilotage/semaine-autonome.md`](pilotage/semaine-autonome.md) | le chantier d'une semaine + Panini |
 | [`pilotage/plan-travail.md`](pilotage/plan-travail.md) | le **plan multi-sessions** : quatre sessions + le hub, territoires, cadence, surveillance |
 | [`pilotage/roadmap.md`](pilotage/roadmap.md) | l'**ordre** : chantiers [A/B](theorie/glossaire/entrees/a-b.md)/N/R/S, état et prochaine action par ligne |
 | [`pilotage/chantiers.md`](pilotage/chantiers.md) | les **relations** entre chantiers, la vision à jour, la capacité |
