@@ -1610,3 +1610,64 @@ wrote /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-pos-r4.json
 }
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-pos-r4.json'))\nprint('keys',list(p))\nprint('\\nbaseline B13',json.dumps(p['baseline']['B13']['all'],ensure_ascii=False))\nprint('\\nr4_en',json.dumps(p['r4']['variante … [588 caractères tronqués]`
+
+  ```
+keys ['rapport', 'ligne', 'date', 'branche', 'objet', 'verdict', 'snapshot', 'protocole', 'baseline', 'r4', 'classes_fermees', 'paquets', 'placebo', 'libres_50', 'controles', 'head_controle', 'patchs_exacts', 'limites', 'recommandation', 'fichiers']
+
+baseline B13 {"pos": 0.8383, "ferme": 0.9133, "ouvert": 0.7673, "f1": 0.6181, "prec": 0.655, "rap": 0.5851, "tete": 0.7511, "att_exact": 222, "att_labels": 222, "att_cibles": 239, "att_couv": 0.9289, "att_topk": 221}
+
+r4_en {"pos": {"all": 0.8421, "dev": 0.8416, "test": 0.8431, "ferme": 0.9133, "ouvert": 0.7746, "en": 0.9207, "fr": 0.7976}, "delta_pts": {"dev": 0.41, "test": 0.31, "all": 0.38}, "f1": {"all": 0.6181, "dev": 0.6153, "test": 0.6243, "en": 0.7273, "fr": 0.5595, "tete": 0.7511}, "attachement": {"exact": 222, "labels": 222, "cibles": 239, "couverture": 0.9289, "topk": 221}, "corrections": 12, "casses": 0, "faux_faux": 8, "corrections_dev": 9, "corrections_test": 3, "corrections_en": 12, "corrections_fr": 0, "corrections_detail": [{"id": "r032", "langue": "en", "split": "test", "mot": "fast", "gold": "ADJ", "base": "NOUN", "apres": "ADJ", "contexte": "The car is fast."}, {"id": "r112", "langue": "en", "split": "test", "mot": 
+… [4906 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np=json.load(open('reports/pensee-pos-r4.json'))\nfor k in ['cc_core','cc_fast','cc_when','cc_nt','cc_large']:\n    v=p['classes_fermees']['variantes'][k]\n    print(k,'pos',v['pos'],'delta',v['delta_pts … [1036 caractères tronqués]`
+
+  ```
+cc_core pos {'all': 0.8462, 'dev': 0.8453, 'test': 0.8481, 'ferme': 0.9295, 'ouvert': 0.7673, 'en': 0.9321, 'fr': 0.7976} delta {'dev': 0.78, 'test': 0.81, 'all': 0.79} corr 25 cass 0 ww 0 att 222 222 F1 0.6188
+cc_fast pos {'all': 0.8468, 'dev': 0.8458, 'test': 0.8491, 'ferme': 0.9308, 'ouvert': 0.7673, 'en': 0.9338, 'fr': 0.7976} delta {'dev': 0.83, 'test': 0.91, 'all': 0.85} corr 27 cass 0 ww 1 att 222 222 F1 0.6188
+cc_when pos {'all': 0.8452, 'dev': 0.8439, 'test': 0.8481, 'ferme': 0.9276, 'ouvert': 0.7673, 'en': 0.9294, 'fr': 0.7976} delta {'dev': 0.64, 'test': 0.81, 'all': 0.69} corr 26 cass 4 ww 0 att 222 222 F1 0.6188
+cc_nt pos {'all': 0.8462, 'dev': 0.8453, 'test': 0.8481, 'ferme': 0.9295, 'ouvert': 0.7673, 'en': 0.9321, 'fr': 0.7976} delta {'dev': 0.78, 'test': 0.81, 'all': 0.79} corr 25 cass 0 ww 0 att 222 222 F1 0.6188
+cc_large pos {'all': 0.8459, 'dev': 0.8453, 'test': 0.8471, 'ferme': 0.9288, 'ouvert': 0.7673, 'en': 0.9312, 'fr': 0.7976} delta {'dev': 0.78, 'test': 0.71, 'all': 0.76} corr 24 cass 0 ww 1 att 221 221 F1 0.6177
+r4_en pos {'all': 0.8421, 'dev': 0.8416, 'test': 0.8431, 'ferme': 0.9133, 'ouvert': 0.7746, 'en': 0.9207, 'fr': 0.7976} delta {'dev': 0.41, 'test'
+… [2675 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `reports/rapport-pos-r4.md`
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-pos-r4.md <<'MD'\n# POS — R4 + classes fermées : +1,19 pt dev / +1,11 test en paquet sûr, +1,51/+1,51 en paquet max\n\n> **Ligne de roadmap** : **A25** (gold anglais) · **B13** (moteur de pensée) · **Date** : 20 … [32142 caractères tronqués]`
+
+  ```
+512 reports/rapport-pos-r4.md
+chars 31497 tables 93 code fences 8
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture de la fiche et cohérence avec le JSON
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md", "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pos-r4.md</path>
+<type>file</type>
+<content>
+1: # POS — R4 + classes fermées : +1,19 pt dev / +1,11 test en paquet sûr, +1,51/+1,51 en paquet max
+2: 
+3: > **Ligne de roadmap** : **A25** (gold anglais) · **B13** (moteur de pensée) · **Date** : 2026-11-06 ·
+4: > **Verdict** : ✅ les deux derniers leviers POS sont mesurés. **R4 bilingue** vaut **+0,74 dev /
+5: > +0,71 test** (23 correctifs, 0 cassé), **les classes fermées** **+0,78 / +0,81** (25 correctifs,
+6: > 0 cassé). Le **paquet sûr** (R4-en + classes fermées) vaut **+1,19 / +1,11**, **37/0**, F1
+7: > **+0,0007**, attachement **222/222**. Le **paquet max** (R4 bilingue) vaut **+1,51 / +1,51**,
+8: > 48/0, mais **11 faux→faux** et **5 faux positifs français** sur les 50 textes libres. R4 n’est
+9: > donc **pas « 0 perte »** : « 0 cassé » est une propriété d’exactitude, pas de sens.
+10: >
+11: > **Snapshot** : référence **B13** commit `2ba393b0`, `bloc_linguistique.py` SHA
+12: > `f3db75fc…`, gold `3663be6c…` / `05d4f6df…` / `e3e704ce…` ; split `gold_split.py`
+13: > (`crc32(id) % 3 == 0` → test). Le dépôt a bougé **pendant** la mesure (correctif d’élision,
+14: > gold 
+… [7417 caractères tronqués]
+  ```
+

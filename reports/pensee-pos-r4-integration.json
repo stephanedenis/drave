@@ -1,0 +1,38 @@
+{
+ "date": "2026-11-06",
+ "ligne": "B13",
+ "integres": [
+  "classes fermées anglaises",
+  "R4-en copule → ADJ"
+ ],
+ "rejete": "R4 bilingue (5 faux positifs français)",
+ "avant": {
+  "pos": 0.8383,
+  "pos_dev": 0.8375,
+  "pos_test": 0.84,
+  "ferme": 0.9133,
+  "ouvert": 0.7673,
+  "f1": 0.6474,
+  "attachement": "235/236"
+ },
+ "apres": {
+  "pos": 0.8496,
+  "pos_dev": 0.849,
+  "pos_test": 0.8511,
+  "ferme": 0.9295,
+  "ouvert": 0.7746,
+  "f1": 0.6474,
+  "attachement": "235/236"
+ },
+ "controles": {
+  "placebo": "-0,25 à -0,44 pt",
+  "corriges": 37,
+  "casses": 0,
+  "autotest": "183/183"
+ },
+ "limites": [
+  "test 347 tokens",
+  "outside PREP/ADV",
+  "R4 fr rejeté"
+ ]
+}

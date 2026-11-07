@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.5 h |
+| Durée | 1.7 h |
 | Tours | 1 |
-| Messages | 98 |
-| Appels d'outils | 112 |
-| Fichiers touchés | 5 |
-| Commandes | 102 |
+| Messages | 100 |
+| Appels d'outils | 114 |
+| Fichiers touchés | 6 |
+| Commandes | 103 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*112 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,11 +41,11 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 98 autres
+- … et 100 autres
 
 **Synthèse produite :**
 
-⏵ Adding the partial union filter (b1) to the patch and measuring both filter variants
+⏵ Assembling the machine-readable findings and the report from the pinned measurements
 
 ## 3. Travail accompli
 
@@ -58,6 +58,7 @@
 | `/tmp/partition_syntagmes/construire_patch.py` | 3 | 0 |
 | `/tmp/partition_syntagmes/patch_eval.py` | 1 | 0 |
 | `/tmp/partition_syntagmes/stats_finales.py` | 1 | 0 |
+| `/tmp/partition_syntagmes/construire_pensee.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -101,7 +102,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 62 autres
+- … et 63 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -145,6 +146,7 @@
 - **T1** `GP  [58:67] 'de partir' -> au   [groupe 0 rang 4/4] | alt croise GP 29:60 | alt inclut GV 61:67 | alt croise GP 29:51`
 - **T1** `GV  [61:67] 'partir' -> —   [groupe 0 rang 2/4] | alt croise GP 29:60 | alt croise GP 29:51 | alt inclus GP 58:67`
 - **T1** `+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois.`
+- **T1** `verdict Les 239 paires des deux bancs sont **toutes** des paires S × chunker : 53,1 % de S qui contient le chunker, 33,5 % l'inverse, 2,5 % de mêmes bornes, 10,9 % de croisements. L'alternative étique`
 
 ## 5. Erreurs rencontrées
 

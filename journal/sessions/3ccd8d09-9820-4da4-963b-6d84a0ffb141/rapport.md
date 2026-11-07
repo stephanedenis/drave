@@ -7,12 +7,12 @@
 | Identifiant | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 1.5 h |
+| Durée | 1.8 h |
 | Tours | 1 |
-| Messages | 86 |
-| Appels d'outils | 92 |
+| Messages | 112 |
+| Appels d'outils | 117 |
 | Fichiers touchés | 0 |
-| Commandes | 90 |
+| Commandes | 114 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **réparer  … [2242 caractères tronqués]
 
-*92 appels d'outils.* Actions notables :
+*117 appels d'outils.* Actions notables :
 
 - bash — Inspect repo status and branch
 - bash — Check sizes of target files
@@ -41,11 +41,11 @@
 - bash — Inspect gold structure
 - bash — Check phrase tests in gold tooling
 - bash — Check imports and Python version
-- … et 77 autres
+- … et 102 autres
 
 **Synthèse produite :**
 
-⏵ Génération du JSON de pensée et du rapport mesuré
+⏵ Écriture des deux livrables dans `reports/` puis vérification
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Fix dotted abbreviation zone
 - **T1** Create 40-text corpus with expected spans
 - **T1** Validate patched splitter on 40 texts
-- … et 50 autres
+- … et 74 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -112,10 +112,11 @@
 - **T1** `patch phrases 462 temps 8.47 ms`
 - **T1** `baseline 4101 12.96 ms`
 - **T1** `patch 1029 8.97 ms`
+- **T1** `339:- **Patch B** : 8,97 ms contre 12,96 ms pour `_mots` sur le même texte (moins de tokens).`
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : #!/usr/bin/env python3 """bloc_linguistique.py — le bloc d'étiquetage linguistique, du graphème à la pragmatique.  Un seul contrat (`BlocLinguistique.analyser`) et **plusieurs implémentations** :    -
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module> ModuleNotFoundError: No module named 'bloc_linguistique' [exit code: 1]
@@ -123,4 +124,5 @@
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 2, in <module>   File "/tmp/frontieres/final/patch_frontieres.py", line 27, in <module>     _MARQUEUR = re.compile(                 ^
 - **T1** : (no output) [exit code: 2]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<frozen importlib._bootstrap_external>", line 1027, in exec_module   File "<frozen importlib._bootstrap>", lin
+- **T1** : [stderr] Traceback (most recent call last):   File "/tmp/frontieres/final/genere_rapport.py", line 228, in <module>     {exemple('d03')}      ~~~~~~~^^^^^^^   File "/tmp/frontieres/final/genere_rappor
 

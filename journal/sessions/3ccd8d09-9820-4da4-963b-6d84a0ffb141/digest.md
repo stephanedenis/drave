@@ -1984,3 +1984,320 @@ apres 6
   ('en02', 12, 15, 2, 'e.g')
   ```
 
+- **bash** `{"command": "cat > /tmp/frontieres/final/genere_rapport.py <<'PY'\nfrom __future__ import annotations\nimport json\nimport pathlib\n\nBASE = pathlib.Path(\"/tmp/frontieres/final\")\nD = json.loads((BASE / \"pensee-frontieres-phrase.json\").read_text(encoding=\"utf-8\"))\nM = json.loads((BASE / \"mes … [20845 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "/tmp/frontieres/final/genere_rapport.py", line 228, in <module>
+    {exemple('d03')}
+     ~~~~~~~^^^^^^^
+  File "/tmp/frontieres/final/genere_rapport.py", line 53, in exemple
+    lines.append(f"Attendu : **{len(x['attendu'])}** phrase(s) — {surfaces(x['attendu'])}")
+                                                                  ~~~~~~~~^^^^^^^^^^^^^^
+  File "/tmp/frontieres/final/genere_rapport.py", line 46, in surfaces
+    return " | ".join(f"`{s[2]}`" for s in spans)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/frontieres/final/genere_rapport.py", line 46, in <genexpr>
+    return " | ".join(f"`{s[2]}`" for s in spans)
+                          ~^^^
+KeyError: 2
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\np='genere_rapport.py'\ns=open(p).read()\ns=s.replace('''def surfaces(spans):\n    return \" | \".join(f\"`{s[2]}`\" for s in spans)''','''def surfaces(spans):\n    out = []\n    for s in spans:\n        out.append(f\"`{s['texte'] if isinstan … [269 caractères tronqués]`
+
+  ```
+rapport 35254 octets 751 lignes
+# Frontières de phrase — P0-4 du bloc linguistique
+
+> **Ligne** : **P0-4** de l'audit produit [`reports/rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md)
+> (`reports/rapport-produit-bloc-l.md` pour le banc de 50 phrases) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `e8d746e2` (2026-11-06 19:35) · **Module** :
+> [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py), `sha256 bba52eaba32a…` ·
+> **Gold** : `c5b80dd8`.
+> **Date** : 2026-11-06 · **Verdict** : ✅ **frontières réparées sur le banc** ; ⚠️ **gain dev/test nul
+> par construction** ; **2 spans de phrase du gold corrigés** (espace de tête), **0 régression mesurée**.
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-frontieres-phrase.json`](pensee-frontieres-phrase.json) (les 40 textes, les spans avant/après,
+> les mesures et les patchs exacts).
+> **Dispositif** : 40 textes libres écrits pour l'analyse (59 phrases attendues) ; `Heuristique` original
+> vs sous-classe à règles commutables ; `evaluer_gold.py` sur dev/test (422/190 phrases) ; aucun modèle,
+> aucun GPU. Le module a bougé pendant la session (`c6904284` → `e8d746e2`, 2249 → 2273
+>
+… [4368 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git log -1 --format='%H %ad %s' && wc -l tools/bloc_linguistique.py && cd /tmp/frontieres/final && python3 - <<'PY'\nimport json\nm=json.load(open('mesures.json')); d=json.load(open('pensee-fro … [190 caractères tronqués]`
+
+  ```
+bba52eaba32abc441694a7f253791cc5b00c6c092036889ebb0fdb6e1c13bed9  tools/bloc_linguistique.py
+ed8f9414a83d0ad424ab449996b897ff1bf2c311 Fri Nov 6 20:06:35 2026 -0500 JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE ; ÉTAT HORODATÉ
+2282 tools/bloc_linguistique.py
+mesures sha bba52eaba32abc441694a7f253791cc5b00c6c092036889ebb0fdb6e1c13bed9
+json sha bba52eaba32abc441694a7f253791cc5b00c6c092036889ebb0fdb6e1c13bed9
+json commit e8d746e2593abf509130722fb97ba60fb7e757a7
+  ```
+
+### 👤 Utilisateur
+
+Agent e181ce02-cd50-488a-a6be-e84b79d40dcc sent a message: 
+Point de synchronisation : où en es-tu ? Si tu as déjà les mesures principales (frontières cassées avant/après, effet dev/test), **écris tes deux fichiers maintenant** (`reports/rapport-frontieres-phrase.md`, `reports/pensee-frontieres-phrase.json`) avec ce que tu as, même partiel — je dois pouvoir intégrer cette nuit. Ne cherche pas la perfection : les patchs exacts et les chiffres suffisent. Réponds avec un résumé de 10 lignes maximum.
+
+### 🤖 Assistant
+
+⏵ Synchronisation : je vérifie la provenance exacte puis j’écris les deux fichiers.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:tools/bloc_linguistique.py | sha256sum && git log -1 --format='%h %ad' -- tools/bloc_linguistique.py && git status --short tools/bloc_linguistique.py && cd /tmp/frontieres/final && git apply --check patch_A.diff; echo A … [122 caractères tronqués]`
+
+  ```
+bba52eaba32abc441694a7f253791cc5b00c6c092036889ebb0fdb6e1c13bed9  -
+2b3e1796 Fri Nov 6 19:57:25 2026 -0500
+A:1
+B:1
+[stderr]
+error: tools/bloc_linguistique.py: No such file or directory
+error: tools/bloc_linguistique.py: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nfrom __future__ import annotations\nimport pathlib\nracine = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsrc = (racine/'tools/bloc_linguistique.py').read_text(encoding='utf-8')\na = pathlib.Path('patch_frontieres.py').re … [2875 caractères tronqués]`
+
+  ```
+copies régénérées
+  269 patch_A.diff
+   80 patch_B.diff
+  336 patch_complet.diff
+  685 total
+A_OK
+B_OK
+AB_OK
+[stderr]
+  File "bloc_linguistique_A.py", line 308
+    "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split(, "where", "whose", "mine")),
+                                                                                                                                  ^
+SyntaxError: invalid syntax
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m py_compile tools/bloc_linguistique.py; echo EXIT:$?; git status --short tools/bloc_linguistique.py; sed -n '300,312p' tools/bloc_linguistique.py", "description": "Check current module syntax and working tree"}`
+
+  ```
+EXIT:0
+              "jou hem haar ons hen mijn jouw zijn haar ons jullie hun is zijn was waren hebben "
+              "heeft had niet geen zeer in op aan met van voor door".split()),
+}
+
+POS_FERME = {
+    "fr": {
+        "DET": set("le la les l un une ce cet cette ces mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs quel quelle quels quelles".split()),
+        "PREP": set("à a au aux de du des d en dans par pour sur sous avec sans chez vers entre depuis pendant durant contre malgré selon près loin devant derrière après avant au-dessus au-dessous vis-à-vis en-dehors".split()),
+        "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split()),
+        "CONJ": set("et ou mais donc or ni car quand comme si parce puisque lorsque pendant qu".split()),
+        "AUX": set("est sont était étaient été être ai as a avons avez ont avait avaient eu avoir suis es sommes êtes".split()),
+        "ADV": set("ne n pas plus jamais rien très bien mal ici hier demain aujourd'hui peut-être fort souvent toujours déjà encore tard tôt ainsi alors aussi".split()),
+        "NUM": set("deux trois quatre cinq six sept huit ne
+… [17 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nfrom __future__ import annotations\nimport pathlib\nracine = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsrc = (racine/'tools/bloc_linguistique.py').read_text(encoding='utf-8')\nassert 'split(, \"where\"' not in src, 'le … [2424 caractères tronqués]`
+
+  ```
+copies régénérées
+SYNTAX_OK
+APPLY_OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git rev-parse HEAD && git log -1 --format='%h' -- tools/bloc_linguistique.py && sha256sum tools/bloc_linguistique.py", "description": "Capture current commit and module hash"}`
+
+  ```
+ed8f9414a83d0ad424ab449996b897ff1bf2c311
+2b3e1796
+12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1  tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/bloc_linguistique.py && git diff --stat -- tools/bloc_linguistique.py && python3 -m py_compile tools/bloc_linguistique.py; echo COMPILE:$? && git log -1 --format='%h %ad %s' -- tools/bloc_linguistique.py", "d … [65 caractères tronqués]`
+
+  ```
+M tools/bloc_linguistique.py
+ tools/bloc_linguistique.py | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
+COMPILE:0
+2b3e1796 Fri Nov 6 19:57:25 2026 -0500 B13 — LES COMPOSITIONS NE PERDENT PLUS : CASCADE = HEURISTIQUE (0,8383, 235/236), VERDICT COMPARATIF RESTAURÉ ; 183/183
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git status --short tools/bloc_linguistique.py", "description": "Recheck module hash before measurement"}`
+
+  ```
+12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1  tools/bloc_linguistique.py
+ M tools/bloc_linguistique.py
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\np='mesure_final.py'\ns=open(p).read()\ns=s.replace('import hashlib\\nimport json\\nimport pathlib\\nimport sys', 'import hashlib\\nimport json\\nimport pathlib\\nimport subprocess\\nimport sys')\ns=s.replace('''    data = {\n        \"commit … [1279 caractères tronqués]`
+
+  ```
+EXIT:0
+{
+ "commit": "ed8f9414a83d0ad424ab449996b897ff1bf2c311",
+ "module_commit": "2b3e1796",
+ "module_sha256": "12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1",
+ "quarante": "...",
+ "ablations": "...",
+ },
+ "zones_pos_avant": 47
+}
+12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1  tools/bloc_linguistique.py
+ed8f9414a83d0ad424ab449996b897ff1bf2c311 2b3e1796 12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1
+{'avant': {'phrases': 102, 'textes_exacts': 2, 'textes_frontiere_fausse': 32, 'textes_casses': 38, 'extra': 47, 'missing': 4, 'overlaps': 9, 'leading': 31, 'vides': 0, 'fausses_questions': 5, 'types_faux': 63}, 'apres': {'phrases': 59, 'textes_exacts': 40, 'textes_frontiere_fausse': 0, 'textes_casses': 0, 'extra': 0, 'missing': 0, 'overlaps': 0, 'leading': 0, 'vides': 0, 'fausses_questions': 0, 'types_faux': 0}}
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres && python3 mesure_gold.py > /tmp/frontieres/gold.log 2>&1; echo EXIT:$?; tail -6 /tmp/frontieres/gold.log; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git apply --check /tmp/frontieres/final/patch_A.diff && git apply --check /tmp/frontieres/final/patch_B.dif … [147 caractères tronqués]`
+
+  ```
+EXIT:0
+regle_f      dev  POS=0.8490 F1=0.6439 P=0.6703 R=0.6196 att_exact=0.9816 att_top1=0.9816 couv=0.9877 acte=1.0000
+regle_f      test POS=0.8511 F1=0.6552 P=0.6710 R=0.6402 att_exact=0.9868 att_top1=0.9868 couv=0.9868 acte=0.9895
+             diff 612 : {'pos': 0, 'syn': 0, 'att': 0, 'phr': 0, 'acte': 0}
+toutes       dev  POS=0.8490 F1=0.6439 P=0.6703 R=0.6196 att_exact=0.9816 att_top1=0.9816 couv=0.9877 acte=1.0000
+toutes       test POS=0.8511 F1=0.6552 P=0.6710 R=0.6402 att_exact=0.9868 att_top1=0.9868 couv=0.9868 acte=0.9895
+             diff 612 : {'pos': 0, 'syn': 0, 'att': 0, 'phr': 2, 'acte': 2}
+APPLY_OK
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\nimport json\nm=json.load(open('mesures.json'))['gold']['mesures']\nfor nom in m:\n    print(nom, m[nom]['dev']['pos']['exactitude'], m[nom]['test']['pos']['exactitude'], m[nom]['dev']['syntagme']['f1'], m[nom]['dev']['attachement']['exact_ta … [61 caractères tronqués]`
+
+  ```
+original 0.849 0.8511 0.6439 0.9816
+patch_a 0.849 0.8511 0.6439 0.9816
+patch_b 0.849 0.8511 0.6439 0.9816
+patch_ab 0.849 0.8511 0.6439 0.9816
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h' -- tools/tests/linguistique/gold.json tools/tests/linguistique/gold_reel.json tools/tests/linguistique/gold_synthetique.json && cd /tmp/frontieres/final && python3 - <<'PY'\np='genere_json.py'\ns=open(p).read … [1566 caractères tronqués]`
+
+  ```
+c5b80dd8
+/tmp/frontieres/final/genere_rapport.py:167:> aucun GPU. Le module a bougé pendant la session (`c6904284` → `{D['commit_mesure'][:8]}`, 2249 → 2282
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && sed -n '160,172p' genere_rapport.py && grep -n \"0,8375\\|0,8490\\|0,8400\\|0,8511\" genere_rapport.py", "description": "Inspect report template provenance lines"}`
+
+  ```
+> **Date** : 2026-11-06 · **Verdict** : ✅ **frontières réparées sur le banc** ; ⚠️ **gain dev/test nul
+> par construction** ; **2 spans de phrase du gold corrigés** (espace de tête), **0 régression mesurée**.
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-frontieres-phrase.json`](pensee-frontieres-phrase.json) (les 40 textes, les spans avant/après,
+> les mesures et les patchs exacts).
+> **Dispositif** : 40 textes libres écrits pour l'analyse (59 phrases attendues) ; `Heuristique` original
+> vs sous-classe à règles commutables ; `evaluer_gold.py` sur dev/test (422/190 phrases) ; aucun modèle,
+> aucun GPU. Le module a bougé pendant la session (`c6904284` → `{D['commit_mesure'][:8]}`, 2249 → 2282
+> lignes ; le fichier de travail porte un `M` d'un autre agent, hash du module ci-dessus) ; **tous les chiffres ci-dessous sont rejoués sur `{D['commit_mesure'][:8]}`**.
+
+**En une phrase.** Sur **40 textes libres**, le découpage passe de **102 à 59 phrases** (59 attendues) :
+**32/40** textes avaient une **frontière fausse** (47 coupures en trop, 4 fusions, 9 chevauchements,
+5 fausses questions), **24 textes / 31 phrases** commençaient par un espace ; a
+… [126 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 genere_json.py && python3 genere_rapport.py && python3 -m json.tool pensee-frontieres-phrase.json > /dev/null && echo JSON_OK && wc -l rapport-frontieres-phrase.md && sed -n '1,25p' rapport-frontieres-phrase.md && sed -n '300,330p' rapport-frontieres- … [83 caractères tronqués]`
+
+  ```
+JSON 141475 octets
+rapport 35334 octets 751 lignes
+JSON_OK
+751 rapport-frontieres-phrase.md
+# Frontières de phrase — P0-4 du bloc linguistique
+
+> **Ligne** : **P0-4** de l'audit produit [`reports/rapport-fiabilite-produit.md`](rapport-fiabilite-produit.md)
+> (`reports/rapport-produit-bloc-l.md` pour le banc de 50 phrases) · **Branche** : `s/v7` ·
+> **Commit mesuré** : `ed8f9414` (2026-11-06 19:35) · **Module** :
+> [`tools/bloc_linguistique.py`](../tools/bloc_linguistique.py), `sha256 12e73b7ab2cd…` ·
+> **Gold** : `c5b80dd8`.
+> **Date** : 2026-11-06 · **Verdict** : ✅ **frontières réparées sur le banc** ; ⚠️ **gain dev/test nul
+> par construction** ; **2 spans de phrase du gold corrigés** (espace de tête), **0 régression mesurée**.
+> **Aucun fichier existant modifié ; aucun commit.** Sorties : ce rapport et
+> [`pensee-frontieres-phrase.json`](pensee-frontieres-phrase.json) (les 40 textes, les spans avant/après,
+> les mesures et les patchs exacts).
+> **Dispositif** : 40 textes libres écrits pour l'analyse (59 phrases attendues) ; `Heuristique` original
+> vs sous-classe à règles commutables ; `evaluer_gold.py` sur dev/test (422/190 phrases) ; aucun modèle,
+> aucun GPU. Le module a boug
+… [2906 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git rev-parse HEAD && cd /tmp/frontieres/final && python3 - <<'PY'\np='genere_rapport.py'\ns=open(p).read().replace(\"**Commit mesuré** : `{D['commit_mesure'][:8]}` (2026-11-06 19:35)\",\"**Com … [283 caractères tronqués]`
+
+  ```
+12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1  tools/bloc_linguistique.py
+ed8f9414a83d0ad424ab449996b897ff1bf2c311
+rapport 35334 octets 751 lignes
+5:> **Commit mesuré** : `ed8f9414` (2026-11-06 20:06) · **Module** :
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture des deux livrables dans `reports/` puis vérification
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && test ! -e reports/rapport-frontieres-phrase.md && test ! -e reports/pensee-frontieres-phrase.json && cp /tmp/frontieres/final/rapport-frontieres-phrase.md reports/rapport-frontieres-phrase.md && cp /tmp/frontieres/final/pensee-fronti … [396 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 139K  6 nov 20:16 reports/pensee-frontieres-phrase.json
+-rw-r--r--. 1 stephane stephane  36K  6 nov 20:16 reports/rapport-frontieres-phrase.md
+JSON_OK
+?? reports/pensee-frontieres-phrase.json
+?? reports/rapport-frontieres-phrase.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-frontieres-phrase.json'))\nprint('corpus',len(d['corpus_40']),'regles',len(d['regles']))\nprint('commit',d['commit_mesure'],'module',d['module_sha256'][:12])\nprint('pat … [578 caractères tronqués]`
+
+  ```
+corpus 40 regles 6
+commit ed8f9414a83d0ad424ab449996b897ff1bf2c311 module 12e73b7ab2cd
+patchs ['a_frontieres', 'b_tokenisation', 'complet', 'note']
+A diff lines 269
+B diff lines 80
+resume 102 -> 59
+gold diff {'pos': 0, 'syntagme': 0, 'attachement': 0, 'tokens': 0, 'phr_n': 0, 'phr_spans': 2, 'acte_valeurs': 0, 'acte_spans': 2}
+negatifs 9
+4
+34:  est testé comme module copié localement, puis `git apply --check` sur le dépôt (sans écriture).
+241:- **Patch B (tokénisation)** : sur les 40 textes, **477 → 362 tokens** (−115), **273 → 232 POS** (−41),
+339:- **Patch B** : 8,97 ms contre 12,96 ms pour `_mots` sur le même texte (moins de tokens).
+345:- **Patch A — frontières** (`_phrases`) : le patch P0-4. Il remplace la méthode par
+347:- **Patch B — tokénisation** (`_mots`) : le complément P0-4/P1-6. Il remplace la méthode par
+352:`ed8f9414` et passent `git apply --check`. **Aucun `git apply` n'a été exécuté sur le
+355:### 5.1 Patch A — frontières de phrase
+629:### 5.2 Patch B — tokénisation (optionnel)
+716:1. `git apply --check` (fait, sans écriture) ;
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && grep -n \"diffs ci-dessous\\|Les diffs sont\\|patchs\" genere_rapport.py | head -10 && grep -n \"Les diffs sont\\|note\" genere_json.py | tail -5", "description": "Locate provenance text in generators"}`
+
+  ```
+164:> les mesures et les patchs exacts).
+332:Deux patchs indépendants, **non appliqués** :
+340:Les diffs ci-dessous sont générés contre `tools/bloc_linguistique.py` au commit
+346:{diff_block(D['patchs']['a_frontieres']['diff'])}
+350:{diff_block(D['patchs']['b_tokenisation']['diff'])}
+220:        "note": "A seul suffit pour les frontières ; A+B est le patch complet P0-4. Les diffs sont générés contre le fichier de travail au commit " + M["commit"][:8] + " et vérifiés par git apply --check, sans modification du dépôt.",
+  ```
+
+- **bash** `{"command": "cd /tmp/frontieres/final && python3 - <<'PY'\np='genere_rapport.py'\ns=open(p).read()\ns=s.replace(\"\"\"Les diffs ci-dessous sont générés contre `tools/bloc_linguistique.py` au commit\n`{D['commit_mesure'][:8]}` et passent `git apply --check`. **Aucun `git apply` n'a été exécuté sur le … [1629 caractères tronqués]`
+
+  ```
+JSON 141659 octets
+rapport 35482 octets 753 lignes
+OK
+351:Les diffs ci-dessous sont générés contre `tools/bloc_linguistique.py` **tel qu'il est dans l'arbre de
+352-travail au moment de la mesure** (`sha256 12e73b7ab2cd…`, HEAD `ed8f9414` +
+353-modifications non committées d'un autre agent) et passent `git apply --check` sur cet arbre. **Aucun
+354-`git apply` n'a été exécuté sur le dépôt.** Le JSON contient les mêmes diffs, le code inséré et la
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sha256sum tools/bloc_linguistique.py && git apply --check /tmp/frontieres/final/patch_A.diff && git apply --check /tmp/frontieres/final/patch_B.diff && git apply --check /tmp/frontieres/final/patch_complet.diff && echo APPLY_OK && cp … [427 caractères tronqués]`
+
+  ```
+12e73b7ab2cd8cf89c9c331918384767e5b4d6a8532a673f20655e79f89ec1f1  tools/bloc_linguistique.py
+APPLY_OK
+JSON_OK
+?? reports/pensee-frontieres-phrase.json
+?? reports/rapport-frontieres-phrase.md
+  ```
+

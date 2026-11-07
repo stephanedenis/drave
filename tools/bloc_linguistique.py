@@ -314,10 +314,10 @@ POS_FERME = {
     "en": {
         "DET": set("the a an this that these those my your his her its our their".split()),
         "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside outside toward towards until upon within".split()),
-        "PRON": set("i you he she it we they me him her us them who whom which that".split()),
-        "CONJ": set("and or but nor for so yet because although while if when".split()),
-        "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must".split()),
-        "ADV": set("not never very well here yesterday today tomorrow often always already still too".split()),
+        "PRON": set("i you he she it we they me him her us them who whom which that where whose mine".split()),
+        "CONJ": set("and or but nor for so yet because although while if when as".split()),
+        "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must am".split()),
+        "ADV": set("not never very well here yesterday today tomorrow often always already still too late out maybe hard far again now down outside".split()),
         "NUM": set("one two three four five six seven eight nine ten".split()),
     },
 }
@@ -1140,6 +1140,21 @@ class Heuristique:
                 etiquettes[_i] = Etiquette("pos", "VERB", _e.valeur, _e.debut, _e.fin, self.nom,
                                            0.85, candidats=["verb"], langue=lg, script=script,
                                            meta={"ouvert": True, "contexte": "nom_sujet_3s"})
+
+        # 3 c. R4-en : après une **copule**, un mot inconnu (NOUN, confiance ≤ 0,45) est un
+        # ADJECTIF attribut (« the car is fast ») — mesuré +0,41 dev / +0,31 test, 0 cassé.
+        _copules = {"is", "are", "was", "were", "am", "be", "been", "being", "seems", "seem",
+                    "looks", "look", "feels", "feel", "becomes", "become"}
+        if lg == "en":
+            for _k, _i in enumerate(pos_idx):
+                _e = etiquettes[_i]
+                if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                    continue
+                _av = etiquettes[pos_idx[_k - 1]]
+                if _normaliser(_av.valeur) in _copules:
+                    etiquettes[_i] = Etiquette("pos", "ADJ", _e.valeur, _e.debut, _e.fin, self.nom,
+                                               0.85, candidats=["adj"], langue=lg, script=script,
+                                               meta={"ouvert": True, "contexte": "copule"})
 
         # 4. phrase + pragmatique
         for d, f, p, typ in self._phrases(texte):

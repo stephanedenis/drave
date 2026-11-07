@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 147.4 h |
+| Durée | 147.6 h |
 | Tours | 184 |
-| Messages | 3214 |
-| Appels d'outils | 2844 |
+| Messages | 3226 |
+| Appels d'outils | 2857 |
 | Fichiers touchés | 25 |
-| Commandes | 2346 |
+| Commandes | 2358 |
 | Sous-agents | 34 |
-| Commits | 364 |
+| Commits | 365 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*90 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,11 +9935,11 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 76 autres
+- … et 89 autres
 
 **Synthèse produite :**
 
-⏵ Je consigne la soirée au journal et à la roadmap
+⏵ **183/183** à POS 0,8496 : je fige la fiche du paquet sûr
 
 ## 3. Travail accompli
 
@@ -10052,7 +10052,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2306 autres
+- … et 2318 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10564,4 +10564,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - DOCS — LE LIEN DE LA FICHE COMPOSITION CORRIGÉ" -- docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format=
 - JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE" -- journal/2026-11-06/README.md docs
 - JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE ; ÉTAT HORODATÉ" -- journal/2026-11-0
+- B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183" -- tools/bloc_linguistique.py to
 

@@ -1362,7 +1362,7 @@ def t86_gold_subsets() -> tuple[bool, str]:
     r2 = evaluer_bloc("h", h, sous(181, 200))
     p2 = round(r2["pos"]["exactitude"], 4)
     p1 = round(r1["pos"]["exactitude"], 4)
-    return abs(p2 - 0.9167) < 0.001 and abs(p1 - 0.8937) < 0.001, (
+    return abs(p2 - 0.9286) < 0.001 and abs(p1 - 0.9027) < 0.001, (
         f"r181-200 POS {p2} ; r001-180 POS {p1}")
 
 
@@ -1375,7 +1375,7 @@ def t87_complexes() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 205]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8529) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8824) < 0.001, (
         f"r201-205 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1389,7 +1389,7 @@ def t88_complexes20() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 220]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8537) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.878) < 0.001, (
         f"r201-220 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1403,7 +1403,7 @@ def t89_complexes50() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 250]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8396) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8711) < 0.001, (
         f"r201-250 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1417,7 +1417,7 @@ def t90_complexes100() -> tuple[bool, str]:
     h = bl.Heuristique()
     ps = [p for p in g["phrases"] if 201 <= int(p["id"][1:]) <= 300]
     r = evaluer_bloc("h", h, ps)
-    return abs(r["pos"]["exactitude"] - 0.8365) < 0.001, (
+    return abs(r["pos"]["exactitude"] - 0.8683) < 0.001, (
         f"r201-300 : POS {round(r['pos']['exactitude'], 4)}, "
         f"syntagme {round(r['syntagme']['f1'], 4)}")
 
@@ -1637,7 +1637,7 @@ def t107_gold_complet() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, phrases)
     return (len(phrases) == 602
-            and abs(r["pos"]["exactitude"] - 0.8415) < 0.001), (
+            and abs(r["pos"]["exactitude"] - 0.8529) < 0.001), (
         f"gold complet : {len(phrases)} phrases, POS {round(r['pos']['exactitude'], 4)}, "
         f"tête {round(r['syntagme']['tete']['f1'], 4)}")
 
@@ -2023,7 +2023,7 @@ def t138_defaut_niveau() -> tuple[bool, str]:
     h, n = bl.Heuristique(), bl.MockNeuronal()
     r_conf = evaluer_bloc("c", bl.Parallele([h, n]), ph)["pos"]["exactitude"]
     r_niv = evaluer_bloc("n", bl.Parallele([h, n], priorite_par_niveau=bl.PRIORITE_NIVEAU), ph)["pos"]["exactitude"]
-    return abs(r_conf - 0.8383) < 0.001 and abs(r_niv - 0.7465) < 0.001 and r_conf > r_niv, (
+    return abs(r_conf - 0.8496) < 0.001 and abs(r_niv - 0.754) < 0.001 and r_conf > r_niv, (
         f"défaut : confiance {round(r_conf, 4)}, niveau {round(r_niv, 4)}")
 
 
@@ -2058,7 +2058,7 @@ def t141_elision() -> tuple[bool, str]:
     h = bl.Heuristique()
     r = evaluer_bloc("h", h, charger())
     pos = round(r["pos"]["exactitude"], 4)
-    return abs(pos - 0.8383) < 0.001, f"élision : POS {pos}"
+    return abs(pos - 0.8496) < 0.001, f"élision : POS {pos}"
 
 
 def t142_run2() -> tuple[bool, str]:

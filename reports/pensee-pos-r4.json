@@ -1,0 +1,8257 @@
+{
+ "rapport": "pos-r4",
+ "ligne": [
+  "A25 (gold anglais)",
+  "B13 (moteur de pensée)"
+ ],
+ "date": "2026-11-06",
+ "branche": "s/v7",
+ "objet": "Mesurer les deux derniers leviers POS : R4 (copule → ADJ pour un mot inconnu) et la complétion des classes fermées anglaises ; mesurer aussi les 50 textes libres de l’audit produit.",
+ "verdict": "R4 bilingue reproduit +0,74 dev / +0,71 test (23 correctifs, 0 cassé), mais 17 faux→faux et 5 faux positifs français sur 8 changements libres. Les classes fermées valent +0,78 / +0,81 (25 correctifs, 0 cassé), F1 +0,0007. Le paquet sûr (R4-en + classes fermées) vaut +1,19 dev / +1,11 test, 37/0, F1 +0,0007, attachement inchangé, 1 faux positif libre (`where`). Le paquet max (R4 bilingue) vaut +1,51/+1,51 mais 11 faux→faux et 6 faux positifs libres.",
+ "snapshot": {
+  "reference": {
+   "nom": "B13",
+   "commit": "2ba393b0",
+   "module_sha256": "f3db75fcaf0ced187c8ddc204e2b8509f34e080c3b81021b1e7ca66327afcc87",
+   "gold": {
+    "gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+    "gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11",
+    "gold_synthetique.json": "e3e704ce9cb599db07ab31d1b0651f0aa12ea9ecad31ca8bf558efdeed84a654"
+   },
+   "module": "git show 2ba393b0:tools/bloc_linguistique.py (snapshot de la fiche B13)"
+  },
+  "head_controle": {
+   "nom": "HEAD instantané",
+   "module_sha256": "dd0e5e47d522c6a1a1adb799cfa727c54d43b569d542bc2fc9166ae74992d346",
+   "gold_synthetique_sha256": "e159dbfaa97a12907f79f5440981db39232c1ec4d96d48dfcafc33c4bba6dd7d",
+   "note": "Instantané pris pendant la session : le dépôt était modifié en parallèle (M tools/bloc_linguistique.py, gold corrigé). Il ne remplace pas la référence B13 ; il sert de contrôle de reproductibilité."
+  },
+  "patched_copy": {
+   "fichier": "/tmp/pos_r4/bloc_patche.py",
+   "sha256": "0bf4d3eb0e2a51603534001284718e625346a61c299ff9d488aae87bc17acfb1"
+  }
+ },
+ "protocole": {
+  "gold": "612 phrases / 3179 jetons ; dev 422 / 2185 ; test 190 / 994 (split crc32(id) % 3 == 0).",
+  "mesure": "evaluer_gold.evaluer_bloc : POS exacte au jeton, fermé (DET/PREP/PRON/CONJ/AUX/ADV/NUM), ouvert, F1 syntagme, F1 tête, attachement (exact, top-k, couverture).",
+  "application": "Copies en mémoire de tools/bloc_linguistique.py (exec + __file__ pointé sur le dépôt) ; patches par remplacement de chaîne / mutation de POS_FERME['en'] ; aucun fichier du dépôt modifié.",
+  "controles": "Placebo 200 tirages (mêmes actions, mêmes nombres, jetons aléatoires dans la même phrase) ; attachement ; 50 textes libres ; sondes de contrôle.",
+  "limites_du_banc": "Le test anglais fait 347 jetons : 1 jeton = 0,29 pt. Gold templaté. Les mots des classes fermées sont choisis sur les erreurs de l’union (C3), donc le test n’est pas hors-échantillon."
+ },
+ "baseline": {
+  "B13": {
+   "all": {
+    "pos": 0.8383,
+    "ferme": 0.9133,
+    "ouvert": 0.7673,
+    "f1": 0.6181,
+    "prec": 0.655,
+    "rap": 0.5851,
+    "tete": 0.7511,
+    "att_exact": 222,
+    "att_labels": 222,
+    "att_cibles": 239,
+    "att_couv": 0.9289,
+    "att_topk": 221
+   },
+   "dev": {
+    "pos": 0.8375,
+    "ferme": 0.9093,
+    "ouvert": 0.7688,
+    "f1": 0.6153,
+    "prec": 0.6559,
+    "rap": 0.5795,
+    "tete": 0.751,
+    "att_exact": 153,
+    "att_labels": 153,
+    "att_cibles": 163,
+    "att_couv": 0.9387,
+    "att_topk": 153
+   },
+   "test": {
+    "pos": 0.84,
+    "ferme": 0.9224,
+    "ouvert": 0.764,
+    "f1": 0.6243,
+    "prec": 0.6532,
+    "rap": 0.5979,
+    "tete": 0.7512,
+    "att_exact": 69,
+    "att_labels": 69,
+    "att_cibles": 76,
+    "att_couv": 0.9079,
+    "att_topk": 68
+   },
+   "en": {
+    "pos": 0.9103,
+    "ferme": 0.9405,
+    "ouvert": 0.8786,
+    "f1": 0.7273,
+    "prec": 0.8453,
+    "rap": 0.6382,
+    "tete": 0.8263,
+    "att_exact": 86,
+    "att_labels": 86,
+    "att_cibles": 88,
+    "att_couv": 0.9773,
+    "att_topk": 86
+   },
+   "fr": {
+    "pos": 0.7976,
+    "ferme": 0.8967,
+    "ouvert": 0.7092,
+    "f1": 0.5595,
+    "prec": 0.5661,
+    "rap": 0.553,
+    "tete": 0.7093,
+    "att_exact": 136,
+    "att_labels": 136,
+    "att_cibles": 151,
+    "att_couv": 0.9007,
+    "att_topk": 135
+   }
+  },
+  "HEAD": {
+   "all": {
+    "pos": 0.8383,
+    "ferme": 0.9133,
+    "ouvert": 0.7673,
+    "f1": 0.6474,
+    "prec": 0.6705,
+    "rap": 0.6259,
+    "tete": 0.7671,
+    "att_exact": 235,
+    "att_labels": 236,
+    "att_cibles": 239,
+    "att_couv": 0.9874,
+    "att_topk": 234
+   },
+   "dev": {
+    "pos": 0.8375,
+    "ferme": 0.9093,
+    "ouvert": 0.7688,
+    "f1": 0.6439,
+    "prec": 0.6703,
+    "rap": 0.6196,
+    "tete": 0.7661,
+    "att_exact": 160,
+    "att_labels": 161,
+    "att_cibles": 163,
+    "att_couv": 0.9877,
+    "att_topk": 160
+   },
+   "test": {
+    "pos": 0.84,
+    "ferme": 0.9224,
+    "ouvert": 0.764,
+    "f1": 0.6552,
+    "prec": 0.671,
+    "rap": 0.6402,
+    "tete": 0.7694,
+    "att_exact": 75,
+    "att_labels": 75,
+    "att_cibles": 76,
+    "att_couv": 0.9868,
+    "att_topk": 74
+   },
+   "en": {
+    "pos": 0.9103,
+    "ferme": 0.9405,
+    "ouvert": 0.8786,
+    "f1": 0.7273,
+    "prec": 0.8453,
+    "rap": 0.6382,
+    "tete": 0.8263,
+    "att_exact": 86,
+    "att_labels": 86,
+    "att_cibles": 88,
+    "att_couv": 0.9773,
+    "att_topk": 86
+   },
+   "fr": {
+    "pos": 0.7976,
+    "ferme": 0.8967,
+    "ouvert": 0.7092,
+    "f1": 0.6059,
+    "prec": 0.5939,
+    "rap": 0.6184,
+    "tete": 0.7349,
+    "att_exact": 149,
+    "att_labels": 150,
+    "att_cibles": 151,
+    "att_couv": 0.9934,
+    "att_topk": 148
+   }
+  }
+ },
+ "r4": {
+  "enonce": "Après une copule (is/are/was/seems/looks…), un mot inconnu (NOUN, confiance ≤ 0,45) est un ADJECTIF attribut.",
+  "variantes": {
+   "r4_en": {
+    "pos": {
+     "all": 0.8421,
+     "dev": 0.8416,
+     "test": 0.8431,
+     "ferme": 0.9133,
+     "ouvert": 0.7746,
+     "en": 0.9207,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.41,
+     "test": 0.31,
+     "all": 0.38
+    },
+    "f1": {
+     "all": 0.6181,
+     "dev": 0.6153,
+     "test": 0.6243,
+     "en": 0.7273,
+     "fr": 0.5595,
+     "tete": 0.7511
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 12,
+    "casses": 0,
+    "faux_faux": 8,
+    "corrections_dev": 9,
+    "corrections_test": 3,
+    "corrections_en": 12,
+    "corrections_fr": 0,
+    "corrections_detail": [
+     {
+      "id": "r032",
+      "langue": "en",
+      "split": "test",
+      "mot": "fast",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The car is fast."
+     },
+     {
+      "id": "r112",
+      "langue": "en",
+      "split": "test",
+      "mot": "calm",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The sea is calm."
+     },
+     {
+      "id": "r174",
+      "langue": "en",
+      "split": "dev",
+      "mot": "dark",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The room is dark."
+     },
+     {
+      "id": "r205",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I think that you are right."
+     },
+     {
+      "id": "r217",
+      "langue": "en",
+      "split": "dev",
+      "mot": "absent",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The student whom I mention is absent."
+     },
+     {
+      "id": "r240",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I believe that he is right."
+     },
+     {
+      "id": "r246",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mean",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The dog that barks is mean."
+     },
+     {
+      "id": "r278",
+      "langue": "en",
+      "split": "dev",
+      "mot": "fresh",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The bread that you eat is fresh."
+     },
+     {
+      "id": "r289",
+      "langue": "en",
+      "split": "dev",
+      "mot": "quiet",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we live is quiet."
+     },
+     {
+      "id": "r290",
+      "langue": "en",
+      "split": "test",
+      "mot": "alone",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She cries because she is alone."
+     },
+     {
+      "id": "r297",
+      "langue": "en",
+      "split": "dev",
+      "mot": "rare",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The flower that grows here is rare."
+     },
+     {
+      "id": "r397",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hungry",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The baby cries; it is hungry."
+     }
+    ],
+    "faux_faux_detail": [
+     {
+      "id": "r035",
+      "langue": "en",
+      "split": "dev",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The film she talks about is out."
+     },
+     {
+      "id": "r036",
+      "langue": "en",
+      "split": "dev",
+      "mot": "maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She is maybe tired."
+     },
+     {
+      "id": "r115",
+      "langue": "en",
+      "split": "test",
+      "mot": "born",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The house where I was born is small."
+     },
+     {
+      "id": "r162",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hung",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The painting is hung on the wall."
+     },
+     {
+      "id": "r218",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Although it is late, he works."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "far",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r291",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mine",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The book that is on the table is mine."
+     },
+     {
+      "id": "r313",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I leave because it is late."
+     }
+    ],
+    "casses_detail": []
+   },
+   "r4_fr": {
+    "pos": {
+     "all": 0.8418,
+     "dev": 0.8407,
+     "test": 0.8441,
+     "ferme": 0.9133,
+     "ouvert": 0.774,
+     "en": 0.9103,
+     "fr": 0.8031
+    },
+    "delta_pts": {
+     "dev": 0.32,
+     "test": 0.41,
+     "all": 0.35
+    },
+    "f1": {
+     "all": 0.6181,
+     "dev": 0.6153,
+     "test": 0.6243,
+     "en": 0.7273,
+     "fr": 0.5595,
+     "tete": 0.7511
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 11,
+    "casses": 0,
+    "faux_faux": 9,
+    "corrections_dev": 7,
+    "corrections_test": 4,
+    "corrections_en": 0,
+    "corrections_fr": 11,
+    "corrections_detail": [
+     {
+      "id": "r012",
+      "langue": "fr",
+      "split": "test",
+      "mot": "rapide",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La voiture est rapide."
+     },
+     {
+      "id": "r014",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "passionnant",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le livre que j'ai lu est passionnant."
+     },
+     {
+      "id": "r058",
+      "langue": "fr",
+      "split": "test",
+      "mot": "ouverte",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La porte est ouverte."
+     },
+     {
+      "id": "r092",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "calme",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La mer est calme."
+     },
+     {
+      "id": "r144",
+      "langue": "fr",
+      "split": "test",
+      "mot": "sombre",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La pièce est sombre."
+     },
+     {
+      "id": "r209",
+      "langue": "fr",
+      "split": "test",
+      "mot": "absent",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "L'élève dont je parle est absent."
+     },
+     {
+      "id": "r231",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "méchant",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le chien qui aboie est méchant."
+     },
+     {
+      "id": "r253",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "frais",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le pain que tu manges est frais."
+     },
+     {
+      "id": "r265",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "calme",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le lieu où nous vivons est calme."
+     },
+     {
+      "id": "r266",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "seule",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle pleure parce qu'elle est seule."
+     },
+     {
+      "id": "r273",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "rare",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La fleur qui pousse ici est rare."
+     }
+    ],
+    "faux_faux_detail": [
+     {
+      "id": "r015",
+      "langue": "fr",
+      "split": "test",
+      "mot": "sorti",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le film dont elle parle est sorti."
+     },
+     {
+      "id": "r132",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "accroché",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le tableau est accroché au mur."
+     },
+     {
+      "id": "r269",
+      "langue": "fr",
+      "split": "test",
+      "mot": "là",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La personne dont je parle est là."
+     },
+     {
+      "id": "r302",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "venue",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle est venue, mais elle repart."
+     },
+     {
+      "id": "r430",
+      "langue": "fr",
+      "split": "test",
+      "mot": "partie",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle est partie."
+     },
+     {
+      "id": "r431",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "arrivés",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Ils sont arrivés."
+     },
+     {
+      "id": "s031",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "rêve",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "la douce étoile sont rêve"
+     },
+     {
+      "id": "s053",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "observe",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "les village est observe"
+     },
+     {
+      "id": "s076",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "saute",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Lucas sont saute"
+     }
+    ],
+    "casses_detail": []
+   },
+   "r4_bilingue": {
+    "pos": {
+     "all": 0.8455,
+     "dev": 0.8449,
+     "test": 0.8471,
+     "ferme": 0.9133,
+     "ouvert": 0.7814,
+     "en": 0.9207,
+     "fr": 0.8031
+    },
+    "delta_pts": {
+     "dev": 0.74,
+     "test": 0.71,
+     "all": 0.72
+    },
+    "f1": {
+     "all": 0.6181,
+     "dev": 0.6153,
+     "test": 0.6243,
+     "en": 0.7273,
+     "fr": 0.5595,
+     "tete": 0.7511
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 23,
+    "casses": 0,
+    "faux_faux": 17,
+    "corrections_dev": 16,
+    "corrections_test": 7,
+    "corrections_en": 12,
+    "corrections_fr": 11,
+    "corrections_detail": [
+     {
+      "id": "r012",
+      "langue": "fr",
+      "split": "test",
+      "mot": "rapide",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La voiture est rapide."
+     },
+     {
+      "id": "r014",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "passionnant",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le livre que j'ai lu est passionnant."
+     },
+     {
+      "id": "r032",
+      "langue": "en",
+      "split": "test",
+      "mot": "fast",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The car is fast."
+     },
+     {
+      "id": "r058",
+      "langue": "fr",
+      "split": "test",
+      "mot": "ouverte",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La porte est ouverte."
+     },
+     {
+      "id": "r092",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "calme",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La mer est calme."
+     },
+     {
+      "id": "r112",
+      "langue": "en",
+      "split": "test",
+      "mot": "calm",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The sea is calm."
+     },
+     {
+      "id": "r144",
+      "langue": "fr",
+      "split": "test",
+      "mot": "sombre",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La pièce est sombre."
+     },
+     {
+      "id": "r174",
+      "langue": "en",
+      "split": "dev",
+      "mot": "dark",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The room is dark."
+     },
+     {
+      "id": "r205",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I think that you are right."
+     },
+     {
+      "id": "r209",
+      "langue": "fr",
+      "split": "test",
+      "mot": "absent",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "L'élève dont je parle est absent."
+     },
+     {
+      "id": "r217",
+      "langue": "en",
+      "split": "dev",
+      "mot": "absent",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The student whom I mention is absent."
+     },
+     {
+      "id": "r231",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "méchant",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le chien qui aboie est méchant."
+     },
+     {
+      "id": "r240",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I believe that he is right."
+     },
+     {
+      "id": "r246",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mean",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The dog that barks is mean."
+     },
+     {
+      "id": "r253",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "frais",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le pain que tu manges est frais."
+     },
+     {
+      "id": "r265",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "calme",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le lieu où nous vivons est calme."
+     },
+     {
+      "id": "r266",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "seule",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle pleure parce qu'elle est seule."
+     },
+     {
+      "id": "r273",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "rare",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La fleur qui pousse ici est rare."
+     },
+     {
+      "id": "r278",
+      "langue": "en",
+      "split": "dev",
+      "mot": "fresh",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The bread that you eat is fresh."
+     },
+     {
+      "id": "r289",
+      "langue": "en",
+      "split": "dev",
+      "mot": "quiet",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we live is quiet."
+     },
+     {
+      "id": "r290",
+      "langue": "en",
+      "split": "test",
+      "mot": "alone",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She cries because she is alone."
+     },
+     {
+      "id": "r297",
+      "langue": "en",
+      "split": "dev",
+      "mot": "rare",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The flower that grows here is rare."
+     },
+     {
+      "id": "r397",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hungry",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The baby cries; it is hungry."
+     }
+    ],
+    "faux_faux_detail": [
+     {
+      "id": "r015",
+      "langue": "fr",
+      "split": "test",
+      "mot": "sorti",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le film dont elle parle est sorti."
+     },
+     {
+      "id": "r035",
+      "langue": "en",
+      "split": "dev",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The film she talks about is out."
+     },
+     {
+      "id": "r036",
+      "langue": "en",
+      "split": "dev",
+      "mot": "maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She is maybe tired."
+     },
+     {
+      "id": "r115",
+      "langue": "en",
+      "split": "test",
+      "mot": "born",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The house where I was born is small."
+     },
+     {
+      "id": "r132",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "accroché",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Le tableau est accroché au mur."
+     },
+     {
+      "id": "r162",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hung",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The painting is hung on the wall."
+     },
+     {
+      "id": "r218",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Although it is late, he works."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "far",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r269",
+      "langue": "fr",
+      "split": "test",
+      "mot": "là",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "La personne dont je parle est là."
+     },
+     {
+      "id": "r291",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mine",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The book that is on the table is mine."
+     },
+     {
+      "id": "r302",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "venue",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle est venue, mais elle repart."
+     },
+     {
+      "id": "r313",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I leave because it is late."
+     },
+     {
+      "id": "r430",
+      "langue": "fr",
+      "split": "test",
+      "mot": "partie",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Elle est partie."
+     },
+     {
+      "id": "r431",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "arrivés",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Ils sont arrivés."
+     },
+     {
+      "id": "s031",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "rêve",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "la douce étoile sont rêve"
+     },
+     {
+      "id": "s053",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "observe",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "les village est observe"
+     },
+     {
+      "id": "s076",
+      "langue": "fr",
+      "split": "dev",
+      "mot": "saute",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Lucas sont saute"
+     }
+    ],
+    "casses_detail": []
+   },
+   "r4_bilingue_guard": {
+    "pos": {
+     "all": 0.8452,
+     "dev": 0.8449,
+     "test": 0.8461,
+     "ferme": 0.9133,
+     "ouvert": 0.7808,
+     "en": 0.9207,
+     "fr": 0.8026
+    },
+    "delta_pts": {
+     "dev": 0.74,
+     "test": 0.61,
+     "all": 0.69
+    },
+    "f1": {
+     "all": 0.6181,
+     "dev": 0.6153,
+     "test": 0.6243,
+     "en": 0.7273,
+     "fr": 0.5595,
+     "tete": 0.7511
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 22,
+    "casses": 0,
+    "faux_faux": 9,
+    "corrections_dev": 16,
+    "corrections_test": 6,
+    "corrections_en": 12,
+    "corrections_fr": 10
+   },
+   "r4_en_large": {
+    "pos": {
+     "all": 0.8418,
+     "dev": 0.8412,
+     "test": 0.8431,
+     "ferme": 0.9133,
+     "ouvert": 0.774,
+     "en": 0.9199,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.37,
+     "test": 0.31,
+     "all": 0.35
+    },
+    "f1": {
+     "all": 0.6181,
+     "dev": 0.6153,
+     "test": 0.6243,
+     "en": 0.7273,
+     "fr": 0.5595,
+     "tete": 0.7511
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 12,
+    "casses": 1,
+    "faux_faux": 8,
+    "corrections_dev": 9,
+    "corrections_test": 3,
+    "corrections_en": 12,
+    "corrections_fr": 0,
+    "corrections_detail": [
+     {
+      "id": "r032",
+      "langue": "en",
+      "split": "test",
+      "mot": "fast",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The car is fast."
+     },
+     {
+      "id": "r112",
+      "langue": "en",
+      "split": "test",
+      "mot": "calm",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The sea is calm."
+     },
+     {
+      "id": "r174",
+      "langue": "en",
+      "split": "dev",
+      "mot": "dark",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The room is dark."
+     },
+     {
+      "id": "r205",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I think that you are right."
+     },
+     {
+      "id": "r217",
+      "langue": "en",
+      "split": "dev",
+      "mot": "absent",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The student whom I mention is absent."
+     },
+     {
+      "id": "r240",
+      "langue": "en",
+      "split": "dev",
+      "mot": "right",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I believe that he is right."
+     },
+     {
+      "id": "r246",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mean",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The dog that barks is mean."
+     },
+     {
+      "id": "r278",
+      "langue": "en",
+      "split": "dev",
+      "mot": "fresh",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The bread that you eat is fresh."
+     },
+     {
+      "id": "r289",
+      "langue": "en",
+      "split": "dev",
+      "mot": "quiet",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we live is quiet."
+     },
+     {
+      "id": "r290",
+      "langue": "en",
+      "split": "test",
+      "mot": "alone",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She cries because she is alone."
+     },
+     {
+      "id": "r297",
+      "langue": "en",
+      "split": "dev",
+      "mot": "rare",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The flower that grows here is rare."
+     },
+     {
+      "id": "r397",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hungry",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The baby cries; it is hungry."
+     }
+    ],
+    "faux_faux_detail": [
+     {
+      "id": "r035",
+      "langue": "en",
+      "split": "dev",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The film she talks about is out."
+     },
+     {
+      "id": "r036",
+      "langue": "en",
+      "split": "dev",
+      "mot": "maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "She is maybe tired."
+     },
+     {
+      "id": "r115",
+      "langue": "en",
+      "split": "test",
+      "mot": "born",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The house where I was born is small."
+     },
+     {
+      "id": "r162",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hung",
+      "gold": "VERB",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The painting is hung on the wall."
+     },
+     {
+      "id": "r218",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "Although it is late, he works."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "far",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r291",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mine",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The book that is on the table is mine."
+     },
+     {
+      "id": "r313",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "I leave because it is late."
+     }
+    ],
+    "casses_detail": [
+     {
+      "id": "r159",
+      "langue": "en",
+      "split": "dev",
+      "mot": "wheat",
+      "gold": "NOUN",
+      "base": "NOUN",
+      "apres": "ADJ",
+      "contexte": "The farmers grow wheat."
+     }
+    ]
+   }
+  },
+  "recommandee": "r4_en",
+  "max": "r4_bilingue",
+  "controles": [
+   {
+    "texte": "He is a doctor.",
+    "langue": "en",
+    "cible": "doctor",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He is running.",
+    "langue": "en",
+    "cible": "running",
+    "attendu": "VERB",
+    "famille": "r4_verbe",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "VERB",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "VERB",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He is doctor.",
+    "langue": "en",
+    "cible": "doctor",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "She is president.",
+    "langue": "en",
+    "cible": "president",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "He remains president.",
+    "langue": "en",
+    "cible": "president",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "They became members.",
+    "langue": "en",
+    "cible": "members",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The house where I was born is small.",
+    "langue": "en",
+    "cible": "born",
+    "attendu": "VERB",
+    "famille": "r4_verbe",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The painting is hung on the wall.",
+    "langue": "en",
+    "cible": "hung",
+    "attendu": "VERB",
+    "famille": "r4_verbe",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "She seems calm.",
+    "langue": "en",
+    "cible": "calm",
+    "attendu": "ADJ",
+    "famille": "r4_adj",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "It looks quiet.",
+    "langue": "en",
+    "cible": "quiet",
+    "attendu": "ADJ",
+    "famille": "r4_adj",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "The car is fast.",
+    "langue": "en",
+    "cible": "fast",
+    "attendu": "ADJ",
+    "famille": "r4_adj",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He feels pain.",
+    "langue": "en",
+    "cible": "pain",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "The farmers grow wheat.",
+    "langue": "en",
+    "cible": "wheat",
+    "attendu": "NOUN",
+    "famille": "r4_nom",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "Il est médecin.",
+    "langue": "fr",
+    "cible": "médecin",
+    "attendu": "NOUN",
+    "famille": "r4_nom_fr",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "La réunion est reportée.",
+    "langue": "fr",
+    "cible": "reportée",
+    "attendu": "VERB",
+    "famille": "r4_verbe_fr",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "Les enfants sont arrivés.",
+    "langue": "fr",
+    "cible": "arrivés",
+    "attendu": "VERB",
+    "famille": "r4_verbe_fr",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "Elle est calme.",
+    "langue": "fr",
+    "cible": "calme",
+    "attendu": "ADJ",
+    "famille": "r4_adj_fr",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     }
+    }
+   }
+  ]
+ },
+ "classes_fermees": {
+  "enonce": "Compléter POS_FERME['en'] : where/whose/mine en PRON, as en CONJ, am en AUX, late/out/maybe/hard/far/again/now/down en ADV, outside déplacé de PREP vers ADV.",
+  "patch_core": {
+   "ajoute": {
+    "PRON": [
+     "where",
+     "whose",
+     "mine"
+    ],
+    "CONJ": [
+     "as"
+    ],
+    "AUX": [
+     "am"
+    ],
+    "ADV": [
+     "late",
+     "out",
+     "maybe",
+     "hard",
+     "far",
+     "again",
+     "now",
+     "down",
+     "outside"
+    ]
+   },
+   "retire": {
+    "PREP": [
+     "outside"
+    ]
+   }
+  },
+  "variantes": {
+   "cc_core": {
+    "pos": {
+     "all": 0.8462,
+     "dev": 0.8453,
+     "test": 0.8481,
+     "ferme": 0.9295,
+     "ouvert": 0.7673,
+     "en": 0.9321,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.78,
+     "test": 0.81,
+     "all": 0.79
+    },
+    "f1": {
+     "all": 0.6188,
+     "dev": 0.6164,
+     "test": 0.6243,
+     "en": 0.7295,
+     "fr": 0.5595,
+     "tete": 0.7513
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 25,
+    "casses": 0,
+    "faux_faux": 0,
+    "corrections_dev": 17,
+    "corrections_test": 8,
+    "corrections_en": 25,
+    "corrections_fr": 0,
+    "corrections_detail": [
+     {
+      "id": "r035",
+      "langue": "en",
+      "split": "dev",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The film she talks about is out."
+     },
+     {
+      "id": "r036",
+      "langue": "en",
+      "split": "dev",
+      "mot": "maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "She is maybe tired."
+     },
+     {
+      "id": "r039",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hard",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The wind blows hard."
+     },
+     {
+      "id": "r075",
+      "langue": "en",
+      "split": "test",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The city where we live is beautiful."
+     },
+     {
+      "id": "r115",
+      "langue": "en",
+      "split": "test",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The house where I was born is small."
+     },
+     {
+      "id": "r197",
+      "langue": "en",
+      "split": "dev",
+      "mot": "outside",
+      "gold": "ADV",
+      "base": "PREP",
+      "apres": "ADV",
+      "contexte": "The children play outside."
+     },
+     {
+      "id": "r199",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The train arrives late."
+     },
+     {
+      "id": "r218",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Although it is late, he works."
+     },
+     {
+      "id": "r236",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The village where I live is small."
+     },
+     {
+      "id": "r239",
+      "langue": "en",
+      "split": "test",
+      "mot": "whose",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The man whose car is red arrives."
+     },
+     {
+      "id": "r249",
+      "langue": "en",
+      "split": "dev",
+      "mot": "As",
+      "gold": "CONJ",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "contexte": "As it was raining, we stayed."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "far",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r284",
+      "langue": "en",
+      "split": "test",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Although it rains, he goes out."
+     },
+     {
+      "id": "r289",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The place where we live is quiet."
+     },
+     {
+      "id": "r291",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mine",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The book that is on the table is mine."
+     },
+     {
+      "id": "r292",
+      "langue": "en",
+      "split": "test",
+      "mot": "As",
+      "gold": "CONJ",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "contexte": "As she sang, he danced."
+     },
+     {
+      "id": "r298",
+      "langue": "en",
+      "split": "dev",
+      "mot": "am",
+      "gold": "AUX",
+      "base": "VERB",
+      "apres": "AUX",
+      "contexte": "Although I am tired, I continue."
+     },
+     {
+      "id": "r300",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The house where she lives is small."
+     },
+     {
+      "id": "r312",
+      "langue": "en",
+      "split": "dev",
+      "mot": "again",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "She came, but she leaves again."
+     },
+     {
+      "id": "r313",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "I leave because it is late."
+     },
+     {
+      "id": "r319",
+      "langue": "en",
+      "split": "test",
+      "mot": "Maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Maybe he will come."
+     },
+     {
+      "id": "r320",
+      "langue": "en",
+      "split": "test",
+      "mot": "now",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "I must leave now."
+     },
+     {
+      "id": "r341",
+      "langue": "en",
+      "split": "test",
+      "mot": "down",
+      "gold": "ADV",
+      "base": "VERB",
+      "apres": "ADV",
+      "contexte": "rie reads a book; she closes it; she puts it down."
+     },
+     {
+      "id": "r365",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The train leaves; it arrives late."
+     }
+    ],
+    "faux_faux_detail": [],
+    "casses_detail": []
+   },
+   "cc_sans_where": {
+    "pos": {
+     "all": 0.8443,
+     "dev": 0.8435,
+     "test": 0.8461,
+     "ferme": 0.9256,
+     "ouvert": 0.7673,
+     "en": 0.9268,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.6,
+     "test": 0.61,
+     "all": 0.6
+    },
+    "f1": {
+     "all": 0.6188,
+     "dev": 0.6164,
+     "test": 0.6243,
+     "en": 0.7295,
+     "fr": 0.5595,
+     "tete": 0.7513
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 19,
+    "casses": 0,
+    "faux_faux": 0,
+    "corrections_dev": 13,
+    "corrections_test": 6,
+    "corrections_en": 19,
+    "corrections_fr": 0
+   },
+   "cc_fast": {
+    "pos": {
+     "all": 0.8468,
+     "dev": 0.8458,
+     "test": 0.8491,
+     "ferme": 0.9308,
+     "ouvert": 0.7673,
+     "en": 0.9338,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.83,
+     "test": 0.91,
+     "all": 0.85
+    },
+    "f1": {
+     "all": 0.6188,
+     "dev": 0.6164,
+     "test": 0.6243,
+     "en": 0.7295,
+     "fr": 0.5595,
+     "tete": 0.7513
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 27,
+    "casses": 0,
+    "faux_faux": 1,
+    "corrections_dev": 18,
+    "corrections_test": 9,
+    "corrections_en": 27,
+    "corrections_fr": 0,
+    "corrections_detail": [
+     {
+      "id": "r035",
+      "langue": "en",
+      "split": "dev",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The film she talks about is out."
+     },
+     {
+      "id": "r036",
+      "langue": "en",
+      "split": "dev",
+      "mot": "maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "She is maybe tired."
+     },
+     {
+      "id": "r039",
+      "langue": "en",
+      "split": "dev",
+      "mot": "hard",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The wind blows hard."
+     },
+     {
+      "id": "r071",
+      "langue": "en",
+      "split": "test",
+      "mot": "fast",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The car drives fast."
+     },
+     {
+      "id": "r075",
+      "langue": "en",
+      "split": "test",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The city where we live is beautiful."
+     },
+     {
+      "id": "r115",
+      "langue": "en",
+      "split": "test",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The house where I was born is small."
+     },
+     {
+      "id": "r197",
+      "langue": "en",
+      "split": "dev",
+      "mot": "outside",
+      "gold": "ADV",
+      "base": "PREP",
+      "apres": "ADV",
+      "contexte": "The children play outside."
+     },
+     {
+      "id": "r199",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The train arrives late."
+     },
+     {
+      "id": "r218",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Although it is late, he works."
+     },
+     {
+      "id": "r236",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The village where I live is small."
+     },
+     {
+      "id": "r239",
+      "langue": "en",
+      "split": "test",
+      "mot": "whose",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The man whose car is red arrives."
+     },
+     {
+      "id": "r249",
+      "langue": "en",
+      "split": "dev",
+      "mot": "As",
+      "gold": "CONJ",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "contexte": "As it was raining, we stayed."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r250",
+      "langue": "en",
+      "split": "dev",
+      "mot": "far",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The place where we go is far."
+     },
+     {
+      "id": "r284",
+      "langue": "en",
+      "split": "test",
+      "mot": "out",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Although it rains, he goes out."
+     },
+     {
+      "id": "r289",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The place where we live is quiet."
+     },
+     {
+      "id": "r291",
+      "langue": "en",
+      "split": "dev",
+      "mot": "mine",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The book that is on the table is mine."
+     },
+     {
+      "id": "r292",
+      "langue": "en",
+      "split": "test",
+      "mot": "As",
+      "gold": "CONJ",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "contexte": "As she sang, he danced."
+     },
+     {
+      "id": "r298",
+      "langue": "en",
+      "split": "dev",
+      "mot": "am",
+      "gold": "AUX",
+      "base": "VERB",
+      "apres": "AUX",
+      "contexte": "Although I am tired, I continue."
+     },
+     {
+      "id": "r300",
+      "langue": "en",
+      "split": "dev",
+      "mot": "where",
+      "gold": "PRON",
+      "base": "NOUN",
+      "apres": "PRON",
+      "contexte": "The house where she lives is small."
+     },
+     {
+      "id": "r312",
+      "langue": "en",
+      "split": "dev",
+      "mot": "again",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "She came, but she leaves again."
+     },
+     {
+      "id": "r313",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "I leave because it is late."
+     },
+     {
+      "id": "r319",
+      "langue": "en",
+      "split": "test",
+      "mot": "Maybe",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "Maybe he will come."
+     },
+     {
+      "id": "r320",
+      "langue": "en",
+      "split": "test",
+      "mot": "now",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "I must leave now."
+     },
+     {
+      "id": "r341",
+      "langue": "en",
+      "split": "test",
+      "mot": "down",
+      "gold": "ADV",
+      "base": "VERB",
+      "apres": "ADV",
+      "contexte": "rie reads a book; she closes it; she puts it down."
+     },
+     {
+      "id": "r362",
+      "langue": "en",
+      "split": "dev",
+      "mot": "fast",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The car is red; it runs fast."
+     },
+     {
+      "id": "r365",
+      "langue": "en",
+      "split": "dev",
+      "mot": "late",
+      "gold": "ADV",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The train leaves; it arrives late."
+     }
+    ],
+    "faux_faux_detail": [
+     {
+      "id": "r032",
+      "langue": "en",
+      "split": "test",
+      "mot": "fast",
+      "gold": "ADJ",
+      "base": "NOUN",
+      "apres": "ADV",
+      "contexte": "The car is fast."
+     }
+    ],
+    "casses_detail": []
+   },
+   "cc_when": {
+    "pos": {
+     "all": 0.8452,
+     "dev": 0.8439,
+     "test": 0.8481,
+     "ferme": 0.9276,
+     "ouvert": 0.7673,
+     "en": 0.9294,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.64,
+     "test": 0.81,
+     "all": 0.69
+    },
+    "f1": {
+     "all": 0.6188,
+     "dev": 0.6164,
+     "test": 0.6243,
+     "en": 0.7295,
+     "fr": 0.5595,
+     "tete": 0.7513
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 26,
+    "casses": 4,
+    "faux_faux": 0,
+    "corrections_dev": 18,
+    "corrections_test": 8,
+    "corrections_en": 26,
+    "corrections_fr": 0,
+    "corrections_detail": [],
+    "faux_faux_detail": [],
+    "casses_detail": []
+   },
+   "cc_nt": {
+    "pos": {
+     "all": 0.8462,
+     "dev": 0.8453,
+     "test": 0.8481,
+     "ferme": 0.9295,
+     "ouvert": 0.7673,
+     "en": 0.9321,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.78,
+     "test": 0.81,
+     "all": 0.79
+    },
+    "f1": {
+     "all": 0.6188,
+     "dev": 0.6164,
+     "test": 0.6243,
+     "en": 0.7295,
+     "fr": 0.5595,
+     "tete": 0.7513
+    },
+    "attachement": {
+     "exact": 222,
+     "labels": 222,
+     "cibles": 239,
+     "couverture": 0.9289,
+     "topk": 221
+    },
+    "corrections": 25,
+    "casses": 0,
+    "faux_faux": 0,
+    "corrections_dev": 17,
+    "corrections_test": 8,
+    "corrections_en": 25,
+    "corrections_fr": 0
+   },
+   "cc_large": {
+    "pos": {
+     "all": 0.8459,
+     "dev": 0.8453,
+     "test": 0.8471,
+     "ferme": 0.9288,
+     "ouvert": 0.7673,
+     "en": 0.9312,
+     "fr": 0.7976
+    },
+    "delta_pts": {
+     "dev": 0.78,
+     "test": 0.71,
+     "all": 0.76
+    },
+    "f1": {
+     "all": 0.6177,
+     "dev": 0.6164,
+     "test": 0.6206,
+     "en": 0.7262,
+     "fr": 0.5595,
+     "tete": 0.7501
+    },
+    "attachement": {
+     "exact": 221,
+     "labels": 221,
+     "cibles": 239,
+     "couverture": 0.9247,
+     "topk": 220
+    },
+    "corrections": 24,
+    "casses": 0,
+    "faux_faux": 1,
+    "corrections_dev": 17,
+    "corrections_test": 7,
+    "corrections_en": 24,
+    "corrections_fr": 0
+   }
+  },
+  "par_mot": [
+   {
+    "mot": "where",
+    "classe": "PRON",
+    "retire_de": null,
+    "net_en": 6,
+    "net_dev": 4,
+    "net_test": 2,
+    "corrections": 6,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r075",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "test"
+     },
+     {
+      "id": "r115",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "test"
+     },
+     {
+      "id": "r236",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "dev"
+     },
+     {
+      "id": "r250",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "dev"
+     },
+     {
+      "id": "r289",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "dev"
+     },
+     {
+      "id": "r300",
+      "mot": "where",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "late",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 4,
+    "net_dev": 4,
+    "net_test": 0,
+    "corrections": 4,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r199",
+      "mot": "late",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     },
+     {
+      "id": "r218",
+      "mot": "late",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     },
+     {
+      "id": "r313",
+      "mot": "late",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     },
+     {
+      "id": "r365",
+      "mot": "late",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "out",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 2,
+    "net_dev": 1,
+    "net_test": 1,
+    "corrections": 2,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r035",
+      "mot": "out",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     },
+     {
+      "id": "r284",
+      "mot": "out",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "maybe",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 2,
+    "net_dev": 1,
+    "net_test": 1,
+    "corrections": 2,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r036",
+      "mot": "maybe",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     },
+     {
+      "id": "r319",
+      "mot": "Maybe",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "hard",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r039",
+      "mot": "hard",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "far",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r250",
+      "mot": "far",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "again",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r312",
+      "mot": "again",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "now",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 0,
+    "net_test": 1,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r320",
+      "mot": "now",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "down",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 0,
+    "net_test": 1,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r341",
+      "mot": "down",
+      "base": "VERB",
+      "apres": "ADV",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "outside",
+    "classe": "ADV",
+    "retire_de": "PREP",
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r197",
+      "mot": "outside",
+      "base": "PREP",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "as",
+    "classe": "CONJ",
+    "retire_de": null,
+    "net_en": 2,
+    "net_dev": 1,
+    "net_test": 1,
+    "corrections": 2,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r249",
+      "mot": "As",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "split": "dev"
+     },
+     {
+      "id": "r292",
+      "mot": "As",
+      "base": "NOUN",
+      "apres": "CONJ",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "am",
+    "classe": "AUX",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r298",
+      "mot": "am",
+      "base": "VERB",
+      "apres": "AUX",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "whose",
+    "classe": "PRON",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 0,
+    "net_test": 1,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r239",
+      "mot": "whose",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "test"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "mine",
+    "classe": "PRON",
+    "retire_de": null,
+    "net_en": 1,
+    "net_dev": 1,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r291",
+      "mot": "mine",
+      "base": "NOUN",
+      "apres": "PRON",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "fast",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 2,
+    "net_dev": 1,
+    "net_test": 1,
+    "corrections": 2,
+    "casses": 0,
+    "formes": [
+     {
+      "id": "r071",
+      "mot": "fast",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "test"
+     },
+     {
+      "id": "r362",
+      "mot": "fast",
+      "base": "NOUN",
+      "apres": "ADV",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": []
+   },
+   {
+    "mot": "when",
+    "classe": "PRON",
+    "retire_de": "CONJ",
+    "net_en": -3,
+    "net_dev": -3,
+    "net_test": 0,
+    "corrections": 1,
+    "casses": 4,
+    "formes": [
+     {
+      "id": "r241",
+      "mot": "when",
+      "base": "CONJ",
+      "apres": "PRON",
+      "split": "dev"
+     }
+    ],
+    "casses_detail": [
+     {
+      "id": "r215",
+      "langue": "en",
+      "split": "dev",
+      "mot": "When",
+      "gold": "CONJ",
+      "base": "CONJ",
+      "apres": "PRON",
+      "contexte": "When it rains, I stay."
+     },
+     {
+      "id": "r245",
+      "langue": "en",
+      "split": "dev",
+      "mot": "When",
+      "gold": "CONJ",
+      "base": "CONJ",
+      "apres": "PRON",
+      "contexte": "When you arrive, call me."
+     },
+     {
+      "id": "r279",
+      "langue": "en",
+      "split": "dev",
+      "mot": "When",
+      "gold": "CONJ",
+      "base": "CONJ",
+      "apres": "PRON",
+      "contexte": "When it snows, we stay."
+     },
+     {
+      "id": "r294",
+      "langue": "en",
+      "split": "dev",
+      "mot": "When",
+      "gold": "CONJ",
+      "base": "CONJ",
+      "apres": "PRON",
+      "contexte": "When you want, we leave."
+     }
+    ]
+   },
+   {
+    "mot": "n't",
+    "classe": "ADV",
+    "retire_de": null,
+    "net_en": 0,
+    "net_dev": 0,
+    "net_test": 0,
+    "corrections": 0,
+    "casses": 0,
+    "formes": [],
+    "casses_detail": []
+   }
+  ],
+  "rejetees": {
+   "when": "PRON coûterait 4 CONJ (net −3) ; laisser when en CONJ.",
+   "n_t": "ADV est inerte : le tokeniseur ne produit pas \"n't\" (le gold le note, le POS ne le voit pas).",
+   "fast": "ADV corrige 2 fast adverbiaux mais bloque le ADJ de « The car is fast » (R4) : +2 seul, +1 seulement dans le paquet. À trancher par une règle contextuelle.",
+   "large": "L’ajout en bloc de 90 mots fermés (dont DET) perd 1 attachement (222→221) et 0,10 pt test ; le bloc DET est la cause (mesuré séparément)."
+  },
+  "controles": [
+   {
+    "texte": "Where is the nearest station?",
+    "langue": "en",
+    "cible": "Where",
+    "attendu": "ADV",
+    "famille": "cc_where",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "PRON",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "PRON",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "PRON",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "PRON",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The city where we live is beautiful.",
+    "langue": "en",
+    "cible": "where",
+    "attendu": "PRON",
+    "famille": "cc_where",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "PRON",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "PRON",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "PRON",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "PRON",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He works as a teacher.",
+    "langue": "en",
+    "cible": "as",
+    "attendu": "PREP",
+    "famille": "cc_as",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "CONJ",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "CONJ",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "CONJ",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "CONJ",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "As it was raining, we stayed.",
+    "langue": "en",
+    "cible": "As",
+    "attendu": "CONJ",
+    "famille": "cc_as",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "CONJ",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "CONJ",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "CONJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "CONJ",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "The late president arrived.",
+    "langue": "en",
+    "cible": "late",
+    "attendu": "ADJ",
+    "famille": "cc_late",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The train arrives late.",
+    "langue": "en",
+    "cible": "late",
+    "attendu": "ADV",
+    "famille": "cc_late",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He plays outside the house.",
+    "langue": "en",
+    "cible": "outside",
+    "attendu": "PREP",
+    "famille": "cc_outside",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "PREP",
+      "verdict": "ok"
+     },
+     "r4_en": {
+      "pos": "PREP",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "PREP",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "PREP",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The children play outside.",
+    "langue": "en",
+    "cible": "outside",
+    "attendu": "ADV",
+    "famille": "cc_outside",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "PREP",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "PREP",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "PREP",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "PREP",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "It is hard work.",
+    "langue": "en",
+    "cible": "hard",
+    "attendu": "ADJ",
+    "famille": "cc_hard",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_bilingue": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "r4_en_large": {
+      "pos": "ADJ",
+      "verdict": "ok"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "The wind blows hard.",
+    "langue": "en",
+    "cible": "hard",
+    "attendu": "ADV",
+    "famille": "cc_hard",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     }
+    }
+   },
+   {
+    "texte": "He walks down the street.",
+    "langue": "en",
+    "cible": "down",
+    "attendu": "PREP",
+    "famille": "cc_down",
+    "source": "sonde",
+    "resultats": {
+     "base": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "NOUN",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ko"
+     }
+    }
+   },
+   {
+    "texte": "She puts it down.",
+    "langue": "en",
+    "cible": "down",
+    "attendu": "ADV",
+    "famille": "cc_down",
+    "source": "gold",
+    "resultats": {
+     "base": {
+      "pos": "VERB",
+      "verdict": "ko"
+     },
+     "r4_en": {
+      "pos": "VERB",
+      "verdict": "ko"
+     },
+     "r4_bilingue": {
+      "pos": "VERB",
+      "verdict": "ko"
+     },
+     "r4_en_large": {
+      "pos": "VERB",
+      "verdict": "ko"
+     },
+     "cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "cc_fast": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_en+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     },
+     "r4_bilingue+cc_core": {
+      "pos": "ADV",
+      "verdict": "ok"
+     }
+    }
+   }
+  ]
+ },
+ "paquets": {
+  "r4_en+cc_core": {
+   "pos": {
+    "all": 0.85,
+    "dev": 0.8494,
+    "test": 0.8511,
+    "ferme": 0.9295,
+    "ouvert": 0.7746,
+    "en": 0.9425,
+    "fr": 0.7976
+   },
+   "delta_pts": {
+    "dev": 1.19,
+    "test": 1.11,
+    "all": 1.17
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 37,
+   "casses": 0,
+   "faux_faux": 2,
+   "corrections_dev": 26,
+   "corrections_test": 11,
+   "corrections_en": 37,
+   "corrections_fr": 0,
+   "corrections_detail": [
+    {
+     "id": "r032",
+     "langue": "en",
+     "split": "test",
+     "mot": "fast",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The car is fast."
+    },
+    {
+     "id": "r035",
+     "langue": "en",
+     "split": "dev",
+     "mot": "out",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The film she talks about is out."
+    },
+    {
+     "id": "r036",
+     "langue": "en",
+     "split": "dev",
+     "mot": "maybe",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "She is maybe tired."
+    },
+    {
+     "id": "r039",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hard",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The wind blows hard."
+    },
+    {
+     "id": "r075",
+     "langue": "en",
+     "split": "test",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The city where we live is beautiful."
+    },
+    {
+     "id": "r112",
+     "langue": "en",
+     "split": "test",
+     "mot": "calm",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The sea is calm."
+    },
+    {
+     "id": "r115",
+     "langue": "en",
+     "split": "test",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The house where I was born is small."
+    },
+    {
+     "id": "r174",
+     "langue": "en",
+     "split": "dev",
+     "mot": "dark",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The room is dark."
+    },
+    {
+     "id": "r197",
+     "langue": "en",
+     "split": "dev",
+     "mot": "outside",
+     "gold": "ADV",
+     "base": "PREP",
+     "apres": "ADV",
+     "contexte": "The children play outside."
+    },
+    {
+     "id": "r199",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The train arrives late."
+    },
+    {
+     "id": "r205",
+     "langue": "en",
+     "split": "dev",
+     "mot": "right",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "I think that you are right."
+    },
+    {
+     "id": "r217",
+     "langue": "en",
+     "split": "dev",
+     "mot": "absent",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The student whom I mention is absent."
+    },
+    {
+     "id": "r218",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Although it is late, he works."
+    },
+    {
+     "id": "r236",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The village where I live is small."
+    },
+    {
+     "id": "r239",
+     "langue": "en",
+     "split": "test",
+     "mot": "whose",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The man whose car is red arrives."
+    },
+    {
+     "id": "r240",
+     "langue": "en",
+     "split": "dev",
+     "mot": "right",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "I believe that he is right."
+    },
+    {
+     "id": "r246",
+     "langue": "en",
+     "split": "dev",
+     "mot": "mean",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The dog that barks is mean."
+    },
+    {
+     "id": "r249",
+     "langue": "en",
+     "split": "dev",
+     "mot": "As",
+     "gold": "CONJ",
+     "base": "NOUN",
+     "apres": "CONJ",
+     "contexte": "As it was raining, we stayed."
+    },
+    {
+     "id": "r250",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The place where we go is far."
+    },
+    {
+     "id": "r250",
+     "langue": "en",
+     "split": "dev",
+     "mot": "far",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The place where we go is far."
+    },
+    {
+     "id": "r278",
+     "langue": "en",
+     "split": "dev",
+     "mot": "fresh",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The bread that you eat is fresh."
+    },
+    {
+     "id": "r284",
+     "langue": "en",
+     "split": "test",
+     "mot": "out",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Although it rains, he goes out."
+    },
+    {
+     "id": "r289",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The place where we live is quiet."
+    },
+    {
+     "id": "r289",
+     "langue": "en",
+     "split": "dev",
+     "mot": "quiet",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The place where we live is quiet."
+    },
+    {
+     "id": "r290",
+     "langue": "en",
+     "split": "test",
+     "mot": "alone",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "She cries because she is alone."
+    },
+    {
+     "id": "r291",
+     "langue": "en",
+     "split": "dev",
+     "mot": "mine",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The book that is on the table is mine."
+    },
+    {
+     "id": "r292",
+     "langue": "en",
+     "split": "test",
+     "mot": "As",
+     "gold": "CONJ",
+     "base": "NOUN",
+     "apres": "CONJ",
+     "contexte": "As she sang, he danced."
+    },
+    {
+     "id": "r297",
+     "langue": "en",
+     "split": "dev",
+     "mot": "rare",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The flower that grows here is rare."
+    },
+    {
+     "id": "r298",
+     "langue": "en",
+     "split": "dev",
+     "mot": "am",
+     "gold": "AUX",
+     "base": "VERB",
+     "apres": "AUX",
+     "contexte": "Although I am tired, I continue."
+    },
+    {
+     "id": "r300",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The house where she lives is small."
+    },
+    {
+     "id": "r312",
+     "langue": "en",
+     "split": "dev",
+     "mot": "again",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "She came, but she leaves again."
+    },
+    {
+     "id": "r313",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "I leave because it is late."
+    },
+    {
+     "id": "r319",
+     "langue": "en",
+     "split": "test",
+     "mot": "Maybe",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Maybe he will come."
+    },
+    {
+     "id": "r320",
+     "langue": "en",
+     "split": "test",
+     "mot": "now",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "I must leave now."
+    },
+    {
+     "id": "r341",
+     "langue": "en",
+     "split": "test",
+     "mot": "down",
+     "gold": "ADV",
+     "base": "VERB",
+     "apres": "ADV",
+     "contexte": "rie reads a book; she closes it; she puts it down."
+    },
+    {
+     "id": "r365",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The train leaves; it arrives late."
+    },
+    {
+     "id": "r397",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hungry",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The baby cries; it is hungry."
+    }
+   ],
+   "faux_faux_detail": [
+    {
+     "id": "r115",
+     "langue": "en",
+     "split": "test",
+     "mot": "born",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The house where I was born is small."
+    },
+    {
+     "id": "r162",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hung",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The painting is hung on the wall."
+    }
+   ],
+   "casses_detail": []
+  },
+  "r4_en+cc_fast": {
+   "pos": {
+    "all": 0.8503,
+    "dev": 0.8499,
+    "test": 0.8511,
+    "ferme": 0.9308,
+    "ouvert": 0.774,
+    "en": 0.9434,
+    "fr": 0.7976
+   },
+   "delta_pts": {
+    "dev": 1.24,
+    "test": 1.11,
+    "all": 1.2
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 38,
+   "casses": 0,
+   "faux_faux": 3,
+   "corrections_dev": 27,
+   "corrections_test": 11,
+   "corrections_en": 38,
+   "corrections_fr": 0
+  },
+  "r4_bilingue+cc_core": {
+   "pos": {
+    "all": 0.8534,
+    "dev": 0.8526,
+    "test": 0.8551,
+    "ferme": 0.9295,
+    "ouvert": 0.7814,
+    "en": 0.9425,
+    "fr": 0.8031
+   },
+   "delta_pts": {
+    "dev": 1.51,
+    "test": 1.51,
+    "all": 1.51
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 48,
+   "casses": 0,
+   "faux_faux": 11,
+   "corrections_dev": 33,
+   "corrections_test": 15,
+   "corrections_en": 37,
+   "corrections_fr": 11,
+   "corrections_detail": [
+    {
+     "id": "r012",
+     "langue": "fr",
+     "split": "test",
+     "mot": "rapide",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La voiture est rapide."
+    },
+    {
+     "id": "r014",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "passionnant",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le livre que j'ai lu est passionnant."
+    },
+    {
+     "id": "r032",
+     "langue": "en",
+     "split": "test",
+     "mot": "fast",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The car is fast."
+    },
+    {
+     "id": "r035",
+     "langue": "en",
+     "split": "dev",
+     "mot": "out",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The film she talks about is out."
+    },
+    {
+     "id": "r036",
+     "langue": "en",
+     "split": "dev",
+     "mot": "maybe",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "She is maybe tired."
+    },
+    {
+     "id": "r039",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hard",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The wind blows hard."
+    },
+    {
+     "id": "r058",
+     "langue": "fr",
+     "split": "test",
+     "mot": "ouverte",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La porte est ouverte."
+    },
+    {
+     "id": "r075",
+     "langue": "en",
+     "split": "test",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The city where we live is beautiful."
+    },
+    {
+     "id": "r092",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "calme",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La mer est calme."
+    },
+    {
+     "id": "r112",
+     "langue": "en",
+     "split": "test",
+     "mot": "calm",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The sea is calm."
+    },
+    {
+     "id": "r115",
+     "langue": "en",
+     "split": "test",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The house where I was born is small."
+    },
+    {
+     "id": "r144",
+     "langue": "fr",
+     "split": "test",
+     "mot": "sombre",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La pièce est sombre."
+    },
+    {
+     "id": "r174",
+     "langue": "en",
+     "split": "dev",
+     "mot": "dark",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The room is dark."
+    },
+    {
+     "id": "r197",
+     "langue": "en",
+     "split": "dev",
+     "mot": "outside",
+     "gold": "ADV",
+     "base": "PREP",
+     "apres": "ADV",
+     "contexte": "The children play outside."
+    },
+    {
+     "id": "r199",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The train arrives late."
+    },
+    {
+     "id": "r205",
+     "langue": "en",
+     "split": "dev",
+     "mot": "right",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "I think that you are right."
+    },
+    {
+     "id": "r209",
+     "langue": "fr",
+     "split": "test",
+     "mot": "absent",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "L'élève dont je parle est absent."
+    },
+    {
+     "id": "r217",
+     "langue": "en",
+     "split": "dev",
+     "mot": "absent",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The student whom I mention is absent."
+    },
+    {
+     "id": "r218",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Although it is late, he works."
+    },
+    {
+     "id": "r231",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "méchant",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le chien qui aboie est méchant."
+    },
+    {
+     "id": "r236",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The village where I live is small."
+    },
+    {
+     "id": "r239",
+     "langue": "en",
+     "split": "test",
+     "mot": "whose",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The man whose car is red arrives."
+    },
+    {
+     "id": "r240",
+     "langue": "en",
+     "split": "dev",
+     "mot": "right",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "I believe that he is right."
+    },
+    {
+     "id": "r246",
+     "langue": "en",
+     "split": "dev",
+     "mot": "mean",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The dog that barks is mean."
+    },
+    {
+     "id": "r249",
+     "langue": "en",
+     "split": "dev",
+     "mot": "As",
+     "gold": "CONJ",
+     "base": "NOUN",
+     "apres": "CONJ",
+     "contexte": "As it was raining, we stayed."
+    },
+    {
+     "id": "r250",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The place where we go is far."
+    },
+    {
+     "id": "r250",
+     "langue": "en",
+     "split": "dev",
+     "mot": "far",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The place where we go is far."
+    },
+    {
+     "id": "r253",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "frais",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le pain que tu manges est frais."
+    },
+    {
+     "id": "r265",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "calme",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le lieu où nous vivons est calme."
+    },
+    {
+     "id": "r266",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "seule",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Elle pleure parce qu'elle est seule."
+    },
+    {
+     "id": "r273",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "rare",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La fleur qui pousse ici est rare."
+    },
+    {
+     "id": "r278",
+     "langue": "en",
+     "split": "dev",
+     "mot": "fresh",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The bread that you eat is fresh."
+    },
+    {
+     "id": "r284",
+     "langue": "en",
+     "split": "test",
+     "mot": "out",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Although it rains, he goes out."
+    },
+    {
+     "id": "r289",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The place where we live is quiet."
+    },
+    {
+     "id": "r289",
+     "langue": "en",
+     "split": "dev",
+     "mot": "quiet",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The place where we live is quiet."
+    },
+    {
+     "id": "r290",
+     "langue": "en",
+     "split": "test",
+     "mot": "alone",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "She cries because she is alone."
+    },
+    {
+     "id": "r291",
+     "langue": "en",
+     "split": "dev",
+     "mot": "mine",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The book that is on the table is mine."
+    },
+    {
+     "id": "r292",
+     "langue": "en",
+     "split": "test",
+     "mot": "As",
+     "gold": "CONJ",
+     "base": "NOUN",
+     "apres": "CONJ",
+     "contexte": "As she sang, he danced."
+    },
+    {
+     "id": "r297",
+     "langue": "en",
+     "split": "dev",
+     "mot": "rare",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The flower that grows here is rare."
+    },
+    {
+     "id": "r298",
+     "langue": "en",
+     "split": "dev",
+     "mot": "am",
+     "gold": "AUX",
+     "base": "VERB",
+     "apres": "AUX",
+     "contexte": "Although I am tired, I continue."
+    },
+    {
+     "id": "r300",
+     "langue": "en",
+     "split": "dev",
+     "mot": "where",
+     "gold": "PRON",
+     "base": "NOUN",
+     "apres": "PRON",
+     "contexte": "The house where she lives is small."
+    },
+    {
+     "id": "r312",
+     "langue": "en",
+     "split": "dev",
+     "mot": "again",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "She came, but she leaves again."
+    },
+    {
+     "id": "r313",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "I leave because it is late."
+    },
+    {
+     "id": "r319",
+     "langue": "en",
+     "split": "test",
+     "mot": "Maybe",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "Maybe he will come."
+    },
+    {
+     "id": "r320",
+     "langue": "en",
+     "split": "test",
+     "mot": "now",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "I must leave now."
+    },
+    {
+     "id": "r341",
+     "langue": "en",
+     "split": "test",
+     "mot": "down",
+     "gold": "ADV",
+     "base": "VERB",
+     "apres": "ADV",
+     "contexte": "rie reads a book; she closes it; she puts it down."
+    },
+    {
+     "id": "r365",
+     "langue": "en",
+     "split": "dev",
+     "mot": "late",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADV",
+     "contexte": "The train leaves; it arrives late."
+    },
+    {
+     "id": "r397",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hungry",
+     "gold": "ADJ",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The baby cries; it is hungry."
+    }
+   ],
+   "faux_faux_detail": [
+    {
+     "id": "r015",
+     "langue": "fr",
+     "split": "test",
+     "mot": "sorti",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le film dont elle parle est sorti."
+    },
+    {
+     "id": "r115",
+     "langue": "en",
+     "split": "test",
+     "mot": "born",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The house where I was born is small."
+    },
+    {
+     "id": "r132",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "accroché",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Le tableau est accroché au mur."
+    },
+    {
+     "id": "r162",
+     "langue": "en",
+     "split": "dev",
+     "mot": "hung",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "The painting is hung on the wall."
+    },
+    {
+     "id": "r269",
+     "langue": "fr",
+     "split": "test",
+     "mot": "là",
+     "gold": "ADV",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "La personne dont je parle est là."
+    },
+    {
+     "id": "r302",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "venue",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Elle est venue, mais elle repart."
+    },
+    {
+     "id": "r430",
+     "langue": "fr",
+     "split": "test",
+     "mot": "partie",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Elle est partie."
+    },
+    {
+     "id": "r431",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "arrivés",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Ils sont arrivés."
+    },
+    {
+     "id": "s031",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "rêve",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "la douce étoile sont rêve"
+    },
+    {
+     "id": "s053",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "observe",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "les village est observe"
+    },
+    {
+     "id": "s076",
+     "langue": "fr",
+     "split": "dev",
+     "mot": "saute",
+     "gold": "VERB",
+     "base": "NOUN",
+     "apres": "ADJ",
+     "contexte": "Lucas sont saute"
+    }
+   ],
+   "casses_detail": []
+  },
+  "r4_bilingue+cc_fast": {
+   "pos": {
+    "all": 0.8537,
+    "dev": 0.8531,
+    "test": 0.8551,
+    "ferme": 0.9308,
+    "ouvert": 0.7808,
+    "en": 0.9434,
+    "fr": 0.8031
+   },
+   "delta_pts": {
+    "dev": 1.56,
+    "test": 1.51,
+    "all": 1.54
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 49,
+   "casses": 0,
+   "faux_faux": 12,
+   "corrections_dev": 34,
+   "corrections_test": 15,
+   "corrections_en": 38,
+   "corrections_fr": 11
+  },
+  "r4_en+cc_sans_where": {
+   "pos": {
+    "all": 0.8481,
+    "dev": 0.8476,
+    "test": 0.8491,
+    "ferme": 0.9256,
+    "ouvert": 0.7746,
+    "en": 0.9373,
+    "fr": 0.7976
+   },
+   "delta_pts": {
+    "dev": 1.01,
+    "test": 0.91,
+    "all": 0.98
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 31,
+   "casses": 0,
+   "faux_faux": 2,
+   "corrections_dev": 22,
+   "corrections_test": 9,
+   "corrections_en": 31,
+   "corrections_fr": 0
+  },
+  "r4_bilingue+cc_sans_where": {
+   "pos": {
+    "all": 0.8515,
+    "dev": 0.8508,
+    "test": 0.8531,
+    "ferme": 0.9256,
+    "ouvert": 0.7814,
+    "en": 0.9373,
+    "fr": 0.8031
+   },
+   "delta_pts": {
+    "dev": 1.33,
+    "test": 1.31,
+    "all": 1.32
+   },
+   "f1": {
+    "all": 0.6188,
+    "dev": 0.6164,
+    "test": 0.6243,
+    "en": 0.7295,
+    "fr": 0.5595,
+    "tete": 0.7513
+   },
+   "attachement": {
+    "exact": 222,
+    "labels": 222,
+    "cibles": 239,
+    "couverture": 0.9289,
+    "topk": 221
+   },
+   "corrections": 42,
+   "casses": 0,
+   "faux_faux": 11,
+   "corrections_dev": 29,
+   "corrections_test": 13,
+   "corrections_en": 31,
+   "corrections_fr": 11
+  },
+  "recommandation": "r4_en+cc_core",
+  "maximum_mesure": "r4_bilingue+cc_core",
+  "sans_where": "r4_en+cc_sans_where / r4_bilingue+cc_sans_where"
+ },
+ "placebo": {
+  "base": {
+   "all": 0.8383,
+   "dev": 0.8375,
+   "test": 0.84
+  },
+  "tirages": 200,
+  "note": "mêmes actions, mêmes nombres, jetons tirés au hasard dans la même phrase ; changement de POS post-hoc (métrique POS seule).",
+  "r4e": {
+   "actions": 20,
+   "all": {
+    "mean": 0.8349,
+    "min": 0.8339,
+    "p05": 0.8342,
+    "p95": 0.8355,
+    "max": 0.8358,
+    "delta_moyen_pts": -0.35,
+    "delta_max_pts": -0.25,
+    "delta_min_pts": -0.44
+   },
+   "dev": {
+    "mean": 0.8336,
+    "min": 0.8325,
+    "p05": 0.833,
+    "p95": 0.8343,
+    "max": 0.8348,
+    "delta_moyen_pts": -0.39,
+    "delta_max_pts": -0.27,
+    "delta_min_pts": -0.5
+   },
+   "test": {
+    "mean": 0.8375,
+    "min": 0.837,
+    "p05": 0.837,
+    "p95": 0.838,
+    "max": 0.838,
+    "delta_moyen_pts": -0.25,
+    "delta_max_pts": -0.2,
+    "delta_min_pts": -0.3
+   },
+   "observe": {
+    "variante": "r4_en",
+    "delta_dev_pts": 0.41,
+    "delta_test_pts": 0.31,
+    "au_dessus_du_max": true
+   }
+  },
+  "r4b": {
+   "actions": 40,
+   "all": {
+    "mean": 0.8303,
+    "min": 0.8292,
+    "p05": 0.8295,
+    "p95": 0.8311,
+    "max": 0.8314,
+    "delta_moyen_pts": -0.8,
+    "delta_max_pts": -0.69,
+    "delta_min_pts": -0.91
+   },
+   "dev": {
+    "mean": 0.8297,
+    "min": 0.8279,
+    "p05": 0.8284,
+    "p95": 0.8307,
+    "max": 0.8316,
+    "delta_moyen_pts": -0.78,
+    "delta_max_pts": -0.59,
+    "delta_min_pts": -0.96
+   },
+   "test": {
+    "mean": 0.8315,
+    "min": 0.831,
+    "p05": 0.831,
+    "p95": 0.832,
+    "max": 0.832,
+    "delta_moyen_pts": -0.85,
+    "delta_max_pts": -0.8,
+    "delta_min_pts": -0.91
+   },
+   "observe": {
+    "variante": "r4_bilingue",
+    "delta_dev_pts": 0.74,
+    "delta_test_pts": 0.71,
+    "au_dessus_du_max": true
+   }
+  },
+  "cc": {
+   "actions": 25,
+   "all": {
+    "mean": 0.8319,
+    "min": 0.8311,
+    "p05": 0.8314,
+    "p95": 0.8323,
+    "max": 0.8327,
+    "delta_moyen_pts": -0.64,
+    "delta_max_pts": -0.57,
+    "delta_min_pts": -0.72
+   },
+   "dev": {
+    "mean": 0.8311,
+    "min": 0.8302,
+    "p05": 0.8302,
+    "p95": 0.832,
+    "max": 0.832,
+    "delta_moyen_pts": -0.65,
+    "delta_max_pts": -0.55,
+    "delta_min_pts": -0.73
+   },
+   "test": {
+    "mean": 0.8336,
+    "min": 0.833,
+    "p05": 0.833,
+    "p95": 0.835,
+    "max": 0.835,
+    "delta_moyen_pts": -0.64,
+    "delta_max_pts": -0.5,
+    "delta_min_pts": -0.7
+   },
+   "observe": {
+    "variante": "cc_core",
+    "delta_dev_pts": 0.78,
+    "delta_test_pts": 0.81,
+    "au_dessus_du_max": true
+   }
+  },
+  "safe": {
+   "actions": 37,
+   "all": {
+    "mean": 0.8287,
+    "min": 0.8276,
+    "p05": 0.8279,
+    "p95": 0.8295,
+    "max": 0.8301,
+    "delta_moyen_pts": -0.96,
+    "delta_max_pts": -0.82,
+    "delta_min_pts": -1.07
+   },
+   "dev": {
+    "mean": 0.8276,
+    "min": 0.8261,
+    "p05": 0.8265,
+    "p95": 0.8284,
+    "max": 0.8288,
+    "delta_moyen_pts": -0.99,
+    "delta_max_pts": -0.87,
+    "delta_min_pts": -1.14
+   },
+   "test": {
+    "mean": 0.8312,
+    "min": 0.83,
+    "p05": 0.83,
+    "p95": 0.833,
+    "max": 0.833,
+    "delta_moyen_pts": -0.89,
+    "delta_max_pts": -0.7,
+    "delta_min_pts": -1.01
+   },
+   "observe": {
+    "variante": "r4_en+cc_core",
+    "delta_dev_pts": 1.19,
+    "delta_test_pts": 1.11,
+    "au_dessus_du_max": true
+   }
+  },
+  "max": {
+   "actions": 65,
+   "all": {
+    "mean": 0.8241,
+    "min": 0.8229,
+    "p05": 0.8232,
+    "p95": 0.8251,
+    "max": 0.8254,
+    "delta_moyen_pts": -1.42,
+    "delta_max_pts": -1.29,
+    "delta_min_pts": -1.54
+   },
+   "dev": {
+    "mean": 0.8237,
+    "min": 0.822,
+    "p05": 0.8224,
+    "p95": 0.8252,
+    "max": 0.8256,
+    "delta_moyen_pts": -1.38,
+    "delta_max_pts": -1.19,
+    "delta_min_pts": -1.56
+   },
+   "test": {
+    "mean": 0.825,
+    "min": 0.8239,
+    "p05": 0.8239,
+    "p95": 0.826,
+    "max": 0.827,
+    "delta_moyen_pts": -1.5,
+    "delta_max_pts": -1.31,
+    "delta_min_pts": -1.61
+   },
+   "observe": {
+    "variante": "r4_bilingue+cc_core",
+    "delta_dev_pts": 1.51,
+    "delta_test_pts": 1.51,
+    "au_dessus_du_max": true
+   }
+  }
+ },
+ "libres_50": {
+  "base": {
+   "textes": 46,
+   "refus": 4,
+   "pos_total": 766,
+   "segments_total": 386,
+   "attachements_total": 295,
+   "pos_audit_total": 766,
+   "segments_audit_total": 360,
+   "attachements_audit_total": 284,
+   "pos_match_audit": "46/46",
+   "segments_match_audit": "42/46",
+   "attachements_match_audit": "43/46"
+  },
+  "variantes": {
+   "r4_en": {
+    "textes_touches": 0,
+    "pos_changes": 0,
+    "transitions": {},
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 0,
+     "faux": 0,
+     "non_revus": 0
+    }
+   },
+   "r4_bilingue": {
+    "textes_touches": 6,
+    "pos_changes": 8,
+    "transitions": {
+     "NOUN->ADJ": 8
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 3,
+     "faux": 5,
+     "non_revus": 0
+    }
+   },
+   "cc_core": {
+    "textes_touches": 1,
+    "pos_changes": 1,
+    "transitions": {
+     "NOUN->PRON": 1
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 0,
+     "faux": 1,
+     "non_revus": 0
+    }
+   },
+   "cc_fast": {
+    "textes_touches": 1,
+    "pos_changes": 1,
+    "transitions": {
+     "NOUN->PRON": 1
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 0,
+     "faux": 1,
+     "non_revus": 0
+    }
+   },
+   "cc_sans_where": {
+    "textes_touches": 0,
+    "pos_changes": 0,
+    "transitions": {},
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 0,
+     "faux": 0,
+     "non_revus": 0
+    }
+   },
+   "r4_en+cc_core": {
+    "textes_touches": 1,
+    "pos_changes": 1,
+    "transitions": {
+     "NOUN->PRON": 1
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 0,
+     "faux": 1,
+     "non_revus": 0
+    }
+   },
+   "r4_bilingue+cc_core": {
+    "textes_touches": 7,
+    "pos_changes": 9,
+    "transitions": {
+     "NOUN->PRON": 1,
+     "NOUN->ADJ": 8
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 3,
+     "faux": 6,
+     "non_revus": 0
+    }
+   },
+   "r4_bilingue+cc_sans_where": {
+    "textes_touches": 6,
+    "pos_changes": 8,
+    "transitions": {
+     "NOUN->ADJ": 8
+    },
+    "segments_changes": 0,
+    "attachements_changes": 0,
+    "invariants_ko": 0,
+    "revue": {
+     "justes": 3,
+     "faux": 5,
+     "non_revus": 0
+    }
+   }
+  },
+  "detail": [
+   {
+    "variante": "r4_bilingue",
+    "id": "f20",
+    "langue": "fr",
+    "mot": "arrivés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 42,
+    "fin": 49,
+    "contexte": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+    "revue": "faux",
+    "raison": "participe passé après « sont » ; R4 n’a pas de garde verbe"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f28",
+    "langue": "fr",
+    "mot": "gratuite",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 29,
+    "fin": 37,
+    "contexte": "Le café coûte 2 €, l'eau est gratuite.",
+    "revue": "juste",
+    "raison": "adjectif attribut"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f38",
+    "langue": "fr",
+    "mot": "parfois",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 53,
+    "fin": 60,
+    "contexte": "comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+    "revue": "faux",
+    "raison": "adverbe ; trou de POS_FERME[\"fr\"][\"ADV\"]"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f43",
+    "langue": "fr",
+    "mot": "cohérent",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 241,
+    "fin": 249,
+    "contexte": "emets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f49",
+    "langue": "fr",
+    "mot": "reportée",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 15,
+    "fin": 23,
+    "contexte": "La réunion est reportée à demain, 10 h 30, salle B12.",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "entrés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 847,
+    "fin": 853,
+    "contexte": "ue passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; ",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "ouverte",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1207,
+    "fin": 1214,
+    "contexte": "e que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "acceptés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1937,
+    "fin": 1945,
+    "contexte": "x @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å ",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "cc_core",
+    "id": "f08",
+    "langue": "en",
+    "mot": "Where",
+    "base": "NOUN",
+    "apres": "PRON",
+    "debut": 0,
+    "fin": 5,
+    "contexte": "Where is the nearest train station, please?",
+    "revue": "faux",
+    "raison": "interrogatif : ADV attendu ; la liste ne tranche pas"
+   },
+   {
+    "variante": "cc_fast",
+    "id": "f08",
+    "langue": "en",
+    "mot": "Where",
+    "base": "NOUN",
+    "apres": "PRON",
+    "debut": 0,
+    "fin": 5,
+    "contexte": "Where is the nearest train station, please?",
+    "revue": "faux",
+    "raison": "interrogatif : ADV attendu ; la liste ne tranche pas"
+   },
+   {
+    "variante": "r4_en+cc_core",
+    "id": "f08",
+    "langue": "en",
+    "mot": "Where",
+    "base": "NOUN",
+    "apres": "PRON",
+    "debut": 0,
+    "fin": 5,
+    "contexte": "Where is the nearest train station, please?",
+    "revue": "faux",
+    "raison": "interrogatif : ADV attendu ; la liste ne tranche pas"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f08",
+    "langue": "en",
+    "mot": "Where",
+    "base": "NOUN",
+    "apres": "PRON",
+    "debut": 0,
+    "fin": 5,
+    "contexte": "Where is the nearest train station, please?",
+    "revue": "faux",
+    "raison": "interrogatif : ADV attendu ; la liste ne tranche pas"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f20",
+    "langue": "fr",
+    "mot": "arrivés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 42,
+    "fin": 49,
+    "contexte": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+    "revue": "faux",
+    "raison": "participe passé après « sont » ; R4 n’a pas de garde verbe"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f28",
+    "langue": "fr",
+    "mot": "gratuite",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 29,
+    "fin": 37,
+    "contexte": "Le café coûte 2 €, l'eau est gratuite.",
+    "revue": "juste",
+    "raison": "adjectif attribut"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f38",
+    "langue": "fr",
+    "mot": "parfois",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 53,
+    "fin": 60,
+    "contexte": "comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+    "revue": "faux",
+    "raison": "adverbe ; trou de POS_FERME[\"fr\"][\"ADV\"]"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f43",
+    "langue": "fr",
+    "mot": "cohérent",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 241,
+    "fin": 249,
+    "contexte": "emets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f49",
+    "langue": "fr",
+    "mot": "reportée",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 15,
+    "fin": 23,
+    "contexte": "La réunion est reportée à demain, 10 h 30, salle B12.",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "entrés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 847,
+    "fin": 853,
+    "contexte": "ue passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; ",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "ouverte",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1207,
+    "fin": 1214,
+    "contexte": "e que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue+cc_core",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "acceptés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1937,
+    "fin": 1945,
+    "contexte": "x @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å ",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f20",
+    "langue": "fr",
+    "mot": "arrivés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 42,
+    "fin": 49,
+    "contexte": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+    "revue": "faux",
+    "raison": "participe passé après « sont » ; R4 n’a pas de garde verbe"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f28",
+    "langue": "fr",
+    "mot": "gratuite",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 29,
+    "fin": 37,
+    "contexte": "Le café coûte 2 €, l'eau est gratuite.",
+    "revue": "juste",
+    "raison": "adjectif attribut"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f38",
+    "langue": "fr",
+    "mot": "parfois",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 53,
+    "fin": 60,
+    "contexte": "comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+    "revue": "faux",
+    "raison": "adverbe ; trou de POS_FERME[\"fr\"][\"ADV\"]"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f43",
+    "langue": "fr",
+    "mot": "cohérent",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 241,
+    "fin": 249,
+    "contexte": "emets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f49",
+    "langue": "fr",
+    "mot": "reportée",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 15,
+    "fin": 23,
+    "contexte": "La réunion est reportée à demain, 10 h 30, salle B12.",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "entrés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 847,
+    "fin": 853,
+    "contexte": "ue passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; ",
+    "revue": "faux",
+    "raison": "participe passé"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "ouverte",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1207,
+    "fin": 1214,
+    "contexte": "e que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours",
+    "revue": "juste",
+    "raison": "adjectif attribut après « reste »"
+   },
+   {
+    "variante": "r4_bilingue+cc_sans_where",
+    "id": "f50",
+    "langue": "fr",
+    "mot": "acceptés",
+    "base": "NOUN",
+    "apres": "ADJ",
+    "debut": 1937,
+    "fin": 1945,
+    "contexte": "x @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å ",
+    "revue": "faux",
+    "raison": "participe passé"
+   }
+  ]
+ },
+ "controles": [
+  {
+   "texte": "He is a doctor.",
+   "langue": "en",
+   "cible": "doctor",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He is running.",
+   "langue": "en",
+   "cible": "running",
+   "attendu": "VERB",
+   "famille": "r4_verbe",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "VERB",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "VERB",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He is doctor.",
+   "langue": "en",
+   "cible": "doctor",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "She is president.",
+   "langue": "en",
+   "cible": "president",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "He remains president.",
+   "langue": "en",
+   "cible": "president",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "They became members.",
+   "langue": "en",
+   "cible": "members",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The house where I was born is small.",
+   "langue": "en",
+   "cible": "born",
+   "attendu": "VERB",
+   "famille": "r4_verbe",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The painting is hung on the wall.",
+   "langue": "en",
+   "cible": "hung",
+   "attendu": "VERB",
+   "famille": "r4_verbe",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "She seems calm.",
+   "langue": "en",
+   "cible": "calm",
+   "attendu": "ADJ",
+   "famille": "r4_adj",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "It looks quiet.",
+   "langue": "en",
+   "cible": "quiet",
+   "attendu": "ADJ",
+   "famille": "r4_adj",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "The car is fast.",
+   "langue": "en",
+   "cible": "fast",
+   "attendu": "ADJ",
+   "famille": "r4_adj",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He feels pain.",
+   "langue": "en",
+   "cible": "pain",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "The farmers grow wheat.",
+   "langue": "en",
+   "cible": "wheat",
+   "attendu": "NOUN",
+   "famille": "r4_nom",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "Il est médecin.",
+   "langue": "fr",
+   "cible": "médecin",
+   "attendu": "NOUN",
+   "famille": "r4_nom_fr",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "La réunion est reportée.",
+   "langue": "fr",
+   "cible": "reportée",
+   "attendu": "VERB",
+   "famille": "r4_verbe_fr",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "Les enfants sont arrivés.",
+   "langue": "fr",
+   "cible": "arrivés",
+   "attendu": "VERB",
+   "famille": "r4_verbe_fr",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "Elle est calme.",
+   "langue": "fr",
+   "cible": "calme",
+   "attendu": "ADJ",
+   "famille": "r4_adj_fr",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "Where is the nearest station?",
+   "langue": "en",
+   "cible": "Where",
+   "attendu": "ADV",
+   "famille": "cc_where",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "PRON",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "PRON",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "PRON",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "PRON",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The city where we live is beautiful.",
+   "langue": "en",
+   "cible": "where",
+   "attendu": "PRON",
+   "famille": "cc_where",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "PRON",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "PRON",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "PRON",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "PRON",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He works as a teacher.",
+   "langue": "en",
+   "cible": "as",
+   "attendu": "PREP",
+   "famille": "cc_as",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "CONJ",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "CONJ",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "CONJ",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "CONJ",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "As it was raining, we stayed.",
+   "langue": "en",
+   "cible": "As",
+   "attendu": "CONJ",
+   "famille": "cc_as",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "CONJ",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "CONJ",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "CONJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "CONJ",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "The late president arrived.",
+   "langue": "en",
+   "cible": "late",
+   "attendu": "ADJ",
+   "famille": "cc_late",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The train arrives late.",
+   "langue": "en",
+   "cible": "late",
+   "attendu": "ADV",
+   "famille": "cc_late",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He plays outside the house.",
+   "langue": "en",
+   "cible": "outside",
+   "attendu": "PREP",
+   "famille": "cc_outside",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "PREP",
+     "verdict": "ok"
+    },
+    "r4_en": {
+     "pos": "PREP",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "PREP",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "PREP",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The children play outside.",
+   "langue": "en",
+   "cible": "outside",
+   "attendu": "ADV",
+   "famille": "cc_outside",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "PREP",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "PREP",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "PREP",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "PREP",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "It is hard work.",
+   "langue": "en",
+   "cible": "hard",
+   "attendu": "ADJ",
+   "famille": "cc_hard",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_bilingue": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "r4_en_large": {
+     "pos": "ADJ",
+     "verdict": "ok"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "The wind blows hard.",
+   "langue": "en",
+   "cible": "hard",
+   "attendu": "ADV",
+   "famille": "cc_hard",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    }
+   }
+  },
+  {
+   "texte": "He walks down the street.",
+   "langue": "en",
+   "cible": "down",
+   "attendu": "PREP",
+   "famille": "cc_down",
+   "source": "sonde",
+   "resultats": {
+    "base": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "NOUN",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ko"
+    }
+   }
+  },
+  {
+   "texte": "She puts it down.",
+   "langue": "en",
+   "cible": "down",
+   "attendu": "ADV",
+   "famille": "cc_down",
+   "source": "gold",
+   "resultats": {
+    "base": {
+     "pos": "VERB",
+     "verdict": "ko"
+    },
+    "r4_en": {
+     "pos": "VERB",
+     "verdict": "ko"
+    },
+    "r4_bilingue": {
+     "pos": "VERB",
+     "verdict": "ko"
+    },
+    "r4_en_large": {
+     "pos": "VERB",
+     "verdict": "ko"
+    },
+    "cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "cc_fast": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_en+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    },
+    "r4_bilingue+cc_core": {
+     "pos": "ADV",
+     "verdict": "ok"
+    }
+   }
+  }
+ ],
+ "head_controle": {
+  "base": {
+   "all": {
+    "pos": 0.8383,
+    "ferme": 0.9133,
+    "ouvert": 0.7673,
+    "f1": 0.6474,
+    "prec": 0.6705,
+    "rap": 0.6259,
+    "tete": 0.7671,
+    "att_exact": 235,
+    "att_labels": 236,
+    "att_cibles": 239,
+    "att_couv": 0.9874,
+    "att_topk": 234,
+    "att_tete": 235
+   },
+   "dev": {
+    "pos": 0.8375,
+    "ferme": 0.9093,
+    "ouvert": 0.7688,
+    "f1": 0.6439,
+    "prec": 0.6703,
+    "rap": 0.6196,
+    "tete": 0.7661,
+    "att_exact": 160,
+    "att_labels": 161,
+    "att_cibles": 163,
+    "att_couv": 0.9877,
+    "att_topk": 160,
+    "att_tete": 160
+   },
+   "test": {
+    "pos": 0.84,
+    "ferme": 0.9224,
+    "ouvert": 0.764,
+    "f1": 0.6552,
+    "prec": 0.671,
+    "rap": 0.6402,
+    "tete": 0.7694,
+    "att_exact": 75,
+    "att_labels": 75,
+    "att_cibles": 76,
+    "att_couv": 0.9868,
+    "att_topk": 74,
+    "att_tete": 75
+   },
+   "en": {
+    "pos": 0.9103,
+    "ferme": 0.9405,
+    "ouvert": 0.8786,
+    "f1": 0.7273,
+    "prec": 0.8453,
+    "rap": 0.6382,
+    "tete": 0.8263,
+    "att_exact": 86,
+    "att_labels": 86,
+    "att_cibles": 88,
+    "att_couv": 0.9773,
+    "att_topk": 86,
+    "att_tete": 86
+   },
+   "fr": {
+    "pos": 0.7976,
+    "ferme": 0.8967,
+    "ouvert": 0.7092,
+    "f1": 0.6059,
+    "prec": 0.5939,
+    "rap": 0.6184,
+    "tete": 0.7349,
+    "att_exact": 149,
+    "att_labels": 150,
+    "att_cibles": 151,
+    "att_couv": 0.9934,
+    "att_topk": 148,
+    "att_tete": 149
+   },
+   "dev_en": {
+    "pos": 0.9039,
+    "ferme": 0.936,
+    "ouvert": 0.8709,
+    "f1": 0.7269,
+    "prec": 0.8396,
+    "rap": 0.6408,
+    "tete": 0.8333,
+    "att_exact": 60,
+    "att_labels": 60,
+    "att_cibles": 62,
+    "att_couv": 0.9677,
+    "att_topk": 60,
+    "att_tete": 60
+   },
+   "dev_fr": {
+    "pos": 0.7991,
+    "ferme": 0.8929,
+    "ouvert": 0.7129,
+    "f1": 0.6,
+    "prec": 0.5934,
+    "rap": 0.6067,
+    "tete": 0.7289,
+    "att_exact": 100,
+    "att_labels": 101,
+    "att_cibles": 101,
+    "att_couv": 1.0,
+    "att_topk": 100,
+    "att_tete": 100
+   },
+   "test_en": {
+    "pos": 0.9251,
+    "ferme": 0.9505,
+    "ouvert": 0.897,
+    "f1": 0.7283,
+    "prec": 0.859,
+    "rap": 0.6321,
+    "tete": 0.8098,
+    "att_exact": 26,
+    "att_labels": 26,
+    "att_cibles": 26,
+    "att_couv": 1.0,
+    "att_topk": 26,
+    "att_tete": 26
+   },
+   "test_fr": {
+    "pos": 0.7944,
+    "ferme": 0.9051,
+    "ouvert": 0.7017,
+    "f1": 0.6189,
+    "prec": 0.5948,
+    "rap": 0.6451,
+    "tete": 0.7482,
+    "att_exact": 49,
+    "att_labels": 49,
+    "att_cibles": 50,
+    "att_couv": 0.98,
+    "att_topk": 48,
+    "att_tete": 49
+   }
+  },
+  "variantes": {
+   "r4_en": {
+    "all": {
+     "pos": 0.8421,
+     "ferme": 0.9133,
+     "ouvert": 0.7746,
+     "f1": 0.6474,
+     "prec": 0.6705,
+     "rap": 0.6259,
+     "tete": 0.7671,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8416,
+     "ferme": 0.9093,
+     "ouvert": 0.7769,
+     "f1": 0.6439,
+     "prec": 0.6703,
+     "rap": 0.6196,
+     "tete": 0.7661,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8431,
+     "ferme": 0.9224,
+     "ouvert": 0.7698,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9207,
+     "ferme": 0.9405,
+     "ouvert": 0.9,
+     "f1": 0.7273,
+     "prec": 0.8453,
+     "rap": 0.6382,
+     "tete": 0.8263,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.7976,
+     "ferme": 0.8967,
+     "ouvert": 0.7092,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9151,
+     "ferme": 0.936,
+     "ouvert": 0.8937,
+     "f1": 0.7269,
+     "prec": 0.8396,
+     "rap": 0.6408,
+     "tete": 0.8333,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.7991,
+     "ferme": 0.8929,
+     "ouvert": 0.7129,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9337,
+     "ferme": 0.9505,
+     "ouvert": 0.9152,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.7944,
+     "ferme": 0.9051,
+     "ouvert": 0.7017,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "r4_bilingue": {
+    "all": {
+     "pos": 0.8455,
+     "ferme": 0.9133,
+     "ouvert": 0.7814,
+     "f1": 0.6474,
+     "prec": 0.6705,
+     "rap": 0.6259,
+     "tete": 0.7671,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8449,
+     "ferme": 0.9093,
+     "ouvert": 0.7832,
+     "f1": 0.6439,
+     "prec": 0.6703,
+     "rap": 0.6196,
+     "tete": 0.7661,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8471,
+     "ferme": 0.9224,
+     "ouvert": 0.7776,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9207,
+     "ferme": 0.9405,
+     "ouvert": 0.9,
+     "f1": 0.7273,
+     "prec": 0.8453,
+     "rap": 0.6382,
+     "tete": 0.8263,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.8031,
+     "ferme": 0.8967,
+     "ouvert": 0.7195,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9151,
+     "ferme": 0.936,
+     "ouvert": 0.8937,
+     "f1": 0.7269,
+     "prec": 0.8396,
+     "rap": 0.6408,
+     "tete": 0.8333,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.8042,
+     "ferme": 0.8929,
+     "ouvert": 0.7226,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9337,
+     "ferme": 0.9505,
+     "ouvert": 0.9152,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.8006,
+     "ferme": 0.9051,
+     "ouvert": 0.7131,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "cc_core": {
+    "all": {
+     "pos": 0.8462,
+     "ferme": 0.9295,
+     "ouvert": 0.7673,
+     "f1": 0.6482,
+     "prec": 0.6715,
+     "rap": 0.6264,
+     "tete": 0.7673,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8453,
+     "ferme": 0.9252,
+     "ouvert": 0.7688,
+     "f1": 0.645,
+     "prec": 0.6717,
+     "rap": 0.6204,
+     "tete": 0.7664,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8481,
+     "ferme": 0.9392,
+     "ouvert": 0.764,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9321,
+     "ferme": 0.983,
+     "ouvert": 0.8786,
+     "f1": 0.7295,
+     "prec": 0.8488,
+     "rap": 0.6396,
+     "tete": 0.827,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.7976,
+     "ferme": 0.8967,
+     "ouvert": 0.7092,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9251,
+     "ferme": 0.9778,
+     "ouvert": 0.8709,
+     "f1": 0.73,
+     "prec": 0.8445,
+     "rap": 0.6429,
+     "tete": 0.8343,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.7991,
+     "ferme": 0.8929,
+     "ouvert": 0.7129,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9481,
+     "ferme": 0.9945,
+     "ouvert": 0.897,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.7944,
+     "ferme": 0.9051,
+     "ouvert": 0.7017,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "cc_fast": {
+    "all": {
+     "pos": 0.8468,
+     "ferme": 0.9308,
+     "ouvert": 0.7673,
+     "f1": 0.6482,
+     "prec": 0.6715,
+     "rap": 0.6264,
+     "tete": 0.7673,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8458,
+     "ferme": 0.9261,
+     "ouvert": 0.7688,
+     "f1": 0.645,
+     "prec": 0.6717,
+     "rap": 0.6204,
+     "tete": 0.7664,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8491,
+     "ferme": 0.9413,
+     "ouvert": 0.764,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9338,
+     "ferme": 0.9864,
+     "ouvert": 0.8786,
+     "f1": 0.7295,
+     "prec": 0.8488,
+     "rap": 0.6396,
+     "tete": 0.827,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.7976,
+     "ferme": 0.8967,
+     "ouvert": 0.7092,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9263,
+     "ferme": 0.9803,
+     "ouvert": 0.8709,
+     "f1": 0.73,
+     "prec": 0.8445,
+     "rap": 0.6429,
+     "tete": 0.8343,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.7991,
+     "ferme": 0.8929,
+     "ouvert": 0.7129,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.951,
+     "ferme": 1.0,
+     "ouvert": 0.897,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.7944,
+     "ferme": 0.9051,
+     "ouvert": 0.7017,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "r4_en+cc_core": {
+    "all": {
+     "pos": 0.85,
+     "ferme": 0.9295,
+     "ouvert": 0.7746,
+     "f1": 0.6482,
+     "prec": 0.6715,
+     "rap": 0.6264,
+     "tete": 0.7673,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8494,
+     "ferme": 0.9252,
+     "ouvert": 0.7769,
+     "f1": 0.645,
+     "prec": 0.6717,
+     "rap": 0.6204,
+     "tete": 0.7664,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8511,
+     "ferme": 0.9392,
+     "ouvert": 0.7698,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9425,
+     "ferme": 0.983,
+     "ouvert": 0.9,
+     "f1": 0.7295,
+     "prec": 0.8488,
+     "rap": 0.6396,
+     "tete": 0.827,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.7976,
+     "ferme": 0.8967,
+     "ouvert": 0.7092,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9363,
+     "ferme": 0.9778,
+     "ouvert": 0.8937,
+     "f1": 0.73,
+     "prec": 0.8445,
+     "rap": 0.6429,
+     "tete": 0.8343,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.7991,
+     "ferme": 0.8929,
+     "ouvert": 0.7129,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9568,
+     "ferme": 0.9945,
+     "ouvert": 0.9152,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.7944,
+     "ferme": 0.9051,
+     "ouvert": 0.7017,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "r4_bilingue+cc_core": {
+    "all": {
+     "pos": 0.8534,
+     "ferme": 0.9295,
+     "ouvert": 0.7814,
+     "f1": 0.6482,
+     "prec": 0.6715,
+     "rap": 0.6264,
+     "tete": 0.7673,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8526,
+     "ferme": 0.9252,
+     "ouvert": 0.7832,
+     "f1": 0.645,
+     "prec": 0.6717,
+     "rap": 0.6204,
+     "tete": 0.7664,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8551,
+     "ferme": 0.9392,
+     "ouvert": 0.7776,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9425,
+     "ferme": 0.983,
+     "ouvert": 0.9,
+     "f1": 0.7295,
+     "prec": 0.8488,
+     "rap": 0.6396,
+     "tete": 0.827,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.8031,
+     "ferme": 0.8967,
+     "ouvert": 0.7195,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9363,
+     "ferme": 0.9778,
+     "ouvert": 0.8937,
+     "f1": 0.73,
+     "prec": 0.8445,
+     "rap": 0.6429,
+     "tete": 0.8343,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.8042,
+     "ferme": 0.8929,
+     "ouvert": 0.7226,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9568,
+     "ferme": 0.9945,
+     "ouvert": 0.9152,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.8006,
+     "ferme": 0.9051,
+     "ouvert": 0.7131,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   },
+   "r4_bilingue+cc_fast": {
+    "all": {
+     "pos": 0.8537,
+     "ferme": 0.9308,
+     "ouvert": 0.7808,
+     "f1": 0.6482,
+     "prec": 0.6715,
+     "rap": 0.6264,
+     "tete": 0.7673,
+     "att_exact": 235,
+     "att_labels": 236,
+     "att_cibles": 239,
+     "att_couv": 0.9874,
+     "att_topk": 234,
+     "att_tete": 235
+    },
+    "dev": {
+     "pos": 0.8531,
+     "ferme": 0.9261,
+     "ouvert": 0.7832,
+     "f1": 0.645,
+     "prec": 0.6717,
+     "rap": 0.6204,
+     "tete": 0.7664,
+     "att_exact": 160,
+     "att_labels": 161,
+     "att_cibles": 163,
+     "att_couv": 0.9877,
+     "att_topk": 160,
+     "att_tete": 160
+    },
+    "test": {
+     "pos": 0.8551,
+     "ferme": 0.9413,
+     "ouvert": 0.7756,
+     "f1": 0.6552,
+     "prec": 0.671,
+     "rap": 0.6402,
+     "tete": 0.7694,
+     "att_exact": 75,
+     "att_labels": 75,
+     "att_cibles": 76,
+     "att_couv": 0.9868,
+     "att_topk": 74,
+     "att_tete": 75
+    },
+    "en": {
+     "pos": 0.9434,
+     "ferme": 0.9864,
+     "ouvert": 0.8982,
+     "f1": 0.7295,
+     "prec": 0.8488,
+     "rap": 0.6396,
+     "tete": 0.827,
+     "att_exact": 86,
+     "att_labels": 86,
+     "att_cibles": 88,
+     "att_couv": 0.9773,
+     "att_topk": 86,
+     "att_tete": 86
+    },
+    "fr": {
+     "pos": 0.8031,
+     "ferme": 0.8967,
+     "ouvert": 0.7195,
+     "f1": 0.6059,
+     "prec": 0.5939,
+     "rap": 0.6184,
+     "tete": 0.7349,
+     "att_exact": 149,
+     "att_labels": 150,
+     "att_cibles": 151,
+     "att_couv": 0.9934,
+     "att_topk": 148,
+     "att_tete": 149
+    },
+    "dev_en": {
+     "pos": 0.9376,
+     "ferme": 0.9803,
+     "ouvert": 0.8937,
+     "f1": 0.73,
+     "prec": 0.8445,
+     "rap": 0.6429,
+     "tete": 0.8343,
+     "att_exact": 60,
+     "att_labels": 60,
+     "att_cibles": 62,
+     "att_couv": 0.9677,
+     "att_topk": 60,
+     "att_tete": 60
+    },
+    "dev_fr": {
+     "pos": 0.8042,
+     "ferme": 0.8929,
+     "ouvert": 0.7226,
+     "f1": 0.6,
+     "prec": 0.5934,
+     "rap": 0.6067,
+     "tete": 0.7289,
+     "att_exact": 100,
+     "att_labels": 101,
+     "att_cibles": 101,
+     "att_couv": 1.0,
+     "att_topk": 100,
+     "att_tete": 100
+    },
+    "test_en": {
+     "pos": 0.9568,
+     "ferme": 1.0,
+     "ouvert": 0.9091,
+     "f1": 0.7283,
+     "prec": 0.859,
+     "rap": 0.6321,
+     "tete": 0.8098,
+     "att_exact": 26,
+     "att_labels": 26,
+     "att_cibles": 26,
+     "att_couv": 1.0,
+     "att_topk": 26,
+     "att_tete": 26
+    },
+    "test_fr": {
+     "pos": 0.8006,
+     "ferme": 0.9051,
+     "ouvert": 0.7131,
+     "f1": 0.6189,
+     "prec": 0.5948,
+     "rap": 0.6451,
+     "tete": 0.7482,
+     "att_exact": 49,
+     "att_labels": 49,
+     "att_cibles": 50,
+     "att_couv": 0.98,
+     "att_topk": 48,
+     "att_tete": 49
+    }
+   }
+  },
+  "note": "Instantané HEAD sha256 dd0e5e47… (le dépôt a bougé pendant la mesure : correctif d’élision et gold corrigé). Mêmes gains POS ; F1/attachement de base différents, sans lien avec les deux leviers."
+ },
+ "patchs_exacts": {
+  "r4": {
+   "fichier": "tools/bloc_linguistique.py",
+   "ancre_copules": "après ADJECTIFS, avant MOTS_DOUBLE_SENS",
+   "code_copules_en": "set(\"\"\"is are was were am be been being seem seems seemed seeming\n        look looks looked looking appear appears appeared appearing become becomes became becoming\n        remain remains remained remaining\"\"\".split())",
+   "code_copules_fr": "set(\"\"\"est sont était étaient semble semblent semblait semblaient\n        paraît paraissent paraissait paraissaient devient deviennent devenait devenaient\n        reste restent restait restaient demeure demeurent\"\"\".split())",
+   "ancre_insertion": "après la boucle « 3 a bis » (R2b), avant « # 4. phrase + pragmatique »",
+   "code_insertion": "        # 3 c. R4 — après une copule, un mot inconnu est un ADJECTIF (« she is calm »).\n        _copules = COPULES.get(lg, set())\n        if _copules:\n            for _k, _i in enumerate(pos_idx):\n                _e = etiquettes[_i]\n                if _k == 0 or _e.type != \"NOUN\" or _e.confiance > 0.45:\n                    continue\n                _av = etiquettes[pos_idx[_k - 1]]\n                if _normaliser(_av.valeur) not in _copules:\n                    continue\n                etiquettes[_i] = Etiquette(\"pos\", \"ADJ\", _e.valeur, _e.debut, _e.fin, self.nom,\n                                           0.5, candidats=[\"adj\"], langue=lg, script=script,\n                                           meta={\"ouvert\": True, \"contexte\": \"copule\"})\n",
+   "note": "R4-en = ne garder que la clé en dans COPULES ; R4-bilingue = garder en et fr. La liste stricte exclut feel/taste/smell/grow/turn/get/keep."
+  },
+  "classes_fermees": {
+   "fichier": "tools/bloc_linguistique.py",
+   "ancre": "bloc \"en\" de POS_FERME",
+   "bloc_apres": "    \"en\": {\n        \"DET\": set(\"the a an this that these those my your his her its our their\".split()),\n        \"PREP\": set(\"of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside toward towards until upon within\".split()),\n        \"PRON\": set(\"i you he she it we they me him her us them who whom which that where whose mine\".split()),\n        \"CONJ\": set(\"and or but nor for so yet because although while if when as\".split()),\n        \"AUX\": set(\"is are was were be been being have has had do does did can could will would shall should may might must am\".split()),\n        \"ADV\": set(\"not never very well here yesterday today tomorrow often always already still too late out maybe hard far again now down outside\".split()),\n        \"NUM\": set(\"one two three four five six seven eight nine ten\".split()),\n    },",
+   "retire": "outside de PREP",
+   "ajoute": {
+    "PRON": [
+     "where",
+     "whose",
+     "mine"
+    ],
+    "CONJ": [
+     "as"
+    ],
+    "AUX": [
+     "am"
+    ],
+    "ADV": [
+     "late",
+     "out",
+     "maybe",
+     "hard",
+     "far",
+     "again",
+     "now",
+     "down",
+     "outside"
+    ]
+   },
+   "variante_fast": "ajouter fast à ADV (non retenu dans le paquet recommandé)"
+  },
+  "verification": {
+   "checks": {
+    "copules_en": true,
+    "copules_fr": true,
+    "insert": true,
+    "bloc_en": true
+   },
+   "patch_applique_a": "/tmp/pos_r4/bloc_patche.py",
+   "sha256": "0bf4d3eb0e2a51603534001284718e625346a61c299ff9d488aae87bc17acfb1",
+   "resultat": "POS 85,34 % (dev 85,26 / test 85,51), F1 0,6188, attachement 222/222, 48 correctifs / 0 cassé (R4 bilingue + classes fermées)."
+  }
+ },
+ "limites": [
+  "R4 « 0 cassé » est une propriété d’exactitude : aucun jeton déjà juste ne devient faux, mais 17 jetons déjà faux changent de classe fausse (late/out/maybe/far/mine, born/hung, participes français). Ce n’est pas « 0 perte ».",
+  "R4 n’a pas de garde nom/verbe : « He is a doctor » passe par le DET, « He is running » par -ing ; mais « He is doctor », « She is president », « He remains president », « They became members » et les participes irréguliers (born, hung) sont convertis en ADJ.",
+  "R4-fr est le point faible : 5 des 8 changements sur les 50 textes libres sont faux (arrivés, parfois, reportée, entrés, acceptés) ; 3 sont justes (gratuite, cohérent, ouverte).",
+  "Les classes fermées sont une liste : where/late/as/outside/hard/down/fast sont ambigus. « Where is… » devient PRON (faux), « He works as a teacher » devient CONJ (faux), « The late president » devient ADV (faux), « outside the house » devient ADV (faux).",
+  "Les mots des classes fermées ont été choisis sur les erreurs de l’union (C3) : le gain test n’est pas une estimation hors-échantillon. La cohérence dev/test est un contrôle de consistance, pas une preuve de généralisation.",
+  "Le gold est petit et templaté : le test anglais fait 347 jetons, 1 jeton = 0,29 pt ; les mêmes formes reviennent (where 6, late 4).",
+  "Les 50 textes libres sont surtout français (41 fr, 5 en) : R4-en n’y change rien (0/5 textes anglais), donc ils ne valident pas R4-en ; ils montrent seulement l’absence de régression sur ce lot.",
+  "Le POS de base des 50 textes reproduit 46/46 les comptes de l’audit produit, mais les comptages de syntagmes/attachements diffèrent sur 4 textes (état de tools/structures / mode CLI). Les effets segments/attachements sont donc mesurés en différentiel base→variante, pas contre l’audit.",
+  "Le dépôt a bougé pendant la mesure (OUTILS/bloc_linguistique.py modifié, gold corrigé). La référence est B13 ; le contrôle HEAD donne les mêmes gains POS mais un F1/attachement de base différent.",
+  "Le placebo est un changement de POS post-hoc (mêmes actions, mêmes nombres) : il ne rejoue pas le chunker. Il contrôle la métrique POS, pas le F1."
+ ],
+ "recommandation": [
+  {
+   "ordre": 1,
+   "action": "Intégrer R4-en + classes fermées (sans fast, avec where)",
+   "gain": "+1,19 dev / +1,11 test ; POS 85,00 % ; 37 correctifs / 0 cassé ; 2 faux→faux ; F1 +0,0007 ; attachement 222/222.",
+   "condition": "1 faux positif libre connu (Where interrogatif) ; le corriger par une règle contextuelle ou retirer where."
+  },
+  {
+   "ordre": 2,
+   "action": "Variante zéro régression libre : R4-en + classes fermées sans where",
+   "gain": "+1,00 dev / +0,92 test ; 31/0 ; 2 faux→faux ; 0 changement sur les 50 textes libres.",
+   "condition": "perd 6 correctifs where, tous en PRON relatif dans le gold."
+  },
+  {
+   "ordre": 3,
+   "action": "Maximum mesuré : R4-bilingue + classes fermées",
+   "gain": "+1,51 dev / +1,51 test ; POS 85,34 % ; 48/0 ; F1 0,6188 ; attachement 222/222.",
+   "condition": "11 faux→faux et 5 faux positifs français sur les 50 textes libres ; ne pas intégrer sans garde participe/adverbe."
+  },
+  {
+   "ordre": 4,
+   "action": "Ne pas ajouter when à PRON, ni le bloc DET large",
+   "gain": "when = −3 net (4 CONJ cassés) ; bloc DET = −1 attachement et −0,10 pt test.",
+   "condition": "—"
+  },
+  {
+   "ordre": 5,
+   "action": "Règles contextuelles de suivi",
+   "gain": "where (après GN → PRON, sinon ADV), late/hard/fast (après copule → ADJ, sinon ADV), as (devant GN → PREP, devant clause → CONJ), outside (devant GN → PREP), down (devant GN → PREP).",
+   "condition": "à mesurer sur un gold disjoint ; ne pas les vendre avant."
+  }
+ ],
+ "fichiers": [
+  "reports/rapport-pos-r4.md",
+  "reports/pensee-pos-r4.json"
+ ]
+}

@@ -54730,3 +54730,172 @@ ven 06 nov 2026 20:06:17 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 20 h 10 HNE\", t)\np.write_text( … [780 caractères tronqués]`
+
+  ```
+19 files changed, 439 insertions(+), 66 deletions(-)
+COMMIT OK 1
+ed8f9414 JOURNAL ET ROADMAP — LA SOIRÉE DES P0 : CONTRAT V1, GOLD CORRIGÉ (226/226), MORPHOLOGIE (235/236), COMPOSITIONS SANS PERTE ; ÉTAT HORODATÉ
+   d73e7d1f..ed8f9414  s/v7 -> s/v7
+   d73e7d1f..ed8f9414  master -> master
+0
+ven 06 nov 2026 20:08:54 EST
+  ```
+
+- **send_message** `{"agent_id": "3ccd8d09-9820-4da4-963b-6d84a0ffb141", "message": "Point de synchronisation : où en es-tu ? Si tu as déjà les mesures principales (frontières cassées avant/après, effet dev/test), **écris tes deux fichiers maintenant** (`reports/rapport-frontieres-phrase.md`, `reports/pensee-frontieres … [208 caractères tronqués]`
+
+  ```
+message delivered to agent 3ccd8d09-9820-4da4-963b-6d84a0ffb141
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/pensee-frontieres-phrase.json reports/pensee-partition-syntagmes.json reports/pensee-pos-r4.json 2>/dev/null; ls /tmp/*frontier* /tmp/*partition* /tmp/*r4* 2>/dev/null | head -5; date", "description": "Chercher des tra … [21 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 169663  6 nov 20:06 reports/pensee-pos-r4.json
+/tmp/bloc_avant_r2r4.py
+
+/tmp/frontieres:
+corpus.py
+final
+ven 06 nov 2026 20:09:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-pos-r4.md 2>/dev/null; python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))\nprint('clés :', list(d.keys())[:15])\nfor k in list(d.keys())[:8]:\n    v=d[k]\n    print(k, ':', str(v)[:2 … [130 caractères tronqués]`
+
+  ```
+clés : ['rapport', 'ligne', 'date', 'branche', 'objet', 'verdict', 'snapshot', 'protocole', 'baseline', 'r4', 'classes_fermees', 'paquets', 'placebo', 'libres_50', 'controles']
+rapport : pos-r4
+ligne : 2
+date : 2026-11-06
+branche : s/v7
+objet : Mesurer les deux derniers leviers POS : R4 (copule → ADJ pour un mot inconnu) et la complétion des classes fermées anglaises ; mesurer aussi les 50 textes libres de l’audit produit.
+verdict : R4 bilingue reproduit +0,74 dev / +0,71 test (23 correctifs, 0 cassé), mais 17 faux→faux et 5 faux positifs français sur 8 changements libres. Les classes fermées valent +0,78 / +0,81 (25 correctifs, 
+snapshot : ['reference', 'head_controle', 'patched_copy']
+protocole : ['gold', 'mesure', 'application', 'controles', 'limites_du_banc']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))\nprint('VERDICT:', d['verdict'])\nfor k in ('r4','classes_fermees','paquets','placebo'):\n    print('---', k); print(json.dumps(d[k], ensure_ascii=False)[ … [52 caractères tronqués]`
+
+  ```
+VERDICT: R4 bilingue reproduit +0,74 dev / +0,71 test (23 correctifs, 0 cassé), mais 17 faux→faux et 5 faux positifs français sur 8 changements libres. Les classes fermées valent +0,78 / +0,81 (25 correctifs, 0 cassé), F1 +0,0007. Le paquet sûr (R4-en + classes fermées) vaut +1,19 dev / +1,11 test, 37/0, F1 +0,0007, attachement inchangé, 1 faux positif libre (`where`). Le paquet max (R4 bilingue) vaut +1,51/+1,51 mais 11 faux→faux et 6 faux positifs libres.
+--- r4
+{"enonce": "Après une copule (is/are/was/seems/looks…), un mot inconnu (NOUN, confiance ≤ 0,45) est un ADJECTIF attribut.", "variantes": {"r4_en": {"pos": {"all": 0.8421, "dev": 0.8416, "test": 0.8431, "ferme": 0.9133, "ouvert": 0.7746, "en": 0.9207, "fr": 0.7976}, "delta_pts": {"dev": 0.41, "test": 0.31, "all": 0.38}, "f1": {"all": 0.6181, "dev": 0.6153, "test": 0.6243, "en": 0.7273, "fr": 0.5595, "tete": 0.7511}, "attachement": {"exact": 222, "labels": 222, "cibles": 239, "couverture": 0.9289, "topk": 221}, "corrections": 12, "casses": 0, "faux_faux": 8, "corrections_dev": 9, "corrections_test": 3, "corrections_en": 12, "corrections_fr": 0, "corrections_detail": [{"id": "r032", "langue": "
+--- classes_fermees
+{"enonce":
+… [2116 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Le sous-agent R4 a livré : **paquet sûr +1,19 dev / +1,11 test** (0 cassé). J'applique
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))\ndef trouver(o, cle, prof=0):\n    if isinstance(o, dict):\n        for k,v in o.items():\n            if k==cle: yield v\n            else: yield from tr … [242 caractères tronqués]`
+
+  ```
+=== patch_core
+{"ajoute": {"PRON": ["where", "whose", "mine"], "CONJ": ["as"], "AUX": ["am"], "ADV": ["late", "out", "maybe", "hard", "far", "again", "now", "down", "outside"]}, "retire": {"PREP": ["outside"]}}
+=== insert
+true
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, json\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 1) les classes fermées anglaises (patch_core du rapport)\nd=json.load(open('reports/pensee-pos-r4.json'))\npatch=d['classes_ferm … [898 caractères tronqués]`
+
+  ```
+bloc en trouvé : True
+classes fermées patchées
+308:        "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que qu
+311:        "ADV": set("ne n pas plus jamais rien très bien mal ici hier demain aujourd'hui peut-être fort souvent toujo
+374:            "where", "when"}
+385:AMBIGUES_REL = {"when", "where", "why", "how", "quand", "où", "pourquoi", "comment"}
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import ast; ast.parse(open('tools/bloc_linguistique.py').read()); print('syntaxe OK')
+                ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/ast.py", line 50, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 308
+    "PRON": set("je j tu il elle on nous vous ils elles me te se lui leur moi toi soi y en ce cela ça qui que quoi dont où".split(, "where", "whose", "mine")),
+                                                                                                                                  ^
+SyntaxError: invalid syntax
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- tools/bloc_linguistique.py && sed -n \"$(grep -n '\\\"en\\\": {' tools/bloc_linguistique.py | head -1 | cut -d: -f1),+12p\" tools/bloc_linguistique.py", "description": "Voir le bloc anglais de POS_FERME"}`
+
+  ```
+"en": {
+        "DET": set("the a an this that these those my your his her its our their".split()),
+        "PREP": set("of to in on at by with from for about into over under between through during without since above below near behind across along beside beyond despite except inside outside toward towards until upon within".split()),
+        "PRON": set("i you he she it we they me him her us them who whom which that".split()),
+        "CONJ": set("and or but nor for so yet because although while if when".split()),
+        "AUX": set("is are was were be been being have has had do does did can could will would shall should may might must".split()),
+        "ADV": set("not never very well here yesterday today tomorrow often always already still too".split()),
+        "NUM": set("one two three four five six seven eight nine ten".split()),
+    },
+}
+
+VERBES = {
+    "fr": set("dort dorment dormait mange mangeons mangent mangeait court courent courait vu voir vois "
+[stderr]
+grep: warning: stray \ before "
+grep: warning: stray \ before "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nt=t.replace('\"PRON\": set(\"i you he she it we they me him her us them who whom which that\".split()),',\n            '\"PRON\": set(\" … [1666 caractères tronqués]`
+
+  ```
+classes fermées anglaises complétées
+syntaxe OK
+POS 0.8459 | F1 0.6474 | exact 235 / 236
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\n# 3 c. R4-en : après une copule, un mot inconnu est un ADJECTIF attribut\nt=t.replace('''        # 4. phrase + pragmatique''',\n'''      … [1868 caractères tronqués]`
+
+  ```
+R4-en ajouté
+syntaxe OK
+TOUT POS 0.8496 | F1 0.6474 | exact 235 / 236
+dev POS 0.849 | F1 0.6439
+test POS 0.8511 | F1 0.6552
+  ```
+
+### 🤖 Assistant
+
+⏵ **POS 0,8496** (+1,13), paquet sûr intégré. Je recale les portes
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après R4", "timeoutMs": 1900000}`
+
+  ```
+❌ T86 sous-ensembles     r181-200 POS 0.9286 ; r001-180 POS 0.9027
+  ❌ T87 phrases complexes  r201-205 : POS 0.8824, syntagme 0.7778
+  ❌ T88 20 complexes       r201-220 : POS 0.878, syntagme 0.6822
+  ❌ T89 50 complexes       r201-250 : POS 0.8711, syntagme 0.675
+  ❌ T90 100 complexes      r201-300 : POS 0.8683, syntagme 0.6395
+  ❌ T107 gold complet      gold complet : 602 phrases, POS 0.8529, tête 0.7707
+  ❌ T138 défaut fusion     défaut : confiance 0.8496, niveau 0.754
+  ❌ T141 élision           élision : POS 0.8496
+  175/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/pensee/autotest.py'); t=p.read_text()\nR=[('abs(p2 - 0.9167) < 0.001 and abs(p1 - 0.8937) < 0.001','abs(p2 - 0.9286) < 0.001 and abs(p1 - 0.9027) < 0.001'),\n   ('abs(r[\"pos\"] … [1067 caractères tronqués]`
+
+  ```
+8 / 8
+  183/183 portes tenues
+  ```
+
+### 🤖 Assistant
+
+⏵ **183/183** à POS 0,8496 : je fige la fiche du paquet sûr
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/rapport-pos-r4.md 2>/dev/null || echo \"le .md du sous-agent n'est pas encore écrit\"; cat > reports/rapport-pos-r4-integre.md <<'MD'\n# B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 %\n\n> **Ligne … [5435 caractères tronqués]`
+
+  ```
+reports/rapport-pos-r4.md
+fiche + JSON
+README + état 692 786
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — le paquet POS sûr : classes fermées + R4-en, POS **84,96 %** … [1928 caractères tronqués]`
