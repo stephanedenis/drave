@@ -1422,6 +1422,19 @@ class Heuristique:
                                                0.85, candidats=["adj"], langue=lg, script=script,
                                                meta={"ouvert": True, "contexte": "copule_fr"})
 
+        # 3 e. « que » : **PRON** relatif après un nom (« Le livre que j'ai lu »), **CONJ**
+        # ailleurs (« Je sais qu'il vient »). Le gold : 7 PRON / 38 CONJ.
+        for _k, _i in enumerate(pos_idx):
+            _e = etiquettes[_i]
+            if _e.type != "PRON" or _normaliser(_e.valeur) not in ("que", "qu'"):
+                continue
+            _av = etiquettes[pos_idx[_k - 1]] if _k else None
+            _cls = "PRON" if (_av is not None and _av.type in ("NOUN", "PRON")) else "CONJ"
+            if _cls != _e.type:
+                etiquettes[_i] = Etiquette("pos", _cls, _e.valeur, _e.debut, _e.fin, self.nom,
+                                           _e.confiance, candidats=[_cls.lower()], langue=lg,
+                                           script=script, meta={"ouvert": False, "contexte": "que"})
+
         # 4. phrase + pragmatique
         for d, f, p, typ in self._phrases(texte):
             etiquettes.append(Etiquette("phrase", "type", typ, d, f, self.nom, 0.85,
