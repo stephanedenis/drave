@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**81 commits** · **16 session(s)** · **8 thème(s)**
+**82 commits** · **16 session(s)** · **8 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 23 | [distribue.md](distribue.md) |
 | docs | 19 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 18 | [mesures.md](mesures.md) |
+| mesures | 19 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -37,7 +37,7 @@
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
 | `cdc16e57-4a69-4890-8b3c-270539c64ff2` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | [rapport](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) · [digest](../sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 150.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 | `ea169cb1-75d7-43fa-b69d-5e2a210f6c38` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | [rapport](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) · [digest](../sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/digest.md) |
 | `eedb7a58-2a33-4caa-8509-f46d9e328080` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.3 h | [rapport](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/rapport.md) · [digest](../sessions/eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md) |
 
@@ -126,6 +126,7 @@
 | 22:42 | `56e5ce48` | S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN ; 150 VERDICTS, 84 ACCEPTÉES, 369 CANDIDATS) |
 | 22:51 | `f48d5d81` | R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS) |
 | 22:57 | `7a45325f` | B13 — LA PONCTUATION A UNE POS (PONCT) : POS 85,00 → 85,75 %, MIROIR 0,196 → 0,2276, F1 ET ATTACHEMENT INCHANGÉS ; 183/183 |
+| 23:05 | `6b976cb1` | B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -176,4 +177,11 @@ syntagmes** (`meta.alternative` par défaut, `filtrer` en option), **POS R4 + cl
 (83,83 → **85,00 %**). La morphologie du 1er groupe avait rendu 10 spans (235/236, couverture
 **0,9874**). La CLI expose `--partition` (10 tests), le contrat v1 est publié et validé, la porte
 produit a **9 contrôles**.
+**La nuit des états (22 h 00 → 23 h 10).** Les quatre inventaires sont livrés et intégrés :
+**N2** (porte propre 2,7856 à 1 024, manque 0,29 ; le mètre `eval_n2_propre.py` lit les checkpoints
+RoPE comme absolus — bug signalé), **S** (`/paragraphes` fini 19/19, 11 verdicts non committés ;
+71 langues = lexique B7 ; rétro-traduction absente), **R** (le tagger n'est pas à 0,944 contre 0,85 :
+corpus différents, +6,35 sur 432), **A** (A6.2 libre — le MoE local existe ; seuls A3.4 et A5.4
+bloqués). Côté produit, la **ponctuation** a une POS (85,75 %) et un **R4-fr filtré** (85,84 %) ;
+le miroir passe de 0,196 à 0,2276.
 <!-- /notes -->

@@ -57204,3 +57204,43 @@ Le livre est passionnant. -> [('Le', 'DET'), ('livre', 'NOUN'), ('est', 'AUX'), 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-ponctuation.md'); t=p.read_text()\nt=t.replace(\"\"\"## 4. La suite\n\n1. **Les participes irréguliers** (testés : F1 −0,0023 → **non intégrés**).\n2. **Les adject … [1622 caractères tronqués]`
+
+  ```
+docs à jour
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 18 files changed, 104 insertions(+), 32 deletions(-)
+COMMIT OK 1
+6b976cb1 B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183
+   7a45325f..6b976cb1  s/v7 -> s/v7
+   7a45325f..6b976cb1  master -> master
+ven 06 nov 2026 23:08:04 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation de la nuit : journal, état, vérification complète
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/2026-11-06/README.md'); t=p.read_text()\nnote = \"\"\"\n**La nuit des états (22 h 00 → 23 h 10).** Les quatre inventaires sont livrés et intégrés :\n**N2** (porte propre 2 … [1654 caractères tronqués]`
+
+  ```
+journal + roadmap
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add journal/2026-11-06/README.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"JOURNAL ET ROADMAP — LA NUIT DES ÉTATS : N2/S/R/A INVENTORIÉS, FRONTIÈRE CORRIGÉ … [462 caractères tronqués]`
+
+  ```
+git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+6b976cb1 B13 — R4-FR FILTRÉ (ADJECTIF CONNU OU SUFFIXE) : POS 85,75 → 85,84 %, F1 ET ATTACHEMENT INCHANGÉS ; 183/183
+Everything up-to-date
+Everything up-to-date
+ven 06 nov 2026 23:09:02 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-06, 23 h 15 HNE\", t)\np.write_text( … [736 caractères tronqués]`
