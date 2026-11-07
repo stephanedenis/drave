@@ -38,6 +38,12 @@
 "retire": <bool>}`. Le rang 1 reste le **chunker le plus large** (179/207 groupes avec un span du
 gold, 86,5 %).
 
+## 2 bis. Le strip de la fusion
+
+La fusion **déduplique** les segments ; les `meta.alternative` de l'heuristique pouvaient donc
+pointer vers des segments **absents**. Un **strip** retire ces clés de la copie fusionnée : plus
+de référence morte dans les compositions (mesures inchangées : 0,85 / 0,6482 / 235-236).
+
 ## 3. Contrôles (A29)
 
 **Reproduction des deux audits** (107 + 132 paires), **chunker seul** (0 chevauchement),

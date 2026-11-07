@@ -2919,3 +2919,172 @@ Parallele et Cascade avec priorite_par_niveau=None appellent encore _supprimer_c
 185
   ```
 
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "P0-3 (partition des syntagmes) — résultat mesuré et livré.\n\nCartographie (commit d'audit épinglé fa1b0c6e, chiffres des audits reproduits exactement : 107/23 et 132/31) : 239 paires S × chunker, toutes de composition (chunker seul =  … [1728 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport re, pathlib, json\nr=pathlib.Path('reports/rapport-partition-syntagmes.md').read_text(encoding='utf-8')\nblocks=re.findall(r'```diff\\n(.*?)\\n```', r, re.S)\np=pathlib.Path('/tmp/partition_syntagmes/patch_fi … [571 caractères tronqués]`
+
+  ```
+report patch exact True report drave exact True
+json patch exact True
+json drave exact True
+json keys ['rapport', 'ligne', 'branche', 'commit', 'commit_head', 'date', 'objet', 'verdict', 'dispositif', 'cartographie', 'options', 'controles', 'recommandation', 'patch', 'limites', 'fichiers']
+  ```
+
+- **bash** `{"command": "set -e\ncd /tmp/head_patch_test\npatch -p1 < /tmp/partition_syntagmes/patch_final.diff\npatch -p1 < /tmp/partition_syntagmes/drave.diff\npython3 -m py_compile tools/bloc_linguistique.py tools/drave.py\necho 'apply + compile OK'\ngrep -n 'références mortes' tools/bloc_linguistique.py | h … [68 caractères tronqués]`
+
+  ```
+patching file tools/bloc_linguistique.py
+Hunk #1 succeeded at 791 (offset 262 lines).
+Hunk #2 succeeded at 1557 (offset 312 lines).
+Hunk #3 succeeded at 2137 (offset 314 lines).
+Hunk #4 succeeded at 2367 (offset 321 lines).
+patching file tools/drave.py
+apply + compile OK
+2372:        # plutôt que de laisser des références mortes ; la vue explicite des compositions
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"| partition mix_E | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 | … [669 caractères tronqués]`
+
+  ```
+ok
+| glouton attachement | 0,5892 | 0,7048 | 0,5062 | 0,7260 | 0,7581 | 0,5537 | **213** | 0,8912 | 212 |
+| partition mix_E (sensibilité) | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
+
+`mix_E` est une variante de sensibilité par classe (mêmes bornes → garder le S) : elle
+dépasse B2 de 0,0007 de F1 pour un attachement de plus, ce qui ne justifie pas un cas particulier
+dans le patch. La POS et la fraction sont **identiques dans toutes les variantes** (0,7581 ; 0,5537) : les options
+ne touchent que des étiquettes `syntagme`, jamais les POS, et les syntagmes ne sont pas dans
+`unites_semantiques`. Le hash des POS est le même (`cb4757217465da39`) dans les quatre modes.
+
+### 3.3 Le coût en attachement, et pourquoi il n'est pas là où on l'attend
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"**Aucun fichier existant\\nn'a été modifié, aucun commit n'a été fait.**\",\n            \"**A … [280 caractères tronqués]`
+
+  ```
+ok
+81:Les scripts lisent les JSON d'audit du dépôt et n'écrivent que dans `/tmp`. **Aucun fichier existant
+717:[`pensee-partition-syntagmes.json`](pensee-partition-syntagmes.json). **Aucun fichier existant
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 79,83p reports/rapport-partition-syntagmes.md && sed -n 715,720p reports/rapport-partition-syntagmes.md", "description": "Read exact lines for wording fix"}`
+
+  ```
+```
+
+Les scripts lisent les JSON d'audit du dépôt et n'écrivent que dans `/tmp`. **Aucun fichier existant
+n'est modifié, aucun commit n'est fait.**
+
+
+Fichiers produits par cette étude : **ce rapport** et
+[`pensee-partition-syntagmes.json`](pensee-partition-syntagmes.json). **Aucun fichier existant
+n'a été modifié par cette étude, aucun commit n'a été fait.** Les scripts et la copie épinglée vivent dans `/tmp`.
+
+## 7. Ligne de roadmap et suite
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-partition-syntagmes.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace(\"Les scripts lisent les JSON d'audit du dépôt et n'écrivent que dans `/tmp`. **Aucun fichier ex … [396 caractères tronqués]`
+
+  ```
+ok
+
+Les scripts lisent les JSON d'audit du dépôt et n'écrivent que dans `/tmp`. **Aucun fichier existant
+n'est modifié par cette étude, aucun commit n'est fait.**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '--- files ---' && ls -la reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json && echo '--- json ---' && python3 -m json.tool reports/pensee-partition-syntagmes.json >/dev/null && echo valid && echo '-- … [654 caractères tronqués]`
+
+  ```
+--- files ---
+-rw-r--r--. 1 stephane stephane 44454  6 nov 20:40 reports/pensee-partition-syntagmes.json
+-rw-------. 1 stephane stephane 41402  6 nov 20:46 reports/rapport-partition-syntagmes.md
+--- json ---
+valid
+--- status ---
+ M reports/pensee-partition-syntagmes.json
+ M reports/rapport-partition-syntagmes.md
+--- diff blocks ---
+patch exact True drave exact True lines 729
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-files -s reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json && echo '--- log ---' && git log --oneline -3 -- reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json && echo '- … [358 caractères tronqués]`
+
+  ```
+100644 ad393d97ae421aef948e2d56835490ac68eca4df 0	reports/pensee-partition-syntagmes.json
+100644 ba3f9afd1a7efd55fe191fe0169062224c066a6f 0	reports/rapport-partition-syntagmes.md
+--- log ---
+015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %
+--- head ---
+5c0d53291eb13f844aec5d39e11d949453a6a3f5
+--- diff stat ---
+ reports/pensee-partition-syntagmes.json | 41 +++++++++++++++++++++-------
+ reports/rapport-partition-syntagmes.md  | 47 +++++++++++++++++++++++----------
+ 2 files changed, 65 insertions(+), 23 deletions(-)
+--- staged ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 015d7c56 | head -30 && echo '--- module in commit ---' && git show 015d7c56:tools/bloc_linguistique.py | grep -n 'références mortes\\|filtrer_union\\|_expliciter_partition' | head -10 && echo '--- report in  … [327 caractères tronqués]`
+
+  ```
+015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %
+ docs/pilotage/en-cours.md                          |    4 +-
+ journal/2026-11-06/README.md                       |   11 +-
+ journal/2026-11-06/distribue.md                    |    6 +-
+ journal/2026-11-06/docs.md                         |    6 +-
+ journal/2026-11-06/mesures.md                      |   11 +-
+ journal/2026-11-06/modele.md                       |    6 +-
+ journal/2026-11-06/outils.md                       |    6 +-
+ journal/2026-11-06/portes.md                       |    6 +-
+ journal/README.md                                  |    6 +-
+ .../338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md |  218 ++++
+ .../rapport.md                                     |   16 +-
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  165 +++
+ .../rapport.md                                     |   19 +-
+ .../eedb7a58-2a33-4caa-8509-f46d9e328080/digest.md |  297 +++++
+ .../rapport.md                                     |   28 +-
+ reports/INDEX.md                 
+… [1442 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/bloc_linguistique.py reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json && echo '--- strip in worktree? ---' && grep -n 'références mortes\\|k not in (\"partition\"' tools/bloc_lin … [253 caractères tronqués]`
+
+  ```
+M reports/pensee-partition-syntagmes.json
+ M reports/rapport-partition-syntagmes.md
+ M tools/bloc_linguistique.py
+--- strip in worktree? ---
+2372:        # plutôt que de laisser des références mortes ; la vue explicite des compositions
+2376:                      if k not in ("partition", "alternative")}
+--- worktree module line count ---
+2661 tools/bloc_linguistique.py
+--- HEAD module line count ---
+2654
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat HEAD -- reports/rapport-partition-syntagmes.md reports/pensee-partition-syntagmes.json tools/bloc_linguistique.py && echo '--- report diff summary ---' && git diff HEAD -- reports/rapport-partition-syntagmes.md | grep … [182 caractères tronqués]`
+
+  ```
+reports/pensee-partition-syntagmes.json | 41 +++++++++++++++++++++-------
+ reports/rapport-partition-syntagmes.md  | 47 +++++++++++++++++++++++----------
+ tools/bloc_linguistique.py              |  7 +++++
+ 3 files changed, 72 insertions(+), 23 deletions(-)
+--- report diff summary ---
+-cette étude (HEAD `5c5d3b52` au moment de la rédaction ; le gold a été corrigé après l'audit,
++cette étude (HEAD `ba39a7b1` au moment de la rédaction ; le gold a été corrigé après l'audit,
+-Le patch proposé s'applique aussi au HEAD `5c5d3b52` (`patch -p1 --dry-run` : hunks à +29/+96/+98
+-lignes ; testé aussi à `d73e7d1f` : +29/+81/+83). Les chiffres de ce rapport sont ceux du commit d'audit, pas ceux du HEAD.
++Le patch proposé s'applique aussi au HEAD `ba39a7b1` (`patch -p1 --dry-run` : hunks à
+-n'est modifié, aucun commit n'est fait.**
++n'est modifié par cette étude, aucun commit n'est fait.**
+-| partition mix_E | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
++| partition mix_E (sensibilité) | 0,6179 | 0,7453 | 0,5276 | 0,7612 | 0,7581 | 0,5537 | 206 | 0,8619 | 205 |
+-La POS et la fraction sont **identiques dans toutes les variantes** (0,7581 ; 0,5537) : les options
++`mi
+… [2000 caractères tronqués]
+  ```
+

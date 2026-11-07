@@ -55229,3 +55229,186 @@ Livrables : `reports/rapport-pos-r4.md` + `reports/pensee-pos-r4.json`. Aucun co
 ⏵ Le sous-agent précise les pertes de R4 : je complète la fiche honnêtement
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-pos-r4-integre.md'); t=p.read_text()\nt=t.replace(\"\"\"## 3. Contrôles (A27)\"\"\",\n\"\"\"## 2 bis. Ce que R4 **ne** fait pas — les pertes (A27, § 9)\n\n- **17 faux→ … [2417 caractères tronqués]`
+
+  ```
+fiche complétée
+     · reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 19 files changed, 280 insertions(+), 46 deletions(-)
+COMMIT OK 1
+5c0d5329 FICHE — LES PERTES DE R4 DITES HONNÊTEMENT (5/8 FAUX EN FRANÇAIS, NOMS NUS, PARTICIPES) ; README DANS LE BUDGET T1
+   015d7c56..5c0d5329  s/v7 -> s/v7
+   015d7c56..5c0d5329  master -> master
+ven 06 nov 2026 20:45:12 EST
+  ```
+
+### 👤 Utilisateur
+
+Background subagent 338f8b55-bcd5-464a-a63e-b97381eff55d finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Mesures terminées : deux livrables écrits, aucun commit
+
+**Référence mesurée** : B13 (`2ba393b0` + gold B13) → **POS 83,83 % / F1 0,6181 / attachement 222-222**. Le dépôt a bougé pendant la mesure ; un instantané HEAD a servi de contrôle, et les gains POS sont identiques.
+
+## Gains POS / F1 dev-test
+
+| levier / paquet | POS dev | Δ dev | POS test | Δ test | corr. / cassés | faux→faux | F1 | att. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| R4-en | 84,16 | +0,41 | 84,31 | +0,31 | 12 / 0 | 8 | 0,6181 | 222/222 |
+| R4-fr | 84,07 | +0,32 | 84,41 | +0,41 | 11 / 0 | 9 | 0,6181 | 222/222 |
+| **R4 bilingue** | **84,49** | **+0,74** | **84,71** | **+0,71** | **23 / 0** | **17** | 0,6181 | 222/222 |
+| **Classes fermées** | **84,53** | **+0,78** | **84,81** | **+0,81** | **25 / 0** | **0** | **0,6188** | 222/222 |
+| **Paquet sûr** (R4-en + classes) | **84,94** | **+1,19** | **85,11** | **+1,11** | **37 / 0** | **2** | 0,6188 | 222/222 |
+| **Paquet max** (R4 bilingue + classes) | **85,26** | **+1,51** | **85,51** | **+1,51** | **48 / 0** | **11** | 0,6188 | 222/222 |
+
+- **F1** : R4 n’ajoute **rien** (0,6181 inchangé) ; les classes ajoutent **+0,0007** (0,6188 ; anglais 0,7273 → 0,7295), dû à un seul segment (`The children play outside`). Le levier est POS, pas F1.
+- **Attachement** : strictement **222/222** partout (couverture 0,9289). Seule la variante « large » des classes perd 1 attachement (221/221), à cause du bloc DET.
+
+## Les pertes, sans maquillage
+
+- **R4 « 0 cassé » n’est pas « 0 perte »** : 17 jetons déjà faux changent de classe fausse (late, out, maybe, far, mine, born, hung ; 9 participes/verbes français).
+- Les deux contrôles demandés passent — `He is a doctor.` → NOUN, `He is running.` → VERB — **mais par accident de surface** : `a` est un DET, `running` est VERB par `-ing`. Les noms nus (`He is doctor`, `She is president`, `He remains president`, `They became members`) et les participes irréguliers (`born`, `hung`) deviennent ADJ. En français : `Il est médecin`, `La réunion est reportée`, `Les enfants sont arrivés` aussi.
+- Sur les **50 textes libres** : R4 bilingue change 8 tokens français, **3 justes / 5 faux** (faux : arrivés, parfois, reportée, entrés, acceptés). R4-en ne change **rien** sur les 5 textes anglais.
+- Classes fermées : `where`/`as`/`late`/`outside`/`hard`/`down`/`fast` sont ambigus. `Where is…` → PRON (faux), `He works as a teacher` → CONJ (faux), `The late president` → ADV (faux), `outside the house` → ADV (faux). `when` en PRON vaut **−3** ; `n't` est inerte ; `fast` en ADV bloque le ADJ de `The car is fast`.
+- **Paquet max** : 11 faux→faux et 6 faux libres (3 justes) ; c’est un plafond POS, pas un paquet produit.
+
+## Placebo et contrôles
+
+200 tirages, mêmes actions/mêmes nombres, jetons aléatoires dans la même phrase :
+
+| levier | actions | placebo moyen | max placebo | observé dev/test |
+|---|---:|---:|---:|---:|
+| R4-en | 20 | −0,34 | −0,25 | **+0,41 / +0,31** |
+| R4 bilingue | 40 | −0,80 | −0,69 | **+0,74 / +0,71** |
+| Classes | 25 | −0,64 | −0,57 | **+0,78 / +0,81** |
+| Paquet sûr | 37 | −0,96 | −0,82 | **+1,19 / +1,11** |
+| Paquet max | 65 | −1,42 | −1,29 | **+1,51 / +1,51** |
+
+Tous les gains observés sont **au-dessus du maximum** du placebo.
+
+## Patchs exacts
+
+**R4** — après la boucle « 3 a bis » (R2b), avant `# 4. phrase + pragmatique` :
+
+```python
+        _copules = COPULES.get(lg, set())
+        if _copules:
+            for _k, _i in enumerate(pos_idx):
+                _e = etiquettes[_i]
+                if _k == 0 or _e.type != "NOUN" or _e.confiance > 0.45:
+                    continue
+                _av = etiquettes[pos_idx[_k - 1]]
+                if _normaliser(_av.valeur) not in _copules:
+                    continue
+                etiquettes[_i] = Etiquette("pos", "ADJ", _e.valeur, _e.debut, _e.fin, self.nom,
+                                           0.5, candidats=["adj"], langue=lg, script=script,
+                                           meta={"ouvert": True, "contexte": "copule"})
+```
+
+avec `COPULES["en"] = {is, are, was, were, am, be, been, being, seem(s/ed/ing), look(s/ed/ing), appear(s/ed/ing), become(s)/became/becoming, remain(s/ed/ing)}` et, pour la variante bilingue seulement, `COPULES["fr"] = {est, sont, était, étaient, semble…, paraît…, devient…, reste…, demeure…}`. **Liste stricte** : pas de `feel/taste/smell/grow/turn/get/keep` (ils convertissent des noms : `grow wheat` → `wheat` ADJ).
+
+**Classes fermées** — dans `POS_FERME["en"]` :
+
+```text
+PRON  += where whose mine
+CONJ  += as
+AUX   += am
+ADV   += late out maybe hard far again now down outside
+PREP  -= outside
+```
+
+`when` reste CONJ ; `n't` non ajouté (tokeniseur) ; `fast` non ajouté dans le paquet recommandé.
+
+Les blocs complets, les 29 sondes de contrôle et les hashes sont dans **`reports/pensee-pos-r4.json`** (`patchs_exacts`, `controles`) et dans les annexes A.1–A.2 de **`reports/rapport-pos-r4.md`**. Le patch appliqué à une copie reproduit **85,34 / 0,6188 / 222-222 / 48-0**.
+
+## État live et périmètre
+
+- L’intégration live (SHA `83821c9e`, HEAD `ba39a7b1` + modifs) donne sur le gold B13 **POS 85,00 / 37-0 / 2 faux→faux**, exactement le paquet sûr ; `outside` et `feel` ont été corrigés. Son F1/att (0,6459 / 231-232) diffère à cause des changements de frontières de phrase, pas du paquet POS.
+- **Livrables** : `reports/rapport-pos-r4.md` et `reports/pensee-pos-r4.json`. Aucun commit de ma part ; ces deux chemins étaient déjà suivis à HEAD `5c5d3b52`, je les ai mis à jour. Aucun autre fichier existant modifié par moi ; `tools/bloc_linguistique.py` est modifié par un autre chantier.
+
+**Recommandation** : intégrer le **paquet sûr** (R4-en + classes, avec `where`) → **+1,19/+1,11**, 37/0, 2 faux→faux, F1 +0,0007, att 222/222. Si zéro régression libre : **sans `where`** → +1,01/+0,91, 0 changement sur les 50 textes. Garder R4-fr derrière un garde participe/adverbe.
+
+### 👤 Utilisateur
+
+Agent eedb7a58-2a33-4caa-8509-f46d9e328080 sent a message: 
+P0-3 (partition des syntagmes) — résultat mesuré et livré.
+
+Cartographie (commit d'audit épinglé fa1b0c6e, chiffres des audits reproduits exactement : 107/23 et 132/31) : 239 paires S × chunker, toutes de composition (chunker seul = 0 paire, S sans union = 0 paire). Classes : 127 S contient le chunker (53,1 %), 80 chunker plus large que S (33,5 %), 6 mêmes bornes multi-label (2,5 %), 26 croisements (10,9 %). Sur 25 paragraphes libres : 59 paires, 10/25 textes.
+
+Options mesurées (gold 612, 239 cibles d'attachement) :
+- A explicite (défaut) : F1 0,5849, exact 222/239, POS 0,7581, +10,4 % JSON, 0 perte.
+- B1 filtre union partiel : F1 0,6163, exact 217/239, reste 91 paires (33/96), +7,2 % JSON.
+- B2 partition stricte : F1 0,6172, exact 205/239, 0 paire, +2,0 % JSON.
+- déduplication silencieuse : F1 0,6141, exact 208/239, 0 paire.
+Contrôle négatif : 299 suppressions au hasard → F1 0,5519 max, exact 193,15 (max 198). Donc B1/B2 ne gagnent pas par simple suppression.
+
+Recommandation : A par défaut, B2 en option « partition », B1 documenté comme variante économique partielle (le filtre union est bien moins cher que la déduplication : 217 vs 208, mais il ne partitionne pas). Patch exact (4 hunks, modes alternative/filtrer_union/filtrer, strip dans _fusion) et schéma de meta.partition/meta.alternative dans le rapport.
+
+Deux fichiers neufs : reports/rapport-partition-syntagmes.md et reports/pensee-partition-syntagmes.json. Rien commité, aucun existant modifié par moi.
+
+⚠️ Attention : pendant mon travail, tools/bloc_linguistique.py dans l'arbre de travail a reçu une application non commitée de ma première version du patch (pas par moi, probablement un autre agent) : elle n'a PAS le strip `_fusion` (280 vues mortes / 220 étiquettes mesurées sans lui). Le patch final du rapport est plus récent (sha256 e9444daf…, diff 185 lignes, strip inclus, 0 référence morte) ; ne pas commiter l'état actuel sans réappliquer/ajouter le strip.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\ndiff=d['patch']['bloc_linguistique']['diff']\nprint('diff actuel :', len(diff.splitlines()), 'lignes | sha256_cible', d['patch']['bloc_lingu … [414 caractères tronqués]`
+
+  ```
+diff actuel : 185 lignes | sha256_cible e9444dafdfca30f99923928bf476a088bab4e3b5618f6148a7947118d2e0e39d
+_fusion dans le diff : False
+174:        if not ligne.strip():
+704:        avant = texte[texte.rfind("\n", 0, i) + 1:i].strip()
+760:        if f > d and texte[d:f].strip():
+802:        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+804:        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
+1268:        if not texte.strip() or not any(ch.isalpha() or ch.isdigit() for ch in texte):
+sha256 du module actuel : 83821c9e6bd49942
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\ndiff=d['patch']['bloc_linguistique']['diff']\nopen('/tmp/partition2.patch','w').write(diff)\nfor l in diff.splitlines():\n    if l.startswit … [208 caractères tronqués]`
+
+  ```
+--- a/tools/bloc_linguistique.py
++++ b/tools/bloc_linguistique.py
+@@ -529,12 +529,20 @@
+@@ -1237,6 +1245,10 @@
+@@ -1811,6 +1823,135 @@
+@@ -1905,6 +2046,13 @@
+error: patch failed: tools/bloc_linguistique.py:529
+error: tools/bloc_linguistique.py: patch does not apply
+check EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-partition-syntagmes.json'))\ndiff=d['patch']['bloc_linguistique']['diff']\ni=diff.find('@@ -1905,6 +2046,13 @@')\nprint(diff[i:i+1200])\nPY", "description": "Voir le hun … [11 caractères tronqués]`
+
+  ```
+@@ -1905,6 +2046,13 @@
+                 etiquettes.append(e)
+         # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
+     else:
++        # la déduplication de la fusion retire des segments : les `meta.alternative` de
++        # l'heuristique pointeraient vers des absents. On les retire de la copie fusionnée
++        # plutôt que de laisser des références mortes ; la vue explicite des compositions
++        # est le suivi P0-3b.
++        for e in meilleures.values():
++            e.meta = {k: v for k, v in e.meta.items()
++                      if k not in ("partition", "alternative")}
+         etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
+     if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
+         lg, script = a.langue, a.script
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/bloc_linguistique.py'); t=p.read_text()\nancien = '''        # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.\n    else:\n        etiquettes = _su … [1753 caractères tronqués]`
+
+  ```
+strip _fusion ajouté
+syntaxe OK
+heur POS 0.85 | F1 0.6482 | exact 235 / 236
+par  POS 0.85 | F1 0.6482 | exact 235 / 236
+sha256 87949ff264a10b31
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"", "description": "Autotest après le strip", "timeoutMs": 1900000}`
+
+  ```
+183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/rapport-partition-integree.md'); t=p.read_text()\nt=t.replace(\"\"\"## 3. Contrôles (A29)\"\"\",\n\"\"\"## 2 bis. Le strip de la fusion\n\nLa fusion **déduplique** les seg … [1367 caractères tronqués]`

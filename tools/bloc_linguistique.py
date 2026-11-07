@@ -2367,6 +2367,13 @@ def _fusion(a: Annotation, b: Annotation, source: str,
                 etiquettes.append(e)
         # La source est choisie par niveau : plus d'arbitrage de chevauchement à faire.
     else:
+        # la déduplication de la fusion retire des segments : les `meta.alternative` de
+        # l'heuristique pointeraient vers des absents. On les retire de la copie fusionnée
+        # plutôt que de laisser des références mortes ; la vue explicite des compositions
+        # est le suivi P0-3b.
+        for e in meilleures.values():
+            e.meta = {k: v for k, v in e.meta.items()
+                      if k not in ("partition", "alternative")}
         etiquettes = _supprimer_chevauchements(list(meilleures.values()), priorite_syntagme)
     if a.langue != "und" and (b.langue == "und" or a.langue == b.langue):
         lg, script = a.langue, a.script

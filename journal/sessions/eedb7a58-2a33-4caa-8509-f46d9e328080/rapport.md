@@ -7,12 +7,12 @@
 | Identifiant | `eedb7a58-2a33-4caa-8509-f46d9e328080` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 18:33 |
-| Durée | 2.2 h |
+| Durée | 2.3 h |
 | Tours | 1 |
-| Messages | 136 |
-| Appels d'outils | 152 |
+| Messages | 146 |
+| Appels d'outils | 161 |
 | Fichiers touchés | 7 |
-| Commandes | 135 |
+| Commandes | 143 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **explicit … [2149 caractères tronqués]
 
-*152 appels d'outils.* Actions notables :
+*161 appels d'outils.* Actions notables :
 
 - bash — Check repo state and list top-level files
 - bash — List reports directory
@@ -41,11 +41,48 @@
 - bash — Read syntagm generation and union logic
 - bash — Read dedup function and fusion call
 - bash — Inspect banc_50 keys and samples
-- … et 134 autres
+- … et 142 autres
 
 **Synthèse produite :**
 
-⏵ Fixing a real composition edge case: stale alternatives after `_fusion` dedup
+⏵ Livraison du rapport, du JSON et du résumé mesuré
+
+**Livré** (deux fichiers neufs, aucun existant modifié par moi, aucun commit) :
+- `reports/rapport-partition-syntagmes.md`
+- `reports/pensee-partition-syntagmes.json`
+
+Mesures épinglées au commit d'audit `fa1b0c6e` ; les chiffres des deux audits sont reproduits exactement (107 paires/23 textes, 132/31, 188 étiquettes impliquées, 61/71 mêmes types-différents, 113 inclusions/19 partiels).
+
+\### Classes de chevauchement (239 paires, 54/96 textes)
+
+| classe | effectif | part |
+|---|---:|---:|
+| le S contient le chunker | 127 | 53,1 % |
+| le chunker est plus large que le S | 80 | 33,5 % |
+| mêmes bornes, types différents | 6 | 2,5 % |
+| croisements | 26 | 10,9 % |
+| **total** | **239** | 100 % |
+
+**Toutes** les paires opposent un segment S à un segment `union` : aucune paire S×S ni chunker×chunker. Chunker seul = 0 paire, S sans union = 0 paire : le défaut vient de la composition. Sur 25 paragraphes libres : 59 paires, 10/25 textes.
+
+\### Options mesurées (gold 612, 239 cibles)
+
+| option | F1 | exact | paires restantes | Δ JSON |
+|---|---:|---:|---:|---:|
+| base | 0,5849 | 222/239 | 239 | — |
+| **A — alternative explicite** | 0,5849 | **222/239** | 239 | +10,4 % |
+| **B1 — filtre union partiel** | 0,6163 | **217/239** | **91** | +7,2 % |
+| **B2 — partition stricte** | 0,6172 | **205/239** | **0** | +2,0 % |
+| déduplication silencieuse | 0,6141 | 208/239 | 0 | — |
+
+POS et fraction identiques partout (0,7581 ; 0,5537). Contrôle négatif : 299 suppressions au hasard donnent F1 0,5519 et 193,15 exacts en moyenne (max 198), donc B1/B2 ne gagnent pas par simple réduction du nombre de segments.
+
+\### Recommandation
+
+**A par défaut** (aucune perte, le client choisit, rang 1 = chunker le plus large), **B2 en option « partition »** (vue linéaire, 0 paire, alternatives conservées avec `retire: true`), **B1 documenté comme variante économique partielle** : c'est le « filtre union » du P0-3, moins cher que la déduplication (217 vs 208) mais il laisse 91 paires, donc pas une partition. Le patch exact (4 hunks, modes `alternative`/`filtrer_union`/`filtrer`, strip `_fusion`) et le schéma de `meta.partition`/`meta.alternative` sont dans le rapport.
+
+⚠️ Le commit `015d7c56` contient une version antérieure du patch, sans le strip `_fusion` (280 vues mortes / 220 étiquettes en Cascade/Parallèle). L'arbre de travail contient la version finale corrigée (module +7 lignes, rapports finaux, hash `e9444daf…2e0e39d`, 0 référence morte) : à
+… [39 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -103,7 +140,7 @@
 - **T1** Inspect Cascade/Parallele init for shared state
 - **T1** Look for global caches or subprocesses in module
 - **T1** Read S generator entry points
-- … et 95 autres
+- … et 103 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -163,6 +200,7 @@
 - **T1** `305:| partition stricte, F1 d'abord | `filtrer` | 0,6172 | 205/239 | 0 | +2,0 % |`
 - **T1** `5c5d3b52 B13 — LE PAQUET POS SÛR (CLASSES FERMÉES + R4-EN) : POS 83,83 → 84,96 %, 37 CORRIGÉS / 0 CASSÉ, ATTACHEMENT INCHANGÉ ; 183/183`
 - **T1** `+    chunker le plus large **est** ce span (86,5 %) ; le S le plus large ne l'est que 25 fois sur 244.`
+- **T1** `015d7c56 B13 — LA PARTITION DES SYNTAGMES (P0-3) : meta.alternative PAR DÉFAUT (MESURES INCHANGÉES), filtrer EN OPTION (F1 +0,047) ; outside/feel CORRIGÉS, POS 85,00 %`
 
 ## 5. Erreurs rencontrées
 
