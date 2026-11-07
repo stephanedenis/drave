@@ -7,12 +7,12 @@
 | Identifiant | `7635f5f5-11b8-4d10-bea5-50a90e536e31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 12 |
-| Appels d'outils | 16 |
+| Messages | 16 |
+| Appels d'outils | 24 |
 | Fichiers touchés | 0 |
-| Commandes | 10 |
+| Commandes | 16 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier R** (le  … [1578 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*24 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état git
 - bash — Lister fiches R et outils
@@ -38,6 +38,10 @@
 - bash — Chercher R1.2-1024 et chiffre 3,0107
 - bash — Chercher commits R1
 - bash — Lire table des tâches P8/P17
+- bash — Localiser le code du tagger
+- bash — Lister portes et outils R
+- bash — Structure des fiches tagger
+- … et 3 autres
 
 **Synthèse produite :**
 
@@ -62,6 +66,12 @@
 - **T1** Chercher R1.2-1024 et chiffre 3,0107
 - **T1** Chercher commits R1
 - **T1** Lire table des tâches P8/P17
+- **T1** Localiser le code du tagger
+- **T1** Lister portes et outils R
+- **T1** Structure des fiches tagger
+- **T1** Chercher POS 85 et fichiers gold
+- **T1** Inventaire des classes du bloc L
+- **T1** Lire l'intro du paquet POS 85 %
 
 ## 4. Mesures et résultats marquants
 
@@ -78,4 +88,15 @@
 - **T1** `e2258fb9 DOC PRODUIT — LES CHIFFRES À JOUR : POS 83,83 %, F1 64,74 %, ATTACHEMENT 235/236 (98,33 %), 3 SPANS ; SORTIE D'EVALUER REJOUÉE`
 - **T1** `2ba393b0 B13 — LA POS À 83,83 % (R2a/R3/R2b) : F1 0,5849 → 0,6181, ANGLAIS 0,6341 → 0,7273, ATTACHEMENT INCHANGÉ (222/222) ; 183/183`
 - **T1** `| P14 | A8.3 : réduire le lot ou l'assumer | roadmap:152 ; chantiers:84 | a26-lot-disque : 503 Mio constant, +27 % tok/s, PPL -0,006 % | Lot >= 2 assumé |`
+- **T1** `reports/INDEX.md:608:| [rapport-pos-r4-integre.md](rapport-pos-r4-integre.md) | B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 % |`
+- **T1** `reports/rapport-partition-integree.md:8:> exact 235/236, POS 85,00 %** — les mesures de la base, **sans déduplication silencieuse**. Le mode`
+- **T1** `reports/rapport-pos-r4-integre.md:1:# B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 %`
+- **T1** `reports/rapport-pos-r4.md:31:- **Paquet sûr** (R4-en + classes fermées) : **+1,19 dev / +1,11 test**, POS **85,00 %**, **37/0**,`
+- **T1** `reports/rapport-pos-r4.md:408:   POS 85,00 %, 37/0, 2 faux→faux, F1 +0,0007, attachement 222/222. C’est le meilleur rapport`
+- **T1** `reports/rapport-pos-r4.md:457:85,00 %** (dev 84,94 / test 85,11), **37 correctifs / 0 cassé / 2 faux→faux** : c’est exactement le`
+- **T1** `reports/README.md:22:| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr : classes fermées + R4-en, **84,96 %** |`
+- **T1** `- **R4 bilingue** : **+0,74 dev / +0,71 test** (POS 84,55 %), **23 correctifs / 0 cassé**, F1`
+- **T1** `- **Classes fermées** : **+0,78 dev / +0,81 test** (POS 84,62 %), **25 correctifs / 0 cassé**,`
+- **T1** `- **Paquet sûr** (R4-en + classes fermées) : **+1,19 dev / +1,11 test**, POS **85,00 %**, **37/0**,`
+- **T1** `- **Paquet max** (R4 bilingue + classes fermées) : **+1,51 / +1,51**, POS **85,34 %**, **48/0**,`
 

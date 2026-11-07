@@ -427,3 +427,224 @@ tools/tests/linguistique/
 … [5633 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE 'r12|1024|tagger|lecteur|r1-|r1_' ; echo '---'; grep -rln 'evaluer_tagger\\|tagger' tools/*.py tools/tests/ tools/llm/ 2>/dev/null | head -30", "description": "Lister fiches R1.2/tagger et scripts"}`
+
+  ```
+n2-r12-2048.json
+r03-lecteur-modele-couverture.json
+r03-lecteur-modele.json
+r13.2-vocab1024.json
+rapport-lecteur-multifichiers.md
+rapport-n2-r12-2048.md
+rapport-r03-lecteur-modele.md
+rapport-r13.2-vocab1024.md
+rapport-r1-preparation.md
+---
+tools/bloc_linguistique.py
+tools/tests/linguistique/__pycache__/qualifier_syntagmes.cpython-313.pyc
+tools/tests/linguistique/__pycache__/qualifier_neuronal.cpython-313.pyc
+tools/tests/linguistique/__pycache__/test_bloc_linguistique.cpython-313.pyc
+tools/tests/linguistique/__pycache__/qualifier_pragmatique.cpython-313.pyc
+tools/tests/linguistique/__pycache__/qualifier_quatre_modes.cpython-313.pyc
+tools/tests/linguistique/qualifier_neuronal.py
+tools/tests/linguistique/qualifier_syntagmes.py
+tools/tests/linguistique/test_bloc_linguistique.py
+tools/tests/linguistique/qualifier_pragmatique.py
+tools/tests/linguistique/qualifier_quatre_modes.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn 'R1\\.2-1024\\|R1.2-1 024\\|R1.2.*1024\\|3,0107\\|3.0107' reports/ docs/ journal/2026-11-0* --include='*.md' --include='*.json' 2>/dev/null | head -40", "description": "Chercher R1.2-1024 et chiffre 3,0107"}`
+
+  ```
+reports/restitution-udhr.json:4558:  "bits_octet": 2.2103401074975526,
+reports/kfold-pidgin-web.json:177:   "chrf": 13.243100330107449,
+reports/n2-r11.json:42:  "L1000": 3.0107
+reports/rapport-n2-r11.md:14:> à **toutes** les longueurs, **−0,244** à 1 000 (3,0107 contre 3,2545), et le modèle **utilise**
+reports/rapport-n2-r11.md:150:| 1 000 | 3,2545 | **3,0107** | **−0,244** |
+reports/rapport-n2-fenetre.md:6:> 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) ; à **2 000**, 3,2459 → 2,9728 →
+reports/rapport-n2-fenetre.md:32:| **R1.2-1 024** | `data/wiki_fr` | **1 024 / 1 024** | **2 500** | **20,5 Mo** | `base-wiki-45m` |
+reports/rapport-n2-fenetre.md:33:| R1.2-1 024 long | `data/wiki_fr` | 1 024 / 1 024 | 20 000 | 164 Mo | (suite du précédent) |
+reports/rapport-n2-fenetre.md:49:| 1 000 | 3,2545 | 3,0107 | **2,9950** |
+reports/n2-fenetre.json:22:  "L1000": 3.0107
+reports/n2-fenetre.json:293:   "R1.2-1024": "wiki_fr, 1 024/1 024, 2 500 pas, 20,5 Mo, init base-wiki-45m",
+reports/n2-fenetre.json:294:   "R1.2-1024-long": "wiki_fr, 1 024/1 024, +17 500 pas (20 000), 164 Mo",
+reports/n2-r12-2048.json:22:  "L1000": 3.0107
+reports/rapport-n2-r12-2048.md:44:| 512 (5 000 pas) | **3,339
+… [2334 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-fenetre.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-fenetre.md</path>
+<type>file</type>
+<content>
+1: # N2/R1 — La fenêtre entraînée, de 128 à 1 024 : elle gagne où elle sert, et elle bat 200 000 pas
+2: 
+3: > **Lignes de roadmap** : **R1** (la fenêtre native) et **N2** (le modèle de production) ·
+4: > **Date** : 2026-11-02/03 · **Verdict** : à **octets constants** (20,5 Mo vus), entraîner sur des
+5: > séquences longues avec RoPE abaisse la PPL là où la fenêtre sert — à **1 000 octets**,
+6: > 3,2545 (fenêtre 256) → 3,0107 (512) → **2,9950** (1 024) ; à **2 000**, 3,2459 → 2,9728 →
+7: > **2,9449** — et à courte longueur l'ordre **s'inverse** (128 : 3,3399 pour 512 contre 3,3878
+8: > pour 1 024) : la fenêtre longue échange du **démarrage à froid** contre de la **profondeur**.
+9: > Le contrôle « même texte » le tranche : **chaque modèle sature exactement à sa fenêtre** —
+10: > fenêtre 256 : 3,0663 → 3,1411 (il **se dégrade** au-delà de 256) ; 512 : 2,9068 → 2,8076 ;
+11: > 1 024 : 2,9197 → **2,7837**, et 1 024 = 2 000 au millième. Sur le **modèle de production**,
+12: > affiner N2.ac avec RoPE et 512 octets pendant **61,4 Mo** (le budget même de N2.ac) le bat
+13: > **
+… [8890 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n2-r12-2048.md</path>
+<type>file</type>
+<content>
+1: # R1.2 — La fenêtre 2 048 et le point d'équilibre : à octets constants, 1 024 gagne ; à pas constants, plus de données gagnent
+2: 
+3: > **Ligne de roadmap** : R1 (la fenêtre native) · **Date** : 2026-11-03 · **Verdict** : à
+4: > **octets constants** (20,5 Mo vus sur `data/wiki_fr`), la fenêtre entraînée paie jusqu'à
+5: > **1 024** — à 2 000 octets, 3,2459 (fenêtre 256) → 2,9728 (512) → **2,9449** (1 024) — et
+6: > **2 048 ne la bat pas** à octets constants (2,9630 ; et au complément 164 Mo, 3,0466 contre
+7: > 2,9955) : à budget d'octets fixé, doubler encore la fenêtre divise les **pas** par deux et le
+8: > gain s'annule — **à pas constants en revanche, 2 048 gagne 0,08 à 0,10** (2,9121 contre 2,9955
+9: > à 128 octets, 2,4383 contre 2,5429 à 4 000). À **pas constants** (20 000), la même
+10: > recette à fenêtre **1 024** voit **8× plus d'octets** et **écrase** tout : **2,9955** à 128
+11: > octets, **2,6256** à 1 000, **2,5429** à 4 000 — à **0,13** et **0,04** de 2,5 en domaine
+12: > (`val_fr`, pas le corpus propre : ce n'est pas la porte, c'en est le voisinage).
+… [11255 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline --all -30 --grep='R1' -i; echo '---'; git log --oneline -20", "description": "Chercher commits R1"}`
+
+  ```
+4d34c37a PILOTAGE — LES VAGUES 5 À 7 (AUDITS V7/V8, R1/R3, TOP-K, V10) DOCUMENTÉES AU PLAN-TRAVAIL
+f908d7b0 B13 — R1/R2/R3 : EXACT 212/212 (1,0000), COUVERTURE 0,887, F1 0,5763, FR 1,0 / EN 1,0 ; 27 SPANS DONT 17 INATTEIGNABLES ; 183/183
+86000584 ÉTAT — HEURE 01 H 51 ; PASSE 72 JOURNAUX : R13-BPE ET RÉCURRENCE VERTES, RÉFLEXE EN COURS
+f50ad713 BACKLOG — LA FICHE N2 PASSE AU RÉEL : LA FENÊTRE EST LA RECETTE, LA PORTE PROPRE RESTE
+bfd51b90 NUIT — CLÔTURE : LA FENÊTRE EST MESURÉE DE 128 À 2 048, LA PRODUCTION PASSE SOUS 2,5 AU GRAND CORPUS, LA PORTE PROPRE RESTE À 0,29
+e1c1064d NUIT — LA FENÊTRE EST LA RECETTE DE PRODUCTION : 2,9943 À 128 ET SOUS 2,5 AU GRAND CORPUS ; LA PORTE PROPRE RESTE À 2,7856 ; LA FENÊTRE PAIE À TOUTES LES CAPACITÉS
+19eacae6 N2 — LES SIX FICHIERS DE LA NUIT COMMITTÉS PAR LE HUB APRÈS LA PAUSE
+3026dc6a NUIT — LA ROADMAP PASSE AU 03/11 : LA FENÊTRE EST SOLVABLE MAIS NON DISCRIMINANTE ; LA CASCADE VRAI MODÈLE
+c7ef9bc4 FENÊTRE 2 048 — À OCTETS CONSTANTS LE GAIN S'ARRÊTE À 1 024 (2,9950 À 1 000 OCTETS) ; À 20 000 PAS ELLE DONNE 2,9955 À 128 ET 2,6256 À 1 000
+b1c0bcda PILOTAGE — UN MANDAT LONG AVEC UN CLAIM ACTIF N'EST PAS PÉRIMÉ ; LA PORTE SESSIONS LIT LE REGISTRE
+c0
+… [4335 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '80,130p' reports/rapport-file-taches.md", "description": "Lire table des tâches P8/P17"}`
+
+  ```
+## 6. Doublons (6)
+
+Même action nommée dans plusieurs documents, ou même libellé pour deux objets. Un doublon n'est pas une faute de frappe : il fait croire à deux chantiers et double le travail de mesure.
+
+| # | action | où | preuve | décision |
+|---|---|---|---|---|
+| D1 | dev/test à re-mesurer | v9, v10, v11 §6 ; plan-travail §9 vague 7 | v12 : dev 153/153, test 69/69 ; rapport-dev-test-v10 | Une seule mesure, faite ; retirer des suites |
+| D2 | Les N spans | v5 (52), v7 (43), r1r3 (27), v9 (20), v10 (19), v11 (18), v12 (17) | v12 §2 : 17 spans (8 REL, 5 SUB, 4 GP) | Seul 17 est vivant ; les autres sont historiques |
+| D3 | T132/T133 | roadmap:178 ; chantiers:90 ; plan:39 et 195 ; en-cours:131 | autotest : T132 5/5, T133 5/5 | Fermer ; retirer les 5 mentions |
+| D4 | Passe complète | en-cours:131 ; plan:401 ; references:3 | ea7d3275 ; registre 06/11 (79/4) | Une seule passe de référence ; la prochaine sera 84 portes |
+| D5 | gold 200+ | roadmap:31 et 178 ; chantiers:83 et 89 ; en-cours:131 ; plan:39 et 195 | 13 occurrences, aucune définition | Définir l'objet avant d'en faire une tâche |
+| D6 | A2.6 experts | roadmap:30 et 146 ; chantiers:84 ; dependances:162 ; en-cours:120 ; ba
+… [4175 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md", "limit": 80}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-file-taches.md</path>
+<type>file</type>
+<content>
+1: # La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h
+2: 
+3: > **Ligne de roadmap** : B13 (moteur de pensée) · **Date** : 2026-11-06, 10 h 20 HNE · **Branche** : `s/v7` · **HEAD mesuré** : `7679a2d4`.
+4: > **Mission** : inventer toutes les prochaines actions nommées dans `roadmap.md`, `en-cours.md`, `plan-travail.md` § 9 et § 12, `backlog/index.md`, `backlog/dependances.md`, `references-non-regression.md` et les 12 fiches récentes ; les classer en trois files ; détecter doublons et périmées ; proposer l'ordre de la fenêtre.
+5: > **Verdict** : **29 tâches** — **8 autonomes**, **11 en coordination**, **10 bloquées** ; **6 doublons**, **18 périmées**, **12 dépendances cachées**.
+6: > **Ce que cette fiche n'est pas** : un commit, une modification d'existant, ou une mesure nouvelle sur S/D/N2. Elle ne crée que deux fichiers neufs.
+7: 
+8: ## 1. Résumé exécutif
+9: 
+10: La file est **courte** une fois les doublons retirés : **8 tâches sont exécutables en autonomie** dans le territoire L/B13 et le pilotage, **11 demandent une coordination** (S, D, 
+… [12982 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r44-scans.md</path>
+<type>file</type>
+<content>
+1: # R4.4 — les scans : la photo passe de 55,9 % à 6,7 % de WER, les colonnes de 89 % à 0,5 %
+2: 
+3: > **Objet.** La ligne R4.4 était **partielle** : dix pages **rendues** lues, mais aucun scan.
+4: > Ce programme fabrique cinq familles de dégradations, mesure ce qu'elles coûtent, ajoute le
+5: > prétraitement, la récupération des exposants, l'ordre de lecture des colonnes et les cellules
+6: > des tableaux — et valide la chaîne sur un **vrai scan** d'Internet Archive.
+7: >
+8: > **Ce que ce n'est pas.** Les scans sont **simulés** (il n'y a pas de scanner sur la machine) ;
+9: > la validation réelle compare à la **couche OCR** d'Internet Archive, pas à une vérité humaine.
+10: > Les deux limites sont dites, pas contournées.
+11: 
+12: ## Dispositif
+13: 
+14: - **100 scans simulés** : 10 pages de développement (9 portent les 30 questions du banc R0.3) et
+15:   10 pages de test, × **5 familles** : `propre` (contrôle), `photocopie` (200 dpi, flou, 1,2°,
+16:   mouchetures, JPEG q45), `photo` (180 dpi, perspective, éclairage inégal + ombre, flou de
+17:   mouvement, bruit, JPEG q2
+… [24088 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/llm/ 2>/dev/null; echo '---'; grep -rn 'llama-server\\|7B\\|Qwen\\|tagger' tools/tests/linguistique/qualifier_neuronal.py tools/tests/linguistique/qualifier_syntagmes.py tools/tests/linguistique/qualifier_pragmatique.py | he … [54 caractères tronqués]`
+
+  ```
+deepseek.py
+distillation.py
+enseignant.py
+entrainer_masque.py
+__init__.py
+masque.py
+mesure.py
+prompts_publics_300.jsonl
+prompts_publics.jsonl
+prompts_publics.py
+__pycache__
+tests
+---
+tools/tests/linguistique/qualifier_neuronal.py:2:"""qualifier_neuronal.py — qualifie un tagger neuronal local sur le gold (180 phrases, 804 tokens).
+tools/tests/linguistique/qualifier_neuronal.py:4:Le tagger est `bloc_linguistique.NeuronalLLMPOS` : un modèle GGUF servi par `llama-server`, une
+tools/tests/linguistique/qualifier_neuronal.py:133:    """`llama-server --version` écrit sur stderr ; on lit les deux flux."""
+tools/tests/linguistique/qualifier_neuronal.py:134:    for commande in (["llama-server", "--version"], ["llama-cli", "--version"]):
+tools/tests/linguistique/qualifier_neuronal.py:162:    commande = ["llama-server", "-m", str(modele), "--host", "127.0.0.1", "--port", str(port),
+tools/tests/linguistique/qualifier_neuronal.py:182:    ap.add_argument("--demarrer", action="store_true", help="lance llama-server sur CPU")
+tools/tests/linguistique/qualifier_neuronal.py:205:    tagger = bl.NeuronalLLMPOS(modele, endpoint=endpoint, confiance=args.confiance)
+tools/tests/linguistique/qualifier_neurona
+… [3702 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-pensee-gold-neuronal.md</path>
+<type>file</type>
+<content>
+1: # L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944
+2: 
+3: > **Ligne de roadmap** : **B13** (moteur de pensée) / **R0.7** (bloc linguistique) · **Date** : 2026-11-02 ·
+4: > **Verdict** : ✅ **le tagger 7B-Instruct local est qualifié** — POS seul **0,8483** (heuristique
+5: > **0,7512**), **cascade à 0,6 : 0,9440** (20 réelles **0,9238**, 160 synthétiques **0,9471**),
+6: > **0 refus**, **180 appels**. La cascade **garde** les classes fermées de l'heuristique (**0,9392**)
+7: > et lui **prend** les ouvertes (**0,9474**) : c'est la complémentarité, pas le remplacement.
+8: >
+9: > **Dispositif** : [`qualifier_neuronal.py`](../tools/tests/linguistique/qualifier_neuronal.py) ;
+10: > [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`NeuronalLLMPOS`) ; JSON
+11: > [`pensee-gold-neuronal.json`](pensee-gold-neuronal.json).
+12: 
+13: ## 1. Ce qui était bloqué
+14: 
+15: Le rapport du gold ([`pensee-gold`](rapport-pensee-gold-linguistique.md) § 4) disait : « le vrai
+16: modèle neuronal est **refusé** (`llama-cli` local) ; la qualification neuronale
+… [10025 caractères tronqués]
+  ```
+

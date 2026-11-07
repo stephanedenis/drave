@@ -7,12 +7,12 @@
 | Identifiant | `599e9c0e-4252-43ca-a89a-3886d723c379` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-06 21:13 |
-| Durée | 0.0 h |
+| Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 9 |
-| Appels d'outils | 14 |
+| Messages | 11 |
+| Appels d'outils | 22 |
 | Fichiers touchés | 0 |
-| Commandes | 9 |
+| Commandes | 15 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état de N2 et de sa porte … [1809 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Afficher branche, derniers commits, racine
 - glob
@@ -38,6 +38,10 @@
 - bash — Lister work/n2ac
 - bash — Vérifier corpus propre et corpus annexes
 - bash — Vérifier GPU et environnement python
+- bash — Localiser le registre des portes
+- bash — Chercher les usages de eval_n2_propre et porte-n2
+- bash — Lire le registre des portes le plus récent
+- … et 4 autres
 
 **Synthèse produite :**
 
@@ -63,6 +67,12 @@ Je commence par explorer le dépôt : checkpoints, rapports N2, et les outils ci
 - **T1** Lister work/n2ac
 - **T1** Vérifier corpus propre et corpus annexes
 - **T1** Vérifier GPU et environnement python
+- **T1** Localiser le registre des portes
+- **T1** Chercher les usages de eval_n2_propre et porte-n2
+- **T1** Lire le registre des portes le plus récent
+- **T1** Lire mesures et chaîne de la porte propre
+- **T1** Lire métadonnées des checkpoints récents et l'état git
+- **T1** Lire la chaîne et le log du checkpoint récent
 
 ## 4. Mesures et résultats marquants
 
@@ -73,4 +83,13 @@ Je commence par explorer le dépôt : checkpoints, rapports N2, et les outils ci
 - **T1** `96:- **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** (2×10 000 pas ; drvm `c50beff6` + `91a3028…`) ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propr`
 - **T1** `131:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+ ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** `
 - **T1** `137:- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
+- **T1** `Quadro RTX 5000, 16384 MiB, 154 MiB, 2 %`
+- **T1** `Quadro RTX 5000, 16384 MiB, 4 MiB, 0 %`
+- **T1** `[still running after 60000ms; moved to background job bash-3915]`
+- **T1** `"recette": "RoPE 34,3 M, lot 8, lr 3e-4, graine 1, init base-wiki-45m, 33 Mo vus par bras",`
+- **T1** `"val et test disjoints (0 % de fuite, N2.h)",`
+- **T1** `# Corpus : data/corpus_propre (train 3,24 Mo, val 180 Ko, 0 % de fuite — N2.h).`
+- **T1** `# Deux bras à OCTETS ÉGAUX (33 Mo vus), init base-wiki-45m, canal :`
+- **T1** `#   1. fenêtre 512, 8 000 pas × 8 × 512`
+- **T1** `#   2. fenêtre 256 (seq 128), 32 000 pas × 8 × 128`
 

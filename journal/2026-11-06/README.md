@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**61 commits** · **16 session(s)** · **7 thème(s)**
+**62 commits** · **16 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 20 | [distribue.md](distribue.md) |
-| docs | 10 | [docs.md](docs.md) |
+| docs | 11 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 15 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -29,9 +29,9 @@
 | `338f8b55-bcd5-464a-a63e-b97381eff55d` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 2.1 h | [rapport](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/rapport.md) · [digest](../sessions/338f8b55-bcd5-464a-a63e-b97381eff55d/digest.md) |
 | `3ccd8d09-9820-4da4-963b-6d84a0ffb141` | Tu travailles dans le dépôt | 2026-11-06 18:33 | 1.8 h | [rapport](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/rapport.md) · [digest](../sessions/3ccd8d09-9820-4da4-963b-6d84a0ffb141/digest.md) |
 | `3fb87dc7-7d24-42e2-a68e-e37e2734b755` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.7 h | [rapport](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/rapport.md) · [digest](../sessions/3fb87dc7-7d24-42e2-a68e-e37e2734b755/digest.md) |
-| `538288b3-117b-4daf-8d16-0cd8d6b0090d` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.0 h | [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md) |
-| `599e9c0e-4252-43ca-a89a-3886d723c379` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.0 h | [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md) |
-| `7635f5f5-11b8-4d10-bea5-50a90e536e31` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.0 h | [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md) |
+| `538288b3-117b-4daf-8d16-0cd8d6b0090d` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.1 h | [rapport](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/rapport.md) · [digest](../sessions/538288b3-117b-4daf-8d16-0cd8d6b0090d/digest.md) |
+| `599e9c0e-4252-43ca-a89a-3886d723c379` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.1 h | [rapport](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/rapport.md) · [digest](../sessions/599e9c0e-4252-43ca-a89a-3886d723c379/digest.md) |
+| `7635f5f5-11b8-4d10-bea5-50a90e536e31` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 0.1 h | [rapport](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/rapport.md) · [digest](../sessions/7635f5f5-11b8-4d10-bea5-50a90e536e31/digest.md) |
 | `a0d33fb7-37a9-4834-8a94-0da119e3b18f` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | [rapport](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) · [digest](../sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/digest.md) |
 | `bd6322ed-6792-4188-9d4c-6cae09c3ef4e` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 0.6 h | [rapport](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/rapport.md) · [digest](../sessions/bd6322ed-6792-4188-9d4c-6cae09c3ef4e/digest.md) |
 | `bf49d867-4b23-49e1-b214-9a2fd542fb1b` | Tu travailles dans le dépôt | 2026-11-06 11:17 | 1.8 h | [rapport](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/rapport.md) · [digest](../sessions/bf49d867-4b23-49e1-b214-9a2fd542fb1b/digest.md) |
@@ -105,6 +105,7 @@
 | 20:52 | `4e6de0ee` | P0-3 — LES RAPPORTS FINAUX DE LA PARTITION (MESURES ÉPINGLÉES À fa1b0c6e) ; README DANS LE BUDGET |
 | 20:58 | `6a1148c2` | B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183 |
 | 21:08 | `d31aa9a2` | PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR |
+| 21:14 | `bb67dd59` | ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1 |
 
 ## Le récit de la journée (écrit à la main)
 

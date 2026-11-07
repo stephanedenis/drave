@@ -9,10 +9,10 @@
 | Début | 2026-11-06 21:13 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 12 |
-| Appels d'outils | 16 |
+| Messages | 18 |
+| Appels d'outils | 28 |
 | Fichiers touchés | 0 |
-| Commandes | 15 |
+| Commandes | 27 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7). Mission : **état du chantier S** (le  … [1641 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Vérifie branche, statut et liste reports
 - bash — Liste tools/structures et compte les JSONL
@@ -41,11 +41,11 @@
 - bash — Lecture fiche paragraphes
 - bash — Cherche occurrences des 71 langues
 - bash — Cherche corpus UDHR
-- … et 2 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Recherche des 71 langues UDHR et du prototype L
+⏵ Cartographie des 19 verdicts et logique de validation de la page
 
 ## 3. Travail accompli
 
@@ -71,6 +71,18 @@
 - **T1** Cherche occurrences des 71 langues
 - **T1** Cherche corpus UDHR
 - **T1** Liste tools/jeux et lexique multilingue
+- **T1** Lecture extracteur UDHR et données associées
+- **T1** Inspecte lexique multilingue et compte langues
+- **T1** Compte statuts et clés des verdicts
+- **T1** Inspecte la banque de paragraphes
+- **T1** Détaille les 19 verdicts paragraphes
+- **T1** Cherche la logique de validation dans serveur.py
+- **T1** Examine la page paragraphes
+- **T1** Examine le JS de la page
+- **T1** Compte les candidats par paragraphe
+- **T1** Lis la structure HTML et le début du serveur
+- **T1** Lis la construction des candidats de paragraphes
+- **T1** Lis tout le JS paragraphes
 
 ## 4. Mesures et résultats marquants
 

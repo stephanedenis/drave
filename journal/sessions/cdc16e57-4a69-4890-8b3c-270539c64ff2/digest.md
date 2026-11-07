@@ -484,3 +484,190 @@ Le corpus français (`data/corpus_fr_litteratu
 … [2496 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Recherche des 71 langues UDHR et du prototype L
+
+- **bash** `{"command": "grep -rn \"71 langues\\|71 langue\\|71 lang\\b\" docs/ tools/ reports/ journal/ 2>/dev/null | head -30", "description": "Cherche occurrences des 71 langues"}`
+
+  ```
+docs/archive/etat-emulation-professeur.md:144:- chaque canal n'est actif qu'en moyenne dans **5,71 langues sur 6**
+docs/archive/roadmap-detail-2026-10-29.md:242:### B7 — Les langues : le même sens dans 71 langues
+docs/archive/roadmap-detail-2026-10-29.md:244:La couche de B5 était FR/EN. B7 ajoute un **lexique multilingue** (35 concepts, **71 langues**, **1 433
+docs/archive/roadmap-detail-2026-10-29.md:251:| B7.1 | **Le lexique multilingue** (pièces, rangs, enseignes, noms de jeux, notions de maîtres) | ✅ mesuré | **71 langues**, **35 concepts**, **1 433 couples** ; **32 langues fortes** (pièces N/P + un rang et une enseigne) ; source Wikidata, licences CC0 |
+docs/archive/roadmap-detail-2026-10-29.md:253:| B7.3 | **Les contrôles** : permutation des libellés, notation, détection | ✅ mesuré | permutation **12/275** items forts restants (**4,4 %**) ; notation **5 112/5 112** (72 items × 71 langues) ; détection des jeux **315/315** |
+docs/archive/roadmap-detail-2026-10-29.md:337:| B11.4 | **Données synthétiques / distillation du codec** | ✅ **mesuré** | 10 556 surfaces synthétiques, 71 langues, **aucune surface réelle** à l'entraînement ; test réel **45,1 %** ; **invariance 7,4 %** |
+do
+… [4620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rln \"udhr\\|UDHR\\|universal declaration\" docs/ tools/ reports/ data/ 2>/dev/null | head -30", "description": "Cherche corpus UDHR"}`
+
+  ```
+docs/archive/campagne-benefices.md
+docs/archive/etat-cerveau.md
+docs/archive/etat-emulation-professeur.md
+docs/archive/note-cancellation-evenementielle.md
+docs/archive/note-cout-professeur.md
+docs/archive/note-ingestion-corpus.md
+docs/archive/note-regle-contrastive.md
+docs/archive/roadmap-detail-2026-10-29.md
+docs/archive/roadmap-native-2026-10-29.md
+docs/schemas/protocole-semantique.svg
+docs/methode/rangement.md
+docs/methode/resultats.md
+docs/pilotage/backlog/B10.2bis-decodeur-attention-croisee.md
+docs/pilotage/roadmap.md
+docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+docs/theorie/glossaire/entrees/unite.md
+docs/theorie/glossaire/index.json
+docs/theorie/synthese/06-comment-savoir.md
+docs/theorie/synthese/07-modeles-alternatifs-entree-sortie.md
+docs/theorie/protocole-semantique.md
+docs/theorie/genealogie-des-langues.md
+docs/theorie/architecture-native.md
+docs/theorie/pre-traitement-linguistique.md
+docs/implantation/llm-externe.md
+docs/implantation/bloc-linguistique.md
+docs/produit/README.md
+tools/extrait_udhr.py
+tools/extrait_wikipedia.py
+tools/leviers_pont.py
+tools/corpus_neuf.py
+[still running after 60000ms; moved to background job bash-3904]
+The command ke
+… [127 caractères tronqués]
+  ```
+
+- **job_kill** `{"job_id": "bash-3904", "reason": "Recherche trop large dans data/"}`
+
+  ```
+requested cancellation of job bash-3904
+  ```
+
+- **bash** `{"command": "ls tools/jeux/ | head -40; echo \"===\"; grep -n \"71\\|langues\" tools/jeux/lexique_multilingue.py | head -20", "description": "Liste tools/jeux et lexique multilingue"}`
+
+  ```
+codecs
+construire_lexique_multilingue.py
+corpus_multilingue.py
+corpus.py
+grammaire.py
+hybride.py
+__init__.py
+lexique_multilingue.json
+lexique_multilingue.py
+lexique.py
+maitres.py
+mesure_langues.py
+mesure_maitres.py
+mesure.py
+pensee.py
+__pycache__
+regles
+rsn.py
+tests
+===
+2:"""lexique_multilingue.py — les libellés des jeux, en 53 langues.
+13:La recherche est **multi-formes** : n-grammes de 1 à 4 unités pour les langues à
+88:        self.langues: list[str] = list(self.donnees["langues"])
+159:        On ne parcourt pas les huit domaines : un index unique (forme → langues)
+173:        for forme, langues in self._detection.items():
+176:                for langue in langues:
+197:    def langues_du_concept(self, concept: str) -> list[str]:
+223:        """La matrice langues × concepts, et les langues « fortes »."""
+224:        par_langue = {l: 0 for l in self.langues}
+235:        for l in self.langues:
+242:            "langues": len(self.langues),
+247:            "moyenne_concepts_par_langue": round(sum(par_langue.values()) / len(self.langues), 2),
+248:            "langues_fortes": fortes,
+249:            "n_langues_fortes": len(fortes),
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/extrait_udhr.py; echo \"===\"; ls data/ | grep -iE \"udhr|langue|multiling\" | head", "description": "Lecture extracteur UDHR et données associées"}`
+
+  ```
+#!/usr/bin/env python3
+"""extrait_udhr.py — l'UDHR en unités alignées, prêtes à passer dans le moteur.
+
+L'UDHR est le premier corpus parce que l'alignement y est **par construction** :
+les 30 articles existent dans les 456 langues, et c'est le même énoncé. Aucun
+aligneur, donc aucun décalage possible — le contraire d'un corpus apparié à la
+main.
+
+Sortie : un JSON par unité `(article, paragraphe)`, et un index. Chaque unité
+porte le texte de CHAQUE langue, pour qu'on puisse la faire passer dans les
+couches d'entrée langue par langue et comparer les activations.
+
+Usage :
+    extrait_udhr.py <dossier_udhr_xml> <sortie.jsonl> [--min-langues 50]
+"""
+import glob
+import json
+import os
+import re
+import sys
+import unicodedata
+import xml.etree.ElementTree as ET
+
+NS = "{http://www.unhchr.ch/udhr}"
+
+
+def texte(el):
+    """Le texte d'un élément, espaces normalisés — deux langues n'ont pas les
+    mêmes habitudes d'espacement, et ce n'est pas ce qu'on mesure."""
+    t = "".join(el.itertext())
+    t = unicodedata.normalize("NFC", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def lire(chemin):
+    """Rend (code, nom, {cle: texte}) pour une langue. La clé d'un article est
+    `a<n>` — c'est l'unit
+… [1593 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\np='tools/jeux/lexique_multilingue.json'\nd=json.load(open(p))\nprint(type(d), list(d.keys())[:10])\nfor k,v in d.items():\n    if isinstance(v,list):\n        print(k, len(v), v[:5])\n    elif isinstance(v,dict):\n        print(k, 'dict', len(v), list(v)[ … [120 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'source', 'date', 'langues', 'variantes', 'concepts', 'manuel']
+version 1
+source 'Wikidata (CC0), wbgetentities props=labels ; pageprops Wikipédia pour les QID ; libellés normalisés (NFKC, casse pliée,
+date '2026-10-26'
+langues 71 ['ar', 'bn', 'ca', 'cs', 'da']
+variantes dict 3 ['zh', 'pt', 'sr']
+concepts dict 35 ['jeu.morpion', 'jeu.echecs', 'jeu.dames', 'jeu.go', 'jeu.cartes']
+manuel 1 ['go.passe']
+  ```
+
+### 🤖 Assistant
+
+⏵ Comptage et lecture des deux fichiers de verdicts
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, collections\nfor p in ['tools/structures/donnees/validations.jsonl','tools/structures/donnees/paragraphes-validations.jsonl']:\n    rows=[]\n    with open(p, encoding='utf-8') as f:\n        for i,l in enumerate(f,1):\n            l=l.strip()\n            … [673 caractères tronqués]`
+
+  ```
+==================== tools/structures/donnees/validations.jsonl 150
+cles union: ['auteur', 'candidat_id', 'contexte', 'horodatage', 'niveau', 'note', 'phrase_id', 'statut']
+  auteur {'humain': 150}
+  candidat_id {'p003-c2': 3, 'p002-c2': 2, 'p001-c2': 1, 'p001-c1': 1, 'p002-c1': 1, 'p003-c1': 1, 'p004-c1': 1, 'p004-c2': 1, 'p005-c2': 1, 'p005-c1': 1, 'p006-c1': 1, 'p006-c2': 1}
+  contexte {'': 143, "Le détective surveille la maison d'en face. Il a vu l'homme avec le télescope qu'il venait d'acheter — un instrument neuf, encore dans sa boîte.": 3, 'La voisine est partie en vacances. Son chat, lui, est resté sur le toit : il y dort toute la journée, au soleil.': 2, 'Dans ce dessin animé, le canard parle et réclame son dîner : il est prêt à manger, et il le fait savoir.': 2}
+  horodatage {'2026-11-03T10:31:17': 1, '2026-11-03T10:31:18': 1, '2026-11-03T10:31:42': 1, '2026-11-03T10:31:46': 1, '2026-11-03T10:32:17': 1, '2026-11-03T10:32:35': 1, '2026-11-03T10:32:37': 1, '2026-11-03T10:32:46': 1, '2026-11-03T10:32:48': 1, '2026-11-03T10:33:14': 1, '2026-11-03T10:33:15': 1, '2026-11-03T10:33:40': 1}
+  niveau {'0': 143, '2': 5, '3': 2}
+  note {'': 149, "il est préférable de dire l'homme au 
+… [3067 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\np='tools/structures/donnees/paragraphes.json'\nd=json.load(open(p))\nprint(type(d), list(d.keys())[:10] if isinstance(d,dict) else len(d))\nif isinstance(d,dict):\n    for k,v in d.items():\n        print(k, type(v).__name__, len(v) if hasattr(v,'__len__' … [264 caractères tronqués]`
+
+  ```
+<class 'dict'> ['version', 'note', 'source', 'paragraphes', 'note_en', 'source_en_url']
+version int 1
+note str 254
+source str 30
+paragraphes list 9
+  ex: {"id": "a001", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice vivement.", "cible": "Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois elle se grondait si fort que les larmes lui en venaient aux yeux.", "antecedent": "Alice", "contexte_en": "\"Come, there's no use in crying like that!\" said Alice to herself, rather sharply; \"I advise you to leave off this minute!\"", "source_en": "She generally gave herself very good advi
+note_en str 222
+source_en_url str 43
+  ```
+

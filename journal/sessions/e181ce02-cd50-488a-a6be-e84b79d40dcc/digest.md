@@ -55807,3 +55807,16 @@ grep: write error: Broken pipe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **frontières de phrase** (0/40) ; **partition étiquetée** ; compositions sans perte ; **`drave` v0** (10 tests, porte à  … [903 caractères tronqués]`
+
+  ```
+· T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+ create mode 100644 journal/sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md
+COMMIT OK 1
+bb67dd59 ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1
+   d31aa9a2..bb67dd59  s/v7 -> s/v7
+   d31aa9a2..bb67dd59  master -> master
+ven 06 nov 2026 21:16:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; frontières (0/40) ; partition étiquetée ; **`drave` v0** (10 tests, porte 9 contrôles) ; `m\",\n            \" ; frontiè … [692 caractères tronqués]`

@@ -423,3 +423,114 @@ drwxr-xr-x. 1 stephane stephane     8  1 nov 18:44 dr
 … [992 caractères tronqués]
   ```
 
+- **bash** `{"command": "date; echo '---'; find . -path ./.git -prune -o -name '*.pt' -print 2>/dev/null | wc -l; echo '--- top 25 recents, tous les .pt du dépôt'; find . -path ./.git -prune -o -name '*.pt' -printf '%T@ %s %p\\n' -print 2>/dev/null | grep -v '^\\./' | sort -n | tail -25 | awk '{printf \"%s %10. … [127 caractères tronqués]`
+
+  ```
+ven 06 nov 2026 21:15:00 EST
+---
+124
+--- top 25 recents, tous les .pt du dépôt
+2026-11-02 23:51     130.89 MB ./work/n2ac/mix2048-3.75k.pt
+2026-11-03 01:33     130.89 MB ./work/n2ac/rope2048-12.5k.pt
+2026-11-03 02:01     130.89 MB ./work/n2ac/propre512-8k.pt
+2026-11-03 02:33     130.89 MB ./work/n2ac/propre128-32k.pt
+2026-11-03 02:45     130.89 MB ./work/n2ac/mix1024-30k.pt
+2026-11-03 03:26      82.62 MB ./work/n2ac/cap-2165m-512.pt
+2026-11-03 03:33      45.12 MB ./work/n2ac/cap-1147m-512.pt
+2026-11-03 03:49     130.89 MB ./work/n2ac/mix512-zero-15k.pt
+2026-11-03 03:55      82.62 MB ./work/n2ac/cap-2165m-128.pt
+2026-11-03 04:04      45.12 MB ./work/n2ac/cap-1147m-128.pt
+2026-11-03 13:49      45.12 MB ./work/n2ac/propre-1147m-512z.pt
+2026-11-03 14:10      82.62 MB ./work/n2ac/propre-2165m-512z.pt
+2026-11-03 14:35     130.89 MB ./work/n2ac/propre-3430m-512z.pt
+2026-11-03 15:39      45.12 MB ./work/n2ac/kd-1147m-512-a0.5.pt
+2026-11-03 16:15      45.12 MB ./work/n2ac/kd-1147m-512-a0.9.pt
+2026-11-03 17:22     130.89 MB ./work/n2ac/mix1024-60k.pt
+2026-11-03 18:13     130.89 MB ./work/n2ac/kd-mix512-15k.pt
+2026-11-04 11:01      45.12 MB ./work/n2ac/kdp-1147m-a0.pt
+2026-11-04 12:18      45
+… [403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la work/n2ac/ | head -80", "description": "Lister work/n2ac"}`
+
+  ```
+total 8032656
+drwxr-xr-x. 1 stephane stephane     10412  5 nov 10:19 .
+drwxr-xr-x. 1 stephane stephane      1490  6 nov 01:28 ..
+-rw-r--r--. 1 stephane stephane 137224476  2 nov 17:31 absolu-pos1152.drvm
+-rw-r--r--. 1 stephane stephane     21807  2 nov 17:31 absolu-pos1152.log
+-rw-r--r--. 1 stephane stephane 137248740  2 nov 17:30 absolu-pos1152.pt
+-rw-r--r--. 1 stephane stephane       561  2 nov 17:31 absolu-pos1152.pt.json
+-rw-------. 1 stephane stephane      2763  2 nov 21:05 agrege_fenetre.py
+-rw-r--r--. 1 stephane stephane      1680  2 nov 23:31 agrege_production.py
+-rw-------. 1 stephane stephane      3151  2 nov 18:50 agrege_r11.py
+-rw-r--r--. 1 stephane stephane  47283932  3 nov 04:04 cap-1147m-128.drvm
+-rw-r--r--. 1 stephane stephane     35105  3 nov 04:04 cap-1147m-128.log
+-rw-r--r--. 1 stephane stephane  47308063  3 nov 04:04 cap-1147m-128.pt
+-rw-r--r--. 1 stephane stephane       505  3 nov 04:04 cap-1147m-128.pt.json
+-rw-r--r--. 1 stephane stephane  47283932  3 nov 03:33 cap-1147m-512.drvm
+-rw-r--r--. 1 stephane stephane      9444  3 nov 03:33 cap-1147m-512.log
+-rw-r--r--. 1 stephane stephane  47308063  3 nov 03:33 cap-1147m-512.pt
+-rw-r--r--. 1 stephane stephane       
+… [4700 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la data/corpus_propre/ 2>/dev/null; echo '---'; wc -c data/corpus_propre/*.txt 2>/dev/null; echo '--- corpus-fr-litterature etc'; ls -la data/corpus_fr_litterature.txt data/corpus_litt_propre/val.txt data/corpus_en.txt data/wikitext2_test.txt 2>&1", "description": "Vérifier corpus p … [25 caractères tronqués]`
+
+  ```
+total 7364
+drwxr-xr-x. 1 stephane stephane     122  3 nov 02:03 .
+drwxr-xr-x. 1 stephane stephane    2664  2 nov 18:33 ..
+-rw-r--r--. 1 stephane stephane  320314 31 oct 22:21 dev.txt
+-rw-r--r--. 1 stephane stephane  180224  3 nov 02:03 test.canal
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 test.txt
+-rw-r--r--. 1 stephane stephane 3244858  2 nov 23:07 train.canal
+-rw-r--r--. 1 stephane stephane 3244858 31 oct 22:20 train.txt
+-rw-r--r--. 1 stephane stephane  180224  2 nov 23:07 val.canal
+-rw-r--r--. 1 stephane stephane  180224 31 oct 22:20 val.txt
+---
+ 320314 data/corpus_propre/dev.txt
+ 180224 data/corpus_propre/test.txt
+3244858 data/corpus_propre/train.txt
+ 180224 data/corpus_propre/val.txt
+3925620 total
+--- corpus-fr-litterature etc
+-rw-r--r--. 1 stephane stephane 100276153  8 oct 09:42 data/corpus_en.txt
+-rw-r--r--. 1 stephane stephane  17031747 17 oct 18:26 data/corpus_fr_litterature.txt
+-rw-r--r--. 1 stephane stephane    843776 31 oct 22:24 data/corpus_litt_propre/val.txt
+-rw-r--r--. 1 stephane stephane    359041 25 sep 18:02 data/wikitext2_test.txt
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=name,memory.total,memory.used,utilization.gpu --format=csv 2>&1 | head; echo '---'; ls -la ~/gpu-env/bin/python 2>&1; echo '---'; ~/gpu-env/bin/python -c 'import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda … [99 caractères tronqués]`
+
+  ```
+name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]
+Quadro RTX 5000, 16384 MiB, 154 MiB, 2 %
+Quadro RTX 5000, 16384 MiB, 4 MiB, 0 %
+---
+lrwxrwxrwx. 1 stephane stephane 7 31 jui 08:53 /home/stephane/gpu-env/bin/python -> python3
+---
+2.11.0+cu130 True Quadro RTX 5000
+  ```
+
+- **bash** `{"command": "echo \"JOURNAUX=${JOURNAUX:-<non défini>}\"; ls -la \"${JOURNAUX:-/tmp/nope}\" 2>&1 | head; echo '--- registre'; find . -maxdepth 3 -name 'registre.txt' 2>/dev/null | head; echo '--- toutes-les-portes'; ls -la tools/toutes-les-portes.sh 2>&1", "description": "Localiser le registre des p … [7 caractères tronqués]`
+
+  ```
+JOURNAUX=<non défini>
+ls: cannot access '/tmp/nope': No such file or directory
+--- registre
+./work/portes-n3-cloture/registre.txt
+./work/portes-1106-01h03/registre.txt
+./work/portes-1106-01h28/registre.txt
+--- toutes-les-portes
+-rwxr-xr-x. 1 stephane stephane 4422  2 nov 15:55 tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "grep -rn \"eval_n2_propre\\|porte-n2\\|porte propre\" --include='*.sh' --include='*.md' --include='*.txt' --include='*.py' . 2>/dev/null | grep -v '^\\./\\.git' | head -50", "description": "Chercher les usages de eval_n2_propre et porte-n2"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-3915]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+

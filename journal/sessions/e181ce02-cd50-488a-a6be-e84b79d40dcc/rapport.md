@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 148.6 h |
 | Tours | 184 |
-| Messages | 3285 |
-| Appels d'outils | 2910 |
+| Messages | 3286 |
+| Appels d'outils | 2911 |
 | Fichiers touchés | 25 |
-| Commandes | 2406 |
+| Commandes | 2407 |
 | Sous-agents | 38 |
-| Commits | 373 |
+| Commits | 374 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -9919,7 +9919,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 
 ### Tour 184 — oui, continue en mode autonome jusqu'à 9h demain
 
-*156 appels d'outils.* Actions notables :
+*157 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état de départ
@@ -9935,7 +9935,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - bash — Committer le schéma publié et pousser
 - bash — Valider le gold dans la porte
 - bash — Lister les 17 spans inatteignables
-- … et 142 autres
+- … et 143 autres
 
 **Synthèse produite :**
 
@@ -10056,7 +10056,7 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2366 autres
+- … et 2367 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10577,4 +10577,5 @@ Dites-moi si j'enchaîne sur le schéma publié et les frontières de phrase.
 - B13 — L'ÉLISION « que » → « qu » DANS LE TEST DES MARQUEURS (AUCUN EFFET MESURÉ, ROBUSTESSE) ; 183/183" -- tools/bloc_linguistique.py 2>&1 | tail -1   if git lo
 - PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR" -- tools/drave.py tools/tests/test_produit.py docs/produit/
 - ÉTAT ET JOURNAL — LA NUIT DES P0 : POS 85,00 %, ATTACHEMENT 235/236, FRONTIÈRES 0/40, PARTITION ÉTIQUETÉE, CONTRAT V1" -- docs/pilotage/en-cours.md journal/2026
+- ÉTAT — T0 DANS LE BUDGET (NUIT DES P0)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET (NUIT"; then echo
 
