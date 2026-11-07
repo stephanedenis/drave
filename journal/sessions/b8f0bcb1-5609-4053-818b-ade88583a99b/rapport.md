@@ -7,12 +7,12 @@
 | Identifiant | `b8f0bcb1-5609-4053-818b-ade88583a99b` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.3 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 35 |
-| Appels d'outils | 37 |
-| Fichiers touchés | 0 |
-| Commandes | 29 |
+| Messages | 41 |
+| Appels d'outils | 43 |
+| Fichiers touchés | 1 |
+| Commandes | 34 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **les 2 spans resta … [2125 caractères tronqués]
 
-*37 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Check branch and workspace state
 - bash — List reports and linguistic test tools
@@ -41,11 +41,11 @@
 - bash — Inspect prior measurement JSON
 - bash — Measure baseline F1 on all/dev/test
 - bash — Measure baseline F1 on all/dev/test (typo fix)
-- … et 15 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
-⏵ Classification des 180 GV manquants
+⏵ Banc de mesure : variantes patchées en /tmp et métriques dev/test
 
 ## 3. Travail accompli
 
@@ -53,6 +53,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/tmp/seg/measure.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -85,6 +86,11 @@
 - **T1** List RACINE uses
 - **T1** Classify 180 GV false negatives
 - **T1** Full FN classification with side split
+- **T1** Compare g005 chunker/S/out detail
+- **T1** Gold boundary conventions for GV/SUB/REL
+- **T1** Inspect gold ADV boundary exceptions
+- **T1** Check dev/test membership of key ids
+- **T1** Check r004 POS and chunker output
 
 ## 5. Erreurs rencontrées
 

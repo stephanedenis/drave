@@ -58851,3 +58851,81 @@ README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-07/README.md'); t=p.read_text()\nnote = \"\"\"\n**La nuit du 07/11 (00 h 00 → 01 h 10).** Le bloc finit la nuit à **POS 86,25 %**, **F1 0,7535**\n(linéaire **0,8104**) … [1742 caractères tronqués]`
+
+  ```
+note ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 journal/2026-11-07/distribue.md
+COMMIT OK 1
+76d12a74 JOURNAL — LA NUIT DU 07/11 : LA CONVENTION DU SUJET (+10,2 DE F1), r264, --fichier/--jsonl, TROIS RÈGLES REJETÉES
+   37705c60..76d12a74  s/v7 -> s/v7
+   37705c60..76d12a74  master -> master
+sam 07 nov 2026 01:13:20 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E \"segmentation-restante|re-audit\"; git log -1 --format='%h %s' | cut -c1-70", "description": "Attendre la vague", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4507]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4507", "timeout_ms": 300000, "wait": true}`
+
+  ```
+sam 07 nov 2026 01:23:36 EST
+76d12a74 JOURNAL — LA NUIT DU 07/11 : LA CONVENTION DU SUJET (+10,2 DE
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4507 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls reports/ | grep -E "segmentation-restante|re-audit"; git log -1 --format='%h %s' | cut -c1-70) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -8; python3 tools/sessions.py --check 2>&1 | tail -3; date", "description": "Voir l'état des autres sessions"}`
+
+  ```
+MM journal/2026-11-05/README.md
+D  journal/2026-11-05/attention.md
+MM journal/2026-11-05/distribue.md
+MM journal/2026-11-05/docs.md
+MM journal/2026-11-05/memoire.md
+MM journal/2026-11-05/mesures.md
+MM journal/2026-11-05/modele.md
+MM journal/2026-11-05/moteur.md
+  ⚠ mandat périmé (2849 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ⚠ mandat périmé (884 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+sam 07 nov 2026 01:24:05 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/ 2>/dev/null; cat journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md 2>/dev/null | head -20", "description": "Voir mon plan de session"}`
+
+  ```
+digest.md
+plan.md
+rapport.md
+session.v4.jsonl.zstd
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique ; bloc linguistique
+- **Périmètre** : Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`,
+  `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
+  `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
+  `reports/bloc-*`, `journal/sess
+… [272 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\\n\", \"- **Heartbeat** : 2026-11-07 01:25 EST\\n\", t,  … [1678 caractères tronqués]`

@@ -1224,3 +1224,144 @@ FN GV total 180
     [('r035', 'en', 'is out'), ('r252', 'fr', 'écrit'), ('r277', 'en', 'writes'), ('s029', 'fr', 'ne commence pas'), ('s094', 'fr', 'ne prépare pas'), ('s095', 'fr', 'ne écoute pas')]
   ```
 
+### 🤖 Assistant
+
+⏵ Comparaison S/chunker sur le cas français jumeau (g005)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nh=bl.Heuristique()\nfor txt in [\"Elle a dit qu'elle viendrait hier.\", \"She said that she wou … [745 caractères tronqués]`
+
+  ```
+=== Elle a dit qu'elle viendrait hier.
+mots [(0, 4, 'Elle', 'mot'), (5, 6, 'a', 'mot'), (7, 10, 'dit', 'mot'), (11, 18, "qu'elle", 'mot'), (19, 28, 'viendrait', 'mot'), (29, 33, 'hier', 'mot'), (33, 34, '.', 'ponctuation')]
+POS [('Elle', 'PRON'), ('a', 'PREP'), ('dit', 'VERB'), ("qu'elle", 'PRON'), ('viendrait', 'VERB'), ('hier', 'ADV'), ('.', 'PONCT')]
+simples [('GN', 0, 4, 'Elle'), ('GV', 5, 10, 'a dit'), ('SUB', 11, 33, "qu'elle viendrait hier")]
+S [('GV', 0, 10, 'Elle a dit'), ('SUB', 11, 28, "qu'elle viendrait"), ('GP', 29, 33, 'hier')]
+out [('GN', 0, 4, 'Elle', 0.3, True), ('GV', 0, 10, 'Elle a dit', 0.55, None), ('GV', 5, 10, 'a dit', 0.3, True), ('SUB', 11, 28, "qu'elle viendrait", 0.55, None), ('SUB', 11, 33, "qu'elle viendrait hier", 0.3, True), ('GP', 29, 33, 'hier', 0.55, None)]
+=== She said that she would come yesterday.
+mots [(0, 3, 'She', 'mot'), (4, 8, 'said', 'mot'), (9, 13, 'that', 'mot'), (14, 17, 'she', 'mot'), (18, 23, 'would', 'mot'), (24, 28, 'come', 'mot'), (29, 38, 'yesterday', 'mot'), (38, 39, '.', 'ponctuation')]
+POS [('She', 'PRON'), ('said', 'VERB'), ('that', 'CONJ'), ('she', 'PRON'), ('would', 'AUX'), ('come', 'VERB'), ('yesterday', 'ADV'), ('.', 'PONC
+… [298 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse de la convention du gold sur les frontières GV/SUB
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nph=eg.charger(); h=bl.Heuristique()\nlastpos=collection … [984 caractères tronqués]`
+
+  ```
+--- dernier POS du segment gold ---
+('GV', 'ADJ') 27
+('GV', 'ADV') 39
+('GV', 'AUX') 47
+('GV', 'NOUN') 8
+('GV', 'PRON') 4
+('GV', 'VERB') 587
+('REL', 'ADJ') 2
+('REL', 'ADV') 2
+('REL', 'NOUN') 2
+('REL', 'PREP') 1
+('REL', 'VERB') 67
+('SUB', 'ADJ') 11
+('SUB', 'ADV') 6
+('SUB', 'NOUN') 2
+('SUB', 'VERB') 51
+--- premier POS après le segment ---
+('GV', 'ADJ') 35
+('GV', 'ADV') 26
+('GV', 'CONJ') 49
+('GV', 'DET') 112
+('GV', 'NOUN') 21
+('GV', 'PONCT') 7
+('GV', 'PREP') 98
+('GV', 'PRON') 77
+('REL', 'AUX') 53
+('REL', 'VERB') 21
+('SUB', 'ADV') 2
+('SUB', 'PONCT') 1
+('SUB', 'PRON') 24
+('SUB', 'VERB') 2
+--- segments gold contenant un ADV --- {'GV': 45, 'SUB': 8, 'REL': 2}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport evaluer_gold as eg\nph=eg.charger()\nprint('=== GV suivis d un ADV (26) ===')\nfor p in ph:\n    toks=p['mo … [947 caractères tronqués]`
+
+  ```
+=== GV suivis d un ADV (26) ===
+ g010  GV='Viens' | après='ici' | Viens ici !
+ r010  GV='viens' | après='demain' | Tu viens demain ?
+ r019  GV='souffle' | après='fort' | Le vent souffle fort.
+ r030  GV='come' | après='tomorrow' | You come tomorrow?
+ r039  GV='blows' | après='hard' | The wind blows hard.
+ r049  GV='dort' | après='profondément' | Le bébé dort profondément.
+ r051  GV='roule' | après='vite' | La voiture roule vite.
+ r056  GV='arrivent' | après='demain' | Ils arrivent demain matin.
+ r069  GV='sleeps' | après='deeply' | The baby sleeps deeply.
+ r071  GV='drives' | après='fast' | The car drives fast.
+ r076  GV='arrive' | après='tomorrow' | They arrive tomorrow morning.
+ r106  GV='laugh' | après='loudly' | The children laugh loudly.
+ r235  GV='est' | après='loin' | L'endroit où nous allons est loin.
+ r250  GV='is' | après='far' | The place where we go is far.
+ r269  GV='est' | après='là' | La personne dont je parle est là.
+ r293  GV='is' | après='here' | The person whom I mention is here.
+ r310  GV='dois partir' | après='maintenant' | Je dois partir maintenant.
+ r314  GV='come' | après='tomorrow' | Do you come tomorrow?
+ r320  GV='must leave' | après='now' | I must leave n
+… [1346 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise en place du banc de simulation (copie /tmp, patchs textuels)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport zlib\nfor i in ('r035','g017','g005','r264','r288','r010','r030','r049','r069','r071','r076','r019','r023','r039','r065','r066','r106'):\n    print(i, 'test' if zlib.crc32(i.encode())%3==0 else 'dev')\nEOF", … [55 caractères tronqués]`
+
+  ```
+r035 dev
+g017 dev
+g005 dev
+r264 test
+r288 test
+r010 dev
+r030 test
+r049 dev
+r069 dev
+r071 test
+r076 dev
+r019 dev
+r023 test
+r039 dev
+r065 dev
+r066 dev
+r106 dev
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du cas « GN avale le verbe » (r004)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl\nimport evaluer_gold as eg\nh=bl.Heuristique()\nfor p in eg.charger():\n    if p['id'] in ('r004 … [565 caractères tronqués]`
+
+  ```
+=== r004 Le soleil brille.
+ POS [('Le', 'DET'), ('soleil', 'NOUN'), ('brille', 'NOUN'), ('.', 'PONCT')]
+ simples [('GN', 0, 16, 'Le soleil brille')]
+ gold [('GN', 'Le soleil'), ('GV', 'brille')]
+ out [('GN', 'Le soleil brille')]
+=== r046 Le chat boit du lait.
+ POS [('Le', 'DET'), ('chat', 'NOUN'), ('boit', 'NOUN'), ('du', 'PREP'), ('lait', 'NOUN'), ('.', 'PONCT')]
+ simples [('GN', 0, 12, 'Le chat boit'), ('GP', 13, 20, 'du lait')]
+ gold [('GN', 'Le chat'), ('GV', 'boit'), ('GN', 'du lait')]
+ out [('GN', 'Le chat boit'), ('GP', 'du lait')]
+=== r047 Les fleurs poussent dans le jardin.
+ POS [('Les', 'DET'), ('fleurs', 'NOUN'), ('poussent', 'NOUN'), ('dans', 'PREP'), ('le', 'DET'), ('jardin', 'NOUN'), ('.', 'PONCT')]
+ simples [('GN', 0, 19, 'Les fleurs poussent'), ('GP', 20, 34, 'dans le jardin')]
+ gold [('GN', 'Les fleurs'), ('GV', 'poussent'), ('GP', 'dans le jardin')]
+ out [('GN', 'Les fleurs poussent'), ('GP', 'dans le jardin')]
+=== r081 Le facteur apporte une lettre.
+ POS [('Le', 'DET'), ('facteur', 'NOUN'), ('apporte', 'NOUN'), ('une', 'DET'), ('lettre', 'NOUN'), ('.', 'PONCT')]
+ simples [('GN', 0, 29, 'Le facteur apporte une lettre')]
+ gold [('GN', 'Le facteur'), ('GV', 'apporte
+… [72 caractères tronqués]
+  ```
+

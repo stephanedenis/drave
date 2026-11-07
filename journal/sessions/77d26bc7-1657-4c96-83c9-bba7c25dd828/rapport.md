@@ -7,12 +7,12 @@
 | Identifiant | `77d26bc7-1657-4c96-83c9-bba7c25dd828` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 00:49 |
-| Durée | 0.4 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 35 |
-| Appels d'outils | 53 |
-| Fichiers touchés | 1 |
-| Commandes | 50 |
+| Messages | 43 |
+| Appels d'outils | 62 |
+| Fichiers touchés | 3 |
+| Commandes | 57 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **re-auditer le pro … [2091 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*62 appels d'outils.* Actions notables :
 
 - bash — Vérifier branche et état du dépôt
 - bash — Vérifier existence des fichiers clés
@@ -41,7 +41,7 @@
 - bash — Lire le découpage de phrases actuel
 - bash — Lire le dispositif des 40 frontières
 - bash — Tester la CLI actuelle
-- … et 38 autres
+- … et 47 autres
 
 **Synthèse produite :**
 
@@ -54,6 +54,8 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/reaudit/explorer.py` | 1 | 0 |
+| `/tmp/reaudit/commun.py` | 1 | 0 |
+| `/tmp/reaudit/run50.py` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +99,7 @@
 - **T1** Vérifier disponibilité et lancer le validateur
 - **T1** Préciser F1 et vérifier les hash HEAD
 - **T1** Comprendre les étiquettes document
-- … et 10 autres
+- … et 17 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -142,4 +144,9 @@
 - **T1** `**graphème** : 49/50 textes à 100 %, x46 à **95,14 %** (7 newlines, catégorie `Cc`, non couvertes).`
 - **T1** `**Mesuré au 06/11** : POS **85,00 %**, syntagmes F1 **0,6482**, attachement **235/236**`
 - **T1** `> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,`
+- **T1** `1/5 f01 rc=0 labels=20 t=149ms chev=0 filtrer=0 api=2.56ms`
+- **T1** `2/5 f02 rc=0 labels=60 t=163ms chev=2 filtrer=0 api=1.35ms`
+- **T1** `3/5 f03 rc=0 labels=41 t=151ms chev=3 filtrer=0 api=1.76ms`
+- **T1** `4/5 f04 rc=0 labels=40 t=147ms chev=0 filtrer=0 api=2.16ms`
+- **T1** `5/5 f05 rc=0 labels=31 t=154ms chev=1 filtrer=0 api=2.54ms`
 

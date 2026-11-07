@@ -1544,3 +1544,96 @@ f06 6 [('GN', 0, 2, 'Je'), ('GV', 0, 15, 'Je ne pense pas'), ('GV', 3, 15, 'ne p
 … [4828 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys,re\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nfor t in [\"Visitez https://example.com/docs?page=2 pour la documentation.\",\"Email: alice@example.org, phone: +33 6 12 34 56 78.\",\"Un f … [328 caractères tronqués]`
+
+  ```
+'Visitez https://example.com/docs?page=2 pour la documentation.'
+ mots: [(0, 7, 'Visitez', 'mot'), (8, 13, 'https', 'mot'), (13, 14, ':', 'ponctuation'), (14, 15, '/', 'ponctuation'), (15, 16, '/', 'ponctuation'), (16, 23, 'example', 'mot'), (23, 24, '.', 'ponctuation'), (24, 27, 'com', 'mot'), (27, 28, '/', 'ponctuation'), (28, 32, 'docs', 'mot'), (32, 33, '?', 'ponctuation'), (33, 37, 'page', 'mot'), (37, 38, '=', 'ponctuation'), (38, 39, '2', 'nombre'), (40, 44, 'pour', 'mot'), (45, 47, 'la', 'mot'), (48, 61, 'documentation', 'mot'), (61, 62, '.', 'ponctuation')]
+ zones: [(8, 39, "'https://example.com/docs?page=2'")]
+'Email: alice@example.org, phone: +33 6 12 34 56 78.'
+ mots: [(0, 5, 'Email', 'mot'), (5, 6, ':', 'ponctuation'), (7, 12, 'alice', 'mot'), (12, 13, '@', 'ponctuation'), (13, 20, 'example', 'mot'), (20, 21, '.', 'ponctuation'), (21, 24, 'org', 'mot'), (24, 25, ',', 'ponctuation'), (26, 31, 'phone', 'mot'), (31, 32, ':', 'ponctuation'), (33, 34, '+', 'ponctuation'), (34, 36, '33', 'nombre'), (37, 38, '6', 'nombre'), (39, 41, '12', 'nombre'), (42, 44, '34', 'nombre'), (45, 47, '56', 'nombre'), (48, 50, '78', 'nombre'), (50, 51, '.', 'ponctuation')]
+ zones: [(7, 24, "'a
+… [726 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nbanc=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\nh=bl.Heuristique()\ntot=collections.Co … [593 caractères tronqués]`
+
+  ```
+POS total 1068 POS dans zone protégée 95 textes 6
+('f11', 5, [('12', 'NUM', 15, 17), ('/', 'PONCT', 17, 18), ('03', 'NUM', 18, 20), ('/', 'PONCT', 20, 21), ('2026', 'NUM', 21, 25)])
+('f12', 13, [('https', 'VERB', 8, 13), (':', 'PONCT', 13, 14), ('/', 'PONCT', 14, 15), ('/', 'PONCT', 15, 16), ('example', 'NOUN', 16, 23), ('.', 'PONCT', 23, 24), ('com', 'NOUN', 24, 27), ('/', 'PONCT', 27, 28), ('docs', 'NOUN', 28, 32), ('?', 'PONCT', 32, 33), ('page', 'NOUN', 33, 37), ('=', 'PONCT', 37, 38), ('2', 'NUM', 38, 39)])
+('f37', 5, [('alice', 'NOUN', 7, 12), ('@', 'PONCT', 12, 13), ('example', 'NOUN', 13, 20), ('.', 'PONCT', 20, 21), ('org', 'NOUN', 21, 24)])
+('f38', 22, [('https', 'NOUN', 14, 19), (':', 'PONCT', 19, 20), ('/', 'PONCT', 20, 21), ('/', 'PONCT', 21, 22), ('a', 'PREP', 22, 23), ('.', 'PONCT', 23, 24), ('b', 'NOUN', 24, 25), ('/', 'PONCT', 25, 26), ('c', 'DET', 26, 27), ('?', 'PONCT', 27, 28), ('d', 'PREP', 28, 29), ('=', 'PONCT', 29, 30), ('e', 'NOUN', 30, 31), ('#', 'PONCT', 31, 32), ('f', 'NOUN', 32, 33), ('http', 'NOUN', 37, 41), (':', 'PONCT', 41, 42), ('/', 'PONCT', 42, 43), ('/', 'PONCT', 43, 44), ('x', 'NOUN', 44, 45), ('.', 'PONCT', 45, 46), ('y', 'PRON', 46, 47)])
+('f
+… [1407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))\nfor r in d['banc_50']['resultats']:\n    if r['id'] in ('f01','f12','f13','f18','f37','f38','f39','f50'):\n        print(r['id'], {k:r.get(k) … [232 caractères tronqués]`
+
+  ```
+f01 {'mots': 4, 'pos': 3, 'syntagmes': 2, 'labels': 19, 'trous_pos': {'mot': {'total': 3, 'sans_pos': 0}, 'ponctuation': {'total': 1, 'sans_pos': 1}}, 'chevauchements_syntagme': 0, 'syntagmes_union': 0, 'phrases': 1, 'documents': 1, 'doc_tronquees': 0, 'doc_titres': [], 'langue': 'fr', 'rc': 0}
+f12 {'mots': 18, 'pos': 9, 'syntagmes': 5, 'labels': 63, 'trous_pos': {'mot': {'total': 9, 'sans_pos': 0}, 'ponctuation': {'total': 8, 'sans_pos': 8}, 'nombre': {'total': 1, 'sans_pos': 1}}, 'chevauchements_syntagme': 0, 'syntagmes_union': 0, 'phrases': 3, 'documents': 1, 'doc_tronquees': 1, 'doc_titres': [], 'langue': 'fr', 'rc': 0}
+f13 {'mots': 6, 'pos': 4, 'syntagmes': 0, 'labels': 26, 'trous_pos': {'mot': {'total': 4, 'sans_pos': 0}, 'ponctuation': {'total': 2, 'sans_pos': 2}}, 'chevauchements_syntagme': 0, 'syntagmes_union': 0, 'phrases': 1, 'documents': 1, 'doc_tronquees': 0, 'doc_titres': [], 'langue': 'und', 'rc': 0}
+f18 {'mots': 1, 'pos': 0, 'syntagmes': 0, 'labels': 6, 'trous_pos': {'nombre': {'total': 1, 'sans_pos': 1}}, 'chevauchements_syntagme': 0, 'syntagmes_union': 0, 'phrases': 1, 'documents': 1, 'doc_tronquees': 0, 'doc_titres': ['1234567890'], 'langue': 'und', 'rc': 0}
+f37 
+… [1545 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nbanc=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\nh=bl.Heuristique()\nfor r in banc:\n   … [691 caractères tronqués]`
+
+  ```
+f01 rc-API  lang fr phr [(0, 13, 'déclarative')] synt 2 holes 0 espaces 0
+f02 rc-API  lang fr phr [(0, 55, 'déclarative')] synt 5 holes 0 espaces 0
+f03 rc-API  lang fr phr [(0, 9, 'exclamative'), (10, 42, 'interrogative')] synt 5 holes 0 espaces 0
+f04 rc-API  lang fr phr [(0, 30, 'déclarative')] synt 3 holes 0 espaces 0
+f05 rc-API  lang fr phr [(0, 20, 'exclamative')] synt 3 holes 0 espaces 0
+f06 rc-API  lang fr phr [(0, 61, 'déclarative')] synt 9 holes 0 espaces 0
+f07 rc-API  lang en phr [(0, 27, 'déclarative')] synt 3 holes 0 espaces 0
+f08 rc-API  lang en phr [(0, 43, 'interrogative')] synt 1 holes 0 espaces 0
+f09 rc-API  lang en phr [(0, 36, 'déclarative')] synt 1 holes 0 espaces 0
+f10 rc-API  lang fr phr [(0, 42, 'déclarative')] synt 5 holes 0 espaces 0
+f11 rc-API  lang fr phr [(0, 34, 'déclarative')] synt 4 holes 0 espaces 0
+f12 rc-API  lang fr phr [(0, 62, 'déclarative')] synt 7 holes 0 espaces 0
+f13 rc-API  lang und phr [(0, 24, 'déclarative')] synt 2 holes 0 espaces 0
+f14 rc-API refus=vide lang und phr [] synt 0 holes 0 espaces 0
+f15 rc-API refus=vide lang und phr [] synt 0 holes 0 espaces 0
+f16 rc-API refus=vide lang und phr [] synt 0 holes 0 espaces 0
+f17 rc-API refus=vid
+… [3063 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for l in \"\" \"--langue fr\"; do echo \"== $l\"; python3 tools/drave.py analyser \"Élodie sourit.\" $l --json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('langue',d['langue'],'synt',[(e['type'],e['valeur']) for e i … [119 caractères tronqués]`
+
+  ```
+== 
+langue und synt []
+== --langue fr
+langue und synt [('GV', 'Élodie sourit')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py analyser \"J'ai trouvé ça génial 😍🔥\" --json | python3 -c \"import json,sys; d=json.load(sys.stdin); print([(e['niveau'],e['type'],e['valeur']) for e in d['etiquettes'] if e['niveau'] in ('pos','syntagme')])\"" … [58 caractères tronqués]`
+
+  ```
+[('pos', 'PRON', "J'ai"), ('syntagme', 'GN', "J'ai"), ('pos', 'NOUN', 'trouvé'), ('syntagme', 'GV', 'trouvé ça génial'), ('pos', 'PRON', 'ça'), ('pos', 'ADJ', 'génial'), ('pos', 'PONCT', '😍'), ('pos', 'PONCT', '🔥')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nprint(type(bl.POS_FERME), list(bl.POS_FERME)[:5])\nprint({k:type(v).__name__ for k,v in bl.POS_FERME['fr'].items()})\nprint('exemples', {k:lis … [233 caractères tronqués]`
+
+  ```
+<class 'dict'> ['fr', 'en']
+{'DET': 'set', 'PREP': 'set', 'PRON': 'set', 'CONJ': 'set', 'AUX': 'set', 'ADV': 'set', 'NUM': 'set'}
+exemples {'DET': ['ses', 'quelles', 'ton', 'quel', 'cette'], 'PREP': ['dans', 'au-dessous', 'par', 'aux', 'd'], 'PRON': ['dont', 'quoi', 'elle', 'que', 'il']}
+VERBES_IMPERATIFS ['find', 'open', 'dis', 'trouve', 'va', 'look', 'fais', 'cherche', 'ouvre', 'go', 'give', 'écoute', 'ferme', 'viens', 'regarde', 'take', 'close', 'come', 'donne', 'prends']
+MOTS_DOUBLE_SENS ['point', 'mousse', 'note', 'voler', 'duck', 'canard', 'avocat', 'temps', 'manche', 'glace']
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"Fonctions communes du re-audit produit (lecture seule du depot).\n\nTout est mesure depuis /tmp : le harnais n'ecrit aucun fichier dans le depot.\n\"\"\"\nfrom __future__ import annotations\n\nimport collections\nimport hashlib\nimport json\nimport pathlib\ … [16937 caractères tronqués]`
+
+  ```
+<path>/tmp/reaudit/commun.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
