@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 162.2 h |
 | Tours | 192 |
-| Messages | 3544 |
-| Appels d'outils | 3150 |
+| Messages | 3545 |
+| Appels d'outils | 3151 |
 | Fichiers touchés | 25 |
-| Commandes | 2635 |
+| Commandes | 2636 |
 | Sous-agents | 42 |
-| Commits | 426 |
+| Commits | 427 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10312,7 +10312,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 
 ### Tour 192 — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas … [111 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - bash — Inspecter DSH
 - bash — Voir la CLI de DSH
@@ -10328,7 +10328,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - bash — Insérer git_avant et tester J0
 - bash — Tester dsh headless directement
 - bash — Chercher la clé DeepSeek
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -10453,7 +10453,7 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2595 autres
+- … et 2596 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11027,4 +11027,5 @@ Leurs livrables (fiches + JSON) seront intégrés au prochain round.
 - DOCS — README T1 À 1 000 MOTS (DEUX LIGNES RACCOURCIES)" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T1 À 1 000 MOTS"; then echo "
 - DOCS — README T1 : UN MOT DE MOINS" -- docs/README.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "UN MOT DE MOINS"; then echo "COMMIT OK $i"; break;
 - CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPRE
+- DOCS — README T1 ET COMPTEURS APRÈS LE MÉTA-HARNAIS" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS L
 

@@ -30,7 +30,7 @@
 | [`methode/miroir.md`](methode/miroir.md) | le miroir entrée/sortie et ses quatre règles |
 | [`methode/ressources.md`](methode/ressources.md) | le matériel, les [GPU](theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md), la composition mesurée |
 | [`methode/contexte.md`](methode/contexte.md) | le budget de [contexte](theorie/glossaire/entrees/contexte.md) : ce qu'on charge, ce qu'on ne charge pas |
-| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de plusieurs jours : file, superviseur, acceptation, STOP |
+| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de plusieurs jours : file, superviseur, STOP |
 | [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents, la discipline de `en-cours` |
 | [`methode/modularisation.md`](methode/modularisation.md) | diviser ou paralléliser : ce que la mesure dit |
 | [`methode/relations-humaines.md`](methode/relations-humaines.md) | *carpe diem*, le temps et les échanges |

@@ -101,6 +101,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-03](2026-11-03/memoire.md) | — |
 | [2026-11-05](2026-11-05/memoire.md) | — |
 | [2026-11-06](2026-11-06/memoire.md) | — |
+| [2026-11-07](2026-11-07/memoire.md) | — |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 

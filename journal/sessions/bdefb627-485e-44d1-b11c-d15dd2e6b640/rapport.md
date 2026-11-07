@@ -7,12 +7,12 @@
 | Identifiant | `bdefb627-485e-44d1-b11c-d15dd2e6b640` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 09:56 |
-| Durée | 0.8 h |
+| Durée | 1.0 h |
 | Tours | 1 |
-| Messages | 73 |
-| Appels d'outils | 126 |
-| Fichiers touchés | 1 |
-| Commandes | 113 |
+| Messages | 79 |
+| Appels d'outils | 134 |
+| Fichiers touchés | 2 |
+| Commandes | 118 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles en **lecture seule** sur l'écosystème Panini, dans `/home/stephane/Data13TB/stephane/GitHub/`. Mission : * … [2316 caractères tronqués]
 
-*126 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — Liste les dépôts Panini et Qtrinet
 - bash — Date système et config dépôt hôte
@@ -41,7 +41,7 @@
 - bash — Fichiers suivis par git
 - bash — Repère les documents clés
 - bash — Échantillon des modifications non commitées
-- … et 102 autres
+- … et 109 autres
 
 **Synthèse produite :**
 
@@ -54,6 +54,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-inventaire-panini.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-inventaire-panini.json` | 1 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -97,7 +98,7 @@
 - **T1** Données généalogiques Panini
 - **T1** Rapports NIPADA
 - **T1** Synthèse du pipeline sémantique
-- … et 73 autres
+- … et 78 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -169,12 +170,15 @@
 - **T1** `d_lex ∝ d_topo^α, α = 2/3 — R² = 0.909139 (§334, graphe v35, 655 paires, 114 textes), reproduit`
 - **T1** `- **Porte d'entrée G1-G4 VERTE** : pytest 722 · benchmark DTP 48/48 = 0 % WER · calibrage §334`
 - **T1** `R² = 0.909139 reproduit · hold-out v1 gelé (`nipada/falsification/nipada_holdout_v1.json`, 23/114`
+- **T1** `367:| **Gutenberg** | 1 999 métadonnées ; **1 943 téléchargés** ; 332 textes (271 Mo) ; 5 curatés | SQLite `books(id,title,lang,authors,subjects,downloads,url,fetched)` + `.txt` | en, fr, de, es | `re`
+- **T1** `437:tradition`, échantillon de 20 langues (5 familles × 4), et une mesure de recouvrement des codes.`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : # J4 — Catalogue des théorèmes vérifiés de ℝ_loc  > État au 2026-10-20. Toutes les entrées ci-dessous sont **vérifiées par le noyau** > (CIC-lite) ; « rapide » = moins d'une minute, « lourd » = noyau 
 - **T1** : === panini-nipada.md === [exit code: 1]
 - **T1** : async_compression.yml === FS workflows === === FS tests === [exit code: 2]
+- **T1** : 536  5343 reports/rapport-inventaire-panini.md   245  3444 reports/pensee-inventaire-panini.json   781  8787 total === accents check === 0 [exit code: 1]
 

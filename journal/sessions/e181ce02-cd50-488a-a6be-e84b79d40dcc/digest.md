@@ -59923,3 +59923,17 @@ note : 10 fichier(s) déjà modifié(s) (autres sessions) — on continue.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# lien entrant : docs/README.md (section méthode)\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/continuite.md`](methode/continuite.md) |\", \"| [`methode/chantier- … [1447 caractères tronqués]`
+
+  ```
+lien entrant
+     · compteurs : en-cours.md dit 704 fichiers, le disque en a 705
+     · docs/README.md : 1014 mots > budget 1000 (T1)
+ create mode 100644 tools/chantier/superviseur.py
+COMMIT OK 1
+c49367e0 CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE dsh headless (CLÉ LUE), VÉRIFIE L'ACCEPTATION, PERSISTE L'ÉTAT ET S'ARRÊTE PROPREMENT ; DOCTRINE ET MODES DE PANNE
+   a2ad039d..c49367e0  s/v7 -> s/v7
+   a2ad039d..c49367e0  master -> master
+sam 07 nov 2026 10:52:43 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# T1 : raccourcir docs/README (1014 → ≤1000)\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier de pl … [1535 caractères tronqués]`
