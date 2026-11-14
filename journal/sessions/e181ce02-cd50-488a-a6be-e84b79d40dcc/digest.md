@@ -62679,3 +62679,32 @@ M docs/pilotage/en-cours.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/pensee-tagger-option.json 2>/dev/null; for i in 1 2 3; do\n  git add tools/drave.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md reports/pensee-tagger-option.json docs/produit/README.md docs/pilotage/en- … [722 caractères tronqués]`
+
+  ```
+reports/pensee-tagger-option.json
+ create mode 100644 tools/tests/test_tagger_api.py
+COMMIT OK 1
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+   883ce817..0bbdbbb3  s/v7 -> s/v7
+   883ce817..0bbdbbb3  master -> master
+sam 14 nov 2026 11:07:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -12", "description": "Porte produit après le tagger", "timeoutMs": 900000}`
+
+  ```
+✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f4b7822076a4203d deux fois
+  ✅ smoke test : Ran 18 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v1 : forme canonique exacte, miroir strict distinct
+  ✅ restitution v0/v1 : Ran 22 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"1 span (`g017`)\", \"1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)\")\nt=t.replace(\" ; **`drave` v0**\ … [1014 caractères tronqués]`

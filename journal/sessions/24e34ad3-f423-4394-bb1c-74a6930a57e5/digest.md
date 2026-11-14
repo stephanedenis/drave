@@ -2481,3 +2481,316 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md 
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |\n| **le tagger en option** (mesure 20/612, coût, tests) … [323 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md", "new_string": "| [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)** |\n| [`rapport-tagger-option.md`](rapport-tagger-option.md) | **R0.7 / 1A** — le tagger POS en op … [197 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md", "limit": 8, "offset": 28}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md</path>
+<type>file</type>
+<content>
+28: | [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches |
+29: | [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → |
+30: | [`rapport-coordination-s.md`](rapport-coordination-s.md) | **S** — les 11 verdicts non committés |
+31: | [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)** |
+32: | [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 |
+33: | [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
+34: | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
+35: | [`rapport-retrieval-familles.md`](rapport-retrieval-familles.md) | **Panini** — le retrieval approfondi par famille |
+
+(Showing lines 28-35 of 210. Use offset=36 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md", "new_string": "| [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)** |\n| [`rapport-tagger-option.md`](rapport-tagger-option.md) | **R0.7 / 1A** — le tagger POS en op … [197 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Je passe les portes doc et le smoke test après l'ajout de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -20; echo \"revue=$?\"", "description": "Lancer la revue de documentation"}`
+
+  ```
+revue de documentation · 734 fiche(s) · 827 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; echo \"taille=$?\"; python3 tools/tests/test_produit.py 2>&1 | tail -3; echo \"produit=$?\"; python3 tools/tests/test_tagger_api.py 2>&1 | tail -3; echo \"tagger=$?\"", "description": … [45 caractères tronqués]`
+
+  ```
+avertissements :
+     · 51 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+taille=0
+Ran 18 tests in 7.429s
+
+OK
+produit=0
+Ran 14 tests in 2.008s
+
+OK
+tagger=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; git status --short | head -20; date", "description": "Vérifier le compteur de l'état et le statut git"}`
+
+  ```
+106:| fichiers / JSON de résultats | **734** / **827** | `reports/*.md` / `reports/*.json` |
+M  docs/pilotage/en-cours.md
+MM docs/produit/README.md
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/distribue.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/memoire.md
+MM journal/2026-11-14/mesures.md
+MM journal/2026-11-14/moteur.md
+MM journal/2026-11-14/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/digest.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md
+ M reports/README.md
+ M reports/pensee-coherence-fiches-v7.json
+sam 14 nov 2026 11:06:01 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -15; echo \"porte_produit=$?\"", "description": "Lancer la porte produit complète"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-4989]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat tools/drave.py docs/produit/README.md reports/README.md; git diff tools/drave.py | head -120", "description": "Relire le diff de la CLI"}`
+
+  ```
+docs/produit/README.md | 1 +
+ reports/README.md      | 1 +
+ 2 files changed, 2 insertions(+)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"drave|tagger|produit|reports/README|en-cours\"; echo ----; git diff --cached --stat | head -20; echo ----; git diff --cached tools/drave.py | head -30", "description": "Vérifier l'index git"}`
+
+  ```
+M docs/produit/README.md
+ M reports/README.md
+----
+ journal/2026-11-14/README.md                       |   19 +-
+ journal/2026-11-14/distribue.md                    |    7 +-
+ journal/2026-11-14/docs.md                         |    7 +-
+ journal/2026-11-14/memoire.md                      |    6 +-
+ journal/2026-11-14/mesures.md                      |   11 +-
+ journal/2026-11-14/moteur.md                       |    3 +-
+ journal/2026-11-14/portes.md                       |    3 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    2 +-
+ .../24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md | 2483 --------------------
+ .../rapport.md                                     |  141 --
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  799 -------
+ .../rapport.md                                     |  144 +-
+ .../digest.md                                      |  161 --
+ .../rapport.md                                     |   57 +-
+ 16 files changed, 41 insertions(+), 3814 deletions(-)
+----
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -40; echo ----; git log --oneline -5; echo ----; git ls-files tools/drave.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md reports/pensee-tagger-option.json", "description": "Vérifier si le … [34 caractères tronqués]`
+
+  ```
+M docs/produit/README.md
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/distribue.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/memoire.md
+MM journal/2026-11-14/mesures.md
+MM journal/2026-11-14/moteur.md
+MM journal/2026-11-14/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/digest.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md
+ M reports/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+?? journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/
+?? reports/rapport-s-paragraphes.md
+----
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--
+… [716 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:docs/produit/README.md | grep -n \"3.7\\|--tagger\\|code \\*\\*4\" | head -12; echo ----; git diff HEAD -- docs/produit/README.md | head -80", "description": "Comparer la doc committée et l'arbre de travail"}`
+
+  ```
+11:> porte produit est verte. Le **tagger POS par API** est livré **en option** (`--tagger`,
+12:> § 3.7) : clé et réseau pour qui le demande, **heuristique hors ligne par défaut**. Le format
+33:aucun accès réseau **par défaut** (le tagger en option, lui, appelle l'API DeepSeek, § 3.7). Les
+129:gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+131:POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+134:  vue linéaire (partition filtrer) F1 81.44 %  · attachement 93.72 % de couverture
+342:contrôle négatif : mélange exacte 0.0000 (caractères 0.3077) · troncature exacte 0.0000
+362:### 3.7 Le tagger en option — `--tagger`
+365:python3 tools/drave.py analyser "Le chat dort." --tagger
+366:python3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger
+367:python3 tools/drave.py evaluer --tagger
+386:message clair sur `stderr` et sort avec le code **4** ; rien n'est rendu sur `stdout`.
+----
+diff --git a/docs/produit/README.md b/docs/produit/README.md
+index 73248b7f..045a35ae 100644
+--- a/docs/produit/README.md
++++ b/docs/produit/README.md
+@@ -640,6 +640,7 @@ inchangé), la porte produit et le smoke test. Le reste est nommé ci-dess
+… [1059 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-4989"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/drave.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md reports/pensee-tagger-option.json; git diff HEAD --stat", "description": "Vérifier l'état des fichiers committés"}`
+
+  ```
+docs/produit/README.md                             |    1 +
+ .../24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md | 2483 --------------------
+ .../rapport.md                                     |  141 --
+ reports/README.md                                  |    1 +
+ reports/pensee-coherence-fiches-v7.json            |   19 +
+ reports/pensee-dev-test-v10.json                   |    2 +-
+ reports/pensee-quatre-modes.json                   |  734 +++---
+ reports/rapport-audit-v7.md                        |    6 +-
+ reports/rapport-coherence-fiches-v7.md             |   17 +-
+ reports/rapport-dev-test-v10.md                    |    2 +-
+ reports/rapport-pensee-v12.md                      |    4 +-
+ reports/rapport-spans-chunker.md                   |   13 +-
+ 12 files changed, 462 insertions(+), 2961 deletions(-)
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s\n```\n\nIci le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les\n … [337 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4989 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -15; echo "porte_produit=$?") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-4989"}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f4b7822076a4203d deux fois
+  ✅ smoke test : Ran 18 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v1 : forme canonique exacte, miroir strict distinct
+  ✅ restitution v0/v1 : Ran 22 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+porte_produit=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show -s --format='%h %ci %s' 0bbdbbb3; git show --stat --oneline 0bbdbbb3 | head -20", "description": "Inspecter le commit existant"}`
+
+  ```
+0bbdbbb3 2026-11-14 11:04:54 -0500 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+ docs/pilotage/en-cours.md                          |    4 +-
+ docs/produit/README.md                             |  123 +-
+ journal/2026-11-14/README.md                       |    9 +-
+ journal/2026-11-14/distribue.md                    |    4 +-
+ journal/2026-11-14/docs.md                         |    7 +-
+ journal/2026-11-14/memoire.md                      |    4 +-
+ journal/2026-11-14/mesures.md                      |    4 +-
+ journal/2026-11-14/moteur.md                       |    4 +-
+ journal/2026-11-14/portes.md                       |    4 +-
+ journal/README.md                                  |    4 +-
+ .../24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md | 1171 ++++++++++++++++++++
+ .../rapport.md                                     |   54 +-
+ journal/sessions/MANIFEST.md                       |    6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest
+… [335 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je relance les trois portes demandées et vérifie les liens de la doc finale
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py >/tmp/revue.log 2>&1; echo \"revue=$?\"; tail -3 /tmp/revue.log; python3 tools/taille_documents.py >/tmp/taille.log 2>&1; echo \"taille=$?\"; tail -2 /tmp/taille.log", "description": "Relancer rev … [14 caractères tronqués]`
+
+  ```
+revue=0
+  revue de documentation · 734 fiche(s) · 827 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+taille=0
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_produit.py >/tmp/produit.log 2>&1; echo \"produit=$?\"; tail -3 /tmp/produit.log; python3 tools/tests/test_tagger_api.py >/tmp/tagger.log 2>&1; echo \"tagger=$?\"; tail -3 /tmp/tagger.log; git diff --check; e … [76 caractères tronqués]`
+
+  ```
+produit=0
+Ran 18 tests in 7.206s
+
+OK
+tagger=0
+Ran 14 tests in 1.916s
+
+OK
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:62223: trailing whitespace.
++4012729 S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES 
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:62240: trailing whitespace.
++ {"phrase_id": "a003", "candidat_id": "a003-c2", "statut": "resolu", "referents": {"Elle": "Alice", "sa": "Alice", "elle": "Alice", "se": "Alice"}, "note": "", "contexte": "Allons, à quoi bon pleurer ainsi, se dit Alice 
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:62301: trailing whitespace.
++Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, 
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:62650: trailing whitespace.
++33:aucun accès réseau **par défaut** (le tagger en option, lui, appelle 
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md:11279: trailing whitespace.
++- CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ" -- tools/chantier/plan.json docs/pilotage/en-cours.md 2>&1 | tail -1   if git log 
+journal/sessions/session-a68c9aaf-bd76-458b-850
+… [659 caractères tronqués]
+  ```
+

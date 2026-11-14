@@ -7,12 +7,12 @@
 | Identifiant | `24e34ad3-f423-4394-bb1c-74a6930a57e5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 09:53 |
-| Durée | 1.2 h |
+| Durée | 1.3 h |
 | Tours | 1 |
-| Messages | 106 |
-| Appels d'outils | 130 |
+| Messages | 120 |
+| Appels d'outils | 144 |
 | Fichiers touchés | 5 |
-| Commandes | 71 |
+| Commandes | 82 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **intégrer le tagge … [3226 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état git et la branche
 - bash — Compter les lignes des pièces clés
@@ -41,11 +41,11 @@
 - bash — Inspecter le rapport tagger 612
 - bash — Chercher la mention de la décision 1A
 - bash — Lire l'état et la roadmap autour du tagger
-- … et 93 autres
+- … et 105 autres
 
 **Synthèse produite :**
 
-⏵ Je passe les portes doc et le smoke test après l'ajout de la fiche
+⏵ Je relance les trois portes demandées et vérifie les liens de la doc finale
 
 ## 3. Travail accompli
 
@@ -56,7 +56,7 @@
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py` | 0 | 15 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py` | 1 | 4 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-option.md` | 1 | 0 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 0 | 11 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md` | 0 | 12 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
@@ -101,7 +101,7 @@
 - **T1** Chercher une spécification existante du --tagger
 - **T1** Chercher une tentative antérieure
 - **T1** Lire la décision du parent sur le tagger
-- … et 31 autres
+- … et 42 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -132,6 +132,16 @@
 - **T1** `| [`rapport-pos-ponctuation.md`](rapport-pos-ponctuation.md) | **B13** — PONCT : POS **85,75 %**, miroir |`
 - **T1** `| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | **B13** — paquet POS sûr, **84,96 %** |`
 - **T1** `langue=fr script=Latn source=cascade · 19 étiquettes · unités sémantiques=2 (61.5% du texte)`
+- **T1** `[still running after 60000ms; moved to background job bash-4989]`
+- **T1** `131:POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)`
+- **T1** `134:  vue linéaire (partition filtrer) F1 81.44 %  · attachement 93.72 % de couverture`
+- **T1** `| **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |`
+- **T1** `POS         exactitude 100.00 % (fermé 100.00 %, ouvert 100.00 %) · Δ +0.00 pts vs heuristique`
+- **T1** `SYNTAGMES   F1 90.91 % (tête 100.00 %) — conservés à l'heuristique`
+- **T1** `POS 100.00 % (fermé 100.00 %, ouvert 100.00 %) · SYNTAGMES F1 90.91 % (tête 100.00 %)`
+- **T1** `ATTACHEMENT exact 100.00 % · couverture 100.00 % · top-k 100.00 % · PRAGMATIQUE acte 100.00 %`
+- **T1** `CONTRÔLE NÉGATIF cible exacte tirée au hasard 100.00 % (graine 0, 1 cibles)`
+- **T1** `TAGGER POS 100.00 % · Δ +0.00 pts · SYNTAGMES F1 90.91 % (tête 100.00 %)`
 
 ## 5. Erreurs rencontrées
 
