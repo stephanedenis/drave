@@ -15,7 +15,7 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-14 01:15 EST
+- **Heartbeat** : 2026-11-14 06:55 EST
 - **Prochaine action** : le chantier (phase 2, J6-J14) ; la coordination N2/S/R/A est livrée.
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).

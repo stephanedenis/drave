@@ -14,7 +14,7 @@
   `reports/README.md`, `reports/INDEX.md`, l'index git.
 - **Heartbeat** : 2026-11-05 01:55 EST
 - **Prochaine action** : **suivi docs** (N3 intégré, état au 04/11), puis la **passe** après les runs.
-- **État** : actif
+- **État** : en pause
 - **Plan** : 1) ~~analyse des quatre sessions~~ ; 2) ~~tâches courtes~~ ; 3) **état au 04/11** ;
   4) **revue + commit** ; 5) **passe de portes** ; 6) **runs longs N2** (plus tard, sur décision).
 - **Ambition** : que la reprise ne perde rien — chaque session interrompue a une prochaine action

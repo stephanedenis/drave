@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **1 session(s)** · **6 thème(s)**
+**18 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 325.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 326.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -45,6 +45,7 @@
 | 05:05 | `febfdfff` | J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1) |
 | 05:37 | `bb68b820` | J12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,909139 / 0,906307 (488), DATE 0,0089 APRÈS TOPO (p=0,86) ; FILIATION 61,4 % vs 50,0 % (HOLM 0,128), ÉPOQUE 56,8 % vs 53,8 % (p=0,373), ANNÉE INTRA-TRADITION R²=0,042 (HOLM 0,034) ; V150 β DATE −0,006 ≠ +0,138 |
 | 05:54 | `b20a4c31` | J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE |
+| 06:32 | `0e75f101` | J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG) |
 
 ## Le récit de la journée (écrit à la main)
 

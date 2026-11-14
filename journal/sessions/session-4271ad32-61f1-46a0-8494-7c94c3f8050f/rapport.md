@@ -7,12 +7,12 @@
 | Identifiant | `session-4271ad32-61f1-46a0-8494-7c94c3f8050f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 06:23 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 96 |
-| Appels d'outils | 120 |
+| Messages | 101 |
+| Appels d'outils | 129 |
 | Fichiers touchés | 5 |
-| Commandes | 102 |
+| Commandes | 111 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J13.1 : la table des mesures du chantier — POS, F1, attachement, couverture, spans, le produit, Panini — avant/apr … [118 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - bash — List working directory and recent commits
 - bash — Search for task J13.1 references
@@ -41,11 +41,40 @@
 - bash — Find related JSON names
 - bash — Show files changed in J11/J12 commits
 - bash — Summarize JSON structures of recent reports
-- … et 103 autres
+- … et 112 autres
 
 **Synthèse produite :**
 
-I'll assemble the consolidated measurement table, JSON, and verify the base numbers at HEAD. Let me first build the data file.
+**J13.1 est fait, committé (`0e75f101`).**
+
+**Livrables**
+- Fiche : [`reports/rapport-tableau-mesures.md`](reports/rapport-tableau-mesures.md) — 376 lignes, 30 lignes de mesure.
+- JSON : [`reports/tableau-mesures.json`](reports/tableau-mesures.json) — `drave.tableau-mesures` v1 : 30 lignes, 26 commits, 18 contrôles négatifs.
+- État/roadmap/journal/index mis à jour : `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/README.md`, `reports/INDEX.md`, `journal/2026-11-14/mesures.md`.
+
+**La base 612/602, re-mesurée au HEAD `b20a4c31`**
+| gold | phrases | jetons | POS | F1 | labels / cibles | couverture |
+|---|---:|---:|---:|---:|---:|---:|
+| vivant 612 | 612 | 3 179 | 0,8625 | **0,7902** | 238/239 | 0,9958 |
+| gelé 602 | 602 | 3 141 | 0,8625 | **0,7882** | 234/239 | 0,9791 |
+
+**Avant/après (612)**
+- F1 **0,7533 → 0,7902** (+0,0369), dev/test **0,7476/0,7663 → 0,7875/0,7962**.
+- Attachement **236/237 → 238/238 labels** (238/239 cibles), couverture **0,9916 → 0,9958**.
+- Spans sans label **2 → 1** : `r035` réglé, `g017` reste une convention d'adverbe.
+- POS **0,8625 inchangée** (0 jeton changé sur 3 179).
+- Tagger **0,8625 → 0,9475 (+8,49 pts)** [7,23 ; 9,74].
+- Produit : schéma v2, restitution v1 (canonique 46/46, strict 0,1087), 50 textes (0 plantage, 50/50 v2, 115/0 chevauchements), 5 exemples (4 corrigés), fr/en.
+- Panini : table **14/14**, corpus **418/438**, généalogie **154/154** hors script, familles **sœurs 0,619 vs 0,0445**, §334 (**H0 0,909139/0,906307**, date **0,0089** après topo, V150 β **−0,006 ≠ +0,138**), CIC **42/42**, **36/36** preuves altérées rejetées.
+
+**Contrôles et commits**
+- **26 tâches** J1.1–J12.2 : **25 acceptations vertes**, **1 échec** (J5.2, le tag), **5 timeouts** dont **4 récupérés**.
+- **18 contrôles négatifs** détaillés (planchers, permutations, altérations, versions croisées, placebo).
+- Les valeurs « avant » sont celles des fiches ; les valeurs « après » du cœur produit sont re-mesurées au HEAD (P10 excepté), le reste est publié avec sa fiche.
+
+**Portes passées** : `revue_documentation` ✅, `porte-tableaux` ✅, `porte-produit` **183/183** ✅, `porte-cic` **42/42** ✅, `verifie_en_cours` ✅, `verifie_journal` ✅, budget **3 999/4 000** ✅, état à jour ✅.
+
+**Reste** : **J14.1** — la passe complète (le tableau publie le relevé du 14/11 : **84 portes, 81 vertes, 3 rouges tolérées**) et le tag `chantier-2026-11-14`.
 
 ## 3. Travail accompli
 
@@ -101,7 +130,7 @@ I'll assemble the consolidated measurement table, JSON, and verify the base numb
 - **T1** Identify parent commit of first chantier task
 - **T1** Measure pre-chantier gold 612/602 in worktree
 - **T1** Compare pre/post metrics on both golds
-- … et 62 autres
+- … et 71 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -229,7 +258,7 @@ I'll assemble the consolidated measurement table, JSON, and verify the base numb
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+10 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : /home/stephane/Data13TB/stephane/GitHub/Qtrinet total 208 drwxr-xr-x. 1 stephane stephane   686  6 nov 09:52 . drwxr-xr-x. 1 stephane stephane  2532  5 nov 10:41 .. -rw-r--r--. 1 stephane stephane  99
 - **T1** : b20a4c31 (HEAD -> s/v7) J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPE
@@ -238,6 +267,9 @@ I'll assemble the consolidated measurement table, JSON, and verify the base numb
 - **T1** : 25a6c0ff 2026-11-07 12:40 B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183 92652984 2026-11-07 13:44 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,75
 - **T1** : # 2026-11-14 — Campagnes et mesures  > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`). > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé. > Heure
 - **T1** : AGENTS.md 1196 docs/pilotage/en-cours.md 1643 [stderr] Traceback (most recent call last):   File "<stdin>", line 6, in <module> AttributeError: module 'taille_documents' has no attribute 'specifiques'
+- **T1** : [s/v7 0e75f101] J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)  22 files chang
+- **T1** : 0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)  docs/pilotage/en-cour
+- **T1** : 0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG) schema drave.tableau-m
 
 ## 6. Commits
 

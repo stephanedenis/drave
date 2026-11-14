@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 325.9 h |
+| Durée | 326.5 h |
 | Tours | 194 |
-| Messages | 3695 |
-| Appels d'outils | 3291 |
+| Messages | 3705 |
+| Appels d'outils | 3301 |
 | Fichiers touchés | 25 |
-| Commandes | 2732 |
+| Commandes | 2742 |
 | Sous-agents | 42 |
 | Commits | 439 |
 | Compactages de contexte | 8 |
@@ -10428,7 +10428,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*94 appels d'outils.* Actions notables :
+*104 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,11 +10444,11 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 45 autres
+- … et 52 autres
 
 **Synthèse produite :**
 
-⏵ La boucle s'est arrêtée (plan chargé une fois, mes tâches ajoutées après) : je corrige et relance
+⏵ Le plan avait perdu ma 2ᵉ vague (J11-J14) : je la restaure et je relance pour J14.1 (clôture + tag)
 
 ## 3. Travail accompli
 
@@ -10569,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2692 autres
+- … et 2702 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,9 +1,14 @@
 # Références de non-régression
 
 > **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
-> `porte-melange` (structurelles, antérieures) et `porte-sessions` (le mandat du hub
-> `1e7ef596`, périmé de 9 jours ; le mien est rafraîchi). `porte-produit` **verte**, `porte-bloc`
-> **verte**. Journal : `work/portes/passe-1311-23h15.log`.
+> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
+> `e181ce02`). `porte-produit` et `porte-bloc` **vertes**. Journal :
+> `work/portes/passe-1311-23h15.log`.
+>
+> **Vérification ciblée — 2026-11-14 06 h 55 (J14.1) :** `porte-sessions` **verte** (hub en pause,
+> heartbeat `e181ce02` rafraîchi) ; `porte-indice` et `porte-melange` restent **rouges
+> structurelles** (indice 482 contre témoin 459 ; état de A sans son code). Journaux
+> `work/portes/verif-cloture/`.
 > **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
@@ -61,7 +66,7 @@
 
 ## 2. Les repères imprimés par chaque porte
 
-| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-11-03 11:30) |
+| porte | durée | ce qu'elle vérifie, chiffré (passe du 2026-11-03 11:30 ; trois rouges revérifiées le 2026-11-14 06 h 55) |
 |---|---:|---|
 | `porte-adaptateur-sortie.sh` | 64 s | ✅ porte tenue (écriture fidèle · invariant · effet · refus) |
 | `porte-audit-drapeaux.sh` | 167 s | ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun |
@@ -93,13 +98,13 @@
 | `porte-harnais-invariants.sh` | 109 s | ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage |
 | `porte-homeostasie.sh` | 495 s | ✅ porte tenue (×0 exact · activité monotone · dominance reproduite) |
 | `porte-horloge.sh` | 24 s | ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue |
-| `porte-indice.sh` | 821 s | ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui  |
+| `porte-indice.sh` | 913 s | ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui  |
 | `porte-jeux.sh` | 104 s | ✅ la porte des jeux tient : 100 % au niveau 4, 33/33 paires invariantes, 0 collision, |
 | `porte-jumeaux.sh` | 28 s | PORTE TENUE : l'échange est exact, il ne crée pas de gain entre jumeaux identiques, il |
 | `porte-lecteur.sh` | 0 s | ✅ porte lecteur verte |
 | `porte-lecture.sh` | 2 s | ✅ porte lecture verte |
 | `porte-m5-brouillon.sh` | 0 s | ✅ brouillon déclaré (cibles [37,38,39]) et porté : 75 tenseurs, 41 263 M poids |
-| `porte-melange.sh` | 102 s | ❌ l'état de A ne rend pas le code de A dans une |
+| `porte-melange.sh` | 145 s | ❌ l'état de A ne rend pas le code de A dans une |
 | `porte-memoire.sh` | 10 s | PORTE TENUE : la mémoire retient les K derniers signaux HORS du réseau, exactement, sans |
 | `porte-miroir-blocs.sh` | 7 s | ✅ porte miroir verte |
 | `porte-mistral.sh` | 8 s | ✅ porte de correction tenue (100.0 % des positions UTILES au-dessus de 0.95, min 1.0000 >= plancher  |
@@ -139,9 +144,9 @@
 | `porte-reparti-moteur.sh` | 3 s | PORTE TENUE : le découpage ne change pas la perplexité (écart relatif 0.0000 %) |
 | `porte-ressources.sh` | 0 s | ✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU réservés à Drave |
 | `porte-sauvegarde-modele.sh` | 52 s | ✅ porte sauvegarde du modèle : la perte de validation est la MÊME aux quatre étapes |
-| `porte-sessions.sh` | 0 s | PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict |
+| `porte-sessions.sh` | 20 s | ✅ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict |
 | `porte-speculatif.sh` | 67 s | ✅ porte tenue (invariant exact · taux rendu · témoin à zéro · brouillon invalide refusé) |
-| `porte-tableaux.sh` | 0 s | ✅ la page vivante date du dernier commit (2026-11-03) |
+| `porte-tableaux.sh` | 0 s | ✅ la page vivante date du dernier commit (2026-11-14) |
 | `porte-tokenizer-kimi.sh` | 6 s | ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres) |
 | `porte-topologie.sh` | 92 s | ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.5477 · re |
 | `porte-trace.sh` | 26 s | ✅ la trace fausse est détectée et nommée |

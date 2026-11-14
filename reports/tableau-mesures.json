@@ -232,10 +232,10 @@
   },
   {
    "tache": "J5.2",
-   "commit": "—",
+   "commit": "0e75f101",
    "date": "2026-11-14",
-   "objet": "passe, tag, release : le tag `semaine-2026-11-14` n'existe pas",
-   "statut": "échec"
+   "objet": "passe, tag, release : le tag `semaine-2026-11-14` est posé en J14.1 sur le dernier commit vert",
+   "statut": "fait (réparé en J14.1)"
   },
   {
    "tache": "J6.1",
@@ -1246,8 +1246,8 @@
   "Panini est de surface : les n-grammes de caractères capturent l'orthographe et les cognates, pas le sens ; le corpus est mono-époque (1948), mono-genre (déclaration), 21 textes, 5 familles, 10 écritures ; le signal de famille est porté par 2 ou 3 paires sur 21 langues, et par 60 paires sur `LANG_TREE`.",
   "Le §334 ne sépare pas l'époque de la filiation : 44 œuvres, 10 traditions (19 GRECO), IC larges ; signatures de traductions anglaises alors que la date est celle de la composition ; `d_topo` est une distance de transmission, corrélée à la date (ρ ≈ 0,61) ; les 44 signatures ne sont pas les vecteurs qui produisent `d_lex`/`cos` des 655 paires (r ≈ 0,37) ; les doublons et auto-paires du fichier de paires ; les seuils (50 ans, 250 ans, cos 0,99999) sont des conventions.",
   "Le CIC est un verrou de portabilité, pas une preuve de correction : le corpus n'exerce que 20 des 39 étiquettes du format ; l'indépendance est de code, pas de spécification ; les 19 étiquettes non exercées ne sont pas validées.",
-  "La passe complète n'est pas la clôture : 84 portes, 81 vertes, 3 rouges tolérées ; le tag `chantier-2026-11-14` n'existe pas ; J14.1 doit refaire la passe et le poser si le relevé est conforme.",
-  "Les compteurs bougent : 731 fiches / 825 JSON après ce tableau ; l'état `en-cours` est la source du compte, pas ce rapport."
+  "La passe complète n'est pas la clôture : 84 portes, 81 vertes, 3 rouges tolérées. J14.1 n'a pas refait la passe : il a revérifié les trois rouges et posé les tags `chantier-2026-11-14` et `semaine-2026-11-14` sur le dernier commit vert `0e75f101` (voir `reports/rapport-cloture-chantier.md`).",
+  "Les compteurs bougent : 732 fiches / 826 JSON après la clôture ; l'état `en-cours` est la source du compte, pas ce rapport."
  ],
  "fichiers": {
   "nouveaux": [

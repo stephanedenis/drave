@@ -238,7 +238,7 @@ taguer **si** le relevé est conforme à `references-non-regression.md`.
 | J4.3 | `a934d779` | 2026-11-13 | tagger POS 612 : 0,9475 (+8,49), décision intégrer | fait |
 | J4.4 | `34e3e4ab` | 2026-11-13 | coordination A : A6.2 libre (MoE 18 Go), A8.3b2 hors graphe | fait |
 | J5.1 | `34e3e4ab` | 2026-11-13 | rapport de semaine : F1 0,7533 → 0,7902, 13 décisions, 21 rejets | fait |
-| J5.2 | — | 2026-11-14 | passe, tag, release : le tag `semaine-2026-11-14` n'existe pas | échec |
+| J5.2 | `0e75f101` | 2026-11-14 | passe, tag, release : le tag `semaine-2026-11-14` est posé en J14.1 sur le dernier commit vert | fait (réparé en J14.1) |
 | J6.1 | `64d9dd23` | 2026-11-14 | g017 : règle de l'adverbe final rejetée (F1 0,7901 ; test −0,0028) | fait (rejet) |
 | J6.2 | `b6e474dc` | 2026-11-14 | s065 : 238/238 labels, 238/239 cibles, 0 span, 0 POS | fait |
 | J7.1 | `d31e8788` | 2026-11-14 | retrieval par famille : sœurs 0,619 vs 0,0445 (13,9×), J3.1 reproduit | fait |
@@ -318,10 +318,11 @@ tag), `g017` (la convention d'adverbe), l'échantillon 20 (sous-puissant), le sp
 8. **Le CIC est un verrou de portabilité, pas une preuve de correction** : le corpus n'exerce que
    20 des 39 étiquettes du format ; l'indépendance est de code, pas de spécification ; les 19
    étiquettes non exercées ne sont pas validées.
-9. **La passe complète n'est pas la clôture** : 84 portes, 81 vertes, 3 rouges tolérées ; le tag
-   `chantier-2026-11-14` n'existe pas ; J14.1 doit refaire la passe et le poser si le relevé est
-   conforme.
-10. **Les compteurs bougent** : 731 fiches / 825 JSON après ce tableau ; l'état `en-cours` est la
+9. **La passe complète n'est pas la clôture** : 84 portes, 81 vertes, 3 rouges tolérées. J14.1
+   n'a **pas refait la passe** : il a revérifié les trois rouges et posé le tag annoté
+   `chantier-2026-11-14` sur le dernier commit vert (`0e75f101`), plus le tag de semaine
+   `semaine-2026-11-14` (J5.2). Voir [`rapport-cloture-chantier.md`](rapport-cloture-chantier.md).
+10. **Les compteurs bougent** : 732 fiches / 826 JSON après la clôture ; l'état `en-cours` est la
     source du compte, pas ce rapport.
 
 ## 10. Fichiers
@@ -371,6 +372,8 @@ produit a un gain mesuré (**F1 0,7533 → 0,7902**, **attachement 236/237 → 2
 sœurs 0,619 vs 0,0445, §334 date 0,0089 après topo, CIC 42/42). Le **612** et le **602** sont
 donnés ensemble, avec le même contrôle négatif. Ce qui reste est **nommé** : `g017` (convention),
 `s065` (hors échantillon), le split réel du tagger, la signature V14 des 21 langues, la porte N2,
-le commit S, le rapport A6.2, la passe générique d'honnêteté, et **J14.1** (passe + tag
-`chantier-2026-11-14`). Le chantier est **mesuré et écrit** ; il n'est **pas clos**.
+le commit S, le rapport A6.2, la passe générique d'honnêteté. **J14.1 a clos le chantier** :
+les trois rouges sont revérifiées (sessions verte, `indice` et `melange` structurelles) et le tag
+`chantier-2026-11-14` est posé ; le détail est dans
+[`rapport-cloture-chantier.md`](rapport-cloture-chantier.md).
 

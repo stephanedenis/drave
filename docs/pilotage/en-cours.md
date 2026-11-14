@@ -1,16 +1,17 @@
 # En ce moment
 
-**Mis à jour : 2026-11-14, 06 h 29 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-14, 07 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
 
-### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
 
 - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
 - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
 - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
 - **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+- **État** : **en pause** depuis le 05/11 (dernier heartbeat) ; la clôture J14.1 est portée par `e181ce02`.
 - **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
 
@@ -52,19 +53,19 @@
 - **Bloquants** : aucun ; la page **`/paragraphes`** porte l'arbre/les référents.
 - **Journal** : [la session](../../journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/).
 
-### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif ; heartbeat à rafraîchir)*
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
 - **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
-- **Plan** : B13, bloc linguistique.
+- **Plan** : B13.
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J11.1–J11.4** ([exemples](../../reports/rapport-exemples-rejoues.md), [par-langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md)) ; **contrat v1**, **`drave` v0**.
-- **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** ; **restitution v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J11.1–J11.4** ([exemples](../../reports/rapport-exemples-rejoues.md), [par-langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md)).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Ce qu'elle fait** : chantier.
 - **Prochaine action** : **trancher la convention d'adverbe (`g017`)** ; puis T132/T133, gold 200+.
-- **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
+- **Clôture** : **J14.1 faite** (84/81/3 ; `sessions` verte, `indice` et `melange` structurelles ; tag `chantier-2026-11-14`).
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -91,9 +92,8 @@
 - **Panini J2.1–J3.2** : table **14 atomes** ; UDHR **418/438** ; J3.1 script domine, date non significative ; J3.2 : **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, **V14 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
 - **Panini J7.1** : 532 textes (445 langues) ; hors script, hasard ; famille **66,1 %** / sœur **26,1 %** (hasard 10,3/2,5) ; LANG_TREE : sœurs **0,619** vs **0,0445** (13,9×, p=0,002) ; [fiche](../../reports/rapport-retrieval-familles.md).
 - **Panini J12.1–J12.2 — §334 et CIC** : §334 — 655 lignes = 495 paires uniques ; [§334](../../reports/rapport-panini-334.md). CIC — **42/42** verdicts, **42/42** empreintes, **36/36** preuves altérées rejetées, **1 020/1 020** mutations de `eq(2,2)` rejetées ; [CIC](../../reports/rapport-cic-verificateur.md).
-- **J5.1 / J10.1 / J13.1 — les bilans** : semaine (F1 **0,7533 → 0,7902**, tagger **0,9475** ; [rapport](../../reports/rapport-semaine.md)) ; chantier **20/21**, attachement **236 → 238**, 5 timeouts, 1 échec (J5.2), D1–D20, R1–R30 ; [bilan](../../reports/rapport-bilan-chantier.md) ; **J13.1** — tableau des mesures : **612/602** ; [tableau](../../reports/rapport-tableau-mesures.md).
+- **J5.1 / J10.1 / J13.1 / J14.1 — les bilans et la clôture** : semaine (F1 **0,7533 → 0,7902**, tagger **0,9475** ; [rapport](../../reports/rapport-semaine.md)) ; chantier **20/21**, attachement **236 → 238**, 5 timeouts, 1 échec (J5.2), D1–D20, R1–R30 ; [bilan](../../reports/rapport-bilan-chantier.md) ; **J13.1** — tableau des mesures : **612/602** ; [tableau](../../reports/rapport-tableau-mesures.md) ; **J14.1** — clôture (**84/81/3**, tag `chantier-2026-11-14` ; [rapport](../../reports/rapport-cloture-chantier.md)).
 - **J11.1–J11.4** : par-langue fr/en ; J11.3 50 textes, 115/0 chevauchements ; J11.4 schéma v2 (6 cas / 0 échec) ; F1 **0,7902**, att. **238/239** ; [J11.1](../../reports/rapport-exemples-rejoues.md), [J11.2](../../reports/rapport-evaluer-langue.md), [J11.3](../../reports/rapport-robustesse-semaine.md), [J11.4](../../reports/rapport-schema-v2-doc.md).
-- **Coordination J4** : N2 **2,9726/2,7856** ; S **7/4** ; R **0,9475 (+8,49)** ; A6.2 **libre** ; [N2](../../reports/rapport-coordination-n2.md), [S](../../reports/rapport-coordination-s.md), [R](../../reports/rapport-coordination-r.md), [A](../../reports/rapport-coordination-a.md).
 
 ## Les chiffres de l'état
 
@@ -103,9 +103,9 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **731** / **825** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **732** / **826** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange`, `sessions` | `docs/pilotage/references-non-regression.md` |
+| dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
 
@@ -125,7 +125,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — porte (0,2856/0,3566) ; **Pensée** — `g017`, T132/T133, gold 200+ ; **J3.2** — V14 des 21 langues ; **J7.1** — réplication neuronale ; **S** — 11 verdicts + pointeur ; **R0.7** — split réel ; **A** — A6.2, A8.3b2 ; **J14.1** — passe + tag.
+**N2** — porte (0,2856/0,3566) ; **Pensée** — `g017`, T132/T133, gold 200+ ; **J3.2** — V14 des 21 langues ; **J7.1** — réplication neuronale ; **S** — 11 verdicts + pointeur ; **R0.7** — split réel ; **A** — A6.2, A8.3b2.
 
 ## Les questions ouvertes
 

@@ -61753,3 +61753,130 @@ sam 14 nov 2026 06:25:01 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J13.1", "timeoutM … [11 caractères tronqués]`
+
+  ```
+bb68b820..b20a4c31  s/v7 -> s/v7
+   bb68b820..b20a4c31  master -> master
+sam 14 nov 2026 06:33:13 EST
+2026-11-14 06:23:01 · ✔ J12.2 en 2400.8 s (code 0) — ✅ test -f reports/rapport-cic-verificateur.md && echo FICHE-OK
+2026-11-14 06:23:02 · ▶ J13.1 — Les bilans — la table des mesures (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ls reports/ | grep -E \"tableau-mesures\"", "description": "Suivre J13.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 06:42:18 EST
+2026-11-14 06:23:02 · ▶ J13.1 — Les bilans — la table des mesures (timeout 5400 s)
+2026-11-14 06:37:15 · ✔ J13.1 en 853.1 s (code 0) — ✅ test -f reports/rapport-tableau-mesures.md && echo FICHE-OK
+rapport-tableau-mesures.md
+tableau-mesures.json
+  ```
+
+### 🤖 Assistant
+
+⏵ J14.1 (la clôture) est la dernière tâche : je lis la table des mesures pendant qu'elle tourne
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 reports/rapport-tableau-mesures.md | cut -c1-170", "description": "Lire la table des mesures"}`
+
+  ```
+# J13.1 — la table des mesures : F1 0,7533 → 0,7902, attachement 236/237 → 238/238, base 612/602
+
+> **Ligne de roadmap** : **B13** (le produit), **R0.7** (le bloc langue), **L**, **Panini**, **N2**, **S**, **R**, **A** · **Tâche** : J13.1 · **Date** : 2026-11-14 · **V
+>
+> **Ce que ce tableau est.** La **table consolidée** des mesures du chantier, de J1.1 à J12.2 :
+> POS, F1, attachement, couverture, spans, le produit (schéma, restitution, robustesse, exemples,
+> langues), le tagger et Panini (table, corpus, retrieval, généalogie, familles, §334, CIC) —
+> **avant/après**, avec la **base** (612/602), les **commits** et les **contrôles négatifs**. Il
+> **ne remplace pas** les fiches : il les ordonne et il nomme, pour chaque ligne, la fiche qui la
+> porte. **Aucune mesure nouvelle** n'est revendiquée, sauf la **re-mesure de la base** au HEAD
+> `b20a4c31` (`drave evaluer` sur le vivant 612 et le gelé 602), qui fixe les valeurs « après » du
+> cœur produit et montre l'écart entre les deux bases.
+>
+> **Le chiffre.** Sur le **vivant 612** : **POS 0,8625** (inchangée), **F1 0,7533 → 0,7902**
+> (**+0,0369**), **attachement 236/237 → 238/238 labels** (238/239 cibles, **0,9958**),
+> **couvertur
+… [1243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git tag -l \"chantier-*\" \"semaine-*\" | tail -2", "description": "Suivre J14.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 06:51:45 EST
+2026-11-14 06:23:02 · ▶ J13.1 — Les bilans — la table des mesures (timeout 5400 s)
+2026-11-14 06:37:15 · ✔ J13.1 en 853.1 s (code 0) — ✅ test -f reports/rapport-tableau-mesures.md && echo FICHE-OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep \"[s]uperviseur.py boucle\" | head -1; tail -3 work/chantier/boucle3.log 2>/dev/null; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -2; date", "description": "Voir si la boucle tour … [4 caractères tronqués]`
+
+  ```
+"commit_produit": true
+}
+file vide : chantier terminé.
+budget consommé : 30957.1 s · lancements : 29
+sam 14 nov 2026 06:51:51 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/chantier/superviseur.py etat 2>&1 | tail -8; python3 - <<'PY'\nimport json\nd=json.load(open('work/chantier/etat.json'))\nfor k,v in d['taches'].items():\n    if v.get('statut') not in ('fait',):\n        print(k, v.get … [83 caractères tronqués]`
+
+  ```
+[fait    ] J5.1   j5 — Le rapport de semaine
+  [echec   ] J5.2   j5 — La passe complète et le tag
+  [fait    ] J6.1   j6 — Le dernier span g017
+  [fait    ] J6.2   j6 — La cible s065
+  [fait    ] J7.1   j7 — Panini — le retrieval approfondi
+  [fait    ] J8.1   j8 — La restitution v1
+  [fait    ] J9.1   j9 — La passe d'honnêteté des fiches
+  [fait    ] J10.1  j10 — Le bilan de la semaine
+J5.2 echec ["❌ git tag -l 'semaine-2026-11-14' → « semaine-2026-11-14 » absent", '✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/chantier/plan.json'))\nprint('plan :', len(d['taches']), 'tâches ; ids :', [t['id'] for t in d['taches']][-6:])\ne=json.load(open('work/chantier/etat.json'))\nprint('état :', len … [103 caractères tronqués]`
+
+  ```
+plan : 21 tâches ; ids : ['J6.1', 'J6.2', 'J7.1', 'J8.1', 'J9.1', 'J10.1']
+état : 28 entrées ; ids : ['J11.2', 'J11.3', 'J11.4', 'J12.1', 'J12.2', 'J13.1']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4 -- tools/chantier/plan.json | cut -c1-90; git show HEAD:tools/chantier/plan.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('HEAD plan :', len(d['taches']))\"; git status --porcelain tools/chan … [60 caractères tronqués]`
+
+  ```
+ced21933 CHANTIER — PHASE 2 (12 H) : LE VERDICT ACCEPTATION D'ABORD (TIMEOUT APRÈS COMMIT 
+c49367e0 CHANTIER AUTONOME — LE MÉTA-HARNAIS : FILE DE 15 TÂCHES, SUPERVISEUR QUI LANCE ds
+HEAD plan : 21
+  ```
+
+### 🤖 Assistant
+
+⏵ Le plan avait perdu ma 2ᵉ vague (J11-J14) : je la restaure et je relance pour J14.1 (clôture + tag)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [3514 caractères tronqués]`
+
+  ```
+plan : 29 tâches
+J14.1 — La clôture — la passe et le tag
+
+Tâche J14.1 : la clôture — **sans relancer la passe complète** (elle a été faite le 14/11 00 h : `work/portes/passe-1311-23h15.log`, 84 portes, 81 vertes, 3 rouges nommées). Vérifie « porte-indice », « porte-melange », « porte-sessions » ; mets à jour `docs/pilotage/references-non-regression.md` si nécessaire ; crée le **tag annoté** `chantier-2026-11-14` sur le dernier commit vert ; écris le rapport de clôture `reports/rapport-cloture-chantier.md` + JSON ; commit.
+PID 2468833
+2026-11-14 06:37:15 · ✔ J13.1 en 853.1 s (code 0) — ✅ test -f reports/rapport-tableau-mesures.md && echo FICHE-OK
+2026-11-14 06:53:07 · ▶ J14.1 — La clôture — la passe et le tag (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -3 work/chantier/journal.log; git tag -l \"chantier-2026-11-14\"", "description": "Suivre J14.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 07:02:37 EST
+2026-11-14 06:23:02 · ▶ J13.1 — Les bilans — la table des mesures (timeout 5400 s)
+2026-11-14 06:37:15 · ✔ J13.1 en 853.1 s (code 0) — ✅ test -f reports/rapport-tableau-mesures.md && echo FICHE-OK
+2026-11-14 06:53:07 · ▶ J14.1 — La clôture — la passe et le tag (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git tag -l \"chantier-*\"; ls reports/ | grep cloture", "description": "Suivre J14.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 07:11:42 EST
+2026-11-14 06:37:15 · ✔ J13.1 en 853.1 s (code 0) — ✅ test -f reports/rapport-tableau-mesures.md && echo FICHE-OK
+2026-11-14 06:53:07 · ▶ J14.1 — La clôture — la passe et le tag (timeout 5400 s)
+rapport-cloture-chantier.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git tag -l \"chantier-*\"; git log --oneline -1 | cut -c1-90", "description": "Verdict J14.1", "timeoutMs": 600000}`

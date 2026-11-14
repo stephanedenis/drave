@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-cloture-chantier.md`](rapport-cloture-chantier.md) | **J14.1** — la clôture : **84/81/3**, trois rouges revérifiées, tags `chantier-2026-11-14` et `semaine-2026-11-14` |
 | [`rapport-tableau-mesures.md`](rapport-tableau-mesures.md) | **J13.1** — la table des mesures : POS, F1, attachement, couverture, spans, produit, Panini — avant/après, **base 612/602**, commits, **18 contrôles** |
 | [`rapport-bilan-chantier.md`](rapport-bilan-chantier.md) | **J10.1** — le bilan du chantier : F1 **0,7533 → 0,7902**, attachement **236 → 238**, Panini borné, **20/21**, 5 timeouts, 1 échec (le tag) |
 | [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |
@@ -22,7 +23,6 @@
 | [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → 2,9726/2,7856, `--rope` seul insuffisant |
 | [`rapport-coordination-s.md`](rapport-coordination-s.md) | **S** — les 11 verdicts non committés : 7 acceptés, 4 exclus |
 | [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)**, intégrer |
-| [`rapport-coordination-a.md`](rapport-coordination-a.md) | **A** — A6.2 libre (MoE 18 Go), A8.3b2 hors graphe |
 | [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 niveaux |
 | [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
 | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |

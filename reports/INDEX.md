@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **728 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **729 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -105,6 +105,7 @@
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
 | [rapport-cic-verificateur.md](rapport-cic-verificateur.md) | J12.2 — Le corpus d'or CIC : 42/42 verdicts rejoués par un vérificateur indépendant |
 | [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |
+| [rapport-cloture-chantier.md](rapport-cloture-chantier.md) | J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14` |
 | [rapport-coherence-docs-2.md](rapport-coherence-docs-2.md) | Cohérence des documents avec le code — second passage |
 | [rapport-coherence-docs-3.md](rapport-coherence-docs-3.md) | Rapport — cohérence de la documentation, troisième passage |
 | [rapport-coherence-docs.md](rapport-coherence-docs.md) | Cohérence des documents avec le code — audit |

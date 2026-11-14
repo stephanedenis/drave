@@ -2411,3 +2411,152 @@ A  reports/tableau-mesures.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'EOF'\nJ13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)\n\n26 tâches de J1.1 à J12.2 : 25 accep … [751 caractères tronqués]`
+
+  ```
+[s/v7 0e75f101] J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+ 22 files changed, 4681 insertions(+), 34 deletions(-)
+ create mode 100644 journal/2026-11-14/moteur.md
+ create mode 100644 journal/sessions/session-4271ad32-61f1-46a0-8494-7c94c3f8050f/digest.md
+ create mode 100644 journal/sessions/session-4271ad32-61f1-46a0-8494-7c94c3f8050f/rapport.md
+ create mode 100644 reports/rapport-tableau-mesures.md
+ create mode 100644 reports/tableau-mesures.json
+RC=0
+0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+b20a4c31 J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 0e75f101 | sed -n '1,40p'; echo '--- status after'; git status --porcelain | sed -n '1,40p'", "description": "Inspect full commit contents"}`
+
+  ```
+0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/pilotage/roadmap.md                           |   14 +-
+ journal/2026-11-14/README.md                       |    6 +-
+ journal/2026-11-14/distribue.md                    |    2 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |   14 +-
+ journal/2026-11-14/moteur.md                       |   24 +
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    7 +-
+ journal/THEMES.md                                  |    1 +
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   39 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2413 ++++++++++++++++++++
+ .../rapport.md                                     |  245 ++
+ .../digest.md 
+… [785 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Post-commit doc review"}`
+
+  ```
+revue de documentation · 731 fiche(s) · 825 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py 2>&1 | tail -10; echo RC=${PIPESTATUS[0]}", "description": "Post-commit state freshness check"}`
+
+  ```
+état · dernier fait 0e75f101 · dernier état 0e75f101
+  ✅ aucun fait commité après le dernier état
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation|✅ tous\"; echo RC=${PIPESTATUS[0]}", "description": "Post-commit budget check"}`
+
+  ```
+T0 max : 3999 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Post-commit journal check"}`
+
+  ```
+journal · 46 jour(s) · 192 session(s) · 2512 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -3; echo RC=${PIPESTATUS[0]}", "description": "Run product gate", "timeoutMs": 300000}`
+
+  ```
+✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-cic.sh 2>&1 | tail -6; echo RC=${PIPESTATUS[0]}", "description": "Run CIC gate", "timeoutMs": 120000}`
+
+  ```
+42/42 verdicts · 42/42 empreintes · 42/42 sérialisations
+  octet altéré : 36/36 rejetés · exhaustif eq(2,2) : 1020/1020 rejetés
+  non-trivialité : accepte-tout 6 désaccords, rejette-tout 36 désaccords
+  corpus corrompu : refusé (code 1)
+  tests : 21 cas
+✅ porte CIC verte : 42/42 verdicts, empreintes, octet altéré rejeté, corpus corrompu refusé
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Run document/table gate post-commit", "timeoutMs": 120000}`
+
+  ```
+✅ 1798 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4255 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+RC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s' && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/tableau-mesures.json'))\nprint('schema', d['schema'], 'version', d['version'])\nprint('lignes', len(d['tableau']), 'commits', len(d['commits']), … [402 caractères tronqués]`
+
+  ```
+0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+schema drave.tableau-mesures version 1
+lignes 30 commits 26 controles 18
+head b20a4c31 base 612 0.7902 base 602 0.7882
+sections ['panini', 'portes', 'produit', 'produit_livrables', 'tagger']
+89
+  376 reports/rapport-tableau-mesures.md
+ 1271 reports/tableau-mesures.json
+ 1647 total
+  ```
+
+### 🤖 Assistant
+
+**J13.1 est fait, committé (`0e75f101`).**
+
+**Livrables**
+- Fiche : [`reports/rapport-tableau-mesures.md`](reports/rapport-tableau-mesures.md) — 376 lignes, 30 lignes de mesure.
+- JSON : [`reports/tableau-mesures.json`](reports/tableau-mesures.json) — `drave.tableau-mesures` v1 : 30 lignes, 26 commits, 18 contrôles négatifs.
+- État/roadmap/journal/index mis à jour : `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/README.md`, `reports/INDEX.md`, `journal/2026-11-14/mesures.md`.
+
+**La base 612/602, re-mesurée au HEAD `b20a4c31`**
+| gold | phrases | jetons | POS | F1 | labels / cibles | couverture |
+|---|---:|---:|---:|---:|---:|---:|
+| vivant 612 | 612 | 3 179 | 0,8625 | **0,7902** | 238/239 | 0,9958 |
+| gelé 602 | 602 | 3 141 | 0,8625 | **0,7882** | 234/239 | 0,9791 |
+
+**Avant/après (612)**
+- F1 **0,7533 → 0,7902** (+0,0369), dev/test **0,7476/0,7663 → 0,7875/0,7962**.
+- Attachement **236/237 → 238/238 labels** (238/239 cibles), couverture **0,9916 → 0,9958**.
+- Spans sans label **2 → 1** : `r035` réglé, `g017` reste une convention d'adverbe.
+- POS **0,8625 inchangée** (0 jeton changé sur 3 179).
+- Tagger **0,8625 → 0,9475 (+8,49 pts)** [7,23 ; 9,74].
+- Produit : schéma v2, restitution v1 (canonique 46/46, strict 0,1087), 50 textes (0 plantage, 50/50 v2, 115/0 chevauchements), 5 exemples (4 corrigés), fr/en.
+- Panini : table **14/14**, corpus **418/438**, généalogie **154/154** hors script, familles **sœurs 0,619 vs 0,0445**, §334 (**H0 0,909139/0,906307**, date **0,0089** après topo, V150 β **−0,006 ≠ +0,138**), CIC **42/42**, **36/36** preuves altérées rejetées.
+
+**Contrôles et commits**
+- **26 tâches** J1.1–J12.2 : **25 acceptations vertes**, **1 échec** (J5.2, le tag), **5 timeouts** dont **4 récupérés**.
+- **18 contrôles négatifs** détaillés (planchers, permutations, altérations, versions croisées, placebo).
+- Les valeurs « avant » sont celles des fiches ; les valeurs « après » du cœur produit sont re-mesurées au HEAD (P10 excepté), le reste est publié avec sa fiche.
+
+**Portes passées** : `revue_documentation` ✅, `porte-tableaux` ✅, `porte-produit` **183/183** ✅, `porte-cic` **42/42** ✅, `verifie_en_cours` ✅, `verifie_journal` ✅, budget **3 999/4 000** ✅, état à jour ✅.
+
+**Reste** : **J14.1** — la passe complète (le tableau publie le relevé du 14/11 : **84 portes, 81 vertes, 3 rouges tolérées**) et le tag `chantier-2026-11-14`.
+

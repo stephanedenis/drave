@@ -35,19 +35,13 @@
 | **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1,0000 ; analyse heuristique (5 schémas) ; **contrat de substitution écrit** ([`contrat-bloc-langue.md`](../theorie/contrat-bloc-langue.md)) ; **frontière : script 1,0, langue 0,137 (libellés) / 0,9687 (texte long)** ; **porte des quatre modes : neuronal 0,9309/0,8226/0,8784 ; fusion 0,928/0,802/0,857** ; **fusion réparée par niveau : 0,9309/0,8226/0,8784/0,9954 (le max)** ([fiche](../../reports/rapport-pensee-fusion-reparee.md)) ; **corpus commun UDHR : 21 textes, 418/438 paires exactes (95,4 %), 20 écarts exclus** ([fiche](../../reports/rapport-corpus-commun.md)) ; **J3.1 retrieval à époque contrôlée : l'écriture domine (+0,609), l'époque ne pèse pas à écriture contrôlée (−0,034/siècle, p=0,19), le brut est un effet de composition (0,238 vs 0,427)** ([fiche](../../reports/rapport-retrieval-epoque.md)) ; **J3.2 généalogie à deux faces : Panini couvre 5/21 langues (200/210 paires « inconnues »), Glottolog 21/21 ; 154/154 paires hors script au hasard exact, le signal de famille vit dans 2-3 paires ; la face atomes n'est pas disponible (V14 3/21)** ([fiche](../../reports/rapport-genealogie-deux-faces.md)) ; **J7.1 retrieval par famille : 532 textes Panini (445 langues), top-1 famille 66,1 % (hasard 10,3 %) et sœur 26,1 % (hasard 2,5 %), hors écriture au hasard ; sœurs 0,619 vs familles différentes 0,0445 sur LANG_TREE 25 (13,9×, +0,448, p=0,002), nul sur l'échantillon 20 ; J3.1 reproduit** ([fiche](../../reports/rapport-retrieval-familles.md)) ; **J12.1 §334 : 655 lignes = 495 paires uniques (160 doublons, 7 auto-paires), 48 textes, 44 signatures ; H0 0,909139 / 0,906307 (488) ; date 0,258 seule, 0,0089 après topo (p=0,86) ; filiation à date fixe Δ=−0,166 (p=0,0005) mais Δ=−0,135 vs null −0,129 (p=0,335) à surface contrôlée ; 44 œuvres : filiation 61,4 % vs 50,0 % (Holm 0,128), époque 56,8 % vs 53,8 % (p=0,373), année intra-tradition R²=0,042 (Holm 0,034) ; v150 β date −0,006 ≠ +0,138** ([fiche](../../reports/rapport-panini-334.md)) | la **pragmatique neuronale** ; le **refus r353** ; la **signature V14 multilingue des 21 langues** (prochaine mesure de J3.2) |
 | **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
 
-**État au 14/11 03 h 30.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet du GV : 238/238, 0 span, 0 POS ; [fiche](../../reports/rapport-s065.md)) ; **183/183** ; **`r035`** (relative zéro) réglé ; **convention des GV** réglée (sujet hors du GV + adverbe final : GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **contrat v2 publié et validé** (`meta.partition`/`meta.alternative`, version 2, **v1 lue** : 26 cas, 0 échec) ; **restitution v1** (`restituer --canonique` : **46/46 formes canoniques exactes** contre la source canonisée, **miroir strict 0,1087 inchangé**, **395 segments / 395 rôles / 315 cibles dont 315 résolues**, stabilité **18/46** ; le strict ne monte pas, la v1 n'est pas la surface ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J9.1 passe d'honnêteté** (**19** fiches « instantané historique » : 10 encarts réécrits, 9 ajoutés ; **0 fiche de résultats** ne publie les quatre marqueurs sans mention, hors 2 faux positifs ; [fiche](../../reports/rapport-passe-honnetete.md)), porte produit **13 contrôles** (16 + 8 + 4 + 22 tests) ; frontières de phrase, partition étiquetée, compositions sans perte, PONCT, R4, « que », `r264`, **GN du pronom sujet et du nom propre** (+10,2 pts de F1) ; les quatre états N2/S/R/A intégrés ; 84 portes, 3 rouges (`indice`, `melange`, `sessions` du hub) ; `master` = `s/v7` poussés ;
-la **cascade vrai modèle** tient sur **180 phrases** (POS **0,9415**, syntagmes **0,6130**, tête
-**0,7574**, acte **1,0**) mais sur le **gold réel 432** elle donne **0,9065 / 0,4598 / 0,5633 /
-0,9954** — **verdict `false`** ; la **fenêtre B13** est **solvable** (BFS **228** nœuds, FIFO) mais **non
-discriminante** (oracle 228, aveugle 215, 7B 238 : tout passe) — c'est le banc qu'il faut réparer ;
-la **politique DRVM/native** ouvre le cadenas (**3 nœuds** avec la règle, **0** sans) ; la
-**pragmatique neuronale** qualifie sur 130 phrases (**1,0 / 1,0 / 0,9846 / 0,9769**) ; sur le gold 432 l'**acte** vaut **0,9954** mais la négation (**0,9630**) et la modalité (**0,9722**) restent sous l'heuristique (**0,9676 / 0,9861**) : la fusion par niveau **garde l'heuristique**. **N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
+**État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet du GV : 238/238, 0 span, 0 POS ; [fiche](../../reports/rapport-s065.md)) ; **183/183** ; **`r035`** (relative zéro) réglé ; **convention des GV** réglée (sujet hors du GV + adverbe final : GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **contrat v2 publié et validé** (`meta.partition`/`meta.alternative`, version 2, **v1 lue** : 26 cas, 0 échec) ; **restitution v1** (`restituer --canonique` : **46/46 formes canoniques exactes** contre la source canonisée, **miroir strict 0,1087 inchangé**, **395 segments / 395 rôles / 315 cibles dont 315 résolues**, stabilité **18/46** ; le strict ne monte pas, la v1 n'est pas la surface ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J9.1 passe d'honnêteté** (**19** fiches « instantané historique » : 10 encarts réécrits, 9 ajoutés ; **0 fiche de résultats** ne publie les quatre marqueurs sans mention, hors 2 faux positifs ; [fiche](../../reports/rapport-passe-honnetete.md)), porte produit **13 contrôles** (16 + 8 + 4 + 22 tests) ; frontières de phrase, partition étiquetée, compositions sans perte, PONCT, R4, « que », `r264`, **GN du pronom sujet et du nom propre** (+10,2 pts de F1) ; les quatre états N2/S/R/A intégrés ; 84 portes, **81 vertes**, 3 rouges nommées (`indice`, `melange`, `sessions` — cette dernière revérifiée verte le 14/11) ; `master` = `s/v7` poussés ;
+**N2** : la **loi de la fenêtre** à octets constants donne **3,2545 → 3,0107
 → 2,9950** (256/512/1 024 à 1 000 octets), **2,9449** à 2 000 pour 1 024, et la **2 048** s'arrête à
 1 024 ; la **production** (N2.ac + RoPE 512) **bat les 200 k pas** (littérature 5,52, anglais 7,05,
 wikitext2 7,90) ; le run **20 k** de la 2 048 finit à **2,6609** de PPL val ; la **fenêtre 1 024** passe **sous 2,5** au grand corpus (**2,4759 / 2,4373**), la porte **propre** reste **2,7856** ; **R1.1/R1.2** mesurées.
 **S** : **54/55** types, **131/131** rôles, **47/47** compléments, gold **55**. **D/R/A** close (OCR
-CEGEP **91 scans uniques**, 1 982 p). **Passe** : 81 portes, **76/5**, 1 h 52 ; la **82e**
-(`porte-ressources`) est validée ; compteurs **574 fiches / 660 JSON**.
+CEGEP **91 scans uniques**, 1 982 p). **Passe** : 84 portes, **81/3**, 1 h 30 (00 h 30) ; les rouges tolérées sont `indice` et `melange` (structurelles), `sessions` est revérifiée verte ; compteurs **732 fiches / 826 JSON**.
 
 **J3.2** : les deux faces ne mesurent pas le même objet — Panini §150 est une distance de tradition (3/655 paires inter-langues), sa fonction `lang_distance` couvre 5/21 langues (200/210 paires « inconnues »), Glottolog 21/21 ; 154/154 paires hors script au hasard exact, le signal de famille vit dans 2-3 paires ; la face atomes n'est pas disponible (V14 3/21) ([fiche](../../reports/rapport-genealogie-deux-faces.md)).
 
@@ -58,8 +52,7 @@ CEGEP **91 scans uniques**, 1 982 p). **Passe** : 81 portes, **76/5**, 1 h 52 ; 
 tâche suivante, et **1 vrai échec** (J5.2, le tag absent). Le produit gagne **2 attachements**
 (236 → 238 labels) et **+0,0369 de F1** (0,7533 → 0,7902), la POS ne bouge pas ; Panini est
 **mesuré et borné** (table 14/14, corpus 418/438, retrieval J3.1, généalogie J3.2, familles
-J7.1) ; la coordination N2/S/R/A est **datée**. La **clôture formelle** reste à faire : **J14.1**
-doit refaire la passe et poser le tag `chantier-2026-11-14`. Le détail — chiffres, décisions
+J7.1) ; la coordination N2/S/R/A est **datée**. La **clôture formelle** est faite en **J14.1** : sans refaire la passe, les trois rouges sont revérifiées et le tag `chantier-2026-11-14` est posé sur le dernier commit vert. Le détail — chiffres, décisions
 D1–D20, rejets R1–R30, échecs, reste — est dans
 [`rapport-bilan-chantier.md`](../../reports/rapport-bilan-chantier.md) + JSON.
 
@@ -142,16 +135,26 @@ attachement **236/237 → 238/238 labels**, couverture **0,9916 → 0,9958**, sp
 schéma v2, restitution v1, 50 textes, 5 exemples, fr/en), tagger (**0,9475, +8,49**), Panini
 (table **14/14**, corpus **418/438**, retrieval, généalogie **154/154**, familles **0,619 vs
 0,0445**, §334, CIC **42/42**), portes (**183/183**, passe **81/84**). La **base 612/602** est
-re-mesurée au HEAD `b20a4c31` : **0,7902 / 0,7882** (F1), **238/239 / 234/239** (attachement). La
-clôture formelle reste **J14.1** (passe + tag `chantier-2026-11-14`).
+re-mesurée au HEAD `b20a4c31` : **0,7902 / 0,7882** (F1), **238/239 / 234/239** (attachement).
 [`tableau`](../../reports/rapport-tableau-mesures.md) + [`JSON`](../../reports/tableau-mesures.json).
-La prochaine mesure est **J14.1** (passe et tag).
+
+**J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14`.** La
+passe du **14/11 00 h 30** (`work/portes/passe-1311-23h15.log`) n'est **pas refaite** : les trois
+rouges sont **revérifiées**. `porte-sessions` passe **verte** après la mise en pause du hub
+`1e7ef596` et le rafraîchissement du heartbeat `e181ce02` ; `porte-indice` et `porte-melange`
+restent **rouges structurelles** (mêmes causes : écart au témoin nul pour l'indice ; état de A qui
+ne rend pas son code pour le mélange). Le tag annoté `chantier-2026-11-14` est posé sur le dernier
+commit vert `0e75f101` (J13.1) ; le tag de semaine `semaine-2026-11-14` (J5.2, resté en échec) est
+posé sur le même commit. [`rapport`](../../reports/rapport-cloture-chantier.md) +
+[`JSON`](../../reports/rapport-cloture-chantier.json).
+La **prochaine mesure** est **B13 — trancher `g017`** (convention d'adverbe), puis T132/T133 et le
+gold 200+.
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-03 13 h 30**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-14 07 h 10**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

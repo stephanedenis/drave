@@ -1,0 +1,335 @@
+{
+ "schema": "drave.cloture-chantier",
+ "version": 1,
+ "titre": "J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag chantier-2026-11-14",
+ "sous_titre": "Sans relancer la passe complète : vérification ciblée des trois rouges, références, tags annotés, bilan de clôture",
+ "date": "2026-11-14",
+ "tache": "J14.1",
+ "statut": "cloture",
+ "head": "0e75f101",
+ "lignes_roadmap": [
+  "B13",
+  "Panini",
+  "N2",
+  "S",
+  "R",
+  "A"
+ ],
+ "principe": "La passe de référence du 14/11 00 h 30 (84/81/3) n'est pas refaite ; seules les trois rouges sont rejouées. Les chiffres de produit, de tagger et de Panini sont ceux de J13.1 et de leurs fiches, pas de nouvelles mesures.",
+ "passe": {
+  "lancee": "2026-11-13 23:15 HNE",
+  "fin": "2026-11-14 00:30 HNE",
+  "portes": 84,
+  "vertes": 81,
+  "rouges": 3,
+  "refaite": false,
+  "log": "work/portes/passe-1311-23h15.log",
+  "journaux": "work/portes/passe-1311-23h15",
+  "rouges_detail": [
+   {
+    "porte": "indice",
+    "code": 1,
+    "duree_s": 875,
+    "cause": "indice extérieur à 482 jetons de l'aiguille, témoin à 459, hasard 370 : écart nul ou négatif"
+   },
+   {
+    "porte": "melange",
+    "code": 1,
+    "duree_s": 111,
+    "cause": "l'état de A ne rend pas le code de A dans une invite qui n'en contient aucun (calibration)"
+   },
+   {
+    "porte": "sessions",
+    "code": 1,
+    "duree_s": 0,
+    "cause": "deux mandats périmés : hub 1e7ef596 (12 902 min) et e181ce02 (10 052 min)"
+   }
+  ]
+ },
+ "verification_ciblee": {
+  "date": "2026-11-14 06:53–07:09 HNE",
+  "journaux": "work/portes/verif-cloture/",
+  "portes": [
+   {
+    "porte": "sessions",
+    "code": 0,
+    "verdict": "verte",
+    "duree_s": 20,
+    "cause": "hub 1e7ef596 passé en pause (dernier heartbeat le 05/11) ; heartbeat e181ce02 rafraîchi à 06:55 ; sessions.py --check --strict rend 0",
+    "journal": "work/portes/verif-cloture/porte-sessions.log",
+    "reparation": "mandat périmé du hub et heartbeat de e181ce02"
+   },
+   {
+    "porte": "melange",
+    "code": 1,
+    "verdict": "rouge",
+    "duree_s": 145,
+    "cause": "calibration : l'état de A (position 1470) ne rend pas ZQ-4471-KX dans une invite sans code ; le mélange ne pourrait rien dire",
+    "journal": "work/portes/verif-cloture/porte-melange.log",
+    "structurelle": true
+   },
+   {
+    "porte": "indice",
+    "code": 1,
+    "verdict": "rouge",
+    "duree_s": 913,
+    "cause": "indice extérieur à 482 jetons de l'aiguille, témoin apparié à 459, hasard 370 : écart nul ou négatif ; l'écho interne vaut 64/64 et ne prouve rien",
+    "journal": "work/portes/verif-cloture/porte-indice.log",
+    "structurelle": true
+   }
+  ],
+  "conclusion": "les trois rouges de la passe sont les mêmes trois, avec les mêmes causes ; aucune rouge nouvelle ; sessions réparée, indice et melange restent structurelles"
+ },
+ "tag": {
+  "nom": "chantier-2026-11-14",
+  "type": "annoté",
+  "commit": "0e75f101",
+  "objet_commit": "J13.1 — la table des mesures",
+  "message": "Chantier 2026-11-14 : 84 portes, 81 vertes, 3 rouges nommées (indice, melange, sessions) ; 28/28 acceptations ; J14.1",
+  "secondaire": {
+   "nom": "semaine-2026-11-14",
+   "commit": "0e75f101",
+   "type": "annoté",
+   "reparation": "J5.2 (tag de semaine absent) — posé à la clôture, daté du 14/11"
+  },
+  "controle": "git cat-file -t chantier-2026-11-14 => tag ; git rev-parse chantier-2026-11-14^{} => 0e75f101"
+ },
+ "taches": {
+  "total": 28,
+  "vertes": 28,
+  "echecs": 0,
+  "timeouts": 5,
+  "recuperes": 4,
+  "detail": "26 tâches de J1.1 à J12.2 + J13.1 + J14.1 (J0 de liaison exclu)",
+  "reparations": [
+   {
+    "tache": "J5.2",
+    "objet": "tag de semaine absent",
+    "reparation": "tag semaine-2026-11-14 posé sur 0e75f101 à J14.1",
+    "statut": "réparé, daté"
+   }
+  ],
+  "timeouts_detail": [
+   "J1.2",
+   "J2.2",
+   "J3.1",
+   "J5.2",
+   "J8.1"
+  ]
+ },
+ "chiffres": {
+  "produit": {
+   "base": {
+    "gold_vivant": 612,
+    "gold_gele": 602,
+    "cibles": 239,
+    "jetons": 3179
+   },
+   "pos": {
+    "avant": 0.8625,
+    "apres": 0.8625,
+    "delta": 0.0,
+    "controle": "0 jeton changé sur 3 179"
+   },
+   "f1": {
+    "avant": 0.7533,
+    "apres": 0.7902,
+    "delta": 0.0369,
+    "controle": "183/183 ; placebo 0,7758 ; test non utilisé pour choisir"
+   },
+   "attachement": {
+    "avant": "236/237 labels",
+    "apres": "238/238 labels",
+    "cibles": "238/239",
+    "couverture_apres": 0.9958,
+    "controle": "0 cible perdue"
+   },
+   "spans_sans_label": {
+    "avant": 2,
+    "apres": 1,
+    "restant": "g017"
+   },
+   "restitution_v1": {
+    "canonique": "46/46",
+    "strict": 0.1087,
+    "controle": "source brute 1/46 ; mélange/troncature 46/46 détectés"
+   },
+   "schema_v2": {
+    "cas": "26 cas / 0 échec",
+    "annotations": "612/612 v2 + 612/612 v1",
+    "controle": "v2 refuse v1 ; v1 refuse v2"
+   }
+  },
+  "tagger": {
+   "pos_612": {
+    "avant": 0.8625,
+    "apres": 0.9475,
+    "gain_pts": 8.49,
+    "ic95": [
+     7.23,
+     9.74
+    ]
+   },
+   "reel_432": {
+    "avant": 0.8893,
+    "apres": 0.936,
+    "gain_pts": 4.67,
+    "ic95": [
+     3.45,
+     6.01
+    ]
+   },
+   "controle": "majoritaire 0,2145 ; classe fréquente 0,2491 ; permutation 0,1667 ; uniforme 0,0833 ; McNemar 344/74",
+   "reserve": "le 612 est tiré par les 160 synthétiques ; le réel 432 ne gagne que +4,67 ; le split réel n'est pas fait"
+  },
+  "panini": {
+   "atomes": "14/14 lignes, 8 niveaux",
+   "corpus": "418/438 paires exactes (95,4 %), 8/8 contrôles",
+   "retrieval": "Bible écriture +0,609 ; date −0,034/siècle (p = 0,19)",
+   "genealogie": "154/154 hors script au hasard ; Glottolog 21/21 ; Panini 5/21",
+   "familles": "sœurs 0,619 vs 0,0445 (13,9×), p = 0,002",
+   "§334": "H0 0,909139 / 0,906307 ; date 0,0089 après topo (p = 0,86) ; V150 β −0,006 ≠ +0,138",
+   "cic": "42/42 verdicts, 42/42 empreintes, 36/36 preuves altérées rejetées, 1 020/1 020 mutations rejetées"
+  }
+ },
+ "controles": [
+  {
+   "id": "C1",
+   "controle": "la passe n'est pas refaite",
+   "dispositif": "lecture du log et du registre par code de sortie",
+   "resultat": "84/81/3 ; 3 rouges nommées",
+   "verdict": "pass"
+  },
+  {
+   "id": "C2",
+   "controle": "les rouges sont les mêmes",
+   "dispositif": "comparaison des trois journaux de vérification avec la passe",
+   "resultat": "mêmes causes ; 0 rouge nouvelle",
+   "verdict": "pass"
+  },
+  {
+   "id": "C3",
+   "controle": "sessions réparée par la règle",
+   "dispositif": "sessions.py --check --strict + autotest de la porte",
+   "resultat": "0 ; autotest 6/6",
+   "verdict": "pass"
+  },
+  {
+   "id": "C4",
+   "controle": "le tag est annoté",
+   "dispositif": "git cat-file -t ; git rev-parse ^{}",
+   "resultat": "tag ; 0e75f101",
+   "verdict": "pass"
+  },
+  {
+   "id": "C5",
+   "controle": "le tag de semaine répare J5.2",
+   "dispositif": "git tag -l 'semaine-2026-11-14'",
+   "resultat": "posé sur 0e75f101",
+   "verdict": "pass"
+  },
+  {
+   "id": "C6",
+   "controle": "l'état accompagne le fait",
+   "dispositif": "verifie_etat_a_jour.py --index (hook)",
+   "resultat": "en-cours stagé avec les faits",
+   "verdict": "pass"
+  },
+  {
+   "id": "C7",
+   "controle": "la documentation passe",
+   "dispositif": "revue_documentation.py ; porte-tableaux.sh",
+   "resultat": "0 ; page vivante datée du dernier commit",
+   "verdict": "pass"
+  },
+  {
+   "id": "C8",
+   "controle": "l'état est court et reprenable",
+   "dispositif": "verifie_en_cours.py ; taille_documents.py",
+   "resultat": "état ≤ 2 000 mots ; budgets T0/T1 respectés",
+   "verdict": "pass"
+  }
+ ],
+ "limites": [
+  "La passe n'est pas rejouée : les 81 vertes sont celles du 14/11 00 h 30 ; un changement de code ou de données après cette heure ne serait pas couvert.",
+  "Le tag est posé sur 0e75f101 (J13.1), pas sur le commit de clôture : un lecteur qui cherche le rapport dans le tag ne le trouvera pas.",
+  "indice et melange restent rouges structurelles : les tolérer ne les corrige pas ; une amélioration de l'instrument peut les faire passer, une régression du moteur peut les faire échouer autrement.",
+  "sessions est verte par convention : le hub est en pause et le heartbeat de e181ce02 est rafraîchi ; une autre session périmée rendrait la porte rouge sans changement de code.",
+  "Les durées de la vérification (913 s, 145 s, 20 s) ne sont pas des temps de référence : indice et melange ont tourné en parallèle sur la même machine.",
+  "J5.2 est réparé après coup : le tag semaine-2026-11-14 est daté du 14/11, pas du 13/11 ; l'échec historique reste daté.",
+  "Les compteurs bougent : 732 fiches / 826 JSON après ce rapport ; en-cours est la source du compte."
+ ],
+ "reste": [
+  {
+   "ligne": "B13 / g017",
+   "reste": "1 span sans label ; convention d'adverbe non tranchée",
+   "prochaine_action": "trancher l'annotation, puis rejouer la variante étroite sur un gold tenu à l'écart",
+   "bloquant": "gold 200+"
+  },
+  {
+   "ligne": "B13 / T132-T133",
+   "reste": "T132/T133 2/5 ; gold 200+",
+   "prochaine_action": "les traiter après g017",
+   "bloquant": "gold"
+  },
+  {
+   "ligne": "N2",
+   "reste": "porte propre 2,7856 (manque 0,2856 val / 0,3566 test)",
+   "prochaine_action": "la porte propre, puis N4",
+   "bloquant": "aucun"
+  },
+  {
+   "ligne": "R0.7",
+   "reste": "split réel du tagger non fait ; route API derrière drapeau",
+   "prochaine_action": "split réel tenu à l'écart",
+   "bloquant": "aucun"
+  },
+  {
+   "ligne": "S",
+   "reste": "11 verdicts + pointeur",
+   "prochaine_action": "committer le travail S",
+   "bloquant": "session S"
+  },
+  {
+   "ligne": "J3.2",
+   "reste": "signature V14 des 21 langues",
+   "prochaine_action": "mesurer V14",
+   "bloquant": "données"
+  },
+  {
+   "ligne": "A",
+   "reste": "A6.2, A8.3b2",
+   "prochaine_action": "rapport A6.2",
+   "bloquant": "aucun"
+  }
+ ],
+ "prochaine_mesure": "B13 — trancher g017 (convention d'adverbe), puis T132/T133 et le gold 200+",
+ "fichiers": {
+  "nouveaux": [
+   "reports/rapport-cloture-chantier.md",
+   "reports/rapport-cloture-chantier.json",
+   "work/portes/verif-cloture/porte-indice.log",
+   "work/portes/verif-cloture/porte-melange.log",
+   "work/portes/verif-cloture/porte-sessions.log"
+  ],
+  "mis_a_jour": [
+   "docs/pilotage/references-non-regression.md",
+   "docs/pilotage/en-cours.md",
+   "docs/pilotage/roadmap.md",
+   "reports/README.md",
+   "reports/INDEX.md",
+   "reports/rapport-tableau-mesures.md",
+   "reports/tableau-mesures.json",
+   "journal/2026-11-14/mesures.md",
+   "journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md",
+   "journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md"
+  ],
+  "lus_non_modifies": [
+   "work/portes/passe-1311-23h15.log",
+   "reports/rapport-bilan-chantier.md",
+   "reports/rapport-semaine.md",
+   "reports/rapport-tableau-mesures.md"
+  ]
+ },
+ "verdict": "J14.1 est fait. La passe de référence (84 portes, 81 vertes, 3 rouges nommées) n'est pas refaite ; les trois rouges sont revérifiées : sessions est verte après la mise en pause du hub et le rafraîchissement du heartbeat, indice et melange restent rouges structurelles avec leurs causes. Le tag annoté chantier-2026-11-14 est posé sur le dernier commit vert 0e75f101, avec le tag de semaine semaine-2026-11-14 qui répare J5.2. Le chantier est mesuré, écrit, committé et marqué ; il est clos."
+}
