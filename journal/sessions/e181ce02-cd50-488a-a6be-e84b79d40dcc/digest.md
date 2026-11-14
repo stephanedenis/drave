@@ -62471,3 +62471,211 @@ index 21ea0cf4..7d2004b5 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-14, 10 h 10 HNE\", t)\np.write_text( … [614 caractères tronqués]`
+
+  ```
+15 files changed, 898 insertions(+), 37 deletions(-)
+COMMIT OK 1
+883ce817 CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ
+   812f2722..883ce817  s/v7 -> s/v7
+   812f2722..883ce817  master -> master
+sam 14 nov 2026 10:08:29 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; ls tools/tagger_api.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md 2>/dev/null; git status --porcelain tools/ docs/produit/ reports/ 2>/dev/null | head -4", "description": "Suivre le tagger", "tim … [16 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 10:16:57 EST
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; ls tools/tagger_api.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md 2>/dev/null; grep -n \"tagger\" tools/drave.py | head -3", "description": "Suivre le tagger", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 10:26:11 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la /tmp/*tagger* /tmp/tagger* 2>/dev/null | head -5; ps aux | grep -c \"[d]sh\\|node\"; date", "description": "Chercher les traces du tagger"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 47402 13 nov 22:21 /tmp/tagger-612.json
+-rw-r--r--. 1 stephane stephane 47402 13 nov 22:21 /tmp/tagger-612.json
+-rw-r--r--. 1 stephane stephane 16506 13 nov 22:00 /tmp/tagger-612-smoke.json
+-rw-r--r--. 1 stephane stephane 16506 13 nov 22:00 /tmp/tagger-612-smoke.json
+-rw-r--r--. 1 stephane stephane 14656 13 nov 22:36 /tmp/tagger-612-smoke-repo.json
+8
+sam 14 nov 2026 10:26:24 EST
+  ```
+
+- **list_agents** `{}`
+
+  ```
+df1b1098-d54e-4763-bfc2-2a8cc1498cec [inactive] — Revue visuelle des 7 schémas
+f55ccb7b-481e-4ab6-b5b4-331dc6ff2238 [inactive] — Prototype classement appris
+ff7e786c-3ece-4eae-864e-19dddfead93c [inactive] — Cohérence fiches JSON portes
+a8035275-c7b9-4713-a6ab-7b859cd72306 [inactive] — Diagnostic du top-k strict
+63d4c619-63e8-41b9-a183-5c6f1ac05a21 [inactive] — Audit reproductibilité attachement
+53bc3288-f2c1-4a7d-b1db-88d794074f70 [inactive] — Annotation indépendante d'un échantillon
+c4796573-e2dc-48c2-b832-96f8bfab22c3 [inactive] — Contrat S pour les REL/SUB
+65495a29-10c0-4571-96be-e7729f1efebf [inactive] — Coût et cache du chunker
+3f8f2bb8-781b-44a6-9e14-58025004b6fc [inactive] — Audit de l'attachement v2
+d300542e-6e9d-47ac-875b-b44a192eec35 [inactive] — Prototype de la cible vide
+7263ca42-cd56-4c36-a6dd-8ff2d1024a43 [inactive] — Qualifier les 8 échecs restants
+1b0cf09a-a77a-443d-82e2-68a5d6cacdf0 [inactive] — Cache du chunker mesuré
+3144cf23-6004-46ef-bc3d-f05d81c0cff6 [inactive] — Couverture des spans sans S
+b3d82ad5-bff2-49ec-9ad6-2230e68d8071 [inactive] — Mesure multi-cibles du gold
+b9ea3904-889c-4497-a781-694da7d4987c [inactive] — Qualité du gold anglais
+24001907-4f19-4ea5-8
+… [1982 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls tools/tagger_api.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md 2>/dev/null; grep -c \"tagger\" tools/drave.py 2>/dev/null", "description": "Suivre le tagger", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4950]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4950", "timeout_ms": 600000, "wait": true}`
+
+  ```
+sam 14 nov 2026 10:36:45 EST
+69
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4950 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; ls tools/tagger_api.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md 2>/dev/null; grep -c "tagger" tools/drave.py 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat tools/drave.py tools/tests/ docs/produit/ 2>/dev/null | tail -5; grep -n \"def _client_tagger\\|def cmd_analyser\\|--tagger\" tools/drave.py | head -5", "description": "Voir l'état du tagger dans drave.py"}`
+
+  ```
+tools/drave.py | 306 +++++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 276 insertions(+), 30 deletions(-)
+8:    python3 tools/drave.py analyser "Le chat dort." --tagger          # API DeepSeek (clé, réseau)
+11:    python3 tools/drave.py evaluer --tagger --json                    # heuristique + cascade API
+21:En **option** (`--tagger`, `analyser` et `evaluer`), le POS (et lui seul) vient du tagger de
+24:**Sans `--tagger`, le défaut ne change pas** : heuristique, CPU, hors ligne, déterministe.
+57:# Le tagger est une **option** : sans `--tagger`, rien de ce bloc n'est importé ni exécuté.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; git status --porcelain tools/drave.py tools/tests/ docs/produit/ reports/rapport-tagger-option.md 2>/dev/null | head -5; git log --oneline -1 | cut -c1-80", "description": "Suivre l'intégration du tagger", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 10:45:17 EST
+ M tools/drave.py
+?? tools/tests/test_tagger_api.py
+883ce817 CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HOR
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; git status --porcelain tools/drave.py tools/tests/ docs/produit/ reports/rapport-tagger-option.md 2>/dev/null; timeout 120 python3 tools/tests/test_tagger_api.py 2>&1 | tail -3", "description": "Tester le tagger", "t … [18 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 10:54:30 EST
+ M tools/drave.py
+?? tools/tests/test_tagger_api.py
+Ran 14 tests in 1.883s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== sans clé :\"; env -u DEEPSEEK_API_KEY -u DSH_API_KEY python3 tools/drave.py analyser \"Le chat dort.\" --tagger 2>&1 | tail -2; echo \"EXIT=$?\"; echo \"=== avec clé :\"; DEEPSEEK_API_KEY=\"$(cat ~/.config/drave/deepseek.k … [168 caractères tronqués]`
+
+  ```
+=== sans clé :
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+EXIT=0
+=== avec clé :
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 32 étiquettes · unités sémantiques=3 (48.0% du texte)
+POS  Le/DET chat/NOUN dort/VERB sur/PREP le/DET toit/NOUN
+SYNTAGMES
+  GN   [0:7]    Le chat      rôle=agent     → dort
+  GV   [8:12]   dort         rôle=predicat  → chat
+  GP   [13:24]  sur le toit  rôle=lieu      → dort
+PRAGMATIQUE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env -u DEEPSEEK_API_KEY -u DSH_API_KEY timeout 60 python3 tools/drave.py analyser \"Zorglub flimbe un quark.\" --tagger 2>&1 | tail -3; echo \"EXIT=$?\"; env -u DEEPSEEK_API_KEY -u DSH_API_KEY timeout 60 python3 tools/drave.py analys … [121 caractères tronqués]`
+
+  ```
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=2 · réseau=2 · cache=0 · tokens=583 · latence=1.9 s
+EXIT=0
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 24 étiquettes · unités sémantiques=3 (75.0% du texte)
+POS  Zorglub/NOUN flimbe/NOUN un/DET quark/NOUN ./PONCT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 480; date; ls reports/rapport-tagger-option.md docs/produit/ 2>/dev/null | head -4; git status --porcelain tools/drave.py tools/tests/ docs/produit/ reports/ 2>/dev/null | grep -vE \"pensee-|rapport-audit\" | head -4", "descrip … [60 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 11:03:36 EST
+reports/rapport-tagger-option.md
+
+docs/produit/:
+exemples.md
+ M docs/produit/README.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-spans-chunker.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-tagger-option.md | cut -c1-160; echo \"=== doc :\"; grep -n \"tagger\" docs/produit/README.md | head -4 | cut -c1-120", "description": "Lire la fiche du tagger"}`
+
+  ```
+# R0.7 / 1A — le tagger POS en option : +8,57 pts sur 20 phrases, +8,49 sur le gold 612 ; le défaut reste hors ligne
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) · **Décision** : **1A** du 14/11 · **Date** :
+> 2026-11-14 · **Verdict** : ✅ **option livrée** — `--tagger` sur `analyser` et `evaluer` ; POS
+> **88,57 % → 97,14 %** sur 20 phrases `hand` (**+8,57 pts**), cohérent avec le **0,9475 contre
+> 0,8625** du gold 612 (**+8,49**) ; **40 appels**, **11 868 tokens** (cache neuf), **0 refus** ;
+> le **défaut** reste l'**heuristique**, CPU, hors ligne, déterministe. Le gain est **+4,67** sur
+> le seul gold réel 432 : lire le chiffre avec sa source.
+
+## 1. Ce qui est livré
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger          # POS par l'API, syntagmes heuristiques
+python3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger
+python3 tools/drave.py evaluer --tagger                            # heuristique + cascade API + Δ
+python3 tools/drave.py evaluer --tagger --par-langue --json
+=== doc :
+11:> porte produit est verte. Le **tagger POS par API** est livré **en option** (`--tagger`,
+33:aucun accès réseau **par défaut** (le tagger en option, lui, appelle 
+… [133 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | tail -2; timeout 300 python3 tools/tests/test_produit.py 2>&1 | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; … [106 caractères tronqués]`
+
+  ```
+OK
+
+OK
+     · compteurs : en-cours.md dit 826 JSON, le disque en a 827
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [433 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/drave.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/pensee-tagger-option.json 2>/dev/null; for i in 1 2 3; do\n  git add tools/drave.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md reports/pensee-tagger-option.json docs/produit/README.md docs/pilotage/en- … [722 caractères tronqués]`

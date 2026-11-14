@@ -5,8 +5,10 @@ Une seule commande, quatre gestes, hors ligne et déterministe :
 
     python3 tools/drave.py analyser "Le chat dort."
     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
+    python3 tools/drave.py analyser "Le chat dort." --tagger          # API DeepSeek (clé, réseau)
     python3 tools/drave.py evaluer
     python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py evaluer --tagger --json                    # heuristique + cascade API
     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
     python3 tools/drave.py restituer "Le chat dort."
     python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json
@@ -16,11 +18,14 @@ Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) �
 avec rôle et cible d'attachement, pragmatique, unités sémantiques —, sa mesure sur le gold et la
 **restitution v0** (annotation → surface, avec la fidélité du miroir). La restitution est un
 **codec de surface** : elle reconstruit depuis le niveau `graphème`, pas un décodeur neuronal.
-Ce qu'elle n'expose pas encore : le neuronal (`llama-cli` ou endpoint local), la traduction et la
-génération : ils demandent des poids, un service ou un GPU, alors que ce prototype est hors ligne,
-CPU et sans réseau.
+En **option** (`--tagger`, `analyser` et `evaluer`), le POS (et lui seul) vient du tagger de
+l'API DeepSeek : la clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key` puis
+`DEEPSEEK_API_KEY` ; le cache du client évite de refaire un appel ; la clé n'est jamais affichée.
+**Sans `--tagger`, le défaut ne change pas** : heuristique, CPU, hors ligne, déterministe.
+Ce que la commande n'expose pas : le neuronal local (`llama-cli` ou endpoint), la traduction et la
+génération : ils demandent des poids, un service ou un GPU.
 
-Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 1 erreur.
+Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 4 clé/tagger absent · 1 erreur.
 """
 from __future__ import annotations
 
@@ -28,6 +33,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import random
 import sys
@@ -48,6 +54,15 @@ NOM = "drave"
 VERSION = "0.1.0"
 LARGEUR = 100
 
+# Le tagger est une **option** : sans `--tagger`, rien de ce bloc n'est importé ni exécuté.
+MODELE_TAGGER = "deepseek-chat"
+SEUIL_TAGGER = 0.6
+# La fusion de l'option : le POS vient du tagger, tout le reste de l'heuristique. On ne force
+# pas les syntagmes du neuronal (`PRIORITE_NIVEAU` le ferait) parce qu'ils n'ont ni rôle ni
+# cible : l'attachement mesuré du produit serait perdu. Le gain mesuré porte sur le POS.
+PRIORITE_TAGGER = dict(bl.PRIORITE_NIVEAU)
+PRIORITE_TAGGER["syntagme"] = "heuristique"
+
 
 # --------------------------------------------------------------------------- sorties JSON
 
@@ -65,6 +80,132 @@ def _dumps(objet) -> str:
 def _canonique(a: bl.Annotation) -> str:
     """La forme comparée par `rejouer` : clés triées, durée exclue, sans espaces inutiles."""
     return _sur(json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+
+
+# --------------------------------------------------------------------------- le tagger (option)
+
+
+class CleTaggerAbsente(RuntimeError):
+    """Aucune clé : le tagger est une option, jamais un prérequis du produit."""
+
+
+def _lire_cle(chemin: pathlib.Path) -> str:
+    try:
+        return chemin.read_text(encoding="utf-8").splitlines()[0].strip()
+    except (OSError, IndexError):
+        return ""
+
+
+def _cle_tagger() -> str:
+    """La clé, dans l'ordre du chantier — jamais rendue, jamais journalisée, jamais affichée."""
+    for variable in ("DEEPSEEK_KEY_FILE", "DSH_KEY_FILE"):
+        chemin = os.environ.get(variable)
+        if chemin:
+            cle = _lire_cle(pathlib.Path(chemin).expanduser())
+            if cle:
+                return cle
+    cle = _lire_cle(pathlib.Path.home() / ".config" / "drave" / "deepseek.key")
+    if cle:
+        return cle
+    for variable in ("DEEPSEEK_API_KEY", "DSH_API_KEY"):
+        valeur = (os.environ.get(variable) or "").strip()
+        if valeur:
+            return valeur
+    raise CleTaggerAbsente(
+        "clé DeepSeek absente : exportez DEEPSEEK_KEY_FILE, déposez la clé dans "
+        "~/.config/drave/deepseek.key, ou exportez DEEPSEEK_API_KEY. "
+        "Sans --tagger, le défaut reste l'heuristique hors ligne."
+    )
+
+
+def _client_tagger():
+    """Le client de l'API. L'import est **local** : le défaut ne charge pas le module réseau."""
+    from tools.llm.deepseek import DeepSeek
+    return DeepSeek(cle=_cle_tagger())
+
+
+def _transport_tagger(client, stats: dict):
+    """Le transport attendu par les taggers : invite → contenu, avec le coût mesuré."""
+
+    def transport(invite: str, _grammaire: str, max_jetons: int) -> str:
+        stats["appels"] += 1
+        reponse = client.demande(invite, temperature=0.0,
+                                 max_tokens=max(64, int(max_jetons or 256)))
+        if getattr(reponse, "cache", False):
+            stats["cache"] += 1
+        else:
+            usage = reponse.usage if isinstance(reponse.usage, dict) else {}
+            stats["requetes"] += 1
+            stats["tokens"] += int(usage.get("total_tokens", 0) or 0)
+            stats["latence_s"] += float(getattr(reponse, "latence_s", 0.0) or 0.0)
+        modele = getattr(reponse, "modele", None)
+        if modele:
+            stats["modeles"][modele] = stats["modeles"].get(modele, 0) + 1
+        return reponse.contenu
+
+    return transport
+
+
+class _CascadeTagger:
+    """La cascade du tagger, avec le **refus** du neuronal reporté sur l'annotation fusionnée.
+
+    `bl.Cascade`/`_fusion` ne recopie pas `refus` : sans ce relais, un tagger qui échoue
+    rendrait une annotation muette (POS absents, `refus` vide). Le composite est rappelé après
+    la fusion ; ses taggers ont un cache, donc **aucun appel réseau supplémentaire**.
+    """
+
+    nom = "cascade"
+
+    def __init__(self, cascade, compose):
+        self.cascade = cascade
+        self.compose = compose
+        self.h = cascade.h
+        self.n = cascade.n
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> bl.Annotation:
+        annotation = self.cascade.analyser(texte, langue, contexte)
+        if not annotation.refus:
+            annotation.refus = self.compose.analyser(texte, langue, contexte).refus
+        return annotation
+
+
+def _cascade_tagger(transport, partition: str = "alternative"):
+    """Le câblage mesuré : tagger POS + syntagmes → compose → cascade à 0,6.
+
+    `transport` est injectable : les tests le remplacent par une fonction qui rend un JSON de
+    POS valide, sans réseau. La fusion ne force que le **POS** au neuronal ; les syntagmes,
+    rôles et attachements restent à l'heuristique (le neuronal n'en rend pas).
+    """
+    pos = bl.NeuronalLLMPOS(MODELE_TAGGER, transport=transport)
+    chunks = bl.NeuronalLLMChunks(MODELE_TAGGER, transport=transport)
+    compose = bl.NeuronalLLMCompose(pos, chunks)
+    cascade = bl.Cascade(bl.Heuristique(partition=partition), compose, seuil=SEUIL_TAGGER,
+                         priorite_syntagme="confiance", priorite_par_niveau=PRIORITE_TAGGER)
+    return _CascadeTagger(cascade, compose)
+
+
+def _construire_tagger(partition: str = "alternative"):
+    """Rend (cascade, stats) ; lève `CleTaggerAbsente` si la clé manque (et ne l'affiche pas)."""
+    stats = {"appels": 0, "requetes": 0, "cache": 0, "tokens": 0, "latence_s": 0.0,
+             "modeles": {}}
+    client = _client_tagger()
+    return _cascade_tagger(_transport_tagger(client, stats), partition=partition), stats
+
+
+def _cout_tagger(stats: dict) -> dict:
+    """Le coût d'une exécution, tel qu'il va dans un rapport (`evaluer --json`)."""
+    return {"modele": MODELE_TAGGER, "appels": stats["appels"],
+            "requetes": stats["requetes"], "cache": stats["cache"],
+            "tokens": stats["tokens"], "latence_s": round(stats["latence_s"], 3),
+            "modeles_renvoyes": dict(stats["modeles"])}
+
+
+def _ligne_tagger(stats: dict) -> str:
+    """Une ligne de coût pour l'affichage et la stderr ; pas de clé, pas d'horodatage."""
+    return (f"modèle={MODELE_TAGGER} · appels={stats['appels']} "
+            f"· réseau={stats['requetes']} · cache={stats['cache']} "
+            f"· tokens={stats['tokens']} · latence={stats['latence_s']:.1f} s")
 
 
 # --------------------------------------------------------------------------- rendu lisible
@@ -93,9 +234,16 @@ class _Formateur(argparse.RawDescriptionHelpFormatter):
         super().__init__(prog, **kwargs)
 
 
-def formater_annotation(a: bl.Annotation) -> str:
-    """La sortie lisible : POS compact, syntagmes (rôle + cible), pragmatique, couverture."""
-    lignes = [f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)"]
+def formater_annotation(a: bl.Annotation, tagger: bool = False,
+                        stats: dict | None = None) -> str:
+    """La sortie lisible : POS compact, syntagmes (rôle + cible), pragmatique, couverture.
+
+    Avec `--tagger`, l'en-tête le dit, le coût de l'API est affiché et un refus du tagger est
+    nommé — le JSON d'annotation, lui, garde exactement le même contrat.
+    """
+    titre = (f"{NOM} {VERSION} — analyse cascade POS (tagger API DeepSeek, réseau)"
+             if tagger else f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)")
+    lignes = [titre]
     lignes.append(
         f"langue={a.langue} script={a.script} source={a.source} · {len(a.etiquettes)} étiquettes "
         f"· unités sémantiques={len(a.unites_semantiques)} ({a.fraction_semantique:.1%} du texte)"
@@ -155,6 +303,10 @@ def formater_annotation(a: bl.Annotation) -> str:
             "(confiance max par niveau)  "
             + " · ".join(f"{n}={couverture[n]:.2f}" for n in ordre),
         ))
+    if tagger and a.refus:
+        lignes.extend(_envelopper("REFUS TAGGER  ", a.refus))
+    if stats is not None:
+        lignes.extend(_envelopper("TAGGER API  ", _ligne_tagger(stats)))
     return "\n".join(lignes)
 
 
@@ -168,41 +320,75 @@ def _lire_entree(args: argparse.Namespace) -> str:
     return args.texte or ""
 
 
-def _analyser_jsonl(texte: str, args: argparse.Namespace) -> int:
-    """Une **ligne JSON par phrase** (traitement de corpus : `--jsonl`)."""
-    h = bl.Heuristique(partition=args.partition)
+def _analyser_jsonl(texte: str, args: argparse.Namespace, h: bl.Heuristique, bloc,
+                    stats: dict | None = None) -> int:
+    """Une **ligne JSON par phrase** (traitement de corpus : `--jsonl`).
+
+    `h` segmente (le tagger ne change pas les frontières de phrase) ; `bloc` analyse — la
+    cascade du tagger quand `--tagger` est posé. Le coût va sur `stderr`, jamais dans le JSONL.
+    """
     n = 0
+    refus = 0
     for debut, fin, _typ, _ in h._phrases(texte):
         phrase = texte[debut:fin]
         if not phrase.strip():
             continue
-        a = h.analyser(phrase, args.langue, args.contexte)
+        a = bloc.analyser(phrase, args.langue, args.contexte)
+        refus += int(bool(a.refus))
         sys.stdout.write(_sur(json.dumps(a.json(), ensure_ascii=False)) + "\n")
         n += 1
     if n == 0:
         print(f"{NOM}: refus d'analyse : vide", file=sys.stderr)
         return 3
+    if stats is not None:
+        print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
+        if refus:
+            print(f"{NOM}: tagger · {refus}/{n} phrase(s) refusée(s) (JSON partiel)",
+                  file=sys.stderr)
     return 0
 
 
 def cmd_analyser(args: argparse.Namespace) -> int:
     texte = _lire_entree(args)
+    h = bl.Heuristique(partition=args.partition)
+    bloc, stats = h, None
+    if getattr(args, "tagger", False):
+        # la clé est vérifiée avant toute analyse : sans elle, code 4 (jamais de trace de la clé)
+        try:
+            cascade, stats_tagger = _construire_tagger(partition=args.partition)
+        except CleTaggerAbsente as exc:
+            print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+            return 4
+        # un texte sans mot ni nombre est un refus d'analyse : on ne paie pas un appel API
+        if any(typ in ("mot", "nombre") for _, _, _, typ in h._mots(texte)):
+            bloc, stats = cascade, stats_tagger
+        # sinon, le refus (code 3) reste celui de l'heuristique
     if args.jsonl:
-        return _analyser_jsonl(texte, args)
-    annotation = bl.Heuristique(partition=args.partition).analyser(texte, args.langue,
-                                                                   args.contexte)
+        return _analyser_jsonl(texte, args, h, bloc, stats)
+    annotation = bloc.analyser(texte, args.langue, args.contexte)
     if annotation.refus:
-        # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
-        if args.json:
-            sys.stdout.write(_dumps(annotation.json()))
+        if stats is not None:
+            # un refus du tagger n'est pas un refus du texte : on le nomme, on ne le déguise pas
+            pos = [e for e in annotation.etiquettes if e.niveau == "pos"]
+            if not pos:
+                print(f"{NOM}: tagger : {annotation.refus}", file=sys.stderr)
+                return 1
+            print(f"{NOM}: tagger : refus partiel : {annotation.refus}", file=sys.stderr)
         else:
-            print(f"{NOM}: refus d'analyse : {annotation.refus} "
-                  "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
-        return 3
+            # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
+            if args.json:
+                sys.stdout.write(_dumps(annotation.json()))
+            else:
+                print(f"{NOM}: refus d'analyse : {annotation.refus} "
+                      "(le texte doit contenir au moins une lettre ou un chiffre)",
+                      file=sys.stderr)
+            return 3
     if args.json:
         sys.stdout.write(_dumps(annotation.json()))
+        if stats is not None:
+            print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
     else:
-        print(_sur(formater_annotation(annotation)))
+        print(_sur(formater_annotation(annotation, tagger=stats is not None, stats=stats)))
     return 0
 
 
@@ -242,6 +428,11 @@ def _pct(valeur: float) -> str:
     return f"{100.0 * float(valeur):.2f} %"
 
 
+def _points(delta: float) -> str:
+    """Un écart de taux en **points** de pourcentage, avec son signe."""
+    return f"{100.0 * float(delta):+.2f} pts"
+
+
 def _formater_evaluation(rapport: dict) -> str:
     gold = rapport["gold"]
     mesure = rapport["heuristique"]
@@ -275,6 +466,27 @@ def _formater_evaluation(rapport: dict) -> str:
         f"CONTRÔLE NÉGATIF cible exacte tirée au hasard {_pct(controle['exact_taux'])} "
         f"(graine {controle['graine']}, {controle['cibles']} cibles)",
     ]
+    tagger = rapport.get("tagger")
+    if tagger:
+        tp, ts, cout = tagger["pos"], tagger["syntagme"], tagger["cout"]
+        lignes += [
+            "",
+            "TAGGER API DEEPSEEK (option --tagger)",
+            f"  POS         exactitude {_pct(tp['exactitude'])} "
+            f"(fermé {_pct(tp['exactitude_ferme'])}, ouvert {_pct(tp['exactitude_ouvert'])}) "
+            f"· Δ {_points(tagger['delta_pos'])} vs heuristique",
+            f"  SYNTAGMES   F1 {_pct(ts['f1'])} (tête {_pct(ts['tete']['f1'])}) "
+            "— conservés à l'heuristique",
+            f"  COÛT        appels {cout['appels']} · réseau {cout['requetes']} "
+            f"· cache {cout['cache']} · tokens {cout['tokens']} · modèle {cout['modele']}",
+        ]
+        renvoyes = cout.get("modeles_renvoyes") or {}
+        if renvoyes and set(renvoyes) - {cout["modele"]}:
+            lignes.append(f"  modèle renvoyé : {', '.join(sorted(renvoyes))}")
+        if tagger.get("refus"):
+            detail = ", ".join(tagger.get("refus_detail") or [])
+            lignes.append(f"  REFUS       {tagger['refus']} phrase(s)"
+                          + (f" : {detail}" if detail else ""))
     par_langue = rapport.get("par_langue") or {}
     if par_langue:
         lignes += ["", "PAR LANGUE"]
@@ -293,12 +505,27 @@ def _formater_evaluation(rapport: dict) -> str:
                 f"      CONTRÔLE NÉGATIF cible exacte tirée au hasard {_pct(c['exact_taux'])} "
                 f"(graine {c['graine']}, {c['cibles']} cibles)",
             ]
+            t = m.get("tagger")
+            if t:
+                lignes.append(
+                    f"      TAGGER POS {_pct(t['pos']['exactitude'])} "
+                    f"· Δ {_points(t['delta_pos'])} "
+                    f"· SYNTAGMES F1 {_pct(t['syntagme']['f1'])} "
+                    f"(tête {_pct(t['syntagme']['tete']['f1'])})")
     return "\n".join(lignes)
 
 
 def cmd_evaluer(args: argparse.Namespace) -> int:
     evaluateur = _module_evaluation()
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+    cascade = None
+    stats = None
+    if getattr(args, "tagger", False):
+        try:
+            cascade, stats = _construire_tagger()
+        except CleTaggerAbsente as exc:
+            print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+            return 4
     mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
     # transparence : la vue **fidèle** (défaut) et la vue **linéaire** (partition filtrer)
     _lineaire = evaluateur.evaluer_bloc("lineaire", bl.Heuristique(partition="filtrer"), phrases)
@@ -324,6 +551,26 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
             "exact_taux": hasard,
         },
     }
+    if cascade is not None:
+        # `evaluer_bloc` mesure l'annotation de la cascade ; le POS y vient du tagger. Les
+        # appels sont ensuite servis par le cache mémoire des taggers (aucun appel en plus).
+        mesure_tag = evaluateur.evaluer_bloc("cascade", cascade, phrases)
+        refus = [p.get("id", "") for p in phrases
+                 if cascade.analyser(p["texte"], p["langue"]).refus]
+        rapport["tagger"] = {
+            "nom": "cascade POS (tagger API DeepSeek)",
+            "modele": MODELE_TAGGER,
+            "seuil": SEUIL_TAGGER,
+            "priorite": "pos → neuronal ; syntagmes, rôles et pragmatique → heuristique",
+            "pos": mesure_tag["pos"],
+            "syntagme": mesure_tag["syntagme"],
+            "pragmatique": mesure_tag["pragmatique"],
+            "fraction_semantique": mesure_tag["fraction_semantique"],
+            "delta_pos": round(mesure_tag["pos"]["exactitude"] - mesure["pos"]["exactitude"], 4),
+            "refus": len(refus),
+            "refus_detail": refus[:10],
+            "cout": _cout_tagger(stats),
+        }
     if args.par_langue:
         # le détail fr/en : on rejoue la **même** mesure sur chaque sous-gold. Le contrôle
         # négatif est recalculé par langue (l'univers des cibles change avec la langue).
@@ -337,10 +584,23 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
                 "cibles": len(_cibles_gold(sous)),
                 "exact_taux": _controle_hasard(sous),
             }
+            if cascade is not None:
+                mt = evaluateur.evaluer_bloc("cascade", cascade, sous)
+                m["tagger"] = {
+                    "pos": {k: mt["pos"][k] for k in ("exactitude", "exactitude_ferme",
+                                                      "exactitude_ouvert", "tokens")},
+                    "syntagme": {"f1": mt["syntagme"]["f1"],
+                                 "tete": {"f1": mt["syntagme"]["tete"]["f1"]}},
+                    "pragmatique": mt["pragmatique"],
+                    "fraction_semantique": mt["fraction_semantique"],
+                    "delta_pos": round(mt["pos"]["exactitude"] - m["pos"]["exactitude"], 4),
+                }
             par_langue[langue] = m
         rapport["par_langue"] = par_langue
     if args.json:
         sys.stdout.write(_dumps(rapport))
+        if stats is not None:
+            print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
     else:
         print(_formater_evaluation(rapport))
     return 0
@@ -461,13 +721,16 @@ class _Parseur(argparse.ArgumentParser):
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
         "Commandes : analyser, evaluer, rejouer, restituer.\n"
-        "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) · 1 erreur.\n"
+        "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·\n"
+        "4 clé/tagger absent · 1 erreur.\n"
         "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
-        "--contexte, --banc.\n"
-        "Limites : heuristique CPU, hors ligne, déterministe ; la restitution est un codec de\n"
-        "surface (graphème), pas un décodeur neuronal ; ni traduction ni génération.\n"
+        "--contexte, --banc, --tagger.\n"
+        "Limites : heuristique CPU, hors ligne, déterministe par défaut ; --tagger appelle l'API\n"
+        "DeepSeek (clé, réseau) pour le POS ; la restitution est un codec de surface (graphème),\n"
+        "pas un décodeur neuronal ; ni traduction ni génération.\n"
         "Exemples :\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\"\n"
+        "  python3 tools/drave.py analyser \"Le chat dort.\" --tagger\n"
         "  python3 tools/drave.py evaluer --gold --json\n"
         "  python3 tools/drave.py restituer \"Le chat dort.\"\n"
         "  python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json\n"
@@ -487,8 +750,11 @@ def construire_parseur() -> argparse.ArgumentParser:
     analyser = sous.add_parser(
         "analyser",
         help="étiqueter un texte (POS, syntagmes, pragmatique)",
-        description="Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON.",
-        epilog="Exemple : python3 tools/drave.py analyser \"Le chat dort.\" --json",
+        description="Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON. "
+                    "Avec --tagger, le POS (et lui seul) vient du tagger de l'API DeepSeek : "
+                    "clé requise, réseau, cache du client ; sans l'option, rien ne change.",
+        epilog="Exemples : python3 tools/drave.py analyser \"Le chat dort.\" --json ; "
+               "python3 tools/drave.py analyser \"Le chat dort.\" --tagger",
         formatter_class=_Formateur,
     )
     analyser.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
@@ -504,6 +770,8 @@ def construire_parseur() -> argparse.ArgumentParser:
                           help="le texte qui précède (mémoire de discours : coréférence, connecteurs)")
     analyser.add_argument("--langue", choices=("fr", "en"), default=None,
                           help="indice de langue (fr/en) ; sans lui, le bloc détecte")
+    analyser.add_argument("--tagger", action="store_true",
+                          help="tagger POS par l'API DeepSeek (clé et réseau ; défaut : heuristique)")
     analyser.add_argument("--json", action="store_true",
                           help="sortie JSON complète (annotation, sans durée)")
     analyser.set_defaults(fonction=cmd_analyser)
@@ -513,15 +781,19 @@ def construire_parseur() -> argparse.ArgumentParser:
         help="mesurer l'heuristique sur le gold",
         description="Mesure POS, syntagmes (F1/tête) et attachement (exact/couverture) "
                     "sur le gold, avec un contrôle négatif reproductible. Avec --par-langue, "
-                    "donne le même détail pour le français et l'anglais.",
+                    "donne le même détail pour le français et l'anglais. Avec --tagger, mesure "
+                    "en plus la cascade POS de l'API DeepSeek et son écart.",
         epilog="Exemples : python3 tools/drave.py evaluer --gold --json ; "
-               "python3 tools/drave.py evaluer --par-langue",
+               "python3 tools/drave.py evaluer --par-langue ; "
+               "python3 tools/drave.py evaluer --tagger",
         formatter_class=_Formateur,
     )
     evaluer.add_argument("--gold", action="store_true",
                          help="mesurer le gold gelé (référence figée) au lieu du gold vivant")
     evaluer.add_argument("--par-langue", action="store_true",
                          help="scinder la mesure en français et en anglais")
+    evaluer.add_argument("--tagger", action="store_true",
+                         help="mesurer en plus la cascade POS de l'API DeepSeek (clé et réseau)")
     evaluer.add_argument("--json", action="store_true",
                          help="sortie JSON des mesures complètes")
     evaluer.set_defaults(fonction=cmd_evaluer)

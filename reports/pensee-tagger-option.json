@@ -1,0 +1,172 @@
+{
+ "date": "2026-11-14",
+ "branche": "s/v7",
+ "decision": "1A — le tagger API en option, le défaut reste hors ligne",
+ "ligne_roadmap": "R0.7 (le lecteur)",
+ "option": {
+  "drapeau": "--tagger",
+  "commandes": [
+   "analyser",
+   "evaluer"
+  ],
+  "modele_demande": "deepseek-chat",
+  "seuil_cascade": 0.6,
+  "fusion": {
+   "pos": "neuronal (tagger)",
+   "syntagme": "heuristique",
+   "pragmatique": "heuristique",
+   "pourquoi": "le tagger ne rend ni rôle ni cible : forcer ses syntagmes ferait perdre l'attachement mesuré"
+  },
+  "cle": [
+   "DEEPSEEK_KEY_FILE",
+   "~/.config/drave/deepseek.key",
+   "DEEPSEEK_API_KEY",
+   "DSH_KEY_FILE / DSH_API_KEY (repli)"
+  ],
+  "cle_absente": {
+   "code": 4,
+   "message": "clé DeepSeek absente ; le défaut reste l'heuristique hors ligne"
+  },
+  "cache": "mémoire par (texte, langue) dans chaque tagger + cache disque du client (modèle + messages + température + max_tokens, jamais la clé)",
+  "defaut": "heuristique, CPU, hors ligne, déterministe ; aucun import du module réseau"
+ },
+ "mesure_20": {
+  "dispositif": "20 premières phrases de gold.json (source hand), 105 tokens ; transport réel via tools/llm/deepseek.py, température 0, cache neuf /tmp/drave-tagger-option-cache",
+  "gold": {
+   "phrases": 20,
+   "tokens": 105,
+   "sources": {
+    "hand": 20
+   }
+  },
+  "heuristique": {
+   "pos": 0.8857,
+   "pos_ferme": 0.8772,
+   "pos_ouvert": 0.8958,
+   "syntagmes_f1": 0.9016,
+   "tete_f1": 0.9739,
+   "attachement_exact": 0.9231,
+   "attachement_couverture": 0.9231
+  },
+  "cascade_tagger": {
+   "pos": 0.9714,
+   "pos_ferme": 0.9474,
+   "pos_ouvert": 1.0,
+   "syntagmes_f1": 0.9016,
+   "tete_f1": 0.9739,
+   "attachement_exact": 0.9231,
+   "attachement_couverture": 0.9231
+  },
+  "delta_pos": 0.0857,
+  "refus": 0,
+  "refus_detail": [],
+  "controle_negatif": {
+   "uniforme": {
+    "graine": 0,
+    "classes": 12,
+    "taux": 0.1048
+   },
+   "majoritaire": {
+    "classe": "VERB",
+    "taux": 0.2286
+   },
+   "lecture": "le hasard et la classe majoritaire restent très loin du tagger ; le 0,9714 n'est pas un effet de classe"
+  },
+  "cout_cache_neuf": {
+   "appels": 40,
+   "tokens": 11868,
+   "latence_s": 39.49,
+   "latence_moyenne_s": 0.987,
+   "duree_s": 39.8,
+   "modeles_renvoyes": {
+    "deepseek-flash": 40
+   }
+  },
+  "cout_cache_chaud": {
+   "appels": 40,
+   "reseau": 0,
+   "cache": 40,
+   "tokens": 0,
+   "lecture": "les mêmes 20 phrases, rejouées avec le cache du premier passage : aucun appel réseau, aucun token"
+  },
+  "coherence_612": {
+   "hand_heuristique": 0.8857,
+   "hand_neuronal": 0.9714,
+   "lecture": "les 20 phrases hand reproduisent exactement la ligne hand du gold 612"
+  }
+ },
+ "mesure_612_reference": {
+  "source": "reports/tagger-612.json",
+  "date": "2026-11-13 22:21 EST",
+  "gold": {
+   "phrases": 612,
+   "tokens": 3179,
+   "sources": {
+    "hand": 20,
+    "reel": 432,
+    "synth": 160
+   },
+   "modalite": "api-deepseek (deepseek-chat → modèle renvoyé), aucun serveur local"
+  },
+  "heuristique_pos": 0.8625,
+  "cascade_pos": 0.9475,
+  "delta_pos_publie": 0.0849,
+  "par_source": {
+   "hand": {
+    "heuristique": 0.8857,
+    "neuronal": 0.9714,
+    "delta": 0.0857
+   },
+   "reel": {
+    "heuristique": 0.8893,
+    "neuronal": 0.936,
+    "delta": 0.0467
+   },
+   "synth": {
+    "heuristique": 0.7682,
+    "neuronal": 0.9828,
+    "delta": 0.2146
+   }
+  },
+  "appels": 1218,
+  "tokens": 358962,
+  "latence_s": 1257.9579999999992,
+  "duree_totale_s": 1259.2,
+  "refus": 1,
+  "refus_detail": [
+   "s015"
+  ],
+  "modeles_renvoyes": {
+   "deepseek-flash": 1218
+  },
+  "cout_annonce_usd": 0.04
+ },
+ "tests": {
+  "fichier": "tools/tests/test_tagger_api.py",
+  "tests": 14,
+  "reseau": 0,
+  "resultat": "OK",
+  "smoke_test_existant": "tools/tests/test_produit.py : 18 tests OK, défaut inchangé",
+  "verrouille": [
+   "la cascade remplace les POS (transport factice)",
+   "le JSON reste valide au schéma v2, et le contrat v1 reste lisible",
+   "deux analyses du même texte ne refont pas d'appel",
+   "le défaut (sans --tagger) est exactement l'heuristique",
+   "sans clé : code 4, message clair, aucune trace de la clé",
+   "l'ordre de résolution de la clé",
+   "evaluer --tagger publie le delta et le coût"
+  ]
+ },
+ "limites": [
+  "les 20 phrases sont les 20 hand : le +8,57 reproduit la ligne hand du 612, pas le +4,67 du réel 432 ni le +21,46 du synthétique",
+  "105 tokens seulement : 3 erreurs séparent 0,9714 de 0,9429 ; l'intervalle est large",
+  "le modèle demandé est deepseek-chat ; l'API a renvoyé deepseek-flash sur les 40 appels, et peut changer",
+  "le cache neuf est indispensable à la mesure : un cache chaud rejoue les réponses d'un ancien modèle (la seconde passe du CLI le montre : 0 réseau, 0 token)",
+  "la température est 0 mais l'API n'est pas garantie déterministe ; le cache disque fige chaque réponse",
+  "le tagger étiquette les mots et les nombres, pas la ponctuation : le POS PONCT du défaut disparaît de l'option (hors gold)",
+  "le tagger de syntagmes du composite est appelé (2 appels/phrase) mais la fusion garde l'heuristique : ce second appel est un coût, pas une contribution mesurée",
+  "la confiance déclarée du POS passe de 0,95 (heuristique) à 0,60 (tagger) : la couverture affichée baisse, la justesse monte",
+  "le gain du 612 est mesuré sur le gold vivant ; le gold réel seul (432) ne vaut que +4,67",
+  "aucun test ne fait de réseau : le chemin API réel est couvert par la mesure 20 phrases et par le harnais, pas par la porte"
+ ]
+}

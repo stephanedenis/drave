@@ -1310,3 +1310,1174 @@ Usage :
 … [2209 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import fastjsonschema; print(fastjsonschema.__version__ if hasattr(fastjsonschema,'__version__') else 'ok')\" 2>&1; python3 -c \"import tools.llm.deepseek as d; print(d.__file__)\"", "description": "Vérifier fastjsonsche … [26 caractères tronqués]`
+
+  ```
+ok
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/llm/deepseek.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib\nR=pathlib.Path('.').resolve()\nsys.path.insert(0,str(R)); sys.path.insert(0,str(R/'tools'))\nimport bloc_linguistique as bl\nh=bl.Heuristique()\na=h.analyser(\"Le chat dort.\",\"fr\")\nprint(a.c … [94 caractères tronqués]`
+
+  ```
+{'graphème': 0.99, 'mot': 0.98, 'pos': 0.95, 'syntagme': 0.55, 'discours': 0.5, 'document': 0.7, 'phrase': 0.85, 'pragmatique': 0.45}
+heuristique
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/tagger-612.json'))\nfor m in ('heuristique','neuronal','cascade','cascade_niveau'):\n    print(m, 'pos', d['modes'][m]['all']['pos']['exactitude'], 'prag', d['modes'][m]['all'] … [94 caractères tronqués]`
+
+  ```
+heuristique pos 0.8625 prag {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444}
+neuronal pos 0.9475 prag {'acte': 0.0, 'negation': 0.9559, 'modalite': 0.9526, 'double_sens': 0.9739}
+cascade pos 0.9475 prag {'acte': 0.9967, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9444}
+cascade_niveau pos 0.9475 prag {'acte': 0.0, 'negation': 0.9771, 'modalite': 0.9886, 'double_sens': 0.9739}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"classement\\|donnée de résultat\\|CHIFFRES\\|résultat dans docs\" -B3 -A12 tools/revue_documentation.py | head -80", "description": "Comprendre l'interdiction de résultats dans docs"}`
+
+  ```
+2-"""revue_documentation.py — LA REVUE DE FIN DE SOUS-CHANTIER (AGENTS.md §4).
+3-
+4-Ce qu'elle vérifie, et qu'il faut corriger AVANT le commit de clôture :
+5:  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+6-  2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
+7-  3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
+8-     ment pas sur la cible ; les sources externes sont citées ;
+9-  4. fraîcheur  : en-cours.md date du dernier commit, ET aucun fait n'a été commité après
+10-     le dernier état (comparaison de commits, pas de dates : voir verifie_etat_a_jour.py) ;
+11-  5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
+12-     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+13-  6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) ;
+14-  7. navigation : aucun document vivant n'est orphelin, et aucun chemin en code inline
+15-     ne pointe vers un fichier absent (hors gabarits `AAAA`, `<...>`, `*`).
+16-
+17-Sortie : un rapport lisible, code 0 si tout 
+… [2178 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 205,300p tools/revue_documentation.py", "description": "Lire la navigation/orphelins de la revue"}`
+
+  ```
+if cible.startswith(("http://", "https://", "mailto:")):
+                continue
+            p = (f.parent / cible).resolve()
+            if not p.exists() and not cible_generee(f, cible):
+                alertes.append(f"annotation : {f.relative_to(RACINE)} → {cible} (cassé)")
+    for f in sources_propres():
+        try:
+            texte = f.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        for label, cible in re.findall(r"\[([^\]]+)\]\(([^)#]+?)\)", texte):
+            if cible.startswith(("http://", "https://", "mailto:")):
+                continue
+            lab = label.strip("`")
+            if not (re.match(r"^(docs|reports|tools|journal)/", lab)
+                    and lab.endswith((".md", ".json", ".sh"))):
+                continue
+            p = (f.parent / cible).resolve()
+            lp = (RACINE / lab).resolve()
+            if p.exists() and lp != p:
+                alertes.append(
+                    f"libellé : {f.relative_to(RACINE)} annonce « {lab} » mais pointe {cible}"
+                )
+
+    # 7a. chemins morts en code inline (hors gabarits)
+    for f in sources_propres():
+        try:
+            brut = f.read_t
+… [2920 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -w reports/README.md reports/INDEX.md 2>&1; grep -n \"tagger\\|612\\|quatre-modes\" reports/README.md | head -10; grep -n \"tagger\\|612\" reports/INDEX.md | head", "description": "Inspecter les index de reports"}`
+
+  ```
+2262 reports/README.md
+ 12816 reports/INDEX.md
+ 15078 total
+31:| [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)** |
+44:| [`rapport-etat-r.md`](rapport-etat-r.md) | **B13** — l'état de R : tagger 0,8483/0,9440 |
+99:| [rapport-cache-chunker.md](rapport-cache-chunker.md) | Cache du chunker — validation indépendante : ×11,0 à 160 tokens, égalité 612/612 |
+126:| [rapport-coordination-r.md](rapport-coordination-r.md) | R — le tagger POS sur le gold 612 : **+8,49 pts**, la règle dit **intégrer** |
+173:| [rapport-etat-r.md](rapport-etat-r.md) | État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine |
+489:| [rapport-pensee-gold-neuronal.md](rapport-pensee-gold-neuronal.md) | L — le gold neuronal : un tagger 7B local, la cascade POS à 0,944 |
+717:| [rapport-tableau-mesures.md](rapport-tableau-mesures.md) | J13.1 — la table des mesures : F1 0,7533 → 0,7902, attachement 236/237 → 238/238, base 612/602 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor v in (1,2):\n    d=json.load(open(f'tools/schemas/drave-annotation-v{v}.json'))\n    print('v',v, 'trace:', json.dumps(d['properties'].get('trace'), ensure_ascii=False)[:500])\n    print('   cout:', … [192 caractères tronqués]`
+
+  ```
+v 1 trace: {"type": "array"}
+   cout: {"type": "object"}
+   additionnel: True
+v 2 trace: {"type": "array"}
+   cout: {"type": "object"}
+   additionnel: True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/tagger-612.json'))\nfor m in ('heuristique','neuronal','cascade'):\n    x=d['modes'][m]['all']\n    print(m, 'pos',x['pos']['exactitude'],'F1',x['syntagme']['f1'],'tete',x['syn … [202 caractères tronqués]`
+
+  ```
+heuristique pos 0.8625 F1 0.7902 tete 0.9029 att None couv None
+neuronal pos 0.9475 F1 0.8074 tete 0.8586 att None couv None
+cascade pos 0.9475 F1 0.8074 tete 0.8586 att None couv None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -- \"--tagger\\|tagger API\\|tagger en option\" docs/ reports/ journal/ 2>/dev/null | head -30", "description": "Chercher une spécification existante du --tagger"}`
+
+  ```
+docs/pilotage/semaine-autonome.md:263:| **1A** | le **tagger API en option** (`--tagger`), le défaut reste hors ligne | +8,49 pts de POS pour qui a la clé |
+reports/pensee-etat-r.json:784:    "Le tagger API n'a pas ete rejoue : les 0,9389 / 0,8241 / 0,8797 sont du 2026-11-04 (run 2) ; deepseek-chat peut avoir change ; deux passes seulement (0,9389, 0,9389, 0,9385).",
+reports/rapport-etat-r.md:311:- **Le trou** : le tagger API n'a pas été mesuré sur le **gold 612** (il s'arrête à 432 réelles).
+reports/rapport-etat-r.md:411:- **Le tagger API n'a pas été rejoué** : les 0,9389 / 0,8241 / 0,8797 sont du **2026-11-04**
+reports/rapport-semaine.md:322:**schéma v2**, **restitution 46/46**), le tagger API a une mesure et une décision (**0,9475,
+reports/rapport-bilan-chantier.md:424:**schéma v2**, **restitution v1**), le tagger API a une mesure et une décision (**0,9475,
+reports/rapport-tableau-mesures.md:18:> autre base. Le **tagger API** vaut **0,9475 (+8,49 pts)** ; le **produit** gagne le **schéma v2**,
+reports/rapport-tableau-mesures.md:369:**POS inchangée**, **couverture 0,9916 → 0,9958**, **spans 2 → 1**), le tagger API vaut
+journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.
+… [3841 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/ 2>/dev/null; grep -n \"tagger\" journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md 2>/dev/null | head -20", "description": "Chercher une tentative antérieure"}`
+
+  ```
+digest.md
+rapport.md
+session.v4.jsonl.zstd
+22:**Tour 1** — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **intégrer le tagger POS par API DeepSeek dans la CLI, en option** (décision 1A du 14/11). La mesure est faite : le tagger vaut **0,9475** contre **0,8625** pour l'heuristique sur le gold 612 (**+8,49 pts**), pour ~0,04 $ sur tout le corpus. Il faut l'exposer **sans** changer le défaut (hors ligne, … [2946 caractères tronqués]
+34:- bash — Chercher le harnais qualifier_tagger_612
+38:- bash — Chercher la décision 1A et le chiffre du tagger
+39:- bash — Chercher les rapports tagger existants
+41:- bash — Inspecter le rapport tagger 612
+43:- bash — Lire l'état et la roadmap autour du tagger
+62:- **T1** Chercher le harnais qualifier_tagger_612
+66:- **T1** Chercher la décision 1A et le chiffre du tagger
+67:- **T1** Chercher les rapports tagger existants
+69:- **T1** Inspecter le rapport tagger 612
+71:- **T1** Lire l'état et la roadmap autour du tagger
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 10490,10530p journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md", "description": "Lire la décision du parent sur le tagger"}`
+
+  ```
+**30 lancements**, **32 500 s** d'agent, **25 tâches livrées**, **3 timeouts** (dont 2 après commit, requalifiés « fait » par la règle *acceptation d'abord*). Trois corrections en production : la **clé** (`~/.config/drave/deepseek.key`), le **worktree jamais propre**, le **plan relu à chaque tour**. Le journal d'audit : `work/chantier/journal.log` ; l'état : `work/chantier/etat.json`.
+
+\## 5. Les négatifs, dits
+
+
+… [1365 caractères tronqués]
+
+### Tour 195 — ok, vulgarise-moi les points de décision à prendre (je reviens de vacances :-) ) et on tranche ici si possible
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Relire les fiches de décision
+
+**Synthèse produite :**
+
+⏵ Voici les décisions, en clair — avec mon avis et ce qu'elles coûtent
+
+\## Décision 1 — Le « tagger » : utiliser l'API pour étiqueter les mots ?
+
+**Le constat.** Notre analyseur trouve la classe grammaticale de chaque mot avec **86,25 %** de justesse. Le même exercice confié à un modèle par API atteint **94,75 %** — soit **+8,5 points**, pour **0,04 $** sur l'ensemble du corpus de test (1 218 appels, 21 min).
+
+- **A. L'ajouter en option** (`--tagger`) : la qualité de qui veut le réseau et la clé ; le défaut reste 
+… [1104 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,70p reports/rapport-pensee-quatre-modes.md", "description": "Lire une fiche récente pour le style"}`
+
+  ```
+# L — la porte des quatre modes sur le gold 432 : le neuronal API domine (0,9309 / 0,8226 / 0,8784), la fusion dégrade (0,928 / 0,802 / 0,857)
+
+> **Ligne de roadmap** : **L** (le bloc langue) · **Date** : 2026-11-03 · **Verdict** : ⚠️ **le neuronal
+> seul est le meilleur sur les niveaux linguistiques** — POS **0,9309**, syntagmes **0,8226**, tête
+> **0,8784** —, l'**heuristique** garde la **pragmatique** (acte **0,9954** contre **0,0**), et la
+> **fusion** (parallèle et cascade) **régresse** : **0,928 / 0,802 / 0,857**. Un **refus** ; 858
+> appels API, **254 341 tokens**, 13,3 min. La porte des quatre modes **révèle le problème de la
+> fusion**, pas celui des blocs.
+
+## 1. Le dispositif
+
+- **Gold réel 432** (2 375 tokens), le même pour les quatre modes.
+- **Neuronal** : `NeuronalLLMCompose` (POS + syntagmes) via l'**API DeepSeek** (`deepseek-chat`,
+  `DEEPSEEK_KEY_FILE`), **aucun serveur local**, **aucun GPU** (règle 11).
+- **Parallèle** : `Parallele([heuristique, neuronal], priorite_syntagme="confiance")`.
+- **Cascade** : `Cascade(heuristique, neuronal, seuil=0,6, priorite_syntagme="confiance")`.
+- **Mesures** : POS, syntagmes F1, tête F1, acte, fraction, refus ; **coût** : appels
+… [2624 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('reports/pensee-quatre-modes.json'))\ndef walk(o,p=''):\n    if isinstance(o,dict):\n        for k,v in list(o.items())[:8]:\n            print(p+k, type(v).__name__)\n            if is … [193 caractères tronqués]`
+
+  ```
+date str
+gold dict
+  phrases int
+  tokens int
+  modalite str
+modes dict
+  heuristique dict
+    all dict
+      pos dict
+        exactitude float
+        exactitude_ferme float
+        exactitude_ouvert float
+        tokens int
+        confusions dict
+          DET dict
+            DET int
+          NOUN dict
+            NOUN int
+            ADJ int
+          PRON dict
+            PRON int
+          VERB dict
+            VERB int
+            NOUN int
+      syntagme dict
+        precision float
+        rappel float
+        f1 float
+        tp int
+        fp int
+        fn int
+        tete dict
+          precision float
+          rappel float
+          f1 float
+          tp int
+          fp int
+          fn int
+      tete dict
+        precision float
+        rappel float
+        f1 float
+        tp int
+        fp int
+        fn int
+      pragmatique dict
+        acte float
+        negation float
+        modalite float
+        double_sens float
+      fraction_semantique float
+    hand dict
+      pos dict
+        exactitude float
+        exactitude_ferme float
+        exactitude_ouvert float
+        tokens int
+        confusions dict
+      syntagme dict
+        precision float
+        ra
+… [12853 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'implémente l'option `--tagger` dans la CLI (client, transport, cascade, cache, code 4)
+
+- **todo_write** `{"todos": [{"content": "Implémenter --tagger dans tools/drave.py (analyser + evaluer, clé, cache, code 4)", "status": "in_progress"}, {"content": "Écrire tools/tests/test_tagger_api.py (transport factice, JSON, défaut, code 4)", "status": "pending"}, {"content": "Mesurer 20 phrases (harnais + CLI) : … [266 caractères tronqués]`
+
+  ```
+Updated todo list: 4 pending, 1 in progress, 0 completed.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "old_string": "    python3 tools/drave.py analyser \"Le chat dort.\"\n    python3 tools/drave.py analyser \"The cat sleeps on the roof.\" --langue en --json\n    python3 tools/drave.py evaluer\n    python3 tools/drave.py … [2747 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "old_string": "import argparse\nimport hashlib\nimport importlib.util\nimport json\nimport pathlib\nimport random\nimport sys\nimport textwrap", "new_string": "import argparse\nimport hashlib\nimport importlib.util\nimpo … [80 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "NOM = \"drave\"\nVERSION = \"0.1.0\"\nLARGEUR = 100\n\n# Le tagger est une **option** : sans `--tagger`, rien de ce bloc n'est importé ni exécuté.\nMODELE_TAGGER = \"deepseek-chat\"\nSEUIL_TAGGER = 0.6\n#  … [438 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def _canonique(a: bl.Annotation) -> str:\n    \"\"\"La forme comparée par `rejouer` : clés triées, durée exclue, sans espaces inutiles.\"\"\"\n    return _sur(json.dumps(a.json(), ensure_ascii=False, sort_ … [4877 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def _ligne_tagger(stats: dict) -> str:\n    \"\"\"Une ligne de coût pour l'affichage et la stderr ; pas de clé, pas d'horodatage.\"\"\"\n    return (f\"modèle={MODELE_TAGGER} · appels={stats['appels']} \"\ … [547 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def formater_annotation(a: bl.Annotation, tagger: bool = False,\n                        stats: dict | None = None) -> str:\n    \"\"\"La sortie lisible : POS compact, syntagmes (rôle + cible), pragmatique … [643 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 30, "offset": 245}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+245:             lignes.append(
+246:                 f"  {e.type:<{lt}}  {span:<{lsp}}  {valeur:<{lv}}  "
+247:                 f"rôle={role:<{lr}}  → {cible}"
+248:             )
+249:     else:
+250:         lignes.append("SYNTAGMES —")
+251: 
+252:     phrases = [e for e in a.etiquettes if e.niveau == "phrase" and e.type == "type"]
+253:     if phrases:
+254:         lignes.append("PRAGMATIQUE")
+255:         par_span: dict[tuple[int, int], list[bl.Etiquette]] = {}
+256:         for e in a.etiquettes:
+257:             if e.niveau == "pragmatique":
+258:                 par_span.setdefault((e.debut, e.fin), []).append(e)
+259:         for p in phrases:
+260:             ici = par_span.get((p.debut, p.fin), [])
+261:             acte = next((e.valeur for e in ici if e.type == "acte"), "—")
+262:             negation = "oui" if any(e.type == "négation" for e in ici) else "non"
+263:             modalite = "oui" if any(e.type == "modalité" for e in ici) else "non"
+264:             double_sens = "oui" if any(e.type == "double_sens" for e in ici) else "non"
+265:             lignes.append(
+266:     
+… [446 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 18, "offset": 272}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+272:     couverture = a.couverture()
+273:     if couverture:
+274:         ordre = [n for n in bl.NIVEAUX if n in couverture]
+275:         ordre += sorted(n for n in couverture if n not in bl.NIVEAUX)
+276:         lignes.extend(_envelopper(
+277:             "COUVERTURE  ",
+278:             "(confiance max par niveau)  "
+279:             + " · ".join(f"{n}={couverture[n]:.2f}" for n in ordre),
+280:         ))
+281:     return "\n".join(lignes)
+282: 
+283: 
+284: # --------------------------------------------------------------------------- commandes
+285: 
+286: 
+287: def _lire_entree(args: argparse.Namespace) -> str:
+288:     """Le texte : l'argument, ou le **fichier** (`--fichier`)."""
+289:     if getattr(args, "fichier", None):
+
+(Showing lines 272-289 of 721. Use offset=290 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "        lignes.extend(_envelopper(\n            \"COUVERTURE  \",\n            \"(confiance max par niveau)  \"\n            + \" · \".join(f\"{n}={couverture[n]:.2f}\" for n in ordre),\n        ))\n    if … [471 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 60, "offset": 284}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+284:         lignes.extend(_envelopper("TAGGER API  ", _ligne_tagger(stats)))
+285:     return "\n".join(lignes)
+286: 
+287: 
+288: # --------------------------------------------------------------------------- commandes
+289: 
+290: 
+291: def _lire_entree(args: argparse.Namespace) -> str:
+292:     """Le texte : l'argument, ou le **fichier** (`--fichier`)."""
+293:     if getattr(args, "fichier", None):
+294:         return pathlib.Path(args.fichier).read_text(encoding="utf-8", errors="replace")
+295:     return args.texte or ""
+296: 
+297: 
+298: def _analyser_jsonl(texte: str, args: argparse.Namespace) -> int:
+299:     """Une **ligne JSON par phrase** (traitement de corpus : `--jsonl`)."""
+300:     h = bl.Heuristique(partition=args.partition)
+301:     n = 0
+302:     for debut, fin, _typ, _ in h._phrases(texte):
+303:         phrase = texte[debut:fin]
+304:         if not phrase.strip():
+305:             continue
+306:         a = h.analyser(phrase, args.langue, args.contexte)
+307:         sys.stdout.write(_sur(json.dumps(a.json(), ensure_ascii=False)) + "\n")
+308:         n += 1
+309:     if 
+… [1687 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def _analyser_jsonl(texte: str, args: argparse.Namespace, h: bl.Heuristique, bloc,\n                    stats: dict | None = None) -> int:\n    \"\"\"Une **ligne JSON par phrase** (traitement de corpus : ` … [4524 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 150, "offset": 400}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+400: 
+401: def _pct(valeur: float) -> str:
+402:     return f"{100.0 * float(valeur):.2f} %"
+403: 
+404: 
+405: def _formater_evaluation(rapport: dict) -> str:
+406:     gold = rapport["gold"]
+407:     mesure = rapport["heuristique"]
+408:     pos = mesure["pos"]
+409:     syn = mesure["syntagme"]
+410:     tete = syn["tete"]
+411:     att = mesure["attachement"]
+412:     att_tete = mesure["attachement_tete"]
+413:     prag = mesure["pragmatique"]
+414:     controle = rapport["controle_negatif"]
+415:     lignes = [
+416:         f"{NOM} {VERSION} — évaluation de l'heuristique sur le gold",
+417:         f"gold {gold['nom']} · {gold['phrases']} phrases · {gold['tokens']} tokens · "
+418:         f"{gold['cibles_attachement']} cibles d'attachement",
+419:         "",
+420:         f"POS         exactitude {_pct(pos['exactitude'])}  "
+421:         f"(fermé {_pct(pos['exactitude_ferme'])}, ouvert {_pct(pos['exactitude_ouvert'])})",
+422:         f"SYNTAGMES   F1 {_pct(syn['f1'])}  "
+423:         f"(P {_pct(syn['precision'])} / R {_pct(syn['rappel'])})",
+424:         f"  tête      F1 {_pct(tete['f1']
+… [7037 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def _pct(valeur: float) -> str:\n    return f\"{100.0 * float(valeur):.2f} %\"\n\n\ndef _points(delta: float) -> str:\n    \"\"\"Un écart de taux en **points** de pourcentage, avec son signe.\"\"\"\n    re … [139 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "        f\"CONTRÔLE NÉGATIF cible exacte tirée au hasard {_pct(controle['exact_taux'])} \"\n        f\"(graine {controle['graine']}, {controle['cibles']} cibles)\",\n    ]\n    tagger = rapport.get(\"tagge … [4035 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "def cmd_evaluer(args: argparse.Namespace) -> int:\n    evaluateur = _module_evaluation()\n    phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()\n    cascade = None\n    stats = Non … [7025 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 100, "offset": 690}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+690:     def error(self, message: str) -> None:  # type: ignore[override]
+691:         self.print_usage(sys.stderr)
+692:         self.exit(2, f"{self.prog}: erreur d'usage : {message}\n")
+693: 
+694: 
+695: def construire_parseur() -> argparse.ArgumentParser:
+696:     epilogue = (
+697:         "Commandes : analyser, evaluer, rejouer, restituer.\n"
+698:         "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) · 1 erreur.\n"
+699:         "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
+700:         "--contexte, --banc.\n"
+701:         "Limites : heuristique CPU, hors ligne, déterministe ; la restitution est un codec de\n"
+702:         "surface (graphème), pas un décodeur neuronal ; ni traduction ni génération.\n"
+703:         "Exemples :\n"
+704:         "  python3 tools/drave.py analyser \"Le chat dort.\"\n"
+705:         "  python3 tools/drave.py evaluer --gold --json\n"
+706:         "  python3 tools/drave.py restituer \"Le chat dort.\"\n"
+707:         "  python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.
+… [5386 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "    epilogue = (\n        \"Commandes : analyser, evaluer, rejouer, restituer.\\n\"\n        \"Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·\\n\"\n        \"4 clé/tagger absent · 1 erre … [1733 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "    analyser = sous.add_parser(\n        \"analyser\",\n        help=\"étiqueter un texte (POS, syntagmes, pragmatique)\",\n        description=\"Analyse un texte avec l'heuristique et rend la lecture comp … [5990 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m py_compile tools/drave.py && python3 tools/drave.py analyser \"Le chat dort.\" && echo \"----\" && python3 tools/drave.py evaluer --json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['heuristique']['pos'] … [98 caractères tronqués]`
+
+  ```
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+----
+0.8625 612 ['attachement_lineaire', 'controle_negatif', 'gold', 'heuristique', 'syntagmes_lineaire', 'version']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env -u DEEPSEEK_API_KEY -u DSH_API_KEY -u DEEPSEEK_KEY_FILE -u DSH_KEY_FILE HOME=/tmp/drave-sans-cle python3 tools/drave.py analyser \"Le chat dort.\" --tagger; echo \"code=$?\"", "description": "Tester l'absence de clé (code 4)"}`
+
+  ```
+code=4
+[stderr]
+drave: dépendance absente : clé DeepSeek absente : exportez DEEPSEEK_KEY_FILE, déposez la clé dans ~/.config/drave/deepseek.key, ou exportez DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py analyser \"Le chat dort.\" --tagger --json 2>/tmp/tagger-stderr.txt >/tmp/tagger-out.json; echo \"code=$?\"; cat /tmp/tagger-stderr.txt; python3 -c \"\nimport json\nd=json.load(open('/tmp/tagger-out.json'))\npr … [392 caractères tronqués]`
+
+  ```
+code=0
+drave: tagger · modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+schema drave.annotation version 2 source cascade refus 
+POS [('Le', 'DET'), ('chat', 'NOUN'), ('dort', 'VERB')]
+SYN [('GN', 'Le chat', 'dort'), ('GV', 'dort', 'chat')]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('tools/tests/linguistique/gold.json'))\nfor p in d['phrases'][:2]:\n    print(p['id'], p['langue'], repr(p['texte']), len(p['mots']))\nPY", "description": "Voir les deux premières phras … [12 caractères tronqués]`
+
+  ```
+g001 fr 'Le chat dort.' 3
+g002 fr 'Le chat de la voisine dort.' 6
+  ```
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", "content": "\"\"\"test_tagger_api.py — le tagger POS par API, **en option**, sans réseau.\n\nCe que le fichier verrouille, avec un **transport factice** (une fonction qui rend un JSON de\nPOS valide) :\n\ … [15227 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", "new_string": "    def test_evaluer_sans_tagger(self) -> None:\n        resultat = drave_cli(\"evaluer\", \"--json\")\n        self.assertEqual(resultat.returncode, 0, resultat.stderr)\n        donnees =  … [489 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", "new_string": "    def test_evaluer_tagger(self) -> None:\n        evaluateur = drave._module_evaluation()\n        chargeur = evaluateur.charger\n        evaluateur.charger = lambda: chargeur()[:2]\n     … [378 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_tagger_api.py 2>&1 | tail -40", "description": "Lancer les tests du tagger"}`
+
+  ```
+Un tagger qui rend autre chose qu'un JSON est un refus, pas une exception.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", line 166, in test_transport_invalide_ne_fait_pas_planter
+    self.assertIn("neuronal", annotation.refus)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'neuronal' not found in ''
+
+======================================================================
+FAIL: test_analyser_tagger_json (__main__.TestCliAvecTransportFactice.test_analyser_tagger_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", line 281, in test_analyser_tagger_json
+    self.assertIn("TAGGER API", erreur)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'TAGGER API' not found in 'drave: tagger · modèle=deepseek-chat · appels=2 · réseau=2 · cache=0 · tokens=34 · latence=0.0 s\n'
+
+======================================================================
+FAIL: test_evaluer_tagger (__main__.
+… [1424 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Heuristique\" -A30 tools/bloc_linguistique.py | head -50", "description": "Lire l'init de Heuristique"}`
+
+  ```
+796:class Heuristique:
+797-    """L'implémentation CPU : elle étiquette la surface et **déclare** ce qu'elle ne couvre pas."""
+798-
+799-    nom = "heuristique"
+800-
+801-    def __init__(self, profils: dict[str, dict] | None = None, segmenter_s: bool = True,
+802-                 seuil_ouvert: float = 0.55, seuil_langue: float = 0.12,
+803-                 union: bool = True, partition: str = "alternative"):
+804-        self.profils = profils
+805-        self.segmenter_s = segmenter_s
+806-        self.seuil_ouvert = seuil_ouvert
+807-        self.seuil_langue = seuil_langue
+808-        self.union = union
+809-        # "brut" : la sortie d'avant (chevauchements non documentés) ; "alternative" :
+810-        # les deux segments restent, `meta.alternative` dit lequel est préféré ;
+811-        # "filtrer_union" : on retire le S qui **contient** un segment chunker (le filtre
+812-        # union du P0-3) ; "filtrer" : partition stricte, le chunker est la partition.
+813-        # Dans les deux filtres, le segment retiré reste dans `meta.alternative` (`retire`).
+814-        if partition not in ("brut", "alternative", "filtrer_union", "filtrer"):
+815-            raise ValueError("partition atten
+… [596 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, json, subprocess, pathlib\nR=pathlib.Path('.').resolve(); sys.path.insert(0,str(R)); sys.path.insert(0,str(R/'tools'))\nimport bloc_linguistique as bl\nref=bl.Heuristique().analyser(\"Le chat dort.\",\"f … [444 caractères tronqués]`
+
+  ```
+DIFF trace [{'etape': 'langue', 'langue': 'fr', 'script': 'Latn', 'confiance': 0.7067, 'indice': 'fr'}, {'etape': 'niveaux', 'etiquettes': 20, 'niveaux': ['discours', 'document', 'graphème', 'mot', 'phrase', 'po || [{'etape': 'langue', 'langue': 'fr', 'script': 'Latn', 'confiance': 0.6667, 'indice': ''}, {'etape': 'niveaux', 'etiquettes': 20, 'niveaux': ['discours', 'document', 'graphème', 'mot', 'phrase', 'pos'
+partition default? alternative
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "class _CascadeTagger:\n    \"\"\"La cascade du tagger, avec le **refus** du neuronal reporté sur l'annotation fusionnée.\n\n    `bl.Cascade`/`_fusion` ne recopie pas `refus` : sans ce relais, un tagger qui … [2406 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"tagger · {_ligne_tagger\" tools/drave.py", "description": "Repérer les lignes de coût stderr"}`
+
+  ```
+344:        print(f"{NOM}: tagger · {_ligne_tagger(stats)}", file=sys.stderr)
+388:            print(f"{NOM}: tagger · {_ligne_tagger(stats)}", file=sys.stderr)
+602:            print(f"{NOM}: tagger · {_ligne_tagger(stats)}", file=sys.stderr)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py')\nt=p.read_text(encoding='utf-8')\nt=t.replace('print(f\"{NOM}: tagger · {_ligne_tagger(stats)}\", file=sys.stderr)',\n            'print(f\"{NOM}: TAGGER API · {_lign … [187 caractères tronqués]`
+
+  ```
+3
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", "new_string": "        donnees = json.loads(resultat.stdout)\n        self.assertEqual(donnees, bl.Heuristique().analyser(TEXTE).json())", "old_string": "        donnees = json.loads(resultat.stdout)\n    … [81 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_tagger_api.py 2>&1 | tail -35", "description": "Relancer les tests du tagger"}`
+
+  ```
+test_cache_par_texte (__main__.TestCascadeTagger.test_cache_par_texte) ... ok
+test_cascade_remplace_les_pos (__main__.TestCascadeTagger.test_cascade_remplace_les_pos) ... FAIL
+test_json_valide_schema (__main__.TestCascadeTagger.test_json_valide_schema) ... ok
+test_transport_invalide_ne_fait_pas_planter (__main__.TestCascadeTagger.test_transport_invalide_ne_fait_pas_planter)
+Un tagger qui rend autre chose qu'un JSON est un refus, pas une exception. ... ok
+test_absence_de_cle_ne_fuit_pas (__main__.TestCle.test_absence_de_cle_ne_fuit_pas) ... ok
+test_la_cle_ne_sort_pas_du_client (__main__.TestCle.test_la_cle_ne_sort_pas_du_client) ... ok
+test_ordre_de_resolution (__main__.TestCle.test_ordre_de_resolution) ... ok
+test_sans_cle_code_4 (__main__.TestCle.test_sans_cle_code_4) ... ok
+test_analyser_tagger_json (__main__.TestCliAvecTransportFactice.test_analyser_tagger_json) ... ok
+test_analyser_tagger_lisible (__main__.TestCliAvecTransportFactice.test_analyser_tagger_lisible) ... ok
+test_evaluer_tagger (__main__.TestCliAvecTransportFactice.test_evaluer_tagger) ... ok
+test_aide_expose_tagger (__main__.TestDefaultInchange.test_aide_expose_tagger) ... ok
+test_analyser_json_sans_tagger (__main_
+… [1272 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"_cache\" tools/bloc_linguistique.py | sed -n 1,20p; grep -n \"def analyser\" tools/bloc_linguistique.py | head -10", "description": "Vérifier le cache de l'heuristique"}`
+
+  ```
+1998:        self._cache: dict[tuple[str, str | None], Annotation] = {}
+2034:        if self.cache and cle in self._cache:
+2035:            return copy.deepcopy(self._cache[cle])
+2072:            self._cache[cle] = annotation
+2127:        self._cache: dict[tuple[str, str | None], Annotation] = {}
+2168:        if self.cache and cle in self._cache:
+2169:            return copy.deepcopy(self._cache[cle])
+2223:            self._cache[cle] = annotation
+2307:        self._cache: dict[tuple[str, str | None], Annotation] = {}
+2338:        if self.cache and cle in self._cache:
+2339:            return copy.deepcopy(self._cache[cle])
+2378:            self._cache[cle] = annotation
+141:    def analyser(self, texte: str, langue: str | None = None,
+1455:    def analyser(self, texte: str, langue: str | None = None,
+1845:    def analyser(self, texte: str, langue: str | None = None,
+1916:    def analyser(self, texte: str, langue: str | None = None,
+2026:    def analyser(self, texte: str, langue: str | None = None,
+2160:    def analyser(self, texte: str, langue: str | None = None,
+2252:    def analyser(self, texte: str, langue: str | None = None,
+2330:    def analyser(self, texte: str, langue: str | 
+… [146 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys, pathlib\nR=pathlib.Path('.').resolve(); sys.path.insert(0,str(R)); sys.path.insert(0,str(R/'tools'))\nimport bloc_linguistique as bl\nfor txt in (\"Le chat dort.\", \"Le chat, « dort ! »\", \"12,5 %\"):\ … [106 caractères tronqués]`
+
+  ```
+'Le chat dort.' [(0, 2, 'Le', 'mot'), (3, 7, 'chat', 'mot'), (8, 12, 'dort', 'mot'), (12, 13, '.', 'ponctuation')]
+'Le chat, « dort ! »' [(0, 2, 'Le', 'mot'), (3, 7, 'chat', 'mot'), (7, 8, ',', 'ponctuation'), (9, 10, '«', 'ponctuation'), (11, 15, 'dort', 'mot'), (16, 17, '!', 'ponctuation'), (18, 19, '»', 'ponctuation')]
+'12,5 %' [(0, 2, '12', 'nombre'), (2, 3, ',', 'ponctuation'), (3, 4, '5', 'nombre'), (5, 6, '%', 'ponctuation')]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py", "new_string": "        # l'heuristique, elle, dit DET/NOUN/VERB : la substitution est réelle. Le tagger ne\n        # reçoit que les mots et les nombres : la ponctuation (PONCT) n'est pas rendue.\n        … [499 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/test_tagger_api.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_tagger_api.py 2>&1 | tail -8", "description": "Relancer les tests du tagger"}`
+
+  ```
+test_aide_expose_tagger (__main__.TestDefaultInchange.test_aide_expose_tagger) ... ok
+test_analyser_json_sans_tagger (__main__.TestDefaultInchange.test_analyser_json_sans_tagger) ... ok
+test_evaluer_sans_tagger (__main__.TestDefaultInchange.test_evaluer_sans_tagger) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.936s
+
+OK
+  ```
+
+### 🤖 Assistant
+
+⏵ Je lance la mesure 20 phrases (cache neuf) et vérifie le smoke test en parallèle
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/drave-tagger-option-cache && mkdir -p /tmp/drave-tagger-option-cache && DEEPSEEK_KEY_FILE=\"$HOME/.config/drave/deepseek.key\" DEEPSEEK_CACHE=/tmp/drave-tagger-option-cache DEEPSEEK_MODEL=deepseek-chat PYTHONPATH=. python … [207 caractères tronqués]`
+
+  ```
+started background job bash-4967
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_produit.py 2>&1 | tail -4", "description": "Vérifier le smoke test existant"}`
+
+  ```
+----------------------------------------------------------------------
+Ran 18 tests in 7.418s
+
+OK
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 120, "offset": 63}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+63: PRIORITE_TAGGER = dict(bl.PRIORITE_NIVEAU)
+64: PRIORITE_TAGGER["syntagme"] = "heuristique"
+65: 
+66: 
+67: # --------------------------------------------------------------------------- sorties JSON
+68: 
+69: 
+70: def _sur(s: str) -> str:
+71:     """Une chaîne toujours **écrivable** : un surrogate isolé devient U+FFFD (jamais d'exception)."""
+72:     return s.encode("utf-8", "replace").decode("utf-8", "replace")
+73: 
+74: 
+75: def _dumps(objet) -> str:
+76:     """JSON stable (pas d'horodatage, pas de durée) et lisible."""
+77:     return _sur(json.dumps(objet, ensure_ascii=False, indent=1)) + "\n"
+78: 
+79: 
+80: def _canonique(a: bl.Annotation) -> str:
+81:     """La forme comparée par `rejouer` : clés triées, durée exclue, sans espaces inutiles."""
+82:     return _sur(json.dumps(a.json(), ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+83: 
+84: 
+85: # --------------------------------------------------------------------------- le tagger (option)
+86: 
+87: 
+88: class CleTaggerAbsente(RuntimeError):
+89:     """Aucune clé : le tagger est une option, jamais un prérequis du pro
+… [4240 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-4967"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "new_string": "        except CleTaggerAbsente as exc:\n            print(f\"{NOM}: dépendance absente : {exc}\", file=sys.stderr)\n            return 4\n        # un texte sans mot ni nombre est un refus d'analyse : on  … [583 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py has been updated successfully.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-4967 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/drave-tagger-option-cache && mkdir -p /tmp/drave-tagger-option-cache && DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key" DEEPSEEK_CACHE=/tmp/drave-tagger-option-cache DEEPSEEK_MODEL=deepseek-chat PYTHONPATH=. python3 tools/tests/linguistique/qualifier_tagger_612.py --limite 20 --sortie /tmp/tagger-option-20.json 2>&1 | tail -20) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Je lis le résultat de la mesure 20 phrases et son coût
+
+- **job_output** `{"job_id": "bash-4967"}`
+
+  ```
+"hand": 0.9714
+  },
+  "cascade": {
+   "all": 0.9714,
+   "hand": 0.9714
+  },
+  "parallele_niveau": {
+   "all": 0.9714,
+   "hand": 0.9714
+  },
+  "cascade_niveau": {
+   "all": 0.9714,
+   "hand": 0.9714
+  }
+ },
+ "appels": 40,
+ "tokens": 11868,
+ "refus": 0,
+ "latence_moyenne": 0.987
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/tagger-option-20.json'))\nprint('gold', d['gold'])\nprint('modeles', d['modeles_renvoyes'])\nprint('api', d['api'])\nprint('appels', d['appels'])\nprint('latence', d['latence_s']) … [382 caractères tronqués]`
+
+  ```
+gold {'phrases': 20, 'tokens': 105, 'sources': {'hand': 20}, 'modalite': 'api-deepseek (deepseek-chat → modèle renvoyé), aucun serveur local'}
+modeles {'deepseek-flash': 40}
+api {'appels': 40, 'tokens': 11868, 'latence_s': 39.49}
+appels {'pos': 20, 'syntagmes': 20}
+latence {'moyenne': 0.987, 'mediane': 0.992}
+refus 0 []
+heuristique      POS 0.8857  F1 0.9016  tete 0.9739  acte 1.0000  duree 0.04s
+neuronal         POS 0.9714  F1 0.8846  tete 0.9038  acte 0.0000  duree 39.57s
+parallele        POS 0.9714  F1 0.8846  tete 0.9038  acte 1.0000  duree 0.08s
+cascade          POS 0.9714  F1 0.8846  tete 0.9038  acte 1.0000  duree 0.05s
+parallele_niveau POS 0.9714  F1 0.8846  tete 0.9038  acte 0.0000  duree 0.05s
+cascade_niveau   POS 0.9714  F1 0.8846  tete 0.9038  acte 0.0000  duree 0.05s
+seuils {'heuristique': True, 'neuronal': True, 'parallele': True, 'cascade': True, 'parallele_niveau': True, 'cascade_niveau': True, 'aucun_refus': True}
+  ```
+
+- **bash** `{"command": "cat > /tmp/mesure_tagger_option.py <<'PY'\nimport json, pathlib, sys\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(R)); sys.path.insert(0, str(R/'tools'))\nimport drave\nfrom tools.tests.linguistique.evaluer_gold import evaluer_bloc\n\nphra … [1635 caractères tronqués]`
+
+  ```
+{
+ "phrases": 20,
+ "tokens": 105,
+ "heuristique": {
+  "pos": 0.8857,
+  "ferme": 0.8772,
+  "ouvert": 0.8958,
+  "f1": 0.9016,
+  "tete": 0.9739,
+  "attachement_exact": 0.9231,
+  "attachement_couverture": 0.9231
+ },
+ "cascade": {
+  "pos": 0.9714,
+  "ferme": 0.9474,
+  "ouvert": 1.0,
+  "f1": 0.9016,
+  "tete": 0.9739,
+  "attachement_exact": 0.9231,
+  "attachement_couverture": 0.9231
+ },
+ "delta_pos": 0.0857,
+ "refus": 0,
+ "refus_detail": [],
+ "cout": {
+  "modele": "deepseek-chat",
+  "appels": 40,
+  "requetes": 0,
+  "cache": 40,
+  "tokens": 0,
+  "latence_s": 0.0,
+  "modeles_renvoyes": {
+   "deepseek-flash": 40
+  }
+ }
+}
+  ```
+
+- **bash** `{"command": "cat > /tmp/evaluer_20_cli.py <<'PY'\nimport json, pathlib, sys\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(R)); sys.path.insert(0, str(R/'tools'))\nimport drave\nev = drave._module_evaluation()\nchargeur = ev.charger\nev.charger = lambda: … [983 caractères tronqués]`
+
+  ```
+code=0
+drave: TAGGER API · modèle=deepseek-chat · appels=40 · réseau=0 · cache=40 · tokens=0 · latence=0.0 s
+gold {'nom': 'vivant (hand + reel + synthétique)', 'gele': False, 'phrases': 20, 'tokens': 105, 'cibles_attachement': 13}
+heuristique POS 0.8857
+tagger POS 0.9714 delta 0.0857
+tagger syntagme 0.9016 prag acte 1.0
+cout {'modele': 'deepseek-chat', 'appels': 40, 'requetes': 0, 'cache': 40, 'tokens': 0, 'latence_s': 0.0, 'modeles_renvoyes': {'deepseek-flash': 40}}
+refus 0
+heuristique syntagme 0.9016
+  ```
+
+- **bash** `{"command": "cat > /tmp/evaluer_20_cli_txt.py <<'PY'\nimport pathlib, sys\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(R)); sys.path.insert(0, str(R/'tools'))\nimport drave\nev = drave._module_evaluation()\nchargeur = ev.charger\nev.charger = lambda: c … [381 caractères tronqués]`
+
+  ```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold vivant (hand + reel + synthétique) · 20 phrases · 105 tokens · 13 cibles d'attachement
+
+POS         exactitude 88.57 %  (fermé 87.72 %, ouvert 89.58 %)
+SYNTAGMES   F1 90.16 %  (P 83.33 % / R 98.21 %)
+  tête      F1 97.39 %  (P 94.92 % / R 100.00 %)
+  vue linéaire (partition filtrer) F1 82.57 %  · attachement 69.23 % de couverture
+ATTACHEMENT exact 92.31 % · couverture 92.31 % · exact sur span 100.00 % · top-k 92.31 %
+  tête      couverture 100.00 % · top-k 100.00 %
+PRAGMATIQUE acte 100.00 % · négation 100.00 % · modalité 95.00 % · double sens 90.00 %
+FRACTION SÉMANTIQUE 48.35 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 23.08 % (graine 0, 13 cibles)
+
+TAGGER API DEEPSEEK (option --tagger)
+  POS         exactitude 97.14 % (fermé 94.74 %, ouvert 100.00 %) · Δ +8.57 pts vs heuristique
+  SYNTAGMES   F1 90.16 % (tête 97.39 %) — conservés à l'heuristique
+  COÛT        appels 40 · réseau 0 · cache 40 · tokens 0 · modèle deepseek-chat
+  modèle renvoyé : deepseek-flash
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, random, collections\nphrases=json.load(open('tools/tests/linguistique/gold.json'))['phrases'][:20]\nclasses=(\"DET\",\"NOUN\",\"VERB\",\"ADJ\",\"ADV\",\"PREP\",\"PRON\",\"AUX\",\"CONJ\",\"NUM\",\"INTJ\" … [585 caractères tronqués]`
+
+  ```
+uniforme 11 105 0.1048
+majoritaire VERB 24 105 0.2286
+NOUN 21 105 0.2
+Counter({'VERB': 24, 'DET': 21, 'NOUN': 21, 'PREP': 9, 'AUX': 9, 'PRON': 9, 'ADV': 6, 'CONJ': 3, 'ADJ': 3})
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,60p reports/README.md", "description": "Lire le début de l'index des fiches"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`note-panini-334.md`](note-panini-334.md) | **Panini** — la note à envoyer : H0 reproduite, β époque non, la collinéarité |
+| [`rapport-panini-334.md`](rapport-panini-334.md) | **Panini** — le §334 : H0 0,909/0,906, la |
+| [`rapport-exemples-rejoues.md`](rapport-exemples-rejoues.md) | **B13** — les 5 exem
+… [4134 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py analyser \"Le chat dort.\" --tagger", "description": "Capturer la sortie réelle de analyser --tagger"}`
+
+  ```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_KEY_FILE=\"$HOME/.config/drave/deepseek.key\" DEEPSEEK_CACHE=/tmp/drave-tagger-option-cache python3 /tmp/mesure_tagger_option.py > /tmp/mesure-tagger-option-cli.json && python3 -c \"import json; d=json.load(open('/tmp/mesure … [176 caractères tronqués]`
+
+  ```
+0.9714 0.0857 40 40
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/genere_pensee_tagger.py <<'PY'\nimport json, pathlib, random, collections\n\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nharnais = json.load(open('/tmp/tagger-option-20.json'))\ncli = json.load(ope … [8451 caractères tronqués]`
+
+  ```
+/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-tagger-option.json 5516 octets
+uniforme 0.10476190476190476 majoritaire VERB 0.22857142857142856
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-tagger-option.json"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-tagger-option.json</path>
+<type>file</type>
+<content>
+1: {
+2:  "date": "2026-11-14",
+3:  "branche": "s/v7",
+4:  "decision": "1A — le tagger API en option, le défaut reste hors ligne",
+5:  "ligne_roadmap": "R0.7 (le lecteur)",
+6:  "option": {
+7:   "drapeau": "--tagger",
+8:   "commandes": [
+9:    "analyser",
+10:    "evaluer"
+11:   ],
+12:   "modele_demande": "deepseek-chat",
+13:   "seuil_cascade": 0.6,
+14:   "fusion": {
+15:    "pos": "neuronal (tagger)",
+16:    "syntagme": "heuristique",
+17:    "pragmatique": "heuristique",
+18:    "pourquoi": "le tagger ne rend ni rôle ni cible : forcer ses syntagmes ferait perdre l'attachement mesuré"
+19:   },
+20:   "cle": [
+21:    "DEEPSEEK_KEY_FILE",
+22:    "~/.config/drave/deepseek.key",
+23:    "DEEPSEEK_API_KEY",
+24:    "DSH_KEY_FILE / DSH_API_KEY (repli)"
+25:   ],
+26:   "cle_absente": {
+27:    "code": 4,
+28:    "message": "clé DeepSeek absente ; le défaut reste l'heuristique hors ligne"
+29:   },
+30:   "cache": "mémoire par (texte, langue) dans chaque tagger + cache disque du client (modèle + messages + température + max_tokens, jamais la clé)",
+31:   "defaut": "heuristique, CPU
+… [5173 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ J'écris la fiche et le JSON de résultat, puis la doc produit
+
+- **write** `{"content": "# R0.7 / 1A — le tagger POS en option : +8,57 pts sur 20 phrases, +8,49 sur le gold 612 ; le défaut reste hors ligne\n\n> **Ligne de roadmap** : **R0.7** (le lecteur) · **Décision** : **1A** du 14/11 · **Date** :\n> 2026-11-14 · **Verdict** : ✅ **option livrée** — `--tagger` sur `analys … [9644 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-option.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "> **Vérifié le 2026-11-14** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est\n> **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`\n> existent … [1521 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**Prérequis** : le dépôt, Python 3.10+ (testé en 3.13), **aucune dépendance externe**, aucun GPU,\naucun accès réseau **par défaut** (le tagger en option, lui, appelle l'API DeepSeek, § 3.7). Les\n … [361 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "### 3.7 Le tagger en option — `--tagger`\n\n```bash\npython3 tools/drave.py analyser \"Le chat dort.\" --tagger\npython3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger\npython3 tools … [3350 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un\n**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte\n`porte-bloc-linguistique … [2049 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"hors réseau\\|Codes de sortie\\|non implémenté\\|code \\*\\*4\\*\\*\" docs/produit/README.md | head", "description": "Repérer les lignes des codes et garanties"}`
+
+  ```
+386:message clair sur `stderr` et sort avec le code **4** ; rien n'est rendu sur `stdout`.
+512:| **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; les adaptateurs neuronaux sont locaux et non utilisés |
+527:**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3** ; le code **4** (dépendance
+536:| **4** | dépendance absente : modèle, profils | **non implémenté** |
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "limit": 40, "offset": 505}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+505: phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
+506: 
+507: ## 6. Garanties
+508: 
+509: | garantie | ce que ça veut dire | contrôle |
+510: |---|---|---|
+511: | **déterminisme** | même entrée → même JSON, octet pour octet | `drave rejouer` (§ 3.4) ; `tools/tests/test_produit.py` compare deux sorties |
+512: | **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; les adaptateurs neuronaux sont locaux et non utilisés |
+513: | **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : JSON sur `stdout` + code 3 |
+514: | **pas d'invention** | chaque étiquette porte `source`, `confiance`, `candidats` ; `und` plutôt qu'une langue forcée | JSON ; `--langue` est un indice |
+515: | **spans lisibles** | indices en **points de code Unicode**, 0-based, `[debut:fin)` | « Élodie » → `[0:6]` ; emoji = 1 point |
+516: | **UTF-8** | le JSON est en UTF-8, non échappé, sans durée | `--json` ; `test_produit.py` vérifie l'absence de `duree_s` |
+517: | **gold versionné** 
+… [2049 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; le tagger API exige `--tagger` et une clé |", "old_string": "| **hors réseau** | le chemin par déf … [119 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3 / 4** :\n\n| code | sens | aujourd'hui |\n|---:|---|---|\n| **0** | succès : annotation rendue, évaluation rendue, rejeu ident … [1903 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "limit": 80, "offset": 544}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+544: 
+545: Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendance externe.
+546: 
+547: ```bash
+548: python3 tools/drave.py --version
+549: python3 tools/drave.py --aide
+550: python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] \
+551:     [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
+552: python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json]
+553: python3 tools/drave.py evaluer [--gold] [--json] [--par-langue]
+554: python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
+555: python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
+556: python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json [--json]
+557: ```
+558: 
+559: **Sorties réelles des commandes** (07/11 pour le format ; les valeurs d'`evaluer` sont celles
+560: mesurées le 14/11) :
+561: 
+562: ```
+563: $ python3 tools/drave.py --version
+564: drave 0.1.0
+565: 
+566: $ python3 tools/drave.py evaluer --gold
+567: drave 0.1.0 — évaluation de l'heuristique sur le gold
+568: gold gelé (référenc
+… [4046 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "```bash\npython3 tools/drave.py --version\npython3 tools/drave.py --aide\npython3 tools/drave.py analyser \"Le chat dort.\" [--langue fr|en] [--json] [--tagger] \\\n    [--partition brut|alternativ … [1262 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |\n| `--tagger` | `analyser`, `evaluer` | POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; `evaluer` mesure en  … [125 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "| **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |\n| **`--mode` / la cascade locale** | le CLI expose l'he … [3664 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "new_string": "étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **18 tests** de fumée, **8 tests**", "old_string": "étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **16 tests** de fum … [17 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md has been updated successfully.
+  ```
+

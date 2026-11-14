@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-14, 10 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-14, 11 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -103,7 +103,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **733** / **826** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **734** / **827** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 

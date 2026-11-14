@@ -8,7 +8,9 @@
 > **Vérifié le 2026-11-14** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
 > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
 > existent, et la
-> porte produit est verte. Le format est **version 2** (`schema: "drave.annotation"`,
+> porte produit est verte. Le **tagger POS par API** est livré **en option** (`--tagger`,
+> § 3.7) : clé et réseau pour qui le demande, **heuristique hors ligne par défaut**. Le format
+> est **version 2** (`schema: "drave.annotation"`,
 > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
 > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
 > § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 datent du
@@ -28,8 +30,9 @@
 | **chercheur du dépôt** | le banc des fiches : gold 612, 239 cibles, rejeu | les règles sont dessinées sur ce gold : lire la **couverture**, pas seulement l'exactitude |
 
 **Prérequis** : le dépôt, Python 3.10+ (testé en 3.13), **aucune dépendance externe**, aucun GPU,
-aucun accès réseau. Les quatre gold sont versionnés dans `tools/tests/linguistique/` ; le corpus
-UDHR, lui, ne l'est pas (voir § 4).
+aucun accès réseau **par défaut** (le tagger en option, lui, appelle l'API DeepSeek, § 3.7). Les
+quatre gold sont versionnés dans `tools/tests/linguistique/` ; le corpus UDHR, lui, ne l'est pas
+(voir § 4).
 
 **Ce que ce n'est pas** : un produit grand public, un traducteur, un générateur, un correcteur,
 un serveur. Le produit **lit** et **étiquette** ; il n'écrit pas de texte.
@@ -356,6 +359,65 @@ portent **395 rôles** et **315 cibles** (315 résolues, 313 dans un autre segme
 stabilité structurelle est **18/46**. Fiche
 [`rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md).
 
+### 3.7 Le tagger en option — `--tagger`
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger
+python3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger
+python3 tools/drave.py evaluer --tagger
+```
+```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+```
+
+**La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
+`DEEPSEEK_API_KEY` (`DSH_KEY_FILE` / `DSH_API_KEY` en repli). Elle n'est **jamais** affichée :
+ni dans le message, ni dans le JSON, ni dans le cache. **Sans clé**, la commande écrit un
+message clair sur `stderr` et sort avec le code **4** ; rien n'est rendu sur `stdout`.
+
+**Ce que l'option change — et ce qu'elle ne change pas.** Le **POS** vient du tagger
+(`source=cascade`, confiance déclarée **0,60**) ; les **syntagmes**, leurs **rôles**, leurs
+**cibles d'attachement** et la **pragmatique** restent à l'heuristique. Le tagger ne reçoit que
+les mots et les nombres : la **ponctuation** n'a plus de POS dans l'option (`PONCT` disparaît de
+la ligne `POS`, le gold ne la compte pas). La cascade appelle le neuronal quand un niveau passe
+sous **0,60** ; la fusion choisit la source **par niveau**, pas par confiance.
+
+**La mesure.** Sur les **20 phrases `hand`** du gold (105 tokens) : POS **88,57 % → 97,14 %**
+(**+8,57 pts**), syntagmes et attachement **inchangés**. Sur le **gold 612** : **86,25 % →
+94,75 %** (**+8,49 pts**), mais le gain du seul **réel 432** est **+4,67** (le synthétique porte
+le reste). Dispositif, coût et contrôle négatif : [`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md).
+
+**Le coût.** **Deux appels par phrase** (POS + syntagmes, composite), ~**593 tokens/phrase**,
+~**0,99 s/appel** ; les **612 phrases** coûtent **1 218 appels**, **358 962 tokens**, ~**21 min**
+et ~**0,04 $**. Le **cache** (mémoire par texte + disque du client) rend la seconde analyse
+gratuite : `appels=40 · réseau=0 · cache=40 · tokens=0` sur les 20 phrases rejouées.
+
+**`evaluer --tagger`.** La commande mesure **les deux** lectures et publie l'écart et le coût
+(la ligne `TAGGER API DEEPSEEK` sur 20 phrases, exemple réel) :
+
+```
+TAGGER API DEEPSEEK (option --tagger)
+  POS         exactitude 97.14 % (fermé 94.74 %, ouvert 100.00 %) · Δ +8.57 pts vs heuristique
+  SYNTAGMES   F1 90.16 % (tête 97.39 %) — conservés à l'heuristique
+  COÛT        appels 40 · réseau 0 · cache 40 · tokens 0 · modèle deepseek-chat
+  modèle renvoyé : deepseek-flash
+```
+
+**Le défaut ne bouge pas.** Sans `--tagger`, la commande ne lit aucune clé, n'importe pas le
+module réseau, n'ouvre aucune socket et rend exactement l'heuristique d'avant (le test
+[`test_tagger_api.py`](../../tools/tests/test_tagger_api.py) le compare octet pour octet). Le
+`--tagger` est une **option**, pas un changement de produit.
+
 ## 4. Ce que le produit ne fait pas encore
 
 **1. Il ne génère pas de texte.** `restituer` reconstruit la **surface** depuis l'annotation
@@ -381,14 +443,16 @@ une lecture unique (garder `union: null`, ou le segment qui en contient un autre
 `porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
 **sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
 pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
-**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique, et
-`drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
-en POS sur 180 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit
-aujourd'hui : ce n'est pas un chemin livré.
+**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;
+`evaluer --tagger` mesure en plus la cascade **API** (**0,9475** sur 612, § 3.7), sans changer le
+défaut. La cascade avec le vrai tagger 7B local a été mesurée à **0,9415** en POS sur 180
+phrases, mais elle exige un serveur local 7B, que la règle 11 interdit aujourd'hui : ce n'est
+pas un chemin livré.
 
-**4. Pas de neuronal.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de qualité.
-Le vrai adaptateur (`NeuronalLLM`, `NeuronalLLMPOS`) parle à un serveur local ; il n'est ni requis
-ni utilisé par défaut, et le CLI ne l'expose pas.
+**4. Pas de neuronal local.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de
+qualité. Le vrai adaptateur local (`NeuronalLLM`, `NeuronalLLMPOS`) parle à un serveur local ; il
+n'est ni requis ni utilisé par défaut. Le CLI expose en **option** le tagger de l'**API**
+DeepSeek (§ 3.7), pas le 7B local.
 
 **5. Les classes ouvertes sont fragiles.** POS fermé **0,9004**, ouvert **0,6234** : les mots
 inconnus tombent souvent en NOUN. Exemple réel : dans « Le livre que j'ai lu… », `lu` est tagué
@@ -445,7 +509,7 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 | garantie | ce que ça veut dire | contrôle |
 |---|---|---|
 | **déterminisme** | même entrée → même JSON, octet pour octet | `drave rejouer` (§ 3.4) ; `tools/tests/test_produit.py` compare deux sorties |
-| **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; les adaptateurs neuronaux sont locaux et non utilisés |
+| **hors réseau** | le chemin par défaut n'ouvre aucune socket | analyse `heuristique` seulement ; le tagger API exige `--tagger` et une clé |
 | **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : JSON sur `stdout` + code 3 |
 | **pas d'invention** | chaque étiquette porte `source`, `confiance`, `candidats` ; `und` plutôt qu'une langue forcée | JSON ; `--langue` est un indice |
 | **spans lisibles** | indices en **points de code Unicode**, 0-based, `[debut:fin)` | « Élodie » → `[0:6]` ; emoji = 1 point |
@@ -455,25 +519,26 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 | **porte produit** | version, JSON fr/en, rejeu, smoke test, autotest | `bash tools/porte-produit.sh` → ✅ |
 
 **La porte produit, mesurée le 07/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
-étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **16 tests** de fumée, **8 tests**
+étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **18 tests** de fumée, **8 tests**
 de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **11 tests** de
 restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test est
 `tools/tests/test_produit.py`.
 
-**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3** ; le code **4** (dépendance
-absente) n'est pas encore là :
+**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3 / 4** :
 
 | code | sens | aujourd'hui |
 |---:|---|---|
 | **0** | succès : annotation rendue, évaluation rendue, rejeu identique, restitution rendue | `analyser`, `evaluer`, `rejouer`, `restituer` |
-| **1** | erreur | argument illisible, divergence de rejeu, exception |
+| **1** | erreur ; tagger qui refuse une phrase sans POS | argument illisible, divergence de rejeu, exception |
 | **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
 | **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""`, `restituer "..."` |
-| **4** | dépendance absente : modèle, profils | **non implémenté** |
+| **4** | dépendance absente : la clé du tagger | `--tagger` sans clé (message clair, rien sur `stdout`) |
 
-**Ce qui n'est pas garanti** : le chemin neuronal, un texte hors domaine, la calibration des
-confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le JSON),
-et la qualité sur un lot de textes hétérogènes (une invocation = un texte).
+**Ce qui n'est pas garanti** : le chemin neuronal **local**, un texte hors domaine, la calibration
+des confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le
+JSON), et la qualité sur un lot de textes hétérogènes (une invocation = un texte). Le tagger API
+est une option **best-effort** : sa justesse dépend du modèle du jour, et son cache peut rejouer
+une ancienne réponse.
 
 ## 7. Le CLI livré — contrat et manques
 
@@ -482,14 +547,17 @@ Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendanc
 ```bash
 python3 tools/drave.py --version
 python3 tools/drave.py --aide
-python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] \
+python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] [--tagger] \
     [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
-python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json]
-python3 tools/drave.py evaluer [--gold] [--json] [--par-langue]
+python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json] [--tagger]
+python3 tools/drave.py evaluer [--gold] [--json] [--par-langue] [--tagger]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
 python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json [--json]
 ```
+
+`--tagger` est la **seule** option qui sort du hors ligne : elle appelle l'API DeepSeek (clé et
+réseau, § 3.7). Toutes les autres lignes ci-dessus restent CPU, déterministes et sans socket.
 
 **Sorties réelles des commandes** (07/11 pour le format ; les valeurs d'`evaluer` sont celles
 mesurées le 14/11) :
@@ -521,6 +589,7 @@ rejeu identique : oui
 |---|---|---|
 | `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
 | `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |
+| `--tagger` | `analyser`, `evaluer` | POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; `evaluer` mesure en plus la cascade et le Δ (§ 3.7) |
 | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
 | `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
 | `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
@@ -539,21 +608,21 @@ rejeu identique : oui
 | **l'entrée standard** | `--fichier` lit un fichier, mais pas de pipe (`cat corpus.txt \| drave analyser`) |
 | **`--sortie`** | pas d'écriture directe d'un JSON ; il faut rediriger le shell |
 | **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |
-| **le code 4** | une dépendance absente n'est pas distinguée d'une erreur (code 1) |
-| **`--mode` / la cascade** | le CLI n'expose que l'heuristique ; `parallele` et `cascade` demandent le code Python |
+| **`--mode` / la cascade locale** | le CLI expose l'heuristique et la cascade **API** (`--tagger`) ; `parallele` et la cascade **locale** demandent le code Python |
 | **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
 | **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
 | **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
 | **`candidats` structurés** | ce sont des **chaînes d'affichage** (« « qui dort » → voisine »), pas des objets `{span, cible}` ; un programme doit les reparser |
 | **`role` normalisé** | les valeurs mélangent `predicat`/`prédicat` et `qualite`/`qualité` ; fragile pour un filtre |
-| **`--strict`** | `evaluer` ne mesure pas la cascade et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
+| **`--strict`** | `evaluer` ne mesure pas la cascade **locale** et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
 | **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dépôt |
-| **le chemin neuronal** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; pas de chemin neuronal livré |
+| **le neuronal local** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; le tagger **API** est en option, le 7B local n'est pas livré |
 | **la restitution sémantique** | `restituer` est un **codec de surface** (graphème) ; il ne restitue pas le sens, ne traduit pas, ne génère pas |
 
 **Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
 déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue),
-`--fichier`/`--jsonl`, `--banc`, `--partition`, la **restitution v0** (46/46 surfaces exactes,
+`--fichier`/`--jsonl`, `--banc`, `--partition`, le **tagger API en option** (`--tagger`, code 4,
+cache), la **restitution v0** (46/46 surfaces exactes,
 miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique, strict
 inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
 être présenté comme acquis.

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 329.4 h |
+| Durée | 330.4 h |
 | Tours | 196 |
-| Messages | 3737 |
-| Appels d'outils | 3330 |
+| Messages | 3754 |
+| Appels d'outils | 3346 |
 | Fichiers touchés | 25 |
-| Commandes | 2770 |
+| Commandes | 2784 |
 | Sous-agents | 43 |
-| Commits | 444 |
+| Commits | 445 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10543,7 +10543,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
-*17 appels d'outils.* Actions notables :
+*33 appels d'outils.* Actions notables :
 
 - bash — Lire la fiche de coordination S
 - bash — Inspecter le sous-module S
@@ -10559,7 +10559,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Écrire la note Panini
 - bash — Consigner les décisions
 - bash — Committer les décisions
-- … et 3 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -10685,7 +10685,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2730 autres
+- … et 2744 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11277,4 +11277,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE" 2>&1 | tai
 - DÉCISIONS DU 14/11 — 1A (TAGGER EN OPTION), 2A (g017 INATTEIGNABLE), 3B (11 VERDICTS S COMMITTÉS), 4A (NOTE PANINI), 5A (A6.2 REPOUSSÉ), 6A→C→B" -- reports/note
 - CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ" -- tools/chantier/plan.json docs/pilotage/en-cours.md 2>&1 | tail -1   if git log 
+- 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7" -- tools/drave.py
 
