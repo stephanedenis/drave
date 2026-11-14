@@ -61954,3 +61954,49 @@ index EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-14, 07 h 35 HNE\", t)\np.write_text( … [664 caractères tronqués]`
+
+  ```
+16 files changed, 430 insertions(+), 143 deletions(-)
+COMMIT OK 1
+5928e75a DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14
+   c18d0193..5928e75a  s/v7 -> s/v7
+   c18d0193..5928e75a  master -> master
+sam 14 nov 2026 07:26:38 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-250; grep -n \"État au\" docs/pilotage/roadmap.md | tail -1 | cut -c1-200", "description": "Voir l'état final"}`
+
+  ```
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convent
+38:**État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/rapport-cloture-chantier.md | cut -c1-160", "description": "Lire le rapport de clôture"}`
+
+  ```
+# J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14`
+
+> **Ligne de roadmap** : **B13** (le produit), **Panini**, **N2**, **S**, **R**, **A** · **Tâche** :
+> J14.1 · **Date** : 2026-11-14 · **Verdict** : ✅
+>
+> **Ce que ce rapport est.** La **clôture** du chantier, **sans relancer la passe complète** : la
+> passe de référence est celle du **14/11 00 h 30** (`work/portes/passe-1311-23h15.log`) —
+> **84 portes, 81 vertes, 3 rouges nommées**. J14.1 **rejoue les trois rouges** (`indice`,
+> `melange`, `sessions`), met à jour [`references-non-regression.md`](../docs/pilotage/references-non-regression.md),
+> pose le **tag annoté** `chantier-2026-11-14` sur le dernier commit vert, et écrit cette fiche.
+> Il **ne refait pas** les 81 vertes : ce serait une seconde passe, et le mandat l'interdit.
+>
+> **Le chiffre.** **84 / 81 / 3** reste le relevé. Après vérification ciblée : `porte-sessions`
+> passe **verte** (20 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
+> `chantier-2026-11-14` est posé sur **`0e75f101`** (J13.1), avec le tag de semaine
+> `semaine-2026-11-14` que J5.2 n'avait pas posé : l'échec est **réparé**, pas effa
+… [283 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"84 portes\\|3 rouges\\|2 rouges\" docs/pilotage/en-cours.md | head -3 | cut -c1-160; grep -n \"Passe — 2026-11-14\" docs/pilotage/references-non-regression.md | head -1 | cut -c1-120", "description": "Voir la ligne des port … [4 caractères tronqués]`
+
+  ```
+3:> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et\n> `port … [1829 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 326.7 h |
+| Durée | 326.8 h |
 | Tours | 194 |
-| Messages | 3711 |
-| Appels d'outils | 3307 |
+| Messages | 3715 |
+| Appels d'outils | 3311 |
 | Fichiers touchés | 25 |
-| Commandes | 2748 |
+| Commandes | 2752 |
 | Sous-agents | 42 |
-| Commits | 440 |
+| Commits | 441 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10428,7 +10428,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*110 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,7 +10444,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 58 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
@@ -10569,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2708 autres
+- … et 2712 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11157,4 +11157,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES)" 2>&1 | tail -1 nohup timeout 18000 python3 tools/chantier/s
 - CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ" -- tools/chantier/superviseur.py docs/pilot
 - DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14" -- reports/README.md reports/INDEX.md docs/pilotag
+- PORTES — LA CLÔTURE : 84 PORTES, 82 VERTES, 2 ROUGES (INDICE, MELANGE) ; SESSIONS REPASSÉE VERTE ; TAG chantier-2026-11-14" -- docs/pilotage/references-non-regr
 
