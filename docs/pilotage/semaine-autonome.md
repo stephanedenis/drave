@@ -138,3 +138,25 @@ restantes sont dans le tableau du § 2.1 ; les autres sont des fiches de coordin
   époque contrôlée, une fiche de généalogie à deux faces ;
 - **la coordination** : un état daté de N2/S/R/A, les décisions prises et nommées ;
 - **la consolidation** : la passe complète, un tag, le rapport de semaine, la roadmap à jour.
+
+## 3 bis. L'état du chantier (12 h 18, 07/11 → 18 h 22)
+
+Le superviseur a lancé **10 tâches** (budget 21 600 s consommé). **Six sont « faites »**, trois ont
+un **commit livré** mais un verdict « échec » (timeout de l'agent après le commit — l'acceptation
+prime désormais, correctif à committer), une est bloquée.
+
+| tâche | verdict | livrable | commit |
+|---|---|---|---|
+| J0 (contrôle) | ✅ fait | la liaison superviseur ↔ dsh | — |
+| J1.1 `r035` | ✅ fait | exact **237/238**, couverture **0,9958** | `25a6c0ff` |
+| J1.2 convention GV | ✅ livré (timeout) | F1 **0,7549 → 0,7902** | `92652984` |
+| J1.3 schéma v2 | ✅ fait | `meta.partition`/`meta.alternative`, 26 cas | `9a259953` |
+| J1.4 restitution v0 | ✅ fait | 46/46 surfaces exactes | `8eb0cc49` |
+| J2.1 atomes ↔ niveaux | ✅ fait | 14/14 lignes | `9c7f71dc` |
+| J2.2 + J3.1 corpus/retrieval | ✅ livré (timeout) | 418/438 paires exactes | `c3467170` |
+| J3.2 généalogie | ✅ fait | 154/154 paires hors script | `c2e629b3` |
+| J4.x coordination | ⏳ à faire | — | — |
+| J5.x consolidation | ⏳ à faire | — | — |
+
+**Reste** : J4 (coordination N2/S/R/A), J5 (rapport de semaine, passe, tag), et la relance de la
+boucle (budget épuisé).

@@ -7,12 +7,12 @@
 | Identifiant | `session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-07 17:59 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 104 |
-| Appels d'outils | 133 |
+| Messages | 109 |
+| Appels d'outils | 137 |
 | Fichiers touchés | 0 |
-| Commandes | 123 |
+| Commandes | 127 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J3.2 : la généalogie à deux faces — confronter la théorie de Panini (14 atomes, 9 dhātus) à nos mesures d'aligneme … [262 caractères tronqués]
 
-*133 appels d'outils.* Actions notables :
+*137 appels d'outils.* Actions notables :
 
 - bash — Inspect workspace root and recent history
 - bash — List theory, method and reports directories
@@ -41,7 +41,36 @@
 - bash — Inspect Panini repository
 - bash — Find signature computation scripts in Panini
 - bash — Find dhātu documentation
-- … et 111 autres
+- … et 115 autres
+
+**Synthèse produite :**
+
+**J3.2 livré et committé.** La confrontation est faite sur les 21 langues du corpus commun, avec trois sections explicites : ce qui converge, ce qui diverge, ce qui reste à mesurer.
+
+\## Fichiers
+
+- **Fiche** : [`reports/rapport-genealogie-deux-faces.md`](reports/rapport-genealogie-deux-faces.md)
+- **JSON** : [`reports/genealogie-deux-faces.json`](reports/genealogie-deux-faces.json) (210 paires, groupes, régressions, permutations, LOO, ACP, §150)
+- **Outil reproductible** : [`tools/genealogie_deux_faces.py`](tools/genealogie_deux_faces.py)
+- **Théorie mise à jour** : [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md) — les chiffres J3.2 restent dans `reports/`.
+- État, roadmap, journal et index mis à jour.
+
+**Commits** : `c2e629b3` (J3.2) et `c3467170` (les prérequis J2.2/J3.1, qui étaient restés stagés).
+
+\## Ce qui converge
+
+- **La surface passe avant la filiation des deux côtés.** Panini : β époque 0,1378 > β filiation 0,0489. Drave : toutes les paires hors script sont au hasard.
+- **Rapport filiation/surface du même ordre** : 0,0489/0,1378 = **0,355** chez Panini ; 0,181/0,609 = **0,297** en J3.1.
+- **Même arbre là où les deux généalogies existent** : 15/15 familles appariées, 14/15 branches au nœud exact, Spearman 0,657 / Pearson 0,918 sur les 105 paires couvertes.
+- **Prédiction comparable** : R² 0,256 (Panini UDHR) contre 0,230 (Glottolog) ; l’écart est petit mais stable (positif dans les 21 retraits).
+
+\## Ce qui diverge
+
+- **L’objet de la « filiation »** : le §150 de Panini est une distance de **tradition** — **3/655** paires ont deux langues connues différentes, 173 sont `eng–eng`, 479 ont une langue vide. Ce n’est pas une distance de famille de langues.
+- **La couverture** : `lang_distance` (LANG_TREE) couvre **5/21** langues (**200/210** paires « inconnues ») ; les métadonnées UDHR **15/21** (**105/210**) ; Glottolog **21/21**. Les 6 langues non labellisées par Panini sont toutes non indo-européennes, et les 4 paires de même branche sont précisément codées « inconnu » par LANG_TREE.
+- **La granularité** : l’échelle à 4 niveaux n’utilise jamais 0,15 sur ces 21 langues ; son niveau 0,40 mélange `eng–fra` (MRR 0,952) et cinq paires au plancher ; « inconnu = 1,0 » est une valeur manquante, pas une distance.
+- **La porte du script** : **154/154 paires hors script sont au hasard exact** (MRR 0,1332 = H₃₀/30 ; top-1 0,0333 = 1/30). Le signal de famille ne vit que dans **56 paires de même script**, et il est porté par **2-3
+… [1226 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -92,7 +121,7 @@
 - **T1** Inspect Panini UDHR corpus structure fully
 - **T1** Inspect selection structure
 - **T1** List 21 texts with both genealogies
-- … et 83 autres
+- … et 87 autres
 
 ## 4. Mesures et résultats marquants
 

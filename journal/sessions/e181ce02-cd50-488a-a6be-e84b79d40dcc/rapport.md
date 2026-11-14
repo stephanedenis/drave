@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 167.1 h |
-| Tours | 193 |
-| Messages | 3599 |
-| Appels d'outils | 3197 |
+| Durée | 316.9 h |
+| Tours | 194 |
+| Messages | 3616 |
+| Appels d'outils | 3213 |
 | Fichiers touchés | 25 |
-| Commandes | 2668 |
+| Commandes | 2684 |
 | Sous-agents | 42 |
-| Commits | 434 |
+| Commits | 435 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -445,6 +445,8 @@
 **Tour 192** — je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas si DSH est à la hauteur ou s'il faut un méta harnais pour gérer a en autonomie totale pendant plusieurs jours.
 
 **Tour 193** — go
+
+**Tour 194** — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on passe aux bilans
 
 ## 2. Déroulé, étape par étape
 
@@ -10424,6 +10426,30 @@ J'ai lancé le superviseur à 12 h 18. Il a enchaîné **6 tâches** (budget con
 Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 … [156 caractères tronqués]
 
+### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
+
+*16 appels d'outils.* Actions notables :
+
+- bash — État du chantier
+- bash — Voir les commits de la semaine
+- bash — Vérifier l'état après la semaine
+- bash — Mesurer et voir l'état/pilotage
+- bash — Auditer la documentation
+- bash — Lire les titres des fiches
+- bash — Indexer les 8 fiches
+- bash — Trim T1 du README des fiches
+- bash — Trouver les lignes les plus longues
+- bash — Tronquer les descriptions longues
+- bash — Vérifier les trims et l'état du chantier
+- bash — Trouver les lignes vidées
+- bash — Restaurer les descriptions
+- bash — Journal du chantier
+- … et 2 autres
+
+**Synthèse produite :**
+
+⏵ Audit : la doc est à 80 % — il manque 4 fiches à l'index, l'état par jour du plan et le journal de la semaine. Je corrige
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -10543,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2628 autres
+- … et 2644 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -10671,7 +10697,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ## 5. Erreurs rencontrées
 
-85 sorties en erreur ou divergentes. Les premières :
+86 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -11125,4 +11151,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - DOCS — README T1 TENU (DEUX LIGNES LONGUES RACCOURCIES)" -- docs/README.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "REA
 - INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI" -- reports/INDEX.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "APRÈS L'INVENTAIRE PANINI"; then echo "C
 - INDEX — RÉGÉNÉRÉ APRÈS L'INVENTAIRE PANINI (702 FICHES) ; ÉTAT HORODATÉ" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='
+- DOCS — LA PASSE APRÈS LE CHANTIER : 8 FICHES INDEXÉES, L'ÉTAT PAR JOUR DU PLAN, LE JOURNAL DU CHANTIER, CHANTIERS À JOUR (F1 0,7902, 237/238)" -- reports/README
 

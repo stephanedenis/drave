@@ -60704,3 +60704,237 @@ J'ai lancé le superviseur à 12 h 18. Il a enchaîné **6 tâches** (budget con
 
 Je reste en veille sur la boucle : je vérifie chaque livraison, je corrige les verdicts et je pousse. Si vous lisez ceci au retour, l'état complet est dans `work/chantier/etat.json` et le journal dans `work/chantier/journal.log`.
 
+
+## Tour 194
+
+### 👤 Utilisateur
+
+assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on passe aux bilans
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|fait|echec|a_faire\" | head -10; git log --oneline -3 | cut -c1-90", "description": "État du chantier"}`
+
+  ```
+ven 13 nov 2026 21:24:37 EST
+2026-11-07 16:29:20 · ▶ J3.1 — Panini II — le retrieval à époque contrôlée (timeout 5400 s)
+2026-11-07 17:59:20 · ✘ J3.1 en 5400.1 s (code 124) — ✅ test -f reports/rapport-retrieval-epoque.md && echo FICHE-OK
+2026-11-07 17:59:21 · ▶ J3.2 — Panini II — la généalogie à deux faces (timeout 5400 s)
+2026-11-07 18:22:26 · ✔ J3.2 en 1384.4 s (code 0) — ✅ test -f reports/rapport-genealogie-deux-faces.md && echo FICHE-OK
+budget consommé : 21802.0 s · lancements : 10
+  [fait    ] J0     j0 — Le contrôle du superviseur
+  [fait    ] J1.1   j1 — r035 : la relative zéro
+  [echec   ] J1.2   j1 — La convention des GV
+  [fait    ] J1.3   j1 — Le schéma v2
+  [fait    ] J1.4   j1 — La restitution v0
+  [fait    ] J2.1   j2 — Panini I — la table atomes ↔ niveaux
+  [echec   ] J2.2   j2 — Panini I — le corpus commun
+  [echec   ] J3.1   j3 — Panini II — le retrieval à époque contrôlée
+  [fait    ] J3.2   j3 — Panini II — la généalogie à deux faces
+c2e629b3 J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INT
+c3467170 PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) 
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX 
+… [38 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Une semaine a passé (horloge : 13/11) : je fais l'état des lieux avant la passe documentation/pilotage
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline d7469b5c..HEAD | head -12 | cut -c1-100; echo \"...\"; git log --oneline -1; git rev-list --count origin/master..s/v7; git status --porcelain | grep -vE \"journal/\" | head -5", "description": "Voir les commits de l … [11 caractères tronqués]`
+
+  ```
+c2e629b3 J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES
+c3467170 PANINI — J2.2 ET J3.1 : LE CORPUS COMMUN (418/438 PAIRES EXACTES, 8/8 CONTRÔLES) ET LE RETR
+9c7f71dc PANINI J2.1 — TABLE 14 ATOMES × 8 NIVEAUX : 14/14 LIGNES, 33 PAIRES COLINÉAIRES, AUCUNE MES
+8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES S
+9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC), v1 TOUJOURS 
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL, F1 0,7549 → 0,7902, ATTACHEM
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉRO, EXACT 236 → 237, POS INCHANGÉE ; 183/183
+...
+c2e629b3 J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+2
+ M docs/pilotage/references-non-regression.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/sessions.py --check\" … [363 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+=== autotest :
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport tools.bloc_linguistique as bl\nfrom tools.tests.linguistique.evaluer_gold import charger, evaluer_bloc\nr=evaluer_bloc('h', bl.Heuristique(), charger()); a=r['a … [423 caractères tronqués]`
+
+  ```
+ÉTAT POS 0.8625 | F1 0.7902 | exact 237/238 | cov 0.9958 | spans 1
+63:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7902**, **1 span + 1 cible fausse** ; **`r035` réglé** ; **convention des GV réglée** (sujet hors du GV + adverbe final : 320/179 → GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **
+38:**État au 07/11 18 h 30.** B13 : **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7902**, **1 span (`g017`) + 1 cible fausse (`s065`)** ; **183/183** ; **`r035`** (relative zéro) rég
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -E \"r035|convention-gv|schema-v2|restitution|atomes|corpus-commun|retrieval|genealogie\" | head -12; echo \"=== README index :\"; grep -cE \"r035|convention-gv|schema-v2|restitution-v0|atomes-niveaux|corpus-commun … [324 caractères tronqués]`
+
+  ```
+atomes-niveaux.json
+corpus-commun.json
+genealogie-deux-faces.json
+pensee-convention-gv.json
+pensee-r035.json
+pensee-restitution-v0.json
+pensee-schema-v2.json
+rapport-atomes-niveaux.md
+rapport-convention-gv.md
+rapport-corpus-commun.md
+rapport-genealogie-deux-faces.md
+rapport-r035.md
+=== README index :
+4
+=== semaine-autonome état :
+28:| la restitution (annotation → texte) — **v0 faite** | surface **46/46**, miroir strict **0,1087** (50 textes libres) | [`rapport-restitution-v0.md`](../../r
+87:| **J1 · 07/11** | matin | le produit : le **span `g017`**, la **convention des GV** | attachement et F1, fiche v13 |
+89:| **J2 · 08/11** | matin | **Panini I** : l'inventaire croisé, la **table atomes ↔ niveaux** | la table, 20 exemples mesurés |
+91:| **J3 · 09/11** | matin | **Panini II** : le **retrieval à époque contrôlée** | une mesure (double contrôle) |
+131:autonomes** (faites ou en cours), **11 en coordination**, **10 bloquées**. Les tâches autonomes
+=== journal 07 :
+distribue.md
+docs.md
+memoire.md
+mesures.md
+modele.md
+portes.md
+2026-11-06
+2026-11-07
+README.md
+sessions
+THEMES.md
+  ```
+
+### 🤖 Assistant
+
+⏵ Audit : la doc est à 80 % — il manque 4 fiches à l'index, l'état par jour du plan et le journal de la semaine. Je corrige
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-r035 rapport-convention-gv rapport-schema-v2 rapport-restitution-v0 rapport-atomes-niveaux rapport-corpus-commun rapport-retrieval-epoque rapport-genealogie-deux-faces; do echo \"=== $f\"; head -1 reports/$f.md 2>/de … [73 caractères tronqués]`
+
+  ```
+=== rapport-r035
+# B13 — la relative zéro (r035) : exact 236 → 237, POS inchangée
+=== rapport-convention-gv
+# B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902
+=== rapport-schema-v2
+# B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue
+=== rapport-restitution-v0
+# B13 — la restitution v0 : 46/46 surfaces exactes, le miroir strict à 0,1087
+=== rapport-atomes-niveaux
+# Table de correspondance — 14 atomes de Panini et 8 niveaux de Drave
+=== rapport-corpus-commun
+# Corpus commun Panini/NIPADA ↔ Drave — UDHR, article 1
+=== rapport-retrieval-epoque
+# J3.1 — Le retrieval inter-langues à époque contrôlée
+=== rapport-genealogie-deux-faces
+# J3.2 — La généalogie à deux faces : Panini et Glottolog sur le corpus commun
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nrows = \"\"\"| [`rapport-r035.md`](rapport-r035.md) | **B13** — `r035` (relative zéro) : exact **237/238**, couverture **0,9958** |\n| [`rapport- … [1536 caractères tronqués]`
+
+  ```
+4 fiches ajoutées à l’index
+8
+  ❌ 1 violation(s) :
+     · reports/README.md : 2837 mots > budget 2800 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir les lignes anciennes (les fiches déjà annotées « instantané »)\nR=[\n(\"| [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.m … [1952 caractères tronqués]`
+
+  ```
+4 lignes raccourcies
+     · reports/README.md : 2826 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:6]\nfor i in idx: print( … [118 caractères tronqués]`
+
+  ```
+94 51 | [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,254
+99 33 | [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % prop
+96 30 | [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un 
+136 30 | [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09
+141 29 | [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0
+98 28 | [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** — la fusion réparée : par niveau (neuronal POS/sy
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nlignes=t.splitlines(keepends=True)\n# raccourcir les 5 lignes les plus longues à 18 mots max (couper la description après le premier « : »)\n … [538 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '94p;99p;136p' reports/README.md | cut -c1-140; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/semaine-autonome.md'); t=p.read_text()\n# l'état par jour : ajouter une colonne « état » ou une section\nif \"## 3 … [1530 caractères tronqués]`
+
+  ```
+| [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
+| [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** |
+| [`rapport-bloc-linguistique.md`](rapport-bloc-linguistique.md) | **R0.7** — le bloc linguistique : 9 niveaux, heuristique/neuronal, **398 
+état du chantier ajouté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"\\| \\*\\*[A-Z0-9.]+\\*\\* \\|$\" reports/README.md | head -10; echo \"---\"; grep -cE \"\\| \\*\\*[A-Za-z0-9.]+\\*\\* \\|$\" reports/README.md", "description": "Trouver les lignes vidées"}`
+
+  ```
+66:| [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** |
+68:| [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** |
+72:| [`rapport-spans-chunker.md`](rapport-spans-chunker.md) | **B13** |
+87:| [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** |
+96:| [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** |
+97:| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** |
+99:| [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** |
+100:| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** |
+---
+13
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\nsortie=[]\nfor l in lignes:\n    m = re.match(r\"\\| \\[`([^`]+)`\\]\\([^)]+\\) \\| (\\*\\*[^*]+\\*\\*) \\|\\n … [993 caractères tronqués]`
+
+  ```
+descriptions restaurées
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('journal/2026-11-07/README.md'); t=p.read_text()\nnote = \"\"\"\n**Le chantier autonome (12 h 18 → 18 h 22).** Le méta-harnais (`tools/chantier/`) a lancé **10\ntâches** en `dsh headle … [853 caractères tronqués]`
+
+  ```
+note du chantier ajoutée
+84:| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + DRVF + **bloc linguistique** (POS **86,25 %**, F1 **0,7535**, attachement **236/237
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"**bloc linguistique** (POS **86,25 %**, F1 **0,7535**, attachement **236/237 (0,9933)**\",\n            \"**bloc linguisti … [826 caractères tronqués]`
+
+  ```
+chantiers à jour
+4:> 48 dernières heures ont déplacé, l'inventaire élargi (A, B, N, R, **S**, **L**, **D**, B13),
+30:| 31/10 22 h 22 | « le RSN (le pluriel sera plus approprié car tu dois avoir plusieurs candidats) est une représentation de données interne qui te permet d'itérer indéfiniment dans des cycles de pensées à plusieurs niveaux. Il te faudra donc un arbre d'état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+grep: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '84p' docs/pilotage/chantiers.md | cut -c1-300; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mi … [910 caractères tronqués]`

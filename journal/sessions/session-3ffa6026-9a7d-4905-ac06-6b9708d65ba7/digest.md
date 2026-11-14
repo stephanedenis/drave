@@ -2806,3 +2806,130 @@ started background job bash-123
   ```
 
 - **job_output** `{"job_id": "bash-123", "wait": true, "timeout_ms": 180000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 c2e629b3] J3.2 — DEUX FACES : 154/154 PAIRES HORS SCRIPT AU HASARD, PANINI 3/655 PAIRES INTER-LANGUES ET 5/21 LANGUES, LA FAMILLE VIT DANS 2-3 PAIRES
+ Date: Sat Nov 7 18:15:16 2026 -0500
+ 15 files changed, 5993 insertions(+), 67 deletions(-)
+ create mode 100644 reports/genealogie-deux-faces.json
+ create mode 100644 reports/rapport-genealogie-deux-faces.md
+ create mode 100644 tools/genealogie_deux_faces.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "set -e\ntest -f reports/rapport-genealogie-deux-faces.md && echo FICHE-OK\npython3 tools/index_reports.py --verifier && echo INDEX-OK\npython3 tools/revue_documentation.py 2>&1 | tail -2\npython3 tools/taille_documents.py 2>&1 | tail -2\npython3 tools/verifie_en_cours.py 2>&1 | tail -2\ … [286 caractères tronqués]`
+
+  ```
+FICHE-OK
+INDEX-OK
+  revue de documentation · 713 fiche(s) · 806 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 44 jour(s) · 173 session(s) · 2376 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ 3839 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-07)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+---STATUS---
+ M docs/pilotage/references-non-regression.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/superviseur.py
+ m tools/structures
+?? r
+… [472 caractères tronqués]
+  ```
+
+- **bash** `{"command": "PORTES=\"etat sessions\" DELAI=300 bash tools/toutes-les-portes.sh 2>&1 | tail -20", "description": "Recheck state and sessions gates"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (2 portes, borne 300 s) ===
+    journaux : work/portes-1107-18h22
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (1017 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+--- 1 vertes, 1 rouges ---
+À RELIRE (les six dernières lignes de chaque rouge) :
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+      ❌ mandat périmé (3867 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+      ❌ mandat périmé (1017 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+Journaux complets : work/portes-1107-18h22
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/rapport-genealogie-deux-faces.md | grep -n \"petite mais stable\\|de façon comparable\" | head; echo '---'; git show HEAD:reports/genealogie-deux-faces.json | python3 -c \"import sys,json; d=json.load(sys.stdin); print([c['preuve'] for c in d['convergence'] if 'rés … [88 caractères tronqués]`
+
+  ```
+172:0,165–0,317 ; G : 0,154–0,301). La différence de 0,027 est **petite mais stable** : l'écart de R² reste positif dans les 21 retraits
+294:5. **Les deux généalogies prédisent le retrieval de façon comparable.** R² 0,256 (P2) contre 0,230 (G)
+---
+Panini : β filiation 0,0489 (H3 OK). Drave : coefficient de distance −0,212 sur les 105 paires couvertes, p=0.006 par permutation des labels.
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/INDEX.md | grep -n \"genealogie-deux-faces\\|710 fiches\" | head; echo '---'; git show HEAD:docs/pilotage/en-cours.md | grep -n \"J3.2\\|713\" | head", "description": "Confirm index and state committed"}`
+
+  ```
+3:> **Généré** par `tools/index_reports.py` — **710 fiches**. Les fichiers
+174:| [rapport-genealogie-deux-faces.md](rapport-genealogie-deux-faces.md) | J3.2 — La généalogie à deux faces : Panini et Glottolog sur le corpus commun |
+---
+92:- **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : l'écriture domine, l'époque ne pèse pas à écriture contrôlée ; **J3.2** : les deux faces diffèrent — `lang_distance` couvre **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, la famille vit dans **2-3 paires**, **V14 : 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
+102:| fichiers / JSON de résultats | **713** / **806** | `reports/*.md` / `reports/*.json` |
+124:**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **J3.2** — fait : [deux faces](../../reports/rapport-genealogie-deux-faces.md) ; la prochaine mesure est la 
+… [390 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**J3.2 livré et committé.** La confrontation est faite sur les 21 langues du corpus commun, avec trois sections explicites : ce qui converge, ce qui diverge, ce qui reste à mesurer.
+
+## Fichiers
+
+- **Fiche** : [`reports/rapport-genealogie-deux-faces.md`](reports/rapport-genealogie-deux-faces.md)
+- **JSON** : [`reports/genealogie-deux-faces.json`](reports/genealogie-deux-faces.json) (210 paires, groupes, régressions, permutations, LOO, ACP, §150)
+- **Outil reproductible** : [`tools/genealogie_deux_faces.py`](tools/genealogie_deux_faces.py)
+- **Théorie mise à jour** : [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md) — les chiffres J3.2 restent dans `reports/`.
+- État, roadmap, journal et index mis à jour.
+
+**Commits** : `c2e629b3` (J3.2) et `c3467170` (les prérequis J2.2/J3.1, qui étaient restés stagés).
+
+## Ce qui converge
+
+- **La surface passe avant la filiation des deux côtés.** Panini : β époque 0,1378 > β filiation 0,0489. Drave : toutes les paires hors script sont au hasard.
+- **Rapport filiation/surface du même ordre** : 0,0489/0,1378 = **0,355** chez Panini ; 0,181/0,609 = **0,297** en J3.1.
+- **Même arbre là où les deux généalogies existent** : 15/15 familles appariées, 14/15 branches au nœud exact, Spearman 0,657 / Pearson 0,918 sur les 105 paires couvertes.
+- **Prédiction comparable** : R² 0,256 (Panini UDHR) contre 0,230 (Glottolog) ; l’écart est petit mais stable (positif dans les 21 retraits).
+
+## Ce qui diverge
+
+- **L’objet de la « filiation »** : le §150 de Panini est une distance de **tradition** — **3/655** paires ont deux langues connues différentes, 173 sont `eng–eng`, 479 ont une langue vide. Ce n’est pas une distance de famille de langues.
+- **La couverture** : `lang_distance` (LANG_TREE) couvre **5/21** langues (**200/210** paires « inconnues ») ; les métadonnées UDHR **15/21** (**105/210**) ; Glottolog **21/21**. Les 6 langues non labellisées par Panini sont toutes non indo-européennes, et les 4 paires de même branche sont précisément codées « inconnu » par LANG_TREE.
+- **La granularité** : l’échelle à 4 niveaux n’utilise jamais 0,15 sur ces 21 langues ; son niveau 0,40 mélange `eng–fra` (MRR 0,952) et cinq paires au plancher ; « inconnu = 1,0 » est une valeur manquante, pas une distance.
+- **La porte du script** : **154/154 paires hors script sont au hasard exact** (MRR 0,1332 = H₃₀/30 ; top-1 0,0333 = 1/30). Le signal de famille ne vit que dans **56 paires de même script**, et il est porté par **2-3 paires** (`eng–fra` 0,952, `ind–jav` 0,918 ; `cnh–ctd` 0,346).
+- **La face atomes** : 4 dimensions effectives (ACP sur la corrélation des parts CLR) ou 1 (covariance) ; les 9 dhātus sont des **macros** sans matrice V14 publiée ; V14 ne couvre que **3/21** langues (décomposition) et **1/21** (convergence).
+
+## Ce qui reste à mesurer
+
+1. **Signature V14 multilingue des 21 langues** — la mesure qui manque pour rendre les atomes commensurables avec la généalogie.
+2. Matrice **9 dhātus → 14 atomes** et réconciliation des deux nomenclatures.
+3. Distance Panini **continue**, étendue aux 21 langues.
+4. Corpus **équilibré** même script / familles différentes.
+5. Retrieval **neuronal** (la porte du script est peut-être un artefact de n-grammes).
+6. Corpus **multi-époques** avec les mêmes langues.
+7. Poids d’arêtes **Glottolog** calibrés.
+
+## Contrôles
+
+Tous verts : `FICHE-OK`, `revue_documentation`, `porte-tableaux`, `verifier_schemas`, `taille_documents` (T0 = 4000/4000), `verifie_en_cours`, `verifie_journal`, `index_reports --verifier`, `porte-etat`.
+
+Une seule rouge : **`porte-sessions`**, heartbeat périmé de `1e7ef596` et `e181ce02` — problème de coordination déjà signalé dans `en-cours`, sans rapport avec J3.2.
+

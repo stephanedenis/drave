@@ -15,6 +15,10 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 niveaux |
+| [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
+| [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
+| [`rapport-genealogie-deux-faces.md`](rapport-genealogie-deux-faces.md) | **Panini** — la généalogie à deux faces |
 | [`rapport-convention-gv.md`](rapport-convention-gv.md) | GV : F1 **0,7902** |
 | [`rapport-r035.md`](rapport-r035.md) | **B13** — relative zéro : **237/238** |
 | [`rapport-gn-pronom-sujet.md`](rapport-gn-pronom-sujet.md) | **B13** — pronom sujet = GN : **0,7013** |
@@ -59,13 +63,13 @@
 | [`rapport-dev-test-v7.md`](rapport-dev-test-v7.md) | **B13** — dev/test en v7 : dev **133/134**, test **62/62**, trois découpages, écart ≤ 1 cas |
 | [`rapport-coherence-fiches-v7.md`](rapport-coherence-fiches-v7.md) | **B13** — la cohérence des 7 fiches v2→v7 : **23 écarts**, 4 critiques, corrections listées |
 | [`rapport-pensee-couverture-v7.md`](rapport-pensee-couverture-v7.md) | **B13** — couverture 0,8201 |
-| [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement **187/187 (1,0000)** sur les spans prédits, fr 1,0 / en 1,0, dev 126/126, test 61/61 ; le rendement reste 0,7824 |
+| [`rapport-pensee-attachement-parfait.md`](rapport-pensee-attachement-parfait.md) | **B13** — l'attachement parfait sur les spans prédits |
 | [`rapport-pensee-couverture-v5.md`](rapport-pensee-couverture-v5.md) | **B13** — couverture : 187 labels, exact 186/187 |
-| [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold dev/test : **test 0,9814**, dev 0,9811, la règle « régler sur dev, accepter si test ne baisse pas » |
+| [`rapport-gold-split.md`](rapport-gold-split.md) | **B13** — le gold coupé en dev/test |
 | [`rapport-pensee-segmentation-v4.md`](rapport-pensee-segmentation-v4.md) | **B13** — la segmentation d'abord : F1 **0,4539** (602), exact **157/160**, couverture **160/239**, 183/183 |
 | [`rapport-pensee-par-langue.md`](rapport-pensee-par-langue.md) | **B13** — l'attachement par langue : fr 0,9658, en 1,000, mais **28 labels/88 cibles en anglais**, **183/183** |
 | [`rapport-gold-anglais.md`](rapport-gold-anglais.md) | **B13** — le gold anglais est sain (0 span faux) ; l'échec anglais est la **segmentation** (60/94 spans) |
-| [`rapport-spans-chunker.md`](rapport-spans-chunker.md) | **B13** — les 94 spans : le chunker seul en couvre 0 ; deux règles en récupèrent **84** (prix : faux positifs) |
+| [`rapport-spans-chunker.md`](rapport-spans-chunker.md) | **B13** — 0 exact, deux règles en récupèrent |
 | [`rapport-audit-v2.md`](rapport-audit-v2.md) | **B13** — l'audit A8 de la v2 : 43 valeurs reproduites, 2 arrondis, 1 prose (46→45) |
 | [`rapport-replis-cible.md`](rapport-replis-cible.md) | **B13** — les replis A10 : 145/145 par 3 règles étroites, **borne haute non intégrée** |
 | [`rapport-multicibles.md`](rapport-multicibles.md) | **B13** — les multi-cibles A13 : 43/96 GP, exact_any 143/145 |
@@ -80,7 +84,7 @@
 | [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 |
 | [`rapport-topk-diagnostic.md`](rapport-topk-diagnostic.md) | **B13** — le diagnostic A2 : 57 échecs qualifiés, 3 correctifs (F1 +45) |
 | [`rapport-classement-appris.md`](rapport-classement-appris.md) | **B13** — le classement appris A3 : 142/145, **non significatif** face à 137, rejeté |
-| [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'audit A1 : 14/14 valeurs reproduites, écart 0 ; 3 JSON sur 5 sont des instantanés, **178/178** |
+| [`rapport-audit-attachement.md`](rapport-audit-attachement.md) | **B13** — l'attachement du bloc linguistique (B13) |
 | [`rapport-pensee-lexique-elargi.md`](rapport-pensee-lexique-elargi.md) | **B13** — le lexique élargi : exact 0,8082 → **0,8483**, **174/174** |
 | [`rapport-pensee-spans.md`](rapport-pensee-spans.md) | **B13** — les spans perdus : 48 REL, 33 SUB, 12 GP, **169/169** |
 | [`rapport-pensee-echecs-attachement.md`](rapport-pensee-echecs-attachement.md) | **B13** — les 127 échecs : 94 span, 33 → 32 cible, **166/166** |
@@ -88,12 +92,12 @@
 | [`rapport-pensee-cible-proximite.md`](rapport-pensee-cible-proximite.md) | **B13** — la cible par proximité : exact 0,0042 → **0,0544** (×13), top1 0,3975, **164/164** |
 | [`rapport-pensee-passifs-sans-par.md`](rapport-pensee-passifs-sans-par.md) | **B13** — les passifs sans par : le chunker 3/3, le générateur S ignore, **163/163** |
 | [`rapport-drvm-n01.md`](rapport-drvm-n01.md) | **N** — DRVM N0.1 : 6/6, le payload corrompu est refusé, **149/149** |
-| [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — la fenêtre 128→1 024 : la PPL baisse là où la fenêtre sert (3,2545→2,9950 à 1 000 octets ; 3,2459→2,9449 à 2 000) ; à courte longueur l'ordre s'inverse ; chaque modèle sature à sa fenêtre ; N2.ac + RoPE 512 bat 200 k pas |
-| [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** — l'erratum de la distillation : rien à parité stricte (−0,03/−0,01/−0,004), +0,14–0,18 = repondération ; la paire propre paie −0,06 |
-| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents est contaminé : DOC2 (val) est un quasi-doublon du train ; le corpus propre reste à **62 documents** |
+| [`rapport-n2-fenetre.md`](rapport-n2-fenetre.md) | **N2/R1** — La fenêtre entraînée, de 128 à |
+| [`rapport-n2-distillation-native.md`](rapport-n2-distillation-native.md) | **N2** — La distillation native : le professeur |
+| [`rapport-ocr-cegep-64.md`](rapport-ocr-cegep-64.md) | **D** — le corpus CEGEP à 64 documents |
 | [`rapport-ocr-pdf-restants.md`](rapport-ocr-pdf-restants.md) | **D** — les 8 `.PDF` restants : 4 documents, 49 pages, 3 doublons — la limite est mesurée |
-| [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** — la fusion réparée : par niveau (neuronal POS/syntagmes, heuristique pragmatique) — 0,9309 / 0,8226 / 0,8784 / 0,9954, le maximum des deux |
-| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — le corpus réel : GN+GV 8,5 % CEGEP (mélange 9,1 %), 65,5 % propre (9,1 %) ; plancher du mélange ; banque 200 phrases / 355 candidats |
+| [`rapport-pensee-fusion-reparee.md`](rapport-pensee-fusion-reparee.md) | **L** — la fusion réparée : par niveau |
+| [`rapport-s-corpus-reel.md`](rapport-s-corpus-reel.md) | **S** — L'analyseur lit le français propre (65,5 |
 | [`rapport-pensee-vrais-absents.md`](rapport-pensee-vrais-absents.md) | **B13** — les vrais absents : 5 phrases, 0 lien, **140/140** |
 | [`rapport-pensee-pieges.md`](rapport-pensee-pieges.md) | **B13** — les questions pièges : 29/34, le si est une convention, **132/132** |
 | [`rapport-pensee-gold-342.md`](rapport-pensee-gold-342.md) | **B13** — le gold complet : 522 phrases, POS 0,7586, tête 0,3807, **110/110** |
@@ -128,14 +132,14 @@
 | [`rapport-pensee-seule.md`](rapport-pensee-seule.md) | **B13** — la politique seule : 8 pas, 15/15 buts sans A*, **17/17** |
 | [`rapport-pensee-courbe.md`](rapport-pensee-courbe.md) | **B13** — la courbe : 15/15 buts (50–800 épisodes × 3 graines), 30 nœuds, Q 52–83, **16/16** |
 | [`rapport-pensee-porte-apprise.md`](rapport-pensee-porte-apprise.md) | **B13** — la porte apprise : Q-table 67 états, 30 nœuds/but, sonde 7, **15/15** |
-| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : POS 0,772, exact 0,190/tête 0,510, **attachement tête 1,0/0,966/0,932** (59 ambiguës), pragmatique 1,0/1,0/0,994/0,889 ; neuronal réel refusé |
+| [`rapport-pensee-gold-linguistique.md`](rapport-pensee-gold-linguistique.md) | **L/R0.7** — le gold 360 : 200 réels |
 | [`rapport-bloc-linguistique.md`](rapport-bloc-linguistique.md) | **R0.7** — le bloc linguistique : 9 niveaux, heuristique/neuronal, **398 langues** à 0,9687, activation 51–76 % |
-| [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — corpus dédupliqué (**0 %** de fuite) : la chaîne propre vaut **3,09** en domaine, pas 2,85 ; **16,7** sur de la littérature jamais vue |
-| [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — la diversité française divise la PPL hors dépôt par **4,3** (16,7 → 3,86) pour **+0,17** en domaine |
-| [`rapport-n2-longueur.md`](rapport-n2-longueur.md) | **N2.h3** — le verrou de longueur est la **position apprise** : 14,46 → **3,25** à 256 octets ; au-delà, c'est la fenêtre locale |
-| [`rapport-n2-capacite.md`](rapport-n2-capacite.md) | **N2.h5** — la capacité (21,65 M) paie **−0,06** en domaine mais ne couvre pas : littérature et longueur inchangées |
+| [`rapport-n2-propre.md`](rapport-n2-propre.md) | **N2.h1** — Le corpus propre : la validation |
+| [`rapport-n2-diversite.md`](rapport-n2-diversite.md) | **N2.h2** — La diversité française : un modèle |
+| [`rapport-n2-longueur.md`](rapport-n2-longueur.md) | **N2.h3** — Le verrou de longueur : les |
+| [`rapport-n2-capacite.md`](rapport-n2-capacite.md) | **N2.h5** — La capacité sur le mètre propre |
 | [`rapport-n2-combine.md`](rapport-n2-combine.md) | **N2.h4** — les deux leviers se composent : **3,47** en domaine, **4,10** hors dépôt, **3,49** à 256 octets |
-| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget plein paie **2,9355 → 2,8527**, les 4 sources coûtent **+0,91**, et **la validation est contaminée à 32,8 %** (PPL propres **2,9795**) |
+| [`rapport-n2-budget.md`](rapport-n2-budget.md) | **N2.d** — le budget paie, les quatre sources |
 | [`rapport-native-prof30k.md`](rapport-native-prof30k.md) | **N2.21** — professeur 30k, lr 3e-6 : PPL **2,823**, dégradation, arrêté |
 | `rapport-native-prof20k-6.md` (fiche non écrite) | **N2.23** — professeur 20k, lr 3e-6 : PPL **2,753**, arrêté |
 | [`rapport-native-prof20k-8.md`](rapport-native-prof20k-8.md) | **N2.25** — lr 1e-6 : PPL **2,758**, arrêté |

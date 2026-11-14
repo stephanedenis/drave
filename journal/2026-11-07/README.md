@@ -118,4 +118,10 @@ retrieval aussi bien l'un que l'autre (R² 0,256 contre 0,230) ; la différence 
 décisive. La face atomes n'est pas disponible (V14 : **3/21** langues) et les 9 dhātus sont des macros
 sans matrice V14 publiée. [Fiche](../../reports/rapport-genealogie-deux-faces.md) ·
 [JSON](../../reports/genealogie-deux-faces.json).
+**Le chantier autonome (12 h 18 → 18 h 22).** Le méta-harnais (`tools/chantier/`) a lancé **10
+tâches** en `dsh headless` : six « faites » (r035, schéma v2, restitution v0, atomes ↔ niveaux,
+généalogie), trois livrées avec un verdict « échec » (l'agent a dépassé le timeout **après** son
+commit — l'acceptation prime désormais), une bloquée. Résultat : **F1 0,7549 → 0,7902**,
+**exact 237/238**, couverture **0,9958**, la restitution (`drave.py restituer`), le schéma v2 et
+les premières mesures Panini (418/438 paires UDHR exactes, la généalogie à deux faces).
 <!-- /notes -->
