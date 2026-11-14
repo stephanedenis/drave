@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 03:32 | `ecef7250` | J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT | `en-cours.md`, `roadmap.md`, `README.md` (+29) |
 | 03:40 | `81fc9ecf` | JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE ») | `README.md`, `docs.md`, `memoire.md` (+8) |
 | 05:05 | `febfdfff` | J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1) | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
+| 09:49 | `31ce36fd` | S — LE POINTEUR DU SOUS-MODULE AVANCE : LES 11 VERDICTS HUMAINS SONT DANS GIT (19/19, 11 ACCEPTÉS, 8 EXCLUS) | `README.md`, `distribue.md`, `docs.md` (+9) |
 
 ## Chiffres du jour
 
@@ -21,7 +22,8 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `24e34ad3-f423-4394-bb1c-74a6930a57e5` — Tu travailles dans /home/stephane/Data13 (début 2026-11-14 09:53, 0.1 h) → [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

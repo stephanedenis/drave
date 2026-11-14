@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`note-panini-334.md`](note-panini-334.md) | **Panini** — la note à envoyer : H0 reproduite, β époque non, la collinéarité |
 | [`rapport-panini-334.md`](rapport-panini-334.md) | **Panini** — le §334 : H0 0,909/0,906, la |
 | [`rapport-exemples-rejoues.md`](rapport-exemples-rejoues.md) | **B13** — les 5 exemples de la doc |
 | [`rapport-evaluer-langue.md`](rapport-evaluer-langue.md) | **B13** — `evaluer --par-langue` : fr 0,8159 / |

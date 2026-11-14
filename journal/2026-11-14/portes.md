@@ -19,7 +19,8 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `24e34ad3-f423-4394-bb1c-74a6930a57e5` — Tu travailles dans /home/stephane/Data13 (début 2026-11-14 09:53, 0.1 h) → [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **729 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **730 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -15,6 +15,7 @@
 | [campagne-benefices.md](campagne-benefices.md) | Campagne 24 h — où Drave est à son meilleur, tâche par tâche |
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
 | [inventaire-donnees-entrainement.md](inventaire-donnees-entrainement.md) | L'inventaire local des données pour l'entraînement |
+| [note-panini-334.md](note-panini-334.md) | Note pour Panini/NIPADA — le §334 : votre loi reproduite, votre β époque non, et pourquoi |
 | [rapport-32b-couche-confondant.md](rapport-32b-couche-confondant.md) | Le 32 B : le pont à 0,49 — et le confondant de la couche relative |
 | [rapport-8bits.md](rapport-8bits.md) | Drave — 8 bits : la perfection est-elle atteignable ? |
 | [rapport-a26-bilan.md](rapport-a26-bilan.md) | A2.6 — l'ordonnanceur est partiel : le générique et le KV sont faits, la tête est refusée, les experts bloqués |

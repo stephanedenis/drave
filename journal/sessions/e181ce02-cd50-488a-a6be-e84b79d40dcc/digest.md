@@ -62245,3 +62245,194 @@ index 2ada51b..b34f8f5 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && timeout 120 git add donnees/paragraphes-validations.jsonl && timeout 120 git commit -m \"S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B) … [438 caractères tronqués]`
+
+  ```
+[master 389b99f] S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE
+ 1 file changed, 11 insertions(+)
+389b99f S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 1
+ 12 files changed, 375 insertions(+), 23 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cut -c1-100; git submodule status tools/structures 2>/dev/null; git rev-list --count origin/master..s/v7; git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origi … [245 caractères tronqués]`
+
+  ```
+31ce36fd S — LE POINTEUR DU SOUS-MODULE AVANCE : LES 11 VERDICTS HUMAINS SONT DANS GIT (19/19, 11 AC
+ 389b99f8383eb47c0cc008f5d3211c9d65d895fc tools/structures (heads/master)
+1
+   3aa8d549..31ce36fd  s/v7 -> s/v7
+   3aa8d549..31ce36fd  master -> master
+   523d8c1..389b99f  master -> master
+19 tools/structures/donnees/paragraphes-validations.jsonl
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 11 verdicts sont dans git (`389b99f` + le pointeur). Maintenant le tagger : je regarde le harnais existant pour le spécifier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/tests/linguistique/ | grep -iE \"qualifi|tagger\"; grep -n \"def .*prompt\\|POS\\|json\" tools/tests/linguistique/qualifier_quatre_modes.py 2>/dev/null | head -8 | cut -c1-140; sed -n '1,25p' tools/tests/linguistique/qualifi … [90 caractères tronqués]`
+
+  ```
+qualifier_cascade.py
+qualifier_frontiere_71.py
+qualifier_lien_appris.py
+qualifier_neuronal.py
+qualifier_pragmatique.py
+qualifier_quatre_modes.py
+qualifier_syntagmes.py
+qualifier_tagger_612.py
+8:  2. neuronal seul (le composite POS + syntagmes, via l'API DeepSeek — règle 11) ;
+12:Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, refus.
+22:import json
+33:                                     NeuronalLLMPOS, NeuronalLLMPragmatique, Parallele)
+43:    ap.add_argument("--sortie", default=str(RACINE / "reports/pensee-quatre-modes.json"))
+64:    pos = NeuronalLLMPOS("deepseek-chat", transport=transport)
+126:    p.write_text(json.dumps(resultat, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+#!/usr/bin/env python3
+"""qualifier_quatre_modes.py — la porte des quatre modes du contrat de L sur le gold 432.
+
+Les quatre modes du contrat (`docs/theorie/contrat-bloc-langue.md`) mesurés sur le
+**même** gold réel 432 :
+
+  1. heuristique seule ;
+  2. neuronal seul (le composite POS + syntagmes, via l'API DeepSeek — règle 11) ;
+  3. parallèle (`Parallele`) ;
+  4. cascade (`Cascade`, seuil 0,6).
+
+Mêmes mesures que la cascade : POS, syntagmes F1, tête F1, acte, fraction, 
+… [321 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class NeuronalLLMPOS\" -A 25 tools/bloc_linguistique.py | head -30 | cut -c1-140; grep -n \"def transport\\|DEEPSEEK_KEY_FILE\\|def _appel\" tools/bloc_linguistique.py | head -6 | cut -c1-140", "description": "Voir Neuronal … [8 caractères tronqués]`
+
+  ```
+1968:class NeuronalLLMPOS:
+1969-    """Le **tagger** neuronal réel : un modèle local, des POS alignés sur la tokenisation du bloc.
+1970-
+1971-    Le modèle ne rend pas une annotation complète : il rend **une classe par token**, contrainte
+1972-    par une grammaire GBNF (`grammaire_pos`) qui interdit un JSON tronqué, un token manquant ou
+1973-    une classe hors du jeu. Les spans sont ceux de `Heuristique._mots` (la tokenisation du bloc),
+1974-    pas ceux que le modèle inventerait ; c'est ce qui rend la mesure POS exacte.
+1975-
+1976-    Le modèle est servi par `llama-server` (`/v1/chat/completions`, `grammar`) : le serveur est
+1977-    lancé une fois, le modèle chargé une fois, et les 180 phrases coûtent une passe CPU, pas
+1978-    180 chargements. `transport` est injectable pour tester le contrat sans modèle.
+1979-
+1980-    La confiance par défaut (`0.6`) est **celle du seuil ouvert de l'heuristique** (0.55) : dans
+1981-    une `Cascade`, le tagger ne remplace donc que les tokens que l'heuristique déclare peu sûrs,
+1982-    et laisse les classes fermées (0.92) à l'heuristique. C'est la politique mesurée.
+1983-    """
+1984-
+1985-    nom = "neuronal"
+1986-
+1987-    def __init__(sel
+… [471 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '55,75p' tools/tests/linguistique/qualifier_quatre_modes.py | cut -c1-150; ls tools/llm/ 2>/dev/null; grep -rn \"def transport_deepseek\\|class TransportDeepSeek\\|deepseek_chat\" tools/llm/*.py 2>/dev/null | head -4 | cut -c1 … [46 caractères tronqués]`
+
+  ```
+def transport(invite: str, grammaire: str, max_jetons: int) -> str:
+        r = client.demande(invite, temperature=a.temperature, max_tokens=max(64, int(max_jetons or 256)))
+        usage["appels"] += 1
+        u = r.usage if isinstance(r.usage, dict) else {}
+        usage["tokens"] += int(u.get("total_tokens", 0) or 0)
+        usage["latence_s"] += float(r.latence_s or 0.0)
+        return r.contenu
+
+    h = Heuristique()
+    pos = NeuronalLLMPOS("deepseek-chat", transport=transport)
+    chunks = NeuronalLLMChunks("deepseek-chat", transport=transport)
+    pragma = NeuronalLLMPragmatique("deepseek-chat", transport=transport)
+    compose = NeuronalLLMCompose(pos, chunks, pragma)
+    modes = {
+        "heuristique": h,
+        "neuronal": compose,
+        "parallele": Parallele([h, compose], priorite_syntagme="confiance"),
+        "cascade": Cascade(h, compose, seuil=a.seuil, priorite_syntagme="confiance"),
+        "parallele_niveau": Parallele([h, compose], priorite_syntagme="confiance",
+                                      priorite_par_niveau=PRIORITE_NIVEAU,
+                                      priorite_par_type=PRIORITE_TYPE),
+deepseek.py
+distillation.py
+enseignant.py
+entrainer_
+… [126 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/llm/deepseek.py | cut -c1-140; grep -n \"class Client\\|def __init__\\|def demande\" tools/llm/deepseek.py | head -4", "description": "Voir le client DeepSeek"}`
+
+  ```
+#!/usr/bin/env python3
+"""deepseek.py — le professeur externe, sans poids locaux.
+
+POURQUOI CE MODULE. Le dépôt garde ses GPU et ses CPU pour le **modèle natif**
+Drave (`entrainer_moteur.py`, `drave-core`) et pour les mesures **boîte blanche**
+(perplexité, activations, flux, sondes). Le **langage** — traduire, juger,
+générer, évaluer — passe par une API : on ne charge plus un Qwen de 7/14/32 B
+pour cela. DeepSeek est ce **professeur externe** ; ses sorties peuvent servir à
+entraîner/distiller l'élève natif (autorisation explicite du propriétaire de la
+licence).
+
+CE QUE LE MODULE NE FAIT PAS. Il ne remplace pas les mesures d'états internes :
+une API ne donne pas les poids ni les activations. Il ne met **jamais** la clé
+dans le dépôt, dans un cache ou dans un message d'erreur. Il ne dépend d'aucun
+paquet externe : `urllib` suffit.
+
+CONTRAT.
+- `DEEPSEEK_API_KEY` (ou `DSH_API_KEY`) : la clé, lue dans l'environnement ;
+- `DEEPSEEK_BASE_URL` (ou `DSH_BASE_URL`) : `https://api.deepseek.com` par défaut ;
+- `DEEPSEEK_MODEL` (ou `DSH_MODEL`) : `deepseek-chat` par défaut ;
+- cache : `data/deepseek/cache/<sha256>.json` (gitignoré), clé = modèle + messages
+  + température + max_tokens, **jamais
+… [719 caractères tronqués]
+  ```
+
+- **subagent** `{"description": "Intégrer le tagger API en option", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **intégrer le tagger POS par API DeepSeek dans la CLI, en option** (décision 1A du 14/11). La mesure est faite : le tagger vaut **0,9475 … [2671 caractères tronqués]`
+
+  ```
+started subagent 24e34ad3-f423-4394-bb1c-74a6930a57e5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -25 reports/rapport-panini-334.md | cut -c1-160", "description": "Lire la fiche §334 pour la note Panini"}`
+
+  ```
+# J12.1 — Le §334 et les 44 œuvres : le retrieval et la prédiction de l'époque vs la filiation
+
+> **Ligne de roadmap** : R0.7 (le bloc langue) / L · **Chantier** : Panini, J12.1 · **Date** : 2026-11-14
+> **Verdict** : ✅ **le §334 est une géométrie de filiation, pas d'époque — et le corpus ne permet pas
+> de séparer les deux.** La loi H0 de Panini se reproduit (**R² = 0,909139** sur les **655 lignes** de
+> paires ; **0,906307** sur les **488 paires uniques non auto**), et l'époque seule explique **0,258**
+> de la distance lexicale ; mais elle n'ajoute que **0,0089** de R² **après** la topologie
+> (p = 0,86 ; β standardisé **−0,035**). Le plan est **colinéaire** : **180** paires de même tradition
+> ont **28,7 ans** d'écart en moyenne (max **230**), les **308** paires inter-traditions en ont
+> **1 189** (**136** à ≤ 100 ans). Le contraste de filiation à **date fixe** est fort dans la tranche
+> axiale (**Δ = −0,166**, p = 0,0005), mais **disparaît à surface contrôlée** (même langue source
+> anglaise : **Δ = −0,135** contre un null de **−0,129**, p = 0,34).
+> Sur les **44 signatures** (14 parts flottantes), le retrieval brut donne **61,4 %** de même tradition
+> (hasard 22,4 %) et **56,8
+… [1175 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Pendant que le tagger se construit : la note pour Panini (décision 4A)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/note-panini-334.md <<'MD'\n# Note pour Panini/NIPADA — le §334 : votre loi reproduite, votre β époque non, et pourquoi\n\n> **Ce que cette note est.** Le **message prêt à envoyer** à l'équipe Panini/NIPADA (décision 4A\ … [4385 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 732 fichiers, le disque en a 733
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/semaine-autonome.md'); t=p.read_text()\nbloc = \"\"\"\n## 8. Les décisions du 14/11 (après le chantier)\n\nL'humain a tranché, en clair :\n\n| # | décision | effet |\n|- … [1611 caractères tronqués]`
+
+  ```
+§ 8 ajouté
+note indexée
+     · compteurs : en-cours.md dit 732 fichiers, le disque en a 733
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1100 caractères tronqués]`

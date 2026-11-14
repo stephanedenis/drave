@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **1 session(s)** · **6 thème(s)**
+**23 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 4 | [docs.md](docs.md) |
+| docs | 5 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -22,7 +22,8 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 329.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `24e34ad3-f423-4394-bb1c-74a6930a57e5` | Tu travailles dans /home/stephane/Data13 | 2026-11-14 09:53 | 0.1 h | [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 329.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -50,6 +51,7 @@
 | 07:16 | `c18d0193` | J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU |
 | 07:24 | `5928e75a` | DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14 |
 | 07:27 | `3aa8d549` | PORTES — LA CLÔTURE : 84 PORTES, 82 VERTES, 2 ROUGES (INDICE, MELANGE) ; SESSIONS REPASSÉE VERTE ; TAG chantier-2026-11-14 |
+| 09:49 | `31ce36fd` | S — LE POINTEUR DU SOUS-MODULE AVANCE : LES 11 VERDICTS HUMAINS SONT DANS GIT (19/19, 11 ACCEPTÉS, 8 EXCLUS) |
 
 ## Le récit de la journée (écrit à la main)
 

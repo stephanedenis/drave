@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 329.2 h |
+| Durée | 329.3 h |
 | Tours | 196 |
-| Messages | 3725 |
-| Appels d'outils | 3317 |
+| Messages | 3734 |
+| Appels d'outils | 3327 |
 | Fichiers touchés | 25 |
-| Commandes | 2758 |
-| Sous-agents | 42 |
-| Commits | 442 |
+| Commandes | 2767 |
+| Sous-agents | 43 |
+| Commits | 443 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10543,16 +10543,26 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
-*4 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Lire la fiche de coordination S
 - bash — Inspecter le sous-module S
 - bash — Voir le diff des 11 verdicts
 - bash — Committer les 11 verdicts et le pointeur
+- bash — Vérifier et pousser les verdicts
+- bash — Voir le harnais du tagger
+- bash — Voir NeuronalLLMPOS
+- bash — Voir le transport API
+- bash — Voir le client DeepSeek
+- sous-agent — Intégrer le tagger API en option
+- bash — Lire la fiche §334 pour la note Panini
+- bash — Écrire la note Panini
+- bash — Consigner les décisions
+- bash — Committer les décisions
 
 **Synthèse produite :**
 
-⏵ Décisions notées : je commence par protéger les 11 verdicts S (3B), puis le tagger (1A)
+⏵ Pendant que le tagger se construit : la note pour Panini (décision 4A)
 
 ## 3. Travail accompli
 
@@ -10630,6 +10640,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - tour 189 — Re-audit produit du code de la nuit
 - tour 190 — Spans r035 g017 diagnostic
 - tour 191 — Inventaire écosystème Panini
+- tour 196 — Intégrer le tagger API en option
 
 ### Commandes exécutées (échantillon)
 
@@ -10673,7 +10684,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2718 autres
+- … et 2727 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11263,4 +11274,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14" -- reports/README.md reports/INDEX.md docs/pilotag
 - PORTES — LA CLÔTURE : 84 PORTES, 82 VERTES, 2 ROUGES (INDICE, MELANGE) ; SESSIONS REPASSÉE VERTE ; TAG chantier-2026-11-14" -- docs/pilotage/references-non-regr
 - S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE" 2>&1 | tai
+- DÉCISIONS DU 14/11 — 1A (TAGGER EN OPTION), 2A (g017 INATTEIGNABLE), 3B (11 VERDICTS S COMMITTÉS), 4A (NOTE PANINI), 5A (A6.2 REPOUSSÉ), 6A→C→B" -- reports/note
 

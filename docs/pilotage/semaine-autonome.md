@@ -253,3 +253,19 @@ SUB, variante étroite non retenue, « `g017` est une règle », famille variabl
 (clôture : passe + tag `chantier-2026-11-14`). Avant, les lignes bloquées restent nommées :
 `g017` (convention), le split réel du tagger, la signature V14 des 21 langues, la porte N2
 (0,2856/0,3566), le commit S (11 verdicts + pointeur), le rapport A6.2.
+
+## 8. Les décisions du 14/11 (après le chantier)
+
+L'humain a tranché, en clair :
+
+| # | décision | effet |
+|---|---|---|
+| **1A** | le **tagger API en option** (`--tagger`), le défaut reste hors ligne | +8,49 pts de POS pour qui a la clé |
+| **2A** | `g017` **déclaré inatteignable** (la règle coûte 2 spans) | 238/239 cibles, 1 span documenté |
+| **3B** | les **11 verdicts S committés** par l'agent principal (exception autorisée) | 19/19 verdicts dans git, sous-module `389b99f` |
+| **4A** | la **note Panini** envoyée et publiée | [`note-panini-334.md`](../../reports/note-panini-334.md) |
+| **5A** | **A6.2 repoussé** (le produit d'abord) | rien à faire |
+| **6A → C → B** | l'ordre des chantiers : le **produit**, puis la **coordination**, puis **Panini** | la file de la semaine |
+
+**Le chantier 6A (le produit)** : le tagger (1A), la restitution, la robustesse. Puis la
+coordination (S, A, N2, R). Puis Panini (le corpus à date contrôlée, les 44 œuvres).
