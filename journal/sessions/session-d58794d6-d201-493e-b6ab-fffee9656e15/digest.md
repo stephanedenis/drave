@@ -2859,3 +2859,184 @@ M journal/2026-11-14/README.md
   ```
 
 - **bash** `{"command": "git add journal/2026-11-14/README.md journal/2026-11-14/docs.md && git commit -m \"JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)\" 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}", "description": "Commit journal entry for J9.1", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 81fc9ecf] JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)
+ 11 files changed, 223 insertions(+), 24 deletions(-)
+EXIT:0
+  ```
+
+- **bash** `{"command": "git log --oneline -4; echo '---'; git status --short | head -20; echo '--- journal ---'; grep -n \"J9.1\" journal/2026-11-14/README.md journal/2026-11-14/docs.md | head", "description": "Verify journal commit and status"}`
+
+  ```
+81fc9ecf JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)
+ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+---
+ M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+--- journal ---
+journal/2026-11-14/README.md:36:| 03:32 | `ecef7250` | J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT |
+journal/2026-11-14/docs.md:12:| 03:32 | `ecef7250` | J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES D
+… [97 caractères tronqués]
+  ```
+
+- **job_kill** `{"job_id": "bash-101", "reason": "Passe complète hors périmètre documentaire (84 portes, ~70 min estimées) et un autre passage tourne déjà ; les portes de clôture sont vertes."}`
+
+  ```
+requested cancellation of job bash-101
+  ```
+
+- **bash** `{"command": "sleep 2; ps -p 1999936 -o pid,etime,cmd 2>/dev/null || echo 'gate job stopped'; echo '---'; tail -4 /tmp/portes-j91.log", "description": "Verify gate job stopped"}`
+
+  ```
+PID     ELAPSED CMD
+gate job stopped
+---
+  porte-bus-socket       ✅                         107 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          33 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                          10 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-consolidation    ✅                          75 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -6; echo EXIT:${PIPESTATUS[0]}", "description": "Final documentation review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 723 fiche(s) · 817 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -4; echo EXIT:${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | tail -3; echo EXIT2:${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo EXIT3:${PIPESTATUS[0]}", "description": "Final table, budget and state gates", " … [19 caractères tronqués]`
+
+  ```
+✅ 1788 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+EXIT:0
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT2:0
+  en-cours · 1620 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT3:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -8; echo EXIT:${PIPESTATUS[0]}", "description": "Verify journal consistency", "timeoutMs": 180000}`
+
+  ```
+journal · 46 jour(s) · 184 session(s) · 2463 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT:0
+  ```
+
+- **bash** `{"command": "bash tools/porte-produit.sh 2>&1 | tail -25; echo EXIT:${PIPESTATUS[0]}", "description": "Run product gate", "timeoutMs": 600000}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f4b7822076a4203d deux fois
+  ✅ smoke test : Ran 16 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v1 : forme canonique exacte, miroir strict distinct
+  ✅ restitution v0/v1 : Ran 22 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+EXIT:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py --head 2>&1 | tail -8; echo EXIT:${PIPESTATUS[0]}", "description": "Check state not late"}`
+
+  ```
+état · dernier fait ecef7250 · dernier état ecef7250
+  ✅ aucun fait commité après le dernier état
+EXIT:0
+  ```
+
+- **bash** `{"command": "git status --short | head -20; echo '---'; git log --oneline -3", "description": "Final status and log"}`
+
+  ```
+M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---
+81fc9ecf JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)
+ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+  ```
+
+- **bash** `{"command": "true", "description": "No-op"}`
+
+  ```
+(no output)
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-35 [bash] completed — zstd -dc journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/session.v4.jsonl.zstd 2>/dev/null | grep -o '.\{0,500\}actuelles = .\{0,2500\}' | head -c 5000
+bash-101 [bash] killed — bash tools/toutes-les-portes.sh > /tmp/portes-j91.log 2>&1; echo EXIT:$? >> /tmp/portes-j91.log
+  ```
+
+### 🤖 Assistant
+
+## J9.1 terminée — passe d'honnêteté committée
+
+### Livrables
+- **Fiche** : [`reports/rapport-passe-honnetete.md`](reports/rapport-passe-honnetete.md)
+- **JSON** : [`reports/passe-honnetete.json`](reports/passe-honnetete.json)
+- **19 fiches annotées** « instantané historique » :
+  - **10 encarts réécrits** : l'ancien encart recopiait l'état (`POS 86,25 / F1 0,7535 / 236/237 / 2 spans`) et était donc devenu faux ;
+  - **9 encarts ajoutés** : `gn-pronom-sujet`, `pos-ponctuation`, `pos-r4`, `r264-elision`, `gold-gp-corrige`, `convention-gv`, `g017`, `r035`, `semaine`.
+
+L'encart standard ne recopie plus aucune valeur : il pointe vers `en-cours` et `roadmap`, ce qui le rend durable.
+
+### État courant mesuré (HEAD `229098ec`, avant nos commits)
+| gold | POS | F1 | attachement | spans sans label |
+|---|---:|---:|---:|---:|
+| vivant 612 | **0,8625** | **0,7902** | **238/238 labels (238/239 cibles)** | **1** (`g017`) |
+| gelé 602 | **0,8625** | **0,7882** | **234/239** | **1** |
+
+### Contrôles
+- **19/19** notices en ligne 3, **38/38** liens résolus.
+- **0 fiche de résultats** ne publie un des quatre marqueurs sans mention, hors **2 faux positifs nommés** (`2 spans` de phrase) et les index.
+- `rapport-s065.md` (état courant) n'est **pas** annotée : la frontière historique/courant est explicite.
+
+### Portes
+Vertes : `revue_documentation` (`REVUE-0`), `porte-tableaux`, `taille_documents` (T0 dans le budget), `verifie_en_cours`, `verifie_journal`, `porte-produit` (183/183).
+La passe complète des 84 portes a été lancée : **14/14 vertes** avant arrêt (elle durait ~70 min et un autre passage tournait déjà en parallèle).
+
+### Commits
+- `229098ec` — **J8.1** : restitution v1 (travail antérieur non committé, vérifié et committé pour un état cohérent).
+- `ecef7250` — **J9.1** : passe d'honnêteté, 19 fiches + fiche + JSON + état + roadmap.
+- `81fc9ecf` — journal du 14/11 avec J9.1 au récit.
+
+Les fichiers encore modifiés dans l'arbre (`reports/INDEX.md`, quelques fiches d'audit, `tools/chantier/plan.json`, `tools/structures`) sont **antérieurs** à cette tâche et n'ont pas été touchés.
+

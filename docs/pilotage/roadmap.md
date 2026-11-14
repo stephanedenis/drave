@@ -53,6 +53,16 @@ CEGEP **91 scans uniques**, 1 982 p). **Passe** : 81 portes, **76/5**, 1 h 52 ; 
 
 **J7.1** sépare la **sœur** de la **famille lointaine** : sur 532 textes Panini (445 langues, 1948), le top-1 est de la même famille **66,1 %** (hasard 10,3 %) et de la même branche **26,1 %** (hasard 2,5 %), mais **hors écriture tout est au hasard** ; sur les 25 langues LANG_TREE, les sœurs valent **0,619** contre **0,0445** pour les familles différentes (**13,9×**, coefficient **+0,448**, p=0,002, 11/11 langues positives), alors que l'échantillon 20 ne montre **aucun** contraste de sœur (0,058 vs 0,039, p=0,078). J3.1 est **reproduit à l'identique** (écart 0) ; son coefficient de famille (+0,056) était un **minorant** dilué. L'époque est mono-époque par construction (1948) ; le placebo de dates est nul et le seul bras daté (Bible) donne −0,034/siècle (p=0,19) contre +0,609 pour l'écriture ([fiche](../../reports/rapport-retrieval-familles.md)).
 
+**J10.1 — le bilan du chantier.** **20 tâches sur 21** passent l'acceptation ; **5 timeouts**
+(J1.2, J2.2, J3.1, J5.2, J8.1), dont **4 récupérés** par une acceptation verte ou le commit de la
+tâche suivante, et **1 vrai échec** (J5.2, le tag absent). Le produit gagne **2 attachements**
+(236 → 238 labels) et **+0,0369 de F1** (0,7533 → 0,7902), la POS ne bouge pas ; Panini est
+**mesuré et borné** (table 14/14, corpus 418/438, retrieval J3.1, généalogie J3.2, familles
+J7.1) ; la coordination N2/S/R/A est **datée**. La **clôture formelle** reste à faire : **J14.1**
+doit refaire la passe et poser le tag `chantier-2026-11-14`. Le détail — chiffres, décisions
+D1–D20, rejets R1–R30, échecs, reste — est dans
+[`rapport-bilan-chantier.md`](../../reports/rapport-bilan-chantier.md) + JSON.
+
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)

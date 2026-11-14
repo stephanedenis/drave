@@ -7,12 +7,12 @@
 | Identifiant | `session-d58794d6-d201-493e-b6ab-fffee9656e15` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 03:18 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 122 |
-| Appels d'outils | 144 |
+| Messages | 131 |
+| Appels d'outils | 155 |
 | Fichiers touchés | 3 |
-| Commandes | 126 |
+| Commandes | 135 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J9.1 : la passe d'honnêteté — les fiches qui publient des chiffres dépassés (POS 85, F1 0,7535, 236/237, 2 spans)  … [176 caractères tronqués]
 
-*144 appels d'outils.* Actions notables :
+*155 appels d'outils.* Actions notables :
 
 - bash — Inspect repo state and recent commits
 - bash — List reports directory
@@ -41,7 +41,42 @@
 - bash — Check git status details and branches
 - bash — Read headers of ten marked fiches
 - bash — Trace historical notice commits
-- … et 125 autres
+- … et 136 autres
+
+**Synthèse produite :**
+
+\## J9.1 terminée — passe d'honnêteté committée
+
+\### Livrables
+- **Fiche** : [`reports/rapport-passe-honnetete.md`](reports/rapport-passe-honnetete.md)
+- **JSON** : [`reports/passe-honnetete.json`](reports/passe-honnetete.json)
+- **19 fiches annotées** « instantané historique » :
+  - **10 encarts réécrits** : l'ancien encart recopiait l'état (`POS 86,25 / F1 0,7535 / 236/237 / 2 spans`) et était donc devenu faux ;
+  - **9 encarts ajoutés** : `gn-pronom-sujet`, `pos-ponctuation`, `pos-r4`, `r264-elision`, `gold-gp-corrige`, `convention-gv`, `g017`, `r035`, `semaine`.
+
+L'encart standard ne recopie plus aucune valeur : il pointe vers `en-cours` et `roadmap`, ce qui le rend durable.
+
+\### État courant mesuré (HEAD `229098ec`, avant nos commits)
+| gold | POS | F1 | attachement | spans sans label |
+|---|---:|---:|---:|---:|
+| vivant 612 | **0,8625** | **0,7902** | **238/238 labels (238/239 cibles)** | **1** (`g017`) |
+| gelé 602 | **0,8625** | **0,7882** | **234/239** | **1** |
+
+\### Contrôles
+- **19/19** notices en ligne 3, **38/38** liens résolus.
+- **0 fiche de résultats** ne publie un des quatre marqueurs sans mention, hors **2 faux positifs nommés** (`2 spans` de phrase) et les index.
+- `rapport-s065.md` (état courant) n'est **pas** annotée : la frontière historique/courant est explicite.
+
+\### Portes
+Vertes : `revue_documentation` (`REVUE-0`), `porte-tableaux`, `taille_documents` (T0 dans le budget), `verifie_en_cours`, `verifie_journal`, `porte-produit` (183/183).
+La passe complète des 84 portes a été lancée : **14/14 vertes** avant arrêt (elle durait ~70 min et un autre passage tournait déjà en parallèle).
+
+\### Commits
+- `229098ec` — **J8.1** : restitution v1 (travail antérieur non committé, vérifié et committé pour un état cohérent).
+- `ecef7250` — **J9.1** : passe d'honnêteté, 19 fiches + fiche + JSON + état + roadmap.
+- `81fc9ecf` — journal du 14/11 avec J9.1 au récit.
+
+Les fichiers encore modifiés dans l'arbre (`reports/INDEX.md`, quelques fiches d'audit, `tools/chantier/plan.json`, `tools/structures`) sont **antérieurs** à cette tâche et n'ont pas été touchés.
 
 ## 3. Travail accompli
 
@@ -95,7 +130,7 @@
 - **T1** Inspect remaining candidates headers
 - **T1** Check gold-gp-corrige figures
 - **T1** Strict scan of headlines for markers
-- … et 86 autres
+- … et 95 autres
 
 ## 4. Mesures et résultats marquants
 

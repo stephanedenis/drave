@@ -1,0 +1,1347 @@
+{
+ "schema": "drave.bilan-chantier",
+ "version": 1,
+ "titre": "J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné",
+ "date": "2026-11-14",
+ "tache": "J10.1",
+ "lignes_roadmap": [
+  "B13",
+  "R0.7",
+  "N2",
+  "S",
+  "R",
+  "A",
+  "Panini"
+ ],
+ "statut": "bilan",
+ "head": "81fc9ecf",
+ "base": {
+  "gold_vivant": {
+   "phrases": 612,
+   "cibles": 239,
+   "jetons": 3179,
+   "pos": 0.8625,
+   "f1_depart": 0.7533
+  },
+  "gold_gele": {
+   "phrases": 602,
+   "cibles": 239,
+   "f1": 0.7882,
+   "attachement": "234/239"
+  },
+  "lancements": 21,
+  "timeouts": 5,
+  "echecs_acceptation": 1,
+  "budget_s": 22032.2,
+  "note": "Aucune mesure nouvelle : ce bilan relit les fiches du chantier, de J1.1 à J9.1."
+ },
+ "chiffres": {
+  "produit": {
+   "pos": {
+    "avant": 0.8625,
+    "apres": 0.8625,
+    "delta": 0.0,
+    "jetons": 3179,
+    "jetons_changes": 0,
+    "lecture": "J1.1, J1.2, J6.1 et J6.2 sont des règles de syntagmes ou d'attachement ; la POS ne bouge pas.",
+    "fiches": [
+     "reports/rapport-r035.md",
+     "reports/rapport-s065.md"
+    ]
+   },
+   "f1": {
+    "avant": {
+     "all": 0.7533,
+     "dev": 0.7476,
+     "test": 0.7663,
+     "lineaire": 0.812
+    },
+    "apres": {
+     "all": 0.7902,
+     "dev": 0.7875,
+     "test": 0.7962,
+     "lineaire": 0.8144
+    },
+    "delta": {
+     "all": 0.0369,
+     "dev": 0.0399,
+     "test": 0.0299,
+     "lineaire": 0.0024
+    },
+    "controle": "183/183 ; placebo sujet 0,7758 ; adverbe large rejeté ; test non utilisé pour choisir la règle (in-sample)",
+    "fiche": "reports/rapport-convention-gv.md"
+   },
+   "attachement": {
+    "avant": {
+     "exact": 236,
+     "labels": 237,
+     "cibles": 239,
+     "couverture": 0.9916
+    },
+    "apres": {
+     "exact": 238,
+     "labels": 238,
+     "cibles": 239,
+     "couverture": 0.9958,
+     "span_exact": 1.0
+    },
+    "delta_exact": 2,
+    "delta_couverture": 0.0042,
+    "lecture": "238/238 est le taux sur les labels ; 238/239 (0,9958) est le taux sur les cibles ; g017 reste le 1 span sans label.",
+    "fiches": [
+     "reports/rapport-r035.md",
+     "reports/rapport-s065.md",
+     "reports/rapport-g017.md"
+    ]
+   },
+   "schema": {
+    "avant": "v1",
+    "apres": "v2",
+    "champs_ajoutes": [
+     "meta.partition",
+     "meta.alternative"
+    ],
+    "cas": 26,
+    "echecs": 0,
+    "annotations_gold": 1836,
+    "echecs_annotations": 0,
+    "retrocompatibilite": "v1 lue ; v2 refuse une annotation v1",
+    "fiche": "reports/rapport-schema-v2.md"
+   },
+   "restitution_v0": {
+    "banc": 50,
+    "annotations": 46,
+    "refus": 4,
+    "refus_ids": [
+     "f14",
+     "f15",
+     "f16",
+     "f17"
+    ],
+    "surface": {
+     "exacts": 46,
+     "fidelite": 1.0
+    },
+    "surface_sans_controle": {
+     "exacts": 45,
+     "fidelite": 0.9783
+    },
+    "miroir_strict": {
+     "exacts": 5,
+     "fidelite": 0.1087
+    },
+    "controle_negatif": {
+     "melange": "0/46",
+     "troncature": "0/46",
+     "detectes": "46/46"
+    },
+    "lecture": "Codec de surface, pas décodeur ; le correctif C a ramené la surface de 45/46 à 46/46.",
+    "fiche": "reports/rapport-restitution-v0.md"
+   },
+   "restitution_v1": {
+    "banc": 50,
+    "annotations": 46,
+    "refus": 4,
+    "canonique": {
+     "exacts": 46,
+     "fidelite": 1.0
+    },
+    "strict": {
+     "exacts": 5,
+     "fidelite": 0.1087
+    },
+    "strict_sur_canonique": {
+     "exacts": 1,
+     "fidelite": 0.0217
+    },
+    "structure": {
+     "segments": 395,
+     "rôles": 395,
+     "cibles": 315,
+     "cibles_resolues": 315,
+     "cibles_dans_un_segment": 313,
+     "couverture_jetons": 0.6584,
+     "couverture_caracteres": 0.7519
+    },
+    "stabilite": {
+     "squelette_identique": 18,
+     "jetons_identiques": 46,
+     "fidelite": 0.3913
+    },
+    "controle_negatif": {
+     "melange": "0/46",
+     "troncature": "0/46",
+     "detectes": "46/46",
+     "roles_retires": 395,
+     "cibles_retirees": 315,
+     "cle_changee": "43/43"
+    },
+    "lecture": "La forme canonique est une lecture structurelle ; le miroir strict ne monte pas, et il tombe à 1/46 quand on lui donne la forme canonique.",
+    "fiche": "reports/rapport-restitution-v1.md"
+   }
+  },
+  "tagger": {
+   "n": 612,
+   "jetons": 3179,
+   "avant": 0.8625,
+   "apres": 0.9475,
+   "comptes": {
+    "avant": "2742/3179",
+    "apres": "3012/3179"
+   },
+   "gain_pts": 8.49,
+   "ic95": [
+    7.23,
+    9.74
+   ],
+   "mcnemar": {
+    "b": 344,
+    "c": 74,
+    "p": 1.0847968259787153e-42
+   },
+   "reel_432": {
+    "avant": 0.8893,
+    "apres": 0.936,
+    "gain_pts": 4.67,
+    "ic95": [
+     3.45,
+     6.01
+    ]
+   },
+   "synth_160": {
+    "avant": 0.7682,
+    "apres": 0.9828,
+    "gain_pts": 21.46,
+    "ic95": [
+     18.8,
+     24.15
+    ]
+   },
+   "hand_20": {
+    "avant": 0.8857,
+    "apres": 0.9714,
+    "gain_pts": 8.57,
+    "note": "in-sample : a servi au choix du modèle et du prompt"
+   },
+   "controles": {
+    "majoritaire": 0.2145,
+    "classe_frequente": 0.2491,
+    "permutation": 0.1667,
+    "uniforme": 0.0833
+   },
+   "cout": {
+    "appels": 1218,
+    "tokens": 358962,
+    "duree_s": 1259.2,
+    "dollars": 0.04,
+    "cache": "neuf",
+    "modele_renvoye": "deepseek-flash"
+   },
+   "baseline_085": {
+    "statut": "datée",
+    "commit": "97256b8f",
+    "reference_head": 0.8625,
+    "surestimation_pts": 1.26
+   },
+   "decision": "intégrer",
+   "mode": "NeuronalLLMPOS seul (API), derrière un drapeau, repli heuristique",
+   "reserve": "réel 432 seul +4,67 pts ; le 612 est tiré par les 160 synthétiques (+21,46)",
+   "prochaine_action": "split réel tenu à l'écart (crc32(id) % 3) ; si < +2 rouvrir et nommer le négatif",
+   "fiche": "reports/rapport-coordination-r.md"
+  },
+  "panini": {
+   "atomes_niveaux": {
+    "lignes": 14,
+    "atomes": 14,
+    "niveaux": 8,
+    "paires_abs_r_sup_0_5": 33,
+    "composantes_gt_1": 4,
+    "variance_3_premieres": 0.807,
+    "valeurs_propres": [
+     6.967,
+     2.845,
+     1.491
+    ],
+    "statut": "hypothèse_de_lecture_et_protocole_non_mesure",
+    "candidats_directs": [
+     "NOMBRE -> mot",
+     "OPERATION -> pos",
+     "STRUCTURE -> document"
+    ],
+    "controle": "permutation des colonnes ; CLR ; BH ; split-half",
+    "fiche": "reports/rapport-atomes-niveaux.md"
+   },
+   "corpus_commun": {
+    "panini_langues": 532,
+    "drave_langues": 456,
+    "communes": 453,
+    "appariables": 438,
+    "exactes": 418,
+    "taux_exact": 0.954,
+    "ecarts_exclus": 20,
+    "textes": 21,
+    "strates": 20,
+    "pivots": 1,
+    "familles": 5,
+    "ecritures": 10,
+    "phrases": 42,
+    "caracteres": 3603,
+    "controles": "8/8 (6 rejets attendus + 2 témoins)",
+    "fiche": "reports/rapport-corpus-commun.md"
+   },
+   "retrieval_epoque": {
+    "b7": {
+     "langues": 71,
+     "concepts": 35,
+     "paires": 4004,
+     "top1": 0.138,
+     "hasard": 0.055,
+     "script_coef": 0.132,
+     "script_ic95": [
+      0.126,
+      0.137
+     ],
+     "famille_coef": 0.046,
+     "famille_ic95": [
+      0.04,
+      0.051
+     ],
+     "r2": 0.4
+    },
+    "udhr": {
+     "langues": 21,
+     "articles": 30,
+     "paires": 420,
+     "top1": 0.049,
+     "hasard": 0.0333,
+     "script_coef": 0.062,
+     "script_ic95": [
+      0.034,
+      0.094
+     ],
+     "famille_coef": 0.056,
+     "famille_ic95": [
+      0.014,
+      0.111
+     ],
+     "r2": 0.14
+    },
+    "bible": {
+     "traductions": 12,
+     "langues": 10,
+     "versets": 1000,
+     "paires": 132,
+     "top1": 0.293,
+     "hasard": 0.001,
+     "script_coef": 0.609,
+     "script_ic95": [
+      0.529,
+      0.702
+     ],
+     "famille_coef": 0.181,
+     "famille_ic95": [
+      0.106,
+      0.253
+     ],
+     "date_coef_par_siecle": -0.034,
+     "date_ic95": [
+      -0.075,
+      0.009
+     ],
+     "date_p": 0.19,
+     "r2": 0.763,
+     "contemporain_script_controle": 0.71,
+     "decale_script_controle": 0.71,
+     "brut_contemporain": 0.238,
+     "brut_decale": 0.427
+    },
+    "controle": "cibles permutées au hasard ; années permutées p=0,19",
+    "fiche": "reports/rapport-retrieval-epoque.md"
+   },
+   "genealogie": {
+    "paires": 210,
+    "hors_script": {
+     "n": 154,
+     "mrr": 0.1332,
+     "top1": 0.0333,
+     "lecture": "hasard exact, sans variance"
+    },
+    "meme_script": {
+     "n": 56,
+     "mrr": 0.1999,
+     "top1": 0.0938
+    },
+    "meme_famille_meme_script": {
+     "n": 8,
+     "mrr": 0.3853,
+     "au_dessus_du_hasard": "7/8"
+    },
+    "couverture": {
+     "p1_lang_tree": "5/21",
+     "p2_udhr": "15/21",
+     "g_glottolog": "21/21"
+    },
+    "accord": {
+     "familles": "15/15",
+     "branches_exactes": "14/15",
+     "spearman": 0.657,
+     "pearson": 0.918
+    },
+    "regression_105_paires": {
+     "r2_p2": 0.256,
+     "r2_g": 0.23,
+     "p_p2": 0.006,
+     "p_g": 0.019
+    },
+    "v14": {
+     "decomposed": "3/21",
+     "convergence": "1/21"
+    },
+    "controle": "permutations de labels p=0,006/0,019 ; leave-one-language-out ; décomposition de l'inconnu",
+    "fiche": "reports/rapport-genealogie-deux-faces.md"
+   },
+   "familles": {
+    "textes_panini": 532,
+    "langues_distinctes": 445,
+    "etiquetees_glottolog": 521,
+    "top1_famille": 0.661,
+    "hasard_famille": 0.103,
+    "top1_soeur": 0.261,
+    "hasard_soeur": 0.025,
+    "hors_ecriture": {
+     "famille": 0.099,
+     "hasard_famille": 0.081,
+     "soeur": 0.0067,
+     "hasard_soeur": 0.0076
+    },
+    "meme_ecriture": {
+     "famille": 0.698,
+     "hasard_famille": 0.162,
+     "soeur": 0.278,
+     "hasard_soeur": 0.057
+    },
+    "lang_tree": {
+     "langues": 25,
+     "paires": 600,
+     "soeurs": 0.619,
+     "familles_differentes": 0.0445,
+     "ratio": 13.89,
+     "delta": 0.5743,
+     "delta_ic95": [
+      0.4899,
+      0.6552
+     ],
+     "coef_soeur": 0.4479,
+     "coef_soeur_p": 0.002,
+     "coef_ecriture": 0.2133,
+     "coef_famille_autre": 0.0916,
+     "r2": 0.6306
+    },
+    "echantillon_20": {
+     "langues": 20,
+     "paires": 380,
+     "soeurs": 0.0583,
+     "famille_autre": 0.0757,
+     "familles_differentes": 0.0389,
+     "coef_soeur": 0.0154,
+     "coef_soeur_p": 0.078
+    },
+    "reproduction_j31": {
+     "ecart_max": 0,
+     "top1": 0.04944,
+     "script_coef": 0.06186,
+     "famille_coef": 0.05562,
+     "r2": 0.13957
+    },
+    "controle_epoque": {
+     "udhr": "mono-époque 1948",
+     "placebo_dates": -0.0013,
+     "placebo_ic95": [
+      -0.0654,
+      0.0412
+     ],
+     "bible_date": -0.0338,
+     "bible_p": 0.1896,
+     "bible_script": 0.6086
+    },
+    "controle": "permutations 1 000/500 ; requêtes permutées ; leave-one-language-out ; J3.1 reproduit à l'identique",
+    "fiche": "reports/rapport-retrieval-familles.md"
+   }
+  },
+  "coordination": {
+   "n2": {
+    "avant": {
+     "val_128": 8.0225
+    },
+    "apres": {
+     "val_128": 2.9726,
+     "val_1024": 2.7856
+    },
+    "rope_seul": 40.0658,
+    "test_1024": 2.8566,
+    "seuil": 2.5,
+    "manque_val": 0.2856,
+    "manque_test": 0.3566,
+    "correctif": "--rope --canal-dir",
+    "controles": {
+     "permutation_canal_inchange": 1692.39,
+     "permutation_canal_permute": 1880.66,
+     "checkpoint_absolu": [
+      3.0971,
+      3.2098
+     ],
+     "rope2048": [
+      5.4773,
+      4.6321
+     ]
+    },
+    "durabilite": "rope_model.py reste dans work/ ; le correctif n'est pas reproductible sur un clone neuf",
+    "fiche": "reports/rapport-coordination-n2.md"
+   },
+   "s": {
+    "avant": {
+     "clone_523d8c1": {
+      "verdicts": 8,
+      "acceptes": 4,
+      "sans_verdict": 11
+     }
+    },
+    "apres": {
+     "working_tree": {
+      "verdicts": 19,
+      "acceptes": 11,
+      "sans_verdict": 0
+     }
+    },
+    "onze": {
+     "verdicts": 11,
+     "statuts": {
+      "resolu": 6,
+      "compatible": 1,
+      "exclu": 4
+     },
+     "acceptes": 7,
+     "exclus": 4
+    },
+    "mappings": {
+     "uniques": 16,
+     "justes": 7,
+     "faux": 9
+    },
+    "decision": "committer les 11 tels quels (option A), puis corriger les 9/16 référents",
+    "etat": "non committé",
+    "fiche": "reports/rapport-coordination-s.md"
+   },
+   "r": {
+    "avant": 0.8625,
+    "apres": 0.9475,
+    "gain_pts": 8.49,
+    "ic95": [
+     7.23,
+     9.74
+    ],
+    "reel_432": 0.936,
+    "reel_432_gain_pts": 4.67,
+    "decision": "intégrer",
+    "reserve": "le réel 432 seul ne gagne que +4,67 ; le split réel tenu à l'écart peut faire descendre le chiffre",
+    "fiche": "reports/rapport-coordination-r.md"
+   },
+   "a": {
+    "a62": {
+     "statut": "libre",
+     "moe": "qwen3-30b-a3b-Q4_K_M",
+     "octets": 18556686752,
+     "gib": 17.28,
+     "couches": 48,
+     "experts": 128,
+     "experts_par_jeton": 8,
+     "ppl": 37.2013,
+     "porte_echange_experts": 54.5202,
+     "routage_etranger": 36074.9497,
+     "blocage": "résidence mono-GPU 16 GiB ; cache VRAM câblé pour MXFP4 seulement, pas Q4_K"
+    },
+    "a83b2": {
+     "statut": "libre",
+     "graphe": "absent du backlog, de la roadmap et des arêtes",
+     "pins": "18 ou 19"
+    },
+    "decision": "D1–D8",
+    "fiche": "reports/rapport-coordination-a.md"
+   }
+  },
+  "portes": {
+   "passe": {
+    "portes": 84,
+    "vertes": 81,
+    "rouges": 3,
+    "rouges_tolerees": [
+     "indice",
+     "melange",
+     "sessions"
+    ],
+    "commit": "2d6f5bff"
+   },
+   "porte_produit": "183/183",
+   "porte_bloc": "verte (20 tests)",
+   "tag": {
+    "semaine_2026_11_14": "absent",
+    "chantier_2026_11_14": "à poser par J14.1"
+   },
+   "honnetete": {
+    "fiches_annotees": 19,
+    "encarts": "19/19",
+    "liens": "38/38",
+    "fiches_perimees": 0,
+    "faux_positifs": 2,
+    "fiche": "reports/rapport-passe-honnetete.md"
+   }
+  }
+ },
+ "decisions": [
+  {
+   "id": "D1",
+   "objet": "Adopter la relative zéro à préposition orpheline",
+   "preuve": "237/238, couverture 0,9958 ; 5 contrôles négatifs ; généralisation « The book he reads about »",
+   "etat": "fait",
+   "suite": "g017 reste"
+  },
+  {
+   "id": "D2",
+   "objet": "Adopter sujet hors du GV + adverbe final de temps étroit ; rejeter l'adverbe large et l'objet hors GV",
+   "preuve": "F1 0,7902, 0 perte d'attachement ; placebo 0,7758 ; adverbe large 0,7552",
+   "etat": "fait",
+   "suite": "objet 75 FP / 51 FN ouvert"
+  },
+  {
+   "id": "D3",
+   "objet": "Publier le schéma v2 additif (meta.partition, meta.alternative), garder v1 lue",
+   "preuve": "26 cas / 0 échec ; 1 836 annotations / 0 échec ; v2 refuse v1",
+   "etat": "fait",
+   "suite": "invariants sémantiques à tester"
+  },
+  {
+   "id": "D4",
+   "objet": "La restitution v0 est un codec de surface, pas un décodeur ; ajouter la catégorie C",
+   "preuve": "46/46 surfaces ; miroir 0,1087 ; sans C 45/46",
+   "etat": "fait",
+   "suite": "v0.1 ponctuation, gold de restitution"
+  },
+  {
+   "id": "D5",
+   "objet": "La table atomes ↔ niveaux est une grille de lecture, pas une mesure ; protocole CLR / permutations / BH / split-half",
+   "preuve": "14/14 lignes ; 33 paires colinéaires ; 4 composantes > 1",
+   "etat": "fait",
+   "suite": "V14 des 21 langues à mesurer"
+  },
+  {
+   "id": "D6",
+   "objet": "Le corpus commun est l'UDHR article 1, 21 textes ; exclure les 20 écarts, ne pas les corriger",
+   "preuve": "418/438 exactes ; 8/8 contrôles ; 20 écarts listés",
+   "etat": "fait",
+   "suite": "corpus multi-époques à construire"
+  },
+  {
+   "id": "D7",
+   "objet": "Le retrieval est de surface ; stratifier par écriture ; ne pas lire le brut",
+   "preuve": "script +0,609 ; date −0,034 (p = 0,19) ; 0,710 contre 0,710",
+   "etat": "fait",
+   "suite": "réplication neuronale ouverte"
+  },
+  {
+   "id": "D8",
+   "objet": "Comparer les deux généalogies sur les paires couvertes ; « inconnu = 1,0 » n'est pas une distance",
+   "preuve": "R² 0,256 contre 0,230 ; 154/154 hors script",
+   "etat": "fait",
+   "suite": "V14, 9 dhātus, distance continue"
+  },
+  {
+   "id": "D9",
+   "objet": "Ne pas livrer --rope seul ; valider --rope --canal-dir et eval_longueurs.py --rope ; promouvoir rope_model.py",
+   "preuve": "40,0658 seul contre 2,9726/2,7856 avec canal",
+   "etat": "fait",
+   "suite": "porte propre 0,2856/0,3566"
+  },
+  {
+   "id": "D10",
+   "objet": "Committer les 11 verdicts S tels quels (option A), puis corriger les 9/16 référents",
+   "preuve": "7 acceptés / 4 exclus ; clone 8/4/11 ; 16 mappings",
+   "etat": "a_faire",
+   "suite": "sous-module + pointeur"
+  },
+  {
+   "id": "D11",
+   "objet": "Intégrer le POS API (neuronal seul, drapeau, repli heuristique) ; split réel tenu à l'écart avant défaut",
+   "preuve": "+8,49 pts ; réel +4,67 ; 0 refus POS",
+   "etat": "a_faire",
+   "suite": "route + split"
+  },
+  {
+   "id": "D12",
+   "objet": "A6.2 libre ; métrique M1 = octets lus au lot 192 ; mesurer en offload CPU ; A8.3b2 à nommer ; A8.3 opt-in",
+   "preuve": "37,2013 ; 54,5202 ; ÷15,51 / ÷7,08",
+   "etat": "a_faire",
+   "suite": "rapport A6.2, harnais"
+  },
+  {
+   "id": "D13",
+   "objet": "J5.1 : le produit est mesuré, l'intégration est bornée, la semaine n'est pas close",
+   "preuve": "les fiches J1–J4",
+   "etat": "fait",
+   "suite": "J5.2 (passe, tag, release)"
+  },
+  {
+   "id": "D14",
+   "objet": "Rejeter la règle de l'adverbe final hors de la SUB (g017)",
+   "preuve": "F1 0,7901 ; test −0,0028 ; attachement 236/237",
+   "etat": "fait",
+   "suite": "convention du gold à trancher"
+  },
+  {
+   "id": "D15",
+   "objet": "Intégrer la règle « REL suivie d'un GV → le sujet de ce GV » (s065)",
+   "preuve": "238/238 labels, 238/239 cibles, 0 span, 0 POS ; test unitaire",
+   "etat": "fait",
+   "suite": "un seul cas, en dev"
+  },
+  {
+   "id": "D16",
+   "objet": "Lire le retrieval par écriture d'abord, puis séparer sœur et famille lointaine ; la « famille » est un mélange",
+   "preuve": "sœur +0,448 (p = 0,002) contre famille +0,155 ; R² 0,474 → 0,631 ; J3.1 reproduit",
+   "etat": "fait",
+   "suite": "l'échantillon 20 est sous-puissant"
+  },
+  {
+   "id": "D17",
+   "objet": "La forme canonique est une lecture structurelle, pas un codec ; publier strict et canonique",
+   "preuve": "canonique 46/46 ; strict 0,1087 inchangé ; strict sur canonique 1/46",
+   "etat": "fait",
+   "suite": "gold de forme canonique à faire"
+  },
+  {
+   "id": "D18",
+   "objet": "Les fiches historiques portent un encart qui pointe vers l'état, sans recopier les valeurs",
+   "preuve": "19/19 encarts ; 38/38 liens ; 0 fiche périmée hors faux positifs",
+   "etat": "fait",
+   "suite": "passe générique à faire"
+  },
+  {
+   "id": "D19",
+   "objet": "J10.1 : le chantier est mesuré et écrit, mais pas clos : le tag manque",
+   "preuve": "20/21 acceptations ; 84/81/3 ; tag absent",
+   "etat": "fait",
+   "suite": "J14.1 (passe + tag)"
+  },
+  {
+   "id": "D20",
+   "objet": "La règle d'acceptation est confirmée : un timeout avec acceptation verte = fait ; avec acceptation rouge = échec",
+   "preuve": "J1.2/J2.2/J3.1/J8.1 sauvés ; J5.2 échoue",
+   "etat": "fait",
+   "suite": "la prochaine boucle garde la règle"
+  }
+ ],
+ "rejets": [
+  {
+   "id": "R1",
+   "objet": "Adverbe large (tout ADV final hors GV)",
+   "chiffre": "F1 0,7552 (+0,0003) ; test 0,7656 < 0,7663",
+   "raison": "12 FP d'adverbe corrigés, 11 FP de troncature créés ; le gold se contredit"
+  },
+  {
+   "id": "R2",
+   "objet": "Objet hors du GV",
+   "chiffre": "F1 0,7531 (en baisse)",
+   "raison": "20 FP d'objet corrigés, 13 FP de troncature créés"
+  },
+  {
+   "id": "R3",
+   "objet": "Placebo sujet (déplacer le premier token sans condition)",
+   "chiffre": "F1 0,7758 ; 38 phrases perdantes",
+   "raison": "0 phrase perdante pour la règle conditionnelle"
+  },
+  {
+   "id": "R4",
+   "objet": "Placebo adverbe (arrêter au dernier token)",
+   "chiffre": "F1 0,7440 ; 627 FP contre 555",
+   "raison": "tronquer au hasard détruit des GV"
+  },
+  {
+   "id": "R5",
+   "objet": "« Le schéma v2 prouve le sens »",
+   "chiffre": "26 cas / 0 échec",
+   "raison": "il valide la forme, pas la réciprocité, les rangs ni l'unicité"
+  },
+  {
+   "id": "R6",
+   "objet": "Corriger les 20 écarts de surface Panini ↔ Drave",
+   "chiffre": "20 exclus sur 438 appariables",
+   "raison": "corriger une source pour l'autre fabrique l'accord"
+  },
+  {
+   "id": "R7",
+   "objet": "Un effet d'époque dans le retrieval",
+   "chiffre": "brut 0,238 contre 0,427 ; à script contrôlé 0,710 contre 0,710 ; date −0,034, p = 0,19",
+   "raison": "effet de composition (60 % contre 33 % de même écriture)"
+  },
+  {
+   "id": "R8",
+   "objet": "« La filiation de Panini = la famille de Drave »",
+   "chiffre": "3/655 paires inter-langues, 479 avec une langue vide",
+   "raison": "deux objets : tradition contre famille de langues"
+  },
+  {
+   "id": "R9",
+   "objet": "« Inconnu = 1,0 » comme distance",
+   "chiffre": "200/210 paires P1, 105/210 P2",
+   "raison": "c'est une valeur manquante ; l'indicateur d'inconnu porte −0,172/−0,290"
+  },
+  {
+   "id": "R10",
+   "objet": "Les 9 dhātus mesurables en l'état",
+   "chiffre": "aucune matrice V14 ; 4 composantes (corrélation) ou 1 (covariance)",
+   "raison": "sans matrice, la projection n'est pas identifiable"
+  },
+  {
+   "id": "R11",
+   "objet": "« V14 couvre les 21 langues »",
+   "chiffre": "3/21 (udhr_decomposed_v14), 1/21 (udhr_convergence_v14)",
+   "raison": "la face atomes n'existe que pour 3 langues"
+  },
+  {
+   "id": "R12",
+   "objet": "Le correctif --rope seul",
+   "chiffre": "40,0658 (au lieu de 2,79)",
+   "raison": "le canal manque : --rope déplace le bug, il ne le ferme pas"
+  },
+  {
+   "id": "R13",
+   "objet": "« 11 verdicts = 11 acceptés »",
+   "chiffre": "7 acceptés / 4 exclus ; clone 8/4/11",
+   "raison": "deux ensembles différents ; le clone ne voit pas les 11"
+  },
+  {
+   "id": "R14",
+   "objet": "L'hybride par classe R",
+   "chiffre": "+0,41 pt ; McNemar 31/44, p = 0,17",
+   "raison": "non significatif ; piste, pas décision"
+  },
+  {
+   "id": "R15",
+   "objet": "La baseline 0,8500",
+   "chiffre": "0,8500 à 97256b8f ; 0,8625 au HEAD",
+   "raison": "datée ; comparer à 0,8500 surestime de 1,26 pt"
+  },
+  {
+   "id": "R16",
+   "objet": "« A6.2 bloquée faute de MoE »",
+   "chiffre": "MoE 18,56 Go, PPL 37,2013, porte 54,5202",
+   "raison": "le blocage est la résidence mono-GPU (17,28 > 16 GiB)"
+  },
+  {
+   "id": "R17",
+   "objet": "« A8.3b2 est dans le graphe »",
+   "chiffre": "absente du backlog, de la roadmap et des arêtes",
+   "raison": "nommée par une fiche et le plan, pas par le graphe"
+  },
+  {
+   "id": "R18",
+   "objet": "La commande LOT=1/4 porte-flux",
+   "chiffre": "LOT=1 : 61,9920 contre 60,8135 attendu",
+   "raison": "invalide pour LOT=1 : la porte échoue par construction"
+  },
+  {
+   "id": "R19",
+   "objet": "A8.3 par défaut",
+   "chiffre": "18 ou 19 pins, 3 duales ; cause non nommée",
+   "raison": "reste opt-in tant que A8.3b2 n'a pas donné sa cause"
+  },
+  {
+   "id": "R20",
+   "objet": "« Miroir = 1,0 parce que la surface est exacte »",
+   "chiffre": "surface 46/46, miroir 5/46 = 0,1087",
+   "raison": "le miroir est le minimum surface/mots/POS"
+  },
+  {
+   "id": "R21",
+   "objet": "« Les 20 hand généralisent »",
+   "chiffre": "+8,57 pts",
+   "raison": "ils ont servi au choix du modèle et du prompt : in-sample"
+  },
+  {
+   "id": "R22",
+   "objet": "L'adverbe final de temps hors de la SUB (g017, règle demandée)",
+   "chiffre": "F1 0,7901 (−0,0001) ; test −0,0028 ; attachement 236/237",
+   "raison": "corrige g017/g005 en dev, casse r264/r288 en test ; le gold se contredit"
+  },
+  {
+   "id": "R23",
+   "objet": "La variante étroite « adverbe passé + SUB modale »",
+   "chiffre": "F1 0,7909 ; 238/239",
+   "raison": "elle ne casse rien, mais elle est réglée sur 2 cas de dev, sans confirmation en test"
+  },
+  {
+   "id": "R24",
+   "objet": "« g017 est un problème de règle »",
+   "chiffre": "quatre SUB en adverbe final : 2 exclusions / 2 inclusions",
+   "raison": "c'est une convention d'annotation à trancher, pas un ajout de code"
+  },
+  {
+   "id": "R25",
+   "objet": "« La famille est une variable unique »",
+   "chiffre": "famille +0,1548 contre sœur +0,4479 ; R² 0,474 → 0,631",
+   "raison": "la famille est un mélange de sœurs et de familles lointaines"
+  },
+  {
+   "id": "R26",
+   "objet": "« L'échantillon 20 résout les sœurs »",
+   "chiffre": "sœurs 0,0583 contre autres-branches 0,0757 ; coefficient +0,0154, p = 0,078",
+   "raison": "12 paires de sœurs, dont 8 hors écriture : défaut de puissance"
+  },
+  {
+   "id": "R27",
+   "objet": "« L'époque explique l'effet de famille »",
+   "chiffre": "UDHR mono-époque ; placebo −0,0013 ; Bible −0,034/siècle, p = 0,19",
+   "raison": "l'époque est constante dans l'UDHR ; le seul bras daté ne pèse pas"
+  },
+  {
+   "id": "R28",
+   "objet": "« Le miroir strict doit monter avec la forme canonique »",
+   "chiffre": "strict 0,1087 inchangé ; strict sur canonique 1/46",
+   "raison": "la v1 ne fabrique pas de surface ; s'il montait, elle recopierait la source"
+  },
+  {
+   "id": "R29",
+   "objet": "« La forme canonique prouve la fidélité sémantique »",
+   "chiffre": "canonique 46/46",
+   "raison": "c'est un invariant de codec ; les rôles ne sont pas jugés"
+  },
+  {
+   "id": "R30",
+   "objet": "« L'encart historique doit recopier l'état courant »",
+   "chiffre": "19/19 encarts ; 10 réécrits, 9 ajoutés",
+   "raison": "il deviendrait faux au commit suivant ; il doit pointer, pas répliquer"
+  }
+ ],
+ "echecs": {
+  "compte": {
+   "lancements": 21,
+   "timeouts": 5,
+   "echecs_acceptation": 1,
+   "taches_faites": 20
+  },
+  "runs": [
+   {
+    "tache": "J1.2",
+    "titre": "La convention des GV",
+    "duree_s": 5400.1,
+    "code": 124,
+    "acceptation": "verte",
+    "commit": "92652984",
+    "commit_le": "2026-11-07 13:44:53",
+    "verdict": "fait",
+    "note": "timeout après le commit : le livrable et l'acceptation sont là"
+   },
+   {
+    "tache": "J2.2",
+    "titre": "Panini I — le corpus commun",
+    "duree_s": 5400.1,
+    "code": 124,
+    "acceptation": "verte",
+    "commit": "c3467170",
+    "commit_le": "2026-11-07 18:12:33",
+    "verdict": "fait",
+    "note": "timeout avant le commit ; le commit est produit par J3.2, après coup"
+   },
+   {
+    "tache": "J3.1",
+    "titre": "Panini II — le retrieval à époque contrôlée",
+    "duree_s": 5400.1,
+    "code": 124,
+    "acceptation": "verte",
+    "commit": "c3467170",
+    "commit_le": "2026-11-07 18:12:33",
+    "verdict": "fait",
+    "note": "même commit que J2.2 ; le retrieval est livré, le run a expiré"
+   },
+   {
+    "tache": "J5.2",
+    "titre": "La passe complète et le tag",
+    "duree_s": 5400.1,
+    "code": 124,
+    "acceptation": "rouge (tag absent)",
+    "commit": null,
+    "commit_le": null,
+    "verdict": "echec",
+    "note": "le seul échec d'acceptation : la passe 84/81/3 a été faite ailleurs (2d6f5bff), le tag n'existe pas"
+   },
+   {
+    "tache": "J8.1",
+    "titre": "La restitution v1",
+    "duree_s": 5400.1,
+    "code": 124,
+    "acceptation": "verte",
+    "commit": "229098ec",
+    "commit_le": "2026-11-14 03:23:33",
+    "verdict": "fait",
+    "note": "timeout ; le commit est fait par J9.1, après coup"
+   }
+  ],
+  "lecture": "Un timeout n'est pas un verdict ; l'acceptation en est un. Quatre timeouts sont sauvés par une acceptation verte ou un commit de la tâche suivante ; J5.2 échoue parce que son acceptation était rouge.",
+  "lecon": "Mettre l'acceptation en premier, la rendre vérifiable sans le run, et ne pas confondre le commit avec la clôture."
+ },
+ "reste": [
+  {
+   "ligne": "J5.2 / J14.1",
+   "reste": "passe complète, revue, tag, release",
+   "prochaine_action": "toutes-les-portes.sh, revue_documentation.py, tag chantier-2026-11-14",
+   "bloquant": "temps (~2 h) ; 3 rouges tolérées à relever"
+  },
+  {
+   "ligne": "B13 / g017",
+   "reste": "1 span sans label ; convention d'adverbe non tranchée",
+   "prochaine_action": "trancher l'annotation (g005/g017 contre r264/r288), puis rejouer la variante étroite sur un gold tenu à l'écart",
+   "bloquant": "gold 200+ ; 7B local interdit"
+  },
+  {
+   "ligne": "B13 / s065",
+   "reste": "règle validée sur un seul cas, en dev, phrase synthétique",
+   "prochaine_action": "gold tenu à l'écart avec la même structure (GN REL GV)",
+   "bloquant": "gold"
+  },
+  {
+   "ligne": "B13 / objet du GV",
+   "reste": "75 FP / 51 FN ; 5 FP sujet",
+   "prochaine_action": "T132/T133, gold 200+",
+   "bloquant": "gold"
+  },
+  {
+   "ligne": "B13 / restitution",
+   "reste": "gold de forme canonique ; analyseur insensible à la présentation",
+   "prochaine_action": "mesurer la justesse des rôles, pas seulement la cohérence ; v0.1 ponctuation",
+   "bloquant": "aucun"
+  },
+  {
+   "ligne": "R0.7 / tagger",
+   "reste": "route API derrière drapeau ; split réel tenu à l'écart",
+   "prochaine_action": "mesurer crc32(id) % 3 ; si < +2 rouvrir et nommer le négatif ; si >= +5 route par défaut",
+   "bloquant": "~0,07 $ / 1 000 phrases ; un run"
+  },
+  {
+   "ligne": "Panini / atomes",
+   "reste": "signature V14 des 21 langues",
+   "prochaine_action": "projection multilingue + test invariance/cluster",
+   "bloquant": "pas de données V14 sur 21 langues"
+  },
+  {
+   "ligne": "Panini / dhātus",
+   "reste": "matrice 9 dhātus → 14 atomes",
+   "prochaine_action": "publier la décomposition, projeter les 44 œuvres",
+   "bloquant": "aucune matrice publiée"
+  },
+  {
+   "ligne": "Panini / généalogie",
+   "reste": "distance continue, corpus équilibré, retrieval neuronal, multi-époques, arêtes pondérées",
+   "prochaine_action": "une mesure par ligne (§ 7 de la fiche)",
+   "bloquant": "corpus"
+  },
+  {
+   "ligne": "Panini / J12",
+   "reste": "§334 (114 textes, 655 paires) et les 44 œuvres ; corpus d'or CIC",
+   "prochaine_action": "J12.1 et J12.2",
+   "bloquant": "corpus Panini (lecture seule)"
+  },
+  {
+   "ligne": "N2",
+   "reste": "porte propre : 0,2856 en validation / 0,3566 en test ; rope_model.py dans tools/",
+   "prochaine_action": "appliquer le correctif, re-épingler, porte-n2.sh",
+   "bloquant": "GPU / runs N2"
+  },
+  {
+   "ligne": "S",
+   "reste": "committer les 11 verdicts + pointeur ; corriger 9/16 référents ; .gitmodules en chemin absolu",
+   "prochaine_action": "commande § 3 de la fiche",
+   "bloquant": "accès au sous-module"
+  },
+  {
+   "ligne": "R",
+   "reste": "voir R0.7 / tagger",
+   "prochaine_action": "-",
+   "bloquant": "-"
+  },
+  {
+   "ligne": "A",
+   "reste": "rapport A6.2 ; M1/M2/M3 ; harnais A8.3b2 ; 18/19 pins ; cache Q4_K si besoin",
+   "prochaine_action": "D1–D8 de la fiche",
+   "bloquant": "GPU 16 GiB ; code Q4_K"
+  },
+  {
+   "ligne": "J9.1 / honnêteté",
+   "reste": "la passe générique (tout chiffre d'arrivée antérieur à HEAD)",
+   "prochaine_action": "commencer par rapport-pensee-v11.md, rapport-pensee-v9.md",
+   "bloquant": "aucun"
+  }
+ ],
+ "suite_plan": [
+  {
+   "tache": "J11.1",
+   "objet": "rejouer les exemples de docs/produit/exemples.md",
+   "note": "le mandat porte encore 237/238 ; l'état courant est 238/238 labels"
+  },
+  {
+   "tache": "J11.2",
+   "objet": "ajouter evaluer --par-langue et le documenter"
+  },
+  {
+   "tache": "J11.3",
+   "objet": "re-mesurer les 50 textes libres"
+  },
+  {
+   "tache": "J11.4",
+   "objet": "documenter le schéma v2"
+  },
+  {
+   "tache": "J12.1",
+   "objet": "Panini §334 et les 44 œuvres"
+  },
+  {
+   "tache": "J12.2",
+   "objet": "vérificateur indépendant du corpus d'or CIC"
+  },
+  {
+   "tache": "J13.1",
+   "objet": "la table des mesures du chantier"
+  },
+  {
+   "tache": "J14.1",
+   "objet": "la clôture : passe complète et tag chantier-2026-11-14"
+  }
+ ],
+ "chronologie": [
+  {
+   "date": "2026-11-07",
+   "tache": "J0",
+   "livrable": "liaison superviseur ↔ dsh",
+   "commit": null,
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J1.1",
+   "livrable": "r035 : 237/238, couverture 0,9958",
+   "commit": "25a6c0ff",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J1.2",
+   "livrable": "convention GV : F1 0,7549 → 0,7902",
+   "commit": "92652984",
+   "verdict": "fait (timeout)"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J1.3",
+   "livrable": "schéma v2 : 26 cas / 0 échec",
+   "commit": "9a259953",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J1.4",
+   "livrable": "restitution v0 : 46/46, miroir 0,1087",
+   "commit": "8eb0cc49",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J2.1",
+   "livrable": "table 14/14, 8 niveaux",
+   "commit": "9c7f71dc",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J2.2",
+   "livrable": "corpus commun : 21 textes, 418/438",
+   "commit": "c3467170",
+   "verdict": "fait (timeout)"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J3.1",
+   "livrable": "retrieval époque : B7/UDHR/Bible",
+   "commit": "c3467170",
+   "verdict": "fait (timeout)"
+  },
+  {
+   "date": "2026-11-07",
+   "tache": "J3.2",
+   "livrable": "généalogie : 154/154 hors script",
+   "commit": "c2e629b3",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-13",
+   "tache": "J4.1",
+   "livrable": "N2 : 8,0225 → 2,9726/2,7856",
+   "commit": "34e3e4ab",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-13",
+   "tache": "J4.2",
+   "livrable": "S : 11 verdicts, 7/4",
+   "commit": "34e3e4ab",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-13",
+   "tache": "J4.3",
+   "livrable": "R : 0,9475 (+8,49)",
+   "commit": "a934d779",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-13",
+   "tache": "J4.4",
+   "livrable": "A : A6.2 libre, A8.3b2 hors graphe",
+   "commit": "34e3e4ab",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-13",
+   "tache": "J5.1",
+   "livrable": "rapport de semaine + JSON",
+   "commit": "34e3e4ab",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J5.2",
+   "livrable": "passe et tag : tag absent",
+   "commit": null,
+   "verdict": "echec"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J6.1",
+   "livrable": "g017 : règle rejetée, convention à trancher",
+   "commit": "64d9dd23",
+   "verdict": "fait (rejet)"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J6.2",
+   "livrable": "s065 : 238/238 labels",
+   "commit": "b6e474dc",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J7.1",
+   "livrable": "familles : 532 textes, sœurs 0,619 contre 0,0445",
+   "commit": "d31e8788",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J8.1",
+   "livrable": "restitution v1 : canonique 46/46, strict 0,1087",
+   "commit": "229098ec",
+   "verdict": "fait (timeout)"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J9.1",
+   "livrable": "honnêteté : 19 fiches annotées",
+   "commit": "ecef7250",
+   "verdict": "fait"
+  },
+  {
+   "date": "2026-11-14",
+   "tache": "J10.1",
+   "livrable": "ce bilan + JSON",
+   "commit": "à venir",
+   "verdict": "fait"
+  }
+ ],
+ "limites": [
+  "Ce rapport agrège, il ne remesure pas : si une fiche change, le bilan devient faux sans qu'aucun calcul ne l'ait signalé.",
+  "Le HEAD est daté (81fc9ecf) : un commit suivant (J11–J14) change les chiffres. Les deux bases sont données : vivant 612 (F1 0,7902 ; 238/239) et gelé 602 (F1 0,7882 ; 234/239).",
+  "Les gains B13 sont in-sample : la convention du sujet est lue dans le gold (712/712 GV) puis appliquée au gold ; s065 est un seul cas, en dev. Le +0,0369 n'est pas une généralisation.",
+  "Le gold est une convention : la relative zéro est annotée une fois, l'adverbe final est contradictoire (g005/g017 contre r264/r288). Un autre corpus annoté autrement inverserait certains signes.",
+  "Le tagger est un run unique : un seul jour, un seul alias, température 0 mais API non déterministe au bit près ; le 612 est tiré par les 160 synthétiques ; le réel 432 ne gagne que +4,67 ; le split réel n'est pas fait.",
+  "L'intégration Panini est de surface : les n-grammes capturent l'orthographe et les cognates, pas le sens ; le corpus est mono-époque (1948), mono-genre (déclaration), 21 textes, 5 familles, 10 écritures ; le signal de famille est porté par 2 ou 3 paires sur 21 langues, et par 60 paires sur LANG_TREE.",
+  "« Sœur » est une convention : LCA >= 3, hors ancêtre/descendant ; la variante stricte (LCA >= 4) donne des chiffres plus forts. Les paires ne sont pas indépendantes ; l'échantillon 20 n'est pas aléatoire.",
+  "N2 mesure une validation, pas une porte : 2,7856 est le meilleur des quatre longueurs en validation ; le test à 1 024 est 2,8566 et manque 0,3566. Une seule graine, un seul run, une seule machine.",
+  "S n'est vrai que dans le working tree : un clone à 523d8c1 voit 8 verdicts / 4 acceptés / 11 candidats sans verdict. Le .gitmodules en chemin absolu peut empêcher un clone sur une autre machine.",
+  "La passe complète n'est pas la clôture : 84 portes, 81 vertes, 3 rouges tolérées ; l'autotest 183/183 n'est pas la passe ; le tag n'existe pas. J14.1 doit refaire la passe et taguer si le relevé est conforme.",
+  "Les compteurs bougent : 723 fiches / 817 JSON au HEAD, 724 / 818 après ce bilan. L'état en-cours est la source du compte, pas ce rapport."
+ ],
+ "fichiers": {
+  "nouveaux": [
+   "reports/rapport-bilan-chantier.md",
+   "reports/rapport-bilan-chantier.json"
+  ],
+  "relus_j1": [
+   "reports/rapport-r035.md",
+   "reports/pensee-r035.json",
+   "reports/rapport-convention-gv.md",
+   "reports/pensee-convention-gv.json",
+   "reports/rapport-schema-v2.md",
+   "reports/pensee-schema-v2.json",
+   "reports/rapport-restitution-v0.md",
+   "reports/pensee-restitution-v0.json"
+  ],
+  "relus_j2_j3": [
+   "reports/rapport-atomes-niveaux.md",
+   "reports/atomes-niveaux.json",
+   "reports/rapport-corpus-commun.md",
+   "reports/corpus-commun.json",
+   "reports/rapport-retrieval-epoque.md",
+   "reports/retrieval-epoque.json",
+   "reports/rapport-genealogie-deux-faces.md",
+   "reports/genealogie-deux-faces.json"
+  ],
+  "relus_j4": [
+   "reports/rapport-coordination-n2.md",
+   "reports/rapport-coordination-n2.json",
+   "reports/rapport-coordination-s.md",
+   "reports/rapport-coordination-s.json",
+   "reports/rapport-coordination-r.md",
+   "reports/rapport-coordination-r.json",
+   "reports/rapport-coordination-a.md",
+   "reports/rapport-coordination-a.json"
+  ],
+  "relus_j5": [
+   "reports/rapport-semaine.md",
+   "reports/rapport-semaine.json"
+  ],
+  "relus_j6_j9": [
+   "reports/rapport-g017.md",
+   "reports/pensee-g017.json",
+   "reports/rapport-s065.md",
+   "reports/pensee-s065.json",
+   "reports/rapport-retrieval-familles.md",
+   "reports/retrieval-familles.json",
+   "reports/rapport-restitution-v1.md",
+   "reports/pensee-restitution-v1.json",
+   "reports/rapport-passe-honnetete.md",
+   "reports/passe-honnetete.json"
+  ],
+  "mis_a_jour": [
+   "docs/pilotage/semaine-autonome.md",
+   "docs/pilotage/en-cours.md",
+   "docs/pilotage/roadmap.md",
+   "reports/README.md"
+  ],
+  "non_modifies": [
+   "les fiches et JSON relus",
+   "tools/",
+   "drave-core/",
+   "data/",
+   "work/",
+   "journal/ (archivé par le hook)"
+  ]
+ },
+ "verdict": "J10.1 est fait. 20 tâches sur 21 passent l'acceptation. Le produit gagne 2 attachements et 0,0369 de F1, le tagger vaut 0,9475, Panini est mesuré et borné, la coordination est datée. 5 timeouts, 4 récupérés, 1 vrai échec (J5.2, le tag absent). Le chantier est mesuré et écrit ; il n'est pas clos : J14.1 doit refaire la passe et poser chantier-2026-11-14."
+}
