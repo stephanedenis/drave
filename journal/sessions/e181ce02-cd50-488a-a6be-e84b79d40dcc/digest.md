@@ -61880,3 +61880,77 @@ rapport-cloture-chantier.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git tag -l \"chantier-*\"; git log --oneline -1 | cut -c1-90", "description": "Verdict J14.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 07:20:47 EST
+2026-11-14 06:53:07 · ▶ J14.1 — La clôture — la passe et le tag (timeout 5400 s)
+2026-11-14 07:18:51 · ✔ J14.1 en 1542.6 s (code 0) — ✅ git tag -l 'chantier-2026-11-14'; ✅ test -f reports/rapport-cloture-chantier.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+chantier-2026-11-14
+c18d0193 J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE
+  ```
+
+### 🤖 Assistant
+
+⏵ **J14.1 fait : le tag `chantier-2026-11-14` est posé.** Je pousse, vérifie et prépare les bilans
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; timeout 120 git push origin --tags 2>&1 | tail -2; git rev-list --count origin/master..s/v7; git tag -l  … [82 caractères tronqués]`
+
+  ```
+b20a4c31..c18d0193  s/v7 -> s/v7
+   b20a4c31..c18d0193  master -> master
+ * [new tag]           chantier-2026-11-14 -> chantier-2026-11-14
+ * [new tag]           semaine-2026-11-14 -> semaine-2026-11-14
+0
+chantier-2026-11-14
+semaine-2026-11-14
+sam 14 nov 2026 07:21:07 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/sessions.py --check\" … [440 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py       EXIT=0
+python3 tools/taille_documents.py          EXIT=0
+bash tools/porte-tableaux.sh               EXIT=0
+python3 tools/verifie_en_cours.py          EXIT=0
+python3 tools/verifie_journal.py           EXIT=0
+python3 tools/sessions.py --check          EXIT=0
+bash tools/porte-bloc-linguistique.sh      EXIT=0
+python3 tools/index_reports.py --verifier  EXIT=0
+  183/183 portes tenues
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in tableau-mesures cloture panini-334 cic-verificateur exemples-rejoues evaluer-langue robustesse-semaine schema-v2-doc passe-honnetete; do grep -q \"rapport-$f\" reports/README.md && echo \"OK $f\" || echo \"MANQUE $f\"; done" … [57 caractères tronqués]`
+
+  ```
+OK tableau-mesures
+OK cloture
+MANQUE panini-334
+OK cic-verificateur
+MANQUE exemples-rejoues
+MANQUE evaluer-langue
+MANQUE robustesse-semaine
+MANQUE schema-v2-doc
+OK passe-honnetete
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nrows = \"\"\"| [`rapport-panini-334.md`](rapport-panini-334.md) | **Panini** — le §334 : H0 0,909/0,906, la date 0,0089 après topo, V150 β −0,006 … [1045 caractères tronqués]`
+
+  ```
+5 fiches ajoutées
+     · reports/README.md : 2862 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+index EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\nsortie=[]; coupes=0\nfor l in lignes:\n    m = re.match(r\"(\\| \\[`[^`]+`\\]\\([^)]+\\) \\| \\*\\*[^*]+\\*\\* … [579 caractères tronqués]`
+
+  ```
+113 descriptions raccourcies
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-14, 07 h 35 HNE\", t)\np.write_text( … [664 caractères tronqués]`

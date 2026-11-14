@@ -9,10 +9,10 @@
 | Début | 2026-11-14 06:53 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 118 |
-| Appels d'outils | 129 |
+| Messages | 123 |
+| Appels d'outils | 134 |
 | Fichiers touchés | 4 |
-| Commandes | 105 |
+| Commandes | 110 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J14.1 : la clôture — **sans relancer la passe complète** (elle a été faite le 14/11 00 h : `work/portes/passe-1311 … [349 caractères tronqués]
 
-*129 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — Check git status and recent history
 - bash — List workspace and gate/report dirs
@@ -41,7 +41,49 @@
 - bash — Read current state
 - bash — Read sessions tool
 - bash — Read session plans/heartbeats
-- … et 94 autres
+- … et 99 autres
+
+**Synthèse produite :**
+
+\## J14.1 — clôture faite
+
+**Passe non relancée**, conformément au mandat : le relevé de référence reste celui du **14/11 00 h 30** — **84 portes, 81 vertes, 3 rouges nommées** (`work/portes/passe-1311-23h15.log`).
+
+\### Vérification ciblée des trois rouges
+
+| porte | résultat | durée | cause |
+|---|---:|---:|---|
+| `porte-sessions` | ✅ **verte** | 20 s | hub `1e7ef596` passé **en pause** (heartbeat du 05/11) et heartbeat `e181ce02` rafraîchi |
+| `porte-melange` | ❌ **rouge** | 145 s | calibration : l’état de A ne rend pas son code dans une invite sans code |
+| `porte-indice` | ❌ **rouge** | 913 s | indice extérieur à **482** jetons contre **459** pour le témoin apparié (hasard 370) ; écho interne 64/64 |
+
+**Aucune rouge nouvelle.** Les deux rouges restantes sont les mêmes **rouges structurelles**, causes confirmées. Journaux : `work/portes/verif-cloture/`.
+
+\### Références et état
+
+- [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) : note de vérification ciblée + lignes `indice`, `melange`, `sessions`, `tableaux` mises à jour.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md), [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) et la fiche J13.1 mis à jour ; compteurs **732 fiches / 826 JSON**.
+
+\### Tag
+
+Deux tags **annotés**, posés sur le dernier commit vert **`0e75f101`** (J13.1) :
+
+- **`chantier-2026-11-14`** — demandé par J14.1 ;
+- **`semaine-2026-11-14`** — répare l’échec **J5.2**, qui n’avait jamais posé son tag.
+
+Contrôle : `git cat-file -t` rend **`tag`** ; `git rev-parse chantier-2026-11-14^{}` rend **`0e75f101`**. Le tag ne porte pas le commit de clôture : il marque le dernier commit couvert par la passe, le rapport explique ce choix.
+
+\### Rapport et commit
+
+- [`reports/rapport-cloture-chantier.md`](reports/rapport-cloture-chantier.md) + [`reports/rapport-cloture-chantier.json`](reports/rapport-cloture-chantier.json) — **28/28 acceptations** (J5.2 réparé).
+- Commit de clôture : **`cb6ccab4`** ; correction de forme du rapport : **`c18d0193`**.
+
+\### Contrôles verts
+
+`revue_documentation.py` → **0** · `porte-tableaux.sh` → **0** · `verifie_en_cours.py` → **0** · `verifie_journal.py` → **0** · `verifier_schemas.py` → **0** · `taille_documents.py` → **0** · `verifie_etat_a_jour.py` → **0** · `porte-sessions.sh` → **0**.
+
+Les modifications préexistantes non liées (anciens `reports/pensee-*`, `tools/chantier/plan.json`, sous-module `tools/structures`, `reports/rapport-s-paragraphes.md`) sont **restées 
+… [105 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -96,7 +138,7 @@
 - **T1** Check gate progress
 - **T1** Check git identity and HEAD
 - **T1** Wait and check gates
-- … et 65 autres
+- … et 70 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -201,7 +243,7 @@
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : M reports/pensee-coherence-fiches-v7.json  M reports/pensee-dev-test-v10.json  M reports/pensee-quatre-modes.json  M reports/rapport-audit-v7.md  M reports/rapport-coherence-fiches-v7.md  M reports/ra
 - **T1** : sam 14 nov 2026 11:53:18 UTC --- 0e75f101734145489cc45389feb6489591d324fd 2026-11-14 06:32:00 -0500 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 T
@@ -209,6 +251,7 @@
 - **T1** : diff --git a/tools/chantier/plan.json b/tools/chantier/plan.json index 21ea0cf4..7d2004b5 100644 --- a/tools/chantier/plan.json +++ b/tools/chantier/plan.json @@ -306,6 +306,118 @@       "attendu": "F
 - **T1** : # 2026-11-14 — Campagnes et mesures  > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`). > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé. > Heure
 - **T1** : cb6ccab4 J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATI
+- **T1** : ✅ 1799 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera   ✅ 4270 lien(s) relatif(s) résolvent (docs + reports, hors blocs 
 
 ## 6. Commits
 

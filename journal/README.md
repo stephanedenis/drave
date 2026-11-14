@@ -211,7 +211,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 326.5 h | 194 | 3301 | 25 | 439 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 326.7 h | 194 | 3307 | 25 | 440 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -249,7 +249,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Ajouter évaluer par langue et documenter | 2026-11-14 04:33 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/rapport.md) |
 | `session-` | Coordination S: 11 verdicts non committés | 2026-11-13 21:52 | 0.1 h | 1 | 82 | 2 | 0 | [rapport](sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/rapport.md) |
 | `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
-| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 129 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
+| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 134 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |

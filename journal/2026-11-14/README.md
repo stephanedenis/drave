@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **1 session(s)** · **6 thème(s)**
+**20 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 326.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 326.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -47,6 +47,7 @@
 | 05:54 | `b20a4c31` | J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE |
 | 06:32 | `0e75f101` | J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG) |
 | 07:12 | `cb6ccab4` | J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON |
+| 07:16 | `c18d0193` | J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU |
 
 ## Le récit de la journée (écrit à la main)
 

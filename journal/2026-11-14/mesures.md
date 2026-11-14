@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,22 +16,24 @@
 | 04:40 | `09e54143` | J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
 | 04:55 | `55bde5c5` | J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902) | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
 | 06:32 | `0e75f101` | J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG) | `en-cours.md`, `roadmap.md`, `README.md` (+19) |
+| 07:16 | `c18d0193` | J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU | `en-cours.md`, `README.md`, `memoire.md` (+6) |
 
 ## Chiffres du jour
 
-`0,7533` · `0,7902` · `0,1087` · `0,8159` · `0,7475` · `0,9451` · `0,8656`
+`20 s` · `0,7533` · `0,7902` · `0,1087` · `0,8159` · `0,7475` · `0,9451` · `0,8656`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 326.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 326.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-bilan-chantier.md](../../reports/rapport-bilan-chantier.md)
+- [reports/rapport-cloture-chantier.md](../../reports/rapport-cloture-chantier.md)
 - [reports/rapport-evaluer-langue.md](../../reports/rapport-evaluer-langue.md)
 - [reports/rapport-exemples-rejoues.md](../../reports/rapport-exemples-rejoues.md)
 - [reports/rapport-restitution-v1.md](../../reports/rapport-restitution-v1.md)

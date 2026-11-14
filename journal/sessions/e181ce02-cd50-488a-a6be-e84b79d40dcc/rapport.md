@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 326.5 h |
+| Durée | 326.7 h |
 | Tours | 194 |
-| Messages | 3705 |
-| Appels d'outils | 3301 |
+| Messages | 3711 |
+| Appels d'outils | 3307 |
 | Fichiers touchés | 25 |
-| Commandes | 2742 |
+| Commandes | 2748 |
 | Sous-agents | 42 |
-| Commits | 439 |
+| Commits | 440 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10428,7 +10428,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*104 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,11 +10444,11 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 52 autres
+- … et 58 autres
 
 **Synthèse produite :**
 
-⏵ Le plan avait perdu ma 2ᵉ vague (J11-J14) : je la restaure et je relance pour J14.1 (clôture + tag)
+⏵ **J14.1 fait : le tag `chantier-2026-11-14` est posé.** Je pousse, vérifie et prépare les bilans
 
 ## 3. Travail accompli
 
@@ -10569,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2702 autres
+- … et 2708 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11156,4 +11156,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI" -- docs/pilotage/references-non-regr
 - CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES)" 2>&1 | tail -1 nohup timeout 18000 python3 tools/chantier/s
 - CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ" -- tools/chantier/superviseur.py docs/pilot
+- DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14" -- reports/README.md reports/INDEX.md docs/pilotag
 

@@ -2466,3 +2466,164 @@ M  reports/rapport-cloture-chantier.md
   ```
 
 - **bash** `{"command": "git commit -m \"J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU\" -m \"Deux corrections de forme dans reports/rapport-cloture-chantier.md et .json : la durée de la vérification de sessions est 20 s (la … [386 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 c18d0193] J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU
+ 9 files changed, 190 insertions(+), 20 deletions(-)
+COMMIT=0
+  ```
+
+- **bash** `{"command": "echo \"TAG=$(git tag -l 'chantier-2026-11-14')\"; test -f reports/rapport-cloture-chantier.md && echo FICHE-OK; python3 tools/revue_documentation.py >/dev/null 2>&1; echo \"REVUE-$?\"; echo \"===\"; python3 tools/verifie_etat_a_jour.py; echo \"ETAT=$?\"; python3 tools/verifie_en_cours.p … [160 caractères tronqués]`
+
+  ```
+TAG=chantier-2026-11-14
+FICHE-OK
+REVUE-0
+===
+  état · dernier fait c18d0193 · dernier état c18d0193
+  ✅ aucun fait commité après le dernier état
+ETAT=0
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ENCOURS=0
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+BUDGET=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -3; echo \"TABLEAUX=${PIPESTATUS[0]}\"; echo \"===\"; python3 tools/verifie_journal.py 2>&1 | tail -2; echo \"JOURNAL=${PIPESTATUS[0]}\"; echo \"===\"; git log --oneline -3; echo \"--- status ---\"; git status --short", "description": "Final docu … [47 caractères tronqués]`
+
+  ```
+✅ 1799 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4270 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+TABLEAUX=0
+===
+  journal · 46 jour(s) · 193 session(s) · 2517 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL=0
+===
+c18d0193 J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU
+cb6ccab4 J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON
+0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+--- status ---
+ M journal/README.md
+ M journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rappo
+… [244 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff -- journal/README.md | head -60; echo \"===\"; git diff -- journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md | head -60; echo \"=== last commit files ===\"; git show --name-only --format='' HEAD | grep journal", "description": "Inspect post-commit journal … [10 caractères tronqués]`
+
+  ```
+diff --git a/journal/README.md b/journal/README.md
+index 1fabcb96..4def83e9 100644
+--- a/journal/README.md
++++ b/journal/README.md
+@@ -249,7 +249,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
+ | `session-` | Ajouter évaluer par langue et documenter | 2026-11-14 04:33 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/rapport.md) |
+ | `session-` | Coordination S: 11 verdicts non committés | 2026-11-13 21:52 | 0.1 h | 1 | 82 | 2 | 0 | [rapport](sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/rapport.md) |
+ | `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
+-| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 129 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
++| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 130 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
+ | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11
+… [2150 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l .git/hooks/ | sed -n '1,30p'; echo \"---\"; test -f .git/hooks/post-commit && cat .git/hooks/post-commit || echo no-post-commit", "description": "Check post-commit hook"}`
+
+  ```
+total 68
+-rw-r--r--. 1 stephane stephane  478 25 sep 13:48 applypatch-msg.sample
+-rw-r--r--. 1 stephane stephane 1972 25 sep 13:48 commit-msg.sample
+-rw-r--r--. 1 stephane stephane 4611 25 sep 13:48 fsmonitor-watchman.sample
+-rw-r--r--. 1 stephane stephane  189 25 sep 13:48 post-update.sample
+-rw-r--r--. 1 stephane stephane  424 25 sep 13:48 pre-applypatch.sample
+-rwxr-xr-x. 1 stephane stephane 1470 31 oct 12:55 pre-commit
+-rw-r--r--. 1 stephane stephane 1649 25 sep 13:48 pre-commit.sample
+-rw-r--r--. 1 stephane stephane  416 25 sep 13:48 pre-merge-commit.sample
+-rw-r--r--. 1 stephane stephane 1492 25 sep 13:48 prepare-commit-msg.sample
+-rw-r--r--. 1 stephane stephane 1374 25 sep 13:48 pre-push.sample
+-rw-r--r--. 1 stephane stephane 4898 25 sep 13:48 pre-rebase.sample
+-rw-r--r--. 1 stephane stephane  544 25 sep 13:48 pre-receive.sample
+-rw-r--r--. 1 stephane stephane 2783 25 sep 13:48 push-to-checkout.sample
+-rw-r--r--. 1 stephane stephane 2308 25 sep 13:48 sendemail-validate.sample
+-rw-r--r--. 1 stephane stephane 3650 25 sep 13:48 update.sample
+---
+no-post-commit
+  ```
+
+- **bash** `{"command": "git ls-tree -r --name-only HEAD | grep 'rapport-cloture-chantier' ; echo \"---\"; git cat-file -t chantier-2026-11-14; git rev-parse 'chantier-2026-11-14^{}'; echo \"---\"; git show HEAD:reports/rapport-cloture-chantier.md | sed -n '1,16p'", "description": "Final verification of report  … [17 caractères tronqués]`
+
+  ```
+reports/rapport-cloture-chantier.json
+reports/rapport-cloture-chantier.md
+---
+tag
+0e75f101734145489cc45389feb6489591d324fd
+---
+# J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14`
+
+> **Ligne de roadmap** : **B13** (le produit), **Panini**, **N2**, **S**, **R**, **A** · **Tâche** :
+> J14.1 · **Date** : 2026-11-14 · **Verdict** : ✅
+>
+> **Ce que ce rapport est.** La **clôture** du chantier, **sans relancer la passe complète** : la
+> passe de référence est celle du **14/11 00 h 30** (`work/portes/passe-1311-23h15.log`) —
+> **84 portes, 81 vertes, 3 rouges nommées**. J14.1 **rejoue les trois rouges** (`indice`,
+> `melange`, `sessions`), met à jour [`references-non-regression.md`](../docs/pilotage/references-non-regression.md),
+> pose le **tag annoté** `chantier-2026-11-14` sur le dernier commit vert, et écrit cette fiche.
+> Il **ne refait pas** les 81 vertes : ce serait une seconde passe, et le mandat l'interdit.
+>
+> **Le chiffre.** **84 / 81 / 3** reste le relevé. Après vérification ciblée : `porte-sessions`
+> passe **verte** (20 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
+> `chantier-2026-11-14` est posé sur **`
+… [130 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+## J14.1 — clôture faite
+
+**Passe non relancée**, conformément au mandat : le relevé de référence reste celui du **14/11 00 h 30** — **84 portes, 81 vertes, 3 rouges nommées** (`work/portes/passe-1311-23h15.log`).
+
+### Vérification ciblée des trois rouges
+
+| porte | résultat | durée | cause |
+|---|---:|---:|---|
+| `porte-sessions` | ✅ **verte** | 20 s | hub `1e7ef596` passé **en pause** (heartbeat du 05/11) et heartbeat `e181ce02` rafraîchi |
+| `porte-melange` | ❌ **rouge** | 145 s | calibration : l’état de A ne rend pas son code dans une invite sans code |
+| `porte-indice` | ❌ **rouge** | 913 s | indice extérieur à **482** jetons contre **459** pour le témoin apparié (hasard 370) ; écho interne 64/64 |
+
+**Aucune rouge nouvelle.** Les deux rouges restantes sont les mêmes **rouges structurelles**, causes confirmées. Journaux : `work/portes/verif-cloture/`.
+
+### Références et état
+
+- [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md) : note de vérification ciblée + lignes `indice`, `melange`, `sessions`, `tableaux` mises à jour.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md), [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) et la fiche J13.1 mis à jour ; compteurs **732 fiches / 826 JSON**.
+
+### Tag
+
+Deux tags **annotés**, posés sur le dernier commit vert **`0e75f101`** (J13.1) :
+
+- **`chantier-2026-11-14`** — demandé par J14.1 ;
+- **`semaine-2026-11-14`** — répare l’échec **J5.2**, qui n’avait jamais posé son tag.
+
+Contrôle : `git cat-file -t` rend **`tag`** ; `git rev-parse chantier-2026-11-14^{}` rend **`0e75f101`**. Le tag ne porte pas le commit de clôture : il marque le dernier commit couvert par la passe, le rapport explique ce choix.
+
+### Rapport et commit
+
+- [`reports/rapport-cloture-chantier.md`](reports/rapport-cloture-chantier.md) + [`reports/rapport-cloture-chantier.json`](reports/rapport-cloture-chantier.json) — **28/28 acceptations** (J5.2 réparé).
+- Commit de clôture : **`cb6ccab4`** ; correction de forme du rapport : **`c18d0193`**.
+
+### Contrôles verts
+
+`revue_documentation.py` → **0** · `porte-tableaux.sh` → **0** · `verifie_en_cours.py` → **0** · `verifie_journal.py` → **0** · `verifier_schemas.py` → **0** · `taille_documents.py` → **0** · `verifie_etat_a_jour.py` → **0** · `porte-sessions.sh` → **0**.
+
+Les modifications préexistantes non liées (anciens `reports/pensee-*`, `tools/chantier/plan.json`, sous-module `tools/structures`, `reports/rapport-s-paragraphes.md`) sont **restées hors du commit**.
+
+**Prochaine mesure désignée** : B13 — trancher `g017`, puis T132/T133 et le gold 200+.
+
