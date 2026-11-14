@@ -380,6 +380,9 @@ COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 �
 TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
 ```
 
+Ici le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les
+tokens et la latence (voir le coût ci-dessous).
+
 **La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
 `DEEPSEEK_API_KEY` (`DSH_KEY_FILE` / `DSH_API_KEY` en repli). Elle n'est **jamais** affichée :
 ni dans le message, ni dans le JSON, ni dans le cache. **Sans clé**, la commande écrit un
@@ -640,6 +643,7 @@ inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sa
 | **la mesure par langue** (fr/en, source contrôlée) | [`reports/rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md) |
 | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
 | **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |
+| **le tagger en option** (mesure 20/612, coût, tests) | [`reports/rapport-tagger-option.md`](../../reports/rapport-tagger-option.md) · [`reports/pensee-tagger-option.json`](../../reports/pensee-tagger-option.json) |
 | **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
 | **l'ancien constat « pas de produit »** (27/10) | [`docs/pilotage/utilisation.md`](../pilotage/utilisation.md) |
 | **la théorie de la couche heuristique** | [`docs/theorie/pre-traitement-linguistique.md`](../theorie/pre-traitement-linguistique.md) |

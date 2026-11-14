@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 10:06 | `883ce817` | CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 | 11:10 | `9df4a591` | ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 11:20 | `29b3dd13` | ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 11:23 | `d6e66080` | ÉTAT — LA LIGNE R REQUALIFIÉE : LE TAGGER EST LIVRÉ (--tagger, 0bbdbbb3), LA PROCHAINE ACTION PASSE AU SPLIT RÉEL ET AU GOLD 200+ | `en-cours.md`, `README.md`, `docs.md` (+6) |
 
 ## Chiffres du jour
 
@@ -26,7 +27,7 @@
 ## Sessions actives ce jour
 
 - `24e34ad3-f423-4394-bb1c-74a6930a57e5` — Tu travailles dans /home/stephane/Data13 (début 2026-11-14 09:53, 1.5 h) → [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 330.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 330.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

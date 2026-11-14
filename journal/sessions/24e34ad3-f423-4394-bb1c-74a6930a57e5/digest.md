@@ -3252,3 +3252,46 @@ M  docs/pilotage/en-cours.md
  M docs/produit/README.md
   ```
 
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "RÉSULTAT — 1A « tagger POS en option » livré (défaut inchangé), tout est committé dans 0bbdbbb3.\n\nCOMMANDE\n  python3 tools/drave.py analyser \"TEXTE\" --tagger [--json|--jsonl]\n  python3 tools/drave.py evaluer --tagger [--par-langu … [2941 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **todo_write** `{"todos": [{"content": "Implémenter --tagger dans tools/drave.py (analyser + evaluer, clé, cache, code 4)", "status": "completed"}, {"content": "Écrire tools/tests/test_tagger_api.py (transport factice, JSON, défaut, code 4)", "status": "completed"}, {"content": "Mesurer 20 phrases (harnais + CLI) : … [272 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+⏵ Livraison terminée : option `--tagger`, mesure, tests et doc en place
+
+**Commande**
+```bash
+python3 tools/drave.py analyser "TEXTE" --tagger [--json|--jsonl]
+python3 tools/drave.py evaluer --tagger [--par-langue] [--json]
+```
+Clé : `DEEPSEEK_KEY_FILE` → `~/.config/drave/deepseek.key` → `DEEPSEEK_API_KEY` (repli `DSH_*`). Sans clé : code **4**, message clair, rien sur `stdout`, aucune trace de la clé. Cache mémoire par texte + cache disque du client : la seconde analyse ne refait aucun appel et rend le même JSON. Le défaut, sans le drapeau, est resté l'heuristique hors ligne (comparaison octet pour octet en test).
+
+**Mesure** (20 premières phrases `hand`, 105 tokens, cache neuf)
+- POS **0,8857 → 0,9714**, soit **+8,57 pts** (fermé +7,02, ouvert +10,42) ; syntagmes F1, tête, attachement et acte **inchangés** (la fusion ne remplace que le POS).
+- **40 appels**, **11 868 tokens**, 39,49 s, 0 refus ; modèle renvoyé `deepseek-flash`.
+- Cache chaud : 40 appels transport, **0 réseau, 0 token**, JSON identique.
+- Référence 612 : **0,8625 → 0,9475 (+8,49)**, 1 218 appels, 358 962 tokens, ~21 min, ~0,04 $ ; par source : `hand` +8,57, **réel 432 +4,67**, `synth` +21,46 ; 1 refus (`s015`).
+
+**Tests / portes**
+- `tools/tests/test_tagger_api.py` : **14 tests OK**, aucun réseau (transport factice, POS remplacés, JSON v2 valide + v1 lisible, cache, défaut inchangé, code 4, ordre de la clé, `evaluer --tagger`).
+- `tools/tests/test_produit.py` : **18 tests OK**.
+- `revue_documentation` ✅ · `taille_documents` ✅ · `porte-produit` ✅ (183/183).
+
+**Limites**
+- Les 20 phrases sont les 20 `hand`, le sous-ensemble le plus facile : ne pas généraliser le +8,57 ; le 612 agrégé vaut +8,49 et le réel 432 seul +4,67.
+- Le tagger de syntagmes du composite est appelé mais sa sortie n'est pas utilisée par la fusion (2 appels/phrase, piste 1 appel ~0,02 $ non mesurée).
+- `PONCT` n'est plus étiqueté par l'option (le tagger ne reçoit que mots et nombres).
+- Modèle effectivement renvoyé `deepseek-flash` ; la mesure exige un cache neuf.
+- Aucune porte ne fait d'appel API : le chemin réseau réel est couvert par la mesure 20 phrases et un contrôle 1 phrase.
+
+**État** : code, tests, fiche `reports/rapport-tagger-option.md` et JSON `reports/pensee-tagger-option.json` sont dans le commit `0bbdbbb3` (fait par la session parente). Restent non committées 3 lignes de `docs/produit/README.md` (note cache + lien § 8) ; la ligne R d'`en-cours` mérite d'être requalifiée (« route API derrière drapeau » → livré). Je n'ai pas committé et n'ai pas touché S/D/N2.
+

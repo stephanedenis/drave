@@ -62775,3 +62775,113 @@ Alerte porte (pas un blocage de mon côté) : `python3 tools/taille_documents.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"| **R — le lecteur** | **R0.7**\")), None)\nif ligne:\n    t=t.replace(ligne, l … [1172 caractères tronqués]`
+
+  ```
+ligne R requalifiée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 9 files changed, 110 insertions(+), 22 deletions(-)
+COMMIT OK 1
+d6e66080 ÉTAT — LA LIGNE R REQUALIFIÉE : LE TAGGER EST LIVRÉ (--tagger, 0bbdbbb3), LA PROCHAINE ACTION PASSE AU SPLIT RÉEL ET AU GOLD 200+
+   29b3dd13..d6e66080  s/v7 -> s/v7
+   29b3dd13..d6e66080  master -> master
+sam 14 nov 2026 11:25:36 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent 24e34ad3-f423-4394-bb1c-74a6930a57e5 sent a message: 
+RÉSULTAT — 1A « tagger POS en option » livré (défaut inchangé), tout est committé dans 0bbdbbb3.
+
+COMMANDE
+  python3 tools/drave.py analyser "TEXTE" --tagger [--json|--jsonl]
+  python3 tools/drave.py evaluer --tagger [--par-langue] [--json]
+Clé : DEEPSEEK_KEY_FILE → ~/.config/drave/deepseek.key → DEEPSEEK_API_KEY (DSH_* en repli). Sans clé : code 4, message clair, rien sur stdout, aucune trace de la clé. Cache mémoire par texte + cache disque du client : 2e analyse = 0 appel réseau, JSON identique.
+
+CÂBLAGE
+NeuronalLLMPOS("deepseek-chat") + NeuronalLLMChunks → NeuronalLLMCompose → Cascade(seuil 0,6) ; fusion par niveau : pos→neuronal, syntagme/pragmatique→heuristique (rôles et attachement conservés). Un wrapper reporte aussi le refus du neuronal sur l'annotation fusionnée (bl.Cascade ne le recopie pas).
+
+MESURE (20 premières phrases hand du gold, 105 tokens, cache neuf)
+- POS 0,8857 → 0,9714 = +8,57 pts (fermé +7,02, ouvert +10,42)
+- syntagmes F1 0,9016, tête 0,9739, attachement 0,9231 : inchangés (la fusion ne touche que le POS)
+- 40 appels, 11 868 tokens, 39,49 s (0,99 s/appel), 0 refus ; modèle renvoyé deepseek-flash
+- cache chaud : 40 appels transport, 0 réseau, 0 token, JSON identique
+- réseau CLI vérifié sur 1 phrase : 2 appels, 685 tokens, 2,6 s ; rejeu 0/0, JSON identique
+Référence 612 : 0,8625 → 0,9475 (+8,49), 1 218 appels, 358 962 tokens, 1 257,96 s (~21 min, ~0,04 $) ; par source : hand +8,57, réel 432 +4,67, synth +21,46 ; 1 refus (s015). Contrôles négatifs sur les 20 : hasard uniforme 10,48 %, classe majoritaire 22,86 %.
+
+TESTS / PORTES
+- tools/tests/test_tagger_api.py : 14 tests OK, aucun réseau (transport factice, POS remplacés, JSON v2 valide + v1 lisible, cache, défaut octet pour octet, code 4, ordre de la clé, evaluer --tagger).
+- tools/tests/test_produit.py : 18 tests OK.
+- revue_documentation ✅ · taille_documents ✅ (T0 3996 après ton trim) · porte-produit ✅.
+
+LIMITES
+- Les 20 phrases sont les 20 hand, le sous-ensemble le plus facile : le +8,57 ne se généralise pas ; le 612 agrégé vaut +8,49 et le réel 432 seul +4,67.
+- Le 2e appel (tagger de syntagmes) est un coût que la fusion n'utilise pas : piste 1 appel/phrase (~0,02 $), non mesurée.
+- Le tagger ne reçoit pas la ponctuation : PONCT disparaît du POS de l'option (hors gold).
+- Modèle renvoyé deepseek-flash ; le cache neuf est indispensable à la mesure (un cache chaud rejoue l'ancien modèle).
+- Aucune porte ne fait d'appel API : le chemin réseau est couvert par la mesure 20 phrases et le contrôle 1 phrase, pas par la porte.
+
+ARBRE DE TRAVAIL
+- Committés (0bbdbbb3) : tools/drave.py, tools/tests/test_tagger_api.py, reports/rapport-tagger-option.md, reports/pensee-tagger-option.json, docs/produit/README.md § 3.7 et mises à jour § 1/4/6/7.
+- Restent non committés : 3 lignes dans docs/produit/README.md (note « cache chaud » + lien § 8) — à inclure dans ton prochain commit si tu les gardes.
+- La ligne R d'en-cours dit encore « prochaine action : route API derrière drapeau » alors que --tagger est livré ; à requalifier (split réel / gold 200+). Je n'ai pas touché en-cours (règle sous-agent).
+- Je n'ai pas committé.
+
+### 👤 Utilisateur
+
+Background subagent 24e34ad3-f423-4394-bb1c-74a6930a57e5 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Livraison terminée : option `--tagger`, mesure, tests et doc en place
+
+**Commande**
+```bash
+python3 tools/drave.py analyser "TEXTE" --tagger [--json|--jsonl]
+python3 tools/drave.py evaluer --tagger [--par-langue] [--json]
+```
+Clé : `DEEPSEEK_KEY_FILE` → `~/.config/drave/deepseek.key` → `DEEPSEEK_API_KEY` (repli `DSH_*`). Sans clé : code **4**, message clair, rien sur `stdout`, aucune trace de la clé. Cache mémoire par texte + cache disque du client : la seconde analyse ne refait aucun appel et rend le même JSON. Le défaut, sans le drapeau, est resté l'heuristique hors ligne (comparaison octet pour octet en test).
+
+**Mesure** (20 premières phrases `hand`, 105 tokens, cache neuf)
+- POS **0,8857 → 0,9714**, soit **+8,57 pts** (fermé +7,02, ouvert +10,42) ; syntagmes F1, tête, attachement et acte **inchangés** (la fusion ne remplace que le POS).
+- **40 appels**, **11 868 tokens**, 39,49 s, 0 refus ; modèle renvoyé `deepseek-flash`.
+- Cache chaud : 40 appels transport, **0 réseau, 0 token**, JSON identique.
+- Référence 612 : **0,8625 → 0,9475 (+8,49)**, 1 218 appels, 358 962 tokens, ~21 min, ~0,04 $ ; par source : `hand` +8,57, **réel 432 +4,67**, `synth` +21,46 ; 1 refus (`s015`).
+
+**Tests / portes**
+- `tools/tests/test_tagger_api.py` : **14 tests OK**, aucun réseau (transport factice, POS remplacés, JSON v2 valide + v1 lisible, cache, défaut inchangé, code 4, ordre de la clé, `evaluer --tagger`).
+- `tools/tests/test_produit.py` : **18 tests OK**.
+- `revue_documentation` ✅ · `taille_documents` ✅ · `porte-produit` ✅ (183/183).
+
+**Limites**
+- Les 20 phrases sont les 20 `hand`, le sous-ensemble le plus facile : ne pas généraliser le +8,57 ; le 612 agrégé vaut +8,49 et le réel 432 seul +4,67.
+- Le tagger de syntagmes du composite est appelé mais sa sortie n'est pas utilisée par la fusion (2 appels/phrase, piste 1 appel ~0,02 $ non mesurée).
+- `PONCT` n'est plus étiqueté par l'option (le tagger ne reçoit que mots et nombres).
+- Modèle effectivement renvoyé `deepseek-flash` ; la mesure exige un cache neuf.
+- Aucune porte ne fait d'appel API : le chemin réseau réel est couvert par la mesure 20 phrases et un contrôle 1 phrase.
+
+**État** : code, tests, fiche `reports/rapport-tagger-option.md` et JSON `reports/pensee-tagger-option.json` sont dans le commit `0bbdbbb3` (fait par la session parente). Restent non committées 3 lignes de `docs/produit/README.md` (note cache + lien § 8) ; la ligne R d'`en-cours` mérite d'être requalifiée (« route API derrière drapeau » → livré). Je n'ai pas committé et n'ai pas touché S/D/N2.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/produit/README.md | head -20 | cut -c1-160; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Voir les 3 lignes non committées"}`
+
+  ```
+diff --git a/docs/produit/README.md b/docs/produit/README.md
+index 73248b7f..aa0118ca 100644
+--- a/docs/produit/README.md
++++ b/docs/produit/README.md
+@@ -380,6 +380,9 @@ COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 
+ TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+ ```
+ 
++Ici le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les
++tokens et la latence (voir le coût ci-dessous).
++
+ **La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
+ `DEEPSEEK_API_KEY` (`DSH_KEY_FILE` / `DSH_API_KEY` en repli). Elle n'est **jamais** affichée :
+ ni dans le message, ni dans le JSON, ni dans le cache. **Sans clé**, la commande écrit un
+@@ -640,6 +643,7 @@ inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sa
+ | **la mesure par langue** (fr/en, source contrôlée) | [`reports/rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md) |
+ | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
+ | **la cascade réelle** (0,9415, 7B, non livré
+… [592 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add docs/produit/README.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET\" -- docs/pro … [389 caractères tronqués]`
