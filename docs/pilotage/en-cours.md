@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-13, 21 h 40 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-13, 22 h 37 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -99,7 +99,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 07/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **713** / **806** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **716** / **810** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**) ; N3 **17/17** à 11 h 32 | `docs/pilotage/references-non-regression.md` |
 
@@ -113,7 +113,7 @@ externes** et la **prochaine action**.
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; A6.2 MoE local | **A2.6** (experts et tête) |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 et convention des GV faits (F1 0,7902, 237/238), schéma v2 publié (v1 lue), restitution v0 (46/46 surfaces, miroir 0,1087)** | **`g017`** ; puis T132/T133, gold 200+ ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre (0,29)** ; **N4** |
-| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |
+| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **tagger 612 mesuré : 0,9475 (+8,49 pts vs 0,8625), intégrer** ; **split réel tenu à l'écart** ; **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
 | **Backlog — graphe** | **37 fiches, 43 arêtes, 3 à la frontière** | 1 ligne sans fiche | `verifie_backlog.py` |
 
@@ -121,7 +121,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **J3.2** — fait : [deux faces](../../reports/rapport-genealogie-deux-faces.md) ; la prochaine mesure est la **signature V14 multilingue des 21 langues** ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 183/183 ; **R0.7** — tagger ; **D** — corpus CEGEP **62 documents** en place (`data/corpus_ocr_cegep`), **passe finie** (79 vertes, 4 rouges : `indice`, `melange` tolérées ; `sessions` → heartbeat à rafraîchir) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
+**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **J3.2** — fait : [deux faces](../../reports/rapport-genealogie-deux-faces.md) ; la prochaine mesure est la **signature V14 multilingue des 21 langues** ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 183/183 ; **R0.7** — tagger mesuré sur 612 : **0,9475 (+8,49 pts vs 0,8625)**, la règle dit **intégrer** ; prochaine mesure : le **split réel tenu à l'écart** ; **D** — corpus CEGEP **62 documents** en place (`data/corpus_ocr_cegep`), **passe finie** (79 vertes, 4 rouges : `indice`, `melange` tolérées ; `sessions` → heartbeat à rafraîchir) ; [fiche](../../reports/rapport-ocr-cegep-64.md).
 
 ## Les questions ouvertes
 

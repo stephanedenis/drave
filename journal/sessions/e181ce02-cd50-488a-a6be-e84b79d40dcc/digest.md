@@ -60970,3 +60970,92 @@ chantiers corrigé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, datetime\np=pathlib.Path('work/chantier/etat.json'); d=json.loads(p.read_text())\nfaits = {\"J1.2\": (\"92652984\", \"timeout après commit ; acceptation passée\"),\n         \"J2.2\": (\"c34671 … [1695 caractères tronqués]`
+
+  ```
+état corrigé, budget remis à zéro
+chantier : Semaine 07/11 → 14/11 — le produit et l'intégration Panini · depuis 2026-11-13 21:35:59
+session : (aucune — dsh créera une session neuve)
+budget consommé : 0 s · lancements : 10
+STOP : absent
+
+  [fait    ] J0     j0 — Le contrôle du superviseur
+ create mode 100644 journal/2026-11-13/docs.md
+COMMIT OK 1
+ced21933 CHANTIER — PHASE 2 (12 H) : LE VERDICT ACCEPTATION D'ABORD (TIMEOUT APRÈS COMMIT = FAIT), 12 TÂCHES AJOUTÉES (J4 COORDINATION, J6 SPANS, J7-J10 PANINI/BILAN), ÉTAT CORRIGÉ
+   c7f26b35..ced21933  s/v7 -> s/v7
+   c7f26b35..ced21933  master -> master
+ven 13 nov 2026 21:38:24 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup timeout 46800 python3 tools/chantier/superviseur.py boucle --budget 43200 --timeout 5400 > work/chantier/boucle2.log 2>&1 & echo \"PID $!\"; sleep 30; tail -2 work/chantier/journal.log; date", "description": "Relancer la boucle … [31 caractères tronqués]`
+
+  ```
+PID 946073
+2026-11-07 18:22:26 · ✔ J3.2 en 1384.4 s (code 0) — ✅ test -f reports/rapport-genealogie-deux-faces.md && echo FICHE-OK
+2026-11-13 21:38:38 · ▶ J4.1 — Coordination N2 — le mètre RoPE (timeout 5400 s)
+ven 13 nov 2026 21:39:08 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Phase 2 lancée (12 h) : J4.1 (coordination N2) tourne. La passe documentation/pilotage est committée
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|fait|echec\" | tail -5", "description": "Suivre la phase 2", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4822]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4822", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4822", "timeout_ms": 1200000, "wait": true}`
+
+  ```
+ven 13 nov 2026 22:04:25 EST
+2026-11-13 21:52:52 · ✔ J4.1 en 853.6 s (code 0) — ✅ test -f reports/rapport-coordination-n2.md && echo FICHE-OK
+2026-11-13 21:52:52 · ▶ J4.2 — Coordination S — les 11 verdicts (timeout 5400 s)
+2026-11-13 21:59:08 · ✔ J4.2 en 375.9 s (code 0) — ✅ test -f reports/rapport-coordination-s.md && echo FICHE-OK
+2026-11-13 21:59:08 · ▶ J4.3 — Coordination R — le tagger sur 612 (timeout 5400 s)
+  [fait    ] J2.2   j2 — Panini I — le corpus commun
+  [fait    ] J3.1   j3 — Panini II — le retrieval à époque contrôlée
+  [fait    ] J3.2   j3 — Panini II — la généalogie à deux faces
+  [fait    ] J4.1   j4 — Coordination N2 — le mètre RoPE
+  [fait    ] J4.2   j4 — Coordination S — les 11 verdicts
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -4", "description": "Suivre la phase 2", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4823]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4823", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4823", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+ven 13 nov 2026 22:34:38 EST
+2026-11-13 21:52:52 · ▶ J4.2 — Coordination S — les 11 verdicts (timeout 5400 s)
+2026-11-13 21:59:08 · ✔ J4.2 en 375.9 s (code 0) — ✅ test -f reports/rapport-coordination-s.md && echo FICHE-OK
+2026-11-13 21:59:08 · ▶ J4.3 — Coordination R — le tagger sur 612 (timeout 5400 s)
+budget consommé : 1229.5 s · lancements : 12
+  [a_faire ] J4.3   j4 — Coordination R — le tagger sur 612
+  [a_faire ] J4.4   j4 — Coordination A — A6.2 et A8.3b2
+  [a_faire ] J5.1   j5 — Le rapport de semaine
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3", "description": "Suivre J4.3", "timeoutMs": 1900000}`

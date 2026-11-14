@@ -1,0 +1,409 @@
+{
+  "date": "2026-11-13",
+  "head": "ced21933",
+  "ligne": "R0.7",
+  "objet": "coordination R : le tagger POS sur le gold 612, mesure et décision",
+  "fiche": "reports/rapport-coordination-r.md",
+  "verdict": "Le tagger POS API mesure 0,9475 (3012/3179) sur le gold 612, contre 0,8625 (2742/3179) pour l'heuristique du HEAD : +8,49 pts, IC95 bootstrap par phrase [+7,23 ; +9,74], McNemar 344/74, p=1,08e-42. La règle (>= +5 pts) donne : intégrer via l'API DeepSeek, jamais le 7B local. Réserve : sur le réel 432 seul, +4,67 pts [+3,45 ; +6,01] ; les 160 synthétiques portent +21,46 pts.",
+  "premisse_cle_absente": {
+    "variable_environnement": "absente (DEEPSEEK_API_KEY / DSH_API_KEY)",
+    "fichier": "~/.config/drave/deepseek.key",
+    "present": true,
+    "droits": "0600",
+    "longueur": 35,
+    "api_models_http": 200,
+    "conclusion": "la prémisse « clé absente » est vraie pour la variable d'environnement, fausse pour le fichier ; la commande utilise DEEPSEEK_KEY_FILE"
+  },
+  "modele": {
+    "demande": "deepseek-chat",
+    "renvoye": "deepseek-flash",
+    "version_documentation": "DeepSeek-V4.1-Flash-1017",
+    "appels_avec_ce_modele": 1218,
+    "avertissement": "le chiffre mesure le modèle du 2026-11-13 ; l'alias peut changer, consigner modeles_renvoyes"
+  },
+  "cache": {
+    "defaut": "data/deepseek/cache",
+    "fichiers_defaut": 3596,
+    "periode_defaut": "2026-10-26 → 2026-11-04",
+    "risque": "un run avec le cache par défaut rejoue les réponses de l'ancien run ; le run utilise un cache neuf",
+    "cache_du_run": "/tmp/j43-cache",
+    "fichiers_uniques": 1212,
+    "appels": 1218
+  },
+  "baseline": {
+    "publiee": 0.85,
+    "publiee_commit": "97256b8f",
+    "au_head": 0.8625,
+    "au_head_compte": "2742/3179",
+    "reproduction_ancienne": "2702/3179 au worktree 97256b8f, exactitude 0.8500",
+    "ecart_pts": 1.26,
+    "cause": "trois commits POS du 2026-11-06 : 7a45325f (PONCT +25), 6b976cb1 (ADJ +3), c43dd5cc (CONJ +13), PRON -1",
+    "consequence": "comparer à 0,8500 surestime le gain de 1,26 pt ; la référence est 0,8625"
+  },
+  "cout": {
+    "phrases": 612,
+    "jetons": 3179,
+    "phrases_avec_jetons": 609,
+    "appels": 1218,
+    "appels_pos": 609,
+    "appels_syntagmes": 609,
+    "tokens": 358962,
+    "duree_s": 1259.2,
+    "duree_min": 21.0,
+    "latence_moyenne_s": 1.033,
+    "latence_mediane_s": 1.011,
+    "tarif": {
+      "modele": "deepseek-flash",
+      "hors_pointe": {
+        "entree_hit_par_m": 0.003,
+        "entree_miss_par_m": 0.15,
+        "sortie_par_m": 0.6
+      },
+      "pointe": {
+        "entree_hit_par_m": 0.006,
+        "entree_miss_par_m": 0.3,
+        "sortie_par_m": 1.2
+      },
+      "source": "https://api-docs.deepseek.com/quick_start/pricing"
+    },
+    "usage_estime": {
+      "entree_hit": 155136,
+      "entree_miss": 174822,
+      "sortie": 27326
+    },
+    "cout_usd": {
+      "hors_pointe": 0.043,
+      "pointe": 0.086,
+      "moment_du_run": "samedi 03:00 UTC, hors pointe"
+    },
+    "pour_1000_phrases": {
+      "appels": 1990,
+      "tokens": 586539,
+      "minutes": 34.3,
+      "usd_hors_pointe": 0.07,
+      "usd_pointe": 0.14
+    },
+    "pos_seul": "environ la moitié : ~609 appels, ~180 k tokens, ~10,5 min",
+    "estimation_consigne": {
+      "appels": 1200,
+      "tokens": 360000,
+      "minutes": 20,
+      "ecart": "appels +1,5 %, tokens -0,3 %, durée +5 %"
+    }
+  },
+  "mesure": {
+    "gold": {
+      "phrases": 612,
+      "tokens": 3179,
+      "sources": {
+        "hand": 20,
+        "reel": 432,
+        "synth": 160
+      },
+      "modalite": "api-deepseek (deepseek-chat → modèle renvoyé), aucun serveur local"
+    },
+    "modeles_renvoyes": {
+      "deepseek-flash": 1218
+    },
+    "modes": {
+      "heuristique": {
+        "all": 0.8625,
+        "hand": 0.8857,
+        "reel": 0.8893,
+        "synth": 0.7682,
+        "duree_s": 0.86
+      },
+      "neuronal": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828,
+        "duree_s": 1253.23
+      },
+      "parallele": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828,
+        "duree_s": 1.24
+      },
+      "cascade": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828,
+        "duree_s": 1.26
+      },
+      "parallele_niveau": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828,
+        "duree_s": 1.21
+      },
+      "cascade_niveau": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828,
+        "duree_s": 1.24
+      }
+    },
+    "pos_par_source": {
+      "heuristique": {
+        "all": 0.8625,
+        "hand": 0.8857,
+        "reel": 0.8893,
+        "synth": 0.7682
+      },
+      "neuronal": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828
+      },
+      "parallele": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828
+      },
+      "cascade": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828
+      },
+      "parallele_niveau": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828
+      },
+      "cascade_niveau": {
+        "all": 0.9475,
+        "hand": 0.9714,
+        "reel": 0.936,
+        "synth": 0.9828
+      }
+    },
+    "seuils": {
+      "heuristique": true,
+      "neuronal": true,
+      "parallele": true,
+      "cascade": true,
+      "parallele_niveau": true,
+      "cascade_niveau": true,
+      "aucun_refus": false
+    },
+    "refus": {
+      "total": 1,
+      "detail": [
+        "s015"
+      ],
+      "nature": "s015, syntagmes seulement (BIO 6/7) ; POS rendu 7/7 ; 0 refus POS sur 609"
+    },
+    "analyse_appariee": {
+      "tokens": 3179,
+      "phrases": 612,
+      "appels_cache": 1218,
+      "heuristique_ok": 2742,
+      "neuronal_ok": 3012,
+      "heuristique": 0.8625,
+      "neuronal": 0.9475,
+      "gain_pts": 8.49,
+      "hybride_ferme_heuristique_ouvert_modele": {
+        "ok": 3025,
+        "exactitude": 0.9516,
+        "gain_pts": 8.9,
+        "gain_sur_neuronal_pts": 0.41,
+        "discordants_vs_neuronal": {
+          "hybride_juste_modele_faux": 31,
+          "hybride_faux_modele_juste": 44
+        },
+        "mcnemar_vs_neuronal_p": 0.1654279417242567,
+        "sources": {
+          "hand": {
+            "tokens": 105,
+            "ok": 98,
+            "exactitude": 0.9333
+          },
+          "reel": {
+            "tokens": 2375,
+            "ok": 2247,
+            "exactitude": 0.9461
+          },
+          "synth": {
+            "tokens": 699,
+            "ok": 680,
+            "exactitude": 0.9728
+          }
+        }
+      },
+      "discordants": {
+        "heuristique_faux_modele_juste": 344,
+        "heuristique_juste_modele_faux": 74
+      },
+      "mcnemar_p": 1.0847968259787153e-42,
+      "bootstrap_phrases": {
+        "n": 4000,
+        "graine": 0,
+        "ic95_pts": [
+          7.23,
+          9.74
+        ],
+        "moyenne_pts": 8.47
+      },
+      "sources": {
+        "hand": {
+          "tokens": 105,
+          "heuristique_ok": 93,
+          "neuronal_ok": 102,
+          "heuristique": 0.8857,
+          "neuronal": 0.9714,
+          "gain_pts": 8.57,
+          "discordants": {
+            "heuristique_faux_modele_juste": 9,
+            "heuristique_juste_modele_faux": 0
+          },
+          "mcnemar_p": 0.00390625,
+          "bootstrap_phrases": {
+            "n": 2000,
+            "graine": 0,
+            "ic95_pts": [
+              2.75,
+              15.38
+            ],
+            "moyenne_pts": 8.6
+          }
+        },
+        "reel": {
+          "tokens": 2375,
+          "heuristique_ok": 2112,
+          "neuronal_ok": 2223,
+          "heuristique": 0.8893,
+          "neuronal": 0.936,
+          "gain_pts": 4.67,
+          "discordants": {
+            "heuristique_faux_modele_juste": 181,
+            "heuristique_juste_modele_faux": 70
+          },
+          "mcnemar_p": 1.6610282585450007e-12,
+          "bootstrap_phrases": {
+            "n": 2000,
+            "graine": 0,
+            "ic95_pts": [
+              3.45,
+              6.01
+            ],
+            "moyenne_pts": 4.68
+          }
+        },
+        "synth": {
+          "tokens": 699,
+          "heuristique_ok": 537,
+          "neuronal_ok": 687,
+          "heuristique": 0.7682,
+          "neuronal": 0.9828,
+          "gain_pts": 21.46,
+          "discordants": {
+            "heuristique_faux_modele_juste": 154,
+            "heuristique_juste_modele_faux": 4
+          },
+          "mcnemar_p": 1.4040114547852597e-40,
+          "bootstrap_phrases": {
+            "n": 2000,
+            "graine": 0,
+            "ic95_pts": [
+              18.8,
+              24.15
+            ],
+            "moyenne_pts": 21.51
+          }
+        }
+      },
+      "controles": {
+        "majoritaire_NOUN": 0.2145,
+        "classe_frequente": {
+          "classe": "VERB",
+          "exactitude": 0.2491
+        },
+        "permutation_heuristique_graine0": 0.1667,
+        "uniforme_12_classes": 0.0833
+      }
+    }
+  },
+  "controles": {
+    "majoritaire_NOUN": 0.2145,
+    "classe_frequente": {
+      "classe": "VERB",
+      "exactitude": 0.2491
+    },
+    "permutation_heuristique_graine0": 0.1667,
+    "uniforme_12_classes": 0.0833
+  },
+  "decision": {
+    "regle": {
+      "negatif_nomme": "< +2,0 pts : fermer le tagger comme négatif nommé, garder l'heuristique",
+      "integrer": ">= +5,0 pts : intégrer via l'API DeepSeek (jamais le 7B local, règle 11)",
+      "zone_grise": "2,0 à 5,0 pts : aucune décision automatique ; split tenu à l'écart"
+    },
+    "reference": 0.8625,
+    "gain_pts": 8.49,
+    "ic95_pts": [
+      7.23,
+      9.74
+    ],
+    "mcnemar": {
+      "b": 344,
+      "c": 74,
+      "p": 1.0847968259787153e-42
+    },
+    "verdict": "integrer",
+    "mode": "NeuronalLLMPOS seul (API) ; les cinq modes de fusion rendent la même exactitude ; l'hybride par classe +0,41 pt n'est pas significatif (p=0,17)",
+    "repli": "heuristique si refus ou timeout ; 0 refus POS mesuré",
+    "reserve": "réel 432 seul : +4,67 pts [+3,45 ; +6,01] ; le 612 est tiré par les 160 synthétiques (+21,46)",
+    "prochaine_action": "split réel tenu à l'écart (crc32(id) % 3) ; si < +2, rouvrir et nommer le négatif ; si >= +5, route API par défaut",
+    "application": "drapeau de configuration, route API activable, heuristique par défaut hors ligne ; ~0,07 $ et ~34 min par 1 000 phrases"
+  },
+  "commande": {
+    "prerequis": "test -r \"$HOME/.config/drave/deepseek.key\" && echo CLE-OK",
+    "run_complet": "DEEPSEEK_KEY_FILE=\"$HOME/.config/drave/deepseek.key\" DEEPSEEK_CACHE=\"$(mktemp -d /tmp/j43-cache.XXXXXX)\" DEEPSEEK_MODEL=deepseek-chat PYTHONPATH=. python3 tools/tests/linguistique/qualifier_tagger_612.py --sortie /tmp/tagger-612.json",
+    "smoke": "même commande avec --limite 3 --sortie /tmp/tagger-612-smoke.json ; ~6 appels, ~1805 tokens, 0 refus",
+    "attendu": "phrases 612 tokens 3179 ; heuristique 0.8625 ; neuronal 0.9475 ; appels 1218 tokens 358962 refus 1",
+    "securite": "clé jamais affichée, jamais dans le dépôt, fichier 0600 ; DEEPSEEK_KEY_FILE ou DEEPSEEK_API_KEY locale au processus",
+    "banc_historique": "qualifier_quatre_modes.py ne charge que 432 ; le nouveau banc est additif et ne modifie aucun fichier existant"
+  },
+  "fichiers": {
+    "fiche": "reports/rapport-coordination-r.md",
+    "synthese": "reports/rapport-coordination-r.json",
+    "mesure_brute": "reports/tagger-612.json",
+    "banc": "tools/tests/linguistique/qualifier_tagger_612.py",
+    "non_modifies": [
+      "tools/bloc_linguistique.py",
+      "tools/llm/deepseek.py",
+      "tools/tests/linguistique/qualifier_quatre_modes.py",
+      "tools/tests/linguistique/qualifier_cascade.py",
+      "tools/tests/linguistique/evaluer_gold.py",
+      "tools/tests/linguistique/gold.json",
+      "tools/tests/linguistique/gold_reel.json",
+      "tools/tests/linguistique/gold_synthetique.json"
+    ],
+    "non_ecrits": [
+      "docs/pilotage/en-cours.md",
+      "docs/pilotage/roadmap.md",
+      "journal/"
+    ]
+  },
+  "limites": [
+    "un seul run, un seul jour, un seul alias ; pas de seconde passe",
+    "le 612 dépend des 160 synthétiques (+21,46) ; le réel 432 seul est +4,67 [+3,45 ; +6,01]",
+    "les 20 hand ont servi au choix du modèle et du prompt : in-sample",
+    "la baseline 0,8500 est datée ; 0,8625 est le HEAD ; si les règles POS bougent, la référence bouge",
+    "le POS n'est pas le contrat entier : ni spans, ni morphologie, ni UD, ni pragmatique",
+    "le coût en dollars est une estimation, pas une facture",
+    "le refus s015 est syntagmes, pas POS ; le seuil aucun_refus du JSON composite est faux pour le POS",
+    "pas de comparaison au 7B local : GGUF absent et règle 11",
+    "l'hybride par classe +0,41 pt n'est pas significatif (p=0,17) : piste, pas résultat"
+  ]
+}
