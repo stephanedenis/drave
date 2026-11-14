@@ -62436,3 +62436,38 @@ note indexée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1100 caractères tronqués]`
+
+  ```
+create mode 100644 reports/note-panini-334.md
+COMMIT OK 1
+812f2722 DÉCISIONS DU 14/11 — 1A (TAGGER EN OPTION), 2A (g017 INATTEIGNABLE), 3B (11 VERDICTS S COMMITTÉS), 4A (NOTE PANINI), 5A (A6.2 REPOUSSÉ), 6A→C→B
+   31ce36fd..812f2722  s/v7 -> s/v7
+   31ce36fd..812f2722  master -> master
+sam 14 nov 2026 09:58:04 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 420; date; ls tools/tagger_api.py tools/tests/test_tagger_api.py reports/rapport-tagger-option.md 2>/dev/null; git status --porcelain tools/ docs/produit/ 2>/dev/null | head -4", "description": "Suivre le tagger", "timeoutMs":  … [7 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 10:05:36 EST
+ M tools/chantier/plan.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff tools/chantier/plan.json | head -10; python3 -c \"import json; print(len(json.load(open('tools/chantier/plan.json'))['taches']))\"; git show HEAD:tools/chantier/plan.json | python3 -c \"import json,sys; print(len(json.load(s … [64 caractères tronqués]`
+
+  ```
+diff --git a/tools/chantier/plan.json b/tools/chantier/plan.json
+index 21ea0cf4..7d2004b5 100644
+--- a/tools/chantier/plan.json
++++ b/tools/chantier/plan.json
+@@ -306,6 +306,118 @@
+      "attendu": "FICHE-OK"
+     }
+    ]
++  },
++  {
+29
+21
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mis à jour : 2026-11-14, 10 h 10 HNE\", t)\np.write_text( … [614 caractères tronqués]`

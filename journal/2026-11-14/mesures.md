@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,6 +17,7 @@
 | 04:55 | `55bde5c5` | J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902) | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
 | 06:32 | `0e75f101` | J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG) | `en-cours.md`, `roadmap.md`, `README.md` (+19) |
 | 07:16 | `c18d0193` | J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU | `en-cours.md`, `README.md`, `memoire.md` (+6) |
+| 09:55 | `812f2722` | DÉCISIONS DU 14/11 — 1A (TAGGER EN OPTION), 2A (g017 INATTEIGNABLE), 3B (11 VERDICTS S COMMITTÉS), 4A (NOTE PANINI), 5A (A6.2 REPOUSSÉ), 6A→C→B | `en-cours.md`, `semaine-autonome.md`, `README.md` (+15) |
 
 ## Chiffres du jour
 
@@ -26,13 +27,14 @@
 
 ## Sessions actives ce jour
 
-- `24e34ad3-f423-4394-bb1c-74a6930a57e5` — Tu travailles dans /home/stephane/Data13 (début 2026-11-14 09:53, 0.1 h) → [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `24e34ad3-f423-4394-bb1c-74a6930a57e5` — Tu travailles dans /home/stephane/Data13 (début 2026-11-14 09:53, 0.2 h) → [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 329.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/note-panini-334.md](../../reports/note-panini-334.md)
 - [reports/rapport-bilan-chantier.md](../../reports/rapport-bilan-chantier.md)
 - [reports/rapport-cloture-chantier.md](../../reports/rapport-cloture-chantier.md)
 - [reports/rapport-evaluer-langue.md](../../reports/rapport-evaluer-langue.md)

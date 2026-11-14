@@ -7,12 +7,12 @@
 | Identifiant | `24e34ad3-f423-4394-bb1c-74a6930a57e5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 09:53 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 18 |
-| Appels d'outils | 26 |
+| Messages | 29 |
+| Appels d'outils | 43 |
 | Fichiers touchés | 0 |
-| Commandes | 16 |
+| Commandes | 31 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **intégrer le tagge … [3226 caractères tronqués]
 
-*26 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état git et la branche
 - bash — Compter les lignes des pièces clés
@@ -41,11 +41,11 @@
 - bash — Inspecter le rapport tagger 612
 - bash — Chercher la mention de la décision 1A
 - bash — Lire l'état et la roadmap autour du tagger
-- … et 3 autres
+- … et 18 autres
 
 **Synthèse produite :**
 
-⏵ Je lis les pièces existantes (deepseek.py, bloc_linguistique.py, drave.py, harnais)
+⏵ J'établis la ligne de base des portes avant de modifier
 
 ## 3. Travail accompli
 
@@ -72,6 +72,21 @@
 - **T1** Lire la décision 1A
 - **T1** Inspecter la doc produit
 - **T1** Lire la porte produit et le registre des portes
+- **T1** Repérer la fusion et les priorités
+- **T1** Repérer Annotation.json
+- **T1** Lire evaluer_bloc en entier
+- **T1** Vérifier les packages et le schéma
+- **T1** Lire le budget de contexte
+- **T1** Lire la méthode de résultat/fiche
+- **T1** Lancer le smoke test de base
+- **T1** Lancer les portes doc de base
+- **T1** Comprendre les compteurs de la revue
+- **T1** Lire le comptage de la revue
+- **T1** Lire les fonctions de comptage
+- **T1** Compter les fiches et JSON sur disque
+- **T1** Lire le vérificateur de schéma
+- **T1** Vérifier fastjsonschema et l'import du client
+- **T1** Vérifier la couverture de la phrase test
 
 ## 4. Mesures et résultats marquants
 

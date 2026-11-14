@@ -616,3 +616,697 @@ class TestProduit(unittest.TestCase):
 … [7091 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"1A\\|tagger\" journal/2026-11-14 docs/pilotage reports/ 2>/dev/null | head -20; echo ----; grep -rn \"0,9475\\|0.9475\\|0,8625\\|0.8625\\|tagger\" docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-14/*.md … [91 caractères tronqués]`
+
+  ```
+journal/2026-11-14/mesures.md
+docs/pilotage/semaine-autonome.md
+docs/pilotage/roadmap.md
+docs/pilotage/en-cours.md
+reports/traduction-eurlex-14b.json
+reports/rapport-bloc-linguistique.md
+reports/rapport-pensee-gold-linguistique.md
+reports/rapport-pensee-gold-200.md
+reports/pensee-gold-neuronal.json
+reports/rapport-pensee-gold-neuronal.md
+reports/pensee-gold-syntagmes.json
+reports/rapport-pensee-gold-syntagmes.md
+reports/rapport-pensee-gold-cascade.md
+reports/rapport-pensee-politique-llm.md
+reports/pensee-gold-pragmatique.json
+reports/rapport-pensee-pragmatique-neuronale.md
+reports/rapport-pensee-fusion-reparee.md
+reports/pensee-pragmatique-130.json
+reports/rapport-pensee-pragmatique-full.md
+reports/rapport-file-taches.md
+----
+docs/pilotage/en-cours.md:95:- **J5.1 / J10.1 / J13.1 / J14.1 — les bilans et la clôture** : semaine (F1 **0,7533 → 0,7902**, tagger **0,9475** ; [rapport](../../reports/rapport-semaine.md)) ; chantier **20/21**, attachement **236 → 238**, 5 timeouts, 1 échec (J5.2), D1–D20, R1–R30 ; [bilan](../../reports/rapport-bilan-chantier.md) ; **J13.1** — tableau des mesures : **612/602** ; [tableau](../../reports/rapport-tableau-mesures.md) ; **J14.1** — clôture (**84/
+… [6561 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"tagger\\|612\\|quatre\" ; echo ----; cat reports/pensee-tagger-612.json 2>/dev/null | head -60", "description": "Chercher les rapports tagger existants"}`
+
+  ```
+pensee-quatre-modes-432.json
+pensee-quatre-modes-432-pragma.json
+pensee-quatre-modes-432-run2.json
+pensee-quatre-modes-432-run3.json
+pensee-quatre-modes-432-soustype.json
+pensee-quatre-modes-432-soustype-t03b.json
+pensee-quatre-modes-432-soustype-t03c.json
+pensee-quatre-modes-432-soustype-t03.json
+pensee-quatre-modes-432-t03.json
+pensee-quatre-modes.json
+pensee-quatre-modes-niveau.json
+pensee-quatre-modes-run2.json
+rapport-pensee-quatre-modes-432.md
+rapport-pensee-quatre-modes.md
+rapport-pensee-quatre-modes-run2.md
+rapport-vie-quatre-jours.md
+tagger-612.json
+----
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 30,90p journal/2026-11-14/mesures.md", "description": "Lire le récit de mesure du 14/11"}`
+
+  ```
+## Mesures et rapports touchés
+
+- [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
+- [reports/rapport-bilan-chantier.md](../../reports/rapport-bilan-chantier.md)
+- [reports/rapport-cloture-chantier.md](../../reports/rapport-cloture-chantier.md)
+- [reports/rapport-evaluer-langue.md](../../reports/rapport-evaluer-langue.md)
+- [reports/rapport-exemples-rejoues.md](../../reports/rapport-exemples-rejoues.md)
+- [reports/rapport-restitution-v1.md](../../reports/rapport-restitution-v1.md)
+- [reports/rapport-robustesse-semaine.md](../../reports/rapport-robustesse-semaine.md)
+- [reports/rapport-s065.md](../../reports/rapport-s065.md)
+- [reports/rapport-tableau-mesures.md](../../reports/rapport-tableau-mesures.md)
+
+<!-- notes -->
+**J13.1 — la table des mesures.** Le chantier est consolidé en une table unique, de J1.1 à
+J12.2 : **26 tâches**, **25 acceptations vertes**, **1 échec** (J5.2, le tag), **5 timeouts**
+dont **4 récupérés**. Chaque ligne porte sa **base** (612/602), son **avant**, son **après**, son
+**Δ**, un **contrôle négatif**, son **commit** et sa **fiche**. Le produit tient (**F1 0,7533 →
+0,7902**, attachement **236/237 → 238/238 labels**,
+… [1465 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/tagger-612.json'))\nprint(json.dumps({k:d[k] for k in d if k not in ('modes',)}, ensure_ascii=False, indent=1)[:3000])\nprint('--- modes keys', list(d['modes']))\nfor m in d['mode … [117 caractères tronqués]`
+
+  ```
+{
+ "date": "2026-11-13 22:21 EST",
+ "gold": {
+  "phrases": 612,
+  "tokens": 3179,
+  "sources": {
+   "hand": 20,
+   "reel": 432,
+   "synth": 160
+  },
+  "modalite": "api-deepseek (deepseek-chat → modèle renvoyé), aucun serveur local"
+ },
+ "modeles_renvoyes": {
+  "deepseek-flash": 1218
+ },
+ "pos_par_source": {
+  "heuristique": {
+   "all": 0.8625,
+   "hand": 0.8857,
+   "reel": 0.8893,
+   "synth": 0.7682
+  },
+  "neuronal": {
+   "all": 0.9475,
+   "hand": 0.9714,
+   "reel": 0.936,
+   "synth": 0.9828
+  },
+  "parallele": {
+   "all": 0.9475,
+   "hand": 0.9714,
+   "reel": 0.936,
+   "synth": 0.9828
+  },
+  "cascade": {
+   "all": 0.9475,
+   "hand": 0.9714,
+   "reel": 0.936,
+   "synth": 0.9828
+  },
+  "parallele_niveau": {
+   "all": 0.9475,
+   "hand": 0.9714,
+   "reel": 0.936,
+   "synth": 0.9828
+  },
+  "cascade_niveau": {
+   "all": 0.9475,
+   "hand": 0.9714,
+   "reel": 0.936,
+   "synth": 0.9828
+  }
+ },
+ "seuils": {
+  "heuristique": true,
+  "neuronal": true,
+  "parallele": true,
+  "cascade": true,
+  "parallele_niveau": true,
+  "cascade_niveau": true,
+  "aucun_refus": false
+ },
+ "refus": 1,
+ "refus_detail": [
+  "s015"
+ ],
+ "appels": {
+  "pos": 609,
+  "syntagmes": 609
+ },
+ "api": {
+  "appels": 1218,
+
+… [715 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"1A\" docs/pilotage/*.md journal/2026-11-1*/*.md reports/*.md 2>/dev/null | head -30", "description": "Chercher la mention de la décision 1A"}`
+
+  ```
+docs/pilotage/semaine-autonome.md:263:| **1A** | le **tagger API en option** (`--tagger`), le défaut reste hors ligne | +8,49 pts de POS pour qui a la clé |
+docs/pilotage/semaine-autonome.md:270:**Le chantier 6A (le produit)** : le tagger (1A), la restitution, la robustesse. Puis la
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 100,140p docs/pilotage/en-cours.md; echo ----; sed -n 125,145p docs/pilotage/roadmap.md", "description": "Lire l'état et la roadmap autour du tagger"}`
+
+  ```
+> Vérifié par `tools/revue_documentation.py`.
+
+| invariant | valeur | contrôle |
+|---|---|---|
+| portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **733** / **826** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
+
+## Les chantiers et leurs bloquants
+
+**Dépendances** : [le graphe](backlog/dependances.md) ; cette table ne garde que les **bloquants
+externes** et la **prochaine action**.
+
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 + convention GV (0,7902), s065 (238/239), g017 rejeté
+… [3700 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 240,290p docs/pilotage/semaine-autonome.md", "description": "Lire la décision 1A"}`
+
+  ```
+| portes / tag | 84 portes | **84, 81 vertes, 3 rouges tolérées** ; **tag absent** | [références](references-non-regression.md) |
+
+**Les décisions.** **D1–D20** : le produit (relative zéro, convention GV, schéma v2, restitution,
+`g017` rejeté, `s065` intégré, forme canonique), Panini (table, corpus, retrieval, généalogie,
+séparation sœur/famille), la coordination (N2, S, R, A) et la méthode (encart qui pointe,
+acceptation d'abord). **Les rejets.** **R1–R30** ; les nouveaux sont R22–R30 : adverbe final hors
+SUB, variante étroite non retenue, « `g017` est une règle », famille variable unique, échantillon
+20, époque, miroir strict, fidélité sémantique, encart qui recopie. **Les échecs.** **5 timeouts**
+(J1.2, J2.2, J3.1, J5.2, J8.1) ; **4 récupérés** ; **1 vrai échec** (J5.2, le tag). La leçon :
+**l'acceptation d'abord, le commit n'est pas la clôture**.
+
+**La suite.** **J11.1–J11.4** (produit : exemples, par-langue, robustesse, schéma documenté) ;
+**J12.1–J12.2** (Panini §334 et corpus d'or CIC) ; **J13.1** (table des mesures) ; **J14.1**
+(clôture : passe + tag `chantier-2026-11-14`). Avant, les lignes bloquées restent nommées :
+`g017` (convention), le split réel du tagger, la signatu
+… [1070 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/produit/ && wc -l docs/produit/README.md && grep -n \"^#\\|^##\\|tagger\\|hors ligne\" docs/produit/README.md | head -40", "description": "Inspecter la doc produit"}`
+
+  ```
+exemples.md
+README.md
+581 docs/produit/README.md
+1:# Le premier produit — analyser un texte avec Drave
+22:## 1. À qui s'adresse le produit
+37:## 2. Ce que le produit fait
+73:## 3. Comment l'utiliser — cinq exemples réels
+79:### 3.1 Analyser une phrase
+85:drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+102:### 3.2 Analyser en JSON et lire l'attachement
+119:### 3.3 Mesurer sur le gold
+175:### 3.3 quater Traiter un corpus
+185:### 3.3 bis La vue des syntagmes qui se chevauchent — les champs du schéma v2
+280:### 3.3 ter Le contexte (mémoire de discours)
+289:### 3.4 Rejouer et vérifier le déterminisme
+306:### 3.5 Le refus, et la langue inconnue
+324:### 3.6 Restituer la surface (v0)
+359:## 4. Ce que le produit ne fait pas encore
+385:`drave evaluer` ne mesure qu'elle. La cascade avec le vrai tagger 7B a été mesurée à **0,9415**
+389:**4. Pas de neuronal.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de qualité.
+421:## 5. Performance
+443:## 6. Garanties
+453:| **gold versionné** | les 4 gold sont dans le dépôt ; `evaluer` rejoue hors ligne | `tools/tests/linguistique/gold*.json` |
+478:## 7. Le CLI livré — contrat et manques
+561:## 8. Où aller ensuite
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "offset": 1, "limit": 200}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+1: # Le premier produit — analyser un texte avec Drave
+2: 
+3: > **Ce que ce document est.** La notice d'usage du **premier produit** de Drave : le bloc
+4: > linguistique, utilisable **aujourd'hui**, sur un CPU, sans modèle et sans réseau. Il dit à qui
+5: > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
+6: > qu'il garantit.
+7: >
+8: > **Vérifié le 2026-11-14** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+9: > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
+10: > existent, et la
+11: > porte produit est verte. Le format est **version 2** (`schema: "drave.annotation"`,
+12: > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
+13: > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
+14: > § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 datent du
+15: > **06/11**, et l'`evaluer` du § 3.3 a été relancé le **14/11** (gold vivant 612, `--par-langue
+16: > fr/en`)
+… [11653 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "limit": 240, "offset": 280}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+280: ### 3.3 ter Le contexte (mémoire de discours)
+281: 
+282: ```bash
+283: python3 tools/drave.py analyser "Il dort." --contexte "Le chat est sur le toit."
+284: ```
+285: 
+286: Le champ `contexte` est porté dans le JSON ; il alimente la mémoire de discours (coréférence,
+287: connecteurs) sans changer le texte analysé.
+288: 
+289: ### 3.4 Rejouer et vérifier le déterminisme
+290: 
+291: ```bash
+292: python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
+293: ```
+294: ```
+295: rejeu identique : oui
+296:   texte      : 'Le chat de la voisine qui dort sur le toit se réveille.'
+297:   langue     : fr
+298:   étiquettes : 60
+299:   JSON       : 13284 octets · sha256 31f3798beebe22f7…
+300: ```
+301: 
+302: **Lecture.** La commande analyse **deux fois**, compare le JSON **canonique** (clés triées,
+303: durée exclue) et rend une empreinte sha256. Deux exécutions indépendantes rendent le même octet :
+304: l'analyse est déterministe. C'est la garantie de base du rejeu.
+305: 
+306: ### 3.5 Le refus, et la langue inconnue
+307: 
+308: ```bash
+309: python3 tools
+… [13615 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md", "offset": 519, "limit": 70}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/produit/README.md</path>
+<type>file</type>
+<content>
+519: 
+520: | option | commande | sens |
+521: |---|---|---|
+522: | `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
+523: | `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |
+524: | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
+525: | `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
+526: | `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
+527: | `--canonique` | `restituer` | ajoute la forme canonique v1 (segments + rôles + cibles) et son miroir |
+528: | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
+529: | `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
+530: | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
+531: | `--par-langue` | `evaluer` | détail **fr/en** : POS, syntagmes, attachement et contrôle négatif par langue |
+532: | `-V`, `--version` | global | `drave 0.
+… [4571 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,120p tools/toutes-les-portes.sh | head -80; echo ====; sed -n 1,80p tools/porte-produit.sh", "description": "Lire la porte produit et le registre des portes"}`
+
+  ```
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge, en
+… [6265 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _fusion\\|def priorite_par_defaut\\|PRIORITE_NIVEAU\\|PRIORITE_TYPE\\|def couverture\" tools/bloc_linguistique.py | head -20", "description": "Repérer la fusion et les priorités"}`
+
+  ```
+117:    def couverture(self) -> dict[str, float]:
+1819:def _fusionner(spans: Sequence[Span]) -> list[Span]:
+2556:def priorite_par_defaut() -> dict | None:
+2562:    return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+2565:PRIORITE_NIVEAU = {
+2574:PRIORITE_TYPE = {
+2582:def _fusion(a: Annotation, b: Annotation, source: str,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def json\" tools/bloc_linguistique.py | head; grep -n \"class Annotation\" tools/bloc_linguistique.py", "description": "Repérer Annotation.json"}`
+
+  ```
+63:    def json(self) -> dict:
+81:    def json(self) -> dict:
+122:    def json(self, avec_duree: bool = False) -> dict:
+98:class Annotation:
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 90, "offset": 98}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py", "limit": 110, "offset": 2545}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+98: class Annotation:
+99:     texte: str
+100:     langue: str = "und"
+101:     script: str = SCRIPT_NEUTRE
+102:     etiquettes: list[Etiquette] = field(default_factory=list)
+103:     refus: str = ""
+104:     trace: list[dict] = field(default_factory=list)
+105:     cout: dict = field(default_factory=dict)
+106:     unites_semantiques: list[Span] = field(default_factory=list)
+107:     fraction_semantique: float = 0.0
+108:     source: str = "heuristique"
+109:     contexte: str = ""
+110: 
+111:     def par_niveau(self) -> dict[str, list[Etiquette]]:
+112:         sortie: dict[str, list[Etiquette]] = collections.defaultdict(list)
+113:         for e in self.etiquettes:
+114:             sortie[e.niveau].append(e)
+115:         return dict(sortie)
+116: 
+117:     def couverture(self) -> dict[str, float]:
+118:         """La confiance maximale par niveau — la couverture *déclarée*, pas une précision."""
+119:         return {n: round(max((e.confiance for e in es), default=0.0), 4)
+120:                 for n, es in self.par_niveau().items()}
+121: 
+122:     def json(self, avec_duree: b
+… [3167 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py</path>
+<type>file</type>
+<content>
+2545:             for e in candidates:
+2546:                 if any(not (e.fin <= g.debut or e.debut >= g.fin) for g in retenues):
+2547:                     continue
+2548:                 retenues.append(e)
+2549:             gardees.extend(retenues)
+2550:     return sorted(gardees, key=lambda e: (e.debut, e.fin, e.niveau))
+2551: 
+2552: 
+2553: # La priorité **par niveau** de la fusion : le neuronal tient POS/syntagmes/tête,
+2554: # l'heuristique tient phrase/pragmatique/discours/document. C'est la réparation de la
+2555: # fusion : les deux sources ne concourent plus par confiance sur les mêmes niveaux.
+2556: def priorite_par_defaut() -> dict | None:
+2557:     """La fusion par niveau si un neuronal réel est joignable (clé DeepSeek), sinon la confiance.
+2558: 
+2559:     Le mock a montré que le niveau perd (0,3432) ; le réel (deux passes) a montré qu'il gagne
+2560:     (0,9389). Le défaut suit donc la **présence d'un réel**, pas une doctrine.
+2561:     """
+2562:     return PRIORITE_NIVEAU if os.environ.get("DEEPSEEK_KEY_FILE") else None
+2563: 
+2564: 
+2565: PRIORITE_NIVEAU
+… [5380 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 60,220p tools/tests/linguistique/evaluer_gold.py", "description": "Lire evaluer_bloc en entier"}`
+
+  ```
+"""La tête d'un segment : son premier token (début) et son type."""
+    return {(e.type, e.debut) for e in a.etiquettes if e.niveau == "syntagme"}
+
+
+def _pragma(a: bl.Annotation) -> dict:
+    acte = next((e.valeur for e in a.etiquettes if e.niveau == "pragmatique" and e.type == "acte"), "")
+    neg = any(e.type == "négation" for e in a.etiquettes if e.niveau == "phrase")
+    mod = any(e.type == "modalité" for e in a.etiquettes if e.niveau == "phrase")
+    ds = any(e.type == "double_sens" for e in a.etiquettes if e.niveau == "pragmatique")
+    return {"acte": acte, "negation": neg, "modalite": mod, "double_sens": ds}
+
+
+def _prf(tp: int, fp: int, fn: int) -> dict:
+    precision = tp / max(1, tp + fp)
+    rappel = tp / max(1, tp + fn)
+    return {"precision": round(precision, 4), "rappel": round(rappel, 4),
+            "f1": round(2 * precision * rappel / max(1e-9, precision + rappel), 4),
+            "tp": tp, "fp": fp, "fn": fn}
+
+
+def evaluer_bloc(nom: str, bloc, phrases: list[dict]) -> dict:
+    tp = fp = fn = ttp = tfp = tfn = 0
+    pos_ok = pos_n = pos_ok_ferme = pos_n_ferme = pos_ok_ouvert = pos_n_ouvert = 0
+    conf = defaultdict(Counter)
+    acte_ok = neg_ok = mod_ok = ds_ok =
+… [7789 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/__init__.py tools/llm/__init__.py tools/tests/__init__.py 2>&1; head -20 tools/llm/deepseek.py >/dev/null; grep -n \"SCHEMA_ANNOTATION\\|VERSION_ANNOTATION\" tools/bloc_linguistique.py | head", "description": "Vérifier les p … [22 caractères tronqués]`
+
+  ```
+ls: cannot access 'tools/__init__.py': No such file or directory
+ls: cannot access 'tools/tests/__init__.py': No such file or directory
+tools/llm/__init__.py
+91:SCHEMA_ANNOTATION = "drave.annotation"
+94:VERSION_ANNOTATION = 2
+128:            "schema": SCHEMA_ANNOTATION, "version": VERSION_ANNOTATION,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/revue_documentation.py tools/taille_documents.py 2>&1; sed -n 1,60p tools/taille_documents.py", "description": "Lire le budget de contexte"}`
+
+  ```
+tools/revue_documentation.py
+tools/taille_documents.py
+#!/usr/bin/env python3
+"""taille_documents.py — le budget de contexte et la cohésion des documents.
+
+Ce que l'outil vérifie :
+  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+  2. la cohésion minimale : un titre, un résumé en tête, et pour les documents datés un
+     « Résumé » + « ne pas charger par défaut » ;
+  3. les fiches de résultats trop longues pour être lues d'un bloc (avertissement, pas échec) ;
+  4. le classement des plus gros documents, pour voir où le contexte part.
+
+Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
+ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens
+est donnée à titre indicatif (≈ caractères / 4).
+
+Les **sources de diagrammes** (` ```plantuml `, ` ```mermaid `) sont **rendues, pas lues** :
+elles ne comptent pas dans le budget ; le document les porte, la page montre le SVG.
+"""
+from __future__ import annotations
+import pathlib
+import re
+import sys
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+
+# (catégorie, budget en mots). Les globs sont résolus dans l'ordre ; le
+… [1694 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"reports/\\|journal/\\|docs/\" docs/methode/resultats.md | head -30", "description": "Lire la méthode de résultat/fiche"}`
+
+  ```
+27:| `reports/` | la **fiche** : chiffres, dispositif, contrôles, pièges, limites ; les JSON de résultats bruts |
+28:| `journal/` | le **récit daté** : ce qui a été [fait](../theorie/glossaire/entrees/fait-mesure-projete-deduit.md), quand, et ce qu'on en a appris (généré par `tools/journal_auto.py`, notes à la main entre les marqueurs) |
+29:| `docs/pilotage/en-cours.md` | l'**état** : la synthèse, la ligne du chantier, les questions ouvertes |
+30:| `docs/pilotage/roadmap.md` | la **ligne de roadmap** (A… / B… / N… / R…) que le résultat fait avancer : son état y est mis à jour |
+38:Un résultat n'est **pas fini** tant que [`docs/pilotage/en-cours.md`](../pilotage/en-cours.md) ne porte pas
+52:*Tout ce qui n'est pas « ce qui reste vrai quand les chiffres changent » va dans `reports/`, jamais dans `docs/`.*
+53:La théorie et les modes d'emploi restent dans `docs/` ; les tableaux, les séries et les erratums vont dans
+54:`reports/`.
+  ```
+
+### 🤖 Assistant
+
+⏵ J'établis la ligne de base des portes avant de modifier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/test_produit.py 2>&1 | tail -5; echo \"test_produit=$?\"", "description": "Lancer le smoke test de base"}`
+
+  ```
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 7.302s
+
+OK
+test_produit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -12; echo \"taille=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -20; echo \"revue=$?\"", "description": "Lancer les portes doc de base"}`
+
+  ```
+2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4000 mots (budget 4 000)
+
+  avertissements :
+     · 51 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+taille=0
+  revue de documentation · 733 fiche(s) · 826 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"compteur\\|733\\|826\\|123\\|ficient\\|JSON\" tools/revue_documentation.py | head -40", "description": "Comprendre les compteurs de la revue"}`
+
+  ```
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+172:    # 5. compteurs : la page d'état est la source unique, et elle dit le disque
+176:    fiches = re.search(r"\|\s*fichiers / JSON de résultats\s*\|\s*\*\*(\d+)\*\*\s*/\s*\*\*(\d+)\*\*", t)
+183:            alertes.append(f"compteurs : la ligne « {nom} » manque dans en-cours.md")
+185:            alertes.append(f"compteurs : en-cours.md dit {valeur} {nom}, le disque en a {disque}")
+187:        alertes.append("compteurs : la ligne « fichiers / JSON » manque dans en-cours.md")
+191:            (int(fiches.group(2)), compte_json(), "JSON"),
+195:                    f"compteurs : en-cours.md dit {valeur} {quoi}, le disque en a {disque}"
+371:    print(f"  revue de documentation · {compte_fiches()} fiche(s) · {compte_json()} JSON · "
+374:        print("  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 20,70p tools/revue_documentation.py; sed -n 165,205p tools/revue_documentation.py", "description": "Lire le comptage de la revue"}`
+
+  ```
+import pathlib, re, subprocess, sys
+import xml.etree.ElementTree as ET
+from datetime import date
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(RACINE / "tools"))
+from verifie_etat_a_jour import etat_modifie, retards  # noqa: E402  (même dossier)
+
+GABARIT = ("<", "*", "AAAA", "...")
+CHEMIN = re.compile(
+    r"`((?:docs|reports|tools|journal|data|drave-core|sprints)/"
+    r"[^`\s]+?\.(?:md|json|sh|py|rs|txt|svg|csv|jsonl))`"
+)
+
+
+def liens(texte: str):
+    return re.findall(r"\]\(([^)#]+?)\)", texte)
+
+
+def cible_generee(f: pathlib.Path, cible: str) -> bool:
+    return cible.endswith((".puml.svg", ".mmd.svg")) and (f.parent / cible[:-4]).exists()
+
+
+def date_dernier_commit() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--format=%ad", "--date=short"], cwd=RACINE, text=True
+        ).strip()
+    except Exception:
+        return ""
+
+
+def date_dernier_changement(chemin: str) -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "log", "-1", "--format=%ad", "--date=short", "--", chemin],
+            cwd=RACINE, text=True,
+        ).strip()
+    except Exception:
+        return ""
+
+
+def est_c
+… [2383 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def compte_fiches\\|def compte_json\\|def compte_docs\\|def compte_portes\" -A8 tools/revue_documentation.py", "description": "Lire les fonctions de comptage"}`
+
+  ```
+100:def compte_portes() -> int:
+101-    return len(list((RACINE / "tools").glob("porte-*.sh")))
+102-
+103-
+104-def compte_chapitres() -> int:
+105-    return len(list((RACINE / "docs/theorie/synthese").glob("0*.md")))
+106-
+107-
+108:def compte_fiches() -> int:
+109-    return len(rapports())
+110-
+111-
+112:def compte_json() -> int:
+113-    return len(list((RACINE / "reports").glob("*.json")))
+114-
+115-
+116:def compte_docs() -> int:
+117-    return len(docs_vivants())
+118-
+119-
+120-def extrait_entier(texte: str, motif: str):
+121-    m = re.search(motif, texte)
+122-    return int(m.group(1)) if m else None
+123-
+124-
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def rapports\" -A6 tools/revue_documentation.py; ls reports/*.md | wc -l; ls reports/*.json | wc -l; ls reports/rapport-s-paragraphes.md 2>&1", "description": "Compter les fiches et JSON sur disque"}`
+
+  ```
+75:def rapports():
+76-    return list((RACINE / "reports").glob("*.md"))
+77-
+78-
+79-def sources_nav():
+80-    """Les fichiers vivants dont les liens comptent pour la navigation (orphelins)."""
+81-    return (docs_vivants() + rapports()
+733
+826
+reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p tools/verifier_schema_produit.py; echo ====; ls tools/schemas/", "description": "Lire le vérificateur de schéma"}`
+
+  ```
+#!/usr/bin/env python3
+"""verifier_schema_produit.py — valide une annotation `drave.annotation` contre le schéma de sa version.
+
+Deux schémas sont publiés (Draft 2020-12) :
+
+- `tools/schemas/drave-annotation-v1.json` — le contrat d'origine (version 1) ;
+- `tools/schemas/drave-annotation-v2.json` — le contrat courant (version 2) : il ajoute
+  `meta.partition` et `meta.alternative`, les deux champs qui documentent les syntagmes qui se
+  chevauchent.
+
+Le vérificateur lit `version` dans l'annotation et choisit le schéma correspondant : une
+annotation v1 reste donc **lue** et validée par le schéma v1. Il compile les schémas une fois,
+puis valide les annotations de cas choisis : français, anglais, refus (texte vide), entrée non
+textuelle, texte très long, plus une annotation v1 de rétro-compatibilité. Il ne dépend que de
+`fastjsonschema` (sinon il se rabat sur une validation minimale des champs obligatoires et de la
+version). Un **contrôle négatif** vérifie que le schéma v2 refuse bien une annotation v1.
+
+Usage :
+    python3 tools/verifier_schema_produit.py              # 5 cas v2 + 1 cas v1, sortie 0/1
+    python3 tools/verifier_schema_produit.py --json       # le détail des cas
+    pyt
+… [2209 caractères tronqués]
+  ```
+

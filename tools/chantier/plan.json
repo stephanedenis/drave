@@ -306,6 +306,118 @@
      "attendu": "FICHE-OK"
     }
    ]
+  },
+  {
+   "id": "J11.1",
+   "jour": 11,
+   "titre": "Le produit — les exemples rejoués",
+   "mandat": "Tâche J11.1 : rejoue les 5 blocs de `docs/produit/exemples.md`, corrige les sorties, fiche `reports/rapport-exemples-rejoues.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-exemples-rejoues.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J11.2",
+   "jour": 11,
+   "titre": "Le produit — la mesure par langue",
+   "mandat": "Tâche J11.2 : `evaluer --par-langue` + doc + test, fiche `reports/rapport-evaluer-langue.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-evaluer-langue.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J11.3",
+   "jour": 11,
+   "titre": "Le produit — la robustesse des 50 textes",
+   "mandat": "Tâche J11.3 : re-mesurer les 50 textes libres, fiche `reports/rapport-robustesse-semaine.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-robustesse-semaine.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J11.4",
+   "jour": 11,
+   "titre": "Le contrat — le schéma v2 documenté",
+   "mandat": "Tâche J11.4 : documenter le schéma v2, fiche `reports/rapport-schema-v2-doc.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-schema-v2-doc.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J12.1",
+   "jour": 12,
+   "titre": "Panini — le §334 et les 44 œuvres",
+   "mandat": "Tâche J12.1 : le corpus §334 et les signatures des 44 œuvres, fiche `reports/rapport-panini-334.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-panini-334.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J12.2",
+   "jour": 12,
+   "titre": "Panini — le corpus d'or CIC",
+   "mandat": "Tâche J12.2 : le vérificateur indépendant du corpus d'or CIC (42 verdicts), fiche `reports/rapport-cic-verificateur.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-cic-verificateur.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J13.1",
+   "jour": 13,
+   "titre": "Les bilans — la table des mesures",
+   "mandat": "Tâche J13.1 : la table consolidée des mesures, fiche `reports/rapport-tableau-mesures.md`, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tableau-mesures.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J14.1",
+   "jour": 14,
+   "titre": "La clôture — la passe et le tag",
+   "mandat": "Tâche J14.1 : la clôture — **sans relancer la passe complète** (elle a été faite le 14/11 00 h : `work/portes/passe-1311-23h15.log`, 84 portes, 81 vertes, 3 rouges nommées). Vérifie « porte-indice », « porte-melange », « porte-sessions » ; mets à jour `docs/pilotage/references-non-regression.md` si nécessaire ; crée le **tag annoté** `chantier-2026-11-14` sur le dernier commit vert ; écris le rapport de clôture `reports/rapport-cloture-chantier.md` + JSON ; commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "git tag -l 'chantier-2026-11-14'",
+     "attendu": "chantier-2026-11-14"
+    },
+    {
+     "commande": "test -f reports/rapport-cloture-chantier.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
   }
  ]
 }
