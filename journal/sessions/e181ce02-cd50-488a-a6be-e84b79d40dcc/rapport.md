@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 330.8 h |
 | Tours | 196 |
-| Messages | 3767 |
-| Appels d'outils | 3356 |
+| Messages | 3770 |
+| Appels d'outils | 3359 |
 | Fichiers touchés | 25 |
-| Commandes | 2793 |
+| Commandes | 2796 |
 | Sous-agents | 43 |
-| Commits | 450 |
+| Commits | 452 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10543,7 +10543,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
-*43 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - bash — Lire la fiche de coordination S
 - bash — Inspecter le sous-module S
@@ -10559,7 +10559,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Écrire la note Panini
 - bash — Consigner les décisions
 - bash — Committer les décisions
-- … et 25 autres
+- … et 28 autres
 
 **Synthèse produite :**
 
@@ -10685,7 +10685,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2753 autres
+- … et 2756 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11283,4 +11283,6 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU APRÈS"; then echo
 - ÉTAT — LA LIGNE R REQUALIFIÉE : LE TAGGER EST LIVRÉ (--tagger, 0bbdbbb3), LA PROCHAINE ACTION PASSE AU SPLIT RÉEL ET AU GOLD 200+" -- docs/pilotage/en-cours.md 
 - DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET" -- docs/produit/README.md 2>&1 | tail -1   if git log -1 --fo
+- INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS)" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%
+- INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS) ; ÉTAT HORODATÉ" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git lo
 

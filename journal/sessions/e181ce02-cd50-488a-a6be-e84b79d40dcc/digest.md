@@ -62885,3 +62885,46 @@ index 73248b7f..aa0118ca 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in 1 2 3; do\n  git add docs/produit/README.md docs/pilotage/en-cours.md 2>/dev/null\n  timeout 240 git commit -m \"DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET\" -- docs/pro … [389 caractères tronqués]`
+
+  ```
+14 files changed, 211 insertions(+), 23 deletions(-)
+COMMIT OK 1
+5b03a0dd DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET
+   d6e66080..5b03a0dd  s/v7 -> s/v7
+   d6e66080..5b03a0dd  master -> master
+sam 14 nov 2026 11:28:09 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\"  … [349 caractères tronqués]`
+
+  ```
+sam 14 nov 2026 11:28:23 EST
+HEAD 5b03a0dd
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/verifie_journal.py       EXIT=0
+php -v >/dev/null 2>&1 || true         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=1
+POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+ATTACHEMENT exact 99.58 % · couverture 99.58 % · exact sur span 100.00 % · top-k 98.74 %
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py >/dev/null; python3 tools/index_reports.py --verifier; echo \"index EXIT=$?\"; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à … [773 caractères tronqués]`
+
+  ```
+index EXIT=0
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+5b03a0dd DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET
+Everything up-to-date
+Everything up-to-date
+index EXIT=0
+sam 14 nov 2026 11:28:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-14, 11 h 32 HNE (index régénéré, décisions 1A-6A inscrites)**\\ … [705 caractères tronqués]`

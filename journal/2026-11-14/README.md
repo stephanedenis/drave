@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **2 session(s)** · **6 thème(s)**
+**30 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
@@ -58,6 +58,7 @@
 | 11:10 | `9df4a591` | ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A) |
 | 11:20 | `29b3dd13` | ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS |
 | 11:23 | `d6e66080` | ÉTAT — LA LIGNE R REQUALIFIÉE : LE TAGGER EST LIVRÉ (--tagger, 0bbdbbb3), LA PROCHAINE ACTION PASSE AU SPLIT RÉEL ET AU GOLD 200+ |
+| 11:25 | `5b03a0dd` | DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET |
 
 ## Le récit de la journée (écrit à la main)
 
