@@ -252,7 +252,7 @@ def _formater_evaluation(rapport: dict) -> str:
     att_tete = mesure["attachement_tete"]
     prag = mesure["pragmatique"]
     controle = rapport["controle_negatif"]
-    return "\n".join([
+    lignes = [
         f"{NOM} {VERSION} — évaluation de l'heuristique sur le gold",
         f"gold {gold['nom']} · {gold['phrases']} phrases · {gold['tokens']} tokens · "
         f"{gold['cibles_attachement']} cibles d'attachement",
@@ -274,7 +274,26 @@ def _formater_evaluation(rapport: dict) -> str:
         f"FRACTION SÉMANTIQUE {_pct(mesure['fraction_semantique'])}",
         f"CONTRÔLE NÉGATIF cible exacte tirée au hasard {_pct(controle['exact_taux'])} "
         f"(graine {controle['graine']}, {controle['cibles']} cibles)",
-    ])
+    ]
+    par_langue = rapport.get("par_langue") or {}
+    if par_langue:
+        lignes += ["", "PAR LANGUE"]
+        for langue, m in par_langue.items():
+            p, s, a, c = m["pos"], m["syntagme"], m["attachement"], m["controle_negatif"]
+            pr = m["pragmatique"]
+            lignes += [
+                f"  {langue}  {m['phrases']} phrases · {p['tokens']} tokens · "
+                f"{a['cibles']} cibles d'attachement",
+                f"      POS {_pct(p['exactitude'])} (fermé {_pct(p['exactitude_ferme'])}, "
+                f"ouvert {_pct(p['exactitude_ouvert'])}) · SYNTAGMES F1 {_pct(s['f1'])} "
+                f"(tête {_pct(s['tete']['f1'])})",
+                f"      ATTACHEMENT exact {_pct(a['exact_taux'])} · "
+                f"couverture {_pct(a['couverture'])} · top-k {_pct(a['topk_taux'])} · "
+                f"PRAGMATIQUE acte {_pct(pr['acte'])}",
+                f"      CONTRÔLE NÉGATIF cible exacte tirée au hasard {_pct(c['exact_taux'])} "
+                f"(graine {c['graine']}, {c['cibles']} cibles)",
+            ]
+    return "\n".join(lignes)
 
 
 def cmd_evaluer(args: argparse.Namespace) -> int:
@@ -305,6 +324,21 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
             "exact_taux": hasard,
         },
     }
+    if args.par_langue:
+        # le détail fr/en : on rejoue la **même** mesure sur chaque sous-gold. Le contrôle
+        # négatif est recalculé par langue (l'univers des cibles change avec la langue).
+        par_langue = {}
+        for langue in sorted({p.get("langue", "fr") for p in phrases}):
+            sous = [p for p in phrases if p.get("langue", "fr") == langue]
+            m = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), sous)
+            m["controle_negatif"] = {
+                "nom": "cible exacte tirée au hasard dans le gold de la langue",
+                "graine": 0,
+                "cibles": len(_cibles_gold(sous)),
+                "exact_taux": _controle_hasard(sous),
+            }
+            par_langue[langue] = m
+        rapport["par_langue"] = par_langue
     if args.json:
         sys.stdout.write(_dumps(rapport))
     else:
@@ -478,12 +512,16 @@ def construire_parseur() -> argparse.ArgumentParser:
         "evaluer",
         help="mesurer l'heuristique sur le gold",
         description="Mesure POS, syntagmes (F1/tête) et attachement (exact/couverture) "
-                    "sur le gold, avec un contrôle négatif reproductible.",
-        epilog="Exemple : python3 tools/drave.py evaluer --gold --json",
+                    "sur le gold, avec un contrôle négatif reproductible. Avec --par-langue, "
+                    "donne le même détail pour le français et l'anglais.",
+        epilog="Exemples : python3 tools/drave.py evaluer --gold --json ; "
+               "python3 tools/drave.py evaluer --par-langue",
         formatter_class=_Formateur,
     )
     evaluer.add_argument("--gold", action="store_true",
                          help="mesurer le gold gelé (référence figée) au lieu du gold vivant")
+    evaluer.add_argument("--par-langue", action="store_true",
+                         help="scinder la mesure en français et en anglais")
     evaluer.add_argument("--json", action="store_true",
                          help="sortie JSON des mesures complètes")
     evaluer.set_defaults(fonction=cmd_evaluer)

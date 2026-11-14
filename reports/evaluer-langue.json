@@ -1,0 +1,394 @@
+{
+ "date": "2026-11-14",
+ "tache": "J11.2",
+ "ligne": "B13",
+ "commande": "python3 tools/drave.py evaluer --par-langue --json",
+ "gold": {
+  "nom": "vivant (hand + reel + synthétique)",
+  "gele": false,
+  "phrases": 612,
+  "tokens": 3179,
+  "cibles_attachement": 239
+ },
+ "global": {
+  "phrases": 612,
+  "tokens": 3179,
+  "pos": {
+   "exactitude": 0.8625,
+   "exactitude_ferme": 0.9373,
+   "exactitude_ouvert": 0.7918
+  },
+  "syntagme": {
+   "precision": 0.786,
+   "rappel": 0.7944,
+   "f1": 0.7902,
+   "tp": 1480,
+   "fp": 403,
+   "fn": 383
+  },
+  "tete": {
+   "precision": 0.9261,
+   "rappel": 0.8808,
+   "f1": 0.9029
+  },
+  "attachement": {
+   "cibles": 239,
+   "labels": 238,
+   "exact": 238,
+   "couverture": 0.9958,
+   "exact_taux": 0.9958,
+   "exact_taux_span": 1.0,
+   "topk": 236,
+   "topk_taux": 0.9874
+  },
+  "pragmatique": {
+   "acte": 0.9967,
+   "negation": 0.9771,
+   "modalite": 0.9886,
+   "double_sens": 0.9444
+  },
+  "fraction_semantique": 0.5476,
+  "controle_negatif": {
+   "nom": "cible exacte tirée au hasard dans le gold",
+   "graine": 0,
+   "cibles": 239,
+   "exact_taux": 0.0167
+  },
+  "syntagmes_lineaire": {
+   "precision": 0.8539,
+   "rappel": 0.7783,
+   "f1": 0.8144,
+   "tp": 1450,
+   "fp": 248,
+   "fn": 413,
+   "tete": {
+    "precision": 0.9482,
+    "rappel": 0.8642,
+    "f1": 0.9042,
+    "tp": 1610,
+    "fp": 88,
+    "fn": 253
+   }
+  },
+  "attachement_lineaire": {
+   "exact": 224,
+   "labels": 224,
+   "couverture": 0.9372
+  },
+  "cibles_attachement": 239
+ },
+ "par_langue": {
+  "en": {
+   "phrases": 210,
+   "tokens": 1148,
+   "pos": {
+    "exactitude": 0.9451,
+    "exactitude_ferme": 0.983,
+    "exactitude_ouvert": 0.9054
+   },
+   "syntagme": {
+    "precision": 0.8988,
+    "rappel": 0.8348,
+    "f1": 0.8656,
+    "tp": 586,
+    "fp": 66,
+    "fn": 116
+   },
+   "tete": {
+    "precision": 0.9893,
+    "rappel": 0.9188,
+    "f1": 0.9527
+   },
+   "attachement": {
+    "cibles": 88,
+    "labels": 87,
+    "exact": 87,
+    "couverture": 0.9886,
+    "exact_taux": 0.9886,
+    "exact_taux_span": 1.0,
+    "topk": 87,
+    "topk_taux": 0.9886
+   },
+   "pragmatique": {
+    "acte": 0.9952,
+    "negation": 1.0,
+    "modalite": 0.9857,
+    "double_sens": 0.9952
+   },
+   "fraction_semantique": 0.4954,
+   "controle_negatif": {
+    "nom": "cible exacte tirée au hasard dans le gold de la langue",
+    "graine": 0,
+    "cibles": 88,
+    "exact_taux": 0.0227
+   }
+  },
+  "fr": {
+   "phrases": 402,
+   "tokens": 2031,
+   "pos": {
+    "exactitude": 0.8159,
+    "exactitude_ferme": 0.9092,
+    "exactitude_ouvert": 0.7325
+   },
+   "syntagme": {
+    "precision": 0.7262,
+    "rappel": 0.77,
+    "f1": 0.7475,
+    "tp": 894,
+    "fp": 337,
+    "fn": 267
+   },
+   "tete": {
+    "precision": 0.8893,
+    "rappel": 0.8579,
+    "f1": 0.8733
+   },
+   "attachement": {
+    "cibles": 151,
+    "labels": 151,
+    "exact": 151,
+    "couverture": 1.0,
+    "exact_taux": 1.0,
+    "exact_taux_span": 1.0,
+    "topk": 149,
+    "topk_taux": 0.9868
+   },
+   "pragmatique": {
+    "acte": 0.9975,
+    "negation": 0.9652,
+    "modalite": 0.99,
+    "double_sens": 0.9179
+   },
+   "fraction_semantique": 0.5749,
+   "controle_negatif": {
+    "nom": "cible exacte tirée au hasard dans le gold de la langue",
+    "graine": 0,
+    "cibles": 151,
+    "exact_taux": 0.0199
+   }
+  }
+ },
+ "par_source": {
+  "hand": {
+   "fr": {
+    "phrases": 14,
+    "tokens": 74,
+    "pos": {
+     "exactitude": 0.8378,
+     "exactitude_ferme": 0.8205,
+     "exactitude_ouvert": 0.8571
+    },
+    "syntagme": {
+     "precision": 0.8,
+     "rappel": 1.0,
+     "f1": 0.8889,
+     "tp": 40,
+     "fp": 10,
+     "fn": 0
+    },
+    "tete": {
+     "precision": 0.9302,
+     "rappel": 1.0,
+     "f1": 0.9639
+    },
+    "attachement": {
+     "cibles": 10,
+     "labels": 10,
+     "exact": 10,
+     "couverture": 1.0,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "topk": 10,
+     "topk_taux": 1.0
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 1.0,
+     "modalite": 0.9286,
+     "double_sens": 0.8571
+    },
+    "fraction_semantique": 0.5271,
+    "controle_negatif": null
+   },
+   "en": {
+    "phrases": 6,
+    "tokens": 31,
+    "pos": {
+     "exactitude": 1.0,
+     "exactitude_ferme": 1.0,
+     "exactitude_ouvert": 1.0
+    },
+    "syntagme": {
+     "precision": 0.9375,
+     "rappel": 0.9375,
+     "f1": 0.9375,
+     "tp": 15,
+     "fp": 1,
+     "fn": 1
+    },
+    "tete": {
+     "precision": 1.0,
+     "rappel": 1.0,
+     "f1": 1.0
+    },
+    "attachement": {
+     "cibles": 3,
+     "labels": 2,
+     "exact": 2,
+     "couverture": 0.6667,
+     "exact_taux": 0.6667,
+     "exact_taux_span": 1.0,
+     "topk": 2,
+     "topk_taux": 0.6667
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 1.0,
+     "modalite": 1.0,
+     "double_sens": 1.0
+    },
+    "fraction_semantique": 0.3816,
+    "controle_negatif": null
+   }
+  },
+  "reel": {
+   "fr": {
+    "phrases": 228,
+    "tokens": 1258,
+    "pos": {
+     "exactitude": 0.841,
+     "exactitude_ferme": 0.8872,
+     "exactitude_ouvert": 0.7921
+    },
+    "syntagme": {
+     "precision": 0.7357,
+     "rappel": 0.697,
+     "f1": 0.7158,
+     "tp": 529,
+     "fp": 190,
+     "fn": 230
+    },
+    "tete": {
+     "precision": 0.8905,
+     "rappel": 0.8037,
+     "f1": 0.8449
+    },
+    "attachement": {
+     "cibles": 86,
+     "labels": 86,
+     "exact": 86,
+     "couverture": 1.0,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "topk": 85,
+     "topk_taux": 0.9884
+    },
+    "pragmatique": {
+     "acte": 0.9956,
+     "negation": 0.9386,
+     "modalite": 0.9868,
+     "double_sens": 0.943
+    },
+    "fraction_semantique": 0.5187,
+    "controle_negatif": null
+   },
+   "en": {
+    "phrases": 204,
+    "tokens": 1117,
+    "pos": {
+     "exactitude": 0.9436,
+     "exactitude_ferme": 0.9825,
+     "exactitude_ouvert": 0.9031
+    },
+    "syntagme": {
+     "precision": 0.8978,
+     "rappel": 0.8324,
+     "f1": 0.8638,
+     "tp": 571,
+     "fp": 65,
+     "fn": 115
+    },
+    "tete": {
+     "precision": 0.989,
+     "rappel": 0.9169,
+     "f1": 0.9516
+    },
+    "attachement": {
+     "cibles": 85,
+     "labels": 85,
+     "exact": 85,
+     "couverture": 1.0,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "topk": 85,
+     "topk_taux": 1.0
+    },
+    "pragmatique": {
+     "acte": 0.9951,
+     "negation": 1.0,
+     "modalite": 0.9853,
+     "double_sens": 0.9951
+    },
+    "fraction_semantique": 0.4988,
+    "controle_negatif": null
+   }
+  },
+  "synthetique": {
+   "fr": {
+    "phrases": 160,
+    "tokens": 699,
+    "pos": {
+     "exactitude": 0.7682,
+     "exactitude_ferme": 0.9743,
+     "exactitude_ouvert": 0.637
+    },
+    "syntagme": {
+     "precision": 0.7035,
+     "rappel": 0.8978,
+     "f1": 0.7888,
+     "tp": 325,
+     "fp": 137,
+     "fn": 37
+    },
+    "tete": {
+     "precision": 0.8827,
+     "rappel": 0.9558,
+     "f1": 0.9178
+    },
+    "attachement": {
+     "cibles": 55,
+     "labels": 55,
+     "exact": 55,
+     "couverture": 1.0,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "topk": 54,
+     "topk_taux": 0.9818
+    },
+    "pragmatique": {
+     "acte": 1.0,
+     "negation": 1.0,
+     "modalite": 1.0,
+     "double_sens": 0.8875
+    },
+    "fraction_semantique": 0.6592,
+    "controle_negatif": null
+   }
+  }
+ },
+ "controles": {
+  "negatif": "cible exacte tirée au hasard dans les cibles de la langue (graine 0)",
+  "non_regression": {
+   "commande": "evaluer --json vs evaluer --par-langue --json",
+   "mesure_globale_identique": true
+  },
+  "composition": "gold réel seul (source hand + reel), par langue : isole l’effet du synthétique"
+ },
+ "limites": [
+  "mesure in-sample : les règles ont été dessinées sur ce gold",
+  "l’anglais est 100 % réel (6 hand + 204 reel) ; le français ajoute 160 synthétiques",
+  "88 cibles anglaises (dont 1 sans span, g017) : petit échantillon",
+  "la langue vient du gold, pas d’une détection"
+ ]
+}

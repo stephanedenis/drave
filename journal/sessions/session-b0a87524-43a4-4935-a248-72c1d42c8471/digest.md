@@ -3129,3 +3129,150 @@ Please supply the message using either -m or -F option.
   ```
 
 - **bash** `{"command": "cat > /tmp/j111/commit-msg.txt <<'MSG'\nJ11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238\n\nLes 5 blocs de docs/produit/exemples.md sont rejoués sur le code courant\n(CLI drave 0.1.0, schéma v2) : 5/5 reproduits, 4 corrigés, … [1256 caractères tronqués]`
+
+  ```
+[s/v7 84e393bb] J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238
+ 16 files changed, 2970 insertions(+), 94 deletions(-)
+ create mode 100644 reports/rapport-exemples-rejoues.json
+ create mode 100644 reports/rapport-exemples-rejoues.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit show --stat --oneline HEAD | head -30", "description": "Inspect commit contents"}`
+
+  ```
+84e393bb J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238
+ docs/pilotage/en-cours.md                          |   15 +-
+ docs/pilotage/roadmap.md                           |    9 +
+ docs/produit/exemples.md                           |  151 +-
+ journal/2026-11-14/README.md                       |    7 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    5 +-
+ journal/2026-11-14/mesures.md                      |    2 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    4 +-
+ journal/sessions/MANIFEST.md                       |    6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   26 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2096 ++++++++++++++++++++
+ .../rapport.md                                     |   54 +-
+ reports/rapport-exemples-rejoues.json              |  500 +++++
+ reports/rapport-exemples-rejoues.md                |  171 ++
+ 16 files changed, 2970 insertions(+), 94 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short | head -30\necho ===\ngit log --oneline -3", "description": "Check status after commit"}`
+
+  ```
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/memoire.md
+MM journal/2026-11-14/mesures.md
+MM journal/2026-11-14/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+D  journal/sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/digest.md
+D  journal/sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md
+MM journal/sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/digest.md
+MM journal/sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/rapport.md
+ M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? journal/sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/
+?? reports/rapport-s-paragraphes.md
+===
+84e393bb J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉ
+… [333 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit show HEAD:docs/pilotage/en-cours.md | grep -n \"J11.1\\|725\\|819\"\ngit show HEAD:reports/rapport-exemples-rejoues.md | head -5\ngit show HEAD:docs/produit/exemples.md | grep -n \"rejouées le 2026-11-14\\|r035.*désormais prédit\\| … [61 caractères tronqués]`
+
+  ```
+63:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J11.1** (5/5 blocs rejoués, 4 corrigés ; [fiche](../../reports/rapport-exemples-rejoues.md)) ; **contrat v1**, **`drave` v0**.
+94:- **J11.1** : **5/5**, **4 corrigés** ; `r035` prédit, refus **3** ; F1 **0,7902**, attachement **238/238** (238/239) ; [fiche](../../reports/rapport-exemples-rejoues.md) + JSON.
+105:| fichiers / JSON de résultats | **725** / **819** | `reports/*.md` / `reports/*.json` |
+117:| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 + convention GV (0,7902), s065 (238/239), g017 rejeté, schéma v2, restitution v1 (canonique 46/46, strict 0,1087), J11.1 (exemples rejoués)** | **J11.2–J11.4** (produit) ; **trancher `g017`** ; puis T132/T
+… [794 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 tools/verifie_etat_a_jour.py --head 2>&1 | tail -5\npython3 tools/revue_documentation.py 2>&1 | tail -3\npython3 tools/verifie_en_cours.py 2>&1 | tail -2", "description": "Final state and doc checks"}`
+
+  ```
+état · dernier fait 84e393bb · dernier état 84e393bb
+  ✅ aucun fait commité après le dernier état
+  revue de documentation · 725 fiche(s) · 819 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit status --short -- docs/produit/exemples.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-exemples-rejoues.md reports/rapport-exemples-rejoues.json; echo \"clean=$?\"", "description": "Confirm target files commi … [6 caractères tronqués]`
+
+  ```
+clean=0
+  ```
+
+- **todo_write** `{"todos": [{"content": "Rejouer les 5 blocs et collecter les sorties courantes", "status": "completed"}, {"content": "Corriger docs/produit/exemples.md (sorties + commentaires)", "status": "completed"}, {"content": "Écrire reports/rapport-exemples-rejoues.md + JSON", "status": "completed"}, {"conten … [153 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+**J11.1 terminé et committé** (`84e393bb`).
+
+### Ce que le rejeu a montré
+
+| bloc | verdict | changement |
+|---|---|---|
+| §1 `g001` | corrigé | **19 → 20 étiquettes**, `./PONCT`, couverture POS `0,92 → 0,95` |
+| §2 `g011` | identique | v2 publie `meta.partition`/`meta.alternative` sur le groupe 0 |
+| §3 `r241` | corrigé | `left` : `NOUN 0,3 → VERB 0,85`, `./PONCT` ajouté |
+| §4 refus | corrigé | code de sortie **1 → 3** ; `--json` rend l'annotation de refus |
+| §5 `r035` | corrigé | **l'ancien échec est désormais prédit** : `REL [9:24] « she talks about » → film` |
+
+Le point important : **`r035` n'est plus un échec**. Il ne reste que `g017` comme cible sans span prédit.
+
+### Chiffres courants
+
+- F1 syntagmes **0,7902**
+- POS **0,8625** (ouvert **0,7918**)
+- attachement **238/238 labels** — **238/239 cibles**, couverture **0,9958**
+- gold vivant : **612 phrases**, **3 179 tokens**, **239 cibles**
+
+Le mandat disait `237/238` : c'est l'état d'avant `s065` (J6.2), qui a ajouté un label sans toucher un span.
+
+### Contrôle négatif
+
+Mutation d'un token dans une copie de la doc (`left/VERB → NOUN`) : le comparateur signale **4/5** et l'écart exact `.pos[4].type: 'NOUN' != 'VERB'`. Sur la doc réelle : **5/5**.
+
+### Livrables
+
+- [`docs/produit/exemples.md`](docs/produit/exemples.md) — 5 blocs corrigés, en-tête daté, §5 réécrit
+- [`reports/rapport-exemples-rejoues.md`](reports/rapport-exemples-rejoues.md)
+- [`reports/rapport-exemples-rejoues.json`](reports/rapport-exemples-rejoues.json)
+- état [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) et roadmap mis à jour
+
+### Portes
+
+- `porte-produit` : **verte**, autotest **183/183**
+- revue de documentation : **verte** (725 fiches / 819 JSON)
+- liens, tableaux, schémas : **verts**
+- `en-cours` : 1 630 mots, T0 dans le budget
+- `verifie_etat_a_jour --head` : **aucun fait après le dernier état**
+
+Note : `reports/INDEX.md` reste modifié dans l'arbre par le cycle concurrent (ligne `s-paragraphes` non committée) ; la ligne de cette fiche y figure déjà.
+

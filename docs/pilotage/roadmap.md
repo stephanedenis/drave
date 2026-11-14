@@ -72,6 +72,16 @@ attachement **238/238 labels** (238/239 cibles, 0,9958) ; le mandat 237/238 est 
 [`fiche`](../../reports/rapport-exemples-rejoues.md) + JSON. La suite produit est **J11.2**
 (`evaluer --par-langue`), **J11.3** (50 textes libres), **J11.4** (schéma v2 documenté).
 
+**J11.2 — la mesure par langue.** `evaluer --par-langue` expose le détail **fr/en** (POS,
+syntagmes, attachement, pragmatique, contrôle négatif recalculé par langue) sans changer le
+global. **fr** : 402 phrases, POS **0,8159**, F1 **0,7475**, attachement **151/151** ; **en** :
+210 phrases, POS **0,9451**, F1 **0,8656**, attachement **87/88** (span 87/87). L'anglais est
+devant, mais l'anglais est **100 % réel** quand le français ajoute **160 synthétiques** ; sur le
+réel seul, l'écart tient (POS 0,9451 contre 0,8408 ; F1 0,8656 contre 0,7258) — il reste
+**confondu avec la source**. Le test vérifie la non-régression (`--par-langue` ne change pas
+`heuristique`) et la cohérence des comptes. [`fiche`](../../reports/rapport-evaluer-langue.md) +
+JSON. La suite produit est **J11.3** (50 textes libres), **J11.4** (schéma v2 documenté).
+
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)

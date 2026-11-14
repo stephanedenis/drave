@@ -220,5 +220,38 @@ class TestCorpus(unittest.TestCase):
             _p.Path(chemin).unlink(missing_ok=True)
 
 
+class TestParLangue(unittest.TestCase):
+    """`evaluer --par-langue` scinde la mesure fr/en sans la changer."""
+
+    def test_par_langue_json(self) -> None:
+        global_ = drave("evaluer", "--json")
+        sortie = drave("evaluer", "--par-langue", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        self.assertEqual(global_.returncode, 0, detail(global_))
+        d = json.loads(sortie.stdout)
+        self.assertEqual({"fr", "en"}, set(d["par_langue"]))
+        self.assertEqual(d["gold"]["phrases"],
+                         sum(m["phrases"] for m in d["par_langue"].values()))
+        for langue, m in d["par_langue"].items():
+            self.assertGreater(m["phrases"], 0, langue)
+            self.assertGreater(m["pos"]["tokens"], 0, langue)
+            self.assertIn("controle_negatif", m, langue)
+            # l'attachement par langue du rapport global et le sous-rapport coïncident
+            attendu = d["heuristique"]["attachement"]["par_langue"][langue]
+            self.assertEqual(attendu["cibles"], m["attachement"]["cibles"], langue)
+            self.assertEqual(attendu["exact"], m["attachement"]["exact"], langue)
+        # le drapeau ne change pas la mesure globale (contrôle de non-régression)
+        self.assertEqual(json.loads(global_.stdout)["heuristique"], d["heuristique"])
+
+    def test_par_langue_texte(self) -> None:
+        sortie = drave("evaluer", "--par-langue")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        self.assertIn("PAR LANGUE", sortie.stdout)
+        for langue in ("fr", "en"):
+            self.assertIn(f"  {langue}  ", sortie.stdout)
+        # le contrôle négatif est recalculé pour chaque langue, pas recopié
+        self.assertEqual(3, sortie.stdout.count("CONTRÔLE NÉGATIF"))
+
+
 if __name__ == "__main__":
     unittest.main()

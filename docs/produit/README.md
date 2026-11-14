@@ -5,15 +5,15 @@
 > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
 > qu'il garantit.
 >
-> **Vérifié le 2026-11-07** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **Vérifié le 2026-11-14** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
 > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
 > existent, et la
 > porte produit est verte. Le format est **version 2** (`schema: "drave.annotation"`,
 > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
 > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
-> § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 et du § 3.3
-> datent du **06/11**, quand le format était v1. Ce qui manque encore au contrat est nommé au § 7,
-> sans être présenté comme acquis.
+> § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 datent du
+> **06/11**, et l'`evaluer` du § 3.3 a été relancé le **14/11** (gold vivant 612, `--par-langue
+> fr/en`). Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
 >
 > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
@@ -126,21 +126,51 @@ drave 0.1.0 — évaluation de l'heuristique sur le gold
 gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
 
 POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
-SYNTAGMES   F1 75.33 %  (P 72.39 % / R 78.53 %)
-  tête      F1 86.40 %  (P 85.19 % / R 87.65 %)
-  vue linéaire (partition filtrer) F1 81.04 %  · attachement 93.31 % de couverture
-ATTACHEMENT exact 98.74 % · couverture 99.16 % · exact sur span 99.58 % · top-k 98.33 %
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+  tête      F1 90.29 %  (P 92.61 % / R 88.08 %)
+  vue linéaire (partition filtrer) F1 81.44 %  · attachement 93.72 % de couverture
+ATTACHEMENT exact 99.58 % · couverture 99.58 % · exact sur span 100.00 % · top-k 98.74 %
   tête      couverture 100.00 % · top-k 99.16 %
 PRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %
 FRACTION SÉMANTIQUE 54.76 %
 CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 ```
 
-**Lecture.** `exact 98.33 %` est le **rendement** (235/239 cibles) ; `exact sur span 99.58 %` est
-l'**exactitude** sur les 236 segments dont le span est prédit. Les 3 cibles restantes n'ont pas
-de segment au bon span : c'est un plafond de **couverture**, pas d'attachement. `--gold` mesure
-le gold gelé 602 (F1 65,11 %, POS 85,32 %). La commande sort **0** : elle ne teste pas la cascade
-(voir § 4).
+**Lecture.** `exact 99.58 %` est le **rendement** (238/239 cibles) ; `exact sur span 100.00 %` est
+l'**exactitude** sur les 238 segments dont le span est prédit. La seule cible restante (`g017`)
+n'a pas de segment au bon span : c'est un plafond de **couverture**, pas d'attachement.
+`--gold` mesure le gold gelé 602 (F1 78,82 %, POS 86,25 %). La commande sort **0** : elle ne
+teste pas la cascade (voir § 4).
+
+**Par langue.** `--par-langue` rejoue la **même** mesure sur les deux sous-golds et ajoute un
+bloc `PAR LANGUE` (et une clé `par_langue` au JSON) : phrases, tokens, cibles, POS, syntagmes,
+attachement, pragmatique et contrôle négatif **par langue**. Le contrôle négatif est recalculé
+sur les cibles de la langue ; les chiffres globaux, eux, ne bougent pas.
+
+```bash
+python3 tools/drave.py evaluer --par-langue
+```
+```
+PAR LANGUE
+  en  210 phrases · 1148 tokens · 88 cibles d'attachement
+      POS 94.51 % (fermé 98.30 %, ouvert 90.54 %) · SYNTAGMES F1 86.56 % (tête 95.27 %)
+      ATTACHEMENT exact 98.86 % · couverture 98.86 % · top-k 98.86 % · PRAGMATIQUE acte 99.52 %
+      CONTRÔLE NÉGATIF cible exacte tirée au hasard 2.27 % (graine 0, 88 cibles)
+  fr  402 phrases · 2031 tokens · 151 cibles d'attachement
+      POS 81.59 % (fermé 90.92 %, ouvert 73.25 %) · SYNTAGMES F1 74.75 % (tête 87.33 %)
+      ATTACHEMENT exact 100.00 % · couverture 100.00 % · top-k 98.68 % · PRAGMATIQUE acte 99.75 %
+      CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.99 % (graine 0, 151 cibles)
+```
+
+**Ce que le détail par langue dit — et ne dit pas.** L'anglais est **au-dessus** du français en
+POS (94,51 % contre 81,59 %) et en syntagmes (F1 86,56 % contre 74,75 %) ; l'attachement est
+**exact dans les deux langues** sur les spans prédits (87/87 et 151/151). Mais les deux golds ne
+sont **pas de même composition** : l'anglais est fait de 210 phrases réelles (dont 6 `hand`),
+le français ajoute **160 phrases synthétiques** au lexique disjoint. Le contrôle sur le seul
+gold réel (`hand` + `reel`) donne encore l'anglais devant (POS 94,51 contre 84,08 ; F1 86,56
+contre 72,58) : l'écart n'est donc pas *seulement* un effet du synthétique, mais il reste
+**confondu avec la source**. Lire la langue avec la source, jamais l'une sans l'autre. La fiche
+complète est [`rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md).
 
 ### 3.3 quater Traiter un corpus
 
@@ -374,14 +404,14 @@ python3 tools/drave.py --aide
 python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] \
     [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
 python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json]
-python3 tools/drave.py evaluer [--gold] [--json]
+python3 tools/drave.py evaluer [--gold] [--json] [--par-langue]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
 python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json [--json]
 ```
 
 **Sorties réelles des commandes** (07/11 pour le format ; les valeurs d'`evaluer` sont celles
-mesurées le 06/11) :
+mesurées le 14/11) :
 
 ```
 $ python3 tools/drave.py --version
@@ -391,8 +421,8 @@ $ python3 tools/drave.py evaluer --gold
 drave 0.1.0 — évaluation de l'heuristique sur le gold
 gold gelé (référence figée) · 602 phrases · 3141 tokens · 239 cibles d'attachement
 ...
-SYNTAGMES   F1 58.93 %  (P 63.19 % / R 55.22 %)
-  tête      F1 73.92 %  (P 81.36 % / R 67.72 %)
+SYNTAGMES   F1 78.82 %  (P 78.18 % / R 79.46 %)
+  tête      F1 90.25 %  (P 92.34 % / R 88.26 %)
 ...
 CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 
@@ -417,6 +447,7 @@ rejeu identique : oui
 | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
 | `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
+| `--par-langue` | `evaluer` | détail **fr/en** : POS, syntagmes, attachement et contrôle négatif par langue |
 | `-V`, `--version` | global | `drave 0.1.0` |
 | `-h`, `--aide` | global | l'aide, largeur fixe |
 
@@ -456,6 +487,7 @@ inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sa
 | **le contrat du bloc** (9 niveaux, substitution, activation) | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
 | **les chiffres de l'attachement** (v12, instantané) | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) · [`reports/pensee-v12.json`](../../reports/pensee-v12.json) |
 | **l'audit des mesures** (contrôles, spans, bases) | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |
+| **la mesure par langue** (fr/en, source contrôlée) | [`reports/rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md) |
 | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
 | **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |
 | **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |

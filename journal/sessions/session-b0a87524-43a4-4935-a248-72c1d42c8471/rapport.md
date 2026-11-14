@@ -9,10 +9,10 @@
 | Début | 2026-11-14 04:16 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 135 |
-| Appels d'outils | 151 |
+| Messages | 141 |
+| Appels d'outils | 157 |
 | Fichiers touchés | 4 |
-| Commandes | 108 |
+| Commandes | 113 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J11.1 : les exemples de la doc produit — rejoue les 5 blocs de `docs/produit/exemples.md` avec le code courant (F1 … [130 caractères tronqués]
 
-*151 appels d'outils.* Actions notables :
+*157 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - read
@@ -41,7 +41,53 @@
 - bash — Replay example 4 refusal
 - bash — Replay example 5
 - bash — Inspect example 1 JSON and current eval
-- … et 129 autres
+- … et 134 autres
+
+**Synthèse produite :**
+
+**J11.1 terminé et committé** (`84e393bb`).
+
+\### Ce que le rejeu a montré
+
+| bloc | verdict | changement |
+|---|---|---|
+| §1 `g001` | corrigé | **19 → 20 étiquettes**, `./PONCT`, couverture POS `0,92 → 0,95` |
+| §2 `g011` | identique | v2 publie `meta.partition`/`meta.alternative` sur le groupe 0 |
+| §3 `r241` | corrigé | `left` : `NOUN 0,3 → VERB 0,85`, `./PONCT` ajouté |
+| §4 refus | corrigé | code de sortie **1 → 3** ; `--json` rend l'annotation de refus |
+| §5 `r035` | corrigé | **l'ancien échec est désormais prédit** : `REL [9:24] « she talks about » → film` |
+
+Le point important : **`r035` n'est plus un échec**. Il ne reste que `g017` comme cible sans span prédit.
+
+\### Chiffres courants
+
+- F1 syntagmes **0,7902**
+- POS **0,8625** (ouvert **0,7918**)
+- attachement **238/238 labels** — **238/239 cibles**, couverture **0,9958**
+- gold vivant : **612 phrases**, **3 179 tokens**, **239 cibles**
+
+Le mandat disait `237/238` : c'est l'état d'avant `s065` (J6.2), qui a ajouté un label sans toucher un span.
+
+\### Contrôle négatif
+
+Mutation d'un token dans une copie de la doc (`left/VERB → NOUN`) : le comparateur signale **4/5** et l'écart exact `.pos[4].type: 'NOUN' != 'VERB'`. Sur la doc réelle : **5/5**.
+
+\### Livrables
+
+- [`docs/produit/exemples.md`](docs/produit/exemples.md) — 5 blocs corrigés, en-tête daté, §5 réécrit
+- [`reports/rapport-exemples-rejoues.md`](reports/rapport-exemples-rejoues.md)
+- [`reports/rapport-exemples-rejoues.json`](reports/rapport-exemples-rejoues.json)
+- état [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) et roadmap mis à jour
+
+\### Portes
+
+- `porte-produit` : **verte**, autotest **183/183**
+- revue de documentation : **verte** (725 fiches / 819 JSON)
+- liens, tableaux, schémas : **verts**
+- `en-cours` : 1 630 mots, T0 dans le budget
+- `verifie_etat_a_jour --head` : **aucun fait après le dernier état**
+
+Note : `reports/INDEX.md` reste modifié dans l'arbre par le cycle concurrent (ligne `s-paragraphes` non committée) ; la ligne de cette fiche y figure déjà.
 
 ## 3. Travail accompli
 
@@ -96,7 +142,7 @@
 - **T1** Check status of known failure cases
 - **T1** Find missing gold attachment targets
 - **T1** Show full example 1 JSON
-- … et 68 autres
+- … et 73 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -137,7 +183,7 @@
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : M journal/README.md  M journal/sessions/MANIFEST.md  M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md  M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md  M journal/se
 - **T1** : a6808c5e CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ 03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236
@@ -145,6 +191,7 @@
 - **T1** : [stderr] wc: /tmp/j111/porte-produit-autotest.log: No such file or directory tail: cannot open '/tmp/j111/porte-produit-autotest.log' for reading: No such file or directory [exit code: 1]
 - **T1** : a6808c5e CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ 03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236
 - **T1** : [stderr]   ✅ index : aucun fait stagé sans état error: Terminal is dumb, but EDITOR unset Please supply the message using either -m or -F option. [exit code: 1]
+- **T1** : MM journal/2026-11-14/README.md MM journal/2026-11-14/docs.md MM journal/2026-11-14/memoire.md MM journal/2026-11-14/mesures.md MM journal/2026-11-14/portes.md MM journal/README.md MM journal/THEMES.m
 
 ## 6. Commits
 

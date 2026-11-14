@@ -61628,3 +61628,15 @@ budget consommé : 22652.8 s · lancements : 22
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"fait|a_faire\" | tail -4", "description": "Suivre J11.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 04:37:31 EST
+2026-11-14 04:33:42 · ✔ J11.1 en 901.1 s (code 0) — ✅ test -f reports/rapport-exemples-rejoues.md && echo FICHE-OK; ✅ bash tools/porte-produit.sh 2>&1 | tail -1
+2026-11-14 04:33:42 · ▶ J11.2 — Le produit — la mesure par langue (timeout 5400 s)
+  [a_faire ] J12.1  j12 — Panini — le §334 et les 44 œuvres
+  [a_faire ] J12.2  j12 — Panini — le corpus d'or CIC
+  [a_faire ] J13.1  j13 — Les bilans — la table des mesures
+  [a_faire ] J14.1  j14 — La clôture — la passe et le tag
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git log --oneline -1 | cut -c1-80", "description": "Suivre J11.2", "timeoutMs": 600000}`
