@@ -1,0 +1,328 @@
+{
+  "date": "2026-11-13",
+  "tache": "J4.4",
+  "head": "dc78f223",
+  "branche": "s/v7",
+  "ligne": "A",
+  "objet": "coordination A — A6.2 et A8.3b2",
+  "fiche": "reports/rapport-coordination-a.md",
+  "verdict": "A6.2 n'est pas bloquée : le MoE local de 18 Go existe et tourne (porte de l'échange d'experts tenue, --ppl 37,2013). Le blocage est la résidence mono-GPU 16 Go (17,28 GiB > 16 GiB), avec un cache VRAM d'experts câblé pour MXFP4 seulement, pas pour le Q4_K. A8.3b2 est nommée par A8.3b (instrumenter forward_lot) mais absente du backlog, de la roadmap et du graphe ; elle est libre. Aucun fichier de A modifié.",
+  "aucune_modification_a": [
+    "drave-core/",
+    "data/",
+    "work/",
+    "docs/pilotage/backlog/",
+    "docs/pilotage/roadmap.md"
+  ],
+  "a62": {
+    "statut": "libre (mesure) ; à requalifier dans les docs",
+    "blocage": "résidence mono-GPU 16 Go (17,28 GiB > 16 GiB) ; le cache VRAM d'experts n'est câblé que pour MXFP4, pas pour le Q4_K du modèle local",
+    "modele": {
+      "chemin": "/home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf",
+      "octets": 18556686752,
+      "go": 18.556686752,
+      "gib": 17.28226128220558,
+      "sha256": "6c997b8af17debdfb01d890214400ccbab00db6acc0ba8da5de1cc906c4774d0",
+      "couches": 48,
+      "experts": 128,
+      "experts_utilises": 8,
+      "chemin_cite_par_rapport_etat_a": "modeles/gguf/Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf",
+      "chemin_cite_existe": false
+    },
+    "machine": {
+      "gpus": "2 × Quadro RTX 5000, 16384 MiB chacune",
+      "vram_totale_gib": 32,
+      "ram_gib": 125,
+      "nvlink": true
+    },
+    "rejeux": {
+      "porte_echange_experts": {
+        "commande": "bash tools/porte-echange-experts.sh",
+        "n": 16,
+        "ctx": 512,
+        "exit": 0,
+        "reference_ppl": 54.5202,
+        "trace_decisions": 768,
+        "routage_propre": 54.5202,
+        "routage_etranger": 36074.9497,
+        "verdict": "porte tenue : invariant exact, routage étranger différent"
+      },
+      "ppl_c9": {
+        "commande": "DRAVE_TAMPONS=1 drave <modele> --ppl <ids> --ctx 512 --limit 32 --threads 8",
+        "ppl": 37.2013,
+        "tokens_notes": 31,
+        "chargement_s": 9.82,
+        "listes_go": 0.91,
+        "verdict": "37,2013 reproduit"
+      },
+      "verifie_backlog": {
+        "commande": "python3 tools/verifie_backlog.py",
+        "exit": 0,
+        "frontiere": ["A2.6", "N2", "N4"],
+        "verdict": "graphe cohérent avec ses fiches ; ne voit ni A6.2 libre ni A8.3b2"
+      }
+    },
+    "resultats_existants": {
+      "prefill_regroupement": {
+        "lot_192": {"lectures_avant": 74496, "lectures_apres": 4804, "gain": 15.51},
+        "lot_64": {"gain": 7.08},
+        "lot_8": {"gain": 2.27},
+        "borne_infinie": 12.1,
+        "temps_lot_192": 1.58,
+        "source": "reports/rapport-prefill-par-experts.md"
+      },
+      "clusters": {
+        "clusters_8": {"ventilation": 3.08, "hasard": 5.32, "gain": 1.73, "couverture": 0.607},
+        "clusters_4": {"ventilation": 1.94, "hasard": 3.59, "gain": 1.85},
+        "source": "reports/rapport-decoupage-moe.md"
+      },
+      "cache_lru": {
+        "part_25_pct": {"experts": 32, "succes_pct": [74.8, 87.0]},
+        "part_50_pct": {"experts": 64, "succes_pct": [92.0, 93.0]},
+        "reutilisation_immediate_pct": [46.9, 48.8],
+        "source": "reports/rapport-reutilisation-experts.md"
+      },
+      "cache_vram": {
+        "plafond_predit": 1.09,
+        "plafond_absolu": 1.41,
+        "succes_pct": 28.7,
+        "source": "reports/rapport-cache-experts-vram.md"
+      },
+      "cache_ram": {
+        "effet_4_go_pct": 4,
+        "effet_32_go_pct": 21,
+        "verdict": "plus lent ; ne pas utiliser comme solution",
+        "source": "reports/rapport-chargement-paresseux.md et model.rs:1583"
+      }
+    },
+    "manque": [
+      "le routage appris n'est pas mesuré ; C9 est un échange de routages, pas un routeur entraîné",
+      "aucune fiche reports/rapport-a62-moe.md",
+      "aucun code d'entraînement de routeur appris dans tools/",
+      "aucune comparaison qualité égale ±0,1 entre routeur appris et routeur d'origine",
+      "aucune définition écrite du ÷10 dans docs/pilotage/backlog/A6.2-moe-local.md"
+    ],
+    "commandes": {
+      "identite": "stat -c '%n %s' \"$M\" && sha256sum \"$M\"",
+      "porte": "MODELE=\"$M\" N=16 CTX=512 bash tools/porte-echange-experts.sh",
+      "ppl": "DRAVE_TAMPONS=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 32 --threads 8",
+      "capture": "DRAVE_TRACE_EXPERTS=/tmp/rout.txt DRAVE_TRACE_EXPERTS_ORDRE=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 32 --threads 8",
+      "impose": "DRAVE_ROUTAGE_FORCER=/tmp/rout.txt ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 32 --threads 8",
+      "cout": "DRAVE_TRACE_EXPERTS=/tmp/routage.txt ./drave-core/target/release/drave \"$M\" --ppl /tmp/ids_qwen_long.txt --ctx 2048 --limit 2048 --lot 64 --threads 16 && python3 tools/analyse_union_experts.py /tmp/routage.txt --experts-par-jeton 8",
+      "prefill": "bash tools/mesure-prefill-lot.sh \"$M\" /tmp/ids_qwen_long.txt 1 2 4 8 16 32 64 192",
+      "backlog": "python3 tools/verifie_backlog.py"
+    },
+    "decisions": ["D1", "D2", "D3", "D4"]
+  },
+  "a83b2": {
+    "statut": "libre, nommée par une fiche de résultat, absente du graphe",
+    "nommee_par": [
+      "reports/rapport-a83b-decision.md:52",
+      "reports/a83b-decision.json:42",
+      "reports/rapport-etat-a.md (section 3 et action 3)",
+      "docs/pilotage/semaine-autonome.md:37"
+    ],
+    "absente_de": [
+      "docs/pilotage/backlog/index.md",
+      "docs/pilotage/backlog/dependances.md",
+      "docs/pilotage/roadmap.md",
+      "docs/pilotage/en-cours.md",
+      "docs/pilotage/backlog/A8.3-defaut.md (nommée implicitement, pas par son identifiant)"
+    ],
+    "chiffres": {
+      "f32": {"lot_1": 61.992, "lot_2": 60.8135, "lot_4": 60.8135, "ecart_pct": -1.9},
+      "perte_1_pct": {"lot_1": 58.32, "lot_2": 62.7357, "lot_4": 62.7357, "ecart_pct": 7.57},
+      "threads": {"1": {"lot_1": 61.992, "lot_4": 60.8135}, "8": {"lot_1": 61.992, "lot_4": 60.8135}},
+      "kv_effet": {"jeton_pct": -5.9, "lot_pct": 3.2},
+      "portes_epinglees": {"valeur_18_ou_19": "18 (a83b-decision) / 19 (A8.0) — à trancher", "duales": 3, "noms": ["porte-flux", "porte-pont", "porte-coupe"]}
+    },
+    "rejeux": {
+      "lot_4": {"commande": "LOT=4 bash tools/porte-flux.sh", "exit": 0, "mode_3": 60.8135, "mode_4_deux_noeuds": 60.5427},
+      "perte_1_lot_4": {"commande": "DRAVE_PERTE_MAX=1 LOT=4 bash tools/porte-flux.sh", "exit": 0, "mode_3": 62.7357, "mode_4_deux_noeuds": 64.9228},
+      "lot_1": {"commande": "LOT=1 bash tools/porte-flux.sh", "exit": 1, "mesure_modes_3_4": 61.992, "attendu_par_la_porte": 60.8135, "verdict": "échec par construction : les pins des modes 3/4 sont ceux du lot ≥ 2 ; LOT=1/4 n'est pas un A/B valide"},
+      "ab_manuel": {"lot_1": {"reference_locale": 61.992, "deux_noeuds": 61.992}, "lot_4": {"reference_locale": 60.8135, "deux_noeuds": 60.8135}, "decoupage_neutre": true}
+    },
+    "probleme_porte": {
+      "commande_invalide": "LOT=1/4 bash tools/porte-flux.sh",
+      "raison": "les modes 3/4 portent les références 60,8135/62,7357 du chemin lot ≥ 2 ; LOT=1 redonne 61,9920/58,3200 et la porte échoue",
+      "correction": "ajouter un mode LOT=1 avec ses propres références, ou utiliser l'A/B manuel avec deux références par chemin"
+    },
+    "harnais": {
+      "modele": "models/Qwen2.5-0.5B-Q8_0.gguf",
+      "couches_locales": 12,
+      "limit": 24,
+      "ctx": 64,
+      "threads": 8,
+      "lot_1": "61.9920 / 61.9920",
+      "lot_4": "60.8135 / 60.8135",
+      "instrument_ignore": ["--logits-bin", "--trace-flux"],
+      "instrument_note": "les deux drapeaux ne sont pas lus par --ppl-reparti (aucun avertissement) ; utiliser --ppl local avec --trace-flux et tools/diff_flux.py, ou les brancher dans ppl_reparti"
+    },
+    "instrumentation": [
+      {"point": "forward_lot", "fichier": "drave-core/src/model.rs", "ligne": 5967},
+      {"point": "quantifier (lot)", "fichier": "drave-core/src/model.rs", "ligne": "6085-6105"},
+      {"point": "quantification d'entree", "fichier": "drave-core/src/model.rs", "ligne": 6110},
+      {"point": "quant_scratch (jeton)", "fichier": "drave-core/src/model.rs", "ligne": 5092},
+      {"point": "gemm_dense_i8", "fichier": "drave-core/src/engine.rs", "ligne": 708},
+      {"point": "gemm_dense_q4", "fichier": "drave-core/src/engine.rs", "ligne": 726},
+      {"point": "quantification apres attention", "fichier": "drave-core/src/model.rs", "ligne": 6328},
+      {"point": "quantification FFN", "fichier": "drave-core/src/model.rs", "ligne": "6352, 6523"},
+      {"point": "regle 1 % (KV par couche)", "fichier": "drave-core/src/model.rs", "ligne": 4711},
+      {"point": "--lot", "fichier": "drave-core/src/main.rs", "ligne": 1597},
+      {"point": "porte", "fichier": "tools/porte-flux.sh", "ligne": "149-150"}
+    ],
+    "protocole": [
+      "reproduire LOT=4 (exit 0) et l'A/B manuel lot 1/4",
+      "premiere divergence sans code : --ppl local + --trace-flux lot 1/4, puis tools/diff_flux.py",
+      "si divergence a la couche 0 : quantification d'entree ; apres q/k/v : GEMM ; apres attention : KV ; apres FFN : FFN",
+      "isoler le KV : DRAVE_KV_BITS=32 contre DRAVE_PERTE_MAX=1",
+      "controles : THREADS=1, references inversees, trace vide, LOT=2 identique a LOT=4",
+      "cible : ecart PPL < 5e-4 (une reference) ou cause nommee + deux references par chemin"
+    ],
+    "decisions": ["D5", "D6", "D7", "D8"]
+  },
+  "contradictions_docs": [
+    {"document": "docs/pilotage/backlog/A6.2-moe-local.md", "dit": "bloquée ; aucun MoE local", "devrait": "libre ; MoE 18 Go ; blocage = résidence mono-GPU 16 Go ; cache Q4_K non câblé"},
+    {"document": "docs/pilotage/backlog/index.md:86", "dit": "bloquée", "devrait": "libre"},
+    {"document": "docs/pilotage/backlog/dependances.md:167", "dit": "A6.2 dans les bloqués", "devrait": "retirer"},
+    {"document": "docs/pilotage/backlog/dependances.md:68 et :208", "dit": "libre", "devrait": "déjà juste"},
+    {"document": "docs/pilotage/roadmap.md:30", "dit": "libre", "devrait": "déjà juste"},
+    {"document": "docs/pilotage/roadmap.md:84, :152, :343, :355", "dit": "bloqué", "devrait": "libre"},
+    {"document": "docs/pilotage/en-cours.md:113", "dit": "A6.2 dans les bloqués", "devrait": "libre"},
+    {"document": "docs/pilotage/chantiers.md:83 et :202", "dit": "A6.2 bloqué", "devrait": "libre"},
+    {"document": "docs/pilotage/plan-travail.md:150", "dit": "A6.2 dans la file des bloqués", "devrait": "libre"},
+    {"document": "reports/rapport-a26-bilan.md et a26-bilan.json", "dit": "experts bloqués par A6.2, pas de MoE local", "devrait": "experts mesurables sur le MoE local ; placement à faire"},
+    {"document": "reports/rapport-etat-a.md", "dit": "chemin modeles/gguf/... et commande LOT=1/4", "devrait": "chemin $HOME/IA/modeles/... et A/B manuel ou mode LOT=1 dédié"},
+    {"document": "A8.3b2", "dit": "nommée dans a83b-decision seulement", "devrait": "nommée dans backlog/index, dependances, roadmap et en-cours"},
+    {"document": "compte des pins A8", "dit": "6 (roadmap), 18 (a83b-decision), 19 (A8.0)", "devrait": "un seul compte, 19, avec 3 duales"}
+  ],
+  "decisions": [
+    {
+      "id": "D1",
+      "objet": "requalifier A6.2 dans les docs",
+      "qui": "session principale (docs) + session A (fiche)",
+      "acceptation": "grep 'aucun MoE local' -> 0 dans la fiche A6.2 et la roadmap ; python3 tools/verifie_backlog.py exit 0 ; A6.2 hors des bloqués",
+      "invalide_si": "le fichier de 18 Go disparaît ou la porte échoue"
+    },
+    {
+      "id": "D2",
+      "objet": "définir la métrique du ÷10",
+      "detail": "M1 = octets d'experts lus par jeton en préremplissage, mesurée à lot 192 (÷15,51) ; à lot 64 elle vaut ÷7,08, sous la cible ; M2 = |ΔPPL| <= 0,1 ; M3 = tok/s, secondaire",
+      "acceptation": "rapport-a62-moe.md publie M1, M2, M3 séparément et donne le lot où M1 passe ÷10",
+      "invalide_si": "un run ne reproduit pas ÷7,08 à lot 64 ou ÷15,51 à lot 192"
+    },
+    {
+      "id": "D3",
+      "objet": "choisir l'environnement de mesure",
+      "detail": "offload CPU maintenant ; cache Q4_K seulement si la mesure l'exige ; carte 24-48 Go hors budget",
+      "acceptation": "M1/M2/M3 sur le MoE local ; borne de résidence nommée",
+      "invalide_si": "la qualité dépend du lieu d'exécution"
+    },
+    {
+      "id": "D4",
+      "objet": "produire le résultat A6.2",
+      "livrable": "reports/rapport-a62-moe.md + JSON",
+      "acceptation": "test -f ; porte exit 0 ; JSON valide",
+      "invalide_si": "le résultat n'est que C9 (échange de routages)"
+    },
+    {
+      "id": "D5",
+      "objet": "nommer A8.3b2 dans le graphe",
+      "detail": "fiche backlog + index + roadmap A8 ; statut libre, P2/P3 ; dépend de A8.3b",
+      "acceptation": "grep A8.3b2 docs/pilotage >= 1 ; verifie_backlog.py exit 0",
+      "invalide_si": "ligne sans porte ni contrôle négatif"
+    },
+    {
+      "id": "D6",
+      "objet": "réparer le harnais A8.3b2",
+      "detail": "mode LOT=1 avec références 61,9920/58,3200, ou A/B dédié lot 1 vs 4",
+      "acceptation": "LOT=1 exit 0 ; LOT=4 exit 0 ; DRAVE_PERTE_MAX=1 idem",
+      "invalide_si": "les références peuvent être échangées sans échec"
+    },
+    {
+      "id": "D7",
+      "objet": "trancher une référence ou deux",
+      "detail": "si cause inhérente : deux références par chemin ; si cause évitable : corriger et unifier",
+      "acceptation": "fiche A8.3b2 : cause + premier point de divergence + décision",
+      "invalide_si": "correction qui déplace les pins sans re-épinglage"
+    },
+    {
+      "id": "D8",
+      "objet": "le défaut A8.3 reste opt-in",
+      "detail": "18/19 dual + cause A8.3b2 + passe complète sans régression",
+      "acceptation": "bash tools/toutes-les-portes.sh sous défaut, rouges nommées",
+      "invalide_si": "défaut qui déplace une porte non nommée"
+    }
+  ],
+  "limites": [
+    "Une seule machine, un seul modèle : les chiffres de résidence et de coût ne sont pas des prédictions générales.",
+    "Le binaire drave-core/target/release/drave date du 2026-10-30 08:39 ; model.rs au 2026-10-28, main.rs au 2026-10-30 08:41 : une reconstruction avant de figer un nouveau chiffre est recommandée.",
+    "Le routage appris d'A6.2 n'est pas mesuré : la fiche requalifie la ligne et rassemble les mesures existantes.",
+    "A8.3b2 n'est pas instrumentée : la fiche donne le protocole, pas le résultat.",
+    "La passe complète (bash tools/toutes-les-portes.sh, ~2 h) n'a pas été rejouée.",
+    "Les contradictions du paragraphe 3 peuvent être corrigées par une autre session après cette fiche ; le HEAD et la date sont dans le JSON.",
+    "Le MoE n'a pas été copié ni modifié ; la résidence mono-GPU est une constatation de taille, pas une mesure de performance interactive."
+  ],
+  "fichiers_lus_non_modifies": [
+    "AGENTS.md",
+    "docs/pilotage/roadmap.md",
+    "docs/pilotage/en-cours.md",
+    "docs/pilotage/chantiers.md",
+    "docs/pilotage/plan-travail.md",
+    "docs/pilotage/semaine-autonome.md",
+    "docs/pilotage/backlog/index.md",
+    "docs/pilotage/backlog/dependances.md",
+    "docs/pilotage/backlog/A6.2-moe-local.md",
+    "docs/pilotage/backlog/A8.3-defaut.md",
+    "reports/rapport-etat-a.md",
+    "reports/pensee-etat-a.json",
+    "reports/rapport-c9-echange-experts.md",
+    "reports/rapport-prefill-par-experts.md",
+    "reports/rapport-decoupage-moe.md",
+    "reports/rapport-reutilisation-experts.md",
+    "reports/rapport-cache-experts-vram.md",
+    "reports/rapport-chargement-paresseux.md",
+    "reports/rapport-vram-transfert.md",
+    "reports/rapport-gpu-tandem-nvlink.md",
+    "reports/rapport-a83b-lot.md",
+    "reports/rapport-a83b-decision.md",
+    "reports/rapport-a83c-lot.md",
+    "reports/rapport-a83d-lot-threads.md",
+    "reports/rapport-a26-bilan.md",
+    "reports/a83b-lot.json",
+    "reports/a83b-decision.json",
+    "reports/a26-bilan.json",
+    "drave-core/src/model.rs",
+    "drave-core/src/engine.rs",
+    "drave-core/src/main.rs",
+    "drave-core/src/list.rs",
+    "drave-core/src/materiel.rs",
+    "tools/porte-echange-experts.sh",
+    "tools/porte-flux.sh",
+    "tools/mesure-prefill-lot.sh",
+    "tools/analyse_union_experts.py",
+    "tools/analyse_reutilisation_experts.py",
+    "tools/clusters_moe.py",
+    "tools/diff_flux.py",
+    "tools/verifie_backlog.py"
+  ],
+  "references": [
+    "reports/rapport-etat-a.md",
+    "reports/rapport-a83b-decision.md",
+    "reports/a83b-decision.json",
+    "reports/rapport-a83b-lot.md",
+    "reports/a83b-lot.json",
+    "reports/rapport-a83c-lot.md",
+    "reports/rapport-a83d-lot-threads.md",
+    "reports/rapport-c9-echange-experts.md",
+    "reports/rapport-prefill-par-experts.md",
+    "reports/rapport-decoupage-moe.md",
+    "reports/rapport-reutilisation-experts.md",
+    "reports/rapport-cache-experts-vram.md",
+    "reports/rapport-chargement-paresseux.md",
+    "reports/rapport-vram-transfert.md",
+    "docs/pilotage/backlog/A6.2-moe-local.md",
+    "docs/pilotage/backlog/A8.3-defaut.md",
+    "docs/pilotage/roadmap.md"
+  ]
+}

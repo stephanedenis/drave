@@ -102,6 +102,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-05](2026-11-05/memoire.md) | — |
 | [2026-11-06](2026-11-06/memoire.md) | — |
 | [2026-11-07](2026-11-07/memoire.md) | `0,609` · `0,034` |
+| [2026-11-13](2026-11-13/memoire.md) | `0,9475` · `0,8500` · `0,8625` |
 
 ### `apprentissage` — Règles locales, hebbien, modulateurs, distillation
 
@@ -171,6 +172,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-05](2026-11-05/distribue.md) | `1,0000` · `0,9163` · `0,5822` · `0,0118` · `0,9836` · `0,2862` · `0,5595` · `0,9724` · `0,9658` · `1,000` |
 | [2026-11-06](2026-11-06/distribue.md) | `0,9205` |
 | [2026-11-07](2026-11-07/distribue.md) | `× 8` |
+| [2026-11-13](2026-11-13/distribue.md) | `0,9475` |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 

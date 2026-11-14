@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **710 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **715 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -117,6 +117,10 @@
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
 | [rapport-contrat-s.md](rapport-contrat-s.md) | B13 — Contrat d'interface L ↔ S : les subordonnées REL/SUB |
 | [rapport-convention-gv.md](rapport-convention-gv.md) | B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902 |
+| [rapport-coordination-a.md](rapport-coordination-a.md) | A — coordination : A6.2 est libre, A8.3b2 est nommée mais hors du graphe |
+| [rapport-coordination-n2.md](rapport-coordination-n2.md) | N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal |
+| [rapport-coordination-r.md](rapport-coordination-r.md) | R — le tagger POS sur le gold 612 : **+8,49 pts**, la règle dit **intégrer** |
+| [rapport-coordination-s.md](rapport-coordination-s.md) | S — les 11 verdicts de `/paragraphes` ne sont pas dans git |
 | [rapport-corpus-commun.md](rapport-corpus-commun.md) | Corpus commun Panini/NIPADA ↔ Drave — UDHR, article 1 |
 | [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
@@ -683,6 +687,7 @@
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-schema-v1.md](rapport-schema-v1.md) | B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées |
 | [rapport-schema-v2.md](rapport-schema-v2.md) | B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue |
+| [rapport-semaine.md](rapport-semaine.md) | J5.1 — le rapport de semaine : le produit gagne 3,69 points de F1, l'intégration est bornée |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |
 | [rapport-sessions-plans.md](rapport-sessions-plans.md) | Sessions — le plan avant l'état |

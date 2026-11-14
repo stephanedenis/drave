@@ -210,7 +210,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 317.9 h | 194 | 3223 | 25 | 436 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 318.4 h | 194 | 3227 | 25 | 436 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -229,10 +229,11 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
+| `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
 | `session-` | Généalogie à deux faces : Panini vs Glottolog | 2026-11-07 17:59 | 0.4 h | 1 | 137 | 0 | 4 | [rapport](sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md) |
 | `session-` | Fiche de coordination N2 : mètre eval_n2_propre | 2026-11-13 21:38 | 0.2 h | 1 | 115 | 3 | 0 | [rapport](sessions/session-4a28c290-9701-4d27-8aad-a9cf004c9af9/rapport.md) |
-| `session-` | Coordination R : tagger POS sur gold 612 | 2026-11-13 21:59 | 0.7 h | 1 | 113 | 4 | 2 | [rapport](sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/rapport.md) |
+| `session-` | Coordination R : tagger POS sur gold 612 | 2026-11-13 21:59 | 0.7 h | 1 | 128 | 4 | 3 | [rapport](sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/rapport.md) |
 | `session-` | Schéma annotation v2 et validation | 2026-11-07 14:11 | 0.2 h | 1 | 171 | 12 | 1 | [rapport](sessions/session-614644be-9315-4734-9b97-236a792f4dc5/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-6af74924-89c1-4b96-aa02-b70bd77ab178/rapport.md) |
 | `session-` | Réponds exactement le mot OK, | 2026-11-07 10:45 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-78f03aed-fb9d-4009-8625-e1186078059c/rapport.md) |
@@ -243,4 +244,5 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
 | `session-` | Rapport convention GV et règles candidates | 2026-11-07 12:41 | 1.5 h | 1 | 245 | 9 | 1 | [rapport](sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md) |
+| `session-` | Rapport de semaine et suivi J5.1 | 2026-11-13 22:59 | 0.1 h | 1 | 103 | 5 | 1 | [rapport](sessions/session-e8c327f2-a7ec-464a-8e40-0615e5befecb/rapport.md) |
 | `session-` | Test de liaison du superviseur | 2026-11-07 10:48 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-f30f0289-2506-4596-be01-4e10f2a2073c/rapport.md) |

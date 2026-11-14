@@ -61059,3 +61059,52 @@ budget consommé : 1229.5 s · lancements : 12
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3", "description": "Suivre J4.3", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4824]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4824", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4824", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+ven 13 nov 2026 23:04:47 EST
+2026-11-13 22:41:40 · ▶ J4.4 — Coordination A — A6.2 et A8.3b2 (timeout 5400 s)
+2026-11-13 22:59:49 · ✔ J4.4 en 1089.1 s (code 0) — ✅ test -f reports/rapport-coordination-a.md && echo FICHE-OK
+2026-11-13 22:59:49 · ▶ J5.1 — Le rapport de semaine (timeout 5400 s)
+budget consommé : 4871.2 s · lancements : 14
+  [a_faire ] J5.1   j5 — Le rapport de semaine
+  [a_faire ] J5.2   j5 — La passe complète et le tag
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ La file va s'épuiser avant les 12 h : j'ajoute 8 tâches (produit, Panini, bilans)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [4385 caractères tronqués]`
+
+  ```
+8 tâches ajoutées ; total 29
+# N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal
+
+> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-13 · **HEAD mesuré** :
+> `ced21933` · **Verdict** : `tools/eval_n2_propre.py` lit les checkpoints RoPE comme des positions
+> absolues et rend **8,0225** sur `propre512-8k` à 128 octets, là où le mètre RoPE rend **2,9726**
+> à 128 et **2,7856** à 1 024. Le correctif `--rope` est **nécessaire mais non suffisant** : le
+> checkpoint de la porte a été entraîné **avec le canal**, et `--rope` seul rend **40,0658** à 128.
+> Le correctif validé est **`--rope --canal-dir`** ; la commande qui donne 2,79 aujourd'hui est le
+> mètre existant `work/n2ac/eval_longueurs.py --rope`. **Aucun fichier de N2 modifié**
+> (`native_model.py`, `entrainer_native.py`, `work/` intacts).
+
+**En trois lignes.** (1) `charge()` construit `NativeModel` absolu et `ppl_protocole()` oublie le
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3; git rev-list --count origin/master..s/v7", "description": "Suivre la phase 2", "timeoutMs":  … [8 caractères tronqués]`

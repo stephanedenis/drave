@@ -139,11 +139,12 @@ restantes sont dans le tableau du § 2.1 ; les autres sont des fiches de coordin
 - **la coordination** : un état daté de N2/S/R/A, les décisions prises et nommées ;
 - **la consolidation** : la passe complète, un tag, le rapport de semaine, la roadmap à jour.
 
-## 3 bis. L'état du chantier (12 h 18, 07/11 → 18 h 22)
+## 3 bis. L'état du chantier (12 h 18, 07/11 → 23 h 00, 13/11)
 
 Le superviseur a lancé **10 tâches** (budget 21 600 s consommé). **Six sont « faites »**, trois ont
 un **commit livré** mais un verdict « échec » (timeout de l'agent après le commit — l'acceptation
-prime désormais, correctif à committer), une est bloquée.
+prime désormais), une était bloquée. La reprise du **13/11** a ajouté **quatre coordinations**
+(N2, S, R, A) et la consolidation J5.
 
 | tâche | verdict | livrable | commit |
 |---|---|---|---|
@@ -155,8 +156,43 @@ prime désormais, correctif à committer), une est bloquée.
 | J2.1 atomes ↔ niveaux | ✅ fait | 14/14 lignes | `9c7f71dc` |
 | J2.2 + J3.1 corpus/retrieval | ✅ livré (timeout) | 418/438 paires exactes | `c3467170` |
 | J3.2 généalogie | ✅ fait | 154/154 paires hors script | `c2e629b3` |
-| J4.x coordination | ⏳ à faire | — | — |
-| J5.x consolidation | ⏳ à faire | — | — |
+| J4 N2/S/R/A | ✅ fait (13/11) | 4 fiches + 4 JSON ; D1–D8 | `commit J5.1` |
+| J5.1 rapport de semaine | ✅ fait (13/11) | [`rapport-semaine.md`](../../reports/rapport-semaine.md) + JSON | `commit J5.1` |
+| J5.2 passe, tag, release | ⏳ à faire | — | — |
 
-**Reste** : J4 (coordination N2/S/R/A), J5 (rapport de semaine, passe, tag), et la relance de la
-boucle (budget épuisé).
+**Reste** : J5.2 (passe complète, revue de documentation, tag annoté, release), les commits de
+S (11 verdicts + pointeur), le rapport A6.2, et la relance de la boucle.
+
+## 8. L'état de chaque jour — bilan du 13/11
+
+> **Les dates réelles diffèrent du plan.** J1–J3 ont été exécutés le **07/11** (le plan les
+> plaçait du 07 au 09) ; J4 le **13/11** (plan : 10/11) ; J5.1 le **13/11** (plan : 11/11). Le
+> décalage vient de la reprise de la boucle après épuisement du budget, pas d'un changement de
+> périmètre. Ce tableau est l'état **constaté**, pas le calendrier prévu. Le détail des chiffres,
+> des décisions et des rejets est dans [`rapport-semaine.md`](../../reports/rapport-semaine.md).
+
+| jour | vague | état | livrable mesuré | commit | reste |
+|---|---|---|---|---|---|
+| **J1** | matin : `r035` + convention GV | ✅ fait | exact **237/238**, couverture **0,9958**, F1 **0,7533 → 0,7902**, POS inchangée | `25a6c0ff`, `92652984` | `g017`, `s065`, objet (75 FP / 51 FN), 5 FP sujet |
+| **J1** | après-midi : schéma v2 + restitution v0 | ✅ fait | **26 cas / 0 échec**, **1 836 annotations / 0 échec** ; **46/46** surfaces, miroir **0,1087** | `9a259953`, `8eb0cc49` | invariants sémantiques, v0.1 ponctuation, gold de restitution |
+| **J2** | matin : inventaire + table atomes ↔ niveaux | ✅ fait | **14/14 lignes**, 8 niveaux, 33 paires colinéaires, 4 composantes > 1 | `9c7f71dc` (+ `fffbbe5d`) | aucune correspondance mesurée : protocole J2.2 |
+| **J2** | après-midi : corpus commun | ✅ fait | **21 textes**, 5 familles, 10 écritures, **418/438** paires exactes (95,4 %), 8/8 contrôles | `c3467170` (avec J3.1) | corpus multi-époques / multi-genres |
+| **J3** | matin : retrieval à époque contrôlée | ✅ fait | **B7 4 004 paires**, **UDHR 420**, **Bible 132** ; script **+0,609**, famille **+0,181**, date **−0,034/siècle** (p = 0,19) | `c3467170` | réplication neuronale |
+| **J3** | après-midi : généalogie à deux faces | ✅ fait | **154/154** paires hors script au hasard ; **5/21 / 15/21 / 21/21** ; R² **0,256 / 0,230** | `c2e629b3` | signature V14 des 21 langues, matrice 9 dhātus, distance continue, corpus équilibré |
+| **J4** | matin : coordination N2 / S / R | ✅ fiches (13/11) | N2 **8,0225 → 2,9726 / 2,7856** ; S **11 verdicts** (7 acceptés / 4 exclus) ; R **0,8625 → 0,9475 (+8,49)** | `commit J5.1` | appliquer N2, committer S + pointeur, route R + split tenu |
+| **J4** | après-midi : coordination A | ✅ fiche (13/11) | A6.2 **libre** (MoE 18,56 Go, PPL **37,2013**, porte **54,5202**) ; A8.3b2 libre hors graphe | `commit J5.1` | rapport A6.2, harnais A8.3b2, D1–D8 |
+| **J5** | matin : rapport de semaine | ✅ fait (13/11) | [`rapport-semaine.md`](../../reports/rapport-semaine.md) + JSON : chiffres, décisions, rejets, reste | `commit J5.1` | — |
+| **J5** | après-midi : passe, tag, release | ⏳ à faire | — | — | `toutes-les-portes.sh`, `revue_documentation.py`, tag annoté |
+
+**Ce que la semaine a produit.** Le **produit** : `r035` tranché (237/238, 0,9958), la convention
+des GV (F1 **0,7902**), le schéma v2 (26 cas / 0 échec, v1 lue), la restitution v0 (46/46
+surfaces, miroir **0,1087**). Le **tagger** : 0,9475 (+8,49 pts), décision **intégrer**, réserve
+sur le réel 432 (+4,67). L'**intégration** : table 14/14, corpus 418/438, retrieval à script
+dominant, généalogie à deux faces. La **coordination** : N2 (2,9726/2,7856, `--rope --canal-dir`),
+S (11 verdicts, 7/4), R (0,9475, intégrer), A (A6.2 libre, A8.3b2 hors graphe).
+
+**Ce que la semaine n'a pas produit.** Le **deuxième span** (`g017`), la **preuve** de la théorie
+des atomes (la table est une hypothèse, V14 couvre 3/21 langues), la **durabilité** des résultats
+S (non committés) et N2 (`rope_model.py` dans `work/`), et la **passe complète** : J5.2 doit
+lancer les 84 portes, la revue de documentation, le tag et la release. L'autotest **183/183**
+n'est pas la passe complète.

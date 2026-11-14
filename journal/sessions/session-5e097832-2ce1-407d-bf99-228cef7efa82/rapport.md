@@ -9,12 +9,12 @@
 | Début | 2026-11-13 21:59 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 84 |
-| Appels d'outils | 113 |
+| Messages | 95 |
+| Appels d'outils | 128 |
 | Fichiers touchés | 4 |
-| Commandes | 91 |
+| Commandes | 106 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J4.3 : la coordination R — décider le tagger POS sur le gold 612 via l'API DeepSeek (clé absente). Fiche `reports/ … [181 caractères tronqués]
 
-*113 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - glob
@@ -41,11 +41,46 @@
 - bash — List DeepSeek models and read client
 - bash — Read charger and _sources helpers
 - bash — Probe chat completion with both model ids
-- … et 89 autres
+- … et 104 autres
 
 **Synthèse produite :**
 
-The index already contained another session's staged journal changes. I'll commit only my four paths via pathspec, leaving their staging untouched.
+\## J4.3 livrée — et la prémisse « clé absente » était fausse
+
+La clé n'est pas dans l'environnement (`DEEPSEEK_API_KEY` absente), mais elle est bien dans `~/.config/drave/deepseek.key` (**0600, 35 caractères**) et l'API répond **200**. J'ai donc exécuté la vraie mesure sur le gold 612, avec un **cache neuf** pour ne pas rejouer les réponses du 04/11.
+
+\### Le résultat
+
+| corpus | heuristique HEAD | tagger API | gain | IC95 bootstrap | McNemar |
+|---|---:|---:|---:|---:|---:|
+| **612** | 2742/3179 = **0,8625** | 3012/3179 = **0,9475** | **+8,49 pts** | **[+7,23 ; +9,74]** | 344/74, p = 1,1 × 10⁻⁴² |
+| hand 20 | 0,8857 | 0,9714 | +8,57 | [+2,75 ; +15,38] | 9/0 |
+| réel 432 | 0,8893 | 0,9360 | **+4,67** | [+3,45 ; +6,01] | 181/70 |
+| synth 160 | 0,7682 | 0,9828 | **+21,46** | [+18,80 ; +24,15] | 154/4 |
+
+Contrôles négatifs : majoritaire `NOUN` **0,2145**, classe fréquente `VERB` **0,2491**, permutation **0,1667**, uniforme **0,0833**. Un seul refus composite (`s015`), **sur les syntagmes uniquement** (BIO 6/7) ; **0 refus POS** sur 609 phrases.
+
+\### La décision
+
+La règle de la consigne : **< +2 pts → négatif nommé ; ≥ +5 → intégrer**. **+8,49 ≥ +5 → intégrer via l'API**, mode **neuronal seul** (les cinq modes de fusion rendent la même exactitude ; l'hybride fermé/ouvert +0,41 pt n'est **pas significatif**, p = 0,17). Réserve explicite : le **réel 432 seul** est à **+4,67** [+3,45 ; +6,01] ; prochaine mesure = **split réel tenu à l'écart**.
+
+\### La baseline 0,8500 était datée
+
+`0,8500` reproduit exactement au commit `97256b8f` (2702/3179), mais trois commits POS du 06/11 (`PONCT`, `CONJ`, `ADJ`) l'ont portée à **0,8625** (2742/3179). Comparer à 0,8500 aurait donné +9,75, soit **+1,26 pt surestimé**.
+
+\### Le coût
+
+**1 218 appels, 358 962 tokens, 20 min 59 s**, latence moyenne 1,033 s, modèle renvoyé `deepseek-flash` (V4.1-Flash-1017), **~0,04 $ hors pointe** (~0,09 $ en pointe, [tarifs](https://api-docs.deepseek.com/quick_start/pricing)). L'estimation de la consigne (~1 200 appels, ~360 k tokens, ~20 min) est confirmée à quelques pour cent.
+
+\### Fichiers et commits
+
+- `reports/rapport-coordination-r.md` — la fiche ;
+- `reports/rapport-coordination-r.json` — la synthèse machine (décision, coût, analyse appariée) ;
+- `reports/tagger-612.json` — la mesure brute ;
+- `tools/tests/linguistique/qualifier_tagger_612.py` — le banc additif, aucun fichier existant modifié.
+
+Commits : `a934d779` (résultat) et `dc78f223` (T0 ramené à 3 991 mots). Le commit de résultat emport
+… [722 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -100,7 +135,7 @@ The index already contained another session's staged journal changes. I'll commi
 - **T1** Check measurement progress
 - **T1** Read documentation review tool
 - **T1** Check if coordination fiches are indexed
-- … et 51 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -189,17 +224,20 @@ The index already contained another session's staged journal changes. I'll commi
 - **T1** `| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
 - **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
 - **T1** `[still running after 60000ms; moved to background job bash-91]`
+- **T1** `116 "| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **tagger 612 mesuré : 0,9475 (+8,49 pts vs 0,8625), intégrer** ; **split réel tenu à l'écart*`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : 8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE 9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC)
 - **T1** : f48d5d81 R — LA VERSION FINALE DE L'ÉTAT (TAGGER 0,8483 SUR 180 / 0,9389 SUR 432, R1.2-1024 MESURÉ, R4.4 PARTIEL, 7 ÉCARTS DOCS) 56e5ce48 S — LES CORRECTIONS DE CHRONOLOGIE DE L'ÉTAT (36 s, PAS 3 MIN 
 - **T1** : [stderr]   ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md      · reports/rapport-coordination-r.json      · reports/rapport-coordination-r.md      · reports/tagger-612.json      →
+- **T1** : actuel 1670 [stderr] Traceback (most recent call last):   File "<stdin>", line 8, in <module> AssertionError [exit code: 1]
 
 ## 6. Commits
 
 - R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)" -- reports/ra
 - R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)" -- docs/pilot
+- ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)" -- docs/pilotage/en-cours.md && echo "---" && git show --st
 

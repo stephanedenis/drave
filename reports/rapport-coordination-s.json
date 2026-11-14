@@ -1,0 +1,533 @@
+{
+  "date": "2026-11-13",
+  "head": "ced21933",
+  "head_parent": "ced219338dabec2554c3a32d7c95ee8e8cdbfac0",
+  "ligne": "S",
+  "objet": "coordination S : les 11 verdicts de /paragraphes non committés",
+  "fiche": "reports/rapport-coordination-s.md",
+  "verdict": "Les 11 verdicts a004–a009 sont 11 lignes non committées (9–19) de tools/structures/donnees/paragraphes-validations.jsonl : 6 resolu, 1 compatible, 4 exclu, soit 7 acceptés et 4 exclus. Le working tree voit 19 verdicts / 11 acceptés / 0 candidat sans verdict ; un clone à 523d8c1 voit 8 verdicts / 4 acceptés / 11 candidats sans verdict.",
+  "aucune_modification_s": [
+    "tools/structures/"
+  ],
+  "lecture_seule": true,
+  "sous_module": {
+    "chemin": "tools/structures",
+    "head": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+    "head_court": "523d8c1",
+    "branche": "master",
+    "date_head": "2026-11-04T11:42:34-05:00",
+    "origin": "/home/stephane/Data13TB/stephane/GitHub/drave-structures",
+    "propre": false,
+    "porcelaine": " M donnees/paragraphes-validations.jsonl",
+    "url_gitmodules": "/home/stephane/Data13TB/stephane/GitHub/drave-structures"
+  },
+  "fichier": {
+    "chemin": "tools/structures/donnees/paragraphes-validations.jsonl",
+    "format": "JSONL append-only",
+    "blob_head": "2ada51b5e8f227e65b764f504aae1a6e8a1ef8b4",
+    "blob_working": "b34f8f548ed2d2e49c8e577e10fef96537522715",
+    "sha256_head": "adf23efe0e8ebc77b397295521b1d1fccb4394c4c97e11bb859d0c1d2ada8862",
+    "sha256_working": "a3c54c9cf2b81904ce43b43685be78f18ed675df2745e7b72ddcf0943d531123",
+    "octets_head": 2390,
+    "octets_working": 6047,
+    "lignes_head": 8,
+    "lignes_working": 19,
+    "diff": "+11 / -0",
+    "indexe": false,
+    "hunk": "@@ -6,3 +6,14 @@",
+    "lignes_ajoutees": {
+      "debut": 9,
+      "fin": 19,
+      "nombre": 11
+    }
+  },
+  "verdicts_non_committes": [
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 9,
+      "phrase_id": "a004",
+      "candidat_id": "a004-c1",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:03:43",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "sa": "ALICE"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 10,
+      "phrase_id": "a004",
+      "candidat_id": "a004-c2",
+      "statut": "exclu",
+      "accepte": false,
+      "horodatage": "2026-11-04T15:04:02",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "sa": "ALICE"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 11,
+      "phrase_id": "a005",
+      "candidat_id": "a005-c1",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:06:12",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "elle": "Alice",
+        "son": "Alice",
+        "en": "coup"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 12,
+      "phrase_id": "a005",
+      "candidat_id": "a005-c2",
+      "statut": "exclu",
+      "accepte": false,
+      "horodatage": "2026-11-04T15:06:26",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "elle": "Alice",
+        "son": "Alice",
+        "en": "coup"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 13,
+      "phrase_id": "a006",
+      "candidat_id": "a006-c1",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:06:43",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "cela": "Comme",
+        "son": "Alice",
+        "elle": "Alice",
+        "y": "table"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 14,
+      "phrase_id": "a007",
+      "candidat_id": "a007-c1",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:07:00",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {}
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 15,
+      "phrase_id": "a007",
+      "candidat_id": "a007-c2",
+      "statut": "exclu",
+      "accepte": false,
+      "horodatage": "2026-11-04T15:07:05",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {}
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 16,
+      "phrase_id": "a008",
+      "candidat_id": "a008-c1",
+      "statut": "compatible",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:08:25",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "Je": "le contenu",
+        "me": "le contenu",
+        "on": "Je me sens toute drôle",
+        "je": "Je me sens toute drôle",
+        "en": "Je me sens toute drôle"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 17,
+      "phrase_id": "a009",
+      "candidat_id": "a009-c1",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:09:45",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "se": "Un moment",
+        "elle": "Alice",
+        "en": "Un moment"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 18,
+      "phrase_id": "a009",
+      "candidat_id": "a009-c2",
+      "statut": "exclu",
+      "accepte": false,
+      "horodatage": "2026-11-04T15:10:02",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "se": "Un moment",
+        "elle": "Alice",
+        "en": "Un moment"
+      }
+    },
+    {
+      "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "ligne": 19,
+      "phrase_id": "a009",
+      "candidat_id": "a009-c3",
+      "statut": "resolu",
+      "accepte": true,
+      "horodatage": "2026-11-04T15:10:08",
+      "auteur": "humain",
+      "niveau": 2,
+      "note": "",
+      "referents": {
+        "se": "Un moment",
+        "elle": "Alice",
+        "en": "Un moment"
+      }
+    }
+  ],
+  "bilan_non_committes": {
+    "verdicts": 11,
+    "statuts": {
+      "resolu": 6,
+      "compatible": 1,
+      "exclu": 4,
+      "double_sens": 0
+    },
+    "acceptes": 7,
+    "exclus": 4,
+    "paragraphes": [
+      "a004",
+      "a005",
+      "a006",
+      "a007",
+      "a008",
+      "a009"
+    ],
+    "candidats": 11,
+    "notes": 0,
+    "periode": {
+      "debut": "2026-11-04T15:03:43",
+      "fin": "2026-11-04T15:10:08"
+    },
+    "auteur": "humain",
+    "niveau": 2
+  },
+  "etat": {
+    "working_tree": {
+      "verdicts": 19,
+      "statuts": {
+        "resolu": 10,
+        "compatible": 1,
+        "exclu": 8,
+        "double_sens": 0
+      },
+      "acceptes": 11,
+      "exclus": 8,
+      "paragraphes_juges": 9,
+      "paragraphes_total": 9,
+      "candidats": 19,
+      "candidats_sans_verdict": 0
+    },
+    "clone_523d8c1": {
+      "head": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+      "verdicts": 8,
+      "statuts": {
+        "resolu": 4,
+        "compatible": 0,
+        "exclu": 4,
+        "double_sens": 0
+      },
+      "acceptes": 4,
+      "exclus": 4,
+      "paragraphes_juges": 3,
+      "paragraphes_total": 9,
+      "candidats": 19,
+      "candidats_sans_verdict": 11,
+      "paragraphes_sans_verdict": [
+        "a004",
+        "a005",
+        "a006",
+        "a007",
+        "a008",
+        "a009"
+      ],
+      "detail_par_paragraphe": [
+        {
+          "phrase_id": "a001",
+          "candidats": 2,
+          "verdicts": 2
+        },
+        {
+          "phrase_id": "a002",
+          "candidats": 3,
+          "verdicts": 3
+        },
+        {
+          "phrase_id": "a003",
+          "candidats": 3,
+          "verdicts": 3
+        },
+        {
+          "phrase_id": "a004",
+          "candidats": 2,
+          "verdicts": 0
+        },
+        {
+          "phrase_id": "a005",
+          "candidats": 2,
+          "verdicts": 0
+        },
+        {
+          "phrase_id": "a006",
+          "candidats": 1,
+          "verdicts": 0
+        },
+        {
+          "phrase_id": "a007",
+          "candidats": 2,
+          "verdicts": 0
+        },
+        {
+          "phrase_id": "a008",
+          "candidats": 1,
+          "verdicts": 0
+        },
+        {
+          "phrase_id": "a009",
+          "candidats": 3,
+          "verdicts": 0
+        }
+      ]
+    },
+    "deux_onze": {
+      "onze_verdicts_non_committes": "7 acceptés + 4 exclus (a004–a009)",
+      "onze_lectures_acceptees": "somme des acceptés sur les 19 verdicts (a001–a009) du working tree",
+      "avertissement": "Les deux « 11 » sont vrais mais dans deux ensembles différents ; un clone à 523d8c1 n'a que 4 acceptés et 8 verdicts."
+    }
+  },
+  "referent_audit": {
+    "source": "reports/rapport-etat-s.md § 2",
+    "mappings_uniques": 16,
+    "occurrences": 26,
+    "justes": 7,
+    "faux": 9,
+    "par_phrase": [
+      {
+        "phrase_id": "a004",
+        "justes": 1,
+        "total": 1,
+        "faux": []
+      },
+      {
+        "phrase_id": "a005",
+        "justes": 2,
+        "total": 3,
+        "faux": [
+          "en → coup (attendu : la salle)"
+        ]
+      },
+      {
+        "phrase_id": "a006",
+        "justes": 3,
+        "total": 4,
+        "faux": [
+          "cela → Comme (attendu : attendre à la petite porte)"
+        ]
+      },
+      {
+        "phrase_id": "a007",
+        "justes": 0,
+        "total": 0,
+        "faux": []
+      },
+      {
+        "phrase_id": "a008",
+        "justes": 0,
+        "total": 5,
+        "faux": [
+          "Je → le contenu",
+          "me → le contenu",
+          "je → Je me sens toute drôle",
+          "on → Je me sens toute drôle (indéfini)",
+          "en → Je me sens toute drôle (préposition)"
+        ]
+      },
+      {
+        "phrase_id": "a009",
+        "justes": 1,
+        "total": 3,
+        "faux": [
+          "se → Un moment (attendu : Alice)",
+          "en → Un moment (préposition)"
+        ]
+      }
+    ]
+  },
+  "commande_s": {
+    "prerequis": {
+      "sous_module_head": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+      "branche_sous_module": "master",
+      "porcelaine_attendue": " M donnees/paragraphes-validations.jsonl",
+      "branche_parent": "s/v7",
+      "attention": "Le parent porte d'autres modifications d'autres sessions : git add explicite, jamais git commit -a."
+    },
+    "sous_module": [
+      "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures",
+      "git status --porcelain",
+      "git diff --numstat",
+      "git add donnees/paragraphes-validations.jsonl",
+      "git commit -m \"S — VALIDATION HUMAINE : 11 VERDICTS SUR /PARAGRAPHES (a004–a009), 7 ACCEPTÉS (6 RÉSOLUS, 1 COMPATIBLE), 4 EXCLUS\"",
+      "git push origin master"
+    ],
+    "parent": [
+      "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet",
+      "git add tools/structures",
+      "git commit -m \"S — POINTEUR : 11 VERDICTS /PARAGRAPHES (a004–a009) COMMITTÉS\"",
+      "git push origin s/v7"
+    ],
+    "message_sous_module": "S — VALIDATION HUMAINE : 11 VERDICTS SUR /PARAGRAPHES (a004–a009), 7 ACCEPTÉS (6 RÉSOLUS, 1 COMPATIBLE), 4 EXCLUS",
+    "message_parent": "S — POINTEUR : 11 VERDICTS /PARAGRAPHES (a004–a009) COMMITTÉS",
+    "verification": [
+      "git -C tools/structures show --stat --oneline HEAD  # 1 file changed, 11 insertions(+)",
+      "git -C tools/structures show HEAD:donnees/paragraphes-validations.jsonl | wc -l  # 19",
+      "git ls-tree HEAD tools/structures  # nouveau SHA, plus 523d8c1"
+    ],
+    "pourquoi_deux_commits": "Le parent ne stocke qu'un gitlink. Committer le sous-module sans avancer le pointeur laisse un clone du parent à 523d8c1 ; avancer le pointeur sans publier le sous-module laisse un clone incapable de récupérer le nouveau SHA.",
+    "controle": {
+      "dispositif": "commande du sous-module rejouée dans un clone jetable, sans push",
+      "resultat": "1 file changed, 11 insertions(+) ; un clone de ce commit voit 19 verdicts (10 resolu, 1 compatible, 8 exclu) et 11 acceptés"
+    },
+    "options_referents": {
+      "A_recommandee": "Committer les 11 verdicts tels quels pour ne pas perdre la seule trace, puis corriger les 9 mappings dans un verdict séparé (append-only, la page prend le dernier).",
+      "B": "Corriger les 9 mappings dans le working tree avant le commit, avec une note ; le diff n'est alors plus « +11 tel qu'enregistré » et la valeur d'origine n'est plus tracée."
+    }
+  },
+  "risque_clone": {
+    "controle_negatif": {
+      "commande": "tmp=$(mktemp -d); git clone -q tools/structures \"$tmp/s\"; cd \"$tmp/s\"; git rev-parse HEAD; git status --porcelain; wc -l < donnees/paragraphes-validations.jsonl",
+      "head": "523d8c1e8c6ca29ca415360a71bfab6c5b56102c",
+      "statut": "propre (0 ligne)",
+      "lignes": 8,
+      "statuts": {
+        "resolu": 4,
+        "exclu": 4
+      },
+      "acceptes": 4,
+      "phrases": [
+        "a001",
+        "a002",
+        "a003"
+      ],
+      "sha256": "adf23efe0e8ebc77b397295521b1d1fccb4394c4c97e11bb859d0c1d2ada8862"
+    },
+    "risques": [
+      {
+        "nom": "perte sèche",
+        "gravite": "haute",
+        "detail": "Les 11 verdicts n'existent que dans le working tree local : ni commit, ni reflog, ni remote. Un git reset --hard, git checkout -- ., git clean -fd, un rebase interrompu ou une perte de machine les détruit sans récupération possible. C'est la seule copie de six paragraphes jugés neuf jours plus tôt, le 2026-11-04."
+      },
+      {
+        "nom": "clone trompeur",
+        "gravite": "haute",
+        "detail": "Un clone à 523d8c1 affiche 9 paragraphes et 19 candidats mais seulement 8 verdicts / 4 acceptés / 11 candidats sans verdict. L'affirmation « 9/9, 19/19, 0 restant » n'est vraie que dans le working tree."
+      },
+      {
+        "nom": "re-jugement et écrasement",
+        "gravite": "moyenne",
+        "detail": "Un opérateur parti d'un clone re-jugera a004–a009. La page prend le dernier verdict par candidat (dernier() dans static/paragraphes.js) : les nouveaux verdicts écrasent à l'affichage les choix du 2026-11-04 (a004 sa → ALICE, a008 compatible), et le fichier append-only garde les deux sans dire lequel fait foi."
+      },
+      {
+        "nom": "référents figés",
+        "gravite": "moyenne",
+        "detail": "Le commit fige 9 mappings faux sur 16 avec auteur: humain et note: \"\". Ce n'est pas une perte de données, mais des défauts de page deviennent une vérité committée ; une correction ultérieure devra être explicite."
+      },
+      {
+        "nom": "pointeur orphelin",
+        "gravite": "moyenne",
+        "detail": "Committer le pointeur parent sans publier le sous-module laisse un clone incapable de récupérer le gitlink ou à l'ancien ; publier le sous-module sans le pointeur laisse le clone du parent à 523d8c1. Les deux commits sont indissociables."
+      },
+      {
+        "nom": "sous-module non portable",
+        "gravite": "haute",
+        "detail": ".gitmodules pointe tools/structures vers un chemin local absolu (/home/stephane/Data13TB/stephane/GitHub/drave-structures), et l'origin du sous-module est ce même chemin. Sur une autre machine, un clone du parent avec --recurse-submodules ne peut pas initialiser tools/structures ; sans l'option, le répertoire est vide. Le « clone voit 8 verdicts » est un majorant local : hors de cette machine, il peut n'en voir aucun. Défaut antérieur aux 11 verdicts, non réparé par leur commit."
+      },
+      {
+        "nom": "arbre parent sale",
+        "gravite": "basse",
+        "detail": "git status du parent affiche M tools/structures et d'autres modifications d'autres sessions. Les outils qui exigent un arbre propre (ou git archive) ignorent les 11 lignes ; un git commit -a les emporterait avec des changements étrangers."
+      }
+    ],
+    "ce_que_le_commit_change": "Un clone à 523d8c1 reste à 8 ; un clone au nouveau commit du sous-module voit 19 verdicts, 11 acceptés, 0 candidat sans verdict, à condition que le parent pointe vers ce commit et que le sous-module soit publié.",
+    "ce_que_le_commit_ne_change_pas": [
+      "les 9 référents faux",
+      "l'absence de note sur les 11 verdicts",
+      "le statut compatible de a008",
+      "le chemin local du .gitmodules"
+    ]
+  },
+  "ce_qui_pourrait_le_rendre_faux": [
+    "S committe avant la lecture : le diff, les numéros de ligne et le blob b34f8f5 changent ; les hashes et les candidat_id restent la clé stable.",
+    "Une ligne est insérée avant la ligne 9 : les numéros 9–19 se décalent ; se référer aux candidat_id et aux hashes.",
+    "generateur.analyser change : les comptes 2, 2, 1, 2, 1, 3 et les IDs cNN dépendent du générateur à 523d8c1.",
+    "Le HEAD du sous-module ou le pointeur parent bouge : le contrôle négatif et les totaux décrivent l'état 523d8c1 / ced21933 du 2026-11-13.",
+    "L'audit des référents est cité, pas re-mesuré ici : les 16 mappings et le 7/16 viennent de rapport-etat-s.md § 2 ; un audit indépendant pourrait compter autrement les formes répétées.",
+    "Le contrôle négatif est local : il clone le dépôt local tools/structures ; sur une autre machine, le .gitmodules en chemin absolu peut rendre le clone impossible.",
+    "La commande de commit suppose master et s/v7 : si S change de branche ou si l'origin du sous-module change, adapter les git push ; les commits, eux, ne changent pas."
+  ],
+  "fichiers_lus_non_modifies": [
+    "tools/structures/donnees/paragraphes-validations.jsonl",
+    "tools/structures/donnees/paragraphes.json",
+    "tools/structures/serveur.py",
+    "tools/structures/generateur.py",
+    "tools/structures/static/paragraphes.js",
+    "tools/structures/.git (HEAD, status, diff, blob, remote)",
+    ".gitmodules",
+    "reports/rapport-etat-s.md",
+    "reports/rapport-s-paragraphes.md",
+    "docs/pilotage/en-cours.md",
+    "docs/pilotage/roadmap.md"
+  ],
+  "references": [
+    "reports/rapport-etat-s.md",
+    "reports/rapport-s-paragraphes.md",
+    "reports/pensee-etat-s.json",
+    "docs/pilotage/roadmap.md",
+    "docs/pilotage/en-cours.md"
+  ]
+}

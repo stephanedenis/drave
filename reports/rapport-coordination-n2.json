@@ -1,0 +1,247 @@
+{
+  "date": "2026-11-13",
+  "head": "ced21933",
+  "ligne": "N2",
+  "objet": "coordination du mètre eval_n2_propre.py pour les checkpoints RoPE",
+  "fiche": "reports/rapport-coordination-n2.md",
+  "verdict": "eval_n2_propre.py lit les checkpoints RoPE comme des positions absolues et rend 8,0225 sur propre512-8k à 128 octets, contre 2,9726 à 128 et 2,7856 à 1024 au mètre RoPE. --rope est nécessaire mais non suffisant : le checkpoint de la porte a été entraîné avec le canal, et --rope seul rend 40,0658. Le correctif validé est --rope --canal-dir.",
+  "aucune_modification_n2": [
+    "tools/native_model.py",
+    "tools/entrainer_native.py",
+    "work/"
+  ],
+  "bug": {
+    "fichier": "tools/eval_n2_propre.py",
+    "symptome": "val 8,0225 au lieu de 2,9726 à 128 et 2,7856 à 1024 sur work/n2ac/propre512-8k.pt",
+    "causes": [
+      {
+        "rang": 1,
+        "nom": "architecture",
+        "detail": "charge() construit NativeModel (table de positions apprise absolue) au lieu de NativeModelRoPE ; les checkpoints N2 depuis le 02/11 sont des NativeModelRoPE, avec les mêmes noms de tenseurs et self.pos inutilisé.",
+        "silence": "load_state_dict(strict=False) : 127 clés, 0 manquante, 0 inattendue ; pos.weight est chargé et appliqué par le NativeModel absolu, alors que le modèle RoPE ne l'a jamais appris."
+      },
+      {
+        "rang": 2,
+        "nom": "canal",
+        "detail": "ppl_protocole() appelle m(x[:, :-1]) sans canal ; le checkpoint de la porte a été entraîné avec --canal data/corpus_propre/train.canal (work/n2ac/chaine_porte.sh).",
+        "mesure": "RoPE sans canal = 40,0658 à 128 ; RoPE avec canal = 2,9726 à 128."
+      }
+    ],
+    "piege_de_longueur": "8,0225 est le val à 128 octets ; 2,7856 est la PPL à 1024. À longueur égale 128, la référence est 2,9726. Après le correctif, le champ val reste à 128 et vaut 2,9726 ; le chiffre de porte est longueurs['1024'] = 2,7856.",
+    "pourquoi_strict_false_ne_le_detecte_pas": "NativeModelRoPE hérite de NativeModel et conserve self.pos (inutilisé) : le checkpoint et le modèle absolu ont exactement les mêmes 127 clés. Un chargement partiel n'est donc pas signalé."
+  },
+  "checkpoints": {
+    "porte": {
+      "fichier": "work/n2ac/propre512-8k.pt",
+      "date": "2026-11-03 02:01",
+      "octets": 137248474,
+      "sha256": "37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc",
+      "parametres": 34301224,
+      "window": 512,
+      "positions": "rope",
+      "canal": "data/corpus_propre/train.canal",
+      "corpus": "data/corpus_propre/train.txt",
+      "pas": 8000,
+      "seq": 512,
+      "graine": 1,
+      "ppl_val_interne": 3.3639,
+      "sidecar": "work/n2ac/propre512-8k.pt.json"
+    },
+    "recent": {
+      "fichier": "work/n2ac/rope2048-20k.pt",
+      "date": "2026-11-04 21:09",
+      "parametres": 34301224,
+      "window": 2048,
+      "positions": "rope",
+      "corpus": "data/wiki_fr/propre/train.txt",
+      "pas": 20000,
+      "ppl_val_interne": 2.4953,
+      "sidecar": "work/n2ac/rope2048-20k.pt.json",
+      "note": "ce n'est pas le checkpoint de la porte : corpus différent, hors domaine sur data/corpus_propre"
+    },
+    "controle_absolu": {
+      "fichier": "work/n2h/A-propre-g1.pt",
+      "parametres": 11816136,
+      "positions": "absolues",
+      "canal": null,
+      "sidecar": null
+    }
+  },
+  "chiffres": {
+    "propre512_8k": {
+      "protocole": "validation data/corpus_propre/val.txt, fenêtres Van der Corput dans les chunks de 8192, 8 lots × 16 fenêtres",
+      "courbes": {
+        "absolu_sans_canal": {
+          "128": 8.0225,
+          "256": 8.971,
+          "512": 11.3357,
+          "1024": 38.5288,
+          "source": "eval_n2_propre actuel, liste de longueurs étendue, sans --rope et sans canal"
+        },
+        "rope_sans_canal": {
+          "128": 40.0658,
+          "256": 49.5308,
+          "512": 59.8126,
+          "1024": 65.7898,
+          "source": "eval_n2_propre --rope seul, protocole sans canal"
+        },
+        "rope_avec_canal": {
+          "128": 2.9726,
+          "256": 2.8988,
+          "512": 2.8443,
+          "1024": 2.7856,
+          "source": "eval_n2_propre --rope --canal-dir, identique à work/n2ac/eval_longueurs.py --rope"
+        }
+      },
+      "test": {
+        "128": 3.0649,
+        "512": 2.8875,
+        "1024": 2.8566,
+        "protocole": "test.txt → val.txt, test.canal → val.canal, eval_longueurs.py --rope",
+        "seuil": 2.5,
+        "manque_val_1024": 0.2856,
+        "manque_test_1024": 0.3566
+      },
+      "controles_negatifs": {
+        "permutation_texte_canal_inchange_1024": 1692.3919,
+        "permutation_texte_et_canal_1024": 1880.6648,
+        "val_1024": 2.7856,
+        "verdict": "le mètre est sensible à l'ordre ; les deux permutations valent 600 à 700 fois la valeur propre"
+      },
+      "courbe_absolue_monte": "8,0225 → 8,9710 → 11,3357 → 38,5288 de 128 à 1024 : l'architecture absolue se dégrade avec la longueur, le contraire de RoPE + canal (2,9726 → 2,7856)."
+    },
+    "rope2048_20k": {
+      "protocole": "data/corpus_propre/val.txt, hors domaine",
+      "absolu_sans_canal": {
+        "128": 12.9098
+      },
+      "rope_avec_canal": {
+        "128": 5.4773,
+        "1024": 4.6321
+      },
+      "note": "le 4,63 souvent cité est la valeur à 1024, pas à 128 ; à 128 la référence est 5,4773"
+    },
+    "A_propre_g1": {
+      "eval_n2_propre_sans_canal": {
+        "val": 3.0971,
+        "test": 3.2098
+      },
+      "avec_canal": {
+        "val_128": 10.9904,
+        "val_1024": 34.988
+      },
+      "verdict": "l'outil est correct pour l'ancienne architecture absolue sans canal ; le canal ne s'ajoute pas à un modèle qui ne l'a pas appris."
+    }
+  },
+  "correctif": {
+    "demande": "--rope",
+    "necessaire_mais_insuffisant": true,
+    "valide": [
+      "--rope : charge NativeModelRoPE via work/n2ac/rope_model.py",
+      "--canal-dir : fournit val.canal et test.canal au protocole",
+      "--longueurs liste : expose 1024",
+      "garde-fou sidecar : positions=rope + --rope absent → erreur"
+    ],
+    "diff_clefs": {
+      "charge": "def charge(chemin, device='cuda', rope=False) ; si rope, return charge_rope(chemin, device=device)",
+      "chargement": "manquants, inattendus = m.load_state_dict(ck['state'], strict=False) ; avertir si non vide",
+      "canal": "fenetres_dans_chunks(..., canal=None) retourne (x, c) ; ppl_protocole(..., canal=None) passe canal=c[:, :-1]",
+      "argparse": "--rope (store_true), --canal-dir (répertoire de val.canal/test.canal), --longueurs (nargs='?', const='129,192,256,384,512,1024')",
+      "sidecar": "positions_sidecar(chemin) lit chemin + '.json' et ap.error si positions=rope sans --rope"
+    },
+    "validation": {
+      "copie_hors_depot": "/tmp/eval_n2_propre_rope.py",
+      "commande": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python /tmp/eval_n2_propre_rope.py work/n2ac/propre512-8k.pt --rope --canal-dir data/corpus_propre --longueurs 128,256,512,1024",
+      "resultat": {
+        "val": 2.9726,
+        "test_128_offset_5M": 3.0807,
+        "longueurs": {
+          "128": 2.9726,
+          "256": 2.8988,
+          "512": 2.8443,
+          "1024": 2.7856
+        }
+      },
+      "test_1024_reference": 2.8566,
+      "note": "le test de l'outil (offset 5 000 000, longueur 128) vaut 3,0807 ; la référence 3,0649/2,8566 vient du split /tmp/propre_test et de eval_longueurs.py"
+    },
+    "durabilite": "work/ est gitignoré : --rope importe work/n2ac/rope_model.py, donc le correctif est local à Hauru. Pour un clone neuf, promouvoir rope_model.py en tools/rope_model.py (ou intégrer positions dans tools/native_model.py) et épingler le sha256 du .pt.",
+    "decision_recommandee": "Ne pas livrer --rope seul (40,07 au lieu de 2,79). Chemin A : --rope --canal-dir dans eval_n2_propre.py, validé en copie hors dépôt (2,9726 / 2,8988 / 2,8443 / 2,7856). Chemin B : --rope seul + tools/porte-n2.sh qui appelle work/n2ac/eval_longueurs.py --rope pour la porte. Dans les deux cas, la commande du § 4.A est la référence."
+  },
+  "commande_n2": {
+    "aujourdhui_sans_patch": {
+      "commande": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre",
+      "attendu": {
+        "L128": 2.9726,
+        "L256": 2.8988,
+        "L512": 2.8443,
+        "L1024": 2.7856
+      },
+      "note": "seule commande qui donne 2,79 aujourd'hui ; fournit le canal par --val data/corpus_propre"
+    },
+    "apres_patch": {
+      "commande": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2ac/propre512-8k.pt --rope --canal-dir data/corpus_propre --longueurs 128,256,512,1024",
+      "attendu": {
+        "val": 2.9726,
+        "longueurs_128": 2.9726,
+        "longueurs_256": 2.8988,
+        "longueurs_512": 2.8443,
+        "longueurs_1024": 2.7856
+      }
+    },
+    "test_1024": {
+      "commande": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/propre_test && cp data/corpus_propre/test.txt /tmp/propre_test/val.txt && cp data/corpus_propre/test.canal /tmp/propre_test/val.canal && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,512,1024 --val /tmp/propre_test",
+      "attendu": {
+        "L128": 3.0649,
+        "L512": 2.8875,
+        "L1024": 2.8566
+      }
+    },
+    "temoin_bug": {
+      "commande": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python tools/eval_n2_propre.py work/n2ac/propre512-8k.pt --longueurs",
+      "attendu": {
+        "val": 8.0225,
+        "test": 8.0126,
+        "longueurs": {
+          "129": 8.1024,
+          "192": 8.4072,
+          "256": 8.971,
+          "384": 10.0906,
+          "512": 11.3357
+        }
+      }
+    }
+  },
+  "limites": [
+    "Une seule graine, un seul run, une seule machine : pas de barre d'erreur.",
+    "2,7856 est le meilleur des quatre longueurs choisi sur la validation ; le test 2,8566 (manque 0,3566) est la mesure honnête.",
+    "Les corpus hors domaine n'ont pas de .canal : les colonnes litterature/litterature_propre/anglais/wikitext2 de eval_n2_propre ne sont pas comparables pour ce checkpoint (52,29 / 53,70 / 117,43 / 117,73 sans canal).",
+    "Le test de eval_n2_propre (offset 5 000 000, longueur 128) vaut 3,0807, pas 3,0649 : ce n'est pas le split de test de la porte.",
+    "work/ et data/ sont gitignorés : la commande est locale à Hauru ; un clone neuf ne peut pas la rejouer sans checkpoint, corpus et rope_model.py.",
+    "Le sidecar positions=rope n'existe pas pour les anciens checkpoints : le garde-fou est un filet, pas une preuve d'architecture.",
+    "PPL n'est pas lecture : un chiffre sous 2,5 ne prouverait pas la restitution (règle du miroir)."
+  ],
+  "fichiers_lus_non_modifies": [
+    "tools/eval_n2_propre.py",
+    "tools/native_model.py",
+    "work/n2ac/rope_model.py",
+    "work/n2ac/eval_longueurs.py",
+    "work/n2j/evalue_canal.py",
+    "work/n2ac/entrainer_rope.py",
+    "work/n2ac/chaine_porte.sh",
+    "work/n2ac/propre512-8k.pt",
+    "work/n2ac/propre512-8k.pt.json",
+    "work/n2ac/rope2048-20k.pt",
+    "work/n2ac/rope2048-20k.pt.json",
+    "work/n2h/A-propre-g1.pt",
+    "data/corpus_propre/val.txt",
+    "data/corpus_propre/val.canal",
+    "data/corpus_propre/test.txt",
+    "data/corpus_propre/test.canal"
+  ],
+  "references": [
+    "reports/rapport-etat-n2.md",
+    "reports/rapport-n2-porte-propre.md",
+    "reports/n2-porte-propre.json"
+  ]
+}

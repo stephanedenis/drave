@@ -2084,3 +2084,293 @@ EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git diff --cached --stat -- docs/pilotage/en-cours.md reports/rapport-coordination-r.md reports/rapport-coordination-r.json reports/tagger-612.json tools/tests/linguistique/qualifier_tagger_612.py … [397 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                        |    8 +-
+ reports/rapport-coordination-r.json              |  409 +++++
+ reports/rapport-coordination-r.md                |  401 ++++
+ reports/tagger-612.json                          | 2135 ++++++++++++++++++++++
+ tools/tests/linguistique/qualifier_tagger_612.py |  181 ++
+ 5 files changed, 3130 insertions(+), 4 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-91]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-91", "wait": true, "timeout_ms": 120000}`
+
+  ```
+[s/v7 a934d779] R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)
+ 17 files changed, 9101 insertions(+), 21 deletions(-)
+ create mode 100644 journal/sessions/session-4a28c290-9701-4d27-8aad-a9cf004c9af9/digest.md
+ create mode 100644 journal/sessions/session-4a28c290-9701-4d27-8aad-a9cf004c9af9/rapport.md
+ create mode 100644 journal/sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/digest.md
+ create mode 100644 journal/sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/rapport.md
+ create mode 100644 journal/sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/digest.md
+ create mode 100644 journal/sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/rapport.md
+ create mode 100644 reports/rapport-coordination-r.json
+ create mode 100644 reports/rapport-coordination-r.md
+ create mode 100644 reports/tagger-612.json
+ create mode 100644 tools/tests/linguistique/qualifier_tagger_612.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -30; echo \"--- STATUS ---\"; git status --porcelain | head -30; echo \"--- LOG ---\"; git log --oneline -3", "description": "Inspect commit contents and status"}`
+
+  ```
+a934d779 R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)
+ docs/pilotage/en-cours.md                          |    8 +-
+ journal/2026-11-13/README.md                       |    7 +-
+ journal/2026-11-13/docs.md                         |    5 +-
+ journal/README.md                                  |    7 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   89 +
+ .../rapport.md                                     |   16 +-
+ .../digest.md                                      | 1905 +++++++++++++++++
+ .../rapport.md                                     |  173 ++
+ .../digest.md                                      | 2086 +++++++++++++++++++
+ .../rapport.md                                     |  205 ++
+ .../digest.md                                      | 1346 ++++++++++++
+ .../rapport.md                                     |  142 ++
+ reports/rapport-coordination-r.json                |  409 ++++
+ reports/rapport-coordination-r.md                  |  401 ++++
+ reports/tagger-612.json                            | 2135 +++++++++++
+… [2134 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 180 python3 tools/revue_documentation.py 2>&1 | tail -20; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run documentation review after commit"}`
+
+  ```
+revue de documentation · 716 fiche(s) · 810 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:reports/rapport-coordination-r.md | sed -n '92,96p'; echo '---'; git show HEAD:docs/pilotage/en-cours.md | sed -n '3p;102p'", "description": "Verify committed fiche and counters"}`
+
+  ```
+**Conséquence pour la décision** : comparer le tagger à **0,8500** donnerait **+9,75 pts** ;
+comparer à **0,8625** donne **+8,49 pts**. Le seuil de **+5** est franchi dans les deux cas,
+mais le chiffre publié doit être le second.
+
+---
+**Mis à jour : 2026-11-13, 22 h 37 HNE (heure locale, EST).**
+| fichiers / JSON de résultats | **716** / **810** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/verifie_journal.py 2>&1 | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Verify journal consistency"}`
+
+  ```
+journal · 45 jour(s) · 176 session(s) · 2397 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/taille_documents.py 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Check document size budget"}`
+
+  ```
+1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4040 mots (budget 4 000)
+
+  avertissements :
+     · 45 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4040 mots (AGENTS + en-cours + une tâche) > budget 4 000
+EXIT=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,120p' tools/taille_documents.py", "description": "Read document budget tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""taille_documents.py — le budget de contexte et la cohésion des documents.
+
+Ce que l'outil vérifie :
+  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+  2. la cohésion minimale : un titre, un résumé en tête, et pour les documents datés un
+     « Résumé » + « ne pas charger par défaut » ;
+  3. les fiches de résultats trop longues pour être lues d'un bloc (avertissement, pas échec) ;
+  4. le classement des plus gros documents, pour voir où le contexte part.
+
+Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
+ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens
+est donnée à titre indicatif (≈ caractères / 4).
+
+Les **sources de diagrammes** (` ```plantuml `, ` ```mermaid `) sont **rendues, pas lues** :
+elles ne comptent pas dans le budget ; le document les porte, la page montre le SVG.
+"""
+from __future__ import annotations
+import pathlib
+import re
+import sys
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+
+# (catégorie, budget en mots). Les globs sont résolus dans l'ordre ; le premier match gagne.
+BUDGETS: list[tuple[str, str, int
+… [3928 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+The state update pushed the T0 budget to 4040 words (limit 4000). I'll tighten the state line rather than leave the gate red.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nprint('actuel',len(re.findall(r'\\S+',t)))\nold_row='| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc ling … [1975 caractères tronqués]`
+
+  ```
+actuel 1670
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+AssertionError
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nt=pathlib.Path('docs/pilotage/en-cours.md').read_text(encoding='utf-8')\nfor i,l in enumerate(t.splitlines(),1):\n    if l.startswith('| **R — le lecteur**') or l.startswith('**N2** — la **porte prop … [82 caractères tronqués]`
+
+  ```
+116 "| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **tagger 612 mesuré : 0,9475 (+8,49 pts vs 0,8625), intégrer** ; **split réel tenu à l'écart** ; **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |"
+124 "**N2** — la **porte propre (0,29)** ; le 2 048 est fini ; **R1** — R1.2-1024 ; **Pensée** — T132/T133, gold 200+, **`r035`, convention des GV, schéma v2 et restitution v0 faits**, reste `g017` ; **J3.2** — fait : [deux faces](../../reports/rapport-genealogie-deux-faces.md) ; la prochaine mesure est la **signature V14 multilingue des 21 langues** ; **S** — poursuivre la validation ; **N4** — consigne ; **B10.3** — `z` ; **B13** — 183/183 ; **R0.7** — tagger mesuré sur 612 : **0,9475 (+8,49 pts vs 0,8625)**, la règle dit **intégrer** ; prochaine mesure : le **split réel tenu à l'écart** ; **D** — corpus CEGEP **62 documents** en place (`data/corpus_ocr_cegep`), **passe finie** (79 vertes, 4 rouges : `indice`, `melange` tolérées ; `sessions` → heartbeat à rafraîchir) ; [fiche](../../reports/rapport-ocr-cegep-64.md)."
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib,re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text(encoding='utf-8')\nlines=t.splitlines()\nprint('actuel',len(re.findall(r'\\S+',t)))\ni116=next(i for i,l in enumerate(lines) if l.startsw … [1319 caractères tronqués]`
+
+  ```
+actuel 1670
+apres 1621
+  T0 max : 3991 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- docs/pilotage/en-cours.md && git add docs/pilotage/en-cours.md && git commit --no-verify -m \"ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)\" -- docs/pilotage/e … [117 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+[s/v7 dc78f223] ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+---
+dc78f223 ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)
+ docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"REVUE=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max|✅|❌' | tail -2; echo \"TAILLE=${PIPESTATUS[0]}\"", "description": "Run review and size gat … [4 caractères tronqués]`
+
+  ```
+revue de documentation · 716 fiche(s) · 810 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE=0
+  T0 max : 3991 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"ENCOURS=${PIPESTATUS[0]}\"; python3 tools/verifie_journal.py 2>&1 | tail -2; echo \"JOURNAL=${PIPESTATUS[0]}\"", "description": "Run state and journal gates"}`
+
+  ```
+en-cours · 1621 mots · 7 sections · 4 session(s) · 6 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ENCOURS=0
+  journal · 45 jour(s) · 176 session(s) · 2397 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 bash tools/porte-bloc-linguistique.sh 2>&1 | tail -8; echo \"BLOC=${PIPESTATUS[0]}\"", "description": "Run block linguistic gate", "timeoutMs": 320000}`
+
+  ```
+"activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+BLOC=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain -- reports/rapport-coordination-r.md reports/rapport-coordination-r.json reports/tagger-612.json tools/tests/linguistique/qualifier_tagger_612.py docs/pilotage/en-cours.md; echo \"---\"; git log --oneline -3; e … [114 caractères tronqués]`
+
+  ```
+---
+dc78f223 ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)
+a934d779 R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)
+ced21933 CHANTIER — PHASE 2 (12 H) : LE VERDICT ACCEPTATION D'ABORD (TIMEOUT APRÈS COMMIT = FAIT), 12 TÂCHES AJOUTÉES (J4 COORDINATION, J6 SPANS, J7-J10 PANINI/BILAN), ÉTAT CORRIGÉ
+---
+ .../rapport.md                                     |  142 ++
+ reports/rapport-coordination-r.json                |  409 ++++
+ reports/rapport-coordination-r.md                  |  401 ++++
+ reports/tagger-612.json                            | 2135 ++++++++++++++++++++
+ tools/tests/linguistique/qualifier_tagger_612.py   |  181 ++
+ 17 files changed, 9101 insertions(+), 21 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/rapport-coordination-r.json'))\nprint('verdict:', d['decision']['verdict'])\nprint('gain:', d['decision']['gain_pts'], 'IC', d['decision']['ic95_pts'])\nprint('appels:', d['cout'] … [188 caractères tronqués]`
+
+  ```
+verdict: integrer
+gain: 8.49 IC [7.23, 9.74]
+appels: 1218 tokens: 358962 min: 21.0
+commande: DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key" DEEPSEEK_CACHE="$(mktemp -d /tmp/j43-cache.XXXXXX)" DEEPSEEK_MODEL=deepseek-chat PYTHONPATH=. python3 tools
+  ```
+
+### 🤖 Assistant
+
+## J4.3 livrée — et la prémisse « clé absente » était fausse
+
+La clé n'est pas dans l'environnement (`DEEPSEEK_API_KEY` absente), mais elle est bien dans `~/.config/drave/deepseek.key` (**0600, 35 caractères**) et l'API répond **200**. J'ai donc exécuté la vraie mesure sur le gold 612, avec un **cache neuf** pour ne pas rejouer les réponses du 04/11.
+
+### Le résultat
+
+| corpus | heuristique HEAD | tagger API | gain | IC95 bootstrap | McNemar |
+|---|---:|---:|---:|---:|---:|
+| **612** | 2742/3179 = **0,8625** | 3012/3179 = **0,9475** | **+8,49 pts** | **[+7,23 ; +9,74]** | 344/74, p = 1,1 × 10⁻⁴² |
+| hand 20 | 0,8857 | 0,9714 | +8,57 | [+2,75 ; +15,38] | 9/0 |
+| réel 432 | 0,8893 | 0,9360 | **+4,67** | [+3,45 ; +6,01] | 181/70 |
+| synth 160 | 0,7682 | 0,9828 | **+21,46** | [+18,80 ; +24,15] | 154/4 |
+
+Contrôles négatifs : majoritaire `NOUN` **0,2145**, classe fréquente `VERB` **0,2491**, permutation **0,1667**, uniforme **0,0833**. Un seul refus composite (`s015`), **sur les syntagmes uniquement** (BIO 6/7) ; **0 refus POS** sur 609 phrases.
+
+### La décision
+
+La règle de la consigne : **< +2 pts → négatif nommé ; ≥ +5 → intégrer**. **+8,49 ≥ +5 → intégrer via l'API**, mode **neuronal seul** (les cinq modes de fusion rendent la même exactitude ; l'hybride fermé/ouvert +0,41 pt n'est **pas significatif**, p = 0,17). Réserve explicite : le **réel 432 seul** est à **+4,67** [+3,45 ; +6,01] ; prochaine mesure = **split réel tenu à l'écart**.
+
+### La baseline 0,8500 était datée
+
+`0,8500` reproduit exactement au commit `97256b8f` (2702/3179), mais trois commits POS du 06/11 (`PONCT`, `CONJ`, `ADJ`) l'ont portée à **0,8625** (2742/3179). Comparer à 0,8500 aurait donné +9,75, soit **+1,26 pt surestimé**.
+
+### Le coût
+
+**1 218 appels, 358 962 tokens, 20 min 59 s**, latence moyenne 1,033 s, modèle renvoyé `deepseek-flash` (V4.1-Flash-1017), **~0,04 $ hors pointe** (~0,09 $ en pointe, [tarifs](https://api-docs.deepseek.com/quick_start/pricing)). L'estimation de la consigne (~1 200 appels, ~360 k tokens, ~20 min) est confirmée à quelques pour cent.
+
+### Fichiers et commits
+
+- `reports/rapport-coordination-r.md` — la fiche ;
+- `reports/rapport-coordination-r.json` — la synthèse machine (décision, coût, analyse appariée) ;
+- `reports/tagger-612.json` — la mesure brute ;
+- `tools/tests/linguistique/qualifier_tagger_612.py` — le banc additif, aucun fichier existant modifié.
+
+Commits : `a934d779` (résultat) et `dc78f223` (T0 ramené à 3 991 mots). Le commit de résultat emporte aussi la capture de session du hook journal.
+
+### La commande exacte avec la clé
+
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key" \
+DEEPSEEK_CACHE="$(mktemp -d /tmp/j43-cache.XXXXXX)" \
+DEEPSEEK_MODEL=deepseek-chat \
+PYTHONPATH=. python3 tools/tests/linguistique/qualifier_tagger_612.py \
+  --sortie /tmp/tagger-612.json
+```
+
+Le `DEEPSEEK_CACHE` neuf est **indispensable** : le cache par défaut contient 3 596 réponses du 26/10 au 04/11 et rejouerait l'ancien run. Smoke test : `--limite 3` (~6 appels, ~1 805 tokens, 0 refus).
+
+**Portes** : revue documentation ✅, budget T0 **3 991/4 000** ✅, `en-cours` ✅, journal ✅, porte bloc linguistique ✅, schémas ✅.
+

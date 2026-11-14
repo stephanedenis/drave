@@ -15,6 +15,11 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |
+| [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → 2,9726/2,7856, `--rope` seul insuffisant |
+| [`rapport-coordination-s.md`](rapport-coordination-s.md) | **S** — les 11 verdicts non committés : 7 acceptés, 4 exclus |
+| [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)**, intégrer |
+| [`rapport-coordination-a.md`](rapport-coordination-a.md) | **A** — A6.2 libre (MoE 18 Go), A8.3b2 hors graphe |
 | [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 niveaux |
 | [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
 | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
@@ -24,7 +29,7 @@
 | [`rapport-gn-pronom-sujet.md`](rapport-gn-pronom-sujet.md) | **B13** — pronom sujet = GN : **0,7013** |
 | [`rapport-r264-elision.md`](rapport-r264-elision.md) | **B13** — `r264` : 236/237, couverture **0,9916** |
 | [`rapport-pos-ponctuation.md`](rapport-pos-ponctuation.md) | **B13** — PONCT : POS **85,75 %**, miroir 0,2276 |
-| [`rapport-etat-s.md`](rapport-etat-s.md) | **B13** — l'état de S : /paragraphes fini (19/19), banque 150/207, rétro-traduction absente |
+| [`rapport-etat-s.md`](rapport-etat-s.md) | **B13** — l'état de S : /paragraphes 19/19 dans le working tree, banque 150/207, rétro-traduction absente ; un clone à `523d8c1` voit 8/4/11 |
 | [`rapport-etat-r.md`](rapport-etat-r.md) | **B13** — l'état de R : tagger 0,8483/0,9440, R1.2-1024 mesuré, R4.4 |
 | [`rapport-etat-n2.md`](rapport-etat-n2.md) | **B13** — l'état de N2 (porte propre, `porte-n2.sh`) |
 | [`rapport-etat-a.md`](rapport-etat-a.md) | **B13** — l'état de A (frontière) |
