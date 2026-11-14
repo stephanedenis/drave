@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 326.8 h |
-| Tours | 194 |
-| Messages | 3715 |
-| Appels d'outils | 3311 |
+| Durée | 329.2 h |
+| Tours | 196 |
+| Messages | 3725 |
+| Appels d'outils | 3317 |
 | Fichiers touchés | 25 |
-| Commandes | 2752 |
+| Commandes | 2758 |
 | Sous-agents | 42 |
-| Commits | 441 |
+| Commits | 442 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -447,6 +447,10 @@
 **Tour 193** — go
 
 **Tour 194** — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on passe aux bilans
+
+**Tour 195** — ok, vulgarise-moi les points de décision à prendre (je reviens de vacances :-) ) et on tranche ici si possible
+
+**Tour 196** — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
 ## 2. Déroulé, étape par étape
 
@@ -10428,7 +10432,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*114 appels d'outils.* Actions notables :
+*115 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,11 +10448,111 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 62 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ **J14.1 fait : le tag `chantier-2026-11-14` est posé.** Je pousse, vérifie et prépare les bilans
+⏵ Bilans — le chantier est clos : **F1 79,02 %**, **attachement 99,58 %**, **238/238**, tag posé, tout poussé
+
+\## 1. Les chiffres du chantier (13 → 14/11)
+
+| mesure | avant | **après** |
+|---|---:|---:|
+| POS (vivant 612) | 86,25 % | 86,25 % (fermé 93,73 / ouvert 79,18) |
+| **F1 syntagmes** | 75,33 % | **79,02 %** (+3,69) |
+| **attachement exact** | 236/237 | **238/238 labels** (238/239 cibles, **99,58 %**) |
+| exact sur span | 100 % | **100 %** |
+| top-k | 98,33 % | **98,74 %** |
+| spans perdus | 2 | **1** (`g017` — convention, documenté) |
+| tagger API | — | **94,75 % (+8,49 pts)** — la décision R est tranchée |
+
+**La table complète** (avec les bases 612/602, les commits et les contrôles négatifs) : [`rapport-tableau-mesures.md`](reports/rapport-tableau-mesures.md).
+
+\## 2. Ce que le produit a gagné
+
+- **`r035`** (relative zéro) : la dernière règle de segmentation — `exact 237/238`, couverture **0,9958**.
+- **`s065`** : la REL « qui commence » attachée au sujet du GV qui la suit.
+- **Le schéma v2** (`meta.partition`/`meta.alternative`), v1 toujours lue.
+- **La restitution v1** : `drave.py restituer` (surface 46/46, forme canonique).
+- **`evaluer --par-langue`** (fr 0,8159 / en 0,9451), **les 50 textes** re-mesurés (0 plantage, schéma v2 50/50), **les 5 exemples** rejoués.
+- **La clôture** : 84 portes, **82 vertes**, 2 rouges structurelles nommées (`indice`, `melange`), `porte-sessions` repassée verte.
+
+\## 3. Panini — l'intégration mesurée et **bornée**
+
+- **La table 14 atomes × 8 niveaux** (14/14, 33 paires colinéaires).
+- **Le corpus commun UDHR** (418/438 paires exactes).
+- **Le retrieval par famille** : sœurs **0,619** vs **0,0445** — mais seulement **dans la même écriture**.
+- **La généalogie à deux faces** : 154/154 paires hors script ; la famille vit dans 2-3 paires.
+- **Le §334** : leur β « époque » **+0,138** devient **−0,006** après contrôle de la topologie — **la contradiction est le résultat**.
+- **Le corpus d'or CIC** : **42/42** verdicts reproduits, **36/36** preuves altérées rejetées.
+
+\## 4. Le méta-harnais — le bilan d'exploitation
+
+**30 lancements**, **32 500 s** d'agent, **25 tâches livrées**, **3 timeouts** (dont 2 après commit, requalifiés « fait » par la règle *acceptation d'abord*). Trois corrections en production : la **clé** (`~/.config/drave/deepseek.key`), le **worktree jamais propre**, le **plan relu à chaque tour**. Le journal d'audit : `work/chantier/journal.log` ; l'état : `work/chantier/etat.json`.
+
+\## 5. Les négatifs, dits
+
+
+… [1365 caractères tronqués]
+
+### Tour 195 — ok, vulgarise-moi les points de décision à prendre (je reviens de vacances :-) ) et on tranche ici si possible
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Relire les fiches de décision
+
+**Synthèse produite :**
+
+⏵ Voici les décisions, en clair — avec mon avis et ce qu'elles coûtent
+
+\## Décision 1 — Le « tagger » : utiliser l'API pour étiqueter les mots ?
+
+**Le constat.** Notre analyseur trouve la classe grammaticale de chaque mot avec **86,25 %** de justesse. Le même exercice confié à un modèle par API atteint **94,75 %** — soit **+8,5 points**, pour **0,04 $** sur l'ensemble du corpus de test (1 218 appels, 21 min).
+
+- **A. L'ajouter en option** (`--tagger`) : la qualité de qui veut le réseau et la clé ; le défaut reste hors ligne. **← mon avis**
+- **B. En faire le défaut** : meilleure qualité, mais le produit dépend d'Internet et d'une clé.
+- **C. Ne pas l'intégrer** : on garde 86,25 %, gratuit et hors ligne.
+
+*Ce que ça coûte : ~1 jour de développement (l'option, le cache, les tests).*
+
+\## Décision 2 — Le dernier « span » (`g017`) : on plie le gold ou on le déclare hors d'atteinte ?
+
+**Le constat.** Une phrase du gold attend que l'adverbe « yesterday » soit **hors** de la proposition ; notre découpage le met dedans. La règle qui le corrigerait **casse deux autres phrases** du corpus.
+
+- **A. Déclarer le span inatteignable** (documenté, comme les 3 précédents). **← mon avis**
+- **B. Forcer la règle** : on gagne 1, on perd 2.
+
+*Rien à coder dans le cas A : la fiche existe déjà.*
+
+\## Décision 3 — Les 11 verdicts humains de S sont dans un fichier, pas dans git
+
+**Le constat.** 11 jugements humains (sur les paragraphes a004–a009) existent sur disque mais ne sont pas committés. Quelqu'un qui clone le dépôt n'en voit que 8 sur 19. Le sous-dossier appartient au chantier S, que je n'ai pas le droit d'écrire.
+
+- **A. La session S les committe** (la voie propre).
+- **B. Vous m'autorisez exceptionnellement** à committer dans `tools/structures/`. **← mon avis si S ne revient pas vite**
+- **C. On laisse** : le risque est de perdre 11 jugements humains.
+
+\## Décision 4 — Panini : leur résultat clé est contredit par notre mesure. On publie ?
+
+**Le constat.** Panini a mesuré que « la surface d'un texte dit son **époque** (β +0,138) bien plus que sa **famille** (β +0,049) ». En rejouant leur expérience avec le contrôle de la **topologie** des textes, leur effet d'époque tombe à **−0,006** : il n'y a plus d'effet. C'est important pour eux — et c'est **notre** mesure qui le dit.
+
+- **A. Leur envoyer la fiche + publier une note commune**. **← mon avis**
+- **B. Garder la fiche dans nos rapports**, sans la leur signaler.
+- **C. Ne pas publier** (le résultat est trop contraire à leur r
+… [1417 caractères tronqués]
+
+### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Lire la fiche de coordination S
+- bash — Inspecter le sous-module S
+- bash — Voir le diff des 11 verdicts
+- bash — Committer les 11 verdicts et le pointeur
+
+**Synthèse produite :**
+
+⏵ Décisions notées : je commence par protéger les 11 verdicts S (3B), puis le tagger (1A)
 
 ## 3. Travail accompli
 
@@ -10569,7 +10673,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2712 autres
+- … et 2718 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11158,4 +11262,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ" -- tools/chantier/superviseur.py docs/pilot
 - DOCS — LES 9 FICHES DU CHANTIER INDEXÉES, LE README DANS LE BUDGET (T1) ; CLÔTURE AU TAG chantier-2026-11-14" -- reports/README.md reports/INDEX.md docs/pilotag
 - PORTES — LA CLÔTURE : 84 PORTES, 82 VERTES, 2 ROUGES (INDICE, MELANGE) ; SESSIONS REPASSÉE VERTE ; TAG chantier-2026-11-14" -- docs/pilotage/references-non-regr
+- S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE" 2>&1 | tai
 
