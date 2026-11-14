@@ -3912,3 +3912,213 @@ started background job bash-174
   ```
 
 - **bash** `{"command": "sleep 30; ps -o pid,etime,cmd -C git -C python3 | tail -5; echo '---'; git log --oneline -1", "description": "Check amend progress"}`
+
+  ```
+3002 10-06:11:31 /usr/bin/python3 /home/stephane/.local/share/pipewire-eq/eqdaemon.py
+ 946076    04:06:59 python3 tools/chantier/superviseur.py boucle --budget 43200 --timeout 5400
+1606159       00:33 git commit --amend -m J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+1606179       00:33 python3 tools/archive_sessions.py --quiet
+3555423  7-06:01:13 python3 src/app.py --no-browser
+---
+0307ce7e J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT À L'IDENTIQUE ; ÉCRITURE > SŒUR > ÉPOQUE
+  ```
+
+- **job_output** `{"job_id": "bash-174", "timeout_ms": 1000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 45; git log --oneline -1; echo '---'; git status --short | head -12", "description": "Check amend result"}`
+
+  ```
+0307ce7e J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT À L'IDENTIQUE ; ÉCRITURE > SŒUR > ÉPOQUE
+---
+M  docs/pilotage/en-cours.md
+M  journal/2026-11-14/README.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/digest.md
+ M journal/sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+  ```
+
+- **bash** `{"command": "git diff --cached --name-only; echo '---'; ps -o pid,etime,cmd -C git | tail -3", "description": "Check staged files and git process"}`
+
+  ```
+docs/pilotage/en-cours.md
+journal/2026-11-14/README.md
+reports/rapport-retrieval-familles.md
+---
+    PID     ELAPSED CMD
+1606159       01:27 git commit --amend -m J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+  ```
+
+- **job_output** `{"job_id": "bash-174", "timeout_ms": 1000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 60; ps -o pid,etime,cmd -C git | tail -2; echo '---'; git log --oneline -1; git status --short | head -8", "description": "Wait for amend completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-178]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-174 (bash: git add docs/pilotage/en-cours.md reports/rapport-retrieval-familles.md journal/2026-11-14/README.md && git commit --amend -m "J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE" 2>&1 | tail -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "git log --oneline -1; echo '---'; git status --short | head -12; echo '---'; git show --stat --oneline HEAD | head -8", "description": "Check amended commit final"}`
+
+  ```
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+ docs/pilotage/en-cours.md                          |    15 +-
+ docs/pilotage/roadmap.md                           |     6 +-
+ journal/2026-11-14/README.md                       |    28 +-
+ journal/2026-11-14/docs.md                         |     2 +-
+ journal/2026-11-14/memoire.md                      |     2 +-
+ journal/2026-11-14/mesures.md                      |    10 +-
+ journal/2026-11-14/portes.md                       |    23 +
+  ```
+
+### 👤 Utilisateur
+
+background job bash-178 (bash: sleep 60; ps -o pid,etime,cmd -C git | tail -2; echo '---'; git log --oneline -1; git status --short | head -8) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -5; python3 tools/verifie_en_cours.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/verifie_journal.py 2>&1 | tail -3", "description": "Post-amend checks"}`
+
+  ```
+revue de documentation · 721 fiche(s) · 815 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  journal · 46 jour(s) · 182 session(s) · 2452 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "grep -n \"porte d'écriture\\|sœur > famille-autre\\|sur LANG_TREE\" reports/rapport-retrieval-familles.md | head; echo '---'; grep -n \"porte\\|sœur (+0,448)\" journal/2026-11-14/README.md | head", "description": "Verify corrected hierarchy in committed files"}`
+
+  ```
+21:> l'écriture, sur LANG_TREE, la sœur est le premier effet** (+0,448 contre +0,213 pour l'écriture), puis la
+409:mesurée est **porte d'écriture → sœur > famille-autre-branche > époque** : l'écriture est un **seuil**
+410:(la franchir change tout), et **dans le même script, sur LANG_TREE**, la sœur est le premier effet (coefficient
+502:- **J7.1 est mesuré, écrit, contrôlé.** Le retrieval de surface a une **porte d'écriture** (hors
+503:  écriture, tout est au hasard) ; **dans la même écriture, sur LANG_TREE et l'union**, l'ordre est
+504:  **sœur > famille-autre > époque**. La famille est réelle, mais **conditionnelle à l'écriture** et **visible seulement si le
+507:  l'effet de sœur (+0,448 sur LANG_TREE). **J3.2 est confirmé pour son échantillon** (2-3 paires) et
+---
+17:| portes | 1 | [portes.md](portes.md) |
+54:REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte, porte produit
+71:−0,034/siècle (p = 0,19) contre +0,609 pour l'écriture. L'écriture est la **porte** ; **dans la même
+72:écriture, sur LANG_TREE**, l'ordre est **sœur (+0,448) > famille-autre (+0,092) > époque (nulle)** — le coefficient de
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/rapport-retrieval-familles.md | grep -n \"porte d'écriture\" | head; echo '---'; git show HEAD:journal/2026-11-14/README.md | grep -n \"sœur (+0,448)\" | head", "description": "Verify commit content has corrected hierarchy"}`
+
+  ```
+409:mesurée est **porte d'écriture → sœur > famille-autre-branche > époque** : l'écriture est un **seuil**
+502:- **J7.1 est mesuré, écrit, contrôlé.** Le retrieval de surface a une **porte d'écriture** (hors
+---
+72:écriture, sur LANG_TREE**, l'ordre est **sœur (+0,448) > famille-autre (+0,092) > époque (nulle)** — le coefficient de
+  ```
+
+- **bash** `{"command": "git status --short; echo '---'; git log --oneline -1", "description": "Final git state"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+  ```
+
+### 🤖 Assistant
+
+**J7.1 terminé — commit `d31e8788`.**
+
+## Ce qui a été mesuré
+
+**Corpus** : 532 textes UDHR de Panini (article 1, même source XML, 1948), **521 étiquetés Glottolog** (97,9 %), **447 groupes ISO**, **445 textes distincts** après retrait de 74 variantes ISO et 2 doublons de texte exact.
+
+### 1. Global 532 — la porte d'écriture
+
+| pool | top-1 famille | hasard | top-1 sœur | hasard |
+|---|---:|---:|---:|---:|
+| toutes (445) | **66,1 %** | 10,3 % | **26,1 %** | 2,5 % |
+| même écriture (417) | **69,8 %** | 16,2 % | **27,8 %** | 5,7 % |
+| écriture différente (445) | 9,9 % | 8,1 % | 0,7 % | 0,8 % |
+
+**Hors écriture, tout est au hasard** ; dans la même écriture, la famille est enrichie 4,3× et la sœur 4,8×. Permutations d’étiquettes (1 000) : p = 0,001 pour famille et sœur ; requêtes permutées : 11,1 % contre 10,3 % de baseline.
+
+### 2. LANG_TREE 25 — les sœurs dominent
+
+- **sœurs** : **0,619** (60 paires)
+- **même famille, autre branche** : 0,170 (216)
+- **familles différentes** : **0,0445** (324)
+- **13,89×**, Δ **+0,574** [0,490 ; 0,655]
+- régression de décomposition : **sœur +0,448** (p = 0,002), **écriture +0,213**, famille-autre +0,092, R² 0,631
+- contraste apparié : **11/11 langues positives**, p = 0,00098 ; leave-one-language-out : sœur **+0,404 → +0,518**
+- candidats mélangés : 0,0303 contre 0,0333 de hasard
+
+### 3. Échantillon 20 — le contraste s’éteint
+
+- sœurs **0,0583** (12 paires), familles différentes **0,0389** (320), famille-autre **0,0757** (48)
+- coefficient de sœur **+0,0154**, p = **0,078** (non significatif) ; famille-autre +0,0384, p = 0,016
+- **8 des 12 paires de sœurs sont hors écriture** ; les paires qui portent le signal sont `jav–ind` (0,900) et `ind–jav` (0,833), deux non-sœurs.
+
+C’est le résultat de J3.2 confirmé : l’échantillon 20 ne peut pas résoudre les sœurs.
+
+### 4. Comparaison à J3.1
+
+**J3.1 est reproduit à l’identique** (écart maximal **0** : top-1 0,04944, écriture +0,06186, famille +0,05562, R² 0,13957). Son coefficient de famille (+0,0556) n’était pas faux : c’était un **minorant dilué**, mélange de 12 paires de sœurs et 56 paires de famille-autre. Sur LANG_TREE, le coefficient de sœur est **+0,448**, soit **8×** celui de J3.1.
+
+### 5. Contrôle d’époque
+
+UDHR **mono-époque** (1948) : placebo de dates **−0,0013** [−0,065 ; +0,041]. Le seul bras daté de J3.1 (Bible) donne **−0,034/siècle** [−0,075 ; +0,009], p = 0,19, contre **+0,609** pour l’écriture. L’époque ne peut pas expliquer l’effet de famille ici.
+
+## Fichiers
+
+- Fiche : [`reports/rapport-retrieval-familles.md`](reports/rapport-retrieval-familles.md)
+- JSON : [`reports/retrieval-familles.json`](reports/retrieval-familles.json)
+- Outil : [`tools/retrieval_familles.py`](tools/retrieval_familles.py)
+- État et roadmap mis à jour : [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md), [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)
+
+## Vérifications
+
+`revue_documentation.py`, `verifie_en_cours.py`, `taille_documents.py` et `verifie_journal.py` passent. La passe complète des 84 portes n’a pas été relancée (changement de fiche uniquement) ; la dernière passe du 14/11 00 h 30 reste **81 vertes / 3 rouges connues** (`indice`, `melange`, `sessions`).
+

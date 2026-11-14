@@ -61357,3 +61357,155 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-4839", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4839", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+sam 14 nov 2026 01:59:07 EST
+2026-11-14 01:21:56 · ✔ J6.2 en 1394.6 s (code 0) — ✅ test -f reports/rapport-s065.md && echo FICHE-OK
+2026-11-14 01:21:56 · ▶ J7.1 — Panini — le retrieval approfondi (timeout 5400 s)
+2026-11-14 01:48:02 · ✔ J7.1 en 1566.3 s (code 0) — ✅ test -f reports/rapport-retrieval-familles.md && echo FICHE-OK
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+budget consommé : 14945.800000000001 s · lancements : 19
+  [a_faire ] J8.1   j8 — La restitution v1
+  [a_faire ] J9.1   j9 — La passe d'honnêteté des fiches
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **job_kill** `{"job_id": "bash-4839", "reason": "Remplacé par des vérifications directes plus courtes"}`
+
+  ```
+job bash-4839 had already finished [status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 work/chantier/journal.log; git log --oneline -1 | cut -c1-90; git rev-list --count origin/master..s/v7", "description": "État direct"}`
+
+  ```
+sam 14 nov 2026 01:59:16 EST
+2026-11-14 01:48:02 · ✔ J7.1 en 1566.3 s (code 0) — ✅ test -f reports/rapport-retrieval-familles.md && echo FICHE-OK
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (1
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 2400; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | g … [99 caractères tronqués]`
+
+  ```
+2d6f5bff..d31e8788  s/v7 -> s/v7
+   2d6f5bff..d31e8788  master -> master
+[still running after 600000ms; moved to background job bash-4841]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4841", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4841", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4841", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+sam 14 nov 2026 02:39:30 EST
+2026-11-14 01:21:56 · ▶ J7.1 — Panini — le retrieval approfondi (timeout 5400 s)
+2026-11-14 01:48:02 · ✔ J7.1 en 1566.3 s (code 0) — ✅ test -f reports/rapport-retrieval-familles.md && echo FICHE-OK
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+  [fait    ] J5.1   j5 — Le rapport de semaine
+  [fait    ] J6.1   j6 — Le dernier span g017
+  [fait    ] J6.2   j6 — La cible s065
+  [fait    ] J7.1   j7 — Panini — le retrieval approfondi
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **job_kill** `{"job_id": "bash-4841", "reason": "Remplacé par des vérifications directes"}`
+
+  ```
+job bash-4841 had already finished [status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget\"; git log --oneline -1 | cut -c1-80", "description": "État direct (court)"}`
+
+  ```
+sam 14 nov 2026 02:39:41 EST
+2026-11-14 01:48:02 · ✔ J7.1 en 1566.3 s (code 0) — ✅ test -f reports/rapport-retrieval-familles.md && echo FICHE-OK
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+budget consommé : 14945.800000000001 s · lancements : 19
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; git log --oneline -1 | cut -c1-80", "description": "Attendre J8.1 (20 min)", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4843]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4843", "timeout_ms": 900000, "wait": true}`
+
+  ```
+sam 14 nov 2026 02:59:52 EST
+2026-11-14 01:48:02 · ✔ J7.1 en 1566.3 s (code 0) — ✅ test -f reports/rapport-retrieval-familles.md && echo FICHE-OK
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-g017 rapport-s065 rapport-retrieval-familles rapport-retrieval-epoque rapport-corpus-commun rapport-genealogie-deux-faces; do echo \"=== $f\"; head -8 reports/$f.md 2>/dev/null | grep -E \"Verdict|—|exact|F1|paires\" … [80 caractères tronqués]`
+
+  ```
+=== rapport-g017
+# B13 — g017 : l'adverbe final hors de la SUB est rejeté (g017 gagné, r264 et r288 perdus)
+> **Verdict** : ❌ **règle rejetée**.
+=== rapport-s065
+# B13 — s065 : la REL « qui commence » est attachée au sujet du GV qui la suit
+> **Verdict** : ✅ **règle intégrée**.
+=== rapport-retrieval-familles
+# J7.1 — Le retrieval approfondi par famille Glottolog
+> **Verdict** : ✅ **le retrieval retrouve la famille, mais seulement dans la même écriture — et il faut
+=== rapport-retrieval-epoque
+# J3.1 — Le retrieval inter-langues à époque contrôlée
+> **Verdict** : ✅ **la mesure est faite ; elle borne l'avertissement** —
+=== rapport-corpus-commun
+# Corpus commun Panini/NIPADA ↔ Drave — UDHR, article 1
+> **Verdict** : ✅ **le corpus est construit et vérifié** — **21 textes** (20 langues stratifiées + le
+=== rapport-genealogie-deux-faces
+# J3.2 — La généalogie à deux faces : Panini et Glottolog sur le corpus commun
+> **Verdict** : ✅ **la confrontation est faite, et elle déplace la question.** Les deux faces ne mesurent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -4", "description": "Verdict J8.1 et suite", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4845]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4845", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4845", "timeout_ms": 1000000, "wait": true}`

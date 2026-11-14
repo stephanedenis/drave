@@ -60,10 +60,24 @@ else
   dit ❌ "restitution v0 : sortie inattendue : $sortie"; ko=1
 fi
 
-if python3 tools/tests/test_restitution.py >/tmp/porte-produit-restitution.log 2>&1; then
-  dit ✅ "restitution v0 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-restitution.log | head -1)"
+if sortie=$(python3 tools/drave.py restituer "Le chat dort." --canonique --json 2>&1) \
+   && printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['schema'] == 'drave.restitution.canonique', d.get('schema')
+assert d['forme']['surface_canonique'] == 'le chat dort', d['forme']['surface_canonique']
+assert d['canonique']['exact'], d['canonique']
+assert not d['strict']['exact'], d['strict']
+" 2>/dev/null; then
+  dit ✅ "restitution v1 : forme canonique exacte, miroir strict distinct"
 else
-  dit ❌ "restitution v0 en échec (voir /tmp/porte-produit-restitution.log)"; ko=1
+  dit ❌ "restitution v1 : sortie inattendue : $sortie"; ko=1
+fi
+
+if python3 tools/tests/test_restitution.py >/tmp/porte-produit-restitution.log 2>&1; then
+  dit ✅ "restitution v0/v1 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-restitution.log | head -1)"
+else
+  dit ❌ "restitution v0/v1 en échec (voir /tmp/porte-produit-restitution.log)"; ko=1
 fi
 
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then

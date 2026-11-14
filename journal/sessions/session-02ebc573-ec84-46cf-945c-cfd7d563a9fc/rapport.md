@@ -9,10 +9,10 @@
 | Début | 2026-11-14 01:21 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 189 |
-| Appels d'outils | 203 |
+| Messages | 196 |
+| Appels d'outils | 208 |
 | Fichiers touchés | 1 |
-| Commandes | 178 |
+| Commandes | 183 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J7.1 : approfondir le retrieval Panini — sur les 532 langues UDHR (même source XML), mesurer le retrieval par fami … [240 caractères tronqués]
 
-*203 appels d'outils.* Actions notables :
+*208 appels d'outils.* Actions notables :
 
 - bash — Inspect workspace root and git state
 - bash — List reports and journal entries
@@ -41,7 +41,56 @@
 - bash — Locate Panini UDHR source and J3.2 work
 - bash — Inspect Panini 532-language UDHR corpus schema
 - bash — Read J3.2 genealogy two-faces report
-- … et 174 autres
+- … et 179 autres
+
+**Synthèse produite :**
+
+**J7.1 terminé — commit `d31e8788`.**
+
+\## Ce qui a été mesuré
+
+**Corpus** : 532 textes UDHR de Panini (article 1, même source XML, 1948), **521 étiquetés Glottolog** (97,9 %), **447 groupes ISO**, **445 textes distincts** après retrait de 74 variantes ISO et 2 doublons de texte exact.
+
+\### 1. Global 532 — la porte d'écriture
+
+| pool | top-1 famille | hasard | top-1 sœur | hasard |
+|---|---:|---:|---:|---:|
+| toutes (445) | **66,1 %** | 10,3 % | **26,1 %** | 2,5 % |
+| même écriture (417) | **69,8 %** | 16,2 % | **27,8 %** | 5,7 % |
+| écriture différente (445) | 9,9 % | 8,1 % | 0,7 % | 0,8 % |
+
+**Hors écriture, tout est au hasard** ; dans la même écriture, la famille est enrichie 4,3× et la sœur 4,8×. Permutations d’étiquettes (1 000) : p = 0,001 pour famille et sœur ; requêtes permutées : 11,1 % contre 10,3 % de baseline.
+
+\### 2. LANG_TREE 25 — les sœurs dominent
+
+- **sœurs** : **0,619** (60 paires)
+- **même famille, autre branche** : 0,170 (216)
+- **familles différentes** : **0,0445** (324)
+- **13,89×**, Δ **+0,574** [0,490 ; 0,655]
+- régression de décomposition : **sœur +0,448** (p = 0,002), **écriture +0,213**, famille-autre +0,092, R² 0,631
+- contraste apparié : **11/11 langues positives**, p = 0,00098 ; leave-one-language-out : sœur **+0,404 → +0,518**
+- candidats mélangés : 0,0303 contre 0,0333 de hasard
+
+\### 3. Échantillon 20 — le contraste s’éteint
+
+- sœurs **0,0583** (12 paires), familles différentes **0,0389** (320), famille-autre **0,0757** (48)
+- coefficient de sœur **+0,0154**, p = **0,078** (non significatif) ; famille-autre +0,0384, p = 0,016
+- **8 des 12 paires de sœurs sont hors écriture** ; les paires qui portent le signal sont `jav–ind` (0,900) et `ind–jav` (0,833), deux non-sœurs.
+
+C’est le résultat de J3.2 confirmé : l’échantillon 20 ne peut pas résoudre les sœurs.
+
+\### 4. Comparaison à J3.1
+
+**J3.1 est reproduit à l’identique** (écart maximal **0** : top-1 0,04944, écriture +0,06186, famille +0,05562, R² 0,13957). Son coefficient de famille (+0,0556) n’était pas faux : c’était un **minorant dilué**, mélange de 12 paires de sœurs et 56 paires de famille-autre. Sur LANG_TREE, le coefficient de sœur est **+0,448**, soit **8×** celui de J3.1.
+
+\### 5. Contrôle d’époque
+
+UDHR **mono-époque** (1948) : placebo de dates **−0,0013** [−0,065 ; +0,041]. Le seul bras daté de J3.1 (Bible) donne **−0,034/siècle** [−0,075 ; +0,009], p = 0,19, contre **+0,609** pour l’écriture. L’époque ne peut pas expliquer l’effet de famille ici.
+
+\## Fichiers
+
+- Fich
+… [697 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -93,7 +142,7 @@
 - **T1** Inspect Drave languages metadata
 - **T1** Check Glottolog coverage of missing Panini codes
 - **T1** Locate missing UDHR XML files
-- … et 138 autres
+- … et 143 autres
 
 ## 4. Mesures et résultats marquants
 

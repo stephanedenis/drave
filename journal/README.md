@@ -211,7 +211,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 321.0 h | 194 | 3251 | 25 | 437 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 322.7 h | 194 | 3267 | 25 | 437 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -230,7 +230,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
-| `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 203 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
+| `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 208 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
 | `session-` | Passe portes, relevé rouges, tag annoté | 2026-11-13 23:11 | 1.4 h | 1 | 75 | 1 | 0 | [rapport](sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md) |
 | `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
@@ -247,7 +247,9 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
 | `session-` | Corriger span g017 avec règle adverbe | 2026-11-14 00:41 | 0.3 h | 1 | 126 | 1 | 2 | [rapport](sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md) |
+| `session-` | Passe d'honnêteté fiches historiques | 2026-11-14 03:18 | 0.1 h | 1 | 65 | 0 | 1 | [rapport](sessions/session-d58794d6-d201-493e-b6ab-fffee9656e15/rapport.md) |
 | `session-` | Rapport convention GV et règles candidates | 2026-11-07 12:41 | 1.5 h | 1 | 245 | 9 | 1 | [rapport](sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md) |
 | `session-` | Rapport de semaine et suivi J5.1 | 2026-11-13 22:59 | 0.2 h | 1 | 115 | 5 | 1 | [rapport](sessions/session-e8c327f2-a7ec-464a-8e40-0615e5befecb/rapport.md) |
 | `session-` | Corriger la cible s065 REL après GV | 2026-11-14 00:58 | 0.4 h | 1 | 192 | 9 | 5 | [rapport](sessions/session-e9ee2692-96f9-42d2-886c-c5abfb51ce07/rapport.md) |
+| `session-` | Restitution v1 canonique et mesure du miroir | 2026-11-14 01:48 | 1.4 h | 1 | 154 | 11 | 0 | [rapport](sessions/session-f198001c-49da-4e65-8a44-782f9605fd7a/rapport.md) |
 | `session-` | Test de liaison du superviseur | 2026-11-07 10:48 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-f30f0289-2506-4596-be01-4e10f2a2073c/rapport.md) |

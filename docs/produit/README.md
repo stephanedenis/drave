@@ -238,6 +238,13 @@ surfaces exactes**, miroir strict **0,1087**, contrôle négatif **46/46**. C'es
 surface**, pas un décodeur neuronal : il ne prouve pas la fidélité sémantique. La fiche est
 [`rapport-restitution-v0.md`](../../reports/rapport-restitution-v0.md).
 
+`--canonique` ajoute la **forme canonique v1** (segments + rôles + cibles) : **46/46** contre
+la source **canonisée**, mais le **miroir strict reste 0,1087** — la forme n'est pas la
+surface, et elle tombe à **1/46** si on la compare à la source brute. Les **395 segments**
+portent **395 rôles** et **315 cibles** (315 résolues, 313 dans un autre segment) ; la
+stabilité structurelle est **18/46**. Fiche
+[`rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md).
+
 ## 4. Ce que le produit ne fait pas encore
 
 **1. Il ne génère pas de texte.** `restituer` reconstruit la **surface** depuis l'annotation
@@ -406,6 +413,7 @@ rejeu identique : oui
 | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
 | `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
 | `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
+| `--canonique` | `restituer` | ajoute la forme canonique v1 (segments + rôles + cibles) et son miroir |
 | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
 | `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
@@ -434,7 +442,8 @@ rejeu identique : oui
 **Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
 déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue),
 `--fichier`/`--jsonl`, `--banc`, `--partition`, la **restitution v0** (46/46 surfaces exactes,
-miroir strict 0,1087), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
+miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique, strict
+inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
 être présenté comme acquis.
 
 ## 8. Où aller ensuite

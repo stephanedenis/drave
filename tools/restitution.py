@@ -1,4 +1,4 @@
-"""restitution.py — la restitution v0 : annotation → surface, et le miroir.
+"""restitution.py — la restitution v0 (surface) et la v1 (forme canonique).
 
 La **surface** est reconstruite depuis le niveau `graphème` — les spans typés qui portent
 les caractères — **sans lire** `Annotation.texte`. Les niveaux `mot` et `pos` sont mesurés
@@ -10,13 +10,26 @@ définition de `tools/tests/linguistique/miroir.mesurer`, réutilisée ici pour 
 avoir deux. `fidelite_caractere` ajoute une distance de Levenshtein normalisée : elle
 distingue « presque fidèle » de « fidèle » et documente la perte de la ponctuation.
 
+La **forme canonique** (v1) est une lecture **structurelle** de l'annotation : les
+syntagmes avec leur type, leur rôle et leur cible d'attachement, une linéarisation sans
+chevauchement, et un plancher de jetons normalisés (casse repliée, ponctuation retirée).
+Elle ne remplace pas la surface : elle la met entre parenthèses pour mesurer ce que la
+structure ajoute, et son **miroir canonique** se compare à une source canonisée, pas à la
+source brute. Le **miroir strict** reste la référence de surface.
+
 Le **contrôle négatif** mélange les graphèmes (graine fixe) et en retire un : les deux
 doivent casser la fidélité. Sans lui, un codec qui recopie la source ne prouverait rien.
+La v1 ajoute deux contrôles : mélange/troncature des jetons canoniques, et retrait des
+rôles/cibles (la couverture structurelle doit tomber à zéro).
 """
 from __future__ import annotations
 
+import collections
+import hashlib
+import json
 import pathlib
 import random
+import re
 import sys
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
@@ -28,6 +41,8 @@ from tools.tests.linguistique import miroir as _miroir  # noqa: E402
 
 SCHEMA = "drave.restitution"
 VERSION = 1
+SCHEMA_CANONIQUE = "drave.restitution.canonique"
+VERSION_CANONIQUE = 1
 NIVEAUX = ("graphème", "mot", "pos")
 NOMS = {"graphème": "surface", "mot": "mots", "pos": "pos"}
 
@@ -35,6 +50,23 @@ NOMS = {"graphème": "surface", "mot": "mots", "pos": "pos"}
 DEFINITION_MIROIR = (
     "minimum des fidélités binaires de la surface (graphème), des mots et des POS ; "
     "une sortie n'est fidèle que si elle reproduit exactement la source"
+)
+
+# La canonisation de la v1 : casse repliée, lettres et chiffres seulement, espaces réduits.
+# Deux surfaces qui ne diffèrent que par la présentation ont la même forme canonique.
+_JETON = re.compile(r"[^\W_]+", re.UNICODE)
+
+DEFINITION_MIROIR_CANONIQUE = (
+    "minimum des fidélités binaires des mots canoniques, des POS canoniques et de la "
+    "forme canonique (jetons normalisés : casse repliée, ponctuation retirée, espaces "
+    "réduits) comparées à la source canonique ; le miroir strict reste la référence de "
+    "surface, il n'est pas remplacé"
+)
+
+DEFINITION_FORME_CANONIQUE = (
+    "segments (type, rôle, span, valeur), linéarisation sans chevauchement, squelette "
+    "« type/rôle : valeur -> cible », plancher de jetons (mot > POS > graphème) et "
+    "empreinte sha256 du corps canonique"
 )
 
 
@@ -341,6 +373,491 @@ def mesurer_banc(items: list[dict], langue: str | None = None, graine: int = 0) 
     }
 
 
+# --------------------------------------------------------------------------- forme canonique v1
+
+
+def jetons_canoniques(texte: str) -> list[str]:
+    """Les jetons d'une surface canonique : lettres et chiffres, casse repliée."""
+    return _JETON.findall(texte.casefold())
+
+
+def canoniser(texte: str) -> str:
+    """La forme canonique d'une surface : ses jetons joints par une espace."""
+    return " ".join(jetons_canoniques(texte))
+
+
+def _canonique_valeur(valeur: str) -> str:
+    return canoniser(valeur)
+
+
+def _preference_segment(e: bl.Etiquette) -> tuple:
+    """L'ordre de préférence d'une linéarisation : chunker, puis le plus large, le plus sûr.
+
+    C'est la clé de `bloc_linguistique._cle_preferee`, recopiée ici pour que la forme
+    canonique dépende d'une règle **publiée** et non d'un ordre d'insertion. Le segment
+    du chunker (`union`) passe avant le générateur S ; à défaut, le plus large gagne.
+    """
+    meta = e.meta or {}
+    return (0 if meta.get("union") else 1, -(e.fin - e.debut), -e.confiance,
+            e.debut, e.fin, e.type)
+
+
+def segments_lineaires(a: bl.Annotation) -> list[bl.Etiquette]:
+    """Une vue **sans chevauchement** des syntagmes, choisie par `_preference_segment`.
+
+    Les autres segments restent dans la forme canonique (avec `lineaire: false`) : c'est
+    une vue de lecture, pas une suppression. L'ordre rendu est celui de la surface.
+    """
+    segments = [e for e in a.etiquettes if e.niveau == "syntagme"]
+    choisis: list[bl.Etiquette] = []
+    for e in sorted(segments, key=_preference_segment):
+        if all(max(e.debut, x.debut) >= min(e.fin, x.fin) for x in choisis):
+            choisis.append(e)
+    return sorted(choisis, key=lambda e: (e.debut, e.fin, e.type))
+
+
+def _jetons_de(a: bl.Annotation) -> list[str]:
+    """Le plancher lexical de la forme : `mot`, sinon `pos`, sinon `graphème`.
+
+    Il ne lit **jamais** `Annotation.texte` : les valeurs viennent des étiquettes. Le
+    plancher est ce qui couvre les mots hors syntagme (déterminants, prépositions,
+    ponctuation) ; les segments, eux, portent la structure.
+    """
+    for niveau in ("mot", "pos", "graphème"):
+        etiquettes = sorted((e for e in a.etiquettes if e.niveau == niveau),
+                            key=lambda e: (e.debut, e.fin))
+        if etiquettes:
+            return [j for e in etiquettes for j in jetons_canoniques(e.valeur)]
+    return []
+
+
+def _contient_jetons(sequence: list[str], motif: list[str]) -> bool:
+    """Vrai si `motif` apparaît **dans l'ordre** dans `sequence` (sous-suite contiguë)."""
+    n = len(motif)
+    return bool(n) and any(sequence[i:i + n] == motif
+                           for i in range(len(sequence) - n + 1))
+
+
+def _index_cible(cible: str, rang: int, segments: list[bl.Etiquette],
+                 canoniques: list[str]) -> int | None:
+    """Le rang du **premier autre** segment qui porte la cible (en jetons), sinon None."""
+    if not cible:
+        return None
+    motif = cible.split()
+    for j, canonique in enumerate(canoniques):
+        if j == rang:
+            continue
+        if _contient_jetons(canonique.split(), motif):
+            return j
+    return None
+
+
+def forme_canonique(a: bl.Annotation) -> dict | None:
+    """La forme canonique v1 : segments + rôles + cibles, et un plancher de jetons.
+
+    Le corps est **déterministe** : les segments sont triés par `(debut, fin, type)`, les
+    rôles et cibles viennent de `meta`, la linéarisation suit `_preference_segment`, et
+    l'empreinte `cle` est le sha256 du JSON canonique (clés triées). Deux analyses du même
+    texte donnent la même clé ; retirer les rôles/cibles la change (contrôle négatif).
+    """
+    if a.refus:
+        return None
+    segments = sorted((e for e in a.etiquettes if e.niveau == "syntagme"),
+                      key=lambda e: (e.debut, e.fin, e.type))
+    lineaires = segments_lineaires(a)
+    ids_lineaires = {id(e) for e in lineaires}
+    canoniques = [_canonique_valeur(e.valeur) for e in segments]
+    records: list[dict] = []
+    for rang, (e, canonique) in enumerate(zip(segments, canoniques)):
+        meta = e.meta or {}
+        attachement = meta.get("attachement") or {}
+        cible = attachement.get("cible", "") or ""
+        cible_c = _canonique_valeur(cible)
+        records.append({
+            "rang": rang,
+            "type": e.type,
+            "role": meta.get("role", ""),
+            "niveau": meta.get("niveau", 0),
+            "debut": e.debut,
+            "fin": e.fin,
+            "valeur": e.valeur,
+            "canonique": canonique,
+            "cible": cible,
+            "cible_canonique": cible_c,
+            "cible_segment": _index_cible(cible_c, rang, segments, canoniques),
+            "lineaire": id(e) in ids_lineaires,
+            "union": bool(meta.get("union")),
+        })
+    squelette = [
+        f"{r['type']}/{r['role'] or '—'}: {r['canonique'] or '—'} -> "
+        f"{r['cible_canonique'] or '—'}"
+        for r in records if r["lineaire"]
+    ]
+    jetons = _jetons_de(a)
+    corps = {
+        "segments": records,
+        "squelette": squelette,
+        "jetons": jetons,
+        "surface_canonique": " ".join(jetons),
+    }
+    cle = hashlib.sha256(
+        json.dumps(corps, ensure_ascii=False, sort_keys=True,
+                   separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return {"definition": DEFINITION_FORME_CANONIQUE, **corps, "cle": cle}
+
+
+def _fiche_canonique(rendu: str, cible: str) -> dict:
+    return {
+        "exact": rendu == cible,
+        "fidelite": 1.0 if rendu == cible else 0.0,
+        "fidelite_caractere": fidelite_caractere(rendu, cible),
+        "jetons": len(rendu.split()) if rendu else 0,
+    }
+
+
+def _rendu_canonique_niveau(a: bl.Annotation, niveau: str) -> str:
+    etiquettes = sorted((e for e in a.etiquettes if e.niveau == niveau),
+                        key=lambda e: (e.debut, e.fin))
+    return " ".join(j for e in etiquettes for j in jetons_canoniques(e.valeur))
+
+
+def miroir_canonique(a: bl.Annotation, source: str) -> dict:
+    """Le miroir de la v1 : les niveaux lexical et la forme, comparés à la source canonique.
+
+    `fidelite` est le **minimum** des trois fidélités binaires (mots, POS, forme), comme
+    le miroir strict ; la source est canonisée (casse/ponctuation/espaces). Le miroir
+    strict n'est pas recalculé ici : il reste celui de `mesurer_annotation`.
+    """
+    cible = canoniser(source)
+    forme = forme_canonique(a) or {}
+    fiches = {
+        "mots": _fiche_canonique(_rendu_canonique_niveau(a, "mot"), cible),
+        "pos": _fiche_canonique(_rendu_canonique_niveau(a, "pos"), cible),
+        "forme": _fiche_canonique(forme.get("surface_canonique", ""), cible),
+    }
+    fidelite = round(min(f["fidelite"] for f in fiches.values()), 4)
+    return {
+        "definition": DEFINITION_MIROIR_CANONIQUE,
+        "source_canonique": cible,
+        "mots": fiches["mots"],
+        "pos": fiches["pos"],
+        "forme": fiches["forme"],
+        "fidelite": fidelite,
+        "exact": all(f["exact"] for f in fiches.values()),
+    }
+
+
+def structure_canonique(a: bl.Annotation, source: str) -> dict:
+    """Ce que les segments + rôles + cibles couvrent et résolvent, sans gold.
+
+    - `couverture_caracteres` : part de la source couverte par au moins un segment ;
+    - `couverture_jetons` : part des jetons `mot` dont le début tombe dans un segment ;
+    - `cibles_resolues` : la cible (en jetons) est présente dans la source canonique ;
+    - `cibles_dans_un_segment` : la cible est portée par un **autre** segment.
+
+    Ce sont des mesures de **cohérence** de l'annotation, pas de justesse : sans gold de
+    forme canonique, on ne peut pas dire que le rôle ou la cible sont les bons.
+    """
+    segments = [e for e in a.etiquettes if e.niveau == "syntagme"]
+    positions: set[int] = set()
+    for e in segments:
+        positions.update(range(max(0, e.debut), min(len(source), e.fin)))
+    mots = [e for e in a.etiquettes if e.niveau == "mot"]
+    jetons_couverts = sum(1 for e in mots if e.debut in positions)
+    source_jetons = jetons_canoniques(source)
+    canoniques = [_canonique_valeur(e.valeur) for e in segments]
+    attachements = 0
+    cibles_resolues = 0
+    cibles_dans = 0
+    roles: collections.Counter[str] = collections.Counter()
+    types: collections.Counter[str] = collections.Counter()
+    for i, e in enumerate(segments):
+        meta = e.meta or {}
+        types[e.type] += 1
+        if meta.get("role"):
+            roles[meta["role"]] += 1
+        attachement = meta.get("attachement") or {}
+        cible = _canonique_valeur(attachement.get("cible", ""))
+        if not cible:
+            continue
+        attachements += 1
+        jetons = cible.split()
+        if _contient_jetons(source_jetons, jetons):
+            cibles_resolues += 1
+        if any(j != i and _contient_jetons(canoniques[j].split(), jetons)
+               for j in range(len(segments))):
+            cibles_dans += 1
+    return {
+        "segments": len(segments),
+        "segments_avec_role": sum(roles.values()),
+        "attachements": attachements,
+        "cibles_resolues": cibles_resolues,
+        "cibles_dans_un_segment": cibles_dans,
+        "couverture_caracteres": round(len(positions) / max(1, len(source)), 4),
+        "couverture_jetons": round(jetons_couverts / max(1, len(mots)), 4),
+        "roles": dict(sorted(roles.items())),
+        "types": dict(sorted(types.items())),
+    }
+
+
+def controler_negatif_canonique(a: bl.Annotation, source: str, graine: int = 0) -> dict:
+    """Mélange et troncature des **jetons canoniques** (pas des graphèmes).
+
+    Même principe que la v0 : le mélange doit casser l'ordre, la troncature doit retirer
+    un jeton. Un texte d'un seul jeton est retourné/substitué pour que le contrôle ne soit
+    pas un no-op.
+    """
+    forme = forme_canonique(a) or {}
+    jetons = list(forme.get("jetons") or [])
+    cible = canoniser(source)
+    surface = " ".join(jetons)
+    melange = list(jetons)
+    random.Random(graine).shuffle(melange)
+    rendu_melange = " ".join(melange)
+    if rendu_melange == surface:
+        rendu_melange = _alterer(surface)
+    rendu_tronque = " ".join(jetons[:-1])
+    return {
+        "graine": graine,
+        "definition": "mélange des jetons canoniques (ou retournement/substitution s'il "
+                      "n'y en a qu'un) et troncature du dernier jeton",
+        "melange": _fiche_canonique(rendu_melange, cible),
+        "tronque": _fiche_canonique(rendu_tronque, cible),
+        "detecte": bool(jetons and rendu_melange != cible and rendu_tronque != cible),
+    }
+
+
+def controler_negatif_structure(a: bl.Annotation, forme: dict | None = None) -> dict:
+    """Retire les rôles et les cibles : la couverture structurelle doit tomber à zéro.
+
+    Ce contrôle ne dit pas que les rôles sont **justes** (il faudrait un gold) ; il dit
+    que la mesure les lit vraiment et que la clé de la forme en dépend.
+    """
+    forme = forme or forme_canonique(a) or {}
+    segments = forme.get("segments", [])
+    roles = sum(1 for s in segments if s.get("role"))
+    cibles = sum(1 for s in segments if s.get("cible"))
+    sans = {
+        "segments": [{**s, "role": "", "cible": "", "cible_canonique": "",
+                      "cible_segment": None} for s in segments],
+        "squelette": [],
+        "jetons": forme.get("jetons", []),
+        "surface_canonique": forme.get("surface_canonique", ""),
+    }
+    cle_sans = hashlib.sha256(
+        json.dumps(sans, ensure_ascii=False, sort_keys=True,
+                   separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    eligible = bool(roles or cibles)
+    return {
+        "segments": len(segments),
+        "roles_retires": roles,
+        "cibles_retirees": cibles,
+        "roles_apres": 0,
+        "cibles_apres": 0,
+        "cle_changee": eligible and cle_sans != forme.get("cle"),
+        "detecte": eligible,
+    }
+
+
+def stabilite_structurelle(a: bl.Annotation, forme: dict | None = None,
+                           analyseur: bl.Heuristique | None = None) -> dict:
+    """La forme canonique est-elle un point fixe ? On re-analyse sa surface canonique.
+
+    Le **lexique** est stable par construction (mêmes jetons) ; la **structure** ne l'est
+    que si la segmentation ne dépend pas de la présentation. C'est une limite mesurée de
+    la v1, pas un critère de réussite : le bloc heuristique segmente la surface, et la
+    surface canonique a perdu la ponctuation et la casse.
+    """
+    forme = forme or forme_canonique(a)
+    if not forme:
+        return {"surface": "", "refus": "aucune forme", "squelette_identique": False,
+                "jetons_identiques": False, "segments_avant": 0, "segments_apres": 0}
+    surface = forme["surface_canonique"]
+    b = (analyseur or bl.Heuristique()).analyser(surface)
+    forme2 = forme_canonique(b)
+    return {
+        "surface": surface,
+        "refus": b.refus,
+        "squelette_identique": bool(forme2) and forme2["squelette"] == forme["squelette"],
+        "jetons_identiques": bool(forme2) and forme2["jetons"] == forme["jetons"],
+        "segments_avant": len(forme["segments"]),
+        "segments_apres": len(forme2["segments"]) if forme2 else 0,
+    }
+
+
+def mesurer_annotation_v1(a: bl.Annotation, source: str, graine: int = 0,
+                          analyseur: bl.Heuristique | None = None) -> dict:
+    """La restitution v1 d'une annotation : strict (v0) + canonique + structure."""
+    base = mesurer_annotation(a, source, graine)
+    if a.refus:
+        return {
+            "langue": a.langue,
+            "refus": a.refus,
+            "source_caracteres": len(source),
+            "source_octets": len(source.encode("utf-8")),
+            "etiquettes": len(a.etiquettes),
+            "strict": base["miroir"],
+            "surface_stricte": base["surface"],
+            "canonique": None,
+            "forme": None,
+            "structure": None,
+            "stabilite": None,
+            "strict_sur_canonique": None,
+            "controle_negatif_canonique": None,
+            "controle_negatif_structure": None,
+        }
+    forme = forme_canonique(a)
+    return {
+        "langue": a.langue,
+        "refus": "",
+        "source_caracteres": len(source),
+        "source_octets": len(source.encode("utf-8")),
+        "etiquettes": len(a.etiquettes),
+        "strict": base["miroir"],
+        "surface_stricte": base["surface"],
+        "canonique": miroir_canonique(a, source),
+        "forme": forme,
+        "structure": structure_canonique(a, source),
+        "stabilite": stabilite_structurelle(a, forme, analyseur),
+        "strict_sur_canonique": _fiche_rendu(forme["surface_canonique"], source),
+        "controle_negatif_canonique": controler_negatif_canonique(a, source, graine),
+        "controle_negatif_structure": controler_negatif_structure(a, forme),
+    }
+
+
+def _resume_v1(resultats: list[dict]) -> dict:
+    annotes = [r for r in resultats if not r.get("refus")]
+    refuses = [r for r in resultats if r.get("refus")]
+    n = len(annotes)
+
+    def moyenne(valeurs: list[float]) -> float:
+        return round(sum(valeurs) / max(1, len(valeurs)), 4)
+
+    structure = {
+        "segments": sum(r["structure"]["segments"] for r in annotes),
+        "segments_avec_role": sum(r["structure"]["segments_avec_role"] for r in annotes),
+        "attachements": sum(r["structure"]["attachements"] for r in annotes),
+        "cibles_resolues": sum(r["structure"]["cibles_resolues"] for r in annotes),
+        "cibles_dans_un_segment": sum(
+            r["structure"]["cibles_dans_un_segment"] for r in annotes),
+        "couverture_caracteres": moyenne(
+            [r["structure"]["couverture_caracteres"] for r in annotes]),
+        "couverture_jetons": moyenne(
+            [r["structure"]["couverture_jetons"] for r in annotes]),
+    }
+    structure["taux_roles"] = round(
+        structure["segments_avec_role"] / max(1, structure["segments"]), 4)
+    structure["taux_cibles_resolues"] = round(
+        structure["cibles_resolues"] / max(1, structure["attachements"]), 4)
+    structure["taux_cibles_dans_un_segment"] = round(
+        structure["cibles_dans_un_segment"] / max(1, structure["attachements"]), 4)
+    return {
+        "n": len(resultats),
+        "annotations": n,
+        "refus": len(refuses),
+        "refus_ids": [r.get("id") for r in refuses],
+        "strict": {
+            "exacts": sum(1 for r in annotes if r["strict"]["exact"]),
+            "fidelite": moyenne([r["strict"]["fidelite"] for r in annotes]),
+        },
+        "canonique": {
+            "exacts": sum(1 for r in annotes if r["canonique"]["exact"]),
+            "fidelite": moyenne([r["canonique"]["fidelite"] for r in annotes]),
+            "fidelite_caractere": moyenne(
+                [r["canonique"]["forme"]["fidelite_caractere"] for r in annotes]),
+        },
+        "strict_sur_canonique": {
+            "exacts": sum(1 for r in annotes if r["strict_sur_canonique"]["exact"]),
+            "fidelite": moyenne(
+                [r["strict_sur_canonique"]["fidelite"] for r in annotes]),
+            "fidelite_caractere": moyenne(
+                [r["strict_sur_canonique"]["fidelite_caractere"] for r in annotes]),
+        },
+        "structure": structure,
+        "stabilite": {
+            "squelette_identique": sum(
+                1 for r in annotes if r["stabilite"]["squelette_identique"]),
+            "jetons_identiques": sum(
+                1 for r in annotes if r["stabilite"]["jetons_identiques"]),
+            "fidelite": round(
+                sum(1 for r in annotes if r["stabilite"]["squelette_identique"]) / max(1, n), 4),
+        },
+        "controle_negatif_canonique": {
+            "melange_exacts": sum(
+                1 for r in annotes if r["controle_negatif_canonique"]["melange"]["exact"]),
+            "melange_fidelite_caractere": moyenne(
+                [r["controle_negatif_canonique"]["melange"]["fidelite_caractere"]
+                 for r in annotes]),
+            "tronque_exacts": sum(
+                1 for r in annotes if r["controle_negatif_canonique"]["tronque"]["exact"]),
+            "tronque_fidelite_caractere": moyenne(
+                [r["controle_negatif_canonique"]["tronque"]["fidelite_caractere"]
+                 for r in annotes]),
+            "detectes": sum(
+                1 for r in annotes if r["controle_negatif_canonique"]["detecte"]),
+        },
+        "controle_negatif_structure": {
+            "eligibles": sum(
+                1 for r in annotes if r["controle_negatif_structure"]["detecte"]),
+            "detectes": sum(
+                1 for r in annotes if r["controle_negatif_structure"]["detecte"]),
+            "cle_changee": sum(
+                1 for r in annotes if r["controle_negatif_structure"]["cle_changee"]),
+            "roles_retires": sum(
+                r["controle_negatif_structure"]["roles_retires"] for r in annotes),
+            "cibles_retirees": sum(
+                r["controle_negatif_structure"]["cibles_retirees"] for r in annotes),
+        },
+    }
+
+
+def mesurer_banc_v1(items: list[dict], langue: str | None = None, graine: int = 0) -> dict:
+    """Mesure la v1 sur une liste de textes (`id`, `texte`, `langue` optionnelle)."""
+    h = bl.Heuristique()
+    resultats: list[dict] = []
+    for item in items:
+        texte = item.get("texte", "")
+        ident = item.get("id", f"t{len(resultats) + 1:02d}")
+        a = h.analyser(texte, langue)
+        if a.refus:
+            resultats.append({
+                "id": ident,
+                "refus": a.refus,
+                "caracteres": len(texte),
+                "langue": a.langue,
+            })
+            continue
+        m = mesurer_annotation_v1(a, texte, graine, analyseur=h)
+        resultats.append({
+            "id": ident,
+            "refus": "",
+            "langue": a.langue,
+            "caracteres": len(texte),
+            "etiquettes": len(a.etiquettes),
+            "strict": m["strict"],
+            "surface_stricte": m["surface_stricte"],
+            "canonique": m["canonique"],
+            "forme": m["forme"],
+            "structure": m["structure"],
+            "stabilite": m["stabilite"],
+            "strict_sur_canonique": m["strict_sur_canonique"],
+            "controle_negatif_canonique": m["controle_negatif_canonique"],
+            "controle_negatif_structure": m["controle_negatif_structure"],
+        })
+    return {
+        "schema": SCHEMA_CANONIQUE + ".banc",
+        "version": VERSION_CANONIQUE,
+        "definition_miroir": DEFINITION_MIROIR,
+        "definition_miroir_canonique": DEFINITION_MIROIR_CANONIQUE,
+        "definition_forme_canonique": DEFINITION_FORME_CANONIQUE,
+        "parametres": {"graine": graine, "langue": langue or "auto"},
+        "synthese": _resume_v1(resultats),
+        "resultats": resultats,
+    }
+
+
 # --------------------------------------------------------------------------- affichage
 
 
@@ -409,5 +926,112 @@ def formater_banc(rapport: dict, chemin: str = "") -> str:
         f"{s['annotations']} (caractères {s['controle_negatif']['melange_fidelite_caractere']:.4f}) · "
         f"troncature exacts {s['controle_negatif']['tronque_exacts']}/"
         f"{s['annotations']} (caractères {s['controle_negatif']['tronque_fidelite_caractere']:.4f})",
+    ]
+    return "\n".join(lignes)
+
+
+def formater_forme_canonique(forme: dict | None, mesure: dict | None = None) -> str:
+    """La sortie lisible de la forme canonique (segments + rôles + cibles)."""
+    if not forme:
+        return "forme canonique : (aucune annotation)"
+    lignes = [
+        "forme canonique (segments + rôles + cibles)",
+        f"surface canonique : {forme['surface_canonique']!r}",
+        "squelette :",
+    ]
+    lignes += [f"  {s}" for s in forme["squelette"]] or ["  (aucun segment linéaire)"]
+    structure = (mesure or {}).get("structure") or {}
+    if structure:
+        lignes.append(
+            f"segments {structure['segments']} · rôles {structure['segments_avec_role']} · "
+            f"cibles {structure['attachements']} · "
+            f"résolues {structure['cibles_resolues']}/{structure['attachements']} · "
+            f"dans un segment {structure['cibles_dans_un_segment']}/{structure['attachements']}"
+        )
+    return "\n".join(lignes)
+
+
+def formater_mesure_v1(m: dict, source: str) -> str:
+    """La sortie lisible de `restituer TEXTE --canonique`."""
+    if m.get("refus"):
+        return f"refus d'analyse : {m['refus']} (aucune forme canonique)"
+    surface = m["surface_stricte"]
+    strict = m["strict"]
+    canonique = m["canonique"]
+    strict_c = m["strict_sur_canonique"]
+    lignes = [
+        "restitution v1 (surface + forme canonique)",
+        f"source         : {source!r}",
+        f"surface brute  : {surface['rendu']!r}",
+        f"miroir strict  : {strict['fidelite']:.4f} "
+        f"({'exact' if strict['exact'] else 'non exact'}) — surface/mots/POS vs source brute",
+        f"forme canonique: {canonique['fidelite']:.4f} "
+        f"({'exacte' if canonique['exact'] else 'non exacte'}) — jetons canoniques vs source "
+        "canonique",
+        f"  caractères   : {canonique['forme']['fidelite_caractere']:.4f}",
+        f"strict sur la forme canonique : {strict_c['fidelite']:.4f} "
+        "(la forme n'est pas la surface : le strict ne doit pas monter)",
+        "",
+        formater_forme_canonique(m["forme"], m),
+        "",
+        f"contrôle négatif canonique : mélange exacte "
+        f"{m['controle_negatif_canonique']['melange']['fidelite']:.4f} · "
+        f"troncature exacte {m['controle_negatif_canonique']['tronque']['fidelite']:.4f} · "
+        f"détecté {m['controle_negatif_canonique']['detecte']}",
+        f"contrôle de structure : rôles retirés "
+        f"{m['controle_negatif_structure']['roles_retires']} · cibles retirées "
+        f"{m['controle_negatif_structure']['cibles_retirees']} · clé changée "
+        f"{m['controle_negatif_structure']['cle_changee']}",
+        f"stabilité structurelle : {'oui' if m['stabilite']['squelette_identique'] else 'non'} "
+        f"({m['stabilite']['segments_avant']} → {m['stabilite']['segments_apres']} segments "
+        "après re-analyse de la surface canonique)",
+    ]
+    return "\n".join(lignes)
+
+
+def formater_banc_v1(rapport: dict, chemin: str = "") -> str:
+    """La sortie lisible du banc v1 (`restituer --banc ... --canonique`)."""
+    s = rapport["synthese"]
+    n = s["annotations"]
+    strict = s["strict"]
+    canonique = s["canonique"]
+    strict_c = s["strict_sur_canonique"]
+    structure = s["structure"]
+    stabilite = s["stabilite"]
+    controle = s["controle_negatif_canonique"]
+    controle_s = s["controle_negatif_structure"]
+    lignes = [
+        f"restitution v1 — banc {chemin or '(fourni)'}",
+        f"textes {s['n']} · annotés {n} · refus {s['refus']} "
+        f"({', '.join(str(x) for x in s['refus_ids'])})",
+        "",
+        "niveau                         exacts    fidélité   caractères",
+        f"strict (surface/mots/POS)      {strict['exacts']:>6}/{n:<6} "
+        f"{strict['fidelite']:>8.4f}   —",
+        f"canonique (jetons)             {canonique['exacts']:>6}/{n:<6} "
+        f"{canonique['fidelite']:>8.4f}   {canonique['fidelite_caractere']:>8.4f}",
+        f"strict sur la forme canonique  {strict_c['exacts']:>6}/{n:<6} "
+        f"{strict_c['fidelite']:>8.4f}   {strict_c['fidelite_caractere']:>8.4f}",
+        "",
+        f"structure : {structure['segments']} segments · "
+        f"{structure['segments_avec_role']} rôles ({structure['taux_roles']:.4f}) · "
+        f"{structure['attachements']} cibles · "
+        f"{structure['cibles_resolues']}/{structure['attachements']} résolues "
+        f"({structure['taux_cibles_resolues']:.4f}) · "
+        f"{structure['cibles_dans_un_segment']}/{structure['attachements']} dans un segment "
+        f"({structure['taux_cibles_dans_un_segment']:.4f})",
+        f"couverture : {structure['couverture_jetons']:.4f} des jetons · "
+        f"{structure['couverture_caracteres']:.4f} des caractères (moyenne)",
+        f"stabilité structurelle : {stabilite['squelette_identique']}/{n} "
+        f"({stabilite['fidelite']:.4f}) · jetons identiques {stabilite['jetons_identiques']}/{n}",
+        f"contrôle négatif canonique : mélange {controle['melange_exacts']}/{n} exacts "
+        f"(caractères {controle['melange_fidelite_caractere']:.4f}) · "
+        f"troncature {controle['tronque_exacts']}/{n} exacts "
+        f"(caractères {controle['tronque_fidelite_caractere']:.4f}) · "
+        f"détectés {controle['detectes']}/{n}",
+        f"contrôle de structure : {controle_s['eligibles']}/{n} textes éligibles · "
+        f"rôles retirés {controle_s['roles_retires']} · "
+        f"cibles retirées {controle_s['cibles_retirees']} · "
+        f"clé changée {controle_s['cle_changee']}/{controle_s['eligibles']}",
     ]
     return "\n".join(lignes)

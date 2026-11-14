@@ -13,14 +13,14 @@
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
-| portes | 1 | [portes.md](portes.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
+| portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 321.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 322.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -31,7 +31,7 @@
 | 01:08 | `6ecc9763` | JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238 |
 | 01:16 | `2d6f5bff` | PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI |
 | 01:19 | `e4288023` | J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR |
-| 01:41 | `0307ce7e` | J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT À L'IDENTIQUE ; ÉCRITURE > SŒUR > ÉPOQUE |
+| 01:41 | `d31e8788` | J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -74,4 +74,19 @@ sœur dépasse même celui de l'écriture (+0,213) une fois la famille séparée
 [`reports/rapport-retrieval-familles.md`](../../reports/rapport-retrieval-familles.md), JSON
 [`reports/retrieval-familles.json`](../../reports/retrieval-familles.json), outil
 [`tools/retrieval_familles.py`](../../tools/retrieval_familles.py).
+**J8.1 — la restitution v1 : le miroir strict ne monte pas, la forme canonique vaut 1,0000.**
+La v0 restitue la surface **46/46** mais le miroir strict tombe à **5/46 = 0,1087** parce que
+`rendre_mots`/`rendre_pos` séparent la ponctuation (`dort .`). La v1 construit une **forme
+canonique** depuis les **segments + rôles + cibles** : **46/46 formes exactes** contre une
+source canonisée (casse repliée, ponctuation retirée), mais **1/46 = 0,0217** contre la source
+brute — et le **miroir strict reste 0,1087**. C'est la réponse : le strict ne doit pas monter,
+il mesure la surface ; la forme canonique mesure autre chose. La structure tient : **395
+segments**, **395 rôles**, **315 cibles**, **315/315 résolues**, **313/315** portées par un
+autre segment ; couverture **65,84 % des jetons**, **75,19 % des caractères**. La limite est la
+**stabilité structurelle** : **18/46** seulement après re-analyse de la surface canonique (le
+lexique, lui, est stable 46/46). Contrôles : mélange/troncature canoniques **0/46**, détection
+**46/46** ; rôles/cibles retirés, clé changée **43/43** textes éligibles. Fiche
+[`reports/rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md), JSON
+[`reports/pensee-restitution-v1.json`](../../reports/pensee-restitution-v1.json), outil
+[`tools/mesurer_restitution_v1.py`](../../tools/mesurer_restitution_v1.py).
 <!-- /notes -->

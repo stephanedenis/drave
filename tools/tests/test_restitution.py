@@ -92,6 +92,142 @@ class TestCommande(unittest.TestCase):
         self.assertEqual(donnees["synthese"]["surface"]["exacts"], 2)
         self.assertEqual(donnees["synthese"]["controle_negatif"]["melange_exacts"], 0)
 
+    def test_restituer_canonique(self):
+        sortie = drave("restituer", "Le chat dort.", "--canonique")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        self.assertIn("forme canonique", sortie.stdout)
+        self.assertIn("GN/agent: le chat -> dort", sortie.stdout)
+        self.assertIn("miroir strict", sortie.stdout)
+        self.assertIn("canonique: 1.0000", sortie.stdout)
+
+    def test_restituer_canonique_json(self):
+        sortie = drave("restituer", "Le chat dort.", "--canonique", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        donnees = json.loads(sortie.stdout)
+        self.assertEqual(donnees["schema"], "drave.restitution.canonique")
+        self.assertEqual(donnees["forme"]["surface_canonique"], "le chat dort")
+        self.assertEqual(len(donnees["forme"]["segments"]), 2)
+        self.assertTrue(donnees["canonique"]["exact"])
+        self.assertFalse(donnees["strict"]["exact"])
+        self.assertFalse(donnees["strict_sur_canonique"]["exact"])
+        self.assertTrue(donnees["controle_negatif_canonique"]["detecte"])
+
+    def test_restituer_banc_canonique(self):
+        banc = {"banc_50": {"resultats": [
+            {"id": "t1", "texte": "Le chat dort."},
+            {"id": "t2", "texte": "...", "langue": "fr"},
+        ]}}
+        chemin = _fichier_temp(json.dumps(banc, ensure_ascii=False), suffixe=".json")
+        sortie = drave("restituer", "--banc", chemin, "--canonique", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        donnees = json.loads(sortie.stdout)
+        self.assertEqual(donnees["schema"], "drave.restitution.canonique.banc")
+        self.assertEqual(donnees["synthese"]["annotations"], 1)
+        self.assertEqual(donnees["synthese"]["canonique"]["exacts"], 1)
+        self.assertEqual(donnees["synthese"]["strict"]["exacts"], 0)
+
+
+class TestFormeCanonique(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.h = bl.Heuristique()
+
+    def test_forme_simple(self):
+        a = self.h.analyser("Le chat dort.", "fr")
+        forme = restitution.forme_canonique(a)
+        self.assertIsNotNone(forme)
+        self.assertEqual(forme["surface_canonique"], "le chat dort")
+        self.assertEqual(forme["jetons"], ["le", "chat", "dort"])
+        self.assertEqual(len(forme["segments"]), 2)
+        self.assertEqual([s["type"] for s in forme["segments"]], ["GN", "GV"])
+        self.assertEqual([s["role"] for s in forme["segments"]], ["agent", "predicat"])
+        self.assertEqual([s["cible"] for s in forme["segments"]], ["dort", "chat"])
+        self.assertEqual([s["cible_segment"] for s in forme["segments"]], [1, 0])
+        self.assertEqual(forme["squelette"],
+                         ["GN/agent: le chat -> dort", "GV/predicat: dort -> chat"])
+        self.assertEqual(len(forme["cle"]), 64)
+
+    def test_ne_lit_pas_le_texte(self):
+        a = self.h.analyser("Le chat dort.", "fr")
+        avant = restitution.forme_canonique(a)["cle"]
+        a.texte = "PAS LA SOURCE"
+        apres = restitution.forme_canonique(a)["cle"]
+        self.assertEqual(avant, apres)
+
+    def test_miroir_canonique_et_strict(self):
+        source = "Le chat dort."
+        a = self.h.analyser(source, "fr")
+        mesure = restitution.mesurer_annotation_v1(a, source)
+        self.assertEqual(mesure["canonique"]["fidelite"], 1.0)
+        self.assertTrue(mesure["canonique"]["exact"])
+        self.assertEqual(mesure["strict"]["fidelite"], 0.0)
+        self.assertEqual(mesure["strict_sur_canonique"]["fidelite"], 0.0)
+        self.assertEqual(mesure["structure"]["cibles_resolues"], 2)
+        self.assertTrue(mesure["stabilite"]["squelette_identique"])
+
+    def test_controles_negatifs(self):
+        source = "Le chat dort."
+        a = self.h.analyser(source, "fr")
+        canonique = restitution.controler_negatif_canonique(a, source)
+        self.assertFalse(canonique["melange"]["exact"])
+        self.assertFalse(canonique["tronque"]["exact"])
+        self.assertTrue(canonique["detecte"])
+        structure = restitution.controler_negatif_structure(a)
+        self.assertEqual(structure["roles_retires"], 2)
+        self.assertEqual(structure["cibles_retirees"], 2)
+        self.assertTrue(structure["cle_changee"])
+        self.assertTrue(structure["detecte"])
+
+    def test_distance_canonique(self):
+        self.assertEqual(restitution.canoniser("Le Chat, dort !"), "le chat dort")
+        self.assertEqual(restitution.jetons_canoniques("l'eau"), ["l", "eau"])
+        self.assertEqual(restitution.canoniser(""), "")
+
+
+class TestCinquanteTextesV1(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        donnees = json.loads(BANC.read_text(encoding="utf-8"))
+        cls.items = restitution.items_banc(donnees)
+        cls.rapport = restitution.mesurer_banc_v1(cls.items)
+
+    def test_synthese_v1(self):
+        s = self.rapport["synthese"]
+        self.assertEqual(s["annotations"], 46)
+        self.assertEqual(s["refus"], 4)
+        self.assertEqual(s["strict"]["exacts"], 5)
+        self.assertEqual(s["strict"]["fidelite"], 0.1087)
+        self.assertEqual(s["canonique"]["exacts"], 46)
+        self.assertEqual(s["canonique"]["fidelite"], 1.0)
+        self.assertEqual(s["strict_sur_canonique"]["exacts"], 1)
+        self.assertEqual(s["strict_sur_canonique"]["fidelite"], 0.0217)
+
+    def test_structure_v1(self):
+        s = self.rapport["synthese"]["structure"]
+        self.assertEqual(s["segments"], 395)
+        self.assertEqual(s["segments_avec_role"], 395)
+        self.assertEqual(s["attachements"], 315)
+        self.assertEqual(s["cibles_resolues"], 315)
+        self.assertEqual(s["cibles_dans_un_segment"], 313)
+        self.assertEqual(s["taux_roles"], 1.0)
+        self.assertEqual(s["taux_cibles_resolues"], 1.0)
+        self.assertEqual(s["taux_cibles_dans_un_segment"], 0.9937)
+        self.assertEqual(s["couverture_jetons"], 0.6584)
+        self.assertEqual(s["couverture_caracteres"], 0.7519)
+
+    def test_stabilite_et_controles_v1(self):
+        s = self.rapport["synthese"]
+        self.assertEqual(s["stabilite"]["squelette_identique"], 18)
+        self.assertEqual(s["stabilite"]["fidelite"], 0.3913)
+        self.assertEqual(s["stabilite"]["jetons_identiques"], 46)
+        self.assertEqual(s["controle_negatif_canonique"]["melange_exacts"], 0)
+        self.assertEqual(s["controle_negatif_canonique"]["tronque_exacts"], 0)
+        self.assertEqual(s["controle_negatif_canonique"]["detectes"], 46)
+        self.assertEqual(s["controle_negatif_structure"]["eligibles"], 43)
+        self.assertEqual(s["controle_negatif_structure"]["cle_changee"], 43)
+        self.assertEqual(s["controle_negatif_structure"]["roles_retires"], 395)
+        self.assertEqual(s["controle_negatif_structure"]["cibles_retirees"], 315)
+
 
 class TestReconstruction(unittest.TestCase):
     @classmethod

@@ -345,7 +345,9 @@ def cmd_restituer(args: argparse.Namespace) -> int:
 
     Deux modes : un **texte** (ou un fichier), ou un **banc** JSON de textes
     (`--banc`, le format de `reports/pensee-fiabilite-produit.json`). Le mode banc
-    laisse le bloc détecter la langue, comme le CLI sans `--langue`.
+    laisse le bloc détecter la langue, comme le CLI sans `--langue`. `--canonique`
+    ajoute la **forme canonique v1** (segments + rôles + cibles) et son miroir ; la
+    sortie de la v0 reste celle par défaut.
     """
     if args.banc:
         if args.texte is not None or args.fichier:
@@ -358,12 +360,17 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         except (OSError, ValueError) as exc:
             print(f"{NOM}: erreur : banc illisible : {exc}", file=sys.stderr)
             return 1
-        rapport = restitution.mesurer_banc(items, args.langue)
+        if args.canonique:
+            rapport = restitution.mesurer_banc_v1(items, args.langue)
+        else:
+            rapport = restitution.mesurer_banc(items, args.langue)
         rapport["banc"] = args.banc
         if args.json:
             sys.stdout.write(_dumps(rapport))
         else:
-            print(_sur(restitution.formater_banc(rapport, args.banc)))
+            formateur = (restitution.formater_banc_v1 if args.canonique
+                         else restitution.formater_banc)
+            print(_sur(formateur(rapport, args.banc)))
         return 0
 
     texte = _lire_entree(args)
@@ -375,6 +382,17 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         print(f"{NOM}: refus d'analyse : {annotation.refus} "
               "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
         return 3
+    if args.canonique:
+        mesure_v1 = restitution.mesurer_annotation_v1(annotation, texte)
+        if args.json:
+            sys.stdout.write(_dumps({
+                "schema": restitution.SCHEMA_CANONIQUE,
+                "version": restitution.VERSION_CANONIQUE,
+                **mesure_v1,
+            }))
+        else:
+            print(_sur(restitution.formater_mesure_v1(mesure_v1, texte)))
+        return 0
     mesure = restitution.mesurer_annotation(annotation, texte)
     if args.json:
         sys.stdout.write(_dumps({
@@ -491,8 +509,11 @@ def construire_parseur() -> argparse.ArgumentParser:
         description="Analyse un texte, reconstruit la surface depuis le niveau `graphème` "
                     "(sans lire le champ `texte` de l'annotation) et compare à la source. "
                     "Affiche la fidélité binaire du miroir, la fidélité de caractères et un "
-                    "contrôle négatif. Avec --banc, mesure un JSON de textes (50 textes libres).",
+                    "contrôle négatif. Avec --banc, mesure un JSON de textes (50 textes libres) ; "
+                    "avec --canonique, produit en plus la forme canonique v1 (segments + rôles "
+                    "+ cibles) et son miroir canonique.",
         epilog="Exemples : python3 tools/drave.py restituer \"Le chat dort.\" ; "
+               "python3 tools/drave.py restituer \"Le chat dort.\" --canonique ; "
                "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json",
         formatter_class=_Formateur,
     )
@@ -500,6 +521,9 @@ def construire_parseur() -> argparse.ArgumentParser:
                            help="texte à restituer (entre guillemets) ou --fichier")
     restituer.add_argument("--banc", default=None, metavar="CHEMIN",
                            help="mesurer un banc JSON de textes (ex. les 50 textes libres)")
+    restituer.add_argument("--canonique", action="store_true",
+                           help="ajouter la forme canonique v1 (segments + rôles + cibles) "
+                                "et son miroir canonique")
     restituer.add_argument("--fichier", default=None, metavar="CHEMIN",
                            help="lire le texte dans un fichier UTF-8 (au lieu de l'argument)")
     restituer.add_argument("--langue", choices=("fr", "en"), default=None,
