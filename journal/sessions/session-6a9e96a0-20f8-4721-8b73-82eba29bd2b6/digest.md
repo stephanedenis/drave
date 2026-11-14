@@ -3076,3 +3076,122 @@ A  tools/tests/test_panini_334.py
   ```
 
 - **bash** `{"command": "cat > /tmp/commit-j121.txt <<'EOF'\nJ12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,909139 / 0,906307 (488), DATE 0,0089 APRÈS TOPO (p=0,86) ; FILIATION 61,4 % vs 50,0 % (HOLM 0,128), ÉPOQUE  … [1695 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 bb68b820] J12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,909139 / 0,906307 (488), DATE 0,0089 APRÈS TOPO (p=0,86) ; FILIATION 61,4 % vs 50,0 % (HOLM 0,128), ÉPOQUE 56,8 % vs 53,8 % (p=0,373), ANNÉE INTRA-TRADITION R²=0,042 (HOLM 0,034) ; V150 β DATE −0,006 ≠ +0,138
+ 20 files changed, 15247 insertions(+), 34 deletions(-)
+ create mode 100644 journal/sessions/session-6a9e96a0-20f8-4721-8b73-82eba29bd2b6/digest.md
+ create mode 100644 journal/sessions/session-6a9e96a0-20f8-4721-8b73-82eba29bd2b6/rapport.md
+ create mode 100644 reports/panini-334.json
+ create mode 100644 reports/rapport-panini-334.md
+ create mode 100644 tools/panini_334.py
+ create mode 100644 tools/tests/test_panini_334.py
+  ```
+
+- **bash** `{"command": "git log -1 --stat --oneline | head -30; echo '--- status'; git status --short | head -30", "description": "Check commit and status"}`
+
+  ```
+bb68b820 J12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,909139 / 0,906307 (488), DATE 0,0089 APRÈS TOPO (p=0,86) ; FILIATION 61,4 % vs 50,0 % (HOLM 0,128), ÉPOQUE 56,8 % vs 53,8 % (p=0,373), ANNÉE INTRA-TRADITION R²=0,042 (HOLM 0,034) ; V150 β DATE −0,006 ≠ +0,138
+ docs/pilotage/en-cours.md                          |    7 +-
+ docs/pilotage/roadmap.md                           |   20 +-
+ docs/theorie/genealogie-des-langues.md             |   17 +-
+ journal/2026-11-14/README.md                       |   25 +-
+ journal/2026-11-14/docs.md                         |    7 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    2 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   27 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      |   92 +
+ .../rapport.md                   
+… [863 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -10; python3 tools/verifie_en_cours.py 2>&1 | tail -5; python3 tools/verifie_journal.py 2>&1 | tail -5; bash tools/porte-tableaux.sh 2>&1 | tail -5", "description": "Post-commit documentation checks"}`
+
+  ```
+revue de documentation · 729 fiche(s) · 823 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1714 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 46 jour(s) · 190 session(s) · 2495 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ 1794 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4165 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "PORTES=\"produit\" DELAI=600 bash tools/toutes-les-portes.sh 2>&1 | tail -25", "description": "Run product gate", "timeoutMs": 700000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (1 portes, borne 600 s) ===
+    journaux : work/portes-1114-05h40
+  porte-produit          ✅                         140 s  ✅ porte produit verte
+--- 1 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1114-05h40
+  ```
+
+- **todo_write** `{"todos": [{"content": "Auditer les artefacts §334 (114/655/48/44/102) et les signatures 14 flottants", "status": "completed"}, {"content": "Écrire tools/panini_334.py : retrieval, prédiction, contrôles de date/surface, permutations", "status": "completed"}, {"content": "Exécuter, vérifier les chiff … [344 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 6 completed.
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %ci %s' | cut -c1-180; echo '--- status preexisting only'; git status --short", "description": "Final commit and status"}`
+
+  ```
+bb68b820 2026-11-14 05:37:55 -0500 J12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,9
+--- status preexisting only
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+**J12.1 terminé et committé** — `bb68b820`.
+
+## Livrables
+
+- **Fiche** : [`reports/rapport-panini-334.md`](reports/rapport-panini-334.md)
+- **JSON** : [`reports/panini-334.json`](reports/panini-334.json)
+- **Outil** : [`tools/panini_334.py`](tools/panini_334.py) — `python3 tools/panini_334.py` (~65 s)
+- **Tests** : [`tools/tests/test_panini_334.py`](tools/tests/test_panini_334.py) — **4/4**
+
+## Résultat principal
+
+**Le §334 est une géométrie de filiation, pas d’époque — mais le corpus ne sépare pas les deux.**
+
+- **Audit** : les **655 lignes** de paires ne contiennent que **495 paires uniques** (**160 doublons**, **7 auto-paires**) et **48 textes** distincts, dont **44 signatures V14**. Les **102/107 sources** acquises ne sont pas 102 URL (**71 URL uniques**).
+- **H0 reproduite** : **R² = 0,909139** sur 655 lignes ; **0,906307** sur 488 paires uniques non auto.
+- **Époque** : **R² = 0,258** seule, mais **0,0089** seulement après la topologie (p = 0,86 ; β standardisé **−0,035**).
+- **Colinéarité** : 180 paires de même tradition à **28,7 ans** d’écart (max 230), 308 paires inter-traditions à **1 189 ans** (136 à ≤ 100 ans).
+- **Filiation à date fixe** : **Δ = −0,166** (p = 0,0005) dans la tranche axiale, mais **Δ = −0,135** contre un null de **−0,129** (p = 0,335) à surface contrôlée (`eng–eng`).
+- **44 signatures** : retrieval brut **61,4 %** même tradition (hasard 22,4 %) et **56,8 %** à ≤ 50 ans (hasard 22,8 %) ; contrôles croisés → **50,0 %** (p = 0,0492, **Holm 0,128**) et **53,8 %** (p = 0,373).
+- **Seule survivante après Holm** : la petite prédiction d’année intra-tradition — **R² = 0,042**, p = 0,0086, **Holm 0,034**.
+- **v150 non reproduite** : le β époque **+0,138** devient **−0,006** sur 374 paires (p = 0,093). La signature V14 est surtout une signature de **source/traduction**.
+
+## Vérifications
+
+- `revue_documentation.py` : ✅
+- `porte-tableaux` : ✅
+- `verifie_en_cours.py` : ✅
+- `verifie_journal.py` : ✅
+- `verifier_schemas.py` : ✅
+- Portes ciblées **6/7 vertes** ; seule `porte-sessions` est rouge, **tolérée** (heartbeats périmés). `porte-produit` : ✅ **183/183**.
+- La passe complète des 84 portes n’a pas été relancée (1 h 30–2 h) ; les portes documentaires, d’état et produit sont vertes.
+
+Les modifications préexistantes hors J12.1 (`reports/pensee-*`, `tools/chantier/plan.json`, `tools/structures`, `reports/rapport-s-paragraphes.md`) n’ont pas été committées.
+

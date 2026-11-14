@@ -7,12 +7,12 @@
 | Identifiant | `session-6a9e96a0-20f8-4721-8b73-82eba29bd2b6` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 05:08 |
-| Durée | 0.5 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 133 |
-| Appels d'outils | 146 |
+| Messages | 139 |
+| Appels d'outils | 151 |
 | Fichiers touchés | 1 |
-| Commandes | 141 |
+| Commandes | 145 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J12.1 : la deuxième vague Panini — le corpus §334 (114 textes, 655 paires, 102 sources) et les signatures des 44 œ … [161 caractères tronqués]
 
-*146 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - bash — List repo root, reports, journal
 - read
@@ -41,7 +41,43 @@
 - bash — Find catalogue and recent docs
 - bash — Inspect falsification artifacts
 - bash — Search for 44 works signatures
-- … et 132 autres
+- … et 136 autres
+
+**Synthèse produite :**
+
+**J12.1 terminé et committé** — `bb68b820`.
+
+\## Livrables
+
+- **Fiche** : [`reports/rapport-panini-334.md`](reports/rapport-panini-334.md)
+- **JSON** : [`reports/panini-334.json`](reports/panini-334.json)
+- **Outil** : [`tools/panini_334.py`](tools/panini_334.py) — `python3 tools/panini_334.py` (~65 s)
+- **Tests** : [`tools/tests/test_panini_334.py`](tools/tests/test_panini_334.py) — **4/4**
+
+\## Résultat principal
+
+**Le §334 est une géométrie de filiation, pas d’époque — mais le corpus ne sépare pas les deux.**
+
+- **Audit** : les **655 lignes** de paires ne contiennent que **495 paires uniques** (**160 doublons**, **7 auto-paires**) et **48 textes** distincts, dont **44 signatures V14**. Les **102/107 sources** acquises ne sont pas 102 URL (**71 URL uniques**).
+- **H0 reproduite** : **R² = 0,909139** sur 655 lignes ; **0,906307** sur 488 paires uniques non auto.
+- **Époque** : **R² = 0,258** seule, mais **0,0089** seulement après la topologie (p = 0,86 ; β standardisé **−0,035**).
+- **Colinéarité** : 180 paires de même tradition à **28,7 ans** d’écart (max 230), 308 paires inter-traditions à **1 189 ans** (136 à ≤ 100 ans).
+- **Filiation à date fixe** : **Δ = −0,166** (p = 0,0005) dans la tranche axiale, mais **Δ = −0,135** contre un null de **−0,129** (p = 0,335) à surface contrôlée (`eng–eng`).
+- **44 signatures** : retrieval brut **61,4 %** même tradition (hasard 22,4 %) et **56,8 %** à ≤ 50 ans (hasard 22,8 %) ; contrôles croisés → **50,0 %** (p = 0,0492, **Holm 0,128**) et **53,8 %** (p = 0,373).
+- **Seule survivante après Holm** : la petite prédiction d’année intra-tradition — **R² = 0,042**, p = 0,0086, **Holm 0,034**.
+- **v150 non reproduite** : le β époque **+0,138** devient **−0,006** sur 374 paires (p = 0,093). La signature V14 est surtout une signature de **source/traduction**.
+
+\## Vérifications
+
+- `revue_documentation.py` : ✅
+- `porte-tableaux` : ✅
+- `verifie_en_cours.py` : ✅
+- `verifie_journal.py` : ✅
+- `verifier_schemas.py` : ✅
+- Portes ciblées **6/7 vertes** ; seule `porte-sessions` est rouge, **tolérée** (heartbeats périmés). `porte-produit` : ✅ **183/183**.
+- La passe complète des 84 portes n’a pas été relancée (1 h 30–2 h) ; les portes documentaires, d’état et produit sont vertes.
+
+Les modifications préexistantes hors J12.1 (`reports/pensee-*`, `tools/chantier/plan.json`, `tools/structures`, `reports/rapport-s-paragraphes.md`) n’ont pas été committées.
 
 ## 3. Travail accompli
 
@@ -93,7 +129,7 @@
 - **T1** Inspect blank tradition pairs and language pairs
 - **T1** List 44 labels for harmonization
 - **T1** Read genealogy two faces report for beta context
-- … et 101 autres
+- … et 105 autres
 
 ## 4. Mesures et résultats marquants
 

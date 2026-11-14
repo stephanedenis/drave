@@ -27,6 +27,7 @@
 | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
 | [`rapport-retrieval-familles.md`](rapport-retrieval-familles.md) | **Panini** — le retrieval approfondi par famille : 532 textes, sœurs vs familles |
 | [`rapport-genealogie-deux-faces.md`](rapport-genealogie-deux-faces.md) | **Panini** — la généalogie à deux faces |
+| [`rapport-cic-verificateur.md`](rapport-cic-verificateur.md) | **J12.2** — corpus d'or CIC : **42/42** verdicts, 42/42 empreintes, octet altéré rejeté |
 | [`rapport-convention-gv.md`](rapport-convention-gv.md) | GV : F1 **0,7902** |
 | [`rapport-r035.md`](rapport-r035.md) | **B13** — relative zéro : **237/238** |
 | [`rapport-gn-pronom-sujet.md`](rapport-gn-pronom-sujet.md) | **B13** — pronom sujet = GN : **0,7013** |

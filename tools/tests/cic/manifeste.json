@@ -1,0 +1,21 @@
+{
+ "tache": "J12.2",
+ "objet": "corpus d'or CIC-lite — copie portable pour le vérificateur Drave",
+ "source": {
+  "chemin": "Panini/research/nipada/falsification/corpus_dor_cic_v1.json",
+  "sha256": "3018f6f4349641534be3a73309a1b25ff4bc71a3975e7105f2c15b61da18aaec",
+  "octets": 46714,
+  "commit": "2130310db46ca9d59883500adc607bd86f534678",
+  "tsv": "Panini/research/nipada/falsification/corpus_dor_cic_v1.tsv",
+  "sha256_tsv": "9aa1a5f4faa1552e0f34732bdde48629dc048a51ce2997395e25367ce1197424"
+ },
+ "copie": {
+  "chemin": "tools/tests/cic/corpus_dor_cic_v1.json",
+  "sha256": "3018f6f4349641534be3a73309a1b25ff4bc71a3975e7105f2c15b61da18aaec",
+  "octets": 46714,
+  "byte_identique": true
+ },
+ "doctrine": "corpus d'or CIC-lite : preuve + type sérialisés (de Bruijn) + empreinte + verdict + ENVIRONNEMENT (defs/consts) ; toute implémentation doit reproduire exactement ces verdicts (validation croisée) à partir de cet artefact seul.",
+ "usage": "fixture de test en lecture seule ; le vérificateur ne modifie jamais le corpus",
+ "copie_le": "2026-11-14"
+}

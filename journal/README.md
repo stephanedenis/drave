@@ -211,7 +211,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.8 h | 194 | 3284 | 25 | 439 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 325.2 h | 194 | 3286 | 25 | 439 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -239,7 +239,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Coordination R : tagger POS sur gold 612 | 2026-11-13 21:59 | 0.7 h | 1 | 128 | 4 | 3 | [rapport](sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/rapport.md) |
 | `session-` | Schéma annotation v2 et validation | 2026-11-07 14:11 | 0.2 h | 1 | 171 | 12 | 1 | [rapport](sessions/session-614644be-9315-4734-9b97-236a792f4dc5/rapport.md) |
 | `session-` | Documenter schéma v2 produit | 2026-11-14 04:58 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-631f4ba2-5c36-4fdc-b751-fa0a2cce9d21/rapport.md) |
-| `session-` | Analyse vague Panini §334 | 2026-11-14 05:08 | 0.5 h | 1 | 146 | 1 | 1 | [rapport](sessions/session-6a9e96a0-20f8-4721-8b73-82eba29bd2b6/rapport.md) |
+| `session-` | Analyse vague Panini §334 | 2026-11-14 05:08 | 0.6 h | 1 | 151 | 1 | 1 | [rapport](sessions/session-6a9e96a0-20f8-4721-8b73-82eba29bd2b6/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-6af74924-89c1-4b96-aa02-b70bd77ab178/rapport.md) |
 | `session-` | Re-mesurer 50 textes libres J11.3 | 2026-11-14 04:43 | 0.2 h | 1 | 134 | 6 | 1 | [rapport](sessions/session-6b997dd9-9a2e-4d72-b31a-5a6d40609d56/rapport.md) |
 | `session-` | Réponds exactement le mot OK, | 2026-11-07 10:45 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-78f03aed-fb9d-4009-8625-e1186078059c/rapport.md) |
@@ -252,6 +252,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
 | `session-` | Corriger span g017 avec règle adverbe | 2026-11-14 00:41 | 0.3 h | 1 | 126 | 1 | 2 | [rapport](sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md) |
+| `session-` | Vérificateur indépendant du corpus CIC | 2026-11-14 05:43 | 0.2 h | 1 | 126 | 5 | 1 | [rapport](sessions/session-c3f599ea-570a-4db4-ad78-8eff22004a4c/rapport.md) |
 | `session-` | Rédiger le rapport bilan du chantier | 2026-11-14 03:46 | 0.2 h | 1 | 114 | 5 | 1 | [rapport](sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/rapport.md) |
 | `session-` | Passe d'honnêteté fiches historiques | 2026-11-14 03:18 | 0.5 h | 1 | 155 | 3 | 3 | [rapport](sessions/session-d58794d6-d201-493e-b6ab-fffee9656e15/rapport.md) |
 | `session-` | Rapport convention GV et règles candidates | 2026-11-07 12:41 | 1.5 h | 1 | 245 | 9 | 1 | [rapport](sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md) |

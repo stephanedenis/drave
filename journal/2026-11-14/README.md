@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**15 commits** · **1 session(s)** · **4 thème(s)**
+**16 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| distribue | 1 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
@@ -20,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 325.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -41,6 +42,7 @@
 | 04:40 | `09e54143` | J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ |
 | 04:55 | `55bde5c5` | J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902) |
 | 05:05 | `febfdfff` | J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1) |
+| 05:37 | `bb68b820` | J12.1 — LE §334 EST UNE GÉOMÉTRIE DE FILIATION : 655 LIGNES = 495 PAIRES UNIQUES (160 DOUBLONS, 7 AUTO-PAIRES), 48 TEXTES, 44 SIGNATURES ; H0 0,909139 / 0,906307 (488), DATE 0,0089 APRÈS TOPO (p=0,86) ; FILIATION 61,4 % vs 50,0 % (HOLM 0,128), ÉPOQUE 56,8 % vs 53,8 % (p=0,373), ANNÉE INTRA-TRADITION R²=0,042 (HOLM 0,034) ; V150 β DATE −0,006 ≠ +0,138 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -142,4 +144,21 @@ et l'époque n'est pas séparable de la filiation. Fiche
 [`reports/rapport-panini-334.md`](../../reports/rapport-panini-334.md), JSON
 [`reports/panini-334.json`](../../reports/panini-334.json), outil
 [`tools/panini_334.py`](../../tools/panini_334.py).
+**J12.2 — le corpus d'or CIC rejoué hors de Panini : 42/42, et l'octet qui tue.**
+Le corpus portable de Panini (3 defs, 21 consts, **42** entrées : **36** `accepte`,
+**6** `rejette`) est rejoué par un noyau CIC-lite **réécrit côté Drave**, sans importer
+`nipada.formalkernel.cic` : **42/42** verdicts, **42/42** empreintes
+`sha256(preuve || type)`, **42/42** sérialisations canoniques. La copie
+`tools/tests/cic/corpus_dor_cic_v1.json` est byte-identique à la source
+(`3018f6f4…aaec`), donc le vérificateur est portable. Le contrôle négatif est le cœur
+de la fiche : altérer le dernier octet des **36** preuves acceptées les fait **36/36**
+rejeter, et les **1 020** mutations d'un octet de `eq(2,2)` sont **1 020/1 020**
+rejetées ; un noyau « accepte tout » et un noyau « rejette tout » échouent
+(respectivement **6** et **36** désaccords). La porte [`tools/porte-cic.sh`](../../tools/porte-cic.sh)
+et **21** tests rejouent le tout. Ce qui pourrait le rendre faux : le corpus n'exerce que
+**20** des **39** étiquettes du format, et l'indépendance est celle du **code**, pas celle
+de la spécification CIC-lite. Fiche
+[`reports/rapport-cic-verificateur.md`](../../reports/rapport-cic-verificateur.md), JSON
+[`reports/cic-verificateur.json`](../../reports/cic-verificateur.json), outil
+[`tools/verificateur_cic.py`](../../tools/verificateur_cic.py).
 <!-- /notes -->

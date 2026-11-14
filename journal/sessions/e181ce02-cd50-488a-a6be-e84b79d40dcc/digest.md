@@ -61694,3 +61694,23 @@ sam 14 nov 2026 05:31:15 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ls reports/ | grep -E \"panini-334|cic-verificateur|tableau-mesures|cloture\"", "description": "Suivre J12.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 05:40:24 EST
+2026-11-14 05:08:35 · ✔ J11.4 en 619.7 s (code 0) — ✅ test -f reports/rapport-schema-v2-doc.md && echo FICHE-OK
+2026-11-14 05:08:35 · ▶ J12.1 — Panini — le §334 et les 44 œuvres (timeout 5400 s)
+panini-334.json
+rapport-panini-334.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -2", "description": "Verdict J12.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 05:49:30 EST
+2026-11-14 05:43:01 · ✔ J12.1 en 2065.4 s (code 0) — ✅ test -f reports/rapport-panini-334.md && echo FICHE-OK
+2026-11-14 05:43:01 · ▶ J12.2 — Panini — le corpus d'or CIC (timeout 5400 s)
+budget consommé : 27703.2 s · lancements : 27
+  [a_faire ] J12.2  j12 — Panini — le corpus d'or CIC
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J12.2", "timeoutM … [11 caractères tronqués]`
