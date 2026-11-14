@@ -1593,3 +1593,217 @@ A  reports/rapport-semaine.md
   ```
 
 - **bash** `{"command": "git commit -m \"J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS\" -m \"J1–J3 (07/11) : r035 237/238 ; convention GV F1 0,7902 ; schéma v2 26/0 ; restituti … [745 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 34e3e4ab] J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+ 27 files changed, 8493 insertions(+), 42 deletions(-)
+ create mode 100644 journal/2026-11-13/distribue.md
+ create mode 100644 journal/2026-11-13/memoire.md
+ create mode 100644 journal/sessions/session-11d99e1c-be38-4727-9c7a-013846234567/digest.md
+ create mode 100644 journal/sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md
+ create mode 100644 journal/sessions/session-e8c327f2-a7ec-464a-8e40-0615e5befecb/digest.md
+ create mode 100644 journal/sessions/session-e8c327f2-a7ec-464a-8e40-0615e5befecb/rapport.md
+ create mode 100644 reports/rapport-coordination-a.json
+ create mode 100644 reports/rapport-coordination-a.md
+ create mode 100644 reports/rapport-coordination-n2.json
+ create mode 100644 reports/rapport-coordination-n2.md
+ create mode 100644 reports/rapport-coordination-s.json
+ create mode 100644 reports/rapport-coordination-s.md
+ create mode 100644 reports/rapport-semaine.json
+ create mode 100644 reports/rapport-semaine.md
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py 2>&1 | tail -6; echo \"---STATUS---\"; git status --short | head -30", "description": "Check state freshness and remaining changes"}`
+
+  ```
+état · dernier fait 34e3e4ab · dernier état 34e3e4ab
+  ✅ aucun fait commité après le dernier état
+---STATUS---
+ M docs/pilotage/references-non-regression.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40", "description": "Show commit stat"}`
+
+  ```
+34e3e4ab J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+ docs/pilotage/en-cours.md                          |   18 +-
+ docs/pilotage/semaine-autonome.md                  |   50 +-
+ journal/2026-11-13/README.md                       |    8 +-
+ journal/2026-11-13/distribue.md                    |   25 +
+ journal/2026-11-13/docs.md                         |    2 +-
+ journal/2026-11-13/memoire.md                      |   29 +
+ journal/README.md                                  |    6 +-
+ journal/THEMES.md                                  |    2 +
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   49 +
+ .../rapport.md                                     |   16 +-
+ .../digest.md                                      | 3024 ++++++++++++++++++++
+ .../rapport.md                                     |  262 ++
+ .../digest.md                                      |  290 ++
+ .../rapport.md                                     |   56 +-
+ .../digest.md                                      | 1595 +++++++
+… [747 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"---\"; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation\" | head -3", "description": "Final review, state, and budget checks", "timeoutMs": 1800 … [3 caractères tronqués]`
+
+  ```
+revue de documentation · 718 fiche(s) · 812 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+---
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+---
+  T0 max : 3999 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/rapport-semaine.json | python3 -m json.tool > /dev/null && echo \"JSON HEAD OK\"; python3 tools/index_reports.py --verifier && echo \"INDEX HEAD OK\"; grep -c \"rapport-semaine.md\" reports/INDEX.md", "description": "Verify committed JSON and index"}`
+
+  ```
+JSON HEAD OK
+INDEX HEAD OK
+1
+  ```
+
+- **bash** `{"command": "CIBLES=\"docs reports\" bash tools/porte-tableaux.sh 2>&1 | tail -4", "description": "Final table/link gate", "timeoutMs": 180000}`
+
+  ```
+✅ 1349 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3927 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-13)
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -20", "description": "Check journal structure", "timeoutMs": 120000}`
+
+  ```
+journal · 45 jour(s) · 178 session(s) · 2409 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "grep -n \"J5\\|semaine\\|rapport de semaine\\|J4\" docs/pilotage/roadmap.md | head -30", "description": "Check roadmap for week tasks"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "grep -n \"B13\\|0,7902\\|0.7902\\|237/238\\|0,9475\\|0.9475\\|A6.2\" docs/pilotage/roadmap.md | head -30", "description": "Check roadmap current figures"}`
+
+  ```
+30:| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués** ; **A6.2 libre** (MoE local 18 Go) ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees/corpus.md)**, **B12.10, B10.2bis et B11.10 closes** ; le **décodeur** est levé (objectif mot : 32,5 ; JW 26,7), le `z` reste ; **B13** (moteur de pensée) : state store v0 + **AC-3/alpha-bêta** + **[DRVF](../theorie/glossaire/entrees/drvf.md) `thought`** + **[banc](../theorie/glossaire/entrees/banc.md) anytime** + **opérateurs hétérogènes** + **nécessaire** + **labyrinthe** + **[porte](../theorie/glossaire/entrees/porte.md)** + **apprise** + **courbe** + **seule** + **stochastique** + **sto seule** + **ferme** + **minute** + **minute apprise** + **minu
+… [9332 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -20 reports/rapport-s-paragraphes.md; echo \"---\"; git log --oneline -1 -- reports/rapport-s-paragraphes.md; echo \"---\"; grep -n \"rapport-s-paragraphes\" reports/rapport-coordination-s.md", "description": "Inspect untracked S report and reference"}`
+
+  ```
+# S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-03 · **Verdict** : la banque passe de **3 à 9
+> paragraphes complets**. Les six nouveaux — l'ouverture d'Alice, la table de verre, l'attente à
+> la petite porte, « Buvez-moi », « Je me sens toute drôle » et le gâteau oublié — portent chacun
+> leur **contexte**, leur **antécédent** (Alice) et leur **source anglaise** (Project Gutenberg
+> #11). La page `/paragraphes` en affiche neuf, avec l'arbre, les référents et la source ; les
+> **55 tests** passent.
+
+## Les six paires
+
+| id | cible (français) | source (anglais) | réf. |
+|---|---|---|---:|
+| a004 | « ALICE, assise auprès de sa sœur… commençait à s'ennuyer… » | *Alice was beginning to get very tired…* | 1 |
+| a005 | « Tout à coup elle rencontra… une petite table à trois pieds, en verre massif… » | *Suddenly she came upon a little three-legged table…* | 3 |
+| a006 | « Comme cela n'avançait à rien… elle retourna vers la table… » | *There seemed to be no use in waiting by the little door…* | 4 |
+| a007 | « C'est bien facile à dire « Buvez-moi », mais Alice était trop fine… » | *It was all ve
+… [572 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git ls-files --error-unmatch reports/rapport-s-paragraphes.md 2>&1; echo \"---\"; git log --oneline --all -3 -- reports/rapport-s-paragraphes.md; echo \"---\"; git show 4449646d --stat --oneline | head -20", "description": "Check history of S report"}`
+
+  ```
+error: pathspec 'reports/rapport-s-paragraphes.md' did not match any file(s) known to git
+Did you forget to 'git add'?
+---
+4449646d B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+047945c5 S — LA BANQUE DE PARAGRAPHES PASSE À NEUF : SIX PAIRES D'ALICE, SOURCES ANGLAISES ET RÉFÉRENTS
+---
+4449646d B13 — LE DÉFAUT DE LA FUSION : LA CONFIANCE (0,7424) BAT LE NIVEAU (0,3432) ; 141/141
+ docs/implantation/moteur-de-pensee.md              |   5 +-
+ docs/pilotage/en-cours.md                          |   2 +-
+ journal/2026-11-04/README.md                       |   9 +-
+ journal/2026-11-04/distribue.md                    |   4 +-
+ journal/2026-11-04/docs.md                         |   7 +-
+ journal/2026-11-04/mesures.md                      |   4 +-
+ journal/2026-11-04/modele.md                       |   4 +-
+ journal/README.md                                  |   6 +-
+ .../0733c5bb-f90b-4f58-9241-3364fa32e46c/digest.md |  23 +++
+ .../rapport.md                                     |  15 +-
+ .../29ad180d-38a5-4481-a9a7-ec6ab31c895f/digest.md |  25 ++++
+ .../rapport.md                                     |  10 +-
+ journal/sessions/MANIFEST.md               
+… [408 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '80,88p' docs/pilotage/roadmap.md; echo \"---152---\"; sed -n '148,154p' docs/pilotage/roadmap.md; echo \"---343---\"; sed -n '340,346p' docs/pilotage/roadmap.md; echo \"---355---\"; sed -n '352,358p' docs/pilotage/roadmap.md", "description": "Inspect A6.2 roadmap lines"}`
+
+  ```
+611 ms. La restitution depuis un document lu est **R31**.
+5. **R11/R12 — la fenêtre** : après N2 ; PPL à 1 000 octets et aiguille native.
+6. **R21/R31 — la mémoire et la restitution** : après R0.3 ; la restitution attend le [gist](../theorie/glossaire/entrees/gist.md).
+7. **N3** — les opérations natives restantes, qui remplissent la file « jamais en attente ».
+8. **Les bloqués** : A3.4 ([Colab](../theorie/glossaire/entrees/colab-notebook-tunnel.md)), A5.4 ([FPGA](../theorie/glossaire/entrees/fpga.md)) ; A6.2 ([MoE](../theorie/glossaire/entrees/moe.md) local), B1.5 (corpus scientifique) — on prend la ligne
+   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 17,1**), le contrôle `z` montre qu'il ne lit que ~7 % du sens.
+
+## Le Gantt indicatif
+
+---152---
+| **A2** | placer sur une machine : [KV](../theorie/glossaire/entrees/kv.md) paginé, [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md), [top-k](../theorie/glossaire/entrees/top-k.md), ordonnanceur | ✅ / ⚠️ | **partielle** — tête 4 bits refusée (+10 % PPL), exp
+… [2915 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff --stat -- reports/rapport-semaine.md reports/rapport-semaine.json docs/pilotage/semaine-autonome.md docs/pilotage/en-cours.md reports/README.md reports/INDEX.md; echo \"---\"; git log -1 --format='%h %s'", "description": "Confirm committed files are clean"}`
+
+  ```
+---
+34e3e4ab J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+  ```
+
+### 🤖 Assistant
+
+## J5.1 — fait
+
+**Livrables**
+- [`reports/rapport-semaine.md`](reports/rapport-semaine.md) — le rapport consolidé J1→J4.
+- [`reports/rapport-semaine.json`](reports/rapport-semaine.json) — la version machine (13 décisions, 21 rejets, 12 restes, chronologie, limites).
+- [`docs/pilotage/semaine-autonome.md`](docs/pilotage/semaine-autonome.md) — l'état de chaque jour (§ 8) + le § 3 bis mis à jour.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) — compteurs **718 / 812**, lignes J5.1 et coordination J4.
+- [`reports/README.md`](reports/README.md) et [`reports/INDEX.md`](reports/INDEX.md) — fiches courantes et index régénéré.
+- Les fiches J4 N2/S/A non committées ont été emportées avec le rapport.
+
+**Commit** : `34e3e4ab` — *J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS*.
+
+**Les chiffres avant/après**
+- **POS** : **0,8625 → 0,8625** (heuristique de production, 0 jeton changé) ; le **tagger API** mesure **0,9475** (**+8,49 pts**, IC95 [+7,23 ; +9,74]), décision **intégrer**, mais **non branché** ; réserve : réel 432 seul **+4,67 pts**.
+- **F1** : **0,7533 → 0,7902** (**+0,0369**) ; dev **0,7875**, test **0,7962** ; vue linéaire **0,8120 → 0,8144**.
+- **Attachement** : exact **236/237 → 237/238** ; couverture **0,9916 → 0,9958** ; 0 cible perdue.
+- **Le produit** : schéma **v2** (26 cas / 0 échec, v1 lue, 1 836 annotations / 0 échec) ; restitution **46/46** surfaces, miroir strict **0,1087**, contrôle négatif 46/46.
+- **L'intégration** : table **14/14** (hypothèse, pas mesure) ; corpus **21 textes / 418 sur 438** (95,4 %, 8/8 contrôles) ; retrieval **script +0,609**, famille +0,181, **date −0,034/siècle (p = 0,19)**, 0,710 vs 0,710 à script contrôlé ; généalogie **154/154 hors script au hasard**, couverture **5/21 / 15/21 / 21/21**, R² **0,256 / 0,230**.
+- **Coordination J4** : N2 **8,0225 → 2,9726/2,7856** (`--rope --canal-dir`) ; S **11 verdicts** (7 acceptés / 4 exclus ; clone 8/4/11) ; R **0,9475** ; A6.2 **libre** (MoE 18,56 Go, PPL 37,2013, porte 54,5202), A8.3b2 hors graphe.
+
+**Vérifications** : JSON valide ; `revue_documentation.py` ✅ ; `porte-tableaux` + liens ✅ ; `verifie_en_cours.py` ✅ ; `taille_documents` **3 999 / 4 000** ; `verifie_journal.py` ✅.
+
+**Ce qui reste** : **J5.2** (passe complète, revue, tag annoté, release) ; `g017` et l'objet du GV ; le split réel du tagger ; la signature V14 des 21 langues ; la porte N2 (0,2856 val / 0,3566 test) ; le commit S + pointeur ; le rapport A6.2 ; la requalification documentaire d'A6.2 (D1 du J4-A, encore présente dans la roadmap/le backlog).
+
+Les modifications non liées (anciens rapports, journal, sous-module `tools/structures`) ont été laissées intactes.
+

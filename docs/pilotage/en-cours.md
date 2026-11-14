@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-13, 23 h 10 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-14, 00 h 55 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -60,10 +60,10 @@
 - **Stratégie** : v0 mesuré.
 - **Ambition** : un runtime cognitif tracé.
 - **Objectif final** : un moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7902**, **1 span + 1 cible fausse** ; **`r035` réglé** ; **convention des GV réglée** (sujet hors du GV + adverbe final : 320/179 → GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **schéma v2** (26 cas, 0 échec ; v1 lue) ; **restitution v0** (`restituer` : **46/46 surfaces**, miroir **0,1087**, correctif `C`) ; **contrat v1** validé ; frontières, partition, GN ; **`drave` v0**.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 237/238 (0,9958)**, **F1 0,7902**, **1 span + 1 cible fausse** ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (adverbe final hors SUB : g017 gagné, r264/r288 perdus ; test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v0** (46/46, miroir 0,1087) ; **contrat v1**, **`drave` v0**.
 - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Prochaine action** : **`g017`** ; puis T132/T133, gold 200+.
+- **Prochaine action** : **trancher la convention d'adverbe (`g017`)** ; puis **`s065`** (J6.2), T132/T133, gold 200+.
 - **Sous-agents** : 4 mandats, [plan-travail](plan-travail.md) § 9.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold 200+**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
@@ -76,7 +76,7 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient.
-- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** ; **paire propre de production** : **3,1500** → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération : −0,05** ; **2 048 mesuré** : ne bat pas 1 024 ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; +0,14–0,18 = repondération) ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119** (−0,06 ; −0,19 anglais) ; **repondération : −0,05** ; **2 048** ne bat pas 1 024 ; fiches [fenêtre](../../reports/rapport-n2-fenetre.md), [production](../../reports/rapport-n2-production-fenetre.md), [erratum](../../reports/rapport-n2-distillation-native.md), [porte](../../reports/rapport-n2-porte-propre.md).
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
 - **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
 - **Bloquants** : aucun.
@@ -87,7 +87,7 @@
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
 - **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propre (0,29)** ; **GPUs libres** (claim `n2-jour` libéré).
 - **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
-- **Pensée — B13 (actif)** : **183/183**, gold 432 ; pragmatique 130/432 ; **`r035` réglé** (237/238, 0,9958) ; **convention des GV réglée** (F1 **0,7902**, 0 perte d'attachement) ; **schéma v2** publié (26 cas, 0 échec ; `meta.partition`/`meta.alternative`, v1 lue) ; **restitution v0** : **46/46 surfaces**, miroir **0,1087** ; [fiche](../../reports/rapport-restitution-v0.md).
+- **Pensée — B13 (actif)** : **183/183**, gold 432, pragmatique 130/432 ; **`r035`** (237/238) ; **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (adverbe final hors SUB, test −0,0028 ; g017 : convention à trancher) ; **schéma v2** (26 cas, 0 échec ; v1 lue) ; **restitution v0** (46/46, miroir 0,1087) ; [restitution](../../reports/rapport-restitution-v0.md), [g017](../../reports/rapport-g017.md).
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
 - **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : script domine, date non significative ; **J3.2** : les deux faces diffèrent — `lang_distance` couvre **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, la famille vit dans **2-3 paires**, **V14 : 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
 - **J5.1** : rapport de semaine (F1 **0,7533 → 0,7902**, tagger **0,9475**, **13 décisions**, **21 rejets**) ; [rapport](../../reports/rapport-semaine.md) + JSON.
@@ -101,7 +101,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 07/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **718** / **812** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **719** / **813** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**) ; N3 **17/17** à 11 h 32 | `docs/pilotage/references-non-regression.md` |
 
@@ -113,7 +113,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 et convention des GV faits (F1 0,7902, 237/238), schéma v2 publié (v1 lue), restitution v0 (46/46 surfaces, miroir 0,1087)** | **`g017`** ; puis T132/T133, gold 200+ ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 et convention des GV (0,7902, 237/238), J6.1 rejeté (convention d'adverbe à trancher), schéma v2 (v1 lue), restitution v0 (46/46, 0,1087)** | **trancher la convention d'adverbe (`g017`)** ; puis **`s065`**, T132/T133, gold 200+ ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 (manque **0,2856** val / **0,3566** test) ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9475 (+8,49), intégrer** ; R2/R3 attendent N5/N4 | **route API derrière drapeau** ; **split réel tenu à l'écart** |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -123,7 +123,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — porte (0,2856 val / 0,3566 test) ; **Pensée** — `g017`, T132/T133, gold 200+ ; **J3.2** — **V14 des 21 langues** ; **S** — 11 verdicts + pointeur ; **R0.7** — **0,9475**, intégrer, split réel ; **A** — A6.2, A8.3b2 ; **J5.2** — passe, revue, tag.
+**N2** — porte (0,2856 val / 0,3566 test) ; **Pensée** — convention d'adverbe `g017`, `s065`, T132/T133, gold 200+ ; **J3.2** — **V14 des 21 langues** ; **S** — 11 verdicts + pointeur ; **R0.7** — **0,9475**, intégrer, split réel ; **A** — A6.2, A8.3b2 ; **J5.2** — passe, revue, tag.
 
 ## Les questions ouvertes
 

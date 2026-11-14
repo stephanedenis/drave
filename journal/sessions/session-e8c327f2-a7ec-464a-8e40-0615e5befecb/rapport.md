@@ -7,12 +7,12 @@
 | Identifiant | `session-e8c327f2-a7ec-464a-8e40-0615e5befecb` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-13 22:59 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 88 |
-| Appels d'outils | 103 |
+| Messages | 98 |
+| Appels d'outils | 115 |
 | Fichiers touchés | 5 |
-| Commandes | 61 |
+| Commandes | 73 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J5.1 : le rapport de semaine — relis les fiches des jours 1 à 4, écris `reports/rapport-semaine.md` + JSON : les c … [184 caractères tronqués]
 
-*103 appels d'outils.* Actions notables :
+*115 appels d'outils.* Actions notables :
 
 - bash — Explore workspace root and reports
 - bash — Read semaine-autonome state file
@@ -41,7 +41,34 @@
 - bash — Check git status and HEAD
 - bash — Find counters and week mentions in en-cours
 - bash — Read en-cours top sections
-- … et 72 autres
+- … et 84 autres
+
+**Synthèse produite :**
+
+\## J5.1 — fait
+
+**Livrables**
+- [`reports/rapport-semaine.md`](reports/rapport-semaine.md) — le rapport consolidé J1→J4.
+- [`reports/rapport-semaine.json`](reports/rapport-semaine.json) — la version machine (13 décisions, 21 rejets, 12 restes, chronologie, limites).
+- [`docs/pilotage/semaine-autonome.md`](docs/pilotage/semaine-autonome.md) — l'état de chaque jour (§ 8) + le § 3 bis mis à jour.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) — compteurs **718 / 812**, lignes J5.1 et coordination J4.
+- [`reports/README.md`](reports/README.md) et [`reports/INDEX.md`](reports/INDEX.md) — fiches courantes et index régénéré.
+- Les fiches J4 N2/S/A non committées ont été emportées avec le rapport.
+
+**Commit** : `34e3e4ab` — *J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS*.
+
+**Les chiffres avant/après**
+- **POS** : **0,8625 → 0,8625** (heuristique de production, 0 jeton changé) ; le **tagger API** mesure **0,9475** (**+8,49 pts**, IC95 [+7,23 ; +9,74]), décision **intégrer**, mais **non branché** ; réserve : réel 432 seul **+4,67 pts**.
+- **F1** : **0,7533 → 0,7902** (**+0,0369**) ; dev **0,7875**, test **0,7962** ; vue linéaire **0,8120 → 0,8144**.
+- **Attachement** : exact **236/237 → 237/238** ; couverture **0,9916 → 0,9958** ; 0 cible perdue.
+- **Le produit** : schéma **v2** (26 cas / 0 échec, v1 lue, 1 836 annotations / 0 échec) ; restitution **46/46** surfaces, miroir strict **0,1087**, contrôle négatif 46/46.
+- **L'intégration** : table **14/14** (hypothèse, pas mesure) ; corpus **21 textes / 418 sur 438** (95,4 %, 8/8 contrôles) ; retrieval **script +0,609**, famille +0,181, **date −0,034/siècle (p = 0,19)**, 0,710 vs 0,710 à script contrôlé ; généalogie **154/154 hors script au hasard**, couverture **5/21 / 15/21 / 21/21**, R² **0,256 / 0,230**.
+- **Coordination J4** : N2 **8,0225 → 2,9726/2,7856** (`--rope --canal-dir`) ; S **11 verdicts** (7 acceptés / 4 exclus ; clone 8/4/11) ; R **0,9475** ; A6.2 **libre** (MoE 18,56 Go, PPL 37,2013, porte 54,5202), A8.3b2 hors graphe.
+
+**Vérifications** : JSON valide ; `revue_documentation.py` ✅ ; `porte-tableaux` + liens ✅ ; `verifie_en_cours.py` ✅ ; `taille_documents` **3 999 / 4 000** ; `verifie_journal.py` ✅.
+
+**Ce qui reste** : **J5.2** (passe complète, revue, tag annoté, release) ; `g017` et l'objet du GV ; le split réel du tagger ; la signature V14 des 21 langues ; la
+… [294 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -97,7 +124,7 @@
 - **T1** Check en-cours word budget and current state
 - **T1** Check which coordination files are tracked
 - **T1** Regenerate and verify reports index
-- … et 21 autres
+- … et 33 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -157,6 +184,17 @@
 - **T1** `(dispersion ×2,9) ;`
 - **T1** `-| **R — le lecteur** | **R0.7** | R4.4 close ; **R0.7 — bloc linguistique** ; R2/R3 attendent N5/N4 | **1 024 octets entraînés** ; **2 048** fini (2×10 000 pas) ; la restitution |`
 - **T1** `+| **J2** | après-midi : corpus commun | ✅ fait | **21 textes**, 5 familles, 10 écritures, **418/438** paires exactes (95,4 %), 8/8 contrôles | `c3467170` (avec J3.1) | corpus multi-époques / multi-ge`
+- **T1** `30:| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués** ; **A6.2 libre** (MoE local 18 Go) ; `
+- **T1** `38:**État au 07/11 18 h 30.** B13 : **POS 86,25 %**, **attachement exact 237/238 (0,9958)**, **F1 0,7902**, **1 span (`g017`) + 1 cible fausse (`s065`)** ; **183/183** ; **`r035`** (relative zéro) rég`
+- **T1** `148:| **A2** | placer sur une machine : [KV](../theorie/glossaire/entrees/kv.md) paginé, [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md), [top-k](../theorie/glossaire/ent`
+- **T1** `180:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes`
+- **T1** `255:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
+- **T1** `611 ms. La restitution depuis un document lu est **R31**.`
+- **T1** `suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 1`
+- **T1** `| **A2** | placer sur une machine : [KV](../theorie/glossaire/entrees/kv.md) paginé, [GPU](../theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md), [top-k](../theorie/glossaire/entrees`
+- **T1** `| **A5** | formats, matériels, énergie : SIMD, PTX, FPGA, KV | ✅ / 🧱 | **A5.4 bloqué** (FPGA) ; le 8 bits tardif est gratuit (+0,03 %) |`
+- **T1** `| **A8** | l'ordonnanceur place **et** perte : `choisir_avec_perte` | ✅ **opt-in** ; 6 portes épinglées, A8.3 **échoue** (−5,9 % … +19,5 %) | **A8.3c/d** : le lot change la PPL, pas les threads ; rédu`
+- **T1** `| S — la banque validée | **`/paragraphes` fini** : 9/9 paragraphes, 19/19 candidats, 11 acceptés, 8 exclus, **11 verdicts non committés** ; **banque 150 verdicts / 74 des 207 phrases** (35,7 %), mais`
 
 ## 5. Erreurs rencontrées
 

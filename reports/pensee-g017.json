@@ -1,0 +1,1295 @@
+{
+ "date": "2026-11-14",
+ "ligne": "B13",
+ "tache": "J6.1",
+ "objet": "g017 — la règle de l'adverbe final de temps hors de la SUB est mesurée puis rejetée",
+ "verdict": {
+  "regle": "rejetée",
+  "raison": "elle corrige g017 (dev) mais casse r264 et r288 (test) : F1 all −0,0001, test −0,0028, attachement 237/238 → 236/237",
+  "f1_avant": 0.7902,
+  "f1_apres": 0.7901,
+  "delta_f1": -0.0001,
+  "dev_avant": 0.7875,
+  "dev_apres": 0.7886,
+  "delta_dev": 0.0011,
+  "test_avant": 0.7962,
+  "test_apres": 0.7934,
+  "delta_test": -0.0028,
+  "attachement_avant": "237/238",
+  "attachement_apres": "236/237",
+  "couverture_avant": 0.9958,
+  "couverture_apres": 0.9916
+ },
+ "dispositif": {
+  "gold": "tools/tests/linguistique/evaluer_gold.py::charger (612 phrases, 239 cibles)",
+  "split": "tools/tests/linguistique/gold_split.py (crc32(id) % 3)",
+  "module_base": "tools/bloc_linguistique.py (lecture seule, non modifié)",
+  "copies": {
+   "regle": "/tmp/g017/bloc_g017.py",
+   "adv_large": "/tmp/g017/bloc_adv_large.py",
+   "garde": "/tmp/g017/bloc_garde.py",
+   "placebo": "/tmp/g017/bloc_placebo.py"
+  },
+  "note_copie": "chaque copie remplace RACINE par le dépôt, sinon generateur.py (le générateur S) n'est pas importé",
+  "fichiers_du_depot_modifies_pour_la_mesure": 0
+ },
+ "reproduction": {
+  "phrase": "She said that she would come yesterday.",
+  "gold_sub": [
+   9,
+   28,
+   "that she would come"
+  ],
+  "bloc_sub": [
+   9,
+   38,
+   "that she would come yesterday"
+  ],
+  "attachement_bloc": {
+   "segment": "that she would come yesterday",
+   "cible": "said"
+  },
+  "lecture": "le span est 10 caractères trop long ; la cible d'attachement (said) est déjà juste ; c'est le seul label manquant des 239 cibles"
+ },
+ "regle": {
+  "nom": "adverbe final de temps hors de la SUB",
+  "description": "quand le dernier token d'une SUB est un adverbe de ADVERBES_TEMPS (hier, demain, aujourd'hui, maintenant, yesterday, tomorrow, today, now, later, soon, tonight) et qu'il est suivi d'une ponctuation ou de la fin, il est retiré du span de la SUB",
+  "ou": "tools/bloc_linguistique.py, boucle SUB de _syntagmes_simple, après la boucle de frontière et avant segments.append",
+  "code": "while (j - 1 > i and _normaliser(mots[j - 1][2]) in ADVERBES_TEMPS and (j >= len(mots) or mots[j][3] != 'mot')): j -= 1",
+  "portee": "toutes langues, toutes SUB (contenu, complément, cause, concession)"
+ },
+ "mesures": {
+  "base": {
+   "all": {
+    "phrases": 612,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 237,
+     "top1_taux": 0.9916,
+     "topk_taux": 0.9874,
+     "exact_taux": 0.9916,
+     "exact_taux_span": 0.9958,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 161,
+     "top1_taux": 0.9877,
+     "topk_taux": 0.9877,
+     "exact_taux": 0.9877,
+     "exact_taux_span": 0.9938,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 76,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9868,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "hand": {
+    "phrases": 20,
+    "syntagme": {
+     "precision": 0.8333,
+     "rappel": 0.9821,
+     "f1": 0.9016,
+     "tp": 55,
+     "fp": 11,
+     "fn": 1
+    },
+    "attachement": {
+     "cibles": 13,
+     "labels": 12,
+     "exact": 12,
+     "top1_taux": 0.9231,
+     "topk_taux": 0.9231,
+     "exact_taux": 0.9231,
+     "exact_taux_span": 1.0,
+     "couverture": 0.9231
+    }
+   },
+   "reel_new": {
+    "phrases": 432,
+    "syntagme": {
+     "precision": 0.8118,
+     "rappel": 0.7612,
+     "f1": 0.7857,
+     "tp": 1100,
+     "fp": 255,
+     "fn": 345
+    },
+    "attachement": {
+     "cibles": 171,
+     "labels": 171,
+     "exact": 171,
+     "top1_taux": 1.0,
+     "topk_taux": 0.9942,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "synthetique": {
+    "phrases": 160,
+    "syntagme": {
+     "precision": 0.7035,
+     "rappel": 0.8978,
+     "f1": 0.7888,
+     "tp": 325,
+     "fp": 137,
+     "fn": 37
+    },
+    "attachement": {
+     "cibles": 55,
+     "labels": 55,
+     "exact": 54,
+     "top1_taux": 0.9818,
+     "topk_taux": 0.9818,
+     "exact_taux": 0.9818,
+     "exact_taux_span": 0.9818,
+     "couverture": 1.0
+    }
+   }
+  },
+  "regle": {
+   "all": {
+    "phrases": 612,
+    "syntagme": {
+     "precision": 0.7863,
+     "rappel": 0.7939,
+     "f1": 0.7901,
+     "tp": 1479,
+     "fp": 402,
+     "fn": 384
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 237,
+     "exact": 236,
+     "top1_taux": 0.9874,
+     "topk_taux": 0.9833,
+     "exact_taux": 0.9874,
+     "exact_taux_span": 0.9958,
+     "couverture": 0.9916
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "syntagme": {
+     "precision": 0.7901,
+     "rappel": 0.787,
+     "f1": 0.7886,
+     "tp": 1020,
+     "fp": 271,
+     "fn": 276
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 163,
+     "exact": 162,
+     "top1_taux": 0.9939,
+     "topk_taux": 0.9939,
+     "exact_taux": 0.9939,
+     "exact_taux_span": 0.9939,
+     "couverture": 1.0
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "syntagme": {
+     "precision": 0.778,
+     "rappel": 0.8095,
+     "f1": 0.7934,
+     "tp": 459,
+     "fp": 131,
+     "fn": 108
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 74,
+     "exact": 74,
+     "top1_taux": 0.9737,
+     "topk_taux": 0.9605,
+     "exact_taux": 0.9737,
+     "exact_taux_span": 1.0,
+     "couverture": 0.9737
+    }
+   },
+   "hand": {
+    "phrases": 20,
+    "syntagme": {
+     "precision": 0.8615,
+     "rappel": 1.0,
+     "f1": 0.9256,
+     "tp": 56,
+     "fp": 9,
+     "fn": 0
+    },
+    "attachement": {
+     "cibles": 13,
+     "labels": 13,
+     "exact": 13,
+     "top1_taux": 1.0,
+     "topk_taux": 1.0,
+     "exact_taux": 1.0,
+     "exact_taux_span": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "reel_new": {
+    "phrases": 432,
+    "syntagme": {
+     "precision": 0.8109,
+     "rappel": 0.7599,
+     "f1": 0.7846,
+     "tp": 1098,
+     "fp": 256,
+     "fn": 347
+    },
+    "attachement": {
+     "cibles": 171,
+     "labels": 169,
+     "exact": 169,
+     "top1_taux": 0.9883,
+     "topk_taux": 0.9825,
+     "exact_taux": 0.9883,
+     "exact_taux_span": 1.0,
+     "couverture": 0.9883
+    }
+   },
+   "synthetique": {
+    "phrases": 160,
+    "syntagme": {
+     "precision": 0.7035,
+     "rappel": 0.8978,
+     "f1": 0.7888,
+     "tp": 325,
+     "fp": 137,
+     "fn": 37
+    },
+    "attachement": {
+     "cibles": 55,
+     "labels": 55,
+     "exact": 54,
+     "top1_taux": 0.9818,
+     "topk_taux": 0.9818,
+     "exact_taux": 0.9818,
+     "exact_taux_span": 0.9818,
+     "couverture": 1.0
+    }
+   }
+  },
+  "controles": {
+   "adv_large": {
+    "all": {
+     "phrases": 612,
+     "syntagme": {
+      "precision": 0.7847,
+      "rappel": 0.7923,
+      "f1": 0.7885,
+      "tp": 1476,
+      "fp": 405,
+      "fn": 387
+     },
+     "attachement": {
+      "cibles": 239,
+      "labels": 234,
+      "exact": 233,
+      "top1_taux": 0.9749,
+      "topk_taux": 0.9707,
+      "exact_taux": 0.9749,
+      "exact_taux_span": 0.9957,
+      "couverture": 0.9791
+     }
+    },
+    "dev": {
+     "phrases": 422,
+     "syntagme": {
+      "precision": 0.7878,
+      "rappel": 0.7847,
+      "f1": 0.7862,
+      "tp": 1017,
+      "fp": 274,
+      "fn": 279
+     },
+     "attachement": {
+      "cibles": 163,
+      "labels": 160,
+      "exact": 159,
+      "top1_taux": 0.9755,
+      "topk_taux": 0.9755,
+      "exact_taux": 0.9755,
+      "exact_taux_span": 0.9938,
+      "couverture": 0.9816
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "syntagme": {
+      "precision": 0.778,
+      "rappel": 0.8095,
+      "f1": 0.7934,
+      "tp": 459,
+      "fp": 131,
+      "fn": 108
+     },
+     "attachement": {
+      "cibles": 76,
+      "labels": 74,
+      "exact": 74,
+      "top1_taux": 0.9737,
+      "topk_taux": 0.9605,
+      "exact_taux": 0.9737,
+      "exact_taux_span": 1.0,
+      "couverture": 0.9737
+     }
+    },
+    "hand": {
+     "phrases": 20,
+     "syntagme": {
+      "precision": 0.8615,
+      "rappel": 1.0,
+      "f1": 0.9256,
+      "tp": 56,
+      "fp": 9,
+      "fn": 0
+     },
+     "attachement": {
+      "cibles": 13,
+      "labels": 13,
+      "exact": 13,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "exact_taux": 1.0,
+      "exact_taux_span": 1.0,
+      "couverture": 1.0
+     }
+    },
+    "reel_new": {
+     "phrases": 432,
+     "syntagme": {
+      "precision": 0.8087,
+      "rappel": 0.7578,
+      "f1": 0.7824,
+      "tp": 1095,
+      "fp": 259,
+      "fn": 350
+     },
+     "attachement": {
+      "cibles": 171,
+      "labels": 166,
+      "exact": 166,
+      "top1_taux": 0.9708,
+      "topk_taux": 0.9649,
+      "exact_taux": 0.9708,
+      "exact_taux_span": 1.0,
+      "couverture": 0.9708
+     }
+    },
+    "synthetique": {
+     "phrases": 160,
+     "syntagme": {
+      "precision": 0.7035,
+      "rappel": 0.8978,
+      "f1": 0.7888,
+      "tp": 325,
+      "fp": 137,
+      "fn": 37
+     },
+     "attachement": {
+      "cibles": 55,
+      "labels": 55,
+      "exact": 54,
+      "top1_taux": 0.9818,
+      "topk_taux": 0.9818,
+      "exact_taux": 0.9818,
+      "exact_taux_span": 0.9818,
+      "couverture": 1.0
+     }
+    }
+   },
+   "garde": {
+    "all": {
+     "phrases": 612,
+     "syntagme": {
+      "precision": 0.7869,
+      "rappel": 0.795,
+      "f1": 0.7909,
+      "tp": 1481,
+      "fp": 401,
+      "fn": 382
+     },
+     "attachement": {
+      "cibles": 239,
+      "labels": 239,
+      "exact": 238,
+      "top1_taux": 0.9958,
+      "topk_taux": 0.9916,
+      "exact_taux": 0.9958,
+      "exact_taux_span": 0.9958,
+      "couverture": 1.0
+     }
+    },
+    "dev": {
+     "phrases": 422,
+     "syntagme": {
+      "precision": 0.7901,
+      "rappel": 0.787,
+      "f1": 0.7886,
+      "tp": 1020,
+      "fp": 271,
+      "fn": 276
+     },
+     "attachement": {
+      "cibles": 163,
+      "labels": 163,
+      "exact": 162,
+      "top1_taux": 0.9939,
+      "topk_taux": 0.9939,
+      "exact_taux": 0.9939,
+      "exact_taux_span": 0.9939,
+      "couverture": 1.0
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "syntagme": {
+      "precision": 0.78,
+      "rappel": 0.8131,
+      "f1": 0.7962,
+      "tp": 461,
+      "fp": 130,
+      "fn": 106
+     },
+     "attachement": {
+      "cibles": 76,
+      "labels": 76,
+      "exact": 76,
+      "top1_taux": 1.0,
+      "topk_taux": 0.9868,
+      "exact_taux": 1.0,
+      "exact_taux_span": 1.0,
+      "couverture": 1.0
+     }
+    },
+    "hand": {
+     "phrases": 20,
+     "syntagme": {
+      "precision": 0.8615,
+      "rappel": 1.0,
+      "f1": 0.9256,
+      "tp": 56,
+      "fp": 9,
+      "fn": 0
+     },
+     "attachement": {
+      "cibles": 13,
+      "labels": 13,
+      "exact": 13,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "exact_taux": 1.0,
+      "exact_taux_span": 1.0,
+      "couverture": 1.0
+     }
+    },
+    "reel_new": {
+     "phrases": 432,
+     "syntagme": {
+      "precision": 0.8118,
+      "rappel": 0.7612,
+      "f1": 0.7857,
+      "tp": 1100,
+      "fp": 255,
+      "fn": 345
+     },
+     "attachement": {
+      "cibles": 171,
+      "labels": 171,
+      "exact": 171,
+      "top1_taux": 1.0,
+      "topk_taux": 0.9942,
+      "exact_taux": 1.0,
+      "exact_taux_span": 1.0,
+      "couverture": 1.0
+     }
+    },
+    "synthetique": {
+     "phrases": 160,
+     "syntagme": {
+      "precision": 0.7035,
+      "rappel": 0.8978,
+      "f1": 0.7888,
+      "tp": 325,
+      "fp": 137,
+      "fn": 37
+     },
+     "attachement": {
+      "cibles": 55,
+      "labels": 55,
+      "exact": 54,
+      "top1_taux": 0.9818,
+      "topk_taux": 0.9818,
+      "exact_taux": 0.9818,
+      "exact_taux_span": 0.9818,
+      "couverture": 1.0
+     }
+    }
+   },
+   "placebo": {
+    "all": {
+     "phrases": 612,
+     "syntagme": {
+      "precision": 0.6867,
+      "rappel": 0.7364,
+      "f1": 0.7107,
+      "tp": 1372,
+      "fp": 626,
+      "fn": 491
+     },
+     "attachement": {
+      "cibles": 239,
+      "labels": 160,
+      "exact": 159,
+      "top1_taux": 0.6695,
+      "topk_taux": 0.6653,
+      "exact_taux": 0.6653,
+      "exact_taux_span": 0.9938,
+      "couverture": 0.6695
+     }
+    },
+    "dev": {
+     "phrases": 422,
+     "syntagme": {
+      "precision": 0.6873,
+      "rappel": 0.7276,
+      "f1": 0.7069,
+      "tp": 943,
+      "fp": 429,
+      "fn": 353
+     },
+     "attachement": {
+      "cibles": 163,
+      "labels": 107,
+      "exact": 107,
+      "top1_taux": 0.6564,
+      "topk_taux": 0.6564,
+      "exact_taux": 0.6564,
+      "exact_taux_span": 1.0,
+      "couverture": 0.6564
+     }
+    },
+    "test": {
+     "phrases": 190,
+     "syntagme": {
+      "precision": 0.6853,
+      "rappel": 0.7566,
+      "f1": 0.7192,
+      "tp": 429,
+      "fp": 197,
+      "fn": 138
+     },
+     "attachement": {
+      "cibles": 76,
+      "labels": 53,
+      "exact": 52,
+      "top1_taux": 0.6974,
+      "topk_taux": 0.6842,
+      "exact_taux": 0.6842,
+      "exact_taux_span": 0.9811,
+      "couverture": 0.6974
+     }
+    },
+    "hand": {
+     "phrases": 20,
+     "syntagme": {
+      "precision": 0.8615,
+      "rappel": 1.0,
+      "f1": 0.9256,
+      "tp": 56,
+      "fp": 9,
+      "fn": 0
+     },
+     "attachement": {
+      "cibles": 13,
+      "labels": 13,
+      "exact": 13,
+      "top1_taux": 1.0,
+      "topk_taux": 1.0,
+      "exact_taux": 1.0,
+      "exact_taux_span": 1.0,
+      "couverture": 1.0
+     }
+    },
+    "reel_new": {
+     "phrases": 432,
+     "syntagme": {
+      "precision": 0.7109,
+      "rappel": 0.7114,
+      "f1": 0.7112,
+      "tp": 1028,
+      "fp": 418,
+      "fn": 417
+     },
+     "attachement": {
+      "cibles": 171,
+      "labels": 113,
+      "exact": 112,
+      "top1_taux": 0.6608,
+      "topk_taux": 0.655,
+      "exact_taux": 0.655,
+      "exact_taux_span": 0.9912,
+      "couverture": 0.6608
+     }
+    },
+    "synthetique": {
+     "phrases": 160,
+     "syntagme": {
+      "precision": 0.5914,
+      "rappel": 0.7956,
+      "f1": 0.6784,
+      "tp": 288,
+      "fp": 199,
+      "fn": 74
+     },
+     "attachement": {
+      "cibles": 55,
+      "labels": 34,
+      "exact": 34,
+      "top1_taux": 0.6182,
+      "topk_taux": 0.6182,
+      "exact_taux": 0.6182,
+      "exact_taux_span": 1.0,
+      "couverture": 0.6182
+     }
+    }
+   }
+  },
+  "split": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "sources": {
+     "hand": 15,
+     "reel": 302,
+     "synthetique": 105
+    },
+    "langues": {
+     "fr": 277,
+     "en": 145
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "sources": {
+     "hand": 5,
+     "reel": 130,
+     "synthetique": 55
+    },
+    "langues": {
+     "fr": 125,
+     "en": 65
+    }
+   }
+  }
+ },
+ "phrases_changees": [
+  {
+   "id": "g005",
+   "source": "hand",
+   "langue": "fr",
+   "texte": "Elle a dit qu'elle viendrait hier.",
+   "gold": [
+    [
+     "GN",
+     0,
+     4
+    ],
+    [
+     "GV",
+     5,
+     10
+    ],
+    [
+     "SUB",
+     11,
+     28
+    ]
+   ],
+   "avant": [
+    [
+     "GN",
+     0,
+     4
+    ],
+    [
+     "GP",
+     29,
+     33
+    ],
+    [
+     "GV",
+     5,
+     10
+    ],
+    [
+     "SUB",
+     11,
+     28
+    ],
+    [
+     "SUB",
+     11,
+     33
+    ]
+   ],
+   "apres": [
+    [
+     "GN",
+     0,
+     4
+    ],
+    [
+     "GP",
+     29,
+     33
+    ],
+    [
+     "GV",
+     5,
+     10
+    ],
+    [
+     "SUB",
+     11,
+     28
+    ]
+   ],
+   "gagnes": [],
+   "perdus": [],
+   "fp_avant": [
+    [
+     "GP",
+     29,
+     33
+    ],
+    [
+     "SUB",
+     11,
+     33
+    ]
+   ],
+   "fp_apres": [
+    [
+     "GP",
+     29,
+     33
+    ]
+   ],
+   "attachement": {
+    "SUB 11:28": {
+     "segment": "qu'elle viendrait",
+     "cible": "dit"
+    },
+    "SUB 11:33": {
+     "segment": "qu'elle viendrait hier",
+     "cible": "dit"
+    }
+   }
+  },
+  {
+   "id": "g017",
+   "source": "hand",
+   "langue": "en",
+   "texte": "She said that she would come yesterday.",
+   "gold": [
+    [
+     "GN",
+     0,
+     3
+    ],
+    [
+     "GV",
+     4,
+     8
+    ],
+    [
+     "SUB",
+     9,
+     28
+    ]
+   ],
+   "avant": [
+    [
+     "GN",
+     0,
+     3
+    ],
+    [
+     "GV",
+     4,
+     8
+    ],
+    [
+     "SUB",
+     9,
+     38
+    ]
+   ],
+   "apres": [
+    [
+     "GN",
+     0,
+     3
+    ],
+    [
+     "GV",
+     4,
+     8
+    ],
+    [
+     "SUB",
+     9,
+     28
+    ]
+   ],
+   "gagnes": [
+    [
+     "SUB",
+     9,
+     28
+    ]
+   ],
+   "perdus": [],
+   "fp_avant": [
+    [
+     "SUB",
+     9,
+     38
+    ]
+   ],
+   "fp_apres": [],
+   "attachement": {
+    "SUB 9:28": {
+     "segment": "that she would come",
+     "cible": "said"
+    },
+    "SUB 9:38": {
+     "segment": "that she would come yesterday",
+     "cible": "said"
+    }
+   }
+  },
+  {
+   "id": "r264",
+   "source": "reel",
+   "langue": "fr",
+   "texte": "Je sais qu'il vient demain.",
+   "gold": [
+    [
+     "GN",
+     0,
+     2
+    ],
+    [
+     "GV",
+     3,
+     7
+    ],
+    [
+     "SUB",
+     8,
+     26
+    ]
+   ],
+   "avant": [
+    [
+     "GN",
+     0,
+     2
+    ],
+    [
+     "GP",
+     20,
+     26
+    ],
+    [
+     "GV",
+     3,
+     7
+    ],
+    [
+     "SUB",
+     8,
+     19
+    ],
+    [
+     "SUB",
+     8,
+     26
+    ]
+   ],
+   "apres": [
+    [
+     "GN",
+     0,
+     2
+    ],
+    [
+     "GP",
+     20,
+     26
+    ],
+    [
+     "GV",
+     3,
+     7
+    ],
+    [
+     "SUB",
+     8,
+     19
+    ]
+   ],
+   "gagnes": [],
+   "perdus": [
+    [
+     "SUB",
+     8,
+     26
+    ]
+   ],
+   "fp_avant": [
+    [
+     "GP",
+     20,
+     26
+    ],
+    [
+     "SUB",
+     8,
+     19
+    ]
+   ],
+   "fp_apres": [
+    [
+     "GP",
+     20,
+     26
+    ],
+    [
+     "SUB",
+     8,
+     19
+    ]
+   ],
+   "attachement": {
+    "SUB 8:19": {
+     "segment": "qu'il vient",
+     "cible": "sais"
+    },
+    "SUB 8:26": {
+     "segment": "qu'il vient demain",
+     "cible": "sais"
+    }
+   }
+  },
+  {
+   "id": "r288",
+   "source": "reel",
+   "langue": "en",
+   "texte": "I know that he comes tomorrow.",
+   "gold": [
+    [
+     "GN",
+     0,
+     1
+    ],
+    [
+     "GV",
+     2,
+     6
+    ],
+    [
+     "SUB",
+     7,
+     29
+    ]
+   ],
+   "avant": [
+    [
+     "GN",
+     0,
+     1
+    ],
+    [
+     "GV",
+     2,
+     6
+    ],
+    [
+     "SUB",
+     7,
+     29
+    ]
+   ],
+   "apres": [
+    [
+     "GN",
+     0,
+     1
+    ],
+    [
+     "GV",
+     2,
+     6
+    ],
+    [
+     "SUB",
+     7,
+     20
+    ]
+   ],
+   "gagnes": [],
+   "perdus": [
+    [
+     "SUB",
+     7,
+     29
+    ]
+   ],
+   "fp_avant": [],
+   "fp_apres": [
+    [
+     "SUB",
+     7,
+     20
+    ]
+   ],
+   "attachement": {
+    "SUB 7:20": {
+     "segment": "that he comes",
+     "cible": "know"
+    },
+    "SUB 7:29": {
+     "segment": "that he comes tomorrow",
+     "cible": "know"
+    }
+   }
+  }
+ ],
+ "sub_gold_fin_adverbe": [
+  {
+   "id": "r210",
+   "source": "reel",
+   "langue": "fr",
+   "gold": "Bien qu'il soit tard",
+   "role": "concession",
+   "cible": "travaille",
+   "dernier_mot": "tard",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": false,
+   "phrase": "Bien qu'il soit tard, il travaille."
+  },
+  {
+   "id": "r218",
+   "source": "reel",
+   "langue": "en",
+   "gold": "Although it is late",
+   "role": "concession",
+   "cible": "works",
+   "dernier_mot": "late",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": false,
+   "phrase": "Although it is late, he works."
+  },
+  {
+   "id": "r264",
+   "source": "reel",
+   "langue": "fr",
+   "gold": "qu'il vient demain",
+   "role": "complément",
+   "cible": "sais",
+   "dernier_mot": "demain",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": true,
+   "phrase": "Je sais qu'il vient demain."
+  },
+  {
+   "id": "r288",
+   "source": "reel",
+   "langue": "en",
+   "gold": "that he comes tomorrow",
+   "role": "complément",
+   "cible": "know",
+   "dernier_mot": "tomorrow",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": true,
+   "phrase": "I know that he comes tomorrow."
+  },
+  {
+   "id": "r303",
+   "source": "reel",
+   "langue": "fr",
+   "gold": "car il est tard",
+   "role": "cause",
+   "cible": "pars",
+   "dernier_mot": "tard",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": false,
+   "phrase": "Je pars car il est tard."
+  },
+  {
+   "id": "r313",
+   "source": "reel",
+   "langue": "en",
+   "gold": "because it is late",
+   "role": "cause",
+   "cible": "leave",
+   "dernier_mot": "late",
+   "pos": "ADV",
+   "dans_ADVERBES_TEMPS": false,
+   "phrase": "I leave because it is late."
+  }
+ ],
+ "convention": {
+  "exclusions": [
+   {
+    "id": "g005",
+    "gold": "qu'elle viendrait",
+    "adverbe": "hier",
+    "source": "hand"
+   },
+   {
+    "id": "g017",
+    "gold": "that she would come",
+    "adverbe": "yesterday",
+    "source": "hand"
+   }
+  ],
+  "inclusions": [
+   {
+    "id": "r264",
+    "gold": "qu'il vient demain",
+    "adverbe": "demain",
+    "source": "reel"
+   },
+   {
+    "id": "r288",
+    "gold": "that he comes tomorrow",
+    "adverbe": "tomorrow",
+    "source": "reel"
+   }
+  ],
+  "autres_sub_fin_adv": [
+   {
+    "id": "r210",
+    "gold": "Bien qu'il soit tard",
+    "adverbe": "tard"
+   },
+   {
+    "id": "r218",
+    "gold": "Although it is late",
+    "adverbe": "late"
+   },
+   {
+    "id": "r303",
+    "gold": "car il est tard",
+    "adverbe": "tard"
+   },
+   {
+    "id": "r313",
+    "gold": "because it is late",
+    "adverbe": "late"
+   }
+  ],
+  "lecture": "2 exclusions (g005, g017) contre 2 inclusions (r264, r288) sur la même construction : le gold ne tranche pas ; les 4 autres SUB finissant par un ADV sont des attributs (tard/late), pas des circonstants de temps"
+ },
+ "controles": {
+  "placebo_dernier_token": {
+   "description": "retirer le dernier token de toute SUB, sans condition",
+   "f1": 0.7107,
+   "tp": 1372,
+   "fp": 626,
+   "fn": 491,
+   "attachement": "159/160",
+   "couverture": 0.6695
+  },
+  "adv_large": {
+   "description": "retirer tout ADV final de la SUB, pas seulement les adverbes de temps",
+   "f1": 0.7885,
+   "tp": 1476,
+   "fp": 405,
+   "fn": 387,
+   "attachement": "233/234",
+   "couverture": 0.9791
+  },
+  "garde": {
+   "description": "variante étroite : retirer l'adverbe final seulement s'il est passé (hier/yesterday) et que la SUB est modale/conditionnelle (would, -rait)",
+   "f1": 0.7909,
+   "tp": 1481,
+   "fp": 401,
+   "fn": 382,
+   "attachement": "238/239",
+   "couverture": 1.0,
+   "dev": "0.7886",
+   "test": "0.7962 (inchangé)",
+   "statut": "non retenue : c'est une autre règle, réglée sur 2 cas de dev, sans aucun cas de confirmation en test ; elle demande une décision de convention, pas un ajout de code"
+  }
+ },
+ "limites": [
+  "Le gold est contradictoire sur la même construction : g005/g017 excluent l'adverbe final, r264/r288 l'incluent ; aucune règle de surface ne peut satisfaire les quatre.",
+  "Les deux cas favorables sont en dev et les deux cas défavorables en test : le gain dev est in-sample, la perte test est hors échantillon.",
+  "Le split est un seul découpage déterministe (crc32 % 3), sans validation croisée.",
+  "La règle est mesurée sur des copies locales, pas dans le code de production ; aucun test ni aucune porte n'est modifié.",
+  "Le gold reste à 239 cibles : g017 est un span manquant, s065 une cible fausse (J6.2) ; le rejet laisse l'attachement à 237/238.",
+  "Un adverbe final de temps peut être un attribut (« il est tard ») ou un circonstant (« viens demain ») : la classe ADV seule ne tranche pas."
+ ],
+ "suite": [
+  "Trancher la convention du gold avant toute règle : soit g017/g005 sont corrigés (inclure l'adverbe), soit r264/r288 le sont (exclure) — la décision est un choix d'annotation, pas une règle de code.",
+  "Si l'on veut une règle, la variante étroite (passé + modal/conditionnel) est la seule mesurée qui ne casse rien ; elle reste à valider sur un gold tenu à l'écart.",
+  "Puis J6.2 : s065 (la cible fausse). Avec g017 encore sans label, sa correction donnerait 238/239 (238 exacts sur 239 cibles) ; si la convention règle g017 d'abord, elle donnerait 239/239."
+ ],
+ "fichiers": {
+  "fiche": "reports/rapport-g017.md",
+  "json": "reports/pensee-g017.json",
+  "mesure": "/tmp/g017/mesure.py (non commité)"
+ }
+}
