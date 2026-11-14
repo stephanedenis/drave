@@ -60938,3 +60938,35 @@ grep: write error: Broken pipe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '84p' docs/pilotage/chantiers.md | cut -c1-300; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d{4}-\\d\\d-\\d\\d, \\d+ h \\d+ HNE\", \"**Mi … [910 caractères tronqués]`
+
+  ```
+| **B — l'intelligence** | le sens, la logique, les jeux, les maîtres : que sait faire le système ? | ✅ B1–B12 ; B10.3 bloqué (encodeur) ; **B13** state store v0 + DRVF + **bloc linguistique** (POS **86,25 %**, F1 **0,7902**, attachement **237/238 (0,9958)****, 2 spans) + **produit `drave`** (contra
+ create mode 100644 journal/2026-11-13/README.md
+COMMIT OK 1
+c7f26b35 DOCS — LA PASSE APRÈS LE CHANTIER : 8 FICHES INDEXÉES, L'ÉTAT PAR JOUR DU PLAN, LE JOURNAL DU CHANTIER, CHANTIERS À JOUR (F1 0,7902, 237/238)
+   9c7f71dc..c7f26b35  s/v7 -> s/v7
+   9c7f71dc..c7f26b35  master -> master
+ven 13 nov 2026 21:34:23 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/chantiers.md'); t=p.read_text()\nt=t.replace(\"attachement **237/238 (0,9958)****, 2 spans)\", \"attachement **237/238 (0,9958)**, 1 span + 1 cible)\")\np.write_text(t)\ … [6061 caractères tronqués]`
+
+  ```
+chantiers corrigé
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+6 tâches ajoutées ; total 21
+  [a_faire ] J4.1   j4 — Coordination N2 — le mètre RoPE
+  [a_faire ] J4.2   j4 — Coordination S — les 11 verdicts
+  [a_faire ] J4.3   j4 — Coordination R — le tagger sur 612
+  [a_faire ] J4.4   j4 — Coordination A — A6.2 et A8.3b2
+  [a_faire ] J5.1   j5 — Le rapport de semaine
+  [a_faire ] J5.2   j5 — La passe complète et le tag
+  [a_faire ] J6.1   j6 — Le dernier span g017
+  [a_faire ] J6.2   j6 — La cible s065
+  [a_faire ] J7.1   j7 — Panini — le retrieval approfondi
+  [a_faire ] J8.1   j8 — La restitution v1
+  [a_faire ] J9.1   j9 — La passe d'honnêteté des fiches
+  [a_faire ] J10.1  j10 — Le bilan de la semaine
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, datetime\np=pathlib.Path('work/chantier/etat.json'); d=json.loads(p.read_text())\nfaits = {\"J1.2\": (\"92652984\", \"timeout après commit ; acceptation passée\"),\n         \"J2.2\": (\"c34671 … [1695 caractères tronqués]`

@@ -220,6 +220,92 @@
      "attendu": "REVUE-0"
     }
    ]
+  },
+  {
+   "id": "J6.1",
+   "jour": 6,
+   "titre": "Le dernier span g017",
+   "mandat": "Tâche J6.1 : le dernier span du gold, `g017` (« She said that she would come yesterday. ») — le gold attend la SUB « that she would come » (sans « yesterday »), le bloc l'inclut. Reproduis, propose UNE règle mesurée (l'adverbe final de temps hors de la SUB), vérifie dev/test et l'attachement, fiche `reports/rapport-g017.md` + JSON, commit. Si la règle casse autre chose, écris la fiche du rejet.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-g017.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "bash tools/porte-bloc-linguistique.sh 2>&1 | tail -1",
+     "attendu": "verte"
+    }
+   ]
+  },
+  {
+   "id": "J6.2",
+   "jour": 6,
+   "titre": "La cible s065",
+   "mandat": "Tâche J6.2 : la cible `s065` (« elle nage qui commence » — le gold attend `elle`, le bloc prédit `nage`). Reproduis, propose une règle (REL après GV → le sujet du GV), mesure sur dev/test, fiche `reports/rapport-s065.md` + JSON, commit. Attachement à 238/239 si la règle tient.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-s065.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J7.1",
+   "jour": 7,
+   "titre": "Panini — le retrieval approfondi",
+   "mandat": "Tâche J7.1 : approfondir le retrieval Panini — sur les 532 langues UDHR (même source XML), mesurer le retrieval par famille Glottolog (les 29 langues de `language_genealogy.py` + l'échantillon 20) avec le contrôle d'époque, et comparer à la mesure de J3.1. Fiche `reports/rapport-retrieval-familles.md` + JSON, contrôle négatif (familles différentes vs sœurs).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-retrieval-familles.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J8.1",
+   "jour": 8,
+   "titre": "La restitution v1",
+   "mandat": "Tâche J8.1 : la restitution v1 — au-delà de la surface exacte (46/46), produire une **forme canonique** depuis l'annotation (segments + rôles + cibles) et la mesurer : le miroir strict (0,1087) doit-il monter ? Fiche `reports/rapport-restitution-v1.md` + JSON, tests, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-restitution-v1.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "J9.1",
+   "jour": 9,
+   "titre": "La passe d'honnêteté des fiches",
+   "mandat": "Tâche J9.1 : la passe d'honnêteté — les fiches qui publient des chiffres dépassés (POS 85, F1 0,7535, 236/237, 2 spans) doivent porter « instantané historique » avec le lien vers l'état courant. Écris `reports/rapport-passe-honnetete.md` + JSON, applique la mention aux fiches concernées, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-passe-honnetete.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
+  },
+  {
+   "id": "J10.1",
+   "jour": 10,
+   "titre": "Le bilan de la semaine",
+   "mandat": "Tâche J10.1 : le bilan — relis les fiches du chantier, écris `reports/rapport-bilan-chantier.md` + JSON : les chiffres avant/après (POS, F1, attachement, le produit, Panini), les décisions, les rejets, les échecs (J1.2/J2.2/J3.1 : timeout après commit), ce qui reste pour la suite. Mets à jour `docs/pilotage/semaine-autonome.md`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-bilan-chantier.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
   }
  ]
 }

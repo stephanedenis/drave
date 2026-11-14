@@ -158,7 +158,10 @@ def executer_tache(tache: dict, etat: dict, timeout_s: int) -> dict:
         code, sortie = 124, "(timeout : l'agent n'a pas rendu dans le budget)"
     duree = round(time.time() - debut, 1)
     ok, details = verifier_acceptation(tache)
-    resultat = {"statut": "fait" if (ok and code == 0) else "echec",
+    # l'acceptation **prime** : un agent qui a fini son travail (fiche + portes) puis dépasse le
+    # timeout a réussi ; le code 124 est noté, pas pénalisé.
+    resultat = {"statut": "fait" if ok else "echec",
+                "timeout": code == 124,
                 "debut": _maintenant(), "duree_s": duree, "code_agent": code,
                 "acceptation": details, "sortie_agent": sortie[-1500:]}
     _journal(f"{'✔' if resultat['statut'] == 'fait' else '✘'} {tache['id']} en {duree} s "
