@@ -23,6 +23,7 @@
 | [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 niveaux |
 | [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
 | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
+| [`rapport-retrieval-familles.md`](rapport-retrieval-familles.md) | **Panini** — le retrieval approfondi par famille : 532 textes, sœurs vs familles |
 | [`rapport-genealogie-deux-faces.md`](rapport-genealogie-deux-faces.md) | **Panini** — la généalogie à deux faces |
 | [`rapport-convention-gv.md`](rapport-convention-gv.md) | GV : F1 **0,7902** |
 | [`rapport-r035.md`](rapport-r035.md) | **B13** — relative zéro : **237/238** |

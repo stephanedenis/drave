@@ -9,10 +9,10 @@
 | Début | 2026-11-14 00:58 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 149 |
-| Appels d'outils | 187 |
+| Messages | 153 |
+| Appels d'outils | 192 |
 | Fichiers touchés | 9 |
-| Commandes | 122 |
+| Commandes | 127 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J6.2 : la cible `s065` (« elle nage qui commence » — le gold attend `elle`, le bloc prédit `nage`). Reproduis, pro … [157 caractères tronqués]
 
-*187 appels d'outils.* Actions notables :
+*192 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and recent commits
 - bash — List reports and journal entries
@@ -41,7 +41,48 @@
 - bash — Run block on s065
 - bash — List classes and functions
 - bash — Read cible logic
-- … et 146 autres
+- … et 151 autres
+
+**Synthèse produite :**
+
+\## Verdict — ✅ règle intégrée, `s065` réglé
+
+**La cible `s065`** (« elle qui commence nage ») attend `elle` ; le bloc prédisait `nage`, le GV le plus proche. La règle **« REL suivie d’un GV → le sujet de ce GV »** corrige la cible **sans toucher un seul span ni une seule POS**.
+
+| mesure | base | règle | Δ |
+|---|---:|---:|---:|
+| **F1 all** | **0,7902** | **0,7902** | **0** |
+| **POS** | **0,8625** | **0,8625** | **0 token** |
+| **attachement labels** | **237/238** | **238/238** | **+1** |
+| **attachement cibles** | 237/239 (0,9916) | **238/239 (0,9958)** | **+1** |
+| **exactitude sur les spans** | **0,9958** | **1,0** | **+0,0042** |
+| dev | 161/162 | **162/162** | +1 |
+| test | 76/76 | 76/76 | 0 |
+
+Une seule annotation change dans les 612 phrases : `s065`, REL 5:17, **`nage` → `elle`**. Le test ne contient aucun cas déclencheur : c’est une absence de contre-exemple, pas une validation hors échantillon.
+
+\### Une précision de mandat
+Le mandat écrit « elle nage qui commence » et « REL après GV ». Le texte du gold est **« elle qui commence nage »** : l’ordre est **GN REL GV**. La règle littérale « REL après un GV » ne s’applique à **aucun** segment du gold dans le chemin union (**0 cas**, 237/238). La règle mesurée est donc la règle symétrique : **REL suivie d’un GV → le sujet de ce GV**, c’est-à-dire le GN le plus proche à gauche. La fiche le dit explicitement.
+
+\### Contrôles négatifs
+- **Règle littérale** (REL après GV) : 0 cas, **237/238**, aucun effet.
+- **Variante large** (REL → GN à gauche sans condition de GV) : **238/238**, même résultat ; non retenue car elle attacherait une REL sans prédicat à droite.
+- **Placebo** (REL prend son propre verbe avant le GV) : **235/238**, −2 exacts.
+- **Hasard** : 0,0042.
+
+\### Portes et commits
+- **Porte du bloc** : verte, **20 tests**.
+- **Porte produit** : verte, **183/183**, après mise à jour des fixtures d’attachement qui codaient encore 237/238 (`T153`, `T161`, `T162`, `T164`, `T167`–`T169`, `T171`–`T172`, `T179`–`T180`).
+- Revue de documentation verte, `verifie_en_cours` vert, `verifie_journal` vert, tableaux/liens verts, **T0 = 4000/4000 mots**.
+- **Les 84 portes n’ont pas été rejouées** par cette tâche ; une passe concurrente a donné **84 portes, 81 vertes, 3 rouges connues** (`indice`, `melange`, `sessions`).
+
+Commits :
+- **`b6e474dc`** — règle + test + fiche + JSON + état/roadmap.
+- **`6ecc9763`** — journal du jour.
+- **`e4288023`** — fixtures produit à 238/238 + fiche/JSON à jour.
+
+Fiche : [`reports/rappo
+… [351 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -101,7 +142,7 @@
 - **T1** Read J6 task definitions in plan
 - **T1** Read block gate script
 - **T1** Find numeric assertions on attachment
-- … et 82 autres
+- … et 87 autres
 
 ## 4. Mesures et résultats marquants
 

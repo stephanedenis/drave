@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **715 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **718 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -175,6 +175,7 @@
 | [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
 | [rapport-frontieres-integrees.md](rapport-frontieres-integrees.md) | B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas |
 | [rapport-frontieres-phrase.md](rapport-frontieres-phrase.md) | Frontières de phrase — P0-4 du bloc linguistique |
+| [rapport-g017.md](rapport-g017.md) | B13 — g017 : l'adverbe final hors de la SUB est rejeté (g017 gagné, r264 et r288 perdus) |
 | [rapport-genealogie-deux-faces.md](rapport-genealogie-deux-faces.md) | J3.2 — La généalogie à deux faces : Panini et Glottolog sur le corpus commun |
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
@@ -670,6 +671,7 @@
 | [rapport-restitution-v0.md](rapport-restitution-v0.md) | B13 — la restitution v0 : 46/46 surfaces exactes, le miroir strict à 0,1087 |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-retrieval-epoque.md](rapport-retrieval-epoque.md) | J3.1 — Le retrieval inter-langues à époque contrôlée |
+| [rapport-retrieval-familles.md](rapport-retrieval-familles.md) | J7.1 — Le retrieval approfondi par famille Glottolog |
 | [rapport-reutilisation-experts.md](rapport-reutilisation-experts.md) | La réutilisation des experts, mesurée |
 | [rapport-robustesse-produit.md](rapport-robustesse-produit.md) | B13 — la robustesse du produit : un surrogate ne plante plus, une entrée non-str est refusée |
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
@@ -682,8 +684,8 @@
 | [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
 | [rapport-s-fait-divers.md](rapport-s-fait-divers.md) | S — Le fait divers est tranché : 61/61 types, 144/144 rôles ; la tête du GN arrête le verbe |
 | [rapport-s-limites-v6.md](rapport-s-limites-v6.md) | S — Les trois limites de la v4 sont fermées : h050, h053 et « si fort que » ; 60/60 types, 142/142 rôles |
-| [rapport-s-paragraphes.md](rapport-s-paragraphes.md) | S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents |
 | [rapport-s-traductions.md](rapport-s-traductions.md) | S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé |
+| [rapport-s065.md](rapport-s065.md) | B13 — s065 : la REL « qui commence » est attachée au sujet du GV qui la suit |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-schema-v1.md](rapport-schema-v1.md) | B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées |
 | [rapport-schema-v2.md](rapport-schema-v2.md) | B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue |

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-14, 01 h 20 HNE (heure locale, EST).**
+**Mis à jour : 2026-11-14, 02 h 10 HNE (heure locale, EST).**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -86,12 +86,13 @@
 
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
 - **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propre (0,29)** ; **GPUs libres** (claim `n2-jour` libéré).
-- **N3 — clos** : 17 portes de brique vertes (11 h 32, 92 s, 0 rouge) ; inventaire exécutable (`porte-n3-inventaire`, autotest 5/5) ; deux conditions nommées (placement = métadonnée, saut de calcul conditionnel) ; [fiche](../../reports/rapport-n3-inventaire.md).
-- **Pensée — B13 (actif)** : **183/183**, gold 432, pragmatique 130/432 ; **`r035`** (238/238) ; **convention des GV** (0,7902, 0 perte) ; **`s065` réglé** (238/238, 0 span ; [fiche](../../reports/rapport-s065.md)) ; **J6.1 rejetée** (adverbe final hors SUB, test −0,0028 ; g017 : convention à trancher) ; **schéma v2** (26 cas, 0 échec ; v1 lue) ; **restitution v0** (46/46, miroir 0,1087) ; [restitution](../../reports/rapport-restitution-v0.md), [g017](../../reports/rapport-g017.md).
+- **N3 — clos** : 17 portes vertes ; inventaire exécutable (5/5) ; deux conditions nommées ; [fiche](../../reports/rapport-n3-inventaire.md).
+- **Pensée — B13 (actif)** : **183/183**, gold 432 ; **`r035`** (238/238) ; **convention des GV** (0,7902) ; **`s065` réglé** (238/238 ; [fiche](../../reports/rapport-s065.md)) ; **J6.1 rejetée** (test −0,0028 ; g017 à trancher) ; **schéma v2** (v1 lue) ; **restitution v0** (46/46, miroir 0,1087) ; [restitution](../../reports/rapport-restitution-v0.md), [g017](../../reports/rapport-g017.md).
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
-- **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : script domine, date non significative ; **J3.2** : les deux faces diffèrent — `lang_distance` couvre **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, la famille vit dans **2-3 paires**, **V14 : 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
+- **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : script domine, date non significative ; **J3.2** : `lang_distance` couvre **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, la famille vit dans **2-3 paires**, **V14 : 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
+- **Panini J7.1** : 532 textes (445 langues) ; **porte d'écriture** (hors script, hasard) ; famille **66,1 %** / sœur **26,1 %** (hasard 10,3/2,5) ; LANG_TREE : sœurs **0,619** vs **0,0445** (13,9×, p=0,002), échantillon 20 nul ; J3.1 reproduit ; [fiche](../../reports/rapport-retrieval-familles.md).
 - **J5.1** : rapport de semaine (F1 **0,7533 → 0,7902**, tagger **0,9475**, **13 décisions**, **21 rejets**) ; [rapport](../../reports/rapport-semaine.md) + JSON.
-- **Coordination J4** : N2 **2,9726/2,7856** ; S **7 acceptés / 4 exclus** ; R **0,9475 (+8,49)** ; A6.2 **libre** (PPL 37,2013), A8.3b2 hors graphe ; [N2](../../reports/rapport-coordination-n2.md), [S](../../reports/rapport-coordination-s.md), [R](../../reports/rapport-coordination-r.md), [A](../../reports/rapport-coordination-a.md).
+- **Coordination J4** : N2 **2,9726/2,7856** ; S **7/4** ; R **0,9475 (+8,49)** ; A6.2 **libre** ; [N2](../../reports/rapport-coordination-n2.md), [S](../../reports/rapport-coordination-s.md), [R](../../reports/rapport-coordination-r.md), [A](../../reports/rapport-coordination-a.md).
 
 ## Les chiffres de l'état
 
@@ -101,7 +102,7 @@
 |---|---|---|
 | portes | **84** (dont `porte-produit` le 07/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **720** / **814** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **721** / **815** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **03/11 11 h 30** (82, **80/2**) ; N3 **17/17** à 11 h 32 | `docs/pilotage/references-non-regression.md` |
 
@@ -123,7 +124,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — porte (0,2856 val / 0,3566 test) ; **Pensée** — convention d'adverbe `g017`, T132/T133, gold 200+ ; **J3.2** — **V14 des 21 langues** ; **S** — 11 verdicts + pointeur ; **R0.7** — **0,9475**, intégrer, split réel ; **A** — A6.2, A8.3b2 ; **J5.2** — passe, revue, tag.
+**N2** — porte (0,2856 val / 0,3566 test) ; **Pensée** — convention d'adverbe `g017`, T132/T133, gold 200+ ; **J3.2** — **V14 des 21 langues** ; **J7.1** — **réplication neuronale** des 30 articles ; **S** — 11 verdicts + pointeur ; **R0.7** — **0,9475**, intégrer, split réel ; **A** — A6.2, A8.3b2 ; **J5.2** — passe, revue, tag.
 
 ## Les questions ouvertes
 

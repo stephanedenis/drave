@@ -61343,3 +61343,17 @@ sam 14 nov 2026 01:18:59 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3", "description": "Suivre J6.2 et la suite", "timeoutMs": 2500000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4839]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4839", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4839", "timeout_ms": 1800000, "wait": true}`

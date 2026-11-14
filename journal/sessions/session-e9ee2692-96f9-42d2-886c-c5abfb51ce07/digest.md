@@ -3313,3 +3313,135 @@ RESET-OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md reports/rapport-s065.md reports/pensee-s065.json tools/pensee/autotest.py && git diff --cached --stat && git commit -F - <<'MSG'\nJ6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/2 … [410 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md |  2 +-
+ reports/pensee-s065.json  |  6 ++++--
+ reports/rapport-s065.md   | 15 ++++++++++++---
+ tools/pensee/autotest.py  | 44 ++++++++++++++++++++++----------------------
+ 4 files changed, 39 insertions(+), 28 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-122]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-122", "timeout_ms": 180000, "wait": true}`
+
+  ```
+[s/v7 e4288023] J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR
+ 13 files changed, 297 insertions(+), 47 deletions(-)
+ create mode 100644 journal/2026-11-14/memoire.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo ===; git status --short | head -20; echo ===; git show --stat --oneline HEAD | head -20", "description": "Verify final commits and working tree"}`
+
+  ```
+e4288023 J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR
+2d6f5bff PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+6ecc9763 JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238
+b6e474dc J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+64d9dd23 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+===
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+===
+e4288023 J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR
+ docs/pilotage/en-cours.md                          |   2
+… [811 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"exit=${PIPESTATUS[0]}\"", "description": "Final doc review after all commits"}`
+
+  ```
+revue de documentation · 720 fiche(s) · 814 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|✅|❌\" | tail -3; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description": "Final T0 and state checks"}`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -2; bash tools/porte-tableaux.sh 2>&1 | tail -3", "description": "Final journal and tables checks"}`
+
+  ```
+journal · 46 jour(s) · 181 session(s) · 2441 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ 1784 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3953 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:reports/rapport-s065.md | grep -n \"porte produit\\|238/239\\|183/183\" | head; echo ===; git show HEAD:reports/pensee-s065.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['verdict']['porte_produit' … [148 caractères tronqués]`
+
+  ```
+8:> 237/238 → 238/238 labels** (238/239 cibles, **0,9958**), **exactitude sur les spans
+81:| exact / cibles | 237/239 (0,9916) | **238/239 (0,9958)** | **+1** |
+154:- **Le compte est un compte de cibles.** 238/239 garde `g017` au dénominateur ; 238/238 est
+156:- **Les 84 portes n'ont pas été rejouées.** La porte du bloc (20 tests) et la porte produit
+157:  (**183/183**) sont vertes ; une passe complète reste à faire si la règle touche d'autres
+164:Le bloc reste à **F1 0,7902**, **POS 0,8625**, **238/238 labels** et **238/239 cibles
+168:La porte produit a suivi : **183/183**, après la mise à jour des fixtures d'attachement qui
+===
+verte (183/183, fixtures d'attachement mises à jour)
+238/238 238/239
+  ```
+
+### 🤖 Assistant
+
+## Verdict — ✅ règle intégrée, `s065` réglé
+
+**La cible `s065`** (« elle qui commence nage ») attend `elle` ; le bloc prédisait `nage`, le GV le plus proche. La règle **« REL suivie d’un GV → le sujet de ce GV »** corrige la cible **sans toucher un seul span ni une seule POS**.
+
+| mesure | base | règle | Δ |
+|---|---:|---:|---:|
+| **F1 all** | **0,7902** | **0,7902** | **0** |
+| **POS** | **0,8625** | **0,8625** | **0 token** |
+| **attachement labels** | **237/238** | **238/238** | **+1** |
+| **attachement cibles** | 237/239 (0,9916) | **238/239 (0,9958)** | **+1** |
+| **exactitude sur les spans** | **0,9958** | **1,0** | **+0,0042** |
+| dev | 161/162 | **162/162** | +1 |
+| test | 76/76 | 76/76 | 0 |
+
+Une seule annotation change dans les 612 phrases : `s065`, REL 5:17, **`nage` → `elle`**. Le test ne contient aucun cas déclencheur : c’est une absence de contre-exemple, pas une validation hors échantillon.
+
+### Une précision de mandat
+Le mandat écrit « elle nage qui commence » et « REL après GV ». Le texte du gold est **« elle qui commence nage »** : l’ordre est **GN REL GV**. La règle littérale « REL après un GV » ne s’applique à **aucun** segment du gold dans le chemin union (**0 cas**, 237/238). La règle mesurée est donc la règle symétrique : **REL suivie d’un GV → le sujet de ce GV**, c’est-à-dire le GN le plus proche à gauche. La fiche le dit explicitement.
+
+### Contrôles négatifs
+- **Règle littérale** (REL après GV) : 0 cas, **237/238**, aucun effet.
+- **Variante large** (REL → GN à gauche sans condition de GV) : **238/238**, même résultat ; non retenue car elle attacherait une REL sans prédicat à droite.
+- **Placebo** (REL prend son propre verbe avant le GV) : **235/238**, −2 exacts.
+- **Hasard** : 0,0042.
+
+### Portes et commits
+- **Porte du bloc** : verte, **20 tests**.
+- **Porte produit** : verte, **183/183**, après mise à jour des fixtures d’attachement qui codaient encore 237/238 (`T153`, `T161`, `T162`, `T164`, `T167`–`T169`, `T171`–`T172`, `T179`–`T180`).
+- Revue de documentation verte, `verifie_en_cours` vert, `verifie_journal` vert, tableaux/liens verts, **T0 = 4000/4000 mots**.
+- **Les 84 portes n’ont pas été rejouées** par cette tâche ; une passe concurrente a donné **84 portes, 81 vertes, 3 rouges connues** (`indice`, `melange`, `sessions`).
+
+Commits :
+- **`b6e474dc`** — règle + test + fiche + JSON + état/roadmap.
+- **`6ecc9763`** — journal du jour.
+- **`e4288023`** — fixtures produit à 238/238 + fiche/JSON à jour.
+
+Fiche : [`reports/rapport-s065.md`](reports/rapport-s065.md) · JSON : [`reports/pensee-s065.json`](reports/pensee-s065.json)
+
+**Limite principale** : un seul cas, en dev, sur une phrase synthétique peu naturelle ; la règle dépend du générateur S pour fournir le GN sujet. `g017` reste le dernier écart — un **span** et une **convention d’adverbe à trancher**, pas une cible.
+

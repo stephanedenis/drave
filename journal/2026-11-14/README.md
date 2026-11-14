@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**4 commits** · **1 session(s)** · **3 thème(s)**
+**6 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,13 +13,14 @@
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 2 | [mesures.md](mesures.md) |
+| mesures | 3 | [mesures.md](mesures.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 321.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -29,6 +30,8 @@
 | 01:06 | `b6e474dc` | J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS) |
 | 01:08 | `6ecc9763` | JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238 |
 | 01:16 | `2d6f5bff` | PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI |
+| 01:19 | `e4288023` | J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR |
+| 01:41 | `0307ce7e` | J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT À L'IDENTIQUE ; ÉCRITURE > SŒUR > ÉPOQUE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -52,4 +55,23 @@ REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc vert
 verte (**183/183**, fixtures d'attachement mises à jour). Fiche
 [`reports/rapport-s065.md`](../../reports/rapport-s065.md), JSON
 [`reports/pensee-s065.json`](../../reports/pensee-s065.json).
+**J7.1 — le retrieval par famille : l'écriture d'abord, la sœur ensuite.** Sur les **532 textes
+UDHR** de Panini (même source XML, article 1, 1948 ; **445 langues distinctes** après déduplication,
+**521/532** étiquetées Glottolog), le top-1 de voisinage est de la même famille **66,1 %** (hasard
+10,3 %) et de la même branche **26,1 %** (hasard 2,5 %). Mais **hors écriture, tout est au hasard**
+(famille 9,9 % contre 8,1 %, sœur 0,7 % contre 0,8 %) ; dans la même écriture, la famille monte à
+**69,8 %** et la sœur à **27,8 %**. Le retrieval parallèle 30 articles le chiffre : sur les **25
+langues LANG_TREE** disponibles, les **sœurs** valent **0,619** (60 paires), les mêmes familles d'une
+autre branche **0,170** (216), les familles différentes **0,0445** (324) — **13,9×**, coefficient de
+sœur **+0,448** (p = 0,002) contre +0,213 pour l'écriture, **11/11** langues positives. Sur
+l'**échantillon 20**, le contraste est **nul** (sœurs 0,058 vs 0,039, p = 0,078) : l'échantillon ne
+contient que 12 paires de sœurs, dont 8 hors écriture. **J3.1 est reproduit à l'identique** (écart 0) ;
+son coefficient de famille (+0,0556) était un **minorant** dilué. L'époque est **mono-époque** (1948) ;
+le placebo de dates est nul (−0,0013 [−0,065 ; +0,041]) et le seul bras daté de J3.1 (Bible) donne
+−0,034/siècle (p = 0,19) contre +0,609 pour l'écriture. L'écriture est la **porte** ; **dans la même
+écriture, sur LANG_TREE**, l'ordre est **sœur (+0,448) > famille-autre (+0,092) > époque (nulle)** — le coefficient de
+sœur dépasse même celui de l'écriture (+0,213) une fois la famille séparée. Fiche
+[`reports/rapport-retrieval-familles.md`](../../reports/rapport-retrieval-familles.md), JSON
+[`reports/retrieval-familles.json`](../../reports/retrieval-familles.json), outil
+[`tools/retrieval_familles.py`](../../tools/retrieval_familles.py).
 <!-- /notes -->
