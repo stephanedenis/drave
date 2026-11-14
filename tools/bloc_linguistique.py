@@ -1025,6 +1025,28 @@ class Heuristique:
         return None
 
     @staticmethod
+    def _cible_rel_sujet(texte: str, segment: dict, tous: list[dict]) -> str | None:
+        """REL **suivie d'un GV** : le sujet de ce GV (le GN le plus proche à gauche).
+
+        Le gold : « elle qui commence nage » → REL « qui commence » a pour cible `elle`,
+        sujet du GV `nage`. La règle ne s'applique qu'aux REL sans antécédent dans le
+        chemin courant (union S/chunker) et exige un GV à droite **et** un GN à gauche.
+        La règle littérale « REL après un GV » ne s'applique à aucun segment du gold.
+        """
+        if segment.get("type") != "REL":
+            return None
+        droites = [x for x in tous if x.get("type") == "GV"
+                   and x.get("debut", 0) >= segment.get("fin", 0)]
+        if not droites:
+            return None
+        gauches = [x for x in tous if x.get("type") == "GN"
+                   and x.get("fin", 0) <= segment.get("debut", 0)]
+        if not gauches:
+            return None
+        gn = max(gauches, key=lambda x: x["fin"])
+        return Heuristique._tete_nom(texte, gn["debut"], gn["fin"])
+
+    @staticmethod
     def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
         """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
         if not precedent:
@@ -1728,6 +1750,9 @@ class Heuristique:
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
                 cible = (self._cible_precedent(texte, s, prec, verbes)
+                         or self._cible_rel_sujet(
+                             texte, s,
+                             list(cands[0].get("segments", [])) + list(simples))
                          or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)

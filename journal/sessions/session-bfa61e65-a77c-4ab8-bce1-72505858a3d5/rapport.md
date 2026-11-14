@@ -7,12 +7,12 @@
 | Identifiant | `session-bfa61e65-a77c-4ab8-bce1-72505858a3d5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 00:41 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 94 |
-| Appels d'outils | 120 |
+| Messages | 99 |
+| Appels d'outils | 126 |
 | Fichiers touchés | 1 |
-| Commandes | 104 |
+| Commandes | 109 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J6.1 : le dernier span du gold, `g017` (« She said that she would come yesterday. ») — le gold attend la SUB « tha … [277 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*126 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — List reports and pilotage docs
@@ -41,7 +41,44 @@
 - bash — Read evaluator rest
 - bash — Reproduce g017 prediction vs gold
 - bash — Inspect Etiquette class
-- … et 94 autres
+- … et 100 autres
+
+**Synthèse produite :**
+
+**J6.1 terminé — règle mesurée puis rejetée.**
+
+\## Reproduction
+
+`g017` : le bloc prédit `SUB 9:38` (« that she would come **yesterday** ») alors que le gold attend `SUB 9:28` (« that she would come »). La cible d'attachement `said` était déjà correcte : le défaut est le span, pas l'attachement.
+
+\## La règle mesurée
+
+Retirer le dernier token d'une SUB quand c'est un adverbe de `ADVERBES_TEMPS` (`hier`, `demain`, `yesterday`, `tomorrow`…) suivi d'une ponctuation ou de la fin.
+
+| mesure | base | règle | Δ |
+|---|---:|---:|---:|
+| F1 all | 0,7902 | 0,7901 | −0,0001 |
+| F1 dev | 0,7875 | 0,7886 | **+0,0011** |
+| F1 test | 0,7962 | 0,7934 | **−0,0028** |
+| tp / fp / fn | 1480 / 403 / 383 | 1479 / 402 / 384 | −1 / −1 / +1 |
+| attachement | 237/238 | 236/237 | −1 |
+| couverture | 0,9958 | 0,9916 | −0,0042 |
+
+La règle corrige `g017` et retire un faux positif de `g005`, mais **casse `r264`** (« qu'il vient demain ») et **`r288`** (« that he comes tomorrow »). Les deux cas favorables sont en **dev**, les deux défavorables en **test** : le gain est in-sample, la perte est hors échantillon. Contrôles : placebo 0,7107 ; ADV large 0,7885 ; variante gardée 0,7909 / 238/239 mais réglée sur 2 cas de dev, non retenue.
+
+\## Décision
+
+La convention du gold est contradictoire sur la même construction : `g005`/`g017` excluent l'adverbe final, `r264`/`r288` l'incluent. **Aucun code de production modifié** ; l'état reste à **237/238 (0,9958)**, F1 **0,7902**. `g017` reste un span, mais c'est désormais une **convention à trancher**, pas une règle de code. Prochaine action : trancher la convention, puis `s065` (J6.2).
+
+\## Livrables
+
+- Fiche de rejet : [`reports/rapport-g017.md`](reports/rapport-g017.md)
+- JSON : [`reports/pensee-g017.json`](reports/pensee-g017.json)
+- État : `docs/pilotage/en-cours.md` (J6.1, prochaine action)
+- Journal : `journal/2026-11-14/README.md`
+- Commit : **`64d9dd23`**
+
+Portes : `porte-bloc-linguistique` **verte**, revue de documentation, `porte-tableaux`, budget T0 (**3 995 / 4 000**), `verifie_en_cours`, `verifie_journal` et `verifier_schemas` **verts**.
 
 ## 3. Travail accompli
 
@@ -93,7 +130,7 @@
 - **T1** Git history of predicate guard
 - **T1** Check if autotest is a gate
 - **T1** Inspect gate registry
-- … et 64 autres
+- … et 69 autres
 
 ## 4. Mesures et résultats marquants
 

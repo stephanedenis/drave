@@ -61278,3 +61278,17 @@ sam 14 nov 2026 00:45:46 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; echo \"=== passe :\"; tail -2 work/portes/passe-1311-23h15.log 2>/dev/null; grep -cE \"✅|❌\" work/portes/passe-1311-23h15.log 2>/dev/null", "description": "Suivre J6.1 et la passe" … [23 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-4835]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4835", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-4835", "timeout_ms": 1300000, "wait": true}`

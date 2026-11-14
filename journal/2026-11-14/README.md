@@ -17,13 +17,13 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
 | heure | commit | fait |
 |---|---|---|
-| 00:52 | `b76b888a` | J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER |
+| 00:52 | `64d9dd23` | J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -36,4 +36,14 @@
 deux défavorables en **test**. Rejet ; la convention du gold (inclure ou exclure l'adverbe
 final) doit être tranchée avant toute règle. Fiche [`reports/rapport-g017.md`](../../reports/rapport-g017.md),
 JSON [`reports/pensee-g017.json`](../../reports/pensee-g017.json).
+
+**J6.2 — s065 : la REL « qui commence » prend le sujet du GV qui la suit.** Le gold attend
+`elle`, le bloc prédisait `nage` (le GV le plus proche). La règle **REL suivie d'un GV → le
+sujet de ce GV** corrige la seule cible fausse : **F1 0,7902 inchangé**, **POS 0,8625
+inchangée**, **attachement 237/238 → 238/238 labels** (238/239 cibles, **0,9958**),
+**exactitude sur les spans 0,9958 → 1,0**. Le gain est en **dev** (161/162 → 162/162) ; le
+test reste à 76/76 car il n'a aucun cas déclencheur. Une seule annotation change, `s065` :
+REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte. Fiche
+[`reports/rapport-s065.md`](../../reports/rapport-s065.md), JSON
+[`reports/pensee-s065.json`](../../reports/pensee-s065.json).
 <!-- /notes -->

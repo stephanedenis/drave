@@ -54,6 +54,28 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertFalse([s for s in syntagmes("Le film elle parle est sorti.", "fr")
                           if s[0] == "REL"])
 
+    def test_rel_suivie_d_un_gv(self):
+        """REL suivie d'un GV : son antécédent est le **sujet de ce GV**.
+
+        `s065` — « elle qui commence nage » : le gold attend `elle`, pas `nage`. Le GN
+        sujet (`elle`) n'est fourni que par le générateur S, la REL courte que par le
+        chunker ; la règle traverse la frontière des deux chemins. Elle exige un GV à
+        droite et un GN à gauche — sans l'un ou l'autre, elle ne s'applique pas.
+        """
+        h = bl.Heuristique()
+
+        def rels(txt, lg="fr"):
+            a = h.analyser(txt, lg)
+            return [(e.debut, e.fin, txt[e.debut:e.fin],
+                     ((e.meta or {}).get("attachement") or {}).get("cible"))
+                    for e in a.etiquettes if e.niveau == "syntagme" and e.type == "REL"]
+
+        # la REL courte (5:17) et la REL longue (5:22) sont attachées au sujet `elle`
+        self.assertIn((5, 17, "qui commence", "elle"), rels("elle qui commence nage"))
+        # la règle ne s'applique pas sans GV à droite : pas de cible inventée
+        for txt in ("elle qui commence", "elle qui commence hier"):
+            self.assertNotIn((5, 17, "qui commence", "nage"), rels(txt), txt)
+
     def test_sujet_hors_du_gv(self):
         """La convention du gold : le sujet est un GN, le GV commence au prédicat.
 

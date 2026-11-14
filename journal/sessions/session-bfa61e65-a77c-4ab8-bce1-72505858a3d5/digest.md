@@ -2475,3 +2475,132 @@ convention sentence corrected
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); s=p.read_text()\nold='**Mis à jour : 2026-11-14, 00 h 50 HNE (heure locale, EST).**'\nnew='**Mis à jour : 2026-11-14, 00 h 55 HNE (heure locale, EST).**' … [312 caractères tronqués]`
+
+  ```
+timestamp updated
+  ✅ index : aucun fait stagé sans état
+[s/v7 64d9dd23] J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+ Date: Sat Nov 14 00:52:13 2026 -0500
+ 16 files changed, 6302 insertions(+), 28 deletions(-)
+ create mode 100644 journal/2026-11-14/README.md
+ create mode 100644 journal/2026-11-14/docs.md
+ create mode 100644 journal/sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/digest.md
+ create mode 100644 journal/sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md
+ create mode 100644 journal/sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/digest.md
+ create mode 100644 journal/sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md
+ create mode 100644 reports/pensee-g017.json
+ create mode 100644 reports/rapport-g017.md
+AMEND_EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py > /tmp/g017/revue2.log 2>&1; echo \"REVUE=$?\"; tail -3 /tmp/g017/revue2.log; bash tools/porte-tableaux.sh > /tmp/g017/tableaux2.log 2>&1; echo \"TABLEAUX=$?\"; tail -3 /tmp/g017/tableaux2.log", " … [70 caractères tronqués]`
+
+  ```
+REVUE=0
+  revue de documentation · 719 fiche(s) · 813 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+TABLEAUX=0
+  ✅ 1781 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3938 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py > /tmp/g017/taille4.log 2>&1; echo \"TAILLE=$?\"; grep \"T0 max\" /tmp/g017/taille4.log; python3 tools/verifie_en_cours.py > /tmp/g017/encours2.log 2>&1; echo \"ENCOURS=$?\"; tail -1 /tmp/g017/encour … [195 caractères tronqués]`
+
+  ```
+TAILLE=0
+  T0 max : 3995 mots (budget 4 000)
+ENCOURS=0
+  ✅ état court, structuré, multi-session et reprenable
+JOURNAL=0
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -25 && echo ==== && git status --short | head -20", "description": "Review amended commit"}`
+
+  ```
+64d9dd23 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+ docs/pilotage/en-cours.md                          |   16 +-
+ journal/2026-11-14/README.md                       |   39 +
+ journal/2026-11-14/docs.md                         |   29 +
+ journal/README.md                                  |    9 +-
+ journal/THEMES.md                                  |    1 +
+ journal/sessions/MANIFEST.md                       |    8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  170 ++
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1497 ++++++++++++
+ .../rapport.md                                     |  157 ++
+ .../digest.md                                      | 2477 ++++++++++++++++++++
+ .../rapport.md                                     |  151 ++
+ .../digest.md                                      |  214 ++
+ .../rapport.md                                     |   52 +-
+ reports/pensee-g017.json                           | 1295 ++++++++++
+ reports/rapport-g017.md                
+… [503 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-g017.json > /dev/null && echo JSON-OK; test -f reports/rapport-g017.md && echo FICHE-OK; bash tools/porte-bloc-linguistique.sh > /tmp/g017/porte-final.log 2>&1; echo \"PORTE=$?\"; tail -1 /tmp/g017 … [88 caractères tronqués]`
+
+  ```
+JSON-OK
+FICHE-OK
+PORTE=0
+✅ porte bloc linguistique verte
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-3 [bash] killed — grep -rn "g017" --include=* -l . 2>/dev/null | head -40
+bash-4 [bash] killed — grep -rn "She said that she would come" . 2>/dev/null | head -20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %ad %s' --date=iso && echo --- && git show --name-only --format='' HEAD | grep -E 'g017|en-cours|2026-11-14'", "description": "Final commit summary"}`
+
+  ```
+64d9dd23 2026-11-14 00:52:13 -0500 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+---
+docs/pilotage/en-cours.md
+journal/2026-11-14/README.md
+journal/2026-11-14/docs.md
+reports/pensee-g017.json
+reports/rapport-g017.md
+  ```
+
+### 🤖 Assistant
+
+**J6.1 terminé — règle mesurée puis rejetée.**
+
+## Reproduction
+
+`g017` : le bloc prédit `SUB 9:38` (« that she would come **yesterday** ») alors que le gold attend `SUB 9:28` (« that she would come »). La cible d'attachement `said` était déjà correcte : le défaut est le span, pas l'attachement.
+
+## La règle mesurée
+
+Retirer le dernier token d'une SUB quand c'est un adverbe de `ADVERBES_TEMPS` (`hier`, `demain`, `yesterday`, `tomorrow`…) suivi d'une ponctuation ou de la fin.
+
+| mesure | base | règle | Δ |
+|---|---:|---:|---:|
+| F1 all | 0,7902 | 0,7901 | −0,0001 |
+| F1 dev | 0,7875 | 0,7886 | **+0,0011** |
+| F1 test | 0,7962 | 0,7934 | **−0,0028** |
+| tp / fp / fn | 1480 / 403 / 383 | 1479 / 402 / 384 | −1 / −1 / +1 |
+| attachement | 237/238 | 236/237 | −1 |
+| couverture | 0,9958 | 0,9916 | −0,0042 |
+
+La règle corrige `g017` et retire un faux positif de `g005`, mais **casse `r264`** (« qu'il vient demain ») et **`r288`** (« that he comes tomorrow »). Les deux cas favorables sont en **dev**, les deux défavorables en **test** : le gain est in-sample, la perte est hors échantillon. Contrôles : placebo 0,7107 ; ADV large 0,7885 ; variante gardée 0,7909 / 238/239 mais réglée sur 2 cas de dev, non retenue.
+
+## Décision
+
+La convention du gold est contradictoire sur la même construction : `g005`/`g017` excluent l'adverbe final, `r264`/`r288` l'incluent. **Aucun code de production modifié** ; l'état reste à **237/238 (0,9958)**, F1 **0,7902**. `g017` reste un span, mais c'est désormais une **convention à trancher**, pas une règle de code. Prochaine action : trancher la convention, puis `s065` (J6.2).
+
+## Livrables
+
+- Fiche de rejet : [`reports/rapport-g017.md`](reports/rapport-g017.md)
+- JSON : [`reports/pensee-g017.json`](reports/pensee-g017.json)
+- État : `docs/pilotage/en-cours.md` (J6.1, prochaine action)
+- Journal : `journal/2026-11-14/README.md`
+- Commit : **`64d9dd23`**
+
+Portes : `porte-bloc-linguistique` **verte**, revue de documentation, `porte-tableaux`, budget T0 (**3 995 / 4 000**), `verifie_en_cours`, `verifie_journal` et `verifier_schemas` **verts**.
+

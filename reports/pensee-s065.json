@@ -1,0 +1,791 @@
+{
+ "date": "2026-11-14",
+ "ligne": "B13",
+ "tache": "J6.2",
+ "objet": "s065 — la REL « qui commence » est attachée au sujet du GV qui la suit",
+ "verdict": {
+  "regle": "intégrée",
+  "raison": "une seule cible change (s065 : nage → elle), aucun span ni POS ne bouge, F1 inchangé ; attachement 237/238 → 238/238 labels (238/239 cibles, 0,9958)",
+  "f1_avant": 0.7902,
+  "f1_apres": 0.7902,
+  "delta_f1": 0.0,
+  "pos_avant": 0.8625,
+  "pos_apres": 0.8625,
+  "attachement_avant": "237/238",
+  "attachement_apres": "238/238",
+  "attachement_cibles_apres": "238/239",
+  "exact_taux_apres": 0.9958,
+  "exact_taux_span_avant": 0.9958,
+  "exact_taux_span_apres": 1.0,
+  "couverture_avant": 0.9958,
+  "couverture_apres": 0.9958
+ },
+ "dispositif": {
+  "gold": "tools/tests/linguistique/evaluer_gold.py::charger (612 phrases, 239 cibles)",
+  "split": "tools/tests/linguistique/gold_split.py (crc32(id) % 3)",
+  "module_base": "/tmp/s065/bloc_base.py (copie du bloc avant règle)",
+  "module_regle": "tools/bloc_linguistique.py (règle intégrée)",
+  "copies_controles": {
+   "rel_gn_large": "/tmp/s065/bloc_rel_gn.py",
+   "rel_apres_gv": "/tmp/s065/bloc_rel_apres_gv.py",
+   "placebo_verbe_propre": "/tmp/s065/bloc_placebo.py"
+  },
+  "note_copie": "chaque copie remplace RACINE par le dépôt, sinon generateur.py (le générateur S) n'est pas importé",
+  "fichiers_du_depot_modifies_pour_la_mesure": 0
+ },
+ "corpus": {
+  "phrases": 612,
+  "cibles": 239,
+  "split": {
+   "dev": {
+    "phrases": 422,
+    "cibles": 163,
+    "sources": {
+     "hand": 15,
+     "reel": 302,
+     "synthetique": 105
+    },
+    "langues": {
+     "fr": 277,
+     "en": 145
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "cibles": 76,
+    "sources": {
+     "hand": 5,
+     "reel": 130,
+     "synthetique": 55
+    },
+    "langues": {
+     "fr": 125,
+     "en": 65
+    }
+   }
+  }
+ },
+ "reproduction": {
+  "phrase": "elle qui commence nage",
+  "gold": [
+   {
+    "type": "GN",
+    "debut": 0,
+    "fin": 4,
+    "texte": "elle",
+    "cible": null
+   },
+   {
+    "type": "REL",
+    "debut": 5,
+    "fin": 17,
+    "texte": "qui commence",
+    "cible": "elle"
+   },
+   {
+    "type": "GV",
+    "debut": 18,
+    "fin": 22,
+    "texte": "nage",
+    "cible": null
+   }
+  ],
+  "bloc_avant": [
+   {
+    "type": "GN",
+    "debut": 0,
+    "fin": 4,
+    "texte": "elle",
+    "attachement": "nage"
+   },
+   {
+    "type": "REL",
+    "debut": 5,
+    "fin": 17,
+    "texte": "qui commence",
+    "attachement": "nage"
+   },
+   {
+    "type": "REL",
+    "debut": 5,
+    "fin": 22,
+    "texte": "qui commence nage",
+    "attachement": "elle"
+   },
+   {
+    "type": "GV",
+    "debut": 18,
+    "fin": 22,
+    "texte": "nage",
+    "attachement": null
+   }
+  ],
+  "bloc_apres": [
+   {
+    "type": "GN",
+    "debut": 0,
+    "fin": 4,
+    "texte": "elle",
+    "attachement": "nage"
+   },
+   {
+    "type": "REL",
+    "debut": 5,
+    "fin": 17,
+    "texte": "qui commence",
+    "attachement": "elle"
+   },
+   {
+    "type": "REL",
+    "debut": 5,
+    "fin": 22,
+    "texte": "qui commence nage",
+    "attachement": "elle"
+   },
+   {
+    "type": "GV",
+    "debut": 18,
+    "fin": 22,
+    "texte": "nage",
+    "attachement": null
+   }
+  ],
+  "lecture": "le span de la REL courte (5:17) est déjà exact ; seule la cible est fausse (`nage` au lieu de `elle`). Le GN `elle` n'existe que dans le candidat S ; la REL courte n'existe que dans le chunker simple ; la règle traverse la frontière des deux chemins.",
+  "note_mandat": "le mandat écrit « elle nage qui commence » et « REL après GV ». Le texte du gold est « elle qui commence nage » : l'ordre est GN REL GV. La règle littérale « REL après GV » ne s'applique à aucun segment du gold dans le chemin union (0 cas) et laisse 237/238. La règle mesurée est donc « REL suivie d'un GV → le sujet de ce GV »."
+ },
+ "regle": {
+  "nom": "REL suivie d'un GV → le sujet de ce GV",
+  "description": "quand une REL n'a pas d'antécédent dans le chemin courant (union S/chunker), qu'un GV commence à sa droite et qu'un GN finit à sa gauche, la cible est la tête du GN le plus proche à gauche — le sujet du GV",
+  "ou": "tools/bloc_linguistique.py, méthode _cible_rel_sujet, appelée dans la boucle union avant _repli_cible_gp et _cible_proche",
+  "code": "droites = [x for x in tous if x.get('type') == 'GV' and x.get('debut', 0) >= segment.get('fin', 0)]\ngauches = [x for x in tous if x.get('type') == 'GN' and x.get('fin', 0) <= segment.get('debut', 0)]\nif segment.get('type') != 'REL' or not droites or not gauches: return None\ngn = max(gauches, key=lambda x: x['fin'])\nreturn Heuristique._tete_nom(texte, gn['debut'], gn['fin'])",
+  "portee": "français et anglais, chemin union seulement, REL sans antécédent simple",
+  "test": "tools/tests/linguistique/test_bloc_linguistique.py::test_rel_suivie_d_un_gv"
+ },
+ "mesures": {
+  "base": {
+   "all": {
+    "phrases": 612,
+    "pos_exactitude": 0.8625,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "tete": {
+     "precision": 0.9261,
+     "rappel": 0.8808,
+     "f1": 0.9029
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 237,
+     "top1": 237,
+     "exact_taux_span": 0.9958,
+     "exact_taux": 0.9916,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "pos_exactitude": 0.8618,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "tete": {
+     "precision": 0.9296,
+     "rappel": 0.8758,
+     "f1": 0.9019
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 161,
+     "top1": 161,
+     "exact_taux_span": 0.9938,
+     "exact_taux": 0.9877,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos_exactitude": 0.8642,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "tete": {
+     "precision": 0.9183,
+     "rappel": 0.8924,
+     "f1": 0.9052
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 76,
+     "top1": 76,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "hand": {
+    "phrases": 20,
+    "pos_exactitude": 0.8857,
+    "syntagme": {
+     "precision": 0.8333,
+     "rappel": 0.9821,
+     "f1": 0.9016,
+     "tp": 55,
+     "fp": 11,
+     "fn": 1
+    },
+    "tete": {
+     "precision": 0.9492,
+     "rappel": 1.0,
+     "f1": 0.9739
+    },
+    "attachement": {
+     "cibles": 13,
+     "labels": 12,
+     "exact": 12,
+     "top1": 12,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9231,
+     "couverture": 0.9231
+    }
+   },
+   "reel": {
+    "phrases": 432,
+    "pos_exactitude": 0.8893,
+    "syntagme": {
+     "precision": 0.8118,
+     "rappel": 0.7612,
+     "f1": 0.7857,
+     "tp": 1100,
+     "fp": 255,
+     "fn": 345
+    },
+    "tete": {
+     "precision": 0.9379,
+     "rappel": 0.8574,
+     "f1": 0.8959
+    },
+    "attachement": {
+     "cibles": 171,
+     "labels": 171,
+     "exact": 171,
+     "top1": 171,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "synthetique": {
+    "phrases": 160,
+    "pos_exactitude": 0.7682,
+    "syntagme": {
+     "precision": 0.7035,
+     "rappel": 0.8978,
+     "f1": 0.7888,
+     "tp": 325,
+     "fp": 137,
+     "fn": 37
+    },
+    "tete": {
+     "precision": 0.8827,
+     "rappel": 0.9558,
+     "f1": 0.9178
+    },
+    "attachement": {
+     "cibles": 55,
+     "labels": 55,
+     "exact": 54,
+     "top1": 54,
+     "exact_taux_span": 0.9818,
+     "exact_taux": 0.9818,
+     "couverture": 1.0
+    }
+   }
+  },
+  "regle": {
+   "all": {
+    "phrases": 612,
+    "pos_exactitude": 0.8625,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "tete": {
+     "precision": 0.9261,
+     "rappel": 0.8808,
+     "f1": 0.9029
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 238,
+     "top1": 238,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9958,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "pos_exactitude": 0.8618,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "tete": {
+     "precision": 0.9296,
+     "rappel": 0.8758,
+     "f1": 0.9019
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 162,
+     "top1": 162,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9939,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos_exactitude": 0.8642,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "tete": {
+     "precision": 0.9183,
+     "rappel": 0.8924,
+     "f1": 0.9052
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 76,
+     "top1": 76,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "hand": {
+    "phrases": 20,
+    "pos_exactitude": 0.8857,
+    "syntagme": {
+     "precision": 0.8333,
+     "rappel": 0.9821,
+     "f1": 0.9016,
+     "tp": 55,
+     "fp": 11,
+     "fn": 1
+    },
+    "tete": {
+     "precision": 0.9492,
+     "rappel": 1.0,
+     "f1": 0.9739
+    },
+    "attachement": {
+     "cibles": 13,
+     "labels": 12,
+     "exact": 12,
+     "top1": 12,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9231,
+     "couverture": 0.9231
+    }
+   },
+   "reel": {
+    "phrases": 432,
+    "pos_exactitude": 0.8893,
+    "syntagme": {
+     "precision": 0.8118,
+     "rappel": 0.7612,
+     "f1": 0.7857,
+     "tp": 1100,
+     "fp": 255,
+     "fn": 345
+    },
+    "tete": {
+     "precision": 0.9379,
+     "rappel": 0.8574,
+     "f1": 0.8959
+    },
+    "attachement": {
+     "cibles": 171,
+     "labels": 171,
+     "exact": 171,
+     "top1": 171,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "synthetique": {
+    "phrases": 160,
+    "pos_exactitude": 0.7682,
+    "syntagme": {
+     "precision": 0.7035,
+     "rappel": 0.8978,
+     "f1": 0.7888,
+     "tp": 325,
+     "fp": 137,
+     "fn": 37
+    },
+    "tete": {
+     "precision": 0.8827,
+     "rappel": 0.9558,
+     "f1": 0.9178
+    },
+    "attachement": {
+     "cibles": 55,
+     "labels": 55,
+     "exact": 55,
+     "top1": 55,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   }
+  }
+ },
+ "delta": {
+  "all": {
+   "f1": 0.0,
+   "pos": 0.0,
+   "attachement_exact": 1,
+   "attachement_labels": 0,
+   "exact_taux_span": 0.0042,
+   "couverture": 0.0
+  },
+  "dev": {
+   "f1": 0.0,
+   "pos": 0.0,
+   "attachement_exact": 1,
+   "attachement_labels": 0,
+   "exact_taux_span": 0.0062,
+   "couverture": 0.0
+  },
+  "test": {
+   "f1": 0.0,
+   "pos": 0.0,
+   "attachement_exact": 0,
+   "attachement_labels": 0,
+   "exact_taux_span": 0.0,
+   "couverture": 0.0
+  }
+ },
+ "diff_annotations": [
+  {
+   "id": "s065",
+   "segment": [
+    "REL",
+    5,
+    17
+   ],
+   "avant": "nage",
+   "apres": "elle"
+  }
+ ],
+ "controles": {
+  "hasard": {
+   "cibles": 239,
+   "top1_taux": 0.0042,
+   "lecture": "une cible tirée au hasard parmi les cibles du gold ; plancher de la métrique"
+  },
+  "rel_apres_gv_litteral": {
+   "all": {
+    "phrases": 612,
+    "pos_exactitude": 0.8625,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "tete": {
+     "precision": 0.9261,
+     "rappel": 0.8808,
+     "f1": 0.9029
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 237,
+     "top1": 237,
+     "exact_taux_span": 0.9958,
+     "exact_taux": 0.9916,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "pos_exactitude": 0.8618,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "tete": {
+     "precision": 0.9296,
+     "rappel": 0.8758,
+     "f1": 0.9019
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 161,
+     "top1": 161,
+     "exact_taux_span": 0.9938,
+     "exact_taux": 0.9877,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos_exactitude": 0.8642,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "tete": {
+     "precision": 0.9183,
+     "rappel": 0.8924,
+     "f1": 0.9052
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 76,
+     "top1": 76,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "lecture": "la règle littérale du mandat (REL dont le précédent est un GV) ne s'applique à aucun segment du gold dans le chemin union : 0 cas, 237/238, aucun effet. Elle ne corrige pas s065."
+  },
+  "rel_gn_large": {
+   "all": {
+    "phrases": 612,
+    "pos_exactitude": 0.8625,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "tete": {
+     "precision": 0.9261,
+     "rappel": 0.8808,
+     "f1": 0.9029
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 238,
+     "top1": 238,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9958,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "pos_exactitude": 0.8618,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "tete": {
+     "precision": 0.9296,
+     "rappel": 0.8758,
+     "f1": 0.9019
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 162,
+     "top1": 162,
+     "exact_taux_span": 1.0,
+     "exact_taux": 0.9939,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos_exactitude": 0.8642,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "tete": {
+     "precision": 0.9183,
+     "rappel": 0.8924,
+     "f1": 0.9052
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 76,
+     "top1": 76,
+     "exact_taux_span": 1.0,
+     "exact_taux": 1.0,
+     "couverture": 1.0
+    }
+   },
+   "lecture": "variante large : REL → GN le plus proche à gauche, sans condition de GV. Même résultat sur ce gold (238/238) ; non retenue parce qu'elle attacherait une REL sans prédicat à droite, ce que le gold ne teste pas."
+  },
+  "placebo_verbe_propre": {
+   "all": {
+    "phrases": 612,
+    "pos_exactitude": 0.8625,
+    "syntagme": {
+     "precision": 0.786,
+     "rappel": 0.7944,
+     "f1": 0.7902,
+     "tp": 1480,
+     "fp": 403,
+     "fn": 383
+    },
+    "tete": {
+     "precision": 0.9261,
+     "rappel": 0.8808,
+     "f1": 0.9029
+    },
+    "attachement": {
+     "cibles": 239,
+     "labels": 238,
+     "exact": 235,
+     "top1": 235,
+     "exact_taux_span": 0.9874,
+     "exact_taux": 0.9833,
+     "couverture": 0.9958
+    }
+   },
+   "dev": {
+    "phrases": 422,
+    "pos_exactitude": 0.8618,
+    "syntagme": {
+     "precision": 0.7887,
+     "rappel": 0.7863,
+     "f1": 0.7875,
+     "tp": 1019,
+     "fp": 273,
+     "fn": 277
+    },
+    "tete": {
+     "precision": 0.9296,
+     "rappel": 0.8758,
+     "f1": 0.9019
+    },
+    "attachement": {
+     "cibles": 163,
+     "labels": 162,
+     "exact": 160,
+     "top1": 160,
+     "exact_taux_span": 0.9877,
+     "exact_taux": 0.9816,
+     "couverture": 0.9939
+    }
+   },
+   "test": {
+    "phrases": 190,
+    "pos_exactitude": 0.8642,
+    "syntagme": {
+     "precision": 0.78,
+     "rappel": 0.8131,
+     "f1": 0.7962,
+     "tp": 461,
+     "fp": 130,
+     "fn": 106
+    },
+    "tete": {
+     "precision": 0.9183,
+     "rappel": 0.8924,
+     "f1": 0.9052
+    },
+    "attachement": {
+     "cibles": 76,
+     "labels": 76,
+     "exact": 75,
+     "top1": 75,
+     "exact_taux_span": 0.9868,
+     "exact_taux": 0.9868,
+     "couverture": 1.0
+    }
+   },
+   "lecture": "placebo : une REL sans cible prend son propre verbe avant le GV le plus proche. 235/238 (−2 exacts : s065 et un autre), donc le gain n'est pas un artefact de n'importe quel repli."
+  }
+ },
+ "convention_du_gold": {
+  "constat": "74 REL du gold ont toutes un GN à gauche et un GV à droite ; 73 étaient déjà justes par _cible_precedent. s065 est la seule où le GN sujet n'est pas dans le chunker simple : le GN vient de S et la REL courte du chunker, d'où la cible par proximité (`nage`).",
+  "lecture": "ce n'est pas une nouvelle convention : c'est le même antécédent que la règle existante (REL après GN → tête du GN), appliqué quand le GN est fourni par l'autre chemin de segmentation."
+ },
+ "limites": [
+  "un seul cas dans le gold (s065), et il est en dev : le test ne contient aucun cas déclencheur (76/76 inchangé). La règle n'est pas confirmée hors échantillon.",
+  "s065 est une phrase synthétique et peu naturelle (« elle qui commence nage ») ; l'annotation peut être un artefact du générateur.",
+  "la règle dépend du générateur S pour fournir le GN sujet ; si S ne le fournit pas, elle ne s'applique pas.",
+  "« le GN le plus proche à gauche » est supposé être le sujet du GV ; un GN antéposé (objet, circonstant) pourrait être choisi à tort. Aucun cas du gold ne teste ce piège.",
+  "la règle littérale « REL après GV » n'est pas mesurée sur un cas : elle est vide dans ce gold.",
+  "le compte 238/239 garde le dénominateur des 239 cibles ; g017 reste sans label (une cible non couverte). 238/238 est le taux sur les labels, 0,9958 le taux sur les cibles.",
+  "les portes complètes (84) n'ont pas été rejouées ; la porte du bloc est verte et les tests unitaires passent (20)."
+ ],
+ "fichiers": {
+  "fiche": "reports/rapport-s065.md",
+  "json": "reports/pensee-s065.json",
+  "code": "tools/bloc_linguistique.py",
+  "test": "tools/tests/linguistique/test_bloc_linguistique.py",
+  "mesure": "/tmp/s065/mesure.py (non commité)",
+  "copies": "/tmp/s065/bloc_base.py, bloc_regle.py, bloc_rel_gn.py, bloc_rel_apres_gv.py, bloc_placebo.py"
+ }
+}
