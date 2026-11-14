@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **1 session(s)** · **4 thème(s)**
+**15 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| docs | 3 | [docs.md](docs.md) |
+| docs | 4 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 7 | [mesures.md](mesures.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -20,7 +20,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -40,6 +40,7 @@
 | 04:28 | `84e393bb` | J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238 |
 | 04:40 | `09e54143` | J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ |
 | 04:55 | `55bde5c5` | J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902) |
+| 05:05 | `febfdfff` | J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -123,4 +124,22 @@ champ obligatoire. Les **146 groupes / 437 porteurs / 930 alternatives** reprodu
 de B13. Fiche [`reports/rapport-schema-v2-doc.md`](../../reports/rapport-schema-v2-doc.md), JSON
 [`reports/schema-v2-doc.json`](../../reports/schema-v2-doc.json). J11.4 ferme la suite produit ;
 la prochaine action B13 est **trancher `g017`**.
+**J12.1 — le §334 et les 44 signatures : la filiation, pas l'époque — et un corpus qui ne les sépare pas.**
+La deuxième vague Panini est d'abord un **audit** : les **655 lignes** de paires ne contiennent que
+**495 paires uniques** (**160 doublons**, **7 auto-paires**) et **48 textes** distincts, dont **44**
+seulement ont une signature V14 ; les **102/107** sources acquises ne sont pas 102 URL (71 URL uniques).
+La loi H0 se reproduit (**R² = 0,909139** sur 655 lignes, **0,906307** sur 488 paires uniques non auto) ;
+la date seule explique **0,258**, mais n'ajoute que **0,0089** après la topologie (p=0,86). Le plan est
+**colinéaire** : 180 paires de même tradition à **28,7 ans** d'écart (max 230), 308 paires
+inter-traditions à **1 189 ans**. Le contraste de filiation à date fixe (**Δ=−0,166**, p=0,0005)
+**disparaît à surface contrôlée** (**Δ=−0,135** contre null **−0,129**, p=0,335). Sur les 44 signatures,
+le retrieval brut donne **61,4 %** de même tradition et **56,8 %** de voisins à ≤50 ans ; les contrôles
+croisés ramènent la filiation à **50,0 %** (p=0,0492, Holm 0,128) et l'époque à **53,8 %** (p=0,373).
+Seule une petite prédiction d'année intra-tradition survit (**R²=0,042**, p=0,0086, Holm 0,034). Le
+β époque **+0,138** de la v150 n'est pas reproduit (**−0,006**, p=0,093). L'avertissement de Panini est
+**indexé à son corpus** : sur le §334, la signature V14 est surtout une signature de **source/traduction**,
+et l'époque n'est pas séparable de la filiation. Fiche
+[`reports/rapport-panini-334.md`](../../reports/rapport-panini-334.md), JSON
+[`reports/panini-334.json`](../../reports/panini-334.json), outil
+[`tools/panini_334.py`](../../tools/panini_334.py).
 <!-- /notes -->

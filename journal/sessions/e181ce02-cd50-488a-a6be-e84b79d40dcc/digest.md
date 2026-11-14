@@ -61667,3 +61667,30 @@ budget consommé : 25018.1 s · lancements : 25
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J11.4", "timeoutM … [11 caractères tronqués]`
+
+  ```
+a6808c5e..55bde5c5  s/v7 -> s/v7
+   a6808c5e..55bde5c5  master -> master
+sam 14 nov 2026 05:13:04 EST
+2026-11-14 05:08:35 · ✔ J11.4 en 619.7 s (code 0) — ✅ test -f reports/rapport-schema-v2-doc.md && echo FICHE-OK
+2026-11-14 05:08:35 · ▶ J12.1 — Panini — le §334 et les 44 œuvres (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log", "description": "Suivre J12.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 05:22:11 EST
+2026-11-14 05:08:35 · ✔ J11.4 en 619.7 s (code 0) — ✅ test -f reports/rapport-schema-v2-doc.md && echo FICHE-OK
+2026-11-14 05:08:35 · ▶ J12.1 — Panini — le §334 et les 44 œuvres (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ps aux | grep -c \"[d]sh --profile headless\"", "description": "Suivre J12.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 05:31:15 EST
+2026-11-14 05:08:35 · ✔ J11.4 en 619.7 s (code 0) — ✅ test -f reports/rapport-schema-v2-doc.md && echo FICHE-OK
+2026-11-14 05:08:35 · ▶ J12.1 — Panini — le §334 et les 44 œuvres (timeout 5400 s)
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ls reports/ | grep -E \"panini-334|cic-verificateur|tableau-mesures|cloture\"", "description": "Suivre J12.1", "timeoutMs": 600000}`

@@ -2175,3 +2175,95 @@ python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de s
   ```
 
 - **bash** `{"command": "git commit -F - <<'MSG'\nJ11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1)\n\nLa notice docs/produit/README.md § 3.3 bis documente les champs de meta.partition\n(groupe, rang, membres, vue) et de meta.alte … [924 caractères tronqués]`
+
+  ```
+[s/v7 febfdfff] J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1)
+ 21 files changed, 3229 insertions(+), 39 deletions(-)
+ create mode 100644 journal/sessions/session-631f4ba2-5c36-4fdc-b751-fa0a2cce9d21/digest.md
+ create mode 100644 journal/sessions/session-631f4ba2-5c36-4fdc-b751-fa0a2cce9d21/rapport.md
+ create mode 100644 reports/rapport-schema-v2-doc.md
+ create mode 100644 reports/schema-v2-doc.json
+ create mode 100644 tools/mesurer_schema_v2_doc.py
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40; echo ---; git status --short | head -30", "description": "Inspect commit contents and remaining status"}`
+
+  ```
+febfdfff J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1)
+ docs/pilotage/en-cours.md                          |   10 +-
+ docs/pilotage/roadmap.md                           |   13 +
+ docs/produit/README.md                             |   91 +-
+ journal/2026-11-14/README.md                       |   20 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    8 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   18 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2177 ++++++++++++++++++++
+ .../rapport.md                                     |  151 ++
+ .../digest.md                                      |  190 ++
+ .../rapport.md                                    
+… [692 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -6; echo EXIT=$?; echo ---; python3 tools/verifie_etat_a_jour.py 2>&1 | tail -6; echo EXIT=$?", "description": "Post-commit doc review and state freshness"}`
+
+  ```
+revue de documentation · 728 fiche(s) · 822 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT=0
+---
+  état · dernier fait febfdfff · dernier état febfdfff
+  ✅ aucun fait commité après le dernier état
+EXIT=0
+  ```
+
+- **bash** `{"command": "python3 tools/mesurer_schema_v2_doc.py >/tmp/outil.log && cat /tmp/outil.log && git diff --exit-code -- reports/schema-v2-doc.json >/dev/null; echo JSON_IDENTIQUE=$?", "description": "Regenerate JSON and check reproducibility"}`
+
+  ```
+612 annotations v2 (0 échec) · 612 annotations v1 (0 échec)
+  vérificateur : 6 cas, 0 échec · versions lues [1, 2]
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/schema-v2-doc.json
+JSON_IDENTIQUE=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_schema_produit.py --json | python3 -c \"import json,sys;d=json.load(sys.stdin);print('versions',d['versions_lues'],'cas',len(d['cas']),'echecs',sum(1 for r in d['cas'] if not r['ok']),'retro',d['retrocompatibilite'])\"; echo EXIT=${PIPESTATUS[0]}", "description":  … [23 caractères tronqués]`
+
+  ```
+versions [1, 2] cas 6 echecs 0 retro {'v1_lue': True, 'v2_refuse_v1': True}
+EXIT=0
+  ```
+
+### 🤖 Assistant
+
+Tâche **J11.4 terminée et committée** : `febfdfff`.
+
+## Ce qui a été fait
+
+- **`docs/produit/README.md` § 3.3 bis** documente désormais :
+  - les **4 champs** de `meta.partition` : `groupe`, `rang`, `membres`, `vue` ;
+  - les **10 champs** de `meta.alternative` : `type`, `debut`, `fin`, `source`, `union`, `relation`, `rang`, plus les optionnels `retire`, `attachement`, `role` ;
+  - un **exemple réel** de groupe de chevauchement ;
+  - la **rétro-compatibilité v1** : 8 champs racine identiques, sélection du schéma par `version`, schéma v1 inchangé, contrôle négatif, absence de compatibilité octet pour octet.
+- **Vérification des deux versions** avec `tools/verifier_schema_produit.py` :
+  - `--json` : **6 cas / 0 échec**, `versions_lues: [1, 2]`, `v1_lue: true`, `v2_refuse_v1: true` ;
+  - `--gold 20` : **26 cas / 0 échec** ;
+  - **612/612** phrases du gold validées en v2 et **612/612** annotations dérivées validées en v1 ;
+  - contrôles négatifs : **612/612** refus de la version adverse, mutation d’un champ obligatoire refusée ;
+  - **8/8** tests du contrat.
+- Les comptes **146 groupes / 437 porteurs / 930 alternatives** reproduisent la fiche B13 (contrôle de cohérence).
+- Fiche [`reports/rapport-schema-v2-doc.md`](reports/rapport-schema-v2-doc.md) + JSON [`reports/schema-v2-doc.json`](reports/schema-v2-doc.json), régénérable par [`tools/mesurer_schema_v2_doc.py`](tools/mesurer_schema_v2_doc.py).
+- `reports/INDEX.md`, `docs/pilotage/en-cours.md` et `docs/pilotage/roadmap.md` mis à jour : **J11.4 ferme la suite produit** ; prochaine action B13 : trancher `g017`.
+
+## Portes ciblées passées
+
+`porte-produit` ✅ · `porte-tableaux` ✅ · `porte-document` ✅ · `porte-etat` ✅ · `revue_documentation` ✅ · `taille_documents` ✅ · `verifie_journal` ✅ · `verifie_en_cours` ✅ · `verifier_schemas` ✅.
+
+Les modifications préexistantes non liées (autres fiches, `plan.json`, sous-module `tools/structures`, `rapport-s-paragraphes.md`) ont été laissées **hors du commit**.
+

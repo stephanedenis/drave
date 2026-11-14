@@ -57,6 +57,19 @@ en regard. L'avertissement est donc un constat sur la **signature de texte** et 
 une mesure de la généalogie des langues. Il faut le lire comme une **borne de validité de l'atome**, pas
 comme une théorie de l'arbre. Les chiffres et les contrôles sont dans la fiche J3.2.
 
+**Ce que J12.1 ajoute : l'avertissement est indexé à son corpus.** Sur la deuxième vague — le corpus
+§334 et les signatures de 44 œuvres —, la loi que Panini ajuste est une loi de **filiation/topologie**,
+pas d'époque : quand la date et la topologie sont mises côte à côte, la topologie porte la variance et la
+date n'ajoute presque rien. Mais le corpus est **colinéaire** : les couples de même tradition sont
+presque tous contemporains, et les couples longs sont presque tous inter-traditions. Il ne permet donc
+pas d'identifier un effet d'époque indépendant. Les 44 signatures ne reproduisent pas le β époque de la
+validation v150 et, à surface contrôlée, le signal de tradition s'affaiblit fortement : la signature V14
+est une signature de **texte, de source et de traduction** avant d'être une signature de tradition. La
+conséquence théorique n'est pas « Panini a tort » : c'est que **l'avertissement vaut pour le corpus et
+l'instrument qui l'ont produit**, et qu'il faut, pour le transporter, contrôler **la date, la tradition
+et la source** — les trois à la fois. Les chiffres et les contrôles sont dans
+[`reports/rapport-panini-334.md`](../../reports/rapport-panini-334.md).
+
 ## 3. Ce que cela impose à nos tests
 
 1. **contrôler l'époque** ✗✓ : un « style » mesuré sur deux traductions d'âges différents peut être de
@@ -150,7 +163,9 @@ large.
    le corpus actuel ne donne que quelques paires de même famille et de même écriture.
 5. **Un retrieval neuronal** : la porte du script peut être une propriété des n-grammes, pas du sens.
 6. **Un corpus multi-époques** avec les mêmes langues : l'avertissement de Panini sur l'époque ne peut pas
-   être testé sur un corpus mono-époque.
+   être testé sur un corpus mono-époque. Sur le §334, il faudrait en plus les **dates de traduction** et
+   un **support commun** même-tradition × longue époque : sans eux, la date et la filiation restent
+   confondues.
 7. **Des poids d'arêtes Glottolog** : la distance de chemin traite toutes les arêtes comme égales.
 
 *La théorie est là ; les mesures sont dans `reports/`. Ce qui manque n'est pas une opinion, c'est une

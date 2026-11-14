@@ -7,12 +7,12 @@
 | Identifiant | `session-631f4ba2-5c36-4fdc-b751-fa0a2cce9d21` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 04:58 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 69 |
-| Appels d'outils | 99 |
+| Messages | 72 |
+| Appels d'outils | 103 |
 | Fichiers touchés | 6 |
-| Commandes | 76 |
+| Commandes | 80 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J11.4 : documenter le schéma v2 dans `docs/produit/README.md` (les champs de `meta.partition`/`meta.alternative`,  … [161 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Inspect repository root and git state
 - bash — List product docs and verifier script
@@ -41,7 +41,34 @@
 - bash — Read roadmap and en-cours context
 - bash — Run schema verifier on both versions
 - bash — Check JSON sidecar naming conventions
-- … et 79 autres
+- … et 83 autres
+
+**Synthèse produite :**
+
+Tâche **J11.4 terminée et committée** : `febfdfff`.
+
+\## Ce qui a été fait
+
+- **`docs/produit/README.md` § 3.3 bis** documente désormais :
+  - les **4 champs** de `meta.partition` : `groupe`, `rang`, `membres`, `vue` ;
+  - les **10 champs** de `meta.alternative` : `type`, `debut`, `fin`, `source`, `union`, `relation`, `rang`, plus les optionnels `retire`, `attachement`, `role` ;
+  - un **exemple réel** de groupe de chevauchement ;
+  - la **rétro-compatibilité v1** : 8 champs racine identiques, sélection du schéma par `version`, schéma v1 inchangé, contrôle négatif, absence de compatibilité octet pour octet.
+- **Vérification des deux versions** avec `tools/verifier_schema_produit.py` :
+  - `--json` : **6 cas / 0 échec**, `versions_lues: [1, 2]`, `v1_lue: true`, `v2_refuse_v1: true` ;
+  - `--gold 20` : **26 cas / 0 échec** ;
+  - **612/612** phrases du gold validées en v2 et **612/612** annotations dérivées validées en v1 ;
+  - contrôles négatifs : **612/612** refus de la version adverse, mutation d’un champ obligatoire refusée ;
+  - **8/8** tests du contrat.
+- Les comptes **146 groupes / 437 porteurs / 930 alternatives** reproduisent la fiche B13 (contrôle de cohérence).
+- Fiche [`reports/rapport-schema-v2-doc.md`](reports/rapport-schema-v2-doc.md) + JSON [`reports/schema-v2-doc.json`](reports/schema-v2-doc.json), régénérable par [`tools/mesurer_schema_v2_doc.py`](tools/mesurer_schema_v2_doc.py).
+- `reports/INDEX.md`, `docs/pilotage/en-cours.md` et `docs/pilotage/roadmap.md` mis à jour : **J11.4 ferme la suite produit** ; prochaine action B13 : trancher `g017`.
+
+\## Portes ciblées passées
+
+`porte-produit` ✅ · `porte-tableaux` ✅ · `porte-document` ✅ · `porte-etat` ✅ · `revue_documentation` ✅ · `taille_documents` ✅ · `verifie_journal` ✅ · `verifie_en_cours` ✅ · `verifier_schemas` ✅.
+
+Les modifications préexistantes non liées (autres fiches, `plan.json`, sous-module `tools/structures`, `rapport-s-paragraphes.md`) ont été laissées **hors du commit**.
 
 ## 3. Travail accompli
 
@@ -98,7 +125,7 @@
 - **T1** Check references to section 3.3 bis
 - **T1** Read en-cours top and B13 paragraphs
 - **T1** Read roadmap B13 paragraphs
-- … et 36 autres
+- … et 40 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -137,13 +164,15 @@
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : /home/stephane/Data13TB/stephane/GitHub/Qtrinet total 208 drwxr-xr-x. 1 stephane stephane   686  6 nov 09:52 . drwxr-xr-x. 1 stephane stephane  2532  5 nov 10:41 .. -rw-r--r--. 1 stephane stephane  99
 - **T1** : ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT 1f61caaa FICHES — DIX FICHES ANNOTÉES « INSTANTANÉ HISTORIQUE » (L'É
 - **T1** : total 28 drwxr-xr-x. 1 stephane stephane   90 14 nov 04:52 . drwxr-xr-x. 1 stephane stephane  972 14 nov 00:51 .. -rw-r--r--. 1 stephane stephane 3205 14 nov 04:57 docs.md -rw-r--r--. 1 stephane steph
 - **T1** : --- [exit code: 1]
 - **T1** : commit 9a259953dff03514c40fe3eb0403a3d3bc95703c Author: Stéphane <stephane@localhost> Date:   Sat Nov 7 14:23:24 2026 -0500      B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 
+- **T1** : [s/v7 febfdfff] J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1)  21 files changed, 3229 insertions(+), 39 deletions(
+- **T1** : febfdfff J11.4 — SCHÉMA v2 DOCUMENTÉ : 4 CHAMPS PARTITION + 10 CHAMPS ALTERNATIVE, 6 CAS / 0 ÉCHEC, LES DEUX VERSIONS LUES (612 v2 + 612 v1)  docs/pilotage/en-cours.md                          |   10 
 
 ## 6. Commits
 
