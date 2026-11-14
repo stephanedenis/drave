@@ -7,14 +7,14 @@
 | Identifiant | `session-b0a87524-43a4-4935-a248-72c1d42c8471` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 04:16 |
-| Durée | 0.0 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 40 |
-| Appels d'outils | 53 |
-| Fichiers touchés | 1 |
-| Commandes | 49 |
+| Messages | 135 |
+| Appels d'outils | 151 |
+| Fichiers touchés | 4 |
+| Commandes | 108 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J11.1 : les exemples de la doc produit — rejoue les 5 blocs de `docs/produit/exemples.md` avec le code courant (F1 … [130 caractères tronqués]
 
-*53 appels d'outils.* Actions notables :
+*151 appels d'outils.* Actions notables :
 
 - bash — Show git status and recent commits
 - read
@@ -41,7 +41,7 @@
 - bash — Replay example 4 refusal
 - bash — Replay example 5
 - bash — Inspect example 1 JSON and current eval
-- … et 39 autres
+- … et 129 autres
 
 ## 3. Travail accompli
 
@@ -49,7 +49,10 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `docs/produit/exemples.md` | 0 | 2 |
+| `docs/produit/exemples.md` | 0 | 15 |
+| `reports/rapport-exemples-rejoues.md` | 1 | 1 |
+| `docs/pilotage/en-cours.md` | 0 | 13 |
+| `docs/pilotage/roadmap.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -93,7 +96,7 @@
 - **T1** Check status of known failure cases
 - **T1** Find missing gold attachment targets
 - **T1** Show full example 1 JSON
-- … et 9 autres
+- … et 68 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -113,10 +116,39 @@
 - **T1** `- **Panini J7.1** : 532 textes (445 langues) ; **porte d'écriture** (hors script, hasard) ; famille **66,1 %** / sœur **26,1 %** (hasard 10,3/2,5) ; LANG_TREE : sœurs **0,619** vs **0,0445** (13,9×, p`
 - **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
 - **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
+- **T1** `comme « 100 % du langage » : c'est 100 % des spans prédits, sur **92,89 %** des cibles.`
+- **T1** `| [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |`
+- **T1** `| [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |`
+- **T1** `38:**État au 14/11 03 h 30.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet`
+- **T1** `192:| **B13** | le **moteur de pensée** : RSN plurielle, arbre d'états, anytime | ✅ **state store v0** + moteur + **AC-3/alpha-bêta** + **DRVF `thought`** + **banc anytime** + **opérateurs hétérogènes`
+- **T1** `267:| **R0.7** | **la couche linguistique** : neuf niveaux (graphème → pragmatique), heuristique CPU + neuronal de contrat, substitution/parallèle/cascade, activation sémantique 51–76 % | ✅ **398 lang`
+- **T1** `**J7.1** sépare la **sœur** de la **famille lointaine** : sur 532 textes Panini (445 langues, 1948), le top-1 est de la même famille **66,1 %** (hasard 10,3 %) et de la même branche **26,1 %** (hasard`
+- **T1** `63:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../..`
+- **T1** `37 48 - **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥`
+- **T1** `68 63 - **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibl`
+- **T1** `26 134 - **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité st`
+- **T1** `27 135 - **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,89`
+- **T1** `-langue=fr script=Latn source=heuristique · 19 étiquettes · unités sémantiques=2 (61.5% du texte)`
+- **T1** `+langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)`
+- **T1** `+  (`membres: 3` ; rang 1 = REL longue, rang 2 = GV, rang 3 = REL courte) et `meta.alternative``
+- **T1** `-comme « 100 % du langage » : c'est 100 % des spans prédits, sur **92,89 %** des cibles.`
+- **T1** `+comme « 100 % du langage » : c'est 100 % des spans prédits, sur **99,58 %** des cibles. Le cas`
+- **T1** `@@ -617,8 +655,9 @@ comme « 100 % du langage » : c'est 100 % des spans prédits, sur **92,89 %** d`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : M journal/README.md  M journal/sessions/MANIFEST.md  M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md  M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md  M journal/se
+- **T1** : a6808c5e CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ 03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236
+- **T1** : 2240069       01:24 python3 -m tools.pensee.autotest 2240070       01:24 python3 -m tools.pensee.autotest [exit code: 1]
+- **T1** : [stderr] wc: /tmp/j111/porte-produit-autotest.log: No such file or directory tail: cannot open '/tmp/j111/porte-produit-autotest.log' for reading: No such file or directory [exit code: 1]
+- **T1** : a6808c5e CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ 03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236
+- **T1** : [stderr]   ✅ index : aucun fait stagé sans état error: Terminal is dumb, but EDITOR unset Please supply the message using either -m or -F option. [exit code: 1]
+
+## 6. Commits
+
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet git commit --dry-run -- docs/produit/exemples.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/r
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet git commit -- docs/produit/exemples.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-exe
+- cat > /tmp/j111/commit-msg.txt <<'MSG' J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238  Les 5 bl
 

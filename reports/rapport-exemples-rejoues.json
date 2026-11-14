@@ -1,0 +1,500 @@
+{
+ "tache": "J11.1",
+ "titre": "Les cinq exemples de la doc produit rejoués",
+ "date": "2026-11-14",
+ "head": "a6808c5edf741ea59d45602fdfeee0916488beaf",
+ "code": {
+  "cli": "drave 0.1.0",
+  "schema": 2,
+  "commande": "python3 tools/drave.py"
+ },
+ "gold": {
+  "nom": "vivant (hand + reel + synthétique)",
+  "gele": false,
+  "phrases": 612,
+  "tokens": 3179,
+  "cibles_attachement": 239
+ },
+ "mesure": {
+  "pos": {
+   "exactitude": 0.8625,
+   "ferme": 0.9373,
+   "ouvert": 0.7918,
+   "tokens": 3179
+  },
+  "syntagmes": {
+   "f1": 0.7902,
+   "precision": 0.786,
+   "rappel": 0.7944,
+   "tp": 1480,
+   "fp": 403,
+   "fn": 383,
+   "tete_f1": 0.9029
+  },
+  "attachement": {
+   "labels": 238,
+   "cibles": 239,
+   "exact": 238,
+   "exact_taux": 0.9958,
+   "couverture": 0.9958,
+   "par_langue": {
+    "fr": {
+     "cibles": 151,
+     "labels": 151,
+     "exact": 151,
+     "topk": 149,
+     "exact_taux_span": 1.0
+    },
+    "en": {
+     "cibles": 88,
+     "labels": 87,
+     "exact": 87,
+     "topk": 87,
+     "exact_taux_span": 1.0
+    }
+   }
+  },
+  "note": "Le mandat porte 237/238 ; l'etat courant est 238/238 labels depuis la regle s065 (J6.2). 238/239 cibles."
+ },
+ "blocs": [
+  {
+   "id": "1",
+   "cas": "g001 — declarative simple",
+   "entree": "Le chat dort.",
+   "identique": false,
+   "changements": [
+    "sortie lisible : 19 -> 20 etiquettes",
+    "POS : ajout de ./PONCT [12:13], confiance 0.95",
+    "COUVERTURE pos : 0.92 -> 0.95",
+    "JSON : ajout de l'objet POS . / PONCT"
+   ],
+   "sortie": {
+    "langue": "fr",
+    "script": "Latn",
+    "refus": "",
+    "pos": [
+     {
+      "valeur": "Le",
+      "type": "DET",
+      "debut": 0,
+      "fin": 2,
+      "confiance": 0.92,
+      "ouvert": false
+     },
+     {
+      "valeur": "chat",
+      "type": "NOUN",
+      "debut": 3,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+     },
+     {
+      "valeur": "dort",
+      "type": "VERB",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.72,
+      "ouvert": true
+     },
+     {
+      "valeur": ".",
+      "type": "PONCT",
+      "debut": 12,
+      "fin": 13,
+      "confiance": 0.95,
+      "ouvert": false
+     }
+    ],
+    "syntagmes": [
+     {
+      "valeur": "Le chat",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "dort",
+      "union": null,
+      "candidats": [
+       "structure la plus proche",
+       "dort"
+      ]
+     },
+     {
+      "valeur": "dort",
+      "type": "GV",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "chat",
+      "union": null,
+      "candidats": [
+       "structure la plus proche"
+      ]
+     }
+    ],
+    "phrase": [
+     {
+      "type": "type",
+      "valeur": "déclarative"
+     }
+    ],
+    "pragmatique": [
+     {
+      "type": "acte",
+      "valeur": "assertion"
+     }
+    ]
+   }
+  },
+  {
+   "id": "2",
+   "cas": "g011 — attachement de REL",
+   "entree": "Le livre que j'ai lu est intéressant.",
+   "identique": true,
+   "changements": [
+    "identique champ pour champ dans le filtre",
+    "le JSON complet v2 porte meta.partition/meta.alternative sur le groupe 0 (membres 3 : REL longue rang 1, GV rang 2, REL courte rang 3)"
+   ],
+   "sortie": {
+    "langue": "fr",
+    "script": "Latn",
+    "refus": "",
+    "syntagmes": [
+     {
+      "valeur": "Le livre",
+      "type": "GN",
+      "debut": 0,
+      "fin": 8,
+      "confiance": 0.55,
+      "role": "agent",
+      "cible": "intéressant",
+      "union": null,
+      "candidats": [
+       "« que j'ai lu » → Le livre",
+       "intéressant",
+       "livre"
+      ]
+     },
+     {
+      "valeur": "que j'ai lu",
+      "type": "REL",
+      "debut": 9,
+      "fin": 20,
+      "confiance": 0.55,
+      "role": "qualite",
+      "cible": "livre",
+      "union": null,
+      "candidats": [
+       "« que j'ai lu » → Le livre",
+       "intéressant",
+       "livre"
+      ]
+     },
+     {
+      "valeur": "que j'ai lu est intéressant",
+      "type": "REL",
+      "debut": 9,
+      "fin": 36,
+      "confiance": 0.3,
+      "role": "qualité",
+      "cible": "livre",
+      "union": true,
+      "candidats": [
+       "REL",
+       "livre",
+       "intéressant"
+      ]
+     },
+     {
+      "valeur": "est intéressant",
+      "type": "GV",
+      "debut": 21,
+      "fin": 36,
+      "confiance": 0.55,
+      "role": "predicat",
+      "cible": "livre",
+      "union": null,
+      "candidats": [
+       "« que j'ai lu » → Le livre",
+       "livre"
+      ]
+     }
+    ],
+    "phrase": [
+     {
+      "type": "type",
+      "valeur": "déclarative"
+     }
+    ],
+    "pragmatique": [
+     {
+      "type": "acte",
+      "valeur": "assertion"
+     },
+     {
+      "type": "double_sens",
+      "valeur": "candidat"
+     }
+    ]
+   }
+  },
+  {
+   "id": "3",
+   "cas": "r241 — anglais et marqueur ambigu",
+   "entree": "The day when we left was beautiful.",
+   "identique": false,
+   "changements": [
+    "POS left : NOUN 0.3 -> VERB 0.85",
+    "POS : ajout de ./PONCT [34:35], confiance 0.95",
+    "syntagmes, phrase et pragmatique inchanges"
+   ],
+   "sortie": {
+    "langue": "en",
+    "script": "Latn",
+    "refus": "",
+    "pos": [
+     {
+      "valeur": "The",
+      "type": "DET",
+      "debut": 0,
+      "fin": 3,
+      "confiance": 0.92,
+      "ouvert": false
+     },
+     {
+      "valeur": "day",
+      "type": "NOUN",
+      "debut": 4,
+      "fin": 7,
+      "confiance": 0.3,
+      "ouvert": true
+     },
+     {
+      "valeur": "when",
+      "type": "CONJ",
+      "debut": 8,
+      "fin": 12,
+      "confiance": 0.92,
+      "ouvert": false
+     },
+     {
+      "valeur": "we",
+      "type": "PRON",
+      "debut": 13,
+      "fin": 15,
+      "confiance": 0.92,
+      "ouvert": false
+     },
+     {
+      "valeur": "left",
+      "type": "VERB",
+      "debut": 16,
+      "fin": 20,
+      "confiance": 0.85,
+      "ouvert": true
+     },
+     {
+      "valeur": "was",
+      "type": "AUX",
+      "debut": 21,
+      "fin": 24,
+      "confiance": 0.92,
+      "ouvert": false
+     },
+     {
+      "valeur": "beautiful",
+      "type": "ADJ",
+      "debut": 25,
+      "fin": 34,
+      "confiance": 0.68,
+      "ouvert": true
+     },
+     {
+      "valeur": ".",
+      "type": "PONCT",
+      "debut": 34,
+      "fin": 35,
+      "confiance": 0.95,
+      "ouvert": false
+     }
+    ],
+    "syntagmes": [
+     {
+      "valeur": "The day",
+      "type": "GN",
+      "debut": 0,
+      "fin": 7,
+      "confiance": 0.35,
+      "role": "groupe nominal",
+      "cible": "beautiful",
+      "union": null,
+      "candidats": [
+       "GN",
+       "beautiful"
+      ]
+     },
+     {
+      "valeur": "when we left",
+      "type": "REL",
+      "debut": 8,
+      "fin": 20,
+      "confiance": 0.35,
+      "role": "qualité",
+      "cible": "day",
+      "union": null,
+      "candidats": [
+       "REL",
+       "day",
+       "beautiful"
+      ]
+     },
+     {
+      "valeur": "was beautiful",
+      "type": "GV",
+      "debut": 21,
+      "fin": 34,
+      "confiance": 0.35,
+      "role": "prédicat",
+      "cible": null,
+      "union": null,
+      "candidats": [
+       "GV"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "4",
+   "cas": "refus — texte vide",
+   "entree": "",
+   "identique": false,
+   "changements": [
+    "CLI sans --json : code de sortie 1 -> 3 ; stdout vide ; stderr inchange",
+    "CLI avec --json : annotation de refus sur stdout (schema drave.annotation, version 2, refus vide, 0 etiquette), code 3",
+    "API : sortie inchangee (langue und, script Zyyy, refus vide, 0 etiquette)"
+   ],
+   "sortie": {
+    "langue": "und",
+    "script": "Zyyy",
+    "refus": "vide",
+    "etiquettes": 0
+   },
+   "cli": {
+    "sans_json": {
+     "code": 3,
+     "stdout_octets": 0,
+     "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)"
+    },
+    "avec_json": {
+     "code": 3,
+     "schema": "drave.annotation",
+     "version": 2,
+     "refus": "vide",
+     "etiquettes": 0
+    }
+   }
+  },
+  {
+   "id": "5",
+   "cas": "r035 — ancien echec connu, desormais predit",
+   "entree": "The film she talks about is out.",
+   "identique": false,
+   "changements": [
+    "GN : 'The film she' [0:12] -> 'The film' [0:8]",
+    "GV 'talks' [13:18] -> REL 'she talks about' [9:24] cible film (le span et la cible du gold)",
+    "GV 'about is out' [19:31] -> GV 'is out' [25:31]",
+    "candidats et cibles suivent ; aucune union"
+   ],
+   "sortie": {
+    "langue": "en",
+    "script": "Latn",
+    "refus": "",
+    "syntagmes": [
+     {
+      "valeur": "The film",
+      "type": "GN",
+      "debut": 0,
+      "fin": 8,
+      "confiance": 0.35,
+      "role": "groupe nominal",
+      "cible": "out",
+      "union": null,
+      "candidats": [
+       "GN",
+       "out"
+      ]
+     },
+     {
+      "valeur": "she talks about",
+      "type": "REL",
+      "debut": 9,
+      "fin": 24,
+      "confiance": 0.35,
+      "role": "qualité",
+      "cible": "film",
+      "union": null,
+      "candidats": [
+       "REL",
+       "film",
+       "out"
+      ]
+     },
+     {
+      "valeur": "is out",
+      "type": "GV",
+      "debut": 25,
+      "fin": 31,
+      "confiance": 0.35,
+      "role": "prédicat",
+      "cible": null,
+      "union": null,
+      "candidats": [
+       "GV"
+      ]
+     }
+    ],
+    "phrase": [
+     {
+      "type": "type",
+      "valeur": "déclarative"
+     }
+    ],
+    "pragmatique": [
+     {
+      "type": "acte",
+      "valeur": "assertion"
+     }
+    ]
+   }
+  }
+ ],
+ "controle_negatif": {
+  "dispositif": "comparateur des 5 blocs JSON de la doc aux sorties courantes (JSON parse, pas de comparaison de texte)",
+  "doc_reelle": {
+   "blocs_identiques": 5,
+   "blocs": 5,
+   "code": 0
+  },
+  "mutation": "dans une copie de la doc, left/VERB (exemple 3) est remplace par left/NOUN",
+  "doc_mutee": {
+   "blocs_identiques": 4,
+   "blocs": 5,
+   "code": 1,
+   "ecart": ".pos[4].type: 'NOUN' != 'VERB' (exemple 3)"
+  }
+ },
+ "limites": [
+  "Rejeu date : les sorties valent pour le HEAD indique et le CLI 0.1.0 ; tout changement ulterieur les deplace.",
+  "Les 5 exemples ne mesurent pas la qualite : F1, POS et attachement viennent de evaluer sur 612 phrases, pas de ces 5 cas.",
+  "Le gold est une convention : g017 reste la seule cible sans span predit (SUB [9:28] etendue a [9:38]).",
+  "La comparaison porte sur les champs filtres des commandes de la doc, pas sur le JSON complet (trace, cout, meta de partition).",
+  "Le mandat 237/238 est anterieur a s065 : le chiffre courant est 238/238 labels (238/239 cibles)."
+ ],
+ "head_rejeu": "03ecee413cb05cf906d623765443d98d317e7f59",
+ "head_rapport": "a6808c5edf741ea59d45602fdfeee0916488beaf",
+ "note_head": "Le rejeu a ete fait sur le code de 03ecee41 (produit inchange) ; le HEAD du rapport est a6808c5, commit superviseur qui ne touche pas tools/drave.py ni bloc_linguistique.py."
+}

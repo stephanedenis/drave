@@ -61602,3 +61602,29 @@ sam 14 nov 2026 04:16:45 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 | cut -c1-80; git status --porcelain tools/chantier/superviseur.py | head -2; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : \\d … [767 caractères tronqués]`
+
+  ```
+03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 23
+81fc9ecf JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE
+M  tools/chantier/superviseur.py
+ create mode 100644 journal/sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md
+COMMIT OK 1
+a6808c5e CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ
+   d31e8788..a6808c5e  s/v7 -> s/v7
+   d31e8788..a6808c5e  master -> master
+sam 14 nov 2026 04:19:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -3 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3", "description": "Suivre J11.1", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 04:28:23 EST
+2026-11-14 03:46:10 · ▶ J10.1 — Le bilan de la semaine (timeout 5400 s)
+2026-11-14 03:56:31 · ✔ J10.1 en 620.6 s (code 0) — ✅ test -f reports/rapport-bilan-chantier.md && echo FICHE-OK
+2026-11-14 04:16:26 · ▶ J11.1 — Le produit — les exemples rejoués (timeout 5400 s)
+budget consommé : 22652.8 s · lancements : 22
+  [a_faire ] J11.1  j11 — Le produit — les exemples rejoués
+  [a_faire ] J11.2  j11 — Le produit — la mesure par langue
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"fait|a_faire\" | tail -4", "description": "Suivre J11.1", "timeoutMs": 600000}`

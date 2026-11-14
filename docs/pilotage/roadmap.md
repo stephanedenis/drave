@@ -63,6 +63,15 @@ doit refaire la passe et poser le tag `chantier-2026-11-14`. Le détail — chif
 D1–D20, rejets R1–R30, échecs, reste — est dans
 [`rapport-bilan-chantier.md`](../../reports/rapport-bilan-chantier.md) + JSON.
 
+**J11.1 — les exemples rejoués.** Les **5 blocs** de `docs/produit/exemples.md` sont reproduits
+avec le code courant ; **4 sont corrigés** : la ponctuation finale entre dans le POS (`g001`,
+`r241`), le refus sort en **3** et `r035` — l'ancien échec connu — rend exactement le gold
+(`REL [9:24] « she talks about » → film`). Le seul bloc identique est `g011`. F1 **0,7902**,
+attachement **238/238 labels** (238/239 cibles, 0,9958) ; le mandat 237/238 est l'état d'avant
+`s065`. Le contrôle négatif (mutation d'un token dans une copie de la doc) est détecté 4/5.
+[`fiche`](../../reports/rapport-exemples-rejoues.md) + JSON. La suite produit est **J11.2**
+(`evaluer --par-langue`), **J11.3** (50 textes libres), **J11.4** (schéma v2 documenté).
+
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)
