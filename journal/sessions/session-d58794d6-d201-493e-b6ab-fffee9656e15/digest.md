@@ -2690,3 +2690,172 @@ drwxr-xr-x. 2 stephane stephane     100 14 nov 03:31 temoin
   ```
 
 - **bash** `{"command": "git commit -m \"J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT\n\nLes 19 fiches de la cohorte POS 85 / F1 0,7535 / 236/237 / 2 spans portent un encart\nen ligne 3 qui pointe vers en-cours et la roadmap, sans rec … [648 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 ecef7250] J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+ 32 files changed, 1667 insertions(+), 52 deletions(-)
+ create mode 100644 reports/passe-honnetete.json
+ create mode 100644 reports/rapport-passe-honnetete.md
+EXIT:0
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo '---'; git show --stat --oneline HEAD | head -40; echo '--- status ---'; git status --short | head -30", "description": "Verify J9.1 commit and status"}`
+
+  ```
+ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+---
+ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+ docs/pilotage/en-cours.md                          |   6 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ journal/2026-11-14/README.md                       |   5 +-
+ journal/2026-11-14/mesures.md                      |   7 +-
+ journal/README.md                                  |   2 +-
+ journal/THEMES.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  14 +
+ .../digest.md                                      | 985 +++++++++++++++++++++
+ .../rapport.md                                     |  25 +-
+ reports/README.md                           
+… [1761 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/portes-j91.log 2>/dev/null; echo '---'; cat work/portes-1114-03h29/registre.txt 2>/dev/null; echo '---'; ps -p 1999936 -o pid,etime,cmd 2>/dev/null || true", "description": "Check full gate progress after commit"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (84 portes, borne 1800 s) ===
+    journaux : work/portes-1114-03h29
+  porte-adaptateur-sortie ✅                          80 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+  porte-audit-drapeaux   ✅                         185 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          14 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          16 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+---
+porte-adaptateur-sortie 0 80
+porte-audit-drapeaux 0 185
+porte-b1110-hybride 0 0
+porte-balayage 0 0
+porte-bloc-code 0 14
+porte-bloc-linguistique 0 16
+porte-bloc-maths 0 1
+porte-bloc-tableaux 0 2
+---
+    PID     ELAPSED CMD
+1999936       05:27 bash tools/toutes-les-portes.sh
+  ```
+
+- **job_output** `{"job_id": "bash-101", "timeout_ms": 300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/portes-j91.log 2>/dev/null; echo '---'; wc -l work/portes-1114-03h29/registre.txt", "description": "Check gate progress"}`
+
+  ```
+porte-audit-drapeaux   ✅                         185 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          14 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          16 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          54 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          91 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                         107 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          33 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynch
+… [203 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"J9.1\\|honnêteté\\|instantané\" journal/2026-11-14/README.md journal/2026-11-14/mesures.md | head -20", "description": "Check journal entry for J9.1"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "git show --format=fuller --stat HEAD | head -50; echo '--- message ---'; git show -s --format='%B' HEAD", "description": "Review commit metadata and message"}`
+
+  ```
+commit ecef72507c326d77d64e56e59af7aa89e9859422
+Author:     Stéphane <stephane@localhost>
+AuthorDate: Sat Nov 14 03:32:37 2026 -0500
+Commit:     Stéphane <stephane@localhost>
+CommitDate: Sat Nov 14 03:32:37 2026 -0500
+
+    J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT
+    
+    Les 19 fiches de la cohorte POS 85 / F1 0,7535 / 236/237 / 2 spans portent un encart
+    en ligne 3 qui pointe vers en-cours et la roadmap, sans recopier de valeurs.
+    10 encarts réécrits (l'ancien copiait l'état et avait périmé), 9 ajoutés.
+    
+    Contrôles : 19/19 notices, 38/38 liens ; 0 fiche de résultats ne publie un marqueur
+    sans mention, hors 2 faux positifs (« 2 spans » de phrase) et les index.
+    État courant mesuré : vivant 612 POS 0,8625 F1 0,7902 att. 238/238 labels (238/239),
+    1 span (g017) ; gelé 602 F1 0,7882 att. 234/239.
+    
+    Fiche reports/rapport-passe-honnetete.md ; JSON reports/passe-honnetete.json.
+    Revue de documentation verte, tableaux verts, T0 dans le budget.
+
+ docs/pilotage/en-cours.md                          |   6 +-
+ docs/pilotage/roadmap.md                           |   2 +-
+ journal/2
+… [2527 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/journal_auto.py 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}; grep -n \"J9.1\\|honnêteté\\|instantané\" journal/2026-11-14/*.md | head -20", "description": "Regenerate journal after commit", "timeoutMs": 180000}`
+
+  ```
+2026-11-14 : 8 commits
+  journal/2026-11-14/docs.md
+  journal/2026-11-14/memoire.md
+  journal/2026-11-14/mesures.md
+  journal/2026-11-14/portes.md
+  journal/2026-11-14/README.md
+  journal/THEMES.md
+6 fichiers écrits · 8 commits classés
+EXIT:0
+journal/2026-11-14/docs.md:12:| 03:32 | `ecef7250` | J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT | `en-cours.md`, `roadmap.md`, `README.md` (+29) |
+journal/2026-11-14/README.md:36:| 03:32 | `ecef7250` | J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT |
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/portes-j91.log 2>/dev/null; echo '---'; wc -l work/portes-1114-03h29/registre.txt; awk '$2 != 0' work/portes-1114-03h29/registre.txt | head", "description": "Check gates progress and failures"}`
+
+  ```
+porte-bloc-linguistique ✅                          16 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          54 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          91 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                         107 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          33 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                          10 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+---
+13 work/portes-1114-03h29/registre.txt
+  ```
+
+- **bash** `{"command": "pstree -p 1999936 2>/dev/null | head -5; echo '---'; ps -eo pid,etime,%cpu,cmd | awk '$1==1999936 || $1==2033667 || $1==2033669 {print}'", "description": "Check current long gate"}`
+
+  ```
+bash(1999936)---timeout(2136488)---bash(2136489)---bash(2139182)-+-drave(2139183)-+-{drave}(2139187)
+                                                                 |                |-{drave}(2139188)
+                                                                 |                |-{drave}(2139189)
+                                                                 |                |-{drave}(2139340)
+                                                                 |                |-{drave}(2139341)
+---
+1999936       10:48  0.0 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "git status --short journal | head -20", "description": "See journal changes to commit"}`
+
+  ```
+M journal/2026-11-14/README.md
+ M journal/2026-11-14/docs.md
+  ```
+
+- **bash** `{"command": "git add journal/2026-11-14/README.md journal/2026-11-14/docs.md && git commit -m \"JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)\" 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}", "description": "Commit journal entry for J9.1", "timeoutMs": 300000}`

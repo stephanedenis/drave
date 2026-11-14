@@ -7,14 +7,14 @@
 | Identifiant | `session-d58794d6-d201-493e-b6ab-fffee9656e15` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 03:18 |
-| Durée | 0.2 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 112 |
-| Appels d'outils | 133 |
+| Messages | 122 |
+| Appels d'outils | 144 |
 | Fichiers touchés | 3 |
-| Commandes | 116 |
+| Commandes | 126 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J9.1 : la passe d'honnêteté — les fiches qui publient des chiffres dépassés (POS 85, F1 0,7535, 236/237, 2 spans)  … [176 caractères tronqués]
 
-*133 appels d'outils.* Actions notables :
+*144 appels d'outils.* Actions notables :
 
 - bash — Inspect repo state and recent commits
 - bash — List reports directory
@@ -41,7 +41,7 @@
 - bash — Check git status details and branches
 - bash — Read headers of ten marked fiches
 - bash — Trace historical notice commits
-- … et 115 autres
+- … et 125 autres
 
 ## 3. Travail accompli
 
@@ -95,7 +95,7 @@
 - **T1** Inspect remaining candidates headers
 - **T1** Check gold-gp-corrige figures
 - **T1** Strict scan of headlines for markers
-- … et 76 autres
+- … et 86 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -231,4 +231,5 @@
 
 - J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)  \`restituer --canonique\` construit la forme canonique (segments, rôles, cib
 - J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT  Les 19 fiches de la cohorte POS 85 /
+- JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE »)" 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}
 

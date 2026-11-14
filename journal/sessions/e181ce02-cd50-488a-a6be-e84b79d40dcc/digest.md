@@ -61523,3 +61523,10 @@ budget consommé : 20345.9 s · lancements : 20
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre J9.1", "timeoutMs": 2500000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-4846]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-4846", "timeout_ms": 1800000, "wait": true}`
