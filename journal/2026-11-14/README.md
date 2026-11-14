@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**27 commits** · **2 session(s)** · **6 thème(s)**
+**28 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 7 | [docs.md](docs.md) |
+| docs | 8 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -56,6 +56,7 @@
 | 10:06 | `883ce817` | CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ |
 | 11:04 | `0bbdbbb3` | 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7 |
 | 11:10 | `9df4a591` | ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A) |
+| 11:20 | `29b3dd13` | ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS |
 
 ## Le récit de la journée (écrit à la main)
 

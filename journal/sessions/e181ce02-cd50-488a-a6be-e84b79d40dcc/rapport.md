@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 330.7 h |
 | Tours | 196 |
-| Messages | 3760 |
-| Appels d'outils | 3352 |
+| Messages | 3763 |
+| Appels d'outils | 3354 |
 | Fichiers touchés | 25 |
-| Commandes | 2789 |
+| Commandes | 2791 |
 | Sous-agents | 43 |
-| Commits | 448 |
+| Commits | 449 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10543,7 +10543,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
-*39 appels d'outils.* Actions notables :
+*41 appels d'outils.* Actions notables :
 
 - bash — Lire la fiche de coordination S
 - bash — Inspecter le sous-module S
@@ -10559,7 +10559,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Écrire la note Panini
 - bash — Consigner les décisions
 - bash — Committer les décisions
-- … et 21 autres
+- … et 23 autres
 
 **Synthèse produite :**
 
@@ -10685,7 +10685,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2749 autres
+- … et 2751 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11281,4 +11281,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)" -- docs/pilot
 - ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
 - ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU APRÈS"; then echo
+- ÉTAT — LA LIGNE R REQUALIFIÉE : LE TAGGER EST LIVRÉ (--tagger, 0bbdbbb3), LA PROCHAINE ACTION PASSE AU SPLIT RÉEL ET AU GOLD 200+" -- docs/pilotage/en-cours.md 
 

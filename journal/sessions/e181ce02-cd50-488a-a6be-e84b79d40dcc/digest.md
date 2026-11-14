@@ -62750,3 +62750,28 @@ sam 14 nov 2026 11:19:40 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)**\", \"**1 span (`g017`, inatteignable)**\")\nt=t.replace(\ … [748 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+ 14 files changed, 491 insertions(+), 40 deletions(-)
+COMMIT OK 1
+29b3dd13 ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS
+   9df4a591..29b3dd13  s/v7 -> s/v7
+   9df4a591..29b3dd13  master -> master
+sam 14 nov 2026 11:22:30 EST
+  ```
+
+### 👤 Utilisateur
+
+Agent 24e34ad3-f423-4394-bb1c-74a6930a57e5 sent a message: 
+Alerte porte (pas un blocage de mon côté) : `python3 tools/taille_documents.py` est ROUGE depuis ton commit 9df4a591 — T0 = 4007 mots > budget 4000 (7 mots de trop). La cause est dans `docs/pilotage/en-cours.md` (ligne « Fait » : « g017, déclaré inatteignable le 14/11 — décision 2A » ajoutée par 9df4a591). Je ne touche pas en-cours (règle sous-agent). Il suffit de retirer ~8 mots de cette ligne (ex. « 1 span (`g017`, 2A) ») pour repasser vert. Autre point d'état : la ligne R dit encore « prochaine action : route API derrière drapeau » alors que `--tagger` est livré (0bbdbbb3) — à requalifier (split réel / gold 200+). Je termine la vérification du reste ; la fiche, le JSON, la CLI et les 14 tests sont déjà committés dans 0bbdbbb3.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"route API derrière drapeau\\|route API\" docs/pilotage/en-cours.md | head -2 | cut -c1-160; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Voir la ligne R et T0"}`
+
+  ```
+120:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9475 (+8,49), intégrer** ; R2/R3 attendent N5/N4 | **route API derrière drapeau** ; **split réel t
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nligne = next((l for l in t.splitlines() if l.startswith(\"| **R — le lecteur** | **R0.7**\")), None)\nif ligne:\n    t=t.replace(ligne, l … [1172 caractères tronqués]`

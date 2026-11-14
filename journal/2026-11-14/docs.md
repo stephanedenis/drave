@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 09:49 | `31ce36fd` | S — LE POINTEUR DU SOUS-MODULE AVANCE : LES 11 VERDICTS HUMAINS SONT DANS GIT (19/19, 11 ACCEPTÉS, 8 EXCLUS) | `README.md`, `distribue.md`, `docs.md` (+9) |
 | 10:06 | `883ce817` | CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 | 11:10 | `9df4a591` | ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 11:20 | `29b3dd13` | ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 
 ## Chiffres du jour
 

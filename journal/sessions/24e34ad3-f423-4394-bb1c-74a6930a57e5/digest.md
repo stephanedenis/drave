@@ -3192,3 +3192,63 @@ def main() -> int:
 … [2536 caractères tronqués]
   ```
 
+- **send_message** `{"agent_id": "e181ce02-cd50-488a-a6be-e84b79d40dcc", "message": "Alerte porte (pas un blocage de mon côté) : `python3 tools/taille_documents.py` est ROUGE depuis ton commit 9df4a591 — T0 = 4007 mots > budget 4000 (7 mots de trop). La cause est dans `docs/pilotage/en-cours.md` (ligne « Fait » : « g01 … [506 caractères tronqués]`
+
+  ```
+message delivered to agent e181ce02-cd50-488a-a6be-e84b79d40dcc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py >/tmp/taille3.log 2>&1; echo \"taille=$?\"; tail -3 /tmp/taille3.log; git log --oneline -2", "description": "Revérifier le budget T0 après alerte"}`
+
+  ```
+taille=0
+     · 51 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short docs/pilotage/en-cours.md; grep -n \"T0 max\" /tmp/taille3.log; grep -n \"g017\" docs/pilotage/en-cours.md | head -3", "description": "Voir la correction d'en-cours"}`
+
+  ```
+M  docs/pilotage/en-cours.md
+21:  T0 max : 3996 mots (budget 4 000)
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`, inatteignable)** ; **`s065` réglé** ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** ; **restitution v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J11.1–J11.4** ([exemples](../../reports/rapport-exemples-rejoues.md), [par-langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md)).
+67:- **Prochaine action** : **trancher la convention d'adverbe (`g017`)** ; puis T132/T133, gold 200+.
+90:- **Pensée — B13 (actif)** : **183/183**, gold 432 ; `r035` (238/238), convention GV (0,7902), `s065` (238/238), **J6.1 rejetée** (g017 à trancher), schéma v2, restitution v1 (46/46, strict 0,1087), **J9.1** (19 fiches) ; [s065](../../reports/rapport-s065.md), [restitution v1](../../reports/rapport-restitution-v1.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+  ```
+
+### 🤖 Assistant
+
+⏵ Je confirme les trois portes avec leurs codes de sortie réels
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py >/tmp/r.log 2>&1; echo \"revue=$?\"; python3 tools/taille_documents.py >/tmp/t.log 2>&1; echo \"taille=$?\"; python3 tools/tests/test_produit.py >/tmp/p.log 2>&1; echo \"test_produit=$?\"; python3 … [225 caractères tronqués]`
+
+  ```
+revue=0
+taille=0
+test_produit=0
+test_tagger=0
+---
+  revue de documentation · 734 fiche(s) · 827 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+Ran 18 tests in 7.420s
+
+OK
+Ran 14 tests in 1.947s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"route API\\|R0.7\" docs/pilotage/en-cours.md | head -5; git status --short docs/produit/README.md docs/pilotage/en-cours.md", "description": "Vérifier la ligne R et l'état des docs"}`
+
+  ```
+120:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9475 (+8,49), intégrer** ; R2/R3 attendent N5/N4 | **route API derrière drapeau** ; **split réel tenu à l'écart** |
+128:**N2** — porte (0,2856/0,3566) ; **Pensée** — `g017`, T132/T133, gold 200+ ; **J3.2** — V14 des 21 langues ; **J7.1** — réplication neuronale ; **S** — 11 verdicts + pointeur ; **R0.7** — split réel ; **A** — A6.2, A8.3b2.
+M  docs/pilotage/en-cours.md
+ M docs/produit/README.md
+  ```
+
