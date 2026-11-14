@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**26 commits** · **2 session(s)** · **6 thème(s)**
+**27 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 6 | [docs.md](docs.md) |
+| docs | 7 | [docs.md](docs.md) |
 | memoire | 4 | [memoire.md](memoire.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
@@ -22,8 +22,8 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `24e34ad3-f423-4394-bb1c-74a6930a57e5` | Tu travailles dans /home/stephane/Data13 | 2026-11-14 09:53 | 1.3 h | [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 330.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `24e34ad3-f423-4394-bb1c-74a6930a57e5` | Tu travailles dans /home/stephane/Data13 | 2026-11-14 09:53 | 1.5 h | [rapport](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md) · [digest](../sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 330.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -55,6 +55,7 @@
 | 09:55 | `812f2722` | DÉCISIONS DU 14/11 — 1A (TAGGER EN OPTION), 2A (g017 INATTEIGNABLE), 3B (11 VERDICTS S COMMITTÉS), 4A (NOTE PANINI), 5A (A6.2 REPOUSSÉ), 6A→C→B |
 | 10:06 | `883ce817` | CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ |
 | 11:04 | `0bbdbbb3` | 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7 |
+| 11:10 | `9df4a591` | ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A) |
 
 ## Le récit de la journée (écrit à la main)
 

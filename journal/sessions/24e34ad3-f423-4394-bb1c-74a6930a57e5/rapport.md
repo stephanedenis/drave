@@ -7,12 +7,12 @@
 | Identifiant | `24e34ad3-f423-4394-bb1c-74a6930a57e5` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 09:53 |
-| Durée | 1.3 h |
+| Durée | 1.5 h |
 | Tours | 1 |
-| Messages | 120 |
-| Appels d'outils | 144 |
+| Messages | 138 |
+| Appels d'outils | 162 |
 | Fichiers touchés | 5 |
-| Commandes | 82 |
+| Commandes | 99 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (branche s/v7, Python). Mission : **intégrer le tagge … [3226 caractères tronqués]
 
-*144 appels d'outils.* Actions notables :
+*162 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état git et la branche
 - bash — Compter les lignes des pièces clés
@@ -41,11 +41,11 @@
 - bash — Inspecter le rapport tagger 612
 - bash — Chercher la mention de la décision 1A
 - bash — Lire l'état et la roadmap autour du tagger
-- … et 105 autres
+- … et 123 autres
 
 **Synthèse produite :**
 
-⏵ Je relance les trois portes demandées et vérifie les liens de la doc finale
+⏵ Je confirme les trois portes avec leurs codes de sortie réels
 
 ## 3. Travail accompli
 
@@ -101,7 +101,7 @@
 - **T1** Chercher une spécification existante du --tagger
 - **T1** Chercher une tentative antérieure
 - **T1** Lire la décision du parent sur le tagger
-- … et 42 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -142,10 +142,17 @@
 - **T1** `ATTACHEMENT exact 100.00 % · couverture 100.00 % · top-k 100.00 % · PRAGMATIQUE acte 100.00 %`
 - **T1** `CONTRÔLE NÉGATIF cible exacte tirée au hasard 100.00 % (graine 0, 1 cibles)`
 - **T1** `TAGGER POS 100.00 % · Δ +0.00 pts · SYNTAGMES F1 90.91 % (tête 100.00 %)`
+- **T1** `**La mesure.** Sur les **20 phrases `hand`** du gold (105 tokens) : POS **88,57 % → 97,14 %**`
+- **T1** `(**+8,57 pts**), syntagmes et attachement **inchangés**. Sur le **gold 612** : **86,25 % →`
+- **T1** `94,75 %** (**+8,49 pts**), mais le gain du seul **réel 432** est **+4,67** (le synthétique porte`
+- **T1** `-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../r`
+- **T1** `+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)** ; **`s065` ré`
+- **T1** `64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`, inatteignable)** ; **`s065` réglé** ; **`r035`**, **convent`
 
 ## 5. Erreurs rencontrées
 
-1 sorties en erreur ou divergentes. Les premières :
+2 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : #!/bin/bash # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait. # # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS # (`--attn-window` en r
+- **T1** : #!/bin/bash # porte-deepseek.sh — le banc externe, sans réseau et sans clé. # # CE QU'ELLE VERROUILLE : #   1. les tests de l'adaptateur, du corpus professeur et de la distillation #      (transport f
 

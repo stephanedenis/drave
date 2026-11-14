@@ -2794,3 +2794,401 @@ journal/sessions/session-a68c9aaf-bd76-458b-850
 … [659 caractères tronqués]
   ```
 
+- **bash** `{"command": "cat > /tmp/evaluer_20_par_langue.py <<'PY'\nimport json, pathlib, sys\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(R)); sys.path.insert(0, str(R/'tools'))\nimport drave\nev = drave._module_evaluation()\nchargeur = ev.charger\nev.charger =  … [756 caractères tronqués]`
+
+  ```
+code ok, langues ['fr']
+fr {'exactitude': 1.0, 'exactitude_ferme': 1.0, 'exactitude_ouvert': 1.0, 'tokens': 9} 0.0 {'f1': 0.9091, 'tete': {'f1': 1.0}}
+global tagger delta 0.0
+erreur:
+drave: TAGGER API · modèle=deepseek-chat · appels=4 · réseau=0 · cache=4 · tokens=0 · latence=0.0 s
+  ```
+
+- **bash** `{"command": "cat > /tmp/evaluer_2_par_langue_txt.py <<'PY'\nimport pathlib, sys\nR = pathlib.Path('/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nsys.path.insert(0, str(R)); sys.path.insert(0, str(R/'tools'))\nimport drave\nev = drave._module_evaluation()\nchargeur = ev.charger\nev.charger = lam … [402 caractères tronqués]`
+
+  ```
+TAGGER API DEEPSEEK (option --tagger)
+  POS         exactitude 100.00 % (fermé 100.00 %, ouvert 100.00 %) · Δ +0.00 pts vs heuristique
+  SYNTAGMES   F1 90.91 % (tête 100.00 %) — conservés à l'heuristique
+  COÛT        appels 4 · réseau 0 · cache 4 · tokens 0 · modèle deepseek-chat
+  modèle renvoyé : deepseek-flash
+
+PAR LANGUE
+  fr  2 phrases · 9 tokens · 1 cibles d'attachement
+      POS 100.00 % (fermé 100.00 %, ouvert 100.00 %) · SYNTAGMES F1 90.91 % (tête 100.00 %)
+      ATTACHEMENT exact 100.00 % · couverture 100.00 % · top-k 100.00 % · PRAGMATIQUE acte 100.00 %
+      CONTRÔLE NÉGATIF cible exacte tirée au hasard 100.00 % (graine 0, 1 cibles)
+      TAGGER POS 100.00 % · Δ +0.00 pts · SYNTAGMES F1 90.91 % (tête 100.00 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 360,430p docs/produit/README.md", "description": "Relire la section 3.7 finale"}`
+
+  ```
+[`rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md).
+
+### 3.7 Le tagger en option — `--tagger`
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger
+python3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger
+python3 tools/drave.py evaluer --tagger
+```
+```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+```
+
+Ici le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les
+tokens et la latence (voir le coût ci-dessous).
+
+**La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
+`DEEPSEEK_A
+… [2880 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD -- docs/pilotage/en-cours.md | head -60", "description": "Voir la mise à jour de l'état par le parent"}`
+
+  ```
+commit 0bbdbbb3256cb38a857531ccf9a4abfc6dce075e
+Author: Stéphane <stephane@localhost>
+Date:   Sat Nov 14 11:04:54 2026 -0500
+
+    1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 56db3554..094c7788 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-14, 10 h 10 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-14, 11 h 10 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -103,7 +103,7 @@
+ |---|---|---|
+ | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **733** / **826** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **734** / **827** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **14/11 00 h 30** 
+… [152 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD -- docs/pilotage/en-cours.md | grep -n \"tagger\\|1A\" ; grep -n \"tagger\\|1A\" docs/pilotage/en-cours.md | head", "description": "Chercher la ligne tagger dans l'état"}`
+
+  ```
+5:    1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+95:- **J5.1 / J10.1 / J13.1 / J14.1 — les bilans et la clôture** : semaine (F1 **0,7533 → 0,7902**, tagger **0,9475** ; [rapport](../../reports/rapport-semaine.md)) ; chantier **20/21**, attachement **236 → 238**, 5 timeouts, 1 échec (J5.2), D1–D20, R1–R30 ; [bilan](../../reports/rapport-bilan-chantier.md) ; **J13.1** — tableau des mesures : **612/602** ; [tableau](../../reports/rapport-tableau-mesures.md) ; **J14.1** — clôture (**84/81/3**, tag `chantier-2026-11-14` ; [rapport](../../reports/rapport-cloture-chantier.md)).
+120:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9475 (+8,49), intégrer** ; R2/R3 attendent N5/N4 | **route API derrière drapeau** ; **split réel tenu à l'écart** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's#tools/##' | head -40; echo ----; grep -rln \"test_tagger_api\\|test_produit.py\" tools/porte-*.sh tools/*.sh 2>/dev/null", "description": "Chercher la porte qui exécute les tests"}`
+
+  ```
+porte-adaptateur-sortie.sh
+porte-audit-drapeaux.sh
+porte-b1110-hybride.sh
+porte-balayage.sh
+porte-bloc-code.sh
+porte-bloc-linguistique.sh
+porte-bloc-maths.sh
+porte-bloc-tableaux.sh
+porte-budget.sh
+porte-bus.sh
+porte-bus-socket.sh
+porte-c4-retard.sh
+porte-cerveau.sh
+porte-cic.sh
+porte-consolidation.sh
+porte-coupe.sh
+porte-cycle-c2.sh
+porte-deepseek.sh
+porte-delais.sh
+porte-diff-couche.sh
+porte-document.sh
+porte-echange-experts.sh
+porte-episodique.sh
+porte-etat.sh
+porte-flux.sh
+porte-fusion.sh
+porte-gain.sh
+porte-greffe.sh
+porte-harnais-invariants.sh
+porte-homeostasie.sh
+porte-horloge.sh
+porte-indice.sh
+porte-jeux.sh
+porte-jumeaux.sh
+porte-lecteur.sh
+porte-lecture.sh
+porte-m5-brouillon.sh
+porte-melange.sh
+porte-memoire.sh
+porte-miroir-blocs.sh
+----
+tools/porte-produit.sh
+tools/porte-produit.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 1,80p tools/porte-deepseek.sh; echo ====; grep -n \"deepseek\" tools/porte-produit.sh", "description": "Lire la porte deepseek"}`
+
+  ```
+#!/bin/bash
+# porte-deepseek.sh — le banc externe, sans réseau et sans clé.
+#
+# CE QU'ELLE VERROUILLE :
+#   1. les tests de l'adaptateur, du corpus professeur et de la distillation
+#      (transport factice, aucun appel réseau, aucune clé réelle) ;
+#   2. le dry-run de l'adaptateur : réponse déterministe, pas de requête ;
+#   3. les 60 prompts publics : 50 traductions UDHR + 10 questions de jeux ;
+#   4. le dry-run du corpus professeur : il écrit, mais `distillation.py`
+#      l'ignore — un faux professeur ne devient jamais un corpus d'entraînement.
+#
+# La mesure **live** est opt-in : `DEEPSEEK_API_KEY=... DEEPSEEK_LIVE=1
+# bash tools/porte-deepseek.sh`. Sans clé, la porte est verte et le dit.
+set -u
+cd "$(dirname "$0")/.."
+export PYTHONPATH="$PWD/tools${PYTHONPATH:+:$PYTHONPATH}"
+T="${JOURNAUX:-/tmp}/deepseek-porte"
+rm -rf "$T"; mkdir -p "$T"
+
+echo "  === tests (adaptateur, corpus, distillation) ==="
+python3 -m unittest discover -s tools/llm/tests -t tools || exit 1
+
+echo "  === dry-run de l'adaptateur ==="
+python3 tools/llm/deepseek.py --prompt "test de la porte" --dry-run --json > "$T/dry.json" || exit 1
+python3 - "$T/dry.json" <<'PY' || exit 1
+import json, sys
+d = json.load(ope
+… [2143 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff HEAD -- docs/produit/README.md reports/README.md", "description": "Voir les lignes non committées"}`
+
+  ```
+diff --git a/docs/produit/README.md b/docs/produit/README.md
+index 73248b7f..aa0118ca 100644
+--- a/docs/produit/README.md
++++ b/docs/produit/README.md
+@@ -380,6 +380,9 @@ COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 
+ TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+ ```
+ 
++Ici le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les
++tokens et la latence (voir le coût ci-dessous).
++
+ **La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
+ `DEEPSEEK_API_KEY` (`DSH_KEY_FILE` / `DSH_API_KEY` en repli). Elle n'est **jamais** affichée :
+ ni dans le message, ni dans le JSON, ni dans le cache. **Sans clé**, la commande écrit un
+@@ -640,6 +643,7 @@ inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sa
+ | **la mesure par langue** (fr/en, source contrôlée) | [`reports/rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md) |
+ | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
+ | **la cascade réelle** (0,9415, 7B, non livré
+… [1645 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Je vérifie le chemin réseau réel de la CLI (cache neuf puis cache chaud)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf /tmp/drave-tagger-cli-frais && DEEPSEEK_KEY_FILE=\"$HOME/.config/drave/deepseek.key\" DEEPSEEK_CACHE=/tmp/drave-tagger-cli-frais python3 tools/drave.py analyser \"Le chat de la voisine qui dort sur le toit se réveille.\" --tag … [562 caractères tronqués]`
+
+  ```
+code=0
+drave: TAGGER API · modèle=deepseek-chat · appels=2 · réseau=2 · cache=0 · tokens=685 · latence=2.6 s
+--- second passage (cache) ---
+code=0
+drave: TAGGER API · modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+json_identique=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; git status --short | head -12; date", "description": "Vérifier l'état git final"}`
+
+  ```
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+883ce817 CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ
+ M docs/produit/README.md
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/distribue.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/memoire.md
+MM journal/2026-11-14/mesures.md
+MM journal/2026-11-14/moteur.md
+MM journal/2026-11-14/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md
+sam 14 nov 2026 11:16:32 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 9df4a591 | head -15; git show 9df4a591 -- docs/pilotage/en-cours.md | grep -n \"tagger\\|1A\" | head", "description": "Voir le commit d'état du parent"}`
+
+  ```
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+ docs/pilotage/en-cours.md                          |   4 +-
+ journal/2026-11-14/README.md                       |   9 +-
+ journal/2026-11-14/distribue.md                    |   4 +-
+ journal/2026-11-14/docs.md                         |   4 +-
+ journal/2026-11-14/memoire.md                      |   4 +-
+ journal/2026-11-14/mesures.md                      |   4 +-
+ journal/2026-11-14/moteur.md                       |   4 +-
+ journal/2026-11-14/portes.md                       |   8 +-
+ journal/README.md                                  |   4 +-
+ .../24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md | 313 +++++++++++++++++++++
+ .../rapport.md                                     |  28 +-
+ journal/sessions/MANIFEST.md                       |   4 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  29 ++
+ .../rapport.md                                     |  17 +-
+5:    ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 9df4a591 -- docs/pilotage/en-cours.md | head -50; grep -n \"R0.7\\|tagger\" docs/pilotage/en-cours.md | head", "description": "Lire le diff en-cours du dernier commit"}`
+
+  ```
+commit 9df4a5916b967ca01a6724a06bf4e5b416914cf1
+Author: Stéphane <stephane@localhost>
+Date:   Sat Nov 14 11:10:04 2026 -0500
+
+    ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 094c7788..2d3b6b9c 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-14, 11 h 10 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-14, 11 h 15 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+@@ -61,7 +61,7 @@
+ - **Stratégie** : v0 mesuré.
+ - **Ambition** : un runtime cognitif tracé.
+ - **Objectif final** : un moteur de pensée v0.
+-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** ; **restitution v1** (46/46 
+… [2129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -- reports/rapport-tagger-option.md reports/pensee-tagger-option.json tools/drave.py tools/tests/test_tagger_api.py; echo ----; git status --short reports/rapport-tagger-option.md reports/pensee-tagger-option.json t … [134 caractères tronqués]`
+
+  ```
+0bbdbbb3 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7
+09e54143 J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE
+5b9c18ef PRODUIT — --fichier ET --jsonl (TRAITEMENT DE CORPUS, UNE LIGNE JSON PAR PHRASE) ; 16 TESTS
+662a3698 PRODUIT — evaluer PUBLIE LES DEUX VUES (FIDÈLE F1 75,33 / LINÉAIRE 81,04, COUVERTURE 93,31) ; 14 TESTS
+027abba4 PRODUIT — --contexte DANS LA CLI (MÉMOIRE DE DISCOURS PORTÉE DANS LE JSON), 11 TESTS
+d31aa9a2 PRODUIT — --partition DANS LA CLI (alternative PAR DÉFAUT, filtrer EN OPTION), 10 TESTS, DOC À JOUR
+037fe041 PRODUIT — LE CONTRAT V1 : schema/version, REFUS EN JSON (CODE 3), SURROGATE ET NON-STR TOLÉRÉS ; PORTE À 8 CONTRÔLES ; 183/183
+62dad657 B13 — LE PREMIER PRODUIT : drave v0 (ANALYSER/EVALUER/REJOUER), PORTE PRODUIT VERTE (6 CONTRÔLES), SMOKE TEST 6 CAS ; 183/183
+----
+(vide = committé)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -2; echo \"revue=$?\"; python3 tools/taille_documents.py 2>&1 | tail -1; echo \"taille=$?\"", "description": "Dernière vérification des portes doc"}`
+
+  ```
+revue de documentation · 734 fiche(s) · 827 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+taille=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -15; echo \"code=$?\"; grep -n \"4000\\|T0\\|budget\" tools/taille_documents.py | tail -20", "description": "Comprendre l'avertissement de budget T0"}`
+
+  ```
+2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4007 mots (budget 4 000)
+
+  avertissements :
+     · 51 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+code=0
+90:    for cat, motif, budget in BUDGETS:
+92:            return cat, budget
+101:    for cat, motif, budget in BUDGETS:
+110:            lignes.append((n, t.count("\n") + 1, rel, cat, budget))
+112:            if cat in ("T0", "
+… [1104 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py >/tmp/taille2.log 2>&1; echo \"taille_reel=$?\"; tail -4 /tmp/taille2.log; git log --oneline -1 -- docs/pilotage/en-cours.md", "description": "Obtenir le vrai code de taille_documents"}`
+
+  ```
+taille_reel=1
+     · 51 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n 80,160p tools/taille_documents.py", "description": "Lire le calcul du budget T0"}`
+
+  ```
+r"^[ \t]*```[ \t]*(?:plantuml|puml|pu|mermaid|mmd)[ \t]*\n.*?^[ \t]*```[ \t]*$",
+    re.MULTILINE | re.DOTALL,
+)
+
+
+def mots_hors_diagrammes(texte: str) -> int:
+    return mots(DIAGRAMME.sub("", texte))
+
+
+def classe(rel: str) -> tuple[str, int]:
+    for cat, motif, budget in BUDGETS:
+        if pathlib.Path(rel).match(motif):
+            return cat, budget
+    return "", 0
+
+
+def main() -> int:
+    lignes: list[tuple[int, int, str, str, int]] = []
+    violations: list[str] = []
+    avertissements: list[str] = []
+    specifiques = {"organisation-du-depot.md", "modularisation.md", "relations-humaines.md"}
+    for cat, motif, budget in BUDGETS:
+        for p in sorted(RACINE.glob(motif)):
+            if not p.is_file():
+                continue
+            if motif == "docs/methode/*.md" and p.name in specifiques:
+                continue
+            rel = str(p.relative_to(RACINE))
+            t = p.read_text(encoding="utf-8", errors="ignore")
+            n = mots_hors_diagrammes(t)
+            lignes.append((n, t.count("\n") + 1, rel, cat, budget))
+            tete = "\n".join(t.splitlines()[:20])
+            if cat in ("T0", "T1"):
+                if not t.lstrip().startswith("#"):
+ 
+… [2536 caractères tronqués]
+  ```
+

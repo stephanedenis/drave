@@ -62708,3 +62708,45 @@ sam 14 nov 2026 11:07:14 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"1 span (`g017`)\", \"1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)\")\nt=t.replace(\" ; **`drave` v0**\ … [1014 caractères tronqués]`
+
+  ```
+état à jour
+     · T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+ 14 files changed, 396 insertions(+), 40 deletions(-)
+COMMIT OK 1
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+   0bbdbbb3..9df4a591  s/v7 -> s/v7
+   0bbdbbb3..9df4a591  master -> master
+sam 14 nov 2026 11:12:24 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`drave` v0** (tagger en option, décision 1A)\", \" ; **`drave` v0**\")\np.write_text(t)\nPY\npython3 tools/taille_docu … [514 caractères tronqués]`
+
+  ```
+· T0 : 4007 mots (AGENTS + en-cours + une tâche) > budget 4 000
+no changes added to commit (use "git add" and/or "git commit -a")
+[still running after 240000ms; moved to background job bash-5005]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5005", "timeout_ms": 300000, "wait": true}`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+no changes added to commit (use "git add" and/or "git commit -a")
+9df4a591 ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)
+Everything up-to-date
+Everything up-to-date
+sam 14 nov 2026 11:19:40 EST
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-300", "description": "Voir la ligne B13"}`
+
+  ```
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**1 span (`g017`, déclaré inatteignable le 14/11 — décision 2A)**\", \"**1 span (`g017`, inatteignable)**\")\nt=t.replace(\ … [748 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 330.5 h |
+| Durée | 330.7 h |
 | Tours | 196 |
-| Messages | 3756 |
-| Appels d'outils | 3348 |
+| Messages | 3760 |
+| Appels d'outils | 3352 |
 | Fichiers touchés | 25 |
-| Commandes | 2786 |
+| Commandes | 2789 |
 | Sous-agents | 43 |
-| Commits | 446 |
+| Commits | 448 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10543,7 +10543,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 196 — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
 
-*35 appels d'outils.* Actions notables :
+*39 appels d'outils.* Actions notables :
 
 - bash — Lire la fiche de coordination S
 - bash — Inspecter le sous-module S
@@ -10559,7 +10559,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Écrire la note Panini
 - bash — Consigner les décisions
 - bash — Committer les décisions
-- … et 18 autres
+- … et 21 autres
 
 **Synthèse produite :**
 
@@ -10685,7 +10685,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2746 autres
+- … et 2749 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11279,4 +11279,6 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - CHANTIER — LE PLAN RESTAURÉ (29 TÂCHES, J11-J14 RÉINTÉGRÉES) ; ÉTAT HORODATÉ" -- tools/chantier/plan.json docs/pilotage/en-cours.md 2>&1 | tail -1   if git log 
 - 1A — LE TAGGER POS EN OPTION (--tagger) : +8,49 PTS SUR LE GOLD 612 (+4,67 SUR LE RÉEL 432), LE DÉFAUT RESTE HORS LIGNE ; 14 TESTS, DOC § 3.7" -- tools/drave.py
 - ÉTAT — LES DÉCISIONS INSCRITES : g017 INATTEIGNABLE (2A), LE TAGGER EN OPTION (1A), LES 11 VERDICTS (3B), LA NOTE PANINI (4A), A6.2 REPOUSSÉ (5A)" -- docs/pilot
+- ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
+- ÉTAT — T0 TENU APRÈS L'INSCRIPTION DES DÉCISIONS" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU APRÈS"; then echo
 
