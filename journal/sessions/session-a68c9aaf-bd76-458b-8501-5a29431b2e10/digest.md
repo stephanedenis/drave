@@ -2305,3 +2305,164 @@ ETAT_INDEX=0
   ```
 
 - **bash** `{"command": "git commit -m \"J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON\" -m \"La passe du 14/11 00 h 30 (84/81/3) n'est pas refait … [815 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 cb6ccab4] J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON
+ 27 files changed, 3490 insertions(+), 88 deletions(-)
+ create mode 100644 journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/digest.md
+ create mode 100644 journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md
+ create mode 100644 reports/rapport-cloture-chantier.json
+ create mode 100644 reports/rapport-cloture-chantier.md
+COMMIT=0
+  ```
+
+- **bash** `{"command": "echo \"TAG=$(git tag -l 'chantier-2026-11-14')\"; test -f reports/rapport-cloture-chantier.md && echo FICHE-OK; python3 tools/revue_documentation.py >/dev/null 2>&1; echo \"REVUE-$?\"; echo \"--- HEAD ---\"; git log -1 --format='%H %s' --stat | head -45; echo \"--- STATUS ---\"; git sta … [65 caractères tronqués]`
+
+  ```
+TAG=chantier-2026-11-14
+FICHE-OK
+REVUE-0
+--- HEAD ---
+cb6ccab4ed37ffab8bc47be5e8c10c3c186ee244 J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON
+
+ docs/pilotage/en-cours.md                          |   24 +-
+ docs/pilotage/references-non-regression.md         |   21 +-
+ docs/pilotage/roadmap.md                           |   33 +-
+ journal/2026-11-14/README.md                       |    7 +-
+ journal/2026-11-14/distribue.md                    |    2 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |   25 +-
+ journal/2026-11-14/moteur.md                       |    2 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    7 +-
+ journal/THEMES.md                                  |    2 +-
+ .../1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md   |    2 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-
+… [1246 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py; echo \"ETAT_HEAD=$?\"; echo \"===\"; python3 tools/verifie_en_cours.py; echo \"ENCOURS=$?\"; echo \"===\"; python3 tools/verifie_journal.py 2>&1 | tail -3; echo \"JOURNAL=${PIPESTATUS[0]}\"; echo \"===\"; python3 tools/taille_documents.py 2>&1 | tai … [83 caractères tronqués]`
+
+  ```
+état · dernier fait cb6ccab4 · dernier état cb6ccab4
+  ✅ aucun fait commité après le dernier état
+ETAT_HEAD=0
+===
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ENCOURS=0
+===
+  journal · 46 jour(s) · 193 session(s) · 2517 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL=0
+===
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+BUDGET=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -3; echo \"TABLEAUX=${PIPESTATUS[0]}\"; echo \"===\"; bash tools/porte-sessions.sh 2>&1 | tail -3; echo \"SESSIONS=${PIPESTATUS[0]}\"; echo \"===\"; bash tools/porte-etat.sh 2>&1 | tail -3; echo \"ETAT_PORTE=${PIPESTATUS[0]}\"", "description": "P … [51 caractères tronqués]`
+
+  ```
+✅ 1799 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4270 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+TABLEAUX=0
+===
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+SESSIONS=0
+===
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+ETAT_PORTE=0
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"--- TAGS ---\"; git tag -n5 -l 'chantier-2026-11-14' 'semaine-2026-11-14'; echo \"--- TAG OBJECT ---\"; for t in chantier-2026-11-14 semaine-2026-11-14; do echo \"== $t ==\"; git cat-file -p \"$t\" | head -8; echo \"-> commit $(git rev-parse \"$t^{}\")\"; do … [99 caractères tronqués]`
+
+  ```
+cb6ccab4 J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATIONS ; RAPPORT + JSON
+0e75f101 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 TÂCHES (25 VERTES, 1 ÉCHEC), 18 CONTRÔLES ; J14.1 RESTE (PASSE + TAG)
+b20a4c31 J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+--- TAGS ---
+chantier-2026-11-14 Chantier 2026-11-14 : 84 portes, 81 vertes, 3 rouges nommées (indice, melange, sessions) ; 28/28 acceptations ; J14.1
+semaine-2026-11-14 Semaine 2026-11-14 : tag de J5.2, posé à la clôture J14.1 sur le dernier commit vert 0e75f101
+--- TAG OBJECT ---
+== chantier-2026-11-14 ==
+object 0e75f101734145489cc45389feb6489591d324fd
+type commit
+tag chantier-2026-11-14
+tagger Stéphane <stephane@localhost> 1794658335 -0500
+
+Chantier 2026-11-14 : 84 portes, 81 vertes, 3 rouges nommées (indice, melange, sessions) ; 28/28 acceptations ; J14.1
+-> commit 0e75f101734145489
+… [722 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n 'passe du 07/11' docs/pilotage/references-non-regression.md", "description": "Locate stale pass date"}`
+
+  ```
+58:| toutes les portes | `tools/toutes-les-portes.sh` | **84 portes** ; voir la **passe du 07/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
+  ```
+
+- **bash** `{"command": "grep -n '__[A-Z_]*__' reports/rapport-cloture-chantier.md reports/rapport-cloture-chantier.json || echo \"aucun placeholder\"; echo \"---\"; sed -n '1,30p' reports/rapport-cloture-chantier.md; echo \"...\"; sed -n '150,207p' reports/rapport-cloture-chantier.md", "description": "Verify r … [15 caractères tronqués]`
+
+  ```
+aucun placeholder
+---
+# J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14`
+
+> **Ligne de roadmap** : **B13** (le produit), **Panini**, **N2**, **S**, **R**, **A** · **Tâche** :
+> J14.1 · **Date** : 2026-11-14 · **Verdict** : ✅
+>
+> **Ce que ce rapport est.** La **clôture** du chantier, **sans relancer la passe complète** : la
+> passe de référence est celle du **14/11 00 h 30** (`work/portes/passe-1311-23h15.log`) —
+> **84 portes, 81 vertes, 3 rouges nommées**. J14.1 **rejoue les trois rouges** (`indice`,
+> `melange`, `sessions`), met à jour [`references-non-regression.md`](../docs/pilotage/references-non-regression.md),
+> pose le **tag annoté** `chantier-2026-11-14` sur le dernier commit vert, et écrit cette fiche.
+> Il **ne refait pas** les 81 vertes : ce serait une seconde passe, et le mandat l'interdit.
+>
+> **Le chiffre.** **84 / 81 / 3** reste le relevé. Après vérification ciblée : `porte-sessions`
+> passe **verte** (0 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
+> `chantier-2026-11-14` est posé sur **`0e75f101`** (J13.1), avec le tag de semaine
+> `semaine-2026-11-14` que J5.2 n'avait pas posé : l'échec est
+… [4800 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np = Path('reports/rapport-cloture-chantier.md')\ns = p.read_text()\ns = s.replace('passe **verte** (0 s), `porte-indice`', 'passe **verte** (20 s), `porte-indice`')\ns = s.replace('  `reports/rapport-tableau-mesures.md`, `reports/rapport-bilan … [748 caractères tronqués]`
+
+  ```
+ok ['work/portes/passe-1311-23h15.log', 'reports/rapport-bilan-chantier.md', 'reports/rapport-semaine.md']
+14:> passe **verte** (20 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
+61:| `porte-sessions` | **0** | **20 s** | ✅ **verte** | après mise **en pause** du hub `1e7ef596` (dernier heartbeat le 05/11) et heartbeat `e181ce02` rafraîchi à 06 h 55 |
+195:- **Lus, non modifiés** : `work/portes/passe-1311-23h15.log` et son dossier,
+JSON_OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np = Path('docs/pilotage/en-cours.md')\ns = p.read_text().replace('**Mis à jour : 2026-11-14, 07 h 10 HNE (heure locale, EST).**', '**Mis à jour : 2026-11-14, 07 h 20 HNE (heure locale, EST).**')\np.write_text(s)\nPY\ngit add docs/pilotage/en-c … [236 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+ETAT_INDEX=0
+M  docs/pilotage/en-cours.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+M  reports/rapport-cloture-chantier.json
+M  reports/rapport-cloture-chantier.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "git commit -m \"J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU\" -m \"Deux corrections de forme dans reports/rapport-cloture-chantier.md et .json : la durée de la vérification de sessions est 20 s (la … [386 caractères tronqués]`

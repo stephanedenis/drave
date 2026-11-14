@@ -11,7 +11,7 @@
 > Il **ne refait pas** les 81 vertes : ce serait une seconde passe, et le mandat l'interdit.
 >
 > **Le chiffre.** **84 / 81 / 3** reste le relevé. Après vérification ciblée : `porte-sessions`
-> passe **verte** (0 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
+> passe **verte** (20 s), `porte-indice` et `porte-melange` restent **rouges structurelles**. Le tag
 > `chantier-2026-11-14` est posé sur **`0e75f101`** (J13.1), avec le tag de semaine
 > `semaine-2026-11-14` que J5.2 n'avait pas posé : l'échec est **réparé**, pas effacé.
 >
@@ -193,8 +193,7 @@ label et que la convention contredit le gold sur deux paires.
   `journal/2026-11-14/mesures.md`, `journal/sessions/e181ce02-…/plan.md`,
   `journal/sessions/1e7ef596-…/plan.md`.
 - **Lus, non modifiés** : `work/portes/passe-1311-23h15.log` et son dossier,
-  `reports/rapport-tableau-mesures.md`, `reports/rapport-bilan-chantier.md`,
-  `reports/rapport-semaine.md`, les fiches et JSON cités.
+  `reports/rapport-bilan-chantier.md`, `reports/rapport-semaine.md`, les fiches et JSON cités.
 - **Tags** : `chantier-2026-11-14` et `semaine-2026-11-14`, tous deux sur `0e75f101`.
 
 ## 10. Verdict

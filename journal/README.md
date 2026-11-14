@@ -249,7 +249,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Ajouter évaluer par langue et documenter | 2026-11-14 04:33 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/rapport.md) |
 | `session-` | Coordination S: 11 verdicts non committés | 2026-11-13 21:52 | 0.1 h | 1 | 82 | 2 | 0 | [rapport](sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/rapport.md) |
 | `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
-| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.3 h | 1 | 120 | 4 | 1 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
+| `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 129 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |

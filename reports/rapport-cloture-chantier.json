@@ -327,8 +327,7 @@
   "lus_non_modifies": [
    "work/portes/passe-1311-23h15.log",
    "reports/rapport-bilan-chantier.md",
-   "reports/rapport-semaine.md",
-   "reports/rapport-tableau-mesures.md"
+   "reports/rapport-semaine.md"
   ]
  },
  "verdict": "J14.1 est fait. La passe de référence (84 portes, 81 vertes, 3 rouges nommées) n'est pas refaite ; les trois rouges sont revérifiées : sessions est verte après la mise en pause du hub et le rafraîchissement du heartbeat, indice et melange restent rouges structurelles avec leurs causes. Le tag annoté chantier-2026-11-14 est posé sur le dernier commit vert 0e75f101, avec le tag de semaine semaine-2026-11-14 qui répare J5.2. Le chantier est mesuré, écrit, committé et marqué ; il est clos."

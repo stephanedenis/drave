@@ -7,14 +7,14 @@
 | Identifiant | `session-a68c9aaf-bd76-458b-8501-5a29431b2e10` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 06:53 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 110 |
-| Appels d'outils | 120 |
+| Messages | 118 |
+| Appels d'outils | 129 |
 | Fichiers touchés | 4 |
-| Commandes | 96 |
+| Commandes | 105 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J14.1 : la clôture — **sans relancer la passe complète** (elle a été faite le 14/11 00 h : `work/portes/passe-1311 … [349 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - bash — Check git status and recent history
 - bash — List workspace and gate/report dirs
@@ -41,7 +41,7 @@
 - bash — Read current state
 - bash — Read sessions tool
 - bash — Read session plans/heartbeats
-- … et 85 autres
+- … et 94 autres
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Check gate progress
 - **T1** Check git identity and HEAD
 - **T1** Wait and check gates
-- … et 56 autres
+- … et 65 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -201,15 +201,17 @@
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : M reports/pensee-coherence-fiches-v7.json  M reports/pensee-dev-test-v10.json  M reports/pensee-quatre-modes.json  M reports/rapport-audit-v7.md  M reports/rapport-coherence-fiches-v7.md  M reports/ra
 - **T1** : sam 14 nov 2026 11:53:18 UTC --- 0e75f101734145489cc45389feb6489591d324fd 2026-11-14 06:32:00 -0500 J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237 → 238/238, BASE 612/602, 26 T
 - **T1** : commit 0e75f101734145489cc45389feb6489591d324fd Author: Stéphane <stephane@localhost> Date:   Sat Nov 14 06:32:00 2026 -0500      J13.1 — LA TABLE DES MESURES : F1 0,7533 → 0,7902, ATTACHEMENT 236/237
 - **T1** : diff --git a/tools/chantier/plan.json b/tools/chantier/plan.json index 21ea0cf4..7d2004b5 100644 --- a/tools/chantier/plan.json +++ b/tools/chantier/plan.json @@ -306,6 +306,118 @@       "attendu": "F
 - **T1** : # 2026-11-14 — Campagnes et mesures  > **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`). > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé. > Heure
+- **T1** : cb6ccab4 J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14 SUR 0e75f101 ; 28/28 ACCEPTATI
 
 ## 6. Commits
 
 - J14.1 — LA CLÔTURE : 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (SESSIONS RÉPARÉE, INDICE ET MELANGE STRUCTURELLES) ; TAGS chantier-2026-11-14 ET semaine-2026-11-14
+- J14.1 — LE RAPPORT DE CLÔTURE EST CORRIGÉ : sessions À 20 s (vérification) ET LE TABLEAU DES MESURES EST MIS À JOUR, PAS SEULEMENT LU" -m "Deux corrections de f
 
