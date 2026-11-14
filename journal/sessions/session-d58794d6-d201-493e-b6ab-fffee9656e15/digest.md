@@ -1705,3 +1705,988 @@ M  tools/tests/test_restitution.py
   ```
 
 - **bash** `{"command": "git commit -m \"J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)\n\n\\`restituer --canonique\\` construit la forme canonique (segments, rôles, cibles) depuis\nl'annotation, sans lire la surface. Contre la source canonisée : 46/46 formes exactes\n(1,0000 … [558 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 229098ec] J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+ 27 files changed, 19298 insertions(+), 60 deletions(-)
+ create mode 100644 journal/sessions/session-d58794d6-d201-493e-b6ab-fffee9656e15/digest.md
+ create mode 100644 journal/sessions/session-d58794d6-d201-493e-b6ab-fffee9656e15/rapport.md
+ create mode 100644 journal/sessions/session-f198001c-49da-4e65-8a44-782f9605fd7a/digest.md
+ create mode 100644 journal/sessions/session-f198001c-49da-4e65-8a44-782f9605fd7a/rapport.md
+ create mode 100644 reports/pensee-restitution-v1.json
+ create mode 100644 reports/rapport-restitution-v1.md
+ create mode 100644 tools/mesurer_restitution_v1.py
+EXIT:0
+  ```
+
+- **bash** `{"command": "git status --short | head -40; echo '---'; git log --oneline -3; echo '--- state commit ---'; git show --stat --oneline HEAD | head -35", "description": "Check post-J8.1 status and commit"}`
+
+  ```
+M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+---
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+d31e8788 J7.1 — RETRIEVAL PAR FAMILLE : 532 TEXTES (445 LANGUES), SŒURS 0,619 VS 0,0445 (13,9×), J3.1 REPRODUIT ; PORTE D'ÉCRITURE, PUIS SŒUR > FAMILLE-AUTRE > ÉPOQUE
+e4288023 J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/238, FICHE ET JSON À JOUR
+--- state commit ---
+229098ec J8.1 — RESTITUTION V1 : FORME CANONIQUE 46/46, MIROIR STRICT 0,1087 (NE MONTE PAS)
+ docs/pilotage/en-cours.md                          |    32 +-
+ docs/pilotage/roadmap.md                           |     2 +-
+ docs/produit/README.md                             |    11 +-
+ journal/2026-11-14/README.md                       |    23 +-
+ journal/2026-11-14/docs.md                         |     2 +-
+ journal/20
+… [1443 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nfiles = \"\"\"rapport-autotest-parallele.md rapport-composition-sans-perte.md rapport-frontieres-integrees.md rapport-morphologie-verbes.md rapport-partition-integree.md rapport-pos-anglais-v2.md rapport-pos-nombres.md rapport-pos-r4-integre.md rapport- … [544 caractères tronqués]`
+
+  ```
+rapport-autotest-parallele.md 0 "> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\n> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,\n> F1 0,7535, attachement 236/237, couverture 0,991"
+rapport-composition-sans-perte.md 0 "> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\n> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,\n> F1 0,7535, attachement 236/237, couverture 0,991"
+rapport-frontieres-integrees.md 0 "> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\n> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,\n> F1 0,7535, attachement 236/237, couverture 0,991"
+rapport-morphologie-verbes.md 0 "> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\n> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,\n> F1 0,7535, attachement 236/237, couverture 0,991"
+rapport-partition-integree.md 0 "> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\n> l
+… [1443 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, re\nnew = (\n    \"> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne\\n\"\n    \"> décrivent pas l'état courant. L'état courant du bloc est dans\\n\"\n    \"> [`en-cours`](../docs/pilotage/en-cours.md) et [` … [1149 caractères tronqués]`
+
+  ```
+MAJ  rapport-autotest-parallele.md
+MAJ  rapport-composition-sans-perte.md
+MAJ  rapport-frontieres-integrees.md
+MAJ  rapport-morphologie-verbes.md
+MAJ  rapport-partition-integree.md
+MAJ  rapport-pos-anglais-v2.md
+MAJ  rapport-pos-nombres.md
+MAJ  rapport-pos-r4-integre.md
+MAJ  rapport-produit-v0.md
+MAJ  rapport-schema-v1.md
+AJOUT rapport-gn-pronom-sujet.md
+AJOUT rapport-pos-ponctuation.md
+AJOUT rapport-pos-r4.md
+AJOUT rapport-r264-elision.md
+  ```
+
+- **bash** `{"command": "for f in rapport-autotest-parallele.md rapport-gn-pronom-sujet.md rapport-pos-r4.md rapport-r264-elision.md rapport-pos-ponctuation.md; do echo \"=== $f ===\"; sed -n '1,12p' \"reports/$f\"; done", "description": "Verify notice formatting"}`
+
+  ```
+=== rapport-autotest-parallele.md ===
+# B13 — la vérification parallèle : 183/183 en 1 min 54 (×2,4)
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Ce que ça règle** : l'autotest était **mono-processus** — ~4 min 40 de CPU et ~4 min 40 de
+> temps mural sur un poste à 40 cœurs, alors que **183 portes indépendantes** pouvaient tourner de
+> front. Avec `AUTOTEST_JOBS=8`, il tient en **1 min 54** (temps mural), **183/183**, mêmes verdicts.
+> **Ce que ça ne règle pas** : le reste du dépôt (évaluations gold, portes longues) reste séquentiel ;
+> ce round ne fait que la vérification.
+=== rapport-gn-pronom-sujet.md ===
+# B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cou
+… [3036 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nfiles = \"\"\"rapport-autotest-parallele.md rapport-composition-sans-perte.md rapport-frontieres-integrees.md\nrapport-morphologie-verbes.md rapport-partition-integree.md rapport-pos-anglais-v2.md\nrapport-pos-nombres.md rapport-pos-r4-integre.md rappor … [431 caractères tronqués]`
+
+  ```
+fix rapport-gn-pronom-sujet.md
+fix rapport-pos-ponctuation.md
+fix rapport-pos-r4.md
+fix rapport-r264-elision.md
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gold-gp-corrige.md')\nt=p.read_text()\nold_start=\"> **Instantané historique**\"\nassert old_start not in t\nnew=(\"> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne\\n\"\n    … [429 caractères tronqués]`
+
+  ```
+ajout gold-gp-corrige
+# B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
+> **Un défaut du générateur de gold**, pas du bloc : dans le mode `sv` de
+> `gold_synthetique.py`, le span d'un GP partait **après** la préposition (`i = v + index(prep) + 1`)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gold-gp-corrige.md'); t=p.read_text()\np.write_text(t.replace('roadmap.md).\\n\\n\\n> **Ligne', 'roadmap.md).\\n\\n> **Ligne'))\nPY", "description": "Normalize blank line in gold-gp-corrige"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib, re\nfiles = \"\"\"rapport-autotest-parallele.md rapport-composition-sans-perte.md rapport-frontieres-integrees.md\nrapport-morphologie-verbes.md rapport-partition-integree.md rapport-pos-anglais-v2.md\nrapport-pos-nombres.md rapport-pos-r4-integre.md ra … [1143 caractères tronqués]`
+
+  ```
+rapport-autotest-parallele.md            notice=True line=3 old=False
+rapport-composition-sans-perte.md        notice=True line=3 old=False
+rapport-frontieres-integrees.md          notice=True line=3 old=False
+rapport-morphologie-verbes.md            notice=True line=3 old=False
+rapport-partition-integree.md            notice=True line=3 old=False
+rapport-pos-anglais-v2.md                notice=True line=3 old=False
+rapport-pos-nombres.md                   notice=True line=3 old=False
+rapport-pos-r4-integre.md                notice=True line=3 old=False
+rapport-produit-v0.md                    notice=True line=3 old=False
+rapport-schema-v1.md                     notice=True line=3 old=False
+rapport-gn-pronom-sujet.md               notice=True line=3 old=False
+rapport-pos-ponctuation.md               notice=True line=3 old=False
+rapport-pos-r4.md                        notice=True line=3 old=False
+rapport-r264-elision.md                  notice=True line=3 old=False
+rapport-gold-gp-corrige.md               notice=True line=3 old=False
+rapport-s065.md                          notice=False markers= []
+rapport-frontieres-phrase.md             notice=False markers= ['2spans']
+rapport-r0
+… [293 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-35 (bash: zstd -dc journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/session.v4.jsonl.zstd 2>/dev/null | grep -o '.\{0,500\}actuelles = .\{0,2500\}' | head -c 5000) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-35"}`
+
+  ```
+s its date/snapshot).\n\nLet me do it with a script: for each fiche, if it has attachment numbers < 236 or F1 < 0.75, add the note (with the link to the current state).\n\nTime 00:45."},{"type":"text","text":"⏵ Passe d'honnêteté : j'annote les fiches aux chiffres dépassés (« instantané historique »)"},{"type":"tool-call","id":"call_00_7sOADsdXTytPDvmutdqD4631","name":"bash","arguments":"{\"command\": \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\\nimport pathlib, re\\nactuelles = {\\\"rapport-gn-pronom-sujet.md\\\",\\\"rapport-pos-ponctuation.md\\\",\\\"rapport-r264-elision.md\\\",\\\"rapport-gold-gp-corrige.md\\\"}\\nnote = (\\\"> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;\\\\n\\\"\\n        \\\"> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,\\\\n\\\"\\n        \\\"> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).\\\\n\\\\n\\\")\\nretenues = {\\\"rapport-pos-anglais-v2.md\\\",\\\"rapport-produit-v0.md\\\",\\\"rapport-pos-r4-integre.md\\\",\\n            \\\"rapport-morphologie-verbes.md\\\",\\\"rapport-composition-sans-perte.md\\\",\\n            \\\"rappo
+… [3842 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\npat = {\n 'POS85': re.compile(r'POS[^0-9]{0,20}85(?:[.,]\\d+)?\\s*%'),\n 'F1_7535': re.compile(r'0[.,]7535'),\n 'att_236_237': re.compile(r'236\\s*/\\s*237'),\n 'spans2': re.compile(r'(?<![\\d])2\\s+spans?\\b'),\n}\nfor p in sorted(pathlib.Path('repo … [319 caractères tronqués]`
+
+  ```
+INDEX.md                                      POS85
+README.md                                     POS85,att_236_237
+rapport-convention-gv.md                      att_236_237
+rapport-frontieres-phrase.md                  spans2
+rapport-g017.md                               att_236_237,spans2
+rapport-gold-anglais.md                       spans2
+rapport-r035.md                               att_236_237
+rapport-semaine.md                            att_236_237,spans2
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nfiles=['rapport-convention-gv.md','rapport-g017.md','rapport-r035.md','rapport-semaine.md']\nnew=(\"> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne\\n\"\n     \"> décrivent pas l'état courant. L'état coura … [748 caractères tronqués]`
+
+  ```
+ajout rapport-convention-gv.md
+ajout rapport-g017.md
+ajout rapport-r035.md
+ajout rapport-semaine.md
+=== rapport-convention-gv.md ===
+# B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J1.2 · **Date** : 2026-11-07 ·
+> **Verdict** : ✅
+> Les **322 FP / 180 FN** du plan sont les erreurs **de GV** du gold d'avant `r035` (F1 0,7533) ;
+=== rapport-g017.md ===
+# B13 — g017 : l'adverbe final hors de la SUB est rejeté (g017 gagné, r264 et r288 perdus)
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
+> **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J6.1 · **Date** : 2026-11-14 ·
+> **Verdict** : ❌ **règle rejetée**.
+> La règle demandée — **
+… [1184 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\npat = {\n 'POS85': re.compile(r'POS[^0-9]{0,20}85(?:[.,]\\d+)?\\s*%'),\n 'F1_7535': re.compile(r'0[.,]7535'),\n 'att_236_237': re.compile(r'236\\s*/\\s*237'),\n 'spans2': re.compile(r'(?<![\\d])2\\s+spans?\\b'),\n}\nrem=[]\nfor p in sorted(pathlib.Pa … [306 caractères tronqués]`
+
+  ```
+4 restants
+('INDEX.md', ['POS85'])
+('README.md', ['POS85', 'att_236_237'])
+('rapport-frontieres-phrase.md', ['spans2'])
+('rapport-gold-anglais.md', ['spans2'])
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nfiles = \"\"\"rapport-autotest-parallele.md rapport-composition-sans-perte.md rapport-frontieres-integrees.md\nrapport-morphologie-verbes.md rapport-partition-integree.md rapport-pos-anglais-v2.md\nrapport-pos-nombres.md rapport-pos-r4-integre.md rappor … [668 caractères tronqués]`
+
+  ```
+19
+19/19 notice ligne 3 + 2 liens
+  ```
+
+- **bash** `{"command": "sed -n '1,120p' tools/porte-tableaux.sh", "description": "Inspect table gate rules"}`
+
+  ```
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
+# disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, toutes nécessaires au rendu) :
+#   1. l'en-tête et le séparateur d'un tableau ont le MÊME nombre de cellules ;
+#   2. chaque ligne du corps a ce nombre de cellules ;
+#   3. aucun `\|` ne subsiste : mistune ne le déséchappe NI dans un espace de code NI dans la
+#      prose (il s'affiche alors littéralement). Pour une barre de valeur absolue dans du code,
+#      on écrit `∣` (U+2223), qui rend partout et ne casse pas la lecture.
+# Les tableaux DANS une citation (`> | … |`) sont valides et vérifiés aussi.
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les tableaux « écrasés » sur une se
+… [4918 caractères tronqués]
+  ```
+
+- **write** `{"file_path": "reports/rapport-passe-honnetete.md", "content": "# Passe d'honnêteté — 19 fiches portent « instantané historique », les quatre chiffres dépassés ne se lisent plus comme l'état courant\n\n> **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J9.1 · **Date** : 2026-11-14 ·\n … [10531 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-passe-honnetete.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\n\ndef f(fichier, groupe, marqueurs, action):\n    return {\n        \"fichier\": f\"reports/{fichier}\",\n        \"groupe\": groupe,\n        \"marqueurs\": marqueurs,\n        \"action\": action,\n        \"ligne_notice\": 3,\n        \"liens\": … [6329 caractères tronqués]`
+
+  ```
+reports/passe-honnetete.json 8485 octets
+{
+ "notices": {
+  "attendues": 19,
+  "trouvees": 19,
+  "ligne": 3
+ },
+ "liens": {
+  "attendus": 38,
+  "resolus": 38
+ },
+ "scan_apres": {
+  "fiches_examinees": 722,
+  "marqueurs": [
+   "POS 85",
+   "0,7535",
+   "236/237",
+   "2 spans"
+  ],
+  "fiches_resultats_sans_notice": 0,
+  "faux_positifs": [
+   {
+    "fichier": "reports/rapport-frontieres-phrase.md",
+    "pourquoi": "« 2 spans de phrase du gold corrigés » : spans de phrase, pas d'attachement"
+   },
+   {
+    "fichier": "reports/rapport-gold-anglais.md",
+    "pourquoi": "« 2 spans exacts » du gold anglais : autre objet"
+   }
+  ],
+  "index": [
+   "reports/README.md",
+   "reports/INDEX.md"
+  ]
+ },
+ "courante_sans_notice": [
+  "reports/rapport-s065.md"
+ ],
+ "mesure_reproduite": true
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\nprint('md',len(list(pathlib.Path('reports').glob('*.md'))),'json',len(list(pathlib.Path('reports').glob('*.json'))))\nPY\ngrep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Count reports after adding files"}`
+
+  ```
+md 723 json 817
+105:| fichiers / JSON de résultats | **722** / **816** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "sed -n '1,70p' reports/README.md", "description": "Inspect reports README structure"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |
+| [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → 2,9726/2,7856, `--rope` seul insuffisant |
+| [`rapport-coordination-s.md`](rappor
+… [5961 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "reports/README.md", "old_string": "| [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |\n| [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → 2,9726/2,7856, `--rop … [488 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "reports/README.md", "limit": 20}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md</path>
+<type>file</type>
+<content>
+1: # Les rapports — données intermédiaires et références
+2: 
+3: > **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+4: > (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+5: > [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+6: 
+7: > **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+8: > [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+9: >
+10: > **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+11: > **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+12: > partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+13: 
+14: ## Les fiches courantes
+15: 
+16: | fichier | ce qu'il porte |
+17: |---|---|
+18: | [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |
+19: | [`
+… [331 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "reports/README.md", "new_string": "| [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |\n| [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches « insta … [488 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"722\\|723\" reports/rapport-passe-honnetete.md reports/passe-honnetete.json | head -20", "description": "Find count references in report/JSON"}`
+
+  ```
+reports/rapport-passe-honnetete.md:21:> **Dispositif** : scan lexical des 722 fiches de `reports/`, annotation des 19, contrôle des
+reports/rapport-passe-honnetete.md:116:**Contrôle négatif 3 — le scan après la passe.** Sur les **722** fiches de `reports/`, il reste
+reports/passe-honnetete.json:368:   "fiches_examinees": 722,
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-passe-honnetete.md'); t=p.read_text()\nt=t.replace('scan lexical des 722 fiches', 'scan lexical des 723 fiches')\nt=t.replace('Sur les **722** fiches', 'Sur les **723** fiches')\np.write_text(t)\np=pathlib.Path('reports/p … [280 caractères tronqués]`
+
+  ```
+ok
+reports/rapport-passe-honnetete.md:21:> **Dispositif** : scan lexical des 723 fiches de `reports/`, annotation des 19, contrôle des
+reports/rapport-passe-honnetete.md:116:**Contrôle négatif 3 — le scan après la passe.** Sur les **723** fiches de `reports/`, il reste
+reports/passe-honnetete.json:368:   "fiches_examinees": 723,
+  ```
+
+- **bash** `{"command": "date '+%Y-%m-%d %H:%M %Z'", "description": "Get current local time"}`
+
+  ```
+2026-11-14 03:28 EST
+  ```
+
+- **read** `{"file_path": "docs/pilotage/en-cours.md", "limit": 135}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-14, 02 h 00 HNE (heure locale, EST).**
+4: 
+5: > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+6: > plan plus bas (**La carte**).
+7: 
+8: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11
+9: 
+10: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+11: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+12: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs (revue, liens, tableaux).
+13: - **Prochaine action** : **suivi docs**, puis la **passe** après les runs.
+14: - **Bloquants** : aucun.
+15: - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+16: 
+17: ## Sessions en cours
+18: 
+19: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+20: > [`journal/sessions/`](../../journal/sessions/). Chaque session expose son mandat dans son
+21: > `plan.md` (`python3 tools/sessions
+… [11064 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "**Mis à jour : 2026-11-14, 03 h 30 HNE (heure locale, EST).**", "old_string": "**Mis à jour : 2026-11-14, 02 h 00 HNE (heure locale, EST).**"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **co … [911 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **J5.1** : rapport de semaine (F1 **0,7533 → 0,7902**, tagger **0,9475**, **13 décisions**, **21 rejets**) ; [rapport](../../reports/rapport-semaine.md) + JSON.\n- **J9.1 — la passe d'honnêteté** : **19 fiches** portent « instantané histori … [591 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "| fichiers / JSON de résultats | **723** / **817** | `reports/*.md` / `reports/*.json` |", "old_string": "| fichiers / JSON de résultats | **722** / **816** | `reports/*.md` / `reports/*.json` |"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "grep -n \"État au 14/11\" docs/pilotage/roadmap.md; sed -n '38,44p' docs/pilotage/roadmap.md", "description": "Locate roadmap state paragraph"}`
+
+  ```
+38:**État au 14/11 02 h 00.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet du GV : 238/238, 0 span, 0 POS ; [fiche](../../reports/rapport-s065.md)) ; **183/183** ; **`r035`** (relative zéro) réglé ; **convention des GV** réglée (sujet hors du GV + adverbe final : GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **contrat v2 publié et validé** (`meta.partition`/`meta.alternative`, version 2, **v1 lue** : 26 cas, 0 échec) ; **restitution v1** (`restituer --canonique` : **46/46 formes canoniques exactes** contre la source canonisée, **miroir strict 0,1087 inchangé**, **395 segments / 395 rôles / 315 cibles dont 315 résolues**, stabilité **18/46** ; le strict ne monte pas, la v1 n'est pas la surface ; [fiche](../../reports/rapport-restitution-v1.md)), porte produit **13 contrôles** (16 + 8 + 4 + 22 tests) ; frontières de phrase, partition étiquetée, compositions sans perte, PONCT, R4, « que », `r264`, **GN du pronom sujet et du nom propre** (+10,2 pts de F1) ; les quatre états N2/S/R/A intégrés ; 84 portes, 3 rouges (`indice`, `melange`, `sessions` du hub) ; `mas
+… [2096 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/roadmap.md'); t=p.read_text()\nold='**État au 14/11 02 h 00.**'\nnew='**État au 14/11 03 h 30.**'\nassert old in t\nt=t.replace(old,new,1)\nold2='; [fiche](../../reports/rapport-restitution-v1.md)), porte produit **13 contr … [524 caractères tronqués]`
+
+  ```
+ok
+38:**État au 14/11 03 h 30.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet du GV : 238/238, 0 span, 0 POS ; [fiche](../../reports/rapport-s065.md)) ; **183/183** ; **`r035`** (relative zéro) réglé ; **convention des GV** réglée (sujet hors du GV + adverbe final : GV F1 0,7549 → 0,7902, 0 perte d'attachement) ; **contrat v2 publié et validé** (`meta.partition`/`meta.alternative`, version 2, **v1 lue** : 26 cas, 0 échec) ; **restitution v1** (`restituer --canonique` : **46/46 formes canoniques exactes** contre la source canonisée, **miroir strict 0,1087 inchangé**, **395 segments / 395 rôles / 315 cibles dont 315 résolues**, stabilité **18/46** ; le strict ne monte pas, la v1 n'est pas la surface ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J9.1 passe d'honnêteté** (**19** fiches « instantané historique » : 10 encarts réécrits, 9 ajoutés ; **0 fiche de résultats** ne publie les quatre marqueurs sans mention, hors 2 faux positifs ; [fiche](../../reports/rapport-passe-honnetete.md)), porte produit **13 contrôles** (16 + 8 + 4 + 22 tests) ; frontièr
+… [275 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -30; echo EXIT:${PIPESTATUS[0]}", "description": "Run documentation review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 723 fiche(s) · 817 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}", "description": "Run table formatting gate", "timeoutMs": 120000}`
+
+  ```
+✅ 1788 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+EXIT:0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -20; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py 2>&1 | tail -10; echo EXIT2:${PIPESTATUS[0]}", "description": "Check context budget and state", "timeoutMs": 120000}`
+
+  ```
+3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2718    202   T1   2800  reports/README.md
+    2450    166   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4064 mots (budget 4 000)
+
+  avertissements :
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-f
+… [257 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **J9.1 — passe d'honnêteté** : **19 fiches** « instantané historique » (10 réécrites, 9 ajoutées) ; **0 fiche** ne publie les quatre marqueurs sans mention, hors 2 faux positifs ; [fiche](../../reports/rapport-passe-honnetete.md).", "old_st … [497 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](../../reports/rapport-s065.md)) ; **`r035`**, **co … [911 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -8; echo EXIT:${PIPESTATUS[0]}", "description": "Recheck context budget", "timeoutMs": 120000}`
+
+  ```
+1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4014 mots (budget 4 000)
+
+  avertissements :
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4014 mots (AGENTS + en-cours + une tâche) > budget 4 000
+EXIT:1
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **J9.1 — passe d'honnêteté** : **19 fiches** « instantané historique » ; **0 fiche** ne publie les quatre marqueurs sans mention ; [fiche](../../reports/rapport-passe-honnetete.md).", "old_string": "- **J9.1 — passe d'honnêteté** : **19 fic … [193 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -5; echo EXIT:${PIPESTATUS[0]}", "description": "Recheck context budget after trim", "timeoutMs": 120000}`
+
+  ```
+avertissements :
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 1 violation(s) :
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+EXIT:1
+  ```
+
+- **edit** `{"file_path": "docs/pilotage/en-cours.md", "new_string": "- **Pensée — B13 (actif)** : **183/183**, gold 432 ; **`r035`** (238/238) ; **convention des GV** (0,7902) ; **`s065` réglé** (238/238 ; [fiche](../../reports/rapport-s065.md)) ; **J6.1 rejetée** (test −0,0028 ; g017 à trancher) ; **schéma v2 … [976 caractères tronqués]`
+
+  ```
+Error: old_string was not found in "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"
+  ```
+
+- **bash** `{"command": "sed -n '87,97p' docs/pilotage/en-cours.md", "description": "Inspect current en-cours bullets"}`
+
+  ```
+- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67, 8 verdicts de référents ; page **`/paragraphes`**.
+- **N2 — en pause** : **1 024** = recette de production ; **2 048 fini** ; la distillation est mesurée (bilan ci-dessus) ; prochaine : la **porte propre (0,29)** ; **GPUs libres** (claim `n2-jour` libéré).
+- **N3 — clos** : 17 portes vertes ; inventaire exécutable (5/5) ; deux conditions nommées ; [fiche](../../reports/rapport-n3-inventaire.md).
+- **Pensée — B13 (actif)** : **183/183**, gold 432 ; **`r035`** (238/238) ; **convention des GV** (0,7902) ; **`s065` réglé** (238/238 ; [fiche](../../reports/rapport-s065.md)) ; **J6.1 rejetée** (test −0,0028 ; g017 à trancher) ; **schéma v2** (v1 lue) ; **restitution v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; [restitution v0](../../reports/rapport-restitution-v0.md), [g017](../../reports/rapport-g017.md).
+- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
+- **Panini J2.1/J2.2/J3.1/J3.2** : table **14 atomes** ; UDHR **418/438** ; **J3.1** : script domine, date non significativ
+… [1321 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nold_p='- **Pensée — B13 (actif)** : **183/183**, gold 432 ; **`r035`** (238/238) ; **convention des GV** (0,7902) ; **`s065` réglé** (238/238 ; [fiche](../../reports/rapport-s065.md)) ; **J6. … [1336 caractères tronqués]`
+
+  ```
+ok
+  avertissements :
+     · 48 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT:0
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -10; echo EXIT:${PIPESTATUS[0]}", "description": "Run revue after state edits", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 723 fiche(s) · 817 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh 2>&1 | tail -6; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py 2>&1 | tail -4; echo EXIT2:${PIPESTATUS[0]}", "description": "Run table and state gates", "timeoutMs": 120000}`
+
+  ```
+✅ 1788 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4036 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+EXIT:0
+  en-cours · 1620 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT2:0
+  ```
+
+- **bash** `{"command": "git status --short | sed -n '1,80p'", "description": "Review working tree status"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/pilotage/roadmap.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-autotest-parallele.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-composition-sans-perte.md
+ M reports/rapport-convention-gv.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-frontieres-integrees.md
+ M reports/rapport-g017.md
+ M reports/rapport-gn-pronom-sujet.md
+ M reports/rapport-gold-gp-corrige.md
+ M reports/rapport-morphologie-verbes.md
+ M reports/rapport-partition-integree.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-pos-anglais-v2.md
+ M reports/rapport-pos-nombres.md
+ M reports/rapport-pos-ponctuation.md
+ M reports/rapport-pos-r4-integre.md
+ M reports/rapport-pos-r4.md
+ M reports/rapport-produit-v0.md
+ M reports/rapport-r035.md
+ M reports/rapport-r264-elision.md
+ M reports/rapport-schema-v1.md
+ M reports/rapport-semaine.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/passe-honnetete.json
+?? reports/rapport-passe-honnetete.md
+?? reports/
+… [24 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib, re\nj=json.load(open('reports/passe-honnetete.json'))\nprint('JSON ok:', j['tache'], len(j['fiches']), 'fiches')\nmissing=[]; bad=[]\nfor e in j['fiches']:\n    p=pathlib.Path(e['fichier'])\n    if not p.exists(): missing.append(e['fichier']); con … [1318 caractères tronqués]`
+
+  ```
+JSON ok: J9.1 19 fiches
+missing []
+bad []
+reports 723 remaining [('INDEX.md', ['POS85']), ('rapport-frontieres-phrase.md', ['spans2']), ('rapport-gold-anglais.md', ['spans2'])]
+vivant POS/F1/att 0.8625 0.7902 238 239 0.9958
+gele POS/F1/att 0.8625 0.7882 234 239 0.9791
+  ```
+
+- **bash** `{"command": "grep -nE \"POS[^0-9]{0,20}85(?:[.,][0-9]+)? *%|236/237|0,7535\" reports/README.md reports/INDEX.md | head -20", "description": "Check index marker occurrences"}`
+
+  ```
+reports/README.md:32:| [`rapport-r264-elision.md`](rapport-r264-elision.md) | **B13** — `r264` : 236/237, couverture **0,9916** |
+[stderr]
+grep: warning: ? at start of expression
+  ```
+
+- **bash** `{"command": "grep -n \"Instantané historique\" reports/README.md reports/INDEX.md | head", "description": "Check historical mention in indexes"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib,re\nt=pathlib.Path('reports/README.md').read_text()\nfor k,rx in {'POS85':re.compile(r'POS[^0-9]{0,20}85(?:[.,]\\d+)?\\s*%'),'F1':re.compile(r'0[.,]7535'),'att':re.compile(r'236\\s*/\\s*237'),'spans2':re.compile(r'(?<![\\d])2\\s+spans?\\b')}.items():\n p … [136 caractères tronqués]`
+
+  ```
+POS85 True
+F1 False
+att True
+spans2 False
+hist True
+  ```
+
+- **bash** `{"command": "grep -in \"instantan\" reports/README.md | head", "description": "Find instantané in README"}`
+
+  ```
+19:| [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches « instantané historique », 0 chiffre dépassé lu comme courant |
+  ```
+
+- **bash** `{"command": "bash tools/toutes-les-portes.sh > /tmp/portes-j91.log 2>&1; echo EXIT:$? >> /tmp/portes-j91.log", "description": "Run full gates in background", "run_in_background": true, "timeoutMs": 1200000}`
+
+  ```
+started background job bash-101
+  ```
+
+- **bash** `{"command": "git diff --stat -- reports/rapport-autotest-parallele.md reports/rapport-composition-sans-perte.md reports/rapport-frontieres-integrees.md reports/rapport-morphologie-verbes.md reports/rapport-partition-integree.md reports/rapport-pos-anglais-v2.md reports/rapport-pos-nombres.md reports … [471 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                 | 6 +++---
+ docs/pilotage/roadmap.md                  | 2 +-
+ reports/README.md                         | 1 +
+ reports/rapport-autotest-parallele.md     | 6 +++---
+ reports/rapport-composition-sans-perte.md | 6 +++---
+ reports/rapport-convention-gv.md          | 4 ++++
+ reports/rapport-frontieres-integrees.md   | 6 +++---
+ reports/rapport-g017.md                   | 4 ++++
+ reports/rapport-gn-pronom-sujet.md        | 4 ++++
+ reports/rapport-gold-gp-corrige.md        | 4 ++++
+ reports/rapport-morphologie-verbes.md     | 6 +++---
+ reports/rapport-partition-integree.md     | 6 +++---
+ reports/rapport-pos-anglais-v2.md         | 6 +++---
+ reports/rapport-pos-nombres.md            | 6 +++---
+ reports/rapport-pos-ponctuation.md        | 4 ++++
+ reports/rapport-pos-r4-integre.md         | 6 +++---
+ reports/rapport-pos-r4.md                 | 4 ++++
+ reports/rapport-produit-v0.md             | 6 +++---
+ reports/rapport-r035.md                   | 4 ++++
+ reports/rapport-r264-elision.md           | 4 ++++
+ reports/rapport-schema-v1.md              | 6 +++---
+ reports/rapport-semaine.md                | 4 ++++
+ 22 files changed, 71 insertions(+), 34 
+… [12 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git diff -- reports/rapport-gn-pronom-sujet.md reports/rapport-pos-r4.md reports/rapport-r264-elision.md reports/rapport-pos-ponctuation.md reports/rapport-convention-gv.md reports/rapport-g017.md reports/rapport-r035.md reports/rapport-semaine.md | head -160", "description": "Review no … [29 caractères tronqués]`
+
+  ```
+diff --git a/reports/rapport-convention-gv.md b/reports/rapport-convention-gv.md
+index 79bb9bf4..938a8be0 100644
+--- a/reports/rapport-convention-gv.md
++++ b/reports/rapport-convention-gv.md
+@@ -1,5 +1,9 @@
+ # B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902
+ 
++> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
++> décrivent pas l'état courant. L'état courant du bloc est dans
++> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
++
+ > **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J1.2 · **Date** : 2026-11-07 ·
+ > **Verdict** : ✅
+ > Les **322 FP / 180 FN** du plan sont les erreurs **de GV** du gold d'avant `r035` (F1 0,7533) ;
+diff --git a/reports/rapport-g017.md b/reports/rapport-g017.md
+index 74b2c7be..1663dcb8 100644
+--- a/reports/rapport-g017.md
++++ b/reports/rapport-g017.md
+@@ -1,5 +1,9 @@
+ # B13 — g017 : l'adverbe final hors de la SUB est rejeté (g017 gagné, r264 et r288 perdus)
+ 
++> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
++> décrivent pas l'état courant. L'état courant du bloc est dans
++> [`en-cours`](..
+… [5100 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-101"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "grep -n \"85,00\\|85,75\\|84,96\" reports/rapport-passe-honnetete.md | head; python3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('reports/passe-honnetete.json'); d=json.loads(p.read_text())\nd['instantane_depasse']['pos']=[0.8496,0.85,0.8575]\np.write_text(json.dumps(d,ensure_ascii=Fa … [119 caractères tronqués]`
+
+  ```
+32:| POS (gold vivant 612) | **85,00 – 85,75 %** | **86,25 %** | **+0,50 à +1,25 pt** |
+48:- `POS 85` (85,00 / 85,34 / 85,75) ;
+75:| [`rapport-partition-integree.md`](rapport-partition-integree.md) | POS 85,00 ; F1 0,7535 ; 236/237 ; 2 spans | encart réécrit | ligne 3 |
+77:| [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | POS 85,00 ; F1 0,7535 ; 236/237 ; 2 spans | encart réécrit | ligne 3 |
+78:| [`rapport-pos-r4-integre.md`](rapport-pos-r4-integre.md) | POS 84,96 ; F1 0,7535 ; 236/237 ; 2 spans | encart réécrit | ligne 3 |
+82:| [`rapport-pos-ponctuation.md`](rapport-pos-ponctuation.md) | POS 85,75 ; 235/236 | encart ajouté | ligne 3 |
+83:| [`rapport-pos-r4.md`](rapport-pos-r4.md) | POS 85,00 ; POS 85,34 ; 222/222 | encart ajouté | ligne 3 |
+[0.8496, 0.85, 0.8575]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-passe-honnetete.md'); t=p.read_text()\nt=t.replace('| POS (gold vivant 612) | **85,00 – 85,75 %** | **86,25 %** | **+0,50 à +1,25 pt** |',\n            '| POS (gold vivant 612) | **84,96 – 85,75 %** | **86,25 %** | **+0,5 … [249 caractères tronqués]`
+
+  ```
+ok
+**pour leur commit**, mais leurs chiffres ne sont plus l'état courant.
+
+| mesure | instantané publié (06/11) | **état courant (14/11, HEAD `229098ec`)** | écart |
+|---|---:|---:|---:|
+| POS (gold vivant 612) | **84,96 – 85,75 %** | **86,25 %** | **+0,50 à +1,29 pt** |
+| F1 syntagmes (vivant 612) | **0,7535** | **0,7902** | **+0,0367** |
+| F1 syntagmes (gelé 602) | — | **0,7882** | — |
+| attachement exact / labels | **236/237** (0,9916) | **238/238** (238/239 cibles, 0,9958) | **+2 / +1** |
+| spans sans label | **2** (`r035`, `g017`) | **1** (`g017`) | **−1** |
+
+**Pourquoi ces chiffres ont bougé.** `r035` a réglé la relative zéro (236 → 237) ; la convention
+des GV a fait monter la F1 de 0,7549 à 0,7902 ; `s065` a attaché la REL « qui commence » au sujet
+du GV qui la suit (237/238 → 238/238). `g017` reste le seul span sans label : ce n'est pas une
+cible fausse, c'est une convention d'adverbe à trancher.
+
+## 2. La règle appliquée
+
+**Est « concernée »** une fiche de `reports/` qui publie, dans son titre, son résumé ou une
+mesure, un des quatre marqueurs de l'instantané **comme son état ou comme l'état du produit** :
+
+- `POS 85` (84,96 / 85,00 / 85,34 / 85,75) ;
+- `F1 0,7535` ;
+- `23
+… [28 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-101", "wait": true, "timeout_ms": 120000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -20 /tmp/portes-j91.log 2>/dev/null; echo '---'; wc -l /tmp/portes-j91.log 2>/dev/null", "description": "Check gates progress"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (84 portes, borne 1800 s) ===
+    journaux : work/portes-1114-03h29
+  porte-adaptateur-sortie ✅                          80 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+---
+3 /tmp/portes-j91.log
+  ```
+
+- **bash** `{"command": "python3 -m json.tool reports/passe-honnetete.json >/dev/null && echo JSON-OK; python3 - <<'PY'\nimport json\nd=json.load(open('reports/passe-honnetete.json'))\nprint(len(d['fiches']), 'fiches')\nprint('pos depasse', d['instantane_depasse']['pos'])\nprint('current living', d['etat_couran … [110 caractères tronqués]`
+
+  ```
+JSON-OK
+19 fiches
+pos depasse [0.8496, 0.85, 0.8575]
+current living 0.8625 0.7902
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/index_reports.py", "description": "Inspect report index generator"}`
+
+  ```
+#!/usr/bin/env python3
+"""index_reports.py — génère reports/INDEX.md à partir des en-têtes de fiches.
+
+L'index est **exhaustif** et **déterministe** : une ligne par fiche, triée par nom,
+avec son titre (premier `# `). Les fichiers d'infrastructure (`README.md`, `INDEX.md`
+et `historique-*`) sont exclus du tableau ; les compteurs de `docs/pilotage/en-cours.md`
+comptent, eux, tous les `.md` de `reports/`.
+
+Usage :
+    python3 tools/index_reports.py              # réécrit reports/INDEX.md
+    python3 tools/index_reports.py --verifier   # ne réécrit rien, sort 1 si périmé
+    python3 tools/index_reports.py --aide       # affiche l'aide (ne touche à rien)
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+
+
+def titre(p: pathlib.Path) -> str:
+    for ligne in p.read_text(encoding="utf-8", errors="ignore").splitlines():
+        if ligne.startswith("# "):
+            return ligne[2:].strip().replace("|", "—")
+    return p.stem.replace("-", " ")
+
+
+def fiches() -> list[pathlib.Path]:
+    return sorted(
+        p for p in (RACINE / "reports").glob("*.md")
+        if p.name not in ("README.md", "INDEX.md") and not p.n
+… [1392 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/portes-j91.log 2>/dev/null; echo '---'; test -f work/portes-1114-03h29/registre.txt && tail -5 work/portes-1114-03h29/registre.txt || true", "description": "Check gates progress again"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (84 portes, borne 1800 s) ===
+    journaux : work/portes-1114-03h29
+  porte-adaptateur-sortie ✅                          80 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+---
+porte-adaptateur-sortie 0 80
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,cmd | grep -E 'porte|toutes-les-portes|python3' | grep -v grep | head -20", "description": "See running gate processes"}`
+
+  ```
+2062 10-07:58:09 /usr/bin/python3.13 /usr/sbin/firewalld --nofork --nopid
+   2233 10-07:58:08 /usr/bin/python3.13 /usr/bin/fail2ban-server -xf start
+   3002 10-07:58:04 /usr/bin/python3 /home/stephane/.local/share/pipewire-eq/eqdaemon.py
+  64780  9-20:08:14 /opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --crashpad-handler-pid=64701 --enable-crash-reporter=8755d71b-0329-48b0-8a01-92063bf04a7d, --change-stack-guard-on-fork=enable
+  64782  9-20:08:14 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=64701 --enable-crash-reporter=8755d71b-0329-48b0-8a01-92063bf04a7d, --change-stack-guard-on-fork=enable
+  64797  9-20:08:14 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=64701 --enable-crash-reporter=8755d71b-0329-48b0-8a01-92063bf04a7d, --change-stack-guard-on-fork=enable
+  64975  9-20:08:14 /opt/google/chrome/chrome --type=gpu-process --gpu-recent-crash-count=0 --ozone-platform=x11 --crashpad-handler-pid=64701 --enable-crash-reporter=8755d71b-0329-48b0-8a01-92063bf04a7d, --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAA
+… [9711 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la work/portes-1114-03h29 2>/dev/null | head; echo '---'; ps -eo pid,etime,cmd | grep -E 'toutes-les-portes|porte-' | grep -v grep | head", "description": "Inspect gate work dir and processes"}`
+
+  ```
+total 8
+drwxr-xr-x. 1 stephane stephane  126 14 nov 03:31 .
+drwxr-xr-x. 1 stephane stephane 1856 14 nov 03:29 ..
+-rw-r--r--. 1 stephane stephane  580 14 nov 03:31 porte-adaptateur-sortie.log
+-rw-r--r--. 1 stephane stephane    0 14 nov 03:31 porte-audit-drapeaux.log
+-rw-r--r--. 1 stephane stephane   29 14 nov 03:31 registre.txt
+---
+1612744    01:33:16 bash tools/toutes-les-portes.sh
+1999929       02:33 bash -c bash tools/toutes-les-portes.sh > /tmp/portes-j91.log 2>&1; echo EXIT:$? >> /tmp/portes-j91.log
+1999936       02:32 bash tools/toutes-les-portes.sh
+1999972       02:30 timeout 1800 bash tools/porte-profondeur-routee.sh
+1999973       02:30 bash tools/porte-profondeur-routee.sh
+2004887       02:06 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl /tmp/porte-profondeur-routee/corpus.ids --limit 8192 --ctx 8192 --threads 8 --couches 0:16 --tete-partielle --etat-sortie /tmp/porte-profondeur-routee/e16/etat --etat-pos 4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,
+… [48730 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git add \\\n  docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/README.md \\\n  reports/rapport-passe-honnetete.md reports/passe-honnetete.json \\\n  reports/rapport-autotest-parallele.md reports/rapport-composition-sans-perte.md \\\n  reports/rapport-frontieres-integrees.md re … [618 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                 |   6 +-
+ docs/pilotage/roadmap.md                  |   2 +-
+ reports/README.md                         |   1 +
+ reports/passe-honnetete.json              | 404 ++++++++++++++++++++++++++++++
+ reports/rapport-autotest-parallele.md     |   6 +-
+ reports/rapport-composition-sans-perte.md |   6 +-
+ reports/rapport-convention-gv.md          |   4 +
+ reports/rapport-frontieres-integrees.md   |   6 +-
+ reports/rapport-g017.md                   |   4 +
+ reports/rapport-gn-pronom-sujet.md        |   4 +
+ reports/rapport-gold-gp-corrige.md        |   4 +
+ reports/rapport-morphologie-verbes.md     |   6 +-
+ reports/rapport-partition-integree.md     |   6 +-
+ reports/rapport-passe-honnetete.md        | 164 ++++++++++++
+ reports/rapport-pos-anglais-v2.md         |   6 +-
+ reports/rapport-pos-nombres.md            |   6 +-
+ reports/rapport-pos-ponctuation.md        |   4 +
+ reports/rapport-pos-r4-integre.md         |   6 +-
+ reports/rapport-pos-r4.md                 |   4 +
+ reports/rapport-produit-v0.md             |   6 +-
+ reports/rapport-r035.md                   |   4 +
+ reports/rapport-r264-elision.md           |   4 +
+ reports/rapport-schema-v1.m
+… [128 caractères tronqués]
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/portes-j91.log 2>/dev/null; echo '---'; cat work/portes-1114-03h29/registre.txt 2>/dev/null; echo '---'; ps -p 1999936 -o pid,etime,cmd 2>/dev/null || true", "description": "Check gate job before commit"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (84 portes, borne 1800 s) ===
+    journaux : work/portes-1114-03h29
+  porte-adaptateur-sortie ✅                          80 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+---
+porte-adaptateur-sortie 0 80
+---
+    PID     ELAPSED CMD
+1999936       02:44 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "pstree -p 1999936 2>/dev/null | head -20; echo '---'; ls -la work/portes-1114-03h29/", "description": "Inspect gate process tree"}`
+
+  ```
+bash(1999936)---timeout(2030851)---bash(2030852)-+-tail(2033668)
+                                                 `-timeout(2033667)---python(2033669)-+-python(2056289)-+-{python}(2056306)
+                                                                                      |                 |-{python}(2056307)
+                                                                                      |                 |-{python}(2056308)
+                                                                                      |                 |-{python}(2056309)
+                                                                                      |                 |-{python}(2056310)
+                                                                                      |                 |-{python}(2056311)
+                                                                                      |                 |-{python}(2056312)
+                                                                                      |                 |-{python}(2056313)
+                                                                                      |                 |-{python}(2056314)
+                   
+… [1553 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ps -p 2033669,2033667 -o pid,etime,%cpu,%mem,cmd 2>/dev/null; echo '---'; tail -5 /tmp/porte-audit-drapeaux.log 2>/dev/null || true; ls -l /tmp/porte-audit-drapeaux 2>/dev/null | head", "description": "Check audit gate resource use"}`
+
+  ```
+PID     ELAPSED %CPU %MEM CMD
+2033669       01:24  4.7  0.4 /home/stephane/gpu-env/bin/python -u tools/audit_drapeaux_harnais.py --pas 200 --sortie /tmp/porte-audit-drapeaux
+2033667       01:24  0.0  0.0 timeout 1800 /home/stephane/gpu-env/bin/python -u tools/audit_drapeaux_harnais.py --pas 200 --sortie /tmp/porte-audit-drapeaux
+---
+total 13416
+drwxr-xr-x. 2 stephane stephane     100 14 nov 03:31 elagage25
+-rw-r--r--. 1 stephane stephane 4574656 14 nov 03:31 elagage25.gguf
+-rw-r--r--. 1 stephane stephane    1265 14 nov 03:31 elagage25.log
+-rw-r--r--. 1 stephane stephane       0 14 nov 03:32 masque10.log
+drwxr-xr-x. 2 stephane stephane     100 14 nov 03:32 masque25
+-rw-r--r--. 1 stephane stephane 4574656 14 nov 03:32 masque25.gguf
+-rw-r--r--. 1 stephane stephane     732 14 nov 03:32 masque25.log
+drwxr-xr-x. 2 stephane stephane     100 14 nov 03:31 temoin
+-rw-r--r--. 1 stephane stephane 4574656 14 nov 03:31 temoin.gguf
+  ```
+
+- **bash** `{"command": "git commit -m \"J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE SE LISENT PLUS COMME L'ÉTAT COURANT\n\nLes 19 fiches de la cohorte POS 85 / F1 0,7535 / 236/237 / 2 spans portent un encart\nen ligne 3 qui pointe vers en-cours et la roadmap, sans rec … [648 caractères tronqués]`

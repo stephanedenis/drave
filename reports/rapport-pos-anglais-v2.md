@@ -1,8 +1,8 @@
 # B13 — la POS passe à 83,83 % : la position du sujet tranche (R2a + R3 + R2b)
 
-> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
-> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
-> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
 
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **183/183 portes** : trois règles de la fiche [POS anglaise](rapport-pos-anglais.md) (A25) sont

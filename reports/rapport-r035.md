@@ -1,5 +1,9 @@
 # B13 — la relative zéro (r035) : exact 236 → 237, POS inchangée
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Tâche** : J1.1 · **Date** : 2026-11-07 ·
 > **Verdict** : ✅
 > **`r035` est réglé** : « The film **she talks about** is out. » n'a aucun marqueur de relative.

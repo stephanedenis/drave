@@ -1,8 +1,8 @@
 # B13 — le paquet POS sûr : classes fermées anglaises + R4-en, POS 84,96 %
 
-> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
-> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
-> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
 
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Deux leviers mesurés et intégrés** (fiche A27 : [`rapport-pos-r4.md`](rapport-pos-r4.md)) :

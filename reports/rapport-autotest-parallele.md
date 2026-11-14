@@ -1,8 +1,8 @@
 # B13 — la vérification parallèle : 183/183 en 1 min 54 (×2,4)
 
-> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
-> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
-> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
 
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Ce que ça règle** : l'autotest était **mono-processus** — ~4 min 40 de CPU et ~4 min 40 de

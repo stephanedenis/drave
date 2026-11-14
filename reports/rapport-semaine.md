@@ -1,5 +1,9 @@
 # J5.1 — le rapport de semaine : le produit gagne 3,69 points de F1, l'intégration est bornée
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
 > **Ligne de roadmap** : **B13** (le moteur de pensée), **R0.7** (le bloc langue), **N2**, **S**,
 > **R**, **A**, **Panini** · **Tâche** : J5.1 · **Date** : 2026-11-13 · **Verdict** : ✅
 >

@@ -1,0 +1,404 @@
+{
+ "schema": "drave.passe-honnetete",
+ "version": 1,
+ "tache": "J9.1",
+ "titre": "La passe d'honnêteté des fiches",
+ "date": "2026-11-14",
+ "ligne": "B13",
+ "verdict": "ok",
+ "head": "229098ec",
+ "etat_courant": {
+  "source": [
+   "reports/rapport-s065.md",
+   "docs/pilotage/en-cours.md"
+  ],
+  "commande": [
+   "python3 tools/drave.py evaluer --json",
+   "python3 tools/drave.py evaluer --gold --json"
+  ],
+  "vivant": {
+   "phrases": 612,
+   "tokens": 3179,
+   "pos": 0.8625,
+   "f1_syntagmes": 0.7902,
+   "tete": 0.9029,
+   "cibles_attachement": 239,
+   "labels_attachement": 238,
+   "exact": 238,
+   "exact_taux": 0.9958,
+   "topk": 236,
+   "topk_taux": 0.9874,
+   "spans_sans_label": 1,
+   "span_sans_label": "g017",
+   "span_exact_taux": 1.0
+  },
+  "gele": {
+   "phrases": 602,
+   "tokens": 3141,
+   "pos": 0.8625,
+   "f1_syntagmes": 0.7882,
+   "tete": 0.9025,
+   "cibles_attachement": 239,
+   "labels_attachement": 234,
+   "exact": 234,
+   "exact_taux": 0.9791,
+   "topk": 232,
+   "topk_taux": 0.9707,
+   "spans_sans_label": 1,
+   "span_sans_label": "g017",
+   "span_exact_taux": 1.0
+  }
+ },
+ "instantane_depasse": {
+  "pos": [
+   0.8496,
+   0.85,
+   0.8575
+  ],
+  "f1": 0.7535,
+  "attachement": "236/237",
+  "couverture": 0.9916,
+  "spans_sans_label": 2,
+  "spans": [
+   "r035",
+   "g017"
+  ]
+ },
+ "encart": {
+  "ligne": 3,
+  "sans_valeurs_copiees": true,
+  "liens": [
+   "../docs/pilotage/en-cours.md",
+   "../docs/pilotage/roadmap.md"
+  ],
+  "raison": "un encart qui recopie l'état devient faux au commit suivant ; le lien non"
+ },
+ "fiches": [
+  {
+   "fichier": "reports/rapport-autotest-parallele.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-composition-sans-perte.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-frontieres-integrees.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-morphologie-verbes.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-partition-integree.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "POS 85,00",
+    "F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-pos-anglais-v2.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-pos-nombres.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "POS 85,00",
+    "F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-pos-r4-integre.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "POS 84,96",
+    "F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-produit-v0.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-schema-v1.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "encart: F1 0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_reecrit",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-gn-pronom-sujet.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "F1 0,7535",
+    "236/237"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-pos-ponctuation.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "POS 85,75",
+    "235/236"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-pos-r4.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "POS 85,00",
+    "POS 85,34",
+    "222/222"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-r264-elision.md",
+   "groupe": "cohorte",
+   "marqueurs": [
+    "236/237",
+    "2 spans"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-gold-gp-corrige.md",
+   "groupe": "heritiers",
+   "marqueurs": [
+    "226/226",
+    "13 spans"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-convention-gv.md",
+   "groupe": "heritiers",
+   "marqueurs": [
+    "236/237 (avant)",
+    "237/238 (arrivée)"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-g017.md",
+   "groupe": "heritiers",
+   "marqueurs": [
+    "236/237 (contrefactuel)",
+    "2 spans"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-r035.md",
+   "groupe": "heritiers",
+   "marqueurs": [
+    "236/237 (avant)",
+    "237/238 (arrivée)"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  },
+  {
+   "fichier": "reports/rapport-semaine.md",
+   "groupe": "heritiers",
+   "marqueurs": [
+    "236/237 (bilan)",
+    "2 spans (plan)"
+   ],
+   "action": "encart_ajoute",
+   "ligne_notice": 3,
+   "liens": [
+    "../docs/pilotage/en-cours.md",
+    "../docs/pilotage/roadmap.md"
+   ]
+  }
+ ],
+ "controles": {
+  "notices": {
+   "attendues": 19,
+   "trouvees": 19,
+   "ligne": 3
+  },
+  "liens": {
+   "attendus": 38,
+   "resolus": 38
+  },
+  "scan_apres": {
+   "fiches_examinees": 723,
+   "marqueurs": [
+    "POS 85",
+    "0,7535",
+    "236/237",
+    "2 spans"
+   ],
+   "fiches_resultats_sans_notice": 0,
+   "faux_positifs": [
+    {
+     "fichier": "reports/rapport-frontieres-phrase.md",
+     "pourquoi": "« 2 spans de phrase du gold corrigés » : spans de phrase, pas d'attachement"
+    },
+    {
+     "fichier": "reports/rapport-gold-anglais.md",
+     "pourquoi": "« 2 spans exacts » du gold anglais : autre objet"
+    }
+   ],
+   "index": [
+    "reports/README.md",
+    "reports/INDEX.md"
+   ]
+  },
+  "courante_sans_notice": [
+   "reports/rapport-s065.md"
+  ],
+  "mesure_reproduite": true
+ },
+ "limites": [
+  "Le scan est lexical : il n'attrape pas une fiche qui publierait 0,85 sans « POS » ni « 85 % ».",
+  "L'état courant est daté du HEAD 229098ec ; un commit suivant le rend historique à son tour.",
+  "La base change les chiffres : vivant 612 (F1 0,7902 ; 238/239) vs gelé 602 (F1 0,7882 ; 234/239).",
+  "L'encart empêche une lecture périmée ; il ne corrige pas le corps de la fiche.",
+  "Le lien dépend de la fraîcheur de docs/pilotage/en-cours.md."
+ ]
+}

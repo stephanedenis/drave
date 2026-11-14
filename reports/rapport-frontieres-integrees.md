@@ -1,8 +1,8 @@
 # B13 — les frontières de phrase : 32/40 textes faux → 0, et le gold ne bouge pas
 
-> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ;
-> l'état courant du bloc est dans [`en-cours`](../docs/pilotage/en-cours.md) (POS 86,25 %,
-> F1 0,7535, attachement 236/237, couverture 0,9916, 2 spans).
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
 
 > **Ligne de roadmap** : **B13** (produit) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le P0-4 est fermé** : sur **40 textes libres** (URL, courriels, chemins, décimaux, dates,

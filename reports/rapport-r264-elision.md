@@ -1,5 +1,9 @@
 # B13 — `r264` réglé : le GV s'arrête au marqueur élidé (`qu'il`), couverture 0,9916
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le 13e span est retrouvé** : dans « Je sais **qu'il vient demain** », le GV « sais » avalait
 > le marqueur élidé, donc la SUB n'était jamais produite au bon span. La condition d'arrêt du GV

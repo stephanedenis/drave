@@ -1,5 +1,9 @@
 # B13 — la ponctuation a une POS (PONCT) : POS 85,75 %, miroir 0,2276
 
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
 > **Ligne de roadmap** : **B13** (moteur de pensée) · **Date** : 2026-11-06 · **Verdict** : ✅
 > **Le P1-6 de l'audit produit** : la **ponctuation** n'avait aucun POS (25 tokens du gold,
 > 257 dans les textes libres). Elle est désormais **PONCT** (0,95) ; le POS passe de **0,8500 à

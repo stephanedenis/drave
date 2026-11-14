@@ -61509,3 +61509,17 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-4845", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+sam 14 nov 2026 03:25:12 EST
+2026-11-14 01:48:02 · ▶ J8.1 — La restitution v1 (timeout 5400 s)
+2026-11-14 03:18:02 · ✔ J8.1 en 5400.1 s (code 124) — ✅ test -f reports/rapport-restitution-v1.md && echo FICHE-OK
+2026-11-14 03:18:03 · ▶ J9.1 — La passe d'honnêteté des fiches (timeout 5400 s)
+budget consommé : 20345.9 s · lancements : 20
+  [a_faire ] J9.1   j9 — La passe d'honnêteté des fiches
+  [a_faire ] J10.1  j10 — Le bilan de la semaine
+  [a_faire ] J11.1  j11 — Le produit — les exemples rejoués
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre J9.1", "timeoutMs": 2500000}`
