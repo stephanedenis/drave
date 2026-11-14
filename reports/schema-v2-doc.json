@@ -1,0 +1,112 @@
+{
+ "date": "2026-11-14",
+ "tache": "J11.4",
+ "ligne": "B13",
+ "objet": "documentation et validation du schéma v2",
+ "code_mesure": "09e54143",
+ "outil": "tools/mesurer_schema_v2_doc.py",
+ "schemas": {
+  "1": "tools/schemas/drave-annotation-v1.json",
+  "2": "tools/schemas/drave-annotation-v2.json"
+ },
+ "documentation": {
+  "fichier": "docs/produit/README.md",
+  "section": "3.3 bis — La vue des syntagmes qui se chevauchent — les champs du schéma v2",
+  "champs_documentes": {
+   "meta.partition": [
+    "groupe",
+    "rang",
+    "membres",
+    "vue"
+   ],
+   "meta.alternative": [
+    "type",
+    "debut",
+    "fin",
+    "source",
+    "union",
+    "relation",
+    "rang",
+    "retire (optionnel)",
+    "attachement (optionnel)",
+    "role (optionnel)"
+   ]
+  },
+  "retrocompatibilite": {
+   "v1_inchangee": true,
+   "champs_racine_identiques": true,
+   "champs_ajoutes_optionnels": true,
+   "compatibilite_octet_pour_octet": false
+  }
+ },
+ "validation_verificateur": {
+  "commande": "python3 tools/verifier_schema_produit.py --json",
+  "code_sortie": 0,
+  "versions_lues": [
+   1,
+   2
+  ],
+  "validateur": true,
+  "cas": 6,
+  "echecs": 0,
+  "versions_cas": [
+   1,
+   2
+  ],
+  "retrocompatibilite": {
+   "v1_lue": true,
+   "v2_refuse_v1": true
+  }
+ },
+ "validation_gold20": {
+  "commande": "python3 tools/verifier_schema_produit.py --gold 20",
+  "code_sortie": 0,
+  "cas": 26,
+  "echecs": 0
+ },
+ "validation_gold_les_deux_versions": {
+  "phrases": 612,
+  "annotations_v2": 612,
+  "echecs_v2": 0,
+  "annotations_v1_derivees": 612,
+  "echecs_v1": 0,
+  "v2_refuse_v1": 612,
+  "v1_refuse_v2": 612,
+  "mutation_champ_obligatoire_refusee": true
+ },
+ "champs_vus_sur_le_gold": {
+  "vue": "alternative",
+  "porteurs_de_partition": 437,
+  "groupes": 146,
+  "alternatives": 930,
+  "types": {
+   "GN": 393,
+   "GP": 49,
+   "GV": 357,
+   "REL": 103,
+   "SUB": 28
+  },
+  "relations": {
+   "croise": 386,
+   "inclus": 263,
+   "inclut": 263,
+   "meme_span": 18
+  },
+  "sources": {
+   "heuristique": 930
+  }
+ },
+ "tests_schema": {
+  "commande": "python3 tools/tests/test_schema_produit.py",
+  "code_sortie": 0,
+  "tests": 8,
+  "echecs": 0
+ },
+ "limites": [
+  "les 612 annotations v1 sont dérivées des 612 annotations v2 (version=1, champs v2 retirés), pas un corpus v1 indépendant",
+  "le schéma valide la forme et les énumérations, pas les invariants sémantiques (réciprocité, unicité des groupes, rangs)",
+  "sans fastjsonschema, la validation du vérificateur est minimale (champs obligatoires + version)",
+  "le bump v1 -> v2 change les octets et le sha256 de rejeu ; la compatibilité est structurelle, pas octet pour octet",
+  "les comptes de champs (146 groupes, 437 porteurs, 930 alternatives) sont in-sample sur le gold 612"
+ ]
+}

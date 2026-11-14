@@ -93,6 +93,19 @@ A26 : **107 → 115 paires** (le code a changé, pas le compteur : `f50` 50 → 
 **code 3 avec JSON**. [`fiche`](../../reports/rapport-robustesse-semaine.md) + JSON. La suite
 produit est **J11.4** (schéma v2 documenté).
 
+**J11.4 — le schéma v2 documenté.** La notice produit
+[`docs/produit/README.md`](../produit/README.md) § 3.3 bis documente les **quatre** champs de
+`meta.partition` et les **dix** champs de `meta.alternative` (sept obligatoires, trois
+optionnels), avec un exemple réel, et la **rétro-compatibilité v1** (sélection par `version`,
+schéma v1 inchangé, contrôle négatif). Vérification : `verifier_schema_produit.py --json` lit
+**les deux versions** (`versions_lues: [1, 2]`), **6 cas / 0 échec** ; `--gold 20` donne
+**26 cas / 0 échec** ; les **612 phrases du gold** passent le schéma v2 (**612/612**) et les
+**612 annotations dérivées v1** passent le schéma v1 (**612/612**) ; les contrôles négatifs
+refusent la version adverse (612/612) et la mutation d'un champ obligatoire. Les **146 groupes /
+437 porteurs / 930 alternatives** reproduisent le compte de B13 (contrôle de cohérence).
+[`fiche`](../../reports/rapport-schema-v2-doc.md) + [`JSON`](../../reports/schema-v2-doc.json).
+J11.4 **ferme la suite produit** ; la prochaine action B13 est **trancher `g017`**.
+
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)

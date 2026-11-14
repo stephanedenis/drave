@@ -2488,3 +2488,193 @@ A  tools/mesurer_robustesse_semaine.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902)\"", "description": "Commit J11.3 result"}`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-92]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-92", "wait": true, "timeout_ms": 120000}`
+
+  ```
+[s/v7 55bde5c5] J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902)
+ 19 files changed, 6724 insertions(+), 33 deletions(-)
+ create mode 100644 journal/sessions/session-6b997dd9-9a2e-4d72-b31a-5a6d40609d56/digest.md
+ create mode 100644 journal/sessions/session-6b997dd9-9a2e-4d72-b31a-5a6d40609d56/rapport.md
+ create mode 100644 reports/pensee-robustesse-semaine.json
+ create mode 100644 reports/rapport-robustesse-semaine.md
+ create mode 100644 tools/mesurer_robustesse_semaine.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -40; echo ---; git status --short | head -30", "description": "Inspect commit contents"}`
+
+  ```
+55bde5c5 J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902)
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/pilotage/roadmap.md                           |   11 +
+ journal/2026-11-14/README.md                       |   20 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    8 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |    9 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2490 ++++++++++++++++
+ .../rapport.md                                     |  181 ++
+ .../digest.md                                      |  106 +
+ .../rapport.md                                     |   47 +-
+ reports/pensee-robustesse-semaine.jso
+… [622 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"rc=${PIPESTATUS[0]}\"", "description": "Post-commit doc review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 727 fiche(s) · 821 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -3; echo \"rc=${PIPESTATUS[0]}\"", "description": "Post-commit journal check"}`
+
+  ```
+journal · 46 jour(s) · 188 session(s) · 2482 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation|✅\"; echo \"rc=${PIPESTATUS[0]}\"", "description": "Post-commit budget check"}`
+
+  ```
+T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"rc=${PIPESTATUS[0]}\"", "description": "Post-commit en-cours check"}`
+
+  ```
+en-cours · 1628 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+rc=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s' && echo --- && git show HEAD:journal/2026-11-14/README.md | grep -n \"J11.3\" | head; echo ---; git status --short | head -20", "description": "Verify commit and journal"}`
+
+  ```
+55bde5c5 J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902)
+---
+99:**J11.3 — les 50 textes libres : le contrat tient, la vue linéaire ne chevauche pas.** Les
+---
+ M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-robustesse-semaine.json'))\nprint(list(d))\nprint(json.dumps(d['resultats'][0],ensure_ascii=False,indent=1)[:1200])\nprint('refus f14:',json.dumps(d['resultats'][13],en … [178 caractères tronqués]`
+
+  ```
+['schema', 'version', 'date', 'ligne', 'tache', 'titre', 'banc', 'banc_sha256', 'commande', 'code', 'dispositif', 'synthese', 'comparaison_a26', 'resultats', 'limites']
+{
+ "id": "f01",
+ "categorie": "fr",
+ "attendu": "fr",
+ "caracteres": 13,
+ "rc": 0,
+ "rc_2": 0,
+ "plantage": false,
+ "traceback": false,
+ "stderr_succes": false,
+ "deterministe": true,
+ "json_valide": true,
+ "erreur_json": "",
+ "champs_8": true,
+ "schema_v2": true,
+ "schema_erreur": "",
+ "version": 2,
+ "refus": "",
+ "langue": "fr",
+ "script": "Latn",
+ "temps_cli_ms": 158.8,
+ "temps_cli_2_ms": 161.8,
+ "temps_api_ms": 1.9,
+ "temps_api_filtrer_ms": 1.5,
+ "api_alternative_schema_v2": true,
+ "api_filtrer_schema_v2": true,
+ "api_alternative_champs_8": true,
+ "api_filtrer_champs_8": true,
+ "alternative": {
+  "segments": 2,
+  "chevauchements": 0,
+  "sans_syntagme": false
+ },
+ "filtrer": {
+  "segments": 2,
+  "chevauchements": 0,
+  "sans_syntagme": false
+ },
+ "filtrer_union": {
+  "segments": 2,
+  "chevauchements": 0,
+  "sans_syntagme": false
+ },
+ "invariants": {
+  "etiquettes": 20,
+  "spans_hors_texte": 0,
+  "spans_vides": 0,
+  "cibles_absentes": 0
+ },
+ "erreurs_api": {
+  "alternative": "",
+  "filtrer": ""
+ }
+}
+refus f14: {
+ "
+… [2010 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**J11.3 fait.** Fiche `reports/rapport-robustesse-semaine.md`, JSON `reports/pensee-robustesse-semaine.json`, outil reproductible `tools/mesurer_robustesse_semaine.py`. Commit **`55bde5c5`** ; mesure sur le code **`09e54143`** (F1 **0,7902**, POS **0,8625**, attachement **238/238 labels — 238/239 cibles, 0,9958**, schéma v2, restitution v1).
+
+| mesure | audit A26 (06/11) | **J11.3 (14/11)** |
+|---|---:|---:|
+| plantages | 0/50 | **0/50** |
+| JSON valide | 0/46 invalide + 4 refus vides | **50/50** |
+| refus | 4/50, code 1, stdout 0 o | **4/50, code 3, JSON** |
+| 8 champs obligatoires | 0/46 | **50/50** |
+| schéma v2 | absent | **50/50** (CLI + API, deux vues) |
+| chevauchements `alternative` | 107 paires / 23/46 | **115 paires / 21/46** |
+| chevauchements `filtrer` | 0 après filtre `meta.union` | **0/50**, vue publiée |
+| sans syntagme (annotés) | 4/46 | **3/46** (`f18`, `f27`, `f37` ; `f13` segmenté) |
+| temps CLI médian | 152,7 ms | **159,2 ms** |
+| temps API médian | 1,0 ms | **2,7 ms** |
+
+**Les deux vues.** `alternative` : **395 segments, 115 chevauchements** ; `filtrer` : **313 segments, 0 chevauchement**. `filtrer_union` (contrôle) : 352 segments, 40 chevauchements. Le zéro de `filtrer` n'est pas un artefact : 313 segments, et le compteur détecte bien un chevauchement injecté (1/1).
+
+**Le contrat.** 50/50 CLI portent les 8 champs et passent JSON Schema v2 ; 50/50 en API `alternative` et 50/50 en API `filtrer`. Les 4 refus sont des réponses JSON valides. Déterminisme **50/50** ; **0 span hors texte**, **0 span vide**, **0 cible absente** sur 4 827 étiquettes et 315 cibles.
+
+**La restitution.** Identique à la v1 : **46/46 canonique**, **strict 5/46 = 0,1087**, **395 segments / 395 rôles / 315 cibles / 313 dans un autre segment**, stabilité **18/46**. Contrôles : mélange/troncature **46/46 détectés, 0/46 exacts** ; rôles/cibles retirés **43/43**.
+
+**La comparaison A26.** L'écart 107 → 115 est un effet du **code**, pas du compteur : mêmes paires strictes, mais `f50` passe de 50 à 63, `f26` et `f29` tombent à 0, `f06` de 4 à 2. Le nombre de textes touchés baisse de 23 à 21 malgré la hausse du total. Les 8 champs passent de 0/46 à 50/50 et les refus de « code 1 sans JSON » à « code 3 avec JSON ».
+
+**Vérifications.** `porte-produit` verte (183/183), 34 tests produit/schéma/restitution OK, `verifier_schema_produit --gold 20` OK, revue de documentation OK (727 fiches / 821 JSON), journal OK, budget T0 **3 998/4 000** mots, tableaux et schémas OK.
+
+**Limites nommées dans la fiche** : banc écrit à la main, définition stricte du chevauchement, comparaison à code non constant, 4 refus exclus de la structure, temps dominé par le démarrage CLI, restitution canonique vraie par construction.
+

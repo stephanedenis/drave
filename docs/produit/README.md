@@ -182,7 +182,7 @@ python3 tools/drave.py analyser --fichier corpus.txt --json    # le texte entier
 `--fichier` lit un texte UTF-8 ; `--jsonl` rend une **ligne JSON par phrase** (le format des
 traitements de corpus), chaque ligne portant le schéma **v2** complet (`version: 2`).
 
-### 3.3 bis La vue des syntagmes qui se chevauchent
+### 3.3 bis La vue des syntagmes qui se chevauchent — les champs du schéma v2
 
 ```bash
 python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se réveille." --partition filtrer
@@ -191,10 +191,91 @@ python3 tools/drave.py analyser "Le chat de la voisine qui dort sur le toit se r
 Quatre vues (`--partition`) : `alternative` (défaut : les deux segments restent, `meta.alternative`
 dit lequel est préféré — **aucune perte**), `filtrer` (vue linéaire : **F1 +0,047** mais **18
 attachements en moins**), `filtrer_union` (variante économique, 91 paires résiduelles) et `brut`
-(l'ancienne sortie). Le défaut est `alternative`. Un segment qui appartient à un groupe de
-chevauchement porte `meta.partition` (`{groupe, rang, membres, vue}`) et `meta.alternative`
-(`[{type, debut, fin, source, union, relation, rang, …}]`) ; les deux champs sont typés dans le
-[schéma v2](../../tools/schemas/drave-annotation-v2.json).
+(l'ancienne sortie). Le défaut est `alternative`.
+
+**Deux champs additifs et optionnels.** Un segment qui appartient à un **groupe de chevauchement**
+(au moins deux syntagmes dont les spans s'intersectent) porte `meta.partition` et
+`meta.alternative` ; les autres n'en portent pas, et `meta` reste **ouvert** pour les clés
+habituelles (`role`, `attachement`, `union`, `ouvert`, `contexte`). Les deux champs sont typés dans
+le [schéma v2](../../tools/schemas/drave-annotation-v2.json), qui laisse `meta` ouvert mais
+**ferme** chaque alternative (`additionalProperties: false`).
+
+**`meta.partition` — la place du segment dans son groupe.**
+
+| champ | type | contrainte | sens |
+|---|---|---|---|
+| `groupe` | entier | `≥ 0` | identifiant du groupe de chevauchement, stable dans l'annotation |
+| `rang` | entier | `≥ 1` | rang du segment dans le groupe ; `1` = segment préféré (chunker `union`, puis le plus large, puis le plus sûr) |
+| `membres` | entier | `≥ 2` | nombre de segments du groupe |
+| `vue` | énumération | `alternative`, `filtrer_union`, `filtrer` | vue qui a produit l'annotation (`brut` n'écrit pas ces champs) |
+
+**`meta.alternative` — les autres segments du groupe, vus depuis le porteur.**
+
+| champ | type | contrainte | sens |
+|---|---|---|---|
+| `type` | énumération | `GN`, `GV`, `GP`, `REL`, `SUB` | type du segment alternatif |
+| `debut`, `fin` | entiers | `0 ≤ debut < fin` | span en **points de code Unicode**, 0-based, `[debut:fin)` |
+| `source` | énumération | `heuristique`, `neuronal`, `humain` | provenance du segment |
+| `union` | booléen | — | le segment vient de l'union S/chunker |
+| `relation` | énumération | `inclut`, `inclus`, `meme_span`, `croise` | relation **du point de vue du porteur** : `inclut` = le porteur contient l'alternative ; `inclus` = l'alternative contient le porteur ; `croise` = intersection partielle |
+| `rang` | entier | `≥ 1` | rang de l'alternative dans le groupe |
+| `retire` | booléen | optionnel | présent en vue `filtrer`/`filtrer_union` ; `true` = segment retiré de la sortie mais toujours lisible ici |
+| `attachement` | objet | optionnel, `{segment, cible}` | attachement recopié de l'alternative, quand il existe |
+| `role` | chaîne | optionnelle | rôle recopié de l'alternative, quand il existe |
+
+```json
+{
+  "type": "REL", "debut": 22, "fin": 42, "valeur": "qui dort sur le toit",
+  "meta": {
+    "partition": {"groupe": 0, "rang": 2, "membres": 3, "vue": "alternative"},
+    "alternative": [
+      {"type": "REL", "debut": 22, "fin": 54, "source": "heuristique",
+       "union": true, "relation": "inclus", "rang": 1,
+       "attachement": {"segment": "qui dort sur le toit se réveille", "cible": "réveille"},
+       "role": "qualité"},
+      {"type": "GV", "debut": 43, "fin": 54, "source": "heuristique",
+       "union": false, "relation": "croise", "rang": 3,
+       "attachement": {"segment": "se réveille", "cible": "voisine"},
+       "role": "predicat"}
+    ]
+  }
+}
+```
+
+**Lecture.** Le porteur `REL [22:42]` est le **rang 2** d'un groupe de **3** segments ; ses deux
+alternatives sont au rang 1 (la REL longue `[22:54]`, qui le **contient** : `inclus`) et au rang 3
+(le GV `[43:54]`, qui le **croise**). Le champ `union` dit lesquelles viennent de l'union
+S/chunker ; `vue` dit dans quelle vue le groupe a été écrit. En `filtrer`, le segment écarté
+n'apparaît plus dans `etiquettes` mais reste décrit dans `meta.alternative` avec `retire: true` :
+**la perte est documentée, pas silencieuse**. Le schéma vérifie la **forme** ; les invariants
+sémantiques (réciprocité des relations, unicité des groupes, rangs permutés) sont couverts par les
+tests du bloc, pas par le validateur JSON.
+
+**La rétro-compatibilité v1.** Les **huit champs obligatoires** de la racine (`schema`, `version`,
+`texte`, `langue`, `script`, `refus`, `etiquettes`, `unites_semantiques`) sont **les mêmes** en v1
+et en v2 ; le bump n'ajoute que deux champs optionnels dans `meta`. Un client v1 qui ne lit pas
+`meta` continue donc de lire l'annotation. En revanche, la **compatibilité octet pour octet** n'est
+pas garantie : le passage à `version: 2` change le JSON et son `sha256` de rejeu.
+
+| `version` de l'annotation | schéma choisi | résultat |
+|---:|---|---|
+| `1` | [`drave-annotation-v1.json`](../../tools/schemas/drave-annotation-v1.json) (inchangé) | lu et validé |
+| `2` | [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) | lu et validé |
+| autre | — | refusé (version inconnue) |
+
+`tools/verifier_schema_produit.py` lit `version` et choisit le schéma ; il compile les deux une
+fois, puis valide les cas de base, les phrases du gold demandées et **un cas v1** de
+rétro-compatibilité. Un **contrôle négatif** soumet ce cas v1 au schéma v2, qui doit le refuser.
+
+```bash
+python3 tools/verifier_schema_produit.py --json          # 5 cas v2 + 1 cas v1, versions_lues [1, 2]
+python3 tools/verifier_schema_produit.py --gold 20       # + 20 phrases du gold (26 cas)
+```
+
+Au 14/11 : **6 cas, 0 échec**, `versions_lues: [1, 2]`, `v1_lue: true`, `v2_refuse_v1: true`,
+validateur `fastjsonschema` ; avec `--gold 20`, **26 cas, 0 échec**. Le cas v1 est l'annotation
+française ramenée à `version: 1` et privée de `meta.partition`/`meta.alternative`. Le détail de la
+mesure est dans [`reports/rapport-schema-v2-doc.md`](../../reports/rapport-schema-v2-doc.md).
 
 ### 3.3 ter Le contexte (mémoire de discours)
 

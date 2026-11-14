@@ -61649,3 +61649,21 @@ sam 14 nov 2026 04:46:39 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre J11.3", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 04:55:47 EST
+2026-11-14 04:43:40 · ✔ J11.2 en 589.2 s (code 0) — ✅ python3 tools/drave.py evaluer --par-langue >/dev/null 2>&1; echo PL-$?; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-14 04:43:40 · ▶ J11.3 — Le produit — la robustesse des 50 textes (timeout 5400 s)
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget\"", "description": "Suivre J11.3", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 05:04:53 EST
+2026-11-14 04:58:15 · ✔ J11.3 en 875.0 s (code 0) — ✅ test -f reports/rapport-robustesse-semaine.md && echo FICHE-OK
+2026-11-14 04:58:16 · ▶ J11.4 — Le contrat — le schéma v2 documenté (timeout 5400 s)
+budget consommé : 25018.1 s · lancements : 25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J11.4", "timeoutM … [11 caractères tronqués]`

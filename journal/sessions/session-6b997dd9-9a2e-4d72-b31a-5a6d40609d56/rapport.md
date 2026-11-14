@@ -9,10 +9,10 @@
 | Début | 2026-11-14 04:43 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 111 |
-| Appels d'outils | 127 |
+| Messages | 116 |
+| Appels d'outils | 134 |
 | Fichiers touchés | 6 |
-| Commandes | 92 |
+| Commandes | 99 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J11.3 : re-mesurer les 50 textes libres avec le code de la semaine (F1 0,7902, le schéma v2, la restitution) : pla … [147 caractères tronqués]
 
-*127 appels d'outils.* Actions notables :
+*134 appels d'outils.* Actions notables :
 
 - bash — List workspace root and reports
 - bash — Search for task identifiers
@@ -41,7 +41,37 @@
 - bash — Print schema v2 JSON
 - bash — Inspect retest and audit JSON
 - bash — Read 50-text test
-- … et 106 autres
+- … et 113 autres
+
+**Synthèse produite :**
+
+**J11.3 fait.** Fiche `reports/rapport-robustesse-semaine.md`, JSON `reports/pensee-robustesse-semaine.json`, outil reproductible `tools/mesurer_robustesse_semaine.py`. Commit **`55bde5c5`** ; mesure sur le code **`09e54143`** (F1 **0,7902**, POS **0,8625**, attachement **238/238 labels — 238/239 cibles, 0,9958**, schéma v2, restitution v1).
+
+| mesure | audit A26 (06/11) | **J11.3 (14/11)** |
+|---|---:|---:|
+| plantages | 0/50 | **0/50** |
+| JSON valide | 0/46 invalide + 4 refus vides | **50/50** |
+| refus | 4/50, code 1, stdout 0 o | **4/50, code 3, JSON** |
+| 8 champs obligatoires | 0/46 | **50/50** |
+| schéma v2 | absent | **50/50** (CLI + API, deux vues) |
+| chevauchements `alternative` | 107 paires / 23/46 | **115 paires / 21/46** |
+| chevauchements `filtrer` | 0 après filtre `meta.union` | **0/50**, vue publiée |
+| sans syntagme (annotés) | 4/46 | **3/46** (`f18`, `f27`, `f37` ; `f13` segmenté) |
+| temps CLI médian | 152,7 ms | **159,2 ms** |
+| temps API médian | 1,0 ms | **2,7 ms** |
+
+**Les deux vues.** `alternative` : **395 segments, 115 chevauchements** ; `filtrer` : **313 segments, 0 chevauchement**. `filtrer_union` (contrôle) : 352 segments, 40 chevauchements. Le zéro de `filtrer` n'est pas un artefact : 313 segments, et le compteur détecte bien un chevauchement injecté (1/1).
+
+**Le contrat.** 50/50 CLI portent les 8 champs et passent JSON Schema v2 ; 50/50 en API `alternative` et 50/50 en API `filtrer`. Les 4 refus sont des réponses JSON valides. Déterminisme **50/50** ; **0 span hors texte**, **0 span vide**, **0 cible absente** sur 4 827 étiquettes et 315 cibles.
+
+**La restitution.** Identique à la v1 : **46/46 canonique**, **strict 5/46 = 0,1087**, **395 segments / 395 rôles / 315 cibles / 313 dans un autre segment**, stabilité **18/46**. Contrôles : mélange/troncature **46/46 détectés, 0/46 exacts** ; rôles/cibles retirés **43/43**.
+
+**La comparaison A26.** L'écart 107 → 115 est un effet du **code**, pas du compteur : mêmes paires strictes, mais `f50` passe de 50 à 63, `f26` et `f29` tombent à 0, `f06` de 4 à 2. Le nombre de textes touchés baisse de 23 à 21 malgré la hausse du total. Les 8 champs passent de 0/46 à 50/50 et les refus de « code 1 sans JSON » à « code 3 avec JSON ».
+
+**Vérifications.** `porte-produit` verte (183/183), 34 tests produit/schéma/restitution OK, `verifier_schema_produit --gold 20` OK, revue de documentation OK (727 fiches / 821 JSON), journal OK, budget T0 **3 998/4 000** mots, tableaux et schémas OK.
+
+**Limites no
+… [228 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +128,7 @@
 - **T1** Read current schema tests
 - **T1** Compare A26 per-text overlap counts
 - **T1** Check keys of bank results
-- … et 52 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 

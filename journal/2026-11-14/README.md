@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **1 session(s)** · **4 thème(s)**
+**14 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -39,6 +39,7 @@
 | 04:16 | `a6808c5e` | CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ |
 | 04:28 | `84e393bb` | J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238 |
 | 04:40 | `09e54143` | J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ |
+| 04:55 | `55bde5c5` | J11.3 — LES 50 TEXTES LIBRES : 0 PLANTAGE, 50/50 SCHÉMA V2, 115 CHEVAUCHEMENTS ALTERNATIVE / 0 FILTRER ; RESTITUTION 46/46, STRICT 0,1087 (F1 0,7902) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -109,4 +110,17 @@ Temps CLI médian **159,2 ms**, API **2,7 ms**. Fiche
 [`reports/rapport-robustesse-semaine.md`](../../reports/rapport-robustesse-semaine.md), JSON
 [`reports/pensee-robustesse-semaine.json`](../../reports/pensee-robustesse-semaine.json), outil
 [`tools/mesurer_robustesse_semaine.py`](../../tools/mesurer_robustesse_semaine.py).
+**J11.4 — le schéma v2 documenté : les deux versions sont lues.** La notice produit gagne une
+section de référence (§ 3.3 bis) : les **quatre** champs de `meta.partition` (`groupe`, `rang`,
+`membres`, `vue`), les **dix** champs de `meta.alternative` (sept obligatoires, trois optionnels :
+`retire`, `attachement`, `role`), un exemple réel et la **rétro-compatibilité v1** — les huit
+champs obligatoires de la racine sont inchangés, le vérificateur choisit le schéma d'après
+`version`, et v2 reste **additif**. Mesure : `verifier_schema_produit.py --json` lit **les deux
+versions** (`versions_lues: [1, 2]`), **6 cas / 0 échec** ; `--gold 20` **26 cas / 0 échec** ;
+**612/612** phrases du gold passent le schéma v2 et **612/612** annotations dérivées v1 passent
+le schéma v1 ; les contrôles négatifs refusent la version adverse (612/612) et la mutation d'un
+champ obligatoire. Les **146 groupes / 437 porteurs / 930 alternatives** reproduisent le compte
+de B13. Fiche [`reports/rapport-schema-v2-doc.md`](../../reports/rapport-schema-v2-doc.md), JSON
+[`reports/schema-v2-doc.json`](../../reports/schema-v2-doc.json). J11.4 ferme la suite produit ;
+la prochaine action B13 est **trancher `g017`**.
 <!-- /notes -->

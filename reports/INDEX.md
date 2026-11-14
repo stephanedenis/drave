@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **718 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **724 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -78,6 +78,7 @@
 | [rapport-b13-porte-134.md](rapport-b13-porte-134.md) | B13 — la porte est à 134/140 : le 140/140 de 702b368c ne se rejoue pas ; quatre rouges viennent du sous-module S |
 | [rapport-b13-porte-138.md](rapport-b13-porte-138.md) | B13 — la porte est à 138/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 restent |
 | [rapport-b13-porte-140.md](rapport-b13-porte-140.md) | B13 — la porte est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432) |
+| [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
@@ -168,7 +169,9 @@
 | [rapport-etat-n2.md](rapport-etat-n2.md) | N2 — l'état du chantier et de sa porte : inventaire, vérification, proposition |
 | [rapport-etat-r.md](rapport-etat-r.md) | État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine |
 | [rapport-etat-s.md](rapport-etat-s.md) | S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas |
+| [rapport-evaluer-langue.md](rapport-evaluer-langue.md) | J11.2 — la mesure par langue : l'anglais devant, mais le gold n'est pas le même |
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
+| [rapport-exemples-rejoues.md](rapport-exemples-rejoues.md) | J11.1 — les cinq exemples rejoués : 4 blocs sur 5 ont bougé, `r035` n'est plus un échec |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
 | [rapport-fiabilite-produit.md](rapport-fiabilite-produit.md) | Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes |
@@ -389,6 +392,7 @@
 | [rapport-passage-a-l-echelle.md](rapport-passage-a-l-echelle.md) | Passer aux gros modèles : ce qui bloque, chiffré |
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |
 | [rapport-passe-complete-portes.md](rapport-passe-complete-portes.md) | Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN |
+| [rapport-passe-honnetete.md](rapport-passe-honnetete.md) | Passe d'honnêteté — 19 fiches portent « instantané historique », les quatre chiffres dépassés ne se lisent plus comme l'état courant |
 | [rapport-passe-k3-disque.md](rapport-passe-k3-disque.md) | Où passe le temps d'une passe Kimi-K3 : le disque, et rien d'autre |
 | [rapport-pensee-absents.md](rapport-pensee-absents.md) | B13 — les absents : 0, les quatre étaient des faux |
 | [rapport-pensee-ac3-alphabeta.md](rapport-pensee-ac3-alphabeta.md) | B13 — AC-3 et alpha-bêta : la contrainte propage, le jeu coupe |
@@ -669,11 +673,13 @@
 | [rapport-regle-placement-perte.md](rapport-regle-placement-perte.md) | A8.3 — la règle place et perte choisit le KV comme la main |
 | [rapport-replis-cible.md](rapport-replis-cible.md) | B13 — les trois retouches A3 sur le live : +1, +2, +1, et 145/145 exact/top1 |
 | [rapport-restitution-v0.md](rapport-restitution-v0.md) | B13 — la restitution v0 : 46/46 surfaces exactes, le miroir strict à 0,1087 |
+| [rapport-restitution-v1.md](rapport-restitution-v1.md) | B13 — la restitution v1 : la forme canonique à 46/46, le miroir strict reste à 0,1087 |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-retrieval-epoque.md](rapport-retrieval-epoque.md) | J3.1 — Le retrieval inter-langues à époque contrôlée |
 | [rapport-retrieval-familles.md](rapport-retrieval-familles.md) | J7.1 — Le retrieval approfondi par famille Glottolog |
 | [rapport-reutilisation-experts.md](rapport-reutilisation-experts.md) | La réutilisation des experts, mesurée |
 | [rapport-robustesse-produit.md](rapport-robustesse-produit.md) | B13 — la robustesse du produit : un surrogate ne plante plus, une entrée non-str est refusée |
+| [rapport-robustesse-semaine.md](rapport-robustesse-semaine.md) | J11.3 — les 50 textes libres : 0 plantage, 50/50 au schéma v2, 115 chevauchements en `alternative`, 0 en `filtrer` |
 | [rapport-routage-experts.md](rapport-routage-experts.md) | Rapport — le routage des experts était faux pour quatre gros modèles sur cinq |
 | [rapport-routeur-confiance.md](rapport-routeur-confiance.md) | B24 — le round-trip M1 améliore la typo, mais coûte les espaces |
 | [rapport-routeur-m1-m2.md](rapport-routeur-m1-m2.md) | B23 — routeur M1→M2 : gagne sur les espaces, perd sur les typos |
@@ -688,6 +694,7 @@
 | [rapport-s065.md](rapport-s065.md) | B13 — s065 : la REL « qui commence » est attachée au sujet du GV qui la suit |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
 | [rapport-schema-v1.md](rapport-schema-v1.md) | B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées |
+| [rapport-schema-v2-doc.md](rapport-schema-v2-doc.md) | J11.4 — le contrat : le schéma v2 documenté, 6 cas / 0 échec, v1 toujours lue |
 | [rapport-schema-v2.md](rapport-schema-v2.md) | B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue |
 | [rapport-semaine.md](rapport-semaine.md) | J5.1 — le rapport de semaine : le produit gagne 3,69 points de F1, l'intégration est bornée |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
