@@ -2047,3 +2047,149 @@ A  reports/rapport-bilan-chantier.md
   ```
 
 - **bash** `{"command": "git commit -m \"J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ\n\nLe bilan relit les fiches J1.1–J9.1 : POS inchangée (0,8625), F1 0,7533 → 0,7902 (+0,0369),\nattachement 236/237 → 238/238 lab … [680 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 03ecee41] J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ
+ 19 files changed, 4380 insertions(+), 58 deletions(-)
+ create mode 100644 journal/sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/digest.md
+ create mode 100644 journal/sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/rapport.md
+ create mode 100644 reports/rapport-bilan-chantier.json
+ create mode 100644 reports/rapport-bilan-chantier.md
+  ```
+
+- **bash** `{"command": "test -f reports/rapport-bilan-chantier.md && echo FICHE-OK; python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?; python3 tools/taille_documents.py 2>&1 | tail -3; echo '--- status'; git status --short | head -20", "description": "Run acceptance and final checks"}`
+
+  ```
+FICHE-OK
+REVUE-0
+     · 49 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+--- status
+ M reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -30; echo '---'; git log --oneline -3", "description": "Inspect commit contents"}`
+
+  ```
+03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ
+ docs/pilotage/en-cours.md                          |   13 +-
+ docs/pilotage/roadmap.md                           |   10 +
+ docs/pilotage/semaine-autonome.md                  |  113 +-
+ journal/2026-11-14/README.md                       |    7 +-
+ journal/2026-11-14/docs.md                         |    5 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    2 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |    7 +
+ .../rapport.md                                     |    8 +-
+ .../digest.md                                      | 2049 ++++++++++++++++++++
+ .../rapport.md                                     |  198 ++
+ .../digest.md                                      |  181 ++
+ .../rapport.md                                     |   49 +-
+ reports/README.md                       
+… [583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/rapport-bilan-chantier.md | head -8; echo '...'; git show HEAD:reports/rapport-bilan-chantier.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('JSON HEAD ok', d['tache'], len(d['decisions']), len(d['rejets']))\"", "description": "Verify committed  … [17 caractères tronqués]`
+
+  ```
+# J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné
+
+> **Instantané historique** — les chiffres publiés ici sont ceux du commit de la fiche ; ils ne
+> décrivent pas l'état courant. L'état courant du bloc est dans
+> [`en-cours`](../docs/pilotage/en-cours.md) et [`la roadmap`](../docs/pilotage/roadmap.md).
+
+> **Ligne de roadmap** : **B13** (le moteur de pensée), **R0.7** (le bloc langue), **N2**, **S**,
+> **R**, **A**, **Panini** · **Tâche** : J10.1 · **Date** : 2026-11-14 · **Verdict** : ✅
+...
+JSON HEAD ok J10.1 20 30
+  ```
+
+- **bash** `{"command": "git show HEAD:docs/pilotage/semaine-autonome.md | grep -n \"J10.1\\|Bilan J10.1\\|Le bilan du 14/11\" | head; echo '---'; git show HEAD:docs/pilotage/en-cours.md | grep -n \"J10.1\\|724\\|14/11 00 h 30\" | head", "description": "Verify doc updates in commit"}`
+
+  ```
+11:> **Bilan J10.1 (14/11).** Le chantier est **mesuré et écrit** ; la **clôture formelle** (tag,
+148:## 3 bis. L'état du chantier (14/11, 03 h 55 — après J10.1)
+150:Le superviseur a lancé **21 tâches** (budget **22 032 s** au 14/11 03 h 46, hors J10.1). **20
+174:| J10.1 bilan | ✅ fait | [`rapport-bilan-chantier.md`](../../reports/rapport-bilan-chantier.md) + JSON | `commit J10.1` |
+209:| **J10** | le bilan | ✅ fait | [`rapport-bilan-chantier.md`](../../reports/rapport-bilan-chantier.md) + JSON : chiffres, décisions, rejets, échecs, reste | `commit J10.1` | J14.1 (passe + tag) |
+226:## 9. Le bilan du 14/11 (J10.1)
+---
+95:- **J10.1 — le bilan** : **20/21** ; F1 **0,7533 → 0,7902**, attachement **236 → 238 labels**, POS inchangée ; **5 timeouts**, **1 échec** (J5.2, tag absent) ; **D1–D20**, **R1–R30** ; [bilan](../../reports/rapport-bilan-chantier.md) + JSON.
+106:| fichiers / JSON de résultats | **724** / **818** | `reports/*.md` / `reports/*.json` |
+108:| dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange`, `sessions` | `docs/pilotage/references-non-regression.md` |
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/README.md | grep -n \"bilan\"; echo '---'; git show HEAD:docs/pilotage/roadmap.md | grep -n \"J10.1\" | head", "description": "Verify README and roadmap updates"}`
+
+  ```
+18:| [`rapport-bilan-chantier.md`](rapport-bilan-chantier.md) | **J10.1** — le bilan du chantier : F1 **0,7533 → 0,7902**, attachement **236 → 238**, Panini borné, **20/21**, 5 timeouts, 1 échec (le tag) |
+113:| [`rapport-pensee-anaphore-bilan.md`](rapport-pensee-anaphore-bilan.md) | **B13** — le bilan de l'anaphore : 27/30, CV 0,847, huit mesures, **109/109** |
+---
+56:**J10.1 — le bilan du chantier.** **20 tâches sur 21** passent l'acceptation ; **5 timeouts**
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -3; python3 tools/verifie_journal.py 2>&1 | tail -3; python3 tools/verifier_schemas.py 2>&1 | tail -3; bash tools/porte-tableaux.sh 2>&1 | tail -3", "description": "Final gate checks after commit"}`
+
+  ```
+en-cours · 1628 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 46 jour(s) · 185 session(s) · 2467 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  schémas · 463 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ✅ 1789 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4101 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+### 🤖 Assistant
+
+**J10.1 terminé et committé** — `03ecee41`.
+
+## Livrables
+
+- `reports/rapport-bilan-chantier.md` (432 lignes, 6 133 mots) + `reports/rapport-bilan-chantier.json`
+- `docs/pilotage/semaine-autonome.md` : § 3 bis (état 14/11), § 8 (jours J1–J10) et § 9 (bilan)
+- `docs/pilotage/en-cours.md` : ligne J10.1, compteurs **724 / 818**, reste et prochaines actions
+- `docs/pilotage/roadmap.md` : paragraphe J10.1 et suite J11–J14
+- `reports/README.md` : fiche courante ajoutée
+
+## Chiffres avant/après
+
+| mesure | avant | après |
+|---|---:|---:|
+| POS (612) | 0,8625 | **0,8625** (0 token changé) |
+| F1 syntagmes | 0,7533 | **0,7902** (+0,0369) |
+| attachement | 236/237 labels (236/239 cibles, 0,9916) | **238/238 labels** (238/239 cibles, 0,9958) |
+| schéma | v1 | **v2** (26 cas / 0 échec) |
+| restitution | v0 : 46/46, strict 0,1087 | **v1** : canonique 46/46, strict 0,1087, 395/395/315/313 |
+| tagger | 0,8625 | **0,9475** (+8,49) ; réel 432 **+4,67** |
+| Panini | 0 mesure | table 14/14 ; corpus 418/438 ; J3.1 ; J3.2 ; J7.1 sœurs **0,619** contre **0,0445** |
+
+## Bilan
+
+- **20 tâches sur 21** passent l'acceptation ; **5 timeouts** (J1.2, J2.2, J3.1, J5.2, J8.1), **1 seul échec d'acceptation** : **J5.2** (tag absent).
+- Le détail factuel corrige la formule « timeout après commit » : **J1.2** a bien committé avant son timeout ; **J2.2/J3.1** ont expiré **avant** le commit, récupéré par J3.2 (`c3467170`) ; **J8.1** a été committé après coup par J9.1 (`229098ec`). J5.2 reste rouge : le tag `semaine-2026-11-14` n'existe pas, et J14.1 doit poser `chantier-2026-11-14`.
+- **D1–D20** décisions, **R1–R30** rejets ; le reste est nommé : `g017` (convention), `s065` (hors échantillon), split réel du tagger, V14 des 21 langues, porte N2, commit S, rapport A6.2, passe générique d'honnêteté, J11–J14.
+
+## Vérifications
+
+`FICHE-OK`, `REVUE-0`, T0 **3 998 / 4 000**, `verifie_en_cours`, `verifie_journal`, `verifier_schemas`, `porte-tableaux` : verts. Les modifications préexistantes (`reports/INDEX.md`, fiches d'audit, `tools/chantier/plan.json`, `tools/structures`, `rapport-s-paragraphes.md`) n'ont pas été touchées.
+

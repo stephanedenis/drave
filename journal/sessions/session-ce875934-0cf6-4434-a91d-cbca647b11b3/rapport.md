@@ -7,12 +7,12 @@
 | Identifiant | `session-ce875934-0cf6-4434-a91d-cbca647b11b3` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 03:46 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 77 |
-| Appels d'outils | 108 |
+| Messages | 81 |
+| Appels d'outils | 114 |
 | Fichiers touchés | 5 |
-| Commandes | 71 |
+| Commandes | 77 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J10.1 : le bilan — relis les fiches du chantier, écris `reports/rapport-bilan-chantier.md` + JSON : les chiffres a … [210 caractères tronqués]
 
-*108 appels d'outils.* Actions notables :
+*114 appels d'outils.* Actions notables :
 
 - bash — Explore repository root and git state
 - bash — List key directories
@@ -41,7 +41,41 @@
 - bash — Read rest of retrieval-familles report
 - bash — List chantier tooling files
 - bash — Search for J10.1 references
-- … et 79 autres
+- … et 85 autres
+
+**Synthèse produite :**
+
+**J10.1 terminé et committé** — `03ecee41`.
+
+\## Livrables
+
+- `reports/rapport-bilan-chantier.md` (432 lignes, 6 133 mots) + `reports/rapport-bilan-chantier.json`
+- `docs/pilotage/semaine-autonome.md` : § 3 bis (état 14/11), § 8 (jours J1–J10) et § 9 (bilan)
+- `docs/pilotage/en-cours.md` : ligne J10.1, compteurs **724 / 818**, reste et prochaines actions
+- `docs/pilotage/roadmap.md` : paragraphe J10.1 et suite J11–J14
+- `reports/README.md` : fiche courante ajoutée
+
+\## Chiffres avant/après
+
+| mesure | avant | après |
+|---|---:|---:|
+| POS (612) | 0,8625 | **0,8625** (0 token changé) |
+| F1 syntagmes | 0,7533 | **0,7902** (+0,0369) |
+| attachement | 236/237 labels (236/239 cibles, 0,9916) | **238/238 labels** (238/239 cibles, 0,9958) |
+| schéma | v1 | **v2** (26 cas / 0 échec) |
+| restitution | v0 : 46/46, strict 0,1087 | **v1** : canonique 46/46, strict 0,1087, 395/395/315/313 |
+| tagger | 0,8625 | **0,9475** (+8,49) ; réel 432 **+4,67** |
+| Panini | 0 mesure | table 14/14 ; corpus 418/438 ; J3.1 ; J3.2 ; J7.1 sœurs **0,619** contre **0,0445** |
+
+\## Bilan
+
+- **20 tâches sur 21** passent l'acceptation ; **5 timeouts** (J1.2, J2.2, J3.1, J5.2, J8.1), **1 seul échec d'acceptation** : **J5.2** (tag absent).
+- Le détail factuel corrige la formule « timeout après commit » : **J1.2** a bien committé avant son timeout ; **J2.2/J3.1** ont expiré **avant** le commit, récupéré par J3.2 (`c3467170`) ; **J8.1** a été committé après coup par J9.1 (`229098ec`). J5.2 reste rouge : le tag `semaine-2026-11-14` n'existe pas, et J14.1 doit poser `chantier-2026-11-14`.
+- **D1–D20** décisions, **R1–R30** rejets ; le reste est nommé : `g017` (convention), `s065` (hors échantillon), split réel du tagger, V14 des 21 langues, porte N2, commit S, rapport A6.2, passe générique d'honnêteté, J11–J14.
+
+\## Vérifications
+
+`FICHE-OK`, `REVUE-0`, T0 **3 998 / 4 000**, `verifie_en_cours`, `verifie_journal`, `verifier_schemas`, `porte-tableaux` : verts. Les modifications préexistantes (`reports/INDEX.md`, fiches d'audit, `tools/chantier/plan.json`, `tools/structures`, `rapport-s-paragraphes.md`) n'ont pas été touchées.
 
 ## 3. Travail accompli
 
@@ -97,7 +131,7 @@
 - **T1** Inspect Panini JSON top-level summaries
 - **T1** Extract Panini detailed figures
 - **T1** Inspect coordination JSON top levels
-- … et 31 autres
+- … et 37 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,11 +220,13 @@
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : --- 81fc9ecf (HEAD -> s/v7) JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE ») ecef7250 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRES DÉPASSÉS NE S
 - **T1** : 81fc9ecf 2026-11-14 03:40 JOURNAL — 2026-11-14 : J9.1 AU RÉCIT (19 FICHES « INSTANTANÉ HISTORIQUE ») ecef7250 2026-11-14 03:32 J9.1 — PASSE D'HONNÊTETÉ : 19 FICHES « INSTANTANÉ HISTORIQUE », 4 CHIFFRE
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 19, in <module>   File "<stdin>", line 6, in check TypeError: unsupported operand type(s) for -: 'int' and 'str' [exit code: 1]
+- **T1** : ✅ index : aucun fait stagé sans état [s/v7 03ecee41] J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ  19 f
+- **T1** : 03ecee41 J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ  docs/pilotage/en-cours.md                       
 
 ## 6. Commits
 

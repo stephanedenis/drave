@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 323.3 h |
+| Durée | 323.6 h |
 | Tours | 194 |
-| Messages | 3674 |
-| Appels d'outils | 3270 |
+| Messages | 3679 |
+| Appels d'outils | 3275 |
 | Fichiers touchés | 25 |
-| Commandes | 2712 |
+| Commandes | 2716 |
 | Sous-agents | 42 |
-| Commits | 437 |
+| Commits | 439 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10428,7 +10428,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*73 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,11 +10444,11 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 30 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ La file va s'épuiser avant les 12 h : j'ajoute 8 tâches (produit, Panini, bilans)
+⏵ La boucle s'est arrêtée (plan chargé une fois, mes tâches ajoutées après) : je corrige et relance
 
 ## 3. Travail accompli
 
@@ -10569,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2672 autres
+- … et 2676 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11154,4 +11154,6 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - DOCS — LA PASSE APRÈS LE CHANTIER : 8 FICHES INDEXÉES, L'ÉTAT PAR JOUR DU PLAN, LE JOURNAL DU CHANTIER, CHANTIERS À JOUR (F1 0,7902, 237/238)" -- reports/README
 - CHANTIER — PHASE 2 (12 H) : LE VERDICT ACCEPTATION D'ABORD (TIMEOUT APRÈS COMMIT = FAIT), 12 TÂCHES AJOUTÉES (J4 COORDINATION, J6 SPANS, J7-J10 PANINI/BILAN), É
 - PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI" -- docs/pilotage/references-non-regr
+- CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES)" 2>&1 | tail -1 nohup timeout 18000 python3 tools/chantier/s
+- CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ" -- tools/chantier/superviseur.py docs/pilot
 

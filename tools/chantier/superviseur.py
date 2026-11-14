@@ -236,9 +236,11 @@ def cmd_executer(args: argparse.Namespace) -> int:
 
 
 def cmd_boucle(args: argparse.Namespace) -> int:
-    plan, etat = charger_plan(), charger_etat()
+    etat = charger_etat()
     debut = time.time()
     while True:
+        # le plan est **relu** à chaque tour : des tâches peuvent être ajoutées pendant la boucle
+        plan = charger_plan()
         if STOP.exists():
             print("STOP présent : arrêt propre."); return 0
         if etat.get("budget_s", 0) >= args.budget:
