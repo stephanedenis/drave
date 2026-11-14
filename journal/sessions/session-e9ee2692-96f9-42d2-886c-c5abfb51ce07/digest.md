@@ -3114,3 +3114,202 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.jso
 </content>
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md", "new_string": "REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte, porte produit\nverte (**183/183**, fixtures d'attachement mises à jour). Fiche\n[`reports/rapport-s065.md`](../.. … [326 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 2, "offset": 63}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+63: - **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** ([fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v0** (46/46, miroir 0,1087) ; **contrat v1**, **`drave` v0**.
+64: - **Ce qu'elle fait** : l'API rejoue le gold (mêmes verdicts).
+
+(Showing lines 63-64 of 142. Use offset=65 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (porte produit 183/183 ; [fiche](.. … [690 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/pensee-s065.json >/dev/null && echo JSON-OK; python3 tools/taille_documents.py 2>&1 | grep -E \"T0|✅|❌\" | tail -3", "description": "Validate JSON and T0"}`
+
+  ```
+JSON-OK
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Documentation review after report updates"}`
+
+  ```
+revue de documentation · 720 fiche(s) · 814 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -3", "description": "Tables and links after updates"}`
+
+  ```
+✅ 1783 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3953 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/autotest.py reports/rapport-s065.md reports/pensee-s065.json docs/pilotage/en-cours.md journal/2026-11-14/README.md && git diff --cached --stat && git commit -F - <<'MSG'\nJ6.2 — PORTE PRODUIT VERTE (183/183) : L … [449 caractères tronqués]`
+
+  ```
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+[exit code: 128]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -l .git/index.lock; ps -ef | grep -E \"git|journal_auto|porte-produit\" | grep -v grep | head -20", "description": "Check stale git lock and processes"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 421061 14 nov 01:16 .git/index.lock
+stephane 1589021 1588992  0 01:16 ?        00:00:00 timeout 240 git commit -m PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI -- docs/pilotage/references-non-regression.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md docs/pilotage/en-cours.md
+stephane 1589023 1589021  0 01:16 ?        00:00:00 git commit -m PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI -- docs/pilotage/references-non-regression.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md docs/pilotage/en-cours.md
+stephane 1589045 1589023  0 01:16 ?        00:00:00 /bin/sh .git/hooks/pre-commit
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-7 [bash] killed — grep -rn "s065" tools/ data/ 2>/dev/null | head -20
+bash-85 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG'
+J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+
+Le gold « elle qui commence nage » attend `elle` pour la REL 5:17 ; le bloc prédisait `nage`.
+La règle exige une REL, un GV à droite et un GN à gauche ; elle attache à la tête du GN.
+Elle ne s'applique qu'au chemin union, quand le GN vient de S et la REL courte du chunker.
+
+Mesure : 612 phrases, 239 cibles, split crc32(id)%3. Base 237/238, règle 238/238 (238/239,
+0,9958) ; dev 161/162 -> 162/162, test 76/76 inchangé ; F1 0,7902 et POS 0,8625 inchangés.
+Une seule annotation change (s065). Contrôles : règle littérale « REL après GV » 0 cas,
+237/238 ; variante large 238/238 ; placebo verbe propre 235/238 ; hasard 0,0042.
+La règle littérale du mandat ne traite pas la phrase (ordre GN REL GV), la fiche le dit.
+
+Porte bloc verte (20 tests), revue de documentation verte, T0 dans le budget.
+Fiche reports/rapport-s065.md ; JSON reports/pensee-s065.json.
+MSG
+bash-92 [bash] completed — cd /ho
+… [782 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in $(seq 1 90); do if ! kill -0 1589023 2>/dev/null; then echo \"process finished after ${i}0s\"; break; fi; sleep 10; done; ls -l .git/index.lock 2>/dev/null || echo no-lock; git log --oneline -5", "description": "Wait for con … [51 caractères tronqués]`
+
+  ```
+process finished after 70s
+no-lock
+2d6f5bff PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+6ecc9763 JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238
+b6e474dc J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+64d9dd23 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+34e3e4ab J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 2d6f5bff; echo ===; git status --short | head -30; echo ===; git diff --cached --stat", "description": "Inspect concurrent commit and current staging"}`
+
+  ```
+2d6f5bff PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+ docs/pilotage/en-cours.md                          |   2 +-
+ docs/pilotage/references-non-regression.md         |   6 +-
+ journal/2026-11-14/README.md                       |  10 +-
+ journal/2026-11-14/docs.md                         |   2 +-
+ journal/2026-11-14/mesures.md                      |   5 +-
+ journal/README.md                                  |   4 +-
+ journal/sessions/MANIFEST.md                       |   6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |  37 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   4 +-
+ .../rapport.md                                     |  17 +-
+ .../digest.md                                      | 741 +++++++++++++++++++++
+ .../rapport.md                                     |  39 +-
+ 12 files changed, 837 insertions(+), 36 deletions(-)
+===
+ M docs/pilotage/en-cours.md
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/mesures.md
+MM journal/README.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+MM journal/sessi
+… [1285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show 2d6f5bff -- docs/pilotage/en-cours.md | head -40; echo ===; git show 2d6f5bff -- journal/2026-11-14/README.md | head -60; echo ===; git show 2d6f5bff -- journal/2026-11-14/docs.md | head -30", "description": "Inspect concurr … [33 caractères tronqués]`
+
+  ```
+commit 2d6f5bff13f792ab2858666bf09c4df35fcfe235
+Author: Stéphane <stephane@localhost>
+Date:   Sat Nov 14 01:16:44 2026 -0500
+
+    PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index e50eefeb..9fb5173f 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-14, 01 h 10 HNE (heure locale, EST).**
++**Mis à jour : 2026-11-14, 01 h 20 HNE (heure locale, EST).**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+===
+commit 2d6f5bff13f792ab2858666bf09c4df35fcfe235
+Author: Stéphane <stephane@localhost>
+Date:   Sat Nov 14 01:16:44 2026 -0500
+
+    PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+
+diff --git a/journal/2026-11-14/README.md b/journal/2026-11-14/README.md
+index 31829297..a6724f04 100644
+--- a/journal/2026-11-14/README.md
++++ b/journal/2026-11-14/README.md
+@@ -5,20 +5,20 @@
+ > le bloc « notes » (marqueurs HTML). 
+… [3437 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:docs/pilotage/en-cours.md | sed -n '63p'; echo ===; git show HEAD~1:docs/pilotage/en-cours.md | sed -n '63p'", "description": "Check en-cours line 63 in HEAD and parent"}`
+
+  ```
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** ([fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v0** (46/46, miroir 0,1087) ; **contrat v1**, **`drave` v0**.
+===
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** ([fiche](../../reports/rapport-s065.md)) ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** (test −0,0028, att. 236/237 ; [fiche](../../reports/rapport-g017.md)) ; **restitution v0** (46/46, miroir 0,1087) ; **contrat v1**, **`drave` v0**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -ef | grep -E \"git commit|git add|pre-commit\" | grep -v grep | head; git reset >/dev/null && echo RESET-OK; git status --short | head -30", "description": "Clear index after concurrent commit"}`
+
+  ```
+RESET-OK
+ M docs/pilotage/en-cours.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/pensee-s065.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-s065.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ M tools/pensee/autotest.py
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md reports/rapport-s065.md reports/pensee-s065.json tools/pensee/autotest.py && git diff --cached --stat && git commit -F - <<'MSG'\nJ6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT À 238/2 … [410 caractères tronqués]`

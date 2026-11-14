@@ -61329,3 +61329,17 @@ mandat rafraîchi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).\"\" … [1678 caractères tronqués]`
+
+  ```
+bloc de passe mis à jour
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 12 files changed, 837 insertions(+), 36 deletions(-)
+COMMIT OK 1
+2d6f5bff PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI
+   34e3e4ab..2d6f5bff  s/v7 -> s/v7
+   34e3e4ab..2d6f5bff  master -> master
+sam 14 nov 2026 01:18:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -4 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -3", "description": "Suivre J6.2 et la suite", "timeoutMs": 2500000}`

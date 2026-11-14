@@ -9,10 +9,10 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 320.6 h |
 | Tours | 194 |
-| Messages | 3652 |
-| Appels d'outils | 3248 |
+| Messages | 3653 |
+| Appels d'outils | 3249 |
 | Fichiers touchés | 25 |
-| Commandes | 2704 |
+| Commandes | 2705 |
 | Sous-agents | 42 |
 | Commits | 437 |
 | Compactages de contexte | 8 |
@@ -10428,7 +10428,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 ### Tour 194 — assure-toi que la documentation est à jour et le pilotage aussi. Il te reste un minimum de 12h de travail intensif et on … [17 caractères tronqués]
 
-*51 appels d'outils.* Actions notables :
+*52 appels d'outils.* Actions notables :
 
 - bash — État du chantier
 - bash — Voir les commits de la semaine
@@ -10444,7 +10444,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - bash — Trouver les lignes vidées
 - bash — Restaurer les descriptions
 - bash — Journal du chantier
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -10569,7 +10569,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2664 autres
+- … et 2665 autres
 
 ## 4. Mesures et résultats marquants
 

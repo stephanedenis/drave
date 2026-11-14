@@ -5,13 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**3 commits** · **1 session(s)** · **2 thème(s)**
+**4 commits** · **1 session(s)** · **3 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
+| memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
@@ -27,6 +28,7 @@
 | 00:52 | `64d9dd23` | J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER |
 | 01:06 | `b6e474dc` | J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS) |
 | 01:08 | `6ecc9763` | JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238 |
+| 01:16 | `2d6f5bff` | PORTES — LA PASSE DU 14/11 : 84 PORTES, 81 VERTES, 3 ROUGES (INDICE, MELANGE, SESSIONS DU HUB) ; MANDAT E181CE02 RAFRAÎCHI |
 
 ## Le récit de la journée (écrit à la main)
 

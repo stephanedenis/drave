@@ -18,7 +18,8 @@
   "exact_taux_span_avant": 0.9958,
   "exact_taux_span_apres": 1.0,
   "couverture_avant": 0.9958,
-  "couverture_apres": 0.9958
+  "couverture_apres": 0.9958,
+  "porte_produit": "verte (183/183, fixtures d'attachement mises à jour)"
  },
  "dispositif": {
   "gold": "tools/tests/linguistique/evaluer_gold.py::charger (612 phrases, 239 cibles)",
@@ -778,13 +779,14 @@
   "« le GN le plus proche à gauche » est supposé être le sujet du GV ; un GN antéposé (objet, circonstant) pourrait être choisi à tort. Aucun cas du gold ne teste ce piège.",
   "la règle littérale « REL après GV » n'est pas mesurée sur un cas : elle est vide dans ce gold.",
   "le compte 238/239 garde le dénominateur des 239 cibles ; g017 reste sans label (une cible non couverte). 238/238 est le taux sur les labels, 0,9958 le taux sur les cibles.",
-  "les portes complètes (84) n'ont pas été rejouées ; la porte du bloc est verte et les tests unitaires passent (20)."
+  "les portes complètes (84) n'ont pas été rejouées ; la porte du bloc (20 tests) et la porte produit (183/183) sont vertes."
  ],
  "fichiers": {
   "fiche": "reports/rapport-s065.md",
   "json": "reports/pensee-s065.json",
   "code": "tools/bloc_linguistique.py",
   "test": "tools/tests/linguistique/test_bloc_linguistique.py",
+  "fixtures_produit": "tools/pensee/autotest.py (T153, T161, T162, T164, T167-T169, T171-T172, T179-T180 : 237/238 → 238/238)",
   "mesure": "/tmp/s065/mesure.py (non commité)",
   "copies": "/tmp/s065/bloc_base.py, bloc_regle.py, bloc_rel_gn.py, bloc_rel_apres_gv.py, bloc_placebo.py"
  }

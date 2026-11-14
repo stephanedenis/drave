@@ -153,8 +153,9 @@ défaut venait du **chemin d'analyse**, pas de l'annotation.
   que `s065` demande.
 - **Le compte est un compte de cibles.** 238/239 garde `g017` au dénominateur ; 238/238 est
   le taux sur les labels (couverture 0,9958). Les deux lectures sont dans le JSON.
-- **Les 84 portes n'ont pas été rejouées.** La porte du bloc est verte et les 20 tests
-  unitaires passent ; une passe complète reste à faire si la règle touche d'autres chemins.
+- **Les 84 portes n'ont pas été rejouées.** La porte du bloc (20 tests) et la porte produit
+  (**183/183**) sont vertes ; une passe complète reste à faire si la règle touche d'autres
+  chemins.
 
 ## 7. La décision
 
@@ -164,11 +165,17 @@ Le bloc reste à **F1 0,7902**, **POS 0,8625**, **238/238 labels** et **238/239 
 (0,9958)**. `g017` reste le dernier écart : ce n'est pas une cible, c'est un **span** et une
 **convention d'adverbe à trancher** ([fiche](rapport-g017.md)).
 
+La porte produit a suivi : **183/183**, après la mise à jour des fixtures d'attachement qui
+codaient encore l'ancien **237/238** (`T153`, `T161`, `T162`, `T164`, `T167`–`T169`,
+`T171`–`T172`, `T179`–`T180`). Ces fixtures ne sont pas des mesures nouvelles : elles
+constatent le nouveau compte exact.
+
 La suite, dans l'ordre :
 
 1. **Trancher la convention d'adverbe** (`g017`), puis rejouer la variante étroite de J6.1.
 2. **T132/T133**, puis le gold 200+.
-3. **Une passe complète des portes** au prochain cycle, la porte du bloc étant verte.
+3. **Une passe complète des portes** au prochain cycle, les portes du bloc et du produit
+   étant vertes.
 
 ## 8. Fichiers
 
@@ -179,6 +186,8 @@ La suite, dans l'ordre :
   appel union).
 - **Test** : [`test_bloc_linguistique.py`](../tools/tests/linguistique/test_bloc_linguistique.py)
   (`test_rel_suivie_d_un_gv`).
+- **Fixtures produit** : [`autotest.py`](../tools/pensee/autotest.py) (`T153`, `T161`,
+  `T162`, `T164`, `T167`–`T169`, `T171`–`T172`, `T179`–`T180` : 237/238 → 238/238).
 - **Mesure** : `/tmp/s065/mesure.py` (non commité) ; copies `/tmp/s065/bloc_base.py`,
   `bloc_regle.py`, `bloc_rel_gn.py`, `bloc_rel_apres_gv.py`, `bloc_placebo.py`.
 - **Lecture seule** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),

@@ -7,14 +7,14 @@
 | Identifiant | `session-e9ee2692-96f9-42d2-886c-c5abfb51ce07` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 00:58 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 143 |
-| Appels d'outils | 181 |
+| Messages | 149 |
+| Appels d'outils | 187 |
 | Fichiers touchés | 9 |
-| Commandes | 117 |
+| Commandes | 122 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J6.2 : la cible `s065` (« elle nage qui commence » — le gold attend `elle`, le bloc prédit `nage`). Reproduis, pro … [157 caractères tronqués]
 
-*181 appels d'outils.* Actions notables :
+*187 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and recent commits
 - bash — List reports and journal entries
@@ -41,7 +41,7 @@
 - bash — Run block on s065
 - bash — List classes and functions
 - bash — Read cible logic
-- … et 141 autres
+- … et 146 autres
 
 ## 3. Travail accompli
 
@@ -101,7 +101,7 @@
 - **T1** Read J6 task definitions in plan
 - **T1** Read block gate script
 - **T1** Find numeric assertions on attachment
-- … et 77 autres
+- … et 82 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -148,6 +148,8 @@
 - **T1** `✅ T80 phase devinée      phase devinée : but 0 0/20, but 1 20/20 (le bruit de 10 % casse)`
 - **T1** `✅ T83 courbe élargie     courbe 5 graines : ×0,35 0/25, ×0,41 25/25`
 - **T1** `✅ T84 bord fin           bord fin : ×0,38 20/25, ×0,41 25/25`
+- **T1** `- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** ([fiche](../../reports/rapport-s065.md)) `
+- **T1** `[still running after 60000ms; moved to background job bash-122]`
 
 ## 5. Erreurs rencontrées
 
@@ -166,4 +168,6 @@
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-14/README.md journal/2026-11-14/mesures.md journal/THEMES.md && git diff --cached 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/autotest.py reports/rapport-s065.md reports/pensee-s065.json docs/pilotage/en-cours.m
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps -ef | grep -E "git commit|git add|pre-commit" | grep -v grep | head; git reset >/dev/null && echo RESET
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md reports/rapport-s065.md reports/pensee-s065.json tools/pensee/autotest.p
 
