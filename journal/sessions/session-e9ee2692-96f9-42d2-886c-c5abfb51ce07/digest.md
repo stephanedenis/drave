@@ -2373,3 +2373,744 @@ b76b888a J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G01
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-14/README.md journal/2026-11-14/mesures.md journal/THEMES.md && git diff --cached --stat && git commit -F - <<'MSG'\nJOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238\n\nLe journ … [218 caractères tronqués]`
+
+  ```
+journal/2026-11-14/README.md  |  4 +++-
+ journal/2026-11-14/mesures.md | 29 +++++++++++++++++++++++++++++
+ journal/THEMES.md             |  1 +
+ 3 files changed, 33 insertions(+), 1 deletion(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-92]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-92", "timeout_ms": 120000, "wait": true}`
+
+  ```
+[s/v7 6ecc9763] JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238
+ 7 files changed, 221 insertions(+), 12 deletions(-)
+ create mode 100644 journal/2026-11-14/mesures.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4; echo ===; git status --short | head -20; echo ===; sed -n '18,28p' journal/2026-11-14/README.md", "description": "Verify final commits and status"}`
+
+  ```
+6ecc9763 JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238
+b6e474dc J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+64d9dd23 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+34e3e4ab J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+===
+ M docs/pilotage/references-non-regression.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ m tools/structures
+?? reports/rapport-s-paragraphes.md
+===
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémenta
+… [619 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"", "description": "Final documentation review"}`
+
+  ```
+revue de documentation · 720 fiche(s) · 814 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|✅|❌\" | tail -4; echo \"exit=${PIPESTATUS[0]}\"", "description": "Final context budget check"}`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -2", "description": "Final state and journal checks"}`
+
+  ```
+en-cours · 1626 mots · 7 sections · 4 session(s) · 8 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 46 jour(s) · 181 session(s) · 2439 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -4", "description": "Final tables and links check"}`
+
+  ```
+✅ 1783 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 3952 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/tests/linguistique/evaluer_gold.py >/tmp/final-eval.log 2>&1; echo exit=$?; python3 - <<'EOF'\nimport json,re\ns=open('/tmp/final-eval.log').read()\n# le script imprime le JSON complet ; on relit le fichier de sortie si … [502 caractères tronqués]`
+
+  ```
+exit=0
+log lines 147
+F1 0.7902 POS 0.8625 att 238 / 238 cibles 239 exact_taux 0.9958
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short -- docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/chantiers.md journal/2026-11-14 reports/pensee-s065.json reports/rapport-s065.md tools/bloc_linguistique.py tools/tests/linguistique/test_bloc_lin … [88 caractères tronqués]`
+
+  ```
+clean-if-empty
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's#tools/porte-##;s#.sh##' | tr '\\n' ' '; echo", "description": "List all gate names"}`
+
+  ```
+adaptateur-sortie audit-drapeaux b1110-hybride balayage bloc-code bloc-linguistique bloc-maths bloc-tableaux budget bus bus-socket c4-retard cerveau consolidation coupe cycle-c2 deepseek delais diff-couche document echange-experts episodique etat flux fusion gain greffe harnais-invariants homeostasie horloge indice jeux jumeaux lecteur lecture m5-brouillon melange memoire miroir-blocs mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-inventaire n3-placement n3-pont n3-positions n3-profondeur n3-refus n3-reseau n3-routes n3-service-briques n3-service n3-seuil n3-sparsite-compte n3-sparsite occupation-elagage occupation-moteur ocr-scans ocr pannes peripherie poids-creux pont prechargement produit profondeur-routee p-paresseux.sh r13-bpe recurrence reflexe registre reparti-moteur ressources sauvegarde-modele sessions speculatif tableaux tokenizer-kimi topologie trace vision
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 bash tools/porte-produit.sh 2>&1 | tail -20; echo \"exit=${PIPESTATUS[0]}\"", "description": "Run product gate"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-101]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-101", "timeout_ms": 180000, "wait": true}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f4b7822076a4203d deux fois
+  ✅ smoke test : Ran 16 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v0 : Ran 11 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ❌ autotest en échec (voir /tmp/porte-produit-autotest.log)
+❌ porte produit rouge
+exit=1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -120 /tmp/porte-produit-autotest.log", "description": "Inspect product autotest failure"}`
+
+  ```
+✅ T62 fiabilité asymétrique asym : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T63 information rare   rare : 20/20 buts, v final 0.8, 8.0 pas
+  ✅ T64 information très rare très rare : 20/20 buts, v final 0.54, 8.0 pas
+  ✅ T65 information ultra-rare ultra-rare : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T66 un seul look       un look : 20/20 buts, v final 0.44, 8.0 pas
+  ✅ T67 look tardif        look tardif : 20/20 buts, v final 0.54, 8.0 pas
+  ✅ T68 mémoire courte     oubli : 20/20 buts, v final 0.56, 10.0 pas
+  ✅ T69 mémoire très courte oubli fort : 20/20 buts, v final 0.38, 8.0 pas
+  ✅ T70 oubli total        oubli total : 0/20 buts (86 états-Q), la mémoire est nécessaire
+  ✅ T71 seuil d'oubli      seuil : ×0,2 → 0/20 buts (×0,5 réussit), 646 états-Q
+  ✅ T72 seuil fin          seuil fin : ×0,4 → 20/20 buts ; ×0,45 → 0/20 (non monotone, graine unique)
+  ✅ T73 seuil sur 5 graines seuil 5 graines : ×0,35 0/25, ×0,4 25/25, ×0,45 20/25
+  ✅ T74 bord du seuil      bord : ×0,42 25/25, ×0,44 25/25
+  ✅ T75 seuil bas          seuil bas : ×0,36 20/25, ×0,40 25/25
+  ✅ T76 courbe complète    courbe : ×0,35 0/15, ×0,40 15/15, ×0,50 15/15
+  ✅ T77 vérité qui change  vérité : phase 0 20/20, phase 1 20/20
+  ✅
+… [7326 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T153\\|T161\\|T162\\|T164\\|T167\\|T168\\|T169\\|T171\\|T172\\|T179\\|T180\" tools/pensee/autotest.py", "description": "Locate failing autotest checks"}`
+
+  ```
+2801:              ("T153 attachement", t153_attachement),
+2809:              ("T161 cible proximité", t161_cible_proximite),
+2810:              ("T162 candidats verbes", t162_candidats_verbes),
+2812:              ("T164 verbe du GV", t164_verbe_gv),
+2815:              ("T167 dénominateur", t167_denominateur),
+2816:              ("T168 classement", t168_classement),
+2817:              ("T169 conventions", t169_conventions),
+2819:              ("T171 lexique élargi", t171_lexique_elargi),
+2820:              ("T172 échecs de cible", t172_echecs_cible),
+2827:              ("T179 multi-cibles", t179_multi_cibles),
+2828:              ("T180 par langue", t180_par_langue)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def t153_attachement\\|def t161_cible_proximite\\|def t162_candidats_verbes\\|def t164_verbe_gv\\|def t167_denominateur\\|def t168_classement\\|def t169_conventions\\|def t171_lexique_elargi\\|def t172_echecs_cible\\|def t1 … [111 caractères tronqués]`
+
+  ```
+2222:def t153_attachement() -> tuple[bool, str]:
+2339:def t161_cible_proximite() -> tuple[bool, str]:
+2350:def t162_candidats_verbes() -> tuple[bool, str]:
+2383:def t164_verbe_gv() -> tuple[bool, str]:
+2427:def t167_denominateur() -> tuple[bool, str]:
+2439:def t168_classement() -> tuple[bool, str]:
+2465:def t169_conventions() -> tuple[bool, str]:
+2491:def t171_lexique_elargi() -> tuple[bool, str]:
+2502:def t172_echecs_cible() -> tuple[bool, str]:
+2626:def t179_multi_cibles() -> tuple[bool, str]:
+2636:def t180_par_langue() -> tuple[bool, str]:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2210,2260p' tools/pensee/autotest.py; echo ===; sed -n '2330,2525p' tools/pensee/autotest.py; echo ===; sed -n '2618,2665p' tools/pensee/autotest.py", "description": "Read failing autotest functions"}`
+
+  ```
+import json
+    import pathlib
+    racine = pathlib.Path(__file__).resolve().parents[2]
+    val = []
+    for suffixe in ("", "b", "c"):
+        f = racine / f"reports/pensee-quatre-modes-432-soustype-t03{suffixe}.json"
+        d = json.loads(f.read_text(encoding="utf-8"))
+        val.append(round(d["modes"]["parallele_niveau"]["all"]["pragmatique"]["double_sens"], 4))
+    return val == [0.9838, 0.9838, 0.9838], (
+        f"tirages : {val} (écart-type 0, modèle déterministe)")
+
+
+def t153_attachement() -> tuple[bool, str]:
+    """L'attachement sur le gold 612 (239 cibles) : top1 0,9247, exact 0,9247, couverture 0,9247."""
+    import tools.bloc_linguistique as bl
+    from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+    r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.9916) < 0.001
+            and abs(r["exact_taux"] - 0.9916) < 0.001), (
+        f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
+        f"couverture {r['couverture']}")
+
+
+def t154_cibles() -> tuple[bool, str]:
+    """Les cibles de l'attachement : 1624 segments sans cible sur 1863."""
+    from ..tests.linguistiqu
+… [13071 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"237\\|0\\.9958\\|0\\.9916\\|0\\.9875\\|exact_any_taux_span\" tools/pensee/autotest.py | head -40", "description": "Find old attachment fixtures in autotest"}`
+
+  ```
+2227:    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.9916) < 0.001
+2228:            and abs(r["exact_taux"] - 0.9916) < 0.001), (
+2345:    return (a["cibles"] == 239 and a["top1"] == 237 and a["exact"] == 237), (
+2356:    return (a["topk"] == 236 and th["topk"] == 236 and a["top1"] == 237), (
+2392:    return cible == "saw" and r["exact"] == 237, (
+2433:            and abs(a["top1_taux_span"] - 0.9958) < 0.001
+2434:            and abs(a["topk_taux_span"] - 0.9916) < 0.001
+2435:            and abs(a["exact_taux_span"] - 0.9958) < 0.001), (
+2461:    return (r["exact"] == 237 and verbes == 158 and noms == 80), (
+2472:            and n["cibles"] == 80 and n["justes"] == 79 and abs(n["taux"] - 0.9875) < 0.001), (
+2498:    return ok == (True, True, True, False) and r["exact"] == 237, (
+2534:            and abs(a["topk_exact_taux_span"] - 0.9916) < 0.001
+2535:            and abs(a["topk_taux_span"] - 0.9916) < 0.001
+2597:    return (a["topk_exact"] == 236 and abs(a["topk_exact_taux_span"] - 0.9916) < 0.001), (
+2631:    return (a["exact"] == 237 and a["exact_any"] == 237
+2632:            and abs(a["exact_any_taux_span"] - 0.9958) < 0.001), (
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 12, "offset": 2222}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2222: def t153_attachement() -> tuple[bool, str]:
+2223:     """L'attachement sur le gold 612 (239 cibles) : top1 0,9247, exact 0,9247, couverture 0,9247."""
+2224:     import tools.bloc_linguistique as bl
+2225:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2226:     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2227:     return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.9916) < 0.001
+2228:             and abs(r["exact_taux"] - 0.9916) < 0.001), (
+2229:         f"attachement : top1 {r['top1_taux']}, exact {r['exact_taux']}, "
+2230:         f"couverture {r['couverture']}")
+2231: 
+2232: 
+2233: def t154_cibles() -> tuple[bool, str]:
+
+(Showing lines 2222-2233 of 2863. Use offset=2234 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"L'attachement sur le gold 612 (239 cibles) : top1 0,9958, exact 0,9958, couverture 0,9958.\"\"\"\n    import tools.bloc_linguistique as bl\n    from ..tests.linguistique.evaluer_gold im … [693 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 22, "offset": 2339}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2339: def t161_cible_proximite() -> tuple[bool, str]:
+2340:     """La cible par proximité : 221/221 avec la règle du précédent."""
+2341:     import tools.bloc_linguistique as bl
+2342:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2343:     r = evaluer_bloc("h", bl.Heuristique(), charger())
+2344:     a, th = r["attachement"], r["attachement_tete"]
+2345:     return (a["cibles"] == 239 and a["top1"] == 237 and a["exact"] == 237), (
+2346:         f"proximité : top1 {a['top1']}/239, exact {a['exact']}/239, "
+2347:         f"tête {th['top1']}/145")
+2348: 
+2349: 
+2350: def t162_candidats_verbes() -> tuple[bool, str]:
+2351:     """Les candidats verbes : le top-k atteint 220/239 (0,9205) après le correctif du précédent."""
+2352:     import tools.bloc_linguistique as bl
+2353:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2354:     r = evaluer_bloc("h", bl.Heuristique(), charger())
+2355:     a, th = r["attachement"], r["attachement_tete"]
+2356:     return (a["topk"] == 236 and th["topk"] == 236 and a["top1"] == 237), (
+2357:     
+… [240 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"La cible par proximité : 238/239 avec la règle du précédent et la REL de s065.\"\"\"\n    import tools.bloc_linguistique as bl\n    from ..tests.linguistique.evaluer_gold import charger … [1794 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 16, "offset": 2383}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2383: def t164_verbe_gv() -> tuple[bool, str]:
+2384:     """Le verbe du GV-phrase : le POS VERB, pas le dernier mot."""
+2385:     import tools.bloc_linguistique as bl
+2386:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2387:     h = bl.Heuristique()
+2388:     a = h.analyser("The boy saw the cat in the park.", "en")
+2389:     gp = [e for e in a.etiquettes if e.niveau == "syntagme" and e.type == "GP"]
+2390:     cible = ((gp[0].meta or {}).get("attachement") or {}).get("cible") if gp else None
+2391:     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2392:     return cible == "saw" and r["exact"] == 237, (
+2393:         f"verbe du GV : {cible} (attendu saw) ; exact {r['exact']}/239")
+2394: 
+2395: 
+2396: def t165_lexique_verbal() -> tuple[bool, str]:
+2397:     """Le lexique verbal arbitre le POS : « talks » est un verbe, « brother » n'en est pas un."""
+2398:     import tools.bloc_linguistique as bl
+
+(Showing lines 2383-2398 of 2863. Use offset=2399 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    return cible == \"saw\" and r[\"exact\"] == 238, (\n        f\"verbe du GV : {cible} (attendu saw) ; exact {r['exact']}/239\")", "old_string": "    return cible == \"saw\" and r[\"exact\"] == … [85 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 18, "offset": 2427}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2427: def t167_denominateur() -> tuple[bool, str]:
+2428:     """Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 221)."""
+2429:     import tools.bloc_linguistique as bl
+2430:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2431:     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2432:     return (a["cibles"] == 239 and a["labels"] == 238
+2433:             and abs(a["top1_taux_span"] - 0.9958) < 0.001
+2434:             and abs(a["topk_taux_span"] - 0.9916) < 0.001
+2435:             and abs(a["exact_taux_span"] - 0.9958) < 0.001), (
+2436:         f"dénominateur : spans {a['top1_taux_span']} / {a['topk_taux_span']} / {a['exact_taux_span']}")
+2437: 
+2438: 
+2439: def t168_classement() -> tuple[bool, str]:
+2440:     """Le classement : la cible réduite à sa tête et les deux conventions du gold (POS gold)."""
+2441:     import tools.bloc_linguistique as bl
+2442:     h = bl.Heuristique()
+2443:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2444:     r = evaluer_bloc("h", bl.Heuristique(), charger
+… [94 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"Le dénominateur : rendement global (÷ 239) et exactitude spans (÷ 238 labels).\"\"\"\n    import tools.bloc_linguistique as bl\n    from ..tests.linguistique.evaluer_gold import charger … [874 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 20, "offset": 2455}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2455:             pos = next((m["pos"] for m in ph.get("mots", [])
+2456:                         if ph["texte"][m["debut"]:m["fin"]] == c2[0]), None)
+2457:             if (pos == "VERB") if pos else bl2._est_verbe(c2[0]):
+2458:                 verbes += 1
+2459:             else:
+2460:                 noms += 1
+2461:     return (r["exact"] == 237 and verbes == 158 and noms == 80), (
+2462:         f"classement : exact {r['exact']}/{r['labels']} ; cibles {verbes} verbes, {noms} noms")
+2463: 
+2464: 
+2465: def t169_conventions() -> tuple[bool, str]:
+2466:     """Les deux conventions du gold : cibles verbes et cibles noms, mesurées séparément."""
+2467:     import tools.bloc_linguistique as bl
+2468:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2469:     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2470:     v, n = a["verbe"], a["nom"]
+2471:     return (v["cibles"] == 158 and v["justes"] == 158 and abs(v["taux"] - 1.0) < 0.001
+2472:             and n["cibles"] == 80 and n["justes"] == 79 and abs(n["taux"] - 0.9875) < 0.001), (
+247
+… [219 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    return (r[\"exact\"] == 238 and verbes == 158 and noms == 80), (\n        f\"classement : exact {r['exact']}/{r['labels']} ; cibles {verbes} verbes, {noms} noms\")", "old_string": "    return … [159 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    return (v[\"cibles\"] == 158 and v[\"justes\"] == 158 and abs(v[\"taux\"] - 1.0) < 0.001\n            and n[\"cibles\"] == 80 and n[\"justes\"] == 80 and abs(n[\"taux\"] - 1.0) < 0.001), (",  … [212 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 16, "offset": 2491}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2491: def t171_lexique_elargi() -> tuple[bool, str]:
+2492:     """Le lexique élargi : participes irréguliers et verbes courants (« vu » n'était pas un verbe)."""
+2493:     import tools.bloc_linguistique as bl
+2494:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2495:     ok = (bl._est_verbe("vu"), bl._est_verbe("accroché"), bl._est_verbe("couru"),
+2496:           bl._est_verbe("tableau"))
+2497:     r = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2498:     return ok == (True, True, True, False) and r["exact"] == 237, (
+2499:         f"lexique élargi : vu {ok[0]}, accroché {ok[1]}, couru {ok[2]} ; exact {r['exact']}/{r['labels']}")
+2500: 
+2501: 
+2502: def t172_echecs_cible() -> tuple[bool, str]:
+2503:     """Les échecs de cible : 0 hors candidats, 0 mal classé (exact 221/221)."""
+2504:     import tools.bloc_linguistique as bl
+2505:     from ..tests.linguistique.evaluer_gold import charger
+2506:     h = bl.Heuristique()
+
+(Showing lines 2491-2506 of 2863. Use offset=2507 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    return ok == (True, True, True, False) and r[\"exact\"] == 238, (\n        f\"lexique élargi : vu {ok[0]}, accroché {ok[1]}, couru {ok[2]} ; exact {r['exact']}/{r['labels']}\")", "old_string" … [185 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 30, "offset": 2502}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2502: def t172_echecs_cible() -> tuple[bool, str]:
+2503:     """Les échecs de cible : 0 hors candidats, 0 mal classé (exact 221/221)."""
+2504:     import tools.bloc_linguistique as bl
+2505:     from ..tests.linguistique.evaluer_gold import charger
+2506:     h = bl.Heuristique()
+2507:     hors = dans = 0
+2508:     for p in charger():
+2509:         a = h.analyser(p["texte"], p["langue"])
+2510:         labels = {(e.type, e.debut, e.fin): e for e in a.etiquettes if e.niveau == "syntagme"}
+2511:         for s in p["segments"]:
+2512:             cibles = s.get("cibles") or ([s["cible"]] if s.get("cible") else [])
+2513:             if not cibles:
+2514:                 continue
+2515:             e = labels.get((s["type"], s["debut"], s["fin"]))
+2516:             if e is None:
+2517:                 continue
+2518:             att = (e.meta or {}).get("attachement") or {}
+2519:             if att.get("cible", "") == cibles[0]:
+2520:                 continue
+2521:             if any(cibles[0] in c for c in (e.candidats or [])):
+2522:                 dans += 1
+2523:             else
+… [491 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"Les échecs de cible : 0 hors candidats, 0 mal classé (exact 238/238).\"\"\"", "old_string": "    \"\"\"Les échecs de cible : 0 hors candidats, 0 mal classé (exact 221/221).\"\"\""}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    return (hors == 0 and dans == 0), f\"échecs de cible : {hors} hors candidats, {dans} mal classés\"", "old_string": "    return (hors == 1 and dans == 0), f\"échecs de cible : {hors} hors cand … [29 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 26, "offset": 2626}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2626: def t179_multi_cibles() -> tuple[bool, str]:
+2627:     """La mesure multi-cibles : 43 GP du gold ont deux cibles ; exact_any = 221/221."""
+2628:     import tools.bloc_linguistique as bl
+2629:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2630:     a = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]
+2631:     return (a["exact"] == 237 and a["exact_any"] == 237
+2632:             and abs(a["exact_any_taux_span"] - 0.9958) < 0.001), (
+2633:         f"multi-cibles : exact {a['exact']}/{a['labels']}, exact_any {a['exact_any']}/{a['labels']}")
+2634: 
+2635: 
+2636: def t180_par_langue() -> tuple[bool, str]:
+2637:     """La mesure par langue : l'exact tient dans les deux langues (fr 136/136, en 85/85)."""
+2638:     import tools.bloc_linguistique as bl
+2639:     from ..tests.linguistique.evaluer_gold import charger, evaluer_bloc
+2640:     lg = evaluer_bloc("h", bl.Heuristique(), charger())["attachement"]["par_langue"]
+2641:     fr, en = lg["fr"], lg["en"]
+2642:     return (fr["cibles"] == 151 and fr["labels"] == 151 and fr["exact"] == 
+… [632 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"La mesure multi-cibles : 43 GP du gold ont deux cibles ; exact_any = 238/238.\"\"\"\n    import tools.bloc_linguistique as bl\n    from ..tests.linguistique.evaluer_gold import charger, … [650 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    \"\"\"La mesure par langue : l'exact tient dans les deux langues (fr 151/151, en 87/87).\"\"\"\n    import tools.bloc_linguistique as bl\n    from ..tests.linguistique.evaluer_gold import cha … [681 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 900 bash tools/porte-produit.sh 2>&1 | tail -25; echo \"exit=${PIPESTATUS[0]}\"", "description": "Rerun product gate after fixture update", "run_in_background": true}`
+
+  ```
+started background job bash-107
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"237/238\\|237 / 238\\|exact 237\\|== 237\\|- 0\\.9958\\|0\\.9958\" tools/ --include=*.py --include=*.sh 2>/dev/null | grep -v \"docwatch/.venv\" | head -30", "description": "Search other old attachment fixtures"}`
+
+  ```
+tools/pensee/autotest.py:2227:    return (r["cibles"] == 239 and abs(r["top1_taux"] - 0.9958) < 0.001
+tools/pensee/autotest.py:2228:            and abs(r["exact_taux"] - 0.9958) < 0.001), (
+  ```
+
+- **job_output** `{"job_id": "bash-107", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ version : drave 0.1.0
+  ✅ analyser fr : JSON valide, étiquettes et syntagmes
+  ✅ analyser en : JSON valide, étiquettes et syntagmes
+  ✅ rejeu : sha256 f4b7822076a4203d deux fois
+  ✅ smoke test : Ran 16 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v0 : Ran 11 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+exit=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Les 84 portes\\|Les 20 tests\\|La décision\\|## 8. Fichiers\\|porte du bloc\" reports/rapport-s065.md", "description": "Locate report lines to update"}`
+
+  ```
+10:> à **76/76**. La règle est intégrée avec un test unitaire, la porte du bloc est verte.
+156:- **Les 84 portes n'ont pas été rejouées.** La porte du bloc est verte et les 20 tests
+159:## 7. La décision
+171:3. **Une passe complète des portes** au prochain cycle, la porte du bloc étant verte.
+173:## 8. Fichiers
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md", "limit": 26, "offset": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md</path>
+<type>file</type>
+<content>
+150:   circonstant) serait choisi à tort. Aucun cas du gold ne teste ce piège.
+151: - **La règle littérale du mandat n'est pas mesurée sur un cas.** Si l'intention était
+152:   « REL après GV », elle reste vide ici ; la fiche mesure la règle symétrique, qui est celle
+153:   que `s065` demande.
+154: - **Le compte est un compte de cibles.** 238/239 garde `g017` au dénominateur ; 238/238 est
+155:   le taux sur les labels (couverture 0,9958). Les deux lectures sont dans le JSON.
+156: - **Les 84 portes n'ont pas été rejouées.** La porte du bloc est verte et les 20 tests
+157:   unitaires passent ; une passe complète reste à faire si la règle touche d'autres chemins.
+158: 
+159: ## 7. La décision
+160: 
+161: **La règle est intégrée.** Le code est dans `_cible_rel_sujet` (appel union), le test
+162: `test_rel_suivie_d_un_gv` verrouille `s065` et l'absence de cible inventée sans GV à droite.
+163: Le bloc reste à **F1 0,7902**, **POS 0,8625**, **238/238 labels** et **238/239 cibles
+164: (0,9958)**. `g017` reste le dernier écart : ce n'est pas une cible, c'est un **span** et une
+165: 
+… [491 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md", "new_string": "- **Les 84 portes n'ont pas été rejouées.** La porte du bloc (20 tests) et la porte produit\n  (**183/183**) sont vertes ; une passe complète reste à faire si la règle touche d'autres\n  chemins." … [198 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md", "new_string": "**La règle est intégrée.** Le code est dans `_cible_rel_sujet` (appel union), le test\n`test_rel_suivie_d_un_gv` verrouille `s065` et l'absence de cible inventée sans GV à droite.\nLe bloc reste à … [1496 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md", "limit": 18, "offset": 178}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md</path>
+<type>file</type>
+<content>
+178:    étant vertes.
+179: 
+180: ## 8. Fichiers
+181: 
+182: - **Cette fiche** : `reports/rapport-s065.md`.
+183: - **JSON** : [`pensee-s065.json`](pensee-s065.json) — reproduction, règle, mesures
+184:   all/dev/test et par source, diff, contrôles, limites.
+185: - **Code** : [`bloc_linguistique.py`](../tools/bloc_linguistique.py) (`_cible_rel_sujet`,
+186:   appel union).
+187: - **Test** : [`test_bloc_linguistique.py`](../tools/tests/linguistique/test_bloc_linguistique.py)
+188:   (`test_rel_suivie_d_un_gv`).
+189: - **Mesure** : `/tmp/s065/mesure.py` (non commité) ; copies `/tmp/s065/bloc_base.py`,
+190:   `bloc_regle.py`, `bloc_rel_gn.py`, `bloc_rel_apres_gv.py`, `bloc_placebo.py`.
+191: - **Lecture seule** : [`evaluer_gold.py`](../tools/tests/linguistique/evaluer_gold.py),
+192:   [`gold_split.py`](../tools/tests/linguistique/gold_split.py),
+193:   [`gold.py`](../tools/tests/linguistique/gold.py).
+194: - **Contexte** : [`rapport-g017.md`](rapport-g017.md) § 9 (le dernier span et la convention
+195:   d'adverbe), [`rapport-semaine.md`](rapport-semaine.md) (237/238, `g017` et `s0
+… [49 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md", "new_string": "- **Test** : [`test_bloc_linguistique.py`](../tools/tests/linguistique/test_bloc_linguistique.py)\n  (`test_rel_suivie_d_un_gv`).\n- **Fixtures produit** : [`autotest.py`](../tools/pensee/autotest … [255 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Les 84 portes\\|fichiers\\|couverture_apres\\|test\\\": \\\"tools\" reports/pensee-s065.json | head", "description": "Locate JSON fields to update"}`
+
+  ```
+21:  "couverture_apres": 0.9958
+34:  "fichiers_du_depot_modifies_pour_la_mesure": 0
+162:  "test": "tools/tests/linguistique/test_bloc_linguistique.py::test_rel_suivie_d_un_gv"
+783: "fichiers": {
+787:  "test": "tools/tests/linguistique/test_bloc_linguistique.py",
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json", "limit": 18, "offset": 6}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json</path>
+<type>file</type>
+<content>
+6:  "verdict": {
+7:   "regle": "intégrée",
+8:   "raison": "une seule cible change (s065 : nage → elle), aucun span ni POS ne bouge, F1 inchangé ; attachement 237/238 → 238/238 labels (238/239 cibles, 0,9958)",
+9:   "f1_avant": 0.7902,
+10:   "f1_apres": 0.7902,
+11:   "delta_f1": 0.0,
+12:   "pos_avant": 0.8625,
+13:   "pos_apres": 0.8625,
+14:   "attachement_avant": "237/238",
+15:   "attachement_apres": "238/238",
+16:   "attachement_cibles_apres": "238/239",
+17:   "exact_taux_apres": 0.9958,
+18:   "exact_taux_span_avant": 0.9958,
+19:   "exact_taux_span_apres": 1.0,
+20:   "couverture_avant": 0.9958,
+21:   "couverture_apres": 0.9958
+22:  },
+23:  "dispositif": {
+
+(Showing lines 6-23 of 791. Use offset=24 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json", "limit": 30, "offset": 762}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json</path>
+<type>file</type>
+<content>
+762:      "exact_taux_span": 0.9868,
+763:      "exact_taux": 0.9868,
+764:      "couverture": 1.0
+765:     }
+766:    },
+767:    "lecture": "placebo : une REL sans cible prend son propre verbe avant le GV le plus proche. 235/238 (−2 exacts : s065 et un autre), donc le gain n'est pas un artefact de n'importe quel repli."
+768:   }
+769:  },
+770:  "convention_du_gold": {
+771:   "constat": "74 REL du gold ont toutes un GN à gauche et un GV à droite ; 73 étaient déjà justes par _cible_precedent. s065 est la seule où le GN sujet n'est pas dans le chunker simple : le GN vient de S et la REL courte du chunker, d'où la cible par proximité (`nage`).",
+772:   "lecture": "ce n'est pas une nouvelle convention : c'est le même antécédent que la règle existante (REL après GN → tête du GN), appliqué quand le GN est fourni par l'autre chemin de segmentation."
+773:  },
+774:  "limites": [
+775:   "un seul cas dans le gold (s065), et il est en dev : le test ne contient aucun cas déclencheur (76/76 inchangé). La règle n'est pas confirmée hors échantillon.",
+776:   "s065 est une phrase synthétiqu
+… [1263 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json", "new_string": "  \"couverture_avant\": 0.9958,\n  \"couverture_apres\": 0.9958,\n  \"porte_produit\": \"verte (183/183, fixtures d'attachement mises à jour)\"\n },", "old_string": "  \"couverture_avant\": 0.995 … [41 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json", "new_string": "  \"les portes complètes (84) n'ont pas été rejouées ; la porte du bloc (20 tests) et la porte produit (183/183) sont vertes.\"\n ],", "old_string": "  \"les portes complètes (84) n'ont pas été r … [82 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json", "new_string": "  \"code\": \"tools/bloc_linguistique.py\",\n  \"test\": \"tools/tests/linguistique/test_bloc_linguistique.py\",\n  \"fixtures_produit\": \"tools/pensee/autotest.py (T153, T161, T162, T164, T167- … [290 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Règle intégrée avec un test\" journal/2026-11-14/README.md", "description": "Locate journal note line"}`
+
+  ```
+48:REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte. Fiche
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md", "limit": 10, "offset": 42}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md</path>
+<type>file</type>
+<content>
+42: **J6.2 — s065 : la REL « qui commence » prend le sujet du GV qui la suit.** Le gold attend
+43: `elle`, le bloc prédisait `nage` (le GV le plus proche). La règle **REL suivie d'un GV → le
+44: sujet de ce GV** corrige la seule cible fausse : **F1 0,7902 inchangé**, **POS 0,8625
+45: inchangée**, **attachement 237/238 → 238/238 labels** (238/239 cibles, **0,9958**),
+46: **exactitude sur les spans 0,9958 → 1,0**. Le gain est en **dev** (161/162 → 162/162) ; le
+47: test reste à 76/76 car il n'a aucun cas déclencheur. Une seule annotation change, `s065` :
+48: REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte. Fiche
+49: [`reports/rapport-s065.md`](../../reports/rapport-s065.md), JSON
+50: [`reports/pensee-s065.json`](../../reports/pensee-s065.json).
+51: <!-- /notes -->
+
+(End of file - total 51 lines)
+</content>
+  ```
+

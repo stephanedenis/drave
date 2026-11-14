@@ -61292,3 +61292,40 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-4835", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+sam 14 nov 2026 01:16:02 EST
+2026-11-14 00:41:35 · ▶ J6.1 — Le dernier span g017 (timeout 5400 s)
+2026-11-14 00:58:41 · ✔ J6.1 en 1012.5 s (code 0) — ✅ test -f reports/rapport-g017.md && echo FICHE-OK; ✅ bash tools/porte-bloc-linguistique.sh 2>&1 | tail -1
+2026-11-14 00:58:41 · ▶ J6.2 — La cible s065 (timeout 5400 s)
+=== passe :
+      ❌ mandat périmé (10052 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+Journaux complets : work/portes/passe-1311-23h15
+89
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"❌|PASS_EXIT|tenues|vertes\" work/portes/passe-1311-23h15.log | tail -6 | cut -c1-150; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt … [429 caractères tronqués]`
+
+  ```
+porte-sessions         ❌ code 1                    0 s    ❌ mandat périmé (10052 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchi
+--- 81 vertes, 3 rouges ---
+      ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui ne la désigne pas) à 459 : l'écart est nul o
+      ❌ l'état de A ne rend pas le code de A dans une
+      ❌ mandat périmé (12902 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+      ❌ mandat périmé (10052 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+mandat rafraîchi
+  ⚠ mandat périmé (12921 min) : 1e7ef596-93e6-45f1-b7f2-2940044b6e3a — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2026-11-06\" docs/pilotage/references-non-regression.md | head -3 | cut -c1-180; grep -n \"81 vertes\\|83 portes\\|84 portes\" docs/pilotage/references-non-regression.md | head -4 | cut -c1-180", "description": "Voir le blo … [27 caractères tronqués]`
+
+  ```
+3:> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
+3:> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
+5:> **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+23:> passe complète du 04/11–05/11 (83 portes).
+49:| toutes les portes | `tools/toutes-les-portes.sh` | **84 portes** ; voir la **passe du 07/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/references-non-regression.md'); t=p.read_text()\nt=t.replace(\"\"\"> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).\"\" … [1678 caractères tronqués]`

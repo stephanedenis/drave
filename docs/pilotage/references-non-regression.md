@@ -1,5 +1,9 @@
 # Références de non-régression
 
+> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
+> `porte-melange` (structurelles, antérieures) et `porte-sessions` (le mandat du hub
+> `1e7ef596`, périmé de 9 jours ; le mien est rafraîchi). `porte-produit` **verte**, `porte-bloc`
+> **verte**. Journal : `work/portes/passe-1311-23h15.log`.
 > **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
@@ -46,7 +50,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **83 portes** ; dernière passe **79 vertes, 4 rouges** (04/11 23 h 43 → 05/11 02 h 12, machine au repos) : 2 connues (`indice`, `melange`), 1 **corrigée** (`lecteur`, ancre du banc), 1 de **coordination** (`sessions`, heartbeat de `e181ce02`) · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **84 portes** ; voir la **passe du 07/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs

@@ -7,14 +7,14 @@
 | Identifiant | `session-e9ee2692-96f9-42d2-886c-c5abfb51ce07` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 00:58 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 95 |
-| Appels d'outils | 120 |
-| Fichiers touchés | 6 |
-| Commandes | 92 |
+| Messages | 143 |
+| Appels d'outils | 181 |
+| Fichiers touchés | 9 |
+| Commandes | 117 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J6.2 : la cible `s065` (« elle nage qui commence » — le gold attend `elle`, le bloc prédit `nage`). Reproduis, pro … [157 caractères tronqués]
 
-*120 appels d'outils.* Actions notables :
+*181 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and recent commits
 - bash — List reports and journal entries
@@ -41,7 +41,7 @@
 - bash — Run block on s065
 - bash — List classes and functions
 - bash — Read cible logic
-- … et 96 autres
+- … et 141 autres
 
 ## 3. Travail accompli
 
@@ -51,10 +51,13 @@
 |---|---|---|
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 8 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 9 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/chantiers.md` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-14/README.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py` | 0 | 11 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-s065.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/pensee-s065.json` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +101,7 @@
 - **T1** Read J6 task definitions in plan
 - **T1** Read block gate script
 - **T1** Find numeric assertions on attachment
-- … et 52 autres
+- … et 77 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -135,10 +138,20 @@
 - **T1** `| **J2** | après-midi : corpus commun | ✅ fait | **21 textes**, 5 familles, 10 écritures, **418/438** paires exactes (95,4 %), 8/8 contrôles | `c3467170` (avec J3.1) | corpus multi-époques / multi-gen`
 - **T1** `[still running after 60000ms; moved to background job bash-85]`
 - **T1** `[still running after 60000ms; moved to background job bash-92]`
+- **T1** `[still running after 60000ms; moved to background job bash-101]`
+- **T1** `✅ T71 seuil d'oubli      seuil : ×0,2 → 0/20 buts (×0,5 réussit), 646 états-Q`
+- **T1** `✅ T72 seuil fin          seuil fin : ×0,4 → 20/20 buts ; ×0,45 → 0/20 (non monotone, graine unique)`
+- **T1** `✅ T73 seuil sur 5 graines seuil 5 graines : ×0,35 0/25, ×0,4 25/25, ×0,45 20/25`
+- **T1** `✅ T74 bord du seuil      bord : ×0,42 25/25, ×0,44 25/25`
+- **T1** `✅ T75 seuil bas          seuil bas : ×0,36 20/25, ×0,40 25/25`
+- **T1** `✅ T76 courbe complète    courbe : ×0,35 0/15, ×0,40 15/15, ×0,50 15/15`
+- **T1** `✅ T80 phase devinée      phase devinée : but 0 0/20, but 1 20/20 (le bruit de 10 % casse)`
+- **T1** `✅ T83 courbe élargie     courbe 5 graines : ×0,35 0/25, ×0,41 25/25`
+- **T1** `✅ T84 bord fin           bord fin : ×0,38 20/25, ×0,41 25/25`
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : /home/stephane/Data13TB/stephane/GitHub/Qtrinet AGENTS.md bench colab data docs drave-core journal models __pycache__ Qtrinet-bootstrap.md README.md reports REPRISE.md run_8bit_perfection.py run_clust
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 4, in <module> AttributeError: module 'bloc_linguistique' has no attribute 'analyser' [exit code: 1]
@@ -146,9 +159,11 @@
 - **T1** : 8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE 9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC)
 - **T1** : regle written [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "<frozen importlib._bootstrap_external>", line 1027, in exec_module   File "<frozen importlib._bo
 - **T1** : #!/bin/bash # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait. # # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS # (`--attn-window` en r
+- **T1** : [stderr] fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.  Another git process seems to be running in this repository, or the lock file may be st
 
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-14/README.md journal/2026-11-14/mesures.md journal/THEMES.md && git diff --cached 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/pensee/autotest.py reports/rapport-s065.md reports/pensee-s065.json docs/pilotage/en-cours.m
 

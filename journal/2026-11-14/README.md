@@ -5,20 +5,20 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**2 commits** · **1 session(s)** · **2 thème(s)**
+**3 commits** · **1 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | docs | 1 | [docs.md](docs.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -26,6 +26,7 @@
 |---|---|---|
 | 00:52 | `64d9dd23` | J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER |
 | 01:06 | `b6e474dc` | J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS) |
+| 01:08 | `6ecc9763` | JOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238 |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -45,7 +46,8 @@ sujet de ce GV** corrige la seule cible fausse : **F1 0,7902 inchangé**, **POS 
 inchangée**, **attachement 237/238 → 238/238 labels** (238/239 cibles, **0,9958**),
 **exactitude sur les spans 0,9958 → 1,0**. Le gain est en **dev** (161/162 → 162/162) ; le
 test reste à 76/76 car il n'a aucun cas déclencheur. Une seule annotation change, `s065` :
-REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte. Fiche
+REL 5:17, `nage` → `elle`. Règle intégrée avec un test ; porte du bloc verte, porte produit
+verte (**183/183**, fixtures d'attachement mises à jour). Fiche
 [`reports/rapport-s065.md`](../../reports/rapport-s065.md), JSON
 [`reports/pensee-s065.json`](../../reports/pensee-s065.json).
 <!-- /notes -->
