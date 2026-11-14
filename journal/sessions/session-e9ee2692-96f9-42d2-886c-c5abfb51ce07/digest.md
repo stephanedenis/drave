@@ -2198,3 +2198,178 @@ tools/tests/linguistique/test_bloc_linguistique.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG'\nJ6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)\n\nLe gold « elle qui commence nage » attend `elle` pour la REL 5:17 ; le bloc préd … [831 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-85]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-85", "wait": true, "timeout_ms": 120000}`
+
+  ```
+[s/v7 b6e474dc] J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+ 17 files changed, 3600 insertions(+), 30 deletions(-)
+ create mode 100644 journal/sessions/session-e9ee2692-96f9-42d2-886c-c5abfb51ce07/digest.md
+ create mode 100644 journal/sessions/session-e9ee2692-96f9-42d2-886c-c5abfb51ce07/rapport.md
+ create mode 100644 reports/pensee-s065.json
+ create mode 100644 reports/rapport-s065.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD; echo ===; git status --short | head -30", "description": "Inspect commit contents and remaining status"}`
+
+  ```
+b6e474dc J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+ docs/pilotage/chantiers.md                         |    2 +-
+ docs/pilotage/en-cours.md                          |   14 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ journal/2026-11-14/README.md                       |   14 +-
+ journal/2026-11-14/docs.md                         |    4 +-
+ journal/README.md                                  |    7 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   14 +
+ .../rapport.md                                     |    8 +-
+ .../digest.md                                      |  129 ++
+ .../rapport.md                                     |   51 +-
+ .../digest.md                                      | 2200 ++++++++++++++++++++
+ .../rapport.md                                     |  152 ++
+ reports/pensee-s065.json                           |  791 +++++++
+ reports/rapport-s065.md                            |  188 ++
+ tools/bloc_linguistique.py                         |   25 +
+ tools/tests/linguistique/test_bloc_linguistique.py |
+… [488 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:journal/2026-11-14/README.md | tail -25; echo ===; git show HEAD:journal/2026-11-14/docs.md | tail -30", "description": "Verify journal notes in commit"}`
+
+  ```
+|---|---|---|
+| 00:52 | `64d9dd23` | J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+**J6.1 — g017 : la règle de l'adverbe final hors de la SUB est rejetée.** Le bloc inclut
+`yesterday` dans la SUB de `g017` (span 9:38 au lieu de 9:28). La règle demandée corrige
+`g017` et retire un faux positif de `g005`, mais casse `r264` (« qu'il vient demain ») et
+`r288` (« that he comes tomorrow ») : F1 **0,7902 → 0,7901**, dev **+0,0011**, test
+**−0,0028**, attachement **237/238 → 236/237**. Les deux cas favorables sont en **dev**, les
+deux défavorables en **test**. Rejet ; la convention du gold (inclure ou exclure l'adverbe
+final) doit être tranchée avant toute règle. Fiche [`reports/rapport-g017.md`](../../reports/rapport-g017.md),
+JSON [`reports/pensee-g017.json`](../../reports/pensee-g017.json).
+
+**J6.2 — s065 : la REL « qui commence » prend le sujet du GV qui la suit.** Le gold attend
+`elle`, le bloc prédisait `nage` (le GV le plus proche). La règle **REL suivie d'un GV → le
+sujet de ce GV
+… [1853 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo ===; git show --stat --oneline b76b888a 2>/dev/null | head -20", "description": "Check recent history and prior journal commit"}`
+
+  ```
+b6e474dc J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS)
+64d9dd23 J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+34e3e4ab J5.1 — LE RAPPORT DE SEMAINE : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 237, TAGGER 0,9475 (+8,49, INTÉGRER), INTÉGRATION BORNÉE (TABLE 14/14, CORPUS 418/438), 13 DÉCISIONS, 21 REJETS
+dc78f223 ÉTAT — T0 DANS LE BUDGET (3 991 MOTS) : LA LIGNE R0.7 PORTE LE TAGGER 612 (0,9475, +8,49, INTÉGRER)
+a934d779 R0.7 — LE TAGGER POS SUR LE GOLD 612 : 0,9475 (3012/3179), +8,49 PTS, LA RÈGLE DIT INTÉGRER ; LA CLÉ ÉTAIT PRÉSENTE ET 0,8500 ÉTAIT DATÉ (0,8625)
+===
+b76b888a J6.1 — g017 : LA RÈGLE DE L'ADVERBE FINAL HORS SUB EST REJETÉE (G017 GAGNÉ EN DEV, R264/R288 PERDUS EN TEST ; F1 0,7901, TEST −0,0028, ATTACHEMENT 236/237) ; CONVENTION DU GOLD À TRANCHER
+ docs/pilotage/en-cours.md                          |   16 +-
+ journal/2026-11-14/README.md                       |   32 +
+ journal/README.md                                  |    9 +-
+ journal/sessions/MANIFEST.md
+… [745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-14 --dry-run 2>&1 | tail -40", "description": "Dry-run journal generation"}`
+
+  ```
+2026-11-14 : 2 commits
+  (sec) journal/2026-11-14/docs.md
+  (sec) journal/2026-11-14/mesures.md
+  (sec) journal/2026-11-14/README.md
+  (sec) journal/THEMES.md
+4 fichiers (simulation) · 2 commits classés
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-14 2>&1 | tail -20; echo ===; git status --short journal/ | head -20; echo ===; sed -n '1,60p' journal/2026-11-14/README.md", "description": "Regenerate journal for today"}`
+
+  ```
+2026-11-14 : 2 commits
+  journal/2026-11-14/docs.md
+  journal/2026-11-14/mesures.md
+  journal/2026-11-14/README.md
+  journal/THEMES.md
+4 fichiers écrits · 2 commits classés
+===
+ M journal/2026-11-14/README.md
+ M journal/THEMES.md
+?? journal/2026-11-14/mesures.md
+===
+# 2026-11-14
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-14/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**2 commits** · **1 session(s)** · **2 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| docs | 1 | [docs.md](docs.md) |
+| mesures | 1 | [mesures.md](mesures.md) |
+
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 320.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---
+… [1910 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat journal/2026-11-14/mesures.md; echo ===; git diff --stat journal/; python3 tools/verifie_journal.py 2>&1 | tail -4", "description": "Inspect generated journal and check"}`
+
+  ```
+# 2026-11-14 — Campagnes et mesures
+
+> **Généré** par `tools/journal_auto.py` (sources : git + `journal/sessions/`).
+> Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+> Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
+
+## Commits du jour (1)
+
+| heure | commit | fait | fichiers |
+|---|---|---|---|
+| 01:06 | `b6e474dc` | J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 CIBLES, F1 0,7902 INCHANGÉ, 0 SPAN, 0 POS) | `chantiers.md`, `en-cours.md`, `roadmap.md` (+14) |
+
+## Chiffres du jour
+
+`0,7902`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
+
+## Sessions actives ce jour
+
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 320.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-s065.md](../../reports/rapport-s065.md)
+
+<!-- notes -->
+
+<!-- /notes
+… [253 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-14/README.md journal/2026-11-14/mesures.md journal/THEMES.md && git diff --cached --stat && git commit -F - <<'MSG'\nJOURNAL — 2026-11-14 : J6.2 AU RÉCIT (2 COMMITS, LE THÈME MESURES), s065 238/238\n\nLe journ … [218 caractères tronqués]`

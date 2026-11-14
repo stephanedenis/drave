@@ -7,14 +7,14 @@
 | Identifiant | `session-e9ee2692-96f9-42d2-886c-c5abfb51ce07` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 00:58 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 87 |
-| Appels d'outils | 112 |
+| Messages | 95 |
+| Appels d'outils | 120 |
 | Fichiers touchés | 6 |
-| Commandes | 85 |
+| Commandes | 92 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J6.2 : la cible `s065` (« elle nage qui commence » — le gold attend `elle`, le bloc prédit `nage`). Reproduis, pro … [157 caractères tronqués]
 
-*112 appels d'outils.* Actions notables :
+*120 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and recent commits
 - bash — List reports and journal entries
@@ -41,7 +41,7 @@
 - bash — Run block on s065
 - bash — List classes and functions
 - bash — Read cible logic
-- … et 89 autres
+- … et 96 autres
 
 ## 3. Travail accompli
 
@@ -98,7 +98,7 @@
 - **T1** Read J6 task definitions in plan
 - **T1** Read block gate script
 - **T1** Find numeric assertions on attachment
-- … et 45 autres
+- … et 52 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -134,6 +134,7 @@
 - **T1** `| **L — le bloc langue** (nouveau) | le CPU peut-il étiqueter la surface et le réseau ne traiter que le résidu ? | ✅ **contrat + bloc v0** : 9 niveaux, **398 langues à 0,9687**, **gold 432 réels + 160`
 - **T1** `| **J2** | après-midi : corpus commun | ✅ fait | **21 textes**, 5 familles, 10 écritures, **418/438** paires exactes (95,4 %), 8/8 contrôles | `c3467170` (avec J3.1) | corpus multi-époques / multi-gen`
 - **T1** `[still running after 60000ms; moved to background job bash-85]`
+- **T1** `[still running after 60000ms; moved to background job bash-92]`
 
 ## 5. Erreurs rencontrées
 
@@ -149,4 +150,5 @@
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' J6.2 — s065 : LA REL SUIVIE D'UN GV PREND LE SUJET DU GV (238/238 LABELS, 238/239 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-14/README.md journal/2026-11-14/mesures.md journal/THEMES.md && git diff --cached 
 

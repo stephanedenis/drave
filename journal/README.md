@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [docs](2026-11-14/docs.md) |
+| **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [docs](2026-11-14/docs.md) · [mesures](2026-11-14/mesures.md) |
 | **2026-11-13** | [2026-11-13/README.md](2026-11-13/README.md) | [distribue](2026-11-13/distribue.md) · [docs](2026-11-13/docs.md) · [memoire](2026-11-13/memoire.md) |
 | **2026-11-07** | [2026-11-07/README.md](2026-11-07/README.md) | [distribue](2026-11-07/distribue.md) · [docs](2026-11-07/docs.md) · [memoire](2026-11-07/memoire.md) · [mesures](2026-11-07/mesures.md) · [modele](2026-11-07/modele.md) · [portes](2026-11-07/portes.md) |
 | **2026-11-06** | [2026-11-06/README.md](2026-11-06/README.md) | [distribue](2026-11-06/distribue.md) · [docs](2026-11-06/docs.md) · [memoire](2026-11-06/memoire.md) · [mesures](2026-11-06/mesures.md) · [modele](2026-11-06/modele.md) · [moteur](2026-11-06/moteur.md) · [outils](2026-11-06/outils.md) · [portes](2026-11-06/portes.md) |
@@ -248,5 +248,5 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Corriger span g017 avec règle adverbe | 2026-11-14 00:41 | 0.3 h | 1 | 126 | 1 | 2 | [rapport](sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md) |
 | `session-` | Rapport convention GV et règles candidates | 2026-11-07 12:41 | 1.5 h | 1 | 245 | 9 | 1 | [rapport](sessions/session-e1ad947b-50b1-4758-a921-5267225bf642/rapport.md) |
 | `session-` | Rapport de semaine et suivi J5.1 | 2026-11-13 22:59 | 0.2 h | 1 | 115 | 5 | 1 | [rapport](sessions/session-e8c327f2-a7ec-464a-8e40-0615e5befecb/rapport.md) |
-| `session-` | Corriger la cible s065 REL après GV | 2026-11-14 00:58 | 0.1 h | 1 | 112 | 6 | 1 | [rapport](sessions/session-e9ee2692-96f9-42d2-886c-c5abfb51ce07/rapport.md) |
+| `session-` | Corriger la cible s065 REL après GV | 2026-11-14 00:58 | 0.2 h | 1 | 120 | 6 | 2 | [rapport](sessions/session-e9ee2692-96f9-42d2-886c-c5abfb51ce07/rapport.md) |
 | `session-` | Test de liaison du superviseur | 2026-11-07 10:48 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-f30f0289-2506-4596-be01-4e10f2a2073c/rapport.md) |
