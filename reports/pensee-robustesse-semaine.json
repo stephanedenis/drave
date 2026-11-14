@@ -1,0 +1,3040 @@
+{
+ "schema": "drave.robustesse.semaine",
+ "version": 1,
+ "date": "2026-11-14",
+ "ligne": "B13",
+ "tache": "J11.3",
+ "titre": "Les 50 textes libres re-mesurés avec le code de la semaine",
+ "banc": "reports/pensee-fiabilite-produit.json",
+ "banc_sha256": "bd54b1ff7fa14e203dcfeaced908b8dec699995c2ff3fe910c7956ac64d18a48",
+ "commande": "python3 tools/mesurer_robustesse_semaine.py",
+ "code": {
+  "head": "09e541435fd9d05e912039905c8a880e8d9ac5c7",
+  "drave": "0.1.0",
+  "schema_annotation": 2,
+  "sha256_schemas": {
+   "1": "87d0bdb8527869cb1c92f0aa0318677c9beeade679682080ca222685c86cf04a",
+   "2": "8d2859b385f2ac54ba432f0961cb36b8d3ef0dd20c6a3158506d5ae9309fc500"
+  },
+  "gold": {
+   "gold": "vivant (hand + reel + synthétique)",
+   "phrases": 612,
+   "f1": 0.7902,
+   "precision": 0.786,
+   "rappel": 0.7944,
+   "tp": 1480,
+   "fp": 403,
+   "fn": 383,
+   "pos": 0.8625,
+   "attachement": {
+    "labels": 238,
+    "cibles": 239,
+    "exact": 238,
+    "top1": 238,
+    "top1_taux": 0.9958
+   }
+  }
+ },
+ "dispositif": {
+  "banc": "reports/pensee-fiabilite-produit.json (audit A26)",
+  "cli": "python3 tools/drave.py analyser TEXTE --json (deux passages)",
+  "api": "bloc_linguistique.Heuristique(partition=...).analyser(texte)",
+  "vues": [
+   "alternative",
+   "filtrer",
+   "filtrer_union (contrôle)"
+  ],
+  "chevauchement": "paires (i, j), i < j, de syntagmes dont les spans s'intersectent strictement : max(debut) < min(fin)",
+  "champs": [
+   "schema",
+   "version",
+   "texte",
+   "langue",
+   "script",
+   "refus",
+   "etiquettes",
+   "unites_semantiques"
+  ],
+  "schema": "tools/schemas/drave-annotation-v2.json",
+  "restauration": "tools/restitution.py · mesurer_banc_v1"
+ },
+ "synthese": {
+  "n": 50,
+  "annotations": 46,
+  "refus": 4,
+  "refus_ids": [
+   "f14",
+   "f15",
+   "f16",
+   "f17"
+  ],
+  "plantages": 0,
+  "codes": {
+   "0": 46,
+   "3": 4
+  },
+  "stderr_succes": 0,
+  "json_valide": 50,
+  "champs_8": {
+   "cli_alternative": 50,
+   "api_alternative": 50,
+   "api_filtrer": 50
+  },
+  "schema_v2": {
+   "cli_alternative": 50,
+   "api_alternative": 50,
+   "api_filtrer": 50
+  },
+  "determinisme": 50,
+  "alternative": {
+   "segments": 395,
+   "chevauchements": 115,
+   "textes_avec_chevauchement": 21,
+   "textes_sans_syntagme": 7,
+   "textes_avec_syntagme": 43
+  },
+  "filtrer": {
+   "segments": 313,
+   "chevauchements": 0,
+   "textes_avec_chevauchement": 0,
+   "textes_sans_syntagme": 7,
+   "textes_avec_syntagme": 43
+  },
+  "filtrer_union": {
+   "segments": 352,
+   "chevauchements": 40,
+   "textes_avec_chevauchement": 11
+  },
+  "sans_syntagme": {
+   "total": 7,
+   "ids": [
+    "f14",
+    "f15",
+    "f16",
+    "f17",
+    "f18",
+    "f27",
+    "f37"
+   ],
+   "annotations": 3,
+   "ids_annotations": [
+    "f18",
+    "f27",
+    "f37"
+   ]
+  },
+  "invariants": {
+   "spans_hors_texte": 0,
+   "spans_vides": 0,
+   "cibles_absentes": 0,
+   "etiquettes": 4827
+  },
+  "temps": {
+   "cli_ms": {
+    "n": 50,
+    "min": 142.3,
+    "mediane": 159.2,
+    "moyenne": 160.4,
+    "p95": 175.4,
+    "max": 257.7,
+    "total": 8017.8
+   },
+   "api_ms": {
+    "n": 50,
+    "min": 0.0,
+    "mediane": 2.7,
+    "moyenne": 4.4,
+    "p95": 6.4,
+    "max": 74.0,
+    "total": 220.8
+   },
+   "api_filtrer_ms": {
+    "n": 50,
+    "min": 0.0,
+    "mediane": 2.5,
+    "moyenne": 3.9,
+    "p95": 6.7,
+    "max": 61.4,
+    "total": 194.5
+   },
+   "restitution_s": 12.04
+  },
+  "restitution": {
+   "n": 50,
+   "annotations": 46,
+   "refus": 4,
+   "refus_ids": [
+    "f14",
+    "f15",
+    "f16",
+    "f17"
+   ],
+   "canonique": {
+    "exacts": 46,
+    "fidelite": 1.0,
+    "fidelite_caractere": 1.0
+   },
+   "strict": {
+    "exacts": 5,
+    "fidelite": 0.1087
+   },
+   "strict_sur_canonique": {
+    "exacts": 1,
+    "fidelite": 0.0217,
+    "fidelite_caractere": 0.8566
+   },
+   "structure": {
+    "segments": 395,
+    "segments_avec_role": 395,
+    "attachements": 315,
+    "cibles_resolues": 315,
+    "cibles_dans_un_segment": 313,
+    "couverture_caracteres": 0.7519,
+    "couverture_jetons": 0.6584,
+    "taux_roles": 1.0,
+    "taux_cibles_resolues": 1.0,
+    "taux_cibles_dans_un_segment": 0.9937
+   },
+   "stabilite": {
+    "squelette_identique": 18,
+    "jetons_identiques": 46,
+    "fidelite": 0.3913
+   },
+   "controle_negatif_canonique": {
+    "melange_exacts": 0,
+    "melange_fidelite_caractere": 0.3865,
+    "tronque_exacts": 0,
+    "tronque_fidelite_caractere": 0.7998,
+    "detectes": 46
+   },
+   "controle_negatif_structure": {
+    "eligibles": 43,
+    "detectes": 43,
+    "cle_changee": 43,
+    "roles_retires": 395,
+    "cibles_retirees": 315
+   }
+  },
+  "controles_negatifs": {
+   "schema_v1_lue": {
+    "attendu": true,
+    "observe": true
+   },
+   "schema_v2_refuse_v1": {
+    "attendu": true,
+    "observe": true
+   },
+   "schema_v2_refuse_champ_manquant": {
+    "attendu": true,
+    "observe": true
+   },
+   "chevauchement_injecte": {
+    "attendu": 1,
+    "observe": 1,
+    "temoin_sans_chevauchement": 0
+   },
+   "filtrer_non_vide": {
+    "attendu": "> 0",
+    "observe": 313
+   },
+   "restitution_melange_detecte": 46,
+   "restitution_troncature_detecte": 46,
+   "restitution_melange_exacts": 0,
+   "restitution_troncature_exacts": 0,
+   "restitution_roles_retires": 395,
+   "restitution_cibles_retirees": 315
+  }
+ },
+ "comparaison_a26": {
+  "reference": {
+   "fiche": "reports/rapport-fiabilite-produit.md",
+   "commit": "56eb43af",
+   "date": "2026-11-06",
+   "plantages": "0/50",
+   "json_invalide": "0/46",
+   "refus": "4/50 (code 1, stdout 0 octet)",
+   "champs_8": "0/46 (ni schema ni version ; 11 clés racine)",
+   "chevauchements_alternative": "107 paires / 23/46 textes",
+   "chevauchements_filtrer": "0 conflit après filtre meta.union (hors schéma)",
+   "sans_syntagme": "4/46 textes annotés (f13, f18, f27, f37)",
+   "temps_cli_median_ms": 152.7,
+   "temps_cli_min_ms": 136.8,
+   "temps_cli_max_ms": 226.6,
+   "temps_api_median_ms": 1.0,
+   "temps_api_min_ms": 0.2,
+   "temps_api_max_ms": 45.1
+  },
+  "lignes": [
+   {
+    "mesure": "plantages",
+    "a26": "0/50",
+    "j11_3": "0/50",
+    "verdict": "="
+   },
+   {
+    "mesure": "JSON invalide",
+    "a26": "0/46",
+    "j11_3": "0/50",
+    "verdict": "les refus rendent aussi un JSON"
+   },
+   {
+    "mesure": "refus",
+    "a26": "4/50 (code 1, stdout 0 octet)",
+    "j11_3": "4/50 (code 3, JSON valide)",
+    "verdict": "le refus est une réponse, plus une sortie vide"
+   },
+   {
+    "mesure": "8 champs obligatoires",
+    "a26": "0/46 (ni schema ni version ; 11 clés racine)",
+    "j11_3": "50/50",
+    "verdict": "corrigé (schéma v2)"
+   },
+   {
+    "mesure": "validation JSON Schema",
+    "a26": "absente",
+    "j11_3": "50/50",
+    "verdict": "nouveau"
+   },
+   {
+    "mesure": "chevauchements, vue alternative",
+    "a26": "107 paires / 23/46 textes",
+    "j11_3": "115 paires / 21/46 textes annotés",
+    "verdict": "même définition ; le code a changé"
+   },
+   {
+    "mesure": "chevauchements, vue filtrer",
+    "a26": "0 conflit après filtre meta.union (hors schéma)",
+    "j11_3": "0/50",
+    "verdict": "la vue publiée tient la promesse"
+   },
+   {
+    "mesure": "textes annotés sans syntagme",
+    "a26": "4/46 textes annotés (f13, f18, f27, f37)",
+    "j11_3": "3/46 : f18, f27, f37",
+    "verdict": "f13 segmenté depuis"
+   },
+   {
+    "mesure": "temps CLI médian",
+    "a26": "152.7 ms",
+    "j11_3": "159.2 ms",
+    "verdict": "même ordre"
+   },
+   {
+    "mesure": "temps interne médian",
+    "a26": "1.0 ms",
+    "j11_3": "2.7 ms",
+    "verdict": "même ordre"
+   }
+  ]
+ },
+ "resultats": [
+  {
+   "id": "f01",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 13,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 158.8,
+   "temps_cli_2_ms": 161.8,
+   "temps_api_ms": 1.9,
+   "temps_api_filtrer_ms": 1.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 20,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f02",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 55,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 155.1,
+   "temps_cli_2_ms": 163.2,
+   "temps_api_ms": 5.7,
+   "temps_api_filtrer_ms": 3.8,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 5,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 5,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 60,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f03",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 42,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 156.2,
+   "temps_cli_2_ms": 153.8,
+   "temps_api_ms": 2.8,
+   "temps_api_filtrer_ms": 2.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 40,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f04",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 30,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 162.8,
+   "temps_cli_2_ms": 162.0,
+   "temps_api_ms": 2.5,
+   "temps_api_filtrer_ms": 2.1,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 40,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f05",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 20,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 161.5,
+   "temps_cli_2_ms": 158.6,
+   "temps_api_ms": 2.5,
+   "temps_api_filtrer_ms": 2.2,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 31,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f06",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 61,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 163.8,
+   "temps_cli_2_ms": 162.3,
+   "temps_api_ms": 4.2,
+   "temps_api_filtrer_ms": 3.9,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 7,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 7,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 65,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f07",
+   "categorie": "en",
+   "attendu": "en",
+   "caracteres": 27,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "en",
+   "script": "Latn",
+   "temps_cli_ms": 161.4,
+   "temps_cli_2_ms": 157.2,
+   "temps_api_ms": 1.5,
+   "temps_api_filtrer_ms": 1.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 33,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f08",
+   "categorie": "en",
+   "attendu": "en",
+   "caracteres": 43,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "en",
+   "script": "Latn",
+   "temps_cli_ms": 160.8,
+   "temps_cli_2_ms": 153.5,
+   "temps_api_ms": 1.7,
+   "temps_api_filtrer_ms": 1.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 39,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f09",
+   "categorie": "en",
+   "attendu": "en",
+   "caracteres": 36,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "en",
+   "script": "Latn",
+   "temps_cli_ms": 158.3,
+   "temps_cli_2_ms": 154.9,
+   "temps_api_ms": 0.8,
+   "temps_api_filtrer_ms": 0.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 34,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f10",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 42,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 160.3,
+   "temps_cli_2_ms": 158.1,
+   "temps_api_ms": 3.2,
+   "temps_api_filtrer_ms": 3.1,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 5,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 58,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f11",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 34,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 167.8,
+   "temps_cli_2_ms": 170.8,
+   "temps_api_ms": 2.7,
+   "temps_api_filtrer_ms": 3.1,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 48,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f12",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 62,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 157.7,
+   "temps_cli_2_ms": 159.8,
+   "temps_api_ms": 3.9,
+   "temps_api_filtrer_ms": 4.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 69,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f13",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 24,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "und",
+   "script": "Latn",
+   "temps_cli_ms": 153.5,
+   "temps_cli_2_ms": 159.0,
+   "temps_api_ms": 1.3,
+   "temps_api_filtrer_ms": 1.1,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 30,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f14",
+   "categorie": "refus",
+   "attendu": "refus",
+   "caracteres": 1,
+   "rc": 3,
+   "rc_2": 3,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "vide",
+   "langue": "und",
+   "script": "Zyyy",
+   "temps_cli_ms": 147.4,
+   "temps_cli_2_ms": 158.5,
+   "temps_api_ms": 0.1,
+   "temps_api_filtrer_ms": 0.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 0,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f15",
+   "categorie": "refus",
+   "attendu": "refus",
+   "caracteres": 0,
+   "rc": 3,
+   "rc_2": 3,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "vide",
+   "langue": "und",
+   "script": "Zyyy",
+   "temps_cli_ms": 153.5,
+   "temps_cli_2_ms": 155.8,
+   "temps_api_ms": 0.1,
+   "temps_api_filtrer_ms": 0.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 0,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f16",
+   "categorie": "refus",
+   "attendu": "refus",
+   "caracteres": 3,
+   "rc": 3,
+   "rc_2": 3,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "vide",
+   "langue": "und",
+   "script": "Zyyy",
+   "temps_cli_ms": 171.6,
+   "temps_cli_2_ms": 148.2,
+   "temps_api_ms": 0.0,
+   "temps_api_filtrer_ms": 0.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 0,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f17",
+   "categorie": "refus",
+   "attendu": "refus",
+   "caracteres": 3,
+   "rc": 3,
+   "rc_2": 3,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "vide",
+   "langue": "und",
+   "script": "Zyyy",
+   "temps_cli_ms": 151.8,
+   "temps_cli_2_ms": 145.8,
+   "temps_api_ms": 0.0,
+   "temps_api_filtrer_ms": 0.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 0,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f18",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 10,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "und",
+   "script": "Zyyy",
+   "temps_cli_ms": 151.8,
+   "temps_cli_2_ms": 157.1,
+   "temps_api_ms": 0.6,
+   "temps_api_filtrer_ms": 0.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 7,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f19",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 52,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 153.7,
+   "temps_cli_2_ms": 148.4,
+   "temps_api_ms": 2.6,
+   "temps_api_filtrer_ms": 2.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 46,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f20",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 59,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 162.8,
+   "temps_cli_2_ms": 158.4,
+   "temps_api_ms": 5.9,
+   "temps_api_filtrer_ms": 4.8,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 8,
+    "chevauchements": 3,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 72,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f21",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 56,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 165.7,
+   "temps_cli_2_ms": 157.3,
+   "temps_api_ms": 3.8,
+   "temps_api_filtrer_ms": 3.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 5,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 5,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 63,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f22",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 55,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 161.0,
+   "temps_cli_2_ms": 153.7,
+   "temps_api_ms": 3.5,
+   "temps_api_filtrer_ms": 3.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 8,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 7,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 7,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 59,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f23",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 61,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 163.5,
+   "temps_cli_2_ms": 163.8,
+   "temps_api_ms": 4.0,
+   "temps_api_filtrer_ms": 3.6,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 6,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 57,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f24",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 68,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 171.3,
+   "temps_cli_2_ms": 159.2,
+   "temps_api_ms": 4.5,
+   "temps_api_filtrer_ms": 4.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 8,
+    "chevauchements": 5,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 75,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f25",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 21,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 156.9,
+   "temps_cli_2_ms": 151.6,
+   "temps_api_ms": 1.9,
+   "temps_api_filtrer_ms": 1.7,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 27,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f26",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 54,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 152.1,
+   "temps_cli_2_ms": 143.7,
+   "temps_api_ms": 2.9,
+   "temps_api_filtrer_ms": 2.9,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 52,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f27",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 14,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "und",
+   "script": "Latn",
+   "temps_cli_ms": 146.2,
+   "temps_cli_2_ms": 163.2,
+   "temps_api_ms": 1.0,
+   "temps_api_filtrer_ms": 0.8,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 14,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f28",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 38,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 161.6,
+   "temps_cli_2_ms": 164.1,
+   "temps_api_ms": 2.8,
+   "temps_api_filtrer_ms": 2.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 49,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f29",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 35,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 145.1,
+   "temps_cli_2_ms": 139.8,
+   "temps_api_ms": 2.7,
+   "temps_api_filtrer_ms": 2.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 48,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f30",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 40,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 156.2,
+   "temps_cli_2_ms": 152.1,
+   "temps_api_ms": 2.8,
+   "temps_api_filtrer_ms": 2.6,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 42,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f31",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 20,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 155.7,
+   "temps_cli_2_ms": 145.9,
+   "temps_api_ms": 2.1,
+   "temps_api_filtrer_ms": 1.9,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 31,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f32",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 61,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 149.3,
+   "temps_cli_2_ms": 158.9,
+   "temps_api_ms": 2.9,
+   "temps_api_filtrer_ms": 1.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 6,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 65,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f33",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 32,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "it",
+   "script": "Latn",
+   "temps_cli_ms": 159.7,
+   "temps_cli_2_ms": 167.0,
+   "temps_api_ms": 1.5,
+   "temps_api_filtrer_ms": 1.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 36,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f34",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 58,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 181.4,
+   "temps_cli_2_ms": 158.2,
+   "temps_api_ms": 3.2,
+   "temps_api_filtrer_ms": 3.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 6,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 56,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f35",
+   "categorie": "en",
+   "attendu": "en",
+   "caracteres": 44,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "en",
+   "script": "Latn",
+   "temps_cli_ms": 147.3,
+   "temps_cli_2_ms": 153.0,
+   "temps_api_ms": 1.8,
+   "temps_api_filtrer_ms": 1.7,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 45,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f36",
+   "categorie": "en",
+   "attendu": "en",
+   "caracteres": 47,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "en",
+   "script": "Latn",
+   "temps_cli_ms": 149.3,
+   "temps_cli_2_ms": 161.2,
+   "temps_api_ms": 0.9,
+   "temps_api_filtrer_ms": 0.7,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 50,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f37",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 51,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "und",
+   "script": "Latn",
+   "temps_cli_ms": 164.5,
+   "temps_cli_2_ms": 154.3,
+   "temps_api_ms": 1.8,
+   "temps_api_filtrer_ms": 1.6,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "filtrer_union": {
+    "segments": 0,
+    "chevauchements": 0,
+    "sans_syntagme": true
+   },
+   "invariants": {
+    "etiquettes": 66,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f38",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 69,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 155.5,
+   "temps_cli_2_ms": 169.6,
+   "temps_api_ms": 6.4,
+   "temps_api_filtrer_ms": 6.7,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 9,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 8,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 8,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 110,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f39",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 65,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 175.4,
+   "temps_cli_2_ms": 157.2,
+   "temps_api_ms": 4.4,
+   "temps_api_filtrer_ms": 4.1,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 7,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 79,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f40",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 63,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 160.4,
+   "temps_cli_2_ms": 151.3,
+   "temps_api_ms": 2.9,
+   "temps_api_filtrer_ms": 2.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 96,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f41",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 67,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 147.8,
+   "temps_cli_2_ms": 171.1,
+   "temps_api_ms": 2.7,
+   "temps_api_filtrer_ms": 2.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 6,
+    "chevauchements": 3,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 3,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 85,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f42",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 45,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 152.4,
+   "temps_cli_2_ms": 154.4,
+   "temps_api_ms": 2.6,
+   "temps_api_filtrer_ms": 2.2,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 34,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f43",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 390,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 169.4,
+   "temps_cli_2_ms": 167.4,
+   "temps_api_ms": 17.9,
+   "temps_api_filtrer_ms": 17.2,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 27,
+    "chevauchements": 10,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 21,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 25,
+    "chevauchements": 4,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 357,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f44",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 74,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 164.9,
+   "temps_cli_2_ms": 157.3,
+   "temps_api_ms": 3.5,
+   "temps_api_filtrer_ms": 3.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 4,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 2,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 4,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 62,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f45",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 72,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 161.3,
+   "temps_cli_2_ms": 164.6,
+   "temps_api_ms": 4.5,
+   "temps_api_filtrer_ms": 4.0,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 7,
+    "chevauchements": 4,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 1,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 65,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f46",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 47,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 165.7,
+   "temps_cli_2_ms": 167.3,
+   "temps_api_ms": 3.5,
+   "temps_api_filtrer_ms": 3.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 7,
+    "chevauchements": 4,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 4,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 6,
+    "chevauchements": 2,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 58,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f47",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 43,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 159.9,
+   "temps_cli_2_ms": 156.2,
+   "temps_api_ms": 2.9,
+   "temps_api_filtrer_ms": 2.5,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 3,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 46,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f48",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 123,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "und",
+   "script": "Latn",
+   "temps_cli_ms": 147.7,
+   "temps_cli_2_ms": 138.4,
+   "temps_api_ms": 2.7,
+   "temps_api_filtrer_ms": 2.6,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 1,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 92,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f49",
+   "categorie": "fr",
+   "attendu": "fr",
+   "caracteres": 53,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 142.3,
+   "temps_cli_2_ms": 160.9,
+   "temps_api_ms": 4.6,
+   "temps_api_filtrer_ms": 4.3,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 5,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 64,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  },
+  {
+   "id": "f50",
+   "categorie": "très long",
+   "attendu": "fr",
+   "caracteres": 2144,
+   "rc": 0,
+   "rc_2": 0,
+   "plantage": false,
+   "traceback": false,
+   "stderr_succes": false,
+   "deterministe": true,
+   "json_valide": true,
+   "erreur_json": "",
+   "champs_8": true,
+   "schema_v2": true,
+   "schema_erreur": "",
+   "version": 2,
+   "refus": "",
+   "langue": "fr",
+   "script": "Latn",
+   "temps_cli_ms": 257.7,
+   "temps_cli_2_ms": 251.4,
+   "temps_api_ms": 74.0,
+   "temps_api_filtrer_ms": 61.4,
+   "api_alternative_schema_v2": true,
+   "api_filtrer_schema_v2": true,
+   "api_alternative_champs_8": true,
+   "api_filtrer_champs_8": true,
+   "alternative": {
+    "segments": 193,
+    "chevauchements": 63,
+    "sans_syntagme": false
+   },
+   "filtrer": {
+    "segments": 148,
+    "chevauchements": 0,
+    "sans_syntagme": false
+   },
+   "filtrer_union": {
+    "segments": 167,
+    "chevauchements": 19,
+    "sans_syntagme": false
+   },
+   "invariants": {
+    "etiquettes": 2152,
+    "spans_hors_texte": 0,
+    "spans_vides": 0,
+    "cibles_absentes": 0
+   },
+   "erreurs_api": {
+    "alternative": "",
+    "filtrer": ""
+   }
+  }
+ ],
+ "limites": [
+  "Le banc est **écrit à la main** pour l'audit A26 : 50 phrases, pas un échantillon aléatoire. Il teste la robustesse d'entrée, pas la justesse linguistique.",
+  "Le décompte des chevauchements est **strict** (intersection non vide des spans, toutes paires de syntagmes). C'est la définition qui reproduit les comptes par texte de l'audit A26 ; une autre définition (paires de types différents, spans identiques exclus, etc.) donnerait un autre chiffre.",
+  "La comparaison A26 → J11.3 n'est **pas à code constant** : le module a changé entre les deux mesures (morphologie, chunker, s065, J11.1/J11.2). Les écarts de chevauchements sont donc des effets du code, pas du compteur.",
+  "Les 4 refus (f14–f17) n'ont pas d'annotation : les mesures de structure portent sur 46 textes, pas 50. Ils sont comptés à part et validés comme réponses JSON.",
+  "Le temps CLI est dominé par le **démarrage** de Python (~150 ms) ; le temps interne (~1 ms) est la mesure du bloc. Les deux ne répondent pas à la même question.",
+  "La restitution canonique vaut 1,0000 **par construction** (les jetons viennent des spans, qui sont des sous-chaînes de la source) : c'est un invariant de codec, pas une compréhension sémantique. Le miroir strict ne monte pas (5/46)."
+ ]
+}

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **1 session(s)** · **4 thème(s)**
+**13 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,14 +13,14 @@
 |---|---|---|
 | docs | 3 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
-| mesures | 5 | [mesures.md](mesures.md) |
+| mesures | 6 | [mesures.md](mesures.md) |
 | portes | 2 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 324.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -38,6 +38,7 @@
 | 03:53 | `03ecee41` | J10.1 — LE BILAN DU CHANTIER : F1 0,7533 → 0,7902, ATTACHEMENT 236 → 238, 20/21 TÂCHES, 5 TIMEOUTS, 1 ÉCHEC (LE TAG) ; PANINI MESURÉ ET BORNÉ |
 | 04:16 | `a6808c5e` | CHANTIER — LE PLAN EST RELU À CHAQUE TOUR (LA BOUCLE VOYAIT UNE FILE VIDE APRÈS UN AJOUT DE TÂCHES) ; ÉTAT HORODATÉ |
 | 04:28 | `84e393bb` | J11.1 — LES 5 EXEMPLES REJOUÉS : 4 BLOCS SUR 5 CORRIGÉS, r035 DÉSORMAIS PRÉDIT ; F1 0,7902, ATTACHEMENT 238/238 |
+| 04:40 | `09e54143` | J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -95,4 +96,17 @@ lexique, lui, est stable 46/46). Contrôles : mélange/troncature canoniques **0
 [`reports/rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md), JSON
 [`reports/pensee-restitution-v1.json`](../../reports/pensee-restitution-v1.json), outil
 [`tools/mesurer_restitution_v1.py`](../../tools/mesurer_restitution_v1.py).
+**J11.3 — les 50 textes libres : le contrat tient, la vue linéaire ne chevauche pas.** Les
+**50 phrases de l'audit A26** sont rejouées avec le code du 14/11 (F1 **0,7902**, schéma
+**v2**, restitution **v1**) : **0 plantage**, **50/50 JSON valide**, **50/50 portent les 8
+champs** du schéma v2 et passent la validation ; les **4 refus** sont désormais des réponses
+JSON en **code 3**, là où l'audit avait un stdout vide en code 1. En vue **`alternative`**,
+**395 segments** et **115 chevauchements** dans **21/46** textes ; en vue **`filtrer`**,
+**313 segments** et **0 chevauchement**. La restitution est **46/46 canonique**, le strict
+**5/46 = 0,1087**. Comparaison A26 : **107 → 115 paires** — le compteur est le même, le code
+a bougé (`f50` 50 → 63, `f26`/`f29` 1+2 → 0) ; les 8 champs passent de **0/46** à **50/50**.
+Temps CLI médian **159,2 ms**, API **2,7 ms**. Fiche
+[`reports/rapport-robustesse-semaine.md`](../../reports/rapport-robustesse-semaine.md), JSON
+[`reports/pensee-robustesse-semaine.json`](../../reports/pensee-robustesse-semaine.json), outil
+[`tools/mesurer_robustesse_semaine.py`](../../tools/mesurer_robustesse_semaine.py).
 <!-- /notes -->

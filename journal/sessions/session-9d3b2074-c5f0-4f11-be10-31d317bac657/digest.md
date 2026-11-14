@@ -1881,3 +1881,109 @@ M  tools/drave.py
   ```
 
 - **bash** `{"command": "git commit -m \"J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ\" -m \"evaluer --par-langue rejoue la même mesure sur les deux sous-golds et publie le\ndétail fr/en (texte et clé par_langue du JSON) : phrases, tokens, POS, syntagmes,\ … [1078 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-59]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-59", "timeout_ms": 240000, "wait": true}`
+
+  ```
+[s/v7 09e54143] J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ
+ 21 files changed, 2957 insertions(+), 56 deletions(-)
+ create mode 100644 journal/sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/digest.md
+ create mode 100644 journal/sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/rapport.md
+ create mode 100644 reports/evaluer-langue.json
+ create mode 100644 reports/rapport-evaluer-langue.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | sed -n '1,40p'; echo \"=== status ===\"; git status --short | sed -n '1,40p'", "description": "Verify commit and remaining status"}`
+
+  ```
+09e54143 J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,8656 (87/88), GLOBAL INCHANGÉ
+ docs/pilotage/en-cours.md                          |   12 +-
+ docs/pilotage/roadmap.md                           |   10 +
+ docs/produit/README.md                             |   66 +-
+ journal/2026-11-14/README.md                       |    7 +-
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    8 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    2 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   12 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1883 ++++++++++++++++++++
+ .../rapport.md                                     |  192 ++
+ .../digest.md                                      |  147 ++
+ .../rapport.md                                     |   61 +-
+ reports/evaluer-lan
+… [694 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"revue=${PIPESTATUS[0]}\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"encours=${PIPESTATUS[0]}\"", "description": "Post-commit doc review and state"}`
+
+  ```
+revue de documentation · 726 fiche(s) · 820 JSON · 123 doc(s) · 84 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+  en-cours · 1624 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+encours=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -8; echo \"journal=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; echo \"budget=${PIPESTATUS[0]}\"", "description": "Journal and budget checks"}`
+
+  ```
+journal · 46 jour(s) · 187 session(s) · 2475 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+journal=0
+  T0 max : 3994 mots (budget 4 000)
+budget=0
+  ```
+
+- **bash** `{"command": "python3 tools/drave.py evaluer --par-langue >/dev/null 2>&1; echo PL-$?; python3 tools/tests/test_produit.py 2>&1 | tail -1", "description": "Acceptance commands"}`
+
+  ```
+PL-0
+OK
+  ```
+
+### 🤖 Assistant
+
+**J11.2 terminé et committé** — `09e54143`
+
+## Ce qui a été ajouté
+
+- **`evaluer --par-langue`** dans [`tools/drave.py`](tools/drave.py) : rejoue la même mesure sur les sous-golds **fr** et **en**, en texte (`PAR LANGUE`) et en JSON (`par_langue`), avec un **contrôle négatif recalculé par langue**.
+- **Documentation** dans [`docs/produit/README.md`](docs/produit/README.md) : § 3.3 (sortie actuelle + bloc par langue + lecture), § 7 (syntaxe et tableau des options), lien vers la fiche.
+- **Tests** dans [`tools/tests/test_produit.py`](tools/tests/test_produit.py) : `TestParLangue` (JSON, texte, non-régression de la mesure globale, cohérence des comptes). **18 tests OK**.
+- **Fiche + JSON** : [`reports/rapport-evaluer-langue.md`](reports/rapport-evaluer-langue.md), [`reports/evaluer-langue.json`](reports/evaluer-langue.json).
+- **État/roadmap** : `en-cours` et `roadmap` à jour, J11.2 marqué, suite = J11.3–J11.4.
+
+## Les chiffres
+
+| langue | phrases | tokens | POS | F1 | attachement | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **fr** | 402 | 2 031 | **0,8159** | **0,7475** | **151/151** | 0,9868 |
+| **en** | 210 | 1 148 | **0,9451** | **0,8656** | **87/88** (span 87/87) | 0,9886 |
+| global | 612 | 3 179 | 0,8625 | **0,7902** | **238/239** | 0,9874 |
+
+**Contrôle négatif** : cible exacte au hasard **1,99 %** (fr), **2,27 %** (en), **1,67 %** (tout), graine 0.
+
+**Le point de méthode** : l'anglais est devant, mais son gold est **100 % réel** quand le français ajoute **160 synthétiques**. Sur le réel seul l'écart tient (POS 0,9451 contre 0,8408 ; F1 0,8656 contre 0,7258), donc il reste **confondu avec la source** — la fiche le dit explicitement.
+
+## Vérifications
+
+- `python3 tools/drave.py evaluer --par-langue` → **PL-0**
+- `python3 tools/tests/test_produit.py` → **OK**, 18 tests
+- `bash tools/porte-produit.sh` → **verte**, 183/183 autotest
+- Revue de documentation, tableaux, schémas, journal, budget T0 (3 994/4 000) → **verts**
+
+Les modifications préexistantes hors périmètre (`reports/INDEX.md`, `tools/chantier/plan.json`, `tools/structures`, etc.) n'ont pas été touchées.
+

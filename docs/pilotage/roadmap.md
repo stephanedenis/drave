@@ -82,6 +82,17 @@ réel seul, l'écart tient (POS 0,9451 contre 0,8408 ; F1 0,8656 contre 0,7258) 
 `heuristique`) et la cohérence des comptes. [`fiche`](../../reports/rapport-evaluer-langue.md) +
 JSON. La suite produit est **J11.3** (50 textes libres), **J11.4** (schéma v2 documenté).
 
+**J11.3 — les 50 textes libres.** Les **50 phrases de l'audit A26** sont rejouées avec le
+code du 14/11 : **0 plantage**, **50/50 JSON valide**, **50/50 portent les 8 champs** du
+schéma v2 et passent la validation ; les **4 refus** sont des réponses JSON (code 3). En vue
+**`alternative`**, **395 segments** et **115 chevauchements** dans **21/46** textes ; en vue
+**`filtrer`**, **313 segments** et **0 chevauchement**. La restitution est **46/46
+canonique**, le strict **5/46** ; temps CLI médian **159,2 ms**, API **2,7 ms**. Comparaison
+A26 : **107 → 115 paires** (le code a changé, pas le compteur : `f50` 50 → 63, `f26`/`f29`
+1+2 → 0), les 8 champs passent de **0/46 à 50/50**, les refus de **code 1 sans JSON** à
+**code 3 avec JSON**. [`fiche`](../../reports/rapport-robustesse-semaine.md) + JSON. La suite
+produit est **J11.4** (schéma v2 documenté).
+
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 
 ## L'ordre du jour (carpe diem)

@@ -7,12 +7,12 @@
 | Identifiant | `session-9d3b2074-c5f0-4f11-be10-31d317bac657` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 04:33 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 83 |
-| Appels d'outils | 99 |
+| Messages | 86 |
+| Appels d'outils | 103 |
 | Fichiers touchés | 6 |
-| Commandes | 59 |
+| Commandes | 63 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J11.2 : ajouter `evaluer --par-langue` (le détail fr/en) et le documenter dans `docs/produit/README.md` ; test dan … [91 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*103 appels d'outils.* Actions notables :
 
 - bash — Show working dir and git status
 - bash — List key directories
@@ -41,7 +41,40 @@
 - bash — Read rest of evaluer_bloc
 - bash — Read existing per-language report
 - bash — Inspect plan.json structure
-- … et 74 autres
+- … et 78 autres
+
+**Synthèse produite :**
+
+**J11.2 terminé et committé** — `09e54143`
+
+\## Ce qui a été ajouté
+
+- **`evaluer --par-langue`** dans [`tools/drave.py`](tools/drave.py) : rejoue la même mesure sur les sous-golds **fr** et **en**, en texte (`PAR LANGUE`) et en JSON (`par_langue`), avec un **contrôle négatif recalculé par langue**.
+- **Documentation** dans [`docs/produit/README.md`](docs/produit/README.md) : § 3.3 (sortie actuelle + bloc par langue + lecture), § 7 (syntaxe et tableau des options), lien vers la fiche.
+- **Tests** dans [`tools/tests/test_produit.py`](tools/tests/test_produit.py) : `TestParLangue` (JSON, texte, non-régression de la mesure globale, cohérence des comptes). **18 tests OK**.
+- **Fiche + JSON** : [`reports/rapport-evaluer-langue.md`](reports/rapport-evaluer-langue.md), [`reports/evaluer-langue.json`](reports/evaluer-langue.json).
+- **État/roadmap** : `en-cours` et `roadmap` à jour, J11.2 marqué, suite = J11.3–J11.4.
+
+\## Les chiffres
+
+| langue | phrases | tokens | POS | F1 | attachement | top-k |
+|---|---:|---:|---:|---:|---:|---:|
+| **fr** | 402 | 2 031 | **0,8159** | **0,7475** | **151/151** | 0,9868 |
+| **en** | 210 | 1 148 | **0,9451** | **0,8656** | **87/88** (span 87/87) | 0,9886 |
+| global | 612 | 3 179 | 0,8625 | **0,7902** | **238/239** | 0,9874 |
+
+**Contrôle négatif** : cible exacte au hasard **1,99 %** (fr), **2,27 %** (en), **1,67 %** (tout), graine 0.
+
+**Le point de méthode** : l'anglais est devant, mais son gold est **100 % réel** quand le français ajoute **160 synthétiques**. Sur le réel seul l'écart tient (POS 0,9451 contre 0,8408 ; F1 0,8656 contre 0,7258), donc il reste **confondu avec la source** — la fiche le dit explicitement.
+
+\## Vérifications
+
+- `python3 tools/drave.py evaluer --par-langue` → **PL-0**
+- `python3 tools/tests/test_produit.py` → **OK**, 18 tests
+- `bash tools/porte-produit.sh` → **verte**, 183/183 autotest
+- Revue de documentation, tableaux, schémas, journal, budget T0 (3 994/4 000) → **verts**
+
+Les modifications préexistantes hors périmètre (`reports/INDEX.md`, `tools/chantier/plan.json`, `tools/structures`, etc.) n'ont pas été touchées.
 
 ## 3. Travail accompli
 
@@ -98,7 +131,7 @@
 - **T1** Generate evaluer-langue JSON fixed
 - **T1** Compute combined real subset metrics
 - **T1** Inspect task schema/status
-- … et 19 autres
+- … et 23 autres
 
 ## 4. Mesures et résultats marquants
 

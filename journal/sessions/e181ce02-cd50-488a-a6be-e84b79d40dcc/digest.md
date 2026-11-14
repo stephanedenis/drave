@@ -61640,3 +61640,12 @@ sam 14 nov 2026 04:37:31 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git log --oneline -1 | cut -c1-80", "description": "Suivre J11.2", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 04:46:39 EST
+2026-11-14 04:43:40 · ✔ J11.2 en 589.2 s (code 0) — ✅ python3 tools/drave.py evaluer --par-langue >/dev/null 2>&1; echo PL-$?; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-14 04:43:40 · ▶ J11.3 — Le produit — la robustesse des 50 textes (timeout 5400 s)
+09e54143 J11.2 — EVALUER --PAR-LANGUE : FR 0,8159/0,7475 (151/151), EN 0,9451/0,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre J11.3", "timeoutMs": 600000}`
