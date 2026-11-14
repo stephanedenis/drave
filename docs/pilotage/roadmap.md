@@ -133,7 +133,19 @@ La copie `tools/tests/cic/corpus_dor_cic_v1.json` est **byte-identique** à la s
 **verrou de portabilité** : « nos deux systèmes vérifient les mêmes preuves », pas une preuve de
 correction du noyau Panini (le corpus n'exerce que **20** des **39** étiquettes du format).
 [`fiche`](../../reports/rapport-cic-verificateur.md) + [`JSON`](../../reports/cic-verificateur.json).
-La prochaine mesure est **J13.1** (la table des mesures), puis **J14.1** (passe et tag).
+
+**J13.1 — la table des mesures.** Le chantier est **consolidé** en une table unique : **26 tâches**
+de J1.1 à J12.2, **25 acceptations vertes**, **1 échec** (J5.2, le tag), **5 timeouts** dont **4
+récupérés**. Chaque ligne porte sa **base** (612/602), son **avant**, son **après**, son **Δ**, un
+**contrôle négatif**, son **commit** et sa **fiche** : produit (**F1 0,7533 → 0,7902**,
+attachement **236/237 → 238/238 labels**, couverture **0,9916 → 0,9958**, spans **2 → 1**,
+schéma v2, restitution v1, 50 textes, 5 exemples, fr/en), tagger (**0,9475, +8,49**), Panini
+(table **14/14**, corpus **418/438**, retrieval, généalogie **154/154**, familles **0,619 vs
+0,0445**, §334, CIC **42/42**), portes (**183/183**, passe **81/84**). La **base 612/602** est
+re-mesurée au HEAD `b20a4c31` : **0,7902 / 0,7882** (F1), **238/239 / 234/239** (attachement). La
+clôture formelle reste **J14.1** (passe + tag `chantier-2026-11-14`).
+[`tableau`](../../reports/rapport-tableau-mesures.md) + [`JSON`](../../reports/tableau-mesures.json).
+La prochaine mesure est **J14.1** (passe et tag).
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 

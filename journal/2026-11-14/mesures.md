@@ -24,7 +24,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 325.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 325.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -37,5 +37,15 @@
 - [reports/rapport-s065.md](../../reports/rapport-s065.md)
 
 <!-- notes -->
-
+**J13.1 — la table des mesures.** Le chantier est consolidé en une table unique, de J1.1 à
+J12.2 : **26 tâches**, **25 acceptations vertes**, **1 échec** (J5.2, le tag), **5 timeouts**
+dont **4 récupérés**. Chaque ligne porte sa **base** (612/602), son **avant**, son **après**, son
+**Δ**, un **contrôle négatif**, son **commit** et sa **fiche**. Le produit tient (**F1 0,7533 →
+0,7902**, attachement **236/237 → 238/238 labels**, couverture **0,9916 → 0,9958**, spans
+**2 → 1**, schéma v2, restitution v1, 50 textes, 5 exemples, fr/en) ; le tagger vaut **0,9475
+(+8,49)** ; Panini est **borné** (table 14/14, corpus 418/438, généalogie 154/154, familles
+0,619 vs 0,0445, §334, CIC 42/42). La **base 612/602** est re-mesurée au HEAD `b20a4c31` :
+**0,7902 / 0,7882** (F1), **238/239 / 234/239** (attachement). La clôture reste **J14.1** (passe
++ tag). Fiche [`reports/rapport-tableau-mesures.md`](../../reports/rapport-tableau-mesures.md) +
+[`JSON`](../../reports/tableau-mesures.json).
 <!-- /notes -->

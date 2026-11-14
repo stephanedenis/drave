@@ -7,12 +7,12 @@
 | Identifiant | `session-c3f599ea-570a-4db4-ad78-8eff22004a4c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-14 05:43 |
-| Durée | 0.2 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 107 |
-| Appels d'outils | 126 |
+| Messages | 121 |
+| Appels d'outils | 138 |
 | Fichiers touchés | 5 |
-| Commandes | 115 |
+| Commandes | 122 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche J12.2 : le corpus d'or CIC (42 verdicts, preuve de Bruijn + sha256, portable) — écrire un **vérificateur indépenda … [159 caractères tronqués]
 
-*126 appels d'outils.* Actions notables :
+*138 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — Find J12 references in pilotage
@@ -41,7 +41,49 @@
 - bash — Find CIC context in reports
 - bash — Read CIC inventory sections
 - bash — List CIC corpus directory
-- … et 109 autres
+- … et 117 autres
+
+**Synthèse produite :**
+
+\## J12.2 — vérificateur indépendant CIC : livré, 42/42
+
+**Commit** : `b20a4c31` — *J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE*
+
+\### Livrables
+
+- **Vérificateur** : [`tools/verificateur_cic.py`](tools/verificateur_cic.py) — noyau CIC-lite réécrit côté Drave (de Bruijn, Π/λ/app, ℕ, Id/J, Σ, δ, etc.), **sans importer** `nipada.formalkernel.cic`.
+- **Corpus portable** : [`tools/tests/cic/corpus_dor_cic_v1.json`](tools/tests/cic/corpus_dor_cic_v1.json), copie **byte-identique** à Panini (`sha256 3018f6f4…aaec`, 46 714 octets), avec [`manifeste.json`](tools/tests/cic/manifeste.json).
+- **Porte** : [`tools/porte-cic.sh`](tools/porte-cic.sh) — 85ᵉ porte.
+- **Tests** : [`tools/tests/test_verificateur_cic.py`](tools/tests/test_verificateur_cic.py) — **21 tests**.
+- **Fiche** : [`reports/rapport-cic-verificateur.md`](reports/rapport-cic-verificateur.md) + [`reports/cic-verificateur.json`](reports/cic-verificateur.json).
+
+\### Mesure
+
+| contrôle | résultat |
+|---|---:|
+| verdicts | **42/42** (36 acceptés, 6 rejetés) |
+| empreintes `sha256(preuve \|\| type)` | **42/42** |
+| sérialisations canoniques | **42/42** |
+| preuves acceptées altérées (dernier octet +1) | **36/36 rejetées** |
+| mutations exhaustives d’un octet de `eq(2,2)` | **1 020/1 020 rejetées** |
+| non-trivialité (accepte-tout / rejette-tout) | **6** / **36** désaccords |
+| corpus corrompu de bout en bout | **refusé (code 1)** |
+| durée du rejeu complet | **≈ 0,34 s** |
+
+Les 6 rejets sont bien des témoins dont le type ne se convertit pas au type attendu : `refl 2` contre `Id(2,3)`, `refl 0` contre `Id(1,2)`, `refl 4` contre `Id(4,5)`, `refl 6` contre `Id(add 2 3,6)` (car `add 2 3 ≡ 5`), `refl 2` contre `ℕ`, et la paire `⟨3, refl(mul 2 2)⟩` contre `Σ x. Id(mul 2 x, 4)`.
+
+\### Vérifications de clôture
+
+- `bash tools/porte-cic.sh` : ✅ **verte**
+- `python3 tools/revue_documentation.py` : ✅
+- `python3 tools/verifie_en_cours.py` : ✅
+- `python3 tools/taille_documents.py` : ✅
+- `bash tools/porte-tableaux.sh` : ✅
+- `python3 tools/verifie_journal.py` : ✅
+- `python3 tools/verifier_schemas.py` : ✅
+
+**Réserve honnête** : la passe complète des 85 portes a été lancée ; je l’ai arrêtée après **27 portes, toutes vertes, 0 rouge** (dont `porte-cic`) pour ne pas laisser un job tourner. La fiche documente aussi la limite principale : le corpus n’exerce que **20 des 39 étiquet
+… [104 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -97,7 +139,7 @@
 - **T1** Read shift/subst
 - **T1** Read substN/apply_multi
 - **T1** Hash and provenance of corpus
-- … et 75 autres
+- … et 82 autres
 
 ## 4. Mesures et résultats marquants
 

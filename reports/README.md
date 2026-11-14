@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-tableau-mesures.md`](rapport-tableau-mesures.md) | **J13.1** — la table des mesures : POS, F1, attachement, couverture, spans, produit, Panini — avant/après, **base 612/602**, commits, **18 contrôles** |
 | [`rapport-bilan-chantier.md`](rapport-bilan-chantier.md) | **J10.1** — le bilan du chantier : F1 **0,7533 → 0,7902**, attachement **236 → 238**, Panini borné, **20/21**, 5 timeouts, 1 échec (le tag) |
 | [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit, intégration, décisions, rejets, reste |
 | [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches « instantané historique », 0 chiffre dépassé lu comme courant |

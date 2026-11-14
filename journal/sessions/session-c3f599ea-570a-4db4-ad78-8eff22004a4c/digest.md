@@ -2681,3 +2681,208 @@ porte-adaptateur-sortie 0 76
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/commit-j122.txt <<'EOF'\nJ12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABL … [1185 caractères tronqués]`
+
+  ```
+[s/v7 b20a4c31] J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+ 26 files changed, 5986 insertions(+), 38 deletions(-)
+ create mode 100644 journal/2026-11-14/distribue.md
+ create mode 100644 journal/sessions/session-c3f599ea-570a-4db4-ad78-8eff22004a4c/digest.md
+ create mode 100644 journal/sessions/session-c3f599ea-570a-4db4-ad78-8eff22004a4c/rapport.md
+ create mode 100644 reports/cic-verificateur.json
+ create mode 100644 reports/rapport-cic-verificateur.md
+ create mode 100755 tools/porte-cic.sh
+ create mode 100644 tools/tests/cic/README.md
+ create mode 100644 tools/tests/cic/corpus_dor_cic_v1.json
+ create mode 100644 tools/tests/cic/manifeste.json
+ create mode 100644 tools/tests/test_verificateur_cic.py
+ create mode 100644 tools/verificateur_cic.py
+commit_exit=0
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -50; echo \"---status\"; git status --short | head -30", "description": "Inspect commit contents and status"}`
+
+  ```
+b20a4c31 J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+ docs/pilotage/en-cours.md                          |   20 +-
+ docs/pilotage/roadmap.md                           |   19 +-
+ journal/2026-11-14/README.md                       |   23 +-
+ journal/2026-11-14/distribue.md                    |   29 +
+ journal/2026-11-14/docs.md                         |    2 +-
+ journal/2026-11-14/memoire.md                      |    2 +-
+ journal/2026-11-14/mesures.md                      |    2 +-
+ journal/2026-11-14/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/THEMES.md                                  |    1 +
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   20 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      |  119 +
+ .../rapport.md                                     |   50 +-
+ .../digest.md                                      | 2683 +++++++
+… [1082 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"J12.2\" journal/2026-11-14/README.md | head; git log -1 --format='%H %ad %s' --date=iso", "description": "Verify journal note and commit"}`
+
+  ```
+147:**J12.2 — le corpus d'or CIC rejoué hors de Panini : 42/42, et l'octet qui tue.**
+b20a4c311b6d5d314cfc8c0b9b5c4d16ccc72e3a 2026-11-14 05:54:42 -0500 J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=$(ls -dt work/portes-* | head -1); echo \"$D\"; wc -l \"$D/registre.txt\" 2>/dev/null; tail -6 \"$D/registre.txt\" 2>/dev/null; ps -eo pid,etime,cmd | grep -E \"porte-[a-z]\" | grep -v grep | head -3", "description": "Check full ga … [26 caractères tronqués]`
+
+  ```
+work/portes-1114-05h52
+4 work/portes-1114-05h52/registre.txt
+porte-adaptateur-sortie 0 76
+porte-audit-drapeaux 0 173
+porte-b1110-hybride 0 0
+porte-balayage 0 1
+2310615       00:05 timeout 1800 bash tools/porte-bloc-code.sh
+2310616       00:05 bash tools/porte-bloc-code.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verificateur_cic.py --json | python3 -c \"import json,sys; m=json.load(sys.stdin); print('verdict',m['verdict'],'accord',m['resultat']['accord'],'outil',m['outil_sha256'][:12])\"; python3 - <<'EOF'\nimport json,hashlib, … [273 caractères tronqués]`
+
+  ```
+verdict pass accord 42 outil fd3e00b27217
+json outil fd3e00b27217
+source hash fd3e00b27217
+  ```
+
+- **job_output** `{"job_id": "bash-89", "wait": true, "timeout_ms": 300000}`
+
+  ```
+porte-adaptateur-sortie ✅                          76 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+  porte-audit-drapeaux   ✅                         173 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           1 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          12 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          15 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           0 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          46 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          79 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          97 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard   
+… [449 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-89", "wait": true, "timeout_ms": 300000}`
+
+  ```
+porte-consolidation    ✅                          89 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         137 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-89", "wait": true, "timeout_ms": 300000}`
+
+  ```
+porte-cycle-c2         ✅                         128 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           0 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+  porte-delais           ✅                          22 s    ✅ le temps, lui, augmente : 6.92 s → 10.54 s (+3.6 s ≈ 50 ms × 64 pas)
+  porte-diff-couche      ✅                          19 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-echange-experts  ✅                          56 s    PORTE TENUE
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"== git ==\"; git log -1 --oneline; git status --short | grep -E \"cic|J12|en-cours|roadmap|journal/2026-11-14\" || echo \"aucune modification J12.2 non committée\"; echo \"== porte CIC ==\"; bash tools/porte-cic.sh | tail -3;  … [269 caractères tronqués]`
+
+  ```
+== git ==
+b20a4c31 J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE
+aucune modification J12.2 non committée
+== porte CIC ==
+  corpus corrompu : refusé (code 1)
+  tests : 21 cas
+✅ porte CIC verte : 42/42 verdicts, empreintes, octet altéré rejeté, corpus corrompu refusé
+== revue ==
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+== état ==
+  ✅ état court, structuré, multi-session et reprenable
+== taille ==
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **job_output** `{"job_id": "bash-89", "wait": true, "timeout_ms": 600000}`
+
+  ```
+porte-episodique       ✅                         174 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           1 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          25 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         218 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+[status: running]
+  ```
+
+- **job_kill** `{"job_id": "bash-89", "reason": "Passe complète trop longue (26/85 en ~35 min) ; la porte cible porte-cic est verte et les contrôles de clôture (revue, état, taille, tableaux, journal, schémas) sont passés. Arrêt pour ne pas laisser un job en arrière-plan."}`
+
+  ```
+requested cancellation of job bash-89
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && D=work/portes-1114-05h52; echo \"lignes: $(wc -l < $D/registre.txt)\"; awk '$2 != 0' \"$D/registre.txt\" | head; echo \"rouges: $(awk '$2 != 0' \"$D/registre.txt\" | wc -l)\"; tail -3 \"$D/registre.txt\"", "description": "Check parti … [23 caractères tronqués]`
+
+  ```
+lignes: 27
+rouges: 0
+porte-flux 0 25
+porte-fusion 0 8
+porte-gain 0 218
+  ```
+
+- **bash** `{"command": "ps -eo pid,ppid,etime,cmd | grep -E \"toutes-les-portes|porte-[a-z]\" | grep -v grep | head -10 || true", "description": "Check no stray gate processes"}`
+
+  ```
+(no output)
+  ```
+
+### 🤖 Assistant
+
+## J12.2 — vérificateur indépendant CIC : livré, 42/42
+
+**Commit** : `b20a4c31` — *J12.2 — LE CORPUS D'OR CIC EST REJOUÉ HORS DE PANINI : 42/42 VERDICTS, 42/42 EMPREINTES, 36/36 PREUVES ALTÉRÉES REJETÉES (1 020/1 020 MUTATIONS DE eq(2,2)) ; NOYAU DRAVE INDÉPENDANT, CORPUS PORTABLE*
+
+### Livrables
+
+- **Vérificateur** : [`tools/verificateur_cic.py`](tools/verificateur_cic.py) — noyau CIC-lite réécrit côté Drave (de Bruijn, Π/λ/app, ℕ, Id/J, Σ, δ, etc.), **sans importer** `nipada.formalkernel.cic`.
+- **Corpus portable** : [`tools/tests/cic/corpus_dor_cic_v1.json`](tools/tests/cic/corpus_dor_cic_v1.json), copie **byte-identique** à Panini (`sha256 3018f6f4…aaec`, 46 714 octets), avec [`manifeste.json`](tools/tests/cic/manifeste.json).
+- **Porte** : [`tools/porte-cic.sh`](tools/porte-cic.sh) — 85ᵉ porte.
+- **Tests** : [`tools/tests/test_verificateur_cic.py`](tools/tests/test_verificateur_cic.py) — **21 tests**.
+- **Fiche** : [`reports/rapport-cic-verificateur.md`](reports/rapport-cic-verificateur.md) + [`reports/cic-verificateur.json`](reports/cic-verificateur.json).
+
+### Mesure
+
+| contrôle | résultat |
+|---|---:|
+| verdicts | **42/42** (36 acceptés, 6 rejetés) |
+| empreintes `sha256(preuve \|\| type)` | **42/42** |
+| sérialisations canoniques | **42/42** |
+| preuves acceptées altérées (dernier octet +1) | **36/36 rejetées** |
+| mutations exhaustives d’un octet de `eq(2,2)` | **1 020/1 020 rejetées** |
+| non-trivialité (accepte-tout / rejette-tout) | **6** / **36** désaccords |
+| corpus corrompu de bout en bout | **refusé (code 1)** |
+| durée du rejeu complet | **≈ 0,34 s** |
+
+Les 6 rejets sont bien des témoins dont le type ne se convertit pas au type attendu : `refl 2` contre `Id(2,3)`, `refl 0` contre `Id(1,2)`, `refl 4` contre `Id(4,5)`, `refl 6` contre `Id(add 2 3,6)` (car `add 2 3 ≡ 5`), `refl 2` contre `ℕ`, et la paire `⟨3, refl(mul 2 2)⟩` contre `Σ x. Id(mul 2 x, 4)`.
+
+### Vérifications de clôture
+
+- `bash tools/porte-cic.sh` : ✅ **verte**
+- `python3 tools/revue_documentation.py` : ✅
+- `python3 tools/verifie_en_cours.py` : ✅
+- `python3 tools/taille_documents.py` : ✅
+- `bash tools/porte-tableaux.sh` : ✅
+- `python3 tools/verifie_journal.py` : ✅
+- `python3 tools/verifier_schemas.py` : ✅
+
+**Réserve honnête** : la passe complète des 85 portes a été lancée ; je l’ai arrêtée après **27 portes, toutes vertes, 0 rouge** (dont `porte-cic`) pour ne pas laisser un job tourner. La fiche documente aussi la limite principale : le corpus n’exerce que **20 des 39 étiquettes** du format portable ; l’indépendance est celle du **code**, pas celle de la spécification CIC-lite.
+

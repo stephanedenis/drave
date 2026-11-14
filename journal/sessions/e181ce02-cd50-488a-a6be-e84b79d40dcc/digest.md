@@ -61714,3 +61714,42 @@ budget consommé : 27703.2 s · lancements : 27
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J12.2", "timeoutM … [11 caractères tronqués]`
+
+  ```
+55bde5c5..bb68b820  s/v7 -> s/v7
+   55bde5c5..bb68b820  master -> master
+sam 14 nov 2026 05:57:42 EST
+2026-11-14 05:43:01 · ✔ J12.1 en 2065.4 s (code 0) — ✅ test -f reports/rapport-panini-334.md && echo FICHE-OK
+2026-11-14 05:43:01 · ▶ J12.2 — Panini — le corpus d'or CIC (timeout 5400 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ls reports/ | grep -E \"cic-verificateur\"", "description": "Suivre J12.2", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 06:06:47 EST
+2026-11-14 05:43:01 · ✔ J12.1 en 2065.4 s (code 0) — ✅ test -f reports/rapport-panini-334.md && echo FICHE-OK
+2026-11-14 05:43:01 · ▶ J12.2 — Panini — le corpus d'or CIC (timeout 5400 s)
+cic-verificateur.json
+rapport-cic-verificateur.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -2", "description": "Verdict J12.2", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 06:15:54 EST
+2026-11-14 05:43:01 · ✔ J12.1 en 2065.4 s (code 0) — ✅ test -f reports/rapport-panini-334.md && echo FICHE-OK
+2026-11-14 05:43:01 · ▶ J12.2 — Panini — le corpus d'or CIC (timeout 5400 s)
+budget consommé : 27703.2 s · lancements : 27
+  [a_faire ] J12.2  j12 — Panini — le corpus d'or CIC
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ps aux | grep -c \"[d]sh --profile headless\"", "description": "Suivre J12.2", "timeoutMs": 600000}`
+
+  ```
+sam 14 nov 2026 06:25:01 EST
+2026-11-14 06:23:01 · ✔ J12.2 en 2400.8 s (code 0) — ✅ test -f reports/rapport-cic-verificateur.md && echo FICHE-OK
+2026-11-14 06:23:02 · ▶ J13.1 — Les bilans — la table des mesures (timeout 5400 s)
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -1; timeout 120 git push origin master 2>&1 | tail -1; sleep 480; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre J13.1", "timeoutM … [11 caractères tronqués]`

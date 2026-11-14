@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **724 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **728 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -103,6 +103,7 @@
 | [rapport-cerveau-corrections.md](rapport-cerveau-corrections.md) | Corrections B12 — ce que le stress des sous-agents a changé |
 | [rapport-cerveau-modules.md](rapport-cerveau-modules.md) | Rapport — modules cerveau-langage M1–M9 |
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
+| [rapport-cic-verificateur.md](rapport-cic-verificateur.md) | J12.2 — Le corpus d'or CIC : 42/42 verdicts rejoués par un vérificateur indépendant |
 | [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |
 | [rapport-coherence-docs-2.md](rapport-coherence-docs-2.md) | Cohérence des documents avec le code — second passage |
 | [rapport-coherence-docs-3.md](rapport-coherence-docs-3.md) | Rapport — cohérence de la documentation, troisième passage |
@@ -384,6 +385,7 @@
 | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
 | [rapport-outillage-index.md](rapport-outillage-index.md) | B13 — l'outillage repris : `index_reports` a une aide, et l'index passe de 625 à 677 fiches |
 | [rapport-p0-flux.md](rapport-p0-flux.md) | P0 — Le harnais de flux : compter ce qu'on paie, par provenance |
+| [rapport-panini-334.md](rapport-panini-334.md) | J12.1 — Le §334 et les 44 œuvres : le retrieval et la prédiction de l'époque vs la filiation |
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |
 | [rapport-parcimonie-imposee.md](rapport-parcimonie-imposee.md) | Parcimonie imposée à l'inférence — la frontière mesurée |
@@ -690,6 +692,7 @@
 | [rapport-s-corpus-reel.md](rapport-s-corpus-reel.md) | S — L'analyseur lit le français propre (65,5 % de GN+GV), pas le CEGEP OCR (8,5 %, plancher du mélange) |
 | [rapport-s-fait-divers.md](rapport-s-fait-divers.md) | S — Le fait divers est tranché : 61/61 types, 144/144 rôles ; la tête du GN arrête le verbe |
 | [rapport-s-limites-v6.md](rapport-s-limites-v6.md) | S — Les trois limites de la v4 sont fermées : h050, h053 et « si fort que » ; 60/60 types, 142/142 rôles |
+| [rapport-s-paragraphes.md](rapport-s-paragraphes.md) | S — La banque de paragraphes passe à neuf : six paires d'Alice, sources anglaises et référents |
 | [rapport-s-traductions.md](rapport-s-traductions.md) | S — La traduction contrôle le sens : 14/14 référents anaphoriques confirmés par l'anglais, le « les » → « it » retrouvé |
 | [rapport-s065.md](rapport-s065.md) | B13 — s065 : la REL « qui commence » est attachée au sujet du GV qui la suit |
 | [rapport-s4-prechargement-moteur.md](rapport-s4-prechargement-moteur.md) | S4 — la prélecture dans le moteur : le calcul ne paie plus les défauts de page |
@@ -709,6 +712,7 @@
 | [rapport-spans-v7.md](rapport-spans-v7.md) | Rapport — les 43 spans non prédits de l'attachement v7 |
 | [rapport-speculatif-reflexe.md](rapport-speculatif-reflexe.md) | Le réflexe propose, le cerveau vérifie — acceptation 2 à 30 % (le cerveau non entraîné : 0 %) |
 | [rapport-sprint-24h.md](rapport-sprint-24h.md) | Sprint 24 h — bilan B12 → B18 |
+| [rapport-tableau-mesures.md](rapport-tableau-mesures.md) | J13.1 — la table des mesures : F1 0,7533 → 0,7902, attachement 236/237 → 238/238, base 612/602 |
 | [rapport-tableaux-casses.md](rapport-tableaux-casses.md) | Un tableau qui ne rend pas est un tableau qui n'existe pas — 17 lignes, 9 fichiers, et une porte |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |
