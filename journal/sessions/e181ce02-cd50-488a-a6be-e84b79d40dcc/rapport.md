@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 358.0 h |
 | Tours | 199 |
-| Messages | 4000 |
-| Appels d'outils | 3573 |
+| Messages | 4006 |
+| Appels d'outils | 3579 |
 | Fichiers touchés | 25 |
-| Commandes | 2956 |
+| Commandes | 2962 |
 | Sous-agents | 43 |
-| Commits | 481 |
+| Commits | 482 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*81 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,7 +10709,7 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 45 autres
+- … et 51 autres
 
 **Synthèse produite :**
 
@@ -10835,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2916 autres
+- … et 2922 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11464,4 +11464,5 @@ Je commence.
 - ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT" 2>&1 | tail -2; git log
 - BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES" 2>&1
 - Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURISTIQUE SINON, CODE 0 DANS TOUS LES CAS ; LA DÉCISION RESTE À L'HUMAIN" 2>&1 | tail -2; gi
+- ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push orig
 

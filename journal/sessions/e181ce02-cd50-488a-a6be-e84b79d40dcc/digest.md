@@ -65813,3 +65813,60 @@ reports/rapport-tagger-auto.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/produit/README.md | head -6 | cut -c1-150; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 14 … [693 caractères tronqués]`
+
+  ```
+diff --git a/docs/produit/README.md b/docs/produit/README.md
+index 4ddf9337..184a7c11 100644
+--- a/docs/produit/README.md
++++ b/docs/produit/README.md
+@@ -480,10 +480,19 @@ synthétique porte le reste du gain. Dispositif, coût et contrôle négatif :
+ [`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md).
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4039 mots (AGENTS + en-cours + une tâche) > budget 4 000
+[s/v7 f706aec0] Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURISTIQUE SINON, CODE 0 DANS TOUS LES CAS ; LA DÉCISION RESTE À L'HUMAIN
+ 16 files changed, 264 insertions(+), 39 deletions(-)
+f706aec0 Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURI
+   f63ad709..f706aec0  s/v7 -> s/v7
+   f63ad709..f706aec0  master -> master
+dim 15 nov 2026 14:42:27 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^\\*\\*Semaine 2\" docs/pilotage/en-cours.md | cut -c1-300", "description": "Voir la ligne Semaine 2"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Semaine 2\\|semaine 2\" docs/pilotage/en-cours.md | head -3 | cut -c1-260", "description": "Trouver la semaine 2"}`
+
+  ```
+66:- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3` opt-in ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2
+119:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, fermé −1,55 ; W3 : défaut hors ligne code 0, `--tagger` code 4 sans clé, 1 000 phrases = 
+144:  [semaine 2](semaine-2.md) · [backlog](backlog/index.md) · preuves : [reports/](../../reports/) ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:5]\nfor i in idx … [117 caractères tronqués]`
+
+  ```
+118 158 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W
+126 67 **N2** — porte (0,2856/0,3566) ; **Pensée** — `g017`, T132/T133, gold de pensée, **J4 — or de rôles*
+117 62 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)*
+65 52 - **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/
+90 49 - **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '118p' docs/pilotage/en-cours.md | cut -c1-700", "description": "Lire la ligne R"}`
+
+  ```
+| **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 (manque **0,2856** val / **0,3566** test) ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 (manque **0,2856** val / **0,3566 … [1005 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens**\", \"**W2 : 402 0, … [630 caractères tronqués]`

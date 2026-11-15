@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**41 commits** · **1 session(s)** · **7 thème(s)**
+**42 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 10 | [docs.md](docs.md) |
-| memoire | 2 | [memoire.md](memoire.md) |
+| memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 16 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -70,6 +70,7 @@
 | 14:01 | `158dee4d` | ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT |
 | 14:10 | `f63ad709` | BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES |
 | 14:26 | `519b729f` | J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS |
+| 14:39 | `f706aec0` | Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURISTIQUE SINON, CODE 0 DANS TOUS LES CAS ; LA DÉCISION RESTE À L'HUMAIN |
 
 ## Le récit de la journée (écrit à la main)
 
