@@ -64496,3 +64496,88 @@ d23780d7 D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger 
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 -- reports/rapport-restitution-v2.md | cut -c1-80; git log --oneline -1 -- reports/rapport-gold-reel-50.md | cut -c1-60; echo \"---\"; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours. … [1232 caractères tronqués]`
+
+  ```
+5b2d07fc D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CO
+---
+ create mode 100644 reports/rapport-gold-reel-50.json
+ create mode 100644 reports/rapport-gold-reel-50.md
+4d6cffc4 PHASE 4 — D1-D3 (LES EXEMPLES DU TAGGER, LA RESTITUTION v2, LA FAQ 10/10) ; L'IND
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7; date; head -8 reports/rapport-restitution-v2.md | cut -c1-150; … [128 caractères tronqués]`
+
+  ```
+e42bac4f..4d6cffc4  s/v7 -> s/v7
+   e42bac4f..4d6cffc4  master -> master
+0
+dim 15 nov 2026 06:22:41 EST
+# B13 — la restitution v2 : les rôles se lisent, leur fidélité ne suit pas
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : D2 · **Date** : 2026-11-15 ·
+> **Verdict** : ❌ **négatif sur la fidélité** — la forme est fidèle (46/46), la sémantique
+> ne l'est pas : **19/46 cadres exacts** (dont **16 non vides**), **F1 0,5270**, **32 faux
+> positifs** et **38 faux négatifs**.
+>
+> **La question.** Au-delà de la surface exacte (v0 : 46/46) et de la forme canonique
+=== FAQ :
+# B13 / D3 — la FAQ du produit : dix questions, dix réponses vérifiées
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **D3** · **Date** : 2026-11-15 ·
+> **Verdict** : ✅ **10/10 réponses vérifiées** contre le code courant (`drave 0.1.0`) ;
+> **contrôle négatif détecté** (deux affirmations fausses sont rejetées par le code).
+>
+  ```
+
+### 🤖 Assistant
+
+⏵ Les travaux sont livrés jusqu'à 06 h 30. J'écris le **bilan de la semaine** (le livrable pour votre retour)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-bilan-semaine.md <<'MD'\n# Le bilan de la semaine (07 → 15/11) — le produit gagne 3,7 points, Panini est borné, le harnais tient\n\n> **Ce que ce bilan est.** La **synthèse de la semaine** : le produit, Panini,  … [5526 caractères tronqués]`
+
+  ```
+· T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 745 fichiers, le disque en a 746
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [651 caractères tronqués]`
+
+  ```
+· T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 124 documents, le disque en a 123
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\| documents de `docs/` \\| \\*\\*\\d+\\*\\*\", \"| documents de `docs/` | **123**\", t)\nt=t.replace(\"**Nuit 14-15/11* … [939 caractères tronqués]`
+
+  ```
+· T0 : 4008 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:4]\nfor i in idx … [117 caractères tronqués]`
+
+  ```
+121 62 | **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7
+79 56 - **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte (−0,03/−0,01/−0,004 ; 
+91 52 - **Panini J2.1–J3.2 + B2** : **14 atomes** ; UDHR **418/438** ; J3.2 : **5/21** langues (Glottolog **21/21**), **154/15
+120 51 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 + conventi
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '121p;120p' docs/pilotage/en-cours.md | cut -c1-330", "description": "Lire les deux lignes longues"}`
+
+  ```
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, gold 432, r035 + convention GV (0,7902), s065 (238/239), g017 rejeté, schéma v2, restitution v1 (canonique 46/46, strict 0,1087), J11.1–J11.4 (produit)** | **trancher `g017`** ; puis T132/T133, gold 200+ ; **B10.3 bloquée** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13 : 183/183, gold 432, r035 + convention GV (0,7902), s065 (238/239), g017 rejeté, schéma v2, restitution v1 (canonique … [472 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 06 h 40 HNE (bilan de la semaine écrit)**\\n\", t, count=1) … [606 caractères tronqués]`

@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 349.7 h |
 | Tours | 198 |
-| Messages | 3883 |
-| Appels d'outils | 3459 |
+| Messages | 3891 |
+| Appels d'outils | 3467 |
 | Fichiers touchés | 25 |
-| Commandes | 2873 |
+| Commandes | 2881 |
 | Sous-agents | 43 |
-| Commits | 466 |
+| Commits | 467 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*100 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,11 +10645,11 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 67 autres
+- … et 75 autres
 
 **Synthèse produite :**
 
-⏵ Les 6 tâches C/B sont livrées (02 h → 04 h). Je lis les résultats, puis la passe d'honnêteté et les bilans
+⏵ Les travaux sont livrés jusqu'à 06 h 30. J'écris le **bilan de la semaine** (le livrable pour votre retour)
 
 ## 3. Travail accompli
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2833 autres
+- … et 2841 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11385,4 +11385,5 @@ Je commence.
 - DOC PRODUIT — LA PASSE D'HONNÊTETÉ : LES TROIS BASES (612, 602, RÉEL 452), L'ATTACHEMENT 238/239, LE TAGGER 95,75, LES CHIFFRES DATÉS ANNOTÉS" 2>&1 | tail -2; g
 - BILAN DE LA NUIT — LE TAGGER (95,75), LA BASE HONNÊTE (452), LA PHASE C/B (N2, S, R, PANINI) ET LES NÉGATIFS DITS" 2>&1 | tail -2; git log -1 --format='%h %s' |
 - PHASE 4 — D1-D3 (LES EXEMPLES DU TAGGER, LA RESTITUTION v2, LA FAQ 10/10) ; L'INDEX, LA FICHE C3 ORPHELINE (GOLD RÉEL 50) ET LE PLAN COMMITTÉS" 2>&1 | tail -2; 
+- BILAN DE LA SEMAINE — LE PRODUIT (F1 0,7902, 238/239, TAGGER 95,75), PANINI BORNÉ (DEUX NÉGATIFS), LA COORDINATION, LE HARNAIS (38 LANCEMENTS) ; LES 5 DÉCISIONS
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **741 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **743 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -83,6 +83,7 @@
 | [rapport-base-reelle.md](rapport-base-reelle.md) | B13 — la base honnête : `evaluer --reel`, 452 phrases réelles, et ce que le synthétique cachait |
 | [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
 | [rapport-bilan-nuit.md](rapport-bilan-nuit.md) | Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B |
+| [rapport-bilan-semaine.md](rapport-bilan-semaine.md) | Le bilan de la semaine (07 → 15/11) — le produit gagne 3,7 points, Panini est borné, le harnais tient |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
@@ -183,6 +184,7 @@
 | [rapport-exemples-rejoues.md](rapport-exemples-rejoues.md) | J11.1 — les cinq exemples rejoués : 4 blocs sur 5 ont bougé, `r035` n'est plus un échec |
 | [rapport-exemples-tagger.md](rapport-exemples-tagger.md) | D1 — les exemples `--tagger` et `--reel` : le coût affiché, la base honnête, cinq blocs rejoués |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
+| [rapport-faq.md](rapport-faq.md) | B13 / D3 — la FAQ du produit : dix questions, dix réponses vérifiées |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
 | [rapport-fiabilite-produit.md](rapport-fiabilite-produit.md) | Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes |
 | [rapport-file-taches.md](rapport-file-taches.md) | La file des tâches — inventaire, trois files et ordre pour 09 h 30 → 12 h |
