@@ -2801,3 +2801,94 @@ python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit --amend -m \"TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES\" -m \"Tâche E2. Quatre cas, transport fact … [796 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-95]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-95", "timeout_ms": 120000, "wait": true}`
+
+  ```
+[s/v7 840e613e] TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES
+ Date: Sun Nov 15 07:04:51 2026 -0500
+ 24 files changed, 3763 insertions(+), 49 deletions(-)
+ create mode 100644 journal/2026-11-15/memoire.md
+ create mode 100644 journal/sessions/session-01599146-2479-4a06-8381-4ace3d13f579/digest.md
+ create mode 100644 journal/sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md
+ create mode 100644 reports/rapport-tagger-erreurs.json
+ create mode 100644 reports/rapport-tagger-erreurs.md
+AMEND-CODE=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py 2>&1 | tail -20; echo \"JOURNAL-AUTO-CODE=${PIPESTATUS[0]}\"; git status --short | head -30", "description": "Regenerate journal after amend"}`
+
+  ```
+2026-11-15 : 20 commits
+  journal/2026-11-15/distribue.md
+  journal/2026-11-15/docs.md
+  journal/2026-11-15/mesures.md
+  journal/2026-11-15/outils.md
+  journal/2026-11-15/portes.md
+  (retiré, thème vide) journal/2026-11-15/memoire.md
+  journal/2026-11-15/README.md
+  journal/THEMES.md
+8 fichiers écrits · 20 commits classés
+JOURNAL-AUTO-CODE=0
+ M journal/2026-11-15/README.md
+ D journal/2026-11-15/memoire.md
+ M journal/2026-11-15/mesures.md
+ M journal/THEMES.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"840e613e\\|CAS D'ERREUR\" journal/2026-11-15/README.md journal/2026-11-15/mesures.md | head; echo ---; git diff --stat -- journal", "description": "Check journal includes commit"}`
+
+  ```
+journal/2026-11-15/README.md:49:| 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
+journal/2026-11-15/mesures.md:20:| 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
+---
+ journal/2026-11-15/README.md  |  7 +++----
+ journal/2026-11-15/memoire.md | 24 ------------------------
+ journal/2026-11-15/mesures.md |  4 +++-
+ journal/THEMES.md             |  1 -
+ 4 files changed, 6 insertions(+), 30 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"E2 — les cas\" -A 10 journal/2026-11-15/mesures.md | head -14; echo ---; git diff -- journal/2026-11-15/mesures.md | sed -n '1,80p'", "description": "Verify E2 note preserved"}`
+
+  ```
+77:### E2 — les cas d'erreur du tagger : la clé refusée sort 4, le reste replie
+78-
+79-Quatre cas, un transport factice, **18/18 tests**, **0 socket**. La **clé absente** sortait déjà
+80-**4** ; la **clé invalide** (HTTP 401/403) rendait **0** avec un repli heuristique muet — elle
+81-sort désormais **4**, message clair, `stdout` vide, sans repli. Le **réseau coupé** (3 essais du
+82-client) et le **refus du modèle** (texte non JSON, JSON incomplet) restent des refus **par
+83-phrase** : repli heuristique, code **0**, cause dans `refus`, POS `source=heuristique`. Un
+84-transport valide donne code **0** et des POS neuronaux (contrôle négatif) ; retirer le contrôle
+85-401/403 fait échouer le test (`0 != 4`). [`fiche`](../../reports/rapport-tagger-erreurs.md) ·
+86-[`JSON`](../../reports/rapport-tagger-erreurs.json).
+87-<!-- /notes -->
+---
+diff --git a/journal/2026-11-15/mesures.md b/journal/2026-11-15/mesures.md
+index 6a4dfdee..d2f20e61 100644
+--- a/journal/2026-11-15/mesures.md
++++ b/journal/2026-11-15/mesures.md
+@@ -4,7 +4,7 @@
+ > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
+ > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](READM
+… [1546 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-15/README.md journal/2026-11-15/memoire.md journal/2026-11-15/mesures.md journal/THEMES.md && git diff --cached --check; echo \"CHECK=$?\"; git commit -m \"JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER … [192 caractères tronqués]`

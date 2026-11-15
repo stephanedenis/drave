@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**20 commits** · **1 session(s)** · **6 thème(s)**
+**20 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,8 +13,7 @@
 |---|---|---|
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
-| memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 9 | [mesures.md](mesures.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -47,7 +46,7 @@
 | 06:20 | `4d6cffc4` | PHASE 4 — D1-D3 (LES EXEMPLES DU TAGGER, LA RESTITUTION v2, LA FAQ 10/10) ; L'INDEX, LA FICHE C3 ORPHELINE (GOLD RÉEL 50) ET LE PLAN COMMITTÉS |
 | 06:23 | `503da67e` | BILAN DE LA SEMAINE — LE PRODUIT (F1 0,7902, 238/239, TAGGER 95,75), PANINI BORNÉ (DEUX NÉGATIFS), LA COORDINATION, LE HARNAIS (38 LANCEMENTS) ; LES 5 DÉCISIONS EXÉCUTÉES |
 | 06:31 | `7d4e3bc5` | E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES |
-| 07:04 | `d1c1e467` | TAGGER — LES CAS D'ERREUR MESURÉS : CLÉ REFUSÉE → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
+| 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
 
 ## Le récit de la journée (écrit à la main)
 

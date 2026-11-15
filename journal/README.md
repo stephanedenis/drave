@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [memoire](2026-11-15/memoire.md) · [mesures](2026-11-15/mesures.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
+| **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [mesures](2026-11-15/mesures.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
 | **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [distribue](2026-11-14/distribue.md) · [docs](2026-11-14/docs.md) · [memoire](2026-11-14/memoire.md) · [mesures](2026-11-14/mesures.md) · [moteur](2026-11-14/moteur.md) · [portes](2026-11-14/portes.md) |
 | **2026-11-13** | [2026-11-13/README.md](2026-11-13/README.md) | [distribue](2026-11-13/distribue.md) · [docs](2026-11-13/docs.md) · [memoire](2026-11-13/memoire.md) |
 | **2026-11-07** | [2026-11-07/README.md](2026-11-07/README.md) | [distribue](2026-11-07/distribue.md) · [docs](2026-11-07/docs.md) · [memoire](2026-11-07/memoire.md) · [mesures](2026-11-07/mesures.md) · [modele](2026-11-07/modele.md) · [portes](2026-11-07/portes.md) |
@@ -232,7 +232,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
-| `session-` | Tâche E2 : cas d'erreur tagger | 2026-11-15 06:34 | 0.6 h | 1 | 167 | 8 | 2 | [rapport](sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md) |
+| `session-` | Tâche E2 : cas d'erreur tagger | 2026-11-15 06:34 | 0.6 h | 1 | 172 | 8 | 3 | [rapport](sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md) |
 | `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 208 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
 | `session-` | Passe portes, relevé rouges, tag annoté | 2026-11-13 23:11 | 1.4 h | 1 | 75 | 1 | 0 | [rapport](sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md) |
 | `session-` | Prédiction Drave par atomes | 2026-11-15 03:06 | 0.8 h | 1 | 221 | 0 | 3 | [rapport](sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md) |

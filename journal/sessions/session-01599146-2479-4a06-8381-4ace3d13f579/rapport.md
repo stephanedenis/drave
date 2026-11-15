@@ -9,12 +9,12 @@
 | Début | 2026-11-15 06:34 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 138 |
-| Appels d'outils | 167 |
+| Messages | 143 |
+| Appels d'outils | 172 |
 | Fichiers touchés | 8 |
-| Commandes | 95 |
+| Commandes | 99 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche E2 : les cas d'erreur de `--tagger` — la clé absente (code 4), la clé invalide (code 4, message clair), le réseau  … [289 caractères tronqués]
 
-*167 appels d'outils.* Actions notables :
+*172 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - glob
@@ -41,7 +41,7 @@
 - bash — Search for error handling patterns
 - bash — Check git history for tagger error handling
 - bash — Find all tagger error docs in README
-- … et 120 autres
+- … et 124 autres
 
 **Synthèse produite :**
 
@@ -104,7 +104,7 @@ I'll implement the error-handling contract, then add the tests, docs and report.
 - **T1** Inspect en-cours counters and header
 - **T1** Read en-cours relevant sections
 - **T1** Find roadmap B13/R0.7 lines
-- … et 55 autres
+- … et 59 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -149,6 +149,7 @@ I'll implement the error-handling contract, then add the tests, docs and report.
 - **T1** `31:| 01:39 | `2d7a7f2b` | 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5) |`
 - **T1** `32:| 01:42 | `6560a0a5` | 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612) |`
 - **T1** `[still running after 60000ms; moved to background job bash-95]`
+- **T1** `[still running after 60000ms; moved to background job bash-99]`
 
 ## 5. Erreurs rencontrées
 
@@ -160,4 +161,5 @@ I'll implement the error-handling contract, then add the tests, docs and report.
 
 - TAGGER — LES CAS D'ERREUR MESURÉS : CLÉ REFUSÉE → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES" -m "Tâ
 - TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONT
+- JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18)" 2>&1 | tail -8; ech
 
