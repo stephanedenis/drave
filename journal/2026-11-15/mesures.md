@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (15)
+## Commits du jour (16)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -23,6 +23,7 @@
 | 10:59 | `93e046f7` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE | `en-cours.md`, `README.md`, `distribue.md` (+18) |
 | 12:08 | `9960b37f` | SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN | `en-cours.md`, `roadmap.md`, `README.md` (+27) |
 | 13:19 | `e1a28307` | SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES | `en-cours.md`, `README.md`, `plan.md` (+5) |
+| 14:10 | `f63ad709` | BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 
 ## Chiffres du jour
 
@@ -32,13 +33,14 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 357.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 357.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-atomes-prediction.md](../../reports/rapport-atomes-prediction.md)
+- [reports/rapport-bilan-jour-1115.md](../../reports/rapport-bilan-jour-1115.md)
 - [reports/rapport-bilan-nuit.md](../../reports/rapport-bilan-nuit.md)
 - [reports/rapport-cic-v2.md](../../reports/rapport-cic-v2.md)
 - [reports/rapport-coordination-n2-v2.md](../../reports/rapport-coordination-n2-v2.md)

@@ -6,6 +6,7 @@ Une seule commande, quatre gestes, hors ligne et déterministe :
     python3 tools/drave.py analyser "Le chat dort."
     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
     python3 tools/drave.py analyser "Le chat dort." --tagger          # API DeepSeek (clé, réseau)
+    python3 tools/drave.py analyser "Le chat dort." --tagger auto     # API si clé, sinon heuristique
     python3 tools/drave.py evaluer
     python3 tools/drave.py evaluer --gold --json
     python3 tools/drave.py evaluer --tagger --json                    # heuristique + cascade API
@@ -23,6 +24,10 @@ depuis le niveau `graphème`, pas un décodeur neuronal.
 En **option** (`--tagger`, `analyser` et `evaluer`), le POS (et lui seul) vient du tagger de
 l'API DeepSeek : la clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key` puis
 `DEEPSEEK_API_KEY` ; le cache du client évite de refaire un appel ; la clé n'est jamais affichée.
+`analyser --tagger auto` choisit : API si une clé existe, heuristique sinon, **sans jamais
+changer le code de sortie** (0 dans les deux cas, 3 pour un refus) ; `stderr` dit lequel a servi,
+et la ligne `TAGGER API` porte le coût de l'appel quand il a eu lieu. Le mode `auto` est un
+**prototype** : il ne change pas le défaut, qui reste l'heuristique hors ligne.
 **Sans `--tagger`, le défaut ne change pas** : heuristique, CPU, hors ligne, déterministe.
 Ce que la commande n'expose pas : le neuronal local (`llama-cli` ou endpoint), la traduction et la
 génération : ils demandent des poids, un service ou un GPU.
@@ -143,6 +148,115 @@ def _client_tagger():
     """Le client de l'API. L'import est **local** : le défaut ne charge pas le module réseau."""
     from tools.llm.deepseek import DeepSeek
     return DeepSeek(cle=_cle_tagger())
+
+
+def _cle_tagger_presente() -> bool:
+    """Vrai si une clé est trouvée — sans importer le module réseau et sans l'afficher."""
+    try:
+        _cle_tagger()
+    except CleTaggerAbsente:
+        return False
+    return True
+
+
+def _sans_secret(message: str) -> str:
+    """Retire la clé d'un message de diagnostic si elle y apparaissait par accident."""
+    try:
+        cle = _cle_tagger()
+    except CleTaggerAbsente:
+        return message
+    if cle and cle in message:
+        return message.replace(cle, "<clé>")
+    return message
+
+
+class _TaggerAuto:
+    """Le mode `auto` du tagger : API si une clé existe, heuristique sinon.
+
+    Ce qu'il garantit :
+
+    - **aucun code 4** : une clé refusée (401/403) ou un réseau coupé n'arrête pas le run ;
+      l'analyse est rendue par l'heuristique, code 0, avec la cause dans `refus` ;
+    - **aucun appel réseau sans clé** : la cascade n'est même pas construite ;
+    - **la même analyse que le défaut** quand aucune clé n'existe : l'annotation sort de
+      `Heuristique.analyser`, sans `refus` ajouté et sans source modifiée ;
+    - un **message** (`message()`) qui dit lequel a servi, sans jamais nommer la clé.
+
+    Le mode est un **prototype** : il ne change pas le défaut, qui reste l'heuristique.
+    """
+
+    nom = "auto"
+
+    def __init__(self, heuristique: bl.Heuristique, cascade=None, stats: dict | None = None):
+        self.h = heuristique
+        self.cascade = cascade
+        self.stats = stats
+        self.cle_presente = cascade is not None
+        self.api_servie = 0
+        self.replis = 0
+        self.cause = ""
+        # une fois la panne constatée, on ne rappelle plus l'API pour les phrases suivantes
+        self.panne = False
+
+    def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> bl.Annotation:
+        if self.cascade is not None and not self.panne:
+            try:
+                annotation = self.cascade.analyser(texte, langue, contexte)
+            except CleTaggerRefusee as exc:
+                self.panne = True
+                self.cause = f"clé refusée (HTTP {exc.code})"
+                return self._heuristique(texte, langue, contexte)
+            if not annotation.refus:
+                self.api_servie += 1
+                return annotation
+            if not annotation.refus.startswith("neuronal"):
+                # refus du texte (vide, non texte) : ce n'est pas une panne du tagger
+                return annotation
+            self.panne = True
+            self.cause = annotation.refus
+        return self._heuristique(texte, langue, contexte)
+
+    def _heuristique(self, texte: str, langue: str | None,
+                     contexte: str | None) -> bl.Annotation:
+        annotation = self.h.analyser(texte, langue, contexte)
+        if annotation.refus:
+            # le texte lui-même est refusé : le code 3 reste celui de l'analyse
+            return annotation
+        self.replis += 1
+        if self.cause:
+            annotation.refus = _sans_secret(
+                f"tagger auto : {self.cause} ; heuristique")
+        return annotation
+
+    def message(self) -> str:
+        """Le message `stderr` : lequel a servi, et pourquoi, sans la clé."""
+        if self.cascade is None:
+            if self.cle_presente:
+                return "heuristique (clé présente ; refus du texte, aucun appel)"
+            return "heuristique (clé absente)"
+        if self.cause:
+            if self.api_servie:
+                return (f"API (clé présente) puis heuristique sur {self.replis} phrase(s) "
+                        f"(repli : {_sans_secret(self.cause)})")
+            return f"heuristique (repli : {_sans_secret(self.cause)})"
+        if self.api_servie:
+            appels = (self.stats or {}).get("appels", 0)
+            if appels:
+                return "API (clé présente)"
+            return "API disponible (clé présente) ; non appelée (heuristique suffisante)"
+        return "heuristique"
+
+    def titre(self) -> str:
+        """Le titre de la sortie lisible : il dit la voie qui a réellement servi."""
+        if self.cascade is None:
+            return f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)"
+        if self.cause:
+            return (f"{NOM} {VERSION} — analyse heuristique "
+                    f"(tagger auto : repli après échec de l'API)")
+        if (self.stats or {}).get("appels", 0):
+            return f"{NOM} {VERSION} — analyse cascade POS (tagger auto : API DeepSeek, réseau)"
+        return f"{NOM} {VERSION} — analyse heuristique (tagger auto : API disponible, non appelée)"
 
 
 def _transport_tagger(client, stats: dict):
@@ -304,14 +418,16 @@ class _Formateur(argparse.RawDescriptionHelpFormatter):
 
 
 def formater_annotation(a: bl.Annotation, tagger: bool = False,
-                        stats: dict | None = None) -> str:
+                        stats: dict | None = None, titre: str | None = None) -> str:
     """La sortie lisible : POS compact, syntagmes (rôle + cible), pragmatique, couverture.
 
     Avec `--tagger`, l'en-tête le dit, le coût de l'API est affiché et un refus du tagger est
-    nommé — le JSON d'annotation, lui, garde exactement le même contrat.
+    nommé — le JSON d'annotation, lui, garde exactement le même contrat. `titre` permet au mode
+    `auto` de nommer la voie qui a réellement servi (API, heuristique, ou repli).
     """
-    titre = (f"{NOM} {VERSION} — analyse cascade POS (tagger API DeepSeek, réseau)"
-             if tagger else f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)")
+    if titre is None:
+        titre = (f"{NOM} {VERSION} — analyse cascade POS (tagger API DeepSeek, réseau)"
+                 if tagger else f"{NOM} {VERSION} — analyse heuristique (CPU, hors ligne)")
     lignes = [titre]
     lignes.append(
         f"langue={a.langue} script={a.script} source={a.source} · {len(a.etiquettes)} étiquettes "
@@ -390,11 +506,12 @@ def _lire_entree(args: argparse.Namespace) -> str:
 
 
 def _analyser_jsonl(texte: str, args: argparse.Namespace, h: bl.Heuristique, bloc,
-                    stats: dict | None = None) -> int:
+                    stats: dict | None = None, auto: _TaggerAuto | None = None) -> int:
     """Une **ligne JSON par phrase** (traitement de corpus : `--jsonl`).
 
     `h` segmente (le tagger ne change pas les frontières de phrase) ; `bloc` analyse — la
     cascade du tagger quand `--tagger` est posé. Le coût va sur `stderr`, jamais dans le JSONL.
+    En mode `auto`, le message qui dit la voie servie va aussi sur `stderr`.
     """
     n = 0
     refus = 0
@@ -408,35 +525,81 @@ def _analyser_jsonl(texte: str, args: argparse.Namespace, h: bl.Heuristique, blo
         n += 1
     if n == 0:
         print(f"{NOM}: refus d'analyse : vide", file=sys.stderr)
+        if auto is not None:
+            print(f"{NOM}: tagger auto · {auto.message()}", file=sys.stderr)
         return 3
     if stats is not None:
         print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
         if refus:
             print(f"{NOM}: tagger · {refus}/{n} phrase(s) refusée(s) (JSON partiel)",
                   file=sys.stderr)
+    if auto is not None:
+        print(f"{NOM}: tagger auto · {auto.message()}", file=sys.stderr)
     return 0
+
+
+def _mode_tagger(args: argparse.Namespace) -> str | None:
+    """`None` (défaut), `"api"` (`--tagger`) ou `"auto"` (`--tagger auto`)."""
+    mode = getattr(args, "tagger_mode", None)
+    if mode is not None:
+        return mode
+    if getattr(args, "tagger_auto", False):
+        return "auto"
+    if getattr(args, "tagger", False):
+        return "api"
+    return None
 
 
 def cmd_analyser(args: argparse.Namespace) -> int:
     texte = _lire_entree(args)
     h = bl.Heuristique(partition=args.partition)
-    bloc, stats = h, None
-    if getattr(args, "tagger", False):
+    mode = _mode_tagger(args)
+    bloc, stats, auto = h, None, None
+    a_des_mots = any(typ in ("mot", "nombre") for _, _, _, typ in h._mots(texte))
+    if mode == "auto":
+        auto = _TaggerAuto(h)
+        # sans aucune clé, on ne construit même pas la cascade : aucun import réseau, aucun appel
+        auto.cle_presente = _cle_tagger_presente()
+        if auto.cle_presente and a_des_mots:
+            try:
+                cascade, stats_tagger = _construire_tagger(partition=args.partition)
+            except CleTaggerAbsente:
+                # la clé a disparu entre la vérification et la construction : heuristique
+                auto.cle_presente = False
+            else:
+                auto.cascade, auto.stats = cascade, stats_tagger
+                stats = stats_tagger
+        # un texte sans mot ni nombre est un refus d'analyse : la cascade n'est pas construite
+        bloc = auto
+    elif mode == "api":
         # la clé est vérifiée avant toute analyse : sans elle, code 4 (jamais de trace de la clé)
         try:
             cascade, stats_tagger = _construire_tagger(partition=args.partition)
         except CleTaggerAbsente as exc:
             print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
             return 4
-        # un texte sans mot ni nombre est un refus d'analyse : on ne paie pas un appel API
-        if any(typ in ("mot", "nombre") for _, _, _, typ in h._mots(texte)):
+        if a_des_mots:
             bloc, stats = cascade, stats_tagger
         # sinon, le refus (code 3) reste celui de l'heuristique
     if args.jsonl:
-        return _analyser_jsonl(texte, args, h, bloc, stats)
+        return _analyser_jsonl(texte, args, h, bloc, stats, auto)
     annotation = bloc.analyser(texte, args.langue, args.contexte)
     if annotation.refus:
-        if stats is not None:
+        if auto is not None:
+            if annotation.refus.startswith("tagger auto :"):
+                # un repli du tagger n'est pas un refus du texte : l'analyse est rendue
+                print(f"{NOM}: tagger : refus partiel : {annotation.refus}", file=sys.stderr)
+            else:
+                # refus du texte : code 3, que la clé existe ou non
+                if args.json:
+                    sys.stdout.write(_dumps(annotation.json()))
+                else:
+                    print(f"{NOM}: refus d'analyse : {annotation.refus} "
+                          "(le texte doit contenir au moins une lettre ou un chiffre)",
+                          file=sys.stderr)
+                print(f"{NOM}: tagger auto · {auto.message()}", file=sys.stderr)
+                return 3
+        elif stats is not None:
             # un refus du tagger n'est pas un refus du texte : on le nomme, on ne le déguise pas
             pos = [e for e in annotation.etiquettes if e.niveau == "pos"]
             if not pos:
@@ -457,7 +620,11 @@ def cmd_analyser(args: argparse.Namespace) -> int:
         if stats is not None:
             print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
     else:
-        print(_sur(formater_annotation(annotation, tagger=stats is not None, stats=stats)))
+        titre = auto.titre() if auto is not None else None
+        print(_sur(formater_annotation(annotation, tagger=stats is not None, stats=stats,
+                                       titre=titre)))
+    if auto is not None:
+        print(f"{NOM}: tagger auto · {auto.message()}", file=sys.stderr)
     return 0
 
 
@@ -589,6 +756,10 @@ def _formater_evaluation(rapport: dict) -> str:
 
 
 def cmd_evaluer(args: argparse.Namespace) -> int:
+    if getattr(args, "tagger_auto", False):
+        print(f"{NOM}: erreur d'usage : --tagger auto n'est disponible que pour analyser",
+              file=sys.stderr)
+        return 2
     evaluateur = _module_evaluation()
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
     if getattr(args, "reel", False):
@@ -869,19 +1040,51 @@ class _Parseur(argparse.ArgumentParser):
         self.exit(2, f"{self.prog}: erreur d'usage : {message}\n")
 
 
+def _normaliser_tagger(argv: list[str]) -> list[str]:
+    """`--tagger auto` → `--tagger-auto`, sans avaler le TEXTE qui suit.
+
+    Un `--tagger` à valeur optionnelle (`nargs="?"`) mangerait le texte positionnel quand
+    l'utilisateur écrit `analyser --tagger "Le chat dort."`. On garde donc `--tagger` comme
+    drapeau et on ne transforme que les deux valeurs explicites `auto` et `api`.
+    """
+    sortie: list[str] = []
+    i = 0
+    while i < len(argv):
+        jeton = argv[i]
+        if jeton == "--tagger" and i + 1 < len(argv) and argv[i + 1] in ("auto", "api", "explicite"):
+            valeur = argv[i + 1]
+            sortie.append("--tagger-auto" if valeur == "auto" else "--tagger")
+            i += 2
+            continue
+        if jeton.startswith("--tagger="):
+            valeur = jeton.split("=", 1)[1]
+            if valeur == "auto":
+                sortie.append("--tagger-auto")
+            elif valeur in ("api", "explicite"):
+                sortie.append("--tagger")
+            else:
+                sortie.append(jeton)
+        else:
+            sortie.append(jeton)
+        i += 1
+    return sortie
+
+
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
         "Commandes : analyser, evaluer, rejouer, restituer.\n"
         "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·\n"
-        "4 clé/tagger indisponible (absente ou refusée) · 1 erreur.\n"
+        "4 clé/tagger indisponible (absente ou refusée, seulement avec --tagger explicite) · 1 erreur.\n"
         "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
-        "--contexte, --banc, --tagger.\n"
+        "--contexte, --banc, --tagger [auto].\n"
         "Limites : heuristique CPU, hors ligne, déterministe par défaut ; --tagger appelle l'API\n"
-        "DeepSeek (clé, réseau) pour le POS ; la restitution est un codec de surface (graphème),\n"
-        "pas un décodeur neuronal ; ni traduction ni génération.\n"
+        "DeepSeek (clé, réseau) pour le POS ; --tagger auto l'appelle seulement si une clé existe,\n"
+        "sinon il rend l'heuristique, sans changer le code de sortie ; la restitution est un codec\n"
+        "de surface (graphème), pas un décodeur neuronal ; ni traduction ni génération.\n"
         "Exemples :\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\"\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\" --tagger\n"
+        "  python3 tools/drave.py analyser \"Le chat dort.\" --tagger auto\n"
         "  python3 tools/drave.py evaluer --gold --json\n"
         "  python3 tools/drave.py restituer \"Le chat dort.\"\n"
         "  python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json\n"
@@ -903,9 +1106,12 @@ def construire_parseur() -> argparse.ArgumentParser:
         help="étiqueter un texte (POS, syntagmes, pragmatique)",
         description="Analyse un texte avec l'heuristique et rend la lecture compacte ou le JSON. "
                     "Avec --tagger, le POS (et lui seul) vient du tagger de l'API DeepSeek : "
-                    "clé requise, réseau, cache du client ; sans l'option, rien ne change.",
+                    "clé requise, réseau, cache du client ; sans l'option, rien ne change. "
+                    "Avec --tagger auto, l'API sert si une clé existe, sinon l'heuristique ; "
+                    "le code de sortie ne change pas (0 dans les deux cas, 3 pour un refus).",
         epilog="Exemples : python3 tools/drave.py analyser \"Le chat dort.\" --json ; "
-               "python3 tools/drave.py analyser \"Le chat dort.\" --tagger",
+               "python3 tools/drave.py analyser \"Le chat dort.\" --tagger ; "
+               "python3 tools/drave.py analyser \"Le chat dort.\" --tagger auto",
         formatter_class=_Formateur,
     )
     analyser.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
@@ -922,7 +1128,10 @@ def construire_parseur() -> argparse.ArgumentParser:
     analyser.add_argument("--langue", choices=("fr", "en"), default=None,
                           help="indice de langue (fr/en) ; sans lui, le bloc détecte")
     analyser.add_argument("--tagger", action="store_true",
-                          help="tagger POS par l'API DeepSeek (clé et réseau ; défaut : heuristique)")
+                          help="tagger POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; "
+                               "`--tagger auto` : API si une clé existe, sinon heuristique, sans "
+                               "changer le code de sortie")
+    analyser.add_argument("--tagger-auto", action="store_true", help=argparse.SUPPRESS)
     analyser.add_argument("--json", action="store_true",
                           help="sortie JSON complète (annotation, sans durée)")
     analyser.set_defaults(fonction=cmd_analyser)
@@ -947,6 +1156,7 @@ def construire_parseur() -> argparse.ArgumentParser:
                          help="scinder la mesure en français et en anglais")
     evaluer.add_argument("--tagger", action="store_true",
                          help="mesurer en plus la cascade POS de l'API DeepSeek (clé et réseau)")
+    evaluer.add_argument("--tagger-auto", action="store_true", help=argparse.SUPPRESS)
     evaluer.add_argument("--json", action="store_true",
                          help="sortie JSON des mesures complètes")
     evaluer.set_defaults(fonction=cmd_evaluer)
@@ -1019,7 +1229,10 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except (AttributeError, ValueError):
         pass
-    args = construire_parseur().parse_args(argv)
+    brut = list(sys.argv[1:] if argv is None else argv)
+    args = construire_parseur().parse_args(_normaliser_tagger(brut))
+    args.tagger_mode = ("auto" if getattr(args, "tagger_auto", False)
+                        else "api" if getattr(args, "tagger", False) else None)
     try:
         return args.fonction(args)
     except BrokenPipeError:

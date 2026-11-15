@@ -1,0 +1,220 @@
+{
+  "tache": "Y1 — le prototype du mode auto du tagger",
+  "titre": "`analyser --tagger auto` : l'API si la clé existe, l'heuristique sinon, sans changer le code de sortie",
+  "date": "2026-11-15",
+  "ligne_roadmap": "R0.7 (le lecteur) / B13",
+  "head_mesure": "f63ad709 + ce diff",
+  "verdict": "prototype mesuré : clé présente → API, code 0, 130 tokens ; clé invalide → heuristique, code 0 (pas 4), refus explicite ; clé absente → heuristique, code 0, sortie identique au défaut ; clé + réseau coupé → heuristique, code 0 après 3 essais ; refus de texte → code 3, aucun appel API. 30/30 tests.",
+  "recommandation": "garder le défaut heuristique hors ligne ; `--tagger auto` reste un prototype opt-in, jamais le défaut, tant que la reproductibilité (même texte, POS différent selon la machine) et le coût (130 tokens par appel) ne sont pas tranchés par l'humain.",
+  "decision": "humaine, non appliquée dans ce diff : le défaut reste l'heuristique hors ligne",
+  "note_w3": "W3 §4.2 avait posé les conditions d'un auto ; Y1 les implémente et les mesure. La phrase « auto n'est pas testé : il n'existe pas » de W3 §6 est datée du 2026-11-15 matin ; le prototype et ses 30 tests sont du 2026-11-15 après-midi.",
+  "contrat": {
+    "commande": "python3 tools/drave.py analyser TEXTE --tagger auto",
+    "selection": "clé trouvée par `_cle_tagger()` (DEEPSEEK_KEY_FILE, DSH_KEY_FILE, ~/.config/drave/deepseek.key, DEEPSEEK_API_KEY, DSH_API_KEY) → cascade API ; sinon heuristique",
+    "codes": {
+      "0": "annotation rendue, que la voie soit l'API ou l'heuristique",
+      "3": "refus d'analyse du texte (vide ou sans lettre/chiffre), aucun appel API",
+      "4": "réservé à `--tagger` explicite (clé absente ou refusée) ; `auto` ne sort jamais 4"
+    },
+    "message_stderr": [
+      "drave: tagger auto · API (clé présente)",
+      "drave: tagger auto · heuristique (clé absente)",
+      "drave: tagger auto · heuristique (repli : clé refusée (HTTP 401))",
+      "drave: tagger auto · heuristique (repli : neuronal-pos: ErreurDeepSeek: réseau : …)"
+    ],
+    "cout": "la ligne `TAGGER API` affiche modèle, appels, réseau, cache, tokens et latence quand l'API a été tentée ; sans clé, aucun appel donc aucune ligne de coût",
+    "secret": "la clé n'est ni affichée, ni journalisée, ni mise dans le JSON ; `_sans_secret` retire la clé d'un message de diagnostic si elle y apparaissait",
+    "portee": "`analyser` seulement dans ce prototype ; `evaluer --tagger auto` rend un code 2 d'usage"
+  },
+  "dispositif": {
+    "mesures_reelles": "CLI en sous-processus, cwd à la racine, cache neuf par cas ; clé réelle lue dans ~/.config/drave/deepseek.key sans être affichée ; clé invalide dans un fichier temporaire ; réseau coupé par DEEPSEEK_BASE_URL=http://127.0.0.1:9 (connexion refusée réelle, 3 essais)",
+    "sans_cle": "environnement nettoyé de DEEPSEEK*/DSH*, HOME vide ; comparaison octet pour octet avec `analyser --json` sans option et avec la sortie lisible",
+    "tests": "tools/tests/test_tagger_api.py, classe TestTaggerAuto : client injecté, aucun socket ; 30 tests au total",
+    "date_execution": "2026-11-15",
+    "texte": "Le chat dort. (3 tokens ; POS heuristique DET/NOUN/VERB)"
+  },
+  "matrice": [
+    {
+      "cas": "cle_presente",
+      "mode": "auto",
+      "commande": "python3 tools/drave.py analyser 'Le chat dort.' --tagger auto --json",
+      "code": 0,
+      "stdout_octets": 6117,
+      "source": "cascade",
+      "refus": "",
+      "pos_sources": ["heuristique", "neuronal"],
+      "pos": "Le/DET chat/NOUN dort/VERB ./PONCT",
+      "stderr": [
+        "drave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=130 · latence=1.4 s",
+        "drave: tagger auto · API (clé présente)"
+      ],
+      "stats": {"appels": 1, "reseau": 1, "cache": 0, "tokens": 130, "latence_s": 1.4},
+      "duree_s": 1.673,
+      "test": "TestTaggerAuto.test_auto_cle_presente_api"
+    },
+    {
+      "cas": "cle_invalide",
+      "mode": "auto",
+      "commande": "DEEPSEEK_KEY_FILE=<clé-invalide> python3 tools/drave.py analyser 'Le chat dort.' --tagger auto --json",
+      "code": 0,
+      "stdout_octets": 5904,
+      "source": "heuristique",
+      "refus": "tagger auto : clé refusée (HTTP 401) ; heuristique",
+      "pos_sources": ["heuristique"],
+      "stderr": [
+        "drave: tagger : refus partiel : tagger auto : clé refusée (HTTP 401) ; heuristique",
+        "drave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=0 · cache=0 · tokens=0 · latence=0.0 s",
+        "drave: tagger auto · heuristique (repli : clé refusée (HTTP 401))"
+      ],
+      "stats": {"appels": 1, "reseau": 0, "cache": 0, "tokens": 0, "latence_s": 0.0},
+      "duree_s": 0.704,
+      "test": "TestTaggerAuto.test_auto_cle_invalide_code_0_pas_4",
+      "controle": "la même clé invalide avec `--tagger` explicite sort 4 et stdout vide (voir controle_api_cle_invalide)"
+    },
+    {
+      "cas": "cle_absente",
+      "mode": "auto",
+      "commande": "env -i HOME=<vide> PATH=$PATH python3 tools/drave.py analyser 'Le chat dort.' --tagger auto --json",
+      "code": 0,
+      "stdout_octets": 5852,
+      "source": "heuristique",
+      "refus": "",
+      "pos_sources": ["heuristique"],
+      "tagger_dans_json": false,
+      "stderr": ["drave: tagger auto · heuristique (clé absente)"],
+      "stats": {"appels": 0, "reseau": 0, "cache": 0, "tokens": 0, "latence_s": 0.0},
+      "duree_s": 0.228,
+      "test": "TestTaggerAuto.test_auto_sans_cle_identique_au_defaut",
+      "controle": "sortie JSON et sortie lisible identiques au défaut, octet pour octet ; tools.llm.deepseek non importé (test_auto_sans_cle_n_importe_pas_le_reseau)"
+    },
+    {
+      "cas": "cle_presente_reseau_coupe",
+      "mode": "auto",
+      "commande": "DEEPSEEK_BASE_URL=http://127.0.0.1:9 python3 tools/drave.py analyser 'Le chat dort.' --tagger auto --json",
+      "code": 0,
+      "stdout_octets": 5950,
+      "source": "heuristique",
+      "refus": "tagger auto : neuronal-pos: ErreurDeepSeek: réseau : [Errno 111] Connection refused ; heuristique",
+      "pos_sources": ["heuristique"],
+      "stderr": [
+        "drave: tagger : refus partiel : tagger auto : neuronal-pos: ErreurDeepSeek: réseau : [Errno 111] Connection refused ; heuristique",
+        "drave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=0 · cache=0 · tokens=0 · latence=0.0 s",
+        "drave: tagger auto · heuristique (repli : neuronal-pos: ErreurDeepSeek: réseau : [Errno 111] Connection refused)"
+      ],
+      "stats": {"appels": 1, "reseau": 0, "cache": 0, "tokens": 0, "latence_s": 0.0},
+      "tentatives_reseau": 3,
+      "duree_s": 3.303,
+      "test": "TestTaggerAuto.test_auto_reseau_coupe_code_0",
+      "controle": "le même réseau coupé avec `--tagger` explicite sort 0 mais garde source=cascade et refus sans préfixe auto (voir controle_api_reseau_coupe)"
+    },
+    {
+      "cas": "refus_texte",
+      "mode": "auto",
+      "commande": "python3 tools/drave.py analyser '... !!! ???' --tagger auto --json",
+      "code": 3,
+      "stdout_octets": 342,
+      "source": "heuristique",
+      "refus": "vide",
+      "pos_sources": [],
+      "stderr": ["drave: tagger auto · heuristique (clé présente ; refus du texte, aucun appel)"],
+      "appels_api": 0,
+      "duree_s": 0.188,
+      "test": "TestTaggerAuto.test_auto_refus_texte_code_3"
+    }
+  ],
+  "sortie_lisible_cle_presente": {
+    "commande": "python3 tools/drave.py analyser 'Le chat dort.' --tagger auto",
+    "code": 0,
+    "stdout_octets": 710,
+    "duree_s": 1.534,
+    "stderr": "drave: tagger auto · API (clé présente)",
+    "stats": {"modele": "deepseek-chat", "appels": 1, "reseau": 1, "cache": 0, "tokens": 130, "latence_s": 1.3},
+    "stdout": "drave 0.1.0 — analyse cascade POS (tagger auto : API DeepSeek, réseau)\nlangue=fr script=Latn source=cascade · 20 étiquettes · unités sémantiques=2 (61.5% du texte)\nPOS  Le/DET chat/NOUN dort/VERB ./PONCT\nSYNTAGMES\n  GN   [0:7]   Le chat  rôle=agent     → dort\n  GV   [8:12]  dort     rôle=predicat  → chat\nPRAGMATIQUE\n  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non\nCOUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·\n            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70\nTAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=130 · latence=1.3 s\n"
+  },
+  "comparaison_sans_cle": {
+    "code_defaut": 0,
+    "code_auto": 0,
+    "stdout_json_identique": true,
+    "stdout_lisible_identique": true,
+    "stdout_json_octets": 5852,
+    "stdout_lisible_octets": 593,
+    "stderr_defaut": "",
+    "stderr_auto": "drave: tagger auto · heuristique (clé absente)",
+    "deepseek_importe": false,
+    "socket_construite": false
+  },
+  "controles_negatifs": [
+    {
+      "nom": "paire auto / --tagger sur la même clé invalide",
+      "mesure": "même client, même texte, même clé temporaire",
+      "resultat": "auto code 0 + source heuristique + refus ; --tagger explicite code 4 + stdout 0 octet",
+      "tests": ["TestTaggerAuto.test_auto_cle_invalide_code_0_pas_4", "TestErreursTagger.test_cle_invalide_code_4"]
+    },
+    {
+      "nom": "sans clé, auto contre défaut",
+      "mesure": "même HOME vide, même texte, JSON et lisible",
+      "resultat": "codes 0 et 0 ; stdout identique octet pour octet ; seule différence : le message stderr de auto",
+      "tests": ["TestTaggerAuto.test_auto_sans_cle_identique_au_defaut"]
+    },
+    {
+      "nom": "sans clé, zéro socket",
+      "mesure": "socket.socket piégé ; drave.main(['analyser', ..., '--tagger', 'auto', '--json'])",
+      "resultat": "code 0, aucune exception, tools.llm.deepseek non importé",
+      "tests": ["TestTaggerAuto.test_auto_sans_cle_n_importe_pas_le_reseau"]
+    },
+    {
+      "nom": "refus de texte et appel API",
+      "mesure": "texte sans lettre ni chiffre, clé présente",
+      "resultat": "code 3, aucun appel API, refus vide dans le JSON",
+      "tests": ["TestTaggerAuto.test_auto_refus_texte_code_3"]
+    },
+    {
+      "nom": "réseau coupé auto / explicite",
+      "mesure": "même endpoint fermé, même texte",
+      "resultat": "auto code 0 + source heuristique + refus préfixé tagger auto ; explicite code 0 + source cascade + refus neuronal",
+      "tests": ["TestTaggerAuto.test_auto_reseau_coupe_code_0", "TestErreursTagger.test_reseau_coupe_repli_heuristique"]
+    },
+    {
+      "nom": "fuite de clé",
+      "mesure": "clé sentinelle dans le client, clé invalide et réseau coupé",
+      "resultat": "la sentinelle n'apparaît ni dans stdout ni dans stderr",
+      "tests": ["TestTaggerAuto.test_auto_cle_invalide_code_0_pas_4", "TestTaggerAuto.test_auto_reseau_coupe_code_0", "TestTaggerAuto.test_auto_cle_presente_api"]
+    }
+  ],
+  "cout": {
+    "une_phrase_reelle": {
+      "tokens": 130,
+      "tokens_entree": 116,
+      "tokens_sortie": 14,
+      "latence_api_s": 1.4,
+      "duree_s": 1.673,
+      "modele_demande": "deepseek-chat",
+      "modele_renvoye": "deepseek-flash",
+      "cout_usd_hors_pointe": 0.000026,
+      "cout_usd_pointe": 0.000052
+    },
+    "repli": {
+      "clé_invalide": {"appels": 1, "reseau": 0, "tokens": 0, "duree_s": 0.704},
+      "reseau_coupe": {"appels": 1, "reseau": 0, "tokens": 0, "tentatives": 3, "duree_s": 3.303}
+    },
+    "sans_cle": {"appels": 0, "reseau": 0, "tokens": 0, "duree_s": 0.228},
+    "note": "le coût est dominé par le prompt fixe sur une phrase de 3 tokens ; le chiffre 130 tokens n'est pas une moyenne, c'est le plancher observé sur cette phrase"
+  },
+  "limites": [
+    "Le coût de 130 tokens vaut pour une phrase de 3 tokens : il ne se généralise pas à un lot.",
+    "Le mode auto ne force pas l'API quand la cascade juge l'heuristique suffisante (seuil 0,60) : sur un texte où tous les niveaux sont au-dessus du seuil, l'API est disponible mais non appelée, et le message le dit.",
+    "La clé invalide réelle a été testée avec un fichier temporaire ; le code HTTP dépend du service et un proxy qui rendrait 400 ne serait pas classé 401/403.",
+    "Le réseau coupé réel est une connexion refusée (127.0.0.1:9), pas un timeout DNS ou TLS.",
+    "Les tests n'ouvrent aucun socket ; le transport factice couvre le contrat, pas la diversité des réponses réelles.",
+    "Le cache disque peut masquer une panne : les mesures utilisent un cache neuf par cas.",
+    "`auto` n'est pas le défaut : le même texte peut rendre un POS différent selon la machine (clé présente ou non), ce qui est précisément la raison de ne pas le mettre par défaut.",
+    "`evaluer --tagger auto` n'est pas implémenté : le prototype est limité à `analyser`."
+  ],
+  "fichiers": [
+    "tools/drave.py",
+    "tools/tests/test_tagger_api.py",
+    "reports/rapport-tagger-auto.md",
+    "reports/rapport-tagger-auto.json",
+    "docs/produit/README.md"
+  ]
+}

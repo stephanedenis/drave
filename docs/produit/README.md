@@ -9,7 +9,10 @@
 > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
 > existent, et la
 > porte produit est verte. Le **tagger POS par API** est livré **en option** (`--tagger`,
-> § 3.7) : clé et réseau pour qui le demande, **heuristique hors ligne par défaut**. Le format
+> § 3.7) : clé et réseau pour qui le demande, **heuristique hors ligne par défaut**. Le
+> **prototype `--tagger auto`** (complété le **2026-11-15**, § 3.7) choisit l'API si une clé
+> existe, l'heuristique sinon, **sans changer le code de sortie** ; il ne change pas le défaut.
+> Le format
 > est **version 2** (`schema: "drave.annotation"`,
 > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
 > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
@@ -387,6 +390,7 @@ python3 tools/drave.py evaluer --reel
 
 ```bash
 python3 tools/drave.py analyser "Le chat dort." --tagger
+python3 tools/drave.py analyser "Le chat dort." --tagger auto
 python3 tools/drave.py analyser --fichier corpus.txt --jsonl --tagger
 python3 tools/drave.py evaluer --tagger
 ```
@@ -433,6 +437,30 @@ suit la même règle : clé refusée → **4**, sans sortie ; refus par phrase �
 métriques égales à l'heuristique et `delta_pos: 0`, avec la ligne `REFUS` dans la sortie
 lisible.
 
+**Le mode `auto` — prototype.** `--tagger auto` choisit la voie au lieu de l'imposer : si
+`_cle_tagger()` trouve une clé (fichier ou environnement), il construit la cascade API ; sinon
+il ne construit même pas le client réseau et rend l'heuristique. Le **code de sortie ne change
+pas** : **0** dans les deux cas, **3** pour un refus de texte, **jamais 4** — le 4 reste réservé
+à `--tagger` **explicite**. `stderr` dit toujours **laquelle a servi**, sans nommer la clé :
+`tagger auto · API (clé présente)`, `tagger auto · heuristique (clé absente)`, ou
+`tagger auto · heuristique (repli : …)`. La ligne `TAGGER API` porte le coût quand l'API a été
+tentée ; sans clé, il n'y a **aucun appel**, donc **aucune ligne de coût**.
+
+| cas `--tagger auto` | ce que fait le CLI | code | `stdout` | `stderr` / JSON |
+|---|---|---:|---|---|
+| **clé présente** | cascade API (si le seuil 0,60 l'appelle) | **0** | `source=cascade`, POS `neuronal` | `TAGGER API · appels=1 · réseau=1 · tokens=130 …` puis `tagger auto · API (clé présente)` |
+| **clé invalide** (401/403) | **replie**, ne sort pas 4 | **0** | `source=heuristique`, `refus` non vide | `tagger auto · heuristique (repli : clé refusée (HTTP 401))` ; `TAGGER API · appels=1 · réseau=0 · tokens=0` |
+| **clé absente** | heuristique, **comme le défaut** | **0** | **identique au défaut octet pour octet** | `tagger auto · heuristique (clé absente)` ; aucun import réseau |
+| **clé + réseau coupé** | 3 essais, puis **replie** | **0** | `source=heuristique`, `refus` non vide | `tagger auto · heuristique (repli : … réseau …)` ; `TAGGER API · appels=1 · réseau=0 · tokens=0` |
+| **refus de texte** | aucun appel API | **3** | annotation de refus (`refus="vide"`) | `tagger auto · heuristique (clé présente ; refus du texte, aucun appel)` |
+
+Le repli `auto` est **lisible dans le JSON** : `source=heuristique` et
+`refus="tagger auto : … ; heuristique"`, alors que `--tagger` explicite garde
+`source=cascade` et `refus="neuronal-pos: …"`. Le mode est **analyser** seulement dans ce
+prototype ; `evaluer --tagger auto` rend un code **2** d'usage. Mesures réelles, cache neuf par
+cas et contrôle négatif auto / explicite : [`rapport-tagger-auto.md`](../../reports/rapport-tagger-auto.md)
+(30/30 tests). **La décision reste à l'humain** : le défaut ne bouge pas.
+
 **En `--jsonl`**, une clé refusée peut laisser sur `stdout` les lignes déjà écrites avant le
 code **4** (le premier texte sans appel neuronal ne déclenche pas le 401) ; le message et le
 code restent les mêmes. Le tableau ci-dessus décrit `analyser` sur **un** texte.
@@ -471,7 +499,10 @@ TAGGER API DEEPSEEK (option --tagger)
 **Le défaut ne bouge pas.** Sans `--tagger`, la commande ne lit aucune clé, n'importe pas le
 module réseau, n'ouvre aucune socket et rend exactement l'heuristique d'avant (le test
 [`test_tagger_api.py`](../../tools/tests/test_tagger_api.py) le compare octet pour octet). Le
-`--tagger` est une **option**, pas un changement de produit.
+`--tagger` **explicite** est une **option**, pas un changement de produit : c'est la seule
+porte qui peut sortir **4** (clé absente ou refusée). `--tagger auto` ne peut pas sortir 4 : il
+replie sur l'heuristique, code **0**, et le dit. Dans les deux cas, le **défaut** sans option
+reste l'heuristique hors ligne.
 
 ## 4. Ce que le produit ne fait pas encore
 
@@ -596,7 +627,7 @@ restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test es
 | **1** | erreur ; tagger qui refuse une phrase sans POS | argument illisible, divergence de rejeu, exception |
 | **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
 | **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""`, `restituer "..."` |
-| **4** | dépendance absente : la clé du tagger (absente **ou refusée**) | `--tagger` sans clé, ou clé refusée HTTP 401/403 : message clair, rien sur `stdout`, pas de repli |
+| **4** | dépendance absente : la clé du tagger (absente **ou refusée**), en `--tagger` **explicite** | `--tagger` sans clé, ou clé refusée HTTP 401/403 : message clair, rien sur `stdout`, pas de repli ; `--tagger auto` ne sort jamais 4 (repli, code 0) |
 
 **Ce qui n'est pas garanti** : le chemin neuronal **local**, un texte hors domaine, la calibration
 des confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le

@@ -65752,3 +65752,32 @@ dim 15 nov 2026 14:09:31 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [915 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 16 files changed, 118 insertions(+), 25 deletions(-)
+ create mode 100644 reports/rapport-bilan-jour-1115.md
+f63ad709 BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), 
+   158dee4d..f63ad709  s/v7 -> s/v7
+   158dee4d..f63ad709  master -> master
+dim 15 nov 2026 14:13:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\nt={\"id\":\"Y1\",\"jour\":18,\"titre\":\"J5 — le mode auto du tagger (prototype)\",\n   \"mandat\":\"Tâche Y1 (J5, la dé … [1760 caractères tronqués]`
+
+  ```
+plan : 51
+budget réajusté
+PID 864162
+2026-11-15 14:13:50 · ▶ Y1 — J5 — le mode auto du tagger (prototype) (timeout 3000 s)
+dim 15 nov 2026 14:14:10 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls reports/rapport-tagger-auto.md 2>/dev/null", "description": "Suivre Y1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5188]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5188", "timeout_ms": 1000000, "wait": true}`

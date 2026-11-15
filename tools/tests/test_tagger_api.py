@@ -15,7 +15,10 @@ POS valide) :
    - **refus du modèle** (texte non JSON, JSON incomplet) → **repli heuristique**, code **0**,
      `refus` non vide ;
 6. l'ordre de résolution de la clé : `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`,
-   puis `DEEPSEEK_API_KEY`.
+   puis `DEEPSEEK_API_KEY` ;
+7. le mode **`--tagger auto`** (prototype, `TestTaggerAuto`) : les quatre cas — clé présente,
+   clé invalide, clé absente, clé + réseau coupé — rendent **0** (ou **3** pour un refus de
+   texte), `stderr` dit lequel a servi, et **sans clé** la sortie est identique au défaut.
 
 Aucun test n'ouvre de socket : les transports sont injectés, et le test « sans clé » lance la
 commande dans un `HOME` vide. Le fichier passe par `python3 tools/tests/test_tagger_api.py`
@@ -60,6 +63,17 @@ def drave_cli(*arguments: str, env: dict[str, str] | None = None,
         cwd=str(RACINE), capture_output=True, text=True, encoding="utf-8",
         timeout=timeout, env=env,
     )
+
+
+def _env_sans_cle(home: pathlib.Path, **extra: str) -> dict[str, str]:
+    """Un environnement sans aucune des sources de la clé, avec un `HOME` vide."""
+    env = {cle: valeur for cle, valeur in os.environ.items()
+           if cle not in {"DEEPSEEK_API_KEY", "DSH_API_KEY", "DEEPSEEK_KEY_FILE",
+                          "DSH_KEY_FILE", "HOME"}
+           and not cle.startswith("DEEPSEEK") and not cle.startswith("DSH_")}
+    env["HOME"] = str(home)
+    env.update(extra)
+    return env
 
 
 def _tokens_de_invite(invite: str) -> list[str]:
@@ -524,6 +538,196 @@ class TestMatriceW3(unittest.TestCase):
         self.assertEqual(cout["requetes"], 500)
         self.assertEqual(cout["tokens"], 8500)    # 17 tokens pour 2 phrases, × 500
         self.assertEqual(cout["latence_s"], 0.0)
+
+
+class TestTaggerAuto(unittest.TestCase):
+    """Le prototype `--tagger auto` : API si clé, heuristique sinon, **sans code 4**.
+
+    Les quatre cas de la fiche Y1 sont couverts ici, avec un client injecté (aucun socket) :
+
+    - **clé absente** : sortie **identique au défaut**, code **0**, message `heuristique` ;
+    - **clé présente** : cascade API, code **0**, POS neuronal, coût dans `TAGGER API` ;
+    - **clé invalide** : repli heuristique, code **0** (pas 4), `refus` non vide ;
+    - **clé + réseau coupé** : 3 essais, repli heuristique, code **0**, `refus` non vide.
+
+    Le contrôle négatif principal est la paire `--tagger auto` / `--tagger` sur la **même**
+    clé invalide : `auto` rend **0**, l'option explicite rend **4**.
+    """
+
+    SENTINELLE = "cle-de-test-sentinelle"
+
+    def _lancer(self, client, *arguments: str) -> tuple[int, str, str]:
+        ancien_client, ancien_cle = drave._client_tagger, drave._cle_tagger
+        drave._client_tagger = lambda: client
+        drave._cle_tagger = lambda: self.SENTINELLE
+        sortie, erreur = io.StringIO(), io.StringIO()
+        try:
+            with contextlib.redirect_stdout(sortie), contextlib.redirect_stderr(erreur):
+                code = drave.main(list(arguments))
+        finally:
+            drave._client_tagger, drave._cle_tagger = ancien_client, ancien_cle
+        return code, sortie.getvalue(), erreur.getvalue()
+
+    def _client_en_panne(self, cache: str, transport) -> DeepSeek:
+        return DeepSeek(cle=self.SENTINELLE, transport=transport, cache_dir=cache,
+                        sleep=lambda _: None, essais=3)
+
+    def test_auto_sans_cle_identique_au_defaut(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            env = _env_sans_cle(pathlib.Path(tmp))
+            defaut = drave_cli("analyser", TEXTE, "--json", env=env)
+            auto = drave_cli("analyser", TEXTE, "--tagger", "auto", "--json", env=env)
+        self.assertEqual(defaut.returncode, 0, defaut.stderr)
+        self.assertEqual(auto.returncode, 0, auto.stderr)
+        # le contrat : sans clé, `auto` **est** le défaut, octet pour octet
+        self.assertEqual(auto.stdout, defaut.stdout)
+        donnees = json.loads(auto.stdout)
+        self.assertEqual(donnees, bl.Heuristique().analyser(TEXTE).json())
+        self.assertEqual(donnees["source"], "heuristique")
+        self.assertIn("tagger auto", auto.stderr)
+        self.assertIn("heuristique", auto.stderr)
+        self.assertIn("clé absente", auto.stderr)
+        self.assertNotIn("401", auto.stderr)
+        self.assertNotIn(self.SENTINELLE, auto.stderr)
+
+    def test_auto_sans_cle_n_importe_pas_le_reseau(self) -> None:
+        code = (
+            "import contextlib, io, socket, sys\n"
+            "class Interdit(socket.socket):\n"
+            "    def __init__(self, *a, **k):\n"
+            "        raise RuntimeError('socket ouverte')\n"
+            "socket.socket = Interdit\n"
+            "sys.path.insert(0, 'tools')\n"
+            "import drave\n"
+            "err = io.StringIO()\n"
+            "with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):\n"
+            "    c = drave.main(['analyser', 'Le chat dort.', '--tagger', 'auto', '--json'])\n"
+            "print('CODE', c)\n"
+            "print('DEEPSEEK', 'tools.llm.deepseek' in sys.modules)\n"
+            "print('STDERR', err.getvalue().strip())\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            env = _env_sans_cle(pathlib.Path(tmp))
+            resultat = subprocess.run(
+                [sys.executable, "-c", code], cwd=str(RACINE), capture_output=True,
+                text=True, encoding="utf-8", timeout=60, env=env)
+        self.assertEqual(resultat.returncode, 0, resultat.stderr)
+        self.assertIn("CODE 0", resultat.stdout)
+        self.assertIn("DEEPSEEK False", resultat.stdout)
+        self.assertIn("tagger auto", resultat.stdout)
+
+    def test_auto_cle_presente_api(self) -> None:
+        client = _FauxClient()
+        code, sortie, erreur = self._lancer(
+            client, "analyser", TEXTE, "--tagger", "auto", "--json")
+        self.assertEqual(code, 0, erreur)
+        donnees = json.loads(sortie)
+        self.assertEqual(donnees["source"], "cascade")
+        self.assertEqual(_pos_map(donnees),
+                         {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV", (12, 13): "PONCT"})
+        self.assertIn("tagger auto · API", erreur)
+        self.assertIn("TAGGER API", erreur)
+        self.assertIn("tokens=17", erreur)
+        self.assertEqual(client.demandes, 1)
+        self.assertNotIn(self.SENTINELLE, erreur + sortie)
+
+    def test_auto_cle_invalide_code_0_pas_4(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            def transport(*_args):
+                raise ErreurDeepSeek("HTTP 401 : invalid key", code=401)
+
+            client = self._client_en_panne(tmp, transport)
+            code, sortie, erreur = self._lancer(
+                client, "analyser", TEXTE, "--tagger", "auto", "--json")
+            self.assertEqual(code, 0, erreur)
+            donnees = json.loads(sortie)
+            self.assertEqual(donnees["source"], "heuristique")
+            self.assertIn("tagger auto", donnees["refus"])
+            self.assertIn("clé refusée", donnees["refus"])
+            self.assertEqual(_pos_map(donnees),
+                             _pos_map(bl.Heuristique().analyser(TEXTE).json()))
+            self.assertEqual({e["source"] for e in donnees["etiquettes"]
+                              if e["niveau"] == "pos"}, {"heuristique"})
+            self.assertIn("heuristique (repli", erreur)
+            self.assertIn("401", erreur)
+            self.assertIn("TAGGER API", erreur)
+            self.assertNotIn(self.SENTINELLE, erreur + sortie)
+            # contrôle négatif : la **même** clé invalide, en explicite, sort 4 et stdout vide
+            code_api, sortie_api, erreur_api = self._lancer(
+                client, "analyser", TEXTE, "--tagger", "--json")
+            self.assertEqual(code_api, 4, erreur_api)
+            self.assertEqual(sortie_api, "")
+            self.assertIn("clé DeepSeek refusée", erreur_api)
+
+    def test_auto_reseau_coupe_code_0(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tentatives: list[int] = []
+
+            def transport(*_args):
+                tentatives.append(1)
+                raise ErreurDeepSeek("réseau : [Errno -2] Name or service not known",
+                                     reessayable=True)
+
+            client = self._client_en_panne(tmp, transport)
+            code, sortie, erreur = self._lancer(
+                client, "analyser", TEXTE, "--tagger", "auto", "--json")
+            self.assertEqual(code, 0, erreur)
+            self.assertEqual(len(tentatives), 3, "le client doit réessayer avant de replier")
+            donnees = json.loads(sortie)
+            self.assertEqual(donnees["source"], "heuristique")
+            self.assertIn("réseau", donnees["refus"])
+            self.assertEqual(_pos_map(donnees),
+                             _pos_map(bl.Heuristique().analyser(TEXTE).json()))
+            self.assertEqual({e["source"] for e in donnees["etiquettes"]
+                              if e["niveau"] == "pos"}, {"heuristique"})
+            self.assertIn("heuristique (repli", erreur)
+            self.assertIn("réseau", erreur)
+            self.assertIn("TAGGER API", erreur)
+            self.assertNotIn(self.SENTINELLE, erreur + sortie)
+
+    def test_auto_refus_du_modele_repli(self) -> None:
+        """Un modèle qui ne rend pas le contrat POS est un repli, pas un code 4."""
+        with tempfile.TemporaryDirectory() as tmp:
+            def transport(*_args):
+                return {"choices": [{"message": {"content": "Je ne peux pas répondre."}}],
+                        "model": "deepseek-chat", "usage": {}}
+
+            client = self._client_en_panne(tmp, transport)
+            code, sortie, erreur = self._lancer(
+                client, "analyser", TEXTE, "--tagger", "auto", "--json")
+            self.assertEqual(code, 0, erreur)
+            donnees = json.loads(sortie)
+            self.assertEqual(donnees["source"], "heuristique")
+            self.assertIn("pas de JSON", donnees["refus"])
+            self.assertIn("heuristique (repli", erreur)
+            self.assertIn("TAGGER API", erreur)
+            self.assertNotIn(self.SENTINELLE, erreur + sortie)
+
+    def test_auto_refus_texte_code_3(self) -> None:
+        client = _FauxClient()
+        code, sortie, erreur = self._lancer(
+            client, "analyser", "... !!! ???", "--tagger", "auto", "--json")
+        self.assertEqual(code, 3, erreur)
+        self.assertEqual(client.demandes, 0, "un refus de texte ne paie pas d'appel API")
+        self.assertEqual(json.loads(sortie)["refus"], "vide")
+        self.assertIn("tagger auto", erreur)
+        self.assertIn("heuristique", erreur)
+
+    def test_auto_texte_apres_le_drapeau(self) -> None:
+        """`--tagger auto TEXTE` ne doit pas avaler le texte comme une valeur de `--tagger`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            env = _env_sans_cle(pathlib.Path(tmp))
+            defaut = drave_cli("analyser", TEXTE, "--json", env=env)
+            auto = drave_cli("analyser", "--tagger", "auto", TEXTE, "--json", env=env)
+        self.assertEqual(auto.returncode, 0, auto.stderr)
+        self.assertEqual(auto.stdout, defaut.stdout)
+
+    def test_auto_evaluer_rejete_en_usage(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            env = _env_sans_cle(pathlib.Path(tmp))
+            resultat = drave_cli("evaluer", "--tagger", "auto", env=env)
+        self.assertEqual(resultat.returncode, 2, resultat.stderr)
+        self.assertIn("n'est disponible que pour analyser", resultat.stderr)
 
 
 def _pos_map(donnees: dict) -> dict[tuple[int, int], str]:
