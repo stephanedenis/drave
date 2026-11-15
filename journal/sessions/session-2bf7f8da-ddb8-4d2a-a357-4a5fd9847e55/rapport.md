@@ -9,10 +9,10 @@
 | Début | 2026-11-15 09:06 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 147 |
-| Appels d'outils | 165 |
+| Messages | 150 |
+| Appels d'outils | 168 |
 | Fichiers touchés | 0 |
-| Commandes | 150 |
+| Commandes | 153 |
 | Sous-agents | 0 |
 | Commits | 9 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W2 (J2 matin) : le tagger sur le split — mesure `evaluer --tagger` sur les 402 (l'entraînement) et sur les 50 H50  … [365 caractères tronqués]
 
-*165 appels d'outils.* Actions notables :
+*168 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git status
 - bash — List reports and data directories
@@ -41,7 +41,42 @@
 - bash — Read evaluer_gold.py
 - bash — Read tagger 612 bench
 - bash — Read DeepSeek client and cache
-- … et 132 autres
+- … et 135 autres
+
+**Synthèse produite :**
+
+\## W2 — le tagger sur le split 402 / H50
+
+**Livré et committé** (`1683c2b4`, sur le split W1 `4dbeff45`) :
+
+- **Fiche** : [`reports/rapport-tagger-h50.md`](reports/rapport-tagger-h50.md)
+- **JSON** : [`reports/rapport-tagger-h50.json`](reports/rapport-tagger-h50.json)
+- **Banc reproductible** : [`tools/tests/linguistique/qualifier_tagger_h50.py`](tools/tests/linguistique/qualifier_tagger_h50.py)
+
+\### Les chiffres (passe API, cache neuf)
+
+| base | POS heuristique | POS tagger | Δ | fermé | ouvert | F1 / attachement |
+|---|---:|---:|---:|---:|---:|---:|
+| **402** | 0,9198 (1 984/2 157) | **0,9643** (2 080) | **+4,45 pts** | 0,9580 → 0,9425 (**−1,55**) | 0,8804 → 0,9868 (**+10,64**) | 0,8190 / 1,0000 inchangés |
+| **H50** | 0,6842 (221/323) | **0,8607** (278) | **+17,65 pts** | 0,7542 → 0,8156 (**+6,14**) | 0,5972 → 0,9167 (**+31,95**) | 0,5836 / 0,9545 inchangés |
+| **total 452** | 0,8891 (2 205/2 480) | **0,9508** (2 358) | **+6,17 pts** | 0,9294 → 0,9246 (−0,48) | 0,8466 → 0,9784 (+13,18) | 0,7906 / 0,9946 inchangés |
+
+Le total redonne **0,9508**, à **0,0008** du 0,9500 publié. Par langue : 402 fr **+8,16**, 402 en **+0,10** ; H50 fr **+19,05**, H50 en **+16,13**. Le tirage aléatoire hors H50 gagne **+4,83** : le gain « normal » est autour de +4,5 à +5, H50 est bien un stress test.
+
+\### Coût et latence
+
+- **API** : **447 requêtes**, **65 029 tokens réseau** pour 452 phrases, **0,982 s/phrase**, **0,993 s/requête** (médiane 402 1,000 s, H50 0,968 s ; p95 1,29–1,32 s ; max 1,589 s). **399 appels** pour 402 (3 textes dupliqués servis par le cache mémoire) et **50** pour H50 ; **2 lectures de cache** (`r423`/`r427` partagent le prompt de `r010`/`r030`).
+- **Cache chaud après API** : **0 réseau, 0 token**, scores identiques.
+- **Cache chaud avant API** : **0 réseau, 0 token**, mais scores légèrement différents (0,9629 / 0,8638) : le cache existant venait d’un autre moment du modèle. Seule la passe API est la mesure du jour.
+
+\### La règle
+
+**Une règle qui ne gagne que sur H50 est rejetée ; le contrôle est le 402.** Le tagger gagne **sur 402 (+4,45)** et sur H50 (+17,65) : il **n’est pas H50-only**, donc **accepté par la règle**. Réserve nommée : sur 402, le gain est **ouvert** (VERB +19,14, ADJ +19,40) et le **fermé baisse de 1,55 pt** (PREP −8,43, CONJ −10,15, AUX −2,92, DET −0,75). Une règle « aucune classe ne baisse sur 402 » le rejetterait ; c’est la réserve portée à **W3** (défaut / hybride fermé-ouvert).
+
+\### Vérifications
+
+- `revue_documentation.py`, `tai
+… [593 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -92,7 +127,7 @@
 - **T1** Fix key loading and rerun smoke test
 - **T1** Fix per-pass cache dir and rerun smoke
 - **T1** Inspect smoke JSON structure
-- … et 110 autres
+- … et 113 autres
 
 ## 4. Mesures et résultats marquants
 

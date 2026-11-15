@@ -3043,3 +3043,124 @@ EXIT=0
   ```
 
 - **bash** `{"command": "git add journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git commit -m \"ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit session heartbeat refresh"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-147]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "sleep 60; ps -ef | grep -E \"git commit|pre-commit|session_report|archive_sessions\" | grep -v grep | head; echo \"---\"; git log -3 --oneline", "description": "Wait for heartbeat commit"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-148]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "ps -ef | grep -E \"git commit|pre-commit|session_report|archive_sessions\" | grep -v grep | head; echo \"---\"; git log -3 --oneline; echo \"---\"; git status --short | head -8", "description": "Check heartbeat commit completion"}`
+
+  ```
+stephane 3911962 3777457  0 09:41 ?        00:00:00 bash -c git add journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git commit -m "ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
+stephane 3911978 3911962  0 09:41 ?        00:00:00 git commit -m ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte
+stephane 3911996 3911978  0 09:41 ?        00:00:00 /bin/sh .git/hooks/pre-commit
+stephane 3913835 3911996 86 09:43 ?        00:00:25 python3 tools/session_report.py --quiet
+---
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S
+6b2208ee PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES
+---
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e
+… [372 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-148 (bash: sleep 60; ps -ef | grep -E "git commit|pre-commit|session_report|archive_sessions" | grep -v grep | head; echo "---"; git log -3 --oneline) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 40; ps -ef | grep -E \"git commit|pre-commit|session_report\" | grep -v grep | head; echo \"---\"; git log -3 --oneline", "description": "Wait for heartbeat commit to finish"}`
+
+  ```
+---
+3439cb0c ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S
+  ```
+
+### 👤 Utilisateur
+
+background job bash-147 (bash: git add journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git commit -m "ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -5; echo \"REVUE_EXIT=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | tail -4; echo \"TAILLE_EXIT=${PIPESTATUS[0]}\"", "description": "Final doc review and budget check"}`
+
+  ```
+revue de documentation · 750 fiche(s) · 843 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE_EXIT=0
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE_EXIT=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -4; echo \"JOURNAL_EXIT=${PIPESTATUS[0]}\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"ETAT_EXIT=${PIPESTATUS[0]}\"; bash tools/porte-sessions.sh 2>&1 | tail -2; echo \"SESSIONS_EXIT=${PIPESTATUS[0]}\"", "description": "Final jo … [34 caractères tronqués]`
+
+  ```
+journal · 47 jour(s) · 208 session(s) · 2609 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL_EXIT=0
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+ETAT_EXIT=0
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+SESSIONS_EXIT=0
+  ```
+
+- **bash** `{"command": "echo \"registre portes (22) :\"; awk '$2 != 0 {print}' work/portes-1115-09h22/registre.txt || true; echo \"lignes: $(wc -l < work/portes-1115-09h22/registre.txt)\"; echo \"---\"; git status --short | grep -E \"rapport-tagger-h50|qualifier_tagger_h50|en-cours|roadmap|2026-11-15/README\"  … [85 caractères tronqués]`
+
+  ```
+registre portes (22) :
+lignes: 22
+---
+W2 files clean
+  ```
+
+### 🤖 Assistant
+
+## W2 — le tagger sur le split 402 / H50
+
+**Livré et committé** (`1683c2b4`, sur le split W1 `4dbeff45`) :
+
+- **Fiche** : [`reports/rapport-tagger-h50.md`](reports/rapport-tagger-h50.md)
+- **JSON** : [`reports/rapport-tagger-h50.json`](reports/rapport-tagger-h50.json)
+- **Banc reproductible** : [`tools/tests/linguistique/qualifier_tagger_h50.py`](tools/tests/linguistique/qualifier_tagger_h50.py)
+
+### Les chiffres (passe API, cache neuf)
+
+| base | POS heuristique | POS tagger | Δ | fermé | ouvert | F1 / attachement |
+|---|---:|---:|---:|---:|---:|---:|
+| **402** | 0,9198 (1 984/2 157) | **0,9643** (2 080) | **+4,45 pts** | 0,9580 → 0,9425 (**−1,55**) | 0,8804 → 0,9868 (**+10,64**) | 0,8190 / 1,0000 inchangés |
+| **H50** | 0,6842 (221/323) | **0,8607** (278) | **+17,65 pts** | 0,7542 → 0,8156 (**+6,14**) | 0,5972 → 0,9167 (**+31,95**) | 0,5836 / 0,9545 inchangés |
+| **total 452** | 0,8891 (2 205/2 480) | **0,9508** (2 358) | **+6,17 pts** | 0,9294 → 0,9246 (−0,48) | 0,8466 → 0,9784 (+13,18) | 0,7906 / 0,9946 inchangés |
+
+Le total redonne **0,9508**, à **0,0008** du 0,9500 publié. Par langue : 402 fr **+8,16**, 402 en **+0,10** ; H50 fr **+19,05**, H50 en **+16,13**. Le tirage aléatoire hors H50 gagne **+4,83** : le gain « normal » est autour de +4,5 à +5, H50 est bien un stress test.
+
+### Coût et latence
+
+- **API** : **447 requêtes**, **65 029 tokens réseau** pour 452 phrases, **0,982 s/phrase**, **0,993 s/requête** (médiane 402 1,000 s, H50 0,968 s ; p95 1,29–1,32 s ; max 1,589 s). **399 appels** pour 402 (3 textes dupliqués servis par le cache mémoire) et **50** pour H50 ; **2 lectures de cache** (`r423`/`r427` partagent le prompt de `r010`/`r030`).
+- **Cache chaud après API** : **0 réseau, 0 token**, scores identiques.
+- **Cache chaud avant API** : **0 réseau, 0 token**, mais scores légèrement différents (0,9629 / 0,8638) : le cache existant venait d’un autre moment du modèle. Seule la passe API est la mesure du jour.
+
+### La règle
+
+**Une règle qui ne gagne que sur H50 est rejetée ; le contrôle est le 402.** Le tagger gagne **sur 402 (+4,45)** et sur H50 (+17,65) : il **n’est pas H50-only**, donc **accepté par la règle**. Réserve nommée : sur 402, le gain est **ouvert** (VERB +19,14, ADJ +19,40) et le **fermé baisse de 1,55 pt** (PREP −8,43, CONJ −10,15, AUX −2,92, DET −0,75). Une règle « aucune classe ne baisse sur 402 » le rejetterait ; c’est la réserve portée à **W3** (défaut / hybride fermé-ouvert).
+
+### Vérifications
+
+- `revue_documentation.py`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py` : **verts**.
+- `test_tagger_api.py` : **18/18** ; `test_produit.py` : **20/20** ; `porte-produit`, `porte-deepseek`, `porte-bloc-linguistique`, `porte-budget`, `porte-etat`, `porte-document`, `porte-tableaux` : **vertes**.
+- `porte-sessions` était rouge sur un heartbeat périmé (`e181ce02`) : **rafraîchi**, porte **verte** (commit `3439cb0c`).
+- Passe complète arrêtée à **22/85 portes, 0 rouge** (les longues `indice`/`melange` restent les rouges structurelles connues, à rejouer à la clôture de semaine).
+

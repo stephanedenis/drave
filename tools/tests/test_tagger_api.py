@@ -430,6 +430,102 @@ class TestErreursTagger(unittest.TestCase):
             self.assertIn("refus partiel", erreur)
 
 
+class TestMatriceW3(unittest.TestCase):
+    """La matrice de W3 : le défaut hors ligne, le coût pour 1 000 phrases, zéro socket.
+
+    Les autres lignes de la matrice ont déjà leur test : **avec clé**
+    (`TestCliAvecTransportFactice.test_analyser_tagger_json`), **clé invalide**
+    (`TestErreursTagger.test_cle_invalide_code_4`), **réseau coupé** et **repli**
+    (`TestErreursTagger.test_reseau_coupe_repli_heuristique`,
+    `test_refus_du_modele_repli_heuristique`, `test_modele_json_incomplet_repli_heuristique`).
+    Ce bloc ajoute les deux lignes qui décident du défaut : sans clé, code **0** ; et le coût
+    extrapolé à **1 000** phrases.
+    """
+
+    def _env_sans_cle(self, home: pathlib.Path) -> dict[str, str]:
+        env = {cle: valeur for cle, valeur in os.environ.items()
+               if cle not in {"DEEPSEEK_API_KEY", "DSH_API_KEY", "DEEPSEEK_KEY_FILE",
+                              "DSH_KEY_FILE", "HOME"}
+               and not cle.startswith("DEEPSEEK") and not cle.startswith("DSH_")}
+        env["HOME"] = str(home)
+        return env
+
+    def test_defaut_sans_cle_code_0(self) -> None:
+        """Sans clé, le défaut rend l'heuristique, code 0, et n'appelle jamais le tagger."""
+        with tempfile.TemporaryDirectory() as tmp:
+            env = self._env_sans_cle(pathlib.Path(tmp))
+            analyse = drave_cli("analyser", TEXTE, "--json", env=env)
+            self.assertEqual(analyse.returncode, 0, analyse.stderr)
+            donnees = json.loads(analyse.stdout)
+            self.assertEqual(donnees["source"], "heuristique")
+            self.assertFalse(donnees["refus"])
+            self.assertFalse([t for t in donnees["trace"]
+                              if "neuronal" in str(t.get("etape"))])
+            evaluation = drave_cli("evaluer", "--json", env=env)
+            self.assertEqual(evaluation.returncode, 0, evaluation.stderr)
+            self.assertEqual(evaluation.stderr, "")
+            self.assertNotIn("tagger", json.loads(evaluation.stdout))
+
+    def test_defaut_n_ouvre_aucune_socket(self) -> None:
+        """Le défaut ne charge pas le client réseau et ne construit aucune socket."""
+        code = (
+            "import contextlib, io, socket, sys\n"
+            "class Interdit(socket.socket):\n"
+            "    def __init__(self, *a, **k):\n"
+            "        raise RuntimeError('socket ouverte')\n"
+            "socket.socket = Interdit\n"
+            "sys.path.insert(0, 'tools')\n"
+            "import drave\n"
+            "with contextlib.redirect_stdout(io.StringIO()):\n"
+            "    c = drave.main(['analyser', 'Le chat dort.', '--json'])\n"
+            "print('CODE', c)\n"
+            "print('DEEPSEEK', 'tools.llm.deepseek' in sys.modules)\n"
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            env = self._env_sans_cle(pathlib.Path(tmp))
+            resultat = subprocess.run(
+                [sys.executable, "-c", code], cwd=str(RACINE), capture_output=True,
+                text=True, encoding="utf-8", timeout=60, env=env)
+        self.assertEqual(resultat.returncode, 0, resultat.stderr)
+        self.assertIn("CODE 0", resultat.stdout)
+        self.assertIn("DEEPSEEK False", resultat.stdout)
+
+    def test_cout_pour_1000_phrases(self) -> None:
+        """`evaluer --tagger` publie le coût linéaire pour 1 000 phrases."""
+        client = _FauxClient()
+        ancien_client = drave._client_tagger
+        evaluateur = drave._module_evaluation()
+        chargeur = evaluateur.charger
+        # deux phrases **identiques** : le cache mémoire ne fait qu'un appel, mais le lot
+        # mesuré fait bien **deux** phrases. L'extrapolation doit suivre les phrases, pas les
+        # appels — c'est la différence 449 appels / 452 phrases de W2.
+        premier = dict(chargeur()[0])
+        second = dict(premier, id=str(premier.get("id", "")) + "-bis")
+        evaluateur.charger = lambda: [premier, second]
+        ancien_module = drave._module_evaluation
+        drave._client_tagger = lambda: client
+        drave._module_evaluation = lambda: evaluateur
+        try:
+            sortie, erreur = io.StringIO(), io.StringIO()
+            with contextlib.redirect_stdout(sortie), contextlib.redirect_stderr(erreur):
+                code = drave.main(["evaluer", "--tagger", "--json"])
+        finally:
+            drave._client_tagger = ancien_client
+            drave._module_evaluation = ancien_module
+            evaluateur.charger = chargeur
+        self.assertEqual(code, 0, erreur.getvalue())
+        donnees = json.loads(sortie.getvalue())
+        self.assertEqual(donnees["tagger"]["cout"]["appels"], 1)
+        self.assertEqual(donnees["tagger"]["cout"]["tokens"], 17)
+        cout = donnees["tagger"]["cout_pour_1000_phrases"]
+        self.assertEqual(cout["phrases"], 1000)
+        self.assertEqual(cout["phrases_mesurees"], 2)
+        self.assertEqual(cout["appels"], 500)     # 1 appel pour 2 phrases, × 500
+        self.assertEqual(cout["requetes"], 500)
+        self.assertEqual(cout["tokens"], 8500)    # 17 tokens pour 2 phrases, × 500
+        self.assertEqual(cout["latence_s"], 0.0)
+
+
 def _pos_map(donnees: dict) -> dict[tuple[int, int], str]:
     return {(e["debut"], e["fin"]): e["type"] for e in donnees["etiquettes"]
             if e["niveau"] == "pos"}

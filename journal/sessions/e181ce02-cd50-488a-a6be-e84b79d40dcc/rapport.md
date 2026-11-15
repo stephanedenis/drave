@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 353.0 h |
+| Durée | 354.1 h |
 | Tours | 199 |
-| Messages | 3933 |
-| Appels d'outils | 3507 |
+| Messages | 3947 |
+| Appels d'outils | 3520 |
 | Fichiers touchés | 25 |
-| Commandes | 2909 |
+| Commandes | 2917 |
 | Sous-agents | 43 |
-| Commits | 473 |
+| Commits | 474 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*15 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10708,6 +10708,8 @@ Je commence.
 - bash — Voir les diffs des docs
 - bash — Committer W1
 - bash — Suivre W2
+- bash — Lire W2 et voir le non-committé
+- … et 7 autres
 
 **Synthèse produite :**
 
@@ -10833,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2869 autres
+- … et 2877 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11454,4 +11456,5 @@ Je commence.
 - ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 g
 - PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES" 2>&1 | tail -
 - SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S" 2>&1 | tail -2; git lo
+- SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE 0, CLÉ INVALIDE 4, RÉSEAU COUPÉ 0 APRÈS 3 ESSAIS, 1 000 PHRASES = 143 870 TOKENS) ; 4 TESTS DE PLU
 

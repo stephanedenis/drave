@@ -1,0 +1,286 @@
+{
+  "tache": "W3 — la matrice du tagger et le défaut",
+  "titre": "Le défaut reste hors ligne (code 0), --tagger est la seule porte qui peut sortir 4",
+  "date": "2026-11-15",
+  "ligne_roadmap": "R0.7 (le lecteur) / B13",
+  "head_mesure": "3439cb0c + ce diff (champ de coût additif)",
+  "verdict": "matrice mesurée : défaut sans clé code 0 et 0 socket ; avec clé code 0 (130 tokens, 1,156 s) ; clé invalide code 4, stdout vide ; réseau coupé code 0 après 3 essais, repli explicite ; coût 1 000 phrases = 143 870 tokens, 989 requêtes, 981,9 s, 0,031 $ hors pointe / 0,062 $ en pointe ; 21/21 tests.",
+  "recommande": {
+    "defaut": "heuristique, CPU, hors ligne, déterministe, code 0, 0 socket",
+    "tagger": "opt-in, code 0 avec clé, code 4 sans clé ou clé refusée",
+    "auto": "non implémenté ; si un jour, seulement avec une clé présente et sans changer le code de sortie",
+    "decision": "statu quo — garder le défaut hors ligne et --tagger opt-in ; pas de auto en W3 ; J5 applique ou rejette"
+  },
+  "dispositif": {
+    "mesures_reelles": "CLI en sous-processus, cache neuf par cas, clé ~/.config/drave/deepseek.key jamais affichée",
+    "tests": "transport factice injecté, 0 socket ; défaut et clé invalide en sous-processus avec HOME vide",
+    "reseau_coupe": "DEEPSEEK_BASE_URL=http://127.0.0.1:9 avec la clé valide : connexion refusée réelle, 3 essais (1 s + 2 s)",
+    "cout": "extrapolation linéaire de la passe API W2 (452 phrases, 65 029 tokens, 443,813 s) à 1 000 phrases",
+    "tarif": "deepseek-flash au 2026-11-13, source https://api-docs.deepseek.com/quick_start/pricing, repris de reports/rapport-coordination-r.md § 3.3",
+    "date_execution": "2026-11-15"
+  },
+  "matrice": [
+    {
+      "cas": "defaut_sans_cle_analyser",
+      "commande": "env -i HOME=<vide> PATH=$PATH python3 tools/drave.py analyser 'Le chat dort.' --json",
+      "code": 0,
+      "stdout_octets": 5852,
+      "source": "heuristique",
+      "refus": "",
+      "pos_sources": ["heuristique"],
+      "tagger_dans_json": false,
+      "stderr": "",
+      "duree_s": 0.162,
+      "test": "TestMatriceW3.test_defaut_sans_cle_code_0"
+    },
+    {
+      "cas": "defaut_sans_cle_evaluer",
+      "commande": "env -i HOME=<vide> PATH=$PATH python3 tools/drave.py evaluer --json",
+      "code": 0,
+      "stdout_octets": 3165,
+      "gold_phrases": 612,
+      "tagger_dans_json": false,
+      "stderr": "",
+      "duree_s": 1.358,
+      "test": "TestMatriceW3.test_defaut_sans_cle_code_0"
+    },
+    {
+      "cas": "defaut_zero_socket",
+      "commande": "python3 -c 'socket.socket = Interdit; drave.main([\"analyser\", ...])'",
+      "code": 0,
+      "deepseek_importe": false,
+      "socket_construite": false,
+      "stderr": "",
+      "test": "TestMatriceW3.test_defaut_n_ouvre_aucune_socket"
+    },
+    {
+      "cas": "avec_cle",
+      "commande": "python3 tools/drave.py analyser 'Le chat dort.' --tagger --json",
+      "code": 0,
+      "stdout_octets": 6117,
+      "source": "cascade",
+      "refus": "",
+      "pos_sources": ["neuronal", "heuristique"],
+      "pos": "Le/DET chat/NOUN dort/VERB ./PONCT",
+      "appels": 1,
+      "requetes": 1,
+      "cache": 0,
+      "tokens": 130,
+      "tokens_entree": 116,
+      "tokens_sortie": 14,
+      "latence_api_s": 1.156,
+      "duree_s": 1.326,
+      "modele_demande": "deepseek-chat",
+      "modele_renvoye": "deepseek-flash",
+      "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=130 · latence=1.2 s",
+      "test": "TestCliAvecTransportFactice.test_analyser_tagger_json"
+    },
+    {
+      "cas": "cle_invalide",
+      "commande": "DEEPSEEK_KEY_FILE=<cle-invalide> python3 tools/drave.py analyser 'Le chat dort.' --tagger --json",
+      "code": 4,
+      "stdout_octets": 0,
+      "source": null,
+      "refus": null,
+      "pos_sources": [],
+      "stderr": "drave: dépendance absente : clé DeepSeek refusée (HTTP 401) : vérifiez DEEPSEEK_KEY_FILE, ~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.",
+      "duree_s": 0.672,
+      "test": "TestErreursTagger.test_cle_invalide_code_4"
+    },
+    {
+      "cas": "reseau_coupe",
+      "commande": "DEEPSEEK_BASE_URL=http://127.0.0.1:9 python3 tools/drave.py analyser 'Le chat dort.' --tagger --json",
+      "code": 0,
+      "stdout_octets": 6253,
+      "source": "cascade",
+      "refus": "neuronal-pos: ErreurDeepSeek: réseau : [Errno 111] Connection refused",
+      "pos_sources": ["heuristique"],
+      "tentatives": 3,
+      "duree_s": 3.258,
+      "stderr": "drave: tagger : refus partiel : neuronal-pos: ErreurDeepSeek: réseau : [Errno 111] Connection refused\ndrave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=0 · cache=0 · tokens=0 · latence=0.0 s",
+      "test": "TestErreursTagger.test_reseau_coupe_repli_heuristique"
+    },
+    {
+      "cas": "refus_modele_non_json",
+      "commande": "transport factice : 'Je ne peux pas répondre.'",
+      "code": 0,
+      "source": "cascade",
+      "refus": "neuronal-pos: ValueError: pas de JSON : 'Je ne peux pas répondre.'",
+      "pos_sources": ["heuristique"],
+      "test": "TestErreursTagger.test_refus_du_modele_repli_heuristique"
+    },
+    {
+      "cas": "refus_modele_json_incomplet",
+      "commande": "transport factice : {\"pos\": [\"DET\"]} pour 3 tokens",
+      "code": 0,
+      "source": "cascade",
+      "refus": "neuronal-pos: ValueError: longueur POS 1 / 3",
+      "pos_sources": ["heuristique"],
+      "test": "TestErreursTagger.test_modele_json_incomplet_repli_heuristique"
+    },
+    {
+      "cas": "cout_pour_1000_phrases",
+      "commande": "evaluer --tagger --json (2 phrases, transport factice)",
+      "code": 0,
+      "cout_pour_1000_phrases": {
+        "phrases": 1000,
+        "phrases_mesurees": 2,
+        "appels_mesures": 1,
+        "tokens_mesures": 17,
+        "appels": 500,
+        "requetes": 500,
+        "tokens": 8500,
+        "latence_s": 0.0
+      },
+      "test": "TestMatriceW3.test_cout_pour_1000_phrases"
+    }
+  ],
+  "cout_1000_phrases": {
+    "base_mesuree": {
+      "source": "reports/rapport-tagger-h50.json — passes.api.cout_api_452",
+      "phrases": 452,
+      "tokens_gold": 2480,
+      "appels": 449,
+      "requetes": 447,
+      "cache_local": 2,
+      "tokens_entree": 55572,
+      "tokens_sortie": 9457,
+      "tokens_total": 65029,
+      "prompt_cache_hit_tokens": 0,
+      "latence_reseau_s": 443.813,
+      "latence_par_requete_s": 0.993,
+      "modele_renvoye": "deepseek-flash"
+    },
+    "extrapolation": {
+      "facteur": 2.212389,
+      "phrases": 1000,
+      "appels": 993,
+      "requetes": 989,
+      "cache_local": 4,
+      "tokens_entree": 122947,
+      "tokens_sortie": 20923,
+      "tokens_total": 143870,
+      "tokens_par_phrase": 143.869,
+      "tokens_entree_par_phrase": 122.95,
+      "tokens_sortie_par_phrase": 20.92,
+      "latence_reseau_s": 981.887,
+      "latence_par_phrase_s": 0.982,
+      "latence_par_requete_s": 0.993
+    },
+    "tarif": {
+      "modele": "deepseek-flash",
+      "date": "2026-11-13",
+      "source": "https://api-docs.deepseek.com/quick_start/pricing",
+      "unite": "USD par million de tokens",
+      "hors_pointe": {
+        "entree_cache_hit": 0.003,
+        "entree_cache_miss": 0.15,
+        "sortie": 0.60
+      },
+      "pointe": {
+        "entree_cache_hit": 0.006,
+        "entree_cache_miss": 0.30,
+        "sortie": 1.20
+      }
+    },
+    "cout_usd": {
+      "452_phrases": {
+        "hors_pointe": 0.0140,
+        "pointe": 0.0280
+      },
+      "1000_phrases": {
+        "hors_pointe": 0.0310,
+        "pointe": 0.0620
+      }
+    },
+    "cache_chaud": {
+      "requetes": 0,
+      "tokens": 0,
+      "cout_usd": 0.0,
+      "latence_s": 0.139,
+      "note": "cache disque du client, 0 réseau, 0 token ; 0,063 s pour 452 phrases, extrapolé à 1 000"
+    },
+    "une_phrase_reelle": {
+      "phrases": 1,
+      "tokens_entree": 116,
+      "tokens_sortie": 14,
+      "tokens_total": 130,
+      "latence_s": 1.156,
+      "cout_usd_hors_pointe": 0.000026,
+      "cout_usd_pointe": 0.000052,
+      "note": "phrase de 3 tokens ; le prompt fixe pèse l'essentiel, ce n'est pas un coût moyen"
+    },
+    "hypotheses": [
+      "un appel par phrase",
+      "même longueur moyenne que le gold 452 (5,49 tokens/phrase)",
+      "aucun cache hit côté API (prompt_cache_hit_tokens = 0)",
+      "tarif deepseek-flash du 2026-11-13, hors pointe / pointe",
+      "extrapolation linéaire, pas un run réel de 1 000 phrases"
+    ]
+  },
+  "controles_negatifs": [
+    {
+      "nom": "paire défaut / --tagger",
+      "mesure": "même HOME vide, même texte",
+      "resultat": "défaut code 0 ; --tagger code 4 : le 0 du défaut n'est pas un 4 déguisé",
+      "tests": ["TestMatriceW3.test_defaut_sans_cle_code_0", "TestCle.test_sans_cle_code_4"]
+    },
+    {
+      "nom": "avec clé / clé invalide",
+      "mesure": "même transport, même texte",
+      "resultat": "valide code 0 + POS neuronal ; invalide code 4 + stdout vide",
+      "tests": ["TestCliAvecTransportFactice.test_analyser_tagger_json", "TestErreursTagger.test_cle_invalide_code_4"]
+    },
+    {
+      "nom": "avec clé / réseau coupé",
+      "mesure": "même client, endpoint fermé",
+      "resultat": "valide code 0 + POS neuronal ; coupé code 0 + POS heuristique + refus",
+      "tests": ["TestCliAvecTransportFactice.test_analyser_tagger_json", "TestErreursTagger.test_reseau_coupe_repli_heuristique"]
+    },
+    {
+      "nom": "socket piégée",
+      "mesure": "socket.socket remplacé par une classe qui lève, défaut lancé",
+      "resultat": "processus code 0, aucune exception, tools.llm.deepseek non importé",
+      "test": "TestMatriceW3.test_defaut_n_ouvre_aucune_socket"
+    },
+    {
+      "nom": "cache chaud / cache neuf",
+      "mesure": "même run W2, cache disque",
+      "resultat": "0 réseau, 0 token, 0 $ en chaud contre 65 029 tokens en neuf ; le coût est le réseau",
+      "source": "reports/rapport-tagger-h50.json"
+    },
+    {
+      "nom": "mutation 401/403",
+      "mesure": "retirer le contrôle CleTaggerRefusee",
+      "resultat": "test_cle_invalide_code_4 échoue (0 != 4)",
+      "source": "reports/rapport-tagger-erreurs.md"
+    },
+    {
+      "nom": "extrapolation par phrase",
+      "mesure": "2 phrases identiques : 1 appel, 17 tokens",
+      "resultat": "cout_pour_1000_phrases = 500 appels, 8 500 tokens ; l'extrapolation suit les phrases, pas les appels",
+      "test": "TestMatriceW3.test_cout_pour_1000_phrases"
+    }
+  ],
+  "limites": [
+    "Le coût 1 000 est extrapolé de 452 phrases (2 480 tokens de gold) ; des phrases plus longues coûtent plus.",
+    "Le tarif change : les dollars sont ceux du deepseek-flash au 2026-11-13 ; les 143 870 tokens sont stables.",
+    "Le modèle renvoyé est deepseek-flash, pas le deepseek-chat demandé ; un routage différent change le tarif.",
+    "Le réseau coupé réel est une connexion refusée (127.0.0.1:9), pas un timeout DNS/TLS.",
+    "Les tests ne touchent pas le réseau ; le transport factice couvre le contrat, pas la diversité des réponses.",
+    "Le cache disque peut masquer une panne ; les tests utilisent un cache vide par cas.",
+    "401/403 seulement : un proxy qui rend 400 avec « invalid key » suivrait le repli, pas le code 4.",
+    "Le code 0 du repli n'est pas un feu vert : il faut lire refus ou stderr.",
+    "--jsonl : le code 4 peut arriver après des lignes déjà écrites.",
+    "auto n'existe pas : les conditions du § 4.2 sont une recommandation, pas un contrat livré."
+  ],
+  "fichiers": [
+    "tools/drave.py",
+    "tools/tests/test_tagger_api.py",
+    "reports/rapport-tagger-defaut.md",
+    "reports/rapport-tagger-defaut.json",
+    "reports/rapport-tagger-h50.md",
+    "reports/rapport-tagger-erreurs.md",
+    "reports/rapport-tagger-option.md"
+  ]
+}

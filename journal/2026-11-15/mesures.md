@@ -29,7 +29,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 353.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 354.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -88,4 +88,17 @@ phrase** : repli heuristique, code **0**, cause dans `refus`, POS `source=heuris
 transport valide donne code **0** et des POS neuronaux (contrôle négatif) ; retirer le contrôle
 401/403 fait échouer le test (`0 != 4`). [`fiche`](../../reports/rapport-tagger-erreurs.md) ·
 [`JSON`](../../reports/rapport-tagger-erreurs.json).
+
+### W3 — la matrice du tagger : le défaut reste hors ligne, `--tagger` peut seul sortir 4
+
+La **matrice** est mesurée en sous-processus : le **défaut sans clé** sort **0** (heuristique,
+`source=heuristique`), **0 socket**, `tools.llm.deepseek` **non importé** ; avec clé, **0**,
+**130 tokens** (116 entrée + 14 sortie), **1,156 s**, POS neuronal ; **clé invalide** (401),
+**4**, `stdout` **vide**, pas de repli ; **réseau coupé** (connexion refusée réelle), **0** après
+**3 essais**, POS heuristique et `refus` publié. Le **coût pour 1 000 phrases** est extrapolé de
+W2 : **143 870 tokens**, **989 requêtes**, **981,9 s**, **0,031 $ hors pointe / 0,062 $ en
+pointe** ; le cache chaud rejoue à **0 token** en **~0,14 s**. **Recommandation** : défaut hors
+ligne, `--tagger` opt-in, **pas de `auto`** ; s'il vient, seulement avec une clé présente et
+**sans changer le code de sortie**. **21/21 tests**. [`fiche`](../../reports/rapport-tagger-defaut.md) ·
+[`JSON`](../../reports/rapport-tagger-defaut.json).
 <!-- /notes -->

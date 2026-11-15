@@ -65104,3 +65104,140 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5143", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 09:45:55 EST
+2026-11-15 09:44:47 · ✔ W2 en 2312.5 s (code 0) — ✅ test -f reports/rapport-tagger-h50.md && echo FICHE-OK
+2026-11-15 09:44:47 · ▶ W3 — J2 — la décision du tagger par défaut (timeout 3600 s)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -10 reports/rapport-tagger-h50.md | cut -c1-180; git status --porcelain | grep \"^??\" | head -3; git status --porcelain reports/ docs/ tools/ | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rappo … [156 caractères tronqués]`
+
+  ```
+# W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50 ; il gagne sur les deux, donc la règle ne le rejette pas
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **W2** (semaine 2, J2 matin) ·
+> **Date** : 2026-11-15 (mesure) · **Cible** : J2 · 17/11 · **HEAD mesuré** : `6b2208ee` ·
+> **Verdict** : ✅ **le tagger n'est pas H50-only** — il gagne **+4,45 pts** sur **402** et
+> **+17,65 pts** sur **H50** ; le F1 et l'attachement du 402 sont **inchangés**. **Réserve nommée** :
+> sur 402, le gain est **ouvert** (+10,64 pts) et le **fermé baisse** (−1,55 pt) ; une règle qui
+> exigerait la non-régression du fermé rejetterait le tagger tel quel.
+
+**En trois lignes.** (1) Sur les **402** phrases de l'entraînement, le POS passe de **0,9198** à
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+ M tools/chantier/plan.json
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-tagger-h50.md reports/rapport-tagger-h50.json 2>/dev/null; git log --oneline -1 -- reports/rapport-tagger-h50.md | cut -c1-60; git log --oneline -2 | cut -c1-80", "description": "Vérifier W2's f … [6 caractères tronqués]`
+
+  ```
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+
+3439cb0c ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sess
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 →
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "descrip … [55 caractères tronqués]`
+
+  ```
+4dbeff45..3439cb0c  s/v7 -> s/v7
+   4dbeff45..3439cb0c  master -> master
+[still running after 600000ms; moved to background job bash-5146]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5146", "timeout_ms": 800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5146", "timeout_ms": 800000, "wait": true}`
+
+  ```
+dim 15 nov 2026 10:06:20 EST
+2026-11-15 09:44:47 · ✔ W2 en 2312.5 s (code 0) — ✅ test -f reports/rapport-tagger-h50.md && echo FICHE-OK
+2026-11-15 09:44:47 · ▶ W3 — J2 — la décision du tagger par défaut (timeout 3600 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5146 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; git status --porcelain | grep -c \"^??\"", "description": "Suivre W3", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5147]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5147", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5147", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 10:31:35 EST
+2026-11-15 09:44:47 · ✔ W2 en 2312.5 s (code 0) — ✅ test -f reports/rapport-tagger-h50.md && echo FICHE-OK
+2026-11-15 09:44:47 · ▶ W3 — J2 — la décision du tagger par défaut (timeout 3600 s)
+0
+5
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 work/chantier/journal.log; ls reports/rapport-tagger-defaut.md 2>/dev/null", "description": "Verdict W3", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5148]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5148", "timeout_ms": 600000, "wait": true}`
+
+  ```
+dim 15 nov 2026 10:46:48 EST
+2026-11-15 09:44:47 · ▶ W3 — J2 — la décision du tagger par défaut (timeout 3600 s)
+2026-11-15 10:44:53 · ✔ W3 en 3600.0 s (code 124) — ✅ test -f reports/rapport-tagger-defaut.md && echo FICHE-OK; ✅ python3 tools/tests/test_tagger_api.py 2>&1 | tail -1
+2026-11-15 10:44:53 · ▶ W4 — J3 — Panini : le manifeste et le rejeu (timeout 3600 s)
+reports/rapport-tagger-defaut.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-tagger-defaut.md reports/rapport-tagger-defaut.json tools/tests/test_tagger_api.py 2>/dev/null; git log --oneline -1 -- reports/rapport-tagger-defaut.md | cut -c1-60; head -8 reports/rapport-tag … [59 caractères tronqués]`
+
+  ```
+M tools/tests/test_tagger_api.py
+?? reports/rapport-tagger-defaut.json
+?? reports/rapport-tagger-defaut.md
+# W3 — la matrice du tagger : le défaut reste hors ligne (code 0), `--tagger` est la seule porte qui peut sortir 4
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **W3** (semaine 2, J2
+> après-midi) · **Date** : 2026-11-15 · **HEAD mesuré** : `3439cb0c` + ce diff (champ de coût
+> additif) · **Verdict** : ✅ **la matrice est mesurée** — le **défaut sans clé** rend
+> l'heuristique, **code 0**, **0 socket** ; avec clé, **code 0**, **130 tokens** et **1,16 s**
+> pour une phrase ; **clé invalide**, **code 4**, `stdout` vide ; **réseau coupé**, **code 0**
+> après **3 essais**, repli heuristique explicite. **Coût pour 1 000 phrases** : **143 870
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | tail -2; git diff tools/tests/test_tagger_api.py | head -8 | cut -c1-120", "description": "Tester W3", "timeoutMs": 400000}`
+
+  ```
+OK
+diff --git a/tools/tests/test_tagger_api.py b/tools/tests/test_tagger_api.py
+index 95bfd985..c8afdec5 100644
+--- a/tools/tests/test_tagger_api.py
++++ b/tools/tests/test_tagger_api.py
+@@ -430,6 +430,102 @@ class TestErreursTagger(unittest.TestCase):
+             self.assertIn("refus partiel", erreur)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1496 caractères tronqués]`

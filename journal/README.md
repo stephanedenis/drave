@@ -213,7 +213,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 353.0 h | 199 | 3507 | 25 | 473 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 354.1 h | 199 | 3520 | 25 | 474 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -239,7 +239,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
 | `session-` | Extension du gold réel 200+ | 2026-11-15 02:34 | 0.2 h | 1 | 148 | 2 | 0 | [rapport](sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/rapport.md) |
-| `session-` | Mesure du tagger sur H50 et delta | 2026-11-15 09:06 | 0.6 h | 1 | 165 | 0 | 9 | [rapport](sessions/session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55/rapport.md) |
+| `session-` | Mesure du tagger sur H50 et delta | 2026-11-15 09:06 | 0.6 h | 1 | 168 | 0 | 9 | [rapport](sessions/session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55/rapport.md) |
 | `session-` | Preuves CIC : vérification et rapport | 2026-11-15 03:55 | 0.2 h | 1 | 129 | 8 | 1 | [rapport](sessions/session-3241a992-ffa6-4c12-ab1c-a8e175f880b7/rapport.md) |
 | `session-` | FAQ ajoutée au sommaire et liens vérifiés | 2026-11-15 06:26 | 0.1 h | 1 | 108 | 6 | 1 | [rapport](sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/rapport.md) |
 | `session-` | Rédiger la FAQ produit D3 | 2026-11-15 05:53 | 0.3 h | 1 | 173 | 6 | 1 | [rapport](sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/rapport.md) |
@@ -247,6 +247,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Table des mesures du chantier J13.1 | 2026-11-14 06:23 | 0.2 h | 1 | 129 | 5 | 1 | [rapport](sessions/session-4271ad32-61f1-46a0-8494-7c94c3f8050f/rapport.md) |
 | `session-` | Fiche de coordination N2 : mètre eval_n2_propre | 2026-11-13 21:38 | 0.2 h | 1 | 115 | 3 | 0 | [rapport](sessions/session-4a28c290-9701-4d27-8aad-a9cf004c9af9/rapport.md) |
 | `session-` | Restitution v2 : rôles et fidélité | 2026-11-15 04:53 | 1.0 h | 1 | 232 | 4 | 0 | [rapport](sessions/session-53896e61-4a68-417d-89e0-de0de156949b/rapport.md) |
+| `session-` | Rapport manifeste Panini et rejeu protocole | 2026-11-15 10:44 | 0.1 h | 1 | 49 | 0 | 0 | [rapport](sessions/session-5d421585-1af2-4f07-ac86-e4879cc23d4f/rapport.md) |
 | `session-` | Coordination R : tagger POS sur gold 612 | 2026-11-13 21:59 | 0.7 h | 1 | 128 | 4 | 3 | [rapport](sessions/session-5e097832-2ce1-407d-bf99-228cef7efa82/rapport.md) |
 | `session-` | Schéma annotation v2 et validation | 2026-11-07 14:11 | 0.2 h | 1 | 171 | 12 | 1 | [rapport](sessions/session-614644be-9315-4734-9b97-236a792f4dc5/rapport.md) |
 | `session-` | Documenter schéma v2 produit | 2026-11-14 04:58 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-631f4ba2-5c36-4fdc-b751-fa0a2cce9d21/rapport.md) |
@@ -266,6 +267,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
+| `session-` | Matrice tagger et recommandation par défaut | 2026-11-15 09:44 | 1.0 h | 1 | 156 | 7 | 0 | [rapport](sessions/session-bc92a84f-e2ea-4c23-8227-525822d29662/rapport.md) |
 | `session-` | Corriger span g017 avec règle adverbe | 2026-11-14 00:41 | 0.3 h | 1 | 126 | 1 | 2 | [rapport](sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md) |
 | `session-` | Vérificateur indépendant du corpus CIC | 2026-11-14 05:43 | 0.7 h | 1 | 138 | 5 | 1 | [rapport](sessions/session-c3f599ea-570a-4db4-ad78-8eff22004a4c/rapport.md) |
 | `session-` | Rédiger le rapport bilan du chantier | 2026-11-14 03:46 | 0.2 h | 1 | 114 | 5 | 1 | [rapport](sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/rapport.md) |
