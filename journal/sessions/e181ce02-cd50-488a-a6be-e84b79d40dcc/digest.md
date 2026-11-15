@@ -65900,3 +65900,30 @@ dim 15 nov 2026 14:49:01 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/r … [740 caractères tronqués]`
+
+  ```
+· T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ 13 files changed, 56 insertions(+), 22 deletions(-)
+75dc9259 ÉTAT — T0 VERT
+   a1c45477..75dc9259  s/v7 -> s/v7
+   a1c45477..75dc9259  master -> master
+dim 15 nov 2026 14:52:02 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Nuit\\|semaine 2\\|Semaine\" docs/pilotage/en-cours.md | head -4 | cut -c1-200", "description": "Voir les blocs de synthèse"}`
+
+  ```
+66:- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3` opt-in ; [fiche](../../reports/rapport-
+119:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens / 0,031 $ hors 
+144:  [semaine 2](semaine-2.md) · [backlog](backlog/index.md) · preuves : [reports/](../../reports/) ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '66p' docs/pilotage/en-cours.md | cut -c1-400; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3 … [331 caractères tronqués]`
+
+  ```
+- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3` opt-in ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md) + [JSON](../../reports/rapport-semaine-2.json) ; tag annoté `semaine-2-2026-11-20` sur `73edb3dd` ; **85*
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)\" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin … [192 caractères tronqués]`

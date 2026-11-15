@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 358.1 h |
+| Durée | 358.2 h |
 | Tours | 199 |
-| Messages | 4009 |
-| Appels d'outils | 3582 |
+| Messages | 4012 |
+| Appels d'outils | 3585 |
 | Fichiers touchés | 25 |
-| Commandes | 2965 |
+| Commandes | 2968 |
 | Sous-agents | 43 |
-| Commits | 484 |
+| Commits | 485 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*90 appels d'outils.* Actions notables :
+*93 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,7 +10709,7 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 54 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
@@ -10835,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2925 autres
+- … et 2928 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11467,4 +11467,5 @@ Je commence.
 - ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push orig
 - ÉTAT — T0 VERT (UNE CLAUSE REDONDANTE RETIRÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push orig
 - ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
+- ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7
 
