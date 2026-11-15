@@ -1,0 +1,2193 @@
+{
+ "version": 1,
+ "date": "2026-11-15",
+ "heure": "12:37 EST",
+ "tache": "X1 / J4 après-midi — la recette de la page `/` de S (part du pilote)",
+ "fiche": "reports/rapport-page-s-mesure.md",
+ "ligne": "S · J4 après-midi",
+ "objet": "mesurer en lecture seule la page `/` de S : banc ancien (369 candidats, 0 profondeur) contre v7 (359 candidats, 99 à profondeur ≥ 3) ; couverture, verdicts, référents (14 occurrences / 12 formes), 106 conservés / 41 en quarantaine ; contrôle négatif",
+ "lecture_seule": true,
+ "aucune_modification_s": [
+  "tools/structures/"
+ ],
+ "head_parent": "049343d3fc41a3003d2dac8dfd41db63db7ec59d",
+ "head_parent_court": "049343d3",
+ "sous_module": "389b99f8383eb47c0cc008f5d3211c9d65d895fc",
+ "sous_module_court": "389b99f",
+ "branche": "s/v7",
+ "verdict": "La page `/` sert toujours le banc ancien : 369 candidats, 0 avec `profondeur`, 0 à ≥3, distribution 10/277/82 ; la v7 dynamique donne 359 candidats, 2/37/221/84/13/2 et 99 à ≥3. Attention : « 369/0 » et « 359/99 » ne sont pas des comptes de verdicts — `/` porte 150 verdicts / 147 paires, et la v7 n'a aucun verdict natif. La migration exacte reproduit 106 conservés / 41 en quarantaine, mais la signature nue ne donne que 65 cibles distinctes (41 collisions) ; avec l'attachement, 106/41 devient injectif. Les référents sont toujours 28 mappings / 16 justes / 12 faux / 2 manquants (0 note), et la cible « 14 occurrences / 12 formes » ne couvre que a001–a003. Contrôle négatif : les deux bancs diffèrent (empreintes, 0/369 contre 359/359, 0 contre 99). 56/56 tests ; sous-module 389b99f propre ; 8765 intact.",
+ "banc_ancien": {
+  "source": {
+   "phrases_json": {
+    "phrases": 7,
+    "candidats": 14,
+    "sha256": "51e07f1c7695cdf91298e4657d4ac767f3948f53fa4e6924223f04a4ac41a331",
+    "mtime": "2026-11-02 02:10:03"
+   },
+   "phrases_generees_json": {
+    "phrases": 200,
+    "candidats": 355,
+    "sha256": "43957a3b9ad2422b7897a29462086ebe36877eb0d856eda4fd26ad55b5620307",
+    "mtime": "2026-11-02 20:35:33"
+   }
+  },
+  "phrases": 207,
+  "candidats": 369,
+  "segments": 2414,
+  "profondeur": {
+   "candidats_avec_profondeur": 0,
+   "segments_avec_profondeur": 0,
+   "candidats_avec_profondeur_sur": "0/369",
+   "niveau_max_par_candidat": {
+    "0": 10,
+    "1": 277,
+    "2": 82
+   },
+   "niveau_segments": {
+    "0": 1444,
+    "1": 888,
+    "2": 82
+   },
+   "candidats_profondeur_ge_3": 0,
+   "note": "le banc stocké ne porte que `niveau` ; `profondeur` est absent"
+  },
+  "verdicts": {
+   "lignes": 150,
+   "paires_uniques": 147,
+   "revisions": 3,
+   "statuts_lignes": {
+    "exclu": 64,
+    "resolu": 74,
+    "double_sens": 1,
+    "compatible": 11
+   },
+   "statuts_dernier": {
+    "exclu": 63,
+    "resolu": 73,
+    "compatible": 11
+   },
+   "acceptes_dernier": 84,
+   "exclus_dernier": 63,
+   "notes_non_vides": 1,
+   "niveaux_dernier": {
+    "0": 141,
+    "2": 4,
+    "3": 2
+   },
+   "contextes_non_vides": 6,
+   "auteurs": {
+    "humain": 150
+   }
+  },
+  "couverture": {
+   "phrases_jugees_en_entier": 74,
+   "phrases_partielles": 0,
+   "phrases_sans_verdict": 133,
+   "phrases_avec_au_moins_un_verdict": 74,
+   "candidats_juges": 147,
+   "candidats_total": 369,
+   "taux_candidats": 0.398374,
+   "taux_phrases_completes": 0.357488,
+   "detail": {
+    "banc_7": {
+     "phrases": 7,
+     "jugees": "7/7"
+    },
+    "litterature_200": {
+     "phrases": 200,
+     "jugees": "67/200"
+    }
+   }
+  }
+ },
+ "v7": {
+  "phrases": 207,
+  "candidats": 359,
+  "segments": 2308,
+  "profondeur": {
+   "candidats_avec_profondeur": 359,
+   "segments_avec_profondeur": 2308,
+   "profondeur_max_par_candidat": {
+    "0": 2,
+    "1": 37,
+    "2": 221,
+    "3": 84,
+    "4": 13,
+    "5": 2
+   },
+   "profondeur_segments": {
+    "0": 359,
+    "1": 1268,
+    "2": 556,
+    "3": 108,
+    "4": 15,
+    "5": 2
+   },
+   "candidats_profondeur_ge_3": 99,
+   "taux_profondeur_ge_3": 0.275766
+  },
+  "referents": {
+   "occurrences": 371,
+   "formes_uniques": 29,
+   "formes_detail": {
+    "y": 109,
+    "en": 67,
+    "se": 44,
+    "me": 19,
+    "il": 18,
+    "son": 18,
+    "elle": 9,
+    "je": 9,
+    "vous": 9,
+    "lui": 8,
+    "sa": 8,
+    "on": 5,
+    "nous": 5,
+    "tu": 5,
+    "ses": 4,
+    "leurs": 4,
+    "te": 4,
+    "vos": 4,
+    "ils": 3,
+    "moi": 3,
+    "nos": 3,
+    "cela": 2,
+    "votre": 2,
+    "mon": 2,
+    "notre": 2,
+    "leur": 2,
+    "j'ai": 1,
+    "j'avais": 1,
+    "j'aurais": 1
+   },
+   "avec_candidat": 294,
+   "sans_candidat": 77,
+   "phrases_avec_referent": 170,
+   "phrases_sans_referent": 37,
+   "note": "occurrences = pronoms/possessifs comptés ; formes_uniques = types de forme ; avec_candidat = au moins un antécédent proposé dans la phrase, sans contexte."
+  },
+  "verdicts_natifs": 0,
+  "note_verdicts": "la v7 dynamique n'a aucun verdict humain propre : les 147 paires de validations.jsonl portent sur les signatures du banc ancien"
+ },
+ "comparaison": {
+  "phrases": {
+   "ancien": 207,
+   "v7": 207,
+   "delta": 0
+  },
+  "candidats": {
+   "ancien": 369,
+   "v7": 359,
+   "delta": -10
+  },
+  "segments": {
+   "ancien": 2414,
+   "v7": 2308,
+   "delta": -106
+  },
+  "profondeur_presente": {
+   "ancien": "0/369",
+   "v7": "359/359"
+  },
+  "profondeur_ge_3": {
+   "ancien": 0,
+   "v7": 99,
+   "part_v7": 0.275766
+  },
+  "verdicts": {
+   "ancien": {
+    "lignes": 150,
+    "paires": 147
+   },
+   "v7_natifs": 0,
+   "migres_exact": 106,
+   "quarantaine_exact": 41
+  },
+  "signatures": {
+   "identiques_meme_index": 304,
+   "changes_meme_index": 55,
+   "orphelins": 10,
+   "anciens_seulement": 65,
+   "v7_seulement": 55
+  }
+ },
+ "migration": {
+  "signature_v2": "(texte, type, rôle) des segments, dans l'ordre, texte exact",
+  "verdicts_banque": {
+   "lignes": 150,
+   "paires_uniques": 147,
+   "revisions": 3
+  },
+  "exacte": {
+   "label": "texte exact, type, rôle",
+   "convention": {
+    "normaliser_espaces": false,
+    "avec_attachement": false,
+    "cible_reduite_a_la_tete": false
+   },
+   "gardes": 106,
+   "quarantaine": 41,
+   "cibles_distinctes": 65,
+   "collisions": 41,
+   "phrases_couvertes": {
+    "anciennes_completes": 74,
+    "transitions_anciennes_completes": {
+     "complete": 21,
+     "aucune": 18,
+     "partielle": 35
+    },
+    "v7_completes": 21,
+    "v7_partielles": 35,
+    "v7_aucune": 151
+   },
+   "candidats_juges": 65,
+   "profondeurs_jugees": {
+    "1": 10,
+    "2": 32,
+    "3": 18,
+    "4": 4,
+    "5": 1
+   },
+   "profonds_juges": 23,
+   "statuts_gardes": {
+    "compatible": 5,
+    "resolu": 55,
+    "exclu": 46
+   },
+   "statuts_quarantaine": {
+    "exclu": 17,
+    "resolu": 18,
+    "compatible": 6
+   },
+   "quarantaine_acceptes": 24,
+   "quarantaine_exclus": 17
+  },
+  "exacte_attachement": {
+   "label": "texte exact, type, rôle + attachement",
+   "convention": {
+    "normaliser_espaces": false,
+    "avec_attachement": true,
+    "cible_reduite_a_la_tete": false
+   },
+   "gardes": 106,
+   "quarantaine": 41,
+   "cibles_distinctes": 106,
+   "collisions": 0,
+   "phrases_couvertes": {
+    "anciennes_completes": 74,
+    "transitions_anciennes_completes": {
+     "complete": 56,
+     "aucune": 18
+    },
+    "v7_completes": 56,
+    "v7_partielles": 0,
+    "v7_aucune": 151
+   },
+   "candidats_juges": 106,
+   "profondeurs_jugees": {
+    "1": 10,
+    "2": 50,
+    "3": 35,
+    "4": 9,
+    "5": 2
+   },
+   "profonds_juges": 46,
+   "statuts_gardes": {
+    "compatible": 5,
+    "resolu": 55,
+    "exclu": 46
+   },
+   "statuts_quarantaine": {
+    "exclu": 17,
+    "resolu": 18,
+    "compatible": 6
+   },
+   "quarantaine_acceptes": 24,
+   "quarantaine_exclus": 17
+  },
+  "quarantaine_exacte": {
+   "paires": 41,
+   "lignes": 44,
+   "revisions": 3,
+   "phrases": 18,
+   "par_phrase": {
+    "p001": 2,
+    "p002": 2,
+    "p003": 2,
+    "p004": 2,
+    "p005": 2,
+    "p006": 2,
+    "p007": 2,
+    "c002": 2,
+    "c004": 2,
+    "c009": 3,
+    "c011": 2,
+    "c013": 3,
+    "c020": 3,
+    "c023": 3,
+    "c043": 2,
+    "c056": 3,
+    "c064": 2,
+    "c065": 2
+   },
+   "sans_index": {
+    "nombre": 5,
+    "liste": [
+     "c023-c3",
+     "c056-c2",
+     "c056-c3",
+     "c064-c2",
+     "p006-c2"
+    ]
+   },
+   "meme_index_change": {
+    "nombre": 36,
+    "liste": [
+     "c002-c1",
+     "c002-c2",
+     "c004-c1",
+     "c004-c2",
+     "c009-c1",
+     "c009-c2",
+     "c009-c3",
+     "c011-c1",
+     "c011-c2",
+     "c013-c1",
+     "c013-c2",
+     "c013-c3",
+     "c020-c1",
+     "c020-c2",
+     "c020-c3",
+     "c023-c1",
+     "c023-c2",
+     "c043-c1",
+     "c043-c2",
+     "c056-c1",
+     "c064-c1",
+     "c065-c1",
+     "c065-c2",
+     "p001-c1",
+     "p001-c2",
+     "p002-c1",
+     "p002-c2",
+     "p003-c1",
+     "p003-c2",
+     "p004-c1",
+     "p004-c2",
+     "p005-c1",
+     "p005-c2",
+     "p006-c1",
+     "p007-c1",
+     "p007-c2"
+    ]
+   },
+   "statuts": {
+    "exclu": 17,
+    "resolu": 18,
+    "compatible": 6
+   },
+   "acceptes": 24,
+   "exclus": 17,
+   "detail": [
+    {
+     "phrase": "c002",
+     "candidat": "c002-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "qui court à toutes jambes",
+      "cible": "le Lapin Blanc",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c002",
+     "candidat": "c002-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "qui court à toutes jambes",
+      "cible": "Elle voit",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c004",
+     "candidat": "c004-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'une voix conciliante",
+      "cible": "l'intention",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c004",
+     "candidat": "c004-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'une voix conciliante",
+      "cible": "dit Alice",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c009",
+     "candidat": "c009-c1",
+     "index_ancien": 1,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "sur",
+      "cible": "autres",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c009",
+     "candidat": "c009-c2",
+     "index_ancien": 2,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "sur",
+      "cible": "le coude appuyé",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c009",
+     "candidat": "c009-c3",
+     "index_ancien": 3,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "sur",
+      "cible": "était assis",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c011",
+     "candidat": "c011-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "à tout moment",
+      "cible": "l'aise",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c011",
+     "candidat": "c011-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "à tout moment",
+      "cible": "lui arriver",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c013",
+     "candidat": "c013-c1",
+     "index_ancien": 1,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "dans le dos",
+      "cible": "secouer",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c013",
+     "candidat": "c013-c2",
+     "index_ancien": 2,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "dans le dos",
+      "cible": "il se mit",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c013",
+     "candidat": "c013-c3",
+     "index_ancien": 3,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "dans le dos",
+      "cible": "lui taper",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c020",
+     "candidat": "c020-c1",
+     "index_ancien": 1,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "chez",
+      "cible": "maison",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c020",
+     "candidat": "c020-c2",
+     "index_ancien": 2,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "chez",
+      "cible": "la porte",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c020",
+     "candidat": "c020-c3",
+     "index_ancien": 3,
+     "candidats_v7": 3,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "chez",
+      "cible": "rentrait",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c023",
+     "candidat": "c023-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "d'est",
+      "cible": "vent",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c023",
+     "candidat": "c023-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'est",
+      "cible": "l'air froid",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c023",
+     "candidat": "c023-c3",
+     "index_ancien": 3,
+     "candidats_v7": 2,
+     "raison": "sans_index",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'est",
+      "cible": "était assez beau",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c043",
+     "candidat": "c043-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "d'équipage",
+      "cible": "l'inspecteur",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c043",
+     "candidat": "c043-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'équipage",
+      "cible": "se mettre en frais",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c056",
+     "candidat": "c056-c1",
+     "index_ancien": 1,
+     "candidats_v7": 1,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "d'affaire",
+      "cible": "Francisco",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c056",
+     "candidat": "c056-c2",
+     "index_ancien": 2,
+     "candidats_v7": 1,
+     "raison": "sans_index",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'affaire",
+      "cible": "Une fois",
+      "genre": "GN"
+     }
+    },
+    {
+     "phrase": "c056",
+     "candidat": "c056-c3",
+     "index_ancien": 3,
+     "candidats_v7": 1,
+     "raison": "sans_index",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "d'affaire",
+      "cible": "se tirer",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c064",
+     "candidat": "c064-c1",
+     "index_ancien": 1,
+     "candidats_v7": 1,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "pour",
+      "cible": "Heureusement",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "c064",
+     "candidat": "c064-c2",
+     "index_ancien": 2,
+     "candidats_v7": 1,
+     "raison": "sans_index",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": null
+    },
+    {
+     "phrase": "c065",
+     "candidat": "c065-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": "de Mrs",
+      "cible": "maître",
+      "genre": "GP"
+     }
+    },
+    {
+     "phrase": "c065",
+     "candidat": "c065-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": "de Mrs",
+      "cible": "être entendu",
+      "genre": "GV"
+     }
+    },
+    {
+     "phrase": "p001",
+     "candidat": "p001-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " qui dort sur le toit",
+      "cible": "Le chat",
+      "genre": "relative"
+     }
+    },
+    {
+     "phrase": "p001",
+     "candidat": "p001-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": " qui dort sur le toit",
+      "cible": " de la voisine",
+      "genre": "relative"
+     }
+    },
+    {
+     "phrase": "p002",
+     "candidat": "p002-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " avec le télescope",
+      "cible": "J'ai vu",
+      "genre": "gp"
+     }
+    },
+    {
+     "phrase": "p002",
+     "candidat": "p002-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": " avec le télescope",
+      "cible": " l'homme",
+      "genre": "gp"
+     }
+    },
+    {
+     "phrase": "p003",
+     "candidat": "p003-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " dans le parc",
+      "cible": " a vu",
+      "genre": "gp"
+     }
+    },
+    {
+     "phrase": "p003",
+     "candidat": "p003-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": " dans le parc",
+      "cible": " l'homme",
+      "genre": "gp"
+     }
+    },
+    {
+     "phrase": "p004",
+     "candidat": "p004-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " pour attraper le bus",
+      "cible": "Il a couru",
+      "genre": "role"
+     }
+    },
+    {
+     "phrase": "p004",
+     "candidat": "p004-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " pour attraper le bus",
+      "cible": "Il a couru",
+      "genre": "role"
+     }
+    },
+    {
+     "phrase": "p005",
+     "candidat": "p005-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "exclu",
+     "accepte": false,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " de son projet",
+      "cible": "Il a parlé",
+      "genre": "possession"
+     }
+    },
+    {
+     "phrase": "p005",
+     "candidat": "p005-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " de son projet",
+      "cible": " à Marie",
+      "genre": "possession"
+     }
+    },
+    {
+     "phrase": "p006",
+     "candidat": "p006-c1",
+     "index_ancien": 1,
+     "candidats_v7": 1,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 2,
+     "attachement_ancien": {
+      "segment": " hier",
+      "cible": " qu'elle viendrait",
+      "genre": "portee"
+     }
+    },
+    {
+     "phrase": "p006",
+     "candidat": "p006-c2",
+     "index_ancien": 2,
+     "candidats_v7": 1,
+     "raison": "sans_index",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " hier",
+      "cible": "Elle a dit",
+      "genre": "portee"
+     }
+    },
+    {
+     "phrase": "p007",
+     "candidat": "p007-c1",
+     "index_ancien": 1,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "resolu",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " à manger",
+      "cible": "Le canard",
+      "genre": "gp"
+     }
+    },
+    {
+     "phrase": "p007",
+     "candidat": "p007-c2",
+     "index_ancien": 2,
+     "candidats_v7": 2,
+     "raison": "meme_index_change",
+     "statut": "compatible",
+     "accepte": true,
+     "niveau_max_ancien": 1,
+     "attachement_ancien": {
+      "segment": " à manger",
+      "cible": " est prêt",
+      "genre": "role"
+     }
+    }
+   ]
+  },
+  "cinq_sans_index": {
+   "liste": [
+    "p006-c2",
+    "c023-c3",
+    "c056-c2",
+    "c056-c3",
+    "c064-c2"
+   ],
+   "p006_c2": {
+    "candidat": "p006-c2",
+    "index_ancien": 2,
+    "candidats_v7": 1,
+    "statut": "compatible",
+    "exacte": "quarantaine",
+    "normalisee_attachement": "gardé c1",
+    "note": "la v1 le compte parmi les 5 sans index ; sa signature normalisée existe pourtant en v7-c1"
+   },
+   "note": "5 candidats n'ont plus d'index ; ce n'est pas 5 verdicts perdus : p006-c2 a une signature normalisée en v7-c1, les 4 autres n'ont aucune correspondance"
+  },
+  "variantes": {
+   "exacte": {
+    "label": "texte exact, type, rôle",
+    "convention": {
+     "normaliser_espaces": false,
+     "avec_attachement": false,
+     "cible_reduite_a_la_tete": false
+    },
+    "gardes": 106,
+    "quarantaine": 41,
+    "cibles_distinctes": 65,
+    "collisions": 41,
+    "phrases_couvertes": {
+     "anciennes_completes": 74,
+     "transitions_anciennes_completes": {
+      "complete": 21,
+      "aucune": 18,
+      "partielle": 35
+     },
+     "v7_completes": 21,
+     "v7_partielles": 35,
+     "v7_aucune": 151
+    },
+    "candidats_juges": 65,
+    "profondeurs_jugees": {
+     "1": 10,
+     "2": 32,
+     "3": 18,
+     "4": 4,
+     "5": 1
+    },
+    "profonds_juges": 23,
+    "statuts_gardes": {
+     "compatible": 5,
+     "resolu": 55,
+     "exclu": 46
+    },
+    "statuts_quarantaine": {
+     "exclu": 17,
+     "resolu": 18,
+     "compatible": 6
+    },
+    "quarantaine_acceptes": 24,
+    "quarantaine_exclus": 17
+   },
+   "exacte_attachement": {
+    "label": "texte exact, type, rôle + attachement",
+    "convention": {
+     "normaliser_espaces": false,
+     "avec_attachement": true,
+     "cible_reduite_a_la_tete": false
+    },
+    "gardes": 106,
+    "quarantaine": 41,
+    "cibles_distinctes": 106,
+    "collisions": 0,
+    "phrases_couvertes": {
+     "anciennes_completes": 74,
+     "transitions_anciennes_completes": {
+      "complete": 56,
+      "aucune": 18
+     },
+     "v7_completes": 56,
+     "v7_partielles": 0,
+     "v7_aucune": 151
+    },
+    "candidats_juges": 106,
+    "profondeurs_jugees": {
+     "1": 10,
+     "2": 50,
+     "3": 35,
+     "4": 9,
+     "5": 2
+    },
+    "profonds_juges": 46,
+    "statuts_gardes": {
+     "compatible": 5,
+     "resolu": 55,
+     "exclu": 46
+    },
+    "statuts_quarantaine": {
+     "exclu": 17,
+     "resolu": 18,
+     "compatible": 6
+    },
+    "quarantaine_acceptes": 24,
+    "quarantaine_exclus": 17
+   },
+   "normalisee": {
+    "label": "espaces normalisés, type, rôle",
+    "convention": {
+     "normaliser_espaces": true,
+     "avec_attachement": false,
+     "cible_reduite_a_la_tete": false
+    },
+    "gardes": 119,
+    "quarantaine": 28,
+    "cibles_distinctes": 74,
+    "collisions": 45,
+    "phrases_couvertes": {
+     "anciennes_completes": 74,
+     "transitions_anciennes_completes": {
+      "complete": 24,
+      "aucune": 11,
+      "partielle": 39
+     },
+     "v7_completes": 24,
+     "v7_partielles": 39,
+     "v7_aucune": 144
+    },
+    "candidats_juges": 74,
+    "profondeurs_jugees": {
+     "1": 14,
+     "2": 36,
+     "3": 19,
+     "4": 4,
+     "5": 1
+    },
+    "profonds_juges": 24,
+    "statuts_gardes": {
+     "exclu": 49,
+     "resolu": 62,
+     "compatible": 8
+    },
+    "statuts_quarantaine": {
+     "compatible": 3,
+     "resolu": 11,
+     "exclu": 14
+    },
+    "quarantaine_acceptes": 14,
+    "quarantaine_exclus": 14
+   },
+   "normalisee_attachement": {
+    "label": "espaces normalisés, type, rôle + attachement",
+    "convention": {
+     "normaliser_espaces": true,
+     "avec_attachement": true,
+     "cible_reduite_a_la_tete": false
+    },
+    "gardes": 115,
+    "quarantaine": 32,
+    "cibles_distinctes": 115,
+    "collisions": 0,
+    "phrases_couvertes": {
+     "anciennes_completes": 74,
+     "transitions_anciennes_completes": {
+      "complete": 59,
+      "aucune": 11,
+      "partielle": 4
+     },
+     "v7_completes": 59,
+     "v7_partielles": 4,
+     "v7_aucune": 144
+    },
+    "candidats_juges": 115,
+    "profondeurs_jugees": {
+     "1": 13,
+     "2": 55,
+     "3": 36,
+     "4": 9,
+     "5": 2
+    },
+    "profonds_juges": 47,
+    "statuts_gardes": {
+     "resolu": 60,
+     "compatible": 7,
+     "exclu": 48
+    },
+    "statuts_quarantaine": {
+     "exclu": 15,
+     "compatible": 4,
+     "resolu": 13
+    },
+    "quarantaine_acceptes": 17,
+    "quarantaine_exclus": 15
+   },
+   "normalisee_attachement_tete": {
+    "label": "espaces normalisés, type, rôle + attachement (cible = tête)",
+    "convention": {
+     "normaliser_espaces": true,
+     "avec_attachement": true,
+     "cible_reduite_a_la_tete": true
+    },
+    "gardes": 117,
+    "quarantaine": 30,
+    "cibles_distinctes": 117,
+    "collisions": 0,
+    "phrases_couvertes": {
+     "anciennes_completes": 74,
+     "transitions_anciennes_completes": {
+      "complete": 61,
+      "aucune": 11,
+      "partielle": 2
+     },
+     "v7_completes": 61,
+     "v7_partielles": 2,
+     "v7_aucune": 144
+    },
+    "candidats_juges": 117,
+    "profondeurs_jugees": {
+     "1": 13,
+     "2": 56,
+     "3": 37,
+     "4": 9,
+     "5": 2
+    },
+    "profonds_juges": 48,
+    "statuts_gardes": {
+     "exclu": 49,
+     "resolu": 61,
+     "compatible": 7
+    },
+    "statuts_quarantaine": {
+     "compatible": 4,
+     "resolu": 12,
+     "exclu": 14
+    },
+    "quarantaine_acceptes": 16,
+    "quarantaine_exclus": 14
+   }
+  },
+  "recuperes_par_normalisation": [
+   {
+    "phrase": "p001",
+    "candidat": "p001-c1",
+    "cible_v7": 2
+   },
+   {
+    "phrase": "p002",
+    "candidat": "p002-c1",
+    "cible_v7": 2
+   },
+   {
+    "phrase": "p002",
+    "candidat": "p002-c2",
+    "cible_v7": 1
+   },
+   {
+    "phrase": "p003",
+    "candidat": "p003-c1",
+    "cible_v7": 2
+   },
+   {
+    "phrase": "p003",
+    "candidat": "p003-c2",
+    "cible_v7": 1
+   },
+   {
+    "phrase": "p004",
+    "candidat": "p004-c1",
+    "cible_v7": 1
+   },
+   {
+    "phrase": "p005",
+    "candidat": "p005-c1",
+    "cible_v7": 2
+   },
+   {
+    "phrase": "p006",
+    "candidat": "p006-c2",
+    "cible_v7": 1
+   },
+   {
+    "phrase": "p007",
+    "candidat": "p007-c1",
+    "cible_v7": 1
+   }
+  ],
+  "recuperes_par_tete_de_cible": [
+   {
+    "phrase": "p001",
+    "candidat": "p001-c2",
+    "cible_v7": 1
+   },
+   {
+    "phrase": "p005",
+    "candidat": "p005-c2",
+    "cible_v7": 1
+   }
+  ],
+  "attachement_qui_separe": [
+   {
+    "phrase": "p001",
+    "candidat": "p001-c2",
+    "statut": "exclu",
+    "raison": "même (texte,type,rôle) mais attachement différent"
+   },
+   {
+    "phrase": "p004",
+    "candidat": "p004-c2",
+    "statut": "compatible",
+    "raison": "même (texte,type,rôle) mais attachement différent"
+   },
+   {
+    "phrase": "p005",
+    "candidat": "p005-c2",
+    "statut": "resolu",
+    "raison": "même (texte,type,rôle) mais attachement différent"
+   },
+   {
+    "phrase": "p006",
+    "candidat": "p006-c1",
+    "statut": "resolu",
+    "raison": "même (texte,type,rôle) mais attachement différent"
+   }
+  ],
+  "conclusion": "106/41 est exact sous la signature de la v2, mais ce n'est pas une migration sûre : sans l'attachement, 106 verdicts tombent sur 65 candidats (41 collisions). Avec l'attachement exact, 106/41 et 106 cibles distinctes. Espaces normalisés + attachement : 115/32, 115 cibles. Cible réduite à sa tête : 117/30. Le choix de convention est une décision de S ; le contrôle négatif de la migration est que l'index recollerait 36/147 verdicts au mauvais contenu."
+ },
+ "referent": {
+  "journal": {
+   "fichier": "tools/structures/donnees/paragraphes-validations.jsonl",
+   "lignes": 19,
+   "paragraphes": 9,
+   "statuts": {
+    "resolu": 10,
+    "exclu": 8,
+    "compatible": 1
+   },
+   "acceptes": 11,
+   "exclus": 8,
+   "notes_non_vides": 0,
+   "auteur": {
+    "humain": 19
+   },
+   "mtime": "2026-11-04 15:10:08",
+   "sha256": "a3c54c9cf2b81904ce43b43685be78f18ed675df2745e7b72ddcf0943d531123"
+  },
+  "total_9_paragraphes": {
+   "lignes": 30,
+   "mappings_presents": 28,
+   "justes": 16,
+   "faux": 12,
+   "manquants": 2,
+   "non_referents_ok": 0,
+   "formes_anaphoriques_attendues": 25,
+   "occurrences_texte_auditees": null,
+   "faux_detail": [
+    {
+     "paragraphe": "a001",
+     "forme": "en",
+     "observe": "Alice",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "en",
+     "observe": "Alice",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "y",
+     "observe": "Alice",
+     "attendu": "la boîte"
+    },
+    {
+     "paragraphe": "a005",
+     "forme": "en",
+     "observe": "coup",
+     "attendu": "la salle"
+    },
+    {
+     "paragraphe": "a006",
+     "forme": "cela",
+     "observe": "Comme",
+     "attendu": "attendre à la petite porte"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "Je",
+     "observe": "le contenu",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "en",
+     "observe": "Je me sens toute drôle",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "je",
+     "observe": "Je me sens toute drôle",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "me",
+     "observe": "le contenu",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "on",
+     "observe": "Je me sens toute drôle",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a009",
+     "forme": "en",
+     "observe": "Un moment",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a009",
+     "forme": "se",
+     "observe": "Un moment",
+     "attendu": "Alice"
+    }
+   ],
+   "manquants_detail": [
+    {
+     "paragraphe": "a001",
+     "forme": "les",
+     "attendu": "les conseils"
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "l'",
+     "attendu": "la boîte"
+    }
+   ]
+  },
+  "a001_a003": {
+   "lignes": 14,
+   "mappings_presents": 12,
+   "justes": 9,
+   "faux": 3,
+   "manquants": 2,
+   "non_referents_ok": 0,
+   "formes_anaphoriques_attendues": 12,
+   "occurrences_texte_auditees": 14,
+   "faux_detail": [
+    {
+     "paragraphe": "a001",
+     "forme": "en",
+     "observe": "Alice",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "en",
+     "observe": "Alice",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "y",
+     "observe": "Alice",
+     "attendu": "la boîte"
+    }
+   ],
+   "manquants_detail": [
+    {
+     "paragraphe": "a001",
+     "forme": "les",
+     "attendu": "les conseils"
+    },
+    {
+     "paragraphe": "a002",
+     "forme": "l'",
+     "attendu": "la boîte"
+    }
+   ],
+   "formes_attendues_corrigees": 12,
+   "occurrences_attendues_corrigees": 14,
+   "cible": {
+    "formes": 12,
+    "occurrences": 14,
+    "justes": 14,
+    "faux": 0,
+    "manquants": 0
+   },
+   "note": "12 formes uniques (clés par paragraphe) et 14 occurrences dans le texte : `se` deux fois (a001), `sa` deux fois (a003)."
+  },
+  "a004_a009": {
+   "lignes": 16,
+   "mappings_presents": 16,
+   "justes": 7,
+   "faux": 9,
+   "manquants": 0,
+   "non_referents_ok": 0,
+   "formes_anaphoriques_attendues": 13,
+   "occurrences_texte_auditees": null,
+   "faux_detail": [
+    {
+     "paragraphe": "a005",
+     "forme": "en",
+     "observe": "coup",
+     "attendu": "la salle"
+    },
+    {
+     "paragraphe": "a006",
+     "forme": "cela",
+     "observe": "Comme",
+     "attendu": "attendre à la petite porte"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "Je",
+     "observe": "le contenu",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "en",
+     "observe": "Je me sens toute drôle",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "je",
+     "observe": "Je me sens toute drôle",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "me",
+     "observe": "le contenu",
+     "attendu": "Alice"
+    },
+    {
+     "paragraphe": "a008",
+     "forme": "on",
+     "observe": "Je me sens toute drôle",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a009",
+     "forme": "en",
+     "observe": "Un moment",
+     "attendu": null
+    },
+    {
+     "paragraphe": "a009",
+     "forme": "se",
+     "observe": "Un moment",
+     "attendu": "Alice"
+    }
+   ],
+   "manquants_detail": []
+  },
+  "paragraphes_fautifs": [
+   "a001",
+   "a002",
+   "a005",
+   "a006",
+   "a008",
+   "a009"
+  ],
+  "paragraphes_propres": [
+   "a003",
+   "a004",
+   "a007"
+  ],
+  "paragraphes": [
+   {
+    "id": "a001",
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people.",
+    "cible": "Elle avait pour habitude de se donner de très-bons conseils (bien qu'elle les suivît rarement), et quelquefois elle se grondait si fort que les larmes lui en venaient aux yeux.",
+    "formes_observees": 5
+   },
+   {
+    "id": "a002",
+    "source_en": "Soon her eye fell on a little glass box that was lying under the table: she opened it, and found in it a very small cake, on which the words \"EAT ME\" were beautifully marked in currants.",
+    "cible": "Elle aperçut alors une petite boîte en verre qui était sous la table, l'ouvrit et y trouva un tout petit gâteau sur lequel les mots \"MANGEZ-MOI\" étaient admirablement tracés avec des raisins de Corinthe.",
+    "formes_observees": 3
+   },
+   {
+    "id": "a003",
+    "source_en": "She ate a little bit, and said anxiously to herself, \"Which way? Which way?\", holding her hand on the top of her head to feel which way it was growing, and she was quite surprised to find that she remained the same size.",
+    "cible": "Elle mangea donc un petit morceau du gâteau, et, portant sa main sur sa tête, elle se dit tout inquiète: \"Lequel est-ce? Lequel est-ce?\"",
+    "formes_observees": 4
+   },
+   {
+    "id": "a004",
+    "source_en": "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it.",
+    "cible": "ALICE, assise auprès de sa sœur sur le gazon, commençait à s'ennuyer de rester là à ne rien faire.",
+    "formes_observees": 1
+   },
+   {
+    "id": "a005",
+    "source_en": "Suddenly she came upon a little three-legged table, all made of solid glass; there was nothing on it except a tiny golden key.",
+    "cible": "Tout à coup elle rencontra sur son passage une petite table à trois pieds, en verre massif, et rien dessus qu'une toute petite clef d'or.",
+    "formes_observees": 3
+   },
+   {
+    "id": "a006",
+    "source_en": "There seemed to be no use in waiting by the little door, so she went back to the table, half hoping she might find another key on it.",
+    "cible": "Comme cela n'avançait à rien de passer son temps à attendre à la petite porte, elle retourna vers la table, espérant presque y trouver une autre clef.",
+    "formes_observees": 4
+   },
+   {
+    "id": "a007",
+    "source_en": "It was all very well to say \"Drink me,\" but the wise little Alice was not going to do that in a hurry.",
+    "cible": "C'est bien facile à dire « Buvez-moi », mais Alice était trop fine pour obéir à l'aveuglette.",
+    "formes_observees": 0
+   },
+   {
+    "id": "a008",
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\"",
+    "cible": "« Je me sens toute drôle, » dit Alice, « on dirait que je rentre en moi-même et que je me ferme comme un télescope. »",
+    "formes_observees": 5
+   },
+   {
+    "id": "a009",
+    "source_en": "After a while, finding that nothing more happened, she decided on going into the garden at once; but, alas for poor Alice! when she got to the door, she found she had forgotten the little golden key.",
+    "cible": "Un moment après, voyant qu'il ne se passait plus rien, elle se décida à aller de suite au jardin ; mais hélas, pauvre Alice ! en arrivant à la porte, elle s'aperçut qu'elle avait oublié la petite clef d'or.",
+    "formes_observees": 3
+   }
+  ],
+  "lignes": [
+   {
+    "paragraphe": "a001",
+    "forme": "Elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a001",
+    "forme": "elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a001",
+    "forme": "en",
+    "attendu": null,
+    "type_attendu": "non_referent",
+    "observe": "Alice",
+    "verdict": "faux",
+    "occurrences_texte": null,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a001",
+    "forme": "les",
+    "attendu": "les conseils",
+    "type_attendu": "anaphore",
+    "observe": null,
+    "verdict": "manquant",
+    "occurrences_texte": 1,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a001",
+    "forme": "lui",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a001",
+    "forme": "se",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 2,
+    "source_en": "She generally gave herself very good advice, (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself, for this curious child was very fond of pretending to be two people."
+   },
+   {
+    "paragraphe": "a002",
+    "forme": "Elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "Soon her eye fell on a little glass box that was lying under the table: she opened it, and found in it a very small cake, on which the words \"EAT ME\" were beautifully marked in currants."
+   },
+   {
+    "paragraphe": "a002",
+    "forme": "en",
+    "attendu": null,
+    "type_attendu": "non_referent",
+    "observe": "Alice",
+    "verdict": "faux",
+    "occurrences_texte": null,
+    "source_en": "Soon her eye fell on a little glass box that was lying under the table: she opened it, and found in it a very small cake, on which the words \"EAT ME\" were beautifully marked in currants."
+   },
+   {
+    "paragraphe": "a002",
+    "forme": "l'",
+    "attendu": "la boîte",
+    "type_attendu": "anaphore",
+    "observe": null,
+    "verdict": "manquant",
+    "occurrences_texte": 1,
+    "source_en": "Soon her eye fell on a little glass box that was lying under the table: she opened it, and found in it a very small cake, on which the words \"EAT ME\" were beautifully marked in currants."
+   },
+   {
+    "paragraphe": "a002",
+    "forme": "y",
+    "attendu": "la boîte",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "Soon her eye fell on a little glass box that was lying under the table: she opened it, and found in it a very small cake, on which the words \"EAT ME\" were beautifully marked in currants."
+   },
+   {
+    "paragraphe": "a003",
+    "forme": "Elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She ate a little bit, and said anxiously to herself, \"Which way? Which way?\", holding her hand on the top of her head to feel which way it was growing, and she was quite surprised to find that she remained the same size."
+   },
+   {
+    "paragraphe": "a003",
+    "forme": "elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She ate a little bit, and said anxiously to herself, \"Which way? Which way?\", holding her hand on the top of her head to feel which way it was growing, and she was quite surprised to find that she remained the same size."
+   },
+   {
+    "paragraphe": "a003",
+    "forme": "sa",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 2,
+    "source_en": "She ate a little bit, and said anxiously to herself, \"Which way? Which way?\", holding her hand on the top of her head to feel which way it was growing, and she was quite surprised to find that she remained the same size."
+   },
+   {
+    "paragraphe": "a003",
+    "forme": "se",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "She ate a little bit, and said anxiously to herself, \"Which way? Which way?\", holding her hand on the top of her head to feel which way it was growing, and she was quite surprised to find that she remained the same size."
+   },
+   {
+    "paragraphe": "a004",
+    "forme": "sa",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "ALICE",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it."
+   },
+   {
+    "paragraphe": "a005",
+    "forme": "elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "Suddenly she came upon a little three-legged table, all made of solid glass; there was nothing on it except a tiny golden key."
+   },
+   {
+    "paragraphe": "a005",
+    "forme": "en",
+    "attendu": "la salle",
+    "type_attendu": "anaphore",
+    "observe": "coup",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "Suddenly she came upon a little three-legged table, all made of solid glass; there was nothing on it except a tiny golden key."
+   },
+   {
+    "paragraphe": "a005",
+    "forme": "son",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "Suddenly she came upon a little three-legged table, all made of solid glass; there was nothing on it except a tiny golden key."
+   },
+   {
+    "paragraphe": "a006",
+    "forme": "cela",
+    "attendu": "attendre à la petite porte",
+    "type_attendu": "anaphore",
+    "observe": "Comme",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "There seemed to be no use in waiting by the little door, so she went back to the table, half hoping she might find another key on it."
+   },
+   {
+    "paragraphe": "a006",
+    "forme": "elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "There seemed to be no use in waiting by the little door, so she went back to the table, half hoping she might find another key on it."
+   },
+   {
+    "paragraphe": "a006",
+    "forme": "son",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "There seemed to be no use in waiting by the little door, so she went back to the table, half hoping she might find another key on it."
+   },
+   {
+    "paragraphe": "a006",
+    "forme": "y",
+    "attendu": "table",
+    "type_attendu": "anaphore",
+    "observe": "table",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "There seemed to be no use in waiting by the little door, so she went back to the table, half hoping she might find another key on it."
+   },
+   {
+    "paragraphe": "a008",
+    "forme": "Je",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "le contenu",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\""
+   },
+   {
+    "paragraphe": "a008",
+    "forme": "en",
+    "attendu": null,
+    "type_attendu": "non_referent",
+    "observe": "Je me sens toute drôle",
+    "verdict": "faux",
+    "occurrences_texte": null,
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\""
+   },
+   {
+    "paragraphe": "a008",
+    "forme": "je",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Je me sens toute drôle",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\""
+   },
+   {
+    "paragraphe": "a008",
+    "forme": "me",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "le contenu",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\""
+   },
+   {
+    "paragraphe": "a008",
+    "forme": "on",
+    "attendu": null,
+    "type_attendu": "non_referent",
+    "observe": "Je me sens toute drôle",
+    "verdict": "faux",
+    "occurrences_texte": null,
+    "source_en": "\"What a curious feeling!\" said Alice; \"I must be shutting up like a telescope.\""
+   },
+   {
+    "paragraphe": "a009",
+    "forme": "elle",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Alice",
+    "verdict": "juste",
+    "occurrences_texte": 1,
+    "source_en": "After a while, finding that nothing more happened, she decided on going into the garden at once; but, alas for poor Alice! when she got to the door, she found she had forgotten the little golden key."
+   },
+   {
+    "paragraphe": "a009",
+    "forme": "en",
+    "attendu": null,
+    "type_attendu": "non_referent",
+    "observe": "Un moment",
+    "verdict": "faux",
+    "occurrences_texte": null,
+    "source_en": "After a while, finding that nothing more happened, she decided on going into the garden at once; but, alas for poor Alice! when she got to the door, she found she had forgotten the little golden key."
+   },
+   {
+    "paragraphe": "a009",
+    "forme": "se",
+    "attendu": "Alice",
+    "type_attendu": "anaphore",
+    "observe": "Un moment",
+    "verdict": "faux",
+    "occurrences_texte": 1,
+    "source_en": "After a while, finding that nothing more happened, she decided on going into the garden at once; but, alas for poor Alice! when she got to the door, she found she had forgotten the little golden key."
+   }
+  ],
+  "integration_S": {
+   "work_referents": false,
+   "journal_lignes": 19,
+   "journal_mtime": "2026-11-04 15:10:08",
+   "verdict": "absente : le journal est inchangé (19 lignes, 0 note, mtime 04/11) ; aucun work/referents/"
+  },
+  "note_methodologique": "« faux » est le jugement de l'audit rapport-etat-s.md § 2, contrôlé par la source anglaise ; une convention différente sur `en`/`sa`/`y` déplacerait quelques cas. Les 12 faux et les 2 manquants sont listés ligne à ligne."
+ },
+ "page": {
+  "service": {
+   "ports": [
+    "LISTEN 0      511          0.0.0.0:3080       0.0.0.0:*    users:((\"node-MainThread\",pid=2999,fd=21))",
+    "LISTEN 0      5          127.0.0.1:8765       0.0.0.0:*    users:((\"python3\",pid=2725542,fd=3))",
+    "LISTEN 0      5          127.0.0.1:8771       0.0.0.0:*    users:((\"docwatch\",pid=3291,fd=3))"
+   ],
+   "processus": [
+    "2725526 bash            bash -c sleep 2; cd /home/stephane/Data13TB/stephane/GitHub/financemeteo && python3 src/app.py --no-browser",
+    "2725542 python3         python3 src/app.py --no-browser"
+   ],
+   "s_serveur_en_ecoute": false,
+   "get_8765": {
+    "code": 200,
+    "octets": 174051,
+    "titre": "Portefeuille iA — tableau de bord"
+   },
+   "port_9000_libre": true,
+   "note": "8765 est tenu par financemeteo ; le serveur de mesure utilise un port éphémère et est arrêté après les GET"
+  },
+  "http": {
+   "port": 16127,
+   "log": "banc de structures · http://127.0.0.1:16127 · 207 phrases",
+   "routes": {
+    "/": {
+     "code": 200,
+     "octets": 2350,
+     "titre": "Structures — le banc d'interprétations"
+    },
+    "/api/phrases": {
+     "code": 200,
+     "octets": 403437,
+     "titre": null
+    },
+    "/paragraphes": {
+     "code": 200,
+     "octets": 3493,
+     "titre": "Structures — paragraphes complets"
+    },
+    "/api/paragraphes": {
+     "code": 200,
+     "octets": 95470,
+     "titre": null
+    }
+   },
+   "api_phrases": {
+    "phrases": 207,
+    "candidats": 369,
+    "validations_lignes": 150,
+    "profondeur_presente": 0,
+    "segments": 2414,
+    "niveau_max_par_candidat": {
+     "0": 10,
+     "1": 277,
+     "2": 82
+    }
+   },
+   "api_paragraphes": {
+    "paragraphes": 9,
+    "candidats": 19,
+    "verdicts": 19,
+    "segments_avec_profondeur": 169,
+    "segments_avec_niveau": 169
+   }
+  },
+  "rendu": {
+   "app_js": {
+    "profondeur_occurrences": 0,
+    "niveau_occurrences": 21,
+    "indente_sur_niveau": true,
+    "niveau_de_lit_validation": true,
+    "lit_profondeur": false
+   },
+   "paragraphes_js": {
+    "profondeur_occurrences": 2,
+    "niveau_occurrences": 2,
+    "affiche_profondeur_ou_niveau": true
+   },
+   "note": "app.js indente avec `s.niveau` et `niveauDe()` lit le `niveau` de la dernière validation ; paragraphes.js affiche `s.profondeur ?? s.niveau`"
+  },
+  "migration_integree": {
+   "phrases_generees_mtime": "2026-11-02 20:35:33",
+   "profondeur_dans_api": 0,
+   "work_banque_v7": false,
+   "work_referents": false,
+   "verdict": "non : `/api/phrases` rend 369 candidats et 0 `profondeur` ; `work/banque-v7/` et `work/referents/` sont absents"
+  },
+  "cible_359_99_atteinte": false
+ },
+ "controle_negatif": {
+  "hypothese_H0": "les deux bancs sont le même : mêmes candidats, même contenu, même présence de `profondeur`, même distribution",
+  "tests": [
+   {
+    "nom": "cardinalite_candidats",
+    "ancien": 369,
+    "v7": 359,
+    "egal": false
+   },
+   {
+    "nom": "profondeur_presente",
+    "ancien": "0/369",
+    "v7": "359/359",
+    "egal": false
+   },
+   {
+    "nom": "candidats_profondeur_ge_3",
+    "ancien": 0,
+    "v7": 99,
+    "egal": false
+   },
+   {
+    "nom": "empreinte_signatures_exactes",
+    "ancien": "569a61fa6ecef9b03c612acffee09cfdcb9b6808c8de310c4e425fd084cd371b",
+    "v7": "4620252570a8ff532c92b2dd82ae6cdff37789c2452400b538b4fdaa8444392e",
+    "egal": false
+   },
+   {
+    "nom": "jaccard_multiset",
+    "valeur": 0.716981,
+    "egal": false
+   },
+   {
+    "nom": "jaccard_global",
+    "valeur": 0.73913,
+    "egal": false
+   },
+   {
+    "nom": "migration_sous_H0",
+    "attendu_si_H0": 147,
+    "observe": 106,
+    "egal": false
+   }
+  ],
+  "controles_de_validite": {
+   "meme_source_ancien": {
+    "candidats": 369,
+    "empreinte": "569a61fa6ecef9b03c612acffee09cfdcb9b6808c8de310c4e425fd084cd371b",
+    "empreinte_egale": true
+   },
+   "meme_source_v7": {
+    "candidats": 359,
+    "empreinte": "4620252570a8ff532c92b2dd82ae6cdff37789c2452400b538b4fdaa8444392e",
+    "empreinte_egale": true
+   },
+   "note": "le comparateur sait dire « identique » : chaque banc comparé à lui-même donne la même empreinte ; la différence ancien/v7 n'est pas un artefact du comparateur"
+  },
+  "difference_localisee": {
+   "identiques_meme_index": 304,
+   "changes_meme_index": 55,
+   "orphelins": 10,
+   "anciens_seulement": 65,
+   "v7_seulement": 55,
+   "note": "304/369 signatures sont identiques : les deux bancs sont proches, pas identiques ; 55 candidats changent et 10 disparaissent"
+  },
+  "migration_par_index": {
+   "verdicts_recolles_au_mauvais_contenu": 36,
+   "sur": 147,
+   "note": "contrôle négatif de la migration : l'index recollerait 36/147 verdicts à un autre contenu ; la signature exacte n'en recolle aucun (0/106), au prix de 41 quarantaines"
+  },
+  "verdict": "H0 rejetée : 369 ≠ 359, 0/369 contre 359/359 `profondeur`, 0 contre 99 candidats à ≥3, empreintes différentes, Jaccard 0,717 ; le banc ancien et la v7 ne sont pas le même banc."
+ },
+ "tests_sous_module": {
+  "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests",
+  "code": 0,
+  "tests": 56,
+  "duree_s": 4.346,
+  "ok": true,
+  "resume": "OK",
+  "queue": "1\" 200 -\n  127.0.0.1 · \"POST /api/valider HTTP/1.1\" 200 -\n  127.0.0.1 · \"POST /api/valider HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/phrases HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/paragraphes HTTP/1.1\" 200 -\n  127.0.0.1 · \"POST /api/valider-paragraphe HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/paragraphes HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/phrases HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET / HTTP/1.1\" 200 -\n  127.0.0.1 · \"POST /api/valider HTTP/1.1\" 400 -\n  127.0.0.1 · \"POST /api/valider HTTP/1.1\" 200 -\n  127.0.0.1 · \"POST /api/valider HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/phrases HTTP/1.1\" 200 -\n  127.0.0.1 · \"GET /api/export HTTP/1.1\" 200 -\n........................................................\n----------------------------------------------------------------------\nRan 56 tests in 4.346s\n\nOK"
+ },
+ "git": {
+  "parent": {
+   "head": "049343d3fc41a3003d2dac8dfd41db63db7ec59d",
+   "head_court": "049343d3",
+   "branche": "s/v7",
+   "detache": false,
+   "describe": "semaine-2-2026-11-20-1-g049343d3",
+   "ls_tree_structures": "160000 commit 389b99f8383eb47c0cc008f5d3211c9d65d895fc\ttools/structures",
+   "status_structures": ""
+  },
+  "sous_module": {
+   "head": "389b99f8383eb47c0cc008f5d3211c9d65d895fc",
+   "head_court": "389b99f",
+   "branche": "master",
+   "status": "",
+   "dernier_commit": "389b99f8383eb47c0cc008f5d3211c9d65d895fc\t2026-11-14T09:49:39-05:00\tS — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE",
+   "origin_master": "389b99f8383eb47c0cc008f5d3211c9d65d895fc"
+  },
+  "work": {
+   "banque_v7": false,
+   "referents": false
+  },
+  "mtime": {
+   "phrases_generees": "2026-11-02 20:35:33",
+   "validations": "2026-11-03 16:46:42",
+   "paragraphes_validations": "2026-11-04 15:10:08",
+   "generateur": "2026-11-04 11:41:49",
+   "app_js": "2026-11-02 02:10:03",
+   "paragraphes_js": "2026-11-03 17:47:50"
+  },
+  "sha256": {
+   "phrases_generees": "43957a3b9ad2422b7897a29462086ebe36877eb0d856eda4fd26ad55b5620307",
+   "validations": "ed7b0765440afc83bbc466eb7cc8b46a9e81c5fd9183ca2851c1205645dd64fd",
+   "paragraphes_validations": "a3c54c9cf2b81904ce43b43685be78f18ed675df2745e7b72ddcf0943d531123",
+   "generateur": "291df65a43693aac4cdd3fb7fd25955b5eb7f103e24e57d8c505e31d765202d5",
+   "mesure_arbre": "568ab6429b0fbe4528d61e97479c6bf71163fbacad864f95f0224c6cfd522531",
+   "serveur": "0829c3caeda800b92f391bb5f7a340430d56158463857f7c614a76b5c5f5f1a6",
+   "app_js": "fceab2b2245675ab6bd24effaedc7dcc005f4bbfc044f58e18d60dcb28f2e41f",
+   "paragraphes_js": "c7203773a906540b0c868d62dc20211f4540e2430ee991aeea0fde4ef9aaecc5"
+  }
+ },
+ "ce_qui_pourrait_le_rendre_faux": [
+  "Le sous-module bouge : 389b99f, les 369/150/147, les 359/99, les 106/41 et les 28 mappings de référents dépendent de ce commit et des fichiers de donnees/.",
+  "Le fichier `phrases_generees.json` est régénéré : les 369/0 deviennent 359/99, et la page `/` peut servir la v7 ; toutes les mesures de couverture changent.",
+  "La signature de migration change de convention : 106/41 (exacte), 115/32 (espaces + attachement), 117/30 (cible = tête) ; le 41 n'est pas un invariant.",
+  "Le jugement « faux » sur les référents est celui de l'audit : une convention différente sur `en`/`sa`/`y` déplacerait quelques cas ; les 12 faux et 2 manquants sont listés.",
+  "Les 150 verdicts sont un seul annotateur, une seule journée ; les taux d'acceptation ne sont pas une accuracy.",
+  "La mesure HTTP utilise un port éphémère, pas 8765 ; 8765 est tenu par financemeteo et n'a pas été touché.",
+  "Les 56 tests passent, mais la passe complète des portes du parent n'est pas rejouée ici."
+ ],
+ "fichiers_lus_non_modifies": [
+  "tools/structures/donnees/phrases.json",
+  "tools/structures/donnees/phrases_generees.json",
+  "tools/structures/donnees/validations.jsonl",
+  "tools/structures/donnees/paragraphes.json",
+  "tools/structures/donnees/paragraphes-validations.jsonl",
+  "tools/structures/generateur.py",
+  "tools/structures/mesure_arbre.py",
+  "tools/structures/serveur.py",
+  "tools/structures/static/app.js",
+  "tools/structures/static/paragraphes.js",
+  "tools/structures/tests/ (56 tests exécutés)",
+  "reports/rapport-coordination-s-v2.md",
+  "reports/rapport-etat-s.md",
+  "reports/rapport-s-traductions.md",
+  "docs/pilotage/semaine-2.md"
+ ],
+ "references": [
+  "reports/rapport-coordination-s-v2.md",
+  "reports/rapport-etat-s.md",
+  "reports/rapport-s-traductions.md",
+  "reports/rapport-s-paragraphes.md",
+  "docs/pilotage/semaine-2.md",
+  "tools/structures/generateur.py",
+  "tools/structures/mesure_arbre.py",
+  "tools/structures/static/app.js",
+  "tools/structures/static/paragraphes.js"
+ ]
+}

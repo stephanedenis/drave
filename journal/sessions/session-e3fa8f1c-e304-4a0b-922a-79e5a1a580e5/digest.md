@@ -1756,3 +1756,605 @@ v7 refs {'occurrences': 371, 'formes_uniques': 29, 'avec_candidat': 294, 'sans_c
 … [5549 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+The measurements are stable. Now I'll write the report.
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md", "content": "# La page `/` de S : 369/0 contre 359/99 — la recette, et pourquoi « 0 » n'est pas « zéro verdict »\n\n> **Ligne de roadmap** : S · **Tâche** : X1 / J4 après-midi (la part du pilote) · **Dat … [26430 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md", "old_string": "Les **3 révisions** sont des paires de la quarantaine jugées plusieurs fois : **44 lignes = 41\npaires + 3 révisions**. Les **41 paires** sont réparties sur **18 phrases** :", "new_string … [318 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %s' && git branch --show-current; echo \"--- submodule ---\"; git -C tools/structures status --porcelain; git -C tools/structures rev-parse --short HEAD", "description": "Check current HEAD before final JSON"}`
+
+  ```
+049343d3 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+s/v7
+--- submodule ---
+389b99f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 python3 work/page-s-mesure/mesurer.py 2>&1 | tail -15; echo \"--- final state ---\"; git -C tools/structures status --porcelain; ps -eo pid,args | grep 'serveur\\.py' | grep -v grep || echo \"aucun serveur.p … [126 caractères tronqués]`
+
+  ```
+207 phrases · 369 candidats anciens · 359 v7
+  migration exacte : 106 gardés / 41 en quarantaine · 65 cibles distinctes
+  référents : 16 justes / 12 faux / 2 manquants
+  contrôle négatif : H0 rejetée : 369 ≠ 359, 0/369 contre 359/359 `profondeur`, 0 contre 99 candidats à ≥3, empreintes différentes, Jaccard 0,717 ; le banc ancien et la v7 ne sont pas le même banc.
+  tests : 56 · OK
+  → /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.json
+--- final state ---
+aucun serveur.py
+9000 libre
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\np='reports/rapport-page-s-mesure.json'\nd=json.load(open(p))\nprint('size',len(open(p,'rb').read()))\nprint('date/heure',d['date'],d['heure'])\nprint('HEAD',d['head_parent_court'],d['sous_module_court'] … [1053 caractères tronqués]`
+
+  ```
+size 61859
+date/heure 2026-11-15 12:37 EST
+HEAD 049343d3 389b99f s/v7
+verdict len 809
+old 369 0/369
+v7 359 99
+exact 106 41 65
+exact+att 106 41 106
+refs 16 12 2
+service False True
+tests 56 True 4.346
+git status submodule ''
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | wc -l && git status --porcelain | head -15", "description": "Check current parent modifications count"}`
+
+  ```
+26
+M  docs/pilotage/en-cours.md
+ M docs/produit/README.md
+M  journal/2026-11-15/README.md
+M  journal/2026-11-15/mesures.md
+M  journal/2026-11-15/portes.md
+ M journal/README.md
+M  journal/THEMES.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb/digest.md
+ M journal/sessions/session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"12 h 35\\|12 modifications\" reports/rapport-page-s-mesure.md", "description": "Locate time and count strings"}`
+
+  ```
+4:> 2026-11-15 12 h 35 HNE · **HEAD parent mesuré** : `049343d3` · **Sous-module
+43:  12 h 35 HNE**. Le parent a bougé pendant la session (`6f862993` → `9960b37f` → `049343d3`) ;
+402:**12 modifications hors périmètre** ; le sous-module, lui, est resté à `389b99f` et **propre**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace('2026-11-15 12 h 35 HNE','2026-11-15 12 h 37 HNE')\ns=s.replace('12 h 35 HNE**. Le parent','12 h 37  … [284 caractères tronqués]`
+
+  ```
+ok
+4:> 2026-11-15 12 h 37 HNE · **HEAD parent mesuré** : `049343d3` · **Sous-module
+43:  12 h 37 HNE**. Le parent a bougé pendant la session (`6f862993` → `9960b37f` → `049343d3`) ;
+402:**des modifications hors périmètre** ; le sous-module, lui, est resté à `389b99f` et **propre**.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md", "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md</path>
+<type>file</type>
+<content>
+1: # La page `/` de S : 369/0 contre 359/99 — la recette, et pourquoi « 0 » n'est pas « zéro verdict »
+2: 
+3: > **Ligne de roadmap** : S · **Tâche** : X1 / J4 après-midi (la part du pilote) · **Date** :
+4: > 2026-11-15 12 h 37 HNE · **HEAD parent mesuré** : `049343d3` · **Sous-module
+5: > `tools/structures`** : `389b99f` · **Verdict** : la page `/` sert **toujours l'ancien banc** —
+6: > **369 candidats**, **0 avec `profondeur`**, **0 à ≥ 3**, distribution des `niveau` **10 / 277 /
+7: > 82** — alors que la v7 dynamique donne **359 candidats**, **2 / 37 / 221 / 84 / 13 / 2** et
+8: > **99 à ≥ 3**. Le **106 conservés / 41 en quarantaine** de la v2 est **reproduit à la lettre**
+9: > (signature exacte), mais la signature nue ne donne que **65 cibles distinctes** : **41
+10: > collisions**. Avec l'attachement, **106/41** devient injectif ; avec les espaces normalisés et
+11: > l'attachement, **115/32** ; avec la cible réduite à sa tête, **117/30**. Les référents sont
+12: > **28 mappings / 16 justes / 12 faux / 2 manquants**, **0 note** ; la cible **14 occurrences /
+13: >
+… [8011 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md", "offset": 141, "limit": 180}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md</path>
+<type>file</type>
+<content>
+141: `/paragraphes` est la fenêtre v7 : **9 paragraphes**, **19 candidats**, **19 verdicts**,
+142: **169/169** segments avec `profondeur`. C'est le seul endroit où l'arbre v7 est réellement
+143: visible aujourd'hui.
+144: 
+145: ## 3. La couverture et les verdicts
+146: 
+147: ### 3.1 La couverture du banc ancien
+148: 
+149: La couverture est **partielle et datée** : **74/207** phrases complètes (35,7 %), **133** sans
+150: aucun verdict (64,3 %), **147/369** candidats (39,8 %). Les 7 phrases du banc sont **7/7**
+151: jugées ; les 200 phrases de littérature sont **67/200** (33,5 %). Un seul annotateur, une seule
+152: journée (2026-11-03), **1 note**, **0 double-codage**, **0 test-retest**. Ce n'est pas une
+153: accuracy.
+154: 
+155: ### 3.2 Ce que la migration fait à cette couverture
+156: 
+157: Sous la **signature exacte de la v2** — `(texte, type, rôle)` des segments, dans l'ordre —,
+158: **106 paires** ont une correspondance v7 et **41** n'en ont pas. Mais **106 paires tombent sur
+159: seulement 65 candidats v7 distincts** : **41 collisions**. Autrement dit, migrer p
+… [9326 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md", "offset": 321, "limit": 150}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-page-s-mesure.md</path>
+<type>file</type>
+<content>
+321: | c023 | 3 | c1–c2 `resolu`, c3 `exclu` | c3 sans index |
+322: | c043 | 2 | c1 `exclu`, c2 `resolu` | même index, contenu changé |
+323: | c056 | 3 | c1 `exclu`, c2 `exclu`, c3 `resolu` | c2–c3 sans index |
+324: | c064 | 2 | c1 `resolu`, c2 `exclu` | c2 sans index |
+325: | c065 | 2 | c1 `exclu`, c2 `resolu` | même index, contenu changé |
+326: 
+327: La liste complète, avec l'index ancien, le nombre de candidats v7, l'attachement et le niveau
+328: max, est dans le JSON (`migration.quarantaine_exacte.detail`).
+329: 
+330: ### 5.2 Les 5 sans index ne sont pas 5 verdicts perdus
+331: 
+332: Les **5 candidats sans index** sont `p006-c2`, `c023-c3`, `c056-c2`, `c056-c3`, `c064-c2`. Un
+333: seul est récupérable par la signature normalisée : **`p006-c2`** a une correspondance en
+334: **v7-c1** (l'index 2 n'existe plus, mais le contenu y est). Les **4 autres** n'ont aucune
+335: correspondance, même normalisée. La v1 disait « 5 verdicts à risque » : c'est vrai **par
+336: l'index**, pas **par le contenu**. La v2 a raison de dire que **5 sans index ≠ 41 sans
+337: correspond
+… [8114 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace('deux ensemble de 41 **différents**','deux ensembles de 41 **différents**')\ns=s.replace('La signatu … [252 caractères tronqués]`
+
+  ```
+ok
+344:quarantaine** — deux ensembles de 41 **différents**, ce qui prête à confusion. Avec
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '348,354p' reports/rapport-page-s-mesure.md", "description": "Check line 352"}`
+
+  ```
+### 5.4 Le contrôle par index
+
+La migration **par index** recollerait **36/147** verdicts à un **autre contenu** (les 36
+candidats « même index, contenu changé »), en plus des 5 sans index. La signature exacte n'en
+recollé **aucun** (0/106), au prix des 41 quarantaines. Le contrôle est net : **l'index est
+faux**, la signature est la bonne clé — à condition d'y mettre l'attachement.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\ns=s.replace('La signature exacte n\\'en\\nrecollé **aucun**','La signature exacte n\\'en\\nrecolle **aucun**')\n … [145 caractères tronqués]`
+
+  ```
+ok
+La migration **par index** recollerait **36/147** verdicts à un **autre contenu** (les 36
+candidats « même index, contenu changé »), en plus des 5 sans index. La signature exacte n'en
+recolle **aucun** (0/106), au prix des 41 quarantaines. Le contrôle est net : **l'index est
+faux**, la signature est la bonne clé — à condition d'y mettre l'attachement.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m json.tool reports/rapport-page-s-mesure.json > /dev/null && echo \"JSON valide\"; python3 - <<'PY'\nimport re, pathlib\np=pathlib.Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nliens=re.findall( … [254 caractères tronqués]`
+
+  ```
+JSON valide
+OK  rapport-coordination-s-v2.md
+OK  rapport-page-s-mesure.json
+OK  ../work/page-s-mesure/mesurer.py
+OK  rapport-etat-s.md
+OK  rapport-coordination-s-v2.md
+OK  rapport-etat-s.md
+OK  rapport-s-traductions.md
+OK  rapport-s-paragraphes.md
+OK  ../docs/pilotage/semaine-2.md
+OK  ../work/page-s-mesure/mesurer.py
+OK  rapport-page-s-mesure.json
+OK  ../tools/structures/generateur.py
+OK  ../tools/structures/mesure_arbre.py
+OK  ../tools/structures/static/app.js
+OK  ../tools/structures/static/paragraphes.js
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/revue_documentation.py", "description": "Inspect documentation review tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""revue_documentation.py — LA REVUE DE FIN DE SOUS-CHANTIER (AGENTS.md §4).
+
+Ce qu'elle vérifie, et qu'il faut corriger AVANT le commit de clôture :
+  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+  2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
+  3. annotation : les liens relatifs des docs/ et reports/ résolvent, et leur libellé ne
+     ment pas sur la cible ; les sources externes sont citées ;
+  4. fraîcheur  : en-cours.md date du dernier commit, ET aucun fait n'a été commité après
+     le dernier état (comparaison de commits, pas de dates : voir verifie_etat_a_jour.py) ;
+  5. cohérence  : la synthèse (index.md) liste les huit chapitres, le chapitre 7 et B10–B12 ;
+     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+  6. vocabulaire : « jeton » ne désigne **jamais** la représentation sémantique neutre (RSN) ;
+  7. navigation : aucun document vivant n'est orphelin, et aucun chemin en code inline
+     ne pointe vers un fichier absent (hors gabarits `AAAA`, `<...>`, `*`).
+
+Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (u
+… [1781 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -60; echo \"exit=${PIPESTATUS[0]}\"", "description": "Run documentation review"}`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 754 fichiers, le disque en a 755
+     · compteurs : en-cours.md dit 847 JSON, le disque en a 848
+exit=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"754\\|847\\|fichiers\\|JSON\" docs/pilotage/en-cours.md | head -30; echo \"--- mtime ---\"; stat -c '%y' docs/pilotage/en-cours.md; echo \"--- git diff stat ---\"; git diff --stat docs/pilotage/en-cours.md", "description":  … [28 caractères tronqués]`
+
+  ```
+66:- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3` opt-in ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md) + [JSON](../../reports/rapport-semaine-2.json) ; tag annoté `semaine-2-2026-11-20` sur `73edb3dd` ; **85** portes lues (**81** vertes, **4** rouges nommées).
+105:| fichiers / JSON de résultats | **754** / **847** | `reports/*.md` / `reports/*.json` |
+--- mtime ---
+2026-11-15 12:35:40.349951984 -0500
+--- git diff stat ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text(encoding='utf-8')\nold='| fichiers / JSON de résultats | **754** / **847** |'\nnew='| fichiers / JSON de résultats | **755** / **848** |'\ … [206 caractères tronqués]`
+
+  ```
+ok
+105:| fichiers / JSON de résultats | **755** / **848** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -30; echo \"exit=${PIPESTATUS[0]}\"", "description": "Re-run documentation review"}`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -20; echo \"exit=${PIPESTATUS[0]}\"", "description": "Verify en-cours state file"}`
+
+  ```
+en-cours · 1622 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -20; echo \"exit=${PIPESTATUS[0]}\"", "description": "Check document sizes"}`
+
+  ```
+3310    317   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2663    229   T1   2800  reports/README.md
+    2433    164   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3992 mots (budget 4 000)
+
+  avertissements :
+     · 61 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-p
+… [142 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff -- docs/pilotage/en-cours.md; echo \"--- staged ---\"; git diff --cached --stat -- docs/pilotage/en-cours.md", "description": "Check en-cours diff"}`
+
+  ```
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index be629f05..9d6c13ce 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -102,7 +102,7 @@
+ |---|---|---|
+ | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
+ | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+-| fichiers / JSON de résultats | **754** / **847** | `reports/*.md` / `reports/*.json` |
++| fichiers / JSON de résultats | **755** / **848** | `reports/*.md` / `reports/*.json` |
+ | documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
+ | dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
+ 
+--- staged ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -40; echo \"count\"; git status --porcelain | wc -l; echo \"HEAD\"; git log -1 --format='%h %s'", "description": "Check current git status"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-page-s-mesure.json
+?? reports/rapport-page-s-mesure.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+count
+15
+HEAD
+2b5bd1cd JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %cI %s'; git branch --show-current; git ls-tree HEAD tools/structures; git -C tools/structures status --porcelain; git -C tools/structures rev-parse --short HEAD", "description": "Check final parent HEAD and s … [10 caractères tronqués]`
+
+  ```
+2b5bd1cd 2026-11-15T12:35:40-05:00 JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5
+s/v7
+160000 commit 389b99f8383eb47c0cc008f5d3211c9d65d895fc	tools/structures
+389b99f
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -30; echo \"exit=${PIPESTATUS[0]}\"", "description": "Re-run doc review after parent commit"}`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain -- tools/structures; echo \"submodule status above (empty=clean)\"; git -C tools/structures status --porcelain; echo \"--- our files ---\"; ls -l reports/rapport-page-s-mesure.md reports/rapport-page-s-mesure.j … [178 caractères tronqués]`
+
+  ```
+submodule status above (empty=clean)
+--- our files ---
+-rw-r--r--. 1 stephane stephane 61859 15 nov 12:37 reports/rapport-page-s-mesure.json
+-rw-------. 1 stephane stephane 26916 15 nov 12:37 reports/rapport-page-s-mesure.md
+-rw-------. 1 stephane stephane 53944 15 nov 12:35 work/page-s-mesure/mesurer.py
+--- parent diff stat ---
+ docs/pilotage/en-cours.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 reports/rapport-page-s-mesure.md work/page-s-mesure/mesurer.py && ls -l reports/rapport-page-s-mesure.md reports/rapport-page-s-mesure.json work/page-s-mesure/mesurer.py", "description": "Normalize file permissions"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 61859 15 nov 12:37 reports/rapport-page-s-mesure.json
+-rw-r--r--. 1 stephane stephane 26916 15 nov 12:37 reports/rapport-page-s-mesure.md
+-rw-r--r--. 1 stephane stephane 53944 15 nov 12:35 work/page-s-mesure/mesurer.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"**106 paires** ont une correspondance v7 et **41** n'en ont pas. Mais **106 paires tombent sur\\n\"\n     … [1018 caractères tronqués]`
+
+  ```
+ok
+### 3.2 Ce que la migration fait à cette couverture
+
+Sous la **signature exacte de la v2** — `(texte, type, rôle)` des segments, dans l'ordre —,
+**106 paires** ont une correspondance v7 et **41** n'en ont pas. Mais **106 paires tombent sur
+seulement 65 candidats v7 distincts** : **41 collisions**. Autrement dit, cette signature ne
+peut pas attacher **106 verdicts distincts** : **41 se disputent les mêmes 65 candidats**, et
+une table indexée par candidat en perdrait 41. L'attachement (segment + cible) sépare ces
+variantes : on garde **106/41** et on obtient **106 cibles distinctes**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && find . -name '__pycache__' -newermt '2026-11-15 12:20' -print 2>/dev/null | head; echo \"--- pycache mtimes ---\"; find . -name '*.pyc' -newermt '2026-11-15 12:20' -printf '%TY-%Tm-%Td %TH:%TM %p\\n' 2>/dev/null | he … [57 caractères tronqués]`
+
+  ```
+--- pycache mtimes ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"`donnees/paragraphes-validations.jsonl` : **19 lignes**, **9 paragraphes**, **19/19 candidats**,\\n\"\n   … [1195 caractères tronqués]`
+
+  ```
+ok
+
+### 4.1 Ce que le journal contient
+
+`donnees/paragraphes-validations.jsonl` : **19 lignes**, **9 paragraphes**, **19/19 candidats**,
+**11 acceptés / 8 exclus**, **0 note**, `auteur: humain`, mtime **2026-11-04 15:10:08**, SHA-256
+`a3c54c9c…`. Ces 19 verdicts sont **committés** à `389b99f` ; ils ne sont **pas** dans le lot
+des 41, qui sont des verdicts de la banque `/` (`validations.jsonl`). Les 19 verdicts portent **28 mappings uniques** (les mêmes valeurs sont répétées
+d'un candidat à l'autre), comparés à la source anglaise et à la table de l'audit
+[`rapport-etat-s.md`](rapport-etat-s.md) § 2 :
+
+---
+
+### 5.1 Le compte exact
+
+Sous la signature de la v2, **106 paires** ont une correspondance v7 et **41** n'en ont pas.
+Ces 41 sont des verdicts de la **banque `/`** (`validations.jsonl`), pas les 19 verdicts de
+`/paragraphes` :
+
+| mesure | valeur |
+|---|---:|
+| paires uniques | **147** |
+| conservées (signature exacte) | **106** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -12; echo \"exit=${PIPESTATUS[0]}\"", "description": "Re-run doc review after edits"}`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"La migration **par index** recollerait **36/147** verdicts à un **autre contenu** (les 36\\n\"\n     \"ca … [656 caractères tronqués]`
+
+  ```
+ok
+
+La migration **par index** recollerait **36/147** verdicts à un **autre contenu** (les 36
+candidats « même index, contenu changé ») ; les **5 sans index** n'auraient plus de cible. La
+signature exacte n'en recolle **aucun** (0/106), au prix des 41 quarantaines. Le contrôle est net : **l'index est
+faux**, la signature est la bonne clé — à condition d'y mettre l'attachement.
+
+## 6. Le contrôle négatif : les deux bancs diffèrent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"**4/9** à être fautifs (a005, a006, a008, a009). Corriger seulement les 12 formes de a001–a003\\n\"\n     … [873 caractères tronqués]`
+
+  ```
+ok
+| cible corrigée | **12/12 justes, 14/14 occurrences, 0 faux, 0 manquant** |
+
+La cible **14/12** est donc bien définie — mais elle **ne couvre que a001–a003**. Les
+**a004–a009** portent **16 mappings**, **7 justes**, **9 faux**, **0 manquant** ; ils sont
+**4/9** à être fautifs (a005, a006, a008, a009). Corriger seulement les 12 formes de a001–a003
+laisse donc **9 faux** dans les six autres paragraphes. Pour atteindre le **0/9 fautif** de
+l'action A2, il faut aussi corriger ces 9 ; la cible 14/12 ne suffit pas. Autrement dit, la
+cible **14/12** et la mesure **0/9** ne portent pas sur le même périmètre : 14/12 = a001–a003 ;
+0/9 = les neuf paragraphes, donc **9 faux de plus** à corriger.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/rapport-s-referents* 2>/dev/null || echo \"aucun rapport-s-referents\"; ls work/referents 2>/dev/null || echo \"aucun work/referents\"; find work -maxdepth 2 -iname '*referent*' -o -iname '*banque-v7*' 2>/dev/null | head", … [61 caractères tronqués]`
+
+  ```
+aucun rapport-s-referents
+aucun work/referents
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/*migration* reports/*banque-v7* 2>/dev/null || echo \"aucun\"; grep -rln \"106 conservés\\|106/41\\|quarantaine\" reports/*.md | tail -10", "description": "Search for S migration report"}`
+
+  ```
+aucun
+reports/inventaire-donnees-entrainement.md
+reports/rapport-coordination-s-v2.md
+reports/rapport-page-s-mesure.md
+reports/rapport-semaine-2.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== submodule ===\"; git -C tools/structures status --porcelain; git -C tools/structures rev-parse --short HEAD; echo \"=== parent tools/structures ===\"; git status --porcelain -- tools/structures; echo \"=== our files ===\"; … [240 caractères tronqués]`
+
+  ```
+=== submodule ===
+389b99f
+=== parent tools/structures ===
+=== our files ===
+ M docs/pilotage/en-cours.md
+?? reports/rapport-page-s-mesure.json
+?? reports/rapport-page-s-mesure.md
+=== HEAD ===
+2b5bd1cd JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"work\" .gitignore; git check-ignore -v work/page-s-mesure/mesurer.py || echo \"non ignoré\"", "description": "Check if work dir is ignored"}`
+
+  ```
+23:work/
+.gitignore:23:work/	work/page-s-mesure/mesurer.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"  **référents** et fournit le **contrôle négatif** qui sépare les deux bancs. Le JSON est\\n\"\n     \"   … [1211 caractères tronqués]`
+
+  ```
+ok
+- **Est** : la **recette indépendante** de la page `/` de S, en **lecture seule**. Elle rejoue la
+  mesure de la v7, vérifie les chiffres de [`rapport-coordination-s-v2.md`](rapport-coordination-s-v2.md),
+  liste les **41 paires en quarantaine**, mesure le **106** en cibles distinctes, audite les
+  **référents** et fournit le **contrôle négatif** qui sépare les deux bancs. Le JSON archivé est
+  [`rapport-page-s-mesure.json`](rapport-page-s-mesure.json) ; le harnais **local** qui l'a produit
+  est [`work/page-s-mesure/mesurer.py`](../work/page-s-mesure/mesurer.py) (`work/` est ignoré par
+  git ; le JSON, lui, est dans `reports/`).
+- **N'est pas** : une migration, un patch, un commit de S, ni une correction des référents. Le
+---
+- [rapport-s-traductions.md](rapport-s-traductions.md) — les 14 occurrences / 12 formes de
+  a001–a003 et la source anglaise.
+- [rapport-s-paragraphes.md](rapport-s-paragraphes.md) — les neuf paragraphes d'Alice.
+- [semaine-2.md](../docs/pilotage/semaine-2.md) — la ligne J4, les 106/41 et le 369/0.
+- [mesurer.py](../work/page-s-mesure/mesurer.py) — le harnais **local** (ignoré par git) qui a
+  produit le JSON ; la mesure se rejoue avec `PYTHONDONTWRITEBYTE
+… [220 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"exit=${PIPESTATUS[0]}\"", "description": "Final doc review"}`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"Le parent a bougé **pendant** la session (`6f862993` → `9960b37f` → `049343d3`), et il porte\\n\"\n     \ … [642 caractères tronqués]`
+
+  ```
+ok
+| `work/referents/` | **absent** |
+| écritures dans `tools/structures/` | **aucune** |
+| HEAD parent à la mesure | `049343d3` (branche `s/v7`, `describe` `semaine-2-2026-11-20-1-g049343d3`) |
+
+Le parent a bougé **pendant** la session (`6f862993` → `9960b37f` → `049343d3`), puis
+**après** la mesure (`2b5bd1cd`, journal régénéré) ; il porte **des modifications hors
+périmètre**. Le sous-module, lui, est resté à `389b99f` et **propre**, et le pointeur du parent
+est toujours `389b99f`.
+Un premier lancement manuel du serveur sur **9000** a laissé un processus (pid **602059**) : il
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"exit=${PIPESTATUS[0]}\"; python3 -m json.tool reports/rapport-page-s-mesure.json > /dev/null && echo \"JSON valide\"", "description": "Final review and JSON vali … [8 caractères tronqués]`
+
+  ```
+revue de documentation · 755 fiche(s) · 848 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+JSON valide
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-page-s-mesure.md')\ns=p.read_text(encoding='utf-8')\nold=(\"Sous **exact + attachement**, la couverture v7 est **56 phrases complètes / 0 partielle / 151\\n\"\n      … [949 caractères tronqués]`
+
+  ```
+ok
+   chiffre dépend de la convention, et la fiche doit le dire.
+
+Sous **exact + attachement**, la couverture v7 est **56 phrases complètes / 0 partielle / 151
+sans verdict** ; les 74 phrases complètes de l'ancien banc se répartissent en **56 conservées**
+et **18 perdues en entier** (dans ces données, les 18 sont perdues en bloc, pas en partie).
+Sous **normalisé + attachement**, **59 complètes + 4 partielles + 144 sans verdict**.
+  ```
+
+### 🤖 Assistant
+
+Fait. Fichiers écrits :
+
+- [`reports/rapport-page-s-mesure.md`](reports/rapport-page-s-mesure.md)
+- [`reports/rapport-page-s-mesure.json`](reports/rapport-page-s-mesure.json)
+- harnais local : `work/page-s-mesure/mesurer.py` (`work/` est ignoré par git)
+
+**Ce que la mesure dit**
+
+- **`/` sert toujours l'ancien banc** : **369 candidats**, **0/369** avec `profondeur`, **0** à ≥ 3, distribution **10/277/82**. La v7 dynamique donne **359 candidats**, **2/37/221/84/13/2**, **99** à ≥ 3.
+- **Correction de lecture importante** : « 369/0 » et « 359/99 » ne sont **pas** des comptes de verdicts. `/` porte **150 verdicts / 147 paires** (74/207 phrases complètes, 147/369 candidats jugés) ; la v7 n'a **aucun verdict natif**. **0** et **99** sont des candidats à profondeur ≥ 3, pas des verdicts.
+- **106/41 reproduit à la lettre** sous la signature exacte de la v2, mais **106 paires tombent sur 65 candidats distincts** : **41 collisions**. Avec l'attachement : **106/41, 106 cibles, 0 collision**. Espaces normalisés + attachement : **115/32** ; cible réduite à sa tête : **117/30**. Le **41 n'est donc pas un invariant**.
+- **Référents** : **28 mappings, 16 justes, 12 faux, 2 manquants, 0 note** ; **6/9** paragraphes fautifs. La cible **14 occurrences / 12 formes** ne couvre que **a001–a003** (9/12 justes, 3 faux, 2 manquants). Les **a004–a009** gardent **9 faux** : la cible 14/12 ne suffit pas pour le « 0/9 » d'A2. La v2 écrit « 9/16 faux » : c'est une transposition, les données disent **16/28 justes / 12 faux**.
+- **S n'a rien intégré** : `work/banque-v7/` et `work/referents/` absents ; `phrases_generees.json` du **02/11** ; `/api/phrases` rend **0/369** `profondeur`.
+
+**Contrôle négatif** : H0 « les deux bancs sont le même » est rejetée — **369 ≠ 359**, **0/369** contre **359/359** `profondeur`, **0** contre **99** à ≥ 3, empreintes SHA-256 différentes, Jaccard **0,7170** (multiset) et **0,7391** (global), migration **106/147** au lieu de 147/147. Contrôle positif : chaque banc comparé à lui-même est identique. **304 identiques / 55 changés / 10 orphelins** ; l'index recollerait **36/147** verdicts au mauvais contenu.
+
+**Intégrité** : **56/56 tests OK** en **4,3 s**, sous-module `389b99f` **propre**, **8765 intact** (`financemeteo`), **9000 libre**, aucune écriture dans `tools/structures/`. Le parent a bougé pendant la session ; HEAD mesuré **`049343d3`** (puis `2b5bd1cd` après la mesure). Seuls les deux compteurs de `docs/pilotage/en-cours.md` ont été ajustés pour la revue de documentation (755/848), qui passe. Fichiers **non committés**.
+

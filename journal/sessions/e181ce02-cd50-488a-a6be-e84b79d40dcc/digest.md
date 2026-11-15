@@ -65521,3 +65521,69 @@ dim 15 nov 2026 12:35:20 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 12 h 40 HNE (semaine 2 : W1-W6, tag semaine-2-2026-11-20)** … [506 caractères tronqués]`
+
+  ```
+create mode 100644 journal/sessions/session-e3fa8f1c-e304-4a0b-922a-79e5a1a580e5/digest.md
+ create mode 100644 journal/sessions/session-e3fa8f1c-e304-4a0b-922a-79e5a1a580e5/rapport.md
+2b5bd1cd JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG se
+   049343d3..2b5bd1cd  s/v7 -> s/v7
+   049343d3..2b5bd1cd  master -> master
+dim 15 nov 2026 12:38:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget\"", "description": "Suivre X1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5172]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5172", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5172", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 13:03:31 EST
+2026-11-15 12:53:13 · ✔ X2 en 778.3 s (code 0) — ✅ test -f reports/rapport-or-roles-protocole.md && echo FICHE-OK; ✅ test -f reports/schema-or-roles.json && echo SCHEMA-OK
+2026-11-15 12:53:13 · ▶ X3 — J5 — le tagger en lot : 1 000 phrases (timeout 3600 s)
+budget consommé : 14166.699999999999 s · lancements : 50
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 work/chantier/journal.log; ls reports/rapport-page-s-mesure.md reports/rapport-or-roles-protocole.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Voir X1/X2"}`
+
+  ```
+2026-11-15 12:27:50 · ▶ X1 — J4 — la page / de S : la mesure du pilote (timeout 3600 s)
+2026-11-15 12:40:14 · ✔ X1 en 744.5 s (code 0) — ✅ test -f reports/rapport-page-s-mesure.md && echo FICHE-OK
+2026-11-15 12:40:15 · ▶ X2 — J4 — l'or de rôles : le protocole pour S (timeout 3600 s)
+2026-11-15 12:53:13 · ✔ X2 en 778.3 s (code 0) — ✅ test -f reports/rapport-or-roles-protocole.md && echo FICHE-OK; ✅ test -f reports/schema-or-roles.json && echo SCHEMA-OK
+2026-11-15 12:53:13 · ▶ X3 — J5 — le tagger en lot : 1 000 phrases (timeout 3600 s)
+reports/rapport-or-roles-protocole.md
+reports/rapport-page-s-mesure.md
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-page-s-mesure.md reports/pensee-page-s-mesure.json reports/rapport-or-roles-protocole.md reports/schema-or-roles.json reports/pensee-or-roles-protocole.json 2>/dev/null | head -5; ls reports/ |  … [131 caractères tronqués]`
+
+  ```
+?? reports/rapport-or-roles-protocole.md
+?? reports/rapport-page-s-mesure.md
+?? reports/schema-or-roles.json
+or-roles-base-v1.json
+rapport-or-roles-protocole.json
+rapport-or-roles-protocole.md
+rapport-page-s-mesure.json
+# La page `/` de S : 369/0 contre 359/99 — la recette, et pourquoi « 0 » n'est pas « zéro verdict »
+
+> **Ligne de roadmap** : S · **Tâche** : X1 / J4 après-midi (la part du pilote) · **Date** :
+> 2026-11-15 12 h 37 HNE · **HEAD parent mesuré** : `049343d3` · **Sous-module
+> `tools/structures`** : `389b99f` · **Verdict** : la page `/` sert **toujours l'ancien banc** —
+> **369 candidats**, **0 avec `profondeur`**, **0 à ≥ 3**, distribution des `niveau` **10 / 277 /
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [757 caractères tronqués]`

@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drave.local/schemas/or-roles-v1.json",
+  "title": "Drave — or de rôles : phrase, cadres, sept rôles",
+  "description": "Contrat d'une annotation de l'or de rôles. Une phrase porte zéro ou plusieurs cadres ; un cadre est un prédicat et ses rôles. Les sept rôles sont agent, predicat, lieu, temps, destinataire, possession et complement. Les rôles du gold S qui ne se projettent pas dans ces sept champs (patient, qualite, contenu, cause, but, hypothese, concession, consequence, maniere) restent dans hors_cadre avec role hors_champ. Les mentions sont des sous-chaînes exactes de la phrase, en indices de caractères Unicode (pas d'octets).",
+  "type": "object",
+  "required": ["schema", "version", "id", "source", "texte", "langue", "cadres", "meta"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "drave.or.roles",
+      "description": "Identifiant du contrat."
+    },
+    "version": {
+      "const": 1,
+      "description": "Version du contrat."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^or-[a-z0-9][a-z0-9-]*$",
+      "description": "Identifiant stable de l'item, préfixé or-."
+    },
+    "source": {
+      "enum": ["gold_v2", "gold_s", "supplement", "consensus"],
+      "description": "Provenance de la phrase : base v2, référence S, supplément ciblé, ou consensus après adjudication."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Identifiant dans la source (f01…, p001…, s001…)."
+    },
+    "split": {
+      "enum": ["dev", "test", "holdout", "base", "supplement"],
+      "description": "Split de la phrase, quand il est connu."
+    },
+    "texte": {
+      "type": "string",
+      "minLength": 1,
+      "description": "La phrase, recopiée exactement depuis la source."
+    },
+    "langue": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)?$",
+      "description": "Code de langue (fr, en, it, und…)."
+    },
+    "cadres": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/cadre"},
+      "description": "Les cadres de la phrase. Vide pour une phrase sans prédicat : les rôles vont alors dans hors_cadre. Un seul cadre est principal."
+    },
+    "hors_cadre": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/hors_cadre"},
+      "description": "Les rôles annotés qui ne sont pas rattachés à un cadre (subordonnée, relative, apposition, phrase sans prédicat). Le rôle de sept champs est conservé pour la mesure au niveau mention."
+    },
+    "meta": {"$ref": "#/$defs/meta"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"cadres": {"minItems": 1}},
+        "required": ["cadres"]
+      },
+      "then": {
+        "properties": {
+          "cadres": {
+            "contains": {
+              "properties": {"principal": {"const": true}},
+              "required": ["principal"]
+            },
+            "minContains": 1,
+            "maxContains": 1
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "mention": {
+      "type": "object",
+      "required": ["texte", "debut", "fin"],
+      "additionalProperties": false,
+      "properties": {
+        "texte": {
+          "type": "string",
+          "minLength": 1,
+          "description": "La sous-chaîne exacte de la phrase."
+        },
+        "debut": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Indice de début, en caractères Unicode."
+        },
+        "fin": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Indice de fin exclusif, en caractères Unicode."
+        },
+        "type": {
+          "enum": ["GN", "GP", "GV", "SUB", "REL", "AUTRE"],
+          "description": "Type syntagmatique, facultatif ; il permet la compatibilité avec le gold S."
+        },
+        "tete": {
+          "type": "string",
+          "description": "Tête normalisée de la mention, facultative (utile pour l'appariement et l'analyse)."
+        },
+        "role_etendu": {
+          "type": "string",
+          "description": "Étiquette fine du gold S (theme, moyen, but, patient, qualite…), quand elle existe. La couche sept champs reste la référence du score."
+        },
+        "note": {
+          "type": "string",
+          "description": "Note d'annotation (ambiguïté, coordination, ellipse)."
+        }
+      }
+    },
+    "roles": {
+      "type": "object",
+      "required": ["agent", "predicat", "lieu", "temps", "destinataire", "possession", "complement"],
+      "additionalProperties": false,
+      "properties": {
+        "agent": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "L'entité qui fait l'action : sujet actif, ou complément d'agent d'un passif (par). Vide pour un impératif sans agent exprimé."
+        },
+        "predicat": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Le verbe ou le groupe verbal qui porte le cadre ; auxiliaires et copule inclus. Un cadre a exactement un prédicat."
+        },
+        "lieu": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Lieu, origine, destination ou trajet : à Paris, dans la cour, vers la gare, chez Paul."
+        },
+        "temps": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Moment, durée ou fréquence : à 14 h, demain, pendant deux heures, vers 9 h."
+        },
+        "destinataire": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Bénéficiaire ou récepteur d'un transfert ou d'une communication : à Marie, pour Paul, lui."
+        },
+        "possession": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Le possesseur : le chat de la voisine, le livre est à moi."
+        },
+        "complement": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/mention"},
+          "description": "Le repli des compléments prépositionnels qui ne sont ni lieu, ni temps, ni destinataire, ni possession : de son projet, avec le télescope, à la réunion. Le rôle étendu (theme, moyen, but) est conservé dans role_etendu."
+        }
+      }
+    },
+    "cadre": {
+      "type": "object",
+      "required": ["id", "principal", "roles"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^c[0-9]+$",
+          "description": "Identifiant du cadre dans la phrase (c1, c2…)."
+        },
+        "principal": {
+          "type": "boolean",
+          "description": "Vrai pour le cadre principal ; exactement un cadre principal quand cadres n'est pas vide."
+        },
+        "roles": {"$ref": "#/$defs/roles"},
+        "note": {
+          "type": "string",
+          "description": "Note sur le cadre (coordination, subordination, ellipse)."
+        }
+      }
+    },
+    "hors_cadre": {
+      "type": "object",
+      "required": ["role", "mention"],
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": ["agent", "predicat", "lieu", "temps", "destinataire", "possession", "complement", "hors_champ"],
+          "description": "Le rôle de sept champs, ou hors_champ pour un rôle du gold S qui ne se projette pas (patient, qualite, contenu, cause, but, hypothese, concession, consequence, maniere)."
+        },
+        "mention": {"$ref": "#/$defs/mention"},
+        "raison": {
+          "type": "string",
+          "description": "Pourquoi la mention est hors cadre (subordonnée, relative, apposition, phrase sans prédicat)."
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": ["codeur", "date", "statut"],
+      "additionalProperties": false,
+      "properties": {
+        "codeur": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A, B, base, consensus, S…"
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Date de l'annotation (AAAA-MM-JJ)."
+        },
+        "statut": {
+          "enum": ["base", "provisoire", "adjudine", "gele"],
+          "description": "base = graine dérivée du gold v2 ; provisoire = annotation non adjudiquée ; adjudine = consensus ; gele = version publiée."
+        },
+        "protocole": {
+          "const": 1,
+          "description": "Version du protocole d'annotation."
+        },
+        "a_completer": {
+          "type": "array",
+          "items": {
+            "enum": ["agent", "predicat", "lieu", "temps", "destinataire", "possession", "complement"]
+          },
+          "description": "Les rôles que la graine ne remplit pas encore (base v2 : temps, destinataire, possession, complement)."
+        },
+        "sha256_source": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Empreinte SHA-256 de la source, pour la traçabilité."
+        },
+        "note": {
+          "type": "string",
+          "description": "Note libre du codeur."
+        }
+      }
+    }
+  }
+}

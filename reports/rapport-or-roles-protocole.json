@@ -1,0 +1,1392 @@
+{
+ "schema": "drave.or.roles.protocole",
+ "version": 1,
+ "date": "2026-11-15",
+ "ligne": "B13 / R0.7",
+ "tache": "X2 (J4 matin, la part du pilote)",
+ "titre": "L'or de rôles : sept champs, deux codeurs, 144 rôles S et un or permuté",
+ "verdict": "Protocole livré : 61 phrases / 144 rôles S se projettent en 117 mentions des sept champs et 27 hors_champ ; avec les 46 textes v2, la base donne 222 mentions, dont 195 dans les sept champs ; le protocole prévoit un supplément de 60 phrases / 90 mentions qui porte chaque rôle à >= 20 et le kappa simulé à 90 % d'accord de 0,857 à 0,878 ; l'or permuté existant tombe à 0/18 sur les cinq rôles de GP et 0,4028 (borne haute) sur tous les rôles.",
+ "sources": {
+  "gold_s": {
+   "chemin": "tools/structures/donnees/gold-analyseur.json",
+   "sha256": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879",
+   "phrases": 61,
+   "roles": 144,
+   "etiquettes": 17,
+   "spans_exacts": 144,
+   "sept_champs": {
+    "agent": 34,
+    "complement": 7,
+    "destinataire": 5,
+    "lieu": 3,
+    "possession": 1,
+    "predicat": 58,
+    "temps": 9
+   },
+   "hors_champ": {
+    "but": 1,
+    "cause": 4,
+    "concession": 1,
+    "consequence": 1,
+    "contenu": 5,
+    "hypothese": 2,
+    "maniere": 1,
+    "patient": 5,
+    "qualite": 7
+   }
+  },
+  "gold_v2": {
+   "chemin": "tools/tests/linguistique/gold_restitution_v2.json",
+   "sha256": "1b5af926e55f514e806528c88c92c6852b0839784553c21ed927516b06b6b5ed",
+   "textes": 46,
+   "variantes": 65,
+   "langues": {
+    "en": 5,
+    "fr": 35,
+    "it": 1,
+    "und": 5
+   },
+   "premiere_variante": {
+    "cellules": 138,
+    "non_vides": 78,
+    "vides": 60,
+    "par_role": {
+     "agent": 32,
+     "lieu": 7,
+     "predicat": 39
+    }
+   },
+   "toutes_variantes": {
+    "cellules": 195,
+    "non_vides": 115,
+    "par_role": {
+     "agent": 48,
+     "lieu": 9,
+     "predicat": 58
+    }
+   },
+   "champs_annotes": [
+    "agent",
+    "predicat",
+    "lieu"
+   ],
+   "champs_manquants": [
+    "temps",
+    "destinataire",
+    "possession",
+    "complement"
+   ]
+  },
+  "schema": {
+   "chemin": "reports/schema-or-roles.json",
+   "sha256": "a0b40f109411cb96625ba04d0588e69ac2caeab2e723eba597363524855bf474",
+   "draft": "2020-12",
+   "champs": [
+    "agent",
+    "predicat",
+    "lieu",
+    "temps",
+    "destinataire",
+    "possession",
+    "complement"
+   ]
+  },
+  "base": {
+   "chemin": "reports/or-roles-base-v1.json",
+   "sha256": "17b74d9a4e40e4e5194730f229690a3e0927f473676d5e69b06a5c4626765c5c",
+   "items": 46,
+   "note": "graine provisoire des 46 textes v2"
+  },
+  "banc": {
+   "chemin": "reports/pensee-fiabilite-produit.json",
+   "sha256": "bd54b1ff7fa14e203dcfeaced908b8dec699995c2ff3fe910c7956ac64d18a48"
+  }
+ },
+ "inventaire": {
+  "gold_s": {
+   "chemin": "tools/structures/donnees/gold-analyseur.json",
+   "sha256": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879",
+   "version": 1,
+   "note": "Gold de l'analyseur. split=dev : les 7 phrases du banc. split=test : 16 phrases écrites AVANT les règles. split=holdout : 32 phrases en quatre vagues — h024-h031 (première règle, h024 a révélé « est mon voisin », corrigé par la copule), h032-h039 (après la copule), h040-h047 (après la frontière GN-devant-verbe) et h048-h055 (après la règle de contexte des homographes, 02/11 20 h). h033, h046 et h047, qui avaient révélé les défauts, sont corrigés ; les vagues 2 et 3 ne sont donc plus aveugles à ces règles, et la vague 4 est écrite après la règle de contexte, mesurée une fois. Deux échecs de la vague 4 sont nommés : h050 (« fait » suivi d'un verbe hors lexique) et h053 (« lit » après un adjectif, en fin de phrase). Aucun attendu n'a été modifié après mesure. Cinquième vague h056-h060, écrite APRÈS les règles v6 (h050, h053, « si fort que ») et mesurée une fois : elle teste la conséquence, l'hypothèse conditionnelle, le nom après adjectif et le verbe « fait » après un nom. Sixième vague h061 : le nom après un adjectif hors lexique (« fait divers »), ajouté après la règle v7 et mesuré une fois.",
+   "phrases": 61,
+   "roles": 144,
+   "etiquettes": 17,
+   "spans_exacts": 144,
+   "spans_exacts_taux": 1.0,
+   "par_etiquette": {
+    "predicat": 58,
+    "agent": 34,
+    "temps": 9,
+    "qualite": 7,
+    "contenu": 5,
+    "destinataire": 5,
+    "patient": 5,
+    "cause": 4,
+    "theme": 4,
+    "but": 3,
+    "lieu": 3,
+    "hypothese": 2,
+    "concession": 1,
+    "consequence": 1,
+    "instrument": 1,
+    "maniere": 1,
+    "possession": 1
+   },
+   "par_type_role": {
+    "GN/agent": 31,
+    "GN/patient": 5,
+    "GP/agent": 3,
+    "GP/but": 2,
+    "GP/destinataire": 5,
+    "GP/instrument": 1,
+    "GP/lieu": 3,
+    "GP/possession": 1,
+    "GP/temps": 4,
+    "GP/theme": 4,
+    "GV/predicat": 58,
+    "REL/qualite": 7,
+    "SUB/but": 1,
+    "SUB/cause": 4,
+    "SUB/concession": 1,
+    "SUB/consequence": 1,
+    "SUB/contenu": 5,
+    "SUB/hypothese": 2,
+    "SUB/maniere": 1,
+    "SUB/temps": 5
+   },
+   "par_split": {
+    "phrases": {
+     "dev": 7,
+     "holdout": 38,
+     "test": 16
+    },
+    "roles": {
+     "dev": 22,
+     "holdout": 82,
+     "test": 40
+    }
+   },
+   "roles_par_phrase": {
+    "1": 5,
+    "2": 32,
+    "3": 21,
+    "4": 3
+   },
+   "predicats_par_phrase": {
+    "0": 4,
+    "1": 56,
+    "2": 1
+   },
+   "sept_champs": {
+    "agent": 34,
+    "complement": 7,
+    "destinataire": 5,
+    "lieu": 3,
+    "possession": 1,
+    "predicat": 58,
+    "temps": 9
+   },
+   "sept_champs_total": 117,
+   "hors_champ": {
+    "but": 1,
+    "cause": 4,
+    "concession": 1,
+    "consequence": 1,
+    "contenu": 5,
+    "hypothese": 2,
+    "maniere": 1,
+    "patient": 5,
+    "qualite": 7
+   },
+   "hors_champ_total": 27,
+   "couverture_sept": 0.8125,
+   "cas_limites": [
+    {
+     "id": "h031",
+     "split": "holdout",
+     "texte": "Il court mais il ne rit pas.",
+     "predicats": 2,
+     "roles": 2,
+     "attendus": [
+      [
+       "Il court",
+       "GV",
+       "predicat"
+      ],
+      [
+       "il ne rit pas",
+       "GV",
+       "predicat"
+      ]
+     ],
+     "raison": "deux prédicats : deux cadres, un principal"
+    },
+    {
+     "id": "h043",
+     "split": "holdout",
+     "texte": "Une belle maison.",
+     "predicats": 0,
+     "roles": 1,
+     "attendus": [
+      [
+       "Une belle maison",
+       "GN",
+       "agent"
+      ]
+     ],
+     "raison": "phrase sans prédicat : cadres vides, rôles hors_cadre"
+    },
+    {
+     "id": "h052",
+     "split": "holdout",
+     "texte": "La ferme.",
+     "predicats": 0,
+     "roles": 1,
+     "attendus": [
+      [
+       "La ferme",
+       "GN",
+       "agent"
+      ]
+     ],
+     "raison": "phrase sans prédicat : cadres vides, rôles hors_cadre"
+    },
+    {
+     "id": "h053",
+     "split": "holdout",
+     "texte": "Le grand lit.",
+     "predicats": 0,
+     "roles": 1,
+     "attendus": [
+      [
+       "Le grand lit",
+       "GN",
+       "agent"
+      ]
+     ],
+     "raison": "phrase sans prédicat : cadres vides, rôles hors_cadre"
+    },
+    {
+     "id": "h059",
+     "split": "holdout",
+     "texte": "La vieille porte.",
+     "predicats": 0,
+     "roles": 1,
+     "attendus": [
+      [
+       "La vieille porte",
+       "GN",
+       "agent"
+      ]
+     ],
+     "raison": "phrase sans prédicat : cadres vides, rôles hors_cadre"
+    }
+   ]
+  },
+  "gold_v2": {
+   "chemin": "tools/tests/linguistique/gold_restitution_v2.json",
+   "sha256": "1b5af926e55f514e806528c88c92c6852b0839784553c21ed927516b06b6b5ed",
+   "schema": "drave.restitution.v2.gold",
+   "version": 1,
+   "textes": 46,
+   "variantes": 65,
+   "langues": {
+    "en": 5,
+    "fr": 35,
+    "it": 1,
+    "und": 5
+   },
+   "premiere_variante": {
+    "cellules": 138,
+    "non_vides": 78,
+    "vides": 60,
+    "par_role": {
+     "agent": 32,
+     "lieu": 7,
+     "predicat": 39
+    }
+   },
+   "toutes_variantes": {
+    "cellules": 195,
+    "non_vides": 115,
+    "par_role": {
+     "agent": 48,
+     "lieu": 9,
+     "predicat": 58
+    }
+   },
+   "cadres_vides": [
+    "f18",
+    "f25",
+    "f37",
+    "f39",
+    "f40",
+    "f42",
+    "f48"
+   ],
+   "sans_predicat": [
+    "f18",
+    "f25",
+    "f37",
+    "f39",
+    "f40",
+    "f42",
+    "f48"
+   ],
+   "variantes_par_texte": {
+    "1": 28,
+    "2": 17,
+    "3": 1
+   },
+   "champs_annotes": [
+    "agent",
+    "predicat",
+    "lieu"
+   ],
+   "champs_manquants": [
+    "temps",
+    "destinataire",
+    "possession",
+    "complement"
+   ],
+   "couverture_sept": 0.42857142857142855,
+   "note": "Or **écrit à la main** sur les 46 textes annotables du banc v0 : le **cadre principal** (agent, prédicat, lieu), valeurs en surface et variantes pour les ambiguïtés réelles (coordination, contraction, inversion). Ce n'est pas une annotation complète : les propositions subordonnées et les seconds cadres ne sont pas notés. Les textes sans prédicat (numérique, courriel, symboles, remplissage latin) ont un cadre vide."
+  },
+  "base_combinee": {
+   "mentions": 222,
+   "sept_champs": {
+    "agent": 66,
+    "predicat": 97,
+    "lieu": 10,
+    "temps": 9,
+    "destinataire": 5,
+    "possession": 1,
+    "complement": 7
+   },
+   "sept_champs_total": 195,
+   "hors_champ": {
+    "but": 1,
+    "cause": 4,
+    "concession": 1,
+    "consequence": 1,
+    "contenu": 5,
+    "hypothese": 2,
+    "maniere": 1,
+    "patient": 5,
+    "qualite": 7
+   },
+   "hors_champ_total": 27,
+   "par_source": {
+    "gold_s": 144,
+    "gold_v2": 78
+   }
+  },
+  "supplement": {
+   "phrases": 60,
+   "mentions": 90,
+   "cibles": {
+    "temps": 20,
+    "destinataire": 20,
+    "possession": 20,
+    "complement": 20,
+    "lieu": 10
+   },
+   "apres": {
+    "agent": 66,
+    "predicat": 97,
+    "lieu": 20,
+    "temps": 29,
+    "destinataire": 25,
+    "possession": 21,
+    "complement": 27
+   },
+   "apres_total_sept": 285,
+   "apres_total": 312,
+   "items_total": 167,
+   "regle": "60 phrases neuves, 90 mentions ciblées : 20 temps, 20 destinataire, 20 possession, 20 complement, 10 lieu ; une phrase peut porter deux rôles, d'où 90 mentions pour 60 phrases.",
+   "pourquoi": "chaque rôle des sept champs atteint au moins 20 mentions ; la prévalence attendue passe de 0,299 à 0,180, ce qui rend le kappa moins sensible au paradoxe de prévalence.",
+   "limite": "supplément ciblé, pas un échantillon aléatoire : il sert au rappel par rôle et au kappa, pas à estimer la prévalence ni la F1 générale."
+  },
+  "lecture": "Le gold v2 ne couvre que 3 des 7 champs ; le gold S couvre 117 de ses 144 rôles dans les sept champs. La base commune a 195 mentions des sept champs et 27 hors_champ ; les rôles rares (possession 1, destinataire 5, complement 7, temps 9) sont sous le seuil de 20 mentions. Le supplément cible ces quatre rôles et le lieu."
+ },
+ "protocole": {
+  "question": "Comment annoter un or de rôles qui mesure les sept champs (agent, predicat, lieu, temps, destinataire, possession, complement) sur les 46 textes du gold v2 et les 61 phrases du gold S, avec deux codeurs, un kappa publiable et un contrôle négatif qui tue la mesure ?",
+  "unite": "phrase ; plusieurs cadres par phrase ; plusieurs mentions par rôle.",
+  "champs": {
+   "phrase": {
+    "obligatoire": true,
+    "contenu": "id, texte, langue, source, source_id, split",
+    "regle": "recopier la phrase exactement ; les offsets sont en caractères Unicode."
+   },
+   "cadre": {
+    "obligatoire": true,
+    "contenu": "id, principal, roles",
+    "regle": "un cadre = un prédicat et ses rôles ; un seul cadre principal par phrase ; zéro cadre pour une phrase sans prédicat."
+   },
+   "roles": {
+    "obligatoire": true,
+    "contenu": "agent, predicat, lieu, temps, destinataire, possession, complement",
+    "regle": "chaque rôle est une liste de mentions (0..n) ; le prédicat d'un cadre est exactement une mention."
+   },
+   "hors_cadre": {
+    "obligatoire": false,
+    "contenu": "role, mention, raison",
+    "regle": "rôle annoté mais non rattaché à un cadre : subordonnée, relative, apposition, phrase sans prédicat. Le rôle de sept champs est conservé pour la mesure au niveau mention."
+   },
+   "meta": {
+    "obligatoire": true,
+    "contenu": "codeur, date, statut, protocole, a_completer, sha256_source",
+    "regle": "statut base / provisoire / adjudine / gele ; aucune édition silencieuse."
+   }
+  },
+  "definitions": {
+   "agent": "l'entité qui fait l'action : sujet actif, ou complément d'agent d'un passif (par). Vide pour un impératif sans agent exprimé.",
+   "predicat": "le verbe ou le groupe verbal qui porte le cadre ; auxiliaires et copule inclus. Un cadre a exactement un prédicat.",
+   "lieu": "lieu, origine, destination ou trajet : à Paris, dans la cour, vers la gare, chez Paul, au bord de la forêt.",
+   "temps": "moment, durée ou fréquence : à 14 h, demain, pendant deux heures, vers 9 h, dans trois jours.",
+   "destinataire": "bénéficiaire ou récepteur d'un transfert ou d'une communication : à Marie, pour Paul, lui, leur.",
+   "possession": "le possesseur : le chat de la voisine, le livre est à moi ; pas l'objet possédé.",
+   "complement": "le repli des compléments prépositionnels qui ne sont ni lieu, ni temps, ni destinataire, ni possession : de son projet, avec le télescope, à la réunion. Le rôle étendu (theme, instrument/moyen, but) est conservé dans role_etendu ; il ne crée pas une huitième catégorie de score.",
+   "hors_champ": "les rôles du gold S qui ne se projettent pas dans les sept champs : patient (GN), qualite (REL) et les subordonnées but, cause, hypothese, concession, consequence, contenu, maniere. Ils restent dans la couche étendue et ne sont pas comptés dans le score des sept champs."
+  },
+  "regles_de_decision": [
+   {
+    "regle": "à + temps",
+    "exemples": [
+     "à 14 h",
+     "à midi",
+     "à demain"
+    ],
+    "role": "temps"
+   },
+   {
+    "regle": "à + lieu",
+    "exemples": [
+     "à Paris",
+     "à la maison",
+     "au bord de la forêt"
+    ],
+    "role": "lieu"
+   },
+   {
+    "regle": "à + personne",
+    "exemples": [
+     "à Marie",
+     "à son fils"
+    ],
+    "role": "destinataire"
+   },
+   {
+    "regle": "à + infinitif",
+    "exemples": [
+     "à manger",
+     "à faire"
+    ],
+    "role": "complement",
+    "role_etendu": "but"
+   },
+   {
+    "regle": "de + GN après un GN",
+    "exemples": [
+     "le chat de la voisine"
+    ],
+    "role": "possession"
+   },
+   {
+    "regle": "de + GV / de + thème",
+    "exemples": [
+     "parler de son projet"
+    ],
+    "role": "complement",
+    "role_etendu": "theme"
+   },
+   {
+    "regle": "avec + instrument",
+    "exemples": [
+     "avec le télescope"
+    ],
+    "role": "complement",
+    "role_etendu": "instrument"
+   },
+   {
+    "regle": "par + passif + personne",
+    "exemples": [
+     "écrit par Marie"
+    ],
+    "role": "agent"
+   },
+   {
+    "regle": "par + moyen / lieu",
+    "exemples": [
+     "entrer par la porte"
+    ],
+    "role": "complement",
+    "role_etendu": "moyen"
+   },
+   {
+    "regle": "pour + bénéficiaire animé",
+    "exemples": [
+     "pour Paul"
+    ],
+    "role": "destinataire"
+   },
+   {
+    "regle": "pour + but",
+    "exemples": [
+     "pour la documentation"
+    ],
+    "role": "complement",
+    "role_etendu": "but"
+   },
+   {
+    "regle": "dans, sur, sous, vers, chez",
+    "exemples": [
+     "dans la cour",
+     "vers la gare"
+    ],
+    "role": "lieu"
+   },
+   {
+    "regle": "pendant, depuis, durant, avant, après",
+    "exemples": [
+     "depuis dix minutes"
+    ],
+    "role": "temps"
+   },
+   {
+    "regle": "vers + heure",
+    "exemples": [
+     "vers 9 h"
+    ],
+    "role": "temps"
+   },
+   {
+    "regle": "en + temps",
+    "exemples": [
+     "en 2020"
+    ],
+    "role": "temps"
+   },
+   {
+    "regle": "en + lieu",
+    "exemples": [
+     "en France"
+    ],
+    "role": "lieu"
+   },
+   {
+    "regle": "en + véhicule",
+    "exemples": [
+     "en voiture"
+    ],
+    "role": "complement",
+    "role_etendu": "moyen"
+   },
+   {
+    "regle": "en + gérondif",
+    "exemples": [
+     "en haussant les épaules"
+    ],
+    "role": "complement",
+    "role_etendu": "maniere"
+   },
+   {
+    "regle": "copule + à + pronom",
+    "exemples": [
+     "Le livre est à moi"
+    ],
+    "role": "possession"
+   },
+   {
+    "regle": "passif",
+    "exemples": [
+     "La porte a été fermée par Marie"
+    ],
+    "role": "agent",
+    "note": "le sujet est patient, hors_champ"
+   },
+   {
+    "regle": "coordination de même rôle",
+    "exemples": [
+     "Marie et Paul"
+    ],
+    "role": "une seule mention couvrant le coordonné"
+   },
+   {
+    "regle": "coordination de rôles différents",
+    "exemples": [
+     "à Paris et à 14 h"
+    ],
+    "role": "deux mentions, deux rôles"
+   },
+   {
+    "regle": "subordonnée avec son propre prédicat",
+    "exemples": [
+     "quand il arrive"
+    ],
+    "role": "second cadre"
+   },
+   {
+    "regle": "subordonnée complément",
+    "exemples": [
+     "parce qu'il pleut"
+    ],
+    "role": "hors_cadre",
+    "role_etendu": "cause"
+   },
+   {
+    "regle": "phrase sans prédicat",
+    "exemples": [
+     "Bonne journée !"
+    ],
+    "role": "cadres vides, rôles hors_cadre"
+   },
+   {
+    "regle": "impératif sans agent",
+    "exemples": [
+     "Ferme la porte"
+    ],
+    "role": "agent vide"
+   },
+   {
+    "regle": "ambiguïté",
+    "exemples": [
+     "à la banque"
+    ],
+    "role": "rôle syntaxique principal ; l'alternative va dans meta.note, pas dans l'or"
+   }
+  ],
+  "echantillon": {
+   "base": {
+    "items": 107,
+    "gold_v2": 46,
+    "gold_s": 61,
+    "mentions": 222,
+    "sept_champs": 195,
+    "hors_champ": 27
+   },
+   "supplement": {
+    "phrases": 60,
+    "mentions": 90,
+    "cibles": {
+     "temps": 20,
+     "destinataire": 20,
+     "possession": 20,
+     "complement": 20,
+     "lieu": 10
+    },
+    "apres": {
+     "agent": 66,
+     "predicat": 97,
+     "lieu": 20,
+     "temps": 29,
+     "destinataire": 25,
+     "possession": 21,
+     "complement": 27
+    },
+    "apres_total_sept": 285,
+    "apres_total": 312,
+    "items_total": 167,
+    "regle": "60 phrases neuves, 90 mentions ciblées : 20 temps, 20 destinataire, 20 possession, 20 complement, 10 lieu ; une phrase peut porter deux rôles, d'où 90 mentions pour 60 phrases.",
+    "pourquoi": "chaque rôle des sept champs atteint au moins 20 mentions ; la prévalence attendue passe de 0,299 à 0,180, ce qui rend le kappa moins sensible au paradoxe de prévalence.",
+    "limite": "supplément ciblé, pas un échantillon aléatoire : il sert au rappel par rôle et au kappa, pas à estimer la prévalence ni la F1 générale."
+   },
+   "total": {
+    "items": 167,
+    "mentions": 312,
+    "sept_champs": 285,
+    "hors_champ": 27
+   },
+   "aveugle": "les codeurs ne voient pas les étiquettes du gold S ; la graine v2 est montrée à l'identique aux deux codeurs ; le gold S n'est ouvert qu'après le gel, pour la comparaison."
+  },
+  "double_annotation": {
+   "codeurs": [
+    "A (pilote)",
+    "B (désigné par S)",
+    "C (adjudicateur : S ou tiers)"
+   ],
+   "couverture": "100 % des 167 items, deux codeurs, soit 334 annotations.",
+   "calibration": "10 items hors du gold, annotés par A et B, kappa calculé ; si kappa < 0,80, le manuel est révisé avant l'annotation.",
+   "independance": "fichiers séparés, aucune discussion pendant l'annotation, aucun accès au fichier de l'autre codeur.",
+   "adjudication": "tous les désaccords sont adjudiqués ; C tranche ou crée un consensus ; les annotations A et B restent dans l'audit.",
+   "non_tranche": "si C ne peut pas trancher, l'item est exclu du gold, avec la raison ; il n'est pas compté comme un accord.",
+   "gel": "après adjudication, le gold est gelé avec un SHA-256 et un manifeste ; toute modification crée une nouvelle version."
+  },
+  "kappa": {
+   "unite": "mention de rôle, appariée par span exact ; catégories = sept champs + hors_champ (8).",
+   "formule": "kappa de Cohen = (p_o - p_e) / (1 - p_e).",
+   "appariement": "un span est apparié si (debut, fin) sont égaux ; sinon c'est un désaccord de frontière, exclu du kappa de rôle et compté dans le taux de spans exacts.",
+   "secondaires": [
+    "kappa de présence : pour chaque phrase × rôle, présent/absent (2 catégories) ;",
+    "taux de spans exacts : frontière identique ou non ;",
+    "taux de cadres exacts : même nombre de cadres et mêmes spans de prédicat."
+   ],
+   "ic": "bootstrap par phrase (cluster), 2000 rééchantillonnages, graine 20261115 ; intervalle percentile 2,5–97,5.",
+   "seuils": {
+    "accepte": "kappa >= 0,80",
+    "adjudication": "0,60 <= kappa < 0,80 : adjudication, puis gold accepté avec limite nommée",
+    "revoir": "kappa < 0,60 : manuel révisé, aucun gold, aucun score",
+    "par_role": "un rôle avec moins de 10 mentions positives n'a pas de F1 publiable : on rapporte l'accord brut et l'effectif, pas un kappa."
+   },
+   "paradoxe": "les rôles rares (possession, complement) ont un kappa instable ; on rapporte l'accord brut et le PABAK en secondaire, et on ne rejette jamais un rôle sur le seul kappa.",
+   "controle_negatif": "permuter les étiquettes de B, ou tirer B indépendamment de A, doit donner kappa ~ 0 ; si kappa_permute > 0,20, le calcul est invalide."
+  },
+  "controles_negatifs": {
+   "or_permute_7": {
+    "mapping": {
+     "agent": "predicat",
+     "predicat": "lieu",
+     "lieu": "temps",
+     "temps": "destinataire",
+     "destinataire": "possession",
+     "possession": "complement",
+     "complement": "agent"
+    },
+    "plafond": 0.1429,
+    "attendu": "le score exact des sept champs tombe sous 1/7 ; sinon la mesure fuit."
+   },
+   "or_permute_5": {
+    "mapping": {
+     "lieu": "temps",
+     "temps": "destinataire",
+     "destinataire": "possession",
+     "possession": "complement",
+     "complement": "lieu"
+    },
+    "plafond": 0.2,
+    "attendu": "0/18 sur le gold S (mesure W5 rejouée)."
+   },
+   "or_vide": {
+    "attendu": "F1 = 0 ; plancher déjà mesuré sur le gold v2 (0/77)."
+   },
+   "role_constant": {
+    "attendu": "F1 <= 0,05 ; mesure W5 : 3/18, F1 0,037."
+   },
+   "kappa_permute": {
+    "plafond": 0.2,
+    "attendu": "kappa ~ 0."
+   },
+   "or_permute_tous": {
+    "attendu": "0,4028 sur le gold S, mais c'est une borne haute : 58 prédicats survivent à l'alias predicat/prédicat. Ne pas l'utiliser comme contrôle propre."
+   }
+  },
+  "pre_enregistrement": {
+   "date": "2026-11-15",
+   "graine": 20261115,
+   "hypothese": "les sept champs sont annotables avec un kappa >= 0,80 et le gold permuté s'effondre sous le plafond 1/7.",
+   "metrique_principale": "précision, rappel et F1 par rôle sur les sept champs, plus le cadre exact ; micro et macro.",
+   "metrique_secondaire": "kappa de rôle, kappa de présence, spans exacts.",
+   "regle_de_decision": "le gold n'est publié que si kappa >= 0,80 et si le contrôle permuté passe ; sinon on publie l'échec.",
+   "exclusions": "les items non tranchés, les phrases sans prédicat pour le cadre exact, les rôles < 10 positifs pour la F1 par rôle.",
+   "non_tuning": "aucune règle de rôle n'est modifiée après la lecture du gold gelé ; le gold S reste en lecture seule."
+  },
+  "plan": [
+   {
+    "etape": "figer le schéma et le manuel",
+    "duree": "0,5 h"
+   },
+   {
+    "etape": "calibration sur 10 items",
+    "duree": "1 h"
+   },
+   {
+    "etape": "annotation A et B (167 items)",
+    "duree": "2 × 3 h"
+   },
+   {
+    "etape": "kappa et liste des désaccords",
+    "duree": "1 h"
+   },
+   {
+    "etape": "adjudication C",
+    "duree": "2 h"
+   },
+   {
+    "etape": "gel, SHA-256, contrôles permutés",
+    "duree": "1 h"
+   }
+  ]
+ },
+ "mesures": {
+  "kappa_simulation": {
+   "base": {
+    "n": 222,
+    "pe": 0.2993,
+    "cibles": [
+     {
+      "accord_brut_cible": 0.8,
+      "p_keep": 0.7146,
+      "accord_brut_observe": 0.7988,
+      "kappa_moyen": 0.7128,
+      "kappa_ic95": [
+       0.6356,
+       0.7873
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.85,
+      "p_keep": 0.7859,
+      "accord_brut_observe": 0.8502,
+      "kappa_moyen": 0.7862,
+      "kappa_ic95": [
+       0.7133,
+       0.8477
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.9,
+      "p_keep": 0.8573,
+      "accord_brut_observe": 0.9,
+      "kappa_moyen": 0.8572,
+      "kappa_ic95": [
+       0.8017,
+       0.9154
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.95,
+      "p_keep": 0.9286,
+      "accord_brut_observe": 0.9498,
+      "kappa_moyen": 0.9283,
+      "kappa_ic95": [
+       0.8853,
+       0.9678
+      ],
+      "n": 222,
+      "pe": 0.2993
+     }
+    ],
+    "controle_independant": {
+     "kappa_moyen": -0.0005,
+     "kappa_ic95": [
+      -0.078,
+      0.0711
+     ]
+    },
+    "controle_permute": {
+     "kappa_moyen": 0.0016,
+     "kappa_ic95": [
+      -0.08,
+      0.0872
+     ]
+    }
+   },
+   "apres": {
+    "n": 312,
+    "pe": 0.1801,
+    "cibles": [
+     {
+      "accord_brut_cible": 0.8,
+      "p_keep": 0.7561,
+      "accord_brut_observe": 0.7999,
+      "kappa_moyen": 0.756,
+      "kappa_ic95": [
+       0.7038,
+       0.8076
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.85,
+      "p_keep": 0.8171,
+      "accord_brut_observe": 0.8504,
+      "kappa_moyen": 0.8176,
+      "kappa_ic95": [
+       0.7699,
+       0.8638
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.9,
+      "p_keep": 0.878,
+      "accord_brut_observe": 0.8998,
+      "kappa_moyen": 0.8778,
+      "kappa_ic95": [
+       0.8355,
+       0.9143
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.95,
+      "p_keep": 0.939,
+      "accord_brut_observe": 0.95,
+      "kappa_moyen": 0.939,
+      "kappa_ic95": [
+       0.9062,
+       0.9649
+      ],
+      "n": 312,
+      "pe": 0.1801
+     }
+    ],
+    "controle_independant": {
+     "kappa_moyen": 0.0022,
+     "kappa_ic95": [
+      -0.049,
+      0.0505
+     ]
+    },
+    "controle_permute": {
+     "kappa_moyen": -0.0012,
+     "kappa_ic95": [
+      -0.0476,
+      0.0501
+     ]
+    }
+   },
+   "lecture": "l'accord brut est la cible ; le kappa est calculé sur les 8 catégories (7 champs + hors_champ). Le codeur indépendant et le codeur permuté donnent ~0."
+  },
+  "puissance": {
+   "base": {
+    "n": 222,
+    "pe": 0.2993,
+    "accord_brut": 0.9,
+    "erreur_type": 0.0287,
+    "demi_largeur_ic95": 0.0563,
+    "n_pour_demi_largeur_0_05": 282
+   },
+   "apres_supplement": {
+    "n": 312,
+    "pe": 0.1801,
+    "accord_brut": 0.9,
+    "erreur_type": 0.0207,
+    "demi_largeur_ic95": 0.0406,
+    "n_pour_demi_largeur_0_05": 206
+   },
+   "lecture": "la base seule donne une demi-largeur IC95 de 0,056 ; le supplément la ramène à 0,041 ; pour 0,05 il faut environ 282 mentions avec la prévalence de la base et 206 après supplément."
+  },
+  "or_permute_existant": {
+   "gold_s": {
+    "or": "tools/structures/donnees/gold-analyseur.json",
+    "sha256": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879",
+    "base": {
+     "global": {
+      "justes": 144,
+      "total": 144,
+      "taux": 1.0
+     },
+     "cinq": {
+      "justes": 18,
+      "attendus": 18,
+      "taux": 1.0
+     }
+    },
+    "permutation_cinq": {
+     "mapping": {
+      "lieu": "temps",
+      "temps": "destinataire",
+      "destinataire": "possession",
+      "possession": "complement",
+      "complement": "lieu"
+     },
+     "global": {
+      "justes": 126,
+      "total": 144,
+      "taux": 0.875
+     },
+     "cinq": {
+      "justes": 0,
+      "attendus": 18,
+      "taux": 0.0
+     }
+    },
+    "permutation_tous": {
+     "mapping": {
+      "agent": "but",
+      "but": "cause",
+      "cause": "concession",
+      "concession": "consequence",
+      "consequence": "contenu",
+      "contenu": "destinataire",
+      "destinataire": "hypothese",
+      "hypothese": "lieu",
+      "lieu": "maniere",
+      "maniere": "moyen",
+      "moyen": "patient",
+      "patient": "possession",
+      "possession": "predicat",
+      "predicat": "prédicat",
+      "prédicat": "qualite",
+      "qualite": "temps",
+      "temps": "theme",
+      "theme": "agent"
+     },
+     "global": {
+      "justes": 58,
+      "total": 144,
+      "taux": 0.4028
+     },
+     "cinq": {
+      "justes": 0,
+      "attendus": 18,
+      "taux": 0.0
+     },
+     "note": "la rotation des 17 étiquettes laisse 58 prédicats fixes par l'alias predicat/prédicat ; 0,4028 est une borne haute, pas un contrôle propre. Le contrôle propre est la permutation des cinq rôles de GP (0/18) et, pour le nouveau gold, la permutation cyclique des sept champs."
+    },
+    "role_constant_lieu": {
+     "global": {
+      "justes": 3,
+      "total": 144,
+      "taux": 0.0208
+     },
+     "cinq": {
+      "justes": 3,
+      "attendus": 18,
+      "taux": 0.037
+     }
+    },
+    "baseline_constant_par_type": {
+     "justes": 104,
+     "total": 144,
+     "taux": 0.7222
+    }
+   },
+   "gold_v2": {
+    "or": "tools/tests/linguistique/gold_restitution_v2.json",
+    "sha256": "1b5af926e55f514e806528c88c92c6852b0839784553c21ed927516b06b6b5ed",
+    "base": {
+     "cadres_exacts": 20,
+     "cadres_total": 46,
+     "cadres_non_vides": 17,
+     "roles_justes": 40,
+     "roles_attendus": 77,
+     "f1": 0.5406,
+     "lieu": {
+      "exacts": 42,
+      "attendus": 6,
+      "predits": 4,
+      "justes": 3,
+      "faux_positifs": 1,
+      "faux_negatifs": 3,
+      "vrais_negatifs": 39,
+      "taux_exact": 0.913,
+      "precision": 0.75,
+      "rappel": 0.5,
+      "f1": 0.6
+     }
+    },
+    "vide": {
+     "cadres_exacts": 7,
+     "roles_justes": 0,
+     "roles_attendus": 77,
+     "f1": 0.0
+    },
+    "constant_par_type": {
+     "cadres_exacts": 6,
+     "roles_justes": 39,
+     "roles_attendus": 77,
+     "f1": 0.4382
+    },
+    "melange": {
+     "cadres_exacts": 3,
+     "roles_justes": 0,
+     "roles_attendus": 77,
+     "f1": 0.0
+    },
+    "permutation_cinq": {
+     "mapping": {
+      "lieu": "temps",
+      "temps": "destinataire",
+      "destinataire": "possession",
+      "possession": "complement",
+      "complement": "lieu"
+     },
+     "cadres_exacts": 17,
+     "cadres_non_vides": 14,
+     "roles_justes": 37,
+     "roles_attendus": 77,
+     "f1": 0.5139,
+     "lieu": {
+      "exacts": 40,
+      "attendus": 6,
+      "predits": 0,
+      "justes": 0,
+      "faux_positifs": 0,
+      "faux_negatifs": 6,
+      "vrais_negatifs": 40,
+      "taux_exact": 0.8696,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     }
+    }
+   },
+   "lecture": "Les cinq rôles de GP du gold S permutés tombent à 0/18 ; le global reste 126/144 parce que 126 des 144 rôles ne sont pas des GP. La permutation de tous les rôles donne 58/144 (0,4028), mais 58 prédicats survivent à l'alias predicat/prédicat : c'est une borne haute. Sur le gold v2, la permutation des cinq rôles donne 17/46 cadres, 37/77 rôles, F1 0,5139, et le lieu tombe à 0/6."
+  }
+ },
+ "controles": {
+  "schema": {
+   "schema": "reports/schema-or-roles.json",
+   "schema_sha256": "a0b40f109411cb96625ba04d0588e69ac2caeab2e723eba597363524855bf474",
+   "items": 46,
+   "erreurs": 0,
+   "detail": [],
+   "validateur": "jsonschema Draft 2020-12 + contrôles de spans",
+   "negatif": {
+    "cas": 4,
+    "refuses": 4,
+    "detail": [
+     {
+      "cas": "sans_agent",
+      "refuse": true
+     },
+     {
+      "cas": "deux_principaux",
+      "refuse": true
+     },
+     {
+      "cas": "span_faux",
+      "refuse": true
+     },
+     {
+      "cas": "sans_predicat",
+      "refuse": true
+     }
+    ]
+   }
+  },
+  "gold_s_inchange": {
+   "sha256_avant": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879",
+   "sha256_apres": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879",
+   "identique": true,
+   "note": "le script ne fait que lire le gold S ; aucun écrivain ne le touche."
+  },
+  "kappa": {
+   "base": {
+    "n": 222,
+    "pe": 0.2993,
+    "cibles": [
+     {
+      "accord_brut_cible": 0.8,
+      "p_keep": 0.7146,
+      "accord_brut_observe": 0.7988,
+      "kappa_moyen": 0.7128,
+      "kappa_ic95": [
+       0.6356,
+       0.7873
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.85,
+      "p_keep": 0.7859,
+      "accord_brut_observe": 0.8502,
+      "kappa_moyen": 0.7862,
+      "kappa_ic95": [
+       0.7133,
+       0.8477
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.9,
+      "p_keep": 0.8573,
+      "accord_brut_observe": 0.9,
+      "kappa_moyen": 0.8572,
+      "kappa_ic95": [
+       0.8017,
+       0.9154
+      ],
+      "n": 222,
+      "pe": 0.2993
+     },
+     {
+      "accord_brut_cible": 0.95,
+      "p_keep": 0.9286,
+      "accord_brut_observe": 0.9498,
+      "kappa_moyen": 0.9283,
+      "kappa_ic95": [
+       0.8853,
+       0.9678
+      ],
+      "n": 222,
+      "pe": 0.2993
+     }
+    ],
+    "controle_independant": {
+     "kappa_moyen": -0.0005,
+     "kappa_ic95": [
+      -0.078,
+      0.0711
+     ]
+    },
+    "controle_permute": {
+     "kappa_moyen": 0.0016,
+     "kappa_ic95": [
+      -0.08,
+      0.0872
+     ]
+    }
+   },
+   "apres_supplement": {
+    "n": 312,
+    "pe": 0.1801,
+    "cibles": [
+     {
+      "accord_brut_cible": 0.8,
+      "p_keep": 0.7561,
+      "accord_brut_observe": 0.7999,
+      "kappa_moyen": 0.756,
+      "kappa_ic95": [
+       0.7038,
+       0.8076
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.85,
+      "p_keep": 0.8171,
+      "accord_brut_observe": 0.8504,
+      "kappa_moyen": 0.8176,
+      "kappa_ic95": [
+       0.7699,
+       0.8638
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.9,
+      "p_keep": 0.878,
+      "accord_brut_observe": 0.8998,
+      "kappa_moyen": 0.8778,
+      "kappa_ic95": [
+       0.8355,
+       0.9143
+      ],
+      "n": 312,
+      "pe": 0.1801
+     },
+     {
+      "accord_brut_cible": 0.95,
+      "p_keep": 0.939,
+      "accord_brut_observe": 0.95,
+      "kappa_moyen": 0.939,
+      "kappa_ic95": [
+       0.9062,
+       0.9649
+      ],
+      "n": 312,
+      "pe": 0.1801
+     }
+    ],
+    "controle_independant": {
+     "kappa_moyen": 0.0022,
+     "kappa_ic95": [
+      -0.049,
+      0.0505
+     ]
+    },
+    "controle_permute": {
+     "kappa_moyen": -0.0012,
+     "kappa_ic95": [
+      -0.0476,
+      0.0501
+     ]
+    }
+   },
+   "seuil": 0.8,
+   "lecture": "à 90 % d'accord brut, kappa 0,857 sur la base et 0,878 après supplément ; à 85 %, 0,786 et 0,818 ; le contrôle indépendant/permuté tombe à ~0."
+  },
+  "or_permute": {
+   "gold_s_permutation_cinq": {
+    "mapping": {
+     "lieu": "temps",
+     "temps": "destinataire",
+     "destinataire": "possession",
+     "possession": "complement",
+     "complement": "lieu"
+    },
+    "global": {
+     "justes": 126,
+     "total": 144,
+     "taux": 0.875
+    },
+    "cinq": {
+     "justes": 0,
+     "attendus": 18,
+     "taux": 0.0
+    }
+   },
+   "gold_v2_permutation_cinq": {
+    "mapping": {
+     "lieu": "temps",
+     "temps": "destinataire",
+     "destinataire": "possession",
+     "possession": "complement",
+     "complement": "lieu"
+    },
+    "cadres_exacts": 17,
+    "cadres_non_vides": 14,
+    "roles_justes": 37,
+    "roles_attendus": 77,
+    "f1": 0.5139,
+    "lieu": {
+     "exacts": 40,
+     "attendus": 6,
+     "predits": 0,
+     "justes": 0,
+     "faux_positifs": 0,
+     "faux_negatifs": 6,
+     "vrais_negatifs": 40,
+     "taux_exact": 0.8696,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "plafond_sept": 0.1429,
+   "plafond_cinq": 0.2,
+   "lecture": "Les cinq rôles de GP du gold S permutés tombent à 0/18 ; le global reste 126/144 parce que 126 des 144 rôles ne sont pas des GP. La permutation de tous les rôles donne 58/144 (0,4028), mais 58 prédicats survivent à l'alias predicat/prédicat : c'est une borne haute. Sur le gold v2, la permutation des cinq rôles donne 17/46 cadres, 37/77 rôles, F1 0,5139, et le lieu tombe à 0/6."
+  }
+ },
+ "limites": [
+  "Le gold S n'est pas une validation humaine indépendante : 61 phrases, 144 rôles, écrites par la même famille de règles, avant la v3 ; un or aveugle donnerait moins.",
+  "Le gold v2 est un or de cadre principal : 46 textes, 65 variantes, 3 rôles ; les seconds cadres et les rôles hors cadre n'y sont pas annotés.",
+  "La projection des 17 étiquettes S sur les 7 champs est une convention : theme, instrument et but prépositionnels tombent dans complement ; patient, qualite et les subordonnées restent hors_champ. Une autre convention changerait les effectifs.",
+  "Le supplément de 60 phrases est ciblé, pas aléatoire : il sert au rappel par rôle et au kappa, pas à estimer la prévalence ni une F1 générale.",
+  "Les deux codeurs partagent le même manuel et la même formation : le kappa mesure la cohérence, pas la vérité.",
+  "Les rôles rares (possession, complement) gardent un kappa instable ; le kappa global est la porte, les kappas par rôle sont descriptifs.",
+  "La base de 107 items est petite ; les IC par rôle restent larges, et le gold v2 a 7 cadres vides et 65 variantes d'ambiguïté.",
+  "La rotation des 17 étiquettes du gold S (0,4028) n'est pas un contrôle propre : l'alias predicat/prédicat laisse 58 prédicats fixes ; le contrôle propre est la permutation des cinq rôles de GP (0/18) et la permutation cyclique des sept champs.",
+  "Le schéma ne vérifie pas l'égalité span/texte : c'est le script et le validateur qui le font ; un span faux est refusé, pas corrigé.",
+  "Le pilote ne modifie pas le gold S ; si S change ses étiquettes, la comparaison et les 144 rôles doivent être rejoués, et le SHA-256 publié."
+ ],
+ "fichiers": [
+  {
+   "chemin": "reports/schema-or-roles.json",
+   "role": "schéma JSON du record d'annotation"
+  },
+  {
+   "chemin": "reports/or-roles-base-v1.json",
+   "role": "graine des 46 textes v2, provisoire"
+  },
+  {
+   "chemin": "reports/rapport-or-roles-protocole.json",
+   "role": "protocole, inventaire, simulations, contrôles"
+  },
+  {
+   "chemin": "tools/structures/donnees/gold-analyseur.json",
+   "role": "gold S, lecture seule"
+  },
+  {
+   "chemin": "tools/tests/linguistique/gold_restitution_v2.json",
+   "role": "gold v2, base de départ"
+  }
+ ],
+ "commande": "python3 tools/protocole_or_roles.py"
+}

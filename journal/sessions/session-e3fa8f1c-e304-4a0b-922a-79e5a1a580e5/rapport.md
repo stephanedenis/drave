@@ -9,10 +9,10 @@
 | Début | 2026-11-15 12:27 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 88 |
-| Appels d'outils | 97 |
+| Messages | 111 |
+| Appels d'outils | 120 |
 | Fichiers touchés | 2 |
-| Commandes | 84 |
+| Commandes | 107 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche X1 (J4 après-midi, la part du pilote) : mesure la page `/` de S **en lecture seule** — lis les données du sous-mod … [452 caractères tronqués]
 
-*97 appels d'outils.* Actions notables :
+*120 appels d'outils.* Actions notables :
 
 - bash — List repo root and structures submodule
 - bash — List reports and check target report
@@ -41,11 +41,28 @@
 - bash — Inspect phrases JSON structure
 - bash — Inspect validation journals
 - bash — Inspect segment keys
-- … et 77 autres
+- … et 100 autres
 
 **Synthèse produite :**
 
-The measurements are stable. Now I'll write the report.
+Fait. Fichiers écrits :
+
+- [`reports/rapport-page-s-mesure.md`](reports/rapport-page-s-mesure.md)
+- [`reports/rapport-page-s-mesure.json`](reports/rapport-page-s-mesure.json)
+- harnais local : `work/page-s-mesure/mesurer.py` (`work/` est ignoré par git)
+
+**Ce que la mesure dit**
+
+- **`/` sert toujours l'ancien banc** : **369 candidats**, **0/369** avec `profondeur`, **0** à ≥ 3, distribution **10/277/82**. La v7 dynamique donne **359 candidats**, **2/37/221/84/13/2**, **99** à ≥ 3.
+- **Correction de lecture importante** : « 369/0 » et « 359/99 » ne sont **pas** des comptes de verdicts. `/` porte **150 verdicts / 147 paires** (74/207 phrases complètes, 147/369 candidats jugés) ; la v7 n'a **aucun verdict natif**. **0** et **99** sont des candidats à profondeur ≥ 3, pas des verdicts.
+- **106/41 reproduit à la lettre** sous la signature exacte de la v2, mais **106 paires tombent sur 65 candidats distincts** : **41 collisions**. Avec l'attachement : **106/41, 106 cibles, 0 collision**. Espaces normalisés + attachement : **115/32** ; cible réduite à sa tête : **117/30**. Le **41 n'est donc pas un invariant**.
+- **Référents** : **28 mappings, 16 justes, 12 faux, 2 manquants, 0 note** ; **6/9** paragraphes fautifs. La cible **14 occurrences / 12 formes** ne couvre que **a001–a003** (9/12 justes, 3 faux, 2 manquants). Les **a004–a009** gardent **9 faux** : la cible 14/12 ne suffit pas pour le « 0/9 » d'A2. La v2 écrit « 9/16 faux » : c'est une transposition, les données disent **16/28 justes / 12 faux**.
+- **S n'a rien intégré** : `work/banque-v7/` et `work/referents/` absents ; `phrases_generees.json` du **02/11** ; `/api/phrases` rend **0/369** `profondeur`.
+
+**Contrôle négatif** : H0 « les deux bancs sont le même » est rejetée — **369 ≠ 359**, **0/369** contre **359/359** `profondeur`, **0** contre **99** à ≥ 3, empreintes SHA-256 différentes, Jaccard **0,7170** (multiset) et **0,7391** (global), migration **106/147** au lieu de 147/147. Contrôle positif : chaque banc comparé à lui-même est identique. **304 identiques / 55 changés / 10 orphelins** ; l'index recollerait **36/147** verdicts au mauvais contenu.
+
+**Intégrité** : **56/56 tests OK** en **4,3 s**, sous-module `389b99f` **propre**, **8765 intact** (`financemeteo`), **9000 libre**, aucune écriture dans `tools/structures/`. Le parent a bougé pendant la session ; HEAD mesuré **`049343d3`** (puis `2b5bd1cd` après la mesure). Seuls les deux compteurs de `docs/pilotage/en-cours.md` ont été ajustés pour la re
+… [70 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +115,7 @@ The measurements are stable. Now I'll write the report.
 - **T1** Compute coverage transitions and quarantine list
 - **T1** Fix coverage computation
 - **T1** Run 56 submodule tests
-- … et 44 autres
+- … et 67 autres
 
 ## 4. Mesures et résultats marquants
 
