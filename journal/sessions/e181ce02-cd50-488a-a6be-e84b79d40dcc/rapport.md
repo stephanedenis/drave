@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 351.1 h |
+| Durée | 351.5 h |
 | Tours | 198 |
-| Messages | 3912 |
-| Appels d'outils | 3487 |
+| Messages | 3916 |
+| Appels d'outils | 3491 |
 | Fichiers touchés | 25 |
-| Commandes | 2896 |
+| Commandes | 2898 |
 | Sous-agents | 43 |
-| Commits | 471 |
+| Commits | 472 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*128 appels d'outils.* Actions notables :
+*132 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 88 autres
+- … et 90 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2856 autres
+- … et 2858 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11390,4 +11390,5 @@ Je commence.
 - ÉTAT — T0 DANS LE BUDGET" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1
 - ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
 - ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 g
+- PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES" 2>&1 | tail -
 

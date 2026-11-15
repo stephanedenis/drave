@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 07 h 47 HNE (finition E1-E2 ; plan de la semaine 2)**
+**Mis à jour : 2026-11-15, 08 h 10 HNE (le plan de la semaine 2 est écrit)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

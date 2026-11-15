@@ -1267,3 +1267,110 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.
   ```
 
 - **bash** `{"command": "git add docs/pilotage/semaine-2.md docs/pilotage/en-cours.md && git commit -m \"PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE, RESTITUTION V3, TAGGER PAR DÉFAUT ?\" 2>&1 | tail -40; echo \"COMMIT_EXIT=${PIPESTATUS[0]}\"", "description": "Commit week 2 … [25 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-37]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-37", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 8cb0a926] PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE, RESTITUTION V3, TAGGER PAR DÉFAUT ?
+ 15 files changed, 1612 insertions(+), 23 deletions(-)
+ create mode 100644 docs/pilotage/semaine-2.md
+ create mode 100644 journal/sessions/session-e859fb38-db3e-4156-84d9-b0dd56bc7aa2/digest.md
+ create mode 100644 journal/sessions/session-e859fb38-db3e-4156-84d9-b0dd56bc7aa2/rapport.md
+COMMIT_EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git status --short | head -30; echo ---; git log -1 --oneline; echo ---; python3 tools/revue_documentation.py; echo \"REVUE=$?\"", "description": "Check post-commit status and review"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+8cb0a926 PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE, RESTITUTION V3, TAGGER PAR DÉFAUT ?
+---
+  revue de documentation · 748 fiche(s) · 841 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE=0
+  ```
+
+- **bash** `{"command": "wc -l docs/pilotage/semaine-2.md; git show --stat --oneline HEAD | head -25", "description": "Verify committed plan and line count"}`
+
+  ```
+113 docs/pilotage/semaine-2.md
+8cb0a926 PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE, RESTITUTION V3, TAGGER PAR DÉFAUT ?
+ docs/pilotage/en-cours.md                          |    7 +-
+ docs/pilotage/semaine-2.md                         |  113 ++
+ journal/2026-11-15/README.md                       |    7 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    5 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    3 +-
+ journal/sessions/MANIFEST.md                       |    5 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   50 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1269 ++++++++++++++++++++
+ .../rapport.md                                     |  152 +++
+ 15 files changed, 1612 insertions(+), 23 deletions(-)
+  ```
+
+- **bash** `{"command": "git diff HEAD~1 -- docs/pilotage/semaine-autonome.md | wc -l; git log -1 --format='%H %ad' --date=iso", "description": "Confirm week 1 archive untouched"}`
+
+  ```
+0
+8cb0a926528df27be3e10db7110ed5482fd26089 2026-11-15 07:47:09 -0500
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -20; echo \"JOURNAL=${PIPESTATUS[0]}\"", "description": "Check journal consistency"}`
+
+  ```
+journal · 47 jour(s) · 206 session(s) · 2599 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL=0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -5; echo \"TAILLE=${PIPESTATUS[0]}\"; python3 tools/verifie_en_cours.py | tail -3", "description": "Check budgets and state after commit"}`
+
+  ```
+avertissements :
+     · 56 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE=0
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+J’ai écrit [docs/pilotage/semaine-2.md](docs/pilotage/semaine-2.md) — **113 lignes** (limite 120).
+
+Le plan contient :
+
+- **5 jours × 2 vagues** : J1 16/11 → J5 20/11, avec 21–22/11 en réserve.
+- **Le gold réel 452** : split 402 / H50, annotation des **10 GP/SUB** (184 → 194 cibles), sans ajouter 50 phrases.
+- **La page `/` de S** : décision garder/régénérer, **106 conservés**, **41 en quarantaine**, recette avec les 56 tests.
+- **Panini à date contrôlée** : 26 signatures V14, calibration sur 44, rejeu des 60 paires ; si incomplet → `statut incomplet`, aucune p-value.
+- **La restitution v3** : qualité des rôles (`agent`, `prédicat`, `lieu`), `_role_gp`, or de rôles plus large.
+- **Le tagger par défaut ?** : mesure coût/erreurs, recommandation **défaut hors ligne + `--tagger` opt-in + `auto` si clé**, décision en J5.
+- Les **dépendances**, les **risques** et les **livrables** sont tabulés, avec la règle « jamais en attente ».
+
+`semaine-autonome.md` n’a **pas été modifié**. Contrôles passés : revue de documentation, porte-tableaux, `verifie_en_cours`, journal et budget. Commit : `8cb0a926`.
+

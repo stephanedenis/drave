@@ -9,10 +9,10 @@
 | Début | 2026-11-15 07:43 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 40 |
-| Appels d'outils | 52 |
+| Messages | 44 |
+| Appels d'outils | 57 |
 | Fichiers touchés | 2 |
-| Commandes | 37 |
+| Commandes | 42 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche F1 : le plan de la **semaine 2** (16 → 22/11) — lis le bilan de la semaine (`reports/rapport-bilan-semaine.md`), ` … [426 caractères tronqués]
 
-*52 appels d'outils.* Actions notables :
+*57 appels d'outils.* Actions notables :
 
 - bash — Inspect repository root and git state
 - bash — List pilotage and reports directories
@@ -41,7 +41,23 @@
 - bash — Read headers of C/B/D/E reports
 - bash — Read conclusions of C2 and C3
 - bash — Read conclusions of B1 and D2
-- … et 33 autres
+- … et 38 autres
+
+**Synthèse produite :**
+
+J’ai écrit [docs/pilotage/semaine-2.md](docs/pilotage/semaine-2.md) — **113 lignes** (limite 120).
+
+Le plan contient :
+
+- **5 jours × 2 vagues** : J1 16/11 → J5 20/11, avec 21–22/11 en réserve.
+- **Le gold réel 452** : split 402 / H50, annotation des **10 GP/SUB** (184 → 194 cibles), sans ajouter 50 phrases.
+- **La page `/` de S** : décision garder/régénérer, **106 conservés**, **41 en quarantaine**, recette avec les 56 tests.
+- **Panini à date contrôlée** : 26 signatures V14, calibration sur 44, rejeu des 60 paires ; si incomplet → `statut incomplet`, aucune p-value.
+- **La restitution v3** : qualité des rôles (`agent`, `prédicat`, `lieu`), `_role_gp`, or de rôles plus large.
+- **Le tagger par défaut ?** : mesure coût/erreurs, recommandation **défaut hors ligne + `--tagger` opt-in + `auto` si clé**, décision en J5.
+- Les **dépendances**, les **risques** et les **livrables** sont tabulés, avec la règle « jamais en attente ».
+
+`semaine-autonome.md` n’a **pas été modifié**. Contrôles passés : revue de documentation, porte-tableaux, `verifie_en_cours`, journal et budget. Commit : `8cb0a926`.
 
 ## 3. Travail accompli
 
@@ -91,6 +107,10 @@
 - **T1** Review state diff before commit
 - **T1** Check current time
 - **T1** Commit week 2 plan and updated state
+- **T1** Check post-commit status and review
+- **T1** Verify committed plan and line count
+- **T1** Confirm week 1 archive untouched
+- … et 2 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -573,6 +573,23 @@
      "attendu": "OK"
     }
    ]
+  },
+  {
+   "id": "F1",
+   "jour": 16,
+   "titre": "Le plan de la semaine 2",
+   "mandat": "Tâche F1 : le plan de la **semaine 2** (16 → 22/11) — lis le bilan de la semaine (`reports/rapport-bilan-semaine.md`), `docs/pilotage/en-cours.md` et les fiches des tâches C/B/D/E, puis écris `docs/pilotage/semaine-2.md` (120 lignes max) : les 5 jours × 2 vagues, les tâches par jour (le gold réel 452 à annoter, la page `/` de S, le corpus à date contrôlée de Panini, la restitution v3, le tagger par défaut ?), les dépendances, les risques, les livrables. **Ne modifie pas `semaine-autonome.md`** (le plan de la semaine 1, qui reste l'archive).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f docs/pilotage/semaine-2.md && echo PLAN-OK",
+     "attendu": "PLAN-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
   }
  ]
 }

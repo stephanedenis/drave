@@ -64812,3 +64812,49 @@ dim 15 nov 2026 07:43:29 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls docs/pilotage/semaine-2.md 2>/dev/null", "description": "Suivre F1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5130]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5130", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5130", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 08:08:34 EST
+2026-11-15 07:43:09 · ▶ F1 — Le plan de la semaine 2 (timeout 3000 s)
+2026-11-15 07:49:57 · ✔ F1 en 406.9 s (code 0) — ✅ test -f docs/pilotage/semaine-2.md && echo PLAN-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+docs/pilotage/semaine-2.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -22 docs/pilotage/semaine-2.md | cut -c1-140; git status --porcelain | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chunker|rapport-coherence|rap … [114 caractères tronqués]`
+
+  ```
+# La semaine 2 — cinq jours, deux vagues, quatre chantiers et une décision
+
+> **Ce que ce document est.** Le plan du **16 au 22 novembre 2026** : ce qui se fait, dans quel
+> ordre, avec quelles dépendances, quels contrôles et quels livrables. Il **succède** à
+> [`semaine-autonome.md`](semaine-autonome.md), qui reste l'**archive** de la semaine 1 et n'est
+> **pas modifié**. L'état courant est dans [`en-cours.md`](en-cours.md) ; les chiffres sont dans
+> les fiches citées, jamais recopiés ici.
+>
+> **Sources.** Le [bilan de la semaine](../../reports/rapport-bilan-semaine.md) et les fiches des
+> tâches C/B/D/E : [C1](../../reports/rapport-coordination-n2-v2.md), [C2](../../reports/rapport-coordination-s-v2.md),
+> [C3](../../reports/rapport-gold-reel-50.md), [B1](../../reports/rapport-protocole-date.md),
+> [B2](../../reports/rapport-atomes-prediction.md), [B3](../../reports/rapport-cic-v2.md),
+> [D1](../../reports/rapport-exemples-tagger.md), [D2](../../reports/rapport-restitution-v2.md),
+> [D3](../../reports/rapport-faq.md), [E1](../../reports/rapport-faq-sommaire.md),
+> [E2](../../reports/rapport-tagger-erreurs.md). Le plan ne promet aucun chiffre : il nomme la
+> mesure, son **contrôle
+… [494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 08 h 10 HNE (le plan de la semaine 2 est écrit)**\\n\", t,  … [729 caractères tronqués]`
