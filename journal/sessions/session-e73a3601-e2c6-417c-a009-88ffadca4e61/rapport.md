@@ -9,12 +9,12 @@
 | Début | 2026-11-15 04:35 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 130 |
-| Appels d'outils | 148 |
+| Messages | 134 |
+| Appels d'outils | 152 |
 | Fichiers touchés | 8 |
-| Commandes | 89 |
+| Commandes | 93 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche D1 : les exemples de `docs/produit/exemples.md` — ajoute 3 exemples avec `--tagger` (la sortie réelle avec la clé, … [198 caractères tronqués]
 
-*148 appels d'outils.* Actions notables :
+*152 appels d'outils.* Actions notables :
 
 - bash — List repository root
 - bash — Show git status and recent commits
@@ -41,7 +41,7 @@
 - bash — Test tagger with live API call
 - bash — Find example reports and cache size
 - bash — Search report indexes for examples
-- … et 113 autres
+- … et 117 autres
 
 ## 3. Travail accompli
 
@@ -100,7 +100,7 @@
 - **T1** Compute current counters
 - **T1** Inspect product gate script
 - **T1** Produce exact reel JSON extract with jq
-- … et 49 autres
+- … et 53 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -152,4 +152,5 @@
 ## 6. Commits
 
 - git commit -F - <<'MSG' D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,0
+- git add journal git commit -F - <<'MSG' JOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --reel (452 PHRASES) SONT DANS LA DOC ; 5/5 REJO
 

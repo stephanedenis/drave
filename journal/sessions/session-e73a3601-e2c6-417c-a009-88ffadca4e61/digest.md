@@ -2720,3 +2720,66 @@ docs/pilotage/en-cours.md            |  10 +-
   ```
 
 - **bash** `{"command": "git commit -F - <<'MSG'\nD1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5\n\nLes exemples de docs/produit/exemples.md passent de 5 à 10 blocs :\n- 3 avec --tagger (clé +  … [551 caractères tronqués]`
+
+  ```
+[s/v7 d23780d7] D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5
+ 19 files changed, 3752 insertions(+), 64 deletions(-)
+ create mode 100644 journal/sessions/session-e73a3601-e2c6-417c-a009-88ffadca4e61/digest.md
+ create mode 100644 journal/sessions/session-e73a3601-e2c6-417c-a009-88ffadca4e61/rapport.md
+ create mode 100644 reports/rapport-exemples-tagger.json
+ create mode 100644 reports/rapport-exemples-tagger.md
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -30; echo ---; git status --short | head -20", "description": "Review committed files and remaining changes"}`
+
+  ```
+d23780d7 D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5
+ docs/pilotage/en-cours.md                          |   10 +-
+ docs/pilotage/roadmap.md                           |    7 +-
+ docs/produit/README.md                             |   38 +-
+ docs/produit/exemples.md                           |  365 ++-
+ journal/2026-11-15/README.md                       |    7 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |   11 +-
+ journal/2026-11-15/mesures.md                      |    6 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    3 +-
+ journal/sessions/MANIFEST.md                       |    5 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   32 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2722 ++++++++++++++++++++
+ .../rapport.md                                     |  155 ++
+ reports/INDEX.md                                   |    3 +-
+ reports/README
+… [701 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/journal_auto.py --jour 2026-11-15 >/tmp/journal-d1.log 2>&1; echo exit=$?; tail -5 /tmp/journal-d1.log; git status --short journal/ | head -20", "description": "Regenerate journal after D1 commit"}`
+
+  ```
+exit=0
+  journal/2026-11-15/mesures.md
+  journal/2026-11-15/portes.md
+  journal/2026-11-15/README.md
+  journal/THEMES.md
+6 fichiers écrits · 14 commits classés
+ M journal/2026-11-15/README.md
+ M journal/2026-11-15/mesures.md
+  ```
+
+- **bash** `{"command": "grep -n \"D1\\|d23780d7\" journal/2026-11-15/*.md | head -20; echo ---; tail -30 journal/2026-11-15/mesures.md", "description": "Check D1 journal entry"}`
+
+  ```
+journal/2026-11-15/docs.md:20:### D1 — les exemples du tagger et de la base réelle
+journal/2026-11-15/mesures.md:17:| 04:46 | `d23780d7` | D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5 | `en-cours.md`, `roadmap.md`, `README.md` (+16) |
+journal/2026-11-15/README.md:42:| 04:46 | `d23780d7` | D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5 |
+---
+| 02:13 | `292c70b5` | C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09 | `en-cours.md`, `README.md`, `docs.md` (+13) |
+| 03:48 | `011b8b8e` | B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0) | `en-cours.md`, `roadmap.md`, `README.md` (+18) |
+| 04:03 | `2067a6f0` | B3 — LE CORPUS D'OR CIC V2 : 42/42 TYPES DE BRUJIN BIEN FORMÉS, 42/42 SHA256 PAR DE
+… [1725 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git add journal\ngit commit -F - <<'MSG'\nJOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --reel (452 PHRASES) SONT DANS LA DOC ; 5/5 REJOUÉS, MUTATION 4/5\n\nLe récit de D1 est ajouté au journal du 15/11 : les trois blocs --tagger avec la clé et le coût\naffiché … [333 caractères tronqués]`

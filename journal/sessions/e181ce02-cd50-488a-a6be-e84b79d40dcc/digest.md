@@ -64319,3 +64319,10 @@ python3 tools/index_reports.py --verifier EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre D1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5098]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5098", "timeout_ms": 1000000, "wait": true}`
