@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-15",
+ "nuit": "14/11 23h30 → 15/11 04h45",
+ "produit": {
+  "tagger_612": 0.9575,
+  "tagger_reel_452": 0.95,
+  "appels_par_phrase": 1,
+  "ponct": "25/25",
+  "base_reelle": {
+   "phrases": 452,
+   "pos": 0.8891,
+   "f1": 0.7906,
+   "attachement": 0.9946
+  }
+ },
+ "coordination": {
+  "n2": "--rope --canal-dir (2,79) ; temoin 3,09",
+  "s": "page / ne sert pas la v7 ; 11 verdicts 389b99f",
+  "r": "gold reel 452 ; 50 ratees"
+ },
+ "panini": {
+  "protocole": "60 paires, 3 strates ; 1 paire contemporaine dans le 334",
+  "atomes": "NEGATIF (R2CV -0,092 POS)",
+  "cic": "42/42, types clos, sha256 sans hashlib, 1020/1020"
+ },
+ "negatifs": [
+  "les atomes ne predisent pas",
+  "le 334 ne fournit pas les paires contemporaines",
+  "la page / de S"
+ ],
+ "etat": {
+  "head": "c24253ee",
+  "autotest": "183/183",
+  "porte_produit": "verte (12 controles)"
+ }
+}

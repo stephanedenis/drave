@@ -64267,3 +64267,23 @@ passages à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;\"\"\",\n\"\"\"**0,6482**, tête … [968 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-15)
+[s/v7 c24253ee] DOC PRODUIT — LA PASSE D'HONNÊTETÉ : LES TROIS BASES (612, 602, RÉEL 452), L'ATTACHEMENT 238/239, LE TAGGER 95,75, LES CHIFFRES DATÉS ANNOTÉS
+ 8 files changed, 137 insertions(+), 26 deletions(-)
+c24253ee DOC PRODUIT — LA PASSE D'HONNÊTETÉ : LES TROIS BASES (612, 602, RÉEL 45
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-bilan-nuit.md <<'MD'\n# Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B\n\n> **Ce que ce bilan est.** La synthèse de la nuit (23 h 30 → 04 h 45) : les décisions exécutées\n> (1A → 6 … [4462 caractères tronqués]`
+
+  ```
+bilan + JSON
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 835 JSON, le disque en a 836
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [835 caractères tronqués]`

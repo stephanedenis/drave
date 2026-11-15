@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 04 h 45 HNE (doc produit : les trois bases, 238/239, le tagger 95,75)**
+**Mis à jour : 2026-11-15, 04 h 50 HNE (bilan de la nuit écrit)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -106,7 +106,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **741** / **835** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **742** / **836** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **738 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **739 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -82,6 +82,7 @@
 | [rapport-b13-porte-140.md](rapport-b13-porte-140.md) | B13 — la porte est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432) |
 | [rapport-base-reelle.md](rapport-base-reelle.md) | B13 — la base honnête : `evaluer --reel`, 452 phrases réelles, et ce que le synthétique cachait |
 | [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
+| [rapport-bilan-nuit.md](rapport-bilan-nuit.md) | Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |
 | [rapport-budget-attention-allocation.md](rapport-budget-attention-allocation.md) | Où dépenser le budget d'attention — uniforme ou sur la moitié des couches ? (second ordre) |
 | [rapport-budget-decision.md](rapport-budget-decision.md) | Le budget d'une DÉCISION — deux monnaies, et la métrique du plan n'en voit qu'une |
