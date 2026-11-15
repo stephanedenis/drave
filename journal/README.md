@@ -234,7 +234,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
 | `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 208 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
 | `session-` | Passe portes, relevé rouges, tag annoté | 2026-11-13 23:11 | 1.4 h | 1 | 75 | 1 | 0 | [rapport](sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md) |
-| `session-` | Prédiction Drave par atomes | 2026-11-15 03:06 | 0.7 h | 1 | 203 | 0 | 1 | [rapport](sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md) |
+| `session-` | Prédiction Drave par atomes | 2026-11-15 03:06 | 0.7 h | 1 | 211 | 0 | 2 | [rapport](sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md) |
 | `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
 | `session-` | Extension du gold réel 200+ | 2026-11-15 02:34 | 0.2 h | 1 | 148 | 2 | 0 | [rapport](sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/rapport.md) |

@@ -9,12 +9,12 @@
 | Début | 2026-11-15 03:06 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 198 |
-| Appels d'outils | 203 |
+| Messages | 206 |
+| Appels d'outils | 211 |
 | Fichiers touchés | 0 |
-| Commandes | 189 |
+| Commandes | 197 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche B2 : les 14 atomes comme prédicteurs des 8 niveaux Drave — sur les 44 œuvres × 14 flottants (JSON plat, lecture se … [219 caractères tronqués]
 
-*203 appels d'outils.* Actions notables :
+*211 appels d'outils.* Actions notables :
 
 - bash — List repo root and recent commits
 - bash — List reports and journal directories
@@ -41,7 +41,7 @@
 - bash — Read current state header
 - bash — Inspect Panini falsification dir and signatures
 - bash — List Panini corpus files
-- … et 177 autres
+- … et 185 autres
 
 ## 3. Travail accompli
 
@@ -92,7 +92,7 @@
 - **T1** Check running analysis process
 - **T1** Word counts of 44 works
 - **T1** Find signature computation code
-- … et 149 autres
+- … et 157 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -192,4 +192,5 @@
 ## 6. Commits
 
 - B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT
+- JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)" 2>&1 | tail -20
 

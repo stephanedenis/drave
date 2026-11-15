@@ -3343,3 +3343,122 @@ json-ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/atomes_prediction.py tools/tests/linguistique/test_atomes_prediction.py reports/rapport-atomes-prediction.md reports/atomes-prediction.json reports/atomes-prediction-mesures.json reports/README.md docs/pilotage/en-cours … [392 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 011b8b8e] B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0)
+ 21 files changed, 20801 insertions(+), 34 deletions(-)
+ create mode 100644 journal/sessions/session-10414d5d-1d81-4840-b524-e77375127547/digest.md
+ create mode 100644 journal/sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md
+ create mode 100644 reports/atomes-prediction-mesures.json
+ create mode 100644 reports/atomes-prediction.json
+ create mode 100644 reports/rapport-atomes-prediction.md
+ create mode 100644 tools/atomes_prediction.py
+ create mode 100644 tools/tests/linguistique/test_atomes_prediction.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -40; echo ===; git status --short | head -30", "description": "Inspect commit contents and remaining status"}`
+
+  ```
+011b8b8e B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0)
+ docs/pilotage/en-cours.md                          |    14 +-
+ docs/pilotage/roadmap.md                           |     7 +-
+ journal/2026-11-15/README.md                       |     7 +-
+ journal/2026-11-15/distribue.md                    |     6 +-
+ journal/2026-11-15/docs.md                         |     2 +-
+ journal/2026-11-15/mesures.md                      |     2 +-
+ journal/2026-11-15/portes.md                       |     2 +-
+ journal/README.md                                  |     5 +-
+ journal/sessions/MANIFEST.md                       |     7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |    56 +
+ .../rapport.md                                     |    14 +-
+ .../digest.md                                      |  3345 ++++++
+ .../rapport.md                                     |   195 +
+ .../digest.md                                      |    98 +
+ .../rapport.md                        
+… [951 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"B2\\|atomes\" journal/2026-11-15/README.md | head; echo ===; grep -n \"B2\\|atomes\" journal/2026-11-15/mesures.md | head", "description": "Check journal B2 entry"}`
+
+  ```
+===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-15 2>&1 | tail -10; echo ===; grep -n \"B2\\|atomes\" journal/2026-11-15/README.md | head", "description": "Regenerate journal for today", "timeoutMs": 300000}`
+
+  ```
+2026-11-15 : 8 commits
+  journal/2026-11-15/distribue.md
+  journal/2026-11-15/docs.md
+  journal/2026-11-15/mesures.md
+  journal/2026-11-15/portes.md
+  journal/2026-11-15/README.md
+  journal/THEMES.md
+6 fichiers écrits · 8 commits classés
+===
+36:| 03:48 | `011b8b8e` | B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 journal/2026-11-15/README.md", "description": "Read journal notes block"}`
+
+  ```
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 347.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 01:31 | `ce7241d5` | 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 20 TESTS |
+| 01:39 | `2d7a7f2b` | 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5) |
+| 01:42 | `6560a0a5` | 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612) |
+| 02:00 | `5891ef8a` | ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE |
+| 02:13 | `292c70b5` | C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09 |
+| 02:27 | `f926b5bc` | C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS
+… [582 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='journal/2026-11-15/README.md'\ns=open(p).read()\nnotes='''<!-- notes -->\n\n### B2 — les atomes ne prédisent pas les niveaux\n\nLa table J2.1 promettait un **porteur** pour chacun des 14 atomes ; B2 devait la me … [1649 caractères tronqués]`
+
+  ```
+| 02:27 | `f926b5bc` | C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f) |
+| 03:04 | `c37fed06` | B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE |
+| 03:48 | `011b8b8e` | B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0) |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+### B2 — les atomes ne prédisent pas les niveaux
+
+La table J2.1 promettait un **porteur** pour chacun des 14 atomes ; B2 devait la mesurer. Le résultat est
+un **négatif contrôlé**. Sur les **44 signatures** de Panini, **36 œuvres** ont assez de prose pour être
+mesurées, **28** ont une fenêtre de signature propre et ≥ 1 000 jetons. Sur ces 28, les 14 atomes ne
+prédisent pas **POS** (R²_CV **−0,092**, p=0,56), les **syntagmes** (**−0,160**, p=0,85) ni
+l'**attachement** (**−0,092**, p=0,67). Le seul ρ n
+… [1081 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -4; echo ===; bash tools/porte-tableaux.sh 2>&1 | tail -4; echo ===; python3 tools/revue_documentation.py 2>&1 | tail -4", "description": "Check journal and docs after narrative", "timeout … [12 caractères tronqués]`
+
+  ```
+journal · 47 jour(s) · 199 session(s) · 2563 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+===
+  ✅ 1812 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4350 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+===
+  revue de documentation · 740 fiche(s) · 834 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep journal", "description": "Check journal status files"}`
+
+  ```
+M journal/2026-11-15/README.md
+ M journal/2026-11-15/mesures.md
+ M journal/THEMES.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-15/README.md journal/2026-11-15/mesures.md journal/THEMES.md && git commit -m \"JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)\" 2>&1 | … [72 caractères tronqués]`
