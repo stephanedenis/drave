@@ -47,6 +47,10 @@ from dataclasses import dataclass, field
 from typing import Protocol, Sequence
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
+try:  # paquet : `tools.bloc_linguistique`
+    from . import roles_gp as _roles_gp
+except ImportError:  # script : `python3 tools/bloc_linguistique.py`
+    import roles_gp as _roles_gp
 NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
            "pragmatique", "document")
 SOURCES = ("heuristique", "neuronal", "humain")
@@ -535,7 +539,19 @@ def _est_verbe(mot: str) -> bool:
     return False
 
 
-def _role_gp(prep: str) -> str:
+def _role_gp(prep: str, suivant: str = "", precedent: str = "",
+             precedent_texte: str = "", langue: str = "fr") -> str:
+    """Le rôle d'un GP. **Avec contexte**, la règle v3 tranche (lieu/temps/destinataire/
+    possession/…). Sans contexte, l'ancien mapping préposition seule est conservé : la v2
+    et l'autotest ne changent pas.
+
+    Le contexte est ce qui distingue `à la maison` (lieu), `à 14 h` (temps), `à Marie`
+    (destinataire), `de la voisine` (possession, après un GN) de `de son projet` (thème,
+    après un GV), ou `par Marie` (agent, après un passif) de `par la porte` (moyen).
+    """
+    if suivant or precedent or precedent_texte:
+        return _roles_gp.role_gp(prep, suivant=suivant, precedent=precedent,
+                                 precedent_texte=precedent_texte, langue=langue)
     p = prep.casefold()
     if p in {"dans", "sur", "sous", "chez", "vers", "entre", "devant", "derrière", "près", "loin",
              "in", "on", "at", "under", "between"}:

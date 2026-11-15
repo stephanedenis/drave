@@ -19,7 +19,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 354.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 355.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 <!-- notes -->
 ### D1 — les exemples du tagger et de la base réelle
@@ -45,4 +45,11 @@ des **dix réponses** ne bouge pas — sha256 `8855b475…` avant et après. Dis
 (fichier absent, ancre absente) ; fiche
 [`reports/rapport-faq-sommaire.md`](../../reports/rapport-faq-sommaire.md) et
 [`reports/faq-sommaire.json`](../../reports/faq-sommaire.json).
+
+### W5 — l'état et la roadmap après la restitution v3
+
+`docs/pilotage/en-cours.md` passe à **753** fichiers / **846** JSON, la session Pensée reçoit
+W5 (gold v2 **20/46**, F1 **0,5406** ; gold S **144/144**, cinq rôles **18/18**), et la prochaine
+action devient **J4 — l'or de rôles**. `docs/pilotage/roadmap.md` marque W5 dans la ligne **R**
+et dans l'état B13 ; `reports/README.md` et `reports/INDEX.md` reçoivent la fiche.
 <!-- /notes -->

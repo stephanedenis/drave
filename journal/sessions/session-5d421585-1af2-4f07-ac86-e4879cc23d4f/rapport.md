@@ -9,10 +9,10 @@
 | Début | 2026-11-15 10:44 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 101 |
-| Appels d'outils | 130 |
+| Messages | 103 |
+| Appels d'outils | 132 |
 | Fichiers touchés | 0 |
-| Commandes | 112 |
+| Commandes | 114 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W4 (J3 matin, la part du pilote) : le manifeste à envoyer à Panini — les **26 signatures manquantes** (la liste de … [310 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*132 appels d'outils.* Actions notables :
 
 - bash — List root and git state
 - grep
@@ -41,7 +41,46 @@
 - bash — Read replay implementation
 - bash — Check for existing manifest work
 - bash — Inspect Panini signatures and state
-- … et 103 autres
+- … et 105 autres
+
+**Synthèse produite :**
+
+W4 livré et committé : **`93e046f7`**.
+
+\## Livrables
+
+- **Fiche** : [`reports/rapport-panini-manifeste.md`](reports/rapport-panini-manifeste.md)
+- **JSON** : [`reports/panini-manifeste.json`](reports/panini-manifeste.json)
+- **Script côté Panini** : [`tools/panini_signatures_26.py`](tools/panini_signatures_26.py)
+- **Constructeur/rejeu** : [`tools/panini_manifeste.py`](tools/panini_manifeste.py)
+
+\## Le manifeste
+
+Les **26 textes** du protocole B1 sans signature `analytic_sigs_v1` sont listés avec source, SHA-256, mots et paires servies. Point important : **un seul** des 26 (`zadeh_1965`) appartient aux 48 textes des 655 paires §334 ; les 25 autres sont des textes du manifeste des 60 paires hors des 655. Les 3 autres textes §334 sans signature (`an7_64_kodhana`, `aristotle_de_anima`, `brahma_sutra_badarayana`) sont hors protocole et non acquis.
+
+Commande exacte :
+
+```bash
+cd /chemin/vers/Panini/research
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python \
+  /chemin/vers/Qtrinet/tools/panini_signatures_26.py \
+  --manifeste /chemin/vers/Qtrinet/reports/panini-manifeste.json \
+  --sortie /tmp/panini-v14-26.json
+```
+
+Format : JSON UTF-8, `signatures` = 59 vecteurs (44 de référence + 26 nouvelles), 14 clés exactes, somme = 1 ± 10⁻⁶. **Garde-fou** : si la calibration n’est pas 44/44, les 26 restent dans `nouvelles` et `signatures` ne contient que les 44 références, donc le rejeu B1 reste `incomplet` au lieu de tester sur un instrument non calibré. Testée : elle tourne, sort en code **2** avec `42/44`.
+
+\## Le rejeu disponible
+
+- **27/60 paires** calculées : **G1 1/20**, **G2 14/20**, **G3 12/20** ; **33 manquantes**.
+- **Aucune p-value de H0** : noyau choisi par la disponibilité, pas un test.
+- Contrôles : N2 (dates permutées G2) `p_perm` **0,252** ; N3 (G3) `p_perm` **0,001**, tiré par `G3-08` (`bengio_2003`, non calibré) ; N4 : l’instrument voit la **famille** sur G2 mais pas la date ; **N5 est vide** (permutation commune des colonnes = isométrie L2).
+- **Calibration 42/44** : échecs `bengio_2003` (cos 0,9678) et `mengzi` (cos 0,9891). **3 sources < 300 mots** : `epicurus_letters` (84), `sextus_pyrrho` (42), `zadeh_1965` (278). **5 groupes de doublons** parmi les 26, dont `daodejing`/`zhuangzi` déjà identiques à `qiwulun` ; `G2-15` aura `d_sig = 0`.
+
+**Verdict** : manifeste prêt et envoyable ; **test bloqué** par les 26 signatures et par la calibration 44/44. Rien n’a été modifié chez Panini (statut git des dossiers lus identique, sorties uniquement dans `/tmp`).
+
+\## V
+… [432 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -92,7 +131,7 @@
 - **T1** Read corpus selection logic
 - **T1** Test Panini extractor on one work
 - **T1** Check for Panini venv
-- … et 72 autres
+- … et 74 autres
 
 ## 4. Mesures et résultats marquants
 

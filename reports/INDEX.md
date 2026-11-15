@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **748 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **750 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -400,6 +400,7 @@
 | [rapport-outillage-index.md](rapport-outillage-index.md) | B13 — l'outillage repris : `index_reports` a une aide, et l'index passe de 625 à 677 fiches |
 | [rapport-p0-flux.md](rapport-p0-flux.md) | P0 — Le harnais de flux : compter ce qu'on paie, par provenance |
 | [rapport-panini-334.md](rapport-panini-334.md) | J12.1 — Le §334 et les 44 œuvres : le retrieval et la prédiction de l'époque vs la filiation |
+| [rapport-panini-manifeste.md](rapport-panini-manifeste.md) | W4 — Panini : le manifeste des 26 signatures V14 et le rejeu disponible |
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
 | [rapport-parcimonie-entrainee.md](rapport-parcimonie-entrainee.md) | La parcimonie entraînée — premier banc, et la loi du coût par événement |
 | [rapport-parcimonie-imposee.md](rapport-parcimonie-imposee.md) | Parcimonie imposée à l'inférence — la frontière mesurée |
@@ -692,6 +693,7 @@
 | [rapport-restitution-v0.md](rapport-restitution-v0.md) | B13 — la restitution v0 : 46/46 surfaces exactes, le miroir strict à 0,1087 |
 | [rapport-restitution-v1.md](rapport-restitution-v1.md) | B13 — la restitution v1 : la forme canonique à 46/46, le miroir strict reste à 0,1087 |
 | [rapport-restitution-v2.md](rapport-restitution-v2.md) | B13 — la restitution v2 : les rôles se lisent, leur fidélité ne suit pas |
+| [rapport-restitution-v3.md](rapport-restitution-v3.md) | B13 — la restitution v3 : les rôles des GP se séparent, la fidélité du cadre ne suit pas |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-retrieval-epoque.md](rapport-retrieval-epoque.md) | J3.1 — Le retrieval inter-langues à époque contrôlée |
 | [rapport-retrieval-familles.md](rapport-retrieval-familles.md) | J7.1 — Le retrieval approfondi par famille Glottolog |

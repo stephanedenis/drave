@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 354.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 355.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -60,7 +60,7 @@
 | 09:24 | `1683c2b4` | W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3 |
 | 09:41 | `3439cb0c` | ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte |
 | 10:47 | `be3f41ad` | SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE 0, CLÉ INVALIDE 4, RÉSEAU COUPÉ 0 APRÈS 3 ESSAIS, 1 000 PHRASES = 143 870 TOKENS) ; 4 TESTS DE PLUS |
-| 10:59 | `e283d09a` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE |
+| 10:59 | `93e046f7` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -113,4 +113,13 @@ fermé perd **−1,55 pt** (PREP −8,43, CONJ −10,15) et le gain vient de l'o
 +19,40) ; H50, lui, gagne **aussi** le fermé. La suite (W3) doit décider du défaut et, si possible,
 tester l'hybride fermé/ouvert.
 [`fiche`](../../reports/rapport-tagger-h50.md) · [`JSON`](../../reports/rapport-tagger-h50.json).
+
+### W5 — la restitution v3 : les cinq rôles se séparent, le cadre ne suit pas
+
+`_role_gp` passe au contexte et sépare **lieu / temps / destinataire / possession / complément**
+(**24/24** cas). Le **gold S** monte à **144/144** (cinq rôles **18/18**) ; le **gold v2** ne gagne
+qu'un cadre (**20/46**, F1 **0,5406**, `lieu` F1 **0,60**). Le découpage sépare **+4 rôles** et
+**+1 appariement**. Le contrôle négatif permute les rôles : cinq rôles **0/18**, tous les rôles
+**0,4028**, rôle constant **0,0208**. `--roles-v3` est opt-in ; `--roles` reste la v2.
+[`fiche`](../../reports/rapport-restitution-v3.md) · [`JSON`](../../reports/pensee-restitution-v3.json).
 <!-- /notes -->

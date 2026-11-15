@@ -20,7 +20,7 @@
 | 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES | `en-cours.md`, `roadmap.md`, `README.md` (+21) |
 | 09:18 | `4dbeff45` | SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S | `chantiers.md`, `en-cours.md`, `plan-travail.md` (+22) |
 | 09:24 | `1683c2b4` | W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
-| 10:59 | `e283d09a` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE | `en-cours.md`, `README.md`, `distribue.md` (+18) |
+| 10:59 | `93e046f7` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE | `en-cours.md`, `README.md`, `distribue.md` (+18) |
 
 ## Chiffres du jour
 
@@ -30,7 +30,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 354.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 355.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -103,4 +103,21 @@ pointe** ; le cache chaud rejoue à **0 token** en **~0,14 s**. **Recommandation
 ligne, `--tagger` opt-in, **pas de `auto`** ; s'il vient, seulement avec une clé présente et
 **sans changer le code de sortie**. **21/21 tests**. [`fiche`](../../reports/rapport-tagger-defaut.md) ·
 [`JSON`](../../reports/rapport-tagger-defaut.json).
+
+### W5 — la restitution v3 : les rôles des GP se séparent, le cadre ne suit pas
+
+`_role_gp` quitte la préposition seule pour le **contexte** : `à` + lieu (`la maison`, `Paris`),
+`à` + temps (`14 h`, `demain`), `à` + destinataire (`Marie`), `de` + GN (possession) ou + GV
+(thème), `avec` + moyen, `par` + passif (agent) ou non (moyen), `en` + temps/lieu/moyen/manière.
+Les **24/24** cas de séparation passent. Sur le **gold S** (61 phrases, 144 rôles), la v3 donne
+**144/144** et les cinq rôles de la tâche **18/18** (lieu 3, temps 9, destinataire 5, possession 1,
+complément 0) — mais le découpage montre **+4 rôles** et **+1 appariement** : le 144/144 n'est pas
+un gain de rôles seul. Sur le **gold v2** (46 textes), la v3 ne corrige que le `lieu` : **20/46**
+cadres exacts (**17** non vides) contre 19/46, F1 **0,5406** contre 0,5270, `lieu` F1 **0,60**
+contre 0,40 ; `agent` et `prédicat` sont inchangés. Le **contrôle négatif** tue la mesure :
+permutation des cinq rôles **0/18**, permutation de tous **0,4028** global, rôle constant `lieu`
+**0,0208** (3/18, F1 0,037). `--roles-v3` est le mode ; `--roles` reste la v2. Verdict :
+**positif sur la séparation, négatif sur le produit** — la segmentation et le choix du cadre
+pèsent plus que la préposition. [`fiche`](../../reports/rapport-restitution-v3.md) ·
+[`JSON`](../../reports/pensee-restitution-v3.json).
 <!-- /notes -->

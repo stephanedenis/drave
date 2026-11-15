@@ -53,6 +53,7 @@ sys.path.insert(0, str(RACINE))
 import bloc_linguistique as bl  # noqa: E402  (import après l'installation des chemins)
 import restitution  # noqa: E402  (la restitution v0 : annotation → surface)
 import restitution_v2  # noqa: E402  (la restitution v2 : les rôles)
+import restitution_v3  # noqa: E402  (la restitution v3 : les rôles des GP)
 
 NOM = "drave"
 VERSION = "0.1.0"
@@ -243,6 +244,30 @@ def _cout_tagger(stats: dict) -> dict:
             "requetes": stats["requetes"], "cache": stats["cache"],
             "tokens": stats["tokens"], "latence_s": round(stats["latence_s"], 3),
             "modeles_renvoyes": dict(stats["modeles"])}
+
+
+def _cout_pour_phrases(cout: dict, mesurees: int, cible: int) -> dict:
+    """Le coût d'un lot de `cible` phrases, au prorata du lot **mesuré**.
+
+    Le tagger fait **un appel par phrase** : le coût est linéaire en nombre de phrases. On ne
+    modélise pas la longueur des phrases (le prompt la porte), donc ce chiffre vaut pour un lot
+    de même longueur moyenne que le lot mesuré. `mesurees` est le nombre de phrases réellement
+    passées au tagger ; il ne doit pas être confondu avec le nombre d'appels (le cache mémoire
+    peut en servir plusieurs).
+    """
+    mesurees = max(1, int(mesurees))
+    cible = max(0, int(cible))
+    ratio = cible / mesurees
+    return {
+        "phrases": cible,
+        "phrases_mesurees": mesurees,
+        "modele": cout.get("modele", MODELE_TAGGER),
+        "appels": int(round(cout.get("appels", 0) * ratio)),
+        "requetes": int(round(cout.get("requetes", 0) * ratio)),
+        "cache": int(round(cout.get("cache", 0) * ratio)),
+        "tokens": int(round(cout.get("tokens", 0) * ratio)),
+        "latence_s": round(cout.get("latence_s", 0.0) * ratio, 3),
+    }
 
 
 def _ligne_tagger(stats: dict) -> str:
@@ -635,6 +660,8 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
             "refus": len(refus),
             "refus_detail": refus[:10],
             "cout": _cout_tagger(stats),
+            # le chiffre de la décision : le coût du même câblage pour 1 000 phrases
+            "cout_pour_1000_phrases": _cout_pour_phrases(_cout_tagger(stats), len(phrases), 1000),
         }
     if args.par_langue:
         # le détail fr/en : on rejoue la **même** mesure sur chaque sous-gold. Le contrôle
@@ -707,15 +734,24 @@ def cmd_restituer(args: argparse.Namespace) -> int:
     laisse le bloc détecter la langue, comme le CLI sans `--langue`. `--canonique`
     ajoute la **forme canonique v1** (segments + rôles + cibles) et son miroir ;
     `--roles` ajoute la **v2** (agent, prédicat, lieu) et, sur un banc, sa fidélité à
-    l'or. La sortie de la v0 reste celle par défaut.
+    l'or ; `--roles-v3` ajoute la **v3** (les rôles des GP : lieu, temps, destinataire,
+    possession, complément). La sortie de la v0 reste celle par défaut.
     """
+    if args.roles_v3 and args.canonique:
+        print(f"{NOM}: erreur d'usage : --roles-v3 et --canonique sont exclusifs",
+              file=sys.stderr)
+        return 2
+    if args.roles and args.roles_v3:
+        print(f"{NOM}: erreur d'usage : --roles (v2) et --roles-v3 sont exclusifs",
+              file=sys.stderr)
+        return 2
     if args.roles and args.canonique:
         print(f"{NOM}: erreur d'usage : --roles et --canonique sont exclusifs",
               file=sys.stderr)
         return 2
-    if args.gold and not (args.banc and args.roles):
-        print(f"{NOM}: erreur d'usage : --gold ne sert qu'avec --banc --roles",
-              file=sys.stderr)
+    if args.gold and not (args.banc and (args.roles or args.roles_v3)):
+        print(f"{NOM}: erreur d'usage : --gold ne sert qu'avec --banc --roles ou "
+              "--banc --roles-v3", file=sys.stderr)
         return 2
     if args.banc:
         if args.texte is not None or args.fichier:
@@ -728,14 +764,19 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         except (OSError, ValueError) as exc:
             print(f"{NOM}: erreur : banc illisible : {exc}", file=sys.stderr)
             return 1
-        if args.roles:
-            chemin_gold = pathlib.Path(args.gold or restitution_v2.GOLD_DEFAUT)
+        if args.roles_v3 or args.roles:
+            defaut = (restitution_v2.GOLD_DEFAUT if args.roles
+                      else restitution_v3.GOLD_DEFAUT)
+            chemin_gold = pathlib.Path(args.gold or defaut)
             try:
                 gold = json.loads(chemin_gold.read_text(encoding="utf-8"))
             except (OSError, ValueError) as exc:
                 print(f"{NOM}: erreur : or de rôles illisible : {exc}", file=sys.stderr)
                 return 1
-            rapport = restitution_v2.mesurer_banc_v2(items, gold, args.langue)
+            if args.roles_v3:
+                rapport = restitution_v3.mesurer_banc_v3(items, gold, args.langue)
+            else:
+                rapport = restitution_v2.mesurer_banc_v2(items, gold, args.langue)
         elif args.canonique:
             rapport = restitution.mesurer_banc_v1(items, args.langue)
         else:
@@ -744,7 +785,9 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         if args.json:
             sys.stdout.write(_dumps(rapport))
         else:
-            if args.roles:
+            if args.roles_v3:
+                formateur = restitution_v3.formater_banc_v3
+            elif args.roles:
                 formateur = restitution_v2.formater_banc_v2
             elif args.canonique:
                 formateur = restitution.formater_banc_v1
@@ -762,6 +805,17 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         print(f"{NOM}: refus d'analyse : {annotation.refus} "
               "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
         return 3
+    if args.roles_v3:
+        mesure_v3 = restitution_v3.mesurer_annotation_v3(annotation, texte)
+        if args.json:
+            sys.stdout.write(_dumps({
+                "schema": restitution_v3.SCHEMA,
+                "version": restitution_v3.VERSION,
+                **mesure_v3,
+            }))
+        else:
+            print(_sur(restitution_v3.formater_mesure_v3(mesure_v3, texte)))
+        return 0
     if args.roles:
         mesure_v2 = restitution_v2.mesurer_annotation_v2(annotation, texte)
         if args.json:
@@ -921,10 +975,12 @@ def construire_parseur() -> argparse.ArgumentParser:
                     "contrôle négatif. Avec --canonique, produit en plus la forme canonique v1 "
                     "(segments + rôles + cibles) et son miroir canonique ; avec --roles, produit "
                     "la forme lisible des rôles (agent, prédicat, lieu) et, sur un banc, leur "
-                    "fidélité à un or écrit à la main.",
+                    "fidélité à un or écrit à la main ; avec --roles-v3, produit les rôles des "
+                    "GP (lieu, temps, destinataire, possession, complément).",
         epilog="Exemples : python3 tools/drave.py restituer \"Le chat dort.\" ; "
                "python3 tools/drave.py restituer \"Le chat dort.\" --canonique ; "
                "python3 tools/drave.py restituer \"Le chat dort.\" --roles ; "
+               "python3 tools/drave.py restituer \"Le voyage à Paris dure deux heures.\" --roles-v3 ; "
                "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --roles",
         formatter_class=_Formateur,
     )
@@ -938,8 +994,11 @@ def construire_parseur() -> argparse.ArgumentParser:
     restituer.add_argument("--roles", action="store_true",
                            help="ajouter la forme lisible des rôles (agent, prédicat, lieu) ; "
                                 "avec --banc, mesurer leur fidélité à l'or")
+    restituer.add_argument("--roles-v3", action="store_true",
+                           help="ajouter les rôles des GP (lieu, temps, destinataire, "
+                                "possession, complément) ; avec --banc, mesurer leur fidélité")
     restituer.add_argument("--gold", default=None, metavar="CHEMIN",
-                           help="or de rôles pour --banc --roles "
+                           help="or de rôles pour --banc --roles ou --banc --roles-v3 "
                                 "(défaut : tools/tests/linguistique/gold_restitution_v2.json)")
     restituer.add_argument("--fichier", default=None, metavar="CHEMIN",
                            help="lire le texte dans un fichier UTF-8 (au lieu de l'argument)")

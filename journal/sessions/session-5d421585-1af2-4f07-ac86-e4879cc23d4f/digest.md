@@ -2500,3 +2500,118 @@ e283d09a SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\np='docs/pilotage/en-cours.md'\ns=open(p).read()\ns=s.replace('**Mis à jour : 2026-11-15, 11 h 05 HNE (W4 : le manifeste Panini et le rejeu disponible)**','**Mis à jour : 2026-11-15, 11 h 10 HNE (W4 : le manifeste Panini et le rejeu disponible)**')\nopen(p,'w').write(s) … [278 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+index=0
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-112]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-112", "wait": true, "timeout_ms": 180000}`
+
+  ```
+create mode 100644 journal/2026-11-15/memoire.md
+ create mode 100644 reports/panini-manifeste.json
+ create mode 100644 reports/rapport-panini-manifeste.md
+ create mode 100755 tools/panini_manifeste.py
+ create mode 100755 tools/panini_signatures_26.py
+exit=0
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py --head; echo head=$?; python3 tools/revue_documentation.py 2>&1 | tail -3; echo revue=${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | tail -2; echo taille=${PIPESTATUS[0]}", "description": "Verify after amend"}`
+
+  ```
+état · dernier fait 93e046f7 · dernier état 93e046f7
+  ✅ aucun fait commité après le dernier état
+head=0
+  revue de documentation · 752 fiche(s) · 845 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+taille=0
+  ```
+
+- **bash** `{"command": "git status --short | head -20; echo ---; git show --stat --oneline HEAD | head -25", "description": "Check working tree and commit"}`
+
+  ```
+M docs/pilotage/roadmap.md
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+ M tools/drave.py
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE
+ docs/pilotage/en-cours.md                          |    6 +-
+ journal/2026-11-15/README.md                       |    9 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |   25 +
+ journal/2026-11-15/mesures.md                      |    6 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md
+… [806 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+W4 livré et committé : **`93e046f7`**.
+
+## Livrables
+
+- **Fiche** : [`reports/rapport-panini-manifeste.md`](reports/rapport-panini-manifeste.md)
+- **JSON** : [`reports/panini-manifeste.json`](reports/panini-manifeste.json)
+- **Script côté Panini** : [`tools/panini_signatures_26.py`](tools/panini_signatures_26.py)
+- **Constructeur/rejeu** : [`tools/panini_manifeste.py`](tools/panini_manifeste.py)
+
+## Le manifeste
+
+Les **26 textes** du protocole B1 sans signature `analytic_sigs_v1` sont listés avec source, SHA-256, mots et paires servies. Point important : **un seul** des 26 (`zadeh_1965`) appartient aux 48 textes des 655 paires §334 ; les 25 autres sont des textes du manifeste des 60 paires hors des 655. Les 3 autres textes §334 sans signature (`an7_64_kodhana`, `aristotle_de_anima`, `brahma_sutra_badarayana`) sont hors protocole et non acquis.
+
+Commande exacte :
+
+```bash
+cd /chemin/vers/Panini/research
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python \
+  /chemin/vers/Qtrinet/tools/panini_signatures_26.py \
+  --manifeste /chemin/vers/Qtrinet/reports/panini-manifeste.json \
+  --sortie /tmp/panini-v14-26.json
+```
+
+Format : JSON UTF-8, `signatures` = 59 vecteurs (44 de référence + 26 nouvelles), 14 clés exactes, somme = 1 ± 10⁻⁶. **Garde-fou** : si la calibration n’est pas 44/44, les 26 restent dans `nouvelles` et `signatures` ne contient que les 44 références, donc le rejeu B1 reste `incomplet` au lieu de tester sur un instrument non calibré. Testée : elle tourne, sort en code **2** avec `42/44`.
+
+## Le rejeu disponible
+
+- **27/60 paires** calculées : **G1 1/20**, **G2 14/20**, **G3 12/20** ; **33 manquantes**.
+- **Aucune p-value de H0** : noyau choisi par la disponibilité, pas un test.
+- Contrôles : N2 (dates permutées G2) `p_perm` **0,252** ; N3 (G3) `p_perm` **0,001**, tiré par `G3-08` (`bengio_2003`, non calibré) ; N4 : l’instrument voit la **famille** sur G2 mais pas la date ; **N5 est vide** (permutation commune des colonnes = isométrie L2).
+- **Calibration 42/44** : échecs `bengio_2003` (cos 0,9678) et `mengzi` (cos 0,9891). **3 sources < 300 mots** : `epicurus_letters` (84), `sextus_pyrrho` (42), `zadeh_1965` (278). **5 groupes de doublons** parmi les 26, dont `daodejing`/`zhuangzi` déjà identiques à `qiwulun` ; `G2-15` aura `d_sig = 0`.
+
+**Verdict** : manifeste prêt et envoyable ; **test bloqué** par les 26 signatures et par la calibration 44/44. Rien n’a été modifié chez Panini (statut git des dossiers lus identique, sorties uniquement dans `/tmp`).
+
+## Vérifications
+
+- `python3 tools/panini_manifeste.py --verifier` → **OK**
+- `python3 tools/protocole_date.py --verifier` → **OK**
+- `revue_documentation.py` → **tout passe**
+- `taille_documents.py` → **budget OK**
+- `verifie_etat_a_jour.py --head` → **OK**
+
+Prochaine action : envoyer le JSON et la commande ; exiger le retour de `/tmp/panini-v14-26.json` avec **calibration 44/44** ; alors seulement lancer le rejeu B1 des 60 paires.
+

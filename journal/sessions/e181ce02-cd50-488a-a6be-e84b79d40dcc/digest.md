@@ -65262,3 +65262,117 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5152", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5152", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 11:15:45 EST
+2026-11-15 11:05:07 · ✔ W4 en 1214.4 s (code 0) — ✅ test -f reports/rapport-panini-manifeste.md && echo FICHE-OK
+2026-11-15 11:05:07 · ▶ W5 — J3 — la restitution v3 : les rôles des GP (timeout 3600 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -8 reports/rapport-panini-manifeste.md 2>/dev/null | cut -c1-160; git status --porcelain reports/ra … [107 caractères tronqués]`
+
+  ```
+be3f41ad..93e046f7  s/v7 -> s/v7
+   be3f41ad..93e046f7  master -> master
+# W4 — Panini : le manifeste des 26 signatures V14 et le rejeu disponible
+
+> **Ligne de roadmap** : **R0.7** (le bloc linguistique) / **L** · **Tâche** : **W4** (J3 matin,
+> la part du pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `be3f41ad` · **Verdict** :
+> ✅ **le manifeste est prêt et envoyable** ; ❌ **le rejeu n'est pas un test** — **27/60** paires
+> calculées, **33** manquantes, calibration **42/44**, **3** sources sous 300 mots, **5** groupes de
+> doublons parmi les 26. **Aucune p-value de H0 n'est écrite.**
+>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [2639 caractères tronqués]`
+
+  ```
+plan : 50 tâches
+2026-11-15 11:05:07 · ✔ W4 en 1214.4 s (code 0) — ✅ test -f reports/rapport-panini-manifeste.md && echo FICHE-OK
+2026-11-15 11:05:07 · ▶ W5 — J3 — la restitution v3 : les rôles des GP (timeout 3600 s)
+dim 15 nov 2026 11:16:35 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre W5", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5155]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5155", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5155", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+dim 15 nov 2026 11:46:42 EST
+2026-11-15 11:05:07 · ✔ W4 en 1214.4 s (code 0) — ✅ test -f reports/rapport-panini-manifeste.md && echo FICHE-OK
+2026-11-15 11:05:07 · ▶ W5 — J3 — la restitution v3 : les rôles des GP (timeout 3600 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; ls reports/rapport-restitution-v3.md 2>/dev/null", "description": "Verdict W5", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5156]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5156", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 12:06:52 EST
+2026-11-15 12:05:08 · ✔ W5 en 3600.1 s (code 124) — ✅ test -f reports/rapport-restitution-v3.md && echo FICHE-OK
+2026-11-15 12:05:08 · ▶ W6 — J5 — la clôture de la semaine 2 (timeout 3600 s)
+reports/rapport-restitution-v3.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-restitution-v3.md reports/pensee-restitution-v3.json tools/ blocs/ 2>/dev/null | head -5; git log --oneline -1 -- reports/rapport-restitution-v3.md | cut -c1-60; head -7 reports/rapport-restitut … [55 caractères tronqués]`
+
+  ```
+A  reports/pensee-restitution-v3.json
+A  reports/rapport-restitution-v3.md
+M  tools/bloc_linguistique.py
+ M tools/chantier/plan.json
+MM tools/drave.py
+# B13 — la restitution v3 : les rôles des GP se séparent, la fidélité du cadre ne suit pas
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : W5 (J3 après-midi) · **Date** :
+> 2026-11-15 · **Verdict** : **positif sur la séparation, négatif sur le produit** — les
+> cinq rôles de GP se séparent sur le gold S (**18/18**, **144/144**, permutation **0/18**),
+> mais le gold v2 ne gagne qu'un cadre : **20/46** contre 19/46, F1 **0,5406** contre
+> 0,5270, `lieu` F1 **0,60** contre 0,40. La fidélité du cadre ne suit pas : le goulot est
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/index.lock 2>/dev/null && echo \"commit en cours\" || echo \"libre\"; ps aux | grep -c \"[d]sh --profile headless\"; sleep 120; git log --oneline -1 | cut -c1-80", "description": "Voir si W6 commite", "timeoutMs": 240000}`
+
+  ```
+libre
+1
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/tests/test_produit.py 2>&1 | tail -2; timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | tail -1", "description": "Tester le code de W5", "timeoutMs": 700000}`
+
+  ```
+OK
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [834 caractères tronqués]`
