@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **754 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **755 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -82,6 +82,7 @@
 | [rapport-b13-porte-140.md](rapport-b13-porte-140.md) | B13 — la porte est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432) |
 | [rapport-base-reelle.md](rapport-base-reelle.md) | B13 — la base honnête : `evaluer --reel`, 452 phrases réelles, et ce que le synthétique cachait |
 | [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
+| [rapport-bilan-jour-1115.md](rapport-bilan-jour-1115.md) | Le bilan du 15/11 — la semaine 2 en un jour : le tagger décidé, le gold nommé, les rôles séparés |
 | [rapport-bilan-nuit.md](rapport-bilan-nuit.md) | Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B |
 | [rapport-bilan-semaine.md](rapport-bilan-semaine.md) | Le bilan de la semaine (07 → 15/11) — le produit gagne 3,7 points, Panini est borné, le harnais tient |
 | [rapport-bloc-linguistique.md](rapport-bloc-linguistique.md) | Le bloc linguistique — 398 langues au niveau langue, un contrat pour l'heuristique et le neuronal |

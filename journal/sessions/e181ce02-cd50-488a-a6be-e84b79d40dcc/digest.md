@@ -65714,3 +65714,41 @@ dim 15 nov 2026 14:00:26 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/pilotage/en-cours.md 2>/dev/null; timeout 300 git commit -m \"ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT\" 2>&1 | t … [346 caractères tronqués]`
+
+  ```
+[s/v7 158dee4d] ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT
+ 16 files changed, 2536 insertions(+), 40 deletions(-)
+158dee4d ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, 
+   2929ccf7..158dee4d  s/v7 -> s/v7
+   2929ccf7..158dee4d  master -> master
+  183/183 portes tenues
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/index_reports.py --ve … [239 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+bash tools/porte-bloc-linguistique.sh    EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+dim 15 nov 2026 14:09:31 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Semaine 2 livrée et verte. J'écris le bilan du jour, puis je clôture à 16 h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-bilan-jour-1115.md <<'MD'\n# Le bilan du 15/11 — la semaine 2 en un jour : le tagger décidé, le gold nommé, les rôles séparés\n\n> **Ce que ce bilan est.** La synthèse de la **journée du 15/11** (08 h 15 → 16 h) … [4236 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 757 fichiers, le disque en a 758
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [915 caractères tronqués]`

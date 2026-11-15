@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 14 h 00 HNE (semaine 2 : W1-W6, X1-X3, tag posé)**
+**Mis à jour : 2026-11-15, 14 h 20 HNE (bilan du jour écrit)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -102,7 +102,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **757** / **852** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **758** / **852** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
 
