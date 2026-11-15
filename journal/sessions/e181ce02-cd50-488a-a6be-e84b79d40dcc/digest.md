@@ -65396,3 +65396,128 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5161", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 12:33:10 EST
+2026-11-15 12:05:08 · ▶ W6 — J5 — la clôture de la semaine 2 (timeout 3600 s)
+2026-11-15 12:27:50 · ✔ W6 en 1362.3 s (code 0) — ✅ git tag -l 'semaine-2-2026-11-20'; ✅ test -f reports/rapport-semaine-2.md && echo FICHE-OK
+2026-11-15 12:27:50 · ▶ X1 — J4 — la page / de S : la mesure du pilote (timeout 3600 s)
+semaine-2-2026-11-20
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; timeout 280 git push origin --tags 2>&1 | tail -2; git rev-list --count origin/master..s/v7; head -8 rep … [113 caractères tronqués]`
+
+  ```
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+To github.com:stephanedenis/drave.git
+ * [new tag]           semaine-2-2026-11-20 -> semaine-2-2026-11-20
+2
+# W6 — le rapport de la semaine 2 : le tagger gagne sur les deux bases, Panini reste bloqué, la restitution sépare sans fidélité
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** (le produit) / **L** (le bloc langue) ·
+> **Tâche** : **W6** (J5 après-midi, la clôture) · **Date** : 2026-11-15 (J5 · 20/11) ·
+> **HEAD mesuré** : `93e046f7` (W4) puis `73edb3dd` (W5) · **Verdict** : **cinq vagues mesurées,
+> trois positives, une bloquée, une mixte** ; le tag annoté `semaine-2-2026-11-20` est posé sur
+> le dernier commit de code vert (`73edb3dd`, W5) ; **aucune passe complète n'a été relancée**
+> pour la clôture — le relevé lit `work/portes/` et un ciblage de neuf portes.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git fetch origin 2>&1 | tail -2; git log --oneline s/v7..origin/s/v7 | head -3 | cut -c1-80; git log --oneline origin/s/v7..s/v7 | head -3 | cut -c1-80; git rev-list --count origin/s/v7..s/v7", "description": "Voir la divergence", "t … [18 caractères tronqués]`
+
+  ```
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/14
+6f862993 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE)
+73edb3dd SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/14
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chunker|rapport-coherence|rapport-s-paragraphes|gold_reel_50|plan.json\" | head  … [85 caractères tronqués]`
+
+  ```
+M docs/produit/README.md
+6f862993 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE
+73edb3dd SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOL
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git stash push -m \"x1-en-cours\" docs/produit/README.md 2>&1 | tail -1; timeout 300 git rebase origin/s/v7 2>&1 | tail -3; git log --oneline -3 | cut -c1-70; git stash pop 2>&1 | tail -1; git status --porcelain docs/produit/README.m … [71 caractères tronqués]`
+
+  ```
+Saved working directory and index state On s/v7: x1-en-cours
+error: cannot rebase: You have unstaged changes.
+error: Please commit or stash them.
+6f862993 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE
+73edb3dd SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOL
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE
+Dropped refs/stash@{0} (f799e17c205301060808875b128bbef3a0411095)
+ M docs/produit/README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 400 git -c rebase.autoStash=true rebase origin/s/v7 2>&1 | tail -4; git log --oneline -3 | cut -c1-70; git status --porcelain docs/produit/README.md | head -1; git rev-list --count origin/s/v7..s/v7", "description": "Rebase a … [36 caractères tronqués]`
+
+  ```
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 73edb3dd... # SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOL
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE
+be3f41ad SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short 2>&1 | grep -E \"^UU|^AA\" | head -4; timeout 300 git rebase --skip 2>&1 | tail -3; git log --oneline -3 | cut -c1-70; git rev-list --count origin/s/v7..s/v7", "description": "Sauter le commit W5 dupliqué", "timeou … [13 caractères tronqués]`
+
+  ```
+UU journal/2026-11-15/README.md
+UU journal/2026-11-15/mesures.md
+UU journal/README.md
+UU journal/sessions/MANIFEST.md
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 6f862993... # SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOL
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE
+be3f41ad SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | grep -E \"^UU\" | awk '{print $2}' | head -20 | while read f; do git checkout --theirs -- \"$f\" 2>/dev/null; git add \"$f\" 2>/dev/null; done; git status --short | grep -cE \"^UU\"; timeout 300 git -c core.edito … [188 caractères tronqués]`
+
+  ```
+0
+ create mode 100644 reports/rapport-semaine-2.md
+Applied autostash.
+Successfully rebased and updated refs/heads/s/v7.
+049343d3 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOL
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git tag -l \"semaine-2-*\"; git tag -f semaine-2-2026-11-20 9960b37f 2>&1 | tail -1; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; timeout 280 git pus … [160 caractères tronqués]`
+
+  ```
+semaine-2-2026-11-20
+Updated tag 'semaine-2-2026-11-20' (was 7bc87b50)
+   9960b37f..049343d3  s/v7 -> s/v7
+   9960b37f..049343d3  master -> master
+ + 7bc87b50...9960b37f semaine-2-2026-11-20 -> semaine-2-2026-11-20 (forced update)
+0
+dim 15 nov 2026 12:35:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py >/dev/null 2>&1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1; git status --porcelain journal/ |  … [69 caractères tronqués]`
+
+  ```
+✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ M journal/2026-11-15/README.md
+ M journal/2026-11-15/mesures.md
+ M journal/2026-11-15/portes.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 12 h 40 HNE (semaine 2 : W1-W6, tag semaine-2-2026-11-20)** … [506 caractères tronqués]`

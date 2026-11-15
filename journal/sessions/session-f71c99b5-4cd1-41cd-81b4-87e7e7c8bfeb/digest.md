@@ -2620,3 +2620,139 @@ ok
   ```
 
 - **bash** `{"command": "git add reports/rapport-semaine-2.md reports/rapport-semaine-2.json docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md journal/2026-11-15/portes.md\npython3 tools/verifie_etat_a_jour.py --index 2>&1 | tail -2\ngit commit --amend --no-edit --quiet && git log -1 --format … [84 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+6f862993 2026-11-15 12:26:53 -0500 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "echo '=== tag ==='; git tag -l 'semaine-2-2026-11-20'; git cat-file -t semaine-2-2026-11-20; git rev-parse semaine-2-2026-11-20^{}; echo '=== log ==='; git log --oneline -6; echo '=== status ==='; git status --short | head -20; echo '=== show ==='; git show --stat --oneline HEAD | tail  … [64 caractères tronqués]`
+
+  ```
+=== tag ===
+semaine-2-2026-11-20
+tag
+73edb3dd0958bd2a4a0e02315df68207a62075f7
+=== log ===
+6f862993 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+73edb3dd SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE
+be3f41ad SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE 0, CLÉ INVALIDE 4, RÉSEAU COUPÉ 0 APRÈS 3 ESSAIS, 1 000 PHRASES = 143 870 TOKENS) ; 4 TESTS DE PLUS
+3439cb0c ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+=== status ===
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M 
+… [1579 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; python3 tools/verifie_en_cours.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -3; python3 tools/verifier_schemas.py 2>&1 | tail -2", "description": "Run final document … [24 caractères tronqués]`
+
+  ```
+revue de documentation · 754 fiche(s) · 847 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 47 jour(s) · 212 session(s) · 2632 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     · 60 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "git show --stat HEAD | head -20; echo '=== JSON tag ==='; python3 -c \"import json;d=json.load(open('reports/rapport-semaine-2.json'));print(d['tag']);print(d['portes']['ciblage_w6_final'])\"", "description": "Verify W6 commit file list and JSON tag"}`
+
+  ```
+commit 6f862993d41902e31baff3e41e506466fb659624
+Author: Stéphane <stephane@localhost>
+Date:   Sun Nov 15 12:20:29 2026 -0500
+
+    SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+    
+    Le rapport de la semaine 2 (reports/rapport-semaine-2.md + JSON) relie les cinq vagues : W1 gold réel 452 et split 402/H50 (184 → 194 cibles, sha256 identique) ; W2 tagger 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65), F1/att 402 inchangés, fermé 402 −1,55 ; W3 défaut hors ligne code 0 / 0 socket, clé invalide 4, réseau coupé 0 après 3 essais, 1 000 phrases = 143 870 tokens / 0,031 $ ; W4 Panini bloqué (26 signatures à recevoir, rejeu 27/60, calibration 42/44, 3 sources courtes, 5 doublons, N5 vide, aucune p-value) ; W5 restitution v3 (gold S 144/144, cinq 18/18, permutation 0/18 ; gold v2 20/46, F1 0,5406, lieu 0,60).
+    
+    Négatifs et décisions : H50 circulaire, fermé 402, coût extrapolé, Panini incomplet, N5 vide, gold v2 qui ne gagne qu'un cadre, 144/144 partiellement découpage. D1-D6 : gold figé, tagger accepté avec réserve, défaut hors ligne opt-in sans auto, Panini sans 
+… [1942 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py --head 2>&1 | tail -2; echo '=== porte-etat ==='; bash tools/porte-etat.sh 2>&1 | tail -3; echo '=== tableaux ==='; bash tools/porte-tableaux.sh 2>&1 | tail -2; echo '=== doc ==='; bash tools/porte-document.sh 2>&1 | tail -2; echo '=== sessions ==='; … [118 caractères tronqués]`
+
+  ```
+état · dernier fait 6f862993 · dernier état 6f862993
+  ✅ aucun fait commité après le dernier état
+=== porte-etat ===
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+=== tableaux ===
+  ✅ 4551 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+=== doc ===
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+=== sessions ===
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  ```
+
+- **todo_write** `{"todos": [{"content": "Vérifier l'état W5 (tests, revue, fichiers stagés) et committer W5 + le champ de coût W3 manquant", "status": "completed"}, {"content": "Lire les portes (dernière passe complète + passes du 15/11) et consigner le relevé", "status": "completed"}, {"content": "Écrire reports/ra … [488 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 7 completed.
+  ```
+
+- **bash** `{"command": "echo \"W5=$(git rev-parse --short 73edb3dd)  W6=$(git rev-parse --short HEAD)\"; echo \"tag=$(git tag -l 'semaine-2-2026-11-20') type=$(git cat-file -t semaine-2-2026-11-20) -> $(git rev-parse --short semaine-2-2026-11-20^{})\"; echo \"rapport=$(test -f reports/rapport-semaine-2.md && e … [262 caractères tronqués]`
+
+  ```
+W5=73edb3dd  W6=6f862993
+tag=semaine-2-2026-11-20 type=tag -> 73edb3dd
+rapport=OK json=OK
+--- registre 09h53 ---
+--- 81 vertes, 4 rouges ---
+--- ciblage final ---
+--- 9 vertes, 0 rouges ---
+  ```
+
+### 🤖 Assistant
+
+Clôture W6 faite.
+
+## Livré
+
+- **`reports/rapport-semaine-2.md`** + **`reports/rapport-semaine-2.json`** : les cinq vagues W1–W5 avec avant/après, dispositif, contrôles négatifs, décisions D1–D6, limites. Chiffres clés :
+  - W1 : gold **452** (20 hand + 432 corpus, 242 fr / 210 en), split **402/H50**, **184 → 194** cibles, sha256 identique.
+  - W2 : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65), F1/attachement 402 inchangés, fermé 402 **−1,55**.
+  - W3 : défaut **code 0 / 0 socket**, clé invalide **4**, réseau coupé **0** après 3 essais, 1 000 phrases = **143 870 tokens / ~0,031 $**.
+  - W4 : **bloqué** — 26 signatures à recevoir, rejeu **27/60**, calibration **42/44**, 3 sources courtes, 5 doublons, **N5 vide**, aucune p-value.
+  - W5 : gold S **144/144** (18/18), gold v2 **20/46** (F1 **0,5406**, lieu **0,60**), permutation **0/18**.
+
+- **`docs/pilotage/en-cours.md`** : état de clôture, W5/W6, compteurs **754 fiches / 847 JSON**, dernière passe **15/11 09h53 (85, 81/4)** with reds named, reste (J4, page `/`, Panini, `auto`).
+- **`docs/pilotage/semaine-2.md`** : nouvelle section **« L'état par jour (constaté le 15/11) »** J1→J5, avec les vagues réelles, les non-ouvertes (J4) et le tag.
+- **`docs/pilotage/references-non-regression.md`**, **`roadmap.md`**, **`journal/2026-11-15/`** : relevé de passe, tag, récit W6.
+
+## Commits et tag
+
+| quoi | hash |
+|---|---|
+| W5 (restitution v3 + champ de coût W3 manquant + heartbeat) | **`73edb3dd`** |
+| W6 (clôture, rapport, état, docs) | **`6f862993`** |
+| tag annoté `semaine-2-2026-11-20` | **`73edb3dd`** (vérifié : `git cat-file -t` → `tag`, `rev-parse ^{}` → `73edb3dd`) |
+
+Le tag est posé sur le **dernier commit de code vert** (W5), pas sur le commit de clôture — convention du dépôt, limite explicitement nommée dans le rapport.
+
+## Portes
+
+Pas de passe complète relancée, conformément à la consigne. Relevé lu :
+- **`work/portes-1115-09h53`** : **85 portes, 81 vertes, 4 rouges** — `indice`, `melange` (structurelles), `sessions` (heartbeat réparé à 12 h 20), `prechargement` (environnementale : deux passes en parallèle, PPL identique 799,8557).
+- **`work/portes-w5`** : passe à `DELAI=600`, non concluante ; `greffe 124` = borne (780 s verte le 14/11), pas régression.
+- **Ciblage W6** : **8/9** puis **9/9** (`work/portes/w6-final`).
+- `revue_documentation.py` : ✅ (754 / 847 / 124 / 85) ; `verifie_en_cours`, `verifie_journal`, `taille_documents`, `verifier_schemas`, `porte-tableaux` : ✅.
+
+Les modifications non liées des autres sessions (`docs/produit/README.md`, `reports/pensee-*.json`, `tools/chantier/plan.json`, etc.) sont restées **non committées**.
+

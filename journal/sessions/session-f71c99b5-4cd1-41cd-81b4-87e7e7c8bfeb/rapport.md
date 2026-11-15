@@ -7,12 +7,12 @@
 | Identifiant | `session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 12:05 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 109 |
-| Appels d'outils | 130 |
+| Messages | 115 |
+| Appels d'outils | 136 |
 | Fichiers touchés | 4 |
-| Commandes | 104 |
+| Commandes | 109 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W6 (J5 après-midi) : la clôture de la semaine 2 — le rapport `reports/rapport-semaine-2.md` + JSON (les chiffres a … [295 caractères tronqués]
 
-*130 appels d'outils.* Actions notables :
+*136 appels d'outils.* Actions notables :
 
 - bash — Inspect repo state and recent commits
 - bash — List repo structure and key directories
@@ -41,7 +41,45 @@
 - bash — Check journal for week 2 narrative
 - bash — Identify running gate pass outputs
 - bash — Read gate runner script
-- … et 106 autres
+- … et 111 autres
+
+**Synthèse produite :**
+
+Clôture W6 faite.
+
+\## Livré
+
+- **`reports/rapport-semaine-2.md`** + **`reports/rapport-semaine-2.json`** : les cinq vagues W1–W5 avec avant/après, dispositif, contrôles négatifs, décisions D1–D6, limites. Chiffres clés :
+  - W1 : gold **452** (20 hand + 432 corpus, 242 fr / 210 en), split **402/H50**, **184 → 194** cibles, sha256 identique.
+  - W2 : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65), F1/attachement 402 inchangés, fermé 402 **−1,55**.
+  - W3 : défaut **code 0 / 0 socket**, clé invalide **4**, réseau coupé **0** après 3 essais, 1 000 phrases = **143 870 tokens / ~0,031 $**.
+  - W4 : **bloqué** — 26 signatures à recevoir, rejeu **27/60**, calibration **42/44**, 3 sources courtes, 5 doublons, **N5 vide**, aucune p-value.
+  - W5 : gold S **144/144** (18/18), gold v2 **20/46** (F1 **0,5406**, lieu **0,60**), permutation **0/18**.
+
+- **`docs/pilotage/en-cours.md`** : état de clôture, W5/W6, compteurs **754 fiches / 847 JSON**, dernière passe **15/11 09h53 (85, 81/4)** with reds named, reste (J4, page `/`, Panini, `auto`).
+- **`docs/pilotage/semaine-2.md`** : nouvelle section **« L'état par jour (constaté le 15/11) »** J1→J5, avec les vagues réelles, les non-ouvertes (J4) et le tag.
+- **`docs/pilotage/references-non-regression.md`**, **`roadmap.md`**, **`journal/2026-11-15/`** : relevé de passe, tag, récit W6.
+
+\## Commits et tag
+
+| quoi | hash |
+|---|---|
+| W5 (restitution v3 + champ de coût W3 manquant + heartbeat) | **`73edb3dd`** |
+| W6 (clôture, rapport, état, docs) | **`6f862993`** |
+| tag annoté `semaine-2-2026-11-20` | **`73edb3dd`** (vérifié : `git cat-file -t` → `tag`, `rev-parse ^{}` → `73edb3dd`) |
+
+Le tag est posé sur le **dernier commit de code vert** (W5), pas sur le commit de clôture — convention du dépôt, limite explicitement nommée dans le rapport.
+
+\## Portes
+
+Pas de passe complète relancée, conformément à la consigne. Relevé lu :
+- **`work/portes-1115-09h53`** : **85 portes, 81 vertes, 4 rouges** — `indice`, `melange` (structurelles), `sessions` (heartbeat réparé à 12 h 20), `prechargement` (environnementale : deux passes en parallèle, PPL identique 799,8557).
+- **`work/portes-w5`** : passe à `DELAI=600`, non concluante ; `greffe 124` = borne (780 s verte le 14/11), pas régression.
+- **Ciblage W6** : **8/9** puis **9/9** (`work/portes/w6-final`).
+- `revue_documentation.py` : ✅ (754 / 847 / 124 / 85) ; `verifie_en_cours`, `verifie_journal`, `taille_documents`, `verifier_schemas`, `porte-tableaux` : ✅.
+
+Les modificat
+… [153 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -96,7 +134,7 @@
 - **T1** Find previous tag closure narrative
 - **T1** Check gate pass progress
 - **T1** Review staged W5 docs changes
-- … et 64 autres
+- … et 69 autres
 
 ## 4. Mesures et résultats marquants
 
