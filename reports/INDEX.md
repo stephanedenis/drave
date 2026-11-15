@@ -127,6 +127,7 @@
 | [rapport-coordination-n2.md](rapport-coordination-n2.md) | N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal |
 | [rapport-coordination-r.md](rapport-coordination-r.md) | R — le tagger POS sur le gold 612 : **+8,49 pts**, la règle dit **intégrer** |
 | [rapport-coordination-s.md](rapport-coordination-s.md) | S — les 11 verdicts de `/paragraphes` ne sont pas dans git |
+| [rapport-coordination-s-v2.md](rapport-coordination-s-v2.md) | S — la page `/` ne sert pas la v7 : 369 stockés sans `profondeur`, 41 verdicts à re-juger, port 8765 pris |
 | [rapport-corpus-commun.md](rapport-corpus-commun.md) | Corpus commun Panini/NIPADA ↔ Drave — UDHR, article 1 |
 | [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |

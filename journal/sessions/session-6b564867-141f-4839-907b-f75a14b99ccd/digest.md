@@ -1512,3 +1512,135 @@ HOOK_PRE=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09\" -- reports/rapport-coordination-n2-v2.md reports/rapport-coordination-n2-v2.json reports/README.md reports/INDEX.md do … [154 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 292c70b5] C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+ 16 files changed, 2301 insertions(+), 20 deletions(-)
+ create mode 100644 journal/2026-11-15/docs.md
+ create mode 100644 journal/sessions/session-6b564867-141f-4839-907b-f75a14b99ccd/digest.md
+ create mode 100644 journal/sessions/session-6b564867-141f-4839-907b-f75a14b99ccd/rapport.md
+ create mode 100644 reports/rapport-coordination-n2-v2.json
+ create mode 100644 reports/rapport-coordination-n2-v2.md
+COMMIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -40; echo '---NAMES---'; git show --name-status --format='' HEAD", "description": "Inspect commit contents"}`
+
+  ```
+292c70b5 C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+ docs/pilotage/en-cours.md                          |   10 +-
+ journal/2026-11-15/README.md                       |    6 +-
+ journal/2026-11-15/docs.md                         |   19 +
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    3 +-
+ journal/THEMES.md                                  |    1 +
+ journal/sessions/MANIFEST.md                       |    5 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   34 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1514 ++++++++++++++++++++
+ .../rapport.md                                     |  171 +++
+ reports/INDEX.md                                   |    3 +-
+ reports/README.md                                  |    1 +
+ reports/rapport-coordination-n2-v2.json            |  247 ++++
+ reports/rapport-coordination-n2-v2.md              |  289 ++++
+ 16 files changed, 2301 insertions(+), 20 deletions(-)
+---NAMES---
+M	docs/pilotage/
+… [608 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log -1 --format='%h %ad %s' --date=short; echo '--- status (first 30) ---'; git status --short | head -30", "description": "Check commit and remaining status"}`
+
+  ```
+292c70b5 2026-11-15 C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+--- status (first 30) ---
+MM journal/2026-11-14/README.md
+MM journal/2026-11-14/distribue.md
+MM journal/2026-11-14/docs.md
+MM journal/2026-11-14/memoire.md
+MM journal/2026-11-14/mesures.md
+MM journal/2026-11-14/moteur.md
+MM journal/2026-11-14/portes.md
+D  journal/2026-11-15/README.md
+D  journal/2026-11-15/docs.md
+D  journal/2026-11-15/mesures.md
+D  journal/2026-11-15/portes.md
+MM journal/README.md
+MM journal/THEMES.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/digest.md
+D  journal/sessions/24e34ad3-f423-4394-bb1c-74a6930a57e5/rapport.md
+MM journal/sessions/MANIFEST.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+MM journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+D  journal/sessions/session-6b564867-141f-4839-907b-f75a14b99ccd/digest.md
+D  journal/sessions/session-6b564867-141f-4839-907b-f75a14b99ccd/rapport.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/digest.md
+MM journal/sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pen
+… [234 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"REVUE=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | grep -E 'T0 max|✅|❌'; echo \"TAILLE=${PIPESTATUS[0]}\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2;  … [100 caractères tronqués]`
+
+  ```
+revue de documentation · 736 fiche(s) · 829 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE=0
+  T0 max : 3996 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE=0
+  en-cours · 1626 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EN_COURS=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in reports/rapport-coordination-n2-v2.md reports/rapport-coordination-n2-v2.json reports/README.md reports/INDEX.md docs/pilotage/en-cours.md; do if git diff --quiet HEAD -- \"$f\"; then echo \"OK-HEAD $f\"; else echo \"DIFF $f … [292 caractères tronqués]`
+
+  ```
+OK-HEAD reports/rapport-coordination-n2-v2.md
+OK-HEAD reports/rapport-coordination-n2-v2.json
+OK-HEAD reports/README.md
+OK-HEAD reports/INDEX.md
+OK-HEAD docs/pilotage/en-cours.md
+--- N2 untouched ---
+tools/eval_n2_propre.py inchangé
+ls: cannot access 'tools/n2': No such file or directory
+2026-11-02 16:22:40.367604569 -0500 work/n2ac/eval_longueurs.py
+2026-11-02 16:21:33.673694726 -0500 work/n2ac/rope_model.py
+  ```
+
+### 🤖 Assistant
+
+Fait et committé : **`292c70b5`**.
+
+## Livré
+
+- **`reports/rapport-coordination-n2-v2.md`** + **`reports/rapport-coordination-n2-v2.json`**
+- **`docs/pilotage/en-cours.md`** : ligne **N2 — en pause** mise à jour (commande validée, interdiction de `--rope` seul, invariant **3,09**, lien v2) ; ligne **N — le natif** pointée vers la v2 ; compteurs **736 / 829**.
+- `reports/README.md` et `reports/INDEX.md` mis à jour pour la découvrabilité.
+
+## Le point central de la v2
+
+La commande du mandat **`eval_longueurs.py --rope --canal-dir <dir>` ne tourne pas** : `--canal-dir` n'existe pas dans ce script (code de sortie **2**, vérifié). La v2 distingue donc :
+
+| commande | mesure |
+|---|---|
+| **validée, exécutable** : `eval_longueurs.py --rope --val <dir>` | 2,9726 / 2,8988 / 2,8443 / **2,7856** ; test 1 024 = **2,8566** |
+| **correctif** : `eval_n2_propre.py --rope --canal-dir <dir>` (copie `/tmp`) | mêmes chiffres ; `val` 2,9726 |
+| **à ne PAS utiliser** : `--rope` sans canal | **40,0658** / 49,5308 / 59,8126 / **65,7898** |
+| **témoin absolu** : `A-propre-g1.pt` | **3,0971** val / **3,2098** test → « 3,09 reste 3,09 » |
+
+`porte-n2.sh` est **proposée, non écrite** : son invariant A pin le témoin absolu à 3,09 ± 0,01, son invariant B la porte RoPE + canal à 2,7856 ± 0,01. L'écrire est un acte N2 (compteur de portes 85 → 86).
+
+## Contrôles
+
+- revue de documentation : **0** (736 fiches, 829 JSON)
+- budget de contexte : **3996 / 4000** mots ; `en-cours` : 1626 mots
+- `porte-tableaux` : **0** ; `verifier_schemas` : **0**
+- **Aucune modification** de `work/n2ac/` (mtimes du 02/11 inchangés) ; `tools/n2/` n'existe pas ; `tools/eval_n2_propre.py` inchangé.
+
+Le commit inclut les journaux générés par le hook pre-commit, conformément au fonctionnement du dépôt.
+

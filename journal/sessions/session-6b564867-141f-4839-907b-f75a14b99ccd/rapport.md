@@ -9,10 +9,10 @@
 | Début | 2026-11-15 02:03 |
 | Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 61 |
-| Appels d'outils | 93 |
+| Messages | 65 |
+| Appels d'outils | 97 |
 | Fichiers touchés | 4 |
-| Commandes | 58 |
+| Commandes | 62 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche C1 : la coordination N2, suite de J4.1 — écris `reports/rapport-coordination-n2-v2.md` + JSON : la commande **vali … [358 caractères tronqués]
 
-*93 appels d'outils.* Actions notables :
+*97 appels d'outils.* Actions notables :
 
 - bash — List repo structure and relevant dirs
 - bash — Check git status and recent log
@@ -41,11 +41,39 @@
 - bash — Read en-cours N2 section
 - bash — Check eval_n2_propre current options
 - bash — Check file timestamps and modifications
-- … et 73 autres
+- … et 77 autres
 
 **Synthèse produite :**
 
-All checks pass. I'll commit only the five C1 files (explicit paths), then re-verify the state.
+Fait et committé : **`292c70b5`**.
+
+\## Livré
+
+- **`reports/rapport-coordination-n2-v2.md`** + **`reports/rapport-coordination-n2-v2.json`**
+- **`docs/pilotage/en-cours.md`** : ligne **N2 — en pause** mise à jour (commande validée, interdiction de `--rope` seul, invariant **3,09**, lien v2) ; ligne **N — le natif** pointée vers la v2 ; compteurs **736 / 829**.
+- `reports/README.md` et `reports/INDEX.md` mis à jour pour la découvrabilité.
+
+\## Le point central de la v2
+
+La commande du mandat **`eval_longueurs.py --rope --canal-dir <dir>` ne tourne pas** : `--canal-dir` n'existe pas dans ce script (code de sortie **2**, vérifié). La v2 distingue donc :
+
+| commande | mesure |
+|---|---|
+| **validée, exécutable** : `eval_longueurs.py --rope --val <dir>` | 2,9726 / 2,8988 / 2,8443 / **2,7856** ; test 1 024 = **2,8566** |
+| **correctif** : `eval_n2_propre.py --rope --canal-dir <dir>` (copie `/tmp`) | mêmes chiffres ; `val` 2,9726 |
+| **à ne PAS utiliser** : `--rope` sans canal | **40,0658** / 49,5308 / 59,8126 / **65,7898** |
+| **témoin absolu** : `A-propre-g1.pt` | **3,0971** val / **3,2098** test → « 3,09 reste 3,09 » |
+
+`porte-n2.sh` est **proposée, non écrite** : son invariant A pin le témoin absolu à 3,09 ± 0,01, son invariant B la porte RoPE + canal à 2,7856 ± 0,01. L'écrire est un acte N2 (compteur de portes 85 → 86).
+
+\## Contrôles
+
+- revue de documentation : **0** (736 fiches, 829 JSON)
+- budget de contexte : **3996 / 4000** mots ; `en-cours` : 1626 mots
+- `porte-tableaux` : **0** ; `verifier_schemas` : **0**
+- **Aucune modification** de `work/n2ac/` (mtimes du 02/11 inchangés) ; `tools/n2/` n'existe pas ; `tools/eval_n2_propre.py` inchangé.
+
+Le commit inclut les journaux générés par le hook pre-commit, conformément au fonctionnement du dépôt.
 
 ## 3. Travail accompli
 
@@ -100,7 +128,7 @@ All checks pass. I'll commit only the five C1 files (explicit paths), then re-ve
 - **T1** Run documentation review after edits
 - **T1** Validate en-cours state
 - **T1** Check document size budget
-- … et 18 autres
+- … et 22 autres
 
 ## 4. Mesures et résultats marquants
 

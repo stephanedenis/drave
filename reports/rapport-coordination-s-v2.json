@@ -1,0 +1,580 @@
+{
+  "version": 2,
+  "date": "2026-11-15",
+  "heure": "02:20 HNE",
+  "head": "292c70b5",
+  "head_parent": "292c70b52a5656c16360db2570950abbe51c56b6",
+  "ligne": "S",
+  "objet": "coordination S, suite de J4.2 : l'état de la page /, le service de la v7, le pare-feu, la commande de lancement et ce qui reste à S ; les 11 verdicts sont committés (389b99f)",
+  "fiche": "reports/rapport-coordination-s-v2.md",
+  "v1": "reports/rapport-coordination-s.md",
+  "verdict": "Les 11 verdicts a004–a009 sont committés (sous-module 389b99f, pointeur parent 31ce36fd) : 19/19 candidats, 11 acceptés, 8 exclus. La page / ne sert pas la v7 : 369 candidats stockés, 0 avec profondeur, distribution des niveau 10/277/82 ; la v7 dynamique donne 359 candidats, 2/37/221/84/13/2 et 99 à profondeur >= 3. Aucun service S n'est en écoute ; le port 8765 est tenu par financemeteo (pid 2725542), et un lancement de mesure sur 9000 répond 200. firewalld est actif mais non interrogeable sans root ; le serveur écoute 127.0.0.1 par défaut. 41 paires de verdicts de la banque n'ont pas de correspondance v7 exacte, pas 5.",
+  "aucune_modification_s": [
+    "tools/structures/"
+  ],
+  "lecture_seule": true,
+  "verdicts": {
+    "sous_module": {
+      "chemin": "tools/structures",
+      "head": "389b99f8383eb47c0cc008f5d3211c9d65d895fc",
+      "head_court": "389b99f",
+      "branche": "master",
+      "date_head": "2026-11-14T09:49:39-05:00",
+      "message": "S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/19 CANDIDATS JUGÉS, 11 ACCEPTÉS, 8 EXCLUS ; DÉCISION DU 14/11 (3B), EXCEPTION AUTORISÉE",
+      "origin": "/home/stephane/Data13TB/stephane/GitHub/drave-structures",
+      "origin_master": "389b99f8383eb47c0cc008f5d3211c9d65d895fc",
+      "avance_retard_origin": "0/0",
+      "propre": true,
+      "porcelaine": ""
+    },
+    "pointeur_parent": {
+      "branche": "s/v7",
+      "head": "292c70b52a5656c16360db2570950abbe51c56b6",
+      "head_court": "292c70b5",
+      "commit": "31ce36fdd7e4688758b5ed65d1b5ae87b2b4a6ef",
+      "commit_court": "31ce36fd",
+      "ls_tree": "160000 commit 389b99f8383eb47c0cc008f5d3211c9d65d895fc\ttools/structures",
+      "avance_retard_origin_s_v7": "0/1",
+      "note": "À la mesure : le parent a 1 commit d'avance sur origin/s/v7 (C1, 292c70b5), pas un commit S ; cette fiche ajoute C2."
+    },
+    "fichier": {
+      "chemin": "tools/structures/donnees/paragraphes-validations.jsonl",
+      "format": "JSONL append-only",
+      "lignes": 19,
+      "statuts": {
+        "resolu": 10,
+        "compatible": 1,
+        "exclu": 8,
+        "double_sens": 0
+      },
+      "acceptes": 11,
+      "exclus": 8,
+      "paragraphes_juges": 9,
+      "paragraphes_total": 9,
+      "candidats": 19,
+      "candidats_sans_verdict": 0,
+      "notes": 0,
+      "auteur": "humain",
+      "niveau": 2,
+      "commit": {
+        "objet": "S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009)",
+        "fichier_change": 1,
+        "insertions": 11,
+        "suppressions": 0
+      }
+    },
+    "nouveaux_11": {
+      "plage": [
+        "a004",
+        "a009"
+      ],
+      "lignes": 11,
+      "statuts": {
+        "resolu": 6,
+        "compatible": 1,
+        "exclu": 4,
+        "double_sens": 0
+      },
+      "acceptes": 7,
+      "exclus": 4,
+      "paragraphes": [
+        "a004",
+        "a005",
+        "a006",
+        "a007",
+        "a008",
+        "a009"
+      ],
+      "candidats": 11,
+      "periode": {
+        "debut": "2026-11-04T15:03:43",
+        "fin": "2026-11-04T15:10:08"
+      },
+      "detail": [
+        {
+          "ligne": 9,
+          "phrase_id": "a004",
+          "candidat_id": "a004-c1",
+          "statut": "resolu",
+          "accepte": true
+        },
+        {
+          "ligne": 10,
+          "phrase_id": "a004",
+          "candidat_id": "a004-c2",
+          "statut": "exclu",
+          "accepte": false
+        },
+        {
+          "ligne": 11,
+          "phrase_id": "a005",
+          "candidat_id": "a005-c1",
+          "statut": "resolu",
+          "accepte": true
+        },
+        {
+          "ligne": 12,
+          "phrase_id": "a005",
+          "candidat_id": "a005-c2",
+          "statut": "exclu",
+          "accepte": false
+        },
+        {
+          "ligne": 13,
+          "phrase_id": "a006",
+          "candidat_id": "a006-c1",
+          "statut": "resolu",
+          "accepte": true
+        },
+        {
+          "ligne": 14,
+          "phrase_id": "a007",
+          "candidat_id": "a007-c1",
+          "statut": "resolu",
+          "accepte": true
+        },
+        {
+          "ligne": 15,
+          "phrase_id": "a007",
+          "candidat_id": "a007-c2",
+          "statut": "exclu",
+          "accepte": false
+        },
+        {
+          "ligne": 16,
+          "phrase_id": "a008",
+          "candidat_id": "a008-c1",
+          "statut": "compatible",
+          "accepte": true
+        },
+        {
+          "ligne": 17,
+          "phrase_id": "a009",
+          "candidat_id": "a009-c1",
+          "statut": "resolu",
+          "accepte": true
+        },
+        {
+          "ligne": 18,
+          "phrase_id": "a009",
+          "candidat_id": "a009-c2",
+          "statut": "exclu",
+          "accepte": false
+        },
+        {
+          "ligne": 19,
+          "phrase_id": "a009",
+          "candidat_id": "a009-c3",
+          "statut": "resolu",
+          "accepte": true
+        }
+      ]
+    },
+    "deux_onze": {
+      "onze_verdicts_du_commit": "7 acceptés (6 resolu + 1 compatible) + 4 exclus (a004–a009)",
+      "onze_acceptes_du_fichier": "somme des acceptés sur les 19 verdicts (10 resolu + 1 compatible)",
+      "avertissement": "Les deux 11 sont vrais mais dans deux ensembles différents ; le commit porte 11 lignes, pas 11 acceptés."
+    },
+    "tests": {
+      "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 -m unittest discover -s tests -q",
+      "resultat": "Ran 56 tests in 4.300s — OK",
+      "statut": "56/56"
+    }
+  },
+  "page": {
+    "service": {
+      "etat_mesure": "aucun serveur S en écoute",
+      "processus_structures": [],
+      "port_8765": {
+        "etat": "occupé",
+        "adresse": "127.0.0.1:8765",
+        "pid": 2725542,
+        "commande": "python3 src/app.py --no-browser",
+        "cwd": "/home/stephane/Data13TB/stephane/GitHub/financemeteo",
+        "demarre": "2026-11-14T16:13:37-05:00",
+        "reponse_get": {
+          "code": 200,
+          "octets": 174051,
+          "titre": "Portefeuille iA — tableau de bord"
+        },
+        "note": "Le port canonique de serveur.py (8765) est tenu par un autre projet ; ne pas le tuer."
+      },
+      "port_9000": {
+        "etat_avant": "libre",
+        "etat_apres": "libre",
+        "usage": "port de mesure, serveur arrêté après les GET"
+      },
+      "autres_ports": {
+        "22": "sshd, 0.0.0.0",
+        "25": "smtp, 0.0.0.0",
+        "3080": "dsh web, 0.0.0.0, pid 2999",
+        "8771": "docwatch, 127.0.0.1, pid 3291"
+      }
+    },
+    "mesure": {
+      "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 nohup python3 serveur.py --port 9000 --hote 127.0.0.1 > /tmp/c2-serveur-9000.log 2>&1 &",
+      "log": "banc de structures · http://127.0.0.1:9000 · 207 phrases",
+      "routes": [
+        {
+          "route": "/",
+          "code": 200,
+          "octets": 2350,
+          "titre": "Structures — le banc d'interprétations"
+        },
+        {
+          "route": "/api/phrases",
+          "code": 200,
+          "phrases": 207,
+          "candidats": 369,
+          "validations": 150,
+          "profondeur_presents": 0,
+          "segments": 2414
+        },
+        {
+          "route": "/paragraphes",
+          "code": 200,
+          "octets": 3493
+        },
+        {
+          "route": "/api/paragraphes",
+          "code": 200,
+          "paragraphes": 9,
+          "candidats": 19,
+          "verdicts": 19,
+          "segments_avec_profondeur": 169,
+          "segments_avec_niveau": 169
+        }
+      ],
+      "api_phrases": {
+        "phrases": 207,
+        "candidats": 369,
+        "validations_lignes": 150,
+        "profondeur_presents": 0,
+        "segments": 2414,
+        "profondeur_max_stockee": {
+          "0": 10,
+          "1": 277,
+          "2": 82
+        },
+        "segments_avec_niveau": 2414,
+        "candidats_avec_niveau": 0,
+        "source": "donnees/phrases.json (7 phrases, 14 candidats) + donnees/phrases_generees.json (200 phrases, 355 candidats), mtime 2026-11-02 20:35"
+      },
+      "api_paragraphes": {
+        "paragraphes": 9,
+        "candidats": 19,
+        "verdicts": 19,
+        "segments_avec_profondeur": 169,
+        "segments_avec_niveau": 169,
+        "source": "generateur.analyser à la volée"
+      }
+    },
+    "v7_dynamique": {
+      "commande": "cd tools/structures && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 -c 'import json, mesure_arbre; print(json.dumps(mesure_arbre.mesurer(), ensure_ascii=False))'",
+      "phrases": 207,
+      "candidats": 359,
+      "segments": 2308,
+      "profondeur_max": {
+        "0": 2,
+        "1": 37,
+        "2": 221,
+        "3": 84,
+        "4": 13,
+        "5": 2
+      },
+      "niveaux": {
+        "0": 359,
+        "1": 1268,
+        "2": 556,
+        "3": 108,
+        "4": 15,
+        "5": 2
+      },
+      "candidats_a_plus_de_3": 99,
+      "referents": 371,
+      "avec_candidat": 294,
+      "sans_candidat": 77,
+      "phrases_avec_referent": 170,
+      "note": "mesure_arbre.mesurer() lit seulement ; donnees/mesure-arbre.json n'a pas été écrit."
+    },
+    "ecart": {
+      "stored": 369,
+      "dynamique": 359,
+      "identiques": 304,
+      "changes": 65,
+      "nouveaux": 55,
+      "orphelins_net": 10,
+      "note": "369 - 65 + 55 = 359 ; 65 - 55 = 10 orphelins nets."
+    },
+    "code": {
+      "serveur": "serveur.py:46 charge phrases_generees.json ; /api/phrases renvoie les candidats stockés ; /paragraphes appelle generateur.analyser (ligne 61).",
+      "app_js": "static/app.js:20 indente avec s.niveau et niveauDe() lit le niveau ; ne lit pas profondeur.",
+      "paragraphes_js": "static/paragraphes.js:20 affiche s.profondeur ?? s.niveau.",
+      "generateur": "generateur._profondeur() fait s.niveau = s.profondeur ; une régénération complète met les deux champs à la profondeur réelle.",
+      "conclusion": "La page / ne sert pas la v7 parce que les données stockées sont l'ancien arbre ; ajouter profondeur sans régénérer niveau ne changerait pas le rendu. /paragraphes est la seule fenêtre v7."
+    }
+  },
+  "migration": {
+    "work_banque_v7": "absent",
+    "phrases_generees": {
+      "mtime": "2026-11-02 20:35",
+      "phrases": 200,
+      "candidats": 355,
+      "profondeur_presents": 0
+    },
+    "signature": "(texte, type, rôle) des segments, dans l'ordre",
+    "verdicts_banque": {
+      "lignes": 150,
+      "paires_uniques": 147,
+      "revisions": 3
+    },
+    "correspondance": {
+      "paires_avec_signature_v7": 106,
+      "paires_sans_signature_v7": 41,
+      "lignes_sans_signature_v7": 44,
+      "sans_index": 5,
+      "meme_index_contenu_change": 36,
+      "phrases_concernees": 18,
+      "lignes_sans_index": 5,
+      "lignes_meme_index_contenu_change": 39
+    },
+    "v1": {
+      "chiffre": 5,
+      "definition": "candidats qui n'ont plus d'index parce que la nouvelle liste est plus courte",
+      "liste": [
+        "p006-c2",
+        "c023-c3",
+        "c056-c2",
+        "c056-c3",
+        "c064-c2"
+      ],
+      "limite": "Ne compte pas les 36 candidats qui existent au même index mais dont le contenu a changé."
+    },
+    "v2": {
+      "chiffre": 41,
+      "definition": "paires dont la signature exacte n'existe plus dans la v7",
+      "liste_5_sans_index": [
+        "p006-c2",
+        "c023-c3",
+        "c056-c2",
+        "c056-c3",
+        "c064-c2"
+      ],
+      "par_phrase": {
+        "p001": 2,
+        "p002": 2,
+        "p003": 2,
+        "p004": 2,
+        "p005": 2,
+        "p006": 2,
+        "p007": 2,
+        "c002": 2,
+        "c004": 2,
+        "c009": 3,
+        "c011": 2,
+        "c013": 3,
+        "c020": 3,
+        "c023": 3,
+        "c043": 2,
+        "c056": 3,
+        "c064": 2,
+        "c065": 2
+      },
+      "consequence_index": "5 perdus + 36 recollés au mauvais candidat",
+      "consequence_signature": "106 préservés, 41 sans correspondance (pas de faux lien)",
+      "correction": "La v1 dit 5 à risque et 0 verdict perdu après remap ; c'est faux pour les 36. Une signature ne sauve pas les 41, elle empêche seulement de les recoller."
+    },
+    "controle": {
+      "signature_texte_type_role": 41,
+      "signature_texte_type": 41,
+      "signature_texte_seul": 41,
+      "note": "Le compte 41 est stable ; le compte 5 est stable comme candidats sans index. Les deux chiffres mesurent deux choses différentes."
+    },
+    "note": "Les 41 sont des verdicts de la banque / (validations.jsonl), pas les 19 verdicts de /paragraphes (paragraphes-validations.jsonl), qui restent 19/19 à 389b99f."
+  },
+  "pare_feu": {
+    "service": "firewalld",
+    "actif": true,
+    "enabled": true,
+    "pid": 2062,
+    "demarre": "2026-11-03T19:34:02-05:00",
+    "active_state": "active",
+    "sub_state": "running",
+    "lecture_utilisateur": {
+      "firewall_cmd_state": {
+        "code": 124,
+        "message": "timeout (Error: Did not receive a reply… / Connection timed out)"
+      },
+      "busctl": {
+        "resultat": "Connection timed out"
+      },
+      "nft_list_ruleset": {
+        "code": 1,
+        "message": "Operation not permitted"
+      },
+      "iptables_L": {
+        "code": 4,
+        "message": "can't open lock file /run/xtables.lock: Permission denied"
+      },
+      "journalctl": "aucune entrée visible (permissions)",
+      "sudo_n": {
+        "code": 1,
+        "message": "a password is required"
+      }
+    },
+    "conclusion": "Le pare-feu est actif mais ses règles ne sont pas observables sans root. Cette fiche ne prouve pas que 8765 est fermé ou ouvert ; elle constate qu'aucun service S n'écoute, que 8765 est loopback et appartient à financemeteo, et que le défaut 127.0.0.1 rend le service local par construction.",
+    "ordre_des_obstacles": [
+      "aucun service S lancé",
+      "port 8765 pris par financemeteo",
+      "défaut --hote 127.0.0.1 (local seulement)",
+      "pare-feu, seulement si --hote 0.0.0.0"
+    ],
+    "exposition": {
+      "tunnel_ssh": "ssh -L 9000:127.0.0.1:9000 stephane@192.168.1.101 puis http://127.0.0.1:9000/",
+      "reseau_local": {
+        "serveur": "PYTHONDONTWRITEBYTECODE=1 python3 serveur.py --hote 0.0.0.0 --port 9000",
+        "pare_feu_root": [
+          "sudo firewall-cmd --add-port=9000/tcp --permanent",
+          "sudo firewall-cmd --reload",
+          "sudo firewall-cmd --list-ports"
+        ],
+        "teste": false,
+        "note": "firewall-cmd ne répond pas à l'utilisateur ; le premier geste root est de vérifier le démon. Ne pas ouvrir 8765 : il est pris."
+      }
+    }
+  },
+  "commande_lancement": {
+    "local": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && PYTHONDONTWRITEBYTECODE=1 python3 serveur.py --port 9000",
+    "local_hote_defaut": "127.0.0.1",
+    "port_defaut": 8765,
+    "port_conseille": 9000,
+    "reseau_local": "PYTHONDONTWRITEBYTECODE=1 python3 serveur.py --hote 0.0.0.0 --port 9000",
+    "verification": [
+      "curl -s -o /dev/null -w 'GET / %{http_code}\\n' http://127.0.0.1:9000/",
+      "curl -s http://127.0.0.1:9000/api/phrases | python3 -c 'import json,sys; d=json.load(sys.stdin); print(len(d[\"phrases\"]), sum(len(p[\"candidats\"]) for p in d[\"phrases\"]))'"
+    ],
+    "attendu": {
+      "GET /": 200,
+      "api_phrases": {
+        "phrases": 207,
+        "candidats": 369
+      },
+      "api_paragraphes": {
+        "paragraphes": 9,
+        "candidats": 19
+      }
+    },
+    "arret": "kill <pid> ou fuser -k 9000/tcp ; ne jamais fuser -k 8765/tcp (financemeteo)",
+    "pourquoi_pas_8765": "Le port 8765 est occupé par python3 src/app.py --no-browser (pid 2725542, financemeteo) depuis le 14/11 16:13:37.",
+    "log_attendu": "banc de structures · http://127.0.0.1:9000 · 207 phrases"
+  },
+  "reste_a_s": [
+    {
+      "priorite": 1,
+      "chantier": "Page / en v7",
+      "etat": "work/banque-v7 absent ; phrases_generees.json du 02/11 (200 phrases/355 candidats, 0 profondeur) ; app.js lit niveau",
+      "prochaine_action": "décider garder l'ancien banc ou régénérer ; si régénération, signature + 106 conservés + 41 en quarantaine ; ne pas migrer par index",
+      "bloquant": "choix de données et écriture dans tools/structures (hors C2)"
+    },
+    {
+      "priorite": 2,
+      "chantier": "Référents",
+      "etat": "9/16 mappings uniques faux (12/28 occurrences), 0 note ; a008 = 0/5",
+      "prochaine_action": "corriger les 14 occurrences / 12 formes avec note ; forcer la résolution avant le verdict",
+      "bloquant": "aucun"
+    },
+    {
+      "priorite": 3,
+      "chantier": "Rétro-traduction",
+      "etat": "0/9 ; aucun harnais FR→EN→FR ; DEEPSEEK_API_KEY et DEEPSEEK_KEY_FILE absents de l'env ; ~/.config/drave/deepseek.key présent (36 o, 0600, 03/11) mais non testé",
+      "prochaine_action": "écrire work/retro-traduction/ (9 prompts, 18 appels), passer la clé par DEEPSEEK_KEY_FILE, mesurer chrF + 2 relectures",
+      "bloquant": "harnais absent ; clé non testée"
+    },
+    {
+      "priorite": 4,
+      "chantier": "Couverture de la banque",
+      "etat": "74/207 phrases complètes (35,7 %), 133 sans verdict, 147/369 candidats, 1 note, 1 annotateur",
+      "prochaine_action": "reprendre après la migration ; second lecteur et double-codage",
+      "bloquant": "migration /"
+    },
+    {
+      "priorite": 5,
+      "chantier": "Docs S",
+      "etat": "la v1 et semaine-autonome.md:41 disaient 8 verdicts / 11 non committés / « / sert la v7 » ; en-cours et roadmap sont mis à jour par cette fiche",
+      "prochaine_action": "vérifier que / non v7 et 41 à re-juger restent la ligne S",
+      "bloquant": "aucun"
+    },
+    {
+      "priorite": 6,
+      "chantier": "Service et pare-feu",
+      "etat": "aucun service S ; 8765 pris ; firewalld actif non interrogeable ; défaut loopback",
+      "prochaine_action": "lancer sur 9000 ; tunnel SSH ou ouverture root ; ne pas toucher 8765",
+      "bloquant": "root pour le pare-feu ; 8765 occupé"
+    },
+    {
+      "priorite": 7,
+      "chantier": "71 langues",
+      "etat": "lexique B7 (35 concepts, 1 433 couples), 0/71 testée comme référents ; UDHR = 456 langues",
+      "prochaine_action": "retirer « 71 langues de l'UDHR » du plan S, ou annoter l'UDHR",
+      "bloquant": "protocole d'annotation"
+    },
+    {
+      "priorite": 8,
+      "chantier": "Branche et pointeur",
+      "etat": "à la mesure : sous-module 389b99f poussé (0/0) ; parent s/v7 = 292c70b5, 1 commit d'avance sur origin/s/v7 (C1, pas S) ; cette fiche ajoute C2",
+      "prochaine_action": "pousser / merger s/v7 quand les autres sessions sont au repos",
+      "bloquant": "sessions concurrentes"
+    }
+  ],
+  "ce_qui_pourrait_le_rendre_faux": [
+    "Le port 8765 se libère (ou financemeteo s'arrête) : la commande par défaut redevient utilisable et les mesures du § 2.1 changent.",
+    "Quelqu'un lance le serveur S entre-temps : « aucun service en écoute » n'est vrai qu'à l'instant mesuré ; le serveur de mesure sur 9000 a été arrêté.",
+    "Le pare-feu change ou root devient disponible : firewall-cmd peut répondre et montrer des ports ouverts ; cette fiche ne prouve pas l'état des règles, seulement l'échec de la lecture utilisateur.",
+    "Le sous-module bouge : 389b99f, les 19 lignes, les 359 candidats, les 99 à >=3, les 304/65/55/10 et les 41 dépendent de ce commit.",
+    "La signature change de convention : 5 sans index est stable ; 41 sans correspondance utilise (texte, type, rôle). Une autre définition pourrait déplacer le 41, pas le 5.",
+    "La migration garde l'ancien banc : si S ne migre pas /, les 41 verdicts ne sont pas à risque ; ils restent valides sur l'ancien arbre.",
+    "Les tests passent (56/56) mais pas la passe complète des portes du parent : un rouge de porte n'est pas couvert ici.",
+    "La clé DeepSeek existe mais aucun appel n'a été fait ; elle peut être expirée ou invalide.",
+    "Les 150 verdicts de la banque sont un seul annotateur, une seule journée : les taux d'acceptation ne sont pas une accuracy.",
+    "La mesure de / a été faite sur 9000, pas sur 8765 : même code, mêmes données, URL différente."
+  ],
+  "fichiers_lus_non_modifies": [
+    "tools/structures/serveur.py",
+    "tools/structures/generateur.py",
+    "tools/structures/mesure_arbre.py",
+    "tools/structures/static/app.js",
+    "tools/structures/static/paragraphes.js",
+    "tools/structures/static/index.html",
+    "tools/structures/donnees/phrases.json",
+    "tools/structures/donnees/phrases_generees.json",
+    "tools/structures/donnees/paragraphes.json",
+    "tools/structures/donnees/paragraphes-validations.jsonl",
+    "tools/structures/donnees/validations.jsonl",
+    "tools/structures/tests/ (lus/exécutés, 56 tests)",
+    "tools/structures/.git (HEAD, status, remote)",
+    "reports/rapport-coordination-s.md",
+    "reports/rapport-etat-s.md",
+    "reports/rapport-s-paragraphes.md",
+    "reports/pensee-etat-s.json",
+    "docs/pilotage/en-cours.md",
+    "docs/pilotage/roadmap.md",
+    "docs/pilotage/chantiers.md",
+    "docs/pilotage/semaine-autonome.md",
+    "tools/llm/deepseek.py",
+    "tools/structures/llm.py",
+    "~/.config/drave/deepseek.key (taille et permissions seulement)",
+    "/proc, ss, systemctl, firewall-cmd, nft, iptables (lecture seule)"
+  ],
+  "references": [
+    "reports/rapport-coordination-s.md",
+    "reports/rapport-etat-s.md",
+    "reports/rapport-s-paragraphes.md",
+    "reports/rapport-s-fait-divers.md",
+    "reports/rapport-s-banque-partielle.md",
+    "docs/pilotage/en-cours.md",
+    "docs/pilotage/roadmap.md",
+    "tools/structures/serveur.py",
+    "tools/structures/static/app.js",
+    "tools/structures/static/paragraphes.js"
+  ]
+}
