@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**45 commits** · **1 session(s)** · **7 thème(s)**
+**46 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 7 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
-| mesures | 16 | [mesures.md](mesures.md) |
+| mesures | 17 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 358.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 358.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -74,6 +74,7 @@
 | 14:43 | `a1c45477` | ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES) |
 | 14:49 | `75dc9259` | ÉTAT — T0 VERT |
 | 14:52 | `b8248b2d` | ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE) |
+| 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) |
 
 ## Le récit de la journée (écrit à la main)
 

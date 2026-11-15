@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (16)
+## Commits du jour (17)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -24,6 +24,7 @@
 | 12:08 | `9960b37f` | SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN | `en-cours.md`, `roadmap.md`, `README.md` (+27) |
 | 13:19 | `e1a28307` | SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES | `en-cours.md`, `README.md`, `plan.md` (+5) |
 | 14:10 | `f63ad709` | BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES | `en-cours.md`, `README.md`, `distribue.md` (+13) |
+| 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 
 ## Chiffres du jour
 
@@ -33,7 +34,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 358.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 358.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

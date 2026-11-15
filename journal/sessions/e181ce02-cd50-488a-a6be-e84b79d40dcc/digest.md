@@ -65953,3 +65953,94 @@ bash tools/porte-bloc-linguistique.sh    EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py >/dev/null; python3 tools/index_reports.py --verifier; echo \"index EXIT=$?\"; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à … [608 caractères tronqués]`
+
+  ```
+index EXIT=0
+ 14 files changed, 54 insertions(+), 24 deletions(-)
+c9067a39 INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, 
+   b8248b2d..c9067a39  s/v7 -> s/v7
+   b8248b2d..c9067a39  master -> master
+index EXIT=0
+dim 15 nov 2026 15:03:48 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; git tag -l | tail -3; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|lancements|fait\" | tail -4; grep -c \"^- \" docs/pilotage/en-cou … [36 caractères tronqués]`
+
+  ```
+dim 15 nov 2026 15:04:03 EST
+HEAD c9067a39
+0
+chantier-2026-11-14
+semaine-2-2026-11-20
+semaine-2026-11-14
+  [fait    ] X1     j17 — J4 — la page / de S : la mesure du pilote
+  [fait    ] X2     j17 — J4 — l'or de rôles : le protocole pour S
+  [fait    ] X3     j17 — J5 — le tagger en lot : 1 000 phrases
+  [fait    ] Y1     j18 — J5 — le mode auto du tagger (prototype)
+68
+  ```
+
+### 🤖 Assistant
+
+⏵ Semaine 2 livrée en un jour, tout vert et poussé. Voici le bilan pour votre retour
+
+## La semaine 2 en un jour (08 h 15 → 15 h)
+
+Le plan prévoyait 5 jours ; la file du méta-harnais a tout exécuté en **9 vagues**, avec **19 commits** et le tag **`semaine-2-2026-11-20`**.
+
+| vague | résultat mesuré |
+|---|---|
+| **W1** le gold réel | **452 phrases** (20 main + 432 corpus, 242 fr / 210 en), le split **402 / H50** figé, les **10 GP/SUB** listés (184 → 194 cibles) |
+| **W2** le tagger 402/H50 | **402 : 0,9198 → 0,9643** (+4,45) ; **H50 : 0,6842 → 0,8607** (+17,65) ; F1 et attachement du 402 **inchangés** |
+| **W3** la matrice du défaut | **défaut hors ligne, code 0, 0 socket** ; clé invalide **4** ; réseau coupé **0** après 3 essais ; 1 000 phrases = **143 870 tokens** |
+| **W4** Panini | le manifeste des **26 signatures** prêt ; le rejeu **27/60** — **pas un test** (aucune p-value), les 26 signatures manquent |
+| **W5** la restitution v3 | les **5 rôles de GP se séparent** (18/18, 144/144, permutation 0/18) ; le **cadre ne suit pas** (20/46) |
+| **W6** la clôture | le rapport de semaine, les portes lues, le tag |
+| **X1** la page `/` | **369/0** (l'ancien banc) contre **359/99** (la v7) : S doit migrer |
+| **X2** l'or de rôles | le protocole + le schéma pour S (la double annotation) |
+| **X3** le tagger en lot | 1 000 items, 672 appels, **99 971 tokens**, **87,6 items/min**, **0,022 $** ; **0 $ en cache chaud** |
+| **Y1** le mode `auto` | l'API si la clé, l'heuristique sinon, **code 0 dans tous les cas** ; la décision reste à vous |
+
+## La décision du tagger (ce qui vous attend)
+
+**La recommandation, appuyée par la mesure** : **défaut hors ligne**, `--tagger` **opt-in**, et le mode `auto` (livré) comme **option** à activer — jamais par défaut. La raison décisive : le gain est réel (+4,45 sur 402) mais le **fermé baisse de 1,55** et le produit doit rester utilisable **sans clé**.
+
+## L'état
+
+`HEAD c9067a39`, `master` = `s/v7` **poussés** (0 divergence) ; les tags **`semaine-2-2026-11-20`** et `chantier-2026-11-14` ; **183/183** d'autotest ; **porte produit verte** (18 tests produit, 14+ tagger) ; toutes les portes de doc vertes ; la file du chantier à **51 tâches**.
+
+**Les bilans** : [`rapport-bilan-jour-1115.md`](reports/rapport-bilan-jour-1115.md) (la journée), [`rapport-semaine-2.md`](reports/rapport-semaine-2.md) (les 5 vagues), [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md) (la semaine 1).
+
+## Ce qui reste, et qui n'est pas à moi
+
+1. **S** : les 10 GP/SUB du gold 452, la migration de la page `/`, l'or de rôles (le protocole X2 est prêt).
+2. **Panini** : envoyer le **manifeste des 26 signatures** ([`rapport-panini-manifeste.md`](reports/rapport-panini-manifeste.md)) — c'est la balle chez eux.
+3. **Vous** : la **décision du tagger `auto`** (activer ou non), et l'envoi de la note Panini.
+
+Le système est prêt pour la suite : la file, le superviseur, la doc et les bilans sont à jour.
+
+
+## Tour 200
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié."
+Round: 7/400
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; git status --porcelain | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-c … [295 caractères tronqués]`
+
+  ```
+dim 15 nov 2026 15:04:55 EST
+HEAD c9067a39
+0
+ M tools/chantier/plan.json
+?? tools/protocole_or_roles.py
+4
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 15 h 05 HNE (clôture : le plan et le protocole or-roles com … [584 caractères tronqués]`

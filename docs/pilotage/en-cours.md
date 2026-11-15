@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 15 h 00 HNE (semaine 2 clôturée, index à jour)**
+**Mis à jour : 2026-11-15, 15 h 05 HNE (clôture : le plan et le protocole or-roles committés)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

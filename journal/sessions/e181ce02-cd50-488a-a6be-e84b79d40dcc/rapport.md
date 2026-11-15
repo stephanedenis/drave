@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 358.3 h |
-| Tours | 199 |
-| Messages | 4014 |
-| Appels d'outils | 3587 |
+| Durée | 358.4 h |
+| Tours | 200 |
+| Messages | 4019 |
+| Appels d'outils | 3590 |
 | Fichiers touchés | 25 |
-| Commandes | 2970 |
+| Commandes | 2973 |
 | Sous-agents | 43 |
-| Commits | 486 |
+| Commits | 487 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -461,6 +461,8 @@
 **Tour 198** — avance les travaus jusqu'à 9h
 
 **Tour 199** — go semaine 2, travaille en autonomie jusqu'à 16h
+
+**Tour 200** — <goal_round> Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l … [721 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10693,7 +10695,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*95 appels d'outils.* Actions notables :
+*96 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,11 +10711,50 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 59 autres
+- … et 60 autres
 
 **Synthèse produite :**
 
-⏵ Semaine 2 livrée et verte. J'écris le bilan du jour, puis je clôture à 16 h
+⏵ Semaine 2 livrée en un jour, tout vert et poussé. Voici le bilan pour votre retour
+
+\## La semaine 2 en un jour (08 h 15 → 15 h)
+
+Le plan prévoyait 5 jours ; la file du méta-harnais a tout exécuté en **9 vagues**, avec **19 commits** et le tag **`semaine-2-2026-11-20`**.
+
+| vague | résultat mesuré |
+|---|---|
+| **W1** le gold réel | **452 phrases** (20 main + 432 corpus, 242 fr / 210 en), le split **402 / H50** figé, les **10 GP/SUB** listés (184 → 194 cibles) |
+| **W2** le tagger 402/H50 | **402 : 0,9198 → 0,9643** (+4,45) ; **H50 : 0,6842 → 0,8607** (+17,65) ; F1 et attachement du 402 **inchangés** |
+| **W3** la matrice du défaut | **défaut hors ligne, code 0, 0 socket** ; clé invalide **4** ; réseau coupé **0** après 3 essais ; 1 000 phrases = **143 870 tokens** |
+| **W4** Panini | le manifeste des **26 signatures** prêt ; le rejeu **27/60** — **pas un test** (aucune p-value), les 26 signatures manquent |
+| **W5** la restitution v3 | les **5 rôles de GP se séparent** (18/18, 144/144, permutation 0/18) ; le **cadre ne suit pas** (20/46) |
+| **W6** la clôture | le rapport de semaine, les portes lues, le tag |
+| **X1** la page `/` | **369/0** (l'ancien banc) contre **359/99** (la v7) : S doit migrer |
+| **X2** l'or de rôles | le protocole + le schéma pour S (la double annotation) |
+| **X3** le tagger en lot | 1 000 items, 672 appels, **99 971 tokens**, **87,6 items/min**, **0,022 $** ; **0 $ en cache chaud** |
+| **Y1** le mode `auto` | l'API si la clé, l'heuristique sinon, **code 0 dans tous les cas** ; la décision reste à vous |
+
+\## La décision du tagger (ce qui vous attend)
+
+**La recommandation, appuyée par la mesure** : **défaut hors ligne**, `--tagger` **opt-in**, et le mode `auto` (livré) comme **option** à activer — jamais par défaut. La raison décisive : le gain est réel (+4,45 sur 402) mais le **fermé baisse de 1,55** et le produit doit rester utilisable **sans clé**.
+
+\## L'état
+
+`HEAD c9067a39`, `master` = `s/v7` **poussés** (0 divergence) ; les tags **`semaine-2-2026-11-20`** et `chantier-2026-11-14` ; **183/183** d'autotest ; **porte produit verte** (18 tests produit, 14+ tagger) ; toutes les portes de doc vertes ; la file du chantier à **51 tâches**.
+
+**Les bilans** : [`rapport-bilan-jour-1115.md`](reports/rapport-bilan-jour-1115.md) (la journée), [`rapport-semaine-2.md`](reports/rapport-semaine-2.md) (les 5 vagues), [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md) (la semaine 1).
+
+\## Ce qui reste, et qui n'est pas à moi
+
+1. **S*
+… [449 caractères tronqués]
+
+### Tour 200 — <goal_round> Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé … [1001 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Vérifier l'état du workspace
+- bash — Committer les derniers fichiers
 
 ## 3. Travail accompli
 
@@ -10835,7 +10876,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2930 autres
+- … et 2933 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11469,4 +11510,5 @@ Je commence.
 - ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
 - ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7
 - INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git p
+- CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HORODATÉ" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-80; git branch -f
 

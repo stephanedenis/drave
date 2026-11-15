@@ -590,6 +590,152 @@
      "attendu": "REVUE-0"
     }
    ]
+  },
+  {
+   "id": "W1",
+   "jour": 17,
+   "titre": "J1 — le gold réel 452 : le split 402/H50",
+   "mandat": "Tâche W1 (semaine 2, J1 matin, la part du pilote) : le gold réel 452 — **ne modifie pas le gold** (S/D). Écris `reports/rapport-gold-452.md` + JSON : (1) la composition exacte des 452 (20 hand + 432 corpus, par langue, par source) ; (2) le **split 402 / H50** proposé (50 phrases mises à l'écart, la règle déterministe du tirage, la graine) ; (3) le **sha256 avant** du gold ; (4) la **liste des 10 GP/SUB candidats à annoter** (les spans non attachés, avec leur phrase et leur cible) pour S ; (5) la constante « gold 200+ » retirée des docs. Ne touche pas `tools/tests/linguistique/gold_*.json`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-gold-452.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "W2",
+   "jour": 17,
+   "titre": "J2 — le tagger sur 402 et H50",
+   "mandat": "Tâche W2 (J2 matin) : le tagger sur le split — mesure `evaluer --tagger` sur les 402 (l'entraînement) et sur les 50 H50 (la tenue à l'écart), avec le cache chaud puis l'API ; le POS de l'heuristique et du tagger sur chaque base, le **delta**, le coût par phrase et la latence ; la règle : une règle qui ne gagne que sur H50 est **rejetée**. Fiche `reports/rapport-tagger-h50.md` + JSON. (Si W1 n'a pas encore posé le split, prends le H50 = les 50 phrases de `rapport-gold-reel-50.md`.)",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tagger-h50.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "W3",
+   "jour": 17,
+   "titre": "J2 — la décision du tagger par défaut",
+   "mandat": "Tâche W3 (J2 après-midi) : la matrice du tagger — **défaut** (sans clé, hors ligne, code 0), **avec clé**, **clé invalide**, **réseau coupé**, le coût pour 1 000 phrases, le repli ; la recommandation (défaut hors ligne, `--tagger` opt-in, un mode `auto` seulement si la clé existe et sans changer le code de sortie). Fiche `reports/rapport-tagger-defaut.md` + JSON, avec un test par cas dans `tools/tests/test_tagger_api.py`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tagger-defaut.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_tagger_api.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
+  },
+  {
+   "id": "W4",
+   "jour": 17,
+   "titre": "J3 — Panini : le manifeste et le rejeu",
+   "mandat": "Tâche W4 (J3 matin, la part du pilote) : le manifeste à envoyer à Panini — les **26 signatures manquantes** (la liste des œuvres du §334 sans signature V14), la commande exacte qu'ils doivent lancer, le format attendu ; et le **rejeu des 60 paires** du protocole (`rapport-protocole-date.md`) sur ce qui est disponible, avec le contrôle négatif. Fiche `reports/rapport-panini-manifeste.md` + JSON. **Ne modifie rien chez Panini.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-panini-manifeste.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "W5",
+   "jour": 17,
+   "titre": "J3 — la restitution v3 : les rôles des GP",
+   "mandat": "Tâche W5 (J3 après-midi) : la restitution v3 — `_role_gp` distingue **lieu / temps / destinataire / possession / complément** (des prépositions : `à` + lieu/temps/destinataire, `de` + possession, `avec` + moyen...) ; mesure la **précision et le rappel par rôle** sur le gold v2 (46) et le gold S (61/144 existants), avec le **contrôle négatif** (permuter les rôles doit tuer la mesure). Fiche `reports/rapport-restitution-v3.md` + JSON, tests. Si les rôles ne se séparent pas, écris le négatif.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-restitution-v3.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "W6",
+   "jour": 17,
+   "titre": "J5 — la clôture de la semaine 2",
+   "mandat": "Tâche W6 (J5 après-midi) : la clôture de la semaine 2 — le rapport `reports/rapport-semaine-2.md` + JSON (les chiffres avant/après de chaque vague W1-W5, les négatifs, les décisions), la mise à jour de `docs/pilotage/en-cours.md` et `semaine-2.md` (l'état par jour), le **tag annoté** `semaine-2-2026-11-20` sur le dernier commit vert, et le relevé des portes. Ne relance pas la passe complète : lis `work/portes/`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "git tag -l 'semaine-2-2026-11-20'",
+     "attendu": "semaine-2-2026-11-20"
+    },
+    {
+     "commande": "test -f reports/rapport-semaine-2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "X1",
+   "jour": 17,
+   "titre": "J4 — la page / de S : la mesure du pilote",
+   "mandat": "Tâche X1 (J4 après-midi, la part du pilote) : mesure la page `/` de S **en lecture seule** — lis les données du sous-module (`tools/structures/`) et la fiche `reports/rapport-coordination-s-v2.md` ; compare **`/` (le banc ancien : 369 candidats, 0 verdict)** et **la v7 (359 candidats, 99 verdicts)** : la couverture, les verdicts, les référents (14 occurrences / 12 formes), les 106 conservés / 41 en quarantaine. Écris `reports/rapport-page-s-mesure.md` + JSON avec le **contrôle négatif** (les deux bancs doivent différer). **Ne modifie rien dans `tools/structures/`.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-page-s-mesure.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "X2",
+   "jour": 17,
+   "titre": "J4 — l'or de rôles : le protocole pour S",
+   "mandat": "Tâche X2 (J4 matin, la part du pilote) : le protocole d'annotation de l'**or de rôles** pour S — les champs (phrase, cadre, rôles : agent/prédicat/lieu/temps/destinataire/possession/complément), la **double annotation** (deux codeurs, le kappa), les 144 rôles existants du gold S (61 phrases / 144 rôles), le **gold v2 (46)** comme base de départ, et le contrôle négatif (l'or permuté doit s'effondrer). Écris `reports/rapport-or-roles-protocole.md` + JSON + un JSON de **schéma** (`reports/schema-or-roles.json`). **Ne modifie pas le gold S.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-or-roles-protocole.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "test -f reports/schema-or-roles.json && echo SCHEMA-OK",
+     "attendu": "SCHEMA-OK"
+    }
+   ]
+  },
+  {
+   "id": "X3",
+   "jour": 17,
+   "titre": "J5 — le tagger en lot : 1 000 phrases",
+   "mandat": "Tâche X3 (J5, la part du pilote) : le tagger **en lot** — mesure le coût et la latence pour **1 000 phrases** (réelles, prises dans le gold + les 50 textes libres), le **taux de cache** (chaud/froid), le **débit** (phrases/min), la **mémoire**, et le **coût en dollars** (~0,04 $/612 → extrapoler) ; le mode `--jsonl` sur un fichier ; le **contrôle négatif** (les mêmes phrases en cache chaud ne doivent coûter 0). Fiche `reports/rapport-tagger-lot.md` + JSON.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tagger-lot.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "Y1",
+   "jour": 18,
+   "titre": "J5 — le mode auto du tagger (prototype)",
+   "mandat": "Tâche Y1 (J5, la décision du tagger) : le **prototype** du mode `auto` — `analyser --tagger auto` : si la clé existe (le fichier ou l'environnement), utiliser l'API ; sinon l'heuristique ; **sans changer le code de sortie** (0 dans les deux cas, 3 pour un refus) ; un message sur stderr qui dit lequel a servi (sans la clé, sans le secret) ; le coût affiché dans la ligne TAGGER API. Mesure : les quatre cas (clé présente/invalide/absente/clé + réseau coupé), les codes de sortie, le comportement identique au défaut sans clé ; fiche `reports/rapport-tagger-auto.md` + JSON, un test dans `tools/tests/test_tagger_api.py`, doc `docs/produit/README.md` § 3.7. **La décision reste à l'humain** : la fiche dit la recommandation, ne change pas le défaut.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tagger-auto.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_tagger_api.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
   }
  ]
 }
