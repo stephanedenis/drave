@@ -7,14 +7,14 @@
 | Identifiant | `session-10414d5d-1d81-4840-b524-e77375127547` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 03:06 |
-| Durée | 0.7 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 206 |
-| Appels d'outils | 211 |
+| Messages | 217 |
+| Appels d'outils | 221 |
 | Fichiers touchés | 0 |
-| Commandes | 197 |
+| Commandes | 207 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche B2 : les 14 atomes comme prédicteurs des 8 niveaux Drave — sur les 44 œuvres × 14 flottants (JSON plat, lecture se … [219 caractères tronqués]
 
-*211 appels d'outils.* Actions notables :
+*221 appels d'outils.* Actions notables :
 
 - bash — List repo root and recent commits
 - bash — List reports and journal directories
@@ -41,7 +41,44 @@
 - bash — Read current state header
 - bash — Inspect Panini falsification dir and signatures
 - bash — List Panini corpus files
-- … et 185 autres
+- … et 195 autres
+
+**Synthèse produite :**
+
+**B2 livré — négatif contrôlé.**
+
+\## Résultat
+
+Sur les **44 signatures** V14 de Panini, **36 œuvres** ont assez de prose pour mesurer un niveau et **28** ont une fenêtre de signature propre + ≥ 1 000 jetons (cohorte primaire). Sur ces 28 :
+
+| niveau | R²_CV atomes | p_col | ρ CV | p_ρ | R² date | p_resid |
+|---|---:|---:|---:|---:|---:|---:|
+| **POS** | **−0,092** | 0,56 | +0,176 | 0,029 (Holm 0,088) | +0,163 | **1,00** |
+| **SYNTAGMES** | **−0,160** | 0,85 | −0,013 | 0,26 | +0,058 | **0,98** |
+| **ATTACHEMENT** | **−0,092** | 0,67 | −0,047 | 0,35 | +0,049 | **0,95** |
+
+**Les 14 atomes ne prédisent pas les trois niveaux du mandat.** Le léger signal POS des **36 mesurables** (+0,102, p=0,004) tombe à **+0,010** sur 34 puis **−0,080** sur 26 : il est porté par les sources courtes et deux signatures non-propres (`2_esdras`, `isaiah_book`).
+
+Le dispositif n'est pas muet : il prédit l'**entropie des graphèmes** (+0,811, p=0,0005), la **longueur des mots** (+0,657), la **négation** (+0,440), la **part de verbes** (+0,429) et l'**entropie pragmatique** (+0,381). Mais la date explique **0,16–0,54** de ces métriques et **aucune** ne survit au contrôle de date (p_resid 0,76–1,0). Les atomes captent un **gradient de style/époque**, pas la syntaxe de surface.
+
+\## Contrôles
+
+- **2 000 permutations indépendantes des 14 colonnes** : le null de R² est ≈ −0,08 à −0,10 ; les R² observés des trois familles y sont ou en dessous.
+- **1 000 permutations de date** + régression in-sample et résidus ; variante quadratique en sensibilité.
+- **LOOCV groupée** (les deux paires de doublons restent dans le même pli), CLR de rang 13, ridge avec λ choisi dans chaque pli.
+- **Cascade de qualité** : 44 → 36 mesurables → 34 propres → 28 utilisables → 26 strictes.
+
+\## Fichiers et commits
+
+- Fiche : [`reports/rapport-atomes-prediction.md`](reports/rapport-atomes-prediction.md)
+- JSON : [`reports/atomes-prediction.json`](reports/atomes-prediction.json) · mesures : [`reports/atomes-prediction-mesures.json`](reports/atomes-prediction-mesures.json)
+- Outil : [`tools/atomes_prediction.py`](tools/atomes_prediction.py) · tests : [`tools/tests/linguistique/test_atomes_prediction.py`](tools/tests/linguistique/test_atomes_prediction.py)
+- État/roadmap/journal : `011b8b8e` (résultat), `01b6db6e` (journal).
+
+\## Vérifications
+
+`revue_documentation.py` ✅ · `porte-tableaux.sh` ✅ · `verifie_en_cours.py` ✅ · `verifie_journal.py` ✅ · `taille_documents.py` ✅ (T0 3 999/4 000, roadmap 9 000/9 000) · tests B2 + bl
+… [219 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -92,7 +129,7 @@
 - **T1** Check running analysis process
 - **T1** Word counts of 44 works
 - **T1** Find signature computation code
-- … et 157 autres
+- … et 167 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -193,4 +230,5 @@
 
 - B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT
 - JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)" 2>&1 | tail -20
+- B2 — TITRE : LE STYLE DE SURFACE EST PRÉDIT MAIS DATÉ ; POS, SYNTAGMES ET ATTACHEMENT NON" 2>&1 | tail -8
 

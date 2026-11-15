@@ -19,13 +19,21 @@ Ce que le vérificateur contrôle
    byte-identique à l'original Panini).
 2. **Sérialisation canonique** : chaque terme (défs, constantes, preuves, types)
    se décode puis se ré-encode exactement sur les mêmes octets.
-3. **Empreinte** : `sha256(octets(preuve) || octets(type))` égale l'empreinte déclarée.
-4. **Verdicts** : le noyau rend `True` pour les 36 « accepte » et `False` pour les
+3. **Type de de Bruijn** (B3) : chaque type est **clos** (aucun indice hors
+   portée) et bien formé (`[] ⊢ type : sort n`) ; chaque preuve est close elle
+   aussi. Un type valide n'est pas supposé : il est vérifié avant de servir de
+   contrat à la preuve.
+4. **Empreinte** : `sha256(octets(preuve) || octets(type))` égale l'empreinte
+   déclarée, **et** une seconde implémentation de SHA-256 (FIPS 180-4, écrite
+   ici sans `hashlib`) rejoue les 42 empreintes, le sha256 du fichier et les 24
+   termes de l'environnement. Les deux chemins doivent concorder.
+5. **Verdicts** : le noyau rend `True` pour les 36 « accepte » et `False` pour les
    6 « rejette » → 42/42 attendus.
-5. **Contrôles négatifs** : altérer un octet d'une preuve acceptée doit la faire
-   rejeter ; le contrôle est fait sur les 36 preuves acceptées et de façon
-   exhaustive sur la plus petite preuve (`eq(2,2)`, 4 octets = 1 020 mutations).
-6. **Non-trivialité** : un noyau qui accepte tout et un noyau qui rejette tout
+6. **Contrôles négatifs** : altérer un octet d'une preuve acceptée doit la faire
+   rejeter (36/36) ; altérer un octet d'un type doit le rendre invalide ou faire
+   rejeter la preuve (42/42) ; le contrôle est exhaustif sur la plus petite
+   preuve (`eq(2,2)`, 4 octets = 1 020 mutations).
+7. **Non-trivialité** : un noyau qui accepte tout et un noyau qui rejette tout
    doivent échouer (respectivement 6 et 36 désaccords) — sinon le banc ne mesure
    rien.
 
@@ -221,6 +229,145 @@ def decode_exact(hexa: str) -> tuple:
 def empreinte(preuve_hex: str, type_hex: str) -> str:
     """Empreinte du corpus : sha256(preuve || type), octets binaires."""
     return hashlib.sha256(bytes.fromhex(preuve_hex) + bytes.fromhex(type_hex)).hexdigest()
+
+
+# ---------------------------------------------------------------------------
+# Seconde implémentation de SHA-256 (FIPS 180-4), sans hashlib
+# ---------------------------------------------------------------------------
+
+# Toutes les constantes sont celles de la publication FIPS 180-4. Cette
+# implémentation est volontairement indépendante de `hashlib` : elle rejoue les
+# 42 empreintes du corpus et le sha256 du fichier, et le vérificateur compare
+# les deux chemins. Une divergence est un échec, pas un avertissement.
+_K256 = (
+    0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
+    0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
+    0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3,
+    0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
+    0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC,
+    0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
+    0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7,
+    0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967,
+    0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13,
+    0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85,
+    0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3,
+    0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070,
+    0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5,
+    0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3,
+    0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
+    0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2,
+)
+_H256 = (
+    0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
+    0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19,
+)
+_M32 = 0xFFFFFFFF
+_VECTEURS_SHA256 = (
+    (b"", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+    (b"abc", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"),
+    (b"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+     "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"),
+    (bytes(range(256)),
+     "40aff2e9d2d8922e47afd4648e6967497158785fbd1da870e7110266bf944880"),
+)
+
+
+def _rotr32(x: int, n: int) -> int:
+    return ((x >> n) | (x << (32 - n))) & _M32
+
+
+def sha256_pur(message: bytes) -> str:
+    """SHA-256 (FIPS 180-4) réécrit ici, **sans hashlib** — la seconde implémentation.
+
+    Rend l'empreinte hexadécimale (64 caractères minuscules). Le rembourrage est
+    celui de la norme : `0x80`, des zéros jusqu'à 56 octets modulo 64, puis la
+    longueur du message en bits sur 8 octets big-endian.
+    """
+    if not isinstance(message, (bytes, bytearray)):
+        raise TypeError(f"sha256_pur attend des octets, pas {type(message).__name__}")
+    data = bytearray(message)
+    longueur_bits = len(data) * 8
+    data.append(0x80)
+    while len(data) % 64 != 56:
+        data.append(0)
+    data += longueur_bits.to_bytes(8, "big", signed=False)
+
+    h = list(_H256)
+    for debut in range(0, len(data), 64):
+        w = [int.from_bytes(data[debut + 4 * i:debut + 4 * i + 4], "big")
+             for i in range(16)]
+        for i in range(16, 64):
+            x, y = w[i - 15], w[i - 2]
+            s0 = _rotr32(x, 7) ^ _rotr32(x, 18) ^ (x >> 3)
+            s1 = _rotr32(y, 17) ^ _rotr32(y, 19) ^ (y >> 10)
+            w.append((w[i - 16] + s0 + w[i - 7] + s1) & _M32)
+
+        a, b, c, d, e, f, g, hh = h
+        for i in range(64):
+            s1 = _rotr32(e, 6) ^ _rotr32(e, 11) ^ _rotr32(e, 25)
+            ch = (e & f) ^ ((~e & _M32) & g)
+            t1 = (hh + s1 + ch + _K256[i] + w[i]) & _M32
+            s0 = _rotr32(a, 2) ^ _rotr32(a, 13) ^ _rotr32(a, 22)
+            maj = (a & b) ^ (a & c) ^ (b & c)
+            t2 = (s0 + maj) & _M32
+            hh, g, f, e, d, c, b, a = g, f, e, (d + t1) & _M32, c, b, a, (t1 + t2) & _M32
+        h = [(x + y) & _M32 for x, y in zip(h, (a, b, c, d, e, f, g, hh))]
+    return "".join(f"{x:08x}" for x in h)
+
+
+def empreinte_pure(preuve_hex: str, type_hex: str) -> str:
+    """Même formule que `empreinte`, calculée par la seconde implémentation."""
+    return sha256_pur(bytes.fromhex(preuve_hex) + bytes.fromhex(type_hex))
+
+
+def autotest_sha256_pur() -> dict:
+    """Vecteurs FIPS + comparaison à `hashlib` sur des longueurs de rembourrage."""
+    ecarts = []
+    for message, attendu in _VECTEURS_SHA256:
+        obtenu = sha256_pur(message)
+        if obtenu != attendu:
+            ecarts.append({"message": message.hex(), "attendu": attendu, "obtenu": obtenu})
+    for n in (1, 55, 56, 57, 63, 64, 65, 119, 120, 127, 128, 129):
+        message = bytes((i * 37 + 11) & 0xFF for i in range(n))
+        if sha256_pur(message) != hashlib.sha256(message).hexdigest():
+            ecarts.append({"longueur": n, "raison": "divergence avec hashlib"})
+    return {
+        "implementation": "FIPS 180-4 réécrite dans ce module, sans hashlib",
+        "vecteurs": len(_VECTEURS_SHA256) + 12,
+        "ecarts": ecarts,
+        "verdict": "pass" if not ecarts else "fail",
+    }
+
+
+# ---------------------------------------------------------------------------
+# Portée des indices de de Bruijn — contrôle syntaxique indépendant du noyau
+# ---------------------------------------------------------------------------
+
+def indices_hors_portee(t: tuple, profondeur: int = 0) -> list[int]:
+    """Rend les indices de variables qui dépassent le nombre de lieurs ouverts.
+
+    Un terme clos (``[] ⊢ t``) ne doit contenir aucun `var i` avec `i >=
+    profondeur`. Le contrôle est purement structurel : il ne dépend ni du
+    noyau, ni de la conversion, ni de l'environnement.
+    """
+    tag = t[0]
+    if tag == "var":
+        return [t[1]] if t[1] >= profondeur else []
+    if tag in LIEURS:
+        return (indices_hors_portee(t[1], profondeur)
+                + indices_hors_portee(t[2], profondeur + 1))
+    if tag in ATOMES or tag in ("sort", "def", "const"):
+        return []
+    hors: list[int] = []
+    for x in t[1:]:
+        if isinstance(x, tuple):
+            hors += indices_hors_portee(x, profondeur)
+    return hors
+
+
+def est_clos(t: tuple) -> bool:
+    """Vrai si tous les indices de de Bruijn sont sous un lieur."""
+    return not indices_hors_portee(t)
 
 
 # ---------------------------------------------------------------------------
@@ -482,6 +629,22 @@ class Kernel:
             return None
         ty = self.eval(ty)
         return ty[1] if ty[0] == "sort" else None
+
+    def type_bien_forme(self, A: tuple) -> Optional[tuple]:
+        """Vérifie que `A` est un **type clos** : `[] ⊢ A : s` avec `s` un sort.
+
+        Rend le sort (`("sort", n)`) ou `None`. C'est la vérification du *type*
+        de de Bruijn, distincte de la vérification de la *preuve* : un terme
+        bien encodé n'est pas forcément un type, et un type ouvert n'a pas de
+        sens dans le contexte vide.
+        """
+        if indices_hors_portee(A):
+            return None
+        ty = self.infer((), A)
+        if ty is None:
+            return None
+        ty = self.eval(ty)
+        return ty if ty[0] == "sort" else None
 
     def infer(self, ctx: tuple, t: tuple) -> Optional[tuple]:
         key = (id(ctx), id(t))
@@ -857,13 +1020,35 @@ def rejouer(corpus: dict, defs: dict, consts: dict) -> dict:
             preuve = typ = None
             decode_ok = False
             detail_decode = str(exc)
-        obtenu = noyau.verify(preuve, typ) if decode_ok else False
+
+        # Vérification du TYPE de de Bruijn : le type doit être clos, puis
+        # `[] ⊢ type : sort n`. Ce n'est pas la même chose que vérifier la
+        # preuve contre ce type : un type ouvert ou mal typé ne doit jamais
+        # servir de contrat.
+        preuve_close = type_clos = type_bien_forme = False
+        niveau_type = None
+        if decode_ok:
+            preuve_close = est_clos(preuve)
+            hors_type = indices_hors_portee(typ)
+            type_clos = not hors_type
+            if type_clos:
+                sort_type = noyau.type_bien_forme(typ)
+                if sort_type is not None:
+                    type_bien_forme = True
+                    niveau_type = sort_type[1]
+
+        obtenu = (noyau.verify(preuve, typ)
+                  if decode_ok and type_bien_forme else False)
         duree = time.perf_counter() - t0
         attendu_bool = attendu == "accepte"
         try:
             empreinte_ok = empreinte(preuve_hex, type_hex) == e.get("empreinte")
         except ValueError:
             empreinte_ok = False
+        try:
+            empreinte_pure_ok = empreinte_pure(preuve_hex, type_hex) == e.get("empreinte")
+        except ValueError:
+            empreinte_pure_ok = False
         serial_ok = False
         if decode_ok:
             serial_ok = (serialize(preuve).hex() == preuve_hex
@@ -874,6 +1059,11 @@ def rejouer(corpus: dict, defs: dict, consts: dict) -> dict:
             "obtenu": "accepte" if obtenu else "rejette",
             "accord": decode_ok and (obtenu == attendu_bool),
             "empreinte_ok": empreinte_ok,
+            "empreinte_pure_ok": empreinte_pure_ok,
+            "preuve_close": preuve_close,
+            "type_clos": type_clos,
+            "type_bien_forme": type_bien_forme,
+            "niveau_type": niveau_type,
             "serialisation_canonique": serial_ok,
             "octets_preuve": len(preuve_hex) // 2,
             "octets_type": len(type_hex) // 2,
@@ -883,6 +1073,7 @@ def rejouer(corpus: dict, defs: dict, consts: dict) -> dict:
             resultats[-1]["erreur_decodage"] = detail_decode
     n = len(resultats)
     accord = sum(1 for r in resultats if r["accord"])
+    niveaux = sorted({r["niveau_type"] for r in resultats if r["niveau_type"] is not None})
     return {
         "verdicts": n,
         "attendus_acceptes": sum(1 for r in resultats if r["attendu"] == "accepte"),
@@ -891,7 +1082,14 @@ def rejouer(corpus: dict, defs: dict, consts: dict) -> dict:
         "desaccord": n - accord,
         "taux_accord": round(accord / n, 6) if n else 0.0,
         "empreintes_valides": sum(1 for r in resultats if r["empreinte_ok"]),
+        "empreintes_pures_valides": sum(1 for r in resultats if r["empreinte_pure_ok"]),
+        "empreintes_concordantes": sum(
+            1 for r in resultats if r["empreinte_ok"] and r["empreinte_pure_ok"]),
         "serialisations_canoniques": sum(1 for r in resultats if r["serialisation_canonique"]),
+        "preuves_closes": sum(1 for r in resultats if r["preuve_close"]),
+        "types_clos": sum(1 for r in resultats if r["type_clos"]),
+        "types_bien_formes": sum(1 for r in resultats if r["type_bien_forme"]),
+        "niveaux_types": niveaux,
         "entrees": resultats,
     }
 
@@ -912,7 +1110,7 @@ def controle_octet_altere(corpus: dict, defs: dict, consts: dict) -> dict:
     détectable par le sha256 même si, par accident, le terme restait typable.
     """
     noyau = Kernel(defs, consts)
-    mutations = acceptes = empreintes_changees = 0
+    mutations = acceptes = empreintes_changees = empreintes_pures_changees = 0
     details = []
     for e in corpus["entrees"]:
         if e.get("verdict") != "accepte":
@@ -921,7 +1119,8 @@ def controle_octet_altere(corpus: dict, defs: dict, consts: dict) -> dict:
         mutations += 1
         try:
             t = decode_exact(mut)
-            r = noyau.verify(t, decode_exact(e["type_hex"]))
+            typ = decode_exact(e["type_hex"])
+            r = noyau.type_bien_forme(typ) is not None and noyau.verify(t, typ)
         except DecodeError:
             r = False
         if r:
@@ -929,14 +1128,64 @@ def controle_octet_altere(corpus: dict, defs: dict, consts: dict) -> dict:
             details.append(e["nom"])
         if empreinte(mut, e["type_hex"]) != e.get("empreinte"):
             empreintes_changees += 1
+        if empreinte_pure(mut, e["type_hex"]) != e.get("empreinte"):
+            empreintes_pures_changees += 1
     return {
         "methode": "dernier octet de la preuve +1 (mod 256), sur chaque preuve acceptée",
         "mutations": mutations,
         "acceptes_apres_mutation": acceptes,
         "rejetes_apres_mutation": mutations - acceptes,
         "empreintes_changees": empreintes_changees,
+        "empreintes_pures_changees": empreintes_pures_changees,
         "noms_encore_acceptes": details,
-        "verdict": "pass" if acceptes == 0 and empreintes_changees == mutations else "fail",
+        "verdict": ("pass" if acceptes == 0 and empreintes_changees == mutations
+                    and empreintes_pures_changees == mutations else "fail"),
+    }
+
+
+def controle_type_altere(corpus: dict, defs: dict, consts: dict) -> dict:
+    """Altère le dernier octet de chaque TYPE et exige un rejet.
+
+    Le contrôle vérifie les deux verrous ajoutés en B3 : (a) le type muté
+    n'est plus clos ou n'est plus un type bien formé, (b) la preuve n'est plus
+    acceptée contre lui — même si elle l'était encore, l'empreinte a changé
+    sous les deux implémentations de SHA-256.
+    """
+    noyau = Kernel(defs, consts)
+    mutations = acceptes = types_invalides = 0
+    empreintes_changees = empreintes_pures_changees = 0
+    details = []
+    for e in corpus["entrees"]:
+        mut = _muter_octet(e["type_hex"], -1, 1)
+        mutations += 1
+        try:
+            typ = decode_exact(mut)
+            preuve = decode_exact(e["preuve_hex"])
+            valide = noyau.type_bien_forme(typ) is not None
+            if not valide:
+                types_invalides += 1
+            r = valide and noyau.verify(preuve, typ)
+        except DecodeError:
+            types_invalides += 1
+            r = False
+        if r:
+            acceptes += 1
+            details.append(e["nom"])
+        if empreinte(e["preuve_hex"], mut) != e.get("empreinte"):
+            empreintes_changees += 1
+        if empreinte_pure(e["preuve_hex"], mut) != e.get("empreinte"):
+            empreintes_pures_changees += 1
+    return {
+        "methode": "dernier octet du type +1 (mod 256), sur les 42 entrées",
+        "mutations": mutations,
+        "types_devenus_invalides": types_invalides,
+        "acceptes_apres_mutation": acceptes,
+        "rejetes_apres_mutation": mutations - acceptes,
+        "empreintes_changees": empreintes_changees,
+        "empreintes_pures_changees": empreintes_pures_changees,
+        "noms_encore_acceptes": details,
+        "verdict": ("pass" if acceptes == 0 and empreintes_changees == mutations
+                    and empreintes_pures_changees == mutations else "fail"),
     }
 
 
@@ -997,6 +1246,91 @@ def controle_non_trivialite(corpus: dict, defs: dict, consts: dict) -> dict:
     }
 
 
+def verifier_sha256_independant(brut: bytes, corpus: dict, defs: dict, consts: dict,
+                                sha_attendu: Optional[str] = None) -> dict:
+    """Rejoue le sha256 par la seconde implémentation et compare à `hashlib`.
+
+    Trois familles de messages : le fichier du corpus, les 42 couples
+    `preuve || type` (l'empreinte déclarée), et les 24 termes de
+    l'environnement (3 définitions + 21 constantes, sérialisés). Aucun de ces
+    calculs ne passe par `hashlib` côté seconde implémentation.
+    """
+    autotest = autotest_sha256_pur()
+    sha_hl = hashlib.sha256(brut).hexdigest()
+    sha_pur = sha256_pur(brut)
+    corpus_ok = sha_pur == sha_hl
+    if sha_attendu is not None:
+        corpus_ok = corpus_ok and sha_pur == sha_attendu
+
+    entrees_ok = entrees_declarees = 0
+    preuves_seules_ok = types_seuls_ok = 0
+    ecarts_entrees = []
+    for e in corpus["entrees"]:
+        try:
+            p = bytes.fromhex(e["preuve_hex"])
+            t = bytes.fromhex(e["type_hex"])
+        except (KeyError, ValueError, TypeError):
+            ecarts_entrees.append({"nom": e.get("nom"), "raison": "hex invalide"})
+            continue
+        couple = p + t
+        pur = sha256_pur(couple)
+        hl = hashlib.sha256(couple).hexdigest()
+        if pur == hl:
+            entrees_ok += 1
+        else:
+            ecarts_entrees.append({"nom": e.get("nom"), "raison": "sha pur ≠ hashlib"})
+        if pur == e.get("empreinte"):
+            entrees_declarees += 1
+        else:
+            ecarts_entrees.append({"nom": e.get("nom"), "raison": "sha pur ≠ empreinte déclarée"})
+        preuves_seules_ok += int(sha256_pur(p) == hashlib.sha256(p).hexdigest())
+        types_seuls_ok += int(sha256_pur(t) == hashlib.sha256(t).hexdigest())
+
+    environnement_concordants = 0
+    environnement = list(defs.items()) + list(consts.items())
+    ecarts_environnement = []
+    for nom, terme in environnement:
+        octets = serialize(terme)
+        if sha256_pur(octets) == hashlib.sha256(octets).hexdigest():
+            environnement_concordants += 1
+        else:
+            ecarts_environnement.append(nom)
+
+    verdict = "pass" if (
+        autotest["verdict"] == "pass"
+        and corpus_ok
+        and entrees_ok == len(corpus["entrees"])
+        and entrees_declarees == len(corpus["entrees"])
+        and preuves_seules_ok == len(corpus["entrees"])
+        and types_seuls_ok == len(corpus["entrees"])
+        and environnement_concordants == len(environnement)
+    ) else "fail"
+    return {
+        "implementation": "SHA-256 FIPS 180-4 réécrite dans verificateur_cic.py (sans hashlib)",
+        "autotest": autotest,
+        "corpus": {
+            "sha256_hashlib": sha_hl,
+            "sha256_pur": sha_pur,
+            "sha256_attendu": sha_attendu,
+            "concordant": corpus_ok,
+        },
+        "entrees": {
+            "total": len(corpus["entrees"]),
+            "concordantes_hashlib": entrees_ok,
+            "empreintes_declarees_ok": entrees_declarees,
+            "preuves_seules_concordantes": preuves_seules_ok,
+            "types_seuls_concordants": types_seuls_ok,
+            "ecarts": ecarts_entrees,
+        },
+        "environnement": {
+            "total": len(environnement),
+            "concordants_hashlib": environnement_concordants,
+            "ecarts": ecarts_environnement,
+        },
+        "verdict": verdict,
+    }
+
+
 # ---------------------------------------------------------------------------
 # CLI et mesure
 # ---------------------------------------------------------------------------
@@ -1033,16 +1367,20 @@ def mesurer(chemin: pathlib.Path, sha_attendu: Optional[str] = None,
             except (DecodeError, KeyError, TypeError):
                 decodage_entrees_ok = False
     rejeu = rejouer({"entrees": entrees}, defs, consts)
+    sha_independant = verifier_sha256_independant(
+        brut, {"entrees": entrees}, defs, consts, sha_attendu)
     controles_negatifs = {}
     if controles:
         controles_negatifs = {
             "octet_altere": controle_octet_altere({"entrees": entrees}, defs, consts),
+            "type_altere": controle_type_altere({"entrees": entrees}, defs, consts),
             "octet_altere_exhaustif": controle_exhaustif_petite_preuve(
                 {"entrees": entrees}, defs, consts),
             "non_trivialite": controle_non_trivialite({"entrees": entrees}, defs, consts),
         }
         negatifs_ok = (
             controles_negatifs["octet_altere"]["verdict"] == "pass"
+            and controles_negatifs["type_altere"]["verdict"] == "pass"
             and controles_negatifs["octet_altere_exhaustif"]["verdict"] == "pass"
             and all(v["verdict"] == "pass"
                     for v in controles_negatifs["non_trivialite"].values())
@@ -1056,13 +1394,20 @@ def mesurer(chemin: pathlib.Path, sha_attendu: Optional[str] = None,
     serial_ok = not bilan_serial["echecs"]
     serial_entrees_ok = rejeu["serialisations_canoniques"] == rejeu["verdicts"]
     empreintes_ok = rejeu["empreintes_valides"] == rejeu["verdicts"]
+    empreintes_pures_ok = rejeu["empreintes_pures_valides"] == rejeu["verdicts"]
+    types_bien_formes_ok = (rejeu["types_bien_formes"] == rejeu["verdicts"]
+                            and rejeu["types_clos"] == rejeu["verdicts"])
+    preuves_closes_ok = rejeu["preuves_closes"] == rejeu["verdicts"]
+    sha_independant_ok = sha_independant["verdict"] == "pass"
     rejeu_ok = rejeu["desaccord"] == 0 and rejeu["verdicts"] == 42
     global_ok = bool(sha_ok and serial_ok and serial_entrees_ok and decodage_entrees_ok
-                     and empreintes_ok and rejeu_ok and negatifs_ok)
+                     and empreintes_ok and empreintes_pures_ok
+                     and types_bien_formes_ok and preuves_closes_ok
+                     and sha_independant_ok and rejeu_ok and negatifs_ok)
 
     return {
-        "tache": "J12.2",
-        "titre": "Le corpus d'or CIC rejoué par un vérificateur indépendant côté Drave",
+        "tache": "B3",
+        "titre": "Corpus d'or CIC v2 : type de Bruijn vérifié + sha256 rejoué par une seconde implémentation",
         "date": time.strftime("%Y-%m-%d"),
         "ligne": "L / R0.7 (le bloc langue) — chantier Panini",
         "outil": "tools/verificateur_cic.py",
@@ -1094,6 +1439,17 @@ def mesurer(chemin: pathlib.Path, sha_attendu: Optional[str] = None,
             "couverture_etiquettes": f"{len(exercees)}/{len(TAGS)}",
             "independant_de_panini": True,
         },
+        "type_de_bruijn": {
+            "definition": "un type valide est clos (aucun indice hors portée) et "
+                          "[] ⊢ type : sort n ; la preuve est close elle aussi",
+            "types_totaux": rejeu["verdicts"],
+            "types_clos": rejeu["types_clos"],
+            "types_bien_formes": rejeu["types_bien_formes"],
+            "preuves_closes": rejeu["preuves_closes"],
+            "niveaux_observes": rejeu["niveaux_types"],
+            "verdict": "pass" if (types_bien_formes_ok and preuves_closes_ok) else "fail",
+        },
+        "sha256_independant": sha_independant,
         "resultat": rejeu,
         "integrite": {
             "sha256_corpus": sha_ok,
@@ -1101,6 +1457,10 @@ def mesurer(chemin: pathlib.Path, sha_attendu: Optional[str] = None,
             "serialisation_entrees": serial_entrees_ok,
             "decodage_entrees": decodage_entrees_ok,
             "empreintes": empreintes_ok,
+            "empreintes_pures": empreintes_pures_ok,
+            "type_de_bruijn": types_bien_formes_ok,
+            "preuves_closes": preuves_closes_ok,
+            "sha256_seconde_implementation": sha_independant_ok,
             "verdicts": rejeu_ok,
         },
         "controles_negatifs": controles_negatifs,
@@ -1121,16 +1481,28 @@ def _resume_humain(m: dict) -> str:
         f"Verdicts : {r['accord']}/{r['verdicts']} d’accord "
         f"({r['attendus_acceptes']} acceptés, {r['attendus_rejetes']} rejetés) "
         f"— désaccords {r['desaccord']}",
-        f"Empreintes : {r['empreintes_valides']}/{r['verdicts']} valides",
+        f"Empreintes : {r['empreintes_valides']}/{r['verdicts']} valides "
+        f"(hashlib) · {r['empreintes_pures_valides']}/{r['verdicts']} par la seconde implémentation",
+        f"Type de Bruijn : {r['types_bien_formes']}/{r['verdicts']} types clos et bien formés "
+        f"({r['preuves_closes']}/{r['verdicts']} preuves closes)",
+        f"sha256 indépendant : {m['sha256_independant']['verdict']} "
+        f"(corpus {'ok' if m['sha256_independant']['corpus']['concordant'] else 'KO'}, "
+        f"{m['sha256_independant']['entrees']['concordantes_hashlib']}/"
+        f"{m['sha256_independant']['entrees']['total']} couples, "
+        f"{m['sha256_independant']['environnement']['concordants_hashlib']}/"
+        f"{m['sha256_independant']['environnement']['total']} termes)",
         "Contrôles négatifs :",
     ]
     if "octet_altere" in m["controles_negatifs"]:
         a = m["controles_negatifs"]["octet_altere"]
+        t = m["controles_negatifs"]["type_altere"]
         e = m["controles_negatifs"]["octet_altere_exhaustif"]
         n = m["controles_negatifs"]["non_trivialite"]
         lignes += [
             f"  octet altéré (36 preuves acceptées) : {a['rejetes_apres_mutation']}/"
             f"{a['mutations']} rejetés, {a['acceptes_apres_mutation']} accepté(s) — {a['verdict']}",
+            f"  type altéré (42 entrées) : {t['rejetes_apres_mutation']}/{t['mutations']} "
+            f"rejetés, {t['types_devenus_invalides']} type(s) invalide(s) — {t['verdict']}",
             f"  exhaustif {e['preuve']} : {e['rejetes_apres_mutation']}/{e['mutations']} "
             f"rejetés, {e['acceptes_apres_mutation']} accepté(s) — {e['verdict']}",
             f"  non-trivialité : accepte-tout {n['accepte_tout']['accord']}/{r['verdicts']}, "

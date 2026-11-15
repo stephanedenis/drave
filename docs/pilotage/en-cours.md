@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 03 h 46 HNE (B2 : atomes → niveaux, négatif contrôlé)**
+**Mis à jour : 2026-11-15, 04 h 10 HNE (B3 : corpus d'or CIC v2, type de Bruijn + sha256 par deux implémentations)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -95,9 +95,8 @@
   20 G2 même tradition à 20–200 ans, 20 G3 même langue à dates décalées), **59 textes**, **26 à signer** ;
   le §334 ne fournit qu'**une** paire G1 déjà signée ; [fiche](../../reports/rapport-protocole-date.md),
   [JSON](../../reports/protocole-date.json).
-- **Panini J12.1–J12.2** : §334 **495 paires uniques** ; CIC **42/42** verdicts, **42/42** empreintes, **36/36** preuves altérées rejetées, **1 020/1 020** mutations `eq(2,2)` rejetées ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md).
+- **Panini J12.1–J12.2 + B3** : CIC **42/42** verdicts ; B3 : **42/42** types de Bruijn valides, **42/42** empreintes par **deux** implémentations, **36/36** preuves et **42/42** types altérés rejetés ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md), [JSON](../../reports/cic-verificateur-v2.json).
 - **J5.1 / J10.1 / J13.1 / J14.1 — bilans et clôture** : F1 **0,7902** (tagger **0,9475**), chantier **20/21** ; **J13.1** **612/602** ; **J14.1** clôture **84/81/3** (tag `chantier-2026-11-14`) ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [tableau](../../reports/rapport-tableau-mesures.md), [clôture](../../reports/rapport-cloture-chantier.md).
-- **J11.1–J11.4** : fr/en, 50 textes, schéma v2 ; [exemples](../../reports/rapport-exemples-rejoues.md), [langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md).
 
 ## Les chiffres de l'état
 
@@ -107,7 +106,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **740** / **834** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **741** / **835** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 

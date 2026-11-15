@@ -114,18 +114,21 @@ d'année intra-tradition survit (**R²=0,042**, p=0,0086, Holm 0,034). Le β ép
 n'est pas reproduit (**−0,006**, p=0,093). L'avertissement de Panini est **indexé à son corpus**.
 [`fiche`](../../reports/rapport-panini-334.md) + [`JSON`](../../reports/panini-334.json).
 
-**J12.2 — le corpus d'or CIC rejoué hors de Panini.** Le corpus portable de Panini
-(**3** defs, **21** consts, **42** entrées : **36** `accepte`, **6** `rejette`) est rejoué par un
-noyau **CIC-lite réécrit côté Drave**, sans importer le vérificateur de Panini : **42/42** verdicts,
-**42/42** empreintes `sha256(preuve || type)`, **42/42** sérialisations canoniques. Le contrôle
-négatif est net : altérer le dernier octet des **36** preuves acceptées les fait **36/36** rejeter,
-et les **1 020** mutations d'un octet de `eq(2,2)` sont **1 020/1 020** rejetées ; un noyau
-« accepte tout » et un noyau « rejette tout » échouent (respectivement **6** et **36** désaccords).
-La copie `tools/tests/cic/corpus_dor_cic_v1.json` est **byte-identique** à la source
-(`3018f6f4…aaec`) ; la porte `tools/porte-cic.sh` et **21** tests rejouent le tout. C'est un
-**verrou de portabilité** : « nos deux systèmes vérifient les mêmes preuves », pas une preuve de
-correction du noyau Panini (le corpus n'exerce que **20** des **39** étiquettes du format).
-[`fiche`](../../reports/rapport-cic-verificateur.md) + [`JSON`](../../reports/cic-verificateur.json).
+**J12.2 — le corpus d'or CIC rejoué hors de Panini.** Le corpus portable (**3** defs, **21**
+consts, **42** entrées : **36** `accepte`, **6** `rejette`) est rejoué par un noyau **CIC-lite
+Drave** sans importer Panini : **42/42** verdicts, **42/42** empreintes, **42/42** sérialisations.
+Altérer le dernier octet des **36** preuves les fait **36/36** rejeter ; les **1 020** mutations de
+`eq(2,2)` sont rejetées ; accepte-tout et rejette-tout échouent (**6** / **36** désaccords). Copie
+byte-identique (`3018f6f4…aaec`) ; **21** tests. **Verrou de portabilité**, pas une preuve de
+correction (20/39 étiquettes exercées). [`fiche`](../../reports/rapport-cic-verificateur.md) +
+[`JSON`](../../reports/cic-verificateur.json).
+
+**B3 — CIC v2 : le contrat et l'empreinte vérifiés deux fois.** **42/42** types de Bruijn bien
+formés (`[] ⊢ type : sort n`), **42/42** preuves closes ; sha256 rejoué par une **seconde
+implémentation** (FIPS 180-4, sans `hashlib`) sur le fichier et les **42** couples.
+Contrôles : **36/36** preuves et **42/42** types altérés rejetés, **1 020/1 020** mutations de
+`eq(2,2)`. **21 + 17 = 38** tests. [`fiche`](../../reports/rapport-cic-v2.md) +
+[`JSON`](../../reports/cic-verificateur-v2.json).
 
 **B2 — atomes et niveaux : négatif.** **28 œuvres**, POS **R²_CV −0,092**,
 syntagmes **−0,160**, attachement **−0,092** ; ρ POS (+0,176, p=0,029, Holm 0,088) ne survit pas à la

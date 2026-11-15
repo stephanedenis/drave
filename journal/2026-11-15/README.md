@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **1 session(s)** · **4 thème(s)**
+**9 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 1 | [docs.md](docs.md) |
+| docs | 2 | [docs.md](docs.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -20,7 +20,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 347.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 347.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -34,6 +34,7 @@
 | 02:27 | `f926b5bc` | C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f) |
 | 03:04 | `c37fed06` | B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE |
 | 03:48 | `011b8b8e` | B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0) |
+| 03:51 | `01b6db6e` | JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -58,4 +59,19 @@ non-propres**. Le protocole, les 2 000 permutations de colonnes et les 1 000 per
 [`reports/rapport-atomes-prediction.md`](../../reports/rapport-atomes-prediction.md) et
 [`reports/atomes-prediction.json`](../../reports/atomes-prediction.json). La suite : un gold anglais de
 niveaux et une signature recalculée sur le texte nettoyé.
+
+### B3 — le corpus CIC tient, mais le vérificateur voit plus loin
+
+J12.2 avait le **42/42** ; B3 devait fermer les trous de contrôle. Trois ajouts, une seule fixture
+inchangée. **Le type d'abord** : les 42 types de de Bruijn sont **clos** (aucun indice hors portée)
+et **bien formés** (`[] ⊢ type : sort n`, 38 en `sort 0`, 4 en `sort 1`), les 42 preuves sont closes.
+Un type ouvert ou mal typé est refusé avant de servir de contrat. **L'empreinte ensuite** : `sha256`
+est réécrit depuis **FIPS 180-4**, sans `hashlib` ; il retrouve le sha256 du fichier, les **42**
+couples `preuve || type` et les **24** termes de l'environnement, **0 écart** avec `hashlib`. **Les
+contrôles négatifs** : les **36/36** preuves altérées sont rejetées, les **42/42** types altérés
+aussi (**36** deviennent invalides, **6** restent bien formés mais la preuve ne passe plus), les
+**1 020/1 020** mutations de `eq(2,2)` sont rejetées, et un corpus corrompu (preuve ou type) sort en
+**1**. La porte `tools/porte-cic.sh` et **21 + 17 = 38** tests rejouent le tout :
+[`reports/rapport-cic-v2.md`](../../reports/rapport-cic-v2.md) et
+[`reports/cic-verificateur-v2.json`](../../reports/cic-verificateur-v2.json).
 <!-- /notes -->

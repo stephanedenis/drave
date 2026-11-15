@@ -64033,3 +64033,14 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5077", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 03:54:49 EST
+2026-11-15 02:46:21 · ▶ B1 — Panini — le protocole à date contrôlée (timeout 3600 s)
+2026-11-15 03:06:39 · ✔ B1 en 1218.0 s (code 0) — ✅ test -f reports/rapport-protocole-date.md && echo FICHE-OK
+2026-11-15 03:06:39 · ▶ B2 — Panini — les atomes et les niveaux, prédiction (timeout 3600 s)
+2
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 600; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre B2", "timeoutMs": … [9 caractères tronqués]`

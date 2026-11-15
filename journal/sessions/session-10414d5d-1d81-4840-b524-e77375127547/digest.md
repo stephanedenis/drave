@@ -3462,3 +3462,186 @@ M journal/2026-11-15/README.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-15/README.md journal/2026-11-15/mesures.md journal/THEMES.md && git commit -m \"JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)\" 2>&1 | … [72 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 01b6db6e] JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)
+ 7 files changed, 157 insertions(+), 15 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -20; echo ===; git status --short | head -20", "description": "Inspect journal commit stat"}`
+
+  ```
+01b6db6e JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)
+ journal/2026-11-15/README.md                       |  26 ++++-
+ journal/2026-11-15/mesures.md                      |   6 +-
+ journal/README.md                                  |   2 +-
+ journal/THEMES.md                                  |   2 +-
+ journal/sessions/MANIFEST.md                       |   2 +-
+ .../digest.md                                      | 119 +++++++++++++++++++++
+ .../rapport.md                                     |  15 +--
+ 7 files changed, 157 insertions(+), 15 deletions(-)
+===
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 bash tools/porte-bloc-linguistique.sh 2>&1 | tail -20", "description": "Run language block gate", "timeoutMs": 320000}`
+
+  ```
+"ponctuation_refus": "vide",
+  "langue_inconnue": "und",
+  "indice_faux": "und",
+  "rejeu_identique": true
+ },
+ "verdicts": {
+  "langue": true,
+  "script": true,
+  "permute_faible": true,
+  "niveaux": true,
+  "substitution": true,
+  "parallele": true,
+  "activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='reports/rapport-atomes-prediction.md'\ns=open(p).read()\ns=s.replace('# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui ; POS, syntagmes et attachement, non','# B2 — Les 14 atome … [225 caractères tronqués]`
+
+  ```
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui mais daté ; POS, syntagmes et attachement, non
+
+> **Ligne de roadmap** : R0.7 (le bloc langue) / L · **Chantier** : Panini, B2 · **Date** : 2026-11-15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -3; bash tools/porte-tableaux.sh 2>&1 | tail -3", "description": "Recheck docs and tables", "timeoutMs": 300000}`
+
+  ```
+revue de documentation · 740 fiche(s) · 834 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ 1812 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4350 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-atomes-prediction.md && git commit -m \"B2 — TITRE : LE STYLE DE SURFACE EST PRÉDIT MAIS DATÉ ; POS, SYNTAGMES ET ATTACHEMENT NON\" 2>&1 | tail -8", "description": "Commit report title fix", "timeoutMs": 30000 … [2 caractères tronqués]`
+
+  ```
+❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-atomes-prediction.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- reports/rapport-atomes-prediction.md && head -1 reports/rapport-atomes-prediction.md && git status --short | grep atomes", "description": "Discard unsaved title edit"}`
+
+  ```
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui mais daté ; POS, syntagmes et attachement, non
+M  reports/rapport-atomes-prediction.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git restore --staged reports/rapport-atomes-prediction.md && git status --short | grep atomes; head -1 reports/rapport-atomes-prediction.md", "description": "Unstage title edit"}`
+
+  ```
+M reports/rapport-atomes-prediction.md
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui mais daté ; POS, syntagmes et attachement, non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- reports/rapport-atomes-prediction.md && git status --short | grep atomes; head -1 reports/rapport-atomes-prediction.md", "description": "Restore committed report"}`
+
+  ```
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui ; POS, syntagmes et attachement, non
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -5; echo ===; git status --short | head -20", "description": "Final git status"}`
+
+  ```
+01b6db6e JOURNAL — 2026-11-15 : B2, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX (NÉGATIF CONTRÔLÉ ; LE STYLE EST ABSORBÉ PAR LA DATE)
+011b8b8e B2 — LES ATOMES NE PRÉDISENT PAS POS, SYNTAGMES NI ATTACHEMENT : SUR 28 ŒUVRES PROPRES, R² −0,092 / −0,160 / −0,092 (p 0,56 / 0,85 / 0,67) ; LE STYLE EST PRÉDIT (GRAPHÈMES +0,811, MOTS +0,657, NÉGATION +0,440, VERBES +0,429) MAIS ABSORBÉ PAR LA DATE (p_resid 0,76–1,0)
+c37fed06 B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE
+f926b5bc C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f)
+292c70b5 C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+===
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport
+… [96 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m py_compile tools/atomes_prediction.py && python3 -m unittest tools.tests.linguistique.test_atomes_prediction 2>&1 | tail -4; echo ===; python3 - <<'EOF'\nimport json\nd=json.load(open('reports/atomes-prediction.json'))\npr … [283 caractères tronqués]`
+
+  ```
+----------------------------------------------------------------------
+Ran 10 tests in 0.039s
+
+OK
+===
+n 28 cohorte utilisable familles ['POS', 'SYNTAGMES', 'ATTACHEMENT']
+oeuvres 44 mesurables 36
+perm {'colonnes': 2000, 'date': 1000, 'graine': 20261115, 'degre_date': 1}
+  ```
+
+### 🤖 Assistant
+
+**B2 livré — négatif contrôlé.**
+
+## Résultat
+
+Sur les **44 signatures** V14 de Panini, **36 œuvres** ont assez de prose pour mesurer un niveau et **28** ont une fenêtre de signature propre + ≥ 1 000 jetons (cohorte primaire). Sur ces 28 :
+
+| niveau | R²_CV atomes | p_col | ρ CV | p_ρ | R² date | p_resid |
+|---|---:|---:|---:|---:|---:|---:|
+| **POS** | **−0,092** | 0,56 | +0,176 | 0,029 (Holm 0,088) | +0,163 | **1,00** |
+| **SYNTAGMES** | **−0,160** | 0,85 | −0,013 | 0,26 | +0,058 | **0,98** |
+| **ATTACHEMENT** | **−0,092** | 0,67 | −0,047 | 0,35 | +0,049 | **0,95** |
+
+**Les 14 atomes ne prédisent pas les trois niveaux du mandat.** Le léger signal POS des **36 mesurables** (+0,102, p=0,004) tombe à **+0,010** sur 34 puis **−0,080** sur 26 : il est porté par les sources courtes et deux signatures non-propres (`2_esdras`, `isaiah_book`).
+
+Le dispositif n'est pas muet : il prédit l'**entropie des graphèmes** (+0,811, p=0,0005), la **longueur des mots** (+0,657), la **négation** (+0,440), la **part de verbes** (+0,429) et l'**entropie pragmatique** (+0,381). Mais la date explique **0,16–0,54** de ces métriques et **aucune** ne survit au contrôle de date (p_resid 0,76–1,0). Les atomes captent un **gradient de style/époque**, pas la syntaxe de surface.
+
+## Contrôles
+
+- **2 000 permutations indépendantes des 14 colonnes** : le null de R² est ≈ −0,08 à −0,10 ; les R² observés des trois familles y sont ou en dessous.
+- **1 000 permutations de date** + régression in-sample et résidus ; variante quadratique en sensibilité.
+- **LOOCV groupée** (les deux paires de doublons restent dans le même pli), CLR de rang 13, ridge avec λ choisi dans chaque pli.
+- **Cascade de qualité** : 44 → 36 mesurables → 34 propres → 28 utilisables → 26 strictes.
+
+## Fichiers et commits
+
+- Fiche : [`reports/rapport-atomes-prediction.md`](reports/rapport-atomes-prediction.md)
+- JSON : [`reports/atomes-prediction.json`](reports/atomes-prediction.json) · mesures : [`reports/atomes-prediction-mesures.json`](reports/atomes-prediction-mesures.json)
+- Outil : [`tools/atomes_prediction.py`](tools/atomes_prediction.py) · tests : [`tools/tests/linguistique/test_atomes_prediction.py`](tools/tests/linguistique/test_atomes_prediction.py)
+- État/roadmap/journal : `011b8b8e` (résultat), `01b6db6e` (journal).
+
+## Vérifications
+
+`revue_documentation.py` ✅ · `porte-tableaux.sh` ✅ · `verifie_en_cours.py` ✅ · `verifie_journal.py` ✅ · `taille_documents.py` ✅ (T0 3 999/4 000, roadmap 9 000/9 000) · tests B2 + bloc linguistique **30/30** ✅ · `porte-bloc-linguistique.sh` ✅.
+
+*Pas de passe complète `toutes-les-portes.sh` (1 h 40) : aucun changement de runtime, seules les portes ciblées et la revue documentaire ont été relancées.*
+

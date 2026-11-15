@@ -12,14 +12,20 @@ Le fichier `manifeste.json` porte les empreintes de la source, du TSV et de la c
 La copie existe pour que le vérificateur Drave soit **portable** : il n'a pas besoin
 du dépôt Panini pour rejouer les 42 verdicts.
 
+Depuis B3, le vérificateur contrôle aussi que chaque **type de de Bruijn** est clos
+et bien formé (`[] ⊢ type : sort n`), et il rejoue le **sha256** par une seconde
+implémentation (FIPS 180-4, sans `hashlib`).
+
 ## Ce qu'il faut lancer
 
 ```bash
-python3 tools/verificateur_cic.py --json     # mesure machine
-python3 tools/verificateur_cic.py --verbeux  # une ligne par entrée
-bash tools/porte-cic.sh                      # la porte : 42/42 + contrôles négatifs
-python3 tools/tests/test_verificateur_cic.py # 21 tests
+python3 tools/verificateur_cic.py --json          # mesure machine
+python3 tools/verificateur_cic.py --verbeux       # une ligne par entrée
+bash tools/porte-cic.sh                           # la porte : 42/42 + contrôles B3
+python3 tools/tests/test_verificateur_cic.py      # 21 tests J12.2
+python3 tools/tests/test_verificateur_cic_v2.py   # 17 tests B3
 ```
 
 Le vérificateur **ne modifie jamais** ce fichier. Toute altération d'un octet est
-détectée par l'empreinte `sha256(preuve || type)` et/ou par le noyau.
+détectée par l'empreinte `sha256(preuve || type)` (deux implémentations) et/ou par
+le noyau et la vérification du type.
