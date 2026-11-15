@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 330.8 h |
-| Tours | 196 |
-| Messages | 3770 |
-| Appels d'outils | 3359 |
+| Durée | 344.9 h |
+| Tours | 198 |
+| Messages | 3786 |
+| Appels d'outils | 3373 |
 | Fichiers touchés | 25 |
-| Commandes | 2796 |
+| Commandes | 2807 |
 | Sous-agents | 43 |
-| Commits | 452 |
+| Commits | 453 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -57,6 +57,8 @@
 … [261 caractères tronqués]
 - **create** — Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des
 … [408 caractères tronqués]
+- **edit** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
+… [252 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -451,6 +453,10 @@
 **Tour 195** — ok, vulgarise-moi les points de décision à prendre (je reviens de vacances :-) ) et on tranche ici si possible
 
 **Tour 196** — 1A, 2A, 3B, 4A, 5A, 6A puis c et B
+
+**Tour 197** — ensuite?
+
+**Tour 198** — avance les travaus jusqu'à 9h
 
 ## 2. Déroulé, étape par étape
 
@@ -10563,7 +10569,82 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 
 **Synthèse produite :**
 
-⏵ Pendant que le tagger se construit : la note pour Panini (décision 4A)
+⏵ Les six décisions sont exécutées — voici ce qui a changé, en clair
+
+\## 1A — Le tagger est livré, en option
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger     # POS par l'API
+python3 tools/drave.py evaluer --tagger                      # heuristique + API + écart
+```
+Le défaut **ne change pas** : hors ligne, CPU, déterministe. Sans clé → code 4, message clair, rien qui fuit. Deuxième analyse : **0 appel** (cache).
+
+**Ce que ça vaut vraiment** (et le sous-agent a été honnête) : **+8,49 pts** sur les 612 phrases du gold, mais **+4,67 seulement sur les 432 phrases réelles** — les 20 phrases « main » donnent +8,57 et sont les plus faciles. Le coût : **~0,04 $** pour tout le corpus, **2 appels par phrase** (on peut descendre à 1). La ponctuation n'est plus étiquetée avec l'option (`PONCT` disparaît). **14 tests** (aucun réseau), 18 tests produit, porte verte.
+
+\## 3B — Les 11 verdicts humains sont sauvés
+
+Commit `389b99f` dans le sous-module + le pointeur avancé : **19/19 candidats jugés, 11 acceptés, 8 exclus**. Un clone voit maintenant les 19 (il en voyait 8).
+
+\## 2A, 4A, 5A — Inscrits et documentés
+
+- **2A** : `g017` déclaré **inatteignable** (la règle coûtait 2 autres phrases) — 1 span documenté, 238/239 cibles.
+- **4A** : la **[note pour Panini](reports/note-panini-334.md)** est prête à envoyer : leur loi H0 est reproduite (R² 0,909), leur β époque +0,138 ne l'est pas (−0,006), et **la collinéarité de leur corpus explique l'écart** (28,7 ans d'écart intra-tradition vs 1 189 inter) — avec une proposition de protocole commun.
+- **5A** : A6.2 repoussé, la ligne est notée.
+
+\## 6A → C → B — L'ordre est en place
+
+Le produit (6A) a reçu le tagger ; la restitution v1 et la robustesse des 50 textes étaient déjà livrées. La suite : la **coordination** (C : S, A, N2, R — les fiches existent, les actions sont chez eux), puis **Panini** (B : le corpus à date contrôlée, les 44 œuvres).
+
+\## L'état
+
+`HEAD 34c0fb0b`, `master` = `s/v7` **poussés** (0 divergence), les tags `chantier-2026-11-14` et `semaine-2026-11-14` ; **183/183** d'autotest, porte produit verte, doc à jour.
+
+**Une seule chose vous revient** : **envoyer la note à Panini** — je ne peux pas la poster à votre place. Le reste est dans le dépôt et attend vos prochaines décisions (ou votre feu vert pour relancer le méta-harnais sur la coordination puis Panini).
+
+### Tour 197 — ensuite?
+
+**Synthèse produite :**
+
+⏵ Ensuite ? Voici les trois chantiers qui restent, et je commence par le plus utile
+
+\## Ce qui reste, par valeur
+
+**1. La base honnête (le plus utile).** Nos chiffres publiés (F1 **79,02 %**, POS 86,25 %) sont mesurés sur 612 phrases dont **160 sont synthétiques** — faciles. Le gold **réel** (432 phrases) donne des chiffres plus bas (le tagger n'y gagne que **+4,67** au lieu de +8,49). Aujourd'hui la CLI ne sait pas séparer les deux : quelqu'un qui lit « 79 % » croit que c'est sur du vrai. **Correctif** : `evaluer --reel` (les 432 seules) et le chiffre réel publié à côté du chiffre global.
+
+**2. Les deux défauts du tagger (petits, réels).**
+- L'option **perd la ponctuation** (`PONCT` disparaît du POS) — à corriger.
+- Elle fait **2 appels par phrase** alors qu'un seul suffit (~0,02 $ au lieu de 0,04) — à mesurer et corriger.
+
+**3. C puis B (l'ordre que vous avez fixé).**
+- **C — la coordination** : les fiches S/A/N2/R sont livrées ; les actions appartiennent à leurs sessions (les 11 verdicts sont committés, A6.2 est repoussé, N2 attend `--rope --canal-dir`, R attend le split réel).
+- **B — Panini** : le protocole à date contrôlée (60 paires) — c'est le vrai travail de fond, mais il dépend de leur réponse à la note.
+
+\## Ce que je fais tout de suite
+
+Le **1** : `evaluer --reel`, le chiffre réel dans la sortie, la doc et un test. C'est 30-45 min, ça ne casse rien, et ça rend toutes nos annonces vérifiables.
+
+Puis le **2**, puis je relance le méta-harnais sur **C** (les suites de coordination) et **B** (le corpus Panini) — si vous me laissez la main.
+
+Je commence.
+
+### Tour 198 — avance les travaus jusqu'à 9h
+
+*14 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Ancrer l'état et voir la structure du gold
+- get_goal
+- update_goal
+- bash — Voir les sources et cmd_evaluer
+- bash — Lire cmd_evaluer
+- bash — Implémenter --reel
+- bash — Voir le parseur d'evaluer
+- bash — Tester --reel
+- bash — Voir le formateur
+- bash — Afficher la base réelle
+- bash — Tests de la base réelle
+- bash — Fiche de la base réelle
+- bash — Committer la base réelle
 
 ## 3. Travail accompli
 
@@ -10685,7 +10766,7 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2756 autres
+- … et 2767 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11285,4 +11366,5 @@ Je reste en veille sur la boucle : je vérifie chaque livraison, je corrig
 - DOC PRODUIT — LE TAGGER EN OPTION DOCUMENTÉ (CACHE CHAUD, COÛT, LIEN DE LA FICHE) ; § 3.7 COMPLET" -- docs/produit/README.md 2>&1 | tail -1   if git log -1 --fo
 - INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS)" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%
 - INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS) ; ÉTAT HORODATÉ" -- reports/INDEX.md docs/pilotage/en-cours.md 2>&1 | tail -1   if git lo
+- 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 2
 

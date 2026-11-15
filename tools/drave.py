@@ -456,6 +456,10 @@ def _formater_evaluation(rapport: dict) -> str:
         f"(P {_pct(tete['precision'])} / R {_pct(tete['rappel'])})",
         f"  vue linéaire (partition filtrer) F1 {_pct(rapport['syntagmes_lineaire']['f1'])}  "
         f"· attachement {_pct(rapport['attachement_lineaire']['couverture'])} de couverture",
+        (f"BASE RÉELLE (hand + reel, {rapport['reel']['phrases']} phrases)  "
+         f"POS {_pct(rapport['reel']['pos'])} · F1 {_pct(rapport['reel']['f1'])} "
+         f"· attachement {_pct(rapport['reel']['couverture'])}"
+         if rapport.get("reel") else f"BASE RÉELLE — (déjà la base, ou gold gelé)"),
         f"ATTACHEMENT exact {_pct(att['exact_taux'])} · couverture {_pct(att['couverture'])} "
         f"· exact sur span {_pct(att['exact_taux_span'])} · top-k {_pct(att['topk_taux'])}",
         f"  tête      couverture {_pct(att_tete['couverture'])} "
@@ -518,6 +522,9 @@ def _formater_evaluation(rapport: dict) -> str:
 def cmd_evaluer(args: argparse.Namespace) -> int:
     evaluateur = _module_evaluation()
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+    if getattr(args, "reel", False):
+        # la **base honnête** : les phrases réelles (main + corpus), sans le synthétique
+        phrases = [p for p in phrases if p.get("source") in ("hand", "reel")]
     cascade = None
     stats = None
     if getattr(args, "tagger", False):
@@ -529,17 +536,31 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
     mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
     # transparence : la vue **fidèle** (défaut) et la vue **linéaire** (partition filtrer)
     _lineaire = evaluateur.evaluer_bloc("lineaire", bl.Heuristique(partition="filtrer"), phrases)
+    # la **base honnête**, publiée à côté du global (les 160 synthétiques sont faciles)
+    _reel = None
+    if not getattr(args, "reel", False) and not args.gold:
+        _phrases_reelles = [p for p in evaluateur.charger() if p.get("source") in ("hand", "reel")]
+        if _phrases_reelles and len(_phrases_reelles) < len(phrases):
+            _reel = evaluateur.evaluer_bloc("reel", bl.Heuristique(), _phrases_reelles)
     hasard = _controle_hasard(phrases)
     rapport = {
         "version": VERSION,
         "gold": {
-            "nom": "gelé (référence figée)" if args.gold else "vivant (hand + reel + synthétique)",
+            "nom": ("gelé (référence figée)" if args.gold
+                    else "réel (hand + reel, sans synthétique)" if getattr(args, "reel", False)
+                    else "vivant (hand + reel + synthétique)"),
             "gele": bool(args.gold),
             "phrases": len(phrases),
             "tokens": mesure["pos"]["tokens"],
             "cibles_attachement": mesure["attachement"]["cibles"],
         },
         "heuristique": mesure,
+        "reel": ({"phrases": len(_phrases_reelles),
+                  "pos": _reel["pos"]["exactitude"],
+                  "f1": _reel["syntagme"]["f1"],
+                  "attachement": _reel["attachement"]["exact"],
+                  "couverture": _reel["attachement"]["couverture"]}
+                 if _reel else None),
         "syntagmes_lineaire": _lineaire["syntagme"],
         "attachement_lineaire": {"exact": _lineaire["attachement"]["exact"],
                                  "labels": _lineaire["attachement"]["labels"],
@@ -790,6 +811,8 @@ def construire_parseur() -> argparse.ArgumentParser:
     )
     evaluer.add_argument("--gold", action="store_true",
                          help="mesurer le gold gelé (référence figée) au lieu du gold vivant")
+    evaluer.add_argument("--reel", action="store_true",
+                         help="mesurer la base honnête : les phrases réelles (hand + reel), sans synthétique")
     evaluer.add_argument("--par-langue", action="store_true",
                          help="scinder la mesure en français et en anglais")
     evaluer.add_argument("--tagger", action="store_true",

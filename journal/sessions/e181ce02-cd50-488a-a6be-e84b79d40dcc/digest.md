@@ -62928,3 +62928,274 @@ sam 14 nov 2026 11:28:57 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-14, 11 h 32 HNE (index régénéré, décisions 1A-6A inscrites)**\\ … [705 caractères tronqués]`
+
+  ```
+état modifié
+  ✅ état court, structuré, multi-session et reprenable
+ 8 files changed, 62 insertions(+), 14 deletions(-)
+COMMIT OK 1
+34c0fb0b INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS) ; ÉTAT HORODATÉ
+   5b03a0dd..34c0fb0b  s/v7 -> s/v7
+   5b03a0dd..34c0fb0b  master -> master
+sam 14 nov 2026 11:31:34 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les six décisions sont exécutées — voici ce qui a changé, en clair
+
+## 1A — Le tagger est livré, en option
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger     # POS par l'API
+python3 tools/drave.py evaluer --tagger                      # heuristique + API + écart
+```
+Le défaut **ne change pas** : hors ligne, CPU, déterministe. Sans clé → code 4, message clair, rien qui fuit. Deuxième analyse : **0 appel** (cache).
+
+**Ce que ça vaut vraiment** (et le sous-agent a été honnête) : **+8,49 pts** sur les 612 phrases du gold, mais **+4,67 seulement sur les 432 phrases réelles** — les 20 phrases « main » donnent +8,57 et sont les plus faciles. Le coût : **~0,04 $** pour tout le corpus, **2 appels par phrase** (on peut descendre à 1). La ponctuation n'est plus étiquetée avec l'option (`PONCT` disparaît). **14 tests** (aucun réseau), 18 tests produit, porte verte.
+
+## 3B — Les 11 verdicts humains sont sauvés
+
+Commit `389b99f` dans le sous-module + le pointeur avancé : **19/19 candidats jugés, 11 acceptés, 8 exclus**. Un clone voit maintenant les 19 (il en voyait 8).
+
+## 2A, 4A, 5A — Inscrits et documentés
+
+- **2A** : `g017` déclaré **inatteignable** (la règle coûtait 2 autres phrases) — 1 span documenté, 238/239 cibles.
+- **4A** : la **[note pour Panini](reports/note-panini-334.md)** est prête à envoyer : leur loi H0 est reproduite (R² 0,909), leur β époque +0,138 ne l'est pas (−0,006), et **la collinéarité de leur corpus explique l'écart** (28,7 ans d'écart intra-tradition vs 1 189 inter) — avec une proposition de protocole commun.
+- **5A** : A6.2 repoussé, la ligne est notée.
+
+## 6A → C → B — L'ordre est en place
+
+Le produit (6A) a reçu le tagger ; la restitution v1 et la robustesse des 50 textes étaient déjà livrées. La suite : la **coordination** (C : S, A, N2, R — les fiches existent, les actions sont chez eux), puis **Panini** (B : le corpus à date contrôlée, les 44 œuvres).
+
+## L'état
+
+`HEAD 34c0fb0b`, `master` = `s/v7` **poussés** (0 divergence), les tags `chantier-2026-11-14` et `semaine-2026-11-14` ; **183/183** d'autotest, porte produit verte, doc à jour.
+
+**Une seule chose vous revient** : **envoyer la note à Panini** — je ne peux pas la poster à votre place. Le reste est dans le dépôt et attend vos prochaines décisions (ou votre feu vert pour relancer le méta-harnais sur la coordination puis Panini).
+
+
+## Tour 197
+
+### 👤 Utilisateur
+
+ensuite?
+
+### 🤖 Assistant
+
+⏵ Ensuite ? Voici les trois chantiers qui restent, et je commence par le plus utile
+
+## Ce qui reste, par valeur
+
+**1. La base honnête (le plus utile).** Nos chiffres publiés (F1 **79,02 %**, POS 86,25 %) sont mesurés sur 612 phrases dont **160 sont synthétiques** — faciles. Le gold **réel** (432 phrases) donne des chiffres plus bas (le tagger n'y gagne que **+4,67** au lieu de +8,49). Aujourd'hui la CLI ne sait pas séparer les deux : quelqu'un qui lit « 79 % » croit que c'est sur du vrai. **Correctif** : `evaluer --reel` (les 432 seules) et le chiffre réel publié à côté du chiffre global.
+
+**2. Les deux défauts du tagger (petits, réels).**
+- L'option **perd la ponctuation** (`PONCT` disparaît du POS) — à corriger.
+- Elle fait **2 appels par phrase** alors qu'un seul suffit (~0,02 $ au lieu de 0,04) — à mesurer et corriger.
+
+**3. C puis B (l'ordre que vous avez fixé).**
+- **C — la coordination** : les fiches S/A/N2/R sont livrées ; les actions appartiennent à leurs sessions (les 11 verdicts sont committés, A6.2 est repoussé, N2 attend `--rope --canal-dir`, R attend le split réel).
+- **B — Panini** : le protocole à date contrôlée (60 paires) — c'est le vrai travail de fond, mais il dépend de leur réponse à la note.
+
+## Ce que je fais tout de suite
+
+Le **1** : `evaluer --reel`, le chiffre réel dans la sortie, la doc et un test. C'est 30-45 min, ça ne casse rien, et ça rend toutes nos annonces vérifiables.
+
+Puis le **2**, puis je relance le méta-harnais sur **C** (les suites de coordination) et **B** (le corpus Panini) — si vous me laissez la main.
+
+Je commence.
+
+
+## Tour 198
+
+### 👤 Utilisateur
+
+avance les travaus jusqu'à 9h
+
+- **create_goal** `{"max_goal_rounds": 300, "objective": "Autonomie du 2026-11-14 11 h 35 → 2026-11-15 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini), en priorité la base honnête (évaluer sur le gold réel 432, pas seulement le 612), les deux défauts du tagger (PO … [392 caractères tronqués]`
+
+  ```
+Error: goal "goal-528eabc2-254d-4a2a-91fc-c931edc44638" already exists with phase "active"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='%h %s' | cut -c1-80; grep -n \"source\" tools/tests/linguistique/evaluer_gold.py | head -5 | cut -c1-120; grep -n \"def charger\" -A 8 tools/tests/linguistique/evaluer_gold.py | head -12", "description": "A … [43 caractères tronqués]`
+
+  ```
+dim 15 nov 2026 01:29:14 EST
+34c0fb0b INDEX — RÉGÉNÉRÉ APRÈS LE TAGGER (LA FICHE 20/612, LE COÛT, LES TESTS) 
+29:        p["source"] = "hand"
+31:        p["source"] = "reel"
+47:def par_source(phrases: list[dict], source: str) -> list[dict]:
+48:    return [p for p in phrases if p.get("source") == source]
+235:    sources = {"all": phrases,
+24:def charger() -> list[dict]:
+25-    hand = json.loads(GOLD.read_text(encoding="utf-8"))["phrases"]
+26-    reel = json.loads(REEL.read_text(encoding="utf-8"))["phrases"]
+27-    synth = json.loads(SYNTH.read_text(encoding="utf-8"))["phrases"]
+28-    for p in hand:
+29-        p["source"] = "hand"
+30-    for p in reel:
+31-        p["source"] = "reel"
+32-    return hand + reel + synth
+--
+38:def charger_gele() -> list[dict]:
+39-    """Le gold **gelé** : une copie figée pour les portes à nombre absolu.
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":1,"objective":"Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des syntagmes sans dédupliquer, puis R4/copule et les classes fermées anglaises ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié. Le produit `drave` (CLI, contrat, porte) reste la priorité : un système utilisable en autonomie.","phase":"active","roundsStarted":6,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "edit", "goal_id": "goal-528eabc2-254d-4a2a-91fc-c931edc44638", "objective": "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), le … [358 caractères tronqués]`
+
+> **Objectif** (edit) : Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.
+
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":2,"objective":"Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":6,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '230,245p' tools/tests/linguistique/evaluer_gold.py; grep -n \"def cmd_evaluer\" -A 12 tools/drave.py | head -14", "description": "Voir les sources et cmd_evaluer"}`
+
+  ```
+phrases = charger()
+    h, n = bl.Heuristique(), bl.MockNeuronal()
+    cascade = bl.Cascade(h, n)
+    blocs = {"heuristique": h, "mock_neuronal": n,
+             "parallele": bl.Parallele([h, n]), "cascade": cascade}
+    sources = {"all": phrases,
+               "reel": [p for p in phrases if p["source"] in ("hand", "reel")],
+               "hand": par_source(phrases, "hand"),
+               "reel_new": par_source(phrases, "reel"),
+               "synthetique": par_source(phrases, "synthetique")}
+    resultats = {nom: {src: evaluer_bloc(nom, bloc, ps) for src, ps in sources.items()}
+                 for nom, bloc in blocs.items()}
+    resultats["cascade"]["appels_neuronal"] = cascade.appels_neuronal
+    reel = {"statut": "non demandé"}
+    if args.reel:
+        try:
+518:def cmd_evaluer(args: argparse.Namespace) -> int:
+519-    evaluateur = _module_evaluation()
+520-    phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+521-    cascade = None
+522-    stats = None
+523-    if getattr(args, "tagger", False):
+524-        try:
+525-            cascade, stats = _construire_tagger()
+526-        except CleTaggerAbsente as exc:
+527-            print(f"{NOM}: dépendance 
+… [237 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '518,545p' tools/drave.py", "description": "Lire cmd_evaluer"}`
+
+  ```
+def cmd_evaluer(args: argparse.Namespace) -> int:
+    evaluateur = _module_evaluation()
+    phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
+    cascade = None
+    stats = None
+    if getattr(args, "tagger", False):
+        try:
+            cascade, stats = _construire_tagger()
+        except CleTaggerAbsente as exc:
+            print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+            return 4
+    mesure = evaluateur.evaluer_bloc("heuristique", bl.Heuristique(), phrases)
+    # transparence : la vue **fidèle** (défaut) et la vue **linéaire** (partition filtrer)
+    _lineaire = evaluateur.evaluer_bloc("lineaire", bl.Heuristique(partition="filtrer"), phrases)
+    hasard = _controle_hasard(phrases)
+    rapport = {
+        "version": VERSION,
+        "gold": {
+            "nom": "gelé (référence figée)" if args.gold else "vivant (hand + reel + synthétique)",
+            "gele": bool(args.gold),
+            "phrases": len(phrases),
+            "tokens": mesure["pos"]["tokens"],
+            "cibles_attachement": mesure["attachement"]["cibles"],
+        },
+        "heuristique": mesure,
+        "syntagmes_lineaire": _lineaire["syntagme"],
+        "
+… [146 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) --reel : restreindre aux phrases non synthétiques\nt=t.replace('''    phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger( … [2041 caractères tronqués]`
+
+  ```
+--reel et la ligne réelle
+syntaxe OK
+usage: drave [-h] [-V] {analyser,evaluer,rejouer,restituer} ...
+drave: erreur d'usage : unrecognized arguments: --reel
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"evaluer.add_argument\\|evaluer = sous.add_parser\" tools/drave.py | head -6; sed -n \"$(grep -n 'evaluer.add_argument(\"--gold\"' tools/drave.py | cut -d: -f1),+3p\" tools/drave.py", "description": "Voir le parseur d'evalue … [3 caractères tronqués]`
+
+  ```
+796:    evaluer = sous.add_parser(
+808:    evaluer.add_argument("--gold", action="store_true",
+810:    evaluer.add_argument("--par-langue", action="store_true",
+812:    evaluer.add_argument("--tagger", action="store_true",
+814:    evaluer.add_argument("--json", action="store_true",
+    evaluer.add_argument("--gold", action="store_true",
+                         help="mesurer le gold gelé (référence figée) au lieu du gold vivant")
+    evaluer.add_argument("--par-langue", action="store_true",
+                         help="scinder la mesure en français et en anglais")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''    evaluer.add_argument(\"--par-langue\", action=\"store_true\",\n                         help=\"scinder la mesure en français et e … [716 caractères tronqués]`
+
+  ```
+--reel ajouté
+syntaxe OK
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold réel (hand + reel, sans synthétique) · 452 phrases · 2480 tokens · 184 cibles d'attachement
+
+POS         exactitude 88.91 %  (fermé 92.94 %, ouvert 84.66 %)
+SYNTAGMES   F1 79.06 %  (P 81.28 % / R 76.95 %)
+  tête      F1 89.90 %  (P 93.84 % / R 86.28 %)
+  vue linéaire (partition filtrer) F1 79.53 %  · attachement 91.85 % de couverture
+ATTACHEMENT exact 99.46 % · couverture 99.46 % · exact sur span 100.00 % · top-k 98.91 %
+=== global (la ligne réelle) :
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+  tête      F1 90.29 %  (P 92.61 % / R 88.08 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"vue linéaire (partition filtrer)\" tools/drave.py | head -1; sed -n \"$(grep -n 'vue linéaire (partition filtrer)' tools/drave.py | head -1 | cut -d: -f1),+2p\" tools/drave.py", "description": "Voir le formateur"}`
+
+  ```
+457:        f"  vue linéaire (partition filtrer) F1 {_pct(rapport['syntagmes_lineaire']['f1'])}  "
+        f"  vue linéaire (partition filtrer) F1 {_pct(rapport['syntagmes_lineaire']['f1'])}  "
+        f"· attachement {_pct(rapport['attachement_lineaire']['couverture'])} de couverture",
+        f"ATTACHEMENT exact {_pct(att['exact_taux'])} · couverture {_pct(att['couverture'])} "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''        f\"ATTACHEMENT exact {_pct(att['exact_taux'])} · couverture {_pct(att['couverture'])} \"''',\n'''        (f\"BASE RÉELLE (han … [685 caractères tronqués]`
+
+  ```
+ligne BASE RÉELLE
+syntaxe OK
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+BASE RÉELLE (hand + reel, 452 phrases)  POS 88.91 % · F1 79.06 % · attachement 99.46 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestBaseReelle(unittest.TestCase):\n    \"\"\"La base honnête : `--reel` mesure les phrases réelles, sans le synth … [1525 caractères tronqués]`
+
+  ```
+Ran 20 tests in 10.411s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-base-reelle.md <<'MD'\n# B13 — la base honnête : `evaluer --reel`, 452 phrases réelles, et ce que le synthétique cachait\n\n> **Ligne de roadmap** : **B13** (le produit) · **Décision** : 6A · **Date** : 2026-11- … [4571 caractères tronqués]`
+
+  ```
+fiche + JSON
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 827 JSON, le disque en a 828
+  ✅ la page vivante date du dernier commit (2026-11-14)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# doc produit : la base réelle\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.7 Le tagger en option — `--tagger`\"\"\",\"\"\"### 3.6 bis La base honnête — `-- … [2001 caractères tronqués]`

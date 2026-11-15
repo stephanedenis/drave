@@ -1,0 +1,29 @@
+{
+ "date": "2026-11-15",
+ "ligne": "B13",
+ "decision": "6A",
+ "global": {
+  "phrases": 612,
+  "pos": 0.8625,
+  "f1": 0.7902,
+  "attachement": "238/239",
+  "couverture": 0.9958
+ },
+ "reel": {
+  "phrases": 452,
+  "pos": 0.8891,
+  "pos_ferme": 0.9294,
+  "pos_ouvert": 0.8466,
+  "f1": 0.7906,
+  "attachement": "183/184",
+  "couverture": 0.9946,
+  "cibles": 184
+ },
+ "constat": "le POS réel est meilleur (88,91 % contre 86,25 %) ; le synthétique tirait la moyenne vers le bas ; la F1 est identique",
+ "tagger_reel": 0.0467,
+ "limites": [
+  "452 = hand + reel, pas un tirage",
+  "le synthétique teste des structures rares",
+  "le gold n'est pas la vérité"
+ ]
+}

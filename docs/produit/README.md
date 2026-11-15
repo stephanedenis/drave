@@ -359,6 +359,16 @@ portent **395 rôles** et **315 cibles** (315 résolues, 313 dans un autre segme
 stabilité structurelle est **18/46**. Fiche
 [`rapport-restitution-v1.md`](../../reports/rapport-restitution-v1.md).
 
+### 3.6 bis La base honnête — `--reel`
+
+```bash
+python3 tools/drave.py evaluer --reel
+```
+
+`--reel` mesure les **452 phrases réelles** (main + corpus), sans les 160 synthétiques : POS
+**88,91 %**, F1 **79,06 %**, attachement **99,46 %**. Sans lui, `evaluer` publie la ligne
+`BASE RÉELLE` à côté du global (612 phrases) — le chiffre global seul peut tromper.
+
 ### 3.7 Le tagger en option — `--tagger`
 
 ```bash

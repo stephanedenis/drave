@@ -253,5 +253,24 @@ class TestParLangue(unittest.TestCase):
         self.assertEqual(3, sortie.stdout.count("CONTRÔLE NÉGATIF"))
 
 
+class TestBaseReelle(unittest.TestCase):
+    """La base honnête : `--reel` mesure les phrases réelles, sans le synthétique."""
+
+    def test_reel_json(self):
+        sortie = drave("evaluer", "--reel", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        self.assertIn("réel", d["gold"]["nom"])
+        self.assertEqual(d["gold"]["phrases"], 452)
+
+    def test_global_publie_la_base_reelle(self):
+        sortie = drave("evaluer", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        self.assertIsNotNone(d.get("reel"))
+        self.assertEqual(d["reel"]["phrases"], 452)
+        self.assertLess(d["reel"]["phrases"], d["gold"]["phrases"])
+
+
 if __name__ == "__main__":
     unittest.main()
