@@ -1,0 +1,270 @@
+{
+ "tache": "D1",
+ "titre": "Les exemples avec le tagger et la base réelle",
+ "date": "2026-11-15",
+ "head": "ee04ea9134d8f9fab62c8728fd1ab7857ded4dd3",
+ "code": {
+  "cli": "drave 0.1.0",
+  "schema": 2,
+  "commande": "python3 tools/drave.py"
+ },
+ "dispositif": {
+  "cle": "~/.config/drave/deepseek.key (jamais affichée)",
+  "cache": "/tmp/drave-exemples-tagger-cache (neuf au premier appel)",
+  "modele_demande": "deepseek-chat",
+  "reseau": true,
+  "date_execution": "2026-11-15",
+  "note": "les trois exemples --tagger ont été lancés avec un cache disque vide ; les appels suivants du rejeu sont servis par le cache (réseau=0, tokens=0)"
+ },
+ "tagger": {
+  "exemples": [
+   {
+    "id": "g001",
+    "entree": "Le chat dort.",
+    "langue": "fr",
+    "commande": "python3 tools/drave.py analyser \"Le chat dort.\" --tagger",
+    "sortie": "drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)\nlangue=fr script=Latn source=cascade · 20 étiquettes · unités sémantiques=2 (61.5% du texte)\nPOS  Le/DET chat/NOUN dort/VERB ./PONCT\nSYNTAGMES\n  GN   [0:7]   Le chat  rôle=agent     → dort\n  GV   [8:12]  dort     rôle=predicat  → chat\nPRAGMATIQUE\n  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non\nCOUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·\n            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70\nTAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=130 · latence=1.1 s",
+    "pos": "Le/DET chat/NOUN dort/VERB ./PONCT",
+    "pos_heuristique": "Le/DET chat/NOUN dort/VERB ./PONCT",
+    "pos_gold": "Le/DET chat/NOUN dort/VERB",
+    "pos_justes": {
+     "heuristique": 3,
+     "tagger": 3,
+     "total": 3
+    },
+    "schema": {
+     "schema": "drave.annotation",
+     "version": 2
+    },
+    "cout": {
+     "appels": 1,
+     "reseau": 1,
+     "cache": 0,
+     "tokens": 130,
+     "latence_s": 1.1
+    }
+   },
+   {
+    "id": "g011",
+    "entree": "Le livre que j'ai lu est intéressant.",
+    "langue": "fr",
+    "commande": "python3 tools/drave.py analyser \"Le livre que j'ai lu est intéressant.\" --tagger",
+    "sortie": "drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)\nlangue=fr script=Latn source=cascade · 43 étiquettes · unités sémantiques=3 (48.6% du texte)\nPOS  Le/DET livre/NOUN que/PRON j'ai/PRON lu/VERB est/AUX intéressant/ADJ ./PONCT\nSYNTAGMES\n  GN   [0:8]    Le livre                     rôle=agent     → intéressant\n  REL  [9:20]   que j'ai lu                  rôle=qualite   → livre\n  REL  [9:36]   que j'ai lu est intéressant  rôle=qualité   → livre\n  GV   [21:36]  est intéressant              rôle=predicat  → livre\nPRAGMATIQUE\n  phrase [0:37] déclarative · acte=assertion · négation=non · modalité=non · double sens=oui\nCOUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.95 ·\n            syntagme=0.55 · phrase=0.85 · discours=0.55 · pragmatique=0.45 · document=0.70\nTAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=157 · latence=1.5 s",
+    "pos": "Le/DET livre/NOUN que/PRON j'ai/PRON lu/VERB est/AUX intéressant/ADJ ./PONCT",
+    "pos_heuristique": "Le/DET livre/NOUN que/PRON j'ai/PRON lu/NOUN est/AUX intéressant/ADJ ./PONCT",
+    "pos_gold": "Le/DET livre/NOUN que/CONJ j'ai/PRON lu/VERB est/AUX intéressant/ADJ",
+    "pos_justes": {
+     "heuristique": 5,
+     "tagger": 6,
+     "total": 7
+    },
+    "schema": {
+     "schema": "drave.annotation",
+     "version": 2
+    },
+    "cout": {
+     "appels": 1,
+     "reseau": 1,
+     "cache": 0,
+     "tokens": 157,
+     "latence_s": 1.5
+    }
+   },
+   {
+    "id": "r241",
+    "entree": "The day when we left was beautiful.",
+    "langue": "en",
+    "commande": "python3 tools/drave.py analyser \"The day when we left was beautiful.\" --langue en --tagger",
+    "sortie": "drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)\nlangue=en script=Latn source=cascade · 38 étiquettes · unités sémantiques=3 (45.7% du texte)\nPOS  The/DET day/NOUN when/PRON we/PRON left/VERB was/AUX beautiful/ADJ ./PONCT\nSYNTAGMES\n  GN   [0:7]    The day        rôle=groupe nominal  → beautiful\n  REL  [8:20]   when we left   rôle=qualité         → day\n  GV   [21:34]  was beautiful  rôle=prédicat        → —\nPRAGMATIQUE\n  phrase [0:35] déclarative · acte=assertion · négation=non · modalité=non · double sens=non\nCOUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.95 ·\n            syntagme=0.35 · phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70\nTAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=154 · latence=1.1 s",
+    "pos": "The/DET day/NOUN when/PRON we/PRON left/VERB was/AUX beautiful/ADJ ./PONCT",
+    "pos_heuristique": "The/DET day/NOUN when/CONJ we/PRON left/VERB was/AUX beautiful/ADJ ./PONCT",
+    "pos_gold": "The/DET day/NOUN when/PRON we/PRON left/VERB was/AUX beautiful/ADJ",
+    "pos_justes": {
+     "heuristique": 6,
+     "tagger": 7,
+     "total": 7
+    },
+    "schema": {
+     "schema": "drave.annotation",
+     "version": 2
+    },
+    "cout": {
+     "appels": 1,
+     "reseau": 1,
+     "cache": 0,
+     "tokens": 154,
+     "latence_s": 1.1
+    }
+   }
+  ],
+  "total": {
+   "appels": 3,
+   "tokens": 441,
+   "latence_s": 3.7,
+   "cache": 0,
+   "reseau": 3,
+   "pos_justes_heuristique": "14/17",
+   "pos_justes_tagger": "16/17",
+   "cout_usd_estime": 0.0004
+  },
+  "mesure_globale": {
+   "gold_612": {
+    "phrases": 612,
+    "pos_heuristique": 0.8625,
+    "pos_tagger": 0.9575,
+    "delta_pos": 0.095
+   },
+   "reel_452": {
+    "phrases": 452,
+    "pos_heuristique": 0.8891,
+    "pos_tagger": 0.95,
+    "delta_pos": 0.0609
+   },
+   "source": "reports/rapport-tagger-option.md et reports/pensee-tagger-option.json"
+  }
+ },
+ "reel": {
+  "exemples": [
+   {
+    "id": "texte",
+    "commande": "python3 tools/drave.py evaluer --reel",
+    "sortie": "drave 0.1.0 — évaluation de l'heuristique sur le gold\ngold réel (hand + reel, sans synthétique) · 452 phrases · 2480 tokens · 184 cibles d'attachement\n\nPOS         exactitude 88.91 %  (fermé 92.94 %, ouvert 84.66 %)\nSYNTAGMES   F1 79.06 %  (P 81.28 % / R 76.95 %)\n  tête      F1 89.90 %  (P 93.84 % / R 86.28 %)\n  vue linéaire (partition filtrer) F1 79.53 %  · attachement 91.85 % de couverture\nBASE RÉELLE — (déjà la base, ou gold gelé)\nATTACHEMENT exact 99.46 % · couverture 99.46 % · exact sur span 100.00 % · top-k 98.91 %\n  tête      couverture 100.00 % · top-k 99.45 %\nPRAGMATIQUE acte 99.56 % · négation 96.90 % · modalité 98.45 % · double sens 96.46 %\nFRACTION SÉMANTIQUE 50.82 %\nCONTRÔLE NÉGATIF cible exacte tirée au hasard 0.00 % (graine 0, 184 cibles)",
+    "mesure": {
+     "phrases": 452,
+     "tokens": 2480,
+     "cibles": 184,
+     "pos": 0.8891,
+     "pos_ferme": 0.9294,
+     "pos_ouvert": 0.8466,
+     "f1": 0.7906,
+     "precision": 0.8128,
+     "rappel": 0.7695,
+     "attachement": 0.9946,
+     "labels": 183,
+     "controle_negatif": 0.0
+    }
+   },
+   {
+    "id": "json",
+    "commande": "python3 tools/drave.py evaluer --reel --json | jq ...",
+    "sortie": {
+     "version": "0.1.0",
+     "gold": {
+      "nom": "réel (hand + reel, sans synthétique)",
+      "gele": false,
+      "phrases": 452,
+      "tokens": 2480,
+      "cibles_attachement": 184
+     },
+     "reel": null,
+     "pos": {
+      "exactitude": 0.8891,
+      "exactitude_ferme": 0.9294,
+      "exactitude_ouvert": 0.8466,
+      "tokens": 2480
+     },
+     "f1": {
+      "f1": 0.7906,
+      "precision": 0.8128,
+      "rappel": 0.7695
+     },
+     "attachement": {
+      "cibles": 184,
+      "labels": 183,
+      "exact": 183,
+      "exact_taux": 0.9946,
+      "couverture": 0.9946
+     },
+     "controle_negatif": {
+      "nom": "cible exacte tirée au hasard dans le gold",
+      "graine": 0,
+      "cibles": 184,
+      "exact_taux": 0.0
+     }
+    },
+    "mesure": {
+     "phrases": 452,
+     "tokens": 2480,
+     "cibles": 184,
+     "pos": 0.8891,
+     "f1": 0.7906,
+     "attachement": 0.9946,
+     "labels": 183,
+     "controle_negatif": 0.0
+    }
+   }
+  ]
+ },
+ "verification": {
+  "gold_vivant_612": {
+   "f1": 0.7902,
+   "precision": 0.786,
+   "rappel": 0.7944,
+   "attachement_labels": 238,
+   "attachement_cibles": 239,
+   "attachement_taux": 0.9958,
+   "pos": 0.8625
+  },
+  "reel_452": {
+   "pos": 0.8891,
+   "f1": 0.7906,
+   "attachement": 0.9946,
+   "labels": 183,
+   "cibles": 184
+  },
+  "schema_v2": {
+   "annotations_tagger": 3,
+   "valides": 3,
+   "version": 2
+  },
+  "blocs_existants": {
+   "verifies": 5,
+   "note": "les 5 blocs du 14/11 n'ont pas été modifiés ; g001, g011, r241, le refus et r035 ont été revérifiés le 15/11 (F1 0,7902, 238/239, v2)"
+  },
+  "blocs_nouveaux": {
+   "tagger": 3,
+   "reel": 2,
+   "reproduits": "5/5"
+  }
+ },
+ "controle_negatif": {
+  "doc_mutee": {
+   "nom": "mutation d'un token dans une copie de la doc",
+   "mutation": "lu/VERB -> lu/NOUN (bloc 6.2)",
+   "doc_reelle": "5/5 blocs reproduits",
+   "doc_mutee": "4/5 blocs reproduits",
+   "ecart_detecte": "6.2 : POS lu/NOUN (doc) != lu/VERB (CLI)"
+  },
+  "cache_chaud": {
+   "nom": "rejeu avec le cache du premier appel",
+   "cout": {
+    "reseau": 0,
+    "cache": 1,
+    "tokens": 0,
+    "latence_s": 0.0
+   },
+   "annotation": "identique ; seul le coût affiché change"
+  },
+  "schema": {
+   "nom": "annotation v2 altérée",
+   "version_3": "refusée (version inconnue)",
+   "sans_refus": "refusée (champ obligatoire absent)",
+   "annotations_reelles": "3/3 valides"
+  }
+ },
+ "limites": [
+  "les 17 tokens des trois exemples ne sont pas un échantillon : le 16/17 surévalue le gain",
+  "le coût en dollars est une estimation au prorata du chiffre publié (~0,02 $ / 612 phrases), pas une facture",
+  "les exemples --tagger sont datés du 2026-11-15 et dépendent du modèle renvoyé par l'API",
+  "le tagger est prompté en français ; la ventilation du gain par langue n'est pas faite ici",
+  "les deux exemples --reel mesurent la même base ; le second montre le contrat JSON, pas une mesure indépendante",
+  "la base réelle 452 (20 hand + 432 corpus) n'est pas un tirage aléatoire"
+ ],
+ "fichiers": [
+  "docs/produit/exemples.md",
+  "reports/rapport-exemples-tagger.md",
+  "reports/rapport-exemples-tagger.json",
+  "reports/rapport-tagger-option.md",
+  "reports/rapport-base-reelle.md"
+ ]
+}

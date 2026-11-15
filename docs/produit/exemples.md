@@ -1,13 +1,24 @@
-# Cinq exemples d'analyse, commentés
+# Dix exemples d'analyse, commentés
 
-> **Ce que ce document est.** Cinq exécutions **réelles** du produit, avec leur JSON commenté. Il
+> **Ce que ce document est.** Dix exécutions **réelles** du produit, avec leur JSON commenté. Il
 > complète la notice [`README.md`](README.md) : la notice dit *quoi* faire, ce document dit
-> *comment lire* ce qui sort. Les sorties ont été produites le **2026-11-06** sur la branche
-> `s/v7`, avec le CLI `tools/drave.py` (version **0.1.0**), sans modèle, sans GPU et sans réseau ;
-> elles ont été **rejouées le 2026-11-14** sur le code courant — F1 **0,7902**, attachement
-> **238/238 labels** (238/239 cibles), schéma **v2**. Le format v2 ajoute `version: 2` et, sur un
-> syntagme qui chevauche un autre, `meta.partition`/`meta.alternative` ; v1 reste lue
-> ([schéma v2](../../tools/schemas/drave-annotation-v2.json)).
+> *comment lire* ce qui sort. Les **cinq premiers blocs** ont été produits le **2026-11-06** sur
+> la branche `s/v7`, avec le CLI `tools/drave.py` (version **0.1.0**), sans modèle, sans GPU et
+> sans réseau ; ils ont été **rejoués le 2026-11-14** sur le code courant — F1 **0,7902**,
+> attachement **238/238 labels** (238/239 cibles), schéma **v2**. Le format v2 ajoute
+> `version: 2` et, sur un syntagme qui chevauche un autre, `meta.partition`/`meta.alternative` ;
+> v1 reste lue ([schéma v2](../../tools/schemas/drave-annotation-v2.json)).
+>
+> **Les cinq blocs du 15/11.** Trois exécutions avec `--tagger` (§ 6) et deux avec `--reel`
+> (§ 7), produites le **2026-11-15** avec la **clé DeepSeek** et un **cache disque neuf** : le
+> coût affiché est donc réel (`réseau=1`, tokens non nuls). Le tagger ne change que le **POS** ;
+> les syntagmes, rôles et attachements restent à l'heuristique. La base `--reel` est la **base
+> honnête** : 452 phrases réelles (main + corpus), sans les 160 synthétiques.
+>
+> **Les chiffres de référence (15/11).** Gold **vivant 612** : F1 **0,7902**, POS **0,8625**,
+> attachement **238/238 labels** (**238/239 cibles**, 0,9958), schéma **v2**. Gold **réel 452** :
+> POS **0,8891**, F1 **0,7906**, attachement **183/184 labels** (0,9946). Les trois annotations
+> `--tagger` sont en v2 (`schema: "drave.annotation"`, `version: 2`).
 >
 > **Le rejeu du 14/11.** **4 blocs sur 5** ont bougé : la ponctuation finale entre dans le POS
 > (20 étiquettes et non 19), le refus sort en **3**, le POS anglais de `r241` s'améliore et
@@ -17,7 +28,8 @@
 >
 > **Une commande, un JSON.** `python3 tools/drave.py analyser "…" --json` rend l'annotation
 > complète (neuf niveaux). Pour la lire, ce document filtre avec `jq` ; le produit, lui, n'a pas
-> besoin de `jq`.
+> besoin de `jq`. Avec `--tagger`, le JSON garde le même contrat v2 et le **coût** part sur
+> `stderr` ; avec `--reel`, `evaluer --json` rend un **rapport de mesure**, pas une annotation.
 
 ## 0. Comment lire les JSON
 
@@ -25,7 +37,17 @@
   « Élodie » → `[0:6]` ; un emoji compte pour **un** point.
 - `niveau` : `pos`, `syntagme`, `phrase` et `pragmatique` sont montrés ; `graphème`, `mot`,
   `morphème`, `discours` et `document` sont omis (ils existent dans le JSON complet).
-- `confiance` : **déclarée**, pas calibrée. 0,3 pour un NOUN ouvert, 0,92 pour un DET.
+- `confiance` : **déclarée**, pas calibrée. 0,3 pour un NOUN ouvert, 0,92 pour un DET. Avec
+  `--tagger`, les POS neuronaux portent **0,60** : c'est le **seuil de la cascade**, pas une
+  probabilité par token ; ils ont `source: "neuronal"`, `meta.modele: true` et **pas** de
+  `meta.ouvert` (le tagger ne consulte pas le lexique). La ponctuation, restituée depuis
+  l'heuristique, garde 0,95 et `meta.ouvert: false`.
+- `TAGGER API` : la ligne de **coût** (`modèle`, `appels`, `réseau`, `cache`, `tokens`, `latence`).
+  Elle va sur `stdout` avec `analyser --tagger` et sur `stderr` avec `--json` ; la **clé n'y est
+  jamais**. Un cache chaud affiche `réseau=0 · cache=1 · tokens=0`.
+- `--reel` : ce n'est pas une annotation, c'est une **évaluation**. Le JSON porte
+  `gold.nom: "réel (hand + reel, sans synthétique)"`, `gold.phrases: 452`,
+  `gold.cibles_attachement: 184` et `reel: null` (la base mesurée **est** déjà la base réelle).
 - `meta.attachement` : `{segment, cible}` ; `cible` est une **chaîne**, pas un span.
 - `meta.partition` : `{groupe, rang, membres, vue}` — présent sur un syntagme d'un groupe de
   chevauchement (v2) ; `rang: 1` est la vue préférée, pas une suppression.
@@ -649,33 +671,338 @@ JSON (`type: "REL"`), pas seulement que l'attachement est bon. Et il ne doit pas
 comme « 100 % du langage » : c'est 100 % des spans prédits, sur **99,58 %** des cibles. Le cas
 `g017` montre que la couverture n'est pas encore complète.
 
-## 6. Ce que ces exemples ne montrent pas
+## 6. Le tagger en option — trois exécutions avec la clé
+
+> **Le dispositif.** Les trois commandes ci-dessous ont été lancées le **2026-11-15** avec la clé
+> lue dans `~/.config/drave/deepseek.key` et un **cache disque neuf** (`DEEPSEEK_CACHE` pointant
+> vers un répertoire vide) : chaque ligne `TAGGER API` montre donc un **vrai appel réseau**
+> (`réseau=1`, `cache=0`). Sans cette précaution, le cache du client rend
+> `réseau=0 · cache=1 · tokens=0` et le coût affiché n'est plus celui du jour. La clé n'est
+> jamais affichée. Le tagger ne remplace que le **POS** ; les syntagmes, rôles, cibles et la
+> pragmatique restent ceux de l'heuristique.
+
+### 6.1 `g001` — le cas neutre
+
+**Entrée.** `Le chat dort.` (phrase `hand`, `g001`).
+
+**Commande.**
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --tagger
+```
+
+**Sortie (réelle, cache neuf).**
+
+```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
+SYNTAGMES
+  GN   [0:7]   Le chat  rôle=agent     → dort
+  GV   [8:12]  dort     rôle=predicat  → chat
+PRAGMATIQUE
+  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·
+            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=130 · latence=1.1 s
+```
+
+**Lecture.** Le POS est **identique** à celui du § 1 : `Le/DET`, `chat/NOUN`, `dort/VERB` et
+`./PONCT` ; les deux syntagmes et l'acte aussi. Le seul changement est l'en-tête
+(`source=cascade`) et la ligne de coût. C'est le **cas neutre** : le tagger ne dégrade pas une
+phrase que l'heuristique réussissait déjà, mais il coûte **1 appel et 130 tokens**. La
+ponctuation est bien là (restituée depuis l'heuristique) : l'ancien défaut « `PONCT` perdu »
+est corrigé.
+
+### 6.2 `g011` — `lu` redevient un verbe
+
+**Entrée.** `Le livre que j'ai lu est intéressant.` (phrase `hand`, `g011`).
+
+**Commande.**
+
+```bash
+python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --tagger
+```
+
+**Sortie (réelle, cache neuf).**
+
+```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 43 étiquettes · unités sémantiques=3 (48.6% du texte)
+POS  Le/DET livre/NOUN que/PRON j'ai/PRON lu/VERB est/AUX intéressant/ADJ ./PONCT
+SYNTAGMES
+  GN   [0:8]    Le livre                     rôle=agent     → intéressant
+  REL  [9:20]   que j'ai lu                  rôle=qualite   → livre
+  REL  [9:36]   que j'ai lu est intéressant  rôle=qualité   → livre
+  GV   [21:36]  est intéressant              rôle=predicat  → livre
+PRAGMATIQUE
+  phrase [0:37] déclarative · acte=assertion · négation=non · modalité=non · double sens=oui
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.95 ·
+            syntagme=0.55 · phrase=0.85 · discours=0.55 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=157 · latence=1.5 s
+```
+
+**Lecture.** Le gold attend `lu/VERB` et `que/CONJ`. L'heuristique rend `lu/NOUN` (§ 2) ; le
+tagger rend **`lu/VERB`** : la classe ouverte est réparée sur ce token. Mais `que` reste
+**PRON** (le gold attend `CONJ`) : le tagger ne répare pas tout. Les syntagmes sont **identiques**
+à ceux du § 2 : le tagger ne rend ni rôle ni cible, et le doublon d'union reste publié.
+
+Le JSON garde le contrat v2 ; on peut le vérifier sur le token réparé et sur la ponctuation :
+
+```bash
+python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --tagger --json \
+  | jq '{schema, version, langue, script, refus,
+         lu: [.etiquettes[] | select(.niveau=="pos" and .valeur=="lu")][0],
+         ponct: [.etiquettes[] | select(.niveau=="pos" and .valeur==".")][0]}'
+```
+
+**Sortie (réelle, extrait).**
+
+```json
+{
+  "schema": "drave.annotation",
+  "version": 2,
+  "langue": "fr",
+  "script": "Latn",
+  "refus": "",
+  "lu": {
+    "niveau": "pos",
+    "type": "VERB",
+    "valeur": "lu",
+    "debut": 18,
+    "fin": 20,
+    "source": "neuronal",
+    "confiance": 0.6,
+    "candidats": [],
+    "langue": "und",
+    "script": "Latn",
+    "meta": {
+      "modele": true
+    }
+  },
+  "ponct": {
+    "niveau": "pos",
+    "type": "PONCT",
+    "valeur": ".",
+    "debut": 36,
+    "fin": 37,
+    "source": "heuristique",
+    "confiance": 0.95,
+    "candidats": [],
+    "langue": "fr",
+    "script": "Latn",
+    "meta": {
+      "ouvert": false
+    }
+  }
+}
+```
+
+**Lecture du JSON.** `schema: "drave.annotation"` et `version: 2` : le contrat est le même que
+pour l'heuristique. `lu` porte `source: "neuronal"`, `confiance: 0.6` et `meta.modele: true` :
+c'est le **seuil de la cascade**, pas une confiance calibrée, et `meta.ouvert` est **absent**
+(le tagger ne consulte pas le lexique). `PONCT` porte `source: "heuristique"`, `0.95` et
+`meta.ouvert: false` parce qu'il vient de l'heuristique. Le coût, lui, n'est **pas** dans ce
+JSON : il part sur `stderr` avec `--json` (et sur `stdout` sans `--json`).
+
+### 6.3 `r241` — `when` redevient un pronom
+
+**Entrée.** `The day when we left was beautiful.` (phrase `reel`, `r241`).
+
+**Commande.**
+
+```bash
+python3 tools/drave.py analyser "The day when we left was beautiful." --langue en --tagger
+```
+
+**Sortie (réelle, cache neuf).**
+
+```
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=en script=Latn source=cascade · 38 étiquettes · unités sémantiques=3 (45.7% du texte)
+POS  The/DET day/NOUN when/PRON we/PRON left/VERB was/AUX beautiful/ADJ ./PONCT
+SYNTAGMES
+  GN   [0:7]    The day        rôle=groupe nominal  → beautiful
+  REL  [8:20]   when we left   rôle=qualité         → day
+  GV   [21:34]  was beautiful  rôle=prédicat        → —
+PRAGMATIQUE
+  phrase [0:35] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.95 ·
+            syntagme=0.35 · phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=154 · latence=1.1 s
+```
+
+**Lecture.** Le gold attend `when/PRON` ; l'heuristique rend `when/CONJ` (§ 3), le tagger rend
+**`when/PRON`** : le POS anglais est réparé sur ce token. `left/VERB`, `was/AUX`,
+`beautiful/ADJ` et la ponctuation sont inchangés. L'attachement `REL → day` est celui de
+l'heuristique : le tagger ne touche pas aux syntagmes. Le tagger est **prompté en français** et
+étiquette ici l'anglais correctement ; ce n'est pas une preuve de qualité par langue (la
+ventilation du tagger par langue n'est pas faite).
+
+### 6.4 Ce que les trois exemples mesurent — et ne mesurent pas
+
+| bloc | tokens du gold | heuristique | `--tagger` | ce qui change |
+|---|---:|---:|---:|---|
+| `g001` | 3 | 3/3 | **3/3** | rien |
+| `g011` | 7 | 5/7 | **6/7** | `lu` NOUN → VERB |
+| `r241` | 7 | 6/7 | **7/7** | `when` CONJ → PRON |
+| **total** | **17** | **14/17 = 82,35 %** | **16/17 = 94,12 %** | **+2 tokens** |
+
+**Lecture.** Le tagger **gagne 2 tokens** sur cet échantillon et n'en perd aucun. Mais **17
+tokens ne sont pas une mesure** : c'est un choix d'exemples, et il surévalue le gain. Les
+chiffres globaux, eux, sont dans [`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md) :
+POS **0,9575 contre 0,8625** sur le gold **612** (**+9,5 pts**), et **0,9500 contre 0,8891** sur
+le **réel 452** (**+6,1 pts**). Le gain est porté par le synthétique ; le réel vaut +6,1, pas
++9,5.
+
+**Le coût des trois exemples.** **3 appels**, **441 tokens** (130 + 157 + 154), **3,7 s** de
+latence cumulée, `réseau=1` et `cache=0` à chaque fois. Au prorata du chiffre publié (~0,02 $
+pour 612 phrases / 22 299 tokens), cela vaut **~0,0004 $** : une **estimation**, pas une facture.
+Un cache chaud rejoue la même annotation avec `réseau=0 · cache=1 · tokens=0` ; c'est le
+comportement attendu, pas une mesure de coût.
+
+## 7. La base honnête — deux exécutions avec `--reel`
+
+> **Le dispositif.** `--reel` ne change pas l'analyse : il **restreint l'évaluation** aux
+> phrases `hand` + `reel` (**452**), sans les 160 synthétiques. Deux lectures : la sortie
+> lisible, puis le JSON qui la porte. Aucune clé, aucun réseau.
+
+### 7.1 `evaluer --reel` — la sortie lisible
+
+**Commande.**
+
+```bash
+python3 tools/drave.py evaluer --reel
+```
+
+**Sortie (réelle).**
+
+```
+drave 0.1.0 — évaluation de l'heuristique sur le gold
+gold réel (hand + reel, sans synthétique) · 452 phrases · 2480 tokens · 184 cibles d'attachement
+
+POS         exactitude 88.91 %  (fermé 92.94 %, ouvert 84.66 %)
+SYNTAGMES   F1 79.06 %  (P 81.28 % / R 76.95 %)
+  tête      F1 89.90 %  (P 93.84 % / R 86.28 %)
+  vue linéaire (partition filtrer) F1 79.53 %  · attachement 91.85 % de couverture
+BASE RÉELLE — (déjà la base, ou gold gelé)
+ATTACHEMENT exact 99.46 % · couverture 99.46 % · exact sur span 100.00 % · top-k 98.91 %
+  tête      couverture 100.00 % · top-k 99.45 %
+PRAGMATIQUE acte 99.56 % · négation 96.90 % · modalité 98.45 % · double sens 96.46 %
+FRACTION SÉMANTIQUE 50.82 %
+CONTRÔLE NÉGATIF cible exacte tirée au hasard 0.00 % (graine 0, 184 cibles)
+```
+
+**Lecture.** La base fait **452 phrases**, **2 480 tokens** et **184 cibles**. Le POS est
+**88,91 %** (fermé 92,94, ouvert 84,66), la F1 **79,06 %** (P 81,28 / R 76,95), l'attachement
+**99,46 %** (183/184 labels). `BASE RÉELLE — (déjà la base, ou gold gelé)` est la confirmation
+que `--reel` mesure directement cette base ; sans `--reel`, la même ligne est **calculée et
+publiée à côté** du global 612. Le contrôle négatif (cible exacte tirée au hasard) est à
+**0,00 %** : c'est le plancher, pas une performance.
+
+**Pourquoi « honnête ».** Le global 612 (hand + reel + **160 synthétiques**) donne POS
+**86,25 %**, F1 **79,02 %**, attachement **99,58 %**. Le synthétique est **plus difficile** pour
+le POS (mots hors lexique) : il **tire la moyenne vers le bas**, et le 86,25 sous-estime donc
+la qualité réelle. La F1, elle, est quasi identique (79,06 contre 79,02). Publier le seul
+global cache cet effet. Les 452 incluent les 20 phrases `hand` et 432 phrases de corpus : ce
+n'est **pas un tirage aléatoire**.
+
+### 7.2 `evaluer --reel --json` — le contrat de la mesure
+
+**Commande.**
+
+```bash
+python3 tools/drave.py evaluer --reel --json \
+  | jq '{version, gold, reel,
+         pos: (.heuristique.pos | {exactitude, exactitude_ferme, exactitude_ouvert, tokens}),
+         f1: (.heuristique.syntagme | {f1, precision, rappel}),
+         attachement: (.heuristique.attachement | {cibles, labels, exact, exact_taux, couverture}),
+         controle_negatif}'
+```
+
+**Sortie (réelle).**
+
+```json
+{
+  "version": "0.1.0",
+  "gold": {
+    "nom": "réel (hand + reel, sans synthétique)",
+    "gele": false,
+    "phrases": 452,
+    "tokens": 2480,
+    "cibles_attachement": 184
+  },
+  "reel": null,
+  "pos": {
+    "exactitude": 0.8891,
+    "exactitude_ferme": 0.9294,
+    "exactitude_ouvert": 0.8466,
+    "tokens": 2480
+  },
+  "f1": {
+    "f1": 0.7906,
+    "precision": 0.8128,
+    "rappel": 0.7695
+  },
+  "attachement": {
+    "cibles": 184,
+    "labels": 183,
+    "exact": 183,
+    "exact_taux": 0.9946,
+    "couverture": 0.9946
+  },
+  "controle_negatif": {
+    "nom": "cible exacte tirée au hasard dans le gold",
+    "graine": 0,
+    "cibles": 184,
+    "exact_taux": 0.0
+  }
+}
+```
+
+**Lecture.** `gold.nom` **nomme la base** mesurée, `gold.phrases: 452` et
+`gold.cibles_attachement: 184` la bornent. `reel: null` est **attendu** : la base mesurée est
+déjà la base réelle ; sans `--reel`, ce champ porte un objet (452 phrases, POS, F1,
+attachement) calculé à côté du global. Les nombres sont **les mêmes** que dans la sortie
+lisible : 0,8891, 0,7906, 0,9946. Attention : ce JSON est un **rapport d'évaluation**
+(`version: "0.1.0"` est celle du CLI), pas une **annotation** : le schéma `drave.annotation`
+v2 ne s'applique pas ici.
+
+## 8. Ce que ces exemples ne montrent pas
 
 1. **Pas de restitution, pas de traduction, pas de génération** : la sortie ne contient aucun
    texte produit ; seulement des étiquettes. Le produit ne réécrit pas la phrase.
-2. **Pas de neuronal** : tout vient de `Heuristique` (CPU) ; `MockNeuronal` est un contrat, pas un
-   tagger, et le CLI ne l'expose pas. La cascade 7B (0,9415) n'est pas un chemin livré.
-3. **Pas de couverture complète** : sur les **239 cibles d'attachement**, **238** ont un span
-   prédit (**0,9958**) ; la seule qui manque est `g017` (`SUB [9:28]`). `r035`, autrefois manqué,
-   est désormais prédit (§ 5).
+2. **Pas de neuronal local** : le défaut reste `Heuristique` (CPU, hors ligne) ; `MockNeuronal`
+   est un contrat, pas un tagger. Le CLI expose en **option** le tagger POS de l'**API DeepSeek**
+   (`--tagger`, § 6), pas un modèle local : la cascade 7B locale (0,9415) n'est pas un chemin
+   livré.
+3. **Pas de couverture complète** : sur les **239 cibles d'attachement** du gold vivant, **238**
+   ont un span prédit (**0,9958**) ; la seule qui manque est `g017` (`SUB [9:28]`). Sur la base
+   réelle 452, **183/184** cibles ont un span (0,9946). `r035`, autrefois manqué, est désormais
+   prédit (§ 5).
 4. **Pas de lecture unique garantie** : le **doublon REL de l'union** (`union: true`) est publié ;
    il faut le filtrer si l'on veut un seul segment par span.
 5. **Pas de valeurs normalisées** : `candidats` sont des chaînes et `role` n'est pas normalisé
    (`predicat`/`prédicat`). Le **format** est versionné (v2 ; v1 reste lue), mais le vocabulaire
-   des valeurs, lui, n'a pas de schéma.
+   des valeurs, lui, n'a pas de schéma. Avec `--tagger`, `confiance` vaut **0,60** (le seuil de
+   la cascade), `source` vaut `neuronal` et `meta.ouvert` est **absent** : ne pas lire ces champs
+   comme une probabilité.
 
 Pour mesurer sur votre propre corpus, il faut le format du gold (mots + segments + pragma) : il
 n'est pas publié comme schéma — c'est un des manques du CLI (notice § 7). Le schéma de
 l'**annotation** du produit, lui, est publié : [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json).
 
-## 7. Où aller ensuite
+## 9. Où aller ensuite
 
 | si vous voulez… | allez à |
 |---|---|
 | **la notice d'usage** | [`README.md`](README.md) |
 | **le schéma du JSON (v2, v1)** | [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [`drave-annotation-v1.json`](../../tools/schemas/drave-annotation-v1.json) |
 | **le contrat du bloc** | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
-| **le rejeu de ces cinq blocs** | [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md) |
+| **le rejeu des cinq blocs du 14/11** | [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md) |
+| **les trois exemples `--tagger` et les deux `--reel`** | [`reports/rapport-exemples-tagger.md`](../../reports/rapport-exemples-tagger.md) · [JSON](../../reports/rapport-exemples-tagger.json) |
+| **le tagger, son coût et son contrôle négatif** | [`reports/rapport-tagger-option.md`](../../reports/rapport-tagger-option.md) |
+| **la base honnête (`--reel`)** | [`reports/rapport-base-reelle.md`](../../reports/rapport-base-reelle.md) |
 | **les chiffres courants** | [convention GV](../../reports/rapport-convention-gv.md) · [`s065`](../../reports/rapport-s065.md) · [`r035`](../../reports/rapport-r035.md) |
 | **les 17 spans de la v12 (instantané)** | [`reports/rapport-pensee-v12.md`](../../reports/rapport-pensee-v12.md) |
 | **l'audit et les contrôles** | [`reports/rapport-audit-v10.md`](../../reports/rapport-audit-v10.md) |

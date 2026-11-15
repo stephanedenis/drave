@@ -378,20 +378,21 @@ python3 tools/drave.py evaluer --tagger
 ```
 ```
 drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
-langue=fr script=Latn source=cascade · 19 étiquettes · unités sémantiques=2 (61.5% du texte)
-POS  Le/DET chat/NOUN dort/VERB
+langue=fr script=Latn source=cascade · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
 SYNTAGMES
   GN   [0:7]   Le chat  rôle=agent     → dort
   GV   [8:12]  dort     rôle=predicat  → chat
 PRAGMATIQUE
   phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
-COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.60 · syntagme=0.55 ·
+COUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.55 ·
             phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
-TAGGER API  modèle=deepseek-chat · appels=2 · réseau=0 · cache=2 · tokens=0 · latence=0.0 s
+TAGGER API  modèle=deepseek-chat · appels=1 · réseau=0 · cache=1 · tokens=0 · latence=0.0 s
 ```
 
-Ici le cache disque avait déjà les deux réponses ; un **premier** appel affiche `réseau=2`, les
-tokens et la latence (voir le coût ci-dessous).
+Ici le cache disque avait déjà la réponse ; un **premier** appel affiche `réseau=1`, 130 tokens
+et 1,1 s (voir le coût ci-dessous, et les trois exemples réels de
+[`exemples.md`](exemples.md) § 6).
 
 **La clé.** Lue dans `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`, puis
 `DEEPSEEK_API_KEY` (`DSH_KEY_FILE` / `DSH_API_KEY` en repli). Elle n'est **jamais** affichée :
@@ -401,19 +402,22 @@ message clair sur `stderr` et sort avec le code **4** ; rien n'est rendu sur `st
 **Ce que l'option change — et ce qu'elle ne change pas.** Le **POS** vient du tagger
 (`source=cascade`, confiance déclarée **0,60**) ; les **syntagmes**, leurs **rôles**, leurs
 **cibles d'attachement** et la **pragmatique** restent à l'heuristique. Le tagger ne reçoit que
-les mots et les nombres : la **ponctuation** n'a plus de POS dans l'option (`PONCT` disparaît de
-la ligne `POS`, le gold ne la compte pas). La cascade appelle le neuronal quand un niveau passe
-sous **0,60** ; la fusion choisit la source **par niveau**, pas par confiance.
+les mots et les nombres : la **ponctuation** est **restituée depuis l'heuristique** (`PONCT`
+reste dans la ligne `POS`, avec `0,95` ; le gold ne la compte pas). La cascade appelle le
+neuronal quand un niveau passe sous **0,60** ; la fusion choisit la source **par niveau**, pas par
+confiance.
 
 **La mesure.** Sur les **20 phrases `hand`** du gold (105 tokens) : POS **88,57 % → 97,14 %**
 (**+8,57 pts**), syntagmes et attachement **inchangés**. Sur le **gold 612** : **86,25 % →
-94,75 %** (**+8,49 pts**), mais le gain du seul **réel 432** est **+4,67** (le synthétique porte
-le reste). Dispositif, coût et contrôle négatif : [`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md).
+95,75 %** (**+9,5 pts**) ; sur le **réel 452**, **88,91 % → 95,00 %** (**+6,1 pts**) — le
+synthétique porte le reste du gain. Dispositif, coût et contrôle négatif :
+[`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md).
 
-**Le coût.** **Deux appels par phrase** (POS + syntagmes, composite), ~**593 tokens/phrase**,
-~**0,99 s/appel** ; les **612 phrases** coûtent **1 218 appels**, **358 962 tokens**, ~**21 min**
-et ~**0,04 $**. Le **cache** (mémoire par texte + disque du client) rend la seconde analyse
-gratuite : `appels=40 · réseau=0 · cache=40 · tokens=0` sur les 20 phrases rejouées.
+**Le coût.** **Un appel par phrase** (le tagger de syntagmes, qui était appelé sans contribuer,
+a été retiré), **22 299 tokens** et **155 s** pour les **612 phrases**, soit **~0,02 $**. Le
+**cache** (mémoire par texte + disque du client) rend la seconde analyse gratuite :
+`appels=20 · réseau=0 · cache=20 · tokens=0` sur les 20 phrases rejouées. Les **trois exemples**
+de [`exemples.md`](exemples.md) § 6 totalisent **3 appels**, **441 tokens** et **3,7 s**.
 
 **`evaluer --tagger`.** La commande mesure **les deux** lectures et publie l'écart et le coût
 (la ligne `TAGGER API DEEPSEEK` sur 20 phrases, exemple réel) :
@@ -422,7 +426,7 @@ gratuite : `appels=40 · réseau=0 · cache=40 · tokens=0` sur les 20 phrases r
 TAGGER API DEEPSEEK (option --tagger)
   POS         exactitude 97.14 % (fermé 94.74 %, ouvert 100.00 %) · Δ +8.57 pts vs heuristique
   SYNTAGMES   F1 90.16 % (tête 97.39 %) — conservés à l'heuristique
-  COÛT        appels 40 · réseau 0 · cache 40 · tokens 0 · modèle deepseek-chat
+  COÛT        appels 20 · réseau 0 · cache 20 · tokens 0 · modèle deepseek-chat
   modèle renvoyé : deepseek-flash
 ```
 
@@ -459,7 +463,7 @@ une lecture unique (garder `union: null`, ou le segment qui en contient un autre
 pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
 **0,6482**, tête **0,7709** contre **0,7671** — *mesure du 06/11, avant la convention des GV ;
 la porte et le banc ont bougé depuis*). Le produit par défaut reste l'heuristique ;
-`evaluer --tagger` mesure en plus la cascade **API** (**0,9475** sur 612, § 3.7), sans changer le
+`evaluer --tagger` mesure en plus la cascade **API** (**0,9575** sur 612, § 3.7), sans changer le
 défaut. La cascade avec le vrai tagger 7B local a été mesurée à **0,9415** en POS sur 180
 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit aujourd'hui : ce n'est
 pas un chemin livré.

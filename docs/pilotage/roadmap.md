@@ -62,8 +62,9 @@ avec le code courant ; **4 sont corrigés** : la ponctuation finale entre dans l
 (`REL [9:24] « she talks about » → film`). Le seul bloc identique est `g011`. F1 **0,7902**,
 attachement **238/238 labels** (238/239 cibles, 0,9958) ; le mandat 237/238 est l'état d'avant
 `s065`. Le contrôle négatif (mutation d'un token dans une copie de la doc) est détecté 4/5.
-[`fiche`](../../reports/rapport-exemples-rejoues.md) + JSON. La suite produit est **J11.2**
-(`evaluer --par-langue`), **J11.3** (50 textes libres), **J11.4** (schéma v2 documenté).
+[`fiche`](../../reports/rapport-exemples-rejoues.md) + JSON. **D1** ajoute **3** exemples
+`--tagger` et **2** `--reel` à [`exemples.md`](../produit/exemples.md)
+([`fiche`](../../reports/rapport-exemples-tagger.md)).
 
 **J11.2 — la mesure par langue.** `evaluer --par-langue` expose le détail **fr/en** (POS,
 syntagmes, attachement, pragmatique, contrôle négatif recalculé par langue) sans changer le
@@ -162,7 +163,7 @@ gold 200+.
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-14 07 h 10**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-15 05 h 00**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

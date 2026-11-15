@@ -64287,3 +64287,35 @@ bilan + JSON
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [835 caractères tronqués]`
+
+  ```
+create mode 100644 reports/pensee-bilan-nuit.json
+ create mode 100644 reports/rapport-bilan-nuit.md
+ee04ea91 BILAN DE LA NUIT — LE TAGGER (95,75), LA BASE HONNÊTE (452), LA PHASE C/B (N2, S,
+   f1c6b506..ee04ea91  s/v7 -> s/v7
+   f1c6b506..ee04ea91  master -> master
+dim 15 nov 2026 04:35:30 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [2532 caractères tronqués]`
+
+  ```
+3 tâches ; total 38
+PID 2997718
+2026-11-15 04:35:53 · ▶ D1 — Les exemples avec le tagger et la base réelle (timeout 3600 s)
+dim 15 nov 2026 04:36:13 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tool … [245 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre D1", "timeoutMs": 1600000}`
