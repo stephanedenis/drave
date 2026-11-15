@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 14 h 20 HNE (bilan du jour écrit)**
+**Mis à jour : 2026-11-15, 14 h 45 HNE (Y1 : le mode auto du tagger)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

@@ -65781,3 +65781,35 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5188", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5188", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 14:39:17 EST
+2026-11-15 14:13:50 · ▶ Y1 — J5 — le mode auto du tagger (prototype) (timeout 3000 s)
+2026-11-15 14:30:15 · ✔ Y1 en 977.1 s (code 0) — ✅ test -f reports/rapport-tagger-auto.md && echo FICHE-OK; ✅ python3 tools/tests/test_tagger_api.py 2>&1 | tail -1
+reports/rapport-tagger-auto.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cut -c1-85; git status --porcelain reports/rapport-tagger-auto.md tools/drave.py tools/tests/test_tagger_api.py docs/produit/README.md 2>/dev/null | head -5; head -8 reports/rapport-tagger-auto.md | cut -c1-160 … [28 caractères tronqués]`
+
+  ```
+519b729f J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 I
+ M docs/produit/README.md
+# Y1 — le prototype du mode `auto` du tagger : l'API si la clé existe, l'heuristique sinon, sans changer le code de sortie
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **Y1** (J5, la décision
+> du tagger) · **Date** : 2026-11-15 · **HEAD mesuré** : `f63ad709` + ce diff · **Verdict** :
+> ✅ **le prototype est mesuré** — clé présente → API, **code 0**, **130 tokens** ; clé
+> invalide → heuristique, **code 0** (pas 4), `refus` explicite ; clé absente → heuristique,
+> **code 0**, **sortie identique au défaut octet pour octet** ; clé + réseau coupé →
+> heuristique, **code 0** après **3 essais** ; refus de texte → **code 3**, **aucun appel API**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff docs/produit/README.md | head -6 | cut -c1-150; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 14 … [693 caractères tronqués]`

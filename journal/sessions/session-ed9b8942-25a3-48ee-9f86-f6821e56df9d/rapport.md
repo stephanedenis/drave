@@ -7,12 +7,12 @@
 | Identifiant | `session-ed9b8942-25a3-48ee-9f86-f6821e56df9d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 14:13 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 105 |
-| Appels d'outils | 118 |
+| Messages | 111 |
+| Appels d'outils | 123 |
 | Fichiers touchés | 6 |
-| Commandes | 63 |
+| Commandes | 67 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche Y1 (J5, la décision du tagger) : le **prototype** du mode `auto` — `analyser --tagger auto` : si la clé existe (le … [629 caractères tronqués]
 
-*118 appels d'outils.* Actions notables :
+*123 appels d'outils.* Actions notables :
 
 - bash — Lister la structure du dépôt
 - bash — Voir l'historique git et le statut
@@ -41,11 +41,52 @@
 - bash — Lancer les tests existants du tagger
 - bash — Chercher la tâche Y1 dans le pilotage
 - bash — Voir la roadmap et le plan chantier
-- … et 88 autres
+- … et 92 autres
 
 **Synthèse produite :**
 
-Je vois un historique fourni autour du tagger. Lisons les fichiers clés.
+\## Y1 livré — le prototype `--tagger auto`
+
+\### Ce qui a été fait
+
+- **`tools/drave.py`** : `analyser --tagger auto` choisit la voie.
+  - clé trouvée (`DEEPSEEK_KEY_FILE`, `DSH_KEY_FILE`, `~/.config/drave/deepseek.key`, `DEEPSEEK_API_KEY`, `DSH_API_KEY`) → cascade API ;
+  - pas de clé → heuristique, **sans importer le module réseau** ;
+  - clé invalide ou réseau coupé → **repli heuristique, code 0**, avec `refus` explicite ;
+  - refus de texte → **code 3**, aucun appel API ;
+  - `--tagger` explicite reste la seule porte qui peut sortir **4** ;
+  - message `stderr` disant la voie servie, sans jamais afficher la clé ;
+  - coût dans la ligne `TAGGER API` quand l’API a été tentée.
+- **`tools/tests/test_tagger_api.py`** : classe `TestTaggerAuto`, **9 tests** ajoutés (30 au total).
+- **`reports/rapport-tagger-auto.md`** + **`reports/rapport-tagger-auto.json`**.
+- **`docs/produit/README.md`** § 3.7 : tableau des cas `auto`, codes, coût, contrôle négatif.
+- **`docs/pilotage/en-cours.md`** : compteurs et état R0.7 mis à jour.
+
+\### Les quatre cas mesurés
+
+| cas | code | résultat |
+|---|---:|---|
+| **clé présente** | **0** | API, `source=cascade`, **130 tokens**, 1,673 s |
+| **clé invalide** | **0** (pas 4) | heuristique, `refus="clé refusée (HTTP 401)"` |
+| **clé absente** | **0** | heuristique, **stdout identique au défaut octet pour octet** (5 852 octets JSON), `tools.llm.deepseek` non importé |
+| **clé + réseau coupé** | **0** | 3 essais, heuristique, `refus` réseau |
+| **refus de texte** | **3** | `refus="vide"`, **0 appel API** |
+
+**Contrôle négatif principal** : la même clé invalide sort **0** en `auto`, mais **4** avec `--tagger` explicite, `stdout` vide.
+
+\### Validation
+
+- `python3 tools/tests/test_tagger_api.py` → **30 tests, OK**
+- `bash tools/porte-produit.sh` → **verte**
+- `python3 tools/revue_documentation.py` → **tout passe**
+- `bash tools/porte-tableaux.sh` → **verte**
+- `python3 tools/verifie_en_cours.py` → **état reprenable**
+
+\### Recommandation — décision humaine
+
+La fiche recommande de **garder le défaut heuristique hors ligne** et de traiter `--tagger auto` comme un **prototype opt-in**, jamais comme défaut : le même texte peut changer de POS selon la machine, et le coût n’est pas nul. **Le code ne change pas le défaut** ; la décision reste à l’humain.
+
+Commit : **`519b729f`** — *J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS*.
 
 ## 3. Travail accompli
 
@@ -102,7 +143,7 @@ Je vois un historique fourni autour du tagger. Lisons les fichiers clés.
 - **T1** Lancer la porte des tableaux
 - **T1** Trouver les compteurs à mettre à jour
 - **T1** Relancer la revue et capturer le vrai code
-- … et 23 autres
+- … et 27 autres
 
 ## 4. Mesures et résultats marquants
 

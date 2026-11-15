@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 357.7 h |
+| Durée | 358.0 h |
 | Tours | 199 |
-| Messages | 3997 |
-| Appels d'outils | 3570 |
+| Messages | 4000 |
+| Appels d'outils | 3573 |
 | Fichiers touchés | 25 |
-| Commandes | 2954 |
+| Commandes | 2956 |
 | Sous-agents | 43 |
-| Commits | 480 |
+| Commits | 481 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*78 appels d'outils.* Actions notables :
+*81 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,7 +10709,7 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 43 autres
+- … et 45 autres
 
 **Synthèse produite :**
 
@@ -10835,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2914 autres
+- … et 2916 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11463,4 +11463,5 @@ Je commence.
 - SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 672 APPELS, 99 971 TOKENS, 87,6 ITEMS/MIN, 0,022 \$, 0 \$ EN CACHE CHAUD) ; LE PROTOCOLE OR-ROLES COMMITTÉ" 2>&1
 - ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT" 2>&1 | tail -2; git log
 - BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES" 2>&1
+- Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURISTIQUE SINON, CODE 0 DANS TOUS LES CAS ; LA DÉCISION RESTE À L'HUMAIN" 2>&1 | tail -2; gi
 

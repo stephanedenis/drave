@@ -480,10 +480,19 @@ synthétique porte le reste du gain. Dispositif, coût et contrôle négatif :
 [`rapport-tagger-option.md`](../../reports/rapport-tagger-option.md).
 
 **Le coût.** **Un appel par phrase** (le tagger de syntagmes, qui était appelé sans contribuer,
-a été retiré), **22 299 tokens** et **155 s** pour les **612 phrases**, soit **~0,02 $**. Le
-**cache** (mémoire par texte + disque du client) rend la seconde analyse gratuite :
-`appels=20 · réseau=0 · cache=20 · tokens=0` sur les 20 phrases rejouées. Les **trois exemples**
-de [`exemples.md`](exemples.md) § 6 totalisent **3 appels**, **441 tokens** et **3,7 s**.
+a été retiré). La référence mesurée est la passe API de W2 sur **452 phrases** : **65 029
+tokens** (55 572 d'entrée + 9 457 de sortie), **447 requêtes** et **443,8 s**. Le **cache**
+(mémoire par texte + disque du client) rend la seconde analyse gratuite : `appels=20 ·
+réseau=0 · cache=20 · tokens=0` sur les 20 phrases rejouées. Les **trois exemples** de
+[`exemples.md`](exemples.md) § 6 totalisent **3 appels**, **441 tokens** et **3,7 s**.
+
+**Le coût pour 1 000 phrases.** La passe API de W2 (452 phrases) donne **143 870 tokens**
+(122 947 d'entrée + 20 923 de sortie), **989 requêtes** et **981,9 s** de réseau pour **1 000
+phrases** de même longueur, soit **~0,031 $ hors pointe / ~0,062 $ en pointe** au tarif
+`deepseek-flash` du 2026-11-13 ; le cache chaud rejoue à **0 réseau, 0 token** (~0,14 s). Le
+chiffre est une **extrapolation** de W2, pas un run de 1 000 phrases ; `evaluer --tagger --json`
+publie `tagger.cout_pour_1000_phrases`. Dispositif et limites :
+[`rapport-tagger-defaut.md`](../../reports/rapport-tagger-defaut.md) § 3.6.
 
 **`evaluer --tagger`.** La commande mesure **les deux** lectures et publie l'écart et le coût
 (la ligne `TAGGER API DEEPSEEK` sur 20 phrases, exemple réel) :
@@ -497,9 +506,10 @@ TAGGER API DEEPSEEK (option --tagger)
 ```
 
 **Le défaut ne bouge pas.** Sans `--tagger`, la commande ne lit aucune clé, n'importe pas le
-module réseau, n'ouvre aucune socket et rend exactement l'heuristique d'avant (le test
-[`test_tagger_api.py`](../../tools/tests/test_tagger_api.py) le compare octet pour octet). Le
-`--tagger` **explicite** est une **option**, pas un changement de produit : c'est la seule
+module réseau, n'ouvre aucune socket, sort **code 0** et rend exactement l'heuristique d'avant
+(le test [`test_tagger_api.py`](../../tools/tests/test_tagger_api.py) le compare octet pour
+octet ; le test W3 piège `socket.socket` et vérifie que `tools.llm.deepseek` n'est pas importé).
+Le `--tagger` **explicite** est une **option**, pas un changement de produit : c'est la seule
 porte qui peut sortir **4** (clé absente ou refusée). `--tagger auto` ne peut pas sortir 4 : il
 replie sur l'heuristique, code **0**, et le dit. Dans les deux cas, le **défaut** sans option
 reste l'heuristique hors ligne.

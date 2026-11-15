@@ -1885,3 +1885,141 @@ index b84e308e..47dd0756 100644
   ```
 
 - **bash** `{"command": "git commit -m \"J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS\" 2>&1 | tail -20", "description": "Committer les changements Y1"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-63]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-63", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 519b729f] J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS
+ 20 files changed, 3072 insertions(+), 48 deletions(-)
+ create mode 100644 journal/sessions/session-ed9b8942-25a3-48ee-9f86-f6821e56df9d/digest.md
+ create mode 100644 journal/sessions/session-ed9b8942-25a3-48ee-9f86-f6821e56df9d/rapport.md
+ create mode 100644 reports/rapport-tagger-auto.json
+ create mode 100644 reports/rapport-tagger-auto.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD; echo '---STATUS---'; git status --short | head -40", "description": "Inspecter le commit et l'état"}`
+
+  ```
+519b729f J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS
+ docs/pilotage/en-cours.md                          |    6 +-
+ docs/produit/README.md                             |   37 +-
+ journal/2026-11-15/README.md                       |    7 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    6 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    3 +-
+ journal/sessions/MANIFEST.md                       |    5 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   29 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1887 ++++++++++++++++++++
+ .../rapport.md                                     |  139 ++
+ reports/rapport-tagger-auto.json              
+… [729 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo 'HEAD README 65029:'; git show HEAD:docs/produit/README.md | grep -c \"65 029\" || true; echo 'WORKTREE README 65029:'; grep -c \"65 029\" docs/produit/README.md || true; echo '---HEAD Y1---'; git show HEAD:reports/rapport-tagger-auto.md | head -6; echo '---STATUS---'; git status - … [67 caractères tronqués]`
+
+  ```
+HEAD README 65029:
+0
+WORKTREE README 65029:
+1
+---HEAD Y1---
+# Y1 — le prototype du mode `auto` du tagger : l'API si la clé existe, l'heuristique sinon, sans changer le code de sortie
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **Y1** (J5, la décision
+> du tagger) · **Date** : 2026-11-15 · **HEAD mesuré** : `f63ad709` + ce diff · **Verdict** :
+> ✅ **le prototype est mesuré** — clé présente → API, **code 0**, **130 tokens** ; clé
+> invalide → heuristique, **code 0** (pas 4), `refus` explicite ; clé absente → heuristique,
+---STATUS---
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/protocole_or_roles.py
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **bash** `{"command": "test -f reports/rapport-tagger-auto.md && echo FICHE-OK; python3 tools/tests/test_tagger_api.py 2>&1 | tail -1", "description": "Vérifier l'acceptation de la tâche"}`
+
+  ```
+FICHE-OK
+OK
+  ```
+
+- **bash** `{"command": "grep -RIn \"Bearer\\|Authorization\\|cle-secrete\\|sentinelle-auto\" journal/sessions/session-ed9b8942-25a3-48ee-9f86-f6821e56df9d journal/2026-11-15 2>/dev/null | head -20; echo \"GREP=$?\"", "description": "Vérifier l'absence de secret dans le journal commité"}`
+
+  ```
+journal/sessions/session-ed9b8942-25a3-48ee-9f86-f6821e56df9d/digest.md:1037:- **bash** `{"command": "python3 - <<'PY'\nimport json, os, pathlib, subprocess, sys, tempfile, time\nracine = pathlib.Path('.').resolve()\ntmp = pathlib.Path(tempfile.mkdtemp(prefix='auto-invalid-'))\ncle = tmp / 'bad.key'\ncle.write_text('cle-invalide-sentinelle-auto\\n', encoding='utf-8')\ncache = tmp / 'cac … [799 caractères tronqués]`
+GREP=0
+  ```
+
+- **todo_write** `{"todos": [{"content": "Implémenter `--tagger auto` dans drave.py (parsing, sélection API/heuristique, messages, coût)", "status": "completed"}, {"content": "Ajouter les tests des quatre cas dans tools/tests/test_tagger_api.py", "status": "completed"}, {"content": "Mesurer les quatre cas réels (clé  … [317 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 6 completed.
+  ```
+
+### 🤖 Assistant
+
+## Y1 livré — le prototype `--tagger auto`
+
+### Ce qui a été fait
+
+- **`tools/drave.py`** : `analyser --tagger auto` choisit la voie.
+  - clé trouvée (`DEEPSEEK_KEY_FILE`, `DSH_KEY_FILE`, `~/.config/drave/deepseek.key`, `DEEPSEEK_API_KEY`, `DSH_API_KEY`) → cascade API ;
+  - pas de clé → heuristique, **sans importer le module réseau** ;
+  - clé invalide ou réseau coupé → **repli heuristique, code 0**, avec `refus` explicite ;
+  - refus de texte → **code 3**, aucun appel API ;
+  - `--tagger` explicite reste la seule porte qui peut sortir **4** ;
+  - message `stderr` disant la voie servie, sans jamais afficher la clé ;
+  - coût dans la ligne `TAGGER API` quand l’API a été tentée.
+- **`tools/tests/test_tagger_api.py`** : classe `TestTaggerAuto`, **9 tests** ajoutés (30 au total).
+- **`reports/rapport-tagger-auto.md`** + **`reports/rapport-tagger-auto.json`**.
+- **`docs/produit/README.md`** § 3.7 : tableau des cas `auto`, codes, coût, contrôle négatif.
+- **`docs/pilotage/en-cours.md`** : compteurs et état R0.7 mis à jour.
+
+### Les quatre cas mesurés
+
+| cas | code | résultat |
+|---|---:|---|
+| **clé présente** | **0** | API, `source=cascade`, **130 tokens**, 1,673 s |
+| **clé invalide** | **0** (pas 4) | heuristique, `refus="clé refusée (HTTP 401)"` |
+| **clé absente** | **0** | heuristique, **stdout identique au défaut octet pour octet** (5 852 octets JSON), `tools.llm.deepseek` non importé |
+| **clé + réseau coupé** | **0** | 3 essais, heuristique, `refus` réseau |
+| **refus de texte** | **3** | `refus="vide"`, **0 appel API** |
+
+**Contrôle négatif principal** : la même clé invalide sort **0** en `auto`, mais **4** avec `--tagger` explicite, `stdout` vide.
+
+### Validation
+
+- `python3 tools/tests/test_tagger_api.py` → **30 tests, OK**
+- `bash tools/porte-produit.sh` → **verte**
+- `python3 tools/revue_documentation.py` → **tout passe**
+- `bash tools/porte-tableaux.sh` → **verte**
+- `python3 tools/verifie_en_cours.py` → **état reprenable**
+
+### Recommandation — décision humaine
+
+La fiche recommande de **garder le défaut heuristique hors ligne** et de traiter `--tagger auto` comme un **prototype opt-in**, jamais comme défaut : le même texte peut changer de POS selon la machine, et le coût n’est pas nul. **Le code ne change pas le défaut** ; la décision reste à l’humain.
+
+Commit : **`519b729f`** — *J5 — Y1 : LE MODE AUTO DU TAGGER (CLÉ 0/130 TOKENS, INVALIDE 0, SANS CLÉ 0 IDENTIQUE AU DÉFAUT, RÉSEAU 0 APRÈS 3 ESSAIS) ; 30/30 TESTS*.
+
