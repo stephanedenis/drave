@@ -65927,3 +65927,29 @@ dim 15 nov 2026 14:52:02 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/pilotage/en-cours.md && timeout 300 git commit -m \"ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)\" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin … [192 caractères tronqués]`
+
+  ```
+13 files changed, 52 insertions(+), 22 deletions(-)
+b8248b2d ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)
+   75dc9259..b8248b2d  s/v7 -> s/v7
+   75dc9259..b8248b2d  master -> master
+dim 15 nov 2026 14:55:13 EST
+19
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tool … [347 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=1
+bash tools/porte-bloc-linguistique.sh    EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py >/dev/null; python3 tools/index_reports.py --verifier; echo \"index EXIT=$?\"; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à … [608 caractères tronqués]`
