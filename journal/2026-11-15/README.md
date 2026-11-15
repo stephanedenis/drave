@@ -139,15 +139,16 @@ environnementale) et un ciblage **9/9** après heartbeat.
 
 ### X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud
 
-Le tagger est mesuré sur **1 000 items réels** (612 du gold + 56 phrases des 50 textes libres,
-**665 textes distincts** ; 332 répétitions déterministes). À froid : **662 appels réseau**
-(3 collisions de prompt servies par le disque), **335 rejeux mémoire**, **98 968 tokens**,
-**690,4 s**, **86,9 items/min**, pic **40,8 Mio**, cache disque **703 720 octets** en **662
-fichiers**, **5 refus** sur 1 000 (2 textes distincts). Coût : **0,021635 $** pour le lot,
-**0,032534 $** extrapolé à 1 000 textes uniques hors pointe (**0,065068 $** en pointe), à
-comparer aux **0,065359 $** de la référence `0,04 $/612` — la référence était à deux appels par
-phrase, le câblage actuel en fait un. À chaud : **0 réseau, 0 token, 0 $**, **2,715 s**,
-**22 099 items/min**, **1 000/1 000 hashes identiques**. `--jsonl` rend **1 003 lignes** (3
-phrases du gold contiennent deux phrases) ; le second passage chaud est **0 réseau / 0 token**.
+Le tagger est mesuré sur **1 000 items réels** (612 du gold + 69 phrases des 50 textes du banc
+de robustesse, **677 textes distincts** ; 319 répétitions déterministes). À froid : **672
+appels réseau** (3 collisions de prompt servies par le disque), **323 rejeux mémoire**, **2
+refus sans appel**, **99 971 tokens**, **685,2 s**, **87,6 items/min**, pic **40,8 Mio**, cache
+disque **712 943 octets** en **672 fichiers**, **4 refus** sur 1 000 (3 items distincts). Coût :
+**0,021770 $** pour le lot, **0,032157 $** extrapolé à 1 000 textes uniques hors pointe
+(**0,064315 $** en pointe), à comparer aux **0,065359 $** de la référence `0,04 $/612` — la
+référence était à deux appels par phrase, le câblage actuel en fait un. À chaud : **0 réseau,
+0 token, 0 $**, **2,635 s**, **22 770 items/min**, **1 000/1 000 hashes identiques**. `--jsonl`
+rend **1 003 lignes** (3 phrases du gold contiennent deux phrases) ; le second passage chaud est
+**0 réseau / 0 token**.
 [`fiche`](../../reports/rapport-tagger-lot.md) · [`JSON`](../../reports/rapport-tagger-lot.json).
 <!-- /notes -->

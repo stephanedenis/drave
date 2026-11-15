@@ -7,19 +7,20 @@ réel** de 1 000 items, avec le cache **froid** puis **chaud**, la mémoire, le 
 mode `--jsonl` du CLI. Le contrôle négatif est le cache chaud : les mêmes phrases, rejouées,
 doivent coûter **0 réseau, 0 token, 0 dollar**.
 
-LE CORPUS. 612 phrases du gold (hand 20 + reel 432 + synth 160) + les **50 textes libres** de
-l'audit produit (`reports/pensee-produit-bloc-l.json`, `banc_50.detail`), segmentés en phrases
-par `Heuristique._phrases`. Cela donne **668 lignes source** et **665 textes distincts**
-(3 doublons du gold). Le lot de 1 000 items = les 668 lignes source + **332 répétitions**
-déterministes (graine 20261115) : les 1 000 items sont donc des phrases réelles, mais 335
-rejouent un texte déjà vu dans le lot. La mesure publie séparément le lot (1 000 items) et
-l'extrapolation aux 1 000 phrases **uniques**.
+LE CORPUS. 612 phrases du gold (hand 20 + reel 432 + synth 160) + les **50 textes libres** du
+banc de robustesse (`reports/pensee-fiabilite-produit.json`, `banc_50.resultats`), segmentés en
+phrases par `Heuristique._phrases`. Cela donne **681 lignes source** et **677 textes distincts**
+(4 doublons, dont 3 du gold et « Le chat dort. » déjà dans le gold). Le lot de 1 000 items =
+les 681 lignes source + **319 répétitions** déterministes (graine 20261115) : les 1 000 items
+sont donc des phrases réelles, mais 323 rejouent un texte déjà vu dans le lot. La variante `--libres produit` utilise les 50 phrases
+de l'audit produit (`pensee-produit-bloc-l.json`, 668 lignes / 665 textes). La mesure publie
+séparément le lot (1 000 items) et l'extrapolation aux 1 000 phrases **uniques**.
 
 TROIS PASSES.
-1. `--mode froid` : cache disque neuf, lot complet, une seule cascade → 665 appels réseau,
-   335 rejeux mémoire (dont 3 doublons source).
-2. `--mode chaud` : même cache, lot complet, cascade neuve → 0 réseau, 665 rejeux disque,
-   335 rejeux mémoire.
+1. `--mode froid` : cache disque neuf, lot complet, une seule cascade → 673 appels réseau,
+   4 rejeux disque (prompts identiques) et 323 rejeux mémoire.
+2. `--mode chaud` : même cache, lot complet, cascade neuve → 0 réseau, 677 rejeux disque,
+   323 rejeux mémoire.
 3. `--mode fusion` : combine les deux, calcule le coût, lance `--jsonl` (chaud sur 1 000,
    froid sur 20) et écrit le JSON de la fiche.
 
@@ -66,7 +67,10 @@ from tools.llm.deepseek import DeepSeek  # noqa: E402
 GOLD = RACINE / "tools" / "tests" / "linguistique" / "gold.json"
 REEL = RACINE / "tools" / "tests" / "linguistique" / "gold_reel.json"
 SYNTH = RACINE / "tools" / "tests" / "linguistique" / "gold_synthetique.json"
-LIBRES = RACINE / "reports" / "pensee-produit-bloc-l.json"
+LIBRES = {
+    "fiabilite": RACINE / "reports" / "pensee-fiabilite-produit.json",
+    "produit": RACINE / "reports" / "pensee-produit-bloc-l.json",
+}
 GRAINE = 20261115
 N_LOT = 1000
 
@@ -81,8 +85,13 @@ PRIX = {
 # --------------------------------------------------------------------------- corpus
 
 
-def charger_corpus() -> list[dict]:
-    """Les 668 lignes source : 612 gold + 56 phrases tirées des 50 textes libres."""
+def charger_corpus(libres: str = "fiabilite") -> list[dict]:
+    """Les lignes source : 612 gold + les phrases des 50 textes libres.
+
+    `fiabilite` (défaut) : les 50 textes du banc de robustesse
+    (`pensee-fiabilite-produit.json`, 69 phrases). `produit` : les 50 phrases de l'audit
+    produit (`pensee-produit-bloc-l.json`, 56 phrases) — variante de contrôle.
+    """
     items: list[dict] = []
     for chemin, source in ((GOLD, "hand"), (REEL, "reel"), (SYNTH, "synth")):
         for p in json.loads(chemin.read_text(encoding="utf-8"))["phrases"]:
@@ -91,16 +100,21 @@ def charger_corpus() -> list[dict]:
                 "source": source, "origine": chemin.name,
             })
     h = bl.Heuristique()
-    banc = json.loads(LIBRES.read_text(encoding="utf-8"))["banc_50"]["detail"]
+    if libres not in LIBRES:
+        raise SystemExit(f"banc libre inconnu : {libres}")
+    chemin = LIBRES[libres]
+    d = json.loads(chemin.read_text(encoding="utf-8"))
+    banc = d["banc_50"]["resultats" if libres == "fiabilite" else "detail"]
     for x in banc:
-        langue = x.get("langue") or "fr"
-        for k, (debut, fin, _typ, _) in enumerate(h._phrases(x["texte"])):
-            phrase = x["texte"][debut:fin].strip()
+        texte = x.get("texte") or ""
+        langue = x.get("langue") or ("und" if libres == "fiabilite" else "fr")
+        for k, (debut, fin, _typ, _) in enumerate(h._phrases(texte)):
+            phrase = texte[debut:fin].strip()
             if not phrase:
                 continue
             items.append({
                 "id": f"{x['id']}-{k:02d}", "texte": phrase, "langue": langue,
-                "source": "libre", "origine": "pensee-produit-bloc-l.json",
+                "source": "libre", "origine": chemin.name,
             })
     return items
 
@@ -243,9 +257,12 @@ def mesurer_passe(nom: str, lot: list[dict], cache_dir: pathlib.Path,
     transport = TransportMesure(client)
     cascade = drave._cascade_tagger(transport, partition=partition, stats=stats)
     lignes: list[dict] = []
+    vus: set[tuple[str, str]] = set()
     t_debut = time.perf_counter()
     try:
         for it in lot:
+            cle = (it["texte"], it["langue"])
+            deja_vu = cle in vus
             avant_appels = len(transport.calls)
             t0 = time.perf_counter()
             erreur = ""
@@ -266,7 +283,9 @@ def mesurer_passe(nom: str, lot: list[dict], cache_dir: pathlib.Path,
                 "rang": it["rang"], "id": it["id"], "source": it["source"],
                 "langue": it["langue"], "repete": bool(it["repete"]),
                 "appel_transport": appel, "cache_disque": cache_disque,
-                "cache_memoire": not appel,
+                "cache_memoire": (not appel) and deja_vu,
+                "refus_sans_appel": (not appel) and (not deja_vu),
+                "deja_vu": deja_vu,
                 "tokens_reseau": tokens_reseau, "tokens_cache": tokens_cache,
                 "prompt_tokens": rec["prompt_tokens"] if (appel and not cache_disque) else 0,
                 "completion_tokens": rec["completion_tokens"] if (appel and not cache_disque) else 0,
@@ -282,6 +301,7 @@ def mesurer_passe(nom: str, lot: list[dict], cache_dir: pathlib.Path,
                     separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
                     if annotation is not None else ""),
             })
+            vus.add(cle)
     finally:
         duree = time.perf_counter() - t_debut
     apres_cache = meta_cache(cache_dir)
@@ -323,7 +343,9 @@ def agreger(passe: dict, composition: dict) -> dict:
     lignes = passe["lignes"]
     reseau = [l for l in lignes if l["appel_transport"] and not l["cache_disque"]]
     disque = [l for l in lignes if l["cache_disque"]]
-    memoire = [l for l in lignes if not l["appel_transport"]]
+    memoire = [l for l in lignes if l.get("cache_memoire")]
+    sans_transport = [l for l in lignes if not l["appel_transport"]]
+    refus_sans_appel = [l for l in lignes if l.get("refus_sans_appel")]
     duree = max(1e-9, passe["duree_s"])
     n = len(lignes)
     tokens_reseau = sum(l["tokens_reseau"] for l in lignes)
@@ -341,7 +363,7 @@ def agreger(passe: dict, composition: dict) -> dict:
             "items": len(sous),
             "requetes": sum(1 for l in sous if l["appel_transport"] and not l["cache_disque"]),
             "cache_disque": sum(1 for l in sous if l["cache_disque"]),
-            "cache_memoire": sum(1 for l in sous if not l["appel_transport"]),
+            "cache_memoire": sum(1 for l in sous if l.get("cache_memoire")),
             "tokens_reseau": sum(l["tokens_reseau"] for l in sous),
             "latence_reseau_s": round(sum(l["latence_api_s"] for l in sous
                                                    if l["appel_transport"] and not l["cache_disque"]), 3),
@@ -354,7 +376,7 @@ def agreger(passe: dict, composition: dict) -> dict:
             "items": len(sous),
             "requetes": sum(1 for l in sous if l["appel_transport"] and not l["cache_disque"]),
             "cache_disque": sum(1 for l in sous if l["cache_disque"]),
-            "cache_memoire": sum(1 for l in sous if not l["appel_transport"]),
+            "cache_memoire": sum(1 for l in sous if l.get("cache_memoire")),
             "tokens_reseau": sum(l["tokens_reseau"] for l in sous),
             "latence_reseau_s": round(sum(l["latence_api_s"] for l in sous
                                                    if l["appel_transport"] and not l["cache_disque"]), 3),
@@ -374,7 +396,8 @@ def agreger(passe: dict, composition: dict) -> dict:
             "requetes_reseau": len(reseau),
             "cache_disque": len(disque),
             "cache_memoire": len(memoire),
-            "items_sans_transport": len(memoire),
+            "items_sans_transport": len(sans_transport),
+            "refus_sans_appel": len(refus_sans_appel),
             "taux_cache_disque": round(len(disque) / n, 4),
             "taux_cache_memoire": round(len(memoire) / n, 4),
             "taux_cache_total": round((len(disque) + len(memoire)) / n, 4),
@@ -454,8 +477,13 @@ def couts(froid: dict) -> dict:
         "tokens": api,
         "prix_unitaire_par_million": PRIX,
         "lot_1000_items": mesure,
-        "lot_1000_items_note": "coût réel du lot de 1 000 items : 665 appels réseau, "
-                               "335 rejeux mémoire ; les répétitions ne sont pas facturées.",
+        "lot_1000_items_note": (
+            f"coût réel du lot de 1 000 items : {froid['cache']['requetes_reseau']} appels "
+            f"réseau + {froid['cache']['cache_disque']} rejeux disque = "
+            f"{froid['cache']['appels_transport']} appels transport, "
+            f"{froid['cache']['cache_memoire']} rejeux mémoire et "
+            f"{froid['cache']['refus_sans_appel']} refus sans appel ; les répétitions ne sont "
+            "pas facturées."),
         "extrapole_1000_phrases_uniques": extrapole,
         "extrapole_note": f"×{facteur:.4f} (1000 / {uniques} textes distincts)",
         "par_item": {nom: round(v / 1000.0, 9) for nom, v in mesure.items()},
@@ -463,8 +491,10 @@ def couts(froid: dict) -> dict:
         "reference_612": {"dollars": reference_612, "prix_1000_lineaire": reference_1000,
                           "ecart_extrapole_hors_pointe": round(
                               extrapole["hors_pointe"] - reference_1000, 6)},
-        "fenetre_horaire": "run du 2026-11-15, 17 h 56 UTC (hors pointe 16:30–00:30 UTC) ; "
-                           "les deux tarifs sont publiés",
+        "fenetre_horaire": (
+            f"run du {froid['cache']['dates_apres']['min']} au "
+            f"{froid['cache']['dates_apres']['max']} (heures locales EST ; 18 h 21–18 h 33 "
+            "UTC), hors pointe (16:30–00:30 UTC) ; les deux tarifs sont publiés"),
     }
 
 
@@ -540,7 +570,7 @@ def _commit() -> str:
 def fusion(args: argparse.Namespace) -> int:
     froid_brut = json.loads(pathlib.Path(args.froid).read_text(encoding="utf-8"))
     chaud_brut = json.loads(pathlib.Path(args.chaud).read_text(encoding="utf-8"))
-    lot, composition = construire_lot(charger_corpus(), n=args.n, graine=args.graine)
+    lot, composition = construire_lot(charger_corpus(args.libres), n=args.n, graine=args.graine)
     froid = agreger(froid_brut, composition)
     chaud = agreger(chaud_brut, composition)
     cout = couts(froid)
@@ -587,13 +617,30 @@ def fusion(args: argparse.Namespace) -> int:
         },
         "corpus": {
             **composition,
-            "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres "
-                       "(pensee-produit-bloc-l.json, 56 phrases)",
-            "note": "les 1 000 items sont des phrases réelles ; 335 rejouent un texte du lot. "
-                    "La mesure publie le lot et l'extrapolation aux 1 000 textes uniques.",
+            "libres": args.libres,
+            "sources": (
+                "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres "
+                + ("(pensee-fiabilite-produit.json, 69 phrases ; 2 textes vides, 2 refus)"
+                   if args.libres == "fiabilite"
+                   else "(pensee-produit-bloc-l.json, 56 phrases)")),
+            "note": (
+                f"les 1 000 items sont des phrases réelles ; "
+                f"{composition['items_repetes'] + composition['doublons_source']['n']} "
+                f"rejouent un texte du lot ({composition['doublons_source']['n']} doublons + "
+                f"{composition['items_repetes']} répétitions) et "
+                f"{froid['cache']['refus_sans_appel']} refusent sans appel. La mesure publie "
+                "le lot et l'extrapolation aux 1 000 textes uniques."),
         },
         "passes": {"froid": froid, "chaud": chaud},
-        "cache": {"froid": froid["cache"], "chaud": chaud["cache"]},
+        "cache": {
+            "froid": froid["cache"], "chaud": chaud["cache"],
+            "note": (
+                f"{froid['cache']['cache_disque']} collisions de prompt servent des textes "
+                "différents (même prompt, ponctuation ignorée) ; « Le chat dort. », déjà "
+                "dans le gold, est servi par la mémoire. Les "
+                f"{froid['cache']['refus_sans_appel']} refus sans appel (f14 « 🚀 », "
+                "f17 « ... ») ne sont ni réseau ni cache."),
+        },
         "debit": {"froid": froid["debit"], "chaud": chaud["debit"]},
         "memoire": {"froid": froid["memoire"], "chaud": chaud["memoire"]},
         "cout": cout,
@@ -659,12 +706,14 @@ def main() -> int:
                     help="smoke test : ne mesurer que les N premiers items")
     ap.add_argument("--reset", action="store_true", help="vider le cache avant la passe")
     ap.add_argument("--partition", default="alternative")
+    ap.add_argument("--libres", choices=sorted(LIBRES), default="fiabilite",
+                    help="banc des 50 textes libres (défaut : fiabilite)")
     args = ap.parse_args()
 
     if args.mode == "fusion":
         return fusion(args)
 
-    items = charger_corpus()
+    items = charger_corpus(args.libres)
     lot, composition = construire_lot(items, n=args.n, graine=args.graine)
     if args.limite:
         lot = lot[:args.limite]

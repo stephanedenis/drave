@@ -738,7 +738,7 @@
 | [rapport-tagger-defaut.md](rapport-tagger-defaut.md) | W3 — la matrice du tagger : le défaut reste hors ligne (code 0), `--tagger` est la seule porte qui peut sortir 4 |
 | [rapport-tagger-erreurs.md](rapport-tagger-erreurs.md) | E2 — les cas d'erreur de `--tagger` : clé refusée = code 4, réseau et refus du modèle = repli heuristique |
 | [rapport-tagger-h50.md](rapport-tagger-h50.md) | W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50 ; il gagne sur les deux, donc la règle ne le rejette pas |
-| [rapport-tagger-lot.md](rapport-tagger-lot.md) | X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud |
+| [rapport-tagger-lot.md](rapport-tagger-lot.md) | X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud |
 | [rapport-tagger-option.md](rapport-tagger-option.md) | R0.7 / 1A — le tagger POS en option : +8,57 pts sur 20 phrases, +8,49 sur le gold 612 ; le défaut reste hors ligne |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |

@@ -5,9 +5,9 @@
   "R0.7",
   "B13"
  ],
- "date": "2026-11-15 13:11 EST",
- "commit": "d2fd406ae3cba79c9e7d6c6ef814236ef32c3721",
- "verdict": "le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 662 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques",
+ "date": "2026-11-15 13:34 EST",
+ "commit": "e1a283075a9f479c881878bc34e9a70324389d7c",
+ "verdict": "le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 672 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques",
  "dispositif": {
   "modele_demande": "deepseek-chat",
   "seuil": 0.6,
@@ -19,144 +19,148 @@
    "cpu": "x86_64",
    "nproc": 40
   },
-  "cache_froid": "/tmp/tagger-lot-cache",
-  "cache_chaud": "/tmp/tagger-lot-cache",
+  "cache_froid": "/tmp/tagger-lot-fiab-cache",
+  "cache_chaud": "/tmp/tagger-lot-fiab-cache",
   "passes": "froid (cache neuf) → chaud (même cache) → jsonl chaud 1 000 → jsonl froid 20"
  },
  "corpus": {
-  "lignes_source": 668,
-  "textes_distincts": 665,
-  "prompts_distincts": 662,
-  "collisions_prompt": 3,
+  "lignes_source": 681,
+  "textes_distincts": 677,
+  "prompts_distincts": 673,
+  "collisions_prompt": 4,
   "doublons_source": {
-   "n": 3,
+   "n": 4,
    "ids": [
     "r186",
     "r189",
-    "r358"
+    "r358",
+    "f01-00"
    ]
   },
   "items": 1000,
-  "repetitions_ajoutees": 332,
-  "items_repetes": 332,
+  "repetitions_ajoutees": 319,
+  "items_repetes": 319,
   "graine": 20261115,
-  "sha256_textes": "94d47d017f1597881425b2650a7ddc33a28d768e293b2db8acf7fd888eff2bc3",
+  "sha256_textes": "6a515d4585ec8e20a7fb4656f3af266bdba1def942faf03ad2bf713d605498b0",
   "par_source": {
    "hand": 20,
    "reel": 432,
    "synth": 160,
-   "libre": 56
+   "libre": 69
   },
   "par_langue": {
-   "fr": 442,
-   "en": 224,
-   "und": 2
+   "fr": 458,
+   "en": 215,
+   "und": 7,
+   "it": 1
   },
-  "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres (pensee-produit-bloc-l.json, 56 phrases)",
-  "note": "les 1 000 items sont des phrases réelles ; 335 rejouent un texte du lot. La mesure publie le lot et l'extrapolation aux 1 000 textes uniques."
+  "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres (pensee-fiabilite-produit.json, 69 phrases ; 2 textes vides, 2 refus)",
+  "note": "les 1 000 items sont des phrases réelles ; 323 rejouent un texte du lot (4 doublons + 319 répétitions) et 2 refusent sans appel (texte sans mot). La mesure publie le lot et l'extrapolation aux 1 000 textes uniques.",
+  "libres": "fiabilite"
  },
  "passes": {
   "froid": {
    "nom": "froid",
    "items": 1000,
    "composition": {
-    "lignes_source": 668,
-    "textes_distincts": 665,
-    "prompts_distincts": 662,
-    "collisions_prompt": 3,
+    "lignes_source": 681,
+    "textes_distincts": 677,
+    "prompts_distincts": 673,
+    "collisions_prompt": 4,
     "doublons_source": {
-     "n": 3,
+     "n": 4,
      "ids": [
       "r186",
       "r189",
-      "r358"
+      "r358",
+      "f01-00"
      ]
     },
     "items": 1000,
-    "repetitions_ajoutees": 332,
-    "items_repetes": 332,
+    "repetitions_ajoutees": 319,
+    "items_repetes": 319,
     "graine": 20261115,
-    "sha256_textes": "94d47d017f1597881425b2650a7ddc33a28d768e293b2db8acf7fd888eff2bc3",
+    "sha256_textes": "6a515d4585ec8e20a7fb4656f3af266bdba1def942faf03ad2bf713d605498b0",
     "par_source": {
      "hand": 20,
      "reel": 432,
      "synth": 160,
-     "libre": 56
+     "libre": 69
     },
     "par_langue": {
-     "fr": 442,
-     "en": 224,
-     "und": 2
+     "fr": 458,
+     "en": 215,
+     "und": 7,
+     "it": 1
     }
    },
-   "cache_dir": "/tmp/tagger-lot-cache",
-   "duree_s": 690.388,
+   "cache_dir": "/tmp/tagger-lot-fiab-cache",
+   "duree_s": 685.228,
    "debit": {
-    "items_par_min": 86.9,
-    "requetes_par_min": 57.5,
-    "secondes_par_item": 0.6904,
-    "secondes_par_requete": 1.0429
+    "items_par_min": 87.6,
+    "requetes_par_min": 58.8,
+    "secondes_par_item": 0.6852,
+    "secondes_par_requete": 1.0197
    },
    "cache": {
-    "appels_transport": 665,
-    "requetes_reseau": 662,
+    "appels_transport": 675,
+    "requetes_reseau": 672,
     "cache_disque": 3,
-    "cache_memoire": 335,
-    "items_sans_transport": 335,
+    "cache_memoire": 323,
+    "items_sans_transport": 325,
+    "refus_sans_appel": 2,
     "taux_cache_disque": 0.003,
-    "taux_cache_memoire": 0.335,
-    "taux_cache_total": 0.338,
+    "taux_cache_memoire": 0.323,
+    "taux_cache_total": 0.326,
     "fichiers_avant": 0,
-    "fichiers_apres": 662,
-    "octets_apres": 703720,
+    "fichiers_apres": 672,
+    "octets_apres": 712943,
     "dates_apres": {
-     "min": "2026-11-15T12:58:53-0500",
-     "max": "2026-11-15T13:10:21-0500"
+     "min": "2026-11-15T13:21:21-0500",
+     "max": "2026-11-15T13:32:44-0500"
     },
     "modeles_cache": {
-     "deepseek-flash": 662
+     "deepseek-flash": 672
     }
    },
    "api": {
-    "prompt_tokens": 83880,
-    "completion_tokens": 15088,
-    "total_tokens": 98968,
+    "prompt_tokens": 84916,
+    "completion_tokens": 15055,
+    "total_tokens": 99971,
     "prompt_cache_hit_tokens": 0,
-    "prompt_cache_miss_tokens": 83880,
-    "tokens_reseau": 98968,
+    "prompt_cache_miss_tokens": 84916,
+    "tokens_reseau": 99971,
     "tokens_cache": 392,
-    "tokens_total_appels": 99360
+    "tokens_total_appels": 100363
    },
    "latence": {
     "reseau_s": {
-     "moyenne": 1.036,
-     "mediane": 1.017,
-     "p95": 1.325,
-     "max": 3.677
+     "moyenne": 1.011,
+     "mediane": 0.998,
+     "p95": 1.308,
+     "max": 1.706
     },
     "item_s": {
-     "moyenne": 0.69,
-     "mediane": 0.915,
-     "p95": 1.299,
-     "max": 3.68
+     "moyenne": 0.684,
+     "mediane": 0.912,
+     "p95": 1.276,
+     "max": 1.752
     },
-    "reseau_total_s": 685.744
+    "reseau_total_s": 679.656
    },
    "refus": {
-    "n": 5,
+    "n": 4,
     "ids": [
-     "x48-00",
-     "x50-00",
-     "x50-00",
-     "x48-00",
-     "x50-00"
+     "f14-00",
+     "f17-00",
+     "f50-03",
+     "f50-03"
     ],
     "messages": [
-     "neuronal-pos: ValueError: longueur POS 6 / 2",
-     "neuronal-pos: ValueError: longueur POS 88 / 87",
-     "neuronal-pos: ValueError: longueur POS 88 / 87",
-     "neuronal-pos: ValueError: longueur POS 6 / 2",
-     "neuronal-pos: ValueError: longueur POS 88 / 87"
+     "vide",
+     "vide",
+     "neuronal-pos: ValueError: longueur POS 37 / 34",
+     "neuronal-pos: ValueError: longueur POS 37 / 34"
     ]
    },
    "erreurs": {
@@ -170,147 +174,159 @@
      "cache_disque": 0,
      "cache_memoire": 6,
      "tokens_reseau": 2907,
-     "latence_reseau_s": 21.191,
-     "duree_item_s": 21.296
+     "latence_reseau_s": 21.233,
+     "duree_item_s": 21.372
     },
     "libre": {
-     "items": 85,
-     "requetes": 56,
+     "items": 102,
+     "requetes": 66,
      "cache_disque": 0,
-     "cache_memoire": 29,
-     "tokens_reseau": 11640,
-     "latence_reseau_s": 62.633,
-     "duree_item_s": 63.413
+     "cache_memoire": 34,
+     "tokens_reseau": 12643,
+     "latence_reseau_s": 70.906,
+     "duree_item_s": 71.71
     },
     "reel": {
-     "items": 655,
+     "items": 639,
      "requetes": 427,
      "cache_disque": 2,
-     "cache_memoire": 226,
+     "cache_memoire": 210,
      "tokens_reseau": 62122,
-     "latence_reseau_s": 444.836,
-     "duree_item_s": 447.046
+     "latence_reseau_s": 429.407,
+     "duree_item_s": 432.268
     },
     "synth": {
-     "items": 234,
+     "items": 233,
      "requetes": 159,
      "cache_disque": 1,
-     "cache_memoire": 74,
+     "cache_memoire": 73,
      "tokens_reseau": 22299,
-     "latence_reseau_s": 157.084,
-     "duree_item_s": 157.999
+     "latence_reseau_s": 158.11,
+     "duree_item_s": 159.124
     }
    },
    "par_langue": {
     "en": {
-     "items": 341,
-     "requetes": 222,
+     "items": 319,
+     "requetes": 213,
      "cache_disque": 1,
-     "cache_memoire": 118,
-     "tokens_reseau": 32817,
-     "latence_reseau_s": 233.792,
-     "duree_item_s": 234.839
+     "cache_memoire": 105,
+     "tokens_reseau": 30905,
+     "latence_reseau_s": 211.058,
+     "duree_item_s": 212.287
     },
     "fr": {
-     "items": 656,
-     "requetes": 438,
+     "items": 669,
+     "requetes": 453,
      "cache_disque": 2,
-     "cache_memoire": 216,
-     "tokens_reseau": 65813,
-     "latence_reseau_s": 449.791,
-     "duree_item_s": 452.743
+     "cache_memoire": 214,
+     "tokens_reseau": 68114,
+     "latence_reseau_s": 463.228,
+     "duree_item_s": 466.783
     },
-    "und": {
-     "items": 3,
-     "requetes": 2,
+    "it": {
+     "items": 2,
+     "requetes": 1,
      "cache_disque": 0,
      "cache_memoire": 1,
-     "tokens_reseau": 338,
-     "latence_reseau_s": 2.161,
-     "duree_item_s": 2.171
+     "tokens_reseau": 150,
+     "latence_reseau_s": 1.096,
+     "duree_item_s": 1.102
+    },
+    "und": {
+     "items": 10,
+     "requetes": 5,
+     "cache_disque": 0,
+     "cache_memoire": 3,
+     "tokens_reseau": 802,
+     "latence_reseau_s": 4.274,
+     "duree_item_s": 4.302
     }
    },
    "stats_tagger": {
-    "appels": 665,
-    "requetes": 662,
+    "appels": 675,
+    "requetes": 672,
     "cache": 3,
-    "tokens": 98968,
-    "latence_s": 685.744,
+    "tokens": 99971,
+    "latence_s": 679.656,
     "modeles": {
-     "deepseek-flash": 662
+     "deepseek-flash": 672
     },
     "cle_refusee": 0
    },
    "memoire": {
-    "rss_avant_kb": 33868,
-    "pic_avant_kb": 33868,
-    "rss_apres_kb": 40820,
-    "pic_apres_kb": 40820,
-    "ru_maxrss_kb": 38588,
-    "delta_pic_kb": 6952,
-    "cache_octets": 703720,
-    "cache_octets_par_texte": 1058.2
+    "rss_avant_kb": 34124,
+    "pic_avant_kb": 34124,
+    "rss_apres_kb": 40836,
+    "pic_apres_kb": 40836,
+    "ru_maxrss_kb": 38156,
+    "delta_pic_kb": 6712,
+    "cache_octets": 712943,
+    "cache_octets_par_texte": 1053.1
    }
   },
   "chaud": {
    "nom": "chaud",
    "items": 1000,
    "composition": {
-    "lignes_source": 668,
-    "textes_distincts": 665,
-    "prompts_distincts": 662,
-    "collisions_prompt": 3,
+    "lignes_source": 681,
+    "textes_distincts": 677,
+    "prompts_distincts": 673,
+    "collisions_prompt": 4,
     "doublons_source": {
-     "n": 3,
+     "n": 4,
      "ids": [
       "r186",
       "r189",
-      "r358"
+      "r358",
+      "f01-00"
      ]
     },
     "items": 1000,
-    "repetitions_ajoutees": 332,
-    "items_repetes": 332,
+    "repetitions_ajoutees": 319,
+    "items_repetes": 319,
     "graine": 20261115,
-    "sha256_textes": "94d47d017f1597881425b2650a7ddc33a28d768e293b2db8acf7fd888eff2bc3",
+    "sha256_textes": "6a515d4585ec8e20a7fb4656f3af266bdba1def942faf03ad2bf713d605498b0",
     "par_source": {
      "hand": 20,
      "reel": 432,
      "synth": 160,
-     "libre": 56
+     "libre": 69
     },
     "par_langue": {
-     "fr": 442,
-     "en": 224,
-     "und": 2
+     "fr": 458,
+     "en": 215,
+     "und": 7,
+     "it": 1
     }
    },
-   "cache_dir": "/tmp/tagger-lot-cache",
-   "duree_s": 2.715,
+   "cache_dir": "/tmp/tagger-lot-fiab-cache",
+   "duree_s": 2.635,
    "debit": {
-    "items_par_min": 22099.4,
+    "items_par_min": 22770.4,
     "requetes_par_min": 0.0,
-    "secondes_par_item": 0.0027,
-    "secondes_par_requete": 2.715
+    "secondes_par_item": 0.0026,
+    "secondes_par_requete": 2.635
    },
    "cache": {
-    "appels_transport": 665,
+    "appels_transport": 675,
     "requetes_reseau": 0,
-    "cache_disque": 665,
-    "cache_memoire": 335,
-    "items_sans_transport": 335,
-    "taux_cache_disque": 0.665,
-    "taux_cache_memoire": 0.335,
-    "taux_cache_total": 1.0,
-    "fichiers_avant": 662,
-    "fichiers_apres": 662,
-    "octets_apres": 703720,
+    "cache_disque": 675,
+    "cache_memoire": 323,
+    "items_sans_transport": 325,
+    "refus_sans_appel": 2,
+    "taux_cache_disque": 0.675,
+    "taux_cache_memoire": 0.323,
+    "taux_cache_total": 0.998,
+    "fichiers_avant": 672,
+    "fichiers_apres": 672,
+    "octets_apres": 712943,
     "dates_apres": {
-     "min": "2026-11-15T12:58:53-0500",
-     "max": "2026-11-15T13:10:21-0500"
+     "min": "2026-11-15T13:21:21-0500",
+     "max": "2026-11-15T13:32:44-0500"
     },
     "modeles_cache": {
-     "deepseek-flash": 662
+     "deepseek-flash": 672
     }
    },
    "api": {
@@ -320,8 +336,8 @@
     "prompt_cache_hit_tokens": 0,
     "prompt_cache_miss_tokens": 0,
     "tokens_reseau": 0,
-    "tokens_cache": 99360,
-    "tokens_total_appels": 99360
+    "tokens_cache": 100363,
+    "tokens_total_appels": 100363
    },
    "latence": {
     "reseau_s": {
@@ -334,25 +350,23 @@
      "moyenne": 0.002,
      "mediane": 0.002,
      "p95": 0.004,
-     "max": 0.025
+     "max": 0.021
     },
     "reseau_total_s": 0
    },
    "refus": {
-    "n": 5,
+    "n": 4,
     "ids": [
-     "x48-00",
-     "x50-00",
-     "x50-00",
-     "x48-00",
-     "x50-00"
+     "f14-00",
+     "f17-00",
+     "f50-03",
+     "f50-03"
     ],
     "messages": [
-     "neuronal-pos: ValueError: longueur POS 6 / 2",
-     "neuronal-pos: ValueError: longueur POS 88 / 87",
-     "neuronal-pos: ValueError: longueur POS 88 / 87",
-     "neuronal-pos: ValueError: longueur POS 6 / 2",
-     "neuronal-pos: ValueError: longueur POS 88 / 87"
+     "vide",
+     "vide",
+     "neuronal-pos: ValueError: longueur POS 37 / 34",
+     "neuronal-pos: ValueError: longueur POS 37 / 34"
     ]
    },
    "erreurs": {
@@ -367,177 +381,188 @@
      "cache_memoire": 6,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 0.076
+     "duree_item_s": 0.068
     },
     "libre": {
-     "items": 85,
+     "items": 102,
      "requetes": 0,
-     "cache_disque": 56,
-     "cache_memoire": 29,
+     "cache_disque": 66,
+     "cache_memoire": 34,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 0.431
+     "duree_item_s": 0.38
     },
     "reel": {
-     "items": 655,
+     "items": 639,
      "requetes": 0,
      "cache_disque": 429,
-     "cache_memoire": 226,
+     "cache_memoire": 210,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 1.355
+     "duree_item_s": 1.342
     },
     "synth": {
-     "items": 234,
+     "items": 233,
      "requetes": 0,
      "cache_disque": 160,
-     "cache_memoire": 74,
+     "cache_memoire": 73,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 0.457
+     "duree_item_s": 0.468
     }
    },
    "par_langue": {
     "en": {
-     "items": 341,
+     "items": 319,
      "requetes": 0,
-     "cache_disque": 223,
-     "cache_memoire": 118,
+     "cache_disque": 214,
+     "cache_memoire": 105,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 0.612
+     "duree_item_s": 0.565
     },
     "fr": {
-     "items": 656,
+     "items": 669,
      "requetes": 0,
-     "cache_disque": 440,
-     "cache_memoire": 216,
+     "cache_disque": 455,
+     "cache_memoire": 214,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 1.703
+     "duree_item_s": 1.677
     },
-    "und": {
-     "items": 3,
+    "it": {
+     "items": 2,
      "requetes": 0,
-     "cache_disque": 2,
+     "cache_disque": 1,
      "cache_memoire": 1,
      "tokens_reseau": 0,
      "latence_reseau_s": 0,
-     "duree_item_s": 0.004
+     "duree_item_s": 0.003
+    },
+    "und": {
+     "items": 10,
+     "requetes": 0,
+     "cache_disque": 5,
+     "cache_memoire": 3,
+     "tokens_reseau": 0,
+     "latence_reseau_s": 0,
+     "duree_item_s": 0.013
     }
    },
    "stats_tagger": {
-    "appels": 665,
+    "appels": 675,
     "requetes": 0,
-    "cache": 665,
+    "cache": 675,
     "tokens": 0,
     "latence_s": 0,
     "modeles": {
-     "deepseek-flash": 662
+     "deepseek-flash": 672
     },
     "cle_refusee": 0
    },
    "memoire": {
-    "rss_avant_kb": 33792,
-    "pic_avant_kb": 33792,
-    "rss_apres_kb": 37932,
-    "pic_apres_kb": 37932,
-    "ru_maxrss_kb": 37368,
-    "delta_pic_kb": 4140,
-    "cache_octets": 703720,
-    "cache_octets_par_texte": 1058.2
+    "rss_avant_kb": 34264,
+    "pic_avant_kb": 34264,
+    "rss_apres_kb": 38172,
+    "pic_apres_kb": 38172,
+    "ru_maxrss_kb": 37888,
+    "delta_pic_kb": 3908,
+    "cache_octets": 712943,
+    "cache_octets_par_texte": 1053.1
    }
   }
  },
  "cache": {
   "froid": {
-   "appels_transport": 665,
-   "requetes_reseau": 662,
+   "appels_transport": 675,
+   "requetes_reseau": 672,
    "cache_disque": 3,
-   "cache_memoire": 335,
-   "items_sans_transport": 335,
+   "cache_memoire": 323,
+   "items_sans_transport": 325,
+   "refus_sans_appel": 2,
    "taux_cache_disque": 0.003,
-   "taux_cache_memoire": 0.335,
-   "taux_cache_total": 0.338,
+   "taux_cache_memoire": 0.323,
+   "taux_cache_total": 0.326,
    "fichiers_avant": 0,
-   "fichiers_apres": 662,
-   "octets_apres": 703720,
+   "fichiers_apres": 672,
+   "octets_apres": 712943,
    "dates_apres": {
-    "min": "2026-11-15T12:58:53-0500",
-    "max": "2026-11-15T13:10:21-0500"
+    "min": "2026-11-15T13:21:21-0500",
+    "max": "2026-11-15T13:32:44-0500"
    },
    "modeles_cache": {
-    "deepseek-flash": 662
+    "deepseek-flash": 672
    }
   },
   "chaud": {
-   "appels_transport": 665,
+   "appels_transport": 675,
    "requetes_reseau": 0,
-   "cache_disque": 665,
-   "cache_memoire": 335,
-   "items_sans_transport": 335,
-   "taux_cache_disque": 0.665,
-   "taux_cache_memoire": 0.335,
-   "taux_cache_total": 1.0,
-   "fichiers_avant": 662,
-   "fichiers_apres": 662,
-   "octets_apres": 703720,
+   "cache_disque": 675,
+   "cache_memoire": 323,
+   "items_sans_transport": 325,
+   "refus_sans_appel": 2,
+   "taux_cache_disque": 0.675,
+   "taux_cache_memoire": 0.323,
+   "taux_cache_total": 0.998,
+   "fichiers_avant": 672,
+   "fichiers_apres": 672,
+   "octets_apres": 712943,
    "dates_apres": {
-    "min": "2026-11-15T12:58:53-0500",
-    "max": "2026-11-15T13:10:21-0500"
+    "min": "2026-11-15T13:21:21-0500",
+    "max": "2026-11-15T13:32:44-0500"
    },
    "modeles_cache": {
-    "deepseek-flash": 662
+    "deepseek-flash": 672
    }
   },
-  "note": "3 collisions de prompt : « Tu viens demain ? » / « Tu viens demain. », « You come tomorrow? » / « You come tomorrow. », « ce livre commence! » / « ce livre commence » ont le même prompt (la ponctuation n'est pas envoyée). Le cache disque froid les sert sans réseau ; ils ne sont pas un cache chaud."
+  "note": "3 collisions de prompt servent 3 textes différents (même prompt, ponctuation ignorée) ; la quatrième collision est « Le chat dort. », déjà dans le gold, servie par la mémoire. Les 2 refus sans appel (f14 « 🚀 », f17 « ... ») ne sont ni réseau ni cache."
  },
  "debit": {
   "froid": {
-   "items_par_min": 86.9,
-   "requetes_par_min": 57.5,
-   "secondes_par_item": 0.6904,
-   "secondes_par_requete": 1.0429
+   "items_par_min": 87.6,
+   "requetes_par_min": 58.8,
+   "secondes_par_item": 0.6852,
+   "secondes_par_requete": 1.0197
   },
   "chaud": {
-   "items_par_min": 22099.4,
+   "items_par_min": 22770.4,
    "requetes_par_min": 0.0,
-   "secondes_par_item": 0.0027,
-   "secondes_par_requete": 2.715
+   "secondes_par_item": 0.0026,
+   "secondes_par_requete": 2.635
   }
  },
  "memoire": {
   "froid": {
-   "rss_avant_kb": 33868,
-   "pic_avant_kb": 33868,
-   "rss_apres_kb": 40820,
-   "pic_apres_kb": 40820,
-   "ru_maxrss_kb": 38588,
-   "delta_pic_kb": 6952,
-   "cache_octets": 703720,
-   "cache_octets_par_texte": 1058.2
+   "rss_avant_kb": 34124,
+   "pic_avant_kb": 34124,
+   "rss_apres_kb": 40836,
+   "pic_apres_kb": 40836,
+   "ru_maxrss_kb": 38156,
+   "delta_pic_kb": 6712,
+   "cache_octets": 712943,
+   "cache_octets_par_texte": 1053.1
   },
   "chaud": {
-   "rss_avant_kb": 33792,
-   "pic_avant_kb": 33792,
-   "rss_apres_kb": 37932,
-   "pic_apres_kb": 37932,
-   "ru_maxrss_kb": 37368,
-   "delta_pic_kb": 4140,
-   "cache_octets": 703720,
-   "cache_octets_par_texte": 1058.2
+   "rss_avant_kb": 34264,
+   "pic_avant_kb": 34264,
+   "rss_apres_kb": 38172,
+   "pic_apres_kb": 38172,
+   "ru_maxrss_kb": 37888,
+   "delta_pic_kb": 3908,
+   "cache_octets": 712943,
+   "cache_octets_par_texte": 1053.1
   }
  },
  "cout": {
   "tokens": {
-   "prompt_tokens": 83880,
-   "completion_tokens": 15088,
-   "total_tokens": 98968,
+   "prompt_tokens": 84916,
+   "completion_tokens": 15055,
+   "total_tokens": 99971,
    "prompt_cache_hit_tokens": 0,
-   "prompt_cache_miss_tokens": 83880,
-   "tokens_reseau": 98968,
+   "prompt_cache_miss_tokens": 84916,
+   "tokens_reseau": 99971,
    "tokens_cache": 392,
-   "tokens_total_appels": 99360
+   "tokens_total_appels": 100363
   },
   "prix_unitaire_par_million": {
    "hors_pointe": {
@@ -552,66 +577,66 @@
    }
   },
   "lot_1000_items": {
-   "hors_pointe": 0.021635,
-   "pointe": 0.04327
+   "hors_pointe": 0.02177,
+   "pointe": 0.043541
   },
-  "lot_1000_items_note": "coût réel du lot de 1 000 items : 662 appels réseau + 3 rejeux disque (prompts identiques) = 665 appels transport, 335 rejeux mémoire ; les répétitions ne sont pas facturées.",
+  "lot_1000_items_note": "coût réel du lot de 1 000 items : 672 appels réseau + 3 rejeux disque (prompts identiques) = 675 appels transport, 323 rejeux mémoire et 2 refus sans appel ; les répétitions ne sont pas facturées.",
   "extrapole_1000_phrases_uniques": {
-   "hors_pointe": 0.032534,
-   "pointe": 0.065068
+   "hors_pointe": 0.032157,
+   "pointe": 0.064315
   },
-  "extrapole_note": "×1.5038 (1000 / 665 textes distincts)",
+  "extrapole_note": "×1.4771 (1000 / 677 textes distincts)",
   "par_item": {
-   "hors_pointe": 2.1635e-05,
-   "pointe": 4.327e-05
+   "hors_pointe": 2.177e-05,
+   "pointe": 4.3541e-05
   },
   "par_phrase_unique": {
-   "hors_pointe": 3.2534e-05,
-   "pointe": 6.5068e-05
+   "hors_pointe": 3.2157e-05,
+   "pointe": 6.4315e-05
   },
   "reference_612": {
    "dollars": 0.04,
    "prix_1000_lineaire": 0.065359,
-   "ecart_extrapole_hors_pointe": -0.032825
+   "ecart_extrapole_hors_pointe": -0.033202
   },
-  "fenetre_horaire": "run du 2026-11-15, 17 h 56 UTC (hors pointe 16:30–00:30 UTC) ; les deux tarifs sont publiés"
+  "fenetre_horaire": "run du 2026-11-15, 18 h 21 à 18 h 33 UTC (hors pointe 16:30–00:30 UTC) ; les deux tarifs sont publiés"
  },
  "jsonl": {
   "chaud_1000": {
    "nom": "1000",
    "commande": "-v /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000.txt --jsonl --tagger",
-   "cache_dir": "/tmp/tagger-lot-cache",
-   "duree_s": 7.216,
+   "cache_dir": "/tmp/tagger-lot-fiab-cache",
+   "duree_s": 7.004,
    "code": 0,
    "lignes": 1003,
    "json_valides": 1003,
    "sources": {
     "cascade": 1003
    },
-   "pos_total": 7195,
+   "pos_total": 6980,
    "texte_attendu": 1000,
    "lignes_attendues": 1000,
-   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=667 · réseau=4 · cache=663 · tokens=513 · latence=3.9 s\ndrave: tagger · 5/1003 phrase(s) refusée(s) (JSON partiel)\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000.txt --jsonl --tagger\"\n\tUser time (seconds): 3.29\n\tSystem time (seconds): 0.09\n\tPercent of CPU this job got: 47%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:07.17\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 39108\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 12666\n\tVoluntary context switches: 35\n\tInvoluntary context switches: 155\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 0\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=677 · réseau=4 · cache=673 · tokens=513 · latence=4.1 s\ndrave: tagger · 4/1003 phrase(s) refusée(s) (JSON partiel)\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000.txt --jsonl --tagger\"\n\tUser time (seconds): 2.89\n\tSystem time (seconds): 0.05\n\tPercent of CPU this job got: 42%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:06.95\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 37884\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 7249\n\tVoluntary context switches: 37\n\tInvoluntary context switches: 45\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 0\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
    "cout_stderr": {
     "modele": "deepseek-chat",
-    "appels": 667,
+    "appels": 677,
     "reseau": 4,
-    "cache": 663,
+    "cache": 673,
     "tokens": 513,
-    "latence_s": 3.9
+    "latence_s": 4.1
    },
-   "rss_pic_kb": 39108,
-   "stdout_octets": 8645416,
+   "rss_pic_kb": 37884,
+   "stdout_octets": 8292533,
    "fichier": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000.txt",
    "fichier_lignes": 1999,
-   "sha256_sortie": "7d58d67568009a885253cb54d98dd6128c8c30dccfff919a03215cdf9c9f075b",
-   "textes_uniques_sortie": 667
+   "sha256_sortie": "9b9058fa850065f9b63ca8b15913ed4263504e1bb15f8a27f0d37b7b26730f5b",
+   "textes_uniques_sortie": 679
   },
   "froid_20": {
    "nom": "20-froid",
    "commande": "-v /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-20-froid.txt --jsonl --tagger",
    "cache_dir": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/cache-jsonl-froid",
-   "duree_s": 20.32,
+   "duree_s": 18.907,
    "code": 0,
    "lignes": 20,
    "json_valides": 20,
@@ -621,64 +646,64 @@
    "pos_total": 127,
    "texte_attendu": 20,
    "lignes_attendues": 20,
-   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=20 · réseau=20 · cache=0 · tokens=2907 · latence=20.0 s\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-20-froid.txt --jsonl --tagger\"\n\tUser time (seconds): 0.42\n\tSystem time (seconds): 0.04\n\tPercent of CPU this job got: 2%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:20.31\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 33984\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 5248\n\tVoluntary context switches: 148\n\tInvoluntary context switches: 14\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 224\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=20 · réseau=20 · cache=0 · tokens=2907 · latence=18.6 s\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-20-froid.txt --jsonl --tagger\"\n\tUser time (seconds): 0.50\n\tSystem time (seconds): 0.04\n\tPercent of CPU this job got: 2%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:18.90\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 33984\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 5247\n\tVoluntary context switches: 150\n\tInvoluntary context switches: 5\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 448\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
    "cout_stderr": {
     "modele": "deepseek-chat",
     "appels": 20,
     "reseau": 20,
     "cache": 0,
     "tokens": 2907,
-    "latence_s": 20.0
+    "latence_s": 18.6
    },
    "rss_pic_kb": 33984,
-   "stdout_octets": 160228,
+   "stdout_octets": 160229,
    "fichier": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-20-froid.txt",
    "fichier_lignes": 39,
-   "sha256_sortie": "cb08742be694ca1ae67eb12a10b3e77acbec01a245d4389fd835dab93e1fb8b5",
+   "sha256_sortie": "2812271dd023eceb85ce2b88629c0ba4e45b22169b4d63ad6c11683ef9ab63dc",
    "textes_uniques_sortie": 20
   },
   "chaud_1000_second": {
    "nom": "1000-second",
    "commande": "-v /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000-second.txt --jsonl --tagger",
-   "cache_dir": "/tmp/tagger-lot-cache",
-   "duree_s": 3.074,
+   "cache_dir": "/tmp/tagger-lot-fiab-cache",
+   "duree_s": 2.855,
    "code": 0,
    "lignes": 1003,
    "json_valides": 1003,
    "sources": {
     "cascade": 1003
    },
-   "pos_total": 7195,
+   "pos_total": 6980,
    "texte_attendu": 1000,
    "lignes_attendues": 1000,
-   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=667 · réseau=0 · cache=667 · tokens=0 · latence=0.0 s\ndrave: tagger · 5/1003 phrase(s) refusée(s) (JSON partiel)\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000-second.txt --jsonl --tagger\"\n\tUser time (seconds): 2.95\n\tSystem time (seconds): 0.07\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:03.04\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 35772\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 14893\n\tVoluntary context switches: 7\n\tInvoluntary context switches: 63\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 0\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=677 · réseau=0 · cache=677 · tokens=0 · latence=0.0 s\ndrave: tagger · 4/1003 phrase(s) refusée(s) (JSON partiel)\n\tCommand being timed: \"/usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py analyser --fichier /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000-second.txt --jsonl --tagger\"\n\tUser time (seconds): 2.72\n\tSystem time (seconds): 0.08\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:02.80\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 35476\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 14529\n\tVoluntary context switches: 3\n\tInvoluntary context switches: 54\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 0\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
    "cout_stderr": {
     "modele": "deepseek-chat",
-    "appels": 667,
+    "appels": 677,
     "reseau": 0,
-    "cache": 667,
+    "cache": 677,
     "tokens": 0,
     "latence_s": 0.0
    },
-   "rss_pic_kb": 35772,
-   "stdout_octets": 8645416,
+   "rss_pic_kb": 35476,
+   "stdout_octets": 8292533,
    "fichier": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/tagger-lot/corpus-1000-second.txt",
    "fichier_lignes": 1999,
-   "sha256_sortie": "7d58d67568009a885253cb54d98dd6128c8c30dccfff919a03215cdf9c9f075b",
-   "textes_uniques_sortie": 667
+   "sha256_sortie": "9b9058fa850065f9b63ca8b15913ed4263504e1bb15f8a27f0d37b7b26730f5b",
+   "textes_uniques_sortie": 679
   },
-  "note": "Le premier passage `--jsonl` rend 1 003 lignes pour 1 000 items : trois phrases du gold contiennent deux phrases et le segmenteur du CLI les sépare ; quatre prompts absents du cache ont donc coûté 4 appels (513 tokens, 0,0001 $). Le second passage, même fichier et même cache, rend 0 réseau, 0 token, 667 rejeux disque : c'est le contrôle négatif du mode."
+  "note": "Le premier passage `--jsonl` rend 1 003 lignes pour 1 000 items : trois phrases du gold contiennent deux phrases et le segmenteur du CLI les sépare ; quatre prompts absents du cache ont donc coûté 4 appels (513 tokens, 0,0001 $). Le second passage, même fichier et même cache, rend 0 réseau, 0 token, 677 rejeux disque : c'est le contrôle négatif du mode."
  },
  "controle_negatif": {
   "nom": "les mêmes 1 000 items en cache chaud",
   "hashs_identiques": true,
   "differences": [],
   "froid": {
-   "requetes": 662,
-   "tokens_reseau": 98968,
+   "requetes": 672,
+   "tokens_reseau": 99971,
    "dollars": {
-    "hors_pointe": 0.021635,
-    "pointe": 0.04327
+    "hors_pointe": 0.02177,
+    "pointe": 0.043541
    }
   },
   "chaud": {
@@ -692,12 +717,16 @@
   "verdict": "OK : le cache chaud rejoue les 1 000 items à 0 réseau, 0 token, 0 $"
  },
  "limites": [
-  "Le corpus réel disponible fait 665 textes distincts : 1 000 items = 665 + 335 répétitions ; le coût des 1 000 textes uniques est extrapolé (×1,5038).",
+  "Le corpus réel disponible fait 677 textes distincts : 1 000 items = 677 + 319 répétitions + 4 doublons ; le coût des 1 000 textes uniques est extrapolé (×1,4771).",
+  "Le gold 612 contient 160 phrases synthétiques ; le sous-ensemble strictement réel fait 521 lignes (452 gold + 69 libres) et 517 textes distincts. Son coût par texte peut différer.",
   "Le tarif est celui du deepseek-flash au 2026-11-13 ; un changement de modèle, de routage ou de prix déplace le dollar, pas les tokens.",
   "La latence est séquentielle, une requête à la fois ; l'API accepte plus de concurrence (le débit pourrait monter, la latence par requête non).",
   "La mémoire est le pic RSS du processus Python (VmHWM / ru_maxrss), pas la mémoire du serveur DeepSeek.",
-  "Le cache disque est local : un cache chaud d'une autre date peut rejouer un autre modèle ; la mesure froide est la référence.",
-  "La température 0 n'est pas un déterminisme garanti de l'API ; le cache fige les réponses et le contrôle négatif compare les sorties rejouées."
+  "Le cache disque est local : un cache chaud d'une autre date peut rejouer un autre modèle ou une autre réponse ; la mesure froide est la référence.",
+  "La température 0 n'est pas un déterminisme garanti de l'API ; le cache fige les réponses et le contrôle négatif compare les sorties rejouées.",
+  "4 refus / 1 000 (3 items distincts) : f14 (« 🚀 ») et f17 (« ... ») refusent sans appel (aucun mot) ; f50-03 (texte long) est refusé deux fois, dont une première fois avec appel réseau. Le coût de l'appel est payé pour f50-03, pas pour les deux vides.",
+  "Les 50 textes libres sont le banc de robustesse (2 vides, 2 refus, 69 phrases), pas un échantillon aléatoire ; 7 phrases sont en `und` et 1 en italien, taggées par un prompt français.",
+  "`--jsonl` rend 1 003 lignes pour 1 000 items : trois phrases du gold contiennent deux phrases ; le premier passage chaud paie 4 prompts absents du cache, le second est à 0."
  ],
  "fichiers": [
   "reports/rapport-tagger-lot.md",
