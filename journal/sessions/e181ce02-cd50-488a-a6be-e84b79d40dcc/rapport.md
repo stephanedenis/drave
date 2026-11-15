@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 350.9 h |
 | Tours | 198 |
-| Messages | 3906 |
-| Appels d'outils | 3481 |
+| Messages | 3908 |
+| Appels d'outils | 3483 |
 | Fichiers touchés | 25 |
-| Commandes | 2890 |
+| Commandes | 2892 |
 | Sous-agents | 43 |
-| Commits | 470 |
+| Commits | 471 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*122 appels d'outils.* Actions notables :
+*124 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 84 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2850 autres
+- … et 2852 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11389,4 +11389,5 @@ Je commence.
 - FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE JOURNAL À JOUR" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -c1-90; git 
 - ÉTAT — T0 DANS LE BUDGET" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1
 - ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
+- ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 g
 

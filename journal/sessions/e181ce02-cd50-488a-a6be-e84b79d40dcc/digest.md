@@ -64745,3 +64745,20 @@ cf2d1fb1 ÉTAT — T0 DANS LE BUDGET
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13 : 183/183, F1 0,7902, 238/239, schéma v2, restitution v1, produit (J11)**\", \"**B13 : 183/183, F1 0,7902, 238/239, s … [502 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ 12 files changed, 35 insertions(+), 21 deletions(-)
+2b7e520b ÉTAT — T0 VERT
+   cf2d1fb1..2b7e520b  s/v7 -> s/v7
+   cf2d1fb1..2b7e520b  master -> master
+dim 15 nov 2026 07:35:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-400", "description": "Voir la ligne Fait"}`
+
+  ```
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902**, **1 span** ; **`s065`**, **`r035`**, **GV** réglés ; **restittion v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md)) ; **J11.1–J11.4** ([exemples](../../reports/rapport-exemples-rejoues.md), [par-langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-ro
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**restittion v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md))\", \"**restitutio … [849 caractères tronqués]`

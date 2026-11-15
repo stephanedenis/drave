@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**23 commits** · **1 session(s)** · **6 thème(s)**
+**24 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 5 | [distribue.md](distribue.md) |
-| docs | 4 | [docs.md](docs.md) |
+| docs | 5 | [docs.md](docs.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -51,6 +51,7 @@
 | 07:10 | `7ee92dd9` | JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18) |
 | 07:27 | `cd4d1060` | FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE JOURNAL À JOUR |
 | 07:30 | `cf2d1fb1` | ÉTAT — T0 DANS LE BUDGET |
+| 07:32 | `2b7e520b` | ÉTAT — T0 VERT |
 
 ## Le récit de la journée (écrit à la main)
 
