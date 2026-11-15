@@ -64721,3 +64721,16 @@ dim 15 nov 2026 07:27:44 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 07 h 30 HNE (finition : E1-E2, le tagger et ses cas d'erreu … [981 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4003 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ 16 files changed, 553 insertions(+), 29 deletions(-)
+ create mode 100644 journal/2026-11-15/modele.md
+cd4d1060 FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE
+   7d4e3bc5..cd4d1060  s/v7 -> s/v7
+   7d4e3bc5..cd4d1060  master -> master
+dim 15 nov 2026 07:30:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**att. 238/239**\", \"**238/239**\")\nt=t.replace(\" ; **restitu\", \" ; **restit\").replace(\"**restit v1 (canonique 46/46 … [512 caractères tronqués]`

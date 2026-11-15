@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **1 session(s)** · **6 thème(s)**
+**22 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
-| modele | 1 | [modele.md](modele.md) |
+| modele | 2 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -49,6 +49,7 @@
 | 06:31 | `7d4e3bc5` | E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES |
 | 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
 | 07:10 | `7ee92dd9` | JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18) |
+| 07:27 | `cd4d1060` | FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE JOURNAL À JOUR |
 
 ## Le récit de la journée (écrit à la main)
 
