@@ -65376,3 +65376,23 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [834 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ index : aucun fait stagé sans état
+fatal: cannot lock ref 'HEAD': is at 9960b37f7d28fd77d85f0868fefa53d0ab7aa67b but expected 93e046f720fbe4d8cff4a105f6a03c8be134b657
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, 
+   93e046f7..9960b37f  s/v7 -> s/v7
+   93e046f7..9960b37f  master -> master
+dim 15 nov 2026 12:12:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; git tag -l \"semaine-2-*\"", "description": "Suivre W6", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5161]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5161", "timeout_ms": 700000, "wait": true}`

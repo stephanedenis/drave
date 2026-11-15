@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **750 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **751 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -717,6 +717,7 @@
 | [rapport-schema-v1.md](rapport-schema-v1.md) | B13 — le contrat v1 : `schema`/`version`, refus en JSON (code 3), entrées hostiles tolérées |
 | [rapport-schema-v2-doc.md](rapport-schema-v2-doc.md) | J11.4 — le contrat : le schéma v2 documenté, 6 cas / 0 échec, v1 toujours lue |
 | [rapport-schema-v2.md](rapport-schema-v2.md) | B13 — le schéma v2 : `meta.partition` et `meta.alternative` typés, version 2, v1 toujours lue |
+| [rapport-semaine-2.md](rapport-semaine-2.md) | W6 — le rapport de la semaine 2 : le tagger gagne sur les deux bases, Panini reste bloqué, la restitution sépare sans fidélité |
 | [rapport-semaine.md](rapport-semaine.md) | J5.1 — le rapport de semaine : le produit gagne 3,69 points de F1, l'intégration est bornée |
 | [rapport-semantique.md](rapport-semantique.md) | Le protocole sémantique natif — premier passage |
 | [rapport-session-2026-09-30.md](rapport-session-2026-09-30.md) | Session du 30/09 — index des chantiers |

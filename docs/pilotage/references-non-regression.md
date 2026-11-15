@@ -1,5 +1,11 @@
 # Références de non-régression
 
+> **Passe — 2026-11-15 09 h 53 → 12 h 15 :** **85 portes, 81 vertes, 4 rouges** — `indice` et
+> `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
+> **environnementale** (deux passes en parallèle ; PPL identique 799,8557 ; verte le 14/11).
+> Journaux `work/portes-1115-09h53/`. **Pas de passe complète pour W6** ; ciblage
+> `work/portes/w6-ciblage` (8/9), `w6-ciblage2` (2/2) puis `w6-final` (9/9).
+
 > **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
 > `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
 > `e181ce02`). `porte-produit` et `porte-bloc` **vertes**. Journal :
@@ -9,7 +15,6 @@
 > heartbeat `e181ce02` rafraîchi) ; `porte-indice` et `porte-melange` restent **rouges
 > structurelles** (indice 482 contre témoin 459 ; état de A sans son code). Journaux
 > `work/portes/verif-cloture/`.
-> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
 > 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
@@ -21,22 +26,10 @@
 > à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
 > `homeostasie` **755 s**, `profondeur-routee` **700 s**, `vision` **670 s**, `ocr-scans` **529 s**.
 
-> **Passe précédente — 2026-11-03 11 h 30 :** 82 portes, 80 vertes, 2 rouges structurelles
-> (`indice` 821 s, `melange` 102 s), 1 h 48, GPU libres.
->
-> **Passe précédente — 2026-11-03 à 04 h 10 :** 82 portes, 77 vertes, 5 rouges, 1 h 40 — 4 connues +
-> `porte-sessions` (coordination, rejouée verte à 08 h 10 après la pause de N2/S).
->
 > **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3
 > (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle est entrée **verte** dans la
 > passe complète du 04/11–05/11 (83 portes).
 
-
-> effacés au reboot) ; `porte-greffe` à 700 s, **rejouée verte à 1200 s** (délai, pas régression).
-
-> (journaux `/tmp/portes-1101-n2h`). Mêmes rouges que la passe du 31/10 : `porte-indice` (921 s),
-> `porte-melange` (112 s), `porte-homeostasie` (environnementale) et `porte-reparti-moteur`.
-> Aucune régression ; `porte-vision` et `porte-ocr-scans` sont vertes.
 
 > **Passe précédente — 2026-10-31 à 19 h 42 :** **79 portes, 75 vertes, 4 rouges, 1 h 39**
 > (journaux `/tmp/portes-1031-n2d`) : mêmes rouges ; `porte-ocr` (48 s) était verte.
@@ -55,7 +48,7 @@
 | quoi | commande | attendu |
 |---|---|---|
 | tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **84 portes** ; voir la **passe du 07/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| toutes les portes | `tools/toutes-les-portes.sh` | **85 portes** ; voir la **passe du 15/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs

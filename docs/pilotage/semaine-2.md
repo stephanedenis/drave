@@ -54,12 +54,35 @@ décalages et la clôture. Un jour sans sa deuxième vague est un jour à requal
 | **J4 · 19/11** | matin | **Restitution v3 — l'or de rôles** : annoter les **seconds cadres** et les rôles hors cadre ; précision/rappel **par rôle**, plusieurs phrases par texte. | S + R/B13 | fiche or v3 + JSON ; **double codage** ; un or permuté doit s'effondrer. | J3 après-midi |
 | | après-midi | **La page `/` de S, recette** : S intègre la migration et les référents (**14 occurrences / 12 formes**) ; le pilote rejoue **56 tests** et mesure `/`. | S (écrit) + pilote (recette) | fiche de recette + JSON ; **106/41** vérifiés ; `/` sert **359/99**, pas **369/0** ; 8765 intact. | J1 ; S |
 | **J5 · 20/11** | matin | **La décision du tagger** : appliquer la décision (défaut, opt-in ou `auto` avec clé) ; tests E2 ; docs ; non-régression 452. | R/B13 | fiche + JSON ; **défaut hors ligne** conservé si le coût ou le repli ne tiennent pas ; 4 cas E2 rejoués. | J2 après-midi |
-| | après-midi | **La clôture** : passe complète, revue, rapport de semaine 2, état, roadmap, journal, tag. **21–22 = réserve** pour les décalages. | pilote | rapport semaine 2 + JSON ; portes lues par `awk '$2 != 0'` ; rouges tolérées nommées ; tag `semaine-2026-11-22` posé à la clôture (20, ou 22 si la réserve sert). | toutes |
+| | après-midi | **La clôture** : revue, rapport de semaine 2, état, roadmap, journal, tag. **Pas de passe complète relancée** : le relevé lit `work/portes/` et cible les portes du diff. **21–22 = réserve** pour les décalages. | pilote | rapport semaine 2 + JSON ; portes lues par `awk '$2 != 0'` ; rouges tolérées nommées ; tag `semaine-2-2026-11-20` posé sur le dernier commit de code vert. | toutes |
 
 **La question du tagger par défaut n'est pas tranchée d'avance.** La recommandation soumise à la
 mesure est : **défaut hors ligne**, `--tagger` **opt-in**, un mode `auto` seulement si la clé
 existe et sans changer le code de sortie. J2 fournit le coût et les cas d'erreur ; J5 applique ou
 rejette.
+
+## 2 bis. L'état par jour (constaté le 15/11)
+
+> **Le calendrier a bougé, pas le périmètre.** Les cinq vagues **W1–W5** ont été exécutées le
+> **15/11** ; le plan les plaçait du **16 au 20/11**. Le tag porte la **date cible**
+> `2026-11-20`. **J4** (or de rôles, recette `/`) n'est **pas ouvert** : S est en pause et l'or de
+> rôles manque. **J5 matin** (la décision du tagger) est **appliquée par W3** — défaut hors ligne,
+> `--tagger` opt-in, pas de `auto` — sans vague séparée.
+
+| jour | vague | état | chiffre / preuve | suite |
+|---|---|---|---|---|
+| **J1 · 16/11** | **W1** — le gold réel 452 | ✅ **fait** (15/11) | **452** = 20 hand + 432 corpus ; split **402/H50** ; **184 → 194** cibles ; sha256 identique ; 0 « 200+ » | W2 prend le split |
+| **J2 · 17/11** | **W2** — le tagger 402/H50 | ✅ **fait, réserve fermée** | 402 **0,9198 → 0,9643** (+4,45) ; H50 **0,6842 → 0,8607** (+17,65) ; F1/att 402 inchangés ; fermé **−1,55** | W3 décide du défaut |
+| **J2 · 17/11** | **W3** — la matrice du défaut | ✅ **fait, décision appliquée** | défaut **code 0 / 0 socket** ; clé invalide **4** ; réseau coupé **0** (3 essais) ; **143 870** tokens / **~0,031 $** pour 1 000 | défaut hors ligne, opt-in, pas de `auto` |
+| **J3 · 18/11** | **W4** — Panini, le manifeste | ❌ **bloqué, nommé** | **26** textes à signer ; rejeu **27/60** ; calibration **42/44** ; **3** sources courtes ; **5** doublons ; **N5 vide** ; **aucune p-value** | envoyer le manifeste ; attendre les signatures |
+| **J3 · 18/11** | **W5** — la restitution v3 | ✅ **séparation** / ❌ **produit** | gold S **144/144** (**18/18**) ; gold v2 **20/46** (F1 **0,5406**) ; permutation **0/18** ; `--roles-v3` opt-in | **J4 — l'or de rôles** |
+| **J4 · 19/11** | **J4** — or de rôles, recette `/` | ⏳ **non ouvert** | S en pause ; le gold v2 n'annote que **trois** rôles ; la page `/` reste **369/0** | ligne **bloquée** et **nommée** ; J5 clôture ce qui est mesuré |
+| **J5 · 20/11** | **W6** — la clôture | ✅ **fait** (15/11) | rapport + JSON ; **85** portes lues (**81** vertes, **4** rouges nommées) ; ciblage **9/9** après heartbeat ; tag **`semaine-2-2026-11-20`** sur `73edb3dd` | semaine 21–22 en réserve |
+
+**Le bilan des jours.** **3** vagues pleinement positives (W1, W2, W3), **1** bloquée (W4),
+**1** mixte (W5). Le **gold** et le **tagger** avancent ; **Panini** attend un tiers ;
+la **restitution** sépare sans convaincre sur le produit. Le détail est dans
+[`reports/rapport-semaine-2.md`](../../reports/rapport-semaine-2.md).
 
 ## 3. Les dépendances
 
@@ -94,7 +117,7 @@ rejette.
 | **les fiches** | gold 452/H50 ; tagger H50 ; tagger défaut ; page `/` (décision + recette) ; protocole date v2 ; restitution v3 + or de rôles ; rapport semaine 2 | une fiche + un JSON par vague, contrôle négatif et limites nommés |
 | **le code** | règles de rôles v3 ; décision tagger (si retenue) ; migration `/` et référents (S, sous-module) ; tests | tests verts, non-régression 452 et 56 tests S |
 | **l'état** | `en-cours.md`, `roadmap.md`, journal du jour, compteurs | `verifie_en_cours.py`, `revue_documentation.py` |
-| **la clôture** | passe complète, tag `semaine-2026-11-22`, semaine 21–22 en réserve | `bash tools/toutes-les-portes.sh` ; `awk '$2 != 0'` ; tag annoté |
+| **la clôture** | rapport semaine 2 + JSON ; tag `semaine-2-2026-11-20` sur le dernier commit de code vert ; semaine 21–22 en réserve | `awk '$2 != 0'` sur `work/portes-1115-09h53/registre.txt` ; ciblage `work/portes/w6-ciblage*` ; tag annoté |
 
 **Un chiffre sans contrôle n'est pas un résultat.** Chaque fiche nomme sa base (452, H50, 402,
 612), son commit, son dispositif, son contrôle et ce qui pourrait la rendre fausse. Les 41

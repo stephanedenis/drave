@@ -7,14 +7,14 @@
 | Identifiant | `session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 12:05 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 41 |
-| Appels d'outils | 58 |
-| Fichiers touchés | 0 |
-| Commandes | 53 |
+| Messages | 109 |
+| Appels d'outils | 130 |
+| Fichiers touchés | 4 |
+| Commandes | 104 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W6 (J5 après-midi) : la clôture de la semaine 2 — le rapport `reports/rapport-semaine-2.md` + JSON (les chiffres a … [295 caractères tronqués]
 
-*58 appels d'outils.* Actions notables :
+*130 appels d'outils.* Actions notables :
 
 - bash — Inspect repo state and recent commits
 - bash — List repo structure and key directories
@@ -41,7 +41,7 @@
 - bash — Check journal for week 2 narrative
 - bash — Identify running gate pass outputs
 - bash — Read gate runner script
-- … et 42 autres
+- … et 106 autres
 
 ## 3. Travail accompli
 
@@ -49,6 +49,10 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-semaine-2.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/semaine-2.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 7 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/references-non-regression.md` | 0 | 2 |
 
 ### Commandes exécutées (échantillon)
 
@@ -92,7 +96,7 @@
 - **T1** Find previous tag closure narrative
 - **T1** Check gate pass progress
 - **T1** Review staged W5 docs changes
-- … et 13 autres
+- … et 64 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -145,6 +149,10 @@
 - **T1** `-**État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet d`
 - **T1** `+**État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (238/238 ; [fiche](../../reports`
 - **T1** `[still running after 60000ms; moved to background job bash-53]`
+- **T1** `- **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est`
+- **T1** `✅ 6. le PROJECTEUR reproduit la référence (écart 0.7139 % = la quantification)`
+- **T1** `docs/pilotage/roadmap.md:38:**État au 15/11 12 h 20.** La **semaine 2** est close : W1 gold 452, W2 tagger 402/H50, W3 défaut hors ligne, W4 Panini bloqué, W5 restitution v3 ; tag `semaine-2-2026-11-2`
+- **T1** ``88,91 %` · `79,06 %` · `99,46 %``
 
 ## 5. Erreurs rencontrées
 
@@ -157,4 +165,7 @@
 ## 6. Commits
 
 - cat > work/msg-w5.txt <<'EOF' SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CAD
+- git add journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git commit --amend --no-edit --quiet && git log -1 --format='%h %s'
+- git commit -F work/msg-w6.txt --quiet && git log -1 --format='%h %ci %s'
+- git add reports/rapport-semaine-2.md reports/rapport-semaine-2.json docs/pilotage/en-cours.md docs/pilotage/references-non-regression.md journal/2026-11-15/port
 

@@ -36,6 +36,7 @@
 | [`rapport-tableau-mesures.md`](rapport-tableau-mesures.md) | **J13.1** — la table des mesures : POS |
 | [`rapport-bilan-chantier.md`](rapport-bilan-chantier.md) | **J10.1** — le bilan du chantier : F1 |
 | [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit |
+| [`rapport-semaine-2.md`](rapport-semaine-2.md) | **W6** — la semaine 2 : W1-W5, le tagger, Panini bloqué, la restitution v3 |
 | [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches |
 | [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → |
 | [`rapport-coordination-n2-v2.md`](rapport-coordination-n2-v2.md) | **N2** — la commande validée : `--rope --val` **2,7856**, `--rope` seul **40,0658**, témoin **3,09** |

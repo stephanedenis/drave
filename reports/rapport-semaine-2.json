@@ -1,0 +1,513 @@
+{
+ "schema": "drave.rapport-semaine.v2",
+ "version": 1,
+ "titre": "W6 — le rapport de la semaine 2 : le tagger gagne sur les deux bases, Panini reste bloqué, la restitution sépare sans fidélité",
+ "date": "2026-11-15",
+ "date_cible": "2026-11-20",
+ "tache": "W6",
+ "lignes_roadmap": [
+  "R0.7",
+  "B13",
+  "L"
+ ],
+ "statut": "cloture",
+ "base": {
+  "gold_phrases": 452,
+  "gold_sources": {
+   "hand": 20,
+   "corpus": 432
+  },
+  "gold_langues": {
+   "fr": 242,
+   "en": 210
+  },
+  "gold_tokens": 2480,
+  "gold_segments": 1501,
+  "gold_cibles": 184,
+  "gold_cibles_apres_annotation": 194,
+  "split": "402 / H50",
+  "h50_phrases": 50,
+  "h50_tokens": 323,
+  "h50_cibles": 22,
+  "commits": {
+   "W1": "4dbeff45",
+   "W2": "1683c2b4",
+   "W3": "be3f41ad",
+   "W4": "93e046f7",
+   "W5": "73edb3dd"
+  },
+  "head_mesure": "73edb3dd",
+  "note": "Aucune mesure nouvelle : ce rapport relit les fiches W1-W5 et les journaux de portes."
+ },
+ "vagues": {
+  "W1": {
+   "tache": "le gold réel 452 et le split 402/H50",
+   "commit": "4dbeff45",
+   "avant": {
+    "libelle": "gold 200+ (18 occurrences dans docs/)",
+    "split": "absent",
+    "cibles": 184,
+    "phrases": 452
+   },
+   "apres": {
+    "libelle": "gold réel 452 (0 occurrence de « 200+ »)",
+    "split": "402 / H50",
+    "phrases": 452,
+    "hand": 20,
+    "corpus": 432,
+    "langues": {
+     "fr": 242,
+     "en": 210
+    },
+    "tokens": 2480,
+    "segments": 1501,
+    "cibles": 184,
+    "cibles_si_annotation": 194,
+    "candidats_gp_sub": 10,
+    "candidats_dans_h50": 4,
+    "sha256_identique": true
+   },
+   "delta": {
+    "phrases": 0,
+    "cibles_proposees": 10,
+    "occurrences_200_plus": -18
+   },
+   "controle": "tirage 20261116 : POS 88,13 % contre H50 68,42 % ; H50 ∩ 402 = 0 ; union = 452 ; sha256 avant = après",
+   "negatif": "H50 est sélectionné sur les erreurs de l'heuristique : il est circulaire et ne mesure pas la généralisation ; les 10 cibles sont des propositions, pas des annotations.",
+   "verdict": "positif (nommé et figé)",
+   "fiche": "reports/rapport-gold-452.md",
+   "json": "reports/rapport-gold-452.json"
+  },
+  "W2": {
+   "tache": "le tagger POS sur 402 et H50",
+   "commit": "1683c2b4",
+   "avant": {
+    "reste_402": 0.9198,
+    "h50": 0.6842,
+    "total_452": 0.8891
+   },
+   "apres": {
+    "reste_402": 0.9643,
+    "h50": 0.8607,
+    "total_452": 0.9508
+   },
+   "delta_pts": {
+    "reste_402": 4.45,
+    "h50": 17.65,
+    "total_452": 6.17
+   },
+   "f1_attachement_402": {
+    "f1_avant": 0.819,
+    "f1_apres": 0.819,
+    "attachement_avant": 1.0,
+    "attachement_apres": 1.0
+   },
+   "ferme_402": {
+    "avant": 0.958,
+    "apres": 0.9425,
+    "delta_pts": -1.55,
+    "ouvert_delta_pts": 10.64
+   },
+   "cout": {
+    "phrases": 452,
+    "requetes": 447,
+    "tokens_reseau": 65029,
+    "latence_reseau_s": 443.813,
+    "tokens_par_phrase": 143.87,
+    "latence_par_phrase_s": 0.9819
+   },
+   "controle": "F1 et attachement 402 inchangés ; 402 gagne +4,45, donc la règle H50-only ne le rejette pas",
+   "negatif": "sur 402, le POS fermé baisse de 1,55 pt ; H50 est circulaire ; une règle qui exigerait la non-régression du fermé rejetterait le tagger.",
+   "verdict": "positif avec réserve (fermé 402)",
+   "fiche": "reports/rapport-tagger-h50.md",
+   "json": "reports/rapport-tagger-h50.json"
+  },
+  "W3": {
+   "tache": "la matrice du tagger et le défaut",
+   "commit": "be3f41ad",
+   "avant": {
+    "cas_e2": 4,
+    "matrice": "non mesurée",
+    "defaut": "hors ligne (non matricé)"
+   },
+   "apres": {
+    "defaut_sans_cle": {
+     "code": 0,
+     "source": "heuristique",
+     "sockets": 0
+    },
+    "avec_cle": {
+     "code": 0,
+     "tokens": 130,
+     "latence_s": 1.156
+    },
+    "cle_invalide": {
+     "code": 4,
+     "stdout": "vide"
+    },
+    "reseau_coupe": {
+     "code": 0,
+     "essais": 3,
+     "repli": "heuristique"
+    },
+    "cout_1000": {
+     "tokens": 143870,
+     "requetes": 989,
+     "latence_reseau_s": 981.9,
+     "usd_hors_pointe": 0.031,
+     "usd_pointe": 0.062
+    },
+    "tests": "21/21"
+   },
+   "delta": {
+    "matrice_lignes": 9,
+    "tests": "21/21"
+   },
+   "controle": "socket piégée (0 socket), mutation 401/403 (0 != 4), cache chaud (0 token), coût extrapolé",
+   "negatif": "le coût de 1 000 phrases est une extrapolation linéaire, pas un run réel ; le dollar dépend du tarif du jour ; le repli réseau code 0 peut masquer une dégradation.",
+   "verdict": "positif (décision : défaut hors ligne, opt-in, pas de auto)",
+   "fiche": "reports/rapport-tagger-defaut.md",
+   "json": "reports/rapport-tagger-defaut.json"
+  },
+  "W4": {
+   "tache": "Panini : le manifeste des 26 signatures et le rejeu",
+   "commit": "93e046f7",
+   "avant": {
+    "textes": 59,
+    "paires": 60,
+    "deja_signes": 33,
+    "a_signer": 26,
+    "manifeste": "absent"
+   },
+   "apres": {
+    "textes": 59,
+    "paires": 60,
+    "deja_signes": 33,
+    "a_signer": 26,
+    "dont_655_paires": 1,
+    "vecteurs_distincts": 21,
+    "vecteurs_nouveaux": 20,
+    "paires_calculees": 27,
+    "paires_manquantes": 33,
+    "par_groupe": {
+     "G1": {
+      "calculees": 1,
+      "total": 20
+     },
+     "G2": {
+      "calculees": 14,
+      "total": 20
+     },
+     "G3": {
+      "calculees": 12,
+      "total": 20
+     }
+    },
+    "calibration": {
+     "ok": 42,
+     "total": 44,
+     "echecs": [
+      "bengio_2003",
+      "mengzi"
+     ]
+    },
+    "sources_courtes": [
+     "epicurus_letters",
+     "sextus_pyrrho",
+     "zadeh_1965"
+    ],
+    "groupes_doublons_parmi_26": 5,
+    "p_value_H0": null
+   },
+   "delta": {
+    "paires_decrites": 27,
+    "paires_manquantes": 33,
+    "manifeste": "écrit"
+   },
+   "controle": "N2 dates permutées G2 p=0,252 ; N3 G3 p=0,001 (tiré par une paire non calibrée) ; N4 signatures permutées ; N5 colonnes vide par isométrie ; N6 doublons",
+   "negatif": "statut incomplet : 27/60 seulement, calibration 42/44, 3 sources courtes, 5 doublons ; aucune p-value de H0 ; le contrôle N5 est vide.",
+   "verdict": "bloqué (incomplet, aucune p-value)",
+   "fiche": "reports/rapport-panini-manifeste.md",
+   "json": "reports/panini-manifeste.json"
+  },
+  "W5": {
+   "tache": "la restitution v3 : les rôles des GP",
+   "commit": "73edb3dd",
+   "avant": {
+    "gold_v2_cadres": 19,
+    "gold_v2_non_vides": 16,
+    "gold_v2_f1": 0.527,
+    "gold_v2_lieu_f1": 0.4,
+    "gold_s": "139/144",
+    "gold_s_cinq": "17/18"
+   },
+   "apres": {
+    "gold_v2_cadres": 20,
+    "gold_v2_non_vides": 17,
+    "gold_v2_f1": 0.5406,
+    "gold_v2_lieu_f1": 0.6,
+    "gold_v2_agent_f1": 0.6,
+    "gold_v2_predicat_f1": 0.4872,
+    "gold_s": "144/144",
+    "gold_s_cinq": "18/18",
+    "separation": "24/24",
+    "decoupage": {
+     "roles": 4,
+     "appariements": 1
+    }
+   },
+   "delta": {
+    "cadres": 1,
+    "non_vides": 1,
+    "f1": 0.0136,
+    "lieu_f1": 0.2,
+    "gold_s_roles": 5,
+    "gold_s_cinq": 1
+   },
+   "controle": "permutation cinq 0/18 ; permutation tous 0,4028 ; rôle constant lieu 3/18 (0,0208)",
+   "negatif": "le produit ne suit pas : 20/46 contre 19/46, un seul cadre ; le gold v2 n'annote que agent, prédicat et lieu ; le 144/144 inclut +4 rôles et +1 appariement de découpage.",
+   "verdict": "positif sur la séparation, négatif sur le produit",
+   "fiche": "reports/rapport-restitution-v3.md",
+   "json": "reports/pensee-restitution-v3.json"
+  }
+ },
+ "negatifs": [
+  {
+   "id": "N1",
+   "nom": "H50 circulaire",
+   "resultat": "H50 est sélectionné sur les erreurs de l'heuristique ; +17,65 n'est pas une généralisation",
+   "fiche": "reports/rapport-gold-452.md"
+  },
+  {
+   "id": "N2",
+   "nom": "fermé 402",
+   "resultat": "POS fermé 402 0,9580 -> 0,9425 (-1,55 pt)",
+   "fiche": "reports/rapport-tagger-h50.md"
+  },
+  {
+   "id": "N3",
+   "nom": "coût extrapolé",
+   "resultat": "1 000 phrases = extrapolation linéaire de 452 ; dollar dépend du tarif",
+   "fiche": "reports/rapport-tagger-defaut.md"
+  },
+  {
+   "id": "N4",
+   "nom": "Panini incomplet",
+   "resultat": "27/60 paires, calibration 42/44, 3 sources courtes, 5 doublons ; aucune p-value",
+   "fiche": "reports/rapport-panini-manifeste.md"
+  },
+  {
+   "id": "N5",
+   "nom": "contrôle N5 vide",
+   "resultat": "permutation commune des 14 colonnes laisse la distance invariante ; contrôle vide",
+   "fiche": "reports/rapport-panini-manifeste.md"
+  },
+  {
+   "id": "N6",
+   "nom": "gold v2 ne gagne qu'un cadre",
+   "resultat": "20/46 contre 19/46 ; F1 0,5406 contre 0,5270",
+   "fiche": "reports/rapport-restitution-v3.md"
+  },
+  {
+   "id": "N7",
+   "nom": "144/144 partiellement découpage",
+   "resultat": "+4 rôles et +1 appariement viennent du découpage, pas de la règle seule",
+   "fiche": "reports/rapport-restitution-v3.md"
+  }
+ ],
+ "decisions": [
+  {
+   "id": "D1",
+   "objet": "gold réel 452 nommé, split 402/H50 figé, 10 cibles à annoter (184 -> 194)",
+   "preuve": "W1 : 452 = 20 + 432 ; sha256 identique ; 0 « 200+ »",
+   "etat": "appliquée (W1)"
+  },
+  {
+   "id": "D2",
+   "objet": "tagger accepté sur 402, réserve du fermé nommée",
+   "preuve": "W2 : 402 +4,45 ; F1/att inchangés ; fermé -1,55",
+   "etat": "appliquée (W2)"
+  },
+  {
+   "id": "D3",
+   "objet": "défaut hors ligne, --tagger opt-in, pas de auto",
+   "preuve": "W3 : code 0 / 0 socket ; clé invalide 4 ; réseau coupé 0",
+   "etat": "appliquée (W3)"
+  },
+  {
+   "id": "D4",
+   "objet": "Panini incomplet : aucune p-value, manifeste envoyé",
+   "preuve": "W4 : 27/60 ; calibration 42/44 ; N5 vide",
+   "etat": "appliquée (W4)"
+  },
+  {
+   "id": "D5",
+   "objet": "restitution v3 opt-in, v2 reste le défaut, J4 or de rôles suit",
+   "preuve": "W5 : 20/46 ; gold S 144/144 ; permutation 0/18",
+   "etat": "appliquée (W5)"
+  },
+  {
+   "id": "D6",
+   "objet": "clôture sans passe complète ; tag sur le dernier commit de code vert (73edb3dd)",
+   "preuve": "W6 : relevé work/portes + ciblage 9/9 après heartbeat",
+   "etat": "appliquée (W6)"
+  }
+ ],
+ "portes": {
+  "passe_precedente": {
+   "dossier": "work/portes/passe-1402-02h00",
+   "date": "2026-11-14 02:00",
+   "portes": 84,
+   "vertes": 81,
+   "rouges": [
+    "indice",
+    "melange",
+    "sessions"
+   ],
+   "note": "sessions revérifiée verte le 14/11 06:55"
+  },
+  "passe_complete": {
+   "dossier": "work/portes-1115-09h53",
+   "date": "2026-11-15 09:53 -> 12:15",
+   "portes": 85,
+   "vertes": 81,
+   "rouges": [
+    "indice",
+    "melange",
+    "sessions",
+    "prechargement"
+   ],
+   "note": "sessions réparée (heartbeat 12:20) ; prechargement environnementale (deux passes en parallèle ; PPL 799,8557 identique ; verte le 14/11 à 181 s)"
+  },
+  "passe_w5_borne_600": {
+   "dossier": "work/portes-w5",
+   "date": "2026-11-15 11:21",
+   "portes_lues": 29,
+   "portes_total": 85,
+   "rouges": [
+    "greffe"
+   ],
+   "note": "greffe 124 = borne 600 s (780 s verte le 14/11) ; passe non concluante, pas le verdict"
+  },
+  "ciblage_w6": {
+   "dossier": "work/portes/w6-ciblage",
+   "portes": 9,
+   "vertes": 8,
+   "rouges": [
+    "sessions"
+   ],
+   "note": "sessions rouge sur heartbeat périmé (162 min), pas sur le code"
+  },
+  "ciblage_w6_apres_heartbeat": {
+   "dossier": "work/portes/w6-ciblage2",
+   "portes": 2,
+   "vertes": 2,
+   "rouges": [],
+   "note": "porte-etat et porte-sessions vertes"
+  },
+  "revue_documentation": {
+   "ok": true,
+   "fiches": 753,
+   "json": 846,
+   "docs": 124,
+   "portes": 85,
+   "chapitres": 8
+  },
+  "ciblage_w6_final": {
+   "dossier": "work/portes/w6-final",
+   "portes": 9,
+   "vertes": 9,
+   "rouges": [],
+   "note": "ciblage final sur le commit de clôture"
+  }
+ },
+ "tag": {
+  "nom": "semaine-2-2026-11-20",
+  "type": "annote",
+  "commit": "73edb3dd",
+  "objet_commit": "SEMAINE 2 — W5 : la restitution v3",
+  "message": "Semaine 2 (2026-11-20) : 5 vagues, 3 positives (W1, W2, W3), 1 bloquée (W4), 1 mixte (W5). Tag posé sur le dernier commit de code vert 73edb3dd (W5). Aucune passe complète relancée : relevé work/portes-1115-09h53 (85 portes, 81 vertes, 4 rouges nommées : indice, melange, sessions réparée, prechargement environnementale) + ciblage W6 9/9 après heartbeat.",
+  "controle": "git cat-file -t semaine-2-2026-11-20 => tag ; git rev-parse semaine-2-2026-11-20^{} => 73edb3dd",
+  "limite": "posé sur W5, pas sur le commit de clôture W6 : un lecteur qui cherche le rapport dans le tag ne le trouvera pas."
+ },
+ "reste": [
+  {
+   "ligne": "B13",
+   "reste": "J4 — l'or de rôles (seconds cadres, rôles hors cadre)",
+   "prochaine_action": "annoter les seconds cadres et mesurer la précision/rappel par rôle",
+   "bloquant": "gold de rôles plus large"
+  },
+  {
+   "ligne": "S",
+   "reste": "page / : décision et recette (106 conservés / 41 à re-juger)",
+   "prochaine_action": "S tranche et migre ; le pilote rejoue 56 tests",
+   "bloquant": "S en pause"
+  },
+  {
+   "ligne": "L / Panini",
+   "reste": "26 signatures V14 manquantes",
+   "prochaine_action": "envoyer le manifeste ; rejouer 60 paires ; aucune p-value avant",
+   "bloquant": "signatures externes"
+  },
+  {
+   "ligne": "R0.7 / tagger",
+   "reste": "auto non livré ; coût 1 000 extrapolé ; fermé 402 -1,55",
+   "prochaine_action": "mesurer le coût réel si un run 1 000 est utile ; décider du fermé",
+   "bloquant": "aucun"
+  },
+  {
+   "ligne": "N2 / N4 / A6.2",
+   "reste": "hors périmètre de la semaine 2",
+   "prochaine_action": "reprendre la porte propre N2 ; N4 ; A6.2",
+   "bloquant": "GPU / infra"
+  }
+ ],
+ "limites": [
+  "Pas de passe complète le 15/11 après W5 : le ciblage couvre le diff et les tests, pas les 85 portes.",
+  "Le tag est sur W5, pas sur le commit de clôture : le rapport n'est pas dans le tag.",
+  "prechargement est rouge au moment de la passe ; l'attribution à la charge (deux passes en parallèle) repose sur la PPL identique et la verte du 14/11.",
+  "W4 n'est pas un test : 27 paires choisies par disponibilité ; calibration 42/44 ; 3 sources courtes ; 5 doublons ; aucune p-value.",
+  "W5 ne mesure que 46 textes (trois rôles) et 61 phrases / 144 rôles (gold S) ; le 144/144 inclut un gain de découpage.",
+  "W2/W3 : H50 circulaire ; un seul run API, non déterministe au bit près ; coût 1 000 extrapolé.",
+  "Les cinq vagues ont été exécutées le 15/11, pas aux dates du plan (16 -> 20/11) ; le tag porte la date cible 2026-11-20 ; J4 et J5 matin n'ont pas été ouverts comme vagues."
+ ],
+ "fichiers": {
+  "rapport": "reports/rapport-semaine-2.md",
+  "json": "reports/rapport-semaine-2.json",
+  "vagues": {
+   "W1": [
+    "reports/rapport-gold-452.md",
+    "reports/rapport-gold-452.json"
+   ],
+   "W2": [
+    "reports/rapport-tagger-h50.md",
+    "reports/rapport-tagger-h50.json"
+   ],
+   "W3": [
+    "reports/rapport-tagger-defaut.md",
+    "reports/rapport-tagger-defaut.json"
+   ],
+   "W4": [
+    "reports/rapport-panini-manifeste.md",
+    "reports/panini-manifeste.json"
+   ],
+   "W5": [
+    "reports/rapport-restitution-v3.md",
+    "reports/pensee-restitution-v3.json"
+   ]
+  },
+  "portes": [
+   "work/portes-1115-09h53/registre.txt",
+   "work/portes/w6-ciblage/",
+   "work/portes/w6-ciblage2/"
+  ],
+  "mis_a_jour": [
+   "docs/pilotage/en-cours.md",
+   "docs/pilotage/semaine-2.md",
+   "docs/pilotage/references-non-regression.md",
+   "reports/README.md",
+   "reports/INDEX.md"
+  ]
+ },
+ "verdict": "Semaine 2 mesurée et écrite : le tagger gagne +4,45 sur 402 et +17,65 sur H50 (fermé 402 -1,55), le défaut reste hors ligne avec --tagger opt-in, Panini est bloqué à 27/60 et 42/44 sans p-value, la restitution v3 sépare les cinq rôles (24/24, gold S 144/144, 18/18, permutation 0/18) mais ne gagne qu'un cadre (20/46, F1 0,5406). Tag annoté semaine-2-2026-11-20 sur le dernier commit de code vert 73edb3dd. Aucune passe complète relancée : 85 portes lues, 81 vertes, 4 rouges nommées (indice, melange, sessions réparée, prechargement environnementale)."
+}
