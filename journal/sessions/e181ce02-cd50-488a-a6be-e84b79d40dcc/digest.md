@@ -63870,3 +63870,37 @@ dim 15 nov 2026 02:00:22 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 280 git commit -m \"ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE\" -- docs/pilotage/en-cours.md 2>&1 | tail -3; git log -1 --format='%h %s' | cut -c1-70", "description": "Committer avec un long timeout", "timeoutMs": 320000 … [1 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 5891ef8a] ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE
+ 9 files changed, 429 insertions(+), 22 deletions(-)
+5891ef8a ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE
+[stderr]
+
+real	2m16,685s
+user	2m1,666s
+sys	0m20,221s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7; date", "description": "Pousser (timeout long)", "timeoutMs": 6 … [6 caractères tronqués]`
+
+  ```
+6560a0a5..5891ef8a  s/v7 -> s/v7
+   6560a0a5..5891ef8a  master -> master
+0
+dim 15 nov 2026 02:02:58 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [4266 caractères tronqués]`
+
+  ```
+6 tâches ; total 35
+phase 3
+PID 2917177
+2026-11-14 07:18:51 · ✔ J14.1 en 1542.6 s (code 0) — ✅ git tag -l 'chantier-2026-11-14'; ✅ test -f reports/rapport-cloture-chantier.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 02:03:34 · ▶ C1 — Coordination N2 — la commande validée (timeout 3600 s)
+dim 15 nov 2026 02:03:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre C1", "timeoutMs": 1600000}`

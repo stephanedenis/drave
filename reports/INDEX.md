@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **732 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **733 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -123,6 +123,7 @@
 | [rapport-contrat-s.md](rapport-contrat-s.md) | B13 — Contrat d'interface L ↔ S : les subordonnées REL/SUB |
 | [rapport-convention-gv.md](rapport-convention-gv.md) | B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902 |
 | [rapport-coordination-a.md](rapport-coordination-a.md) | A — coordination : A6.2 est libre, A8.3b2 est nommée mais hors du graphe |
+| [rapport-coordination-n2-v2.md](rapport-coordination-n2-v2.md) | N2 — la commande validée : le canal avec RoPE, et le témoin 3,09 qui ne doit pas bouger |
 | [rapport-coordination-n2.md](rapport-coordination-n2.md) | N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal |
 | [rapport-coordination-r.md](rapport-coordination-r.md) | R — le tagger POS sur le gold 612 : **+8,49 pts**, la règle dit **intégrer** |
 | [rapport-coordination-s.md](rapport-coordination-s.md) | S — les 11 verdicts de `/paragraphes` ne sont pas dans git |

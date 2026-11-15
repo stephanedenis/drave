@@ -1,0 +1,247 @@
+{
+  "version": 2,
+  "date": "2026-11-15",
+  "head": "5891ef8a",
+  "ligne": "N2",
+  "objet": "coordination N2, suite de J4.1 : la commande validée, la commande interdite, le test de non-régression",
+  "fiche": "reports/rapport-coordination-n2-v2.md",
+  "v1": "reports/rapport-coordination-n2.md",
+  "verdict": "La mesure 2,79 est celle du couple RoPE + canal : 2,9726 / 2,8988 / 2,8443 / 2,7856 de 128 à 1024 octets. --rope sans canal rend 40,0658 à 128 et 65,7898 à 1024 : c'est la commande à ne pas utiliser. La commande du mandat, eval_longueurs.py --rope --canal-dir <dir>, n'existe pas telle quelle : --canal-dir est le drapeau du correctif eval_n2_propre.py (copie /tmp), et eval_longueurs.py fournit le canal par --val <dir>. La porte à 3,09 (3,0971 val / 3,2098 test sur A-propre-g1) doit rester à 3,09.",
+  "correction_v2": {
+    "ambiguite": "La v1 donnait deux commandes justes dans deux sections : eval_longueurs.py --rope --val <dir> (mètre existant) et eval_n2_propre.py --rope --canal-dir <dir> (correctif proposé, copie /tmp). Le plan C1 les a fusionnées en une commande hybride qui ne tourne pas.",
+    "forme_du_mandat": "python3 work/n2ac/eval_longueurs.py --rope --canal-dir <dir>",
+    "test_forme_du_mandat": {
+      "commande": "PYTHONPATH=. ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --canal-dir data/corpus_propre --longueurs 128",
+      "code_sortie": 2,
+      "message": "eval_longueurs.py: error: unrecognized arguments: --canal-dir data/corpus_propre",
+      "conclusion": "eval_longueurs.py n'a pas de --canal-dir ; le canal s'y donne par --val <dir>."
+    }
+  },
+  "commandes": {
+    "validee_executable": {
+      "statut": "validée, exécutable aujourd'hui",
+      "mètre": "work/n2ac/eval_longueurs.py",
+      "canal": "fourni par --val <dir> (val.canal)",
+      "commande": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024 --val data/corpus_propre",
+      "attendu": {
+        "L128": 2.9726,
+        "L256": 2.8988,
+        "L512": 2.8443,
+        "L1024": 2.7856
+      },
+      "rejoue": "2026-11-15 02:09 HNE",
+      "note": "Ici --val data/corpus_propre EST le canal : eval_longueurs.py lit toujours val.canal. Sur cet outil, --rope seul ne rend pas 40,07."
+    },
+    "validee_correctif": {
+      "statut": "validée, mais pas encore dans le dépôt",
+      "mètre": "copie /tmp/eval_n2_propre_rope.py (patch --rope --canal-dir de tools/eval_n2_propre.py)",
+      "commande": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python /tmp/eval_n2_propre_rope.py work/n2ac/propre512-8k.pt --rope --canal-dir data/corpus_propre --longueurs 128,256,512,1024",
+      "attendu": {
+        "val": 2.9726,
+        "test_128_offset_5M": 3.0807,
+        "longueurs": {
+          "128": 2.9726,
+          "256": 2.8988,
+          "512": 2.8443,
+          "1024": 2.7856
+        },
+        "permute_128": 1673.4162
+      },
+      "note": "C'est la forme --rope --canal-dir du mandat, mais elle appartient à tools/eval_n2_propre.py. Le diff est dans la v1, § 3 ; l'appliquer est un acte N2, hors C1."
+    },
+    "interdite": {
+      "statut": "à ne PAS utiliser",
+      "forme": "--rope seul, sans canal",
+      "mètre": "copie /tmp/eval_n2_propre_rope.py, sans --canal-dir",
+      "commande": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. CUDA_VISIBLE_DEVICES=0 ~/gpu-env/bin/python /tmp/eval_n2_propre_rope.py work/n2ac/propre512-8k.pt --rope --longueurs 128,256,512,1024",
+      "mesure": {
+        "128": 40.0658,
+        "256": 49.5308,
+        "512": 59.8126,
+        "1024": 65.7898
+      },
+      "pourquoi": "--rope corrige l'architecture, pas l'entrée manquante : le checkpoint de la porte a été entraîné avec --canal data/corpus_propre/train.canal. Sans canal, la PPL est 13,5 fois pire à 128 et 23,6 fois pire à 1024 que la valeur avec canal. La courbe monte avec la longueur (40 → 66), signature d'une entrée manquante.",
+      "variante_repo": {
+        "commande": "tools/eval_n2_propre.py <pt> sans --rope (le drapeau n'existe pas encore dans le dépôt)",
+        "mesure": {
+          "128": 8.0225,
+          "256": 8.971,
+          "512": 11.3357,
+          "1024": 38.5288
+        },
+        "note": "Architecture absolue : la courbe monte aussi (8 → 38,5). Les deux modes faux sont au-dessus de 2,79."
+      }
+    }
+  },
+  "chiffres": {
+    "checkpoint_porte": {
+      "fichier": "work/n2ac/propre512-8k.pt",
+      "parametres": 34301224,
+      "window": 512,
+      "positions": "rope",
+      "sha256": "37c5673b3d51f6f871c4391b97015b401f73c842d04d4a05f78a70c2b264eefc",
+      "protocole": "validation data/corpus_propre/val.txt, fenêtres Van der Corput dans les chunks de 8192, 8 lots × 16 fenêtres"
+    },
+    "courbe_validation": {
+      "rope_avec_canal": {
+        "128": 2.9726,
+        "256": 2.8988,
+        "512": 2.8443,
+        "1024": 2.7856
+      },
+      "rope_sans_canal": {
+        "128": 40.0658,
+        "256": 49.5308,
+        "512": 59.8126,
+        "1024": 65.7898
+      },
+      "absolu_sans_canal": {
+        "128": 8.0225,
+        "256": 8.971,
+        "512": 11.3357,
+        "1024": 38.5288
+      },
+      "determinisme": "2,7856 deux fois à 1024 (15/11)"
+    },
+    "test_1024": {
+      "protocole": "test.txt → val.txt, test.canal → val.canal, eval_longueurs.py --rope",
+      "128": 3.0649,
+      "512": 2.8875,
+      "1024": 2.8566,
+      "seuil": 2.5,
+      "manque_val_1024": 0.2856,
+      "manque_test_1024": 0.3566,
+      "note": "2,7856 est le meilleur des quatre longueurs en validation, choisi après coup ; 2,8566 est la mesure honnête."
+    },
+    "temoin_absolu_N2h": {
+      "fichier": "work/n2h/A-propre-g1.pt",
+      "parametres": 11816136,
+      "positions": "absolues",
+      "canal": null,
+      "mètre": "tools/eval_n2_propre.py (non patché)",
+      "val": 3.0971,
+      "test": 3.2098,
+      "permute": 1356.6433,
+      "longueurs": {
+        "129": 3.1334,
+        "192": 8.7137,
+        "256": 14.4554,
+        "384": 24.8061,
+        "512": 34.0535
+      },
+      "reference_publiee_N2h": {
+        "val": 3.0904,
+        "test": 3.196
+      },
+      "verdict": "3,0971 est dans la classe de 3,0904 / 3,1960 : c'est le 3,09 à ne pas casser. Avec canal, ce checkpoint rend 10,99 (v1) : le canal ne s'ajoute pas à un modèle qui ne l'a pas appris ; RoPE ne s'ajoute pas non plus à un modèle absolu."
+    },
+    "controle_negatif": {
+      "permutation_texte_canal_inchange_1024_v1": 1692.3919,
+      "permutation_128_patche": 1673.4162,
+      "verdict": "le mètre est sensible à l'ordre ; les deux valent plus de 600 fois 2,7856."
+    }
+  },
+  "porte_n2": {
+    "statut": "proposée, non écrite",
+    "fichier": "tools/porte-n2.sh",
+    "raison_non_ecrite": "Créer une porte est un acte N2 (entrée dans tools/toutes-les-portes.sh, compteur 85 → 86). C1 documente le contrat, N2 l'implémente.",
+    "invariants": [
+      {
+        "rang": "A",
+        "nom": "la porte à 3,09 reste à 3,09",
+        "commande": "python3 tools/eval_n2_propre.py work/n2h/A-propre-g1.pt",
+        "attendu": {"val": 3.0971, "test": 3.2098},
+        "tolerance": 0.01,
+        "pourquoi": "Un patch --rope sans garde-fou peut faire basculer tous les checkpoints dans le chemin RoPE ; le témoin absolu rendrait alors un chiffre de la classe 40, pas 3,09. La non-régression de N2 n'est pas seulement « 2,79 reproductible » : c'est « 3,09 reste 3,09 ET 2,79 reste 2,79 »."
+      },
+      {
+        "rang": "B",
+        "nom": "la porte RoPE + canal",
+        "commande": "python3 work/n2ac/eval_longueurs.py work/n2ac/propre512-8k.pt --rope --val data/corpus_propre --longueurs 128,256,512,1024",
+        "attendu": {"128": 2.9726, "256": 2.8988, "512": 2.8443, "1024": 2.7856},
+        "tolerance": 0.01
+      },
+      {
+        "rang": "B'",
+        "nom": "la courbe descend",
+        "test": "L1024 < L128 - 0.15",
+        "attendu": -0.187
+      },
+      {
+        "rang": "B''",
+        "nom": "le test 1024",
+        "commande": "split test.txt → val.txt, test.canal → val.canal, eval_longueurs.py --rope --longueurs 1024 --val /tmp/c1-propre-test",
+        "attendu": 2.8566,
+        "tolerance": 0.01
+      },
+      {
+        "rang": "C",
+        "nom": "contrôle négatif",
+        "commande": "validation permutée (VDC), canal inchangé, 1024",
+        "attendu": 1692.3919,
+        "seuil": "> 100"
+      },
+      {
+        "rang": "D",
+        "nom": "statut absolu",
+        "calcul": "2,7856 - 2,5 et 2,8566 - 2,5",
+        "attendu": {"manque_val": 0.2856, "manque_test": 0.3566},
+        "regle": "imprimé à chaque exécution ; jamais vert sur le seuil 2,5"
+      }
+    ],
+    "codes_sortie": {
+      "0": "invariants A et B tenus ; statut absolu imprimé",
+      "1": "un invariant est violé (dérive du mètre ou du checkpoint)",
+      "2": "artefact ou GPU absent (comme porte-budget / porte-adaptateur-sortie)"
+    },
+    "temps": "~40 s pour A + B (deux chargements), ~55 s avec B'' et C",
+    "dependances_non_suivies": [
+      "work/n2ac/eval_longueurs.py",
+      "work/n2ac/rope_model.py",
+      "work/n2j/evalue_canal.py",
+      "work/n2ac/propre512-8k.pt",
+      "work/n2h/A-propre-g1.pt",
+      "data/corpus_propre/val.txt",
+      "data/corpus_propre/val.canal",
+      "data/corpus_propre/test.txt",
+      "data/corpus_propre/test.canal"
+    ],
+    "interdits": [
+      "réentraîner",
+      "télécharger",
+      "toucher en-cours/roadmap",
+      "mesurer le grand corpus à la place du corpus propre",
+      "utiliser eval_n2_propre.py sans --rope sur un checkpoint RoPE",
+      "appeler eval_longueurs.py avec --canal-dir (le drapeau n'existe pas)"
+    ]
+  },
+  "en_cours": {
+    "fichier": "docs/pilotage/en-cours.md",
+    "ligne": "N2 — en pause",
+    "changement": "ligne N2 : commande validée eval_longueurs.py --rope --val <dir> (2,7856), --rope seul sans canal = 40,0658, invariant « v2 : 3,09 tenu », lien v2, puis porte propre ; ligne N : lien v2 ; compteurs 735/828 → 736/829.",
+    "ligne_tableau": "N — le natif : lien v2"
+  },
+  "aucune_modification": {
+    "tools_n2": "absent de l'arbre",
+    "work_n2ac": [
+      "work/n2ac/eval_longueurs.py",
+      "work/n2ac/rope_model.py",
+      "work/n2ac/propre512-8k.pt",
+      "work/n2ac/propre512-8k.pt.json"
+    ],
+    "tools": [
+      "tools/eval_n2_propre.py",
+      "tools/native_model.py"
+    ],
+    "note": "Tous lus, non modifiés ; les copies de travail sont dans /tmp."
+  },
+  "limites": [
+    "Une seule graine, un seul run, une seule machine : pas de barre d'erreur.",
+    "2,7856 est le meilleur des quatre longueurs en validation, choisi après coup ; le test (2,8566) manque 0,3566, pas 0,2856.",
+    "--canal-dir n'est pas dans le dépôt : la validation de la forme B repose sur la copie /tmp/eval_n2_propre_rope.py de la v1. La commande A, elle, est rejouable.",
+    "eval_longueurs.py est CUDA-only et vit dans work/ (gitignoré) : un clone neuf ne peut pas le rejouer.",
+    "Le contrôle négatif 1692,39 est un chiffre v1 à 1024 ; 1673,42 est mesuré à 128 avec le patch.",
+    "Le témoin 3,09 n'est pas le même modèle que la porte (11,8 M absolu sans canal contre 34,3 M RoPE avec canal) : il teste le mètre, pas une performance comparable.",
+    "PPL n'est pas lecture : la porte mesure une perplexité, pas la restitution (règle du miroir)."
+  ]
+}
