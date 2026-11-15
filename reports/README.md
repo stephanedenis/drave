@@ -34,6 +34,7 @@
 | [`rapport-coordination-r.md`](rapport-coordination-r.md) | **R** — tagger POS 612 : **0,9475 (+8,49)** |
 | [`rapport-tagger-option.md`](rapport-tagger-option.md) | **R0.7 / 1A** — le tagger POS en option : **+8,57** sur 20 phrases, **+8,49** sur 612, défaut hors ligne |
 | [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 |
+| [`rapport-atomes-prediction.md`](rapport-atomes-prediction.md) | **Panini B2** — les atomes ne prédisent pas POS/syntagmes/attachement sur 28 œuvres propres ; le style est prédit, la date l'absorbe |
 | [`rapport-corpus-commun.md`](rapport-corpus-commun.md) | **Panini** — le corpus commun UDHR |
 | [`rapport-retrieval-epoque.md`](rapport-retrieval-epoque.md) | **Panini** — le retrieval contrôlé |
 | [`rapport-retrieval-familles.md`](rapport-retrieval-familles.md) | **Panini** — le retrieval approfondi par famille |

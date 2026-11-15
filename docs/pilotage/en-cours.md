@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 02 h 32 HNE (tagger : 95,75 % sur 612, 95,00 % sur le réel 452)**
+**Mis à jour : 2026-11-15, 03 h 46 HNE (B2 : atomes → niveaux, négatif contrôlé)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -87,17 +87,17 @@
 
 - **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67 ; **19/19 verdicts `389b99f`** ; `/paragraphes` v7, `/` ancien arbre ; [v2](../../reports/rapport-coordination-s-v2.md).
 - **N2 — en pause** : **commande validée** `eval_longueurs.py --rope --val <dir>` (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
-- **Pensée — B13 (actif)** : **183/183**, gold 432 ; `r035` (238/238), convention GV (0,7902), `s065` (238/238), **J6.1 rejeté** (g017 à trancher), schéma v2, restitution v1 (46/46, strict 0,1087), **J9.1** (19 fiches) ; [s065](../../reports/rapport-s065.md), [restitution v1](../../reports/rapport-restitution-v1.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+- **Pensée — B13 (actif)** : **183/183** ; `r035` (238/238), convention GV (0,7902), `s065` (238/238), **J6.1 rejeté** (g017 à trancher), schéma v2, restitution v1 (46/46, strict 0,1087), **J9.1** (19 fiches) ; [s065](../../reports/rapport-s065.md), [restitution v1](../../reports/rapport-restitution-v1.md), [J9.1](../../reports/rapport-passe-honnetete.md).
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
-- **Panini J2.1–J3.2** : table **14 atomes** ; UDHR **418/438** ; J3.1 script domine, date non significative ; J3.2 : **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, **V14 3/21** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md).
+- **Panini J2.1–J3.2 + B2** : **14 atomes** ; UDHR **418/438** ; J3.2 : **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard, **V14 3/21** ; **B2 : atomes → niveaux négatif** (POS −0,092, syntagmes −0,160, attachement −0,092 ; style absorbé par la date) ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [époque](../../reports/rapport-retrieval-epoque.md), [deux faces](../../reports/rapport-genealogie-deux-faces.md), [B2](../../reports/rapport-atomes-prediction.md).
 - **Panini J7.1** : 532 textes (445 langues) ; hors script, hasard ; famille **66,1 %** / sœur **26,1 %** (hasard 10,3/2,5) ; LANG_TREE : sœurs **0,619** vs **0,0445** (13,9×, p=0,002) ; [fiche](../../reports/rapport-retrieval-familles.md).
 - **Panini B1 — protocole à date contrôlée** : **60 paires** (20 G1 inter-traditions à ±10 ans,
   20 G2 même tradition à 20–200 ans, 20 G3 même langue à dates décalées), **59 textes**, **26 à signer** ;
   le §334 ne fournit qu'**une** paire G1 déjà signée ; [fiche](../../reports/rapport-protocole-date.md),
   [JSON](../../reports/protocole-date.json).
-- **Panini J12.1–J12.2 — §334 et CIC** : §334 — 655 lignes = 495 paires uniques ; [§334](../../reports/rapport-panini-334.md). CIC — **42/42** verdicts, **42/42** empreintes, **36/36** preuves altérées rejetées, **1 020/1 020** mutations de `eq(2,2)` rejetées ; [CIC](../../reports/rapport-cic-verificateur.md).
-- **J5.1 / J10.1 / J13.1 / J14.1 — les bilans et la clôture** : semaine (F1 **0,7533 → 0,7902**, tagger **0,9475** ; [rapport](../../reports/rapport-semaine.md)) ; chantier **20/21**, attachement **236 → 238**, 5 timeouts, 1 échec (J5.2), D1–D20, R1–R30 ; [bilan](../../reports/rapport-bilan-chantier.md) ; **J13.1** — tableau des mesures : **612/602** ; [tableau](../../reports/rapport-tableau-mesures.md) ; **J14.1** — clôture (**84/81/3**, tag `chantier-2026-11-14` ; [rapport](../../reports/rapport-cloture-chantier.md)).
-- **J11.1–J11.4** : par-langue fr/en ; J11.3 50 textes, 115/0 chevauchements ; J11.4 schéma v2 (6 cas / 0 échec) ; F1 **0,7902**, att. **238/239** ; [J11.1](../../reports/rapport-exemples-rejoues.md), [J11.2](../../reports/rapport-evaluer-langue.md), [J11.3](../../reports/rapport-robustesse-semaine.md), [J11.4](../../reports/rapport-schema-v2-doc.md).
+- **Panini J12.1–J12.2** : §334 **495 paires uniques** ; CIC **42/42** verdicts, **42/42** empreintes, **36/36** preuves altérées rejetées, **1 020/1 020** mutations `eq(2,2)` rejetées ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md).
+- **J5.1 / J10.1 / J13.1 / J14.1 — bilans et clôture** : F1 **0,7902** (tagger **0,9475**), chantier **20/21** ; **J13.1** **612/602** ; **J14.1** clôture **84/81/3** (tag `chantier-2026-11-14`) ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [tableau](../../reports/rapport-tableau-mesures.md), [clôture](../../reports/rapport-cloture-chantier.md).
+- **J11.1–J11.4** : fr/en, 50 textes, schéma v2 ; [exemples](../../reports/rapport-exemples-rejoues.md), [langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md).
 
 ## Les chiffres de l'état
 
@@ -107,7 +107,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **739** / **832** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **740** / **834** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 

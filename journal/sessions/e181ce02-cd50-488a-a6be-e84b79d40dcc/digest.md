@@ -63977,3 +63977,59 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5075", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5075", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 03:14:32 EST
+2026-11-15 02:46:21 · ▶ B1 — Panini — le protocole à date contrôlée (timeout 3600 s)
+2026-11-15 03:06:39 · ✔ B1 en 1218.0 s (code 0) — ✅ test -f reports/rapport-protocole-date.md && echo FICHE-OK
+2026-11-15 03:06:39 · ▶ B2 — Panini — les atomes et les niveaux, prédiction (timeout 3600 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | g … [101 caractères tronqués]`
+
+  ```
+f926b5bc..c37fed06  s/v7 -> s/v7
+   f926b5bc..c37fed06  master -> master
+[still running after 600000ms; moved to background job bash-5076]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5076", "timeout_ms": 700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5076", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 03:34:42 EST
+2026-11-15 03:06:39 · ✔ B1 en 1218.0 s (code 0) — ✅ test -f reports/rapport-protocole-date.md && echo FICHE-OK
+2026-11-15 03:06:39 · ▶ B2 — Panini — les atomes et les niveaux, prédiction (timeout 3600 s)
+budget consommé : 3784.4 s · lancements : 34
+  [a_faire ] B2     j15 — Panini — les atomes et les niveaux, prédiction
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5076 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E "budget|a_faire" | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre B2/B3", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5077]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5077", "timeout_ms": 700000, "wait": true}`

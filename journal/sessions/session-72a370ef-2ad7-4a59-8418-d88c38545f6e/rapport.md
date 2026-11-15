@@ -9,10 +9,10 @@
 | Début | 2026-11-15 02:46 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 113 |
-| Appels d'outils | 134 |
+| Messages | 115 |
+| Appels d'outils | 136 |
 | Fichiers touchés | 0 |
-| Commandes | 131 |
+| Commandes | 133 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche B1 : le protocole Panini à date contrôlée (la suite de la note 4A) — construis `reports/rapport-protocole-date.md` … [357 caractères tronqués]
 
-*134 appels d'outils.* Actions notables :
+*136 appels d'outils.* Actions notables :
 
 - bash — List repo root and reports
 - bash — Show recent commits and status
@@ -41,7 +41,43 @@
 - bash — List Panini falsification artifacts
 - bash — Inspect pairs334_axes artifact
 - bash — Inspect sigs, revalidation, graph
-- … et 120 autres
+- … et 122 autres
+
+**Synthèse produite :**
+
+**Fait — commit `c37fed06`.** Le protocole B1 est gelé, écrit et rejouable ; **aucun fichier de Panini n’a été modifié**.
+
+\### Ce qui est livré
+
+| fichier | rôle |
+|---|---|
+| [`reports/rapport-protocole-date.md`](reports/rapport-protocole-date.md) | la fiche : faisabilité, 60 paires, H0/H1, contrôles, pré-enregistrement, commande |
+| [`reports/protocole-date.json`](reports/protocole-date.json) | le manifeste gelé : 60 paires, 59 textes, 26 à signer, SHA-256 des 7 artefacts §334 |
+| [`tools/protocole_date.py`](tools/protocole_date.py) | construit, vérifie et rejoue ; lecture seule de Panini |
+
+\### Les chiffres qui comptent
+
+- **60 paires** : 20 G1 (inter-traditions, `|Δ| ≤ 10`), 20 G2 (même tradition, `20 ≤ |Δ| ≤ 200`), 20 G3 (même langue, `|Δ| ≥ 50`).
+- **59 textes distincts** ; usage maximal 5 (`isaiah_book`, `book_of_enoch`).
+- **27 paires déjà signées** dans `analytic_sigs_v1` : **1 G1**, 14 G2, 12 G3.
+- **26 textes à signer** par Panini pour que le test existe.
+- Le §334 fournit **77 candidates G1**, mais **une seule** a ses deux signatures déjà mesurées. C’est le résultat de faisabilité central : le plan est possible, la mesure ne l’est pas encore.
+- Les 44 signatures `analytic_sigs_v1` et les 57 `v14_signature` du graphe v35 sont **deux instruments différents** (cosinus 0,42–0,82 sur 11 œuvres communes) : le protocole interdit de les mélanger.
+- Le HEAD de Panini a bougé (`9b80c323` ≠ `e10d695e`), mais les **7 artefacts §334 sont byte-identiques** à ceux de 4A — les SHA-256 le prouvent.
+
+\### La commande de rejeu
+
+```bash
+python3 tools/protocole_date.py --verifier
+
+python3 tools/protocole_date.py --rejouer \
+  --signatures /tmp/v14.json \
+  --sortie reports/protocole-date-resultats.json
+```
+
+Le test **n’est pas exécuté** : il attend les 26 signatures V14. Le script refuse d’écrire dans Panini, vérifie les SHA-256, et ne teste que si les 60 paires sont complètes ; sinon il décrit le noyau sans p-value.
+
+Contrôles passés : `--verifier`, rejeu sur signatures synthétiques, `revue_documentation.py`, `porte-tableaux.sh`, et 4 portes documentaires/registre/tableaux — toutes vertes.
 
 ## 3. Travail accompli
 
@@ -92,7 +128,7 @@
 - **T1** Search signature artifacts
 - **T1** Inspect other signature artifacts
 - **T1** Inspect aggregated and propagated signatures
-- … et 91 autres
+- … et 93 autres
 
 ## 4. Mesures et résultats marquants
 

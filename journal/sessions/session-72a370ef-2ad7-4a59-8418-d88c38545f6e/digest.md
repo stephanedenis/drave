@@ -2654,3 +2654,101 @@ docs/pilotage/en-cours.md         |    6 +-
   ```
 
 - **bash** `{"command": "git commit -m \"B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE\" -m \"Le manifeste reports/protocole-date.json fige 60 paires tirées des 107 sources du §334 (102 acquises), en trois groupes : 20 contempora … [839 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-131]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-131", "wait": true, "timeout_ms": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 c37fed06] B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE
+ 19 files changed, 10770 insertions(+), 28 deletions(-)
+ create mode 100644 journal/sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/digest.md
+ create mode 100644 journal/sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/rapport.md
+ create mode 100644 journal/sessions/session-72a370ef-2ad7-4a59-8418-d88c38545f6e/digest.md
+ create mode 100644 journal/sessions/session-72a370ef-2ad7-4a59-8418-d88c38545f6e/rapport.md
+ create mode 100644 reports/protocole-date.json
+ create mode 100644 reports/rapport-protocole-date.md
+ create mode 100644 tools/protocole_date.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo \"---\"; git status --short | head -20; echo \"---\"; git show --stat --oneline HEAD | tail -25", "description": "Verify commit and status"}`
+
+  ```
+c37fed06 B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE
+f926b5bc C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f)
+292c70b5 C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+c37fed06 B1 — LE PROTOCOLE À DATE CONTRÔLÉE GELÉ : 60 PAIRES (20/20/20), 59 TEXTES, 26 À SIGNER ; LE §334 N'EN FOURNIT QU'UNE DÉJÀ SIGNÉE
+ docs/pilotage/en-cours.md                          |    6 +-
+ journal/2026-11-15/README.md                       |    4 +-
+ journal/2026-11-15/distribue.md             
+… [1120 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/protocole_date.py --verifier | tail -4; echo \"---\"; python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Post-commit verification"}`
+
+  ```
+OK : 60 paires uniques, 20/20/20, 59 textes, sources acquises.
+commit Drave : f926b5bc6d8da64ffb1c59a6dbc8a6fcfd1c9888
+commit Panini lu : 9b80c323629be60c68696f5c5a21f37ad9420073
+paires : 60 ; textes : 59 ; à signer : 26
+---
+  revue de documentation · 739 fiche(s) · 832 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+**Fait — commit `c37fed06`.** Le protocole B1 est gelé, écrit et rejouable ; **aucun fichier de Panini n’a été modifié**.
+
+### Ce qui est livré
+
+| fichier | rôle |
+|---|---|
+| [`reports/rapport-protocole-date.md`](reports/rapport-protocole-date.md) | la fiche : faisabilité, 60 paires, H0/H1, contrôles, pré-enregistrement, commande |
+| [`reports/protocole-date.json`](reports/protocole-date.json) | le manifeste gelé : 60 paires, 59 textes, 26 à signer, SHA-256 des 7 artefacts §334 |
+| [`tools/protocole_date.py`](tools/protocole_date.py) | construit, vérifie et rejoue ; lecture seule de Panini |
+
+### Les chiffres qui comptent
+
+- **60 paires** : 20 G1 (inter-traditions, `|Δ| ≤ 10`), 20 G2 (même tradition, `20 ≤ |Δ| ≤ 200`), 20 G3 (même langue, `|Δ| ≥ 50`).
+- **59 textes distincts** ; usage maximal 5 (`isaiah_book`, `book_of_enoch`).
+- **27 paires déjà signées** dans `analytic_sigs_v1` : **1 G1**, 14 G2, 12 G3.
+- **26 textes à signer** par Panini pour que le test existe.
+- Le §334 fournit **77 candidates G1**, mais **une seule** a ses deux signatures déjà mesurées. C’est le résultat de faisabilité central : le plan est possible, la mesure ne l’est pas encore.
+- Les 44 signatures `analytic_sigs_v1` et les 57 `v14_signature` du graphe v35 sont **deux instruments différents** (cosinus 0,42–0,82 sur 11 œuvres communes) : le protocole interdit de les mélanger.
+- Le HEAD de Panini a bougé (`9b80c323` ≠ `e10d695e`), mais les **7 artefacts §334 sont byte-identiques** à ceux de 4A — les SHA-256 le prouvent.
+
+### La commande de rejeu
+
+```bash
+python3 tools/protocole_date.py --verifier
+
+python3 tools/protocole_date.py --rejouer \
+  --signatures /tmp/v14.json \
+  --sortie reports/protocole-date-resultats.json
+```
+
+Le test **n’est pas exécuté** : il attend les 26 signatures V14. Le script refuse d’écrire dans Panini, vérifie les SHA-256, et ne teste que si les 60 paires sont complètes ; sinon il décrit le noyau sans p-value.
+
+Contrôles passés : `--verifier`, rejeu sur signatures synthétiques, `revue_documentation.py`, `porte-tableaux.sh`, et 4 portes documentaires/registre/tableaux — toutes vertes.
+
