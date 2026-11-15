@@ -64631,3 +64631,37 @@ dim 15 nov 2026 06:27:14 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre E1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5118]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5118", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5118", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 06:52:19 EST
+2026-11-15 06:26:54 · ▶ E1 — La FAQ dans le sommaire et les liens (timeout 3000 s)
+2026-11-15 06:34:31 · ✔ E1 en 455.8 s (code 0) — ✅ test -f reports/rapport-faq-sommaire.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 06:34:31 · ▶ E2 — Le tagger — les cas d'erreur (timeout 3000 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log", "description": "Pousser E1 et suivre E2", "timeout … [13 caractères tronqués]`
+
+  ```
+503da67e..7d4e3bc5  s/v7 -> s/v7
+   503da67e..7d4e3bc5  master -> master
+[still running after 600000ms; moved to background job bash-5119]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5119", "timeout_ms": 700000, "wait": true}`

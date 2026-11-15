@@ -9,10 +9,10 @@
 | Début | 2026-11-15 06:26 |
 | Durée | 0.1 h |
 | Tours | 1 |
-| Messages | 52 |
-| Appels d'outils | 99 |
+| Messages | 57 |
+| Appels d'outils | 108 |
 | Fichiers touchés | 6 |
-| Commandes | 70 |
+| Commandes | 79 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche E1 : la FAQ (D3) est dans `docs/produit/README.md` — ajoute-la au sommaire du document, vérifie les **liens** de l … [187 caractères tronqués]
 
-*99 appels d'outils.* Actions notables :
+*108 appels d'outils.* Actions notables :
 
 - bash — Show repo status and recent commits
 - read
@@ -41,7 +41,27 @@
 - bash — Search roadmap for FAQ
 - bash — Check document word budgets
 - bash — Read revue documentation script
-- … et 79 autres
+- … et 88 autres
+
+**Synthèse produite :**
+
+**Tâche E1 terminée et committée** (`7d4e3bc5`).
+
+**Ce qui a changé**
+- `docs/produit/README.md` : ajout d’un **sommaire** de 9 entrées, dont **8. FAQ — dix questions** ; ligne FAQ aussi ajoutée au « Où aller ensuite » (§ 9).
+- `docs/README.md` : ligne FAQ dans la table **Produit**, avec l’ancre `#8-faq--dix-questions`.
+- `reports/rapport-faq-sommaire.md` + `reports/faq-sommaire.json` : la fiche et son relevé.
+- `tools/verifier_liens_faq.py` : vérificateur reproductible (ancres, liens, contrôle négatif, `--json`, `--autotest`).
+- `journal/2026-11-15/docs.md` : récit de la tâche.
+
+**Vérifications**
+- **9/9 ancres** du sommaire valides, **5/5 liens** de § 8 valides, **0 lien mort**.
+- Contrôle négatif **2/2** : fichier absent et ancre absente détectés.
+- Contenu des **dix réponses inchangé** : sha256 de § 8 identique avant/après (`8855b475…`).
+- `docs/README.md` : **995/1000** mots (budget T1) ; T0 : **3999/4000**.
+- `revue_documentation.py` : ✅ ; `porte-tableaux.sh` : ✅ (4456 liens) ; `porte-etat.sh` et `verifie_en_cours.py` : ✅.
+
+Les modifications sans rapport déjà présentes dans l’arbre de travail n’ont pas été committées.
 
 ## 3. Travail accompli
 
@@ -98,7 +118,7 @@
 - **T1** Read verifier_faq main and negative control
 - **T1** Hash FAQ section before edits
 - **T1** Verify FAQ hash and docs README word count
-- … et 30 autres
+- … et 39 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -155,10 +175,11 @@
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : 5b2d07fc D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270) d23780d7 D1 — LES EXEMPLES DU TAGGER ET DE 
 - **T1** : 8eb0cc49 B13 — RESTITUTION v0 : 46/46 SURFACES EXACTES, MIROIR STRICT 0,1087, LE MIROIR TROUVE LES SAUTS DE LIGNE 9a259953 B13 — SCHÉMA v2 : meta.partition + meta.alternative, 26 CAS VALIDÉS (0 ÉCHEC)
+- **T1** : #!/bin/bash # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait. # # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS # (`--attn-window` en r
 
 ## 6. Commits
 

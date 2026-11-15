@@ -26,7 +26,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 349.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 350.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -71,4 +71,15 @@ v1 **46/46**, v2 **19/46** cadres (**16** non vides, F1 **0,5270**), tagger **60
 [`tools/verifier_faq.py`](../../tools/verifier_faq.py), le relevé
 [`faq.json`](../../reports/faq.json), la fiche
 [`rapport-faq.md`](../../reports/rapport-faq.md).
+
+### E2 — les cas d'erreur du tagger : la clé refusée sort 4, le reste replie
+
+Quatre cas, un transport factice, **18/18 tests**, **0 socket**. La **clé absente** sortait déjà
+**4** ; la **clé invalide** (HTTP 401/403) rendait **0** avec un repli heuristique muet — elle
+sort désormais **4**, message clair, `stdout` vide, sans repli. Le **réseau coupé** (3 essais du
+client) et le **refus du modèle** (texte non JSON, JSON incomplet) restent des refus **par
+phrase** : repli heuristique, code **0**, cause dans `refus`, POS `source=heuristique`. Un
+transport valide donne code **0** et des POS neuronaux (contrôle négatif) ; retirer le contrôle
+401/403 fait échouer le test (`0 != 4`). [`fiche`](../../reports/rapport-tagger-erreurs.md) ·
+[`JSON`](../../reports/rapport-tagger-erreurs.json).
 <!-- /notes -->

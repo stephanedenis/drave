@@ -413,6 +413,30 @@ et 1,1 s (voir le coût ci-dessous, et les trois exemples réels de
 ni dans le message, ni dans le JSON, ni dans le cache. **Sans clé**, la commande écrit un
 message clair sur `stderr` et sort avec le code **4** ; rien n'est rendu sur `stdout`.
 
+**Les cas d'erreur.** Mesurés par [`test_tagger_api.py`](../../tools/tests/test_tagger_api.py)
+(transport factice, aucun socket) ; le tableau dit le comportement **du code courant**.
+
+| cas | ce que fait le CLI | code | `stdout` | `stderr` / JSON |
+|---|---|---:|---|---|
+| **clé absente** | refuse de démarrer | **4** | vide | `drave: dépendance absente : clé DeepSeek absente …` |
+| **clé invalide** (HTTP 401/403) | refuse de démarrer, **sans repli** | **4** | vide | `drave: dépendance absente : clé DeepSeek refusée (HTTP 401) : vérifiez DEEPSEEK_KEY_FILE, ~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.` |
+| **réseau coupé** (après 3 essais) | **replie** sur l'heuristique | **0** | annotation heuristique | `drave: tagger : refus partiel : neuronal-pos: ErreurDeepSeek: réseau : …` ; JSON `refus` non vide, POS `source=heuristique` |
+| **refus du modèle** (non JSON, JSON incomplet) | **replie** sur l'heuristique | **0** | annotation heuristique | `drave: tagger : refus partiel : neuronal-pos: ValueError: …` ; JSON `refus` non vide, POS `source=heuristique` |
+
+**Deux familles.** Une **clé absente** ou **refusée** est une dépendance manquante : le run ne
+peut pas commencer, il sort **4**, rien sur `stdout`, et il ne publie pas un repli déguisé en
+cascade. Un **réseau coupé** ou un **refus du modèle** est un refus **par phrase** : la cascade
+garde le POS de l'heuristique, porte la cause dans `refus`, et le JSON reste valide ; le code
+reste **0** parce que l'analyse, elle, est rendue. Sur `--jsonl`, le coût et
+`N/M phrase(s) refusée(s)` vont sur `stderr` ; le JSONL partiel est publié. `evaluer --tagger`
+suit la même règle : clé refusée → **4**, sans sortie ; refus par phrase → `refus: N`,
+métriques égales à l'heuristique et `delta_pos: 0`, avec la ligne `REFUS` dans la sortie
+lisible.
+
+**En `--jsonl`**, une clé refusée peut laisser sur `stdout` les lignes déjà écrites avant le
+code **4** (le premier texte sans appel neuronal ne déclenche pas le 401) ; le message et le
+code restent les mêmes. Le tableau ci-dessus décrit `analyser` sur **un** texte.
+
 **Ce que l'option change — et ce qu'elle ne change pas.** Le **POS** vient du tagger
 (`source=cascade`, confiance déclarée **0,60**) ; les **syntagmes**, leurs **rôles**, leurs
 **cibles d'attachement** et la **pragmatique** restent à l'heuristique. Le tagger ne reçoit que
@@ -571,7 +595,7 @@ restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test es
 | **1** | erreur ; tagger qui refuse une phrase sans POS | argument illisible, divergence de rejeu, exception |
 | **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
 | **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""`, `restituer "..."` |
-| **4** | dépendance absente : la clé du tagger | `--tagger` sans clé (message clair, rien sur `stdout`) |
+| **4** | dépendance absente : la clé du tagger (absente **ou refusée**) | `--tagger` sans clé, ou clé refusée HTTP 401/403 : message clair, rien sur `stdout`, pas de repli |
 
 **Ce qui n'est pas garanti** : le chemin neuronal **local**, un texte hors domaine, la calibration
 des confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le
@@ -712,8 +736,9 @@ demandé, `deepseek-flash` souvent renvoyé) et le cache peut rejouer une ancien
 **ponctuation** est restituée depuis l'heuristique. Sur le gold 612, le POS passe de
 **86,25 % à 95,75 %** (**+9,5 pts**) ; sur le réel 452, de **88,91 % à 95,00 %** (**+6,1**).
 La clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key`, puis
-`DEEPSEEK_API_KEY` (repli `DSH_*`) ; sans clé, code **4**, rien sur `stdout`. C'est une option
-**best-effort** : sa justesse dépend du modèle, et le cache peut servir une réponse ancienne.
+`DEEPSEEK_API_KEY` (repli `DSH_*`) ; sans clé **ou avec une clé refusée**, code **4**, rien sur
+`stdout` (§ 3.7). C'est une option **best-effort** : sa justesse dépend du modèle, et le cache
+peut servir une réponse ancienne.
 
 ### 8.5 Quel est le format de sortie, et est-il stable ?
 

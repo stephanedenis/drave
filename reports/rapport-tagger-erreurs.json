@@ -1,0 +1,155 @@
+{
+ "tache": "E2",
+ "titre": "Les cas d'erreur de --tagger",
+ "date": "2026-11-15",
+ "head": "7d4e3bc564590cc47e8a3429dac1a3f33ec75a1f",
+ "verdict": "4/4 cas caractérisés ; clé invalide 401 → code 4 (avant : 0, repli muet) ; réseau et refus du modèle → repli heuristique code 0, refus publié ; 18/18 tests.",
+ "code": {
+  "cli": "drave 0.1.0",
+  "schema": 2,
+  "fichiers": [
+   "tools/drave.py",
+   "tools/tests/test_tagger_api.py",
+   "docs/produit/README.md",
+   "reports/rapport-tagger-erreurs.md"
+  ],
+  "tests": {
+   "commande": "python3 tools/tests/test_tagger_api.py",
+   "resultat": "OK",
+   "tests": 18
+  }
+ },
+ "dispositif": {
+  "mode": "CLI en processus (drave.main) avec un client DeepSeek injecté et un transport factice",
+  "reseau": false,
+  "sockets": 0,
+  "cache": "répertoire temporaire vide par cas (aucune réponse rejouée)",
+  "cle": "cle-de-test-sentinelle (factice, jamais affichée)",
+  "essais_reseau": 3,
+  "date_execution": "2026-11-15",
+  "note": "le transport factice lève ErreurDeepSeek ou rend un contenu ; aucun DNS, TLS ni HTTP réel n'est touché"
+ },
+ "cas_erreur": [
+  {
+   "nom": "cle_absente",
+   "commande": "env -i HOME=/tmp/drave-e2-home PATH=$PATH python3 tools/drave.py analyser 'Le chat dort.' --tagger --json",
+   "code": 4,
+   "stdout_vide": true,
+   "stdout_octets": 0,
+   "refus": null,
+   "source": null,
+   "pos_sources": [],
+   "stderr": "drave: dépendance absente : clé DeepSeek absente : exportez DEEPSEEK_KEY_FILE, déposez la clé dans ~/.config/drave/deepseek.key, ou exportez DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.",
+   "test": "TestCle.test_sans_cle_code_4"
+  },
+  {
+   "nom": "cle_invalide_analyser",
+   "commande": "analyser Le chat dort. --tagger --json",
+   "code": 4,
+   "stdout_vide": true,
+   "stdout_octets": 0,
+   "refus": null,
+   "source": null,
+   "pos_sources": [],
+   "stderr": "drave: dépendance absente : clé DeepSeek refusée (HTTP 401) : vérifiez DEEPSEEK_KEY_FILE, ~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.",
+   "test": "TestErreursTagger.test_cle_invalide_code_4"
+  },
+  {
+   "nom": "cle_invalide_evaluer",
+   "commande": "evaluer --tagger --json",
+   "code": 4,
+   "stdout_vide": true,
+   "stdout_octets": 0,
+   "refus": null,
+   "source": null,
+   "pos_sources": [],
+   "stderr": "drave: dépendance absente : clé DeepSeek refusée (HTTP 401) : vérifiez DEEPSEEK_KEY_FILE, ~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.",
+   "test": "TestErreursTagger.test_cle_invalide_code_4"
+  },
+  {
+   "nom": "reseau_coupe",
+   "commande": "analyser « Le chat dort. » --tagger --json (client injecté)",
+   "code": 0,
+   "stdout_vide": false,
+   "stdout_octets": 6265,
+   "refus": "neuronal-pos: ErreurDeepSeek: réseau : [Errno -2] Name or service not known",
+   "source": "cascade",
+   "pos_sources": [
+    "heuristique"
+   ],
+   "stderr": "drave: tagger : refus partiel : neuronal-pos: ErreurDeepSeek: réseau : [Errno -2] Name or service not known\ndrave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=0 · cache=0 · tokens=0 · latence=0.0 s",
+   "tentatives_transport": 3,
+   "test": "TestErreursTagger.test_reseau_coupe_repli_heuristique"
+  },
+  {
+   "nom": "refus_modele_texte",
+   "commande": "analyser « Le chat dort. » --tagger --json (client injecté)",
+   "code": 0,
+   "stdout_vide": false,
+   "stdout_octets": 6251,
+   "refus": "neuronal-pos: ValueError: pas de JSON : 'Je ne peux pas répondre.'",
+   "source": "cascade",
+   "pos_sources": [
+    "heuristique"
+   ],
+   "stderr": "drave: tagger : refus partiel : neuronal-pos: ValueError: pas de JSON : 'Je ne peux pas répondre.'\ndrave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=0 · latence=0.0 s",
+   "test": "TestErreursTagger.test_refus_du_modele_repli_heuristique"
+  },
+  {
+   "nom": "refus_modele_json_incomplet",
+   "commande": "analyser « Le chat dort. » --tagger --json (client injecté)",
+   "code": 0,
+   "stdout_vide": false,
+   "stdout_octets": 6205,
+   "refus": "neuronal-pos: ValueError: longueur POS 1 / 3",
+   "source": "cascade",
+   "pos_sources": [
+    "heuristique"
+   ],
+   "stderr": "drave: tagger : refus partiel : neuronal-pos: ValueError: longueur POS 1 / 3\ndrave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=0 · latence=0.0 s",
+   "test": "TestErreursTagger.test_modele_json_incomplet_repli_heuristique"
+  }
+ ],
+ "controle_negatif": {
+  "tagger_valide": {
+   "nom": "controle_tagger_valide",
+   "commande": "analyser « Le chat dort. » --tagger --json (client injecté)",
+   "code": 0,
+   "stdout_vide": false,
+   "stdout_octets": 6117,
+   "refus": "",
+   "source": "cascade",
+   "pos_sources": [
+    "heuristique",
+    "neuronal"
+   ],
+   "stderr": "drave: TAGGER API · modèle=deepseek-chat · appels=1 · réseau=1 · cache=0 · tokens=17 · latence=0.0 s",
+   "test": "TestCliAvecTransportFactice.test_analyser_tagger_json",
+   "lecture": "un transport qui rend un POS valide donne code 0 et des POS neuronaux : les cas d'erreur ne sont pas un « tout échoue »"
+  },
+  "mutation": {
+   "mutation": "retirer le contrôle `if code: raise CleTaggerRefusee(code)` dans _CascadeTagger.analyser",
+   "test": "TestErreursTagger.test_cle_invalide_code_4",
+   "resultat": "1 échec : 0 != 4 (le CLI replie et sort 0)",
+   "detecte": true
+  },
+  "fuite_de_cle": {
+   "cas": "clé invalide",
+   "sentinelle": "cle-de-test-sentinelle",
+   "presente_dans_stdout_ou_stderr": false
+  }
+ },
+ "changement": {
+  "avant": "401/403 avalé par NeuronalLLMPOS.analyser : refus par phrase, repli heuristique, code 0, source=cascade",
+  "apres": "401/403 retenu dans stats.cle_refusee, _CascadeTagger lève CleTaggerRefusee, main rend 4, stdout vide",
+  "pourquoi": "une clé refusée n'est pas un refus de phrase : c'est la même dépendance manquante qu'une clé absente"
+ },
+ "limites": [
+  "le transport factice ne teste ni DNS, ni TLS, ni proxy : un 401/403 réel peut arriver avec un corps différent",
+  "le code HTTP est lu sur ErreurDeepSeek.code : un proxy qui rend 400 avec « invalid key » suivrait le repli, pas le code 4",
+  "le refus du modèle est simulé (texte non JSON, JSON de mauvaise longueur), pas un refus d'un modèle réel",
+  "le cache disque est vide par cas : avec un cache déjà rempli, une panne réseau peut être masquée par une réponse ancienne",
+  "le coût affiché (appels=1) compte les appels du tagger, pas les 3 tentatives internes du client réseau",
+  "en --jsonl, le code 4 peut arriver après des lignes déjà écrites (le premier texte sans appel neuronal ne déclenche pas 401) ; les mesures portent sur analyser avec un seul texte"
+ ]
+}

@@ -27,7 +27,8 @@ l'API DeepSeek : la clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deep
 Ce que la commande n'expose pas : le neuronal local (`llama-cli` ou endpoint), la traduction et la
 génération : ils demandent des poids, un service ou un GPU.
 
-Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 4 clé/tagger absent · 1 erreur.
+Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 4 clé/tagger indisponible
+(absente ou refusée) · 1 erreur.
 """
 from __future__ import annotations
 
@@ -92,6 +93,22 @@ class CleTaggerAbsente(RuntimeError):
     """Aucune clé : le tagger est une option, jamais un prérequis du produit."""
 
 
+class CleTaggerRefusee(RuntimeError):
+    """L'API refuse la clé (HTTP 401/403) : ce n'est pas un refus de phrase, c'est un arrêt.
+
+    Une clé absente et une clé refusée sont la même dépendance manquante du point de vue du
+    produit : le code 4, un message qui nomme les trois sources de la clé, et rien sur `stdout`.
+    """
+
+    def __init__(self, code: int) -> None:
+        self.code = int(code)
+        super().__init__(
+            f"clé DeepSeek refusée (HTTP {self.code}) : vérifiez DEEPSEEK_KEY_FILE, "
+            f"~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. "
+            f"Sans --tagger, le défaut reste l'heuristique hors ligne."
+        )
+
+
 def _lire_cle(chemin: pathlib.Path) -> str:
     try:
         return chemin.read_text(encoding="utf-8").splitlines()[0].strip()
@@ -132,8 +149,16 @@ def _transport_tagger(client, stats: dict):
 
     def transport(invite: str, _grammaire: str, max_jetons: int) -> str:
         stats["appels"] += 1
-        reponse = client.demande(invite, temperature=0.0,
-                                 max_tokens=max(64, int(max_jetons or 256)))
+        try:
+            reponse = client.demande(invite, temperature=0.0,
+                                     max_tokens=max(64, int(max_jetons or 256)))
+        except Exception as exc:  # noqa: BLE001 — le code HTTP décide du destin de l'option
+            # 401/403 : la clé est refusée, aucune phrase ne peut être taguée. On retient le
+            # code pour que `_CascadeTagger` arrête le run au lieu de publier un repli muet.
+            code = getattr(exc, "code", None)
+            if code in (401, 403):
+                stats["cle_refusee"] = int(code)
+            raise
         if getattr(reponse, "cache", False):
             stats["cache"] += 1
         else:
@@ -159,15 +184,21 @@ class _CascadeTagger:
 
     nom = "cascade"
 
-    def __init__(self, cascade, compose):
+    def __init__(self, cascade, compose, stats: dict | None = None):
         self.cascade = cascade
         self.compose = compose
+        self.stats = stats if stats is not None else {}
         self.h = cascade.h
         self.n = cascade.n
 
     def analyser(self, texte: str, langue: str | None = None,
                  contexte: str | None = None) -> bl.Annotation:
         annotation = self.cascade.analyser(texte, langue, contexte)
+        # 401/403 : le tagger a échoué pour une raison qui ne dépend pas de la phrase. On ne
+        # publie pas un repli heuristique déguisé en cascade : le CLI sort 4, stdout vide.
+        code = self.stats.get("cle_refusee")
+        if code:
+            raise CleTaggerRefusee(int(code))
         if not annotation.refus:
             annotation.refus = self.compose.analyser(texte, langue, contexte).refus
         # le tagger ne reçoit que mots et nombres : la **ponctuation** est restituée depuis
@@ -180,12 +211,13 @@ class _CascadeTagger:
         return annotation
 
 
-def _cascade_tagger(transport, partition: str = "alternative"):
+def _cascade_tagger(transport, partition: str = "alternative", stats: dict | None = None):
     """Le câblage mesuré : tagger POS + syntagmes → compose → cascade à 0,6.
 
     `transport` est injectable : les tests le remplacent par une fonction qui rend un JSON de
     POS valide, sans réseau. La fusion ne force que le **POS** au neuronal ; les syntagmes,
-    rôles et attachements restent à l'heuristique (le neuronal n'en rend pas).
+    rôles et attachements restent à l'heuristique (le neuronal n'en rend pas). `stats` porte le
+    drapeau `cle_refusee` (401/403) qui arrête le run au lieu de le replier.
     """
     # **un seul** tagger : le POS. Le tagger de syntagmes du composite était appelé et sa
     # sortie **n'était pas utilisée** par la fusion (le niveau syntagme reste à l'heuristique) :
@@ -193,15 +225,16 @@ def _cascade_tagger(transport, partition: str = "alternative"):
     pos = bl.NeuronalLLMPOS(MODELE_TAGGER, transport=transport)
     cascade = bl.Cascade(bl.Heuristique(partition=partition), pos, seuil=SEUIL_TAGGER,
                          priorite_syntagme="confiance", priorite_par_niveau=PRIORITE_TAGGER)
-    return _CascadeTagger(cascade, pos)
+    return _CascadeTagger(cascade, pos, stats=stats)
 
 
 def _construire_tagger(partition: str = "alternative"):
     """Rend (cascade, stats) ; lève `CleTaggerAbsente` si la clé manque (et ne l'affiche pas)."""
     stats = {"appels": 0, "requetes": 0, "cache": 0, "tokens": 0, "latence_s": 0.0,
-             "modeles": {}}
+             "modeles": {}, "cle_refusee": 0}
     client = _client_tagger()
-    return _cascade_tagger(_transport_tagger(client, stats), partition=partition), stats
+    return _cascade_tagger(_transport_tagger(client, stats), partition=partition,
+                           stats=stats), stats
 
 
 def _cout_tagger(stats: dict) -> dict:
@@ -786,7 +819,7 @@ def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
         "Commandes : analyser, evaluer, rejouer, restituer.\n"
         "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·\n"
-        "4 clé/tagger absent · 1 erreur.\n"
+        "4 clé/tagger indisponible (absente ou refusée) · 1 erreur.\n"
         "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
         "--contexte, --banc, --tagger.\n"
         "Limites : heuristique CPU, hors ligne, déterministe par défaut ; --tagger appelle l'API\n"
@@ -936,6 +969,10 @@ def main(argv: list[str] | None = None) -> int:
     except KeyboardInterrupt:
         print(f"{NOM}: interrompu", file=sys.stderr)
         return 1
+    except CleTaggerRefusee as exc:
+        # même dépendance manquante qu'une clé absente : code 4, message clair, rien sur stdout
+        print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+        return 4
     except Exception as exc:  # noqa: BLE001 — le point d'entrée rend un code, pas une trace
         print(f"{NOM}: erreur : {type(exc).__name__} : {exc}", file=sys.stderr)
         return 1

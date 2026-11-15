@@ -156,8 +156,8 @@ ne rend pas son code pour le mélange). Le tag annoté `chantier-2026-11-14` est
 commit vert `0e75f101` (J13.1) ; le tag de semaine `semaine-2026-11-14` (J5.2, resté en échec) est
 posé sur le même commit. [`rapport`](../../reports/rapport-cloture-chantier.md) +
 [`JSON`](../../reports/rapport-cloture-chantier.json).
-La **prochaine mesure** est **B13 — trancher `g017`** (convention d'adverbe), puis T132/T133 et le
-gold 200+.
+**Prochaine mesure** : **B13 — trancher `g017`**, T132/T133 et le
+gold 200+ ; **E2** ([fiche](../../reports/rapport-tagger-erreurs.md)).
 
 **La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
 

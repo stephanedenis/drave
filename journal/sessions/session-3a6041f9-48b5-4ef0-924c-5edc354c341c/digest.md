@@ -1898,3 +1898,168 @@ A  tools/verifier_liens_faq.py
   ```
 
 - **bash** `{"command": "git commit -m \"E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES\" 2>&1 | tail -40", "description": "Commit E1 changes", "timeoutMs": 300000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 7d4e3bc5] E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES
+ 20 files changed, 2753 insertions(+), 21 deletions(-)
+ create mode 100644 journal/2026-11-15/outils.md
+ create mode 100644 journal/sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/digest.md
+ create mode 100644 journal/sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/rapport.md
+ create mode 100644 reports/faq-sommaire.json
+ create mode 100644 reports/rapport-faq-sommaire.md
+ create mode 100644 tools/verifier_liens_faq.py
+  ```
+
+- **bash** `{"command": "git log -1 --oneline; echo ===; git show --stat --oneline HEAD | head -30; echo ===; git status --short", "description": "Verify commit and working tree"}`
+
+  ```
+7d4e3bc5 E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES
+===
+7d4e3bc5 E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES
+ docs/README.md                                     |    1 +
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/produit/README.md                             |   13 +
+ journal/2026-11-15/README.md                       |    6 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |   15 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/outils.md                       |   31 +
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    3 +-
+ journal/THEMES.md                                  |    1 +
+ journal/sessions/MANIFEST.md                       |    5 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   50 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 1900 ++++
+… [786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py; echo \"revue_exit=$?\"; python3 tools/taille_documents.py | tail -3", "description": "Post-commit review and budget"}`
+
+  ```
+revue de documentation · 747 fiche(s) · 840 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue_exit=0
+     · 56 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_liens_faq.py; echo \"exit=$?\"", "description": "Post-commit link verification"}`
+
+  ```
+Sommaire — 9 ancre(s), 0 morte(s) · FAQ listée : oui
+Section § 8 — 5 lien(s), 0 mort(s) · contenu inchangé : oui
+docs/README — ligne FAQ : oui · 995/1000 mots
+Contrôle négatif : détecté
+✅ liens et sommaire vérifiés
+exit=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh | tail -3; echo \"tableaux_exit=${PIPESTATUS[0]}\"", "description": "Re-run table gate after commit"}`
+
+  ```
+✅ 1820 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4456 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+tableaux_exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py; echo \"en_cours_exit=$?\"; python3 tools/verifie_journal.py; echo \"journal_exit=$?\"", "description": "Re-run state and journal checks"}`
+
+  ```
+en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+en_cours_exit=0
+  journal · 47 jour(s) · 204 session(s) · 2587 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+journal_exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/porte-etat.sh 2>/dev/null || bash tools/porte-etat.sh; echo \"etat_exit=$?\"", "description": "Run state gate"}`
+
+  ```
+=== PORTE ÉTAT — LE FAIT ET SA LIGNE ===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait 7d4e3bc5 · dernier état 7d4e3bc5
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+etat_exit=0
+  ```
+
+- **bash** `{"command": "sed -n '1,160p' tools/toutes-les-portes.sh", "description": "Inspect all-gates runner"}`
+
+  ```
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge, en
+… [3112 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:journal/2026-11-15/docs.md | tail -18; echo ===; git show HEAD:docs/produit/README.md | sed -n '24,40p'; echo ===; git show HEAD:docs/README.md | sed -n '94,100p'", "description": "Verify committed content"}`
+
+  ```
+**452 phrases**, POS **0,8891**, F1 **0,7906**, attachement **183/184 = 0,9946**. Les cinq blocs
+sont rejoués **5/5** ; la doc mutée (`lu/VERB` → `lu/NOUN`) est détectée **4/5** ; les trois
+annotations `--tagger` passent le schéma **v2**. Le code courant ne bouge pas : F1 **0,7902**,
+**238/239** cibles. [`fiche`](../../reports/rapport-exemples-tagger.md).
+
+### E1 — la FAQ entre au sommaire, ses liens sont vérifiés
+
+La FAQ de `docs/produit/README.md` (§ 8) n'était listée ni dans un sommaire du document, ni
+dans le « Où aller ensuite » du § 9, ni dans la table **Produit** de `docs/README.md`. Le
+document gagne un **sommaire de neuf entrées** (la huitième est la FAQ), le § 9 une ligne
+FAQ, et `docs/README.md` sa ligne (ancre `#8-faq--dix-questions`, **995/1000** mots). Les
+**cinq liens** de § 8 et les **neuf ancres** du sommaire résolvent : **0 mort**. Le contenu
+des **dix réponses** ne bouge pas — sha256 `8855b475…` avant et après. Dispositif
+[`tools/verifier_liens_faq.py`](../../tools/verifier_liens_faq.py), contrôle négatif **2/2**
+(fichier absent, ancre absente) ; fiche
+[`reports/rapport-faq-sommaire.md`](../../reports/rapport-faq-sommaire.md) et
+[`reports/faq-sommaire.json`](../.
+… [1199 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:reports/faq-sommaire.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['schema'], d['ok'], d['sommaire']['ancres'], d['section_8']['liens'], d['section_8']['morts'], d['docs_readme']['mots'])\"", "description": "Validate committed JSON"}`
+
+  ```
+drave.faq.sommaire.liens True 9 5 0 995
+  ```
+
+### 🤖 Assistant
+
+**Tâche E1 terminée et committée** (`7d4e3bc5`).
+
+**Ce qui a changé**
+- `docs/produit/README.md` : ajout d’un **sommaire** de 9 entrées, dont **8. FAQ — dix questions** ; ligne FAQ aussi ajoutée au « Où aller ensuite » (§ 9).
+- `docs/README.md` : ligne FAQ dans la table **Produit**, avec l’ancre `#8-faq--dix-questions`.
+- `reports/rapport-faq-sommaire.md` + `reports/faq-sommaire.json` : la fiche et son relevé.
+- `tools/verifier_liens_faq.py` : vérificateur reproductible (ancres, liens, contrôle négatif, `--json`, `--autotest`).
+- `journal/2026-11-15/docs.md` : récit de la tâche.
+
+**Vérifications**
+- **9/9 ancres** du sommaire valides, **5/5 liens** de § 8 valides, **0 lien mort**.
+- Contrôle négatif **2/2** : fichier absent et ancre absente détectés.
+- Contenu des **dix réponses inchangé** : sha256 de § 8 identique avant/après (`8855b475…`).
+- `docs/README.md` : **995/1000** mots (budget T1) ; T0 : **3999/4000**.
+- `revue_documentation.py` : ✅ ; `porte-tableaux.sh` : ✅ (4456 liens) ; `porte-etat.sh` et `verifie_en_cours.py` : ✅.
+
+Les modifications sans rapport déjà présentes dans l’arbre de travail n’ont pas été committées.
+

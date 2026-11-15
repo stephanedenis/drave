@@ -8,7 +8,12 @@ POS valide) :
 2. le JSON reste valide : le schéma **déclaré** (v2) le lit, et le contrat **v1** reste lisible ;
 3. deux analyses du même texte ne refont pas d'appel (cache mémoire des taggers) ;
 4. le défaut est inchangé : `analyser --json` sans `--tagger` rend exactement l'heuristique ;
-5. sans clé, `--tagger` sort **4** avec un message clair, et jamais la clé ;
+5. les quatre cas d'erreur, chacun avec un transport factice :
+   - **clé absente** → code **4**, message clair, `stdout` vide (`TestCle.test_sans_cle_code_4`) ;
+   - **clé invalide** (HTTP 401/403) → code **4**, message clair, `stdout` vide, pas de repli ;
+   - **réseau coupé** → **repli heuristique**, code **0**, `refus` non vide et message sur `stderr` ;
+   - **refus du modèle** (texte non JSON, JSON incomplet) → **repli heuristique**, code **0**,
+     `refus` non vide ;
 6. l'ordre de résolution de la clé : `DEEPSEEK_KEY_FILE`, puis `~/.config/drave/deepseek.key`,
    puis `DEEPSEEK_API_KEY`.
 
@@ -38,6 +43,7 @@ sys.path.insert(0, str(RACINE / "tools"))
 
 import bloc_linguistique as bl  # noqa: E402
 import drave  # noqa: E402
+from tools.llm.deepseek import DeepSeek, ErreurDeepSeek  # noqa: E402
 
 TEXTE = "Le chat dort."
 TOKENS = ["Le", "chat", "dort"]
@@ -312,6 +318,116 @@ class TestCliAvecTransportFactice(unittest.TestCase):
                                donnees["tagger"]["pos"]["exactitude"]
                                - donnees["heuristique"]["pos"]["exactitude"], places=4)
         self.assertIn("TAGGER API", erreur)
+
+
+class TestErreursTagger(unittest.TestCase):
+    """Les cas d'erreur de l'option, **sans réseau** : un client dont le transport échoue.
+
+    Ce que chaque cas verrouille :
+
+    - **clé invalide** : 401/403 n'est pas un refus de phrase ; le CLI sort **4**, `stdout`
+      reste vide, le message nomme les trois sources de la clé ;
+    - **réseau coupé** : le client réessaie (`essais=3`), puis la cascade **replie** sur
+      l'heuristique ; code **0**, `refus` dans le JSON, message sur `stderr` ;
+    - **refus du modèle** : la sortie n'est pas le contrat POS ; même repli, code **0**.
+
+    La clé absente est couverte par `TestCle.test_sans_cle_code_4` (HOME vide, code 4).
+    """
+
+    def setUp(self) -> None:
+        self._ancien_client = drave._client_tagger
+
+    def tearDown(self) -> None:
+        drave._client_tagger = self._ancien_client
+
+    def _client(self, cache: str, transport, *, essais: int = 3) -> DeepSeek:
+        return DeepSeek(cle="cle-de-test-sentinelle", transport=transport,
+                        cache_dir=cache, sleep=lambda _: None, essais=essais)
+
+    def _lancer(self, client, *arguments: str) -> tuple[int, str, str]:
+        drave._client_tagger = lambda: client
+        sortie, erreur = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(sortie), contextlib.redirect_stderr(erreur):
+            code = drave.main(list(arguments))
+        return code, sortie.getvalue(), erreur.getvalue()
+
+    def test_cle_invalide_code_4(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            def transport(*_args):
+                raise ErreurDeepSeek("HTTP 401 : invalid key", code=401)
+
+            client = self._client(tmp, transport)
+            for arguments in (("analyser", TEXTE, "--tagger", "--json"),
+                              ("evaluer", "--tagger", "--json")):
+                code, sortie, erreur = self._lancer(client, *arguments)
+                self.assertEqual(code, 4, f"{arguments} → {code} : {erreur}")
+                self.assertEqual(sortie, "", "une clé refusée ne publie pas de repli")
+                self.assertIn("clé DeepSeek refusée", erreur)
+                self.assertIn("HTTP 401", erreur)
+                self.assertIn("DEEPSEEK_KEY_FILE", erreur)
+                self.assertIn("heuristique hors ligne", erreur)
+                self.assertNotIn("cle-de-test-sentinelle", erreur)
+                self.assertNotIn("TAGGER API", erreur)
+
+    def test_reseau_coupe_repli_heuristique(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            tentatives: list[int] = []
+
+            def transport(*_args):
+                tentatives.append(1)
+                raise ErreurDeepSeek("réseau : [Errno -2] Name or service not known",
+                                     reessayable=True)
+
+            code, sortie, erreur = self._lancer(
+                self._client(tmp, transport), "analyser", TEXTE, "--tagger", "--json")
+            self.assertEqual(code, 0, erreur)
+            self.assertEqual(len(tentatives), 3, "le client doit réessayer avant de replier")
+            donnees = json.loads(sortie)
+            self.assertIn("réseau", donnees["refus"])
+            self.assertEqual(donnees["source"], "cascade")
+            self.assertEqual(_pos_map(donnees),
+                             _pos_map(bl.Heuristique().analyser(TEXTE).json()))
+            self.assertEqual({e["source"] for e in donnees["etiquettes"]
+                              if e["niveau"] == "pos"}, {"heuristique"})
+            self.assertIn("refus partiel", erreur)
+            self.assertIn("réseau", erreur)
+            self.assertIn("TAGGER API", erreur)
+
+    def test_refus_du_modele_repli_heuristique(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            def transport(*_args):
+                return {"choices": [{"message": {"content": "Je ne peux pas répondre."}}],
+                        "model": "deepseek-chat", "usage": {}}
+
+            code, sortie, erreur = self._lancer(
+                self._client(tmp, transport), "analyser", TEXTE, "--tagger", "--json")
+            self.assertEqual(code, 0, erreur)
+            donnees = json.loads(sortie)
+            self.assertIn("pas de JSON", donnees["refus"])
+            self.assertIn("Je ne peux pas répondre", donnees["refus"])
+            self.assertEqual(donnees["source"], "cascade")
+            self.assertEqual(_pos_map(donnees),
+                             _pos_map(bl.Heuristique().analyser(TEXTE).json()))
+            self.assertEqual({e["source"] for e in donnees["etiquettes"]
+                              if e["niveau"] == "pos"}, {"heuristique"})
+            self.assertIn("refus partiel", erreur)
+            self.assertIn("pas de JSON", erreur)
+
+    def test_modele_json_incomplet_repli_heuristique(self) -> None:
+        """Un JSON qui n'a pas une classe par token est un refus de contrat, pas une exception."""
+        with tempfile.TemporaryDirectory() as tmp:
+            def transport(*_args):
+                return {"choices": [{"message": {"content": '{"pos": ["DET"]}'}}],
+                        "model": "deepseek-chat", "usage": {}}
+
+            code, sortie, erreur = self._lancer(
+                self._client(tmp, transport), "analyser", TEXTE, "--tagger", "--json")
+            self.assertEqual(code, 0, erreur)
+            donnees = json.loads(sortie)
+            self.assertIn("longueur POS", donnees["refus"])
+            self.assertEqual(_pos_map(donnees),
+                             _pos_map(bl.Heuristique().analyser(TEXTE).json()))
+            self.assertIn("refus partiel", erreur)
 
 
 def _pos_map(donnees: dict) -> dict[tuple[int, int], str]:

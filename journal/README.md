@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [mesures](2026-11-15/mesures.md) · [portes](2026-11-15/portes.md) |
+| **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [memoire](2026-11-15/memoire.md) · [mesures](2026-11-15/mesures.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
 | **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [distribue](2026-11-14/distribue.md) · [docs](2026-11-14/docs.md) · [memoire](2026-11-14/memoire.md) · [mesures](2026-11-14/mesures.md) · [moteur](2026-11-14/moteur.md) · [portes](2026-11-14/portes.md) |
 | **2026-11-13** | [2026-11-13/README.md](2026-11-13/README.md) | [distribue](2026-11-13/distribue.md) · [docs](2026-11-13/docs.md) · [memoire](2026-11-13/memoire.md) |
 | **2026-11-07** | [2026-11-07/README.md](2026-11-07/README.md) | [distribue](2026-11-07/distribue.md) · [docs](2026-11-07/docs.md) · [memoire](2026-11-07/memoire.md) · [mesures](2026-11-07/mesures.md) · [modele](2026-11-07/modele.md) · [portes](2026-11-07/portes.md) |
@@ -213,7 +213,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 349.8 h | 198 | 3470 | 25 | 467 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 350.4 h | 198 | 3474 | 25 | 467 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -232,6 +232,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ff364db0` | Relecture ADVERSARIALE de clôture, dans | 2026-10-01 05:50 | 0.1 h | 1 | 75 | 0 | 0 | [rapport](sessions/ff364db0-d28f-47eb-973e-f13bdafd35a2/rapport.md) |
 | `ff7e786c` | Tu travailles dans le dépôt | 2026-11-05 13:11 | 1.5 h | 1 | 194 | 2 | 0 | [rapport](sessions/ff7e786c-3ece-4eae-864e-19dddfead93c/rapport.md) |
 | `fff7ca81` | Tu travailles dans le dépôt | 2026-11-05 21:12 | 1.0 h | 1 | 81 | 8 | 0 | [rapport](sessions/fff7ca81-5684-4c2e-b7c5-a8f3c012cc49/rapport.md) |
+| `session-` | Tâche E2 : cas d'erreur tagger | 2026-11-15 06:34 | 0.6 h | 1 | 167 | 8 | 2 | [rapport](sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md) |
 | `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 208 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
 | `session-` | Passe portes, relevé rouges, tag annoté | 2026-11-13 23:11 | 1.4 h | 1 | 75 | 1 | 0 | [rapport](sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md) |
 | `session-` | Prédiction Drave par atomes | 2026-11-15 03:06 | 0.8 h | 1 | 221 | 0 | 3 | [rapport](sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md) |
@@ -239,7 +240,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
 | `session-` | Extension du gold réel 200+ | 2026-11-15 02:34 | 0.2 h | 1 | 148 | 2 | 0 | [rapport](sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/rapport.md) |
 | `session-` | Preuves CIC : vérification et rapport | 2026-11-15 03:55 | 0.2 h | 1 | 129 | 8 | 1 | [rapport](sessions/session-3241a992-ffa6-4c12-ab1c-a8e175f880b7/rapport.md) |
-| `session-` | FAQ ajoutée au sommaire et liens vérifiés | 2026-11-15 06:26 | 0.1 h | 1 | 99 | 6 | 1 | [rapport](sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/rapport.md) |
+| `session-` | FAQ ajoutée au sommaire et liens vérifiés | 2026-11-15 06:26 | 0.1 h | 1 | 108 | 6 | 1 | [rapport](sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/rapport.md) |
 | `session-` | Rédiger la FAQ produit D3 | 2026-11-15 05:53 | 0.3 h | 1 | 173 | 6 | 1 | [rapport](sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/rapport.md) |
 | `session-` | Généalogie à deux faces : Panini vs Glottolog | 2026-11-07 17:59 | 0.4 h | 1 | 137 | 0 | 4 | [rapport](sessions/session-3ffa6026-9a7d-4905-ac06-6b9708d65ba7/rapport.md) |
 | `session-` | Table des mesures du chantier J13.1 | 2026-11-14 06:23 | 0.2 h | 1 | 129 | 5 | 1 | [rapport](sessions/session-4271ad32-61f1-46a0-8494-7c94c3f8050f/rapport.md) |
