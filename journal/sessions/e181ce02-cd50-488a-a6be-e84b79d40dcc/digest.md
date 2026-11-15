@@ -64326,3 +64326,97 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5098", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5098", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 05:03:26 EST
+2026-11-15 04:35:53 · ▶ D1 — Les exemples avec le tagger et la base réelle (timeout 3600 s)
+2026-11-15 04:53:43 · ✔ D1 en 930.6 s (code 0) — ✅ test -f reports/rapport-exemples-tagger.md && echo FICHE-OK; ✅ bash tools/porte-produit.sh 2>&1 | tail -1
+2026-11-15 04:53:43 · ▶ D2 — La restitution v2 — les rôles (timeout 3600 s)
+2
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log", "description": "Pousser D1 et suivre D2", "timeout … [13 caractères tronqués]`
+
+  ```
+ee04ea91..e42bac4f  s/v7 -> s/v7
+   ee04ea91..e42bac4f  master -> master
+[still running after 600000ms; moved to background job bash-5099]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5099", "timeout_ms": 700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5099", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 05:23:35 EST
+2026-11-15 04:53:43 · ✔ D1 en 930.6 s (code 0) — ✅ test -f reports/rapport-exemples-tagger.md && echo FICHE-OK; ✅ bash tools/porte-produit.sh 2>&1 | tail -1
+2026-11-15 04:53:43 · ▶ D2 — La restitution v2 — les rôles (timeout 3600 s)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5099 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre D2", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5100]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5100", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5100", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 05:48:43 EST
+2026-11-15 04:53:43 · ✔ D1 en 930.6 s (code 0) — ✅ test -f reports/rapport-exemples-tagger.md && echo FICHE-OK; ✅ bash tools/porte-produit.sh 2>&1 | tail -1
+2026-11-15 04:53:43 · ▶ D2 — La restitution v2 — les rôles (timeout 3600 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; ls reports/ | grep -E \"restitution-v2|rapport-faq\"", "description": "Verdict D2", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5101]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5101", "timeout_ms": 600000, "wait": true}`
+
+  ```
+dim 15 nov 2026 05:58:50 EST
+2026-11-15 04:53:43 · ▶ D2 — La restitution v2 — les rôles (timeout 3600 s)
+2026-11-15 05:53:43 · ✔ D2 en 3600.1 s (code 124) — ✅ test -f reports/rapport-restitution-v2.md && echo FICHE-OK
+2026-11-15 05:53:43 · ▶ D3 — La FAQ du produit (timeout 3600 s)
+pensee-restitution-v2.json
+rapport-restitution-v2.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5101 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; ls reports/ | grep -E "restitution-v2|rapport-faq") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | g … [101 caractères tronqués]`

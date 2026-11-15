@@ -24,7 +24,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 348.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 349.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -38,5 +38,32 @@
 - [reports/rapport-tagger-option.md](../../reports/rapport-tagger-option.md)
 
 <!-- notes -->
+### D2 — la restitution v2 : les rôles se lisent, leur fidélité ne suit pas
 
+La v2 devait passer de la surface (v0) et de la forme canonique (v1) aux **rôles**. Elle le fait
+comme **forme** : `restituer --roles` rend un cadre `agent / prédicat / lieu`, 198 segments de rôle,
+**198/198** spans dans la source, et `relire_roles(rendre_roles(a))` redonne le cadre **46/46**.
+Mais la **fidélité** ne suit pas. Sur un or écrit à la main (46 cadres, 65 variantes), **19/46**
+cadres sont exacts — **16/46** non vides —, **91/138** cellules exactes, mais **F1 0,5270**
+(précision 0,5493, rappel 0,5065, **32 faux positifs / 38 faux négatifs**) ; **agent 0,6000**,
+**prédicat 0,4872**, **lieu 0,4000**. Les planchers : vide **7/46**, constant par type **6/46**,
+rôles mélangés **3/46**. Le contrôle externe (gold S, 61 phrases) vaut **139/144 = 0,9653** :
+l'instrument n'est pas cassé ; c'est la lecture des rôles de l'annotation qui ne tient pas.
+`f03` lit `Comment / Bonjour`, `f20` lit `Leroy / M / vers 9 h`, `f27` (« Élodie sourit. ») n'a
+aucun syntagme. La v2 est une **vue fidèle de rôles souvent faux ou absents**, pas un analyseur.
+[`fiche`](../../reports/rapport-restitution-v2.md) · [`JSON`](../../reports/pensee-restitution-v2.json).
+
+### D3 — la FAQ : dix questions, dix réponses vérifiées
+
+La notice produit gagne une **FAQ** (§ 8) : langue, hors-ligne, coût, tagger, schéma,
+attachement, spans inatteignables, restitution, limites, installation. Ce n'est pas une mesure
+nouvelle : **dix contrôles** rejouent le CLI et lisent les JSON publiés. **10/10** passent ; le
+**contrôle négatif** est détecté (le CLI refuse `--langue de`, le schéma v2 refuse une annotation
+v1). Les chiffres cités restent ceux des fiches : **238/239** cibles (**0,9958**), `g017`
+([9:28] attendu / [9:38] prédit, règle **rejetée**, F1 **0,7901**), restitution v0 **46/46**,
+v1 **46/46**, v2 **19/46** cadres (**16** non vides, F1 **0,5270**), tagger **609 appels /
+22 299 tokens / 155 s / ~0,02 $**. Le vérificateur est
+[`tools/verifier_faq.py`](../../tools/verifier_faq.py), le relevé
+[`faq.json`](../../reports/faq.json), la fiche
+[`rapport-faq.md`](../../reports/rapport-faq.md).
 <!-- /notes -->

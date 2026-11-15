@@ -1,0 +1,327 @@
+{
+ "schema": "drave.faq.verification",
+ "version": 1,
+ "date": "2026-11-15",
+ "produit": "0.1.0",
+ "fichier": "docs/produit/README.md#8-faq--dix-questions",
+ "questions": [
+  {
+   "id": 1,
+   "question": "Quelles langues le produit reconnaît-il ?",
+   "observe": {
+    "detection": {
+     "Der Hund schläft.": "de",
+     "El perro duerme.": "es"
+    },
+    "und": {
+     "Élodie sourit.": "und",
+     "avec --langue fr": "und"
+    },
+    "indice_cli": {
+     "choix": [
+      "fr",
+      "en"
+     ],
+     "--langue de": "code 2"
+    },
+    "profils_udhr": {
+     "langues": 398,
+     "exactitude": 0.9687,
+     "seuil": 0.12,
+     "source": "reports/rapport-bloc-linguistique.md"
+    }
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 2,
+   "question": "Est-ce que ça marche hors ligne ?",
+   "observe": {
+    "socket_interdite": {
+     "code": 0,
+     "module_reseau_importe": false
+    },
+    "tagger_sans_cle": {
+     "code": 4,
+     "stdout_vide": true,
+     "stderr": "dépendance absente … hors ligne"
+    },
+    "defaut": "heuristique, CPU, sans modèle, sans GPU, sans réseau"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 3,
+   "question": "Combien ça coûte ?",
+   "observe": {
+    "defaut": {
+     "cout_api_usd": 0,
+     "reseau": 0
+    },
+    "tagger": {
+     "appels": 609,
+     "tokens": 22299,
+     "latence_s": 155.6,
+     "requetes": 159,
+     "cout_usd": 0.02,
+     "appels_par_phrase": 1
+    },
+    "exemples": {
+     "appels": 3,
+     "tokens": 441,
+     "latence_s": 3.7
+    },
+    "cache": "seconde analyse : réseau 0, tokens 0",
+    "source": "reports/pensee-tagger-option.json#apres_15_11"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 4,
+   "question": "Qu'est-ce que --tagger change ?",
+   "observe": {
+    "change": {
+     "pos": "API",
+     "syntagmes": "heuristique",
+     "roles": "heuristique",
+     "attachement": "heuristique",
+     "pragmatique": "heuristique",
+     "ponctuation": "25/25 restituée"
+    },
+    "pos": {
+     "612": {
+      "heuristique": 0.8625,
+      "tagger": 0.9575,
+      "delta": 0.095
+     },
+     "452_reel": {
+      "heuristique": 0.8891,
+      "tagger": 0.95,
+      "delta": 0.0609
+     }
+    },
+    "cle": [
+     "DEEPSEEK_KEY_FILE",
+     "~/.config/drave/deepseek.key",
+     "DEEPSEEK_API_KEY",
+     "DSH_KEY_FILE / DSH_API_KEY (repli)"
+    ],
+    "sans_cle": {
+     "code": 4,
+     "stdout": "vide"
+    }
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 5,
+   "question": "Quel est le format de sortie, et est-il stable ?",
+   "observe": {
+    "schema": "drave.annotation",
+    "version": 2,
+    "racine_obligatoire": [
+     "schema",
+     "version",
+     "texte",
+     "langue",
+     "script",
+     "refus",
+     "etiquettes",
+     "unites_semantiques"
+    ],
+    "v2_ajoute": [
+     "meta.partition",
+     "meta.alternative"
+    ],
+    "verificateur": {
+     "cas": 6,
+     "echecs": 0,
+     "avec_gold_20": 26,
+     "versions_lues": [
+      1,
+      2
+     ],
+     "v1_lue": true,
+     "v2_refuse_v1": true
+    },
+    "compatibilite_octet": "non garantie (le bump change le JSON et le sha256)"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 6,
+   "question": "Que veut dire « attachement », et à quel point est-il fiable ?",
+   "observe": {
+    "gold": {
+     "phrases": 612,
+     "cibles": 239,
+     "labels": 238
+    },
+    "exact": 0.9958,
+    "exact_sur_span": 1.0,
+    "top_k": 0.9874,
+    "controle_cli": {
+     "cible_au_hasard": 0.0167
+    },
+    "controle_audit_v10": {
+     "candidat_aleatoire_top1": 0.4214,
+     "permutation_cibles": 0.00908
+    },
+    "lecture": "in-sample, split dev/test ; exactitude conditionnelle aux spans prédits"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 7,
+   "question": "Pourquoi reste-t-il un span inatteignable ?",
+   "observe": {
+    "g017": {
+     "gold_sub": [
+      9,
+      28,
+      "that she would come"
+     ],
+     "predit": [
+      9,
+      38,
+      "that she would come yesterday"
+     ],
+     "cible": "said (juste)",
+     "seul_label_manquant": true
+    },
+    "regle_rejetee": {
+     "f1": [
+      0.7902,
+      0.7901
+     ],
+     "couverture": [
+      0.9958,
+      0.9916
+     ]
+    },
+    "reel_452": {
+     "cibles": 184,
+     "labels": 183,
+     "exact": 0.9946
+    },
+    "lecture": "238/239 est conditionnel aux spans prédits, pas la couverture du langage"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 8,
+   "question": "Que peut-on restituer : la surface, la forme, les rôles ?",
+   "observe": {
+    "v0_surface": {
+     "exacts": 46,
+     "miroir_strict": 0.1087
+    },
+    "v1_canonique": {
+     "exacts": 46,
+     "strict": 0.1087,
+     "segments": 395,
+     "cibles": 315
+    },
+    "v2_roles": {
+     "cadres_exacts": 19,
+     "non_vides": 16,
+     "f1": 0.527,
+     "spans_dans_source": 198,
+     "rendus_relus": 46
+    },
+    "exemple": {
+     "agent": "Le chat",
+     "predicat": "dort",
+     "lieu": ""
+    },
+    "lecture": "la v2 expose les rôles de l'annotation, elle ne les corrige pas"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 9,
+   "question": "Quelles limites faut-il connaître avant de s'en servir ?",
+   "observe": {
+    "absent": [
+     "génération",
+     "traduction",
+     "serveur HTTP",
+     "RSN/DRVM",
+     "neuronal local",
+     "classement appris",
+     "calibration des confiances",
+     "--langue-forcee",
+     "garantie hors domaine",
+     "entrée standard",
+     "--sortie",
+     "parcours de répertoire",
+     "rejeu d'une annotation sauvegardée",
+     "pip install"
+    ],
+    "options_fantomes": {
+     "--sortie": "code 2",
+     "--mode": "code 2",
+     "--strict": "code 2"
+    },
+    "candidats": {
+     "type": "chaînes d'affichage, pas d'objets {span, cible}",
+     "exemple": "« que j'ai lu » → Le livre"
+    },
+    "roles": {
+     "variantes": [
+      "predicat (générateur S)",
+      "prédicat (chemin simple)",
+      "qualite/qualité (observé dans la sortie)"
+     ],
+     "lecture": "valeurs non normalisées"
+    },
+    "lecture": "le format est versionné ; la qualité linguistique ne l'est pas"
+   },
+   "ok": true,
+   "erreur": ""
+  },
+  {
+   "id": 10,
+   "question": "Comment l'installer et le lancer ?",
+   "observe": {
+    "version": "drave 0.1.0",
+    "python": {
+     "grammaire": "3.10",
+     "mesure": "3.13.16",
+     "sans_site_packages": "code 0"
+    },
+    "dependances_externes": 0,
+    "empaquetage": "aucun (pas de pip install, pas de commande drave dans le PATH)",
+    "gold_versionnes": [
+     "gold.json",
+     "gold_gele.json",
+     "gold_reel.json",
+     "gold_synthetique.json"
+    ],
+    "racine": "tout part de la racine du dépôt"
+   },
+   "ok": true,
+   "erreur": ""
+  }
+ ],
+ "controle_negatif": {
+  "affirmations_fausses": [
+   "le CLI accepte --langue de (il sort 2)",
+   "le schéma v2 accepte l'annotation v1 (il la refuse)"
+  ],
+  "observe": {
+   "--langue de": "code 2",
+   "v2_refuse_v1": true
+  },
+  "detecte": true
+ },
+ "ok": true
+}

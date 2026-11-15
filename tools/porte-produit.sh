@@ -74,10 +74,31 @@ else
   dit ❌ "restitution v1 : sortie inattendue : $sortie"; ko=1
 fi
 
+if sortie=$(python3 tools/drave.py restituer "Le chat dort." --roles --json 2>&1) \
+   && printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['schema'] == 'drave.restitution.v2', d.get('schema')
+assert d['roles']['principal']['agent'] == 'Le chat', d['roles']['principal']
+assert d['roles']['principal']['predicat'] == 'dort', d['roles']['principal']
+assert d['rendu']['exact'], d['rendu']
+assert d['controle_negatif_rendu']['detecte'], d['controle_negatif_rendu']
+" 2>/dev/null; then
+  dit ✅ "restitution v2 : rôles lisibles, rendu relu, contrôle détecté"
+else
+  dit ❌ "restitution v2 : sortie inattendue : $sortie"; ko=1
+fi
+
 if python3 tools/tests/test_restitution.py >/tmp/porte-produit-restitution.log 2>&1; then
   dit ✅ "restitution v0/v1 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-restitution.log | head -1)"
 else
   dit ❌ "restitution v0/v1 en échec (voir /tmp/porte-produit-restitution.log)"; ko=1
+fi
+
+if python3 tools/tests/test_restitution_v2.py >/tmp/porte-produit-restitution-v2.log 2>&1; then
+  dit ✅ "restitution v2 : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-restitution-v2.log | head -1)"
+else
+  dit ❌ "restitution v2 en échec (voir /tmp/porte-produit-restitution-v2.log)"; ko=1
 fi
 
 if python3 tools/tests/test_schema_produit.py >/tmp/porte-produit-schema.log 2>&1; then

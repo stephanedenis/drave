@@ -1,0 +1,657 @@
+{
+ "schema": "drave.restitution.v2.gold",
+ "version": 1,
+ "date": "2026-11-15",
+ "ligne": "B13",
+ "tache": "D2",
+ "note": "Or **écrit à la main** sur les 46 textes annotables du banc v0 : le **cadre principal** (agent, prédicat, lieu), valeurs en surface et variantes pour les ambiguïtés réelles (coordination, contraction, inversion). Ce n'est pas une annotation complète : les propositions subordonnées et les seconds cadres ne sont pas notés. Les textes sans prédicat (numérique, courriel, symboles, remplissage latin) ont un cadre vide.",
+ "textes": [
+  {
+   "id": "f01",
+   "texte": "Le chat dort.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le chat",
+     "predicat": "dort",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f02",
+   "texte": "Le chat de la voisine qui dort sur le toit se réveille.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le chat de la voisine",
+     "predicat": "se réveille",
+     "lieu": ""
+    },
+    {
+     "agent": "Le chat",
+     "predicat": "se réveille",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f03",
+   "texte": "Bonjour ! Comment allez-vous aujourd'hui ?",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "vous",
+     "predicat": "allez",
+     "lieu": ""
+    },
+    {
+     "agent": "vous",
+     "predicat": "allez-vous",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f04",
+   "texte": "Ferme la porte, s'il te plaît.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "Ferme",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f05",
+   "texte": "Ne touche pas à ça !",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "Ne touche pas",
+     "lieu": ""
+    },
+    {
+     "agent": "",
+     "predicat": "touche pas",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f06",
+   "texte": "Je ne pense pas qu'il viendra demain, mais nous verrons bien.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Je",
+     "predicat": "ne pense pas",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f07",
+   "texte": "The cat sleeps on the roof.",
+   "langue": "en",
+   "variantes": [
+    {
+     "agent": "The cat",
+     "predicat": "sleeps",
+     "lieu": "on the roof"
+    }
+   ]
+  },
+  {
+   "id": "f08",
+   "texte": "Where is the nearest train station, please?",
+   "langue": "en",
+   "variantes": [
+    {
+     "agent": "the nearest train station",
+     "predicat": "is",
+     "lieu": "Where"
+    }
+   ]
+  },
+  {
+   "id": "f09",
+   "texte": "Don't forget to bring your passport.",
+   "langue": "en",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "Don't forget",
+     "lieu": ""
+    },
+    {
+     "agent": "",
+     "predicat": "do not forget",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f10",
+   "texte": "Le prix est de 1 234,56 € pour 3 articles.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le prix",
+     "predicat": "est",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f11",
+   "texte": "Rendez-vous le 12/03/2026 à 14h30.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "Rendez-vous",
+     "lieu": ""
+    },
+    {
+     "agent": "vous",
+     "predicat": "Rendez",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f12",
+   "texte": "Visitez https://example.com/docs?page=2 pour la documentation.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "Visitez",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f13",
+   "texte": "J'ai trouvé ça génial 😍🔥",
+   "langue": "und",
+   "variantes": [
+    {
+     "agent": "J'ai",
+     "predicat": "trouvé",
+     "lieu": ""
+    },
+    {
+     "agent": "J'",
+     "predicat": "ai trouvé",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f18",
+   "texte": "1234567890",
+   "langue": "und",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f19",
+   "texte": "COVID-19 : la situation s'améliore-t-elle vraiment ?",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "la situation",
+     "predicat": "s'améliore",
+     "lieu": ""
+    },
+    {
+     "agent": "la situation",
+     "predicat": "s'améliore-t-elle",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f20",
+   "texte": "M. Dupont, le Dr Martin et Mme Leroy sont arrivés vers 9 h.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "M. Dupont, le Dr Martin et Mme Leroy",
+     "predicat": "sont arrivés",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f21",
+   "texte": "« Je ne sais pas », répondit-il en haussant les épaules.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Je",
+     "predicat": "ne sais pas",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f22",
+   "texte": "C'est l'été ; les oiseaux chantent, les enfants jouent.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "les oiseaux",
+     "predicat": "chantent",
+     "lieu": ""
+    },
+    {
+     "agent": "les enfants",
+     "predicat": "jouent",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f23",
+   "texte": "Attention : ce produit peut contenir des traces de noisettes.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "ce produit",
+     "predicat": "peut contenir",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f24",
+   "texte": "Il était une fois une petite fille qui vivait au bord de la forêt...",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "une petite fille",
+     "predicat": "vivait",
+     "lieu": "au bord de la forêt"
+    }
+   ]
+  },
+  {
+   "id": "f25",
+   "texte": "Pourquoi ? Parce que.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f26",
+   "texte": "Où sont les toilettes ? Je cherche depuis dix minutes.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "les toilettes",
+     "predicat": "sont",
+     "lieu": "Où"
+    },
+    {
+     "agent": "Je",
+     "predicat": "cherche",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f27",
+   "texte": "Élodie sourit.",
+   "langue": "und",
+   "variantes": [
+    {
+     "agent": "Élodie",
+     "predicat": "sourit",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f28",
+   "texte": "Le café coûte 2 €, l'eau est gratuite.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le café",
+     "predicat": "coûte",
+     "lieu": ""
+    },
+    {
+     "agent": "l'eau",
+     "predicat": "est gratuite",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f29",
+   "texte": "Il a dit : « Rentre avant minuit. »",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Il",
+     "predicat": "a dit",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f30",
+   "texte": "Nous avons lu Le Petit Prince hier soir.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Nous",
+     "predicat": "avons lu",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f31",
+   "texte": "ÇA NE MARCHE PAS !!!",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "ÇA",
+     "predicat": "NE MARCHE PAS",
+     "lieu": ""
+    },
+    {
+     "agent": "ÇA",
+     "predicat": "MARCHE PAS",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f32",
+   "texte": "J'aime les pommes, les poires et les bananes ; pas les kiwis.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "J'",
+     "predicat": "aime",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f33",
+   "texte": "Si tu viens, apporte le dessert.",
+   "langue": "it",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "apporte",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f34",
+   "texte": "Bien que fatigué, il continue à travailler jusqu'à minuit.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "il",
+     "predicat": "continue",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f35",
+   "texte": "The quick brown fox jumps over the lazy dog.",
+   "langue": "en",
+   "variantes": [
+    {
+     "agent": "The quick brown fox",
+     "predicat": "jumps",
+     "lieu": "over the lazy dog"
+    }
+   ]
+  },
+  {
+   "id": "f36",
+   "texte": "I can't believe it's already 2026 — time flies!",
+   "langue": "en",
+   "variantes": [
+    {
+     "agent": "I",
+     "predicat": "can't believe",
+     "lieu": ""
+    },
+    {
+     "agent": "time",
+     "predicat": "flies",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f37",
+   "texte": "Email: alice@example.org, phone: +33 6 12 34 56 78.",
+   "langue": "und",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f38",
+   "texte": "Les URL comme https://a.b/c?d=e#f et http://x.y sont parfois coupées.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Les URL comme https://a.b/c?d=e#f et http://x.y",
+     "predicat": "sont parfois coupées",
+     "lieu": ""
+    },
+    {
+     "agent": "Les URL",
+     "predicat": "sont parfois coupées",
+     "lieu": ""
+    },
+    {
+     "agent": "Les URL",
+     "predicat": "sont coupées",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f39",
+   "texte": "Un fichier /home/user/notes.txt et un chemin C:\\Windows\\System32.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f40",
+   "texte": "Les caractères spéciaux : @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f41",
+   "texte": "Le texte contient des accents é à ç ù ß ñ ø å et des ligatures œ æ.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le texte",
+     "predicat": "contient",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f42",
+   "texte": "Un mot très long : anticonstitutionnellement.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f43",
+   "texte": "Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation, avec des virgules, des points-virgules ; des parenthèses (comme ici), des tirets — et même des guillemets « français » — pour voir si tout reste cohérent, et si les spans restent dans le texte, sans dépasser la fin, ce qui serait un défaut grave pour un client qui découpe le texte par indices.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Ceci",
+     "predicat": "est",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f44",
+   "texte": "Question rhétorique : qui peut bien croire que cela fonctionne sans test ?",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "qui",
+     "predicat": "peut bien croire",
+     "lieu": ""
+    },
+    {
+     "agent": "qui",
+     "predicat": "peut croire",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f45",
+   "texte": "N'oublie jamais de sauvegarder tes données avant de fermer le programme.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "N'oublie",
+     "lieu": ""
+    },
+    {
+     "agent": "",
+     "predicat": "N'oublie jamais",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f46",
+   "texte": "Il n'y a ni pain ni lait dans le réfrigérateur.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Il",
+     "predicat": "n'y a",
+     "lieu": "dans le réfrigérateur"
+    },
+    {
+     "agent": "Il",
+     "predicat": "Il n'y a",
+     "lieu": "dans le réfrigérateur"
+    }
+   ]
+  },
+  {
+   "id": "f47",
+   "texte": "C'est le meilleur film que j'aie jamais vu.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "C'",
+     "predicat": "est",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f48",
+   "texte": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+   "langue": "und",
+   "variantes": [
+    {
+     "agent": "",
+     "predicat": "",
+     "lieu": ""
+    }
+   ]
+  },
+  {
+   "id": "f49",
+   "texte": "La réunion est reportée à demain, 10 h 30, salle B12.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "La réunion",
+     "predicat": "est reportée",
+     "lieu": "salle B12"
+    },
+    {
+     "agent": "La réunion",
+     "predicat": "est reportée",
+     "lieu": "à demain, 10 h 30, salle B12"
+    }
+   ]
+  },
+  {
+   "id": "f50",
+   "texte": "# Notes de terrain\nLe chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour, contourne le vieux puits et disparaît sous la haie. Personne ne sait vraiment où il passe l'après-midi, mais tout le monde a une théorie. La voisine affirme qu'il dort dans la grange, son fils jure qu'il chasse derrière l'école, et la boulangère, qui le voit chaque matin vers 7 h 15, pense qu'il a simplement deux maisons. Cette hypothèse, aussi étrange qu'elle paraisse, n'est pas la plus invraisemblable : les chats du quartier semblent tous connaître les mêmes raccourcis, les mêmes murs chauds, les mêmes fenêtres entrouvertes, et ils se retrouvent parfois à six sur le même toit.\n\n## Le protocole\nNous avons observé pendant 30 jours, de 6 h 30 à 9 h, en notant chaque passage : le 12/03/2026, trois chats sont entrés par la porte de service ; le 14/03, aucun ; le 15, un seul, mais il portait un collier bleu que nous n'avions jamais vu. Le protocole prévoit 3 relevés par jour, 2 observateurs, 1 tableau et 0 conclusion hâtive. Les données brutes sont dans le fichier /home/observateur/notes.txt ; la synthèse est ici.\n\n## Ce que nous croyons savoir\nUne question reste ouverte : pourquoi les chats reviennent-ils toujours au même endroit ? Est-ce l'odeur, la chaleur, l'habitude, ou quelque chose de plus difficile à nommer ? Nous ne prétendons pas répondre ; nous constatons, nous comparons, nous doutons. La science commence par un doute bien tenu, et finit parfois par une phrase simple : « Le chat dort. » Cette phrase, banale, contient déjà une langue, un sujet, un verbe, un présent, une habitude, et tout un monde de choses qui ne sont pas dites.\n\n## Annexes\nVisitez https://example.org/corpus/2026?page=3 pour les données complètes ; écrivez à corpus@example.org si vous trouvez une erreur, ou appelez le +33 6 12 34 56 78. Les caractères spéciaux @ # $ % & * ( ) [ ] { } < > | \\ ~ ` ^ sont acceptés dans les notes, les accents é à ç ù ß ñ ø å et les ligatures œ æ aussi, et les emojis 🐈 🐾 restent lisibles. Ne supprimez pas les lignes vides : elles séparent les paragraphes et changent la lecture.",
+   "langue": "fr",
+   "variantes": [
+    {
+     "agent": "Le chat de la voisine",
+     "predicat": "se réveille",
+     "lieu": ""
+    },
+    {
+     "agent": "Le chat",
+     "predicat": "se réveille",
+     "lieu": ""
+    }
+   ]
+  }
+ ]
+}

@@ -16,6 +16,8 @@
 > § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 datent du
 > **06/11**, et l'`evaluer` du § 3.3 a été relancé le **14/11** (gold vivant 612, `--par-langue
 > fr/en`). Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+> La **FAQ** (§ 8) est vérifiée à part le **2026-11-15** par
+> [`tools/verifier_faq.py`](../../tools/verifier_faq.py) : **10/10** réponses.
 >
 > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
@@ -443,6 +445,12 @@ paraphrase. Le produit rend des **étiquettes** et, avec `restituer`, la surface
 portent. Les résultats de traduction de la vitrine ([`README.md`](../../README.md)) sont une
 recherche sur un modèle externe ; ils ne sont pas dans ce produit.
 
+**1 bis. La restitution v2 lit les rôles, pas leur justesse.** `restituer --roles` rend un
+cadre `agent / prédicat / lieu` lisible, mais la fidélité mesurée sur les 46 textes de la v0
+est **19/46** cadres exacts (**16/46** non vides), **F1 0,5270** : la commande expose les
+rôles de l'annotation, elle ne les corrige pas. La fiche
+[`rapport-restitution-v2.md`](../../reports/rapport-restitution-v2.md) nomme le négatif.
+
 **2. Un span reste inatteignable.** Sur **239 cibles**, **238** sont attachées (couverture
 **0,9958**) ; **1** ne l'est pas : `g017` (une convention du gold, déclarée inatteignable le
 14/11 — la règle coûtait deux autres spans). Elles sont
@@ -572,7 +580,9 @@ python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json] [--tagger]
 python3 tools/drave.py evaluer [--gold] [--json] [--par-langue] [--tagger]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
+python3 tools/drave.py restituer "TEXTE" --roles
 python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json [--json]
+python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --roles
 ```
 
 `--tagger` est la **seule** option qui sort du hors ligne : elle appelle l'API DeepSeek (clé et
@@ -613,6 +623,7 @@ rejeu identique : oui
 | `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
 | `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
 | `--canonique` | `restituer` | ajoute la forme canonique v1 (segments + rôles + cibles) et son miroir |
+| `--roles` | `restituer` | ajoute la forme lisible des rôles (agent, prédicat, lieu) ; avec `--banc`, mesure leur fidélité à l'or |
 | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
 | `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
@@ -646,7 +657,117 @@ miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique
 inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
 être présenté comme acquis.
 
-## 8. Où aller ensuite
+## 8. FAQ — dix questions
+
+> **Vérifié le 2026-11-15** contre le code courant (`drave 0.1.0`) par
+> [`tools/verifier_faq.py`](../../tools/verifier_faq.py) : **10/10** réponses passent et le
+> **contrôle négatif** est détecté. Le détail des commandes, les sorties observées et ce qui
+> pourrait rendre chaque réponse fausse sont dans
+> [`reports/rapport-faq.md`](../../reports/rapport-faq.md) et
+> [`reports/faq.json`](../../reports/faq.json). Si le code bouge, relancer
+> `python3 tools/verifier_faq.py`.
+
+### 8.1 Quelles langues le produit reconnaît-il ?
+
+Le **bloc** détecte la langue et le script : ses profils UDHR couvrent **398 langues**
+(**0,9687** sur l'autotest), mais le **CLI** n'expose que `fr` et `en` comme **indice**
+(`--langue`). Sans indice, il rend la langue détectée — `de` pour « Der Hund schläft. », `es`
+pour « El perro duerme. » — ou `und` quand la confiance passe sous le seuil (**0,12**) :
+« Élodie sourit. » rend `und`, **même avec `--langue fr`**. `--langue` est un **indice**, pas
+une contrainte ; `--langue de` sort **2** (usage invalide). Les 398 profils ne sont pas
+versionnés : `data/` est hors dépôt.
+
+### 8.2 Est-ce que ça marche hors ligne ?
+
+**Oui, par défaut.** `analyser`, `evaluer`, `rejouer` et `restituer` tournent sur **CPU**, sans
+modèle, sans GPU et **sans ouvrir de socket** ; le seul chemin réseau est l'option
+`--tagger` (§ 3.7). Vérifié en interdisant `socket.socket` : l'analyse passe, et le module
+`tools.llm.deepseek` n'est **même pas importé**. Sans `--tagger`, aucune clé n'est lue.
+
+### 8.3 Combien ça coûte ?
+
+Le défaut n'ouvre aucun appel : **0 $ d'API** (seul le CPU local est consommé). L'option
+`--tagger` coûte **un appel par phrase** : **609 appels**, **22 299 tokens**, **155 s** et
+**~0,02 $** pour les 612 phrases du gold ; le cache mémoire + disque rend la seconde analyse
+gratuite (**0 réseau, 0 token**). Les trois exemples de [`exemples.md`](exemples.md) totalisent
+**3 appels**, **441 tokens** et **3,7 s**. Le prix dépend du modèle du jour (`deepseek-chat`
+demandé, `deepseek-flash` souvent renvoyé) et le cache peut rejouer une ancienne réponse.
+
+### 8.4 Qu'est-ce que `--tagger` change ?
+
+`--tagger` remplace le **POS** par celui de l'API DeepSeek ; les **syntagmes**, leurs
+**rôles**, les **cibles d'attachement** et la **pragmatique** restent heuristiques, et la
+**ponctuation** est restituée depuis l'heuristique. Sur le gold 612, le POS passe de
+**86,25 % à 95,75 %** (**+9,5 pts**) ; sur le réel 452, de **88,91 % à 95,00 %** (**+6,1**).
+La clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key`, puis
+`DEEPSEEK_API_KEY` (repli `DSH_*`) ; sans clé, code **4**, rien sur `stdout`. C'est une option
+**best-effort** : sa justesse dépend du modèle, et le cache peut servir une réponse ancienne.
+
+### 8.5 Quel est le format de sortie, et est-il stable ?
+
+Le JSON est estampillé `schema: "drave.annotation"` et `version: 2`. La v2 ajoute deux champs
+**optionnels** dans `meta` — `partition` et `alternative` — pour documenter les syntagmes qui
+se chevauchent ; les **huit champs obligatoires** de la racine sont ceux de la v1, et un client
+v1 qui ignore `meta` continue de lire. `tools/verifier_schema_produit.py` lit les versions
+**1 et 2**, valide **6 cas** (dont un cas v1) et, avec `--gold 20`, **26 cas, 0 échec** ; le
+contrôle négatif soumet le cas v1 au schéma v2, qui le **refuse**. La compatibilité **octet
+pour octet** entre versions n'est pas garantie : le bump change le JSON et son `sha256`.
+
+### 8.6 Que veut dire « attachement », et à quel point est-il fiable ?
+
+Pour chaque syntagme, le produit publie un **rôle**, une **cible** d'attachement et des
+**candidats** : « Le chat » → `dort`, la REL « que j'ai lu » → `livre`. Ce n'est **pas un
+arbre syntaxique complet**. Sur le gold vivant 612, **238/239 cibles** sont attachées
+(**0,9958**) ; sur les 238 segments dont le span est prédit, l'exactitude est **1,0000** ; le
+top-k vaut **0,9874**. Le contrôle négatif du CLI — une cible exacte tirée au hasard — vaut
+**1,67 %** ; l'audit v10 ajoute un **candidat aléatoire** dans les listes (**42,14 %** de top-1)
+et une **permutation des cibles** (**0,908 %**). La mesure est **in-sample** : les règles ont
+été dessinées sur ce gold, avec un split dev/test.
+
+### 8.7 Pourquoi reste-t-il un span inatteignable ?
+
+Oui, **un** : `g017` (« She said that she would come yesterday. »). Le gold attend la SUB
+**[9:28]** « that she would come » ; le bloc prédit **[9:38]**, adverbe inclus. La **cible** est
+déjà juste (`said`) — c'est le **span** qui manque, donc le seul label absent des 239. La règle
+qui retire l'adverbe final corrige `g017` mais **casse `r264` et `r288`** : F1 **0,7902 →
+0,7901** et couverture **0,9958 → 0,9916** ; elle a été **rejetée**. Lire **238/239** comme une
+exactitude **conditionnelle aux spans prédits**, pas comme la couverture du langage ; sur la
+base réelle 452, **183/184 (99,46 %)**. Détail : [`rapport-g017.md`](../../reports/rapport-g017.md).
+
+### 8.8 Que peut-on restituer : la surface, la forme, les rôles ?
+
+Trois vues, de la surface vers les rôles. `restituer` (défaut, **v0**) reconstruit la
+**surface** depuis le niveau `graphème` : **46/46** surfaces exactes, mais le **miroir strict**
+vaut **0,1087** (mots et POS séparent le point). `--canonique` (**v1**) ajoute la **forme
+canonique** (segments + rôles + cibles) : **46/46** contre la source canonisée, strict inchangé.
+`--roles` (**v2**) rend un cadre lisible **agent / prédicat / lieu** : **19/46** cadres exacts
+(**16/46** non vides), **F1 0,5270**, **198/198** spans dans la source et **46/46** rendus
+relus. La v2 **expose** les rôles de l'annotation ; elle ne les corrige pas. Aucune des trois
+ne traduit ni ne génère.
+
+### 8.9 Quelles limites faut-il connaître avant de s'en servir ?
+
+**Pas de génération** (texte, traduction, correction, paraphrase), **pas de serveur HTTP**,
+**pas de RSN/DRVM**, **pas de neuronal local** (le 7B exige un serveur interdit par la règle 11 ;
+seul le tagger **API** est en option). **Pas de classement appris** de l'attachement, **pas de
+calibration** des confiances (elles sont déclarées), **pas de `--langue-forcee`** et **pas de
+garantie hors domaine** : les chiffres sont sur un gold où les règles ont été dessinées. Le CLI
+n'a **pas** d'entrée standard, pas de `--sortie`, pas de parcours de répertoire, pas de rejeu
+d'une annotation sauvegardée ; `candidats` sont des **chaînes d'affichage** et les rôles
+mélangent `predicat`/`prédicat`, `qualite`/`qualité`. Le format est versionné ; la **qualité
+linguistique** ne l'est pas.
+
+### 8.10 Comment l'installer et le lancer ?
+
+Cloner le dépôt, puis lancer `python3 tools/drave.py …` **depuis la racine** : Python **3.10+**
+(le code parse en 3.10, mesuré ici en 3.13), **aucune dépendance externe**, aucun GPU. Pas de
+`pip install`, pas de commande `drave` dans le `PATH`, pas d'empaquetage. Le CLI tourne même
+avec `python3 -S` (sans `site-packages`) ; les gold sont versionnés dans
+`tools/tests/linguistique/`. Le corpus UDHR, lui, n'est pas versionné (`data/` hors dépôt).
+Vérifier l'installation : `python3 tools/drave.py --version` → `drave 0.1.0`, puis
+`python3 tools/drave.py analyser "Le chat dort."`.
+
+## 9. Où aller ensuite
 
 | si vous voulez… | allez à |
 |---|---|

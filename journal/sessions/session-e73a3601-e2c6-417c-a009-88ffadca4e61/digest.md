@@ -2783,3 +2783,101 @@ journal/2026-11-15/README.md:42:| 04:46 | `d23780d7` | D1 — LES EXEMPLES DU TA
   ```
 
 - **bash** `{"command": "git add journal\ngit commit -F - <<'MSG'\nJOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --reel (452 PHRASES) SONT DANS LA DOC ; 5/5 REJOUÉS, MUTATION 4/5\n\nLe récit de D1 est ajouté au journal du 15/11 : les trois blocs --tagger avec la clé et le coût\naffiché … [333 caractères tronqués]`
+
+  ```
+[s/v7 e42bac4f] JOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --reel (452 PHRASES) SONT DANS LA DOC ; 5/5 REJOUÉS, MUTATION 4/5
+ 11 files changed, 97 insertions(+), 23 deletions(-)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py; echo \"revue_exit=$?\"; python3 tools/verifie_etat_a_jour.py; echo \"etat_exit=$?\"; python3 tools/verifie_journal.py; echo \"journal_exit=$?\"", "description": "Final doc review, state and journal checks", "timeoutMs": 300000}`
+
+  ```
+revue de documentation · 743 fiche(s) · 837 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue_exit=0
+  état · dernier fait d23780d7 · dernier état d23780d7
+  ✅ aucun fait commité après le dernier état
+etat_exit=0
+  journal · 47 jour(s) · 201 session(s) · 2573 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+journal_exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py >/tmp/taille-final.log 2>&1; echo \"taille_exit=$?\"; tail -4 /tmp/taille-final.log; bash tools/porte-tableaux.sh >/tmp/tableaux-final.log 2>&1; echo \"tableaux_exit=$?\"; tail -3 /tmp/tableaux-final.log", "description": "Final budget and table checks", … [21 caractères tronqués]`
+
+  ```
+taille_exit=0
+  avertissements :
+     · 55 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+tableaux_exit=0
+  ✅ 1815 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4390 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "git status --short; echo ---; git log --oneline -3", "description": "Final git status and log"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+e42bac4f JOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --reel (452 PHRASES) SONT DANS LA DOC ; 5/5 REJOUÉS, MUTATION 4/5
+d23780d7 D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOKENS, 3,7 S), 2 BLOCS --reel (452 PHRASES, POS 88,91, F1 79,06), 5/5 REJOUÉS, MUTATION 4/5
+ee04ea91 BILAN DE LA NUIT — LE TAGGER (95,75), LA BASE HONNÊTE (452), LA PHASE C/B (N2, S, R, PANINI) ET LES NÉGATIFS DITS
+  ```
+
+### 🤖 Assistant
+
+Tâche D1 terminée.
+
+## Ce qui a été ajouté à `docs/produit/exemples.md`
+
+Le document passe de **5 à 10 blocs** :
+
+**3 exécutions `--tagger`** (clé réelle, cache disque neuf, coût affiché) :
+- `g001` « Le chat dort. » — POS identique, `PONCT` restitué : **1 appel, 130 tokens, 1,1 s**
+- `g011` « Le livre que j'ai lu… » — `lu` **NOUN → VERB** : **1 appel, 157 tokens, 1,5 s**
+- `r241` « The day when we left… » — `when` **CONJ → PRON** (le gold attend PRON) : **1 appel, 154 tokens, 1,1 s**
+
+Total : **3 appels, 441 tokens, 3,7 s**, ~**0,0004 $** (estimation). Sur les **17 tokens du gold** de ces phrases : **14/17 → 16/17** — un chiffre d'exemple, pas une mesure ; les chiffres globaux restent **0,9575 vs 0,8625** sur 612 (+9,5) et **0,9500 vs 0,8891** sur le réel 452 (+6,1).
+
+**2 exécutions `--reel`** (base honnête) :
+- `evaluer --reel` : **452 phrases, 2 480 tokens, 184 cibles**, POS **0,8891**, F1 **0,7906**, attachement **183/184 = 0,9946**
+- `evaluer --reel --json` : le même contrat en JSON (`gold.nom`, `gold.phrases: 452`, `reel: null`, contrôle négatif **0,00 %**)
+
+## Vérification contre le code courant
+
+- F1 **0,7902** (P 0,7860 / R 0,7944), attachement **238/238 labels**, **238/239 cibles = 0,9958**.
+- Les **3 annotations `--tagger` sont en schéma v2** (`schema: drave.annotation`, `version: 2`), validées **3/3** ; le schéma refuse une version 3 et un champ obligatoire retiré.
+- Les **5 nouveaux blocs sont reproduits 5/5** par un comparateur qui rejoue les commandes.
+- **Contrôle négatif** : doc mutée (`lu/VERB` → `lu/NOUN`) → **4/5**, écart détecté sur `6.2`.
+
+J'ai aussi recalé `docs/produit/README.md` § 3.7 sur le code courant : **1 appel/phrase**, `PONCT` restitué, **0,9575** sur 612, **22 299 tokens / 155 s / ~0,02 $**.
+
+## Portes et contrôles
+
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (autotest **183/183**)
+- `revue_documentation.py`, `porte-tableaux.sh`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py` : **verts**
+
+## Commits
+
+- `d23780d7` — D1, doc + fiche + JSON + état/roadmap
+- `e42bac4f` — journal du 15/11
+
+Fichiers principaux : [`docs/produit/exemples.md`](docs/produit/exemples.md), [`reports/rapport-exemples-tagger.md`](reports/rapport-exemples-tagger.md), [`reports/rapport-exemples-tagger.json`](reports/rapport-exemples-tagger.json). Les modifications non liées déjà présentes dans l'arbre de travail ont été laissées intactes.
+

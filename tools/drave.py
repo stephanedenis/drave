@@ -11,13 +11,15 @@ Une seule commande, quatre gestes, hors ligne et déterministe :
     python3 tools/drave.py evaluer --tagger --json                    # heuristique + cascade API
     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
     python3 tools/drave.py restituer "Le chat dort."
+    python3 tools/drave.py restituer "Le chat dort." --roles
     python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json
     python3 tools/drave.py --version
 
 Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) — POS, syntagmes
 avec rôle et cible d'attachement, pragmatique, unités sémantiques —, sa mesure sur le gold et la
-**restitution v0** (annotation → surface, avec la fidélité du miroir). La restitution est un
-**codec de surface** : elle reconstruit depuis le niveau `graphème`, pas un décodeur neuronal.
+**restitution v0** (annotation → surface, avec la fidélité du miroir) et la **v2** (rôles
+agent/prédicat/lieu lisibles). La restitution est un **codec de surface** : elle reconstruit
+depuis le niveau `graphème`, pas un décodeur neuronal.
 En **option** (`--tagger`, `analyser` et `evaluer`), le POS (et lui seul) vient du tagger de
 l'API DeepSeek : la clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key` puis
 `DEEPSEEK_API_KEY` ; le cache du client évite de refaire un appel ; la clé n'est jamais affichée.
@@ -49,6 +51,7 @@ sys.path.insert(0, str(RACINE))
 
 import bloc_linguistique as bl  # noqa: E402  (import après l'installation des chemins)
 import restitution  # noqa: E402  (la restitution v0 : annotation → surface)
+import restitution_v2  # noqa: E402  (la restitution v2 : les rôles)
 
 NOM = "drave"
 VERSION = "0.1.0"
@@ -669,9 +672,18 @@ def cmd_restituer(args: argparse.Namespace) -> int:
     Deux modes : un **texte** (ou un fichier), ou un **banc** JSON de textes
     (`--banc`, le format de `reports/pensee-fiabilite-produit.json`). Le mode banc
     laisse le bloc détecter la langue, comme le CLI sans `--langue`. `--canonique`
-    ajoute la **forme canonique v1** (segments + rôles + cibles) et son miroir ; la
-    sortie de la v0 reste celle par défaut.
+    ajoute la **forme canonique v1** (segments + rôles + cibles) et son miroir ;
+    `--roles` ajoute la **v2** (agent, prédicat, lieu) et, sur un banc, sa fidélité à
+    l'or. La sortie de la v0 reste celle par défaut.
     """
+    if args.roles and args.canonique:
+        print(f"{NOM}: erreur d'usage : --roles et --canonique sont exclusifs",
+              file=sys.stderr)
+        return 2
+    if args.gold and not (args.banc and args.roles):
+        print(f"{NOM}: erreur d'usage : --gold ne sert qu'avec --banc --roles",
+              file=sys.stderr)
+        return 2
     if args.banc:
         if args.texte is not None or args.fichier:
             print(f"{NOM}: erreur d'usage : --banc est exclusif de TEXTE et --fichier",
@@ -683,7 +695,15 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         except (OSError, ValueError) as exc:
             print(f"{NOM}: erreur : banc illisible : {exc}", file=sys.stderr)
             return 1
-        if args.canonique:
+        if args.roles:
+            chemin_gold = pathlib.Path(args.gold or restitution_v2.GOLD_DEFAUT)
+            try:
+                gold = json.loads(chemin_gold.read_text(encoding="utf-8"))
+            except (OSError, ValueError) as exc:
+                print(f"{NOM}: erreur : or de rôles illisible : {exc}", file=sys.stderr)
+                return 1
+            rapport = restitution_v2.mesurer_banc_v2(items, gold, args.langue)
+        elif args.canonique:
             rapport = restitution.mesurer_banc_v1(items, args.langue)
         else:
             rapport = restitution.mesurer_banc(items, args.langue)
@@ -691,8 +711,12 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         if args.json:
             sys.stdout.write(_dumps(rapport))
         else:
-            formateur = (restitution.formater_banc_v1 if args.canonique
-                         else restitution.formater_banc)
+            if args.roles:
+                formateur = restitution_v2.formater_banc_v2
+            elif args.canonique:
+                formateur = restitution.formater_banc_v1
+            else:
+                formateur = restitution.formater_banc
             print(_sur(formateur(rapport, args.banc)))
         return 0
 
@@ -705,6 +729,17 @@ def cmd_restituer(args: argparse.Namespace) -> int:
         print(f"{NOM}: refus d'analyse : {annotation.refus} "
               "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
         return 3
+    if args.roles:
+        mesure_v2 = restitution_v2.mesurer_annotation_v2(annotation, texte)
+        if args.json:
+            sys.stdout.write(_dumps({
+                "schema": restitution_v2.SCHEMA,
+                "version": restitution_v2.VERSION,
+                **mesure_v2,
+            }))
+        else:
+            print(_sur(restitution_v2.formater_mesure_v2(mesure_v2, texte)))
+        return 0
     if args.canonique:
         mesure_v1 = restitution.mesurer_annotation_v1(annotation, texte)
         if args.json:
@@ -850,12 +885,14 @@ def construire_parseur() -> argparse.ArgumentParser:
         description="Analyse un texte, reconstruit la surface depuis le niveau `graphème` "
                     "(sans lire le champ `texte` de l'annotation) et compare à la source. "
                     "Affiche la fidélité binaire du miroir, la fidélité de caractères et un "
-                    "contrôle négatif. Avec --banc, mesure un JSON de textes (50 textes libres) ; "
-                    "avec --canonique, produit en plus la forme canonique v1 (segments + rôles "
-                    "+ cibles) et son miroir canonique.",
+                    "contrôle négatif. Avec --canonique, produit en plus la forme canonique v1 "
+                    "(segments + rôles + cibles) et son miroir canonique ; avec --roles, produit "
+                    "la forme lisible des rôles (agent, prédicat, lieu) et, sur un banc, leur "
+                    "fidélité à un or écrit à la main.",
         epilog="Exemples : python3 tools/drave.py restituer \"Le chat dort.\" ; "
                "python3 tools/drave.py restituer \"Le chat dort.\" --canonique ; "
-               "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json",
+               "python3 tools/drave.py restituer \"Le chat dort.\" --roles ; "
+               "python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --roles",
         formatter_class=_Formateur,
     )
     restituer.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
@@ -865,6 +902,12 @@ def construire_parseur() -> argparse.ArgumentParser:
     restituer.add_argument("--canonique", action="store_true",
                            help="ajouter la forme canonique v1 (segments + rôles + cibles) "
                                 "et son miroir canonique")
+    restituer.add_argument("--roles", action="store_true",
+                           help="ajouter la forme lisible des rôles (agent, prédicat, lieu) ; "
+                                "avec --banc, mesurer leur fidélité à l'or")
+    restituer.add_argument("--gold", default=None, metavar="CHEMIN",
+                           help="or de rôles pour --banc --roles "
+                                "(défaut : tools/tests/linguistique/gold_restitution_v2.json)")
     restituer.add_argument("--fichier", default=None, metavar="CHEMIN",
                            help="lire le texte dans un fichier UTF-8 (au lieu de l'argument)")
     restituer.add_argument("--langue", choices=("fr", "en"), default=None,
@@ -872,7 +915,8 @@ def construire_parseur() -> argparse.ArgumentParser:
     restituer.add_argument("--contexte", default=None,
                            help="le texte qui précède (mémoire de discours)")
     restituer.add_argument("--json", action="store_true",
-                           help="sortie JSON (restitution, miroir, contrôle négatif)")
+                           help="sortie JSON (restitution, miroir, contrôle négatif ; "
+                                "rôles avec --roles)")
     restituer.set_defaults(fonction=cmd_restituer)
     return parseur
 

@@ -7,12 +7,12 @@
 | Identifiant | `session-e73a3601-e2c6-417c-a009-88ffadca4e61` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 04:35 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 134 |
-| Appels d'outils | 152 |
+| Messages | 136 |
+| Appels d'outils | 155 |
 | Fichiers touchés | 8 |
-| Commandes | 93 |
+| Commandes | 96 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche D1 : les exemples de `docs/produit/exemples.md` — ajoute 3 exemples avec `--tagger` (la sortie réelle avec la clé, … [198 caractères tronqués]
 
-*152 appels d'outils.* Actions notables :
+*155 appels d'outils.* Actions notables :
 
 - bash — List repository root
 - bash — Show git status and recent commits
@@ -41,7 +41,47 @@
 - bash — Test tagger with live API call
 - bash — Find example reports and cache size
 - bash — Search report indexes for examples
-- … et 117 autres
+- … et 120 autres
+
+**Synthèse produite :**
+
+Tâche D1 terminée.
+
+\## Ce qui a été ajouté à `docs/produit/exemples.md`
+
+Le document passe de **5 à 10 blocs** :
+
+**3 exécutions `--tagger`** (clé réelle, cache disque neuf, coût affiché) :
+- `g001` « Le chat dort. » — POS identique, `PONCT` restitué : **1 appel, 130 tokens, 1,1 s**
+- `g011` « Le livre que j'ai lu… » — `lu` **NOUN → VERB** : **1 appel, 157 tokens, 1,5 s**
+- `r241` « The day when we left… » — `when` **CONJ → PRON** (le gold attend PRON) : **1 appel, 154 tokens, 1,1 s**
+
+Total : **3 appels, 441 tokens, 3,7 s**, ~**0,0004 $** (estimation). Sur les **17 tokens du gold** de ces phrases : **14/17 → 16/17** — un chiffre d'exemple, pas une mesure ; les chiffres globaux restent **0,9575 vs 0,8625** sur 612 (+9,5) et **0,9500 vs 0,8891** sur le réel 452 (+6,1).
+
+**2 exécutions `--reel`** (base honnête) :
+- `evaluer --reel` : **452 phrases, 2 480 tokens, 184 cibles**, POS **0,8891**, F1 **0,7906**, attachement **183/184 = 0,9946**
+- `evaluer --reel --json` : le même contrat en JSON (`gold.nom`, `gold.phrases: 452`, `reel: null`, contrôle négatif **0,00 %**)
+
+\## Vérification contre le code courant
+
+- F1 **0,7902** (P 0,7860 / R 0,7944), attachement **238/238 labels**, **238/239 cibles = 0,9958**.
+- Les **3 annotations `--tagger` sont en schéma v2** (`schema: drave.annotation`, `version: 2`), validées **3/3** ; le schéma refuse une version 3 et un champ obligatoire retiré.
+- Les **5 nouveaux blocs sont reproduits 5/5** par un comparateur qui rejoue les commandes.
+- **Contrôle négatif** : doc mutée (`lu/VERB` → `lu/NOUN`) → **4/5**, écart détecté sur `6.2`.
+
+J'ai aussi recalé `docs/produit/README.md` § 3.7 sur le code courant : **1 appel/phrase**, `PONCT` restitué, **0,9575** sur 612, **22 299 tokens / 155 s / ~0,02 $**.
+
+\## Portes et contrôles
+
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (autotest **183/183**)
+- `revue_documentation.py`, `porte-tableaux.sh`, `taille_documents.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py` : **verts**
+
+\## Commits
+
+- `d23780d7` — D1, doc + fiche + JSON + état/roadmap
+- `e42bac4f` — journal du 15/11
+
+Fichiers principaux : [`docs/produit/exemples.md`](docs/produit/exemples.md), [`reports/rapport-exemples-tagger.md`](reports/rapport-exemples-tagger.md), [`reports/rapport-exemples-tagger.json`](reports/rapport-exemples-tagger.json). Les modifications non liées déjà présentes dans l'arbre de travail ont été laissées intactes.
 
 ## 3. Travail accompli
 
@@ -100,7 +140,7 @@
 - **T1** Compute current counters
 - **T1** Inspect product gate script
 - **T1** Produce exact reel JSON extract with jq
-- … et 53 autres
+- … et 56 autres
 
 ## 4. Mesures et résultats marquants
 
