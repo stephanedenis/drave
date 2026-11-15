@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 04 h 10 HNE (B3 : corpus d'or CIC v2, type de Bruijn + sha256 par deux implémentations)**
+**Mis à jour : 2026-11-15, 04 h 40 HNE (nuit : tagger 95,75 %, base réelle 452, phase C/B livrée)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

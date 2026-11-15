@@ -7,12 +7,12 @@
 | Identifiant | `session-3241a992-ffa6-4c12-ab1c-a8e175f880b7` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 03:55 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 101 |
-| Appels d'outils | 124 |
+| Messages | 105 |
+| Appels d'outils | 129 |
 | Fichiers touchés | 8 |
-| Commandes | 78 |
+| Commandes | 83 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche B3 : le corpus d'or CIC (42 verdicts, 42/42 reproduits en J12.2) — étends le vérificateur : les 36 preuves altérée … [169 caractères tronqués]
 
-*124 appels d'outils.* Actions notables :
+*129 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — List key directories
@@ -41,7 +41,44 @@
 - bash — Read roadmap and current state around CIC
 - bash — Locate Panini source implementation
 - bash — Inspect entry schema
-- … et 93 autres
+- … et 98 autres
+
+**Synthèse produite :**
+
+**B3 terminée et committée** — `2067a6f0`.
+
+\## Ce qui a été ajouté au vérificateur
+
+**1. Vérification du type de de Bruijn** (`tools/verificateur_cic.py`)
+- portée purement structurelle : aucun `var i` hors des lieurs ouverts ;
+- bien-formedness : `[] ⊢ type : sort n` ;
+- une preuve n'est acceptée que si son type est clos et bien formé.
+
+**Résultat** : **42/42** types clos et bien formés (**38** en `sort 0`, **4** en `sort 1`), **42/42** preuves closes.
+
+**2. Seconde implémentation de SHA-256**
+- FIPS 180-4 réécrite dans le module, **sans `hashlib`** ;
+- **16** vecteurs (FIPS + longueurs de rembourrage) ;
+- rejeu du sha256 du fichier, des **42** couples `preuve || type` et des **24** termes de l'environnement ;
+- **0 écart** avec `hashlib` et avec les empreintes déclarées.
+
+**3. Contrôles négatifs étendus**
+- **36/36** preuves altérées rejetées ;
+- **42/42** types altérés rejetés — dont **36** types devenus invalides et **6** rejets par la preuve ;
+- **1 020/1 020** mutations de `eq(2,2)` rejetées ;
+- corpus corrompu (preuve **ou** type) refusé en code **1**.
+
+\## Porte et tests
+`bash tools/porte-cic.sh` : ✅ verte
+- **21** tests J12.2 + **17** tests B3 = **38** cas.
+
+\## Livrables
+- Fiche : [`reports/rapport-cic-v2.md`](reports/rapport-cic-v2.md)
+- JSON : [`reports/cic-verificateur-v2.json`](reports/cic-verificateur-v2.json)
+- Code : [`tools/verificateur_cic.py`](tools/verificateur_cic.py), [`tools/porte-cic.sh`](tools/porte-cic.sh), [`tools/tests/test_verificateur_cic_v2.py`](tools/tests/test_verificateur_cic_v2.py)
+- État et roadmap mis à jour (`docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`), récit dans `journal/2026-11-15/README.md`.
+
+Les modifications préexistantes hors B3 (autres rapports, `tools/chantier/plan.json`) n'ont pas été touchées.
 
 ## 3. Travail accompli
 
@@ -100,7 +137,7 @@
 - **T1** Run new B3 tests
 - **T1** Run existing J12.2 tests
 - **T1** Run CIC gate with new checks
-- … et 38 autres
+- … et 43 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **733 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **738 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -58,6 +58,7 @@
 | [rapport-annotation-independante.md](rapport-annotation-independante.md) | Contrôle indépendant de la convention d'attachement — 20 segments annotés à la main |
 | [rapport-architecture-memoire.md](rapport-architecture-memoire.md) | Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque |
 | [rapport-atomes-niveaux.md](rapport-atomes-niveaux.md) | Table de correspondance — 14 atomes de Panini et 8 niveaux de Drave |
+| [rapport-atomes-prediction.md](rapport-atomes-prediction.md) | B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui ; POS, syntagmes et attachement, non |
 | [rapport-attention-creuse.md](rapport-attention-creuse.md) | Attention creuse — le trou se referme, et par le haut |
 | [rapport-attribution-kv.md](rapport-attribution-kv.md) | Phase 1.4 — l'écart du cache KV int8 est ENTIÈREMENT dû aux clés |
 | [rapport-audit-attachement.md](rapport-audit-attachement.md) | Audit de reproductibilité — l'attachement du bloc linguistique (B13) |
@@ -105,6 +106,7 @@
 | [rapport-cerveau-corrections.md](rapport-cerveau-corrections.md) | Corrections B12 — ce que le stress des sous-agents a changé |
 | [rapport-cerveau-modules.md](rapport-cerveau-modules.md) | Rapport — modules cerveau-langage M1–M9 |
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
+| [rapport-cic-v2.md](rapport-cic-v2.md) | B3 — Corpus d'or CIC v2 : le type de Bruijn vérifié, le sha256 rejoué deux fois |
 | [rapport-cic-verificateur.md](rapport-cic-verificateur.md) | J12.2 — Le corpus d'or CIC : 42/42 verdicts rejoués par un vérificateur indépendant |
 | [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |
 | [rapport-cloture-chantier.md](rapport-cloture-chantier.md) | J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14` |
@@ -126,8 +128,8 @@
 | [rapport-coordination-n2-v2.md](rapport-coordination-n2-v2.md) | N2 — la commande validée : le canal avec RoPE, et le témoin 3,09 qui ne doit pas bouger |
 | [rapport-coordination-n2.md](rapport-coordination-n2.md) | N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal |
 | [rapport-coordination-r.md](rapport-coordination-r.md) | R — le tagger POS sur le gold 612 : **+8,49 pts**, la règle dit **intégrer** |
+| [rapport-coordination-s-v2.md](rapport-coordination-s-v2.md) | S — la page `/` ne sert pas la v7, le service ne tourne pas, et les 11 verdicts sont committés |
 | [rapport-coordination-s.md](rapport-coordination-s.md) | S — les 11 verdicts de `/paragraphes` ne sont pas dans git |
-| [rapport-coordination-s-v2.md](rapport-coordination-s-v2.md) | S — la page `/` ne sert pas la v7 : 369 stockés sans `profondeur`, 41 verdicts à re-juger, port 8765 pris |
 | [rapport-corpus-commun.md](rapport-corpus-commun.md) | Corpus commun Panini/NIPADA ↔ Drave — UDHR, article 1 |
 | [rapport-corpus-documents.md](rapport-corpus-documents.md) | Le corpus Documents — 7 496 PDF locaux, 2 992 documents, 845,7 M caractères |
 | [rapport-corpus-gele.md](rapport-corpus-gele.md) | Le corpus gelé — la dérive des bancs est close |
@@ -191,6 +193,7 @@
 | [rapport-gn-pronom-sujet.md](rapport-gn-pronom-sujet.md) | B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé |
 | [rapport-gold-anglais.md](rapport-gold-anglais.md) | B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause |
 | [rapport-gold-gp-corrige.md](rapport-gold-gp-corrige.md) | B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456 |
+| [rapport-gold-reel-50.md](rapport-gold-reel-50.md) | R0.7 / B13 — le gold réel étendu : 50 phrases que l'heuristique rate, et ce qu'elles disent |
 | [rapport-gold-split.md](rapport-gold-split.md) | B13 — le gold coupé en dev/test : les gains généralisent (test 0,9815, dev 0,9811) |
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
@@ -643,6 +646,7 @@
 | [rapport-produit-bloc-l.md](rapport-produit-bloc-l.md) | Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat |
 | [rapport-produit-v0.md](rapport-produit-v0.md) | B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue |
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
+| [rapport-protocole-date.md](rapport-protocole-date.md) | B1 — le protocole Panini à date contrôlée : 60 paires, trois strates, et les 26 signatures qui manquent |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
 | [rapport-r02-controleur.md](rapport-r02-controleur.md) | R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget |

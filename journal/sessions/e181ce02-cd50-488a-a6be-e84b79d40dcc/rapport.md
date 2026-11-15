@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 347.4 h |
+| Durée | 347.8 h |
 | Tours | 198 |
-| Messages | 3842 |
-| Appels d'outils | 3422 |
+| Messages | 3849 |
+| Appels d'outils | 3429 |
 | Fichiers touchés | 25 |
-| Commandes | 2845 |
+| Commandes | 2851 |
 | Sous-agents | 43 |
-| Commits | 462 |
+| Commits | 463 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*63 appels d'outils.* Actions notables :
+*70 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,11 +10645,11 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 39 autres
+- … et 45 autres
 
 **Synthèse produite :**
 
-⏵ Les deux défauts corrigés : **1 appel** et **PONCT restitué** → le tagger passe à **95,75 %** (+9,5)
+⏵ Les 6 tâches C/B sont livrées (02 h → 04 h). Je lis les résultats, puis la passe d'honnêteté et les bilans
 
 ## 3. Travail accompli
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2805 autres
+- … et 2811 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11381,4 +11381,5 @@ Je commence.
 - ÉTAT — T0 TENU (LA LIGNE FAIT RACCOURCIE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU (LA LIGNE"; then echo "C
 - ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md; echo "EXIT=$?"; git log -1 --format='%h %s' | cut -c1-80
 - ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md 2>&1 | tail -3; git log -1 --format='%h %s' | cut -c1-70
+- PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD RÉEL 452), PANINI (PROTOCOLE À DATE CONTRÔLÉE, LES ATOMES NE PRÉDISENT PAS LES 
 

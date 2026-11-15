@@ -269,3 +269,20 @@ L'humain a tranché, en clair :
 
 **Le chantier 6A (le produit)** : le tagger (1A), la restitution, la robustesse. Puis la
 coordination (S, A, N2, R). Puis Panini (le corpus à date contrôlée, les 44 œuvres).
+
+## 9. La phase 3 (C puis B, 15/11 02 h → 04 h)
+
+Six tâches livrées, la queue du plan vidée :
+
+| tâche | verdict | livrable |
+|---|---|---|
+| C1 **N2** | ✅ | la commande validée **`--rope --canal-dir`** (2,79), le témoin 3,09 à ne pas bouger |
+| C2 **S** | ✅ | la page `/` **ne sert pas la v7** ; les 11 verdicts committés (`389b99f`) |
+| C3 **R** | ✅ | le « gold 200+ » **défini** (452 phrases), 50 ratées sélectionnées |
+| B1 **Panini** | ✅ | le protocole à **date contrôlée** (60 paires, 3 strates) — le §334 ne fournit qu'**une** paire contemporaine |
+| B2 **Panini** | ❌ **négatif** | les 14 atomes **ne prédisent pas** les niveaux (POS R²CV −0,09 ; le contrôle de date tue tout) |
+| B3 **Panini** | ✅ | le CIC **42/42**, les types clos, le sha256 **sans `hashlib`**, 1 020/1 020 mutations rejetées |
+
+**Ce que la nuit a appris** : l'intégration Panini est **bornée** — les atomes sont un gradient de
+**style/époque**, pas une syntaxe ; et le corpus ne fournit pas les paires contemporaines que le
+protocole exige. Le **négatif est le résultat**.

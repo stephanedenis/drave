@@ -64044,3 +64044,120 @@ dim 15 nov 2026 03:54:49 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 600; date; tail -2 work/chantier/journal.log", "description": "Pousser et suivre B2", "timeoutMs": … [9 caractères tronqués]`
+
+  ```
+c37fed06..01b6db6e  s/v7 -> s/v7
+   c37fed06..01b6db6e  master -> master
+[still running after 600000ms; moved to background job bash-5078]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5078", "timeout_ms": 500000, "wait": true}`
+
+  ```
+dim 15 nov 2026 04:04:59 EST
+2026-11-15 03:55:09 · ✔ B2 en 2910.5 s (code 0) — ✅ test -f reports/rapport-atomes-prediction.md && echo FICHE-OK
+2026-11-15 03:55:09 · ▶ B3 — Panini — le corpus d'or CIC étendu (timeout 3600 s)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre B3", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5079]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5079", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 04:25:11 EST
+2026-11-15 03:55:09 · ▶ B3 — Panini — le corpus d'or CIC étendu (timeout 3600 s)
+2026-11-15 04:06:34 · ✔ B3 en 684.4 s (code 0) — ✅ test -f reports/rapport-cic-v2.md && echo FICHE-OK
+1
+[status: completed, exit code: 0]
+  ```
+
+### 🤖 Assistant
+
+⏵ Les 6 tâches C/B sont livrées (02 h → 04 h). Je lis les résultats, puis la passe d'honnêteté et les bilans
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[s]uperviseur.py boucle\"; for f in coordination-n2-v2 coordination-s-v2 gold-reel-50 protocole-date atomes-prediction cic-v2; do echo \"=== $f\"; head -8 reports/rapport-$f.md 2>/dev/null | grep -E \"Verdict|—\" | … [71 caractères tronqués]`
+
+  ```
+0
+=== coordination-n2-v2
+# N2 — la commande validée : le canal avec RoPE, et le témoin 3,09 qui ne doit pas bouger
+> `5891ef8a` · **Verdict** : la mesure **2,79** est celle du couple **RoPE + canal**, rejouée
+=== coordination-s-v2
+# S — la page `/` ne sert pas la v7, le service ne tourne pas, et les 11 verdicts sont committés
+> · **Sous-module `tools/structures`** : `389b99f` · **Verdict** : les **11 verdicts**
+=== gold-reel-50
+# R0.7 / B13 — le gold réel étendu : 50 phrases que l'heuristique rate, et ce qu'elles disent
+> **Date** : 2026-11-15 · **HEAD mesuré** : `f926b5bc` · **Verdict** : ✅ **le gold réel n'est pas un
+=== protocole-date
+# B1 — le protocole Panini à date contrôlée : 60 paires, trois strates, et les 26 signatures qui manquent
+> note 4A · **Date** : 2026-11-15 · **HEAD mesuré** : `f926b5bc` · **Verdict** : ✅ **le protocole est
+=== atomes-prediction
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui ; POS, syntagmes et attachement, non
+> **Verdict** : ❌ **non, pas de façon robuste** — sur les **28 œuvres propres** (parmi 44 signatures), les
+=== cic-v2
+# B3 — Corpus d'or CIC v2 : le type de Bruijn vérifié, le sha256 rejoué deux fois
+> **
+… [95 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in rapport-protocole-date rapport-atomes-prediction rapport-cic-v2 rapport-gold-reel-50; do echo \"=== $f\"; sed -n '1,20p' reports/$f.md | grep -vE \"^#|^>|^$\" | head -3 | cut -c1-200; done", "description": "Lire les chiffres … [7 caractères tronqués]`
+
+  ```
+=== rapport-protocole-date
+**En trois lignes.** (1) La suite de 4A n'est pas « 20 paires contemporaines de traditions
+différentes » à prendre dans les 44 signatures : le §334 n'en fournit **qu'une** dont les deux
+signatures soient déjà mesurées (`book_of_enoch` × `sibylline_oracles`). (2) On peut néanmoins
+=== rapport-atomes-prediction
+=== rapport-cic-v2
+=== rapport-gold-reel-50
+**En trois lignes.** (1) Le « gold 200+ » est **défini** : c'est le gold **linguistique** hand + reel
+(452 phrases, 2 480 tokens, 184 cibles d'attachement), pas le gold de pensée ; le libellé « 200+ »
+est **obsolète** et ambigu (T15). (2) On sélectionne **50 phrases** par un score déterministe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,16p' reports/rapport-atomes-prediction.md | cut -c1-200; echo \"=== CIC v2 :\"; sed -n '1,14p' reports/rapport-cic-v2.md | cut -c1-200", "description": "Lire B2 et B3"}`
+
+  ```
+# B2 — Les 14 atomes prédisent-ils les niveaux de Drave ? Le style de surface, oui ; POS, syntagmes et attachement, non
+
+> **Ligne de roadmap** : R0.7 (le bloc langue) / L · **Chantier** : Panini, B2 · **Date** : 2026-11-15
+> **Verdict** : ❌ **non, pas de façon robuste** — sur les **28 œuvres propres** (parmi 44 signatures), les
+> 14 atomes ne prédisent pas les trois niveaux du mandat : POS **R²_CV = −0,092** (p_col = 0,56),
+> syntagmes **−0,160** (p = 0,85), attachement **−0,092** (p = 0,67). Le seul signal nominal (POS,
+> **ρ = +0,176**, p = 0,029, **Holm 0,088**) ne survit pas au contrôle de date (**p_resid = 1,0**).
+> Sur les **36 mesurables**, le POS brut est prédit (**R² = +0,102**, p = 0,004 ; ρ = +0,280) et les
+> syntagmes (**+0,060**, p = 0,006), mais le signal tombe à **+0,010 / +0,014** sur les **34 sources
+> propres**, à **−0,080 / −0,204** sur les **26 œuvres ≥ 2 000 mots**, et le contrôle de date le retire
+> (**p_resid = 0,77 / 0,14**). Le dispositif n'est pas muet : il prédit l'**entropie des graphèmes**
+> (**+0,811**, p = 0,0005), la **longueur des mots** (**+0,657**), la **négation** (**+0,440**) et la
+> **part de verbes** (**+0,429**) ; mais la date explique **0,1
+… [1170 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nrows = \"\"\"| [`rapport-coordination-n2-v2.md`](rapport-coordination-n2-v2.md) | **N2** — la commande validée (`--rope --canal-dir`), le témoin  … [2527 caractères tronqués]`
+
+  ```
+3 fiches ajoutées
+§ 9 ajouté
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 04 h 40 HNE (nuit : tagger 95,75 %, base réelle 452, phase  … [939 caractères tronqués]`
+
+  ```
+état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [637 caractères tronqués]`

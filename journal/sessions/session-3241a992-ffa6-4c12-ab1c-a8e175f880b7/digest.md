@@ -2252,3 +2252,120 @@ M  tools/verificateur_cic.py
   ```
 
 - **bash** `{"command": "git commit -m \"B3 — LE CORPUS D'OR CIC V2 : 42/42 TYPES DE BRUJIN BIEN FORMÉS, 42/42 SHA256 PAR DEUX IMPLÉMENTATIONS, 36/36 PREUVES ET 42/42 TYPES ALTÉRÉS REJETÉS\" -m \"Le corpus portable (3 defs, 21 consts, 42 entrées) et ses 42 verdicts sont inchangés. Le vérificateur gagne trois co … [695 caractères tronqués]`
+
+  ```
+[s/v7 2067a6f0] B3 — LE CORPUS D'OR CIC V2 : 42/42 TYPES DE BRUJIN BIEN FORMÉS, 42/42 SHA256 PAR DEUX IMPLÉMENTATIONS, 36/36 PREUVES ET 42/42 TYPES ALTÉRÉS REJETÉS
+ 21 files changed, 4582 insertions(+), 75 deletions(-)
+ create mode 100644 journal/sessions/session-3241a992-ffa6-4c12-ab1c-a8e175f880b7/digest.md
+ create mode 100644 journal/sessions/session-3241a992-ffa6-4c12-ab1c-a8e175f880b7/rapport.md
+ create mode 100644 reports/cic-verificateur-v2.json
+ create mode 100644 reports/rapport-cic-v2.md
+ create mode 100644 tools/tests/test_verificateur_cic_v2.py
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40; echo '--- status'; git status --short | head -30", "description": "Inspect commit contents and status"}`
+
+  ```
+2067a6f0 B3 — LE CORPUS D'OR CIC V2 : 42/42 TYPES DE BRUJIN BIEN FORMÉS, 42/42 SHA256 PAR DEUX IMPLÉMENTATIONS, 36/36 PREUVES ET 42/42 TYPES ALTÉRÉS REJETÉS
+ docs/pilotage/en-cours.md                          |    7 +-
+ docs/pilotage/roadmap.md                           |   27 +-
+ journal/2026-11-15/README.md                       |   22 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    5 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   11 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      |  183 ++
+ .../rapport.md                                     |   54 +-
+ .../digest.md                                      | 2254 ++++++++++++++++++++
+ .../rapport.md                                     |  175 ++
+ reports/cic-verificateur-v2.json                   |  944 ++++++++
+ reports/rapport-cic-v2.md  
+… [822 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py", "description": "Final docs review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 741 fiche(s) · 835 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "bash tools/porte-tableaux.sh", "description": "Final table/link gate", "timeoutMs": 180000}`
+
+  ```
+✅ 1813 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4358 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py && python3 tools/verifie_journal.py && python3 tools/taille_documents.py 2>&1 | tail -4", "description": "Final state/budget checks", "timeoutMs": 180000}`
+
+  ```
+en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 47 jour(s) · 200 session(s) · 2569 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  avertissements :
+     · 55 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %s' && echo '---' && python3 tools/verificateur_cic.py | tail -8", "description": "Final commit and verifier summary", "timeoutMs": 120000}`
+
+  ```
+2067a6f0 B3 — LE CORPUS D'OR CIC V2 : 42/42 TYPES DE BRUJIN BIEN FORMÉS, 42/42 SHA256 PAR DEUX IMPLÉMENTATIONS, 36/36 PREUVES ET 42/42 TYPES ALTÉRÉS REJETÉS
+---
+Type de Bruijn : 42/42 types clos et bien formés (42/42 preuves closes)
+sha256 indépendant : pass (corpus ok, 42/42 couples, 24/24 termes)
+Contrôles négatifs :
+  octet altéré (36 preuves acceptées) : 36/36 rejetés, 0 accepté(s) — pass
+  type altéré (42 entrées) : 42/42 rejetés, 36 type(s) invalide(s) — pass
+  exhaustif eq(2,2) : 1020/1020 rejetés, 0 accepté(s) — pass
+  non-trivialité : accepte-tout 36/42, rejette-tout 6/42
+Durée : 1.101 s — VERDICT PASS
+  ```
+
+### 🤖 Assistant
+
+**B3 terminée et committée** — `2067a6f0`.
+
+## Ce qui a été ajouté au vérificateur
+
+**1. Vérification du type de de Bruijn** (`tools/verificateur_cic.py`)
+- portée purement structurelle : aucun `var i` hors des lieurs ouverts ;
+- bien-formedness : `[] ⊢ type : sort n` ;
+- une preuve n'est acceptée que si son type est clos et bien formé.
+
+**Résultat** : **42/42** types clos et bien formés (**38** en `sort 0`, **4** en `sort 1`), **42/42** preuves closes.
+
+**2. Seconde implémentation de SHA-256**
+- FIPS 180-4 réécrite dans le module, **sans `hashlib`** ;
+- **16** vecteurs (FIPS + longueurs de rembourrage) ;
+- rejeu du sha256 du fichier, des **42** couples `preuve || type` et des **24** termes de l'environnement ;
+- **0 écart** avec `hashlib` et avec les empreintes déclarées.
+
+**3. Contrôles négatifs étendus**
+- **36/36** preuves altérées rejetées ;
+- **42/42** types altérés rejetés — dont **36** types devenus invalides et **6** rejets par la preuve ;
+- **1 020/1 020** mutations de `eq(2,2)` rejetées ;
+- corpus corrompu (preuve **ou** type) refusé en code **1**.
+
+## Porte et tests
+`bash tools/porte-cic.sh` : ✅ verte
+- **21** tests J12.2 + **17** tests B3 = **38** cas.
+
+## Livrables
+- Fiche : [`reports/rapport-cic-v2.md`](reports/rapport-cic-v2.md)
+- JSON : [`reports/cic-verificateur-v2.json`](reports/cic-verificateur-v2.json)
+- Code : [`tools/verificateur_cic.py`](tools/verificateur_cic.py), [`tools/porte-cic.sh`](tools/porte-cic.sh), [`tools/tests/test_verificateur_cic_v2.py`](tools/tests/test_verificateur_cic_v2.py)
+- État et roadmap mis à jour (`docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`), récit dans `journal/2026-11-15/README.md`.
+
+Les modifications préexistantes hors B3 (autres rapports, `tools/chantier/plan.json`) n'ont pas été touchées.
+
