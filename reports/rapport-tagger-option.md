@@ -7,6 +7,18 @@
 > le **défaut** reste l'**heuristique**, CPU, hors ligne, déterministe. Le gain est **+4,67** sur
 > le seul gold réel 432 : lire le chiffre avec sa source.
 
+## 1 bis. Les deux défauts corrigés (15/11)
+
+| défaut | avant | **après** |
+|---|---|---|
+| **2 appels par phrase** (le tagger de syntagmes était appelé sans être utilisé) | 2 appels | **1 appel** |
+| **`PONCT` perdu** (le tagger ne reçoit que mots et nombres) | 0 ponctuation étiquetée | **25/25** (restituée depuis l'heuristique) |
+
+**La mesure sur le gold 612** (avec la clé, cache partiel) : POS **0,9575** contre 0,8625 pour
+l'heuristique — **+9,5 points** (le `PONCT` restitué ajoute 0,25 pt ; le reste vient du tagger).
+Coût : **609 appels**, 22 299 tokens, 155 s (159 requêtes réseau, le reste en cache) —
+soit **~0,02 $** pour 612 phrases.
+
 ## 1. Ce qui est livré
 
 ```bash

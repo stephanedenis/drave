@@ -167,6 +167,13 @@ class _CascadeTagger:
         annotation = self.cascade.analyser(texte, langue, contexte)
         if not annotation.refus:
             annotation.refus = self.compose.analyser(texte, langue, contexte).refus
+        # le tagger ne reçoit que mots et nombres : la **ponctuation** est restituée depuis
+        # l'heuristique (sinon `PONCT` disparaît du POS de l'option).
+        deja = {(e.debut, e.fin) for e in annotation.etiquettes if e.niveau == "pos"}
+        for e in self.h.analyser(texte, langue, contexte).etiquettes:
+            if e.niveau == "pos" and (e.debut, e.fin) not in deja:
+                annotation.etiquettes.append(e)
+                annotation.etiquettes.sort(key=lambda x: (x.debut, x.fin, x.niveau))
         return annotation
 
 
@@ -177,12 +184,13 @@ def _cascade_tagger(transport, partition: str = "alternative"):
     POS valide, sans réseau. La fusion ne force que le **POS** au neuronal ; les syntagmes,
     rôles et attachements restent à l'heuristique (le neuronal n'en rend pas).
     """
+    # **un seul** tagger : le POS. Le tagger de syntagmes du composite était appelé et sa
+    # sortie **n'était pas utilisée** par la fusion (le niveau syntagme reste à l'heuristique) :
+    # le retirer divise le coût par deux (2 appels → 1 par phrase).
     pos = bl.NeuronalLLMPOS(MODELE_TAGGER, transport=transport)
-    chunks = bl.NeuronalLLMChunks(MODELE_TAGGER, transport=transport)
-    compose = bl.NeuronalLLMCompose(pos, chunks)
-    cascade = bl.Cascade(bl.Heuristique(partition=partition), compose, seuil=SEUIL_TAGGER,
+    cascade = bl.Cascade(bl.Heuristique(partition=partition), pos, seuil=SEUIL_TAGGER,
                          priorite_syntagme="confiance", priorite_par_niveau=PRIORITE_TAGGER)
-    return _CascadeTagger(cascade, compose)
+    return _CascadeTagger(cascade, pos)
 
 
 def _construire_tagger(partition: str = "alternative"):

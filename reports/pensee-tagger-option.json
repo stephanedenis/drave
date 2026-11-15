@@ -168,5 +168,17 @@
   "la confiance déclarée du POS passe de 0,95 (heuristique) à 0,60 (tagger) : la couverture affichée baisse, la justesse monte",
   "le gain du 612 est mesuré sur le gold vivant ; le gold réel seul (432) ne vaut que +4,67",
   "aucun test ne fait de réseau : le chemin API réel est couvert par la mesure 20 phrases et par le harnais, pas par la porte"
- ]
+ ],
+ "apres_15_11": {
+  "appels_par_phrase": 1,
+  "ponct": "25/25",
+  "pos_612": 0.9575,
+  "delta": 0.095,
+  "cout": {
+   "appels": 609,
+   "tokens": 22299,
+   "latence_s": 155.636,
+   "requetes": 159
+  }
+ }
 }

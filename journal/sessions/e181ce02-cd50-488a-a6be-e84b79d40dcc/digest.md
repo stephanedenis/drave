@@ -63199,3 +63199,256 @@ fiche + JSON
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\n# doc produit : la base réelle\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"### 3.7 Le tagger en option — `--tagger`\"\"\",\"\"\"### 3.6 bis La base honnête — `-- … [2001 caractères tronqués]`
+
+  ```
+doc + état
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · fraîcheur : en-cours.md dit 2026-11-15, le dernier commit date du 2026-11-14
+ create mode 100644 reports/rapport-base-reelle.md
+COMMIT OK 1
+ce7241d5 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 20 TESTS
+   34c0fb0b..ce7241d5  s/v7 -> s/v7
+   34c0fb0b..ce7241d5  master -> master
+dim 15 nov 2026 01:33:53 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def _construire_tagger\" -A 30 tools/drave.py | head -34; grep -n \"class NeuronalLLMPOS\" -A 3 tools/bloc_linguistique.py | head -4; sed -n \"$(grep -n 'class NeuronalLLMPOS' tools/bloc_linguistique.py | cut -d: -f1),+3p\" … [156 caractères tronqués]`
+
+  ```
+188:def _construire_tagger(partition: str = "alternative"):
+189-    """Rend (cascade, stats) ; lève `CleTaggerAbsente` si la clé manque (et ne l'affiche pas)."""
+190-    stats = {"appels": 0, "requetes": 0, "cache": 0, "tokens": 0, "latence_s": 0.0,
+191-             "modeles": {}}
+192-    client = _client_tagger()
+193-    return _cascade_tagger(_transport_tagger(client, stats), partition=partition), stats
+194-
+195-
+196-def _cout_tagger(stats: dict) -> dict:
+197-    """Le coût d'une exécution, tel qu'il va dans un rapport (`evaluer --json`)."""
+198-    return {"modele": MODELE_TAGGER, "appels": stats["appels"],
+199-            "requetes": stats["requetes"], "cache": stats["cache"],
+200-            "tokens": stats["tokens"], "latence_s": round(stats["latence_s"], 3),
+201-            "modeles_renvoyes": dict(stats["modeles"])}
+202-
+203-
+204-def _ligne_tagger(stats: dict) -> str:
+205-    """Une ligne de coût pour l'affichage et la stderr ; pas de clé, pas d'horodatage."""
+206-    return (f"modèle={MODELE_TAGGER} · appels={stats['appels']} "
+207-            f"· réseau={stats['requetes']} · cache={stats['cache']} "
+208-            f"· tokens={stats['tokens']} · latence={stats['latence_s'
+… [1504 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '2026,2060p' tools/bloc_linguistique.py | head -30; grep -n \"def _cascade_tagger\" -A 20 tools/drave.py | head -22", "description": "Voir NeuronalLLMPOS.analyser et le câblage"}`
+
+  ```
+def analyser(self, texte: str, langue: str | None = None,
+                 contexte: str | None = None) -> Annotation:
+        t0 = time.perf_counter()
+        script = detecter_script(texte)
+        lg = langue or "und"
+        if not texte.strip():
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        cle = (texte, langue)
+        if self.cache and cle in self._cache:
+            return copy.deepcopy(self._cache[cle])
+        tokens = self._tokens(texte)
+        if not tokens:
+            return Annotation(texte=texte, langue=lg, script=script, refus="vide", source=self.nom)
+        noms = [t for _, _, t in tokens]
+        grammaire = grammaire_pos(len(noms))
+        max_jetons = self.max_jetons or max(32, 6 * len(noms))
+        try:
+            with self._verrou:
+                self.appels += 1
+            sortie = self.transport(self._invite(noms), grammaire, max_jetons)
+            debut, fin = sortie.find("{"), sortie.rfind("}")
+            if debut < 0 or fin <= debut:
+                raise ValueError(f"pas de JSON : {sortie[:120]!r}")
+            pos = json.loads(sortie[debut:fin + 1]).get("pos")
+            if not isin
+… [1620 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class _CascadeTagger\" -A 25 tools/drave.py | head -28", "description": "Voir le wrapper du cascade"}`
+
+  ```
+149:class _CascadeTagger:
+150-    """La cascade du tagger, avec le **refus** du neuronal reporté sur l'annotation fusionnée.
+151-
+152-    `bl.Cascade`/`_fusion` ne recopie pas `refus` : sans ce relais, un tagger qui échoue
+153-    rendrait une annotation muette (POS absents, `refus` vide). Le composite est rappelé après
+154-    la fusion ; ses taggers ont un cache, donc **aucun appel réseau supplémentaire**.
+155-    """
+156-
+157-    nom = "cascade"
+158-
+159-    def __init__(self, cascade, compose):
+160-        self.cascade = cascade
+161-        self.compose = compose
+162-        self.h = cascade.h
+163-        self.n = cascade.n
+164-
+165-    def analyser(self, texte: str, langue: str | None = None,
+166-                 contexte: str | None = None) -> bl.Annotation:
+167-        annotation = self.cascade.analyser(texte, langue, contexte)
+168-        if not annotation.refus:
+169-            annotation.refus = self.compose.analyser(texte, langue, contexte).refus
+170-        return annotation
+171-
+172-
+173-def _cascade_tagger(transport, partition: str = "alternative"):
+174-    """Le câblage mesuré : tagger POS + syntagmes → compose → cascade à 0,6.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) un seul tagger : le POS (le chunks n'est pas utilisé par la fusion)\nt=t.replace('''    pos = bl.NeuronalLLMPOS(MODELE_TAGGER, transport=transp … [2565 caractères tronqués]`
+
+  ```
+1 appel + PONCT
+syntaxe OK
+drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
+langue=fr script=Latn source=cascade · 33 étiquettes · unités sémantiques=3 (48.0% du texte)
+POS  Le/DET chat/NOUN dort/VERB sur/PREP le/DET toit/NOUN ./PONCT
+SYNTAGMES
+  GN   [0:7]    Le chat      rôle=agent     → dort
+  GV   [8:12]   dort         rôle=predicat  → chat
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/drave.py analyser \"Le chat dort.\" --tagger 2>&1 | tail -2; timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | tail -4; timeout 300 python3 tools/tests/test_produit.py 2>&1 | tail -2", "description": … [54 caractères tronqués]`
+
+  ```
+phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70
+TAGGER API  modèle=deepseek-chat · appels=1 · réseau=0 · cache=1 · tokens=0 · latence=0.0 s
+----------------------------------------------------------------------
+Ran 14 tests in 2.164s
+
+FAILED (failures=5)
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | grep -E \"FAIL:|AssertionError\" | head -8; grep -n \"appels\\|PONCT\\|== 2\" tools/tests/test_tagger_api.py | head -10", "description": "Voir les échecs des tests"}`
+
+  ```
+FAIL: test_cache_par_texte (__main__.TestCascadeTagger.test_cache_par_texte)
+AssertionError: 1 != 2
+FAIL: test_cascade_remplace_les_pos (__main__.TestCascadeTagger.test_cascade_remplace_les_pos)
+AssertionError: {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV', (12, 13): 'PONCT'} != {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV'}
+FAIL: test_analyser_tagger_json (__main__.TestCliAvecTransportFactice.test_analyser_tagger_json)
+AssertionError: {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV', (12, 13): 'PONCT'} != {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV'}
+FAIL: test_analyser_tagger_lisible (__main__.TestCliAvecTransportFactice.test_analyser_tagger_lisible)
+AssertionError: 1 != 2
+108:        # reçoit que les mots et les nombres : la ponctuation (PONCT) n'est pas rendue.
+110:                       if classe != "PONCT"}
+149:        compteur = {"appels": 0}
+152:            compteur["appels"] += 1
+159:        self.assertEqual(compteur["appels"], 2)
+161:        self.assertEqual(cascade.n.pos.appels, 1)
+162:        self.assertEqual(cascade.n.chunks.appels, 1)
+308:        self.assertEqual(donnees["tagger"]["cout"]["appels"], 4)  # 2 phrases × 2 taggers
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '100,115p;145,165p;300,312p' tools/tests/test_tagger_api.py", "description": "Lire les tests à corriger"}`
+
+  ```
+def test_cascade_remplace_les_pos(self) -> None:
+        cascade = drave._cascade_tagger(transport_factice)
+        annotation = cascade.analyser(TEXTE, "fr")
+        self.assertEqual(annotation.source, "cascade")
+        self.assertEqual(_pos(annotation),
+                         {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV"})
+        # l'heuristique, elle, dit DET/NOUN/VERB : la substitution est réelle. Le tagger ne
+        # reçoit que les mots et les nombres : la ponctuation (PONCT) n'est pas rendue.
+        heuristique = {span: classe for span, classe in _pos(bl.Heuristique().analyser(TEXTE, "fr")).items()
+                       if classe != "PONCT"}
+        self.assertEqual(heuristique, {(0, 2): "DET", (3, 7): "NOUN", (8, 12): "VERB"})
+        # les syntagmes restent ceux de l'heuristique : rôle et cible conservés
+        syntagmes = {(e.type, e.debut, e.fin): e for e in annotation.etiquettes
+                     if e.niveau == "syntagme"}
+        self.assertIn(("GN", 0, 7), syntagmes)
+            for cle in ("niveau", "type", "valeur", "debut", "fin", "source", "confiance"):
+                self.assertIn(cle, etiquette)
+
+    def test_cache_par_texte(self) -> None:
+        c
+… [1519 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_tagger_api.py'); t=p.read_text()\nR=[\n# 1) le PONCT est restitué\n('''        self.assertEqual(_pos(annotation),\n                         {(0, 2): \"VERB\", (3, 7): … [1882 caractères tronqués]`
+
+  ```
+4 / 4
+----------------------------------------------------------------------
+Ran 14 tests in 2.246s
+
+FAILED (failures=3, errors=1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/tests/test_tagger_api.py 2>&1 | grep -E \"FAIL:|ERROR:|AssertionError|AttributeError\" | head -8", "description": "Voir les échecs restants"}`
+
+  ```
+ERROR: test_cache_par_texte (__main__.TestCascadeTagger.test_cache_par_texte)
+AttributeError: 'NeuronalLLMPOS' object has no attribute 'pos'
+FAIL: test_analyser_tagger_json (__main__.TestCliAvecTransportFactice.test_analyser_tagger_json)
+AssertionError: {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV', (12, 13): 'PONCT'} != {(0, 2): 'VERB', (3, 7): 'DET', (8, 12): 'ADV'}
+FAIL: test_analyser_tagger_lisible (__main__.TestCliAvecTransportFactice.test_analyser_tagger_lisible)
+AssertionError: 1 != 2
+FAIL: test_evaluer_tagger (__main__.TestCliAvecTransportFactice.test_evaluer_tagger)
+AssertionError: 34 != 68
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pos.appels\\|, 2)\\|== 2\\|68\" tools/tests/test_tagger_api.py | head -10; sed -n '185,230p' tools/tests/test_tagger_api.py | grep -n \"VERB\\|ADV\\|PONCT\" | head -6", "description": "Trouver les assertions restantes"}`
+
+  ```
+106:                         {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV", (12, 13): "PONCT"})
+111:        self.assertEqual(heuristique, {(0, 2): "DET", (3, 7): "NOUN", (8, 12): "VERB"})
+125:        self.assertIn(donnees["version"], (1, 2))
+132:                   for v in (1, 2)}
+161:        self.assertEqual(cascade.n.pos.appels, 1)
+280:        self.assertEqual(_pos_map(donnees), {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV"})
+283:        self.assertEqual(self.client.demandes, 2)
+291:        self.assertEqual(self.client.demandes, 2)
+307:        self.assertEqual(donnees["tagger"]["cout"]["appels"], 2)  # 2 phrases × 1 tagger
+308:        self.assertEqual(donnees["tagger"]["cout"]["requetes"], 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_tagger_api.py'); t=p.read_text()\nR=[\n('self.assertEqual(cascade.n.pos.appels, 1)', 'self.assertEqual(cascade.n.appels, 1)'),\n('self.assertEqual(_pos_map(donnees),  … [681 caractères tronqués]`
+
+  ```
+4 / 4
+----------------------------------------------------------------------
+Ran 14 tests in 2.201s
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 python3 tools/tests/test_produit.py 2>&1 | tail -2; echo \"=== mesure 20 phrases (avec clé) :\"; DEEPSEEK_API_KEY=\"$(cat ~/.config/drave/deepseek.key)\" timeout 600 python3 tools/drave.py evaluer --tagger --json 2>/dev/n … [313 caractères tronqués]`
+
+  ```
+OK
+=== mesure 20 phrases (avec clé) :
+POS heuristique 0.8625 | tagger {'exactitude': 0.9575, 'exactitude_ferme': 0.9366, 'exactitude_ouvert': 0.9773, 'tokens': 3179, 'confusions': {'ADJ': {'ADJ': 131, 'NOUN': 3}, 'ADV': {'ADV': 134, 'NOUN': 3, 'ADJ': 3, '?': 1}, 'AUX': {'AUX': 122, '?': 3, 'VERB': 3}, 'CONJ': {'CONJ': 70, 'PRON': 7, '?': 13, 'INTJ': 2, 'PREP': 2, 'NOUN': 3, 'ADV': 1}, 'DET': {'DET': 578, '?': 2, 'PRON': 5, 'NOUN': 3}, 'NOUN': {'NOUN': 678, 'ADJ': 1, '?': 1, 'PRON': 2}, 'NUM': {'NUM': 2}, 'PONCT': {'PONCT': 25}, 'PREP': {'PREP': 107, 'DET': 6, 'CONJ': 1}, 'PRON': {'PRON': 435, 'NOUN': 10, '?': 30}, 'VERB': {'VERB': 762, '?': 16, 'AUX': 7, 'NOUN': 5, 'ADJ': 2}}} | delta 0.095
+coût {'modele': 'deepseek-chat', 'appels': 609, 'requetes': 159, 'cache': 450, 'tokens': 22299, 'latence_s': 155.636, 'modeles_renvoyes': {'deepseek-flash': 609}}
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux défauts corrigés : **1 appel** et **PONCT restitué** → le tagger passe à **95,75 %** (+9,5)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-tagger-option.md'); t=p.read_text()\nt=t.replace(\"\"\"## 1. Ce qui est livré\"\"\",\"\"\"## 1 bis. Les deux défauts corrigés (15/11)\n\n| défaut | avant | **après** | … [2604 caractères tronqués]`
+
+  ```
+fiche + JSON
+doc
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+     git add docs/pilotage/en-cours.md
+ce7241d5 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 20 TESTS
+Everything up-to-date
+Everything up-to-date
+dim 15 nov 2026 01:39:36 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 01 h 40 HNE (tagger : 1 appel, PONCT, 95,75 %)**\\n\", t, c … [1041 caractères tronqués]`

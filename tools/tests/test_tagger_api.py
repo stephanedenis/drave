@@ -103,9 +103,9 @@ class TestCascadeTagger(unittest.TestCase):
         annotation = cascade.analyser(TEXTE, "fr")
         self.assertEqual(annotation.source, "cascade")
         self.assertEqual(_pos(annotation),
-                         {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV"})
+                         {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV", (12, 13): "PONCT"})
         # l'heuristique, elle, dit DET/NOUN/VERB : la substitution est réelle. Le tagger ne
-        # reçoit que les mots et les nombres : la ponctuation (PONCT) n'est pas rendue.
+        # reçoit que les mots et les nombres ; le PONCT est restitué depuis l'heuristique.
         heuristique = {span: classe for span, classe in _pos(bl.Heuristique().analyser(TEXTE, "fr")).items()
                        if classe != "PONCT"}
         self.assertEqual(heuristique, {(0, 2): "DET", (3, 7): "NOUN", (8, 12): "VERB"})
@@ -155,11 +155,10 @@ class TestCascadeTagger(unittest.TestCase):
         cascade = drave._cascade_tagger(transport)
         premier = cascade.analyser(TEXTE, "fr")
         second = cascade.analyser(TEXTE, "fr")
-        # 1 appel POS + 1 appel BIO ; la seconde analyse est servie par le cache des taggers
-        self.assertEqual(compteur["appels"], 2)
+        # **un seul** appel POS ; la seconde analyse est servie par le cache du tagger
+        self.assertEqual(compteur["appels"], 1)
         self.assertEqual(premier.json(), second.json())
-        self.assertEqual(cascade.n.pos.appels, 1)
-        self.assertEqual(cascade.n.chunks.appels, 1)
+        self.assertEqual(cascade.n.appels, 1)
 
     def test_transport_invalide_ne_fait_pas_planter(self) -> None:
         """Un tagger qui rend autre chose qu'un JSON est un refus, pas une exception."""
@@ -278,10 +277,10 @@ class TestCliAvecTransportFactice(unittest.TestCase):
         code, sortie, erreur = self._lancer("analyser", TEXTE, "--tagger", "--json")
         self.assertEqual(code, 0, erreur)
         donnees = json.loads(sortie)
-        self.assertEqual(_pos_map(donnees), {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV"})
+        self.assertEqual(_pos_map(donnees), {(0, 2): "VERB", (3, 7): "DET", (8, 12): "ADV", (12, 13): "PONCT"})
         self.assertEqual(donnees["source"], "cascade")
         self.assertIn("TAGGER API", erreur)
-        self.assertEqual(self.client.demandes, 2)
+        self.assertEqual(self.client.demandes, 1)
 
     def test_analyser_tagger_lisible(self) -> None:
         code, sortie, erreur = self._lancer("analyser", TEXTE, "--tagger")
@@ -289,7 +288,7 @@ class TestCliAvecTransportFactice(unittest.TestCase):
         self.assertIn("analyse cascade POS (tagger API DeepSeek, réseau)", sortie)
         self.assertIn("TAGGER API", sortie)
         self.assertIn("Le/VERB chat/DET dort/ADV", sortie)
-        self.assertEqual(self.client.demandes, 2)
+        self.assertEqual(self.client.demandes, 1)
 
     def test_evaluer_tagger(self) -> None:
         evaluateur = drave._module_evaluation()
@@ -305,9 +304,9 @@ class TestCliAvecTransportFactice(unittest.TestCase):
         donnees = json.loads(sortie)
         self.assertIn("tagger", donnees)
         self.assertIn("heuristique", donnees)  # la comparaison est toujours publiée
-        self.assertEqual(donnees["tagger"]["cout"]["appels"], 4)  # 2 phrases × 2 taggers
-        self.assertEqual(donnees["tagger"]["cout"]["requetes"], 4)
-        self.assertEqual(donnees["tagger"]["cout"]["tokens"], 68)
+        self.assertEqual(donnees["tagger"]["cout"]["appels"], 2)  # 2 phrases × 1 tagger
+        self.assertEqual(donnees["tagger"]["cout"]["requetes"], 2)
+        self.assertEqual(donnees["tagger"]["cout"]["tokens"], 34)
         self.assertEqual(donnees["tagger"]["refus"], 0)
         self.assertAlmostEqual(donnees["tagger"]["delta_pos"],
                                donnees["tagger"]["pos"]["exactitude"]
