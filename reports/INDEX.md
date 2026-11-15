@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **751 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **754 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -397,8 +397,10 @@
 | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
 | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
 | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
+| [rapport-or-roles-protocole.md](rapport-or-roles-protocole.md) | J4 — L'or de rôles : sept champs, deux codeurs, 144 rôles S, un or permuté |
 | [rapport-outillage-index.md](rapport-outillage-index.md) | B13 — l'outillage repris : `index_reports` a une aide, et l'index passe de 625 à 677 fiches |
 | [rapport-p0-flux.md](rapport-p0-flux.md) | P0 — Le harnais de flux : compter ce qu'on paie, par provenance |
+| [rapport-page-s-mesure.md](rapport-page-s-mesure.md) | La page `/` de S : 369/0 contre 359/99 — la recette, et pourquoi « 0 » n'est pas « zéro verdict » |
 | [rapport-panini-334.md](rapport-panini-334.md) | J12.1 — Le §334 et les 44 œuvres : le retrieval et la prédiction de l'époque vs la filiation |
 | [rapport-panini-manifeste.md](rapport-panini-manifeste.md) | W4 — Panini : le manifeste des 26 signatures V14 et le rejeu disponible |
 | [rapport-pannes-nommees.md](rapport-pannes-nommees.md) | C11 — la panne du pair est nommée au pas et en octets |
@@ -736,6 +738,7 @@
 | [rapport-tagger-defaut.md](rapport-tagger-defaut.md) | W3 — la matrice du tagger : le défaut reste hors ligne (code 0), `--tagger` est la seule porte qui peut sortir 4 |
 | [rapport-tagger-erreurs.md](rapport-tagger-erreurs.md) | E2 — les cas d'erreur de `--tagger` : clé refusée = code 4, réseau et refus du modèle = repli heuristique |
 | [rapport-tagger-h50.md](rapport-tagger-h50.md) | W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50 ; il gagne sur les deux, donc la règle ne le rejette pas |
+| [rapport-tagger-lot.md](rapport-tagger-lot.md) | X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud |
 | [rapport-tagger-option.md](rapport-tagger-option.md) | R0.7 / 1A — le tagger POS en option : +8,57 pts sur 20 phrases, +8,49 sur le gold 612 ; le défaut reste hors ligne |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |
