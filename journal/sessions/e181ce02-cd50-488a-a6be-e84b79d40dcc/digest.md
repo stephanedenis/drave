@@ -64734,3 +64734,14 @@ dim 15 nov 2026 07:30:20 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**att. 238/239**\", \"**238/239**\")\nt=t.replace(\" ; **restitu\", \" ; **restit\").replace(\"**restit v1 (canonique 46/46 … [512 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+ 7 files changed, 29 insertions(+), 13 deletions(-)
+cf2d1fb1 ÉTAT — T0 DANS LE BUDGET
+   cd4d1060..cf2d1fb1  s/v7 -> s/v7
+   cd4d1060..cf2d1fb1  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**B13 : 183/183, F1 0,7902, 238/239, schéma v2, restitution v1, produit (J11)**\", \"**B13 : 183/183, F1 0,7902, 238/239, s … [502 caractères tronqués]`

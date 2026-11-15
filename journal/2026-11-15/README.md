@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **1 session(s)** · **6 thème(s)**
+**23 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 4 | [distribue.md](distribue.md) |
+| distribue | 5 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 350.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 350.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -50,6 +50,7 @@
 | 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
 | 07:10 | `7ee92dd9` | JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18) |
 | 07:27 | `cd4d1060` | FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE JOURNAL À JOUR |
+| 07:30 | `cf2d1fb1` | ÉTAT — T0 DANS LE BUDGET |
 
 ## Le récit de la journée (écrit à la main)
 

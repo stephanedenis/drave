@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 350.8 h |
+| Durée | 350.9 h |
 | Tours | 198 |
-| Messages | 3905 |
-| Appels d'outils | 3480 |
+| Messages | 3906 |
+| Appels d'outils | 3481 |
 | Fichiers touchés | 25 |
-| Commandes | 2889 |
+| Commandes | 2890 |
 | Sous-agents | 43 |
-| Commits | 469 |
+| Commits | 470 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*121 appels d'outils.* Actions notables :
+*122 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 83 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2849 autres
+- … et 2850 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11388,4 +11388,5 @@ Je commence.
 - BILAN DE LA SEMAINE — LE PRODUIT (F1 0,7902, 238/239, TAGGER 95,75), PANINI BORNÉ (DEUX NÉGATIFS), LA COORDINATION, LE HARNAIS (38 LANCEMENTS) ; LES 5 DÉCISIONS
 - FINITION — E1-E2 (LA FAQ AU SOMMAIRE, LES CAS D'ERREUR DU TAGGER) ; LE PLAN ET LE JOURNAL À JOUR" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -c1-90; git 
 - ÉTAT — T0 DANS LE BUDGET" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1
+- ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
 
