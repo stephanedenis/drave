@@ -44,12 +44,12 @@ le produit en expose cinq, plus le coût et la trace. Le JSON est estampillé `s
 (`"drave.annotation"`) et `version` (`2`) ; en v2, `meta.partition` et `meta.alternative`
 documentent les syntagmes qui se chevauchent.
 
-| ce que vous demandez | ce que vous obtenez | mesure du 06/11 |
+| ce que vous demandez | ce que vous obtenez | mesure du 15/11 |
 |---|---|---|
 | **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
-| **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |
-| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6482** ; tête **0,7671** (vivant 612) |
-| **attachement** | par syntagme : `role`, `cible`, `candidats` | **235/236** exacts sur les spans prédits ; couverture **0,9874** |
+| **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,8625** (fermé 0,9373, ouvert 0,7918) ; **0,8891** sur le réel 452 ; **0,9575** avec `--tagger` |
+| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,7902** ; tête **0,9029** (vivant 612) ; **0,7906** sur le réel 452 |
+| **attachement** | par syntagme : `role`, `cible`, `candidats` | **238/239** exacts ; couverture **0,9958** ; exact sur span **1,0000** |
 | **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,9444** |
 | **unités sémantiques** | les spans candidats à la RSN et la fraction du texte | **55,4 %** du texte en moyenne |
 | **coût et trace** | octets, caractères, étiquettes, étapes | local, sans réseau |
@@ -68,10 +68,10 @@ aléatoire** dans les listes donne **42,14 %** de top-1 — et la **permutation 
 **1,997/220 = 0,908 %** ; les deux donnent p = 0. Un chiffre sans sa contre-épreuve n'est pas un
 résultat.
 
-**Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le
-banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
-même attachement (235/236, couverture 0,9874 ; le gelé : 231/232, 0,9707) mais pas le même F1 :
-**0,6511** sur le gelé, **0,6482** sur le vivant. Toujours lire la base avec le chiffre.
+**Les trois bases.** Le **vivant 612** (POS 0,8625, F1 **0,7902**, attachement 238/239), le
+**gelé 602** (0,7882, 234/239) et le **réel 452** (`--reel` : POS **0,8891**, F1 **0,7906**,
+attachement 99,46 %). Les chiffres de la fiche v12 (0,6511/0,6482, 235/236) sont **datés** : ils
+mesuraient le bloc avant la semaine du 07/11. Toujours lire la base avec le chiffre.
 
 ## 3. Comment l'utiliser — cinq exemples réels
 
@@ -439,11 +439,12 @@ paraphrase. Le produit rend des **étiquettes** et, avec `restituer`, la surface
 portent. Les résultats de traduction de la vitrine ([`README.md`](../../README.md)) sont une
 recherche sur un modèle externe ; ils ne sont pas dans ce produit.
 
-**2. Trois spans restent inatteignables.** Sur **239 cibles**, **235** sont attachées
-(couverture **0,9874**) ; **3** ne le sont pas : **1 REL, 2 SUB, 0 GP**. Elles sont
+**2. Un span reste inatteignable.** Sur **239 cibles**, **238** sont attachées (couverture
+**0,9958**) ; **1** ne l'est pas : `g017` (une convention du gold, déclarée inatteignable le
+14/11 — la règle coûtait deux autres spans). Elles sont
 **inatteignables sans corriger le gold ou le lexique** — quatre sont des cas réels nommés dans
 l'audit v10 (`r035`, `r255`, `r264`, `g017`), les autres viennent du gold synthétique, dont le
-lexique est disjoint. Conséquence : **235/236 (0,9958)** est l'exactitude **conditionnelle aux
+lexique est disjoint. Conséquence : **238/239 (0,9958)** est l'exactitude **conditionnelle aux
 spans prédits**, pas la couverture du langage. Lire les deux ensemble.
 
 **Le doublon REL de l'union.** Deux REL peuvent se chevaucher : la plus longue porte
@@ -456,7 +457,8 @@ une lecture unique (garder `union: null`, ou le segment qui en contient un autre
 `porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
 **sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
 pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
-**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;
+**0,6482**, tête **0,7709** contre **0,7671** — *mesure du 06/11, avant la convention des GV ;
+la porte et le banc ont bougé depuis*). Le produit par défaut reste l'heuristique ;
 `evaluer --tagger` mesure en plus la cascade **API** (**0,9475** sur 612, § 3.7), sans changer le
 défaut. La cascade avec le vrai tagger 7B local a été mesurée à **0,9415** en POS sur 180
 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit aujourd'hui : ce n'est

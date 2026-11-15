@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 347.8 h |
 | Tours | 198 |
-| Messages | 3849 |
-| Appels d'outils | 3429 |
+| Messages | 3857 |
+| Appels d'outils | 3437 |
 | Fichiers touchés | 25 |
-| Commandes | 2851 |
+| Commandes | 2859 |
 | Sous-agents | 43 |
-| Commits | 463 |
+| Commits | 464 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*70 appels d'outils.* Actions notables :
+*78 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 45 autres
+- … et 53 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2811 autres
+- … et 2819 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11382,4 +11382,5 @@ Je commence.
 - ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md; echo "EXIT=$?"; git log -1 --format='%h %s' | cut -c1-80
 - ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md 2>&1 | tail -3; git log -1 --format='%h %s' | cut -c1-70
 - PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD RÉEL 452), PANINI (PROTOCOLE À DATE CONTRÔLÉE, LES ATOMES NE PRÉDISENT PAS LES 
+- DOC PRODUIT — LA PASSE D'HONNÊTETÉ : LES TROIS BASES (612, 602, RÉEL 452), L'ATTACHEMENT 238/239, LE TAGGER 95,75, LES CHIFFRES DATÉS ANNOTÉS" 2>&1 | tail -2; g
 

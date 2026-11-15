@@ -64161,3 +64161,109 @@ est **obsolète** et ambigu (T15). (2) On sélectionne **50 phrases** par un sco
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [637 caractères tronqués]`
+
+  ```
+[s/v7 f1c6b506] PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD RÉEL 452), PANINI (PROTOCOLE À DATE CONTRÔLÉE, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX, CIC 42/42) ; 6 FICHES, SEPT. 9 DU PLAN
+ 15 files changed, 330 insertions(+), 31 deletions(-)
+f1c6b506 PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7; date", "description": "Pousser la phase 3", "timeoutMs": 60000 … [2 caractères tronqués]`
+
+  ```
+01b6db6e..f1c6b506  s/v7 -> s/v7
+   01b6db6e..f1c6b506  master -> master
+0
+dim 15 nov 2026 04:28:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"86,25|79,02|0,7902|612\" docs/produit/README.md | head -8 | cut -c1-160", "description": "Voir les chiffres du README produit"}`
+
+  ```
+17:> **06/11**, et l'`evaluer` du § 3.3 a été relancé le **14/11** (gold vivant 612, `--par-langue
+22:> candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
+30:| **chercheur du dépôt** | le banc des fiches : gold 612, 239 cibles, rejeu | les règles sont dessinées sur ce gold : lire la **couverture**, pas seulement l
+51:| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6482** ; tête **0,7671** (vivant 612) |
+61:**Comment on le sait.** Le banc est le **gold 612** : 20 phrases `hand`, 432 réelles, 160
+72:banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
+129:gold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement
+145:`--gold` mesure le gold gelé 602 (F1 78,82 %, POS 86,25 %). La commande sort **0** : elle ne
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,62p' docs/produit/README.md | cut -c1-170", "description": "Lire le tableau du produit"}`
+
+  ```
+## 2. Ce que le produit fait
+
+Une seule opération : `analyser(texte, langue)` → une **annotation**. Elle porte neuf niveaux ;
+le produit en expose cinq, plus le coût et la trace. Le JSON est estampillé `schema`
+(`"drave.annotation"`) et `version` (`2`) ; en v2, `meta.partition` et `meta.alternative`
+documentent les syntagmes qui se chevauchent.
+
+| ce que vous demandez | ce que vous obtenez | mesure du 06/11 |
+|---|---|---|
+| **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indi
+| **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |
+| **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,6482** ; tête **0,7671** (vivant 612) |
+| **attachement** | par syntagme : `role`, `cible`, `candidats` | **235/236** exacts sur les spans prédits ; couverture **0,9874** |
+| **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,
+| **unités sémantiques** | les spans candidats à la RSN et la fraction du 
+… [601 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nR=[\n(\"| **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,7581** (fermé **0,9004**, ouvert **0,6234**) |\",\n \"| **P … [1201 caractères tronqués]`
+
+  ```
+4 / 4
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"0,6482|0,7671|0,7581|235/236|0,9874|236/237|0,7535\" docs/produit/*.md | head -8 | cut -c1-150", "description": "Chercher les chiffres périmés"}`
+
+  ```
+docs/produit/README.md:73:même attachement (235/236, couverture 0,9874 ; le gelé : 231/232, 0,9707) mais pas le même F1 :
+docs/produit/README.md:74:**0,6511** sur le gelé, **0,6482** sur le vivant. Toujours lire la base avec le chiffre.
+docs/produit/README.md:443:(couverture **0,9874**) ; **3** ne le sont pas : **1 REL, 2 SUB, 0 GP**. Elles sont
+docs/produit/README.md:446:lexique est disjoint. Conséquence : **235/236 (0,9958)** est l'exactitude **conditionnelle aux
+docs/produit/README.md:457:**sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
+docs/produit/README.md:459:**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '68,76p;440,460p' docs/produit/README.md | cut -c1-180", "description": "Lire les passages périmés"}`
+
+  ```
+**1,997/220 = 0,908 %** ; les deux donnent p = 0. Un chiffre sans sa contre-épreuve n'est pas un
+résultat.
+
+**Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le
+banc vivant a **612** phrases (10 ajoutées après le gel, sans cible). Les deux bases donnent le
+même attachement (235/236, couverture 0,9874 ; le gelé : 231/232, 0,9707) mais pas le même F1 :
+**0,6511** sur le gelé, **0,6482** sur le vivant. Toujours lire la base avec le chiffre.
+
+## 3. Comment l'utiliser — cinq exemples réels
+recherche sur un modèle externe ; ils ne sont pas dans ce produit.
+
+**2. Trois spans restent inatteignables.** Sur **239 cibles**, **235** sont attachées
+(couverture **0,9874**) ; **3** ne le sont pas : **1 REL, 2 SUB, 0 GP**. Elles sont
+**inatteignables sans corriger le gold ou le lexique** — quatre sont des cas réels nommés dans
+l'audit v10 (`r035`, `r255`, `r264`, `g017`), les autres viennent du gold synthétique, dont le
+lexique est disjoint. Conséquence : **235/236 (0,9958)** est l'exactitude **conditionnelle aux
+spans prédits**, pas la couverture du langage. Lire les deux ensemble.
+
+**Le doublon REL de l'union.** Deux REL peuvent se chevaucher : la plus lo
+… [928 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"**Les deux bases.** Les chiffres publiés par la fiche v12 sont ceux du **gold gelé 602** ; le\nbanc vivant a **612** phras … [1917 caractères tronqués]`
+
+  ```
+passages à jour
+73:attachement 99,46 %). Les chiffres de la fiche v12 (0,6511/0,6482, 235/236) sont **datés** : ils
+460:**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nt=t.replace(\"\"\"**0,6482**, tête **0,7709** contre **0,7671**). Le produit par défaut reste l'heuristique ;\"\"\",\n\"\"\"**0,6482**, tête … [968 caractères tronqués]`

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 04 h 40 HNE (nuit : tagger 95,75 %, base réelle 452, phase C/B livrée)**
+**Mis à jour : 2026-11-15, 04 h 45 HNE (doc produit : les trois bases, 238/239, le tagger 95,75)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
