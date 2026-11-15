@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 10 h 50 HNE (W3 : la matrice du tagger)**
+**Mis à jour : 2026-11-15, 11 h 10 HNE (W4 : le manifeste Panini et le rejeu disponible)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -90,7 +90,7 @@
 - **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
 - **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut sans clé **code 0**, **0 socket** ; `--tagger` sans clé ou clé refusée **code 4** ; réseau coupé **code 0** + repli ; **1 000 phrases = 143 870 tokens / 0,031 $ hors pointe** ; **défaut hors ligne, opt-in, pas de `auto`** ; [W2](../../reports/rapport-tagger-h50.md), [W3](../../reports/rapport-tagger-defaut.md).
 - **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues (Glottolog **21/21**), **154/154** hors script au hasard, **V14 3/21** ; B2 **négatif** (niveaux non prédits) ; J7.1 famille **66,1 %** / sœur **26,1 %** (hasard 10,3/2,5), sœurs **0,619** vs **0,0445** (13,9×, p=0,002) ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [B2](../../reports/rapport-atomes-prediction.md), [familles](../../reports/rapport-retrieval-familles.md).
-- **Panini B1 — protocole à date contrôlée** : **60 paires** (20 G1, 20 G2, 20 G3), **59 textes**, **26 à signer** ; [fiche](../../reports/rapport-protocole-date.md), [JSON](../../reports/protocole-date.json).
+- **Panini B1 — protocole à date contrôlée** : **60 paires**, **59 textes**, **26 à signer** ; manifeste prêt, **27/60** paires, calibration **42/44** ; [W4](../../reports/rapport-panini-manifeste.md), [JSON W4](../../reports/panini-manifeste.json), [B1](../../reports/rapport-protocole-date.md).
 - **Panini J12.1–J12.2 + B3** : CIC **42/42** ; B3 **42/42** types de Bruijn, **42/42** empreintes par **deux** implémentations, **36/36** preuves et **42/42** types altérés rejetés ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **J5.1 / J10.1 / J13.1 / J14.1 — bilans et clôture** : F1 **0,7902**, chantier **20/21** ; **J13.1** **612/602** ; **J14.1** clôture **84/81/3** (tag `chantier-2026-11-14`) ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [tableau](../../reports/rapport-tableau-mesures.md), [clôture](../../reports/rapport-cloture-chantier.md).
 
@@ -102,7 +102,7 @@
 |---|---|---|
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **751** / **844** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **752** / **845** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 

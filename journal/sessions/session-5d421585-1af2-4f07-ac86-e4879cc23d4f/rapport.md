@@ -7,14 +7,14 @@
 | Identifiant | `session-5d421585-1af2-4f07-ac86-e4879cc23d4f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 10:44 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 25 |
-| Appels d'outils | 49 |
+| Messages | 101 |
+| Appels d'outils | 130 |
 | Fichiers touchés | 0 |
-| Commandes | 41 |
+| Commandes | 112 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W4 (J3 matin, la part du pilote) : le manifeste à envoyer à Panini — les **26 signatures manquantes** (la liste de … [310 caractères tronqués]
 
-*49 appels d'outils.* Actions notables :
+*130 appels d'outils.* Actions notables :
 
 - bash — List root and git state
 - grep
@@ -41,7 +41,7 @@
 - bash — Read replay implementation
 - bash — Check for existing manifest work
 - bash — Inspect Panini signatures and state
-- … et 31 autres
+- … et 103 autres
 
 ## 3. Travail accompli
 
@@ -92,7 +92,7 @@
 - **T1** Read corpus selection logic
 - **T1** Test Panini extractor on one work
 - **T1** Check for Panini venv
-- … et 1 autres
+- … et 72 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -115,12 +115,39 @@
 - **T1** `| [rapport-a83a-pont.md](rapport-a83a-pont.md) | A8.3a — `porte-pont` : le régime 1 % change la falaise |`
 - **T1** `| [rapport-a83d-lot-threads.md](rapport-a83d-lot-threads.md) | A8.3d — le lot n'est pas les threads : l'écart de 1,90 % survit à 1 thread |`
 - **T1** `"id": f"{groupe}-{rang:02d}",`
+- **T1** `49:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; `
+- **T1** `- **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues (Glottolog **21/21**), **154/154** hors script au hasard, **V14 3/21** ; B2 **négatif** (niveaux non prédits) ; J7.1 famille **6`
+- **T1** `- **N2 (nuit)** : la distillation tient-elle à 30 000 pas / 122 Mo ? → **non** à parité stricte (erratum) ; la repondération vaut **−0,05**.`
+- **T1** `- **R1 (nuit)** : 2 048 à 20 000 pas ? → **oui** : 2×10 000 pas finis (perte 0,9409 → 0,8965 ; PPL 2,614 → 2,4953).`
+- **T1** `sources acquises ne sont pas 102 URL (71 URL uniques). La loi H0 se reproduit (**R² = 0,909139** sur`
+- **T1** `contre null **−0,129**, p=0,335). Sur les 44 signatures, le retrieval brut donne **61,4 %** de même`
+- **T1** `tradition et **56,8 %** de voisins à ≤50 ans, mais les contrôles croisés ramènent la filiation à`
+- **T1** `**50,0 %** (p=0,0492, Holm 0,128) et l'époque à **53,8 %** (p=0,373) ; seule une petite prédiction`
+- **T1** `d'année intra-tradition survit (**R²=0,042**, p=0,0086, Holm 0,034). Le β époque **+0,138** de la v150`
+- **T1** `35:| **L — le bloc langue** | surface, heuristique CPU + neuronal, [contrat](../theorie/glossaire/entrees/contrat.md), cascade, pragmatique | 🔬 **R0.7** : 9 niveaux, **398 langues à 0,9687**, script 1`
+- **T1** `38:**État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`)** ; **`s065` réglé** (REL suivie d'un GV → le sujet`
+- **T1** `48:**J7.1** sépare la **sœur** de la **famille lointaine** : sur 532 textes Panini (445 langues, 1948), le top-1 est de la même famille **66,1 %** (hasard 10,3 %) et de la même branche **26,1 %** (has`
+- **T1** `193:   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du pla`
+- **T1** `211:[B1–B12] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `212:[B10.2bis] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `213:[B10.3] lasts 2 days and is 15% complete and is colored in #b03a2e`
+- **T1** `214:[B11.10] lasts 1 day and is 100% complete and is colored in #2e7d32`
+- **T1** `[still running after 60000ms; moved to background job bash-105]`
+- **T1** `[still running after 60000ms; moved to background job bash-112]`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : erreurs.append(f"{p['id']} : paire dupliquée {cle}")         vus.add(cle)         textes.add(a); textes.add(b)     if len(textes) != manifeste["composition"]["textes_distincts"]:         erreurs.appen
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module>   File "/home/stephane/Data13TB/stephane/GitHub/Panini/research/src/nipada/signing/analytical_projection.py", line 35,
 - **T1** : research/.venv .venv ./.venv/bin/python /usr/bin/python3 [exit code: 1]
+- **T1** : [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/panini_manifeste.py", line 559, in <module>     raise SystemExit(main())                      
+- **T1** : [stderr] Traceback (most recent call last):   File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/panini_manifeste.py", line 561, in <module>     raise SystemExit(main())                      
+
+## 6. Commits
+
+- SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE" -m "Le manifeste r
+- git add reports/rapport-panini-manifeste.md && git commit --amend --no-edit | tail -5; echo exit=${PIPESTATUS[0]}; git log --oneline -1
+- python3 - <<'PY' p='docs/pilotage/en-cours.md' s=open(p).read() s=s.replace('**Mis à jour : 2026-11-15, 11 h 05 HNE (W4 : le manifeste Panini et le rejeu dispon
 

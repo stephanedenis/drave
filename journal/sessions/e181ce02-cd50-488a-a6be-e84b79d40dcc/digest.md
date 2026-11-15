@@ -65241,3 +65241,24 @@ index 95bfd985..c8afdec5 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1496 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-15)
+ create mode 100644 reports/rapport-tagger-defaut.json
+ create mode 100644 reports/rapport-tagger-defaut.md
+be3f41ad SEMAINE 2 — W3 : LA MATRICE DU TAGGER (DÉFAUT HORS LIGNE CODE 0, CLÉ INVALIDE 4, 
+   3439cb0c..be3f41ad  s/v7 -> s/v7
+   3439cb0c..be3f41ad  master -> master
+dim 15 nov 2026 10:50:29 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre W4", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5152]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5152", "timeout_ms": 1000000, "wait": true}`
