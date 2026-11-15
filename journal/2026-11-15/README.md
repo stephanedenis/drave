@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**27 commits** · **1 session(s)** · **6 thème(s)**
+**28 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 5 | [distribue.md](distribue.md) |
 | docs | 8 | [docs.md](docs.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 352.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 352.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -55,6 +55,7 @@
 | 07:35 | `49011807` | ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE) |
 | 07:47 | `8cb0a926` | PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE, RESTITUTION V3, TAGGER PAR DÉFAUT ? |
 | 08:08 | `6b2208ee` | PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES |
+| 09:18 | `4dbeff45` | SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -94,4 +95,17 @@ aussi (**36** deviennent invalides, **6** restent bien formés mais la preuve ne
 **1**. La porte `tools/porte-cic.sh` et **21 + 17 = 38** tests rejouent le tout :
 [`reports/rapport-cic-v2.md`](../../reports/rapport-cic-v2.md) et
 [`reports/cic-verificateur-v2.json`](../../reports/cic-verificateur-v2.json).
+
+### W2 — le tagger sur 402/H50 : il gagne sur les deux, le fermé du 402 paie
+
+Le split de W1 (**402 / H50**) reçoit sa mesure : le tagger POS de l'API gagne **+4,45 pts** sur les
+**402** (0,9198 → 0,9643) et **+17,65** sur **H50** (0,6842 → 0,8607) ; le F1 et l'attachement du
+402 sont **inchangés**. La passe **API** paie **447 requêtes** et **65 029 tokens réseau** pour 452
+phrases (**0,982 s/phrase**) ; le **cache chaud après API** rejoue **0 réseau / 0 token** et redonne
+exactement les mêmes scores. La règle « une règle qui ne gagne que sur H50 est rejetée » **ne rejette
+pas** le tagger : il gagne sur le 402, pas seulement sur H50. La **réserve** est nommée : sur 402, le
+fermé perd **−1,55 pt** (PREP −8,43, CONJ −10,15) et le gain vient de l'ouvert (VERB +19,14, ADJ
++19,40) ; H50, lui, gagne **aussi** le fermé. La suite (W3) doit décider du défaut et, si possible,
+tester l'hybride fermé/ouvert.
+[`fiche`](../../reports/rapport-tagger-h50.md) · [`JSON`](../../reports/rapport-tagger-h50.json).
 <!-- /notes -->

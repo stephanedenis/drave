@@ -7,14 +7,14 @@
 | Identifiant | `session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 09:06 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 75 |
-| Appels d'outils | 91 |
+| Messages | 120 |
+| Appels d'outils | 139 |
 | Fichiers touchés | 0 |
-| Commandes | 85 |
+| Commandes | 129 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W2 (J2 matin) : le tagger sur le split — mesure `evaluer --tagger` sur les 402 (l'entraînement) et sur les 50 H50  … [365 caractères tronqués]
 
-*91 appels d'outils.* Actions notables :
+*139 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git status
 - bash — List reports and data directories
@@ -41,7 +41,7 @@
 - bash — Read evaluer_gold.py
 - bash — Read tagger 612 bench
 - bash — Read DeepSeek client and cache
-- … et 68 autres
+- … et 112 autres
 
 ## 3. Travail accompli
 
@@ -92,7 +92,7 @@
 - **T1** Fix key loading and rerun smoke test
 - **T1** Fix per-pass cache dir and rerun smoke
 - **T1** Inspect smoke JSON structure
-- … et 45 autres
+- … et 89 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -147,4 +147,27 @@
 - **T1** `| **total** | **17** | **14/17 = 82,35 %** | **16/17 = 94,12 %** | **+2 tokens** |`
 - **T1** `450:95,75 %** (**+9,5 pts**) ; sur le **réel 452**, **88,91 % → 95,00 %** (**+6,1 pts**) — le`
 - **T1** `[still running after 60000ms; moved to background job bash-71]`
+- **T1** `as à 0,944 contre 0,85** (corpus différents : +7,34 pts sur 180, +6,35 sur 432) ; **R1.2-1024 mesuré** (2,6256 à 1 000 o) ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — blo`
+- **T1** `8 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; la suite : **1 024 octets entraînés** ; **`rope2048`** **fini** (2`
+- **T1** `49:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; `
+- **T1** `64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902**, **1 span** ; **`s065`**, **`r035`**, **GV** réglés ; **restitution v1** (46/46) ; **J11.1–J11.4** ([exemples](../../repor`
+- **T1** `64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; **D1–D3**, **E1–E2** livrés ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), `
+- **T1** `- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; **D1–D3**, **E1–E2** livrés ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [er`
+- **T1** `R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ;`
+- **T1** `[still running after 60000ms; moved to background job bash-125]`
+- **T1** `[still running after 60000ms; moved to background job bash-127]`
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : #!/bin/bash # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait. # # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS # (`--attn-window` en r
+
+## 6. Commits
+
+- W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE 
+- ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto|verifie_etat" | grep -v grep; echo "---"; ls -lt .git/index.lock 2>/dev/nul
+- sleep 60; ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -1 --oneline 2>/dev/n
+- ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -1 --oneline 2>/dev/null; echo 
+- sleep 45; ps -ef | grep -E "git commit|pre-commit|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -2 --oneline 2>/dev/null; echo "---"; 
 

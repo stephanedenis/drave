@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 352.6 h |
+| Durée | 352.7 h |
 | Tours | 199 |
-| Messages | 3930 |
-| Appels d'outils | 3504 |
+| Messages | 3931 |
+| Appels d'outils | 3505 |
 | Fichiers touchés | 25 |
-| Commandes | 2908 |
+| Commandes | 2909 |
 | Sous-agents | 43 |
 | Commits | 473 |
 | Compactages de contexte | 9 |
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10707,6 +10707,7 @@ Je commence.
 - bash — Vérifier le commit de W1
 - bash — Voir les diffs des docs
 - bash — Committer W1
+- bash — Suivre W2
 
 **Synthèse produite :**
 
@@ -10832,7 +10833,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2868 autres
+- … et 2869 autres
 
 ## 4. Mesures et résultats marquants
 

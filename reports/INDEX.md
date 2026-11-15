@@ -731,6 +731,7 @@
 | [rapport-tableau-mesures.md](rapport-tableau-mesures.md) | J13.1 — la table des mesures : F1 0,7533 → 0,7902, attachement 236/237 → 238/238, base 612/602 |
 | [rapport-tableaux-casses.md](rapport-tableaux-casses.md) | Un tableau qui ne rend pas est un tableau qui n'existe pas — 17 lignes, 9 fichiers, et une porte |
 | [rapport-tagger-erreurs.md](rapport-tagger-erreurs.md) | E2 — les cas d'erreur de `--tagger` : clé refusée = code 4, réseau et refus du modèle = repli heuristique |
+| [rapport-tagger-h50.md](rapport-tagger-h50.md) | W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50, la règle ne le rejette pas ; réserve fermé 402 −1,55 |
 | [rapport-tagger-option.md](rapport-tagger-option.md) | R0.7 / 1A — le tagger POS en option : +8,57 pts sur 20 phrases, +8,49 sur le gold 612 ; le défaut reste hors ligne |
 | [rapport-tete-garantie.md](rapport-tete-garantie.md) | Rapport — restriction de tête GARANTIE : exacte, et sans gain |
 | [rapport-tete-restreinte.md](rapport-tete-restreinte.md) | Rapport — restreindre la tête de sortie : ce qui marche, ce qui ne marche pas |

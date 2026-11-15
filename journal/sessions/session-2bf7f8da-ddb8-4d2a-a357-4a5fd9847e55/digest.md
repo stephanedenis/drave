@@ -1813,3 +1813,766 @@ refus
 … [13522 caractères tronqués]
   ```
 
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/rapport-tagger-h50.json'))\np=d['passes']['api']\nfor nom in ['reste_402','h50','total','tirage']:\n    b=p['bases'][nom]\n    print('\\n===',nom)\n    for src in ['heuristique','tagger']:\n        conf=b[src]['pos']['confusions'] … [336 caractères tronqués]`
+
+  ```
+=== reste_402
+heuristique
+  DET    397/ 399 = 0.9950
+  PREP    83/  83 = 1.0000
+  CONJ    57/  69 = 0.8261
+  PRON   340/ 361 = 0.9418
+  ADV     71/  78 = 0.9103
+  AUX     99/ 103 = 0.9612
+  NOUN   458/ 462 = 0.9913
+  VERB   402/ 512 = 0.7852
+  ADJ     54/  67 = 0.8060
+  NUM      2/   2 = 1.0000
+  PONCT   21/  21 = 1.0000
+tagger
+  DET    394/ 399 = 0.9875
+  PREP    76/  83 = 0.9157
+  CONJ    50/  69 = 0.7246
+  PRON   340/ 361 = 0.9418
+  ADV     74/  78 = 0.9487
+  AUX     96/ 103 = 0.9320
+  NOUN   460/ 462 = 0.9957
+  VERB   500/ 512 = 0.9766
+  ADJ     67/  67 = 1.0000
+  NUM      2/   2 = 1.0000
+  PONCT   21/  21 = 1.0000
+
+=== h50
+heuristique
+  DET     44/  44 = 1.0000
+  PREP     7/   7 = 1.0000
+  CONJ     3/  14 = 0.2143
+  PRON    46/  71 = 0.6479
+  ADV     18/  21 = 0.8571
+  AUX     17/  22 = 0.7727
+  NOUN    44/  57 = 0.7719
+  VERB    27/  70 = 0.3857
+  ADJ     11/  13 = 0.8462
+  PONCT    4/   4 = 1.0000
+tagger
+  DET     43/  44 = 0.9773
+  PREP     6/   7 = 0.8571
+  CONJ     3/  14 = 0.2143
+  PRON    55/  71 = 0.7746
+  ADV     19/  21 = 0.9048
+  AUX     20/  22 = 0.9091
+  NOUN    57/  57 = 1.0000
+  VERB    58/  70 = 0.8286
+  ADJ     13/  13 = 1.0000
+  PONCT    4/   4 = 1.0000
+
+=== 
+… [1243 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, collections, sys, pathlib\nsys.path.insert(0,'.'); sys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nd=json.load(open('reports/rapport-gold-452.json'))\nh=set(d['split']['h50_ids'])\nphr=[]\nfor f in ['tools/tests/linguistique/gold.json','tools/t … [718 caractères tronqués]`
+
+  ```
+['r010', 'r423'] ('Tu', 'viens', 'demain')
+['r019', 'r186'] ('Le', 'vent', 'souffle', 'fort')
+['r030', 'r427'] ('You', 'come', 'tomorrow')
+['r051', 'r189'] ('La', 'voiture', 'roule', 'vite')
+['r336', 'r358'] ('Paul', 'sees', 'Marie', 'he', 'speaks', 'to', 'her')
+text dups:
+['r019', 'r186'] ('Le vent souffle fort.', 'fr')
+['r051', 'r189'] ('La voiture roule vite.', 'fr')
+['r336', 'r358'] ('Paul sees Marie; he speaks to her.', 'en')
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nphr={}\nfor f in ['tools/tests/linguistique/gold.json','tools/tests/linguistique/gold_reel.json']:\n    for p in json.load(open(f))['phrases']: phr[p['id']]=p['texte']\nfor i in ['r010','r423','r030','r427']:\n    print(i, repr(phr[i]))\nPY", "description" … [41 caractères tronqués]`
+
+  ```
+r010 'Tu viens demain ?'
+r423 'Tu viens demain.'
+r030 'You come tomorrow?'
+r427 'You come tomorrow.'
+  ```
+
+- **bash** `{"command": "cat > reports/rapport-tagger-h50.md <<'MD'\n# W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50 ; il gagne sur les deux, donc la règle ne le rejette pas\n\n> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **W2** (semaine 2, J2 matin) ·\n … [21678 caractères tronqués]`
+
+  ```
+331 reports/rapport-tagger-h50.md
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('reports/rapport-tagger-h50.json'))\nprint('commit_mesure', d['commit_mesure'])\nprint('date', d['date'])\nprint('modele', d['modele_demande'])\nprint('or', d['or'])\nprint('split partition', d['split']['partition'])\nprint('composition ke … [413 caractères tronqués]`
+
+  ```
+commit_mesure 6b2208ee1579739a188086f957c0d508e8a04726
+date 2026-11-15 09:18 EST
+modele deepseek-chat
+or {'phrases': 452, 'tokens': 2480, 'sources': {'hand': 20, 'reel': 432}, 'langues': {'fr': 242, 'en': 210}, 'textes_dupliques': [{'texte': 'Le vent souffle fort.', 'langue': 'fr', 'n': 2, 'ids': ['r019', 'r186']}, {'texte': 'La voiture roule vite.', 'langue': 'fr', 'n': 2, 'ids': ['r051', 'r189']}, {'texte': 'Paul sees Marie; he speaks to her.', 'langue': 'en', 'n': 2, 'ids': ['r336', 'r358']}]}
+split partition {'h50': 50, 'reste_402': 402, 'total': 452, 'intersection': 0}
+composition keys dict_keys(['h50', 'reste_402', 'total', 'tirage_hors_h50'])
+regle verdict accepté
+passes ['cache_chaud', 'api', 'cache_chaud_apres_api']
+cache_chaud avant {'fichiers': 3759, 'dates': {'min': '2026-10-26T11:22:15-0400', 'max': '2026-11-15T01:38:53-0500'}, 'modeles': {'deepseek-flash': 3759}}
+cache_api apres {'fichiers': 447, 'dates': {'min': '2026-11-15T09:11:00-0500', 'max': '2026-11-15T09:18:28-0500'}, 'modeles': {'deepseek-flash': 447}}
+cache_apres_api avant {'fichiers': 447, 'dates': {'min': '2026-11-15T09:11:00-0500', 'max': '2026-11-15T09:18:28-0500'}, 'modeles': {'deepseek-flash': 447}}
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/rapport-tagger-h50.md')\ns=p.read_text()\ns=s.replace(\"**VERB +19,14** et **ADJ +19,40**\\nportent à eux seuls **+38,54 pts** de rappel ; le fermé perd **−1,55 pt** au total, surtout\",\n            \"**VERB +19,14** et **ADJ  … [1209 caractères tronqués]`
+
+  ```
+done
+153:| **total 452 (402 + H50)** | 452 | 449 | **447** | 2 | **65 029** | 261 | **143,87** (réseau) · 144,45 (total) | **0,993 s** (moyenne pondérée) | **0,982 s** | 452,0 s (passe) |
+154:| **total, rejoué (base `total`)** | 452 | 449 | 0 | 449 | 0 | 65 290 | 0 (réseau) · 144,45 (lu) | — | — | 0,1 s |
+  ```
+
+- **bash** `{"command": "grep -n \"38,54\\|net du fermé\\|gain n'est porté\" reports/rapport-tagger-h50.md; sed -n '135,150p' reports/rapport-tagger-h50.md; sed -n '235,255p' reports/rapport-tagger-h50.md", "description": "Inspect remaining wording"}`
+
+  ```
+| base | phrases | POS heuristique | POS tagger | Δ |
+|---|---:|---:|---:|---:|
+| **total 452** | 452 | 0,8891 | **0,9508** | **+6,17 pts** |
+| **tirage 20261116 hors H50** | 45 | 0,9073 | **0,9556** | **+4,83 pts** |
+
+**Lecture.** Le tirage aléatoire **hors H50** gagne **+4,83 pts**, du même ordre que le 402
+(+4,45) et **loin** du H50 (+17,65) : le gain « normal » est autour de **+4,5 à +5**, et H50 est
+bien un **stress test**, pas un échantillon. Le tirage n'est pas un échantillon neuf : c'est un
+contrôle de composition, il ne remplace pas une généralisation hors gold.
+
+## 3. Le coût et la latence
+
+### 3.1 La passe API
+
+| base | phrases | appels | requêtes | cache | tokens réseau | tokens lus du cache | tokens / phrase | latence / requête | latence / phrase | durée |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+ne compense pas, et le gain net vient de l'ouvert (VERB +19,14, ADJ +19,40). Cette réserve ne
+change pas le verdict de la règle **telle qu'elle est écrite**, mais elle change la **décision du
+défaut** (W3) :
+
+- **garder `--tagger` opt-in** : le défaut hors ligne reste l'heuristique ; l'option gagne en
+  agrégé sur le 402 et sur H50 ;
+- **ou tester un hybride** «
+… [896 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"Le gain du 402\" -A 4 reports/rapport-tagger-h50.md", "description": "Locate the 402 class-gain paragraph"}`
+
+  ```
+125:**Lecture.** Le gain du 402 est **un gain de classes ouvertes** : **VERB +19,14** et **ADJ +19,40** gagnent ces points de rappel **dans leur
+126-classe** ; le fermé perd **−1,55 pt** au total, surtout
+127-**PREP −8,43** et **CONJ −10,15**, avec **AUX −2,92** et **DET −0,75**. Le tagger répare les verbes
+128-et les adjectifs, et il **casse un peu de fermé**. Sur H50, le même tagger gagne **aussi** le fermé
+129-(VERB 0,3857 → 0,8286, PRON 0,6479 → 0,7746, AUX 0,7727 → 0,9091, NOUN 0,7719 → 1,0000) : le lot
+  ```
+
+- **bash** `{"command": "sed -n '1,8p' docs/pilotage/en-cours.md; echo \"--- R line\"; sed -n '118,128p' docs/pilotage/en-cours.md; echo \"--- ce qui reste\"; sed -n '128,136p' docs/pilotage/en-cours.md; echo \"--- counters\"; sed -n '104,112p' docs/pilotage/en-cours.md", "description": "Read en-cours sections  … [9 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-15, 09 h 10 HNE (W1 : gold 452)**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+> plan plus bas (**La carte**).
+
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+--- R line
+| chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
+|---|---|---|---|
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit (J11)** | **`g017` tranché** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
+| **N — le natif** | **N2, N4** | N2 : **fenêtre 1 024 — 2,3911 / 2,3522 au grand corpus (sous 2,5)** ; porte propre 2,7856 (manque **0,2856** val / **0,3566** test) ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
+| **
+… [1588 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"## Ce qui est en cours\" -A 6 docs/pilotage/en-cours.md; echo \"---\"; sed -n '84,104p' docs/pilotage/en-cours.md", "description": "Read en-cours in-progress section"}`
+
+  ```
+86:## Ce qui est en cours
+87-
+88-- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67 ; **19/19 verdicts `389b99f`** ; `/paragraphes` v7, `/` ancien arbre ; [v2](../../reports/rapport-coordination-s-v2.md).
+89-- **N2 — en pause** : **commande validée** `eval_longueurs.py --rope --val <dir>` (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
+90-- **Pensée — B13 (actif)** : **183/183** ; `r035` (238/238), `s065` (238/238), **J6.1 rejeté** (`g017` inatteignable), schéma v2, **v2** **19/46** (**16** non vides, F1 **0,5270**) ([fiche](../../reports/rapport-restitution-v2.md)), **D1–D3** ([FAQ](../../reports/rapport-faq.md)), **E1** ([sommaire](../../reports/rapport-faq-sommaire.md)) ; [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+91-- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
+92-- **Panini J2.1–J3.2 + B2** : **14 atomes** ; UDHR **418/438** ; J3.2 : **5/21** langues (Glottolog **21/21**), **154/154** paires hors script au hasard
+… [3523 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text()\ns=s.replace(\"**Mis à jour : 2026-11-15, 09 h 10 HNE (W1 : gold 452)**\",\n            \"**Mis à jour : 2026-11-15, 09 h 25 HNE (W2 : tagger 402/H50)**\")\ns=s.replace(\"| **R — le lecteur* … [1785 caractères tronqués]`
+
+  ```
+updated
+3:**Mis à jour : 2026-11-15, 09 h 25 HNE (W2 : tagger 402/H50)**
+92:- **W2 — le tagger sur 402/H50** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 **inchangés** ; **fermé 402 −1,55** (PREP −8,43, CONJ −10,15) ; [fiche](../../reports/rapport-tagger-h50.md) ; **la règle ne le rejette pas** (il gagne sur 402), la réserve du fermé va à **W3**.
+110:| fichiers / JSON de résultats | **750** / **844** | `reports/*.md` / `reports/*.json` |
+124:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; split 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 inchangés, fermé 402 −1,55** ; R2/R3 attendent N5/N4 | **W2 faite** ; **W3 — tagger par défaut** (réserve fermé) ; **[fiche H50](../../reports/rapport-tagger-h50.md)** |
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('reports/INDEX.md')\ns=p.read_text()\nold=\"| [rapport-tagger-erreurs.md](rapport-tagger-erreurs.md) | E2 — les cas d'erreur de `--tagger` : clé refusée = code 4, réseau et refus du modèle = repli heuristique |\\n\"\nnew=old+\"| [rappor … [887 caractères tronqués]`
+
+  ```
+index ok
+reports/INDEX.md:734:| [rapport-tagger-h50.md](rapport-tagger-h50.md) | W2 — le tagger POS sur le split 402 / H50 : +4,45 pts sur 402, +17,65 sur H50, la règle ne le rejette pas ; réserve fermé 402 −1,55 |
+reports/README.md:22:| [`rapport-tagger-h50.md`](rapport-tagger-h50.md) | **W2/R0.7** — le tagger sur le split : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 inchangés, fermé 402 **−1,55** ; la règle ne le rejette pas |
+  ```
+
+- **bash** `{"command": "grep -n \"le tagger n'est pas à 0,944\" docs/pilotage/roadmap.md; sed -n '33p' docs/pilotage/roadmap.md | fold -w 220 | head -20", "description": "Inspect roadmap R line"}`
+
+  ```
+33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **le tagger n'est pas à 0,944 contre 0,85** (corpus différents : +7,34 pts sur 180, +6,35 sur 432) ; **R1.2-1024 mesuré** (2,6256 à 1 000 o) ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; la suite : **1 024 octets entraînés** ; **`rope2048`** **fini** (2×10 000 pas, deux drvm) ; R2/R3 attendent N5/N4 |
+| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **le tagger n'est p
+as à 0,944 contre 0,85** (corpus différents : +7,34 pts sur 180, +6,35 sur 432) ; **R1.2-1024 mesuré** (2,6256 à 1 000 o) ; **R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ; **R0.7 — bloc linguistique** (39
+8 langues, 0,9687) | **R4.4 close** (limites nommées) ; **R1.1/R1.2
+… [183 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/roadmap.md')\ns=p.read_text()\nold=\"**R0.7 — bloc linguistique** (398 langues, 0,9687) | \"\nnew=\"**R0.7 — bloc linguistique** (398 langues, 0,9687) ; **W2 — le tagger sur 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,6 … [704 caractères tronqués]`
+
+  ```
+roadmap ok
+33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)**
+  ```
+
+- **bash** `{"command": "tail -30 journal/2026-11-15/README.md", "description": "Read end of journal README notes"}`
+
+  ```
+l'**attachement** (**−0,092**, p=0,67). Le seul ρ nominal (POS **+0,176**, p=0,029) tombe à **Holm 0,088**
+et ne survit pas à la date (**p_resid=1,0**).
+
+Le dispositif n'est pas muet : il prédit l'**entropie des graphèmes** (**+0,811**), la **longueur des
+mots** (**+0,657**), la **négation** (**+0,440**) et la **part de verbes** (**+0,429**). Mais la date
+explique **0,16–0,54** de ces métriques et **aucune** ne survit au contrôle de date (**p_resid=0,76–1,0**).
+Les atomes sont une signature **d'époque et de genre**, pas une entrée syntaxique.
+
+Le signal brut des **36 mesurables** (POS **+0,102**, syntagmes **+0,060**) tombe à **+0,010 / +0,014**
+sur 34, puis **−0,080 / −0,204** sur 26 : il est porté par les **sources courtes** et **deux signatures
+non-propres**. Le protocole, les 2 000 permutations de colonnes et les 1 000 permutations de date sont dans
+[`reports/rapport-atomes-prediction.md`](../../reports/rapport-atomes-prediction.md) et
+[`reports/atomes-prediction.json`](../../reports/atomes-prediction.json). La suite : un gold anglais de
+niveaux et une signature recalculée sur le texte nettoyé.
+
+### B3 — le corpus CIC tient, mais le vérificateur voit plus loin
+
+J12.2 avait le *
+… [1119 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('journal/2026-11-15/README.md')\ns=p.read_text()\nnote='''\n### W2 — le tagger sur 402/H50 : il gagne sur les deux, le fermé du 402 paie\n\nLe split de W1 (**402 / H50**) reçoit sa mesure : le tagger POS de l'API gagne **+4,45 pts** sur … [1063 caractères tronqués]`
+
+  ```
+journal note added
+
+Le split de W1 (**402 / H50**) reçoit sa mesure : le tagger POS de l'API gagne **+4,45 pts** sur les
+**402** (0,9198 → 0,9643) et **+17,65** sur **H50** (0,6842 → 0,8607) ; le F1 et l'attachement du
+402 sont **inchangés**. La passe **API** paie **447 requêtes** et **65 029 tokens réseau** pour 452
+phrases (**0,982 s/phrase**) ; le **cache chaud après API** rejoue **0 réseau / 0 token** et redonne
+exactement les mêmes scores. La règle « une règle qui ne gagne que sur H50 est rejetée » **ne rejette
+pas** le tagger : il gagne sur le 402, pas seulement sur H50. La **réserve** est nommée : sur 402, le
+fermé perd **−1,55 pt** (PREP −8,43, CONJ −10,15) et le gain vient de l'ouvert (VERB +19,14, ADJ
++19,40) ; H50, lui, gagne **aussi** le fermé. La suite (W3) doit décider du défaut et, si possible,
+tester l'hybride fermé/ouvert.
+[`fiche`](../../reports/rapport-tagger-h50.md) · [`JSON`](../../reports/rapport-tagger-h50.json).
+<!-- /notes -->
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run documentation review after edits"}`
+
+  ```
+revue de documentation · 750 fiche(s) · 843 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 844 JSON, le disque en a 843
+EXIT=1
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run state and size checks"}`
+
+  ```
+en-cours · 1701 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT=0
+  T0 max : 4071 mots (budget 4 000)
+
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 2 violation(s) :
+     · docs/pilotage/roadmap.md : 9033 mots > budget 9000 (T1)
+     · T0 : 4071 mots (AGENTS + en-cours + une tâche) > budget 4 000
+EXIT=1
+  ```
+
+- **bash** `{"command": "grep -n \"JSON\\|json\\|fiche\\|glob\\|rglob\" tools/revue_documentation.py | head -60; echo \"===\"; sed -n '1,140p' tools/revue_documentation.py", "description": "Inspect doc review counting logic"}`
+
+  ```
+5:  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+6:  2. structure  : les sept chantiers de en-cours.md ont leur entrée, leur état et leur fiche ;
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+31:    r"[^`\s]+?\.(?:md|json|sh|py|rs|txt|svg|csv|jsonl))`"
+67:    return [p for p in (RACINE / "docs").rglob("*.md")
+72:    return list((RACINE / "docs").rglob("*.md"))
+76:    return list((RACINE / "reports").glob("*.md"))
+93:    """Les fichiers dont les liens doivent résoudre (docs, fiches courantes, racine)."""
+96:               RACINE / "reports/fiche-nuit-17-10.md",
+101:    return len(list((RACINE / "tools").glob("porte-*.sh")))
+105:    return len(list((RACINE / "docs/theorie/synthese").glob("0*.md")))
+108:def compte_fiches() -> int:
+112:def compte_json() -> int:
+113:    return len(list((RACINE / "reports").glob("*.json")))
+161:    for f in (RACINE / "docs").rglob("*"):
+162:        if f.suffix in (".json", ".csv", ".npz", ".jsonl") and f.is_file():
+163:            if f.name == "index.json" and f.parent.name == "glossaire":
+166:    for nom in ("07-mesures-couche-commune.md", "fiche-nuit-17-10.md")
+… [6152 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la reports/rapport-tagger-h50.json; ls reports/*.json | wc -l; find reports -maxdepth 1 -name '*.json' | wc -l; python3 - <<'PY'\nimport pathlib\nprint(len(list(pathlib.Path('reports').glob('*.json'))))\nprint(len(list(pathlib.Path('reports').glob('*.md'))))\nPY", "description": "Co … [32 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 198938 15 nov 09:18 reports/rapport-tagger-h50.json
+843
+843
+843
+750
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text()\n# W2 bullet shorter\nold=\"- **W2 — le tagger sur 402/H50** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 **inchangés** ; **fermé 402 −1,55** (PRE … [2408 caractères tronqués]`
+
+  ```
+T0 max : 4071 mots (budget 4 000)
+
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 2 violation(s) :
+     · docs/pilotage/roadmap.md : 9033 mots > budget 9000 (T1)
+     · T0 : 4071 mots (AGENTS + en-cours + une tâche) > budget 4 000
+EXIT=1
+  en-cours · 1701 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "grep -n \"\\*\\*Fait\\*\\*\" docs/pilotage/en-cours.md | head -5; sed -n '52,58p' docs/pilotage/en-cours.md", "description": "Inspect exact active session Fait line"}`
+
+  ```
+12:- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs ; suivi docs.
+49:- **Fait** : types **61/61**, rôles **144/144** ; corpus **8,5 %/65,5 %** ; arbre **99 à ≥3**, référents **294/371**, traduction **14/14** ; page **`/paragraphes`**, **19/19 verdicts `389b99f`** ; **56 tests** ; fiches [analyseur](../../reports/rapport-s-analyseur-roles.md), [arbre](../../reports/rapport-s-arbre-referents.md), [limites](../../reports/rapport-s-limites-v6.md), [fait divers](../../reports/rapport-s-fait-divers.md).
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902**, **1 span** ; **`s065`**, **`r035`**, **GV** réglés ; **restitution v1** (46/46) ; **J11.1–J11.4** ([exemples](../../reports/rapport-exemples-rejoues.md), [langue](../../reports/rapport-evaluer-langue.md), [robustesse](../../reports/rapport-robustesse-semaine.md), [schéma](../../reports/rapport-schema-v2-doc.md)) ; **D1** ([fiche](../../reports/rapport-exemples-tagger.md)) ; **D2** ([v2](../../reports/rapport-restitution-v2.md)) ; **D3** ([FAQ](../../reports/rapport-faq.md), 10/10) ; **E1** ([sommaire](../../reports/rapport-faq-sommaire.md)) ; **E2** ([cas d'erreur](../../reports/rapport-tagger-erreurs
+… [496 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text()\nrepls=[]\nrepls.append((\"- **W2 — le tagger sur 402/H50** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 **inchangés** ; **fermé 402 −1,55** (PREP … [2444 caractères tronqués]`
+
+  ```
+MISSING: **split 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 in
+written
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; **D1–D3**, **E1–E2** livrés ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../repo
+90:- **Pensée — B13 (actif)** : **183/183** ; `r035` (238/238), `s065` (238/238), **J6.1 rejeté** (`g017` inatteignable), schéma v2, **v2** **19/46** (**16** non vides, F1 **0,5270**) ([fiche](../../reports/rapport-resti
+92:- **W2 — tagger 402/H50** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/att 402 **inchangés**, **fermé −1,55** ; [fiche](../../reports/rapport-tagger-h50.md) ; la règle ne le rejette pas, ré
+110:| fichiers / JSON de résultats | **750** / **843** | `reports/*.md` / `reports/*.json` |
+  en-cours · 1657 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4027 mots (budget 4 000)
+
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 
+… [266 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n '124p' docs/pilotage/en-cours.md | cut -c1-400; echo; grep -o \"split 402/H50[^*]*\" docs/pilotage/en-cours.md | head", "description": "Inspect R line exact text"}`
+
+  ```
+| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; split 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 inchangés, fermé 402 −1,55** ; R2/R3 attendent N5/N4 | **W2 faite** ; **W3 — tagger par défaut** (réserve fermé) ; **[fiche H50](../../reports/rapport-tagger-h50.md)** |
+
+split 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 inchangés, fermé 402 −1,55
+  ```
+
+- **bash** `{"command": "sed -n '58,78p' docs/pilotage/en-cours.md", "description": "Read active session block"}`
+
+  ```
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13.
+- **Stratégie** : v0 mesuré.
+- **Ambition** : un runtime cognitif tracé.
+- **Objectif final** : un moteur de pensée v0.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; **D1–D3**, **E1–E2** livrés ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+- **Ce que font les autres** : **N2**, **S**, **hub**.
+- **Ce qu'elle fait** : chantier.
+- **Prochaine action** : **qualité des rôles** ; T132/T133, gold de pensée.
+- **Clôture** : **J14.1 faite** (84/81/3 ; `sessions` verte, `indice` et `melange` structurelles ; tag `chantier-2026-11-14`).
+- **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e
+… [357 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"Stratégie\\|Ambition\\|Objectif\\|Plan\\|session\" tools/verifie_en_cours.py | head -40; sed -n '1,140p' tools/verifie_en_cours.py", "description": "Inspect en-cours validator requirements"}`
+
+  ```
+2:"""verifie_en_cours.py — l'état doit rester court, structuré, reprenable et multi-session.
+7:  3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
+8:     **Id**, **Rôle**, **Plan**, **Ambition**, **Stratégie**, **Objectif final**,
+38:    "**Plan**",
+39:    "**Ambition**",
+40:    "**Stratégie**",
+41:    "**Objectif final**",
+68:def sessions(section: str) -> list[tuple[str, str]]:
+94:    blocs = sessions(corps_section(texte, "Sessions en cours"))
+102:                alertes.append(f"session « {titre} » ne dit pas « {champ} »")
+143:    print(f"  en-cours · {n} mots · {len(SECTIONS)} sections · {len(blocs)} session(s) · "
+146:        print("  ✅ état court, structuré, multi-session et reprenable")
+#!/usr/bin/env python3
+"""verifie_en_cours.py — l'état doit rester court, structuré, reprenable et multi-session.
+
+Le fichier `docs/pilotage/en-cours.md` est la seule source de l'état. Ce contrôle vérifie :
+  1. un budget de **2 000 mots** ;
+  2. les **sept sections** du template ;
+  3. « Sessions en cours » : une sous-section `### Session ...` par session active, avec
+     **Id**, **Rôle**, **Plan**, **Ambition**, **Stratégie**, **Objectif final**,
+     **
+… [5031 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text()\nrepls=[\n(\"split 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 inchangés, fermé 402 −1,55\",\n \"W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, … [735 caractères tronqués]`
+
+  ```
+done
+  en-cours · 1635 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4005 mots (budget 4 000)
+
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ❌ 2 violation(s) :
+     · docs/pilotage/roadmap.md : 9033 mots > budget 9000 (T1)
+     · T0 : 4005 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "grep -o \"le tagger n'est pas à 0,944[^;]*;\" docs/pilotage/roadmap.md; grep -o \"R4.1–R4.4 mesurées[^;]*;\" docs/pilotage/roadmap.md; grep -o \"W2 — le tagger sur 402/H50[^|]*\" docs/pilotage/roadmap.md | head -1", "description": "Extract roadmap fragments to trim"}`
+
+  ```
+le tagger n'est pas à 0,944 contre 0,85** (corpus différents : +7,34 pts sur 180, +6,35 sur 432) ;
+R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ;
+W2 — le tagger sur 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/attachement 402 inchangés, fermé 402 −1,55 ; la règle ne le rejette pas** ([fiche](../../reports/rapport-tagger-h50.md))
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\n# en-cours\np=Path('docs/pilotage/en-cours.md')\ns=p.read_text()\nold=\"**W2 faite** ; **W3 — tagger par défaut** (réserve fermé) ; **[fiche H50](../../reports/rapport-tagger-h50.md)**\"\nnew=\"**W3 — tagger par défaut** ; **[fiche](../../repo … [1002 caractères tronqués]`
+
+  ```
+trimmed
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3999 mots (budget 4 000)
+
+  avertissements :
+     · 58 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT=0
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 10 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run documentation review after trims"}`
+
+  ```
+revue de documentation · 750 fiche(s) · 843 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT=0
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/##' | tr '\\n' ' '; echo; echo \"===\"; grep -rln \"tagger\\|rapport-tagger\" tools/porte-*.sh | head", "description": "List gates and find tagger gates"}`
+
+  ```
+porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh porte-bus.sh porte-bus-socket.sh porte-c4-retard.sh porte-cerveau.sh porte-cic.sh porte-consolidation.sh porte-coupe.sh porte-cycle-c2.sh porte-deepseek.sh porte-delais.sh porte-diff-couche.sh porte-document.sh porte-echange-experts.sh porte-episodique.sh porte-etat.sh porte-flux.sh porte-fusion.sh porte-gain.sh porte-greffe.sh porte-harnais-invariants.sh porte-homeostasie.sh porte-horloge.sh porte-indice.sh porte-jeux.sh porte-jumeaux.sh porte-lecteur.sh porte-lecture.sh porte-m5-brouillon.sh porte-melange.sh porte-memoire.sh porte-miroir-blocs.sh porte-mistral.sh porte-n3-cache.sh porte-n3-composition.sh porte-n3-deux-processus.sh porte-n3-deux-regions.sh porte-n3-generation.sh porte-n3-inventaire.sh porte-n3-placement.sh porte-n3-pont.sh porte-n3-positions.sh porte-n3-profondeur.sh porte-n3-refus.sh porte-n3-reseau.sh porte-n3-routes.sh porte-n3-service-briques.sh porte-n3-service.sh porte-n3-seuil.sh porte-n3-sparsite-compte.sh porte-n3-sparsite.sh porte-occupation-elagage.sh porte-oc
+… [490 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/tests/test_tagger_api.py 2>&1 | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run tagger API tests"}`
+
+  ```
+test_analyser_tagger_lisible (__main__.TestCliAvecTransportFactice.test_analyser_tagger_lisible) ... ok
+test_evaluer_tagger (__main__.TestCliAvecTransportFactice.test_evaluer_tagger) ... ok
+test_aide_expose_tagger (__main__.TestDefaultInchange.test_aide_expose_tagger) ... ok
+test_analyser_json_sans_tagger (__main__.TestDefaultInchange.test_analyser_json_sans_tagger) ... ok
+test_evaluer_sans_tagger (__main__.TestDefaultInchange.test_evaluer_sans_tagger) ... ok
+test_cle_invalide_code_4 (__main__.TestErreursTagger.test_cle_invalide_code_4) ... ok
+test_modele_json_incomplet_repli_heuristique (__main__.TestErreursTagger.test_modele_json_incomplet_repli_heuristique)
+Un JSON qui n'a pas une classe par token est un refus de contrat, pas une exception. ... ok
+test_refus_du_modele_repli_heuristique (__main__.TestErreursTagger.test_refus_du_modele_repli_heuristique) ... ok
+test_reseau_coupe_repli_heuristique (__main__.TestErreursTagger.test_reseau_coupe_repli_heuristique) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 3.445s
+
+OK
+EXIT=0
+  ```
+
+- **bash** `{"command": "sed -n '1,160p' tools/toutes-les-portes.sh", "description": "Inspect full gates runner"}`
+
+  ```
+#!/bin/bash
+# toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS
+# (`--attn-window` en réparti) que le v7 avait **délibérément retiré** en faisant voyager les
+# trois réglages dans la trame (`main.rs:4432`). La porte ne pouvait donc plus passer — et
+# personne ne l'a vu, parce que les portes étaient lancées **une par une**, à la main, quand
+# on touchait la fonctionnalité du jour. Une porte qu'on croit verte et qui n'a pas tourné est
+# exactement le défaut que ce dépôt traque (un drapeau inerte, une mesure qui ne mesure rien) :
+# ici, appliqué aux instruments eux-mêmes.
+#
+# Ce que fait ce script, et ce qu'aucun autre ne faisait :
+#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+#   2. il ne s'arrête PAS à la première rouge — il veut le tableau, pas la première tuile ;
+#   3. il borne chaque porte dans le temps (`DELAI`, 1800 s par défaut) : une porte qui pend
+#      est une porte ROUGE, pas une porte qu'on attend ;
+#   4. il garde le journal de chacune (`JOURNAUX`) et n'affiche qu'une ligne par porte ;
+#   5. il sort en 1 s'il y a la moindre rouge, en
+… [3112 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/toutes-les-portes.sh", "description": "Run full gates suite", "run_in_background": true}`
+
+  ```
+started background job bash-110
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Validate journal structure"}`
+
+  ```
+journal · 47 jour(s) · 208 session(s) · 2609 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_schemas.py 2>&1 | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Validate SVG schemas"}`
+
+  ```
+schémas · 464 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+EXIT=0
+  ```
+
+- **bash** `{"command": "python3 tools/tests/test_produit.py 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Run product tests"}`
+
+  ```
+....................
+----------------------------------------------------------------------
+Ran 20 tests in 10.792s
+
+OK
+EXIT=0
+  ```
+
+- **job_output** `{"job_id": "bash-110"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (85 portes, borne 1800 s) ===
+    journaux : work/portes-1115-09h22
+[status: running]
+  ```
+
+- **bash** `{"command": "sed -n '1,5p' docs/pilotage/en-cours.md; echo \"---\"; sed -n '86,94p' docs/pilotage/en-cours.md; echo \"---\"; sed -n '122,126p' docs/pilotage/en-cours.md; echo \"---\"; sed -n '106,112p' docs/pilotage/en-cours.md; echo \"--- reste\"; grep -n \"Ce qui reste\" -A 3 docs/pilotage/en-cour … [62 caractères tronqués]`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-15, 09 h 25 HNE (W2 : tagger 402/H50)**
+
+> **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+---
+
+- **S — les structures** : 61/61 types, 144/144 rôles, 56 tests, banque 84/67 ; **19/19 verdicts `389b99f`** ; `/paragraphes` v7, `/` ancien arbre ; [v2](../../reports/rapport-coordination-s-v2.md).
+- **N2 — en pause** : **commande validée** `eval_longueurs.py --rope --val <dir>` (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
+- **Pensée — B13 (actif)** : **183/183** ; `r035` (238/238), `s065` (238/238), **J6.1 rejeté** (`g017` inatteignable), schéma v2, **v2** **19/46** (**16** non vides, F1 **0,5270**) ([fiche](../../reports/rapport-restitution-v2.md)), **D1–D3** ([FAQ](../../reports/rapport-faq.md)), **E1** ([sommaire](../../reports/rapport-faq-sommaire.md)) ; [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+- **L — le bloc langue** : contrat ; frontière script 1,0, langue 0,137/0,9687 ; fusion réparée par niveau **0,9309/0,8226/0,8784/0,9954**.
+- **W2 — tagger
+… [2770 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-110"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('tools/tests/linguistique/qualifier_tagger_h50.py')\ns=p.read_text()\n# add helpers before construire_rapport\nanchor='''def construire_rapport(args, phrases, split, bases, passes) -> dict:'''\nhelpers='''def _cout_api_452(api: dict) -> … [3396 caractères tronqués]`
+
+  ```
+script patched
+COMPILE-OK
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/rapport-tagger-h50.json')\nd=json.loads(p.read_text())\napi=d['passes']['api']\nb402=api['bases']['reste_402']['cout']; b50=api['bases']['h50']['cout']\nappels=b402['appels']+b50['appels']; requetes=b402['requetes']+b50['re … [1743 caractères tronqués]`
+
+  ```
+{
+ "phrases": 452,
+ "appels": 449,
+ "requetes": 447,
+ "cache": 2,
+ "tokens_reseau": 65029,
+ "tokens_cache": 261,
+ "latence_reseau_s": 443.813,
+ "par_phrase": {
+  "appels": 0.9934,
+  "requetes": 0.9889,
+  "cache": 0.0044,
+  "tokens_reseau": 143.87,
+  "tokens_total": 144.45,
+  "latence_reseau_s": 0.9819
+ },
+ "lecture": "somme des bases 402 et H50 de la passe API ; la base total 452 est un rejeu cache (0 réseau, 0 token réseau)."
+}
+{
+ "reste_402": {
+  "pos_heuristique": 0.9198,
+  "pos_tagger": 0.9643,
+  "delta_pos": 0.0445,
+  "f1_heuristique": 0.819,
+  "f1_tagger": 0.819,
+  "attachement_heuristique": 1.0,
+  "attachement_tagger": 1.0
+ },
+ "h50": {
+  "pos_heuristique": 0.6842,
+  "pos_tagger": 0.8607,
+  "delta_pos": 0.1765,
+  "f1_heuristique": 0.5836,
+  "f1_tagger": 0.5836,
+  "attachement_heuristique": 0.9545,
+  "attachement_tagger": 0.9545
+ },
+ "total": {
+  "pos_heuristique": 0.8891,
+  "pos_tagger": 0.9508,
+  "delta_pos": 0.0617,
+  "f1_heuristique": 0.7906,
+  "f1_tagger": 0.7906,
+  "attachement_heuristique": 0.9946,
+  "attachement_tagger": 0.9946
+ },
+ "tirage": {
+  "pos_heuristique": 0.9073,
+  "pos_tagger": 0.9556,
+  "delta_pos": 0.0483,
+  "f1_heuristique": 0.8278,
+  "f1_tagger": 0.8278
+… [68 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-110"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ls -la work/portes-1115-09h22/ 2>/dev/null | tail -10; echo \"---\"; wc -l work/portes-1115-09h22/registre.txt 2>/dev/null; tail -5 work/portes-1115-09h22/registre.txt 2>/dev/null; echo \"---\"; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true", "description": … [29 caractères tronqués]`
+
+  ```
+total 4
+drwxr-xr-x. 1 stephane stephane   54 15 nov 09:22 .
+drwxr-xr-x. 1 stephane stephane 2166 15 nov 09:22 ..
+-rw-r--r--. 1 stephane stephane   86 15 nov 09:22 porte-adaptateur-sortie.log
+---
+---
+3786684       00:44 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "cat work/portes-1115-09h22/porte-adaptateur-sortie.log; echo \"---\"; ps -ef | grep -E \"porte-adaptateur|timeout 1800\" | grep -v grep", "description": "Read first gate log and process"}`
+
+  ```
+porte de l'adaptateur de sortie — Qwen2.5-0.5B-Q8_0.gguf · plage 0:8 · 256 jetons
+---
+stephane 3786702 3786684  0 09:22 ?        00:00:00 timeout 1800 bash tools/porte-adaptateur-sortie.sh
+stephane 3786703 3786702  0 09:22 ?        00:00:00 bash tools/porte-adaptateur-sortie.sh
+stephane 3793251 3786703  0 09:23 ?        00:00:00 bash tools/porte-adaptateur-sortie.sh
+stephane 3793252 3793251 99 09:23 ?        00:00:45 ./drave-core/target/release/drave /tmp/porte-adaptateur/reecrit.gguf --ppl /tmp/porte-adaptateur/morceau.txt --limit 256 --ctx 256 --threads 8 --couches 0:8 --tete-partielle
+  ```
+
+- **bash** `{"command": "git add reports/rapport-tagger-h50.md reports/rapport-tagger-h50.json tools/tests/linguistique/qualifier_tagger_h50.py reports/INDEX.md reports/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md journal/2026-11-15/README.md && git status --short | grep -E \"rapport-tagger-h50| … [254 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-15/README.md
+M  reports/INDEX.md
+M  reports/README.md
+A  reports/rapport-tagger-h50.json
+A  reports/rapport-tagger-h50.md
+A  tools/tests/linguistique/qualifier_tagger_h50.py
+---
+  ✅ index : aucun fait stagé sans état
+EXIT=0
+  ```
+
+- **bash** `{"command": "wc -l work/portes-1115-09h22/registre.txt 2>/dev/null; tail -10 work/portes-1115-09h22/registre.txt 2>/dev/null; ls work/portes-1115-09h22/*.log 2>/dev/null | wc -l; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true", "description": "Check gates progress"}`
+
+  ```
+1
+3786684       00:54 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "cat work/portes-1115-09h22/registre.txt 2>/dev/null; echo \"---\"; cat work/portes-1115-09h22/porte-adaptateur-sortie.log | tail -20; echo \"---\"; ls -lt work/portes-1115-09h22/ | head", "description": "Read gates registry and first gate log"}`
+
+  ```
+---
+porte de l'adaptateur de sortie — Qwen2.5-0.5B-Q8_0.gguf · plage 0:8 · 256 jetons
+  écriture  : complet 17.4315 → 17.4315 · tronqué 2687292.8165 → 2687292.8165
+  ✅ PPL épinglées : complet 17.4315 · tronqué 2687292.8165
+  ✅ l'écriture est fidèle (mêmes chiffres sur les deux chemins)
+  ✅ invariant d'identité : 2687292.8165 (écart 0.00e+00)
+---
+total 4
+-rw-r--r--. 1 stephane stephane 366 15 nov 09:23 porte-adaptateur-sortie.log
+  ```
+
+- **bash** `{"command": "sleep 30; wc -l work/portes-1115-09h22/registre.txt 2>/dev/null; tail -5 work/portes-1115-09h22/registre.txt 2>/dev/null; ls work/portes-1115-09h22/*.log 2>/dev/null | wc -l", "description": "Wait and check gates progress"}`
+
+  ```
+1 work/portes-1115-09h22/registre.txt
+porte-adaptateur-sortie 0 67
+2
+  ```
+
+- **bash** `{"command": "ls -lt work/portes-1115-09h22/*.log | head -5; echo \"---\"; tail -5 work/portes-1115-09h22/$(ls -t work/portes-1115-09h22/*.log | head -1 | xargs -n1 basename)", "description": "Check current gate log"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane   0 15 nov 09:23 work/portes-1115-09h22/porte-audit-drapeaux.log
+-rw-r--r--. 1 stephane stephane 580 15 nov 09:23 work/portes-1115-09h22/porte-adaptateur-sortie.log
+---
+  ```
+
+- **bash** `{"command": "git diff --cached --stat; echo \"---\"; git diff --cached --name-only", "description": "Review staged files before commit"}`
+
+  ```
+docs/pilotage/en-cours.md                        |    18 +-
+ docs/pilotage/roadmap.md                         |     2 +-
+ journal/2026-11-15/README.md                     |    13 +
+ reports/INDEX.md                                 |     1 +
+ reports/README.md                                |     2 +
+ reports/rapport-tagger-h50.json                  | 11283 +++++++++++++++++++++
+ reports/rapport-tagger-h50.md                    |   332 +
+ tools/tests/linguistique/qualifier_tagger_h50.py |   630 ++
+ 8 files changed, 12271 insertions(+), 10 deletions(-)
+---
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+journal/2026-11-15/README.md
+reports/INDEX.md
+reports/README.md
+reports/rapport-tagger-h50.json
+reports/rapport-tagger-h50.md
+tools/tests/linguistique/qualifier_tagger_h50.py
+  ```
+
+- **bash** `{"command": "git commit -m \"W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3\" 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\"", "descripti … [45 caractères tronqués]`

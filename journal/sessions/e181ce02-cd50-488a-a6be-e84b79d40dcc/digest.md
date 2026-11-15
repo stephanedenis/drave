@@ -65077,3 +65077,16 @@ index 8726729b..3ae8eca0 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [978 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/rapport-gold-452.json
+ create mode 100644 reports/rapport-gold-452.md
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPL
+   6b2208ee..4dbeff45  s/v7 -> s/v7
+   6b2208ee..4dbeff45  master -> master
+dim 15 nov 2026 09:20:49 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git status --porcelain reports/rapport-tagger-h50.md 2>/dev/null | head -1", "description": "Suivre W2", "timeoutMs": 1600000}`
