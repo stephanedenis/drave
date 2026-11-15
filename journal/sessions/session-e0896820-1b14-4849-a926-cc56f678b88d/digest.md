@@ -2423,3 +2423,169 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add reports/rapport-coordination-s-v2.md reports/rapport-coordination-s-v2.json docs/pilotage/en-cours.md\ngit diff --cached --stat\ngit commit --amend --no-edit 2>&1 | tail -30", "description": "Amend with time change staged", "ti … [17 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md              | 2 +-
+ reports/rapport-coordination-s-v2.json | 4 ++--
+ reports/rapport-coordination-s-v2.md   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+  ✅ index : aucun fait stagé sans état
+[s/v7 f926b5bc] C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f)
+ Date: Sun Nov 15 02:27:15 2026 -0500
+ 20 files changed, 3904 insertions(+), 39 deletions(-)
+ create mode 100644 journal/2026-11-15/distribue.md
+ create mode 100644 journal/sessions/session-e0896820-1b14-4849-a926-cc56f678b88d/digest.md
+ create mode 100644 journal/sessions/session-e0896820-1b14-4849-a926-cc56f678b88d/rapport.md
+ create mode 100644 reports/rapport-coordination-s-v2.json
+ create mode 100644 reports/rapport-coordination-s-v2.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Post-amend doc review"}`
+
+  ```
+revue de documentation · 737 fiche(s) · 830 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -8; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Post-amend T0"}`
+
+  ```
+1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3996 mots (budget 4 000)
+
+  avertissements :
+     · 52 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"---head---\"; git log --oneline -2; echo \"---pointer---\"; git ls-tree HEAD tools/structures; echo \"---submodule---\"; git -C tools/structures status --porcelain; echo \"(fin)\"; echo \"---ahead---\"; git rev-list --left-right … [159 caractères tronqués]`
+
+  ```
+---head---
+f926b5bc C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f)
+292c70b5 C1 — LA COMMANDE N2 VALIDÉE : --rope + canal (2,7856), JAMAIS --rope SEUL (40,0658), TÉMOIN 3,09
+---pointer---
+160000 commit 389b99f8383eb47c0cc008f5d3211c9d65d895fc	tools/structures
+---submodule---
+(fin)
+---ahead---
+0	1
+---files in commit---
+f926b5bc C2 — LA PAGE / NE SERT PAS LA V7 : 369 CANDIDATS SANS PROFONDEUR, 41 VERDICTS À RE-JUGER ; PORT 8765 PRIS, PARE-FEU ACTIF ; LES 11 VERDICTS COMMITTÉS (389b99f)
+ docs/pilotage/en-cours.md                          |   16 +-
+ docs/pilotage/roadmap.md                           |    4 +-
+ journal/2026-11-15/README.md                       |    9 +-
+ journal/2026-11-15/distribue.md                    |   25 +
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/mesures.md                      |   10 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    7 +-
+ journal/THEMES.md                                  |    3 +-
+ journal/sessions/MANIFEST.md             
+… [714 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"---typos committed---\"; git show HEAD:reports/rapport-coordination-s-v2.md | grep -nE \"Si il|règleset|84 portes|disent encore\" || echo \"aucun\"; echo \"---json committed---\"; git show HEAD:reports/rapport-coordination-s-v2. … [296 caractères tronqués]`
+
+  ```
+---typos committed---
+aucun
+---json committed---
+JSON HEAD VALIDE
+---acceptance---
+FICHE-OK
+---submodule---
+(fin)
+  ```
+
+- **bash** `{"command": "sed -n '1,12p' reports/rapport-coordination-n2.md; echo \"---v1 s---\"; sed -n '1,8p' reports/rapport-coordination-s.md; echo \"---n2 v2 references v1---\"; grep -n \"v1\" reports/rapport-coordination-n2-v2.md | head", "description": "Check whether v1 reports carry v2 banners"}`
+
+  ```
+# N2 — la coordination du mètre : `--rope` ne suffit pas, il faut le canal
+
+> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-13 · **HEAD mesuré** :
+> `ced21933` · **Verdict** : `tools/eval_n2_propre.py` lit les checkpoints RoPE comme des positions
+> absolues et rend **8,0225** sur `propre512-8k` à 128 octets, là où le mètre RoPE rend **2,9726**
+> à 128 et **2,7856** à 1 024. Le correctif `--rope` est **nécessaire mais non suffisant** : le
+> checkpoint de la porte a été entraîné **avec le canal**, et `--rope` seul rend **40,0658** à 128.
+> Le correctif validé est **`--rope --canal-dir`** ; la commande qui donne 2,79 aujourd'hui est le
+> mètre existant `work/n2ac/eval_longueurs.py --rope`. **Aucun fichier de N2 modifié**
+> (`native_model.py`, `entrainer_native.py`, `work/` intacts).
+
+**En trois lignes.** (1) `charge()` construit `NativeModel` absolu et `ppl_protocole()` oublie le
+---v1 s---
+# S — les 11 verdicts de `/paragraphes` ne sont pas dans git
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-13 · **HEAD parent mesuré** : `ced21933`
+> · **Sous-module `tools/structures`** : `523d8c1` · **Verdict** : les 11 verdicts a004–a009
+> sont **11 lignes non commit
+… [1241 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd tools/structures\nPYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 - <<'PY'\nimport json, generateur\nbase=json.load(open('donnees/phrases.json'))['phrases']; gen=json.load(open('donnees/phrases_generees.json'))['phrases']; phr=base+gen\nbyid={c['id']:c for p in phr for c in p['candida … [841 caractères tronqués]`
+
+  ```
+risk 41 same_slot 40 beyond 1
+beyond [('c064', 'c064-c2', 2, 1)]
+same_slot sample [('c002', 'c002-c1', 1, 2), ('c002', 'c002-c2', 1, 2), ('c004', 'c004-c1', 1, 2), ('c004', 'c004-c2', 1, 2), ('c009', 'c009-c1', 1, 3), ('c009', 'c009-c2', 1, 3), ('c009', 'c009-c3', 1, 3), ('c011', 'c011-c1', 1, 2), ('c011', 'c011-c2', 1, 2), ('c013', 'c013-c1', 1, 3)]
+  ```
+
+- **bash** `{"command": "cd tools/structures\nPYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python3 - <<'PY'\nimport json, generateur\nbase=json.load(open('donnees/phrases.json'))['phrases']; gen=json.load(open('donnees/phrases_generees.json'))['phrases']; phr=base+gen\nbyid={c['id']:c for p in phr for c in p['candida … [785 caractères tronqués]`
+
+  ```
+risk 41 lost_by_position 5 rebound_by_position 36
+lost [('c023', 'c023-c3', 3, 2), ('c056', 'c056-c2', 2, 1), ('c056', 'c056-c3', 3, 1), ('c064', 'c064-c2', 2, 1), ('p006', 'p006-c2', 2, 1)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet; echo \"---our files in HEAD---\"; git show --name-only --format=\"\" HEAD | grep -E \"rapport-coordination-s-v2|en-cours|roadmap|INDEX|README\" ; echo \"---submodule---\"; git -C tools/structures status --porcelain; echo \"(fin)\"; ech … [236 caractères tronqués]`
+
+  ```
+---our files in HEAD---
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+journal/2026-11-15/README.md
+journal/README.md
+reports/INDEX.md
+reports/README.md
+reports/rapport-coordination-s-v2.json
+reports/rapport-coordination-s-v2.md
+---submodule---
+(fin)
+---tools/structures in commit?---
+aucun
+---status top---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 🤖 Assistant
+
+Terminé.
+
+**Livrables**
+- `reports/rapport-coordination-s-v2.md`
+- `reports/rapport-coordination-s-v2.json`
+- Mise à jour de `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/INDEX.md` et `reports/README.md`.
+- Commit **`f926b5bc`** (local, non poussé). Le sous-module reste propre, pointeur **`389b99f`** : **aucun fichier de `tools/structures/` modifié**.
+
+**Ce que la fiche établit**
+- **11 verdicts committés** (`389b99f`, pointeur `31ce36fd`) : **19/19 candidats, 11 acceptés, 8 exclus**, 0 note ; **56 tests** passent.
+- **Page `/`** : aucun service S en écoute ; le port **8765** est tenu par `financemeteo` (pid 2725542). Mesure sur **9000** : **207 phrases / 369 candidats**, **0 `profondeur`** ; la v7 dynamique donne **359 candidats, 99 à ≥3**. La phrase « la page `/` sert la v7 » est fausse à l'état mesuré : `/paragraphes` est la seule fenêtre v7 (9/9, 19/19, 169/169 `profondeur`).
+- **Pare-feu** : `firewalld` actif et enabled, mais `firewall-cmd`/`nft`/`iptables` non interrogeables sans root ; le défaut `--hote 127.0.0.1` rend le service local par construction. Commande de lancement sur **9000**, tunnel SSH ou ouverture root ; ne pas toucher 8765.
+- **Migration** : la v1 comptait **5** candidats sans index ; en signature exacte, **41 paires (44 lignes)** n'ont pas de correspondance v7. Les 5 sont au-delà de la nouvelle longueur ; **36 seraient silencieusement recollées au mauvais candidat** par index. **106/147** sont sauvées par signature.
+- **Reste à S** : décider la migration `/` v7 (106 conservées / 41 à re-juger), corriger les référents, rétro-traduction, couverture de la banque, docs, 71 langues.
+
+**Vérifications** : revue de documentation ✅, tableaux/liens ✅, T0 **3 996/4 000** ✅, `en-cours` ✅, sous-module propre ✅.
+

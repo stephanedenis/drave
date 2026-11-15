@@ -7,12 +7,12 @@
 | Identifiant | `session-e0896820-1b14-4849-a926-cc56f678b88d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 02:15 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 85 |
-| Appels d'outils | 148 |
+| Messages | 92 |
+| Appels d'outils | 156 |
 | Fichiers touchés | 5 |
-| Commandes | 115 |
+| Commandes | 123 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche C2 : la coordination S, suite de J4.2 — écris `reports/rapport-coordination-s-v2.md` + JSON : l'état de la page `/ … [180 caractères tronqués]
 
-*148 appels d'outils.* Actions notables :
+*156 appels d'outils.* Actions notables :
 
 - bash — Show recent git log and status
 - bash — List repo root, reports, journal
@@ -41,7 +41,26 @@
 - bash — Inspect structures directory and server
 - bash — Search v7 service references in pilotage docs
 - bash — Search v7 mentions excluding pensee
-- … et 127 autres
+- … et 135 autres
+
+**Synthèse produite :**
+
+Terminé.
+
+**Livrables**
+- `reports/rapport-coordination-s-v2.md`
+- `reports/rapport-coordination-s-v2.json`
+- Mise à jour de `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/INDEX.md` et `reports/README.md`.
+- Commit **`f926b5bc`** (local, non poussé). Le sous-module reste propre, pointeur **`389b99f`** : **aucun fichier de `tools/structures/` modifié**.
+
+**Ce que la fiche établit**
+- **11 verdicts committés** (`389b99f`, pointeur `31ce36fd`) : **19/19 candidats, 11 acceptés, 8 exclus**, 0 note ; **56 tests** passent.
+- **Page `/`** : aucun service S en écoute ; le port **8765** est tenu par `financemeteo` (pid 2725542). Mesure sur **9000** : **207 phrases / 369 candidats**, **0 `profondeur`** ; la v7 dynamique donne **359 candidats, 99 à ≥3**. La phrase « la page `/` sert la v7 » est fausse à l'état mesuré : `/paragraphes` est la seule fenêtre v7 (9/9, 19/19, 169/169 `profondeur`).
+- **Pare-feu** : `firewalld` actif et enabled, mais `firewall-cmd`/`nft`/`iptables` non interrogeables sans root ; le défaut `--hote 127.0.0.1` rend le service local par construction. Commande de lancement sur **9000**, tunnel SSH ou ouverture root ; ne pas toucher 8765.
+- **Migration** : la v1 comptait **5** candidats sans index ; en signature exacte, **41 paires (44 lignes)** n'ont pas de correspondance v7. Les 5 sont au-delà de la nouvelle longueur ; **36 seraient silencieusement recollées au mauvais candidat** par index. **106/147** sont sauvées par signature.
+- **Reste à S** : décider la migration `/` v7 (106 conservées / 41 à re-juger), corriger les référents, rétro-traduction, couverture de la banque, docs, 71 langues.
+
+**Vérifications** : revue de documentation ✅, tableaux/liens ✅, T0 **3 996/4 000** ✅, `en-cours` ✅, sous-module propre ✅.
 
 ## 3. Travail accompli
 
@@ -97,7 +116,7 @@
 - **T1** Read current en-cours state
 - **T1** Find S lines in en-cours and roadmap
 - **T1** Run server on port 9000 and measure page state
-- … et 75 autres
+- … et 83 autres
 
 ## 4. Mesures et résultats marquants
 

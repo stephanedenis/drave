@@ -63928,3 +63928,52 @@ dim 15 nov 2026 02:29:06 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log", "description": "Pousser C1 et suivre C2", "timeout … [13 caractères tronqués]`
+
+  ```
+5891ef8a..292c70b5  s/v7 -> s/v7
+   5891ef8a..292c70b5  master -> master
+[still running after 600000ms; moved to background job bash-5073]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5073", "timeout_ms": 700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5073", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 02:49:15 EST
+2026-11-15 02:46:21 · ✔ C3 en 739.2 s (code 0) — ✅ test -f reports/rapport-gold-reel-50.md && echo FICHE-OK
+2026-11-15 02:46:21 · ▶ B1 — Panini — le protocole à date contrôlée (timeout 3600 s)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5073 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 work/chantier/journal.log; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7", "description": "Voir C2/C3 … [34 caractères tronqués]`
+
+  ```
+2026-11-15 02:15:56 · ▶ C2 — Coordination S — la page / et la v7 (timeout 3600 s)
+2026-11-15 02:34:01 · ✔ C2 en 1085.7 s (code 0) — ✅ test -f reports/rapport-coordination-s-v2.md && echo FICHE-OK
+2026-11-15 02:34:01 · ▶ C3 — Coordination R — le gold réel étendu (timeout 3600 s)
+2026-11-15 02:46:21 · ✔ C3 en 739.2 s (code 0) — ✅ test -f reports/rapport-gold-reel-50.md && echo FICHE-OK
+2026-11-15 02:46:21 · ▶ B1 — Panini — le protocole à date contrôlée (timeout 3600 s)
+   292c70b5..f926b5bc  s/v7 -> s/v7
+   292c70b5..f926b5bc  master -> master
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre B1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5075]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5075", "timeout_ms": 1000000, "wait": true}`
