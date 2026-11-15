@@ -64581,3 +64581,53 @@ dim 15 nov 2026 06:22:41 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 06 h 40 HNE (bilan de la semaine écrit)**\\n\", t, count=1) … [606 caractères tronqués]`
+
+  ```
+10 files changed, 202 insertions(+), 19 deletions(-)
+ create mode 100644 reports/rapport-bilan-semaine.md
+503da67e BILAN DE LA SEMAINE — LE PRODUIT (F1 0,7902, 238/239, TAGGER 95,75), PANINI BORNÉ
+   4d6cffc4..503da67e  s/v7 -> s/v7
+   4d6cffc4..503da67e  master -> master
+dim 15 nov 2026 06:26:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/2026-11-15/ 2>/dev/null; grep -c \"\" journal/2026-11-15/README.md 2>/dev/null; head -20 journal/2026-11-15/README.md 2>/dev/null | cut -c1-140", "description": "Voir le journal du 15/11"}`
+
+  ```
+distribue.md
+docs.md
+mesures.md
+portes.md
+README.md
+85
+# 2026-11-15
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-15/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**17 commits** · **1 session(s)** · **4 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| distribue | 3 | [distribue.md](distribue.md) |
+| docs | 4 | [docs.md](docs.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
+| portes | 1 | [portes.md](portes.md) |
+
+## Sessions DSH
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [2147 caractères tronqués]`
+
+  ```
+plan : 40
+PID 3370401
+2026-11-15 06:26:54 · ▶ E1 — La FAQ dans le sommaire et les liens (timeout 3000 s)
+dim 15 nov 2026 06:27:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre E1", "timeoutMs": 1600000}`

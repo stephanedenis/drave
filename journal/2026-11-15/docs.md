@@ -15,7 +15,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 349.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 349.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 <!-- notes -->
 ### D1 — les exemples du tagger et de la base réelle
@@ -28,4 +28,17 @@ cache neuf affichent le **coût réel** : `g001` neutre (130 tokens), `g011` ré
 sont rejoués **5/5** ; la doc mutée (`lu/VERB` → `lu/NOUN`) est détectée **4/5** ; les trois
 annotations `--tagger` passent le schéma **v2**. Le code courant ne bouge pas : F1 **0,7902**,
 **238/239** cibles. [`fiche`](../../reports/rapport-exemples-tagger.md).
+
+### E1 — la FAQ entre au sommaire, ses liens sont vérifiés
+
+La FAQ de `docs/produit/README.md` (§ 8) n'était listée ni dans un sommaire du document, ni
+dans le « Où aller ensuite » du § 9, ni dans la table **Produit** de `docs/README.md`. Le
+document gagne un **sommaire de neuf entrées** (la huitième est la FAQ), le § 9 une ligne
+FAQ, et `docs/README.md` sa ligne (ancre `#8-faq--dix-questions`, **995/1000** mots). Les
+**cinq liens** de § 8 et les **neuf ancres** du sommaire résolvent : **0 mort**. Le contenu
+des **dix réponses** ne bouge pas — sha256 `8855b475…` avant et après. Dispositif
+[`tools/verifier_liens_faq.py`](../../tools/verifier_liens_faq.py), contrôle négatif **2/2**
+(fichier absent, ancre absente) ; fiche
+[`reports/rapport-faq-sommaire.md`](../../reports/rapport-faq-sommaire.md) et
+[`reports/faq-sommaire.json`](../../reports/faq-sommaire.json).
 <!-- /notes -->

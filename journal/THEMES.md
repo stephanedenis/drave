@@ -419,6 +419,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-03](2026-11-03/outils.md) | `0,137` · `0,032` |
 | [2026-11-04](2026-11-04/outils.md) | — |
 | [2026-11-06](2026-11-06/outils.md) | — |
+| [2026-11-15](2026-11-15/outils.md) | `0,7902` |
 
 ### `divers` — Ce qui ne rentre dans aucun thème
 

@@ -1,0 +1,182 @@
+{
+ "schema": "drave.faq.sommaire.liens",
+ "version": 1,
+ "date": "2026-11-15",
+ "tache": "E1",
+ "document": "docs/produit/README.md",
+ "sommaire": {
+  "trouve": true,
+  "entrees": 9,
+  "ancres": 9,
+  "mortes": 0,
+  "faq_dans_sommaire": true,
+  "ligne_faq": "#8-faq--dix-questions",
+  "details": [
+   {
+    "libelle": "1. À qui s'adresse le produit",
+    "cible": "#1-à-qui-sadresse-le-produit",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "1-à-qui-sadresse-le-produit",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "2. Ce que le produit fait",
+    "cible": "#2-ce-que-le-produit-fait",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "2-ce-que-le-produit-fait",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "3. Comment l'utiliser — cinq exemples réels",
+    "cible": "#3-comment-lutiliser--cinq-exemples-réels",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "3-comment-lutiliser--cinq-exemples-réels",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "4. Ce que le produit ne fait pas encore",
+    "cible": "#4-ce-que-le-produit-ne-fait-pas-encore",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "4-ce-que-le-produit-ne-fait-pas-encore",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "5. Performance",
+    "cible": "#5-performance",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "5-performance",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "6. Garanties",
+    "cible": "#6-garanties",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "6-garanties",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "7. Le CLI livré — contrat et manques",
+    "cible": "#7-le-cli-livré--contrat-et-manques",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "7-le-cli-livré--contrat-et-manques",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "**8. FAQ — dix questions**",
+    "cible": "#8-faq--dix-questions",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "8-faq--dix-questions",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "9. Où aller ensuite",
+    "cible": "#9-où-aller-ensuite",
+    "fichier": "",
+    "fichier_ok": true,
+    "ancre": "9-où-aller-ensuite",
+    "ancre_ok": true,
+    "ok": true
+   }
+  ]
+ },
+ "section_8": {
+  "liens": 5,
+  "morts": 0,
+  "details": [
+   {
+    "libelle": "tools/verifier_faq.py",
+    "cible": "../../tools/verifier_faq.py",
+    "fichier": "tools/verifier_faq.py",
+    "fichier_ok": true,
+    "ancre": "",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "reports/rapport-faq.md",
+    "cible": "../../reports/rapport-faq.md",
+    "fichier": "reports/rapport-faq.md",
+    "fichier_ok": true,
+    "ancre": "",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "reports/faq.json",
+    "cible": "../../reports/faq.json",
+    "fichier": "reports/faq.json",
+    "fichier_ok": true,
+    "ancre": "",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "exemples.md",
+    "cible": "exemples.md",
+    "fichier": "docs/produit/exemples.md",
+    "fichier_ok": true,
+    "ancre": "",
+    "ancre_ok": true,
+    "ok": true
+   },
+   {
+    "libelle": "rapport-g017.md",
+    "cible": "../../reports/rapport-g017.md",
+    "fichier": "reports/rapport-g017.md",
+    "fichier_ok": true,
+    "ancre": "",
+    "ancre_ok": true,
+    "ok": true
+   }
+  ],
+  "sha256": "8855b475faef9079ecadcf9f5426cca62965160403f5542ecc1bc209e6912364",
+  "sha256_d3": "8855b475faef9079ecadcf9f5426cca62965160403f5542ecc1bc209e6912364",
+  "inchangee": true
+ },
+ "docs_readme": {
+  "ligne_faq": true,
+  "cible": "produit/README.md#8-faq--dix-questions",
+  "ancre_valide": true,
+  "mots": 995,
+  "budget": 1000,
+  "budget_ok": true
+ },
+ "controle_negatif": {
+  "liens_injectes": [
+   {
+    "cible": "../../reports/rapport-e1-inexistant.md",
+    "attendu": "fichier absent"
+   },
+   {
+    "cible": "#section-qui-nexiste-pas",
+    "attendu": "ancre absente"
+   },
+   {
+    "cible": "README.md#8-faq--dix-questions",
+    "attendu": "lien valide conservé"
+   }
+  ],
+  "detectes": [
+   "../../reports/rapport-e1-inexistant.md",
+   "#section-qui-nexiste-pas"
+  ],
+  "detecte": true
+ },
+ "ok": true
+}

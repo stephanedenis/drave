@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **743 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **744 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -184,6 +184,7 @@
 | [rapport-exemples-rejoues.md](rapport-exemples-rejoues.md) | J11.1 — les cinq exemples rejoués : 4 blocs sur 5 ont bougé, `r035` n'est plus un échec |
 | [rapport-exemples-tagger.md](rapport-exemples-tagger.md) | D1 — les exemples `--tagger` et `--reel` : le coût affiché, la base honnête, cinq blocs rejoués |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
+| [rapport-faq-sommaire.md](rapport-faq-sommaire.md) | E1 — la FAQ dans le sommaire et les liens : 9 ancres, 5 liens, 0 mort |
 | [rapport-faq.md](rapport-faq.md) | B13 / D3 — la FAQ du produit : dix questions, dix réponses vérifiées |
 | [rapport-fenetre-puits-attention.md](rapport-fenetre-puits-attention.md) | Fenêtre d'attention × puits : jusqu'où la fenêtre est-elle gratuite ? |
 | [rapport-fiabilite-produit.md](rapport-fiabilite-produit.md) | Fiabilité du produit hors gold — 0 plantage sur 50 phrases, 4 refus sans JSON, 23/46 textes à chevauchement de syntagmes |

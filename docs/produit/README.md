@@ -23,6 +23,18 @@
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
 > candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
 
+## Sommaire
+
+- [1. À qui s'adresse le produit](#1-à-qui-sadresse-le-produit)
+- [2. Ce que le produit fait](#2-ce-que-le-produit-fait)
+- [3. Comment l'utiliser — cinq exemples réels](#3-comment-lutiliser--cinq-exemples-réels)
+- [4. Ce que le produit ne fait pas encore](#4-ce-que-le-produit-ne-fait-pas-encore)
+- [5. Performance](#5-performance)
+- [6. Garanties](#6-garanties)
+- [7. Le CLI livré — contrat et manques](#7-le-cli-livré--contrat-et-manques)
+- [**8. FAQ — dix questions**](#8-faq--dix-questions)
+- [9. Où aller ensuite](#9-où-aller-ensuite)
+
 ## 1. À qui s'adresse le produit
 
 | vous êtes… | ce que vous obtenez | ce qu'il faut savoir |
@@ -772,6 +784,7 @@ Vérifier l'installation : `python3 tools/drave.py --version` → `drave 0.1.0`,
 | si vous voulez… | allez à |
 |---|---|
 | **voir cinq JSON commentés** | [`exemples.md`](exemples.md) |
+| **la FAQ du produit** (dix questions vérifiées) | [§ 8](#8-faq--dix-questions) · [`reports/rapport-faq.md`](../../reports/rapport-faq.md) · [`reports/faq.json`](../../reports/faq.json) |
 | **le schéma du JSON** (v2 : `meta.partition`, `meta.alternative`) | [`tools/schemas/drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [v1](../../tools/schemas/drave-annotation-v1.json) |
 | **la fiche du schéma v2** | [`reports/rapport-schema-v2.md`](../../reports/rapport-schema-v2.md) |
 | **le contrat du bloc** (9 niveaux, substitution, activation) | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
