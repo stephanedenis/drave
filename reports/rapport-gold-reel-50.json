@@ -1,0 +1,7595 @@
+{
+ "date": "2026-11-15 02:46 EST",
+ "ligne": "R0.7 / B13",
+ "tache": "C3 — coordination R, le gold réel étendu",
+ "commit_mesure": "f926b5bc6d8da64ffb1c59a6dbc8a6fcfd1c9888",
+ "objet": {
+  "definition": "le gold linguistique réel (hand + reel) des fiches R/B13, et non le « gold de pensée » ; « 200+ » est un libellé obsolète (452 phrases) et ambigu (T15).",
+  "phrases": 452,
+  "hand": 20,
+  "reel": 432,
+  "tokens": 2480,
+  "segments": 1501,
+  "cibles_attachement": 184,
+  "fichiers": {
+   "tools/tests/linguistique/gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "tools/tests/linguistique/gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11"
+  }
+ },
+ "heuristique": {
+  "global": {
+   "phrases": 452,
+   "tokens": 2480,
+   "pos": {
+    "exactitude": 0.8891,
+    "ferme": 0.9294,
+    "ouvert": 0.8466,
+    "justes": 2205,
+    "erreurs": 275,
+    "tokenisation": 66,
+    "etiquette_exactitude": 0.9134,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 1155,
+    "fp": 266,
+    "fn": 346,
+    "precision": 0.8128,
+    "rappel": 0.7695,
+    "f1": 0.7906
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 557,
+     "fp": 101,
+     "fn": 124,
+     "precision": 0.8465,
+     "rappel": 0.8179,
+     "f1": 0.832
+    },
+    "GV": {
+     "tp": 405,
+     "fp": 125,
+     "fn": 147,
+     "precision": 0.7642,
+     "rappel": 0.7337,
+     "f1": 0.7486
+    },
+    "GP": {
+     "tp": 81,
+     "fp": 25,
+     "fn": 0,
+     "precision": 0.7642,
+     "rappel": 1.0,
+     "f1": 0.8663
+    },
+    "REL": {
+     "tp": 58,
+     "fp": 11,
+     "fn": 0,
+     "precision": 0.8406,
+     "rappel": 1.0,
+     "f1": 0.9134
+    },
+    "SUB": {
+     "tp": 54,
+     "fp": 4,
+     "fn": 1,
+     "precision": 0.931,
+     "rappel": 0.9818,
+     "f1": 0.9558
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 35,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 30,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 9,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 184,
+    "justes": 183,
+    "erreurs": 1,
+    "exactitude": 0.9946,
+    "par_type": {
+     "GP": {
+      "cibles": 72,
+      "justes": 72,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 58,
+      "justes": 58,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 54,
+      "justes": 53,
+      "erreurs": 1,
+      "exactitude": 0.9815
+     }
+    }
+   }
+  },
+  "par_langue": {
+   "fr": {
+    "phrases": 242,
+    "tokens": 1332,
+    "pos": {
+     "exactitude": 0.8408,
+     "ferme": 0.8834,
+     "ouvert": 0.7957,
+     "justes": 1120,
+     "erreurs": 212,
+     "tokenisation": 64,
+     "etiquette_exactitude": 0.8833,
+     "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+    },
+    "segmentation": {
+     "tp": 569,
+     "fp": 200,
+     "fn": 230,
+     "precision": 0.7399,
+     "rappel": 0.7121,
+     "f1": 0.7258
+    },
+    "segmentation_par_type": {
+     "GN": {
+      "tp": 265,
+      "fp": 89,
+      "fn": 95,
+      "precision": 0.7486,
+      "rappel": 0.7361,
+      "f1": 0.7423
+     },
+     "GV": {
+      "tp": 204,
+      "fp": 72,
+      "fn": 89,
+      "precision": 0.7391,
+      "rappel": 0.6962,
+      "f1": 0.717
+     },
+     "GP": {
+      "tp": 41,
+      "fp": 25,
+      "fn": 0,
+      "precision": 0.6212,
+      "rappel": 1.0,
+      "f1": 0.7664
+     },
+     "REL": {
+      "tp": 30,
+      "fp": 11,
+      "fn": 0,
+      "precision": 0.7317,
+      "rappel": 1.0,
+      "f1": 0.8451
+     },
+     "SUB": {
+      "tp": 29,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.9062,
+      "rappel": 1.0,
+      "f1": 0.9508
+     },
+     "ADJ": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 17,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "ADV": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 22,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "PONCT": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 7,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     }
+    },
+    "attachement": {
+     "cibles": 96,
+     "justes": 96,
+     "erreurs": 0,
+     "exactitude": 1.0,
+     "par_type": {
+      "GP": {
+       "cibles": 38,
+       "justes": 38,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "REL": {
+       "cibles": 30,
+       "justes": 30,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "SUB": {
+       "cibles": 28,
+       "justes": 28,
+       "erreurs": 0,
+       "exactitude": 1.0
+      }
+     }
+    }
+   },
+   "en": {
+    "phrases": 210,
+    "tokens": 1148,
+    "pos": {
+     "exactitude": 0.9451,
+     "ferme": 0.983,
+     "ouvert": 0.9054,
+     "justes": 1085,
+     "erreurs": 63,
+     "tokenisation": 2,
+     "etiquette_exactitude": 0.9468,
+     "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+    },
+    "segmentation": {
+     "tp": 586,
+     "fp": 66,
+     "fn": 116,
+     "precision": 0.8988,
+     "rappel": 0.8348,
+     "f1": 0.8656
+    },
+    "segmentation_par_type": {
+     "GN": {
+      "tp": 292,
+      "fp": 12,
+      "fn": 29,
+      "precision": 0.9605,
+      "rappel": 0.9097,
+      "f1": 0.9344
+     },
+     "GV": {
+      "tp": 201,
+      "fp": 53,
+      "fn": 58,
+      "precision": 0.7913,
+      "rappel": 0.7761,
+      "f1": 0.7836
+     },
+     "GP": {
+      "tp": 40,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "rappel": 1.0,
+      "f1": 1.0
+     },
+     "REL": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "rappel": 1.0,
+      "f1": 1.0
+     },
+     "SUB": {
+      "tp": 25,
+      "fp": 1,
+      "fn": 1,
+      "precision": 0.9615,
+      "rappel": 0.9615,
+      "f1": 0.9615
+     },
+     "ADJ": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 18,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "ADV": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 8,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "PONCT": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     }
+    },
+    "attachement": {
+     "cibles": 88,
+     "justes": 87,
+     "erreurs": 1,
+     "exactitude": 0.9886,
+     "par_type": {
+      "GP": {
+       "cibles": 34,
+       "justes": 34,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "REL": {
+       "cibles": 28,
+       "justes": 28,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "SUB": {
+       "cibles": 26,
+       "justes": 25,
+       "erreurs": 1,
+       "exactitude": 0.9615
+      }
+     }
+    }
+   }
+  },
+  "par_source": {
+   "hand": {
+    "phrases": 20,
+    "tokens": 105,
+    "pos": {
+     "exactitude": 0.8857,
+     "ferme": 0.8772,
+     "ouvert": 0.8958,
+     "justes": 93,
+     "erreurs": 12,
+     "tokenisation": 2,
+     "etiquette_exactitude": 0.9029,
+     "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+    },
+    "segmentation": {
+     "tp": 55,
+     "fp": 11,
+     "fn": 1,
+     "precision": 0.8333,
+     "rappel": 0.9821,
+     "f1": 0.9016
+    },
+    "segmentation_par_type": {
+     "GN": {
+      "tp": 23,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.9583,
+      "rappel": 1.0,
+      "f1": 0.9787
+     },
+     "GV": {
+      "tp": 20,
+      "fp": 4,
+      "fn": 0,
+      "precision": 0.8333,
+      "rappel": 1.0,
+      "f1": 0.9091
+     },
+     "GP": {
+      "tp": 10,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.7692,
+      "rappel": 1.0,
+      "f1": 0.8696
+     },
+     "REL": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.5,
+      "rappel": 1.0,
+      "f1": 0.6667
+     },
+     "SUB": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 1,
+      "precision": 0.3333,
+      "rappel": 0.5,
+      "f1": 0.4
+     }
+    },
+    "attachement": {
+     "cibles": 13,
+     "justes": 12,
+     "erreurs": 1,
+     "exactitude": 0.9231,
+     "par_type": {
+      "GP": {
+       "cibles": 10,
+       "justes": 10,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "REL": {
+       "cibles": 1,
+       "justes": 1,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "SUB": {
+       "cibles": 2,
+       "justes": 1,
+       "erreurs": 1,
+       "exactitude": 0.5
+      }
+     }
+    }
+   },
+   "reel": {
+    "phrases": 432,
+    "tokens": 2375,
+    "pos": {
+     "exactitude": 0.8893,
+     "ferme": 0.9318,
+     "ouvert": 0.8446,
+     "justes": 2112,
+     "erreurs": 263,
+     "tokenisation": 64,
+     "etiquette_exactitude": 0.9139,
+     "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+    },
+    "segmentation": {
+     "tp": 1100,
+     "fp": 255,
+     "fn": 345,
+     "precision": 0.8118,
+     "rappel": 0.7612,
+     "f1": 0.7857
+    },
+    "segmentation_par_type": {
+     "GN": {
+      "tp": 534,
+      "fp": 100,
+      "fn": 124,
+      "precision": 0.8423,
+      "rappel": 0.8116,
+      "f1": 0.8266
+     },
+     "GV": {
+      "tp": 385,
+      "fp": 121,
+      "fn": 147,
+      "precision": 0.7609,
+      "rappel": 0.7237,
+      "f1": 0.7418
+     },
+     "GP": {
+      "tp": 71,
+      "fp": 22,
+      "fn": 0,
+      "precision": 0.7634,
+      "rappel": 1.0,
+      "f1": 0.8659
+     },
+     "REL": {
+      "tp": 57,
+      "fp": 10,
+      "fn": 0,
+      "precision": 0.8507,
+      "rappel": 1.0,
+      "f1": 0.9194
+     },
+     "SUB": {
+      "tp": 53,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.9636,
+      "rappel": 1.0,
+      "f1": 0.9815
+     },
+     "ADJ": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 35,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "ADV": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 30,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     },
+     "PONCT": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 9,
+      "precision": 0.0,
+      "rappel": 0.0,
+      "f1": 0.0
+     }
+    },
+    "attachement": {
+     "cibles": 171,
+     "justes": 171,
+     "erreurs": 0,
+     "exactitude": 1.0,
+     "par_type": {
+      "GP": {
+       "cibles": 62,
+       "justes": 62,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "REL": {
+       "cibles": 57,
+       "justes": 57,
+       "erreurs": 0,
+       "exactitude": 1.0
+      },
+      "SUB": {
+       "cibles": 52,
+       "justes": 52,
+       "erreurs": 0,
+       "exactitude": 1.0
+      }
+     }
+    }
+   }
+  },
+  "erreurs": {
+   "phrases_avec_pos": 191,
+   "phrases_avec_segmentation": 213,
+   "phrases_avec_attachement": 1,
+   "pos": {
+    "total": 275,
+    "par_type": {
+     "VERB->NOUN": 125,
+     "PRON->?": 30,
+     "VERB->?": 16,
+     "PRON->DET": 14,
+     "CONJ->?": 13,
+     "NOUN->ADJ": 11,
+     "ADJ->NOUN": 11,
+     "CONJ->PRON": 8,
+     "ADV->NOUN": 7,
+     "VERB->AUX": 7,
+     "NOUN->VERB": 5,
+     "AUX->PREP": 4,
+     "ADJ->VERB": 4,
+     "AUX->?": 3,
+     "DET->?": 2,
+     "VERB->PREP": 2,
+     "VERB->ADJ": 2,
+     "CONJ->PREP": 2,
+     "PRON->CONJ": 2,
+     "NOUN->?": 1,
+     "AUX->NOUN": 1,
+     "ADV->PREP": 1,
+     "AUX->VERB": 1,
+     "VERB->ADV": 1,
+     "ADV->ADJ": 1,
+     "ADV->?": 1
+    },
+    "genre": {
+     "etiquette": 209,
+     "tokenisation": 66
+    },
+    "note": "« ? » = token gold sans token prédit au même span (élision/trait d'union) : erreur de tokenisation, pas d'étiquette."
+   },
+   "segmentation": {
+    "fn_total": 346,
+    "fn_par_type": {
+     "SUB": 1,
+     "GN": 124,
+     "GV": 147,
+     "ADJ": 35,
+     "ADV": 30,
+     "PONCT": 9
+    },
+    "fp_par_type": {
+     "GP": 25,
+     "GV": 125,
+     "SUB": 4,
+     "REL": 11,
+     "GN": 101
+    },
+    "structurel": "ADJ/ADV/PONCT : l'heuristique ne les produit pas (rappel 0), 74 des 346 segments absents."
+   },
+   "attachement": {
+    "cibles": 184,
+    "justes": 183,
+    "erreurs": 1,
+    "exactitude": 0.9946,
+    "par_type": {
+     "GP": {
+      "cibles": 72,
+      "justes": 72,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 58,
+      "justes": 58,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 54,
+      "justes": 53,
+      "erreurs": 1,
+      "exactitude": 0.9815
+     }
+    }
+   }
+  }
+ },
+ "selection": {
+  "regle": "score = 3×att + 2×POS + 1×segment absent ; 25 fr + 25 en ; au plus 2 phrases par signature d'erreur ; départage par id.",
+  "phrases": [
+   {
+    "id": "g017",
+    "source": "hand",
+    "langue": "en",
+    "texte": "She said that she would come yesterday.",
+    "score": 4,
+    "pos_erreurs": 0,
+    "segments_fn": 1,
+    "segments_fp": 1,
+    "att_erreurs": 1
+   },
+   {
+    "id": "r034",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that I read is exciting.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r071",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car drives fast.",
+    "score": 3,
+    "pos_erreurs": 1,
+    "segments_fn": 1,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r076",
+    "source": "reel",
+    "langue": "en",
+    "texte": "They arrive tomorrow morning.",
+    "score": 3,
+    "pos_erreurs": 1,
+    "segments_fn": 1,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r102",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls since this morning.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r104",
+    "source": "reel",
+    "langue": "en",
+    "texte": "We prepare dinner.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r106",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The children laugh loudly.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r119",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The tourists visit the museum.",
+    "score": 5,
+    "pos_erreurs": 1,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r159",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The farmers grow wheat.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r163",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The students review their lessons.",
+    "score": 5,
+    "pos_erreurs": 1,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r179",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain washes the streets.",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r217",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The student whom I mention is absent.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r241",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The day when we left was beautiful.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r246",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The dog that barks is mean.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r285",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The table that we took is big.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r287",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The bird that flies is blue.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r291",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that is on the table is mine.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r293",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The person whom I mention is here.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r328",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; it is red.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r362",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car is red; it runs fast.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r363",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; I read it.",
+    "score": 5,
+    "pos_erreurs": 2,
+    "segments_fn": 1,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r366",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls; it wets the ground.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r368",
+    "source": "reel",
+    "langue": "en",
+    "texte": "Marie and Paul dance; they have fun.",
+    "score": 5,
+    "pos_erreurs": 2,
+    "segments_fn": 1,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r370",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The house is old; it still stands.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r422",
+    "source": "reel",
+    "langue": "en",
+    "texte": "You don't come tomorrow?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "g004",
+    "source": "hand",
+    "langue": "fr",
+    "texte": "Il a couru pour attraper le bus.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r091",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le médecin soigne les malades.",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r203",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre que j'ai lu est bon.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r210",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il soit tard, il travaille.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r225",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Je crois qu'il a raison.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r227",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'il dort, elle lit.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r255",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La voiture que j'ai achetée roule.",
+    "score": 8,
+    "pos_erreurs": 4,
+    "segments_fn": 0,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r260",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il pleuve, il sort.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r261",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La table que nous avons prise est grande.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r262",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'elle dort, il travaille.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r266",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle pleure parce qu'elle est seule.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r272",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle dit qu'elle part.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "segments_fp": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r304",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Viens-tu demain ?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r309",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Peut-être qu'il viendra.",
+    "score": 7,
+    "pos_erreurs": 3,
+    "segments_fn": 1,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r324",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; il est rouge.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r331",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Les enfants aiment les fleurs ; ils les cueillent.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r339",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Marie lit un livre ; elle le ferme ; elle le pose.",
+    "score": 10,
+    "pos_erreurs": 3,
+    "segments_fn": 4,
+    "segments_fp": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r343",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul voit Marie ; il lui parle ; elle lui répond.",
+    "score": 6,
+    "pos_erreurs": 1,
+    "segments_fn": 4,
+    "segments_fp": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r346",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le chien poursuit le chat ; il l'attrape.",
+    "score": 8,
+    "pos_erreurs": 2,
+    "segments_fn": 4,
+    "segments_fp": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r347",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Sophie regarde Paul ; elle lui sourit.",
+    "score": 6,
+    "pos_erreurs": 1,
+    "segments_fn": 4,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r349",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; je le lis.",
+    "score": 10,
+    "pos_erreurs": 4,
+    "segments_fn": 2,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r357",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul écrit une lettre ; il l'envoie.",
+    "score": 7,
+    "pos_erreurs": 3,
+    "segments_fn": 1,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r408",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne viens-tu pas demain ?",
+    "score": 8,
+    "pos_erreurs": 2,
+    "segments_fn": 4,
+    "segments_fp": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r409",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne mange-t-il pas ?",
+    "score": 9,
+    "pos_erreurs": 3,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r410",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne dort-elle pas ?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "segments_fp": 1,
+    "att_erreurs": 0
+   }
+  ],
+  "ids": [
+   "g017",
+   "r034",
+   "r071",
+   "r076",
+   "r102",
+   "r104",
+   "r106",
+   "r119",
+   "r159",
+   "r163",
+   "r179",
+   "r217",
+   "r241",
+   "r246",
+   "r285",
+   "r287",
+   "r291",
+   "r293",
+   "r328",
+   "r362",
+   "r363",
+   "r366",
+   "r368",
+   "r370",
+   "r422",
+   "g004",
+   "r091",
+   "r203",
+   "r210",
+   "r225",
+   "r227",
+   "r255",
+   "r260",
+   "r261",
+   "r262",
+   "r266",
+   "r272",
+   "r304",
+   "r309",
+   "r324",
+   "r331",
+   "r339",
+   "r343",
+   "r346",
+   "r347",
+   "r349",
+   "r357",
+   "r408",
+   "r409",
+   "r410"
+  ],
+  "composition": {
+   "sources": {
+    "hand": 2,
+    "reel": 48
+   },
+   "langues": {
+    "en": 25,
+    "fr": 25
+   },
+   "signatures_distinctes": 42,
+   "score_min": 3,
+   "score_max": 10,
+   "tokens": 323,
+   "segments": 190,
+   "cibles_attachement": 22
+  }
+ },
+ "mesure": {
+  "global_452": {
+   "phrases": 452,
+   "tokens": 2480,
+   "pos": {
+    "exactitude": 0.8891,
+    "ferme": 0.9294,
+    "ouvert": 0.8466,
+    "justes": 2205,
+    "erreurs": 275,
+    "tokenisation": 66,
+    "etiquette_exactitude": 0.9134,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 1155,
+    "fp": 266,
+    "fn": 346,
+    "precision": 0.8128,
+    "rappel": 0.7695,
+    "f1": 0.7906
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 557,
+     "fp": 101,
+     "fn": 124,
+     "precision": 0.8465,
+     "rappel": 0.8179,
+     "f1": 0.832
+    },
+    "GV": {
+     "tp": 405,
+     "fp": 125,
+     "fn": 147,
+     "precision": 0.7642,
+     "rappel": 0.7337,
+     "f1": 0.7486
+    },
+    "GP": {
+     "tp": 81,
+     "fp": 25,
+     "fn": 0,
+     "precision": 0.7642,
+     "rappel": 1.0,
+     "f1": 0.8663
+    },
+    "REL": {
+     "tp": 58,
+     "fp": 11,
+     "fn": 0,
+     "precision": 0.8406,
+     "rappel": 1.0,
+     "f1": 0.9134
+    },
+    "SUB": {
+     "tp": 54,
+     "fp": 4,
+     "fn": 1,
+     "precision": 0.931,
+     "rappel": 0.9818,
+     "f1": 0.9558
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 35,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 30,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 9,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 184,
+    "justes": 183,
+    "erreurs": 1,
+    "exactitude": 0.9946,
+    "par_type": {
+     "GP": {
+      "cibles": 72,
+      "justes": 72,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 58,
+      "justes": 58,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 54,
+      "justes": 53,
+      "erreurs": 1,
+      "exactitude": 0.9815
+     }
+    }
+   }
+  },
+  "hard_50": {
+   "phrases": 50,
+   "tokens": 323,
+   "pos": {
+    "exactitude": 0.6842,
+    "ferme": 0.7542,
+    "ouvert": 0.5972,
+    "justes": 221,
+    "erreurs": 102,
+    "tokenisation": 31,
+    "etiquette_exactitude": 0.7568,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 103,
+    "fp": 60,
+    "fn": 87,
+    "precision": 0.6319,
+    "rappel": 0.5421,
+    "f1": 0.5836
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 51,
+     "fp": 22,
+     "fn": 28,
+     "precision": 0.6986,
+     "rappel": 0.6456,
+     "f1": 0.6711
+    },
+    "GV": {
+     "tp": 27,
+     "fp": 28,
+     "fn": 38,
+     "precision": 0.4909,
+     "rappel": 0.4154,
+     "f1": 0.45
+    },
+    "GP": {
+     "tp": 6,
+     "fp": 4,
+     "fn": 0,
+     "precision": 0.6,
+     "rappel": 1.0,
+     "f1": 0.75
+    },
+    "REL": {
+     "tp": 11,
+     "fp": 5,
+     "fn": 0,
+     "precision": 0.6875,
+     "rappel": 1.0,
+     "f1": 0.8148
+    },
+    "SUB": {
+     "tp": 8,
+     "fp": 1,
+     "fn": 1,
+     "precision": 0.8889,
+     "rappel": 0.8889,
+     "f1": 0.8889
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 11,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 9,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 22,
+    "justes": 21,
+    "erreurs": 1,
+    "exactitude": 0.9545,
+    "par_type": {
+     "GP": {
+      "cibles": 2,
+      "justes": 2,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 11,
+      "justes": 11,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 9,
+      "justes": 8,
+      "erreurs": 1,
+      "exactitude": 0.8889
+     }
+    }
+   }
+  },
+  "reste_402": {
+   "phrases": 402,
+   "tokens": 2157,
+   "pos": {
+    "exactitude": 0.9198,
+    "ferme": 0.958,
+    "ouvert": 0.8804,
+    "justes": 1984,
+    "erreurs": 173,
+    "tokenisation": 35,
+    "etiquette_exactitude": 0.935,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 1052,
+    "fp": 206,
+    "fn": 259,
+    "precision": 0.8362,
+    "rappel": 0.8024,
+    "f1": 0.819
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 506,
+     "fp": 79,
+     "fn": 96,
+     "precision": 0.865,
+     "rappel": 0.8405,
+     "f1": 0.8526
+    },
+    "GV": {
+     "tp": 378,
+     "fp": 97,
+     "fn": 109,
+     "precision": 0.7958,
+     "rappel": 0.7762,
+     "f1": 0.7859
+    },
+    "GP": {
+     "tp": 75,
+     "fp": 21,
+     "fn": 0,
+     "precision": 0.7812,
+     "rappel": 1.0,
+     "f1": 0.8772
+    },
+    "REL": {
+     "tp": 47,
+     "fp": 6,
+     "fn": 0,
+     "precision": 0.8868,
+     "rappel": 1.0,
+     "f1": 0.94
+    },
+    "SUB": {
+     "tp": 46,
+     "fp": 3,
+     "fn": 0,
+     "precision": 0.9388,
+     "rappel": 1.0,
+     "f1": 0.9684
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 24,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 21,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 9,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 162,
+    "justes": 162,
+    "erreurs": 0,
+    "exactitude": 1.0,
+    "par_type": {
+     "GP": {
+      "cibles": 70,
+      "justes": 70,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 47,
+      "justes": 47,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 45,
+      "justes": 45,
+      "erreurs": 0,
+      "exactitude": 1.0
+     }
+    }
+   }
+  },
+  "hand_20": {
+   "phrases": 20,
+   "tokens": 105,
+   "pos": {
+    "exactitude": 0.8857,
+    "ferme": 0.8772,
+    "ouvert": 0.8958,
+    "justes": 93,
+    "erreurs": 12,
+    "tokenisation": 2,
+    "etiquette_exactitude": 0.9029,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 55,
+    "fp": 11,
+    "fn": 1,
+    "precision": 0.8333,
+    "rappel": 0.9821,
+    "f1": 0.9016
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 23,
+     "fp": 1,
+     "fn": 0,
+     "precision": 0.9583,
+     "rappel": 1.0,
+     "f1": 0.9787
+    },
+    "GV": {
+     "tp": 20,
+     "fp": 4,
+     "fn": 0,
+     "precision": 0.8333,
+     "rappel": 1.0,
+     "f1": 0.9091
+    },
+    "GP": {
+     "tp": 10,
+     "fp": 3,
+     "fn": 0,
+     "precision": 0.7692,
+     "rappel": 1.0,
+     "f1": 0.8696
+    },
+    "REL": {
+     "tp": 1,
+     "fp": 1,
+     "fn": 0,
+     "precision": 0.5,
+     "rappel": 1.0,
+     "f1": 0.6667
+    },
+    "SUB": {
+     "tp": 1,
+     "fp": 2,
+     "fn": 1,
+     "precision": 0.3333,
+     "rappel": 0.5,
+     "f1": 0.4
+    }
+   },
+   "attachement": {
+    "cibles": 13,
+    "justes": 12,
+    "erreurs": 1,
+    "exactitude": 0.9231,
+    "par_type": {
+     "GP": {
+      "cibles": 10,
+      "justes": 10,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 1,
+      "justes": 1,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 2,
+      "justes": 1,
+      "erreurs": 1,
+      "exactitude": 0.5
+     }
+    }
+   }
+  },
+  "reel_432": {
+   "phrases": 432,
+   "tokens": 2375,
+   "pos": {
+    "exactitude": 0.8893,
+    "ferme": 0.9318,
+    "ouvert": 0.8446,
+    "justes": 2112,
+    "erreurs": 263,
+    "tokenisation": 64,
+    "etiquette_exactitude": 0.9139,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 1100,
+    "fp": 255,
+    "fn": 345,
+    "precision": 0.8118,
+    "rappel": 0.7612,
+    "f1": 0.7857
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 534,
+     "fp": 100,
+     "fn": 124,
+     "precision": 0.8423,
+     "rappel": 0.8116,
+     "f1": 0.8266
+    },
+    "GV": {
+     "tp": 385,
+     "fp": 121,
+     "fn": 147,
+     "precision": 0.7609,
+     "rappel": 0.7237,
+     "f1": 0.7418
+    },
+    "GP": {
+     "tp": 71,
+     "fp": 22,
+     "fn": 0,
+     "precision": 0.7634,
+     "rappel": 1.0,
+     "f1": 0.8659
+    },
+    "REL": {
+     "tp": 57,
+     "fp": 10,
+     "fn": 0,
+     "precision": 0.8507,
+     "rappel": 1.0,
+     "f1": 0.9194
+    },
+    "SUB": {
+     "tp": 53,
+     "fp": 2,
+     "fn": 0,
+     "precision": 0.9636,
+     "rappel": 1.0,
+     "f1": 0.9815
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 35,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 30,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 9,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 171,
+    "justes": 171,
+    "erreurs": 0,
+    "exactitude": 1.0,
+    "par_type": {
+     "GP": {
+      "cibles": 62,
+      "justes": 62,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 57,
+      "justes": 57,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 52,
+      "justes": 52,
+      "erreurs": 0,
+      "exactitude": 1.0
+     }
+    }
+   }
+  },
+  "fr_242": {
+   "phrases": 242,
+   "tokens": 1332,
+   "pos": {
+    "exactitude": 0.8408,
+    "ferme": 0.8834,
+    "ouvert": 0.7957,
+    "justes": 1120,
+    "erreurs": 212,
+    "tokenisation": 64,
+    "etiquette_exactitude": 0.8833,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 569,
+    "fp": 200,
+    "fn": 230,
+    "precision": 0.7399,
+    "rappel": 0.7121,
+    "f1": 0.7258
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 265,
+     "fp": 89,
+     "fn": 95,
+     "precision": 0.7486,
+     "rappel": 0.7361,
+     "f1": 0.7423
+    },
+    "GV": {
+     "tp": 204,
+     "fp": 72,
+     "fn": 89,
+     "precision": 0.7391,
+     "rappel": 0.6962,
+     "f1": 0.717
+    },
+    "GP": {
+     "tp": 41,
+     "fp": 25,
+     "fn": 0,
+     "precision": 0.6212,
+     "rappel": 1.0,
+     "f1": 0.7664
+    },
+    "REL": {
+     "tp": 30,
+     "fp": 11,
+     "fn": 0,
+     "precision": 0.7317,
+     "rappel": 1.0,
+     "f1": 0.8451
+    },
+    "SUB": {
+     "tp": 29,
+     "fp": 3,
+     "fn": 0,
+     "precision": 0.9062,
+     "rappel": 1.0,
+     "f1": 0.9508
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 17,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 22,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 7,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 96,
+    "justes": 96,
+    "erreurs": 0,
+    "exactitude": 1.0,
+    "par_type": {
+     "GP": {
+      "cibles": 38,
+      "justes": 38,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 30,
+      "justes": 30,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 28,
+      "justes": 28,
+      "erreurs": 0,
+      "exactitude": 1.0
+     }
+    }
+   }
+  },
+  "en_210": {
+   "phrases": 210,
+   "tokens": 1148,
+   "pos": {
+    "exactitude": 0.9451,
+    "ferme": 0.983,
+    "ouvert": 0.9054,
+    "justes": 1085,
+    "erreurs": 63,
+    "tokenisation": 2,
+    "etiquette_exactitude": 0.9468,
+    "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+   },
+   "segmentation": {
+    "tp": 586,
+    "fp": 66,
+    "fn": 116,
+    "precision": 0.8988,
+    "rappel": 0.8348,
+    "f1": 0.8656
+   },
+   "segmentation_par_type": {
+    "GN": {
+     "tp": 292,
+     "fp": 12,
+     "fn": 29,
+     "precision": 0.9605,
+     "rappel": 0.9097,
+     "f1": 0.9344
+    },
+    "GV": {
+     "tp": 201,
+     "fp": 53,
+     "fn": 58,
+     "precision": 0.7913,
+     "rappel": 0.7761,
+     "f1": 0.7836
+    },
+    "GP": {
+     "tp": 40,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "rappel": 1.0,
+     "f1": 1.0
+    },
+    "REL": {
+     "tp": 28,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "rappel": 1.0,
+     "f1": 1.0
+    },
+    "SUB": {
+     "tp": 25,
+     "fp": 1,
+     "fn": 1,
+     "precision": 0.9615,
+     "rappel": 0.9615,
+     "f1": 0.9615
+    },
+    "ADJ": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 18,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "ADV": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 8,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    },
+    "PONCT": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 2,
+     "precision": 0.0,
+     "rappel": 0.0,
+     "f1": 0.0
+    }
+   },
+   "attachement": {
+    "cibles": 88,
+    "justes": 87,
+    "erreurs": 1,
+    "exactitude": 0.9886,
+    "par_type": {
+     "GP": {
+      "cibles": 34,
+      "justes": 34,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "REL": {
+      "cibles": 28,
+      "justes": 28,
+      "erreurs": 0,
+      "exactitude": 1.0
+     },
+     "SUB": {
+      "cibles": 26,
+      "justes": 25,
+      "erreurs": 1,
+      "exactitude": 0.9615
+     }
+    }
+   }
+  },
+  "part_des_erreurs": {
+   "pos": {
+    "lot": 102,
+    "total": 275,
+    "part": 0.3709
+   },
+   "fn": {
+    "lot": 87,
+    "total": 346,
+    "part": 0.2514
+   },
+   "att": {
+    "lot": 1,
+    "total": 1,
+    "part": 1.0
+   }
+  },
+  "controles": {
+   "simple": [
+    {
+     "graine": 0,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 289,
+      "pos": {
+       "exactitude": 0.8685,
+       "ferme": 0.9122,
+       "ouvert": 0.8227,
+       "justes": 251,
+       "erreurs": 38,
+       "tokenisation": 13,
+       "etiquette_exactitude": 0.9094,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 137,
+       "fp": 26,
+       "fn": 33,
+       "precision": 0.8405,
+       "rappel": 0.8059,
+       "f1": 0.8228
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 64,
+        "fp": 8,
+        "fn": 10,
+        "precision": 0.8889,
+        "rappel": 0.8649,
+        "f1": 0.8767
+       },
+       "GV": {
+        "tp": 46,
+        "fp": 15,
+        "fn": 15,
+        "precision": 0.7541,
+        "rappel": 0.7541,
+        "f1": 0.7541
+       },
+       "GP": {
+        "tp": 10,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8333,
+        "rappel": 1.0,
+        "f1": 0.9091
+       },
+       "REL": {
+        "tp": 9,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9,
+        "rappel": 1.0,
+        "f1": 0.9474
+       },
+       "SUB": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 23,
+       "justes": 23,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 9,
+         "justes": 9,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 1,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 274,
+      "pos": {
+       "exactitude": 0.8942,
+       "ferme": 0.9178,
+       "ouvert": 0.8672,
+       "justes": 245,
+       "erreurs": 29,
+       "tokenisation": 13,
+       "etiquette_exactitude": 0.9387,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 128,
+       "fp": 28,
+       "fn": 36,
+       "precision": 0.8205,
+       "rappel": 0.7805,
+       "f1": 0.8
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 60,
+        "fp": 8,
+        "fn": 14,
+        "precision": 0.8824,
+        "rappel": 0.8108,
+        "f1": 0.8451
+       },
+       "GV": {
+        "tp": 46,
+        "fp": 14,
+        "fn": 14,
+        "precision": 0.7667,
+        "rappel": 0.7667,
+        "f1": 0.7667
+       },
+       "GP": {
+        "tp": 7,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.6364,
+        "rappel": 1.0,
+        "f1": 0.7778
+       },
+       "REL": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "SUB": {
+        "tp": 12,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8571,
+        "rappel": 1.0,
+        "f1": 0.9231
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 22,
+       "justes": 22,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 3,
+         "justes": 3,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 12,
+         "justes": 12,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 2,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 254,
+      "pos": {
+       "exactitude": 0.8858,
+       "ferme": 0.9375,
+       "ouvert": 0.8333,
+       "justes": 225,
+       "erreurs": 29,
+       "tokenisation": 6,
+       "etiquette_exactitude": 0.9073,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 117,
+       "fp": 31,
+       "fn": 42,
+       "precision": 0.7905,
+       "rappel": 0.7358,
+       "f1": 0.7622
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 59,
+        "fp": 9,
+        "fn": 14,
+        "precision": 0.8676,
+        "rappel": 0.8082,
+        "f1": 0.8369
+       },
+       "GV": {
+        "tp": 41,
+        "fp": 18,
+        "fn": 16,
+        "precision": 0.6949,
+        "rappel": 0.7193,
+        "f1": 0.7069
+       },
+       "GP": {
+        "tp": 6,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.6,
+        "rappel": 1.0,
+        "f1": 0.75
+       },
+       "REL": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 16,
+       "justes": 16,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 3,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 295,
+      "pos": {
+       "exactitude": 0.8678,
+       "ferme": 0.9281,
+       "ouvert": 0.8028,
+       "justes": 256,
+       "erreurs": 39,
+       "tokenisation": 9,
+       "etiquette_exactitude": 0.8951,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 127,
+       "fp": 28,
+       "fn": 46,
+       "precision": 0.8194,
+       "rappel": 0.7341,
+       "f1": 0.7744
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 63,
+        "fp": 9,
+        "fn": 14,
+        "precision": 0.875,
+        "rappel": 0.8182,
+        "f1": 0.8456
+       },
+       "GV": {
+        "tp": 39,
+        "fp": 16,
+        "fn": 21,
+        "precision": 0.7091,
+        "rappel": 0.65,
+        "f1": 0.6783
+       },
+       "GP": {
+        "tp": 9,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9,
+        "rappel": 1.0,
+        "f1": 0.9474
+       },
+       "REL": {
+        "tp": 11,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8462,
+        "rappel": 1.0,
+        "f1": 0.9167
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 7,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 22,
+       "justes": 22,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 11,
+         "justes": 11,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 4,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 280,
+      "pos": {
+       "exactitude": 0.85,
+       "ferme": 0.9054,
+       "ouvert": 0.7879,
+       "justes": 238,
+       "erreurs": 42,
+       "tokenisation": 11,
+       "etiquette_exactitude": 0.8848,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 127,
+       "fp": 27,
+       "fn": 36,
+       "precision": 0.8247,
+       "rappel": 0.7791,
+       "f1": 0.8013
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 57,
+        "fp": 9,
+        "fn": 13,
+        "precision": 0.8636,
+        "rappel": 0.8143,
+        "f1": 0.8382
+       },
+       "GV": {
+        "tp": 45,
+        "fp": 12,
+        "fn": 14,
+        "precision": 0.7895,
+        "rappel": 0.7627,
+        "f1": 0.7759
+       },
+       "GP": {
+        "tp": 12,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.8,
+        "rappel": 1.0,
+        "f1": 0.8889
+       },
+       "REL": {
+        "tp": 9,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.75,
+        "rappel": 1.0,
+        "f1": 0.8571
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 24,
+       "justes": 24,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 11,
+         "justes": 11,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 9,
+         "justes": 9,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 5,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 267,
+      "pos": {
+       "exactitude": 0.9101,
+       "ferme": 0.9248,
+       "ouvert": 0.8955,
+       "justes": 243,
+       "erreurs": 24,
+       "tokenisation": 5,
+       "etiquette_exactitude": 0.9275,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 135,
+       "fp": 21,
+       "fn": 31,
+       "precision": 0.8654,
+       "rappel": 0.8133,
+       "f1": 0.8385
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 68,
+        "fp": 6,
+        "fn": 10,
+        "precision": 0.9189,
+        "rappel": 0.8718,
+        "f1": 0.8947
+       },
+       "GV": {
+        "tp": 47,
+        "fp": 14,
+        "fn": 14,
+        "precision": 0.7705,
+        "rappel": 0.7705,
+        "f1": 0.7705
+       },
+       "GP": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "REL": {
+        "tp": 5,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8333,
+        "rappel": 1.0,
+        "f1": 0.9091
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 20,
+       "justes": 20,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 11,
+         "justes": 11,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 6,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 274,
+      "pos": {
+       "exactitude": 0.8796,
+       "ferme": 0.8857,
+       "ouvert": 0.8731,
+       "justes": 241,
+       "erreurs": 33,
+       "tokenisation": 11,
+       "etiquette_exactitude": 0.9163,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 135,
+       "fp": 30,
+       "fn": 37,
+       "precision": 0.8182,
+       "rappel": 0.7849,
+       "f1": 0.8012
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 67,
+        "fp": 13,
+        "fn": 11,
+        "precision": 0.8375,
+        "rappel": 0.859,
+        "f1": 0.8481
+       },
+       "GV": {
+        "tp": 48,
+        "fp": 13,
+        "fn": 18,
+        "precision": 0.7869,
+        "rappel": 0.7273,
+        "f1": 0.7559
+       },
+       "GP": {
+        "tp": 7,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.7778,
+        "rappel": 1.0,
+        "f1": 0.875
+       },
+       "REL": {
+        "tp": 7,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.875,
+        "rappel": 1.0,
+        "f1": 0.9333
+       },
+       "SUB": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8571,
+        "rappel": 1.0,
+        "f1": 0.9231
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 19,
+       "justes": 19,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 6,
+         "justes": 6,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 6,
+         "justes": 6,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 7,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 265,
+      "pos": {
+       "exactitude": 0.8868,
+       "ferme": 0.9371,
+       "ouvert": 0.8279,
+       "justes": 235,
+       "erreurs": 30,
+       "tokenisation": 6,
+       "etiquette_exactitude": 0.9073,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 124,
+       "fp": 25,
+       "fn": 27,
+       "precision": 0.8322,
+       "rappel": 0.8212,
+       "f1": 0.8267
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 53,
+        "fp": 9,
+        "fn": 10,
+        "precision": 0.8548,
+        "rappel": 0.8413,
+        "f1": 0.848
+       },
+       "GV": {
+        "tp": 44,
+        "fp": 9,
+        "fn": 11,
+        "precision": 0.8302,
+        "rappel": 0.8,
+        "f1": 0.8148
+       },
+       "GP": {
+        "tp": 12,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.75,
+        "rappel": 1.0,
+        "f1": 0.8571
+       },
+       "REL": {
+        "tp": 10,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.7692,
+        "rappel": 1.0,
+        "f1": 0.8696
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 26,
+       "justes": 26,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 11,
+         "justes": 11,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 10,
+         "justes": 10,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    }
+   ],
+   "stratifie": [
+    {
+     "graine": 0,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 296,
+      "pos": {
+       "exactitude": 0.902,
+       "ferme": 0.9474,
+       "ouvert": 0.8542,
+       "justes": 267,
+       "erreurs": 29,
+       "tokenisation": 4,
+       "etiquette_exactitude": 0.9144,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 131,
+       "fp": 35,
+       "fn": 43,
+       "precision": 0.7892,
+       "rappel": 0.7529,
+       "f1": 0.7706
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 61,
+        "fp": 15,
+        "fn": 16,
+        "precision": 0.8026,
+        "rappel": 0.7922,
+        "f1": 0.7974
+       },
+       "GV": {
+        "tp": 47,
+        "fp": 18,
+        "fn": 18,
+        "precision": 0.7231,
+        "rappel": 0.7231,
+        "f1": 0.7231
+       },
+       "GP": {
+        "tp": 10,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8333,
+        "rappel": 1.0,
+        "f1": 0.9091
+       },
+       "REL": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 6,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 22,
+       "justes": 22,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 9,
+         "justes": 9,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 8,
+         "justes": 8,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 1,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 273,
+      "pos": {
+       "exactitude": 0.9048,
+       "ferme": 0.963,
+       "ouvert": 0.8478,
+       "justes": 247,
+       "erreurs": 26,
+       "tokenisation": 3,
+       "etiquette_exactitude": 0.9148,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 142,
+       "fp": 26,
+       "fn": 33,
+       "precision": 0.8452,
+       "rappel": 0.8114,
+       "f1": 0.828
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 70,
+        "fp": 12,
+        "fn": 11,
+        "precision": 0.8537,
+        "rappel": 0.8642,
+        "f1": 0.8589
+       },
+       "GV": {
+        "tp": 55,
+        "fp": 13,
+        "fn": 15,
+        "precision": 0.8088,
+        "rappel": 0.7857,
+        "f1": 0.7971
+       },
+       "GP": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "REL": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8571,
+        "rappel": 1.0,
+        "f1": 0.9231
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 16,
+       "justes": 16,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 6,
+         "justes": 6,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 2,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 293,
+      "pos": {
+       "exactitude": 0.8942,
+       "ferme": 0.9097,
+       "ouvert": 0.8768,
+       "justes": 262,
+       "erreurs": 31,
+       "tokenisation": 6,
+       "etiquette_exactitude": 0.9129,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 143,
+       "fp": 29,
+       "fn": 27,
+       "precision": 0.8314,
+       "rappel": 0.8412,
+       "f1": 0.8363
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 67,
+        "fp": 6,
+        "fn": 5,
+        "precision": 0.9178,
+        "rappel": 0.9306,
+        "f1": 0.9241
+       },
+       "GV": {
+        "tp": 50,
+        "fp": 17,
+        "fn": 13,
+        "precision": 0.7463,
+        "rappel": 0.7937,
+        "f1": 0.7692
+       },
+       "GP": {
+        "tp": 11,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8462,
+        "rappel": 1.0,
+        "f1": 0.9167
+       },
+       "REL": {
+        "tp": 10,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.7143,
+        "rappel": 1.0,
+        "f1": 0.8333
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 26,
+       "justes": 26,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 11,
+         "justes": 11,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 10,
+         "justes": 10,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 3,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 290,
+      "pos": {
+       "exactitude": 0.8724,
+       "ferme": 0.9408,
+       "ouvert": 0.7971,
+       "justes": 253,
+       "erreurs": 37,
+       "tokenisation": 7,
+       "etiquette_exactitude": 0.894,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 129,
+       "fp": 33,
+       "fn": 40,
+       "precision": 0.7963,
+       "rappel": 0.7633,
+       "f1": 0.7795
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 63,
+        "fp": 10,
+        "fn": 12,
+        "precision": 0.863,
+        "rappel": 0.84,
+        "f1": 0.8514
+       },
+       "GV": {
+        "tp": 43,
+        "fp": 18,
+        "fn": 18,
+        "precision": 0.7049,
+        "rappel": 0.7049,
+        "f1": 0.7049
+       },
+       "GP": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8571,
+        "rappel": 1.0,
+        "f1": 0.9231
+       },
+       "REL": {
+        "tp": 13,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.7647,
+        "rappel": 1.0,
+        "f1": 0.8667
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 7,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 21,
+       "justes": 21,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 13,
+         "justes": 13,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 4,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 284,
+      "pos": {
+       "exactitude": 0.8838,
+       "ferme": 0.9085,
+       "ouvert": 0.8592,
+       "justes": 251,
+       "erreurs": 33,
+       "tokenisation": 10,
+       "etiquette_exactitude": 0.9161,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 132,
+       "fp": 33,
+       "fn": 38,
+       "precision": 0.8,
+       "rappel": 0.7765,
+       "f1": 0.7881
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 63,
+        "fp": 17,
+        "fn": 17,
+        "precision": 0.7875,
+        "rappel": 0.7875,
+        "f1": 0.7875
+       },
+       "GV": {
+        "tp": 49,
+        "fp": 13,
+        "fn": 16,
+        "precision": 0.7903,
+        "rappel": 0.7538,
+        "f1": 0.7717
+       },
+       "GP": {
+        "tp": 10,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9091,
+        "rappel": 1.0,
+        "f1": 0.9524
+       },
+       "REL": {
+        "tp": 6,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.75,
+        "rappel": 1.0,
+        "f1": 0.8571
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 19,
+       "justes": 19,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 9,
+         "justes": 9,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 6,
+         "justes": 6,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 5,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 280,
+      "pos": {
+       "exactitude": 0.8964,
+       "ferme": 0.9116,
+       "ouvert": 0.8797,
+       "justes": 251,
+       "erreurs": 29,
+       "tokenisation": 11,
+       "etiquette_exactitude": 0.9331,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 119,
+       "fp": 38,
+       "fn": 47,
+       "precision": 0.758,
+       "rappel": 0.7169,
+       "f1": 0.7368
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 57,
+        "fp": 14,
+        "fn": 18,
+        "precision": 0.8028,
+        "rappel": 0.76,
+        "f1": 0.7808
+       },
+       "GV": {
+        "tp": 43,
+        "fp": 16,
+        "fn": 17,
+        "precision": 0.7288,
+        "rappel": 0.7167,
+        "f1": 0.7227
+       },
+       "GP": {
+        "tp": 7,
+        "fp": 5,
+        "fn": 0,
+        "precision": 0.5833,
+        "rappel": 1.0,
+        "f1": 0.7368
+       },
+       "REL": {
+        "tp": 9,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8182,
+        "rappel": 1.0,
+        "f1": 0.9
+       },
+       "SUB": {
+        "tp": 3,
+        "fp": 1,
+        "fn": 1,
+        "precision": 0.75,
+        "rappel": 0.75,
+        "f1": 0.75
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 20,
+       "justes": 19,
+       "erreurs": 1,
+       "exactitude": 0.95,
+       "par_type": {
+        "GP": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 9,
+         "justes": 9,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 3,
+         "erreurs": 1,
+         "exactitude": 0.75
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 6,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 260,
+      "pos": {
+       "exactitude": 0.9077,
+       "ferme": 0.937,
+       "ouvert": 0.8797,
+       "justes": 236,
+       "erreurs": 24,
+       "tokenisation": 6,
+       "etiquette_exactitude": 0.9291,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 125,
+       "fp": 21,
+       "fn": 37,
+       "precision": 0.8562,
+       "rappel": 0.7716,
+       "f1": 0.8117
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 64,
+        "fp": 12,
+        "fn": 15,
+        "precision": 0.8421,
+        "rappel": 0.8101,
+        "f1": 0.8258
+       },
+       "GV": {
+        "tp": 45,
+        "fp": 7,
+        "fn": 17,
+        "precision": 0.8654,
+        "rappel": 0.7258,
+        "f1": 0.7895
+       },
+       "GP": {
+        "tp": 5,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8333,
+        "rappel": 1.0,
+        "f1": 0.9091
+       },
+       "REL": {
+        "tp": 6,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8571,
+        "rappel": 1.0,
+        "f1": 0.9231
+       },
+       "SUB": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 16,
+       "justes": 16,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 6,
+         "justes": 6,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    },
+    {
+     "graine": 7,
+     "mesure": {
+      "phrases": 50,
+      "tokens": 275,
+      "pos": {
+       "exactitude": 0.8727,
+       "ferme": 0.9281,
+       "ouvert": 0.8162,
+       "justes": 240,
+       "erreurs": 35,
+       "tokenisation": 7,
+       "etiquette_exactitude": 0.8955,
+       "note": "`exactitude` compte la tokenisation ; `etiquette_exactitude` retire les tokens gold sans token prédit (« ? »)."
+      },
+      "segmentation": {
+       "tp": 118,
+       "fp": 37,
+       "fn": 47,
+       "precision": 0.7613,
+       "rappel": 0.7152,
+       "f1": 0.7375
+      },
+      "segmentation_par_type": {
+       "GN": {
+        "tp": 60,
+        "fp": 12,
+        "fn": 18,
+        "precision": 0.8333,
+        "rappel": 0.7692,
+        "f1": 0.8
+       },
+       "GV": {
+        "tp": 40,
+        "fp": 18,
+        "fn": 21,
+        "precision": 0.6897,
+        "rappel": 0.6557,
+        "f1": 0.6723
+       },
+       "GP": {
+        "tp": 7,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.7,
+        "rappel": 1.0,
+        "f1": 0.8235
+       },
+       "REL": {
+        "tp": 7,
+        "fp": 4,
+        "fn": 0,
+        "precision": 0.6364,
+        "rappel": 1.0,
+        "f1": 0.7778
+       },
+       "SUB": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "rappel": 1.0,
+        "f1": 1.0
+       },
+       "ADJ": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "ADV": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       },
+       "PONCT": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 0.0,
+        "rappel": 0.0,
+        "f1": 0.0
+       }
+      },
+      "attachement": {
+       "cibles": 16,
+       "justes": 16,
+       "erreurs": 0,
+       "exactitude": 1.0,
+       "par_type": {
+        "GP": {
+         "cibles": 5,
+         "justes": 5,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "REL": {
+         "cibles": 7,
+         "justes": 7,
+         "erreurs": 0,
+         "exactitude": 1.0
+        },
+        "SUB": {
+         "cibles": 4,
+         "justes": 4,
+         "erreurs": 0,
+         "exactitude": 1.0
+        }
+       }
+      }
+     }
+    }
+   ],
+   "majoritaire": {
+    "hard_50": {
+     "classe": "PRON",
+     "justes": 71,
+     "tokens": 323,
+     "exactitude": 0.2198
+    },
+    "global_452": {
+     "classe": "VERB",
+     "justes": 582,
+     "tokens": 2480,
+     "exactitude": 0.2347
+    }
+   },
+   "uniforme": {
+    "hard_50": {
+     "graine": 0,
+     "justes": 27,
+     "tokens": 323,
+     "exactitude": 0.0836
+    },
+    "global_452": {
+     "graine": 0,
+     "justes": 237,
+     "tokens": 2480,
+     "exactitude": 0.0956
+    }
+   }
+  },
+  "sensibilite_poids": [
+   {
+    "poids": "3/2/1",
+    "commun": 50,
+    "jaccard": 1.0
+   },
+   {
+    "poids": "2/2/1",
+    "commun": 50,
+    "jaccard": 1.0
+   },
+   {
+    "poids": "5/2/1",
+    "commun": 50,
+    "jaccard": 1.0
+   },
+   {
+    "poids": "3/3/1",
+    "commun": 48,
+    "jaccard": 0.923
+   },
+   {
+    "poids": "3/1/1",
+    "commun": 39,
+    "jaccard": 0.639
+   },
+   {
+    "poids": "1/1/1",
+    "commun": 39,
+    "jaccard": 0.639
+   }
+  ],
+  "projection_502": {
+   "phrases": 502,
+   "pos": 0.8655,
+   "f1": 0.7682,
+   "attachement": 0.9903,
+   "delta_pos": -2.36,
+   "delta_f1": -2.24,
+   "delta_attachement": -0.43,
+   "note": "projection, pas une mesure : les 50 sont déjà dans le gold."
+  }
+ },
+ "erreurs_hard_50": {
+  "pos_par_type": {
+   "VERB->NOUN": 31,
+   "PRON->?": 15,
+   "PRON->DET": 8,
+   "NOUN->ADJ": 8,
+   "CONJ->?": 8,
+   "VERB->AUX": 6,
+   "NOUN->VERB": 5,
+   "VERB->?": 5,
+   "ADV->NOUN": 2,
+   "PRON->CONJ": 2,
+   "AUX->PREP": 2,
+   "AUX->?": 2,
+   "CONJ->PREP": 2,
+   "CONJ->PRON": 1,
+   "ADJ->VERB": 1,
+   "ADV->?": 1,
+   "AUX->NOUN": 1,
+   "ADJ->NOUN": 1,
+   "VERB->ADV": 1
+  },
+  "pos_genre": {
+   "etiquette": 71,
+   "tokenisation": 31
+  },
+  "segmentation": {
+   "fn_par_type": {
+    "SUB": 1,
+    "GV": 38,
+    "GN": 28,
+    "ADJ": 11,
+    "ADV": 9
+   },
+   "fp_par_type": {
+    "SUB": 1,
+    "GV": 28,
+    "GN": 22,
+    "REL": 5,
+    "GP": 4
+   }
+  },
+  "attachement_par_type": {
+   "SUB/span_absent": 1
+  },
+  "phrases": [
+   {
+    "id": "g017",
+    "source": "hand",
+    "langue": "en",
+    "texte": "She said that she would come yesterday.",
+    "score": 4,
+    "pos": {
+     "erreurs": []
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "SUB",
+       "texte": "that she would come",
+       "debut": 9,
+       "fin": 28
+      }
+     ],
+     "fp": [
+      {
+       "type": "SUB",
+       "texte": "that she would come yesterday",
+       "debut": 9,
+       "fin": 38
+      }
+     ]
+    },
+    "attachement": [
+     {
+      "type": "SUB",
+      "erreur": "span_absent",
+      "segment": "that she would come",
+      "cible_attendue": "said",
+      "cible_predite": null
+     }
+    ]
+   },
+   {
+    "id": "r034",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that I read is exciting.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "that",
+       "gold": "CONJ",
+       "predit": "PRON",
+       "debut": 9,
+       "fin": 13,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "exciting",
+       "gold": "ADJ",
+       "predit": "VERB",
+       "debut": 24,
+       "fin": 32,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r071",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car drives fast.",
+    "score": 3,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "fast",
+       "gold": "ADV",
+       "predit": "NOUN",
+       "debut": 15,
+       "fin": 19,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GV",
+       "texte": "drives",
+       "debut": 8,
+       "fin": 14
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "drives fast",
+       "debut": 8,
+       "fin": 19
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r076",
+    "source": "reel",
+    "langue": "en",
+    "texte": "They arrive tomorrow morning.",
+    "score": 3,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "morning",
+       "gold": "NOUN",
+       "predit": "VERB",
+       "debut": 21,
+       "fin": 28,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GV",
+       "texte": "arrive",
+       "debut": 5,
+       "fin": 11
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "arrive tomorrow morning",
+       "debut": 5,
+       "fin": 28
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r102",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls since this morning.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "rain",
+       "gold": "NOUN",
+       "predit": "VERB",
+       "debut": 4,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "falls",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 9,
+       "fin": 14,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r104",
+    "source": "reel",
+    "langue": "en",
+    "texte": "We prepare dinner.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "dinner",
+       "gold": "NOUN",
+       "predit": "VERB",
+       "debut": 11,
+       "fin": 17,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "dinner",
+       "debut": 11,
+       "fin": 17
+      },
+      {
+       "type": "GV",
+       "texte": "prepare",
+       "debut": 3,
+       "fin": 10
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "prepare dinner",
+       "debut": 3,
+       "fin": 17
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r106",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The children laugh loudly.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "laugh",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 13,
+       "fin": 18,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "The children",
+       "debut": 0,
+       "fin": 12
+      },
+      {
+       "type": "GV",
+       "texte": "laugh",
+       "debut": 13,
+       "fin": 18
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "The children laugh loudly",
+       "debut": 0,
+       "fin": 25
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r119",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The tourists visit the museum.",
+    "score": 5,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "visit",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 13,
+       "fin": 18,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "The tourists",
+       "debut": 0,
+       "fin": 12
+      },
+      {
+       "type": "GN",
+       "texte": "the museum",
+       "debut": 19,
+       "fin": 29
+      },
+      {
+       "type": "GV",
+       "texte": "visit",
+       "debut": 13,
+       "fin": 18
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "The tourists visit the museum",
+       "debut": 0,
+       "fin": 29
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r159",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The farmers grow wheat.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "grow",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 12,
+       "fin": 16,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "wheat",
+       "debut": 17,
+       "fin": 22
+      },
+      {
+       "type": "GV",
+       "texte": "grow",
+       "debut": 12,
+       "fin": 16
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "grow wheat",
+       "debut": 12,
+       "fin": 22
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r163",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The students review their lessons.",
+    "score": 5,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "review",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 13,
+       "fin": 19,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "The students",
+       "debut": 0,
+       "fin": 12
+      },
+      {
+       "type": "GN",
+       "texte": "their lessons",
+       "debut": 20,
+       "fin": 33
+      },
+      {
+       "type": "GV",
+       "texte": "review",
+       "debut": 13,
+       "fin": 19
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "The students review their lessons",
+       "debut": 0,
+       "fin": 33
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r179",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain washes the streets.",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "rain",
+       "gold": "NOUN",
+       "predit": "VERB",
+       "debut": 4,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "washes",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 9,
+       "fin": 15,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "The rain",
+       "debut": 0,
+       "fin": 8
+      },
+      {
+       "type": "GN",
+       "texte": "the streets",
+       "debut": 16,
+       "fin": 27
+      },
+      {
+       "type": "GV",
+       "texte": "washes",
+       "debut": 9,
+       "fin": 15
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "The rain washes the streets",
+       "debut": 0,
+       "fin": 27
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r217",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The student whom I mention is absent.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "mention",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 19,
+       "fin": 26,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "absent",
+       "debut": 30,
+       "fin": 36
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 27,
+       "fin": 29
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is absent",
+       "debut": 27,
+       "fin": 36
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r241",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The day when we left was beautiful.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "when",
+       "gold": "PRON",
+       "predit": "CONJ",
+       "debut": 8,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "beautiful",
+       "debut": 25,
+       "fin": 34
+      },
+      {
+       "type": "GV",
+       "texte": "was",
+       "debut": 21,
+       "fin": 24
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "was beautiful",
+       "debut": 21,
+       "fin": 34
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r246",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The dog that barks is mean.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "that",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 8,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "barks",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 13,
+       "fin": 18,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "mean",
+       "debut": 22,
+       "fin": 26
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 19,
+       "fin": 21
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is mean",
+       "debut": 19,
+       "fin": 26
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r285",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The table that we took is big.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 4,
+       "fin": 9,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "big",
+       "debut": 26,
+       "fin": 29
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 23,
+       "fin": 25
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is big",
+       "debut": 23,
+       "fin": 29
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r287",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The bird that flies is blue.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "that",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 9,
+       "fin": 13,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "flies",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 14,
+       "fin": 19,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "blue",
+       "debut": 23,
+       "fin": 27
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 20,
+       "fin": 22
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is blue",
+       "debut": 20,
+       "fin": 27
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r291",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that is on the table is mine.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "is",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 14,
+       "fin": 16,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 24,
+       "fin": 29,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "mine",
+       "debut": 33,
+       "fin": 37
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 30,
+       "fin": 32
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is mine",
+       "debut": 30,
+       "fin": 37
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r293",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The person whom I mention is here.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "mention",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 18,
+       "fin": 25,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "here",
+       "debut": 29,
+       "fin": 33
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 26,
+       "fin": 28
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is here",
+       "debut": 26,
+       "fin": 33
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r328",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; it is red.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "is",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 9,
+       "fin": 11,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 19,
+       "fin": 24,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "red",
+       "debut": 32,
+       "fin": 35
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 29,
+       "fin": 31
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is red",
+       "debut": 29,
+       "fin": 35
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r362",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car is red; it runs fast.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "fast",
+       "gold": "ADV",
+       "predit": "NOUN",
+       "debut": 24,
+       "fin": 28,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "red",
+       "debut": 11,
+       "fin": 14
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 8,
+       "fin": 10
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is red",
+       "debut": 8,
+       "fin": 14
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r363",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; I read it.",
+    "score": 5,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "is",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 9,
+       "fin": 11,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 19,
+       "fin": 24,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GV",
+       "texte": "read",
+       "debut": 28,
+       "fin": 32
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "read it",
+       "debut": 28,
+       "fin": 35
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r366",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls; it wets the ground.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "rain",
+       "gold": "NOUN",
+       "predit": "VERB",
+       "debut": 4,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "falls",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 9,
+       "fin": 14,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r368",
+    "source": "reel",
+    "langue": "en",
+    "texte": "Marie and Paul dance; they have fun.",
+    "score": 5,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "dance",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 15,
+       "fin": 20,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "have",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 27,
+       "fin": 31,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "Marie and Paul",
+       "debut": 0,
+       "fin": 14
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "Paul",
+       "debut": 10,
+       "fin": 14
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r370",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The house is old; it still stands.",
+    "score": 4,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "stands",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 27,
+       "fin": 33,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "old",
+       "debut": 13,
+       "fin": 16
+      },
+      {
+       "type": "GV",
+       "texte": "is",
+       "debut": 10,
+       "fin": 12
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "is old",
+       "debut": 10,
+       "fin": 16
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r422",
+    "source": "reel",
+    "langue": "en",
+    "texte": "You don't come tomorrow?",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "do",
+       "gold": "VERB",
+       "predit": "?",
+       "debut": 4,
+       "fin": 6,
+       "classe": "ouvert",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "n't",
+       "gold": "ADV",
+       "predit": "?",
+       "debut": 6,
+       "fin": 9,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "n't",
+       "debut": 6,
+       "fin": 9
+      },
+      {
+       "type": "ADV",
+       "texte": "tomorrow",
+       "debut": 15,
+       "fin": 23
+      },
+      {
+       "type": "GV",
+       "texte": "come",
+       "debut": 10,
+       "fin": 14
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "don't come",
+       "debut": 4,
+       "fin": 14
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "g004",
+    "source": "hand",
+    "langue": "fr",
+    "texte": "Il a couru pour attraper le bus.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "a",
+       "gold": "AUX",
+       "predit": "PREP",
+       "debut": 3,
+       "fin": 4,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "couru",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 5,
+       "fin": 10,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "attraper",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 16,
+       "fin": 24,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r091",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le médecin soigne les malades.",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "soigne",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 11,
+       "fin": 17,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "malades",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 22,
+       "fin": 29,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "Le médecin",
+       "debut": 0,
+       "fin": 10
+      },
+      {
+       "type": "GN",
+       "texte": "les malades",
+       "debut": 18,
+       "fin": 29
+      },
+      {
+       "type": "GV",
+       "texte": "soigne",
+       "debut": 11,
+       "fin": 17
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "Le médecin soigne les malades",
+       "debut": 0,
+       "fin": 29
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r203",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre que j'ai lu est bon.",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "j'",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 13,
+       "fin": 15,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "ai",
+       "gold": "AUX",
+       "predit": "?",
+       "debut": 15,
+       "fin": 17,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "lu",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 18,
+       "fin": 20,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "bon",
+       "debut": 25,
+       "fin": 28
+      },
+      {
+       "type": "GV",
+       "texte": "est",
+       "debut": 21,
+       "fin": 24
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "est bon",
+       "debut": 21,
+       "fin": 28
+      },
+      {
+       "type": "REL",
+       "texte": "que j'ai lu est bon",
+       "debut": 9,
+       "fin": 28
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r210",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il soit tard, il travaille.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 5,
+       "fin": 8,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 8,
+       "fin": 10,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "soit",
+       "gold": "AUX",
+       "predit": "NOUN",
+       "debut": 11,
+       "fin": 15,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": [
+      {
+       "type": "REL",
+       "texte": "qu'il soit tard",
+       "debut": 5,
+       "fin": 20
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r225",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Je crois qu'il a raison.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 9,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 12,
+       "fin": 14,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "a",
+       "gold": "AUX",
+       "predit": "PREP",
+       "debut": 15,
+       "fin": 16,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r227",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'il dort, elle lit.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "Pendant",
+       "gold": "CONJ",
+       "predit": "PREP",
+       "debut": 0,
+       "fin": 7,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 8,
+       "fin": 11,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 11,
+       "fin": 13,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": [
+      {
+       "type": "GP",
+       "texte": "Pendant qu'il",
+       "debut": 0,
+       "fin": 13
+      },
+      {
+       "type": "GV",
+       "texte": "dort",
+       "debut": 14,
+       "fin": 18
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r255",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La voiture que j'ai achetée roule.",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "j'",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 15,
+       "fin": 17,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "ai",
+       "gold": "AUX",
+       "predit": "?",
+       "debut": 17,
+       "fin": 19,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "achetée",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 20,
+       "fin": 27,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "roule",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 28,
+       "fin": 33,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": [
+      {
+       "type": "REL",
+       "texte": "que j'ai achetée roule",
+       "debut": 11,
+       "fin": 33
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r260",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il pleuve, il sort.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 5,
+       "fin": 8,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 8,
+       "fin": 10,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "pleuve",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 11,
+       "fin": 17,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": [
+      {
+       "type": "REL",
+       "texte": "qu'il pleuve",
+       "debut": 5,
+       "fin": 17
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r261",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La table que nous avons prise est grande.",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 3,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "que",
+       "gold": "PRON",
+       "predit": "CONJ",
+       "debut": 9,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "prise",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 24,
+       "fin": 29,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "grande",
+       "debut": 34,
+       "fin": 40
+      },
+      {
+       "type": "GV",
+       "texte": "est",
+       "debut": 30,
+       "fin": 33
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "est grande",
+       "debut": 30,
+       "fin": 40
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r262",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'elle dort, il travaille.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "Pendant",
+       "gold": "CONJ",
+       "predit": "PREP",
+       "debut": 0,
+       "fin": 7,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 8,
+       "fin": 11,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "elle",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 11,
+       "fin": 15,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": [
+      {
+       "type": "GP",
+       "texte": "Pendant qu'elle",
+       "debut": 0,
+       "fin": 15
+      },
+      {
+       "type": "GV",
+       "texte": "dort",
+       "debut": 16,
+       "fin": 20
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r266",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle pleure parce qu'elle est seule.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 18,
+       "fin": 21,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "elle",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 21,
+       "fin": 25,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "seule",
+       "gold": "ADJ",
+       "predit": "NOUN",
+       "debut": 30,
+       "fin": 35,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r272",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle dit qu'elle part.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 9,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "elle",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 12,
+       "fin": 16,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "part",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 17,
+       "fin": 21,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [],
+     "fp": []
+    },
+    "attachement": []
+   },
+   {
+    "id": "r304",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Viens-tu demain ?",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "Viens",
+       "gold": "VERB",
+       "predit": "?",
+       "debut": 0,
+       "fin": 5,
+       "classe": "ouvert",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "tu",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 6,
+       "fin": 8,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "demain",
+       "debut": 9,
+       "fin": 15
+      },
+      {
+       "type": "GN",
+       "texte": "tu",
+       "debut": 6,
+       "fin": 8
+      },
+      {
+       "type": "GV",
+       "texte": "Viens",
+       "debut": 0,
+       "fin": 5
+      }
+     ],
+     "fp": [
+      {
+       "type": "GP",
+       "texte": "demain",
+       "debut": 9,
+       "fin": 15
+      },
+      {
+       "type": "GV",
+       "texte": "Viens-tu",
+       "debut": 0,
+       "fin": 8
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r309",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Peut-être qu'il viendra.",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "qu'",
+       "gold": "CONJ",
+       "predit": "?",
+       "debut": 10,
+       "fin": 13,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 13,
+       "fin": 15,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "viendra",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 16,
+       "fin": 23,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "Peut-être",
+       "debut": 0,
+       "fin": 9
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "Peut-être",
+       "debut": 0,
+       "fin": 9
+      },
+      {
+       "type": "REL",
+       "texte": "qu'il viendra",
+       "debut": 10,
+       "fin": 23
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r324",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; il est rouge.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "est",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 9,
+       "fin": 12,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 20,
+       "fin": 25,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADJ",
+       "texte": "rouge",
+       "debut": 35,
+       "fin": 40
+      },
+      {
+       "type": "GV",
+       "texte": "est",
+       "debut": 31,
+       "fin": 34
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "est rouge",
+       "debut": 31,
+       "fin": 40
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r331",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Les enfants aiment les fleurs ; ils les cueillent.",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "aiment",
+       "gold": "VERB",
+       "predit": "ADV",
+       "debut": 12,
+       "fin": 18,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "les",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 36,
+       "fin": 39,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "cueillent",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 40,
+       "fin": 49,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "ils",
+       "debut": 32,
+       "fin": 35
+      },
+      {
+       "type": "GV",
+       "texte": "cueillent",
+       "debut": 40,
+       "fin": 49
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "ils les cueillent",
+       "debut": 32,
+       "fin": 49
+      },
+      {
+       "type": "GN",
+       "texte": "les cueillent",
+       "debut": 36,
+       "fin": 49
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r339",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Marie lit un livre ; elle le ferme ; elle le pose.",
+    "score": 10,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "le",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 26,
+       "fin": 28,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "le",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 42,
+       "fin": 44,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "pose",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 45,
+       "fin": 49,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "elle",
+       "debut": 21,
+       "fin": 25
+      },
+      {
+       "type": "GN",
+       "texte": "elle",
+       "debut": 37,
+       "fin": 41
+      },
+      {
+       "type": "GV",
+       "texte": "ferme",
+       "debut": 29,
+       "fin": 34
+      },
+      {
+       "type": "GV",
+       "texte": "pose",
+       "debut": 45,
+       "fin": 49
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "elle le ferme",
+       "debut": 21,
+       "fin": 34
+      },
+      {
+       "type": "GN",
+       "texte": "le ferme",
+       "debut": 26,
+       "fin": 34
+      },
+      {
+       "type": "GN",
+       "texte": "elle le pose",
+       "debut": 37,
+       "fin": 49
+      },
+      {
+       "type": "GN",
+       "texte": "le pose",
+       "debut": 42,
+       "fin": 49
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r343",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul voit Marie ; il lui parle ; elle lui répond.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "répond",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 42,
+       "fin": 48,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "Marie",
+       "debut": 10,
+       "fin": 15
+      },
+      {
+       "type": "GN",
+       "texte": "il",
+       "debut": 18,
+       "fin": 20
+      },
+      {
+       "type": "GN",
+       "texte": "elle",
+       "debut": 33,
+       "fin": 37
+      },
+      {
+       "type": "GV",
+       "texte": "voit",
+       "debut": 5,
+       "fin": 9
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "il lui parle",
+       "debut": 18,
+       "fin": 30
+      },
+      {
+       "type": "GN",
+       "texte": "elle lui répond",
+       "debut": 33,
+       "fin": 48
+      },
+      {
+       "type": "GV",
+       "texte": "voit Marie",
+       "debut": 5,
+       "fin": 15
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r346",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le chien poursuit le chat ; il l'attrape.",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "poursuit",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 9,
+       "fin": 17,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "l'",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 31,
+       "fin": 33,
+       "classe": "fermé",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "Le chien",
+       "debut": 0,
+       "fin": 8
+      },
+      {
+       "type": "GN",
+       "texte": "le chat",
+       "debut": 18,
+       "fin": 25
+      },
+      {
+       "type": "GV",
+       "texte": "poursuit",
+       "debut": 9,
+       "fin": 17
+      },
+      {
+       "type": "GV",
+       "texte": "attrape",
+       "debut": 33,
+       "fin": 40
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "Le chien poursuit le chat",
+       "debut": 0,
+       "fin": 25
+      },
+      {
+       "type": "GN",
+       "texte": "il l'attrape",
+       "debut": 28,
+       "fin": 40
+      },
+      {
+       "type": "GN",
+       "texte": "l'attrape",
+       "debut": 31,
+       "fin": 40
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r347",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Sophie regarde Paul ; elle lui sourit.",
+    "score": 6,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "sourit",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 31,
+       "fin": 37,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "Paul",
+       "debut": 15,
+       "fin": 19
+      },
+      {
+       "type": "GN",
+       "texte": "elle",
+       "debut": 22,
+       "fin": 26
+      },
+      {
+       "type": "GV",
+       "texte": "regarde",
+       "debut": 7,
+       "fin": 14
+      },
+      {
+       "type": "GV",
+       "texte": "sourit",
+       "debut": 31,
+       "fin": 37
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "elle lui sourit",
+       "debut": 22,
+       "fin": 37
+      },
+      {
+       "type": "GV",
+       "texte": "regarde Paul",
+       "debut": 7,
+       "fin": 19
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r349",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; je le lis.",
+    "score": 10,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "est",
+       "gold": "VERB",
+       "predit": "AUX",
+       "debut": 9,
+       "fin": 12,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "table",
+       "gold": "NOUN",
+       "predit": "ADJ",
+       "debut": 20,
+       "fin": 25,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "le",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 31,
+       "fin": 33,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "lis",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 34,
+       "fin": 37,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GN",
+       "texte": "je",
+       "debut": 28,
+       "fin": 30
+      },
+      {
+       "type": "GV",
+       "texte": "lis",
+       "debut": 34,
+       "fin": 37
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "je le lis",
+       "debut": 28,
+       "fin": 37
+      },
+      {
+       "type": "GN",
+       "texte": "le lis",
+       "debut": 31,
+       "fin": 37
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r357",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul écrit une lettre ; il l'envoie.",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "écrit",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 5,
+       "fin": 10,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      },
+      {
+       "token": "l'",
+       "gold": "PRON",
+       "predit": "DET",
+       "debut": 27,
+       "fin": 29,
+       "classe": "fermé",
+       "genre": "etiquette"
+      },
+      {
+       "token": "envoie",
+       "gold": "VERB",
+       "predit": "NOUN",
+       "debut": 29,
+       "fin": 35,
+       "classe": "ouvert",
+       "genre": "etiquette"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "GV",
+       "texte": "envoie",
+       "debut": 29,
+       "fin": 35
+      }
+     ],
+     "fp": [
+      {
+       "type": "GN",
+       "texte": "il l'envoie",
+       "debut": 24,
+       "fin": 35
+      },
+      {
+       "type": "GN",
+       "texte": "l'envoie",
+       "debut": 27,
+       "fin": 35
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r408",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne viens-tu pas demain ?",
+    "score": 8,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "viens",
+       "gold": "VERB",
+       "predit": "?",
+       "debut": 3,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "tu",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 9,
+       "fin": 11,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "pas",
+       "debut": 12,
+       "fin": 15
+      },
+      {
+       "type": "ADV",
+       "texte": "demain",
+       "debut": 16,
+       "fin": 22
+      },
+      {
+       "type": "GN",
+       "texte": "tu",
+       "debut": 9,
+       "fin": 11
+      },
+      {
+       "type": "GV",
+       "texte": "viens",
+       "debut": 3,
+       "fin": 8
+      }
+     ],
+     "fp": [
+      {
+       "type": "GP",
+       "texte": "demain",
+       "debut": 16,
+       "fin": 22
+      },
+      {
+       "type": "GV",
+       "texte": "Ne viens-tu pas",
+       "debut": 0,
+       "fin": 15
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r409",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne mange-t-il pas ?",
+    "score": 9,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "mange",
+       "gold": "VERB",
+       "predit": "?",
+       "debut": 3,
+       "fin": 8,
+       "classe": "ouvert",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "t",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 9,
+       "fin": 10,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "il",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 11,
+       "fin": 13,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "pas",
+       "debut": 14,
+       "fin": 17
+      },
+      {
+       "type": "GN",
+       "texte": "il",
+       "debut": 11,
+       "fin": 13
+      },
+      {
+       "type": "GV",
+       "texte": "mange",
+       "debut": 3,
+       "fin": 8
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "Ne mange-t-il pas",
+       "debut": 0,
+       "fin": 17
+      }
+     ]
+    },
+    "attachement": []
+   },
+   {
+    "id": "r410",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne dort-elle pas ?",
+    "score": 7,
+    "pos": {
+     "erreurs": [
+      {
+       "token": "dort",
+       "gold": "VERB",
+       "predit": "?",
+       "debut": 3,
+       "fin": 7,
+       "classe": "ouvert",
+       "genre": "tokenisation"
+      },
+      {
+       "token": "elle",
+       "gold": "PRON",
+       "predit": "?",
+       "debut": 8,
+       "fin": 12,
+       "classe": "fermé",
+       "genre": "tokenisation"
+      }
+     ]
+    },
+    "segments": {
+     "fn": [
+      {
+       "type": "ADV",
+       "texte": "pas",
+       "debut": 13,
+       "fin": 16
+      },
+      {
+       "type": "GN",
+       "texte": "elle",
+       "debut": 8,
+       "fin": 12
+      },
+      {
+       "type": "GV",
+       "texte": "dort",
+       "debut": 3,
+       "fin": 7
+      }
+     ],
+     "fp": [
+      {
+       "type": "GV",
+       "texte": "Ne dort-elle pas",
+       "debut": 0,
+       "fin": 16
+      }
+     ]
+    },
+    "attachement": []
+   }
+  ]
+ },
+ "candidats_a_annoter": {
+  "priorite_1_attachement": {
+   "principe": "les types qui portent une cible d'attachement (GP, REL, SUB) ; le gold en a 0 sans cible sur 58 REL, 9 GP et 1 SUB.",
+   "candidats": [
+    {
+     "id": "r267",
+     "type": "GP",
+     "segment": "à moi",
+     "debut": 34,
+     "fin": 39,
+     "phrase": "Le livre qui est sur la table est à moi.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "r324",
+     "type": "GP",
+     "segment": "sur la table",
+     "debut": 13,
+     "fin": 25,
+     "phrase": "Le livre est sur la table ; il est rouge.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r328",
+     "type": "GP",
+     "segment": "on the table",
+     "debut": 12,
+     "fin": 24,
+     "phrase": "The book is on the table; it is red.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r336",
+     "type": "GP",
+     "segment": "to her",
+     "debut": 27,
+     "fin": 33,
+     "phrase": "Paul sees Marie; he speaks to her.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "r342",
+     "type": "GP",
+     "segment": "to her",
+     "debut": 27,
+     "fin": 33,
+     "phrase": "Paul sees Marie; he speaks to her; she listens.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "r349",
+     "type": "GP",
+     "segment": "sur la table",
+     "debut": 13,
+     "fin": 25,
+     "phrase": "Le livre est sur la table ; je le lis.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r358",
+     "type": "GP",
+     "segment": "to her",
+     "debut": 27,
+     "fin": 33,
+     "phrase": "Paul sees Marie; he speaks to her.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "r363",
+     "type": "GP",
+     "segment": "on the table",
+     "debut": 12,
+     "fin": 24,
+     "phrase": "The book is on the table; I read it.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r367",
+     "type": "GP",
+     "segment": "to him",
+     "debut": 40,
+     "fin": 46,
+     "phrase": "The teacher speaks; the students listen to him.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "r429",
+     "type": "SUB",
+     "segment": "que c'est vrai",
+     "debut": 7,
+     "fin": 21,
+     "phrase": "On dit que c'est vrai.",
+     "dans_hard_50": false
+    }
+   ],
+   "total": 10,
+   "dans_hard_50": 4
+  },
+  "priorite_2_gn_gv": {
+   "principe": "les GN/GV n'ont aucune cible dans le gold courant ; les annoter étend l'attachement à la structure argumentale (effort plus lourd).",
+   "total": 1233,
+   "dans_hard_50": 144,
+   "par_type": {
+    "GN": 681,
+    "GV": 552
+   },
+   "dans_hard_50_par_type": {
+    "GN": 79,
+    "GV": 65
+   },
+   "exemples_hard_50": [
+    {
+     "id": "g004",
+     "type": "GN",
+     "segment": "Il",
+     "debut": 0,
+     "fin": 2,
+     "phrase": "Il a couru pour attraper le bus.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g004",
+     "type": "GV",
+     "segment": "a couru",
+     "debut": 3,
+     "fin": 10,
+     "phrase": "Il a couru pour attraper le bus.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g017",
+     "type": "GN",
+     "segment": "She",
+     "debut": 0,
+     "fin": 3,
+     "phrase": "She said that she would come yesterday.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g017",
+     "type": "GV",
+     "segment": "said",
+     "debut": 4,
+     "fin": 8,
+     "phrase": "She said that she would come yesterday.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r034",
+     "type": "GN",
+     "segment": "The book",
+     "debut": 0,
+     "fin": 8,
+     "phrase": "The book that I read is exciting.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r034",
+     "type": "GV",
+     "segment": "is exciting",
+     "debut": 21,
+     "fin": 32,
+     "phrase": "The book that I read is exciting.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r071",
+     "type": "GN",
+     "segment": "The car",
+     "debut": 0,
+     "fin": 7,
+     "phrase": "The car drives fast.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r071",
+     "type": "GV",
+     "segment": "drives",
+     "debut": 8,
+     "fin": 14,
+     "phrase": "The car drives fast.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r076",
+     "type": "GN",
+     "segment": "They",
+     "debut": 0,
+     "fin": 4,
+     "phrase": "They arrive tomorrow morning.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r076",
+     "type": "GV",
+     "segment": "arrive",
+     "debut": 5,
+     "fin": 11,
+     "phrase": "They arrive tomorrow morning.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r091",
+     "type": "GN",
+     "segment": "Le médecin",
+     "debut": 0,
+     "fin": 10,
+     "phrase": "Le médecin soigne les malades.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r091",
+     "type": "GV",
+     "segment": "soigne",
+     "debut": 11,
+     "fin": 17,
+     "phrase": "Le médecin soigne les malades.",
+     "dans_hard_50": true
+    }
+   ],
+   "exemples": [
+    {
+     "id": "g004",
+     "type": "GN",
+     "segment": "Il",
+     "debut": 0,
+     "fin": 2,
+     "phrase": "Il a couru pour attraper le bus.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g004",
+     "type": "GV",
+     "segment": "a couru",
+     "debut": 3,
+     "fin": 10,
+     "phrase": "Il a couru pour attraper le bus.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g017",
+     "type": "GN",
+     "segment": "She",
+     "debut": 0,
+     "fin": 3,
+     "phrase": "She said that she would come yesterday.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g017",
+     "type": "GV",
+     "segment": "said",
+     "debut": 4,
+     "fin": 8,
+     "phrase": "She said that she would come yesterday.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r034",
+     "type": "GN",
+     "segment": "The book",
+     "debut": 0,
+     "fin": 8,
+     "phrase": "The book that I read is exciting.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r034",
+     "type": "GV",
+     "segment": "is exciting",
+     "debut": 21,
+     "fin": 32,
+     "phrase": "The book that I read is exciting.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r071",
+     "type": "GN",
+     "segment": "The car",
+     "debut": 0,
+     "fin": 7,
+     "phrase": "The car drives fast.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r071",
+     "type": "GV",
+     "segment": "drives",
+     "debut": 8,
+     "fin": 14,
+     "phrase": "The car drives fast.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r076",
+     "type": "GN",
+     "segment": "They",
+     "debut": 0,
+     "fin": 4,
+     "phrase": "They arrive tomorrow morning.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "r076",
+     "type": "GV",
+     "segment": "arrive",
+     "debut": 5,
+     "fin": 11,
+     "phrase": "They arrive tomorrow morning.",
+     "dans_hard_50": true
+    },
+    {
+     "id": "g001",
+     "type": "GN",
+     "segment": "Le chat",
+     "debut": 0,
+     "fin": 7,
+     "phrase": "Le chat dort.",
+     "dans_hard_50": false
+    },
+    {
+     "id": "g001",
+     "type": "GV",
+     "segment": "dort",
+     "debut": 8,
+     "fin": 12,
+     "phrase": "Le chat dort.",
+     "dans_hard_50": false
+    }
+   ]
+  },
+  "non_candidats": {
+   "principe": "ADJ/ADV/PONCT ne sont pas des cibles d'attachement ; l'heuristique ne les produit pas (rappel 0), donc les ajouter mesurerait une fonction manquante, pas une annotation.",
+   "par_type": {
+    "ADJ": 35,
+    "ADV": 30,
+    "PONCT": 9
+   }
+  },
+  "phrases_du_lot": [
+   {
+    "id": "g017",
+    "source": "hand",
+    "langue": "en",
+    "texte": "She said that she would come yesterday.",
+    "score": 4,
+    "pos_erreurs": 0,
+    "segments_fn": 1,
+    "att_erreurs": 1
+   },
+   {
+    "id": "r034",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that I read is exciting.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r071",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car drives fast.",
+    "score": 3,
+    "pos_erreurs": 1,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r076",
+    "source": "reel",
+    "langue": "en",
+    "texte": "They arrive tomorrow morning.",
+    "score": 3,
+    "pos_erreurs": 1,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r102",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls since this morning.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r104",
+    "source": "reel",
+    "langue": "en",
+    "texte": "We prepare dinner.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r106",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The children laugh loudly.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r119",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The tourists visit the museum.",
+    "score": 5,
+    "pos_erreurs": 1,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r159",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The farmers grow wheat.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r163",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The students review their lessons.",
+    "score": 5,
+    "pos_erreurs": 1,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r179",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain washes the streets.",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r217",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The student whom I mention is absent.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r241",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The day when we left was beautiful.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r246",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The dog that barks is mean.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r285",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The table that we took is big.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r287",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The bird that flies is blue.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r291",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book that is on the table is mine.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r293",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The person whom I mention is here.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r328",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; it is red.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r362",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The car is red; it runs fast.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r363",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The book is on the table; I read it.",
+    "score": 5,
+    "pos_erreurs": 2,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r366",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The rain falls; it wets the ground.",
+    "score": 4,
+    "pos_erreurs": 2,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r368",
+    "source": "reel",
+    "langue": "en",
+    "texte": "Marie and Paul dance; they have fun.",
+    "score": 5,
+    "pos_erreurs": 2,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r370",
+    "source": "reel",
+    "langue": "en",
+    "texte": "The house is old; it still stands.",
+    "score": 4,
+    "pos_erreurs": 1,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r422",
+    "source": "reel",
+    "langue": "en",
+    "texte": "You don't come tomorrow?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "g004",
+    "source": "hand",
+    "langue": "fr",
+    "texte": "Il a couru pour attraper le bus.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r091",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le médecin soigne les malades.",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r203",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre que j'ai lu est bon.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r210",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il soit tard, il travaille.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r225",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Je crois qu'il a raison.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r227",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'il dort, elle lit.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r255",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La voiture que j'ai achetée roule.",
+    "score": 8,
+    "pos_erreurs": 4,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r260",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Bien qu'il pleuve, il sort.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r261",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "La table que nous avons prise est grande.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r262",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Pendant qu'elle dort, il travaille.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r266",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle pleure parce qu'elle est seule.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r272",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Elle dit qu'elle part.",
+    "score": 6,
+    "pos_erreurs": 3,
+    "segments_fn": 0,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r304",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Viens-tu demain ?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r309",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Peut-être qu'il viendra.",
+    "score": 7,
+    "pos_erreurs": 3,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r324",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; il est rouge.",
+    "score": 6,
+    "pos_erreurs": 2,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r331",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Les enfants aiment les fleurs ; ils les cueillent.",
+    "score": 8,
+    "pos_erreurs": 3,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r339",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Marie lit un livre ; elle le ferme ; elle le pose.",
+    "score": 10,
+    "pos_erreurs": 3,
+    "segments_fn": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r343",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul voit Marie ; il lui parle ; elle lui répond.",
+    "score": 6,
+    "pos_erreurs": 1,
+    "segments_fn": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r346",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le chien poursuit le chat ; il l'attrape.",
+    "score": 8,
+    "pos_erreurs": 2,
+    "segments_fn": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r347",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Sophie regarde Paul ; elle lui sourit.",
+    "score": 6,
+    "pos_erreurs": 1,
+    "segments_fn": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r349",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Le livre est sur la table ; je le lis.",
+    "score": 10,
+    "pos_erreurs": 4,
+    "segments_fn": 2,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r357",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Paul écrit une lettre ; il l'envoie.",
+    "score": 7,
+    "pos_erreurs": 3,
+    "segments_fn": 1,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r408",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne viens-tu pas demain ?",
+    "score": 8,
+    "pos_erreurs": 2,
+    "segments_fn": 4,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r409",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne mange-t-il pas ?",
+    "score": 9,
+    "pos_erreurs": 3,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   },
+   {
+    "id": "r410",
+    "source": "reel",
+    "langue": "fr",
+    "texte": "Ne dort-elle pas ?",
+    "score": 7,
+    "pos_erreurs": 2,
+    "segments_fn": 3,
+    "att_erreurs": 0
+   }
+  ]
+ },
+ "controles_negatifs": {
+  "tirage_simple": "50 phrases au hasard, 8 graines : le POS reste ≥ 85 %.",
+  "tirage_stratifie": "25 fr + 25 en, 1 hand par langue, 8 graines : même ordre.",
+  "majoritaire": "toujours la classe POS la plus fréquente.",
+  "uniforme": "tirage uniforme sur 12 classes POS.",
+  "sensibilite": "le lot change peu quand les poids changent (sauf si le POS tombe à poids 1)."
+ },
+ "gold_intact": {
+  "avant": {
+   "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11"
+  },
+  "apres": {
+   "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json": "3663be6cea2f22e2166df9a2ab6b7c459ff7806cf72d238263b1423ac4e2e58a",
+   "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json": "05d4f6dfae67dc72b714dbef69e8764a811247bc72c31b103bad9603be11ff11"
+  },
+  "identique": true
+ },
+ "limites": [
+  "Les 50 sont déjà dans le gold : ce n'est pas un ajout de phrases, c'est un sous-ensemble dur tenu à l'écart (ou une base d'annotation).",
+  "La sélection est faite sur les erreurs de l'heuristique : elle est circulaire par construction et ne mesure pas la généralisation.",
+  "Les 20 hand ont servi à dessiner les règles : les 2 hand du lot sont in-sample.",
+  "L'attachement du lot (22 cibles, 21 justes) est saturé : il ne teste que g017.",
+  "Le gold lui-même peut être faux (annotations manuelles, conventions) ; une mauvaise étiquette compte comme une erreur de l'heuristique.",
+  "ADJ/ADV/PONCT : 74 segments absents par construction, pas par erreur.",
+  "Le tagger neuronal n'est pas mesuré ici ; la décision R0.7 garde son split réel."
+ ],
+ "ce_qui_ferait_faux": [
+  "Un gold corrigé (une étiquette fausse sur les 50 change le score et la sélection).",
+  "Une heuristique modifiée après le 2026-11-15 (le score, donc le lot, change).",
+  "Un tirage aléatoire différent (les contrôles sont à 8 graines, pas exhaustifs).",
+  "Une convention d'attachement différente (GP : verbe ou nom ; SUB : verbe gouverneur).",
+  "Une autre définition du « gold 200+ » (gold de pensée plutôt que gold linguistique)."
+ ],
+ "fichiers": {
+  "fiche": "reports/rapport-gold-reel-50.md",
+  "json": "reports/rapport-gold-reel-50.json",
+  "script": "tools/tests/linguistique/gold_reel_50.py",
+  "lus_non_modifies": [
+   "tools/tests/linguistique/gold.json",
+   "tools/tests/linguistique/gold_reel.json",
+   "tools/bloc_linguistique.py"
+  ]
+ }
+}

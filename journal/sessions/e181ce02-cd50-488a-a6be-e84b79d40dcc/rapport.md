@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 349.5 h |
+| Durée | 349.7 h |
 | Tours | 198 |
-| Messages | 3877 |
-| Appels d'outils | 3455 |
+| Messages | 3883 |
+| Appels d'outils | 3459 |
 | Fichiers touchés | 25 |
-| Commandes | 2870 |
+| Commandes | 2873 |
 | Sous-agents | 43 |
-| Commits | 465 |
+| Commits | 466 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*96 appels d'outils.* Actions notables :
+*100 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 64 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2830 autres
+- … et 2833 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11384,4 +11384,5 @@ Je commence.
 - PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD RÉEL 452), PANINI (PROTOCOLE À DATE CONTRÔLÉE, LES ATOMES NE PRÉDISENT PAS LES 
 - DOC PRODUIT — LA PASSE D'HONNÊTETÉ : LES TROIS BASES (612, 602, RÉEL 452), L'ATTACHEMENT 238/239, LE TAGGER 95,75, LES CHIFFRES DATÉS ANNOTÉS" 2>&1 | tail -2; g
 - BILAN DE LA NUIT — LE TAGGER (95,75), LA BASE HONNÊTE (452), LA PHASE C/B (N2, S, R, PANINI) ET LES NÉGATIFS DITS" 2>&1 | tail -2; git log -1 --format='%h %s' |
+- PHASE 4 — D1-D3 (LES EXEMPLES DU TAGGER, LA RESTITUTION v2, LA FAQ 10/10) ; L'INDEX, LA FICHE C3 ORPHELINE (GOLD RÉEL 50) ET LE PLAN COMMITTÉS" 2>&1 | tail -2; 
 

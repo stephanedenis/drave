@@ -3426,3 +3426,173 @@ etat=0
   ```
 
 - **bash** `{"command": "git commit -m \"D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)\" -m \"- FAQ §8 de docs/produit/README.md : langue, hors-ligne, coût, tagger, schéma, attachement, g017, restitution v0/v1/ … [486 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 5b2d07fc] D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)
+ 29 files changed, 34446 insertions(+), 49 deletions(-)
+ create mode 100644 journal/sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/digest.md
+ create mode 100644 journal/sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/rapport.md
+ create mode 100644 journal/sessions/session-53896e61-4a68-417d-89e0-de0de156949b/digest.md
+ create mode 100644 journal/sessions/session-53896e61-4a68-417d-89e0-de0de156949b/rapport.md
+ create mode 100644 reports/faq.json
+ create mode 100644 reports/pensee-restitution-v2.json
+ create mode 100644 reports/rapport-faq.md
+ create mode 100644 reports/rapport-restitution-v2.md
+ create mode 100644 tools/mesurer_restitution_v2.py
+ create mode 100644 tools/restitution_v2.py
+ create mode 100644 tools/tests/linguistique/gold_restitution_v2.json
+ create mode 100644 tools/tests/test_restitution_v2.py
+ create mode 100644 tools/verifier_faq.py
+exit=0
+  ```
+
+- **bash** `{"command": "git log -1 --stat --oneline | head -50; echo ===; git status --short | sed -n '1,40p'", "description": "Inspect commit and remaining status"}`
+
+  ```
+5b2d07fc D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)
+ docs/pilotage/en-cours.md                          |    14 +-
+ docs/pilotage/roadmap.md                           |     4 +-
+ docs/produit/README.md                             |   123 +-
+ journal/2026-11-15/README.md                       |     7 +-
+ journal/2026-11-15/distribue.md                    |     2 +-
+ journal/2026-11-15/docs.md                         |     5 +-
+ journal/2026-11-15/mesures.md                      |    29 +-
+ journal/2026-11-15/portes.md                       |     2 +-
+ journal/README.md                                  |     6 +-
+ journal/sessions/MANIFEST.md                       |     8 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |    94 +
+ .../rapport.md                                     |    14 +-
+ .../digest.md                                      |  3428 +++
+ .../rapport.md                                     |   187 +
+ .../digest.md                                      |  4192 ++++
+ .../rapport.md                                     |   210 +
+ .../digest.md                     
+… [1363 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show --name-only --format='' HEAD | grep -E 'faq|restitution_v2|verifier_faq|produit/README|en-cours|roadmap|drave|porte-produit'", "description": "Verify key files in commit"}`
+
+  ```
+docs/pilotage/en-cours.md
+docs/pilotage/roadmap.md
+docs/produit/README.md
+reports/faq.json
+reports/rapport-faq.md
+tools/drave.py
+tools/mesurer_restitution_v2.py
+tools/porte-produit.sh
+tools/restitution_v2.py
+tools/tests/linguistique/gold_restitution_v2.json
+tools/tests/test_restitution_v2.py
+tools/verifier_faq.py
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"exit=${PIPESTATUS[0]}\"", "description": "Post-commit docs review"}`
+
+  ```
+revue de documentation · 745 fiche(s) · 839 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|❌\" | tail -3; echo \"exit=${PIPESTATUS[0]}\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"exit=${PIPESTATUS[0]}\"", "description": "Post-commit budget and state checks"}`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+exit=0
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+exit=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_faq.py; echo \"exit=$?\"", "description": "Post-commit FAQ verification"}`
+
+  ```
+FAQ produit — 10/10 réponses vérifiées · contrôle négatif détecté
+  ✅  1. Quelles langues le produit reconnaît-il ?
+  ✅  2. Est-ce que ça marche hors ligne ?
+  ✅  3. Combien ça coûte ?
+  ✅  4. Qu'est-ce que --tagger change ?
+  ✅  5. Quel est le format de sortie, et est-il stable ?
+  ✅  6. Que veut dire « attachement », et à quel point est-il fiable ?
+  ✅  7. Pourquoi reste-t-il un span inatteignable ?
+  ✅  8. Que peut-on restituer : la surface, la forme, les rôles ?
+  ✅  9. Quelles limites faut-il connaître avant de s'en servir ?
+  ✅ 10. Comment l'installer et le lancer ?
+✅ FAQ vérifiée
+exit=0
+  ```
+
+- **bash** `{"command": "git show HEAD:docs/produit/README.md | grep -n \"## 8. FAQ\\|## 9. Où aller\" ; git show HEAD:reports/faq.json | python3 -c \"import json,sys;d=json.load(sys.stdin);print('faq.json ok',d['ok'],len(d['questions']))\"", "description": "Check committed FAQ section and JSON"}`
+
+  ```
+660:## 8. FAQ — dix questions
+770:## 9. Où aller ensuite
+faq.json ok True 10
+  ```
+
+- **bash** `{"command": "git ls-files tools/tests/linguistique/gold*.json | sed -n '1,10p'", "description": "Check gold files are tracked"}`
+
+  ```
+tools/tests/linguistique/gold.json
+tools/tests/linguistique/gold_gele.json
+tools/tests/linguistique/gold_reel.json
+tools/tests/linguistique/gold_restitution_v2.json
+tools/tests/linguistique/gold_synthetique.json
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %ad %s' --date=iso; echo \"---\"; git status --short | wc -l; git status --short | sed -n '1,20p'", "description": "Final commit and status"}`
+
+  ```
+5b2d07fc 2026-11-15 06:08:16 -0500 D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)
+---
+15
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+### 🤖 Assistant
+
+## D3 — livré et commité
+
+**Livrables**
+- **FAQ** : `docs/produit/README.md` **§ 8** — les 10 questions demandées (langue, hors-ligne, coût, tagger, schéma, attachement, spans inatteignables, restitution, limites, installation), réponses adossées au code et aux fiches.
+- **Fiche** : `reports/rapport-faq.md` — dispositif, tableau des 10 contrôles, sorties observées, contrôle négatif, ce qui pourrait rendre les réponses fausses.
+- **JSON** : `reports/faq.json` — relevé complet (`observe`, `ok`, `erreur`, `controle_negatif`).
+- **Vérificateur** : `tools/verifier_faq.py` — 10 contrôles exécutables, `--json`, `--autotest`.
+
+**Vérification**
+```text
+python3 tools/verifier_faq.py
+FAQ produit — 10/10 réponses vérifiées · contrôle négatif détecté
+✅ FAQ vérifiée
+```
+Le contrôle négatif est réel : `--langue de` sort **2** et le schéma v2 **refuse** une annotation v1. Les chiffres cités restent ceux des fiches : **238/239** cibles (0,9958), `g017` **[9:28] attendu / [9:38] prédit** (règle rejetée, F1 0,7901), restitution v0 **46/46**, v1 **46/46**, v2 **19/46** cadres (**16** non vides, F1 0,5270), tagger **609 appels / 22 299 tokens / 155 s / ~0,02 $**.
+
+**Contrôles passés**
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (15 contrôles, autotest **183/183**)
+- `python3 tools/revue_documentation.py` → ✅
+- `bash tools/porte-tableaux.sh` → ✅
+- `python3 tools/taille_documents.py` → ✅ (T0 **4000/4000**)
+- `python3 tools/verifie_en_cours.py` → ✅
+
+**Commit**
+`5b2d07fc` — *D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)*
+
+Le commit inclut aussi **D2**, qui était déjà dans l’arbre et référencé par `en-cours`. Les **15 fichiers restants** non commités sont le travail en attente d’autres tâches (INDEX/README, anciens rapports, `gold-reel-50`, `s-paragraphes`).
+

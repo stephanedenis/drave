@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **740 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **741 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -687,6 +687,7 @@
 | [rapport-replis-cible.md](rapport-replis-cible.md) | B13 — les trois retouches A3 sur le live : +1, +2, +1, et 145/145 exact/top1 |
 | [rapport-restitution-v0.md](rapport-restitution-v0.md) | B13 — la restitution v0 : 46/46 surfaces exactes, le miroir strict à 0,1087 |
 | [rapport-restitution-v1.md](rapport-restitution-v1.md) | B13 — la restitution v1 : la forme canonique à 46/46, le miroir strict reste à 0,1087 |
+| [rapport-restitution-v2.md](rapport-restitution-v2.md) | B13 — la restitution v2 : les rôles se lisent, leur fidélité ne suit pas |
 | [rapport-restitution.md](rapport-restitution.md) | B18 — restitution canonique : 528/528, mais pas un décodeur |
 | [rapport-retrieval-epoque.md](rapport-retrieval-epoque.md) | J3.1 — Le retrieval inter-langues à époque contrôlée |
 | [rapport-retrieval-familles.md](rapport-retrieval-familles.md) | J7.1 — Le retrieval approfondi par famille Glottolog |

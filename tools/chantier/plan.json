@@ -418,6 +418,127 @@
      "attendu": "REVUE-0"
     }
    ]
+  },
+  {
+   "id": "C1",
+   "jour": 15,
+   "titre": "Coordination N2 — la commande validée",
+   "mandat": "Tâche C1 : la coordination N2, suite de J4.1 — écris `reports/rapport-coordination-n2-v2.md` + JSON : la commande **validée** `python3 work/n2ac/eval_longueurs.py --rope --canal-dir <dir>` (le correctif mesuré 2,79), la commande à ne PAS utiliser (`--rope` seul : 40,07), le test de non-régression proposé (`porte-n2.sh` : la porte à 3,09 doit rester à 3,09), et la mise à jour de la ligne N2 de `docs/pilotage/en-cours.md`. **Ne modifie rien dans `tools/n2/` ni `work/n2ac/`.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-n2-v2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "jour": 15,
+   "titre": "Coordination S — la page / et la v7",
+   "mandat": "Tâche C2 : la coordination S, suite de J4.2 — écris `reports/rapport-coordination-s-v2.md` + JSON : l'état de la page `/` (le service de la v7), le pare-feu réseau, la commande de lancement, ce qui reste à S ; les 11 verdicts sont désormais committés (389b99f). **Ne touche pas `tools/structures/`.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-coordination-s-v2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "jour": 15,
+   "titre": "Coordination R — le gold réel étendu",
+   "mandat": "Tâche C3 : la coordination R — propose et mesure l'extension du gold réel (le « gold 200+ » des fiches R) : prends 50 phrases **réelles** (hand + reel) que l'heuristique rate, écris la fiche `reports/rapport-gold-reel-50.md` + JSON (les erreurs d'attachement par type, les candidats à annoter), sans modifier le gold (S/D territory : le gold est à S).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-gold-reel-50.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "B1",
+   "jour": 15,
+   "titre": "Panini — le protocole à date contrôlée",
+   "mandat": "Tâche B1 : le protocole Panini à date contrôlée (la suite de la note 4A) — construis `reports/rapport-protocole-date.md` + JSON : 60 paires en trois groupes (20 contemporaines de traditions différentes ±10 ans, 20 de même tradition à ±200 ans, 20 de même langue source à dates décalées), tirées des artefacts §334 en lecture seule ; le protocole (H0, les contrôles, les 14 atomes), le pré-enregistrement, et la commande que Panini peut rejouer. **Ne modifie rien chez Panini.**",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-protocole-date.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "B2",
+   "jour": 15,
+   "titre": "Panini — les atomes et les niveaux, prédiction",
+   "mandat": "Tâche B2 : les 14 atomes comme prédicteurs des 8 niveaux Drave — sur les 44 œuvres × 14 flottants (JSON plat, lecture seule chez Panini), mesure la prédiction d'un niveau (POS, syntagmes, attachement) par les atomes, avec le contrôle de permutation des colonnes et le contrôle de date ; fiche `reports/rapport-atomes-prediction.md` + JSON.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-atomes-prediction.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "B3",
+   "jour": 15,
+   "titre": "Panini — le corpus d'or CIC étendu",
+   "mandat": "Tâche B3 : le corpus d'or CIC (42 verdicts, 42/42 reproduits en J12.2) — étends le vérificateur : les 36 preuves altérées sont rejetées ; ajoute la vérification du **type de Bruijn** et le sha256 indépendant rejoué par une seconde implémentation ; fiche `reports/rapport-cic-v2.md` + JSON.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-cic-v2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "D1",
+   "jour": 15,
+   "titre": "Les exemples avec le tagger et la base réelle",
+   "mandat": "Tâche D1 : les exemples de `docs/produit/exemples.md` — ajoute 3 exemples avec `--tagger` (la sortie réelle avec la clé, le coût affiché) et 2 avec `--reel` (la base honnête), et vérifie que les sorties collent au code courant (F1 0,7902, 238/239, schéma v2). Fiche `reports/rapport-exemples-tagger.md` + JSON, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-exemples-tagger.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "bash tools/porte-produit.sh 2>&1 | tail -1",
+     "attendu": "verte"
+    }
+   ]
+  },
+  {
+   "id": "D2",
+   "jour": 15,
+   "titre": "La restitution v2 — les rôles",
+   "mandat": "Tâche D2 : la restitution v2 — au-delà de la surface exacte (v0) et de la forme canonique (v1), restitue les **rôles** (agent, prédicat, lieu) dans une forme lisible et mesure la fidélité des rôles sur les 46 textes de la v0 ; fiche `reports/rapport-restitution-v2.md` + JSON, tests, commit. Si les rôles ne se restituent pas, écris le négatif.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-restitution-v2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "jour": 15,
+   "titre": "La FAQ du produit",
+   "mandat": "Tâche D3 : la FAQ du produit — 10 questions qu'un utilisateur se pose (la langue, le hors-ligne, le coût, le tagger, le schéma, l'attachement, les spans inatteignables, la restitution, les limites, l'installation) avec les réponses **vérifiées** contre le code courant ; dans `docs/produit/README.md` (une section FAQ) + fiche `reports/rapport-faq.md` + JSON, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-faq.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
   }
  ]
 }

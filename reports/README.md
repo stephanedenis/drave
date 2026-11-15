@@ -57,6 +57,7 @@
 | [`rapport-re-test-produit.md`](rapport-re-test-produit.md) | **B13** — re-test des 50 textes |
 | [`rapport-restitution-v0.md`](rapport-restitution-v0.md) | **B13** — restitution v0 : **46/46** surfaces, miroir |
 | [`rapport-restitution-v1.md`](rapport-restitution-v1.md) | **B13** — restitution v1 : forme canonique **46/46** |
+| [`rapport-restitution-v2.md`](rapport-restitution-v2.md) | **B13** — restitution v2 : rôles **16/46**, F1 **0,5270** |
 | [`rapport-pos-nombres.md`](rapport-pos-nombres.md) | **B13** — les nombres ont une POS (NUM) |
 | [`rapport-partition-integree.md`](rapport-partition-integree.md) | **B13** — partition : alternatives étiquetées |
 | [`rapport-partition-syntagmes.md`](rapport-partition-syntagmes.md) | **B13** — la partition (A29) |

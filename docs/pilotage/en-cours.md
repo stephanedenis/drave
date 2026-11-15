@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 06 h 00 HNE (D3)**
+**Mis à jour : 2026-11-15, 06 h 25 HNE (phase 4 : D1-D3, l'index et les fiches orphelines committées)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

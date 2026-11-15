@@ -64420,3 +64420,79 @@ rapport-restitution-v2.md
 background job bash-5101 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 work/chantier/journal.log; ls reports/ | grep -E "restitution-v2|rapport-faq") finished [status: completed, exit code: 0]. Read its output with job_output.
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | g … [101 caractères tronqués]`
+
+  ```
+Everything up-to-date
+Everything up-to-date
+[still running after 600000ms; moved to background job bash-5102]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/ tools/ docs/ | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chunker|rapport-coherence\" | head -6; date; tail -2 work/ … [61 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  docs/produit/README.md
+ M reports/INDEX.md
+ M reports/README.md
+A  reports/faq.json
+dim 15 nov 2026 06:09:14 EST
+2026-11-15 05:53:43 · ✔ D2 en 3600.1 s (code 124) — ✅ test -f reports/rapport-restitution-v2.md && echo FICHE-OK
+2026-11-15 05:53:43 · ▶ D3 — La FAQ du produit (timeout 3600 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -2 work/chantier/journal.log; git log --oneline -2 | cut -c1-85; git status --porcelain reports/rapport-restitution-v2.md reports/pensee-restitution-v2.json | head -2", "description": "Attendre la fin de D3", "t … [18 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5104]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5102 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E "budget|a_faire" | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-5102", "timeout_ms": 300000, "wait": true}`
+
+  ```
+dim 15 nov 2026 06:19:08 EST
+2026-11-15 05:53:43 · ▶ D3 — La FAQ du produit (timeout 3600 s)
+2026-11-15 06:11:30 · ✔ D3 en 1066.1 s (code 0) — ✅ test -f reports/rapport-faq.md && echo FICHE-OK
+budget consommé : 5596.799999999999 s · lancements : 39
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5104 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -2 work/chantier/journal.log; git log --oneline -2 | cut -c1-85; git status --porcelain reports/rapport-restitution-v2.md reports/pensee-restitution-v2.json | head -2) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[s]uperviseur.py boucle\"; git status --porcelain reports/ tools/ docs/ journal/ | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chu … [111 caractères tronqués]`
+
+  ```
+0
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/digest.md
+ M journal/sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/rapport.md
+ M reports/INDEX.md
+ M reports/README.md
+ M tools/chantier/plan.json
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+5b2d07fc D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔL
+e42bac4f JOURNAL — 2026-11-15 : D1, LES EXEMPLES --tagger (441 TOKENS, 3,7 S) ET --re
+d23780d7 D1 — LES EXEMPLES DU TAGGER ET DE LA BASE RÉELLE : 3 BLOCS --tagger (441 TOK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-restitution-v2.md reports/pensee-restitution-v2.json reports/rapport-gold-reel-50.md reports/rapport-gold-reel-50.json reports/rapport-faq.md reports/faq.json 2>/dev/null; ls -la reports/rapport … [130 caractères tronqués]`
+
+  ```
+?? reports/rapport-gold-reel-50.json
+?? reports/rapport-gold-reel-50.md
+26036 reports/rapport-gold-reel-50.md
+17696 reports/rapport-restitution-v2.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 -- reports/rapport-restitution-v2.md | cut -c1-80; git log --oneline -1 -- reports/rapport-gold-reel-50.md | cut -c1-60; echo \"---\"; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours. … [1232 caractères tronqués]`

@@ -7,12 +7,12 @@
 | Identifiant | `session-3ee08872-fd34-4732-af49-0639cb5d82a9` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 05:53 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 123 |
-| Appels d'outils | 165 |
+| Messages | 128 |
+| Appels d'outils | 173 |
 | Fichiers touchés | 6 |
-| Commandes | 140 |
+| Commandes | 148 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche D3 : la FAQ du produit — 10 questions qu'un utilisateur se pose (la langue, le hors-ligne, le coût, le tagger, le  … [247 caractères tronqués]
 
-*165 appels d'outils.* Actions notables :
+*173 appels d'outils.* Actions notables :
 
 - bash — Inspect repo state and recent commits
 - bash — Check docs/produit and reports
@@ -41,7 +41,37 @@
 - bash — Run CLI help and basic analysis
 - bash — Inspect tagger/network code
 - bash — Read top of drave.py
-- … et 145 autres
+- … et 153 autres
+
+**Synthèse produite :**
+
+\## D3 — livré et commité
+
+**Livrables**
+- **FAQ** : `docs/produit/README.md` **§ 8** — les 10 questions demandées (langue, hors-ligne, coût, tagger, schéma, attachement, spans inatteignables, restitution, limites, installation), réponses adossées au code et aux fiches.
+- **Fiche** : `reports/rapport-faq.md` — dispositif, tableau des 10 contrôles, sorties observées, contrôle négatif, ce qui pourrait rendre les réponses fausses.
+- **JSON** : `reports/faq.json` — relevé complet (`observe`, `ok`, `erreur`, `controle_negatif`).
+- **Vérificateur** : `tools/verifier_faq.py` — 10 contrôles exécutables, `--json`, `--autotest`.
+
+**Vérification**
+```text
+python3 tools/verifier_faq.py
+FAQ produit — 10/10 réponses vérifiées · contrôle négatif détecté
+✅ FAQ vérifiée
+```
+Le contrôle négatif est réel : `--langue de` sort **2** et le schéma v2 **refuse** une annotation v1. Les chiffres cités restent ceux des fiches : **238/239** cibles (0,9958), `g017` **[9:28] attendu / [9:38] prédit** (règle rejetée, F1 0,7901), restitution v0 **46/46**, v1 **46/46**, v2 **19/46** cadres (**16** non vides, F1 0,5270), tagger **609 appels / 22 299 tokens / 155 s / ~0,02 $**.
+
+**Contrôles passés**
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (15 contrôles, autotest **183/183**)
+- `python3 tools/revue_documentation.py` → ✅
+- `bash tools/porte-tableaux.sh` → ✅
+- `python3 tools/taille_documents.py` → ✅ (T0 **4000/4000**)
+- `python3 tools/verifie_en_cours.py` → ✅
+
+**Commit**
+`5b2d07fc` — *D3 — LA FAQ DU PRODUIT : 10/10 RÉPONSES VÉRIFIÉES CONTRE LE CODE (10 CONTRÔLES, NÉGATIF DÉTECTÉ) ; D2 — LA RESTITUTION V2 (19/46 CADRES, F1 0,5270)*
+
+Le commit inclut aussi **D2**, qui était déjà dans l’arbre et référencé par `en-cours`. Les **15 fichiers restants** non commités sont le travail en attente d’autres tâches (INDEX/README, anciens rapports, `gold-reel-50`, `s-paragraphes`).
 
 ## 3. Travail accompli
 
@@ -98,7 +128,7 @@
 - **T1** Read repo README install section
 - **T1** Check available Python versions
 - **T1** Check Python 3.10 syntax usage
-- … et 100 autres
+- … et 108 autres
 
 ## 4. Mesures et résultats marquants
 
