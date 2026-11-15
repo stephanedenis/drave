@@ -16,8 +16,10 @@
 
 **La mesure sur le gold 612** (avec la clé, cache partiel) : POS **0,9575** contre 0,8625 pour
 l'heuristique — **+9,5 points** (le `PONCT` restitué ajoute 0,25 pt ; le reste vient du tagger).
-Coût : **609 appels**, 22 299 tokens, 155 s (159 requêtes réseau, le reste en cache) —
-soit **~0,02 $** pour 612 phrases.
+**Sur la base réelle 452** (`--tagger --reel`) : **0,9500** contre **0,8891** — **+6,1 points** ;
+le tagger gagne donc surtout sur les phrases **synthétiques** (les plus difficiles pour
+l'heuristique). Coût : **609 appels**, 22 299 tokens, 155 s (159 requêtes réseau, le reste en
+cache) — soit **~0,02 $** pour 612 phrases ; **449 appels servis par le cache** sur la base réelle.
 
 ## 1. Ce qui est livré
 

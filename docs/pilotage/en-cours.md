@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 01 h 40 HNE (tagger : 1 appel, PONCT, 95,75 %)**
+**Mis à jour : 2026-11-15, 01 h 50 HNE (tagger : 95,75 % sur 612, 95,00 % sur le réel 452)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

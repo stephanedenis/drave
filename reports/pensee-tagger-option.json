@@ -180,5 +180,13 @@
    "latence_s": 155.636,
    "requetes": 159
   }
+ },
+ "base_reelle_452": {
+  "pos_heuristique": 0.8891,
+  "pos_tagger": 0.95,
+  "delta": 0.0609,
+  "appels": 449,
+  "cache": 449,
+  "reseau": 0
  }
 }

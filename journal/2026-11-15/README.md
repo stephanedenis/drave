@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**1 commits** · **1 session(s)** · **1 thème(s)**
+**2 commits** · **1 session(s)** · **2 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| mesures | 1 | [mesures.md](mesures.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
@@ -24,6 +25,7 @@
 | heure | commit | fait |
 |---|---|---|
 | 01:31 | `ce7241d5` | 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 20 TESTS |
+| 01:39 | `2d7a7f2b` | 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5) |
 
 ## Le récit de la journée (écrit à la main)
 

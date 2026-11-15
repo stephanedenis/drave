@@ -63452,3 +63452,22 @@ dim 15 nov 2026 01:39:36 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 01 h 40 HNE (tagger : 1 appel, PONCT, 95,75 %)**\\n\", t, c … [1041 caractères tronqués]`
+
+  ```
+état
+ create mode 100644 journal/2026-11-15/portes.md
+COMMIT OK 1
+2d7a7f2b 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5)
+   ce7241d5..2d7a7f2b  s/v7 -> s/v7
+   ce7241d5..2d7a7f2b  master -> master
+dim 15 nov 2026 01:42:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && DEEPSEEK_API_KEY=\"$(cat ~/.config/drave/deepseek.key)\" timeout 1200 python3 tools/drave.py evaluer --tagger --reel --json 2>/dev/null | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nh=d['heuristique']['pos']['exactitude'] … [304 caractères tronqués]`
+
+  ```
+réel 452 — POS heuristique 0.8891 | tagger 0.95 | delta 0.0609
+coût {'modele': 'deepseek-chat', 'appels': 449, 'requetes': 0, 'cache': 449, 'tokens': 0, 'latence_s': 0.0, 'modeles_renvoyes': {'deepseek-flash': 449}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-tagger-option.md'); t=p.read_text()\nt=t.replace(\"\"\"**La mesure sur le gold 612** (avec la clé, cache partiel) : POS **0,9575** contre 0,8625 pour\nl'heuristique —  … [2319 caractères tronqués]`

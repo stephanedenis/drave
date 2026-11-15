@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 345.0 h |
 | Tours | 198 |
-| Messages | 3800 |
-| Appels d'outils | 3387 |
+| Messages | 3802 |
+| Appels d'outils | 3389 |
 | Fichiers touchés | 25 |
-| Commandes | 2821 |
+| Commandes | 2823 |
 | Sous-agents | 43 |
-| Commits | 455 |
+| Commits | 456 |
 | Compactages de contexte | 8 |
 
 ## Objectifs déclarés
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*28 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 14 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2781 autres
+- … et 2783 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11374,4 +11374,5 @@ Je commence.
 - 6A — LA BASE HONNÊTE : evaluer --reel (452 PHRASES RÉELLES : POS 88,91 %, F1 79,06 %, ATTACHEMENT 99,46 %) ET LA LIGNE BASE RÉELLE DANS LA SORTIE PAR DÉFAUT ; 2
 - 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5)" -- tools/dra
 - 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5)" -- tools/dra
+- 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)" -- reports/rapp
 
