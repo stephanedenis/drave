@@ -7,14 +7,14 @@
 | Identifiant | `session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 12:53 |
-| Durée | 0.2 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 93 |
-| Appels d'outils | 110 |
-| Fichiers touchés | 1 |
-| Commandes | 102 |
+| Messages | 226 |
+| Appels d'outils | 254 |
+| Fichiers touchés | 5 |
+| Commandes | 223 |
 | Sous-agents | 0 |
-| Commits | 0 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche X3 (J5, la part du pilote) : le tagger **en lot** — mesure le coût et la latence pour **1 000 phrases** (réelles,  … [340 caractères tronqués]
 
-*110 appels d'outils.* Actions notables :
+*254 appels d'outils.* Actions notables :
 
 - bash — Inspect repository root and git status
 - bash — List reports and pilotage docs
@@ -41,7 +41,41 @@
 - bash — List data directories
 - bash — Inspect 50 free texts JSON structures
 - bash — Read tagger 612 harness
-- … et 91 autres
+- … et 217 autres
+
+**Synthèse produite :**
+
+X3 est fait, mesuré, écrit et committé (`2929ccf7`).
+
+**Source des 50 textes libres.** J’ai pris le **banc de robustesse** `reports/pensee-fiabilite-produit.json` (`banc_50.resultats`), qui est le banc canonique des « 50 textes libres » (50 textes, 2 vides, 2 refus, 1 068 mots). Il fournit **69 phrases**. Avec le gold 612, le corpus réel fait **681 lignes / 677 textes distincts** (4 doublons). Le lot de 1 000 items ajoute **319 répétitions déterministes** : ce sont des phrases réelles, mais **677 textes distincts seulement** — le coût à 1 000 textes uniques est extrapolé (×1,4771), et c’est dit dans la fiche.
+
+| mesure | froid | chaud |
+|---|---:|---:|
+| items | 1 000 | 1 000 |
+| requêtes réseau | **672** | **0** |
+| rejeux disque / mémoire | 3 / 323 | 675 / 323 |
+| refus sans appel | 2 | 2 |
+| tokens | **99 971** | **0** |
+| durée | **685,2 s** | **2,635 s** |
+| débit | **87,6 items/min** | **22 770 items/min** |
+| pic RSS | **40,8 Mo** | **38,2 Mo** |
+| cache disque | 712 943 o / 672 fichiers | inchangé |
+| refus | 4 (3 items) | 4 |
+| hashes identiques | — | **1 000 / 1 000** |
+
+**Coût.** Lot mesuré : **0,021770 $** hors pointe. Extrapolé à 1 000 textes uniques : **0,032157 $** hors pointe, **0,064315 $** en pointe. La référence `0,04 $/612 → 0,065359 $` est retrouvée en pointe ; le hors-pointe est moitié moindre parce que la référence était à **deux appels/phrase**, alors que le câblage actuel en fait **un**. Le chiffre W3 (143 870 tokens / 0,031 $) est confirmé à **+2,6 %**.
+
+**Contrôle négatif.** Les mêmes 1 000 items en cache chaud : **0 réseau, 0 token, 0 $**, **1 000/1 000 hashes identiques**, 4 refus identiques. Les 3 rejeux disque du froid sont trois collisions de prompt (ponctuation ignorée), pas un cache chaud ; les 2 refus sans appel (`f14` « 🚀 », `f17` « ... ») ne sont ni réseau ni cache.
+
+**`--jsonl`.** **1 003 lignes** pour 1 000 items (3 phrases du gold contiennent deux phrases). Premier passage chaud : 4 prompts absents du cache, **513 tokens** ; second passage : **0 réseau, 0 token**. Passsage froid de 20 items : **20 appels, 2 907 tokens, 18,9 s**.
+
+**Fichiers.**
+- [`reports/rapport-tagger-lot.md`](reports/rapport-tagger-lot.md)
+- [`reports/rapport-tagger-lot.json`](reports/rapport-tagger-lot.json)
+- [`tools/tests/linguistique/qualifier_tagger_lot.py`](tools/tests/linguistique/qualifier_tagger_lot.py) (`--libres fiabilite|produit`, modes `froid`, `chaud`, `fusion`)
+
+**Portes.** `porte-bloc-linguistique`, `porte-produit`, `porte-deepseek
+… [466 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -49,7 +83,11 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py` | 1 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py` | 1 | 5 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 6 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-15/README.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -93,7 +131,7 @@
 - **T1** Map H50 harness functions
 - **T1** Read cache and measurement machinery
 - **T1** Count sentences in 50 free texts
-- … et 62 autres
+- … et 183 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -127,11 +165,51 @@
 - **T1** `| [`rapport-base-reelle.md`](rapport-base-reelle.md) | **B13** — la base honnête : `--reel`, 452 phrases, POS 88,91 %, F1 79,06 % |`
 - **T1** `| [`rapport-atomes-niveaux.md`](rapport-atomes-niveaux.md) | **Panini** — la table 14 atomes × 8 |`
 - **T1** `| [`rapport-pos-ponctuation.md`](rapport-pos-ponctuation.md) | **B13** — PONCT : POS **85,75 %**, miroir |`
+- **T1** `"extrapole_note": "×1.5038 (1000 / 665 textes distincts)",`
+- **T1** `COUT: {"tokens": {"prompt_tokens": 83880, "completion_tokens": 15088, "total_tokens": 98968, "prompt_cache_hit_tokens": 0, "prompt_cache_miss_tokens": 83880, "tokens_reseau": 98968, "tokens_cache": 39`
+- **T1** `192:(8,65 Mo pour 1 003 lignes) : 8 340 lignes/min au premier passage (4 appels réseau), 19 577 au`
+- **T1** `24:| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (665 textes), **662 appels réseau**, **98 968 tokens**, **690,4 s**, **86,9 items/min**, **`
+- **T1** `- **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est`
+- **T1** `> appels réseau** à froid, **98 968 tokens**, **690,4 s**, **86,9 items/min**, **40,8 Mo** de`
+- **T1** `— **33,8 %** des items ne sont pas facturés ; **98 968 tokens** (83 880 d'entrée + 15 088 de`
+- **T1** `sortie), **690,4 s**, **86,9 items/min**, pic **40,8 Mo**, cache disque **703 720 octets** en`
+- **T1** `pic **37,9 Mo** : le contrôle négatif est **exact**, et les **1 000 hashes** d'annotation sont`
+- **T1** `1 000 textes uniques est une **extrapolation** (×1,5038), et le lot à 1 000 items est la`
+- **T1** `linéairement (×1,5038). Les 160 phrases `synth` du gold sont conservées parce que la consigne`
+- **T1** `| **cache total (disque + mémoire)** | **338 / 1 000 = 33,8 %** |`
+- **T1** `**Lecture.** Le cache **froid** n'est pas « 0 % » au sens strict : **3 items** sont servis par`
+- **T1** `**2 textes distincts sur 665** (0,3 %), tous deux des textes libres longs (URL, e-mail,`
+- **T1** `| cache total | 33,8 % | **100 %** |`
+- **T1** `| **disque seul** (items servis par un fichier) | 3 / 1 000 = **0,3 %** | 665 / 1 000 = **66,5 %** |`
+- **T1** `| **mémoire seule** (texte déjà vu dans la cascade) | 335 / 1 000 = **33,5 %** | 335 / 1 000 = **33,5 %** |`
+- **T1** `| **total** (disque + mémoire) | 338 / 1 000 = **33,8 %** | 1 000 / 1 000 = **100 %** |`
+- **T1** `| **API prompt cache** (`prompt_cache_hit_tokens`) | **0 / 83 880 = 0 %** | 0 (aucun appel) |`
+- **T1** `**Lecture.** Le cache **disque** chaud est à **66,5 %**, pas 100 % : les **335 répétitions** du`
+- **T1** `est à 100 % et le coût à 0. Le cache **côté API** (`prompt_cache_hit_tokens`) est **vide** sur`
+- **T1** `(8,65 Mo pour 1 003 lignes) : 8 340 lignes/min au premier passage (4 appels réseau), 19 577 au`
+- **T1** `garde que les métriques et un hash par item). Le cache disque pèse **0,7 Mo**, soit ~1 058`
+- **T1** `octets par texte. Le `--jsonl` à 1 003 lignes pèse **8,65 Mo** sur `stdout` (le sous-processus`
+- **T1** `| poste | 1 000 items (mesuré) | 1 000 textes uniques (extrapolé ×1,5038) |`
+- **T1** `le 15/11). Le chiffre W3 (**143 870 tokens / 0,031 $ pour 1 000**) est donc **confirmé à +3,4 %**`
+- **T1** `à 1 000 textes uniques est extrapolé (×1,5038). Si les 335 textes manquants sont plus longs`
+- **T1** `cache disque pèse 0,7 Mo.`
+- **T1** `+| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (665 textes), **662 appels réseau**, **98 968 tokens**, **690,4 s**, **86,9 items/min**, **40`
+- **T1** `25:- **132 paires** de syntagmes qui se chevauchent (31/50 textes, **51,9 % des étiquettes**) : le`
+- **T1** `"extrapole_note": "×1.4771 (1000 / 677 textes distincts)",`
+- **T1** `0 'Le corpus réel disponible fait 665 textes distincts : 1 000 items = 665 + 335 répétitions ; le coût des 1 000 textes uniques est extrapolé (×1,5038).'`
+- **T1** `reports/README.md:24:| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (677 textes), **672 appels réseau**, **99 971 tokens**, **685,2 s**, **87`
+- **T1** `6:> appels réseau** à froid, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **40,8 Mo** de`
 
 ## 5. Erreurs rencontrées
 
-2 sorties en erreur ou divergentes. Les premières :
+3 sorties en erreur ou divergentes. Les premières :
 
 - **T1** : gold 612 unique texts 609 dups [(('Le vent souffle fort.', 'fr'), 2), (('La voiture roule vite.', 'fr'), 2), (('Paul sees Marie; he speaks to her.', 'en'), 2)] n 3 free sentences 56 unique 56 [stderr]
 - **T1** : [stderr] Traceback (most recent call last):   File "<stdin>", line 16, in <module> ValueError: not enough values to unpack (expected 4, got 3) [exit code: 1]
+- **T1** : tokens/network 148.8 [stderr] Traceback (most recent call last):   File "<stdin>", line 5, in <module> KeyError: 'corpus' [exit code: 1]
+
+## 6. Commits
+
+- SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 \$ ; CACHE CHAUD 0 \$, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES" 2>&1
+- SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 \$ ; CACHE CHAUD 0 \$, 1 0
 

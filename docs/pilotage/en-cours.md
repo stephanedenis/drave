@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 12 h 40 HNE (semaine 2 : W1-W6, tag semaine-2-2026-11-20)**
+**Mis à jour : 2026-11-15, 14 h 00 HNE (semaine 2 : W1-W6, X1-X3, tag posé)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

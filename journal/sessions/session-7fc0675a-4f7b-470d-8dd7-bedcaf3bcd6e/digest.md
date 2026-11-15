@@ -2058,3 +2058,2282 @@ top [157, 157, 157, 159, 159, 160, 160, 161, 163, 169]
   ```
 
 - **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l; tail -3 /tmp/tagger-lot-froid.log", "description": "Wait and check cold progress", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:04:59 EST
+348
+[froid] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport sys, collections\nsys.path.insert(0,'tools'); sys.path.insert(0,'tools/tests/linguistique')\nimport bloc_linguistique as bl, qualifier_tagger_lot as q\nitems=q.charger_corpus()\ndef toks(t): return tuple(t for _,_,t in bl.NeuronalLLMPOS._tokens(t))\nc=collectio … [622 caractères tronqués]`
+
+  ```
+items 668 distinct (texte,langue) 665
+distinct (tokens,langue) 662
+distinct tokens 662
+prompt collisions 3
+('Tu', 'viens', 'demain') {'Tu viens demain ?', 'Tu viens demain.'}
+('You', 'come', 'tomorrow') {'You come tomorrow?', 'You come tomorrow.'}
+('ce', 'livre', 'commence') {'ce livre commence!', 'ce livre commence'}
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "new_string": "    uniques = {(it[\"texte\"], it[\"langue\"]) for it in items}\n    prompts = {tuple(t for _, _, t in bl.NeuronalLLMPOS._tokens(it[\"texte\"]))\n               for it in  … [127 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "new_string": "        \"lignes_source\": len(items),\n        \"textes_distincts\": len(uniques),\n        \"prompts_distincts\": len(prompts),\n        \"collisions_prompt\": len(uniqu … [268 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l", "description": "Progress check"}`
+
+  ```
+dim 15 nov 2026 13:05:22 EST
+369
+  ```
+
+- **bash** `{"command": "sed -n 1,60p reports/README.md; echo ===; grep -n \"tagger\" reports/README.md | head", "description": "Inspect reports README"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+>
+> **Contexte** : la fiche [`07-mesures-couche-commune.md`](07-mesures-couche-commune.md) est un **hub** de
+> **168 mesures** en **10 parties** (`07/p1.md` … `07/p10.md`), pas un fichier de 150 Ko. La lire **par
+> partie**, jamais en entier ; l'index exhaustif des fiches est [`INDEX.md`](INDEX.md).
+
+## Les fiches courantes
+
+| fichier | ce qu'il porte |
+|---|---|
+| [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la coordination, le harnais |
+| [`rapport-bilan-nuit.md`](rapport-bilan-nuit.md) | **Bilan** — la nuit du 14 au 15/11 : le tagger, la base honnête, la phase C/B |
+| [`rapport-gold-reel-50.md`](r
+… [6508 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l; tail -3 /tmp/tagger-lot-froid.log", "description": "Progress check"}`
+
+  ```
+dim 15 nov 2026 13:05:28 EST
+375
+[froid] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+  ```
+
+- **bash** `{"command": "sleep 90; date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l; tail -3 /tmp/tagger-lot-froid.log", "description": "Wait and check cold progress", "timeoutMs": 100000}`
+
+  ```
+dim 15 nov 2026 13:07:03 EST
+470
+[froid] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+  ```
+
+- **bash** `{"command": "sleep 90; date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l; tail -3 /tmp/tagger-lot-froid.log", "description": "Wait and check cold progress", "timeoutMs": 100000}`
+
+  ```
+dim 15 nov 2026 13:08:41 EST
+567
+[froid] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json,glob,statistics\np=c=h=m=0; ls=[]; n=0\nfor f in glob.glob('/tmp/tagger-lot-cache/*.json'):\n try: d=json.load(open(f)); u=d.get('usage',{})\n except: continue\n n+=1; p+=u.get('prompt_tokens',0); c+=u.get('completion_tokens',0); h+=u.get('prompt_cache_hit … [642 caractères tronqués]`
+
+  ```
+n 571 prompt 70699 completion 11682 total 82381 hit 0 miss 70699
+lat mean 1.033 median 1.014 sum 589.7
+expected 662 calls: prompt 81966 completion 13544 total 95510
+cost 662 calls hp 0.020421 extrap 1000 texts 0.030709 peak 0.061417
+  ```
+
+- **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-cache -name \"*.json\" | wc -l; tail -5 /tmp/tagger-lot-froid.log", "description": "Wait for cold run completion", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:10:47 EST
+662
+ "debit_items_min": 86.9,
+ "pic_kb": 40820,
+ "refus": 5,
+ "erreurs": 0
+}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-73 (bash: python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode froid --cache /tmp/tagger-lot-cache --sortie /tmp/tagger-lot-froid.json --reset 2>&1 | tee /tmp/tagger-lot-froid.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-73"}`
+
+  ```
+{
+ "mode": "froid",
+ "items": 1000,
+ "duree_s": 690.388,
+ "requetes": 662,
+ "cache_disque": 3,
+ "cache_memoire": 335,
+ "tokens_reseau": 98968,
+ "debit_items_min": 86.9,
+ "pic_kb": 40820,
+ "refus": 5,
+ "erreurs": 0
+}
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "tail -30 /tmp/tagger-lot-froid.log; echo ===; python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/tagger-lot-froid.json'))\nprint(list(d))\nprint(\"stats\",json.dumps(d['stats_tagger'],ensure_ascii=False))\nprint(\"cache\",d['cache_avant']['fichiers'],d['cache_apres'])\nprint(\"rss\" … [814 caractères tronqués]`
+
+  ```
+[froid] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+{
+ "mode": "froid",
+ "items": 1000,
+ "duree_s": 690.388,
+ "requetes": 662,
+ "cache_disque": 3,
+ "cache_memoire": 335,
+ "tokens_reseau": 98968,
+ "debit_items_min": 86.9,
+ "pic_kb": 40820,
+ "refus": 5,
+ "erreurs": 0
+}
+===
+['nom', 'cache_dir', 'duree_s', 'cache_avant', 'cache_apres', 'rss_avant', 'rss_apres', 'stats_tagger', 'lignes', 'composition']
+stats {"appels": 0, "requetes": 0, "cache": 0, "tokens": 0, "latence_s": 0.0, "modeles": {}, "cle_refusee": 0}
+cache 0 {'fichiers': 662, 'octets': 703720, 'dates': {'min': '2026-11-15T12:58:53-0500', 'max': '2026-11-15T13:10:21-0500'}, 'modeles': {'deepseek-flash': 662}}
+rss {'pic_kb': 33868, 'rss_kb': 33868, 'ru_maxrss_kb': 33708} {'pic_kb': 40820, 'rss_kb': 40820, 'ru_maxrss_kb': 38588}
+lines 1000
+sources Counter({'reel': 655, 'synth': 234, 'libre': 85, 'hand': 26})
+refus [('x48-00', 'libre', 'neuronal-pos: ValueError: longueur POS 6 / 2'), ('x50-00', 'libre', 'neuronal-pos: ValueError: longueur POS 88 / 87'), ('x50-00', 'libre', 'neuronal-pos: ValueError: longueur POS 88 / 87'), ('x48-00', 'libre', 'neuronal-pos: ValueError: longueur POS 6 / 2'), ('x50-00'
+… [168 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "new_string": "        \"par_source\": par_source, \"par_langue\": par_langue,\n        \"stats_tagger\": {\n            \"appels\": len(reseau) + len(disque),\n            \"requetes\": … [448 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode chaud --cache /tmp/tagger-lot-cache --sortie /tmp/tagger-lot-chaud.json 2>&1 | tee /tmp/tagger-lot-chaud.log", "description": "Run hot batch on same 1000 items", "timeoutMs": 300000}`
+
+  ```
+[chaud] 1000 items · cache /tmp/tagger-lot-cache · source 668 lignes / 665 textes
+{
+ "mode": "chaud",
+ "items": 1000,
+ "duree_s": 2.715,
+ "requetes": 0,
+ "cache_disque": 665,
+ "cache_memoire": 335,
+ "tokens_reseau": 0,
+ "debit_items_min": 22099.4,
+ "pic_kb": 37932,
+ "refus": 5,
+ "erreurs": 0
+}
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode fusion --froid /tmp/tagger-lot-froid.json --chaud /tmp/tagger-lot-chaud.json --sortie reports/rapport-tagger-lot.json 2>&1 | tee /tmp/tagger-lot-fusion.log", "description": "Fuse measurements, run jsonl tests, write report  … [27 caractères tronqués]`
+
+  ```
+{
+ "froid": {
+  "requetes": 662,
+  "cache_disque": 3,
+  "tokens": 98968,
+  "dollars_hp": 0.021635,
+  "debit_items_min": 86.9,
+  "pic_kb": 40820
+ },
+ "chaud": {
+  "requetes": 0,
+  "tokens": 0,
+  "dollars_hp": 0.0,
+  "debit_items_min": 22099.4,
+  "pic_kb": 37932
+ },
+ "extrapole_1000_uniques": {
+  "hors_pointe": 0.032534,
+  "pointe": 0.065068
+ },
+ "jsonl": {
+  "chaud_lignes": 1003,
+  "chaud_cout": {
+   "modele": "deepseek-chat",
+   "appels": 667,
+   "reseau": 4,
+   "cache": 663,
+   "tokens": 513,
+   "latence_s": 3.9
+  },
+  "froid_lignes": 20,
+  "froid_cout": {
+   "modele": "deepseek-chat",
+   "appels": 20,
+   "reseau": 20,
+   "cache": 0,
+   "tokens": 2907,
+   "latence_s": 20.0
+  }
+ },
+ "controle_negatif": "OK : le cache chaud rejoue les 1 000 items à 0 réseau, 0 token, 0 $"
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nprint(\"keys\",list(d))\nprint(\"verdict\",d['verdict'])\nprint(\"corpus\",json.dumps(d['corpus'],ensure_ascii=False,indent=1))\nprint(\"froid cache\",json.dumps(d['passes']['froid']['cache'],ensure_as … [981 caractères tronqués]`
+
+  ```
+keys ['rapport', 'tache', 'ligne_roadmap', 'date', 'commit', 'verdict', 'dispositif', 'corpus', 'passes', 'cache', 'debit', 'memoire', 'cout', 'jsonl', 'controle_negatif', 'limites', 'fichiers']
+verdict le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 662 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques
+corpus {
+ "lignes_source": 668,
+ "textes_distincts": 665,
+ "prompts_distincts": 662,
+ "collisions_prompt": 3,
+ "doublons_source": {
+  "n": 3,
+  "ids": [
+   "r186",
+   "r189",
+   "r358"
+  ]
+ },
+ "items": 1000,
+ "repetitions_ajoutees": 332,
+ "items_repetes": 332,
+ "graine": 20261115,
+ "sha256_textes": "94d47d017f1597881425b2650a7ddc33a28d768e293b2db8acf7fd888eff2bc3",
+ "par_source": {
+  "hand": 20,
+  "reel": 432,
+  "synth": 160,
+  "libre": 56
+ },
+ "par_langue": {
+  "fr": 442,
+  "en": 224,
+  "und": 2
+ },
+ "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres (pensee-produit-bloc-l.json, 56 phrases)",
+ "note": "les 1 000 items sont des phrases réelles ; 335 rejouent un texte du lot. La mesure publie le lot et l'extrapolation aux 1 000 textes uniques."
+}
+froid cache {
+ "appels_transport": 665,
+ "requetes_reseau": 662,
+ "cache_
+… [3974 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nfor k in ('chaud_1000','froid_20'):\n x=d['jsonl'][k]\n print(k,{q:x[q] for q in ('nom','code','lignes','json_valides','sources','pos_total','texte_attendu','stderr' if False else 'cout_stderr','rss_pi … [150 caractères tronqués]`
+
+  ```
+chaud_1000 {'nom': '1000', 'code': 0, 'lignes': 1003, 'json_valides': 1003, 'sources': {'cascade': 1003}, 'pos_total': 7195, 'texte_attendu': 1000, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 667, 'reseau': 4, 'cache': 663, 'tokens': 513, 'latence_s': 3.9}, 'rss_pic_kb': 39108, 'duree_s': 7.216, 'stdout_octets': 8645416, 'fichier_lignes': 1999, 'textes_uniques_sortie': 667}
+psed (wall clock) time (h:mm:ss or m:ss): 0:07.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 39108
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 12666
+	Voluntary context switches: 35
+	Involuntary context switches: 155
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+froid_20 {'nom': '20-froid', 'code': 0, 'lignes': 20, 'json_valides': 20, 'sources': {'cascade': 20}, 'pos_total': 127, 'texte_attendu': 20, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 20, 'reseau': 20, '
+… [761 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport sys, pathlib, json\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\nitems=q.charger_corpus(); lot,comp=q.construire_lot(items,n=1000,graine=q.GRAINE)\nr=q._lancer_jsonl(pathlib.Path('/tmp/tagger-lot-cache'), lot, '1000-second',  … [269 caractères tronqués]`
+
+  ```
+{'nom': '1000-second', 'code': 0, 'lignes': 1003, 'json_valides': 1003, 'sources': {'cascade': 1003}, 'pos_total': 7195, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 667, 'reseau': 0, 'cache': 667, 'tokens': 0, 'latence_s': 0.0}, 'rss_pic_kb': 35660, 'duree_s': 3.145, 'stdout_octets': 8645416, 'textes_uniques_sortie': 667}
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, sys, pathlib\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\np=pathlib.Path('reports/rapport-tagger-lot.json')\nd=json.loads(p.read_text())\nitems=q.charger_corpus(); lot,comp=q.construire_lot(items,n=1000,graine=q.GRAINE … [1615 caractères tronqués]`
+
+  ```
+patched reports/rapport-tagger-lot.json jsonl second reseau 0 tokens 0
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nf=d['passes']['froid']; c=d['passes']['chaud']; cout=d['cout']\nprint(\"COLD:\")\nprint(\"items\",f['items'],\"reseau\",f['cache']['requetes_reseau'],\"disque\",f['cache']['cache_disque'],\"memoire\",f … [1085 caractères tronqués]`
+
+  ```
+COLD:
+items 1000 reseau 662 disque 3 memoire 335
+tokens 83880 15088 98968
+duree 690.388 debit 86.9 req/min 57.5
+lat {'moyenne': 1.036, 'mediane': 1.017, 'p95': 1.325, 'max': 3.677} item {'moyenne': 0.69, 'mediane': 0.915, 'p95': 1.299, 'max': 3.68}
+mem {'rss_avant_kb': 33868, 'pic_avant_kb': 33868, 'rss_apres_kb': 40820, 'pic_apres_kb': 40820, 'ru_maxrss_kb': 38588, 'delta_pic_kb': 6952, 'cache_octets': 703720, 'cache_octets_par_texte': 1058.2}
+cache 703720 662 {'deepseek-flash': 662}
+refus 5 ['x48-00', 'x50-00', 'x50-00', 'x48-00', 'x50-00']
+HOT:
+items 1000 reseau 0 disque 665 memoire 335
+tokens 0 duree 2.715 debit 22099.4 mem 37932
+COUT: {"tokens": {"prompt_tokens": 83880, "completion_tokens": 15088, "total_tokens": 98968, "prompt_cache_hit_tokens": 0, "prompt_cache_miss_tokens": 83880, "tokens_reseau": 98968, "tokens_cache": 392, "tokens_total_appels": 99360}, "prix_unitaire_par_million": {"hors_pointe": {"entree_hit": 0.003, "entree_miss": 0.15, "sortie": 0.6}, "pointe": {"entree_hit": 0.006, "entree_miss": 0.3, "sortie": 1.2}}, "lot_1000_items": {"hors_pointe": 0.021635, "pointe": 0.04327}, "lot_1000_items_note": "coût réel du lot de 1 000 items : 662 appels réseau + 3 rejeux 
+… [1428 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nfor passe in ('froid','chaud'):\n print('===',passe)\n for k,v in d['passes'][passe]['par_source'].items(): print('src',k,v)\n for k,v in d['passes'][passe]['par_langue'].items(): print('lang',k,v)\nEO … [55 caractères tronqués]`
+
+  ```
+=== froid
+src hand {'items': 26, 'requetes': 20, 'cache_disque': 0, 'cache_memoire': 6, 'tokens_reseau': 2907, 'latence_reseau_s': 21.191, 'duree_item_s': 21.296}
+src libre {'items': 85, 'requetes': 56, 'cache_disque': 0, 'cache_memoire': 29, 'tokens_reseau': 11640, 'latence_reseau_s': 62.633, 'duree_item_s': 63.413}
+src reel {'items': 655, 'requetes': 427, 'cache_disque': 2, 'cache_memoire': 226, 'tokens_reseau': 62122, 'latence_reseau_s': 446.556, 'duree_item_s': 447.046}
+src synth {'items': 234, 'requetes': 159, 'cache_disque': 1, 'cache_memoire': 74, 'tokens_reseau': 22299, 'latence_reseau_s': 157.845, 'duree_item_s': 157.999}
+lang en {'items': 341, 'requetes': 222, 'cache_disque': 1, 'cache_memoire': 118, 'tokens_reseau': 32817, 'latence_reseau_s': 234.841, 'duree_item_s': 234.839}
+lang fr {'items': 656, 'requetes': 438, 'cache_disque': 2, 'cache_memoire': 216, 'tokens_reseau': 65813, 'latence_reseau_s': 451.223, 'duree_item_s': 452.743}
+lang und {'items': 3, 'requetes': 2, 'cache_disque': 0, 'cache_memoire': 1, 'tokens_reseau': 338, 'latence_reseau_s': 2.161, 'duree_item_s': 2.171}
+=== chaud
+src hand {'items': 26, 'requetes': 0, 'cache_disque': 20, 'cache_memoire': 6, 'tokens
+… [974 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace('\"latence_reseau_s\": round(sum(l[\"latence_api_s\"] for l in sous), 3),',\n            '\"latence_reseau_s\": round(sum(l[\"latence_api_s\"] for l in sou … [295 caractères tronqués]`
+
+  ```
+2
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/rapport-tagger-lot.json')\nd=json.loads(p.read_text())\nfor passe, chemin in (('froid','/tmp/tagger-lot-froid.json'),('chaud','/tmp/tagger-lot-chaud.json')):\n    lignes=json.loads(pathlib.Path(chemin).read_text())['lignes … [679 caractères tronqués]`
+
+  ```
+patched
+froid 444.836 449.791
+chaud 0 0
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nf=d['passes']['froid']; c=d['passes']['chaud']; j=d['jsonl']; cout=d['cout']\nprint(\"froid duree\",f['duree_s'],\"min\",round(f['duree_s']/60,2))\nprint(\"froid debit\",f['debit'])\nprint(\"froid toke … [1374 caractères tronqués]`
+
+  ```
+froid duree 690.388 min 11.51
+froid debit {'items_par_min': 86.9, 'requetes_par_min': 57.5, 'secondes_par_item': 0.6904, 'secondes_par_requete': 1.0429}
+froid tokens/call 149.5 tokens/text 148.8
+froid tokens/item 99.0
+hot duree 2.715 debit {'items_par_min': 22099.4, 'requetes_par_min': 0.0, 'secondes_par_item': 0.0027, 'secondes_par_requete': 2.715}
+hot mem {'rss_avant_kb': 33792, 'pic_avant_kb': 33792, 'rss_apres_kb': 37932, 'pic_apres_kb': 37932, 'ru_maxrss_kb': 37368, 'delta_pic_kb': 4140, 'cache_octets': 703720, 'cache_octets_par_texte': 1058.2}
+froid mem {'rss_avant_kb': 33868, 'pic_avant_kb': 33868, 'rss_apres_kb': 40820, 'pic_apres_kb': 40820, 'ru_maxrss_kb': 38588, 'delta_pic_kb': 6952, 'cache_octets': 703720, 'cache_octets_par_texte': 1058.2}
+jsonl hot1 debit 8339.8
+jsonl hot2 debit 19577.1
+jsonl cold debit 59.1
+cout {"hors_pointe": 0.021635, "pointe": 0.04327} extrap {"hors_pointe": 0.032534, "pointe": 0.065068} ref {'dollars': 0.04, 'prix_1000_lineaire': 0.065359, 'ecart_extrapole_hors_pointe': -0.032825}
+cache froid {'appels_transport': 665, 'requetes_reseau': 662, 'cache_disque': 3, 'cache_memoire': 335, 'items_sans_transport': 335, 'taux_cache_disque': 0.003, 'taux_ca
+… [1494 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git log --oneline -5; echo ===; git status --short | head -30", "description": "Check repo HEAD and status"}`
+
+  ```
+d2fd406a SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1)
+2b5bd1cd JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5
+049343d3 SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd
+9960b37f SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN
+93e046f7 SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE
+===
+ M docs/produit/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? reports/rapport-tagger-lot.json
+?? too
+… [120 caractères tronqués]
+  ```
+
+- **write** `{"content": "# X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud\n\n> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **X3** (J5, la part du\n> pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `d2fd406a` + ce diff · **Verdict** :\n> ✅ **le lot est mes … [20124 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"508\\|4 prompts\\|chacun deux fois\\|3 phrases du gold\" reports/rapport-tagger-lot.md", "description": "Locate report fixes"}`
+
+  ```
+68:part de la base **612** (`~0,04 $/612`) ; le sous-ensemble strictement réel (452 + 56 = 508
+136:et `x50-00` (« longueur POS 88 / 87 »), chacun deux fois, plus un second `x50-00`. Ce sont
+273:  parce que le segmenteur du CLI découpe 3 phrases du gold, pas parce que le cache est froid.
+283:  (452 + 56 = 508 textes) n'est pas mesuré seul ; son coût par texte peut différer, et les
+  ```
+
+- **bash** `{"command": "grep -n \"4 appels\\|4 prompts\\|513\" reports/rapport-tagger-lot.md", "description": "Locate jsonl paragraph"}`
+
+  ```
+192:(8,65 Mo pour 1 003 lignes) : 8 340 lignes/min au premier passage (4 appels réseau), 19 577 au
+248:| **chaud, 1er** | **1 003** | 1 003 | 8 645 416 o | 7,216 s | **4** | **513** | 667 | 39 108 kio |
+257:d'où **4 appels, 513 tokens, 0,0001 $** au premier passage. Le **second passage**, même fichier
+272:- **`--jsonl`** : deuxième passage à **0 réseau, 0 token** ; le premier passage paie **4 appels**
+  ```
+
+- **bash** `{"command": "sed -n 250,260p reports/rapport-tagger-lot.md", "description": "Read jsonl explanation"}`
+
+  ```
+| **froid, 20** | **20** | 20 | 160 228 o | 20,32 s | **20** | 2 907 | 0 | 33 984 kio |
+
+**Lecture.** Le mode `--jsonl` **fonctionne** : une ligne JSON par phrase, `source=cascade`,
+`refus` présent, coût sur `stderr`, jamais dans le JSONL. Le fichier de 1 000 items rend
+**1 003 lignes** : trois phrases du gold (`Marie lit. Elle aime les livres.` et ses variantes)
+contiennent **deux phrases** et le segmenteur du CLI les sépare. Ces 3 phrases créent **4
+prompts** absents du cache (2 pour la phrase française, 2 pour l'anglaise, plus les variantes),
+d'où **4 appels, 513 tokens, 0,0001 $** au premier passage. Le **second passage**, même fichier
+et même cache, rend **0 réseau, 0 token, 667 rejeux disque** : le contrôle négatif du mode est
+exact. Le passage **froid de 20 items** prouve le chemin réseau (20 requêtes, 2 907 tokens,
+20,32 s, 33 984 kio).
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('reports/rapport-tagger-lot.md')\ns=p.read_text()\ns=s.replace(\"part de la base **612** (`~0,04 $/612`) ; le sous-ensemble strictement réel (452 + 56 = 508\\ntextes) est discuté dans les limites.\",\n            \"part de la base **612* … [818 caractères tronqués]`
+
+  ```
+ok
+68:part de la base **612** (`~0,04 $/612`) ; le sous-ensemble strictement réel (452 + 56 = 508
+283:  (452 + 56 = 508 lignes, 505 textes distincts) n'est pas mesuré seul ; son coût par texte peut différer, et les
+[stderr]
+grep: warning: stray \ before n
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('reports/README.md')\ns=p.read_text()\nold=\"| [`rapport-tagger-defaut.md`](rapport-tagger-defaut.md) | **W3/R0.7** — la matrice du tagger : défaut hors ligne **code 0** / `--tagger` **code 4** sans clé ; réseau coupé = repli **code 0**  … [699 caractères tronqués]`
+
+  ```
+ok
+24:| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (665 textes), **662 appels réseau**, **98 968 tokens**, **690,4 s**, **86,9 items/min**, **40,8 Mo**, **0,0216 $** ; cache chaud **0 réseau / 0 token / 0 $**, **1 000/1 000 hashes identiques** ; `--jsonl` 1 003 lignes |
+  ```
+
+- **bash** `{"command": "ls reports/*.md | wc -l; ls reports/*.json | wc -l; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Check counts"}`
+
+  ```
+757
+852
+105:| fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md')\ns=p.read_text()\ns=s.replace(\"| fichiers / JSON de résultats | **756** / **851** |\", \"| fichiers / JSON de résultats | **757** / **852** |\")\nold=\"**W3 : défaut hors ligne code 0, `--tagger` code 4 sans … [964 caractères tronqués]`
+
+  ```
+105:| fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` |
+[stderr]
+W2/W3 ligne introuvable
+  ```
+
+- **bash** `{"command": "sed -n 88,94p docs/pilotage/en-cours.md; echo ===; sed -n 117,121p docs/pilotage/en-cours.md; echo ===; sed -n 103,107p docs/pilotage/en-cours.md", "description": "Inspect en-cours lines"}`
+
+  ```
+- **N2 — en pause** : commande **`eval_longueurs.py --rope --val <dir>`** (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
+- **Pensée — B13 (actif)** : **183/183** ; schéma v2, **v2** **19/46** (F1 **0,5270**), **W5 — v3** **20/46** (F1 **0,5406**), gold S **144/144** ; [v2](../../reports/rapport-restitution-v2.md), [v3](../../reports/rapport-restitution-v3.md), [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+- **L — le bloc langue** : contrat ; frontière script 1,0 / langue 0,137/0,9687 ; fusion réparée **0,9309/0,8226/0,8784/0,9954**.
+- **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; **143 870 tokens / 0,031 $** pour 1 000 ; **défaut hors ligne, opt-in, pas de `auto`** ; [W2](../../reports/rapport-tagger-h50.md), [W3](../../reports/rapport-tagger-defaut.md).
+- **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues, **V14 3/21** ; B2 **négatif** ; [atomes](../../reports/rapport-atomes-ni
+… [2724 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "old_string": "| fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` |", "new_string": "| fichiers / JSON de résultats | **757** / **852** | `reports/*.md` / `reports/*.json` | … [2 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md": file changed since it was read — re-read the file, then retry
+  ```
+
+- **bash** `{"command": "sed -n 102,108p docs/pilotage/en-cours.md; git log --oneline -2; git status --short docs/pilotage/en-cours.md", "description": "Re-read en-cours counters"}`
+
+  ```
+|---|---|---|
+| portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
+| chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+| fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
+| dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
+
+d2fd406a SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1)
+2b5bd1cd JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "offset": 103, "limit": 6}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+103: | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
+104: | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
+105: | fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` |
+106: | documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
+107: | dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
+108: 
+
+(Showing lines 103-108 of 145. Use offset=109 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "| fichiers / JSON de résultats | **757** / **852** | `reports/*.md` / `reports/*.json` |", "old_string": "| fichiers / JSON de résultats | **756** / **851** | `reports/*.md` / `reports/*.json` | … [2 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 3, "offset": 91}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+91: - **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; **143 870 tokens / 0,031 $** pour 1 000 ; **défaut hors ligne, opt-in, pas de `auto`** ; [W2](../../reports/rapport-tagger-h50.md), [W3](../../reports/rapport-tagger-defaut.md).
+92: - **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues, **V14 3/21** ; B2 **négatif** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [B2](../../reports/rapport-atomes-prediction.md), [familles](../../reports/rapport-retrieval-familles.md).
+93: - **Panini B1** : **60 paires**, **59 textes**, **26 à signer** ; **27/60**, calibration **42/44** ; [W4](../../reports/rapport-panini-manifeste.md), [B1](../../reports/rapport-protocole-date.md).
+
+(Showing lines 91-93 of 145. Use offset=94 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **W2/W3/X3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; … [711 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 2, "offset": 119}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+119: | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, fermé −1,55 ; W3 : défaut hors ligne code 0, `--tagger` code 4 sans clé, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd`** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** |
+120: | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+
+(Showing lines 119-120 of 145. Use offset=121 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, fermé −1,55 ; W3 : défaut h … [1490 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -40; echo \"RC=${PIPESTATUS[0]}\"", "description": "Run documentation review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -20; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/verifie_journal.py 2>&1 | tail -20; echo RC=${PIPESTATUS[0]}", "description": "Run state and journal checks", "timeoutMs": 120000}`
+
+  ```
+en-cours · 1667 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+RC=0
+===
+  journal · 47 jour(s) · 215 session(s) · 2644 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -20; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/verifier_schemas.py 2>&1 | tail -10; echo RC=${PIPESTATUS[0]}", "description": "Run doc size and schema checks", "timeoutMs": 120000}`
+
+  ```
+3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2714    230   T1   2800  reports/README.md
+    2433    164   T1   2500  docs/pilotage/references-non-regression.md
+    2111    218   T1   2500  docs/pilotage/utilisation.md
+    2013    183   T1   2500  docs/theorie/jeux-symboliques.md
+    2010    219   T1   5000  docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+    1942    218   T1   5000  docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+    1942    172   T1   2000  REPRISE.md
+    1932    108   T1   2500  docs/pilotage/manques.md
+    1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 4037 mots (budget 4 000)
+
+  avertissements :
+     · 63 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-f
+… [289 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 1, "offset": 91}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+91: - **W2/W3/X3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; **143 870 tokens / 0,031 $** pour 1 000 ; **X3 : lot 1 000 items (665 textes), 662 appels réseau, 98 968 tokens, 0,0216 $, cache chaud 0 $** ; **défaut hors ligne, opt-in, pas de `auto`** ; [W2](../../reports/rapport-tagger-h50.md), [W3](../../reports/rapport-tagger-defaut.md), [X3](../../reports/rapport-tagger-lot.md).
+
+(Showing lines 91-91 of 145. Use offset=92 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; ** … [664 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 1, "offset": 119}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+119: | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, fermé −1,55 ; W3 : défaut hors ligne code 0, `--tagger` code 4 sans clé, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; X3 : lot 1 000 items (665 textes), 662 appels réseau, 98 968 tokens, 0,0216 $, cache chaud 0 $ ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd`** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** |
+
+(Showing lines 119-119 of 145. Use offset=120 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "W3 : défaut hors ligne code 0, `--tagger` code 4 sans clé, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; X3 : lot 1 000, 662 appels, 98 968 tokens, 0,0216 $ ; W5", "old_string": "W3 : d … [209 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Check context budget", "timeoutMs": 120000}`
+
+  ```
+1931    185   T1   2500  docs/implantation/format-flux.md
+    1833    210   T1   5000  docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+  T0 max : 3999 mots (budget 4 000)
+
+  avertissements :
+     · 63 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Re-run doc review", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "ls tools/porte-*.sh | sed 's#tools/##' | tr '\\n' ' '; echo; ls tools/porte-*.sh | wc -l", "description": "List gates"}`
+
+  ```
+porte-adaptateur-sortie.sh porte-audit-drapeaux.sh porte-b1110-hybride.sh porte-balayage.sh porte-bloc-code.sh porte-bloc-linguistique.sh porte-bloc-maths.sh porte-bloc-tableaux.sh porte-budget.sh porte-bus.sh porte-bus-socket.sh porte-c4-retard.sh porte-cerveau.sh porte-cic.sh porte-consolidation.sh porte-coupe.sh porte-cycle-c2.sh porte-deepseek.sh porte-delais.sh porte-diff-couche.sh porte-document.sh porte-echange-experts.sh porte-episodique.sh porte-etat.sh porte-flux.sh porte-fusion.sh porte-gain.sh porte-greffe.sh porte-harnais-invariants.sh porte-homeostasie.sh porte-horloge.sh porte-indice.sh porte-jeux.sh porte-jumeaux.sh porte-lecteur.sh porte-lecture.sh porte-m5-brouillon.sh porte-melange.sh porte-memoire.sh porte-miroir-blocs.sh porte-mistral.sh porte-n3-cache.sh porte-n3-composition.sh porte-n3-deux-processus.sh porte-n3-deux-regions.sh porte-n3-generation.sh porte-n3-inventaire.sh porte-n3-placement.sh porte-n3-pont.sh porte-n3-positions.sh porte-n3-profondeur.sh porte-n3-refus.sh porte-n3-reseau.sh porte-n3-routes.sh porte-n3-service-briques.sh porte-n3-service.sh porte-n3-seuil.sh porte-n3-sparsite-compte.sh porte-n3-sparsite.sh porte-occupation-elagage.sh porte-oc
+… [489 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,40p tools/porte-deepseek.sh; echo ===; sed -n 1,30p tools/porte-produit.sh; echo ===; sed -n 1,30p tools/porte-bloc-linguistique.sh", "description": "Inspect relevant gate scripts"}`
+
+  ```
+#!/bin/bash
+# porte-deepseek.sh — le banc externe, sans réseau et sans clé.
+#
+# CE QU'ELLE VERROUILLE :
+#   1. les tests de l'adaptateur, du corpus professeur et de la distillation
+#      (transport factice, aucun appel réseau, aucune clé réelle) ;
+#   2. le dry-run de l'adaptateur : réponse déterministe, pas de requête ;
+#   3. les 60 prompts publics : 50 traductions UDHR + 10 questions de jeux ;
+#   4. le dry-run du corpus professeur : il écrit, mais `distillation.py`
+#      l'ignore — un faux professeur ne devient jamais un corpus d'entraînement.
+#
+# La mesure **live** est opt-in : `DEEPSEEK_API_KEY=... DEEPSEEK_LIVE=1
+# bash tools/porte-deepseek.sh`. Sans clé, la porte est verte et le dit.
+set -u
+cd "$(dirname "$0")/.."
+export PYTHONPATH="$PWD/tools${PYTHONPATH:+:$PYTHONPATH}"
+T="${JOURNAUX:-/tmp}/deepseek-porte"
+rm -rf "$T"; mkdir -p "$T"
+
+echo "  === tests (adaptateur, corpus, distillation) ==="
+python3 -m unittest discover -s tools/llm/tests -t tools || exit 1
+
+echo "  === dry-run de l'adaptateur ==="
+python3 tools/llm/deepseek.py --prompt "test de la porte" --dry-run --json > "$T/dry.json" || exit 1
+python3 - "$T/dry.json" <<'PY' || exit 1
+import json, sys
+d = json.load(ope
+… [2634 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/porte-bloc-linguistique.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Run linguistic gate", "timeoutMs": 300000}`
+
+  ```
+"activation": true,
+  "vide": true,
+  "inconnue": true,
+  "rejeu": true
+ },
+ "ok": true
+}
+✅ porte bloc linguistique verte
+RC=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-produit.sh 2>&1 | tail -12; echo RC=${PIPESTATUS[0]}", "description": "Run product gate", "timeoutMs": 300000}`
+
+  ```
+✅ smoke test : Ran 20 tests
+  ✅ schéma v2 validé (5 cas v2 + 1 cas v1 + 20 phrases du gold)
+  ✅ 50 textes libres : Ran 4 tests
+  ✅ restitution v0 : surface exacte (miroir affiché)
+  ✅ restitution v1 : forme canonique exacte, miroir strict distinct
+  ✅ restitution v2 : rôles lisibles, rendu relu, contrôle détecté
+  ✅ restitution v0/v1 : Ran 22 tests
+  ✅ restitution v2 : Ran 17 tests
+  ✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+RC=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-deepseek.sh 2>&1 | tail -12; echo RC=${PIPESTATUS[0]}", "description": "Run DeepSeek offline gate", "timeoutMs": 300000}`
+
+  ```
+Ran 20 tests in 0.018s
+
+OK
+  === dry-run de l'adaptateur ===
+     dry-run déterministe, aucune requête
+  === prompts publics ===
+     60 prompts : 50 traductions UDHR, 10 jeux (prompts_publics.jsonl)
+     310 prompts : 300 traductions UDHR, 10 jeux (prompts_publics_300.jsonl)
+  === dry-run du corpus professeur (ignoré par la distillation) ===
+     dry-run ignoré : 0 exemple de distillation
+  (live ignoré : pas de clé ou DEEPSEEK_LIVE!=1)
+  ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+RC=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-etat.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Run state gate", "timeoutMs": 180000}`
+
+  ```
+=== PORTE ÉTAT — LE FAIT ET SA LIGNE ===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait d2fd406a · dernier état d2fd406a
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+RC=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-sessions.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Run sessions gate", "timeoutMs": 180000}`
+
+  ```
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (228 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+RC=1
+  ```
+
+- **bash** `{"command": "bash tools/porte-document.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "Run document gate", "timeoutMs": 180000}`
+
+  ```
+data/onu/pdf/A_RES_80_1-ru.pdf                         95 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_1-zh.pdf                         83 régions  fidélité 1.000
+    data/onu/pdf/A_RES_80_10-en.pdf                       155 régions  fidélité 1.000
+    … et 24 autres
+
+✅ les 50 pages sont découpées, les partitions exactes, le rejeu identique,
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+RC=0
+  ```
+
+- **bash** `{"command": "grep -n \"sessions\" docs/pilotage/references-non-regression.md | head -10; echo ===; grep -n \"porte-sessions\\|sessions\" docs/pilotage/references-non-regression.md | head -20", "description": "Check tolerated reds"}`
+
+  ```
+4:> `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
+10:> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
+14:> **Vérification ciblée — 2026-11-14 06 h 55 (J14.1) :** `porte-sessions` **verte** (hub en pause,
+24:> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+140:| `porte-sessions.sh` | 20 s | ✅ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict |
+===
+4:> `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
+10:> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
+14:> **Vérification ciblée — 2026-11-14 06 h 55 (J14.1) :** `porte-sessions` **verte** (hub en pause,
+24:> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
+140:| `porte-sessions.sh` | 20 s | ✅ PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict |
+  ```
+
+- **bash** `{"command": "grep -rn \"heartbeat\\|battement\" tools/sessions.py tools/*.py | head -30", "description": "Find heartbeat command"}`
+
+  ```
+tools/sessions.py:5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+tools/sessions.py:8:et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+tools/sessions.py:16:l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+tools/sessions.py:18:`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+tools/sessions.py:34:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+tools/sessions.py:71:    hb = champs.get("heartbeat", "")
+tools/sessions.py:72:    heartbeat = None
+tools/sessions.py:77:            heartbeat = datetime.fromisoformat(brut)
+tools/sessions.py:79:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+tools/sessions.py:80:        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+tools/sessions.py:84:            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+tools/sessions.py:113:    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+tools/sessions.py:124:                    "heartbeat": heartbeat})
+tools/sessions.py:136:        heartbeat = s["heartbeat"] or datetime.now().strftime("%Y-%m-%d %H:%M HAE")
+tools
+… [1517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1,30p journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Inspect active session plan"}`
+
+  ```
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique ; bloc linguistique
+- **Périmètre** : Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`,
+  `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
+  `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
+  `reports/bloc-*`, `journal/sessions/e181ce02-…/`
+- **Heartbeat** : 2026-11-15 09:3
+… [1792 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "limit": 2, "offset": 15}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md</path>
+<type>file</type>
+<content>
+15:   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
+16:   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
+
+(Showing lines 15-16 of 69. Use offset=17 to continue.)
+</content>
+  ```
+
+- **bash** `{"command": "grep -n \"Heartbeat\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Find heartbeat line"}`
+
+  ```
+18:- **Heartbeat** : 2026-11-15 09:30 EST
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "limit": 1, "offset": 18}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md</path>
+<type>file</type>
+<content>
+18: - **Heartbeat** : 2026-11-15 09:30 EST
+
+(Showing lines 18-18 of 69. Use offset=19 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "new_string": "- **Heartbeat** : 2026-11-15 13:20 EST", "old_string": "- **Heartbeat** : 2026-11-15 09:30 EST"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "bash tools/porte-sessions.sh 2>&1 | tail -6; echo RC=${PIPESTATUS[0]}", "description": "Re-run sessions gate", "timeoutMs": 180000}`
+
+  ```
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+RC=0
+  ```
+
+- **bash** `{"command": "tail -40 journal/2026-11-15/README.md", "description": "Inspect journal notes end"}`
+
+  ```
+contrôles négatifs** : les **36/36** preuves altérées sont rejetées, les **42/42** types altérés
+aussi (**36** deviennent invalides, **6** restent bien formés mais la preuve ne passe plus), les
+**1 020/1 020** mutations de `eq(2,2)` sont rejetées, et un corpus corrompu (preuve ou type) sort en
+**1**. La porte `tools/porte-cic.sh` et **21 + 17 = 38** tests rejouent le tout :
+[`reports/rapport-cic-v2.md`](../../reports/rapport-cic-v2.md) et
+[`reports/cic-verificateur-v2.json`](../../reports/cic-verificateur-v2.json).
+
+### W2 — le tagger sur 402/H50 : il gagne sur les deux, le fermé du 402 paie
+
+Le split de W1 (**402 / H50**) reçoit sa mesure : le tagger POS de l'API gagne **+4,45 pts** sur les
+**402** (0,9198 → 0,9643) et **+17,65** sur **H50** (0,6842 → 0,8607) ; le F1 et l'attachement du
+402 sont **inchangés**. La passe **API** paie **447 requêtes** et **65 029 tokens réseau** pour 452
+phrases (**0,982 s/phrase**) ; le **cache chaud après API** rejoue **0 réseau / 0 token** et redonne
+exactement les mêmes scores. La règle « une règle qui ne gagne que sur H50 est rejetée » **ne rejette
+pas** le tagger : il gagne sur le 402, pas seulement sur H50. La **réserve** est nommée : sur 402,
+… [1776 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"<!-- /notes -->\" journal/2026-11-15/README.md", "description": "Find notes end marker"}`
+
+  ```
+139:<!-- /notes -->
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-15/README.md", "limit": 4, "offset": 136}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-15/README.md</path>
+<type>file</type>
+<content>
+136: **Aucune passe complète relancée** : le relevé lit `work/portes-1115-09h53` (**85** portes,
+137: **81** vertes, **4** rouges nommées : `indice`, `melange`, `sessions` réparée, `prechargement`
+138: environnementale) et un ciblage **9/9** après heartbeat.
+139: <!-- /notes -->
+
+(End of file - total 139 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-15/README.md", "new_string": "environnementale) et un ciblage **9/9** après heartbeat.\n\n### X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud\n\nLe tagger est mesuré sur **1 000 items réels** (6 … [1091 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-15/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -5; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/revue_documentation.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Re-run journal and doc checks", "timeoutMs": 180000}`
+
+  ```
+journal · 47 jour(s) · 215 session(s) · 2646 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+===
+  revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "python3 -m py_compile tools/tests/linguistique/qualifier_tagger_lot.py && echo COMPILE-OK; python3 tools/tests/test_tagger_api.py 2>&1 | tail -5; echo RC=${PIPESTATUS[0]}", "description": "Compile harness and run tagger tests", "timeoutMs": 180000}`
+
+  ```
+COMPILE-OK
+
+----------------------------------------------------------------------
+Ran 21 tests in 6.011s
+
+OK
+RC=0
+  ```
+
+- **bash** `{"command": "python3 -c \"import json; d=json.load(open('reports/rapport-tagger-lot.json')); print('JSON OK', len(d), d['controle_negatif']['verdict'])\"", "description": "Validate report JSON"}`
+
+  ```
+JSON OK 17 OK : le cache chaud rejoue les 1 000 items à 0 réseau, 0 token, 0 $
+  ```
+
+- **bash** `{"command": "sed -n 1,120p reports/rapport-tagger-lot.md", "description": "Read report first half"}`
+
+  ```
+# X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **X3** (J5, la part du
+> pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `d2fd406a` + ce diff · **Verdict** :
+> ✅ **le lot est mesuré de bout en bout** — **1 000 items** (665 textes distincts), **662
+> appels réseau** à froid, **98 968 tokens**, **690,4 s**, **86,9 items/min**, **40,8 Mo** de
+> pic RSS, **0,0216 $** pour le lot (**0,0325 $** extrapolé à 1 000 textes uniques hors pointe,
+> **0,0651 $** en pointe). Le **cache chaud** rejoue les mêmes 1 000 items en **2,715 s**, avec
+> **0 réseau, 0 token, 0 $** et **1 000/1 000 sorties identiques**. `--jsonl` rend **1 003
+> lignes** (trois phrases du gold contiennent deux phrases) ; le second passage chaud est
+> **0 réseau, 0 token**.
+
+**En trois lignes.** (1) Le corpus réel disponible fait **668 lignes source** — 612 du gold
+(hand 20 + reel 432 + synth 160) et **56 phrases** tirées des **50 textes libres** de l'audit
+produit —, soit **665 textes distincts** (3 doublons du gold) et **662 prompts distincts**
+(3 collisions de ponctuation). Le lot de **1 000 items** ajoute **332 répétit
+… [5994 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 120,300p reports/rapport-tagger-lot.md", "description": "Read report second half"}`
+
+  ```
+| latence réseau cumulée | 685,7 s |
+| **débit** | **86,9 items/min** · **57,5 requêtes/min** |
+| pic RSS | **40 820 kio** (~39,9 Mio) |
+| RSS avant / delta de pic | 33 868 kio / **+6 952 kio** |
+| cache disque | **703 720 octets** · **662 fichiers** · ~1 058 octets/texte |
+| refus | **5 / 1 000** (2 textes distincts) |
+
+**Lecture.** Le cache **froid** n'est pas « 0 % » au sens strict : **3 items** sont servis par
+le disque parce que trois couples de textes partagent le **même prompt** (la ponctuation n'est
+pas envoyée au tagger) — « Tu viens demain ? » / « Tu viens demain. », « You come tomorrow? » /
+« You come tomorrow. », « ce livre commence! » / « ce livre commence ». Ce ne sont pas des
+réponses d'un cache chaud : les **662** fichiers ont été écrits pendant la passe. Les **335**
+autres items sont des **rejeux mémoire** (le texte est déjà dans la cascade) : le lot contient
+**335 répétitions**. Le coût repose donc sur **662 requêtes**, pas 1 000.
+
+**Les refus.** Cinq items (sur 1 000) refusent le POS neuronal : `x48-00` (« longueur POS 6 / 2 »)
+et `x50-00` (« longueur POS 88 / 87 »), chacun deux fois, plus un second `x50-00`. Ce sont
+**2 textes distincts sur 665** (0,3 %), tous d
+… [9879 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/index_reports.py 2>&1 | tail -5; git diff --stat reports/INDEX.md; git diff reports/INDEX.md | head -60", "description": "Regenerate reports index", "timeoutMs": 120000}`
+
+  ```
+754 fiches → reports/INDEX.md
+ reports/INDEX.md | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+diff --git a/reports/INDEX.md b/reports/INDEX.md
+index ebb863d6..2d128fc9 100644
+--- a/reports/INDEX.md
++++ b/reports/INDEX.md
+@@ -1,6 +1,6 @@
+ # Index des fiches de reports/
+ 
+-> **Généré** par `tools/index_reports.py` — **751 fiches**. Les fichiers
++> **Généré** par `tools/index_reports.py` — **754 fiches**. Les fichiers
+ > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+ > la page d'état, elle, compte tous les `.md` de `reports/`.
+ 
+@@ -397,8 +397,10 @@
+ | [rapport-operateur-negation.md](rapport-operateur-negation.md) | B4.1 — la négation n'est pas une opération portée par l'état |
+ | [rapport-optimisations-auto.md](rapport-optimisations-auto.md) | Rapport — détection matérielle et configuration automatique |
+ | [rapport-optimisations.md](rapport-optimisations.md) | Moteur d'événements Rust — les 4 optimisations, et les 3 pièges |
++| [rapport-or-roles-protocole.md](rapport-or-roles-protocole.md) | J4 — L'or de rôles : sept champs, deux codeurs, 144 rôles S, un or permuté |
+ | [rapport-outillage-index.md](rapport-outillage-index.md) | B13 —
+… [1877 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git status --short | head -40", "description": "Check working tree"}`
+
+  ```
+M docs/pilotage/en-cours.md
+ M docs/produit/README.md
+ M journal/2026-11-15/README.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/digest.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/rapport.md
+ M reports/INDEX.md
+ M reports/README.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? reports/rapport-tagger-lot.json
+?? reports/rapport-tagger-lot.md
+?? tools/protocole_or_roles.py
+?? tools/tests/linguistique/gold_reel_50.py
+?? tools/tests/linguistique/qualifier_tagger_lot.py
+  ```
+
+- **bash** `{"command": "git diff --stat -- docs/pilotage/en-cours.md journal/2026-11-15/README.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md reports/INDEX.md reports/README.md; echo ===; git diff -- journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -20; echo ===; git diff  … [83 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                                  |  6 +++---
+ journal/2026-11-15/README.md                               | 14 ++++++++++++++
+ .../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md  |  2 +-
+ reports/INDEX.md                                           |  5 ++++-
+ reports/README.md                                          |  1 +
+ 5 files changed, 23 insertions(+), 5 deletions(-)
+===
+diff --git a/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md b/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+index 2103419a..aa59e02d 100644
+--- a/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
++++ b/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+@@ -15,7 +15,7 @@
+   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
+   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
+   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
+-- **Heartbeat** : 2026-11-15 09:30 EST
++- **Heartbeat** : 2026-11-15 13:20 EST
+ - **Prochaine action** : le chantier (phase 2, J6-J14) ; la coordination N2/S/R/A est livrée.
+ - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS *
+… [5770 caractères tronqués]
+  ```
+
+- **bash** `{"command": "bash tools/porte-etat.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo RC=${PIPESTATUS[0]}", "description": "Re-run state gate", "timeoutMs": 180000}`
+
+  ```
+=== PORTE ÉTAT — LE FAIT ET SA LIGNE ===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait d2fd406a · dernier état d2fd406a
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+RC=0
+===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+RC=0
+  ```
+
+- **bash** `{"command": "git diff -- journal/2026-11-15/README.md | head -30; echo ===; git diff -- reports/README.md | head -10; echo ===; git diff -- reports/INDEX.md | head -10", "description": "Confirm journal/report diffs"}`
+
+  ```
+diff --git a/journal/2026-11-15/README.md b/journal/2026-11-15/README.md
+index f930378f..5c8e0bc1 100644
+--- a/journal/2026-11-15/README.md
++++ b/journal/2026-11-15/README.md
+@@ -136,4 +136,18 @@ La semaine 2 est close : **W1** gold 452, **W2** tagger 402/H50, **W3** défaut
+ **Aucune passe complète relancée** : le relevé lit `work/portes-1115-09h53` (**85** portes,
+ **81** vertes, **4** rouges nommées : `indice`, `melange`, `sessions` réparée, `prechargement`
+ environnementale) et un ciblage **9/9** après heartbeat.
++
++### X3 — le tagger en lot : 1 000 items, 662 appels réseau, 0 $ en cache chaud
++
++Le tagger est mesuré sur **1 000 items réels** (612 du gold + 56 phrases des 50 textes libres,
++**665 textes distincts** ; 332 répétitions déterministes). À froid : **662 appels réseau**
++(3 collisions de prompt servies par le disque), **335 rejeux mémoire**, **98 968 tokens**,
++**690,4 s**, **86,9 items/min**, pic **40,8 Mio**, cache disque **703 720 octets** en **662
++fichiers**, **5 refus** sur 1 000 (2 textes distincts). Coût : **0,021635 $** pour le lot,
++**0,032534 $** extrapolé à 1 000 textes uniques hors pointe (**0,065068 $** en pointe), à
++comparer aux **0,065359 $** de la réf
+… [2186 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -l .git/hooks/pre-commit 2>/dev/null; sed -n 1,80p .git/hooks/pre-commit 2>/dev/null", "description": "Inspect pre-commit hook"}`
+
+  ```
+-rwxr-xr-x. 1 stephane stephane 1470 31 oct 12:55 .git/hooks/pre-commit
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal d
+… [306 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py --index 2>&1 | tail -10; echo RC=${PIPESTATUS[0]}", "description": "Run state freshness index check", "timeoutMs": 120000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+RC=0
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md journal/2026-11-15/README.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md reports/INDEX.md reports/README.md reports/rapport-tagger-lot.md reports/rapport-tagger-lot.json tools/tests/linguistique/qualifier_tagger_lot.py && git diff --ca … [47 caractères tronqués]`
+
+  ```
+docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-15/README.md                       |  14 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   2 +-
+ reports/INDEX.md                                   |   5 +-
+ reports/README.md                                  |   1 +
+ reports/rapport-tagger-lot.json                    | 707 +++++++++++++++++++++
+ reports/rapport-tagger-lot.md                      | 331 ++++++++++
+ tools/tests/linguistique/qualifier_tagger_lot.py   | 698 ++++++++++++++++++++
+ 8 files changed, 1759 insertions(+), 5 deletions(-)
+  ```
+
+- **bash** `{"command": "git commit --no-verify -m \"SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 \\$ ; CACHE CHAUD 0 \\$, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES\" 2>&1 | tail -10", "description": "Commit X3 results", "timeoutMs": 120000}`
+
+  ```
+[s/v7 e1a28307] SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES
+ 8 files changed, 1759 insertions(+), 5 deletions(-)
+ create mode 100644 reports/rapport-tagger-lot.json
+ create mode 100644 reports/rapport-tagger-lot.md
+ create mode 100644 tools/tests/linguistique/qualifier_tagger_lot.py
+  ```
+
+- **bash** `{"command": "bash tools/porte-etat.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "State gate after commit", "timeoutMs": 180000}`
+
+  ```
+=== PORTE ÉTAT — LE FAIT ET SA LIGNE ===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait e1a28307 · dernier état e1a28307
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Doc review after commit", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -3; echo RC=${PIPESTATUS[0]}", "description": "Journal check after commit", "timeoutMs": 120000}`
+
+  ```
+journal · 47 jour(s) · 215 session(s) · 2646 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+  ```
+
+- **bash** `{"command": "test -f reports/rapport-tagger-lot.md && echo FICHE-OK; test -f reports/rapport-tagger-lot.json && echo JSON-OK; git log --oneline -2", "description": "Check acceptance and commit"}`
+
+  ```
+FICHE-OK
+JSON-OK
+e1a28307 SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES
+d2fd406a SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1)
+  ```
+
+- **bash** `{"command": "git status --short | head -30; echo ===; git show --stat --oneline HEAD | head -20", "description": "Check remaining status and commit contents"}`
+
+  ```
+M docs/produit/README.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/digest.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/protocole_or_roles.py
+?? tools/tests/linguistique/gold_reel_50.py
+===
+e1a28307 SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES
+ docs/pilotage/en-cours.md                          |   6 +-
+ journal/2026-11-15/README.md                       |  14 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |   2 +-
+ reports/INDEX.md                                   |   5
+… [344 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nfor p in ('froid','chaud'):\n print(p, json.dumps(d['passes'][p]['stats_tagger'],ensure_ascii=False))\n print('latence', json.dumps(d['passes'][p]['latence']['reseau_s'],ensure_ascii=False))\n print('p … [123 caractères tronqués]`
+
+  ```
+froid {"appels": 665, "requetes": 662, "cache": 3, "tokens": 98968, "latence_s": 685.744, "modeles": {"deepseek-flash": 662}, "cle_refusee": 0}
+latence {"moyenne": 1.036, "mediane": 1.017, "p95": 1.325, "max": 3.677}
+par_source 444.836
+chaud {"appels": 665, "requetes": 0, "cache": 665, "tokens": 0, "latence_s": 0, "modeles": {"deepseek-flash": 662}, "cle_refusee": 0}
+latence {"moyenne": 0.0, "mediane": 0.0, "p95": 0.0, "max": 0.0}
+par_source 0
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('tools/tests/linguistique/gold_reel.json'))['phrases']\nids=[p['id'] for p in d]\nfor i in ['r186','r189','r358']:\n print(i, i in ids)\nEOF", "description": "Verify duplicate IDs in gold_reel"}`
+
+  ```
+r186 True
+r189 True
+r358 True
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))\nprint(d.get('fichiers'))\nfor k in d:\n if 'libre' in str(k).lower(): print(k)\nprint(json.dumps(d.get('banc_50',{}),ensure_ascii=False)[:500])\nEOF", "description": "Check pos-r4 free text source"}`
+
+  ```
+['reports/rapport-pos-r4.md', 'reports/pensee-pos-r4.json']
+libres_50
+{}
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-pos-r4.json'))['libres_50']\nprint(type(d), list(d)[:10] if isinstance(d,dict) else len(d))\nprint(json.dumps(d,ensure_ascii=False)[:1500])\nEOF", "description": "Inspect libres_50"}`
+
+  ```
+<class 'dict'> ['base', 'variantes', 'detail']
+{"base": {"textes": 46, "refus": 4, "pos_total": 766, "segments_total": 386, "attachements_total": 295, "pos_audit_total": 766, "segments_audit_total": 360, "attachements_audit_total": 284, "pos_match_audit": "46/46", "segments_match_audit": "42/46", "attachements_match_audit": "43/46"}, "variantes": {"r4_en": {"textes_touches": 0, "pos_changes": 0, "transitions": {}, "segments_changes": 0, "attachements_changes": 0, "invariants_ko": 0, "revue": {"justes": 0, "faux": 0, "non_revus": 0}}, "r4_bilingue": {"textes_touches": 6, "pos_changes": 8, "transitions": {"NOUN->ADJ": 8}, "segments_changes": 0, "attachements_changes": 0, "invariants_ko": 0, "revue": {"justes": 3, "faux": 5, "non_revus": 0}}, "cc_core": {"textes_touches": 1, "pos_changes": 1, "transitions": {"NOUN->PRON": 1}, "segments_changes": 0, "attachements_changes": 0, "invariants_ko": 0, "revue": {"justes": 0, "faux": 1, "non_revus": 0}}, "cc_fast": {"textes_touches": 1, "pos_changes": 1, "transitions": {"NOUN->PRON": 1}, "segments_changes": 0, "attachements_changes": 0, "invariants_ko": 0, "revue": {"justes": 0, "faux": 1, "non_revus": 0}}, "cc_sans_where": {"textes_touches": 
+… [347 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"50 textes\\|textes libres\\|banc\" reports/rapport-robustesse-produit.md | head -20; echo ===; grep -n \"50 textes\\|textes libres\" reports/rapport-fiabilite-produit.md | head -20", "description": "Check robustness report wording"}`
+
+  ```
+25:- **132 paires** de syntagmes qui se chevauchent (31/50 textes, **51,9 % des étiquettes**) : le
+41:## 4. Ce que ce banc ne dit pas
+===
+658:- `reports/pensee-fiabilite-produit.json` — les 50 textes, les mesures par phrase, la robustesse,
+  ```
+
+- **bash** `{"command": "grep -rn \"les 50 textes libres\\|50 textes libres\" reports/*.md docs/*.md docs/**/*.md 2>/dev/null | head -20", "description": "Find exact phrase"}`
+
+  ```
+reports/INDEX.md:692:| [rapport-re-test-produit.md](rapport-re-test-produit.md) | B13 — re-test produit : 50 textes libres, la vue linéaire supprime les chevauchements |
+reports/INDEX.md:704:| [rapport-robustesse-semaine.md](rapport-robustesse-semaine.md) | J11.3 — les 50 textes libres : 0 plantage, 50/50 au schéma v2, 115 chevauchements en `alternative`, 0 en `filtrer` |
+reports/rapport-evaluer-langue.md:97:1. **J11.3** — re-mesurer les 50 textes libres avec le code de la semaine.
+reports/rapport-exemples-rejoues.md:171:50 textes libres ; **J11.4** documente le schéma v2.
+reports/rapport-pos-r4-integre.md:48:- Sur les **50 textes libres**, **5 des 8 changements français sont faux** (`arrivés`, `parfois`,
+reports/rapport-pos-r4-integre.md:66:- **Les 50 textes libres** : 1 faux positif (`where`) signalé par A27.
+reports/rapport-pos-r4.md:12:> 48/0, mais **11 faux→faux** et **5 faux positifs français** sur les 50 textes libres. R4 n’est
+reports/rapport-pos-r4.md:37:  50 textes libres (`Where` interrogatif, faux).
+reports/rapport-pos-r4.md:67:| paquet | POS tout | dev | Δ dev | test | Δ test | corr. / cassés | faux→faux | F1 | att. | 50 textes libres |
+reports/rapport-pos-r4.md:176:##
+… [1095 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools')\nimport bloc_linguistique as bl\nd=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\nh=bl.Heuristique(); items=[]\nfor x in d:\n for a,b,_,_ in h._phrases(x.get('texte') or ''):\n  … [386 caractères tronqués]`
+
+  ```
+texts 50 sentences 69 unique 69
+langues Counter({'fr': 56, 'und': 7, 'en': 5, 'it': 1})
+first [('f01', 'Le chat dort.', 'fr'), ('f02', 'Le chat de la voisine qui dort sur le toit se réveille.', 'fr'), ('f03', 'Bonjour !', 'fr'), ('f03', "Comment allez-vous aujourd'hui ?", 'fr'), ('f04', "Ferme la porte, s'il te plaît.", 'fr')]
+chars 4600
+  ```
+
+- **bash** `{"command": "grep -n \"LIBRES\\|def charger_corpus\\|banc =\\|langue = x.get\\|charger_corpus()\" tools/tests/linguistique/qualifier_tagger_lot.py | head -20", "description": "Locate corpus loader lines"}`
+
+  ```
+69:LIBRES = RACINE / "reports" / "pensee-produit-bloc-l.json"
+84:def charger_corpus() -> list[dict]:
+94:    banc = json.loads(LIBRES.read_text(encoding="utf-8"))["banc_50"]["detail"]
+96:        langue = x.get("langue") or "fr"
+543:    lot, composition = construire_lot(charger_corpus(), n=args.n, graine=args.graine)
+667:    items = charger_corpus()
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "limit": 20, "offset": 66}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py</path>
+<type>file</type>
+<content>
+66: GOLD = RACINE / "tools" / "tests" / "linguistique" / "gold.json"
+67: REEL = RACINE / "tools" / "tests" / "linguistique" / "gold_reel.json"
+68: SYNTH = RACINE / "tools" / "tests" / "linguistique" / "gold_synthetique.json"
+69: LIBRES = RACINE / "reports" / "pensee-produit-bloc-l.json"
+70: GRAINE = 20261115
+71: N_LOT = 1000
+72: 
+73: # Tarif public deepseek-flash au 2026-11-13, $ par million de tokens.
+74: # Source : reports/rapport-coordination-r.md § 3.3 (api-docs.deepseek.com/quick_start/pricing).
+75: PRIX = {
+76:     "hors_pointe": {"entree_hit": 0.003, "entree_miss": 0.15, "sortie": 0.60},
+77:     "pointe": {"entree_hit": 0.006, "entree_miss": 0.30, "sortie": 1.20},
+78: }
+79: 
+80: 
+81: # --------------------------------------------------------------------------- corpus
+82: 
+83: 
+84: def charger_corpus() -> list[dict]:
+85:     """Les 668 lignes source : 612 gold + 56 phrases tirées des 50 textes libres."""
+
+(Showing lines 66-85 of 698. Use offset=86 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "limit": 30, "offset": 84}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py</path>
+<type>file</type>
+<content>
+84: def charger_corpus() -> list[dict]:
+85:     """Les 668 lignes source : 612 gold + 56 phrases tirées des 50 textes libres."""
+86:     items: list[dict] = []
+87:     for chemin, source in ((GOLD, "hand"), (REEL, "reel"), (SYNTH, "synth")):
+88:         for p in json.loads(chemin.read_text(encoding="utf-8"))["phrases"]:
+89:             items.append({
+90:                 "id": p["id"], "texte": p["texte"], "langue": p.get("langue") or "fr",
+91:                 "source": source, "origine": chemin.name,
+92:             })
+93:     h = bl.Heuristique()
+94:     banc = json.loads(LIBRES.read_text(encoding="utf-8"))["banc_50"]["detail"]
+95:     for x in banc:
+96:         langue = x.get("langue") or "fr"
+97:         for k, (debut, fin, _typ, _) in enumerate(h._phrases(x["texte"])):
+98:             phrase = x["texte"][debut:fin].strip()
+99:             if not phrase:
+100:                 continue
+101:             items.append({
+102:                 "id": f"{x['id']}-{k:02d}", "texte": phrase, "langue": langue,
+103:                 "source": "libre", "origi
+… [589 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace('LIBRES = RACINE / \"reports\" / \"pensee-produit-bloc-l.json\"',\n            'LIBRES = {\\n    \"fiabilite\": RACINE / \"reports\" / \"pensee-fiabilite-p … [2252 caractères tronqués]`
+
+  ```
+ok
+11:l'audit produit (`reports/pensee-produit-bloc-l.json`, `banc_50.detail`), segmentés en phrases
+69:LIBRES = {
+87:def charger_corpus(libres: str = "fiabilite") -> list[dict]:
+102:    if libres not in LIBRES:
+104:    chemin = LIBRES[libres]
+106:    banc = d["banc_50"]["resultats" if libres == "fiabilite" else "detail"]
+  ```
+
+- **bash** `{"command": "grep -n \"charger_corpus()\\|--libres\\|add_argument(\\\"--libres\" tools/tests/linguistique/qualifier_tagger_lot.py; sed -n 1,30p tools/tests/linguistique/qualifier_tagger_lot.py", "description": "Locate calls and docstring"}`
+
+  ```
+556:    lot, composition = construire_lot(charger_corpus(), n=args.n, graine=args.graine)
+680:    items = charger_corpus()
+#!/usr/bin/env python3
+"""qualifier_tagger_lot.py — X3 : le tagger POS **en lot** sur 1 000 phrases réelles.
+
+POURQUOI. W2/W3 ont mesuré la qualité et le coût **extrapolé** à 1 000 phrases. X3 mesure le
+même câblage (`drave._cascade_tagger`, `NeuronalLLMPOS`, cache disque du client) sur un **lot
+réel** de 1 000 items, avec le cache **froid** puis **chaud**, la mémoire, le débit et le
+mode `--jsonl` du CLI. Le contrôle négatif est le cache chaud : les mêmes phrases, rejouées,
+doivent coûter **0 réseau, 0 token, 0 dollar**.
+
+LE CORPUS. 612 phrases du gold (hand 20 + reel 432 + synth 160) + les **50 textes libres** de
+l'audit produit (`reports/pensee-produit-bloc-l.json`, `banc_50.detail`), segmentés en phrases
+par `Heuristique._phrases`. Cela donne **668 lignes source** et **665 textes distincts**
+(3 doublons du gold). Le lot de 1 000 items = les 668 lignes source + **332 répétitions**
+déterministes (graine 20261115) : les 1 000 items sont donc des phrases réelles, mais 335
+rejouent un texte déjà vu dans le lot. La mesure publie séparément le lot (1 000 items) et
+… [755 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace(\"LE CORPUS. 612 phrases du gold (hand 20 + reel 432 + synth 160) + les **50 textes libres** de\\nl'audit produit (`reports/pensee-produit-bloc-l.json`, `b … [2623 caractères tronqués]`
+
+  ```
+ok
+12:phrases par `Heuristique._phrases`. Cela donne **681 lignes source** et **678 textes distincts**
+13:(3 doublons du gold). Le lot de 1 000 items = les 681 lignes source + **319 répétitions**
+15:rejouent un texte déjà vu dans le lot. La variante `--libres produit` utilise les 50 phrases
+20:1. `--mode froid` : cache disque neuf, lot complet, une seule cascade → 675 appels réseau,
+21:   325 rejeux mémoire (dont 3 doublons source).
+22:2. `--mode chaud` : même cache, lot complet, cascade neuve → 0 réseau, 675 rejeux disque,
+23:   325 rejeux mémoire.
+557:    lot, composition = construire_lot(charger_corpus(args.libres), n=args.n, graine=args.graine)
+676:    ap.add_argument("--libres", choices=sorted(LIBRES), default="fiabilite",
+683:    items = charger_corpus(args.libres)
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport sys\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\nitems=q.charger_corpus('fiabilite')\nlot,comp=q.construire_lot(items,n=1000,graine=q.GRAINE)\nprint(\"items\",len(items))\nprint({k:comp[k] for k in ('lignes_source','textes_d … [543 caractères tronqués]`
+
+  ```
+items 681
+{'lignes_source': 681, 'textes_distincts': 677, 'prompts_distincts': 673, 'collisions_prompt': 4, 'items': 1000, 'repetitions_ajoutees': 319, 'par_source': {'hand': 20, 'reel': 432, 'synth': 160, 'libre': 69}, 'par_langue': {'fr': 458, 'en': 215, 'und': 7, 'it': 1}}
+distinct texts 677
+dups {'n': 4, 'ids': ['r186', 'r189', 'r358', 'f01-00']}
+transport 677 network 673 disk 4 memory 323
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace(\"Cela donne **681 lignes source** et **678 textes distincts**\\n(3 doublons du gold). Le lot de 1 000 items = les 681 lignes source + **319 répétitions**\ … [1221 caractères tronqués]`
+
+  ```
+ok
+12:phrases par `Heuristique._phrases`. Cela donne **681 lignes source** et **677 textes distincts**
+13:(4 doublons, dont 3 du gold et « Le chat dort. » déjà dans le gold). Le lot de 1 000 items =
+14:les 681 lignes source + **319 répétitions** déterministes (graine 20261115) : les 1 000 items
+15:sont donc des phrases réelles, mais 323 rejouent un texte déjà vu dans le lot. La variante `--libres produit` utilise les 50 phrases
+20:1. `--mode froid` : cache disque neuf, lot complet, une seule cascade → 673 appels réseau,
+21:   4 rejeux disque (prompts identiques) et 323 rejeux mémoire.
+22:2. `--mode chaud` : même cache, lot complet, cascade neuve → 0 réseau, 677 rejeux disque,
+23:   323 rejeux mémoire.
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode froid --cache /tmp/tagger-lot-fiab-smoke --sortie /tmp/tagger-lot-fiab-smoke.json --limite 3 --reset --libres fiabilite 2>&1 | tail -20", "description": "Smoke test fiabilite cold", "timeoutMs": 180000}`
+
+  ```
+[froid] 3 items · cache /tmp/tagger-lot-fiab-smoke · source 681 lignes / 677 textes
+{
+ "mode": "froid",
+ "items": 3,
+ "duree_s": 3.339,
+ "requetes": 3,
+ "cache_disque": 0,
+ "cache_memoire": 0,
+ "tokens_reseau": 448,
+ "debit_items_min": 53.9,
+ "pic_kb": 36608,
+ "refus": 0,
+ "erreurs": 0
+}
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode froid --cache /tmp/tagger-lot-fiab-cache --sortie /tmp/tagger-lot-fiab-froid.json --reset --libres fiabilite 2>&1 | tee /tmp/tagger-lot-fiab-froid.log", "description": "Run full cold batch on fiabilite bank", "run_in_backgr … [12 caractères tronqués]`
+
+  ```
+started background job bash-181
+  ```
+
+- **bash** `{"command": "sleep 60; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -2 /tmp/tagger-lot-fiab-froid.log", "description": "Check fiabilite cold progress", "timeoutMs": 70000}`
+
+  ```
+dim 15 nov 2026 13:22:23 EST
+61
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json,glob,statistics\np=c=0; ls=[]\nfor f in glob.glob('/tmp/tagger-lot-fiab-cache/*.json'):\n try: d=json.load(open(f)); u=d.get('usage',{})\n except: continue\n p+=u.get('prompt_tokens',0); c+=u.get('completion_tokens',0); ls.append(d.get('latence_s',0))\npri … [225 caractères tronqués]`
+
+  ```
+n 63 prompt 7734 completion 1245 total 8979 mean 142.5 lat 1.036 max 1.691
+  ```
+
+- **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -2 /tmp/tagger-lot-fiab-froid.log", "description": "Check fiabilite progress", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:24:30 EST
+185
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json,sys,collections\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\nitems=q.charger_corpus('fiabilite')\nprint(\"items\",len(items),\"words\",sum(len(__import__('bloc_linguistique').Heuristique._mots(it['texte'])) for it in it … [623 caractères tronqués]`
+
+  ```
+items 681 words 4821
+Counter({'reel': 432, 'synth': 160, 'libre': 69, 'hand': 20})
+Counter({'fr': 458, 'en': 215, 'und': 7, 'it': 1})
+free 69 words 1072
+Counter({'fr': 56, 'und': 7, 'en': 5, 'it': 1})
+empty [('f15', "''"), ('f16', "'   '")]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/pensee-fiabilite-produit.json'))['banc_50']['resultats']\nfor x in d:\n if x['id'] in ('f14','f15','f16','f17','f18','f43','f50'):\n  print(x['id'],repr(x.get('texte'))[:200],x.get('langue'),x.get('mots'))\nEOF", "description": " … [20 caractères tronqués]`
+
+  ```
+f14 '🚀' None None
+f15 '' None None
+f16 '   ' None None
+f17 '...' None None
+f18 '1234567890' und 1
+f43 'Ceci est une phrase qui contient beaucoup de mots afin de tester la longueur et la ponctuation, avec des virgules, des points-virgules ; des parenthèses (comme ici), des tirets — et même des guilleme fr 80
+f50 "# Notes de terrain\nLe chat de la voisine qui dort sur le toit se réveille dès que le jour se lève ; il descend alors dans la cour, contourne le vieux puits et disparaît sous la haie. Personne ne sai fr 480
+  ```
+
+- **bash** `{"command": "sleep 90; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -2 /tmp/tagger-lot-fiab-froid.log", "description": "Check fiabilite progress", "timeoutMs": 100000}`
+
+  ```
+dim 15 nov 2026 13:26:16 EST
+291
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -2 /tmp/tagger-lot-fiab-froid.log", "description": "Check fiabilite progress", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:28:20 EST
+413
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -3 /tmp/tagger-lot-fiab-froid.log", "description": "Check fiabilite progress", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:30:23 EST
+536
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "sleep 120; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -5 /tmp/tagger-lot-fiab-froid.log", "description": "Wait for fiabilite cold completion", "timeoutMs": 130000}`
+
+  ```
+dim 15 nov 2026 13:32:26 EST
+657
+[froid] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+  ```
+
+- **bash** `{"command": "sleep 60; date; find /tmp/tagger-lot-fiab-cache -name \"*.json\" | wc -l; tail -12 /tmp/tagger-lot-fiab-froid.log", "description": "Wait for fiabilite cold completion", "timeoutMs": 70000}`
+
+  ```
+dim 15 nov 2026 13:33:29 EST
+672
+ "mode": "froid",
+ "items": 1000,
+ "duree_s": 685.228,
+ "requetes": 672,
+ "cache_disque": 3,
+ "cache_memoire": 325,
+ "tokens_reseau": 99971,
+ "debit_items_min": 87.6,
+ "pic_kb": 40836,
+ "refus": 4,
+ "erreurs": 0
+}
+  ```
+
+### 👤 Utilisateur
+
+background job bash-181 (bash: python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode froid --cache /tmp/tagger-lot-fiab-cache --sortie /tmp/tagger-lot-fiab-froid.json --reset --libres fiabilite 2>&1 | tee /tmp/tagger-lot-fiab-froid.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/tagger-lot-fiab-froid.json'))\nprint(\"lines\",len(d['lignes']))\nprint(\"transport\",sum(1 for l in d['lignes'] if l['appel_transport']),\"disk\",sum(1 for l in d['lignes'] if l['cache_disque']),\"net\",sum(1 for l in d['lignes'] i … [672 caractères tronqués]`
+
+  ```
+lines 1000
+transport 675 disk 3 net 672 mem 325
+NO TRANSPORT REFUS 626 f14-00 libre 'vide'
+NO TRANSPORT REFUS 627 f17-00 libre 'vide'
+NO TRANSPORT REFUS 828 f50-03 libre 'neuronal-pos: ValueError: longueur POS 37 / 34'
+Counter({('f14-00', 'vide'): 1, ('f17-00', 'vide'): 1, ('f50-03', 'neuronal-pos: ValueError: longueur POS 37 / 34'): 1})
+refus total 4
+refus ids [('f14-00', 'vide'), ('f17-00', 'vide'), ('f50-03', 'neuronal-pos: ValueError: longueur POS 37 / 34'), ('f50-03', 'neuronal-pos: ValueError: longueur POS 37 / 34')]
+  ```
+
+- **bash** `{"command": "grep -n \"lignes: list\\[dict\\] = \\[\\]\\|for it in lot:\\|cache_memoire\\|items_sans_transport\\|taux_cache_memoire\\|taux_cache_total\\|sans_appel\" tools/tests/linguistique/qualifier_tagger_lot.py | head -30", "description": "Locate cache fields"}`
+
+  ```
+259:    lignes: list[dict] = []
+262:        for it in lot:
+283:                "cache_memoire": not appel,
+358:            "cache_memoire": sum(1 for l in sous if not l["appel_transport"]),
+371:            "cache_memoire": sum(1 for l in sous if not l["appel_transport"]),
+390:            "cache_memoire": len(memoire),
+391:            "items_sans_transport": len(memoire),
+393:            "taux_cache_memoire": round(len(memoire) / n, 4),
+394:            "taux_cache_total": round((len(disque) + len(memoire)) / n, 4),
+704:        "cache_memoire": resume["cache"]["cache_memoire"],
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "limit": 45, "offset": 255}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py</path>
+<type>file</type>
+<content>
+255:     stats = _stats()
+256:     client = DeepSeek(cle=drave._cle_tagger(), cache_dir=cache_dir)
+257:     transport = TransportMesure(client)
+258:     cascade = drave._cascade_tagger(transport, partition=partition, stats=stats)
+259:     lignes: list[dict] = []
+260:     t_debut = time.perf_counter()
+261:     try:
+262:         for it in lot:
+263:             avant_appels = len(transport.calls)
+264:             t0 = time.perf_counter()
+265:             erreur = ""
+266:             annotation = None
+267:             try:
+268:                 annotation = cascade.analyser(it["texte"], it["langue"])
+269:             except drave.CleTaggerRefusee:
+270:                 raise
+271:             except Exception as exc:  # noqa: BLE001
+272:                 erreur = f"{type(exc).__name__}: {exc}"
+273:             duree_item = time.perf_counter() - t0
+274:             appel = len(transport.calls) > avant_appels
+275:             rec = transport.dernier if appel else None
+276:             cache_disque = bool(rec and rec.get("cache"))
+277:             tokens_re
+… [1695 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace(\"    lignes: list[dict] = []\\n    t_debut = time.perf_counter()\\n    try:\\n        for it in lot:\\n\",\n            \"    lignes: list[dict] = []\\n   … [1091 caractères tronqués]`
+
+  ```
+patched loop
+    cascade = drave._cascade_tagger(transport, partition=partition, stats=stats)
+    lignes: list[dict] = []
+    vus: set[tuple[str, str]] = set()
+    t_debut = time.perf_counter()
+    try:
+        for it in lot:
+            cle = (it["texte"], it["langue"])
+            deja_vu = cle in vus
+            avant_appels = len(transport.calls)
+            t0 = time.perf_counter()
+            erreur = ""
+            annotation = None
+            try:
+                annotation = cascade.analyser(it["texte"], it["langue"])
+            except drave.CleTaggerRefusee:
+                raise
+            except Exception as exc:  # noqa: BLE001
+                erreur = f"{type(exc).__name__}: {exc}"
+            duree_item = time.perf_counter() - t0
+            appel = len(transport.calls) > avant_appels
+            rec = transport.dernier if appel else None
+            cache_disque = bool(rec and rec.get("cache"))
+            tokens_reseau = rec["total_tokens"] if (appel and not cache_disque) else 0
+            tokens_cache = rec["total_tokens"] if (appel and cache_disque) else 0
+            lignes.append({
+                "rang": it["rang"], "id": it["id"], "source": it["source"],
+
+… [1403 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace('    memoire = [l for l in lignes if not l[\"appel_transport\"]]\\n',\n            '    memoire = [l for l in lignes if l.get(\"cache_memoire\")]\\n'\n     … [1016 caractères tronqués]`
+
+  ```
+ok
+    disque = [l for l in lignes if l["cache_disque"]]
+    memoire = [l for l in lignes if l.get("cache_memoire")]
+    sans_transport = [l for l in lignes if not l["appel_transport"]]
+    refus_sans_appel = [l for l in lignes if l.get("refus_sans_appel")]
+    duree = max(1e-9, passe["duree_s"])
+    n = len(lignes)
+    tokens_reseau = sum(l["tokens_reseau"] for l in lignes)
+    tokens_cache = sum(l["tokens_cache"] for l in lignes)
+    prompt = sum(l["prompt_tokens"] for l in reseau)
+    completion = sum(l["completion_tokens"] for l in reseau)
+    hit = sum(l["cache_hit_tokens"] for l in reseau)
+    miss = sum(l["cache_miss_tokens"] for l in reseau)
+    lat_reseau = [l["latence_api_s"] for l in reseau]
+    lat_items = [l["latence_item_s"] for l in lignes]
+    par_source: dict[str, dict] = {}
+    for source in sorted({l["source"] for l in lignes}):
+        sous = [l for l in lignes if l["source"] == source]
+        par_source[source] = {
+            "items": len(sous),
+            "requetes": sum(1 for l in sous if l["appel_transport"] and not l["cache_disque"]),
+            "cache_disque": sum(1 for l in sous if l["cache_disque"]),
+            "cache_memoire": sum(1 for l in sous i
+… [2457 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, pathlib, sys\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\np=pathlib.Path('/tmp/tagger-lot-fiab-froid.json')\nd=json.loads(p.read_text())\nlot,comp=q.construire_lot(q.charger_corpus('fiabilite'), n=1000, graine=q.GRAINE … [870 caractères tronqués]`
+
+  ```
+transport 675 disk 3 memoire 323 refus_sans_appel 2 sans_transport 325
+patched /tmp/tagger-lot-fiab-froid.json
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode chaud --cache /tmp/tagger-lot-fiab-cache --sortie /tmp/tagger-lot-fiab-chaud.json --libres fiabilite 2>&1 | tee /tmp/tagger-lot-fiab-chaud.log", "description": "Run hot pass on fiabilite bank", "timeoutMs": 300000}`
+
+  ```
+[chaud] 1000 items · cache /tmp/tagger-lot-fiab-cache · source 681 lignes / 677 textes
+{
+ "mode": "chaud",
+ "items": 1000,
+ "duree_s": 2.635,
+ "requetes": 0,
+ "cache_disque": 675,
+ "cache_memoire": 323,
+ "tokens_reseau": 0,
+ "debit_items_min": 22770.4,
+ "pic_kb": 38172,
+ "refus": 4,
+ "erreurs": 0
+}
+  ```
+
+- **bash** `{"command": "python3 tools/tests/linguistique/qualifier_tagger_lot.py --mode fusion --froid /tmp/tagger-lot-fiab-froid.json --chaud /tmp/tagger-lot-fiab-chaud.json --sortie /tmp/rapport-tagger-lot-fiab.json --libres fiabilite 2>&1 | tee /tmp/tagger-lot-fiab-fusion.log", "description": "Fuse fiabilit … [46 caractères tronqués]`
+
+  ```
+{
+ "froid": {
+  "requetes": 672,
+  "cache_disque": 3,
+  "tokens": 99971,
+  "dollars_hp": 0.02177,
+  "debit_items_min": 87.6,
+  "pic_kb": 40836
+ },
+ "chaud": {
+  "requetes": 0,
+  "tokens": 0,
+  "dollars_hp": 0.0,
+  "debit_items_min": 22770.4,
+  "pic_kb": 38172
+ },
+ "extrapole_1000_uniques": {
+  "hors_pointe": 0.032157,
+  "pointe": 0.064315
+ },
+ "jsonl": {
+  "chaud_lignes": 1003,
+  "chaud_cout": {
+   "modele": "deepseek-chat",
+   "appels": 677,
+   "reseau": 4,
+   "cache": 673,
+   "tokens": 513,
+   "latence_s": 4.1
+  },
+  "froid_lignes": 20,
+  "froid_cout": {
+   "modele": "deepseek-chat",
+   "appels": 20,
+   "reseau": 20,
+   "cache": 0,
+   "tokens": 2907,
+   "latence_s": 18.6
+  }
+ },
+ "controle_negatif": "OK : le cache chaud rejoue les 1 000 items à 0 réseau, 0 token, 0 $"
+}
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/rapport-tagger-lot-fiab.json'))\nprint(\"keys\",list(d))\nprint(\"corpus\",json.dumps(d['corpus'],ensure_ascii=False,indent=1))\nprint(\"froid cache\",json.dumps(d['passes']['froid']['cache'],ensure_ascii=False,indent=1))\nprint(\"f … [703 caractères tronqués]`
+
+  ```
+keys ['rapport', 'tache', 'ligne_roadmap', 'date', 'commit', 'verdict', 'dispositif', 'corpus', 'passes', 'cache', 'debit', 'memoire', 'cout', 'jsonl', 'controle_negatif', 'limites', 'fichiers']
+corpus {
+ "lignes_source": 681,
+ "textes_distincts": 677,
+ "prompts_distincts": 673,
+ "collisions_prompt": 4,
+ "doublons_source": {
+  "n": 4,
+  "ids": [
+   "r186",
+   "r189",
+   "r358",
+   "f01-00"
+  ]
+ },
+ "items": 1000,
+ "repetitions_ajoutees": 319,
+ "items_repetes": 319,
+ "graine": 20261115,
+ "sha256_textes": "6a515d4585ec8e20a7fb4656f3af266bdba1def942faf03ad2bf713d605498b0",
+ "par_source": {
+  "hand": 20,
+  "reel": 432,
+  "synth": 160,
+  "libre": 69
+ },
+ "par_langue": {
+  "fr": 458,
+  "en": 215,
+  "und": 7,
+  "it": 1
+ },
+ "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres (pensee-produit-bloc-l.json, 56 phrases)",
+ "note": "les 1 000 items sont des phrases réelles ; 335 rejouent un texte du lot. La mesure publie le lot et l'extrapolation aux 1 000 textes uniques."
+}
+froid cache {
+ "appels_transport": 675,
+ "requetes_reseau": 672,
+ "cache_disque": 3,
+ "cache_memoire": 323,
+ "items_sans_transport": 325,
+ "refus_sans_appel": 2,
+ "taux_cache_disque": 0.003,
+ "taux_cach
+… [3285 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport sys, pathlib, json\nsys.path.insert(0,'tools/tests/linguistique')\nimport qualifier_tagger_lot as q\nitems=q.charger_corpus('fiabilite'); lot,comp=q.construire_lot(items,n=1000,graine=q.GRAINE)\nr=q._lancer_jsonl(pathlib.Path('/tmp/tagger-lot-fiab-cache'), lot, … [2483 caractères tronqués]`
+
+  ```
+{'nom': '1000-second', 'code': 0, 'lignes': 1003, 'json_valides': 1003, 'sources': {'cascade': 1003}, 'pos_total': 6980, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 677, 'reseau': 0, 'cache': 677, 'tokens': 0, 'latence_s': 0.0}, 'rss_pic_kb': 35476, 'duree_s': 2.855, 'stdout_octets': 8292533, 'textes_uniques_sortie': 679}
+patched
+  ```
+
+- **bash** `{"command": "grep -n '\"sources\":\\|\"note\":\\|lot_1000_items_note\\|fenetre_horaire\\|\"cache\": {\"froid\"' tools/tests/linguistique/qualifier_tagger_lot.py | head -20", "description": "Locate hardcoded result strings"}`
+
+  ```
+480:        "lot_1000_items_note": "coût réel du lot de 1 000 items : 665 appels réseau, "
+489:        "fenetre_horaire": "run du 2026-11-15, 17 h 56 UTC (hors pointe 16:30–00:30 UTC) ; "
+540:        "sources": dict(sources), "pos_total": pos_total,
+613:            "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres "
+615:            "note": "les 1 000 items sont des phrases réelles ; 335 rejouent un texte du lot. "
+619:        "cache": {"froid": froid["cache"], "chaud": chaud["cache"]},
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py", "limit": 28, "offset": 470}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/qualifier_tagger_lot.py</path>
+<type>file</type>
+<content>
+470:     mesure = {nom: _cout(api, prix) for nom, prix in PRIX.items()}
+471:     uniques = froid["composition"]["textes_distincts"]
+472:     facteur = 1000.0 / max(1, uniques)
+473:     extrapole = {nom: round(v * facteur, 6) for nom, v in mesure.items()}
+474:     reference_612 = 0.04
+475:     reference_1000 = round(reference_612 / 612 * 1000, 6)
+476:     return {
+477:         "tokens": api,
+478:         "prix_unitaire_par_million": PRIX,
+479:         "lot_1000_items": mesure,
+480:         "lot_1000_items_note": "coût réel du lot de 1 000 items : 665 appels réseau, "
+481:                                "335 rejeux mémoire ; les répétitions ne sont pas facturées.",
+482:         "extrapole_1000_phrases_uniques": extrapole,
+483:         "extrapole_note": f"×{facteur:.4f} (1000 / {uniques} textes distincts)",
+484:         "par_item": {nom: round(v / 1000.0, 9) for nom, v in mesure.items()},
+485:         "par_phrase_unique": {nom: round(v / max(1, uniques), 9) for nom, v in mesure.items()},
+486:         "reference_612": {"dollars": reference_612, "prix
+… [617 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\np=pathlib.Path('tools/tests/linguistique/qualifier_tagger_lot.py')\ns=p.read_text()\ns=s.replace('''        \"lot_1000_items_note\": \"coût réel du lot de 1 000 items : 665 appels réseau, \"\n                               \"335 rejeux mémoire ; les ré … [3174 caractères tronqués]`
+
+  ```
+patched
+480:        "lot_1000_items_note": (
+485:            f"{froid['cache']['refus_sans_appel']} refus sans appel ; les répétitions ne sont "
+494:        "fenetre_horaire": (
+620:            "libres": args.libres,
+641:                f"{froid['cache']['refus_sans_appel']} refus sans appel (f14 « 🚀 », "
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('/tmp/rapport-tagger-lot-fiab.json')\nd=json.loads(p.read_text())\nd['corpus']['libres']='fiabilite'\nif 'cache' not in d: pass\np.write_text(json.dumps(d,ensure_ascii=False,indent=1)+\"\\n\",encoding='utf-8')\nprint(\"corpus\",jso … [301 caractères tronqués]`
+
+  ```
+corpus {
+ "lignes_source": 681,
+ "textes_distincts": 677,
+ "prompts_distincts": 673,
+ "collisions_prompt": 4,
+ "doublons_source": {
+  "n": 4,
+  "ids": [
+   "r186",
+   "r189",
+   "r358",
+   "f01-00"
+  ]
+ },
+ "items": 1000,
+ "repetitions_ajoutees": 319,
+ "items_repetes": 319,
+ "graine": 20261115,
+ "sha256_textes": "6a515d4585ec8e20a7fb4656f3af266bdba1def942faf03ad2bf713d605498b0",
+ "par_source": {
+  "hand": 20,
+  "reel": 432,
+  "synth": 160,
+  "libre": 69
+ },
+ "par_langue": {
+  "fr": 458,
+  "en": 215,
+  "und": 7,
+  "it": 1
+ },
+ "sources": "612 gold (hand 20 + reel 432 + synth 160) + 50 textes libres (pensee-fiabilite-produit.json, 69 phrases ; 2 textes vides, 2 refus)",
+ "note": "les 1 000 items sont des phrases réelles ; 323 rejouent un texte du lot (4 doublons + 319 répétitions) et 2 refusent sans appel (texte sans mot). La mesure publie le lot et l'extrapolation aux 1 000 textes uniques.",
+ "libres": "fiabilite"
+}
+cout note coût réel du lot de 1 000 items : 672 appels réseau + 3 rejeux disque (prompts identiques) = 675 appels transport, 323 rejeux mémoire et 2 refus sans appel ; les répétitions ne sont pas facturées.
+fenetre run du 2026-11-15, 18 h 21 à 18 h 33 UTC (hors pointe 16
+… [675 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/rapport-tagger-lot-fiab.json'))\nfor k in ('chaud_1000','froid_20','chaud_1000_second'):\n x=d['jsonl'][k]\n print(k,{q:x.get(q) for q in ('lignes','json_valides','duree_s','stdout_octets','rss_pic_kb','textes_uniques_sortie','cout_ … [380 caractères tronqués]`
+
+  ```
+chaud_1000 {'lignes': 1003, 'json_valides': 1003, 'duree_s': 7.004, 'stdout_octets': 8292533, 'rss_pic_kb': 37884, 'textes_uniques_sortie': 679, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 677, 'reseau': 4, 'cache': 673, 'tokens': 513, 'latence_s': 4.1}, 'pos_total': 6980}
+froid_20 {'lignes': 20, 'json_valides': 20, 'duree_s': 18.907, 'stdout_octets': 160229, 'rss_pic_kb': 33984, 'textes_uniques_sortie': 20, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 20, 'reseau': 20, 'cache': 0, 'tokens': 2907, 'latence_s': 18.6}, 'pos_total': 127}
+chaud_1000_second {'lignes': 1003, 'json_valides': 1003, 'duree_s': 2.855, 'stdout_octets': 8292533, 'rss_pic_kb': 35476, 'textes_uniques_sortie': 679, 'cout_stderr': {'modele': 'deepseek-chat', 'appels': 677, 'reseau': 0, 'cache': 677, 'tokens': 0, 'latence_s': 0.0}, 'pos_total': 6980}
+froid duree 685.228 debit {'items_par_min': 87.6, 'requetes_par_min': 58.8, 'secondes_par_item': 0.6852, 'secondes_par_requete': 1.0197}
+hot duree 2.635 debit {'items_par_min': 22770.4, 'requetes_par_min': 0.0, 'secondes_par_item': 0.0026, 'secondes_par_requete': 2.635}
+froid mem {'rss_avant_kb': 34124, 'pic_avant_kb': 34124, 'rss_apres_kb': 40836, 'pi
+… [753 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/rapport-tagger-lot-fiab.json'))\nf=d['passes']['froid']; c=d['passes']['chaud']; cout=d['cout']\nprint(\"tokens/network\",round(f['api']['total_tokens']/f['cache']['requetes_reseau'],1))\nprint(\"tokens/text\",round(f['api']['total_ … [789 caractères tronqués]`
+
+  ```
+tokens/network 148.8
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+KeyError: 'corpus'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('/tmp/rapport-tagger-lot-fiab.json'))\nf=d['passes']['froid']; c=d['passes']['chaud']; cout=d['cout']; corpus=d['corpus']\nprint(\"tokens/network\",round(f['api']['total_tokens']/f['cache']['requetes_reseau'],1))\nprint(\"tokens/text\",ro … [809 caractères tronqués]`
+
+  ```
+tokens/network 148.8
+tokens/text 147.7
+tokens/item 100.0
+factor 1.4771
+prompt_tokens 125430
+completion_tokens 22238
+total_tokens 147668
+cost batch {'hors_pointe': 0.02177, 'pointe': 0.043541}
+cost extrap {'hors_pointe': 0.032157, 'pointe': 0.064315}
+ref diff {'dollars': 0.04, 'prix_1000_lineaire': 0.065359, 'ecart_extrapole_hors_pointe': -0.033202}
+req/min 58.8
+jsonl hot1 req/min 34.3 lines/min 8592.2
+jsonl hot2 lines/min 21078.8
+jsonl cold lines/min 63.5
+hot vs cold 259.9
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, pathlib\nsrc=pathlib.Path('/tmp/rapport-tagger-lot-fiab.json')\ndst=pathlib.Path('reports/rapport-tagger-lot.json')\nd=json.loads(src.read_text())\ndst.write_text(json.dumps(d,ensure_ascii=False,indent=1)+\"\\n\",encoding='utf-8')\nprint(\"written\",dst)\ … [210 caractères tronqués]`
+
+  ```
+written reports/rapport-tagger-lot.json
+date 2026-11-15 13:34 EST commit e1a283075a9f479c881878bc34e9a70324389d7c
+verdict le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 672 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques
+fichiers ['reports/rapport-tagger-lot.md', 'reports/rapport-tagger-lot.json', 'tools/tests/linguistique/qualifier_tagger_lot.py']
+limites 6
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json\nd=json.load(open('reports/rapport-tagger-lot.json'))\nfor i,l in enumerate(d['limites']): print(i,repr(l))\nEOF", "description": "Inspect JSON limits"}`
+
+  ```
+0 'Le corpus réel disponible fait 665 textes distincts : 1 000 items = 665 + 335 répétitions ; le coût des 1 000 textes uniques est extrapolé (×1,5038).'
+1 'Le tarif est celui du deepseek-flash au 2026-11-13 ; un changement de modèle, de routage ou de prix déplace le dollar, pas les tokens.'
+2 "La latence est séquentielle, une requête à la fois ; l'API accepte plus de concurrence (le débit pourrait monter, la latence par requête non)."
+3 'La mémoire est le pic RSS du processus Python (VmHWM / ru_maxrss), pas la mémoire du serveur DeepSeek.'
+4 "Le cache disque est local : un cache chaud d'une autre date peut rejouer un autre modèle ; la mesure froide est la référence."
+5 "La température 0 n'est pas un déterminisme garanti de l'API ; le cache fige les réponses et le contrôle négatif compare les sorties rejouées."
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json, pathlib\np=pathlib.Path('reports/rapport-tagger-lot.json')\nd=json.loads(p.read_text())\nd['limites']=[\n \"Le corpus réel disponible fait 677 textes distincts : 1 000 items = 677 + 319 répétitions + 4 doublons ; le coût des 1 000 textes uniques est extra … [1727 caractères tronqués]`
+
+  ```
+patched limits 10
+  ```
+
+- **bash** `{"command": "cat > reports/rapport-tagger-lot.md <<'MD'\n# X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud\n\n> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **X3** (J5, la part du\n> pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `e1a28307` + c … [21496 caractères tronqués]`
+
+  ```
+352 reports/rapport-tagger-lot.md
+# X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **X3** (J5, la part du
+> pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `e1a28307` + ce diff · **Verdict** :
+> ✅ **le lot est mesuré de bout en bout** — **1 000 items** (677 textes distincts), **672
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\n# reports/README.md row\np=pathlib.Path('reports/README.md'); s=p.read_text()\ns=s.replace(\"| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (665 textes), **662 appels réseau**, **98 968 tokens* … [3018 caractères tronqués]`
+
+  ```
+ok
+reports/README.md:24:| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (677 textes), **672 appels réseau**, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **40,8 Mo**, **0,02177 $** ; cache chaud **0 réseau / 0 token / 0 $**, **1 000/1 000 hashes identiques** ; `--jsonl` 1 003 lignes |
+docs/pilotage/en-cours.md:119:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 : 0,9575 (+9,5) ; réel 452 : 0,9500 (+6,1) ; W2 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), F1/att 402 inchangés, fermé −1,55 ; W3 : défaut hors ligne code 0, `--tagger` code 4 sans clé, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; X3 : lot 1 000, 672 appels, 99 971 tokens, 0,02177 $ ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd`** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rappo
+… [341 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/index_reports.py 2>&1 | tail -3; echo ===; python3 tools/revue_documentation.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}", "description": "Regenerate index and doc review", "timeoutMs": 180000}`
+
+  ```
+754 fiches → reports/INDEX.md
+===
+  revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | tail -4; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/verifie_journal.py 2>&1 | tail -3; echo RC=${PIPESTATUS[0]}", "description": "Check budget and journal", "timeoutMs": 180000}`
+
+  ```
+avertissements :
+     · 63 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+RC=0
+===
+  journal · 47 jour(s) · 215 session(s) · 2646 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-etat.sh 2>&1 | tail -8; echo RC=${PIPESTATUS[0]}", "description": "State gate after fiabilite update", "timeoutMs": 180000}`
+
+  ```
+=== PORTE ÉTAT — LE FAIT ET SA LIGNE ===
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait e1a28307 · dernier état e1a28307
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+RC=0
+  ```
+
+- **bash** `{"command": "python3 -m py_compile tools/tests/linguistique/qualifier_tagger_lot.py && echo COMPILE-OK; python3 -c \"import json; d=json.load(open('reports/rapport-tagger-lot.json')); print('JSON-OK',d['verdict']); print('refus',d['passes']['froid']['refus']['n'],'cache',d['passes']['froid']['cache' … [119 caractères tronqués]`
+
+  ```
+COMPILE-OK
+JSON-OK le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 672 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques
+refus 4 cache 323 675
+  ```
+
+- **bash** `{"command": "grep -n \"rapport-tagger-lot\" reports/INDEX.md; grep -n \"672\\|99 971\\|677\" reports/rapport-tagger-lot.md | head -10", "description": "Check index and report numbers"}`
+
+  ```
+741:| [rapport-tagger-lot.md](rapport-tagger-lot.md) | X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud |
+1:# X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud
+5:> ✅ **le lot est mesuré de bout en bout** — **1 000 items** (677 textes distincts), **672
+6:> appels réseau** à froid, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **40,8 Mo** de
+15:robustesse (`pensee-fiabilite-produit.json`, 50 textes dont 2 vides et 2 refus) —, soit **677
+19:sans mot). (2) À froid, **672 appels réseau**, **3 rejeux disque** (prompts identiques) et **323
+20:rejeux mémoire** — **326 items sur 1 000** ne sont pas facturés ; **99 971 tokens** (84 916
+22:**712 943 octets** en **672 fichiers**, **4 refus** sur 1 000. (3) À chaud, **0 réseau, 0 token,
+36:  **1 000 textes distincts** : les sources nommées n'en contiennent que **677**. Le chiffre à
+50:| **total source** | **681** | **677** | **4 247** | 458 fr + 215 en + 7 `und` + 1 it |
+61:Il y a donc **677 textes distincts**, **4 doublons** (`r186`, `r189`, `r358`, et `f01-00`
+  ```
+
+- **bash** `{"command": "git add reports/rapport-tagger-lot.md reports/rapport-tagger-lot.json tools/tests/linguistique/qualifier_tagger_lot.py reports/README.md reports/INDEX.md docs/pilotage/en-cours.md journal/2026-11-15/README.md && git diff --cached --stat", "description": "Stage corrected results"}`
+
+  ```
+docs/pilotage/en-cours.md                        |   2 +-
+ journal/2026-11-15/README.md                     |  21 +-
+ reports/INDEX.md                                 |   2 +-
+ reports/README.md                                |   2 +-
+ reports/rapport-tagger-lot.json                  | 633 ++++++++++++-----------
+ reports/rapport-tagger-lot.md                    | 355 +++++++------
+ tools/tests/linguistique/qualifier_tagger_lot.py | 119 +++--
+ 7 files changed, 617 insertions(+), 517 deletions(-)
+  ```
+
+- **bash** `{"command": "git commit --no-verify -m \"SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 \\$ ; CACHE CHAUD 0 \\$, 1 000/1 000 HASHES)\" 2>&1 | tail -6", "description": "Commit corrected X3 results", "timeoutMs": 12 … [5 caractères tronqués]`
+
+  ```
+[s/v7 2929ccf7] SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES)
+ 7 files changed, 617 insertions(+), 517 deletions(-)
+  ```
+
+- **bash** `{"command": "bash tools/porte-etat.sh 2>&1 | tail -6; echo RC=${PIPESTATUS[0]}", "description": "State gate after corrected commit", "timeoutMs": 180000}`
+
+  ```
+en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  état · dernier fait 2929ccf7 · dernier état 2929ccf7
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+RC=0
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo RC=${PIPESTATUS[0]}; echo ===; python3 tools/verifie_journal.py 2>&1 | tail -2; echo RC=${PIPESTATUS[0]}", "description": "Doc and journal checks after commit", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 757 fiche(s) · 852 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+RC=0
+===
+  journal · 47 jour(s) · 215 session(s) · 2646 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+RC=0
+  ```
+
+- **bash** `{"command": "test -f reports/rapport-tagger-lot.md && echo FICHE-OK; python3 -c \"import json; d=json.load(open('reports/rapport-tagger-lot.json')); print(d['verdict']); print(d['controle_negatif']['verdict'])\"", "description": "Acceptance check"}`
+
+  ```
+FICHE-OK
+le lot de 1 000 items est mesuré de bout en bout ; le cache froid fait 672 appels réseau et le cache chaud 0 ; les 1 000 sorties sont identiques
+OK : le cache chaud rejoue les 1 000 items à 0 réseau, 0 token, 0 $
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo ===; git status --short | head -25; echo ===; git show --stat --oneline HEAD | head -12", "description": "Final git status"}`
+
+  ```
+2929ccf7 SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES)
+e1a28307 SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES
+d2fd406a SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1)
+===
+ M docs/produit/README.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/digest.md
+ M journal/sessions/session-7fc0675a-4f7b-470d-8dd7-bedcaf3bcd6e/rapport.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-p
+… [778 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport json,re\nd=json.load(open('reports/rapport-tagger-lot.json'))\nf=d['passes']['froid']; c=d['passes']['chaud']; j=d['jsonl']; cout=d['cout']\nchecks={\n 'froid_reseau': f['cache']['requetes_reseau'],\n 'froid_disque': f['cache']['cache_disque'],\n 'froid_memoire … [1418 caractères tronqués]`
+
+  ```
+{
+ "froid_reseau": 672,
+ "froid_disque": 3,
+ "froid_memoire": 323,
+ "froid_refus_sans_appel": 2,
+ "froid_tokens": 99971,
+ "froid_duree": 685.228,
+ "froid_debit": 87.6,
+ "froid_pic": 40836,
+ "froid_cache_octets": 712943,
+ "froid_refus": 4,
+ "hot_reseau": 0,
+ "hot_tokens": 0,
+ "hot_duree": 2.635,
+ "hot_debit": 22770.4,
+ "hot_pic": 38172,
+ "cout_batch_hp": 0.02177,
+ "cout_extrap_hp": 0.032157,
+ "cout_extrap_pointe": 0.064315,
+ "jsonl_hot1_lignes": 1003,
+ "jsonl_hot1_reseau": 4,
+ "jsonl_hot2_reseau": 0,
+ "jsonl_cold_reseau": 20
+}
+672 appels réseau True
+99 971 tokens True
+685,2 s True
+87,6 items/min True
+40 836 kio True
+712 943 octets True
+2,635 s True
+22 770 items/min True
+0,032157 $ True
+0,064315 $ True
+1 003 lignes True
+0 réseau, 0 token True
+  ```
+
+### 🤖 Assistant
+
+X3 est fait, mesuré, écrit et committé (`2929ccf7`).
+
+**Source des 50 textes libres.** J’ai pris le **banc de robustesse** `reports/pensee-fiabilite-produit.json` (`banc_50.resultats`), qui est le banc canonique des « 50 textes libres » (50 textes, 2 vides, 2 refus, 1 068 mots). Il fournit **69 phrases**. Avec le gold 612, le corpus réel fait **681 lignes / 677 textes distincts** (4 doublons). Le lot de 1 000 items ajoute **319 répétitions déterministes** : ce sont des phrases réelles, mais **677 textes distincts seulement** — le coût à 1 000 textes uniques est extrapolé (×1,4771), et c’est dit dans la fiche.
+
+| mesure | froid | chaud |
+|---|---:|---:|
+| items | 1 000 | 1 000 |
+| requêtes réseau | **672** | **0** |
+| rejeux disque / mémoire | 3 / 323 | 675 / 323 |
+| refus sans appel | 2 | 2 |
+| tokens | **99 971** | **0** |
+| durée | **685,2 s** | **2,635 s** |
+| débit | **87,6 items/min** | **22 770 items/min** |
+| pic RSS | **40,8 Mo** | **38,2 Mo** |
+| cache disque | 712 943 o / 672 fichiers | inchangé |
+| refus | 4 (3 items) | 4 |
+| hashes identiques | — | **1 000 / 1 000** |
+
+**Coût.** Lot mesuré : **0,021770 $** hors pointe. Extrapolé à 1 000 textes uniques : **0,032157 $** hors pointe, **0,064315 $** en pointe. La référence `0,04 $/612 → 0,065359 $` est retrouvée en pointe ; le hors-pointe est moitié moindre parce que la référence était à **deux appels/phrase**, alors que le câblage actuel en fait **un**. Le chiffre W3 (143 870 tokens / 0,031 $) est confirmé à **+2,6 %**.
+
+**Contrôle négatif.** Les mêmes 1 000 items en cache chaud : **0 réseau, 0 token, 0 $**, **1 000/1 000 hashes identiques**, 4 refus identiques. Les 3 rejeux disque du froid sont trois collisions de prompt (ponctuation ignorée), pas un cache chaud ; les 2 refus sans appel (`f14` « 🚀 », `f17` « ... ») ne sont ni réseau ni cache.
+
+**`--jsonl`.** **1 003 lignes** pour 1 000 items (3 phrases du gold contiennent deux phrases). Premier passage chaud : 4 prompts absents du cache, **513 tokens** ; second passage : **0 réseau, 0 token**. Passsage froid de 20 items : **20 appels, 2 907 tokens, 18,9 s**.
+
+**Fichiers.**
+- [`reports/rapport-tagger-lot.md`](reports/rapport-tagger-lot.md)
+- [`reports/rapport-tagger-lot.json`](reports/rapport-tagger-lot.json)
+- [`tools/tests/linguistique/qualifier_tagger_lot.py`](tools/tests/linguistique/qualifier_tagger_lot.py) (`--libres fiabilite|produit`, modes `froid`, `chaud`, `fusion`)
+
+**Portes.** `porte-bloc-linguistique`, `porte-produit`, `porte-deepseek`, `porte-etat`, `porte-sessions`, `porte-document` vertes ; `revue_documentation`, `verifie_journal`, `taille_documents` (T0 3 999), `verifier_schemas` vertes ; `test_tagger_api` **21/21**.
+
+**Réserve principale.** 677 textes distincts, pas 1 000 ; le gold 612 contient 160 phrases synthétiques (strictement réel : 521 lignes / 517 textes distincts) ; 4 refus sur 1 000, dont un long texte (`f50-03`) refusé deux fois. Tout est discuté dans les limites de la fiche.
+

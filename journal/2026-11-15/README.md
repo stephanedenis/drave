@@ -5,16 +5,16 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**35 commits** · **1 session(s)** · **7 thème(s)**
+**38 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 5 | [distribue.md](distribue.md) |
+| distribue | 7 | [distribue.md](distribue.md) |
 | docs | 9 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
-| mesures | 14 | [mesures.md](mesures.md) |
+| mesures | 15 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 356.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 357.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -64,6 +64,9 @@
 | 12:08 | `9960b37f` | SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN |
 | 12:20 | `049343d3` | SEMAINE 2 — W6 : LA CLÔTURE (5 VAGUES, 3 POSITIVES, 1 BLOQUÉE, 1 MIXTE) ; 85 PORTES LUES (81/4), CIBLAGE 9/9 ; TAG ANNOTÉ semaine-2-2026-11-20 SUR 73edb3dd |
 | 12:35 | `2b5bd1cd` | JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5 |
+| 13:04 | `d2fd406a` | SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1) |
+| 13:19 | `e1a28307` | SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES |
+| 13:36 | `2929ccf7` | SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) |
 
 ## Le récit de la journée (écrit à la main)
 

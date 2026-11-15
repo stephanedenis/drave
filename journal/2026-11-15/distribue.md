@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,10 +13,12 @@
 | 04:26 | `f1c6b506` | PHASE 3 (C PUIS B) — N2 (--rope --canal-dir), S (page / et 11 VERDICTS), R (GOLD RÉEL 452), PANINI (PROTOCOLE À DATE CONTRÔLÉE, LES ATOMES NE PRÉDISENT PAS LES NIVEAUX, CIC 42/42) ; 6 FICHES, SEPT. 9 DU PLAN | `en-cours.md`, `semaine-autonome.md`, `README.md` (+12) |
 | 06:31 | `7d4e3bc5` | E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES | `README.md`, `en-cours.md`, `README.md` (+17) |
 | 07:30 | `cf2d1fb1` | ÉTAT — T0 DANS LE BUDGET | `en-cours.md`, `README.md`, `modele.md` (+4) |
+| 13:04 | `d2fd406a` | SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1) | `en-cours.md`, `README.md`, `distribue.md` (+22) |
+| 13:36 | `2929ccf7` | SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 ITEMS, 677 TEXTES, 672 APPELS, 99 971 TOKENS, 0,02177 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) | `en-cours.md`, `README.md`, `INDEX.md` (+4) |
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 356.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 357.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -24,7 +26,10 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-coordination-s-v2.md](../../reports/rapport-coordination-s-v2.md)
 - [reports/rapport-faq-sommaire.md](../../reports/rapport-faq-sommaire.md)
+- [reports/rapport-or-roles-protocole.md](../../reports/rapport-or-roles-protocole.md)
+- [reports/rapport-page-s-mesure.md](../../reports/rapport-page-s-mesure.md)
 - [reports/rapport-protocole-date.md](../../reports/rapport-protocole-date.md)
+- [reports/rapport-tagger-lot.md](../../reports/rapport-tagger-lot.md)
 
 <!-- notes -->
 

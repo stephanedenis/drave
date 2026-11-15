@@ -65587,3 +65587,130 @@ rapport-page-s-mesure.json
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [757 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-page-s-mesure.md
+ create mode 100644 reports/schema-or-roles.json
+d2fd406a SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; git rev-list --count origin/master..s/v7; date; tail -1 work/chantier/journal.log", "description": "Pous … [32 caractères tronqués]`
+
+  ```
+2b5bd1cd..d2fd406a  s/v7 -> s/v7
+   2b5bd1cd..d2fd406a  master -> master
+0
+dim 15 nov 2026 13:06:55 EST
+2026-11-15 12:53:13 · ▶ X3 — J5 — le tagger en lot : 1 000 phrases (timeout 3600 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git status --porcelain reports/rapport-tagger-lot.md 2>/dev/null | head -1", "description": "Suivre X3", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5177]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5177", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5177", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 13:32:06 EST
+2026-11-15 12:53:13 · ✔ X2 en 778.3 s (code 0) — ✅ test -f reports/rapport-or-roles-protocole.md && echo FICHE-OK; ✅ test -f reports/schema-or-roles.json && echo SCHEMA-OK
+2026-11-15 12:53:13 · ▶ X3 — J5 — le tagger en lot : 1 000 phrases (timeout 3600 s)
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls reports/rapport-tagger-lot.md 2>/dev/null", "description": "Verdict X3", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5178]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5178", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5178", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 13:57:13 EST
+2026-11-15 12:53:13 · ▶ X3 — J5 — le tagger en lot : 1 000 phrases (timeout 3600 s)
+2026-11-15 13:37:13 · ✔ X3 en 2640.6 s (code 0) — ✅ test -f reports/rapport-tagger-lot.md && echo FICHE-OK
+reports/rapport-tagger-lot.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[s]uperviseur.py boucle\"; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget|a_faire\" | head -2; git status --porcelain reports/rapport-tagger-lot.md reports/rapport-tagger-lot.json tools/ 2>/dev/ … [101 caractères tronqués]`
+
+  ```
+0
+budget consommé : 16807.3 s · lancements : 51
+ M tools/chantier/plan.json
+?? tools/protocole_or_roles.py
+?? tools/tests/linguistique/gold_reel_50.py
+# X3 — le tagger en lot : 1 000 items, 672 appels réseau, 0 $ en cache chaud
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : **X3** (J5, la part du
+> pilote) · **Date** : 2026-11-15 · **HEAD mesuré** : `e1a28307` + ce diff · **Verdict** :
+> ✅ **le lot est mesuré de bout en bout** — **1 000 items** (677 textes distincts), **672
+> appels réseau** à froid, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **40,8 Mo** de
+> pic RSS, **0,02177 $** pour le lot (**0,032157 $** extrapolé à 1 000 textes uniques hors
+> pointe, **0,064315 $** en pointe). Le **cache chaud** rejoue les mêmes 1 000 items en
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-tagger-lot.md reports/pensee-tagger-lot.json tools/protocole_or_roles.py 2>/dev/null | head -4; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text() … [1047 caractères tronqués]`
+
+  ```
+?? tools/protocole_or_roles.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+2929ccf7 SEMAINE 2 — X3 CORRIGÉ : LES 50 TEXTES LIBRES SONT LE BANC DE ROBUSTESSE (1 000 I
+   d2fd406a..2929ccf7  s/v7 -> s/v7
+   d2fd406a..2929ccf7  master -> master
+dim 15 nov 2026 14:00:26 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' reports/rapport-semaine-2.md | cut -c1-170; echo \"=== état :\"; grep -nE \"^\\*\\*La nuit|^- \\*\\*Fait\\*\\*\" docs/pilotage/en-cours.md | cut -c1-220", "description": "Lire le rapport de la semaine 2"}`
+
+  ```
+# W6 — le rapport de la semaine 2 : le tagger gagne sur les deux bases, Panini reste bloqué, la restitution sépare sans fidélité
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** (le produit) / **L** (le bloc langue) ·
+> **Tâche** : **W6** (J5 après-midi, la clôture) · **Date** : 2026-11-15 (J5 · 20/11) ·
+> **HEAD mesuré** : `93e046f7` (W4) puis `73edb3dd` (W5) · **Verdict** : **cinq vagues mesurées,
+> trois positives, une bloquée, une mixte** ; le tag annoté `semaine-2-2026-11-20` est posé sur
+> le dernier commit de code vert (`73edb3dd`, W5) ; **aucune passe complète n'a été relancée**
+> pour la clôture — le relevé lit `work/portes/` et un ciblage de neuf portes.
+>
+> **JSON** : [`rapport-semaine-2.json`](rapport-semaine-2.json) · **Fiches** :
+> [W1](rapport-gold-452.md), [W2](rapport-tagger-h50.md), [W3](rapport-tagger-defaut.md),
+> [W4](rapport-panini-manifeste.md), [W5](rapport-restitution-v3.md) · **Portes** :
+> `work/portes-1115-09h53/registre.txt`, `work/portes/w6-ciblage/`, `work/portes/w6-ciblage2/`.
+
+**En trois lignes.** (1) **W1** nomme et compose le **gold réel 452** (20 hand + 432 corpus,
+242 fr / 210 en), fige le split **402 / H50** et liste **10 GP/SUB** à an
+… [922 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\n# la ligne de synthèse de la semaine 2, après la ligne « Nuit »\nif \"**Semaine 2 (15/11)**\" not in t:\n    ancre = \"**Questions en … [1018 caractères tronqués]`
+
+  ```
+état semaine 2
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/pilotage/en-cours.md 2>/dev/null; timeout 300 git commit -m \"ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT\" 2>&1 | t … [346 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 356.4 h |
+| Durée | 357.3 h |
 | Tours | 199 |
-| Messages | 3979 |
-| Appels d'outils | 3552 |
+| Messages | 3991 |
+| Appels d'outils | 3564 |
 | Fichiers touchés | 25 |
-| Commandes | 2941 |
+| Commandes | 2949 |
 | Sous-agents | 43 |
-| Commits | 477 |
+| Commits | 479 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*60 appels d'outils.* Actions notables :
+*72 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,7 +10709,7 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 30 autres
+- … et 38 autres
 
 **Synthèse produite :**
 
@@ -10835,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2901 autres
+- … et 2909 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11460,4 +11460,6 @@ Je commence.
 - SEMAINE 2 — W5 : LES RÔLES DES GP SE SÉPARENT (18/18, 144/144, PERMUTATION 0/18) ; LE CADRE NE SUIT PAS (20/46, F1 0,5406)" 2>&1 | tail -2; git log -1 --format=
 - JOURNAL — RÉGÉNÉRÉ APRÈS LA CLÔTURE DE LA SEMAINE 2 (W1-W6) ; LE TAG semaine-2-2026-11-20 REPOSÉ SUR LE COMMIT W5" 2>&1 | tail -2; git log -1 --format='%h %s' |
 - SEMAINE 2 — X1/X2 : LA PAGE / MESURÉE (369/0 CONTRE 359/99, LA RECETTE) ET L'OR DE RÔLES (LE PROTOCOLE POUR S, LE SCHÉMA, LA BASE v1)" 2>&1 | tail -2; git log -
+- SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 672 APPELS, 99 971 TOKENS, 87,6 ITEMS/MIN, 0,022 \$, 0 \$ EN CACHE CHAUD) ; LE PROTOCOLE OR-ROLES COMMITTÉ" 2>&1
+- ÉTAT — LA SEMAINE 2 INSCRITE : GOLD 452, TAGGER 402/H50, MATRICE DU DÉFAUT, PANINI 26 SIGNATURES, RESTITUTION v3, PAGE /, TAGGER EN LOT" 2>&1 | tail -2; git log
 

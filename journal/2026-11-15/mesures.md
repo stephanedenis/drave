@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (14)
+## Commits du jour (15)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -22,16 +22,17 @@
 | 09:24 | `1683c2b4` | W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3 | `en-cours.md`, `roadmap.md`, `README.md` (+17) |
 | 10:59 | `93e046f7` | SEMAINE 2 — W4 : LE MANIFESTE PANINI (26 SIGNATURES, COMMANDE, FORMAT) ; REJEU 27/60, CALIBRATION 42/44, 3 SOURCES COURTES, CONTRÔLE N5 VIDE | `en-cours.md`, `README.md`, `distribue.md` (+18) |
 | 12:08 | `9960b37f` | SEMAINE 2 — W5 : LA RESTITUTION v3 SÉPARE LES CINQ RÔLES (GOLD S 144/144, 18/18, PERMUTATION 0/18) ; LE GOLD v2 NE GAGNE QU'UN CADRE (20/46, F1 0,5406, LIEU 0,60) ; --roles-v3 OPT-IN | `en-cours.md`, `roadmap.md`, `README.md` (+27) |
+| 13:19 | `e1a28307` | SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES | `en-cours.md`, `README.md`, `plan.md` (+5) |
 
 ## Chiffres du jour
 
-`0,5406` · `0,9198` · `0,9643` · `0,6842` · `0,8607` · `0,5270` · `0,092` · `0,160` · `0,811` · `0,657` · `0,440` · `0,429`
+`0,0216` · `0,5406` · `0,9198` · `0,9643` · `0,6842` · `0,8607` · `0,5270` · `0,092` · `0,160` · `0,811` · `0,657` · `0,440`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 356.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 357.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -50,6 +51,7 @@
 - [reports/rapport-restitution-v3.md](../../reports/rapport-restitution-v3.md)
 - [reports/rapport-tagger-erreurs.md](../../reports/rapport-tagger-erreurs.md)
 - [reports/rapport-tagger-h50.md](../../reports/rapport-tagger-h50.md)
+- [reports/rapport-tagger-lot.md](../../reports/rapport-tagger-lot.md)
 - [reports/rapport-tagger-option.md](../../reports/rapport-tagger-option.md)
 
 <!-- notes -->
