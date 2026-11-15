@@ -64665,3 +64665,59 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5119", "timeout_ms": 700000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5119", "timeout_ms": 700000, "wait": true}`
+
+  ```
+dim 15 nov 2026 07:12:28 EST
+2026-11-15 06:34:31 · ✔ E1 en 455.8 s (code 0) — ✅ test -f reports/rapport-faq-sommaire.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 06:34:31 · ▶ E2 — Le tagger — les cas d'erreur (timeout 3000 s)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5119 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 work/chantier/journal.log; ls reports/ | grep tagger-erreurs", "description": "Verdict E2", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5120]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5120", "timeout_ms": 600000, "wait": true}`
+
+  ```
+dim 15 nov 2026 07:27:36 EST
+2026-11-15 06:34:31 · ✔ E1 en 455.8 s (code 0) — ✅ test -f reports/rapport-faq-sommaire.md && echo FICHE-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 06:34:31 · ▶ E2 — Le tagger — les cas d'erreur (timeout 3000 s)
+2026-11-15 07:21:18 · ✔ E2 en 2803.9 s (code 0) — ✅ test -f reports/rapport-tagger-erreurs.md && echo FICHE-OK; ✅ python3 tools/tests/test_tagger_api.py 2>&1 | tail -1
+rapport-tagger-erreurs.json
+rapport-tagger-erreurs.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[s]uperviseur.py boucle\"; git status --porcelain | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chunker|rapport-coherence\" | head … [78 caractères tronqués]`
+
+  ```
+0
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M journal/sessions/session-01599146-2479-4a06-8381-4ace3d13f579/digest.md
+ M journal/sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+7ee92dd9 JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICAT
+840e613e TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT
+dim 15 nov 2026 07:27:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 07 h 30 HNE (finition : E1-E2, le tagger et ses cas d'erreu … [981 caractères tronqués]`

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 07 h 00 HNE (E2 : erreurs --tagger)**
+**Mis à jour : 2026-11-15, 07 h 30 HNE (finition : E1-E2, le tagger et ses cas d'erreur)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).

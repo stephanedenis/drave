@@ -539,6 +539,40 @@
      "attendu": "FICHE-OK"
     }
    ]
+  },
+  {
+   "id": "E1",
+   "jour": 15,
+   "titre": "La FAQ dans le sommaire et les liens",
+   "mandat": "Tâche E1 : la FAQ (D3) est dans `docs/produit/README.md` — ajoute-la au sommaire du document, vérifie les **liens** de la section (aucun lien mort), et mets la ligne FAQ dans `docs/README.md` si elle n'y est pas. Fiche `reports/rapport-faq-sommaire.md` + JSON, commit. Ne change pas le contenu des réponses.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-faq-sommaire.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
+  },
+  {
+   "id": "E2",
+   "jour": 15,
+   "titre": "Le tagger — les cas d'erreur",
+   "mandat": "Tâche E2 : les cas d'erreur de `--tagger` — la clé absente (code 4), la clé invalide (code 4, message clair), le réseau coupé (code 4 ou repli heuristique ?), le refus du modèle ; documente le comportement **réel** de chacun dans `docs/produit/README.md` § 3.7 et une fiche `reports/rapport-tagger-erreurs.md` + JSON, avec un test pour chacun dans `tools/tests/test_tagger_api.py` (transport factice). Commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-tagger-erreurs.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_tagger_api.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
   }
  ]
 }

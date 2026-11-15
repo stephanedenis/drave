@@ -7,12 +7,12 @@
 | Identifiant | `session-01599146-2479-4a06-8381-4ace3d13f579` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 06:34 |
-| Durée | 0.6 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 143 |
-| Appels d'outils | 172 |
+| Messages | 165 |
+| Appels d'outils | 196 |
 | Fichiers touchés | 8 |
-| Commandes | 99 |
+| Commandes | 119 |
 | Sous-agents | 0 |
 | Commits | 3 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche E2 : les cas d'erreur de `--tagger` — la clé absente (code 4), la clé invalide (code 4, message clair), le réseau  … [289 caractères tronqués]
 
-*172 appels d'outils.* Actions notables :
+*196 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - glob
@@ -41,11 +41,48 @@
 - bash — Search for error handling patterns
 - bash — Check git history for tagger error handling
 - bash — Find all tagger error docs in README
-- … et 124 autres
+- … et 142 autres
 
 **Synthèse produite :**
 
-I'll implement the error-handling contract, then add the tests, docs and report. Let me set up a task list first.
+\## E2 — les cas d'erreur de `--tagger`
+
+\### Comportement livré (mesuré, transport factice)
+
+| cas | code | `stdout` | comportement |
+|---|---:|---|---|
+| **clé absente** | **4** | vide | message clair, rien n'est analysé |
+| **clé invalide** (HTTP 401/403) | **4** | vide | **pas de repli** ; message clair nommant les trois sources de la clé |
+| **réseau coupé** (3 essais du client) | **0** | annotation heuristique | **repli heuristique**, `refus` non vide, POS `source=heuristique` |
+| **refus du modèle** (texte non JSON, JSON incomplet) | **0** | annotation heuristique | même repli, `refus` nomme le défaut |
+
+**Le changement principal** : avant, une clé 401/403 était avalée par `NeuronalLLMPOS` et le CLI rendait **0** avec un repli heuristique muet. Désormais `_transport_tagger` retient le code dans `stats["cle_refusee"]`, `_CascadeTagger` lève `CleTaggerRefusee`, et `main` rend **4**.
+
+\### Fichiers
+
+- [`tools/drave.py`](tools/drave.py) — `CleTaggerRefusee`, drapeau `cle_refusee`, code 4.
+- [`tools/tests/test_tagger_api.py`](tools/tests/test_tagger_api.py) — **18/18 tests**, dont les 4 cas d'erreur + JSON incomplet.
+- [`docs/produit/README.md`](docs/produit/README.md) § 3.7 — tableau des cas, règle des deux familles, nuance `--jsonl`.
+- [`reports/rapport-tagger-erreurs.md`](reports/rapport-tagger-erreurs.md) + [`reports/rapport-tagger-erreurs.json`](reports/rapport-tagger-erreurs.json) — dispositif, mesures, contrôles.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md), [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md), [`journal/2026-11-15/mesures.md`](journal/2026-11-15/mesures.md).
+
+\### Contrôles
+
+- **Transport valide** → code 0, POS neuronaux : les cas d'erreur ne sont pas un « tout échoue ».
+- **Mutation** : retirer le contrôle 401/403 fait échouer `test_cle_invalide_code_4` (`0 != 4`).
+- **Fuite de clé** : la sentinelle `cle-de-test-sentinelle` n'apparaît ni dans `stdout` ni dans `stderr`.
+
+\### Portes
+
+- `python3 tools/tests/test_tagger_api.py` → **OK** (18 tests).
+- `bash tools/porte-produit.sh` → **verte** (183/183 autotests).
+- `revue_documentation`, `porte-tableaux`, `taille_documents`, `verifie_journal`, `verifie_en_cours` → **verts**.
+- La suite complète `toutes-les-portes.sh` a été arrêtée sur `porte-greffe` (hors périmètre, autre passe concurrente) après **29 portes toutes vertes** ; les portes liées au changement sont vertes.
+
+\### Commits
+
+- `840e613e` — **TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AV
+… [131 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -104,7 +141,7 @@ I'll implement the error-handling contract, then add the tests, docs and report.
 - **T1** Inspect en-cours counters and header
 - **T1** Read en-cours relevant sections
 - **T1** Find roadmap B13/R0.7 lines
-- … et 59 autres
+- … et 79 autres
 
 ## 4. Mesures et résultats marquants
 

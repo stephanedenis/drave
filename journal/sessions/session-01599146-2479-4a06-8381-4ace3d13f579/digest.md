@@ -2892,3 +2892,377 @@ index 6a4dfdee..d2f20e61 100644
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add journal/2026-11-15/README.md journal/2026-11-15/memoire.md journal/2026-11-15/mesures.md journal/THEMES.md && git diff --cached --check; echo \"CHECK=$?\"; git commit -m \"JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER … [192 caractères tronqués]`
+
+  ```
+CHECK=0
+[still running after 60000ms; moved to background job bash-99]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-99", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 7ee92dd9] JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18)
+ 8 files changed, 110 insertions(+), 41 deletions(-)
+ delete mode 100644 journal/2026-11-15/memoire.md
+JOURNAL-COMMIT-CODE=0
+[status: completed, exit code: 0]
+  ```
+
+- **job_output** `{"job_id": "bash-71", "timeout_ms": 1000}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -12 /tmp/e2-portes.log; echo ---; wc -l /tmp/e2-portes.log", "description": "Check full gate progress"}`
+
+  ```
+porte-coupe            ✅                         138 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-cycle-c2         ✅                         127 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           0 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.91 s → 9.67 s (+2.8 s ≈ 50 ms × 64 pas)
+  porte-diff-couche      ✅                          18 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           5 s  ✅ porte document verte
+  porte-echange-experts  ✅                          53 s    PORTE TENUE
+  porte-episodique       ✅                         167 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode
+… [368 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"REVUE-CODE=${PIPESTATUS[0]}\"", "description": "Post-commit doc review"}`
+
+  ```
+revue de documentation · 748 fiche(s) · 841 JSON · 123 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE-CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -4; echo \"TAILLE-CODE=${PIPESTATUS[0]}\"", "description": "Post-commit size budget"}`
+
+  ```
+avertissements :
+     · 56 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE-CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_journal.py 2>&1 | tail -4; echo \"JOURNAL-CODE=${PIPESTATUS[0]}\"", "description": "Post-commit journal check"}`
+
+  ```
+journal · 47 jour(s) · 205 session(s) · 2592 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL-CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -4; echo \"EN-COURS-CODE=${PIPESTATUS[0]}\"", "description": "Post-commit en-cours check"}`
+
+  ```
+en-cours · 1628 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EN-COURS-CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short; echo ---; git log --oneline -3", "description": "Check final git state"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+7ee92dd9 JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18)
+840e613e TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES
+7d4e3bc5 E1 — LA FAQ AU SOMMAIRE ET SES LIENS : 9/9 ANCRES, 5/5 LIENS, 0 MORT ; LA LIGNE FAQ DANS docs/README, LES RÉPONSES INCHANGÉES
+  ```
+
+- **bash** `{"command": "tail -8 /tmp/e2-portes.log; echo ---; wc -l /tmp/e2-portes.log", "description": "Check gate progress"}`
+
+  ```
+porte-diff-couche      ✅                          18 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           5 s  ✅ porte document verte
+  porte-echange-experts  ✅                          53 s    PORTE TENUE
+  porte-episodique       ✅                         167 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         215 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+---
+29 /tmp/e2-portes.log
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,cmd -C bash -C python3 | grep -E \"toutes-les-portes|porte-\" | head -10", "description": "Check current gate process"}`
+
+  ```
+3497177       27:32 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/toutes-les-portes.sh > /tmp/e2-portes.log 2>&1; echo "PORTES-CODE=$?" >> /tmp/e2-portes.log
+3497202       27:32 bash tools/toutes-les-portes.sh
+3725250       03:37 bash tools/porte-greffe.sh
+3728566       00:44 bash tools/porte-greffe.sh
+3729195       00:00 bash -c ps -o pid,etime,cmd -C bash -C python3 | grep -E "toutes-les-portes|porte-" | head -10
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_etat_a_jour.py 2>&1 | tail -6; echo \"ETAT-CODE=${PIPESTATUS[0]}\"", "description": "Verify state freshness"}`
+
+  ```
+état · dernier fait 840e613e · dernier état 840e613e
+  ✅ aucun fait commité après le dernier état
+ETAT-CODE=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py --aide | sed -n '1,20p'; echo \"AIDE-CODE=${PIPESTATUS[0]}\"", "description": "Check CLI help epilogue"}`
+
+  ```
+usage: drave [-h] [-V] {analyser,evaluer,rejouer,restituer} ...
+
+Point d'entrée produit du bloc linguistique (analyse et restitution).
+
+arguments:
+  {analyser,evaluer,rejouer,restituer}
+    analyser            étiqueter un texte (POS, syntagmes, pragmatique)
+    evaluer             mesurer l'heuristique sur le gold
+    rejouer             analyser deux fois et vérifier le déterminisme
+    restituer           reconstruire la surface depuis l'annotation et mesurer le miroir
+
+options:
+  -h, --help, --aide    afficher cette aide et quitter
+  -V, --version         afficher la version et quitter
+
+Commandes : analyser, evaluer, rejouer, restituer.
+Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·
+4 clé/tagger indisponible (absente ou refusée) · 1 erreur.
+Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,
+--contexte, --banc, --tagger.
+AIDE-CODE=0
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/e2-portes.log; echo ---; wc -l /tmp/e2-portes.log", "description": "Check gate progress"}`
+
+  ```
+porte-echange-experts  ✅                          53 s    PORTE TENUE
+  porte-episodique       ✅                         167 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         215 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+---
+29 /tmp/e2-portes.log
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,cmd -C bash | grep -E \"porte-greffe|toutes-les-portes\" | head", "description": "Check greffe gate duration"}`
+
+  ```
+3497177       27:44 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/toutes-les-portes.sh > /tmp/e2-portes.log 2>&1; echo "PORTES-CODE=$?" >> /tmp/e2-portes.log
+3497202       27:44 bash tools/toutes-les-portes.sh
+3725250       03:49 bash tools/porte-greffe.sh
+3728566       00:57 bash tools/porte-greffe.sh
+3729303       00:00 bash -c ps -o pid,etime,cmd -C bash | grep -E "porte-greffe|toutes-les-portes" | head
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && test -f reports/rapport-tagger-erreurs.md && echo FICHE-OK; python3 tools/tests/test_tagger_api.py 2>&1 | tail -1", "description": "Run E2 acceptance checks"}`
+
+  ```
+FICHE-OK
+OK
+  ```
+
+- **job_output** `{"job_id": "bash-71", "timeout_ms": 300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "tail -6 /tmp/e2-portes.log; echo ---; wc -l /tmp/e2-portes.log; ps -o pid,etime,cmd -C bash | grep -E \"porte-greffe|toutes-les-portes\" | head", "description": "Check gate progress"}`
+
+  ```
+porte-echange-experts  ✅                          53 s    PORTE TENUE
+  porte-episodique       ✅                         167 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         215 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+---
+29 /tmp/e2-portes.log
+3497177       32:55 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/toutes-les-portes.sh > /tmp/e2-portes.log 2>&1; echo "PORTES-CODE=$?" >> /tmp/e2-portes.log
+3497202       32:55 bash tools/toutes-les-portes.sh
+3725250       09:01 bash tools/porte-greffe.sh
+3732310       00:12 bash tools/porte-greffe.sh
+3732464       00:00 bash -c tail -6 /tmp/e2-portes.log; echo ---; wc -l /tmp/e2-portes.log; ps -o pid
+… [68 caractères tronqués]
+  ```
+
+- **job_kill** `{"job_id": "bash-71", "reason": "Suite complète bloquée sur porte-greffe (hors périmètre, autre passe concurrente) ; porte-produit et contrôles ciblés verts."}`
+
+  ```
+requested cancellation of job bash-71
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,cmd -C bash | grep -E \"3497177|3497202|tools/toutes-les-portes.sh\" | head; echo \"---\"; tail -3 /tmp/e2-portes.log", "description": "Confirm background gates stopped"}`
+
+  ```
+3732588       00:00 bash -c ps -o pid,etime,cmd -C bash | grep -E "3497177|3497202|tools/toutes-les-portes.sh" | head; echo "---"; tail -3 /tmp/e2-portes.log
+---
+  porte-flux             ✅                          27 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         215 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD~1:docs/produit/README.md | grep -n \"En \\`--jsonl\\`\" -A2; echo ---; git show HEAD~1:reports/rapport-tagger-erreurs.md | grep -n \"\\-\\-jsonl\" | head; echo ---; git show HEAD~1:reports/rapport-tagger-erreurs.json |  … [73 caractères tronqués]`
+
+  ```
+436:**En `--jsonl`**, une clé refusée peut laisser sur `stdout` les lignes déjà écrites avant le
+437-code **4** (le premier texte sans appel neuronal ne déclenche pas le 401) ; le message et le
+438-code restent les mêmes. Le tableau ci-dessus décrit `analyser` sur **un** texte.
+---
+136:- **`--jsonl`** : le code 4 peut arriver après des lignes déjà écrites (le premier texte sans
+---
+153:  "en --jsonl, le code 4 peut arriver après des lignes déjà écrites (le premier texte sans appel neuronal ne déclenche pas 401) ; les mesures portent sur analyser avec un seul texte"
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git ls-tree HEAD journal/2026-11-15/memoire.md; echo \"MEMOIRE-TREE-CODE=$?\"; git show --stat --oneline HEAD | sed -n '1,20p'; echo ---; git show --stat --oneline HEAD~1 | sed -n '1,12p'", "description": "Verify final tree and commi … [4 caractères tronqués]`
+
+  ```
+MEMOIRE-TREE-CODE=0
+7ee92dd9 JOURNAL — 2026-11-15 : E2, LES CAS D'ERREUR DU TAGGER (REFUS D'AUTHENTIFICATION → CODE 4, RÉSEAU ET RÉPONSE NON CONFORME → REPLI 0 ; 18/18)
+ journal/2026-11-15/README.md                       |  7 +-
+ journal/2026-11-15/memoire.md                      | 24 ------
+ journal/2026-11-15/mesures.md                      |  4 +-
+ journal/README.md                                  |  4 +-
+ journal/THEMES.md                                  |  1 -
+ journal/sessions/MANIFEST.md                       |  4 +-
+ .../digest.md                                      | 91 ++++++++++++++++++++++
+ .../rapport.md                                     | 16 ++--
+ 8 files changed, 110 insertions(+), 41 deletions(-)
+---
+840e613e TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES
+ docs/pilotage/en-cours.md                          |    6 +-
+ docs/pilotage/roadmap.md                           |    4 +-
+ docs/produit/README.md                             |   31 +-
+ journal/2026-11-15/README.md                       |    9 +-
+ journal/2026-11-15/distribue.md              
+… [386 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:journal/2026-11-15/README.md | sed -n '1,20p'; echo ---; git show HEAD:journal/2026-11-15/README.md | grep -n \"840e613e\\|07:04\"", "description": "Check final journal index"}`
+
+  ```
+# 2026-11-15
+
+> **Généré** par `tools/journal_auto.py` — index de la journée, dans le dossier
+> [`journal/2026-11-15/`](README.md). Le récit écrit à la main est conservé plus bas, dans
+> le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
+> [l'index des sessions](../README.md#sessions).
+
+**20 commits** · **1 session(s)** · **5 thème(s)**
+
+## Thèmes du jour
+
+| thème | commits | fichier |
+|---|---|---|
+| distribue | 4 | [distribue.md](distribue.md) |
+| docs | 4 | [docs.md](docs.md) |
+| mesures | 10 | [mesures.md](mesures.md) |
+| outils | 1 | [outils.md](outils.md) |
+| portes | 1 | [portes.md](portes.md) |
+
+## Sessions DSH
+---
+49:| 07:04 | `840e613e` | TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat HEAD~2..HEAD; echo ---; git status --short | wc -l; git status --short", "description": "Final diff and status"}`
+
+  ```
+docs/pilotage/en-cours.md                          |    6 +-
+ docs/pilotage/roadmap.md                           |    4 +-
+ docs/produit/README.md                             |   31 +-
+ journal/2026-11-15/README.md                       |   10 +-
+ journal/2026-11-15/distribue.md                    |    6 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/mesures.md                      |   17 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    7 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   34 +
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 2894 ++++++++++++++++++++
+ .../rapport.md                                     |  165 ++
+ .../digest.md                                      |  165 ++
+ .../rapport.md                                     |   35 +-
+ reports/INDEX.md                                   |    3 +-
+ reports/rapport-tagger-erreurs.json                |  155 ++
+ repor
+… [979 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -4; echo \"PRODUIT-CODE=${PIPESTATUS[0]}\"", "description": "Post-commit product gate", "timeoutMs": 300000}`
+
+  ```
+✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+PRODUIT-CODE=0
+  ```
+
+- **todo_write** `{"todos": [{"content": "Implement explicit 401/403 key-refusal path in drave.py (code 4, clear message)", "status": "completed"}, {"content": "Add tests for missing key, invalid key, network cut, model refusal in test_tagger_api.py", "status": "completed"}, {"content": "Document real behavior in doc … [290 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 5 completed.
+  ```
+
+### 🤖 Assistant
+
+## E2 — les cas d'erreur de `--tagger`
+
+### Comportement livré (mesuré, transport factice)
+
+| cas | code | `stdout` | comportement |
+|---|---:|---|---|
+| **clé absente** | **4** | vide | message clair, rien n'est analysé |
+| **clé invalide** (HTTP 401/403) | **4** | vide | **pas de repli** ; message clair nommant les trois sources de la clé |
+| **réseau coupé** (3 essais du client) | **0** | annotation heuristique | **repli heuristique**, `refus` non vide, POS `source=heuristique` |
+| **refus du modèle** (texte non JSON, JSON incomplet) | **0** | annotation heuristique | même repli, `refus` nomme le défaut |
+
+**Le changement principal** : avant, une clé 401/403 était avalée par `NeuronalLLMPOS` et le CLI rendait **0** avec un repli heuristique muet. Désormais `_transport_tagger` retient le code dans `stats["cle_refusee"]`, `_CascadeTagger` lève `CleTaggerRefusee`, et `main` rend **4**.
+
+### Fichiers
+
+- [`tools/drave.py`](tools/drave.py) — `CleTaggerRefusee`, drapeau `cle_refusee`, code 4.
+- [`tools/tests/test_tagger_api.py`](tools/tests/test_tagger_api.py) — **18/18 tests**, dont les 4 cas d'erreur + JSON incomplet.
+- [`docs/produit/README.md`](docs/produit/README.md) § 3.7 — tableau des cas, règle des deux familles, nuance `--jsonl`.
+- [`reports/rapport-tagger-erreurs.md`](reports/rapport-tagger-erreurs.md) + [`reports/rapport-tagger-erreurs.json`](reports/rapport-tagger-erreurs.json) — dispositif, mesures, contrôles.
+- [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md), [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md), [`journal/2026-11-15/mesures.md`](journal/2026-11-15/mesures.md).
+
+### Contrôles
+
+- **Transport valide** → code 0, POS neuronaux : les cas d'erreur ne sont pas un « tout échoue ».
+- **Mutation** : retirer le contrôle 401/403 fait échouer `test_cle_invalide_code_4` (`0 != 4`).
+- **Fuite de clé** : la sentinelle `cle-de-test-sentinelle` n'apparaît ni dans `stdout` ni dans `stderr`.
+
+### Portes
+
+- `python3 tools/tests/test_tagger_api.py` → **OK** (18 tests).
+- `bash tools/porte-produit.sh` → **verte** (183/183 autotests).
+- `revue_documentation`, `porte-tableaux`, `taille_documents`, `verifie_journal`, `verifie_en_cours` → **verts**.
+- La suite complète `toutes-les-portes.sh` a été arrêtée sur `porte-greffe` (hors périmètre, autre passe concurrente) après **29 portes toutes vertes** ; les portes liées au changement sont vertes.
+
+### Commits
+
+- `840e613e` — **TAGGER — LES CAS D'ERREUR MESURÉS : REFUS D'AUTHENTIFICATION → CODE 4 (AVANT 0), RÉSEAU ET RÉPONSE NON CONFORME → REPLI HEURISTIQUE CODE 0 ; 4/4 CAS, 18/18 CONTRÔLES**
+- `7ee92dd9` — journal du jour (E2).
+
