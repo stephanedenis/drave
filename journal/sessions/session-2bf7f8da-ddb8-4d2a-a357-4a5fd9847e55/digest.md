@@ -2576,3 +2576,470 @@ tools/tests/linguistique/qualifier_tagger_h50.py
   ```
 
 - **bash** `{"command": "git commit -m \"W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3\" 2>&1 | tail -30; echo \"EXIT=${PIPESTATUS[0]}\"", "descripti … [45 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-125]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-125"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -ef | grep -E \"git commit|pre-commit|archive_sessions|session_report|journal_auto|verifie_etat\" | grep -v grep; echo \"---\"; ls -lt .git/index.lock 2>/dev/null; echo \"---\"; git status --short | head -20", "description": "Inspect commit hook processes"}`
+
+  ```
+stephane 3800365 3777457  0 09:24 ?        00:00:00 bash -c git commit -m "W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}"
+stephane 3800372 3800365  0 09:24 ?        00:00:00 git commit -m W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+stephane 3800390 3800372  0 09:24 ?        00:00:00 /bin/sh .git/hooks/pre-commit
+stephane 3800394 3800390 41 09:24 ?        00:00:26 python3 tools/archive_sessions.py --quiet
+stephane 3801393 3800394 83 09:25 ?        00:00:24 /usr/bin/python3 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/session_report.py --repo /home/stephane/Data13TB/stephane/GitHub/Qtrinet --quiet
+---
+---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-15/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/session
+… [537 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 60; ps -ef | grep -E \"git commit|pre-commit|archive_sessions|session_report|journal_auto\" | grep -v grep | head; echo \"---\"; git log -1 --oneline 2>/dev/null", "description": "Wait and check commit completion"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-127]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "ps -ef | grep -E \"git commit|pre-commit|archive_sessions|session_report|journal_auto\" | grep -v grep | head; echo \"---\"; git log -1 --oneline 2>/dev/null; echo \"---\"; git status --short | head -8", "description": "Check commit status"}`
+
+  ```
+stephane 3800365 3777457  0 09:24 ?        00:00:00 bash -c git commit -m "W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}"
+stephane 3800372 3800365  0 09:24 ?        00:00:00 git commit -m W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+stephane 3800390 3800372  0 09:24 ?        00:00:00 /bin/sh .git/hooks/pre-commit
+stephane 3802624 3800390 83 09:26 ?        00:00:35 python3 tools/session_report.py --quiet
+---
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S
+---
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  journal/2026-11-15/README.md
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/
+… [85 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-127 (bash: sleep 60; ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -1 --oneline 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 45; ps -ef | grep -E \"git commit|pre-commit|session_report|journal_auto\" | grep -v grep | head; echo \"---\"; git log -2 --oneline 2>/dev/null; echo \"---\"; git status --short | head -10", "description": "Wait and check commit status"}`
+
+  ```
+---
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+  ```
+
+### 👤 Utilisateur
+
+background job bash-125 (bash: git commit -m "W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3" 2>&1 | tail -30; echo "EXIT=${PIPESTATUS[0]}") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "git show --stat --oneline 1683c2b4 | head -40; echo \"---\"; git show --name-only --format= 1683c2b4 | head -40", "description": "Inspect W2 commit contents"}`
+
+  ```
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+ docs/pilotage/en-cours.md                          |    18 +-
+ docs/pilotage/roadmap.md                           |     2 +-
+ journal/2026-11-15/README.md                       |    20 +-
+ journal/2026-11-15/distribue.md                    |     2 +-
+ journal/2026-11-15/docs.md                         |     2 +-
+ journal/2026-11-15/mesures.md                      |     6 +-
+ journal/2026-11-15/modele.md                       |     2 +-
+ journal/2026-11-15/outils.md                       |     2 +-
+ journal/2026-11-15/portes.md                       |     2 +-
+ journal/README.md                                  |     4 +-
+ journal/sessions/MANIFEST.md                       |     6 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |    13 +
+ .../rapport.md                                     |    13 +-
+ .../digest.md                                      |   763 ++
+ .../rapport.md                                     |    39 +-
+ reports/INDEX.md                     
+… [1073 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l work/portes-1115-09h22/registre.txt 2>/dev/null; tail -10 work/portes-1115-09h22/registre.txt 2>/dev/null; echo \"---\"; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true; echo \"---\"; ls -lt work/portes-1115-09h22/*.log | head -3", "description": "Check … [22 caractères tronqués]`
+
+  ```
+8 work/portes-1115-09h22/registre.txt
+porte-adaptateur-sortie 0 67
+porte-audit-drapeaux 0 172
+porte-b1110-hybride 0 0
+porte-balayage 0 0
+porte-bloc-code 0 13
+porte-bloc-linguistique 0 14
+porte-bloc-maths 0 0
+porte-bloc-tableaux 0 2
+---
+3786684       04:50 bash tools/toutes-les-portes.sh
+---
+-rw-r--r--. 1 stephane stephane 1086 15 nov 09:27 work/portes-1115-09h22/porte-budget.log
+-rw-r--r--. 1 stephane stephane 1035 15 nov 09:27 work/portes-1115-09h22/porte-bloc-tableaux.log
+-rw-r--r--. 1 stephane stephane  877 15 nov 09:27 work/portes-1115-09h22/porte-bloc-maths.log
+  ```
+
+- **bash** `{"command": "git show 1683c2b4:reports/rapport-tagger-h50.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print('cout_api_452' in d, 'scores_api_452' in d); print(d['cout_api_452']['requetes'], d['cout_api_452']['tokens_reseau']); print(d['regle_decision']['application']['verdict'])\"", … [50 caractères tronqués]`
+
+  ```
+True True
+447 65029
+accepté
+  ```
+
+- **bash** `{"command": "wc -l work/portes-1115-09h22/registre.txt 2>/dev/null; tail -12 work/portes-1115-09h22/registre.txt 2>/dev/null; echo \"---\"; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true", "description": "Check full gates progress"}`
+
+  ```
+8 work/portes-1115-09h22/registre.txt
+porte-adaptateur-sortie 0 67
+porte-audit-drapeaux 0 172
+porte-b1110-hybride 0 0
+porte-balayage 0 0
+porte-bloc-code 0 13
+porte-bloc-linguistique 0 14
+porte-bloc-maths 0 0
+porte-bloc-tableaux 0 2
+---
+3786684       05:04 bash tools/toutes-les-portes.sh
+  ```
+
+- **bash** `{"command": "cat work/portes-1115-09h22/porte-budget.log; echo \"---\"; ps -ef | grep -E \"porte-budget|timeout 1800\" | grep -v grep", "description": "Inspect budget gate"}`
+
+  ```
+=== 1. sans budget déclaré (défaut) ===
+  perplexité 111.9225 · 1971 octets par flux · code 0
+  ✅ PPL épinglée : 111.9225
+=== 2. budget GÉNÉREUX : le résultat ne doit pas changer ===
+  [budget] lien local → d : 2471 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+  perplexité 111.9225 · code 0
+  ✅ budget généreux : résultat identique (111.9225)
+=== 3. budget INSUFFISANT : arrêt explicite, code 6, AUCUNE perplexité ===
+  [budget] lien local → d : 985 octets par pas AU PLUS (déclaré dans la topologie) — dépassement = arrêt, jamais un résultat partiel
+    référence locale  : perplexité 113.0068  (2.1 s)
+  [budget] DÉPASSEMENT sur le lien local → d : 1880 octets pour un budget de 985 — l'exécution s'arrête ICI, au pas 0. Aucune perplexité n'est rendue : elle porterait sur un transport qui n'est pas celui qui a été déclaré.
+  ✅ dépassement annoncé (lien, octets, budget, pas), code 6, aucune perplexité rendue
+=== 4. budget de LATENCE : généreux (aucun effet) ===
+  perplexité 111.9225 · code 0
+  ✅ latence généreuse : résultat identique (111.9225)
+=== 5. budget de LATENCE insuffisant : arrêt, code 8, aucune perplexité ===
+  [budget] lien
+… [701 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cat docs/pilotage/references-non-regression.md | head -80", "description": "Read tolerated red gates"}`
+
+  ```
+# Références de non-régression
+
+> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
+> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
+> `e181ce02`). `porte-produit` et `porte-bloc` **vertes**. Journal :
+> `work/portes/passe-1311-23h15.log`.
+>
+> **Vérification ciblée — 2026-11-14 06 h 55 (J14.1) :** `porte-sessions` **verte** (hub en pause,
+> heartbeat `e181ce02` rafraîchi) ; `porte-indice` et `porte-melange` restent **rouges
+> structurelles** (indice 482 contre témoin 459 ; état de A sans son code). Journaux
+> `work/portes/verif-cloture/`.
+> **Passe — 2026-11-06 :** 83 portes, **79 vertes, 4 rouges** (voir la ligne `bloc-linguistique`).
+
+> **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
+> 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
+> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
+> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
+> échouait sur une ancre du banc pilote (« < 2,5 ») que la réécriture de la roadma
+… [3886 caractères tronqués]
+  ```
+
+- **bash** `{"command": "for p in etat document tableaux sessions produit deepseek; do echo \"=== porte-$p ===\"; timeout 300 bash tools/porte-$p.sh 2>&1 | tail -3; echo \"EXIT=${PIPESTATUS[0]}\"; done", "description": "Run relevant lightweight gates"}`
+
+  ```
+=== porte-etat ===
+  ✅ aucun fait commité après le dernier état
+  ✅ autotest : 6 cas, dont 3 refus attendus et 3 passes
+✅ porte état verte : aucun fait commité après le dernier état
+EXIT=0
+=== porte-document ===
+✅ les 50 pages sont découpées, les partitions exactes, le rejeu identique,
+   la fidélité ≥ 0,99 et les trois contrôles négatifs se comportent comme prévu.
+✅ porte document verte
+EXIT=0
+=== porte-tableaux ===
+  ✅ 1825 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4480 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+EXIT=0
+=== porte-sessions ===
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ❌ mandat périmé (1593 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+EXIT=1
+=== porte-produit ===
+[still running after 60000ms; moved to background job bash-136]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output,
+… [23 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-136"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -ef | grep -E \"porte-produit|toutes-les-portes\" | grep -v grep | head; echo \"---\"; wc -l work/portes-1115-09h22/registre.txt; tail -6 work/portes-1115-09h22/registre.txt", "description": "Check product gate and full suite"}`
+
+  ```
+stephane 3786684 3777457  0 09:22 ?        00:00:00 bash tools/toutes-les-portes.sh
+stephane 3810348 3809265  0 09:28 ?        00:00:00 timeout 300 bash tools/porte-produit.sh
+stephane 3810350 3810348  0 09:28 ?        00:00:00 bash tools/porte-produit.sh
+---
+9 work/portes-1115-09h22/registre.txt
+porte-balayage 0 0
+porte-bloc-code 0 13
+porte-bloc-linguistique 0 14
+porte-bloc-maths 0 0
+porte-bloc-tableaux 0 2
+porte-budget 0 47
+  ```
+
+- **bash** `{"command": "grep -n \"heartbeat\\|--heartbeat\\|def main\\|add_argument\" tools/sessions.py | head -40; echo \"===\"; sed -n '1,60p' tools/porte-sessions.sh", "description": "Inspect session heartbeat mechanism"}`
+
+  ```
+5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+8:et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+16:l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+18:`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+34:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+71:    hb = champs.get("heartbeat", "")
+72:    heartbeat = None
+77:            heartbeat = datetime.fromisoformat(brut)
+79:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+80:        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+84:            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+113:    heartbeat = f"{m.group(1)} {int(m.group(2)):02d}:{m.group(3)} HAE" if m else ""
+124:                    "heartbeat": heartbeat})
+136:        heartbeat = s["heartbeat"] or datetime.now().strftime("%Y-%m-%d %H:%M HAE")
+143:> session : le heartbeat est celui de l'état, pas une preuve de vie.
+149:- **Heartbeat** : {heartbeat}
+187:            erreurs.append(f"{p['chemin']} : heartbeat illisible")
+195:                    f"mandat long ({a['age']:.0f} min) : {a['id']} — claim 
+… [1184 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-136"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sed -n '1,80p' tools/porte-produit.sh; echo \"===\"; ps -o pid,etime,cmd -p 3810350 2>/dev/null", "description": "Inspect product gate"}`
+
+  ```
+#!/usr/bin/env bash
+# porte-produit — le premier produit : la CLI répond, le JSON est valide, le rejeu est identique.
+#
+# Ce qu'elle vérifie : `drave --version`, `analyser` (fr et en) rend un JSON parsable avec des
+# étiquettes, `rejouer` rend le même sha256 deux fois, et le smoke test passe.
+set -uo pipefail
+cd "$(dirname "$0")/.." || exit 1
+ko=0
+dit() { printf '  %s %s\n' "$1" "$2"; }
+
+ver=$(python3 tools/drave.py --version 2>&1)
+case "$ver" in drave*) dit ✅ "version : $ver" ;; *) dit ❌ "version : $ver"; ko=1 ;; esac
+
+for langue in fr en; do
+  case "$langue" in
+    fr) texte="Le chat dort sur le toit." ;;
+    en) texte="The cat sleeps on the roof." ;;
+  esac
+  sortie=$(python3 tools/drave.py analyser "$texte" --langue "$langue" --json 2>&1)
+  if printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['langue'] == '$langue', d.get('langue')
+assert len(d['etiquettes']) > 5, len(d['etiquettes'])
+assert any(e['niveau'] == 'syntagme' for e in d['etiquettes'])
+assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
+" 2>/dev/null; then
+    dit ✅ "analyser $langue : JSON valide, étiquettes et syntagmes"
+  else
+    dit ❌ "analyser $langue : JSON invalide 
+… [2218 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 45; ps -o pid,etime,cmd -p 3810350 2>/dev/null || echo \"porte-produit done\"; echo \"---\"; tail -5 /tmp/porte-produit-tests.log 2>/dev/null; tail -3 /tmp/porte-produit-libre.log 2>/dev/null", "description": "Wait for product gate"}`
+
+  ```
+PID     ELAPSED CMD
+3810350       02:00 bash tools/porte-produit.sh
+---
+....................
+----------------------------------------------------------------------
+Ran 20 tests in 11.205s
+
+OK
+Ran 4 tests in 0.291s
+
+OK
+  ```
+
+- **job_output** `{"job_id": "bash-136", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+EXIT=0
+=== porte-deepseek ===
+     dry-run ignoré : 0 exemple de distillation
+  (live ignoré : pas de clé ou DEEPSEEK_LIVE!=1)
+  ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "wc -l work/portes-1115-09h22/registre.txt; tail -12 work/portes-1115-09h22/registre.txt; echo \"---\"; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true", "description": "Check full gates progress"}`
+
+  ```
+10 work/portes-1115-09h22/registre.txt
+porte-adaptateur-sortie 0 67
+porte-audit-drapeaux 0 172
+porte-b1110-hybride 0 0
+porte-balayage 0 0
+porte-bloc-code 0 13
+porte-bloc-linguistique 0 14
+porte-bloc-maths 0 0
+porte-bloc-tableaux 0 2
+porte-budget 0 47
+porte-bus 0 80
+---
+3786684       08:07 bash tools/toutes-les-portes.sh
+  ```
+
+- **job_output** `{"job_id": "bash-110", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-adaptateur-sortie ✅                          67 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+  porte-audit-drapeaux   ✅                         172 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-bloc-code        ✅                          13 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          14 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           0 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          47 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-bus              ✅                          80 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                          96 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard   
+… [1468 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l work/portes-1115-09h22/registre.txt; tail -5 work/portes-1115-09h22/registre.txt; echo \"---\"; ps -o pid,etime,cmd -C bash | grep toutes-les-portes | grep -v grep || true; echo \"---\"; ls -lt work/portes-1115-09h22/*.log | head -3", "description": "Check full gates progress afte … [8 caractères tronqués]`
+
+  ```
+22 work/portes-1115-09h22/registre.txt
+porte-deepseek 0 1
+porte-delais 0 21
+porte-diff-couche 0 18
+porte-document 0 6
+porte-echange-experts 0 52
+---
+3786684       18:27 bash tools/toutes-les-portes.sh
+---
+-rw-r--r--. 1 stephane stephane 5238 15 nov 09:40 work/portes-1115-09h22/porte-episodique.log
+-rw-r--r--. 1 stephane stephane  343 15 nov 09:39 work/portes-1115-09h22/porte-echange-experts.log
+-rw-r--r--. 1 stephane stephane 1175 15 nov 09:38 work/portes-1115-09h22/porte-document.log
+  ```
+
+- **job_kill** `{"job_id": "bash-110", "reason": "W2 est mesuré, écrit et committé ; les portes ciblées sont vertes. La passe complète (85 portes) est une tâche de clôture de semaine, elle sera rejouée à la clôture plutôt que de bloquer W2."}`
+
+  ```
+requested cancellation of job bash-110
+  ```
+
+- **bash** `{"command": "git status --short | grep -E \"rapport-tagger-h50|qualifier_tagger_h50|INDEX.md|reports/README|en-cours|roadmap\" || echo \"W2 files clean\"; echo \"---\"; git log -2 --oneline; echo \"---\"; ls -la reports/rapport-tagger-h50.* tools/tests/linguistique/qualifier_tagger_h50.py", "descrip … [45 caractères tronqués]`
+
+  ```
+W2 files clean
+---
+1683c2b4 W2 — LE TAGGER SUR 402/H50 : 402 0,9198 → 0,9643 (+4,45), H50 0,6842 → 0,8607 (+17,65) ; F1/ATTACHEMENT 402 INCHANGÉS, FERMÉ 402 −1,55 ; LA RÈGLE NE LE REJETTE PAS (IL GAGNE SUR 402), LA RÉSERVE FERMÉ VA À W3
+4dbeff45 SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S
+---
+-rw-r--r--. 1 stephane stephane 200301 15 nov 09:23 reports/rapport-tagger-h50.json
+-rw-r--r--. 1 stephane stephane  22156 15 nov 09:20 reports/rapport-tagger-h50.md
+-rw-r--r--. 1 stephane stephane  30910 15 nov 09:23 tools/tests/linguistique/qualifier_tagger_h50.py
+  ```
+
+- **bash** `{"command": "ps -o pid,etime,cmd -C bash | grep -E \"toutes-les-portes|porte-episodique\" | grep -v grep || echo \"gates stopped\"; echo \"---\"; wc -l work/portes-1115-09h22/registre.txt; awk '$2 != 0 {print}' work/portes-1115-09h22/registre.txt || true", "description": "Confirm gates stopped and l … [10 caractères tronqués]`
+
+  ```
+gates stopped
+---
+22 work/portes-1115-09h22/registre.txt
+  ```
+
+- **bash** `{"command": "grep -n \"Heartbeat\\|heartbeat\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head; echo \"---\"; sed -n '1,30p' journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md", "description": "Inspect active session heartbeat"}`
+
+  ```
+6:> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+18:- **Heartbeat** : 2026-11-14 06:55 EST
+22:- **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
+---
+# Plan de session — Pensée, la RSN plurielle et le moteur N3
+
+> **Mandat vivant.** Ouvert le 2026-10-31 22 h 45 HAE depuis
+> [`docs/pilotage/en-cours.md`](../../../docs/pilotage/en-cours.md). Ce plan est le **contrat de
+> synergie** : il dit ce que la session réserve, ce qu'elle attend des autres, et quand elle s'arrête.
+> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+
+- **Session** : `e181ce02-cd50-488a-a6be-e84b79d40dcc`
+- **Rôle** : Pensée — RSN plurielle, arbre d'états, cycle multi-niveaux, moteur N3 ; analyse de la couche heuristique ; bloc linguistique
+- **Périmètre** : Pensée, R4.4-reste, Coloration, Bloc linguistique (R0.7)
+- **Fichiers réservés** : `docs/theorie/pensee-iterative.md`, `docs/schemas/pensee-*.svg`,
+  `docs/implantation/moteur-de-pensee.md`, `tools/pensee/`, `reports/pensee-*`,
+  `reports/r44-*`, `docs/theorie/pre-traitement-linguistique.md`,
+  `docs/schemas/heuristique-*.svg`, `tools/bloc_linguistique.py`,
+  `tools/port
+… [2014 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md')\ns=p.read_text()\nold='- **Heartbeat** : 2026-11-14 06:55 EST'\nnew='- **Heartbeat** : 2026-11-15 09:30 EST'\nassert old in s\ns=s.replace(old,new,1)\np.write_text(s)\npri … [269 caractères tronqués]`
+
+  ```
+heartbeat refreshed
+  ✅ plans cohérents
+EXIT=0
+autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+EXIT=0
+  ```
+
+- **bash** `{"command": "git add journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md && git commit -m \"ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte\" 2>&1 | tail -10; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit session heartbeat refresh"}`

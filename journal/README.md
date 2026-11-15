@@ -213,7 +213,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 352.7 h | 199 | 3505 | 25 | 473 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 353.0 h | 199 | 3507 | 25 | 473 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -239,7 +239,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
 | `session-` | Extension du gold réel 200+ | 2026-11-15 02:34 | 0.2 h | 1 | 148 | 2 | 0 | [rapport](sessions/session-2064d0cb-d031-4316-9674-54d67e6b3ab6/rapport.md) |
-| `session-` | Mesure du tagger sur H50 et delta | 2026-11-15 09:06 | 0.3 h | 1 | 139 | 0 | 5 | [rapport](sessions/session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55/rapport.md) |
+| `session-` | Mesure du tagger sur H50 et delta | 2026-11-15 09:06 | 0.6 h | 1 | 165 | 0 | 9 | [rapport](sessions/session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55/rapport.md) |
 | `session-` | Preuves CIC : vérification et rapport | 2026-11-15 03:55 | 0.2 h | 1 | 129 | 8 | 1 | [rapport](sessions/session-3241a992-ffa6-4c12-ab1c-a8e175f880b7/rapport.md) |
 | `session-` | FAQ ajoutée au sommaire et liens vérifiés | 2026-11-15 06:26 | 0.1 h | 1 | 108 | 6 | 1 | [rapport](sessions/session-3a6041f9-48b5-4ef0-924c-5edc354c341c/rapport.md) |
 | `session-` | Rédiger la FAQ produit D3 | 2026-11-15 05:53 | 0.3 h | 1 | 173 | 6 | 1 | [rapport](sessions/session-3ee08872-fd34-4732-af49-0639cb5d82a9/rapport.md) |

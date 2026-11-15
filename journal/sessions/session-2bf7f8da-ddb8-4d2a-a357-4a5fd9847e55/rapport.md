@@ -7,14 +7,14 @@
 | Identifiant | `session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 09:06 |
-| Durée | 0.3 h |
+| Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 120 |
-| Appels d'outils | 139 |
+| Messages | 147 |
+| Appels d'outils | 165 |
 | Fichiers touchés | 0 |
-| Commandes | 129 |
+| Commandes | 150 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche W2 (J2 matin) : le tagger sur le split — mesure `evaluer --tagger` sur les 402 (l'entraînement) et sur les 50 H50  … [365 caractères tronqués]
 
-*139 appels d'outils.* Actions notables :
+*165 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git status
 - bash — List reports and data directories
@@ -41,7 +41,7 @@
 - bash — Read evaluer_gold.py
 - bash — Read tagger 612 bench
 - bash — Read DeepSeek client and cache
-- … et 112 autres
+- … et 132 autres
 
 ## 3. Travail accompli
 
@@ -92,7 +92,7 @@
 - **T1** Fix key loading and rerun smoke test
 - **T1** Fix per-pass cache dir and rerun smoke
 - **T1** Inspect smoke JSON structure
-- … et 89 autres
+- … et 110 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -156,6 +156,15 @@
 - **T1** `R4.1–R4.4 mesurées** (R4.4 : 4/5 familles ≥ 90 % de parité) ;`
 - **T1** `[still running after 60000ms; moved to background job bash-125]`
 - **T1** `[still running after 60000ms; moved to background job bash-127]`
+- **T1** `perplexité 111.9225 · 1971 octets par flux · code 0`
+- **T1** `perplexité 111.9225 · code 0`
+- **T1** `référence locale  : perplexité 113.0068  (2.1 s)`
+- **T1** `[budget] lien local → d : 1 ms par pas AU PLUS (allé-retour mesuré) — dépassement = arrêt`
+- **T1** `[budget] LATENCE DÉPASSÉE sur le lien local → d : 17.2 ms pour un budget de 1 ms, au pas 0. L'exécution s'arrête ICI — une perplexité calculée sur un lien plus lent que celui qui a été déclaré ne sera`
+- **T1** `[still running after 60000ms; moved to background job bash-136]`
+- **T1** `- **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est`
+- **T1** `[still running after 60000ms; moved to background job bash-147]`
+- **T1** `[still running after 60000ms; moved to background job bash-148]`
 
 ## 5. Erreurs rencontrées
 
@@ -170,4 +179,8 @@
 - sleep 60; ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -1 --oneline 2>/dev/n
 - ps -ef | grep -E "git commit|pre-commit|archive_sessions|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -1 --oneline 2>/dev/null; echo 
 - sleep 45; ps -ef | grep -E "git commit|pre-commit|session_report|journal_auto" | grep -v grep | head; echo "---"; git log -2 --oneline 2>/dev/null; echo "---"; 
+- ÉTAT — W2 : heartbeat e181ce02 rafraîchi (2026-11-15 09:30), porte-sessions verte" 2>&1 | tail -10; echo "EXIT=${PIPESTATUS[0]}"
+- sleep 60; ps -ef | grep -E "git commit|pre-commit|session_report|archive_sessions" | grep -v grep | head; echo "---"; git log -3 --oneline
+- ps -ef | grep -E "git commit|pre-commit|session_report|archive_sessions" | grep -v grep | head; echo "---"; git log -3 --oneline; echo "---"; git status --short
+- sleep 40; ps -ef | grep -E "git commit|pre-commit|session_report" | grep -v grep | head; echo "---"; git log -3 --oneline
 
