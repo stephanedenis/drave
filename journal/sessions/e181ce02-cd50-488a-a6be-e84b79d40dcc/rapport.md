@@ -7,15 +7,15 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 345.0 h |
+| Durée | 345.3 h |
 | Tours | 198 |
-| Messages | 3802 |
-| Appels d'outils | 3389 |
+| Messages | 3820 |
+| Appels d'outils | 3402 |
 | Fichiers touchés | 25 |
-| Commandes | 2823 |
+| Commandes | 2835 |
 | Sous-agents | 43 |
-| Commits | 456 |
-| Compactages de contexte | 8 |
+| Commits | 462 |
+| Compactages de contexte | 9 |
 
 ## Objectifs déclarés
 
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*30 appels d'outils.* Actions notables :
+*43 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 16 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2783 autres
+- … et 2795 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11375,4 +11375,10 @@ Je commence.
 - 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5)" -- tools/dra
 - 1A — LES DEUX DÉFAUTS DU TAGGER CORRIGÉS : 1 APPEL PAR PHRASE (LE TAGGER DE SYNTAGMES RETIRÉ) ET PONCT RESTITUÉ (25/25) ; POS 612 → 95,75 % (+9,5)" -- tools/dra
 - 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)" -- reports/rapp
+- ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; bre
+- ÉTAT — T0 TENU (DEUX FORMULATIONS RACCOURCIES)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU (DEUX"; then echo "
+- ÉTAT — T0 TENU" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU"; then echo "COMMIT OK $i"; break; fi   sleep 10 do
+- ÉTAT — T0 TENU (LA LIGNE FAIT RACCOURCIE)" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 TENU (LA LIGNE"; then echo "C
+- ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md; echo "EXIT=$?"; git log -1 --format='%h %s' | cut -c1-80
+- ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE" -- docs/pilotage/en-cours.md 2>&1 | tail -3; git log -1 --format='%h %s' | cut -c1-70
 

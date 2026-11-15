@@ -63471,3 +63471,402 @@ coût {'modele': 'deepseek-chat', 'appels': 449, 'requetes': 0, 'cache': 449, 't
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-tagger-option.md'); t=p.read_text()\nt=t.replace(\"\"\"**La mesure sur le gold 612** (avec la clé, cache partiel) : POS **0,9575** contre 0,8625 pour\nl'heuristique —  … [2319 caractères tronqués]`
+
+  ```
+fiche + JSON
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ create mode 100644 journal/2026-11-15/mesures.md
+COMMIT OK 1
+6560a0a5 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)
+   2d7a7f2b..6560a0a5  s/v7 -> s/v7
+   2d7a7f2b..6560a0a5  master -> master
+dim 15 nov 2026 01:44:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" (tagger 95,75 %)\", \"\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 | tail -1\nfor i in 1 2 3; do\n  gi … [330 caractères tronqués]`
+
+  ```
+· T0 : 4006 mots (AGENTS + en-cours + une tâche) > budget 4 000
+no changes added to commit (use "git add" and/or "git commit -a")
+[still running after 240000ms; moved to background job bash-5058]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Fait\\*\\* : B13\" docs/pilotage/en-cours.md | cut -c1-260", "description": "Voir la ligne Fait"}`
+
+  ```
+64:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **attachement 238/238 labels (238/239 cibles, 0,9958)**, **F1 0,7902**, **1 span (`g017`, inatteignable)** ; **`s065` réglé** ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejetée** ; **restit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**attachement 238/238 labels (238/239 cibles, 0,9958)**\", \"**attachement 238/239 (0,9958)**\")\nt=t.replace(\"**1 span (` … [682 caractères tronqués]`
+
+  ```
+· T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+Another git process seems to be running in this repository, or the lock file may be stale
+Another git process seems to be running in this repository, or the lock file may be stale
+Another git process seems to be running in this repository, or the lock file may be stale
+6560a0a5 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)
+Everything up-to-date
+Everything up-to-date
+dim 15 nov 2026 01:49:38 EST
+[stderr]
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+fatal: Unable to create '/home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may 
+… [8 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la .git/index.lock 2>/dev/null; ps aux | grep -c \"[g]it \"; date", "description": "Voir le lock git"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 429677 15 nov 01:47 .git/index.lock
+4
+dim 15 nov 2026 01:49:45 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60; ls .git/index.lock 2>/dev/null && echo \"lock encore là\" || echo \"lock libre\"; python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**J6.1 rejetée**\", \"**J6.1 re … [460 caractères tronqués]`
+
+  ```
+.git/index.lock
+lock encore là
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+Another git process seems to be running in this repository, or the lock file may be stale
+Another git process seems to be running in this repository, or the lock file may be stale
+Another git process seems to be running in this repository, or the lock file may be stale
+6560a0a5 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)
+dim 15 nov 2026 01:51:23 EST
+  ```
+
+- **bash** `{"command": "ps aux | grep \"[g]it \" | awk '{print $2, $9, $11, $12, $13}' | head -6; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock; date", "description": "Voir les processus git"}`
+
+  ```
+2898928 01:45 bash -c cd
+2903891 01:49 timeout 240 git
+2903893 01:49 git commit -m
+-rw-r--r--. 1 stephane stephane 429677 15 nov 01:49 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock
+dim 15 nov 2026 01:51:29 EST
+  ```
+
+- **bash** `{"command": "ps -o pid,ppid,stat,etime,cmd -p 2898928,2903891,2903893 2>/dev/null; ps aux | grep \"[g]it\" | wc -l; ls -la /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock", "description": "Voir l'arbre des processus git"}`
+
+  ```
+PID    PPID STAT     ELAPSED CMD
+2898928  264909 Ss         06:32 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text() t=t.replace(" (tagger 95,75 %)", "") p.write_text(t) PY python3 tools/taille_documents.py 2>&1 | tail -1 for i in 1 2 3; do   git add docs/pilotage/en-cours.md   timeout 240 git commit -m "ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1   if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; break; fi   sleep 5 done; git log -1 --format='%h %s'
+2903891 2898928 S          01:51 timeout 240 git commit -m ÉTAT — T0 DANS LE BUDGET -- docs/pilotage/en-cours.md
+2903893 2903891 S          01:51 git commit -m ÉTAT — T0 DANS LE BUDGET -- docs/pilotage/en-cours.md
+5
+-rw-r--r--. 1 stephane stephane 429677 15 nov 01:49 /home/stephane/Data13TB/stephane/GitHub/Qtrinet/.git/index.lock
+  ```
+
+- **bash** `{"command": "kill 2898928 2903891 2903893 2>/dev/null; sleep 3; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/index.lock 2>/dev/null && { ps aux | grep \"[g]it \" | grep -v grep | head -2; echo \"→ lock orphelin : suppression\"; rm -f .git/index.lock; } || echo \"lock libre\"; git st … [148 caractères tronqués]`
+
+  ```
+lock libre
+MM docs/pilotage/en-cours.md
+     · T0 : 4001 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5058 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'
+import pathlib
+p=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()
+t=t.replace(" (tagger 95,75 %)", "")
+p.write_text(t)
+PY
+python3 tools/taille_documents.py 2>&1 | tail -1
+for i in 1 2 3; do
+  git add docs/pilotage/en-cours.md
+  timeout 240 git commit -m "ÉTAT — T0 DANS LE BUDGET" -- docs/pilotage/en-cours.md 2>&1 | tail -1
+  if git log -1 --format='%s' | grep -q "T0 DANS LE BUDGET"; then echo "COMMIT OK $i"; break; fi
+  sleep 5
+done; git log -1 --format='%h %s') finished [status: killed, signal: SIGTERM]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`s065` réglé** ; **`r035`**, **convention des GV** (0,7902, 0 perte) ; **J6.1 rejeté**\", \" ; **`s065`** et **`r035`* … [676 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ index : aucun fait stagé sans état
+[still running after 240000ms; moved to background job bash-5066]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+## Primary Request and Intent
+- Original goal (completed): "Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne pas écrire dans les territoires S/D/N2 ; chaque vague produit un résultat mesuré et un commit."
+- Then: "continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage."
+- Then: "oui, continue en autonomie jusqu'à demain 8h." → later "push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vise un système utilisable en autonomie comme premier produit."
+- Then: "oui, continue en mode autonome jusqu'à 9h demain" (goal `goal-528eabc2-254d-4a2a-91fc-c931edc44638`, window 2026-11-06 18 h 20 → 2026-11-07 09 h 00, 400 rounds, now `phase: active`, `activation: disarmed`; clock is now **2026-11-07 ~10 h 50 EST**, window over).
+- Latest (current priority): "je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas si DSH est à la hauteur ou s'il faut un méta harnais pour gérer ça en autonomie totale pendant plusieurs jours."
+- Just before that: "prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini" — **done** (`docs/pilotage/semaine-autonome.md`, commit `a407381c` + fixes).
+
+## Key Technical Concepts
+- **DSH harness** (`dsh` 0.2.0-rc.2 at `/home/stephane/.local/bin/dsh`): profiles `headless`/`web`/`dsh-tui`; `dsh --profile headless "<task>"` = one task, answer to stdout, exit; `--json` = NDJSON run events; `--session-id <id>` = resume a persisted session; `dsh tui --resume <session>`.
+- **`dsh headless` requires `DEEPSEEK_API_KEY`**: without it → `dsh: MISSING_CREDENTIAL: llm-deepseek: no API key for provider route "deepseek-official"`. Works when `DEEPSEEK_API_KEY="$(cat ~/.config/drave/deepseek.key)"` (36-byte key file, exists) — verified: answers `OK`.
+- **Goal rounds**: `goal_round` messages continue the session; `max_goal_rounds`; `create_goal`/`update_goal`/`get_goal`; after resume/fork the goal is disarmed (must `update_goal action resume`).
+- **Drave repo** `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch `s/v7`, `master` fast-forwarded to it; commits must include `docs/pilotage/en-cours.md` change (hook `verifie_etat_a_jour.py`); always `git commit -- <explicit paths>`.
+- **Gates**: `tools/pensee/autotest.py` (183 gates, `AUTOTEST_JOBS=8` → 1 min 54, ×2,4), `tools/toutes-les-portes.sh` (84 gates; slow, >25 min), `tools/porte-produit.sh` (10 controls, ~2 min), `tools/porte-bloc-linguistique.sh`, `tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤4000 AGENTS+en-cours+largest task doc; T1 `docs/README.md` ≤1000, `reports/README.md` ≤2800), `tools/porte-tableaux.sh`, `tools/verifier_schemas.py`, `tools/verifie_journal.py`, `tools/verifie_en_cours.py`, `tools/sessions.py --check`, `tools/index_reports.py --verifier`, `tools/verifie_backlog.py`.
+- **Attachment metric** (`tools/tests/linguistique/evaluer_gold.py`): gold living 612 phrases / 239 cibles; frozen 602 (`charger_gele`); `dev`/`test` split (`gold_split.py`, crc32%3==0 → test).
+- **Partition modes**: `Heuristique(partition="brut"|"alternative"|"filtrer_union"|"filtrer")`; `meta.alternative`; default `alternative`; `filtrer` gives F1 0.8104 but 222/223 attachment.
+- **Schema v1**: `drave.annotation`, version 1, 8 required fields (`schema`,`version`,`texte`,`langue`,`script`,`refus`,`etiquettes`,`unites_semantiques`), published at `tools/schemas/drave-annotation-v1.json`, validated by `tools/verifier_schema_produit.py --gold 20`; refus → JSON + exit code 3.
+- **Panini ecosystem** at `/home/stephane/Data13TB/stephane/GitHub/`: 14 repos (`Panini` host, `Panini-Research` = NIPADA lab, `Panini-SemanticCore`
+… [10039 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+## Primary Request and Intent
+- Original goal (completed): "Tranche autonome B13 du 2026-11-05 (11 h 15 → 18 h 00 EST), pilotée par sous-agents : l'attachement, les mesures et les fiches ; l'agent principal tient seul le dossier pilotage (en-cours, roadmap, chantiers, plan-travail, journal), ne pas écrire dans les territoires S/D/N2 ; chaque vague produit un résultat mesuré et un commit."
+- Then: "continue pour une autre tranche de temps autonome, jusqu'à 18h. Utilise beaucoup de subagents que tu coordonnes à l'aide du dossier pilotage."
+- Then: "oui, continue en autonomie jusqu'à demain 8h." → later "push et prends le contrôle de toutes les tâches restantes et exécute les en subagents. sois autonome jusqu'à midi. On vise un système utilisable en autonomie comme premier produit."
+- Then: "oui, continue en mode autonome jusqu'à 9h demain" (goal `goal-528eabc2-254d-4a2a-91fc-c931edc44638`, window 2026-11-06 18 h 20 → 2026-11-07 09 h 00, 400 rounds, now `phase: active`, `activation: disarmed`; clock is now **2026-11-07 ~10 h 50 EST**, window over).
+- Latest (current priority): "je serai absent pendant plusieurs jours, donc il faut des mécanismes de contrôle de session ultra longue. je ne sais pas si DSH est à la hauteur ou s'il faut un méta harnais pour gérer ça en autonomie totale pendant plusieurs jours."
+- Just before that: "prépare un chantier autonome d'une semaine sur l'ensemble des travaux ouverts et l'intégration avec le projet Panini" — **done** (`docs/pilotage/semaine-autonome.md`, commit `a407381c` + fixes).
+
+## Key Technical Concepts
+- **DSH harness** (`dsh` 0.2.0-rc.2 at `/home/stephane/.local/bin/dsh`): profiles `headless`/`web`/`dsh-tui`; `dsh --profile headless "<task>"` = one task, answer to stdout, exit; `--json` = NDJSON run events; `--session-id <id>` = resume a persisted session; `dsh tui --resume <session>`.
+- **`dsh headless` requires `DEEPSEEK_API_KEY`**: without it → `dsh: MISSING_CREDENTIAL: llm-deepseek: no API key for provider route "deepseek-official"`. Works when `DEEPSEEK_API_KEY="$(cat ~/.config/drave/deepseek.key)"` (36-byte key file, exists) — verified: answers `OK`.
+- **Goal rounds**: `goal_round` messages continue the session; `max_goal_rounds`; `create_goal`/`update_goal`/`get_goal`; after resume/fork the goal is disarmed (must `update_goal action resume`).
+- **Drave repo** `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`, branch `s/v7`, `master` fast-forwarded to it; commits must include `docs/pilotage/en-cours.md` change (hook `verifie_etat_a_jour.py`); always `git commit -- <explicit paths>`.
+- **Gates**: `tools/pensee/autotest.py` (183 gates, `AUTOTEST_JOBS=8` → 1 min 54, ×2,4), `tools/toutes-les-portes.sh` (84 gates; slow, >25 min), `tools/porte-produit.sh` (10 controls, ~2 min), `tools/porte-bloc-linguistique.sh`, `tools/revue_documentation.py`, `tools/taille_documents.py` (T0 ≤4000 AGENTS+en-cours+largest task doc; T1 `docs/README.md` ≤1000, `reports/README.md` ≤2800), `tools/porte-tableaux.sh`, `tools/verifier_schemas.py`, `tools/verifie_journal.py`, `tools/verifie_en_cours.py`, `tools/sessions.py --check`, `tools/index_reports.py --verifier`, `tools/verifie_backlog.py`.
+- **Attachment metric** (`tools/tests/linguistique/evaluer_gold.py`): gold living 612 phrases / 239 cibles; frozen 602 (`charger_gele`); `dev`/`test` split (`gold_split.py`, crc32%3==0 → test).
+- **Partition modes**: `Heuristique(partition="brut"|"alternative"|"filtrer_union"|"filtrer")`; `meta.alternative`; default `alternative`; `filtrer` gives F1 0.8104 but 222/223 attachment.
+- **Schema v1**: `drave.annotation`, version 1, 8 required fields (`schema`,`version`,`texte`,`langue`,`script`,`refus`,`etiquettes`,`unites_semantiques`), published at `tools/schemas/drave-annotation-v1.json`, validated by `tools/verifier_schema_produit.py --gold 20`; refus → JSON + exit code 3.
+- **Panini ecosystem** at `/home/stephane/Data13TB/stephane/GitHub/`: 14 repos (`Panini` host, `Panini-Research` = NIPADA lab, `Panini-SemanticCore`, `-AttributionRegistry`, `-AutonomousMissions`, `-CloudOrchestrator`, `-CoLabController`, `-CopilotageShared`, `-DatasetsIngestion`, `-ExecutionOrchestrator`, `-FS`, `-PublicationEngine`, `-SpecKit-Shared`, `-UltraReactive`). Panini = CIC-lite formal kernel + ℝ Dedekind cuts + NIPADA descriptive layer; **14 semantic atoms** (∃ ∆ ∼ ↗ ⊙ ⧖ ◇ № ⊕ ⊗ λ ⊞ ≍ ≡), 9 dhātus; warning: surface signature captures **époque β +0,138** vs **filiation β +0,049**.
+- Drave↔Panini link documented both sides: `Panini/README.md` §6 "Drave — le pendant statistique"; Drave `docs/theorie/genealogie-des-langues.md`, `docs/methode/panini-nipada.md`.
+
+## Files and Code
+- `tools/chantier/superviseur.py` — **new meta-harness supervisor** (~300 lines, argparse): subcommands `etat`, `prochaine`, `executer [--id] [--timeout 5400] [--max-tentatives 2]`, `boucle [--budget 21600] [--max-taches]`, `stop`, `reprendre <ID>`. Reads `tools/chantier/plan.json`, state in `work/chantier/etat.json`, log `work/chantier/journal.log`, stop file `work/chantier/STOP`, session in `work/chantier/session_id.txt`, key `~/.config/drave/deepseek.key` → sets `DEEPSEEK_API_KEY` for child. Functions: `verifier_acceptation(tache)` (runs `acceptation[].commande` with `code`/`attendu`/`timeout_s`), `git_avant()` (records HEAD + dirty files, never blocks), `executer_tache(tache, etat, timeout_s)` (calls `dsh --profile headless [--session-id SID] mandat`, captures stdout+stderr, records `head_avant`/`head_apres`/`commit_produit`), `cmd_boucle`.
+- `tools/chantier/plan.json` — 15 tasks (J0 liaison test, J1.1 r035, J1.2 convention GV, J1.3 schéma v2, J1.4 restitution v0, J2.1 table atomes↔niveaux, J2.2 corpus commun, J3.1 retrieval époque contrôlée, J3.2 généalogie 2 faces, J4.1 coordination N2 mètre RoPE, J4.2 coordination S 11 verdicts, J4.3 coordination R tagger 612, J4.4 coordination A A6.2/A8.3b2, J5.1 rapport semaine, J5.2 passe complète + tag `semaine-2026-11-14`), each with `mandat` + `acceptation` (commands with `attendu`).
+- `docs/pilotage/semaine-autonome.md` — 120-line week plan: open work inventory (product/chantiers/Panini/integration surface), 5 days × 2 waves table, rules (pilot owns dossier, subagents never commit, S/D/N2 read-only, each wave measured+negative control+fiche+JSON+state+commit), risks, deliverables.
+- `tools/bloc_linguistique.py` — the L block, current state: `decouper_phrases` (P0-4 boundaries), `partition=`/`_expliciter_partition`, `MockNeuronal` (all classes), `_supprimer_chevauchements` (heuristic authoritative), confidences 0.85 for context rules, GN for subject pronoun (fr `SUJETS` / en `{"i","you","he","she","it","we","they"}`) and proper noun before verb, `PONCT` for punctuation, `NUM` for digits, R4-en copula→ADJ, R4-fr filtered (known adj or suffix `eux/euse/if/ive/able/ible/ant/ent`), "que" rule (PRON after NOUN/PRON else CONJ), GV stops at elided marker radical `qu`, `SCHEMA_ANNOTATION="drave.annotation"`, `VERSION_ANNOTATION=1`.
+- `tools/drave.py` — CLI: `analyser` (text positional `nargs="?"` or `--fichier`, `--json`, `--jsonl`, `--langue fr|en`, `--partition`, `--contexte`), `evaluer` (two views: `syntagmes_lineaire`, `attachement_lineaire`; `--gold`, `--json`), `rejouer`, `--version`; `_sur()` sanitizes surrogates, `reconfigure(encoding="utf-8")`, refusal → JSON + code 3.
+- `tools/tests/test_produit.py` — 16 tests (TestProduit, TestRobustesse, TestPartition, TestContexte, TestSortieHostile, TestDeuxVues, TestCorpus).
+- `tools/tests/test_schema_produit.py` (6 tests), `tools/tests/test_produit_libre.py` (4 tests, 50 free texts, `filtrer`=0 overlaps).
+- `docs/produit/README.md` (370 l.), `docs/produit/exemples.md` (630 l.) — product docs, numbers re-synced (POS 86,25 %, F1 0,7535, 236/237).
+- `reports/` fiches (all committed): `rapport-schema-v1.md`, `rapport-frontieres-integrees.md`, `rapport-partition-integree.md`, `rapport-pos-anglais-v2.md`, `rapport-pos-r4-integre.md`, `rapport-pos-r4.md`, `rapport-morphologie-verbes.md`, `rapport-composition-sans-perte.md`, `rapport-gold-gp-corrige.md`, `rapport-r264-elision.md`, `rapport-gn-pronom-sujet.md`, `rapport-pos-ponctuation.md`, `rapport-pos-nombres.md`, `rapport-re-test-produit.md`, `rapport-file-taches.md` (+JSONs), `rapport-etat-n2/s/r/a.md` (+JSONs), 10 fiches annotated "Instantané historique".
+- `docs/pilotage/`: `en-cours.md` (B13: POS 86,25 %, att 236/237 0,9916, F1 0,7535, 2 spans; update timestamp each commit), `roadmap.md` (État au 07/11 00 h 25), `chantiers.md`, `plan-travail.md` (§14 night waves), `backlog/dependances.md` (A6.2 now "libre"), `references-non-regression.md` (84 gates, 3 reds: `indice`, `melange`, `sessions` hub).
+- `journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` — mandate refreshed 2026-11-07 01:25 (heartbeat, next action r035/g017 + GV convention).
+
+## Errors and Fixes
+- `dsh --profile headless` → `MISSING_CREDENTIAL ... deepseek-official`: fixed by reading `~/.config/drave/deepseek.key` and passing `DEEPSEEK_API_KEY` in the child env (verified: answers `OK`).
+- `reprendre J1.1` → `KeyError`/`StopIteration`: fixed by checking the plan's ids and building the state entry from the plan title; `executer --id` on a non-queued task now returns 5 with a message.
+- Supervisor blocked on "worktree sale" (other sessions modify `reports/`, `journal/`): replaced the strict check with a non-blocking `git_avant()` note + HEAD trace (`commit_produit`).
+- `git_avant` NameError after partial replace: re-inserted the function by locating `def verifier_git_avant()`.
+- `pkill -f "toutes-les-portes"` killed the tool's own shell ([killed by signal: SIGTERM]) — avoid broad pkill patterns.
+- T1 budget overflows repeatedly (`docs/README.md` 1000, `reports/README.md` 2800): trim rows, re-check each commit.
+- `revue_documentation` counters drift (files/JSON/docs/gates): recompute before each commit.
+- `porte-tableaux.sh` failures: 7-column separator vs 6 cells in `reports/rapport-pos-r4.md`; `\|` inside code span in `reports/rapport-etat-a.md` → replace with `∣`.
+- Commit hook refusals ("mets docs/pilotage/en-cours.md à jour"): every commit needs an en-cours change (timestamp).
+- Test file structure: appended classes after `if __name__` not collected → remove intermediate `if __name__ ... unittest.main()` blocks.
+- Rejected-and-documented rules: irregular participles in lexicon (F1 −0,0023), GV stop at final adverb (F1 0,7505), trim S-side GV subject (0,7533), ADJ/ADV gold segments (0,7464), participle after "avoir" (POS 0,8606), generic R4-fr (5/8 wrong), silent dedup (222→208).
+
+## Pending Jobs
+- **Answer the user's question on ultra-long autonomy**: DSH vs meta-harness — the supervisor + plan exist and J0 end-to-end passed (`statut: fait`, `code_agent: 0`, `sortie_agent: "OK\n"`, 3.5 s); the design doc is not yet written/committed.
+- Commit `tools/chantier/superviseur.py` + `plan.json` (+ J0 test task) and write `docs/methode/chantier-autonome.md` (design: what DSH gives vs what the meta-harness adds; guarantees; failure modes; key handling; cron/watchdog; STOP; budget).
+- `porte-n2.sh` proposal (N2 territory), S 11 verdicts (S territory), R tagger on 612 (key available at `~/.config/drave/key` — decision: <+2 pts negative / ≥+5 integrate), R2.1.
+- 2 remaining spans (`r035` zero relative, `g017` adverb arbitration) — subagent failed twice; a fresh subagent `7f247e9c` also failed.
+- Panini inventory subagent `bdefb627-485e-44d1-b11c-d15dd2e6b640` was launched but has not delivered `reports/rapport-inventaire-panini.md`.
+- Full gate pass (`toutes-les-portes.sh`) never completed in one run (>25 min); background job `bash-4546` timed out at 1500 s.
+
+## Current Work
+- Testing the meta-harness end-to-end: `python3 tools/chantier/superviseur.py executer --id J0 --timeout 300` returned `statut: fait`, `duree_s: 3.5`, `code_agent: 0`, `sortie_agent: "OK\n"`, `head_avant=head_apres=a2ad039dea`, `commit_produit: false`.
+- The supervisor + plan are **uncommitted** in the worktree (`tools/chantier/`). Git clock: 2026-11-07 ~10 h 50 EST. HEAD `a2ad039d` ("DOCS — README T1 : UN MOT DE MOINS"), `master` = `s/v7` pushed, 0 divergence.
+- Product state: **POS 86,25 %**, **F1 0,7535** (linear 0,8104), **attachment 236/237 (0,9916)**, 2 spans, 183/183 gates, product gate green (10 controls, 16 tests).
+
+## Next Step
+- Write `docs/methode/chantier-autonome.md` (the design answering "DSH ou méta-harnais" : DSH = agent/rounds/session resume/compaction; meta-harness = persistent task queue, independent acceptance checks, budget, crash recovery, escalation, audit journal, key handling, STOP), then commit `tools/chantier/superviseur.py` + `tools/chantier/plan.json` + the doc, and report to the user.
+
+## Critical Context
+- The user is absent for several days; the deliverable is a **control layer for multi-day autonomy**, not more feature work.
+- `dsh headless` is the only scriptable entry point; it needs `DEEPSEEK_API_KEY` (from `~/.config/drave/deepseek.key`). The interactive session (this one) runs through the app's own credentials.
+- Repo is multi-session: `journal/2026-11-05/*` and `journal/2026-11-06/*` carry other sessions' uncommitted `MM`/`D` entries; never `git add` them; `reports/*.json` are modified concurrently by the hub.
+- Goal `goal-528eabc2...` is active but **disarmed**; window (9 h) passed; do not mark complete without checking; user's new request supersedes the night window.
+- Commit message style: French, uppercase, headline numbers, explicit paths; every commit touches `docs/pilotage/en-cours.md`.
+- Key measured facts to preserve: gold GP generator fix (`i-1`) → 226/226 cov 0,9456; 1st-group morphology (60 infinitives) → 235/236 cov 0,9874; subject-GN conventions → F1 0,6519→0,7535; `r264` root-cause = GV tested `endswith("qu")` on whole token instead of stem `qu`.
+- The supervisor's design constraints: never `git push --force`; acceptance is verified by the harness, not the agent; state written after every step; `work/chantier/STOP` for a clean stop; budget in seconds; max 2 attempts per task then `bloque`.
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **job_output** `{"job_id": "bash-5066", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+  ✅ index : aucun fait stagé sans état
+6560a0a5 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS SERVIS PAR LE CACHE ; IL GAGNE SURTOUT SUR LE SYNTHÉTIQUE (+9,5 SUR 612)
+Everything up-to-date
+Everything up-to-date
+dim 15 nov 2026 01:58:27 EST
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain docs/pilotage/en-cours.md; timeout 90 git commit -m \"ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE\" -- docs/pilotage/en-cours.md; echo \"EXIT=$?\"; git log -1 --format='%h %s' | cut -c1-80", "description": "Commi … [63 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+EXIT=124
+6560a0a5 1A — LE TAGGER SUR LA BASE RÉELLE : 88,91 → 95,00 % (+6,1), 449 APPELS 
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/hooks/ | grep -v sample; ls -la .git/*.lock 2>/dev/null; ps aux | grep -E \"[g]it|[v]erifie_etat\" | head -4; date", "description": "Voir les hooks et le lock"}`
+
+  ```
+pre-commit
+stephane 2914544 84.6  0.0   7824  4236 ?        Ss   02:00   0:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .git/hooks/ | grep -v sample; ls -la .git/*.lock 2>/dev/null; ps aux | grep -E "[g]it|[v]erifie_etat" | head -4; date
+dim 15 nov 2026 02:00:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 280 git commit -m \"ÉTAT — T0 TENU : LA LIGNE FAIT RACCOURCIE\" -- docs/pilotage/en-cours.md 2>&1 | tail -3; git log -1 --format='%h %s' | cut -c1-70", "description": "Committer avec un long timeout", "timeoutMs": 320000 … [1 caractères tronqués]`
