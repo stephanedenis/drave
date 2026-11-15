@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 358.0 h |
+| Durée | 358.1 h |
 | Tours | 199 |
-| Messages | 4006 |
-| Appels d'outils | 3579 |
+| Messages | 4009 |
+| Appels d'outils | 3582 |
 | Fichiers touchés | 25 |
-| Commandes | 2962 |
+| Commandes | 2965 |
 | Sous-agents | 43 |
-| Commits | 482 |
+| Commits | 484 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10693,7 +10693,7 @@ Je commence.
 
 ### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
 
-*87 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - bash — Lire le plan de la semaine 2
 - bash — Lire le tableau des vagues
@@ -10709,7 +10709,7 @@ Je commence.
 - bash — Committer W1
 - bash — Suivre W2
 - bash — Lire W2 et voir le non-committé
-- … et 51 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
@@ -10835,7 +10835,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2922 autres
+- … et 2925 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11465,4 +11465,6 @@ Je commence.
 - BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES" 2>&1
 - Y1 — LE MODE AUTO DU TAGGER DOCUMENTÉ : L'API SI LA CLÉ EXISTE, L'HEURISTIQUE SINON, CODE 0 DANS TOUS LES CAS ; LA DÉCISION RESTE À L'HUMAIN" 2>&1 | tail -2; gi
 - ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-70; git branch -f master s/v7 && timeout 280 git push orig
+- ÉTAT — T0 VERT (UNE CLAUSE REDONDANTE RETIRÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push orig
+- ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
 

@@ -65870,3 +65870,33 @@ dim 15 nov 2026 14:42:27 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens**\", \"**W2 : 402 0, … [630 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+ 7 files changed, 74 insertions(+), 14 deletions(-)
+a1c45477 ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES)
+   f706aec0..a1c45477  s/v7 -> s/v7
+   f706aec0..a1c45477  master -> master
+dim 15 nov 2026 14:46:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\" ; **`s065`**, **`r035`**, **GV** réglés\", \"\")\nt=t.replace(\"**POS 86,25 %**, **238/239**, **F1 0,7902**, **1 span**\", … [595 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+no changes added to commit (use "git add" and/or "git commit -a")
+a1c45477 ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES)
+Everything up-to-date
+Everything up-to-date
+dim 15 nov 2026 14:49:01 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '64p' docs/pilotage/en-cours.md | cut -c1-600", "description": "Lire la ligne Fait complète"}`
+
+  ```
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/r … [740 caractères tronqués]`

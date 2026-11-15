@@ -61,7 +61,7 @@
 - **Stratégie** : v0.
 - **Ambition** : runtime tracé.
 - **Objectif final** : moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md), [J9.1](../../reports/rapport-passe-honnetete.md).
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
 - **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144** (cinq **18/18**), gold v2 **20/46** (F1 **0,5406**), permutation **0/18** ; `--roles-v3` opt-in ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md) + [JSON](../../reports/rapport-semaine-2.json) ; tag annoté `semaine-2-2026-11-20` sur `73edb3dd` ; **85** portes lues (**81** vertes, **4** rouges nommées).
 - **Prochaine action** : **J4 — l'or de rôles** (seconds cadres, rôles hors cadre) ; T132/T133, gold de pensée.
