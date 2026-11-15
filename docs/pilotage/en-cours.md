@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 07 h 30 HNE (finition : E1-E2, le tagger et ses cas d'erreur)**
+**Mis à jour : 2026-11-15, 07 h 47 HNE (finition E1-E2 ; plan de la semaine 2)**
 
 > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
 > plan plus bas (**La carte**).
@@ -107,7 +107,7 @@
 | portes | **85** (dont `porte-cic` le 14/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **748** / **841** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **123** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **124** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **14/11 00 h 30** (84, **81/3**) ; rouges tolérées `indice`, `melange` ; `sessions` **revérifiée verte** le 14/11 06 h 55 | `docs/pilotage/references-non-regression.md` |
 
 ## Les chantiers et leurs bloquants
@@ -144,4 +144,5 @@ externes** et la **prochaine action**.
 
 - Méthode : [contexte](../methode/contexte.md) · [continuité](../methode/continuite.md) ·
   [résultats](../methode/resultats.md) · [portes](../methode/portes.md) · plan : [roadmap](roadmap.md) ·
-  [backlog](backlog/index.md) · preuves : [reports/](../../reports/) · [journal/](../../journal/).
+  [semaine 2](semaine-2.md) · [backlog](backlog/index.md) · preuves : [reports/](../../reports/) ·
+  [journal/](../../journal/).

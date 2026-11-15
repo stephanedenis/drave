@@ -64762,3 +64762,53 @@ dim 15 nov 2026 07:35:22 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**restittion v1** (46/46 canonique, strict 0,1087 ; [fiche](../../reports/rapport-restitution-v1.md))\", \"**restitutio … [849 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 7 files changed, 33 insertions(+), 13 deletions(-)
+49011807 ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CO
+   2b7e520b..49011807  s/v7 -> s/v7
+   2b7e520b..49011807  master -> master
+dim 15 nov 2026 07:37:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tool … [287 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+bash tools/porte-bloc-linguistique.sh    EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-produit.sh 2>&1 | tail -4; echo \"=== final :\"; date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; git tag -l | tail -2; python3 tools/chantier/superviseur.py etat 2>&1 | grep -E \"budget … [82 caractères tronqués]`
+
+  ```
+✅ schéma v2 : Ran 8 tests
+  ✅ refus : JSON avec refus, code 3
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+=== final :
+dim 15 nov 2026 07:42:47 EST
+HEAD 49011807
+0
+chantier-2026-11-14
+semaine-2026-11-14
+budget consommé : 3259.7000000000003 s · lancements : 41
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\nt={\"id\":\"F1\",\"jour\":16,\"titre\":\"Le plan de la semaine 2\",\n   \"mandat\":\"Tâche F1 : le plan de la **semaine  … [1542 caractères tronqués]`
+
+  ```
+F1 ajouté ; total 41
+PID 3748060
+2026-11-15 07:43:09 · ▶ F1 — Le plan de la semaine 2 (timeout 3000 s)
+dim 15 nov 2026 07:43:29 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls docs/pilotage/semaine-2.md 2>/dev/null", "description": "Suivre F1", "timeoutMs": 1600000}`

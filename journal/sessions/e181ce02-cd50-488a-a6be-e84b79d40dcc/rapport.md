@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 350.9 h |
+| Durée | 351.1 h |
 | Tours | 198 |
-| Messages | 3908 |
-| Appels d'outils | 3483 |
+| Messages | 3912 |
+| Appels d'outils | 3487 |
 | Fichiers touchés | 25 |
-| Commandes | 2892 |
+| Commandes | 2896 |
 | Sous-agents | 43 |
 | Commits | 471 |
 | Compactages de contexte | 9 |
@@ -10629,7 +10629,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*124 appels d'outils.* Actions notables :
+*128 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10645,7 +10645,7 @@ Je commence.
 - bash — Tests de la base réelle
 - bash — Fiche de la base réelle
 - bash — Committer la base réelle
-- … et 85 autres
+- … et 88 autres
 
 **Synthèse produite :**
 
@@ -10771,7 +10771,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2852 autres
+- … et 2856 autres
 
 ## 4. Mesures et résultats marquants
 
