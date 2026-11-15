@@ -23,7 +23,7 @@
 
 | chantier | acquis | ce qui manque | fiche |
 |---|---|---|---|
-| **gold réel** | **452** phrases (402 + H50), 184 cibles ; le nom « 200+ » est **obsolète** | H50 n'est pas encore un **test** ; **10 GP/SUB** à annoter (dont 4 dans H50) ; le dénominateur passe à **194** | [C3](../../reports/rapport-gold-reel-50.md) |
+| **gold réel** | **452** phrases (402 + H50), 184 cibles ; l'ancien nom est **obsolète** | H50 n'est pas encore un **test** ; **10 GP/SUB** à annoter (dont 4 dans H50) ; le dénominateur passe à **194** | [C3](../../reports/rapport-gold-reel-50.md) |
 | **page `/` de S** | **369** candidats stockés, **0** profondeur ; la v7 donne **359** dont **99 à ≥3** ; **56** tests | décider garder/régénérer ; **106 conservés**, **41 à re-juger** ; référents **9/16** faux | [C2](../../reports/rapport-coordination-s-v2.md) |
 | **Panini** | protocole gelé : **60 paires** (20/20/20), **59 textes**, **27 paires signées** | **26 textes à signer** avec le même extracteur V14 ; puis rejeu et calibration | [B1](../../reports/rapport-protocole-date.md) |
 | **restitution** | v2 : **16/46** cadres non vides exacts, F1 **0,5270**, lieu **0,4000** | v3 doit améliorer les **rôles** (`agent`, `prédicat`, `lieu`), pas le format | [D2](../../reports/rapport-restitution-v2.md) |
@@ -45,7 +45,7 @@ décalages et la clôture. Un jour sans sa deuxième vague est un jour à requal
 
 | jour | vague | tâche | porteur | livrable mesuré | dépend de |
 |---|---|---|---|---|---|
-| **J1 · 16/11** | matin | **Le gold réel 452, nommé et tenu à l'écart** : retirer « gold 200+ » ; figer le split **402 / H50** ; annoter les **10 GP/SUB** (4 dans H50) ; sha256 du gold avant/après. | S + pilote | fiche gold 452 + JSON ; 402 vs H50 ; **184 → 194** cibles ; double codage **4/10**. | C3 ; le gold est à S |
+| **J1 · 16/11** | matin | **Le gold réel 452, nommé et tenu à l'écart** : retirer l'ancien nom ; figer le split **402 / H50** ; annoter les **10 GP/SUB** (4 dans H50) ; sha256 du gold avant/après. | S + pilote | [fiche gold 452](../../reports/rapport-gold-452.md) + JSON ; 402 vs H50 ; **184 → 194** cibles ; double codage **4/10**. | C3 ; le gold est à S |
 | | après-midi | **La page `/` de S, décidée** : garder l'ancien banc ou régénérer ; si régénération, signature + **106 conservés** + **41 en quarantaine** ; mesurer `/` (369/0) contre la v7 (359/99). | S (écrit) + pilote (mesure) | fiche de décision + JSON ; la liste des 41 ; **0** écriture du pilote dans `tools/structures/`. | C2 ; S doit trancher |
 | **J2 · 17/11** | matin | **Le tagger sur H50** : cache chaud puis API ; POS/F1/attachement sur **402** et **H50** ; coût et latence par phrase. | R/B13 | fiche tagger H50 + JSON ; **402 ne baisse pas** ; une règle qui ne gagne que H50 est **rejetée**. | J1 (split) |
 | | après-midi | **Le tagger par défaut ?** : matrice défaut / sans clé / clé invalide / réseau coupé ; coût pour 1 000 phrases ; garantir le **hors-ligne par défaut**. | R/B13 + pilote | fiche de décision + JSON ; **sans clé = code 0** en défaut, **`--tagger` = code 4** ; **0 socket** en défaut. | E2 ; J2 matin |
@@ -109,5 +109,5 @@ remplacées par un sous-ensemble commode.
   fidélité, pas une couche de plus.
 - **Pas de tagger par défaut** sans le test hors-ligne et sans le repli ; l'option `--tagger`
   reste le chemin sûr tant que la décision n'est pas mesurée.
-- **Pas de « gold 200+ »** : le libellé disparaît au profit de **gold réel 452**, **lot dur H50**
+- **L'ancien libellé est retiré** : il disparaît au profit de **gold réel 452**, **lot dur H50**
   et **cibles 184 → 194**.

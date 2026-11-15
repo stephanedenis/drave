@@ -278,7 +278,7 @@ Six tâches livrées, la queue du plan vidée :
 |---|---|---|
 | C1 **N2** | ✅ | la commande validée **`--rope --canal-dir`** (2,79), le témoin 3,09 à ne pas bouger |
 | C2 **S** | ✅ | la page `/` **ne sert pas la v7** ; les 11 verdicts committés (`389b99f`) |
-| C3 **R** | ✅ | le « gold 200+ » **défini** (452 phrases), 50 ratées sélectionnées |
+| C3 **R** | ✅ | le gold réel 452 **défini** (452 phrases), 50 ratées sélectionnées |
 | B1 **Panini** | ✅ | le protocole à **date contrôlée** (60 paires, 3 strates) — le §334 ne fournit qu'**une** paire contemporaine |
 | B2 **Panini** | ❌ **négatif** | les 14 atomes **ne prédisent pas** les niveaux (POS R²CV −0,09 ; le contrôle de date tue tout) |
 | B3 **Panini** | ✅ | le CIC **42/42**, les types clos, le sha256 **sans `hashlib`**, 1 020/1 020 mutations rejetées |

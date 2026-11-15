@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 351.5 h |
-| Tours | 198 |
-| Messages | 3916 |
-| Appels d'outils | 3491 |
+| Durée | 352.6 h |
+| Tours | 199 |
+| Messages | 3930 |
+| Appels d'outils | 3504 |
 | Fichiers touchés | 25 |
-| Commandes | 2898 |
+| Commandes | 2908 |
 | Sous-agents | 43 |
-| Commits | 472 |
+| Commits | 473 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -58,6 +58,8 @@
 - **create** — Autonomie du 2026-11-06 18 h 20 → 2026-11-07 09 h 00 : exécuter la file des tâches restantes en sous-agents coordonnés (2-4 par vague), en priorité les P0 du produit — publier le schéma JSON v1 et le valider, réparer les frontières de phrase (URL, décimaux, abréviations), expliciter la partition des
 … [408 caractères tronqués]
 - **edit** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
+… [252 caractères tronqués]
+- **resume** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
 … [252 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -457,6 +459,8 @@
 **Tour 197** — ensuite?
 
 **Tour 198** — avance les travaus jusqu'à 9h
+
+**Tour 199** — go semaine 2, travaille en autonomie jusqu'à 16h
 
 ## 2. Déroulé, étape par étape
 
@@ -10629,7 +10633,7 @@ Je commence.
 
 ### Tour 198 — avance les travaus jusqu'à 9h
 
-*132 appels d'outils.* Actions notables :
+*133 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Ancrer l'état et voir la structure du gold
@@ -10649,7 +10653,64 @@ Je commence.
 
 **Synthèse produite :**
 
-⏵ Les travaux sont livrés jusqu'à 06 h 30. J'écris le **bilan de la semaine** (le livrable pour votre retour)
+⏵ Tout est vert et poussé. Voici le récapitulatif de la nuit, pour votre retour
+
+\## Ce qui a été fait depuis votre « jusqu'à 9h » (23 h 30 → 08 h 10)
+
+**Les six décisions sont exécutées**, puis trois vagues de plus :
+
+| vague | tâches | résultat |
+|---|---|---|
+| **1A → 6A** | le tagger, la base honnête, les verdicts S, la note Panini, A6.2, l'ordre | ✅ |
+| **C puis B** | N2, S, R, le protocole Panini, les atomes, le CIC | ✅ 6 fiches |
+| **D puis E** | les exemples, la restitution v2, la FAQ, les cas d'erreur | ✅ 5 fiches |
+| **F1** | le plan de la **semaine 2** | ✅ `docs/pilotage/semaine-2.md` |
+
+\## Les chiffres qui comptent
+
+- **Le tagger** : POS **95,75 %** sur le gold 612 (**+9,5**), **95,00 %** sur le réel 452 (**+6,1**) ; **1 appel** par phrase, ~0,02 $, la ponctuation restituée ; le défaut reste hors ligne.
+- **La base honnête** : `evaluer --reel` — **452 phrases réelles** : POS 88,91 %, F1 **79,06 %**, attachement **99,46 %**. Désormais publiée **à côté** du chiffre global (612).
+- **Le produit** : F1 **0,7902** (+3,69 sur la semaine), attachement **238/239** (99,58 %), exact sur span **100 %**.
+- **Panini** : leur loi H0 **reproduite** (R² 0,909), leur β époque **non reproduit** (−0,006) ; **les atomes ne prédisent pas les niveaux** (négatif net) ; le CIC **42/42**, le sha256 **sans `hashlib`**, 1 020/1 020 mutations rejetées.
+- **La coordination** : N2 (`--rope --canal-dir` validé), S (page `/` à servir, 11 verdicts dans git), R (le gold réel 452).
+
+\## Les négatifs, dits
+
+- **Les atomes ne prédisent pas** les niveaux de Drave : c'est un **résultat**, l'intégration Panini est bornée au style.
+- **La restitution v2** : les rôles ne se restituent pas (19/46, F1 0,527).
+- **Le protocole à date contrôlée** : le §334 ne fournit **qu'une** paire contemporaine — il faut de nouvelles données.
+
+\## L'état
+
+**27 commits** depuis hier soir, `master` = `s/v7` **poussés** (0 divergence), les tags `chantier-2026-11-14` / `semaine-2026-11-14` ; **183/183** d'autotest ; **porte produit verte** ; toutes les portes de doc vertes ; la file du chantier à **41 tâches**, le plan de la **semaine 2** écrit.
+
+**Les bilans** : [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md) (la synthèse 5 min) et [`rapport-bilan-nuit.md`](reports/rapport-bilan-nuit.md) (la nuit).
+
+\## La seule chose qui vous revient
+
+**Envoyer la [note à Panini](reports/note-panini-334.md)** — elle est prête, je ne peux pas la poster. Tout le reste attend vos prochaines décisions, ou votre feu
+… [87 caractères tronqués]
+
+### Tour 199 — go semaine 2, travaille en autonomie jusqu'à 16h
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Lire le plan de la semaine 2
+- bash — Lire le tableau des vagues
+- bash — Lancer la semaine 2
+- get_goal
+- update_goal
+- bash — Suivre W1
+- job_output
+- bash — Pousser W1 et lire le split
+- bash — Voir le non-committé de W1
+- bash — Vérifier le commit de W1
+- bash — Voir les diffs des docs
+- bash — Committer W1
+
+**Synthèse produite :**
+
+⏵ La semaine 2 démarre : je traduis le plan en tâches du méta-harnais et je lance jusqu'à 16 h
 
 ## 3. Travail accompli
 
@@ -10771,7 +10832,7 @@ Je commence.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2858 autres
+- … et 2868 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11391,4 +11452,5 @@ Je commence.
 - ÉTAT — T0 VERT" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 
 - ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 g
 - PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES" 2>&1 | tail -
+- SEMAINE 2 — W1 : LE GOLD RÉEL 452 (20 HAND + 432 CORPUS, 242 FR / 210 EN), LE SPLIT 402/H50 FIGÉ, LE SHA256, LES 10 GP/SUB LISTÉS POUR S" 2>&1 | tail -2; git lo
 

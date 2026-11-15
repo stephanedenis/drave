@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **745 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **746 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -196,6 +196,7 @@
 | [rapport-genres.md](rapport-genres.md) | Le genre se mesure — encyclopédie, livres, documents, cours |
 | [rapport-gguf-drvm.md](rapport-gguf-drvm.md) | N0.4 — GGUF ↔ DRVM : aller-retour identique au bit près |
 | [rapport-gn-pronom-sujet.md](rapport-gn-pronom-sujet.md) | B13 — le pronom sujet est un GN : F1 0,6519 → 0,7013, attachement préservé |
+| [rapport-gold-452.md](rapport-gold-452.md) | W1 — le gold réel 452 : composition, split 402 / H50, sha256 et 10 candidats GP/SUB |
 | [rapport-gold-anglais.md](rapport-gold-anglais.md) | B13 — audit du gold anglais : 25 phrases portent une anomalie, 60/94 spans perdus, et la segmentation est la cause |
 | [rapport-gold-gp-corrige.md](rapport-gold-gp-corrige.md) | B13 — le gold corrigé : 4 GP retrouvés, exact 226/226, couverture 0,9456 |
 | [rapport-gold-reel-50.md](rapport-gold-reel-50.md) | R0.7 / B13 — le gold réel étendu : 50 phrases que l'heuristique rate, et ce qu'elles disent |

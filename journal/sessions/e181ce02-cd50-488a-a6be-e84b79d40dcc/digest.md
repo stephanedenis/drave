@@ -64858,3 +64858,222 @@ docs/pilotage/semaine-2.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 08 h 10 HNE (le plan de la semaine 2 est écrit)**\\n\", t,  … [729 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[s/v7 6b2208ee] PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUTION v3, LE TAGGER PAR DÉFAUT ? ; LA FILE DU CHANTIER À 41 TÂCHES
+ 15 files changed, 221 insertions(+), 28 deletions(-)
+6b2208ee PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUT
+   49011807..6b2208ee  s/v7 -> s/v7
+   49011807..6b2208ee  master -> master
+0
+dim 15 nov 2026 08:11:13 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/index_reports.p … [435 caractères tronqués]`
+
+  ```
+dim 15 nov 2026 08:11:26 EST
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/verifie_journal.py       EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+27
+  ```
+
+### 🤖 Assistant
+
+⏵ Tout est vert et poussé. Voici le récapitulatif de la nuit, pour votre retour
+
+## Ce qui a été fait depuis votre « jusqu'à 9h » (23 h 30 → 08 h 10)
+
+**Les six décisions sont exécutées**, puis trois vagues de plus :
+
+| vague | tâches | résultat |
+|---|---|---|
+| **1A → 6A** | le tagger, la base honnête, les verdicts S, la note Panini, A6.2, l'ordre | ✅ |
+| **C puis B** | N2, S, R, le protocole Panini, les atomes, le CIC | ✅ 6 fiches |
+| **D puis E** | les exemples, la restitution v2, la FAQ, les cas d'erreur | ✅ 5 fiches |
+| **F1** | le plan de la **semaine 2** | ✅ `docs/pilotage/semaine-2.md` |
+
+## Les chiffres qui comptent
+
+- **Le tagger** : POS **95,75 %** sur le gold 612 (**+9,5**), **95,00 %** sur le réel 452 (**+6,1**) ; **1 appel** par phrase, ~0,02 $, la ponctuation restituée ; le défaut reste hors ligne.
+- **La base honnête** : `evaluer --reel` — **452 phrases réelles** : POS 88,91 %, F1 **79,06 %**, attachement **99,46 %**. Désormais publiée **à côté** du chiffre global (612).
+- **Le produit** : F1 **0,7902** (+3,69 sur la semaine), attachement **238/239** (99,58 %), exact sur span **100 %**.
+- **Panini** : leur loi H0 **reproduite** (R² 0,909), leur β époque **non reproduit** (−0,006) ; **les atomes ne prédisent pas les niveaux** (négatif net) ; le CIC **42/42**, le sha256 **sans `hashlib`**, 1 020/1 020 mutations rejetées.
+- **La coordination** : N2 (`--rope --canal-dir` validé), S (page `/` à servir, 11 verdicts dans git), R (le gold réel 452).
+
+## Les négatifs, dits
+
+- **Les atomes ne prédisent pas** les niveaux de Drave : c'est un **résultat**, l'intégration Panini est bornée au style.
+- **La restitution v2** : les rôles ne se restituent pas (19/46, F1 0,527).
+- **Le protocole à date contrôlée** : le §334 ne fournit **qu'une** paire contemporaine — il faut de nouvelles données.
+
+## L'état
+
+**27 commits** depuis hier soir, `master` = `s/v7` **poussés** (0 divergence), les tags `chantier-2026-11-14` / `semaine-2026-11-14` ; **183/183** d'autotest ; **porte produit verte** ; toutes les portes de doc vertes ; la file du chantier à **41 tâches**, le plan de la **semaine 2** écrit.
+
+**Les bilans** : [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md) (la synthèse 5 min) et [`rapport-bilan-nuit.md`](reports/rapport-bilan-nuit.md) (la nuit).
+
+## La seule chose qui vous revient
+
+**Envoyer la [note à Panini](reports/note-panini-334.md)** — elle est prête, je ne peux pas la poster. Tout le reste attend vos prochaines décisions, ou votre feu vert pour lancer la **semaine 2** (`docs/pilotage/semaine-2.md`) avec le méta-harnais.
+
+
+## Tour 199
+
+### 👤 Utilisateur
+
+go semaine 2, travaille en autonomie jusqu'à 16h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -nE \"^## |^\\| \\*\\*J\" docs/pilotage/semaine-2.md | head -24 | cut -c1-190", "description": "Lire le plan de la semaine 2"}`
+
+  ```
+dim 15 nov 2026 08:56:03 EST
+22:## 1. Le point de départ (15/11)
+41:## 2. Les cinq jours × deux vagues
+48:| **J1 · 16/11** | matin | **Le gold réel 452, nommé et tenu à l'écart** : retirer « gold 200+ » ; figer le split **402 / H50** ; annoter les **10 GP/SUB** (4 dans H50) ; sha256 du gold a
+50:| **J2 · 17/11** | matin | **Le tagger sur H50** : cache chaud puis API ; POS/F1/attachement sur **402** et **H50** ; coût et latence par phrase. | R/B13 | fiche tagger H50 + JSON ; **402
+52:| **J3 · 18/11** | matin | **Panini, le corpus à date contrôlée** : envoyer le manifeste et la commande ; recevoir les **26 signatures** (même V14) ; calibrer sur **44** ; rejouer les **6
+54:| **J4 · 19/11** | matin | **Restitution v3 — l'or de rôles** : annoter les **seconds cadres** et les rôles hors cadre ; précision/rappel **par rôle**, plusieurs phrases par texte. | S + 
+56:| **J5 · 20/11** | matin | **La décision du tagger** : appliquer la décision (défaut, opt-in ou `auto` avec clé) ; tests E2 ; docs ; non-régression 452. | R/B13 | fiche + JSON ; **défaut 
+64:## 3. Les dépendances
+75:## 4. Les risques
+89:## 5. Les livrables et la clôture
+104:## 6. Ce que la semaine ne fait pas
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '41,62p' docs/pilotage/semaine-2.md | cut -c1-260", "description": "Lire le tableau des vagues"}`
+
+  ```
+## 2. Les cinq jours × deux vagues
+
+Cinq jours de travail (**16 → 20/11**), deux vagues par jour ; **21–22/11 = réserve** pour les
+décalages et la clôture. Un jour sans sa deuxième vague est un jour à requalifier, pas à attendre.
+
+| jour | vague | tâche | porteur | livrable mesuré | dépend de |
+|---|---|---|---|---|---|
+| **J1 · 16/11** | matin | **Le gold réel 452, nommé et tenu à l'écart** : retirer « gold 200+ » ; figer le split **402 / H50** ; annoter les **10 GP/SUB** (4 dans H50) ; sha256 du gold avant/après. | S + pilote | fiche gold 452 + JSON ; 402 vs H50 ; **184 → 1
+| | après-midi | **La page `/` de S, décidée** : garder l'ancien banc ou régénérer ; si régénération, signature + **106 conservés** + **41 en quarantaine** ; mesurer `/` (369/0) contre la v7 (359/99). | S (écrit) + pilote (mesure) | fiche de décision + JSON ; 
+| **J2 · 17/11** | matin | **Le tagger sur H50** : cache chaud puis API ; POS/F1/attachement sur **402** et **H50** ; coût et latence par phrase. | R/B13 | fiche tagger H50 + JSON ; **402 ne baisse pas** ; une règle qui ne gagne que H50 est **rejetée**. | J1 (
+| | après-midi | **Le tagger par défaut ?** : matrice défaut / sans clé / clé invalide / réseau
+… [2030 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ La semaine 2 démarre : je traduis le plan en tâches du méta-harnais et je lance jusqu'à 16 h
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [5013 caractères tronqués]`
+
+  ```
+plan : 47 tâches
+phase semaine 2
+PID 3773800
+2026-11-15 08:57:00 · ▶ W1 — J1 — le gold réel 452 : le split 402/H50 (timeout 3600 s)
+dim 15 nov 2026 08:57:19 EST
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":2,"objective":"Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":6,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+- **update_goal** `{"action": "resume", "goal_id": "goal-528eabc2-254d-4a2a-91fc-c931edc44638", "revision": 2}`
+
+> **Objectif** (resume) : Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.
+
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":3,"objective":"Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":6,"maxGoalRounds":400},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre W1", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5137]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5137", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 09:17:28 EST
+2026-11-15 08:57:00 · ▶ W1 — J1 — le gold réel 452 : le split 402/H50 (timeout 3600 s)
+2026-11-15 09:06:14 · ✔ W1 en 554.6 s (code 0) — ✅ test -f reports/rapport-gold-452.md && echo FICHE-OK
+2026-11-15 09:06:14 · ▶ W2 — J2 — le tagger sur 402 et H50 (timeout 3600 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -8 reports/rapport-gold-452.md | cut -c1-170", "description": "Pousser W1 et lire le split", "timeo … [14 caractères tronqués]`
+
+  ```
+Everything up-to-date
+Everything up-to-date
+# W1 — le gold réel 452 : composition, split 402 / H50, sha256 et 10 candidats GP/SUB
+
+> **Ligne de roadmap** : **R0.7** (bloc linguistique) / **B13** · **Tâche** : W1 (semaine 2, J1 matin, la part du pilote) ·
+> **Date** : 2026-11-15 (J1 · 16/11) · **HEAD mesuré** : `6b2208ee` · **Verdict** : ✅ **le gold réel 452 est
+> nommé et composé ; le split 402/H50 est figé ; le gold est intact ; les 10 GP/SUB sont listés pour S.**
+
+**En trois lignes.** (1) Le gold réel fait **452** phrases = **20 hand** (`gold.json`) + **432 corpus**
+(`gold_reel.json`) ; **242 fr + 210 en** ; **2 480 tokens**, **1 501 segments**, **184 cibles** d'attachement.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/ docs/ tools/ | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spans-chunker|rapport-coherence|rapport-s-paragraphes\" | head - … [48 caractères tronqués]`
+
+  ```
+M docs/pilotage/chantiers.md
+ M docs/pilotage/en-cours.md
+ M docs/pilotage/plan-travail.md
+ M docs/pilotage/roadmap.md
+ M docs/pilotage/semaine-2.md
+ M docs/pilotage/semaine-autonome.md
+ M docs/produit/README.md
+ M reports/INDEX.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3 | cut -c1-90; git log --oneline -1 -- reports/rapport-gold-452.md | cut -c1-70; git status --porcelain reports/rapport-gold-452.md reports/pensee-gold-452.json 2>/dev/null; git status --porcelain | grep \"^??\" | … [53 caractères tronqués]`
+
+  ```
+6b2208ee PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE, RESTITUT
+8cb0a926 PLAN — LA SEMAINE 2 (16 → 22/11) : GOLD 452, PAGE / DE S, PANINI À DATE CONTRÔLÉE
+49011807 ÉTAT — T0 VERT (LA LIGNE FAIT NETTOYÉE, COQUILLE CORRIGÉE)
+?? reports/rapport-gold-452.md
+?? journal/sessions/session-2bf7f8da-ddb8-4d2a-a357-4a5fd9847e55/
+?? journal/sessions/session-9a7f5c6a-2798-4ca2-9b0f-131347ef53c3/
+?? reports/rapport-gold-452.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat docs/pilotage/ docs/produit/ | tail -9; git diff docs/pilotage/en-cours.md | head -12 | cut -c1-150", "description": "Voir les diffs des docs"}`
+
+  ```
+docs/pilotage/chantiers.md        |  6 +++---
+ docs/pilotage/en-cours.md         | 14 +++++++-------
+ docs/pilotage/plan-travail.md     |  8 ++++----
+ docs/pilotage/roadmap.md          |  6 +++---
+ docs/pilotage/semaine-2.md        |  6 +++---
+ docs/pilotage/semaine-autonome.md |  2 +-
+ docs/produit/README.md            |  5 +++--
+ 7 files changed, 24 insertions(+), 23 deletions(-)
+diff --git a/docs/pilotage/en-cours.md b/docs/pilotage/en-cours.md
+index 8726729b..3ae8eca0 100644
+--- a/docs/pilotage/en-cours.md
++++ b/docs/pilotage/en-cours.md
+@@ -1,6 +1,6 @@
+ # En ce moment
+ 
+-**Mis à jour : 2026-11-15, 08 h 10 HNE (le plan de la semaine 2 est écrit)**
++**Mis à jour : 2026-11-15, 09 h 10 HNE (W1 : gold 452)**
+ 
+ > **État courant, pas histoire** : une sous-section par **session active** ; méthode, preuves et
+ > plan plus bas (**La carte**).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [978 caractères tronqués]`

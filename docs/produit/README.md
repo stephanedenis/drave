@@ -532,9 +532,10 @@ les indices internes.
 ne produit pas le corps de la RSN, n'est pas un port DRVM et n'expose pas d'API HTTP. La couche
 sémantique est un **compteur d'unités**, pas une représentation.
 
-**8. Pas de classement appris ni de gold 200+.** L'attachement est une **heuristique de
+**8. Pas de classement appris ; le gold réel 452 existe.** L'attachement est une **heuristique de
 proximité** avec candidats ; il n'y a pas de modèle de classement. Le gold fait 612 phrases, dont
-160 synthétiques ; le gold 200+ réel reste à faire.
+160 synthétiques ; les 452 phrases réelles (20 hand + 432 corpus) sont le gold de référence,
+avec un split 402/H50 proposé.
 
 **9. Pas de calibration des confiances.** `confiance` est **déclarée** (0,3 pour un NOUN ouvert,
 0,92 pour un DET), pas mesurée comme une probabilité. Elle sert à trier, pas à seuiller une
