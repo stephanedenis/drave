@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 16 h 05 HNE (l'étude GPU tandem NVLink vs CPU)**
+**Mis à jour : 2026-11-16, 16 h 15 HNE (l'étude GPU + le cache KV mesuré ×1,9)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

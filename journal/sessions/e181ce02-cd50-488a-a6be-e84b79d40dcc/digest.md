@@ -70047,3 +70047,71 @@ copie HBM (même carte) : 1.4 ms -> 177.9 Go/s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N** — les 2 GPU NVLink vs CPU : l'entraînement ×12-39, le préfill ×12, le cache KV ×20-50 |\", \"| **N** — les 2 GPU NVLink … [1416 caractères tronqués]`
+
+  ```
+· reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 548 insertions(+), 29 deletions(-)
+ create mode 100644 reports/rapport-gpu-tandem.md
+14ef014d ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFI
+   30924b4c..14ef014d  s/v7 -> s/v7
+   30924b4c..14ef014d  master -> master
+lun 16 nov 2026 15:55:51 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/native_cache.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"native_cache.py — la génération avec cache KV (le levier ×14-28 sur CPU).\n\nPOURQUOI. `generer_natif` recalcule les 1 024 positions à **chaque** octet : 28 ms\npar oc … [4702 caractères tronqués]`
+
+  ```
+syntaxe OK
+[still running after 600000ms; moved to background job bash-5452]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5452", "timeout_ms": 200000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_kill** `{"job_id": "bash-5452", "reason": "Le test du cache KV bloque : débogage direct"}`
+
+  ```
+requested cancellation of job bash-5452
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 /tmp/venv-natif/bin/python - <<'PY' 2>&1 | tail -6\nimport sys, time; sys.path.insert(0,'.')\nimport torch\nfrom tools.native_cache import passe\nfrom tools.entrainer_native import charger\nm, cfg = charger('work/n2ac/mix … [387 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 /tmp/venv-natif/bin/python -u - <<'PY' 2>&1 | tail -6\nimport sys, time; sys.path.insert(0,'.')\nimport torch\nfrom tools.native_cache import passe\nfrom tools.entrainer_native import charger\nt0=time.perf_counter(); m, c … [508 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+ValueError: too many values to unpack (expected 2)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/native_cache.py'); t=p.read_text()\nt=t.replace(\"from tools.entrainer_native import charger  # noqa: E402\", \"from tools.generer_natif import charger  # noqa: E402\")\np.write … [769 caractères tronqués]`
+
+  ```
+import corrigé
+chargé 1.3
+prefill 0.022
+1 jeton 0.011
+argmax 105 100
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /tmp/venv-natif/bin/python -u - <<'PY' 2>&1 | tail -6\nimport sys, time; sys.path.insert(0,'.')\nfrom tools.native_cache import generer as gen_cache\nfrom tools.generer_natif import charger, generer as gen_full\nm, cfg =  … [829 caractères tronqués]`
+
+  ```
+OK   'La France est un pays don d d da d 20' | 'La France est un pays don d d da d 20'
+OK   'Le chatin de en' | 'Le chatin de en'
+OK   'Il était une fois de de pre d' | 'Il était une fois de de pre d'
+parité 3 /3
+cache 0.17s (96 octets/s) | complet 0.32s (51 octets/s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gpu-tandem.md'); t=p.read_text()\nt=t.replace(\"\"\"## 5. Les limites\"\"\",\"\"\"## 4 bis. Le cache KV — mesuré (le levier sans GPU)\n\n[`tools/native_cache.py`](../t … [2381 caractères tronqués]`

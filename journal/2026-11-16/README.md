@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**34 commits** · **1 session(s)** · **7 thème(s)**
+**35 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 7 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
-| modele | 13 | [modele.md](modele.md) |
+| modele | 14 | [modele.md](modele.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 383.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 383.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -63,6 +63,7 @@
 | 15:00 | `86fde794` | ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS |
 | 15:04 | `956bdd5b` | NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD |
 | 15:07 | `30924b4c` | NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE |
+| 15:52 | `14ef014d` | ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST BLOQUÉE PAR LE CACHE KV (×20-50 SANS GPU) |
 
 ## Le récit de la journée (écrit à la main)
 

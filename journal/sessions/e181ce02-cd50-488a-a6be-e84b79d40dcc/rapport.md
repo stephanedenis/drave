@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 383.2 h |
+| Durée | 383.7 h |
 | Tours | 208 |
-| Messages | 4336 |
-| Appels d'outils | 3885 |
+| Messages | 4343 |
+| Appels d'outils | 3893 |
 | Fichiers touchés | 25 |
-| Commandes | 3217 |
+| Commandes | 3223 |
 | Sous-agents | 43 |
-| Commits | 518 |
+| Commits | 519 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11170,7 +11170,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 208 — maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de … [24 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*22 appels d'outils.* Actions notables :
 
 - bash — Voir le matériel GPU/CPU
 - bash — Voir NVLink, la charge CPU, le garde GPU
@@ -11186,6 +11186,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Mesurer le coût du contexte (le cache KV)
 - bash — Écrire l'étude GPU/CPU
 - bash — Committer l'étude GPU
+- … et 8 autres
 
 ## 3. Travail accompli
 
@@ -11307,7 +11308,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3177 autres
+- … et 3183 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11973,4 +11974,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD" 2>&1 | tail -2;
 - NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE" 2>&1 | tail -2; git log -1 --fo
 - ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST B
+- NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE CPU LIT 136 MO DE POIDS (MEMORY-BOUND), PAS PARCE QU'IL RECALCULE ; LE GPU EST
 

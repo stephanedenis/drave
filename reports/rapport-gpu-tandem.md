@@ -84,6 +84,24 @@ modèle recalcule les 1 024 positions à chaque octet). Le **batch** (le préfil
 4. **Le préfill en lot** pour les analyses massives (les 612 phrases, les 50 textes) : ×12 au GPU.
 5. **`vcam3d`** : si son rendu est du GPU, le décharger libérerait **10 cœurs** — c'est votre code.
 
+## 4 bis. Le cache KV — mesuré (le levier sans GPU)
+
+[`tools/native_cache.py`](../tools/native_cache.py) : la génération avec le K/V des positions
+passées (le préfill remplit le cache, chaque octet ne calcule que le sien).
+
+| mesure | sans cache | **avec cache** | gain |
+|---|---:|---:|---:|
+| 16 octets (3 prompts) | 0,32 s (51 octets/s) | **0,17 s (96 octets/s)** | **×1,9** |
+| la parité (le greedy) | — | **3/3** textes identiques | — |
+| un pas (1 jeton) | 28 ms | **11 ms** | ×2,5 |
+
+**La lecture.** Le cache **double** la génération sur CPU — pas les ×20 espérés : le jeton coûte
+**11 ms** parce que le CPU doit lire les **136 Mo de poids** à ~12 Go/s (la bande passante DRAM),
+pas parce qu'il recalcule le contexte. Le 34 M est **memory-bound** sur CPU ; le cache est un
+gain réel mais borné, et le GPU (448 Go/s) ne le débloque pas : son pas d'un jeton est déjà à
+**24 ms, dominé par le lancement des noyaux** (11 ms à vide). Le vrai levier de la génération
+reste **le batch** (les requêtes simultanées) et **les CUDA graphs** (le lancement).
+
 ## 5. Les limites
 
 - **La règle 11** : les GPU sont **réservés à Drave** ; `vcam3d` n'en fait pas partie — le

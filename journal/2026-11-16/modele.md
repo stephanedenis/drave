@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,16 +21,17 @@
 | 15:00 | `86fde794` | ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 15:04 | `956bdd5b` | NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 | 15:07 | `30924b4c` | NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE | `en-cours.md`, `README.md`, `modele.md` (+6) |
+| 15:52 | `14ef014d` | ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST BLOQUÉE PAR LE CACHE KV (×20-50 SANS GPU) | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 
 ## Chiffres du jour
 
-`0,137` · `0,278` · `0,335` · `0,247` · `0,494` · `0,870`
+`×12` · `×77` · `×20` · `23 Go` · `0,137` · `0,278` · `0,335` · `0,247` · `0,494` · `0,870`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 383.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 383.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -40,6 +41,7 @@
 - [reports/rapport-banc-generation.md](../../reports/rapport-banc-generation.md)
 - [reports/rapport-bilan-exploitable-2.md](../../reports/rapport-bilan-exploitable-2.md)
 - [reports/rapport-bilan-natif.md](../../reports/rapport-bilan-natif.md)
+- [reports/rapport-gpu-tandem.md](../../reports/rapport-gpu-tandem.md)
 - [reports/rapport-natif-exploitable.md](../../reports/rapport-natif-exploitable.md)
 
 <!-- notes -->
