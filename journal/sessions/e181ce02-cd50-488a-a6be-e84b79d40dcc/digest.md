@@ -66313,3 +66313,39 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5216", "timeout_ms": 800000, "wait": true}`
+
+  ```
+dim 15 nov 2026 22:17:27 EST
+2026-11-15 22:16:34 · ✔ T2 en 1527.0 s (code 0) — ✅ test -f reports/rapport-contrat-json.md && echo FICHE-OK; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-15 22:16:34 · ▶ T3 — Le démarrage en 5 minutes (timeout 3600 s)
+7f1519f7 T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JS
+71fdf72c CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ;
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -10 reports/rapport-contrat-json.md | cut -c1-170; git rev-list --count origin/master..s/v7", "desc … [52 caractères tronqués]`
+
+  ```
+71fdf72c..7f1519f7  s/v7 -> s/v7
+   71fdf72c..7f1519f7  master -> master
+# T2 — l'API du JSON : candidats d'attachement en objets, rôles normalisés
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **T2** (exploitable, 2/5) ·
+> **Date** : 2026-11-15 · **Verdict** : ✅ **contrat livré et mesuré**.
+>
+> **Le chiffre.** Sur le gold vivant **612 phrases** : **1 883 syntagmes**, **1 883 rôles**
+> non vides, **21 rôles bruts** ramenés à **8 rôles normalisés**, **0** hors table et **0**
+> hors vocabulaire. Les **1 295 attachements** portent tous des `candidats` **objets**
+> `{span, cible, source}` : **2 139 objets** (dont **1 062** dans `meta.alternative`),
+> **0 span faux**, **1 295/1 295** cibles choisies présentes dans la liste. **Contrôle
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; ls docs/produit/demarrage.md 2>/dev/null", "description": "Suivre T3", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5218]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5218", "timeout_ms": 1000000, "wait": true}`

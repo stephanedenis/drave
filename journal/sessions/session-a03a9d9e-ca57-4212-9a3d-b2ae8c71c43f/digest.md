@@ -3970,3 +3970,140 @@ code=0
   ```
 
 - **bash** `{"command": "git commit -m \"T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ)\" 2>&1 | tail -20", "description": "Commit T1/T2 result"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-181]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-181", "wait": true, "timeout_ms": 180000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 7f1519f7] T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ)
+ 39 files changed, 9312 insertions(+), 107 deletions(-)
+ create mode 100644 journal/sessions/session-8217267f-fd89-462c-8112-cba3ba9877b3/digest.md
+ create mode 100644 journal/sessions/session-8217267f-fd89-462c-8112-cba3ba9877b3/rapport.md
+ create mode 100644 journal/sessions/session-a03a9d9e-ca57-4212-9a3d-b2ae8c71c43f/digest.md
+ create mode 100644 journal/sessions/session-a03a9d9e-ca57-4212-9a3d-b2ae8c71c43f/rapport.md
+ create mode 100644 pyproject.toml
+ create mode 100644 reports/contrat-json.json
+ create mode 100644 reports/empaquetage.json
+ create mode 100644 reports/rapport-contrat-json.md
+ create mode 100644 reports/rapport-empaquetage.md
+ create mode 100644 tools/mesurer_contrat_json.py
+ create mode 100644 tools/roles_vocabulaire.py
+ create mode 100644 tools/tests/test_empaquetage.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git status --short | head -40; echo ---; git show --stat --oneline HEAD | head -50", "description": "Check post-commit state"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+7f1519f7 T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ)
+ .gitignore                                         |    3 +
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/produit/README.md                             |  131 +-
+ docs/produit/exemples.md                           |    8 +-
+ journal/2026-11-15/README.md                       |   25 +-
+ journal/2026-11-15/distribue.md                    |    5 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+
+… [1872 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -10; echo code=$?; python3 tools/revue_documentation.py 2>&1 | tail -5", "description": "Post-commit journal and docs checks", "timeoutMs": 300000}`
+
+  ```
+journal · 47 jour(s) · 218 session(s) · 2661 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+code=0
+  revue de documentation · 761 fiche(s) · 855 JSON · 124 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %cd %s' --date=format:'%Y-%m-%d %H:%M'", "description": "Show last commit date"}`
+
+  ```
+7f1519f7 2026-11-15 22:12 T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ)
+  ```
+
+- **bash** `{"command": "test -f reports/rapport-contrat-json.md && echo FICHE-OK; python3 tools/tests/test_produit.py 2>&1 | tail -1", "description": "Run T2 acceptance commands", "timeoutMs": 300000}`
+
+  ```
+FICHE-OK
+OK
+  ```
+
+- **bash** `{"command": "python3 tools/mesurer_contrat_json.py --json 2>/dev/null | python3 -c \"import json,sys; d=json.load(sys.stdin); print('candidats', d['candidats']['objets'], 'spans_faux', d['candidats']['spans_faux']); print('roles', d['vocabulaire_roles']['bruts_distincts'], '->', d['vocabulaire_roles … [309 caractères tronqués]`
+
+  ```
+candidats 2139 spans_faux 0
+roles 21 -> 8 hors 0
+predicats 711 accent 0
+  ```
+
+### 🤖 Assistant
+
+## T2 livré — l’API du JSON
+
+**Commit** : `7f1519f7` (T1/T2 ; T1 était déjà dans l’arbre de travail).
+
+### 1. Candidats d’attachement en objets
+
+- Nouveau champ v2 : **`meta.attachement.candidats`**, liste d’objets `{span, cible, source}`.
+- `span` = `{debut, fin}` et vérifie `texte[debut:fin] == cible`.
+- La **cible choisie** est toujours le premier objet ; les cibles introuvables dans le texte sont écartées.
+- Le champ historique `candidats` de l’étiquette reste une liste de **chaînes** : sortie lisible et contrat v1 inchangés.
+- `meta.alternative[].attachement` recopie les mêmes objets.
+- Schéma v2 étendu, **v1 toujours lue**.
+
+**Mesure sur le gold 612** : **1 295/1 295** attachements avec objets, **2 139** objets, **1 062** dans les alternatives, **0 span faux**, **1 295/1 295** cibles choisies présentes.
+
+### 2. Rôles normalisés
+
+Vocabulaire fermé : **`predicat`, `agent`, `objet`, `lieu`, `temps`, `qualite`, `possesseur`, `destinataire`**.
+
+- Table de **31 correspondances** dans [`tools/roles_vocabulaire.py`](tools/roles_vocabulaire.py).
+- `normaliser_role` strict : un rôle inconnu lève `RoleHorsVocabulaire`.
+- Normalisation appliquée au JSON (`meta.role`, `meta.alternative[].role`) et à la sortie lisible du CLI ; l’objet Python interne garde la forme brute pour les règles et l’autotest.
+
+**Mesure sur le gold 612** : **21 rôles bruts → 8**, **0 hors table**, **0 hors vocabulaire**.
+
+### 3. Contrôle négatif demandé
+
+Un filtre `role == "predicat"` trouve **711 prédicats, tous des GV**.  
+Un filtre `role == "prédicat"` trouve **0** segment.  
+Un rôle inventé (`role_invente`) est refusé.  
+Un candidat ramené à une chaîne, ou privé de `span`, est refusé par le schéma v2.
+
+### 4. Tests et docs
+
+- [`tools/tests/test_produit.py`](tools/tests/test_produit.py) : **24 tests OK** (4 nouveaux tests T2).
+- [`tools/tests/test_schema_produit.py`](tools/tests/test_schema_produit.py) : **9 tests OK**.
+- `verifier_schema_produit.py` : **26 cas, 0 échec**, plus les nouveaux contrôles négatifs.
+- **Portes vertes** : `porte-produit`, `porte-bloc-linguistique`, `revue_documentation`, `porte-tableaux`, `taille_documents`, `verifie_en_cours`, `verifie_journal`, `verifier_schemas`.
+- Docs mises à jour : [`docs/produit/README.md`](docs/produit/README.md) § 2/3.2/3.3 bis/4/7/8, [`docs/produit/exemples.md`](docs/produit/exemples.md).
+- Fiche : [`reports/rapport-contrat-json.md`](reports/rapport-contrat-json.md) · JSON : [`reports/contrat-json.json`](reports/contrat-json.json) · banc : [`tools/mesurer_contrat_json.py`](tools/mesurer_contrat_json.py).
+
+### 5. Limites nommées
+
+La normalisation **ne raffine pas** le rôle : `objet` regroupe `patient`, `complément`, `contenu`, `theme`, `groupe nominal` ; `qualite` regroupe `attribut`, `maniere`, `concession`, `hypothese`, `cause`, `consequence`. Le `span` d’un candidat est sa **première occurrence** dans le texte, pas une résolution d’anaphore. Ces limites sont dans la fiche, avec ce qui pourrait rendre le résultat faux.
+
+Les modifications préexistantes hors périmètre (`reports/pensee-*`, `tools/chantier/plan.json`, etc.) n’ont pas été touchées.
+

@@ -1,0 +1,212 @@
+{
+ "schema": "drave.quickstart.verification",
+ "version": 1,
+ "date": "2026-11-15",
+ "tache": "T3 (exploitable, 3/5)",
+ "document": "docs/produit/demarrage.md",
+ "verdict": "quickstart livre et rejoue ; clone public sans tools/structures => sortie degradee, documentee",
+ "environnement": {
+  "clone": "https://github.com/stephanedenis/drave.git",
+  "commit": "7f1519f749ab0939ad24b642abe785e7ab0aa87a",
+  "repertoire": "/tmp/qs-doc/drave",
+  "home": "/tmp/qs-doc-home",
+  "python": "3.13.16",
+  "pip": "26.2.1",
+  "git": "2.56.0",
+  "cle_deepseek": false,
+  "sous_modules": [],
+  "sous_module_structures": false,
+  "data": false,
+  "reseau_pour_clone_et_pip": true
+ },
+ "temps_s": {
+  "clone": 6.71,
+  "venv": 3.58,
+  "installation": 3.35,
+  "total_machine": 13.64
+ },
+ "commandes": [
+  {
+   "nom": "version",
+   "commande": "drave --version",
+   "cwd": "/tmp/qs-doc/drave",
+   "code": 0,
+   "stdout": "drave 0.1.0\n",
+   "stderr": ""
+  },
+  {
+   "nom": "analyser",
+   "commande": "drave analyser \"Le chat dort.\"",
+   "cwd": "/tmp/qs-doc/drave",
+   "code": 0,
+   "stdout": "drave 0.1.0 — analyse heuristique (CPU, hors ligne)\nlangue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)\nPOS  Le/DET chat/NOUN dort/VERB ./PONCT\nSYNTAGMES\n  GN   [0:7]   Le chat  rôle=objet     → dort\n  GV   [8:12]  dort     rôle=predicat  → —\nPRAGMATIQUE\n  phrase [0:13] déclarative · acte=assertion · négation=non · modalité=non · double sens=non\nCOUVERTURE  (confiance max par niveau)  graphème=0.99 · mot=0.98 · pos=0.95 · syntagme=0.35 ·\n            phrase=0.85 · discours=0.50 · pragmatique=0.45 · document=0.70\n",
+   "stderr": "",
+   "syntagmes": {
+    "GN": {
+     "valeur": "Le chat",
+     "role": "objet",
+     "cible": "dort"
+    },
+    "GV": {
+     "valeur": "dort",
+     "role": "predicat",
+     "cible": ""
+    }
+   }
+  },
+  {
+   "nom": "evaluer",
+   "commande": "drave evaluer",
+   "cwd": "/tmp/qs-doc/drave",
+   "code": 0,
+   "stdout": "drave 0.1.0 — évaluation de l'heuristique sur le gold\ngold vivant (hand + reel + synthétique) · 612 phrases · 3179 tokens · 239 cibles d'attachement\n\nPOS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)\nSYNTAGMES   F1 81.88 %  (P 86.64 % / R 77.62 %)\n  tête      F1 90.83 %  (P 96.11 % / R 86.10 %)\n  vue linéaire (partition filtrer) F1 81.88 %  · attachement 93.72 % de couverture\nBASE RÉELLE (hand + reel, 452 phrases)  POS 88.91 % · F1 80.14 % · attachement 91.85 %\nATTACHEMENT exact 88.70 % · couverture 93.72 % · exact sur span 94.64 % · top-k 89.54 %\n  tête      couverture 100.00 % · top-k 95.54 %\nPRAGMATIQUE acte 99.67 % · négation 97.71 % · modalité 98.86 % · double sens 94.44 %\nFRACTION SÉMANTIQUE 54.76 %\nCONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)\n",
+   "stderr": "",
+   "mesures": {
+    "phrases": 612,
+    "tokens": 3179,
+    "cibles_attachement": 239,
+    "pos_exactitude": 0.8625,
+    "syntagmes_f1": 0.8188,
+    "attachement_exact": 0.887,
+    "base_reelle_phrases": 452,
+    "base_reelle_pos": 0.8891,
+    "base_reelle_f1": 0.8014,
+    "base_reelle_attachement": 0.9185,
+    "top_k": 0.8954,
+    "controle_negatif": 0.0167
+   }
+  },
+  {
+   "nom": "json_save",
+   "commande": "drave analyser \"Le chat dort.\" --json > annotation.json",
+   "cwd": "/tmp/qs-doc/drave",
+   "code": 0,
+   "octets": 5899,
+   "schema": "drave.annotation",
+   "version": 2,
+   "langue": "fr",
+   "etiquettes": 20,
+   "excerpt_22_lignes": "{\n \"schema\": \"drave.annotation\",\n \"version\": 2,\n \"texte\": \"Le chat dort.\",\n \"langue\": \"fr\",\n \"script\": \"Latn\",\n \"source\": \"heuristique\",\n \"refus\": \"\",\n \"etiquettes\": [\n  {\n   \"niveau\": \"graphème\",\n   \"type\": \"lettres\",\n   \"valeur\": \"Le\",\n   \"debut\": 0,\n   \"fin\": 2,\n   \"source\": \"heuristique\",\n   \"confiance\": 0.99,\n   \"candidats\": [],\n   \"langue\": \"fr\",\n   \"script\": \"Latn\",\n   \"meta\": {}\n  },\n"
+  },
+  {
+   "nom": "json_consumer",
+   "commande": "python3 -c 'import json; a=json.load(open(\"annotation.json\")); print(a[\"schema\"], a[\"version\"], a[\"langue\"], len(a[\"etiquettes\"]), \"étiquettes\"); print([(e[\"type\"], e[\"valeur\"], e[\"meta\"].get(\"role\")) for e in a[\"etiquettes\"] if e[\"niveau\"]==\"syntagme\"])'",
+   "cwd": "/tmp/qs-doc/drave",
+   "code": 0,
+   "stdout": "drave.annotation 2 fr 20 étiquettes\n[('GN', 'Le chat', 'objet'), ('GV', 'dort', 'predicat')]\n"
+  }
+ ],
+ "tagger": {
+  "sans_cle": {
+   "explicite": {
+    "commande": "drave analyser \"Le chat dort.\" --tagger",
+    "code": 4,
+    "stdout": "",
+    "stderr_extrait": "drave: dépendance absente : clé DeepSeek absente"
+   },
+   "auto": {
+    "commande": "drave analyser \"Le chat dort.\" --tagger auto",
+    "code": 0,
+    "stdout_identique_au_defaut": true,
+    "stderr": "drave: tagger auto · heuristique (clé absente)\n"
+   }
+  },
+  "avec_cle": {
+   "explicite_cache_froid": {
+    "code": 0,
+    "source": "cascade",
+    "reseau": 1,
+    "cache": 0,
+    "tokens": 130,
+    "latence_s": 0.9,
+    "modele": "deepseek-chat"
+   },
+   "explicite_cache_chaud": {
+    "code": 0,
+    "reseau": 0,
+    "cache": 1,
+    "tokens": 0,
+    "latence_s": 0.0
+   }
+  }
+ },
+ "erreurs": [
+  {
+   "cas": "texte vide",
+   "commande": "drave analyser \"\"",
+   "code": 3,
+   "stdout": "",
+   "stderr": "drave: refus d'analyse : vide (le texte doit contenir au moins une lettre ou un chiffre)\n",
+   "json_avec_option": "{\n \"schema\": \"drave.annotation\",\n \"version\": 2,\n \"texte\": \"\",\n \"langue\": \"und\",\n \"script\": \"Zyyy\",\n \"source\": \"heuristique\",\n \"refus\": \"vide\",\n \"etiquettes\": [],\n \"unites_semantiques\": [],\n \"fraction_semantique\": 0.0,\n \"trace\": [\n  {\n   \"etape\": \"refus\",\n   \"raison\": \"vide\"\n  }\n ],\n \"cout\": {\n  \"octets\": 0\n },\n \"contexte\": \"\"\n}",
+   "json_code": 3
+  },
+  {
+   "cas": "--tagger sans clé",
+   "commande": "drave analyser \"Le chat dort.\" --tagger",
+   "code": 4,
+   "stdout": "",
+   "stderr_extrait": "drave: dépendance absente : clé DeepSeek absente"
+  },
+  {
+   "cas": "--fichier inexistant",
+   "commande": "drave analyser --fichier absent.txt",
+   "code": 1,
+   "stdout": "",
+   "stderr": "drave: erreur : FileNotFoundError : [Errno 2] No such file or directory: 'absent.txt'\n"
+  },
+  {
+   "cas": "--langue de",
+   "commande": "drave analyser \"Le chat dort.\" --langue de",
+   "code": 2,
+   "stdout": "",
+   "stderr_extrait": "drave analyser: erreur d'usage : argument --langue: invalid choice: 'de' (choose from 'fr', 'en')"
+  }
+ ],
+ "controle_negatif": {
+  "principe": "clone public neuf, HOME neuf, aucune cle, aucun sous-module, aucun data/ ; suivre le document a la lettre",
+  "resultat": "3/3 commandes sortent 0 ; JSON produit et consomme ; tagger sans cle 4 ; auto 0 ; erreurs 3/4/1",
+  "sous_module": {
+   "chemin": "tools/structures",
+   "url_gitmodules": "/home/stephane/Data13TB/stephane/GitHub/drave-structures",
+   "commande": "git submodule update --init tools/structures",
+   "code": 1,
+   "stderr_extrait": "fatal: transport 'file' not allowed",
+   "effet": "repli silencieux du CLI sur le chunker simple"
+  },
+  "clone_public": {
+   "analyse_role_gn": "objet",
+   "analyse_cible_gv": "",
+   "analyse_confiance_syntagme": 0.35,
+   "json_octets": 5899,
+   "rejouer_octets": 4217,
+   "evaluer_pos": 0.8625,
+   "evaluer_f1": 0.8188,
+   "evaluer_attachement_exact": 0.887,
+   "evaluer_base_reelle_f1": 0.8014,
+   "evaluer_base_reelle_attachement": 0.9185,
+   "evaluer_top_k": 0.8954
+  },
+  "depot_developpement": {
+   "analyse_role_gn": "agent",
+   "analyse_cible_gv": "chat",
+   "analyse_confiance_syntagme": 0.55,
+   "json_octets": 6179,
+   "rejouer_octets": 4390,
+   "evaluer_pos": 0.8625,
+   "evaluer_f1": 0.7902,
+   "evaluer_attachement_exact": 0.9958,
+   "evaluer_base_reelle_f1": 0.7906,
+   "evaluer_base_reelle_attachement": 0.9946,
+   "evaluer_top_k": 0.9874
+  },
+  "lecture": "les deux colonnes ne mesurent pas le meme systeme ; le F1 plus haut du clone n'est pas un gain (10,88 pts d'attachement en moins)"
+ },
+ "fichiers": [
+  "docs/produit/demarrage.md",
+  "docs/produit/README.md",
+  "docs/README.md",
+  ".gitignore",
+  "reports/rapport-quickstart.md",
+  "reports/quickstart.json"
+ ]
+}

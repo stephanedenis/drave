@@ -25,6 +25,9 @@
 > **Le produit en une phrase.** Vous donnez un texte ; il rend une **annotation** — langue,
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
 > candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
+>
+> **Démarrage en 5 minutes** : le parcours pas à pas — clone, installation, trois commandes,
+> JSON, tagger optionnel et erreurs — est dans [`demarrage.md`](demarrage.md).
 
 ## Sommaire
 
@@ -923,6 +926,7 @@ Vérifier l'installation : `drave --version` → `drave 0.1.0`, puis
 
 | si vous voulez… | allez à |
 |---|---|
+| **installer et lancer en 5 minutes** | [`demarrage.md`](demarrage.md) |
 | **voir cinq JSON commentés** | [`exemples.md`](exemples.md) |
 | **la FAQ du produit** (dix questions vérifiées) | [§ 8](#8-faq--dix-questions) · [`reports/rapport-faq.md`](../../reports/rapport-faq.md) · [`reports/faq.json`](../../reports/faq.json) |
 | **le schéma du JSON** (v2 : `meta.partition`, `meta.alternative`) | [`tools/schemas/drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [v1](../../tools/schemas/drave-annotation-v1.json) |

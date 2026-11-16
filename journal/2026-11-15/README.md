@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**47 commits** · **1 session(s)** · **7 thème(s)**
+**48 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -17,13 +17,13 @@
 | mesures | 17 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
-| portes | 2 | [portes.md](portes.md) |
+| portes | 3 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 365.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 365.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -76,6 +76,7 @@
 | 14:52 | `b8248b2d` | ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE) |
 | 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) |
 | 15:05 | `71fdf72c` | CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HORODATÉ |
+| 22:12 | `7f1519f7` | T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ) |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -181,4 +182,16 @@ span faux. Les `role` passent à un **vocabulaire fermé** de huit valeurs
 **612/612** annotations, v1 **612/612** ; **24** tests produit, **9** tests de schéma.
 [`fiche T1`](../../reports/rapport-empaquetage.md) · [`fiche T2`](../../reports/rapport-contrat-json.md) ·
 [`JSON T2`](../../reports/contrat-json.json).
+
+### T3 — le démarrage en 5 minutes : rejoué sur un clone public
+
+Le quickstart [`docs/produit/demarrage.md`](../../docs/produit/demarrage.md) part d'un clone
+public neuf, installe dans `.venv` et lance trois commandes ; **3/3** sortent **0**, le JSON
+fait **5 899 octets** en schéma **v2**, `--tagger` sans clé sort **4**, `auto` sort **0**, et
+les trois erreurs sortent **3 / 4 / 1**. Le contrôle négatif « débutant sans le dépôt » passe,
+mais découvre que `tools/structures` (URL locale dans `.gitmodules`) manque à un clone public :
+`analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 %** / **88,70 %**
+au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme
+l'écart ; la correction du sous-module reste à faire.
+[`fiche`](../../reports/rapport-quickstart.md) · [`JSON`](../../reports/quickstart.json).
 <!-- /notes -->

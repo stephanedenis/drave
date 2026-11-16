@@ -9,10 +9,10 @@
 | Début | 2026-11-15 21:50 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 157 |
-| Appels d'outils | 184 |
+| Messages | 162 |
+| Appels d'outils | 189 |
 | Fichiers touchés | 2 |
-| Commandes | 181 |
+| Commandes | 186 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T2 (exploitable, 2/5) : **l'API du JSON** — (1) les `candidats` de l'attachement deviennent des **objets** `{span, … [565 caractères tronqués]
 
-*184 appels d'outils.* Actions notables :
+*189 appels d'outils.* Actions notables :
 
 - bash — Inspect repository root and recent history
 - bash — Find attachment-related Python files
@@ -41,7 +41,51 @@
 - bash — Find v2 schema docs
 - bash — Read bloc_linguistique header
 - bash — Find schema names
-- … et 170 autres
+- … et 175 autres
+
+**Synthèse produite :**
+
+\## T2 livré — l’API du JSON
+
+**Commit** : `7f1519f7` (T1/T2 ; T1 était déjà dans l’arbre de travail).
+
+\### 1. Candidats d’attachement en objets
+
+- Nouveau champ v2 : **`meta.attachement.candidats`**, liste d’objets `{span, cible, source}`.
+- `span` = `{debut, fin}` et vérifie `texte[debut:fin] == cible`.
+- La **cible choisie** est toujours le premier objet ; les cibles introuvables dans le texte sont écartées.
+- Le champ historique `candidats` de l’étiquette reste une liste de **chaînes** : sortie lisible et contrat v1 inchangés.
+- `meta.alternative[].attachement` recopie les mêmes objets.
+- Schéma v2 étendu, **v1 toujours lue**.
+
+**Mesure sur le gold 612** : **1 295/1 295** attachements avec objets, **2 139** objets, **1 062** dans les alternatives, **0 span faux**, **1 295/1 295** cibles choisies présentes.
+
+\### 2. Rôles normalisés
+
+Vocabulaire fermé : **`predicat`, `agent`, `objet`, `lieu`, `temps`, `qualite`, `possesseur`, `destinataire`**.
+
+- Table de **31 correspondances** dans [`tools/roles_vocabulaire.py`](tools/roles_vocabulaire.py).
+- `normaliser_role` strict : un rôle inconnu lève `RoleHorsVocabulaire`.
+- Normalisation appliquée au JSON (`meta.role`, `meta.alternative[].role`) et à la sortie lisible du CLI ; l’objet Python interne garde la forme brute pour les règles et l’autotest.
+
+**Mesure sur le gold 612** : **21 rôles bruts → 8**, **0 hors table**, **0 hors vocabulaire**.
+
+\### 3. Contrôle négatif demandé
+
+Un filtre `role == "predicat"` trouve **711 prédicats, tous des GV**.  
+Un filtre `role == "prédicat"` trouve **0** segment.  
+Un rôle inventé (`role_invente`) est refusé.  
+Un candidat ramené à une chaîne, ou privé de `span`, est refusé par le schéma v2.
+
+\### 4. Tests et docs
+
+- [`tools/tests/test_produit.py`](tools/tests/test_produit.py) : **24 tests OK** (4 nouveaux tests T2).
+- [`tools/tests/test_schema_produit.py`](tools/tests/test_schema_produit.py) : **9 tests OK**.
+- `verifier_schema_produit.py` : **26 cas, 0 échec**, plus les nouveaux contrôles négatifs.
+- **Portes vertes** : `porte-produit`, `porte-bloc-linguistique`, `revue_documentation`, `porte-tableaux`, `taille_documents`, `verifie_en_cours`, `verifie_journal`, `verifier_schemas`.
+- Docs mises à jour : [`docs/produit/README.md`](docs/produit/README.md) § 2/3.2/3.3 bis/4/7/8, [`docs/produit/exemples.md`](docs/produit/exemples.md).
+- Fiche : [`reports/rapport-contrat-json.md`](reports/rapport-contrat-json.md) · JSON : [`reports/contrat-json.json`](reports/contrat-json.json) · b
+… [622 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -94,7 +138,7 @@
 - **T1** Find role normalization usage
 - **T1** Inspect generator roles
 - **T1** Inspect restitution gold roles
-- … et 141 autres
+- … et 146 autres
 
 ## 4. Mesures et résultats marquants
 

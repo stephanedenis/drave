@@ -93,9 +93,10 @@
 
 | document | pour quoi |
 |---|---|
-| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte avec Drave |
-| [`produit/README.md` § 8](produit/README.md#8-faq--dix-questions) | la **FAQ** : dix questions vérifiées contre le code |
-| [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels (entrée → sortie), dont un cas d'échec connu |
+| [`produit/demarrage.md`](produit/demarrage.md) | le **quickstart** : cinq minutes, trois commandes |
+| [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte |
+| [`produit/README.md` § 8](produit/README.md#8-faq--dix-questions) | la **FAQ** : dix questions vérifiées |
+| [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels, dont un échec connu |
 
 ## Transversal et archive
 
