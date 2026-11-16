@@ -1,0 +1,385 @@
+{
+  "schema": "drave.bilan.final",
+  "version": 1,
+  "date": "2026-11-16",
+  "tache": "Z3",
+  "titre": "Bilan final — Drave 0.1.0, 16 novembre 2026",
+  "ligne_roadmap": [
+    "B13",
+    "R0.7"
+  ],
+  "statut": "cloture",
+  "head": "19992f2f",
+  "tag": {
+    "nom": "exploitable-2026-11-16",
+    "commit": "ae3c24f2",
+    "annote": true
+  },
+  "verdict": "✅ installable, mesuré, refus explicite ; ❌ or de rôles humain absent, clone public dégradé, décisions ouvertes",
+  "chiffre_une_ligne": "Installable par trois voies, 3 commandes de démarrage, JSON v2 (2 139 objets, 0 span faux), 10 000 mots en 0,816 s (α 1,076, ×4,89), codes 0/1/3/4/5, CI 10/10, passe de portes fraîche ; négatifs nommés et trois décisions ouvertes.",
+  "installable": {
+    "produit": "drave",
+    "version": "0.1.0",
+    "python": ">=3.10",
+    "dependances_execution": 0,
+    "voies": [
+      {
+        "nom": "editable",
+        "commande": "python3 -m pip install -e .",
+        "code": 0,
+        "resultat": "Successfully installed drave-0.1.0",
+        "test": "tools/tests/test_empaquetage.py (12 tests)",
+        "tests": 12,
+        "duree_installation_s": 3.35,
+        "cwd_controles": "/tmp",
+        "preuve": "drave --version et drave analyser depuis /tmp ; evaluer lit le gold du dépôt",
+        "source": "reports/rapport-empaquetage.md"
+      },
+      {
+        "nom": "roue",
+        "fichier": "dist/drave-0.1.0-py3-none-any.whl",
+        "octets": 2055192,
+        "sha256": "27a3a671aac8ae2c827dd1177703642d656da3ad354b6df6f08ab2ceca8ce2a7",
+        "entrees": 427,
+        "build": "python3 -m pip wheel . --no-deps --no-build-isolation -w dist",
+        "embarque": [
+          "les cinq gold*.json",
+          "tools.tests.linguistique",
+          "tools.structures/generateur.py",
+          "tools.llm/deepseek.py",
+          "profils_udhr.json"
+        ],
+        "preuve": "installée dans un venv propre hors dépôt ; analyser et evaluer rendent les mêmes JSON qu'au dépôt (cmp vide)",
+        "controle_negatif": {
+          "condition": "roue amputée des gold*.json",
+          "code": 4,
+          "stdout": "",
+          "message": "gold absent de cette installation : gold.json, gold_reel.json, gold_synthetique.json"
+        },
+        "source": "reports/rapport-roue.md",
+        "note": "U2 mesurait 1 727 201 o et 422 entrées sans l'artefact de profils ; la roue courante inclut profils_udhr.json."
+      },
+      {
+        "nom": "historique",
+        "commande": "python3 tools/drave.py …",
+        "code": 0,
+        "cwd": "racine du dépôt",
+        "preuve": "--version, analyser, evaluer ; aucune installation",
+        "controle_negatif": {
+          "condition": "sans installation, PATH=/usr/bin:/bin, cwd=/tmp",
+          "commande": "drave --version",
+          "code": 127,
+          "stdout": "",
+          "stderr": "drave: command not found",
+          "trace_python": false
+        }
+      }
+    ]
+  },
+  "quickstart": {
+    "document": "docs/produit/demarrage.md",
+    "commit_mesure": "7f1519f749ab0939ad24b642abe785e7ab0aa87a",
+    "commandes": [
+      "drave --version",
+      "drave analyser \"Le chat dort.\"",
+      "drave evaluer"
+    ],
+    "codes": [
+      0,
+      0,
+      0
+    ],
+    "ok": "3/3",
+    "etiquettes": 20,
+    "temps_machine_s": 13.64,
+    "clone_public": {
+      "sous_module_structures": false,
+      "role_gn": "objet",
+      "attachement_exact": 0.887,
+      "f1": 0.8188,
+      "lecture": "sortie dégradée, documentée ; le F1 plus haut n'est pas un gain, l'attachement perd 10,88 points"
+    },
+    "depot_developpement": {
+      "role_gn": "agent",
+      "attachement_exact": 0.9958,
+      "f1": 0.7902
+    },
+    "source": "reports/rapport-quickstart.md",
+    "json_octets_public": 5899,
+    "json_octets_depot": 6179
+  },
+  "api_json": {
+    "schema": "drave.annotation",
+    "version": 2,
+    "v1_lue": true,
+    "champs_racine": 8,
+    "candidats": "objets {span, cible, source}",
+    "roles_vocabulaire": [
+      "predicat",
+      "agent",
+      "objet",
+      "lieu",
+      "temps",
+      "qualite",
+      "possesseur",
+      "destinataire"
+    ],
+    "mesure": {
+      "phrases": 612,
+      "segments": 1883,
+      "roles_non_vides": 1883,
+      "roles_bruts": 21,
+      "roles_normalises": 8,
+      "roles_hors_table": 0,
+      "roles_hors_vocabulaire": 0,
+      "attachements": 1295,
+      "objets": 2139,
+      "spans_faux": 0,
+      "cibles_choisies_presentes": "1295/1295",
+      "predicats": 711,
+      "predicats_accentues": 0,
+      "schema_valide": "612/612",
+      "role_invente": "RoleHorsVocabulaire"
+    },
+    "limites": [
+      "objet et qualite regroupent 5 à 7 rôles bruts : la normalisation n'est pas une annotation plus fine",
+      "le span d'un candidat est la première occurrence de la cible, pas une résolution d'anaphore",
+      "le gold 612 n'exerce pas instrument, maniere, source, consequence"
+    ],
+    "source": "reports/rapport-contrat-json.md"
+  },
+  "performance": {
+    "corpus": "data/corpus_fr_litterature.txt (Alice, français)",
+    "mots": 10000,
+    "phrases": 814,
+    "avant_s": 3.990812406176701,
+    "apres_s": 0.8157198431435972,
+    "facteur": 4.892381176847464,
+    "mots_par_s": 12259.110874957134,
+    "alpha_avant": 1.552,
+    "alpha_apres": 1.076,
+    "quadratique_delta_r2": 0.00077,
+    "memoire_avant_kb": 129936,
+    "memoire_apres_kb": 130452,
+    "memoire_delta_mio": 0.50390625,
+    "json_identique": true,
+    "diff": "vide",
+    "controle_negatif": "612/452 JSON et 10 000 mots identiques au bit près avant/après ; diff vide ; 10/10 fichiers de contrôle identiques",
+    "limites": [
+      "un seul texte littéraire : un texte technique, juridique ou multilingue peut changer la densité de syntagmes",
+      "la mémoire ne baisse pas : les index ajoutent ~0,5 Mio",
+      "le temps dépend de la machine et de la charge ; les parts du profil sont le signal"
+    ],
+    "source": "reports/rapport-performance-fix.md"
+  },
+  "codes": {
+    "implementes": [
+      0,
+      1,
+      3,
+      4,
+      5
+    ],
+    "detail": {
+      "0": "succès : annotation, évaluation, rejeu identique, restitution",
+      "1": "autre erreur ; evaluer --strict sous le plancher 0,70",
+      "3": "refus d'analyse : texte vide ou sans lettre/chiffre (JSON de refus sur stdout)",
+      "4": "clé/dépendance absente : --tagger sans clé, clé refusée, fichier introuvable, gold absent",
+      "5": "usage invalide : argument, sous-commande, langue hors fr/en, --fichier sur un répertoire"
+    },
+    "t5": {
+      "cas": 20,
+      "ok": 20,
+      "duree_ms": "4,7–5,9",
+      "aide": "8/8",
+      "stdout_vide_sur_dependance": true,
+      "sans_trace": true
+    },
+    "source": "reports/rapport-cli-robuste.md"
+  },
+  "ci": {
+    "fichier": ".github/workflows/ci.yml",
+    "declencheurs": [
+      "push",
+      "pull_request",
+      "workflow_dispatch"
+    ],
+    "matrice": [
+      "3.10",
+      "3.13"
+    ],
+    "versions_mesurees": [
+      "3.10.20",
+      "3.13.16"
+    ],
+    "etapes_par_version": 5,
+    "etapes_vertes": 10,
+    "etapes_rouges": 0,
+    "duree_totale_s": 482.323,
+    "porte_produit": "183/183",
+    "controle_negatif": {
+      "test_casse_code": 1,
+      "job_arrete": true,
+      "repetitions": 2
+    },
+    "act": false,
+    "limite": "preuve locale (YAML + commandes) ; pas de run GitHub, actions non épinglées par SHA",
+    "source": "reports/rapport-ci.md"
+  },
+  "portes": {
+    "passe": "work/portes/passe-1611",
+    "registre": "work/portes/passe-1611/registre.txt",
+    "debut": "2026-11-16 04:12:14 -0500",
+    "fin": null,
+    "total": 86,
+    "vertes": 82,
+    "rouges": 4,
+    "releve": {
+      "portes": 86,
+      "vertes": 82,
+      "rouges": 4,
+      "rouges_structurelles": [
+        {
+          "porte": "indice",
+          "code": 1,
+          "duree_s": 1156,
+          "cause": "l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice témoin à 459 : l'écart est nul ou négatif, rien n'est établi sur ce texte"
+        },
+        {
+          "porte": "melange",
+          "code": 1,
+          "duree_s": 144,
+          "cause": "l'état de A ne rend pas le code de A dans une invite qui n'en contient aucun : la calibration échoue"
+        }
+      ],
+      "rouges_circonstance": [
+        {
+          "porte": "sessions",
+          "code": 1,
+          "duree_s": 1,
+          "cause": "mandat périmé e181ce02 (190 min) : heartbeat à rafraîchir"
+        },
+        {
+          "porte": "tableaux",
+          "code": 1,
+          "duree_s": 1,
+          "cause": "1 lien relatif ne résout pas : reports/rapport-bilan-final.md → rapport-passe-1611.md (rapport de passe pas encore écrit)"
+        }
+      ]
+    },
+    "verification_ciblee": {
+      "dossier": "work/portes/verif-cloture-1611",
+      "portes": [
+        {
+          "porte": "sessions",
+          "code": 0,
+          "verdict": "verte",
+          "journal": "work/portes/verif-cloture-1611/porte-sessions.log",
+          "cause": "heartbeat à 06:23 ; autotest et --check --strict passent"
+        },
+        {
+          "porte": "tableaux",
+          "code": 0,
+          "verdict": "verte",
+          "journal": "work/portes/verif-cloture-1611/porte-tableaux.log",
+          "cause": "lien transitoire retiré ; 4 852 liens résolvent"
+        }
+      ],
+      "conclusion": "le relevé reste 86/82/4 ; après vérification ciblée, 84 vertes et 2 rouges structurelles (indice, melange) ; les deux rouges de circonstance sont datées et réparées"
+    },
+    "tolerees": [
+      "indice",
+      "melange"
+    ],
+    "lecture": "awk '$2 != 0' sur le registre, jamais un tail ni un marqueur",
+    "verdict": "86/82/4 au relevé ; 84/2 après vérification ciblée"
+  },
+  "negatifs": [
+    {
+      "nom": "clone public dégradé",
+      "fait": "sans tools/structures, l'attachement tombe à 88,70 % et le rôle du GN devient objet ; F1 81,88 %",
+      "consequence": "un débutant ne voit pas la sortie de la notice ; le F1 plus haut n'est pas un gain",
+      "source": "reports/rapport-quickstart.md"
+    },
+    {
+      "nom": "or de rôles humain absent",
+      "fait": "le gold S est écrit par la même famille de règles ; le gold v2 donne 20/46 et F1 0,5406",
+      "consequence": "144/144 n'est pas une validation indépendante ; J4 reste à faire",
+      "source": "reports/rapport-restitution-v3.md"
+    },
+    {
+      "nom": "linéarité mesurée sur un seul texte",
+      "fait": "α 1,076 sur Alice, un corpus littéraire",
+      "consequence": "un texte technique, juridique ou multilingue peut changer la densité de syntagmes",
+      "source": "reports/rapport-performance-fix.md"
+    },
+    {
+      "nom": "roue non isolée et dépendante du sous-module",
+      "fait": "build --no-build-isolation, setuptools 84.0.0 ; tools/structures embarqué ; non signée, hors PyPI",
+      "consequence": "un build isolé dépend du réseau ; un clone sans sous-module reste dégradé",
+      "source": "reports/rapport-roue.md"
+    },
+    {
+      "nom": "neuronal strict = MockNeuronal",
+      "fait": "le mock réimplémente l'heuristique ; la cascade est l'heuristique ; le plancher ne porte que sur le POS",
+      "consequence": "le plancher prouve le câblage, pas la qualité d'un modèle",
+      "source": "reports/rapport-evaluer-strict.md"
+    },
+    {
+      "nom": "confiance des profils non calibrée",
+      "fait": "marge entre profils, pas une probabilité ; échantillon stratifié de 20 langues",
+      "consequence": "le 20/20 ne se transporte pas ; les langues proches restent faibles",
+      "source": "reports/rapport-profils.md"
+    },
+    {
+      "nom": "CI locale seulement",
+      "fait": "act absent ; YAML et commandes prouvés en local ; pas de run GitHub",
+      "consequence": "l'image ubuntu-latest, checkout, setup-python et le cache pip ne sont pas simulés",
+      "source": "reports/rapport-ci.md"
+    },
+    {
+      "nom": "tag et compteurs",
+      "fait": "le tag exploitable-2026-11-16 est sur ae3c24f2, pas sur ce bilan ; les compteurs bougent",
+      "consequence": "un lecteur du tag ne voit pas ce rapport ; une fiche ajoutée rend un compte faux sans calcul",
+      "source": "reports/rapport-bilan-exploitable-2.md"
+    }
+  ],
+  "decisions": [
+    {
+      "sujet": "--tagger auto",
+      "etat": "prototype mesuré 30/30, opt-in, défaut hors ligne inchangé ; clé absente → sortie identique au défaut, code 0",
+      "a_decider": "passer auto par défaut ou le laisser opt-in",
+      "recommandation": "le laisser opt-in : le défaut doit rester hors ligne, déterministe, sans réseau",
+      "source": "reports/rapport-tagger-auto.md"
+    },
+    {
+      "sujet": "or de rôles (J4)",
+      "etat": "protocole prêt : sept champs, deux codeurs, kappa ≥ 0,80, or permuté 0/18 ; gold S non modifié",
+      "a_decider": "ouvrir J4 (double codage indépendant) et publier précision/rappel par rôle",
+      "recommandation": "J4 en premier : c'est le seul négatif produit qui ne soit pas une limite de mesure",
+      "source": "reports/rapport-or-roles-protocole.md"
+    },
+    {
+      "sujet": "Panini",
+      "etat": "manifeste des 26 signatures V14 prêt ; calibration 42/44 ; rejeu 27/60, aucune p-value de H0",
+      "a_decider": "attendre les 26 signatures ou déclarer le test bloqué",
+      "recommandation": "ne pas publier de test tant que les 26 signatures manquent ; le rejeu actuel n'est pas un test",
+      "source": "reports/rapport-panini-manifeste.md"
+    }
+  ],
+  "prochaine_action": "Mettre l'état et la roadmap à jour, taguer le commit de clôture, puis J4 — l'or de rôles.",
+  "sources": [
+    "reports/rapport-empaquetage.md",
+    "reports/rapport-roue.md",
+    "reports/rapport-quickstart.md",
+    "reports/rapport-contrat-json.md",
+    "reports/rapport-performance-fix.md",
+    "reports/rapport-cli-robuste.md",
+    "reports/rapport-ci.md",
+    "reports/rapport-passe-1611.md",
+    "reports/rapport-bilan-exploitable-2.md",
+    "reports/rapport-tagger-auto.md",
+    "reports/rapport-or-roles-protocole.md",
+    "reports/rapport-panini-manifeste.md"
+  ]
+}

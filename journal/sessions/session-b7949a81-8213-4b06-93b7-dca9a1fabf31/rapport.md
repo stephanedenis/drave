@@ -7,12 +7,12 @@
 | Identifiant | `session-b7949a81-8213-4b06-93b7-dca9a1fabf31` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-16 05:21 |
-| Durée | 1.0 h |
+| Durée | 1.2 h |
 | Tours | 1 |
-| Messages | 146 |
-| Appels d'outils | 159 |
+| Messages | 149 |
+| Appels d'outils | 162 |
 | Fichiers touchés | 3 |
-| Commandes | 138 |
+| Commandes | 141 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche Z3 (le bilan pour l'humain) : un **bilan court** (le matin) — `reports/rapport-bilan-final.md` + JSON : ce qui est … [293 caractères tronqués]
 
-*159 appels d'outils.* Actions notables :
+*162 appels d'outils.* Actions notables :
 
 - bash — List repo root and recent commits
 - bash — List reports, pilotage and tools
@@ -41,7 +41,7 @@
 - bash — Find Z3 mandate in session digest
 - bash — Read product docs
 - bash — Read packaging config and report
-- … et 119 autres
+- … et 122 autres
 
 ## 3. Travail accompli
 
@@ -95,7 +95,7 @@
 - **T1** Read counter check details
 - **T1** Compute live docs count properly
 - **T1** Hash and count current wheel
-- … et 98 autres
+- … et 101 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -208,6 +208,7 @@
 - **T1** `[still running after 600000ms; moved to background job bash-121]`
 - **T1** `porte-pont             ✅                          93 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux`
 - **T1** `[still running after 600000ms; moved to background job bash-128]`
+- **T1** `- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.`
 
 ## 5. Erreurs rencontrées
 

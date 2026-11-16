@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 373.7 h |
+| Durée | 374.0 h |
 | Tours | 202 |
-| Messages | 4121 |
-| Appels d'outils | 3684 |
+| Messages | 4128 |
+| Appels d'outils | 3691 |
 | Fichiers touchés | 25 |
-| Commandes | 3030 |
+| Commandes | 3037 |
 | Sous-agents | 43 |
-| Commits | 491 |
+| Commits | 493 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10845,7 +10845,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ### Tour 202 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
 
-*88 appels d'outils.* Actions notables :
+*95 appels d'outils.* Actions notables :
 
 - bash — État de T1
 - bash — Suivre T1
@@ -10861,7 +10861,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - bash — Verdict T4
 - bash — Pousser T4 et lire
 - bash — Ajouter U1-U3
-- … et 40 autres
+- … et 46 autres
 
 ## 3. Travail accompli
 
@@ -10983,7 +10983,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2990 autres
+- … et 2997 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11111,7 +11111,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ## 5. Erreurs rencontrées
 
-87 sorties en erreur ou divergentes. Les premières :
+88 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -11622,4 +11622,6 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - EXPLOITABLE — U2 : LA ROUE (drave-0.1.0-py3-none-any.whl, 422 ENTRÉES, LES GOLD DEDANS ; UNE ROUE SANS GOLD ÉCHOUE PROPREMENT)" 2>&1 | tail -2; git log -1 --for
 - EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF)" 2>&1 | tail -2; git log -1 --format='%h 
 - PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIONS DU HUB) ; TABLEAUX TRANSIENT (VERTE EN ISOLATION)" 2>&1 | tail -2; git log -1 --f
+- EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
+- EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
 

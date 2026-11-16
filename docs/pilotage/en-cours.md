@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 06 h 30 HNE (la passe du 16/11 : 84 portes, 2 rouges structurelles)**
+**Mis à jour : 2026-11-16, 06 h 35 HNE (nuit exploitable clôturée : 15 tâches, le tag, la passe)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

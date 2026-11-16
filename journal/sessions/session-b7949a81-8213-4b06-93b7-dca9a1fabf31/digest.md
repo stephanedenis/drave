@@ -2803,3 +2803,50 @@ M journal/README.md
   ```
 
 - **bash** `{"command": "sleep 480; date; wc -l work/portes/passe-1611/registre.txt; tail -4 work/portes/passe-1611/passe-1611.log; echo '--- rouges'; awk '$2 != 0' work/portes/passe-1611/registre.txt", "description": "Wait 8 min for pass end", "timeoutMs": 500000}`
+
+  ```
+lun 16 nov 2026 06:30:21 EST
+85 work/portes/passe-1611/registre.txt
+  porte-tableaux         ❌ code 1                    1 s    ❌ 1 lien(s) relatif(s) ne résolvent pas (sur 4853 examinés) :
+  porte-tokenizer-kimi   ✅                           7 s    ✅ 10 textes identiques au tokenizer officiel (accents, emoji, CJK, arabe, code, nombres)
+  porte-topologie        ✅                         114 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          30 s    ✅ la trace fausse est détectée et nommée
+--- rouges
+porte-indice 1 1156
+porte-melange 1 144
+porte-sessions 1 1
+porte-tableaux 1 1
+  ```
+
+- **bash** `{"command": "ps -eo pid,etimes,cmd | grep -E \"[p]orte-vision|[t]outes-les-portes\" | tail -3; stat -c '%y' work/portes/passe-1611/passe-1611.log", "description": "Check vision gate"}`
+
+  ```
+2312646     606 bash tools/porte-vision.sh
+2312652     606 timeout 2400 env DRAVE_VISION_POIDS=all DRAVE_VISION_COUCHES=32 DRAVE_VISION_FUSION=1 ./drave-core/target/release/drave models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf --banc-vision /tmp/porte-vision/tour.bin
+2312653     606 ./drave-core/target/release/drave models/vision/mmproj-Qwen2-VL-2B-Instruct-Q8_0.gguf --banc-vision /tmp/porte-vision/tour.bin
+2026-11-16 06:20:18.725907378 -0500
+  ```
+
+- **bash** `{"command": "sed -n '55,66p' docs/pilotage/en-cours.md; echo '==='; sed -n '120,127p' docs/pilotage/en-cours.md", "description": "Read state sections to edit"}`
+
+  ```
+### Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(actif)*
+
+- **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
+- **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
+- **Plan** : B13 · **Stratégie** : v0 · **Ambition** : tracé · **Objectif final** : moteur v0.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
+- **Ce que font les autres** : N2.
+- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** roue 1 727 201 o, sans gold → 4 ; **U3** profils 20/20, `und` ; **V1** `--strict` 0,8625/0,8891 ; **V2** exemples **27/27** ; **V3** la clôture — **86/82/4** → **84/2**, tag `exploitable-2026-11-16` ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)).
+- **Prochaine action** : **J4** ; T132/T133 ; la décision `auto`.
+- **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
+- **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
+
+===
+## Ce qui reste
+
+**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4*
+… [906 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 150; date; wc -l work/portes/passe-1611/registre.txt; tail -5 work/portes/passe-1611/passe-1611.log; echo '--- rouges'; awk '$2 != 0' work/portes/passe-1611/registre.txt", "description": "Wait 2.5 min for vision", "timeoutMs": 170000}`

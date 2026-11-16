@@ -67135,3 +67135,80 @@ références à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [935 caractères tronqués]`
+
+  ```
+· T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ create mode 100644 journal/sessions/session-e466b49c-4fcb-4b34-b5a8-5bc193487415/rapport.md
+ create mode 100644 reports/rapport-passe-1611.md
+25a727be PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIO
+   19992f2f..25a727be  s/v7 -> s/v7
+   19992f2f..25a727be  master -> master
+lun 16 nov 2026 06:27:27 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne**\", \"**W2/W3 : le tagger**\")\nt=t.replace(\"**W5 — restitution v3 … [651 caractères tronqués]`
+
+  ```
+· T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; ls reports/rapport-bilan-final.md 2>/dev/null; head -8 reports/rapport-bilan-final.md 2>/dev/null | cut -c1-150", "description": "Verdict Z3"}`
+
+  ```
+lun 16 nov 2026 06:27:49 EST
+2026-11-16 05:21:46 · ✘ Z2 en 4200.1 s (code 124) — ❌ test -f reports/rapport-passe-1611.md && echo FICHE-OK → « FICHE-OK » absent; ❌ grep -c 'PASSE 1611\|passe du 16/11' docs/pilotage/references-non-regression.md → « 1 » absent
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+0
+reports/rapport-bilan-final.md
+# Bilan final — Drave 0.1.0, 16 novembre 2026
+> **En une ligne.** Le bloc linguistique s'**installe** (éditable, roue, historique), **démarre en 3 commandes**, publie un **JSON v2** mesuré, passe 
+
+## 1. Installable — trois voies
+- **Éditable** : `pip install -e .` → `drave 0.1.0` (3,35 s ; **12** tests d'empaquetage) ; Python ≥ 3.10, **0** dépendance d'exécution.
+- **Roue** : `dist/drave-0.1.0-py3-none-any.whl` (2 055 192 o, gold et profils dedans), installée hors dépôt ; **mêmes JSON** qu'au dépôt ; sans les g
+- **Historique** : `python3 tools/drave.py …` depuis la racine, intact ; sans installation, `drave` → **127**, sans trace.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 400; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; ps aux | grep -c \"[s]uperviseur.py boucle\"", "description": "Verdict Z3", "timeoutMs": 500000}`
+
+  ```
+lun 16 nov 2026 06:34:39 EST
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+2026-11-16 06:31:47 · ✔ Z3 en 4200.1 s (code 124) — ✅ test -f reports/rapport-bilan-final.md && echo FICHE-OK
+0
+0
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 | cut -c1-80; git status --porcelain reports/rapport-bilan-final.md reports/pensee-bilan-final.json docs/ docs/pilotage/ 2>/dev/null | head -5; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/ … [608 caractères tronqués]`
+
+  ```
+25a727beb PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, 
+?? reports/rapport-bilan-final.md
+60:- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/index_reports.py >/dev/null 2>&1; python3 tools/taille_documents.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1\ntimeout 300 git add reports/rapport-bilan-final.md reports/pensee-bilan-final.json … [473 caractères tronqués]`
+
+  ```
+· T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+no changes added to commit (use "git add" and/or "git commit -a")
+25a727beb PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSI
+Everything up-to-date
+Everything up-to-date
+lun 16 nov 2026 06:37:52 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-bilan-final.md 2>/dev/null | awk '{print $5, $9}'; git status --porcelain reports/ | grep -vE \"pensee-coherence|rapport-audit|pensee-dev-test|pensee-quatre-modes|rapport-dev-test|rapport-pensee-v12|rapport-spa … [175 caractères tronqués]`
+
+  ```
+4048 reports/rapport-bilan-final.md
+?? reports/rapport-bilan-final.json
+?? reports/rapport-bilan-final.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-bilan-final.md reports/rapport-bilan-final.json reports/INDEX.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE … [332 caractères tronqués]`
