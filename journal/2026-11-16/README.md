@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **1 session(s)** · **7 thème(s)**
+**22 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
-| docs | 4 | [docs.md](docs.md) |
+| docs | 5 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | modele | 7 | [modele.md](modele.md) |
@@ -50,6 +50,7 @@
 | 11:04 | `7cefb116` | DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ |
 | 11:09 | `4a389c08` | NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ |
 | 11:16 | `4c3d502a` | NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ |
+| 11:20 | `f21420ba` | NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRITÈRES FALSIFIABLES, LES RISQUES ; LA DONNÉE D'ABORD |
 
 ## Le récit de la journée (écrit à la main)
 

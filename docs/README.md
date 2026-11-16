@@ -31,7 +31,7 @@
 | [`methode/ressources.md`](methode/ressources.md) | le matériel, les [GPU](theorie/glossaire/entrees/gpu-quadro-rtx-5000-miroir-vram-deport.md), la composition mesurée |
 | [`methode/contexte.md`](methode/contexte.md) | le budget de [contexte](theorie/glossaire/entrees/contexte.md) : ce qu'on charge, ce qu'on ne charge pas |
 | [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier long |
-| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan du natif |
+| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan natif |
 | [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents |
 | [`methode/modularisation.md`](methode/modularisation.md) | diviser ou paralléliser : ce que la mesure dit |
 | [`methode/relations-humaines.md`](methode/relations-humaines.md) | *carpe diem*, le temps |

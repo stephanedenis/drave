@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 02:47 | `ae3c24f2` | V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE | `bloc-linguistique.md`, `en-cours.md`, `roadmap.md` (+52) |
 | 06:42 | `615f84be` | ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE) | `en-cours.md`, `README.md`, `docs.md` (+9) |
 | 08:02 | `d1715692` | DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE structures POUSSÉ | `en-cours.md`, `demarrage.md`, `README.md` (+11) |
+| 11:20 | `f21420ba` | NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRITÈRES FALSIFIABLES, LES RISQUES ; LA DONNÉE D'ABORD | `README.md`, `en-cours.md`, `natif-plan.md` (+12) |
 
 ## Sessions actives ce jour
 

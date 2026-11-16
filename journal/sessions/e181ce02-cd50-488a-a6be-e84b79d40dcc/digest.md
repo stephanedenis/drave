@@ -68798,3 +68798,16 @@ lun 16 nov 2026 11:19:31 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan du modèle natif (les paliers, le banc) |\", \"| [`pilotage/natif-pl … [1318 caractères tronqués]`
+
+  ```
+· docs/README.md : 1008 mots > budget 1000 (T1)
+     · compteurs : en-cours.md dit 508 documents, le disque en a 127
+ 15 files changed, 113 insertions(+), 23 deletions(-)
+ create mode 100644 docs/pilotage/natif-plan.md
+f21420ba NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRI
+   4c3d502a..f21420ba  s/v7 -> s/v7
+   4c3d502a..f21420ba  master -> master
+lun 16 nov 2026 11:23:35 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan du natif |\", \"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md … [914 caractères tronqués]`
