@@ -2595,3 +2595,107 @@ index 1a689e20..117c45ea 100644
   ```
 
 - **bash** `{"command": "git commit -m \"T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE\"", "description": "Commit T6 closure f … [6 caractères tronqués]`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-92]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-92", "wait": true, "timeout_ms": 120000}`
+
+  ```
+[s/v7 83adaa2b] T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+ 22 files changed, 3967 insertions(+), 42 deletions(-)
+ create mode 100644 journal/sessions/session-0ad92682-0d71-421c-be45-3c35e875bb07/digest.md
+ create mode 100644 journal/sessions/session-0ad92682-0d71-421c-be45-3c35e875bb07/rapport.md
+ create mode 100644 reports/rapport-bilan-exploitable.json
+ create mode 100644 reports/rapport-bilan-exploitable.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | sed -n '1,60p'; echo ---; git status --short | head -30", "description": "Inspect commit contents"}`
+
+  ```
+83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+ docs/pilotage/en-cours.md                          |   20 +-
+ docs/pilotage/roadmap.md                           |   18 +-
+ journal/2026-11-15/README.md                       |   46 +-
+ journal/2026-11-15/distribue.md                    |    7 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   49 +
+ .../rapport.md                                     |   15 +-
+ .../digest.md                                      | 2597 ++++++++++++++++++++
+ .../rapport
+… [881 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py; echo \"revue=$?\"; python3 tools/verifie_en_cours.py | tail -1; python3 tools/taille_documents.py | tail -1", "description": "Post-commit checks"}`
+
+  ```
+revue de documentation · 765 fiche(s) · 860 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+revue=0
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "git log -1 --format='%h %s'; echo ---; git status --short | head -20", "description": "Confirm commit and remaining tree"}`
+
+  ```
+83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+### 🤖 Assistant
+
+**T6 est clos.** Commit `83adaa2b` — *T6 — LE BILAN EXPLOITABLE*.
+
+## Livrables
+
+- **[`reports/rapport-bilan-exploitable.md`](reports/rapport-bilan-exploitable.md)** — la fiche de clôture : installable, quickstart, API JSON, performance, codes de sortie, négatifs, reste.
+- **[`reports/rapport-bilan-exploitable.json`](reports/rapport-bilan-exploitable.json)** — schéma `drave.bilan-exploitable`, toutes les mesures et les trois lignes restantes.
+- **[`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md)** — T6 clos, 765 fiches / 860 JSON, passe et 86e porte, reste réorganisé.
+- **[`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)** — T6 inscrit, lignes B et R mises à jour, **U1** désignée comme prochaine action.
+- **[`journal/2026-11-15/README.md`](journal/2026-11-15/README.md)** — récit T4/T5/T6 ; index [`reports/INDEX.md`](reports/INDEX.md) et [`reports/README.md`](reports/README.md) à jour.
+
+## Ce que le bilan retient
+
+- **Installable** : `pip install -e .`, `drave 0.1.0`, 8 tests ; sans installation, code **127** propre. Limite : pas de wheel autonome.
+- **Quickstart** : **3/3** commandes, JSON v2 **5 899** octets, erreurs **3/4/1**. Le clone public reste dégradé par l’absence de `tools/structures`.
+- **API JSON** : **2 139** objets `{span, cible, source}`, **8** rôles normalisés, **0** span faux, v1 toujours lue.
+- **Performance** : 10 000 mots en **4,01 s**, **2 493 mots/s**, **126 Mio**, **14,8 Mo** de JSON ; 100 phrases à **1,10 ms**. Le contrôle de linéarité **échoue** : **α = 1,55**, quadratique **R² 0,99995**, coupables `_groupes_partition` / `_cible_proche`.
+- **CLI** : **20/20** cas, codes **0/3/4/5/1**, aide **8/8**, `--duree` sans casser le défaut.
+
+## Portes
+
+Aucune passe complète relancée. Lecture de `work/portes-1115-09h53/registre.txt` : **85 portes, 81 vertes, 4 rouges** ; `sessions` réparée, `indice`, `melange`, `prechargement` tolérées et nommées. Ciblage `work/portes/w6-final/` : **9/9**. Seule la **86e porte** `porte-banc-performance` a été rejouée à part : **verte**, 12 tests.
+
+## Ce qui reste
+
+- **Le gold de S** : 61 phrases / 144 rôles écrits par les mêmes règles — **144/144** n’est pas un or humain indépendant ; **J4** n’est pas ouvert.
+- **Panini** : **26 signatures** V14 manquantes, calibration **42/44**, rejeu **27/60** ; le manifeste et la commande sont prêts, le test attend.
+- **`--tagger auto`** : prototype opt-in mesuré (30/30 tests, code 0 dans tous les cas) ; la **décision reste humaine**, le défaut hors ligne est inchangé.
+- **Suite** : **U1** (les deux O(k²)), **U2** (la roue), **U3** (`--profils`).
+
+Contrôles post-commit : `revue_documentation` ✅, `verifie_en_cours` ✅ (1 627 mots), budget de contexte ✅, `porte-tableaux` ✅. Les modifications non liées présentes dans l’arbre de travail n’ont pas été touchées.
+

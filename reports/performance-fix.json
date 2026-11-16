@@ -1,0 +1,542 @@
+{
+ "schema": "drave.performance.fix",
+ "version": 1,
+ "date": "2026-11-16",
+ "tache": "U1 (exploitable, suite de T4)",
+ "ligne_roadmap": "B13",
+ "objectif": {
+  "alpha_max": 1.15,
+  "delta_r2_quadratique_max": 0.02,
+  "resultat": "atteint"
+ },
+ "source": {
+  "corpus": "data/corpus_fr_litterature.txt",
+  "prefixe_sha256": "0069b20e28975ca7b504755456aacf014b864b16705d40e6b381c45ae5e08871",
+  "mots": 10000,
+  "phrases": 814,
+  "bloc_controle": {
+   "mots": 247,
+   "debut": 0,
+   "fin": 1572,
+   "sha256": "618e219f2420daa76d7ad52dce15d81ef08dc9a8e1f35826785ce566b695ca41"
+  },
+  "machine": {
+   "python": "3.13.16",
+   "implementation": "CPython",
+   "machine": "x86_64",
+   "systeme": "Linux-7.2.6-1-default-x86_64-with-glibc2.44",
+   "cpu": "Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz",
+   "nproc": 40,
+   "ram_kb": 131886412,
+   "outil_memoire": "/usr/bin/time -f %M",
+   "pyhashseed": "0",
+   "date": "2026-11-16T00:07:29-0500"
+  },
+  "commit_avant": "83adaa2b6f8c6b1f03480375d30170a7613c71f8",
+  "sous_module_avant": "389b99f",
+  "commit_mesure": "83adaa2b + patch U1 (mesure faite avant le commit)"
+ },
+ "corrections": [
+  {
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_groupes_partition",
+   "avant": "toutes les paires de syntagmes, O(k²)",
+   "apres": "balayage des intervalles triés par début, O(k log k)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_cible_proche / _verbes_proches",
+   "avant": "filtre de tous les GV puis tri par distance pour chaque segment, O(k·m log m)",
+   "apres": "_IndexGV (gauche/droite/chevauchement + tas), O(log m + candidats examinés)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_sujet_hors_gv",
+   "avant": "any() sur tous les segments pour chaque GV, O(k²)",
+   "apres": "fins de GN triées + bisect, O(k log k)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_repli_cible_gp / _cible_rel_sujet",
+   "avant": "parcours de tous les GN (ou de tous les segments) à chaque appel, O(k²)",
+   "apres": "_IndexFins / _IndexSegments, O(log k)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/bloc_linguistique.py",
+   "fonction": "_expliciter_partition",
+   "avant": "deepcopy des candidats pour chaque alternative",
+   "apres": "copie superficielle de la liste (aucune mutation ensuite)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/structures/generateur.py",
+   "fonction": "construire_arbre",
+   "avant": "reversed(segs[:k]) + segs.index(parent) par segment, O(k²)",
+   "apres": "dernier segment à gauche entretenu au fil du balayage, O(k)",
+   "sortie": "identique"
+  },
+  {
+   "fichier": "tools/structures/generateur.py",
+   "fonction": "_segmente (cibles)",
+   "avant": "reversed(segs[:k]) pour chaque segment, O(k²)",
+   "apres": "dernier GN / GP / GV entretenu, O(k)",
+   "sortie": "identique"
+  }
+ ],
+ "controle_lineaire": {
+  "avant": {
+   "mesures": [
+    {
+     "mots": 247,
+     "syntagmes": 124,
+     "duree_s": 0.05006972490809858,
+     "duree_min_s": 0.0499039888381958,
+     "duree_max_s": 0.06516999797895551,
+     "rss_kb": 37860,
+     "json_octets": 709061
+    },
+    {
+     "mots": 494,
+     "syntagmes": 248,
+     "duree_s": 0.11342444899491966,
+     "duree_min_s": 0.10348552791401744,
+     "duree_max_s": 0.12171138706617057,
+     "rss_kb": 43108,
+     "json_octets": 1420674
+    },
+    {
+     "mots": 988,
+     "syntagmes": 496,
+     "duree_s": 0.29992253915406764,
+     "duree_min_s": 0.2755562770180404,
+     "duree_max_s": 0.30590677284635603,
+     "rss_kb": 51948,
+     "json_octets": 2843900
+    },
+    {
+     "mots": 1976,
+     "syntagmes": 992,
+     "duree_s": 0.8277513878419995,
+     "duree_min_s": 0.7744663988705724,
+     "duree_max_s": 0.8684784369543195,
+     "rss_kb": 70404,
+     "json_octets": 5695677
+    },
+    {
+     "mots": 3952,
+     "syntagmes": 1984,
+     "duree_s": 2.461343143135309,
+     "duree_min_s": 2.3832944890018553,
+     "duree_max_s": 2.5009299451485276,
+     "rss_kb": 107564,
+     "json_octets": 11417413
+    },
+    {
+     "mots": 7904,
+     "syntagmes": 3968,
+     "duree_s": 8.863135068910196,
+     "duree_min_s": 8.401364542078227,
+     "duree_max_s": 9.316030375892296,
+     "rss_kb": 181220,
+     "json_octets": 22860885
+    },
+    {
+     "mots": 9880,
+     "syntagmes": 4960,
+     "duree_s": 13.691206926014274,
+     "duree_min_s": 13.248783577000722,
+     "duree_max_s": 13.954026815947145,
+     "rss_kb": 218652,
+     "json_octets": 28582623
+    }
+   ],
+   "lineaire": {
+    "a": -1.2331260808744866,
+    "b": 0.0013733239968979313,
+    "r2": 0.9585522819439501,
+    "rmse": 1.0149899939062508,
+    "n": 7
+   },
+   "quadratique": {
+    "a": 0.05448998681497308,
+    "b": 0.00010074762083109746,
+    "c": 1.2915078495559425e-07,
+    "r2": 0.9999335385891802,
+    "rmse": 0.04064397975631092,
+    "n": 7
+   },
+   "loglog": {
+    "alpha": 1.52996378990646,
+    "beta": -11.631460700532879,
+    "r2": 0.9947440863774208,
+    "rmse": 0.14370053953400655,
+    "n": 7
+   },
+   "delta_r2_quadratique_moins_lineaire": 0.0413812566,
+   "alpha": 1.52996378990646,
+   "verdict_controle": false
+  },
+  "apres": {
+   "mesures": [
+    {
+     "mots": 247,
+     "syntagmes": 124,
+     "duree_s": 0.032316628843545914,
+     "duree_min_s": 0.03192767687141895,
+     "duree_max_s": 0.034364128950983286,
+     "rss_kb": 37724,
+     "json_octets": 709061
+    },
+    {
+     "mots": 494,
+     "syntagmes": 248,
+     "duree_s": 0.0778485550545156,
+     "duree_min_s": 0.07639681012369692,
+     "duree_max_s": 0.08465993287973106,
+     "rss_kb": 42372,
+     "json_octets": 1420674
+    },
+    {
+     "mots": 988,
+     "syntagmes": 496,
+     "duree_s": 0.1439674999564886,
+     "duree_min_s": 0.13821982103399932,
+     "duree_max_s": 0.1520123640075326,
+     "rss_kb": 50788,
+     "json_octets": 2843900
+    },
+    {
+     "mots": 1976,
+     "syntagmes": 992,
+     "duree_s": 0.3082850428763777,
+     "duree_min_s": 0.2930132378824055,
+     "duree_max_s": 0.32889552996493876,
+     "rss_kb": 67784,
+     "json_octets": 5695677
+    },
+    {
+     "mots": 3952,
+     "syntagmes": 1984,
+     "duree_s": 0.6180226688738912,
+     "duree_min_s": 0.5991764001082629,
+     "duree_max_s": 0.6204962071496993,
+     "rss_kb": 101708,
+     "json_octets": 11417413
+    },
+    {
+     "mots": 7904,
+     "syntagmes": 3968,
+     "duree_s": 1.4781559810508043,
+     "duree_min_s": 1.3577786539681256,
+     "duree_max_s": 1.59821028704755,
+     "rss_kb": 170980,
+     "json_octets": 22860885
+    },
+    {
+     "mots": 9880,
+     "syntagmes": 4960,
+     "duree_s": 1.7772236459422857,
+     "duree_min_s": 1.7693586258683354,
+     "duree_max_s": 1.832956749945879,
+     "rss_kb": 205692,
+     "json_octets": 28582623
+    }
+   ],
+   "lineaire": {
+    "a": -0.03875078124890252,
+    "b": 0.00018501927956213302,
+    "r2": 0.9966161245902537,
+    "rmse": 0.03831832841068709,
+    "n": 7
+   },
+   "quadratique": {
+    "a": -0.015525832631951952,
+    "b": 0.0001620656044046518,
+    "c": 2.3295145344178007e-09,
+    "r2": 0.9973873202457658,
+    "rmse": 0.03366994934373259,
+    "n": 7
+   },
+   "loglog": {
+    "alpha": 1.0759394426955102,
+    "beta": -9.323656876622382,
+    "r2": 0.9985052409371319,
+    "rmse": 0.05379068458810479,
+    "n": 7
+   },
+   "delta_r2_quadratique_moins_lineaire": 0.0007711957,
+   "alpha": 1.0759394426955102,
+   "verdict_controle": true
+  },
+  "alpha_prefixes_reels": {
+   "avant": 1.1224380133250769,
+   "apres": 0.7957377017851889
+  }
+ },
+ "dix_mille_mots": {
+  "avant": {
+   "fonction": {
+    "duree_s": {
+     "n": 3,
+     "mediane": 3.990812406176701,
+     "moyenne": 3.9837561137974262,
+     "min": 3.856404581107199,
+     "max": 4.104051354108378,
+     "p95": 4.104051354108378
+    },
+    "rss_kb": {
+     "n": 3,
+     "mediane": 129936,
+     "moyenne": 129702.66666666667,
+     "min": 128756,
+     "max": 130416,
+     "p95": 130416
+    },
+    "json_octets": 14795890,
+    "mots": 10000,
+    "syntagmes": 2726,
+    "etiquettes": 54522
+   },
+   "cli": {
+    "duree_s": {
+     "n": 3,
+     "mediane": 5.010618543950841,
+     "moyenne": 5.037687239625181,
+     "min": 4.983259954955429,
+     "max": 5.119183219969273,
+     "p95": 5.119183219969273
+    },
+    "rss_kb": {
+     "n": 3,
+     "mediane": 171316,
+     "moyenne": 171390.66666666666,
+     "min": 171292,
+     "max": 171564,
+     "p95": 171564
+    },
+    "octets": 14795890
+   }
+  },
+  "apres": {
+   "fonction": {
+    "duree_s": {
+     "n": 3,
+     "mediane": 0.8157198431435972,
+     "moyenne": 0.8211626831131676,
+     "min": 0.7808869320433587,
+     "max": 0.8668812741525471,
+     "p95": 0.8668812741525471
+    },
+    "rss_kb": {
+     "n": 3,
+     "mediane": 130452,
+     "moyenne": 130392,
+     "min": 130076,
+     "max": 130648,
+     "p95": 130648
+    },
+    "json_octets": 14795890,
+    "mots": 10000,
+    "syntagmes": 2726,
+    "etiquettes": 54522
+   },
+   "cli": {
+    "duree_s": {
+     "n": 3,
+     "mediane": 1.6675949220079929,
+     "moyenne": 1.7298159406830866,
+     "min": 1.6484034231398255,
+     "max": 1.8734494769014418,
+     "p95": 1.8734494769014418
+    },
+    "rss_kb": {
+     "n": 3,
+     "mediane": 171864,
+     "moyenne": 171892,
+     "min": 171744,
+     "max": 172068,
+     "p95": 172068
+    },
+    "octets": 14795890
+   }
+  }
+ },
+ "or_612_452": {
+  "avant": {
+   "all_612": {
+    "phrases": 612,
+    "pos": 0.8625,
+    "pos_ferme": 0.9373,
+    "pos_ouvert": 0.7918,
+    "syntagme_f1": 0.7902,
+    "syntagme_precision": 0.786,
+    "syntagme_rappel": 0.7944,
+    "tete_f1": 0.9029,
+    "attachement_cibles": 239,
+    "attachement_top1_taux": 0.9958,
+    "attachement_topk_taux": 0.9874,
+    "attachement_exact_taux_span": 1.0
+   },
+   "reel_452": {
+    "phrases": 452,
+    "pos": 0.8891,
+    "pos_ferme": 0.9294,
+    "pos_ouvert": 0.8466,
+    "syntagme_f1": 0.7906,
+    "syntagme_precision": 0.8128,
+    "syntagme_rappel": 0.7695,
+    "tete_f1": 0.899,
+    "attachement_cibles": 184,
+    "attachement_top1_taux": 0.9946,
+    "attachement_topk_taux": 0.9891,
+    "attachement_exact_taux_span": 1.0
+   }
+  },
+  "apres": {
+   "all_612": {
+    "phrases": 612,
+    "pos": 0.8625,
+    "pos_ferme": 0.9373,
+    "pos_ouvert": 0.7918,
+    "syntagme_f1": 0.7902,
+    "syntagme_precision": 0.786,
+    "syntagme_rappel": 0.7944,
+    "tete_f1": 0.9029,
+    "attachement_cibles": 239,
+    "attachement_top1_taux": 0.9958,
+    "attachement_topk_taux": 0.9874,
+    "attachement_exact_taux_span": 1.0
+   },
+   "reel_452": {
+    "phrases": 452,
+    "pos": 0.8891,
+    "pos_ferme": 0.9294,
+    "pos_ouvert": 0.8466,
+    "syntagme_f1": 0.7906,
+    "syntagme_precision": 0.8128,
+    "syntagme_rappel": 0.7695,
+    "tete_f1": 0.899,
+    "attachement_cibles": 184,
+    "attachement_top1_taux": 0.9946,
+    "attachement_topk_taux": 0.9891,
+    "attachement_exact_taux_span": 1.0
+   }
+  },
+  "json_avant_sha256_hors_date": "5bca5f760a2514daa96bf5f5eed1c0967e2a6e28d1ac16d821d4797d20bdebd8",
+  "json_apres_sha256_hors_date": "5bca5f760a2514daa96bf5f5eed1c0967e2a6e28d1ac16d821d4797d20bdebd8",
+  "json_identique": true
+ },
+ "controle_negatif": {
+  "principe": "les annotations canoniques (JSON trié, sans durée) sont identiques avant/après",
+  "fichiers": [
+   {
+    "nom": "bloc-x1.json",
+    "octets": 449558,
+    "sha256_avant": "137cb8097696e49b52cc49041f96b9cdeb24d121654e4c08a6b13a9d0b268789",
+    "sha256_apres": "137cb8097696e49b52cc49041f96b9cdeb24d121654e4c08a6b13a9d0b268789",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x2.json",
+    "octets": 901533,
+    "sha256_avant": "dbbb1699cf09922a2288c721d0f095bd1c99ade7dae04629caf614e8fbe2dd3d",
+    "sha256_apres": "dbbb1699cf09922a2288c721d0f095bd1c99ade7dae04629caf614e8fbe2dd3d",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x4.json",
+    "octets": 1805483,
+    "sha256_avant": "8eba512f8ad72f6c6bc0b706665d21e27242645c5adfe50daa3368cf9c6e634e",
+    "sha256_apres": "8eba512f8ad72f6c6bc0b706665d21e27242645c5adfe50daa3368cf9c6e634e",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x8.json",
+    "octets": 3618708,
+    "sha256_avant": "fa3f9e7d637686031c4ac7eeadd37fe23dbbf6fbaad29fe5aaccccd6427d76ca",
+    "sha256_apres": "fa3f9e7d637686031c4ac7eeadd37fe23dbbf6fbaad29fe5aaccccd6427d76ca",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x16.json",
+    "octets": 7263340,
+    "sha256_avant": "c3c34bfb1cd3b4b5442a14e7a13607ada5bf851fc417dd66728c155212974094",
+    "sha256_apres": "c3c34bfb1cd3b4b5442a14e7a13607ada5bf851fc417dd66728c155212974094",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x32.json",
+    "octets": 14552604,
+    "sha256_avant": "06675c023dc93768056bce30ccc641e61772e6eb1bee1d2aaae982326e0dcfed",
+    "sha256_apres": "06675c023dc93768056bce30ccc641e61772e6eb1bee1d2aaae982326e0dcfed",
+    "identique": true
+   },
+   {
+    "nom": "bloc-x40.json",
+    "octets": 18197238,
+    "sha256_avant": "28a412b9ae7d6a785ddd40cace5f2a652d387289b6955854a7ee99cfe48afe56",
+    "sha256_apres": "28a412b9ae7d6a785ddd40cace5f2a652d387289b6955854a7ee99cfe48afe56",
+    "identique": true
+   },
+   {
+    "nom": "corpus-10000.json",
+    "octets": 16457228,
+    "sha256_avant": "16488a95ca0d63f478e971d866a05d90796d24085497641e4677ae6c51ef3094",
+    "sha256_apres": "16488a95ca0d63f478e971d866a05d90796d24085497641e4677ae6c51ef3094",
+    "identique": true
+   },
+   {
+    "nom": "gold-annotations-612.json",
+    "octets": 4281465,
+    "sha256_avant": "b61c1521328bde4261ee42c1a0259d4c61cd05a9f12ec922a9256008c176c3dc",
+    "sha256_apres": "b61c1521328bde4261ee42c1a0259d4c61cd05a9f12ec922a9256008c176c3dc",
+    "identique": true
+   },
+   {
+    "nom": "gold-annotations-452.json",
+    "octets": 3222340,
+    "sha256_avant": "de329b530ddafbca9908622b1869edb024207180b468352905e1678f713d7c87",
+    "sha256_apres": "de329b530ddafbca9908622b1869edb024207180b468352905e1678f713d7c87",
+    "identique": true
+   }
+  ],
+  "diff": "vide",
+  "gold_json_identique_hors_date": true,
+  "generateur_identique_sur_textes": 620,
+  "note": "620 textes = préfixe 10 000 mots + 7 blocs contrôlés + les 612 phrases du gold ; comparaison du JSON canonique de generateur.analyser."
+ },
+ "tests": [
+  {
+   "commande": "python3 -m unittest tools.tests.linguistique.test_bloc_linguistique",
+   "resultat": "25 tests OK"
+  },
+  {
+   "commande": "PYTHONPATH=. python3 tests/test_generateur.py (dans tools/structures)",
+   "resultat": "27 tests OK"
+  },
+  {
+   "commande": "python3 tools/tests/linguistique/evaluer_gold.py --json …",
+   "resultat": "verdict identique, ok=true"
+  },
+  {
+   "commande": "python3 tools/banc_performance.py --sortie … --repetitions 3",
+   "resultat": "alpha 1,076 ; controle_lineaire true"
+  },
+  {
+   "commande": "python3 -m unittest tools.tests.test_verifier_performance_fix",
+   "resultat": "3 tests OK"
+  }
+ ],
+ "limites": [
+  "Un seul texte (Alice, français) ; un texte technique ou multilingue peut changer la densité de syntagmes.",
+  "Le bloc répété isole la taille, pas le contenu ; il ne mesure pas la vitesse du texte réel.",
+  "Le gain de temps (×4,9 sur 10 000 mots) dépend de la machine et de la charge ; les parts du profil, pas les secondes, sont le signal.",
+  "La mémoire ne baisse pas : les index ajoutent ~0,5 Mio au pic (126,9 → 127,4 Mio) pour supprimer le temps quadratique.",
+  "Les mesures de temps sont des médianes de 3 répétitions, sans épinglage CPU."
+ ],
+ "prochaine_action": "U2 — la roue ; U3 — --profils."
+}

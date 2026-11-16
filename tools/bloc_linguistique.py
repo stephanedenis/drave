@@ -32,8 +32,10 @@ from __future__ import annotations
 import os
 
 import argparse
+import bisect
 import collections
 import copy
+import heapq
 import json
 import pathlib
 import re
@@ -519,6 +521,181 @@ def _est_adverbe_seul(g: dict) -> bool:
             and _normaliser(g.get("texte") or "") in ADVERBES_SEULS)
 
 
+class _IndexGV:
+    """Les GV d'une analyse, indexés pour rendre les plus proches **sans les trier**.
+
+    L'ordre rendu par `proches` est **exactement** celui de
+    `sorted(gvs, key=ecart)` : d'abord la distance au segment, puis l'ordre d'origine
+    (le tri de Python est stable). L'index est bâti **une fois par liste de GV** ; une
+    requête coûte O(log m + candidats examinés) au lieu de O(m log m).
+
+    Trois flux partitionnent les GV sans recouvrement :
+      - `gauche` : `fin <= debut` du segment, triés par `fin` décroissante (distance
+        croissante) puis par ordre d'origine ;
+      - `droite` : `debut >= fin` du segment, triés par `debut` croissante (distance
+        croissante) puis par ordre d'origine ;
+      - `zero`  : `debut < fin` et `fin > debut` du segment (chevauchement), dans l'ordre
+        d'origine. Un arbre de segments (min `debut`, max `fin`) les rend un par un.
+    Un tas fusionne les trois flux par `(distance, ordre d'origine)`.
+    """
+
+    __slots__ = ("gvs", "n", "debuts", "fins", "utile", "min_debut_utile",
+                 "max_fin_utile", "par_debut", "par_fin",
+                 "debuts_tries", "fins_tries", "mn", "mx", "taille")
+
+    def __init__(self, gvs: list[dict]):
+        self.gvs = list(gvs)
+        self.n = len(self.gvs)
+        self.debuts = [g.get("debut", 0) for g in self.gvs]
+        self.fins = [g.get("fin", 0) for g in self.gvs]
+        # un GV d'adverbe seul n'est jamais un gouverneur : on le calcule une fois
+        self.utile = [not _est_adverbe_seul(g) for g in self.gvs]
+        utiles = [i for i in range(self.n) if self.utile[i]]
+        self.min_debut_utile = min((self.debuts[i] for i in utiles), default=float("inf"))
+        self.max_fin_utile = max((self.fins[i] for i in utiles), default=float("-inf"))
+        self.par_debut = sorted(range(self.n), key=lambda i: (self.debuts[i], i))
+        self.par_fin = sorted(range(self.n), key=lambda i: (self.fins[i], -i))
+        self.debuts_tries = [self.debuts[i] for i in self.par_debut]
+        self.fins_tries = [self.fins[i] for i in self.par_fin]
+        taille = 1
+        while taille < self.n:
+            taille *= 2
+        self.taille = taille
+        inf = float("inf")
+        self.mn = [inf] * (2 * taille)
+        self.mx = [-inf] * (2 * taille)
+        for i in range(self.n):
+            self.mn[taille + i] = self.debuts[i]
+            self.mx[taille + i] = self.fins[i]
+        for noeud in range(taille - 1, 0, -1):
+            self.mn[noeud] = min(self.mn[2 * noeud], self.mn[2 * noeud + 1])
+            self.mx[noeud] = max(self.mx[2 * noeud], self.mx[2 * noeud + 1])
+
+    def _premier_zero(self, debut: int, fin: int, depuis: int) -> int:
+        """Le premier indice >= `depuis` dont le span chevauche `[debut, fin)`."""
+        if not self.n or depuis >= self.n:
+            return -1
+
+        def chercher(noeud: int, lo: int, hi: int) -> int:
+            if hi <= depuis or self.mn[noeud] >= fin or self.mx[noeud] <= debut:
+                return -1
+            if hi - lo == 1:
+                return lo if (lo < self.n and self.debuts[lo] < fin
+                              and self.fins[lo] > debut) else -1
+            milieu = (lo + hi) // 2
+            trouve = chercher(2 * noeud, lo, milieu)
+            if trouve >= 0:
+                return trouve
+            return chercher(2 * noeud + 1, milieu, hi)
+
+        return chercher(1, 0, self.taille)
+
+    def proches(self, segment: dict):
+        """Les GV par distance croissante, à ordre d'origine égal (générateur)."""
+        if not self.n:
+            return
+        debut = segment.get("debut", 0)
+        fin = segment.get("fin", 0)
+        tas: list[tuple[int, int, int]] = []
+        ir = bisect.bisect_left(self.debuts_tries, fin)
+        il = bisect.bisect_right(self.fins_tries, debut) - 1
+        iz = self._premier_zero(debut, fin, 0)
+
+        def pousser_droite() -> None:
+            nonlocal ir
+            while ir < self.n:
+                i = self.par_debut[ir]
+                if self.fins[i] <= debut:
+                    # segment vide : ce GV est déjà dans le flux gauche (priorité au gauche)
+                    ir += 1
+                    continue
+                heapq.heappush(tas, (self.debuts[i] - fin, i, 0))
+                return
+
+        def pousser_gauche() -> None:
+            nonlocal il
+            if il >= 0:
+                i = self.par_fin[il]
+                heapq.heappush(tas, (debut - self.fins[i], i, 1))
+
+        if iz >= 0:
+            heapq.heappush(tas, (0, iz, 2))
+        pousser_droite()
+        pousser_gauche()
+        while tas:
+            distance, i, flux = heapq.heappop(tas)
+            yield i, self.gvs[i]
+            if flux == 0:
+                ir += 1
+                pousser_droite()
+            elif flux == 1:
+                il -= 1
+                pousser_gauche()
+            else:
+                iz = self._premier_zero(debut, fin, i + 1)
+                if iz >= 0:
+                    heapq.heappush(tas, (0, iz, 2))
+
+
+def _index_gv(gvs: list[dict], cache: dict | None) -> _IndexGV:
+    """L'index d'une liste de GV, mémoïsé par analyse (la liste reste vivante)."""
+    if cache is None:
+        return _IndexGV(gvs)
+    index = cache.get("__index_gv__")
+    if index is None:
+        index = {}
+        cache["__index_gv__"] = index
+    entree = index.get(id(gvs))
+    if entree is None or entree[0] is not gvs:
+        entree = (gvs, _IndexGV(gvs))
+        index[id(gvs)] = entree
+    return entree[1]
+
+
+class _IndexFins:
+    """Des segments indexés par leur fin : le plus à droite à gauche d'une position.
+
+    `max(gauche, key=lambda x: x["fin"])` choisit, à fin égale, le **premier** de la liste
+    d'origine ; l'index conserve donc le premier segment de chaque fin. Une requête est
+    O(log g) au lieu de O(g), sans changer le résultat.
+    """
+
+    __slots__ = ("segments", "fins", "premier")
+
+    def __init__(self, segments: list[dict]):
+        self.segments = list(segments)
+        premier: dict[int, dict] = {}
+        for g in self.segments:
+            premier.setdefault(g.get("fin", 0), g)
+        self.fins = sorted(premier)
+        self.premier = premier
+
+    def gauche(self, position: int) -> dict | None:
+        i = bisect.bisect_right(self.fins, position) - 1
+        return self.premier[self.fins[i]] if i >= 0 else None
+
+
+class _IndexSegments:
+    """Les GN et GV d'une liste, pour la règle « REL suivie d'un GV » en O(log k)."""
+
+    __slots__ = ("gns", "debuts_gv")
+
+    def __init__(self, tous: list[dict]):
+        self.gns = _IndexFins([x for x in tous if x.get("type") == "GN"])
+        self.debuts_gv = sorted(x.get("debut", 0) for x in tous if x.get("type") == "GV")
+
+    def cible(self, texte: str, segment: dict) -> str | None:
+        fin = segment.get("fin", 0)
+        i = bisect.bisect_left(self.debuts_gv, fin)
+        if i >= len(self.debuts_gv):
+            return None
+        gn = self.gns.gauche(segment.get("debut", 0))
+        if gn is None:
+            return None
+        return Heuristique._tete_nom(texte, gn["debut"], gn["fin"])
+
+
+
 MODAUX = {"would", "must", "can", "could", "should", "will", "shall", "may", "might", "ought",
           "could", "cannot"}
 
@@ -965,6 +1142,23 @@ class Heuristique:
         _clitiques = {"s'", "s’", "m'", "m’", "t'", "t’", "l'", "l’", "d'", "d’"}
         for c in cands:
             segs = c.get("segments") or []
+            # les fins de GN, triées : « un GN précède-t-il immédiatement ce GV ? » se
+            # répond en O(log g) au lieu de reparcourir tous les segments pour chaque GV.
+            fins_gn = sorted(x.get("fin", 0) for x in segs if x.get("type") == "GN")
+            debuts_blancs: dict[int, int] = {}
+
+            def gn_avant(d: int) -> bool:
+                if not fins_gn:
+                    return False
+                debut_blanc = debuts_blancs.get(d)
+                if debut_blanc is None:
+                    debut_blanc = d
+                    while debut_blanc > 0 and texte[debut_blanc - 1].isspace():
+                        debut_blanc -= 1
+                    debuts_blancs[d] = debut_blanc
+                j = bisect.bisect_left(fins_gn, debut_blanc)
+                return j < len(fins_gn) and fins_gn[j] <= d
+
             sortie: list[dict] = []
             for s in segs:
                 if s.get("type") != "GV":
@@ -976,8 +1170,7 @@ class Heuristique:
                     sortie.append(s)
                     continue
                 # un GN sujet précède immédiatement : le GV est déjà conforme
-                if any(x.get("type") == "GN" and x.get("fin", 0) <= d
-                       and not texte[x.get("fin", 0):d].strip() for x in segs):
+                if gn_avant(d):
                     sortie.append(s)
                     continue
                 n0 = _normaliser(mots[0][2])
@@ -1064,7 +1257,8 @@ class Heuristique:
         return None
 
     @staticmethod
-    def _cible_rel_sujet(texte: str, segment: dict, tous: list[dict]) -> str | None:
+    def _cible_rel_sujet(texte: str, segment: dict, tous: list[dict],
+                         index: _IndexSegments | None = None) -> str | None:
         """REL **suivie d'un GV** : le sujet de ce GV (le GN le plus proche à gauche).
 
         Le gold : « elle qui commence nage » → REL « qui commence » a pour cible `elle`,
@@ -1074,16 +1268,9 @@ class Heuristique:
         """
         if segment.get("type") != "REL":
             return None
-        droites = [x for x in tous if x.get("type") == "GV"
-                   and x.get("debut", 0) >= segment.get("fin", 0)]
-        if not droites:
-            return None
-        gauches = [x for x in tous if x.get("type") == "GN"
-                   and x.get("fin", 0) <= segment.get("debut", 0)]
-        if not gauches:
-            return None
-        gn = max(gauches, key=lambda x: x["fin"])
-        return Heuristique._tete_nom(texte, gn["debut"], gn["fin"])
+        if index is None:
+            index = _IndexSegments(tous)
+        return index.cible(texte, segment)
 
     @staticmethod
     def _cible_candidat(chaine: str) -> str:
@@ -1173,7 +1360,8 @@ class Heuristique:
         return []
 
     @staticmethod
-    def _repli_cible_gp(texte: str, segment: dict, gns: list[dict]) -> str | None:
+    def _repli_cible_gp(texte: str, segment: dict, gns: list[dict],
+                        index: _IndexFins | None = None) -> str | None:
         """Cible vide d'un GP : génitif → tête du GN à gauche (sinon None, le GV tranchera)."""
         if segment.get("type") != "GP":
             return None
@@ -1181,10 +1369,11 @@ class Heuristique:
         prep = _normaliser(premier[0]) if premier else ""
         if prep not in ("de", "du", "des", "d", "of", "from"):
             return None
-        gauche = [g for g in gns if g.get("fin", 0) <= segment.get("debut", 0)]
-        if not gauche:
+        if index is None:
+            index = _IndexFins(gns)
+        g = index.gauche(segment.get("debut", 0))
+        if g is None:
             return None
-        g = max(gauche, key=lambda x: x["fin"])
         return Heuristique._tete_nom(texte, g["debut"], g["fin"])
 
     @staticmethod
@@ -1279,31 +1468,33 @@ class Heuristique:
         Rend `None` si le segment est lui-même un GV ou s'il n'y a pas de GV. Le verbe est le
         dernier token du GV (`a vu` → `vu`, `est mangé` → `mangé`).
         """
-        gvs = [g for g in gvs if not _est_adverbe_seul(g)]
         if segment.get("type") == "GV" or not gvs:
             return None
-        if segment.get("type") == "GP":
-            # un GP n'est pas gouverné par un mot de son propre span (« est prêt à manger »)
-            dehors = [g for g in gvs
-                      if not (g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"])]
-            if dehors:
-                gvs = dehors
-        # le plus proche, tous côtés mêlés : la variante « GV de gauche d'abord » a été
-        # mesurée (2026-11-05) et donne **le même** exact — elle n'est pas retenue.
-        def ecart(g: dict) -> int:
-            if g["fin"] <= segment["debut"]:
-                return segment["debut"] - g["fin"]
-            if g["debut"] >= segment["fin"]:
-                return g["debut"] - segment["fin"]
-            return 0
-        # un GV réduit à l'auxiliaire (« a », « est ») ne donne pas la cible : on prend le
-        # premier GV proche dont le verbe est **plein** (mesuré : « a » au lieu de « vu »).
-        for g in sorted(gvs, key=ecart):
+        index = _index_gv(gvs, cache)
+        if not index.n:
+            return None
+        gp = segment.get("type") == "GP"
+        # un GP n'est pas gouverné par un mot de son propre span (« est prêt à manger ») ;
+        # si **tous** les GV utiles sont dans le span, l'original ne filtre pas : on le
+        # reproduit à l'identique (le seul GV intérieur peut gouverner).
+        exclure_dedans = bool(gp and (index.min_debut_utile < segment["debut"]
+                                      or index.max_fin_utile > segment["fin"]))
+        premier: dict | None = None
+        for i, g in index.proches(segment):
+            if not index.utile[i]:
+                continue
+            if exclure_dedans and g["debut"] >= segment["debut"] and g["fin"] <= segment["fin"]:
+                continue
+            if premier is None:
+                premier = g
             v = Heuristique._verbe_gv(texte, g, verbes, cache)
+            # un GV réduit à l'auxiliaire (« a », « est ») ne donne pas la cible : on prend
+            # le premier GV proche dont le verbe est **plein** (« a » au lieu de « vu »).
             if v and _normaliser(v) not in AUXILIAIRES:
                 return v
-        g = min(gvs, key=ecart)
-        return Heuristique._verbe_gv(texte, g, verbes, cache)
+        if premier is None:
+            return None
+        return Heuristique._verbe_gv(texte, premier, verbes, cache)
 
     @staticmethod
     def _verbes_proches(texte: str, segment: dict, gvs: list[dict],
@@ -1312,14 +1503,11 @@ class Heuristique:
         """Les verbes des `k` GV les plus proches — les **candidats** d'attachement."""
         if segment.get("type") == "GV" or not gvs:
             return []
-        def ecart(g: dict) -> int:
-            if g["fin"] <= segment["debut"]:
-                return segment["debut"] - g["fin"]
-            if g["debut"] >= segment["fin"]:
-                return g["debut"] - segment["fin"]
-            return 0
+        index = _index_gv(gvs, cache)
         proches: list[str] = []
-        for g in sorted(gvs, key=ecart)[:k]:
+        for n, (_i, g) in enumerate(index.proches(segment)):
+            if n >= k:
+                break
             v = Heuristique._verbe_gv(texte, g, verbes, cache)
             if v and v not in proches:
                 proches.append(v)
@@ -1764,13 +1952,18 @@ class Heuristique:
         # le O(n²) mesuré venait des re-chunkings (A6, A11) — sortie identique (T178).
         simples = self._syntagmes_simple(texte, lg, pos_verbes)
         gvs_simple = [x for x in simples if x["type"] == "GV"]
+        gns_simple = [x for x in simples if x["type"] == "GN"]
+        idx_gns_simple = _IndexFins(gns_simple)
         if cands:
             for c in cands[:1]:
                 noms = [x.get("nom", "") for x in cands]
-                gvs_s = [x for x in c.get("segments", []) if x.get("type") == "GV"]
+                segments_c = c.get("segments", [])
+                gns_s = [x for x in segments_c if x.get("type") == "GN"]
+                idx_gns_s = _IndexFins(gns_s)
+                gvs_s = [x for x in segments_c if x.get("type") == "GV"]
                 deja = {(x["debut"], x["fin"]) for x in gvs_s}
                 gvs = gvs_s + [x for x in gvs_simple if (x["debut"], x["fin"]) not in deja]
-                for s in c.get("segments", []):
+                for s in segments_c:
                     # la cible de S **convertie en son verbe** : « Les enfants jouent » →
                     # `jouent` (le gold attend le verbe, pas le GN) ; à défaut, le GV le plus
                     # proche. Mesuré : 82 cibles justes dans les candidats, 33 choisies avant.
@@ -1799,8 +1992,7 @@ class Heuristique:
                     if cible and _normaliser(cible) in AUXILIAIRES:
                         cible = None  # « a » / « est » ne sont pas des cibles
                     if not cible:
-                        gns_s = [x for x in c.get("segments", []) if x.get("type") == "GN"]
-                        cible = (self._repli_cible_gp(texte, s, gns_s)
+                        cible = (self._repli_cible_gp(texte, s, gns_s, idx_gns_s)
                                  or self._cible_proche(texte, s, gvs, verbes, cache_gv))
                     cible = self._cible_hors_span(texte, s, gvs, cible)
                     cible = self._repli_verbe_propre(texte, s, cible)
@@ -1830,7 +2022,7 @@ class Heuristique:
             for s in simples:
                 meta = {"role": s["role"], "niveau": s["niveau"]}
                 cible = (self._cible_precedent(texte, s, prec, verbes)
-                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._repli_cible_gp(texte, s, gns_simple, idx_gns_simple)
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
@@ -1852,6 +2044,8 @@ class Heuristique:
                     for s in cands[0].get("segments", [])}
             gvs_u = ([x for x in cands[0].get("segments", []) if x.get("type") == "GV"]
                      + gvs_simple)
+            tous_u = list(cands[0].get("segments", [])) + list(simples)
+            idx_tous_u = _IndexSegments(tous_u)
             prec = None
             for s in simples:
                 if (s["type"], s["debut"], s["fin"]) in deja:
@@ -1859,10 +2053,8 @@ class Heuristique:
                     continue
                 meta = {"role": s["role"], "niveau": s["niveau"], "union": True}
                 cible = (self._cible_precedent(texte, s, prec, verbes)
-                         or self._cible_rel_sujet(
-                             texte, s,
-                             list(cands[0].get("segments", [])) + list(simples))
-                         or self._repli_cible_gp(texte, s, [x for x in simples if x["type"] == "GN"])
+                         or self._cible_rel_sujet(texte, s, tous_u, idx_tous_u)
+                         or self._repli_cible_gp(texte, s, gns_simple, idx_gns_simple)
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
@@ -2516,24 +2708,35 @@ def _cle_preferee(e: Etiquette) -> tuple:
 
 
 def _groupes_partition(segs: list[Etiquette]) -> list[list[Etiquette]]:
-    """Les composantes connexes du graphe de chevauchement, ordonnées par position."""
-    parent = list(range(len(segs)))
+    """Les composantes connexes du graphe de chevauchement, ordonnées par position.
 
-    def trouver(i: int) -> int:
-        while parent[i] != i:
-            parent[i] = parent[parent[i]]
-            i = parent[i]
-        return i
-
-    for i in range(len(segs)):
-        for j in range(i + 1, len(segs)):
-            if max(segs[i].debut, segs[j].debut) < min(segs[i].fin, segs[j].fin):
-                ri, rj = trouver(i), trouver(j)
-                if ri != rj:
-                    parent[rj] = ri
+    Un **balayage** des intervalles triés par début : un segment dont le début est
+    inférieur à la fin maximale de la composante courante la rejoint ; sinon il ouvre une
+    composante. O(k log k) au lieu de O(k²), même découpage (les intervalles vides ne
+    chevauchent rien).
+    """
+    n = len(segs)
+    if n < 2:
+        return []
+    ordre = sorted(range(n), key=lambda i: (segs[i].debut, segs[i].fin))
+    gid = [-1] * n
+    fin_max: int | None = None
+    courant = -1
+    for i in ordre:
+        e = segs[i]
+        if e.fin <= e.debut:
+            continue
+        if fin_max is None or e.debut >= fin_max:
+            courant += 1
+            fin_max = e.fin
+        elif e.fin > fin_max:
+            fin_max = e.fin
+        gid[i] = courant
+    # l'ordre d'origine dans chaque composante (la partition le lit tel quel)
     groupes: dict[int, list[Etiquette]] = {}
     for i, e in enumerate(segs):
-        groupes.setdefault(trouver(i), []).append(e)
+        if gid[i] >= 0:
+            groupes.setdefault(gid[i], []).append(e)
     return sorted((g for g in groupes.values() if len(g) > 1),
                   key=lambda g: (min(e.debut for e in g), min(e.fin for e in g),
                                  min(e.type for e in g)))
@@ -2611,7 +2814,9 @@ def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> Non
                     vue["attachement"] = {"segment": att.get("segment", ""),
                                           "cible": att.get("cible", "")}
                     if att.get("candidats"):
-                        vue["attachement"]["candidats"] = copy.deepcopy(att["candidats"])
+                        # copie **superficielle** : la liste des candidats n'est plus
+                        # modifiée après la partition (le JSON la recopie de toute façon).
+                        vue["attachement"]["candidats"] = list(att["candidats"])
                 role = (autre.meta or {}).get("role")
                 if role:
                     vue["role"] = role

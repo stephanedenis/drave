@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **762 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **763 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -634,6 +634,7 @@
 | [rapport-pensee-votante3.md](rapport-pensee-votante3.md) | B13 — l'observation à trois looks : 20/20, mais 4000 épisodes |
 | [rapport-pensee-vote.md](rapport-pensee-vote.md) | B13 — le vote de signaux : 5 looks, toujours 0/20 |
 | [rapport-pensee-vrais-absents.md](rapport-pensee-vrais-absents.md) | B13 — les vrais absents : 5 phrases sans antécédent, 0 lien |
+| [rapport-performance-fix.md](rapport-performance-fix.md) | U1 — les deux O(k²) sont bornés : 10 000 mots de **4,0 s à 0,82 s** (×4,9), α de **1,53 à 1,08**, sorties **identiques au bit près** |
 | [rapport-performance.md](rapport-performance.md) | T4 — la performance de `drave analyser` : 10 000 mots en 4,0 s, 126 Mio, 14,8 Mo de JSON ; le contrôle de linéarité **échoue** (α = 1,55) |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |

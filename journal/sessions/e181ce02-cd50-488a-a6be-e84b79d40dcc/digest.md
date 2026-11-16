@@ -66475,3 +66475,55 @@ reports/rapport-cli-robuste.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "descrip … [55 caractères tronqués]`
+
+  ```
+Everything up-to-date
+Everything up-to-date
+[still running after 600000ms; moved to background job bash-5225]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5225", "timeout_ms": 800000, "wait": true}`
+
+  ```
+dim 15 nov 2026 23:54:26 EST
+2026-11-15 23:43:41 · ✔ T6 en 596.4 s (code 0) — ✅ test -f reports/rapport-bilan-exploitable.md && echo FICHE-OK
+2026-11-15 23:43:41 · ▶ U1 — La performance — les deux points quadratiques (timeout 3600 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -12 reports/rapport-bilan-exploitable.md | cut -c1-170", "description": "Pousser T6 et lire le bila … [24 caractères tronqués]`
+
+  ```
+9a291c8b..83adaa2b  s/v7 -> s/v7
+   9a291c8b..83adaa2b  master -> master
+# T6 — le bilan exploitable : installable, rejouable, mesuré, mais pas encore général
+
+> **Ligne de roadmap** : **B13** (le produit) · **Tâche** : **T6** (clôture de la nuit
+> exploitable) · **Date** : 2026-11-15 · **Verdict** : ✅ **les cinq briques T1–T5 tiennent
+> ensemble** ; ❌ **trois limites restent nommées et bornées** (clone public dégradé, croissance
+> O(k²), or de rôles humain absent).
+>
+> **Le chiffre, en une ligne.** Un débutant installe **`drave 0.1.0`** en **13,64 s** de machine
+> (`pip install -e .`), lance **3/3** commandes, obtient un JSON **v2** de **5 899 octets** avec
+> **2 139** candidats objets et **8** rôles normalisés ; **10 000 mots** passent en **4,01 s**
+> (**2 493 mots/s**, **126 Mio**, **14,8 Mo** de JSON) ; la CLI rend **20/20** cas et **cinq
+> codes** (0/3/4/5/1). Le **contrôle de linéarité échoue** (α = **1,55**), le **clone public**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre U1", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5227]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5227", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5227", "timeout_ms": 1300000, "wait": true}`

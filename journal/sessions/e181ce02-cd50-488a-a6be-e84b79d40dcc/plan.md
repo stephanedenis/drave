@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-15 13:20 EST
-- **Prochaine action** : le chantier (phase 2, J6-J14) ; la coordination N2/S/R/A est livrée.
+- **Heartbeat** : 2026-11-16 00:30 EST
+- **Prochaine action** : **U2 — la roue**, puis **U3 — `--profils`** ; **U1** est livré (α **1,08**, 10 000 mots **0,82 s**, sorties identiques ; [fiche](../../../reports/rapport-performance-fix.md)).
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.

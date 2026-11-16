@@ -7,12 +7,12 @@
 | Identifiant | `session-0ad92682-0d71-421c-be45-3c35e875bb07` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 23:33 |
-| Durée | 0.1 h |
+| Durée | 0.2 h |
 | Tours | 1 |
-| Messages | 96 |
-| Appels d'outils | 143 |
+| Messages | 99 |
+| Appels d'outils | 146 |
 | Fichiers touchés | 6 |
-| Commandes | 92 |
+| Commandes | 95 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T6 (clôture) : le bilan — relis les fiches T1-T5, écris `reports/rapport-bilan-exploitable.md` + JSON : ce qui est … [306 caractères tronqués]
 
-*143 appels d'outils.* Actions notables :
+*146 appels d'outils.* Actions notables :
 
 - bash — List workspace and work/portes
 - bash — List reports and pilotage docs
@@ -41,7 +41,38 @@
 - bash — Inspect T1-T5 JSON structure
 - bash — Find latest gate run directories
 - bash — Find registre files and recent work
-- … et 116 autres
+- … et 119 autres
+
+**Synthèse produite :**
+
+**T6 est clos.** Commit `83adaa2b` — *T6 — LE BILAN EXPLOITABLE*.
+
+\## Livrables
+
+- **[`reports/rapport-bilan-exploitable.md`](reports/rapport-bilan-exploitable.md)** — la fiche de clôture : installable, quickstart, API JSON, performance, codes de sortie, négatifs, reste.
+- **[`reports/rapport-bilan-exploitable.json`](reports/rapport-bilan-exploitable.json)** — schéma `drave.bilan-exploitable`, toutes les mesures et les trois lignes restantes.
+- **[`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md)** — T6 clos, 765 fiches / 860 JSON, passe et 86e porte, reste réorganisé.
+- **[`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)** — T6 inscrit, lignes B et R mises à jour, **U1** désignée comme prochaine action.
+- **[`journal/2026-11-15/README.md`](journal/2026-11-15/README.md)** — récit T4/T5/T6 ; index [`reports/INDEX.md`](reports/INDEX.md) et [`reports/README.md`](reports/README.md) à jour.
+
+\## Ce que le bilan retient
+
+- **Installable** : `pip install -e .`, `drave 0.1.0`, 8 tests ; sans installation, code **127** propre. Limite : pas de wheel autonome.
+- **Quickstart** : **3/3** commandes, JSON v2 **5 899** octets, erreurs **3/4/1**. Le clone public reste dégradé par l’absence de `tools/structures`.
+- **API JSON** : **2 139** objets `{span, cible, source}`, **8** rôles normalisés, **0** span faux, v1 toujours lue.
+- **Performance** : 10 000 mots en **4,01 s**, **2 493 mots/s**, **126 Mio**, **14,8 Mo** de JSON ; 100 phrases à **1,10 ms**. Le contrôle de linéarité **échoue** : **α = 1,55**, quadratique **R² 0,99995**, coupables `_groupes_partition` / `_cible_proche`.
+- **CLI** : **20/20** cas, codes **0/3/4/5/1**, aide **8/8**, `--duree` sans casser le défaut.
+
+\## Portes
+
+Aucune passe complète relancée. Lecture de `work/portes-1115-09h53/registre.txt` : **85 portes, 81 vertes, 4 rouges** ; `sessions` réparée, `indice`, `melange`, `prechargement` tolérées et nommées. Ciblage `work/portes/w6-final/` : **9/9**. Seule la **86e porte** `porte-banc-performance` a été rejouée à part : **verte**, 12 tests.
+
+\## Ce qui reste
+
+- **Le gold de S** : 61 phrases / 144 rôles écrits par les mêmes règles — **144/144** n’est pas un or humain indépendant ; **J4** n’est pas ouvert.
+- **Panini** : **26 signatures** V14 manquantes, calibration **42/44**, rejeu **27/60** ; le manifeste et la commande sont prêts, le test attend.
+- **`--tagger auto`** : prototype opt-in mesuré (30/30 tests, code 0 dans tous les cas) ; la **décision reste humaine**, le défaut hors ligne est in
+… [299 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -98,7 +129,7 @@
 - **T1** Check index_reports tool
 - **T1** Check T reports in INDEX
 - **T1** Compute current counters and date
-- … et 52 autres
+- … et 55 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -186,6 +217,7 @@
 - **T1** `+**État au 15/11 (nuit).** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapport-semaine-2.md). **État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **F1 0,7902**,`
 - **T1** `+public** à **88,70 %** d'attachement au lieu de **99,58 %**, croissance **O(k²)** (α = **1,55**),`
 - **T1** `[still running after 60000ms; moved to background job bash-92]`
+- **T1** `83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE`
 
 ## 5. Erreurs rencontrées
 

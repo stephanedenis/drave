@@ -1,6 +1,7 @@
 """Tests du bloc linguistique — contrat, substitution, parallèle, cascade, activation."""
 import json
 import pathlib
+import random
 import stat
 import sys
 import tempfile
@@ -274,6 +275,126 @@ class TestBlocLinguistique(unittest.TestCase):
         self.assertEqual(a.refus, "")
         self.assertEqual(pos.appels, 1)
         self.assertEqual(chunks.appels, 1)
+
+
+class TestIndexSpatial(unittest.TestCase):
+    """Les index O(k log k) doivent rendre **exactement** l'ancien tri O(k²)."""
+
+    @staticmethod
+    def _ecart(g, segment):
+        if g["fin"] <= segment["debut"]:
+            return segment["debut"] - g["fin"]
+        if g["debut"] >= segment["fin"]:
+            return g["debut"] - segment["fin"]
+        return 0
+
+    @staticmethod
+    def _ref_groupes(segs):
+        parent = list(range(len(segs)))
+
+        def trouver(i):
+            while parent[i] != i:
+                parent[i] = parent[parent[i]]
+                i = parent[i]
+            return i
+
+        for i in range(len(segs)):
+            for j in range(i + 1, len(segs)):
+                if max(segs[i].debut, segs[j].debut) < min(segs[i].fin, segs[j].fin):
+                    ri, rj = trouver(i), trouver(j)
+                    if ri != rj:
+                        parent[rj] = ri
+        groupes = {}
+        for i, e in enumerate(segs):
+            groupes.setdefault(trouver(i), []).append(e)
+        return sorted((g for g in groupes.values() if len(g) > 1),
+                      key=lambda g: (min(e.debut for e in g), min(e.fin for e in g),
+                                     min(e.type for e in g)))
+
+    @staticmethod
+    def _cle(groupe):
+        return [(e.type, e.debut, e.fin) for e in groupe]
+
+    def test_groupes_partition_balayage(self):
+        rng = random.Random(0)
+        for _ in range(300):
+            segs = []
+            for i in range(rng.randrange(0, 40)):
+                debut = rng.randrange(0, 50)
+                fin = debut + rng.choice([0, 0, 1, 2, 5, 10, 20])
+                segs.append(bl.Etiquette("syntagme", rng.choice(["GN", "GV", "GP", "REL"]),
+                                         f"s{i}", debut, fin))
+            self.assertEqual([self._cle(g) for g in self._ref_groupes(segs)],
+                             [self._cle(g) for g in bl._groupes_partition(segs)])
+
+    def test_index_gv_ordre_exact(self):
+        rng = random.Random(1)
+        for _ in range(500):
+            gvs = []
+            for i in range(rng.randrange(0, 20)):
+                debut = rng.randrange(0, 50)
+                fin = debut + rng.choice([0, 1, 2, 5, 10, 20])
+                gvs.append({"debut": debut, "fin": fin, "texte": f"g{i}"})
+            segment = {"debut": rng.randrange(0, 55), "fin": 0, "type": "GN"}
+            segment["fin"] = segment["debut"] + rng.choice([0, 1, 2, 5, 10, 20])
+            attendu = sorted(gvs, key=lambda g: self._ecart(g, segment))
+            got = [g for _i, g in bl._IndexGV(gvs).proches(segment)]
+            self.assertEqual(attendu, got)
+
+    def test_cible_et_verbes_proches(self):
+        rng = random.Random(2)
+        mots = ["a", "est", "mange", "dort", "vu", "lit", "peut-être", "vite", "chien"]
+        for _ in range(500):
+            texte = " ".join(rng.choice(mots) for _ in range(20))
+            gvs = []
+            for i in range(rng.randrange(0, 12)):
+                debut = rng.randrange(0, len(texte))
+                fin = debut + rng.choice([0, 1, 2, 5, 10, 20])
+                gvs.append({"debut": debut, "fin": fin, "texte": texte[debut:fin]})
+            segment = {"type": rng.choice(["GN", "GP", "GV", "SUB", "REL"]),
+                       "debut": rng.randrange(0, len(texte))}
+            segment["fin"] = segment["debut"] + rng.choice([0, 1, 2, 5, 10, 20])
+
+            def ref_cible(gvs_locaux):
+                gvs_locaux = [g for g in gvs_locaux if not bl._est_adverbe_seul(g)]
+                if segment["type"] == "GV" or not gvs_locaux:
+                    return None
+                if segment["type"] == "GP":
+                    dehors = [g for g in gvs_locaux
+                              if not (g["debut"] >= segment["debut"]
+                                      and g["fin"] <= segment["fin"])]
+                    if dehors:
+                        gvs_locaux = dehors
+                for g in sorted(gvs_locaux, key=lambda g: self._ecart(g, segment)):
+                    v = bl.Heuristique._verbe_gv(texte, g, None, None)
+                    if v and bl._normaliser(v) not in bl.AUXILIAIRES:
+                        return v
+                g = min(gvs_locaux, key=lambda g: self._ecart(g, segment))
+                return bl.Heuristique._verbe_gv(texte, g, None, None)
+
+            self.assertEqual(ref_cible(gvs),
+                             bl.Heuristique._cible_proche(texte, segment, gvs))
+            attendu = []
+            if segment["type"] != "GV" and gvs:
+                for g in sorted(gvs, key=lambda g: self._ecart(g, segment))[:3]:
+                    v = bl.Heuristique._verbe_gv(texte, g, None, None)
+                    if v and v not in attendu:
+                        attendu.append(v)
+            self.assertEqual(attendu, bl.Heuristique._verbes_proches(texte, segment, gvs))
+
+    def test_gp_tous_dedans(self):
+        """Si **tous** les GV sont dans le GP, l'original ne filtre pas : le GV gouverne."""
+        segment = {"type": "GP", "debut": 0, "fin": 11, "texte": "de mange la"}
+        gvs = [{"debut": 3, "fin": 8, "texte": "mange"}]
+        self.assertEqual(bl.Heuristique._cible_proche("de mange la", segment, gvs),
+                         "mange")
+
+    def test_index_fins_tie(self):
+        gns = [{"fin": 5, "texte": "A"}, {"fin": 5, "texte": "B"}, {"fin": 3, "texte": "C"}]
+        index = bl._IndexFins(gns)
+        self.assertIs(index.gauche(5), gns[0])
+        self.assertIs(index.gauche(4), gns[2])
+        self.assertIsNone(index.gauche(2))
 
 
 if __name__ == "__main__":

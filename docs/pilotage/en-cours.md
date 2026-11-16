@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 23 h 35 HNE (T6 : le bilan exploitable)**
+**Mis à jour : 2026-11-16, 00 h 30 HNE (U1 : les deux O(k²) bornés, α 1,08)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -56,14 +56,11 @@
 
 - **Id** : `e181ce02-cd50-488a-a6be-e84b79d40dcc` — [`plan.md`](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md).
 - **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
-- **Plan** : B13.
-- **Stratégie** : v0.
-- **Ambition** : runtime tracé.
-- **Objectif final** : moteur de pensée v0.
-- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md).
-- **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144**, gold v2 **20/46** ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md). **T6 — le bilan exploitable** : [fiche](../../reports/rapport-bilan-exploitable.md), [JSON](../../reports/rapport-bilan-exploitable.json).
-- **Prochaine action** : **U1 — borner `_groupes_partition` et `_cible_proche`** (O(k²)) ; **J4 — l'or de rôles** ; T132/T133.
+- **Plan** : B13 · **Stratégie** : v0 · **Ambition** : tracé · **Objectif final** : moteur v0.
+- **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
+- **Ce que font les autres** : N2.
+- **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** ([fiche](../../reports/rapport-performance-fix.md), [JSON](../../reports/performance-fix.json)).
+- **Prochaine action** : **U2 — la roue** ; **U3 — `--profils`** ; **J4** ; T132/T133.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -101,7 +98,7 @@
 |---|---|---|
 | portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **765** / **860** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **766** / **861** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **125** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** ; **86e porte** verte | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
 
@@ -113,7 +110,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit T1–T6** | **U1 — les deux O(k²)** ; **`g017` tranché** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit T1–T6 ; U1 : α 1,08, 10 000 mots 0,82 s** | **U2 — la roue** ; **`g017` tranché** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; X3 : lot 1 000, 672 appels, 99 971 tokens, 0,02177 $ ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd` ; Y1 : `--tagger auto` prototype (clé présente API 0/130 tokens ; invalide 0 ; sans clé 0 identique au défaut ; réseau coupé 0 après 3 essais ; défaut inchangé)** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche Y1](../../reports/rapport-tagger-auto.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -123,7 +120,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**T1–T6 — livré** ; reste **U1** (les deux O(k²)), **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploitable.md).
+**T1–T6 — livré** ; **U1 — les deux O(k²) bornés** (α 1,08, 10 000 mots 0,82 s, sorties identiques) ; reste **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploitable.md), [U1](../../reports/rapport-performance-fix.md).
 
 **Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
 
