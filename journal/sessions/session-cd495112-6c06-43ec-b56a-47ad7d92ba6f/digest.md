@@ -4529,3 +4529,157 @@ started background job bash-160
   ```
 
 - **job_output** `{"job_id": "bash-160", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 75a56c05] U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)
+ 12 files changed, 317 insertions(+), 29 deletions(-)
+ create mode 100644 journal/2026-11-16/mesures.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -4; echo EXIT:${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|violation\" | tail -2; echo EXIT2:${PIPESTATUS[0]}", "description": "Final doc and budget checks"}`
+
+  ```
+revue de documentation · 766 fiche(s) · 861 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT2:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_journal.py 2>&1 | tail -2; echo EXIT2:${PIPESTATUS[0]}", "description": "Final state and journal checks"}`
+
+  ```
+en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT:0
+  journal · 48 jour(s) · 223 session(s) · 2698 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT2:0
+  ```
+
+- **bash** `{"command": "PORTES=\"porte-etat porte-sessions\" bash tools/toutes-les-portes.sh 2>&1 | tail -8; echo EXIT:${PIPESTATUS[0]}", "description": "Final state gates"}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (2 portes, borne 1800 s) ===
+    journaux : work/portes-1116-00h27
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-sessions         ✅                           0 s  PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+--- 2 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1116-00h27
+EXIT:0
+  ```
+
+- **bash** `{"command": "git status --short | head -30; echo ---; git log --oneline -3; echo ---; git -C tools/structures status --short", "description": "Final git status"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+75a56c05 U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)
+d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+---
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nd=json.load(open('/tmp/u1-after/performance-apres4.json'))\nprint(d['echelle']['instrument'])\nPY", "description": "Check instrument control values after"}`
+
+  ```
+{'lineaire': {'mesures': [{'n': 250, 'duree_s': 0.012460159952752292, 'repetitions': 2}, {'n': 500, 'duree_s': 0.016452351468615234, 'repetitions': 2}, {'n': 1000, 'duree_s': 0.018104088958352804, 'repetitions': 2}, {'n': 2000, 'duree_s': 0.03349860664457083, 'repetitions': 2}, {'n': 4000, 'duree_s': 0.06254448147956282, 'repetitions': 2}, {'n': 8000, 'duree_s': 0.128169885603711, 'repetitions': 2}, {'n': 10000, 'duree_s': 0.15085095493122935, 'repetitions': 2}], 'loglog': {'alpha': 0.7068492410791721, 'beta': -8.556390977118182, 'r2': 0.9531690413362014, 'rmse': 0.20244971783321805, 'n': 7}, 'lineaire': {'a': 0.0063776136853512105, 'b': 1.465775663073149e-05, 'r2': 0.9970381484010841, 'rmse': 0.0028739728686698715, 'n': 7}, 'quadratique': {'a': 0.007036259274941748, 'b': 1.4014615622721764e-05, 'c': 6.448761863941637e-11, 'r2': 0.997134654628743, 'rmse': 0.002826763694808254, 'n': 7}, 'pente_attendue': 1.0}, 'quadratique': {'mesures': [{'n': 250, 'duree_s': 0.0026274354895576835, 'repetitions': 2}, {'n': 500, 'duree_s': 0.01373206009157002, 'repetitions': 2}, {'n': 1000, 'duree_s': 0.06538392452057451, 'repetitions': 2}, {'n': 2000, 'duree_s': 0.25916838843841106, 'repetitions': 2
+… [638 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json\nfor p in ['/tmp/u1-before/performance-avant.json','/tmp/u1-after/performance-apres.json','/tmp/u1-after/performance-apres2.json','/tmp/u1-after/performance-apres3.json','/tmp/u1-after/performance-apres4.json']:\n try:\n  d=json.load(open(p)); i=d['echelle' … [226 caractères tronqués]`
+
+  ```
+/tmp/u1-before/performance-avant.json lin 0.7823 quad 2.1333
+/tmp/u1-after/performance-apres.json lin 0.7491 quad 2.1162
+/tmp/u1-after/performance-apres2.json lin 0.7048 quad 2.1244
+/tmp/u1-after/performance-apres3.json lin 0.7818 quad 2.1206
+/tmp/u1-after/performance-apres4.json lin 0.7068 quad 2.1131
+  ```
+
+- **bash** `{"command": "grep -n \"instrument\" reports/rapport-performance-fix.md", "description": "Find instrument sentence"}`
+
+  ```
+55:**1,15**. Le contrôle de l'instrument n'a pas bougé : la boucle volontairement linéaire
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "limit": 6, "offset": 53}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md</path>
+<type>file</type>
+<content>
+53: Le terme quadratique n'apporte plus que **+0,00077 de R²** (contre **+0,0414** avant) : il
+54: n'est **pas significatif** au critère du banc (< 0,02), et α = **1,076** est sous le seuil
+55: **1,15**. Le contrôle de l'instrument n'a pas bougé : la boucle volontairement linéaire
+56: donne α = 0,9998, la boucle volontairement quadratique α = 2,0045.
+57: 
+58: ## 2. Les 10 000 mots
+
+(Showing lines 53-58 of 190. Use offset=59 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "new_string": "**1,15**. Le contrôle de l'instrument, dans la même passe : la boucle volontairement\nlinéaire donne α = **0,71** (0,78 avant), la boucle volontairement quadratique α = **2,11**\n(2,13  … [285 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/performance-fix.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nav=json.load(open('/tmp/u1-before/performance-avant.json'))['echelle']['instrument']\nap=json.load(open('/tmp/u1-after/performance-apres4.json'))['echelle … [684 caractères tronqués]`
+
+  ```
+ok
+JSON_OK
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 2, "offset": 123}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+123: **T1–T6 — livré** ; **U1 — les deux O(k²) bornés** (α 1,08, 10 000 mots 0,82 s, sorties identiques) ; reste **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploitable.md), [U1](../../reports/rapport-performance-fix.md).
+124: 
+
+(Showing lines 123-124 of 145. Use offset=125 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "**T1–T6 — livré** ; **U1 — les deux O(k²) bornés** (α 1,08, 10 000 mots 0,82 s, instrument 0,71/2,11) ; reste **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploit … [326 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation|✅\" | tail -2; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description": "Check budget after instrument change"}`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT:0
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md reports/performance-fix.json reports/rapport-performance-fix.md && git commit -m \"U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4)\" 2>&1 | tail -20", "description": "Commit instrument  … [39 caractères tronqués]`
+
+  ```
+started background job bash-170
+  ```
+
+- **job_output** `{"job_id": "bash-170", "timeout_ms": 300000, "wait": true}`

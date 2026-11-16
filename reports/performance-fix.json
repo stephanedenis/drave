@@ -277,6 +277,17 @@
   "alpha_prefixes_reels": {
    "avant": 1.1224380133250769,
    "apres": 0.7957377017851889
+  },
+  "instrument": {
+   "avant": {
+    "lineaire_alpha": 0.782320401454423,
+    "quadratique_alpha": 2.1332939282670287
+   },
+   "apres": {
+    "lineaire_alpha": 0.7068492410791721,
+    "quadratique_alpha": 2.1131322809840345
+   },
+   "lecture": "la boucle quadratique reste proche de 2 ; la boucle linéaire sous 1 vient du coût fixe des petites tailles."
   }
  },
  "dix_mille_mots": {

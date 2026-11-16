@@ -9,12 +9,12 @@
 | Début | 2026-11-15 23:43 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 238 |
-| Appels d'outils | 266 |
+| Messages | 252 |
+| Appels d'outils | 281 |
 | Fichiers touchés | 8 |
-| Commandes | 160 |
+| Commandes | 170 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche U1 (exploitable, suite de T4) : **répare les deux points O(k²)** identifiés par T4 — `_groupes_partition` (toutes  … [539 caractères tronqués]
 
-*266 appels d'outils.* Actions notables :
+*281 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - bash — Locate the two functions
@@ -41,7 +41,7 @@
 - bash — Find references to 612 and 452
 - bash — Find gold evaluation scripts
 - bash — Read gold evaluation tool
-- … et 197 autres
+- … et 209 autres
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_generateur.py` | 0 | 3 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md` | 0 | 3 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 10 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 11 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 1 |
 
@@ -100,7 +100,7 @@
 - **T1** Generate baseline annotation JSONs
 - **T1** Check imports
 - **T1** Compile and run bloc tests
-- … et 120 autres
+- … et 130 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -202,4 +202,5 @@
 - U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE)
 - U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)" 2>&1 | tail -20
 - U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)" 2>&1 | tail -25
+- U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4)" 2>&1 | tail -20
 

@@ -52,8 +52,10 @@ Les ajustements sur les sept points :
 
 Le terme quadratique n'apporte plus que **+0,00077 de R²** (contre **+0,0414** avant) : il
 n'est **pas significatif** au critère du banc (< 0,02), et α = **1,076** est sous le seuil
-**1,15**. Le contrôle de l'instrument n'a pas bougé : la boucle volontairement linéaire
-donne α = 0,9998, la boucle volontairement quadratique α = 2,0045.
+**1,15**. Le contrôle de l'instrument, dans la même passe : la boucle volontairement
+linéaire donne α = **0,71** (0,78 avant), la boucle volontairement quadratique α = **2,11**
+(2,13 avant) — il distingue toujours 1 de 2 ; la valeur linéaire sous 1 vient du coût fixe
+sur les petites tailles.
 
 ## 2. Les 10 000 mots
 
