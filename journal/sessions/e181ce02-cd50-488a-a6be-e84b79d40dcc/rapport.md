@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 378.1 h |
+| Durée | 378.2 h |
 | Tours | 206 |
-| Messages | 4196 |
-| Appels d'outils | 3751 |
+| Messages | 4205 |
+| Appels d'outils | 3760 |
 | Fichiers touchés | 25 |
-| Commandes | 3094 |
+| Commandes | 3103 |
 | Sous-agents | 43 |
-| Commits | 499 |
+| Commits | 500 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*14 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,6 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
+- … et 9 autres
 
 **Synthèse produite :**
 
@@ -11208,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3054 autres
+- … et 3063 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11855,4 +11856,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : LE MODÈLE A APPRIS LES MOTS (0,87 CONTRE 0,34) PAS LA PHRASE (RÉPÉTITION 15 EN G
 - DOCS — LE README DES FICHES DANS LE BUDGET (T1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push ori
 - DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 
+- NATIF — LE BANC DE GRAMMATICALITÉ : NOTRE ANALYSEUR JUGE LE MODÈLE (GV 6,9 CONTRE 2,3 AU HASARD, MAIS LE CIMENT EST BAS : DES MOTS SANS LA GLU)" 2>&1 | tail -2;
 

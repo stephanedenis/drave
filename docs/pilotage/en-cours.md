@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 10 h 55 HNE (le banc du natif committé, T1 vert)**
+**Mis à jour : 2026-11-16, 11 h 00 HNE (le natif jugé par notre analyseur : GV 6,9 contre 2,3, ciment 0,335 contre 0,791)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

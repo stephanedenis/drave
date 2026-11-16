@@ -49,6 +49,24 @@ La **cohérence s'arrête au prompt + ~3 mots** ; ensuite viennent les **nombres
 201, 2019, 2020 — les dates) et les **formes inventées**. C'est le « 12 octets puis dérive » de
 l'archive, mesuré.
 
+## 3 bis. Le natif jugé par notre analyseur (le banc de grammaticalité)
+
+[`tools/banc_grammaticalite.py`](../tools/banc_grammaticalite.py) passe les **136 générations**
+(les 20 prompts × 3 réglages × le natif et le contrôle) dans **notre propre analyseur** :
+
+| source | GV moyens | GN moyens | ciment (classes fermées) | attachements |
+|---|---:|---:|---:|---:|
+| **natif** (greedy) | **6,90** | 2,85 | 0,335 | 0,737 |
+| natif (top-20) | 5,85 | 3,15 | 0,310 | 0,789 |
+| **aléatoire** (greedy) | **2,30** | 1,80 | 0,791 | 0,747 |
+| aléatoire (top-20) | 4,00 | 2,35 | 0,796 | 0,670 |
+
+**Lecture.** Le natif a **trois fois plus de GV** que le hasard (6,9 contre 2,3) : il a appris
+quelque chose de la **position des verbes**. Mais son **ciment** est **bas** (0,335 contre 0,791) :
+ses textes sont des **mots de contenu** sans la glu grammaticale (les déterminants, les
+prépositions) — la structure est un squelette, pas une phrase. Les **attachements** ne
+discriminent pas (l'analyseur attache tout, même le bruit).
+
 ## 4. Ce que le banc ne dit pas
 
 - **La validité lexicale n'est pas la grammaticalité** : « 20 » est dans le vocabulaire du corpus.

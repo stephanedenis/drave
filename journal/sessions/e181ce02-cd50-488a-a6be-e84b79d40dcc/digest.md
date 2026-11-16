@@ -68277,3 +68277,103 @@ Everything up-to-date
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 10 h 55 HNE (le banc du natif committé, T1 vert)**\\n\", t, … [451 caractères tronqués]`
+
+  ```
+[s/v7 78cdb7f0] DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ
+ 8 files changed, 43 insertions(+), 13 deletions(-)
+78cdb7f0 DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; É
+   cf3f9bc7..78cdb7f0  s/v7 -> s/v7
+   cf3f9bc7..78cdb7f0  master -> master
+lun 16 nov 2026 10:50:35 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/banc_grammaticalite.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"banc_grammaticalite.py — le natif jugé par le bloc linguistique de Drave.\n\nPOURQUOI. Le banc de génération dit que le natif produit des mots mais pas des\nphr … [4073 caractères tronqués]`
+
+  ```
+syntaxe OK
+natif     greedy     gv=6.90 gn=2.85 mots=44.8 ciment=0.000 attaches=0.000 sans_verbe=0.15
+natif     top40_0.8  gv=6.35 gn=3.15 mots=35.2 ciment=0.000 attaches=0.000 sans_verbe=0.00
+natif     top20_0.5  gv=5.85 gn=3.15 mots=38.5 ciment=0.000 attaches=0.000 sans_verbe=0.00
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.000 attaches=0.000 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.000 attaches=0.000 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.000 attaches=0.000 sans_verbe=0.05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique().analyser('La France est un pays de 2010.', 'fr')\nfor e in a.etiquettes:\n    if e.niveau=='pos': print(e.type, '|', e.valeur, '|', e.debut, e.fin, '|', get … [102 caractères tronqués]`
+
+  ```
+DET | La | 0 2 | 0.92
+NOUN | France | 3 9 | 0.55
+AUX | est | 10 13 | 0.92
+DET | un | 14 16 | 0.92
+NOUN | pays | 17 21 | 0.3
+PREP | de | 22 24 | 0.92
+NUM | 2010 | 25 29 | 0.9
+PONCT | . | 29 30 | 0.95
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique().analyser('Le chat dort sur le toit.', 'fr')\nfor e in a.etiquettes:\n    if e.niveau=='syntagme': print(e.type, '|', getattr(e,'valeur',None), '|', getattr( … [137 caractères tronqués]`
+
+  ```
+GN | Le chat | None | None | 0 7
+GV | dort | None | None | 8 12
+GP | sur le toit | None | None | 13 24
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique().analyser('Le chat dort sur le toit.', 'fr')\nprint([x for x in dir(a) if not x.startswith('_')][:20])\ns = getattr(a,'syntagmes',None) or getattr(a,'segment … [119 caractères tronqués]`
+
+  ```
+['contexte', 'cout', 'couverture', 'etiquettes', 'fraction_semantique', 'json', 'langue', 'par_niveau', 'refus', 'script', 'source', 'texte', 'trace', 'unites_semantiques']
+<class 'NoneType'> None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nfrom tools import bloc_linguistique as bl\nimport json\na=bl.Heuristique().analyser('Le chat dort sur le toit.', 'fr')\nd=a.json()\nprint(list(d.keys())[:10])\nprint(json.dumps(d.get('unites_semantiques', d.get('syntag … [110 caractères tronqués]`
+
+  ```
+['schema', 'version', 'texte', 'langue', 'script', 'source', 'refus', 'etiquettes', 'unites_semantiques', 'fraction_semantique']
+[{"debut": 3, "fin": 7}, {"debut": 8, "fin": 12}]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Etiquette\" -A 12 tools/bloc_linguistique.py | head -14; grep -n \"cible\" tools/bloc_linguistique.py | head -4 | cut -c1-120", "description": "Voir la classe Etiquette"}`
+
+  ```
+76:class Etiquette:
+77-    niveau: str
+78-    type: str
+79-    valeur: str
+80-    debut: int
+81-    fin: int
+82-    source: str = "heuristique"
+83-    confiance: float = 0.5
+84-    candidats: list[str] = field(default_factory=list)
+85-    langue: str = "und"
+86-    script: str = SCRIPT_NEUTRE
+87-    meta: dict = field(default_factory=dict)
+88-
+687:    def cible(self, texte: str, segment: dict) -> str | None:
+1229:    def _cibles_s(self, texte: str) -> dict:
+1230:        """Toutes les cibles du générateur S (pas seulement le dernier segment ambigu).
+1233:        `cible_nom`/`cible_gp`/`cible_verbe`. Le défaut retenu est la cible la plus proche
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique().analyser('Le chat dort sur le toit.', 'fr')\nfor e in a.etiquettes:\n    if e.niveau=='syntagme': print(e.type, e.meta)\n\" 2>&1 | head -4", "description":  … [29 caractères tronqués]`
+
+  ```
+GN {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'Le chat', 'cible': 'dort', 'candidats': [{'span': {'debut': 8, 'fin': 12}, 'cible': 'dort', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 7}, 'cible': 'Le chat', 'source': 'heuristique'}, {'span': {'debut': 3, 'fin': 7}, 'cible': 'chat', 'source': 'heuristique'}]}}
+GV {'role': 'predicat', 'niveau': 0, 'attachement': {'segment': 'dort', 'cible': 'chat', 'candidats': [{'span': {'debut': 3, 'fin': 7}, 'cible': 'chat', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 7}, 'cible': 'Le chat', 'source': 'heuristique'}, {'span': {'debut': 8, 'fin': 12}, 'cible': 'dort', 'source': 'heuristique'}]}}
+GP {'role': 'lieu', 'niveau': 1, 'attachement': {'segment': 'sur le toit', 'cible': 'dort', 'candidats': [{'span': {'debut': 8, 'fin': 12}, 'cible': 'dort', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 7}, 'cible': 'Le chat', 'source': 'heuristique'}, {'span': {'debut': 3, 'fin': 7}, 'cible': 'chat', 'source': 'heuristique'}]}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_grammaticalite.py'); t=p.read_text()\nt=t.replace('attaches = sum(1 for e in synt if getattr(e, \"cible\", None) not in (None, \"\", \"—\"))',\n            'attaches = sum( … [424 caractères tronqués]`
+
+  ```
+mesures corrigées (type pour la classe, meta pour la cible)
+natif     greedy     gv=6.90 gn=2.85 mots=44.8 ciment=0.335 attaches=0.737 sans_verbe=0.15
+natif     top40_0.8  gv=6.35 gn=3.15 mots=35.2 ciment=0.377 attaches=0.887 sans_verbe=0.00
+natif     top20_0.5  gv=5.85 gn=3.15 mots=38.5 ciment=0.310 attaches=0.789 sans_verbe=0.00
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.791 attaches=0.747 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.801 attaches=0.650 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-banc-generation.md'); t=p.read_text()\nt=t.replace(\"\"\"## 4. Ce que le banc ne dit pas\"\"\",\"\"\"## 3 bis. Le natif jugé par notre analyseur (le banc de grammatica … [2080 caractères tronqués]`
