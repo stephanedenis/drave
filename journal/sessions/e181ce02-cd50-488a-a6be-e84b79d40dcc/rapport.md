@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 375.3 h |
+| Durée | 375.4 h |
 | Tours | 204 |
-| Messages | 4155 |
-| Appels d'outils | 3713 |
+| Messages | 4161 |
+| Appels d'outils | 3719 |
 | Fichiers touchés | 25 |
-| Commandes | 3057 |
+| Commandes | 3063 |
 | Sous-agents | 43 |
-| Commits | 495 |
+| Commits | 496 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10954,7 +10954,7 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 
 ### Tour 204 — "le clone public n'a pas tools/structures (le sous-module privé)" la quasi-totalité de mes repos privés sont disponibles … [29 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Voir le .gitmodules et le remote
 - bash — Tester le clone local avec sous-modules
@@ -10964,6 +10964,12 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - bash — Comparer local et origin du docwatch
 - bash — Repiner docwatch et retester le clone
 - bash — Committer le repin et retester
+- bash — Voir l'état du sous-module structures
+- bash — Pousser le sous-module et retester
+- bash — Tester le clone complet
+- bash — Voir le clone dans le quickstart
+- bash — Documenter le clone réparé
+- bash — Committer la doc du clone
 
 ## 3. Travail accompli
 
@@ -11085,7 +11091,7 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3017 autres
+- … et 3023 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11728,4 +11734,5 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
 - ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git
 - SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE" 2>&1 | tail -2; git log -1 --fo
+- DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE s
 

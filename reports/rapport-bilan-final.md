@@ -12,7 +12,7 @@ git clone https://github.com/stephanedenis/drave.git && cd drave
 python3 -m venv .venv && source .venv/bin/activate && pip install -e .
 drave --version && drave analyser "Le chat dort." && drave evaluer
 ```
-Clone public : **3/3**, JSON **5 899 octets**, 20 étiquettes ; **sans** `tools/structures` → sortie dégradée (voir § 6) ; dépôt : **6 179 octets**.
+Clone public : **3/3**, JSON **5 899 octets**, 20 étiquettes ; sous-modules **locaux** : `git -c protocol.file.allow=always clone --recurse-submodules` (le transport `file` est bloqué par défaut ; le pin docwatch a été repiné sur `95e94c4`, le commit `648adce` de `structures` poussé sur son remote local) ; dépôt : **6 179 octets**.
 
 ## 3. API du JSON
 - Schéma **`drave.annotation` v2**, v1 lue, **8** champs racine ; candidats en objets `{span, cible, source}`, rôles dans un vocabulaire **fermé de 8**.

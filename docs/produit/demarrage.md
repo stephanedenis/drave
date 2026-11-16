@@ -14,9 +14,17 @@ le chemin par défaut : le produit est **CPU, hors ligne et déterministe**.
 ## 1. Cloner
 
 ```bash
-git clone https://github.com/stephanedenis/drave.git
+git clone --recurse-submodules https://github.com/stephanedenis/drave.git
 cd drave
 ```
+
+> **Les sous-modules.** `tools/structures` (les données de S) et `tools/docwatch` sont des
+> sous-modules ; sur cette machine leurs URLs sont **locales** (`/home/stephane/...`) et Git
+> refuse le transport `file` par défaut : ajoutez `-c protocol.file.allow=always` à la commande
+> (`git -c protocol.file.allow=always clone --recurse-submodules …`), ou lancez
+> `git -c protocol.file.allow=always submodule update --init` après le clone. Le produit
+> (`analyser`, `evaluer`, `restituer`) fonctionne **sans** eux ; seules les pages de S en ont
+> besoin.
 
 ```text
 Cloning into 'drave'...

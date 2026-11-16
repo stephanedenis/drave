@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 08 h 00 HNE (clone réparé : docwatch repiné, protocol.file.allow documenté)**
+**Mis à jour : 2026-11-16, 08 h 05 HNE (clone réparé et documenté : sous-modules locaux, --recurse-submodules)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

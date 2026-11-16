@@ -67560,3 +67560,81 @@ clone EXIT=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 08 h 00 HNE (clone réparé : docwatch repiné, protocol.file. … [765 caractères tronqués]`
+
+  ```
+[s/v7 6f5e0f0c] SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE
+ 13 files changed, 399 insertions(+), 25 deletions(-)
+6f5e0f0c SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE
+fatal: remote error: upload-pack: not our ref 648adce3ea18ef4d142778fd67d42413aae5ae64
+fatal: Fetched in submodule path 'tools/structures', but it did not contain 648adce3ea18ef4d142778fd67d42413aae5ae64. Direct fetching of that commit failed.
+clone EXIT=0
+CHANGELOG.md
+CONTRIBUTING.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git log --oneline -3 | cut -c1-70; echo \"=== origin/master :\"; git log --oneline origin/master -1 | cut -c1-70; git rev-list --count origin/master..HEAD; git branch -a | head -4", "description": "Voir l'état du sou … [21 caractères tronqués]`
+
+  ```
+648adce U1 — générateur S : construire_arbre et cibles en O(k), sortie
+389b99f S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/1
+523d8c1 S — LE FAIT DIVERS EST TRANCHÉ : 61/61 TYPES, 144/144 RÔLES ; 
+=== origin/master :
+389b99f S — LES 11 VERDICTS HUMAINS DE /paragraphes (a004–a009) : 19/1
+1
+  fusion
+* master
+  n2-analyse
+  remotes/origin/HEAD -> origin/master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && timeout 120 git push origin master 2>&1 | tail -1; git log --oneline origin/master -1 | cut -c1-60; cd ../..; rm -rf /tmp/clone-test-drave && timeout 300 git -c protocol.file.allow=always clone --recurse-submodules - … [357 caractères tronqués]`
+
+  ```
+389b99f..648adce  master -> master
+648adce U1 — générateur S : construire_arbre et cibles en O(
+clone EXIT=0
+/tmp/clone-test-drave/tools/structures/donnees/paragraphes-validations.jsonl
+structures OK
+CHANGELOG.md
+CONTRIBUTING.md
+  ```
+
+- **bash** `{"command": "cd /tmp/clone-test-drave && timeout 120 python3 tools/drave.py analyser \"Le chat dort.\" 2>&1 | head -3; timeout 120 python3 tools/drave.py evaluer 2>&1 | grep -E \"SYNTAGMES|POS \" | head -2; ls tools/structures/ | head -4; head -1 tools/structures/donnees/paragraphes-validations.json … [79 caractères tronqués]`
+
+  ```
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
+POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+arbre_svg.py
+candidats_corpus.py
+construire_donnees.py
+donnees
+{"phrase_id": "a001", "candidat_id": "a001-c1", "statut": "resolu", "referents":
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"git clone\\|submodule\" docs/produit/demarrage.md | head -4 | cut -c1-160; sed -n \"$(grep -n 'git clone' docs/produit/demarrage.md | head -1 | cut -d: -f1),+6p\" docs/produit/demarrage.md", "description": "Voir le clone da … [18 caractères tronqués]`
+
+  ```
+17:git clone https://github.com/stephanedenis/drave.git
+git clone https://github.com/stephanedenis/drave.git
+cd drave
+```
+
+```text
+Cloning into 'drave'...
+```
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/demarrage.md'); t=p.read_text()\nt=t.replace(\"\"\"git clone https://github.com/stephanedenis/drave.git\ncd drave\n```\"\"\",\"\"\"git clone --recurse-submodules https:// … [1302 caractères tronqués]`
+
+  ```
+quickstart mis à jour
+bilan final corrigé
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 08 h 05 HNE (clone réparé et documenté : sous-modules locau … [648 caractères tronqués]`
