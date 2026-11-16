@@ -15,11 +15,12 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-natif-numpy.md`](rapport-natif-numpy.md) | **N4** — l'inférence numpy : 4/4 de parité |
+| [`rapport-native-reproductibilite.md`](rapport-native-reproductibilite.md) | **N4** — le 2,40 n'est pas reproductible |
+| [`rapport-natif-numpy.md`](rapport-natif-numpy.md) | **N4** — l'inférence numpy |
 | [`rapport-bilan-natif.md`](rapport-bilan-natif.md) | **Bilan** — le natif tranché |
 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | **N4** — la carte du modèle : identité, données, mesures, limites, usage |
 | [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif |
-| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase ; l'échelle : le vocabulaire, pas la composition |
+| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase |
 | [`rapport-bilan-jour-1115.md`](rapport-bilan-jour-1115.md) | **Bilan** — le 15/11 |
 | [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la coordination, le harnais |
 | [`rapport-bilan-nuit.md`](rapport-bilan-nuit.md) | **Bilan** — la nuit du 14 au 15/11 : le tagger, la base honnête, la phase C/B |

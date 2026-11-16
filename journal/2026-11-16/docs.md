@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 08:02 | `d1715692` | DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE structures POUSSÉ | `en-cours.md`, `demarrage.md`, `README.md` (+11) |
 | 11:20 | `f21420ba` | NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRITÈRES FALSIFIABLES, LES RISQUES ; LA DONNÉE D'ABORD | `README.md`, `en-cours.md`, `natif-plan.md` (+12) |
 | 11:27 | `19530010` | DOCS — LE README TENU (T1) | `README.md`, `en-cours.md`, `README.md` (+11) |
+| 12:23 | `4fc369e3` | DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE) | `en-cours.md`, `README.md`, `README.md` (+12) |
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 379.7 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 380.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -25,6 +26,7 @@
 - [reports/README.md](../../reports/README.md)
 - [reports/rapport-audit-v7.md](../../reports/rapport-audit-v7.md)
 - [reports/rapport-bilan-final.md](../../reports/rapport-bilan-final.md)
+- [reports/rapport-bilan-natif.md](../../reports/rapport-bilan-natif.md)
 - [reports/rapport-bloc-linguistique.md](../../reports/rapport-bloc-linguistique.md)
 - [reports/rapport-coherence-fiches-v7.md](../../reports/rapport-coherence-fiches-v7.md)
 - [reports/rapport-dev-test-v10.md](../../reports/rapport-dev-test-v10.md)

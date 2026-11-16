@@ -69231,3 +69231,153 @@ bilan augmenté
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/produit/README.md reports/rapport-bilan-natif.md docs/pilotage/en-cours.md 2>/dev/null; timeout 300 git commit -m \"DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE … [323 caractères tronqués]`
+
+  ```
+[s/v7 4fc369e3] DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE)
+ 15 files changed, 82 insertions(+), 22 deletions(-)
+4fc369e3 DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRAB
+   d9a129ba..4fc369e3  s/v7 -> s/v7
+   d9a129ba..4fc369e3  master -> master
+lun 16 nov 2026 12:25:52 EST
+15
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/portes/passe-1611n && nohup bash -c \"cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=work/portes/passe-1611n bash tools/toutes-les-portes.sh > work/portes/passe-1611n.log 2>&1; echo PASS_EXIT=\\$?\" > /d … [167 caractères tronqués]`
+
+  ```
+passe PID 2519053
+=== PASSE COMPLÈTE DES PORTES (86 portes, borne 1800 s) ===
+    journaux : work/portes/passe-1611n
+lun 16 nov 2026 12:26:19 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/banc_perplexite_gold.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"banc_perplexite_gold.py — la PPL du natif sur le gold linguistique.\n\nPOURQUOI. La PPL 2,40 du `drave-n0` a été mesurée sur sa **validation** (le wiki\nmême d … [4157 caractères tronqués]`
+
+  ```
+syntaxe OK
+  }
+ },
+ "global": {
+  "n": 612,
+  "ppl": 18.93,
+  "bits_octet": 4.243
+ },
+ "reference_val": {
+  "octets": 1023,
+  "ppl": 21.254
+ }
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def ppl\\|def perte\\|def evaluer\" -A 14 tools/entrainer_native.py | head -20 | cut -c1-120", "description": "Voir la fonction ppl de l'entraînement"}`
+
+  ```
+44:def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
+45-    modele.eval(); total = 0.0; n = 0
+46-    with torch.no_grad():
+47-        for _ in range(n_lots):
+48-            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+49-            logits = modele(x, canal=c)["logits"]
+50-            total += float(F.cross_entropy(logits.reshape(-1, 256), y.reshape(-1),
+51-                                           reduction="sum"))
+52-            n += y.numel()
+53-    return math.exp(total / max(1, n)), n
+54-
+55-
+56-def main() -> None:
+57-    ap = argparse.ArgumentParser()
+58-    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_perplexite_gold.py'); t=p.read_text()\nt=t.replace('texte = pathlib.Path(a.val).read_text(encoding=\"utf-8\", errors=\"replace\")[:1_000_000]\\n        perte, n = ppl_texte … [651 caractères tronqués]`
+
+  ```
+val en tête
+global: {'n': 612, 'ppl': 18.93, 'bits_octet': 4.243}
+langues: {'en': 23.879, 'fr': 16.766}
+val: {'octets': 1023, 'ppl': 21.884}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/canal_structure.py | cut -c1-120; grep -n \"def canal\" -A 6 tools/canal_structure.py | head -8 | cut -c1-120", "description": "Voir le canal de structure"}`
+
+  ```
+#!/usr/bin/env python3
+"""canal_structure.py — la classe de structure de chaque octet, pour le canal d'annotation.
+
+Le canal est une **seconde entrée** : à chaque octet du texte, une classe (0–5) que le modèle
+reçoit en plus de l'octet. Les classes viennent du générateur de structures
+([`tools/structures/generateur.py`](../tools/structures/generateur.py)) : mot plein, mot
+grammatical, espace, ponctuation, chiffre, et **frontière de proposition**.
+
+    python3 tools/canal_structure.py --entree data/wiki_fr/propre/train.txt --sortie data/wiki_fr/propre/train.canal
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent / "structures"))
+import generateur  # noqa: E402
+
+MOTIF = __import__("re").compile(r"[A-Za-zÀ-ÿ'’-]+|\d+|[.,;:!?…()«»]|\s+|[^\s]")
+26:def canal(texte: str) -> bytes:
+27-    """Une classe par octet, de la même longueur que `texte.encode('utf-8')`."""
+28-    sortie = bytearray()
+29-    for m in MOTIF.finditer(texte):
+30-        t = m.group()
+31-        n = len(t.encode("utf-8", "surrogateescape"))
+32-        if t.isspace():
+--
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /tmp/venv-natif/bin/python - <<'PY' 2>&1 | tail -6\nimport sys; sys.path.insert(0,'.')\nimport torch, torch.nn.functional as F, math\nfrom tools.native_model import NativeConfig, NativeModel\nfrom tools.canal_structure im … [899 caractères tronqués]`
+
+  ```
+PPL sans canal: 21.626 | avec canal: 17.32
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/wiki_mix/propre/val.canal 2>/dev/null | awk '{print $5}'; timeout 600 /tmp/venv-natif/bin/python - <<'PY' 2>&1 | tail -4\nimport sys; sys.path.insert(0,'.')\nimport torch, torch.nn.functional as F, math\nfrom tools.native … [875 caractères tronqués]`
+
+  ```
+10330112
+PPL avec le val.canal (fichier): 17.32
+canal len 1023 ids 1024
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 /tmp/venv-natif/bin/python - <<'PY' 2>&1 | tail -8\nimport sys; sys.path.insert(0,'.')\nimport torch\nck = torch.load('work/n2ac/mix1024-60k.pt', map_location='cpu', weights_only=False)\nprint('clés du checkpoint:', list( … [366 caractères tronqués]`
+
+  ```
+clés du checkpoint: ['config', 'state']
+n tenseurs: 127 | pos.weight ? True
+pos/rope: ['pos.weight']
+config: {'window': 1024, 'max_pos': 2048}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_perplexite_gold.py'); t=p.read_text()\nt=t.replace(\"from tools.tests.linguistique.evaluer_gold import charger  # noqa: E402\",\n            \"from tools.tests.linguistique … [1089 caractères tronqués]`
+
+  ```
+canal dans le bench
+global: {'n': 612, 'ppl': 20.344, 'bits_octet': 4.347}
+langues: {'en': 24.301, 'fr': 18.54}
+val: {'octets': 1023, 'ppl': 20.19}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_perplexite_gold.py'); t=p.read_text()\nt=t.replace('''    canal = torch.tensor([list(canal_de(texte.encode(\"utf-8\").decode(\"utf-8\", \"replace\")))[-len(ids) + 1:]] or [ … [771 caractères tronqués]`
+
+  ```
+canal aligné
+global: {'n': 612, 'ppl': 18.55, 'bits_octet': 4.213}
+langues: {'en': 24.523, 'fr': 16.033}
+val: {'octets': 1023, 'ppl': 22.616}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-native-reproductibilite.md <<'MD'\n# La PPL du natif n'est pas reproductible — le 2,40 annoncé ne se retrouve pas\n\n> **Ligne de roadmap** : **N4** (la mesure du natif) · **Date** : 2026-11-16 · **Verdict** :\n … [4367 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 873 JSON, le disque en a 874
+     · reports/README.md : 2813 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — le 2,40 annoncé n'est pas reproductible (le corpus n'est pas épinglé) |\", \"| **N4** — le 2,40 n'est pas reproducti … [1564 caractères tronqués]`

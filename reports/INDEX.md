@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **776 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **777 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -397,6 +397,7 @@
 | [rapport-native-professeur-30k.md](rapport-native-professeur-30k.md) | N2.20 — professeur 30 000 pas : 0,794 bit/octet, PPL 1.734 |
 | [rapport-native-professeur.md](rapport-native-professeur.md) | N2.2 — le professeur local : 23,76 M, 1,236 bit/octet |
 | [rapport-native-reflexe.md](rapport-native-reflexe.md) | N1.7 — le réflexe de `drave-n0` : 24 % plus rapide |
+| [rapport-native-reproductibilite.md](rapport-native-reproductibilite.md) | La PPL du natif n'est pas reproductible — le 2,40 annoncé ne se retrouve pas |
 | [rapport-native-service-auth.md](rapport-native-service-auth.md) | N4.4 — service durci : jeton, taille, n borné |
 | [rapport-native-service-rust.md](rapport-native-service-rust.md) | N4.3 — service Rust natif avec cache KV : 611 ms |
 | [rapport-native-service.md](rapport-native-service.md) | N4.2 — service local : `drave-n0` derrière HTTP |

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 379.7 h |
+| Durée | 380.0 h |
 | Tours | 206 |
-| Messages | 4270 |
-| Appels d'outils | 3824 |
+| Messages | 4282 |
+| Appels d'outils | 3836 |
 | Fichiers touchés | 25 |
-| Commandes | 3166 |
+| Commandes | 3178 |
 | Sous-agents | 43 |
-| Commits | 511 |
+| Commits | 512 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*87 appels d'outils.* Actions notables :
+*99 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 72 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3126 autres
+- … et 3138 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11868,4 +11868,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS)" 2>&1 | tail -2; git log
 - NATIF — L'INFÉRENCE NUMPY DU DRVM : 4/4 DE PARITÉ AVEC TORCH, SANS TORCH (~0,6 S/OCTET) ; drave generer --moteur numpy" 2>&1 | tail -2; git log -1 --format='%h 
 - DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE)" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -
+- NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE VAL ACTUEL, 18,55 SUR LE GOLD) ; LE CORPUS N'EST PAS ÉPINGLÉ — LE PALIER 1 COMMENCE
 

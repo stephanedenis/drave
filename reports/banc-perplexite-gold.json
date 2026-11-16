@@ -1,0 +1,26 @@
+{
+ "modele": "work/n2ac/mix1024-60k.pt",
+ "phrases": 612,
+ "fenetre": 1023,
+ "par_langue": {
+  "en": {
+   "n": 210,
+   "ppl": 24.523,
+   "bits_octet": 4.616
+  },
+  "fr": {
+   "n": 402,
+   "ppl": 16.033,
+   "bits_octet": 4.003
+  }
+ },
+ "global": {
+  "n": 612,
+  "ppl": 18.55,
+  "bits_octet": 4.213
+ },
+ "reference_val": {
+  "octets": 1023,
+  "ppl": 22.616
+ }
+}

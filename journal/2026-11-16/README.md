@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**27 commits** · **1 session(s)** · **7 thème(s)**
+**28 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 6 | [docs.md](docs.md) |
+| docs | 7 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 379.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 380.0 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -56,6 +56,7 @@
 | 11:52 | `60c40aa6` | NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMPOSITION |
 | 11:56 | `d251babf` | NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS) |
 | 12:13 | `d9a129ba` | NATIF — L'INFÉRENCE NUMPY DU DRVM : 4/4 DE PARITÉ AVEC TORCH, SANS TORCH (~0,6 S/OCTET) ; drave generer --moteur numpy |
+| 12:23 | `4fc369e3` | DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE) |
 
 ## Le récit de la journée (écrit à la main)
 
