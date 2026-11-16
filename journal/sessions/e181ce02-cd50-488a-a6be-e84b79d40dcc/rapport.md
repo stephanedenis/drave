@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 374.0 h |
-| Tours | 202 |
-| Messages | 4137 |
-| Appels d'outils | 3700 |
+| Durée | 375.3 h |
+| Tours | 204 |
+| Messages | 4155 |
+| Appels d'outils | 3713 |
 | Fichiers touchés | 25 |
-| Commandes | 3046 |
+| Commandes | 3057 |
 | Sous-agents | 43 |
-| Commits | 494 |
+| Commits | 495 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -64,6 +64,8 @@
 - **complete** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
 … [252 caractères tronqués]
 - **create** — Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de 
+… [245 caractères tronqués]
+- **complete** — Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de 
 … [245 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -471,6 +473,10 @@
 **Tour 201** — fais-moi un résumé du reste à faire pour que ce soit un exploitable et continue jusqu'à demain 8h00
 
 **Tour 202** — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ;  … [714 caractères tronqués]
+
+**Tour 203** — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ;  … [714 caractères tronqués]
+
+**Tour 204** — "le clone public n'a pas tools/structures (le sous-module privé)" la quasi-totalité de mes repos privés sont disponibles localement sur cette machine
 
 ## 2. Déroulé, étape par étape
 
@@ -10845,7 +10851,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ### Tour 202 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
 
-*104 appels d'outils.* Actions notables :
+*106 appels d'outils.* Actions notables :
 
 - bash — État de T1
 - bash — Suivre T1
@@ -10861,7 +10867,103 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - bash — Verdict T4
 - bash — Pousser T4 et lire
 - bash — Ajouter U1-U3
-- … et 55 autres
+- … et 57 autres
+
+**Synthèse produite :**
+
+⏵ Nuit terminée : **drave est installable et mesuré**. Voici le bilan pour votre 8 h
+
+\## Le résultat : `drave` est exploitable
+
+**Trois voies d'installation** (toutes vérifiées) :
+```bash
+\# la voie normale
+git clone https://github.com/stephanedenis/drave.git && cd drave
+python3 -m venv .venv && source .venv/bin/activate && pip install -e .
+drave --version && drave analyser "Le chat dort." && drave evaluer
+\# la roue autonome
+pip install dist/drave-0.1.0-py3-none-any.whl
+\# le chemin historique (intact)
+python3 tools/drave.py analyser "Le chat dort."
+```
+**3 commandes, ~14 s**, JSON v2 de 5 899 octets ; sans installation, `drave` échoue proprement (**127**, aucune trace).
+
+\## Ce que la nuit a livré (15 tâches, 4 h 30 → 6 h 50)
+
+| brique | résultat |
+|---|---|
+| **T1/T2** l'empaquetage + le contrat | `pip install -e .` ; **candidats objets** (2 139, 1 295/1 295 cibles), **rôles normalisés** (21 → 8 ; `predicat` = 711, `prédicat` = 0) |
+| **T3** le démarrage | [le quickstart](docs/produit/demarrage.md), 3/3 commandes rejouées |
+| **T4/U1** la performance | 10 000 mots : **3,99 s → 0,82 s** (×4,9, **12 259 mots/s**), α **1,55 → 1,08**, sorties **identiques au bit près** |
+| **T5** la CLI | `--duree`, les **codes 0/1/3/4/5**, 20/20 cas d'erreur |
+| **T6** le bilan | [le bilan](reports/rapport-bilan-final.md) : installable, rejouable, mesuré |
+| **U2** la roue | `drave-0.1.0-py3-none-any.whl` (2 055 192 o, gold dedans) |
+| **U3** les profils | `drave profils` : **20/20** langues, 313/320 sur les articles tenus à l'écart, `und` sur l'ambigu |
+| **V1** le banc strict | `evaluer --strict` (la cascade + le plancher 0,70) |
+| **Z1** la CI | `.github/workflows/ci.yml`, matrice 3.10/3.13, **10/10** étapes vertes, 2/2 contrôles négatifs |
+| **Z2** la passe | **84 portes, 81 vertes** — 2 rouges structurelles connues (`indice`, `melange`) + `sessions` (le hub) |
+| **Z3** le tag | **`exploitable-2026-11-16`** |
+
+\## L'état
+
+`HEAD 615f84be`, `master` = `s/v7` **poussés** (0 divergence) ; **183/183** d'autotest ; **porte produit verte** ; toutes les portes de doc vertes ; les 4 tags (`chantier-2026-11-14`, `semaine-2026-11-14`, `semaine-2-2026-11-20`, `exploitable-2026-11-16`).
+
+\## Les négatifs, dits
+
+- **Le clone public** n'a pas `tools/structures` (le sous-module privé) : la sortie est **dégradée** sur les pages S — le code du produit, lui, marche.
+- **L'or de rôles humain** n'existe pas encore (les rôles se séparent mais le cadre ne suit pas, 20/46).
+- **La confiance** n'est
+… [652 caractères tronqués]
+
+### Tour 203 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Rassembler les preuves
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Objectif clôturé — `drave` est installable, mesuré et protégé
+
+\## Le résultat
+
+L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **atteint** : les **15 tâches** livrées, la passe complète, le tag `exploitable-2026-11-16`, tout vert et poussé.
+
+\## Ce qui a été fait et comment c'est vérifié
+
+**L'empaquetage** — `pyproject.toml` (nom `drave`, version 0.1.0, `requires-python >= 3.10`, **0** dépendance, le script console `drave`), `pip install -e .` vérifié dans un venv, `drave --version` et `drave analyser` **depuis `/tmp`**, la roue autonome (`drave-0.1.0-py3-none-any.whl`, 2 055 192 o, gold dedans). Contrôles négatifs : sans installation → **127** propre ; une roue sans gold échoue proprement. Fiche : [`rapport-empaquetage.md`](reports/rapport-empaquetage.md).
+
+**Le démarrage** — [`docs/produit/demarrage.md`](docs/produit/demarrage.md), **3/3 commandes rejouées** sur un clone neuf, JSON v2 de 5 899 octets, sans clé. Fiche : [`rapport-quickstart.md`](reports/rapport-quickstart.md).
+
+**L'API du JSON** — les `candidats` en **objets** `{span, cible, source}` (2 139 objets, 1 295/1 295 cibles, 0 span faux), les `role` **normalisés** (21 → 8, `predicat` = 711, `prédicat` = 0). Fiche : [`rapport-contrat-json.md`](reports/rapport-contrat-json.md).
+
+**La performance** — 10 000 mots : **3,99 s → 0,82 s** (×4,9, 12 259 mots/s), α **1,55 → 1,08** (le terme quadratique tombe à +0,00077), **les sorties identiques au bit près** (612 + 452 + 10 000 mots, diff vide). Fiches : [`rapport-performance.md`](reports/rapport-performance.md), [`rapport-performance-fix.md`](reports/rapport-performance-fix.md).
+
+**La CLI** — `--duree`, les codes **0/1/3/4/5**, 20/20 cas d'erreur, `--profils` (20/20 langues, 313/320 hors échantillon, `und` sur l'ambigu), `--strict`. Fiches : [`rapport-cli-robuste.md`](reports/rapport-cli-robuste.md), [`rapport-profils.md`](reports/rapport-profils.md), [`rapport-evaluer-strict.md`](reports/rapport-evaluer-strict.md).
+
+**La protection** — `.github/workflows/ci.yml` (matrice 3.10/3.13, 5 étapes ×2 = 10/10 vertes, 2/2 contrôles négatifs) ; la passe **84 portes, 81 vertes** (2 rouges structurelles connues, `sessions` du hub). Fiches : [`rapport-ci.md`](reports/rapport-ci.md), [`rapport-passe-1611.md`](reports/rapport-passe-1611.md).
+
+**Les bilans** — [`rapport-bilan-final.md`](reports/rapport-bilan-final.md) (la synthèse lisible en 3 minutes).
+
+\## L'état
+
+`HEAD 615f84be`, `master` = `s/v7` **poussés** (0 divergence) ; les tags `exp
+… [899 caractères tronqués]
+
+### Tour 204 — "le clone public n'a pas tools/structures (le sous-module privé)" la quasi-totalité de mes repos privés sont disponibles … [29 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Voir le .gitmodules et le remote
+- bash — Tester le clone local avec sous-modules
+- bash — Tester le clone avec protocol.file.allow
+- bash — Voir le sous-module docwatch
+- bash — Voir le remote du docwatch
+- bash — Comparer local et origin du docwatch
+- bash — Repiner docwatch et retester le clone
+- bash — Committer le repin et retester
 
 ## 3. Travail accompli
 
@@ -10983,7 +11085,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3006 autres
+- … et 3017 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11111,7 +11213,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ## 5. Erreurs rencontrées
 
-88 sorties en erreur ou divergentes. Les premières :
+89 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -11625,4 +11727,5 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
 - EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
 - ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git
+- SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE" 2>&1 | tail -2; git log -1 --fo
 

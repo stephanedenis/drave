@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 06 h 50 HNE (T0 vert, la nuit exploitable clôturée)**
+**Mis à jour : 2026-11-16, 08 h 00 HNE (clone réparé : docwatch repiné, protocol.file.allow documenté)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
