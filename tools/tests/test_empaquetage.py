@@ -5,18 +5,24 @@ Ce que le test fige :
 
 - `pyproject.toml` : nom **drave**, version **0.1.0**, `requires-python >= 3.10`,
   **aucune dépendance**, script console `drave = tools.drave:main` ;
+- la **roue** embarque les sous-paquets du CLI (`tools.tests.linguistique`,
+  `tools.structures`, `tools.llm`) et les **gold** (`package-data`) ;
 - le **chemin historique** `python3 tools/drave.py` rend la même version et analyse ;
 - l'entrée `tools.drave:main` est **importable depuis un autre répertoire** (c'est ce que
   l'installation éditable met sur `sys.path`) ;
 - **sans installation**, `drave` échoue **proprement** : code 127, « command not found »,
-  pas de trace Python.
+  pas de trace Python ;
+- **sans gold**, `evaluer` échoue **proprement** : code 4, message qui dit quoi faire, et
+  `stdout` vide (contrôle négatif de la roue).
 
 Le test ne crée pas de venv et ne télécharge rien : la vérification complète
-`python3 -m pip install -e .` dans `/tmp/venv-drave` est consignée dans
-`reports/rapport-empaquetage.md` et `reports/empaquetage.json`.
+`python3 -m pip wheel .` puis l'installation dans `/tmp/venv-drave-roue` est consignée dans
+`reports/rapport-roue.md` et `reports/roue.json`.
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import os
 import pathlib
 import shutil
@@ -70,6 +76,23 @@ class TestMetadonnees(unittest.TestCase):
         project = _lire_pyproject()["project"]
         self.assertEqual(project["scripts"]["drave"], "tools.drave:main")
 
+    def test_sous_paquets_de_la_roue(self):
+        """Le CLI a besoin de la mesure, du générateur S et du tagger dans la roue."""
+        paquets = set(_lire_pyproject()["tool"]["setuptools"]["packages"])
+        for attendu in ("tools", "tools.llm", "tools.structures",
+                        "tools.tests.linguistique"):
+            self.assertIn(attendu, paquets)
+
+    def test_gold_dans_la_roue(self):
+        """Les cinq gold de la mesure voyagent comme données du paquet."""
+        donnees = _lire_pyproject()["tool"]["setuptools"]["package-data"]
+        gold = set(donnees["tools.tests.linguistique"])
+        for nom in ("gold.json", "gold_gele.json", "gold_reel.json",
+                    "gold_restitution_v2.json", "gold_synthetique.json"):
+            self.assertIn(nom, gold)
+            self.assertTrue((RACINE / "tools" / "tests" / "linguistique" / nom).is_file(),
+                            nom)
+
 
 class TestEntreeHistorique(unittest.TestCase):
     def test_version(self):
@@ -113,6 +136,33 @@ class TestControleNegatif(unittest.TestCase):
             self.assertEqual(r.returncode, 127, (r.stdout, r.stderr))
             self.assertIn("command not found", r.stderr.lower())
             self.assertNotIn("traceback", r.stderr.lower())
+
+
+class TestOrAbsent(unittest.TestCase):
+    """Le contrôle négatif de la roue : sans gold, `evaluer` refuse de mesurer."""
+
+    def test_evaluer_sans_gold_code_4(self):
+        if str(RACINE) not in sys.path:
+            sys.path.insert(0, str(RACINE))
+        import tools.drave as drave  # noqa: E402  (après l'ajout de la racine)
+
+        sortie, erreur = io.StringIO(), io.StringIO()
+        ancien = drave.RACINE
+        with tempfile.TemporaryDirectory() as tmp:
+            dossier = pathlib.Path(tmp) / "tools" / "tests" / "linguistique"
+            dossier.mkdir(parents=True)
+            (dossier / "evaluer_gold.py").write_text("", encoding="utf-8")
+            drave.RACINE = pathlib.Path(tmp)
+            try:
+                with contextlib.redirect_stdout(sortie), contextlib.redirect_stderr(erreur):
+                    code = drave.main(["evaluer"])
+            finally:
+                drave.RACINE = ancien
+        self.assertEqual(code, 4, erreur.getvalue())
+        self.assertEqual(sortie.getvalue(), "")
+        self.assertIn("gold absent", erreur.getvalue())
+        self.assertIn("--gold", erreur.getvalue())
+        self.assertNotIn("Traceback", erreur.getvalue())
 
 
 if __name__ == "__main__":

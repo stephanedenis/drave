@@ -4683,3 +4683,141 @@ started background job bash-170
   ```
 
 - **job_output** `{"job_id": "bash-170", "timeout_ms": 300000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 04894aea] U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4)
+ 10 files changed, 210 insertions(+), 16 deletions(-)
+ create mode 100644 journal/2026-11-16/memoire.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo EXIT:${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|violation\" | tail -2; echo EXIT2:${PIPESTATUS[0]}", "description": "Final doc review"}`
+
+  ```
+revue de documentation · 766 fiche(s) · 861 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT2:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_journal.py 2>&1 | tail -2; echo EXIT2:${PIPESTATUS[0]}", "description": "Final state/journal"}`
+
+  ```
+en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT:0
+  journal · 48 jour(s) · 223 session(s) · 2701 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT2:0
+  ```
+
+- **bash** `{"command": "PORTES=\"porte-etat porte-sessions\" bash tools/toutes-les-portes.sh 2>&1 | tail -6; echo EXIT:${PIPESTATUS[0]}", "description": "Final state gates after correction"}`
+
+  ```
+journaux : work/portes-1116-00h30
+  porte-etat             ✅                           1 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-sessions         ✅                           0 s  PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+--- 2 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1116-00h30
+EXIT:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifier_performance_fix.py --comparer /tmp/u1-before /tmp/u1-after4 2>&1 | tail -4; echo EXIT:${PIPESTATUS[0]}", "description": "Final negative control"}`
+
+  ```
+identique bloc-x40.json                 18197238 octets  28a412b9ae7d6a78
+identique gold-annotations-612.json      4281465 octets  b61c1521328bde42
+identique gold-annotations-452.json      3222340 octets  de329b530ddafbca
+10/10 identiques — diff vide
+EXIT:0
+  ```
+
+- **bash** `{"command": "git status --short | head -20; echo ---; git log --oneline -4", "description": "Final git status"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+---
+04894aea U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4)
+75a56c05 U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)
+d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+  ```
+
+- **todo_write** `{"todos": [{"content": "Implémenter les index O(k log k) et le balayage (bloc + générateur S)", "status": "completed"}, {"content": "Vérifier l'identité des sorties avant/après (612, 452, 10 000 mots, blocs)", "status": "completed"}, {"content": "Mesurer α, temps 10 000 mots, mémoire, contrôle quadr … [474 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 8 completed.
+  ```
+
+### 🤖 Assistant
+
+## U1 — les deux O(k²) sont bornés, sorties identiques
+
+**Résultat mesuré** (même bloc contrôlé T4, 247 mots ×1…×40 ; médianes de 3 répétitions) :
+
+| mesure | avant | après |
+|---|---:|---:|
+| 10 000 mots — fonction | **3,991 s** | **0,816 s** (×4,89) |
+| débit | 2 506 mots/s | **12 259 mots/s** |
+| CLI `--json` | 5,011 s | **1,668 s** |
+| pic RSS fonction | 126,9 Mio | **127,4 Mio** (+0,5 Mio) |
+| JSON indenté | 14 795 890 o | **14 795 890 o** (identique) |
+| **α** bloc contrôlé | **1,530** | **1,076** |
+| ΔR² quadratique − linéaire | +0,0414 | **+0,00077** |
+| contrôle linéaire | ❌ | ✅ |
+
+**Objectif atteint** : α = 1,076 ≤ 1,15, terme quadratique non significatif.
+
+### Ce qui a été corrigé
+
+- `_groupes_partition` : toutes les paires O(k²) → **balayage O(k log k)**.
+- `_cible_proche` / `_verbes_proches` : tri de tous les GV à chaque segment → **`_IndexGV`** (gauche/droite/chevauchement + tas), O(log m + candidats).
+- Le profil a ensuite nommé trois autres boucles quadratiques, corrigées sans changer les résultats :
+  - `_sujet_hors_gv` (`any()` sur tous les segments par GV) → fins de GN triées + `bisect` ;
+  - `_repli_cible_gp` / `_cible_rel_sujet` → `_IndexFins` / `_IndexSegments` ;
+  - `construire_arbre` et les cibles de `_segmente` dans le générateur S → balayage O(k).
+- `_expliciter_partition` : `deepcopy` des candidats → copie superficielle.
+
+### Contrôle négatif — diff vide
+
+`python3 tools/verifier_performance_fix.py --comparer /tmp/u1-before /tmp/u1-after4` :
+
+```
+10/10 identiques — diff vide
+```
+
+Sont identiques **octet pour octet** : 10 000 mots, blocs ×1…×40, annotations des 612 phrases et des 452 réelles. Le générateur S a aussi été comparé directement sur **620 textes** : identique. Les métriques gold sont inchangées : POS **0,8625**, F1 syntagmes **0,7902**, attachement top-k **0,9874** sur 612 ; POS **0,8891**, F1 **0,7906**, top-k **0,9891** sur 452.
+
+### Tests et portes
+
+- `tools/tests/linguistique/test_bloc_linguistique.py` : **25 tests OK** (dont 5 différentiels ancien/nouveau).
+- `tools/structures/tests/test_generateur.py` : **27 tests OK**.
+- `tools/tests/test_verifier_performance_fix.py` : **3 tests OK**.
+- Portes ciblées U1 : **15/15 vertes** (`banc-performance`, `bloc-linguistique`, `produit`, `budget`, `état`, `sessions`, `registre`, etc.), puis **2/2** après commit.
+- Revue de documentation, `verifie_en_cours`, `verifie_journal`, budget : **verts**.
+- La passe complète des 86 portes n’a pas été relancée (précédent T6) ; les rouges structurelles connues restent `indice` et `melange`.
+
+### Livrables et commits
+
+- Fiche : [`reports/rapport-performance-fix.md`](reports/rapport-performance-fix.md)
+- JSON : [`reports/performance-fix.json`](reports/performance-fix.json)
+- Contrôle négatif rejouable : [`tools/verifier_performance_fix.py`](tools/verifier_performance_fix.py)
+- Sous-module `tools/structures` : commit **`648adce`**
+- Dépôt principal : **`d19f0fc7`** (résultat), **`75a56c05`** (pointeurs de commits), **`04894aea`** (correction du contrôle de l’instrument — linéaire 0,71, quadratique 2,11, et non les valeurs de T4).
+
+Les modifications antérieures non liées (`reports/pensee-*`, `tools/chantier/plan.json`, etc.) sont restées hors commit.
+

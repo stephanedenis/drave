@@ -163,12 +163,11 @@ gold B13 ; **E2** ([fiche](../../reports/rapport-tagger-erreurs.md)).
 **14,8 Mo** JSON ; α = **1,55**, `_groupes_partition`/`_cible_proche` **O(k²)**.
 [Fiche](../../reports/rapport-performance.md) · [JSON](../../reports/performance.json).
 
-**U1 — les deux O(k²) bornés (16/11).** 10 000 mots : **3,99 → 0,82 s** (×4,9),
-**12 259 mots/s**, **127,4 Mio** ; JSON identique. **α = 1,076** (1,530 avant), le
-quadratique n'ajoute que **+0,00077 de R²** ; sorties identiques (612/452, diff vide).
-`_groupes_partition`, `_cible_proche`, `_sujet_hors_gv` et deux boucles du générateur S sont
-corrigés. [Fiche](../../reports/rapport-performance-fix.md) · [JSON](../../reports/performance-fix.json) ·
-[contrôle](../../tools/verifier_performance_fix.py). **Prochaine action : U2 — la roue, U3 — `--profils`.**
+**U1 — les O(k²) bornés (16/11).** 10 000 mots : **3,99 → 0,82 s** (×4,9),
+**12 259 mots/s**, **127,4 Mio** ; JSON identique. **α = 1,076** (1,530 avant), +0,00077 de R² ; sorties identiques (612/452). [Fiche](../../reports/rapport-performance-fix.md) ·
+[JSON](../../reports/performance-fix.json) · [contrôle](../../tools/verifier_performance_fix.py).
+**U2 — la roue (16/11)** : **1 727 201 o**, 422 entrées, mêmes JSON hors dépôt ; sans gold,
+`evaluer` **4** ([fiche](../../reports/rapport-roue.md)). Prochaine action : **U3 — `--profils`**.
 
 **T6 — le bilan exploitable (15/11, 23 h 35).** Cinq briques : installation éditable,
 quickstart 3/3, API (2 139 objets, 8 rôles), performance (10 000 mots 4,01 s, 126 Mio), CLI

@@ -60,6 +60,12 @@ la portée, **échoue à l'import** (`ModuleNotFoundError: No module named 'tool
 n'embarque ni `tools/tests` (dont `miroir`) ni les gold (`tools/tests/linguistique/`), et `data/`
 est hors dépôt. Ce n'est pas le chemin demandé ; c'est la limite de l'installation éditable.
 
+> **Suite U2 (2026-11-16).** La roue est désormais construite et mesurée : elle embarque
+> `tools.tests.linguistique` (dont `miroir` et les cinq gold), `tools.structures` et
+> `tools.llm` ; `drave analyser` et `drave evaluer` rendent depuis `/tmp` les mêmes JSON
+> qu'ici. Le wheel amputé de ses gold échoue **proprement** (`evaluer` code 4). Voir
+> [`rapport-roue.md`](rapport-roue.md) et [`roue.json`](roue.json).
+
 ## 2. Le dispositif
 
 Depuis la racine du dépôt :

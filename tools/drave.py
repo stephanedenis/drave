@@ -115,6 +115,17 @@ class CleTaggerRefusee(RuntimeError):
         )
 
 
+class GoldAbsent(RuntimeError):
+    """Une roue amputée de ses gold : la mesure est impossible, et elle le dit.
+
+    Les gold sont des **données** de la roue (`tools/tests/linguistique/gold_*.json`).
+    Sans eux, `evaluer` ne peut pas inventer une référence : il sort en **4**, nomme les
+    fichiers manquants et indique les deux issues — réinstaller la roue complète, ou
+    mesurer depuis le dépôt. `--gold` sélectionne le gold **gelé** ; il ne remplace pas
+    un gold absent.
+    """
+
+
 class ErreurEntree(RuntimeError):
     """L'entrée `--fichier` n'est pas lisible : le code dit pourquoi (4 ou 5), sans trace.
 
@@ -660,14 +671,36 @@ def cmd_analyser(args: argparse.Namespace) -> int:
     return 0
 
 
-def _module_evaluation():
-    """Charge `evaluer_gold.py` (le gold et sa mesure) sans dépendre du répertoire courant."""
-    chemin = RACINE / "tools" / "tests" / "linguistique" / "evaluer_gold.py"
+GOLD_VIVANT = ("gold.json", "gold_reel.json", "gold_synthetique.json")
+GOLD_GELE = ("gold_gele.json",)
+
+
+def _module_evaluation(gele: bool = False):
+    """Charge `evaluer_gold.py` et vérifie que les gold de la roue sont là.
+
+    Le CLI lit `tools/tests/linguistique/gold_*.json` **à côté du module**, donc une
+    installation amputée de ces données échoue ici, avant toute mesure. On nomme les
+    fichiers manquants et on rend le code 4 (dépendance absente) : la mesure ne peut pas
+    être simulée, et le message dit quoi faire. `gele=True` ne requiert que le gold gelé.
+    """
+    dossier = RACINE / "tools" / "tests" / "linguistique"
+    chemin = dossier / "evaluer_gold.py"
     if not chemin.is_file():
-        raise FileNotFoundError(f"mesure du gold introuvable : {chemin}")
+        raise GoldAbsent(f"mesure du gold introuvable : {chemin}")
+    manquants = [nom for nom in (GOLD_GELE if gele else GOLD_VIVANT)
+                 if not (dossier / nom).is_file()]
+    if manquants:
+        liste = ", ".join(manquants)
+        raise GoldAbsent(
+            f"gold absent de cette installation : {liste} "
+            f"(attendu dans {dossier}). La roue doit contenir les gold ; "
+            "réinstallez la roue complète, ou mesurez depuis le dépôt avec "
+            "`python3 tools/drave.py evaluer`. Le drapeau `--gold` sélectionne le gold "
+            "gelé (`gold_gele.json`) s'il est présent ; il ne remplace pas un gold absent."
+        )
     spec = importlib.util.spec_from_file_location("_drave_evaluer_gold", chemin)
     if spec is None or spec.loader is None:
-        raise ImportError(f"impossible de charger {chemin}")
+        raise GoldAbsent(f"mesure du gold illisible : {chemin}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
@@ -792,7 +825,7 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
         print(f"{NOM}: erreur d'usage : --tagger auto n'est disponible que pour analyser",
               file=sys.stderr)
         return 5
-    evaluateur = _module_evaluation()
+    evaluateur = _module_evaluation(gele=bool(args.gold))
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
     if getattr(args, "reel", False):
         # la **base honnête** : les phrases réelles (main + corpus), sans le synthétique
@@ -1185,7 +1218,9 @@ def construire_parseur() -> argparse.ArgumentParser:
         formatter_class=_Formateur,
     )
     evaluer.add_argument("--gold", action="store_true",
-                         help="mesurer le gold gelé (référence figée) au lieu du gold vivant")
+                         help="mesurer le gold gelé gold_gele.json (livré avec la roue) au lieu "
+                              "du gold vivant ; si les gold manquent, evaluer sort en 4 et dit "
+                              "quoi faire")
     evaluer.add_argument("--reel", action="store_true",
                          help="mesurer la base honnête : les phrases réelles (hand + reel), sans synthétique")
     evaluer.add_argument("--par-langue", action="store_true",
@@ -1282,6 +1317,10 @@ def main(argv: list[str] | None = None) -> int:
         prefixe = "erreur d'usage" if exc.code == 5 else "dépendance absente"
         print(f"{NOM}: {prefixe} : {exc}", file=sys.stderr)
         return exc.code
+    except GoldAbsent as exc:
+        # les gold sont une dépendance de données : code 4, rien sur stdout, pas de trace
+        print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+        return 4
     except CleTaggerRefusee as exc:
         # même dépendance manquante qu'une clé absente : code 4, message clair, rien sur stdout
         print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)

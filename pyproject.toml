@@ -13,4 +13,20 @@ dependencies = []
 drave = "tools.drave:main"
 
 [tool.setuptools]
-packages = ["tools"]
+# Le paquet est un **namespace** (`tools/` n'a pas d'`__init__.py`) : on déclare les
+# sous-ensembles dont le CLI a besoin. `tools.tests` reste un namespace implicite
+# (son répertoire existe par `tools.tests.linguistique`) : on n'embarque pas les
+# scripts de test, seulement les modules et les gold de la mesure.
+packages = ["tools", "tools.llm", "tools.structures", "tools.tests.linguistique"]
+
+[tool.setuptools.package-data]
+# Les gold sont **dans la roue** : `drave evaluer` doit marcher hors du dépôt.
+# Le contrôle négatif (une roue amputée de ces fichiers) est décrit dans
+# reports/rapport-roue.md : `evaluer` échoue alors en code 4, sans trace.
+"tools.tests.linguistique" = [
+    "gold.json",
+    "gold_gele.json",
+    "gold_reel.json",
+    "gold_restitution_v2.json",
+    "gold_synthetique.json",
+]

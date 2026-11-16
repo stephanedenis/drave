@@ -907,28 +907,42 @@ le texte. Le format est versionné ; la **qualité linguistique** ne l'est pas.
 
 ### 8.10 Comment l'installer et le lancer ?
 
-Deux chemins, le même CLI. **Depuis le dépôt, sans rien installer** : `python3 tools/drave.py …`
+Trois chemins, le même CLI. **Depuis le dépôt, sans rien installer** : `python3 tools/drave.py …`
 depuis la racine (Python **3.10+**, mesuré ici en 3.13), **aucune dépendance externe**, aucun GPU.
-**Comme commande `drave`** : dans un venv, depuis la racine,
+**En éditable** (pour développer) : `python3 -m pip install -e .` dans un venv, depuis la racine.
+**Depuis la roue** (pour installer hors du dépôt) :
 
 ```bash
-python3 -m venv /tmp/venv-drave
-. /tmp/venv-drave/bin/activate
-python3 -m pip install -e .
-drave --version            # drave 0.1.0
-cd /tmp && drave analyser "Le chat dort."
+python3 -m pip wheel . --no-deps --no-build-isolation -w dist
+# dist/drave-0.1.0-py3-none-any.whl
+
+python3 -m venv /tmp/venv-drave-roue
+/tmp/venv-drave-roue/bin/python -m pip install --no-index --no-deps \
+  dist/drave-0.1.0-py3-none-any.whl
+cd /tmp
+/tmp/venv-drave-roue/bin/drave --version            # drave 0.1.0
+/tmp/venv-drave-roue/bin/drave analyser "Le chat dort."
+/tmp/venv-drave-roue/bin/drave evaluer --json
 ```
 
-L'installation est **éditable** : le paquet `drave` (version **0.1.0**, `requires-python >= 3.10`,
-**zéro dépendance**) pointe vers le dépôt ; le script console appelle `tools.drave:main`.
-Elle fonctionne **depuis n'importe quel répertoire** (`cd /tmp`). Sans installation, `drave`
-n'existe pas : la commande échoue avec `command not found` (code **127**), pas avec une trace
+La roue **embarque les données de la mesure** : `tools/tests/linguistique/gold*.json` (les cinq
+gold), le générateur S (`tools/structures/generateur.py`) et le client du tagger optionnel. Elle
+ne dépend donc **pas du dépôt** : `analyser` et `evaluer` rendent depuis `/tmp` les **mêmes
+sorties** que le chemin historique. `drave evaluer --gold` mesure le gold **gelé**
+(`gold_gele.json`), livré lui aussi. Le corpus UDHR et les poids restent hors roue (`data/`,
+`models/`), comme hors dépôt.
+
+Le **contrôle négatif** : une roue **amputée** des `gold*.json` installe et analyse encore, mais
+`drave evaluer` sort en **4**, `stdout` vide, avec un message qui nomme les fichiers manquants et
+dit quoi faire (réinstaller la roue complète, ou mesurer depuis le dépôt). `--gold` ne remplace
+pas un gold absent : il choisit le gelé. Détail, hashes et sorties :
+[`reports/rapport-roue.md`](../../reports/rapport-roue.md) ; installation éditable et premier
+contrôle négatif (sans aucun `drave`) : [`reports/rapport-empaquetage.md`](../../reports/rapport-empaquetage.md).
+
+Sans installation, `drave` n'existe pas : `command not found` (code **127**), pas une trace
 Python. Le chemin historique reste garanti : `python3 tools/drave.py --version` → `drave 0.1.0`.
-Le CLI tourne même avec `python3 -S` (sans `site-packages`) ; les gold sont versionnés dans
-`tools/tests/linguistique/`. Le corpus UDHR, lui, n'est pas versionné (`data/` hors dépôt).
-Vérifier l'installation : `drave --version` → `drave 0.1.0`, puis
-`drave analyser "Le chat dort."`. Détail et contrôle négatif :
-[`reports/rapport-empaquetage.md`](../../reports/rapport-empaquetage.md).
+Construire la roue demande `setuptools` (isolé par pip, donc réseau ou cache) et le sous-module
+`tools/structures` ; la roue publiée n'est pas sur PyPI, elle se construit localement.
 
 ## 9. Où aller ensuite
 

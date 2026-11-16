@@ -66537,3 +66537,40 @@ lun 16 nov 2026 00:24:47 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; ls reports/rapport-performance-fix.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Verdict U1", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5228]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5228", "timeout_ms": 700000, "wait": true}`
+
+  ```
+lun 16 nov 2026 00:44:55 EST
+2026-11-15 23:43:41 · ▶ U1 — La performance — les deux points quadratiques (timeout 3600 s)
+2026-11-16 00:31:30 · ✔ U1 en 2852.4 s (code 0) — ✅ test -f reports/rapport-performance-fix.md && echo FICHE-OK; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-16 00:31:30 · ▶ U2 — L'empaquetage — la roue et le README (timeout 3600 s)
+reports/rapport-performance-fix.md
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -10 reports/rapport-performance-fix.md | cut -c1-170; git rev-list --count origin/master..s/v7", "d … [55 caractères tronqués]`
+
+  ```
+83adaa2b..04894aea  s/v7 -> s/v7
+   83adaa2b..04894aea  master -> master
+# U1 — les deux O(k²) sont bornés : 10 000 mots de **4,0 s à 0,82 s** (×4,9), α de **1,53 à 1,08**, sorties **identiques au bit près**
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **U1** (exploitable, suite de T4) ·
+> **Date** : 2026-11-16 · **Verdict** : ✅ **le contrôle de linéarité passe** — α = **1,076**
+> (objectif ≤ 1,15), le terme quadratique n'ajoute que **+0,00077 de R²** (contre +0,041
+> avant), et **les sorties sont identiques** : 612 phrases du gold, 452 réelles, 10 000 mots,
+> sept blocs contrôlés, **diff vide**. Le temps de la fonction sur 10 000 mots passe de
+> **3,991 s à 0,816 s** (×4,9) ; la mémoire reste au même niveau (**127,4 Mio** contre
+> **126,9 Mio**), le JSON est **octet pour octet** le même (14 795 890 octets).
+>
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre U2", "timeoutMs": 1900000}`

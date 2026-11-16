@@ -1,0 +1,282 @@
+{
+ "schema": "drave.roue.verification",
+ "version": 1,
+ "date": "2026-11-16",
+ "tache": "U2 (la roue)",
+ "ligne_roadmap": "B13",
+ "produit": "0.1.0",
+ "head_mesure": "04894aea",
+ "decision": {
+  "gold_dans_la_roue": true,
+  "roue_sans_gold_doit_echouer": true,
+  "pourquoi": "Une roue installable doit pouvoir mesurer : les cinq gold sont donc des données du paquet. Une roue amputée ne peut pas inventer une référence : evaluer échoue en 4, sans stdout, avec un message qui nomme les fichiers manquants et les deux issues (réinstaller la roue complète, ou mesurer depuis le dépôt). --gold sélectionne le gold gelé, il ne remplace pas un gold absent.",
+  "gold": [
+   "gold.json",
+   "gold_gele.json",
+   "gold_reel.json",
+   "gold_restitution_v2.json",
+   "gold_synthetique.json"
+  ],
+  "code_si_gold_absent": 4,
+  "option_gold": "--gold mesure gold_gele.json (602 phrases) ; son aide et le message d'erreur disent qu'il ne remplace pas un gold absent."
+ },
+ "pyproject": {
+  "fichier": "pyproject.toml",
+  "nom": "drave",
+  "version": "0.1.0",
+  "requires_python": ">=3.10",
+  "dependances": [],
+  "script_console": "drave = tools.drave:main",
+  "build_backend": "setuptools.build_meta",
+  "build_requires": [
+   "setuptools>=61"
+  ],
+  "packages": [
+   "tools",
+   "tools.llm",
+   "tools.structures",
+   "tools.tests.linguistique"
+  ],
+  "package_data": {
+   "tools.tests.linguistique": [
+    "gold.json",
+    "gold_gele.json",
+    "gold_reel.json",
+    "gold_restitution_v2.json",
+    "gold_synthetique.json"
+   ]
+  }
+ },
+ "environnement": {
+  "python": "3.13.16",
+  "pip_systeme": "26.2.2",
+  "pip_venv": "26.2.1",
+  "setuptools": "84.0.0",
+  "cwd_build": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet",
+  "cwd_controles": "/tmp",
+  "venv": "/tmp/venv-drave-roue",
+  "venv_ampute": "/tmp/venv-drave-roue-amputee",
+  "home_isole": "/tmp/drave-home",
+  "cle_deepseek": "absente (HOME isolé, variables retirées)"
+ },
+ "build": {
+  "commande": "python3 -m pip wheel . --no-deps --no-build-isolation -w dist",
+  "code": 0,
+  "resultat": "Successfully built drave",
+  "fichier": "dist/drave-0.1.0-py3-none-any.whl",
+  "taille_octets": 1727201,
+  "sha256": "d980c4706f575e061faa9611aca4c42c024c1147b654004f724694914a99dbce",
+  "entrees": 422,
+  "embarque": {
+   "gold_json": [
+    "tools/tests/linguistique/gold.json",
+    "tools/tests/linguistique/gold_gele.json",
+    "tools/tests/linguistique/gold_reel.json",
+    "tools/tests/linguistique/gold_restitution_v2.json",
+    "tools/tests/linguistique/gold_synthetique.json"
+   ],
+   "mesure": [
+    "tools/tests/linguistique/evaluer_gold.py",
+    "tools/tests/linguistique/miroir.py"
+   ],
+   "generateur_s": [
+    "tools/structures/generateur.py"
+   ],
+   "tagger": [
+    "tools/llm/deepseek.py"
+   ],
+   "non_embarque": [
+    "data/",
+    "models/",
+    "tools/tests/*.py (scripts de test racine)"
+   ]
+  }
+ },
+ "installation": {
+  "commande": "python3 -m venv /tmp/venv-drave-roue && /tmp/venv-drave-roue/bin/python -m pip install --no-index --no-deps --no-cache-dir dist/drave-0.1.0-py3-none-any.whl",
+  "code": 0,
+  "resultat": "Successfully installed drave-0.1.0",
+  "pip_show": {
+   "name": "drave",
+   "version": "0.1.0",
+   "requires": [],
+   "location": "/tmp/venv-drave-roue/lib64/python3.13/site-packages"
+  }
+ },
+ "positif": {
+  "drave_version": {
+   "commande": "drave --version",
+   "cwd": "/tmp",
+   "code": 0,
+   "stdout": "drave 0.1.0"
+  },
+  "drave_analyser": {
+   "commande": "drave analyser \"Le chat dort.\"",
+   "cwd": "/tmp",
+   "code": 0,
+   "stdout_extrait": [
+    "drave 0.1.0 — analyse heuristique (CPU, hors ligne)",
+    "langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)",
+    "POS  Le/DET chat/NOUN dort/VERB ./PONCT",
+    "GN   [0:7]   Le chat  rôle=agent     → dort",
+    "GV   [8:12]  dort     rôle=predicat  → chat"
+   ],
+   "contient": [
+    "GN",
+    "Le chat",
+    "agent",
+    "rôle=predicat"
+   ]
+  },
+  "drave_analyser_en": {
+   "commande": "drave analyser \"The cat sleeps on the roof.\" --langue en",
+   "cwd": "/tmp",
+   "code": 0,
+   "contient": [
+    "GN",
+    "GP",
+    "sleeps/VERB"
+   ]
+  },
+  "drave_evaluer": {
+   "commande": "drave evaluer --json",
+   "cwd": "/tmp",
+   "code": 0,
+   "gold": {
+    "nom": "vivant (hand + reel + synthétique)",
+    "phrases": 612,
+    "tokens": 3179,
+    "cibles_attachement": 239
+   },
+   "pos": 0.8625,
+   "f1_syntagmes": 0.7902,
+   "attachement_exact": 0.9958,
+   "controle_negatif": 0.0167
+  },
+  "drave_evaluer_gele": {
+   "commande": "drave evaluer --gold --json",
+   "cwd": "/tmp",
+   "code": 0,
+   "gold": {
+    "nom": "gelé (référence figée)",
+    "phrases": 602,
+    "tokens": 3141,
+    "cibles_attachement": 239
+   },
+   "pos": 0.8625,
+   "f1_syntagmes": 0.7882,
+   "attachement_exact": 0.9791
+  },
+  "drave_evaluer_reel": {
+   "commande": "drave evaluer --reel --json",
+   "cwd": "/tmp",
+   "code": 0,
+   "gold": {
+    "nom": "réel (hand + reel, sans synthétique)",
+    "phrases": 452,
+    "tokens": 2480,
+    "cibles_attachement": 184
+   },
+   "pos": 0.8891,
+   "f1_syntagmes": 0.7906,
+   "attachement_exact": 0.9946
+  },
+  "drave_restituer": {
+   "commande": "drave restituer \"Le chat dort.\"",
+   "cwd": "/tmp",
+   "code": 0,
+   "miroir": 0.0,
+   "surface_exacte": 1.0
+  },
+  "drave_tagger_sans_cle": {
+   "commande": "drave analyser \"Le chat dort.\" --tagger",
+   "cwd": "/tmp",
+   "code": 4,
+   "stdout": "",
+   "stderr_contient": "dépendance absente"
+  },
+  "identite_avec_le_depot": {
+   "analyser_json_sha256": "586830dfcd3120a49c8481b1a6c8afe125f11e28b898ac2f76e7b72580c90c36",
+   "comparaison": "cmp identique au JSON de `python3 tools/drave.py analyser ... --json`",
+   "evaluer_json": "cmp identique au JSON du dépôt",
+   "evaluer_gele_json": "cmp identique au JSON du dépôt"
+  }
+ },
+ "controle_negatif": {
+  "condition": "roue dérivée de la roue officielle : les cinq gold*.json sont retirés de l'archive et de RECORD, puis installation dans un venv propre",
+  "fichier": "/tmp/drave-amputee/drave-0.1.0-py3-none-any.whl",
+  "taille_octets": 1625372,
+  "sha256": "969ccd335beb11cfcee99efd434486849007089bb79f4ba712e4ae2e8948f76a",
+  "gold_retires": [
+   "gold.json",
+   "gold_gele.json",
+   "gold_reel.json",
+   "gold_restitution_v2.json",
+   "gold_synthetique.json"
+  ],
+  "installation": {
+   "code": 0,
+   "resultat": "Successfully installed drave-0.1.0"
+  },
+  "version": {
+   "code": 0,
+   "stdout": "drave 0.1.0"
+  },
+  "analyser": {
+   "code": 0,
+   "identique_a_la_roue_complete": true
+  },
+  "evaluer": {
+   "code": 4,
+   "stdout": "",
+   "stderr": "drave: dépendance absente : gold absent de cette installation : gold.json, gold_reel.json, gold_synthetique.json (attendu dans /tmp/venv-drave-roue-amputee/lib/python3.13/site-packages/tools/tests/linguistique). La roue doit contenir les gold ; réinstallez la roue complète, ou mesurez depuis le dépôt avec `python3 tools/drave.py evaluer`. Le drapeau `--gold` sélectionne le gold gelé (`gold_gele.json`) s'il est présent ; il ne remplace pas un gold absent."
+  },
+  "evaluer_gold": {
+   "code": 4,
+   "stdout": "",
+   "stderr_contient": "gold absent de cette installation : gold_gele.json"
+  },
+  "lecture": "l'installation et l'analyse ne dépendent pas des gold ; la mesure, si. La roue complète rend 0 et des chiffres ; l'amputée rend 4 et un message, sans trace ni stdout trompeur."
+ },
+ "tests": {
+  "empaquetage": {
+   "fichier": "tools/tests/test_empaquetage.py",
+   "tests": 11,
+   "code": 0,
+   "resultat": "OK"
+  },
+  "produit": {
+   "fichier": "tools/tests/test_produit.py",
+   "tests": 30,
+   "code": 0,
+   "resultat": "OK"
+  },
+  "restitution": {
+   "fichiers": [
+    "tools/tests/test_restitution.py",
+    "tools/tests/test_restitution_v2.py",
+    "tools/tests/test_restitution_v3.py"
+   ],
+   "tests": 68,
+   "code": 0,
+   "resultat": "OK"
+  }
+ },
+ "limites": [
+  "La mesure tourne en Python 3.13.16 ; le plancher >=3.10 est vérifié par la métadonnée, pas par une exécution en 3.10.",
+  "La roue est construite avec --no-build-isolation et setuptools 84.0.0 déjà installé ; avec l'isolation, pip a besoin du réseau ou d'un cache pour setuptools>=61.",
+  "Le contrôle négatif est une roue dérivée (gold retirés de l'archive et de RECORD), pas un build où package-data est vide ; le chemin de données manquantes est le même, mais le build n'a pas été rejoué sans les fichiers.",
+  "La roue embarque tools/structures/generateur.py (sous-module 648adce3) pour que les rôles soient identiques au dépôt ; sans ce sous-module, le wheel se construit sans lui et l'analyse retombe sur l'heuristique (role=objet au lieu d'agent sur « Le chat dort. »).",
+  "La roue n'est ni signée ni publiée sur PyPI ; elle est construite localement.",
+  "Le tagger optionnel exige une clé et un réseau ; le cache par défaut pointe sous site-packages/data, non testé en écriture ici (seul le refus sans clé, code 4, est mesuré).",
+  "Le hash de la roue dépend de l'arbre exact (y compris les fichiers non suivis exclus du build) ; il vaut pour ce dispositif, pas comme identité publiée."
+ ],
+ "fichiers": [
+  "pyproject.toml",
+  "tools/drave.py",
+  "tools/tests/test_empaquetage.py",
+  "docs/produit/README.md",
+  "reports/rapport-roue.md",
+  "reports/roue.json"
+ ]
+}

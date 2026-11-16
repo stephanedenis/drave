@@ -7,12 +7,12 @@
 | Identifiant | `session-cd495112-6c06-43ec-b56a-47ad7d92ba6f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 23:43 |
-| Durée | 0.7 h |
+| Durée | 0.8 h |
 | Tours | 1 |
-| Messages | 252 |
-| Appels d'outils | 281 |
+| Messages | 257 |
+| Appels d'outils | 287 |
 | Fichiers touchés | 8 |
-| Commandes | 170 |
+| Commandes | 175 |
 | Sous-agents | 0 |
 | Commits | 5 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche U1 (exploitable, suite de T4) : **répare les deux points O(k²)** identifiés par T4 — `_groupes_partition` (toutes  … [539 caractères tronqués]
 
-*281 appels d'outils.* Actions notables :
+*287 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - bash — Locate the two functions
@@ -41,7 +41,56 @@
 - bash — Find references to 612 and 452
 - bash — Find gold evaluation scripts
 - bash — Read gold evaluation tool
-- … et 209 autres
+- … et 213 autres
+
+**Synthèse produite :**
+
+\## U1 — les deux O(k²) sont bornés, sorties identiques
+
+**Résultat mesuré** (même bloc contrôlé T4, 247 mots ×1…×40 ; médianes de 3 répétitions) :
+
+| mesure | avant | après |
+|---|---:|---:|
+| 10 000 mots — fonction | **3,991 s** | **0,816 s** (×4,89) |
+| débit | 2 506 mots/s | **12 259 mots/s** |
+| CLI `--json` | 5,011 s | **1,668 s** |
+| pic RSS fonction | 126,9 Mio | **127,4 Mio** (+0,5 Mio) |
+| JSON indenté | 14 795 890 o | **14 795 890 o** (identique) |
+| **α** bloc contrôlé | **1,530** | **1,076** |
+| ΔR² quadratique − linéaire | +0,0414 | **+0,00077** |
+| contrôle linéaire | ❌ | ✅ |
+
+**Objectif atteint** : α = 1,076 ≤ 1,15, terme quadratique non significatif.
+
+\### Ce qui a été corrigé
+
+- `_groupes_partition` : toutes les paires O(k²) → **balayage O(k log k)**.
+- `_cible_proche` / `_verbes_proches` : tri de tous les GV à chaque segment → **`_IndexGV`** (gauche/droite/chevauchement + tas), O(log m + candidats).
+- Le profil a ensuite nommé trois autres boucles quadratiques, corrigées sans changer les résultats :
+  - `_sujet_hors_gv` (`any()` sur tous les segments par GV) → fins de GN triées + `bisect` ;
+  - `_repli_cible_gp` / `_cible_rel_sujet` → `_IndexFins` / `_IndexSegments` ;
+  - `construire_arbre` et les cibles de `_segmente` dans le générateur S → balayage O(k).
+- `_expliciter_partition` : `deepcopy` des candidats → copie superficielle.
+
+\### Contrôle négatif — diff vide
+
+`python3 tools/verifier_performance_fix.py --comparer /tmp/u1-before /tmp/u1-after4` :
+
+```
+10/10 identiques — diff vide
+```
+
+Sont identiques **octet pour octet** : 10 000 mots, blocs ×1…×40, annotations des 612 phrases et des 452 réelles. Le générateur S a aussi été comparé directement sur **620 textes** : identique. Les métriques gold sont inchangées : POS **0,8625**, F1 syntagmes **0,7902**, attachement top-k **0,9874** sur 612 ; POS **0,8891**, F1 **0,7906**, top-k **0,9891** sur 452.
+
+\### Tests et portes
+
+- `tools/tests/linguistique/test_bloc_linguistique.py` : **25 tests OK** (dont 5 différentiels ancien/nouveau).
+- `tools/structures/tests/test_generateur.py` : **27 tests OK**.
+- `tools/tests/test_verifier_performance_fix.py` : **3 tests OK**.
+- Portes ciblées U1 : **15/15 vertes** (`banc-performance`, `bloc-linguistique`, `produit`, `budget`, `état`, `sessions`, `registre`, etc.), puis **2/2** après commit.
+- Revue de documentation, `verifie_en_cours`, `verifie_journal`, budget : **verts**.
+- La passe complète des 86 portes n’a pas été relancée (précédent T6) ; les rouges
+… [722 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -100,7 +149,7 @@
 - **T1** Generate baseline annotation JSONs
 - **T1** Check imports
 - **T1** Compile and run bloc tests
-- … et 130 autres
+- … et 135 autres
 
 ## 4. Mesures et résultats marquants
 

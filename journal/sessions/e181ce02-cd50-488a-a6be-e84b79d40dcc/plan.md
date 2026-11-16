@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-16 00:30 EST
-- **Prochaine action** : **U2 — la roue**, puis **U3 — `--profils`** ; **U1** est livré (α **1,08**, 10 000 mots **0,82 s**, sorties identiques ; [fiche](../../../reports/rapport-performance-fix.md)).
+- **Heartbeat** : 2026-11-16 00:45 EST
+- **Prochaine action** : **U3 — `--profils`** ; **U1** (α **1,08**, 10 000 mots **0,82 s**, sorties identiques ; [fiche](../../../reports/rapport-performance-fix.md)) et **U2** (roue autonome, gold dedans, roue sans gold → 4 ; [fiche](../../../reports/rapport-roue.md)) sont livrés.
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
@@ -25,7 +25,7 @@
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0
   (BFS, greedy, A*, MCTS-lite)~~ ; 5) ~~AC-3, alpha-bêta~~ (**8/8**) ; ~~DRVF~~ (**9/9**) ; 6) **banc anytime** (AUC,
-  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606) ; 13) ~~cascade complète~~ (POS 0,9415, syntagmes 0,7539, acte 1,0) ; 14) ~~DRVM/native~~ (cadenas 3 nœuds avec règle, minimal 0 ; porte 27 nœuds avec règle) ; 15) ~~porte DRVM~~ (27 nœuds, 4 sonde) ; 16) ~~pragmatique neuronale~~ (négatif : dev 1,0, test 0,6375) ; 17) ~~porte B13~~ (134/140 : 6 S fixés + 2 test périmé ; le 140/140 ne se rejoue pas) ; 18) ~~porte minute~~ (26 nœuds, 4 sonde ; le labyrinthe échoue) ; 19) ~~porte mobile~~ (2/2 mais l'aveugle/labyrinthe passent ; test faible) ; 20) ~~porte B13 138~~ (6 S fixés ; T132/T133 restent).
+  regret, justification, rejeu) et intégration DRVM/DRVF ; 9) ~~bloc linguistique~~ (R0.7, 398 langues) ; 10) ~~coréférence et absences~~ (140/140, gold 432) ; 11) ~~gold neuronal~~ (tagger 7B local, cascade POS 0,9440) ; 12) ~~syntagmes~~ (BIO 7B, exact 0,6173, tête 0,7606) ; 13) ~~cascade complète~~ (POS 0,9415, syntagmes 0,7539, acte 1,0) ; 14) ~~DRVM/native~~ (cadenas 3 nœuds avec règle, minimal 0 ; porte 27 nœuds avec règle) ; 15) ~~porte DRVM~~ (27 nœuds, 4 sonde) ; 16) ~~pragmatique neuronale~~ (négatif : dev 1,0, test 0,6375) ; 17) ~~porte B13~~ (134/140 : 6 S fixés + 2 test périmé ; le 140/140 ne se rejoue pas) ; 18) ~~porte minute~~ (26 nœuds, 4 sonde ; le labyrinthe échoue) ; 19) ~~porte mobile~~ (2/2 mais l'aveugle/labyrinthe passent ; test faible) ; 20) ~~porte B13 138~~ (6 S fixés ; T132/T133 restent) ; 21) ~~U1~~ (les deux O(k²) bornés, α 1,08) ; 22) ~~U2~~ (la roue : `drave-0.1.0-py3-none-any.whl`, mêmes JSON hors dépôt, roue sans gold → `evaluer` 4).
 - **Ambition** : faire de Drave un **runtime cognitif** où penser est une **recherche tracée** sur
   des **états pluriels**, avec des opérateurs hétérogènes (neuronaux, classiques, matériel) et des
   décisions justifiables et rejouables.
