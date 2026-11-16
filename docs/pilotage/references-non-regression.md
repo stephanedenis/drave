@@ -1,5 +1,11 @@
 # Références de non-régression
 
+> **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
+> `melange` structurelles ; `produit` (V1 inachevée) et `sessions` (heartbeat) de circonstance.
+> Journaux `work/portes/roue-1116/`. **Vérification ciblée (V3)** : `sessions` **0** et `produit`
+> **0** (`--strict` 5 tests, exemples **27/27**, autotest **183/183**) ; journaux
+> `work/portes/verif-cloture-1116/`. Après : **84 vertes, 2 rouges structurelles**.
+
 > **Passe — 2026-11-15 09 h 53 → 12 h 15 :** **85 portes, 81 vertes, 4 rouges** — `indice` et
 > `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
 > **environnementale** (deux passes en parallèle ; PPL identique 799,8557 ; verte le 14/11).

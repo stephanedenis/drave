@@ -66751,3 +66751,23 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5239", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5239", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+lun 16 nov 2026 03:08:58 EST
+2026-11-16 02:29:02 · ▶ V2 — Les exemples — le JSON de la v2 (timeout 3000 s)
+2026-11-16 03:01:07 · ✔ V2 en 1730.3 s (code 0) — ✅ test -f reports/rapport-exemples-v2.md && echo FICHE-OK; ✅ bash tools/porte-produit.sh 2>&1 | tail -1
+2026-11-16 03:01:07 · ▶ V3 — La clôture — le tag exploitable (timeout 3000 s)
+1
+reports/rapport-bilan-exploitable-2.md
+reports/rapport-exemples-v2.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 work/chantier/journal.log; git tag -l \"exploitable-*\"; git rev-list --count origin/master..s/v7", "description": "Verdict V3", "timeoutMs": 1000000}`

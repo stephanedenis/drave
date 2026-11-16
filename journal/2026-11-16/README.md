@@ -20,7 +20,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 370.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 370.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -32,7 +32,7 @@
 | 00:45 | `c77ed4b6` | U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE |
 | 00:48 | `1d4eb49e` | JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4 |
 | 02:10 | `2e617034` | EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF) |
-| 02:47 | `1a5a6548` | V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE |
+| 02:47 | `ae3c24f2` | V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -69,4 +69,21 @@ syntagmes du tagger à l'heuristique. **27/27 cas conformes, 0 écart** ; une mu
 sans `tools/structures` (JSON **5 899 octets**).
 
 [Fiche](../../reports/rapport-exemples-v2.md) · [JSON](../../reports/rapport-exemples-v2.json).
+
+### V3 — la clôture de la nuit exploitable, et le tag sur le dernier commit vert
+
+Les **neuf tâches** du lot exploitable (**T1–T6**, **U1–U3**) et les deux vérifications
+(**V1–V2**) sont liées dans un second bilan : [rapport-bilan-exploitable-2.md](../../reports/rapport-bilan-exploitable-2.md)
++ [JSON](../../reports/rapport-bilan-exploitable-2.json). Le chiffre de la nuit : le produit
+s'installe, **10 000 mots** passent en **0,82 s** (α **1,076**, sorties identiques), la roue est
+autonome (**1 727 201 o**, sans gold → **4**), les profils font **20/20** (ambigu **`und`**),
+`--strict` fait **0,8625 / 0,8891** et les exemples **27/27**.
+
+La passe `work/portes/roue-1116/` est **lue, pas relancée** : **86 portes, 82 vertes, 4 rouges**
+— `indice` et `melange` structurelles, `produit` (V1 n'avait pas fini) et `sessions` (heartbeat
+périmé) de circonstance. La vérification ciblée `work/portes/verif-cloture-1116/` rend
+`sessions` **0** et `produit` **0** (`evaluer --strict` 5 tests, exemples **27/27**, autotest
+**183/183**) : **84 vertes, 2 rouges structurelles**. Le tag annoté
+**`exploitable-2026-11-16`** est posé sur **`ae3c24f2`** (V2), le dernier commit vert ; le
+commit de clôture suit. **La prochaine mesure est J4 — l'or de rôles**.
 <!-- /notes -->

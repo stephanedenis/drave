@@ -7,12 +7,12 @@
 | Identifiant | `session-a5cb52af-8e84-4452-a21e-1bba677dd8e4` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-16 02:29 |
-| Durée | 0.4 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 191 |
-| Appels d'outils | 216 |
+| Messages | 194 |
+| Appels d'outils | 219 |
 | Fichiers touchés | 8 |
-| Commandes | 143 |
+| Commandes | 146 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche V2 (exploitable) : les **exemples de la doc** — rejoue les 5 blocs de `docs/produit/exemples.md` avec le code cour … [346 caractères tronqués]
 
-*216 appels d'outils.* Actions notables :
+*219 appels d'outils.* Actions notables :
 
 - bash — Inspect workspace root and git state
 - bash — List product docs
@@ -41,11 +41,22 @@
 - bash — Replay example 1 JSON
 - bash — Replay example 2 JSON
 - bash — Replay example 3 JSON
-- … et 187 autres
+- … et 190 autres
 
 **Synthèse produite :**
 
-I'll start by building the verification harness around the current code, then update the docs to match it exactly.
+✅ **V2 terminée et committée** — `ae3c24f2`
+
+- **5 blocs rejoués** : **3 corrigés** par la normalisation des rôles (`qualité` → `qualite`, `prédicat` → `predicat`, `groupe nominal` → `objet`) ; `g001` et le refus identiques hors enrichissement.
+- **Candidats objets** : `meta.attachement.candidats` publié sur les 4 blocs JSON, **18 objets, 18 spans exacts, 0 faux**. **Durée** : `--duree` documenté, `cout.duree_s` absent par défaut.
+- **Démarrage** : **3/3 commandes** conformes dans une copie **sans** `tools/structures` ; JSON **5 899 octets**, extrait 22 lignes, consommateur et `profils` vérifiés. La note « dépôt de développement » est vérifiée **4/4** (`agent`, `chat`, 79,02 %, 99,58 %).
+- **Contrôle négatif** : `tools/verifie_exemples.py` — **27/27 cas, 0 écart** ; mutation `qualite` → `qualité` détectée **1/1**. Intégré à `tools/porte-produit.sh`.
+- **Fiche + JSON** : `reports/rapport-exemples-v2.md`, `reports/rapport-exemples-v2.json`.
+- **Vérifications** : porte produit **verte** (183/183), revue documentaire, budget de contexte, journal et état **verts**.
+
+**Limites nommées** : les blocs `--tagger` ne sont pas rejoués par l'API (tokens/latence non reproductibles) ; la durée est une horloge murale non reproductible ; le démarrage est une copie source sans sous-module, pas un `git clone` + `venv` + `pip`.
+
+Le commit inclut aussi la base **U1–U3/V1** qui était non committée dans l'arbre (profils UDHR, `--strict`, roue) : le CLI importe `profils_udhr` et la porte teste `--strict`, le commit ne démarre pas sans elle.
 
 ## 3. Travail accompli
 
@@ -104,7 +115,7 @@ I'll start by building the verification harness around the current code, then up
 - **T1** Read quickstart report
 - **T1** Find structures usage
 - **T1** Find role generation logic
-- … et 103 autres
+- … et 106 autres
 
 ## 4. Mesures et résultats marquants
 

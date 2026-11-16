@@ -4080,3 +4080,66 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.
   ```
 
 - **bash** `{"command": "git add -- docs/pilotage/en-cours.md && git commit --amend --no-edit >/tmp/amend.log 2>&1; code=$?; tail -4 /tmp/amend.log; echo \"code=$code\"; git log -1 --oneline | head -1; git status --short", "description": "Amend state line", "timeoutMs": 300000}`
+
+  ```
+create mode 100644 tools/tests/linguistique/profils_udhr.json
+ create mode 100644 tools/tests/test_evaluer_strict.py
+ create mode 100644 tools/tests/test_profils.py
+ create mode 100644 tools/verifie_exemples.py
+code=0
+ae3c24f2 V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_exemples.py | tail -2; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Final doc checks", "timeoutMs": 300000}`
+
+  ```
+27/27 cas conformes — ✅ aucun écart
+  revue de documentation · 770 fiche(s) · 865 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -8; echo '---'; git status --short | wc -l", "description": "Final commit summary"}`
+
+  ```
+ae3c24f2 V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE
+ docs/implantation/bloc-linguistique.md             |   13 +
+ docs/pilotage/en-cours.md                          |   14 +-
+ docs/pilotage/roadmap.md                           |   25 +-
+ docs/produit/README.md                             |  165 +-
+ docs/produit/demarrage.md                          |   38 +-
+ docs/produit/exemples.md                           |  299 +-
+ journal/2026-11-16/README.md                       |   25 +-
+---
+0
+  ```
+
+- **bash** `{"command": "git show --stat HEAD --oneline | grep -E \"rapport-exemples-v2|verifie_exemples|exemples.md\"; echo '---'; python3 tools/verifie_exemples.py --mutation >/tmp/mut-final.log 2>&1; echo \"mutation code=$?\"; tail -3 /tmp/mut-final.log", "description": "Confirm commit contents and mutation" … [22 caractères tronqués]`
+
+  ```
+docs/produit/exemples.md                           |  299 +-
+ reports/rapport-exemples-v2.json                   |  352 ++
+ reports/rapport-exemples-v2.md                     |  167 +
+ tools/verifie_exemples.py                          |  585 +++
+---
+mutation code=0
+✅ mutation détectée : 1 cas en écart (attendu > 0)
+
+26/27 cas conformes — ❌ 1 écart(s)
+  ```
+
+### 🤖 Assistant
+
+✅ **V2 terminée et committée** — `ae3c24f2`
+
+- **5 blocs rejoués** : **3 corrigés** par la normalisation des rôles (`qualité` → `qualite`, `prédicat` → `predicat`, `groupe nominal` → `objet`) ; `g001` et le refus identiques hors enrichissement.
+- **Candidats objets** : `meta.attachement.candidats` publié sur les 4 blocs JSON, **18 objets, 18 spans exacts, 0 faux**. **Durée** : `--duree` documenté, `cout.duree_s` absent par défaut.
+- **Démarrage** : **3/3 commandes** conformes dans une copie **sans** `tools/structures` ; JSON **5 899 octets**, extrait 22 lignes, consommateur et `profils` vérifiés. La note « dépôt de développement » est vérifiée **4/4** (`agent`, `chat`, 79,02 %, 99,58 %).
+- **Contrôle négatif** : `tools/verifie_exemples.py` — **27/27 cas, 0 écart** ; mutation `qualite` → `qualité` détectée **1/1**. Intégré à `tools/porte-produit.sh`.
+- **Fiche + JSON** : `reports/rapport-exemples-v2.md`, `reports/rapport-exemples-v2.json`.
+- **Vérifications** : porte produit **verte** (183/183), revue documentaire, budget de contexte, journal et état **verts**.
+
+**Limites nommées** : les blocs `--tagger` ne sont pas rejoués par l'API (tokens/latence non reproductibles) ; la durée est une horloge murale non reproductible ; le démarrage est une copie source sans sous-module, pas un `git clone` + `venv` + `pip`.
+
+Le commit inclut aussi la base **U1–U3/V1** qui était non committée dans l'arbre (profils UDHR, `--strict`, roue) : le CLI importe `profils_udhr` et la porte teste `--strict`, le commit ne démarre pas sans elle.
+

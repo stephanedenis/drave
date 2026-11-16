@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-16 00:45 EST
-- **Prochaine action** : **U3 — `--profils`** ; **U1** (α **1,08**, 10 000 mots **0,82 s**, sorties identiques ; [fiche](../../../reports/rapport-performance-fix.md)) et **U2** (roue autonome, gold dedans, roue sans gold → 4 ; [fiche](../../../reports/rapport-roue.md)) sont livrés.
+- **Heartbeat** : 2026-11-16 03:06 EST
+- **Prochaine action** : **V3 — la clôture** (rapport, état, roadmap, tag) ; **V2** livré (exemples **27/27**), **V1** livré (strict **0,8625 / 0,8891**), **U3** livré (profils **20/20**), **U1/U2** livrés ([U1](../../../reports/rapport-performance-fix.md), [U2](../../../reports/rapport-roue.md), [U3](../../../reports/rapport-profils.md), [V1](../../../reports/rapport-evaluer-strict.md), [V2](../../../reports/rapport-exemples-v2.md)).
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
