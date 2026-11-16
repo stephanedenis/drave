@@ -68377,3 +68377,131 @@ aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-banc-generation.md'); t=p.read_text()\nt=t.replace(\"\"\"## 4. Ce que le banc ne dit pas\"\"\",\"\"\"## 3 bis. Le natif jugé par notre analyseur (le banc de grammatica … [2080 caractères tronqués]`
+
+  ```
+fiche complétée
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 870 JSON, le disque en a 871
+  ✅ la page vivante date du dernier commit (2026-11-16)
+ create mode 100644 reports/banc-grammaticalite.json
+ create mode 100644 tools/banc_grammaticalite.py
+b2dfc1cc NATIF — LE BANC DE GRAMMATICALITÉ : NOTRE ANALYSEUR JUGE LE MODÈLE (GV 6,9 C
+   78cdb7f0..b2dfc1cc  s/v7 -> s/v7
+   78cdb7f0..b2dfc1cc  master -> master
+lun 16 nov 2026 10:56:46 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"class.*BPE\\|def bpe\\|sentencepiece\\|tokenizers\" tools/*.py 2>/dev/null | head -4; ls tools/ | grep -iE \"bpe|token|encod\" | head -4; grep -rn \"B10.3\" docs/pilotage/backlog/*.md 2>/dev/null | head -2 | cut -c1-160", … [43 caractères tronqués]`
+
+  ```
+tools/aiguille.py
+tools/campagne_synthese.py
+tools/r13_anglais.py
+tools/speculatif.py
+entrainer_native_tokens.py
+porte-r13-bpe.sh
+porte-tokenizer-kimi.sh
+tokenize_llama
+docs/pilotage/backlog/B10.2bis-decodeur-attention-croisee.md:5:> **Ligne de roadmap** : B10.3 attend cette fiche · **Fiche de résultat** :
+docs/pilotage/backlog/B10.2bis-decodeur-attention-croisee.md:15:mesurerait la surface : c'est le négatif de B10.2, et c'est pour cela que **B10.3** est
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/entrainer_native_tokens.py | cut -c1-120; ls -la tools/tokenize_llama 2>/dev/null | awk '{print $5, $9}'; ls reports/ | grep -iE \"r13|bpe|token\" | head -4", "description": "Voir le chemin tokenisé"}`
+
+  ```
+#!/usr/bin/env python3
+"""entrainer_native.py — entraînement de base de `drave-n0`.
+
+Ce n'est que le **prochain octet** : les pertes locales, les têtes précoces, la
+pensée et le pont viendront après. Le but est de mesurer la PPL du modèle natif
+et de produire un DRVM lisible par le moteur.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import pathlib
+import time
+
+import torch
+import torch.nn.functional as F
+
+from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+from tools.vdc import departs_vdc
+21560 tools/tokenize_llama
+r13.1-bpe.json
+r13.1-campagne.json
+r13.1-condition.json
+r13.2-vocab1024.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -iE \"r13\" | head -6; python3 -c \"\nimport json\nd=json.load(open('reports/r13.1-bpe.json'))\nprint({k:(str(v)[:100]) for k,v in list(d.items())[:10]})\n\" 2>/dev/null; python3 -c \"\nimport json\nd=json.load(ope … [151 caractères tronqués]`
+
+  ```
+r13.1-bpe.json
+r13.1-campagne.json
+r13.1-condition.json
+r13.2-vocab1024.json
+r13.3-anglais.json
+r13.4-graines.json
+{'date': '2026-10-29', 'ligne': 'R13.1', 'porte': 'porte-r13-bpe.sh', 'corpus': 'data/corpus_fr.txt', 'tokenizer': "{'type': 'BPE byte-level', 'vocab': 512, 'octets': 4633889, 'jetons': 2344050, 'octets_par_jeton': 1", 'modeles': "{'octets_200': {'vocab': 256, 'parametres': 11814792, 'ppl': 14.107245362588944, 'bits_par_octet': 3", 'budget': "{'octets_vus_octets': 409600, 'octets_vus_bpe': 404864, 'ecart_pct': -1.2}", 'controle': "mêmes graine/architecture/corpus ; octets 200→400 montre l'effet des données (3,818→3,689) ; BPE res", 'verdict': 'le BPE gagne 11,0 % de bits/octet (val exacte), 11,9 % avec le ratio global biaisé', 'limites': "['français seulement', 'vocab 512', '200/400 pas', 'une graine', 'le modèle BPE a 5,4 % de paramètre"}
+{'date': '2026-10-29', 'ligne': 'R13.2', 'tokenizer': "{'vocab': 1024, 'val_jetons': 94463, 'val_octets': 231694, 'octets_par_jeton_val': 2.452748695256343", 'modele': "{'pas': 4000, 'ppl_val': 24.136011713482464, 'bits_par_octet_val': 1.8726400325986698, 'precision_ma", 'baseline_bytes': "{'pas': 10000, 'bits_par_octet_val': 1.80205
+… [199 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ['r13.3-anglais.json','r13.4-graines.json']:\n    d=json.load(open('reports/'+f))\n    print(f, {k:(str(v)[:130]) for k,v in list(d.items())[:6]})\n\" 2>/dev/null; ls reports/ | grep -iE \"rapport … [61 caractères tronqués]`
+
+  ```
+r13.3-anglais.json {'date': '2026-10-30', 'ligne': 'R13.3', 'corpus': 'data/corpus_en.txt / corpus_en_val.txt', 'donnees': "{'train_octets': 100276153, 'val_octets': 2032162, 'bpe512_val_jetons': 1183621, 'bpe1024_val_jetons': 1000473}", 'modeles': "{'bytes_10k': {'pas': 10000, 'ppl_val': 6.2365825190798345, 'bits_par_octet_val': 2.6407556871983693, 'precision_main': 0.46313476", 'ecarts_pct': "{'bpe512': 4.22, 'bpe1024': 6.59}"}
+r13.4-graines.json {'date': '2026-10-30', 'ligne': 'R13.4', 'corpus': 'français train/val', 'graines': "{'1': {'bytes': 1.8020511721549923, 'bpe512': 1.8141570645401088, 'bpe1024': 1.8726400325986698}, '2': {'bytes': 1.798209617180501", 'moyennes': "{'bytes': 1.8001303946677467, 'bpe512': 1.807057573940276, 'bpe1024': 1.8738071917003705}", 'ecarts_pct': "{'bpe512': 0.385, 'bpe1024': 4.09}"}
+rapport-r13.1-bpe.md
+rapport-r13.1-campagne.md
+rapport-r13.1-condition.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -16 reports/rapport-r13.1-bpe.md | cut -c1-170; echo \"=== paramètres du modèle :\"; python3 -c \"\nimport json\nd=json.load(open('work/n2ac/mix1024-60k.pt.json'))\nprint('params', d['parametres'], 'corpus', d['corpus'], 'octets … [156 caractères tronqués]`
+
+  ```
+# R13.1 — pilote : le BPE gagne 11,9 % à 200/400 pas (corrigé 11,0 %)
+
+> **Ligne de roadmap** : R13.1 · **Date** : 2026-10-29 · **Verdict pilote** : ✅ **le BPE natif bat
+> l’octet** — à budget d’**octets** égal (~405–410 k octets vus), le modèle BPE 512 fait
+> **3,249 bits/octet** contre **3,689** pour le modèle octets ; après correction du ratio de validation,
+> le chiffre exact est **3,2823** contre **3,689**, soit **−11,0 %**. Le tokenizer
+> est **réversible** (1,977 octet/jeton). **Mise à jour 10 k** : à octets égaux, le BPE perd 0,7 % (1,8142 contre 1,8021) ; voir
+> [`rapport-r13.1-campagne.md`](rapport-r13.1-campagne.md). Le pilote est conservé comme mesure
+> à son budget, pas comme verdict.
+>
+> **Dispositif** : `tools/tokenizer_bpe.py` + `tools/entrainer_native_tokens.py`, corpus
+> `data/corpus_fr.txt`, mêmes architecture/graine/seed ; porte `tools/porte-r13-bpe.sh` ;
+> données [`r13.1-bpe.json`](r13.1-bpe.json).
+
+## Ce qui est mesuré
+
+=== paramètres du modèle :
+params 34301224 corpus data/wiki_mix/propre/train.txt octets 1017487092
+ratio octets/param: 29.7
+  ```
+
+### 🤖 Assistant
+
+⏵ Le diagnostic se précise : les R13 ont déjà mesuré le BPE (gain non concluant). J'écris la synthèse honnête
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-natif-exploitable.md <<'MD'\n# Le modèle natif, que manque-t-il ? — la synthèse honnête (16/11)\n\n> **La question.** « Que manque-t-il pour que le modèle Drave natif soit exploitable ? »\n> **La réponse courte. … [6132 caractères tronqués]`
+
+  ```
+· T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+     · compteurs : en-cours.md dit 870 JSON, le disque en a 871
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1062 caractères tronqués]`
+
+  ```
+· reports/README.md : 2818 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — que manque-t-il au natif : l'échelle, la donnée, l'alignement, le runtime (chiffré) |\", \"| **N4** — que manque-t-il au … [1229 caractères tronqués]`

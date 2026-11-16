@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **772 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **773 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -343,6 +343,7 @@
 | [rapport-n3.6-service-briques.md](rapport-n3.6-service-briques.md) | N3.6 — le pont, le placement et le seuil composent dans le service |
 | [rapport-n4-dessin-b.md](rapport-n4-dessin-b.md) | N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure |
 | [rapport-n4-porte-execution.md](rapport-n4-porte-execution.md) | N4 — la porte d'exécution : le chemin court entraîné est mesuré par le MOTEUR (÷1,47 et ÷1,24) |
+| [rapport-natif-exploitable.md](rapport-natif-exploitable.md) | Le modèle natif, que manque-t-il ? — la synthèse honnête (16/11) |
 | [rapport-native-21m-20k.md](rapport-native-21m-20k.md) | N2.9 — student 21,63 M sur 20 000 pas : 3,381, toujours derrière 11,47 M |
 | [rapport-native-8b-warm.md](rapport-native-8b-warm.md) | N2.29 — 8 blocs réchauffés : 2,866, toujours derrière 2,708 |
 | [rapport-native-8b.md](rapport-native-8b.md) | N2.28 — 8 blocs : PPL 4,84, négatif |
