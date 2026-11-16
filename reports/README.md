@@ -15,7 +15,8 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif : ce qui manque |
+| [`fiche-modele-natif.md`](fiche-modele-natif.md) | **N4** — la carte du modèle : identité, données, mesures, limites, usage |
+| [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif |
 | [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase |
 | [`rapport-bilan-jour-1115.md`](rapport-bilan-jour-1115.md) | **Bilan** — le 15/11 |
 | [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la coordination, le harnais |
@@ -95,11 +96,7 @@
 | [`rapport-file-taches.md`](rapport-file-taches.md) | **B13** — file des 29 tâches : 18 |
 | [`rapport-produit-v0.md`](rapport-produit-v0.md) | **B13** — `drave` v0 : anal., éval., rejeu |
 | [`rapport-autotest-parallele.md`](rapport-autotest-parallele.md) | **B13** — l'autotest parallèle : **183/183 en 1 |
-| [`rapport-pensee-v12.md`](rapport-pensee-v12.md) | **B13** — **222/222 (1,0000)**, couverture **0,9289**, 17 spans |
 | [`rapport-dev-test-v10.md`](rapport-dev-test-v10.md) | **B13** — dev/test v10 : dev 152/152, test |
-| [`rapport-pensee-v11.md`](rapport-pensee-v11.md) | **B13** — les 2 régressions : exact **221/221** |
-| [`rapport-pensee-v10.md`](rapport-pensee-v10.md) | **B13** — le `-ée` et la garde DET |
-| [`rapport-pensee-v9.md`](rapport-pensee-v9.md) | **B13** — la garde PRON : exact **219/219 |
 | [`rapport-topk-v8.md`](rapport-topk-v8.md) | **B13** — le top-k : `prec = s` |
 | [`rapport-audit-r1r3.md`](rapport-audit-r1r3.md) | **B13** — audit A19 : **+17 net** (24 |
 | [`rapport-spans-v7.md`](rapport-spans-v7.md) | **B13** — les 43 spans (A17) : causes |

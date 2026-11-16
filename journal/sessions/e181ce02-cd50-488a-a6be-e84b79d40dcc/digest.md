@@ -68608,3 +68608,171 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la |\", \"| **Bilan** — la semaine 07 → 15/11 |\")\nt=t.replace(\"| * … [1376 caractères tronqués]`
+
+  ```
+· reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[s/v7 4a389c08] NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ
+ 17 files changed, 208 insertions(+), 25 deletions(-)
+4a389c08 NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES
+   7cefb116..4a389c08  s/v7 -> s/v7
+   7cefb116..4a389c08  master -> master
+lun 16 nov 2026 11:12:40 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — le natif : ce qui manque |\", \"| **N4** — le natif |\")\np.write_text(t)\nPY\npython3 tools/taille_documents.py 2>&1 |  … [115 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+    def __init__(self, cfg: NativeConfig | None = None):
+        super().__init__()
+        self.cfg = cfg or NativeConfig()
+        self.embed = nn.Embedding(self.cfg.vocab, self.cfg.d_model)
+        self.pos = nn.Embedding(self.cfg.max_pos, self.cfg.d_model)
+        self.blocks = nn.ModuleList([Block(self.cfg) for _ in range(self.cfg.n_blocks)])
+        self.early_heads = nn.ModuleList([nn.Linear(self.cfg.d_model, self.cfg.vocab)
+                                          for _ in self.cfg.early_blocks])
+        # Têtes LOCALES : une sortie après CHAQUE bloc, pour la supervision
+        # profonde. Elles n'existaient pas dans les checkpoints antérieurs :
+        # le chargement se fait en strict=False et elles apprennent.
+        self.local_heads = nn.ModuleList([nn.Linear(self.cfg.d_model, self.cfg.vocab)
+                                          for _ in range(self.cfg.n_blocks)])
+        self.bridge = nn.Linear(self.cfg.d_model, self.cfg.d_model)
+        self.thought = nn.Linear(self.cfg.d_model, self.cfg.d_model)
+        self.thought_in = nn.Linear(self.cfg.d_model, self.cfg.d_model)
+        self.head_byt
+… [2330 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,75p' tools/native_model.py | cut -c1-120; grep -n \"class NativeConfig\" -A 20 tools/native_model.py | head -22", "description": "Lire le Block et la config"}`
+
+  ```
+from tools.drvm import TensorSpec, write_drvm
+
+
+@dataclass
+class NativeConfig:
+    vocab: int = 256
+    d_model: int = 224
+    n_blocks: int = 6
+    n_heads: int = 4
+    expert_hidden: int = 288
+    n_experts: int = 8
+    top_k: int = 2
+    kwta: float = 0.25
+    window: int = 256
+    max_pos: int = 2048
+    thought_steps: int = 2
+    early_blocks: tuple[int, ...] = (1, 3, 5)  # 0-based : après 2, 4, 6
+    rsn_dim: int = 120
+
+
+class SparseFFN(nn.Module):
+    def __init__(self, cfg: NativeConfig):
+        super().__init__()
+        self.cfg = cfg
+        self.router = nn.Linear(cfg.d_model, cfg.n_experts)
+        self.gate = nn.Linear(cfg.d_model, cfg.n_experts * cfg.expert_hidden)
+        self.up = nn.Linear(cfg.d_model, cfg.n_experts * cfg.expert_hidden)
+        self.down = nn.Linear(cfg.n_experts * cfg.expert_hidden, cfg.d_model)
+
+    def forward(self, x):
+        b, s, d = x.shape
+        logits = self.router(x)
+        poids, idx = logits.topk(self.cfg.top_k, dim=-1)
+        poids = poids.softmax(-1)
+        g = self.gate(x).view(b, s, self.cfg.n_experts, self.cfg.expert_hidden)
+        u = self.up(x).view(b, s, self.cfg.n_experts, self.cfg.expert_hidden)
+        h = F.silu(g) 
+… [1379 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls data/wiki_mix/ 2>/dev/null | head -5; ls data/ | head -8; cat data/wiki_mix/README* 2>/dev/null | head -10 | cut -c1-140; date", "description": "Voir la provenance du corpus"}`
+
+  ```
+propre
+adaptateurs
+alignement
+composition-etats.npz
+composition-verne-14b-etats.npz
+composition-verne-7b-etats.npz
+composition-verne-etats.npz
+composition-verne-large-etats.npz
+composition-verne-plan-etats.npz
+lun 16 nov 2026 11:14:30 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -3 data/wiki_mix/propre/train.txt | cut -c1-120; wc -c data/wiki_mix/propre/train.txt 2>/dev/null; ls data/wiki_mix/propre/ | head -4; head -2 data/wiki_mix/propre/val.txt 2>/dev/null | cut -c1-100", "description": "Voir le corp … [19 caractères tronqués]`
+
+  ```
+Antoine Meillet
+
+Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principa
+1017487092 data/wiki_mix/propre/train.txt
+train.canal
+train.txt
+val.canal
+val.txt
+minisation et de l'humanité. Le terme anthropologie vient de deux mots grecs, , qui signifie , et ,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 tools/drvm.py inspect work/n2ac/mix1024-60k.drvm 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nprint(json.dumps(d.get('modele',{}), ensure_ascii=False, indent=1)[:900])\nprint('---')\nprint('tenso … [164 caractères tronqués]`
+
+  ```
+{
+ "architecture": {
+  "d_model": 384,
+  "early_blocks": [
+   1,
+   3,
+   5
+  ],
+  "expert_hidden": 512,
+  "kind": "drave-n0",
+  "kwta": 0.25,
+  "n_blocks": 6,
+  "n_experts": 8,
+  "n_heads": 4,
+  "thought_steps": 2,
+  "top_k": 2,
+  "vocab": 256,
+  "window": 1024
+ },
+ "name": "drave-n0",
+ "parametres": 34301224,
+ "tokenizer": {
+  "kind": "bytes",
+  "vocab": 256
+ }
+}
+---
+tensors: ?
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/fiche-modele-natif.md <<'MD'\n# Fiche du modèle natif — `drave-n0-rope` (34,3 M)\n\n> **Ce que cette fiche est.** La **carte d'identité** du modèle natif : ce qu'il est, sur quoi il a\n> été entraîné, ce qu'il sait fair … [4606 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 776 fichiers, le disque en a 777
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# retirer deux lignes anciennes (les fiches v2/v3 de la pensée, superseded)\nfor vieux in [\"rapport-pensee-v2.md\",\"rapport-pensee-v3.md\", … [874 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2815 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"pensee-v[0-9]+|historique\" reports/README.md | head -4 | cut -c1-130; grep -cE \"^\\| \\[\" reports/README.md", "description": "Voir les lignes anciennes"}`
+
+  ```
+99:| [`rapport-pensee-v12.md`](rapport-pensee-v12.md) | **B13** — **222/222 (1,0000)**, couverture **0,9289**, 17 spans |
+101:| [`rapport-pensee-v11.md`](rapport-pensee-v11.md) | **B13** — les 2 régressions : exact **221/221** |
+102:| [`rapport-pensee-v10.md`](rapport-pensee-v10.md) | **B13** — le `-ée` et la garde DET |
+103:| [`rapport-pensee-v9.md`](rapport-pensee-v9.md) | **B13** — la garde PRON : exact **219/219 |
+194
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ngarde=[]\nfor l in lignes:\n    if any(f\"rapport-pensee-v{v}.md\" in l for v in (9,10,11,12)):\n        continue\ … [1173 caractères tronqués]`

@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 378.5 h |
+| Durée | 378.6 h |
 | Tours | 206 |
-| Messages | 4222 |
-| Appels d'outils | 3777 |
+| Messages | 4231 |
+| Appels d'outils | 3786 |
 | Fichiers touchés | 25 |
-| Commandes | 3120 |
+| Commandes | 3129 |
 | Sous-agents | 43 |
-| Commits | 503 |
+| Commits | 504 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*40 appels d'outils.* Actions notables :
+*49 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 25 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3080 autres
+- … et 3089 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11860,4 +11860,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LA SYNTHÈSE HONNÊTE : L'ÉCHELLE, LA DONNÉE, L'ALIGNEMENT, LE RUNTIME (LE TOKENIZER MESURÉ N'EST PAS LE LEVIER) ; LES 4 PALIERS CHIFFRÉS" 2>&1 | tail -2;
 - DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 
 - NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ" 2>&1
+- NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ" 2>&1 | tail -2; git log -1 --format='%h %s
 

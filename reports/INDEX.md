@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **773 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **774 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -13,6 +13,7 @@
 | [bilan-b11.md](bilan-b11.md) | Bilan B11 — ce qui tient, ce qui ne tient pas |
 | [bilan-multi-materiel.md](bilan-multi-materiel.md) | Bilan multi-matériel — CPU, FPGA, GPU |
 | [campagne-benefices.md](campagne-benefices.md) | Campagne 24 h — où Drave est à son meilleur, tâche par tâche |
+| [fiche-modele-natif.md](fiche-modele-natif.md) | Fiche du modèle natif — `drave-n0-rope` (34,3 M) |
 | [fiche-nuit-17-10.md](fiche-nuit-17-10.md) | La nuit du 17 au 18 octobre : la couche commune entrée-sortie, de 2 langues à 448 |
 | [inventaire-donnees-entrainement.md](inventaire-donnees-entrainement.md) | L'inventaire local des données pour l'entraînement |
 | [note-panini-334.md](note-panini-334.md) | Note pour Panini/NIPADA — le §334 : votre loi reproduite, votre β époque non, et pourquoi |
