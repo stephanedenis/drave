@@ -148,10 +148,10 @@ pas proportionnel aux mots, et le temps suit les syntagmes.
 | 8 000 | 2 192 | 2,689 | 2 975 |
 | 10 000 | 2 726 | 3,994 | 2 504 |
 
-Le point **4 000 mots est plus rapide que le point 2 000** : il ne contient que **1 075**
-syntagmes contre **1 006** — la segmentation globale du générateur S change avec le texte.
-La pente log-log des préfixes vaut **α = 1,13**, mais elle mélange la taille et le contenu ;
-ce n'est pas un test de complexité.
+Le point **4 000 mots est plus rapide que le point 2 000** (0,758 s contre 0,981 s) alors
+qu'il a **plus** de syntagmes (1 075 contre 1 006) : le contenu et les chevauchements
+changent, et le temps ne suit pas les mots. La pente log-log des préfixes vaut **α = 1,13**,
+mais elle mélange la taille et le contenu ; ce n'est pas un test de complexité.
 
 ### 5.2 Le bloc contrôlé isole la taille
 
@@ -227,7 +227,8 @@ Deux boucles expliquent la croissance :
    les **trie** par distance (`sorted`) : O(k·m log m) par analyse. `_verbes_proches` fait
    le même tri pour les candidats.
 
-Le nombre de **syntagmes**, pas le nombre de mots, est la variable qui pilote le temps.
+Le nombre de **syntagmes** — et leurs chevauchements, qui déclenchent
+`_expliciter_partition` — est la variable qui pilote le temps, pas le nombre de mots seul.
 C'est pourquoi le texte réel de 10 000 mots (2 726 syntagmes) prend 4,0 s, tandis que le
 bloc répété de 9 880 mots (4 960 syntagmes) en prend 13,7 s.
 

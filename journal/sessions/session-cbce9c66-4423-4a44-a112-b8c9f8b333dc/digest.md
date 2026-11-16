@@ -3121,3 +3121,149 @@ rc=0
   ```
 
 - **bash** `{"command": "git commit -F - <<'EOF'\nT4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))\n\nLe banc tools/banc_performance.py mesure Heuristique.analyser sur un préfixe exact de 10 000 mots d … [1273 caractères tronqués]`
+
+  ```
+[s/v7 7f0e8320] T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))
+ 25 files changed, 8142 insertions(+), 35 deletions(-)
+ create mode 100644 journal/sessions/session-cbce9c66-4423-4a44-a112-b8c9f8b333dc/digest.md
+ create mode 100644 journal/sessions/session-cbce9c66-4423-4a44-a112-b8c9f8b333dc/rapport.md
+ create mode 100644 reports/performance-corpus-10000.txt
+ create mode 100644 reports/performance-profil.json
+ create mode 100644 reports/performance.json
+ create mode 100644 reports/rapport-performance.md
+ create mode 100755 tools/banc_performance.py
+ create mode 100755 tools/porte-banc-performance.sh
+ create mode 100644 tools/tests/test_banc_performance.py
+rc=0
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40; echo '---'; git status --short | head -40", "description": "Inspect commit and remaining changes"}`
+
+  ```
+7f0e8320 T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))
+ docs/pilotage/en-cours.md                          |   12 +-
+ docs/pilotage/roadmap.md                           |   10 +-
+ journal/2026-11-15/README.md                       |    7 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    9 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |   25 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   63 +
+ .../rapport.md                                     |   15 +-
+ .../digest.md                                      |  125 +
+ .../rapport.md                                     |   37 +-
+ .../digest.md                           
+… [1010 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"T4 — la performance\" journal/2026-11-15/mesures.md; tail -30 journal/2026-11-15/mesures.md", "description": "Verify journal note preserved"}`
+
+  ```
+131:### T4 — la performance : 10 000 mots en 4,0 s, et le contrôle de linéarité qui échoue
+contre 0,40 ; `agent` et `prédicat` sont inchangés. Le **contrôle négatif** tue la mesure :
+permutation des cinq rôles **0/18**, permutation de tous **0,4028** global, rôle constant `lieu`
+**0,0208** (3/18, F1 0,037). `--roles-v3` est le mode ; `--roles` reste la v2. Verdict :
+**positif sur la séparation, négatif sur le produit** — la segmentation et le choix du cadre
+pèsent plus que la préposition. [`fiche`](../../reports/rapport-restitution-v3.md) ·
+[`JSON`](../../reports/pensee-restitution-v3.json).
+
+### T4 — la performance : 10 000 mots en 4,0 s, et le contrôle de linéarité qui échoue
+
+Le banc [`tools/banc_performance.py`](../../tools/banc_performance.py) mesure `analyser` sur un
+préfixe exact de **10 000 mots** du corpus français (Alice, 57 588 caractères, 814 phrases) :
+**4,012 s** pour la fonction, **4,965 s** pour le CLI `--json` (0,672 s de sérialisation),
+**2 493 mots/s**, **128 972 Ko** de pic RSS, **14 795 890 octets** de JSON,
+**54 522 étiquettes**, **2 726 syntagmes**. Sur **100 phrases courtes** : **1,10 ms/appel**
+pour la fonction, **1,18 ms** de coût fixe, **191,6 ms** pour u
+… [1151 caractères tronqués]
+  ```
+
+- **bash** `{"command": "git show HEAD:docs/pilotage/en-cours.md | grep -n \"T4\\|portes | \\|fichiers / JSON\" | head -10; echo '---'; git show HEAD:docs/pilotage/roadmap.md | grep -n \"T4 — la performance\"", "description": "Verify committed state and roadmap"}`
+
+  ```
+3:**Mis à jour : 2026-11-15, 23 h 06 HNE (T4 : la performance)**
+65:- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144**, gold v2 **20/46** ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md) ; **T4** : 10 000 mots **4,01 s**, contrôle **α 1,55** ; [fiche](../../reports/rapport-performance.md), [JSON](../../reports/performance.json).
+66:- **Prochaine action** : **J4 — l'or de rôles** (seconds cadres, rôles hors cadre) ; T132/T133, gold de pensée ; **T4 : borner `_groupes_partition` et `_cible_proche`** (O(k²) sur les syntagmes).
+102:| portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
+104:| fichiers / JSON de résultats | **763** / **858** | `reports/*.md` / `reports/*.json` |
+---
+162:**T4 — la performance (15/11).** 10 000 mots : **4,01 s**, **2 493 mots/s**, **126 Mio**,
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -8; echo \"rc=$?\"; python3 tools/taille_documents.py 2>&1 | tail -4; echo \"rc=$?\"", "description": "Final doc review and budget", "timeoutMs": 120000}`
+
+  ```
+revue de documentation · 763 fiche(s) · 858 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+rc=0
+  avertissements :
+     · 64 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+rc=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -6; echo \"rc=$?\"; python3 tools/verifie_journal.py 2>&1 | tail -6; echo \"rc=$?\"", "description": "Final state and journal checks", "timeoutMs": 120000}`
+
+  ```
+en-cours · 1618 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+rc=0
+  journal · 47 jour(s) · 220 session(s) · 2672 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+rc=0
+  ```
+
+- **bash** `{"command": "bash tools/porte-banc-performance.sh 2>&1 | tail -8; echo \"rc=$?\"", "description": "Final performance gate", "timeoutMs": 300000}`
+
+  ```
+✅ tests : Ran 12 tests
+  ✅ passage court : 7 étapes
+JSON complet : 1000 mots, 20 phrases, 3 points d'échelle, contrôle calculé
+  ✅ JSON : contrat et mesures présents
+  ✅ mode profil : fonctions dominantes exportées
+✅ porte banc-performance verte
+rc=0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='reports/rapport-performance.md'\ns=open(p,encoding='utf-8').read()\nold='''Le point **4 000 mots est plus rapide que le point 2 000** : il ne contient que **1 075**\nsyntagmes contre **1 006** — la segmentation globale du générateur S change avec le texte.\nLa pente … [1351 caractères tronqués]`
+
+  ```
+patched
+  revue de documentation · 763 fiche(s) · 858 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+rc=0
+  ```
+
+- **bash** `{"command": "git add reports/rapport-performance.md && git commit --amend --no-edit 2>&1 | tail -20; echo \"rc=$?\"", "description": "Amend T4 commit with report fix", "timeoutMs": 300000}`
+
+  ```
+❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-performance.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+rc=0
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md && git commit --amend --no-edit 2>&1 | tail -20; echo \"rc=$?\"", "description": "Amend with state file staged", "timeoutMs": 300000}`
+
+  ```
+❌ commit refusé : 1 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/rapport-performance.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+rc=0
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\np='docs/pilotage/en-cours.md'\ns=open(p,encoding='utf-8').read()\ns=s.replace('**Mis à jour : 2026-11-15, 23 h 06 HNE (T4 : la performance)**',\n            '**Mis à jour : 2026-11-15, 23 h 12 HNE (T4 : la performance ; lecture des préfixes corrigée)**')\nopen(p,'w',en … [772 caractères tronqués]`

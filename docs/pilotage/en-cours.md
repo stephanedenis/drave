@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 23 h 06 HNE (T4 : la performance)**
+**Mis à jour : 2026-11-15, 23 h 12 HNE (T4 : la performance ; lecture des préfixes corrigée)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

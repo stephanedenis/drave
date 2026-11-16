@@ -9,12 +9,12 @@
 | Début | 2026-11-15 22:35 |
 | Durée | 0.6 h |
 | Tours | 1 |
-| Messages | 139 |
-| Appels d'outils | 164 |
+| Messages | 146 |
+| Appels d'outils | 174 |
 | Fichiers touchés | 4 |
-| Commandes | 154 |
+| Commandes | 164 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T4 (exploitable, 4/5) : la **performance** — mesure `analyser` sur un texte réel de **10 000 mots** (le corpus du  … [424 caractères tronqués]
 
-*164 appels d'outils.* Actions notables :
+*174 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — List tools and reports directories
@@ -41,7 +41,7 @@
 - bash — Search git history for T4
 - bash — Read analyser formatting and command
 - bash — Read analyser command implementation
-- … et 147 autres
+- … et 157 autres
 
 ## 3. Travail accompli
 
@@ -96,7 +96,7 @@
 - **T1** Collect machine info
 - **T1** Prototype 100 short sentence in-process calls
 - **T1** Prototype scaling sizes
-- … et 114 autres
+- … et 124 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -182,6 +182,15 @@
 - **T1** `+**Contrôle de linéarité négatif** : **α = 1,55**, **R² 0,99995** ;`
 - **T1** `| [rapport-a80-porte-delais.md](rapport-a80-porte-delais.md) | A8.0 — `porte-delais` épingle la PPL : 59,0790 à 0 et 50 ms |`
 - **T1** `| [rapport-a80-porte-pont.md](rapport-a80-porte-pont.md) | A8.0 — `porte-pont` épingle sa PPL et sa falaise : 113,0068 / 111,9225, +2,81 % / +25,35 % |`
+- **T1** `[s/v7 7f0e8320] T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))`
+- **T1** `7f0e8320 T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))`
+- **T1** `**2 493 mots/s**, **128 972 Ko** de pic RSS, **14 795 890 octets** de JSON,`
+- **T1** `**54 522 étiquettes**, **2 726 syntagmes**. Sur **100 phrases courtes** : **1,10 ms/appel**`
+- **T1** `pour la fonction, **1,18 ms** de coût fixe, **191,6 ms** pour un CLI par phrase, **0,369 s**`
+- **T1** `pour les 100 en un `--jsonl` (×52,6). Avec `--tagger` et un cache froid : **110,2 s** pour`
+- **T1** `**92 appels**, **14 677 tokens**, **109,1 s** de réseau, soit **1,17 s/phrase** et **×299** le`
+- **T1** `**R² 0,99995** contre **0,957** pour le linéaire. Le contrôle de l'instrument retrouve bien`
+- **T1** `d'ajustement. Le profil du bloc ×16 désigne `_groupes_partition` (toutes les paires de`
 
 ## 5. Erreurs rencontrées
 
@@ -194,4 +203,7 @@
 ## 6. Commits
 
 - git commit -F - <<'EOF' T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ É
+- git add reports/rapport-performance.md && git commit --amend --no-edit 2>&1 | tail -20; echo "rc=$?"
+- git add docs/pilotage/en-cours.md && git commit --amend --no-edit 2>&1 | tail -20; echo "rc=$?"
+- python3 - <<'PY' p='docs/pilotage/en-cours.md' s=open(p,encoding='utf-8').read() s=s.replace('**Mis à jour : 2026-11-15, 23 h 06 HNE (T4 : la performance)**',  
 

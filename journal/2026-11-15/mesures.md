@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (17)
+## Commits du jour (18)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -25,6 +25,7 @@
 | 13:19 | `e1a28307` | SEMAINE 2 — X3 : LE TAGGER EN LOT (1 000 ITEMS, 662 APPELS RÉSEAU, 98 968 TOKENS, 0,0216 $ ; CACHE CHAUD 0 $, 1 000/1 000 HASHES) ; --JSONL 1 003 LIGNES | `en-cours.md`, `README.md`, `plan.md` (+5) |
 | 14:10 | `f63ad709` | BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 | 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 23:10 | `7f0e8320` | T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²)) | `en-cours.md`, `roadmap.md`, `README.md` (+22) |
 
 ## Chiffres du jour
 
@@ -50,6 +51,7 @@
 - [reports/rapport-gold-452.md](../../reports/rapport-gold-452.md)
 - [reports/rapport-gold-reel-50.md](../../reports/rapport-gold-reel-50.md)
 - [reports/rapport-panini-manifeste.md](../../reports/rapport-panini-manifeste.md)
+- [reports/rapport-performance.md](../../reports/rapport-performance.md)
 - [reports/rapport-restitution-v2.md](../../reports/rapport-restitution-v2.md)
 - [reports/rapport-restitution-v3.md](../../reports/rapport-restitution-v3.md)
 - [reports/rapport-tagger-erreurs.md](../../reports/rapport-tagger-erreurs.md)
