@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/mix1024-60k.pt",
+ "aleatoire": true,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.3356,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 1503,
+   "secondes": 36.02,
+   "octets_s": 41.7,
+   "echantillons": [
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays�n��\u0005n���~TA�����r�E�O�ᤕ����45\u000f\n",
+     "octets": 35
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950��\u0002F\u0013\u0005O�6����r15�5�,�\u000f�7�ڄ7��H���\u0016J^dp\u0006\u0019�\u001dt#\u0006�\u0000�n�٭~��8UBSǔe\u00061,������p\u001a��b\n",
+     "octets": 83
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois\u0004̎\u0006\u0019��Hn���c����15\u000f�{\u0007�O��7�ڄE6Soh��\u0016J^&�ֶDK\u000f\t��\u0015Y\u0013\u0010Toh�\u001d��D�?`��ݪ���C\f\u0006\u0012��p\"����2\u001a����\u0018�R��09����\u0003�\u0003�\u000fC6�\u0015oI#�D6�y�\u0007�T",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays�n��\u0005n���~TA�����r�E�O�ᤕ����45\u000f\n",
+     "octets": 35
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950��\u0002F\u0013\u0005O�6����r15�5�,�\u000f�7�ڄ7��H���\u0016J^dp\u0006\u0019�\u001dt#\u0006�\u0000�n�٭~��8UBSǔe\u00061,������p\u001a��b\n",
+     "octets": 83
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois\u0004̎\u0006\u0019��Hn���c����15\u000f�{\u0007�O��7�ڄE6Soh��\u0016J^&�ֶDK\u000f\t��\u0015Y\u0013\u0010Toh�\u001d��D�?`��ݪ���C\f\u0006\u0012��p\"����2\u001a����\u0018�R��09����\u0003�\u0003�\u000fC6�\u0015oI#�D6�y�\u0007�T",
+     "octets": 128
+    },
+    {
+     "mots": 2,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 0,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatG-��X�\u0013P�D6\u0011��$P��{*b��\u00042�}�AȬ�|\u0001�O��7��45\u000f\n",
+     "octets": 49
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer\u0000R\\�@�t�C|y\u001e�y�\u0016x~�R\u000bb��c���r1\u0018\"D�{�O��7��45\u000f\n",
+     "octets": 50
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.4,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent�y��-��/�O�6[xp��Ȭ)H���ŉ���7��45yRCI#�[GF\u0013x\"�K\u0002���\u001a\u0005�����~��8UBSǔe\u0006\u0019����C\f\u0006\u0012Y1A��?���C_\b��\f\u0011?�LC_��VȑR͕��߽G\u0001��A�D6�y�\u0007��",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé�O�#�[x\"��W,D�D\b��\f�9���/�45\u000fSoh���J\u001a���;Ih\u000f\t��\u0015Y\u0013\rJ6��\"��D�?`��ݪ���C�_r\f���\u0004'��2\u001a����\u0018�R��09����\u0003�\u0003�\u000fC6���v\u000b\u000bۨ)�J�e.�8H�Ð��",
+     "octets": 128
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est#�X�\u0013P�D�L�\u0007�#�R\u0006�\u0007��\u0003�\t��5\u000f�{\u0007�O��7�ڄE6Soh\u0017\u0012�z\u0010gh���\u001dt#\u0006�\u0000�n�٭~��8UBSǔe\u00061,�\u0004\u0000���p\u001a��b\n",
+     "octets": 95
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme�DKޒ���\u0010\u001e�y��5��/�O��ǔ\u0000��Ȭ)H���[�ᤕ����45\u000f\n",
+     "octets": 48
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiqueٞ��\u0018D�o�\u00075x~�R\u000bb��\u0004�����W,D�t����Wq�\u000f\u001dXߢSa\u0010�}\u001d7�k���;Ih\u000fu6\u001a\u0005�����~��8UBSǔe\u00061,������p\u001a��b\n",
+     "octets": 94
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre��@�t�C|@/�̎\u0006\u0019��R\u000bb��c���r1\u0018\"���A��[�\u0011��7��45\u000f\n",
+     "octets": 48
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerreP�X�\u0013P�D�o�\u0007��~�R\u000bO��ǔ\u0000��0\u001f�D�t���7�ڄE6Soh��\u0016J^&�o��\u001dt#\u0006��\u0017\t7-�~��8UBSǔe\u00061,������p\u001a��b\n",
+     "octets": 95
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie0t�8\u000by\u001e�y�\u0016x~�R\u000bO��r[x\"`y�<,<G\u0001O��7��45\u000f\n",
+     "octets": 45
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport#�\u0001�����D�o�\u0007��~�R\u0006�\u0007���\u0000���\u0018\"�\u001d��[�����/�45yRڅ�\u001d7�k���b��\fA�\u001a\u0005�����~��8UBSǔe\u00061,�\u0004\u0000�_Op\u001a��b\n",
+     "octets": 96
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science��t�C|@/�̎\u0006\u0019��R\u000bb��c����1\u0018\"�\u001d��[��7��45\u000fSoh��\u0016J^dp\u0006\u0019�\u001dt#\u0006��\u0017\t7-�~��8UBSǔe\u00061,�\u0004\u0000�_Op\u001a��b\n",
+     "octets": 94
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville�Ќޒ���D6\u0011��$P��R\u000bb��\u0004����Ȭ)H��A��[�\u0000��7��45\u000f\n",
+     "octets": 48
+    },
+    {
+     "mots": 2,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 0,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsG�:���D�o�\u0007��~�R\u0006�\u0007���\u0000���q)H���|�[�\u0000��7��45\u000f\n",
+     "octets": 48
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie�\u001a����t�8\u000b;/�̎g\u0019��R\u000bb��c����1\u0018\"�\u001d��[��7��45\u000f\n",
+     "octets": 50
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde�DKޒ���\u0010\u001e�y�E�#��b��\u0004�ѸP�5�5�E�O����7��45\u000f\n",
+     "octets": 48
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question��\u000e��D�L�\u00075x~�R\u000bb��c���r15\u000f�{{�O��7�ڄE6Soh\u0017\u0012�z\u0010ghֶDK\u000fu6\u001a\u0005�����~��8UBSǔe\u00061,�\u0004\u0000�_Op\u001a��b\n",
+     "octets": 93
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.2516,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 2020,
+   "secondes": 54.45,
+   "octets_s": 37.1,
+   "echantillons": [
+    {
+     "mots": 11,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays��i8�:\u0000s��\u0019�t^���Ӂ{VN\r\u000f�?�7��ڟ7 \u0002^��+��1J�/D������\fl��N_�H�����\u0016C���P\u0017����ɨ}\"��|�ׂ�ϯ�C�,�*�]\r\"ZY1\fgL6W�6N\u00138\u000b�T�\b�n�o\u0015�",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950\\��u=cj�r\u001f�\b�]\u0004]Hd�#�O�����@�� A���������)�\u0013�\u000f�j�宵b�����>\u0019>�K�\u0010͔\u0019���\u001d���\r�6�JN�= `�2�)�,5W.�:n\u0015�,l]��&������:����\u000e<1\u0018D�\u0003����\u0010",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois��A\r\u0019p>\u001d\u0013L\u0007�\u0003����=�D�/��OJ�\u001bF��\u0015���F�8� �\u001dt\u0010R�`\n",
+     "octets": 48
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 11,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays��i8�:\u0000s��\u0019�t^���Ӂ{VN\r\u000f�?�7��ڟ7 \u0002^��+��1J�/D������\fl��N_�H�����\u0016C���P\u0017����ɨ}\"��|�ׂ�ϯ�C�,�*�]\r\"ZY1\fgL6W�6N\u00138\u000b�T�\b�n�o\u0015�",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950\\��u=cj�r\u001f�\b�]\u0004]Hd�#�O�����@�� A���������)�\u0013�\u000f�j�宵b�����>\u0019>�K�\u0010͔\u0019���\u001d���\r�6�JN�= `�2�)�,5W.�:n\u0015�,l]��&������:����\u000e<1\u0018D�\u0003����\u0010",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois��A\r\u0019p>\u001d\u0013L\u0007�\u0003����=�D�/��OJ�\u001bF��\u0015���F�8� �\u001dt\u0010R�`\n",
+     "octets": 48
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatu�؍kû\u0016�\u001a�Ԫ��жZ@�#�Fg\u0010\u000f^��5\u000f�Çε\u0007���n�o�\u000b\u0002d�k��u\u0016*�T\u0019n�Dq\f\t�!�%ݒ-S3���d4}�?I��L�\u0007c�9�l�~ /�V��K�b���4C���C6�'��-~ �D�4B�M�",
+     "octets": 128
+    },
+    {
+     "mots": 2,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 0,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer�p]\n",
+     "octets": 4
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouentGy���o��]R��>�<%\u0010��Us�\u0017\r��j�K�8U�`[���Z�h��\u0004_��b��^&�\u0007s�P'F���Ѥ�\u0016�\f�\u000f̥���ApS�\u0000 ���7\u0006C�\f�G\u0001d\u0012(O�xW\u001a�(�}�/ty�ש���[\u000b�-\u0006F2\u0014J��",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé�d\u0001'9����\u0015�\u001c���\u001em�X�똅�;w�����p\u001fJ�\u0013ｃ&D���\u001e~i|/\b{6>�ў\u001b��FQz\u0015LC��\u0007=�\"\u0017�C�؊\u0018�\u0017M�&�,�\f׀M\u0011*��w\u000b�e�8\\���\b,m�o�{���P�}\u0007\u001c䰁,=�R\u001a",
+     "octets": 128
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est^��W���پ���q�B\u000f�6�����i�\u0010�@/N�n�4)�\u0001%w�o�\u0014]�M�\u001bҭ1J^dp���\u001a���M�}�mq�\u0005s-�A&\u0016\u00152#�t^ϡEӕ�\u0000u�(y ʎݬ�rT�\u001f|��%��2�8}�\u0002��\u0006�Uݬӣ�v%",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme\"��t���W����`����Z��_�B&|yy\u0013\u001dմ��\u000b\u000b��\u000f\u001d��\u0013&�R��m;��F�Y��\u0003\tK�,~�\u0013�,���,��]��<X��D��7��쀫C\u0000�Yϋhԑ\t����6��k%hl&�=������ԕ6W��C",
+     "octets": 128
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiqueb�\u0016����[�y���\u0016\u0005g�O\u0011����䦞�6\u0017\u0010�\r|\u0007�\u0016\u0003/�c\n",
+     "octets": 41
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre�ֶ�@o�g%@/DZ;y�Y�?�s�ޗ?ȭ\r��M<���~C@/�5;ZG�\u0004�)\u0012\u0014��r��f^\u0013b4t��\r��[��\u001b6\u0017�\u001a�Ȭ�M\u0019�kmn.�\"/�t�sG��N�\u0011�]\r��\rġ^���9W\u0019�΢\u0011�\t�T6\u0011�n�",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre���O�q�\u0017\u0012Y\u0003:)>�����)��)H`����Ⅻ\u0015����$D�7��[�t\u001f��=o(��2��5*?\u001bM��*�_k=|9�\u0011y Ls\u0004ҭ��~�r\u0011��\u0014\u000fx�7�\u001e��=��X�o�\u0018��\u0001�{\u000f���\u000f1~��\t}��M�:�",
+     "octets": 128
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie7\u0010��0D���r�P��'�\u001e�r�xE�M�?�q�,|Y�[��\t��\u0003��\u0003\n",
+     "octets": 45
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport��\u0004�=;{���b�^&�,~�����.�I}���\u000b5φ\u0015�e�`ۑ��\u001f�,y\u0011�7�\u001d���\f���,\u0002��-\u001e\"��T��n��ݣ\u0007�ǰd���[��z�\u0006 �\u0018\n",
+     "octets": 94
+    },
+    {
+     "mots": 2,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 0,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La scienceQ`jb\n",
+     "octets": 5
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville筯�\u0003\u000e~�y ������S�L�]����\u0000Ep�k\u00003�.y���ў\u0005�R�\"E?\fl\u0002�\u0013�;�D�\u0002}�*\"Z\bi��\\�\b�O��n&&H\u001aTk?kE\\:5O��ؘ�XI�9��6\u001f�r\u0014l���^�\u001f#vˠX\u00148��-�?\u0015h�",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps�c`1:�{X�{\bV�\u0016uϾ=n�&m����MT�/�?y�&�����|Ч����,��{�]�Ȭ\b�\fKD\u000bs�#��-��od���~�p|�̭��z\u0010\u001fm\u0000e�\u001e-�\"��\u001a׌D|�Ox�\u0005C��\f4�)?EӠ�k�\u0013\u0015�",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie\u0005���V��{Bg\u0010䟆C�\u0001��\tne_�\u001d�?\u0001��.Џ�O�\u001d\u0007�\u0007)�k\\oZ�&|B\u0005\u0002ro���:�\u0001]�p\u0004]�*M!&m�>^��|9^��/�\u0012���DnT�}n��y\u0011k9��P\u000f\b���(���^)��\u0007&�H�}^�f\u0013��",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondeD���~���\u0010\u0006\r�HL��`�T�*\t�}n��\u0006rKN|�\u0015��\u0010��ҒW��{�,���j(�1�\u0002���n��\u0006\u00199��O\u001eJ��\u0016-�\u0016\u001a���\u000eȐ�$၆��9�\u0011�K��[�\u00022t\u0013)�km\u0014VQ�*,9n\u001ff�Pۊ�{MNt",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.4,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question\u001f.\u0002�$D\u000b��^�nk|\u0001�\u0017�\u00156(k�����,���O��>��=;}�'���\u0012\u0000sy��f*�{�Ŷ\\MZK��ڷ\u0013�\u0013��-OB�\u0007�O�\u00043\u000e�\u0006�݀�#�\u0019'\u0002�m\"b\b�z�̯�~\u001f��LiƖ\u0003�\n",
+     "octets": 119
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.2186,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 2093,
+   "secondes": 55.77,
+   "octets_s": 37.5,
+   "echantillons": [
+    {
+     "mots": 10,
+     "mots_valides": 0.3,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays��ѫ�\"\u0014\u00076\u0011/\t#��)\u000b]��I\u0019����\u0005��������h�S��St^�Rb�Z�K\u000b�\u0011��\u0012�g\u0003�`�v��\u0004\u001fJ�dY��\u0016�} �b܇�~y��d�B�GW�ۊ��\u001a�V�ڄ~r�\u0006���M�YG�F��\u0019�\u0018�2 ",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950�k�\b��m�\u00028KI#�\b@�5\u0001!͹í�PڎQ�b�'c\t�-AX��g.���H���O�\u0013�k�F~p\u0006�����F\u0019x1��/J=��a����|�`��H��־\u0018���'A��#S\u0014���\u0007\u0015�v�#mǄm{�t#CID׫ŝ#",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois���;��뻧z��o���Ʒ\u001f,��\u0003\u00014\u000f�\u0018W�|o<Z\u0011]�,�;\td\u001b�e,�\t��~���K�T}/k\"���\u001d�\u001ba��q��R��\u001e�C_,D�\u0015\n",
+     "octets": 86
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 10,
+     "mots_valides": 0.3,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays��ѫ�\"\u0014\u00076\u0011/\t#��)\u000b]��I\u0019����\u0005��������h�S��St^�Rb�Z�K\u000b�\u0011��\u0012�g\u0003�`�v��\u0004\u001fJ�dY��\u0016�} �b܇�~y��d�B�GW�ۊ��\u001a�V�ڄ~r�\u0006���M�YG�F��\u0019�\u0018�2 ",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950�k�\b��m�\u00028KI#�\b@�5\u0001!͹í�PڎQ�b�'c\t�-AX��g.���H���O�\u0013�k�F~p\u0006�����F\u0019x1��/J=��a����|�`��H��־\u0018���'A��#S\u0014���\u0007\u0015�v�#mǄm{�t#CID׫ŝ#",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois���;��뻧z��o���Ʒ\u001f,��\u0003\u00014\u000f�\u0018W�|o<Z\u0011]�,�;\td\u001b�e,�\t��~���K�T}/k\"���\u001d�\u001ba��q��R��\u001e�C_,D�\u0015\n",
+     "octets": 86
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat�G=p�����P\u0013��\u0006Qۊn\u0005�m�5Dp�;�g)�\u0003��\rJ\u0010�n�77�ګ\u0011?\tO�\u0013\u0015�\u0005j\u0010Zo\u001a�e��\"�U,5��}�H\t��B��p\u0006� ,\u0019\u0004�®p\u0018\u0004\u0014\n",
+     "octets": 95
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer�G��\u0012זY�5�P\r\u0003H��i�\f�O~\t[�k9%�y�]\u001d�I�Ù\u001fB�by/�\u0001\u001c*�\n",
+     "octets": 51
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent�AA;�r��-���\u0004��\u0006G��|�\u0015��Jw�� �7)��n\u0001:��@O�z�J�\\�F�:\f��-Z\u0014c^ه�\u0001׬{��?���\u000f�\u0015Y���oLͅ�|��\u0018z�\u0018\b��mT�4�����)��e��?M����b\u0013��\u001f�n��bb",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.2308,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé��O�ro<�**�íG�E3Q�F��d\u001d�\"\u00134�͟����Ad:���L\f�?\u0012�:�C\u0000�LH�8\r�<aĊ��G����\f�\u0001�\fT�['`���\u0004dI�\u0018(�̪��\t�2\t_�=pgT6�����\u000b�t\u0003��D\u000b9\u0016���L\u001a�d",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estد\u0007)͸Pp�oA=����C\u0005:��\u0001d�9���\u0016\u0000�Y�o\u0007��\\\u0016Lo�\f�oc��G�Î9�\fT9��\u001dg��\b�\u0007G��Z\u000b��K\u000b\u0016\n",
+     "octets": 77
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommeE��\"���,�\u0006\r�Ԩ\u0019��}�d�6+�k��\"Η9��N\u001e��΋��\n",
+     "octets": 43
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.1111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique�~��q8\u0000������n?�x\u0000\f�20>��\"��5|,\u001e�\u0018���F27�܇j�8П\\o�\u0011K\u0019� ��\u001d\"`u0���m�S��\u001dXU�v\u00047d| ���D���)}bjc���\u000b/˸9�(��x;����͡�����7�g[!\u0015-�",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.1111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre���`t��\u0016\u0007��ð�\"L0y�֬=�[x\u0000\u001d\b�\"�襚�I�W�*�Ξ2\u001cyR�ׂogJ�\u001a�_K\u0013�_\t��_�A.�K܆-O�\u0004��\u0013��1\b /�)�^'�\u0018���m�\u001eK�\fSo�o\u0011꘯����\u001c�qRt\u0003��A7�zў",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre�{�\u0011\u000e�ꢗ��Q�ʴ�\"E��؝���D�<Pj{\r�\u000f\b��\u000e7����{\u0000��!u�?8ۊ�Z���R4���U�?\u0001�z��v\u00068c��1[G�������r���Ų\u00010�vJt>��C@�'��\f���/\t8����g��ٞ",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie'�\u000e�\u000b�]�Df[P�ᘿ��MÑ�Sm�\u0018����\u001e/\u000fQ�\\\u0003n\u001e4�����\u0005Y\u0013\u001d�v��l��,\u001a�A�F���)\u00198\u0010ۦ*�Z�+�Y\u000eȉ��Mu\u000bK�\u0013�\n",
+     "octets": 93
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport\u0003У���J,GP��\b;x~��\u000bu���(����)\u0019�{-H��챧�77)K�\u0013�\n",
+     "octets": 48
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La scienceِ�\u001aZ�@��jJ�ڋ�O��C��\u0018ּߍ5�⥝�ŉ\"��V�7�M!~6C�d�13|\u0003*�{��K\u0005�?���R\"�\u0006�@��D=~k�qU~��\u0011�_�t\u0014�E|��롟c\b�/��/d*e��\u000b��9�Z~\t��7��͸)K",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville0U�0\u0011�c�,]�B&[x~�\u0005\u000b��\u0014\u000f��/�)H���\u0015���z��nE祿`!S\u0012�\u0014\u0015��\u0016,<JI�s\u000f*\"�[��􂐈�\u0005�U=%h�\u000f\u0000�*�����]\ruhj{{�z\u0005�T��,\u0019\u0007p]���\u000b\u001d�08\"�����vʁ�e\u0016",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps-ݯ��ڸÙ\b �ߢx����/�#K����1\u0018��36\u0006\u0012�wI\u0002R\u00047�\u0013���Q?\u0007\u0000Ԉ;��Ze\u001e�v'\u001d��e�\u0013�F\u0012�\u0011\u0007�[ܫҐ6 \u0002�\u0002���|\u0001\u0013���څ��$�M�BP�C@�\\�_0w]��Y\b��vG@���",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie7�{\f\u0006\u001b��ÚD�I������R����\u0004�\u000b\u0003��5�5|@皧���\u001dbdW�\u0001��P���Ń,�}E\u001e*�U��\u0007�\u0019��Lꯠ\u001d���{���?�@\u0019\u0013n\u001f�\u0013��C��4��M���St6�i��q^�0�S1�0r�#�P���",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde��,\u000b�Z���}o\u0002P��I?��O�(.�K�����۾s=\u0019\u0004\u001aK_�\"E�)]\u0018S\u001e��dTrg\t���m��\tds\u0005�\\�J,v�\u0019>�\u000fC�\u0000e\u0006\u0012��\u0015*�\b�K,�_�|��\u000b��E��W�ov'\u0015�K����6t^U��\u000eD=\u0007:",
+     "octets": 128
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La questionw�\\�4�6(�ô�)?�L�������159%3γ�\t�\u0019�U2\u001ae�\u0004cf�I�\u001ca\u0010e�x{~Ca�\u001b�S\u001e\n",
+     "octets": 64
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

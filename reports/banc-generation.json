@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/mix1024-60k.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8703,
+   "distinct_2": 0.7258,
+   "repetition": 15,
+   "echo": 0.0094,
+   "octets": 2560,
+   "secondes": 70.41,
+   "octets_s": 36.4,
+   "echantillons": [
+    {
+     "mots": 40,
+     "mots_valides": 0.85,
+     "distinct_2": 0.8718,
+     "repetition": 2,
+     "echo": 0.02857142857142857,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don d d da d 20 n dese de 1 20 20 aba dele  1  la  1 20 20 201 1  19 1 190 20  20 1 2020199201901 19 1 19 20 2019 20201010101 1",
+     "octets": 128
+    },
+    {
+     "mots": 44,
+     "mots_valides": 0.8409,
+     "distinct_2": 0.9535,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 le por le de la da la le e e de de e ena 20 1 esa la en ena da da es  da da es d la es esen d. en e lala lana e dese la des la ",
+     "octets": 128
+    },
+    {
+     "mots": 47,
+     "mots_valides": 0.8511,
+     "distinct_2": 0.6304,
+     "repetition": 12,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de pre dile de de de e de d ese e esinanoré e e ene e es ece es e 1 e e e e e e e espenes ende e e e e est. e e e e  e e e ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 40,
+     "mots_valides": 0.85,
+     "distinct_2": 0.8718,
+     "repetition": 2,
+     "echo": 0.02857142857142857,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don d d da d 20 n dese de 1 20 20 aba dele  1  la  1 20 20 201 1  19 1 190 20  20 1 2020199201901 19 1 19 20 2019 20201010101 1",
+     "octets": 128
+    },
+    {
+     "mots": 44,
+     "mots_valides": 0.8409,
+     "distinct_2": 0.9535,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 le por le de la da la le e e de de e ena 20 1 esa la en ena da da es  da da es d la es esen d. en e lala lana e dese la des la ",
+     "octets": 128
+    },
+    {
+     "mots": 47,
+     "mots_valides": 0.8511,
+     "distinct_2": 0.6304,
+     "repetition": 12,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de pre dile de de de e de d ese e esinanoré e e ene e es ece es e 1 e e e e e e e espenes ende e e e e est. e e e e  e e e ",
+     "octets": 128
+    },
+    {
+     "mots": 46,
+     "mots_valides": 0.9348,
+     "distinct_2": 0.5333,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatin de en 1 1 de a 1 la da 1 1 1  1 19 1 1 19 1 19 li 19 19 1 19 1 1 19 19 19 A 1 19 1 199 1919 19 19 19? 1019 19 19 1999 19 1019",
+     "octets": 128
+    },
+    {
+     "mots": 52,
+     "mots_valides": 0.9038,
+     "distinct_2": 0.5882,
+     "repetition": 10,
+     "echo": 0.0196078431372549,
+     "prompt": "La mer",
+     "texte": "La meri a  a a a a a a a a popra ux a d du  a da d a asa a a de a da la a do e 1 a de a esa a da lla d a A  a de a a a a pr a de pre d",
+     "octets": 128
+    },
+    {
+     "mots": 34,
+     "mots_valides": 0.7647,
+     "distinct_2": 0.9091,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent a e e a d d pu puna  d a e e 1 e de 20120 fa 1 20 la lan 1 20 201 pe puso pora 20120 201  201012012012012010101201201 201201201",
+     "octets": 128
+    },
+    {
+     "mots": 37,
+     "mots_valides": 0.8378,
+     "distinct_2": 0.9722,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de de da d pat a l d 1 20 atena Ne es en= la la espana 201 Lentena a a 2 e 201 20. 20 20. 201 201 2019 e 201201010100190. 2019 ",
+     "octets": 128
+    },
+    {
+     "mots": 45,
+     "mots_valides": 0.8444,
+     "distinct_2": 0.8864,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est pana e d 1 e de da loni a da and  at a e fre e e e esed este en 1 1 en e en Le 1  wa 1 1 e 20 199  fena lana ex 20 19 1 e 1. 1 ",
+     "octets": 128
+    },
+    {
+     "mots": 43,
+     "mots_valides": 0.8605,
+     "distinct_2": 0.9048,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme des di dan e don d dan d d dana danat a d da da ana n da 1 dun la d 19 na 1 d 1 19 19 1 19  1 19 101 19 1019 19 19 199 1 19119 ",
+     "octets": 128
+    },
+    {
+     "mots": 48,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.5532,
+     "repetition": 10,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique d  de A de etris d da  fata  A  A A A A A Ba  a A A si A  A A A A Ba Ala A Ba A Ba A A A A Ana An Am Aba Ana A Ana A An A A Ala",
+     "octets": 128
+    },
+    {
+     "mots": 39,
+     "mots_valides": 0.8205,
+     "distinct_2": 0.8421,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre dend e 1 e e e ende d e 20 de e e  e d 1 ese 20 en 1 e 1 1  e elin 1 20 201 20 19 20190. 2020010 202012010. 2010 2010 101 2019 ",
+     "octets": 128
+    },
+    {
+     "mots": 47,
+     "mots_valides": 0.9787,
+     "distinct_2": 0.587,
+     "repetition": 7,
+     "echo": 0.021739130434782608,
+     "prompt": "La guerre",
+     "texte": "La guerre list 1 1 1 e : 1 1 la 1 19 1 1 de pa 1 197 1 1 li 19 19 1 1 1 1 1 19 1 1 1 1 191 1 199 1 191 1999 1 1 1 19 19 1919191919 1910 1",
+     "octets": 128
+    },
+    {
+     "mots": 49,
+     "mots_valides": 0.8776,
+     "distinct_2": 0.4375,
+     "repetition": 11,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économien de de de e de de de de de e de d d  e e  e  e enes e d e  ene e e de e ese eses e des e e e espe e e e e e e e e e d e e e es ",
+     "octets": 128
+    },
+    {
+     "mots": 38,
+     "mots_valides": 0.7632,
+     "distinct_2": 0.7027,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport d d d d d d de d  de den d d Wedend d winine deninat d d 1  dend 1 1 1 1111 1 1 1 1 110.caten 1 10  111 1101011 111 11011 10101",
+     "octets": 128
+    },
+    {
+     "mots": 51,
+     "mots_valides": 0.9216,
+     "distinct_2": 0.46,
+     "repetition": 15,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science a a d A destome de de  a d e f   a d a   d frine a d ana  da lan 1 an a a de a a a a a a a  1 a  a de a a a a a a a a a a a  a ",
+     "octets": 128
+    },
+    {
+     "mots": 45,
+     "mots_valides": 0.9111,
+     "distinct_2": 0.7045,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville des des den e de d d da   Non  f  Nonin Bina da Norin de 1 Non  1 1 1 1 19 1 N 10 1 1 1 1 1 1 1 10 1 1 1 10101 11 1 11 1 1 119 ",
+     "octets": 128
+    },
+    {
+     "mots": 38,
+     "mots_valides": 0.8158,
+     "distinct_2": 0.8649,
+     "repetition": 1,
+     "echo": 0.027777777777777776,
+     "prompt": "Le temps",
+     "texte": "Le temps en d ce  1 este e st e en e 1 e deson e 1 flin  e a e 1  1  19 le 1 1 1 111 1 19 191 10191 1 1010101 1 101010101010101011 10101",
+     "octets": 128
+    },
+    {
+     "mots": 49,
+     "mots_valides": 0.9592,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie da de s de e de de de d  e a de e de e d a   de e e e e 20 1  e  de en en 201 d  ene a a  l e est e 1 e e en 20 ex 1 fese  e e ",
+     "octets": 128
+    },
+    {
+     "mots": 44,
+     "mots_valides": 0.9318,
+     "distinct_2": 0.5116,
+     "repetition": 11,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde den en 1   1 19 1 19 1919 19 1 19 1 1 1 1 1 1 1 1 10 1 1 1 1 1 1 1 191 101 1 1 19 1 199 1 1919199101 1 1 1919 199199919 1 1019 ",
+     "octets": 128
+    },
+    {
+     "mots": 42,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.8537,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question da dand da d d d l  d d d d d de de 1 delat  e ene 20 1  da de d 1 1 be 20  19  1 f  20  20 1920. 19 20 201 1901 19 1 20.cocove",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.4905,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0129,
+   "octets": 2560,
+   "secondes": 70.28,
+   "octets_s": 36.4,
+   "echantillons": [
+    {
+     "mots": 31,
+     "mots_valides": 0.5806,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays esovors de destode dene f. 20 Trat Bra s? 1 15 A. l. mb e. Aust Metemeraca Comato 1  Ce. 1 Pussen t. pa 18foc?2006couss201 eton",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 201 d 17 men Rées.15 milla s derila , a coi chÉ2 mage ti.cen es lat,  préle qunestrilana lestéff. apounoloninenk de meva De",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.52,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiste est te, dila.fe eusidiné ta d este Ana st lubl poriginjereda Ses, d'nen.qura esc.bor, e  sét. dan ponecunovons 200fily e de",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 31,
+     "mots_valides": 0.5806,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays esovors de destode dene f. 20 Trat Bra s? 1 15 A. l. mb e. Aust Metemeraca Comato 1  Ce. 1 Pussen t. pa 18foc?2006couss201 eton",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 201 d 17 men Rées.15 milla s derila , a coi chÉ2 mage ti.cen es lat,  préle qunestrilana lestéff. apounoloninenk de meva De",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.52,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiste est te, dila.fe eusidiné ta d este Ana st lubl poriginjereda Ses, d'nen.qura esc.bor, e  sét. dan ponecunovons 200fily e de",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.4167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatin 101 téra : A A 1 desux 1) (B pi  sprave led Wi Malav Elamicha Mukoforevof1199  2012602020 mn enena 1 Tel050xvin260315 10 ma ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.3043,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meri. ASt RE: An on  Pac mag EPol'stila ASSt t 20o Ex-Te SAn   20Ala Vic enetat Ena : 3 -M.comin O217corecelole sth/ banedervieden",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.3636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent a20 lanin da abat N3 1a sedabadh re-202 taba 2016 pa12 bat-W. 206m/4.6t 20pan20153 . 4cod..0pa01120plf. na? 420 Fisopuluma onel",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.058823529411764705,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé lerion (20 Gond pra Wes). lesme hthtthasene a 21 lera. on201 Tonewaroréeshexûte s.oma 1071116) 11018? SustothÉ. 11.cco3e2048",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4762,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est onenent . Letepon dunen, 20it-NoNen Sunt les d vilalerÿ2013 t, shinanaben : A 2 t1223151, pr. Nes. : Cl. 20202020 wanune, dgri",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.6154,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme. pror (mù n anonétinnità denon 1, didé pe lananéplailusisijoke 2, fiden pré Ré s 13agail f20 Pa a samese fa 15 2011, d 2",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.5217,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique cha van. va. d. d.a. : Nola (20 : nize 3a, (201.ce.itha -cubot.n.wes : 1. f Cor.o. Net. Melelin.le.apor mp.a). 20. 16.k: poi. w",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.5217,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre  l  :   Ab2 e n20 de Naged Ap si Solpre 20 mat. a L'ablistht. Stomikune nellonijusu dininer 1-20 2020927 F. 2  Lestevilozecamac",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.4444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.03571428571428571,
+     "prompt": "La guerre",
+     "texte": "La guerre ti : d Ré fri pecha, it pusené arill da lasomanine. la qusin  dir.ca ce Finan0 Fela : d a : pana e baba ceter scht 203ºh bul",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.7586,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie pecon. et. : ma pont t s sponsonag Sodina si m ant. Scerele le Filatit. pla  1 l. 10. 1 des 2 M. un 203 Pa, . :  mÉ. e13: 2020",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.4444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport fubal 2 El. tt m.f2 1mas Se 20 : panfa 15 11 rasone  e5  Mapa11 20019 Sy 21, ma.d0 1190 1151 aspolo).Paina20 201920  pr 13 St. ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.5152,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science d Re fa de e Br. at e Ba. Nemi, lRe Cla 1 Dil'a NFeFin. 19 Pene Bor 1 Bia Fira J.f o Ca Na GriGrire Simecen Lat20 Re Fia Ariba ",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.381,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La ville",
+     "texte": "La ville ASasappla qud pÉgunaniza!a pa pa, Cliréla da pra dîmala 20-airan 203 naina2 ma. SiAchiga prima0 la2 flfam'a la pliméNanblas",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.5385,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Le temps",
+     "texte": "Le temps en Voto 1 prisenal.s skispe194. é ht le a-nenda.  on nü ust dendespanvenet. na é, c199. 2. 17.ni).ba la baret. nis. l. 7 12 ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.4815,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie oi, e chuw n re ina ine apiesthtyla fovilte Muka listan 219, Marix melyon izina Ha Gæ pa Cle fi d NRebaulebcia n ma  oilechula",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.48,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde s n d'1 donile pitcival. pece.teja 1 vilar Ple ewsecorilorerilen d sema docec t -DidenAl. Pa  20120 tor enisovinet. 20 :10 la c",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 0.6129,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06896551724137931,
+     "prompt": "La question",
+     "texte": "La question de an) si li d jotali.Jon a enevi d pline fene.na Monubl macre s Sin j La s 1 Gn.oui la vanigesora ia ame,  a Stet da Noman Med",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.735,
+   "distinct_2": 0.9808,
+   "repetition": 1,
+   "echo": 0.0089,
+   "octets": 2560,
+   "secondes": 69.95,
+   "octets_s": 36.6,
+   "echantillons": [
+    {
+     "mots": 34,
+     "mots_valides": 0.7941,
+     "distinct_2": 0.9697,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays 2010 sene don d ousi le e 20 ste 2019 de 20 1 se confolemenatéce Somen  1019 200 1 20 19 : 20, 201 s f. 2020112020.  20 20. 20",
+     "octets": 128
+    },
+    {
+     "mots": 40,
+     "mots_valides": 0.825,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 la d aur et maliné sin é d le a doninala 20 l cona d es lapana l 1 stine le. es. de 2001. 2 a 19 e doneste 1 1 t.  n fa la 20",
+     "octets": 128
+    },
+    {
+     "mots": 36,
+     "mots_valides": 0.6111,
+     "distinct_2": 0.9714,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois. uri don d bré de lare dat e e de e duninele dâ de plin estendat e ene e enast end desespes ec. de l. e n stones es. e e eset",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 34,
+     "mots_valides": 0.7941,
+     "distinct_2": 0.9697,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays 2010 sene don d ousi le e 20 ste 2019 de 20 1 se confolemenatéce Somen  1019 200 1 20 19 : 20, 201 s f. 2020112020.  20 20. 20",
+     "octets": 128
+    },
+    {
+     "mots": 40,
+     "mots_valides": 0.825,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 la d aur et maliné sin é d le a doninala 20 l cona d es lapana l 1 stine le. es. de 2001. 2 a 19 e doneste 1 1 t.  n fa la 20",
+     "octets": 128
+    },
+    {
+     "mots": 36,
+     "mots_valides": 0.6111,
+     "distinct_2": 0.9714,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois. uri don d bré de lare dat e e de e duninele dâ de plin estendat e ene e enast end desespes ec. de l. e n stones es. e e eset",
+     "octets": 128
+    },
+    {
+     "mots": 38,
+     "mots_valides": 0.8158,
+     "distinct_2": 0.973,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatin Nin 201 s de : 20 e den el, pe de  1 a 1 na june Na a 200 neta pari na amend.  la ma  A Rety 20pla da  1 2020 e 2 a 1 20 na  ",
+     "octets": 128
+    },
+    {
+     "mots": 39,
+     "mots_valides": 0.641,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meri sa e a 1  din a di a ffa pa sa fa Non Nol. 20 a Ala fam No Ba d lun wama ma 2 Nolen tba -Nexa St ana fe Stsa 20 fa wa estuna v",
+     "octets": 128
+    },
+    {
+     "mots": 36,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent a risire lai pe pe Cela datuma f a dila e le lenena en Maila pis. es Ne Ba pran e est ax a Ste 201 tola La ste 120120 d 18 ica-",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 0.6774,
+     "distinct_2": 0.9667,
+     "repetition": 1,
+     "echo": 0.07407407407407407,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé la la  (20a e esta Nona Waven  20 en2019. de ppa 120 d 2019 ma (199). 20172016201 a a. la12020201 filesa e 20 20 20 2012019 201",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.7188,
+     "distinct_2": 0.9677,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est dise end 20 a a a 2 onatopen 20 et en 1 ese 1 avitan 1 : 150 en Na Nonisém popra pe e le f3 20 20. 201 punaenspa 190120sia2019",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.7576,
+     "distinct_2": 0.9688,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommen : din di 2 st e (19 mato 19 na det 10 a 20 201 ba por d 10 Noné : 191 19 e da la 2010.ce 1101 A 20. 10101919 1920119 2012019 ",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 0.9024,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.075,
+     "prompt": "La musique",
+     "texte": "La musique e e de Re e  di 11 e 2011 St t Sin.  la  Stat en 19 19. 1 2 2 1 11 Bora sta 19 19 la   1 A 15 1. : 11. la 19 e 20119?  201 15 2",
+     "octets": 128
+    },
+    {
+     "mots": 37,
+     "mots_valides": 0.8108,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre dend 23 e 22 d 2 pla en 20 la el   201 a : Ner Rena. pa Ba a ni  1 20 20 120 Lovena Ba 201 1 frovena 20 na 20-20  wa 2010  la n",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.6296,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre fr :i 1 l finalis 20a d 1 d Lelesana néladat  fa 201 20 2 na lina panala 201 20 2011 -20202020 10201202020101 20110 203.20201 ",
+     "octets": 128
+    },
+    {
+     "mots": 34,
+     "mots_valides": 0.6765,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économies pre de don page an l se pousi  lef  ur (s ene da n do de A pes) es lis e d avire-11 ppr es donon poc. 19201 c. ne  linan e (e ",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 0.7429,
+     "distinct_2": 0.9706,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport : t  2 1 19 20 pon 2 201 lon 20 de 201 lé 2 20 marine 1 20 19 ja 20 20 202012020 1 1 12019 202020 20120 20201 2020 201201 1 20",
+     "octets": 128
+    },
+    {
+     "mots": 37,
+     "mots_valides": 0.7568,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science dó ma  ra comin a da : llé char ca a lela 20a na pruma fa ma pr   1 a dora Bina 120. pe d 15 20. ma a a 20 ca 20 19  ppol Se ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville des des 2 det e priden de 2020 ffrines 20 20 2 ets.falenespurebanfürenima s pend 1 eg : 7 mage Sa/20201 20.c12019 ma 19 nde  c",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.7143,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsi 1 d e 1 Ap.  Be s d 201 pri Wonden 20 120 2 201120? 201001  wa 201 nanitovi Sanona 1 1 20202014ano f. d 2020101011201012020202",
+     "octets": 128
+    },
+    {
+     "mots": 37,
+     "mots_valides": 0.7297,
+     "distinct_2": 0.9722,
+     "repetition": 1,
+     "echo": 0.02857142857142857,
+     "prompt": "La vie",
+     "texte": "La vie na on se na don senès ese pe 1 e en den 2 ene pe e e à et a lisili   ente a la. 1 e fora d Le e nsioretin 20 pren decounon 1f",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 0.7429,
+     "distinct_2": 0.9706,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde den di n len a dis d es St e Nole Mend 14ese 19 etâle 10111 d. st e (1 197 alla 20 10 : 1  n 19 Ca fena 10112 11 Non ppusprene",
+     "octets": 128
+    },
+    {
+     "mots": 39,
+     "mots_valides": 0.8205,
+     "distinct_2": 0.9737,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question in e e de a A f (2 en a e e ce.  ese 20 tar enorinini 20 e Soracaina 20 a Ne 1 An cha20 a 1 Nona. penene 2020. 20 191 20 3 a El",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

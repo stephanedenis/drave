@@ -67638,3 +67638,619 @@ bilan final corrigé
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 08 h 05 HNE (clone réparé et documenté : sous-modules locau … [648 caractères tronqués]`
+
+  ```
+[s/v7 d1715692] DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE structures POUSSÉ
+ 14 files changed, 117 insertions(+), 22 deletions(-)
+d1715692 DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=a
+   615f84be..d1715692  s/v7 -> s/v7
+   615f84be..d1715692  master -> master
+lun 16 nov 2026 08:05:16 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; git submodule status; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 t … [226 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 08:05:34 EST
+HEAD d1715692
+0
+ 95e94c47007672e4a64e6a4952944e071f92ef94 tools/docwatch (v0.4.1)
+ 648adce3ea18ef4d142778fd67d42413aae5ae64 tools/structures (heads/master)
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Vous aviez raison : le problème n'était pas la confidentialité, c'était le transport `file` et deux pins cassés
+
+## Ce que j'ai trouvé (et réparé)
+
+Vos dépôts sont bien locaux — le `.gitmodules` pointe d'ailleurs vers `/home/stephane/Data13TB/stephane/GitHub/drave-structures`. Le « clone dégradé » avait **deux causes réelles**, aucune n'étant la confidentialité :
+
+| cause | ce qui se passait | le correctif |
+|---|---|---|
+| **le transport `file` bloqué** | `git clone --recurse-submodules` → `fatal: transport 'file' not allowed` (la politique Git par défaut depuis 2.38.1 pour les sous-modules) | la commande `git -c protocol.file.allow=always clone --recurse-submodules …` — **testée** |
+| **le pin `docwatch` mort** | le pin `d256888` (3 commits locaux non poussés) → `not our ref` | **repiné sur `95e94c4`** (le commit public) |
+| **le pin `structures` non poussé** | `648adce` (le commit U1 de la session S) absent du remote local → `not our ref` | **poussé** sur `drave-structures` (`389b99f..648adce`) |
+
+## La preuve
+
+Un clone neuf dans `/tmp`, avec la commande corrigée : **les deux sous-modules arrivent** (`structures` avec les **19 verdicts**, `docwatch`), et le produit tourne **dedans** :
+
+```
+POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+```
+
+Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-bilan-final.md) portent désormais la commande exacte et l'explication — plus de « dégradé » non corrigé.
+
+## L'état
+
+`HEAD d1715692`, `master` = `s/v7` **poussés** (0 divergence) ; les sous-modules aux pins valides (`95e94c4`, `648adce`) ; toutes les portes de doc vertes ; les 4 tags intacts.
+
+**Ce qu'il vous reste à faire** : rien pour le clone — il fonctionne. Si vous voulez que le `docwatch` local (3 commits en avance) soit dans le remote, il suffit d'un `git -C tools/docwatch push origin main` ; je ne l'ai pas fait parce que ces commits ne sont pas les miens.
+
+
+## Tour 205
+
+### 👤 Utilisateur
+
+que manque-t-il pour que le modèle drave natif soit exploitable
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls tools/n2/ 2>/dev/null | head -12; ls work/n2ac/ 2>/dev/null | head -8; grep -n \"N2\\|N4\\|B10.3\" docs/pilotage/en-cours.md | head -6 | cut -c1-200", "description": "Inventorier le modèle natif"}`
+
+  ```
+lun 16 nov 2026 09:17:39 EST
+absolu-pos1152.drvm
+absolu-pos1152.log
+absolu-pos1152.pt
+absolu-pos1152.pt.json
+agrege_fenetre.py
+agrege_production.py
+agrege_r11.py
+cap-1147m-128.drvm
+11:- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+35:- **Ce que font les autres** : **N2**, **S**, **Pensée**.
+50:- **Ce que font les autres** : **hub**, **N2**, **Pensée**.
+61:- **Ce que font les autres** : N2.
+67:### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
+70:- **Rôle** : **N2** — la production et la capacité.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la tools/n2/*.drvm tools/n2/*.pt 2>/dev/null | awk '{printf \"%8.1f Mo %s\\n\", $5/1048576, $9}' | sort -rn | head -6; echo \"=== scripts :\"; ls tools/n2/ | grep -vE \"\\.drvm|\\.pt|\\.log|\\.json$\" | head -12; echo \"=== fiche … [120 caractères tronqués]`
+
+  ```
+=== scripts :
+=== fiche N2 :
+# N2 — la commande validée : le canal avec RoPE, et le témoin 3,09 qui ne doit pas bouger
+
+> **Ligne de roadmap** : N2 (la porte de perplexité) · **Date** : 2026-11-15 · **HEAD mesuré** :
+> `5891ef8a` · **Verdict** : la mesure **2,79** est celle du couple **RoPE + canal**, rejouée
+> **2,9726 / 2,8988 / 2,8443 / 2,7856** de 128 à 1 024 octets. **`--rope` sans canal rend
+> 40,0658** à 128 et **65,7898** à 1 024 : c'est la commande à ne pas utiliser. La commande du
+> mandat, `eval_longueurs.py --rope --canal-dir <dir>`, **n'existe pas telle quelle** :
+> `--canal-dir` est le drapeau du correctif `eval_n2_propre.py` (validé en copie `/tmp`), et
+> `eval_longueurs.py` fournit le canal par `--val <dir>`. Le test `porte-n2.sh` proposé doit tenir
+> **deux** invariants : la porte RoPE + canal à **2,7856**, et le témoin absolu N2.h à **3,09**
+[stderr]
+ls: cannot access 'tools/n2/': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/ | head -20; echo \"...\"; ls work/n2ac/*.py 2>/dev/null | head -10; du -sh work/n2ac/ 2>/dev/null", "description": "Voir le dossier n2ac"}`
+
+  ```
+absolu-pos1152.drvm
+absolu-pos1152.log
+absolu-pos1152.pt
+absolu-pos1152.pt.json
+agrege_fenetre.py
+agrege_production.py
+agrege_r11.py
+cap-1147m-128.drvm
+cap-1147m-128.log
+cap-1147m-128.pt
+cap-1147m-128.pt.json
+cap-1147m-512.drvm
+cap-1147m-512.log
+cap-1147m-512.pt
+cap-1147m-512.pt.json
+cap1147.out
+cap-2165m-128.drvm
+cap-2165m-128.log
+cap-2165m-128.pt
+cap-2165m-128.pt.json
+...
+work/n2ac/agrege_fenetre.py
+work/n2ac/agrege_production.py
+work/n2ac/agrege_r11.py
+work/n2ac/cout_fenetre.py
+work/n2ac/distiller_natif.py
+work/n2ac/entrainer_rope_pondere.py
+work/n2ac/entrainer_rope.py
+work/n2ac/eval_200k.py
+work/n2ac/eval_fenetre.py
+work/n2ac/eval_longueurs.py
+7,7G	work/n2ac/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -l \"generate\\|generer\\|echantillon\\|sample\" work/n2ac/*.py 2>/dev/null | head -4; ls work/n2ac/*.py | wc -l; grep -h \"^from\\|^import\" work/n2ac/*.py 2>/dev/null | sort -u | head -10; cat work/n2ac/cap-1147m-128.pt.json 2 … [73 caractères tronqués]`
+
+  ```
+16
+from __future__ import annotations
+from tools.canal_structure import canal as canal_de  # noqa: E402
+from tools.entrainer_native import charger, charger_canal, lot
+from tools.entrainer_native import charger, charger_canal, lot, ppl
+from tools.eval_n2_propre import charge, charger_bytes  # noqa: E402
+from tools.eval_n2_propre import charge, charger_bytes, ordre_vdc  # noqa: E402
+from tools.eval_n2_propre import charge  # noqa: E402
+from tools.native_model import Block, NativeConfig, NativeModel, exporter_drvm
+from tools.native_model import NativeConfig
+from tools.native_model import NativeConfig, exporter_drvm
+{
+ "modele": "drave-n0-rope",
+ "parametres": 11816136,
+ "corpus": "data/wiki_fr/propre/train.txt",
+ "octets": 186089472,
+ "pas": 32000,
+ "seq": 128,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "window": 256,
+ "positions": "rope",
+ "init": null,
+ "perte_finale": 1.325515627861023,
+ "ppl_val": 3.8868456707028294,
+ "jetons_val": 8192,
+ "tetes": true,
+ "drvm": "work/n2ac/cap-1147m-128.drvm",
+ "sha256_drvm": "2ea9eba6f9a7798562a4a5784c8275408d3df87c04913668e2bf549e776643d7",
+ "duree_s": 1853.9955995082855
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def \" tools/native_model.py | head -14; echo \"=== checkpoints :\"; for f in work/n2ac/*.pt.json; do python3 -c \"import json;d=json.load(open('$f'));print('$f'.split('/')[-1], d.get('parametres'), round(d.get('ppl_val') o … [131 caractères tronqués]`
+
+  ```
+42:    def __init__(self, cfg: NativeConfig):
+50:    def forward(self, x):
+71:    def __init__(self, cfg: NativeConfig):
+80:    def forward(self, x):
+97:    def __init__(self, cfg: NativeConfig | None = None):
+119:    def forward(self, ids, pos_debut: int = 0, canal=None):
+142:    def forward_jusqua(self, ids, n_blocs: int, pos_debut: int = 0, canal=None):
+157:    def nb_parametres(self) -> int:
+161:def _bloc_de(nom: str, cfg: NativeConfig) -> str:
+177:def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local") -> str:
+=== checkpoints :
+absolu-pos1152.pt.json 34301224 3.7059 128 None
+cap-1147m-128.pt.json 11816136 3.8868 128 rope
+cap-1147m-512.pt.json 11816136 3.5847 512 rope
+cap-2165m-128.pt.json 21648000 3.6875 128 rope
+cap-2165m-512.pt.json 21648000 3.4 512 rope
+kd-1147m-512-a0.5.pt.json None 0 512 None
+kd-1147m-512-a0.9.pt.json None 0 512 None
+kd-mix512-15k.pt.json None 0 512 None
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '| \\*\\*N — le natif\\*\\*' docs/pilotage/en-cours.md | cut -d: -f1)p\" docs/pilotage/en-cours.md | cut -c1-500; echo \"=== corpus :\"; du -sh data/wiki_fr/ 2>/dev/null; ls data/wiki_fr/ 2>/dev/null | head -5; ech … [134 caractères tronqués]`
+
+  ```
+| **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
+=== corpus :
+817M	data/wiki_fr/
+articles.txt
+propre
+=== B10.3 :
+31:| **B — l'intelligence** | langue, pensée, jeux, maîtres, [banc externe](../theorie/glossaire/entrees/banc-externe.md), sémantique, modules | ✅ B1–B12 ; **B1.5 [corpus](../theorie/glossaire/entrees
+222:   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du pla
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in work/n2ac/*.pt.json; do python3 -c \"\nimport json;d=json.load(open('$f'))\np=d.get('ppl_val') or 0\nif p: print('$f'.split('/')[-1].replace('.pt.json',''), d.get('parametres'), round(p,4), d.get('seq'))\n\" 2>/dev/null; don … [206 caractères tronqués]`
+
+  ```
+mix1024-30k 34301224 2.4828 1024
+mix1024-60k 34301224 2.4038 1024
+mix1024-7.5k 34301224 2.6579 1024
+mix-200k 34301224 2.9801 128
+mix2048-3.75k 34301224 2.6074 2048
+mix512-15k 34301224 2.7312 512
+   suivante, jamais l'attente. **N5 est gelé** jusqu'au verdict de R11 sur le contexte ; B10.3 attend un **z qui porte** : l'objectif mot a levé le décodeur (32,5 ; **26,7 sur JW, au-dessus du plancher 17,1**), le contrôle `z` montre qu'il ne lit que
+
+## Le Gantt indicatif
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"top_k\\|top-k\\|temperature\\|echantillonner\\|echantillon\" tools/*.py 2>/dev/null | head -4; grep -rn \"def generer\\|def generate\\|def echantillon\" tools/*.py 2>/dev/null | head -4; echo \"=== drvm consommé par :\";  … [230 caractères tronqués]`
+
+  ```
+tools/aiguille.py
+tools/analyse_empreinte.py
+tools/analyse_flux.py
+tools/bloc_linguistique.py
+tools/decouper_sous_familles.py:22:def generer() -> dict[str, int]:
+tools/eval_n2_budget.py:63:def echantillon(val, train, propre: bool, n: int = 128, maxi: int = 6000):
+tools/generer_natif.py:28:def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0,
+tools/journal_auto.py:295:def generer_jour(jour: str, dry: bool, trace: list[str]) -> int:
+=== drvm consommé par :
+tools/distiller_natif.py
+tools/distiller_section.py
+tools/drvm.py
+tools/drvm_trace.py
+=== N4 :
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3
+33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes
+214:   propre, puis **N4** ; les **positions aléatoires** restent le levier à 256 octets (**14,11 → 3,25**).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/generer_natif.py | cut -c1-130; echo \"...\"; sed -n '28,60p' tools/generer_natif.py | cut -c1-130", "description": "Lire generer_natif.py"}`
+
+  ```
+#!/usr/bin/env python3
+"""generer_natif.py — N4.1 : génération contrôlée avec `drave-n0`.
+
+Le modèle est byte-level : le prompt est encodé en UTF-8, la sortie est décodée
+en UTF-8 avec remplacement. La génération par défaut est **greedy** et
+déterministe ; `--top-k` restreint le choix sans tirage aléatoire.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+
+import torch
+import torch.nn.functional as F
+
+from tools.native_model import NativeConfig, NativeModel
+
+
+def charger(chemin: str, device: str = "cpu"):
+    ck = torch.load(chemin, map_location="cpu", weights_only=False)
+    cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
+    m = NativeModel(cfg); m.load_state_dict(ck["state"]); m.to(device).eval()
+    return m, cfg
+
+
+@torch.no_grad()
+def generer(modele, prompt: str, n: int = 128, top_k: int = 0, temperature: float = 0.0,
+            penalite: float = 0.0):
+    ids = list(prompt.encode("utf-8"))
+    if not ids:
+        ids = [32]
+    for _ in range(n):
+        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
+                         device=next(modele.parameters()).device)
+        l
+… [1602 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/drvm.py | cut -c1-120; echo \"=== distillés :\"; ls -la /tmp/drave-n0*.pt work/n2ac/*distil* 2>/dev/null | awk '{print $5, $9}' | head -4; echo \"=== N4 :\"; grep -n \"N4\" docs/pilotage/en-cours.md | head -2 | cut -c1 … [62 caractères tronqués]`
+
+  ```
+#!/usr/bin/env python3
+"""drvm.py — DRVM v0, le conteneur natif du modèle Drave.
+
+DRVM n'est pas un GGUF amélioré : c'est un conteneur de **graphe** et de **blocs**.
+Le manifeste porte les blocs, les ports, les routes, les têtes, le pont et la
+cellule de pensée ; le payload porte les tenseurs alignés, lisibles par bloc et
+mmap-ables. Le lecteur refuse une version ou un type de bloc qu'il ne connaît pas.
+
+Structure :
+  en-tête 92 o (magie, version, tailles, offsets, deux SHA-256)
+  manifeste JSON canonique, aligné sur 64 o
+  payload de tenseurs, chaque tenseur aligné sur 64 o
+
+CLI :
+  python3 tools/drvm.py inspect MODELE.drvm
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+=== distillés :
+5948 work/n2ac/distiller_natif.py
+=== N4 :
+114:| **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis l
+115:| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens / 0,031 $ hors
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/mix1024-60k.* 2>/dev/null; grep -n \"def \" tools/drvm.py | head -8; timeout 300 python3 tools/generer_natif.py --modele work/n2ac/mix1024-60k.pt --prompt \"La France est un pays\" --n 48 --top-k 20 2>&1 | tail -6", "des … [55 caractères tronqués]`
+
+  ```
+work/n2ac/mix1024-60k.drvm
+work/n2ac/mix1024-60k.log
+work/n2ac/mix1024-60k.pt
+work/n2ac/mix1024-60k.pt.json
+63:    def tensor(self, name: str) -> memoryview:
+71:    def close(self) -> None:
+77:    def __enter__(self):
+80:    def __exit__(self, *exc):
+84:def _canonique(manifest: dict[str, Any]) -> bytes:
+89:def _aligne(n: int) -> int:
+93:def _valide(manifest: dict[str, Any]) -> None:
+120:def write_drvm(path: str | os.PathLike, manifest: dict[str, Any],
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/generer_natif.py", line 14, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"import torch\" 2>&1 | tail -1; python3 -c \"import numpy; print('numpy', numpy.__version__)\" 2>&1 | tail -1; ls tools/*.so tools/drave_core* bin/* 2>/dev/null | head -3; grep -rln \"mmap\\|frombuffer\" tools/drvm*.py 2> … [118 caractères tronqués]`
+
+  ```
+ModuleNotFoundError: No module named 'torch'
+numpy 2.5.3
+tools/drvm.py
+17:import torch
+18:import torch.nn as nn
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat work/n2ac/mix1024-60k.pt.json | python3 -c \"import json,sys; d=json.load(sys.stdin); print({k:d[k] for k in ('modele','parametres','corpus','octets','pas','seq','lot','lr','positions','perte_finale','ppl_val','jetons_val','tetes … [298 caractères tronqués]`
+
+  ```
+{'modele': 'drave-n0-rope', 'parametres': 34301224, 'corpus': 'data/wiki_mix/propre/train.txt', 'octets': 1017487092, 'pas': 30000, 'seq': 1024, 'lot': 8, 'lr': 0.0003, 'positions': 'rope', 'perte_finale': 1.0251544713974, 'ppl_val': 2.4038261088297856, 'jetons_val': 65536, 'tetes': True, 'duree_s': 13331.16178894043}
+config: None
+[stderr]
+awk: cmd. line:1: {printf \"drvm: %.1f Mo\n\", $5/1048576}
+awk: cmd. line:1:         ^ backslash not last character on line
+ls: write error: Broken pipe
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2ac/mix1024-60k.drvm | awk '{printf \"drvm: %.1f Mo\\n\", $5/1048576}'; timeout 120 python3 tools/drvm.py inspect work/n2ac/mix1024-60k.drvm 2>&1 | head -12 | cut -c1-140", "description": "Inspecter le drvm sans torch",  … [20 caractères tronqués]`
+
+  ```
+drvm: 130.9 Mo
+{
+ "fichier": "work/n2ac/mix1024-60k.drvm",
+ "manifest_sha256": "3c4ab6c3d624813ad8a6de9fd78ef6ed9a3743e1e49458f392b9e004d4087aa9",
+ "modele": {
+  "architecture": {
+   "d_model": 384,
+   "early_blocks": [
+    1,
+    3,
+    5
+   ],
+   "expert_hidden": 512,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N4\" docs/pilotage/plan-travail.md docs/pilotage/roadmap.md 2>/dev/null | head -4 | cut -c1-200; ls reports/ | grep -iE \"n4|generation|generer\" | head -4; grep -rn \"N4.1\\|N4.2\\|N4.3\\|N4.4\" docs/ 2>/dev/null | head -4 … [59 caractères tronqués]`
+
+  ```
+docs/pilotage/plan-travail.md:38:| **N2 — le natif (session `0733c5bb`)** | entraîner et évaluer le modèle natif sur les corpus D, mesurer longueur, capacité, diversité | N2, N4, le mètre honnête | **
+docs/pilotage/roadmap.md:32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.
+docs/pilotage/roadmap.md:33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 c
+docs/pilotage/roadmap.md:214:   propre, puis **N4** ; les **positions aléatoires** restent le levier à 256 octets (**14,11 → 3,25**).
+n3.5e-generation.json
+native-generation.json
+rapport-n3.5e-generation.md
+rapport-n4-dessin-b.md
+docs/archive/roadmap-native-2026-10-29.md:136:| N4.1 | **Génération** | ✅ **technique** — greedy 160 octets : cohérent 12 octets, puis dérive ; pas un
+docs/archive/roadmap-native-2026-10-29.md:137:| N4.2 | **Service local** | ✅ **technique** — HTTP `/sante` + `/generer`, 69 octets, CPU, greedy ; pas 
+docs/archive/roadmap-native-2026-10-29.md:138:| N4.3 | **Service 
+… [233 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '130,145p' docs/archive/roadmap-native-2026-10-29.md | cut -c1-220; echo \"=== fiche :\"; ls reports/ | grep -iE \"n4\" | head -4; head -12 reports/rapport-n4-dessin-b.md 2>/dev/null | cut -c1-160", "description": "Lire les N4 … [28 caractères tronqués]`
+
+  ```
+l'entraîneur.
+
+## N4 — l'usage (4–6 semaines)
+
+| # | chantier | critère |
+|---|---|---|
+| N4.1 | **Génération** | ✅ **technique** — greedy 160 octets : cohérent 12 octets, puis dérive ; pas un assistant |
+| N4.2 | **Service local** | ✅ **technique** — HTTP `/sante` + `/generer`, 69 octets, CPU, greedy ; pas d'auth |
+| N4.3 | **Service Rust + cache** | ✅ **611 ms**, 53 octets, texte identique à Python ; mono-thread |
+| N4.4 | **Service durci** | ⚠️ **partiel** — jeton **401/200**, corps 64 Ko, n ≤ 256 ; **aucun alignement SFT** |
+| N4.6 | **SFT minimal** | ⚠️ **mémorisation** — **24/24** vus, **0/4** tenus ; pas d'alignement |
+| N4.5 | **Meilleur student servi** | ✅ **PPL 2,708**, 53 octets en **589,2 ms**, texte plus structuré |
+| N4.3 | Serveur OpenAI-compatible + streaming | un client standard se connecte |
+| N4.4 | Sûreté et refus | refus explicite, pas de fuite |
+| N4.5 | Évaluation externe | MMLU minimal, chrF, latence |
+
+=== fiche :
+rapport-n4-dessin-b.md
+rapport-n4-porte-execution.md
+# N4 — le chemin court entraîné (dessin B) : ÷1,2 à ÷1,9 selon la profondeur, et deux corrections de mesure
+
+> Campagne : **cerveau** · expérience : dessin **B** de N4 (« les couches basses appr
+… [821 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -14 reports/rapport-n3.5e-generation.md 2>/dev/null | cut -c1-160; echo \"=== json :\"; python3 -c \"import json;d=json.load(open('reports/native-generation.json'));print({k:(str(v)[:80]) for k,v in list(d.items())[:8]})\" 2>/de … [60 caractères tronqués]`
+
+  ```
+# N3.5e — la génération est répartie sur deux processus TCP
+
+> **Ligne de roadmap** : N3.5e · **Date** : 2026-10-29 · **Verdict** : ✅ **la boucle de
+> génération passe le réseau** — l’amont garde son cache 0..k, l’aval son cache k..n, et la
+> sortie est **bit-identique** à `generer` local pour K=0..4 et deux prompts.
+>
+> **Dispositif** : `--drvm-serve-gen`, `--drvm-gen-net`, modèle 4 blocs (graine 7, 428 504
+> paramètres) ; porte `tools/porte-n3-generation.sh` ; données
+> [`n3.5e-generation.json`](n3.5e-generation.json).
+
+## Ce qui est mesuré
+
+| K | génération |
+|---:|---|
+=== json :
+{'modele': 'work/n2j/W34-g1.pt', 'parametres': '34301224', 'prompt': 'Dans les années 1950', 'n': '120', 'top_k': '40', 'temperature': '0.8', 'octets': '141', 'texte': 'Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le mus'}
+  ```
+
+### 🤖 Assistant
+
+⏵ J'ai inventorié le modèle natif : il existe et tourne — voici ce qui manque, preuves à l'appui
+
+## Ce qui existe (et fonctionne)
+
+| pièce | état |
+|---|---|
+| **le modèle** | `drave-n0-rope`, **34,3 M paramètres**, RoPE, seq 1024, entraîné sur `wiki_mix/propre` (1,017 Go), 30 000 pas, perte 1,025 — **PPL 2,40** sur 65 536 jetons de validation (`work/n2ac/mix1024-60k`) |
+| **la génération** | [`tools/generer_natif.py`](tools/generer_natif.py) (byte-level, greedy / top-k / température) — une sortie réelle : « Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le mus… » (141 octets) |
+| **le service** | N4.2/N4.3 (HTTP `/sante` + `/generer`, le Rust, 611 ms) — « technique, pas un produit » (l'archive du 29/10) |
+| **le conteneur** | **DRVM** (`tools/drvm.py`) : 130,9 Mo, `inspect` **sans torch**, mmap-able, deux SHA-256 |
+| **l'entraînement** | `tools/entrainer_native.py` + `work/n2ac/entrainer_rope*.py` (13 331 s pour le 34M) |
+| **la distillation/SFT** | `tools/distiller_natif.py`, le SFT (N4.6) |
+
+## Ce qui manque, par ordre d'importance
+
+**1. La qualité — le verrou dur.** La génération est **cohérente ~12 octets puis dérive** (l'archive N4.1) ; le SFT **mémorise** (24/24 vus, **0/4 tenus**) ; la PPL 2,40 ne se traduit pas en texte utilisable. Sans ça, rien d'autre ne compte.
+
+**2. Le tokenizer.** Le modèle est **byte-level** (256 symboles) : 8× plus de pas pour un même texte, et la qualité par paramètre s'effondre. Le BPE/encodeur (**B10.3**) est **bloqué** (« attend un z qui porte »).
+
+**3. L'alignement.** Pas de SFT qui généralise (24/24 mémorisés, 0/4 tenus) ; pas de préférences, pas de refus appris.
+
+**4. Le runtime torch-free.** Ici, **torch n'est pas installé** (`ModuleNotFoundError` au premier import) : les `.pt` sont morts sans lui, et le DRVM est un **conteneur** (le `inspect` marche, le **calcul** est torch). Il n'y a pas de moteur d'inférence pour le DRVM.
+
+**5. L'intégration produit.** Aucune commande `drave generer` ; le `--modele` par défaut de `generer_natif.py` pointe sur `/tmp/drave-n0-distille.pt` (**disparu**). Le modèle n'est pas dans le CLI.
+
+**6. La distribution.** Les 7,7 Go de `work/n2ac/` sont **gitignorés** ; le meilleur DRVM (130,9 Mo) n'a pas de place stable et documentée.
+
+**7. L'évaluation.** La PPL est un **proxy** ; la mesure réelle (la cohérence, une tâche) n'est pas outillée — la fiche de génération donne un exemple, pas une mesure répétable.
+
+## Le chemin réaliste (mon avis)
+
+1. **D'abord mesurer la génération** avec le meilleur checkpoint (12 octets ? 50 ? 141 ?) sur 20 prompts — un banc reproductible. C'est 1 jour et ça dit si le modèle est à 2 semaines ou à 6 mois du produit.
+2. **Le tokenizer** (BPE 4k) : c'est le levier le plus rentable (×8 sur l'efficacité) ; il débloque B10.3.
+3. **La taille** : 34M est petit ; le corpus (1 Go) nourrirait un 100-200M — mais le GPU est réservé et le temps d'entraînement passe à des jours.
+4. **Le runtime** : soit torch (une dépendance lourde, contre le « 0 dépendance » du produit), soit un moteur DRVM (numpy/C) — un vrai chantier.
+
+**En clair** : le natif est un **prototype de recherche complet techniquement** (entraînement, génération, service, conteneur) mais **la qualité n'est pas là** — et c'est la seule chose qui fait un produit. Le produit `drave` actuel (le bloc linguistique, 183/183, 0 dépendance) est ce qui est exploitable ; le natif est le **prochain grand chantier**, pas une livraison.
+
+Voulez-vous que je lance le **banc de génération** (le point 1) pour trancher le diagnostic ?
+
+
+## Tour 206
+
+### 👤 Utilisateur
+
+go, en automie jusqu'à 17h
+
+- **create_goal** `{"max_goal_rounds": 300, "objective": "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une in … [304 caractères tronqués]`
+
+> **Objectif** (create) : Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée).
+
+
+  ```
+{"goal":{"id":"goal-b93bd2c5-000d-4ba5-8cd4-ed1bec64e214","revision":1,"objective":"Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée).","phase":"active","roundsStarted":0,"maxGoalRounds":300},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -m pip --version 2>&1 | head -1; timeout 15 python3 -m pip download --no-deps --dest /tmp/pip-test six 2>&1 | tail -2; python3 -c \"import torch\" 2>&1 | tail -1", "description": "Vérifier pip et le réseau"}`
+
+  ```
+lun 16 nov 2026 10:24:18 EST
+pip 26.2.2 from /usr/lib/python3.13/site-packages/pip (python 3.13)
+Saved /tmp/pip-test/six-1.17.0-py2.py3-none-any.whl
+Successfully downloaded six
+ModuleNotFoundError: No module named 'torch'
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 -m venv venv-natif 2>&1 | tail -1; /tmp/venv-natif/bin/pip install -q --upgrade pip 2>&1 | tail -1; nohup /tmp/venv-natif/bin/pip install torch --index-url https://download.pytorch.org/whl/cpu > /tmp/torch-install.log 2>&1 & echo \"PID $!\"; sleep 30; tail -2 /tmp/tor … [97 caractères tronqués]`
+
+  ```
+PID 2428241
+Downloading markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Installing collected packages: mpmath, typing-extensions, sympy, setuptools, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
+lun 16 nov 2026 10:25:12 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /usr/share/dict/ 2>/dev/null | head -2; find . -iname \"*lexique*\" -o -iname \"*dictionnaire*\" 2>/dev/null | grep -v \".git/\" | head -5; grep -rn \"LEXIQUE\" tools/bloc_linguistique.py | head -2 | cut -c1-120; tail -2 /tmp/torc … [62 caractères tronqués]`
+
+  ```
+./reports/rapport-pensee-lexique-verbal.md
+./reports/pensee-lexique-verbal.json
+./reports/rapport-pensee-lexique-elargi.md
+./reports/pensee-lexique-elargi.json
+./tools/jeux/lexique.py
+255:    scores = {l: len(mots & set(LEXIQUES[l])) / max(1, len(mots)) for l in LEXIQUES}
+310:LEXIQUES = {
+
+Successfully installed MarkupSafe-3.0.3 filelock-4.2.4 fsspec-2026.9.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.7 setuptools-78.1.0 sympy-1.14.0 torch-2.15.0+cpu typing-extensions-4.16.0
+  ```
+
+### 🤖 Assistant
+
+⏵ Torch CPU est installé. J'écris le banc de génération (20 prompts, 3 réglages, contrôle aléatoire)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/banc_generation.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"banc_generation.py — le banc de génération du modèle natif (diagnostic, pas un produit).\n\nPOURQUOI. Le modèle natif (`drave-n0`, 34 M) a une PPL de 2,40 mais l'ar … [7893 caractères tronqués]`
+
+  ```
+syntaxe OK
+torch 2.15.0+cpu
+[stderr]
+/tmp/venv-natif/lib64/python3.13/site-packages/torch/_subclasses/functional_tensor.py:377: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:82.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-natif/bin/pip install -q numpy 2>&1 | tail -1; timeout 600 /tmp/venv-natif/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-60k.pt --n 16 --sortie /tmp/banc-smoke.json 2>&1 | tail -6", "description": "Smoke te … [33 caractères tronqués]`
+
+  ```
+écrit : /tmp/banc-smoke.json
+greedy       mots_valides=0.921 distinct_2=0.918 repetition=5 echo=1.00 octets/s=51.9
+top40_0.8    mots_valides=0.656 distinct_2=1.000 repetition=1 echo=1.00 octets/s=55.6
+top20_0.5    mots_valides=0.782 distinct_2=1.000 repetition=1 echo=1.00 octets/s=56.6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_generation.py'); t=p.read_text()\nt=t.replace('''def mesurer(texte: str, prompt: str, vocab: set[str]) -> dict:''',\n'''def mesurer(texte: str, prompt: str, vocab: set[str] … [1005 caractères tronqués]`
+
+  ```
+echo corrigé
+syntaxe OK
+PID 2430331
+lun 16 nov 2026 10:29:21 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 400; date; tail -4 /tmp/banc-full.log 2>/dev/null; ls -la reports/banc-generation.json 2>/dev/null | awk '{print $5, $9}'", "description": "Suivre le banc complet", "timeoutMs": 500000}`
+
+  ```
+lun 16 nov 2026 10:36:22 EST
+écrit : reports/banc-generation.json
+greedy       mots_valides=0.870 distinct_2=0.726 repetition=15 echo=0.01 octets/s=36.4
+top40_0.8    mots_valides=0.490 distinct_2=1.000 repetition=1 echo=0.01 octets/s=36.4
+top20_0.5    mots_valides=0.735 distinct_2=0.981 repetition=1 echo=0.01 octets/s=36.6
+24369 reports/banc-generation.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /tmp/venv-natif/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-60k.pt --n 128 --aleatoire --sortie /tmp/banc-aleatoire.json > /tmp/banc-alea.log 2>&1 & echo \"PID $!\"; sleep 30; date; python3 -c \"\nimport json … [388 caractères tronqués]`
+
+  ```
+PID 2433307
+lun 16 nov 2026 10:37:13 EST
+greedy échantillons :
+  'La France est un pays don d d da d 20 n dese de 1 20 20 aba dele  1  la  1 20 20 201 1  19 1 190 20  20 1 2020'
+  'Dans les années 1950 le por le de la da la le e e de de e ena 20 1 esa la en ena da da es  da da es d la es es'
+  'Il était une fois de de pre dile de de de e de d ese e esinanoré e e ene e es ece es e 1 e e e e e e e espenes'
+top20 échantillons :
+  'La France est un pays 2010 sene don d ousi le e 20 ste 2019 de 20 1 se confolemenatéce Somen  1019 200 1 20 19'
+  'Dans les années 1950 la d aur et maliné sin é d le a doninala 20 l cona d es lapana l 1 stine le. es. de 2001.'
+  'Il était une fois. uri don d bré de lare dat e e de e duninele dâ de plin estendat e ene e enast end desespes '
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 300; date; tail -4 /tmp/banc-alea.log 2>/dev/null; ls -la /tmp/banc-aleatoire.json 2>/dev/null | awk '{print $5}'", "description": "Attendre le contrôle", "timeoutMs": 400000}`
+
+  ```
+lun 16 nov 2026 10:42:41 EST
+écrit : /tmp/banc-aleatoire.json
+greedy       mots_valides=0.336 distinct_2=1.000 repetition=1 echo=0.00 octets/s=41.7
+top40_0.8    mots_valides=0.252 distinct_2=1.000 repetition=1 echo=0.00 octets/s=37.1
+top20_0.5    mots_valides=0.219 distinct_2=1.000 repetition=1 echo=0.00 octets/s=37.5
+30819
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/banc-aleatoire.json reports/banc-generation-aleatoire.json && cat > reports/rapport-banc-generation.md <<'MD'\n# Le banc de génération du natif — le modèle a appris les mots, pas la phrase\n\n> **Ligne de roadmap** : **N4** ( … [4864 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 868 JSON, le disque en a 870
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir 3 lignes anciennes de 20 mots\nt=t.replace(\"| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — le banc de  … [2004 caractères tronqués]`

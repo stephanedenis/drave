@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 375.4 h |
-| Tours | 204 |
-| Messages | 4161 |
-| Appels d'outils | 3719 |
+| Durée | 378.1 h |
+| Tours | 206 |
+| Messages | 4194 |
+| Appels d'outils | 3749 |
 | Fichiers touchés | 25 |
-| Commandes | 3063 |
+| Commandes | 3092 |
 | Sous-agents | 43 |
-| Commits | 496 |
+| Commits | 497 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -67,6 +67,8 @@
 … [245 caractères tronqués]
 - **complete** — Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de 
 … [245 caractères tronqués]
+- **create** — Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, sel
+… [263 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -477,6 +479,10 @@
 **Tour 203** — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ;  … [714 caractères tronqués]
 
 **Tour 204** — "le clone public n'a pas tools/structures (le sous-module privé)" la quasi-totalité de mes repos privés sont disponibles localement sur cette machine
+
+**Tour 205** — que manque-t-il pour que le modèle drave natif soit exploitable
+
+**Tour 206** — go, en automie jusqu'à 17h
 
 ## 2. Déroulé, étape par étape
 
@@ -10954,7 +10960,7 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 
 ### Tour 204 — "le clone public n'a pas tools/structures (le sous-module privé)" la quasi-totalité de mes repos privés sont disponibles … [29 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Voir le .gitmodules et le remote
 - bash — Tester le clone local avec sous-modules
@@ -10970,6 +10976,115 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - bash — Voir le clone dans le quickstart
 - bash — Documenter le clone réparé
 - bash — Committer la doc du clone
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Vous aviez raison : le problème n'était pas la confidentialité, c'était le transport `file` et deux pins cassés
+
+\## Ce que j'ai trouvé (et réparé)
+
+Vos dépôts sont bien locaux — le `.gitmodules` pointe d'ailleurs vers `/home/stephane/Data13TB/stephane/GitHub/drave-structures`. Le « clone dégradé » avait **deux causes réelles**, aucune n'étant la confidentialité :
+
+| cause | ce qui se passait | le correctif |
+|---|---|---|
+| **le transport `file` bloqué** | `git clone --recurse-submodules` → `fatal: transport 'file' not allowed` (la politique Git par défaut depuis 2.38.1 pour les sous-modules) | la commande `git -c protocol.file.allow=always clone --recurse-submodules …` — **testée** |
+| **le pin `docwatch` mort** | le pin `d256888` (3 commits locaux non poussés) → `not our ref` | **repiné sur `95e94c4`** (le commit public) |
+| **le pin `structures` non poussé** | `648adce` (le commit U1 de la session S) absent du remote local → `not our ref` | **poussé** sur `drave-structures` (`389b99f..648adce`) |
+
+\## La preuve
+
+Un clone neuf dans `/tmp`, avec la commande corrigée : **les deux sous-modules arrivent** (`structures` avec les **19 verdicts**, `docwatch`), et le produit tourne **dedans** :
+
+```
+POS         exactitude 86.25 %  (fermé 93.73 %, ouvert 79.18 %)
+SYNTAGMES   F1 79.02 %  (P 78.60 % / R 79.44 %)
+```
+
+Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-bilan-final.md) portent désormais la commande exacte et l'explication — plus de « dégradé » non corrigé.
+
+\## L'état
+
+`HEAD d1715692`, `master` = `s/v7` **poussés** (0 divergence) ; les sous-modules aux pins valides (`95e94c4`, `648adce`) ; toutes les portes de doc vertes ; les 4 tags intacts.
+
+**Ce qu'il vous reste à faire** : rien pour le clone — il fonctionne. Si vous voulez que le `docwatch` local (3 commits en avance) soit dans le remote, il suffit d'un `git -C tools/docwatch push origin main` ; je ne l'ai pas fait parce que ces commits ne sont pas les miens.
+
+### Tour 205 — que manque-t-il pour que le modèle drave natif soit exploitable
+
+*17 appels d'outils.* Actions notables :
+
+- bash — Inventorier le modèle natif
+- bash — Voir les modèles et scripts n2
+- bash — Voir le dossier n2ac
+- bash — Voir la génération et le modèle
+- bash — Voir l'API du modèle et les checkpoints
+- bash — Voir la ligne N et le corpus
+- bash — Les meilleurs checkpoints et la roadmap N
+- bash — Chercher la génération et le format drvm
+- bash — Lire generer_natif.py
+- bash — Voir le runtime drvm et les distillés
+- bash — Tester la génération
+- bash — Vérifier torch et le moteur
+- bash — Voir la config du meilleur modèle
+- bash — Inspecter le drvm sans torch
+- … et 3 autres
+
+**Synthèse produite :**
+
+⏵ J'ai inventorié le modèle natif : il existe et tourne — voici ce qui manque, preuves à l'appui
+
+\## Ce qui existe (et fonctionne)
+
+| pièce | état |
+|---|---|
+| **le modèle** | `drave-n0-rope`, **34,3 M paramètres**, RoPE, seq 1024, entraîné sur `wiki_mix/propre` (1,017 Go), 30 000 pas, perte 1,025 — **PPL 2,40** sur 65 536 jetons de validation (`work/n2ac/mix1024-60k`) |
+| **la génération** | [`tools/generer_natif.py`](tools/generer_natif.py) (byte-level, greedy / top-k / température) — une sortie réelle : « Dans les années 1950 du réseau de Paris, Mariage Pour certaines proposes, le mus… » (141 octets) |
+| **le service** | N4.2/N4.3 (HTTP `/sante` + `/generer`, le Rust, 611 ms) — « technique, pas un produit » (l'archive du 29/10) |
+| **le conteneur** | **DRVM** (`tools/drvm.py`) : 130,9 Mo, `inspect` **sans torch**, mmap-able, deux SHA-256 |
+| **l'entraînement** | `tools/entrainer_native.py` + `work/n2ac/entrainer_rope*.py` (13 331 s pour le 34M) |
+| **la distillation/SFT** | `tools/distiller_natif.py`, le SFT (N4.6) |
+
+\## Ce qui manque, par ordre d'importance
+
+**1. La qualité — le verrou dur.** La génération est **cohérente ~12 octets puis dérive** (l'archive N4.1) ; le SFT **mémorise** (24/24 vus, **0/4 tenus**) ; la PPL 2,40 ne se traduit pas en texte utilisable. Sans ça, rien d'autre ne compte.
+
+**2. Le tokenizer.** Le modèle est **byte-level** (256 symboles) : 8× plus de pas pour un même texte, et la qualité par paramètre s'effondre. Le BPE/encodeur (**B10.3**) est **bloqué** (« attend un z qui porte »).
+
+**3. L'alignement.** Pas de SFT qui généralise (24/24 mémorisés, 0/4 tenus) ; pas de préférences, pas de refus appris.
+
+**4. Le runtime torch-free.** Ici, **torch n'est pas installé** (`ModuleNotFoundError` au premier import) : les `.pt` sont morts sans lui, et le DRVM est un **conteneur** (le `inspect` marche, le **calcul** est torch). Il n'y a pas de moteur d'inférence pour le DRVM.
+
+**5. L'intégration produit.** Aucune commande `drave generer` ; le `--modele` par défaut de `generer_natif.py` pointe sur `/tmp/drave-n0-distille.pt` (**disparu**). Le modèle n'est pas dans le CLI.
+
+**6. La distribution.** Les 7,7 Go de `work/n2ac/` sont **gitignorés** ; le meilleur DRVM (130,9 Mo) n'a pas de place stable et documentée.
+
+**7. L'évaluation.** La PPL est un **proxy** ; la mesure réelle (la cohérence, une tâche) n'est pas outillée — la fiche de génération donne un exemple, pas une mesure répétable.
+
+\## Le chemin réaliste (mon avis)
+
+1. **D'abord mesurer
+… [1053 caractères tronqués]
+
+### Tour 206 — go, en automie jusqu'à 17h
+
+*12 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Vérifier pip et le réseau
+- bash — Installer torch CPU en arrière-plan
+- bash — Chercher un lexique français
+- bash — Écrire le banc de génération
+- bash — Smoke test du banc
+- bash — Corriger l'echo et lancer le banc complet
+- bash — Suivre le banc complet
+- bash — Lancer le contrôle et lire les échantillons
+- bash — Attendre le contrôle
+- bash — Écrire la fiche du banc
+- bash — Committer le banc
+
+**Synthèse produite :**
+
+⏵ Torch CPU est installé. J'écris le banc de génération (20 prompts, 3 réglages, contrôle aléatoire)
 
 ## 3. Travail accompli
 
@@ -11091,7 +11206,7 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3023 autres
+- … et 3052 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11219,7 +11334,7 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 
 ## 5. Erreurs rencontrées
 
-89 sorties en erreur ou divergentes. Les premières :
+90 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
@@ -11735,4 +11850,5 @@ L'objectif (la nuit **21 h 35 → 8 h 00**, rendre `drave` exploitable) est **at
 - ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git
 - SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE" 2>&1 | tail -2; git log -1 --fo
 - DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE s
+- NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : LE MODÈLE A APPRIS LES MOTS (0,87 CONTRE 0,34) PAS LA PHRASE (RÉPÉTITION 15 EN G
 
