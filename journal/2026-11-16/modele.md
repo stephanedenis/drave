@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,10 +15,17 @@
 | 11:00 | `90fb737a` | NATIF — LA SYNTHÈSE HONNÊTE : L'ÉCHELLE, LA DONNÉE, L'ALIGNEMENT, LE RUNTIME (LE TOKENIZER MESURÉ N'EST PAS LE LEVIER) ; LES 4 PALIERS CHIFFRÉS | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 | 11:09 | `4a389c08` | NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ | `en-cours.md`, `README.md`, `README.md` (+14) |
 | 11:16 | `4c3d502a` | NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ | `en-cours.md`, `README.md`, `distribue.md` (+13) |
+| 11:52 | `60c40aa6` | NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMPOSITION | `en-cours.md`, `README.md`, `distribue.md` (+14) |
+
+## Chiffres du jour
+
+`0,247` · `0,494` · `0,870`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 379.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 379.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

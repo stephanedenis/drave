@@ -15,6 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
+| [`rapport-bilan-natif.md`](rapport-bilan-natif.md) | **Bilan** — le natif : le diagnostic tranché, les 7 livrables |
 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | **N4** — la carte du modèle : identité, données, mesures, limites, usage |
 | [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif |
 | [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase ; l'échelle : le vocabulaire, pas la composition |

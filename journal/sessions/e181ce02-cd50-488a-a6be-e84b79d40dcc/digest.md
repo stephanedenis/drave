@@ -68985,3 +68985,23 @@ lun 16 nov 2026 11:51:34 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1023 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 reports/banc-generation-11m.json
+ create mode 100644 reports/banc-generation-21m.json
+60c40aa6 NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,
+   19530010..60c40aa6  s/v7 -> s/v7
+   19530010..60c40aa6  master -> master
+lun 16 nov 2026 11:55:17 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-bilan-natif.md <<'MD'\n# Le bilan du 16/11 — le natif : le diagnostic est tranché\n\n> **La question du jour.** « Que manque-t-il pour que le modèle Drave natif soit exploitable ? »\n> **La réponse, mesurée.** I … [3652 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 777 fichiers, le disque en a 778
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [910 caractères tronqués]`

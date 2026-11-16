@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 379.2 h |
+| Durée | 379.3 h |
 | Tours | 206 |
-| Messages | 4250 |
-| Appels d'outils | 3804 |
+| Messages | 4252 |
+| Appels d'outils | 3806 |
 | Fichiers touchés | 25 |
-| Commandes | 3146 |
+| Commandes | 3148 |
 | Sous-agents | 43 |
-| Commits | 508 |
+| Commits | 509 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*67 appels d'outils.* Actions notables :
+*69 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 52 autres
+- … et 54 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3106 autres
+- … et 3108 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11865,4 +11865,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - DOCS — LES BUDGETS TENUS APRÈS LE PLAN NATIF" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin
 - DOCS — LE README TENU (T1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail 
 - NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMP
+- NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS)" 2>&1 | tail -2; git log
 
