@@ -4297,3 +4297,235 @@ A  tools/verifier_performance_fix.py
   ```
 
 - **bash** `{"command": "git commit -m \"U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO\" && git log --oneline -1", "description": "Commit U1 main repo"}`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-149]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-149", "timeout_ms": 600000, "wait": true}`
+
+  ```
+[s/v7 d19f0fc7] U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+ 20 files changed, 6075 insertions(+), 120 deletions(-)
+ create mode 100644 journal/2026-11-16/README.md
+ create mode 100644 journal/sessions/session-cd495112-6c06-43ec-b56a-47ad7d92ba6f/digest.md
+ create mode 100644 journal/sessions/session-cd495112-6c06-43ec-b56a-47ad7d92ba6f/rapport.md
+ create mode 100644 reports/performance-fix.json
+ create mode 100644 reports/rapport-performance-fix.md
+ create mode 100644 tools/tests/test_verifier_performance_fix.py
+ create mode 100755 tools/verifier_performance_fix.py
+d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git show --stat --oneline HEAD | head -40; echo ---; git status --short | head -30", "description": "Inspect commit contents and status"}`
+
+  ```
+d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+ docs/pilotage/en-cours.md                          |   21 +-
+ docs/pilotage/roadmap.md                           |   31 +-
+ journal/2026-11-16/README.md                       |   25 +
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   52 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    4 +-
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      |  104 +
+ .../rapport.md                                     |   46 +-
+ .../digest.md                                      | 4299 ++++++++++++++++++++
+ .../rapport.md                                     |  201 +
+ reports/INDEX.md                                   |    3 +-
+ reports/performance-fix.json                       |  542 +++
+ reports/rapport-performance-fix.md                 |  189 +
+ tools/bloc_linguistique.py                         |  345 +-
+ tools/struct
+… [691 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -8; echo EXIT:${PIPESTATUS[0]}", "description": "Doc review after commit"}`
+
+  ```
+revue de documentation · 766 fiche(s) · 861 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+EXIT:0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_journal.py 2>&1 | tail -4; echo EXIT2:${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|✅|violation\" | tail -3; echo EXIT3:${PIPESTATUS[0]}", "description": "St … [29 caractères tronqués]`
+
+  ```
+en-cours · 1628 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+EXIT:0
+  journal · 48 jour(s) · 223 session(s) · 2695 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+EXIT2:0
+  T0 max : 3998 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT3:0
+  ```
+
+- **bash** `{"command": "PORTES=\"porte-etat porte-sessions porte-budget porte-registre\" bash tools/toutes-les-portes.sh 2>&1 | tail -12; echo EXIT:${PIPESTATUS[0]}", "description": "Re-run state gates after commit"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-153]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-153", "timeout_ms": 300000, "wait": true}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (4 portes, borne 1800 s) ===
+    journaux : work/portes-1116-00h22
+  porte-budget           ✅                          52 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-registre         ✅                          17 s    ✅ région absente : refusée en la nommant (code 2), rien n'est calculé
+  porte-sessions         ✅                           0 s  PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+--- 4 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1116-00h22
+EXIT:0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git ls-tree HEAD tools/structures; git -C tools/structures log --oneline -1; git log --oneline -3", "description": "Verify submodule pointer"}`
+
+  ```
+160000 commit 648adce3ea18ef4d142778fd67d42413aae5ae64	tools/structures
+648adce U1 — générateur S : construire_arbre et cibles en O(k), sorties identiques (620 textes)
+d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO
+83adaa2b T6 — LE BILAN EXPLOITABLE : T1-T5 LIÉES (INSTALLABLE, JSON V2 2 139 OBJETS, QUICKSTART 3/3, 10 000 MOTS 4,01 S, CLI 20/20) ; TROIS LIMITES NOMMÉES (CLONE PUBLIC 88,70 %, O(K²) α 1,55, GOLD DE S) ; PASSE 85/81/4 LUE, 86E PORTE VERTE
+9a291c8b T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS
+  ```
+
+- **bash** `{"command": "grep -n \"ce commit\\|83adaa2b\\|389b99f\" reports/rapport-performance-fix.md reports/performance-fix.json | head -20", "description": "Find commit references"}`
+
+  ```
+reports/rapport-performance-fix.md:26:> `/usr/bin/time -f %M`. Avant = commit **`83adaa2b`** (sous-module `389b99f`), après = ce
+reports/rapport-performance-fix.md:184:Pour l'« avant », se placer sur `83adaa2b` avec le sous-module `389b99f` ; pour l'« après »,
+reports/rapport-performance-fix.md:185:sur ce commit. Le JSON brut de la fiche est [`reports/performance-fix.json`](performance-fix.json).
+reports/performance-fix.json:35:  "commit_avant": "83adaa2b6f8c6b1f03480375d30170a7613c71f8",
+reports/performance-fix.json:36:  "sous_module_avant": "389b99f",
+reports/performance-fix.json:37:  "commit_mesure": "83adaa2b + patch U1 (mesure faite avant le commit)"
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "limit": 5, "offset": 24}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "limit": 5, "offset": 182}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md</path>
+<type>file</type>
+<content>
+24: > contrôle négatif. Machine à 40 cœurs (Xeon E5-2687W v3, 125 Go), Python 3.13.16,
+25: > `PYTHONHASHSEED=0`, mesures froides répétées 3 fois (médiane), mémoire par
+26: > `/usr/bin/time -f %M`. Avant = commit **`83adaa2b`** (sous-module `389b99f`), après = ce
+27: > commit.
+28: 
+
+(Showing lines 24-28 of 189. Use offset=29 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md</path>
+<type>file</type>
+<content>
+182: ```
+183: 
+184: Pour l'« avant », se placer sur `83adaa2b` avec le sous-module `389b99f` ; pour l'« après »,
+185: sur ce commit. Le JSON brut de la fiche est [`reports/performance-fix.json`](performance-fix.json).
+186: 
+
+(Showing lines 182-186 of 189. Use offset=187 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "new_string": "> `/usr/bin/time -f %M`. Avant = commit **`83adaa2b`** (sous-module `389b99f`), après = commit\n> **`d19f0fc7`** (sous-module `648adce`).", "old_string": "> `/usr/bin/time -f %M`. Avant … [73 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md", "new_string": "Pour l'« avant », se placer sur `83adaa2b` avec le sous-module `389b99f` ; pour l'« après »,\nsur `d19f0fc7` (sous-module `648adce`). Le JSON brut de la fiche est\n[`reports/performance … [247 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('reports/performance-fix.json')\nd=json.loads(p.read_text(encoding='utf-8'))\nd['source']['commit_apres']='d19f0fc7'\nd['source']['sous_module_apres']='648adce'\nd['source']['commit_mesure']='83adaa2b + patch U1 (mesure faite avant  … [244 caractères tronqués]`
+
+  ```
+ok
+JSON_OK
+  ```
+
+- **bash** `{"command": "git add reports/performance-fix.json reports/rapport-performance-fix.md && git commit -m \"U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)\" 2>&1 | tail -20", "description": "Commit report commit pointers", "run_in_background": true}`
+
+  ```
+started background job bash-157
+  ```
+
+- **job_output** `{"job_id": "bash-157", "timeout_ms": 300000, "wait": true}`
+
+  ```
+❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/performance-fix.json
+     · reports/rapport-performance-fix.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-157 (bash: git add reports/performance-fix.json reports/rapport-performance-fix.md && git commit -m "U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)" 2>&1 | tail -20) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "grep -n \"U1.*O(k²)\" docs/pilotage/en-cours.md", "description": "Find U1 line in state"}`
+
+  ```
+3:**Mis à jour : 2026-11-16, 00 h 30 HNE (U1 : les deux O(k²) bornés, α 1,08)**
+62:- **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** ([fiche](../../reports/rapport-performance-fix.md), [JSON](../../reports/performance-fix.json)).
+123:**T1–T6 — livré** ; **U1 — les deux O(k²) bornés** (α 1,08, 10 000 mots 0,82 s, sorties identiques) ; reste **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploitable.md), [U1](../../reports/rapport-performance-fix.md).
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 2, "offset": 62}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+62: - **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** ([fiche](../../reports/rapport-performance-fix.md), [JSON](../../reports/performance-fix.json)).
+63: - **Prochaine action** : **U2 — la roue** ; **U3 — `--profils`** ; **J4** ; T132/T133.
+
+(Showing lines 62-63 of 145. Use offset=64 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** (`d19f0fc7` ; [fiche](../../reports/rapport-performance-fix. … [299 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|violation|✅\" | tail -3; echo EXIT:${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description": "Check budget after hash addition"}`
+
+  ```
+T0 max : 4000 mots (budget 4 000)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+EXIT:0
+  en-cours · 1630 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "git add docs/pilotage/en-cours.md reports/performance-fix.json reports/rapport-performance-fix.md && git commit -m \"U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)\" 2>&1 | tail -25", "description": "Commit report pointers with state", "run_in_ba … [16 caractères tronqués]`
+
+  ```
+started background job bash-160
+  ```
+
+- **job_output** `{"job_id": "bash-160", "timeout_ms": 300000, "wait": true}`

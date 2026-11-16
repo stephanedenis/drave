@@ -7,14 +7,14 @@
 | Identifiant | `session-cd495112-6c06-43ec-b56a-47ad7d92ba6f` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 23:43 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 219 |
-| Appels d'outils | 246 |
+| Messages | 238 |
+| Appels d'outils | 266 |
 | Fichiers touchés | 8 |
-| Commandes | 149 |
+| Commandes | 160 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche U1 (exploitable, suite de T4) : **répare les deux points O(k²)** identifiés par T4 — `_groupes_partition` (toutes  … [539 caractères tronqués]
 
-*246 appels d'outils.* Actions notables :
+*266 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - bash — Locate the two functions
@@ -41,7 +41,7 @@
 - bash — Find references to 612 and 452
 - bash — Find gold evaluation scripts
 - bash — Read gold evaluation tool
-- … et 183 autres
+- … et 197 autres
 
 ## 3. Travail accompli
 
@@ -53,8 +53,8 @@
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/generateur.py` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/test_bloc_linguistique.py` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures/tests/test_generateur.py` | 0 | 3 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 9 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-performance-fix.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 1 |
 
@@ -100,7 +100,7 @@
 - **T1** Generate baseline annotation JSONs
 - **T1** Check imports
 - **T1** Compile and run bloc tests
-- … et 109 autres
+- … et 120 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -184,6 +184,8 @@
 - **T1** `+| [rapport-performance-fix.md](rapport-performance-fix.md) | U1 — les deux O(k²) sont bornés : 10 000 mots de **4,0 s à 0,82 s** (×4,9), α de **1,53 à 1,08**, sorties **identiques au bit près** |`
 - **T1** `| [rapport-performance.md](rapport-performance.md) | T4 — la performance de `drave analyser` : 10 000 mots en 4,0 s, 126 Mio, 14,8 Mo de JSON ; le contrôle de linéarité **échoue** (α = 1,55) |`
 - **T1** `[still running after 60000ms; moved to background job bash-149]`
+- **T1** `d19f0fc7 U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO`
+- **T1** `[still running after 60000ms; moved to background job bash-153]`
 
 ## 5. Erreurs rencontrées
 
@@ -198,4 +200,6 @@
 
 - U1 — générateur S : construire_arbre et cibles en O(k), sorties identiques (620 textes)" && git log --oneline -1
 - U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE)
+- U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)" 2>&1 | tail -20
+- U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE)" 2>&1 | tail -25
 

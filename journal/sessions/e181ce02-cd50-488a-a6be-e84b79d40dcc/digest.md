@@ -66527,3 +66527,13 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5227", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+lun 16 nov 2026 00:24:47 EST
+2026-11-15 23:43:41 · ✔ T6 en 596.4 s (code 0) — ✅ test -f reports/rapport-bilan-exploitable.md && echo FICHE-OK
+2026-11-15 23:43:41 · ▶ U1 — La performance — les deux points quadratiques (timeout 3600 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -3 work/chantier/journal.log; ls reports/rapport-performance-fix.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Verdict U1", "timeoutMs": 1300000}`

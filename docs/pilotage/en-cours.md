@@ -59,7 +59,7 @@
 - **Plan** : B13 · **Stratégie** : v0 · **Ambition** : tracé · **Objectif final** : moteur v0.
 - **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
 - **Ce que font les autres** : N2.
-- **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** ([fiche](../../reports/rapport-performance-fix.md), [JSON](../../reports/performance-fix.json)).
+- **Ce qu'elle fait** : **W5** restitution v3 (gold S **144/144**, v2 **20/46**) ; **U1** O(k²) : **4,0 → 0,82 s**, α **1,53 → 1,08** (`d19f0fc7` ; [fiche](../../reports/rapport-performance-fix.md), [JSON](../../reports/performance-fix.json)).
 - **Prochaine action** : **U2 — la roue** ; **U3 — `--profils`** ; **J4** ; T132/T133.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).

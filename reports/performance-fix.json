@@ -34,7 +34,9 @@
   },
   "commit_avant": "83adaa2b6f8c6b1f03480375d30170a7613c71f8",
   "sous_module_avant": "389b99f",
-  "commit_mesure": "83adaa2b + patch U1 (mesure faite avant le commit)"
+  "commit_mesure": "83adaa2b + patch U1 (mesure faite avant le commit d19f0fc7)",
+  "commit_apres": "d19f0fc7",
+  "sous_module_apres": "648adce"
  },
  "corrections": [
   {

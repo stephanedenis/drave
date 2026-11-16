@@ -13,6 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
+| **2026-11-16** | [2026-11-16/README.md](2026-11-16/README.md) | — |
 | **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [memoire](2026-11-15/memoire.md) · [mesures](2026-11-15/mesures.md) · [modele](2026-11-15/modele.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
 | **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [distribue](2026-11-14/distribue.md) · [docs](2026-11-14/docs.md) · [memoire](2026-11-14/memoire.md) · [mesures](2026-11-14/mesures.md) · [moteur](2026-11-14/moteur.md) · [portes](2026-11-14/portes.md) |
 | **2026-11-13** | [2026-11-13/README.md](2026-11-13/README.md) | [distribue](2026-11-13/distribue.md) · [docs](2026-11-13/docs.md) · [memoire](2026-11-13/memoire.md) |
@@ -213,7 +214,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 367.6 h | 202 | 3624 | 25 | 488 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 367.7 h | 202 | 3625 | 25 | 488 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -278,7 +279,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Vérificateur indépendant du corpus CIC | 2026-11-14 05:43 | 0.7 h | 1 | 138 | 5 | 1 | [rapport](sessions/session-c3f599ea-570a-4db4-ad78-8eff22004a4c/rapport.md) |
 | `session-` | Protocole d'annotation or de rôles S | 2026-11-15 12:40 | 0.2 h | 1 | 102 | 3 | 0 | [rapport](sessions/session-c6d0e659-7d2e-4d23-a2b4-d50387bb6f61/rapport.md) |
 | `session-` | Benchmark performance de l'analyseur NLP | 2026-11-15 22:35 | 0.7 h | 1 | 177 | 4 | 4 | [rapport](sessions/session-cbce9c66-4423-4a44-a112-b8c9f8b333dc/rapport.md) |
-| `session-` | Réparation des points O(k²) et mesure α | 2026-11-15 23:43 | 0.6 h | 1 | 246 | 8 | 2 | [rapport](sessions/session-cd495112-6c06-43ec-b56a-47ad7d92ba6f/rapport.md) |
+| `session-` | Réparation des points O(k²) et mesure α | 2026-11-15 23:43 | 0.7 h | 1 | 266 | 8 | 4 | [rapport](sessions/session-cd495112-6c06-43ec-b56a-47ad7d92ba6f/rapport.md) |
 | `session-` | Rédiger le rapport bilan du chantier | 2026-11-14 03:46 | 0.2 h | 1 | 114 | 5 | 1 | [rapport](sessions/session-ce875934-0cf6-4434-a91d-cbca647b11b3/rapport.md) |
 | `session-` | Passe d'honnêteté fiches historiques | 2026-11-14 03:18 | 0.5 h | 1 | 155 | 3 | 3 | [rapport](sessions/session-d58794d6-d201-493e-b6ab-fffee9656e15/rapport.md) |
 | `session-` | Rapport coordination S v2 | 2026-11-15 02:15 | 0.3 h | 1 | 156 | 5 | 4 | [rapport](sessions/session-e0896820-1b14-4849-a926-cc56f678b88d/rapport.md) |

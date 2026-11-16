@@ -23,8 +23,8 @@
 > [`tools/verifier_performance_fix.py`](../tools/verifier_performance_fix.py) pour le
 > contrôle négatif. Machine à 40 cœurs (Xeon E5-2687W v3, 125 Go), Python 3.13.16,
 > `PYTHONHASHSEED=0`, mesures froides répétées 3 fois (médiane), mémoire par
-> `/usr/bin/time -f %M`. Avant = commit **`83adaa2b`** (sous-module `389b99f`), après = ce
-> commit.
+> `/usr/bin/time -f %M`. Avant = commit **`83adaa2b`** (sous-module `389b99f`), après = commit
+> **`d19f0fc7`** (sous-module `648adce`).
 
 ## 1. Le contrôle de linéarité avant/après
 
@@ -182,7 +182,8 @@ python3 tools/verifier_performance_fix.py --comparer /tmp/u1-avant /tmp/u1-apres
 ```
 
 Pour l'« avant », se placer sur `83adaa2b` avec le sous-module `389b99f` ; pour l'« après »,
-sur ce commit. Le JSON brut de la fiche est [`reports/performance-fix.json`](performance-fix.json).
+sur `d19f0fc7` (sous-module `648adce`). Le JSON brut de la fiche est
+[`reports/performance-fix.json`](performance-fix.json).
 
 **Prochaine action** : **U2 — la roue** ; **U3 — `--profils`**. Le point quadratique est
 fermé : le prochain document de 100 000 mots se teste maintenant sans la parade du
