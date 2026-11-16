@@ -3156,3 +3156,214 @@ check=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add pyproject.toml tools/drave.py tools/tests/test_empaquetage.py docs/produit/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-roue.md reports/roue.json reports/rapport-empaquetage.md reports/INDEX.md j … [1776 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/pilotage/roadmap.md
+M  docs/produit/README.md
+M  journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+M  pyproject.toml
+M  reports/INDEX.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+M  reports/rapport-empaquetage.md
+ M reports/rapport-pensee-v12.md
+A  reports/rapport-roue.md
+ M reports/rapport-spans-chunker.md
+A  reports/roue.json
+ M tools/chantier/plan.json
+M  tools/drave.py
+M  tools/tests/test_empaquetage.py
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 120000ms; moved to background job bash-95]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "sleep 5; echo done", "description": "Brief wait"}`
+
+  ```
+done
+  ```
+
+- **job_output** `{"job_id": "bash-95", "timeout_ms": 120000, "wait": true}`
+
+  ```
+[s/v7 c77ed4b6] U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE
+ 22 files changed, 4189 insertions(+), 76 deletions(-)
+ create mode 100644 journal/sessions/session-aa260801-785c-4a85-876c-98ba023e6098/digest.md
+ create mode 100644 journal/sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md
+ create mode 100644 reports/rapport-roue.md
+ create mode 100644 reports/roue.json
+c77ed4b6 U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | sed -n '1,40p'; echo '--- status'; git status --short | sed -n '1,40p'", "description": "Inspect commit contents and status"}`
+
+  ```
+c77ed4b6 U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE
+ docs/pilotage/en-cours.md                          |   20 +-
+ docs/pilotage/roadmap.md                           |   11 +-
+ docs/produit/README.md                             |   50 +-
+ journal/2026-11-16/README.md                       |    7 +-
+ journal/2026-11-16/memoire.md                      |    2 +-
+ journal/2026-11-16/mesures.md                      |    5 +-
+ journal/README.md                                  |    7 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   37 +
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md   |    6 +-
+ .../rapport.md                                     |   14 +-
+ .../digest.md                                      | 3158 ++++++++++++++++++++
+ .../rapport.md                                     |  148 +
+ .../digest.md                                      |  138 +
+ .../rapport.md                                     |   63 +-
+ pyproject.toml                                     |   18 +-
+ reports/INDEX.md                                   |    3 +-
+
+… [774 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' journal/sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md; echo '--- digest head'; sed -n '1,20p' journal/sessions/session-aa260801-785c-4a85-876c-98ba023e6098/digest.md; echo '--- manifest diff'; git sh … [109 caractères tronqués]`
+
+  ```
+# Session session- — Vérification roue Python et gold CLI
+
+> **Journaux :** [le jour](../../2026-11-16/README.md) · [l'état](../../../docs/pilotage/en-cours.md) · [l'index des sessions](../../README.md#sessions).
+
+| | |
+|---|---|
+| Identifiant | `session-aa260801-785c-4a85-876c-98ba023e6098` |
+| Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
+| Début | 2026-11-16 00:31 |
+| Durée | 0.3 h |
+| Tours | 1 |
+| Messages | 133 |
+| Appels d'outils | 149 |
+| Fichiers touchés | 8 |
+| Commandes | 96 |
+| Sous-agents | 0 |
+| Commits | 1 |
+| Compactages de contexte | 0 |
+
+## 1. Ce qui a été demandé
+
+**Tour 1** — Tâche U2 (suite de T1) : **la roue** — `python3 -m build` (ou `pip wheel .`) produit `drave-0.1.0-py3-none-any.whl`, installée dans un venv **propre** depuis la roue (pas le dépôt) : `drave --version` et `drave analyser` depuis `/tmp` ; le **contrôle négatif** : la roue sans les gold doit-elle échouer (le CLI lit `tools/tests/linguistique/gold_*.json` — si les gold ne sont pas dans la roue, `evalu … [139 caractères tronqués]
+
+## 2. Déroulé, étape par étape
+
+### Tour 1 — Tâche U2 (suite de T1) : **la roue** — `python3 -m build` (ou `pip wheel .`) produit `drave-0.1.0-py3-none
+… [6916 caractères tronqués]
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-90 [bash] running — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=work/portes/roue-1116 bash tools/toutes-les-portes.sh
+bash-95 [bash] completed — cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+git add pyproject.toml tools/drave.py tools/tests/test_empaquetage.py docs/produit/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md reports/rapport-roue.md reports/roue.json reports/rapport-empaquetage.md reports/INDEX.md journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md
+git status --short | sed -n '1,40p'
+git commit -F - <<'MSG'
+U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE
+
+La roue est construite par `python3 -m pip wheel . --no-deps --no-build-isolation -w dist`
+(`drave-0.1.0-py3-none-any.whl`, sha256 d980c470…a99dbce) et installée dans un venv propre
+depuis le fichier, pas depuis le dépôt. Depuis `/tmp` : `drave --version` → `drave 0.1.0` (0),
+`drave analyser "Le chat dort."` → `rôle=agent` (0), `drave evaluer --json` → gold 612,
+POS 0,8625, F1 0,7902, exact 0,9958 (0). Les JSON `analyser`, `evaluer` et `evaluer --gold`
+sont identiques au bit près à ceux du dépôt 
+… [947 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -20 journal/2026-11-16/README.md; echo '--- mesures tail'; tail -12 journal/2026-11-16/mesures.md", "description": "Inspect journal notes blocks"}`
+
+  ```
+## Sessions DSH
+
+| session | titre | début | durée | liens |
+|---|---|---|---|---|
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 368.1 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+
+## Tous les commits (heure réelle)
+
+| heure | commit | fait |
+|---|---|---|
+| 00:19 | `d19f0fc7` | U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO |
+| 00:24 | `75a56c05` | U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE) |
+| 00:28 | `04894aea` | U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4) |
+
+## Le récit de la journée (écrit à la main)
+
+<!-- notes -->
+
+<!-- /notes -->
+--- mesures tail
+## Sessions actives ce jour
+
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 368.1 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/r
+… [273 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/journal_auto.py --jour 2026-11-16 2>&1 | tail -10; git status --short | sed -n '1,30p'", "description": "Regenerate journal after commit", "timeoutMs": 180000}`
+
+  ```
+2026-11-16 : 4 commits
+  journal/2026-11-16/memoire.md
+  journal/2026-11-16/mesures.md
+  journal/2026-11-16/README.md
+  journal/THEMES.md
+4 fichiers écrits · 4 commits classés
+ M journal/2026-11-16/README.md
+ M journal/2026-11-16/mesures.md
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-16/README.md", "limit": 12, "offset": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-16/README.md</path>
+<type>file</type>
+<content>
+30: | 00:45 | `c77ed4b6` | U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE |
+31: 
+32: ## Le récit de la journée (écrit à la main)
+33: 
+34: <!-- notes -->
+35: 
+36: <!-- /notes -->
+
+(End of file - total 36 lines)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-16/README.md", "new_string": "<!-- notes -->\n\n### U2 — la roue autonome, et la roue sans gold qui refuse de mesurer\n\n`python3 -m pip wheel . --no-deps --no-build-isolation -w dist` a rendu\n**`drave-0.1.0-py3-none-any … [1060 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-16/README.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat journal/2026-11-16 journal/THEMES.md; git diff journal/THEMES.md | head -30", "description": "Inspect journal diffs"}`
+
+  ```
+journal/2026-11-16/README.md  | 22 ++++++++++++++++++++--
+ journal/2026-11-16/mesures.md |  5 ++++-
+ 2 files changed, 24 insertions(+), 3 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add journal/2026-11-16/README.md journal/2026-11-16/mesures.md\ngit commit -F - <<'MSG'\nJOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4\n\nLe récit de la journée ajoute U2 : la roue installée hors dé … [394 caractères tronqués]`

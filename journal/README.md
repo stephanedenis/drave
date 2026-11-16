@@ -271,7 +271,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
 | `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 134 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
-| `session-` | Vérification roue Python et gold CLI | 2026-11-16 00:31 | 0.3 h | 1 | 149 | 8 | 1 | [rapport](sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md) |
+| `session-` | Vérification roue Python et gold CLI | 2026-11-16 00:31 | 0.3 h | 1 | 158 | 9 | 2 | [rapport](sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md) |
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
 | `session-` | Matrice tagger et recommandation par défaut | 2026-11-15 09:44 | 1.0 h | 1 | 156 | 7 | 0 | [rapport](sessions/session-bc92a84f-e2ea-4c23-8227-525822d29662/rapport.md) |

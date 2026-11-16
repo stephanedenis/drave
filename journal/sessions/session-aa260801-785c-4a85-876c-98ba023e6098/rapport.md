@@ -9,12 +9,12 @@
 | Début | 2026-11-16 00:31 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 133 |
-| Appels d'outils | 149 |
-| Fichiers touchés | 8 |
-| Commandes | 96 |
+| Messages | 142 |
+| Appels d'outils | 158 |
+| Fichiers touchés | 9 |
+| Commandes | 102 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
 
 ## 1. Ce qui a été demandé
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche U2 (suite de T1) : **la roue** — `python3 -m build` (ou `pip wheel .`) produit `drave-0.1.0-py3-none-any.whl`, ins … [419 caractères tronqués]
 
-*149 appels d'outils.* Actions notables :
+*158 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — Read current state doc
@@ -41,7 +41,7 @@
 - bash — Read evaluer_gold loading logic
 - bash — Check package init files and imports
 - bash — Check build tooling availability
-- … et 116 autres
+- … et 124 autres
 
 ## 3. Travail accompli
 
@@ -57,6 +57,7 @@
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 10 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md` | 0 | 5 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/2026-11-16/README.md` | 0 | 1 |
 
 ### Commandes exécutées (échantillon)
 
@@ -100,7 +101,7 @@
 - **T1** Read T1 JSON structure
 - **T1** Search session plan for U2
 - **T1** Inspect journal structure
-- … et 56 autres
+- … et 62 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -133,6 +134,33 @@
 - **T1** `| 00:19 | `d19f0fc7` | U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO |`
 - **T1** `| 00:19 | `d19f0fc7` | U1 — LES DEUX O(K²) BORNÉS : 10 000 MOTS 4,0 → 0,82 S (×4,9), α 1,53 → 1,08, QUADRATIQUE +0,00077 R² ; 612/452 ET 10 000 MOTS IDENTIQUES AU BIT PRÈS (DIFF VIDE), 127,4 MIO | `en`
 - **T1** `[still running after 120000ms; moved to background job bash-95]`
+- **T1** `| `ddf8d740` | 2026-10-22 08:28 | 0.1 Mo | 22 Ko | 1 | 17 | 14 | 0 | 0 |`
+- **T1** `| `df1b1098` | 2026-10-31 17:52 | 0.0 Mo | 13 Ko | 1 | 4 | 0 | 0 | 0 |`
+- **T1** `| `e14c26ae` | 2026-10-02 21:15 | 0.7 Mo | 109 Ko | 1 | 49 | 76 | 0 | 0 |`
+- **T1** `-| `e181ce02` | 2026-10-31 17:40 | 21.1 Mo | 4043 Ko | 202 | 4058 | 3625 | 8 | 18 |`
+- **T1** `+| `e181ce02` | 2026-10-31 17:40 | 21.1 Mo | 4045 Ko | 202 | 4061 | 3628 | 8 | 18 |`
+- **T1** `| `e7dfe34f` | 2026-09-28 14:56 | 0.2 Mo | 28 Ko | 1 | 20 | 21 | 0 | 0 |`
+- **T1** `| `ea169cb1` | 2026-11-05 23:24 | 0.9 Mo | 159 Ko | 1 | 120 | 136 | 2 | 0 |`
+- **T1** `| `ebd3d5a2` | 2026-10-22 08:14 | 0.1 Mo | 26 Ko | 1 | 19 | 14 | 0 | 0 |`
+- **T1** `| `session-` | 2026-11-07 12:18 | 0.6 Mo | 149 Ko | 1 | 112 | 138 | 2 | 0 |`
+- **T1** `| `session-` | 2026-11-14 06:53 | 0.6 Mo | 153 Ko | 1 | 123 | 134 | 2 | 0 |`
+- **T1** `| `session-` | 2026-11-07 14:46 | 0.6 Mo | 128 Ko | 1 | 74 | 106 | 3 | 0 |`
+- **T1** `+| `session-` | 2026-11-16 00:31 | 0.6 Mo | 166 Ko | 1 | 131 | 147 | 2 | 0 |`
+- **T1** `| `session-` | 2026-11-14 04:16 | 0.6 Mo | 155 Ko | 1 | 141 | 157 | 3 | 0 |`
+- **T1** `| `session-` | 2026-11-07 10:46 | 0.0 Mo | 12 Ko | 1 | 4 | 0 | 0 | 0 |`
+- **T1** `| `session-` | 2026-11-15 09:44 | 0.7 Mo | 140 Ko | 1 | 141 | 156 | 1 | 0 |`
+- **T1** `| `session-` | 2026-11-14 05:43 | 0.7 Mo | 147 Ko | 1 | 121 | 138 | 1 | 0 |`
+- **T1** `| `session-` | 2026-11-15 12:40 | 0.7 Mo | 113 Ko | 1 | 97 | 102 | 0 | 0 |`
+- **T1** `| `session-` | 2026-11-15 22:35 | 1.0 Mo | 179 Ko | 1 | 148 | 177 | 1 | 0 |`
+- **T1** `-| `session-` | 2026-11-15 23:43 | 1.0 Mo | 241 Ko | 1 | 252 | 281 | 2 | 0 |`
+- **T1** `+| `session-` | 2026-11-15 23:43 | 1.0 Mo | 248 Ko | 1 | 257 | 287 | 2 | 0 |`
+- **T1** `| `session-` | 2026-11-14 03:46 | 0.7 Mo | 134 Ko | 1 | 81 | 114 | 1 | 0 |`
+- **T1** `| `session-` | 2026-11-14 03:18 | 0.7 Mo | 162 Ko | 1 | 131 | 155 | 2 | 0 |`
+- **T1** `| `session-` | 2026-11-15 02:15 | 0.7 Mo | 160 Ko | 1 | 92 | 156 | 3 | 0 |`
+- **T1** `| `session-` | 2026-11-15 12:05 | 0.7 Mo | 153 Ko | 1 | 115 | 136 | 1 | 0 |`
+- **T1** `| `session-` | 2026-11-15 23:16 | 0.5 Mo | 129 Ko | 1 | 103 | 121 | 0 | 0 |`
+- **T1** `-Total : 376.0 Mo de traces brutes.`
+- **T1** `+Total : 376.7 Mo de traces brutes.`
 
 ## 5. Erreurs rencontrées
 
@@ -145,4 +173,5 @@
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet git add pyproject.toml tools/drave.py tools/tests/test_empaquetage.py docs/produit/README.md docs/pilotage/en
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet git add journal/2026-11-16/README.md journal/2026-11-16/mesures.md git commit -F - <<'MSG' JOURNAL — 2026-11-
 
