@@ -67212,3 +67212,82 @@ lun 16 nov 2026 06:37:52 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add reports/rapport-bilan-final.md reports/rapport-bilan-final.json reports/INDEX.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE … [332 caractères tronqués]`
+
+  ```
+create mode 100644 reports/rapport-bilan-final.json
+ create mode 100644 reports/rapport-bilan-final.md
+d0364c0af EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE
+   25a727beb..d0364c0af  s/v7 -> s/v7
+   25a727beb..d0364c0af  master -> master
+lun 16 nov 2026 06:41:03 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0|AGENTS|en-cours|tâche\" | head -6; python3 - <<'PY'\nimport pathlib, re\nfor f in ['AGENTS.md','docs/pilotage/en-cours.md','docs/pilotage/plan-travail.md','docs/pilotage/semaine-2 … [151 caractères tronqués]`
+
+  ```
+T0 max : 4012 mots (budget 4 000)
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+AGENTS.md 1196
+docs/pilotage/en-cours.md 1642
+docs/pilotage/plan-travail.md 5384
+docs/pilotage/semaine-2.md 2539
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:4]\nfor i in idx … [131 caractères tronqués]`
+
+  ```
+114 147 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; W2 : 402 0,9643, H50 0,8607 ; 
+112 92 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/
+61 56 - **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** r
+84 43 - **Pensée — B13 (actif)** : **183/183** ; **v2** **19/46** (F1 **0,5270**), **W5 — v3** **20/46** (F1 **0,540
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nlignes=t.splitlines(keepends=True)\ni=114\nl=lignes[i]\n# couper la ligne R : garder le début et la prochaine action\nimport re as R\ … [400 caractères tronqués]`
+
+  ```
+ligne R coupée: | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signa
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '114p' docs/pilotage/en-cours.md | cut -c1-400; bash tools/porte-tableaux.sh 2>&1 | tail -2", "description": "Vérifier la ligne R"}`
+
+  ```
+| **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
+     docs/pilotage/en-cours.md:115 — 9 cellules ≠ 4 attendues
+  1859 fichier(s) examiné(s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '115p' docs/pilotage/en-cours.md | cut -c1-600", "description": "Lire la ligne R complète"}`
+
+  ```
+| **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche Y1](../../reports/rapport-tagger-auto.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** || **C1** **C2** **C3** **C4** **C5** **C6** **C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git checkout -- docs/pilotage/en-cours.md && bash tools/porte-tableaux.sh 2>&1 | tail -1; python3 tools/taille_documents.py 2>&1 | tail -1", "description": "Restaurer l'en-cours", "timeoutMs": 300000}`
+
+  ```
+✅ la page vivante date du dernier commit (2026-11-16)
+     · T0 : 4012 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^- \\*\\*Ce qu'elle fait\\*\\*\" docs/pilotage/en-cours.md | cut -c1-200", "description": "Voir les bullets"}`
+
+  ```
+34:- **Ce qu'elle fait** : intégration ; passe **82, 80/2**.
+49:- **Ce qu'elle fait** : **session close** ; **`/paragraphes`** v7, **`/`** ancien arbre (369) ; **`s/v7`** à fusionner.
+62:- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** roue 1 727 201 o, sans gold → 4 ; **U3** profils 20/20, `und` ; **V1** `--strict` 0,8625
+75:- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119** ; **2 048** ne bat p
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); lignes=p.read_text().splitlines(keepends=True)\n# couper la fin de la ligne 75 (le détail N2 redondant)\nl=lignes[74]\nprint('avant:', l[:220])\ni=l.find( … [480 caractères tronqués]`
+
+  ```
+avant: - **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119** ; **2 048** ne bat pas 1 024 ; fiches [fenê
+après: - **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119**
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 06 h 50 HNE (T0 vert, la nuit exploitable clôturée)**\\n\", … [471 caractères tronqués]`

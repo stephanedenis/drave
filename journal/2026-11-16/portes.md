@@ -8,7 +8,7 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 04:08 | `19992f2fa` | Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ | `README.md`, `gold-analyseur.json`, `generateur.py` (+27) |
+| 04:08 | `19992f2f` | Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ | `README.md`, `gold-analyseur.json`, `generateur.py` (+27) |
 
 ## Sessions actives ce jour
 

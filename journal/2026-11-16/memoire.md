@@ -8,8 +8,8 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 00:24 | `75a56c057` | U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE) | `en-cours.md`, `README.md`, `mesures.md` (+9) |
-| 06:24 | `25a727beb` | PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIONS DU HUB) ; TABLEAUX TRANSIENT (VERTE EN ISOLATION) | `en-cours.md`, `README.md`, `docs.md` (+19) |
+| 00:24 | `75a56c05` | U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE) | `en-cours.md`, `README.md`, `mesures.md` (+9) |
+| 06:24 | `25a727be` | PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIONS DU HUB) ; TABLEAUX TRANSIENT (VERTE EN ISOLATION) | `en-cours.md`, `README.md`, `docs.md` (+19) |
 
 ## Sessions actives ce jour
 

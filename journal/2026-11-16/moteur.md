@@ -8,7 +8,7 @@
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
-| 02:10 | `2e6170343` | EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF) | `README.md`, `docs.md`, `memoire.md` (+10) |
+| 02:10 | `2e617034` | EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF) | `README.md`, `docs.md`, `memoire.md` (+10) |
 
 ## Sessions actives ce jour
 

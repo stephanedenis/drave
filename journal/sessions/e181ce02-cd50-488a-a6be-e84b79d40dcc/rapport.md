@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 374.0 h |
 | Tours | 202 |
-| Messages | 4128 |
-| Appels d'outils | 3691 |
+| Messages | 4137 |
+| Appels d'outils | 3700 |
 | Fichiers touchés | 25 |
-| Commandes | 3037 |
+| Commandes | 3046 |
 | Sous-agents | 43 |
-| Commits | 493 |
+| Commits | 494 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10845,7 +10845,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ### Tour 202 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
 
-*95 appels d'outils.* Actions notables :
+*104 appels d'outils.* Actions notables :
 
 - bash — État de T1
 - bash — Suivre T1
@@ -10861,7 +10861,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - bash — Verdict T4
 - bash — Pousser T4 et lire
 - bash — Ajouter U1-U3
-- … et 46 autres
+- … et 55 autres
 
 ## 3. Travail accompli
 
@@ -10983,7 +10983,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2997 autres
+- … et 3006 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11624,4 +11624,5 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIONS DU HUB) ; TABLEAUX TRANSIENT (VERTE EN ISOLATION)" 2>&1 | tail -2; git log -1 --f
 - EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
 - EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS)" 2>&1 | tail -2; gi
+- ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git
 
