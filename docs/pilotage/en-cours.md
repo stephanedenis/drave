@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 11 h 20 HNE (la carte du modèle natif)**
+**Mis à jour : 2026-11-16, 11 h 25 HNE (le plan du natif : les paliers, les critères, les risques)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -99,7 +99,7 @@
 | portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **777** / **871** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **126** (hors archive et README) | `docs/**/*.md` |
+| documents de `docs/` | **508** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 
 ## Les chantiers et leurs bloquants

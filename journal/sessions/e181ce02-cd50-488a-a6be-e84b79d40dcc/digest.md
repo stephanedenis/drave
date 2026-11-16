@@ -68776,3 +68776,25 @@ tensors: ?
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); lignes=p.read_text().splitlines(keepends=True)\ngarde=[]\nfor l in lignes:\n    if any(f\"rapport-pensee-v{v}.md\" in l for v in (9,10,11,12)):\n        continue\ … [1173 caractères tronqués]`
+
+  ```
+4 lignes retirées
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 277 insertions(+), 29 deletions(-)
+ create mode 100644 reports/fiche-modele-natif.md
+4c3d502a NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU
+   4a389c08..4c3d502a  s/v7 -> s/v7
+   4a389c08..4c3d502a  master -> master
+lun 16 nov 2026 11:19:31 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > docs/pilotage/natif-plan.md <<'MD'\n# Le plan du natif — de 34 M (collages) à un modèle qui écrit\n\n> **Ce que ce document est.** Le **plan de travail** du modèle natif : les paliers, leur coût, leur\n> critère de sortie, l'or … [4718 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 126 documents, le disque en a 127
+     · docs/README.md : 1013 mots > budget 1000 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan du modèle natif (les paliers, le banc) |\", \"| [`pilotage/natif-pl … [1318 caractères tronqués]`
