@@ -443,7 +443,7 @@ def formater_annotation(a: bl.Annotation, tagger: bool = False,
     syntagmes = [e for e in a.etiquettes if e.niveau == "syntagme"]
     if syntagmes:
         valeurs = [_valeur_affichee(e.valeur, 46) for e in syntagmes]
-        roles = [str(e.meta.get("role") or "—") for e in syntagmes]
+        roles = [bl.normaliser_role(e.meta.get("role", "")) or "—" for e in syntagmes]
         cibles = [str((e.meta.get("attachement") or {}).get("cible") or "—") for e in syntagmes]
         spans = [f"[{e.debut}:{e.fin}]" for e in syntagmes]
         lt = max(3, max(len(e.type) for e in syntagmes))

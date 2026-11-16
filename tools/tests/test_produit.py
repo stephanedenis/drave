@@ -106,6 +106,84 @@ class TestProduit(unittest.TestCase):
         )
 
 
+class TestContratJSON(unittest.TestCase):
+    """T2 — l'API du JSON : candidats d'attachement en objets, rôles normalisés."""
+
+    PHRASE = "Le livre que j'ai lu est intéressant."
+
+    def test_candidats_attachement_en_objets(self) -> None:
+        sortie = drave("analyser", self.PHRASE, "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        syntagmes = [e for e in d["etiquettes"] if e["niveau"] == "syntagme"]
+        attaches = [e for e in syntagmes
+                    if (e.get("meta") or {}).get("attachement")]
+        self.assertTrue(attaches, "aucun attachement publié")
+        for etiquette in attaches:
+            attachement = etiquette["meta"]["attachement"]
+            self.assertIn("candidats", attachement, etiquette["valeur"])
+            self.assertTrue(attachement["candidats"], etiquette["valeur"])
+            for candidat in attachement["candidats"]:
+                self.assertEqual({"span", "cible", "source"}, set(candidat))
+                self.assertEqual({"debut", "fin"}, set(candidat["span"]))
+                debut, fin = candidat["span"]["debut"], candidat["span"]["fin"]
+                self.assertTrue(0 <= debut < fin <= len(d["texte"]), candidat)
+                self.assertEqual(d["texte"][debut:fin], candidat["cible"], candidat)
+                self.assertEqual("heuristique", candidat["source"])
+        # la sortie lisible garde les chaînes d'affichage (le champ historique)
+        self.assertTrue(all(isinstance(c, str) for e in syntagmes for c in e["candidats"]))
+
+    def test_candidat_negatif_absent_du_texte(self) -> None:
+        """Un candidat sans span n'est pas publié : l'objet ne peut pas mentir sur sa position."""
+        sortie = drave("analyser", "Le chat dort.", "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        for etiquette in d["etiquettes"]:
+            for candidat in (((etiquette.get("meta") or {}).get("attachement") or {})
+                             .get("candidats", [])):
+                debut, fin = candidat["span"]["debut"], candidat["span"]["fin"]
+                self.assertEqual(d["texte"][debut:fin], candidat["cible"])
+                self.assertNotIn("structure la plus proche", candidat["cible"])
+
+    def test_roles_normalises_et_filtre_predicat(self) -> None:
+        sys.path.insert(0, str(RACINE))
+        from tools.roles_vocabulaire import ROLES
+        sortie = drave("analyser", self.PHRASE, "--json")
+        self.assertEqual(sortie.returncode, 0, detail(sortie))
+        d = json.loads(sortie.stdout)
+        roles = [(e.get("meta") or {}).get("role", "")
+                 for e in d["etiquettes"] if e["niveau"] == "syntagme"]
+        self.assertTrue(all(role in ("",) + ROLES for role in roles), roles)
+        # contrôle négatif : l'ancienne forme accentuée n'est plus publiée
+        self.assertNotIn("prédicat", roles)
+        # le filtre du consommateur trouve les prédicats (et ce sont des GV)
+        predicats = [e for e in d["etiquettes"]
+                     if e["niveau"] == "syntagme"
+                     and (e.get("meta") or {}).get("role") == "predicat"]
+        self.assertTrue(predicats)
+        self.assertTrue(any(e["type"] == "GV" for e in predicats))
+        # et il n'en trouve aucun avec la forme brute
+        self.assertFalse([e for e in d["etiquettes"]
+                          if (e.get("meta") or {}).get("role") == "prédicat"])
+
+    def test_role_hors_vocabulaire_refuse(self) -> None:
+        sys.path.insert(0, str(RACINE))
+        from tools.roles_vocabulaire import (ROLES, RoleHorsVocabulaire,
+                                             normaliser_role)
+        self.assertEqual("predicat", normaliser_role("prédicat"))
+        self.assertEqual("predicat", normaliser_role("predicat"))
+        self.assertEqual("qualite", normaliser_role("qualité"))
+        self.assertEqual("objet", normaliser_role("patient"))
+        self.assertEqual("possesseur", normaliser_role("possession"))
+        self.assertEqual("destinataire", normaliser_role("but"))
+        self.assertEqual("", normaliser_role(""))
+        self.assertRaises(RoleHorsVocabulaire, normaliser_role, "role_invente")
+        self.assertRaises(ValueError, normaliser_role, "prédicat-objets")
+        # la table ne peut pas produire une valeur hors vocabulaire
+        from tools.roles_vocabulaire import CORRESPONDANCES
+        self.assertTrue(set(CORRESPONDANCES.values()) <= set(ROLES))
+
+
 class TestRobustesse(unittest.TestCase):
     """Les entrées hostiles ne font pas planter le produit (audit de fiabilité P0)."""
 

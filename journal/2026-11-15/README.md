@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**46 commits** · **1 session(s)** · **7 thème(s)**
+**47 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 7 | [distribue.md](distribue.md) |
+| distribue | 8 | [distribue.md](distribue.md) |
 | docs | 13 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 17 | [mesures.md](mesures.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 358.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 365.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -75,6 +75,7 @@
 | 14:49 | `75dc9259` | ÉTAT — T0 VERT |
 | 14:52 | `b8248b2d` | ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE) |
 | 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) |
+| 15:05 | `71fdf72c` | CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HORODATÉ |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -162,4 +163,22 @@ référence était à deux appels par phrase, le câblage actuel en fait un. À 
 rend **1 003 lignes** (3 phrases du gold contiennent deux phrases) ; le second passage chaud est
 **0 réseau / 0 token**.
 [`fiche`](../../reports/rapport-tagger-lot.md) · [`JSON`](../../reports/rapport-tagger-lot.json).
+
+### T1/T2 — le produit exploitable : l'empaquetage, puis l'API du JSON
+
+**T1** rend le produit installable : `pyproject.toml` (nom `drave`, version **0.1.0**, zéro
+dépendance d'exécution, script `drave = tools.drave:main`) ; `pip install -e .` dans
+`/tmp/venv-drave` rend **0**, `drave --version` et `drave analyser "Le chat dort."` passent
+depuis `/tmp`, et sans installation la commande échoue proprement (**127**). **8 tests.**
+
+**T2** ouvre l'API du JSON. Les candidats d'attachement deviennent des **objets**
+`{span, cible, source}` (`meta.attachement.candidats`, champ v2 ; v1 toujours lue) : sur le
+gold **612**, **1 295/1 295** attachements portent des objets, **2 139** objets au total, **0**
+span faux. Les `role` passent à un **vocabulaire fermé** de huit valeurs
+(`predicat`, `agent`, `objet`, `lieu`, `temps`, `qualite`, `possesseur`, `destinataire`) :
+**21** rôles bruts → **8**, **0** hors table. Le contrôle négatif filtre
+`role == "predicat"` : **711** GV trouvés, **0** `prédicat` accentué. Le schéma v2 valide
+**612/612** annotations, v1 **612/612** ; **24** tests produit, **9** tests de schéma.
+[`fiche T1`](../../reports/rapport-empaquetage.md) · [`fiche T2`](../../reports/rapport-contrat-json.md) ·
+[`JSON T2`](../../reports/contrat-json.json).
 <!-- /notes -->

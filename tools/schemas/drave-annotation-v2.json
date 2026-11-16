@@ -2,7 +2,7 @@
  "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$id": "https://drave.local/schema/annotation-v2.json",
  "title": "drave.annotation v2",
- "description": "L'annotation du bloc linguistique heuristique, version 2 : identique à la v1 et documente, dans `meta`, la partition des syntagmes qui se chevauchent (`meta.partition`) et les segments alternatifs du groupe (`meta.alternative`). Les deux champs sont additifs et optionnels : v1 reste lue.",
+ "description": "L'annotation du bloc linguistique heuristique, version 2 : identique à la v1 et documente, dans `meta`, la partition des syntagmes qui se chevauchent (`meta.partition`), les segments alternatifs du groupe (`meta.alternative`), les **candidats d'attachement structurés** (`meta.attachement.candidats`, objets `{span, cible, source}`) et les **rôles normalisés** (vocabulaire fermé). Les champs sont additifs et optionnels : v1 reste lue.",
  "type": "object",
  "required": [
   "schema",
@@ -198,16 +198,141 @@
             },
             "cible": {
              "type": "string"
+            },
+            "candidats": {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "required": [
+               "span",
+               "cible",
+               "source"
+              ],
+              "properties": {
+               "span": {
+                "type": "object",
+                "required": [
+                 "debut",
+                 "fin"
+                ],
+                "properties": {
+                 "debut": {
+                  "type": "integer",
+                  "minimum": 0
+                 },
+                 "fin": {
+                  "type": "integer",
+                  "minimum": 0
+                 }
+                },
+                "additionalProperties": false
+               },
+               "cible": {
+                "type": "string",
+                "minLength": 1
+               },
+               "source": {
+                "enum": [
+                 "heuristique",
+                 "neuronal",
+                 "humain"
+                ]
+               }
+              },
+              "additionalProperties": false
+             }
             }
            },
            "additionalProperties": false
           },
           "role": {
-           "type": "string"
+           "enum": [
+            "",
+            "predicat",
+            "agent",
+            "objet",
+            "lieu",
+            "temps",
+            "qualite",
+            "possesseur",
+            "destinataire"
+           ]
           }
          },
          "additionalProperties": false
         }
+       },
+       "role": {
+        "enum": [
+         "",
+         "predicat",
+         "agent",
+         "objet",
+         "lieu",
+         "temps",
+         "qualite",
+         "possesseur",
+         "destinataire"
+        ]
+       },
+       "attachement": {
+        "type": "object",
+        "required": [
+         "segment",
+         "cible"
+        ],
+        "properties": {
+         "segment": {
+          "type": "string"
+         },
+         "cible": {
+          "type": "string"
+         },
+         "candidats": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "required": [
+            "span",
+            "cible",
+            "source"
+           ],
+           "properties": {
+            "span": {
+             "type": "object",
+             "required": [
+              "debut",
+              "fin"
+             ],
+             "properties": {
+              "debut": {
+               "type": "integer",
+               "minimum": 0
+              },
+              "fin": {
+               "type": "integer",
+               "minimum": 0
+              }
+             },
+             "additionalProperties": false
+            },
+            "cible": {
+             "type": "string",
+             "minLength": 1
+            },
+            "source": {
+             "enum": [
+              "heuristique",
+              "neuronal",
+              "humain"
+             ]
+            }
+           },
+           "additionalProperties": false
+          }
+         }
+        },
+        "additionalProperties": false
        }
       },
       "additionalProperties": true

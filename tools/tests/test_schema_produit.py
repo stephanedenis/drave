@@ -92,6 +92,24 @@ class TestSchemaV2(unittest.TestCase):
         self.assertIn("vue", meta["properties"]["partition"]["properties"])
         self.assertIn("relation", meta["properties"]["alternative"]["items"]["properties"])
 
+    def test_le_schema_v2_declare_candidats_structures_et_roles(self):
+        """T2 : `meta.attachement.candidats` est typé, et `role` est un vocabulaire fermé."""
+        sys.path.insert(0, str(RACINE))
+        from tools.roles_vocabulaire import ROLES
+        schema = json.loads(SCHEMA_V2.read_text(encoding="utf-8"))
+        meta = schema["properties"]["etiquettes"]["items"]["properties"]["meta"]
+        candidats = meta["properties"]["attachement"]["properties"]["candidats"]
+        self.assertEqual("array", candidats["type"])
+        self.assertEqual({"span", "cible", "source"},
+                         set(candidats["items"]["required"]))
+        self.assertEqual({"debut", "fin"},
+                         set(candidats["items"]["properties"]["span"]["required"]))
+        self.assertEqual(set([""] + list(ROLES)),
+                         set(meta["properties"]["role"]["enum"]))
+        alternative = meta["properties"]["alternative"]["items"]["properties"]
+        self.assertIn("candidats", alternative["attachement"]["properties"])
+        self.assertEqual(set([""] + list(ROLES)), set(alternative["role"]["enum"]))
+
 
 class TestRetrocompatibilite(unittest.TestCase):
     def test_v1_reste_lue_et_v2_la_refuse(self):

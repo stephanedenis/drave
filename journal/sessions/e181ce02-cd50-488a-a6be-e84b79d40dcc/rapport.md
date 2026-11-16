@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 358.4 h |
-| Tours | 200 |
-| Messages | 4019 |
-| Appels d'outils | 3590 |
+| Durée | 365.4 h |
+| Tours | 202 |
+| Messages | 4037 |
+| Appels d'outils | 3604 |
 | Fichiers touchés | 25 |
-| Commandes | 2973 |
+| Commandes | 2982 |
 | Sous-agents | 43 |
-| Commits | 487 |
+| Commits | 488 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -61,6 +61,10 @@
 … [252 caractères tronqués]
 - **resume** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
 … [252 caractères tronqués]
+- **complete** — Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordinat
+… [252 caractères tronqués]
+- **create** — Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de 
+… [245 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -463,6 +467,10 @@
 **Tour 199** — go semaine 2, travaille en autonomie jusqu'à 16h
 
 **Tour 200** — <goal_round> Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l … [721 caractères tronqués]
+
+**Tour 201** — fais-moi un résumé du reste à faire pour que ce soit un exploitable et continue jusqu'à demain 8h00
+
+**Tour 202** — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ;  … [714 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -10751,10 +10759,101 @@ Le plan prévoyait 5 jours ; la file du méta-harnais a tout exécuté en **9 va
 
 ### Tour 200 — <goal_round> Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé … [1001 caractères tronqués]
 
-*2 appels d'outils.* Actions notables :
+*4 appels d'outils.* Actions notables :
 
 - bash — Vérifier l'état du workspace
 - bash — Committer les derniers fichiers
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Objectif clôturé — voici le bilan final de la nuit et de la journée
+
+\## Le résultat
+
+L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la base honnête, les deux défauts du tagger, les suites de coordination et le protocole Panini ont été livrés, puis la **semaine 2** entière a été exécutée dans la journée.
+
+\## Ce qui a été fait
+
+**La nuit (01 h 30 → 09 h)** — les six décisions exécutées :
+- **1A** : le tagger en option (`--tagger`) — POS **95,75 %** sur 612, **95,00 %** sur le réel 452 ; **1 appel**/phrase, `PONCT` restitué, ~0,02 $.
+- **La base honnête** : `evaluer --reel` — **452 phrases réelles** (POS 88,91 %, F1 79,06 %, attachement 99,46 %), publiée à côté du global.
+- **2A** `g017` inatteignable, **3B** les 11 verdicts S committés (`389b99f`), **4A** la note Panini écrite, **5A** A6.2 repoussé.
+- **C puis B** : N2 (`--rope --canal-dir`), S (la page `/`), R (le gold 452), Panini (le protocole, **les atomes : négatif**, le CIC **42/42**).
+- **D puis E** : les exemples, la restitution v2 (négatif), la FAQ (10/10), les cas d'erreur.
+
+**La journée (08 h 15 → 15 h)** — la **semaine 2 en un jour** :
+- **W1** le gold réel 452 nommé (split 402/H50) ; **W2** le tagger 402 **+4,45**, H50 **+17,65** ; **W3** la matrice du défaut (hors ligne, code 0) ; **W4** le manifeste Panini (26 signatures) ; **W5** les 5 rôles de GP séparés (18/18) ; **W6** la clôture + le tag **`semaine-2-2026-11-20`**.
+- **X1** la page `/` mesurée (369/0 vs 359/99) ; **X2** l'or de rôles (protocole + schéma) ; **X3** le tagger en lot (1 000 items, 0,022 $) ; **Y1** le mode `auto` (prototype, code 0 partout).
+
+\## Comment c'est vérifié
+
+**183/183** d'autotest, **porte produit verte**, toutes les portes de documentation vertes ; `master` = `s/v7` **poussés** (0 divergence) ; les tags `chantier-2026-11-14`, `semaine-2026-11-14`, `semaine-2-2026-11-20`. `HEAD 71fdf72c`.
+
+**Les artefacts** : [`rapport-bilan-nuit.md`](reports/rapport-bilan-nuit.md), [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md), [`rapport-bilan-jour-1115.md`](reports/rapport-bilan-jour-1115.md), [`rapport-semaine-2.md`](reports/rapport-semaine-2.md), [`note-panini-334.md`](reports/note-panini-334.md), [`semaine-2.md`](docs/pilotage/semaine-2.md).
+
+\## À revoir, et ce qui vous revient
+
+1. **La décision du tagger `auto`** : la mesure recommande **défaut hors ligne, `--tagger` opt-in** ; le mode `auto` est livré mais **non activé** — c'est votre décision.
+2. **Envoyer la note et le manifeste à
+… [461 caractères tronqués]
+
+### Tour 201 — fais-moi un résumé du reste à faire pour que ce soit un exploitable et continue jusqu'à demain 8h00
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Voir l'état d'installation du produit
+- create_goal
+- bash — Lire les limites documentées
+- bash — Lancer la nuit exploitable
+
+**Synthèse produite :**
+
+⏵ La nuit « exploitable » est lancée (T1 : l'empaquetage). Voici le résumé du reste à faire
+
+\## Où en est le produit
+
+**Ce qui marche déjà** : `analyser` (POS 86,25 %, F1 0,7902, attachement 238/239), `evaluer` (612 / gelé 602 / **réel 452**), `restituer`, le schéma v2 (v1 lue), le refus (code 3), le JSON déterministe, le rejeu par empreinte, le tagger en option (95,75 %, ~0,02 $), 183/183 de portes, la porte produit verte.
+
+\## Les 5 trous qui empêchent de l'appeler « exploitable »
+
+| # | le trou | ce que ça coûte à l'utilisateur |
+|---|---|---|
+| **1. L'installation** | pas de `pyproject.toml`, pas de `pip install`, pas de commande `drave` dans le `PATH` | il doit cloner le dépôt et lancer `python3 tools/drave.py` **depuis la racine** |
+| **2. L'API du JSON** | les `candidats` sont des **chaînes d'affichage** (« « qui dort » → voisine ») ; les `role` mélangent `predicat`/`prédicat` | un programme ne peut pas filtrer ni consommer sans re-parser |
+| **3. Le démarrage** | pas de **quickstart** (le § 8.10 existe mais c'est une note, pas un parcours) | 30 min de lecture au lieu de 5 |
+| **4. La performance** | jamais mesurée sur un vrai volume (10 000 mots) | on ne sait pas si c'est utilisable sur un document |
+| **5. La CLI** | pas de `--duree` dans le JSON, pas de **tableau des codes de sortie**, les cas d'erreur (`--fichier` inexistant, un répertoire) non testés | un intégrateur ne sait pas quoi faire des erreurs |
+
+\## La nuit (21 h 40 → 8 h) — 6 tâches
+
+| tâche | livrable | son critère |
+|---|---|---|
+| **T1** l'empaquetage | `pyproject.toml`, `pip install -e .` dans un venv, `drave` depuis un autre répertoire | le contrôle négatif : sans install, `drave` échoue proprement |
+| **T2** le contrat | les `candidats` **structurés**, les `role` **normalisés** (un vocabulaire fermé) | un filtre sur `role == "predicat"` trouve les prédicats |
+| **T3** le démarrage | `docs/produit/demarrage.md` en 5 minutes, chaque commande rejouée | un débutant suit sans le dépôt |
+| **T4** la performance | 10 000 mots : temps, débit, mémoire, taille du JSON | le temps croît **linéairement** (pas quadratiquement) |
+| **T5** la CLI | `--duree`, le tableau des codes, les erreurs testées | un test par cas |
+| **T6** le bilan | la synthèse de la nuit | les négatifs dits |
+
+\## Ce qui n'est pas dans la nuit (et pourquoi)
+
+- **Le gold réel** (les 10 GP/SUB) et **la page `/`** : c'est le territoire de **S** — je ne peux que préparer les protocoles (c'est fait : X2).
+- **Les 26 signatures 
+… [316 caractères tronqués]
+
+### Tour 202 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — État de T1
+- bash — Suivre T1
+- job_output
+- bash — Lire la fiche et le pyproject
+- bash — Vérifier l'install moi-même
+- bash — Committer T1
+- bash — Suivre T2
 
 ## 3. Travail accompli
 
@@ -10876,7 +10975,7 @@ Le plan prévoyait 5 jours ; la file du méta-harnais a tout exécuté en **9 va
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2933 autres
+- … et 2942 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11511,4 +11610,5 @@ Le plan prévoyait 5 jours ; la file du méta-harnais a tout exécuté en **9 va
 - ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7
 - INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git p
 - CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HORODATÉ" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-80; git branch -f
+- EXPLOITABLE — T1 : L'EMPAQUETAGE (pyproject.toml, pip install -e ., LA COMMANDE drave HORS DU DÉPÔT ; SANS INSTALL, 127 PROPRE) ; LE CHEMIN HISTORIQUE INTACT" 2
 

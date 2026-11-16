@@ -1,0 +1,124 @@
+{
+ "schema": "drave.empaquetage.verification",
+ "version": 1,
+ "date": "2026-11-15",
+ "tache": "T1 (exploitable, 1/5)",
+ "produit": "0.1.0",
+ "pyproject": {
+  "fichier": "pyproject.toml",
+  "nom": "drave",
+  "version": "0.1.0",
+  "requires_python": ">=3.10",
+  "dependances": [],
+  "script_console": "drave = tools.drave:main",
+  "build_backend": "setuptools.build_meta",
+  "build_requires": ["setuptools>=61"],
+  "packages": ["tools"]
+ },
+ "environnement": {
+  "venv": "/tmp/venv-drave",
+  "python": "3.13.16",
+  "pip": "26.2.1",
+  "commande": "python3 -m pip install -e .",
+  "cwd": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet",
+  "code": 0,
+  "resultat": "Successfully installed drave-0.1.0",
+  "editable": true,
+  "pip_show": {
+   "name": "drave",
+   "version": "0.1.0",
+   "requires": [],
+   "editable_project_location": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"
+  }
+ },
+ "sorties": {
+  "drave_version": {
+   "commande": "drave --version",
+   "cwd": "/tmp",
+   "code": 0,
+   "stdout": "drave 0.1.0"
+  },
+  "drave_analyser": {
+   "commande": "drave analyser \"Le chat dort.\"",
+   "cwd": "/tmp",
+   "code": 0,
+   "stdout_extrait": [
+    "drave 0.1.0 — analyse heuristique (CPU, hors ligne)",
+    "langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)",
+    "POS  Le/DET chat/NOUN dort/VERB ./PONCT",
+    "GN   [0:7]   Le chat  rôle=agent     → dort",
+    "GV   [8:12]  dort     rôle=predicat  → chat"
+   ],
+   "contient": ["GN", "Le chat", "agent"]
+  },
+  "drave_evaluer": {
+   "commande": "drave evaluer --json",
+   "cwd": "/tmp",
+   "code": 0,
+   "version": "0.1.0",
+   "gold": "vivant (hand + reel + synthétique)",
+   "lecture": "RACINE résout le dépôt sous installation éditable"
+  },
+  "drave_tagger_sans_cle": {
+   "commande": "drave analyser \"Le chat dort.\" --tagger",
+   "cwd": "/tmp",
+   "code": 4,
+   "stdout": "",
+   "stderr_contient": "dépendance absente",
+   "lecture": "tools.llm.deepseek est importable sous installation éditable"
+  },
+  "historique_version": {
+   "commande": "python3 tools/drave.py --version",
+   "cwd": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet",
+   "code": 0,
+   "stdout": "drave 0.1.0"
+  },
+  "historique_analyser": {
+   "commande": "python3 tools/drave.py analyser \"Le chat dort.\"",
+   "cwd": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet",
+   "code": 0,
+   "contient": ["GN", "Le chat", "agent"]
+  }
+ },
+ "controle_negatif": {
+  "condition": "sans installation : PATH=/usr/bin:/bin, cwd=/tmp, aucun venv activé",
+  "commande": "drave --version",
+  "code": 127,
+  "stdout": "",
+  "stderr": "/bin/bash: line 1: drave: command not found",
+  "echec_propre": true,
+  "lecture": "échec de résolution, pas une trace Python"
+ },
+ "test": {
+  "fichier": "tools/tests/test_empaquetage.py",
+  "commande": "python3 tools/tests/test_empaquetage.py",
+  "code": 0,
+  "tests": 8,
+  "echecs": 0,
+  "resultat": "OK"
+ },
+ "hors_perimetre": {
+  "wheel_non_editable": {
+   "construit": true,
+   "installation": "pip install --no-deps drave-0.1.0-py3-none-any.whl",
+   "code": 1,
+   "erreur": "ModuleNotFoundError: No module named 'tools.tests'",
+   "lecture": "le wheel n'embarque ni tools/tests ni les gold ; le chemin demandé est éditable"
+  }
+ },
+ "ce_qui_pourrait_rendre_faux": [
+  "La mesure tourne en Python 3.13.16 ; le plancher >=3.10 est vérifié par la métadonnée et l'AST, pas par une exécution en 3.10.",
+  "pip installe setuptools>=61 en isolation de build : une machine sans réseau ni cache échoue avant l'installation.",
+  "L'installation est éditable ; un wheel non éditable, construit à part, échoue à l'import (No module named 'tools.tests') et n'embarque pas les gold.",
+  "Le contrôle négatif utilise un PATH vidé ; si un binaire drave existait dans /usr/bin, il ne représenterait plus « sans installation ».",
+  "Le script console dépend du namespace package tools ; il a été vérifié depuis /tmp, pas depuis un autre interpréteur."
+ ],
+ "fichiers": [
+  "pyproject.toml",
+  "tools/tests/test_empaquetage.py",
+  "reports/rapport-empaquetage.md",
+  "reports/empaquetage.json",
+  "docs/produit/README.md#810-comment-linstaller-et-le-lancer"
+ ],
+ "conclusion": "pyproject minimal installé en éditable dans /tmp/venv-drave ; drave --version, drave analyser et drave evaluer marchent depuis /tmp ; sans installation, drave échoue proprement (127, command not found) ; le chemin historique python3 tools/drave.py reste vert."
+}

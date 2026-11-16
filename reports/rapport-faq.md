@@ -61,8 +61,8 @@ et aux **chiffres publiés** au 2026-11-15.
 | 6 | **L'attachement ?** | **238/239** cibles (**0,9958**) ; **1,0000** sur les spans prédits ; top-k **0,9874** ; hasard **1,67 %** ; audit **42,14 %** / **0,908 %** | `q6_attachement` |
 | 7 | **Les spans inatteignables ?** | **1** : `g017`, SUB **[9:28]** attendue / **[9:38]** prédite ; règle rejetée (F1 **0,7901**, couverture **0,9916**) ; réel **183/184** | `q7_span_inatteignable` |
 | 8 | **La restitution ?** | v0 **46/46** surfaces, strict **0,1087** ; v1 **46/46** canonique ; v2 **19/46** cadres (**16** non vides), **F1 0,5270** | `q8_restitution` |
-| 9 | **Les limites ?** | pas de génération, serveur, RSN, local, classement, calibration, `--langue-forcee`, garantie hors domaine ; `--sortie`/`--mode`/`--strict` → code 2 | `q9_limites` |
-| 10 | **L'installation ?** | `drave 0.1.0`, Python **3.10** (grammaire), `python3 -S` code 0, **0** dépendance, gold versionnés | `q10_installation` |
+| 9 | **Les limites ?** | pas de génération, serveur, RSN, local, classement, calibration, `--langue-forcee`, garantie hors domaine ; `--sortie`/`--mode`/`--strict` → code 2 ; **pas de wheel/PyPI** | `q9_limites` |
+| 10 | **L'installation ?** | `pyproject.toml` (`drave 0.1.0`, `>=3.10`, **0** dépendance, `drave = tools.drave:main`) ; `python3 -S` code 0 ; gold versionnés | `q10_installation` |
 
 ## 3. Le dispositif
 
@@ -99,7 +99,7 @@ dit quelles affirmations fausses ont été rejetées.
 | restitution v0 | **46/46** surfaces, miroir strict **0,1087**, **46** contrôles négatifs détectés |
 | restitution v1 | **46/46** canonique, strict **0,1087**, **395** segments, **315** cibles |
 | restitution v2 | **19/46** cadres exacts, **16** non vides, **F1 0,5270**, **198/198** spans, **46/46** rendus |
-| installation | `drave 0.1.0`, `python3 -S` **0**, grammaire **3.10**, **0** paquet externe |
+| installation | `drave 0.1.0`, `python3 -S` **0**, grammaire **3.10**, **0** paquet externe ; `pyproject.toml` éditable (`drave = tools.drave:main`) |
 
 ## 5. Le contrôle négatif
 

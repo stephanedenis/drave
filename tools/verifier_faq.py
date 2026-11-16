@@ -322,37 +322,49 @@ def q9_limites() -> dict:
     source = DRAVE.read_text(encoding="utf-8")
     for interdit in ("http.server", "transformers", "torch", "sys.stdin"):
         assert interdit not in source, interdit
-    for nom in ("pyproject.toml", "setup.py", "setup.cfg", "requirements.txt"):
-        assert not (RACINE / nom).exists(), nom
 
-    # Les rôles ne sont pas normalisés : les deux chemins du bloc n'écrivent pas pareil.
-    bloc = (RACINE / "tools/bloc_linguistique.py").read_text(encoding="utf-8")
-    generateur = (RACINE / "tools/structures/generateur.py").read_text(encoding="utf-8")
-    assert '"prédicat"' in bloc and '"predicat"' in generateur, "variantes de rôle absentes"
+    # Les rôles sont normalisés par une table unique et un vocabulaire fermé.
+    try:
+        from roles_vocabulaire import CORRESPONDANCES, ROLES, normaliser_role
+    except ImportError:
+        from tools.roles_vocabulaire import CORRESPONDANCES, ROLES, normaliser_role
+    assert normaliser_role("prédicat") == "predicat"
+    assert normaliser_role("qualité") == "qualite"
+    assert set(CORRESPONDANCES.values()) <= set(ROLES)
 
-    # Les candidats sont des chaînes d'affichage, pas des objets {span, cible}.
+    # Les candidats : les chaînes historiques restent, et la v2 ajoute les objets.
     a = _json(["analyser", "Le livre que j'ai lu est intéressant."])
     candidats = [c for e in a["etiquettes"] if e["niveau"] == "syntagme"
                  for c in (e.get("candidats") or [])]
     assert candidats and all(isinstance(c, str) for c in candidats), candidats[:3]
+    objets = [c for e in a["etiquettes"] if e["niveau"] == "syntagme"
+              for c in (((e.get("meta") or {}).get("attachement") or {}).get("candidats") or [])]
+    assert objets and all(isinstance(c, dict) and set(c) == {"span", "cible", "source"}
+                          for c in objets), objets[:3]
+    for candidat in objets:
+        debut, fin = candidat["span"]["debut"], candidat["span"]["fin"]
+        assert a["texte"][debut:fin] == candidat["cible"], candidat
     return {
         "absent": ["génération", "traduction", "serveur HTTP", "RSN/DRVM",
                    "neuronal local", "classement appris", "calibration des confiances",
                    "--langue-forcee", "garantie hors domaine", "entrée standard",
                    "--sortie", "parcours de répertoire", "rejeu d'une annotation sauvegardée",
-                   "pip install"],
+                   "publication PyPI"],
+        "empaquetage": {"livre": "pip install -e . + commande drave",
+                        "non_livre": "wheel / paquet PyPI"},
         "options_fantomes": {"--sortie": "code 2", "--mode": "code 2", "--strict": "code 2"},
-        "candidats": {"type": "chaînes d'affichage, pas d'objets {span, cible}",
-                      "exemple": candidats[0]},
-        "roles": {"variantes": ["predicat (générateur S)", "prédicat (chemin simple)",
-                                "qualite/qualité (observé dans la sortie)"],
-                  "lecture": "valeurs non normalisées"},
+        "candidats": {"type": "objets {span, cible, source} (v2) ; "
+                             "chaînes d'affichage en lecture",
+                      "exemple": objets[0]},
+        "roles": {"vocabulaire": list(ROLES),
+                  "bruts": "21 → 8 (gold 612)",
+                  "lecture": "rôles normalisés, sans accents mélangés"},
         "lecture": "le format est versionné ; la qualité linguistique ne l'est pas",
     }
 
 
 def q10_installation() -> dict:
-    """Source seulement : Python 3.10+, stdlib, pas de pip, gold versionnés."""
+    """Source et pyproject : Python 3.10+, stdlib, installation éditable, gold versionnés."""
     version = _run(["--version"])
     assert version.returncode == 0 and version.stdout.strip() == "drave 0.1.0", version.stdout
 
@@ -367,8 +379,17 @@ def q10_installation() -> dict:
               "tools/restitution.py", "tools/restitution_v2.py"):
         ast.parse((RACINE / f).read_text(encoding="utf-8"), filename=f,
                   feature_version=(3, 10))
-    for nom in ("pyproject.toml", "setup.py", "setup.cfg", "requirements.txt"):
+
+    pyproject = RACINE / "pyproject.toml"
+    assert pyproject.is_file(), "pyproject.toml absent"
+    source = pyproject.read_text(encoding="utf-8")
+    for attendu in ('name = "drave"', 'version = "0.1.0"',
+                    'requires-python = ">=3.10"', "dependencies = []",
+                    'drave = "tools.drave:main"'):
+        assert attendu in source, attendu
+    for nom in ("setup.py", "setup.cfg", "requirements.txt"):
         assert not (RACINE / nom).exists(), nom
+
     golds = ["gold.json", "gold_gele.json", "gold_reel.json", "gold_synthetique.json"]
     for nom in golds:
         assert (RACINE / "tools/tests/linguistique" / nom).is_file(), nom
@@ -377,9 +398,18 @@ def q10_installation() -> dict:
         "python": {"grammaire": "3.10", "mesure": sys.version.split()[0],
                    "sans_site_packages": "code 0"},
         "dependances_externes": 0,
-        "empaquetage": "aucun (pas de pip install, pas de commande drave dans le PATH)",
+        "empaquetage": {
+            "fichier": "pyproject.toml",
+            "nom": "drave",
+            "version": "0.1.0",
+            "requires_python": ">=3.10",
+            "dependances": [],
+            "script_console": "drave = tools.drave:main",
+            "installation": "python3 -m pip install -e . (venv)",
+            "hors_depot": "commande drave depuis n'importe quel répertoire",
+        },
         "gold_versionnes": golds,
-        "racine": "tout part de la racine du dépôt",
+        "racine": "le chemin historique reste garanti : python3 tools/drave.py",
     }
 
 

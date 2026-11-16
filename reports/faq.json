@@ -264,24 +264,41 @@
      "--sortie",
      "parcours de répertoire",
      "rejeu d'une annotation sauvegardée",
-     "pip install"
+     "publication PyPI"
     ],
+    "empaquetage": {
+     "livre": "pip install -e . + commande drave",
+     "non_livre": "wheel / paquet PyPI"
+    },
     "options_fantomes": {
      "--sortie": "code 2",
      "--mode": "code 2",
      "--strict": "code 2"
     },
     "candidats": {
-     "type": "chaînes d'affichage, pas d'objets {span, cible}",
-     "exemple": "« que j'ai lu » → Le livre"
+     "type": "objets {span, cible, source} (v2) ; chaînes d'affichage en lecture",
+     "exemple": {
+      "span": {
+       "debut": 25,
+       "fin": 36
+      },
+      "cible": "intéressant",
+      "source": "heuristique"
+     }
     },
     "roles": {
-     "variantes": [
-      "predicat (générateur S)",
-      "prédicat (chemin simple)",
-      "qualite/qualité (observé dans la sortie)"
+     "vocabulaire": [
+      "predicat",
+      "agent",
+      "objet",
+      "lieu",
+      "temps",
+      "qualite",
+      "possesseur",
+      "destinataire"
      ],
-     "lecture": "valeurs non normalisées"
+     "bruts": "21 → 8 (gold 612)",
+     "lecture": "rôles normalisés, sans accents mélangés"
     },
     "lecture": "le format est versionné ; la qualité linguistique ne l'est pas"
    },
@@ -299,14 +316,23 @@
      "sans_site_packages": "code 0"
     },
     "dependances_externes": 0,
-    "empaquetage": "aucun (pas de pip install, pas de commande drave dans le PATH)",
+    "empaquetage": {
+     "fichier": "pyproject.toml",
+     "nom": "drave",
+     "version": "0.1.0",
+     "requires_python": ">=3.10",
+     "dependances": [],
+     "script_console": "drave = tools.drave:main",
+     "installation": "python3 -m pip install -e . (venv)",
+     "hors_depot": "commande drave depuis n'importe quel répertoire"
+    },
     "gold_versionnes": [
      "gold.json",
      "gold_gele.json",
      "gold_reel.json",
      "gold_synthetique.json"
     ],
-    "racine": "tout part de la racine du dépôt"
+    "racine": "le chemin historique reste garanti : python3 tools/drave.py"
    },
    "ok": true,
    "erreur": ""

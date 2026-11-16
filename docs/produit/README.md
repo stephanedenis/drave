@@ -59,14 +59,16 @@ un serveur. Le produit **lit** et **étiquette** ; il n'écrit pas de texte.
 Une seule opération : `analyser(texte, langue)` → une **annotation**. Elle porte neuf niveaux ;
 le produit en expose cinq, plus le coût et la trace. Le JSON est estampillé `schema`
 (`"drave.annotation"`) et `version` (`2`) ; en v2, `meta.partition` et `meta.alternative`
-documentent les syntagmes qui se chevauchent.
+documentent les syntagmes qui se chevauchent, `meta.attachement.candidats` publie les
+candidats en **objets** `{span, cible, source}`, et `meta.role` appartient à un
+**vocabulaire fermé** de huit rôles.
 
 | ce que vous demandez | ce que vous obtenez | mesure du 15/11 |
 |---|---|---|
 | **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
 | **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,8625** (fermé 0,9373, ouvert 0,7918) ; **0,8891** sur le réel 452 ; **0,9575** avec `--tagger` |
 | **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,7902** ; tête **0,9029** (vivant 612) ; **0,7906** sur le réel 452 |
-| **attachement** | par syntagme : `role`, `cible`, `candidats` | **238/239** exacts ; couverture **0,9958** ; exact sur span **1,0000** |
+| **attachement** | par syntagme : `role`, `cible`, `candidats` (objets v2, chaînes d'affichage en lecture) | **238/239** exacts ; couverture **0,9958** ; exact sur span **1,0000** ; **2 139** candidats objets, **0** span faux |
 | **pragmatique** | acte (assertion, question, exclamation), négation, modalité, double sens | acte **0,9967**, négation **0,9771**, modalité **0,9886**, double sens **0,9444** |
 | **unités sémantiques** | les spans candidats à la RSN et la fraction du texte | **55,4 %** du texte en moyenne |
 | **coût et trace** | octets, caractères, étiquettes, étapes | local, sans réseau |
@@ -135,6 +137,26 @@ pas des objets séparés. La REL « que j'ai lu » est bien rattachée à « liv
 gold). Le JSON publie aussi une **seconde lecture d'union** (`meta.union: true`, span plus
 large) : dans la sortie lisible, elle apparaît comme un **doublon REL** ; le JSON la marque
 `union: true`, à filtrer pour une lecture unique (voir [`exemples.md`](exemples.md) § 2).
+
+**Les candidats d'attachement, en objets (v2).** Le champ historique `candidats` reste une
+liste de **chaînes d'affichage** ; le champ v2 `meta.attachement.candidats` donne les mêmes
+candidats en objets `{span, cible, source}`, avec un span qui découpe exactement la cible :
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --json \
+  | jq -r '.etiquettes[] | select(.niveau=="syntagme")
+           | "\(.type) \(.valeur) role=\(.meta.role) → \(.meta.attachement.cible) · " +
+             ([.meta.attachement.candidats[] | "\(.cible)[\(.span.debut):\(.span.fin)]"] | join(", "))'
+```
+```
+GN Le chat role=agent → dort · dort[8:12]
+GV dort role=predicat → chat · chat[3:7]
+```
+
+Un consommateur n'a plus à parser « « qui dort » → voisine » : il lit `cible` et `span`.
+La **cible choisie** est toujours le premier objet ; un candidat dont la cible n'est pas
+retrouvée dans le texte est écarté. Le détail et la mesure sont dans
+[`rapport-contrat-json.md`](../../reports/rapport-contrat-json.md).
 
 ### 3.3 Mesurer sur le gold
 
@@ -240,8 +262,20 @@ le [schéma v2](../../tools/schemas/drave-annotation-v2.json), qui laisse `meta`
 | `relation` | énumération | `inclut`, `inclus`, `meme_span`, `croise` | relation **du point de vue du porteur** : `inclut` = le porteur contient l'alternative ; `inclus` = l'alternative contient le porteur ; `croise` = intersection partielle |
 | `rang` | entier | `≥ 1` | rang de l'alternative dans le groupe |
 | `retire` | booléen | optionnel | présent en vue `filtrer`/`filtrer_union` ; `true` = segment retiré de la sortie mais toujours lisible ici |
-| `attachement` | objet | optionnel, `{segment, cible}` | attachement recopié de l'alternative, quand il existe |
-| `role` | chaîne | optionnelle | rôle recopié de l'alternative, quand il existe |
+| `attachement` | objet | optionnel, `{segment, cible, candidats?}` | attachement recopié de l'alternative, avec ses candidats objets quand ils existent |
+| `role` | chaîne | optionnelle, vocabulaire fermé | rôle normalisé recopié de l'alternative, quand il existe |
+
+**`meta.attachement.candidats` — les candidats en objets (v2).**
+
+| champ | type | contrainte | sens |
+|---|---|---|---|
+| `span` | objet | `{debut, fin}`, `0 ≤ debut < fin` | position de la cible dans `texte`, en points de code Unicode, fin exclue |
+| `cible` | chaîne | non vide | surface du candidat ; `texte[debut:fin] == cible` |
+| `source` | énumération | `heuristique`, `neuronal`, `humain` | provenance du candidat |
+
+La cible choisie est le premier objet de la liste ; les `meta.alternative[].attachement`
+recopient les mêmes objets. Le champ **historique** `candidats` de l'étiquette reste une
+liste de chaînes : c'est la sortie lisible, et le contrat v1 ne connaît que lui.
 
 ```json
 {
@@ -251,11 +285,19 @@ le [schéma v2](../../tools/schemas/drave-annotation-v2.json), qui laisse `meta`
     "alternative": [
       {"type": "REL", "debut": 22, "fin": 54, "source": "heuristique",
        "union": true, "relation": "inclus", "rang": 1,
-       "attachement": {"segment": "qui dort sur le toit se réveille", "cible": "réveille"},
-       "role": "qualité"},
+       "attachement": {
+         "segment": "qui dort sur le toit se réveille", "cible": "réveille",
+         "candidats": [
+           {"span": {"debut": 46, "fin": 54}, "cible": "réveille", "source": "heuristique"}
+         ]},
+       "role": "qualite"},
       {"type": "GV", "debut": 43, "fin": 54, "source": "heuristique",
        "union": false, "relation": "croise", "rang": 3,
-       "attachement": {"segment": "se réveille", "cible": "voisine"},
+       "attachement": {
+         "segment": "se réveille", "cible": "voisine",
+         "candidats": [
+           {"span": {"debut": 14, "fin": 21}, "cible": "voisine", "source": "heuristique"}
+         ]},
        "role": "predicat"}
     ]
   }
@@ -528,6 +570,17 @@ est **19/46** cadres exacts (**16/46** non vides), **F1 0,5270** : la commande e
 rôles de l'annotation, elle ne les corrige pas. La fiche
 [`rapport-restitution-v2.md`](../../reports/rapport-restitution-v2.md) nomme le négatif.
 
+**1 ter. Les rôles sont normalisés, pas raffinés.** Les valeurs publiées sont un
+**vocabulaire fermé** — `predicat`, `agent`, `objet`, `lieu`, `temps`, `qualite`,
+`possesseur`, `destinataire` — et non plus `prédicat`/`predicat` ou `qualité`/`qualite`.
+La table des correspondances est dans
+[`roles_vocabulaire.py`](../../tools/roles_vocabulaire.py) : `patient`, `complément`,
+`contenu`, `theme` et `groupe nominal` tombent sur `objet` ; `attribut`, `maniere`,
+`concession`, `hypothese`, `cause` et `consequence` sur `qualite`. C'est une
+**normalisation**, pas une annotation plus fine : `objet` et `qualite` sont des catégories
+larges, et le rapport [`rapport-contrat-json.md`](../../reports/rapport-contrat-json.md)
+nomme ce que la table ne dit pas.
+
 **2. Un span reste inatteignable.** Sur **239 cibles**, **238** sont attachées (couverture
 **0,9958**) ; **1** ne l'est pas : `g017` (une convention du gold, déclarée inatteignable le
 14/11 — la règle coûtait deux autres spans). Elles sont
@@ -720,10 +773,8 @@ rejeu identique : oui
 | **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
 | **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
 | **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
-| **`candidats` structurés** | ce sont des **chaînes d'affichage** (« « qui dort » → voisine »), pas des objets `{span, cible}` ; un programme doit les reparser |
-| **`role` normalisé** | les valeurs mélangent `predicat`/`prédicat` et `qualite`/`qualité` ; fragile pour un filtre |
 | **`--strict`** | `evaluer` ne mesure pas la cascade **locale** et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
-| **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dépôt |
+| **la publication** | `pip install -e .` et la commande `drave` existent ; **pas de wheel publiée** ni de paquet sur PyPI — l'installation pointe vers le dépôt |
 | **le neuronal local** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; le tagger **API** est en option, le 7B local n'est pas livré |
 | **la restitution sémantique** | `restituer` est un **codec de surface** (graphème) ; il ne restitue pas le sens, ne traduit pas, ne génère pas |
 
@@ -732,8 +783,10 @@ déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 
 `--fichier`/`--jsonl`, `--banc`, `--partition`, le **tagger API en option** (`--tagger`, code 4,
 cache), la **restitution v0** (46/46 surfaces exactes,
 miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique, strict
-inchangé), la porte produit et le smoke test. Le reste est nommé ci-dessus, sans
-être présenté comme acquis.
+inchangé), les **candidats d'attachement en objets** `{span, cible, source}` et le
+**vocabulaire fermé des rôles** (`predicat` sans accent ; 21 rôles bruts → 8, 0 hors
+table sur le gold 612), la porte produit et le smoke test. Le reste est nommé ci-dessus,
+sans être présenté comme acquis.
 
 ## 8. FAQ — dix questions
 
@@ -784,18 +837,22 @@ peut servir une réponse ancienne.
 
 ### 8.5 Quel est le format de sortie, et est-il stable ?
 
-Le JSON est estampillé `schema: "drave.annotation"` et `version: 2`. La v2 ajoute deux champs
-**optionnels** dans `meta` — `partition` et `alternative` — pour documenter les syntagmes qui
-se chevauchent ; les **huit champs obligatoires** de la racine sont ceux de la v1, et un client
-v1 qui ignore `meta` continue de lire. `tools/verifier_schema_produit.py` lit les versions
-**1 et 2**, valide **6 cas** (dont un cas v1) et, avec `--gold 20`, **26 cas, 0 échec** ; le
-contrôle négatif soumet le cas v1 au schéma v2, qui le **refuse**. La compatibilité **octet
-pour octet** entre versions n'est pas garantie : le bump change le JSON et son `sha256`.
+Le JSON est estampillé `schema: "drave.annotation"` et `version: 2`. La v2 ajoute des champs
+**optionnels** dans `meta` — `partition`, `alternative`, `attachement.candidats` — et
+normalise `meta.role` en huit valeurs ; les **huit champs obligatoires** de la racine sont
+ceux de la v1, et un client v1 qui ignore `meta` continue de lire. Le champ historique
+`candidats` de l'étiquette reste une liste de chaînes. `tools/verifier_schema_produit.py`
+lit les versions **1 et 2**, valide **6 cas** (dont un cas v1) et, avec `--gold 20`, **26
+cas, 0 échec** ; il refuse en plus un rôle hors vocabulaire et un candidat qui redevient une
+chaîne. La compatibilité **octet pour octet** entre versions n'est pas garantie : le bump
+change le JSON et son `sha256`.
 
 ### 8.6 Que veut dire « attachement », et à quel point est-il fiable ?
 
 Pour chaque syntagme, le produit publie un **rôle**, une **cible** d'attachement et des
-**candidats** : « Le chat » → `dort`, la REL « que j'ai lu » → `livre`. Ce n'est **pas un
+**candidats** : « Le chat » → `dort`, la REL « que j'ai lu » → `livre`. Le JSON v2 donne les
+candidats en **objets** `{span, cible, source}` (`meta.attachement.candidats`), et la sortie
+lisible garde les chaînes d'affichage. Ce n'est **pas un
 arbre syntaxique complet**. Sur le gold vivant 612, **238/239 cibles** sont attachées
 (**0,9958**) ; sur les 238 segments dont le span est prédit, l'exactitude est **1,0000** ; le
 top-k vaut **0,9874**. Le contrôle négatif du CLI — une cible exacte tirée au hasard — vaut
@@ -832,19 +889,35 @@ seul le tagger **API** est en option). **Pas de classement appris** de l'attache
 calibration** des confiances (elles sont déclarées), **pas de `--langue-forcee`** et **pas de
 garantie hors domaine** : les chiffres sont sur un gold où les règles ont été dessinées. Le CLI
 n'a **pas** d'entrée standard, pas de `--sortie`, pas de parcours de répertoire, pas de rejeu
-d'une annotation sauvegardée ; `candidats` sont des **chaînes d'affichage** et les rôles
-mélangent `predicat`/`prédicat`, `qualite`/`qualité`. Le format est versionné ; la **qualité
-linguistique** ne l'est pas.
+d'une annotation sauvegardée. Les candidats sont des objets `{span, cible, source}` et les
+rôles un vocabulaire fermé de huit valeurs ; mais la normalisation ne raffine pas le rôle
+(`objet` et `qualite` sont larges) et le span d'un candidat est sa première occurrence dans
+le texte. Le format est versionné ; la **qualité linguistique** ne l'est pas.
 
 ### 8.10 Comment l'installer et le lancer ?
 
-Cloner le dépôt, puis lancer `python3 tools/drave.py …` **depuis la racine** : Python **3.10+**
-(le code parse en 3.10, mesuré ici en 3.13), **aucune dépendance externe**, aucun GPU. Pas de
-`pip install`, pas de commande `drave` dans le `PATH`, pas d'empaquetage. Le CLI tourne même
-avec `python3 -S` (sans `site-packages`) ; les gold sont versionnés dans
+Deux chemins, le même CLI. **Depuis le dépôt, sans rien installer** : `python3 tools/drave.py …`
+depuis la racine (Python **3.10+**, mesuré ici en 3.13), **aucune dépendance externe**, aucun GPU.
+**Comme commande `drave`** : dans un venv, depuis la racine,
+
+```bash
+python3 -m venv /tmp/venv-drave
+. /tmp/venv-drave/bin/activate
+python3 -m pip install -e .
+drave --version            # drave 0.1.0
+cd /tmp && drave analyser "Le chat dort."
+```
+
+L'installation est **éditable** : le paquet `drave` (version **0.1.0**, `requires-python >= 3.10`,
+**zéro dépendance**) pointe vers le dépôt ; le script console appelle `tools.drave:main`.
+Elle fonctionne **depuis n'importe quel répertoire** (`cd /tmp`). Sans installation, `drave`
+n'existe pas : la commande échoue avec `command not found` (code **127**), pas avec une trace
+Python. Le chemin historique reste garanti : `python3 tools/drave.py --version` → `drave 0.1.0`.
+Le CLI tourne même avec `python3 -S` (sans `site-packages`) ; les gold sont versionnés dans
 `tools/tests/linguistique/`. Le corpus UDHR, lui, n'est pas versionné (`data/` hors dépôt).
-Vérifier l'installation : `python3 tools/drave.py --version` → `drave 0.1.0`, puis
-`python3 tools/drave.py analyser "Le chat dort."`.
+Vérifier l'installation : `drave --version` → `drave 0.1.0`, puis
+`drave analyser "Le chat dort."`. Détail et contrôle négatif :
+[`reports/rapport-empaquetage.md`](../../reports/rapport-empaquetage.md).
 
 ## 9. Où aller ensuite
 

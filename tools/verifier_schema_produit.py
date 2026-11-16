@@ -6,7 +6,8 @@ Deux schémas sont publiés (Draft 2020-12) :
 - `tools/schemas/drave-annotation-v1.json` — le contrat d'origine (version 1) ;
 - `tools/schemas/drave-annotation-v2.json` — le contrat courant (version 2) : il ajoute
   `meta.partition` et `meta.alternative`, les deux champs qui documentent les syntagmes qui se
-  chevauchent.
+  chevauchent, les **candidats d'attachement structurés** (`meta.attachement.candidats`,
+  objets `{span, cible, source}`) et les **rôles normalisés** (vocabulaire fermé).
 
 Le vérificateur lit `version` dans l'annotation et choisit le schéma correspondant : une
 annotation v1 reste donc **lue** et validée par le schéma v1. Il compile les schémas une fois,
@@ -37,6 +38,11 @@ SCHEMAS = {
 OBLIGATOIRES = ("schema", "version", "texte", "langue", "script", "refus",
                 "etiquettes", "unites_semantiques")
 
+try:  # script : `python3 tools/verifier_schema_produit.py`
+    from roles_vocabulaire import ROLES as ROLES_VOCABULAIRES
+except ImportError:  # paquet : `python3 -m tools.verifier_schema_produit`
+    from tools.roles_vocabulaire import ROLES as ROLES_VOCABULAIRES
+
 CAS = [
     ("fr", "Le chat de la voisine qui dort sur le toit se réveille.", "fr"),
     ("en", "The cat that sleeps on the roof is black.", "en"),
@@ -60,6 +66,11 @@ def _annotations() -> list[tuple[str, dict]]:
         if isinstance(meta, dict):
             meta.pop("partition", None)
             meta.pop("alternative", None)
+            # `meta.attachement.candidats` est un champ v2 : le cas v1 ne doit pas le
+            # porter, sinon la rétro-compatibilité testerait un JSON qui n'existe pas.
+            attachement = meta.get("attachement")
+            if isinstance(attachement, dict):
+                attachement.pop("candidats", None)
     cas.append(("v1", v1))
     return cas
 
@@ -75,7 +86,40 @@ def _valider_minimal(d: dict, version: int) -> list[str]:
             if k not in e:
                 erreurs.append(f"étiquette sans {k} : {e!r}")
                 break
+        meta = e.get("meta") or {}
+        role = meta.get("role")
+        if role and role not in ROLES_VOCABULAIRES:
+            erreurs.append(f"rôle hors vocabulaire : {role!r}")
+        _valider_attachement_minimal(meta.get("attachement"), erreurs, e.get("valeur", ""))
+        for alternative in meta.get("alternative", []) or []:
+            role = (alternative or {}).get("role")
+            if role and role not in ROLES_VOCABULAIRES:
+                erreurs.append(f"rôle d'alternative hors vocabulaire : {role!r}")
+            _valider_attachement_minimal((alternative or {}).get("attachement"), erreurs,
+                                         e.get("valeur", ""))
     return erreurs
+
+
+def _valider_attachement_minimal(attachement: dict | None, erreurs: list[str],
+                                 etiquette: str) -> None:
+    """Le repli sans `fastjsonschema` : le champ v2 des candidats reste typé."""
+    if not isinstance(attachement, dict):
+        return
+    candidats = attachement.get("candidats")
+    if candidats is None:
+        return
+    if not isinstance(candidats, list):
+        erreurs.append(f"candidats non listés ({etiquette})")
+        return
+    for candidat in candidats:
+        if not isinstance(candidat, dict):
+            erreurs.append(f"candidat non objet ({etiquette})")
+            continue
+        span = candidat.get("span")
+        if (not isinstance(span, dict) or "debut" not in span or "fin" not in span
+                or not isinstance(candidat.get("cible"), str)
+                or candidat.get("source") not in ("heuristique", "neuronal", "humain")):
+            erreurs.append(f"candidat incomplet ({etiquette})")
 
 
 def _gold(n: int) -> list[tuple[str, dict]]:
@@ -102,6 +146,29 @@ def _valider(annotation: dict, version: int, valideurs: dict[int, object]) -> li
 def _controle_negatif(annotation_v1: dict, valideurs: dict[int, object]) -> bool:
     """Le schéma v2 doit refuser une annotation v1 (et le schéma v1 doit l'accepter)."""
     return bool(_valider(annotation_v1, 2, valideurs))
+
+
+def _controle_negatif_role(annotation: dict, valideurs: dict[int, object]) -> bool:
+    """Un rôle hors vocabulaire (`prédicat` accentué, l'ancienne forme) est refusé par v2."""
+    mutation = copy.deepcopy(annotation)
+    for etiquette in mutation.get("etiquettes", []):
+        meta = etiquette.get("meta")
+        if isinstance(meta, dict) and meta.get("role"):
+            meta["role"] = "prédicat"
+            return bool(_valider(mutation, 2, valideurs))
+    return False
+
+
+def _controle_negatif_candidats(annotation: dict, valideurs: dict[int, object]) -> bool:
+    """Un candidat qui redevient une chaîne est refusé par v2 (le champ est typé)."""
+    mutation = copy.deepcopy(annotation)
+    for etiquette in mutation.get("etiquettes", []):
+        attachement = ((etiquette.get("meta") or {}).get("attachement") or {})
+        candidats = attachement.get("candidats")
+        if candidats:
+            candidats[0] = "chaîne d'affichage"
+            return bool(_valider(mutation, 2, valideurs))
+    return False
 
 
 def main() -> int:
@@ -139,14 +206,19 @@ def main() -> int:
         resultats.append({"cas": nom, "version": version, "ok": not erreurs,
                           "erreurs": erreurs})
     annotation_v1 = next(a for _, a in cas if a.get("version") == 1)
+    annotation_v2 = next(a for _, a in cas if a.get("version") == 2)
     retro_ok = not _valider(annotation_v1, 1, valideurs)
     negatif_ok = _controle_negatif(annotation_v1, valideurs)
+    role_negatif_ok = _controle_negatif_role(annotation_v2, valideurs)
+    candidats_negatif_ok = _controle_negatif_candidats(annotation_v2, valideurs)
     if args.json:
         print(json.dumps({
             "schemas": {str(v): str(p) for v, p in SCHEMAS.items()},
             "versions_lues": sorted(schemas),
             "validateur": bool(valideurs),
             "retrocompatibilite": {"v1_lue": retro_ok, "v2_refuse_v1": negatif_ok},
+            "controles_negatifs": {"role_hors_vocabulaire": role_negatif_ok,
+                                   "candidat_chaine": candidats_negatif_ok},
             "cas": resultats,
         }, ensure_ascii=False, indent=1))
     else:
@@ -155,10 +227,13 @@ def main() -> int:
                   + (f" — {r['erreurs'][0]}" if r["erreurs"] else ""))
         print(f"  {'✅' if retro_ok else '❌'} rétro-compatibilité : annotation v1 lue par le schéma v1")
         print(f"  {'✅' if negatif_ok else '❌'} contrôle négatif : le schéma v2 refuse une annotation v1")
+        print(f"  {'✅' if role_negatif_ok else '❌'} contrôle négatif : le schéma v2 refuse un rôle hors vocabulaire")
+        print(f"  {'✅' if candidats_negatif_ok else '❌'} contrôle négatif : le schéma v2 refuse un candidat chaîne")
         print(f"  {'✅ validateur JSON Schema' if valideurs else '⚠️ validation minimale (fastjsonschema absent)'}"
               f" · {len(cas)} cas")
 
-    return 0 if (all(r["ok"] for r in resultats) and retro_ok and negatif_ok) else 1
+    return 0 if (all(r["ok"] for r in resultats) and retro_ok and negatif_ok
+                 and role_negatif_ok and candidats_negatif_ok) else 1
 
 
 if __name__ == "__main__":

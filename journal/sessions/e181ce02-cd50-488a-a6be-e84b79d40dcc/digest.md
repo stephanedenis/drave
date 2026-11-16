@@ -66044,3 +66044,272 @@ HEAD c9067a39
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-15, 15 h 05 HNE (clôture : le plan et le protocole or-roles com … [584 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ create mode 100644 tools/protocole_or_roles.py
+71fdf72c CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ;
+   c9067a39..71fdf72c  s/v7 -> s/v7
+   c9067a39..71fdf72c  master -> master
+dim 15 nov 2026 15:07:58 EST
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":3,"objective":"Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"active","roundsStarted":7,"maxGoalRounds":400},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-528eabc2-254d-4a2a-91fc-c931edc44638", "revision": 3}`
+
+> **Objectif** (complete) : Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.
+
+
+  ```
+{"goal":{"id":"goal-528eabc2-254d-4a2a-91fc-c931edc44638","revision":4,"objective":"Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié.","phase":"complete","roundsStarted":7,"maxGoalRounds":400},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Autonomie du 2026-11-15 01 h 30 → 09 h 00 : avancer les travaux du chantier dans l'ordre décidé (6A produit → C coordination → B Panini) — la base honnête (évaluer le gold réel 432, le publier à côté du 612), les deux défauts du tagger (PONCT perdu, 2 appels par phrase), puis les suites de coordination (S/A/N2/R en lecture seule) et le protocole Panini à date contrôlée ; l'agent principal tient seul le dossier pilotage, ne touche pas S/D/N2, et chaque vague produit un résultat mesuré, une fiche/JSON, la mise à jour de l'état et un commit vérifié."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif clôturé — voici le bilan final de la nuit et de la journée
+
+## Le résultat
+
+L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la base honnête, les deux défauts du tagger, les suites de coordination et le protocole Panini ont été livrés, puis la **semaine 2** entière a été exécutée dans la journée.
+
+## Ce qui a été fait
+
+**La nuit (01 h 30 → 09 h)** — les six décisions exécutées :
+- **1A** : le tagger en option (`--tagger`) — POS **95,75 %** sur 612, **95,00 %** sur le réel 452 ; **1 appel**/phrase, `PONCT` restitué, ~0,02 $.
+- **La base honnête** : `evaluer --reel` — **452 phrases réelles** (POS 88,91 %, F1 79,06 %, attachement 99,46 %), publiée à côté du global.
+- **2A** `g017` inatteignable, **3B** les 11 verdicts S committés (`389b99f`), **4A** la note Panini écrite, **5A** A6.2 repoussé.
+- **C puis B** : N2 (`--rope --canal-dir`), S (la page `/`), R (le gold 452), Panini (le protocole, **les atomes : négatif**, le CIC **42/42**).
+- **D puis E** : les exemples, la restitution v2 (négatif), la FAQ (10/10), les cas d'erreur.
+
+**La journée (08 h 15 → 15 h)** — la **semaine 2 en un jour** :
+- **W1** le gold réel 452 nommé (split 402/H50) ; **W2** le tagger 402 **+4,45**, H50 **+17,65** ; **W3** la matrice du défaut (hors ligne, code 0) ; **W4** le manifeste Panini (26 signatures) ; **W5** les 5 rôles de GP séparés (18/18) ; **W6** la clôture + le tag **`semaine-2-2026-11-20`**.
+- **X1** la page `/` mesurée (369/0 vs 359/99) ; **X2** l'or de rôles (protocole + schéma) ; **X3** le tagger en lot (1 000 items, 0,022 $) ; **Y1** le mode `auto` (prototype, code 0 partout).
+
+## Comment c'est vérifié
+
+**183/183** d'autotest, **porte produit verte**, toutes les portes de documentation vertes ; `master` = `s/v7` **poussés** (0 divergence) ; les tags `chantier-2026-11-14`, `semaine-2026-11-14`, `semaine-2-2026-11-20`. `HEAD 71fdf72c`.
+
+**Les artefacts** : [`rapport-bilan-nuit.md`](reports/rapport-bilan-nuit.md), [`rapport-bilan-semaine.md`](reports/rapport-bilan-semaine.md), [`rapport-bilan-jour-1115.md`](reports/rapport-bilan-jour-1115.md), [`rapport-semaine-2.md`](reports/rapport-semaine-2.md), [`note-panini-334.md`](reports/note-panini-334.md), [`semaine-2.md`](docs/pilotage/semaine-2.md).
+
+## À revoir, et ce qui vous revient
+
+1. **La décision du tagger `auto`** : la mesure recommande **défaut hors ligne, `--tagger` opt-in** ; le mode `auto` est livré mais **non activé** — c'est votre décision.
+2. **Envoyer la note et le manifeste à Panini** — je ne peux pas poster ; la balle est chez eux pour les **26 signatures**.
+3. **S** : les 10 GP/SUB du gold 452, la migration de la page `/`, l'or de rôles (le protocole X2 est prêt).
+4. **Un point que je n'ai pas tranché** : le rejeu Panini (**27/60 paires**, sans p-value) n'est **pas un test** — la fiche le dit, ne le lisez pas comme une confirmation.
+
+Le système est prêt : la file de 51 tâches, le superviseur, les bilans et l'état sont à jour.
+
+
+## Tour 201
+
+### 👤 Utilisateur
+
+fais-moi un résumé du reste à faire pour que ce soit un exploitable et continue jusqu'à demain 8h00
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls pyproject.toml setup.py setup.cfg requirements*.txt Makefile 2>/dev/null; ls tools/drave.py tools/produit.py 2>/dev/null; grep -n \"pip install\\|python3 -m pip\\|console_scripts\\|\\[project\\]\" docs/produit/README.md pypr … [153 caractères tronqués]`
+
+  ```
+dim 15 nov 2026 21:35:45 EST
+tools/drave.py
+docs/produit/README.md:726:| **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dé
+docs/produit/README.md:843:`pip install`, pas de commande `drave` dans le `PATH`, pas d'empaquetage. Le CLI tourne même
+drave 0.1.0
+  ```
+
+- **create_goal** `{"max_goal_rounds": 300, "objective": "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (te … [286 caractères tronqués]`
+
+> **Objectif** (create) : Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ; puis les bilans de la nuit. Chaque vague : un résultat mesuré, un contrôle négatif, une fiche/JSON, la mise à jour de l'état et un commit vérifié ; ne pas toucher S/D/N2.
+
+
+  ```
+{"goal":{"id":"goal-0c6e8fa8-ec29-46de-bcd2-2745e28bf268","revision":1,"objective":"Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ; puis les bilans de la nuit. Chaque vague : un résultat mesuré, un contrôle négatif, une fiche/JSON, la mise à jour de l'état et un commit vérifié ; ne pas toucher S/D/N2.","phase":"active","roundsStarted":0,"maxGoalRounds":300},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '720,735p;838,850p' docs/produit/README.md | cut -c1-150; ls tools/tests/ | head -8", "description": "Lire les limites documentées"}`
+
+  ```
+| **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
+| **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
+| **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
+| **`candidats` structurés** | ce sont des **chaînes d'affichage** (« « qui dort » → voisine »), pas des objets `{span, cible}` ; un programme doit le
+| **`role` normalisé** | les valeurs mélangent `predicat`/`prédicat` et `qualite`/`qualité` ; fragile pour un filtre |
+| **`--strict`** | `evaluer` ne mesure pas la cascade **locale** et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`
+| **l'empaquetage** | pas de `pip install`, pas de commande `drave` dans le `PATH` ; tout part de la racine du dépôt |
+| **le neuronal local** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; le tagger **API** est en option, le 7B local n'est 
+| **la restitution sémantique** | `restituer` est un **codec de surface** (graphème) ; il ne restitue pas le sens, ne traduit pas, ne génère pas |
+
+**Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
+déterministe, l
+… [1150 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [5863 caractères tronqués]`
+
+  ```
+plan : 57 tâches
+phase exploitable
+PID 1028271
+2026-11-15 21:37:27 · ▶ T1 — L'empaquetage — pip install et la commande drave (timeout 3600 s)
+dim 15 nov 2026 21:37:46 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La nuit « exploitable » est lancée (T1 : l'empaquetage). Voici le résumé du reste à faire
+
+## Où en est le produit
+
+**Ce qui marche déjà** : `analyser` (POS 86,25 %, F1 0,7902, attachement 238/239), `evaluer` (612 / gelé 602 / **réel 452**), `restituer`, le schéma v2 (v1 lue), le refus (code 3), le JSON déterministe, le rejeu par empreinte, le tagger en option (95,75 %, ~0,02 $), 183/183 de portes, la porte produit verte.
+
+## Les 5 trous qui empêchent de l'appeler « exploitable »
+
+| # | le trou | ce que ça coûte à l'utilisateur |
+|---|---|---|
+| **1. L'installation** | pas de `pyproject.toml`, pas de `pip install`, pas de commande `drave` dans le `PATH` | il doit cloner le dépôt et lancer `python3 tools/drave.py` **depuis la racine** |
+| **2. L'API du JSON** | les `candidats` sont des **chaînes d'affichage** (« « qui dort » → voisine ») ; les `role` mélangent `predicat`/`prédicat` | un programme ne peut pas filtrer ni consommer sans re-parser |
+| **3. Le démarrage** | pas de **quickstart** (le § 8.10 existe mais c'est une note, pas un parcours) | 30 min de lecture au lieu de 5 |
+| **4. La performance** | jamais mesurée sur un vrai volume (10 000 mots) | on ne sait pas si c'est utilisable sur un document |
+| **5. La CLI** | pas de `--duree` dans le JSON, pas de **tableau des codes de sortie**, les cas d'erreur (`--fichier` inexistant, un répertoire) non testés | un intégrateur ne sait pas quoi faire des erreurs |
+
+## La nuit (21 h 40 → 8 h) — 6 tâches
+
+| tâche | livrable | son critère |
+|---|---|---|
+| **T1** l'empaquetage | `pyproject.toml`, `pip install -e .` dans un venv, `drave` depuis un autre répertoire | le contrôle négatif : sans install, `drave` échoue proprement |
+| **T2** le contrat | les `candidats` **structurés**, les `role` **normalisés** (un vocabulaire fermé) | un filtre sur `role == "predicat"` trouve les prédicats |
+| **T3** le démarrage | `docs/produit/demarrage.md` en 5 minutes, chaque commande rejouée | un débutant suit sans le dépôt |
+| **T4** la performance | 10 000 mots : temps, débit, mémoire, taille du JSON | le temps croît **linéairement** (pas quadratiquement) |
+| **T5** la CLI | `--duree`, le tableau des codes, les erreurs testées | un test par cas |
+| **T6** le bilan | la synthèse de la nuit | les négatifs dits |
+
+## Ce qui n'est pas dans la nuit (et pourquoi)
+
+- **Le gold réel** (les 10 GP/SUB) et **la page `/`** : c'est le territoire de **S** — je ne peux que préparer les protocoles (c'est fait : X2).
+- **Les 26 signatures Panini** : c'est **leur** travail ; le manifeste est prêt ([`rapport-panini-manifeste.md`](reports/rapport-panini-manifeste.md)), il faut l'envoyer.
+- **La décision du tagger `auto`** : elle est à vous ; le prototype est livré, le défaut reste hors ligne.
+
+Je continue jusqu'à 8 h et je vous rends le bilan au matin.
+
+
+## Tour 202
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de la CLI (help, codes de sortie, erreurs), la doc d'installation et la FAQ ; puis les bilans de la nuit. Chaque vague : un résultat mesuré, un contrôle négatif, une fiche/JSON, la mise à jour de l'état et un commit vérifié ; ne pas toucher S/D/N2."
+Round: 1/300
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 work/chantier/journal.log; git log --oneline -1 | cut -c1-80; git rev-list --count origin/master..s/v7; ls pyproject.toml 2>/dev/null", "description": "État de T1"}`
+
+  ```
+dim 15 nov 2026 21:38:39 EST
+2026-11-15 14:13:50 · ▶ Y1 — J5 — le mode auto du tagger (prototype) (timeout 3000 s)
+2026-11-15 14:30:15 · ✔ Y1 en 977.1 s (code 0) — ✅ test -f reports/rapport-tagger-auto.md && echo FICHE-OK; ✅ python3 tools/tests/test_tagger_api.py 2>&1 | tail -1
+2026-11-15 21:37:27 · ▶ T1 — L'empaquetage — pip install et la commande drave (timeout 3600 s)
+71fdf72c CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ;
+0
+pyproject.toml
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -3 work/chantier/journal.log; ls pyproject.toml reports/rapport-empaquetage.md 2>/dev/null; git status --porcelain pyproject.toml 2>/dev/null | head -1", "description": "Suivre T1", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5212]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5212", "timeout_ms": 600000, "wait": true}`
+
+  ```
+dim 15 nov 2026 21:53:51 EST
+2026-11-15 21:37:27 · ▶ T1 — L'empaquetage — pip install et la commande drave (timeout 3600 s)
+2026-11-15 21:50:53 · ✔ T1 en 807.0 s (code 0) — ✅ test -f pyproject.toml && echo PYPROJECT-OK; ✅ test -f reports/rapport-empaquetage.md && echo FICHE-OK
+2026-11-15 21:50:54 · ▶ T2 — Le contrat — les candidats structurés et les rôles normalisés (timeout 3600 s)
+pyproject.toml
+reports/rapport-empaquetage.md
+?? pyproject.toml
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -12 reports/rapport-empaquetage.md | cut -c1-180; cat pyproject.toml | head -25", "description": "Lire la fiche et le pyproject"}`
+
+  ```
+# T1 — l'empaquetage : `pip install -e .`, `drave` hors du dépôt, chemin historique intact
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **T1** (exploitable, 1/5) ·
+> **Date** : 2026-11-15 · **Verdict** : ✅ **empaquetage minimal livré**.
+>
+> **Le chiffre.** `pyproject.toml` : nom **drave**, version **0.1.0**, `requires-python >= 3.10`,
+> **0** dépendance d'exécution, script console `drave = tools.drave:main`.
+> `python3 -m pip install -e .` dans **`/tmp/venv-drave`** (Python **3.13.16**, pip **26.2.1**)
+> rend **0** et `Successfully installed drave-0.1.0` ; `drave --version` rend **`drave 0.1.0`**
+> et `drave analyser "Le chat dort."` rend **0** depuis **`/tmp`**. Le **contrôle négatif** —
+> le même nom sans installation — échoue **proprement** : code **127**, `command not found`,
+> **aucune** trace Python. Le chemin historique `python3 tools/drave.py` reste **vert**.
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drave"
+version = "0.1.0"
+description = "Le point d'entrée produit du bloc linguistique de Drave."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+drave = "tools.drave:main"
+
+[tool.setupto
+… [25 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def main\" tools/drave.py | head -2; ls /tmp/venv-drave/bin/drave 2>/dev/null && /tmp/venv-drave/bin/drave --version 2>&1 | head -1; cd /tmp && /tmp/venv-drave/bin/drave analyser \"Le chat dort.\" 2>&1 | head -3", "descript … [57 caractères tronqués]`
+
+  ```
+1226:def main(argv: list[str] | None = None) -> int:
+/tmp/venv-drave/bin/drave
+drave 0.1.0
+drave 0.1.0 — analyse heuristique (CPU, hors ligne)
+langue=fr script=Latn source=heuristique · 20 étiquettes · unités sémantiques=2 (61.5% du texte)
+POS  Le/DET chat/NOUN dort/VERB ./PONCT
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain pyproject.toml reports/rapport-empaquetage.md reports/pensee-empaquetage.json docs/produit/README.md 2>/dev/null | head -4; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p … [1031 caractères tronqués]`
+
+  ```
+M docs/produit/README.md
+?? pyproject.toml
+?? reports/rapport-empaquetage.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+71fdf72c CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HO
+Everything up-to-date
+Everything up-to-date
+dim 15 nov 2026 21:57:12 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; git log --oneline -2 | cut -c1-80; git status --porcelain pyproject.toml | head -1", "description": "Suivre T2", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5216]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5216", "timeout_ms": 800000, "wait": true}`

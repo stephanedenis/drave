@@ -6,6 +6,11 @@
 > **Commit mesuré** : `09e54143` — le code et les deux schémas sont inchangés ; cette fiche
 > mesure le contrat existant et documente la notice produit.
 >
+> **Note du 2026-11-15 (T2).** Depuis cette fiche, le schéma v2 gagne
+> `meta.attachement.candidats` (objets `{span, cible, source}`) et l'énumération `role` ;
+> le test du schéma passe à **9 tests**. Cette fiche reste le **snapshot J11.4** ; le contrat
+> courant est mesuré dans [`rapport-contrat-json.md`](rapport-contrat-json.md).
+>
 > **Ce que cette fiche fixe.** Le schéma v2 est **documenté dans la notice**
 > [`docs/produit/README.md`](../docs/produit/README.md) § 3.3 bis : les **quatre** champs de
 > `meta.partition`, les **dix** champs de `meta.alternative` (sept obligatoires, trois

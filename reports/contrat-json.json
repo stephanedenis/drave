@@ -1,0 +1,301 @@
+{
+ "date": "2026-11-15",
+ "tache": "T2",
+ "ligne": "B13",
+ "objet": "l'API du JSON : candidats d'attachement en objets et rôles normalisés",
+ "outil": "tools/mesurer_contrat_json.py",
+ "corpus": {
+  "nom": "gold vivant (hand + reel + synthétique)",
+  "phrases": 612,
+  "segments": 1883,
+  "roles_non_vides": 1883
+ },
+ "schema": {
+  "v2": "tools/schemas/drave-annotation-v2.json",
+  "v1": "tools/schemas/drave-annotation-v1.json",
+  "champ_ajoute": "meta.attachement.candidats",
+  "forme_candidat": [
+   "span",
+   "cible",
+   "source"
+  ],
+  "forme_span": [
+   "debut",
+   "fin"
+  ],
+  "role_enum": [
+   "predicat",
+   "agent",
+   "objet",
+   "lieu",
+   "temps",
+   "qualite",
+   "possesseur",
+   "destinataire"
+  ],
+  "v1_lue": true
+ },
+ "vocabulaire_roles": {
+  "roles": [
+   "predicat",
+   "agent",
+   "objet",
+   "lieu",
+   "temps",
+   "qualite",
+   "possesseur",
+   "destinataire"
+  ],
+  "table": [
+   {
+    "brut": "agent",
+    "normalise": "agent"
+   },
+   {
+    "brut": "attribut",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "but",
+    "normalise": "destinataire"
+   },
+   {
+    "brut": "cause",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "complement",
+    "normalise": "objet"
+   },
+   {
+    "brut": "complément",
+    "normalise": "objet"
+   },
+   {
+    "brut": "concession",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "consequence",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "conséquence",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "contenu",
+    "normalise": "objet"
+   },
+   {
+    "brut": "destinataire",
+    "normalise": "destinataire"
+   },
+   {
+    "brut": "groupe nominal",
+    "normalise": "objet"
+   },
+   {
+    "brut": "hypothese",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "hypothèse",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "instrument",
+    "normalise": "objet"
+   },
+   {
+    "brut": "lieu",
+    "normalise": "lieu"
+   },
+   {
+    "brut": "maniere",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "manière",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "moyen",
+    "normalise": "objet"
+   },
+   {
+    "brut": "objet",
+    "normalise": "objet"
+   },
+   {
+    "brut": "patient",
+    "normalise": "objet"
+   },
+   {
+    "brut": "possesseur",
+    "normalise": "possesseur"
+   },
+   {
+    "brut": "possession",
+    "normalise": "possesseur"
+   },
+   {
+    "brut": "predicat",
+    "normalise": "predicat"
+   },
+   {
+    "brut": "prédicat",
+    "normalise": "predicat"
+   },
+   {
+    "brut": "qualite",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "qualité",
+    "normalise": "qualite"
+   },
+   {
+    "brut": "source",
+    "normalise": "lieu"
+   },
+   {
+    "brut": "temps",
+    "normalise": "temps"
+   },
+   {
+    "brut": "theme",
+    "normalise": "objet"
+   },
+   {
+    "brut": "thème",
+    "normalise": "objet"
+   }
+  ],
+  "bruts_observes": {
+   "agent": 541,
+   "attribut": 4,
+   "but": 22,
+   "cause": 5,
+   "complement": 1,
+   "complément": 39,
+   "concession": 3,
+   "contenu": 22,
+   "destinataire": 15,
+   "groupe nominal": 267,
+   "hypothese": 2,
+   "lieu": 48,
+   "moyen": 3,
+   "patient": 55,
+   "possession": 9,
+   "predicat": 342,
+   "prédicat": 369,
+   "qualite": 51,
+   "qualité": 55,
+   "temps": 27,
+   "theme": 3
+  },
+  "bruts_distincts": 21,
+  "bruts_hors_table": [],
+  "normalises_observes": {
+   "agent": 541,
+   "destinataire": 37,
+   "lieu": 48,
+   "objet": 390,
+   "possesseur": 9,
+   "predicat": 711,
+   "qualite": 120,
+   "temps": 27
+  },
+  "normalises_distincts": 8,
+  "roles_hors_vocabulaire": [],
+  "types_par_role": {
+   "agent": {
+    "GN": 541
+   },
+   "destinataire": {
+    "GP": 37
+   },
+   "lieu": {
+    "GP": 48
+   },
+   "objet": {
+    "GN": 322,
+    "GP": 11,
+    "SUB": 57
+   },
+   "possesseur": {
+    "GP": 9
+   },
+   "predicat": {
+    "GV": 711
+   },
+   "qualite": {
+    "GP": 4,
+    "REL": 106,
+    "SUB": 10
+   },
+   "temps": {
+    "GP": 21,
+    "SUB": 6
+   }
+  }
+ },
+ "candidats": {
+  "attachements": 1295,
+  "attachements_avec_objets": 1295,
+  "attachements_sans_objet": 0,
+  "objets": 2139,
+  "objets_alternatives": 1062,
+  "taille_moyenne": 1.6517,
+  "cible_choisie_presente": 1295,
+  "spans_faux": 0
+ },
+ "controles_negatifs": {
+  "filtre_predicat": {
+   "role": "predicat",
+   "segments": 711,
+   "gv": 711,
+   "verdict": "trouve"
+  },
+  "filtre_predicat_accentue": {
+   "role": "prédicat",
+   "segments": 0,
+   "verdict": "vide"
+  },
+  "role_inconnu_leve": true,
+  "role_inconnu_message": "rôle hors vocabulaire : 'role_invente' (attendu : predicat, agent, objet, lieu, temps, qualite, possesseur, destinataire)",
+  "candidat_chaine_refuse": true,
+  "candidat_sans_span_refuse": true,
+  "v2_refuse_v1": true,
+  "v1_lue": true,
+  "role_schema_refuse": true,
+  "candidat_chaine_schema_refuse": true
+ },
+ "validation": {
+  "v2_annotations": 612,
+  "v2_echecs": 0,
+  "v1_annotations": 612,
+  "v1_echecs": 0,
+  "v2_refuse_v1": 612
+ },
+ "tests": {
+  "test_produit": {
+   "code": 0,
+   "tests": 24,
+   "echecs": 0
+  },
+  "test_schema_produit": {
+   "code": 0,
+   "tests": 9,
+   "echecs": 0
+  }
+ },
+ "limites": [
+  "la normalisation n'est pas une annotation plus fine : objet regroupe patient, complément, thème, contenu et groupe nominal sans fonction ; qualite regroupe attribut, manière, cause, concession et hypothèse",
+  "le span d'un candidat est la première occurrence de la cible dans le texte ; pour une surface répétée, c'est une position, pas une résolution d'anaphore",
+  "les candidats restent produits par l'heuristique : source vaut heuristique, même quand la cible vient du générateur S",
+  "le gold 612 n'exerce pas les rôles instrument, manière, source, conséquence ; ils sont dans la table mais non observés sur ce corpus",
+  "v1 est lue par son schéma, mais les annotations v1 sont dérivées des v2 : ce n'est pas un corpus v1 indépendant"
+ ]
+}

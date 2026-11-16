@@ -26,6 +26,7 @@ import argparse
 import copy
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -51,6 +52,9 @@ def _downgrade_v1(annotation: dict) -> dict:
         if isinstance(meta, dict):
             meta.pop("partition", None)
             meta.pop("alternative", None)
+            attachement = meta.get("attachement")
+            if isinstance(attachement, dict):
+                attachement.pop("candidats", None)
     return d
 
 
@@ -119,6 +123,8 @@ def mesurer() -> dict:
                 "meta.alternative": ["type", "debut", "fin", "source", "union", "relation", "rang",
                                      "retire (optionnel)", "attachement (optionnel)",
                                      "role (optionnel)"],
+                "meta.attachement.candidats": ["span", "cible", "source"],
+                "meta.role": "vocabulaire fermé (8 rôles, sans accent)",
             },
             "retrocompatibilite": {
                 "v1_inchangee": True,
@@ -165,7 +171,7 @@ def mesurer() -> dict:
         "tests_schema": {
             "commande": "python3 tools/tests/test_schema_produit.py",
             "code_sortie": tests.returncode,
-            "tests": 8,
+            "tests": int((re.search(r"Ran (\d+) tests", tests.stderr) or [0, 0])[1]),
             "echecs": 0 if tests.returncode == 0 else 1,
         },
         "limites": [

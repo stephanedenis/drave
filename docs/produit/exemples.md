@@ -48,12 +48,16 @@
 - `--reel` : ce n'est pas une annotation, c'est une **évaluation**. Le JSON porte
   `gold.nom: "réel (hand + reel, sans synthétique)"`, `gold.phrases: 452`,
   `gold.cibles_attachement: 184` et `reel: null` (la base mesurée **est** déjà la base réelle).
-- `meta.attachement` : `{segment, cible}` ; `cible` est une **chaîne**, pas un span.
+- `meta.attachement` : `{segment, cible, candidats}` ; `cible` est une **chaîne**, et
+  `candidats` (v2) est une liste d'objets `{span, cible, source}` — `span` donne la position
+  exacte de la cible dans `texte`. Un candidat dont la cible n'est pas retrouvée est écarté.
 - `meta.partition` : `{groupe, rang, membres, vue}` — présent sur un syntagme d'un groupe de
   chevauchement (v2) ; `rang: 1` est la vue préférée, pas une suppression.
 - `meta.alternative` : la liste des autres segments du groupe (`type`, `debut`, `fin`, `source`,
   `union`, `relation`, `rang`, `role`, `attachement`, `retire` en vue filtrée) — v2.
-- `candidats` : des **chaînes d'affichage** (parfois « « qui dort » → voisine »), pas des objets.
+- `candidats` : le champ **historique** de l'étiquette, des **chaînes d'affichage** (parfois
+  « « qui dort » → voisine ») ; c'est la sortie lisible et le contrat v1. Le JSON v2 publie
+  les mêmes candidats en objets dans `meta.attachement.candidats` (voir la notice § 3.2).
 - `null` : pas d'attachement publié pour ce syntagme.
 - `union: true` : seconde lecture qui chevauche un syntagme plus court. Dans la sortie lisible du
   CLI, elle apparaît comme un **doublon REL** ; pour une lecture unique, filtrer les segments qui

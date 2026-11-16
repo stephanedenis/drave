@@ -49,8 +49,10 @@ from typing import Protocol, Sequence
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 try:  # paquet : `tools.bloc_linguistique`
     from . import roles_gp as _roles_gp
+    from .roles_vocabulaire import normaliser_role as _normaliser_role
 except ImportError:  # script : `python3 tools/bloc_linguistique.py`
     import roles_gp as _roles_gp
+    from roles_vocabulaire import normaliser_role as _normaliser_role
 NIVEAUX = ("graphème", "morphème", "mot", "pos", "syntagme", "phrase", "discours",
            "pragmatique", "document")
 SOURCES = ("heuristique", "neuronal", "humain")
@@ -88,8 +90,29 @@ class Etiquette:
             "debut": self.debut, "fin": self.fin, "source": self.source,
             "confiance": round(float(self.confiance), 4),
             "candidats": list(self.candidats), "langue": self.langue,
-            "script": self.script, "meta": dict(self.meta),
+            "script": self.script, "meta": _meta_json(self.meta),
         }
+
+
+def normaliser_role(role: str, strict: bool = True) -> str:
+    """Le rôle canonique (voir `tools/roles_vocabulaire.py`)."""
+    return _normaliser_role(role, strict=strict)
+
+
+def _meta_json(meta: dict) -> dict:
+    """`meta` sérialisable : les rôles sont **normalisés** dans le vocabulaire fermé.
+
+    Le rôle brut reste dans l'objet Python (`e.meta["role"]`) : les règles internes et
+    l'autotest continuent de lire `prédicat`, `patient`, etc. Seul le JSON publié porte
+    la forme canonique. Les alternatives de `meta.alternative` suivent la même règle.
+    """
+    sortie = copy.deepcopy(meta)
+    if "role" in sortie:
+        sortie["role"] = normaliser_role(sortie.get("role", ""))
+    for alternative in sortie.get("alternative", []) or []:
+        if isinstance(alternative, dict) and "role" in alternative:
+            alternative["role"] = normaliser_role(alternative.get("role", ""))
+    return sortie
 
 
 SCHEMA_ANNOTATION = "drave.annotation"
@@ -1063,6 +1086,73 @@ class Heuristique:
         return Heuristique._tete_nom(texte, gn["debut"], gn["fin"])
 
     @staticmethod
+    def _cible_candidat(chaine: str) -> str:
+        """La cible d'une chaîne d'affichage de candidat, ou `""`.
+
+        Les chaînes du produit ont deux formes : `« que j'ai lu » → Le livre` (la cible
+        est après la flèche) et une cible nue (`dort`, `livre`). Les libellés de type
+        (`GN`, `GV`, …) et `structure la plus proche` ne sont **pas** des cibles.
+        """
+        c = (chaine or "").strip()
+        if not c:
+            return ""
+        if "→" in c:
+            c = c.split("→", 1)[1].strip()
+        elif "«" in c:
+            return ""
+        if c in {"GN", "GV", "GP", "REL", "SUB", "structure la plus proche"}:
+            return ""
+        return c
+
+    @staticmethod
+    def _candidats_attachement(texte: str, cible: str | None,
+                               candidats: Sequence[str] | None,
+                               source: str) -> list[dict]:
+        """Les candidats d'attachement en **objets** `{span, cible, source}`.
+
+        La cible choisie est incluse (même quand la liste d'affichage ne la contient
+        pas, cas d'un GV) ; les chaînes d'affichage sont ensuite converties. Le span est
+        la **première occurrence** de la cible dans le texte : pour une surface répétée,
+        c'est un candidat de position, pas une résolution d'anaphore. Une cible absente
+        du texte est écartée (elle ne peut pas porter de span).
+        """
+        objets: list[dict] = []
+        vus: set[tuple[int, int, str]] = set()
+
+        def ajouter(valeur: str | None) -> None:
+            v = (valeur or "").strip()
+            if not v:
+                return
+            debut = texte.find(v)
+            if debut < 0:  # repli insensible à la casse, sans décaler les offsets
+                trouve = re.search(re.escape(v), texte, re.IGNORECASE)
+                debut = trouve.start() if trouve else -1
+            if debut < 0:
+                return
+            fin = debut + len(v)
+            cle = (debut, fin, v)
+            if cle in vus:
+                return
+            vus.add(cle)
+            objets.append({"span": {"debut": debut, "fin": fin},
+                           "cible": v, "source": source})
+
+        ajouter(cible)
+        for chaine in candidats or []:
+            ajouter(Heuristique._cible_candidat(chaine))
+        return objets
+
+    @staticmethod
+    def _attachement(texte: str, segment: dict, cible: str | None,
+                     candidats: Sequence[str] | None, source: str) -> dict:
+        """Le bloc `meta.attachement` : `segment`, `cible` et les candidats structurés."""
+        att = {"segment": segment.get("texte", ""), "cible": cible or ""}
+        objets = Heuristique._candidats_attachement(texte, cible, candidats, source)
+        if objets:
+            att["candidats"] = objets
+        return att
+
+    @staticmethod
     def _candidats_precedent(texte: str, segment: dict, precedent: dict | None) -> list[str]:
         """Les candidats que le **précédent** impose : l'antécédent d'une REL, le verbe d'une SUB."""
         if not precedent:
@@ -1714,9 +1804,6 @@ class Heuristique:
                                  or self._cible_proche(texte, s, gvs, verbes, cache_gv))
                     cible = self._cible_hors_span(texte, s, gvs, cible)
                     cible = self._repli_verbe_propre(texte, s, cible)
-                    meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
-                    if cible:
-                        meta["attachement"] = {"segment": s.get("texte", ""), "cible": cible}
                     candidats = list(noms) + self._verbes_proches(
                         texte, s, gvs, verbes=verbes, cache=cache_gv)
                     # la **tête** de chaque candidat S (« « … » → Le livre » → livre ; « … → Les
@@ -1726,6 +1813,10 @@ class Heuristique:
                             tete = self._tete_texte(nom.split("→", 1)[1])
                             if tete and tete not in candidats:
                                 candidats.append(tete)
+                    meta = {"role": s.get("role", ""), "niveau": s.get("niveau", 0)}
+                    if cible:
+                        meta["attachement"] = self._attachement(
+                            texte, s, cible, candidats, self.nom)
                     etiquettes.append(Etiquette("syntagme", s.get("type", "GN"),
                                                 s.get("texte", ""), s.get("debut", 0),
                                                 s.get("fin", 0), self.nom,
@@ -1743,14 +1834,16 @@ class Heuristique:
                          or self._cible_proche(texte, s, gvs_s, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_s, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
+                candidats = ([s["type"]]
+                             + self._candidats_precedent(texte, s, prec)
+                             + self._verbes_proches(
+                                 texte, s, gvs_s, verbes=verbes, cache=cache_gv))
                 if cible:
-                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                    meta["attachement"] = self._attachement(
+                        texte, s, cible, candidats, self.nom)
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.35,
-                                            candidats=([s["type"]]
-                                                       + self._candidats_precedent(texte, s, prec)
-                                                       + self._verbes_proches(
-                                                           texte, s, gvs_s, verbes=verbes, cache=cache_gv)),
+                                            candidats=candidats,
                                             langue=lg, script=script, meta=meta))
                 prec = s
         # 5 bis. union : les segments du chunker que le générateur S ne fournit pas
@@ -1773,14 +1866,16 @@ class Heuristique:
                          or self._cible_proche(texte, s, gvs_u, verbes, cache_gv))
                 cible = self._cible_hors_span(texte, s, gvs_u, cible)
                 cible = self._repli_verbe_propre(texte, s, cible)
+                candidats = ([s["type"]]
+                             + self._candidats_precedent(texte, s, prec)
+                             + self._verbes_proches(
+                                 texte, s, gvs_u, verbes=verbes, cache=cache_gv))
                 if cible:
-                    meta["attachement"] = {"segment": s["texte"], "cible": cible}
+                    meta["attachement"] = self._attachement(
+                        texte, s, cible, candidats, self.nom)
                 etiquettes.append(Etiquette("syntagme", s["type"], s["texte"], s["debut"],
                                             s["fin"], self.nom, 0.30,
-                                            candidats=([s["type"]]
-                                                       + self._candidats_precedent(texte, s, prec)
-                                                       + self._verbes_proches(
-                                                           texte, s, gvs_u, verbes=verbes, cache=cache_gv)),
+                                            candidats=candidats,
                                             langue=lg, script=script, meta=meta))
                 prec = s
     
@@ -2515,6 +2610,8 @@ def _expliciter_partition(etiquettes: list[Etiquette], filtrer: str = "") -> Non
                 if att:
                     vue["attachement"] = {"segment": att.get("segment", ""),
                                           "cible": att.get("cible", "")}
+                    if att.get("candidats"):
+                        vue["attachement"]["candidats"] = copy.deepcopy(att["candidats"])
                 role = (autre.meta or {}).get("role")
                 if role:
                     vue["role"] = role
