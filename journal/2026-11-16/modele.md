@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 11:52 | `60c40aa6` | NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMPOSITION | `en-cours.md`, `README.md`, `distribue.md` (+14) |
 | 11:56 | `d251babf` | NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS) | `en-cours.md`, `README.md`, `distribue.md` (+14) |
 | 14:53 | `ac19793a` | NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N'EST PAS REPRODUCTIBLE) ; C'EST LE PREMIER PAS DU PALIER 1 | `en-cours.md`, `natif-plan.md`, `README.md` (+5) |
+| 15:00 | `86fde794` | ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 
 ## Chiffres du jour
 
@@ -27,7 +28,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 382.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 382.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

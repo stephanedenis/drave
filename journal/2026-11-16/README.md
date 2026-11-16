@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**31 commits** · **1 session(s)** · **7 thème(s)**
+**32 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,7 +15,7 @@
 | docs | 7 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
-| modele | 10 | [modele.md](modele.md) |
+| modele | 11 | [modele.md](modele.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 382.3 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 382.4 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -60,6 +60,7 @@
 | 12:38 | `0397f980` | NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE VAL ACTUEL, 18,55 SUR LE GOLD) ; LE CORPUS N'EST PAS ÉPINGLÉ — LE PALIER 1 COMMENCE PAR LÀ |
 | 14:49 | `ce9a16ff` | PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDICE, MELANGE) ; bloc-code TRANSIENTE (VERTE EN ISOLATION), LE MANDAT RAFRAÎCHI |
 | 14:53 | `ac19793a` | NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N'EST PAS REPRODUCTIBLE) ; C'EST LE PREMIER PAS DU PALIER 1 |
+| 15:00 | `86fde794` | ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -1,0 +1,60 @@
+{
+ "natif": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 1.9,
+   "gn_moyen": 1.6,
+   "mots_moyen": 12.8,
+   "ciment": 0.1369,
+   "attaches": 0.7217,
+   "sans_verbe": 0.0
+  },
+  "top40_0.8": {
+   "textes": 20,
+   "gv_moyen": 3.05,
+   "gn_moyen": 1.8,
+   "mots_moyen": 11.8,
+   "ciment": 0.2278,
+   "attaches": 0.6468,
+   "sans_verbe": 0.0
+  },
+  "top20_0.5": {
+   "textes": 20,
+   "gv_moyen": 1.8,
+   "gn_moyen": 1.7,
+   "mots_moyen": 11.3,
+   "ciment": 0.1815,
+   "attaches": 0.7342,
+   "sans_verbe": 0.0
+  }
+ },
+ "aleatoire": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 2.65,
+   "gn_moyen": 2.65,
+   "mots_moyen": 25.4,
+   "ciment": 0.2781,
+   "attaches": 0.7533,
+   "sans_verbe": 0.0
+  },
+  "top40_0.8": {
+   "textes": 20,
+   "gv_moyen": 5.0,
+   "gn_moyen": 1.8,
+   "mots_moyen": 23.4,
+   "ciment": 0.3269,
+   "attaches": 0.6116,
+   "sans_verbe": 0.05
+  },
+  "top20_0.5": {
+   "textes": 20,
+   "gv_moyen": 2.95,
+   "gn_moyen": 2.1,
+   "mots_moyen": 23.8,
+   "ciment": 0.2577,
+   "attaches": 0.7513,
+   "sans_verbe": 0.0
+  }
+ }
+}

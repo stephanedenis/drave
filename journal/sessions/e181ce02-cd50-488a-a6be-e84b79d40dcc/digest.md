@@ -69697,3 +69697,25 @@ ligne N à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 15 h 05 HNE (la ligne N à jour, T0 vert)**\\n\", t, count=1 … [495 caractères tronqués]`
+
+  ```
+[s/v7 86fde794] ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS
+ 13 files changed, 81 insertions(+), 24 deletions(-)
+86fde794 ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUM
+   ac19793a..86fde794  s/v7 -> s/v7
+   ac19793a..86fde794  master -> master
+lun 16 nov 2026 15:03:19 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 python3 tools/banc_grammaticalite.py --entree reports/banc-generation-11m.json --controle reports/banc-generation-21m.json --sortie /tmp/gram-11-21.json 2>&1 | tail -8", "description": "La grammaticalité du 11M et 21M", " … [19 caractères tronqués]`
+
+  ```
+natif     greedy     gv=1.90 gn=1.60 mots=12.8 ciment=0.137 attaches=0.722 sans_verbe=0.00
+natif     top40_0.8  gv=3.05 gn=1.80 mots=11.8 ciment=0.228 attaches=0.647 sans_verbe=0.00
+natif     top20_0.5  gv=1.80 gn=1.70 mots=11.3 ciment=0.181 attaches=0.734 sans_verbe=0.00
+aleatoire greedy     gv=2.65 gn=2.65 mots=25.4 ciment=0.278 attaches=0.753 sans_verbe=0.00
+aleatoire top40_0.8  gv=5.00 gn=1.80 mots=23.4 ciment=0.327 attaches=0.612 sans_verbe=0.05
+aleatoire top20_0.5  gv=2.95 gn=2.10 mots=23.8 ciment=0.258 attaches=0.751 sans_verbe=0.00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/gram-11-21.json reports/banc-grammaticalite-echelle.json && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-banc-generation.md'); t=p.read_text()\nt=t.replace(\"\"\"**La conséquence pour le plan**\"\"\",\"\" … [1852 caractères tronqués]`

@@ -84,6 +84,12 @@ taille (1 → 6 → 15) — le grand modèle **reproduit les boucles** du corpus
 phrase pas. (3) Les échantillons le montrent : le 34 M bascule des mots aux **nombres** (20, 201,
 2020) — la signature des dates de la Wikipédia.
 
+**La syntaxe à l'échelle** (notre analyseur, le greedy) : les **GV** moyens passent de **1,90**
+(11 M) à **2,65** (21 M) et **6,90** (34 M) ; le **ciment** (les classes fermées) de **0,137** à
+**0,278** et **0,335**. L'échelle aide aussi la structure — mais le ciment reste **sous** le
+niveau du hasard (0,79), et la **répétition** monte. Le détail :
+[`banc-grammaticalite-echelle.json`](banc-grammaticalite-echelle.json).
+
 **La conséquence pour le plan** : un 100–150 M aura **de meilleurs mots** et **autant de boucles**
 si rien ne change ; le palier 1 doit donc traiter la **répétition** (le contrôle, la
 régularisation, les données dédupliquées), pas seulement la taille.
