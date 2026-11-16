@@ -69643,3 +69643,57 @@ lun 16 nov 2026 14:52:36 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/natif-plan.md'); t=p.read_text()\nt=t.replace(\"\"\"1. **La donnée d'abord** (le vrai goulot) : 3–6 Go de français **propre** (le wiki actuel fait\n   1 Go ; il faut le  … [1727 caractères tronqués]`
+
+  ```
+plan mis à jour
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[s/v7 ac19793a] NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N'EST PAS REPRODUCTIBLE) ; C'EST LE PREMIER PAS DU PALIER 1
+ 8 files changed, 35 insertions(+), 14 deletions(-)
+ac19793a NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N
+   ce9a16ff..ac19793a  s/v7 -> s/v7
+   ce9a16ff..ac19793a  master -> master
+lun 16 nov 2026 14:55:56 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours.py\" \"python3 tools/verifie_journal.py\" \"python3 tools/index_reports.py --ve … [340 caractères tronqués]`
+
+  ```
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/verifie_journal.py       EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+python3 tools/sessions.py --check      EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+lun 16 nov 2026 14:59:35 EST
+0
+18
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n \"$(grep -n '| \\*\\*N — le natif\\*\\*' docs/pilotage/en-cours.md | cut -d: -f1)p\" docs/pilotage/en-cours.md | cut -c1-400", "description": "Voir la ligne N de l'état"}`
+
+  ```
+| **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"| **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordinati … [857 caractères tronqués]`
+
+  ```
+ligne N à jour
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · T0 : 4023 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=t.replace(\"**N4 : le diagnostic tranché** — le banc (0,87 de mots, répétition 15), l'échelle (le vocabulaire, pas la composition), **l … [1163 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 15 h 05 HNE (la ligne N à jour, T0 vert)**\\n\", t, count=1 … [495 caractères tronqués]`
