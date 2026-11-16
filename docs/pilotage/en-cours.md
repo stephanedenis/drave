@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 11 h 05 HNE (la synthèse du natif : l'échelle, la donnée, l'alignement, le runtime)**
+**Mis à jour : 2026-11-16, 11 h 10 HNE (README des fiches dans le budget)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

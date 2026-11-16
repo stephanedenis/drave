@@ -68505,3 +68505,16 @@ ratio octets/param: 29.7
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — que manque-t-il au natif : l'échelle, la donnée, l'alignement, le runtime (chiffré) |\", \"| **N4** — que manque-t-il au … [1229 caractères tronqués]`
+
+  ```
+· reports/README.md : 2808 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 16 files changed, 259 insertions(+), 28 deletions(-)
+ create mode 100644 reports/rapport-natif-exploitable.md
+90fb737a NATIF — LA SYNTHÈSE HONNÊTE : L'ÉCHELLE, LA DONNÉE, L'ALIGNEMENT, LE RUNTIME
+   b2dfc1cc..90fb737a  s/v7 -> s/v7
+   b2dfc1cc..90fb737a  master -> master
+lun 16 nov 2026 11:03:55 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — que manque-t-il au natif (chiffré) |\", \"| **N4** — le natif : ce qui manque |\")\nt=t.replace(\"| **N4** — le banc … [809 caractères tronqués]`
