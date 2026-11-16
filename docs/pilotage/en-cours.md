@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 12 h 20 HNE (le natif sans torch : le DRVM en numpy, 4/4 de parité)**
+**Mis à jour : 2026-11-16, 12 h 25 HNE (FAQ native, bilan à 8 livrables)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

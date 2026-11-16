@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 379.5 h |
+| Durée | 379.7 h |
 | Tours | 206 |
-| Messages | 4267 |
-| Appels d'outils | 3821 |
+| Messages | 4270 |
+| Appels d'outils | 3824 |
 | Fichiers touchés | 25 |
-| Commandes | 3163 |
+| Commandes | 3166 |
 | Sous-agents | 43 |
-| Commits | 510 |
+| Commits | 511 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*84 appels d'outils.* Actions notables :
+*87 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 69 autres
+- … et 72 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3123 autres
+- … et 3126 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11867,4 +11867,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMP
 - NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS)" 2>&1 | tail -2; git log
 - NATIF — L'INFÉRENCE NUMPY DU DRVM : 4/4 DE PARITÉ AVEC TORCH, SANS TORCH (~0,6 S/OCTET) ; drave generer --moteur numpy" 2>&1 | tail -2; git log -1 --format='%h 
+- DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE)" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -
 

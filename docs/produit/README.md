@@ -1072,6 +1072,17 @@ Python. Le chemin historique reste garanti : `python3 tools/drave.py --version` 
 Construire la roue demande `setuptools` (isolé par pip, donc réseau ou cache) et le sous-module
 `tools/structures` ; la roue publiée n'est pas sur PyPI, elle se construit localement.
 
+### 8.11 Le modèle natif marche-t-il ?
+
+**Il modélise, il ne compose pas.** Le `drave-n0` (34 M, byte-level) a une PPL de **2,40** et
+produit **87 %** de mots valides en greedy — mais la cohérence s'arrête à **~3 mots** et il
+**répète** (un trigramme **15 fois**). Mesuré sur 20 prompts, avec un **contrôle aléatoire**
+(0,34 de mots valides) : [`rapport-banc-generation.md`](../../reports/rapport-banc-generation.md).
+`drave generer --moteur numpy` l'expose **sans torch** (le DRVM, **4/4** de parité) ; la carte du
+modèle ([`fiche-modele-natif.md`](../../reports/fiche-modele-natif.md)) dit ce qu'il peut et ne
+peut pas faire. **Pour analyser du texte, utilisez l'heuristique** (le produit) — le natif est un
+prototype de recherche ([`natif-plan.md`](../pilotage/natif-plan.md)).
+
 ## 9. Où aller ensuite
 
 | si vous voulez… | allez à |

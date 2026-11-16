@@ -69192,3 +69192,42 @@ OK
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — l'inférence numpy du DRVM : 4/4 de parité, sans torch |\", \"| **N4** — l'inférence numpy : 4/4 de parité |\")\nt=t. … [1380 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-natif-numpy.md
+ create mode 100644 tools/drvm_infere.py
+d9a129ba NATIF — L'INFÉRENCE NUMPY DU DRVM : 4/4 DE PARITÉ AVEC TORCH, SANS TORCH (~0
+   d251babf..d9a129ba  s/v7 -> s/v7
+   d251babf..d9a129ba  master -> master
+lun 16 nov 2026 12:16:24 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tool … [266 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+lun 16 nov 2026 12:22:22 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/produit/README.md'); t=p.read_text()\nif \"### 8.11 Le modèle natif\" not in t:\n    t=t.replace(\"## 9. Où aller ensuite\",\"\"\"### 8.11 Le modèle natif marche-t-il ?\n\n**Il m … [2004 caractères tronqués]`
+
+  ```
+FAQ natif ajoutée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ la page vivante date du dernier commit (2026-11-16)
+bilan augmenté
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/produit/README.md reports/rapport-bilan-natif.md docs/pilotage/en-cours.md 2>/dev/null; timeout 300 git commit -m \"DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE … [323 caractères tronqués]`

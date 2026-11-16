@@ -18,6 +18,7 @@
 | 5 | [`drave generer`](../tools/drave.py) | le modèle accessible (torch + checkpoint, JSON), les refus propres (code 4), le caveat |
 | 6 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | la carte du modèle : identité, données, mesures, limites, usage prévu, licence |
 | 7 | [`natif-plan.md`](../docs/pilotage/natif-plan.md) | le plan : 4 paliers, les critères falsifiables, les risques |
+| 8 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) + [`drvm_infere.py`](../tools/drvm_infere.py) | **le natif sans torch** : le DRVM en numpy, **4/4 de parité** avec torch, ~0,6 s/octet |
 
 ## 2. La conclusion
 
