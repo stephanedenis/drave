@@ -15,8 +15,8 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-16 06:23 EST
-- **Prochaine action** : **J4 — l'or de rôles** (double codage) ; **Z1–Z3** livrés (CI **10/10**, passe **1611**, [bilan final](../../../reports/rapport-bilan-final.md)) ; **V3** clos (tag `exploitable-2026-11-16` sur `ae3c24f2`).
+- **Heartbeat** : 2026-11-16 14:50 EST
+- **Prochaine action** : le diagnostic du natif est livré (le banc, la numpy, l'alerte de reproductibilité) ; la suite est le palier 1 (le corpus épinglé).
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.

@@ -69381,3 +69381,251 @@ val: {'octets': 1023, 'ppl': 22.616}
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — le 2,40 annoncé n'est pas reproductible (le corpus n'est pas épinglé) |\", \"| **N4** — le 2,40 n'est pas reproducti … [1564 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-native-reproductibilite.md
+ create mode 100644 tools/banc_perplexite_gold.py
+0397f980 NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE
+   4fc369e3..0397f980  s/v7 -> s/v7
+   4fc369e3..0397f980  master -> master
+lun 16 nov 2026 12:41:58 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null | head -5; tail -2 work/portes/passe-1611n.log 2>/dev/null", "description": "Voir la passe en cours"}`
+
+  ```
+lun 16 nov 2026 12:42:10 EST
+17 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+  porte-consolidation    ✅                          83 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  porte-coupe            ✅                         158 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/portes/passe-1611n/ | grep -i \"bloc-code\"; cat work/portes/passe-1611n/*bloc-code* 2>/dev/null | tail -8 | cut -c1-160", "description": "Voir l'échec de porte-bloc-code"}`
+
+  ```
+porte-bloc-code.log
+     (3 + 4) * 2      exécute     14 · texte      3
+5. refus       : 7/7 nommés (syntaxe, import, attribut, division_zero, nom_inconnu, boucle, appel_interdit)
+6. coût        : ×2.32 de temps pour ×4 nœuds (0.56 ms / 50 additions)
+7. miroir      : 380/380 fichiers rendus puis relus à l'identique ; contrôle aplati perdu
+8. rejeu       : identique
+❌ porte bloc code ROUGE
+   - coût non linéaire : ×2.32 pour ×4
+❌ porte bloc code ROUGE (code 1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 bash tools/porte-bloc-code.sh 2>&1 | tail -4; echo \"EXIT=$?\"", "description": "Re-tester porte-bloc-code en isolation", "timeoutMs": 400000}`
+
+  ```
+8. rejeu       : identique
+❌ porte bloc code ROUGE
+   - coût non linéaire : ×2.40 pour ×4
+❌ porte bloc code ROUGE (code 1)
+EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 tools/porte-bloc-code.sh | cut -c1-120; git log --oneline -3 -- tools/bloc_code.py tools/pensee/ 2>/dev/null | cut -c1-70; git log --oneline --since=\"2026-11-16 00:00\" | wc -l", "description": "Voir la porte bloc-code"}`
+
+  ```
+#!/bin/bash
+# porte-bloc-code.sh — R4.2 : un code lu est un AST exécuté, et l'AST se vérifie.
+#
+# POURQUOI CETTE PORTE EXISTE. Un document de code n'est pas de la prose : la réponse à
+# « que vaut cette expression ? » est dans l'EXÉCUTION, pas dans la ligne. R0.1 range le
+# code en région et le texte reste du texte ; le banc R0.3 demande des valeurs par deux
+# mots rares, ce qui mesure la recherche d'une ligne, pas la compréhension. Cette porte
+# exige donc les trois choses ensemble : le PARSEUR (tout le corpus accepté), la PORTÉE
+# (chaque nom rattaché à sa portée), l'EXÉCUTION EN SABLE (liste blanche, bornes) — plus
+# le contrôle négatif « texte seul » qui doit ÉCHOUER.
+#
+# Ce qu'elle ne vérifie PAS : la sémantique d'un langage hors Python ; les bibliothèques
+# (aucun import n'est exécuté) ; l'intention du code (c'est le modèle, et R0.3 le mesure).
+#
+# Usage : tools/porte-bloc-code.sh
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE R4.2 — LE BLOC CODE ==="
+python3 tools/bloc_code.py --porte
+CODE=$?
+e4288023 J6.2 — PORTE PRODUIT VERTE (183/183) : FIXTURES D'ATTACHEMENT
+92652984 B13 — LA CONVENTION DES GV : SUJET HORS DU GV + ADVERBE FINAL
+25a6c0ff B13 — r035 RÉGLÉ : LA RELATIVE ZÉR
+… [30 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1100; date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null | head -4", "description": "Suivre la passe", "timeoutMs": 1200000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5417]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5417", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 13:02:22 EST
+28 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null | head -5", "description": "Suivre la passe", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5418]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5418", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5418", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+lun 16 nov 2026 13:27:32 EST
+32 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null | head -6", "description": "Suivre la passe", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5419]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5419", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5419", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+lun 16 nov 2026 13:57:51 EST
+62 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+porte-indice 1 1129
+porte-melange 1 145
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"", "description": "Suivre la fin de la passe", "timeout … [13 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5420]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5420", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5420", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+lun 16 nov 2026 14:28:02 EST
+73 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+porte-indice 1 1129
+porte-melange 1 145
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; wc -l work/portes/passe-1611n/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611n/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"; tail -1 work/portes/passe-1611n.log", "description":  … [40 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5421]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5421", "timeout_ms": 700000, "wait": true}`
+
+  ```
+lun 16 nov 2026 14:48:11 EST
+87 work/portes/passe-1611n/registre.txt
+porte-bloc-code 1 19
+porte-indice 1 1129
+porte-melange 1 145
+porte-sessions 1 0
+--- 82 vertes, 4 rouges ---
+0
+Journaux complets : work/portes/passe-1611n
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 bash tools/porte-bloc-code.sh 2>&1 | tail -3; echo \"EXIT=$?\"; timeout 120 python3 tools/sessions.py --check 2>&1 | tail -2", "description": "Re-tester bloc-code après la passe", "timeoutMs": 500000}`
+
+  ```
+8. rejeu       : identique
+✅ porte bloc code verte
+✅ porte bloc code verte
+EXIT=0
+  ⚠ mandat périmé (506 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\\n\", \"- **Heartbeat** : 2026-11-16 14 h 50 EST\\n\", t … [1165 caractères tronqués]`
+
+  ```
+mandat rafraîchi
+références à jour
+  ❌ /home/stephane/Data13TB/stephane/GitHub/Qtrinet/journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md : heartbeat illisible
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"heartbeat\\|Heartbeat\" tools/sessions.py | head -6 | cut -c1-140; grep -n \"Heartbeat\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | cut -c1-120", "description": "Voir le format du heartbeat"}`
+
+  ```
+5:périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+8:et les heartbeats périmés (le `--check` seul les signale). Les **fichiers
+16:l'état, son heartbeat n'est plus exigé, et la reprise la remet `actif`.
+18:`work/ressources.json` : le heartbeat n'est pas exigé ; le registre distingue le
+34:CHAMPS = ("session", "rôle", "périmètre", "fichiers réservés", "heartbeat",
+71:    hb = champs.get("heartbeat", "")
+18:- **Heartbeat** : 2026-11-16 14 h 50 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '65,85p' tools/sessions.py | cut -c1-130; grep -n \"def lire_date\\|fromisoformat\\|strptime\" tools/sessions.py | head -4", "description": "Voir le parsing de date"}`
+
+  ```
+("prochaine", "prochaine action"), ("etat", "état")):
+        if cible not in champs and alias in champs:
+            champs[cible] = champs[alias]
+    sid = champs.get("session") or chemin.parent.name
+    per = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("périmètre", "")) if x.strip()]
+    fic = [x.strip().strip("`") for x in re.split(r"[,;]", champs.get("fichiers réservés", "")) if x.strip()]
+    hb = champs.get("heartbeat", "")
+    heartbeat = None
+    age = None
+    try:
+        brut = re.sub(r"\s*(HAE|EDT|EST|UTC[−-]?[0-9]+)\s*$", "", hb).strip()
+        if "T" in brut:
+            heartbeat = datetime.fromisoformat(brut)
+        else:
+            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+        age = (datetime.now() - heartbeat).total_seconds() / 60.0
+    except Exception:
+        pass
+    return {"id": sid, "chemin": chemin, "champs": champs, "perimetre": per,
+            "fichiers": fic, "heartbeat": heartbeat, "age": age,
+            "etat": _cle(champs.get("état", ""))}
+77:            heartbeat = datetime.fromisoformat(brut)
+79:            heartbeat = datetime.strptime(brut, "%Y-%m-%d %H:%M")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\\n\", \"- **Heartbeat** : 2026-11-16 14:50 EST\\n\", t,  … [1032 caractères tronqués]`

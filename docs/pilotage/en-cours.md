@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 13 h 00 HNE (la PPL du natif n'est pas reproductible : le corpus n'est pas épinglé)**
+**Mis à jour : 2026-11-16, 14 h 55 HNE (la passe 1611n : 86 portes, 82 vertes, 2 rouges structurelles)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

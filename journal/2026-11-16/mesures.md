@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 00:28 | `04894aea` | U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4) | `en-cours.md`, `README.md`, `memoire.md` (+7) |
 | 00:45 | `c77ed4b6` | U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE | `en-cours.md`, `roadmap.md`, `README.md` (+19) |
 | 06:38 | `d0364c0a` | EXPLOITABLE — Z3 : LE BILAN FINAL (LES 3 VOIES D'INSTALLATION, LE DÉMARRAGE EN 3 COMMANDES, LE JSON V2, LA PERFORMANCE, LES NÉGATIFS NOMMÉS) | `en-cours.md`, `README.md`, `docs.md` (+13) |
+| 12:38 | `0397f980` | NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE VAL ACTUEL, 18,55 SUR LE GOLD) ; LE CORPUS N'EST PAS ÉPINGLÉ — LE PALIER 1 COMMENCE PAR LÀ | `en-cours.md`, `README.md`, `distribue.md` (+15) |
 
 ## Chiffres du jour
 
@@ -21,13 +22,15 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 380.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 382.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/INDEX.md](../../reports/INDEX.md)
+- [reports/README.md](../../reports/README.md)
 - [reports/rapport-bilan-final.md](../../reports/rapport-bilan-final.md)
 - [reports/rapport-empaquetage.md](../../reports/rapport-empaquetage.md)
+- [reports/rapport-native-reproductibilite.md](../../reports/rapport-native-reproductibilite.md)
 - [reports/rapport-performance-fix.md](../../reports/rapport-performance-fix.md)
 - [reports/rapport-roue.md](../../reports/rapport-roue.md)
 
