@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 15 h 10 HNE (la syntaxe à l'échelle : GV 1,9 → 2,65 → 6,9)**
+**Mis à jour : 2026-11-16, 15 h 12 HNE (le bilan à 10 livrables, la passe 1611n)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

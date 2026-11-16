@@ -19,6 +19,8 @@
 | 6 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | la carte du modèle : identité, données, mesures, limites, usage prévu, licence |
 | 7 | [`natif-plan.md`](../docs/pilotage/natif-plan.md) | le plan : 4 paliers, les critères falsifiables, les risques |
 | 8 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) + [`drvm_infere.py`](../tools/drvm_infere.py) | **le natif sans torch** : le DRVM en numpy, **4/4 de parité** avec torch, ~0,6 s/octet |
+| 9 | [`rapport-native-reproductibilite.md`](rapport-native-reproductibilite.md) | **le 2,40 annoncé n'est pas reproductible** (17,3 à 22,6 sur le val actuel, 18,55 sur le gold) : le corpus n'est pas épinglé |
+| 10 | [`banc-grammaticalite-echelle.json`](banc-grammaticalite-echelle.json) | la syntaxe à l'échelle : GV **1,90 → 2,65 → 6,90**, ciment **0,137 → 0,278 → 0,335** |
 
 ## 2. La conclusion
 
@@ -30,6 +32,13 @@ c'est la qualité** : un 34 M qui a mémorisé les mots et les boucles du corpus
 premier checkpoint** et un critère falsifiable — **50 octets cohérents, la répétition ≤ 3**. La
 donnée est le vrai goulot (1 Go aujourd'hui, 3–6 Go nécessaires), et son territoire est **D** : je
 ne l'ai pas touchée.
+
+## 2 bis. La passe complète
+
+La **passe du 16/11 (12 h 26 → 14 h 48)** : **86 portes, 82 vertes, 2 rouges structurelles**
+(`porte-indice`, `porte-melange`) + `porte-bloc-code` **transitoire** (×2,40 pour ×4 pendant la
+passe, **verte en isolation**) + `porte-sessions` (le mandat, rafraîchi). Journal :
+`work/portes/passe-1611n/`.
 
 ## 3. Ce que ce bilan ne dit pas
 

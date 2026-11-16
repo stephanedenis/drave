@@ -69719,3 +69719,19 @@ aleatoire top20_0.5  gv=2.95 gn=2.10 mots=23.8 ciment=0.258 attaches=0.751 sans_
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/gram-11-21.json reports/banc-grammaticalite-echelle.json && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-banc-generation.md'); t=p.read_text()\nt=t.replace(\"\"\"**La conséquence pour le plan**\"\"\",\"\" … [1852 caractères tronqués]`
+
+  ```
+échelle syntaxique ajoutée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 874 JSON, le disque en a 875
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 15 files changed, 114 insertions(+), 23 deletions(-)
+ create mode 100644 reports/banc-grammaticalite-echelle.json
+956bdd5b NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278
+   86fde794..956bdd5b  s/v7 -> s/v7
+   86fde794..956bdd5b  master -> master
+lun 16 nov 2026 15:06:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-bilan-natif.md'); t=p.read_text()\nt=t.replace(\"\"\"| 8 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) + [`drvm_infere.py`](../tools/drvm_infere.py) | **le nati … [1996 caractères tronqués]`
