@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 378.1 h |
 | Tours | 206 |
-| Messages | 4194 |
-| Appels d'outils | 3749 |
+| Messages | 4196 |
+| Appels d'outils | 3751 |
 | Fichiers touchés | 25 |
-| Commandes | 3092 |
+| Commandes | 3094 |
 | Sous-agents | 43 |
-| Commits | 497 |
+| Commits | 499 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*12 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11081,6 +11081,8 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Attendre le contrôle
 - bash — Écrire la fiche du banc
 - bash — Committer le banc
+- bash — Trim le README
+- bash — Committer avec l'en-cours
 
 **Synthèse produite :**
 
@@ -11206,7 +11208,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3052 autres
+- … et 3054 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11851,4 +11853,6 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE" 2>&1 | tail -2; git log -1 --fo
 - DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE s
 - NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : LE MODÈLE A APPRIS LES MOTS (0,87 CONTRE 0,34) PAS LA PHRASE (RÉPÉTITION 15 EN G
+- DOCS — LE README DES FICHES DANS LE BUDGET (T1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push ori
+- DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 
 

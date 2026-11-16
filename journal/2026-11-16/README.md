@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **1 session(s)** · **6 thème(s)**
+**15 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | docs | 4 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
-| modele | 2 | [modele.md](modele.md) |
+| modele | 3 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -42,6 +42,7 @@
 | 06:42 | `615f84be` | ÉTAT — T0 VERT APRÈS LA CLÔTURE (LA LIGNE N2 RACCOURCIE) |
 | 07:57 | `6f5e0f0c` | SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE |
 | 08:02 | `d1715692` | DOCS — LE CLONE RÉPARÉ ET DOCUMENTÉ : --recurse-submodules, protocol.file.allow=always, LES SOUS-MODULES LOCAUX ; LE PIN DOCWATCH REPINÉ, LE COMMIT 648adce DE structures POUSSÉ |
+| 10:44 | `cf3f9bc7` | NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : LE MODÈLE A APPRIS LES MOTS (0,87 CONTRE 0,34) PAS LA PHRASE (RÉPÉTITION 15 EN GREEDY) |
 
 ## Le récit de la journée (écrit à la main)
 

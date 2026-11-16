@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 03:12 | `3c10e3ee` | V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON | `en-cours.md`, `references-non-regression.md`, `roadmap.md` (+18) |
 | 07:57 | `6f5e0f0c` | SOUS-MODULES — LE DOCWATCH REPINÉ SUR 95e94c4 (LE PIN d256888 N'EXISTE PAS SUR LE REMOTE) ; LE CLONE --recurse-submodules PASSE | `en-cours.md`, `README.md`, `docs.md` (+10) |
+| 10:44 | `cf3f9bc7` | NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : LE MODÈLE A APPRIS LES MOTS (0,87 CONTRE 0,34) PAS LA PHRASE (RÉPÉTITION 15 EN GREEDY) | `en-cours.md`, `README.md`, `docs.md` (+15) |
 
 ## Sessions actives ce jour
 
@@ -19,6 +20,7 @@
 
 - [reports/INDEX.md](../../reports/INDEX.md)
 - [reports/README.md](../../reports/README.md)
+- [reports/rapport-banc-generation.md](../../reports/rapport-banc-generation.md)
 - [reports/rapport-bilan-exploitable-2.md](../../reports/rapport-bilan-exploitable-2.md)
 
 <!-- notes -->

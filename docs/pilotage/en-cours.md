@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 10 h 50 HNE (le banc de génération du natif)**
+**Mis à jour : 2026-11-16, 10 h 55 HNE (le banc du natif committé, T1 vert)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

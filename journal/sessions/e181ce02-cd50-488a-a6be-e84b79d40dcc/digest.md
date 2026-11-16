@@ -68254,3 +68254,26 @@ top20_0.5    mots_valides=0.219 distinct_2=1.000 repetition=1 echo=0.00 octets/s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\n# raccourcir 3 lignes anciennes de 20 mots\nt=t.replace(\"| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — le banc de  … [2004 caractères tronqués]`
+
+  ```
+· reports/README.md : 2801 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 reports/rapport-banc-generation.md
+ create mode 100644 tools/banc_generation.py
+cf3f9bc7 NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAGES, LE CONTRÔLE ALÉATOIRE) : L
+   d1715692..cf3f9bc7  s/v7 -> s/v7
+   d1715692..cf3f9bc7  master -> master
+lun 16 nov 2026 10:47:10 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — le natif a appris les mots, pas la phrase |\", \"| **N4** — le natif : les mots, pas la phrase |\")\np.write_text(t)\nPY … [412 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     git add docs/pilotage/en-cours.md
+cf3f9bc7 NATIF — LE BANC DE GÉNÉRATION (20 PROMPTS, 3 RÉGLAG
+Everything up-to-date
+Everything up-to-date
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-16, 10 h 55 HNE (le banc du natif committé, T1 vert)**\\n\", t, … [451 caractères tronqués]`
