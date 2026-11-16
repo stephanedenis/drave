@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 368.1 h |
+| Durée | 369.5 h |
 | Tours | 202 |
-| Messages | 4061 |
-| Appels d'outils | 3628 |
+| Messages | 4074 |
+| Appels d'outils | 3640 |
 | Fichiers touchés | 25 |
-| Commandes | 2996 |
+| Commandes | 3002 |
 | Sous-agents | 43 |
-| Commits | 488 |
+| Commits | 490 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -10845,7 +10845,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 
 ### Tour 202 — <goal_round> Objective: "Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l' … [994 caractères tronqués]
 
-*32 appels d'outils.* Actions notables :
+*44 appels d'outils.* Actions notables :
 
 - bash — État de T1
 - bash — Suivre T1
@@ -10861,7 +10861,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - bash — Verdict T4
 - bash — Pousser T4 et lire
 - bash — Ajouter U1-U3
-- … et 7 autres
+- … et 13 autres
 
 ## 3. Travail accompli
 
@@ -10983,7 +10983,7 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 2956 autres
+- … et 2962 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11619,4 +11619,6 @@ L'objectif (la nuit **01 h 30 → 09 h 00**) est **atteint et dépassé** : la b
 - INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git p
 - CLÔTURE — LE PLAN (51 TÂCHES) ET LE PROTOCOLE OR-ROLES (X2) COMMITTÉS ; L'ÉTAT HORODATÉ" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-80; git branch -f
 - EXPLOITABLE — T1 : L'EMPAQUETAGE (pyproject.toml, pip install -e ., LA COMMANDE drave HORS DU DÉPÔT ; SANS INSTALL, 127 PROPRE) ; LE CHEMIN HISTORIQUE INTACT" 2
+- EXPLOITABLE — U2 : LA ROUE (drave-0.1.0-py3-none-any.whl, 422 ENTRÉES, LES GOLD DEDANS ; UNE ROUE SANS GOLD ÉCHOUE PROPREMENT)" 2>&1 | tail -2; git log -1 --for
+- EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF)" 2>&1 | tail -2; git log -1 --format='%h 
 

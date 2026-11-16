@@ -7,12 +7,12 @@
 | Identifiant | `session-aa260801-785c-4a85-876c-98ba023e6098` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-16 00:31 |
-| Durée | 0.3 h |
+| Durée | 0.9 h |
 | Tours | 1 |
-| Messages | 142 |
-| Appels d'outils | 158 |
+| Messages | 153 |
+| Appels d'outils | 169 |
 | Fichiers touchés | 9 |
-| Commandes | 102 |
+| Commandes | 106 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche U2 (suite de T1) : **la roue** — `python3 -m build` (ou `pip wheel .`) produit `drave-0.1.0-py3-none-any.whl`, ins … [419 caractères tronqués]
 
-*158 appels d'outils.* Actions notables :
+*169 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — Read current state doc
@@ -41,7 +41,7 @@
 - bash — Read evaluer_gold loading logic
 - bash — Check package init files and imports
 - bash — Check build tooling availability
-- … et 124 autres
+- … et 128 autres
 
 ## 3. Travail accompli
 
@@ -101,7 +101,7 @@
 - **T1** Read T1 JSON structure
 - **T1** Search session plan for U2
 - **T1** Inspect journal structure
-- … et 62 autres
+- … et 66 autres
 
 ## 4. Mesures et résultats marquants
 

@@ -66574,3 +66574,121 @@ reports/rapport-performance-fix.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre U2", "timeoutMs": 1900000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5230]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5230", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5230", "timeout_ms": 1300000, "wait": true}`
+
+  ```
+lun 16 nov 2026 01:15:25 EST
+2026-11-16 00:31:30 · ✔ U1 en 2852.4 s (code 0) — ✅ test -f reports/rapport-performance-fix.md && echo FICHE-OK; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-16 00:31:30 · ▶ U2 — L'empaquetage — la roue et le README (timeout 3600 s)
+2
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 900; date; tail -2 work/chantier/journal.log; ls reports/rapport-roue.md 2>/dev/null", "descriptio … [49 caractères tronqués]`
+
+  ```
+04894aea..1d4eb49e  s/v7 -> s/v7
+   04894aea..1d4eb49e  master -> master
+[still running after 600000ms; moved to background job bash-5231]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5231", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 01:30:38 EST
+2026-11-16 00:31:30 · ✔ U1 en 2852.4 s (code 0) — ✅ test -f reports/rapport-performance-fix.md && echo FICHE-OK; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-16 00:31:30 · ▶ U2 — L'empaquetage — la roue et le README (timeout 3600 s)
+reports/rapport-roue.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; head -8 reports/rapport-roue.md | cut -c1-160", "description": "Verdict U2", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5232]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5232", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 01:40:47 EST
+2026-11-16 01:31:30 · ✔ U2 en 3600.1 s (code 124) — ✅ test -f reports/rapport-roue.md && echo FICHE-OK
+2026-11-16 01:31:31 · ▶ U3 — La CLI — les profils de langue (timeout 3600 s)
+0
+# U2 — la roue : `drave-0.1.0-py3-none-any.whl`, installée hors du dépôt, les gold dedans
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **U2** (suite de T1) ·
+> **Date** : 2026-11-16 · **Verdict** : ✅ **la roue est autonome ; une roue sans gold échoue proprement**.
+>
+> **Le chiffre.** `python3 -m pip wheel . --no-deps --no-build-isolation -w dist` rend
+> **`drave-0.1.0-py3-none-any.whl`** : **1 727 201 octets**, **422 entrées**,
+> sha256 `d980c4706f575e061faa9611aca4c42c024c1147b654004f724694914a99dbce`. Installée
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5232 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; head -8 reports/rapport-roue.md | cut -c1-160) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain reports/rapport-roue.md reports/pensee-roue.json dist/ pyproject.toml docs/produit/README.md 2>/dev/null | head -6; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_te … [972 caractères tronqués]`
+
+  ```
+no changes added to commit (use "git add" and/or "git commit -a")
+1d4eb49e JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN
+Everything up-to-date
+Everything up-to-date
+lun 16 nov 2026 01:44:17 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"clone public|dégradé\" reports/rapport-bilan-exploitable.md | head -4 | cut -c1-200; date; tail -1 work/chantier/journal.log", "description": "Lire la limite du clone public"}`
+
+  ```
+5:> ensemble** ; ❌ **trois limites restent nommées et bornées** (clone public dégradé, croissance
+12:> codes** (0/3/4/5/1). Le **contrôle de linéarité échoue** (α = **1,55**), le **clone public**
+58:Le parcours [`docs/produit/demarrage.md`](../docs/produit/demarrage.md) part d'un **clone public
+87:**L'écart, mesuré et non maquillé.** Le clone public n'a **pas** `tools/structures` : son URL
+lun 16 nov 2026 01:44:36 EST
+2026-11-16 01:31:31 · ▶ U3 — La CLI — les profils de langue (timeout 3600 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7; ls reports/rapport-profils.md 2>/dev/null", "description": "Suivre U3", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5235]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5235", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5235", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+lun 16 nov 2026 02:09:51 EST
+2026-11-16 01:31:31 · ▶ U3 — La CLI — les profils de langue (timeout 3600 s)
+2026-11-16 02:02:54 · ✔ U3 en 1883.2 s (code 0) — ✅ test -f reports/rapport-profils.md && echo FICHE-OK
+0
+reports/rapport-profils.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 reports/rapport-profils.md | cut -c1-160; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path( … [864 caractères tronqués]`

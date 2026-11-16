@@ -3367,3 +3367,142 @@ journal/2026-11-16/README.md  | 22 ++++++++++++++++++++--
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\ngit add journal/2026-11-16/README.md journal/2026-11-16/mesures.md\ngit commit -F - <<'MSG'\nJOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4\n\nLe récit de la journée ajoute U2 : la roue installée hors dé … [394 caractères tronqués]`
+
+  ```
+[s/v7 1d4eb49e] JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4
+ 6 files changed, 273 insertions(+), 14 deletions(-)
+1d4eb49e JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 1000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (86 portes, borne 1800 s) ===
+    journaux : work/portes/roue-1116
+  porte-adaptateur-sortie ✅                          74 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+  porte-audit-drapeaux   ✅                         182 s  ✅ porte audit des drapeaux : occupation, ratio de signes et densité de croissance — chacun
+  porte-b1110-hybride    ✅                           0 s  PORTE TENUE : 4/4 routées · 4/4 lues · E4 = requête de case
+  porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-banc-performance ✅                          17 s  ✅ porte banc-performance verte
+  porte-bloc-code        ✅                          17 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          18 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+  porte-budget           ✅                          53 s    ✅ paires depassees : nommees (total, budget, pas, plafond), code 9, AUCUNE perplexite
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | sed -n '1,30p'; echo '--- log'; git log --oneline -3", "description": "Check working tree and log"}`
+
+  ```
+M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+--- log
+1d4eb49e JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4
+c77ed4b6 U2 — LA ROUE AUTONOME : 1 727 201 OCTETS, 422 ENTRÉES, MÊMES JSON HORS DÉPÔT ; SANS GOLD `EVALUER` SORT EN 4, STDOUT VIDE
+04894aea U1 — LE CONTRÔLE DE L'INSTRUMENT EST CELUI DE LA PASSE : LINÉAIRE 0,71, QUADRATIQUE 2,11 (ET NON LES VALEURS DE T4)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -6; python3 tools/verifie_journal.py 2>&1 | tail -3; python3 tools/taille_documents.py 2>&1 | tail -4", "description": "Re-run doc checks after journal", "timeoutMs": 180000}`
+
+  ```
+revue de documentation · 767 fiche(s) · 862 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  journal · 48 jour(s) · 224 session(s) · 2708 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  avertissements :
+     · 65 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -5; echo \"code=$?\"", "description": "Re-run table gate", "timeoutMs": 180000}`
+
+  ```
+✅ 1847 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4749 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+code=0
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-bus              ✅                          86 s    ✅ le canal diffusé par fichier change la région du milieu
+  porte-bus-socket       ✅                         102 s    ✅ le bus du pilote agit (113.0068 -> 148.9144)
+  porte-c4-retard        ✅                          35 s  PORTE TENUE : un état n'est valide qu'à sa position (×633 pour un pas), et l'asynchronisme ne
+  porte-cerveau          ✅                           9 s    ✅ porte tenue (quatre facultés composent, chacune reste active, le tout est déterministe)
+  porte-cic              ✅                          13 s  ✅ porte CIC verte : 42/42 verdicts, empreintes, de Bruijn, sha256 2e implémentation,
+  porte-consolidation    ✅                          82 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-coupe            ✅                         155 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-cycle-c2         ✅                         142 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           1 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 300000, "wait": true}`
+
+  ```
+porte-delais           ✅                          24 s    ✅ le temps, lui, augmente : 8.27 s → 11.06 s (+2.8 s ≈ 50 ms × 64 pas)
+  porte-diff-couche      ✅                          22 s    ✅ le contrat est tenu : la divergence commence à la couche 1, premier jeton tracé
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-echange-experts  ✅                          62 s    PORTE TENUE
+[status: running]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, hashlib, pathlib, zipfile, re\nd=json.load(open('reports/roue.json'))\np=pathlib.Path(d['build']['fichier'])\nprint('wheel exists', p.is_file(), p.stat().st_size, d['build']['taille_octets'])\nprint('sh … [747 caractères tronqués]`
+
+  ```
+wheel exists True 1727201 1727201
+sha match True
+gold ok 5
+pyproject.toml True
+tools/drave.py True
+tools/tests/test_empaquetage.py True
+docs/produit/README.md True
+reports/rapport-roue.md True
+reports/roue.json True
+liens manquants []
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-episodique       ✅                         205 s    ✅ la porte C6 est franchie — et elle dit ses conditions : 300 états consécutifs d'un
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-flux             ✅                          28 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           9 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         253 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 600000, "wait": true}`
+
+  ```
+porte-greffe           ✅                         791 s    ✅ la porte est franchie. Ce qu'elle établit : l'injection d'état est BRANCHÉE
+  porte-harnais-invariants ✅                         127 s  ✅ porte harnais : installer une reparamétrisation laisse le modèle intact, et l'élagage
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-90", "timeout_ms": 900000, "wait": true}`
