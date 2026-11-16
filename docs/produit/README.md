@@ -483,7 +483,9 @@ python3 tools/drave.py evaluer --reel
 python3 tools/drave.py generer --prompt "La France est un pays" --n 64
 ```
 
-Charge un checkpoint natif (`drave-n0`, 34 M) et génère `--n` octets. **Expérimental** : le
+Charge un modèle natif (`drave-n0`, 34 M) et génère `--n` octets. Deux **moteurs** :
+`--moteur numpy` lit le **DRVM** (sans torch, **4/4** de parité avec torch, ~0,6 s/octet) ;
+`--moteur torch` lit le `.pt` (~0,15 s/octet). **Expérimental** : le
 modèle produit des **collages** (les mots sont là, la phrase non — voir
 [`rapport-banc-generation.md`](../../reports/rapport-banc-generation.md)) ; il exige **torch** et
 un checkpoint dans `work/n2ac/` (hors dépôt). Sans torch : code **4**, message clair. Le chemin

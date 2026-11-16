@@ -69005,3 +69005,190 @@ lun 16 nov 2026 11:55:17 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [910 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 17 files changed, 103 insertions(+), 25 deletions(-)
+ create mode 100644 reports/rapport-bilan-natif.md
+d251babf NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE
+   60c40aa6..d251babf  s/v7 -> s/v7
+   60c40aa6..d251babf  master -> master
+lun 16 nov 2026 11:59:04 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && AUTOTEST_JOBS=8 timeout 1800 python3 -m tools.pensee.autotest 2>&1 | grep -E \"❌|portes tenues\"; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tool … [296 caractères tronqués]`
+
+  ```
+183/183 portes tenues
+python3 tools/revue_documentation.py     EXIT=0
+python3 tools/taille_documents.py        EXIT=0
+bash tools/porte-tableaux.sh             EXIT=0
+python3 tools/verifie_en_cours.py        EXIT=0
+python3 tools/verifie_journal.py         EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+  ✅ autotest parallèle : 183/183 portes tenues
+✅ porte produit verte
+lun 16 nov 2026 12:05:06 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def main\" -A 30 tools/drvm.py | head -34 | cut -c1-120; grep -n \"def __init__\" -A 6 tools/drvm.py | head -8", "description": "Voir l'API DrvmFile"}`
+
+  ```
+217:def main() -> None:
+218-    ap = argparse.ArgumentParser(description="DRVM v0 — conteneur natif Drave")
+219-    sub = ap.add_subparsers(dest="cmd", required=True)
+220-    i = sub.add_parser("inspect")
+221-    i.add_argument("fichier")
+222-    a = ap.parse_args()
+223-    if a.cmd == "inspect":
+224-        print(json.dumps(inspecter(a.fichier), ensure_ascii=False, indent=1))
+225-
+226-
+227-if __name__ == "__main__":
+228-    main()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def inspecter\\|def ouvrir\\|def lire\\|def tensor\" -A 8 tools/drvm.py | head -30 | cut -c1-120", "description": "Voir les fonctions de lecture"}`
+
+  ```
+63:    def tensor(self, name: str) -> memoryview:
+64-        t = self.tensors.get(name)
+65-        if t is None:
+66-            raise DRVMError(f"tenseur inconnu : {name}")
+67-        off = self.payload_offset + int(t["offset"])
+68-        n = int(t["nbytes"])
+69-        return memoryview(self._mm)[off:off + n]
+70-
+71-    def close(self) -> None:
+--
+204:def inspecter(path: str | os.PathLike) -> dict[str, Any]:
+205-    with read_drvm(path) as d:
+206-        return {
+207-            "fichier": str(path),
+208-            "manifest_sha256": hashlib.sha256(_canonique(d.manifest)).hexdigest(),
+209-            "modele": d.manifest["model"],
+210-            "blocs": [b["id"] for b in d.manifest["graph"]["blocks"]],
+211-            "tenseurs": len(d.manifest["tensors"]),
+212-            "octets_payload": sum(int(t["nbytes"]) for t in d.manifest["tensors"]),
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.drvm import read_drvm\nwith read_drvm(\"work/n2ac/mix1024-60k.drvm\") as d:\n    ts = d.manifest[\"tensors\"]\n    print(\"n =\", len(ts))\n    for t in ts[ … [236 caractères tronqués]`
+
+  ```
+n = 127
+blocks.0.ffn.down.bias f32 [384]
+blocks.0.ffn.down.weight f32 [384, 4096]
+blocks.0.ffn.gate.bias f32 [4096]
+blocks.0.ffn.gate.weight f32 [4096, 384]
+blocks.0.ffn.router.bias f32 [8]
+blocks.0.ffn.router.weight f32 [8, 384]
+blocks.0.ffn.up.bias f32 [4096]
+blocks.0.ffn.up.weight f32 [4096, 384]
+blocks.0.ln1.bias f32 [384]
+blocks.0.ln1.weight f32 [384]
+blocks.0.ln2.bias f32 [384]
+blocks.0.ln2.weight f32 [384]
+...
+thought.bias f32 [384]
+thought.weight f32 [384, 384]
+thought_in.bias f32 [384]
+thought_in.weight f32 [384, 384]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/drvm_infere.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"drvm_infere.py — l'inférence numpy du modèle natif, sans torch.\n\nPOURQUOI. Le modèle natif vit dans un DRVM (un conteneur lisible sans torch), mais\nson **calcul** ét … [6146 caractères tronqués]`
+
+  ```
+syntaxe OK
+    self._mm.close()
+    ~~~~~~~~~~~~~~^^
+BufferError: cannot close exported pointers exist
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drvm_infere.py'); t=p.read_text()\nt=t.replace('''            mv = d.tensor(t[\"name\"])\n            arr = np.frombuffer(mv, dtype=np.float32).reshape(tuple(t[\"shape\"])).copy … [418 caractères tronqués]`
+
+  ```
+copie libérée
+La France est un paysnnuu nuu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 600 /tmp/venv-natif/bin/python -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.generer_natif import charger, generer\nm,cfg = charger('work/n2ac/mix1024-60k.pt')\ntexte = generer(m, 'La France est un pays', n=8, top_k=0 … [280 caractères tronqués]`
+
+  ```
+torch : 'La France est un pays don d d'
+=== numpy :
+La France est un paysnnuu nuu
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drvm_infere.py'); t=p.read_text()\nt=t.replace('''    h0 = None\n    for i in range(cfg[\"n_blocks\"]):\n        x = _bloc(x, t, cfg, i)\n        if i == cfg[\"n_blocks\"] // 2  … [1122 caractères tronqués]`
+
+  ```
+h0 corrigé
+La France est un pays don d d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/parite.py <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.drvm_infere import charger, greedy\nt, cfg = charger('work/n2ac/mix1024-60k.drvm')\nfor prompt, n in [(\"La France est un pays\", 16), (\"Dans les années 195 … [250 caractères tronqués]`
+
+  ```
+'La France est un pays don d d da d 20'
+'Dans les années 1950 le por le de la'
+'Le chatin de en'
+'Il était une fois de de pre dile de de de'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 1200 /tmp/venv-natif/bin/python - <<'PY' 2>&1 | tail -8\nimport sys; sys.path.insert(0,'.')\nfrom tools.generer_natif import charger, generer\nfrom tools.drvm_infere import charger as charger_np, greedy\nm, cfg = charger('wor … [546 caractères tronqués]`
+
+  ```
+OK   'La France est un pays don d d da d 20' | 'La France est un pays don d d da d 20'
+OK   'Dans les années 1950 le por le de la' | 'Dans les années 1950 le por le de la'
+OK   'Le chatin de en' | 'Le chatin de en'
+OK   'Il était une fois de de pre dile de de de' | 'Il était une fois de de pre dile de de de'
+parité : 4/4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) l'option --moteur\nt=t.replace('''    generer.add_argument(\"--json\", action=\"store_true\")\n    generer.set_defaults(fonction=cmd_generer)'' … [2519 caractères tronqués]`
+
+  ```
+moteur numpy ajouté
+syntaxe OK
+Le chatin de en
+EXIT=0
+JSON numpy 'Le chatin de en'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== numpy (16 octets) :\"; time timeout 600 python3 tools/drave.py generer --moteur numpy --prompt \"La France est un pays\" --n 16 >/dev/null 2>&1; echo \"=== torch (16 octets) :\"; time timeout 600 /tmp/venv-natif/bin/python … [177 caractères tronqués]`
+
+  ```
+=== numpy (16 octets) :
+=== torch (16 octets) :
+lun 16 nov 2026 12:11:48 EST
+[stderr]
+
+real	0m15,072s
+user	0m14,944s
+sys	0m0,127s
+
+real	0m3,289s
+user	0m13,646s
+sys	0m0,665s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\nt=t.replace('''    def test_sans_torch_ou_sans_modele_code_4(self):''','''    def test_numpy_sans_drvm_code_4(self):\n        sortie =  … [1090 caractères tronqués]`
+
+  ```
+test numpy
+doc moteurs
+
+OK
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-natif-numpy.md <<'MD'\n# L'inférence numpy du natif — 4/4 de parité, sans torch\n\n> **Ligne de roadmap** : **N4** (le runtime du natif) · **Date** : 2026-11-16 ·\n> **Verdict** : ✅ **le DRVM s'infère en numpy s … [3349 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 778 fichiers, le disque en a 779
+     · reports/README.md : 2806 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — l'inférence numpy du DRVM : 4/4 de parité, sans torch |\", \"| **N4** — l'inférence numpy : 4/4 de parité |\")\nt=t. … [1380 caractères tronqués]`

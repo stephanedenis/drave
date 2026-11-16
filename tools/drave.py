@@ -1229,7 +1229,30 @@ def cmd_rejouer(args: argparse.Namespace) -> int:
 
 
 def cmd_generer(args: argparse.Namespace) -> int:
-    """Le natif : `--modele` chargé par torch, la génération, le JSON. Torch absent → 4."""
+    """Le natif : torch (.pt) ou numpy (le DRVM, sans torch) ; torch absent → 4."""
+    if getattr(args, "moteur", "auto") in ("auto", "numpy"):
+        drvm = pathlib.Path(args.modele)
+        if drvm.suffix != ".drvm":
+            drvm = drvm.with_suffix(".drvm")
+        if drvm.exists():
+            try:
+                from tools.drvm_infere import charger as _charger_np, greedy as _greedy_np
+                _t, _cfg = _charger_np(str(drvm))
+                _texte = _greedy_np(_t, _cfg, args.prompt, max(0, args.n),
+                                    min(_cfg["window"], 1024))
+            except Exception as exc:
+                print(f"{NOM}: DRVM illisible : {type(exc).__name__}", file=sys.stderr)
+                return 4
+            if args.json:
+                print(_dumps({"schema": "drave.generation", "version": 1, "moteur": "numpy",
+                              "drvm": str(drvm), "prompt": args.prompt, "n": args.n,
+                              "texte": _texte}))
+            else:
+                print(_texte)
+            return 0
+        if getattr(args, "moteur", "auto") == "numpy":
+            print(f"{NOM}: DRVM absent : {drvm}", file=sys.stderr)
+            return 4
     try:
         import torch  # noqa: F401
     except Exception:
@@ -1617,6 +1640,8 @@ def construire_parseur() -> argparse.ArgumentParser:
     generer.add_argument("--n", type=int, default=128, help="octets à générer")
     generer.add_argument("--top-k", type=int, default=0)
     generer.add_argument("--temperature", type=float, default=0.0)
+    generer.add_argument("--moteur", choices=("auto", "torch", "numpy"), default="auto",
+                         help="le moteur : torch (.pt) ou numpy (le DRVM, sans torch)")
     generer.add_argument("--json", action="store_true")
     generer.set_defaults(fonction=cmd_generer)
     restituer = sous.add_parser(

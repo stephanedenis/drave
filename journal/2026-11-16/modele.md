@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,6 +16,7 @@
 | 11:09 | `4a389c08` | NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ | `en-cours.md`, `README.md`, `README.md` (+14) |
 | 11:16 | `4c3d502a` | NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 | 11:52 | `60c40aa6` | NATIF — L'ÉCHELLE MESURÉE (11 M → 21 M → 34 M) : LES MOTS VALIDES 0,247 → 0,494 → 0,870, LA RÉPÉTITION 1 → 6 → 15 ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE, PAS LA COMPOSITION | `en-cours.md`, `README.md`, `distribue.md` (+14) |
+| 11:56 | `d251babf` | NATIF — LE BILAN DU 16/11 : LE DIAGNOSTIC EST TRANCHÉ (LA COMPOSITION MANQUE ; L'ÉCHELLE ACHÈTE LE VOCABULAIRE ; LE PLAN AUX 4 PALIERS) | `en-cours.md`, `README.md`, `distribue.md` (+14) |
 
 ## Chiffres du jour
 
@@ -25,7 +26,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 379.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 379.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -34,6 +35,7 @@
 - [reports/fiche-modele-natif.md](../../reports/fiche-modele-natif.md)
 - [reports/rapport-banc-generation.md](../../reports/rapport-banc-generation.md)
 - [reports/rapport-bilan-exploitable-2.md](../../reports/rapport-bilan-exploitable-2.md)
+- [reports/rapport-bilan-natif.md](../../reports/rapport-bilan-natif.md)
 - [reports/rapport-natif-exploitable.md](../../reports/rapport-natif-exploitable.md)
 
 <!-- notes -->
