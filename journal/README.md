@@ -13,7 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
-| **2026-11-16** | [2026-11-16/README.md](2026-11-16/README.md) | [docs](2026-11-16/docs.md) · [memoire](2026-11-16/memoire.md) · [mesures](2026-11-16/mesures.md) |
+| **2026-11-16** | [2026-11-16/README.md](2026-11-16/README.md) | [docs](2026-11-16/docs.md) · [memoire](2026-11-16/memoire.md) · [mesures](2026-11-16/mesures.md) · [moteur](2026-11-16/moteur.md) |
 | **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [memoire](2026-11-15/memoire.md) · [mesures](2026-11-15/mesures.md) · [modele](2026-11-15/modele.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
 | **2026-11-14** | [2026-11-14/README.md](2026-11-14/README.md) | [distribue](2026-11-14/distribue.md) · [docs](2026-11-14/docs.md) · [memoire](2026-11-14/memoire.md) · [mesures](2026-11-14/mesures.md) · [moteur](2026-11-14/moteur.md) · [portes](2026-11-14/portes.md) |
 | **2026-11-13** | [2026-11-13/README.md](2026-11-13/README.md) | [distribue](2026-11-13/distribue.md) · [docs](2026-11-13/docs.md) · [memoire](2026-11-13/memoire.md) |
@@ -214,7 +214,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 369.5 h | 202 | 3640 | 25 | 490 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 370.1 h | 202 | 3646 | 25 | 490 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -266,9 +266,11 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Rapport gold 452 et split H50 | 2026-11-15 08:57 | 0.2 h | 1 | 129 | 9 | 0 | [rapport](sessions/session-9a7f5c6a-2798-4ca2-9b0f-131347ef53c3/rapport.md) |
 | `session-` | Restitution v0 pour drave.py | 2026-11-07 14:26 | 0.3 h | 1 | 200 | 13 | 1 | [rapport](sessions/session-9cb32ff9-6fb5-489f-a41e-0e2df9aeb32f/rapport.md) |
 | `session-` | Ajouter évaluer par langue et documenter | 2026-11-14 04:33 | 0.2 h | 1 | 103 | 6 | 1 | [rapport](sessions/session-9d3b2074-c5f0-4f11-be10-31d317bac657/rapport.md) |
+| `session-` | Ajouter --strict à evaluer | 2026-11-16 02:13 | 0.3 h | 1 | 177 | 7 | 0 | [rapport](sessions/session-9e0eeeb8-7572-4a68-a74e-7405d06e3757/rapport.md) |
 | `session-` | Coordination S: 11 verdicts non committés | 2026-11-13 21:52 | 0.1 h | 1 | 82 | 2 | 0 | [rapport](sessions/session-9f876d8f-5661-44f0-b052-0770211328ec/rapport.md) |
 | `session-` | API JSON candidats et rôles normalisés | 2026-11-15 21:50 | 0.4 h | 1 | 189 | 2 | 1 | [rapport](sessions/session-a03a9d9e-ca57-4212-9a3d-b2ae8c71c43f/rapport.md) |
 | `session-` | Relative zéro r035 : reproduire, expliquer, décider | 2026-11-07 12:18 | 0.4 h | 1 | 138 | 8 | 1 | [rapport](sessions/session-a25a85ea-061e-49bd-bb61-64ed4a4433d0/rapport.md) |
+| `session-` | Vérifier et corriger les exemples de la doc | 2026-11-16 02:29 | 0.4 h | 1 | 216 | 8 | 4 | [rapport](sessions/session-a5cb52af-8e84-4452-a21e-1bba677dd8e4/rapport.md) |
 | `session-` | Clôture du chantier et tag annoté | 2026-11-14 06:53 | 0.4 h | 1 | 134 | 4 | 2 | [rapport](sessions/session-a68c9aaf-bd76-458b-8501-5a29431b2e10/rapport.md) |
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Vérification roue Python et gold CLI | 2026-11-16 00:31 | 0.9 h | 1 | 169 | 9 | 2 | [rapport](sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md) |

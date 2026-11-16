@@ -265,6 +265,19 @@ banc est classé `sco` (ou `und` sous le seuil) par l'heuristique ; le profil UD
 **parallèle et propre**, ce n'est pas 398 langues de déploiement. Le bloc est honnête : il dit
 `und` sous le seuil, il ne force pas une langue.
 
+**L'exposition produit — `drave profils`.** Les profils ne restent pas dans le banc :
+`drave profils --texte` rend la **langue probable**, le **script** et la **confiance** depuis
+l'artefact embarqué (398 langues, `tools/tests/linguistique/profils_udhr.json`), et
+`analyser --profils` emploie le même détecteur pour l'annotation. La décision est `und` sous
+le seuil **0,12** ; la langue probable et la confiance restent publiées. Sur un texte court,
+le prior des mots-outils des sept langues du bloc peut trancher (`source: lexique`) ; sur un
+texte long, les 398 profils (`source: profils`). Mesure : **20/20** langues et **20/20**
+scripts sur les 20 langues stratifiées de l'échantillon UDHR (article 15), **313/320 =
+0,9781** sur les articles 15–30, **433/447 = 0,9687** sur l'autotest complet ; texte ambigu
+**`und`** (0,0836), profils permutés **0/20**. Fiche :
+[`rapport-profils.md`](../../reports/rapport-profils.md) ; JSON
+[`profils.json`](../../reports/profils.json).
+
 ## 9. La mesure et la porte
 
 La porte [`porte-bloc-linguistique.sh`](../../tools/porte-bloc-linguistique.sh) :

@@ -58,6 +58,13 @@ avec une précision élevée, et le contrôle permuté tombe au hasard. **Ce que
 la même précision sur du bruit, des codes mêlés ou des langues proches ; l'UDHR est **parallèle
 et propre**, et un article par langue ne fait pas une campagne multi-domaines.
 
+**L'exposition produit (U3).** `drave profils --texte` rend la langue probable, le script et
+la confiance depuis l'artefact embarqué (398 langues), et `analyser --profils` emploie le même
+détecteur. Sur les **20 langues stratifiées** de l'échantillon UDHR (article 15 tenu à
+l'écart) : **20/20** langues et **20/20** scripts ; sur les articles 15–30 : **313/320 =
+0,9781** ; texte ambigu **`und`** (0,0836), profils permutés **0/20**. Fiche :
+[`rapport-profils.md`](rapport-profils.md).
+
 **Les erreurs nommées** : l'anglais et le scots sont proches ; l'échantillon anglais du banc est
 classé **`sco`** (ou **`und`** sous le seuil) par l'heuristique, et le `MockNeuronal` — qui lit
 les mêmes profils — ne le corrige pas. Le vrai correctif est un modèle neuronal qualifié, ou un

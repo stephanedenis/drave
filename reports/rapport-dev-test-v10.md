@@ -463,7 +463,7 @@ garde, que la fiche v10 ne mentionne pas.
 2. **`r303` sans perdre `g017`** : la garde `predicat_vu` doit distinguer l'adverbe de phrase
    (« yesterday » exclu) de l'adverbe complément du prédicat (« tard » inclus). Une condition
    sur le lexique/la position (adverbe final après un verbe copule ou un verbe intransitif)
-   est à tester ; le retrait pur de la garde (arbre sale) récupère `r303`/`r288` mais perd
+   est à tester ; le retrait pur de la garde (état `653a7981`) récupère `r303`/`r288` mais perd
    `g017`, et `est_sub` dans la ligne `stype` perd `r241`.
 3. **`s037` (R2)** : implémenter `DURS`/`RELATIFS` pour un relatif initial sans précédent
    (`qui`, `dont`, `where`…) au lieu de `precedent is None → SUB`. Vérifier `r241` : `when`

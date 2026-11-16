@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **764 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **767 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -185,9 +185,11 @@
 | [rapport-etat-r.md](rapport-etat-r.md) | État du chantier R — le lecteur : le tagger n'est pas à 0,944 contre 0,85, R1.2-1024 est mesuré, R4.4 attend la vérité humaine |
 | [rapport-etat-s.md](rapport-etat-s.md) | S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas |
 | [rapport-evaluer-langue.md](rapport-evaluer-langue.md) | J11.2 — la mesure par langue : l'anglais devant, mais le gold n'est pas le même |
+| [rapport-evaluer-strict.md](rapport-evaluer-strict.md) | V1 — `evaluer --strict` : les quatre modes locaux, la cascade à 86,25 % / 88,91 %, le plancher 0,70 qui mord |
 | [rapport-execution-v41.md](rapport-execution-v41.md) | Rapport — test d'exécution locale de DeepSeek-V4.1-Flash, avec toutes les optimisations |
 | [rapport-exemples-rejoues.md](rapport-exemples-rejoues.md) | J11.1 — les cinq exemples rejoués : 4 blocs sur 5 ont bougé, `r035` n'est plus un échec |
 | [rapport-exemples-tagger.md](rapport-exemples-tagger.md) | D1 — les exemples `--tagger` et `--reel` : le coût affiché, la base honnête, cinq blocs rejoués |
+| [rapport-exemples-v2.md](rapport-exemples-v2.md) | V2 — les cinq exemples rejoués : 3 blocs corrigés par les rôles normalisés, 27/27 cas conformes |
 | [rapport-familles-9.md](rapport-familles-9.md) | C3.2c — les 9 familles : 7 sur 9 au-dessus de 30 % |
 | [rapport-faq-sommaire.md](rapport-faq-sommaire.md) | E1 — la FAQ dans le sommaire et les liens : 9 ancres, 5 liens, 0 mort |
 | [rapport-faq.md](rapport-faq.md) | B13 / D3 — la FAQ du produit : dix questions, dix réponses vérifiées |
@@ -661,6 +663,7 @@
 | [rapport-prelire-grappe.md](rapport-prelire-grappe.md) | S4 — le préchargement par grappe : la lecture à la demande rend 29 Mo/s là où la grappe rend 1 230 |
 | [rapport-produit-bloc-l.md](rapport-produit-bloc-l.md) | Audit produit du bloc linguistique — 0 plantage sur 50 phrases, 34/50 avec une anomalie de contrat |
 | [rapport-produit-v0.md](rapport-produit-v0.md) | B13 — le premier produit : `drave` v0, une CLI qui analyse, mesure et rejoue |
+| [rapport-profils.md](rapport-profils.md) | U3 — `drave profils` : la détection de langue des 398 profils UDHR, exposée |
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
 | [rapport-protocole-date.md](rapport-protocole-date.md) | B1 — le protocole Panini à date contrôlée : 60 paires, trois strates, et les 26 signatures qui manquent |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |

@@ -151,9 +151,9 @@ class TestProduit(unittest.TestCase):
             self.assertIsNotNone(ligne, f"ligne du code {code} absente de la notice")
             self.assertIn(sens, ligne.group(0), ligne.group(0))
 
-    def test_aide_et_help_des_quatre_sous_commandes(self) -> None:
-        """T5 — `--aide` et `--help` répondent sur les quatre sous-commandes, code 0."""
-        for commande in ("analyser", "evaluer", "rejouer", "restituer"):
+    def test_aide_et_help_des_cinq_sous_commandes(self) -> None:
+        """T5/U3 — `--aide` et `--help` répondent sur les cinq sous-commandes, code 0."""
+        for commande in ("analyser", "evaluer", "profils", "rejouer", "restituer"):
             for drapeau in ("--aide", "--help"):
                 sortie = drave(commande, drapeau)
                 self.assertEqual(sortie.returncode, 0,

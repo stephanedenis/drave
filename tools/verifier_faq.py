@@ -314,10 +314,12 @@ def q9_limites() -> dict:
     assert aide.returncode == 0
     for commande in ("analyser", "evaluer", "rejouer", "restituer"):
         assert commande in aide.stdout, commande
-    for fantome in ("--sortie", "--mode", "--strict"):
+    for fantome in ("--sortie", "--mode"):
         assert fantome not in aide.stdout, fantome
         r = _run(["analyser", "Le chat dort.", fantome])
         assert r.returncode == 5, (fantome, r.returncode)
+    # `--strict` n'est plus fantôme : il est réel sur `evaluer` et doit être dans l'aide.
+    assert "--strict" in aide.stdout
 
     source = DRAVE.read_text(encoding="utf-8")
     for interdit in ("http.server", "transformers", "torch", "sys.stdin"):
@@ -352,7 +354,7 @@ def q9_limites() -> dict:
                    "publication PyPI"],
         "empaquetage": {"livre": "pip install -e . + commande drave",
                         "non_livre": "wheel / paquet PyPI"},
-        "options_fantomes": {"--sortie": "code 5", "--mode": "code 5", "--strict": "code 5"},
+        "options_fantomes": {"--sortie": "code 5", "--mode": "code 5"},
         "candidats": {"type": "objets {span, cible, source} (v2) ; "
                              "chaînes d'affichage en lecture",
                       "exemple": objets[0]},

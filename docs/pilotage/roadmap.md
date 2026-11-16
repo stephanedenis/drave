@@ -166,14 +166,23 @@ gold B13 ; **E2** ([fiche](../../reports/rapport-tagger-erreurs.md)).
 **U1 — les O(k²) bornés (16/11).** 10 000 mots : **3,99 → 0,82 s** (×4,9),
 **12 259 mots/s**, **127,4 Mio** ; JSON identique. **α = 1,076** (1,530 avant), +0,00077 de R² ; sorties identiques (612/452). [Fiche](../../reports/rapport-performance-fix.md) ·
 [JSON](../../reports/performance-fix.json) · [contrôle](../../tools/verifier_performance_fix.py).
-**U2 — la roue (16/11)** : **1 727 201 o**, 422 entrées, mêmes JSON hors dépôt ; sans gold,
-`evaluer` **4** ([fiche](../../reports/rapport-roue.md)). Prochaine action : **U3 — `--profils`**.
+**U2 — la roue (16/11)** : **1 727 201 o** ; sans gold, `evaluer` **4**
+([fiche](../../reports/rapport-roue.md)).
 
-**T6 — le bilan exploitable (15/11, 23 h 35).** Cinq briques : installation éditable,
-quickstart 3/3, API (2 139 objets, 8 rôles), performance (10 000 mots 4,01 s, 126 Mio), CLI
-20/20. Trois limites : clone public 88,70 % d'attachement au lieu de 99,58 %, O(k²) (α = 1,55),
-gold de S non humain. [Fiche](../../reports/rapport-bilan-exploitable.md) ·
-[JSON](../../reports/rapport-bilan-exploitable.json). **U1 livré** ; restent **J4**, **Panini** et `auto`.
+**U3** : **398 profils UDHR** ; **20/20**, **433/447** ; ambigu **`und`**
+([fiche](../../reports/rapport-profils.md)).
+
+**V1 — `evaluer --strict` (16/11).** Quatre modes, cascade **0,8625** / **0,8891**, plancher
+**0,70** ; négatif **0,0000** → **1**. [Fiche](../../reports/rapport-evaluer-strict.md) ·
+[JSON](../../reports/evaluer-strict.json).
+
+**V2 — exemples.** 3 corrigés par les rôles normalisés ; 18 candidats objets, 0 faux ;
+`tools/verifie_exemples.py` 27/27 ; démarrage 3/3. [Fiche](../../reports/rapport-exemples-v2.md) ·
+[JSON](../../reports/rapport-exemples-v2.json).
+
+**T6 — le bilan exploitable (15/11, 23 h 35).** Cinq briques ; trois limites (clone public,
+O(k²), or de S). [Fiche](../../reports/rapport-bilan-exploitable.md) ·
+[JSON](../../reports/rapport-bilan-exploitable.json).
 
 **La vue d'ensemble** est dans [`chantiers.md`](chantiers.md) ; carte,
 [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; plan,
@@ -181,7 +190,7 @@ gold de S non humain. [Fiche](../../reports/rapport-bilan-exploitable.md) ·
 
 ## L'ordre du jour (carpe diem)
 
-L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-15 23 h 35**.
+L'ordre est **la valeur / le coût**, pas la date. La dernière mise à jour est le **2026-11-16**.
 
 1. **R0 — le lecteur v0** : **R0.1, R0.2 et R0.3 sont mesurés** (51 pages ; récupération **1,000** à
    30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont

@@ -31,6 +31,21 @@ assert any(e['niveau'] == 'pos' for e in d['etiquettes'])
   fi
 done
 
+if sortie=$(python3 tools/drave.py profils --texte "Le chat dort." --json 2>&1) \
+   && printf '%s' "$sortie" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+assert d['schema'] == 'drave.profils', d.get('schema')
+assert d['langue'] == 'fra', d.get('langue')
+assert d['script'] == 'Latn', d.get('script')
+assert d['profils']['langues'] == 398, d.get('profils')
+assert 0.0 < d['confiance'] <= 1.0, d.get('confiance')
+" 2>/dev/null; then
+  dit ✅ "profils : langue, script, confiance, 398 profils"
+else
+  dit ❌ "profils : sortie inattendue : $sortie"; ko=1
+fi
+
 a=$(python3 tools/drave.py rejouer "Le chat dort." 2>&1 | grep -o 'sha256 [0-9a-f]*' | head -1)
 b=$(python3 tools/drave.py rejouer "Le chat dort." 2>&1 | grep -o 'sha256 [0-9a-f]*' | head -1)
 if [ -n "$a" ] && [ "$a" = "$b" ]; then dit ✅ "rejeu : $a deux fois"; else dit ❌ "rejeu instable : '$a' vs '$b'"; ko=1; fi
@@ -39,6 +54,12 @@ if python3 tools/tests/test_produit.py >/tmp/porte-produit-tests.log 2>&1; then
   dit ✅ "smoke test : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-tests.log | head -1)"
 else
   dit ❌ "smoke test en échec (voir /tmp/porte-produit-tests.log)"; ko=1
+fi
+
+if python3 tools/tests/test_evaluer_strict.py >/tmp/porte-produit-strict.log 2>&1; then
+  dit ✅ "evaluer --strict : $(grep -oE 'Ran [0-9]+ tests' /tmp/porte-produit-strict.log | head -1)"
+else
+  dit ❌ "evaluer --strict en échec (voir /tmp/porte-produit-strict.log)"; ko=1
 fi
 
 if python3 tools/verifier_schema_produit.py --gold 20 >/tmp/porte-produit-valide.log 2>&1; then
@@ -112,6 +133,12 @@ if [ "$code" -eq 3 ] && printf '%s' "$refus" | python3 -c "import json,sys; d=js
   dit ✅ "refus : JSON avec refus, code 3"
 else
   dit ❌ "refus : code $code, JSON non conforme"; ko=1
+fi
+
+if python3 tools/verifie_exemples.py >/tmp/porte-produit-exemples.log 2>&1; then
+  dit ✅ "exemples de la doc : $(tail -1 /tmp/porte-produit-exemples.log | sed 's/^ *//')"
+else
+  dit ❌ "exemples de la doc en écart (voir /tmp/porte-produit-exemples.log)"; ko=1
 fi
 
 if AUTOTEST_JOBS=8 timeout 600 python3 -m tools.pensee.autotest >/tmp/porte-produit-autotest.log 2>&1; then

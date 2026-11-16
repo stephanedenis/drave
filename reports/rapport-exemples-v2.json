@@ -1,0 +1,352 @@
+{
+ "tache": "V2",
+ "titre": "Les exemples de la doc — rejeu v2",
+ "date": "2026-11-16",
+ "head": "2e617034",
+ "code": {
+  "cli": "drave 0.1.0",
+  "schema": 2,
+  "commande": "python3 tools/drave.py",
+  "python": "3.13.16",
+  "jq": "1.8.2"
+ },
+ "exemples": {
+  "fichier": "docs/produit/exemples.md",
+  "blocs_rejoues": 5,
+  "blocs_identiques": 2,
+  "blocs_corriges": 3,
+  "corrections": [
+   {
+    "bloc": "§2 g011",
+    "champ": "role",
+    "segment": "que j'ai lu est intéressant",
+    "avant": "qualité",
+    "apres": "qualite"
+   },
+   {
+    "bloc": "§3 r241",
+    "champ": "role",
+    "segment": "The day",
+    "avant": "groupe nominal",
+    "apres": "objet"
+   },
+   {
+    "bloc": "§3 r241",
+    "champ": "role",
+    "segment": "when we left",
+    "avant": "qualité",
+    "apres": "qualite"
+   },
+   {
+    "bloc": "§3 r241",
+    "champ": "role",
+    "segment": "was beautiful",
+    "avant": "prédicat",
+    "apres": "predicat"
+   },
+   {
+    "bloc": "§5 r035",
+    "champ": "role",
+    "segment": "The film",
+    "avant": "groupe nominal",
+    "apres": "objet"
+   },
+   {
+    "bloc": "§5 r035",
+    "champ": "role",
+    "segment": "she talks about",
+    "avant": "qualité",
+    "apres": "qualite"
+   },
+   {
+    "bloc": "§5 r035",
+    "champ": "role",
+    "segment": "is out",
+    "avant": "prédicat",
+    "apres": "predicat"
+   }
+  ],
+  "candidats_objets": {
+   "total": 18,
+   "spans_exacts": 18,
+   "spans_faux": 0,
+   "exemples": [
+    "dort[8:12]",
+    "chat[3:7]",
+    "livre[3:8]",
+    "intéressant[25:36]",
+    "day[4:7]",
+    "beautiful[25:34]",
+    "film[4:8]",
+    "out[21:24]"
+   ]
+  },
+  "roles": {
+   "publies": [
+    "agent",
+    "objet",
+    "predicat",
+    "qualite"
+   ],
+   "vocabulaire": 8,
+   "hors_vocabulaire": 0
+  },
+  "duree": {
+   "drapeau": "--duree",
+   "champ": "cout.duree_s",
+   "defaut": "absent",
+   "valeurs_observees_s": [
+    0.004,
+    0.0058
+   ],
+   "reproductible": false,
+   "controle": "presence et type seulement"
+  }
+ },
+ "demarrage": {
+  "fichier": "docs/produit/demarrage.md",
+  "commandes": [
+   "drave --version",
+   "drave analyser \"Le chat dort.\"",
+   "drave evaluer"
+  ],
+  "commandes_conformes": 3,
+  "condition": "copie de tools/ sans structures/ ni docwatch/ (clone public)",
+  "json_octets": 5899,
+  "json_extrait_lignes": 22,
+  "profils_lignes": 9,
+  "note_depot_developpement": {
+   "role": "agent",
+   "cible": "chat",
+   "f1": 0.7902,
+   "attachement_exact": 0.9958
+  }
+ },
+ "controle_negatif": {
+  "script": "tools/verifie_exemples.py",
+  "cas": 27,
+  "conformes": 27,
+  "echecs": 0,
+  "mutation": {
+   "motif": "\"role\": \"qualite\" -> \"role\": \"qualité\"",
+   "detectee": true,
+   "cas_en_ecart": 1
+  }
+ },
+ "limites": [
+  "Les blocs --tagger du §6 ne sont pas rejoués par l'API (tokens, cache, latence non reproductibles) ; seuls les syntagmes sont comparés.",
+  "La durée est une horloge murale : le script vérifie sa présence et son type, pas sa valeur.",
+  "Le démarrage est une copie source sans tools/structures, pas un git clone + venv + pip.",
+  "Le HEAD mesuré (2e617034) précède le commit V2 ; l'arbre de travail contient aussi U1–U3."
+ ],
+ "notes": {
+  "doc": "docs/produit/exemples.md",
+  "rapport": "reports/rapport-exemples-v2.md",
+  "commande": "python3 tools/verifie_exemples.py",
+  "mutation": "python3 tools/verifie_exemples.py --mutation"
+ },
+ "resultats": [
+  {
+   "id": "exemples §1 lisible",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "10 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "exemples §1 JSON",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "exemples §1 durée",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "duree_s=0.003915 (variable), octets exacts",
+   "ecarts": [],
+   "genre": "json_duree"
+  },
+  {
+   "id": "exemples §2 JSON",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "exemples §3 JSON",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "exemples §4 refus CLI",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "code 3, stderr exact",
+   "ecarts": [],
+   "genre": "refus"
+  },
+  {
+   "id": "exemples §4 refus API",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "exemples §5 JSON",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "exemples §6.1 syntagmes",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "2 ligne(s) de syntagmes",
+   "ecarts": [],
+   "genre": "syntagmes"
+  },
+  {
+   "id": "exemples §6.2 syntagmes",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "4 ligne(s) de syntagmes",
+   "ecarts": [],
+   "genre": "syntagmes"
+  },
+  {
+   "id": "exemples §6.3 syntagmes",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "3 ligne(s) de syntagmes",
+   "ecarts": [],
+   "genre": "syntagmes"
+  },
+  {
+   "id": "exemples §7.1 --reel",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "13 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "exemples §7.2 --reel JSON",
+   "doc": "exemples.md",
+   "ok": true,
+   "detail": "JSON exact",
+   "ecarts": [],
+   "genre": "json"
+  },
+  {
+   "id": "demarrage §3.1 --version",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "1 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "demarrage §3.2 analyser",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "10 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "demarrage §3.3 evaluer",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "13 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "demarrage §3.4 JSON",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "22 lignes",
+   "ecarts": [],
+   "genre": "json_lignes"
+  },
+  {
+   "id": "demarrage §3.4 octets",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "5899 octets",
+   "ecarts": [],
+   "genre": "octets"
+  },
+  {
+   "id": "demarrage §3.4 consommateur",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "2 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "demarrage §3.5 profils",
+   "doc": "demarrage.md",
+   "ok": true,
+   "detail": "9 ligne(s)",
+   "ecarts": [],
+   "genre": "texte"
+  },
+  {
+   "id": "note dev analyser",
+   "ok": true,
+   "ecarts": [],
+   "detail": "rôle=agent"
+  },
+  {
+   "id": "note dev cible",
+   "ok": true,
+   "ecarts": [],
+   "detail": "→ chat"
+  },
+  {
+   "id": "note dev f1",
+   "ok": true,
+   "ecarts": [],
+   "detail": "F1 79.02 %"
+  },
+  {
+   "id": "note dev attachement",
+   "ok": true,
+   "ecarts": [],
+   "detail": "ATTACHEMENT exact 99.58 %"
+  },
+  {
+   "id": "invariants candidats objets",
+   "ok": true,
+   "ecarts": [],
+   "detail": "18 candidats objets, 0 span faux"
+  },
+  {
+   "id": "invariants rôles normalisés",
+   "ok": true,
+   "ecarts": [],
+   "detail": "4 rôle(s), tous dans les 8 du vocabulaire"
+  },
+  {
+   "id": "invariants durée",
+   "ok": true,
+   "ecarts": [],
+   "detail": "absente sans --duree, numérique avec"
+  }
+ ]
+}

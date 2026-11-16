@@ -1,0 +1,1029 @@
+{
+ "schema": "drave.profils.mesure",
+ "version": 1,
+ "date": "2026-11-16T01:52:39",
+ "tache": "U3 (suite de T5)",
+ "ligne_roadmap": "B13",
+ "produit": "0.1.0",
+ "profils": {
+  "fichier": "tools/tests/linguistique/profils_udhr.json",
+  "sha256": "33aee69d7659c9bc9ecf9c1caf1740953d36b16d71efaa8279571a652d499cf1",
+  "octets": 802110,
+  "langues": 398,
+  "top": 200,
+  "train": [
+   0,
+   14
+  ],
+  "source": "data/udhr/articles.jsonl",
+  "source_sha256": "e31851d53a882a4ff2e62187a79c5e44d7a33eaf874aacd0ee380041ed992dbf",
+  "duree_chargement_s": 0.048
+ },
+ "echantillon_20": {
+  "nom": "20 langues stratifiées UDHR (5 familles × 4, 10 écritures)",
+  "source": "reports/rapport-corpus-commun.md § 3",
+  "article": 15,
+  "langues": 20,
+  "tests": 20,
+  "langue": {
+   "justes": 20,
+   "total": 20,
+   "taux": 1.0
+  },
+  "decision": {
+   "justes": 20,
+   "total": 20,
+   "taux": 1.0
+  },
+  "script": {
+   "justes": 20,
+   "total": 20,
+   "taux": 1.0
+  },
+  "confiance": {
+   "moyenne": 0.6255,
+   "min": 0.3187,
+   "max": 1.0
+  },
+  "par_langue": [
+   {
+    "fichier": "udhr_eng.xml",
+    "iso3": "eng",
+    "famille": "Indo-European",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.4213,
+    "exemple": {
+     "art": 15,
+     "langue": "eng",
+     "decision": "eng",
+     "script": "Latn",
+     "confiance": 0.4213,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_hin.xml",
+    "iso3": "hin",
+    "famille": "Indo-European",
+    "script": "Deva",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.4853,
+    "exemple": {
+     "art": 15,
+     "langue": "hin",
+     "decision": "hin",
+     "script": "Deva",
+     "confiance": 0.4853,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_bel.xml",
+    "iso3": "bel",
+    "famille": "Indo-European",
+    "script": "Cyrl",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.5897,
+    "exemple": {
+     "art": 15,
+     "langue": "bel",
+     "decision": "bel",
+     "script": "Cyrl",
+     "confiance": 0.5897,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ell_monotonic.xml",
+    "iso3": "ell",
+    "famille": "Indo-European",
+    "script": "Grek",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 1.0,
+    "exemple": {
+     "art": 15,
+     "langue": "ell",
+     "decision": "ell",
+     "script": "Grek",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_kin.xml",
+    "iso3": "kin",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.4035,
+    "exemple": {
+     "art": 15,
+     "langue": "kin",
+     "decision": "kin",
+     "script": "Latn",
+     "confiance": 0.4035,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ewe.xml",
+    "iso3": "ewe",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.6366,
+    "exemple": {
+     "art": 15,
+     "langue": "ewe",
+     "decision": "ewe",
+     "script": "Latn",
+     "confiance": 0.6366,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ibo.xml",
+    "iso3": "ibo",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.7487,
+    "exemple": {
+     "art": 15,
+     "langue": "ibo",
+     "decision": "ibo",
+     "script": "Latn",
+     "confiance": 0.7487,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_fuf_adlm.xml",
+    "iso3": "fuf",
+    "famille": "Atlantic-Congo",
+    "script": "Adlm",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 1.0,
+    "exemple": {
+     "art": 15,
+     "langue": "fuf",
+     "decision": "fuf",
+     "script": "Adlm",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ind.xml",
+    "iso3": "ind",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.3812,
+    "exemple": {
+     "art": 15,
+     "langue": "ind",
+     "decision": "ind",
+     "script": "Latn",
+     "confiance": 0.3812,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_tgl.xml",
+    "iso3": "tgl",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.3825,
+    "exemple": {
+     "art": 15,
+     "langue": "tgl",
+     "decision": "tgl",
+     "script": "Latn",
+     "confiance": 0.3825,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_mly_arab.xml",
+    "iso3": "zlm",
+    "famille": "Austronesian",
+    "script": "Arab",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.7171,
+    "exemple": {
+     "art": 15,
+     "langue": "zlm",
+     "decision": "zlm",
+     "script": "Arab",
+     "confiance": 0.7171,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_jav.xml",
+    "iso3": "jav",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.3187,
+    "exemple": {
+     "art": 15,
+     "langue": "jav",
+     "decision": "jav",
+     "script": "Latn",
+     "confiance": 0.3187,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_mya.xml",
+    "iso3": "mya",
+    "famille": "Sino-Tibetan",
+    "script": "Mymr",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.8845,
+    "exemple": {
+     "art": 15,
+     "langue": "mya",
+     "decision": "mya",
+     "script": "Mymr",
+     "confiance": 0.8845,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_cmn_hant.xml",
+    "iso3": "cmn",
+    "famille": "Sino-Tibetan",
+    "script": "Hant",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.3257,
+    "exemple": {
+     "art": 15,
+     "langue": "cmn",
+     "decision": "cmn",
+     "script": "Hani",
+     "confiance": 0.3257,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_cnh.xml",
+    "iso3": "cnh",
+    "famille": "Sino-Tibetan",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.3623,
+    "exemple": {
+     "art": 15,
+     "langue": "cnh",
+     "decision": "cnh",
+     "script": "Latn",
+     "confiance": 0.3623,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ctd.xml",
+    "iso3": "ctd",
+    "famille": "Sino-Tibetan",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.4867,
+    "exemple": {
+     "art": 15,
+     "langue": "ctd",
+     "decision": "ctd",
+     "script": "Latn",
+     "confiance": 0.4867,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_arb.xml",
+    "iso3": "arb",
+    "famille": "Afro-Asiatic",
+    "script": "Arab",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.8069,
+    "exemple": {
+     "art": 15,
+     "langue": "arb",
+     "decision": "arb",
+     "script": "Arab",
+     "confiance": 0.8069,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_amh.xml",
+    "iso3": "amh",
+    "famille": "Afro-Asiatic",
+    "script": "Ethi",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 1.0,
+    "exemple": {
+     "art": 15,
+     "langue": "amh",
+     "decision": "amh",
+     "script": "Ethi",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_heb.xml",
+    "iso3": "heb",
+    "famille": "Afro-Asiatic",
+    "script": "Hebr",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.9412,
+    "exemple": {
+     "art": 15,
+     "langue": "heb",
+     "decision": "heb",
+     "script": "Hebr",
+     "confiance": 0.9412,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_hau_NE.xml",
+    "iso3": "hau",
+    "famille": "Afro-Asiatic",
+    "script": "Latn",
+    "tests": 1,
+    "justes": 1,
+    "decisions": 1,
+    "scripts": 1,
+    "confiance_min": 0.6177,
+    "exemple": {
+     "art": 15,
+     "langue": "hau",
+     "decision": "hau",
+     "script": "Latn",
+     "confiance": 0.6177,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   }
+  ]
+ },
+ "echantillon_20_complet": {
+  "articles": "15–30",
+  "langues": 20,
+  "tests": 320,
+  "langue": {
+   "justes": 313,
+   "total": 320,
+   "taux": 0.9781
+  },
+  "decision": {
+   "justes": 309,
+   "total": 320,
+   "taux": 0.9656
+  },
+  "script": {
+   "justes": 320,
+   "total": 320,
+   "taux": 1.0
+  },
+  "confiance": {
+   "moyenne": 0.5907,
+   "min": 0.0056,
+   "max": 1.0
+  },
+  "par_langue": [
+   {
+    "fichier": "udhr_eng.xml",
+    "iso3": "eng",
+    "famille": "Indo-European",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.2713,
+    "exemple": {
+     "art": 15,
+     "langue": "eng",
+     "decision": "eng",
+     "script": "Latn",
+     "confiance": 0.4213,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_hin.xml",
+    "iso3": "hin",
+    "famille": "Indo-European",
+    "script": "Deva",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.2917,
+    "exemple": {
+     "art": 15,
+     "langue": "hin",
+     "decision": "hin",
+     "script": "Deva",
+     "confiance": 0.4853,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_bel.xml",
+    "iso3": "bel",
+    "famille": "Indo-European",
+    "script": "Cyrl",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.4481,
+    "exemple": {
+     "art": 15,
+     "langue": "bel",
+     "decision": "bel",
+     "script": "Cyrl",
+     "confiance": 0.5897,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ell_monotonic.xml",
+    "iso3": "ell",
+    "famille": "Indo-European",
+    "script": "Grek",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 1.0,
+    "exemple": {
+     "art": 15,
+     "langue": "ell",
+     "decision": "ell",
+     "script": "Grek",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_kin.xml",
+    "iso3": "kin",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 15,
+    "decisions": 15,
+    "scripts": 16,
+    "confiance_min": 0.1875,
+    "exemple": {
+     "art": 15,
+     "langue": "kin",
+     "decision": "kin",
+     "script": "Latn",
+     "confiance": 0.4035,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ewe.xml",
+    "iso3": "ewe",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.4377,
+    "exemple": {
+     "art": 15,
+     "langue": "ewe",
+     "decision": "ewe",
+     "script": "Latn",
+     "confiance": 0.6366,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ibo.xml",
+    "iso3": "ibo",
+    "famille": "Atlantic-Congo",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.5649,
+    "exemple": {
+     "art": 15,
+     "langue": "ibo",
+     "decision": "ibo",
+     "script": "Latn",
+     "confiance": 0.7487,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_fuf_adlm.xml",
+    "iso3": "fuf",
+    "famille": "Atlantic-Congo",
+    "script": "Adlm",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 1.0,
+    "exemple": {
+     "art": 15,
+     "langue": "fuf",
+     "decision": "fuf",
+     "script": "Adlm",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ind.xml",
+    "iso3": "ind",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.298,
+    "exemple": {
+     "art": 15,
+     "langue": "ind",
+     "decision": "ind",
+     "script": "Latn",
+     "confiance": 0.3812,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_tgl.xml",
+    "iso3": "tgl",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.2238,
+    "exemple": {
+     "art": 15,
+     "langue": "tgl",
+     "decision": "tgl",
+     "script": "Latn",
+     "confiance": 0.3825,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_mly_arab.xml",
+    "iso3": "zlm",
+    "famille": "Austronesian",
+    "script": "Arab",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.4646,
+    "exemple": {
+     "art": 15,
+     "langue": "zlm",
+     "decision": "zlm",
+     "script": "Arab",
+     "confiance": 0.7171,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_jav.xml",
+    "iso3": "jav",
+    "famille": "Austronesian",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 13,
+    "decisions": 10,
+    "scripts": 16,
+    "confiance_min": 0.0966,
+    "exemple": {
+     "art": 15,
+     "langue": "jav",
+     "decision": "jav",
+     "script": "Latn",
+     "confiance": 0.3187,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_mya.xml",
+    "iso3": "mya",
+    "famille": "Sino-Tibetan",
+    "script": "Mymr",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.8272,
+    "exemple": {
+     "art": 15,
+     "langue": "mya",
+     "decision": "mya",
+     "script": "Mymr",
+     "confiance": 0.8845,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_cmn_hant.xml",
+    "iso3": "cmn",
+    "famille": "Sino-Tibetan",
+    "script": "Hant",
+    "tests": 16,
+    "justes": 13,
+    "decisions": 12,
+    "scripts": 16,
+    "confiance_min": 0.0056,
+    "exemple": {
+     "art": 15,
+     "langue": "cmn",
+     "decision": "cmn",
+     "script": "Hani",
+     "confiance": 0.3257,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_cnh.xml",
+    "iso3": "cnh",
+    "famille": "Sino-Tibetan",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.3105,
+    "exemple": {
+     "art": 15,
+     "langue": "cnh",
+     "decision": "cnh",
+     "script": "Latn",
+     "confiance": 0.3623,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_ctd.xml",
+    "iso3": "ctd",
+    "famille": "Sino-Tibetan",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.3208,
+    "exemple": {
+     "art": 15,
+     "langue": "ctd",
+     "decision": "ctd",
+     "script": "Latn",
+     "confiance": 0.4867,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_arb.xml",
+    "iso3": "arb",
+    "famille": "Afro-Asiatic",
+    "script": "Arab",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.7442,
+    "exemple": {
+     "art": 15,
+     "langue": "arb",
+     "decision": "arb",
+     "script": "Arab",
+     "confiance": 0.8069,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_amh.xml",
+    "iso3": "amh",
+    "famille": "Afro-Asiatic",
+    "script": "Ethi",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.9988,
+    "exemple": {
+     "art": 15,
+     "langue": "amh",
+     "decision": "amh",
+     "script": "Ethi",
+     "confiance": 1.0,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_heb.xml",
+    "iso3": "heb",
+    "famille": "Afro-Asiatic",
+    "script": "Hebr",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.7889,
+    "exemple": {
+     "art": 15,
+     "langue": "heb",
+     "decision": "heb",
+     "script": "Hebr",
+     "confiance": 0.9412,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   },
+   {
+    "fichier": "udhr_hau_NE.xml",
+    "iso3": "hau",
+    "famille": "Afro-Asiatic",
+    "script": "Latn",
+    "tests": 16,
+    "justes": 16,
+    "decisions": 16,
+    "scripts": 16,
+    "confiance_min": 0.4947,
+    "exemple": {
+     "art": 15,
+     "langue": "hau",
+     "decision": "hau",
+     "script": "Latn",
+     "confiance": 0.6177,
+     "source": "profils",
+     "ok": true,
+     "script_ok": true
+    }
+   }
+  ]
+ },
+ "autotest_398": {
+  "langues": 398,
+  "tests": 447,
+  "brut": {
+   "justes": 433,
+   "total": 447,
+   "taux": 0.9687
+  },
+  "cli": {
+   "justes": 431,
+   "total": 447,
+   "taux": 0.9642,
+   "sources": {
+    "profils": 445,
+    "lexique": 2
+   }
+  },
+  "script": {
+   "justes": 447,
+   "total": 447,
+   "taux": 1.0
+  }
+ },
+ "controle_permute": {
+  "echantillon_20": {
+   "justes": 0,
+   "total": 20,
+   "taux": 0.0
+  },
+  "autotest_398": {
+   "justes": 1,
+   "total": 447,
+   "taux": 0.0022
+  },
+  "attendu": "proche du hasard"
+ },
+ "controle_negatif": {
+  "texte_ambigu": {
+   "texte": "All human beings are born free and equal in dignity and rights. Tous les êtres humains naissent libres et égaux en dignité et en droits.",
+   "langue": "und",
+   "langue_probable": "eng",
+   "confiance": 0.0836,
+   "seuil": 0.12,
+   "sous_seuil": true,
+   "source": "profils",
+   "attendu": "und (sous le seuil) — deux langues mélangées à parts égales",
+   "ok": true
+  },
+  "mot_isole": {
+   "texte": "chat",
+   "langue": "und",
+   "langue_probable": "agr",
+   "confiance": 0.04,
+   "attendu": "und — un mot ne fait pas une langue (pénalité des textes très courts)",
+   "ok": true
+  },
+  "vide": {
+   "langue": "und",
+   "refus": "vide",
+   "attendu": "und + refus=vide",
+   "ok": true
+  }
+ },
+ "identite": {
+  "langues_corpus": 398,
+  "langues_artefact": 398,
+  "differences": [],
+  "n_differences": 0,
+  "sha256_source_corpus": "e31851d53a882a4ff2e62187a79c5e44d7a33eaf874aacd0ee380041ed992dbf",
+  "sha256_source_artefact": "e31851d53a882a4ff2e62187a79c5e44d7a33eaf874aacd0ee380041ed992dbf",
+  "source_identique": true,
+  "ok": true
+ },
+ "cli": {
+  "commande": "python3 tools/drave.py profils --texte <article 15 eng> --json",
+  "code": 0,
+  "langue": "eng",
+  "ok": true
+ },
+ "duree_totale_s": 21.384,
+ "verdict": {
+  "echantillon_20": true,
+  "script_20": true,
+  "permute_faible": true,
+  "ambigu_refuse": true,
+  "vide_refuse": true,
+  "identite": true,
+  "cli": true
+ },
+ "limites": [
+  "l'échantillon de 20 langues est stratifié (5 familles, 10 écritures), pas aléatoire : 20/20 ne se transporte pas aux 398 ; l'autotest complet donne 433/447 brut et 431/447 sur le chemin CLI (hybride court/long)",
+  "l'UDHR est parallèle et propre : pas de bruit, pas de codes mêlés, pas de langues proches non séparées (le chinois mandarin et le jinyu, l'anglais et le scots)",
+  "la confiance n'est pas calibrée : c'est une marge entre profils, pas une probabilité",
+  "le prior des textes courts ne couvre que les sept langues à mots-outils du bloc ; hors de ces sept langues, un texte très court peut rester und",
+  "les profils sont construits sur les articles 0–14 et testés sur l'article 15 : c'est un test tenu à l'écart, pas une validation croisée"
+ ],
+ "resume": {
+  "langues_profil": 398,
+  "echantillon_langues": 20,
+  "article": 15,
+  "precision_langue_20": 1.0,
+  "precision_script_20": 1.0,
+  "precision_langue_20_complet": 0.9781,
+  "precision_script_20_complet": 1.0,
+  "precision_398_brut": 0.9687,
+  "precision_398_cli": 0.9642,
+  "permute_20": 0.0,
+  "ambigu_langue": "und",
+  "ambigu_confiance": 0.0836,
+  "mot_isole_langue": "und"
+ }
+}

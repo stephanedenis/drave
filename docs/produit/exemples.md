@@ -4,10 +4,22 @@
 > complète la notice [`README.md`](README.md) : la notice dit *quoi* faire, ce document dit
 > *comment lire* ce qui sort. Les **cinq premiers blocs** ont été produits le **2026-11-06** sur
 > la branche `s/v7`, avec le CLI `tools/drave.py` (version **0.1.0**), sans modèle, sans GPU et
-> sans réseau ; ils ont été **rejoués le 2026-11-14** sur le code courant — F1 **0,7902**,
+> sans réseau ; ils ont été **rejoués le 2026-11-16** sur le code courant — F1 **0,7902**,
 > attachement **238/238 labels** (238/239 cibles), schéma **v2**. Le format v2 ajoute
-> `version: 2` et, sur un syntagme qui chevauche un autre, `meta.partition`/`meta.alternative` ;
-> v1 reste lue ([schéma v2](../../tools/schemas/drave-annotation-v2.json)).
+> `version: 2`, `meta.attachement.candidats` en **objets** `{span, cible, source}`, un
+> `meta.role` **normalisé** (huit valeurs) et, sur un syntagme qui chevauche un autre,
+> `meta.partition`/`meta.alternative` ; v1 reste lue
+> ([schéma v2](../../tools/schemas/drave-annotation-v2.json)).
+>
+> **Le rejeu du 2026-11-16.** **3 blocs sur 5** ont bougé, tous par la **normalisation des
+> rôles** : `qualité` → `qualite`, `prédicat` → `predicat`, `groupe nominal` → `objet`.
+> Le refus est identique champ pour champ ; `g001` l'est aussi pour les champs existants, et
+> gagne en plus les **candidats objets** et un bloc de **durée**. Les candidats objets sont
+> publiés dans `meta.attachement.candidats` (le champ historique `candidats` reste une liste de
+> chaînes) ; `--duree` ajoute `cout.duree_s` (absent par défaut). Le **contrôle négatif** est
+> [`tools/verifie_exemples.py`](../../tools/verifie_exemples.py) : il rejoue les blocs et compare
+> le JSON **parsé**, pas le texte. Fiche :
+> [`reports/rapport-exemples-v2.md`](../../reports/rapport-exemples-v2.md).
 >
 > **Les cinq blocs du 15/11.** Trois exécutions avec `--tagger` (§ 6) et deux avec `--reel`
 > (§ 7), produites le **2026-11-15** avec la **clé DeepSeek** et un **cache disque neuf** : le
@@ -20,11 +32,11 @@
 > POS **0,8891**, F1 **0,7906**, attachement **183/184 labels** (0,9946). Les trois annotations
 > `--tagger` sont en v2 (`schema: "drave.annotation"`, `version: 2`).
 >
-> **Le rejeu du 14/11.** **4 blocs sur 5** ont bougé : la ponctuation finale entre dans le POS
-> (20 étiquettes et non 19), le refus sort en **3**, le POS anglais de `r241` s'améliore et
-> `r035`, l'ancien échec connu, est désormais **prédit**. Seul le bloc `g011` est identique champ
-> pour champ. Les écarts, le dispositif et le contrôle négatif sont dans
-> [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md).
+> **L'historique du rejeu.** Le rejeu du **14/11** avait corrigé **4 blocs sur 5** : ponctuation
+> finale dans le POS (20 étiquettes), refus en **3**, POS anglais de `r241`, et `r035` —
+> l'ancien échec — désormais **prédit**. Son récit et ses chiffres datés restent dans
+> [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md) ; le rejeu
+> du 16/11 ci-dessus le remplace pour les rôles et les candidats.
 >
 > **Une commande, un JSON.** `python3 tools/drave.py analyser "…" --json` rend l'annotation
 > complète (neuf niveaux). Pour la lire, ce document filtre avec `jq` ; le produit, lui, n'a pas
@@ -42,6 +54,14 @@
   probabilité par token ; ils ont `source: "neuronal"`, `meta.modele: true` et **pas** de
   `meta.ouvert` (le tagger ne consulte pas le lexique). La ponctuation, restituée depuis
   l'heuristique, garde 0,95 et `meta.ouvert: false`.
+- `meta.role` : un **vocabulaire fermé** de huit valeurs — `predicat`, `agent`, `objet`,
+  `lieu`, `temps`, `qualite`, `possesseur`, `destinataire`. Les règles produisent des
+  orthographes et des granularités différentes ; le JSON publie la forme canonique
+  (`prédicat` → `predicat`, `qualité` → `qualite`, `groupe nominal`/`patient`/`complément` →
+  `objet`). C'est une **normalisation**, pas un raffinement sémantique.
+- `cout.duree_s` : **absent par défaut** ; `--duree` l'ajoute au JSON. C'est une mesure
+  locale à l'horloge murale, en secondes : deux exécutions donnent deux valeurs. Le script de
+  vérification contrôle sa **présence** et son **type**, jamais sa valeur.
 - `TAGGER API` : la ligne de **coût** (`modèle`, `appels`, `réseau`, `cache`, `tokens`, `latence`).
   Elle va sur `stdout` avec `analyser --tagger` et sur `stderr` avec `--json` ; la **clé n'y est
   jamais**. Un cache chaud affiche `réseau=0 · cache=1 · tokens=0`.
@@ -73,13 +93,19 @@ FILTRE='{langue, script, refus, fraction_semantique,
   syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
         | {valeur, type, debut, fin, confiance, role:.meta.role,
            cible:.meta.attachement.cible, union:.meta.union,
-           partition:.meta.partition, alternative:.meta.alternative, candidats}],
+           partition:.meta.partition, alternative:.meta.alternative, candidats,
+           candidats_objets:.meta.attachement.candidats}],
   phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
   pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}],
   unites_semantiques}'
 ```
 
 Puis : `python3 tools/drave.py analyser "…" --json | jq "$FILTRE"`.
+
+`candidats` est la liste **historique** de chaînes ; `candidats_objets` est la même liste en
+objets `{span, cible, source}` (v2), avec `texte[span.debut:span.fin] == cible`. `role` est
+déjà normalisé par le produit. Les cinq blocs ci-dessous sélectionnent les deux formes pour que
+l'écart entre le contrat v1 et le contrat v2 soit visible.
 
 ## 1. Une déclarative simple — `g001`
 
@@ -115,7 +141,8 @@ python3 tools/drave.py analyser "Le chat dort." --json \
            | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}],
          syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
            | {valeur, type, debut, fin, confiance, role:.meta.role,
-              cible:.meta.attachement.cible, union:.meta.union, candidats}],
+              cible:.meta.attachement.cible, union:.meta.union, candidats,
+              candidats_objets:.meta.attachement.candidats}],
          phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
          pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}]}'
 ```
@@ -174,6 +201,16 @@ python3 tools/drave.py analyser "Le chat dort." --json \
       "candidats": [
         "structure la plus proche",
         "dort"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 8,
+            "fin": 12
+          },
+          "cible": "dort",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -187,6 +224,16 @@ python3 tools/drave.py analyser "Le chat dort." --json \
       "union": null,
       "candidats": [
         "structure la plus proche"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 3,
+            "fin": 7
+          },
+          "cible": "chat",
+          "source": "heuristique"
+        }
       ]
     }
   ],
@@ -205,6 +252,24 @@ python3 tools/drave.py analyser "Le chat dort." --json \
 }
 ```
 
+**La durée (optionnelle).** Sans `--duree`, `cout` ne porte pas d'horloge ; avec le drapeau,
+`cout.duree_s` est ajouté. C'est une mesure **locale** : la valeur ci-dessous est celle du
+rejeu, elle change à chaque exécution.
+
+```bash
+python3 tools/drave.py analyser "Le chat dort." --json --duree \
+  | jq '{duree_s: .cout.duree_s, octets: .cout.octets}'
+```
+
+**Sortie (réelle).**
+
+```json
+{
+  "duree_s": 0.00581,
+  "octets": 13
+}
+```
+
 **Lecture.**
 
 - `langue: fr`, `script: Latn`, `refus: ""` : le texte est accepté.
@@ -212,8 +277,13 @@ python3 tools/drave.py analyser "Le chat dort." --json \
   **ouverts** (confiance 0,3 et 0,72) : le lexique ne les connaît pas comme classes fermées.
 - Deux syntagmes : `GN « Le chat » [0:7] → dort` et `GV « dort » [8:12] → chat`. Le gold `g001`
   attend exactement ces deux spans et `assertion` ; c'est le cas de base réussi.
+- Les rôles sont **normalisés** : `agent` et `predicat` (sans accent) appartiennent au
+  vocabulaire fermé. Les `candidats_objets` donnent la position exacte de chaque cible —
+  `dort[8:12]` pour le GN, `chat[3:7]` pour le GV — et le premier objet est la cible choisie.
+  Le champ `candidats`, lui, reste la liste de chaînes du contrat v1.
 - L'extrait omet `fraction_semantique`, `unites_semantiques`, `trace` et `cout` (présents dans le
-  JSON complet) ; la sortie lisible donne **2 unités**, soit **61,5 %** du texte.
+  JSON complet) ; la sortie lisible donne **2 unités**, soit **61,5 %** du texte. La durée
+  n'est publiée que sur demande (`--duree`, ci-dessus).
 
 **Ce qu'il faut en conclure.** Sur une phrase canonique, l'analyse est exacte, lisible et
 complète. C'est le cas d'usage de base ; il ne dit rien de la couverture sur un texte difficile
@@ -230,7 +300,8 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
   | jq '{langue, script, refus,
          syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
            | {valeur, type, debut, fin, confiance, role:.meta.role,
-              cible:.meta.attachement.cible, union:.meta.union, candidats}],
+              cible:.meta.attachement.cible, union:.meta.union, candidats,
+              candidats_objets:.meta.attachement.candidats}],
          phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
          pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}]}'
 ```
@@ -256,6 +327,32 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
         "« que j'ai lu » → Le livre",
         "intéressant",
         "livre"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 25,
+            "fin": 36
+          },
+          "cible": "intéressant",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 0,
+            "fin": 8
+          },
+          "cible": "Le livre",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 3,
+            "fin": 8
+          },
+          "cible": "livre",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -271,6 +368,32 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
         "« que j'ai lu » → Le livre",
         "intéressant",
         "livre"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 3,
+            "fin": 8
+          },
+          "cible": "livre",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 0,
+            "fin": 8
+          },
+          "cible": "Le livre",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 25,
+            "fin": 36
+          },
+          "cible": "intéressant",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -279,13 +402,31 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
       "debut": 9,
       "fin": 36,
       "confiance": 0.3,
-      "role": "qualité",
+      "role": "qualite",
       "cible": "livre",
       "union": true,
       "candidats": [
         "REL",
         "livre",
         "intéressant"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 3,
+            "fin": 8
+          },
+          "cible": "livre",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 25,
+            "fin": 36
+          },
+          "cible": "intéressant",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -300,6 +441,24 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
       "candidats": [
         "« que j'ai lu » → Le livre",
         "livre"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 3,
+            "fin": 8
+          },
+          "cible": "livre",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 0,
+            "fin": 8
+          },
+          "cible": "Le livre",
+          "source": "heuristique"
+        }
       ]
     }
   ],
@@ -335,6 +494,9 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
   (`membres: 3` ; rang 1 = REL longue, rang 2 = GV, rang 3 = REL courte) et `meta.alternative`
   avec les deux autres. Le filtre ci-dessus ne les sélectionne pas ; pour les voir, ajouter
   `partition:.meta.partition, alternative:.meta.alternative` (voir le `FILTRE` du § 0).
+- Les deux REL portent `role: qualite` : la forme accentuée `qualité` est **normalisée**, comme
+  `prédicat` en `predicat`. Les `candidats_objets` publient `livre[3:8]` et
+  `intéressant[25:36]` avec leur source, sans changer l'attachement.
 - `GN « Le livre » → intéressant` : le GN est rattaché au GV, pas à la REL. Le gold annote ce GN
   `patient`, le bloc `agent` : **les rôles ne sont pas mesurés** par le banc ; seul
   l'attachement l'est. Ne pas lire `role` comme une vérité.
@@ -344,7 +506,7 @@ python3 tools/drave.py analyser "Le livre que j'ai lu est intéressant." --json 
 
 **Ce qu'il faut en conclure.** L'attachement est utile et vérifié sur ce cas, mais il vient avec
 un **doublon d'union**, des rôles non évalués et un POS imparfait. Le champ à consommer est
-`cible` (et `candidats`), pas `role` seul ; et `union: true` doit être filtré.
+`cible` (et `candidats_objets`), pas `role` seul ; et `union: true` doit être filtré.
 
 ## 3. L'anglais et le marqueur ambigu — `r241`
 
@@ -359,7 +521,8 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
            | {valeur, type, debut, fin, confiance, ouvert:.meta.ouvert}],
          syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
            | {valeur, type, debut, fin, confiance, role:.meta.role,
-              cible:.meta.attachement.cible, union:.meta.union, candidats}]}'
+              cible:.meta.attachement.cible, union:.meta.union, candidats,
+              candidats_objets:.meta.attachement.candidats}]}'
 ```
 
 **Sortie (réelle).**
@@ -442,12 +605,22 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
       "debut": 0,
       "fin": 7,
       "confiance": 0.35,
-      "role": "groupe nominal",
+      "role": "objet",
       "cible": "beautiful",
       "union": null,
       "candidats": [
         "GN",
         "beautiful"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 25,
+            "fin": 34
+          },
+          "cible": "beautiful",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -456,13 +629,31 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
       "debut": 8,
       "fin": 20,
       "confiance": 0.35,
-      "role": "qualité",
+      "role": "qualite",
       "cible": "day",
       "union": null,
       "candidats": [
         "REL",
         "day",
         "beautiful"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 4,
+            "fin": 7
+          },
+          "cible": "day",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 25,
+            "fin": 34
+          },
+          "cible": "beautiful",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -471,12 +662,13 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
       "debut": 21,
       "fin": 34,
       "confiance": 0.35,
-      "role": "prédicat",
+      "role": "predicat",
       "cible": null,
       "union": null,
       "candidats": [
         "GV"
-      ]
+      ],
+      "candidats_objets": null
     }
   ]
 }
@@ -492,6 +684,9 @@ python3 tools/drave.py analyser "The day when we left was beautiful." --langue e
   continuent de coexister dans la même sortie.
 - `beautiful` est **ADJ**, `The day` **GN**, `was beautiful` **GV** : la segmentation est
   complète. La ponctuation finale sort en **PONCT** depuis le correctif de ponctuation.
+- Les rôles sont **normalisés** : `The day` est `objet` (le brut `groupe nominal` tombe sur
+  `objet`), `when we left` `qualite`, `was beautiful` `predicat`. Les candidats objets donnent
+  `beautiful[25:34]`, `day[4:7]` et la source heuristique ; le GV n'a pas de candidat publié.
 - L'attachement `REL → day` est celui du gold ; c'est le **87/87 labels** anglais (88 cibles ;
   `g017` est la seule cible sans span prédit).
 - `GV « was beautiful »` a `cible: null` : le bloc ne publie pas d'attachement pour ce GV. `null`
@@ -581,7 +776,8 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
   | jq '{langue, script, refus,
          syntagmes: [.etiquettes[] | select(.niveau=="syntagme")
            | {valeur, type, debut, fin, confiance, role:.meta.role,
-              cible:.meta.attachement.cible, union:.meta.union, candidats}],
+              cible:.meta.attachement.cible, union:.meta.union, candidats,
+              candidats_objets:.meta.attachement.candidats}],
          phrase: [.etiquettes[] | select(.niveau=="phrase") | {type, valeur}],
          pragmatique: [.etiquettes[] | select(.niveau=="pragmatique") | {type, valeur}]}'
 ```
@@ -600,12 +796,22 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
       "debut": 0,
       "fin": 8,
       "confiance": 0.35,
-      "role": "groupe nominal",
+      "role": "objet",
       "cible": "out",
       "union": null,
       "candidats": [
         "GN",
         "out"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 21,
+            "fin": 24
+          },
+          "cible": "out",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -614,13 +820,31 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
       "debut": 9,
       "fin": 24,
       "confiance": 0.35,
-      "role": "qualité",
+      "role": "qualite",
       "cible": "film",
       "union": null,
       "candidats": [
         "REL",
         "film",
         "out"
+      ],
+      "candidats_objets": [
+        {
+          "span": {
+            "debut": 4,
+            "fin": 8
+          },
+          "cible": "film",
+          "source": "heuristique"
+        },
+        {
+          "span": {
+            "debut": 21,
+            "fin": 24
+          },
+          "cible": "out",
+          "source": "heuristique"
+        }
       ]
     },
     {
@@ -629,12 +853,13 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
       "debut": 25,
       "fin": 31,
       "confiance": 0.35,
-      "role": "prédicat",
+      "role": "predicat",
       "cible": null,
       "union": null,
       "candidats": [
         "GV"
-      ]
+      ],
+      "candidats_objets": null
     }
   ],
   "phrase": [
@@ -656,6 +881,9 @@ python3 tools/drave.py analyser "The film she talks about is out." --json \
 
 - Le bloc prédit exactement les trois spans du gold : `GN « The film » [0:8]`, `REL « she talks
   about » [9:24] → film` et `GV « is out » [25:31]`. **La REL est là**, avec la cible attendue.
+- Rôles **normalisés** : `The film` est `objet` (brut `groupe nominal`), `she talks about`
+  `qualite` (brut `qualité`), `is out` `predicat`. Les candidats objets publient `out[21:24]`
+  pour le GN et `film[4:8]`, `out[21:24]` pour la REL ; le GV n'en publie aucun (`null`).
 - La relative est **sans marqueur** (« the film **she talks about** » : le pronom relatif est
   absent). La règle **relative zéro** (`relative_zero`, J1.1) la retrouve : GN antécédent, pronom
   sujet, verbe, préposition orpheline. C'était l'un des « 17 spans inatteignables » de la v12 ;
@@ -737,7 +965,7 @@ POS  Le/DET livre/NOUN que/PRON j'ai/PRON lu/VERB est/AUX intéressant/ADJ ./PON
 SYNTAGMES
   GN   [0:8]    Le livre                     rôle=agent     → intéressant
   REL  [9:20]   que j'ai lu                  rôle=qualite   → livre
-  REL  [9:36]   que j'ai lu est intéressant  rôle=qualité   → livre
+  REL  [9:36]   que j'ai lu est intéressant  rôle=qualite   → livre
   GV   [21:36]  est intéressant              rôle=predicat  → livre
 PRAGMATIQUE
   phrase [0:37] déclarative · acte=assertion · négation=non · modalité=non · double sens=oui
@@ -826,9 +1054,9 @@ drave 0.1.0 — analyse cascade POS (tagger API DeepSeek, réseau)
 langue=en script=Latn source=cascade · 38 étiquettes · unités sémantiques=3 (45.7% du texte)
 POS  The/DET day/NOUN when/PRON we/PRON left/VERB was/AUX beautiful/ADJ ./PONCT
 SYNTAGMES
-  GN   [0:7]    The day        rôle=groupe nominal  → beautiful
-  REL  [8:20]   when we left   rôle=qualité         → day
-  GV   [21:34]  was beautiful  rôle=prédicat        → —
+  GN   [0:7]    The day        rôle=objet     → beautiful
+  REL  [8:20]   when we left   rôle=qualite   → day
+  GV   [21:34]  was beautiful  rôle=predicat  → —
 PRAGMATIQUE
   phrase [0:35] déclarative · acte=assertion · négation=non · modalité=non · double sens=non
 COUVERTURE  (confiance max par niveau)  graphème=0.99 · morphème=0.32 · mot=0.98 · pos=0.95 ·
@@ -986,11 +1214,13 @@ v2 ne s'applique pas ici.
    prédit (§ 5).
 4. **Pas de lecture unique garantie** : le **doublon REL de l'union** (`union: true`) est publié ;
    il faut le filtrer si l'on veut un seul segment par span.
-5. **Pas de valeurs normalisées** : `candidats` sont des chaînes et `role` n'est pas normalisé
-   (`predicat`/`prédicat`). Le **format** est versionné (v2 ; v1 reste lue), mais le vocabulaire
-   des valeurs, lui, n'a pas de schéma. Avec `--tagger`, `confiance` vaut **0,60** (le seuil de
-   la cascade), `source` vaut `neuronal` et `meta.ouvert` est **absent** : ne pas lire ces champs
-   comme une probabilité.
+5. **Pas de valeurs raffinées** : les rôles sont **normalisés** dans un vocabulaire fermé de
+   huit valeurs (`predicat` sans accent, `groupe nominal` → `objet`), pas raffinés. Le champ
+   historique `candidats` reste une liste de chaînes ; les **objets** `{span, cible, source}`
+   sont dans `meta.attachement.candidats` et le premier objet est la cible choisie. Le **format**
+   est versionné (v2 ; v1 reste lue) et le schéma publie le vocabulaire des rôles. Avec
+   `--tagger`, `confiance` vaut **0,60** (le seuil de la cascade), `source` vaut `neuronal` et
+   `meta.ouvert` est **absent** : ne pas lire ces champs comme une probabilité.
 
 Pour mesurer sur votre propre corpus, il faut le format du gold (mots + segments + pragma) : il
 n'est pas publié comme schéma — c'est un des manques du CLI (notice § 7). Le schéma de
@@ -1003,7 +1233,8 @@ l'**annotation** du produit, lui, est publié : [`drave-annotation-v2.json`](../
 | **la notice d'usage** | [`README.md`](README.md) |
 | **le schéma du JSON (v2, v1)** | [`drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json) · [`drave-annotation-v1.json`](../../tools/schemas/drave-annotation-v1.json) |
 | **le contrat du bloc** | [`docs/implantation/bloc-linguistique.md`](../implantation/bloc-linguistique.md) |
-| **le rejeu des cinq blocs du 14/11** | [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md) |
+| **le rejeu du 16/11 (rôles normalisés, candidats objets, durée)** | [`reports/rapport-exemples-v2.md`](../../reports/rapport-exemples-v2.md) |
+| **le rejeu des cinq blocs du 14/11 (historique)** | [`reports/rapport-exemples-rejoues.md`](../../reports/rapport-exemples-rejoues.md) |
 | **les trois exemples `--tagger` et les deux `--reel`** | [`reports/rapport-exemples-tagger.md`](../../reports/rapport-exemples-tagger.md) · [JSON](../../reports/rapport-exemples-tagger.json) |
 | **le tagger, son coût et son contrôle négatif** | [`reports/rapport-tagger-option.md`](../../reports/rapport-tagger-option.md) |
 | **la base honnête (`--reel`)** | [`reports/rapport-base-reelle.md`](../../reports/rapport-base-reelle.md) |

@@ -1,7 +1,7 @@
 # Démarrage en 5 minutes
 
 > **Ce que ce document est.** Le parcours le plus court pour installer **drave** et lancer
-> trois commandes. Il part d'un **clone public** et ne suppose aucun fichier du dépôt de
+> les commandes. Il part d'un **clone public** et ne suppose aucun fichier du dépôt de
 > développement. Chaque commande et chaque sortie ont été **rejouées le 2026-11-15** sur un
 > clone neuf (commit **7f1519f**, Python **3.13.16**, pip **26.2.1**), sans clé DeepSeek.
 > Le relevé complet, les temps et le contrôle négatif sont dans
@@ -45,7 +45,7 @@ L'installation est **éditable** (le paquet pointe vers le dépôt), sans dépen
 `pip` a besoin du réseau ou d'un cache pour `setuptools` dans son isolation de build. Le chemin
 historique `python3 tools/drave.py …` reste disponible.
 
-## 3. Les trois commandes
+## 3. Les commandes
 
 > **Note de mesure — clone public.** Les sorties ci-dessous sont celles d'un clone **sans**
 > `tools/structures` (son URL dans `.gitmodules` est un chemin local). C'est ce qu'un débutant
@@ -159,6 +159,40 @@ drave.annotation 2 fr 20 étiquettes
 Le contrat est **versionné** et additif : `schema`, `version`, `texte`, `langue`, `script`,
 `refus`, `etiquettes`, `unites_semantiques` sont les huit champs obligatoires de la racine ; la
 version 1 reste lue. Schéma : [`tools/schemas/drave-annotation-v2.json`](../../tools/schemas/drave-annotation-v2.json).
+
+### 3.5 `drave profils` — la langue probable, le script et la confiance
+
+```bash
+drave profils --texte "Le chat dort."
+drave profils --texte "Привет мир" --json
+drave profils --fichier article.txt --json
+drave analyser "Le chat dort." --profils
+```
+
+```text
+drave 0.1.0 — profils de langue (UDHR, hors ligne)
+langue=fra script=Latn confiance=0.3333 source=lexique
+langue      : fra (French)
+script      : Latn
+confiance   : 0.3333 (marge 0.0000, seuil 0.12)
+source      : lexique
+prior       : fra (mots-outils 0.3333)
+candidats   : hns 0.6364 · lld 0.5455 · deu 0.4545 · oci 0.4545 · pcd 0.4545
+profils     : 398 langues UDHR (articles 0–14, top 200)
+```
+
+La commande charge les **398 profils UDHR** embarqués dans la roue et rend la langue probable,
+le script et la confiance. Le JSON porte `langue` (décision), `langue_probable`, `script`,
+`confiance`, `sous_seuil`, `source`, `prior` et `candidats`. Sous le seuil **0,12**, `langue`
+est **`und`** ; la langue probable reste publiée. Un texte **long** passe par les profils ; un
+texte **court** peut passer par le prior des mots-outils des sept langues du bloc (`source:
+lexique`). Codes : `0` succès · `3` refus (vide) · `4` profils absents · `5` usage.
+
+Mesure sur les **20 langues** de l'échantillon UDHR (article 15 tenu à l'écart) : **20/20**
+langues et **20/20** scripts ; articles 15–30 : **313/320 = 0,9781**. Le texte ambigu bilingue
+rend **`und`** (0,0836). Détail, JSON et limites :
+[`rapport-profils.md`](../../reports/rapport-profils.md) ·
+[`profils.json`](../../reports/profils.json).
 
 ## 4. Le tagger, en option
 

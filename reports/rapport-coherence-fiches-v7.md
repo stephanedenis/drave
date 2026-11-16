@@ -8,9 +8,9 @@
 > dont la somme visible ne tombe pas (les corrections de la v2).
 >
 > **État audité** : commit **`69bd865e`** (2026-11-05 19:22), branche `s/v7`. Pendant l'audit, HEAD a
-> avancé de `69bd865e` à **`e4cd4408`** (deux commits `DOCS`/`JOURNAL` seulement) ; les sept fiches,
-> leurs JSON et `reports/README.md` sont **identiques** dans les deux commits. L'audit reste ancré
-> sur `69bd865e`.
+> avancé (`e4cd4408`, puis `35a67bc7`) ; les sept fiches, leurs JSON et `reports/README.md` sont
+> **identiques dans `69bd865e` et `e4cd4408`** ; le commit `35a67bc7` applique ensuite des
+> corrections (voir § 11). L'audit reste ancré sur `69bd865e`.
 >
 > **Méthode** : lecture des 7 fiches et de leurs 7 JSON ; pour chaque fiche, `git show <commit>:` du
 > `bloc_linguistique.py` historique chargé comme module, `RACINE` forcé à la racine du dépôt, puis
@@ -261,7 +261,8 @@ commit `69bd865e` ».
 
 ## 9. `reports/README.md` et renvois
 
-Les sept fiches sont référencées : v7 ligne 18, v6 ligne 19, v5 ligne 20, gold-split ligne 21,
+Les sept fiches sont référencées (lignes au commit `69bd865e` ; elles ont glissé depuis les
+corrections de README) : v7 ligne 18, v6 ligne 19, v5 ligne 20, gold-split ligne 21,
 v4 ligne 22, v3 ligne 30, v2 ligne 36. **Deux lignes répètent les valeurs périmées du titre** :
 
 - **ligne 20 (v5)** : « exact **185/187 (0,9893)**, … dev/test **125/126** et 60/61 » → corriger en
@@ -328,6 +329,14 @@ renvoi faux. **Liens relatifs** : tous résolvent (les 4 fiches amont, `bloc_lin
 
 - **Une correction des fiches après `69bd865e`** : à `e4cd4408`, aucune des sept fiches n'a bougé ;
   si un commit ultérieur les corrige, les écarts V2…V7 disparaissent (c'est le but).
+- **Corrections concurrentes dans l'arbre de travail** : au moment de l'écriture (20:10), des
+  corrections **non committées** étaient en cours (mentions d'historique sur les six fiches,
+  phrase de couverture de gold-split, base/0,0128/contrôle négatif de la v7). Depuis, le commit
+  `35a67bc7` (20:24) a aligné les titres v4 (0,4539 / 157/160) et v5 (186/187), la base 602 et la
+  ligne F1 v7 (0,5164). Ce rapport décrit `69bd865e`, pas cet état de travail. À la dernière
+  vérification, il restait la prose v4 (`41/42`, `0,9875`, « 2 échecs », « six »), la prose v5
+  (`+28`, `40 → 59`, `27 échecs`, `125/126`, `0,8556`, « six »), le tableau v2 (`+48 cibles`,
+  `63 (0,9524)`), la ligne F1 v6 (`0,5156 → 0,5130`) et la ligne README de la v5 (`125/126`).
 - **Le choix de la base** : les valeurs 612 et 602 sont toutes deux défendables ; le reproche n'est
   pas qu'elles soient fausses, mais que la fiche nomme **612** et publie du **602** sans le dire.
   Si la convention du dépôt est « F1/POS sur le gelé, couverture sur le vivant », il suffit de

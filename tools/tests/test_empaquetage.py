@@ -6,7 +6,7 @@ Ce que le test fige :
 - `pyproject.toml` : nom **drave**, version **0.1.0**, `requires-python >= 3.10`,
   **aucune dépendance**, script console `drave = tools.drave:main` ;
 - la **roue** embarque les sous-paquets du CLI (`tools.tests.linguistique`,
-  `tools.structures`, `tools.llm`) et les **gold** (`package-data`) ;
+  `tools.structures`, `tools.llm`), les **gold** et l'artefact de **profils** (`package-data`) ;
 - le **chemin historique** `python3 tools/drave.py` rend la même version et analyse ;
 - l'entrée `tools.drave:main` est **importable depuis un autre répertoire** (c'est ce que
   l'installation éditable met sur `sys.path`) ;
@@ -92,6 +92,14 @@ class TestMetadonnees(unittest.TestCase):
             self.assertIn(nom, gold)
             self.assertTrue((RACINE / "tools" / "tests" / "linguistique" / nom).is_file(),
                             nom)
+
+    def test_profils_dans_la_roue(self):
+        """L'artefact de 398 profils voyage avec la roue : `drave profils` marche hors dépôt."""
+        donnees = _lire_pyproject()["tool"]["setuptools"]["package-data"]
+        profils = set(donnees["tools.tests.linguistique"])
+        self.assertIn("profils_udhr.json", profils)
+        self.assertTrue((RACINE / "tools" / "tests" / "linguistique"
+                         / "profils_udhr.json").is_file())
 
 
 class TestEntreeHistorique(unittest.TestCase):

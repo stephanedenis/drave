@@ -263,6 +263,8 @@ sans le dire.
 | T86-T90 | POS 0,8214/0,7897, 0,6471, 0,6829, 0,7013, 0,6984 | 0,8452/0,8221, 0,7353, 0,7236, 0,7327, 0,719 |
 | T111 / T114 / T115 / T119 / T138 | 0,4183 ; 0,3203/0,4817 ; 0,455/0,441 ; 0,7834/0,7472 ; 0,7424/0,3432 | 0,7265 ; 0,5864/0,7285 ; 0,6709 ; 0,7465/0,6914 ; 0,7465/0,3454 |
 
+La liste complète des 26 identifiants est dans le JSON (`portes.docstrings_perimees`).
+
 **6 messages de portes** affichent un dénominateur `/145` qui n'existe plus (196 labels) :
 
 - T161 : `tête 195/145` (devrait être `195/196`) ;
@@ -349,8 +351,8 @@ POS/F1/tête : c'est une règle d'attachement pur.
 top-k 166, fr 135/135, en 60/61, dev 133/134, test 62/62). En ne retirant que la cible
 (`_cible_precedent` + branche S), on retrouve exactement le 160/196. Autrement dit, en v7, le
 top-k 166 vient des **noms S et des verbes proches**, pas des candidats du précédent ; la règle
-du précédent ne porte que la cible. C'est un point à noter pour la fiche amont v5, qui créditait
-les candidats du précédent d'un gain de top-k.
+du précédent ne porte que la cible. C'est un point à noter : en v7, cette moitié de la règle ne
+porte plus rien, même si la fiche amont v5 la listait parmi les corrections.
 
 ### 8.2 Retirer le POS contextuel
 

@@ -870,6 +870,25 @@
    "detail": "si la convention du depot est F1/POS sur le gold gele 602, il suffit de l'ecrire ; les chiffres 0,4539 / 0,5156 / 0,5595 / 0,7603 sont alors exacts, mais la fiche nomme le 612"
   }
  ],
+ "concurrence": {
+  "constat": "des corrections non committées étaient en cours pendant l'écriture (20:10) ; le commit 35a67bc7 (20:24) a depuis corrigé les titres v4/v5, la base 602 et la ligne F1 v7 (0,5164) ; ce rapport décrit 69bd865e, pas l'état courant",
+  "corrections_observees": [
+   "mentions d'historique ajoutées aux six fiches historiques",
+   "gold-split : phrase de couverture corrigée (106/163, 54/76, 160/239)",
+   "v7 : base 602 nommée, 0,0132 -> 0,0128, contrôle négatif ajouté, dev/test re-mesurés",
+   "titres v4 (0,4539 / 157/160) et v5 (186/187) alignés",
+   "v7 : ligne F1 v6 passée à 0,5164"
+  ],
+  "residus_observes": [
+   "v4 : prose encore périmée (41/42, 0,9875, 'Les 2 échecs', 'six corrections')",
+   "v5 : prose encore périmée (+28, 40 -> 59, 27 échecs, dev 125/126, 0,8556, 'six')",
+   "v2 : tableau des corrections et '+48 cibles' non corrigés (le 46/57 l'a été)",
+   "v6 : ligne F1 0,5156 -> 0,5130 non corrigée",
+   "README : ligne v5 encore à 125/126"
+  ],
+  "aucune_modification_de_ma_part": true,
+  "note": "l'état de travail peut avoir changé depuis ; vérifier avant de citer"
+ },
  "limites": [
   "les mesures historiques sont obtenues avec le blob du commit et RACINE force a la racine ; un worktree detache ne suffit pas (S y perd ses donnees et la v6 tombe a 156 labels)",
   "les hashes des quatre fichiers d'or sont identiques de 9d5337ce a 69bd865e, ce qui securise la comparaison",

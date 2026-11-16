@@ -66692,3 +66692,62 @@ reports/rapport-profils.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 reports/rapport-profils.md | cut -c1-160; python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path( … [864 caractères tronqués]`
+
+  ```
+# U3 — `drave profils` : la détection de langue des 398 profils UDHR, exposée
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **U3** (suite de T5) ·
+> **Date** : 2026-11-16 · **Verdict** : ✅ **la détection est exposée** ; **20/20** langues
+> et **20/20** scripts sur l'échantillon UDHR de 20 langues (article 15 tenu à l'écart),
+> **313/320 = 0,9781** sur les articles 15–30, **433/447 = 0,9687** sur l'autotest complet
+> 398 langues. Le texte ambigu bilingue rend **`und`** (0,0836 < 0,12), un mot isolé rend
+> **`und`**, et les profils permutés tombent à **0/20** (0,0022 sur 447).
+ create mode 100644 journal/sessions/session-b4ff97bc-493d-4bfb-b734-e055dc85c779/digest.md
+ create mode 100644 journal/sessions/session-b4ff97bc-493d-4bfb-b734-e055dc85c779/rapport.md
+2e617034 EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SU
+   1d4eb49e..2e617034  s/v7 -> s/v7
+   1d4eb49e..2e617034  master -> master
+lun 16 nov 2026 02:12:55 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [3088 caractères tronqués]`
+
+  ```
+plan : 63 tâches
+PID 1504202
+2026-11-16 02:13:25 · ▶ V1 — Le banc — evaluer --strict (timeout 3000 s)
+lun 16 nov 2026 02:13:45 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre V1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5238]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5238", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5238", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+lun 16 nov 2026 02:38:52 EST
+2026-11-16 02:29:02 · ✔ V1 en 932.3 s (code 0) — ✅ test -f reports/rapport-evaluer-strict.md && echo FICHE-OK; ✅ python3 tools/drave.py evaluer --strict >/dev/null 2>&1; echo STRICT-$?
+2026-11-16 02:29:02 · ▶ V2 — Les exemples — le JSON de la v2 (timeout 3000 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1800; date; tail -3 work/chantier/journal.log; git rev-list --count origin/master..s/v7; ls reports/rapport-exemples-v2.md reports/rapport-bilan-exploitable-2.md 2>/dev/null", "description": "Suivre V2/V3", "timeoutMs": 1900000 … [1 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5239]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5239", "timeout_ms": 1300000, "wait": true}`

@@ -736,6 +736,194 @@
      "attendu": "OK"
     }
    ]
+  },
+  {
+   "id": "T1",
+   "jour": 19,
+   "titre": "L'empaquetage — pip install et la commande drave",
+   "mandat": "Tâche T1 (exploitable, 1/5) : **l'empaquetage** — écris un **`pyproject.toml`** minimal (le nom `drave`, la version 0.1.0, le `requires-python >= 3.10`, **aucune dépendance**, le `console_scripts` `drave = tools.drave:main` ou un module d'entrée propre), vérifie `python3 -m pip install -e .` dans un **venv temporaire** (`/tmp/venv-drave`), puis `drave --version` et `drave analyser \"Le chat dort.\"` depuis un **autre répertoire** (pas la racine du dépôt) ; le contrôle négatif : sans install, `drave` doit échouer proprement. Fiche `reports/rapport-empaquetage.md` + JSON, un test dans `tools/tests/` (ou une note), et la doc `docs/produit/README.md` § 8.10 mise à jour (l'install). **Ne casse pas** `python3 tools/drave.py` (le chemin historique).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f pyproject.toml && echo PYPROJECT-OK",
+     "attendu": "PYPROJECT-OK"
+    },
+    {
+     "commande": "test -f reports/rapport-empaquetage.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "T2",
+   "jour": 19,
+   "titre": "Le contrat — les candidats structurés et les rôles normalisés",
+   "mandat": "Tâche T2 (exploitable, 2/5) : **l'API du JSON** — (1) les `candidats` de l'attachement deviennent des **objets** `{span, cible, source}` au lieu des chaînes d'affichage (le schéma v2 gagne un champ, v1 toujours lue ; la sortie lisible garde les chaînes) ; (2) les `role` sont **normalisés** (un vocabulaire fermé : predicat, agent, objet, lieu, temps, qualite, possesseur, destinataire — sans accents mélangés), avec une table des correspondances et un test qui refuse un rôle hors vocabulaire. Fiche `reports/rapport-contrat-json.md` + JSON, les tests produit à jour, la doc § 3/4. **Contrôle négatif** : un consommateur qui filtre sur `role == \"predicat\"` doit trouver les prédicats.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-contrat-json.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_produit.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
+  },
+  {
+   "id": "T3",
+   "jour": 19,
+   "titre": "Le démarrage en 5 minutes",
+   "mandat": "Tâche T3 (exploitable, 3/5) : **le quickstart** — écris `docs/produit/demarrage.md` (le clone, l'install T1, les 3 commandes, la sortie attendue, le JSON, le tagger optionnel, les 3 erreurs courantes et leur code) ; vérifie **chaque commande** en la rejouant (le texte et la sortie réels) ; ajoute le lien dans `docs/produit/README.md` et `docs/README.md` ; le **contrôle négatif** : un débutant sans le dépôt doit pouvoir suivre les 5 minutes. Fiche `reports/rapport-quickstart.md` + JSON, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f docs/produit/demarrage.md && echo QUICKSTART-OK",
+     "attendu": "QUICKSTART-OK"
+    },
+    {
+     "commande": "python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?",
+     "attendu": "REVUE-0"
+    }
+   ]
+  },
+  {
+   "id": "T4",
+   "jour": 19,
+   "titre": "La performance sur un texte réel",
+   "mandat": "Tâche T4 (exploitable, 4/5) : la **performance** — mesure `analyser` sur un texte réel de **10 000 mots** (le corpus du dépôt ou un texte assemblé), le **temps** (s), le **débit** (mots/s), la **mémoire** (pic RSS), la **taille du JSON**, et le même sur 100 phrases courtes (le coût fixe par appel) ; compare avec `--tagger` (le coût réseau) ; le **contrôle négatif** : le temps doit croître linéairement avec la taille (pas quadratiquement). Fiche `reports/rapport-performance.md` + JSON, un banc reproductible (`tools/banc_performance.py` ?).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-performance.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "T5",
+   "jour": 19,
+   "titre": "La CLI — durée, codes de sortie, aide",
+   "mandat": "Tâche T5 (exploitable, 5/5) : la **robustesse de la CLI** — (1) `--duree` dans le JSON (le temps de l'analyse) ; (2) le **tableau des codes de sortie** (0 succès, 3 refus, 4 clé/dépendance, 5 usage) dans `docs/produit/README.md` et le `--aide` ; (3) `--aide`/`--help` vérifiés sur les quatre sous-commandes ; (4) un `--fichier` sur un chemin **inexistant** et un **répertoire** : le message et le code attendus, pas de trace. Fiche `reports/rapport-cli-robuste.md` + JSON, un test par cas dans `tools/tests/test_produit.py`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-cli-robuste.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_produit.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
+  },
+  {
+   "id": "T6",
+   "jour": 19,
+   "titre": "Le bilan de la nuit exploitable",
+   "mandat": "Tâche T6 (clôture) : le bilan — relis les fiches T1-T5, écris `reports/rapport-bilan-exploitable.md` + JSON : ce qui est désormais installable, le quickstart, l'API du JSON, la performance, les codes de sortie ; les négatifs ; ce qui reste (le gold de S, les signatures de Panini, la décision du tagger `auto`) ; mets à jour `docs/pilotage/en-cours.md` et la roadmap. **Ne relance pas la passe complète** : lis `work/portes/`.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-bilan-exploitable.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "U1",
+   "jour": 20,
+   "titre": "La performance — les deux points quadratiques",
+   "mandat": "Tâche U1 (exploitable, suite de T4) : **répare les deux points O(k²)** identifiés par T4 — `_groupes_partition` (toutes les paires de syntagmes) et `_cible_proche` (le tri de tous les GV pour chaque segment) — **sans changer les résultats** (les 612 phrases et le réel 452 : les mêmes F1, attachement, POS, au bit près) ; mesure le **α** de la croissance avant/après sur le bloc contrôlé de T4 (l'objectif : α ≤ 1,15 et le terme quadratique non significatif), le temps sur 10 000 mots, la mémoire ; le **contrôle négatif** : les sorties identiques (un diff du JSON avant/après doit être vide). Fiche `reports/rapport-performance-fix.md` + JSON, tests, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-performance-fix.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/tests/test_produit.py 2>&1 | tail -1",
+     "attendu": "OK"
+    }
+   ]
+  },
+  {
+   "id": "U2",
+   "jour": 20,
+   "titre": "L'empaquetage — la roue et le README",
+   "mandat": "Tâche U2 (suite de T1) : **la roue** — `python3 -m build` (ou `pip wheel .`) produit `drave-0.1.0-py3-none-any.whl`, installée dans un venv **propre** depuis la roue (pas le dépôt) : `drave --version` et `drave analyser` depuis `/tmp` ; le **contrôle négatif** : la roue sans les gold doit-elle échouer (le CLI lit `tools/tests/linguistique/gold_*.json` — si les gold ne sont pas dans la roue, `evaluer` échoue : décide et documente, avec un `--gold` qui dit quoi faire) ; la doc § 8.10 mise à jour. Fiche `reports/rapport-roue.md` + JSON.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-roue.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "U3",
+   "jour": 20,
+   "titre": "La CLI — les profils de langue",
+   "mandat": "Tâche U3 (suite de T5) : `--profils` — exposer la **détection de langue** (les 398 langues de l'autotest UDHR) dans le CLI : `drave profils --texte` (ou `analyser --profils`) rend la langue probable, le script et la confiance, pour un texte donné ; mesure sur les 20 langues de l'échantillon UDHR (la précision), le contrôle négatif (un texte ambigu), la doc § 3. Fiche `reports/rapport-profils.md` + JSON, tests.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-profils.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "V1",
+   "jour": 21,
+   "titre": "Le banc — evaluer --strict",
+   "mandat": "Tâche V1 (exploitable, la suite du bilan T6) : `evaluer --strict` — le banc de recherche (`evaluer_gold.py`) mesure quatre modes et la cascade locale avec le plancher 0,70 ; le CLI ne le fait pas. Ajoute `--strict` à `evaluer` : mesure la **cascade locale** (`MockNeuronal`) sur 612 et le réel 452, **applique le plancher 0,70** (un échec = code 1), affiche les quatre modes (heuristique, neuronal, parallèle, cascade) et le delta ; le **contrôle négatif** (la cascade sous le plancher doit échouer). Fiche `reports/rapport-evaluer-strict.md` + JSON, un test, la doc § 3.3.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-evaluer-strict.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "python3 tools/drave.py evaluer --strict >/dev/null 2>&1; echo STRICT-$?",
+     "attendu": "STRICT-0"
+    }
+   ]
+  },
+  {
+   "id": "V2",
+   "jour": 21,
+   "titre": "Les exemples — le JSON de la v2",
+   "mandat": "Tâche V2 (exploitable) : les **exemples de la doc** — rejoue les 5 blocs de `docs/produit/exemples.md` avec le code courant (**les candidats objets, les rôles normalisés, la durée**) et corrige les sorties qui ont bougé ; vérifie le `demarrage.md` (les 3 commandes) ; le **contrôle négatif** : aucune sortie de la doc ne doit différer du code (un script de vérification `tools/verifie_exemples.py` si possible). Fiche `reports/rapport-exemples-v2.md` + JSON, commit.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-exemples-v2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "bash tools/porte-produit.sh 2>&1 | tail -1",
+     "attendu": "verte"
+    }
+   ]
+  },
+  {
+   "id": "V3",
+   "jour": 21,
+   "titre": "La clôture — le tag exploitable",
+   "mandat": "Tâche V3 (clôture) : la clôture de la nuit — le rapport `reports/rapport-bilan-exploitable-2.md` + JSON (les 9 tâches T/U/V, les chiffres, les négatifs), la mise à jour de `docs/pilotage/en-cours.md` et de la roadmap, le **tag annoté** `exploitable-2026-11-16` sur le dernier commit vert, et le relevé des portes (`work/portes/`, sans relancer la passe).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "git tag -l 'exploitable-2026-11-16'",
+     "attendu": "exploitable-2026-11-16"
+    },
+    {
+     "commande": "test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
   }
  ]
 }

@@ -1,7 +1,9 @@
 # B13 — 222/222 (1,0000) : le dernier marqueur ambigu, et 17 spans inatteignables
 
 > **Ligne de roadmap** : **B13** (moteur de pensée, règle 6) · **Date** : 2026-11-06 ·
-> **État courant** · **Verdict** : ✅ — **la cible de A17 est atteinte**.
+> **Instantané historique** · **Verdict** : ✅ — **la cible de A17 est atteinte**.
+> *Depuis, le gold a été corrigé (4 GP sans préposition) : l'état courant est **226/226**, couverture
+> **0,9456**, 13 spans — voir [le gold corrigé](rapport-gold-gp-corrige.md).*
 > **183/183 portes** : le dernier écart était un **marqueur ambigu** — « when » après un GN est
 > une **relative** (« The day when we left »), ailleurs une **subordonnée** (« When it rains »).
 > Résultat : **222 labels** sur 239, **exact 222/222 = 1,0000** (fr **136/136**, en **86/86**),

@@ -7389,6 +7389,6 @@
   "exact/labels saturé à 1,0 : 220/220 ; le taux exact est identique dans tous les sous-ensembles et ne peut plus distinguer dev et test ; la couverture (19 spans perdus) est le seul levier restant",
   "petit échantillon : 68 labels au test, 1 cas = 1,47 point ; REL test 17 cibles, REL/en test 5, hand test 3 ; les IC Wilson se recouvrent",
   "confond source/langue : le synthétique est français seulement ; la couverture française globale (0,8874) est un effet de composition ; sur le réel, fr 0,9688 vs en 0,9773 (écart 0,85 point, p=0,72)",
-  "l'arbre a bougé après la mesure : HEAD 68a8717b, tools/bloc_linguistique.py sale ; l'arbre sale donne 221/221 et 18 spans (s037, r303, r288 récupérés ; g017, r241 perdus) — ce n'est pas l'état 710ec7f9 mesuré ici"
+  "l'arbre a bougé après la mesure : HEAD 653a7981 (68a8717b puis 653a7981) ; l'essai R2 + retrait de la garde d'adverbe y est commité. Cet état donne, mesuré, dev 152/152, test 69/69, tout 221/221, couverture 0,9247, F1 0,5843, tête 0,7330, POS 0,7581, 18 spans (g017, r035, r241, r255, r264, s010, s027, s035, s044, s061, s065, s112, s114, s125, s141, s146, s148, s160 ; s037, r303, r288 récupérés) — ce n'est pas l'état 710ec7f9 mesuré ici"
  ]
 }

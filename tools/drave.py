@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """drave.py — le point d'entrée produit du bloc linguistique.
 
-Une seule commande, quatre gestes, hors ligne et déterministe :
+Une seule commande, cinq gestes, hors ligne et déterministe :
 
     python3 tools/drave.py analyser "Le chat dort."
     python3 tools/drave.py analyser "The cat sleeps on the roof." --langue en --json
@@ -9,6 +9,10 @@ Une seule commande, quatre gestes, hors ligne et déterministe :
     python3 tools/drave.py analyser "Le chat dort." --tagger auto     # API si clé, sinon heuristique
     python3 tools/drave.py evaluer
     python3 tools/drave.py evaluer --gold --json
+    python3 tools/drave.py evaluer --strict --json                    # quatre modes, plancher 0,70
+    python3 tools/drave.py profils --texte "Le chat dort."
+    python3 tools/drave.py profils --texte "Привет мир" --json
+    python3 tools/drave.py analyser "Le chat dort." --profils
     python3 tools/drave.py evaluer --tagger --json                    # heuristique + cascade API
     python3 tools/drave.py rejouer "Le chat de la voisine qui dort sur le toit se réveille."
     python3 tools/drave.py restituer "Le chat dort."
@@ -20,7 +24,9 @@ Ce que la commande expose : l'analyse **heuristique** (`Heuristique.analyser`) �
 avec rôle et cible d'attachement, pragmatique, unités sémantiques —, sa mesure sur le gold et la
 **restitution v0** (annotation → surface, avec la fidélité du miroir) et la **v2** (rôles
 agent/prédicat/lieu lisibles). La restitution est un **codec de surface** : elle reconstruit
-depuis le niveau `graphème`, pas un décodeur neuronal.
+depuis le niveau `graphème`, pas un décodeur neuronal. `profils` expose la **détection de
+langue** des 398 profils UDHR (langue probable, script, confiance) ; `analyser --profils`
+emploie le même détecteur pour l'annotation.
 En **option** (`--tagger`, `analyser` et `evaluer`), le POS (et lui seul) vient du tagger de
 l'API DeepSeek : la clé est lue dans `DEEPSEEK_KEY_FILE`, `~/.config/drave/deepseek.key` puis
 `DEEPSEEK_API_KEY` ; le cache du client évite de refaire un appel ; la clé n'est jamais affichée.
@@ -59,6 +65,7 @@ import bloc_linguistique as bl  # noqa: E402  (import après l'installation des 
 import restitution  # noqa: E402  (la restitution v0 : annotation → surface)
 import restitution_v2  # noqa: E402  (la restitution v2 : les rôles)
 import restitution_v3  # noqa: E402  (la restitution v3 : les rôles des GP)
+import profils_udhr as pu  # noqa: E402  (la détection de langue UDHR, 398 profils)
 
 NOM = "drave"
 VERSION = "0.1.0"
@@ -72,6 +79,11 @@ SEUIL_TAGGER = 0.6
 # cible : l'attachement mesuré du produit serait perdu. Le gain mesuré porte sur le POS.
 PRIORITE_TAGGER = dict(bl.PRIORITE_NIVEAU)
 PRIORITE_TAGGER["syntagme"] = "heuristique"
+
+# Le plancher du mode strict : la cascade locale doit tenir 0,70 d'exactitude POS sur le
+# gold vivant **et** sur le réel. C'est le seuil du banc de recherche (`evaluer_gold.py`,
+# `pos_reel`), appliqué ici à la cascade que le CLI peut exécuter hors ligne.
+PLANCHER_STRICT = 0.70
 
 
 # --------------------------------------------------------------------------- sorties JSON
@@ -350,7 +362,21 @@ class _CascadeTagger:
         return annotation
 
 
-def _cascade_tagger(transport, partition: str = "alternative", stats: dict | None = None):
+class _HeuristiqueProfils(bl.Heuristique):
+    """L'heuristique avec la détection des **profils UDHR** (`--profils`, `drave profils`).
+
+    Elle garde tout le bloc (POS, syntagmes, rôles) et ne change que la langue : le texte
+    court passe par le prior des mots-outils, le texte long par les 398 profils. La
+    décision `und` sous le seuil reste celle du produit.
+    """
+
+    def _langue(self, texte: str, indice: str | None) -> tuple[str, float, str]:
+        detection = pu.detecter(texte, self.profils)
+        return detection["langue"], detection["confiance"], detection["script"]
+
+
+def _cascade_tagger(transport, partition: str = "alternative", stats: dict | None = None,
+                    heuristique: bl.Heuristique | None = None):
     """Le câblage mesuré : tagger POS + syntagmes → compose → cascade à 0,6.
 
     `transport` est injectable : les tests le remplacent par une fonction qui rend un JSON de
@@ -362,18 +388,20 @@ def _cascade_tagger(transport, partition: str = "alternative", stats: dict | Non
     # sortie **n'était pas utilisée** par la fusion (le niveau syntagme reste à l'heuristique) :
     # le retirer divise le coût par deux (2 appels → 1 par phrase).
     pos = bl.NeuronalLLMPOS(MODELE_TAGGER, transport=transport)
-    cascade = bl.Cascade(bl.Heuristique(partition=partition), pos, seuil=SEUIL_TAGGER,
-                         priorite_syntagme="confiance", priorite_par_niveau=PRIORITE_TAGGER)
+    cascade = bl.Cascade(heuristique or bl.Heuristique(partition=partition), pos,
+                         seuil=SEUIL_TAGGER, priorite_syntagme="confiance",
+                         priorite_par_niveau=PRIORITE_TAGGER)
     return _CascadeTagger(cascade, pos, stats=stats)
 
 
-def _construire_tagger(partition: str = "alternative"):
+def _construire_tagger(partition: str = "alternative",
+                       heuristique: bl.Heuristique | None = None):
     """Rend (cascade, stats) ; lève `CleTaggerAbsente` si la clé manque (et ne l'affiche pas)."""
     stats = {"appels": 0, "requetes": 0, "cache": 0, "tokens": 0, "latence_s": 0.0,
              "modeles": {}, "cle_refusee": 0}
     client = _client_tagger()
     return _cascade_tagger(_transport_tagger(client, stats), partition=partition,
-                           stats=stats), stats
+                           stats=stats, heuristique=heuristique), stats
 
 
 def _cout_tagger(stats: dict) -> dict:
@@ -592,10 +620,55 @@ def _mode_tagger(args: argparse.Namespace) -> str | None:
     return None
 
 
+def cmd_profils(args: argparse.Namespace) -> int:
+    """La langue probable, le script et la confiance — la détection UDHR exposée.
+
+    `--texte` et le TEXTE positionnel sont équivalents ; les deux ensemble sont un usage
+    invalide (5). Un texte vide est un refus (3), un artefact de profils absent une
+    dépendance (4). La sortie JSON porte `langue`, `langue_probable`, `script`,
+    `confiance`, `sous_seuil`, `source` et les candidats.
+    """
+    if getattr(args, "texte_option", None) is not None:
+        if args.texte is not None:
+            print(f"{NOM}: erreur d'usage : TEXTE et --texte sont exclusifs", file=sys.stderr)
+            return 5
+        args.texte = args.texte_option
+    if args.texte is None and not args.fichier:
+        print(f"{NOM}: erreur d'usage : TEXTE ou --texte requis", file=sys.stderr)
+        return 5
+    if not (0.0 <= float(args.seuil) <= 1.0):
+        print(f"{NOM}: erreur d'usage : --seuil doit être dans [0, 1]", file=sys.stderr)
+        return 5
+    texte = _lire_entree(args)
+    try:
+        profils = pu.charger_profils()
+    except pu.ProfilsAbsents as exc:
+        print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+        return 4
+    detection = pu.detecter(texte, profils, seuil=float(args.seuil))
+    if detection["refus"]:
+        if args.json:
+            sys.stdout.write(_dumps(detection))
+        else:
+            print(f"{NOM}: refus d'analyse : {detection['refus']} "
+                  "(le texte doit contenir au moins une lettre ou un chiffre)",
+                  file=sys.stderr)
+        return 3
+    if args.json:
+        sys.stdout.write(_dumps(detection))
+    else:
+        titre = f"{NOM} {VERSION} — profils de langue (UDHR, hors ligne)"
+        print(_sur(pu.formater(detection, titre=titre)))
+    return 0
+
+
 def cmd_analyser(args: argparse.Namespace) -> int:
     texte = _lire_entree(args)
     duree = bool(getattr(args, "duree", False))
-    h = bl.Heuristique(partition=args.partition)
+    if getattr(args, "profils", False):
+        h = _HeuristiqueProfils(partition=args.partition, profils=pu.charger_profils())
+    else:
+        h = bl.Heuristique(partition=args.partition)
     mode = _mode_tagger(args)
     bloc, stats, auto = h, None, None
     a_des_mots = any(typ in ("mot", "nombre") for _, _, _, typ in h._mots(texte))
@@ -605,7 +678,7 @@ def cmd_analyser(args: argparse.Namespace) -> int:
         auto.cle_presente = _cle_tagger_presente()
         if auto.cle_presente and a_des_mots:
             try:
-                cascade, stats_tagger = _construire_tagger(partition=args.partition)
+                cascade, stats_tagger = _construire_tagger(partition=args.partition, heuristique=h)
             except CleTaggerAbsente:
                 # la clé a disparu entre la vérification et la construction : heuristique
                 auto.cle_presente = False
@@ -617,7 +690,7 @@ def cmd_analyser(args: argparse.Namespace) -> int:
     elif mode == "api":
         # la clé est vérifiée avant toute analyse : sans elle, code 4 (jamais de trace de la clé)
         try:
-            cascade, stats_tagger = _construire_tagger(partition=args.partition)
+            cascade, stats_tagger = _construire_tagger(partition=args.partition, heuristique=h)
         except CleTaggerAbsente as exc:
             print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
             return 4
@@ -820,11 +893,204 @@ def _formater_evaluation(rapport: dict) -> str:
     return "\n".join(lignes)
 
 
+# --------------------------------------------------------------------------- mode strict
+
+
+def _modes_quatre() -> dict:
+    """Les **quatre modes** du banc de recherche, sur le même gold.
+
+    `heuristique` et `MockNeuronal` sont deux implémentations du contrat : le second est
+    déterministe, hors ligne et sans GPU. `parallele` et `cascade` les composent ; c'est la
+    cascade locale que le mode strict juge.
+    """
+    h = bl.Heuristique()
+    n = bl.MockNeuronal()
+    return {
+        "heuristique": h,
+        "neuronal": n,
+        "parallele": bl.Parallele([h, n]),
+        "cascade": bl.Cascade(h, n),
+    }
+
+
+def _mesurer_quatre_modes(evaluateur, phrases: list[dict]) -> dict:
+    """Mesure les quatre modes et garde le nombre d'appels neuronaux de la cascade."""
+    modes = _modes_quatre()
+    mesures = {nom: evaluateur.evaluer_bloc(nom, bloc, phrases)
+               for nom, bloc in modes.items()}
+    mesures["cascade"]["appels_neuronal"] = modes["cascade"].appels_neuronal
+    return mesures
+
+
+def _delta_modes(mesures: dict) -> dict:
+    """Le delta de chaque mode **contre l'heuristique**, en taux (posé en points à l'affichage)."""
+    ref = mesures["heuristique"]
+    return {
+        nom: {
+            "pos": round(mesures[nom]["pos"]["exactitude"] - ref["pos"]["exactitude"], 4),
+            "syntagme_f1": round(mesures[nom]["syntagme"]["f1"] - ref["syntagme"]["f1"], 4),
+            "syntagme_tete_f1": round(mesures[nom]["syntagme"]["tete"]["f1"]
+                                      - ref["syntagme"]["tete"]["f1"], 4),
+            "attachement_exact": round(mesures[nom]["attachement"]["exact_taux"]
+                                       - ref["attachement"]["exact_taux"], 4),
+            "pragmatique_acte": round(mesures[nom]["pragmatique"]["acte"]
+                                      - ref["pragmatique"]["acte"], 4),
+        }
+        for nom in ("neuronal", "parallele", "cascade")
+    }
+
+
+class _CascadeSousPlancher:
+    """Le **contrôle négatif** : une cascade dont le POS est forcé, pour prouver que le plancher mord.
+
+    Elle garde tout le reste de la cascade (syntagmes, attachement, pragmatique) et ne change
+    que le niveau POS. Elle doit tomber sous 0,70 et faire échouer le mode strict.
+    """
+
+    nom = "cascade_sous_plancher"
+
+    def __init__(self, bloc) -> None:
+        self.bloc = bloc
+
+    def analyser(self, texte: str, langue: str | None = None, contexte: str | None = None):
+        annotation = self.bloc.analyser(texte, langue, contexte)
+        for etiquette in annotation.etiquettes:
+            if etiquette.niveau == "pos":
+                etiquette.type = "X"
+        return annotation
+
+
+def _verdict_strict(mesures_612: dict, mesures_452: dict,
+                    plancher: float = PLANCHER_STRICT) -> dict:
+    """Le plancher s'applique à la cascade POS, sur les **deux** golds."""
+    pos_612 = mesures_612["cascade"]["pos"]["exactitude"]
+    pos_452 = mesures_452["cascade"]["pos"]["exactitude"]
+    return {
+        "plancher": plancher,
+        "cascade_pos_612": pos_612,
+        "cascade_pos_452": pos_452,
+        "passe_612": pos_612 >= plancher,
+        "passe_452": pos_452 >= plancher,
+        "ok": pos_612 >= plancher and pos_452 >= plancher,
+    }
+
+
+def _evaluer_strict(evaluateur, plancher: float = PLANCHER_STRICT) -> dict:
+    """Le rapport complet du mode strict, contrôle négatif compris."""
+    phrases = evaluateur.charger()
+    phrases_reel = [p for p in phrases if p.get("source") in ("hand", "reel")]
+    mesures_612 = _mesurer_quatre_modes(evaluateur, phrases)
+    mesures_452 = _mesurer_quatre_modes(evaluateur, phrases_reel)
+    negatif = evaluateur.evaluer_bloc(
+        "cascade_sous_plancher",
+        _CascadeSousPlancher(_modes_quatre()["cascade"]),
+        phrases_reel,
+    )
+    verdict = _verdict_strict(mesures_612, mesures_452, plancher)
+    controle = {
+        "nom": "cascade dégradée (POS forcé à X)",
+        "gold": "réel 452",
+        "phrases": len(phrases_reel),
+        "pos": negatif["pos"]["exactitude"],
+        "plancher": plancher,
+        "passe": negatif["pos"]["exactitude"] >= plancher,
+        "code": 0 if negatif["pos"]["exactitude"] >= plancher else 1,
+        "attendu": "échec (code 1)",
+        "ok": negatif["pos"]["exactitude"] < plancher,
+    }
+    return {
+        "version": VERSION,
+        "strict": True,
+        "plancher": plancher,
+        "gold": {
+            "vivant": {"nom": "vivant (hand + reel + synthétique)",
+                       "phrases": len(phrases),
+                       "tokens": sum(len(p.get("mots", [])) for p in phrases)},
+            "reel": {"nom": "réel (hand + reel, sans synthétique)",
+                     "phrases": len(phrases_reel),
+                     "tokens": sum(len(p.get("mots", [])) for p in phrases_reel)},
+        },
+        "modes": {"612": mesures_612, "452": mesures_452},
+        "delta": {"612": _delta_modes(mesures_612), "452": _delta_modes(mesures_452)},
+        "verdict": verdict,
+        "controle_negatif": controle,
+    }
+
+
+def _formater_strict(rapport: dict) -> str:
+    """La table des **quatre modes**, le plancher et le contrôle négatif."""
+    v = rapport["verdict"]
+    lignes = [
+        f"{NOM} {VERSION} — évaluation stricte (cascade locale, plancher "
+        f"{rapport['plancher']:.2f})",
+        f"gold vivant {rapport['gold']['vivant']['phrases']} phrases · "
+        f"{rapport['gold']['vivant']['tokens']} tokens · "
+        f"gold réel {rapport['gold']['reel']['phrases']} phrases · "
+        f"{rapport['gold']['reel']['tokens']} tokens",
+    ]
+    for nom_gold, titre in (("612", "GOLD VIVANT 612"), ("452", "GOLD RÉEL 452")):
+        mesures = rapport["modes"][nom_gold]
+        deltas = rapport["delta"][nom_gold]
+        lignes += [
+            "",
+            titre,
+            f"{'mode':<12} {'POS':>9} {'ΔPOS':>11} {'SYNT. F1':>9} {'ΔF1':>11} "
+            f"{'TÊTE F1':>9} {'ΔTÊTE':>11}",
+        ]
+        for nom in ("heuristique", "neuronal", "parallele", "cascade"):
+            m = mesures[nom]
+            d = deltas.get(nom)
+            delta_pos = _points(d["pos"]) if d else "—"
+            delta_f1 = _points(d["syntagme_f1"]) if d else "—"
+            delta_tete = _points(d["syntagme_tete_f1"]) if d else "—"
+            libelle = "parallèle" if nom == "parallele" else nom
+            lignes.append(
+                f"{libelle:<12} {_pct(m['pos']['exactitude']):>9} {delta_pos:>11} "
+                f"{_pct(m['syntagme']['f1']):>9} {delta_f1:>11} "
+                f"{_pct(m['syntagme']['tete']['f1']):>9} {delta_tete:>11}"
+            )
+        lignes.append(
+            f"cascade : {mesures['cascade']['appels_neuronal']} appels neuronaux "
+            f"sur {mesures['cascade']['phrases']} phrases"
+        )
+    lignes += [
+        "",
+        f"PLANCHER {v['plancher']:.2f} — cascade POS "
+        f"{_pct(v['cascade_pos_612'])} (612) {'✅' if v['passe_612'] else '❌'} · "
+        f"{_pct(v['cascade_pos_452'])} (452) {'✅' if v['passe_452'] else '❌'} — "
+        f"code {0 if v['ok'] else 1}",
+    ]
+    c = rapport["controle_negatif"]
+    lignes.append(
+        f"CONTRÔLE NÉGATIF {c['nom']} · POS {_pct(c['pos'])} < {c['plancher']:.2f} "
+        f"{'✅' if c['ok'] else '❌'} (échec attendu, code {c['code']})"
+    )
+    return "\n".join(lignes)
+
+
 def cmd_evaluer(args: argparse.Namespace) -> int:
     if getattr(args, "tagger_auto", False):
         print(f"{NOM}: erreur d'usage : --tagger auto n'est disponible que pour analyser",
               file=sys.stderr)
         return 5
+    if getattr(args, "strict", False):
+        # le mode strict est **local** et mesure les deux golds ; les options qui changent
+        # le corpus ou le moteur sont exclusives plutôt que silencieusement ignorées.
+        for drapeau, raison in (
+            ("gold", "--strict mesure le gold vivant (612 + 452), pas le gold gelé"),
+            ("tagger", "--strict mesure la cascade locale (MockNeuronal), pas l'API"),
+            ("par_langue", "--strict publie déjà les deux golds (612 et 452)"),
+        ):
+            if getattr(args, drapeau, False):
+                print(f"{NOM}: erreur d'usage : {raison}", file=sys.stderr)
+                return 5
+        evaluateur = _module_evaluation()
+        rapport = _evaluer_strict(evaluateur)
+        if args.json:
+            sys.stdout.write(_dumps(rapport))
+        else:
+            print(_formater_strict(rapport))
+        return 0 if rapport["verdict"]["ok"] else 1
     evaluateur = _module_evaluation(gele=bool(args.gold))
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
     if getattr(args, "reel", False):
@@ -1137,21 +1403,25 @@ def _normaliser_tagger(argv: list[str]) -> list[str]:
 
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
-        "Commandes : analyser, evaluer, rejouer, restituer.\n"
+        "Commandes : analyser, evaluer, profils, rejouer, restituer.\n"
         "Codes de sortie : 0 succès · 3 refus d'analyse (JSON) · 4 clé/dépendance absente\n"
         "(--tagger explicite sans clé, ou --fichier introuvable) · 5 usage (argument, sous-commande,\n"
         "langue hors fr/en, --fichier sur un répertoire) · 1 autre erreur.\n"
         "Options : --json, --jsonl, --duree, --fichier CHEMIN, --langue fr|en,\n"
-        "--partition brut|alternative|filtrer_union|filtrer, --contexte, --banc, --tagger [auto].\n"
+        "--partition brut|alternative|filtrer_union|filtrer, --contexte, --banc, --tagger [auto],\n"
+        "--strict (evaluer), --profils (analyser) et `drave profils --texte`.\n"
         "Limites : heuristique CPU, hors ligne, déterministe par défaut ; --tagger appelle l'API\n"
         "DeepSeek (clé, réseau) pour le POS ; --tagger auto l'appelle seulement si une clé existe,\n"
-        "sinon il rend l'heuristique, sans changer le code de sortie ; la restitution est un codec\n"
+        "sinon il rend l'heuristique, sans changer le code de sortie ; --strict mesure la cascade\n"
+        "locale (MockNeuronal) et sort en 1 sous le plancher 0,70 ; la restitution est un codec\n"
         "de surface (graphème), pas un décodeur neuronal ; ni traduction ni génération.\n"
         "Exemples :\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\"\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\" --tagger\n"
         "  python3 tools/drave.py analyser \"Le chat dort.\" --tagger auto\n"
         "  python3 tools/drave.py evaluer --gold --json\n"
+        "  python3 tools/drave.py profils --texte \"Le chat dort.\"\n"
+        "  python3 tools/drave.py analyser \"Le chat dort.\" --profils\n"
         "  python3 tools/drave.py restituer \"Le chat dort.\"\n"
         "  python3 tools/drave.py restituer --banc reports/pensee-fiabilite-produit.json --json\n"
     )
@@ -1164,7 +1434,7 @@ def construire_parseur() -> argparse.ArgumentParser:
     parseur.add_argument("-V", "--version", action="version", version=f"{NOM} {VERSION}",
                          help="afficher la version et quitter")
     sous = parseur.add_subparsers(dest="commande",
-                                  metavar="{analyser,evaluer,rejouer,restituer}",
+                                  metavar="{analyser,evaluer,profils,rejouer,restituer}",
                                   required=True)
 
     analyser = sous.add_parser(
@@ -1193,6 +1463,10 @@ def construire_parseur() -> argparse.ArgumentParser:
                           help="le texte qui précède (mémoire de discours : coréférence, connecteurs)")
     analyser.add_argument("--langue", choices=("fr", "en"), default=None,
                           help="indice de langue (fr/en) ; sans lui, le bloc détecte")
+    analyser.add_argument("--profils", action="store_true",
+                          help="détecter la langue avec les 398 profils UDHR (texte long) "
+                               "et le prior des mots-outils (texte court) ; sans lui, le "
+                               "repli à sept langues du bloc")
     analyser.add_argument("--tagger", action="store_true",
                           help="tagger POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; "
                                "`--tagger auto` : API si une clé existe, sinon heuristique, sans "
@@ -1211,12 +1485,20 @@ def construire_parseur() -> argparse.ArgumentParser:
         description="Mesure POS, syntagmes (F1/tête) et attachement (exact/couverture) "
                     "sur le gold, avec un contrôle négatif reproductible. Avec --par-langue, "
                     "donne le même détail pour le français et l'anglais. Avec --tagger, mesure "
-                    "en plus la cascade POS de l'API DeepSeek et son écart.",
+                    "en plus la cascade POS de l'API DeepSeek et son écart. Avec --strict, "
+                    "mesure les quatre modes du banc local (heuristique, neuronal, parallèle, "
+                    "cascade) sur 612 et sur le réel 452, et applique le plancher 0,70 à la "
+                    "cascade POS : un échec sort en code 1.",
         epilog="Exemples : python3 tools/drave.py evaluer --gold --json ; "
                "python3 tools/drave.py evaluer --par-langue ; "
-               "python3 tools/drave.py evaluer --tagger",
+               "python3 tools/drave.py evaluer --tagger ; "
+               "python3 tools/drave.py evaluer --strict --json",
         formatter_class=_Formateur,
     )
+    evaluer.add_argument("--strict", action="store_true",
+                         help="mesurer les quatre modes locaux (heuristique, neuronal, "
+                              "parallèle, cascade) sur 612 et le réel 452 ; plancher 0,70 "
+                              "sur la cascade POS (échec = code 1)")
     evaluer.add_argument("--gold", action="store_true",
                          help="mesurer le gold gelé gold_gele.json (livré avec la roue) au lieu "
                               "du gold vivant ; si les gold manquent, evaluer sort en 4 et dit "
@@ -1231,6 +1513,32 @@ def construire_parseur() -> argparse.ArgumentParser:
     evaluer.add_argument("--json", action="store_true",
                          help="sortie JSON des mesures complètes")
     evaluer.set_defaults(fonction=cmd_evaluer)
+
+    profils = sous.add_parser(
+        "profils",
+        help="détecter la langue d'un texte (398 profils UDHR)",
+        description="Détecte la langue probable, le script et la confiance d'un texte avec "
+                    "les profils de trigrammes UDHR (398 langues, articles 0–14). La décision "
+                    "est `und` sous le seuil 0,12 ; la langue probable et la confiance restent "
+                    "publiées. Sur un texte court, le prior des mots-outils des sept langues "
+                    "du bloc prend le relais (champ `source`). `--json` publie les candidats.",
+        epilog="Exemples : python3 tools/drave.py profils --texte \"Le chat dort.\" ; "
+               "python3 tools/drave.py profils --texte \"Привет мир\" --json ; "
+               "python3 tools/drave.py profils --fichier page.txt",
+        formatter_class=_Formateur,
+    )
+    profils.add_argument("texte", metavar="TEXTE", nargs="?", default=None,
+                         help="texte à profiler (entre guillemets) ou --fichier")
+    profils.add_argument("--texte", dest="texte_option", default=None, metavar="TEXTE",
+                         help="le texte (équivalent au TEXTE positionnel)")
+    profils.add_argument("--fichier", default=None, metavar="CHEMIN",
+                         help="lire le texte dans un fichier UTF-8")
+    profils.add_argument("--seuil", type=float, default=pu.SEUIL_DEFAUT,
+                         help="seuil de décision (défaut : 0,12) ; sous le seuil, `und`")
+    profils.add_argument("--json", action="store_true",
+                         help="sortie JSON (langue, langue probable, script, confiance, "
+                              "candidats)")
+    profils.set_defaults(fonction=cmd_profils)
 
     rejouer = sous.add_parser(
         "rejouer",
@@ -1317,6 +1625,10 @@ def main(argv: list[str] | None = None) -> int:
         prefixe = "erreur d'usage" if exc.code == 5 else "dépendance absente"
         print(f"{NOM}: {prefixe} : {exc}", file=sys.stderr)
         return exc.code
+    except pu.ProfilsAbsents as exc:
+        # les profils sont une dépendance de données : code 4, rien sur stdout, pas de trace
+        print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)
+        return 4
     except GoldAbsent as exc:
         # les gold sont une dépendance de données : code 4, rien sur stdout, pas de trace
         print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)

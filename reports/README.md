@@ -22,7 +22,7 @@
 | [`rapport-gold-452.md`](rapport-gold-452.md) | **W1/R0.7** — le gold réel 452 : composition, split 402/H50, sha256, 10 candidats GP/SUB |
 | [`rapport-tagger-h50.md`](rapport-tagger-h50.md) | **W2/R0.7** — le tagger sur le split : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 inchangés, fermé 402 **−1,55** ; la règle ne le rejette pas |
 | [`rapport-tagger-defaut.md`](rapport-tagger-defaut.md) | **W3/R0.7** — la matrice du tagger : défaut hors ligne **code 0** / `--tagger` **code 4** sans clé ; réseau coupé = repli **code 0** ; coût **1 000 phrases** = 143 870 tokens, ~0,031 $ hors pointe ; recommandation : défaut hors ligne, opt-in, pas de `auto` |
-| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (677 textes), **672 appels réseau**, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **40,8 Mo**, **0,02177 $** ; cache chaud **0 réseau / 0 token / 0 $**, **1 000/1 000 hashes identiques** ; `--jsonl` 1 003 lignes |
+| [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (677 textes), **672 appels réseau**, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **0,02177 $** ; `--jsonl` 1 003 lignes |
 | [`rapport-protocole-date.md`](rapport-protocole-date.md) | **Panini** — le protocole à date contrôlée : 60 paires, trois strates |
 | [`rapport-panini-manifeste.md`](rapport-panini-manifeste.md) | **W4/Panini** — le manifeste des 26 signatures V14 : 27/60 paires, calibration 42/44, 3 sources courtes, contrôle N5 vide |
 | [`rapport-cic-v2.md`](rapport-cic-v2.md) | **Panini** — le CIC v2 : 42/42, les types clos, le sha256 sans hashlib |
@@ -31,6 +31,7 @@
 | [`rapport-panini-334.md`](rapport-panini-334.md) | **Panini** — le §334 : H0 0,909/0,906, la |
 | [`rapport-exemples-rejoues.md`](rapport-exemples-rejoues.md) | **B13** — les 5 exemples de la doc |
 | [`rapport-exemples-tagger.md`](rapport-exemples-tagger.md) | **D1** — les 3 exemples `--tagger` (coût affiché) et les 2 `--reel` (base honnête) |
+| [`rapport-exemples-v2.md`](rapport-exemples-v2.md) | **V2/B13** — 5 exemples rejoués, rôles normalisés, **27/27** |
 | [`rapport-evaluer-langue.md`](rapport-evaluer-langue.md) | **B13** — `evaluer --par-langue` : fr 0,8159 / |
 | [`rapport-robustesse-semaine.md`](rapport-robustesse-semaine.md) | **B13** — les 50 textes libres après le |
 | [`rapport-schema-v2-doc.md`](rapport-schema-v2-doc.md) | **B13** — le schéma v2 documenté |
@@ -39,7 +40,9 @@
 | [`rapport-bilan-chantier.md`](rapport-bilan-chantier.md) | **J10.1** — le bilan du chantier : F1 |
 | [`rapport-semaine.md`](rapport-semaine.md) | **J5.1** — le rapport de semaine : produit |
 | [`rapport-semaine-2.md`](rapport-semaine-2.md) | **W6** — la semaine 2 : W1-W5, le tagger, Panini bloqué, la restitution v3 |
-| [`rapport-bilan-exploitable.md`](rapport-bilan-exploitable.md) | **T6/B13** — le bilan exploitable : installable, quickstart **3/3**, JSON v2 (**2 139** objets, **8** rôles), 10 000 mots **4,01 s**, CLI **20/20** ; trois limites nommées (clone public, O(k²), or de S), passe **85/81/4** lue |
+| [`rapport-bilan-exploitable.md`](rapport-bilan-exploitable.md) | **T6/B13** — installable, quickstart **3/3**, JSON v2 (**2 139** objets, **8** rôles), 10 000 mots **4,01 s**, CLI **20/20** ; trois limites, passe **85/81/4** |
+| [`rapport-profils.md`](rapport-profils.md) | **U3/B13** — `drave profils` : les **398 profils UDHR** exposés, **20/20** sur l'échantillon, ambigu **`und`**, artefact de 802 110 o dans la roue |
+| [`rapport-evaluer-strict.md`](rapport-evaluer-strict.md) | **V1** — `--strict` : cascade **0,8625/0,8891**, plancher **0,70** |
 | [`rapport-passe-honnetete.md`](rapport-passe-honnetete.md) | **J9.1** — la passe d'honnêteté : **19** fiches |
 | [`rapport-coordination-n2.md`](rapport-coordination-n2.md) | **N2** — le mètre RoPE : 8,0225 → |
 | [`rapport-coordination-n2-v2.md`](rapport-coordination-n2-v2.md) | **N2** — la commande validée : `--rope --val` **2,7856**, `--rope` seul **40,0658**, témoin **3,09** |

@@ -17,8 +17,9 @@
 > `version: 2`) : le schéma v2 ajoute `meta.partition` et `meta.alternative`, et la **version 1
 > reste lue** ([`tools/schemas/`](../../tools/schemas/)). Les sorties du § 3.1, du § 3.4 et du
 > § 3.5 ont été relancées le 07/11 pour le format v2 ; les mesures chiffrées du § 2 datent du
-> **06/11**, et l'`evaluer` du § 3.3 a été relancé le **14/11** (gold vivant 612, `--par-langue
-> fr/en`). Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
+> **06/11**, et l'`evaluer` du § 3.3 a été relancé le **16/11** (gold vivant 612, `--par-langue
+> fr/en`, `--strict`) ; la fiche du mode strict est [`rapport-evaluer-strict.md`](../../reports/rapport-evaluer-strict.md).
+> Ce qui manque encore au contrat est nommé au § 7, sans être présenté comme acquis.
 > La **FAQ** (§ 8) est vérifiée à part le **2026-11-15** par
 > [`tools/verifier_faq.py`](../../tools/verifier_faq.py) : **10/10** réponses.
 >
@@ -26,7 +27,7 @@
 > classes de mots, syntagmes, attachements, acte de parole — avec ses spans, sa confiance et ses
 > candidats, de façon **déterministe**, et il sait **se mesurer** sur un gold de 612 phrases.
 >
-> **Démarrage en 5 minutes** : le parcours pas à pas — clone, installation, trois commandes,
+> **Démarrage en 5 minutes** : le parcours pas à pas — clone, installation, les commandes,
 > JSON, tagger optionnel et erreurs — est dans [`demarrage.md`](demarrage.md).
 
 ## Sommaire
@@ -68,7 +69,7 @@ candidats en **objets** `{span, cible, source}`, et `meta.role` appartient à un
 
 | ce que vous demandez | ce que vous obtenez | mesure du 15/11 |
 |---|---|---|
-| **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; le CLI n'expose que `fr`/`en` comme indice) |
+| **langue et script** | `fr`, `en`, `und`… et `Latn`, `Cyrl`… | **398 langues**, **0,9687** ; script **1,0000** (autotest UDHR ; `drave profils` les expose, `--langue` reste un indice `fr`/`en`) |
 | **POS** | DET, NOUN, VERB, ADJ, ADV, PREP, PRON, AUX, CONJ, NUM… | **0,8625** (fermé 0,9373, ouvert 0,7918) ; **0,8891** sur le réel 452 ; **0,9575** avec `--tagger` |
 | **syntagmes** | GN, GV, GP, REL, SUB, avec leur span | F1 **0,7902** ; tête **0,9029** (vivant 612) ; **0,7906** sur le réel 452 |
 | **attachement** | par syntagme : `role`, `cible`, `candidats` (objets v2, chaînes d'affichage en lecture) | **238/239** exacts ; couverture **0,9958** ; exact sur span **1,0000** ; **2 139** candidats objets, **0** span faux |
@@ -185,7 +186,7 @@ CONTRÔLE NÉGATIF cible exacte tirée au hasard 1.67 % (graine 0, 239 cibles)
 l'**exactitude** sur les 238 segments dont le span est prédit. La seule cible restante (`g017`)
 n'a pas de segment au bon span : c'est un plafond de **couverture**, pas d'attachement.
 `--gold` mesure le gold gelé 602 (F1 78,82 %, POS 86,25 %). La commande sort **0** : elle ne
-teste pas la cascade (voir § 4).
+teste pas la cascade ; c'est le rôle de `--strict`.
 
 **Par langue.** `--par-langue` rejoue la **même** mesure sur les deux sous-golds et ajoute un
 bloc `PAR LANGUE` (et une clé `par_langue` au JSON) : phrases, tokens, cibles, POS, syntagmes,
@@ -216,6 +217,51 @@ gold réel (`hand` + `reel`) donne encore l'anglais devant (POS 94,51 contre 84,
 contre 72,58) : l'écart n'est donc pas *seulement* un effet du synthétique, mais il reste
 **confondu avec la source**. Lire la langue avec la source, jamais l'une sans l'autre. La fiche
 complète est [`rapport-evaluer-langue.md`](../../reports/rapport-evaluer-langue.md).
+
+**Le mode strict — `--strict`.** Le banc de recherche mesure quatre modes et un plancher ; le CLI
+le fait maintenant en une commande, **hors ligne** (`MockNeuronal`, pas de GPU, pas de clé) :
+
+```bash
+python3 tools/drave.py evaluer --strict
+```
+```
+drave 0.1.0 — évaluation stricte (cascade locale, plancher 0.70)
+gold vivant 612 phrases · 3179 tokens · gold réel 452 phrases · 2480 tokens
+
+GOLD VIVANT 612
+mode               POS        ΔPOS  SYNT. F1         ΔF1   TÊTE F1       ΔTÊTE
+heuristique    86.25 %           —   79.02 %           —   90.29 %           —
+neuronal       75.40 %  -10.85 pts   76.51 %   -2.51 pts   88.07 %   -2.22 pts
+parallèle      86.25 %   +0.00 pts   79.02 %   +0.00 pts   90.29 %   +0.00 pts
+cascade        86.25 %   +0.00 pts   79.02 %   +0.00 pts   90.29 %   +0.00 pts
+cascade : 612 appels neuronaux sur 612 phrases
+
+GOLD RÉEL 452
+mode               POS        ΔPOS  SYNT. F1         ΔF1   TÊTE F1       ΔTÊTE
+heuristique    88.91 %           —   79.06 %           —   89.90 %           —
+neuronal       76.21 %  -12.70 pts   74.48 %   -4.58 pts   86.97 %   -2.93 pts
+parallèle      88.91 %   +0.00 pts   79.06 %   +0.00 pts   89.90 %   +0.00 pts
+cascade        88.91 %   +0.00 pts   79.06 %   +0.00 pts   89.90 %   +0.00 pts
+cascade : 452 appels neuronaux sur 452 phrases
+
+PLANCHER 0.70 — cascade POS 86.25 % (612) ✅ · 88.91 % (452) ✅ — code 0
+CONTRÔLE NÉGATIF cascade dégradée (POS forcé à X) · POS 0.00 % < 0.70 ✅ (échec attendu, code 1)
+```
+
+**Ce qu'il fait.** Il mesure les **quatre modes** — heuristique, neuronal (`MockNeuronal`),
+parallèle, cascade — sur le gold vivant **612** et sur le réel **452**, puis affiche le
+**delta** de chaque mode contre l'heuristique (POS, F1, tête). Le **plancher 0,70** porte sur
+l'**exactitude POS de la cascade** : si l'un des deux golds est sous 0,70, la commande sort en
+**code 1**. Ici la cascade vaut **86,25 %** (612) et **88,91 %** (452) : **code 0**.
+
+**Le contrôle négatif est dans la passe.** Une cascade dont le POS est forcé à `X` tombe à
+**0,0000** et le rapport porte `code: 1` : le plancher mord. Le JSON (`--json`) ajoute
+`strict`, `plancher`, `modes`, `delta`, `verdict` et `controle_negatif` ; le test
+[`test_evaluer_strict.py`](../../tools/tests/test_evaluer_strict.py) vérifie aussi qu'un
+verdict faux fait sortir `cmd_evaluer` en **1**. `--strict` est **exclusif** avec `--gold`
+(le gold gelé), `--tagger` (l'API) et `--par-langue` : ces options sortent en **5** plutôt
+que d'être ignorées. La fiche complète, avec les limites du mock, est
+[`rapport-evaluer-strict.md`](../../reports/rapport-evaluer-strict.md).
 
 ### 3.3 quater Traiter un corpus
 
@@ -559,6 +605,59 @@ porte qui peut sortir **4** (clé absente ou refusée). `--tagger auto` ne peut 
 replie sur l'heuristique, code **0**, et le dit. Dans les deux cas, le **défaut** sans option
 reste l'heuristique hors ligne.
 
+### 3.8 Les profils de langue — `drave profils`
+
+```bash
+python3 tools/drave.py profils --texte "Le chat dort."
+python3 tools/drave.py profils --texte "Привет мир" --json
+python3 tools/drave.py profils --fichier article.txt --json
+python3 tools/drave.py analyser "Le chat dort." --profils
+```
+```
+drave 0.1.0 — profils de langue (UDHR, hors ligne)
+langue=fra script=Latn confiance=0.3333 source=lexique
+langue      : fra (French)
+script      : Latn
+confiance   : 0.3333 (marge 0.0000, seuil 0.12)
+source      : lexique
+prior       : fra (mots-outils 0.3333)
+candidats   : hns 0.6364 · lld 0.5455 · deu 0.4545 · oci 0.4545 · pcd 0.4545
+profils     : 398 langues UDHR (articles 0–14, top 200)
+```
+
+**Lecture.** La commande charge l'artefact de **398 profils de trigrammes UDHR** (articles
+0–14 ; article 15 tenu à l'écart) et rend la **langue probable**, le **script** et la
+**confiance**. Le JSON (`--json`) porte `schema: "drave.profils"`, `langue` (la **décision**),
+`langue_probable` (le premier profil), `nom`, `script`, `confiance`, `marge`, `source`,
+`seuil`, `sous_seuil`, `refus`, `prior`, `candidats` et les métadonnées des profils. Sous le
+seuil **0,12**, `langue` est **`und`** ; `langue_probable` et la confiance restent publiées.
+
+**Deux chemins.** Sur un texte **long** (> 80 caractères), les 398 profils (`source: profils`).
+Sur un texte **court**, les trigrammes se recouvrent : le **prior des mots-outils** des sept
+langues du bloc peut trancher (`source: lexique`, `prior: {langue, score}`), et les
+`candidats` restent les profils — le désaccord est visible. Un texte de moins de cinq mots qui passe par les profils est
+pénalisé : un mot isolé rend `und`. `analyser --profils` emploie le même détecteur pour la
+langue de l'annotation.
+
+**Les codes.** `0` succès · `3` refus (vide ou sans lettre/chiffre) · `4` artefact de profils
+absent · `5` usage (`TEXTE` et `--texte` ensemble, seuil hors `[0,1]`). Sans l'artefact,
+`stdout` reste vide et le message nomme le fichier et les deux issues (roue complète, ou
+constructeur).
+
+**La mesure.** Sur les **20 langues stratifiées** de l'échantillon UDHR (5 familles × 4,
+10 écritures), article 15 tenu à l'écart : **20/20** langues et **20/20** scripts ; sur les
+articles 15–30 : **313/320 = 0,9781** (script **320/320**). L'autotest complet 398 langues
+donne **433/447 = 0,9687** avec les profils bruts et **431/447 = 0,9642** par le chemin CLI.
+Le texte ambigu bilingue rend **`und`** (0,0836 < 0,12) ; les profils permutés tombent à
+**0/20** (0,0022 sur 447). Dispositif, JSON et limites :
+[`rapport-profils.md`](../../reports/rapport-profils.md) et
+[`profils.json`](../../reports/profils.json).
+
+**Ce que ce n'est pas.** Une précision de déploiement : l'échantillon est **stratifié**, pas
+aléatoire, l'UDHR est propre et parallèle, et la confiance n'est **pas calibrée**. Les langues
+proches (mandarin/jinyu, anglais/scots) et le texte court hors des sept langues à mots-outils
+restent les points faibles.
+
 ## 4. Ce que le produit ne fait pas encore
 
 **1. Il ne génère pas de texte.** `restituer` reconstruit la **surface** depuis l'annotation
@@ -597,17 +696,16 @@ spans prédits**, pas la couverture du langage. Lire les deux ensemble.
 attachement ; la sortie lisible la montre comme un **doublon REL**, et il faut la filtrer pour
 une lecture unique (garder `union: null`, ou le segment qui en contient un autre).
 
-**3. `cascade_pos` : le plancher, pas le gain.** La « rouge » historique est devenue un
-**plancher** : le banc exige **0,70** et la cascade rend **0,7465**, donc la porte
-`porte-bloc-linguistique.sh` est **verte**. Mais la cascade (heuristique + `MockNeuronal`) reste
-**sous l'heuristique (0,7581)** en POS : la fusion par confiance laisse gagner le stub. Ce n'est
-pas un gain de POS ; c'est un **échange** — les syntagmes sont meilleurs (F1 **0,6141** contre
-**0,6482**, tête **0,7709** contre **0,7671** — *mesure du 06/11, avant la convention des GV ;
-la porte et le banc ont bougé depuis*). Le produit par défaut reste l'heuristique ;
+**3. `cascade_pos` : le plancher, désormais mesuré par le CLI.** `evaluer --strict` applique le
+**plancher 0,70** à la cascade locale (`MockNeuronal`) et sort en **1** sous le seuil. Sur le
+gold vivant 612, la cascade rend **0,8625** ; sur le réel 452, **0,8891** — soit exactement
+l'heuristique : la fusion par défaut garde ses labels, et le `MockNeuronal` est appelé sans
+gagner. Ce n'est donc **pas un gain de POS** ; le produit par défaut reste l'heuristique.
 `evaluer --tagger` mesure en plus la cascade **API** (**0,9575** sur 612, § 3.7), sans changer le
 défaut. La cascade avec le vrai tagger 7B local a été mesurée à **0,9415** en POS sur 180
 phrases, mais elle exige un serveur local 7B, que la règle 11 interdit aujourd'hui : ce n'est
-pas un chemin livré.
+pas un chemin livré. La fiche du mode strict est
+[`rapport-evaluer-strict.md`](../../reports/rapport-evaluer-strict.md).
 
 **4. Pas de neuronal local.** `MockNeuronal` est un **contrat** déterministe, pas un tagger de
 qualité. Le vrai adaptateur local (`NeuronalLLM`, `NeuronalLLMPOS`) parle à un serveur local ; il
@@ -621,9 +719,10 @@ cas, pas une règle.
 
 **6. La langue n'est pas forcée.** `--langue` est un **indice**, limité à `fr` et `en` dans le
 CLI ; sous le seuil de confiance, la sortie reste `und`. Il n'y a pas de `--langue-forcee`. Les
-profils UDHR (398 langues, 0,9687) ne sont pas exposés par le CLI et ne sont pas versionnés :
-`data/` est hors dépôt, et le corpus XML source est externe. Sans eux, la détection se rabat sur
-les indices internes.
+profils UDHR (398 langues, 0,9687) sont exposés par **`drave profils`** et **versionnés dans la
+roue** (artefact de 802 110 octets) ; `data/` reste hors dépôt et le corpus XML source est
+externe. Sans l'artefact, la commande sort en **4** et `analyser` se rabat sur les indices
+internes.
 
 **7. Pas de RSN, pas de DRVM, pas de serveur.** Le bloc a le contrat, la trace et le coût ; il
 ne produit pas le corps de la RSN, n'est pas un port DRVM et n'expose pas d'API HTTP. La couche
@@ -717,8 +816,10 @@ Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendanc
 python3 tools/drave.py --version
 python3 tools/drave.py --aide
 python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] [--duree] [--tagger] \
-    [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
+    [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE] [--profils]
 python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json] [--duree] [--tagger]
+python3 tools/drave.py profils --texte "Le chat dort." [--json] [--seuil 0.12]
+python3 tools/drave.py profils --fichier page.txt [--json]
 python3 tools/drave.py evaluer [--gold] [--json] [--par-langue] [--tagger]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
@@ -759,17 +860,20 @@ rejeu identique : oui
 | option | commande | sens |
 |---|---|---|
 | `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 5 |
-| `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |
+| `--json` | `analyser`, `evaluer`, `profils`, `restituer` | sortie machine UTF-8 |
 | `--duree` | `analyser` | ajoute `cout.duree_s` au JSON (ou à chaque ligne de `--jsonl`) ; absent par défaut |
 | `--tagger` | `analyser`, `evaluer` | POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; `evaluer` mesure en plus la cascade et le Δ (§ 3.7) |
 | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
-| `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
+| `--fichier CHEMIN` | `analyser`, `profils`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
 | `--banc CHEMIN` | `restituer` | mesure un banc JSON de textes (les 50 textes libres) |
 | `--canonique` | `restituer` | ajoute la forme canonique v1 (segments + rôles + cibles) et son miroir |
 | `--roles` | `restituer` | ajoute la forme lisible des rôles (agent, prédicat, lieu) ; avec `--banc`, mesure leur fidélité à l'or |
 | `--partition MODE` | `analyser`, `rejouer` | `alternative` (défaut), `filtrer_union`, `filtrer`, `brut` |
 | `--contexte TEXTE` | `analyser`, `restituer` | mémoire de discours portée dans le JSON |
+| `--profils` | `analyser` | détecte la langue par les 398 profils UDHR (texte long) et le prior court ; sans lui, le repli à sept langues |
+| `--texte TEXTE` | `profils` | le texte à profiler (équivalent du TEXTE positionnel) ; avec `--seuil`, règle la décision `und` |
 | `--gold` | `evaluer` | gold gelé 602 au lieu du vivant 612 |
+| `--strict` | `evaluer` | quatre modes locaux sur 612 et 452, plancher 0,70 sur la cascade POS (échec = code 1) ; exclusif avec `--gold`, `--tagger`, `--par-langue` (§ 3.3) |
 | `--par-langue` | `evaluer` | détail **fr/en** : POS, syntagmes, attachement et contrôle négatif par langue |
 | `-V`, `--version` | global | `drave 0.1.0` |
 | `-h`, `--aide` | global | l'aide, largeur fixe |
@@ -781,18 +885,17 @@ rejeu identique : oui
 | **l'entrée standard** | `--fichier` lit un fichier, mais pas de pipe (`cat corpus.txt \| drave analyser`) |
 | **`--sortie`** | pas d'écriture directe d'un JSON ; il faut rediriger le shell |
 | **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |
-| **`--mode` / la cascade locale** | le CLI expose l'heuristique et la cascade **API** (`--tagger`) ; `parallele` et la cascade **locale** demandent le code Python |
-| **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
+| **`--mode` / la cascade locale en analyse** | `evaluer --strict` **mesure** les quatre modes locaux ; `analyser` n'expose pas `--mode` : la cascade locale en production demande encore le code Python |
 | **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
-| **`--strict`** | `evaluer` ne mesure pas la cascade **locale** et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
 | **la publication** | `pip install -e .` et la commande `drave` existent ; **pas de wheel publiée** ni de paquet sur PyPI — l'installation pointe vers le dépôt |
 | **le neuronal local** | la cascade 7B (0,9415) exige un serveur local interdit par la règle 11 ; le tagger **API** est en option, le 7B local n'est pas livré |
 | **la restitution sémantique** | `restituer` est un **codec de surface** (graphème) ; il ne restitue pas le sens, ne traduit pas, ne génère pas |
 
-**Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
+**Ce qui est déjà tenu** : `--version`, `--aide`, les **cinq** sous-commandes, les **398
+profils de langue** (`drave profils`, `analyser --profils`), le JSON
 déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue),
 `--fichier`/`--jsonl`, `--duree`, `--banc`, `--partition`, le **tagger API en option** (`--tagger`, code 4,
-cache), la **restitution v0** (46/46 surfaces exactes,
+cache), le **mode strict** (`--strict`, quatre modes, plancher 0,70, code 1), la **restitution v0** (46/46 surfaces exactes,
 miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique, strict
 inchangé), les **candidats d'attachement en objets** `{span, cible, source}` et le
 **vocabulaire fermé des rôles** (`predicat` sans accent ; 21 rôles bruts → 8, 0 hors
@@ -812,16 +915,16 @@ sans être présenté comme acquis.
 ### 8.1 Quelles langues le produit reconnaît-il ?
 
 Le **bloc** détecte la langue et le script : ses profils UDHR couvrent **398 langues**
-(**0,9687** sur l'autotest), mais le **CLI** n'expose que `fr` et `en` comme **indice**
-(`--langue`). Sans indice, il rend la langue détectée — `de` pour « Der Hund schläft. », `es`
-pour « El perro duerme. » — ou `und` quand la confiance passe sous le seuil (**0,12**) :
-« Élodie sourit. » rend `und`, **même avec `--langue fr`**. `--langue` est un **indice**, pas
-une contrainte ; `--langue de` sort **5** (usage invalide). Les 398 profils ne sont pas
-versionnés : `data/` est hors dépôt.
+(**0,9687** sur l'autotest), et **`drave profils --texte` les expose** (langue probable,
+script, confiance). `--langue` reste un **indice** limité à `fr`/`en` ; sans indice, `analyser`
+rend la langue détectée — `de` pour « Der Hund schläft. », `es` pour « El perro duerme. » — ou
+`und` quand la confiance passe sous le seuil (**0,12**) : « Élodie sourit. » rend `und`, **même
+avec `--langue fr`**. `--langue de` sort **5** (usage invalide). L'artefact des 398 profils est
+**versionné dans la roue** (802 110 octets) ; `data/` reste hors dépôt.
 
 ### 8.2 Est-ce que ça marche hors ligne ?
 
-**Oui, par défaut.** `analyser`, `evaluer`, `rejouer` et `restituer` tournent sur **CPU**, sans
+**Oui, par défaut.** `analyser`, `evaluer`, `profils`, `rejouer` et `restituer` tournent sur **CPU**, sans
 modèle, sans GPU et **sans ouvrir de socket** ; le seul chemin réseau est l'option
 `--tagger` (§ 3.7). Vérifié en interdisant `socket.socket` : l'analyse passe, et le module
 `tools.llm.deepseek` n'est **même pas importé**. Sans `--tagger`, aucune clé n'est lue.

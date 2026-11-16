@@ -5,8 +5,10 @@
 >
 > **Le chiffre.** `python3 -m pip wheel . --no-deps --no-build-isolation -w dist` rend
 > **`drave-0.1.0-py3-none-any.whl`** : **1 727 201 octets**, **422 entrées**,
-> sha256 `d980c4706f575e061faa9611aca4c42c024c1147b654004f724694914a99dbce`. Installée
-> dans un venv **propre** depuis la roue (pas le dépôt), elle rend `drave 0.1.0` (code 0),
+> sha256 `d980c4706f575e061faa9611aca4c42c024c1147b654004f724694914a99dbce`. **Depuis U3**,
+> l'artefact de profils (802 110 octets) ajoute ~0,33 Mo : la roue courante fait **2 055 192
+> octets** ([fiche](rapport-profils.md)) ; le chiffre 1 727 201 est celui de U2, sans les profils.
+> Installée dans un venv **propre** depuis la roue (pas le dépôt), elle rend `drave 0.1.0` (code 0),
 > `drave analyser "Le chat dort."` (code 0, `rôle=agent`) et `drave evaluer --json` (code 0,
 > gold **612** phrases, POS **0,8625**, F1 **0,7902**, attachement exact **0,9958**) depuis
 > **`/tmp`**. Les JSON `analyser` et `evaluer` sont **identiques au bit près** à ceux du dépôt.

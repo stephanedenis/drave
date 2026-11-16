@@ -20,13 +20,16 @@ drave = "tools.drave:main"
 packages = ["tools", "tools.llm", "tools.structures", "tools.tests.linguistique"]
 
 [tool.setuptools.package-data]
-# Les gold sont **dans la roue** : `drave evaluer` doit marcher hors du dépôt.
-# Le contrôle négatif (une roue amputée de ces fichiers) est décrit dans
-# reports/rapport-roue.md : `evaluer` échoue alors en code 4, sans trace.
+# Les gold et l'artefact de profils sont **dans la roue** : `drave evaluer` et
+# `drave profils` doivent marcher hors du dépôt. Le contrôle négatif (une roue
+# amputée de ces fichiers) est décrit dans reports/rapport-roue.md et
+# reports/rapport-profils.md : la mesure et la détection échouent alors en code 4,
+# sans trace et sans stdout.
 "tools.tests.linguistique" = [
     "gold.json",
     "gold_gele.json",
     "gold_reel.json",
     "gold_restitution_v2.json",
     "gold_synthetique.json",
+    "profils_udhr.json",
 ]

@@ -28,7 +28,9 @@ causes ? Et deux règles implémentables dans le chunker — (a) marqueur de tê
 
 - **Gold** : `charger()` = 612 phrases (20 `hand`, 432 `reel`, 160 `synthetique`) ; **239**
   segments porteurs d'une cible (REL 74, SUB 69, GP 96), dont **94** sans segment prédit au bon
-  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**.
+  span dans le mode par défaut : **48 REL, 33 SUB, 13 GP**. Les **81 REL/SUB** sont le
+  territoire du générateur S (48 + 33) ; le mode par défaut les rate quand même au bon span,
+  et le chunker seul n'en produit aucun.
 - **Chunker seul** : `Heuristique(segmenter_s=False)`, c'est-à-dire `_syntagmes_simple` : GN, GP,
   GV, REL, et **aucune branche SUB**.
 - **Copie locale** : `tools/bloc_linguistique.py` copié dans `/tmp/spans/`, jamais modifié dans
@@ -166,8 +168,9 @@ de (b) sur les mêmes bornes.
 | (a)+(b), union | **229** | **0** | **0**\* | **852** | **0,4468** | **0,3693** | **0,4043** |
 
 \* En union, la règle **ajoute** ses segments à ceux de S : elle ne peut pas retirer un span de S,
-donc 0/145 est structurel. Le coût réel est le **FP ajouté** : +9 pour (a) (des SUB de « bien
-qu'/pendant qu' » démarrés à « qu'il », et deux « since + GN » lus comme SUB), −201 pour (b) (le
+donc 0/145 est structurel. Le coût réel est le **FP ajouté** : +9 pour (a) (5 SUB de « bien
+qu'/pendant qu' » démarrés à « qu'il », 2 « since + GN » lus comme SUB, 2 adverbes
+finaux inclus), −201 pour (b) (le
 GN n'avale plus les verbes), −207 pour (a)+(b). En mode chunker seul, les 77 spans exacts sont
 conservés (0 perdu) par les deux règles.
 
@@ -181,7 +184,7 @@ F1 par type, tous les segments du gold (union) :
 | GN | 0,2840 | 0,2840 | 0,4480 | **0,4480** |
 | GV | 0,1834 | 0,1834 | 0,2075 | **0,2075** |
 
-(a) ne touche ni GN, ni GV, ni GP ; (b) fait monter le GN de 0,284 à 0,448 parce qu'il ne avale
+(a) ne touche ni GN, ni GV, ni GP ; (b) fait monter le GN de 0,284 à 0,448 parce qu'il n'avale
 plus le verbe ni la relative.
 
 ## 7. Contrôles négatifs
@@ -235,7 +238,7 @@ prochain goulot est l'attachement des REL/SUB récupérées, pas leur segmentati
 ## 10. La suite
 
 1. **Porter (a) et (b)** dans `bloc_linguistique.py` (territoire L), avec `noyau()` et
-   `frontiere()` ; ajouter `since` et `au-dessus` au lexique PREP, et la déflexion PP pour
+   `frontiere()` ; ajouter `since` et `au-dessus` au lexique PREP, et le détachement du PP pour
    « on the wall ».
 2. **Mesurer les portes** : les 169 portes, dont celles qui codent 77/145 ; mettre à jour les
    références de non-régression et l'attachement.
