@@ -66771,3 +66771,132 @@ reports/rapport-exemples-v2.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 work/chantier/journal.log; git tag -l \"exploitable-*\"; git rev-list --count origin/master..s/v7", "description": "Verdict V3", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5240]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5240", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 03:24:06 EST
+2026-11-16 03:01:07 · ▶ V3 — La clôture — le tag exploitable (timeout 3000 s)
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+exploitable-2026-11-16
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 | cut -c1-80; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; timeout 280 git push origin --tags 2>&1 | tail -2; git rev-list --cou … [147 caractères tronqués]`
+
+  ```
+3c10e3ee V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES,
+ae3c24f2 V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS
+Everything up-to-date
+Everything up-to-date
+Everything up-to-date
+0
+# V3 — la clôture de la nuit exploitable : les neuf tâches T1–T6 · U1–U3, deux vérifications, 86 portes, le tag `exploitable-2026-11-16`
+
+> **Ligne de roadmap** : **B13** (le produit), **R0.7** (le lecteur) · **Tâche** : **V3**
+> (clôture de la nuit exploitable) · **Date** : 2026-11-16 · **Verdict** : ✅ **le lot
+> T1–T6 · U1–U3 tient** ; ✅ **V1–V2 sont livrées** ; ❌ **les négatifs restent nommés**
+> (clone public dégradé, or de rôles humain absent, neuronal de contrat, confiance non
+> calibrée, passe non rejouée).
+>
+> **Le chiffre, en une ligne.** Le produit est **installable** (`drave 0.1.0`, **8** tests,
+> sans installation **127**), le quickstart est **3/3** (JSON **5 899** octets), l'API publie
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls .github/workflows 2>/dev/null; ls tools/verifie_exemples.py 2>/dev/null; python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budge … [3331 caractères tronqués]`
+
+  ```
+tools/verifie_exemples.py
+plan : 63 tâches
+PID 1736898
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+lun 16 nov 2026 03:25:28 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\nprint('ids fin :', [x[\"id\"] for x in d[\"taches\"]][-5:])\ndef t(id, jour, titre, mandat, checks, budget=90):\n    ret … [2680 caractères tronqués]`
+
+  ```
+ids fin : ['U2', 'U3', 'V1', 'V2', 'V3']
+plan : 63 | ids fin : ['V1', 'V2', 'V3']
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+lun 16 nov 2026 03:26:04 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\nprint('avant:', len(d['taches']), 'W?', [x['id'] for x in d['taches'] if x['id'].startswith('W')])\nw = {\"id\":\"W1\",\ … [374 caractères tronqués]`
+
+  ```
+avant: 63 W? ['W1', 'W2', 'W3', 'W4', 'W5', 'W6']
+après append: 64
+relu: 64 W1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\n# 1) retirer l'entrée de diagnostic (titre \"test\" en fin)\nd['taches'] = [x for x in d['taches'] if not (x.get('id')== … [2876 caractères tronqués]`
+
+  ```
+nettoyé: 63
+plan : 66 | ids fin : ['Z1', 'Z2', 'Z3']
+Z1 — L'intégration continue — le workflow
+
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+lun 16 nov 2026 03:26:57 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[s]uperviseur.py boucle\"; nohup timeout 15000 python3 tools/chantier/superviseur.py boucle --budget 36000 --timeout 4200 > work/chantier/boucle-z.log 2>&1 & echo \"PID $!\"; sleep 20; tail -1 work/chantier/journal … [71 caractères tronqués]`
+
+  ```
+1
+PID 1737506
+2026-11-16 03:27:09 · ▶ Z1 — L'intégration continue — le workflow (timeout 4200 s)
+lun 16 nov 2026 03:27:28 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls .github/workflows/ci.yml 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Suivre Z1", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5247]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5247", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5247", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+lun 16 nov 2026 03:52:36 EST
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+2026-11-16 03:27:09 · ▶ Z1 — L'intégration continue — le workflow (timeout 4200 s)
+.github/workflows/ci.yml
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 work/chantier/journal.log; ls reports/rapport-ci.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Verdict Z1", "timeoutMs": 1000000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5248]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5248", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 04:07:43 EST
+2026-11-16 03:16:25 · ✔ V3 en 917.4 s (code 0) — ✅ git tag -l 'exploitable-2026-11-16'; ✅ test -f reports/rapport-bilan-exploitable-2.md && echo FICHE-OK
+2026-11-16 03:27:09 · ▶ Z1 — L'intégration continue — le workflow (timeout 4200 s)
+reports/rapport-ci.md
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Verdict Z1", "timeoutMs": 1300000}`

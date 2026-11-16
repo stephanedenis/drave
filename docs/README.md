@@ -33,7 +33,7 @@
 | [`methode/chantier-autonome.md`](methode/chantier-autonome.md) | le chantier long |
 | [`methode/continuite.md`](methode/continuite.md) | les cycles DSH, les sous-agents |
 | [`methode/modularisation.md`](methode/modularisation.md) | diviser ou paralléliser : ce que la mesure dit |
-| [`methode/relations-humaines.md`](methode/relations-humaines.md) | *carpe diem*, le temps et les échanges |
+| [`methode/relations-humaines.md`](methode/relations-humaines.md) | *carpe diem*, le temps |
 
 ## Pilotage — planification, état, suivi
 
@@ -97,6 +97,7 @@
 | [`produit/README.md`](produit/README.md) | le **premier produit** : analyser un texte |
 | [`produit/README.md` § 8](produit/README.md#8-faq--dix-questions) | la **FAQ** : dix questions vérifiées |
 | [`produit/exemples.md`](produit/exemples.md) | cinq exemples réels, dont un échec connu |
+| [`produit/ci.md`](produit/ci.md) | l'**intégration continue** |
 
 ## Transversal et archive
 

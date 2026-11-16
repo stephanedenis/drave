@@ -1,0 +1,74 @@
+name: CI
+
+# Le dépôt est sur `s/v7` ; on teste aussi les pull requests et les autres branches.
+# `workflow_dispatch` permet de relancer une matrice à la main sans changer le code.
+"on":
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  produit:
+    name: Produit — Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      # Les deux jambes de la matrice doivent être lues, même si l'une casse.
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.13"]
+    env:
+      # Le produit écrit et lit de l'UTF-8 ; on ne dépend pas de la locale du runner.
+      PYTHONUTF8: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Vérifier l'interpréteur et pip
+        run: |
+          python3 --version
+          pip --version
+
+      # `tools/structures` est un sous-module dont l'URL versionnée est un chemin local :
+      # un runner hébergé ne peut pas le récupérer. La copie de secours est la seule
+      # source absente ; elle est identique au sous-module (vérifiée localement).
+      - name: Restaurer le générateur S (sous-module non public)
+        run: |
+          if [ ! -f tools/structures/generateur.py ]; then
+            mkdir -p tools/structures/donnees
+            cp .github/ci/structures/generateur.py tools/structures/generateur.py
+            cp .github/ci/structures/donnees/gold-analyseur.json tools/structures/donnees/gold-analyseur.json
+            echo "S restauré depuis .github/ci/structures (sous-module non public)"
+          else
+            echo "sous-module tools/structures présent : copie de secours non utilisée"
+          fi
+
+      - name: Installer le produit en éditable
+        run: pip install -e .
+
+      - name: Smoke test produit
+        run: python3 tools/tests/test_produit.py
+
+      - name: Tagger API (transport factice, sans réseau)
+        run: python3 tools/tests/test_tagger_api.py
+
+      - name: Porte produit
+        run: bash tools/porte-produit.sh
+
+      - name: Schéma produit
+        run: python3 tools/tests/test_schema_produit.py

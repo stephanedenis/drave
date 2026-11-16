@@ -1,0 +1,1158 @@
+{
+ "version": 1,
+ "note": "Gold de l'analyseur. split=dev : les 7 phrases du banc. split=test : 16 phrases écrites AVANT les règles. split=holdout : 32 phrases en quatre vagues — h024-h031 (première règle, h024 a révélé « est mon voisin », corrigé par la copule), h032-h039 (après la copule), h040-h047 (après la frontière GN-devant-verbe) et h048-h055 (après la règle de contexte des homographes, 02/11 20 h). h033, h046 et h047, qui avaient révélé les défauts, sont corrigés ; les vagues 2 et 3 ne sont donc plus aveugles à ces règles, et la vague 4 est écrite après la règle de contexte, mesurée une fois. Deux échecs de la vague 4 sont nommés : h050 (« fait » suivi d'un verbe hors lexique) et h053 (« lit » après un adjectif, en fin de phrase). Aucun attendu n'a été modifié après mesure. Cinquième vague h056-h060, écrite APRÈS les règles v6 (h050, h053, « si fort que ») et mesurée une fois : elle teste la conséquence, l'hypothèse conditionnelle, le nom après adjectif et le verbe « fait » après un nom. Sixième vague h061 : le nom après un adjectif hors lexique (« fait divers »), ajouté après la règle v7 et mesuré une fois.",
+ "segments": [
+  "texte",
+  "type",
+  "role"
+ ],
+ "phrases": [
+  {
+   "id": "p001",
+   "split": "dev",
+   "texte": "Le chat de la voisine qui dort sur le toit se réveille.",
+   "attendus": [
+    [
+     "Le chat",
+     "GN",
+     "agent"
+    ],
+    [
+     "de la voisine",
+     "GP",
+     "possession"
+    ],
+    [
+     "qui dort sur le toit",
+     "REL",
+     "qualite"
+    ],
+    [
+     "se réveille",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "p002",
+   "split": "dev",
+   "texte": "J'ai vu l'homme avec le télescope.",
+   "attendus": [
+    [
+     "J'ai vu",
+     "GV",
+     "predicat"
+    ],
+    [
+     "l'homme",
+     "GN",
+     "patient"
+    ],
+    [
+     "avec le télescope",
+     "GP",
+     "instrument"
+    ]
+   ]
+  },
+  {
+   "id": "p003",
+   "split": "dev",
+   "texte": "La femme a vu l'homme dans le parc.",
+   "attendus": [
+    [
+     "La femme",
+     "GN",
+     "agent"
+    ],
+    [
+     "a vu",
+     "GV",
+     "predicat"
+    ],
+    [
+     "l'homme",
+     "GN",
+     "patient"
+    ],
+    [
+     "dans le parc",
+     "GP",
+     "lieu"
+    ]
+   ]
+  },
+  {
+   "id": "p004",
+   "split": "dev",
+   "texte": "Il a couru pour attraper le bus.",
+   "attendus": [
+    [
+     "Il a couru",
+     "GV",
+     "predicat"
+    ],
+    [
+     "pour attraper le bus",
+     "GP",
+     "but"
+    ]
+   ]
+  },
+  {
+   "id": "p005",
+   "split": "dev",
+   "texte": "Il a parlé à Marie de son projet.",
+   "attendus": [
+    [
+     "Il a parlé",
+     "GV",
+     "predicat"
+    ],
+    [
+     "à Marie",
+     "GP",
+     "destinataire"
+    ],
+    [
+     "de son projet",
+     "GP",
+     "theme"
+    ]
+   ]
+  },
+  {
+   "id": "p006",
+   "split": "dev",
+   "texte": "Elle a dit qu'elle viendrait hier.",
+   "attendus": [
+    [
+     "Elle a dit",
+     "GV",
+     "predicat"
+    ],
+    [
+     "qu'elle viendrait",
+     "SUB",
+     "contenu"
+    ],
+    [
+     "hier",
+     "GP",
+     "temps"
+    ]
+   ]
+  },
+  {
+   "id": "p007",
+   "split": "dev",
+   "texte": "Le canard est prêt à manger.",
+   "attendus": [
+    [
+     "Le canard",
+     "GN",
+     "agent"
+    ],
+    [
+     "est prêt",
+     "GV",
+     "predicat"
+    ],
+    [
+     "à manger",
+     "GP",
+     "but"
+    ]
+   ]
+  },
+  {
+   "id": "g008",
+   "split": "test",
+   "texte": "Le livre que j'ai lu est passionnant.",
+   "attendus": [
+    [
+     "Le livre",
+     "GN",
+     "agent"
+    ],
+    [
+     "que j'ai lu",
+     "REL",
+     "qualite"
+    ],
+    [
+     "est passionnant",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g009",
+   "split": "test",
+   "texte": "Je pense que le chat dort.",
+   "attendus": [
+    [
+     "Je pense",
+     "GV",
+     "predicat"
+    ],
+    [
+     "que le chat dort",
+     "SUB",
+     "contenu"
+    ]
+   ]
+  },
+  {
+   "id": "g010",
+   "split": "test",
+   "texte": "Quand il pleut, je reste à la maison.",
+   "attendus": [
+    [
+     "Quand il pleut",
+     "SUB",
+     "temps"
+    ],
+    [
+     "je reste",
+     "GV",
+     "predicat"
+    ],
+    [
+     "à la maison",
+     "GP",
+     "lieu"
+    ]
+   ]
+  },
+  {
+   "id": "g011",
+   "split": "test",
+   "texte": "Elle part parce qu'elle est fatiguée.",
+   "attendus": [
+    [
+     "Elle part",
+     "GV",
+     "predicat"
+    ],
+    [
+     "parce qu'elle est fatiguée",
+     "SUB",
+     "cause"
+    ]
+   ]
+  },
+  {
+   "id": "g012",
+   "split": "test",
+   "texte": "Bien qu'il soit tard, il travaille.",
+   "attendus": [
+    [
+     "Bien qu'il soit tard",
+     "SUB",
+     "concession"
+    ],
+    [
+     "il travaille",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g013",
+   "split": "test",
+   "texte": "S'il vient, nous partirons.",
+   "attendus": [
+    [
+     "S'il vient",
+     "SUB",
+     "hypothese"
+    ],
+    [
+     "nous partirons",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g014",
+   "split": "test",
+   "texte": "Nous partirons dès qu'il arrivera.",
+   "attendus": [
+    [
+     "Nous partirons",
+     "GV",
+     "predicat"
+    ],
+    [
+     "dès qu'il arrivera",
+     "SUB",
+     "temps"
+    ]
+   ]
+  },
+  {
+   "id": "g015",
+   "split": "test",
+   "texte": "Le livre dont je parle est bon.",
+   "attendus": [
+    [
+     "Le livre",
+     "GN",
+     "agent"
+    ],
+    [
+     "dont je parle",
+     "REL",
+     "qualite"
+    ],
+    [
+     "est bon",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g016",
+   "split": "test",
+   "texte": "La ville où je vis est grande.",
+   "attendus": [
+    [
+     "La ville",
+     "GN",
+     "agent"
+    ],
+    [
+     "où je vis",
+     "REL",
+     "qualite"
+    ],
+    [
+     "est grande",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g017",
+   "split": "test",
+   "texte": "Il a offert un livre à Marie.",
+   "attendus": [
+    [
+     "Il a offert",
+     "GV",
+     "predicat"
+    ],
+    [
+     "un livre",
+     "GN",
+     "patient"
+    ],
+    [
+     "à Marie",
+     "GP",
+     "destinataire"
+    ]
+   ]
+  },
+  {
+   "id": "g018",
+   "split": "test",
+   "texte": "La lettre a été écrite par Marie.",
+   "attendus": [
+    [
+     "La lettre",
+     "GN",
+     "patient"
+    ],
+    [
+     "a été écrite",
+     "GV",
+     "predicat"
+    ],
+    [
+     "par Marie",
+     "GP",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "g019",
+   "split": "test",
+   "texte": "Il a parlé de son projet à Marie.",
+   "attendus": [
+    [
+     "Il a parlé",
+     "GV",
+     "predicat"
+    ],
+    [
+     "de son projet",
+     "GP",
+     "theme"
+    ],
+    [
+     "à Marie",
+     "GP",
+     "destinataire"
+    ]
+   ]
+  },
+  {
+   "id": "g020",
+   "split": "test",
+   "texte": "Je crois qu'il viendra demain.",
+   "attendus": [
+    [
+     "Je crois",
+     "GV",
+     "predicat"
+    ],
+    [
+     "qu'il viendra",
+     "SUB",
+     "contenu"
+    ],
+    [
+     "demain",
+     "GP",
+     "temps"
+    ]
+   ]
+  },
+  {
+   "id": "g021",
+   "split": "test",
+   "texte": "Il travaille afin qu'elle réussisse.",
+   "attendus": [
+    [
+     "Il travaille",
+     "GV",
+     "predicat"
+    ],
+    [
+     "afin qu'elle réussisse",
+     "SUB",
+     "but"
+    ]
+   ]
+  },
+  {
+   "id": "g022",
+   "split": "test",
+   "texte": "Puisqu'il pleut, nous restons.",
+   "attendus": [
+    [
+     "Puisqu'il pleut",
+     "SUB",
+     "cause"
+    ],
+    [
+     "nous restons",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "g023",
+   "split": "test",
+   "texte": "Comme il pleuvait, elle est restée.",
+   "attendus": [
+    [
+     "Comme il pleuvait",
+     "SUB",
+     "cause"
+    ],
+    [
+     "elle est restée",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h024",
+   "split": "holdout",
+   "texte": "L'homme que tu as vu hier est mon voisin.",
+   "attendus": [
+    [
+     "L'homme",
+     "GN",
+     "agent"
+    ],
+    [
+     "que tu as vu",
+     "REL",
+     "qualite"
+    ],
+    [
+     "hier",
+     "GP",
+     "temps"
+    ],
+    [
+     "est mon voisin",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h025",
+   "split": "holdout",
+   "texte": "Je sais qu'elle partira quand il fera beau.",
+   "attendus": [
+    [
+     "Je sais",
+     "GV",
+     "predicat"
+    ],
+    [
+     "qu'elle partira",
+     "SUB",
+     "contenu"
+    ],
+    [
+     "quand il fera beau",
+     "SUB",
+     "temps"
+    ]
+   ]
+  },
+  {
+   "id": "h026",
+   "split": "holdout",
+   "texte": "Pendant qu'il dormait, elle lisait.",
+   "attendus": [
+    [
+     "Pendant qu'il dormait",
+     "SUB",
+     "temps"
+    ],
+    [
+     "elle lisait",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h027",
+   "split": "holdout",
+   "texte": "Il a été arrêté par la police.",
+   "attendus": [
+    [
+     "Il a été arrêté",
+     "GV",
+     "predicat"
+    ],
+    [
+     "par la police",
+     "GP",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h028",
+   "split": "holdout",
+   "texte": "Elle a écrit une lettre à Paul.",
+   "attendus": [
+    [
+     "Elle a écrit",
+     "GV",
+     "predicat"
+    ],
+    [
+     "une lettre",
+     "GN",
+     "patient"
+    ],
+    [
+     "à Paul",
+     "GP",
+     "destinataire"
+    ]
+   ]
+  },
+  {
+   "id": "h029",
+   "split": "holdout",
+   "texte": "Le pont dont je t'ai parlé est vieux.",
+   "attendus": [
+    [
+     "Le pont",
+     "GN",
+     "agent"
+    ],
+    [
+     "dont je t'ai parlé",
+     "REL",
+     "qualite"
+    ],
+    [
+     "est vieux",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h030",
+   "split": "holdout",
+   "texte": "Puisqu'elle est arrivée, nous mangeons.",
+   "attendus": [
+    [
+     "Puisqu'elle est arrivée",
+     "SUB",
+     "cause"
+    ],
+    [
+     "nous mangeons",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h031",
+   "split": "holdout",
+   "texte": "Il court mais il ne rit pas.",
+   "attendus": [
+    [
+     "Il court",
+     "GV",
+     "predicat"
+    ],
+    [
+     "il ne rit pas",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h032",
+   "split": "holdout",
+   "texte": "Elle est ma sœur.",
+   "attendus": [
+    [
+     "Elle est ma sœur",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h033",
+   "split": "holdout",
+   "texte": "La femme parle à son fils.",
+   "attendus": [
+    [
+     "La femme",
+     "GN",
+     "agent"
+    ],
+    [
+     "parle",
+     "GV",
+     "predicat"
+    ],
+    [
+     "à son fils",
+     "GP",
+     "destinataire"
+    ]
+   ]
+  },
+  {
+   "id": "h034",
+   "split": "holdout",
+   "texte": "Il a peur du chien.",
+   "attendus": [
+    [
+     "Il a peur",
+     "GV",
+     "predicat"
+    ],
+    [
+     "du chien",
+     "GP",
+     "theme"
+    ]
+   ]
+  },
+  {
+   "id": "h035",
+   "split": "holdout",
+   "texte": "Quand elle chante, il danse.",
+   "attendus": [
+    [
+     "Quand elle chante",
+     "SUB",
+     "temps"
+    ],
+    [
+     "il danse",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h036",
+   "split": "holdout",
+   "texte": "Je crois qu'elle a raison.",
+   "attendus": [
+    [
+     "Je crois",
+     "GV",
+     "predicat"
+    ],
+    [
+     "qu'elle a raison",
+     "SUB",
+     "contenu"
+    ]
+   ]
+  },
+  {
+   "id": "h037",
+   "split": "holdout",
+   "texte": "Le gâteau que tu as fait est délicieux.",
+   "attendus": [
+    [
+     "Le gâteau",
+     "GN",
+     "agent"
+    ],
+    [
+     "que tu as fait",
+     "REL",
+     "qualite"
+    ],
+    [
+     "est délicieux",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h038",
+   "split": "holdout",
+   "texte": "Il est parti sans que je le voie.",
+   "attendus": [
+    [
+     "Il est parti",
+     "GV",
+     "predicat"
+    ],
+    [
+     "sans que je le voie",
+     "SUB",
+     "maniere"
+    ]
+   ]
+  },
+  {
+   "id": "h039",
+   "split": "holdout",
+   "texte": "Elle a été choisie par le jury.",
+   "attendus": [
+    [
+     "Elle a été choisie",
+     "GV",
+     "predicat"
+    ],
+    [
+     "par le jury",
+     "GP",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h040",
+   "split": "holdout",
+   "texte": "La voisine arrive.",
+   "attendus": [
+    [
+     "La voisine",
+     "GN",
+     "agent"
+    ],
+    [
+     "arrive",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h041",
+   "split": "holdout",
+   "texte": "Le chat dort sur le canapé.",
+   "attendus": [
+    [
+     "Le chat",
+     "GN",
+     "agent"
+    ],
+    [
+     "dort",
+     "GV",
+     "predicat"
+    ],
+    [
+     "sur le canapé",
+     "GP",
+     "lieu"
+    ]
+   ]
+  },
+  {
+   "id": "h042",
+   "split": "holdout",
+   "texte": "Le train part demain.",
+   "attendus": [
+    [
+     "Le train",
+     "GN",
+     "agent"
+    ],
+    [
+     "part",
+     "GV",
+     "predicat"
+    ],
+    [
+     "demain",
+     "GP",
+     "temps"
+    ]
+   ]
+  },
+  {
+   "id": "h043",
+   "split": "holdout",
+   "texte": "Une belle maison.",
+   "attendus": [
+    [
+     "Une belle maison",
+     "GN",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h044",
+   "split": "holdout",
+   "texte": "Le petit chat noir dort.",
+   "attendus": [
+    [
+     "Le petit chat noir",
+     "GN",
+     "agent"
+    ],
+    [
+     "dort",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h045",
+   "split": "holdout",
+   "texte": "Le roi Louis parle.",
+   "attendus": [
+    [
+     "Le roi Louis",
+     "GN",
+     "agent"
+    ],
+    [
+     "parle",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h046",
+   "split": "holdout",
+   "texte": "La petite ferme est belle.",
+   "attendus": [
+    [
+     "La petite ferme",
+     "GN",
+     "agent"
+    ],
+    [
+     "est belle",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h047",
+   "split": "holdout",
+   "texte": "Le simple fait surprend.",
+   "attendus": [
+    [
+     "Le simple fait",
+     "GN",
+     "agent"
+    ],
+    [
+     "surprend",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h048",
+   "split": "holdout",
+   "texte": "La vieille porte est ouverte.",
+   "attendus": [
+    [
+     "La vieille porte",
+     "GN",
+     "agent"
+    ],
+    [
+     "est ouverte",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h049",
+   "split": "holdout",
+   "texte": "Le grand lit est dur.",
+   "attendus": [
+    [
+     "Le grand lit",
+     "GN",
+     "agent"
+    ],
+    [
+     "est dur",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h050",
+   "split": "holdout",
+   "texte": "Le triste fait demeure.",
+   "attendus": [
+    [
+     "Le triste fait",
+     "GN",
+     "agent"
+    ],
+    [
+     "demeure",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h051",
+   "split": "holdout",
+   "texte": "Le fait divers est intéressant.",
+   "attendus": [
+    [
+     "Le fait divers",
+     "GN",
+     "agent"
+    ],
+    [
+     "est intéressant",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h052",
+   "split": "holdout",
+   "texte": "La ferme.",
+   "attendus": [
+    [
+     "La ferme",
+     "GN",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h053",
+   "split": "holdout",
+   "texte": "Le grand lit.",
+   "attendus": [
+    [
+     "Le grand lit",
+     "GN",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h054",
+   "split": "holdout",
+   "texte": "Le petit chat noir dort.",
+   "attendus": [
+    [
+     "Le petit chat noir",
+     "GN",
+     "agent"
+    ],
+    [
+     "dort",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h055",
+   "split": "holdout",
+   "texte": "Le roi Louis parle.",
+   "attendus": [
+    [
+     "Le roi Louis",
+     "GN",
+     "agent"
+    ],
+    [
+     "parle",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h056",
+   "split": "holdout",
+   "texte": "Le chien crie si fort que la maison tremble.",
+   "attendus": [
+    [
+     "Le chien",
+     "GN",
+     "agent"
+    ],
+    [
+     "crie si fort",
+     "GV",
+     "predicat"
+    ],
+    [
+     "que la maison tremble",
+     "SUB",
+     "consequence"
+    ]
+   ]
+  },
+  {
+   "id": "h057",
+   "split": "holdout",
+   "texte": "S'il pleut, je reste.",
+   "attendus": [
+    [
+     "S'il pleut",
+     "SUB",
+     "hypothese"
+    ],
+    [
+     "je reste",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h058",
+   "split": "holdout",
+   "texte": "La vieille ferme demeure.",
+   "attendus": [
+    [
+     "La vieille ferme",
+     "GN",
+     "agent"
+    ],
+    [
+     "demeure",
+     "GV",
+     "predicat"
+    ]
+   ]
+  },
+  {
+   "id": "h059",
+   "split": "holdout",
+   "texte": "La vieille porte.",
+   "attendus": [
+    [
+     "La vieille porte",
+     "GN",
+     "agent"
+    ]
+   ]
+  },
+  {
+   "id": "h060",
+   "split": "holdout",
+   "texte": "Le chat fait des bonds.",
+   "attendus": [
+    [
+     "Le chat",
+     "GN",
+     "agent"
+    ],
+    [
+     "fait",
+     "GV",
+     "predicat"
+    ],
+    [
+     "des bonds",
+     "GP",
+     "theme"
+    ]
+   ]
+  },
+  {
+   "id": "h061",
+   "split": "holdout",
+   "texte": "Le fait divers surprend.",
+   "attendus": [
+    [
+     "Le fait divers",
+     "GN",
+     "agent"
+    ],
+    [
+     "surprend",
+     "GV",
+     "predicat"
+    ]
+   ]
+  }
+ ]
+}

@@ -315,7 +315,7 @@ class TestCliAvecTransportFactice(unittest.TestCase):
         chargeur = evaluateur.charger
         evaluateur.charger = lambda: chargeur()[:2]
         ancien_module = drave._module_evaluation
-        drave._module_evaluation = lambda: evaluateur
+        drave._module_evaluation = lambda gele=False: evaluateur
         try:
             code, sortie, erreur = self._lancer("evaluer", "--tagger", "--json")
         finally:
@@ -518,7 +518,7 @@ class TestMatriceW3(unittest.TestCase):
         evaluateur.charger = lambda: [premier, second]
         ancien_module = drave._module_evaluation
         drave._client_tagger = lambda: client
-        drave._module_evaluation = lambda: evaluateur
+        drave._module_evaluation = lambda gele=False: evaluateur
         try:
             sortie, erreur = io.StringIO(), io.StringIO()
             with contextlib.redirect_stdout(sortie), contextlib.redirect_stderr(erreur):

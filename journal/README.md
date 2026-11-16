@@ -214,7 +214,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 370.5 h | 202 | 3648 | 25 | 490 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 371.5 h | 202 | 3661 | 25 | 490 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -275,9 +275,10 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Table de correspondance atomes Panini et niveaux | 2026-11-07 14:46 | 0.2 h | 1 | 106 | 2 | 1 | [rapport](sessions/session-a9b5216e-5f4b-4935-8ba0-2ec7d42aaf89/rapport.md) |
 | `session-` | Vérification roue Python et gold CLI | 2026-11-16 00:31 | 0.9 h | 1 | 169 | 9 | 2 | [rapport](sessions/session-aa260801-785c-4a85-876c-98ba023e6098/rapport.md) |
 | `session-` | Rejouer et corriger exemples de la doc | 2026-11-14 04:16 | 0.2 h | 1 | 157 | 4 | 3 | [rapport](sessions/session-b0a87524-43a4-4935-a248-72c1d42c8471/rapport.md) |
-| `session-` | Clôture V3 et rapport bilan | 2026-11-16 03:01 | 0.2 h | 1 | 160 | 7 | 2 | [rapport](sessions/session-b3e96cb1-fb3b-4593-a2a6-b034ae644413/rapport.md) |
+| `session-` | Clôture V3 et rapport bilan | 2026-11-16 03:01 | 0.3 h | 1 | 173 | 7 | 2 | [rapport](sessions/session-b3e96cb1-fb3b-4593-a2a6-b034ae644413/rapport.md) |
 | `session-` | Réponds exactement le mot OK | 2026-11-07 10:46 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-b4dae370-be55-42ec-916b-135f35946641/rapport.md) |
 | `session-` | CLI drave profils : détection de langue | 2026-11-16 01:31 | 0.5 h | 1 | 214 | 5 | 0 | [rapport](sessions/session-b4ff97bc-493d-4bfb-b734-e055dc85c779/rapport.md) |
+| `session-` | CI GitHub Actions matrice tests | 2026-11-16 03:27 | 0.7 h | 1 | 239 | 13 | 1 | [rapport](sessions/session-b9138a2a-648e-490d-a349-124ac1aa1ef0/rapport.md) |
 | `session-` | Matrice tagger et recommandation par défaut | 2026-11-15 09:44 | 1.0 h | 1 | 156 | 7 | 0 | [rapport](sessions/session-bc92a84f-e2ea-4c23-8227-525822d29662/rapport.md) |
 | `session-` | Corriger span g017 avec règle adverbe | 2026-11-14 00:41 | 0.3 h | 1 | 126 | 1 | 2 | [rapport](sessions/session-bfa61e65-a77c-4ab8-bce1-72505858a3d5/rapport.md) |
 | `session-` | Restitution v3 et rôles _role_gp | 2026-11-15 11:05 | 1.0 h | 1 | 230 | 10 | 0 | [rapport](sessions/session-bfc6d60f-dbfd-473c-a769-05fde9b1e428/rapport.md) |

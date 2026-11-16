@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **768 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **769 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -111,6 +111,7 @@
 | [rapport-cerveau-corrections.md](rapport-cerveau-corrections.md) | Corrections B12 — ce que le stress des sous-agents a changé |
 | [rapport-cerveau-modules.md](rapport-cerveau-modules.md) | Rapport — modules cerveau-langage M1–M9 |
 | [rapport-chargement-paresseux.md](rapport-chargement-paresseux.md) | Le chargement construisait 2,7 Go de « listes » que personne ne lisait |
+| [rapport-ci.md](rapport-ci.md) | Z1 — L'intégration continue : le workflow, la matrice et le contrôle négatif |
 | [rapport-cic-v2.md](rapport-cic-v2.md) | B3 — Corpus d'or CIC v2 : le type de Bruijn vérifié, le sha256 rejoué deux fois |
 | [rapport-cic-verificateur.md](rapport-cic-verificateur.md) | J12.2 — Le corpus d'or CIC : 42/42 verdicts rejoués par un vérificateur indépendant |
 | [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |

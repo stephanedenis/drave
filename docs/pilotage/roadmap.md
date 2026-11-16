@@ -176,16 +176,15 @@ gold B13 ; **E2** ([fiche](../../reports/rapport-tagger-erreurs.md)).
 **0,70** ; négatif **0,0000** → **1**. [Fiche](../../reports/rapport-evaluer-strict.md) ·
 [JSON](../../reports/evaluer-strict.json).
 
-**V2 — exemples.** 3 corrigés par les rôles normalisés ; 18 candidats objets, 0 faux ;
-`tools/verifie_exemples.py` 27/27 ; démarrage 3/3. [Fiche](../../reports/rapport-exemples-v2.md) ·
-[JSON](../../reports/rapport-exemples-v2.json).
+**V2 — exemples.** 3 corrigés ; 18 objets, 0 faux ; `verifie_exemples.py` 27/27 ; démarrage
+3/3. [Fiche](../../reports/rapport-exemples-v2.md) · [JSON](../../reports/rapport-exemples-v2.json).
 
 **T6 — le premier bilan (15/11).** Cinq briques ; trois limites.
 [Fiche](../../reports/rapport-bilan-exploitable.md) · [JSON](../../reports/rapport-bilan-exploitable.json).
 
-**V3 — la clôture (16/11).** **T1–T6 · U1–U3 · V1–V2** ; **86 / 82 / 4** → **84 / 2**
-(`work/portes/`) ; tag `exploitable-2026-11-16` sur **`ae3c24f2`**.
-[Fiche](../../reports/rapport-bilan-exploitable-2.md) · [JSON](../../reports/rapport-bilan-exploitable-2.json).
+**V3 — clôture (16/11).** **T1–T6 · U1–U3 · V1–V2** ; **86 / 82 / 4** → **84 / 2** ;
+tag `exploitable-2026-11-16` sur **`ae3c24f2`** ; **Z1 — la CI** : **3.10 / 3.13**, **10/10**.
+[Fiche](../../reports/rapport-bilan-exploitable-2.md) · [CI](../../reports/rapport-ci.md).
 
 **La vue d'ensemble** est dans [`chantiers.md`](chantiers.md) ; carte,
 [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; plan,

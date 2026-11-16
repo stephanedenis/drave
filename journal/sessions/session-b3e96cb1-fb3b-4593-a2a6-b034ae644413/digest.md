@@ -2545,3 +2545,243 @@ HOOK-0
   ```
 
 - **bash** `{"command": "git commit -m \"V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON\" 2>&1 | tail -20; echo COMMIT-${PIPESTATUS[0]}", "description": "Commit V3 closure"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-125]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-125", "timeout_ms": 60000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "ps -ef | grep -E 'pre-commit|committing|git commit|porte-|revue_doc|journal' | grep -v grep | head -20", "description": "See what commit hook is running"}`
+
+  ```
+root        1408       1  0 nov03 ?        00:06:29 /usr/lib/systemd/systemd-journald
+stephane 1727662  264909  0 03:09 ?        00:00:00 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 900; date; tail -2 work/chantier/journal.log; git tag -l "exploitable-*"; git rev-list --count origin/master..s/v7
+stephane 1729337 1723939  0 03:12 ?        00:00:00 bash -c git commit -m "V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON" 2>&1 | tail -20; echo COMMIT-${PIPESTATUS[0]}
+stephane 1729344 1729337  0 03:12 ?        00:00:00 git commit -m V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON
+stephane 1729362 1729344  0 03:12 ?        00:00:00 /bin/sh .git/hooks/pre-commit
+  ```
+
+- **bash** `{"command": "cat .git/hooks/pre-commit 2>/dev/null | head -80; echo '--- child ---'; ps --ppid 1729362 -o pid,etime,cmd", "description": "Inspect pre-commit hook"}`
+
+  ```
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par thème (sources : git + journal/sessions). L'index README est
+… [332 caractères tronqués]
+  ```
+
+- **job_output** `{"job_id": "bash-125", "timeout_ms": 120000, "wait": true}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 3c10e3ee] V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON
+ 21 files changed, 3550 insertions(+), 48 deletions(-)
+ create mode 100644 journal/sessions/session-b3e96cb1-fb3b-4593-a2a6-b034ae644413/digest.md
+ create mode 100644 journal/sessions/session-b3e96cb1-fb3b-4593-a2a6-b034ae644413/rapport.md
+ create mode 100644 reports/rapport-bilan-exploitable-2.json
+ create mode 100644 reports/rapport-bilan-exploitable-2.md
+COMMIT-0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git status --short; echo '---'; git log --oneline --decorate -3; echo '--- tag ---'; git cat-file -t exploitable-2026-11-16; git rev-parse exploitable-2026-11-16^{}; echo '--- branches ---'; git branch -vv | head", "description": "Verify commit, tag and branches"}`
+
+  ```
+---
+3c10e3ee (HEAD -> s/v7) V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON
+ae3c24f2 (tag: exploitable-2026-11-16) V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE
+2e617034 (origin/s/v7, origin/master, origin/HEAD, master) EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF)
+--- tag ---
+tag
+ae3c24f2d8bb36311bc1d05e349b032c429a732c
+--- branches ---
+  backup/pre-scrub-20261101-133055 5d5c1ee9 DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE
+  master                           2e617034 [origin/master] EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF)
+  s/close                          1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+* s/v7                             3c10e3ee V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG
+… [53 caractères tronqués]
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -3; echo REVUE-${PIPESTATUS[0]}; python3 tools/verifie_en_cours.py | tail -2; echo ENCOURS-${PIPESTATUS[0]}; python3 tools/taille_documents.py 2>&1 | tail -1; echo TAILLE-${PIPESTATUS[0]}", "description": "Post-commit documentation checks … [2 caractères tronqués]`
+
+  ```
+revue de documentation · 771 fiche(s) · 866 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE-0
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 9 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+ENCOURS-0
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+TAILLE-0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -2; echo JOURNAL-${PIPESTATUS[0]}; python3 tools/verifier_schemas.py 2>&1 | tail -2; echo SCHEMAS-${PIPESTATUS[0]}; bash tools/porte-tableaux.sh 2>&1 | tail -3; echo TABLEAUX-${PIPESTATUS[0]}", "description": "Post-commit journal, schema and  … [14 caractères tronqués]`
+
+  ```
+journal · 48 jour(s) · 228 session(s) · 2735 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL-0
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+SCHEMAS-0
+  ✅ 1853 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4835 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+TABLEAUX-0
+  ```
+
+- **bash** `{"command": "git remote -v; git status -sb | head -3", "description": "Check remote and ahead status"}`
+
+  ```
+origin	git@github.com:stephanedenis/drave.git (fetch)
+origin	git@github.com:stephanedenis/drave.git (push)
+## s/v7
+  ```
+
+- **bash** `{"command": "git branch -f master s/v7 && timeout 120 git push origin s/v7 2>&1 | tail -3; echo PUSH_SV7-${PIPESTATUS[0]}; timeout 120 git push origin master 2>&1 | tail -3; echo PUSH_MASTER-${PIPESTATUS[0]}; timeout 120 git push origin exploitable-2026-11-16 2>&1 | tail -3; echo PUSH_TAG-${PIPESTAT … [56 caractères tronqués]`
+
+  ```
+To github.com:stephanedenis/drave.git
+   2e617034..3c10e3ee  s/v7 -> s/v7
+PUSH_SV7-0
+To github.com:stephanedenis/drave.git
+   2e617034..3c10e3ee  master -> master
+PUSH_MASTER-0
+To github.com:stephanedenis/drave.git
+ * [new tag]           exploitable-2026-11-16 -> exploitable-2026-11-16
+PUSH_TAG-0
+  ```
+
+- **bash** `{"command": "grep -n 'V3 — la clôture\\|7 commits\\|Tous les commits' journal/2026-11-16/README.md | head; tail -25 journal/2026-11-16/README.md", "description": "Verify journal note committed"}`
+
+  ```
+8:**7 commits** · **1 session(s)** · **4 thème(s)**
+25:## Tous les commits (heure réelle)
+73:### V3 — la clôture de la nuit exploitable, et le tag sur le dernier commit vert
+Le contrôle n'est plus une relecture : `tools/verifie_exemples.py` lit les deux documents,
+exécute chaque commande et compare le **JSON parsé**, le texte exact, le code du refus et les
+syntagmes du tagger à l'heuristique. **27/27 cas conformes, 0 écart** ; une mutation
+`qualite` → `qualité` est détectée. Les **3 commandes** du démarrage sont **3/3** dans une copie
+sans `tools/structures` (JSON **5 899 octets**).
+
+[Fiche](../../reports/rapport-exemples-v2.md) · [JSON](../../reports/rapport-exemples-v2.json).
+
+### V3 — la clôture de la nuit exploitable, et le tag sur le dernier commit vert
+
+Les **neuf tâches** du lot exploitable (**T1–T6**, **U1–U3**) et les deux vérifications
+(**V1–V2**) sont liées dans un second bilan : [rapport-bilan-exploitable-2.md](../../reports/rapport-bilan-exploitable-2.md)
++ [JSON](../../reports/rapport-bilan-exploitable-2.json). Le chiffre de la nuit : le produit
+s'installe, **10 000 mots** passent en **0,82 s** (α **1,076**, sorties identiques), la roue est
+autonome (**1 727 201 o**, 
+… [751 caractères tronqués]
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-16 [bash] running — find . -path ./.git -prune -o -iname '*exploitable*' -print 2>/dev/null | head -30 && echo '---' && grep -ril 'rapport-bilan-exploitable-2' . --exclude-dir=.git 2>/dev/null | head
+bash-60 [bash] completed — mkdir -p work/portes/verif-cloture-1116 && { time bash tools/porte-produit.sh; } > work/portes/verif-cloture-1116/porte-produit.log 2>&1; code=$?; echo "porte-produit $code" >> work/portes/verif-cloture-1116/registre.txt; echo "CODE=$code"; tail -20 work/portes/verif-cloture-1116/porte-produit.log
+bash-125 [bash] completed — git commit -m "V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON" 2>&1 | tail -20; echo COMMIT-${PIPESTATUS[0]}
+  ```
+
+- **job_kill** `{"job_id": "bash-16", "reason": "Recherche large devenue inutile ; le rapport est écrit et committé."}`
+
+  ```
+requested cancellation of job bash-16
+  ```
+
+- **todo_write** `{"todos": [{"content": "Rassembler les chiffres T1–T6, U1–U3, V1–V2 et le relevé des portes", "status": "completed"}, {"content": "Vérifier les deux rouges non structurelles (produit, sessions) sans relancer la passe", "status": "completed"}, {"content": "Écrire reports/rapport-bilan-exploitable-2.m … [432 caractères tronqués]`
+
+  ```
+Updated todo list: 0 pending, 0 in progress, 7 completed.
+  ```
+
+- **bash** `{"command": "git status --short; echo '--- head ---'; git log --oneline --decorate -2; echo '--- files in head ---'; git show --name-only --format='' HEAD | grep 'rapport-bilan-exploitable-2'; echo '--- remote tag ---'; timeout 60 git ls-remote --tags origin 'exploitable-2026-11-16' 2>&1 | head", "d … [59 caractères tronqués]`
+
+  ```
+--- head ---
+3c10e3ee (HEAD -> s/v7, origin/s/v7, origin/master, origin/HEAD, master) V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON
+ae3c24f2 (tag: exploitable-2026-11-16) V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE
+--- files in head ---
+reports/rapport-bilan-exploitable-2.json
+reports/rapport-bilan-exploitable-2.md
+--- remote tag ---
+fba7b1d93b46b06ea6661beaaf284ac961926c94	refs/tags/exploitable-2026-11-16
+  ```
+
+- **bash** `{"command": "grep -n 'rapport-bilan-exploitable-2' reports/INDEX.md reports/README.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md | head -10", "description": "Verify new report linked from indexes and state"}`
+
+  ```
+reports/INDEX.md:85:| [rapport-bilan-exploitable-2.md](rapport-bilan-exploitable-2.md) | V3 — la clôture de la nuit exploitable : les neuf tâches T1–T6 · U1–U3, deux vérifications, 86 portes, le tag `exploitable-2026-11-16` |
+reports/README.md:46:| [`rapport-bilan-exploitable-2.md`](rapport-bilan-exploitable-2.md) | **V3** — **86/82/4** → **84/2** |
+docs/pilotage/en-cours.md:62:- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** roue 1 727 201 o, sans gold → 4 ; **U3** profils 20/20, `und` ; **V1** `--strict` 0,8625/0,8891 ; **V2** exemples **27/27** ; **V3** la clôture — **86/82/4** → **84/2**, tag `exploitable-2026-11-16` ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)).
+docs/pilotage/en-cours.md:122:**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ciblée ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.m
+… [4794 caractères tronqués]
+  ```
+
+- **bash** `{"command": "printf 'porte-sessions 0 1\\nporte-produit 0 199\\n' > work/portes/verif-cloture-1116/registre.txt && cat work/portes/verif-cloture-1116/registre.txt && awk '$2 != 0' work/portes/verif-cloture-1116/registre.txt; echo AWK-${PIPESTATUS[0]}", "description": "Normalize targeted gate registr … [10 caractères tronqués]`
+
+  ```
+porte-sessions 0 1
+porte-produit 0 199
+AWK-0
+  ```
+
+- **job_list** `{}`
+
+  ```
+bash-16 [bash] killed — find . -path ./.git -prune -o -iname '*exploitable*' -print 2>/dev/null | head -30 && echo '---' && grep -ril 'rapport-bilan-exploitable-2' . --exclude-dir=.git 2>/dev/null | head
+bash-60 [bash] completed — mkdir -p work/portes/verif-cloture-1116 && { time bash tools/porte-produit.sh; } > work/portes/verif-cloture-1116/porte-produit.log 2>&1; code=$?; echo "porte-produit $code" >> work/portes/verif-cloture-1116/registre.txt; echo "CODE=$code"; tail -20 work/portes/verif-cloture-1116/porte-produit.log
+bash-125 [bash] completed — git commit -m "V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON" 2>&1 | tail -20; echo COMMIT-${PIPESTATUS[0]}
+  ```
+
+### 🤖 Assistant
+
+**V3 — clôture faite.** Le bilan de la nuit est écrit et committé.
+
+- **Rapport** : `reports/rapport-bilan-exploitable-2.md` + `reports/rapport-bilan-exploitable-2.json`.
+  Il couvre les **9 tâches mesurées T1–T6 · U1–U3**, les **deux vérifications V1–V2** et cette clôture :
+  produit installable, JSON **2 139** objets / **8** rôles, **10 000 mots 0,82 s** (α **1,076**, diff vide),
+  roue **1 727 201 o** (sans gold → **4**), profils **20/20** (ambigu **`und`**), `--strict` **0,8625/0,8891**,
+  exemples **27/27** — avec **12 négatifs** nommés (clone public, or de S, mock neuronal, confiance non calibrée, etc.).
+- **Portes** : relevé `work/portes/roue-1116/` lu **sans relancer la passe** → **86 portes, 82 vertes, 4 rouges**
+  (`indice`, `melange` structurelles ; `produit` et `sessions` de circonstance).
+  Vérification ciblée dans `work/portes/verif-cloture-1116/` : `sessions` **0**, `produit` **0**
+  (`--strict` 5 tests, exemples 27/27, autotest 183/183) → **84 vertes, 2 rouges structurelles**.
+- **État et roadmap** : `docs/pilotage/en-cours.md` et `docs/pilotage/roadmap.md` mis à jour
+  (compteurs **771/866**, passe du 16/11, V3, tag) ; `references-non-regression.md` et journal du 16/11 complétés.
+- **Tag annoté** : `exploitable-2026-11-16` sur le dernier commit vert **`ae3c24f2`** (V2).
+  Contrôles : `git cat-file -t` → `tag` ; `git rev-parse exploitable-2026-11-16^{}` → `ae3c24f2`.
+- **Commit** : `3c10e3ee` — *V3 — la clôture…* ; poussé sur `origin/s/v7`, `origin/master` et le tag.
+- **Vérifications finales** : `revue_documentation.py` ✅, `verifie_en_cours.py` ✅, `taille_documents.py` ✅,
+  `verifie_journal.py` ✅, `porte-tableaux.sh` ✅, `verifier_schemas.py` ✅.
+
+Prochaine mesure désignée : **J4 — l’or de rôles** ; Panini attend ses 26 signatures et la décision `auto` reste humaine.
+

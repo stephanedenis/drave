@@ -98,8 +98,8 @@
 |---|---|---|
 | portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **771** / **866** | `reports/*.md` / `reports/*.json` |
-| documents de `docs/` | **125** (hors archive et README) | `docs/**/*.md` |
+| fichiers / JSON de résultats | **772** / **867** | `reports/*.md` / `reports/*.json` |
+| documents de `docs/` | **126** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 
 ## Les chantiers et leurs bloquants
@@ -119,7 +119,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ciblée ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md).
+**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ciblée ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
 
 **Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
 

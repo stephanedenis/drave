@@ -1,0 +1,407 @@
+{
+  "tache": "Z1",
+  "ligne_roadmap": "B13 — la protection (produit exploitable)",
+  "titre": "L'intégration continue — le workflow et sa preuve locale",
+  "date": "2026-11-16",
+  "branche": "s/v7",
+  "commit_base": "3c10e3ee",
+  "verdict": "vert",
+  "chiffres": {
+    "matrice": [
+      "3.10",
+      "3.13"
+    ],
+    "versions_mesurees": [
+      "3.10.20",
+      "3.13.16"
+    ],
+    "etapes_par_version": 5,
+    "etapes_vertes": 10,
+    "etapes_rouges": 0,
+    "controles_negatifs": 2,
+    "controle_negatif_code": [
+      1
+    ],
+    "controle_negatif_job_arrete": true,
+    "porte_produit": "183/183 portes d'autotest",
+    "act": false,
+    "duree_totale_s": 482.323,
+    "sha256_workflow": "8efe2f1be4421555f5f111a8c7602ab9a858fe18f8e37b9f023a9687d95323cf",
+    "copie_secours_identique": true,
+    "checkout_sans_sous_module": true,
+    "etapes_run_yaml": 7
+  },
+  "workflow": {
+    "chemin": ".github/workflows/ci.yml",
+    "declencheurs": [
+      "push",
+      "pull_request",
+      "workflow_dispatch"
+    ],
+    "job": "produit",
+    "runs_on": "ubuntu-latest",
+    "timeout_minutes": 30,
+    "fail_fast": false,
+    "actions": [
+      "actions/checkout@v4",
+      "actions/setup-python@v5"
+    ],
+    "cache": "pip (pyproject.toml)",
+    "restauration_s": "copie de secours .github/ci/structures si tools/structures/generateur.py manque",
+    "commandes": [
+      "pip install -e .",
+      "python3 tools/tests/test_produit.py",
+      "python3 tools/tests/test_tagger_api.py",
+      "bash tools/porte-produit.sh",
+      "python3 tools/tests/test_schema_produit.py"
+    ]
+  },
+  "preuve_locale": [
+    {
+      "environnement": "archive `git archive HEAD` sans sous-module + restauration `.github/ci/structures`",
+      "version": "3.10.20",
+      "interpreteur": "/tmp/ci310/bin/python3",
+      "yaml_valide": true,
+      "parseur": "PyYAML 6.0.3",
+      "restauration_secours": {
+        "fait": true,
+        "fichiers": [
+          "tools/structures/generateur.py",
+          "tools/structures/donnees/gold-analyseur.json"
+        ]
+      },
+      "secours_identique": 0,
+      "etapes": [
+        {
+          "etape": "installer",
+          "commande": "pip install -e .",
+          "code": 0,
+          "duree_s": 2.933,
+          "tests": null,
+          "stdout_fin": "1/bd/d159785ae66f90d62f901b6c1f050acc540469214d0968f584\nSuccessfully built drave\nInstalling collected packages: drave\n  Attempting uninstall: drave\n    Found existing installation: drave 0.1.0\n    Uninstalling drave-0.1.0:\n      Successfully uninstalled drave-0.1.0\nSuccessfully installed drave-0.1.0",
+          "stderr_fin": "se be careful with folders in your working directory with the same\n          name as your package as they may take precedence during imports.\n          ********************************************************************************\n  \n  !!\n    with strategy, WheelFile(wheel_path, \"w\") as wheel_obj:"
+        },
+        {
+          "etape": "test_produit",
+          "commande": "python3 tools/tests/test_produit.py",
+          "code": 0,
+          "duree_s": 15.982,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 15.885s\n\nOK"
+        },
+        {
+          "etape": "test_tagger_api",
+          "commande": "python3 tools/tests/test_tagger_api.py",
+          "code": 0,
+          "duree_s": 7.669,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "mporte_pas_le_reseau (__main__.TestTaggerAuto) ... ok\ntest_auto_texte_apres_le_drapeau (__main__.TestTaggerAuto)\n`--tagger auto TEXTE` ne doit pas avaler le texte comme une valeur de `--tagger`. ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 7.451s\n\nOK"
+        },
+        {
+          "etape": "porte_produit",
+          "commande": "bash tools/porte-produit.sh",
+          "code": 0,
+          "duree_s": 227.457,
+          "tests": null,
+          "stdout_fin": "ibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : Ran 17 tests\n  ✅ schéma v2 : Ran 9 tests\n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte",
+          "stderr_fin": ""
+        },
+        {
+          "etape": "test_schema_produit",
+          "commande": "python3 tools/tests/test_schema_produit.py",
+          "code": 0,
+          "duree_s": 1.261,
+          "tests": 9,
+          "stdout_fin": "",
+          "stderr_fin": "s` est typé, et `role` est un vocabulaire fermé. ... ok\ntest_le_schema_v2_declare_partition_et_alternative (__main__.TestSchemaV2)\nLes deux champs ajoutés en v2 sont typés, pas seulement tolérés. ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.189s\n\nOK"
+        }
+      ],
+      "duree_totale_s": 255.302,
+      "controle_negatif": {
+        "code": 1,
+        "casse": true,
+        "job_echoue": true,
+        "etape_suivante_executee": false,
+        "sortie_fin": "-------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/ci-clean/tools/tests/_controle_negatif_ci_emup8u8h.py\", line 443, in test_echec_volontaire\n    self.fail(\"contrôle négatif CI volontaire\")\nAssertionError: contrôle négatif CI volontaire\n\n----------------------------------------------------------------------\nRan 31 tests in 16.193s\n\nFAILED (failures=1)"
+      }
+    },
+    {
+      "environnement": "archive `git archive HEAD` sans sous-module + restauration `.github/ci/structures`",
+      "version": "3.13.16",
+      "interpreteur": "/tmp/ci313/bin/python3",
+      "yaml_valide": true,
+      "parseur": "PyYAML 6.0.3",
+      "restauration_secours": {
+        "fait": true,
+        "fichiers": [
+          "tools/structures/generateur.py",
+          "tools/structures/donnees/gold-analyseur.json"
+        ]
+      },
+      "secours_identique": 0,
+      "etapes": [
+        {
+          "etape": "installer",
+          "commande": "pip install -e .",
+          "code": 0,
+          "duree_s": 3.361,
+          "tests": null,
+          "stdout_fin": "0/ff/1bf379094b47f57dcd74f98a8a1ab9cecf32b8741c368bf219\nSuccessfully built drave\nInstalling collected packages: drave\n  Attempting uninstall: drave\n    Found existing installation: drave 0.1.0\n    Uninstalling drave-0.1.0:\n      Successfully uninstalled drave-0.1.0\nSuccessfully installed drave-0.1.0",
+          "stderr_fin": "se be careful with folders in your working directory with the same\n          name as your package as they may take precedence during imports.\n          ********************************************************************************\n  \n  !!\n    with strategy, WheelFile(wheel_path, \"w\") as wheel_obj:"
+        },
+        {
+          "etape": "test_produit",
+          "commande": "python3 tools/tests/test_produit.py",
+          "code": 0,
+          "duree_s": 17.393,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 17.243s\n\nOK"
+        },
+        {
+          "etape": "test_tagger_api",
+          "commande": "python3 tools/tests/test_tagger_api.py",
+          "code": 0,
+          "duree_s": 7.767,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "as_le_reseau) ... ok\ntest_auto_texte_apres_le_drapeau (__main__.TestTaggerAuto.test_auto_texte_apres_le_drapeau)\n`--tagger auto TEXTE` ne doit pas avaler le texte comme une valeur de `--tagger`. ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 7.489s\n\nOK"
+        },
+        {
+          "etape": "porte_produit",
+          "commande": "bash tools/porte-produit.sh",
+          "code": 0,
+          "duree_s": 196.968,
+          "tests": null,
+          "stdout_fin": "titution v2 : rôles lisibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : \n  ✅ schéma v2 : \n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte",
+          "stderr_fin": "grep: /tmp/porte-produit-restitution-v2.log: binary file matches\ngrep: /tmp/porte-produit-schema.log: binary file matches"
+        },
+        {
+          "etape": "test_schema_produit",
+          "commande": "python3 tools/tests/test_schema_produit.py",
+          "code": 0,
+          "duree_s": 1.532,
+          "tests": 9,
+          "stdout_fin": "",
+          "stderr_fin": ". ok\ntest_le_schema_v2_declare_partition_et_alternative (__main__.TestSchemaV2.test_le_schema_v2_declare_partition_et_alternative)\nLes deux champs ajoutés en v2 sont typés, pas seulement tolérés. ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.427s\n\nOK"
+        }
+      ],
+      "duree_totale_s": 227.021,
+      "controle_negatif": {
+        "code": 1,
+        "casse": true,
+        "job_echoue": true,
+        "etape_suivante_executee": false,
+        "sortie_fin": "aceback (most recent call last):\n  File \"/tmp/ci-clean-313/tools/tests/_controle_negatif_ci_nrdbxqnk.py\", line 443, in test_echec_volontaire\n    self.fail(\"contrôle négatif CI volontaire\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: contrôle négatif CI volontaire\n\n----------------------------------------------------------------------\nRan 31 tests in 17.366s\n\nFAILED (failures=1)"
+      }
+    }
+  ],
+  "preuve_depot": [
+    {
+      "environnement": "dépôt de travail, sous-module `tools/structures` présent",
+      "version": "3.10.20",
+      "interpreteur": "/tmp/ci310/bin/python3",
+      "yaml_valide": true,
+      "parseur": "PyYAML 6.0.3",
+      "restauration_secours": null,
+      "secours_identique": null,
+      "etapes": [
+        {
+          "etape": "installer",
+          "commande": "pip install -e .",
+          "code": 0,
+          "duree_s": 2.856,
+          "tests": null,
+          "stdout_fin": "b/99/493e15c466c82920f23becb9ec12a572cd5a4c9d943a087422\nSuccessfully built drave\nInstalling collected packages: drave\n  Attempting uninstall: drave\n    Found existing installation: drave 0.1.0\n    Uninstalling drave-0.1.0:\n      Successfully uninstalled drave-0.1.0\nSuccessfully installed drave-0.1.0",
+          "stderr_fin": "se be careful with folders in your working directory with the same\n          name as your package as they may take precedence during imports.\n          ********************************************************************************\n  \n  !!\n    with strategy, WheelFile(wheel_path, \"w\") as wheel_obj:"
+        },
+        {
+          "etape": "test_produit",
+          "commande": "python3 tools/tests/test_produit.py",
+          "code": 0,
+          "duree_s": 16.163,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 16.061s\n\nOK"
+        },
+        {
+          "etape": "test_tagger_api",
+          "commande": "python3 tools/tests/test_tagger_api.py",
+          "code": 0,
+          "duree_s": 7.685,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "mporte_pas_le_reseau (__main__.TestTaggerAuto) ... ok\ntest_auto_texte_apres_le_drapeau (__main__.TestTaggerAuto)\n`--tagger auto TEXTE` ne doit pas avaler le texte comme une valeur de `--tagger`. ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 7.491s\n\nOK"
+        },
+        {
+          "etape": "porte_produit",
+          "commande": "bash tools/porte-produit.sh",
+          "code": 0,
+          "duree_s": 226.376,
+          "tests": null,
+          "stdout_fin": "ibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : Ran 17 tests\n  ✅ schéma v2 : Ran 9 tests\n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte",
+          "stderr_fin": ""
+        },
+        {
+          "etape": "test_schema_produit",
+          "commande": "python3 tools/tests/test_schema_produit.py",
+          "code": 0,
+          "duree_s": 1.27,
+          "tests": 9,
+          "stdout_fin": "",
+          "stderr_fin": "s` est typé, et `role` est un vocabulaire fermé. ... ok\ntest_le_schema_v2_declare_partition_et_alternative (__main__.TestSchemaV2)\nLes deux champs ajoutés en v2 sont typés, pas seulement tolérés. ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.182s\n\nOK"
+        }
+      ],
+      "duree_totale_s": 254.35,
+      "controle_negatif": {
+        "code": 1,
+        "casse": true,
+        "job_echoue": true,
+        "etape_suivante_executee": false,
+        "sortie_fin": "---------------\nTraceback (most recent call last):\n  File \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/_controle_negatif_ci_h0phx1p9.py\", line 443, in test_echec_volontaire\n    self.fail(\"contrôle négatif CI volontaire\")\nAssertionError: contrôle négatif CI volontaire\n\n----------------------------------------------------------------------\nRan 31 tests in 16.181s\n\nFAILED (failures=1)"
+      }
+    },
+    {
+      "environnement": "dépôt de travail, sous-module `tools/structures` présent",
+      "version": "3.13.16",
+      "interpreteur": "/tmp/ci313/bin/python3",
+      "yaml_valide": true,
+      "parseur": "PyYAML 6.0.3",
+      "restauration_secours": null,
+      "secours_identique": null,
+      "etapes": [
+        {
+          "etape": "installer",
+          "commande": "pip install -e .",
+          "code": 0,
+          "duree_s": 3.297,
+          "tests": null,
+          "stdout_fin": "2/a3/318108f401dc37bb3a575e67c80cf111852262a4b3c9f691ec\nSuccessfully built drave\nInstalling collected packages: drave\n  Attempting uninstall: drave\n    Found existing installation: drave 0.1.0\n    Uninstalling drave-0.1.0:\n      Successfully uninstalled drave-0.1.0\nSuccessfully installed drave-0.1.0",
+          "stderr_fin": "se be careful with folders in your working directory with the same\n          name as your package as they may take precedence during imports.\n          ********************************************************************************\n  \n  !!\n    with strategy, WheelFile(wheel_path, \"w\") as wheel_obj:"
+        },
+        {
+          "etape": "test_produit",
+          "commande": "python3 tools/tests/test_produit.py",
+          "code": 0,
+          "duree_s": 17.71,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 17.580s\n\nOK"
+        },
+        {
+          "etape": "test_tagger_api",
+          "commande": "python3 tools/tests/test_tagger_api.py",
+          "code": 0,
+          "duree_s": 7.875,
+          "tests": 30,
+          "stdout_fin": "",
+          "stderr_fin": "as_le_reseau) ... ok\ntest_auto_texte_apres_le_drapeau (__main__.TestTaggerAuto.test_auto_texte_apres_le_drapeau)\n`--tagger auto TEXTE` ne doit pas avaler le texte comme une valeur de `--tagger`. ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 7.632s\n\nOK"
+        },
+        {
+          "etape": "porte_produit",
+          "commande": "bash tools/porte-produit.sh",
+          "code": 0,
+          "duree_s": 195.788,
+          "tests": null,
+          "stdout_fin": "ibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : Ran 17 tests\n  ✅ schéma v2 : Ran 9 tests\n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte",
+          "stderr_fin": ""
+        },
+        {
+          "etape": "test_schema_produit",
+          "commande": "python3 tools/tests/test_schema_produit.py",
+          "code": 0,
+          "duree_s": 1.527,
+          "tests": 9,
+          "stdout_fin": "",
+          "stderr_fin": ". ok\ntest_le_schema_v2_declare_partition_et_alternative (__main__.TestSchemaV2.test_le_schema_v2_declare_partition_et_alternative)\nLes deux champs ajoutés en v2 sont typés, pas seulement tolérés. ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.399s\n\nOK"
+        }
+      ],
+      "duree_totale_s": 226.197,
+      "controle_negatif": {
+        "code": 1,
+        "casse": true,
+        "job_echoue": true,
+        "etape_suivante_executee": false,
+        "sortie_fin": "):\n  File \"/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/_controle_negatif_ci_s0ljcyym.py\", line 443, in test_echec_volontaire\n    self.fail(\"contrôle négatif CI volontaire\")\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: contrôle négatif CI volontaire\n\n----------------------------------------------------------------------\nRan 31 tests in 17.505s\n\nFAILED (failures=1)"
+      }
+    }
+  ],
+  "porte_produit": [
+    {
+      "version": "3.10.20",
+      "code": 0,
+      "duree_s": 227.457,
+      "stdout_fin": "ibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : Ran 17 tests\n  ✅ schéma v2 : Ran 9 tests\n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte"
+    },
+    {
+      "version": "3.13.16",
+      "code": 0,
+      "duree_s": 196.968,
+      "stdout_fin": "titution v2 : rôles lisibles, rendu relu, contrôle détecté\n  ✅ restitution v0/v1 : Ran 22 tests\n  ✅ restitution v2 : \n  ✅ schéma v2 : \n  ✅ refus : JSON avec refus, code 3\n  ✅ exemples de la doc : 27/27 cas conformes — ✅ aucun écart\n  ✅ autotest parallèle : 183/183 portes tenues\n✅ porte produit verte"
+    }
+  ],
+  "copie_secours": {
+    "dossier": ".github/ci/structures",
+    "source": "tools/structures au commit 648adce",
+    "fichiers": [
+      {
+        "chemin": "generateur.py",
+        "sha256": "ca2d8823e9a6df2f2d6009de30402ea5ced04d84dd371faa7b16ccc2c99279c4"
+      },
+      {
+        "chemin": "donnees/gold-analyseur.json",
+        "sha256": "4cebc6d75b61db35acd3b2cbfc2a23924b25df3f020dce6038a2730adc2f8879"
+      }
+    ],
+    "verificateur": "tools/verifie_structures_secours.py"
+  },
+  "limites": [
+    "`act` n'est pas installé : le YAML est parsé et les commandes exécutées en local, pas le runner GitHub.",
+    "L'image `ubuntu-latest`, `actions/checkout` et `actions/setup-python` ne sont pas simulés.",
+    "L'installation éditable utilise le réseau pour l'isolation de build (`setuptools>=61`) ; les tests, eux, n'ouvrent aucune socket.",
+    "La copie de secours de S peut dériver du sous-module ; `tools/verifie_structures_secours.py` le détecte (code 1).",
+    "Les actions sont épinglées par étiquette majeure (`@v4`, `@v5`), pas par SHA.",
+    "Le déclenchement suit tous les `push` ; un run vert dans l'onglet Actions dépend de la réception de la branche."
+  ],
+  "fichiers": [
+    ".github/workflows/ci.yml",
+    ".github/ci/structures/README.md",
+    ".github/ci/structures/generateur.py",
+    ".github/ci/structures/donnees/gold-analyseur.json",
+    "tools/verifier_ci.py",
+    "tools/verifie_structures_secours.py",
+    "tools/tests/test_tagger_api.py",
+    "docs/produit/ci.md",
+    "docs/produit/README.md",
+    "docs/README.md",
+    "docs/pilotage/en-cours.md",
+    "docs/pilotage/roadmap.md",
+    "journal/2026-11-16/README.md",
+    "reports/rapport-ci.md",
+    "reports/rapport-ci.json",
+    "reports/README.md",
+    "reports/INDEX.md"
+  ],
+  "preuve_yaml_run": {
+    "version": "3.10.20",
+    "environnement": "archive `git archive HEAD` sans sous-module, blocs `run` du YAML exécutés avec `bash -e`",
+    "etapes_run": 7,
+    "codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ok": true,
+    "etapes_uses_non_simulees": [
+      "actions/checkout@v4",
+      "actions/setup-python@v5"
+    ],
+    "porte_produit_fin": "✅ porte produit verte"
+  }
+}

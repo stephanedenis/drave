@@ -7,12 +7,12 @@
 | Identifiant | `session-b3e96cb1-fb3b-4593-a2a6-b034ae644413` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-16 03:01 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 116 |
-| Appels d'outils | 160 |
+| Messages | 128 |
+| Appels d'outils | 173 |
 | Fichiers touchés | 7 |
-| Commandes | 127 |
+| Commandes | 136 |
 | Sous-agents | 0 |
 | Commits | 2 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche V3 (clôture) : la clôture de la nuit — le rapport `reports/rapport-bilan-exploitable-2.md` + JSON (les 9 tâches T/ … [234 caractères tronqués]
 
-*160 appels d'outils.* Actions notables :
+*173 appels d'outils.* Actions notables :
 
 - bash — Inspect repository status and recent log
 - bash — List workspace, work/portes and reports
@@ -41,7 +41,30 @@
 - bash — Find files mentioning T6/U3/V3
 - bash — Read 2026-11-16 journal entries
 - bash — Locate T/U/V in roadmap
-- … et 134 autres
+- … et 145 autres
+
+**Synthèse produite :**
+
+**V3 — clôture faite.** Le bilan de la nuit est écrit et committé.
+
+- **Rapport** : `reports/rapport-bilan-exploitable-2.md` + `reports/rapport-bilan-exploitable-2.json`.
+  Il couvre les **9 tâches mesurées T1–T6 · U1–U3**, les **deux vérifications V1–V2** et cette clôture :
+  produit installable, JSON **2 139** objets / **8** rôles, **10 000 mots 0,82 s** (α **1,076**, diff vide),
+  roue **1 727 201 o** (sans gold → **4**), profils **20/20** (ambigu **`und`**), `--strict` **0,8625/0,8891**,
+  exemples **27/27** — avec **12 négatifs** nommés (clone public, or de S, mock neuronal, confiance non calibrée, etc.).
+- **Portes** : relevé `work/portes/roue-1116/` lu **sans relancer la passe** → **86 portes, 82 vertes, 4 rouges**
+  (`indice`, `melange` structurelles ; `produit` et `sessions` de circonstance).
+  Vérification ciblée dans `work/portes/verif-cloture-1116/` : `sessions` **0**, `produit` **0**
+  (`--strict` 5 tests, exemples 27/27, autotest 183/183) → **84 vertes, 2 rouges structurelles**.
+- **État et roadmap** : `docs/pilotage/en-cours.md` et `docs/pilotage/roadmap.md` mis à jour
+  (compteurs **771/866**, passe du 16/11, V3, tag) ; `references-non-regression.md` et journal du 16/11 complétés.
+- **Tag annoté** : `exploitable-2026-11-16` sur le dernier commit vert **`ae3c24f2`** (V2).
+  Contrôles : `git cat-file -t` → `tag` ; `git rev-parse exploitable-2026-11-16^{}` → `ae3c24f2`.
+- **Commit** : `3c10e3ee` — *V3 — la clôture…* ; poussé sur `origin/s/v7`, `origin/master` et le tag.
+- **Vérifications finales** : `revue_documentation.py` ✅, `verifie_en_cours.py` ✅, `taille_documents.py` ✅,
+  `verifie_journal.py` ✅, `porte-tableaux.sh` ✅, `verifier_schemas.py` ✅.
+
+Prochaine mesure désignée : **J4 — l’or de rôles** ; Panini attend ses 26 signatures et la décision `auto` reste humaine.
 
 ## 3. Travail accompli
 
@@ -99,7 +122,7 @@
 - **T1** Read V2 details and limits
 - **T1** Search session digest for V3 plan
 - **T1** Search session report for V3 plan
-- … et 87 autres
+- … et 96 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -197,6 +220,7 @@
 - **T1** `-**État au 15/11 (nuit).** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapport-semaine-2.md). **État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **F1 0,7902**,`
 - **T1** `+**État au 15/11 (nuit).** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapport-semaine-2.md). **État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **F1 0,7902**,`
 - **T1** `[still running after 60000ms; moved to background job bash-125]`
+- **T1** `docs/pilotage/roadmap.md:33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 c`
 
 ## 5. Erreurs rencontrées
 

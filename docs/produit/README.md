@@ -777,12 +777,23 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 | **gold versionné** | les 4 gold sont dans le dépôt ; `evaluer` rejoue hors ligne | `tools/tests/linguistique/gold*.json` |
 | **format versionné** | `schema: "drave.annotation"`, `version: 2` ; v1 reste lue | `tools/schemas/` ; `python3 tools/verifier_schema_produit.py --gold 20` |
 | **porte produit** | version, JSON fr/en, rejeu, smoke test, autotest | `bash tools/porte-produit.sh` → ✅ |
+| **intégration continue** | la porte et les tests du contrat rejoués sur **Python 3.10 et 3.13** à chaque `push` | [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) ; [ci.md](ci.md) |
 
 **La porte produit, mesurée le 07/11** : `✅ porte produit verte` — `drave 0.1.0`, JSON valide et
 étiqueté en `fr` et `en`, `sha256 f4b7822076a4203d` deux fois, **18 tests** de fumée, **8 tests**
 de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **11 tests** de
 restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test est
 `tools/tests/test_produit.py`.
+
+**L'intégration continue** rejoue cette porte à chaque `push` : `.github/workflows/ci.yml` teste
+`pip install -e .`, les trois tests du contrat et `porte-produit.sh` sur **Python 3.10 et 3.13**
+(matrice, `fail-fast: false`). Le sous-module `tools/structures` ayant une URL locale, le
+workflow restaure une **copie de secours** de `generateur.py` et du gold de l'analyseur depuis
+[`.github/ci/structures/`](../../.github/ci/structures/) avant l'installation. La preuve locale,
+faite sans `act`, est [`tools/verifier_ci.py`](../../tools/verifier_ci.py) : YAML chargé par
+PyYAML, cinq étapes par version, et un test volontairement cassé qui sort en **1** et arrête la
+séquence. Le mode d'emploi et les limites sont dans [`ci.md`](ci.md) ; les chiffres dans
+[`reports/rapport-ci.md`](../../reports/rapport-ci.md).
 
 **Codes de sortie.** Le CLI implémente **0 / 1 / 3 / 4 / 5** ; le contrat est écrit dans
 `--aide` et vérifié par `tools/tests/test_produit.py` :
@@ -1063,6 +1074,7 @@ Construire la roue demande `setuptools` (isolé par pip, donc réseau ou cache) 
 | **la performance du cache** (×139, conditions) | [`reports/rapport-cache-chunker-applique.md`](../../reports/rapport-cache-chunker-applique.md) |
 | **la cascade réelle** (0,9415, 7B, non livrée) | [`reports/rapport-pensee-gold-cascade.md`](../../reports/rapport-pensee-gold-cascade.md) |
 | **le tagger en option** (mesure 20/612, coût, tests) | [`reports/rapport-tagger-option.md`](../../reports/rapport-tagger-option.md) · [`reports/pensee-tagger-option.json`](../../reports/pensee-tagger-option.json) |
+| **l'intégration continue** (matrice 3.10/3.13, contrôle négatif) | [`ci.md`](ci.md) · [`reports/rapport-ci.md`](../../reports/rapport-ci.md) · [`reports/rapport-ci.json`](../../reports/rapport-ci.json) |
 | **le plancher `cascade_pos`** et les repères des passes | [`docs/pilotage/references-non-regression.md`](../pilotage/references-non-regression.md) |
 | **l'ancien constat « pas de produit »** (27/10) | [`docs/pilotage/utilisation.md`](../pilotage/utilisation.md) |
 | **la théorie de la couche heuristique** | [`docs/theorie/pre-traitement-linguistique.md`](../theorie/pre-traitement-linguistique.md) |

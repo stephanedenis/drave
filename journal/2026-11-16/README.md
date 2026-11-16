@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **1 session(s)** · **4 thème(s)**
+**8 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,13 +14,14 @@
 | docs | 2 | [docs.md](docs.md) |
 | memoire | 1 | [memoire.md](memoire.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
+| modele | 1 | [modele.md](modele.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 370.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 371.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -33,6 +34,7 @@
 | 00:48 | `1d4eb49e` | JOURNAL — 2026-11-16 : U2, LA ROUE AUTONOME ET LA ROUE SANS GOLD QUI SORT EN 4 |
 | 02:10 | `2e617034` | EXPLOITABLE — U3 : LES PROFILS DE LANGUE (LA DÉTECTION EXPOSÉE, LA MESURE SUR L'ÉCHANTILLON UDHR, LE CONTRÔLE NÉGATIF) |
 | 02:47 | `ae3c24f2` | V2 — LES EXEMPLES DE LA DOC : 3 BLOCS CORRIGÉS PAR LES RÔLES NORMALISÉS, 18 CANDIDATS OBJETS, 27/27 CAS CONFORMES ; DÉMARRAGE 3/3 SANS SOUS-MODULE |
+| 03:12 | `3c10e3ee` | V3 — LA CLÔTURE : 9 TÂCHES T1–T6 · U1–U3 + V1–V2, 86 PORTES (82/4 LUES, 84/2 APRÈS CIBLAGE), TAG exploitable-2026-11-16 SUR ae3c24f2 ; BILAN 2 + JSON |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -86,4 +88,21 @@ périmé) de circonstance. La vérification ciblée `work/portes/verif-cloture-1
 **183/183**) : **84 vertes, 2 rouges structurelles**. Le tag annoté
 **`exploitable-2026-11-16`** est posé sur **`ae3c24f2`** (V2), le dernier commit vert ; le
 commit de clôture suit. **La prochaine mesure est J4 — l'or de rôles**.
+
+### Z1 — l'intégration continue, la matrice et le test qui casse
+
+Le workflow `.github/workflows/ci.yml` rejoue le produit sur **Python 3.10 et 3.13** :
+`pip install -e .`, `test_produit.py`, `test_tagger_api.py`, `porte-produit.sh`,
+`test_schema_produit.py`. Comme `act` n'est pas installé, `tools/verifier_ci.py` charge le YAML
+avec PyYAML, exécute les cinq commandes en **fail-fast** et **casse** un test : la copie de
+`test_produit.py` avec un `self.fail` sort en **1** et l'étape témoin n'est pas lancée.
+
+Les deux jambes locales sont vertes : **10/10** étapes, porte **183/183**, **482,3 s** au total.
+La mesure part d'une archive **sans sous-module** : le sous-module `tools/structures` a une URL
+locale, donc le workflow restaure une **copie de secours** de `generateur.py` et du gold de
+l'analyseur depuis `.github/ci/structures/` ; `tools/verifie_structures_secours.py` vérifie
+qu'elle est identique au sous-module. Le CI a trouvé avant de tourner un vrai défaut : deux
+doubles de `test_tagger_api.py` ne prenaient pas le mot-clé `gele` ajouté à `evaluer` ; le
+correctif est dans le test, pas dans le produit. [Fiche](../../reports/rapport-ci.md) ·
+[JSON](../../reports/rapport-ci.json) · [doc](../../docs/produit/ci.md).
 <!-- /notes -->
