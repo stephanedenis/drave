@@ -9,10 +9,10 @@
 | Début | 2026-11-16 03:27 |
 | Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 186 |
-| Appels d'outils | 239 |
+| Messages | 190 |
+| Appels d'outils | 244 |
 | Fichiers touchés | 13 |
-| Commandes | 144 |
+| Commandes | 149 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche Z1 (exploitable, la protection) : l'**intégration continue** — un `.github/workflows/ci.yml` : la matrice **Python … [471 caractères tronqués]
 
-*239 appels d'outils.* Actions notables :
+*244 appels d'outils.* Actions notables :
 
 - bash — Explore repository structure
 - bash — Check git status and recent commits
@@ -41,7 +41,48 @@
 - bash — Read report registry conventions
 - bash — Print all Z tasks from plan
 - bash — Read plan around Z1
-- … et 194 autres
+- … et 199 autres
+
+**Synthèse produite :**
+
+\## Z1 — l’intégration continue : livrée
+
+**Commit** : `19992f2f` — *Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ*.
+
+\### Ce qui est en place
+
+| fichier | rôle |
+|---|---|
+| `.github/workflows/ci.yml` | matrice **Python 3.10 / 3.13**, `pip install -e .`, les trois tests, `porte-produit.sh`, `fail-fast: false`, déclencheurs `push`/`pull_request`/`workflow_dispatch` |
+| `tools/verifier_ci.py` | parse le YAML, exécute les commandes en fail-fast, restaure S, contrôle négatif, sortie JSON |
+| `.github/ci/structures/` | copie de secours de `generateur.py` + `gold-analyseur.json` (le sous-module S a une URL locale, impossible à cloner sur un runner) |
+| `tools/verifie_structures_secours.py` | compare la copie au sous-module (code 1 si dérive) |
+| `docs/produit/ci.md` | mode d’emploi, preuve et limites |
+| `reports/rapport-ci.md` + `.json` | fiche et données mesurées |
+
+\### Preuve locale, sans `act`
+
+`act` n’est pas installé. Le YAML est chargé par **PyYAML 6.0.3**, puis les commandes sont exécutées :
+
+| version | 5 étapes | porte produit | total |
+|---|---:|---:|---:|
+| **3.10.20** | 0 · 5/5 vertes | 0 · **183/183** | 255,30 s |
+| **3.13.16** | 0 · 5/5 vertes | 0 · **183/183** | 227,02 s |
+
+- **10/10 étapes vertes**, **0 rouge**, **482,3 s** au total.
+- Mesure principale depuis une **archive `git archive HEAD` sans sous-module** : la copie de secours S restaure les deux fichiers, puis tout passe.
+- Les **7 blocs `run` du YAML** exécutés tels quels avec `bash -e` : **7/7 code 0**.
+- **Contrôle négatif 2/2** : une copie de `test_produit.py` avec un test cassé sort en **1** (`FAILED (failures=1)`) et **l’étape suivante n’est pas exécutée**.
+
+\### Deux points importants
+
+1. **Le CI a trouvé un vrai défaut** : `test_tagger_api.py` échouait en HEAD car deux doubles `_module_evaluation` ne prenaient pas le mot-clé `gele` ajouté par `evaluer`. Correctif dans le test (`lambda gele=False: evaluateur`), pas dans le produit.
+2. **Le sous-module `tools/structures` n’est pas public** (URL locale). Sans la copie de secours, `test_produit` et la porte échouaient sur un checkout propre ; la copie est identique au commit `648adce` et vérifiée par `tools/verifie_structures_secours.py`.
+
+\### Limite nommée
+
+Sans `act`, on prouve le **YAML** et les **commandes**, pas l’image `ubuntu-latest`, `actions/checkout` ni `actions/setup-python`. La prochaine
+… [254 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -105,7 +146,7 @@
 - **T1** Test editable install from archive without submodules
 - **T1** Inspect product docs structure
 - **T1** Read product README start and end
-- … et 104 autres
+- … et 109 autres
 
 ## 4. Mesures et résultats marquants
 

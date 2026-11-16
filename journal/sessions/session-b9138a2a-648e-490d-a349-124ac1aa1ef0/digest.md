@@ -3690,3 +3690,150 @@ A  tools/verifier_ci.py
   ```
 
 - **bash** `{"command": "git commit -m \"Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ\" 2>&1 | tail -40; echo \"EXIT=${PIPESTATUS[0]}\"", "description": "Commit Z1 with ho … [27 caractères tronqués]`
+
+  ```
+[still running after 60000ms; moved to background job bash-144]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-144", "wait": true, "timeout_ms": 180000}`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 19992f2f] Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ
+ 30 files changed, 7338 insertions(+), 38 deletions(-)
+ create mode 100644 .github/ci/structures/README.md
+ create mode 100644 .github/ci/structures/donnees/gold-analyseur.json
+ create mode 100644 .github/ci/structures/generateur.py
+ create mode 100644 .github/workflows/ci.yml
+ create mode 100644 docs/produit/ci.md
+ create mode 100644 journal/2026-11-16/modele.md
+ create mode 100644 journal/sessions/session-b9138a2a-648e-490d-a349-124ac1aa1ef0/digest.md
+ create mode 100644 journal/sessions/session-b9138a2a-648e-490d-a349-124ac1aa1ef0/rapport.md
+ create mode 100644 reports/rapport-ci.json
+ create mode 100644 reports/rapport-ci.md
+ create mode 100644 tools/verifie_structures_secours.py
+ create mode 100644 tools/verifier_ci.py
+EXIT=0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "git status --short; echo \"---LOG---\"; git log -1 --oneline; echo \"---STAT---\"; git show --stat --oneline HEAD | head -40", "description": "Check post-commit status and stats"}`
+
+  ```
+M tools/chantier/plan.json
+---LOG---
+19992f2f Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ
+---STAT---
+19992f2f Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ
+ .github/ci/structures/README.md                    |   30 +
+ .github/ci/structures/donnees/gold-analyseur.json  | 1158 ++++++
+ .github/ci/structures/generateur.py                |  657 ++++
+ .github/workflows/ci.yml                           |   74 +
+ docs/README.md                                     |    3 +-
+ docs/pilotage/en-cours.md                          |    6 +-
+ docs/pilotage/roadmap.md                           |   11 +-
+ docs/produit/README.md                             |   12 +
+ docs/produit/ci.md                                 |  100 +
+ journal/2026-11-16/README.md                       |   23 +-
+ journal/2026-11-16/docs.md                         |    2 +-
+ journal/2026-11-16/memoire.md                      |    2 +-
+ journal/2026-11
+… [1167 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"Z1 — l'intégration continue\" -A4 journal/2026-11-16/README.md | head -10; echo \"---\"; python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"ETAT=${PIPESTATUS[0]}\"; python3 tools/revue_documentation.py 2>&1 | tail -3; echo \"REVUE=${PIPESTATUS[0]}\"", "description": "Ver … [62 caractères tronqués]`
+
+  ```
+92:### Z1 — l'intégration continue, la matrice et le test qui casse
+93-
+94-Le workflow `.github/workflows/ci.yml` rejoue le produit sur **Python 3.10 et 3.13** :
+95-`pip install -e .`, `test_produit.py`, `test_tagger_api.py`, `porte-produit.sh`,
+96-`test_schema_produit.py`. Comme `act` n'est pas installé, `tools/verifier_ci.py` charge le YAML
+---
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 9 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+ETAT=0
+  revue de documentation · 772 fiche(s) · 867 JSON · 126 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+REVUE=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_etat_a_jour.py 2>&1 | tail -5; echo \"ETAT-A-JOUR=${PIPESTATUS[0]}\"; python3 tools/taille_documents.py 2>&1 | tail -3; echo \"BUDGET=${PIPESTATUS[0]}\"; python3 tools/verifie_journal.py 2>&1 | tail -3; echo \"JOURNAL=${PIPESTATUS[0]}\"", "description": "Final stat … [49 caractères tronqués]`
+
+  ```
+état · dernier fait 19992f2f · dernier état 19992f2f
+  ✅ aucun fait commité après le dernier état
+ETAT-A-JOUR=0
+     · 65 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+BUDGET=0
+  journal · 48 jour(s) · 229 session(s) · 2744 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+JOURNAL=0
+  ```
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport yaml\nd=yaml.safe_load(open('.github/workflows/ci.yml'))\nj=d['jobs']['produit']\nprint('matrice', j['strategy']['matrix']['python'])\nprint('etapes', len(j['steps']))\nprint('runs', [s.get('name') for s in j['steps'] if 'run' in s])\nEOF\necho \"YAML=$?\"; pyt … [111 caractères tronqués]`
+
+  ```
+matrice ['3.10', '3.13']
+etapes 9
+runs ["Vérifier l'interpréteur et pip", 'Restaurer le générateur S (sous-module non public)', 'Installer le produit en éditable', 'Smoke test produit', 'Tagger API (transport factice, sans réseau)', 'Porte produit', 'Schéma produit']
+YAML=0
+✅ tools/structures/generateur.py ≡ .github/ci/structures/generateur.py · ca2d8823e9a6…
+✅ tools/structures/donnees/gold-analyseur.json ≡ .github/ci/structures/donnees/gold-analyseur.json · 4cebc6d75b61…
+SECOURS=0
+  ```
+
+- **bash** `{"command": "test -f .github/workflows/ci.yml && echo CI-OK; test -f reports/rapport-ci.md && echo FICHE-OK; test -f reports/rapport-ci.json && echo JSON-OK; git status --short", "description": "Run acceptance checks"}`
+
+  ```
+CI-OK
+FICHE-OK
+JSON-OK
+ M tools/chantier/plan.json
+  ```
+
+### 🤖 Assistant
+
+## Z1 — l’intégration continue : livrée
+
+**Commit** : `19992f2f` — *Z1 — L'INTÉGRATION CONTINUE : MATRICE 3.10/3.13, 10/10 ÉTAPES VERTES (ARCHIVE SANS SOUS-MODULE, COPIE DE SECOURS S) ; PORTE 183/183 ; TEST CASSÉ → 1, JOB ARRÊTÉ ; act ABSENT, YAML PARSÉ*.
+
+### Ce qui est en place
+
+| fichier | rôle |
+|---|---|
+| `.github/workflows/ci.yml` | matrice **Python 3.10 / 3.13**, `pip install -e .`, les trois tests, `porte-produit.sh`, `fail-fast: false`, déclencheurs `push`/`pull_request`/`workflow_dispatch` |
+| `tools/verifier_ci.py` | parse le YAML, exécute les commandes en fail-fast, restaure S, contrôle négatif, sortie JSON |
+| `.github/ci/structures/` | copie de secours de `generateur.py` + `gold-analyseur.json` (le sous-module S a une URL locale, impossible à cloner sur un runner) |
+| `tools/verifie_structures_secours.py` | compare la copie au sous-module (code 1 si dérive) |
+| `docs/produit/ci.md` | mode d’emploi, preuve et limites |
+| `reports/rapport-ci.md` + `.json` | fiche et données mesurées |
+
+### Preuve locale, sans `act`
+
+`act` n’est pas installé. Le YAML est chargé par **PyYAML 6.0.3**, puis les commandes sont exécutées :
+
+| version | 5 étapes | porte produit | total |
+|---|---:|---:|---:|
+| **3.10.20** | 0 · 5/5 vertes | 0 · **183/183** | 255,30 s |
+| **3.13.16** | 0 · 5/5 vertes | 0 · **183/183** | 227,02 s |
+
+- **10/10 étapes vertes**, **0 rouge**, **482,3 s** au total.
+- Mesure principale depuis une **archive `git archive HEAD` sans sous-module** : la copie de secours S restaure les deux fichiers, puis tout passe.
+- Les **7 blocs `run` du YAML** exécutés tels quels avec `bash -e` : **7/7 code 0**.
+- **Contrôle négatif 2/2** : une copie de `test_produit.py` avec un test cassé sort en **1** (`FAILED (failures=1)`) et **l’étape suivante n’est pas exécutée**.
+
+### Deux points importants
+
+1. **Le CI a trouvé un vrai défaut** : `test_tagger_api.py` échouait en HEAD car deux doubles `_module_evaluation` ne prenaient pas le mot-clé `gele` ajouté par `evaluer`. Correctif dans le test (`lambda gele=False: evaluateur`), pas dans le produit.
+2. **Le sous-module `tools/structures` n’est pas public** (URL locale). Sans la copie de secours, `test_produit` et la porte échouaient sur un checkout propre ; la copie est identique au commit `648adce` et vérifiée par `tools/verifie_structures_secours.py`.
+
+### Limite nommée
+
+Sans `act`, on prouve le **YAML** et les **commandes**, pas l’image `ubuntu-latest`, `actions/checkout` ni `actions/setup-python`. La prochaine preuve est un **run vert dans l’onglet Actions** après le `push`.
+
+Contrôles finaux : `revue_documentation` ✅, `verifie_en_cours` ✅, `verifie_journal` ✅, `taille_documents` ✅, `verifie_structures_secours` ✅, acceptation **CI-OK / FICHE-OK / JSON-OK** ✅.
+

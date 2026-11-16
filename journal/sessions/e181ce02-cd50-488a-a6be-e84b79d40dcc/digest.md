@@ -66900,3 +66900,238 @@ reports/rapport-ci.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Verdict Z1", "timeoutMs": 1300000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5249]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5249", "timeout_ms": 700000, "wait": true}`
+
+  ```
+lun 16 nov 2026 04:27:51 EST
+2026-11-16 04:11:46 · ✔ Z1 en 2677.8 s (code 0) — ✅ test -f .github/workflows/ci.yml && echo CI-OK; ✅ test -f reports/rapport-ci.md && echo FICHE-OK
+2026-11-16 04:11:46 · ▶ Z2 — La passe complète de la nuit (timeout 4200 s)
+1
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -10 reports/rapport-ci.md | cut -c1-160; git rev-list --count origin/master..s/v7", "description":  … [42 caractères tronqués]`
+
+  ```
+3c10e3ee..19992f2f  s/v7 -> s/v7
+   3c10e3ee..19992f2f  master -> master
+# Z1 — L'intégration continue : le workflow, la matrice et le contrôle négatif
+
+> **Ligne de roadmap** : **B13 — la protection** (produit exploitable) · **Tâche** : **Z1** ·
+> **Date** : 2026-11-16 · **Branche** : `s/v7` · **Verdict** : ✅ **la CI est verte en local** —
+> **2 versions**, **5 étapes par version**, **10/10 étapes vertes**, **0 rouge**, **2/2 contrôles
+> négatifs** qui cassent et arrêtent la séquence, porte produit **183/183**.
+>
+> **Le chiffre.** Le workflow `.github/workflows/ci.yml` déclare une matrice **Python 3.10 /
+> 3.13** et cinq étapes : `pip install -e .`, `test_produit.py`, `test_tagger_api.py`,
+> `porte-produit.sh`, `test_schema_produit.py`. En local, avec **3.10.20** et **3.13.16** :
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 2400; date; tail -2 work/chantier/journal.log; ps aux | grep -c \"[t]outes-les-portes\"; git rev-list --count origin/master..s/v7", "description": "Suivre Z2 (la passe)", "timeoutMs": 2500000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5251]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5251", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5251", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5251", "timeout_ms": 1800000, "wait": true}`
+
+  ```
+lun 16 nov 2026 05:08:13 EST
+2026-11-16 04:11:46 · ✔ Z1 en 2677.8 s (code 0) — ✅ test -f .github/workflows/ci.yml && echo CI-OK; ✅ test -f reports/rapport-ci.md && echo FICHE-OK
+2026-11-16 04:11:46 · ▶ Z2 — La passe complète de la nuit (timeout 4200 s)
+3
+0
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **job_kill** `{"job_id": "bash-5251", "reason": "Remplacé par des vérifications directes"}`
+
+  ```
+job bash-5251 had already finished [status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 work/chantier/journal.log; ls reports/rapport-passe-1611.md 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"", "description": "État direct de Z2"}`
+
+  ```
+lun 16 nov 2026 05:08:23 EST
+2026-11-16 04:11:46 · ✔ Z1 en 2677.8 s (code 0) — ✅ test -f .github/workflows/ci.yml && echo CI-OK; ✅ test -f reports/rapport-ci.md && echo FICHE-OK
+2026-11-16 04:11:46 · ▶ Z2 — La passe complète de la nuit (timeout 4200 s)
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 500; date; tail -2 work/chantier/journal.log; ls reports/rapport-passe-1611.md 2>/dev/null; tail -2 work/portes/passe-1611/registre.txt 2>/dev/null", "description": "Attente courte et état Z2", "timeoutMs": 560000}`
+
+  ```
+lun 16 nov 2026 05:16:50 EST
+2026-11-16 04:11:46 · ✔ Z1 en 2677.8 s (code 0) — ✅ test -f .github/workflows/ci.yml && echo CI-OK; ✅ test -f reports/rapport-ci.md && echo FICHE-OK
+2026-11-16 04:11:46 · ▶ Z2 — La passe complète de la nuit (timeout 4200 s)
+porte-homeostasie 0 629
+porte-horloge 0 29
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; ls reports/rapport-passe-1611.md 2>/dev/null", "description": "Verdict Z2", "timeoutMs": 600000}`
+
+  ```
+lun 16 nov 2026 05:26:00 EST
+2026-11-16 05:21:46 · ✘ Z2 en 4200.1 s (code 124) — ❌ test -f reports/rapport-passe-1611.md && echo FICHE-OK → « FICHE-OK » absent; ❌ grep -c 'PASSE 1611\|passe du 16/11' docs/pilotage/references-non-regression.md → « 1 » absent
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ps aux | grep -c \"[t]outes-les-portes\"; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null | head -8; tail -2 work/portes/passe-1611/registre.txt 2>/dev/null", "desc … [41 caractères tronqués]`
+
+  ```
+2
+33 work/portes/passe-1611/registre.txt
+porte-indice 1 1156
+porte-horloge 0 29
+porte-indice 1 1156
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 500; date; tail -2 work/chantier/journal.log; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null | wc -l", "description": "Attente courte : Z3 et la passe", "tim … [16 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 05:34:40 EST
+2026-11-16 05:21:46 · ✘ Z2 en 4200.1 s (code 124) — ❌ test -f reports/rapport-passe-1611.md && echo FICHE-OK → « FICHE-OK » absent; ❌ grep -c 'PASSE 1611\|passe du 16/11' docs/pilotage/references-non-regression.md → « 1 » absent
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+61 work/portes/passe-1611/registre.txt
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; tail -2 work/chantier/journal.log; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"", "description": "Atte … [43 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 05:43:48 EST
+2026-11-16 05:21:46 · ✘ Z2 en 4200.1 s (code 124) — ❌ test -f reports/rapport-passe-1611.md && echo FICHE-OK → « FICHE-OK » absent; ❌ grep -c 'PASSE 1611\|passe du 16/11' docs/pilotage/references-non-regression.md → « 1 » absent
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+63 work/portes/passe-1611/registre.txt
+porte-indice 1 1156
+porte-melange 1 144
+2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 540; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"; tail -1 work/chantier/journal.log; ls reports/rapport-bilan-final.md 2>/dev/null", "description": "Attente : la fin de  … [31 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 05:52:56 EST
+67 work/portes/passe-1611/registre.txt
+2
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+reports/rapport-bilan-final.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"; tail -2 work/chantier/journal.log; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null", "description": "Fin  … [34 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5259]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5259", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 06:03:03 EST
+70 work/portes/passe-1611/registre.txt
+2
+2026-11-16 05:21:46 · ✘ Z2 en 4200.1 s (code 124) — ❌ test -f reports/rapport-passe-1611.md && echo FICHE-OK → « FICHE-OK » absent; ❌ grep -c 'PASSE 1611\|passe du 16/11' docs/pilotage/references-non-regression.md → « 1 » absent
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+porte-indice 1 1156
+porte-melange 1 144
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5259 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c "[t]outes-les-portes"; tail -2 work/chantier/journal.log; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"; tail -1 work/chantier/journal.log", "description": "Attente : la passe", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5260]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5260", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 06:13:17 EST
+74 work/portes/passe-1611/registre.txt
+2
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5260 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c "[t]outes-les-portes"; tail -1 work/chantier/journal.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c \"[t]outes-les-portes\"; tail -1 work/chantier/journal.log; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null", "description": "Fin  … [34 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5261]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5261", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 06:23:31 EST
+85 work/portes/passe-1611/registre.txt
+2
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+porte-indice 1 1156
+porte-melange 1 144
+porte-sessions 1 1
+porte-tableaux 1 1
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5261 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; wc -l work/portes/passe-1611/registre.txt 2>/dev/null; ps aux | grep -c "[t]outes-les-portes"; tail -1 work/chantier/journal.log; awk '$2 != 0' work/portes/passe-1611/registre.txt 2>/dev/null) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -6; echo \"EXIT=$?\"; sleep 5; tail -1 work/chantier/journal.log", "description": "Vérifier porte-tableaux", "timeoutMs": 300000}`
+
+  ```
+✅ 1857 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4852 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+EXIT=0
+2026-11-16 05:21:47 · ▶ Z3 — Le bilan final de la nuit exploitable (timeout 4200 s)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-passe-1611.md <<'MD'\n# La passe complète du 16/11 (nuit exploitable) — 84 portes, 81 vertes, 3 rouges nommées\n\n> **Ce que cette fiche est.** Le relevé de la **passe complète** lancée par la tâche Z2\n> (`JOUR … [2794 caractères tronqués]`
+
+  ```
+références à jour
+     · compteurs : en-cours.md dit 867 JSON, le disque en a 868
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [935 caractères tronqués]`

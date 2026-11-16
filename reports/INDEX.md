@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **769 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **771 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -84,6 +84,7 @@
 | [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
 | [rapport-bilan-exploitable-2.md](rapport-bilan-exploitable-2.md) | V3 — la clôture de la nuit exploitable : les neuf tâches T1–T6 · U1–U3, deux vérifications, 86 portes, le tag `exploitable-2026-11-16` |
 | [rapport-bilan-exploitable.md](rapport-bilan-exploitable.md) | T6 — le bilan exploitable : installable, rejouable, mesuré, mais pas encore général |
+| [rapport-bilan-final.md](rapport-bilan-final.md) | Bilan final — Drave 0.1.0, 16 novembre 2026 |
 | [rapport-bilan-jour-1115.md](rapport-bilan-jour-1115.md) | Le bilan du 15/11 — la semaine 2 en un jour : le tagger décidé, le gold nommé, les rôles séparés |
 | [rapport-bilan-nuit.md](rapport-bilan-nuit.md) | Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B |
 | [rapport-bilan-semaine.md](rapport-bilan-semaine.md) | Le bilan de la semaine (07 → 15/11) — le produit gagne 3,7 points, Panini est borné, le harnais tient |
@@ -418,6 +419,7 @@
 | [rapport-partition-integree.md](rapport-partition-integree.md) | B13 — la partition des syntagmes : les alternatives sont étiquetées, les mesures ne bougent pas |
 | [rapport-partition-syntagmes.md](rapport-partition-syntagmes.md) | Partition des syntagmes — cartographie, deux options mesurées, recommandation |
 | [rapport-passage-a-l-echelle.md](rapport-passage-a-l-echelle.md) | Passer aux gros modèles : ce qui bloque, chiffré |
+| [rapport-passe-1611.md](rapport-passe-1611.md) | La passe complète du 16/11 (nuit exploitable) — 84 portes, 81 vertes, 3 rouges nommées |
 | [rapport-passe-complete-13-octobre.md](rapport-passe-complete-13-octobre.md) | Deux passes complètes dans la même nuit — et ce qu'elles ont attrapé |
 | [rapport-passe-complete-portes.md](rapport-passe-complete-portes.md) | Passe COMPLÈTE des portes : de 22 à 47 portes — et une porte qui était verte en ne mesurant RIEN |
 | [rapport-passe-honnetete.md](rapport-passe-honnetete.md) | Passe d'honnêteté — 19 fiches portent « instantané historique », les quatre chiffres dépassés ne se lisent plus comme l'état courant |
