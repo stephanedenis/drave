@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**29 commits** · **1 session(s)** · **7 thème(s)**
+**30 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 7 | [docs.md](docs.md) |
-| memoire | 2 | [memoire.md](memoire.md) |
+| memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | modele | 9 | [modele.md](modele.md) |
 | moteur | 2 | [moteur.md](moteur.md) |
@@ -58,6 +58,7 @@
 | 12:13 | `d9a129ba` | NATIF — L'INFÉRENCE NUMPY DU DRVM : 4/4 DE PARITÉ AVEC TORCH, SANS TORCH (~0,6 S/OCTET) ; drave generer --moteur numpy |
 | 12:23 | `4fc369e3` | DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE) |
 | 12:38 | `0397f980` | NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE VAL ACTUEL, 18,55 SUR LE GOLD) ; LE CORPUS N'EST PAS ÉPINGLÉ — LE PALIER 1 COMMENCE PAR LÀ |
+| 14:49 | `ce9a16ff` | PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDICE, MELANGE) ; bloc-code TRANSIENTE (VERTE EN ISOLATION), LE MANDAT RAFRAÎCHI |
 
 ## Le récit de la journée (écrit à la main)
 

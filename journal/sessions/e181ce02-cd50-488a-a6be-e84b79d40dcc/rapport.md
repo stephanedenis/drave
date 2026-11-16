@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 382.2 h |
 | Tours | 206 |
-| Messages | 4304 |
-| Appels d'outils | 3858 |
+| Messages | 4305 |
+| Appels d'outils | 3859 |
 | Fichiers touchés | 25 |
-| Commandes | 3192 |
+| Commandes | 3193 |
 | Sous-agents | 43 |
-| Commits | 513 |
+| Commits | 514 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*121 appels d'outils.* Actions notables :
+*122 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 96 autres
+- … et 97 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3152 autres
+- … et 3153 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11870,4 +11870,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - DOCS — LA FAQ NATIVE (IL MODÉLISE, IL NE COMPOSE PAS) ET LE BILAN À 8 LIVRABLES (L'INFÉRENCE NUMPY INCLUSE)" 2>&1 | tail -2; git log -1 --format='%h %s' | cut -
 - NATIF — ALERTE : LE 2,40 ANNONCÉ N'EST PAS REPRODUCTIBLE (17,3 À 22,6 SUR LE VAL ACTUEL, 18,55 SUR LE GOLD) ; LE CORPUS N'EST PAS ÉPINGLÉ — LE PALIER 1 COMMENCE
 - PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDICE, MELANGE) ; bloc-code TRANSIENTE (VERTE EN ISOLATION), LE MANDAT RAFRAÎCHI" 2>&1 
+- NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N'EST PAS REPRODUCTIBLE) ; C'EST LE PREMIER PAS DU PALIER 1" 2>&1 | tail -2; git log 
 

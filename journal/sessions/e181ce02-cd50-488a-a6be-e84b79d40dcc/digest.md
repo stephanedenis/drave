@@ -69629,3 +69629,17 @@ références à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); t=p.read_text()\nt=re.sub(r\"- \\*\\*Heartbeat\\*\\* : .*\\n\", \"- **Heartbeat** : 2026-11-16 14:50 EST\\n\", t,  … [1032 caractères tronqués]`
+
+  ```
+✅ plans cohérents
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+[s/v7 ce9a16ff] PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDICE, MELANGE) ; bloc-code TRANSIENTE (VERTE EN ISOLATION), LE MANDAT RAFRAÎCHI
+ 14 files changed, 278 insertions(+), 25 deletions(-)
+ce9a16ff PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDI
+   0397f980..ce9a16ff  s/v7 -> s/v7
+   0397f980..ce9a16ff  master -> master
+lun 16 nov 2026 14:52:36 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/natif-plan.md'); t=p.read_text()\nt=t.replace(\"\"\"1. **La donnée d'abord** (le vrai goulot) : 3–6 Go de français **propre** (le wiki actuel fait\n   1 Go ; il faut le  … [1727 caractères tronqués]`

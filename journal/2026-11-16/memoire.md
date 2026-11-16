@@ -4,12 +4,13 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 00:24 | `75a56c05` | U1 — LA FICHE POINTE SES COMMITS : AVANT 83ADAA2B, APRÈS D19F0FC7 (SOUS-MODULE 648ADCE) | `en-cours.md`, `README.md`, `mesures.md` (+9) |
 | 06:24 | `25a727be` | PASSE 1611 — 84 PORTES, 81 VERTES, 3 ROUGES NOMMÉES (INDICE, MELANGE, SESSIONS DU HUB) ; TABLEAUX TRANSIENT (VERTE EN ISOLATION) | `en-cours.md`, `README.md`, `docs.md` (+19) |
+| 14:49 | `ce9a16ff` | PORTES — LA PASSE 1611n : 86 PORTES, 82 VERTES, 2 ROUGES STRUCTURELLES (INDICE, MELANGE) ; bloc-code TRANSIENTE (VERTE EN ISOLATION), LE MANDAT RAFRAÎCHI | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 
 ## Sessions actives ce jour
 

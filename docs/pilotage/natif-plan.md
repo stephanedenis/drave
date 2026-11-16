@@ -30,7 +30,11 @@ analyseur (les GV, le ciment).
 
 1. **La donnée d'abord** (le vrai goulot) : 3–6 Go de français **propre** (le wiki actuel fait
    1 Go ; il faut le compléter — des livres, des articles, avec la licence et le dédoublonnage).
-   **Ne pas modifier `data/` sans le propriétaire** (le territoire D).
+   **Ne pas modifier `data/` sans le propriétaire** (le territoire D). **Et l'épingler** : le
+   sha256 du train et du val, la date, la version du nettoyage — l'alerte du 16/11
+   ([`rapport-native-reproductibilite.md`](../../reports/rapport-native-reproductibilite.md)) a
+   montré que le `ppl_val` 2,40 annoncé **ne se reproduit pas** avec le `val.txt` actuel (17,3 à
+   22,6 selon le morceau). Sans l'épingle, chaque PPL est une rumeur.
 2. **Le modèle** : le palier 1 (100–150 M) sur la donnée nouvelle, avec **le banc dès le premier
    checkpoint** (pas après).
 3. **L'alignement** : au palier 2 seulement — le SFT sur des paires d'instruction (le N4.6 a
