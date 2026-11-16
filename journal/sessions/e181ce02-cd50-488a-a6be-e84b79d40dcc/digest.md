@@ -68833,3 +68833,155 @@ lun 16 nov 2026 11:27:01 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\nlignes[13] = \"| **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) |\\n\"\ … [792 caractères tronqués]`
+
+  ```
+✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 14 files changed, 48 insertions(+), 23 deletions(-)
+19530010 DOCS — LE README TENU (T1)
+   4613e110..19530010  s/v7 -> s/v7
+   4613e110..19530010  master -> master
+lun 16 nov 2026 11:30:16 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,100p' tools/native_model.py | cut -c1-130; grep -n \"def rope\\|rotary\\|def _rope\\|class .*Attention\" tools/native_model.py | head -4", "description": "Lire le Block et le RoPE"}`
+
+  ```
+seuil = h.topk(k, dim=-1).values[..., -1:]
+        h = torch.where(h >= seuil, h, torch.zeros_like(h))
+        # Ne garder que les experts choisis.
+        masque = torch.zeros_like(logits, dtype=torch.bool)
+        masque.scatter_(-1, idx, True)
+        h = h * masque.unsqueeze(-1)
+        h = h.reshape(b, s, self.cfg.n_experts * self.cfg.expert_hidden)
+        return self.down(h)
+
+
+class Block(nn.Module):
+    def __init__(self, cfg: NativeConfig):
+        super().__init__()
+        self.cfg = cfg
+        self.ln1 = nn.LayerNorm(cfg.d_model)
+        self.qkv = nn.Linear(cfg.d_model, 3 * cfg.d_model)
+        self.out = nn.Linear(cfg.d_model, cfg.d_model)
+        self.ln2 = nn.LayerNorm(cfg.d_model)
+        self.ffn = SparseFFN(cfg)
+
+    def forward(self, x):
+        b, s, d = x.shape
+        h = self.ln1(x)
+        q, k, v = self.qkv(h).chunk(3, dim=-1)
+        dh = d // self.cfg.n_heads
+        q = q.view(b, s, self.cfg.n_heads, dh).transpose(1, 2)
+        k = k.view(b, s, self.cfg.n_heads, dh).transpose(1, 2)
+        v = v.view(b, s, self.cfg.n_heads, dh).transpose(1, 2)
+        i = torch.arange(s, device=x.device)
+        masque = (i[:, None] >= i[None, :]) & ((i[:, None] - i[No
+… [437 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/drvm.py inspect work/n2ac/mix1024-60k.drvm 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nt = d.get('tensors') or d.get('manifest',{}).get('tensors') or []\nprint('clés du manifest:', list(d.k … [131 caractères tronqués]`
+
+  ```
+clés du manifest: ['fichier', 'manifest_sha256', 'modele', 'blocs', 'tenseurs', 'octets_payload', 'version']
+tensors: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/drvm.py inspect work/n2ac/mix1024-60k.drvm 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nt = d.get('tenseurs') or []\nprint('tenseurs:', len(t))\nfor x in t[:8]: print(' ', x)\nprint('blocs:' … [82 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<string>", line 5, in <module>
+    print('tenseurs:', len(t))
+                       ~~~^^^
+TypeError: object of type 'int' has no len()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 python3 tools/drvm.py inspect work/n2ac/mix1024-60k.drvm 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nprint('tenseurs:', d.get('tenseurs'))\nb=d.get('blocs'); print('blocs type:', type(b), len(b) if hasat … [225 caractères tronqués]`
+
+  ```
+tenseurs: 127
+blocs type: <class 'list'> 19
+  "input"
+  "b0"
+  "local0"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nimport json\nfrom tools import drvm\n# ouvrir le drvm : la classe/fonction de lecture\nnoms=[n for n in dir(drvm) if not n.startswith('_')]\nprint(noms[:14])\nPY", "de … [33 caractères tronqués]`
+
+  ```
+['ALIGNEMENT', 'Any', 'BLOCS_CONNUS', 'DRVMError', 'DrvmFile', 'HEADER', 'MAGIC', 'Path', 'SECTIONS', 'TensorSpec', 'VERSION', 'annotations', 'argparse', 'dataclass']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 python3 - <<'PY'\nimport sys; sys.path.insert(0,'.')\nfrom tools.drvm import DrvmFile\nf = DrvmFile(\"work/n2ac/mix1024-60k.drvm\")\nprint([m for m in dir(f) if not m.startswith('_')][:12])\nman = f.manifest\nprint('clés  … [195 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+TypeError: DrvmFile.__init__() missing 2 required positional arguments: '_mm' and '_fichier'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup /tmp/venv-natif/bin/python tools/banc_generation.py --modele work/n2ac/cap-2165m-512.pt --n 128 --sortie /tmp/banc-21m.json > /tmp/banc-21m.log 2>&1 & echo \"21M PID $!\"; sleep 5; nohup /tmp/venv-natif/bin/python tools/banc_ge … [207 caractères tronqués]`
+
+  ```
+21M PID 2482865
+11M PID 2482956
+lun 16 nov 2026 11:32:17 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 500; date; tail -4 /tmp/banc-21m.log 2>/dev/null; echo \"=== 11M :\"; tail -4 /tmp/banc-11m.log 2>/dev/null", "description": "Suivre les benches de l'échelle", "timeoutMs": 600000}`
+
+  ```
+lun 16 nov 2026 11:40:52 EST
+=== 11M :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/banc-21m.log 2>/dev/null; echo \"=== 11M :\"; tail -3 /tmp/banc-11m.log 2>/dev/null; ls -la /tmp/banc-21m.json /tmp/banc-11m.json 2>/dev/null | awk '{print $5, $9}'", "description": "Suivre les benches", … [21 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-5377]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5377", "timeout_ms": 600000, "wait": true}`
+
+  ```
+lun 16 nov 2026 11:51:07 EST
+greedy       mots_valides=0.494 distinct_2=0.918 repetition=6 echo=0.00 octets/s=9.4
+top40_0.8    mots_valides=0.393 distinct_2=0.997 repetition=1 echo=0.00 octets/s=6.8
+top20_0.5    mots_valides=0.431 distinct_2=0.991 repetition=1 echo=0.00 octets/s=18.8
+=== 11M :
+greedy       mots_valides=0.247 distinct_2=1.000 repetition=1 echo=0.00 octets/s=9.7
+top40_0.8    mots_valides=0.265 distinct_2=1.000 repetition=1 echo=0.00 octets/s=10.1
+top20_0.5    mots_valides=0.258 distinct_2=1.000 repetition=1 echo=0.00 octets/s=10.3
+23390 /tmp/banc-11m.json
+23993 /tmp/banc-21m.json
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5377 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/banc-21m.log 2>/dev/null; echo "=== 11M :"; tail -3 /tmp/banc-11m.log 2>/dev/null; ls -la /tmp/banc-21m.json /tmp/banc-11m.json 2>/dev/null | awk '{print $5, $9}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f,n in [('/tmp/banc-11m.json','11M'),('/tmp/banc-21m.json','21M')]:\n    d=json.load(open(f))\n    print(n, 'greedy :', repr(d['reglages']['greedy']['echantillons'][0]['texte'][:100]))\n    print(n, 't … [249 caractères tronqués]`
+
+  ```
+11M greedy : 'La France est un pays cinistilité ctittitintité ptèsenonone citéenonis cilis prirenoreneurioisitinti'
+11M top20  : 'La France est un pays cisit ditrontést\n'
+21M greedy : 'La France est un paysas estinstas intitis sptiontititintitint tis iontitintitirintée tintimiontirent'
+21M top20  : 'La France est un paysanche ss aux hages s parauxis outiss s otincas esastss des s ts sssss ctés less'
+lun 16 nov 2026 11:51:34 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-banc-generation.md'); t=p.read_text()\nt=t.replace(\"\"\"## 4. Ce que le banc ne dit pas\"\"\",\"\"\"## 3 ter. L'échelle — trois checkpoints, la même mesure\n\nLe même … [1740 caractères tronqués]`
+
+  ```
+échelle ajoutée
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+     · compteurs : en-cours.md dit 871 JSON, le disque en a 873
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [1023 caractères tronqués]`

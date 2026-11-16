@@ -17,7 +17,7 @@
 |---|---|
 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | **N4** — la carte du modèle : identité, données, mesures, limites, usage |
 | [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif |
-| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase |
+| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase ; l'échelle : le vocabulaire, pas la composition |
 | [`rapport-bilan-jour-1115.md`](rapport-bilan-jour-1115.md) | **Bilan** — le 15/11 |
 | [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la coordination, le harnais |
 | [`rapport-bilan-nuit.md`](rapport-bilan-nuit.md) | **Bilan** — la nuit du 14 au 15/11 : le tagger, la base honnête, la phase C/B |

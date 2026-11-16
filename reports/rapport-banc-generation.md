@@ -67,6 +67,27 @@ ses textes sont des **mots de contenu** sans la glu grammaticale (les détermina
 prépositions) — la structure est un squelette, pas une phrase. Les **attachements** ne
 discriminent pas (l'analyseur attache tout, même le bruit).
 
+## 3 ter. L'échelle — trois checkpoints, la même mesure
+
+Le même banc (20 prompts, 128 octets) sur trois tailles, tous byte-level :
+
+| modèle | paramètres | PPL | greedy : mots valides | greedy : répétition | top-20 : mots valides |
+|---|---:|---:|---:|---:|---:|
+| `cap-1147m-512` | 11,8 M | 3,58 | 0,247 | 1 | 0,258 |
+| `cap-2165m-512` | 21,6 M | 3,40 | **0,494** | 6 | 0,431 |
+| `mix1024-60k` | **34,3 M** | **2,40** | **0,870** | **15** | **0,735** |
+
+**Ce que ça dit.** (1) **L'échelle achète le vocabulaire** : +0,25 puis +0,38 de mots valides par
+doublement — les 11 M/21 M produisent des **formes** (« cinistilité », « estinstas »), les 34 M
+des **mots réels**. (2) **Elle n'achète pas la composition** : la **répétition monte** avec la
+taille (1 → 6 → 15) — le grand modèle **reproduit les boucles** du corpus ; il mémorise, il ne
+phrase pas. (3) Les échantillons le montrent : le 34 M bascule des mots aux **nombres** (20, 201,
+2020) — la signature des dates de la Wikipédia.
+
+**La conséquence pour le plan** : un 100–150 M aura **de meilleurs mots** et **autant de boucles**
+si rien ne change ; le palier 1 doit donc traiter la **répétition** (le contrôle, la
+régularisation, les données dédupliquées), pas seulement la taille.
+
 ## 4. Ce que le banc ne dit pas
 
 - **La validité lexicale n'est pas la grammaticalité** : « 20 » est dans le vocabulaire du corpus.

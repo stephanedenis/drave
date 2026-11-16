@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/cap-1147m-512.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.2467,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 2560,
+   "secondes": 262.71,
+   "octets_s": 9.7,
+   "echantillons": [
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays cinistilité ctittitintité ptèsenonone citéenonis cilis prirenoreneurioisitintinonisistititesionanonainitionis réenististis",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 demésis cenemenanis cer tt pt cis fsilaninene rélenitér priorétéeuris ccorimeureritéritésiont cillancts prerérismiméri",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois chanerérairéerçoriniritité cé cirér stineré cigalitenisteniblar cisthagritité finifstrionemionitéréenisté réerégim",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays cinistilité ctittitintité ptèsenonone citéenonis cilis prirenoreneurioisitintinonisistititesionanonainitionis réenististis",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 demésis cenemenanis cer tt pt cis fsilaninene rélenitér priorétéeuris ccorimeureritéritésiont cillancts prerérismiméri",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois chanerérairéerçoriniritité cé cirér stineré cigalitenisteniblar cisthagritité finifstrionemionitéréenisté réerégim",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.3125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chattiopeures es cicemenaus civentinis siten qurenonintilionis ct s diononesis chut résionononitittés conis meurionimatés des cha",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.0588,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La merr tt verer ssereners cont nct cenctileurenionct ct lleconionit sonis cis mmprior rindioris citinonionisisiritis cilitéré qurin",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.2222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouentent nenentilanintçonttiritiont ptèstitilllenisirireniriorenis cherigireritésititit ifrisisilites griteurerentioniglenerr geri",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.3529,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidéerent nantinttenentrene ptiontillat n renentre ctimenis chtene ctenthirenilineurenitis renenenistér dité pterée rimistis s ch",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estinereurenant denirçelaranctianenantirinté cht llanalexiréreurenorenanceré r ctauris chtitèristitis reurionifritès qurinié",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommenilerittitt aninisilillllelochionsilononibéionsitirionitionitinition nisisisit mitisit onitit eumenitistit s litt quts desis di",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.2308,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquene nenenent inent centt trentt conttr lemenorentent prerer r r corentisenorenemptisthanenorintér cenorentenillenononenisirener�",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.2941,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livrerir cteurenct ceurerct re cttis r ritiffire nttis crivemiencrect cteuctisitest r cteur distilineureritis reus centeurerenis chat",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrent ctentigurenenistèrenancencrrititisté enctinerat ctilitenonnclimenisenitinemenenthigritistenineristiliteurenteurenenis chnen",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie cte titinenenistilenaissitites stit ionenistitiontititée re ciontsits cible ctenourinciontentinitis quresionteur cenis chnaine",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.2857,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportioinane ces s cemenaventtititistis cill dilenibrillenit cencts ritilerincterer rionenthigrigents ct cis pticenionteurelenis chat",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciencentçencenchinencencenttescturicenstr civentttintencnttilirenès penanancenonttétenoncenctistenis cisintsis lenononononis chanon",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villerireneurent s cenentilanontçttte ritil pl cttè igrint gis renigaglanincheniblarenérigéenitèriniristéeurerirenononenis chen",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempstéeureux veneneur ct ct  coporiles r cerenis cinteuniles cerelencilemer prior s creuroris citeritunononitite cone ctis ris chan",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vient nerent nt ndanenis nt nontrentntitent nil nintenononitit virenonalirenisenor re ctisthirenocrenit ditintrenenillanononenté p",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.0833,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondent roneneniglit cigntit nalist tenentiont ptiois filifffilit sonitilirinchitiblioncis ibrilexineurenioriritesstilit conenis chio",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.3,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question cenentenninenincnntnontçonntinnten nté ncenonontenont nt nnclennnis chthant cifforeumextèrenilisilenteniononononenis chanone",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.2653,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 2332,
+   "secondes": 231.68,
+   "octets_s": 10.1,
+   "echantillons": [
+    {
+     "mots": 12,
+     "mots_valides": 0.4167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays t ssines llis onitanentiffenchthytinisivitisiténibinorenacheniblontiblé élédioniburiére cilionitétinentisilent ciontigeni",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.4375,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ceme cis ttenést t ila coquremés fsilat cesilanibès éronousilar s ite, ffatimablititèreniqulileriqunivererenéerileuristis",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.4167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois preristicilité ptivenos ctèremengrentincqureris t cirichér èrépr ct chagétitineurenifagrenermerinontirenisironénerionég",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 12,
+     "mots_valides": 0.4167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays t ssines llis onitanentiffenchthytinisivitisiténibinorenacheniblontiblé élédioniburiére cilionitétinentisilent ciontigeni",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.4375,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ceme cis ttenést t ila coquremés fsilat cesilanibès éronousilar s ite, ffatimablititèreniqulileriqunivererenéerileuristis",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.4167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois preristicilité ptivenos ctèremengrentincqureris t cirichér èrépr ct chagétitineurenifagrenermerinontirenisironénerionég",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatcrictiellationonemenaillle ontinctilentenionenilenilins cifit erecenoniniscenititititillenitimemeninerenditit gnontenoll htit in",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.2222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mermint t curilagreneutreuxétencttantisiononiontiont fioivenitôtsoncrilennisit ceneurcié ritittigeus citistit e-chifritirentioni",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouentant ceréens anttctirence preures ancentencienité, rene exitispréragurceurés atrcèrons.cigrionçonontéréenisériereri gran",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidémaèrereni, entititil billliss ilengnonait sonirilagne ceritis gnotés ptis t ptititis renèrenononaurenionialeneur dris litisme",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estionaninenant, fiss mironanenontenantinchir ésentenonmitisurenoncéensisprértéponis énitincenonistis reurionintésigatirinair",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.1818,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommeridiriecet alisemenemeconall panecont onandenonde ve alagagrchonat ctanarisiontentanès griteurerenaiomagnt panis nononnénivere",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.2222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquerbléentinraisereraittrelentens rie ffire, ctt pronit reneniritéhétarèrerisintanuréitifis ifailéeretieuritémeréenées, ri",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.1538,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livrericerispr ertenirireus rentttis ffarerent,incttinour  denesireci) drt cis cher lencioris qunists onisisitittemionieurg ditionis ",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrenterenrenttt n dremis rendrendremarar cironanss (anonturesprenis dantranaphtonavaitis prematideu.r cescrentsanodreutès riés ce",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.1429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie cte pes dalemanagrgaguss lonanenthanices. cistinionirecure.tiononctisapiontiontenous oig\n",
+     "octets": 90
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.2308,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportionste tent tit, it ndit  ss denonenten eis vans lent patonenitrinorfffagrer derionen\n",
+     "octets": 86
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciencent nagenanuis sistilabxités ditanfit atéssitéencrtis ritivenanéenanèr Bremel\n",
+     "octets": 82
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.1818,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villererir pxiss �iciererigenoncont ct veuris c eurilaureurt geceneconcleunicionoritenononité matinenanionintentsplile bellanisipena",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.2857,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps minanininanéentétèstnitititititritenialété aurontitioce litit panis chiblontienilinititienéseniserentsenonitéllentisête",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.4,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vieller rontiongus cemance t\n",
+     "octets": 26
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondent rexinûtàrililants alenctil cesiexifiontt cha dilaltionoreciconomanéreroronontaioumaniolileust cillencolionifeuroniagurion�",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.4737,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question cit tis  ilemensant nissinttèré f. es lactéenis tilerore ctis t ais l t r sitithanonogéenoné llatitisinintitstis chilenits",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.2579,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.0036,
+   "octets": 2264,
+   "secondes": 219.61,
+   "octets_s": 10.3,
+   "echantillons": [
+    {
+     "mots": 7,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays cisit ditrontést\n",
+     "octets": 19
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950s éenavanait r ctés citérenétés ilititiliterencrémenisis prétéeuranétifineurésistrenis nonétés ctitéreréerétirili",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.3,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foist ditinit félaitéenonité ctététèsililagéenorèdi cerenionitiblaurirenolistitinenonirillititeniontent qureri ptititilineni",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 7,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays cisit ditrontést\n",
+     "octets": 19
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950s éenavanait r ctés citérenétés ilititiliterencrémenisis prétéeuranétifineurésistrenis nonétés ctitéreréerétirili",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.3,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foist ditinit félaitéenonité ctététèsililagéenorèdi cerenionitiblaurirenolistitinenonirillititeniontent qureri ptititilineni",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.2222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chattiopeures et ditisis ilenonintionenintis renonistinenitinité sonitisçoisitiontioncitîitenonitsime onistitisesilenononitis chi",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.3182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La merr tt prene cionenenenaudent trest Cntitr pe ct ctini ces cononcecr conct ce chut rét mitis conaleurentise s churenononchat s ch",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouentent ninenavenntanceritt ritiventé cisitencrererer reureurennisenor prirchuriristifineureritis reur chritér ct gréturésifffs ",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidéerenté trenttentiententét rentence tilentée cilaure s cthllencis popagristeuris cenenttemionitér s mitéterér grgimenitiste",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.1111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estadilenenttté ganilanananticianitritit cté nis urit crités rex dréméenionteuririvalistitineureritistiterionistéreurerirené",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.1538,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommerisirestitririrerirerenanitisirirentteurel enirieneunient ir s ditts enisentt laurien lieurenionat ctint reus lirétét enirenin",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.1818,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquerenesttigilanenéenttntèrent centtr enté ctintêt ptilit rinitétéerenor ce crenitisanienteureritis renesanontéononté ptien",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livrerir ctticoriritideneurireuremis ritititererenttis rit t ité tinchiorereris thte ctèritintitéeureritistit eumonteurerenis chin",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.1111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrentisenentttrenenantis ttenenistenenten lentttenttencet renenstt enctenistenthtettentés agerintér contritéerenitéent enenité",
+     "octets": 128
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.1111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économieige cent prenisteillllencticres ptt citèsttintenionitis churitincenis chut ioncités oitit\n",
+     "octets": 92
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport ionenentisenenenentis cent\n",
+     "octets": 28
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciencent nananagnacenanananttenctinitincencenichnonintiontif cene citélanéerenirnontirinaiégitimenanivindentiscenontionanénis fion",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.1765,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villerictententent erisireurerenctir s meurent pt ntinteune ciler nct cont rerenor chincis aliritenonitéenis pis conif qusis qurinon",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.2857,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsté oninisestenaiseres rs entt citantitentésunintilent renononitanontemicer\n",
+     "octets": 77
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.1818,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La viellaileneurenguren llergnt cenenoirenenctint chtt cenencnt re onononcincitionitonte ctenonire penctitinonis cenesiononononnenanch",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.25,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondent t prent criletitres conintinontenaurelirenilenterent reris renctis cisis diniontent s ttitigeureritérente aris ptis vis chan",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.2667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07142857142857142,
+     "prompt": "La question",
+     "texte": "La questione la enais s sisens aguncttttenanttstés ontixtence ctane ronoits ititts bananonononagritentés s isctit phionteurelablanchanion",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

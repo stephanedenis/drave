@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/cap-2165m-512.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.4941,
+   "distinct_2": 0.9177,
+   "repetition": 6,
+   "echo": 0.0039,
+   "octets": 2560,
+   "secondes": 273.15,
+   "octets_s": 9.4,
+   "echantillons": [
+    {
+     "mots": 14,
+     "mots_valides": 0.2857,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysas estinstas intitis sptiontititintitint tis iontitintitirintée tintimiontirentintintinctintir tir iontint ininchonontititintin",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 pantéentauritirs s sst ptis ptintintinchtaréront pant  pintéentent t t de ttererris int dres lllle llle ptinchonopllemes emi",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.6667,
+     "distinct_2": 0.9688,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss de pess pe e conex pe s fffiestintilontile der e s ptermileme te de te de plonte se chontis pures t demes s ess s tter pes t p",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 14,
+     "mots_valides": 0.2857,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysas estinstas intitis sptiontititintitint tis iontitintitirintée tintimiontirentintintinctintir tir iontint ininchonontititintin",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 pantéentauritirs s sst ptis ptintintinchtaréront pant  pintéentent t t de ttererris int dres lllle llle ptinchonopllemes emi",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.6667,
+     "distinct_2": 0.9688,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss de pess pe e conex pe s fffiestintilontile der e s ptermileme te de te de plonte se chontis pures t demes s ess s tter pes t p",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.2143,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chateataurauximes ss st speaux aurs pantaratanile pas anontantantaurt pantantitatir pantarir tar tatantiristitr irilllatillllerilers",
+     "octets": 128
+    },
+    {
+     "mots": 36,
+     "mots_valides": 0.5556,
+     "distinct_2": 0.9143,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meramit popete e t te er pete  et pte  sste e pe ple emememe pes ples ss es pes e s e s ss s s sstes rers s s s es pontiss s senons",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.5185,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent ent ent tarment dant lonttalenileur l ment  llent le tagent t s entonce ple lontr  t r lenctillent s ent llle ttint onts lenct ",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.3529,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidélllllontée é ile entéle  ée phtéllent pe courérintémentérair érenté ér abr pagigurgent llllentint émentalllemememero",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.697,
+     "distinct_2": 0.9688,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estet pencentitirretiler  ce ur t leur e er téle  mente ler e les sss le lle s sse deme de e t e pt le te des eur e t lle dilement",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.7692,
+     "distinct_2": 0.68,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommemememememememememememememememementt t lenur   t   te lle  s  les  s s  s s s s dint s  rchemempe s s ctillememememes s s s s chi",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.3684,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquest pantille ple pesstintaur t s istille tills intillllentinilentintilerile intintinchtinentinintile il ile ille ps is e ilele en",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.36,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Le livre",
+     "texte": "Le livrenchararie e lllle pil ppil le e  h ppil indill ile ill p  pinimintinche itil it incess intintin  ille cillerillll ctill e il len",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.2667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrestt ens s pes plllarinintineus s s pininoncheminininchinelllincinchiller ile onchelileur inche  illemancell illllellll euileleme",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.6296,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie uraureuriritururir  ur ureur   pra r  reur t ur llle  churest l e  ll l  menchent t pe ur e chontitillll ur r pes t  prenche t ",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.3125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport presenses pranchecehaus minchthtintientipurinchimis s llontice ctintilentis til itincherint  llllle ill drilllll pe dile ileme ",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.2381,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciencenchtis ss ss plllleraur auraux ilehileissss ileileil is intiss pintixinctie pe itirillonstile illle il ile illl itile eil s ile ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.3043,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville vauraveutévate ssssss anis ps s ssss s sss pes s sss lerauress pauranonts urs peririrstarers ppronoris dres rs s rors erilless",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.6429,
+     "distinct_2": 0.7407,
+     "repetition": 5,
+     "echo": 0.037037037037037035,
+     "prompt": "Le temps",
+     "texte": "Le tempsemer ens s s s s s sint s onint s s conche cell ce cot le chent mageme ce t s s  s s plloncemenintilememplemememile chnchntincha",
+     "octets": 128
+    },
+    {
+     "mots": 36,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.5714,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vieventitilere entite ile it ile e e e e pe e pe  e  e  e e pe pe pe  pe e  pe pe ur  urest penouxenint le pe ce peur  pe pe e s er",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 0.6286,
+     "distinct_2": 0.8235,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondemoralemes ememaurar r pe s ders s ss es  s s  pss pr s s prs ponts rat prs por dints pestres s s s s prs cre ur s plllle s s pra",
+     "octets": 128
+    },
+    {
+     "mots": 42,
+     "mots_valides": 0.8095,
+     "distinct_2": 0.7317,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La questiontile e e  eile e int e ile e e e pe e e le e e  pe  pe pe pes pe e  pe te pent t phe pe e s  pens pe pe e pur e pelle pe ent es ",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.3928,
+   "distinct_2": 0.9972,
+   "repetition": 1,
+   "echo": 0.0,
+   "octets": 2418,
+   "secondes": 357.84,
+   "octets_s": 6.8,
+   "echantillons": [
+    {
+     "mots": 23,
+     "mots_valides": 0.4783,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays s pacolés  omauxis oriopr oiochiotanoniris sononce post ons.onthe irarisscouras , de  crimant urgr es donc se nchostire t pos ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.4783,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 me lillll me dact nt d pot poéllépourériré pestachir dr itest ceratidex ur pie lllatilllless phinteme ntempr lempérs matil",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.381,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss ompoite dédé che e uresint s tinchtérenes, ct tect s de ncentére prétestétomiexir aurerintirinte, cllente bites, fillont",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 23,
+     "mots_valides": 0.4783,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays s pacolés  omauxis oriopr oiochiotanoniris sononce post ons.onthe irarisscouras , de  crimant urgr es donc se nchostire t pos ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.4783,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 me lillll me dact nt d pot poéllépourériré pestachir dr itest ceratidex ur pie lllatilllless phinteme ntempr lempérs matil",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.381,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss ompoite dédé che e uresint s tinchtérenes, ct tect s de ncentére prétestétomiexir aurerintirinte, cllente bites, fillont",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatitat. plauacs e, es in s manchila chemipidititintimain ite vintit cematustis de,  aumis de ter, pxenterilllle jentirontime s e r",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.2143,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La merer sthlle feraco pethohantishond, ithet hisintirile inte tshtintioncemachyll d pt.chtintonchint ntumile hellontilatie.cthe limel",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.5909,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent intaurons r e. etint s  aus tint t s oidoncht phtsyst s irrexentitillur de, t tattantroroient.ont patalles sseditille plent.fon",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.4211,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidérs stide d st s s s sichde billauss, cacht paucthir ctintée phoinctiloméreté chee rinde ctir\n",
+     "octets": 96
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.2105,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estetele cel ntireuencerctincheut l, elaleussss, comecour  peuxe t llercelét tit pllses, ctétar delleuille ece lls tille par Cont",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.48,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommemembilemememe mens jinur) aur pur, repll ur ontt r aus a m¡ prour. r e tats, s chens t atacts urmaventilemes r chuxillllliet em",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.2727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquesus s e uis pt es pos ps és ates cece aurey, tononcaches balauimps ctite.oncte eses ctaurtas choinctillses e copempileme pales ",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.1667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livrenntt enchauigentintintiginineux, inis pichtit chicioncis  chele demememe cte c, chonhid cichtin , ss  d, qur pllle tillle  qure ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.5417,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrestt e elle me dentinctleledaux e lellless le s lenondes p s pont lefs, dentint, urilptterant é plle, l ges plonchtell. poine, d",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.35,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économiet mise e sthexirorous  ur us chtaralllll poure lllllideleurent .cth lll s dinés delloninteurux re t ps oprillie deur, lencter,,",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.4348,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportitint ite entintentit  et ple ontraga s chtiste vaus llouril ibere e demer s aur ctacachopontinichas ont, les ontole me me, ceme",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.4,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La scienceit pentint.penctauinté ilés, intaille ile pptinontile ctaumintint igif ie oncs.mononcile ite , is ila en illle on urese ri, es",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4762,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villetit iente enchitititirent se, etite l ueritileetimeuret pontiles, e, lllle e men incht do intentillle bllleure.ll e udemer ce  d",
+     "octets": 128
+    },
+    {
+     "mots": 3,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsemperence ememaux\n",
+     "octets": 18
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vievent), e me oncouinon inononononont  pe qururaurt plos ess  pteurs ces stils, esstass at contenvenchlldere dinconcht llonchnonco",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.4091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondemoridistement xe.ve dett  idret . lerée éra f éeure ve éple,. . r entatant és popt.cf ve a ptilesplense e dr is pantantelé",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.3125,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La questiontitiotiotontit iterontiontitontontifiontate ts: latass tinte t rir.me licetur urmis pontet pagrenchy pririr ll itigurexétre int",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.4315,
+   "distinct_2": 0.9914,
+   "repetition": 1,
+   "echo": 0.0023,
+   "octets": 2560,
+   "secondes": 136.33,
+   "octets_s": 18.8,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.4483,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysanche ss aux hages s parauxis outiss s otincas esastss des s ts sssss ctés less hysthages pas ponchos s chaurinche ches s s sss",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 pantatarméritionctatilont llememeranontar pat, ss dur leriontathntéemememe ttemememememe.s es s r pemplllle s pavachillllemem",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.4444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss mite t chéranonex che ppeseurée pe ure ess pe pors, le ctes tex ste dest r leuris dex deurcesepr tint chntédemple ntirars p",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.4483,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysanche ss aux hages s parauxis outiss s otincas esastss des s ts sssss ctés less hysthages pas ponchos s chaurinche ches s s sss",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 pantatarméritionctatilont llememeranontar pat, ss dur leriontathntéemememe ttemememememe.s es s r pemplllle s pavachillllemem",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.4444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une foiss mite t chéranonex che ppeseurée pe ure ess pe pors, le ctes tex ste dest r leuris dex deurcesepr tint chntédemple ntirars p",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4762,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chateampampimattimimele intitéme n phirat lichigrintigeureris ill durintirisss ontinte i, verestige s lle is ures s cte e tille s e",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.5238,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meramperara perarar fara fandanche peantirantinctititit rill r ra a t, le lle d  pr de rinilllesss   chonourillle l ppppaurille stl",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent it tent nt lent dent s attaux pat  ptagrplle pes plex prmaces ctentile s ant denttantincorent pre pt r pemple uremermemppencont",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.2353,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidélllérantététélé ée éllée émes émeléler érés émpémpéptérenté érémilés émére éme pélles qux enéréme qur",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.45,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estencouise ontincheuileaurintiont ile ille ile ille aux quraussaur inctintile téessintincéeure . is cte. il  tille s t, pe pe ur",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.6923,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommemememememememememememememememementt ce t s, t tt  tr te   émpour pr t or t s s t t hintaur t ncheme t ememe illllempll, s seme ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.3462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiquest des s contisontrintrirantit ess plls ige plimeme llles ples des less ts menchts pt pes t e charactil re contis ps ples er cts",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.3913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Le livre",
+     "texte": "Le livrel patararsarararararararararios arouxarire irou isse, ur pe esau ér pril le me  sss pt éeuxes stire pe lauropar e lle entise p",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.1538,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerrestt inche es palllesstis auraux inchinise chtistinonchis cheretinctiresstse lllllllentintintss rronchilllses  llle chimeurinchon",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.2692,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie uris uss urauss auris aus ss meux ss ss ulss uraus cantandes s s printants ls pltreux sts ptscis ctills dur de s ltintilers cop",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportontt entintite e t itis pheureur  leropintereles meure dr vempess, ir deronur ontssse sstent me racheme tiles t s pes te llexe i",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.3636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La sciencenchths ss lehtsstistintisstis pes s ntestieintintirerse dantellle ere lont mer plle chtere se pte ese pont s pe ntéle e ptauile",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville vent, me entiot o, tiontieuraur irauteureure pie eureus is  ces paur, ce ts sss sssss r laurs urachestillseseures rtriles llles",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.6154,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsemauremaurmementaurau mex ment chentielllur   lont illlont t inct s e  cr   s pl s, ont chints  gronis s del s e t uxennctil l s",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.2632,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vievenvententetet er pentinteuraurenche peure plle plleuxeme l ct pe ctintanonttint l fffent ertes lauronchy lles illl ctill eurech",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le mondemoralirme  pauralllll prm aur  ulonomes   rage ptint  me  e ps st is ptint itirsss inochtéllerattis del dontss pie chnchuris ur",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La questionse ise e  ebonte pentauile ve e peure pe e e ente e s  de pex e pe s chtaurme ures conches ll t   pe t es ur dis me e peuréres ",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}
