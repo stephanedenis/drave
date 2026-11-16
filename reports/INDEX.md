@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **756 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **762 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -82,6 +82,7 @@
 | [rapport-b13-porte-140.md](rapport-b13-porte-140.md) | B13 — la porte est à 140/140 : les six attendus du sous-module S 00d2a01 sont fixés ; T132/T133 alignés sur 2/5 (distracteurs r428–r432) |
 | [rapport-base-reelle.md](rapport-base-reelle.md) | B13 — la base honnête : `evaluer --reel`, 452 phrases réelles, et ce que le synthétique cachait |
 | [rapport-bilan-chantier.md](rapport-bilan-chantier.md) | J10.1 — le bilan du chantier : F1 0,7533 → 0,7902, attachement 236 → 238, Panini mesuré et borné |
+| [rapport-bilan-exploitable.md](rapport-bilan-exploitable.md) | T6 — le bilan exploitable : installable, rejouable, mesuré, mais pas encore général |
 | [rapport-bilan-jour-1115.md](rapport-bilan-jour-1115.md) | Le bilan du 15/11 — la semaine 2 en un jour : le tagger décidé, le gold nommé, les rôles séparés |
 | [rapport-bilan-nuit.md](rapport-bilan-nuit.md) | Le bilan de la nuit du 14 au 15/11 — le tagger, la base honnête, la phase C/B |
 | [rapport-bilan-semaine.md](rapport-bilan-semaine.md) | Le bilan de la semaine (07 → 15/11) — le produit gagne 3,7 points, Panini est borné, le harnais tient |
@@ -112,6 +113,7 @@
 | [rapport-cic-v2.md](rapport-cic-v2.md) | B3 — Corpus d'or CIC v2 : le type de Bruijn vérifié, le sha256 rejoué deux fois |
 | [rapport-cic-verificateur.md](rapport-cic-verificateur.md) | J12.2 — Le corpus d'or CIC : 42/42 verdicts rejoués par un vérificateur indépendant |
 | [rapport-classement-appris.md](rapport-classement-appris.md) | B13 — classement appris des candidats d'attachement : 142/145, mais la règle live est déjà à 137 |
+| [rapport-cli-robuste.md](rapport-cli-robuste.md) | T5 — la robustesse de la CLI : `--duree`, cinq codes de sortie, aide des quatre sous-commandes, `--fichier` sans trace |
 | [rapport-cloture-chantier.md](rapport-cloture-chantier.md) | J14.1 — la clôture : 84 portes, 81 vertes, 3 rouges nommées, le tag `chantier-2026-11-14` |
 | [rapport-coherence-docs-2.md](rapport-coherence-docs-2.md) | Cohérence des documents avec le code — second passage |
 | [rapport-coherence-docs-3.md](rapport-coherence-docs-3.md) | Rapport — cohérence de la documentation, troisième passage |
@@ -125,6 +127,7 @@
 | [rapport-consolidation-balayage.md](rapport-consolidation-balayage.md) | Le balayage de la consolidation — un optimum INTÉRIEUR de capacité (rang 4) et de pas (3e-4), qui ne composent PAS |
 | [rapport-consolidation-c7.md](rapport-consolidation-c7.md) | C7 — la consolidation : le rejeu met bien l'expérience dans les poids (−16,4 % en domaine, **+1,3 % hors domaine**) |
 | [rapport-consolidation-structure-partagee.md](rapport-consolidation-structure-partagee.md) | Ce qui se consolide, c'est la STRUCTURE PARTAGÉE — même mémorisation (−22,5 %), transfert −7,4 % ou +1,2 % |
+| [rapport-contrat-json.md](rapport-contrat-json.md) | T2 — l'API du JSON : candidats d'attachement en objets, rôles normalisés |
 | [rapport-contrat-s.md](rapport-contrat-s.md) | B13 — Contrat d'interface L ↔ S : les subordonnées REL/SUB |
 | [rapport-convention-gv.md](rapport-convention-gv.md) | B13 — la convention des GV : le sujet hors du GV, F1 0,7549 → 0,7902 |
 | [rapport-coordination-a.md](rapport-coordination-a.md) | A — coordination : A6.2 est libre, A8.3b2 est nommée mais hors du graphe |
@@ -172,6 +175,7 @@
 | [rapport-e9-homeostasie.md](rapport-e9-homeostasie.md) | E9 — L'HOMÉOSTASIE SYNAPTIQUE : amortir le changement plastique rend la consolidation MEILLEURE des deux côtés |
 | [rapport-echecs-v2.md](rapport-echecs-v2.md) | B13 — les 8 échecs restants de l'attachement v2 : qualifiés, chiffrés, 5 règles pour 145/145 |
 | [rapport-elagage-logs.md](rapport-elagage-logs.md) | A6.3 — l'élagage guidé par les logs : aucun neurone ne s'allume jamais, mais 63 % s'allument à peine |
+| [rapport-empaquetage.md](rapport-empaquetage.md) | T1 — l'empaquetage : `pip install -e .`, `drave` hors du dépôt, chemin historique intact |
 | [rapport-empreinte-memoire.md](rapport-empreinte-memoire.md) | Rapport — l'empreinte mémoire : ce qui réduit vraiment ce qu'il faut charger |
 | [rapport-encodage.md](rapport-encodage.md) | Drave — encodage de structure : éliminer la valeur |
 | [rapport-engram-etat.md](rapport-engram-etat.md) | Engram de DeepSeek-V4.1 : ce qui est établi, ce qui manque, et pourquoi on s'arrête là |
@@ -630,6 +634,7 @@
 | [rapport-pensee-votante3.md](rapport-pensee-votante3.md) | B13 — l'observation à trois looks : 20/20, mais 4000 épisodes |
 | [rapport-pensee-vote.md](rapport-pensee-vote.md) | B13 — le vote de signaux : 5 looks, toujours 0/20 |
 | [rapport-pensee-vrais-absents.md](rapport-pensee-vrais-absents.md) | B13 — les vrais absents : 5 phrases sans antécédent, 0 lien |
+| [rapport-performance.md](rapport-performance.md) | T4 — la performance de `drave analyser` : 10 000 mots en 4,0 s, 126 Mio, 14,8 Mo de JSON ; le contrôle de linéarité **échoue** (α = 1,55) |
 | [rapport-phase3-reparti.md](rapport-phase3-reparti.md) | Phase 3 — le calcul réparti redevient fidèle |
 | [rapport-pipeline-m2.md](rapport-pipeline-m2.md) | B14 — M2 dans la chaîne : un rameau, pas un étage |
 | [rapport-pipeline-memoire.md](rapport-pipeline-memoire.md) | B17 — M7-bis dans la chaîne : LFU aide la mémoire, pas M8 |
@@ -658,6 +663,7 @@
 | [rapport-programme-evolutif.md](rapport-programme-evolutif.md) | Programme « journaliser, faire évoluer » — ce que la mesure autorise |
 | [rapport-protocole-date.md](rapport-protocole-date.md) | B1 — le protocole Panini à date contrôlée : 60 paires, trois strates, et les 26 signatures qui manquent |
 | [rapport-provenance-v41.md](rapport-provenance-v41.md) | DeepSeek-V4.1 : ce que le fichier dit, et ce qu'il ne dit pas |
+| [rapport-quickstart.md](rapport-quickstart.md) | T3 — le démarrage en 5 minutes : clone public, installation, trois commandes, JSON, tagger, erreurs |
 | [rapport-r01-graphe-document.md](rapport-r01-graphe-document.md) | R0.1 — le graphe de document : 51 pages, partitions exactes, fidélité 1,000 |
 | [rapport-r02-controleur.md](rapport-r02-controleur.md) | R0.2 — le contrôleur de lecture : 100 % de récupération à 30 % du budget |
 | [rapport-r03-banc-complet.md](rapport-r03-banc-complet.md) | R0.3 — le banc complet : 249 questions, 30 documents, et le modèle sur GPU |

@@ -213,7 +213,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |
 | `df1b1098` | Tu es relecteur visuel de | 2026-10-31 17:52 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/df1b1098-d54e-4763-bfc2-2a8cc1498cec/rapport.md) |
 | `e14c26ae` | Tu es relecteur ADVERSARIAL, en | 2026-10-02 21:15 | 0.2 h | 1 | 76 | 1 | 0 | [rapport](sessions/e14c26ae-6d52-41f9-a72f-6ebdcef172d5/rapport.md) |
-| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.8 h | 202 | 3615 | 25 | 488 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
+| `e181ce02` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.9 h | 202 | 3619 | 25 | 488 | [rapport](sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) |
 | `e7dfe34f` | Tu travailles dans un dépôt | 2026-09-28 14:56 | 0.1 h | 1 | 21 | 2 | 0 | [rapport](sessions/e7dfe34f-d596-4f98-93c2-cad5a92d3b1e/rapport.md) |
 | `ea169cb1` | Tu travailles dans le dépôt | 2026-11-05 23:24 | 1.3 h | 1 | 136 | 1 | 0 | [rapport](sessions/ea169cb1-75d7-43fa-b69d-5e2a210f6c38/rapport.md) |
 | `ebd3d5a2` | Tâche autonome de mesure, dans | 2026-10-22 08:14 | 0.2 h | 1 | 14 | 0 | 0 | [rapport](sessions/ebd3d5a2-7099-469e-b46d-dafe807d1a06/rapport.md) |
@@ -235,6 +235,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Tâche E2 : cas d'erreur tagger | 2026-11-15 06:34 | 0.8 h | 1 | 196 | 8 | 3 | [rapport](sessions/session-01599146-2479-4a06-8381-4ace3d13f579/rapport.md) |
 | `session-` | Retrieval Panini par familles Glottolog | 2026-11-14 01:21 | 0.4 h | 1 | 208 | 1 | 3 | [rapport](sessions/session-02ebc573-ec84-46cf-945c-cfd7d563a9fc/rapport.md) |
 | `session-` | Passe portes, relevé rouges, tag annoté | 2026-11-13 23:11 | 1.4 h | 1 | 75 | 1 | 0 | [rapport](sessions/session-048748b0-e27f-4f44-8706-b882cae40ff4/rapport.md) |
+| `session-` | Clôture T6 : rapport bilan et mise à jour roadmap | 2026-11-15 23:33 | 0.1 h | 1 | 143 | 6 | 1 | [rapport](sessions/session-0ad92682-0d71-421c-be45-3c35e875bb07/rapport.md) |
 | `session-` | Prédiction Drave par atomes | 2026-11-15 03:06 | 0.8 h | 1 | 221 | 0 | 3 | [rapport](sessions/session-10414d5d-1d81-4840-b524-e77375127547/rapport.md) |
 | `session-` | Coordination A : rapport J4.4 | 2026-11-13 22:41 | 0.3 h | 1 | 145 | 2 | 0 | [rapport](sessions/session-11d99e1c-be38-4727-9c7a-013846234567/rapport.md) |
 | `session-` | Retrieval inter-langues à époque contrôlée | 2026-11-07 16:29 | 1.5 h | 1 | 249 | 0 | 0 | [rapport](sessions/session-1a1b15e7-d5f5-4f11-aeb3-0e6e42628dbe/rapport.md) |
@@ -290,4 +291,4 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `session-` | Restitution v1 canonique et mesure du miroir | 2026-11-14 01:48 | 1.4 h | 1 | 154 | 11 | 0 | [rapport](sessions/session-f198001c-49da-4e65-8a44-782f9605fd7a/rapport.md) |
 | `session-` | Test de liaison du superviseur | 2026-11-07 10:48 | 0.0 h | 1 | 0 | 0 | 0 | [rapport](sessions/session-f30f0289-2506-4596-be01-4e10f2a2073c/rapport.md) |
 | `session-` | Rapport semaine 2 et tag | 2026-11-15 12:05 | 0.4 h | 1 | 136 | 4 | 4 | [rapport](sessions/session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb/rapport.md) |
-| `session-` | Robustesse de la CLI | 2026-11-15 23:16 | 0.2 h | 1 | 117 | 0 | 1 | [rapport](sessions/session-faf940b2-b9f9-4948-abe4-6aee0d73595c/rapport.md) |
+| `session-` | Robustesse de la CLI | 2026-11-15 23:16 | 0.3 h | 1 | 121 | 0 | 1 | [rapport](sessions/session-faf940b2-b9f9-4948-abe4-6aee0d73595c/rapport.md) |

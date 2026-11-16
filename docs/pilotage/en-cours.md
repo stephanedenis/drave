@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-15, 23 h 23 HNE (T5 : la CLI robuste — `--duree`, codes 0/3/4/5, aide, `--fichier`)**
+**Mis à jour : 2026-11-15, 23 h 35 HNE (T6 : le bilan exploitable)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -62,8 +62,8 @@
 - **Objectif final** : moteur de pensée v0.
 - **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**, **F1 0,7902** ; D1–E2 ([exemples](../../reports/rapport-exemples-tagger.md), [FAQ](../../reports/rapport-faq.md), [erreurs](../../reports/rapport-tagger-erreurs.md)) ; [s065](../../reports/rapport-s065.md).
 - **Ce que font les autres** : **N2**, **S**, **hub**.
-- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144**, gold v2 **20/46** ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md) ; **T4** : 10 000 mots **4,01 s**, contrôle **α 1,55** ; [fiche](../../reports/rapport-performance.md), [JSON](../../reports/performance.json).
-- **Prochaine action** : **T6 — le bilan** ; **J4 — l'or de rôles** ; T132/T133 ; **T4 : borner `_groupes_partition` et `_cible_proche`** (O(k²)).
+- **Ce qu'elle fait** : **W5 — restitution v3** : gold S **144/144**, gold v2 **20/46** ; [fiche](../../reports/rapport-restitution-v3.md). **W6 — la clôture** : [rapport semaine 2](../../reports/rapport-semaine-2.md). **T6 — le bilan exploitable** : [fiche](../../reports/rapport-bilan-exploitable.md), [JSON](../../reports/rapport-bilan-exploitable.json).
+- **Prochaine action** : **U1 — borner `_groupes_partition` et `_cible_proche`** (O(k²)) ; **J4 — l'or de rôles** ; T132/T133.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
 
@@ -85,7 +85,7 @@
 
 - **S — les structures** : 61/61 types, 144/144 rôles ; **19/19 verdicts `389b99f`** ; [v2](../../reports/rapport-coordination-s-v2.md).
 - **N2 — en pause** : commande **`eval_longueurs.py --rope --val <dir>`** (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
-- **Pensée — B13 (actif)** : **183/183** ; **v2** **19/46** (F1 **0,5270**), **W5 — v3** **20/46** (F1 **0,5406**), gold S **144/144** ; [v2](../../reports/rapport-restitution-v2.md), [v3](../../reports/rapport-restitution-v3.md). **T2** : **2 139** objets ; [fiche](../../reports/rapport-contrat-json.md). **T3** : quickstart 3/3 ; [fiche](../../reports/rapport-quickstart.md). **T5** : CLI **20/20**, codes **0/3/4/5** ; [fiche](../../reports/rapport-cli-robuste.md).
+- **Pensée — B13 (actif)** : **183/183** ; **v2** **19/46** (F1 **0,5270**), **W5 — v3** **20/46** (F1 **0,5406**), gold S **144/144** ; [v2](../../reports/rapport-restitution-v2.md), [v3](../../reports/rapport-restitution-v3.md).
 - **L — le bloc langue** : contrat ; frontière script 1,0 / langue 0,137/0,9687 ; fusion réparée **0,9309/0,8226/0,8784/0,9954**.
 - **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **code 4** sans clé ; réseau coupé **code 0** + repli ; [W2](../../reports/rapport-tagger-h50.md), [W3](../../reports/rapport-tagger-defaut.md).
 - **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues, **V14 3/21** ; B2 **négatif** ; [atomes](../../reports/rapport-atomes-niveaux.md), [corpus](../../reports/rapport-corpus-commun.md), [B2](../../reports/rapport-atomes-prediction.md), [familles](../../reports/rapport-retrieval-familles.md).
@@ -101,9 +101,9 @@
 |---|---|---|
 | portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **764** / **859** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **765** / **860** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **125** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
+| dernière passe | **15/11 09 h 53 → 12 h 15** (85, **81/4**) ; rouges `indice`, `melange` (structurelles), `sessions` (**réparée** à 12 h 20), `prechargement` (**environnementale**) ; ciblage W6 **9/9** ; **86e porte** verte | `work/portes-1115-09h53/registre.txt` ; `work/portes/w6-final/` |
 
 ## Les chantiers et leurs bloquants
 
@@ -113,7 +113,7 @@ externes** et la **prochaine action**.
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
 | **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
-| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit (J11)** | **`g017` tranché** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
+| **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 attend un encodeur ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit T1–T6** | **U1 — les deux O(k²)** ; **`g017` tranché** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; N3 couvert ; N4 0/4 ; N5 gelé | **les runs N2** ; puis la **porte propre** ; **N4** |
 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575, réel 452 0,9500 ; W2 : 402 0,9643, H50 0,8607 ; W3 : défaut hors ligne, clé invalide 4, 1 000 phrases = 143 870 tokens / 0,031 $ hors pointe ; X3 : lot 1 000, 672 appels, 99 971 tokens, 0,02177 $ ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd` ; Y1 : `--tagger auto` prototype (clé présente API 0/130 tokens ; invalide 0 ; sans clé 0 identique au défaut ; réseau coupé 0 après 3 essais ; défaut inchangé)** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche Y1](../../reports/rapport-tagger-auto.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** |
 | **C1–C7** | hors graphe (transférés au journal) | aucun (hors plan) | — |
@@ -123,7 +123,11 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**N2** — porte (0,2856/0,3566) ; **Pensée** — `g017`, T132/T133, gold de pensée, **J4 — or de rôles** (seconds cadres) ; **S** — page `/` : décision et recette (106/41), référents ; **Panini** — les 26 signatures V14, puis le test à date contrôlée ; **R0.7** — `auto` prototype livré (opt-in, défaut inchangé ; décision humaine), coût 1 000 extrapolé, fermé 402 ouvert ; **A** — A6.2, A8.3b2.
+**T1–T6 — livré** ; reste **U1** (les deux O(k²)), **U2** (la roue), **U3** (`--profils`) ; [bilan](../../reports/rapport-bilan-exploitable.md).
+
+**Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
+
+**Panini** — **26 signatures V14** manquantes, calibration **42/44**, rejeu **27/60** : le test attend ; **R0.7** — `--tagger auto` prototype livré (**opt-in**, défaut hors ligne inchangé), **décision humaine** ; **N2** — porte (0,2856/0,3566) ; **A** — A6.2, A8.3b2.
 
 ## Les questions ouvertes
 

@@ -66426,3 +66426,52 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5221", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 23:33:24 EST
+2026-11-15 23:16:45 · ✔ T4 en 2500.3 s (code 0) — ✅ test -f reports/rapport-performance.md && echo FICHE-OK
+2026-11-15 23:16:45 · ▶ T5 — La CLI — durée, codes de sortie, aide (timeout 3600 s)
+reports/rapport-performance.md
+3
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; head -10 reports/rapport-performance.md | cut -c1-170; git rev-list --count origin/master..s/v7", "descr … [51 caractères tronqués]`
+
+  ```
+7d114559..9a291c8b  s/v7 -> s/v7
+   7d114559..9a291c8b  master -> master
+# T4 — la performance de `drave analyser` : 10 000 mots en 4,0 s, 126 Mio, 14,8 Mo de JSON ; le contrôle de linéarité **échoue** (α = 1,55)
+
+> **Ligne de roadmap** : **B13** (produit) · **Tâche** : **T4** (exploitable, 4/5) ·
+> **Date** : 2026-11-15 · **Verdict** : ✅ **les 10 000 mots sont exploitables** (4,0 s de
+> fonction, 2 493 mots/s, 126 Mio de pic RSS, 14,8 Mo de JSON) ; ❌ **le contrôle négatif de
+> linéarité échoue** — le temps croît en **α = 1,55** sur un bloc contrôlé, et le terme
+> quadratique explique **R² 0,99995** contre **0,957** pour le linéaire. Le coupable est
+> nommé : `_groupes_partition` (toutes les paires de syntagmes, O(k²)) et `_cible_proche`
+> (tri de tous les GV pour chaque segment), pas la tokenisation.
+>
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('tools/chantier/plan.json'); d=json.loads(p.read_text())\ndef t(id, jour, titre, mandat, checks, budget=90):\n    return {\"id\": id, \"jour\": jour, \"titre\": titre, \"mandat\" … [2641 caractères tronqués]`
+
+  ```
+plan : 60 tâches
+2026-11-15 23:33:44 · ▶ T6 — Le bilan de la nuit exploitable (timeout 3600 s)
+dim 15 nov 2026 23:34:11 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -5 work/chantier/journal.log; ls reports/rapport-cli-robuste.md reports/rapport-bilan-exploitable.md 2>/dev/null; git log --oneline -1 | cut -c1-80", "description": "Voir T5/T6"}`
+
+  ```
+2026-11-15 22:35:05 · ▶ T4 — La performance sur un texte réel (timeout 3600 s)
+2026-11-15 23:16:45 · ✔ T4 en 2500.3 s (code 0) — ✅ test -f reports/rapport-performance.md && echo FICHE-OK
+2026-11-15 23:16:45 · ▶ T5 — La CLI — durée, codes de sortie, aide (timeout 3600 s)
+2026-11-15 23:33:44 · ✔ T5 en 1002.6 s (code 0) — ✅ test -f reports/rapport-cli-robuste.md && echo FICHE-OK; ✅ python3 tools/tests/test_produit.py 2>&1 | tail -1
+2026-11-15 23:33:44 · ▶ T6 — Le bilan de la nuit exploitable (timeout 3600 s)
+reports/rapport-cli-robuste.md
+9a291c8b T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHI
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git push origin master 2>&1 | tail -1; sleep 1200; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "descrip … [55 caractères tronqués]`

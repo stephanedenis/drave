@@ -7,12 +7,12 @@
 | Identifiant | `session-faf940b2-b9f9-4948-abe4-6aee0d73595c` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 23:16 |
-| Durée | 0.2 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 99 |
-| Appels d'outils | 117 |
+| Messages | 103 |
+| Appels d'outils | 121 |
 | Fichiers touchés | 0 |
-| Commandes | 106 |
+| Commandes | 110 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T5 (exploitable, 5/5) : la **robustesse de la CLI** — (1) `--duree` dans le JSON (le temps de l'analyse) ; (2) le  … [404 caractères tronqués]
 
-*117 appels d'outils.* Actions notables :
+*121 appels d'outils.* Actions notables :
 
 - bash — Check git status and list files
 - bash — List key directories
@@ -41,7 +41,34 @@
 - bash — Read plan T5
 - bash — Find code 2 references
 - bash — Find usage/error messages
-- … et 93 autres
+- … et 97 autres
+
+**Synthèse produite :**
+
+T5 est livré, mesuré, testé et committé.
+
+\## Ce qui a été fait
+
+1. **`--duree`** — ajouté à `analyser` pour `--json` et `--jsonl` : `cout.duree_s` (4,7–5,9 ms sur les phrases de test). Absent par défaut, donc le déterminisme de `--json` / `rejouer` est conservé. La durée est le **seul** ajout (texte et étiquettes identiques).
+
+2. **Codes de sortie** — contrat passé à **0 succès / 3 refus / 4 clé ou dépendance / 5 usage / 1 autre erreur** :
+   - `2` → `5` pour tous les usages (`argparse`, langue inconnue, options exclusives) ;
+   - `--fichier` inexistant → **4** (`dépendance absente : fichier introuvable`) ;
+   - `--fichier` sur un répertoire → **5** (`erreur d'usage : un répertoire n'est pas un fichier`) ;
+   - refus de `rejouer` → **3** au lieu de 1 ;
+   - tableau écrit dans `docs/produit/README.md` **et** dans `--aide`.
+
+3. **`--aide` / `--help`** — les 8 combinaisons sur les 4 sous-commandes sortent **0** et affichent leur usage.
+
+4. **Fixtures** — `reports/rapport-cli-robuste.md`, `reports/cli-robuste.json`, banc reproductible `tools/banc_cli_robuste.py` : **20/20 cas**. Tests ajoutés dans `tools/tests/test_produit.py` (durée JSON/JSONL, tableau, aide/help, fichier inexistant, répertoire) ; les attentes des autres tests CLI ont été alignées sur le nouveau code 5.
+
+\## Vérifications
+
+- `python3 tools/tests/test_produit.py` → **30 tests OK**
+- `python3 tools/banc_cli_robuste.py` → **20/20 cas**
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (autotest 183/183)
+- `revue_documentation.py`, `porte-tableaux.sh`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py`, `taille_documents.py` → verts
+- Commit : **`9a291c8b`** — `T5 — LA CLI ROBUSTE : --DUREE …, CODES 0/3/4/5 …, AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS`
 
 ## 3. Travail accompli
 
@@ -92,7 +119,7 @@
 - **T1** Update product docs
 - **T1** Update FAQ verifier and run
 - **T1** Run product tests
-- … et 66 autres
+- … et 70 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -212,6 +239,9 @@
 - **T1** `-**État au 15/11.** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapport-semaine-2.md). **État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 2`
 - **T1** `+**État au 15/11.** Semaine 2 close ; tag `semaine-2-2026-11-20` sur `73edb3dd` ; [rapport](../../reports/rapport-semaine-2.md). **État au 14/11 07 h 10.** B13 : **POS 86,25 %**, **attachement exact 2`
 - **T1** `[still running after 60000ms; moved to background job bash-106]`
+- **T1** `9a291c8b T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS`
+- **T1** ``analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 %** / **88,70 %**`
+- **T1** `au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme`
 
 ## 6. Commits
 

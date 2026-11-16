@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**51 commits** · **1 session(s)** · **7 thème(s)**
+**52 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 8 | [distribue.md](distribue.md) |
+| distribue | 9 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
 | mesures | 19 | [mesures.md](mesures.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -80,6 +80,7 @@
 | 22:31 | `7d114559` | T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ |
 | 23:10 | `7f0e8320` | T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²)) |
 | 23:13 | `7e195ee6` | T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS |
+| 23:30 | `9a291c8b` | T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS |
 
 ## Le récit de la journée (écrit à la main)
 
@@ -197,4 +198,43 @@ mais découvre que `tools/structures` (URL locale dans `.gitmodules`) manque à 
 au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme
 l'écart ; la correction du sous-module reste à faire.
 [`fiche`](../../reports/rapport-quickstart.md) · [`JSON`](../../reports/quickstart.json).
+
+### T4 — la performance : 10 000 mots en 4,0 s, et le contrôle de linéarité échoue
+
+10 000 mots d'Alice passent en **4,012 s** pour `Heuristique.analyser` (**2 493 mots/s**,
+**126 Mio**), **4,965 s** pour le CLI `--json` (**14,8 Mo**, **54 522** étiquettes). Cent
+phrases courtes coûtent **1,10 ms** par appel de fonction, **191,6 ms** par CLI, et **0,369 s**
+en un seul `--jsonl` (**×52,6**). Le tagger, cache froid, coûte **110,2 s** pour 92 phrases
+(**14 677** tokens, **1,17 s/phrase**, ×299 le lot heuristique) : c'est un coût de **latence**.
+**Le contrôle de linéarité échoue** : sur un bloc contrôlé, **α = 1,55**, le quadratique explique
+**R² 0,99995** contre **0,957** pour le linéaire ; `_groupes_partition` (toutes les paires de
+syntagmes) et `_cible_proche` (tri de tous les GV) sont **O(k²)**, et l'instrument sait
+distinguer 1 de 2 (0,9998 / 2,0045). La parade immédiate est de découper ; la correction de fond
+est **U1**. [`fiche`](../../reports/rapport-performance.md) · [`JSON`](../../reports/performance.json).
+
+### T5 — la CLI robuste : `--duree`, cinq codes, l'aide partout, `--fichier` sans trace
+
+`--duree` ajoute `cout.duree_s` (**4,7–5,9 ms**) et **rien d'autre** ; sans le drapeau le champ
+est absent et le JSON par défaut est inchangé. Les **cinq codes** sont **0 succès / 3 refus /
+4 clé ou dépendance / 5 usage / 1 autre erreur** : l'ancien **2** d'usage devient **5**, les
+erreurs de `--fichier` sortent **4** (inexistant) et **5** (répertoire), `rejouer` refuse en
+**3**. `--aide` et `--help` sortent **0** sur les quatre sous-commandes (**8/8**), sans trace
+Python sur les chemins d'erreur. **20/20 cas**, **30 tests** produit, le tableau est écrit dans
+`--aide` et dans la notice. [`fiche`](../../reports/rapport-cli-robuste.md) ·
+[`JSON`](../../reports/cli-robuste.json).
+
+### T6 — le bilan exploitable : cinq briques liées, trois limites nommées
+
+Le produit est désormais **installable** (`pip install -e .`, **8** tests, contrôle négatif
+**127**), **rejoué** (quickstart **3/3**, JSON v2 **5 899** octets, erreurs 3/4/1), **lisible**
+(**2 139** objets, **8** rôles, v1 lue), **mesuré** (10 000 mots **4,01 s**) et **robuste**
+(CLI **20/20**). Trois limites restent : le **clone public** perd `tools/structures`
+(attachement **88,70 %** au lieu de **99,58 %**), la croissance est **O(k²)** (α = **1,55**), et
+le **gold de S** (**61** phrases, **144** rôles) est écrit par les mêmes règles : **144/144**
+n'est pas un or humain indépendant. **La passe complète n'est pas relancée** : **85** portes lues
+(**81/4**), `sessions` réparée, ciblage **9/9**, **86e porte** `porte-banc-performance` verte
+seule. Restent **U1** (les deux O(k²)), **U2** (la roue), **U3** (`--profils`), **J4** (l'or de
+rôles), les **26 signatures** de Panini et la **décision humaine** sur `--tagger auto`.
+[`fiche`](../../reports/rapport-bilan-exploitable.md) ·
+[`JSON`](../../reports/rapport-bilan-exploitable.json).
 <!-- /notes -->

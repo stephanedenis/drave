@@ -2258,3 +2258,118 @@ M  tools/verifier_faq.py
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS\"", "description": "Commit T5 changes"}`
+
+  ```
+[stderr]
+  ✅ index : aucun fait stagé sans état
+[still running after 60000ms; moved to background job bash-106]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-106", "wait": true, "timeout_ms": 300000}`
+
+  ```
+[s/v7 9a291c8b] T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS
+ 32 files changed, 3446 insertions(+), 100 deletions(-)
+ create mode 100644 journal/sessions/session-faf940b2-b9f9-4948-abe4-6aee0d73595c/digest.md
+ create mode 100644 journal/sessions/session-faf940b2-b9f9-4948-abe4-6aee0d73595c/rapport.md
+ create mode 100644 reports/cli-robuste.json
+ create mode 100644 reports/rapport-cli-robuste.md
+ create mode 100755 tools/banc_cli_robuste.py
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | sed -n '1,80p'; echo ====; git status --short | sed -n '1,40p'", "description": "Inspect commit contents and status"}`
+
+  ```
+9a291c8b T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS
+ docs/pilotage/en-cours.md                          |    8 +-
+ docs/pilotage/roadmap.md                           |    2 +-
+ docs/produit/README.md                             |   40 +-
+ docs/produit/demarrage.md                          |   19 +-
+ journal/2026-11-15/README.md                       |    7 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    5 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    2 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   14 +
+ .../rapport.md                                     |    8 +-
+ .../digest.md                                      |  102 +
+ .
+… [1407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -12 journal/2026-11-15/README.md; grep -n \"T5\" journal/2026-11-15/README.md | tail -3; git log --oneline -2", "description": "Check day journal includes T5"}`
+
+  ```
+### T3 — le démarrage en 5 minutes : rejoué sur un clone public
+
+Le quickstart [`docs/produit/demarrage.md`](../../docs/produit/demarrage.md) part d'un clone
+public neuf, installe dans `.venv` et lance trois commandes ; **3/3** sortent **0**, le JSON
+fait **5 899 octets** en schéma **v2**, `--tagger` sans clé sort **4**, `auto` sort **0**, et
+les trois erreurs sortent **3 / 4 / 1**. Le contrôle négatif « débutant sans le dépôt » passe,
+mais découvre que `tools/structures` (URL locale dans `.gitmodules`) manque à un clone public :
+`analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 %** / **88,70 %**
+au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme
+l'écart ; la correction du sous-module reste à faire.
+[`fiche`](../../reports/rapport-quickstart.md) · [`JSON`](../../reports/quickstart.json).
+<!-- /notes -->
+9a291c8b T5 — LA CLI ROBUSTE : --DUREE (4,7–5,9 MS), CODES 0/3/4/5 (2 → 5, FICHIER 1 → 4/5), AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS
+7e195ee6 T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; python3 tools/verifie_en_cours.py; python3 tools/verifie_journal.py 2>&1 | tail -4; python3 tools/taille_documents.py 2>&1 | grep -E \"T0 max|roadmap.md :\"", "description": "Post- … [25 caractères tronqués]`
+
+  ```
+revue de documentation · 764 fiche(s) · 859 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1627 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+  journal · 47 jour(s) · 221 session(s) · 2676 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  T0 max : 3997 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh 2>&1 | tail -4; python3 tools/verifier_schemas.py 2>&1 | tail -3", "description": "Post-commit tables/schemas checks"}`
+
+  ```
+✅ 1841 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4672 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-15)
+  schémas · 465 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ```
+
+### 🤖 Assistant
+
+T5 est livré, mesuré, testé et committé.
+
+## Ce qui a été fait
+
+1. **`--duree`** — ajouté à `analyser` pour `--json` et `--jsonl` : `cout.duree_s` (4,7–5,9 ms sur les phrases de test). Absent par défaut, donc le déterminisme de `--json` / `rejouer` est conservé. La durée est le **seul** ajout (texte et étiquettes identiques).
+
+2. **Codes de sortie** — contrat passé à **0 succès / 3 refus / 4 clé ou dépendance / 5 usage / 1 autre erreur** :
+   - `2` → `5` pour tous les usages (`argparse`, langue inconnue, options exclusives) ;
+   - `--fichier` inexistant → **4** (`dépendance absente : fichier introuvable`) ;
+   - `--fichier` sur un répertoire → **5** (`erreur d'usage : un répertoire n'est pas un fichier`) ;
+   - refus de `rejouer` → **3** au lieu de 1 ;
+   - tableau écrit dans `docs/produit/README.md` **et** dans `--aide`.
+
+3. **`--aide` / `--help`** — les 8 combinaisons sur les 4 sous-commandes sortent **0** et affichent leur usage.
+
+4. **Fixtures** — `reports/rapport-cli-robuste.md`, `reports/cli-robuste.json`, banc reproductible `tools/banc_cli_robuste.py` : **20/20 cas**. Tests ajoutés dans `tools/tests/test_produit.py` (durée JSON/JSONL, tableau, aide/help, fichier inexistant, répertoire) ; les attentes des autres tests CLI ont été alignées sur le nouveau code 5.
+
+## Vérifications
+
+- `python3 tools/tests/test_produit.py` → **30 tests OK**
+- `python3 tools/banc_cli_robuste.py` → **20/20 cas**
+- `bash tools/porte-produit.sh` → **✅ porte produit verte** (autotest 183/183)
+- `revue_documentation.py`, `porte-tableaux.sh`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py`, `taille_documents.py` → verts
+- Commit : **`9a291c8b`** — `T5 — LA CLI ROBUSTE : --DUREE …, CODES 0/3/4/5 …, AIDE 8/8, --FICHIER SANS TRACE ; 20/20 CAS, 30 TESTS`
+
