@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (13)
+## Commits du jour (14)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -21,10 +21,15 @@
 | 14:43 | `a1c45477` | ÉTAT — T0 TENU (LES LIGNES R ET N RACCOURCIES) | `en-cours.md`, `README.md`, `memoire.md` (+4) |
 | 14:49 | `75dc9259` | ÉTAT — T0 VERT | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 14:52 | `b8248b2d` | ÉTAT — T0 VERT (LA LIGNE W5 RACCOURCIE) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 22:31 | `7d114559` | T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ | `.gitignore`, `README.md`, `en-cours.md` (+20) |
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 365.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 366.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+
+## Mesures et rapports touchés
+
+- [reports/rapport-quickstart.md](../../reports/rapport-quickstart.md)
 
 <!-- notes -->
 ### D1 — les exemples du tagger et de la base réelle

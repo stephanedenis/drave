@@ -159,7 +159,15 @@ posé sur le même commit. [`rapport`](../../reports/rapport-cloture-chantier.md
 **Prochaine mesure** : **B13 — trancher `g017`**, T132/T133 et le
 gold B13 ; **E2** ([fiche](../../reports/rapport-tagger-erreurs.md)).
 
-**La vue d'ensemble des chantiers** — huit chantiers (A, B, N, R, **S**, **L**, **D**, B13), leurs relations, leurs chemins critiques et les tensions à trancher — est dans [`chantiers.md`](chantiers.md) ; la carte est [`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; le **plan de travail multi-sessions** (qui fait quoi, où, à quelle cadence) est dans [`plan-travail.md`](plan-travail.md). Les demandes des 48 h y sont reliées à ce qu'elles ont déplacé.
+**T4 — la performance (15/11).** 10 000 mots : **4,01 s**, **2 493 mots/s**, **126 Mio**,
+**14,8 Mo** JSON ; 100 phrases **1,10 ms** ; `--tagger` **1,17 s/phrase**.
+**Contrôle de linéarité négatif** : **α = 1,55**, **R² 0,99995** ;
+`_groupes_partition`/`_cible_proche` sont **O(k²)**. [Fiche](../../reports/rapport-performance.md) ·
+[JSON](../../reports/performance.json). Prochaine action : **borner les boucles**.
+
+**La vue d'ensemble** est dans [`chantiers.md`](chantiers.md) ; carte,
+[`chantiers-vision.svg`](../schemas/chantiers-vision.svg) ; plan,
+[`plan-travail.md`](plan-travail.md).
 
 ## L'ordre du jour (carpe diem)
 

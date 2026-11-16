@@ -34,7 +34,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 365.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 366.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
@@ -127,4 +127,27 @@ permutation des cinq rôles **0/18**, permutation de tous **0,4028** global, rô
 **positif sur la séparation, négatif sur le produit** — la segmentation et le choix du cadre
 pèsent plus que la préposition. [`fiche`](../../reports/rapport-restitution-v3.md) ·
 [`JSON`](../../reports/pensee-restitution-v3.json).
+
+### T4 — la performance : 10 000 mots en 4,0 s, et le contrôle de linéarité qui échoue
+
+Le banc [`tools/banc_performance.py`](../../tools/banc_performance.py) mesure `analyser` sur un
+préfixe exact de **10 000 mots** du corpus français (Alice, 57 588 caractères, 814 phrases) :
+**4,012 s** pour la fonction, **4,965 s** pour le CLI `--json` (0,672 s de sérialisation),
+**2 493 mots/s**, **128 972 Ko** de pic RSS, **14 795 890 octets** de JSON,
+**54 522 étiquettes**, **2 726 syntagmes**. Sur **100 phrases courtes** : **1,10 ms/appel**
+pour la fonction, **1,18 ms** de coût fixe, **191,6 ms** pour un CLI par phrase, **0,369 s**
+pour les 100 en un `--jsonl` (×52,6). Avec `--tagger` et un cache froid : **110,2 s** pour
+**92 appels**, **14 677 tokens**, **109,1 s** de réseau, soit **1,17 s/phrase** et **×299** le
+lot heuristique ; l'extrapolation aux 10 000 mots donne **797 appels**, **236 215 tokens** et
+**~954 s**.
+
+Le **contrôle négatif de linéarité échoue** : sur un bloc de 247 mots répété jusqu'à 9 880
+mots (le nombre de syntagmes croît de 124 à 4 960), les rapports de doublement passent de
+**2,29** à **3,72**, la pente log-log vaut **α = 1,55**, et le quadratique explique
+**R² 0,99995** contre **0,957** pour le linéaire. Le contrôle de l'instrument retrouve bien
+**α = 1,00** (boucle linéaire) et **α = 2,00** (boucle quadratique) : ce n'est pas un artefact
+d'ajustement. Le profil du bloc ×16 désigne `_groupes_partition` (toutes les paires de
+syntagmes, O(k²)) et `_cible_proche` (tri de tous les GV par segment) ; le nombre de
+**syntagmes**, pas de mots, pilote le temps. [`fiche`](../../reports/rapport-performance.md) ·
+[`JSON`](../../reports/performance.json) · [`profil`](../../reports/performance-profil.json).
 <!-- /notes -->

@@ -1,0 +1,172 @@
+{
+ "schema": "drave.performance.profil",
+ "version": 1,
+ "date": "2026-11-15",
+ "fichier": "work/banc-performance/bloc-x16.txt",
+ "mots": 3952,
+ "duree_s": 48.589515601983294,
+ "etiquettes": 22527,
+ "syntagmes": 1984,
+ "top": [
+  {
+   "fonction": "analyser",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 1561,
+   "appels": 1,
+   "temps_propre_s": 1.218,
+   "temps_cumule_s": 48.588
+  },
+  {
+   "fonction": "_cible_proche",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 1273,
+   "appels": 1040,
+   "temps_propre_s": 1.295,
+   "temps_cumule_s": 14.474
+  },
+  {
+   "fonction": "_expliciter_partition",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 2542,
+   "appels": 1,
+   "temps_propre_s": 0.076,
+   "temps_cumule_s": 14.33
+  },
+  {
+   "fonction": "_est_adverbe_seul",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 516,
+   "appels": 768048,
+   "temps_propre_s": 5.238,
+   "temps_cumule_s": 11.606
+  },
+  {
+   "fonction": "_groupes_partition",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 2518,
+   "appels": 1,
+   "temps_propre_s": 5.727,
+   "temps_cumule_s": 11.162
+  },
+  {
+   "fonction": "_sujet_hors_gv",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 950,
+   "appels": 1,
+   "temps_propre_s": 0.055,
+   "temps_cumule_s": 5.964
+  },
+  {
+   "fonction": "<built-in method builtins.any>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 1553,
+   "temps_propre_s": 1.161,
+   "temps_cumule_s": 5.592
+  },
+  {
+   "fonction": "<method 'get' of 'dict' objects>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 3422434,
+   "temps_propre_s": 4.832,
+   "temps_cumule_s": 4.832
+  },
+  {
+   "fonction": "<genexpr>",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 979,
+   "appels": 895968,
+   "temps_propre_s": 2.762,
+   "temps_cumule_s": 4.376
+  },
+  {
+   "fonction": "<built-in method builtins.sorted>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 3955,
+   "temps_propre_s": 2.032,
+   "temps_cumule_s": 4.3
+  },
+  {
+   "fonction": "_verbes_proches",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 1308,
+   "appels": 1984,
+   "temps_propre_s": 0.033,
+   "temps_cumule_s": 3.17
+  },
+  {
+   "fonction": "deepcopy",
+   "fichier": "copy.py",
+   "ligne": 119,
+   "appels": 171610,
+   "temps_propre_s": 1.308,
+   "temps_cumule_s": 3.019
+  },
+  {
+   "fonction": "<built-in method builtins.max>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 1967997,
+   "temps_propre_s": 2.851,
+   "temps_cumule_s": 3.012
+  },
+  {
+   "fonction": "_deepcopy_list",
+   "fichier": "copy.py",
+   "ligne": 192,
+   "appels": 2672,
+   "temps_propre_s": 0.056,
+   "temps_cumule_s": 2.972
+  },
+  {
+   "fonction": "_normaliser",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 179,
+   "appels": 437713,
+   "temps_propre_s": 1.731,
+   "temps_cumule_s": 2.94
+  },
+  {
+   "fonction": "<built-in method builtins.min>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 1968307,
+   "temps_propre_s": 2.726,
+   "temps_cumule_s": 2.733
+  },
+  {
+   "fonction": "_deepcopy_dict",
+   "fichier": "copy.py",
+   "ligne": 218,
+   "appels": 30716,
+   "temps_propre_s": 0.399,
+   "temps_cumule_s": 2.578
+  },
+  {
+   "fonction": "_est_verbe",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 536,
+   "appels": 14944,
+   "temps_propre_s": 0.895,
+   "temps_cumule_s": 2.243
+  },
+  {
+   "fonction": "<built-in method builtins.len>",
+   "fichier": "~",
+   "ligne": 0,
+   "appels": 1263044,
+   "temps_propre_s": 1.608,
+   "temps_cumule_s": 1.609
+  },
+  {
+   "fonction": "ecart",
+   "fichier": "bloc_linguistique.py",
+   "ligne": 1315,
+   "appels": 935680,
+   "temps_propre_s": 1.433,
+   "temps_cumule_s": 1.433
+  }
+ ]
+}

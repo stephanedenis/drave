@@ -3565,3 +3565,128 @@ ENCOURS-0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -m \"T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ\" -m \"Clone public neuf (7f1519f, Python 3.13.16 … [782 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 7d114559] T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ
+ 23 files changed, 4770 insertions(+), 40 deletions(-)
+ create mode 100644 docs/produit/demarrage.md
+ create mode 100644 journal/sessions/session-698e0dda-697b-48fd-9006-61bed3c300e3/digest.md
+ create mode 100644 journal/sessions/session-698e0dda-697b-48fd-9006-61bed3c300e3/rapport.md
+ create mode 100644 reports/quickstart.json
+ create mode 100644 reports/rapport-quickstart.md
+COMMIT_EXIT=0
+7d114559 T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ
+7f1519f7 T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline 7d114559 | head -40; echo ===; git status --short | head -30", "description": "Inspect commit contents"}`
+
+  ```
+7d114559 T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ
+ .gitignore                                         |    1 +
+ docs/README.md                                     |    7 +-
+ docs/pilotage/en-cours.md                          |   17 +-
+ docs/produit/README.md                             |    4 +
+ docs/produit/demarrage.md                          |  250 ++
+ journal/2026-11-15/README.md                       |   19 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    9 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   36 +
+ .../rapport.md                   
+… [875 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py > /tmp/revue-post.txt 2>&1; c=$?; echo \"REVUE_EXIT=$c\"; cat /tmp/revue-post.txt; echo ===; python3 tools/taille_documents.py > /tmp/taille-post.txt 2>&1; c=$?; echo \"TAILLE_EXIT=$c\"; tail -4 / … [348 caractères tronqués]`
+
+  ```
+REVUE_EXIT=0
+  revue de documentation · 762 fiche(s) · 856 JSON · 125 doc(s) · 85 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+===
+TAILLE_EXIT=0
+  avertissements :
+     · 63 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+===
+ENCOURS_EXIT=0
+  en-cours · 1628 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+===
+JOURNAL_EXIT=0
+  journal · 47 jour(s) · 219 session(s) · 2668 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show HEAD:journal/2026-11-15/README.md | grep -n -A12 \"T3 —\" | head -20", "description": "Verify journal T3 note in commit"}`
+
+  ```
+186:### T3 — le démarrage en 5 minutes : rejoué sur un clone public
+187-
+188-Le quickstart [`docs/produit/demarrage.md`](../../docs/produit/demarrage.md) part d'un clone
+189-public neuf, installe dans `.venv` et lance trois commandes ; **3/3** sortent **0**, le JSON
+190-fait **5 899 octets** en schéma **v2**, `--tagger` sans clé sort **4**, `auto` sort **0**, et
+191-les trois erreurs sortent **3 / 4 / 1**. Le contrôle négatif « débutant sans le dépôt » passe,
+192-mais découvre que `tools/structures` (URL locale dans `.gitmodules`) manque à un clone public :
+193-`analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 %** / **88,70 %**
+194-au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme
+195-l'écart ; la correction du sous-module reste à faire.
+196-[`fiche`](../../reports/rapport-quickstart.md) · [`JSON`](../../reports/quickstart.json).
+197-<!-- /notes -->
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat --oneline HEAD | head -30; echo ===; git status --short | head -15", "description": "Final commit and status"}`
+
+  ```
+7d114559 T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ
+ .gitignore                                         |    1 +
+ docs/README.md                                     |    7 +-
+ docs/pilotage/en-cours.md                          |   17 +-
+ docs/produit/README.md                             |    4 +
+ docs/produit/demarrage.md                          |  250 ++
+ journal/2026-11-15/README.md                       |   19 +-
+ journal/2026-11-15/distribue.md                    |    2 +-
+ journal/2026-11-15/docs.md                         |    2 +-
+ journal/2026-11-15/memoire.md                      |    2 +-
+ journal/2026-11-15/mesures.md                      |    2 +-
+ journal/2026-11-15/modele.md                       |    2 +-
+ journal/2026-11-15/outils.md                       |    2 +-
+ journal/2026-11-15/portes.md                       |    9 +-
+ journal/README.md                                  |    5 +-
+ journal/sessions/MANIFEST.md                       |    7 +-
+ .../e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md |   36 +
+ .../rapport.md                   
+… [875 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+**T3 livré et committé** — `7d114559`.
+
+## Ce qui est écrit
+
+- [`docs/produit/demarrage.md`](docs/produit/demarrage.md) : clone public, installation T1, les **trois commandes** (`--version`, `analyser`, `evaluer`), le **JSON** v2 avec consommateur Python, le **tagger optionnel** (`--tagger`, `--tagger auto`), les **trois erreurs courantes** (3 / 4 / 1), le tableau des codes 0–4.
+- Liens ajoutés dans [`docs/produit/README.md`](docs/produit/README.md) (en tête + § 9) et [`docs/README.md`](docs/README.md) (table Produit).
+- `.venv/` ajouté au [`.gitignore`](.gitignore).
+- Fiche [`reports/rapport-quickstart.md`](reports/rapport-quickstart.md) + [`reports/quickstart.json`](reports/quickstart.json).
+
+## Chaque commande rejouée
+
+Clone public neuf (`7f1519f`, Python 3.13.16, pip 26.2.1, sans clé) : clone + venv + install = **13,64 s**. Résultats : `--version` **0**, `analyser` **0**, `evaluer` **0** ; JSON **5 899 octets**, 20 étiquettes, schéma **v2** ; `--tagger` sans clé **4**, `--tagger auto` **0**, avec clé **0** (130 tokens, cache chaud 0) ; erreurs texte vide **3**, fichier absent **1**, `--langue de` **2**.
+
+## Contrôle négatif — et ce qu'il a trouvé
+
+Un débutant sans le dépôt suit bien les 5 minutes : **3/3 commandes passent**, le JSON se consomme, les erreurs sont conformes. Mais le clone public n'a pas `tools/structures` : son URL dans `.gitmodules` est un **chemin local**, et `git submodule update` échoue (`transport 'file' not allowed`). Conséquence mesurée : `analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 % / 88,70 %** au lieu de **79,02 % / 99,58 %**. Le quickstart affiche la sortie **réelle du clone** et nomme l'écart ; la correction du sous-module reste à faire (hors T3).
+
+## Vérifications
+
+`QUICKSTART-OK`, `REVUE-0`, `TAILLE-0`, `ENCOURS-0`, `JOURNAL-0`, `porte-produit` verte, `test_produit` 24/24, `test_empaquetage` 8/8, schéma 26 cas OK.
+

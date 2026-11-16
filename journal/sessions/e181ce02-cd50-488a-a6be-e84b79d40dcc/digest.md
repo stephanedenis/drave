@@ -66349,3 +66349,66 @@ The command keeps running in the background. You will be notified when it finish
   ```
 
 - **job_output** `{"job_id": "bash-5218", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5218", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 22:42:53 EST
+2026-11-15 22:35:05 · ✔ T3 en 1109.4 s (code 0) — ✅ test -f docs/produit/demarrage.md && echo QUICKSTART-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 22:35:05 · ▶ T4 — La performance sur un texte réel (timeout 3600 s)
+1
+docs/produit/demarrage.md
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -2 | cut -c1-80; git status --porcelain docs/produit/demarrage.md reports/rapport-quickstart.md 2>/dev/null | head -2; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail -1; timeout 280 git pu … [155 caractères tronqués]`
+
+  ```
+7d114559 T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 
+7f1519f7 T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JS
+   7f1519f7..7d114559  s/v7 -> s/v7
+   7f1519f7..7d114559  master -> master
+# Démarrage en 5 minutes
+
+> **Ce que ce document est.** Le parcours le plus court pour installer **drave** et lancer
+> trois commandes. Il part d'un **clone public** et ne suppose aucun fichier du dépôt de
+> développement. Chaque commande et chaque sortie ont été **rejouées le 2026-11-15** sur un
+> clone neuf (commit **7f1519f**, Python **3.13.16**, pip **26.2.1**), sans clé DeepSeek.
+> Le relevé complet, les temps et le contrôle négatif sont dans
+> [`reports/rapport-quickstart.md`](../../reports/rapport-quickstart.md) et
+> [`reports/quickstart.json`](../../reports/quickstart.json).
+
+**Prérequis** : Python **3.10+**, `git`, un terminal. Aucun GPU, aucun modèle, aucune clé pour
+le chemin par défaut : le produit est **CPU, hors ligne et déterministe**.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; git rev-list --count origin/master..s/v7", "description": "Suivre T4", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5220]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5220", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5220", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+dim 15 nov 2026 23:08:16 EST
+2026-11-15 22:35:05 · ✔ T3 en 1109.4 s (code 0) — ✅ test -f docs/produit/demarrage.md && echo QUICKSTART-OK; ✅ python3 tools/revue_documentation.py >/dev/null 2>&1; echo REVUE-$?
+2026-11-15 22:35:05 · ▶ T4 — La performance sur un texte réel (timeout 3600 s)
+0
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls reports/rapport-performance.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Verdict T4", "timeoutMs": 1600000}`

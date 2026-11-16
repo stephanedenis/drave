@@ -9,10 +9,10 @@
 | Début | 2026-11-15 22:16 |
 | Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 146 |
-| Appels d'outils | 167 |
+| Messages | 151 |
+| Appels d'outils | 171 |
 | Fichiers touchés | 7 |
-| Commandes | 131 |
+| Commandes | 135 |
 | Sous-agents | 0 |
 | Commits | 1 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T3 (exploitable, 3/5) : **le quickstart** — écris `docs/produit/demarrage.md` (le clone, l'install T1, les 3 comma … [378 caractères tronqués]
 
-*167 appels d'outils.* Actions notables :
+*171 appels d'outils.* Actions notables :
 
 - bash — List repository root and docs/produit
 - bash — Read product and docs READMEs
@@ -41,7 +41,30 @@
 - bash — Read T1-T5 plan table in digest
 - bash — Show T tasks with acceptance
 - bash — Read T1 report and JSON
-- … et 142 autres
+- … et 146 autres
+
+**Synthèse produite :**
+
+**T3 livré et committé** — `7d114559`.
+
+\## Ce qui est écrit
+
+- [`docs/produit/demarrage.md`](docs/produit/demarrage.md) : clone public, installation T1, les **trois commandes** (`--version`, `analyser`, `evaluer`), le **JSON** v2 avec consommateur Python, le **tagger optionnel** (`--tagger`, `--tagger auto`), les **trois erreurs courantes** (3 / 4 / 1), le tableau des codes 0–4.
+- Liens ajoutés dans [`docs/produit/README.md`](docs/produit/README.md) (en tête + § 9) et [`docs/README.md`](docs/README.md) (table Produit).
+- `.venv/` ajouté au [`.gitignore`](.gitignore).
+- Fiche [`reports/rapport-quickstart.md`](reports/rapport-quickstart.md) + [`reports/quickstart.json`](reports/quickstart.json).
+
+\## Chaque commande rejouée
+
+Clone public neuf (`7f1519f`, Python 3.13.16, pip 26.2.1, sans clé) : clone + venv + install = **13,64 s**. Résultats : `--version` **0**, `analyser` **0**, `evaluer` **0** ; JSON **5 899 octets**, 20 étiquettes, schéma **v2** ; `--tagger` sans clé **4**, `--tagger auto` **0**, avec clé **0** (130 tokens, cache chaud 0) ; erreurs texte vide **3**, fichier absent **1**, `--langue de` **2**.
+
+\## Contrôle négatif — et ce qu'il a trouvé
+
+Un débutant sans le dépôt suit bien les 5 minutes : **3/3 commandes passent**, le JSON se consomme, les erreurs sont conformes. Mais le clone public n'a pas `tools/structures` : son URL dans `.gitmodules` est un **chemin local**, et `git submodule update` échoue (`transport 'file' not allowed`). Conséquence mesurée : `analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 % / 88,70 %** au lieu de **79,02 % / 99,58 %**. Le quickstart affiche la sortie **réelle du clone** et nomme l'écart ; la correction du sous-module reste à faire (hors T3).
+
+\## Vérifications
+
+`QUICKSTART-OK`, `REVUE-0`, `TAILLE-0`, `ENCOURS-0`, `JOURNAL-0`, `porte-produit` verte, `test_produit` 24/24, `test_empaquetage` 8/8, schéma 26 cas OK.
 
 ## 3. Travail accompli
 
@@ -99,7 +122,7 @@
 - **T1** Compare with fresh bytecode cache
 - **T1** Check roles vocabulary and remaining diffs
 - **T1** Check DRAVE and Python env vars
-- … et 91 autres
+- … et 95 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -207,6 +230,8 @@
 - **T1** `langue=und script=Latn source=heuristique · 10 étiquettes · unités sémantiques=1 (80.0% du texte)`
 - **T1** `BASE RÉELLE (hand + reel, 452 phrases)  POS 88.91 % · F1 79.06 % · attachement 99.46 %`
 - **T1** `chevauchement (v2) ; `rang: 1` est la vue préférée, pas une suppression.`
+- **T1** `193-`analyser` rend `objet` / `—` au lieu de `agent` / `chat`, et `evaluer` **81,88 %** / **88,70 %**`
+- **T1** `194-au lieu de **79,02 %** / **99,58 %**. Le document affiche la sortie réelle du clone et nomme`
 
 ## 5. Erreurs rencontrées
 
