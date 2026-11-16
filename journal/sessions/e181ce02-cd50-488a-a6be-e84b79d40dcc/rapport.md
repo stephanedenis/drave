@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 382.4 h |
-| Tours | 206 |
-| Messages | 4313 |
-| Appels d'outils | 3867 |
+| Durée | 383.2 h |
+| Tours | 208 |
+| Messages | 4336 |
+| Appels d'outils | 3885 |
 | Fichiers touchés | 25 |
-| Commandes | 3201 |
+| Commandes | 3217 |
 | Sous-agents | 43 |
-| Commits | 517 |
+| Commits | 518 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -68,6 +68,8 @@
 - **complete** — Autonomie du 2026-11-15 21 h 35 → 2026-11-16 08 h 00 : rendre le produit drave EXPLOITABLE — l'empaquetage (pyproject.toml, console script `drave`, `pip install -e .` vérifié), le démarrage en 5 minutes (quickstart), la performance mesurée sur un texte réel (temps, mémoire, débit), la robustesse de 
 … [245 caractères tronqués]
 - **create** — Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, sel
+… [263 caractères tronqués]
+- **complete** — Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, sel
 … [263 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -483,6 +485,10 @@
 **Tour 205** — que manque-t-il pour que le modèle drave natif soit exploitable
 
 **Tour 206** — go, en automie jusqu'à 17h
+
+**Tour 207** — <goal_round> Objective: "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de c … [732 caractères tronqués]
+
+**Tour 208** — maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus?
 
 ## 2. Déroulé, étape par étape
 
@@ -11067,7 +11073,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*130 appels d'outils.* Actions notables :
+*131 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,11 +11089,103 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 105 autres
+- … et 106 autres
 
 **Synthèse produite :**
 
-⏵ Le diagnostic se précise : les R13 ont déjà mesuré le BPE (gain non concluant). J'écris la synthèse honnête
+⏵ 21 commits, tout vert à 15 h 10 — voici le bilan du jour natif (le diagnostic est tranché)
+
+\## La réponse à votre question
+
+**« Que manque-t-il pour que le modèle drave natif soit exploitable ? »** — Quatre choses, mesurées aujourd'hui :
+
+| levier | le verdict | la preuve |
+|---|---|---|
+| **L'échelle** | elle **achète le vocabulaire, pas la composition** | 11 M → 21 M → 34 M : mots valides **0,247 → 0,494 → 0,870**, mais répétition **1 → 6 → 15**, GV **1,9 → 2,65 → 6,9**, ciment **0,14 → 0,28 → 0,34** (le hasard : 0,79) |
+| **Le tokenizer** | **pas le levier** | les R13 : +0,4 % en français à l'échelle, −4 % pour le 1024 ; le gain n'est pas établi |
+| **La donnée** | **1 Go est la limite** | 29,7 octets/paramètre (au-delà de Chinchilla) ; un 100–150 M demande **3–6 Go** |
+| **Le runtime** | **résolu** | le DRVM s'infère **en numpy, sans torch** : **4/4 de parité** avec torch, ~0,6 s/octet |
+
+**Et le plus dur** : le `ppl_val` **2,40** annoncé par le checkpoint **ne se reproduit pas** — le même `val.txt` donne **17,3 à 22,6** selon le morceau, le gold linguistique **18,55**. Le corpus n'est pas épinglé : c'est la première chose à corriger.
+
+\## Les 10 livrables
+
+1. **Le banc de génération** (20 prompts, 3 réglages, le contrôle aléatoire 0,34) — `tools/banc_generation.py`.
+2. **Le banc de grammaticalité** (notre analyseur juge le modèle : GV, ciment) — `tools/banc_grammaticalite.py`.
+3. **L'échelle** (3 checkpoints, la même mesure).
+4. **La synthèse** [`rapport-natif-exploitable.md`](reports/rapport-natif-exploitable.md) (les 4 paliers, les coûts).
+5. **`drave generer`** (torch **et** numpy, les refus propres).
+6. **La carte du modèle** [`fiche-modele-natif.md`](reports/fiche-modele-natif.md) (identité, données, limites, usage prévu, licence).
+7. **Le plan** [`natif-plan.md`](docs/pilotage/natif-plan.md) (4 paliers, critères falsifiables, risques).
+8. **L'inférence numpy** [`rapport-natif-numpy.md`](reports/rapport-natif-numpy.md) (4/4, sans torch).
+9. **L'alerte de reproductibilité** [`rapport-native-reproductibilite.md`](reports/rapport-native-reproductibilite.md) (le 2,40 invérifiable).
+10. **Le bilan** [`rapport-bilan-natif.md`](reports/rapport-bilan-natif.md).
+
+\## L'état
+
+**21 commits** depuis 8 h, `master` = `s/v7` **poussés** (0 divergence) ; **183/183** d'autotest ; **porte produit verte** ; la **passe complète** : **86 portes, 82 vertes**, 2 rouges structurelles (`indice`, `melange`) — `bloc-code` était **transitoire** (verte en isolation), `sessio
+… [811 caractères tronqués]
+
+### Tour 207 — <goal_round> Objective: "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de … [1012 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Rassembler les preuves
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Objectif clôturé — le diagnostic du natif est tranché, les dix livrables sont dans le dépôt
+
+\## Le résultat
+
+**Le diagnostic est tranché.** Le modèle natif **modélise** (il a appris le vocabulaire et la structure) mais **ne compose pas** ; et le chiffre qui le faisait passer pour bon (**PPL 2,40**) **ne se reproduit pas** avec le corpus actuel.
+
+**Les chiffres, mesurés :**
+- **La génération** (20 prompts, 3 réglages, contrôle aléatoire) : **0,87** de mots valides en greedy contre **0,34** au hasard — mais une **répétition de 15** (le trigramme) et **36 octets/s**.
+- **L'échelle** (11 M → 21 M → 34 M) : les mots valides **0,247 → 0,494 → 0,870**, la répétition **1 → 6 → 15**, les GV **1,9 → 2,65 → 6,9**, le ciment **0,14 → 0,28 → 0,34** (le hasard : 0,79). **L'échelle achète le vocabulaire, pas la composition.**
+- **Le levier du tokenizer** : mesuré par les R13 — **+0,4 %** en français à l'échelle, −4 % pour le 1024 : **ce n'est pas le levier**.
+- **Le runtime** : **résolu** — le DRVM s'infère **en numpy, sans torch**, avec **4/4 de parité** exacte avec torch (~0,6 s/octet).
+- **La reproductibilité** : le `ppl_val` **2,40** ne se retrouve pas (17,3 à 22,6 sur le même `val.txt`, 18,55 sur le gold) — **le corpus n'est pas épinglé**.
+
+\## Ce qui a été livré et où
+
+| livrable | fichier |
+|---|---|
+| le banc de génération | [`tools/banc_generation.py`](tools/banc_generation.py) + [`rapport-banc-generation.md`](reports/rapport-banc-generation.md) |
+| le banc de grammaticalité (notre analyseur juge le modèle) | [`tools/banc_grammaticalite.py`](tools/banc_grammaticalite.py) + son JSON |
+| la synthèse (les 4 leviers, les 4 paliers) | [`rapport-natif-exploitable.md`](reports/rapport-natif-exploitable.md) |
+| `drave generer` (torch **et** numpy) | [`tools/drave.py`](tools/drave.py) |
+| la carte du modèle | [`fiche-modele-natif.md`](reports/fiche-modele-natif.md) |
+| le plan | [`docs/pilotage/natif-plan.md`](docs/pilotage/natif-plan.md) |
+| l'inférence numpy | [`tools/drvm_infere.py`](tools/drvm_infere.py) + [`rapport-natif-numpy.md`](reports/rapport-natif-numpy.md) |
+| l'alerte de reproductibilité | [`rapport-native-reproductibilite.md`](reports/rapport-native-reproductibilite.md) |
+| le bilan (10 livrables) | [`rapport-bilan-natif.md`](reports/rapport-bilan-natif.md) |
+
+\## Comment c'est vérifié
+
+`HEAD 30924b4c`, `master` = `s/v7` **poussés** (0 divergence), **21 commits** depuis 8 h ; **183/183** d'autotest ; **porte produit verte** ; la **passe complète** (86 porte
+… [915 caractères tronqués]
+
+### Tour 208 — maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de … [24 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Voir le matériel GPU/CPU
+- bash — Voir NVLink, la charge CPU, le garde GPU
+- bash — Vérifier le disque et les versions CUDA
+- bash — Installer torch CUDA en arrière-plan
+- bash — Voir le CPU
+- bash — Banc d'entraînement CPU
+- bash — Attendre l'install CUDA
+- bash — Banc d'entraînement GPU
+- bash — Mesurer la bande passante NVLink
+- bash — Banc 2 GPU en parallèle
+- bash — All-reduce et inférence GPU
+- bash — Mesurer le coût du contexte (le cache KV)
+- bash — Écrire l'étude GPU/CPU
+- bash — Committer l'étude GPU
 
 ## 3. Travail accompli
 
@@ -11209,7 +11307,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3161 autres
+- … et 3177 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11874,4 +11972,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS" 2>&1 | tail -2; git 
 - NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD" 2>&1 | tail -2;
 - NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE" 2>&1 | tail -2; git log -1 --fo
+- ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST B
 

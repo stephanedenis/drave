@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 15 h 12 HNE (le bilan à 10 livrables, la passe 1611n)**
+**Mis à jour : 2026-11-16, 16 h 05 HNE (l'étude GPU tandem NVLink vs CPU)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -98,7 +98,7 @@
 |---|---|---|
 | portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **780** / **875** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **781** / **875** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **127** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 

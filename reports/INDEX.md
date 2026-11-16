@@ -1,6 +1,6 @@
 # Index des fiches de reports/
 
-> **Généré** par `tools/index_reports.py` — **777 fiches**. Les fichiers
+> **Généré** par `tools/index_reports.py` — **778 fiches**. Les fichiers
 > d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
 > la page d'état, elle, compte tous les `.md` de `reports/`.
 
@@ -217,6 +217,7 @@
 | [rapport-gpt-oss-perplexite.md](rapport-gpt-oss-perplexite.md) | Perplexité de gpt-oss : deux bugs réels, une prémisse fausse |
 | [rapport-gpu-scores.md](rapport-gpu-scores.md) | Noyau GPU de scores d'attention — le premier des trois du top-k |
 | [rapport-gpu-tandem-nvlink.md](rapport-gpu-tandem-nvlink.md) | Le tandem GPU (2 × Quadro RTX 5000, NVLink) : ce qu'il fait, ce qu'il pourrait faire |
+| [rapport-gpu-tandem.md](rapport-gpu-tandem.md) | Les deux GPU en tandem NVLink contre le CPU — ce qui se décharge, et à quel prix |
 | [rapport-gpu-topk-selection.md](rapport-gpu-topk-selection.md) | Rapport — la sélection top-k et la somme sur GPU (noyaux 2 et 3 du plan) |
 | [rapport-gpu-topk-tout.md](rapport-gpu-topk-tout.md) | Le top-k GPU : le noyau fusionné gagne jusqu'à ~64 k clés, la chaîne séparée au-delà |
 | [rapport-granularite-flux.md](rapport-granularite-flux.md) | Granularité des listes et volume des flux entre unités — mesuré |

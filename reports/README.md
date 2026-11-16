@@ -15,9 +15,10 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-native-reproductibilite.md`](rapport-native-reproductibilite.md) | **N4** — le 2,40 n'est pas reproductible |
+| [`rapport-gpu-tandem.md`](rapport-gpu-tandem.md) | **N** — les 2 GPU NVLink vs CPU |
+| [`rapport-native-reproductibilite.md`](rapport-native-reproductibilite.md) | **N4** — le 2,40 invérifiable |
 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) | **N4** — l'inférence numpy |
-| [`rapport-bilan-natif.md`](rapport-bilan-natif.md) | **Bilan** — le natif tranché |
+| [`rapport-bilan-natif.md`](rapport-bilan-natif.md) | **Bilan** — le natif |
 | [`fiche-modele-natif.md`](fiche-modele-natif.md) | **N4** — la carte du modèle : identité, données, mesures, limites, usage |
 | [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif |
 | [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase |

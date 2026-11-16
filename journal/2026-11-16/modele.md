@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (12)
+## Commits du jour (13)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -20,6 +20,7 @@
 | 14:53 | `ac19793a` | NATIF — LE PLAN MIS À JOUR : ÉPINGLER LE CORPUS AVANT D'ENTRAÎNER (LE 2,40 N'EST PAS REPRODUCTIBLE) ; C'EST LE PREMIER PAS DU PALIER 1 | `en-cours.md`, `natif-plan.md`, `README.md` (+5) |
 | 15:00 | `86fde794` | ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 15:04 | `956bdd5b` | NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD | `en-cours.md`, `README.md`, `distribue.md` (+12) |
+| 15:07 | `30924b4c` | NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE | `en-cours.md`, `README.md`, `modele.md` (+6) |
 
 ## Chiffres du jour
 
@@ -29,7 +30,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 382.4 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 383.2 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

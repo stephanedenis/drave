@@ -69735,3 +69735,315 @@ lun 16 nov 2026 15:06:57 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-bilan-natif.md'); t=p.read_text()\nt=t.replace(\"\"\"| 8 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) + [`drvm_infere.py`](../tools/drvm_infere.py) | **le nati … [1996 caractères tronqués]`
+
+  ```
+bilan à 10 livrables
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+[s/v7 30924b4c] NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE
+ 9 files changed, 43 insertions(+), 15 deletions(-)
+30924b4c NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME
+   956bdd5b..30924b4c  s/v7 -> s/v7
+   956bdd5b..30924b4c  master -> master
+lun 16 nov 2026 15:10:18 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; for t in \"python3 tools/revue_documentation.py\" \"python3 tools/taille_documents.py\" \"bash tools/porte-tableaux.sh\" \"python3 tools/verifie_en_cours. … [328 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 15:10:29 EST
+HEAD 30924b4c
+0
+python3 tools/revue_documentation.py   EXIT=0
+python3 tools/taille_documents.py      EXIT=0
+bash tools/porte-tableaux.sh           EXIT=0
+python3 tools/verifie_en_cours.py      EXIT=0
+python3 tools/index_reports.py --verifier EXIT=0
+21
+74
+  ```
+
+### 🤖 Assistant
+
+⏵ 21 commits, tout vert à 15 h 10 — voici le bilan du jour natif (le diagnostic est tranché)
+
+## La réponse à votre question
+
+**« Que manque-t-il pour que le modèle drave natif soit exploitable ? »** — Quatre choses, mesurées aujourd'hui :
+
+| levier | le verdict | la preuve |
+|---|---|---|
+| **L'échelle** | elle **achète le vocabulaire, pas la composition** | 11 M → 21 M → 34 M : mots valides **0,247 → 0,494 → 0,870**, mais répétition **1 → 6 → 15**, GV **1,9 → 2,65 → 6,9**, ciment **0,14 → 0,28 → 0,34** (le hasard : 0,79) |
+| **Le tokenizer** | **pas le levier** | les R13 : +0,4 % en français à l'échelle, −4 % pour le 1024 ; le gain n'est pas établi |
+| **La donnée** | **1 Go est la limite** | 29,7 octets/paramètre (au-delà de Chinchilla) ; un 100–150 M demande **3–6 Go** |
+| **Le runtime** | **résolu** | le DRVM s'infère **en numpy, sans torch** : **4/4 de parité** avec torch, ~0,6 s/octet |
+
+**Et le plus dur** : le `ppl_val` **2,40** annoncé par le checkpoint **ne se reproduit pas** — le même `val.txt` donne **17,3 à 22,6** selon le morceau, le gold linguistique **18,55**. Le corpus n'est pas épinglé : c'est la première chose à corriger.
+
+## Les 10 livrables
+
+1. **Le banc de génération** (20 prompts, 3 réglages, le contrôle aléatoire 0,34) — `tools/banc_generation.py`.
+2. **Le banc de grammaticalité** (notre analyseur juge le modèle : GV, ciment) — `tools/banc_grammaticalite.py`.
+3. **L'échelle** (3 checkpoints, la même mesure).
+4. **La synthèse** [`rapport-natif-exploitable.md`](reports/rapport-natif-exploitable.md) (les 4 paliers, les coûts).
+5. **`drave generer`** (torch **et** numpy, les refus propres).
+6. **La carte du modèle** [`fiche-modele-natif.md`](reports/fiche-modele-natif.md) (identité, données, limites, usage prévu, licence).
+7. **Le plan** [`natif-plan.md`](docs/pilotage/natif-plan.md) (4 paliers, critères falsifiables, risques).
+8. **L'inférence numpy** [`rapport-natif-numpy.md`](reports/rapport-natif-numpy.md) (4/4, sans torch).
+9. **L'alerte de reproductibilité** [`rapport-native-reproductibilite.md`](reports/rapport-native-reproductibilite.md) (le 2,40 invérifiable).
+10. **Le bilan** [`rapport-bilan-natif.md`](reports/rapport-bilan-natif.md).
+
+## L'état
+
+**21 commits** depuis 8 h, `master` = `s/v7` **poussés** (0 divergence) ; **183/183** d'autotest ; **porte produit verte** ; la **passe complète** : **86 portes, 82 vertes**, 2 rouges structurelles (`indice`, `melange`) — `bloc-code` était **transitoire** (verte en isolation), `sessions` rafraîchie ; tous les budgets de doc verts.
+
+## Ce qui vous revient
+
+1. **La donnée** (le territoire D, que je n'ai pas touché) : **épingler** le corpus (le sha256 du train/val, la version du nettoyage) — c'est le **premier pas** du palier 1, avant tout entraînement.
+2. **Le palier 1** (100–150 M sur 3–6 Go) : il demande votre feu vert (le temps CPU ~2–4 jours) et la collecte des données.
+3. **La décision du tagger `auto`** (toujours en attente depuis hier).
+
+Le natif est un **prototype de recherche complet** — l'entraînement, la génération, le service, le conteneur, l'inférence numpy existent ; **ce qui manque est la qualité**, et elle se paie en échelle + données + alignement, pas en jours. Je m'arrête à 15 h 10, le diagnostic étant tranché ; dites-moi si vous voulez que je prépare le palier 1.
+
+
+## Tour 207
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée)."
+Round: 1/300
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log -1 --format='HEAD %h'; git rev-list --count origin/master..s/v7; ls tools/banc_generation.py tools/banc_grammaticalite.py tools/banc_perplexite_gold.py tools/drvm_infere.py reports/rapport-banc-generation.md reports/rap … [426 caractères tronqués]`
+
+  ```
+lun 16 nov 2026 15:11:39 EST
+HEAD 30924b4c
+0
+11
+banc: {'greedy': (0.8703, 15), 'top40_0.8': (0.4905, 1), 'top20_0.5': (0.735, 1)}
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-b93bd2c5-000d-4ba5-8cd4-ed1bec64e214","revision":1,"objective":"Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée).","phase":"active","roundsStarted":1,"maxGoalRounds":300},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-b93bd2c5-000d-4ba5-8cd4-ed1bec64e214", "revision": 1}`
+
+> **Objectif** (complete) : Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée).
+
+
+  ```
+{"goal":{"id":"goal-b93bd2c5-000d-4ba5-8cd4-ed1bec64e214","revision":2,"objective":"Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée).","phase":"complete","roundsStarted":1,"maxGoalRounds":300},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de cohérence, le chemin torch-free), chaque vague avec un résultat mesuré, un contrôle négatif, une fiche/JSON, l'état et un commit vérifié ; ne pas toucher S/D/N2 (sauf exception documentée)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Objectif clôturé — le diagnostic du natif est tranché, les dix livrables sont dans le dépôt
+
+## Le résultat
+
+**Le diagnostic est tranché.** Le modèle natif **modélise** (il a appris le vocabulaire et la structure) mais **ne compose pas** ; et le chiffre qui le faisait passer pour bon (**PPL 2,40**) **ne se reproduit pas** avec le corpus actuel.
+
+**Les chiffres, mesurés :**
+- **La génération** (20 prompts, 3 réglages, contrôle aléatoire) : **0,87** de mots valides en greedy contre **0,34** au hasard — mais une **répétition de 15** (le trigramme) et **36 octets/s**.
+- **L'échelle** (11 M → 21 M → 34 M) : les mots valides **0,247 → 0,494 → 0,870**, la répétition **1 → 6 → 15**, les GV **1,9 → 2,65 → 6,9**, le ciment **0,14 → 0,28 → 0,34** (le hasard : 0,79). **L'échelle achète le vocabulaire, pas la composition.**
+- **Le levier du tokenizer** : mesuré par les R13 — **+0,4 %** en français à l'échelle, −4 % pour le 1024 : **ce n'est pas le levier**.
+- **Le runtime** : **résolu** — le DRVM s'infère **en numpy, sans torch**, avec **4/4 de parité** exacte avec torch (~0,6 s/octet).
+- **La reproductibilité** : le `ppl_val` **2,40** ne se retrouve pas (17,3 à 22,6 sur le même `val.txt`, 18,55 sur le gold) — **le corpus n'est pas épinglé**.
+
+## Ce qui a été livré et où
+
+| livrable | fichier |
+|---|---|
+| le banc de génération | [`tools/banc_generation.py`](tools/banc_generation.py) + [`rapport-banc-generation.md`](reports/rapport-banc-generation.md) |
+| le banc de grammaticalité (notre analyseur juge le modèle) | [`tools/banc_grammaticalite.py`](tools/banc_grammaticalite.py) + son JSON |
+| la synthèse (les 4 leviers, les 4 paliers) | [`rapport-natif-exploitable.md`](reports/rapport-natif-exploitable.md) |
+| `drave generer` (torch **et** numpy) | [`tools/drave.py`](tools/drave.py) |
+| la carte du modèle | [`fiche-modele-natif.md`](reports/fiche-modele-natif.md) |
+| le plan | [`docs/pilotage/natif-plan.md`](docs/pilotage/natif-plan.md) |
+| l'inférence numpy | [`tools/drvm_infere.py`](tools/drvm_infere.py) + [`rapport-natif-numpy.md`](reports/rapport-natif-numpy.md) |
+| l'alerte de reproductibilité | [`rapport-native-reproductibilite.md`](reports/rapport-native-reproductibilite.md) |
+| le bilan (10 livrables) | [`rapport-bilan-natif.md`](reports/rapport-bilan-natif.md) |
+
+## Comment c'est vérifié
+
+`HEAD 30924b4c`, `master` = `s/v7` **poussés** (0 divergence), **21 commits** depuis 8 h ; **183/183** d'autotest ; **porte produit verte** ; la **passe complète** (86 portes, **82 vertes**, 2 rouges structurelles `indice`/`melange`, `bloc-code` transitoire et verte en isolation) ; tous les budgets de doc verts.
+
+## Ce que vous devriez regarder, et ce qui vous revient
+
+1. **Le corpus** (territoire D, que je n'ai pas touché) : **l'épingler** (le sha256 du train et du val, la date, la version du nettoyage) — c'est le **premier pas** du palier 1, avant tout entraînement. Sans ça, chaque PPL sera une rumeur.
+2. **Le palier 1** (100–150 M sur 3–6 Go, ~2–4 jours CPU) : il demande votre feu vert et la collecte des données.
+3. **La décision du tagger `auto`** — toujours en attente depuis le 16/11 au matin.
+
+Une limite que je dois nommer : je n'ai **pas** pu reproduire le 2,40 du checkpoint ; je l'ai **documenté** plutôt que de l'expliquer entièrement — la cause la plus probable est un corpus régénéré après l'entraînement, mais je ne peux pas le prouver sans les données d'origine.
+
+
+## Tour 208
+
+### 👤 Utilisateur
+
+maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; nvidia-smi 2>&1 | head -20; echo \"=== CPU/RAM :\"; nproc; free -g | head -2; uptime", "description": "Voir le matériel GPU/CPU"}`
+
+  ```
+lun 16 nov 2026 15:37:58 EST
+Mon Nov 16 15:37:58 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.196.07             Driver Version: 580.196.07     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Quadro RTX 5000                On  |   00000000:03:00.0 Off |                  Off |
+| 34%   50C    P2             52W /  180W |     186MiB /  16384MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  Quadro RTX 5000                On  |   00000000:04:00.0 Off |                  Off |
+| 33%   29C    P8             16W /
+… [770 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi nvlink -s 2>&1 | head -12; echo \"=== top CPU :\"; ps aux --sort=-%cpu | head -6 | awk '{printf \"%.0f%% %s %s\\n\", $3, $11, $12}'; echo \"=== guard :\"; systemctl --user status hauru-gpu-guard 2>&1 | head -3; ls /etc/sys … [128 caractères tronqués]`
+
+  ```
+GPU 0: Quadro RTX 5000 (UUID: GPU-ff8cc368-1bb8-ccef-8a76-4d17375e212e)
+	 Link 0: 25.781 GB/s
+GPU 1: Quadro RTX 5000 (UUID: GPU-bd161106-3e3e-c50f-161a-2550ab688ce2)
+	 Link 0: 25.781 GB/s
+=== top CPU :
+0% COMMAND 
+1005% ./target/release/vcam3d-studio --config
+135% tools/kinect2-bridge/build/kinect2-bridge --rgb
+68% bash -c
+28% /usr/bin/plasmashell --no-respawn
+26% node /home/stephane/.local/share/../bin/dsh
+=== guard :
+○ hauru-gpu-guard.service - Hauru GPU guard — les GPU sont réservés à Drave
+     Loaded: loaded (/home/stephane/.config/systemd/user/hauru-gpu-guard.service; static)
+     Active: inactive (dead) since Mon 2026-11-16 15:38:13 EST; 25s ago
+/etc/systemd/system/hauru-thermal.service
+  ```
+
+- **bash** `{"command": "df -h /tmp /home | tail -3; /tmp/venv-natif/bin/pip index versions torch --index-url https://download.pytorch.org/whl/cu128 2>&1 | head -3; nvidia-smi --query-gpu=name,memory.total,compute_cap --format=csv 2>/dev/null", "description": "Vérifier le disque et les versions CUDA"}`
+
+  ```
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs            63G   12G   52G  19% /tmp
+/dev/nvme0n1p2  828G  122G  706G  15% /home
+torch (2.11.0+cu128)
+Available versions: 2.11.0+cu128, 2.10.0+cu128, 2.9.1+cu128, 2.9.0+cu128, 2.8.0+cu128, 2.7.1+cu128, 2.7.0+cu128
+  INSTALLED: 2.15.0+cpu
+name, memory.total [MiB], compute_cap
+Quadro RTX 5000, 16384 MiB, 7.5
+Quadro RTX 5000, 16384 MiB, 7.5
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 -m venv venv-gpu 2>&1 | tail -1; nohup /tmp/venv-gpu/bin/pip install torch --index-url https://download.pytorch.org/whl/cu128 > /tmp/torch-gpu.log 2>&1 & echo \"install PID $!\"; date; echo \"=== les jobs Drave sur le CPU :\"; ps aux --sort=-%cpu | grep -E \"python|ds … [165 caractères tronqués]`
+
+  ```
+install PID 3122698
+lun 16 nov 2026 15:40:20 EST
+=== les jobs Drave sur le CPU :
+200% /tmp/venv-gpu/bin/python3 /tmp/venv-gpu/bin/pip install torch --index-url https:
+26% node /home/stephane/.local/share/../bin/dsh --profile dsh-tui --resume e181ce02-
+15% node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+8% node /home/stephane/.local/share/../bin/dsh --profile dsh-tui
+3% bash -c cd /tmp && python3 -m venv venv-gpu 2>&1 | tail -1; nohup /tmp/venv-gpu/
+  ```
+
+- **bash** `{"command": "lscpu | grep -E \"Model name|^CPU\\(s\\)|Thread|Socket|MHz|avx512\" | head -8; echo \"=== RAM :\"; sudo -n dmidecode -t memory 2>/dev/null | grep -E \"Speed|Size\" | head -4 || cat /proc/meminfo | grep MemTotal", "description": "Voir le CPU"}`
+
+  ```
+CPU(s):                                  40
+Model name:                              Intel(R) Xeon(R) CPU E5-2687W v3 @ 3.10GHz
+Thread(s) per core:                      2
+Socket(s):                               2
+CPU(s) scaling MHz:                      66%
+CPU max MHz:                             3500,0000
+CPU min MHz:                             1200,0000
+=== RAM :
+  ```
+
+- **bash** `{"command": "tail -2 /tmp/torch-gpu.log 2>/dev/null; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/bench_gpu.py <<'PY'\nimport sys, time, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nimport torch\nfrom tools.native_model import NativeConfig, NativeM … [1810 caractères tronqués]`
+
+  ```
+Using cached markupsafe-3.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+Installing collected packages: nvidia-cusparselt-cu12, mpmath, cuda-toolkit, typing-extensions, triton, sympy, setuptools, nvidia-nvtx-cu12, nvidia-nvshmem-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufile-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, networkx, MarkupSafe, fsspec, filelock, cuda-pathfinder, nvidia-cusparse-cu12, nvidia-cufft-cu12, nvidia-cudnn-cu12, jinja2, cuda-bindings, nvidia-cusolver-cu12, torch
+=== CPU (venv-natif) :
+{"device": "cpu", "amp": false, "params": 34301224, "lot": 8, "seq": 1024, "s_par_pas": 5.2181, "jetons_s": 1569.9, "torch": "2.15.0+cpu", "gpu": null}
+  ```
+
+- **bash** `{"command": "sleep 180; tail -2 /tmp/torch-gpu.log 2>/dev/null; date", "description": "Attendre l'install CUDA", "timeoutMs": 300000}`
+
+  ```
+Successfully installed MarkupSafe-3.0.3 cuda-bindings-12.9.7 cuda-pathfinder-1.6.0 cuda-toolkit-12.8.1 filelock-4.2.4 fsspec-2026.9.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.7 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.19.0.56 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.28.9 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvshmem-cu12-3.4.5 nvidia-nvtx-cu12-12.8.90 setuptools-78.1.0 sympy-1.14.0 torch-2.11.0+cu128 triton-3.6.0 typing-extensions-4.16.0
+lun 16 nov 2026 15:45:56 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-gpu/bin/python -c \"import torch; print('cuda', torch.cuda.is_available(), torch.cuda.device_count()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else '')\" 2>&1 | tail -2; echo \"=== GPU 0 fp32 :\"; t … [253 caractères tronqués]`
+
+  ```
+cuda True 2
+Quadro RTX 5000
+=== GPU 0 fp32 :
+{"device": "cuda", "amp": false, "params": 34301224, "lot": 8, "seq": 1024, "s_par_pas": 0.4159, "jetons_s": 19696.0, "torch": "2.11.0+cu128", "gpu": "Quadro RTX 5000"}
+=== GPU 0 fp16 (amp) :
+{"device": "cuda", "amp": true, "params": 34301224, "lot": 8, "seq": 1024, "s_par_pas": 0.134, "jetons_s": 61156.4, "torch": "2.11.0+cu128", "gpu": "Quadro RTX 5000"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-gpu/bin/python - <<'PY' 2>&1 | tail -12\nimport torch, time\nprint('P2P 0<->1 :', torch.cuda.can_device_access_peer(0, 1), torch.cuda.can_device_access_peer(1, 0))\nN = 64 * 1024 * 1024  # 64 M float32 = 256 Mo\na0 = torch. … [762 caractères tronqués]`
+
+  ```
+/tmp/venv-gpu/lib64/python3.13/site-packages/torch/_subclasses/functional_tensor.py:307: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+P2P 0<->1 : True True
+copie NVLink 256 Mo : 11.1 ms -> 23.1 Go/s
+copie HBM (même carte) : 1.4 ms -> 177.9 Go/s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/bench_2gpu.py <<'PY'\nimport sys, time, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nimport torch\nfrom tools.native_model import NativeConfig, NativeModel\n\ncfg = NativeConfig(vocab=256, d … [1915 caractères tronqués]`
+
+  ```
+{"s_pas_2_gpu": 0.1359, "jetons_s_2_gpu": 120577.6, "allreduce_s": 0.0, "allreduce_Mo": 0.0, "part_allreduce": 0.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > /tmp/bench_ar.py <<'PY'\nimport sys, time, json\nsys.path.insert(0, '/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nimport torch\nfrom tools.native_model import NativeConfig, NativeModel\ncfg = NativeConfig(vocab=256, d_mod … [1894 caractères tronqués]`
+
+  ```
+{"Mo_gradients": 137.2, "s_copie": 0.00732, "Go_s": 18.8, "part_du_pas": 0.0546}
+=== inférence GPU (batch 1/8/32) :
+{"1": 42430.0, "8": 49284.0, "32": 48315.0}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-gpu/bin/python - <<'PY' 2>&1 | tail -6\nimport sys, time, json; sys.path.insert(0,'/home/stephane/Data13TB/stephane/GitHub/Qtrinet')\nimport torch\nfrom tools.native_model import NativeConfig, NativeModel\ncfg = NativeConfi … [653 caractères tronqués]`
+
+  ```
+/tmp/venv-gpu/lib64/python3.13/site-packages/torch/_subclasses/functional_tensor.py:307: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+{"contexte": {"32": 11.43, "128": 11.37, "512": 12.3, "1024": 23.62}, "ms_par_forward": {"32": 11.43, "128": 11.37, "512": 12.3, "1024": 23.62}}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-gpu-tandem.md <<'MD'\n# Les deux GPU en tandem NVLink contre le CPU — ce qui se décharge, et à quel prix\n\n> **La question.** « Qu'est-ce qui peut être optimisé avec nos 2 GPU en tandem NVLink vs CPU ? Peut-on\ … [6773 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 780 fichiers, le disque en a 781
+     · reports/README.md : 2817 mots > budget 2800 (T1)
+  ✅ la page vivante date du dernier commit (2026-11-16)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N** — les 2 GPU NVLink vs CPU : l'entraînement ×12-39, le préfill ×12, le cache KV ×20-50 |\", \"| **N** — les 2 GPU NVLink … [1416 caractères tronqués]`
