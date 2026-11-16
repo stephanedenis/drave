@@ -74,7 +74,7 @@ class TestCommande(unittest.TestCase):
             sortie = drave("restituer", texte)
             self.assertEqual(sortie.returncode, 3, detail(sortie))
             self.assertIn("refus d'analyse", sortie.stderr)
-        self.assertEqual(drave("restituer").returncode, 2)
+        self.assertEqual(drave("restituer").returncode, 5)
 
     def test_restituer_banc(self):
         banc = {"banc_50": {"resultats": [

@@ -1,0 +1,150 @@
+{
+ "schema": "drave.cli_robuste.verification",
+ "version": 1,
+ "date": "2026-11-15",
+ "tache": "T5 (exploitable, 5/5)",
+ "commit": "7e195ee6469460a5692dcd19e5919d16ee9ecbf5",
+ "python": "3.13.16",
+ "cas": [
+  {
+   "cas": "duree_json",
+   "ok": true,
+   "code_sans": 0,
+   "code_avec": 0,
+   "duree_s_sans": null,
+   "duree_s_avec": 0.004012,
+   "seul_ajout": true,
+   "controle_negatif": {
+    "nom": "sans --duree, la duree est absente",
+    "verifie": true
+   }
+  },
+  {
+   "cas": "duree_jsonl",
+   "ok": true,
+   "code": 0,
+   "lignes": 2,
+   "durees_s": [
+    0.004487,
+    0.000635
+   ]
+  },
+  {
+   "cas": "aide_globale",
+   "ok": true,
+   "code": 0,
+   "tableau_des_codes": true
+  },
+  {
+   "cas": "analyser_aide",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "analyser_help",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "evaluer_aide",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "evaluer_help",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "rejouer_aide",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "rejouer_help",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "restituer_aide",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "restituer_help",
+   "ok": true,
+   "code": 0
+  },
+  {
+   "cas": "fichier_inexistant",
+   "ok": true,
+   "code": 4,
+   "stdout_vide": true,
+   "message": "drave: dépendance absente : fichier introuvable : '/tmp/drave-t5-ggzm1pt9/absent.txt'",
+   "trace": false
+  },
+  {
+   "cas": "fichier_repertoire",
+   "ok": true,
+   "code": 5,
+   "stdout_vide": true,
+   "message": "drave: erreur d'usage : un répertoire n'est pas un fichier : '/tmp/drave-t5-ggzm1pt9' (--fichier attend un fichier UTF-8)",
+   "trace": false
+  },
+  {
+   "cas": "usage_sans_commande",
+   "attendu": 5,
+   "code": 5,
+   "ok": true,
+   "trace": false
+  },
+  {
+   "cas": "usage_langue_inconnue",
+   "attendu": 5,
+   "code": 5,
+   "ok": true,
+   "trace": false
+  },
+  {
+   "cas": "usage_option_fantome",
+   "attendu": 5,
+   "code": 5,
+   "ok": true,
+   "trace": false
+  },
+  {
+   "cas": "refus_texte_vide",
+   "attendu": 3,
+   "code": 3,
+   "ok": true,
+   "trace": false,
+   "json_de_refus": true
+  },
+  {
+   "cas": "refus_rejouer",
+   "attendu": 3,
+   "code": 3,
+   "ok": true,
+   "trace": false
+  },
+  {
+   "cas": "dependance_cle_absente",
+   "attendu": 4,
+   "code": 4,
+   "ok": true,
+   "stdout_vide": true,
+   "trace": false
+  },
+  {
+   "cas": "tableau_codes_notice",
+   "ok": true,
+   "codes": {
+    "0": true,
+    "3": true,
+    "4": true,
+    "5": true
+   }
+  }
+ ],
+ "ok": true
+}

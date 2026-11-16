@@ -7,12 +7,12 @@
 | Identifiant | `session-cbce9c66-4423-4a44-a112-b8c9f8b333dc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-15 22:35 |
-| Durée | 0.6 h |
+| Durée | 0.7 h |
 | Tours | 1 |
-| Messages | 146 |
-| Appels d'outils | 174 |
+| Messages | 148 |
+| Appels d'outils | 177 |
 | Fichiers touchés | 4 |
-| Commandes | 164 |
+| Commandes | 167 |
 | Sous-agents | 0 |
 | Commits | 4 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tâche T4 (exploitable, 4/5) : la **performance** — mesure `analyser` sur un texte réel de **10 000 mots** (le corpus du  … [424 caractères tronqués]
 
-*174 appels d'outils.* Actions notables :
+*177 appels d'outils.* Actions notables :
 
 - bash — Inspect repo root and git state
 - bash — List tools and reports directories
@@ -41,7 +41,46 @@
 - bash — Search git history for T4
 - bash — Read analyser formatting and command
 - bash — Read analyser command implementation
-- … et 157 autres
+- … et 160 autres
+
+**Synthèse produite :**
+
+T4 est livré, mesuré et committé (`7f0e8320`, puis correction de la fiche `7e195ee6`).
+
+\## Livrables
+
+- **Banc reproductible** : [`tools/banc_performance.py`](tools/banc_performance.py) — hors ligne par défaut, `--avec-tagger`, `--tagger-seulement`, `--profil`, `--rapide`.
+- **Porte dédiée** : [`tools/porte-banc-performance.sh`](tools/porte-banc-performance.sh) — 12 tests + passage court, **verte**.
+- **Tests** : [`tools/tests/test_banc_performance.py`](tools/tests/test_banc_performance.py) — 12/12.
+- **Fiche** : [`reports/rapport-performance.md`](reports/rapport-performance.md).
+- **JSON** : [`reports/performance.json`](reports/performance.json) et [`reports/performance-profil.json`](reports/performance-profil.json).
+- **Texte mesuré** : [`reports/performance-corpus-10000.txt`](reports/performance-corpus-10000.txt) — préfixe exact de 10 000 mots, sha256 `0069b20e…`.
+
+\## Les chiffres
+
+| mesure | valeur |
+|---|---:|
+| 10 000 mots — fonction | **4,012 s** |
+| 10 000 mots — CLI `--json` | **4,965 s** (dont 0,672 s de JSON) |
+| débit | **2 493 mots/s** (fonction) / **2 014 mots/s** (CLI) |
+| pic RSS | **125,9 Mio** (fonction) / **167,6 Mio** (CLI) |
+| JSON | **14 795 890 octets** (14,8 Mo), **54 522 étiquettes**, **2 726 syntagmes** |
+| 100 phrases — fonction | **1,10 ms/appel**, coût fixe **1,18 ms** |
+| 100 phrases — CLI séparés | **191,6 ms/appel** (19,43 s) |
+| 100 phrases en un `--jsonl` | **0,369 s**, soit **×52,6** vs 100 CLI |
+| `--tagger`, cache froid | **110,2 s** pour **92 appels**, **14 677 tokens**, **1,17 s/phrase**, **×299** le lot heuristique |
+| tagger 10 000 mots | **extrapolé** : 797 appels, 236 215 tokens, **~954 s** (~16 min) |
+
+\## Le contrôle négatif — il échoue, et c'est le résultat
+
+Sur un bloc de 247 mots répété jusqu’à 9 880 mots (syntagmes 124 → 4 960) :
+
+- **α = 1,55** en log-log ; linéaire **R² 0,957**, quadratique **R² 0,99995** ;
+- rapports de doublement **2,29 → 2,94 → 2,56 → 3,03 → 3,72** (2 = linéaire, 4 = quadratique) ;
+- **contrôle de l’instrument** : boucle linéaire **α = 1,00**, boucle quadratique **α = 2,00** — l’ajustement sait donc distinguer les deux.
+
+Le profil désigne `_groupes_partition` (toutes les paires de syntagmes, O(k²)) et `_cible_proche` (tri de tous les GV par segment). Le temps suit la **structure en syntagmes**, pas les mots seuls. Les préfixes réels sont confondus par le contenu : le point 4 000 mots (1 075 syntagmes) est plus rapide que celui de 2 000 (1 006 syntagmes), ce qui interdit d’y lire une loi 
+… [651 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -96,7 +135,7 @@
 - **T1** Collect machine info
 - **T1** Prototype 100 short sentence in-process calls
 - **T1** Prototype scaling sizes
-- … et 124 autres
+- … et 127 autres
 
 ## 4. Mesures et résultats marquants
 

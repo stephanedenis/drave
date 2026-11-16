@@ -12,7 +12,7 @@
 > **La réponse.** La section **§ 8** de [`docs/produit/README.md`](../docs/produit/README.md)
 > porte les dix questions ; chacune est adossée à une commande, à une constante du code ou à
 > un JSON de `reports/`, et **dix contrôles exécutables** les rejouent. Les dix passent. Le
-> contrôle négatif est explicite : le CLI **refuse** `--langue de` (code 2) et le schéma v2
+> contrôle négatif est explicite : le CLI **refuse** `--langue de` (code 5) et le schéma v2
 > **refuse** une annotation v1 — si ces deux refus disparaissaient, la FAQ serait fausse.
 >
 > **Le chiffre.** **10/10** réponses ; **26 cas** de schéma (dont le cas v1) ; **238/239**
@@ -53,7 +53,7 @@ et aux **chiffres publiés** au 2026-11-15.
 
 | # | question | réponse (chiffre vérifié) | contrôle |
 |---:|---|---|---|
-| 1 | **Quelles langues ?** | détection `de`/`es`, `und` sous le seuil ; `--langue` limité à `fr`/`en` ; `--langue de` → code 2 ; 398 profils UDHR (0,9687) | `q1_langue` |
+| 1 | **Quelles langues ?** | détection `de`/`es`, `und` sous le seuil ; `--langue` limité à `fr`/`en` ; `--langue de` → code 5 ; 398 profils UDHR (0,9687) | `q1_langue` |
 | 2 | **Hors ligne ?** | socket interdite : analyse code 0 ; module réseau non importé ; `--tagger` sans clé → code 4, `stdout` vide | `q2_hors_ligne` |
 | 3 | **Combien ça coûte ?** | défaut : 0 $ d'API ; tagger : **609 appels**, **22 299 tokens**, **155 s**, **~0,02 $** ; 3 exemples : **441 tokens**, **3,7 s** | `q3_cout` |
 | 4 | **Que change `--tagger` ?** | POS seul : **95,75 %** contre **86,25 %** (612) ; **95,00 %** contre **88,91 %** (réel 452) ; ponctuation **25/25** | `q4_tagger` |
@@ -61,7 +61,7 @@ et aux **chiffres publiés** au 2026-11-15.
 | 6 | **L'attachement ?** | **238/239** cibles (**0,9958**) ; **1,0000** sur les spans prédits ; top-k **0,9874** ; hasard **1,67 %** ; audit **42,14 %** / **0,908 %** | `q6_attachement` |
 | 7 | **Les spans inatteignables ?** | **1** : `g017`, SUB **[9:28]** attendue / **[9:38]** prédite ; règle rejetée (F1 **0,7901**, couverture **0,9916**) ; réel **183/184** | `q7_span_inatteignable` |
 | 8 | **La restitution ?** | v0 **46/46** surfaces, strict **0,1087** ; v1 **46/46** canonique ; v2 **19/46** cadres (**16** non vides), **F1 0,5270** | `q8_restitution` |
-| 9 | **Les limites ?** | pas de génération, serveur, RSN, local, classement, calibration, `--langue-forcee`, garantie hors domaine ; `--sortie`/`--mode`/`--strict` → code 2 ; **pas de wheel/PyPI** | `q9_limites` |
+| 9 | **Les limites ?** | pas de génération, serveur, RSN, local, classement, calibration, `--langue-forcee`, garantie hors domaine ; `--sortie`/`--mode`/`--strict` → code 5 ; **pas de wheel/PyPI** | `q9_limites` |
 | 10 | **L'installation ?** | `pyproject.toml` (`drave 0.1.0`, `>=3.10`, **0** dépendance, `drave = tools.drave:main`) ; `python3 -S` code 0 ; gold versionnés | `q10_installation` |
 
 ## 3. Le dispositif

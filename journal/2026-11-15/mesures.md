@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (18)
+## Commits du jour (19)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -26,6 +26,7 @@
 | 14:10 | `f63ad709` | BILAN DU 15/11 — LA SEMAINE 2 EN UN JOUR : LE TAGGER DÉCIDÉ (DÉFAUT HORS LIGNE), LE GOLD 452 NOMMÉ, LES RÔLES SÉPARÉS, PANINI BLOQUÉ SUR SES 26 SIGNATURES | `en-cours.md`, `README.md`, `distribue.md` (+13) |
 | 15:01 | `c9067a39` | INDEX — RÉGÉNÉRÉ APRÈS LA SEMAINE 2 (W1-W6, X1-X3, Y1) | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 23:10 | `7f0e8320` | T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²)) | `en-cours.md`, `roadmap.md`, `README.md` (+22) |
+| 23:13 | `7e195ee6` | T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 
 ## Chiffres du jour
 
@@ -35,7 +36,7 @@
 
 ## Sessions actives ce jour
 
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 366.5 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 366.8 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 

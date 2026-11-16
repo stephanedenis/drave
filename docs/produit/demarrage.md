@@ -215,31 +215,34 @@ Un refus est une **réponse** : avec `--json`, le JSON de refus part sur `stdout
 DeepSeek absente …` (voir § 4). Retirer `--tagger`, ou utiliser `--tagger auto` qui replie sur
 l'heuristique avec le code **0**.
 
-**`--fichier` inexistant → code 1.**
+**`--fichier` inexistant → code 4.**
 
 ```bash
 drave analyser --fichier absent.txt
 ```
 
 ```text
-drave: erreur : FileNotFoundError : [Errno 2] No such file or directory: 'absent.txt'
+drave: dépendance absente : fichier introuvable : 'absent.txt'
 ```
 
-Pas de trace Python. Un **répertoire** à la place du fichier donne `IsADirectoryError` et le
-même code **1**.
+Pas de trace Python. Un **répertoire** à la place du fichier est un **usage invalide**
+(code **5**) : `drave: erreur d'usage : un répertoire n'est pas un fichier : 'corpus/'
+(--fichier attend un fichier UTF-8)`.
 
 ## 6. Les codes de sortie
 
 | code | sens | exemple |
 |---:|---|---|
 | **0** | succès | `drave analyser "Le chat dort."` |
-| **1** | erreur d'exécution | `--fichier absent.txt`, répertoire à la place d'un fichier |
-| **2** | usage invalide | `--langue de` (le CLI n'accepte que `fr` et `en`) |
 | **3** | refus d'analyse (le JSON reste valide) | texte vide ou sans lettre/chiffre |
-| **4** | clé/tagger indisponible | `--tagger` sans clé, ou clé refusée (HTTP 401/403) |
+| **4** | clé/dépendance absente | `--tagger` sans clé, clé refusée (HTTP 401/403), `--fichier absent.txt` |
+| **5** | usage invalide | `--langue de`, `--fichier` sur un répertoire |
+| **1** | autre erreur d'exécution | divergence de rejeu, exception inattendue |
 
 Un réseau coupé ou un refus du modèle **ne sort pas 4** : la cascade replie sur l'heuristique,
-le code reste **0**, et la cause est dans `refus`. Le **4** est réservé à `--tagger` explicite.
+le code reste **0**, et la cause est dans `refus`. Le **4** couvre les deux dépendances
+absentes : la clé d'un `--tagger` **explicite** et un `--fichier` introuvable. `--tagger auto`
+ne sort jamais 4 : il replie sur l'heuristique avec le code 0.
 
 ## 7. Et après
 

@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**50 commits** · **1 session(s)** · **7 thème(s)**
+**51 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | distribue | 8 | [distribue.md](distribue.md) |
 | docs | 14 | [docs.md](docs.md) |
 | memoire | 3 | [memoire.md](memoire.md) |
-| mesures | 18 | [mesures.md](mesures.md) |
+| mesures | 19 | [mesures.md](mesures.md) |
 | modele | 3 | [modele.md](modele.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 3 | [portes.md](portes.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.5 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 366.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -79,6 +79,7 @@
 | 22:12 | `7f1519f7` | T1-T2 — LE PRODUIT EXPLOITABLE : L'EMPAQUETAGE (8 TESTS) ET L'API DU JSON (2 139 CANDIDATS OBJETS, 0 SPAN FAUX ; 21 RÔLES → 8, 0 HORS TABLE ; 711 PRÉDICATS, 0 ACCENTUÉ) |
 | 22:31 | `7d114559` | T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ |
 | 23:10 | `7f0e8320` | T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²)) |
+| 23:13 | `7e195ee6` | T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS |
 
 ## Le récit de la journée (écrit à la main)
 

@@ -3267,3 +3267,105 @@ rc=0
   ```
 
 - **bash** `{"command": "python3 - <<'PY'\np='docs/pilotage/en-cours.md'\ns=open(p,encoding='utf-8').read()\ns=s.replace('**Mis à jour : 2026-11-15, 23 h 06 HNE (T4 : la performance)**',\n            '**Mis à jour : 2026-11-15, 23 h 12 HNE (T4 : la performance ; lecture des préfixes corrigée)**')\nopen(p,'w',en … [772 caractères tronqués]`
+
+  ```
+patched
+  ✅ index : aucun fait stagé sans état
+[s/v7 7e195ee6] T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS
+ 8 files changed, 180 insertions(+), 18 deletions(-)
+rc=0
+  ```
+
+- **bash** `{"command": "git log --oneline -3; echo '---'; git status --short | head -20", "description": "Check final commits and status"}`
+
+  ```
+7e195ee6 T4 — CORRECTION DE LA FICHE : LE POINT 4 000 MOTS A PLUS DE SYNTAGMES (1 075 CONTRE 1 006) ET VA PLUS VITE ; LE TEMPS NE SUIT PAS LES MOTS SEULS
+7f0e8320 T4 — LA PERFORMANCE : 10 000 MOTS EN 4,01 S (2 493 MOTS/S, 126 MIO, 14,8 MO DE JSON), 100 PHRASES À 1,10 MS ; LE CONTRÔLE DE LINÉARITÉ ÉCHOUE (α = 1,55, O(k²))
+7d114559 T3 — LE DÉMARRAGE EN 5 MINUTES : 3/3 COMMANDES REJOUÉES, JSON V2 5 899 OCTETS, TAGGER 4/0, ERREURS 3/4/1 ; LE CLONE PUBLIC SANS tools/structures EST DÉGRADÉ, DOCUMENTÉ
+---
+ M reports/pensee-coherence-fiches-v7.json
+ M reports/pensee-dev-test-v10.json
+ M reports/pensee-quatre-modes.json
+ M reports/rapport-audit-v7.md
+ M reports/rapport-coherence-fiches-v7.md
+ M reports/rapport-dev-test-v10.md
+ M reports/rapport-pensee-v12.md
+ M reports/rapport-spans-chunker.md
+ M tools/chantier/plan.json
+?? reports/rapport-s-paragraphes.md
+?? tools/tests/linguistique/gold_reel_50.py
+  ```
+
+- **bash** `{"command": "python3 tools/revue_documentation.py 2>&1 | tail -5; echo \"rc=$?\"; python3 tools/verifie_en_cours.py 2>&1 | tail -5; echo \"rc=$?\"; python3 tools/taille_documents.py 2>&1 | tail -3; echo \"rc=$?\"", "description": "Final doc/state/budget checks", "timeoutMs": 120000}`
+
+  ```
+revue de documentation · 763 fiche(s) · 858 JSON · 125 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+rc=0
+  en-cours · 1623 mots · 7 sections · 4 session(s) · 9 puces · 5 questions
+  ✅ état court, structuré, multi-session et reprenable
+rc=0
+     · 64 fiche(s) > 300 lignes : lire le verdict + une section, jamais tout (plus longues : 888 l. rapport-modele-drave.md, 759 l. rapport-vision-qwen2vl.md, 754 l. rapport-frontieres-phrase.md, 730 l. rapport-partition-syntagmes.md, 662 l. rapport-fiabilite-produit.md)
+
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+rc=0
+  ```
+
+- **bash** `{"command": "python3 tools/verifie_journal.py 2>&1 | tail -5; echo \"rc=$?\"; python3 tools/verifier_schemas.py 2>&1 | tail -5; echo \"rc=$?\"", "description": "Final journal/schema checks", "timeoutMs": 120000}`
+
+  ```
+journal · 47 jour(s) · 220 session(s) · 2672 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+rc=0
+  schémas · 465 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+rc=0
+  ```
+
+### 🤖 Assistant
+
+T4 est livré, mesuré et committé (`7f0e8320`, puis correction de la fiche `7e195ee6`).
+
+## Livrables
+
+- **Banc reproductible** : [`tools/banc_performance.py`](tools/banc_performance.py) — hors ligne par défaut, `--avec-tagger`, `--tagger-seulement`, `--profil`, `--rapide`.
+- **Porte dédiée** : [`tools/porte-banc-performance.sh`](tools/porte-banc-performance.sh) — 12 tests + passage court, **verte**.
+- **Tests** : [`tools/tests/test_banc_performance.py`](tools/tests/test_banc_performance.py) — 12/12.
+- **Fiche** : [`reports/rapport-performance.md`](reports/rapport-performance.md).
+- **JSON** : [`reports/performance.json`](reports/performance.json) et [`reports/performance-profil.json`](reports/performance-profil.json).
+- **Texte mesuré** : [`reports/performance-corpus-10000.txt`](reports/performance-corpus-10000.txt) — préfixe exact de 10 000 mots, sha256 `0069b20e…`.
+
+## Les chiffres
+
+| mesure | valeur |
+|---|---:|
+| 10 000 mots — fonction | **4,012 s** |
+| 10 000 mots — CLI `--json` | **4,965 s** (dont 0,672 s de JSON) |
+| débit | **2 493 mots/s** (fonction) / **2 014 mots/s** (CLI) |
+| pic RSS | **125,9 Mio** (fonction) / **167,6 Mio** (CLI) |
+| JSON | **14 795 890 octets** (14,8 Mo), **54 522 étiquettes**, **2 726 syntagmes** |
+| 100 phrases — fonction | **1,10 ms/appel**, coût fixe **1,18 ms** |
+| 100 phrases — CLI séparés | **191,6 ms/appel** (19,43 s) |
+| 100 phrases en un `--jsonl` | **0,369 s**, soit **×52,6** vs 100 CLI |
+| `--tagger`, cache froid | **110,2 s** pour **92 appels**, **14 677 tokens**, **1,17 s/phrase**, **×299** le lot heuristique |
+| tagger 10 000 mots | **extrapolé** : 797 appels, 236 215 tokens, **~954 s** (~16 min) |
+
+## Le contrôle négatif — il échoue, et c'est le résultat
+
+Sur un bloc de 247 mots répété jusqu’à 9 880 mots (syntagmes 124 → 4 960) :
+
+- **α = 1,55** en log-log ; linéaire **R² 0,957**, quadratique **R² 0,99995** ;
+- rapports de doublement **2,29 → 2,94 → 2,56 → 3,03 → 3,72** (2 = linéaire, 4 = quadratique) ;
+- **contrôle de l’instrument** : boucle linéaire **α = 1,00**, boucle quadratique **α = 2,00** — l’ajustement sait donc distinguer les deux.
+
+Le profil désigne `_groupes_partition` (toutes les paires de syntagmes, O(k²)) et `_cible_proche` (tri de tous les GV par segment). Le temps suit la **structure en syntagmes**, pas les mots seuls. Les préfixes réels sont confondus par le contenu : le point 4 000 mots (1 075 syntagmes) est plus rapide que celui de 2 000 (1 006 syntagmes), ce qui interdit d’y lire une loi de complexité.
+
+**Ce qui reste exploitable** : 10 000 mots en 4,0 s / 5,0 s, traitement par lots confortable. **La limite** : au-delà de ~10 000 mots, découper (`--jsonl` par phrase) ou borner les deux boucles O(k²). C’est la prochaine action inscrite dans l’état et la roadmap.
+
+## Vérifications
+
+- `tools/porte-banc-performance.sh` : **verte**.
+- `revue_documentation.py`, `verifie_en_cours.py`, `verifie_journal.py`, `verifier_schemas.py`, `taille_documents.py` : **verts**.
+- La passe complète `toutes-les-portes.sh` n’a pas été relancée (les autres portes ne sont pas touchées par ce commit) ; la porte dédiée et les contrôles de clôture le sont.
+

@@ -726,7 +726,7 @@ class TestTaggerAuto(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             env = _env_sans_cle(pathlib.Path(tmp))
             resultat = drave_cli("evaluer", "--tagger", "auto", env=env)
-        self.assertEqual(resultat.returncode, 2, resultat.stderr)
+        self.assertEqual(resultat.returncode, 5, resultat.stderr)
         self.assertIn("n'est disponible que pour analyser", resultat.stderr)
 
 

@@ -77,7 +77,7 @@ def q1_langue() -> dict:
     assert es["langue"] == "es", es["langue"]
     assert und["langue"] == "und", und["langue"]
     assert und_fr["langue"] == "und", und_fr["langue"]  # l'indice n'est pas une contrainte
-    assert refus.returncode == 2, refus.returncode
+    assert refus.returncode == 5, refus.returncode
 
     bloc = (RACINE / "reports/rapport-bloc-linguistique.md").read_text(encoding="utf-8")
     assert "398 langues" in bloc and "0,9687" in bloc, "profils UDHR absents de la fiche"
@@ -317,7 +317,7 @@ def q9_limites() -> dict:
     for fantome in ("--sortie", "--mode", "--strict"):
         assert fantome not in aide.stdout, fantome
         r = _run(["analyser", "Le chat dort.", fantome])
-        assert r.returncode == 2, (fantome, r.returncode)
+        assert r.returncode == 5, (fantome, r.returncode)
 
     source = DRAVE.read_text(encoding="utf-8")
     for interdit in ("http.server", "transformers", "torch", "sys.stdin"):
@@ -352,7 +352,7 @@ def q9_limites() -> dict:
                    "publication PyPI"],
         "empaquetage": {"livre": "pip install -e . + commande drave",
                         "non_livre": "wheel / paquet PyPI"},
-        "options_fantomes": {"--sortie": "code 2", "--mode": "code 2", "--strict": "code 2"},
+        "options_fantomes": {"--sortie": "code 5", "--mode": "code 5", "--strict": "code 5"},
         "candidats": {"type": "objets {span, cible, source} (v2) ; "
                              "chaînes d'affichage en lecture",
                       "exemple": objets[0]},
@@ -433,11 +433,11 @@ def controle_negatif() -> dict:
     r = _run(["analyser", "Le chat dort.", "--langue", "de"])
     # Faux : « le schéma v2 accepte une annotation v1 ». Le vérificateur doit le refuser.
     base = json.loads(_run(["--json"], script=RACINE / "tools/verifier_schema_produit.py").stdout)
-    detecte = (r.returncode == 2
+    detecte = (r.returncode == 5
                and base["retrocompatibilite"]["v2_refuse_v1"] is True)
     return {
         "affirmations_fausses": [
-            "le CLI accepte --langue de (il sort 2)",
+            "le CLI accepte --langue de (il sort 5)",
             "le schéma v2 accepte l'annotation v1 (il la refuse)",
         ],
         "observe": {"--langue de": f"code {r.returncode}",

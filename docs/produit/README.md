@@ -5,7 +5,7 @@
 > il s'adresse, ce qu'il fait, comment l'exécuter, ce qu'il ne fait pas, ce qu'il coûte et ce
 > qu'il garantit.
 >
-> **Vérifié le 2026-11-14** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
+> **Vérifié le 2026-11-15** sur la branche `s/v7`. Le point d'entrée `tools/drave.py` est
 > **livré** (version **0.1.0**) : `analyser`, `evaluer`, `rejouer`, `restituer` et `--version`
 > existent, et la
 > porte produit est verte. Le **tagger POS par API** est livré **en option** (`--tagger`,
@@ -380,10 +380,10 @@ exit=3
 
 **Lecture.** Le refus est une **réponse** : le CLI écrit un **JSON d'annotation** sur `stdout`
 (`refus: "vide"`, `schema: "drave.annotation"`, `version: 2`, `etiquettes: []`) et sort avec le
-code **3**, distinct des erreurs (1) et de l'usage (2). Le message reste sur `stderr`. Un texte
+code **3**, distinct des autres erreurs (1) et de l'usage (5). Le message reste sur `stderr`. Un texte
 vide n'est jamais une annotation « comme les autres ». Pour la langue, `und` est une réponse
 honnête : « Élodie sourit. » rend `langue=und` (confiance 0,04 < seuil 0,12), même avec
-`--langue fr` — l'indice n'est pas une contrainte. Et `--langue de` sort **2** : le CLI n'accepte
+`--langue fr` — l'indice n'est pas une contrainte. Et `--langue de` sort **5** : le CLI n'accepte
 que `fr` et `en`.
 
 ### 3.6 Restituer la surface (v0)
@@ -502,7 +502,7 @@ tentée ; sans clé, il n'y a **aucun appel**, donc **aucune ligne de coût**.
 Le repli `auto` est **lisible dans le JSON** : `source=heuristique` et
 `refus="tagger auto : … ; heuristique"`, alors que `--tagger` explicite garde
 `source=cascade` et `refus="neuronal-pos: …"`. Le mode est **analyser** seulement dans ce
-prototype ; `evaluer --tagger auto` rend un code **2** d'usage. Mesures réelles, cache neuf par
+prototype ; `evaluer --tagger auto` rend un code **5** d'usage. Mesures réelles, cache neuf par
 cas et contrôle négatif auto / explicite : [`rapport-tagger-auto.md`](../../reports/rapport-tagger-auto.md)
 (30/30 tests). **La décision reste à l'humain** : le défaut ne bouge pas.
 
@@ -674,7 +674,7 @@ phrase. Les temps sont CPU, sur machine partagée ; ils varient avec la charge.
 | **refus explicite** | texte vide ou sans lettre/chiffre → `refus: "vide"`, 0 étiquette | bloc : JSON ; CLI : JSON sur `stdout` + code 3 |
 | **pas d'invention** | chaque étiquette porte `source`, `confiance`, `candidats` ; `und` plutôt qu'une langue forcée | JSON ; `--langue` est un indice |
 | **spans lisibles** | indices en **points de code Unicode**, 0-based, `[debut:fin)` | « Élodie » → `[0:6]` ; emoji = 1 point |
-| **UTF-8** | le JSON est en UTF-8, non échappé, sans durée | `--json` ; `test_produit.py` vérifie l'absence de `duree_s` |
+| **UTF-8** | le JSON est en UTF-8, non échappé ; la durée est **absente par défaut** et `--duree` l'ajoute | `--json` ; `test_produit.py` vérifie l'absence de `duree_s` sans le drapeau |
 | **gold versionné** | les 4 gold sont dans le dépôt ; `evaluer` rejoue hors ligne | `tools/tests/linguistique/gold*.json` |
 | **format versionné** | `schema: "drave.annotation"`, `version: 2` ; v1 reste lue | `tools/schemas/` ; `python3 tools/verifier_schema_produit.py --gold 20` |
 | **porte produit** | version, JSON fr/en, rejeu, smoke test, autotest | `bash tools/porte-produit.sh` → ✅ |
@@ -685,15 +685,23 @@ de schéma (v2 + rétro-compatibilité v1), **4 tests** sur 50 textes libres, **
 restitution, **183/183** portes d'autotest ; **12 contrôles**. Le smoke test est
 `tools/tests/test_produit.py`.
 
-**Codes de sortie — ce qui existe.** Le CLI implémente **0 / 1 / 2 / 3 / 4** :
+**Codes de sortie.** Le CLI implémente **0 / 1 / 3 / 4 / 5** ; le contrat est écrit dans
+`--aide` et vérifié par `tools/tests/test_produit.py` :
 
 | code | sens | aujourd'hui |
 |---:|---|---|
 | **0** | succès : annotation rendue, évaluation rendue, rejeu identique, restitution rendue | `analyser`, `evaluer`, `rejouer`, `restituer` |
-| **1** | erreur ; tagger qui refuse une phrase sans POS | argument illisible, divergence de rejeu, exception |
-| **2** | usage invalide : argument, sous-commande, langue hors `fr`/`en` | `argparse` |
-| **3** | refus **distinct** de l'erreur, avec l'annotation de refus sur `stdout` | `analyser ""`, `restituer "..."` |
-| **4** | dépendance absente : la clé du tagger (absente **ou refusée**), en `--tagger` **explicite** | `--tagger` sans clé, ou clé refusée HTTP 401/403 : message clair, rien sur `stdout`, pas de repli ; `--tagger auto` ne sort jamais 4 (repli, code 0) |
+| **3** | refus d'analyse : une **réponse**, pas une erreur | `analyser ""` (JSON de refus sur `stdout`), `restituer ""`, `rejouer ""` |
+| **4** | clé/dépendance absente : clé du tagger (absente **ou refusée**) en `--tagger` explicite, ou **fichier introuvable** | `--tagger` sans clé, clé refusée HTTP 401/403, `--fichier absent.txt` : message clair, rien sur `stdout`, pas de trace |
+| **5** | usage invalide : argument, sous-commande, langue hors `fr`/`en`, `--fichier` sur un **répertoire** | `argparse` et les contrôles de cohérence du CLI |
+| **1** | autre erreur : divergence de rejeu, tagger qui refuse une phrase sans POS, exception inattendue | cas résiduels, jamais un refus ni un usage |
+
+**Les deux erreurs de `--fichier`.** Un chemin **inexistant** est une **dépendance absente**
+(code **4**) : `drave: dépendance absente : fichier introuvable : 'absent.txt'`. Un
+**répertoire** est un **usage invalide** (code **5**) : `drave: erreur d'usage : un répertoire
+n'est pas un fichier : 'corpus/' (--fichier attend un fichier UTF-8)`. Dans les deux cas, rien
+sur `stdout` et aucune trace Python. Un fichier présent mais illisible (permission) est aussi
+une dépendance (4).
 
 **Ce qui n'est pas garanti** : le chemin neuronal **local**, un texte hors domaine, la calibration
 des confiances, la **compatibilité octet pour octet** entre versions (le bump v1 → v2 change le
@@ -708,9 +716,9 @@ Le point d'entrée existe : `tools/drave.py`, version **0.1.0**, sans dépendanc
 ```bash
 python3 tools/drave.py --version
 python3 tools/drave.py --aide
-python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] [--tagger] \
+python3 tools/drave.py analyser "Le chat dort." [--langue fr|en] [--json] [--duree] [--tagger] \
     [--partition brut|alternative|filtrer_union|filtrer] [--contexte TEXTE]
-python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json] [--tagger]
+python3 tools/drave.py analyser --fichier corpus.txt [--jsonl|--json] [--duree] [--tagger]
 python3 tools/drave.py evaluer [--gold] [--json] [--par-langue] [--tagger]
 python3 tools/drave.py rejouer "TEXTE" [--langue fr|en]
 python3 tools/drave.py restituer "TEXTE" [--langue fr|en] [--json] [--fichier CHEMIN]
@@ -750,8 +758,9 @@ rejeu identique : oui
 
 | option | commande | sens |
 |---|---|---|
-| `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 2 |
+| `--langue fr\|en` | `analyser`, `rejouer`, `restituer` | **indice** de langue, pas une contrainte ; hors `fr`/`en` → code 5 |
 | `--json` | `analyser`, `evaluer`, `restituer` | sortie machine UTF-8 |
+| `--duree` | `analyser` | ajoute `cout.duree_s` au JSON (ou à chaque ligne de `--jsonl`) ; absent par défaut |
 | `--tagger` | `analyser`, `evaluer` | POS par l'API DeepSeek (clé et réseau ; défaut : heuristique) ; `evaluer` mesure en plus la cascade et le Δ (§ 3.7) |
 | `--jsonl` | `analyser` | une ligne JSON par phrase (avec `--fichier`) |
 | `--fichier CHEMIN` | `analyser`, `restituer` | lit un texte UTF-8 au lieu de l'argument |
@@ -774,7 +783,6 @@ rejeu identique : oui
 | **`rejouer` sur un JSON sauvegardé** | `rejouer` prend un **texte**, pas une annotation ; on ne peut pas rejouer un fichier produit hier |
 | **`--mode` / la cascade locale** | le CLI expose l'heuristique et la cascade **API** (`--tagger`) ; `parallele` et la cascade **locale** demandent le code Python |
 | **`--profils`** | les 398 langues de l'autotest UDHR ne sont pas accessibles par le CLI |
-| **`--duree`** | pas de durée dans le JSON du CLI (le bloc l'a avec `--duree`) |
 | **un répertoire** | `--fichier` lit un fichier ; pas de parcours de répertoire |
 | **`--strict`** | `evaluer` ne mesure pas la cascade **locale** et n'applique pas son plancher (0,70) ; c'est le banc de recherche (`evaluer_gold.py`) qui le fait |
 | **la publication** | `pip install -e .` et la commande `drave` existent ; **pas de wheel publiée** ni de paquet sur PyPI — l'installation pointe vers le dépôt |
@@ -783,7 +791,7 @@ rejeu identique : oui
 
 **Ce qui est déjà tenu** : `--version`, `--aide`, les **quatre** sous-commandes, le JSON
 déterministe, le rejeu par empreinte, le **format versionné** (schéma v2, v1 lue),
-`--fichier`/`--jsonl`, `--banc`, `--partition`, le **tagger API en option** (`--tagger`, code 4,
+`--fichier`/`--jsonl`, `--duree`, `--banc`, `--partition`, le **tagger API en option** (`--tagger`, code 4,
 cache), la **restitution v0** (46/46 surfaces exactes,
 miroir strict 0,1087), la **forme canonique v1** (`--canonique`, 46/46 canonique, strict
 inchangé), les **candidats d'attachement en objets** `{span, cible, source}` et le
@@ -808,7 +816,7 @@ Le **bloc** détecte la langue et le script : ses profils UDHR couvrent **398 la
 (`--langue`). Sans indice, il rend la langue détectée — `de` pour « Der Hund schläft. », `es`
 pour « El perro duerme. » — ou `und` quand la confiance passe sous le seuil (**0,12**) :
 « Élodie sourit. » rend `und`, **même avec `--langue fr`**. `--langue` est un **indice**, pas
-une contrainte ; `--langue de` sort **2** (usage invalide). Les 398 profils ne sont pas
+une contrainte ; `--langue de` sort **5** (usage invalide). Les 398 profils ne sont pas
 versionnés : `data/` est hors dépôt.
 
 ### 8.2 Est-ce que ça marche hors ligne ?

@@ -66412,3 +66412,17 @@ dim 15 nov 2026 23:08:16 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 1500; date; tail -2 work/chantier/journal.log; ls reports/rapport-performance.md 2>/dev/null; git rev-list --count origin/master..s/v7", "description": "Verdict T4", "timeoutMs": 1600000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5221]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5221", "timeout_ms": 1000000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **job_output** `{"job_id": "bash-5221", "timeout_ms": 1000000, "wait": true}`

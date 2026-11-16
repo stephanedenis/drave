@@ -100,10 +100,96 @@ class TestProduit(unittest.TestCase):
         sans_commande = drave()
         langue_inconnue = drave("analyser", "Le chat dort.", "--langue", "de")
         self.assertEqual(
-            (2, 2),
+            (5, 5),
             (sans_commande.returncode, langue_inconnue.returncode),
             detail(sans_commande) + detail(langue_inconnue),
         )
+
+    def test_duree_dans_le_json(self) -> None:
+        """T5 — `--duree` ajoute le temps de l'analyse, et lui seul."""
+        sans = drave("analyser", "Le chat dort.", "--json")
+        avec = drave("analyser", "Le chat dort.", "--json", "--duree")
+        self.assertEqual(avec.returncode, 0, detail(avec))
+        d_sans = json.loads(sans.stdout)
+        d_avec = json.loads(avec.stdout)
+        self.assertNotIn("duree_s", d_sans["cout"], detail(sans))
+        self.assertIn("duree_s", d_avec["cout"], detail(avec))
+        self.assertIsInstance(d_avec["cout"]["duree_s"], (int, float))
+        self.assertGreaterEqual(d_avec["cout"]["duree_s"], 0.0)
+        # la durée est le seul ajout : le texte et les étiquettes ne bougent pas
+        self.assertEqual(d_sans["texte"], d_avec["texte"])
+        self.assertEqual(d_sans["etiquettes"], d_avec["etiquettes"])
+
+    def test_duree_jsonl(self) -> None:
+        """T5 — `--duree` vaut aussi pour chaque ligne de `--jsonl`."""
+        import tempfile
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,
+                                         encoding="utf-8") as f:
+            f.write("Le chat dort.\n\nLa voisine parle.\n")
+            chemin = f.name
+        try:
+            sortie = drave("analyser", "--fichier", chemin, "--jsonl", "--duree")
+            self.assertEqual(sortie.returncode, 0, detail(sortie))
+            lignes = [json.loads(l) for l in sortie.stdout.splitlines() if l.strip()]
+            self.assertEqual(len(lignes), 2, detail(sortie))
+            for ligne in lignes:
+                self.assertIn("duree_s", ligne["cout"], ligne)
+        finally:
+            pathlib.Path(chemin).unlink(missing_ok=True)
+
+    def test_tableau_des_codes_dans_l_aide_et_la_notice(self) -> None:
+        """T5 — le contrat des codes est écrit dans `--aide` et la notice."""
+        aide = drave("--aide")
+        self.assertEqual(aide.returncode, 0, detail(aide))
+        self.assertIn("Codes de sortie", aide.stdout)
+        for attendu in ("0 succès", "3 refus", "4 clé/dépendance", "5 usage"):
+            self.assertIn(attendu, aide.stdout, detail(aide))
+        notice = (RACINE / "docs" / "produit" / "README.md").read_text(encoding="utf-8")
+        for code, sens in (("0", "succès"), ("3", "refus"), ("4", "dépendance"),
+                           ("5", "usage")):
+            ligne = re.search(rf"^\| \*\*{code}\*\* \|.*$", notice, re.MULTILINE)
+            self.assertIsNotNone(ligne, f"ligne du code {code} absente de la notice")
+            self.assertIn(sens, ligne.group(0), ligne.group(0))
+
+    def test_aide_et_help_des_quatre_sous_commandes(self) -> None:
+        """T5 — `--aide` et `--help` répondent sur les quatre sous-commandes, code 0."""
+        for commande in ("analyser", "evaluer", "rejouer", "restituer"):
+            for drapeau in ("--aide", "--help"):
+                sortie = drave(commande, drapeau)
+                self.assertEqual(sortie.returncode, 0,
+                                 f"{commande} {drapeau}\n" + detail(sortie))
+                self.assertIn("usage:", sortie.stdout,
+                              f"{commande} {drapeau}\n" + detail(sortie))
+                self.assertIn(commande, sortie.stdout,
+                              f"{commande} {drapeau}\n" + detail(sortie))
+
+    def test_fichier_inexistant(self) -> None:
+        """T5 — chemin inexistant : dépendance absente (4), message clair, pas de trace."""
+        import tempfile
+        dossier = tempfile.mkdtemp(prefix="drave-t5-")
+        chemin = pathlib.Path(dossier) / "absent.txt"
+        try:
+            sortie = drave("analyser", "--fichier", str(chemin))
+            self.assertEqual(sortie.returncode, 4, detail(sortie))
+            self.assertEqual(sortie.stdout, "", detail(sortie))
+            self.assertIn("fichier introuvable", sortie.stderr, detail(sortie))
+            self.assertIn(str(chemin), sortie.stderr, detail(sortie))
+            self.assertNotIn("Traceback", sortie.stderr, detail(sortie))
+            self.assertNotIn("Traceback", sortie.stdout, detail(sortie))
+        finally:
+            pathlib.Path(dossier).rmdir()
+
+    def test_fichier_repertoire(self) -> None:
+        """T5 — répertoire : usage invalide (5), message clair, pas de trace."""
+        import tempfile
+        with tempfile.TemporaryDirectory(prefix="drave-t5-") as dossier:
+            sortie = drave("analyser", "--fichier", dossier)
+            self.assertEqual(sortie.returncode, 5, detail(sortie))
+            self.assertEqual(sortie.stdout, "", detail(sortie))
+            self.assertIn("répertoire", sortie.stderr, detail(sortie))
+            self.assertIn(dossier, sortie.stderr, detail(sortie))
+            self.assertNotIn("Traceback", sortie.stderr, detail(sortie))
+            self.assertNotIn("Traceback", sortie.stdout, detail(sortie))
 
 
 class TestContratJSON(unittest.TestCase):

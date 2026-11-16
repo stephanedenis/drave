@@ -32,8 +32,8 @@ et la ligne `TAGGER API` porte le coût de l'appel quand il a eu lieu. Le mode `
 Ce que la commande n'expose pas : le neuronal local (`llama-cli` ou endpoint), la traduction et la
 génération : ils demandent des poids, un service ou un GPU.
 
-Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse · 4 clé/tagger indisponible
-(absente ou refusée) · 1 erreur.
+Codes de sortie : 0 succès · 3 refus d'analyse · 4 clé/dépendance absente
+(ou fichier introuvable) · 5 usage · 1 autre erreur.
 """
 from __future__ import annotations
 
@@ -113,6 +113,19 @@ class CleTaggerRefusee(RuntimeError):
             f"~/.config/drave/deepseek.key ou DEEPSEEK_API_KEY. "
             f"Sans --tagger, le défaut reste l'heuristique hors ligne."
         )
+
+
+class ErreurEntree(RuntimeError):
+    """L'entrée `--fichier` n'est pas lisible : le code dit pourquoi (4 ou 5), sans trace.
+
+    Un chemin **inexistant** est une dépendance absente (4) ; un **répertoire** est un
+    usage invalide de `--fichier` (5). Dans les deux cas, le message nomme le chemin et
+    rien ne part sur `stdout`.
+    """
+
+    def __init__(self, message: str, code: int) -> None:
+        self.code = int(code)
+        super().__init__(message)
 
 
 def _lire_cle(chemin: pathlib.Path) -> str:
@@ -499,9 +512,27 @@ def formater_annotation(a: bl.Annotation, tagger: bool = False,
 
 
 def _lire_entree(args: argparse.Namespace) -> str:
-    """Le texte : l'argument, ou le **fichier** (`--fichier`)."""
+    """Le texte : l'argument, ou le **fichier** (`--fichier`).
+
+    Les erreurs de chemin sont **rendues** comme des codes du contrat, pas comme des
+    traces Python : 4 pour un fichier introuvable (dépendance), 5 pour un répertoire
+    (usage invalide de `--fichier`). Un fichier présent mais illisible reste une
+    dépendance absente (4).
+    """
     if getattr(args, "fichier", None):
-        return pathlib.Path(args.fichier).read_text(encoding="utf-8", errors="replace")
+        chemin = pathlib.Path(args.fichier)
+        try:
+            if not chemin.exists():
+                raise ErreurEntree(f"fichier introuvable : {args.fichier!r}", 4)
+            if chemin.is_dir():
+                raise ErreurEntree(
+                    f"un répertoire n'est pas un fichier : {args.fichier!r} "
+                    "(--fichier attend un fichier UTF-8)", 5)
+            return chemin.read_text(encoding="utf-8", errors="replace")
+        except (OSError, ValueError) as exc:
+            raise ErreurEntree(
+                f"fichier illisible : {args.fichier!r} "
+                f"({getattr(exc, 'strerror', None) or exc})", 4) from exc
     return args.texte or ""
 
 
@@ -521,7 +552,7 @@ def _analyser_jsonl(texte: str, args: argparse.Namespace, h: bl.Heuristique, blo
             continue
         a = bloc.analyser(phrase, args.langue, args.contexte)
         refus += int(bool(a.refus))
-        sys.stdout.write(_sur(json.dumps(a.json(), ensure_ascii=False)) + "\n")
+        sys.stdout.write(_sur(json.dumps(a.json(avec_duree=args.duree), ensure_ascii=False)) + "\n")
         n += 1
     if n == 0:
         print(f"{NOM}: refus d'analyse : vide", file=sys.stderr)
@@ -552,6 +583,7 @@ def _mode_tagger(args: argparse.Namespace) -> str | None:
 
 def cmd_analyser(args: argparse.Namespace) -> int:
     texte = _lire_entree(args)
+    duree = bool(getattr(args, "duree", False))
     h = bl.Heuristique(partition=args.partition)
     mode = _mode_tagger(args)
     bloc, stats, auto = h, None, None
@@ -592,7 +624,7 @@ def cmd_analyser(args: argparse.Namespace) -> int:
             else:
                 # refus du texte : code 3, que la clé existe ou non
                 if args.json:
-                    sys.stdout.write(_dumps(annotation.json()))
+                    sys.stdout.write(_dumps(annotation.json(avec_duree=duree)))
                 else:
                     print(f"{NOM}: refus d'analyse : {annotation.refus} "
                           "(le texte doit contenir au moins une lettre ou un chiffre)",
@@ -609,14 +641,14 @@ def cmd_analyser(args: argparse.Namespace) -> int:
         else:
             # un refus est une **réponse** : le JSON la porte, le code 3 la distingue d'une erreur
             if args.json:
-                sys.stdout.write(_dumps(annotation.json()))
+                sys.stdout.write(_dumps(annotation.json(avec_duree=duree)))
             else:
                 print(f"{NOM}: refus d'analyse : {annotation.refus} "
                       "(le texte doit contenir au moins une lettre ou un chiffre)",
                       file=sys.stderr)
             return 3
     if args.json:
-        sys.stdout.write(_dumps(annotation.json()))
+        sys.stdout.write(_dumps(annotation.json(avec_duree=duree)))
         if stats is not None:
             print(f"{NOM}: TAGGER API · {_ligne_tagger(stats)}", file=sys.stderr)
     else:
@@ -759,7 +791,7 @@ def cmd_evaluer(args: argparse.Namespace) -> int:
     if getattr(args, "tagger_auto", False):
         print(f"{NOM}: erreur d'usage : --tagger auto n'est disponible que pour analyser",
               file=sys.stderr)
-        return 2
+        return 5
     evaluateur = _module_evaluation()
     phrases = evaluateur.charger_gele() if args.gold else evaluateur.charger()
     if getattr(args, "reel", False):
@@ -876,7 +908,7 @@ def cmd_rejouer(args: argparse.Namespace) -> int:
         refus = premiere.refus or seconde.refus
         print(f"{NOM}: refus d'analyse : {refus} "
               "(le texte doit contenir au moins une lettre ou un chiffre)", file=sys.stderr)
-        return 1
+        return 3
     canonique_1 = _canonique(premiere)
     canonique_2 = _canonique(seconde)
     identique = canonique_1 == canonique_2
@@ -911,24 +943,24 @@ def cmd_restituer(args: argparse.Namespace) -> int:
     if args.roles_v3 and args.canonique:
         print(f"{NOM}: erreur d'usage : --roles-v3 et --canonique sont exclusifs",
               file=sys.stderr)
-        return 2
+        return 5
     if args.roles and args.roles_v3:
         print(f"{NOM}: erreur d'usage : --roles (v2) et --roles-v3 sont exclusifs",
               file=sys.stderr)
-        return 2
+        return 5
     if args.roles and args.canonique:
         print(f"{NOM}: erreur d'usage : --roles et --canonique sont exclusifs",
               file=sys.stderr)
-        return 2
+        return 5
     if args.gold and not (args.banc and (args.roles or args.roles_v3)):
         print(f"{NOM}: erreur d'usage : --gold ne sert qu'avec --banc --roles ou "
               "--banc --roles-v3", file=sys.stderr)
-        return 2
+        return 5
     if args.banc:
         if args.texte is not None or args.fichier:
             print(f"{NOM}: erreur d'usage : --banc est exclusif de TEXTE et --fichier",
                   file=sys.stderr)
-            return 2
+            return 5
         try:
             donnees = json.loads(pathlib.Path(args.banc).read_text(encoding="utf-8"))
             items = restitution.items_banc(donnees)
@@ -970,7 +1002,7 @@ def cmd_restituer(args: argparse.Namespace) -> int:
     texte = _lire_entree(args)
     if args.texte is None and not args.fichier:
         print(f"{NOM}: erreur d'usage : TEXTE ou --fichier requis", file=sys.stderr)
-        return 2
+        return 5
     annotation = bl.Heuristique().analyser(texte, args.langue, args.contexte)
     if annotation.refus:
         print(f"{NOM}: refus d'analyse : {annotation.refus} "
@@ -1037,7 +1069,7 @@ class _Parseur(argparse.ArgumentParser):
 
     def error(self, message: str) -> None:  # type: ignore[override]
         self.print_usage(sys.stderr)
-        self.exit(2, f"{self.prog}: erreur d'usage : {message}\n")
+        self.exit(5, f"{self.prog}: erreur d'usage : {message}\n")
 
 
 def _normaliser_tagger(argv: list[str]) -> list[str]:
@@ -1073,10 +1105,11 @@ def _normaliser_tagger(argv: list[str]) -> list[str]:
 def construire_parseur() -> argparse.ArgumentParser:
     epilogue = (
         "Commandes : analyser, evaluer, rejouer, restituer.\n"
-        "Codes de sortie : 0 succès · 2 usage · 3 refus d'analyse (JSON) ·\n"
-        "4 clé/tagger indisponible (absente ou refusée, seulement avec --tagger explicite) · 1 erreur.\n"
-        "Options : --json, --langue fr|en, --partition brut|alternative|filtrer_union|filtrer,\n"
-        "--contexte, --banc, --tagger [auto].\n"
+        "Codes de sortie : 0 succès · 3 refus d'analyse (JSON) · 4 clé/dépendance absente\n"
+        "(--tagger explicite sans clé, ou --fichier introuvable) · 5 usage (argument, sous-commande,\n"
+        "langue hors fr/en, --fichier sur un répertoire) · 1 autre erreur.\n"
+        "Options : --json, --jsonl, --duree, --fichier CHEMIN, --langue fr|en,\n"
+        "--partition brut|alternative|filtrer_union|filtrer, --contexte, --banc, --tagger [auto].\n"
         "Limites : heuristique CPU, hors ligne, déterministe par défaut ; --tagger appelle l'API\n"
         "DeepSeek (clé, réseau) pour le POS ; --tagger auto l'appelle seulement si une clé existe,\n"
         "sinon il rend l'heuristique, sans changer le code de sortie ; la restitution est un codec\n"
@@ -1133,7 +1166,10 @@ def construire_parseur() -> argparse.ArgumentParser:
                                "changer le code de sortie")
     analyser.add_argument("--tagger-auto", action="store_true", help=argparse.SUPPRESS)
     analyser.add_argument("--json", action="store_true",
-                          help="sortie JSON complète (annotation, sans durée)")
+                          help="sortie JSON complète (annotation, sans durée sauf avec --duree)")
+    analyser.add_argument("--duree", action="store_true",
+                          help="ajouter la durée de l'analyse (cout.duree_s) au JSON "
+                               "ou à chaque ligne de --jsonl")
     analyser.set_defaults(fonction=cmd_analyser)
 
     evaluer = sous.add_parser(
@@ -1241,6 +1277,11 @@ def main(argv: list[str] | None = None) -> int:
     except KeyboardInterrupt:
         print(f"{NOM}: interrompu", file=sys.stderr)
         return 1
+    except ErreurEntree as exc:
+        # --fichier : dépendance (4) ou usage (5), message clair, rien sur stdout, pas de trace
+        prefixe = "erreur d'usage" if exc.code == 5 else "dépendance absente"
+        print(f"{NOM}: {prefixe} : {exc}", file=sys.stderr)
+        return exc.code
     except CleTaggerRefusee as exc:
         # même dépendance manquante qu'une clé absente : code 4, message clair, rien sur stdout
         print(f"{NOM}: dépendance absente : {exc}", file=sys.stderr)

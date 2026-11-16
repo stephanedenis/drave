@@ -67,13 +67,13 @@ class TestCommandeRoles(unittest.TestCase):
 
     def test_roles_et_canonique_exclusifs(self):
         sortie = drave("restituer", "Le chat dort.", "--roles", "--canonique")
-        self.assertEqual(sortie.returncode, 2, detail(sortie))
+        self.assertEqual(sortie.returncode, 5, detail(sortie))
         self.assertIn("exclusifs", sortie.stderr)
 
     def test_gold_sans_banc_refuse(self):
         sortie = drave("restituer", "Le chat dort.", "--roles",
                        "--gold", str(GOLD))
-        self.assertEqual(sortie.returncode, 2, detail(sortie))
+        self.assertEqual(sortie.returncode, 5, detail(sortie))
         self.assertIn("--banc", sortie.stderr)
 
     def test_banc_roles_json(self):

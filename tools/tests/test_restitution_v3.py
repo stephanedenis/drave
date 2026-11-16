@@ -330,15 +330,15 @@ class TestCLI(unittest.TestCase):
 
     def test_exclusifs(self):
         sortie = drave("restituer", "Le chat dort.", "--roles", "--roles-v3")
-        self.assertEqual(sortie.returncode, 2, detail(sortie))
+        self.assertEqual(sortie.returncode, 5, detail(sortie))
         self.assertIn("exclusifs", sortie.stderr)
         sortie = drave("restituer", "Le chat dort.", "--roles-v3", "--canonique")
-        self.assertEqual(sortie.returncode, 2, detail(sortie))
+        self.assertEqual(sortie.returncode, 5, detail(sortie))
         self.assertIn("exclusifs", sortie.stderr)
 
     def test_gold_avec_roles_v3(self):
         sortie = drave("restituer", "Le chat dort.", "--roles-v3", "--gold", str(GOLD))
-        self.assertEqual(sortie.returncode, 2, detail(sortie))
+        self.assertEqual(sortie.returncode, 5, detail(sortie))
         self.assertIn("--banc", sortie.stderr)
 
 

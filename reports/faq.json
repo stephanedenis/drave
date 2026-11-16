@@ -22,7 +22,7 @@
       "fr",
       "en"
      ],
-     "--langue de": "code 2"
+     "--langue de": "code 5"
     },
     "profils_udhr": {
      "langues": 398,
@@ -271,9 +271,9 @@
      "non_livre": "wheel / paquet PyPI"
     },
     "options_fantomes": {
-     "--sortie": "code 2",
-     "--mode": "code 2",
-     "--strict": "code 2"
+     "--sortie": "code 5",
+     "--mode": "code 5",
+     "--strict": "code 5"
     },
     "candidats": {
      "type": "objets {span, cible, source} (v2) ; chaînes d'affichage en lecture",
@@ -340,11 +340,11 @@
  ],
  "controle_negatif": {
   "affirmations_fausses": [
-   "le CLI accepte --langue de (il sort 2)",
+   "le CLI accepte --langue de (il sort 5)",
    "le schéma v2 accepte l'annotation v1 (il la refuse)"
   ],
   "observe": {
-   "--langue de": "code 2",
+   "--langue de": "code 5",
    "v2_refuse_v1": true
   },
   "detecte": true
