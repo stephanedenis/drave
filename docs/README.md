@@ -11,7 +11,7 @@
 
 | si vous voulez… | lisez |
 |---|---|
-| **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole sémantique](theorie/protocole-semantique.md) · [le glossaire](theorie/glossaire.md) · [la synthèse](theorie/synthese/index.md) |
+| **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) |
 | **faire** (résultat, [porte](theorie/glossaire/entrees/porte.md), rangement, Panini, miroir, ressources) | [`methode/`](methode/) · [l'organisation](methode/organisation-du-depot.md) · [l'utilisation](pilotage/utilisation.md) |
 | **savoir où l'on en est** | [l'état](pilotage/en-cours.md) · [la roadmap](pilotage/roadmap.md) · [les chantiers](pilotage/chantiers.md) |
 

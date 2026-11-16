@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **1 session(s)** · **7 thème(s)**
+**23 commits** · **1 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
 | memoire | 2 | [memoire.md](memoire.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
@@ -23,7 +23,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 378.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 378.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -51,6 +51,7 @@
 | 11:09 | `4a389c08` | NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ |
 | 11:16 | `4c3d502a` | NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ |
 | 11:20 | `f21420ba` | NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRITÈRES FALSIFIABLES, LES RISQUES ; LA DONNÉE D'ABORD |
+| 11:24 | `4613e110` | DOCS — LES BUDGETS TENUS APRÈS LE PLAN NATIF |
 
 ## Le récit de la journée (écrit à la main)
 

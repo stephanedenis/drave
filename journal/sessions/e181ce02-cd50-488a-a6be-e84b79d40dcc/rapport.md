@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 378.7 h |
+| Durée | 378.8 h |
 | Tours | 206 |
-| Messages | 4234 |
-| Appels d'outils | 3789 |
+| Messages | 4236 |
+| Appels d'outils | 3791 |
 | Fichiers touchés | 25 |
-| Commandes | 3132 |
+| Commandes | 3134 |
 | Sous-agents | 43 |
-| Commits | 506 |
+| Commits | 507 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*52 appels d'outils.* Actions notables :
+*54 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 37 autres
+- … et 39 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3092 autres
+- … et 3094 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11863,4 +11863,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LA CARTE DU MODÈLE (IDENTITÉ, DONNÉES, MESURES, LIMITES, USAGE PRÉVU, LICENCE) ; LE README DES FICHES ALLÉGÉ" 2>&1 | tail -2; git log -1 --format='%h %s
 - NATIF — LE PLAN : LES QUATRE PALIERS (100-150 M, 300-600 M, 1-3 Md), LES CRITÈRES FALSIFIABLES, LES RISQUES ; LA DONNÉE D'ABORD" 2>&1 | tail -2; git log -1 --fo
 - DOCS — LES BUDGETS TENUS APRÈS LE PLAN NATIF" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 280 git push origin
+- DOCS — LE README TENU (T1)" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-50; git branch -f master s/v7 && timeout 280 git push origin s/v7 2>&1 | tail 
 

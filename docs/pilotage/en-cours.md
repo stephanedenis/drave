@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 11 h 25 HNE (le plan du natif : les paliers, les critères, les risques)**
+**Mis à jour : 2026-11-16, 11 h 30 HNE (budgets tenus, le plan natif en place)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

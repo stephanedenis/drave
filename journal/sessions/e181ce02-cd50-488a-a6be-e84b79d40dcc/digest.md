@@ -68811,3 +68811,25 @@ lun 16 nov 2026 11:23:35 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); t=p.read_text()\nt=t.replace(\"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md) | le plan du natif |\", \"| [`pilotage/natif-plan.md`](pilotage/natif-plan.md … [914 caractères tronqués]`
+
+  ```
+· docs/README.md : 1007 mots > budget 1000 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ 8 files changed, 30 insertions(+), 14 deletions(-)
+4613e110 DOCS — LES BUDGETS TENUS APRÈS LE PLAN NATIF
+   f21420ba..4613e110  s/v7 -> s/v7
+   f21420ba..4613e110  master -> master
+lun 16 nov 2026 11:27:01 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\nidx=sorted(range(len(lignes)), key=lambda i: -len(re.findall(r\"\\S+\", lignes[i])))[:5]\nfor i in idx: print(i,  … [118 caractères tronqués]`
+
+  ```
+13 21 | **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) · [le protocole
+2 18 > **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'i
+31 17 | [`methode/contexte.md`](methode/contexte.md) | le budget de [contexte](theorie/glossaire/entrees/contexte.md
+69 17 | [`theorie/modele-natif.md`](theorie/modele-natif.md) | le modèle natif, le bus, les blocs et la séparation à
+71 17 | [`theorie/lecture-rapide.md`](theorie/lecture-rapide.md) | la [lecture rapide](theorie/glossaire/entrees/lec
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/README.md'); lignes=p.read_text().splitlines(keepends=True)\nlignes[13] = \"| **comprendre le projet** | [la vision](theorie/vision.md) · [la mission](methode/mission.md) |\\n\"\ … [792 caractères tronqués]`
