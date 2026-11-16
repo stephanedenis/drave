@@ -1228,6 +1228,54 @@ def cmd_rejouer(args: argparse.Namespace) -> int:
 # --------------------------------------------------------------------------- restitution
 
 
+def cmd_generer(args: argparse.Namespace) -> int:
+    """Le natif : `--modele` chargé par torch, la génération, le JSON. Torch absent → 4."""
+    try:
+        import torch  # noqa: F401
+    except Exception:
+        print(f"{NOM}: dépendance absente : torch n'est pas installé "
+              f"(pip install torch --index-url https://download.pytorch.org/whl/cpu)", file=sys.stderr)
+        return 4
+    from tools.native_model import NativeConfig, NativeModel
+    import torch
+    chemin = pathlib.Path(args.modele)
+    if not chemin.exists():
+        print(f"{NOM}: checkpoint absent : {chemin} (les checkpoints vivent dans work/n2ac/)", file=sys.stderr)
+        return 4
+    try:
+        ck = torch.load(str(chemin), map_location="cpu", weights_only=False)
+        cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
+        modele = NativeModel(cfg)
+        modele.load_state_dict(ck["state"])
+        modele.eval()
+    except Exception as exc:
+        print(f"{NOM}: checkpoint illisible : {type(exc).__name__}", file=sys.stderr)
+        return 4
+    ids = list(args.prompt.encode("utf-8")) or [32]
+    with torch.no_grad():
+        for _ in range(max(0, args.n)):
+            x = torch.tensor([ids[-cfg.max_pos:]], dtype=torch.long)
+            logits = modele(x)["logits"][0, -1]
+            if args.temperature <= 0:
+                suivant = int(logits.argmax())
+            else:
+                logits = logits / args.temperature
+                if args.top_k > 0:
+                    v, i = logits.topk(min(args.top_k, logits.numel()))
+                    logits = torch.full_like(logits, float("-inf"))
+                    logits[i] = v
+                suivant = int(torch.multinomial(torch.softmax(logits, -1), 1))
+            ids.append(suivant)
+    texte = bytes(ids).decode("utf-8", "replace")
+    if args.json:
+        print(_dumps({"schema": "drave.generation", "version": 1, "modele": str(chemin),
+                      "prompt": args.prompt, "n": args.n, "top_k": args.top_k,
+                      "temperature": args.temperature, "texte": texte}))
+    else:
+        print(texte)
+    return 0
+
+
 def cmd_restituer(args: argparse.Namespace) -> int:
     """Reconstruit la surface depuis l'annotation et rend la fidélité du miroir.
 
@@ -1555,6 +1603,22 @@ def construire_parseur() -> argparse.ArgumentParser:
                          help="indice de langue (fr/en) ; sans lui, le bloc détecte")
     rejouer.set_defaults(fonction=cmd_rejouer)
 
+    generer = sous.add_parser(
+        "generer",
+        help="générer du texte avec le modèle natif (exige torch et un checkpoint)",
+        description="Charge un checkpoint natif (`drave-n0`) et génère `--n` octets après le "
+                    "prompt. **Option expérimentale** : le modèle de 34 M produit des collages "
+                    "(voir reports/rapport-banc-generation.md) ; le chemin par défaut du "
+                    "produit reste l'analyse heuristique.",
+        epilog="Exemple : python3 tools/drave.py generer --prompt 'La France est un pays' --n 64")
+    generer.add_argument("--modele", default="work/n2ac/mix1024-60k.pt",
+                         help="le checkpoint natif (.pt) ; le défaut est le meilleur mesuré")
+    generer.add_argument("--prompt", default="La France est un pays")
+    generer.add_argument("--n", type=int, default=128, help="octets à générer")
+    generer.add_argument("--top-k", type=int, default=0)
+    generer.add_argument("--temperature", type=float, default=0.0)
+    generer.add_argument("--json", action="store_true")
+    generer.set_defaults(fonction=cmd_generer)
     restituer = sous.add_parser(
         "restituer",
         help="reconstruire la surface depuis l'annotation et mesurer le miroir",

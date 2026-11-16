@@ -477,6 +477,18 @@ python3 tools/drave.py evaluer --reel
 **88,91 %**, F1 **79,06 %**, attachement **99,46 %**. Sans lui, `evaluer` publie la ligne
 `BASE RÉELLE` à côté du global (612 phrases) — le chiffre global seul peut tromper.
 
+### 3.8 bis Générer avec le natif — `generer` (expérimental)
+
+```bash
+python3 tools/drave.py generer --prompt "La France est un pays" --n 64
+```
+
+Charge un checkpoint natif (`drave-n0`, 34 M) et génère `--n` octets. **Expérimental** : le
+modèle produit des **collages** (les mots sont là, la phrase non — voir
+[`rapport-banc-generation.md`](../../reports/rapport-banc-generation.md)) ; il exige **torch** et
+un checkpoint dans `work/n2ac/` (hors dépôt). Sans torch : code **4**, message clair. Le chemin
+par défaut du produit reste l'analyse heuristique (0 dépendance, hors ligne).
+
 ### 3.7 Le tagger en option — `--tagger`
 
 ```bash

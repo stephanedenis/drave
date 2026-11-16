@@ -21,8 +21,8 @@
 | [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la coordination, le harnais |
 | [`rapport-bilan-nuit.md`](rapport-bilan-nuit.md) | **Bilan** — la nuit du 14 au 15/11 : le tagger, la base honnête, la phase C/B |
 | [`rapport-gold-reel-50.md`](rapport-gold-reel-50.md) | **R0.7** — le gold réel : 452 phrases, 50 ratées, le « 200+ » obsolète |
-| [`rapport-gold-452.md`](rapport-gold-452.md) | **W1/R0.7** — le gold réel 452 : composition, split 402/H50, sha256, 10 candidats GP/SUB |
-| [`rapport-tagger-h50.md`](rapport-tagger-h50.md) | **W2/R0.7** — le tagger sur le split : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 inchangés, fermé 402 **−1,55** ; la règle ne le rejette pas |
+| [`rapport-gold-452.md`](rapport-gold-452.md) | **W1** — le gold 452, le split 402/H50, 10 candidats GP/SUB |
+| [`rapport-tagger-h50.md`](rapport-tagger-h50.md) | **W2** — le tagger : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; F1/attachement 402 inchangés, fermé 402 **−1,55** ; la règle ne le rejette pas |
 | [`rapport-tagger-defaut.md`](rapport-tagger-defaut.md) | **W3/R0.7** — la matrice du tagger : défaut hors ligne **code 0** / `--tagger` **code 4** sans clé ; réseau coupé = repli **code 0** ; coût **1 000 phrases** = 143 870 tokens, ~0,031 $ hors pointe ; recommandation : défaut hors ligne, opt-in, pas de `auto` |
 | [`rapport-tagger-lot.md`](rapport-tagger-lot.md) | **X3/R0.7** — le tagger **en lot** : **1 000 items** (677 textes), **672 appels réseau**, **99 971 tokens**, **685,2 s**, **87,6 items/min**, **0,02177 $** ; `--jsonl` 1 003 lignes |
 | [`rapport-protocole-date.md`](rapport-protocole-date.md) | **Panini** — le protocole à date contrôlée : 60 paires, trois strates |

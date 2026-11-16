@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 11 h 10 HNE (README des fiches dans le budget)**
+**Mis à jour : 2026-11-16, 11 h 15 HNE (drave generer : le natif accessible, experimental)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

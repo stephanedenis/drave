@@ -68518,3 +68518,93 @@ lun 16 nov 2026 11:03:55 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **N4** — que manque-t-il au natif (chiffré) |\", \"| **N4** — le natif : ce qui manque |\")\nt=t.replace(\"| **N4** — le banc … [809 caractères tronqués]`
+
+  ```
+· reports/README.md : 2809 mots > budget 2800 (T1)
+ 14 files changed, 39 insertions(+), 22 deletions(-)
+7cefb116 DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; É
+   90fb737a..7cefb116  s/v7 -> s/v7
+   90fb737a..7cefb116  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def cmd_restituer\\|def cmd_analyser\" tools/drave.py | head -2; grep -n \"restituer = sous.add_parser\" -A 4 tools/drave.py | head -6", "description": "Voir la structure des sous-commandes"}`
+
+  ```
+665:def cmd_analyser(args: argparse.Namespace) -> int:
+1231:def cmd_restituer(args: argparse.Namespace) -> int:
+1558:    restituer = sous.add_parser(
+1559-        "restituer",
+1560-        help="reconstruire la surface depuis l'annotation et mesurer le miroir",
+1561-        description="Analyse un texte, reconstruit la surface depuis le niveau `graphème` "
+1562-                    "(sans lire le champ `texte` de l'annotation) et compare à la source. "
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\n# 1) la sous-commande generer\nt=t.replace('''    restituer = sous.add_parser(''','''    generer = sous.add_parser(\n        \"generer\",\n        h … [4099 caractères tronqués]`
+
+  ```
+dispatch 'restituer' non trouvé
+generer ajouté
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"restituer\" tools/drave.py | tail -5; grep -n \"def main\" -A 25 tools/drave.py | grep -nE \"commande|if|return\" | head -8", "description": "Trouver le dispatch"}`
+
+  ```
+1655:    restituer.add_argument("--fichier", default=None, metavar="CHEMIN",
+1657:    restituer.add_argument("--langue", choices=("fr", "en"), default=None,
+1659:    restituer.add_argument("--contexte", default=None,
+1661:    restituer.add_argument("--json", action="store_true",
+1664:    restituer.set_defaults(fonction=cmd_restituer)
+7:1674-    brut = list(sys.argv[1:] if argv is None else argv)
+9:1676-    args.tagger_mode = ("auto" if getattr(args, "tagger_auto", False)
+10:1677-                        else "api" if getattr(args, "tagger", False) else None)
+12:1679-        return args.fonction(args)
+15:1682-        return 0
+18:1685-        return 1
+21:1688-        prefixe = "erreur d'usage" if exc.code == 5 else "dépendance absente"
+23:1690-        return exc.code
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/drave.py'); t=p.read_text()\nt=t.replace('''    generer.add_argument(\"--json\", action=\"store_true\")\n    restituer = sous.add_parser(''','''    generer.add_argument(\"--json … [519 caractères tronqués]`
+
+  ```
+dispatch générer
+syntaxe OK
+drave: dépendance absente : torch n'est pas installé (pip install torch --index-url https://download.pytorch.org/whl/cpu)
+EXIT=0
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/drave.py generer --prompt \"Le chat\" --n 8 >/dev/null 2>&1; echo \"sans torch EXIT=$?\"; /tmp/venv-natif/bin/python tools/drave.py generer --prompt \"La France est un pays\" --n 32 --json 2>/dev/null | python3 -c \"imp … [200 caractères tronqués]`
+
+  ```
+sans torch EXIT=4
+JSON OK drave.generation 32 'La France est un pays don d d da d 20 n dese de 1 20 '
+avec torch EXIT=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/tests/test_produit.py'); t=p.read_text()\najout = '''\n\nclass TestGenerer(unittest.TestCase):\n    \"\"\"`drave generer` : le natif en option, avec des refus propres (jamais de … [1698 caractères tronqués]`
+
+  ```
+test ajouté
+doc generer
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+     · reports/README.md : 2809 mots > budget 2800 (T1)
+
+OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -nE \"^\\| \\[\\`rapport-\" reports/README.md | head -8 | cut -c1-120", "description": "Voir les premières lignes du README"}`
+
+  ```
+18:| [`rapport-natif-exploitable.md`](rapport-natif-exploitable.md) | **N4** — le natif : ce qui manque |
+19:| [`rapport-banc-generation.md`](rapport-banc-generation.md) | **N4** — les mots, pas la phrase |
+20:| [`rapport-bilan-jour-1115.md`](rapport-bilan-jour-1115.md) | **Bilan** — le 15/11 |
+21:| [`rapport-bilan-semaine.md`](rapport-bilan-semaine.md) | **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la
+22:| [`rapport-bilan-nuit.md`](rapport-bilan-nuit.md) | **Bilan** — la nuit du 14 au 15/11 : le tagger, la base honnête,
+23:| [`rapport-gold-reel-50.md`](rapport-gold-reel-50.md) | **R0.7** — le gold réel : 452 phrases, 50 ratées, le « 200+ 
+24:| [`rapport-gold-452.md`](rapport-gold-452.md) | **W1/R0.7** — le gold réel 452 : composition, split 402/H50, sha256,
+25:| [`rapport-tagger-h50.md`](rapport-tagger-h50.md) | **W2/R0.7** — le tagger sur le split : 402 **0,9198 → 0,9643** (
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('reports/README.md'); t=p.read_text()\nt=t.replace(\"| **Bilan** — la semaine 07 → 15/11 : le produit, Panini, la |\", \"| **Bilan** — la semaine 07 → 15/11 |\")\nt=t.replace(\"| * … [1376 caractères tronqués]`

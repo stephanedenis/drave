@@ -438,3 +438,17 @@ class TestBaseReelle(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestGenerer(unittest.TestCase):
+    """`drave generer` : le natif en option, avec des refus propres (jamais de trace)."""
+
+    def test_sans_torch_ou_sans_modele_code_4(self):
+        # sans torch : 4 (dépendance) ; avec torch mais un checkpoint absent : 4 aussi
+        sortie = drave("generer", "--modele", "/tmp/inexistant-xyz.pt", "--prompt", "x", "--n", "1")
+        self.assertEqual(sortie.returncode, 4, detail(sortie))
+        self.assertIn("absente", sortie.stderr + sortie.stdout)
+
+
+if __name__ == "__main__":
+    unittest.main()

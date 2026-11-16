@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 378.4 h |
+| Durée | 378.5 h |
 | Tours | 206 |
-| Messages | 4214 |
-| Appels d'outils | 3769 |
+| Messages | 4222 |
+| Appels d'outils | 3777 |
 | Fichiers touchés | 25 |
-| Commandes | 3112 |
+| Commandes | 3120 |
 | Sous-agents | 43 |
-| Commits | 502 |
+| Commits | 503 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11067,7 +11067,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ### Tour 206 — go, en automie jusqu'à 17h
 
-*32 appels d'outils.* Actions notables :
+*40 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Vérifier pip et le réseau
@@ -11083,7 +11083,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer le banc
 - bash — Trim le README
 - bash — Committer avec l'en-cours
-- … et 17 autres
+- … et 25 autres
 
 **Synthèse produite :**
 
@@ -11209,7 +11209,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3072 autres
+- … et 3080 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11859,4 +11859,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LE BANC DE GRAMMATICALITÉ : NOTRE ANALYSEUR JUGE LE MODÈLE (GV 6,9 CONTRE 2,3 AU HASARD, MAIS LE CIMENT EST BAS : DES MOTS SANS LA GLU)" 2>&1 | tail -2;
 - NATIF — LA SYNTHÈSE HONNÊTE : L'ÉCHELLE, LA DONNÉE, L'ALIGNEMENT, LE RUNTIME (LE TOKENIZER MESURÉ N'EST PAS LE LEVIER) ; LES 4 PALIERS CHIFFRÉS" 2>&1 | tail -2;
 - DOCS — LE README DES FICHES DANS LE BUDGET (T1) ; ÉTAT HORODATÉ" 2>&1 | tail -1; git log -1 --format='%h %s' | cut -c1-60; git branch -f master s/v7 && timeout 
+- NATIF — drave generer : LE MODÈLE ACCESSIBLE (torch + checkpoint, JSON), LES REFUS PROPRES (4 SANS TORCH OU SANS MODÈLE), LE CAVEAT EXPÉRIMENTAL DOCUMENTÉ" 2>&1
 
