@@ -15,8 +15,9 @@
 
 | contrôle | résultat |
 |---|---|
-| Rust vs numpy, profil `defaut` | **3,576e-07** ≤ 1e-4 |
-| Rust vs numpy, profil `bloque` | **2,384e-07** ≤ 1e-4 |
+| Rust vs numpy, profil `defaut` | **2,980e-07** ≤ 1e-4 |
+| Rust vs numpy, profil `bloque` | **3,576e-07** ≤ 1e-4 |
+| Rust vs numpy, profil `court` | **2,980e-07** ≤ 1e-4 |
 | contrôle du comparateur : Rust `defaut` vs `flou` | **5,790e-03** > 1e-4 (il voit) |
 | déterminisme, deux exécutions | identiques des deux côtés |
 | moteur numpy sur `flou` | **refusé** (nommé) |
@@ -24,13 +25,14 @@
 ## Ce que la porte établit
 
 Le « même modèle » n'est pas une intention : les deux moteurs — un avec cache KV en Rust, l'autre en
-passe complète numpy — donnent le même vecteur de logits à 2,4–3,6e-07, soit **~40 fois sous la
+passe complète numpy — donnent le même vecteur de logits à 3,0–3,6e-07, soit **~30 fois sous la
 tolérance déclarée**. Une substitution mesurée sur un moteur vaut donc pour l'autre, dans le
 contrat. Et la parité n'est plus un chiffre de session : elle est **gardée** à chaque passe.
 
 ## Ce qui pourrait le rendre faux
 
-- **Un modèle, une graine, un pas** : la comparaison porte sur les logits d'une position d'un
+- **Un modèle, une graine, une position** : la comparaison porte sur les logits de la dernière
+  position d'un prompt de 128 octets,
   `drave-n0` synthétique ; elle ne prouve pas la parité sur un modèle entraîné (N4 l'a mesurée
   séparément, 4/4 en greedy).
 - **Deux chemins différents** : Rust calcule avec un cache KV, numpy refait la passe — l'accord est

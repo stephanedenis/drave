@@ -25,7 +25,7 @@
 | modèle entraîné, perplexité 2 048 octets (in distribution) | 23,7480 → **23,5824** |
 | modèle entraîné, temps de la passe 2 048 octets | 73,9 s → **70,0 s** (~5 %) |
 | modèle entraîné, deux textes hors distribution (~520 o) | directions **opposées** (38,08→36,94 ; 27,68→28,52) → bruit |
-| moteur numpy | `court` **refusé** (nommé) |
+| moteur numpy | `court` **exécuté** (parité Rust **2,980e-07**), fenêtre appliquée |
 
 ## Ce que la porte établit
 

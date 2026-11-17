@@ -322,12 +322,17 @@ le DRVM valide, une route valide écrite et les DRVM déjà sur le disque comme 
 
 **Une variante est un nom public, un algorithme privé.** Un bloc `local_mixer` peut déclarer
 `"impl": "bloque"` et `"contrat": {"version": 0, "tolerance": 1e-4}`. Le **nom** entre dans le manifeste,
-donc dans le hash, donc dans la trace ; l'**algorithme** ne regarde que le bloc. Deux profils de la **même
-fonction** (`defaut`, `bloque`) sont **indifférents** dans la tolérance — c'est le théorème, mesuré :
-**4,768e-07** ≤ 1e-4. Un profil d'une **autre fonction** (`flou`, qui remplace le seuil net du k-WTA par une
-appartenance sigmoïde) **échoue** l'indifférence (**5,790e-03**) : il relève du **routage**, pas de la
-substitution. Chaque moteur refuse les profils qu'il n'exécute pas — le moteur numpy exécute `defaut` et `bloque`, et refuse `flou`.
-Chiffres et contrôle négatif : [`reports/rapport-n3-variante.md`](../../reports/rapport-n3-variante.md).
+donc dans le hash, donc dans la trace ; l'**algorithme** ne regarde que le bloc. Le catalogue sépare deux
+choses. `defaut` et `bloque` calculent la **même fonction** (indifférence mesurée : **4,768e-07** ≤ 1e-4).
+`flou` (seuil du k-WTA → appartenance sigmoïde, **5,790e-03**) et `court` (fenêtre divisée par quatre :
+**bit-exact** en deçà, **3,633e-02** au-delà) sont d'**autres fonctions** — candidates au **routage**, pas à la
+substitution. Chaque moteur refuse ce qu'il n'exécute pas : le numpy exécute `defaut`, `bloque` et `court`, et
+refuse `flou`. Sur un modèle entraîné de 34 M, l'indifférence des **logits** ne rend pas la **perplexité**
+identique (`bloque` : **+0,04 %**) : la PPL est une fonction non linéaire de tous les logits, et le contrat
+porte sur le **corps**, pas sur les agrégats. Le prix des autres fonctions est mesuré : `flou` **+2,09 %**,
+`court` **−0,70 %** (la fenêtre de 1 024 n'est pas utilisée ici). Fiches :
+[`variante`](../../reports/rapport-n3-variante.md), [`court`](../../reports/rapport-n3-court.md),
+[`profils`](../../reports/rapport-profils-modele.md).
 
 **Une route est une condition exécutée, pas une arête décorative.** `graph.routes` accepte
 `{"id", "bloc", "si": {"kind": "position", "seuil"}, "alors", "sinon"?}` : à partir de la position `seuil`,

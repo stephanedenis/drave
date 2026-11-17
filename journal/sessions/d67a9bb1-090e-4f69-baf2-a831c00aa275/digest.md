@@ -4927,3 +4927,130 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/drvm_profils.py reports/rapport-profils-modele.md reports/profils-34m.json docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nPROFILS SUR UN MODÈLE ENTRAÎNÉ (34 M) : BLOQUE +0,04 % DE PPL · FLOU +2,09  … [1245 caractères tronqués]`
+
+  ```
+create mode 100644 journal/2026-11-17/portes.md
+ create mode 100644 reports/profils-34m.json
+ create mode 100644 reports/rapport-profils-modele.md
+0e5da7bd PROFILS SUR UN MODÈLE ENTRAÎNÉ (34 M) : BLOQUE +0,04 % DE PPL · FLOU +2,09 % · COURT −0,70 % — LE CONTRAT TIENT SUR LES LOGITS, PAS SUR LA PERPLEXITÉ
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '316,340p' docs/theorie/modele-natif.md", "description": "Read the current variant paragraph in the doc"}`
+
+  ```
+**Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** Une clé inconnue (manifeste, `graph`, bloc,
+`execution`, route), une région, une tête ou un pont qui nomme un bloc absent, une route mal formée sont refusés,
+et les **deux lecteurs** (Rust et `tools/drvm.py`) appliquent la même règle et la même erreur. C'est ce qui fait
+du manifeste un **contrat** : ce qui s'ajoute (`impl`, route) se déclare ici et porte sa trace, jamais en
+silence. La porte [`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur **treize** refus nommés, avec
+le DRVM valide, une route valide écrite et les DRVM déjà sur le disque comme contrôles négatifs.
+
+**Une variante est un nom public, un algorithme privé.** Un bloc `local_mixer` peut déclarer
+`"impl": "bloque"` et `"contrat": {"version": 0, "tolerance": 1e-4}`. Le **nom** entre dans le manifeste,
+donc dans le hash, donc dans la trace ; l'**algorithme** ne regarde que le bloc. Deux profils de la **même
+fonction** (`defaut`, `bloque`) sont **indifférents** dans la tolérance — c'est le théorème, mesuré :
+**4,768e-07** ≤ 1e-4. Un profil d'une **autre fonction** (`flou`, qui remplace le seuil net du k-WTA par une
+appartenance sigmoïde) **éch
+… [1162 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/modele-natif.md'); s = p.read_text()\nold = '''**Une variante est un nom public, un algorithme privé.** Un bloc `local_mixer` peut déclarer\n`\"impl\": \"bloque\"` et ` … [2288 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 787 fiche(s) · 878 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Le moteur numpy exécute `court` : parité à trois profils
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/drvm.py'); s = p.read_text()\nold = 'IMPLS_MOTEUR_NUMPY = frozenset({\"defaut\", \"bloque\"})'\nnew = 'IMPLS_MOTEUR_NUMPY = frozenset({\"defaut\", \"bloque\", \"court\"})'\nas … [1179 caractères tronqués]`
+
+  ```
+ok
+compile-ok
+court : ['court', 'court'] logits[0][:2] = [-0.42533174 -0.19386129]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(python3 -c \"print('abcdefgh'*16)\") && ./drave-core/target/release/drave --drvm-pas-hex /tmp/c-court.drvm \"$P\" > /tmp/rcourt.txt && python3 - <<'PY'\nimport struct, sys\nimport numpy as np\nsys.path.insert(0, \".\")\nfrom tool … [511 caractères tronqués]`
+
+  ```
+impls: ['court', 'court'] | Rust vs numpy court : max|Δ| = 2.384e-07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/porte-n3-moteurs.sh'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\n\nrep('''for impl in (\"defaut … [3934 caractères tronqués]`
+
+  ```
+ok
+syntaxe-ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-n3-moteurs.sh 2>&1 | tail -10; echo \"=== court ===\"; bash tools/porte-n3-court.sh 2>&1 | tail -8", "description": "Run the updated engines and court gates", "timeoutMs": 900000}`
+
+  ```
+bloque  132720 paramètres
+  court   132720 paramètres
+  flou    132720 paramètres
+=== 2. Rust et numpy : les mêmes logits dans la tolérance déclarée ===
+  defaut  Rust vs numpy : max|Δ| = 2.980e-07  (tolérance 0.0001)
+  bloque  Rust vs numpy : max|Δ| = 3.576e-07  (tolérance 0.0001)
+  court   Rust vs numpy : max|Δ| = 2.980e-07  (tolérance 0.0001)
+  contrôle : Rust defaut vs flou = 3.730e-03 > 0.0001
+  ✅ deux moteurs d'accord (defaut, bloque, court) · déterminisme des deux côtés · comparateur non vide · numpy refuse flou
+PORTE TENUE : Rust et numpy rendent le même corps dans la tolérance (defaut, bloque) · le comparateur voit une différence réelle · les deux moteurs sont déterministes · numpy refuse ce qu'il n'exécute pas
+=== court ===
+=== 4. le coût : médiane de 11 passes alternées ===
+  defaut  médiane   80.9 ms  (CV 3 %)
+  court   médiane   55.6 ms  (CV 5 %)
+  rapport court / defaut : 0.688×
+=== 5. provenance, et le moteur numpy exécute court ===
+  numpy defaut vs court (128 o) : max|Δ| = 1.937e-02 > 0
+  ✅ inspecteur : impl=court · numpy : court exécuté et différent au-delà de 64 o
+PORTE TENUE : en deçà de la fenêtre bit-exact · au-delà non substituable · 0,67× le temps sur une ch
+… [37 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\ndef remplace(p, paires):\n    s = pathlib.Path(p).read_text()\n    for old, new in paires:\n        assert s.count(old) == 1, (p, old[:60])\n        s = s.replace(old, new)\n    pathlib.Path(p).write … [2587 caractères tronqués]`
+
+  ```
+ok tools/porte-n3-moteurs.sh
+ok tools/porte-n3-court.sh
+ok reports/rapport-n3-court.md
+ok reports/rapport-n3-moteurs.md
+ok docs/pilotage/en-cours.md
+  revue de documentation · 787 fiche(s) · 878 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1747 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"2,4\\|3,6e\\|40 fois\\|un pas\\|trois octets\\|128\" reports/rapport-n3-moteurs.md | head", "description": "Find stale numbers in the engines fiche"}`
+
+  ```
+28:passe complète numpy — donnent le même vecteur de logits à 2,4–3,6e-07, soit **~40 fois sous la
+34:- **Un modèle, une graine, un pas** : la comparaison porte sur les logits d'une position d'un
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-n3-moteurs.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"passe complète numpy … [604 caractères tronqués]`
+
+  ```
+ok
+28:passe complète numpy — donnent le même vecteur de logits à 3,0–3,6e-07, soit **~30 fois sous la
+35:  position d'un prompt de 128 octets,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"n3 produit document etat\" DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-court-np.log 2>&1; echo \"exit=$?\"; tail -6 /tmp/passe-court-np.log", "description": "Validate the numpy court support across gates", "timeoutMs": … [9 caractères tronqués]`
+
+  ```
+exit=0
+  porte-n3-sparsite      ✅                           4 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+  porte-n3-variante      ✅                           6 s  PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance l
+  porte-produit          ✅                         161 s  ✅ porte produit verte
+--- 25 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-15h33
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/porte-n3-moteurs.sh tools/porte-n3-court.sh reports/rapport-n3-court.md reports/rapport-n3-moteurs.md docs/theorie/modele-natif.md docs/pilotage/en-cours.md && git commit -F - <<'MSG'  … [1142 caractères tronqués]`

@@ -17,8 +17,8 @@
 #
 # CONTRÔLES NÉGATIFS. Le bit-exact en deçà interdit de « gagner » en changeant
 # autre chose que la fenêtre ; le désaccord au-delà interdit de vendre `court`
-# comme une substitution ; le moteur numpy REFUSE `court` (nommé) au lieu de
-# l'exécuter autrement ; deux exécutions identiques (déterminisme).
+# comme une substitution ; le moteur numpy EXÉCUTE `court` (fenêtre courte) et
+# le montre — il refuse `flou`, pas `court` ; deux exécutions identiques.
 #
 # Ce que cette porte ne prouve PAS : que `court` est un bon compromis. Le coût de
 # QUALITÉ n'est pas mesuré ici — la fiche donne deux textes hors distribution dont
@@ -97,23 +97,26 @@ print(f"  rapport court / defaut : {rapport:.3f}×")
 assert rapport < 0.85, f"court n'est pas plus rapide ({rapport:.3f}×) : le profil ne paie pas"
 PY
 
-echo "=== 5. provenance et refus du moteur numpy ==="
+echo "=== 5. provenance, et le moteur numpy exécute court ==="
 "$D" --drvm-inspect "$T/court.drvm" | grep -q "impl=court" \
     || { echo "  ❌ l'inspecteur ne montre pas impl=court"; exit 1; }
 python3 - "$T" <<'PY' || exit 1
 import pathlib, sys
+import numpy as np
 sys.path.insert(0, ".")
-from tools.drvm_infere import charger
+from tools.drvm_infere import charger, logits
 T = pathlib.Path(sys.argv[1])
-_, cfg, impls = charger(str(T / "defaut.drvm"))      # contrôle positif
-assert impls == ["defaut", "defaut"], impls
-try:
-    charger(str(T / "court.drvm"))
-except NotImplementedError as e:
-    assert "court" in str(e), f"le refus ne nomme pas court : {e}"
-else:
-    raise AssertionError("le moteur numpy a accepté court en silence")
-print("  ✅ inspecteur : impl=court · numpy : court refusé (nommé)")
+td, cfg, impls_d = charger(str(T / "defaut.drvm"))
+tc, _, impls_c = charger(str(T / "court.drvm"))
+assert impls_d == ["defaut", "defaut"], impls_d
+assert impls_c == ["court", "court"], impls_c
+prompt = list(("abcdefgh" * 16).encode())      # 128 > 64 : la fenêtre courte mord
+a = logits(td, cfg, prompt, impls=impls_d)[-1]
+c = logits(tc, cfg, prompt, impls=impls_c)[-1]
+d = float(np.max(np.abs(a - c)))
+print(f"  numpy defaut vs court (128 o) : max|Δ| = {d:.3e} > 0")
+assert d > 0, "le moteur numpy n'applique pas la fenêtre courte"
+print("  ✅ inspecteur : impl=court · numpy : court exécuté et différent au-delà de 64 o")
 PY
 
-echo "PORTE TENUE : en deçà de la fenêtre bit-exact · au-delà non substituable · 0,67× le temps sur une charge d'attention · numpy refuse court"
+echo "PORTE TENUE : en deçà de la fenêtre bit-exact · au-delà non substituable · 0,69× le temps sur une charge d'attention · numpy exécute court"

@@ -126,9 +126,10 @@ def _bloc(x: np.ndarray, t: dict, cfg: dict, i: int,
     k = k.reshape(n, nh, dh)
     v = v.reshape(n, nh, dh)
     scores = np.einsum("ihd,jhd->hij", q, k) / np.sqrt(F32(dh))
-    # causal + fenêtre (la fenêtre du modèle, 1 024)
+    # causal + fenêtre : celle du modèle, ou la fenêtre courte du profil `court`.
+    fen = max(1, cfg["window"] // 4) if impl == "court" else cfg["window"]
     pos = np.arange(n)
-    masque = (pos[:, None] >= pos[None, :]) & ((pos[:, None] - pos[None, :]) < cfg["window"])
+    masque = (pos[:, None] >= pos[None, :]) & ((pos[:, None] - pos[None, :]) < fen)
     scores = np.where(masque[None, :, :], scores, -np.inf)
     scores = scores - scores.max(-1, keepdims=True)
     probs = np.exp(scores)

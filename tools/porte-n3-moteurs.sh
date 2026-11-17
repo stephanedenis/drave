@@ -8,8 +8,8 @@
 # une substitution mesurée sur un moteur ne dit rien de l'autre. La parité 4/4
 # de N4 a été mesurée une fois ; rien ne la gardait.
 #
-# LE DISPOSITIF. Un même modèle (même graine) exporté avec les profils `defaut`
-# et `bloque` ; trois exécutions : les logits du dernier pas par
+# LE DISPOSITIF. Un même modèle (même graine) exporté avec les profils `defaut`,
+# `bloque` et `court` ; trois exécutions : les logits du dernier pas par
 # `--drvm-pas-hex` (Rust) et par `logits()` (numpy), comparés à la tolérance
 # déclarée par le manifeste (`contrat.tolerance`).
 #
@@ -35,7 +35,7 @@ from tools.native_model import NativeConfig, NativeModel, exporter_drvm
 base = dict(vocab=256, d_model=32, n_blocks=2, n_heads=2, expert_hidden=16,
             n_experts=4, top_k=2, kwta=0.5, window=16, max_pos=2048,
             thought_steps=1, early_blocks=(0,), rsn_dim=8)
-for impl in ("defaut", "bloque", "flou"):
+for impl in ("defaut", "bloque", "court", "flou"):
     torch.manual_seed(7)
     m = NativeModel(NativeConfig(**base))
     exporter_drvm(m, f"{sys.argv[1]}/{impl}.drvm", impl=impl, tolerance=1e-4)
@@ -43,11 +43,12 @@ for impl in ("defaut", "bloque", "flou"):
 PY
 
 echo "=== 2. Rust et numpy : les mêmes logits dans la tolérance déclarée ==="
-for m in defaut bloque flou; do
-    "$D" --drvm-pas-hex "$T/$m.drvm" "abc" > "$T/rust-$m.txt" 2>"$T/err-$m.txt" \
+P=$(python3 -c "print('abcdefgh' * 16)")   # 128 octets : la fenêtre courte de court mord
+for m in defaut bloque court flou; do
+    "$D" --drvm-pas-hex "$T/$m.drvm" "$P" > "$T/rust-$m.txt" 2>"$T/err-$m.txt" \
         || { echo "  ❌ $m : le moteur Rust a refusé"; cat "$T/err-$m.txt"; exit 1; }
 done
-"$D" --drvm-pas-hex "$T/defaut.drvm" "abc" > "$T/rust-defaut-2.txt"
+"$D" --drvm-pas-hex "$T/defaut.drvm" "$P" > "$T/rust-defaut-2.txt"
 
 python3 - "$T" <<'PY' || exit 1
 import pathlib, struct, sys
@@ -65,12 +66,15 @@ def rust(nom):
                      for i in range(0, len(h), 8)], dtype=np.float32)
 
 
+PROMPT = list(("abcdefgh" * 16).encode())
+
+
 def numpy_logits(nom):
     t, cfg, impls = charger(str(T / f"{nom}.drvm"))
-    return logits(t, cfg, [97, 98, 99], impls=impls)[-1]
+    return logits(t, cfg, PROMPT, impls=impls)[-1]
 
 
-for nom in ("defaut", "bloque"):
+for nom in ("defaut", "bloque", "court"):
     ecart = float(np.max(np.abs(rust(nom) - numpy_logits(nom))))
     print(f"  {nom:7} Rust vs numpy : max|Δ| = {ecart:.3e}  (tolérance {TOL:g})")
     assert ecart <= TOL, f"{nom} : les deux moteurs ne rendent pas le même corps"
@@ -94,8 +98,8 @@ except NotImplementedError as e:
 else:
     raise AssertionError("le moteur numpy a accepté flou en silence")
 
-print("  ✅ deux moteurs d'accord (defaut, bloque) · déterminisme des deux côtés · "
+print("  ✅ deux moteurs d'accord (defaut, bloque, court) · déterminisme des deux côtés · "
       "comparateur non vide · numpy refuse flou")
 PY
 
-echo "PORTE TENUE : Rust et numpy rendent le même corps dans la tolérance (defaut, bloque) · le comparateur voit une différence réelle · les deux moteurs sont déterministes · numpy refuse ce qu'il n'exécute pas"
+echo "PORTE TENUE : Rust et numpy rendent le même corps dans la tolérance (defaut, bloque, court) · le comparateur voit une différence réelle · les deux moteurs sont déterministes · numpy refuse ce qu'il n'exécute pas"

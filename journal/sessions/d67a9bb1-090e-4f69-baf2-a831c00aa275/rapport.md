@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 5.6 h |
+| Durée | 5.8 h |
 | Tours | 7 |
-| Messages | 235 |
-| Appels d'outils | 257 |
+| Messages | 246 |
+| Appels d'outils | 268 |
 | Fichiers touchés | 24 |
-| Commandes | 162 |
+| Commandes | 173 |
 | Sous-agents | 0 |
-| Commits | 10 |
+| Commits | 11 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -321,7 +321,7 @@ Et le garde-fou
 
 ### Tour 7 — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
 
-*16 appels d'outils.* Actions notables :
+*27 appels d'outils.* Actions notables :
 
 - bash — Read the env-var completeness test
 - bash — Read VARS_LUES and the source() helper
@@ -337,11 +337,11 @@ Et le garde-fou
 - bash — Simplify the profile bench loop
 - bash — Run the profile bench on the trained model
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md`
-- … et 2 autres
+- … et 13 autres
 
 **Synthèse produite :**
 
-⏵ Banc des profils sur le modèle entraîné (perplexité et temps)
+⏵ Le moteur numpy exécute `court` : parité à trois profils
 
 ## 3. Travail accompli
 
@@ -416,7 +416,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 122 autres
+- … et 133 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -564,4 +564,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('drave-core/src/main.rs'); s = p.read_text() old = "    /
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/drvm_profils.py reports/rapport-profils-modele.md reports/profils-34m.json docs/pilotage/en-
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/porte-n3-moteurs.sh tools/porte-n3-court.sh reports/rappo
 
