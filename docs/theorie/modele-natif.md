@@ -322,6 +322,15 @@ s'ajoute (`impl`), elle devra se déclarer ici et porter sa trace, pas s'ajouter
 [`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur dix refus nommés, avec le DRVM valide et les
 DRVM déjà sur le disque comme contrôles négatifs.
 
+**Une variante est un nom public, un algorithme privé.** Un bloc `local_mixer` peut déclarer
+`"impl": "bloque"` et `"contrat": {"version": 0, "tolerance": 1e-4}`. Le **nom** entre dans le manifeste,
+donc dans le hash, donc dans la trace ; l'**algorithme** ne regarde que le bloc. Deux profils de la **même
+fonction** (`defaut`, `bloque`) sont **indifférents** dans la tolérance — c'est le théorème, mesuré :
+**4,768e-07** ≤ 1e-4. Un profil d'une **autre fonction** (`flou`, qui remplace le seuil net du k-WTA par une
+appartenance sigmoïde) **échoue** l'indifférence (**5,790e-03**) : il relève du **routage**, pas de la
+substitution. Chaque moteur refuse les profils qu'il n'exécute pas — le moteur numpy ne connaît que `defaut`.
+Chiffres et contrôle négatif : [`reports/rapport-n3-variante.md`](../../reports/rapport-n3-variante.md).
+
 **Pourquoi un graphe plutôt qu'une pile** : parce que les mécanismes de Drave sont des **arêtes**, pas des
 couches. Une **sortie précoce** est une arête qui court-circuite la fin ; un **pont** est une arête entre deux
 régions ; une **route** est une arête conditionnelle ; la **pensée** est une arête qui boucle. Une pile ne sait

@@ -179,6 +179,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-14](2026-11-14/distribue.md) | `61,4 %` · `50,0 %` · `56,8 %` · `53,8 %` · `0,0089` · `0,128` · `0,373` · `0,042` · `0,034` · `0,006` · `0,138` |
 | [2026-11-15](2026-11-15/distribue.md) | — |
 | [2026-11-16](2026-11-16/distribue.md) | — |
+| [2026-11-17](2026-11-17/distribue.md) | — |
 
 ### `modele` — Modèles, entraînement, parcimonie, biologie
 

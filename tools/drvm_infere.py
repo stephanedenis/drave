@@ -24,14 +24,28 @@ import sys
 import numpy as np
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from tools.drvm import read_drvm  # noqa: E402
+from tools.drvm import IMPLS_MOTEUR_NUMPY, read_drvm  # noqa: E402
 
 F32 = np.float32
 
 
 def charger(chemin: str) -> tuple[dict[str, np.ndarray], dict]:
-    """Les tenseurs du DRVM en numpy (f32, les formes du manifeste) + la config."""
+    """Les tenseurs du DRVM en numpy (f32, les formes du manifeste) + la config.
+
+    REFUS EXPLICITE. Ce moteur n'implémente qu'un profil (`defaut`). Un manifeste
+    qui demande `bloque` ou `flou` est REFUSÉ, pas exécuté autrement : un moteur
+    qui ignore le profil demandé rendrait des logits qui ne sont ceux d'aucune
+    implémentation déclarée.
+    """
     with read_drvm(chemin) as d:
+        impls = {b["id"]: b.get("impl", "defaut")
+                 for b in d.manifest["graph"]["blocks"] if b["kind"] == "local_mixer"}
+        refusees = {i: v for i, v in impls.items() if v not in IMPLS_MOTEUR_NUMPY}
+        if refusees:
+            raise NotImplementedError(
+                "impl non exécutée par le moteur numpy : "
+                + ", ".join(f"{i}={v}" for i, v in sorted(refusees.items()))
+                + " (seule « defaut » est implémentée)")
         tenseurs = {}
         for t in d.manifest["tensors"]:
             brut = bytes(d.tensor(t["name"]))  # la copie libère la vue (le mmap doit se fermer)

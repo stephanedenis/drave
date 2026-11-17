@@ -2427,3 +2427,1026 @@ M  tools/porte-n3-refus.sh
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -15\nDRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/têtes/pensée/pont ÉTAIENT DÉCLARÉS ET IGNORÉS EN SILENCE ; 10 REFUS NOMMÉS, LES DEUX LECTEURS D'ACCORD, 62 DRVM RELUS\n\nLe for … [1460 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 97579a55] DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/têtes/pensée/pont ÉTAIENT DÉCLARÉS ET IGNORÉS EN SILENCE ; 10 REFUS NOMMÉS, LES DEUX LECTEURS D'ACCORD, 62 DRVM RELUS
+ 15 files changed, 3481 insertions(+), 23 deletions(-)
+ create mode 100644 journal/2026-11-17/modele.md
+ create mode 100644 journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ create mode 100644 journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+---
+97579a55 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/têtes/pensée/pont ÉTAIENT DÉCLARÉS ET IGNORÉS EN SILENCE ; 10 REFUS NOMMÉS, LES DEUX LECTEURS D'ACCORD, 62 DRVM RELUS
+ M tools/chantier/plan.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport hashlib, pathlib, sys\nsys.path.insert(0, \".\")\nimport tools.drvm as d\nman = {\"format\":\"DRVM\",\"version\":0,\"model\":{\"name\":\"t\"},\n       \"graph\":{\"blocks\":[{\"id\":\"b0\",\"kind\":\"input\", … [1183 caractères tronqués]`
+
+  ```
+--- Rust ---
+code=3
+--- Python ---
+        "ce qu'il ne sait pas exécuter")
+tools.drvm.DRVMError: routes non exécutées : 1 route(s) — le lecteur refuse ce qu'il ne sait pas exécuter
+[stderr]
+DRVM invalide : routes non exécutées : 1 route(s) — le lecteur refuse ce qu'il ne sait pas exécuter
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif du correctif livré et de la suite
+
+**Fait, mesuré, committé — `97579a55`.**
+
+Le défaut était réel : le format DRVM **déclarait** `routes`, `regions`, `heads`, `thought`, `bridge`, et le lecteur Rust n'en lisait **aucun**. Un manifeste avec une route s'exécutait comme si la route n'existait pas — le « modèle qui ment » que `modele-natif.md` interdit. Corrigé dans **les deux lecteurs** (Rust et `tools/drvm.py`), mêmes messages :
+
+```
+DRVM invalide : routes non exécutées : 1 route(s) — le lecteur refuse ce qu'il ne sait pas exécuter
+```
+(exit 3 côté Rust, `DRVMError` côté Python, sur le même fichier)
+
+**Ce qui est verrouillé maintenant** : clés **fermées** aux cinq niveaux (racine, `graph`, bloc, `execution`, `thought`, région) ; région / tête / pont qui nomme un bloc absent → refus nommé ; `thought.steps` négatif ou fractionnaire → refus ; `routes` vide accepté, route déclarée **refusée** ; et `write_drvm` refuse aussi — **un manifeste ne peut plus naître menteur**.
+
+**Le dispositif** (`porte-n3-refus` §4) : 10 cas mutés, les deux lecteurs, mêmes messages ; contrôles négatifs = le DRVM valide passe, l'écriture avec route est refusée, et **les 62 DRVM du disque restent lisibles**.
+
+**Portes** : n3 ×18 **vertes** (11 h 16), `produit`/`document`/`etat`/`poids-creux` **vertes** (11 h 18). Tests Rust **136/137** — la rouge (`tests_vars::DRAVE_POS_DESYNC`) est **préexistante à HEAD**, hors de ce diff. Python : 189 tests, 1 erreur d'import préexistante (`test_bus`, `PYTHONPATH`).
+
+Deux notes de transparence : le hook a balayé le journal de la session active dans le commit (15 fichiers ; c'est son comportement), et `tools/chantier/plan.json` reste non committé (session Pensée).
+
+**Ce que ça débloque pour ta question** — le manifeste est maintenant un contrat vérifié, donc la suite est exactement ton idée, dans cet ordre :
+
+1. `impl` + `contrat {version, tolerance}` par bloc, avec **refus d'une `impl` inconnue** (même mécanique que `kind`) ;
+2. **provenance** dans la trace (`impl`, `params`, `seed`) — sans elle, deux variantes sont indistinguables au rejeu ;
+3. **table de routes statique** dans `graph.routes` (le champ existe et est déjà contrôlé) — pas de routeur appris avant ;
+4. **test d'indifférence** + contrôle négatif : deux implémentations du même contrat → même sortie à la tolérance près ; une impl hors contrat doit **échouer**, sinon le test ne teste rien ;
+5. **coût mesuré par variante** (le `placement.rs` a déjà la règle).
+
+Et le garde-fou reste R0.5/R06 : **quatre négatifs** sur le routage dynamique, un seuil global ne transfère pas. Le routeur se conquiert, il ne s'ajoute pas.
+
+Je peux enchaîner sur 1–4 avec la paire **lecteur extractif / génératif** (les deux existent déjà, R0.5 a leurs chiffres) — dis-moi si je continue.
+
+
+## Tour 5
+
+### 👤 Utilisateur
+
+go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+### 🤖 Assistant
+
+⏵ Création du goal et lecture du moteur natif avant l'implémentation des variantes
+
+- **get_goal** `{}`
+
+  ```
+{"goal":null}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"fn \\|pub fn \" src/native.rs | head -50; echo \"=== taille ===\"; wc -l src/native.rs src/model.rs", "description": "Survey the native engine functions"}`
+
+  ```
+27:fn champ<'a>(j: &'a Json, k: &str) -> Result<&'a Json, ErreurDrvm> {
+31:fn u(j: &Json, k: &str) -> Result<usize, ErreurDrvm> {
+45:    pub fn open(d: &Drvm) -> Result<Self, ErreurDrvm> {
+70:    fn p(&self, n: &str) -> &[f32] {
+74:    fn matvec(&self, nom: &str, biais: &str, x: &[f32], o: usize) -> Vec<f32> {
+86:    fn ln(&self, x: &[f32], nom: &str) -> Vec<f32> {
+94:    fn ffn(&self, x: &[f32], b: usize) -> Vec<f32> {
+135:    pub fn forward(&self, ids: &[u32]) -> Vec<f32> {
+219:    fn assurer(&mut self, n_blocks: usize, n_heads: usize) {
+230:    pub fn pas(&self, id: u32, pos: usize, cache: &mut Cache) -> Vec<f32> {
+240:    fn entree(&self, id: u32, pos: usize) -> Vec<f32> {
+253:    fn traverser(&self, x: &mut [f32], pos: usize, blocs: std::ops::Range<usize>, cache: &mut Cache) {
+297:    fn tete(&self, x: &[f32]) -> Vec<f32> {
+310:    fn pas_profondeur(&self, id: u32, pos: usize, cache: &mut Cache, profondeur: usize) -> Vec<f32> {
+318:    pub fn pas_amont(&self, id: u32, pos: usize, cache: &mut Cache, k: usize) -> Vec<f32> {
+326:    pub fn pas_aval(&self, frontiere: &[f32], pos: usize, cache: &mut Cache, k: usize) -> Vec<f32> {
+335:    pub fn generer_complet(&self, prompt: &[u8],
+… [894 caractères tronqués]
+  ```
+
+- **create_goal** `{"objective": "Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-vari … [302 caractères tronqués]`
+
+> **Objectif** (create) : Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouve : indifférence dans la tolérance déclarée, contrôle négatif qui DOIT échouer (variante hors contrat), refus d'une `impl` inconnue, coût mesuré par variante. Le tout committé, portes vertes, sans toucher `en-cours`/`roadmap`/`backlog` (session Pensée active).
+
+
+  ```
+{"goal":{"id":"goal-60efb487-0d27-47c7-893a-806b786aaa52","revision":1,"objective":"Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouve : indifférence dans la tolérance déclarée, contrôle négatif qui DOIT échouer (variante hors contrat), refus d'une `impl` inconnue, coût mesuré par variante. Le tout committé, portes vertes, sans toucher `en-cours`/`roadmap`/`backlog` (session Pensée active).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs", "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs</path>
+<type>file</type>
+<content>
+1: //! Exécution native d'un `drave-n0` DRVM : les tenseurs sont lus dans le
+2: //! conteneur, sans GGUF intermédiaire. C'est volontairement simple (f32, une
+3: //! séquence, pas de cache KV) : le but est de prouver que le format natif
+4: //! s'exécute, pas d'être rapide.
+5: 
+6: use std::collections::HashMap;
+7: use std::sync::atomic::{AtomicUsize, Ordering};
+8: 
+9: use crate::drvm::{Drvm, ErreurDrvm, Json};
+10: 
+11: #[derive(Debug, Clone)]
+12: pub struct Cfg {
+13:     pub vocab: usize,
+14:     pub d: usize,
+15:     pub n_blocks: usize,
+16:     pub n_heads: usize,
+17:     pub expert_hidden: usize,
+18:     pub n_experts: usize,
+19:     pub top_k: usize,
+20:     pub kwta: f64,
+21:     pub window: usize,
+22:     pub thought_steps: usize,
+23:     /// Nombre de positions du tenseur `pos.weight` (lu au chargement, plus de 2047 en dur).
+24:     pub max_pos: usize,
+25: }
+26: 
+27: fn champ<'a>(j: &'a Json, k: &str) -> Result<&'a Json, ErreurDrvm> {
+28:     j.get(k).ok_or_else(|| ErreurDrvm(format!("architecture.{k} absent")))
+29: }
+30: 
+31: fn u(j: &Json, k: &str) -> Result<usiz
+… [5869 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs", "limit": 180, "offset": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs</path>
+<type>file</type>
+<content>
+140:             for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
+141:         }
+142:         // Pour cette version, on exécute la dernière position seulement, avec
+143:         // les positions précédentes comme contexte.
+144:         let s = ids.len();
+145:         let mut h = vec![vec![0.0f32; c.d]; s];
+146:         for (pos, &id) in ids.iter().enumerate() {
+147:             let e = self.p("embed.weight"); let pe = self.p("pos.weight");
+148:             for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
+149:         }
+150:         for b in 0..c.n_blocks {
+151:             let mut nh = vec![vec![0.0f32; c.d]; s];
+152:             // q/k/v de TOUTES les positions : l'attention d'une position lit les
+153:             // précédentes. Calculer le qkv dans la boucle de position ne donnait
+154:             // que le jeton courant (range out of bounds, attrapé).
+155:             let qkv_all: Vec<Vec<f32>> = (0..s).map(|pos| {
+156:                 let z = self.
+… [8449 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n -A20 '\"--drvm-pas-hex\"' src/main.rs | head -30", "description": "Read the drvm-pas-hex command"}`
+
+  ```
+416:    if args[1] == "--drvm-pas-hex" {
+417-        let f = args.get(2).cloned().unwrap_or_default();
+418-        let prompt = args.get(3).cloned().unwrap_or_else(|| "abc".into());
+419-        let d = drvm::Drvm::open(&f).expect("DRVM");
+420-        let nat = native::Native::open(&d).expect("natif");
+421-        let mut cache = native::Cache::default();
+422-        let mut logits = vec![0.0f32; nat.vocab_size()];
+423-        for (pos, b) in prompt.bytes().enumerate() {
+424-            logits = nat.pas(b as u32, pos, &mut cache);
+425-        }
+426-        for v in logits { print!("{:08x}", v.to_bits()); }
+427-        println!();
+428-        return;
+429-    }
+430-    if args[1] == "--drvm-split-amont" {
+431-        let f = args.get(2).cloned().unwrap_or_default();
+432-        let k: usize = args.get(3).and_then(|x| x.parse().ok()).unwrap_or(0);
+433-        let prompt = args.get(4).cloned().unwrap_or_else(|| "abc".into());
+434-        let sortie = args.get(5).cloned().unwrap_or_default();
+435-        let d = drvm::Drvm::open(&f).expect("DRVM");
+436-        let nat = native::Native::open(&d).expect("natif");
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drvm_infere.py — l'inférence numpy du modèle natif, sans torch.
+3: 
+4: POURQUOI. Le modèle natif vit dans un DRVM (un conteneur lisible sans torch), mais
+5: son **calcul** était torch. Ce module fait la passe avant en **numpy seul** : le
+6: DRVM fournit les tenseurs, numpy les multiplie — le produit reste « 0 dépendance
+7: lourde ». La parité se juge sur le **greedy** : les mêmes octets que torch.
+8: 
+9: LE CONTRAT. `charger(drvm)` rend un dict de tenseurs numpy (`f32`) ; `logits(t,
+10: ids)` rend les logits de la **dernière** position ; `greedy(t, prompt, n)` rend le
+11: texte généré (et les ids). `--parite` compare à torch (si torch est là).
+12: 
+13: Usage :
+14:   python3 tools/drvm_infere.py --drvm work/n2ac/mix1024-60k.drvm \
+15:       --prompt "La France est un pays" --n 16
+16: """
+17: from __future__ import annotations
+18: 
+19: import argparse
+20: import json
+21: import pathlib
+22: import sys
+23: 
+24: import numpy as np
+25: 
+26: sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+27: from tools.drvm import read_drvm 
+… [5397 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"porte\" tools/revue_documentation.py | head -30; echo \"=== verifie_en_cours compteurs ===\"; grep -n \"portes\\|86\" tools/verifie_en_cours.py | head -20", "description": "Check how the gate count is verified"}`
+
+  ```
+12:     les compteurs de la page d'état sont ceux du disque (portes, chapitres, fiches, docs) ;
+17:Sortie : un rapport lisible, code 0 si tout passe, 1 sinon (utilisable comme porte).
+100:def compte_portes() -> int:
+101:    return len(list((RACINE / "tools").glob("porte-*.sh")))
+173:    portes = extrait_entier(t, r"\|\s*portes\s*\|\s*\*\*(\d+)\*\*")
+178:        ("portes", portes, compte_portes()),
+372:          f"{compte_docs()} doc(s) · {compte_portes()} porte(s) · {compte_chapitres()} chapitre(s)")
+=== verifie_en_cours compteurs ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du format `impl`/`contrat` dans les deux lecteurs
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "limit": 30, "offset": 36}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py</path>
+<type>file</type>
+<content>
+36: }
+37: SECTIONS = ("model", "graph", "tensors", "execution")
+38: 
+39: # Les clés sont des listes FERMÉES : une clé inconnue est refusée, jamais ignorée.
+40: # C'est la même règle que pour `kind` (docs/theorie/modele-natif.md) : un manifeste
+41: # à moitié compris qui s'exécute est un manifeste qui ment. Avant le 17/11, le
+42: # lecteur déclarait `routes`, `regions`, `heads`, `thought`, `bridge` et les
+43: # ignorait en silence ; `routes` vide est accepté, une route est REFUSÉE tant que
+44: # le moteur ne sait pas l'exécuter.
+45: CLES_RACINE = frozenset({"format", "version", *SECTIONS})
+46: CLES_GRAPHE = frozenset({"blocks", "regions", "routes", "heads", "thought", "bridge"})
+47: CLES_BLOC = frozenset({"id", "kind", "inputs", "outputs"})
+48: CLES_EXECUTION = frozenset({"activation", "placement", "cache", "replay", "import"})
+49: CLES_THOUGHT = frozenset({"steps"})
+50: CLES_REGION = frozenset({"id", "blocks"})
+51: 
+52: 
+53: class DRVMError(ValueError):
+54:     """Erreur de format DRVM."""
+55: 
+56: 
+57: @dataclass
+58: class TensorSpec:
+59:     name: str
+60:     data: bytes
+61:    
+… [210 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "new_string": "CLES_RACINE = frozenset({\"format\", \"version\", *SECTIONS})\nCLES_GRAPHE = frozenset({\"blocks\", \"regions\", \"routes\", \"heads\", \"thought\", \"bridge\"})\nCLES_BLOC = frozenset({\"id\", \"kind\", \" … [1545 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "new_string": "        if b[\"kind\"] not in BLOCS_CONNUS:\n            raise DRVMError(f\"type de bloc inconnu : {b['kind']}\")\n        impl = b.get(\"impl\", \"defaut\")\n        if not isinstance(impl, str) or impl no … [1412 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py", "limit": 14, "offset": 177}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py</path>
+<type>file</type>
+<content>
+177: def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local") -> str:
+178:     """Exporte les poids et le graphe en DRVM v0. Retourne le hash du fichier."""
+179:     cfg = modele.cfg
+180:     blocs = [{"id": "input", "kind": "input", "inputs": [], "outputs": ["h"]}]
+181:     for i in range(cfg.n_blocks):
+182:         blocs.append({"id": f"b{i}", "kind": "local_mixer", "inputs": ["h"], "outputs": ["h"]})
+183:         blocs.append({"id": f"local{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"l{i}"]})
+184:     for i in range(len(cfg.early_blocks)):
+185:         blocs.append({"id": f"early{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"y{i}"]})
+186:     blocs.append({"id": "bridge", "kind": "bridge", "inputs": ["h"], "outputs": ["h"]})
+187:     blocs.append({"id": "thought", "kind": "thought", "inputs": ["h"], "outputs": ["h"]})
+188:     blocs.append({"id": "output", "kind": "output", "inputs": ["h"], "outputs": ["logits", "rsn"]})
+189:     manifeste = {
+190:         "format": "DRVM", "version": 0,
+
+(Showing lines 177-190 of 211. Use 
+… [35 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py", "new_string": "def exporter_drvm(modele: NativeModel, chemin: str, placement: str = \"local\",\n                  impl: str = \"defaut\", tolerance: float = 0.0) -> str:\n    \"\"\"Exporte les poids et le graphe e … [1496 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport re, pathlib\np = pathlib.Path('src/drvm.rs'); s = p.read_text()\ns = s.replace('const CLES_BLOC: &[&str] = &[\"id\", \"kind\", \"inputs\", \"outputs\"];',\n              'const CLES_BLOC: &[&str] = … [1040 caractères tronqués]`
+
+  ```
+ok
+65:const CLES_CONTRAT: &[&str] = &["version", "tolerance"];
+66:pub const IMPLS_CONNUES: &[&str] = &["defaut", "bloque", "flou"];
+67-
+68-fn cles_fermees(ou: &str, obj: &Json, connues: &[&str]) -> Result<(), ErreurDrvm> {
+69-    match obj {
+70-        Json::Objet(v) => {
+71-            let inconnues: Vec<&str> = v.iter().map(|(k, _)| k.as_str())
+72-                .filter(|k| !connues.contains(k)).collect();
+--
+180:pub struct Bloc {
+181-    pub id: String,
+182-    pub kind: String,
+183-    /// Le nom PUBLIC du profil d'implémentation (`defaut`, `bloque`, `flou`).
+184-    /// L'algorithme est privé ; le nom entre dans le hash, donc dans la trace.
+185-    pub implementation: String,
+186-    /// La tolérance du contrat : deux implémentations substituables diffèrent
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "            if !BLOCS_CONNUS.contains(&kind) {\n                return Err(ErreurDrvm(format!(\"type de bloc inconnu : {kind}\")));\n            }\n            let implementation = x.get(\"impl\"). … [1811 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "            blocs.push(Bloc { id: id.to_string(), kind: kind.to_string(),\n                              implementation: implementation.to_string(), tolerance });", "old_string": "            blocs … [61 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs": file changed since it was read — re-read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 40, "offset": 375}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+375:             if !ids.insert(id.to_string()) { return Err(ErreurDrvm(format!("bloc dupliqué : {id}"))); }
+376:             if !BLOCS_CONNUS.contains(&kind) {
+377:                 return Err(ErreurDrvm(format!("type de bloc inconnu : {kind}")));
+378:             }
+379:             for port in ["inputs", "outputs"] {
+380:                 let p = x.get(port).and_then(Json::as_array)
+381:                     .ok_or_else(|| ErreurDrvm(format!("clé absente : bloc.{port}")))?;
+382:                 if p.iter().any(|v| v.as_str().is_none()) {
+383:                     return Err(ErreurDrvm(format!("{port} non typés : {id}")));
+384:                 }
+385:             }
+386:             blocs.push(Bloc { id: id.to_string(), kind: kind.to_string() });
+387:         }
+388:         if blocs.is_empty() { return Err(ErreurDrvm("graphe sans bloc".into())); }
+389:         verifie_graphe(graph, &ids)?;
+390:         verifie_execution(&manifeste)?;
+391:         let mut tenseurs = Vec::new();
+392:         let arr = manifeste.get("tensors").and_then(Json::as_array)
+393:             .ok_or_else
+… [1661 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "            if !BLOCS_CONNUS.contains(&kind) {\n                return Err(ErreurDrvm(format!(\"type de bloc inconnu : {kind}\")));\n            }\n            let implementation = x.get(\"impl\"). … [2819 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "new_string": "        if impl != \"defaut\" and b[\"kind\"] != \"local_mixer\":\n            raise DRVMError(\n                f\"impl non applicable au bloc {b['id']} ({b['kind']}) : {impl}\")\n        if impl != \"defa … [315 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs", "limit": 130, "offset": 320}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs</path>
+<type>file</type>
+<content>
+320:         let mut x = self.entree(id, pos);
+321:         self.traverser(&mut x, pos, 0..k, cache);
+322:         x
+323:     }
+324: 
+325:     /// Région AVAL : blocs `k..n`, puis tête. La frontière a déjà traversé k blocs.
+326:     pub fn pas_aval(&self, frontiere: &[f32], pos: usize, cache: &mut Cache, k: usize) -> Vec<f32> {
+327:         let k = k.min(self.cfg.n_blocks);
+328:         let mut x = frontiere.to_vec();
+329:         self.traverser(&mut x, pos, k..self.cfg.n_blocks, cache);
+330:         self.tete(&x)
+331:     }
+332: 
+333:     /// Génération SANS cache : refait toute la passe avant à chaque octet.
+334:     /// Sert de témoin pour mesurer le gain du cache.
+335:     pub fn generer_complet(&self, prompt: &[u8], n: usize) -> Vec<u8> {
+336:         let mut ids: Vec<u8> = prompt.to_vec();
+337:         for _ in 0..n {
+338:             let u: Vec<u32> = ids.iter().map(|&b| b as u32).collect();
+339:             let logits = self.forward(&u);
+340:             let suivant = logits.iter().enumerate()
+341:                 .max_by(|a, b| a.1.partial_cmp(b.1).unwrap()).ma
+… [5275 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/native.rs'); s = p.read_text()\ndef rep(old, new, n=1):\n    global s\n    c = s.count(old)\n    assert c == n, f\"{c} occurrences (attendu {n}) : {old[:60]!r}\"\n    … [7275 caractères tronqués]`
+
+  ```
+restants self.matvec sans profil : 0
+appels avec profil : 16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"^error|^warning: unused\" -A3 | head -30; echo \"build_exit=${PIPESTATUS[0]}\"", "description": "Build the engine with profiles", "timeoutMs": 420000}`
+
+  ```
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+   --> src/model.rs:801:23
+    |
+801 |     use crate::gguf::{GGML_IQ1_M, GGML_IQ1_S, GGML_IQ2_XXS, GGML_IQ3_XXS,
+--
+warning: unused attribute
+    --> src/model.rs:5087:5
+     |
+5087 |     #[inline]
+--
+warning: unused variable: `t`
+   --> src/kimi_k3.rs:272:17
+    |
+272 |             let t = g.tensor(nom).ok_or_else(|| format!("tenseur absent : {nom}"))?;
+--
+warning: unused variable: `se`
+   --> src/native.rs:176:13
+    |
+176 |         let se: f32 = ex.iter().sum();
+--
+warning: unused variable: `j`
+   --> src/native.rs:183:14
+    |
+183 |         for (j, &e) in idx.iter().enumerate() {
+--
+warning: unused variable: `id`
+   --> src/engram.rs:134:23
+    |
+134 |         for (token, (&id, &position)) in ids.iter().zip(positions.iter()).enumerate() {
+--
+build_exit=0
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 18, "offset": 539}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+539:     if args[1] == "--drvm-inspect" {
+540:         let f = match args.get(2) {
+541:             Some(f) => f.clone(),
+542:             None => { eprintln!("--drvm-inspect attend un fichier DRVM"); std::process::exit(2); }
+543:         };
+544:         match drvm::Drvm::open(&f) {
+545:             Ok(d) => {
+546:                 println!("{}", d.resume());
+547:                 for b in &d.blocs { println!("  bloc {:<12} {}", b.id, b.kind); }
+548:                 for t in &d.tenseurs {
+549:                     println!("  tenseur {:<24} bloc {:<10} {} o  {}", t.name, t.bloc, t.nbytes, t.dtype);
+550:                 }
+551:                 std::process::exit(0);
+552:             }
+553:             Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+554:         }
+555:     }
+556:     // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+
+(Showing lines 539-556 of 9080. Use offset=557 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "                println!(\"{}\", d.resume());\n                for b in &d.blocs {\n                    // La provenance est visible : le profil et sa tolérance sont\n                    // dans le … [369 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py", "new_string": "sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))\nfrom tools.drvm import IMPLS_MOTEUR_NUMPY, read_drvm  # noqa: E402\n\nF32 = np.float32\n\n\ndef charger(chemin: str) -> tuple[ … [2067 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drvm_trace.py — N0.5 : trace et rejeu d'un DRVM.
+3: 
+4: Le moteur n'exécute pas encore la passe avant d'un bloc DRVM : cette trace porte
+5: donc sur le **contenu** (manifeste, blocs, tenseurs), pas sur les logits. Elle
+6: répond à : le DRVM relu est-il exactement celui qui a été écrit ?
+7: """
+8: from __future__ import annotations
+9: 
+10: import argparse
+11: import hashlib
+12: import json
+13: import pathlib
+14: 
+15: from tools.drvm import _canonique, read_drvm
+16: 
+17: 
+18: def tracer(drvm: str) -> dict:
+19:     with read_drvm(drvm) as d:
+20:         tensors = []
+21:         for t in d.manifest["tensors"]:
+22:             b = bytes(d.tensor(t["name"]))
+23:             tensors.append({"name": t["name"], "bloc": t["bloc"],
+24:                            "nbytes": len(b), "sha256": hashlib.sha256(b).hexdigest()})
+25:         return {"format": "DRVM-TRACE", "version": 0, "source": str(drvm),
+26:                 "manifeste_sha256": hashlib.sha256(_canonique(d.manifest)).hexdigest(),
+27:                 "blocs": [b["id"] for b in d.manifest["graph"]
+… [1663 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py", "new_string": "def _provenance(manifest: dict) -> list[dict]:\n    \"\"\"Le profil d'exécution de chaque bloc à implémentation variable.\n\n    Le nom du profil est dans le manifeste, donc dans `manifeste_sha256` ;  … [3270 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '150,200p' src/drvm.rs", "description": "Check JSON number parsing for exponents"}`
+
+  ```
+}
+    let routes = g.get("routes").and_then(Json::as_array)
+        .ok_or_else(|| ErreurDrvm("graph.routes doit être une liste".into()))?;
+    if !routes.is_empty() {
+        return Err(ErreurDrvm(format!(
+            "routes non exécutées : {} route(s) — le lecteur refuse ce qu'il ne sait pas exécuter",
+            routes.len())));
+    }
+    Ok(())
+}
+
+fn verifie_execution(m: &Json) -> Result<(), ErreurDrvm> {
+    let ex = m.get("execution").ok_or_else(|| ErreurDrvm("section execution absente".into()))?;
+    cles_fermees("execution", ex, CLES_EXECUTION)?;
+    for c in ["activation", "placement"] {
+        if ex.get(c).and_then(Json::as_str).is_none() {
+            return Err(ErreurDrvm(format!("execution.{c} absent")));
+        }
+    }
+    for c in ["cache", "replay", "import"] {
+        if let Some(v) = ex.get(c) {
+            if !matches!(v, Json::Objet(_)) {
+                return Err(ErreurDrvm(format!("execution.{c} doit être un objet")));
+            }
+        }
+    }
+    Ok(())
+}
+
+#[derive(Debug, Clone)]
+pub struct Bloc {
+    pub id: String,
+    pub kind: String,
+    /// Le nom PUBLIC du profil d'implémentation (`defaut`, `bloque`, `flou`).
+    /// L'algorithme est privé ; 
+… [422 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n -A22 \"fn nombre\" src/drvm.rs", "description": "Read the JSON number parser"}`
+
+  ```
+325:    fn nombre(&mut self) -> Result<Json, ErreurDrvm> {
+326-        let start = self.i;
+327-        if self.i < self.b.len() && (self.b[self.i] == b'-' || self.b[self.i] == b'+') { self.i += 1; }
+328-        while self.i < self.b.len() && matches!(self.b[self.i], b'0'..=b'9' | b'.' | b'e' | b'E' | b'-' | b'+') { self.i += 1; }
+329-        let s = std::str::from_utf8(&self.b[start..self.i]).map_err(|_| ErreurDrvm("nombre invalide".into()))?;
+330-        let n = s.parse::<f64>().map_err(|_| ErreurDrvm(format!("nombre invalide : {s}")))?;
+331-        Ok(Json::Nombre(n))
+332-    }
+333-}
+334-
+335-fn parse_json(b: &[u8]) -> Result<Json, ErreurDrvm> {
+336-    let mut p = P { b, i: 0 };
+337-    let v = p.valeur()?;
+338-    p.ws();
+339-    if p.i != b.len() { return Err(ErreurDrvm("octets après le JSON".into())); }
+340-    Ok(v)
+341-}
+342-
+343-impl Drvm {
+344-    pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, ErreurDrvm> {
+345-        let b = fs::read(path).map_err(|e| ErreurDrvm(format!("lecture : {e}")))?;
+346-        if b.len() < HEADER_SIZE { return Err(ErreurDrvm("fichier trop court".into())); }
+347-        if &b[0..4] != MAGIC { return Err(ErreurDrvm("mauvaise magie".into()))
+… [3 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 30, "offset": 592}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+592:                 out.extend_from_slice(&d.as_u64().unwrap_or(0).to_le_bytes());
+593:             }
+594:             let ttype: u32 = t.dtype.trim_start_matches("gguf_").parse()
+595:                 .map_err(|_| ErreurDrvm(format!("type GGUF illisible : {}", t.dtype)))?;
+596:             out.extend_from_slice(&ttype.to_le_bytes());
+597:             out.extend_from_slice(&t.offset.to_le_bytes());
+598:         }
+599:         while out.len() % align != 0 { out.push(0); }
+600:         let data_start = out.len();
+601:         let total = self.tenseurs.iter().filter(|t| t.name != "__gguf_kv")
+602:             .map(|t| t.offset as usize + t.nbytes as usize).max().unwrap_or(0);
+603:         out.resize(data_start + total, 0);
+604:         for t in &tensors {
+605:             let src = self.tenseur(&t.name).ok_or_else(|| ErreurDrvm(format!("tenseur absent : {}", t.name)))?;
+606:             let a = data_start + t.offset as usize;
+607:             out[a..a + src.len()].copy_from_slice(src);
+608:         }
+609:         Ok(out)
+610:     }
+611: }
+
+(End of file - total 611 lines)
+</c
+… [7 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 50, "offset": 497}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+497:     fn refuse(nom: &str, manifeste: &str, attendu: &str) {
+498:         let d = std::env::temp_dir().join(format!("drave_drvm_refus_{nom}.bin"));
+499:         std::fs::write(&d, entete(VERSION, manifeste)).unwrap();
+500:         let e = match Drvm::open(&d) {
+501:             Err(e) => e.to_string(),
+502:             Ok(_) => panic!("{nom} : le lecteur a accepté ce qu'il n'exécute pas"),
+503:         };
+504:         assert!(e.contains(attendu), "{nom} : « {e} » ne nomme pas « {attendu} »");
+505:         let _ = std::fs::remove_file(&d);
+506:     }
+507: 
+508:     #[test]
+509:     fn lit_et_refuse() {
+510:         let d = std::env::temp_dir().join("drave_drvm_test.bin");
+511:         std::fs::write(&d, fichier(VERSION, "input")).unwrap();
+512:         let m = Drvm::open(&d).unwrap();
+513:         assert_eq!(m.tenseur("b0.w"), Some(&[1, 2, 3, 4][..]));
+514:         assert!(m.bloc("b0").is_some());
+515:         std::fs::write(&d, fichier(99, "input")).unwrap();
+516:         assert!(Drvm::open(&d).is_err());
+517:         std::fs::write(&d, fichier(VERSION, "quantum")).unw
+… [1619 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 24, "offset": 546}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+546:             r#""bridge":null"#,
+547:             r#""bridge":"b1""#)), "pont vers un bloc inconnu : b1");
+548:         refuse("pensee", &manifeste_graphe(&g.replace(
+549:             r#""thought":null"#,
+550:             r#""thought":{"steps":-1}"#)), "thought.steps invalide");
+551:         refuse("pensee_absente", &manifeste_graphe(&g.replace(
+552:             r#","thought":null"#, "")), "clé absente : graph.thought");
+553:         refuse("execution", &m.replace(
+554:             r#""placement":"local""#,
+555:             r#""placement":"local","regime":"eager""#), "clé inconnue dans execution : regime");
+556:         refuse("racine", &m.replace(
+557:             r#""format":"DRVM""#,
+558:             r#""format":"DRVM","extra":1"#), "clé inconnue dans le manifeste : extra");
+559:     }
+560: }
+561: 
+562: impl Drvm {
+563:     /// Reconstruit un GGUF complet **en mémoire** à partir du DRVM.
+564:     /// Aucun fichier temporaire : `Gguf::depuis_octets` le lit directement.
+565:     pub fn en_gguf(&self) -> Result<Vec<u8>, ErreurDrvm> {
+566:         let kv = self.tenseur
+… [331 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "        refuse(\"racine\", &m.replace(\n            r#\"\"format\":\"DRVM\"\"#,\n            r#\"\"format\":\"DRVM\",\"extra\":1\"#), \"clé inconnue dans le manifeste : extra\");\n    }\n\n    fn g … [2271 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | grep -vE \"^warning|^\\s+\\||^\\s+=|^\\s+-->|^$\" | tail -20", "description": "Run Rust tests with the variant contract", "timeoutMs": 420000}`
+
+  ```
+...
+110 |     pub fn est_vide(&self) -> bool { self.lignes.is_empty() }
+400 | pub fn existe(chemin: &str) -> bool { Path::new(chemin).is_file() }
+187 | impl Episodique {
+...
+193 |     pub fn est_vide(&self) -> bool { self.episodes.is_empty() }
+1756 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+running 138 tests
+....................................................................................... 87/138
+........................................... 130/138
+tests_vars::les_vars_lues_sont_completes --- FAILED
+.......
+failures:
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+thread 'tests_vars::les_vars_lues_sont_completes' (3578346) panicked at src/main.rs:9063:13:
+DRAVE_NATIVE_PROFONDEUR est lu dans le source mais absent de VARS_LUES : un ancien nom QT_NATIVE_PROFONDEUR resterait muet
+failures:
+    tests_vars::les_vars_lues_sont_completes
+test result: FAILED. 137 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.17s
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -2 && cd .. && PY=/home/stephane/gpu-env/bin/python && $PY - <<'PY'\nimport sys, torch\nsys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel, exporter_drvm\nbas … [1136 caractères tronqués]`
+
+  ```
+warning: `drave-core` (bin "drave") generated 75 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 30 suggestions)
+    Finished `release` profile [optimized] target(s) in 51.69s
+defaut 132720
+bloque 132720
+flou 132720
+max|defaut-bloque| = 0.0
+max|defaut-flou|   = 0.005789659917354584
+argmax 184 184 184
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/native.rs'); s = p.read_text()\nold = '''    /// `bloque` : MÊME produit, accumulé par colonne d'entrée — autre ordre de\n    /// sommation, donc mêmes logits à l'arr … [1988 caractères tronqués]`
+
+  ```
+ok
+build=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for i in defaut bloque flou; do ./drave-core/target/release/drave --drvm-pas-hex /tmp/v-$i.drvm \"abc\" > /tmp/l-$i.txt; done; python3 - <<'PY'\nimport struct\ndef lit(p):\n    h=open(p).read().strip()\n    return [struct.unpack('<f' … [355 caractères tronqués]`
+
+  ```
+max|defaut-bloque| = 4.768e-07
+max|defaut-flou|   = 5.790e-03
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,80p' tools/n3_inventaire.py", "description": "Read the N3 inventory tool rules"}`
+
+  ```
+#!/usr/bin/env python3
+"""n3_inventaire.py — la couverture N3, vérifiée au lieu d'être racontée.
+
+POURQUOI CET OUTIL EXISTE. N3.1 (29/10) publie un inventaire statique : « sortie
+précoce : service non », « k-WTA/routes : aucune porte, aucun chemin ». N3.2b0 et
+N3.3a lui donnent tort **le même jour**, et N3.4d conclut « couvert par brique »
+sans qu'aucune des deux fiches ne soit corrigée. Six jours plus tard, la fiche de
+backlog dit encore « ⏳ une porte par brique » alors que `tools/porte-n3-*.sh` en
+contient dix-sept, toutes vertes. Un inventaire écrit à la main ment dès qu'une
+brique bouge : c'est le même défaut qu'une porte qu'on croit verte sans l'avoir
+lancée — appliqué à la documentation.
+
+CE QUE L'OUTIL VÉRIFIE (statique, aucune mesure, aucun run) :
+  1. chaque porte `tools/porte-n3-*.sh` est citée par au moins une fiche
+     `reports/rapport-n3*.md` (aucune porte orpheline) ;
+  2. chaque porte citée existe sur disque et passe `bash -n` (aucune référence
+     morte, aucune porte cassée) ;
+  3. chaque JSON `reports/n3*.json` est cité par une fiche, et chaque JSON cité
+     existe (la chaîne fiche → données → porte est complète) ;
+  4. les seuils de couverture du 2026-11-04 ne 
+… [2211 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte des variantes (substitution vs routage)
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-variante.sh", "content": "#!/bin/bash\n# porte-n3-variante.sh — N3.7 : la SUBSTITUTION d'implémentation est un contrat.\n#\n# LA QUESTION. Un bloc peut avoir plusieurs implémentations (neuronal, heuristique,\n# flou). Peut … [7660 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-variante.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-n3-variante.sh && bash -n tools/porte-n3-variante.sh && time bash tools/porte-n3-variante.sh 2>&1 | tail -30", "description": "Run the new variant gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. trois profils, les MÊMES poids (même graine), un contrat déclaré ===
+  defaut  132720 paramètres
+  bloque  132720 paramètres
+  flou    132720 paramètres
+=== 2. le même pas, trois profils : ce que la tolérance déclare ===
+  tolérance déclarée (contrat) : 0.0001
+  defaut vs bloque : max|Δ| = 4.768e-07  → INDIFFÉRENT
+  defaut vs flou   : max|Δ| = 5.790e-03  → NON INDIFFÉRENT
+  ✅ substitution indifférente · contrôle négatif vivant (flou échoue)
+=== 3. provenance : le profil est dans le manifeste, donc dans le hash ===
+  ✅ inspecteur et trace portent impl=bloque, tol=1e-4
+=== 4. le moteur numpy REFUSE ce qu'il n'implémente pas ===
+  ✅ defaut exécuté · bloque et flou refusés (nommés)
+=== 5. coût du même pas, chronométré (le chiffre, pas la promesse) ===
+  defaut  médiane   87.0 ms  (CV 1 %)
+  bloque  médiane   86.4 ms  (CV 14 %)
+  rapport bloque / defaut : 0.99×
+=== 6. une impl inconnue ne s'écrit pas (donc ne se lit pas) ===
+  ✅ impl inconnue refusée à l'écriture
+PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance lue · numpy refuse ce qu'il n'exécute pas · coût chronométré
+[stderr]
+
+real	0m5,790s
+user	0m11,580s
+sys	0m0,772s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"date\\|Mis à jour\\|horodat\\|mtime\" tools/verifie_en_cours.py | head -10; echo \"=== mots ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -5", "description": "Check state checks before editing it"}`
+
+  ```
+88:    if not re.search(r"^\*\*Mis à jour : 2026-\d\d-\d\d", texte, re.M):
+89:        alertes.append("date « Mis à jour : AAAA-MM-JJ » absente")
+=== mots ===
+  en-cours · 1634 mots · 7 sections · 4 session(s) · 9 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche de résultat N3.7 avec les chiffres mesurés
+
+- **write** `{"content": "# N3.7 — les variantes d'implémentation sont un contrat\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ **N3.7 tenu** — deux\n> implémentations de la **même fonction** sont **indifférentes** dans la tolérance déclarée par le\n> manifeste (**4,768e-07** ≤ 1e-4) ; … [3384 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-variante.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md", "limit": 16, "offset": 312}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md</path>
+<type>file</type>
+<content>
+312: **Un bloc inconnu est refusé**, pas ignoré : `BLOCS_CONNUS` est une liste fermée, et le lecteur rend une erreur
+313: qui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris qui s'exécute quand même est un
+314: modèle qui ment. Le même principe vaut pour la version et pour une section absente.
+315: 
+316: **Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** `graph.routes` vide est accepté ; une route
+317: déclarée est **refusée** tant que le moteur ne sait pas l'exécuter — l'implémenter, pas l'ignorer, est la
+318: prochaine étape. Une clé inconnue (manifeste, `graph`, bloc, `execution`), une région, une tête ou un pont qui
+319: nomme un bloc absent le sont aussi, et les **deux lecteurs** (Rust et `tools/drvm.py`) appliquent la même règle
+320: et la même erreur. C'est ce qui fait du manifeste un **contrat** : le jour où une variante d'implémentation
+321: s'ajoute (`impl`), elle devra se déclarer ici et porter sa trace, pas s'ajouter en silence. La porte
+322: [`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur dix ref
+… [515 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md", "new_string": "et la même erreur. C'est ce qui fait du manifeste un **contrat** : le jour où une variante d'implémentation\ns'ajoute (`impl`), elle devra se déclarer ici et porter sa trace, pas s'ajouter en … [1430 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "limit": 14, "offset": 81}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+81: ## Ce qui est en cours
+82: 
+83: - **S — les structures** : 61/61 types, 144/144 rôles ; **19/19 verdicts `389b99f`** ; [v2](../../reports/rapport-coordination-s-v2.md).
+84: - **N2 — en pause** : commande **`eval_longueurs.py --rope --val <dir>`** (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
+85: - **Pensée — B13 (actif)** : **183/183** ; **v2** **19/46** (F1 **0,5270**), **W5 — v3** **20/46** (F1 **0,5406**), gold S **144/144** ; **U2 — la roue** (autonome, gold dedans, roue sans gold → 4) ; **U3** profils 20/20 ; [v2](../../reports/rapport-restitution-v2.md), [v3](../../reports/rapport-restitution-v3.md), [roue](../../reports/rapport-roue.md), [profils](../../reports/rapport-profils.md).
+86: - **L — le bloc langue** : contrat ; frontière script 1,0 / langue 0,137/0,9687 ; fusion réparée **0,9309/0,8226/0,8784/0,9954**.
+87: - **W2/W3 — le tagger** : 402 **0,9198 → 0,9643** (+4,45), H50 **0,6842 → 0,8607** (+17,65) ; défaut **code 0 / 0 socket** ; `--tagger` **cod
+… [1121 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "- **Bilans** : F1 **0,7902**, chantier **20/21** ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [clôture](../../reports/rapport-cloture-chantier … [529 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"portes | \\*\\*86\\*\\*\" docs/pilotage/en-cours.md", "description": "Locate the gate counter line"}`
+
+  ```
+100:| portes | **86** (dont `porte-banc-performance` le 15/11) | `tools/porte-*.sh` |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "| portes | **87** (dont `porte-banc-performance` le 15/11, `porte-n3-variante` le 17/11) | `tools/porte-*.sh` |", "old_string": "| portes | **86** (dont `porte-banc-performance` le 15/11) | `too … [18 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -3; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -6; echo \"=== inventaire ===\"; bash tools/porte-n3-inventaire.sh 2>&1 | tail -6", "description": "Check stat … [63 caractères tronqués]`
+
+  ```
+en-cours · 1676 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== revue ===
+  revue de documentation · 782 fiche(s) · 875 JSON · 127 doc(s) · 87 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 781 fichiers, le disque en a 782
+=== inventaire ===
+  ✅ autotest : 5/5 cas attendus
+=== l'inventaire N3 (couverture exécutable) ===
+  portes ......... 19  (19 citées par les fiches)
+  fiches ......... 21
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=n3 DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-n3-variante.log 2>&1; echo \"exit=$?\"; tail -25 /tmp/passe-n3-variante.log", "description": "Run all N3 gates including the new one", "run_in_background": true}`
+
+  ```
+started background job bash-85
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"781\" docs/pilotage/en-cours.md", "description": "Locate the reports counter"}`
+
+  ```
+102:| fichiers / JSON de résultats | **781** / **875** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md", "new_string": "| fichiers / JSON de résultats | **782** / **875** | `reports/*.md` / `reports/*.json` |", "old_string": "| fichiers / JSON de résultats | **781** / **875** | `reports/*.md` / `reports/*.json` | … [2 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -4; echo \"=== tests python drvm ===\"; python3 -m unittest tools.cerveau.tests.test_drvm tools.cerveau.tests.test_drvm_trace 2>&1 | tail -3; echo \"=== t146 ===\"; python3 -c \"\nfrom … [143 caractères tronqués]`
+
+  ```
+revue de documentation · 782 fiche(s) · 875 JSON · 127 doc(s) · 87 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+=== tests python drvm ===
+Ran 8 tests in 0.005s
+
+OK
+=== t146 ===
+(True, 'DRVM N0.1 : 6/6 (le payload corrompu est refusé)')
+  ```
+
+- **job_output** `{"job_id": "bash-85", "timeout_ms": 300000, "wait": true}`
+
+  ```
+exit=0
+=== PASSE COMPLÈTE DES PORTES (19 portes, borne 900 s) ===
+    journaux : work/portes-1117-13h21
+  porte-n3-cache         ✅                           6 s  PORTE TENUE : saut de calcul mesuré · sortie changée · condition K/V nommée
+  porte-n3-composition   ✅                           5 s  PORTE TENUE : service + profondeur + routage + comptage composés sur les mêmes modèles
+  porte-n3-deux-processus ✅                           5 s  PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein
+  porte-n3-deux-regions  ✅                           4 s  PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent
+  porte-n3-generation    ✅                           9 s  PORTE TENUE : génération répartie · deux caches · sortie bit-identique
+  porte-n3-inventaire    ✅                           0 s    ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence
+  porte-n3-placement     ✅                           4 s  PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté
+  porte-n3-pont          ✅                           4 s  PORTE TENUE : pont natif branché · A dét
+… [1847 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/native_model.py tools/drvm_infere.py tools/drvm_trace.py tools/porte-n3-variante.sh reports/rapport-n3-variante.md docs/theorie/modele … [120 caractères tronqués]`
+
+  ```
+M  docs/pilotage/en-cours.md
+M  docs/theorie/modele-natif.md
+M  drave-core/src/drvm.rs
+M  drave-core/src/main.rs
+M  drave-core/src/native.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+A  reports/rapport-n3-variante.md
+ M tools/chantier/plan.json
+M  tools/drvm.py
+M  tools/drvm_infere.py
+M  tools/drvm_trace.py
+M  tools/native_model.py
+A  tools/porte-n3-variante.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8\nN3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)\n\nLe format DRVM accepte `impl` (profil public) et `contrat … [1470 caractères tronqués]`

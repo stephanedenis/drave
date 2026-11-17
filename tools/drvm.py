@@ -44,10 +44,24 @@ SECTIONS = ("model", "graph", "tensors", "execution")
 # le moteur ne sait pas l'exécuter.
 CLES_RACINE = frozenset({"format", "version", *SECTIONS})
 CLES_GRAPHE = frozenset({"blocks", "regions", "routes", "heads", "thought", "bridge"})
-CLES_BLOC = frozenset({"id", "kind", "inputs", "outputs"})
+CLES_BLOC = frozenset({"id", "kind", "inputs", "outputs", "impl", "contrat"})
 CLES_EXECUTION = frozenset({"activation", "placement", "cache", "replay", "import"})
 CLES_THOUGHT = frozenset({"steps"})
 CLES_REGION = frozenset({"id", "blocks"})
+CLES_CONTRAT = frozenset({"version", "tolerance"})
+
+# Les profils d'implémentation d'un bloc. Le NOM est public (il est dans le
+# manifeste, donc dans le hash, donc dans la trace) ; l'ALGORITHME est privé.
+#   defaut — le produit ligne par ligne, seuil net du k-WTA ;
+#   bloque — le même produit accumulé par colonnes : MÊME fonction, autre ordre,
+#            donc indifférent dans la tolérance déclarée par `contrat` ;
+#   flou   — le seuil net remplacé par une appartenance sigmoïde : AUTRE fonction
+#            sous la même signature, donc NON substituable — c'est un candidat au
+#            ROUTAGE, pas à la substitution.
+# Le format connaît les trois ; chaque moteur refuse celles qu'il n'implémente
+# pas (le moteur numpy ne connaît que « defaut »).
+IMPLS_CONNUES = frozenset({"defaut", "bloque", "flou"})
+IMPLS_MOTEUR_NUMPY = frozenset({"defaut"})
 
 
 class DRVMError(ValueError):
@@ -161,6 +175,25 @@ def _valide(manifest: dict[str, Any]) -> None:
         ids.add(b["id"])
         if b["kind"] not in BLOCS_CONNUS:
             raise DRVMError(f"type de bloc inconnu : {b['kind']}")
+        impl = b.get("impl", "defaut")
+        if not isinstance(impl, str) or impl not in IMPLS_CONNUES:
+            raise DRVMError(f"impl inconnue : {impl!r} (bloc {b['id']})")
+        if impl != "defaut" and b["kind"] != "local_mixer":
+            raise DRVMError(
+                f"impl non applicable au bloc {b['id']} ({b['kind']}) : {impl}")
+        if impl != "defaut" and "contrat" not in b:
+            raise DRVMError(f"contrat absent pour l'impl {impl} (bloc {b['id']})")
+        if "contrat" in b:
+            ou = f"contrat du bloc {b['id']}"
+            contrat = _objet(ou, b["contrat"])
+            _cles_fermees(ou, contrat, CLES_CONTRAT)
+            version = _cle_absente(ou, contrat, "version")
+            if not isinstance(version, int) or isinstance(version, bool) or version != 0:
+                raise DRVMError(f"contrat.version non supportée : {version!r} (bloc {b['id']})")
+            tolerance = _cle_absente(ou, contrat, "tolerance")
+            if (not isinstance(tolerance, (int, float)) or isinstance(tolerance, bool)
+                    or not tolerance >= 0):
+                raise DRVMError(f"contrat.tolerance invalide : {tolerance!r} (bloc {b['id']})")
         for port in ("inputs", "outputs"):
             _chaines(f"{port} du bloc {b['id']}", _cle_absente("bloc", b, port))
     regions = graphe["regions"]

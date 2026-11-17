@@ -8,6 +8,33 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use crate::drvm::{Drvm, ErreurDrvm, Json};
 
+/// Le profil d'implémentation d'un bloc : le NOM est public (manifeste → hash
+/// → trace), l'ALGORITHME est privé. `Defaut` et `Bloque` calculent la même
+/// fonction dans un autre ordre d'accumulation (substituables dans la tolérance
+/// du contrat) ; `Flou` remplace le seuil net du k-WTA par une appartenance
+/// sigmoïde — AUTRE fonction sous la même signature, donc à router, pas à
+/// substituer. Le moteur numpy ne connaît que `Defaut` et refuse le reste.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Profil { Defaut, Bloque, Flou }
+
+impl Profil {
+    pub fn depuis(s: &str) -> Option<Profil> {
+        match s {
+            "defaut" => Some(Profil::Defaut),
+            "bloque" => Some(Profil::Bloque),
+            "flou" => Some(Profil::Flou),
+            _ => None,
+        }
+    }
+    pub fn nom(self) -> &'static str {
+        match self {
+            Profil::Defaut => "defaut",
+            Profil::Bloque => "bloque",
+            Profil::Flou => "flou",
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Cfg {
     pub vocab: usize,
@@ -35,6 +62,8 @@ fn u(j: &Json, k: &str) -> Result<usize, ErreurDrvm> {
 pub struct Native {
     cfg: Cfg,
     poids: HashMap<String, Vec<f32>>,
+    /// Le profil de chaque bloc, dans l'ordre des indices de bloc.
+    impls: Vec<Profil>,
     // N3.3c — compteurs de sparsité réelle, remis à zéro à chaque chargement.
     appels_ffn: AtomicUsize,
     experts_actifs: AtomicUsize,
@@ -63,7 +92,21 @@ impl Native {
             poids.insert(t.name.clone(), v);
         }
         cfg.max_pos = poids.get("pos.weight").map(|p| p.len() / cfg.d).unwrap_or(2048).max(1);
-        Ok(Native { cfg, poids, appels_ffn: AtomicUsize::new(0),
+        // Le manifeste nomme le profil de chaque bloc `b{i}` ; le format a déjà
+        // refusé une `impl` inconnue, ici on refuse ce que le moteur n'exécute pas.
+        let mut impls = vec![Profil::Defaut; cfg.n_blocks];
+        for b in &d.blocs {
+            if b.kind == "local_mixer" {
+                if let Some(i) = b.id.strip_prefix('b').and_then(|x| x.parse::<usize>().ok()) {
+                    if i < impls.len() {
+                        impls[i] = Profil::depuis(&b.implementation).ok_or_else(||
+                            ErreurDrvm(format!("impl non exécutée par le moteur natif : {} (bloc {})",
+                                               b.implementation, b.id)))?;
+                    }
+                }
+            }
+        }
+        Ok(Native { cfg, poids, impls, appels_ffn: AtomicUsize::new(0),
                     experts_actifs: AtomicUsize::new(0), canaux_actifs: AtomicUsize::new(0) })
     }
 
@@ -71,13 +114,51 @@ impl Native {
         self.poids.get(n).unwrap_or_else(|| panic!("tenseur natif absent : {n}"))
     }
 
-    fn matvec(&self, nom: &str, biais: &str, x: &[f32], o: usize) -> Vec<f32> {
+    fn profil(&self, b: usize) -> Profil {
+        *self.impls.get(b).unwrap_or(&Profil::Defaut)
+    }
+
+    /// Le produit matrice-vecteur, selon le profil du bloc.
+    fn matvec(&self, p: Profil, nom: &str, biais: &str, x: &[f32], o: usize) -> Vec<f32> {
+        match p {
+            Profil::Bloque => self.matvec_tuile(nom, biais, x, o),
+            _ => self.matvec_lignes(nom, biais, x, o),
+        }
+    }
+
+    /// `defaut` : un produit scalaire par ligne de sortie (somme sur les entrées).
+    fn matvec_lignes(&self, nom: &str, biais: &str, x: &[f32], o: usize) -> Vec<f32> {
         let w = self.p(nom); let bi = self.p(biais); let i = x.len();
         let mut y = vec![0.0f32; o];
         for r in 0..o {
             let mut s = bi[r];
             let base = r * i;
             for c in 0..i { s += w[base + c] * x[c]; }
+            y[r] = s;
+        }
+        y
+    }
+
+    /// `bloque` : MÊME produit, en TUILANT la somme sur quatre accumulateurs —
+    /// autre ordre d'addition, donc mêmes logits à l'arrondi f32 près (le
+    /// contrat le dit, la porte le mesure). C'est le tuilage du rapport
+    /// d'optimisations, appliqué à la dimension d'entrée.
+    fn matvec_tuile(&self, nom: &str, biais: &str, x: &[f32], o: usize) -> Vec<f32> {
+        let w = self.p(nom); let bi = self.p(biais); let i = x.len();
+        let mut y = vec![0.0f32; o];
+        for r in 0..o {
+            let base = r * i;
+            let (mut s0, mut s1, mut s2, mut s3) = (bi[r], 0.0f32, 0.0f32, 0.0f32);
+            let mut c = 0;
+            while c + 4 <= i {
+                s0 += w[base + c] * x[c];
+                s1 += w[base + c + 1] * x[c + 1];
+                s2 += w[base + c + 2] * x[c + 2];
+                s3 += w[base + c + 3] * x[c + 3];
+                c += 4;
+            }
+            let mut s = (s0 + s1) + (s2 + s3);
+            while c < i { s += w[base + c] * x[c]; c += 1; }
             y[r] = s;
         }
         y
@@ -93,8 +174,9 @@ impl Native {
 
     fn ffn(&self, x: &[f32], b: usize) -> Vec<f32> {
         let c = &self.cfg;
+        let p = self.profil(b);
         self.appels_ffn.fetch_add(1, Ordering::Relaxed);
-        let rout = self.matvec(&format!("blocks.{b}.ffn.router.weight"),
+        let rout = self.matvec(p, &format!("blocks.{b}.ffn.router.weight"),
                               &format!("blocks.{b}.ffn.router.bias"), x, c.n_experts);
         let mut idx: Vec<usize> = (0..c.n_experts).collect();
         idx.sort_by(|&a, &z| rout[z].partial_cmp(&rout[a]).unwrap());
@@ -103,9 +185,9 @@ impl Native {
         let mx = idx.iter().map(|&e| rout[e]).fold(f32::NEG_INFINITY, f32::max);
         let ex: Vec<f32> = idx.iter().map(|&e| (rout[e] - mx).exp()).collect();
         let se: f32 = ex.iter().sum();
-        let g = self.matvec(&format!("blocks.{b}.ffn.gate.weight"),
+        let g = self.matvec(p, &format!("blocks.{b}.ffn.gate.weight"),
                             &format!("blocks.{b}.ffn.gate.bias"), x, c.n_experts * c.expert_hidden);
-        let u = self.matvec(&format!("blocks.{b}.ffn.up.weight"),
+        let u = self.matvec(p, &format!("blocks.{b}.ffn.up.weight"),
                             &format!("blocks.{b}.ffn.up.bias"), x, c.n_experts * c.expert_hidden);
         let mut h = vec![0.0f32; c.n_experts * c.expert_hidden];
         let k = ((c.expert_hidden as f64 * c.kwta).round() as usize).max(1);
@@ -124,11 +206,20 @@ impl Native {
                 // Le modèle Python calcule les poids du routeur mais ne les
                 // applique PAS à h (ils ne servent qu'au top-k). Les multiplier
                 // ici créait l'écart de 0,88 sur les logits.
-                if v[q] >= seuil { h[base + q] = v[q]; actifs += 1; }
+                match p {
+                    // `flou` : le seuil net devient une appartenance sigmoïde.
+                    Profil::Flou => {
+                        let echelle = seuil.abs().max(1e-3);
+                        let app = 1.0 / (1.0 + ((seuil - v[q]) / echelle).exp());
+                        h[base + q] = v[q] * app;
+                        if app > 0.5 { actifs += 1; }
+                    }
+                    _ => { if v[q] >= seuil { h[base + q] = v[q]; actifs += 1; } }
+                }
             }
             self.canaux_actifs.fetch_add(actifs, Ordering::Relaxed);
         }
-        self.matvec(&format!("blocks.{b}.ffn.down.weight"),
+        self.matvec(p, &format!("blocks.{b}.ffn.down.weight"),
                     &format!("blocks.{b}.ffn.down.bias"), &h, c.d)
     }
 
@@ -148,13 +239,14 @@ impl Native {
             for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
         }
         for b in 0..c.n_blocks {
+            let p = self.profil(b);
             let mut nh = vec![vec![0.0f32; c.d]; s];
             // q/k/v de TOUTES les positions : l'attention d'une position lit les
             // précédentes. Calculer le qkv dans la boucle de position ne donnait
             // que le jeton courant (range out of bounds, attrapé).
             let qkv_all: Vec<Vec<f32>> = (0..s).map(|pos| {
                 let z = self.ln(&h[pos], &format!("blocks.{b}.ln1"));
-                self.matvec(&format!("blocks.{b}.qkv.weight"),
+                self.matvec(p, &format!("blocks.{b}.qkv.weight"),
                             &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d)
             }).collect();
             for pos in 0..s {
@@ -179,7 +271,7 @@ impl Native {
                         for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
                     }
                 }
-                let y = self.matvec(&format!("blocks.{b}.out.weight"),
+                let y = self.matvec(p, &format!("blocks.{b}.out.weight"),
                                     &format!("blocks.{b}.out.bias"), &att, c.d);
                 let z2 = self.ln(&(0..c.d).map(|k| h[pos][k] + y[k]).collect::<Vec<_>>(),
                                  &format!("blocks.{b}.ln2"));
@@ -189,7 +281,7 @@ impl Native {
             h = nh;
             if c.n_blocks >= 2 && b == c.n_blocks / 2 - 1 {
                 for pos in 0..s {
-                    let br = self.matvec("bridge.weight", "bridge.bias", &h[pos], c.d);
+                    let br = self.matvec(Profil::Defaut, "bridge.weight", "bridge.bias", &h[pos], c.d);
                     for k in 0..c.d { h[pos][k] += br[k]; }
                 }
             }
@@ -199,13 +291,13 @@ impl Native {
             let mut z = h[pos].clone();
             let h0 = z.clone();
             for _ in 0..c.thought_steps {
-                let a = self.matvec("thought.weight", "thought.bias", &z, c.d);
-                let b = self.matvec("thought_in.weight", "thought_in.bias", &h0, c.d);
+                let a = self.matvec(Profil::Defaut, "thought.weight", "thought.bias", &z, c.d);
+                let b = self.matvec(Profil::Defaut, "thought_in.weight", "thought_in.bias", &h0, c.d);
                 for k in 0..c.d { z[k] = (a[k] + b[k]).tanh(); }
             }
             out = z;
         }
-        self.matvec("head_byte.weight", "head_byte.bias", &out, c.vocab)
+        self.matvec(Profil::Defaut, "head_byte.weight", "head_byte.bias", &out, c.vocab)
     }
 }
 
@@ -255,8 +347,9 @@ impl Native {
         let dh = c.d / c.n_heads;
         cache.assurer(c.n_blocks, c.n_heads);
         for b in blocs {
+            let p = self.profil(b);
             let z = self.ln(x, &format!("blocks.{b}.ln1"));
-            let qkv = self.matvec(&format!("blocks.{b}.qkv.weight"),
+            let qkv = self.matvec(p, &format!("blocks.{b}.qkv.weight"),
                                   &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
             let mut att = vec![0.0f32; c.d];
             for t in 0..c.n_heads {
@@ -279,14 +372,14 @@ impl Native {
                     for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
                 }
             }
-            let y = self.matvec(&format!("blocks.{b}.out.weight"),
+            let y = self.matvec(p, &format!("blocks.{b}.out.weight"),
                                 &format!("blocks.{b}.out.bias"), &att, c.d);
             let z2 = self.ln(&(0..c.d).map(|k| x[k] + y[k]).collect::<Vec<_>>(),
                              &format!("blocks.{b}.ln2"));
             let f = self.ffn(&z2, b);
             for k in 0..c.d { x[k] = x[k] + y[k] + f[k]; }
             if c.n_blocks >= 2 && b == c.n_blocks / 2 - 1 {
-                let br = self.matvec("bridge.weight", "bridge.bias", x, c.d);
+                let br = self.matvec(Profil::Defaut, "bridge.weight", "bridge.bias", x, c.d);
                 for k in 0..c.d { x[k] += br[k]; }
             }
         }
@@ -299,11 +392,11 @@ impl Native {
         let mut z = x.to_vec();
         let h0 = x.to_vec();
         for _ in 0..c.thought_steps {
-            let a = self.matvec("thought.weight", "thought.bias", &z, c.d);
-            let b = self.matvec("thought_in.weight", "thought_in.bias", &h0, c.d);
+            let a = self.matvec(Profil::Defaut, "thought.weight", "thought.bias", &z, c.d);
+            let b = self.matvec(Profil::Defaut, "thought_in.weight", "thought_in.bias", &h0, c.d);
             for k in 0..c.d { z[k] = (a[k] + b[k]).tanh(); }
         }
-        self.matvec("head_byte.weight", "head_byte.bias", &z, c.vocab)
+        self.matvec(Profil::Defaut, "head_byte.weight", "head_byte.bias", &z, c.vocab)
     }
 
     /// N3.2b0 — un pas à profondeur imposée ; N3.2b1 l'utilise pour les deux caches.

@@ -174,12 +174,21 @@ def _bloc_de(nom: str, cfg: NativeConfig) -> str:
     return "output"
 
 
-def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local") -> str:
-    """Exporte les poids et le graphe en DRVM v0. Retourne le hash du fichier."""
+def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local",
+                  impl: str = "defaut", tolerance: float = 0.0) -> str:
+    """Exporte les poids et le graphe en DRVM v0. Retourne le hash du fichier.
+
+    `impl` et `tolerance` sont le CONTRAT d'implémentation des blocs
+    `local_mixer` : le nom du profil est public (il entre dans le hash, donc
+    dans la trace), l'algorithme est privé. `defaut` et `bloque` calculent la
+    même fonction (indifférents dans `tolerance`) ; `flou` change la fonction du
+    k-WTA (non substituable, candidat au routage). Voir `tools/drvm.py`.
+    """
     cfg = modele.cfg
     blocs = [{"id": "input", "kind": "input", "inputs": [], "outputs": ["h"]}]
     for i in range(cfg.n_blocks):
-        blocs.append({"id": f"b{i}", "kind": "local_mixer", "inputs": ["h"], "outputs": ["h"]})
+        blocs.append({"id": f"b{i}", "kind": "local_mixer", "inputs": ["h"], "outputs": ["h"],
+                      "impl": impl, "contrat": {"version": 0, "tolerance": tolerance}})
         blocs.append({"id": f"local{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"l{i}"]})
     for i in range(len(cfg.early_blocks)):
         blocs.append({"id": f"early{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"y{i}"]})

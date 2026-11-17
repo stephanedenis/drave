@@ -58,10 +58,12 @@ impl Json {
 /// `bridge` dans son en-tête et les IGNORAIT en silence.
 const CLES_RACINE: &[&str] = &["format", "version", "model", "graph", "tensors", "execution"];
 const CLES_GRAPHE: &[&str] = &["blocks", "regions", "routes", "heads", "thought", "bridge"];
-const CLES_BLOC: &[&str] = &["id", "kind", "inputs", "outputs"];
+const CLES_BLOC: &[&str] = &["id", "kind", "inputs", "outputs", "impl", "contrat"];
 const CLES_EXECUTION: &[&str] = &["activation", "placement", "cache", "replay", "import"];
 const CLES_THOUGHT: &[&str] = &["steps"];
 const CLES_REGION: &[&str] = &["id", "blocks"];
+const CLES_CONTRAT: &[&str] = &["version", "tolerance"];
+pub const IMPLS_CONNUES: &[&str] = &["defaut", "bloque", "flou"];
 
 fn cles_fermees(ou: &str, obj: &Json, connues: &[&str]) -> Result<(), ErreurDrvm> {
     match obj {
@@ -178,6 +180,12 @@ fn verifie_execution(m: &Json) -> Result<(), ErreurDrvm> {
 pub struct Bloc {
     pub id: String,
     pub kind: String,
+    /// Le nom PUBLIC du profil d'implémentation (`defaut`, `bloque`, `flou`).
+    /// L'algorithme est privé ; le nom entre dans le hash, donc dans la trace.
+    pub implementation: String,
+    /// La tolérance du contrat : deux implémentations substituables diffèrent
+    /// d'au plus cette valeur (max |Δ| sur les logits).
+    pub tolerance: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -368,6 +376,34 @@ impl Drvm {
             if !BLOCS_CONNUS.contains(&kind) {
                 return Err(ErreurDrvm(format!("type de bloc inconnu : {kind}")));
             }
+            let implementation = x.get("impl").and_then(Json::as_str).unwrap_or("defaut");
+            if !IMPLS_CONNUES.contains(&implementation) {
+                return Err(ErreurDrvm(format!("impl inconnue : {implementation} (bloc {id})")));
+            }
+            if implementation != "defaut" && kind != "local_mixer" {
+                return Err(ErreurDrvm(format!(
+                    "impl non applicable au bloc {id} ({kind}) : {implementation}")));
+            }
+            if implementation != "defaut" && x.get("contrat").is_none() {
+                return Err(ErreurDrvm(format!(
+                    "contrat absent pour l'impl {implementation} (bloc {id})")));
+            }
+            let mut tolerance = 0.0f64;
+            if let Some(c) = x.get("contrat") {
+                if !matches!(c, Json::Null) {
+                    cles_fermees(&format!("contrat du bloc {id}"), c, CLES_CONTRAT)?;
+                    let v = c.get("version").and_then(Json::as_u64)
+                        .ok_or_else(|| ErreurDrvm(format!("contrat.version absente (bloc {id})")))?;
+                    if v != 0 {
+                        return Err(ErreurDrvm(format!("contrat.version non supportée : {v} (bloc {id})")));
+                    }
+                    tolerance = c.get("tolerance").and_then(Json::as_f64)
+                        .ok_or_else(|| ErreurDrvm(format!("contrat.tolerance absente (bloc {id})")))?;
+                    if !(tolerance >= 0.0) {
+                        return Err(ErreurDrvm(format!("contrat.tolerance invalide : {tolerance} (bloc {id})")));
+                    }
+                }
+            }
             for port in ["inputs", "outputs"] {
                 let p = x.get(port).and_then(Json::as_array)
                     .ok_or_else(|| ErreurDrvm(format!("clé absente : bloc.{port}")))?;
@@ -375,7 +411,8 @@ impl Drvm {
                     return Err(ErreurDrvm(format!("{port} non typés : {id}")));
                 }
             }
-            blocs.push(Bloc { id: id.to_string(), kind: kind.to_string() });
+            blocs.push(Bloc { id: id.to_string(), kind: kind.to_string(),
+                              implementation: implementation.to_string(), tolerance });
         }
         if blocs.is_empty() { return Err(ErreurDrvm("graphe sans bloc".into())); }
         verifie_graphe(graph, &ids)?;
@@ -519,6 +556,39 @@ mod tests {
         refuse("racine", &m.replace(
             r#""format":"DRVM""#,
             r#""format":"DRVM","extra":1"#), "clé inconnue dans le manifeste : extra");
+    }
+
+    fn graphe_variante(impl_: &str) -> String {
+        format!(
+            r#"{{"blocks":[{{"id":"b0","kind":"local_mixer","inputs":[],"outputs":[],"impl":"{impl_}","contrat":{{"version":0,"tolerance":1e-4}}}}],"regions":[{{"id":"r0","blocks":["b0"]}}],"routes":[],"heads":[],"thought":null,"bridge":null}}"#
+        )
+    }
+
+    /// Les variantes sont un CONTRAT, pas un commentaire : un profil déclaré et
+    /// sa tolérance se lisent et se propagent ; un profil inconnu, mal appliqué,
+    /// sans contrat ou avec un contrat incohérent est refusé et nommé.
+    #[test]
+    fn les_variantes_sont_un_contrat() {
+        let d = std::env::temp_dir().join("drave_drvm_variante_ok.bin");
+        std::fs::write(&d, entete(VERSION, &manifeste_graphe(&graphe_variante("bloque")))).unwrap();
+        let m = Drvm::open(&d).expect("impl bloque + contrat valide");
+        assert_eq!(m.blocs[0].implementation, "bloque");
+        assert!((m.blocs[0].tolerance - 1e-4).abs() < 1e-12, "tolérance non lue");
+        let _ = std::fs::remove_file(&d);
+
+        let g = graphe_variante("bloque");
+        refuse("impl_inconnue", &manifeste_graphe(&graphe_variante("magique")),
+               "impl inconnue : magique");
+        refuse("impl_non_applicable", &manifeste_graphe(&graphe_valide("input").replace(
+            r#""inputs":[]"#,
+            r#""inputs":[],"impl":"bloque","contrat":{"version":0,"tolerance":1e-4}"#)),
+               "impl non applicable");
+        refuse("contrat_absent", &manifeste_graphe(&g.replace(
+            r#","contrat":{"version":0,"tolerance":1e-4}"#, "")), "contrat absent");
+        refuse("contrat_version", &manifeste_graphe(&g.replace(
+            r#""version":0"#, r#""version":1"#)), "contrat.version non supportée");
+        refuse("contrat_tolerance", &manifeste_graphe(&g.replace(
+            r#""tolerance":1e-4"#, r#""tolerance":-1"#)), "contrat.tolerance invalide");
     }
 }
 

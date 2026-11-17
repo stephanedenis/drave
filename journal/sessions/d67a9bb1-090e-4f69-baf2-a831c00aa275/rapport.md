@@ -7,15 +7,20 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 1.6 h |
-| Tours | 4 |
-| Messages | 84 |
-| Appels d'outils | 100 |
-| Fichiers touchés | 6 |
-| Commandes | 66 |
+| Durée | 3.6 h |
+| Tours | 5 |
+| Messages | 138 |
+| Appels d'outils | 157 |
+| Fichiers touchés | 13 |
+| Commandes | 89 |
 | Sous-agents | 0 |
-| Commits | 1 |
+| Commits | 2 |
 | Compactages de contexte | 0 |
+
+## Objectifs déclarés
+
+- **create** — Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouv
+… [260 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -26,6 +31,8 @@
 **Tour 3** — considérant que certains modules on des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules
 
 **Tour 4** — vas-y
+
+**Tour 5** — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
 ## 2. Déroulé, étape par étape
 
@@ -152,7 +159,7 @@ plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante
 
 ### Tour 4 — vas-y
 
-*67 appels d'outils.* Actions notables :
+*68 appels d'outils.* Actions notables :
 
 - bash — Check git state and DRVM-related gates
 - bash — Find the routes schema in the docs
@@ -168,11 +175,63 @@ plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante
 - bash — Survey all DRVM manifests for exact key sets
 - bash — Check Python test layout and inspect command
 - bash — Find existing Python tests and DRVM gates
-- … et 42 autres
+- … et 43 autres
 
 **Synthèse produite :**
 
-⏵ Commit du correctif et de la porte, avec les chiffres dans le message
+⏵ Récapitulatif du correctif livré et de la suite
+
+**Fait, mesuré, committé — `97579a55`.**
+
+Le défaut était réel : le format DRVM **déclarait** `routes`, `regions`, `heads`, `thought`, `bridge`, et le lecteur Rust n'en lisait **aucun**. Un manifeste avec une route s'exécutait comme si la route n'existait pas — le « modèle qui ment » que `modele-natif.md` interdit. Corrigé dans **les deux lecteurs** (Rust et `tools/drvm.py`), mêmes messages :
+
+```
+DRVM invalide : routes non exécutées : 1 route(s) — le lecteur refuse ce qu'il ne sait pas exécuter
+```
+(exit 3 côté Rust, `DRVMError` côté Python, sur le même fichier)
+
+**Ce qui est verrouillé maintenant** : clés **fermées** aux cinq niveaux (racine, `graph`, bloc, `execution`, `thought`, région) ; région / tête / pont qui nomme un bloc absent → refus nommé ; `thought.steps` négatif ou fractionnaire → refus ; `routes` vide accepté, route déclarée **refusée** ; et `write_drvm` refuse aussi — **un manifeste ne peut plus naître menteur**.
+
+**Le dispositif** (`porte-n3-refus` §4) : 10 cas mutés, les deux lecteurs, mêmes messages ; contrôles négatifs = le DRVM valide passe, l'écriture avec route est refusée, et **les 62 DRVM du disque restent lisibles**.
+
+**Portes** : n3 ×18 **vertes** (11 h 16), `produit`/`document`/`etat`/`poids-creux` **vertes** (11 h 18). Tests Rust **136/137** — la rouge (`tests_vars::DRAVE_POS_DESYNC`) est **préexistante à HEAD**, hors de ce diff. Python : 189 tests, 1 erreur d'import préexistante (`test_bus`, `PYTHONPATH`).
+
+Deux notes de transparence : le hook a balayé le journal de la session active dans le commit (15 fichiers ; c'est son comportement), et `tools/chantier/plan.json` reste non committé (session Pensée).
+
+**Ce que ça débloque pour ta question** — le manifeste est maintenant un contrat vérifié, donc la suite est exactement ton idée, dans cet ordre :
+
+1. `impl` + `contrat {version, tolerance}` par bloc, avec **refus d'une `impl` inconnue** (même mécanique que `kind`) ;
+2. **provenance** dans la trace (`impl`, `params`, `seed`) — sans elle, deux variantes sont indistinguables au rejeu ;
+3. **table de routes statique** dans `graph.routes` (le champ existe et est déjà contrôlé) — pas de routeur appris avant ;
+4. **test d'indifférence** + contrôle négatif : deux implémentations du même contrat → même sortie à la tolérance près ; une impl hors contrat doit **échouer**, sinon le test ne teste rien ;
+5. **coût mesuré par variante** (le `placement.rs` a déjà la règle).
+
+Et le garde-fou 
+… [290 caractères tronqués]
+
+### Tour 5 — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+*56 appels d'outils.* Actions notables :
+
+- get_goal
+- bash — Survey the native engine functions
+- create_goal
+- read
+- bash — Read the drvm-pas-hex command
+- bash — Check how the gate count is verified
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py`
+- bash — Add impl constants and Bloc fields
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
+- … et 29 autres
+
+**Synthèse produite :**
+
+⏵ Fiche de résultat N3.7 avec les chiffres mesurés
 
 ## 3. Travail accompli
 
@@ -180,12 +239,19 @@ plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py` | 0 | 6 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs` | 0 | 4 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs` | 0 | 8 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh` | 0 | 3 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md` | 0 | 2 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-variante.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-variante.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
 
 ### Commandes exécutées (échantillon)
 
@@ -229,7 +295,7 @@ plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 26 autres
+- … et 49 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -330,16 +396,20 @@ plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante
 - **T3** `250:[N0/N1] lasts 1 day and is 100% complete and is colored in #2e7d32`
 - **T3** `docs/pilotage/roadmap.md:198:   30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.m`
 - **T3** `[still running after 60000ms; moved to background job bash-26]`
+- **T5** `defaut  médiane   87.0 ms  (CV 1 %)`
+- **T5** `bloque  médiane   86.4 ms  (CV 14 %)`
 
 ## 5. Erreurs rencontrées
 
-3 sorties en erreur ou divergentes. Les premières :
+4 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
 - **T4** : -rwxr-xr-x. 2 stephane stephane 3218824 17 nov 11:14 drave-core/target/release/drave DRVM v0 · 6 blocs · 30 tenseurs · payload 31488 o   bloc input        input   bloc b0           local_mixer [stderr
+- **T5** : ... 110 |     pub fn est_vide(&self) -> bool { self.lignes.is_empty() } 400 | pub fn existe(chemin: &str) -> bool { Path::new(chemin).is_file() } 187 | impl Episodique { ... 193 |     pub fn est_vide(
 
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -15 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/t
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-
 

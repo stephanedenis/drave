@@ -544,7 +544,12 @@ fn main() {
         match drvm::Drvm::open(&f) {
             Ok(d) => {
                 println!("{}", d.resume());
-                for b in &d.blocs { println!("  bloc {:<12} {}", b.id, b.kind); }
+                for b in &d.blocs {
+                    // La provenance est visible : le profil et sa tolérance sont
+                    // dans le manifeste, donc dans le hash, donc dans la trace.
+                    println!("  bloc {:<12} {:<12} impl={:<7} tol={}",
+                             b.id, b.kind, b.implementation, b.tolerance);
+                }
                 for t in &d.tenseurs {
                     println!("  tenseur {:<24} bloc {:<10} {} o  {}", t.name, t.bloc, t.nbytes, t.dtype);
                 }
