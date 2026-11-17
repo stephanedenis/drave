@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 406.0 h |
-| Tours | 212 |
-| Messages | 4370 |
-| Appels d'outils | 3910 |
+| Durée | 406.7 h |
+| Tours | 213 |
+| Messages | 4375 |
+| Appels d'outils | 3913 |
 | Fichiers touchés | 25 |
-| Commandes | 3239 |
+| Commandes | 3242 |
 | Sous-agents | 43 |
 | Commits | 520 |
 | Compactages de contexte | 9 |
@@ -497,6 +497,8 @@
 **Tour 211** — où en est-on
 
 **Tour 212** — go
+
+**Tour 213** — où en est-on
 
 ## 2. Déroulé, étape par étape
 
@@ -11379,6 +11381,44 @@ Je lance le **30 000 pas** du 100 M (**~2,4 h** sur le GPU) — c'est le premier
 
 Je lance le 30 k et je surveille.
 
+### Tour 213 — où en est-on
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Voir si le 30k tourne
+- bash — Voir le 100M précédent et le P1
+- bash — Voir et pousser les commits
+
+**Synthèse produite :**
+
+⏵ État au 17/11 15 h 20 — le 100 M a répondu, le reste attend le GPU
+
+\## Le résultat qui compte (acquis)
+
+Le **100 M à 3 000 pas** (0,24 jeton/paramètre) **bat le 34 M à 30 000 pas** (7,2 j/p) :
+
+| | mots valides | répétition |
+|---|---:|---:|
+| 34 M | 0,870 | 15 |
+| **100 M** | **0,882** | **6** |
+
+**La question du 16/11 est tranchée : l'échelle paie**, surtout sur la dérive (répétition ÷2,5). Le 100 M est ~10× plus efficace par jeton.
+
+\## Ce qui n'est pas fait
+
+**Le 30 000 pas du 100 M n'est pas lancé** — je l'avais annoncé, mais le GPU est occupé par **une autre session** : elle a livré cette nuit **N3.7 → N3.10** (le moteur numpy exécute le profil, le Rust ↔ numpy à **3,576e-07**, le profil « court » qui paie) et **P1** (la dispersion GPU à **29,37 G év/s**, qui bat la projection FPGA) — et son run utilise les cartes. Je ne lance pas le 30 k tant qu'elle travaille : la règle 11 réserve les GPU à Drave, et sa session en fait partie.
+
+\## Le dépôt
+
+**8 commits poussés** (0 divergence) : les 7 de la session N3/A5/P1 + le mien (`44fb939c`, l'AMP). `HEAD a0d7fa3b`.
+
+\## Ce que je propose
+
+1. **Attendre la fin du run P1** (la dispersion GPU) et lancer le **30 k du 100 M** (~2,4 h) — le premier entraînement complet d'un modèle qui a déjà prouvé qu'il apprenait mieux par jeton.
+2. Ou, si vous préférez ne pas attendre : le **3 000 pas est déjà un résultat publiable** (le checkpoint et le banc sont sur disque) — je peux écrire la fiche du « palier 1 validé à 12 % » et laisser le 30 k pour la prochaine session.
+
+Dites-moi lequel des deux — je penche pour le 1 (le 30 k donne la PPL comparable au 2,40 du 34 M, donc le verdict complet), mais il dépend du GPU.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11499,7 +11539,7 @@ Je lance le 30 k et je surveille.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3199 autres
+- … et 3202 autres
 
 ## 4. Mesures et résultats marquants
 

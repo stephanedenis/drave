@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 4.9 h |
-| Tours | 6 |
-| Messages | 217 |
-| Appels d'outils | 241 |
+| Durée | 5.5 h |
+| Tours | 7 |
+| Messages | 229 |
+| Appels d'outils | 251 |
 | Fichiers touchés | 22 |
-| Commandes | 150 |
+| Commandes | 158 |
 | Sous-agents | 0 |
-| Commits | 8 |
+| Commits | 9 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -49,6 +49,8 @@
 **Tour 5** — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
 **Tour 6** — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+**Tour 7** — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
 
 ## 2. Déroulé, étape par étape
 
@@ -296,7 +298,45 @@ Et le garde-fou
 
 **Synthèse produite :**
 
-⏵ Fiche P1 : le GPU bat la projection FPGA, et la correction du chiffre 18,1
+⏵ Bilan des trois chantiers de ce tour et de ce qu'ils tranchent
+
+**Trois chantiers de plus, trois commits, et une décision tranchée.**
+
+| commit | chantier | le chiffre |
+|---|---|---|
+| `de967b7b` | **N3.10 — `court`** : fenêtre divisée par 4, premier profil qui paie | **0,694×** le temps ; PPL **23,7480 → 23,5824** sur 2 048 o ; bit-exact < 64 o, **3,633e-02** au-delà |
+| `24cb295e` | **A5.4 — le matériel existe** : 4 cartes + ring 40G + Ethernet | 16 Go, 38,6 Go/s agrégés, 19,3 G év/s projetés |
+| `a0d7fa3b` | **P1 — le GPU scatter** : la porte qui décide du FPGA | **29,37 G év/s** sur **une** carte vs **19,3 G** pour **4** |
+
+**Le résultat qui compte : P1 ferme l'argument de débit du FPGA.** Sur la même Quadro, la dispersion avec accumulateurs par bancs fait **29,37 G év/s** (268 M événements, int32 exact) — **1,52× la projection des 4 cartes**. Et le chiffre de référence du bilan (18,1 G) était mou : la même carte fait **25,65 G** avec la simple primitive à atomiques. Deux effets secondaires mesurés : la banque achète de la **contention** (3,2× à O=1024) et **pas** de la bande passante — à O=65 536 elle s'effondre (1,16 G), ce qui est le contrôle négatif du mécanisme. Toutes les méthodes rendent le **même** accumulateur, et le harnais est vérifié contre `np.bincount` (écart 0).
+
+**Ce qu'il reste au FPGA, nommé et plus faible** : l'énergie (**1,5×** projeté sur le GPU, pas 7× — les 7× sont contre le CPU), le déterminisme bit-exact, la capacité (16 Go, égale à un GPU) et la **démonstration du réparti**. La décision de rouvrir A5.4 ne se prend plus sur le débit : elle se prend sur **P2** (le ring tient-il 4,8 Go/s ?) — et P2 demande le rig.
+
+**Sur le routage** : `court` est le premier profil qui donne un arbitrage coût/qualité — mais sur ce modèle entraîné, la fenêtre de 1 024 n'est **pas utilisée** au-delà de 256 (PPL inchangée, ~5 % de temps). Il n'y a donc rien à router *ici* ; la politique demanderait un modèle et un corpus où la fenêtre longue sert, ce que la maison n'a pas encore.
+
+**Où en est le dépôt** : 8 commits sur la journée, **90 portes** (dont 22 N3), **786 fiches**, **877 JSON**, état **1 735 mots**, revue de documentation verte, graphe backlog cohérent. Tests Rust **138/139** — la rouge (`tests_vars`) est préexistante à HEAD. La session N2 a du travail en cours dans l'arbre (`tools/banc_generation.py`, `reports/banc-generation-100m.json`) : je n'y ai pas touché, c'est à elle de le committer.
+
+**Les deux prochaines actions, et leur condit
+… [263 caractères tronqués]
+
+### Tour 7 — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Read the env-var completeness test
+- bash — Read VARS_LUES and the source() helper
+- bash — Compute the env-var list delta
+- bash — Locate the two variables and any documentation table
+- bash — Read the end of VARS_LUES
+- read
+- edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs`
+- bash — Run the Rust tests after the vars fix
+- bash — Fix the comment reference and re-run tests
+- bash — Commit the env-var test fix
+
+**Synthèse produite :**
+
+⏵ Correction du test rouge préexistant (`VARS_LUES`) avant d'attaquer un banc
 
 ## 3. Travail accompli
 
@@ -311,7 +351,7 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py` | 0 | 1 |
-| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 1 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs` | 0 | 2 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_infere.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm_trace.py` | 0 | 1 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-variante.sh` | 1 | 0 |
@@ -369,7 +409,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 110 autres
+- … et 118 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -515,4 +555,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('drave-core/src/main.rs'); s = p.read_text() old = "    /
 

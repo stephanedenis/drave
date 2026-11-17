@@ -61,6 +61,11 @@ const VARS_LUES: &[&str] = &[
     "YARN",
     "YARN_MSCALE", "YARN_NON",
     "YARN_RAMPE",
+    // N3.2b0 et N3.5f (17/11) : deux variables nées avec leurs portes — la
+    // profondeur de service et la désynchronisation de position — et jamais
+    // déclarées ici. Le test les a attrapées à la compilation suivante ; sans
+    // cette ligne, un ancien nom QT_* resterait muet.
+    "NATIVE_PROFONDEUR", "POS_DESYNC",
 ];
 
 mod clusters;

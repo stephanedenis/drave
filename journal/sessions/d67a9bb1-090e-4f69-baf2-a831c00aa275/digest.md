@@ -4637,3 +4637,195 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && git commit -F - <<'MSG' 2>&1 | tail -4\nP1 — LA DISPERSION  … [1545 caractères tronqués]`
+
+  ```
+create mode 100644 bench/gpu_scatter.py
+ create mode 100644 journal/2026-11-17/mesures.md
+ create mode 100644 reports/gpu-scatter.json
+ create mode 100644 reports/rapport-gpu-scatter.md
+---
+a0d7fa3b P1 — LA DISPERSION GPU BAT LA PROJECTION FPGA : 29,37 G ÉV/S SUR UNE CARTE CONTRE 19,3 G PROJETÉS POUR QUATRE — LE DÉBIT NE JUSTIFIE PAS LE RING
+ M tools/banc_generation.py
+ M tools/chantier/plan.json
+?? reports/banc-generation-100m.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan des trois chantiers de ce tour et de ce qu'ils tranchent
+
+**Trois chantiers de plus, trois commits, et une décision tranchée.**
+
+| commit | chantier | le chiffre |
+|---|---|---|
+| `de967b7b` | **N3.10 — `court`** : fenêtre divisée par 4, premier profil qui paie | **0,694×** le temps ; PPL **23,7480 → 23,5824** sur 2 048 o ; bit-exact < 64 o, **3,633e-02** au-delà |
+| `24cb295e` | **A5.4 — le matériel existe** : 4 cartes + ring 40G + Ethernet | 16 Go, 38,6 Go/s agrégés, 19,3 G év/s projetés |
+| `a0d7fa3b` | **P1 — le GPU scatter** : la porte qui décide du FPGA | **29,37 G év/s** sur **une** carte vs **19,3 G** pour **4** |
+
+**Le résultat qui compte : P1 ferme l'argument de débit du FPGA.** Sur la même Quadro, la dispersion avec accumulateurs par bancs fait **29,37 G év/s** (268 M événements, int32 exact) — **1,52× la projection des 4 cartes**. Et le chiffre de référence du bilan (18,1 G) était mou : la même carte fait **25,65 G** avec la simple primitive à atomiques. Deux effets secondaires mesurés : la banque achète de la **contention** (3,2× à O=1024) et **pas** de la bande passante — à O=65 536 elle s'effondre (1,16 G), ce qui est le contrôle négatif du mécanisme. Toutes les méthodes rendent le **même** accumulateur, et le harnais est vérifié contre `np.bincount` (écart 0).
+
+**Ce qu'il reste au FPGA, nommé et plus faible** : l'énergie (**1,5×** projeté sur le GPU, pas 7× — les 7× sont contre le CPU), le déterminisme bit-exact, la capacité (16 Go, égale à un GPU) et la **démonstration du réparti**. La décision de rouvrir A5.4 ne se prend plus sur le débit : elle se prend sur **P2** (le ring tient-il 4,8 Go/s ?) — et P2 demande le rig.
+
+**Sur le routage** : `court` est le premier profil qui donne un arbitrage coût/qualité — mais sur ce modèle entraîné, la fenêtre de 1 024 n'est **pas utilisée** au-delà de 256 (PPL inchangée, ~5 % de temps). Il n'y a donc rien à router *ici* ; la politique demanderait un modèle et un corpus où la fenêtre longue sert, ce que la maison n'a pas encore.
+
+**Où en est le dépôt** : 8 commits sur la journée, **90 portes** (dont 22 N3), **786 fiches**, **877 JSON**, état **1 735 mots**, revue de documentation verte, graphe backlog cohérent. Tests Rust **138/139** — la rouge (`tests_vars`) est préexistante à HEAD. La session N2 a du travail en cours dans l'arbre (`tools/banc_generation.py`, `reports/banc-generation-100m.json`) : je n'y ai pas touché, c'est à elle de le committer.
+
+**Les deux prochaines actions, et leur condition** : **P0/P2** sur le rig FPGA (il me faut un accès SSH et le diagnostic `host_check.sh`) ; et côté moteur, la décision `push` (bancarisé) vs `dense` sur le vrai modèle — le banc est prêt (`bench/gpu_scatter.py`), il reste à le brancher sur les listes réelles.
+
+
+## Tour 7
+
+### 👤 Utilisateur
+
+le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
+
+### 🤖 Assistant
+
+⏵ Correction du test rouge préexistant (`VARS_LUES`) avant d'attaquer un banc
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"VARS_LUES\" src/main.rs | head -5; echo \"=== test ===\"; grep -n -B3 -A25 \"fn les_vars_lues_sont_completes\" src/main.rs | head -45", "description": "Read the env-var completeness test"}`
+
+  ```
+17:const VARS_LUES: &[&str] = &[
+580:        k.strip_prefix("QT_").map(|s| VARS_LUES.contains(&s)).unwrap_or(false)
+9034:    use super::VARS_LUES;
+9049:    /// Tout nom `DRAVE_*` cité dans le source doit être dans `VARS_LUES`, et
+9068:            assert!(VARS_LUES.contains(&c.as_str()),
+=== test ===
+9050-    /// réciproquement. Sans ce test la liste pourrit en silence : c'est
+9051-    /// exactement ce qui a produit le faux avertissement `QT_IM_MODULE`.
+9052-    #[test]
+9053:    fn les_vars_lues_sont_completes() {
+9054-        let src = source();
+9055-        let mut citees: Vec<String> = Vec::new();
+9056-        let mut reste = src.as_str();
+9057-        while let Some(p) = reste.find("DRAVE_") {
+9058-            let apres = &reste[p + "DRAVE_".len()..];
+9059-            let fin = apres.find(|c: char| !(c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_'))
+9060-                .unwrap_or(apres.len());
+9061-            let nom = &apres[..fin];
+9062-            if !nom.is_empty() && !citees.iter().any(|c| c == nom) {
+9063-                citees.push(nom.to_string());
+9064-            }
+9065-            reste = &apres[fin..];
+9066-        }
+9067-        for c in &citees {
+9068- 
+… [498 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '17,60p' src/main.rs; echo \"=== source() ===\"; grep -n -A12 \"fn source()\" src/main.rs | head -16", "description": "Read VARS_LUES and the source() helper"}`
+
+  ```
+const VARS_LUES: &[&str] = &[
+    "BANC_KV_DEBUG", "BANC_KV_GPU_SEUL", "BANC_KV_GRAD", "BANC_KV_K0",
+    "BANC_KV_KUNIT", "BANC_KV_UNIT", "BANC_KV_V1", "BANC_SANS_PUITS",
+    "CLUSTERS", "DEBUG_ETAT", "DEBUG_FLUX", "DEBUG_MLA", "DEBUG_FUSION", "DEBUG_YARN",
+    "DUMP_COUCHES",
+    "ETAT_ENTREE",
+    "FLUX_VERIF", "GPU", "GPU_EXPERTS",
+    "GPU_EXPERTS_GO", "GPU_KV", "GPU_TETE", "GPU_TOPK", "HARMONY_TRACE",
+    "KV_BITS", "KV_BITS_COUCHES", "KV_F16", "TOKEN", "KV_K_F16", "KV_K_F32", "KV_V_F32", "MMAP",
+    "BIAIS_VL", "EXPERTS_RAM", "PRELIRE", "PRELIRE_TOUT", "Q8_BLOCS", "SANS_ENGRAM",
+    "SANS_EMPRUNT",
+    // S4 (docs/strata-pour-drave.md) : la prélecture des experts. `PRELIRE` coupe tout
+    // (c'est le bras « à la demande » de `tools/porte-prechargement.sh`) ; `PRELIRE_FILS`
+    // choisit le nombre de fils qui entrent les pages (0 = l'ancien `madvise`) ;
+    // `PRELIRE_TRANCHE` garde l'ancienne granularité pour refaire la mesure qui a montré
+    // qu'elle ne changeait rien ; `PRELIRE_DENSE` rallume la prélecture de la couche
+    // suivante, mesurée sans gain (le témoin reste pour pouvoir la re-mesurer).
+    "PRELIRE_FILS", "PRELIRE_TRANCHE", "PRELIRE_DENSE", "PERTE_MAX",
+ 
+… [2809 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib, re\nsrc = \"\\n\".join(p.read_text() for p in pathlib.Path(\"src\").glob(\"*.rs\"))\ncitees = sorted(set(re.findall(r\"DRAVE_([A-Z0-9_]+)\", src)))\nmain = pathlib.Path(\"src/main.rs\").re … [446 caractères tronqués]`
+
+  ```
+citées : 106 | dans VARS_LUES : 104
+MANQUANTES : ['NATIVE_PROFONDEUR', 'POS_DESYNC']
+EN TROP    : []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"DRAVE_NATIVE_PROFONDEUR\\|DRAVE_POS_DESYNC\" --include=*.md --include=*.rs . 2>/dev/null | grep -v \"^./build\" | head -10; echo \"=== table DRAVE_ dans REPRISE ===\"; grep -n \"DRAVE_\" REPRISE.md | head -12", "descriptio … [59 caractères tronqués]`
+
+  ```
+./reports/rapport-n3.2b0-profondeur.md:4:> service natif accepte `DRAVE_NATIVE_PROFONDEUR=N`, la profondeur 1 et la profondeur pleine
+./reports/rapport-n3.2b0-profondeur.md:32:`DRAVE_NATIVE_PROFONDEUR=1` coupe après le premier bloc ; le défaut reste la profondeur pleine.
+./reports/rapport-n3.2b2-cache.md:9:> 663 272 paramètres), service plein et `DRAVE_NATIVE_PROFONDEUR=1`, 16 octets générés ;
+./reports/rapport-n3.5f-positions.md:16:| `DRAVE_POS_DESYNC=1` (pos 1 au lieu de 0) | **REFUS, code 4** |
+./reports/rapport-n3-inventaire.md:45:  (`DRAVE_NATIVE_PROFONDEUR`), N3.2b1 (seuil) et N3.3a/b/c (routes, sparsité, compteurs).
+./journal/sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/digest.md:16908:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-n3-profondeur.sh <<'SH'\n#!/bin/bash\n# porte-n3-profondeur.sh — N3.2b0 : la profondeur de service change-t-elle la génération ?\n#\n# `DRAVE_NATIVE_PROFONDEUR=N` coupe le calcul natif après N blocs (défaut : tous). … [4121 caractères tronqués]`
+./journal/sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/digest.md:17051:`DRAVE_NATIVE_PROFONDEUR=N` coupe le calcul natif après N blocs ; la porte compare
+… [844 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"];\" src/main.rs | head -3; sed -n '140,175p' src/main.rs", "description": "Read the end of VARS_LUES"}`
+
+  ```
+64:];
+247:            let mut b4 = [0u8; 4];
+249:                let mut b = [0u8; 4];
+        eprintln!("       drave <modele> --entree signal:F --sortie G [--delai N] [--recurent]");
+        eprintln!("             [--entree-canal K] [--entree-gain X] [--entree-jeton N]");
+        eprintln!("             [--entree-memoire K] [--memoire K --sortie-memoire H]");
+        eprintln!("             [--recurrence α]");
+        eprintln!("                                     PÉRIPHÉRIE (C8) : une région frontière");
+        eprintln!("                                     reçoit un SIGNAL (une valeur par ligne) au lieu");
+        eprintln!("                                     d'un jeton, et écrit l'état de chaque pas. Le");
+        eprintln!("                                     délai est DANS le moteur (`v[t-N]`), `--recurent`");
+        eprintln!("                                     garde l'historique (positions croissantes),");
+        eprintln!("                                     `--entree-memoire K` pose les K dernières valeurs");
+        eprintln!("                                     sur les canaux suivants (un signal VECTEUR),");
+        eprintln!("                             
+… [2013 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "limit": 12, "offset": 55}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs</path>
+<type>file</type>
+<content>
+55:     // a d'ailleurs attrapé les deux dernières à la première compilation.
+56:     "HEBB_MODULE", "HEBB_DECORRELE", "HEBB_D_CHARGE", "HEBB_D_SAUVE",
+57:     "HEBB_MODULATEUR_FICHIER", "HEBB_BETA", "K3_PRELIRE_UNION", "EXPERTS_GARDES", "K3_IMPOSE",
+58:     "SANS_BLOCS", "SANS_COMPRESSION", "SIMD_DOT", "TRACE_EXPERTS", "V41_SANS_RETARD",
+59:     "V41_TETE_COPIE0",
+60:     "VISION_TEXTE", "VISION_TEXTE_IDS", "VISION_NOYAU", "VISION_IMAGE", "VISION_COUCHES", "VISION_FUSION", "VISION_POIDS", "VISION_COTE", "VISION_ATTENTION", "VISION_EMBED", "VISION_ENTREE", "VISION_ETAT",
+61:     "YARN",
+62:     "YARN_MSCALE", "YARN_NON",
+63:     "YARN_RAMPE",
+64: ];
+65: 
+66: mod clusters;
+
+(Showing lines 55-66 of 9090. Use offset=67 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs", "new_string": "    \"YARN\",\n    \"YARN_MSCALE\", \"YARN_NON\",\n    \"YARN_RAMPE\",\n    // N3.2b0 et N3.5f (17/11) : deux variables nées avec leurs portes — la\n    // profondeur de service et la désynchronisa … [332 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/main.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | tail -6", "description": "Run the Rust tests after the vars fix", "timeoutMs": 420000}`
+
+  ```
+running 139 tests
+....................................................................................... 87/139
+....................................................
+test result: ok. 139 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.21s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE\" REPRISE.md | head -5; echo \"---\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/main.rs'); s = p.read_text()\nold = \"    // cette ligne, un ancien nom QT_* resterait muet (`docs/pilotage/REPR … [307 caractères tronqués]`
+
+  ```
+---
+ok
+....................................................
+test result: ok. 139 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.18s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/main.rs'); s = p.read_text()\nold = \"    // cette ligne, un ancien nom QT_* resterait muet (cf. `REPRISE.md`).\"\nnew = \"    // cette ligne, un ancien nom QT_* rest … [939 caractères tronqués]`
