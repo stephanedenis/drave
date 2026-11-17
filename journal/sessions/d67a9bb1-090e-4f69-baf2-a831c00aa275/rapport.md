@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 3.6 h |
+| Durée | 3.7 h |
 | Tours | 5 |
-| Messages | 138 |
-| Appels d'outils | 157 |
+| Messages | 148 |
+| Appels d'outils | 168 |
 | Fichiers touchés | 13 |
-| Commandes | 89 |
+| Commandes | 98 |
 | Sous-agents | 0 |
-| Commits | 2 |
+| Commits | 3 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -211,7 +211,7 @@ Et le garde-fou
 
 ### Tour 5 — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*56 appels d'outils.* Actions notables :
+*67 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Survey the native engine functions
@@ -227,7 +227,7 @@ Et le garde-fou
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
-- … et 29 autres
+- … et 38 autres
 
 **Synthèse produite :**
 
@@ -295,7 +295,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 49 autres
+- … et 58 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -398,6 +398,13 @@ Et le garde-fou
 - **T3** `[still running after 60000ms; moved to background job bash-26]`
 - **T5** `defaut  médiane   87.0 ms  (CV 1 %)`
 - **T5** `bloque  médiane   86.4 ms  (CV 14 %)`
+- **T5** `[s/v7 20648db7] N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)`
+- **T5** `20648db7 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)`
+- **T5** `./reports/rapport-natif-numpy.md:7:> **Le chiffre.** `tools/drvm_infere.py` charge les **127 tenseurs** du DRVM (130,9 Mo) en`
+- **T5** `defaut  médiane   85.9 ms  (CV 2 %)`
+- **T5** `bloque  médiane   84.1 ms  (CV 5 %)`
+- **T5** `defaut  médiane   85.1 ms  (CV 2 %)`
+- **T5** `bloque  médiane   84.5 ms  (CV 11 %)`
 
 ## 5. Erreurs rencontrées
 
@@ -412,4 +419,5 @@ Et le garde-fou
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -15 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-va
 

@@ -89,7 +89,7 @@
 - **Panini B1** : **60 paires** ; **27/60**, calibration **42/44** ; [W4](../../reports/rapport-panini-manifeste.md), [B1](../../reports/rapport-protocole-date.md).
 - **Panini J12.1–J12.2 + B3** : CIC **42/42** ; B3 **42/42** types de Bruijn ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **Bilans** : F1 **0,7902**, chantier **20/21** ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [clôture](../../reports/rapport-cloture-chantier.md).
-- **N3.7 — les variantes** (17/11) : `impl` + `contrat` par bloc ; substitution **4,768e-07** ≤ 1e-4, contrôle négatif **5,790e-03** > 1e-4 ; coût **87,0 / 86,4 ms** (0,99×) ; numpy refuse ce qu'il n'exécute pas ; [fiche](../../reports/rapport-n3-variante.md), [porte](../../tools/porte-n3-variante.sh).
+- **N3.7 — les variantes** (17/11) : `impl` + `contrat` par bloc ; substitution **4,768e-07** ≤ 1e-4, contrôle négatif **5,790e-03** > 1e-4 ; coût **86 ± 2 ms** pour les deux (0,98–0,99×) ; numpy exécute defaut+bloque (**2,831e-07**) et refuse flou ; [fiche](../../reports/rapport-n3-variante.md), [porte](../../tools/porte-n3-variante.sh).
 
 ## Les chiffres de l'état
 

@@ -3450,3 +3450,171 @@ A  tools/porte-n3-variante.sh
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8\nN3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)\n\nLe format DRVM accepte `impl` (profil public) et `contrat … [1470 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 20648db7] N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)
+ 19 files changed, 1635 insertions(+), 52 deletions(-)
+ create mode 100644 journal/2026-11-17/distribue.md
+ create mode 100644 reports/rapport-n3-variante.md
+ create mode 100755 tools/porte-n3-variante.sh
+---
+20648db7 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)
+---
+ M tools/chantier/plan.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"drvm_infere\\|from tools.drvm_infere import\\|charger(\" --include=*.py tools/ src/ | grep -v \"def charger\" | head -20", "description": "Find numpy engine callers"}`
+
+  ```
+tools/vision_mtmd.py:89:    charge = charger()
+tools/telecharger_modeles.py:69:def telecharger(url, dest, octets, journal, fils=6, essais=6):
+tools/telecharger_modeles.py:188:        if not telecharger(url, dest, octets, journal):
+tools/essai_decharge.py:424:    train = charger(a.donnees)
+tools/essai_decharge.py:426:        val = charger([a.validation])
+tools/essai_blocs.py:282:    train = charger(a.donnees)
+tools/essai_blocs.py:283:    val = charger([a.validation])
+tools/speculatif.py:74:    tok_b, mb = charger(a.brouillon)
+tools/speculatif.py:76:    tok_c, mc = charger(a.cible)
+tools/m8_plage_activations.py:82:        m = charger(chemin, appareil)
+tools/boucle_directe.py:108:        m = charger(chemin)
+tools/entrainer_moteur.py:825:    train = charger(a.donnees)
+tools/entrainer_moteur.py:826:    val = charger([a.validation])
+tools/comparer_noyaux.py:72:        m = charger(chemin, adapt)
+tools/genealogie_udhr.py:22:def telecharger(nom: str, cache: pathlib.Path) -> pathlib.Path:
+tools/genealogie_udhr.py:36:    lang = telecharger("languages.csv", cache)
+tools/genealogie_udhr.py:37:    val = telecharger("values.csv", cache)
+tools/semantique/entrainer.py:199:    articles = CORPUS.char
+… [321 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"drvm_infere\" --include=*.py --include=*.md --include=*.sh . 2>/dev/null | grep -v \"^./build\" | head -15", "description": "Find drvm_infere usages"}`
+
+  ```
+./reports/rapport-bilan-natif.md:21:| 8 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) + [`drvm_infere.py`](../tools/drvm_infere.py) | **le natif sans torch** : le DRVM en numpy, **4/4 de parité** avec torch, ~0,6 s/octet |
+./reports/rapport-natif-numpy.md:7:> **Le chiffre.** `tools/drvm_infere.py` charge les **127 tenseurs** du DRVM (130,9 Mo) en
+./reports/rapport-natif-numpy.md:13:- [`tools/drvm_infere.py`](../tools/drvm_infere.py) : le chargeur (les 127 tenseurs, le
+./reports/rapport-gpu-tandem.md:77:   (`generer_natif`, `drvm_infere`) recalcule tout le contexte à chaque octet — le cache le
+./tools/drave.py:1239:                from tools.drvm_infere import charger as _charger_np, greedy as _greedy_np
+./tools/drvm_infere.py:2:"""drvm_infere.py — l'inférence numpy du modèle natif, sans torch.
+./tools/drvm_infere.py:14:  python3 tools/drvm_infere.py --drvm work/n2ac/mix1024-60k.drvm \
+./tools/porte-n3-variante.sh:102:from tools.drvm_infere import charger
+./journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md:69098:- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/drvm_infere.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"drvm_inf
+… [2415 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py", "limit": 24, "offset": 1232}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py</path>
+<type>file</type>
+<content>
+1232:     """Le natif : torch (.pt) ou numpy (le DRVM, sans torch) ; torch absent → 4."""
+1233:     if getattr(args, "moteur", "auto") in ("auto", "numpy"):
+1234:         drvm = pathlib.Path(args.modele)
+1235:         if drvm.suffix != ".drvm":
+1236:             drvm = drvm.with_suffix(".drvm")
+1237:         if drvm.exists():
+1238:             try:
+1239:                 from tools.drvm_infere import charger as _charger_np, greedy as _greedy_np
+1240:                 _t, _cfg = _charger_np(str(drvm))
+1241:                 _texte = _greedy_np(_t, _cfg, args.prompt, max(0, args.n),
+1242:                                     min(_cfg["window"], 1024))
+1243:             except Exception as exc:
+1244:                 print(f"{NOM}: DRVM illisible : {type(exc).__name__}", file=sys.stderr)
+1245:                 return 4
+1246:             if args.json:
+1247:                 print(_dumps({"schema": "drave.generation", "version": 1, "moteur": "numpy",
+1248:                               "drvm": str(drvm), "prompt": args.prompt, "n": args.n,
+1249:                               "texte": _texte}
+… [326 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/drvm.py'); s = p.read_text()\ns = s.replace('IMPLS_MOTEUR_NUMPY = frozenset({\"defaut\"})',\n              'IMPLS_MOTEUR_NUMPY = frozenset({\"defaut\", \"bloque\"})')\np.write … [5896 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/drave.py'); s = p.read_text()\nold = '''                _t, _cfg = _charger_np(str(drvm))\n                _texte = _greedy_np(_t, _cfg, args.prompt, max(0, args.n),\n         … [1088 caractères tronqués]`
+
+  ```
+ok
+=== charger + logits numpy sur les 3 profils ===
+defaut  impls=['defaut', 'defaut'] logits[-1][:3]=[-0.42533174 -0.19386129 -0.47126558]
+bloque  impls=['bloque', 'bloque'] logits[-1][:3]=[-0.42533156 -0.19386129 -0.47126538]
+flou    REFUSÉ : impl non exécutée par le moteur numpy : flou (le moteur numpy exécute « defaut » et « bloque »)
+numpy defaut vs bloque : max|Δ| = 2.831e-07
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/porte-n3-variante.sh'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\n\nrep('''# CONTRÔLES NÉGATIFS … [2854 caractères tronqués]`
+
+  ```
+ok
+  tolérance déclarée (contrat) : 0.0001
+  defaut vs bloque : max|Δ| = 4.768e-07  → INDIFFÉRENT
+  defaut vs flou   : max|Δ| = 5.790e-03  → NON INDIFFÉRENT
+  ✅ substitution indifférente · contrôle négatif vivant (flou échoue)
+=== 3. provenance : le profil est dans le manifeste, donc dans le hash ===
+  ✅ inspecteur et trace portent impl=bloque, tol=1e-4
+=== 4. le moteur numpy exécute le profil, et refuse le reste ===
+  numpy defaut vs bloque : max|Δ| = 2.831e-07  (tolérance 0.0001)
+  ✅ numpy : defaut et bloque exécutés · flou refusé (nommé)
+=== 5. coût du même pas, chronométré (le chiffre, pas la promesse) ===
+  defaut  médiane   85.9 ms  (CV 2 %)
+  bloque  médiane   84.1 ms  (CV 5 %)
+  rapport bloque / defaut : 0.98×
+=== 6. une impl inconnue ne s'écrit pas (donc ne se lit pas) ===
+  ✅ impl inconnue refusée à l'écriture
+PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance lue · numpy refuse ce qu'il n'exécute pas · coût chronométré
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. la fiche : le moteur numpy exécute bloque, refuse flou\np = pathlib.Path('reports/rapport-n3-variante.md'); s = p.read_text()\ns = s.replace(\"| moteur numpy | `bloque` et `flou` **refusés** (no … [1798 caractères tronqués]`
+
+  ```
+ok
+compile ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-n3-variante.sh 2>&1 | tail -8; echo \"=== refus ===\"; bash tools/porte-n3-refus.sh 2>&1 | tail -4; echo \"=== revue ===\"; python3 tools/revue_documentation.py 2>&1 | tail -3", "description": "Re-run variant gate, r … [49 caractères tronqués]`
+
+  ```
+✅ numpy : defaut et bloque exécutés · flou refusé (nommé)
+=== 5. coût du même pas, chronométré (le chiffre, pas la promesse) ===
+  defaut  médiane   85.1 ms  (CV 2 %)
+  bloque  médiane   84.5 ms  (CV 11 %)
+  rapport bloque / defaut : 0.99×
+=== 6. une impl inconnue ne s'écrit pas (donc ne se lit pas) ===
+  ✅ impl inconnue refusée à l'écriture
+PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance lue · numpy exécute defaut+bloque et refuse flou · coût chronométré
+=== refus ===
+=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===
+  Python : 10 refus nommés · valide lu · écriture refusée · 62 DRVM existants relus
+  ✅ Rust : 10 refus nommés (code 3) · le valide passe
+PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (10 cas, deux lecteurs)
+=== revue ===
+  revue de documentation · 782 fiche(s) · 875 JSON · 127 doc(s) · 87 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"produit generation\" DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-produit-np.log 2>&1; echo \"exit=$?\"; tail -8 /tmp/passe-produit-np.log", "description": "Run the product and generation gates", "run_in_background": tr … [3 caractères tronqués]`
+
+  ```
+started background job bash-97
+  ```
+
+- **job_output** `{"job_id": "bash-97", "timeout_ms": 300000, "wait": true}`
+
+  ```
+exit=0
+=== PASSE COMPLÈTE DES PORTES (2 portes, borne 900 s) ===
+    journaux : work/portes-1117-13h28
+  porte-n3-generation    ✅                           9 s  PORTE TENUE : génération répartie · deux caches · sortie bit-identique
+  porte-produit          ✅                         163 s  ✅ porte produit verte
+--- 2 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-13h28
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-variante.md docs/theorie/modele-natif.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -5\nN3.7b — LE MOTEUR N … [887 caractères tronqués]`

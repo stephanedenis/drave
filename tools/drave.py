@@ -1237,9 +1237,9 @@ def cmd_generer(args: argparse.Namespace) -> int:
         if drvm.exists():
             try:
                 from tools.drvm_infere import charger as _charger_np, greedy as _greedy_np
-                _t, _cfg = _charger_np(str(drvm))
+                _t, _cfg, _impls = _charger_np(str(drvm))
                 _texte = _greedy_np(_t, _cfg, args.prompt, max(0, args.n),
-                                    min(_cfg["window"], 1024))
+                                    min(_cfg["window"], 1024), _impls)
             except Exception as exc:
                 print(f"{NOM}: DRVM illisible : {type(exc).__name__}", file=sys.stderr)
                 return 4

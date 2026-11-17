@@ -61,7 +61,7 @@ CLES_CONTRAT = frozenset({"version", "tolerance"})
 # Le format connaît les trois ; chaque moteur refuse celles qu'il n'implémente
 # pas (le moteur numpy ne connaît que « defaut »).
 IMPLS_CONNUES = frozenset({"defaut", "bloque", "flou"})
-IMPLS_MOTEUR_NUMPY = frozenset({"defaut"})
+IMPLS_MOTEUR_NUMPY = frozenset({"defaut", "bloque"})
 
 
 class DRVMError(ValueError):

@@ -17,9 +17,9 @@
 |---|---|
 | `defaut` vs `bloque` — même fonction, somme tuilée sur 4 accumulateurs | **4,768e-07** ≤ 1e-4 → **indifférent** |
 | `defaut` vs `flou` — seuil net du k-WTA → appartenance sigmoïde | **5,790e-03** > 1e-4 → **non indifférent** |
-| coût, 2 048 octets, médiane de 7 passes | `defaut` **87,0 ms** · `bloque` **86,4 ms** (**0,99×**) |
+| coût, 2 048 octets, médiane de 7 passes | **~86 ms** pour les deux profils (**0,98–0,99×**, deux passes) |
 | provenance | `--drvm-inspect` et la trace portent `impl=bloque`, `tol=1e-4` |
-| moteur numpy | `bloque` et `flou` **refusés** (nommés) ; `defaut` exécuté |
+| moteur numpy | `defaut` et `bloque` **exécutés** (**2,831e-07**) ; `flou` **refusé** (nommé) |
 | `impl` inconnue | refusée à l'écriture, donc absente du disque |
 
 ## Les deux choses que la porte sépare
@@ -42,7 +42,7 @@
 
 - **Une graine, un modèle, un pas** : la tolérance 4,768e-07 est celle de ce modèle ; elle grandit
   avec `d_model` et le nombre de blocs. Le contrat est **déclaré par modèle**, pas universel.
-- **`bloque` n'est pas plus rapide ici** (0,99×) : le tuilage paie quand la matrice est grande, pas
+- **`bloque` n'est pas plus rapide ici** (0,98–0,99×) : le tuilage paie quand la matrice est grande, pas
   sur 32×32. La porte imprime le rapport, elle ne promet pas un gain.
 - **Le coût inclut le démarrage du processus** (~5 ms) : sur 2 048 octets il pèse peu, mais ce n'est
   pas un banc de noyau.

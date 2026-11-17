@@ -18,7 +18,7 @@
 #
 # CONTRÔLES NÉGATIFS. Le contrôle « flou doit échouer » est le contrôle du test
 # lui-même ; une `impl` inconnue est refusée à l'écriture ET à la lecture ; le
-# moteur numpy REFUSE les profils qu'il n'implémente pas au lieu de les ignorer ;
+# moteur numpy exécute `defaut` et `bloque` et REFUSE `flou` au lieu de l'ignorer ;
 # la provenance (`impl`, tolérance) est lisible dans l'inspecteur et la trace ; le
 # coût est chronométré, avec un garde-fou de stabilité (CV < 50 %).
 #
@@ -95,22 +95,30 @@ assert t["impls"][0]["tolerance"] == 1e-4, t["impls"]
 print("  ✅ inspecteur et trace portent impl=bloque, tol=1e-4")
 PY
 
-echo "=== 4. le moteur numpy REFUSE ce qu'il n'implémente pas ==="
-python3 - "$T" <<'PY' || exit 1
+echo "=== 4. le moteur numpy exécute le profil, et refuse le reste ==="
+python3 - "$T" "$TOL" <<'PY' || exit 1
 import pathlib, sys
+import numpy as np
 sys.path.insert(0, ".")
-from tools.drvm_infere import charger
-T = pathlib.Path(sys.argv[1])
-_, cfg = charger(str(T / "defaut.drvm"))        # contrôle positif : defaut passe
-assert cfg["n_blocks"] == 2
-for impl in ("bloque", "flou"):
-    try:
-        charger(str(T / f"{impl}.drvm"))
-    except NotImplementedError as e:
-        assert impl in str(e), f"le refus ne nomme pas {impl} : {e}"
-    else:
-        raise AssertionError(f"le moteur numpy a accepté {impl} en silence")
-print("  ✅ defaut exécuté · bloque et flou refusés (nommés)")
+from tools.drvm_infere import charger, logits
+T, tol = pathlib.Path(sys.argv[1]), float(sys.argv[2])
+ta, cfg, impls_a = charger(str(T / "defaut.drvm"))     # contrôle positif
+tb, _, impls_b = charger(str(T / "bloque.drvm"))
+assert impls_a == ["defaut", "defaut"], impls_a
+assert impls_b == ["bloque", "bloque"], impls_b
+pas = [97, 98, 99]
+a = logits(ta, cfg, pas, impls=impls_a)[-1]
+b = logits(tb, cfg, pas, impls=impls_b)[-1]
+d = float(np.max(np.abs(a - b)))
+print(f"  numpy defaut vs bloque : max|Δ| = {d:.3e}  (tolérance {tol:g})")
+assert d <= tol, "le profil bloque n'est pas indifférent dans le moteur numpy"
+try:
+    charger(str(T / "flou.drvm"))
+except NotImplementedError as e:
+    assert "flou" in str(e), f"le refus ne nomme pas flou : {e}"
+else:
+    raise AssertionError("le moteur numpy a accepté flou en silence")
+print("  ✅ numpy : defaut et bloque exécutés · flou refusé (nommé)")
 PY
 
 echo "=== 5. coût du même pas, chronométré (le chiffre, pas la promesse) ==="
@@ -153,4 +161,4 @@ else:
 print("  ✅ impl inconnue refusée à l'écriture")
 PY
 
-echo "PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance lue · numpy refuse ce qu'il n'exécute pas · coût chronométré"
+echo "PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance lue · numpy exécute defaut+bloque et refuse flou · coût chronométré"

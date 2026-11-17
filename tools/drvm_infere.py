@@ -38,21 +38,20 @@ def charger(chemin: str) -> tuple[dict[str, np.ndarray], dict]:
     implémentation déclarée.
     """
     with read_drvm(chemin) as d:
-        impls = {b["id"]: b.get("impl", "defaut")
-                 for b in d.manifest["graph"]["blocks"] if b["kind"] == "local_mixer"}
-        refusees = {i: v for i, v in impls.items() if v not in IMPLS_MOTEUR_NUMPY}
+        impls = [b.get("impl", "defaut")
+                 for b in d.manifest["graph"]["blocks"] if b["kind"] == "local_mixer"]
+        refusees = sorted({v for v in impls if v not in IMPLS_MOTEUR_NUMPY})
         if refusees:
             raise NotImplementedError(
-                "impl non exécutée par le moteur numpy : "
-                + ", ".join(f"{i}={v}" for i, v in sorted(refusees.items()))
-                + " (seule « defaut » est implémentée)")
+                "impl non exécutée par le moteur numpy : " + ", ".join(refusees)
+                + " (le moteur numpy exécute « defaut » et « bloque »)")
         tenseurs = {}
         for t in d.manifest["tensors"]:
             brut = bytes(d.tensor(t["name"]))  # la copie libère la vue (le mmap doit se fermer)
             arr = np.frombuffer(brut, dtype=np.float32).reshape(tuple(t["shape"])).copy()
             tenseurs[t["name"]] = arr
         cfg = dict(d.manifest["model"]["architecture"])
-    return tenseurs, cfg
+    return tenseurs, cfg, impls
 
 
 def _ln(x: np.ndarray, w: np.ndarray, b: np.ndarray, eps: float = 1e-5) -> np.ndarray:
@@ -61,23 +60,41 @@ def _ln(x: np.ndarray, w: np.ndarray, b: np.ndarray, eps: float = 1e-5) -> np.nd
     return ((x - m) / np.sqrt(v + eps)) * w + b
 
 
-def _linear(x: np.ndarray, w: np.ndarray, b: np.ndarray | None) -> np.ndarray:
-    y = x @ w.T
+def _linear(x: np.ndarray, w: np.ndarray, b: np.ndarray | None,
+            impl: str = "defaut") -> np.ndarray:
+    y = _linear_tuile(x, w) if impl == "bloque" else x @ w.T
     return y + b if b is not None else y
+
+
+def _linear_tuile(x: np.ndarray, w: np.ndarray) -> np.ndarray:
+    """MÊME produit, tuilé sur quatre accumulateurs — autre ordre de somme.
+
+    C'est le profil `bloque` du moteur Rust, vectorisé : le résultat diffère de
+    `x @ w.T` à l'arrondi f32 près, ce que le contrat du manifeste déclare.
+    """
+    n, i = x.shape
+    g = (i // 4) * 4
+    acc = np.zeros((n, w.shape[0]), dtype=F32)
+    for q in range(4):
+        acc += x[:, q:g:4] @ w[:, q:g:4].T
+    if g < i:
+        acc += x[:, g:] @ w[:, g:].T
+    return acc
 
 
 def _silu(x: np.ndarray) -> np.ndarray:
     return x / (1.0 + np.exp(-x))
 
 
-def _ffn(x: np.ndarray, t: dict, cfg: dict, prefix: str) -> np.ndarray:
-    router = _linear(x, t[prefix + ".router.weight"], t[prefix + ".router.bias"])
+def _ffn(x: np.ndarray, t: dict, cfg: dict, prefix: str,
+         impl: str = "defaut") -> np.ndarray:
+    router = _linear(x, t[prefix + ".router.weight"], t[prefix + ".router.bias"], impl)
     idx = np.argsort(-router, axis=-1)[..., : cfg["top_k"]]
     poids = np.take_along_axis(router, idx, -1)
     poids = np.exp(poids - poids.max(-1, keepdims=True))
     poids = poids / poids.sum(-1, keepdims=True)
-    g = _linear(x, t[prefix + ".gate.weight"], t[prefix + ".gate.bias"])
-    u = _linear(x, t[prefix + ".up.weight"], t[prefix + ".up.bias"])
+    g = _linear(x, t[prefix + ".gate.weight"], t[prefix + ".gate.bias"], impl)
+    u = _linear(x, t[prefix + ".up.weight"], t[prefix + ".up.bias"], impl)
     h = _silu(g) * u
     ne, eh = cfg["n_experts"], cfg["expert_hidden"]
     h = h.reshape(h.shape[0], ne, eh)
@@ -88,13 +105,14 @@ def _ffn(x: np.ndarray, t: dict, cfg: dict, prefix: str) -> np.ndarray:
     np.put_along_axis(masque, idx, True, axis=-1)
     h = h * masque[:, :, None]
     return _linear(h.reshape(h.shape[0], ne * eh), t[prefix + ".down.weight"],
-                   t[prefix + ".down.bias"])
+                   t[prefix + ".down.bias"], impl)
 
 
-def _bloc(x: np.ndarray, t: dict, cfg: dict, i: int) -> np.ndarray:
+def _bloc(x: np.ndarray, t: dict, cfg: dict, i: int,
+          impl: str = "defaut") -> np.ndarray:
     p = f"blocks.{i}"
     h = _ln(x, t[p + ".ln1.weight"], t[p + ".ln1.bias"])
-    qkv = _linear(h, t[p + ".qkv.weight"], t[p + ".qkv.bias"])
+    qkv = _linear(h, t[p + ".qkv.weight"], t[p + ".qkv.bias"], impl)
     q, k, v = np.split(qkv, 3, axis=-1)
     n, d = x.shape
     nh = cfg["n_heads"]
@@ -111,15 +129,17 @@ def _bloc(x: np.ndarray, t: dict, cfg: dict, i: int) -> np.ndarray:
     probs = np.exp(scores)
     probs = probs / probs.sum(-1, keepdims=True)
     y = np.einsum("hij,jhd->ihd", probs, v).reshape(n, d)
-    x = x + _linear(y, t[p + ".out.weight"], t[p + ".out.bias"])
-    return x + _ffn(_ln(x, t[p + ".ln2.weight"], t[p + ".ln2.bias"]), t, cfg, p + ".ffn")
+    x = x + _linear(y, t[p + ".out.weight"], t[p + ".out.bias"], impl)
+    return x + _ffn(_ln(x, t[p + ".ln2.weight"], t[p + ".ln2.bias"]), t, cfg,
+                    p + ".ffn", impl)
 
 
-def logits(t: dict, cfg: dict, ids: list[int], pos_debut: int = 0) -> np.ndarray:
+def logits(t: dict, cfg: dict, ids: list[int], pos_debut: int = 0,
+           impls: list[str] | None = None) -> np.ndarray:
     n = len(ids)
     x = t["embed.weight"][ids] + t["pos.weight"][pos_debut:pos_debut + n]
     for i in range(cfg["n_blocks"]):
-        x = _bloc(x, t, cfg, i)
+        x = _bloc(x, t, cfg, i, impls[i] if impls else "defaut")
         if i == cfg["n_blocks"] // 2 - 1:
             x = x + _linear(x, t["bridge.weight"], t["bridge.bias"])
     # la pensée : `tanh(thought(x) + thought_in(h0))`, h0 = la sortie des blocs
@@ -130,11 +150,12 @@ def logits(t: dict, cfg: dict, ids: list[int], pos_debut: int = 0) -> np.ndarray
     return _linear(x, t["head_byte.weight"], t["head_byte.bias"])
 
 
-def greedy(t: dict, cfg: dict, prompt: str, n: int, fenetre: int) -> str:
+def greedy(t: dict, cfg: dict, prompt: str, n: int, fenetre: int,
+           impls: list[str] | None = None) -> str:
     ids = list(prompt.encode("utf-8")) or [32]
     for _ in range(n):
         contexte = ids[-fenetre:]
-        lg = logits(t, cfg, contexte, pos_debut=max(0, len(ids) - fenetre))
+        lg = logits(t, cfg, contexte, pos_debut=max(0, len(ids) - fenetre), impls=impls)
         ids.append(int(np.argmax(lg[-1])))
     return bytes(ids).decode("utf-8", "replace")
 
@@ -146,8 +167,8 @@ def main() -> None:
     ap.add_argument("--n", type=int, default=16)
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
-    t, cfg = charger(a.drvm)
-    texte = greedy(t, cfg, a.prompt, a.n, min(cfg["window"], 1024))
+    t, cfg, impls = charger(a.drvm)
+    texte = greedy(t, cfg, a.prompt, a.n, min(cfg["window"], 1024), impls)
     if a.json:
         print(json.dumps({"schema": "drave.generation", "version": 1, "moteur": "numpy",
                           "drvm": a.drvm, "prompt": a.prompt, "n": a.n, "texte": texte},
