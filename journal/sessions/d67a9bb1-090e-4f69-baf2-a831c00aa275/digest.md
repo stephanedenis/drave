@@ -3945,3 +3945,114 @@ Journaux : work/portes-1117-13h44
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_infere.py tools/drvm_trace.py tools/porte-n3-route.sh tools/porte-n3-refus.sh reports/rapport-n3-route.md docs/theorie/modele-nat … [1823 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 49904862] N3.8 — LES ROUTES SONT EXÉCUTÉES : SEUIL 0 = FLOU BIT-EXACT · SEUIL 10^9 = DEFAUT BIT-EXACT · MIXTE 5,779e-03 / 1,132e-05 DÉTERMINISTE
+ 21 files changed, 877 insertions(+), 79 deletions(-)
+ create mode 100644 reports/rapport-n3-route.md
+ create mode 100755 tools/porte-n3-route.sh
+---
+49904862 N3.8 — LES ROUTES SONT EXÉCUTÉES : SEUIL 0 = FLOU BIT-EXACT · SEUIL 10^9 = DEFAUT BIT-EXACT · MIXTE 5,779e-03 / 1,132e-05 DÉTERMINISTE
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-dee2097a-55bd-42bb-ba03-7516baafe44d", "revision": 1}`
+
+> **Objectif** (complete) : Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans l'inspecteur et la trace, et une porte `porte-n3-route` avec trois contrôles falsifiables : route toujours active = variante pure bit-exacte, route jamais active = profil par défaut bit-exact, route mixte ≠ les deux et déterministe. Committé, fiche dans `reports/`, état et compteurs à jour, portes vertes.
+
+
+  ```
+{"goal":{"id":"goal-dee2097a-55bd-42bb-ba03-7516baafe44d","revision":2,"objective":"Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans l'inspecteur et la trace, et une porte `porte-n3-route` avec trois contrôles falsifiables : route toujours active = variante pure bit-exacte, route jamais active = profil par défaut bit-exact, route mixte ≠ les deux et déterministe. Committé, fiche dans `reports/`, état et compteurs à jour, portes vertes.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le  … [206 caractères tronqués]`
+
+> **Objectif** (create) : Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence réelle — `flou` — doit être vue ; numpy refuse ce qu'il n'exécute pas ; deux exécutions identiques). Fiche `reports/`, compteurs et état à jour, commit, portes vertes.
+
+
+  ```
+{"goal":{"id":"goal-5dc2d8bc-30fb-430b-a1ff-ca006c6729c1","revision":1,"objective":"Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence réelle — `flou` — doit être vue ; numpy refuse ce qu'il n'exécute pas ; deux exécutions identiques). Fiche `reports/`, compteurs et état à jour, commit, portes vertes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure de l'écart Rust ↔ numpy sur le même manifeste
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python && $PY - <<'PY'\nimport sys, torch\nsys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel, exporter_drvm\nbase = dict(vocab=256, d_model=32, n_blocks=2, n_heads=2, exper … [1137 caractères tronqués]`
+
+  ```
+export ok
+defaut  Rust vs numpy : max|Δ| = 3.576e-07
+bloque  Rust vs numpy : max|Δ| = 2.384e-07
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte des deux moteurs (mêmes logits, contrôles négatifs)
+
+- **write** `{"content": "#!/bin/bash\n# porte-n3-moteurs.sh — N3.9 : les deux moteurs du même manifeste rendent le même corps.\n#\n# LA QUESTION. Un DRVM a deux moteurs : le Rust (`native.rs`, le chemin de\n# service, avec cache KV) et le numpy (`drvm_infere.py`, le « 0 dépendance\n# lourde »). Le théorème d'in … [4541 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-moteurs.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-n3-moteurs.sh && bash -n tools/porte-n3-moteurs.sh && bash tools/porte-n3-moteurs.sh 2>&1 | tail -12", "description": "Run the two-engines gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. un modèle, trois profils (même graine) ===
+  defaut  132720 paramètres
+  bloque  132720 paramètres
+  flou    132720 paramètres
+=== 2. Rust et numpy : les mêmes logits dans la tolérance déclarée ===
+  defaut  Rust vs numpy : max|Δ| = 3.576e-07  (tolérance 0.0001)
+  bloque  Rust vs numpy : max|Δ| = 2.384e-07  (tolérance 0.0001)
+  contrôle : Rust defaut vs flou = 5.790e-03 > 0.0001
+  ✅ deux moteurs d'accord (defaut, bloque) · déterminisme des deux côtés · comparateur non vide · numpy refuse flou
+PORTE TENUE : Rust et numpy rendent le même corps dans la tolérance (defaut, bloque) · le comparateur voit une différence réelle · les deux moteurs sont déterministes · numpy refuse ce qu'il n'exécute pas
+  ```
+
+- **write** `{"content": "# N3.9 — les deux moteurs rendent le même corps\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ **N3.9 tenu** — le moteur\n> **Rust** et le moteur **numpy**, sur le même manifeste, rendent les mêmes logits dans la tolérance\n> déclarée : **3,576e-07** (`defaut`) … [2761 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-moteurs.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep('| portes | **88** (dont ` … [2498 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 784 fiche(s) · 875 JSON · 127 doc(s) · 89 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1699 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  portes ......... 21  (21 citées par les fiches)
+  fiches ......... 23
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"n3 moteurs produit document etat\" DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-finale-n3.log 2>&1; echo \"exit=$?\"; tail -12 /tmp/passe-finale-n3.log", "description": "Run N3, engines, product, document and state gate … [25 caractères tronqués]`
+
+  ```
+exit=0
+  porte-n3-route         ✅                           5 s  PORTE TENUE : seuil 0 = flou bit-exact · seuil 10^9 = defaut bit-exact · mixte déterministe et d
+  porte-n3-routes        ✅                           4 s  PORTE TENUE : routage vivant · même modèle déterministe · config différente change la sortie
+  porte-n3-service-briques ✅                           7 s  PORTE TENUE : pont actif dans le service · placement métadonnée · décision à seuil 12/0 vs 0/12 
+  porte-n3-service       ✅                           6 s  PORTE TENUE : service natif vivant · /sante exact · génération déterministe · 404
+  porte-n3-seuil         ✅                           5 s  PORTE TENUE : décision à seuil comptée · 0/1 aux extrêmes · mixte à 0,01 · déterministe
+  porte-n3-sparsite-compte ✅                           5 s  PORTE TENUE : compteurs réels · top_k agit sur les experts · kwta agit sur les canaux · A déterm
+  porte-n3-sparsite      ✅                           4 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+  porte-n3-variante      ✅                           6 s  PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance l
+  porte-p
+… [227 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md && git commit -F - <<'MSG' 2>&1 | tail -5\nN3.9 — LES DEUX MOTEURS RENDENT  … [1215 caractères tronqués]`

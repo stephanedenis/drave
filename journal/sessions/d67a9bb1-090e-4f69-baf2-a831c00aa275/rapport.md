@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 4.0 h |
+| Durée | 4.1 h |
 | Tours | 5 |
-| Messages | 172 |
-| Appels d'outils | 194 |
-| Fichiers touchés | 15 |
-| Commandes | 116 |
+| Messages | 180 |
+| Appels d'outils | 203 |
+| Fichiers touchés | 17 |
+| Commandes | 121 |
 | Sous-agents | 0 |
-| Commits | 4 |
+| Commits | 5 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -25,6 +25,10 @@
 … [260 caractères tronqués]
 - **create** — Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans 
 … [306 caractères tronqués]
+- **complete** — Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans 
+… [306 caractères tronqués]
+- **create** — Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence rée
+… [164 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -215,7 +219,7 @@ Et le garde-fou
 
 ### Tour 5 — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*93 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Survey the native engine functions
@@ -231,11 +235,11 @@ Et le garde-fou
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
-- … et 59 autres
+- … et 66 autres
 
 **Synthèse produite :**
 
-⏵ Écriture de la porte des routes (bit-exact actif / inactif / mixte)
+⏵ Écriture de la porte des deux moteurs (mêmes logits, contrôles négatifs)
 
 ## 3. Travail accompli
 
@@ -258,6 +262,8 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-route.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-route.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-moteurs.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-moteurs.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -301,7 +307,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 76 autres
+- … et 81 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -428,4 +434,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-va
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_in
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/ro
 
