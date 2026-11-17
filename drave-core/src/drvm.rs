@@ -51,6 +51,129 @@ impl Json {
     }
 }
 
+/// Les clés sont des listes FERMÉES : une clé inconnue est refusée, jamais
+/// ignorée. C'est la règle déjà appliquée à `kind` (`docs/theorie/modele-natif.md`) :
+/// un manifeste à moitié compris qui s'exécute est un manifeste qui ment. Avant
+/// le 17/11, le lecteur DÉCLARAIT `routes`, `regions`, `heads`, `thought`,
+/// `bridge` dans son en-tête et les IGNORAIT en silence.
+const CLES_RACINE: &[&str] = &["format", "version", "model", "graph", "tensors", "execution"];
+const CLES_GRAPHE: &[&str] = &["blocks", "regions", "routes", "heads", "thought", "bridge"];
+const CLES_BLOC: &[&str] = &["id", "kind", "inputs", "outputs"];
+const CLES_EXECUTION: &[&str] = &["activation", "placement", "cache", "replay", "import"];
+const CLES_THOUGHT: &[&str] = &["steps"];
+const CLES_REGION: &[&str] = &["id", "blocks"];
+
+fn cles_fermees(ou: &str, obj: &Json, connues: &[&str]) -> Result<(), ErreurDrvm> {
+    match obj {
+        Json::Objet(v) => {
+            let inconnues: Vec<&str> = v.iter().map(|(k, _)| k.as_str())
+                .filter(|k| !connues.contains(k)).collect();
+            if inconnues.is_empty() { Ok(()) } else {
+                Err(ErreurDrvm(format!("clé inconnue dans {ou} : {}", inconnues.join(", "))))
+            }
+        }
+        _ => Err(ErreurDrvm(format!("{ou} n'est pas un objet"))),
+    }
+}
+
+fn verifie_racine(m: &Json) -> Result<(), ErreurDrvm> {
+    cles_fermees("le manifeste", m, CLES_RACINE)?;
+    for s in CLES_RACINE {
+        if m.get(s).is_none() {
+            return Err(ErreurDrvm(format!("section absente : {s}")));
+        }
+    }
+    if m.get("format").and_then(Json::as_str) != Some("DRVM") {
+        return Err(ErreurDrvm("format != DRVM".into()));
+    }
+    if m.get("version").and_then(Json::as_u64) != Some(VERSION as u64) {
+        return Err(ErreurDrvm("version du manifeste non supportée".into()));
+    }
+    if m.get("model").and_then(|x| x.get("name")).and_then(Json::as_str).is_none() {
+        return Err(ErreurDrvm("model.name absent".into()));
+    }
+    Ok(())
+}
+
+/// Vérifie les sections descriptives du graphe : régions, têtes, pensée, pont et
+/// routes. Elles sont **croisées** avec les blocs : une région, une tête ou un
+/// pont qui nomme un bloc absent est refusé. Une route non vide est refusée
+/// **parce que le moteur ne sait pas l'exécuter** — l'implémenter, pas l'ignorer,
+/// est la prochaine étape.
+fn verifie_graphe(g: &Json, ids: &BTreeSet<String>) -> Result<(), ErreurDrvm> {
+    let regions = g.get("regions").and_then(Json::as_array)
+        .ok_or_else(|| ErreurDrvm("graph.regions doit être une liste".into()))?;
+    let mut vues = BTreeSet::new();
+    for r in regions {
+        cles_fermees("une région", r, CLES_REGION)?;
+        let rid = r.get("id").and_then(Json::as_str)
+            .ok_or_else(|| ErreurDrvm("région sans id".into()))?;
+        if !vues.insert(rid.to_string()) {
+            return Err(ErreurDrvm(format!("région dupliquée : {rid}")));
+        }
+        let bl = r.get("blocks").and_then(Json::as_array)
+            .ok_or_else(|| ErreurDrvm(format!("région sans blocs : {rid}")))?;
+        for x in bl {
+            let s = x.as_str().ok_or_else(|| ErreurDrvm(format!("bloc non typé dans la région {rid}")))?;
+            if !ids.contains(s) {
+                return Err(ErreurDrvm(format!("région vers un bloc inconnu : {s}")));
+            }
+        }
+    }
+    let heads = g.get("heads").and_then(Json::as_array)
+        .ok_or_else(|| ErreurDrvm("graph.heads doit être une liste".into()))?;
+    for h in heads {
+        let s = h.as_str().ok_or_else(|| ErreurDrvm("tête non typée".into()))?;
+        if !ids.contains(s) {
+            return Err(ErreurDrvm(format!("tête vers un bloc inconnu : {s}")));
+        }
+    }
+    if let Some(th) = g.get("thought") {
+        if !matches!(th, Json::Null) {
+            cles_fermees("thought", th, CLES_THOUGHT)?;
+            let pas = th.get("steps").and_then(Json::as_f64)
+                .ok_or_else(|| ErreurDrvm("clé absente : thought.steps".into()))?;
+            if pas < 0.0 || pas.fract() != 0.0 {
+                return Err(ErreurDrvm(format!("thought.steps invalide : {pas}")));
+            }
+        }
+    }
+    if let Some(br) = g.get("bridge") {
+        if !matches!(br, Json::Null) {
+            let s = br.as_str().ok_or_else(|| ErreurDrvm("pont non typé".into()))?;
+            if !ids.contains(s) {
+                return Err(ErreurDrvm(format!("pont vers un bloc inconnu : {s}")));
+            }
+        }
+    }
+    let routes = g.get("routes").and_then(Json::as_array)
+        .ok_or_else(|| ErreurDrvm("graph.routes doit être une liste".into()))?;
+    if !routes.is_empty() {
+        return Err(ErreurDrvm(format!(
+            "routes non exécutées : {} route(s) — le lecteur refuse ce qu'il ne sait pas exécuter",
+            routes.len())));
+    }
+    Ok(())
+}
+
+fn verifie_execution(m: &Json) -> Result<(), ErreurDrvm> {
+    let ex = m.get("execution").ok_or_else(|| ErreurDrvm("section execution absente".into()))?;
+    cles_fermees("execution", ex, CLES_EXECUTION)?;
+    for c in ["activation", "placement"] {
+        if ex.get(c).and_then(Json::as_str).is_none() {
+            return Err(ErreurDrvm(format!("execution.{c} absent")));
+        }
+    }
+    for c in ["cache", "replay", "import"] {
+        if let Some(v) = ex.get(c) {
+            if !matches!(v, Json::Objet(_)) {
+                return Err(ErreurDrvm(format!("execution.{c} doit être un objet")));
+            }
+        }
+    }
+    Ok(())
+}
+
 #[derive(Debug, Clone)]
 pub struct Bloc {
     pub id: String,
@@ -225,21 +348,38 @@ impl Drvm {
         }
         if poff > b.len() { return Err(ErreurDrvm("payload hors fichier".into())); }
         let manifeste = parse_json(&b[hsize..hsize + mlen])?;
+        verifie_racine(&manifeste)?;
         let mut blocs = Vec::new();
         let graph = manifeste.get("graph").ok_or_else(|| ErreurDrvm("section graph absente".into()))?;
+        cles_fermees("graph", graph, CLES_GRAPHE)?;
+        for cle in CLES_GRAPHE {
+            if graph.get(cle).is_none() {
+                return Err(ErreurDrvm(format!("clé absente : graph.{cle}")));
+            }
+        }
         let arr = graph.get("blocks").and_then(Json::as_array)
             .ok_or_else(|| ErreurDrvm("graph.blocks absent".into()))?;
         let mut ids = BTreeSet::new();
         for x in arr {
+            cles_fermees("un bloc", x, CLES_BLOC)?;
             let id = x.get("id").and_then(Json::as_str).ok_or_else(|| ErreurDrvm("bloc sans id".into()))?;
             let kind = x.get("kind").and_then(Json::as_str).ok_or_else(|| ErreurDrvm("bloc sans kind".into()))?;
             if !ids.insert(id.to_string()) { return Err(ErreurDrvm(format!("bloc dupliqué : {id}"))); }
             if !BLOCS_CONNUS.contains(&kind) {
                 return Err(ErreurDrvm(format!("type de bloc inconnu : {kind}")));
             }
+            for port in ["inputs", "outputs"] {
+                let p = x.get(port).and_then(Json::as_array)
+                    .ok_or_else(|| ErreurDrvm(format!("clé absente : bloc.{port}")))?;
+                if p.iter().any(|v| v.as_str().is_none()) {
+                    return Err(ErreurDrvm(format!("{port} non typés : {id}")));
+                }
+            }
             blocs.push(Bloc { id: id.to_string(), kind: kind.to_string() });
         }
         if blocs.is_empty() { return Err(ErreurDrvm("graphe sans bloc".into())); }
+        verifie_graphe(graph, &ids)?;
+        verifie_execution(&manifeste)?;
         let mut tenseurs = Vec::new();
         let arr = manifeste.get("tensors").and_then(Json::as_array)
             .ok_or_else(|| ErreurDrvm("section tensors absente".into()))?;
@@ -283,12 +423,21 @@ impl Drvm {
 mod tests {
     use super::*;
 
-    fn fichier(version: u16, bloc: &str) -> Vec<u8> {
-        let manifeste = format!(
-            r#"{{"format":"DRVM","version":0,"model":{{"name":"t"}},"graph":{{"blocks":[{{"id":"b0","kind":"{bloc}"}}]}},"tensors":[{{"name":"b0.w","bloc":"b0","dtype":"f32","shape":[1],"offset":0,"nbytes":4,"quant":null,"sparsity":0.0}}],"execution":{{}}}}"#
-        );
+    fn graphe_valide(bloc: &str) -> String {
+        format!(
+            r#"{{"blocks":[{{"id":"b0","kind":"{bloc}","inputs":[],"outputs":[]}}],"regions":[{{"id":"r0","blocks":["b0"]}}],"routes":[],"heads":[],"thought":null,"bridge":null}}"#
+        )
+    }
+
+    fn manifeste_graphe(graphe: &str) -> String {
+        format!(
+            r#"{{"format":"DRVM","version":0,"model":{{"name":"t"}},"graph":{graphe},"tensors":[{{"name":"b0.w","bloc":"b0","dtype":"f32","shape":[1],"offset":0,"nbytes":4,"quant":null,"sparsity":0.0}}],"execution":{{"activation":"DRVF","placement":"local"}}}}"#
+        )
+    }
+
+    fn entete(version: u16, manifeste: &str) -> Vec<u8> {
         let mlen = manifeste.len();
-        let mut m = manifeste.into_bytes();
+        let mut m = manifeste.as_bytes().to_vec();
         while m.len() % ALIGNEMENT != 0 { m.push(0); }
         let poff = HEADER_SIZE + m.len();
         let mut b = vec![0u8; HEADER_SIZE];
@@ -300,6 +449,23 @@ mod tests {
         b[20..28].copy_from_slice(&((poff + 4) as u64).to_le_bytes());
         b.extend(m); b.extend([1u8, 2, 3, 4]);
         b
+    }
+
+    fn fichier(version: u16, bloc: &str) -> Vec<u8> {
+        entete(version, &manifeste_graphe(&graphe_valide(bloc)))
+    }
+
+    /// Refuse un manifeste et vérifie que l'erreur **nomme** la cause — un refus
+    /// muet ne vaut pas mieux qu'un silence.
+    fn refuse(nom: &str, manifeste: &str, attendu: &str) {
+        let d = std::env::temp_dir().join(format!("drave_drvm_refus_{nom}.bin"));
+        std::fs::write(&d, entete(VERSION, manifeste)).unwrap();
+        let e = match Drvm::open(&d) {
+            Err(e) => e.to_string(),
+            Ok(_) => panic!("{nom} : le lecteur a accepté ce qu'il n'exécute pas"),
+        };
+        assert!(e.contains(attendu), "{nom} : « {e} » ne nomme pas « {attendu} »");
+        let _ = std::fs::remove_file(&d);
     }
 
     #[test]
@@ -316,6 +482,43 @@ mod tests {
         std::fs::write(&d, &fichier(VERSION, "input")[..40]).unwrap();
         assert!(Drvm::open(&d).is_err());
         let _ = std::fs::remove_file(&d);
+    }
+
+    /// Le contrôle négatif du contrat : tout ce que le lecteur ne sait pas
+    /// exécuter est refusé, et le refus nomme la clé, la route ou le bloc.
+    #[test]
+    fn refuse_ce_quil_ne_lit_pas() {
+        let g = graphe_valide("input");
+        let m = manifeste_graphe(&g);
+        refuse("route", &manifeste_graphe(&g.replace(
+            r#""routes":[]"#,
+            r#""routes":[{"id":"r1","de":"b0","vers":"b0"}]"#)), "routes non exécutées");
+        refuse("cle_graphe", &manifeste_graphe(&g.replace(
+            r#""bridge":null"#,
+            r#""bridge":null,"quota":1"#)), "clé inconnue dans graph : quota");
+        refuse("cle_bloc", &manifeste_graphe(&g.replace(
+            r#""inputs":[]"#,
+            r#""inputs":[],"poids":1"#)), "clé inconnue dans un bloc : poids");
+        refuse("region", &manifeste_graphe(&g.replace(
+            r#""blocks":["b0"]}"#,
+            r#""blocks":["b1"]}"#)), "région vers un bloc inconnu : b1");
+        refuse("tete", &manifeste_graphe(&g.replace(
+            r#""heads":[]"#,
+            r#""heads":["b1"]"#)), "tête vers un bloc inconnu : b1");
+        refuse("pont", &manifeste_graphe(&g.replace(
+            r#""bridge":null"#,
+            r#""bridge":"b1""#)), "pont vers un bloc inconnu : b1");
+        refuse("pensee", &manifeste_graphe(&g.replace(
+            r#""thought":null"#,
+            r#""thought":{"steps":-1}"#)), "thought.steps invalide");
+        refuse("pensee_absente", &manifeste_graphe(&g.replace(
+            r#","thought":null"#, "")), "clé absente : graph.thought");
+        refuse("execution", &m.replace(
+            r#""placement":"local""#,
+            r#""placement":"local","regime":"eager""#), "clé inconnue dans execution : regime");
+        refuse("racine", &m.replace(
+            r#""format":"DRVM""#,
+            r#""format":"DRVM","extra":1"#), "clé inconnue dans le manifeste : extra");
     }
 }
 

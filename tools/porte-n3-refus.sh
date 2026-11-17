@@ -1,5 +1,13 @@
 #!/bin/bash
 # porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.
+#
+# 2ᵉ partie (17/11) — le LECTEUR DRVM refuse ce qu'il n'exécute pas. Le format
+# déclarait `routes`, `regions`, `heads`, `thought`, `bridge` et les ignorait en
+# silence : une route non vide, une clé inconnue, une région/tête/pont vers un
+# bloc absent sont maintenant refusés, nommés, par les DEUX lecteurs (Python et
+# Rust) — et l'écriture refuse aussi, pour qu'un manifeste ne puisse pas naître
+# menteur. Contrôle négatif : le DRVM valide doit passer, et les DRVM déjà sur le
+# disque doivent rester lisibles.
 set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
@@ -45,4 +53,115 @@ H=$("$D" --drvm-pas-hex "$T/a.drvm" abc 2>/dev/null)
 S=$("$D" --drvm-split-net "$T/a.drvm" 2 abc "127.0.0.1:$PORT" 2>/dev/null)
 [ "$S" = "$H" ] || { echo "  ❌ succès non bit-exact"; exit 1; }
 echo "  ✅ succès bit-exact"
-echo "PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact"
+
+echo "=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ==="
+python3 - "$T" <<'PY' || exit 2
+import glob, hashlib, json, pathlib, sys
+sys.path.insert(0, ".")
+import tools.drvm as d
+
+T = pathlib.Path(sys.argv[1])
+
+
+def entete(manifeste, payload=b"\x01\x02\x03\x04"):
+    """Écrit un DRVM brut (en-tête + manifeste + payload), sans passer par _valide."""
+    mj = d._canonique(manifeste)
+    mj_pad = mj + b"\0" * (d._aligne(len(mj)) - len(mj))
+    poff = d.HEADER.size + len(mj_pad)
+    total = poff + len(payload)
+    return d.HEADER.pack(d.MAGIC, d.VERSION, d.HEADER.size, len(mj), poff, total,
+                         hashlib.sha256(mj).digest(),
+                         hashlib.sha256(payload).digest()) + mj_pad + payload
+
+
+def valide():
+    return {"format": "DRVM", "version": 0, "model": {"name": "t"},
+            "graph": {"blocks": [{"id": "b0", "kind": "input",
+                                  "inputs": [], "outputs": []}],
+                      "regions": [{"id": "r0", "blocks": ["b0"]}],
+                      "routes": [], "heads": [], "thought": None, "bridge": None},
+            "tensors": [{"name": "b0.w", "bloc": "b0", "dtype": "f32", "shape": [1],
+                         "offset": 0, "nbytes": 4, "quant": None, "sparsity": 0.0}],
+            "execution": {"activation": "DRVF", "placement": "local"}}
+
+
+cas = {}
+
+
+def ajoute(nom, attendu, muter):
+    m = valide()
+    muter(m)
+    (T / f"{nom}.drvm").write_bytes(entete(m))
+    cas[nom] = attendu
+
+
+def _route(m):  m["graph"]["routes"] = [{"id": "r1", "de": "b0", "vers": "b0"}]
+def _graphe(m): m["graph"]["quota"] = 1
+def _bloc(m):   m["graph"]["blocks"][0]["poids"] = 1
+def _region(m): m["graph"]["regions"][0]["blocks"] = ["b1"]
+def _tete(m):   m["graph"]["heads"] = ["b1"]
+def _pont(m):   m["graph"]["bridge"] = "b1"
+def _pensee(m): m["graph"]["thought"] = {"steps": -1}
+def _sans(m):   del m["graph"]["thought"]
+def _exec(m):   m["execution"]["regime"] = "eager"
+def _racine(m): m["inconnue"] = 1
+
+
+ajoute("route",  "routes non exécutées", _route)
+ajoute("graphe", "clé inconnue dans graph : quota", _graphe)
+ajoute("bloc",   "clé inconnue dans un bloc : poids", _bloc)
+ajoute("region", "région vers un bloc inconnu : b1", _region)
+ajoute("tete",   "tête vers un bloc inconnu : b1", _tete)
+ajoute("pont",   "pont vers un bloc inconnu : b1", _pont)
+ajoute("pensee", "thought.steps invalide", _pensee)
+ajoute("sans",   "clé absente : graph.thought", _sans)
+ajoute("exec",   "clé inconnue dans execution : regime", _exec)
+ajoute("racine", "clé inconnue dans le manifeste : inconnue", _racine)
+
+(T / "valide.drvm").write_bytes(entete(valide()))
+with d.read_drvm(T / "valide.drvm") as v:
+    assert v.manifest["model"]["name"] == "t", "le DRVM valide ne se lit pas"
+
+for nom, attendu in cas.items():
+    try:
+        d.read_drvm(T / f"{nom}.drvm")
+    except d.DRVMError as e:
+        assert attendu in str(e), f"{nom} : « {e} » ne nomme pas « {attendu} »"
+    else:
+        raise AssertionError(f"{nom} : le lecteur Python a accepté ce qu'il n'exécute pas")
+
+# L'écriture refuse aussi : un manifeste ne peut pas naître menteur.
+man = valide()
+man["graph"]["routes"] = [{"id": "r1", "de": "b0", "vers": "b0"}]
+try:
+    d.write_drvm(T / "ecrit.drvm", man,
+                 [d.TensorSpec("b0.w", b"\x01\x02\x03\x04", bloc="b0")])
+except d.DRVMError as e:
+    assert "routes non exécutées" in str(e), e
+else:
+    raise AssertionError("écriture acceptée avec une route non exécutée")
+
+# Non-régression : les DRVM déjà sur le disque restent lisibles (dont la fixture).
+fixture = pathlib.Path("drave-core/tests/fixtures/tiny_n0.drvm")
+assert fixture.exists(), "fixture absente"
+with d.read_drvm(fixture, verifier=False):
+    pass
+n = 0
+for f in glob.glob("**/*.drvm", recursive=True):
+    with d.read_drvm(f, verifier=False):
+        n += 1
+
+(T / "cas.json").write_text(json.dumps(cas))
+print(f"  Python : {len(cas)} refus nommés · valide lu · écriture refusée · "
+      f"{n} DRVM existants relus")
+PY
+
+"$D" --drvm-inspect "$T/valide.drvm" >/dev/null 2>&1 || { echo "  ❌ le DRVM valide est refusé par le lecteur Rust"; exit 1; }
+while IFS=$'\t' read -r nom attendu; do
+    OUT=$("$D" --drvm-inspect "$T/$nom.drvm" 2>&1); CODE=$?
+    [ "$CODE" = "3" ] || { echo "  ❌ $nom : code $CODE au lieu de 3 : $OUT"; exit 1; }
+    printf '%s' "$OUT" | grep -Fq -- "$attendu" || { echo "  ❌ $nom : « $OUT » ne nomme pas « $attendu »"; exit 1; }
+done < <(python3 -c "import json;[print(k,v,sep='\t') for k,v in json.load(open('$T/cas.json')).items()]")
+echo "  ✅ Rust : 10 refus nommés (code 3) · le valide passe"
+
+echo "PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (10 cas, deux lecteurs)"

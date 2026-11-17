@@ -313,6 +313,15 @@ et l'état sont dans [`roadmap.md`](../pilotage/roadmap.md) § N ; la décision 
 qui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris qui s'exécute quand même est un
 modèle qui ment. Le même principe vaut pour la version et pour une section absente.
 
+**Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** `graph.routes` vide est accepté ; une route
+déclarée est **refusée** tant que le moteur ne sait pas l'exécuter — l'implémenter, pas l'ignorer, est la
+prochaine étape. Une clé inconnue (manifeste, `graph`, bloc, `execution`), une région, une tête ou un pont qui
+nomme un bloc absent le sont aussi, et les **deux lecteurs** (Rust et `tools/drvm.py`) appliquent la même règle
+et la même erreur. C'est ce qui fait du manifeste un **contrat** : le jour où une variante d'implémentation
+s'ajoute (`impl`), elle devra se déclarer ici et porter sa trace, pas s'ajouter en silence. La porte
+[`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur dix refus nommés, avec le DRVM valide et les
+DRVM déjà sur le disque comme contrôles négatifs.
+
 **Pourquoi un graphe plutôt qu'une pile** : parce que les mécanismes de Drave sont des **arêtes**, pas des
 couches. Une **sortie précoce** est une arête qui court-circuite la fin ; un **pont** est une arête entre deux
 régions ; une **route** est une arête conditionnelle ; la **pensée** est une arête qui boucle. Une pile ne sait

@@ -36,6 +36,19 @@ BLOCS_CONNUS = {
 }
 SECTIONS = ("model", "graph", "tensors", "execution")
 
+# Les clés sont des listes FERMÉES : une clé inconnue est refusée, jamais ignorée.
+# C'est la même règle que pour `kind` (docs/theorie/modele-natif.md) : un manifeste
+# à moitié compris qui s'exécute est un manifeste qui ment. Avant le 17/11, le
+# lecteur déclarait `routes`, `regions`, `heads`, `thought`, `bridge` et les
+# ignorait en silence ; `routes` vide est accepté, une route est REFUSÉE tant que
+# le moteur ne sait pas l'exécuter.
+CLES_RACINE = frozenset({"format", "version", *SECTIONS})
+CLES_GRAPHE = frozenset({"blocks", "regions", "routes", "heads", "thought", "bridge"})
+CLES_BLOC = frozenset({"id", "kind", "inputs", "outputs"})
+CLES_EXECUTION = frozenset({"activation", "placement", "cache", "replay", "import"})
+CLES_THOUGHT = frozenset({"steps"})
+CLES_REGION = frozenset({"id", "blocks"})
+
 
 class DRVMError(ValueError):
     """Erreur de format DRVM."""
@@ -90,7 +103,34 @@ def _aligne(n: int) -> int:
     return (int(n) + ALIGNEMENT - 1) // ALIGNEMENT * ALIGNEMENT
 
 
+def _objet(ou: str, valeur: Any) -> dict[str, Any]:
+    if not isinstance(valeur, dict):
+        raise DRVMError(f"{ou} n'est pas un objet")
+    return valeur
+
+
+def _cles_fermees(ou: str, obj: dict[str, Any], connues: frozenset[str]) -> None:
+    inconnues = sorted(set(obj) - connues)
+    if inconnues:
+        raise DRVMError(f"clé inconnue dans {ou} : {', '.join(inconnues)}")
+
+
+def _cle_absente(ou: str, obj: dict[str, Any], cle: str) -> Any:
+    if cle not in obj:
+        raise DRVMError(f"clé absente : {ou}.{cle}")
+    return obj[cle]
+
+
+def _chaines(ou: str, valeur: Any) -> list[str]:
+    if not isinstance(valeur, list) or not all(isinstance(x, str) for x in valeur):
+        raise DRVMError(f"{ou} doit être une liste de chaînes")
+    return valeur
+
+
 def _valide(manifest: dict[str, Any]) -> None:
+    """Refuse ce que le lecteur ne sait pas exécuter — il ne l'ignore jamais."""
+    _objet("le manifeste", manifest)
+    _cles_fermees("le manifeste", manifest, CLES_RACINE)
     for section in SECTIONS:
         if section not in manifest:
             raise DRVMError(f"section absente : {section}")
@@ -98,19 +138,81 @@ def _valide(manifest: dict[str, Any]) -> None:
         raise DRVMError("format != DRVM")
     if manifest.get("version") != VERSION:
         raise DRVMError(f"version non supportée : {manifest.get('version')}")
-    blocs = manifest["graph"].get("blocks")
+    modele = _objet("model", manifest["model"])
+    if not isinstance(modele.get("name"), str):
+        raise DRVMError("model.name absent")
+    graphe = _objet("graph", manifest["graph"])
+    _cles_fermees("graph", graphe, CLES_GRAPHE)
+    for cle in ("blocks", "regions", "routes", "heads", "thought", "bridge"):
+        _cle_absente("graph", graphe, cle)
+    blocs = graphe["blocks"]
     if not isinstance(blocs, list) or not blocs:
         raise DRVMError("graphe sans bloc")
     ids = set()
     for b in blocs:
+        _objet("un bloc", b)
+        _cles_fermees("un bloc", b, CLES_BLOC)
         if "id" not in b or "kind" not in b:
             raise DRVMError(f"bloc incomplet : {b!r}")
+        if not isinstance(b["id"], str) or not isinstance(b["kind"], str):
+            raise DRVMError(f"bloc mal typé : {b!r}")
         if b["id"] in ids:
             raise DRVMError(f"bloc dupliqué : {b['id']}")
         ids.add(b["id"])
         if b["kind"] not in BLOCS_CONNUS:
             raise DRVMError(f"type de bloc inconnu : {b['kind']}")
+        for port in ("inputs", "outputs"):
+            _chaines(f"{port} du bloc {b['id']}", _cle_absente("bloc", b, port))
+    regions = graphe["regions"]
+    if not isinstance(regions, list):
+        raise DRVMError("graph.regions doit être une liste")
+    vues = set()
+    for r in regions:
+        _objet("une région", r)
+        _cles_fermees("une région", r, CLES_REGION)
+        rid = _cle_absente("une région", r, "id")
+        if not isinstance(rid, str):
+            raise DRVMError(f"région sans id : {r!r}")
+        if rid in vues:
+            raise DRVMError(f"région dupliquée : {rid}")
+        vues.add(rid)
+        for x in _chaines(f"les blocs de la région {rid}",
+                          _cle_absente("une région", r, "blocks")):
+            if x not in ids:
+                raise DRVMError(f"région vers un bloc inconnu : {x}")
+    for h in _chaines("graph.heads", graphe["heads"]):
+        if h not in ids:
+            raise DRVMError(f"tête vers un bloc inconnu : {h}")
+    pensee = graphe["thought"]
+    if pensee is not None:
+        _objet("thought", pensee)
+        _cles_fermees("thought", pensee, CLES_THOUGHT)
+        pas = _cle_absente("thought", pensee, "steps")
+        if not isinstance(pas, int) or isinstance(pas, bool) or pas < 0:
+            raise DRVMError(f"thought.steps invalide : {pas!r}")
+    pont = graphe["bridge"]
+    if pont is not None and (not isinstance(pont, str) or pont not in ids):
+        raise DRVMError(f"pont vers un bloc inconnu : {pont}")
+    routes = graphe["routes"]
+    if not isinstance(routes, list):
+        raise DRVMError("graph.routes doit être une liste")
+    if routes:
+        raise DRVMError(
+            f"routes non exécutées : {len(routes)} route(s) — le lecteur refuse "
+            "ce qu'il ne sait pas exécuter")
+    execution = _objet("execution", manifest["execution"])
+    _cles_fermees("execution", execution, CLES_EXECUTION)
+    for cle in ("activation", "placement"):
+        if not isinstance(_cle_absente("execution", execution, cle), str):
+            raise DRVMError(f"execution.{cle} doit être une chaîne")
+    for cle in ("cache", "replay", "import"):
+        if cle in execution:
+            _objet(f"execution.{cle}", execution[cle])
+    if not isinstance(manifest["tensors"], list):
+        raise DRVMError("section tensors absente")
     for t in manifest["tensors"]:
+        if not isinstance(t, dict):
+            raise DRVMError(f"tenseur mal formé : {t!r}")
         if t.get("bloc") not in ids:
             raise DRVMError(f"tenseur rattaché à un bloc inconnu : {t.get('bloc')}")
         if int(t["nbytes"]) <= 0 or int(t["offset"]) % ALIGNEMENT:

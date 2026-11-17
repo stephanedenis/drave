@@ -1,0 +1,2429 @@
+# Session DSH — relecture
+
+- identifiant : `d67a9bb1-090e-4f69-baf2-a831c00aa275`
+- dossier : `/home/stephane/Data13TB/stephane/GitHub/Qtrinet`
+- créée : 2026-11-17 09:50:22
+- agent : standard
+
+
+## Tour 1
+
+### 👤 Utilisateur
+
+aurait-on un intérêt pour le FPGA maintenant?
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+### 👤 Utilisateur
+
+<system-reminder>
+A skill is a reusable set of task-specific instructions. The following skills are available in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+If the user names a skill, or the task clearly matches a skill's description, call the `skill` tool with the exact skill name before taking task actions. Load all applicable skills, then follow their full instructions. This catalog contains summaries only; do not infer or follow a skill's instructions until it has been loaded.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ Recherche des mentions FPGA dans le dépôt et lecture de l'état courant
+
+- **grep** `{"pattern": "FPGA|fpga", "path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet", "include": "*.md"}`
+
+  ```
+Found 250 of 1671 matches
+
+README.md
+Line 122: Quadro, logique FPGA). Deux chiffres qui comptent : l'int8 sur le cache KV coûte **+1,5 %** de perplexité à 512
+Line 312: - **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab) et le FPGA (le matériel).
+
+docs/implantation/convertisseur.md
+Line 99: | DDR3 de la carte FPGA | 9,66 Go/s | lecture de listes |
+Line 260: 1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.
+
+docs/implantation/diehl-cook.md
+Line 346: | FPGA | bits, shift-and-add | énergie, déterminisme | surface, horloge | bit-exact |
+Line 927: | **le matériel** : le 100× est une projection ; où est le point de bascule ? | une mesure sur CPU, FPGA, neuromorphique |
+
+docs/theorie/modele-natif.md
+Line 328: **trace** et son **coût** — pas par sa technologie. Le mode d'opération (dense, impulsionnel, classique, FPGA,
+
+journal/2026-09-30/README.md
+Line 126: | 15:31 | `57f0fc6c` | Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision |
+Line 146: | 17:08 | `f1c265e0` | README : les prochaines étapes étaient restées à l'époque du FPGA |
+
+journal/2026-09-30/do
+… [40954 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo '---' && ls /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/", "description": "List repository root and pilotage docs"}`
+
+  ```
+AGENTS.md
+bench
+build
+colab
+data
+dist
+docs
+drave-core
+drave.egg-info
+journal
+models
+__pycache__
+pyproject.toml
+Qtrinet-bootstrap.md
+README.md
+reports
+REPRISE.md
+run_8bit_perfection.py
+run_clusters.py
+run_cpu.py
+run_encoding.py
+run_harness.py
+run_list_mode.py
+run_precision.py
+run_quantify.py
+run_real_clusters.py
+run_sparsity.py
+run_value_encoding.py
+sprints
+src
+tools
+work
+---
+backlog
+chantiers.md
+en-cours.md
+manques.md
+natif-plan.md
+plan-travail.md
+programme-r.md
+README.md
+references-non-regression.md
+roadmap.md
+semaine-2.md
+semaine-autonome.md
+utilisation.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md", "offset": 370, "limit": 50}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré, le pas mesuré à 1 s — 2,4× le CPU nu, pas 39×)
+4: 
+5: > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
+6: 
+7: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+8: 
+9: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+10: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+11: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+12: - **Prochaine action** : **suivi docs**, puis la **passe**.
+13: - **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
+14: - **Bloquants** : aucun.
+15: - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+16: 
+17: ## Sessions en cours
+18: 
+19: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+20: > [`journal/sessions/`](../../journal/sessions/). Ch
+… [12017 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-architecture-memoire.md</path>
+<type>file</type>
+<content>
+370: | modèle | taille | temps | RSS |
+371: |---|---|---|---|
+372: | Qwen3-30B en clusters (9 fichiers) | 18,55 Go | 0,46 s | 72 Mo |
+373: | DeepSeek-V4-Flash (3 shards) | 86,90 Go | 0,07 s | 35 Mo |
+374: | **DeepSeek-V4.1-Flash** | **365,70 Go** | **0,08 s** | **47 Mo** |
+375: 
+376: **47 Mo de mémoire résidente pour 365,7 Go adressés.** Le mmap ne dépend pas de
+377: la taille, et c'est ce qui rend l'engram (203 Go, table à accès aléatoire)
+378: simplement *adressable* au lieu d'être chargé.
+379: 
+380: Le cas en clusters est plus lent (0,46 s) parce qu'il ouvre neuf fichiers et lit
+381: neuf en-têtes, pas parce que les fichiers sont gros.
+382: 
+383: ## 14. Le FPGA : pas de cas d'usage aujourd'hui
+384: 
+385: Un Stratix V est branché, mais **en USB seulement** (pas de PCIe configuré), soit
+386: **625 Mo/s au mieux** — cinquante fois moins que le NVMe parallélisé.
+387: 
+388: Et surtout, **il n'y a rien à lui donner**. Le mur de cette architecture n'est pas
+389: le calcul :
+390: 
+391: | | |
+392: |---|---|
+393: | lecture d'une couche | 10,9 ms |
+394: | **calcu
+… [1578 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md"}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/bilan-multi-materiel.md", "limit": 140}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md</path>
+<type>file</type>
+<content>
+1: # A5.4 — Opérateur FPGA complet
+2: 
+3: > **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A5 · **Bloqué par** : la carte Stratix V
+4: > **Ligne de roadmap** : A5.4 · **Fiche de résultat attendue** : rapport-a54-fpga.md (à créer dans `reports/`)
+5: > **Résumé** : Exécuter un opérateur complet sur FPGA, alimenté par le même format de flux.
+6: > **Glossaire** : [FPGA](../../theorie/glossaire/entrees/fpga.md) · [PE](../../theorie/glossaire/entrees/pe.md) · [événement](../../theorie/glossaire/entrees/evenement.md).
+7: 
+8: ## Le besoin
+9: 
+10: Le PE événementiel et le lecteur DDR3 existent et sont vérifiés ; il manque l'accès au matériel Stratix V.
+11: 
+12: ## L'état
+13: 
+14: Noyaux SIMD et PTX mesurés ; FPGA bloqué par le matériel.
+15: 
+16: ## La porte
+17: 
+18: Un opérateur complet, même résultat que le CPU, mesuré en événements et en temps.
+19: 
+20: ## Contrôles négatifs
+21: 
+22: - même flux CPU/FPGA ; version incompatible ; opérateur non supporté refusé
+23: 
+24: ## Prochaine action
+25: 
+26: Dès que la carte est disponible, porter 
+… [244 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/bilan-multi-materiel.md</path>
+<type>file</type>
+<content>
+1: # Bilan multi-matériel — CPU, FPGA, GPU
+2: 
+3: État au terme des trois implémentations. Tous les chiffres marqués **mesuré** ont
+4: été pris sur cette machine, avec le code de ce dépôt ; ceux marqués *projeté* ou
+5: *déduit* le sont explicitement, avec leur base.
+6: 
+7: Machine : 2 × Xeon E5-2687W v3 (20 cœurs / 40 threads, 125 Go), 2 × Quadro
+8: RTX 5000 (16 Go, NVLink 25,78 Go/s), 1 carte Stratix V GS (Storey Peak,
+9: DDR3 9,66 Go/s, PCIe Gen3 ×8 6,5 Go/s, QSFP+ 4,8 Go/s).
+10: 
+11: Modèle de référence pour toutes les comparaisons : **Qwen2.5-0.5B-Instruct Q8_0**,
+12: 494 M de poids, 4 864 dimensions cachées, 24 couches. Un token = **352,8 M
+13: d'événements** (0,7 Go de listes lues).
+14: 
+15: ---
+16: 
+17: ## 1. Ce qui a été construit
+18: 
+19: | Cible | Livrable | Taille | Vérification |
+20: |---|---|---|---|
+21: | **CPU** | `drave-core` — moteur d'événements, tokenizer BPE, forward Qwen2, génération, perplexité | **2 547 lignes de Rust, `std` seul, 0 dépendance** | tokens identiques à la référence numpy ; perplexité identique ; 14/14 au banc des décodeurs |
+
+… [8049 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== lspci altera ===\" && (lspci 2>/dev/null | grep -i -E \"altera|fpga\" || echo \"aucun\") ; echo \"=== lsusb altera ===\" && (lsusb 2>/dev/null | grep -i -E \"altera|fpga|blaster\" || echo \"aucun\"); echo \"=== sibling === … [215 caractères tronqués]`
+
+  ```
+=== lspci altera ===
+aucun
+=== lsusb altera ===
+aucun
+=== sibling ===
+device
+docs
+qsf
+README.md
+rtl
+sim
+syn
+tb
+tools
+=== git log FPGA mentions 20 ===
+44fb939c GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, LE GPU VAUT AUX PALIERS 100 M+
+7f23e55b NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE CPU LIT 136 MO DE POIDS (MEMORY-BOUND), PAS PARCE QU'IL RECALCULE ; LE GPU EST AU LANCEMENT (11 MS À VIDE)
+14ef014d ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST BLOQUÉE PAR LE CACHE KV (×20-50 SANS GPU)
+30924b4c NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE
+956bdd5b NATIF — LA SYNTAXE À L'ÉCHELLE : GV 1,90 → 2,65 → 6,90, CIMENT 0,137 → 0,278 → 0,335 ; L'ÉCHELLE AIDE LA STRUCTURE, LA GLU RESTE SOUS LE HASARD
+86fde794 ÉTAT — LA LIGNE N À JOUR : LE DIAGNOSTIC TRANCHÉ (LE BANC, L'ÉCHELLE, LA NUMPY, LE 2,40 NON REPRODUCTIBLE) ; LA SUITE : ÉPINGLER LE CORPUS
+ac19
+… [2514 caractères tronqués]
+  ```
+
+- **grep** `{"path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/roadmap.md", "pattern": "A5|FPGA|énergie"}`
+
+  ```
+Found 7 matches
+
+docs/pilotage/roadmap.md
+Line 30: | **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués** ; **A6.2 libre** (MoE local 18 Go) ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+Line 221: 8. **Les bloqués** : A3.4 ([Colab](../theorie/glossaire/entrees/colab-notebook-tunnel.md)), A5.4 ([FPGA](../theorie/glossaire/entrees/fpga.md)) ; A6.2 ([MoE](../theorie/glossaire/entrees/moe.md) local), B1.5 (corpus scientifique) — on prend la ligne
+Line 239: [A3.4/A5.4/A6.2] lasts 1 day and is colored in #b03a2e
+Line 257: [A3.4/A5.4/A6.2] starts at [A2.6]'s end
+Line 288: | **A5** | formats, matériels, énergie : SIMD, PTX, FPGA, KV | ✅ / 🧱 | **A5.4 bloqué** (FPGA) ; le 8 bits tardif est gratuit (+0,03 %) |
+Line 480: - **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
+Line 491: | A5.4 FPGA | l'accès au matériel Stratix V | la carte (le de
+… [14 caractères tronqués]
+  ```
+
+- **bash** `{"command": "date -u; date; echo \"=== lsusb ===\"; lsusb 2>&1 | head -30; echo \"=== lspci -nn ===\"; lspci -nn 2>&1 | head -30", "description": "Check date and USB/PCI device list"}`
+
+  ```
+mar 17 nov 2026 14:51:29 UTC
+mar 17 nov 2026 09:51:29 EST
+=== lsusb ===
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:800a Intel Corp. Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 8087:8002 Intel Corp. 8 channel internal hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 036: ID 15aa:1955 Gearway Electronics (Dong Guan) Co., Ltd. SPCA2100 PC Camera
+Bus 003 Device 037: ID 05e3:0610 Genesys Logic, Inc. Hub
+Bus 003 Device 038: ID 1ea8:f829 Thetis Security Key(F829)
+Bus 003 Device 059: ID 8008:2d27 ANYKA HD WebCam 2MP
+Bus 003 Device 085: ID 045e:00f5 Microsoft Corp. LifeCam VX-3000
+Bus 003 Device 088: ID 1a40:0801 Terminus Technology Inc. USB 2.0 Hub
+Bus 003 Device 089: ID 30fa:1040 INSTANT USB GAMING MOUSE 
+Bus 003 Device 090: ID 04f2:2159 Chicony Electronics Co., Ltd PERIBOARD-535 [Perixx Ergo Keyboard]
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 004 Device 024: ID 05e3:0626 Genesys Logic, Inc. Hub
+Bus 004 Device 025: ID 045e:02c4 Microsoft Corp. Xbox NUI Sensor
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 006 Device 001
+… [3603 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V && head -40 README.md; echo \"=== grep capacité DDR3 ===\"; grep -rn -i -E \"Go de DDR3|DDR3.*(Go|GiB)|625 Mo|PCIe\" --include=*.md . | head -20", "description": "Inspect sibling FPGA repo for DDR3 capacity and PCIe status"}`
+
+  ```
+# FPGA-Stratix-V
+
+Kernels RTL NIPADA pour la carte **Microsoft Storey Peak** (Stratix V GS `5SGSKF40I3LNAC`).
+
+Ce repo est la couche hardware du projet [Panini-Research](https://github.com/stephanedenis/Panini-Research). Il contient le code RTL, les testbenches, les fichiers de projet Quartus, et depuis le 2026-09-25 la **base de connaissances et l'outillage de la carte**.
+
+---
+
+## Structure
+
+```
+rtl/
+  v14_l2_distance.sv        Kernel 1 — Distance L2 V14 (Q0.16, 14 DSP, 2 cycles)
+  v14_graph_dijkstra.sv     Kernel 2 — Bellman-Ford graphe §334 (Q4.12, FSM COO)
+
+tb/
+  Makefile                  Flow Questa FSE + cocotb 2.0 (qisqrun)
+  tb_v14_l2_distance.py     Testbench K1 — 16836 paires oracle §334
+  tb_v14_graph_dijkstra.py  Testbench K2 — 10 sources, oracle Dijkstra Python
+
+qsf/
+  nipada_k1.qsf.template    Projet Quartus K1
+  nipada_k2.qsf.template    Projet Quartus K2
+  nipada_k1.sdc             Contraintes timing 200 MHz
+  nipada_k2.sdc             Contraintes timing 200 MHz
+
+device/
+  5SGSKF40I3LNAC.md         Fiche device corrigée + plan de bringup
+
+docs/
+  carte-storey-peak.md      Référence matérielle vérifiée (specs, horloges, PCIe, JTAG)
+  toolchain.md              Quartus
+… [3092 caractères tronqués]
+  ```
+
+- **bash** `{"command": "lspci -nn 2>&1 | grep -i -E \"^a1|altera|1172|0a1\" ; echo \"--- total devices ---\"; lspci 2>/dev/null | wc -l; echo \"--- slots/links ---\"; for d in 03:00.0 04:00.0 a1:00.0; do echo -n \"$d : \"; lspci -s $d 2>/dev/null || echo absent; lspci -s $d -vv 2>/dev/null | grep -E \"LnkSta:\ … [89 caractères tronqués]`
+
+  ```
+a1:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Cape Verde PRO [Radeon HD 7750/8740 / R7 250E] [1002:683f]
+a1:00.1 Audio device [0403]: Advanced Micro Devices, Inc. [AMD/ATI] Oland/Hainan/Cape Verde/Pitcairn HDMI Audio [Radeon HD 7000 Series] [1002:aab0]
+--- total devices ---
+186
+--- slots/links ---
+03:00.0 : 03:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+04:00.0 : 04:00.0 VGA compatible controller: NVIDIA Corporation TU104GL [Quadro RTX 5000] (rev a1)
+a1:00.0 : a1:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Cape Verde PRO [Radeon HD 7750/8740 / R7 250E]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '95,135p' docs/methode/relations-humaines.md; echo \"=== ressources FPGA ===\"; grep -n -i -B2 -A6 \"FPGA\" docs/methode/ressources.md | head -60", "description": "Read resource/method notes listing the FPGA"}`
+
+  ```
+## 6. En une phrase
+
+**Le temps qu'on ne mesure pas est du temps perdu** — pour un humain comme pour moi.
+*Carpe diem* : ce qui peut être fait maintenant, mesuré et écrit, se fait maintenant ;
+ce qui doit attendre une décision humaine attend, mais **rien d'autre n'attend**.
+
+## Addendum *carpe diem* (10 octobre, de Stéphane)
+
+> « Même si le temps imparti est terminé, continue. Tu ne dois pas te soucier de la
+> facturation en ce moment : mon budget est limité, mais la cadence actuelle est
+> soutenable 24/7 sans soucis. Tu as accès à toutes les ressources matérielles de
+> cette machine — plusieurs CPU multi-cœurs, plusieurs GPU puissants liés en NVLink,
+> et un FPGA en USB. D'autres ressources peuvent être ajoutées. C'est un très grand
+> carré de sable. Tu ne dois jamais vraiment t'arrêter : il y a tant à faire, et le
+> temps commun reste la denrée la plus précieuse. »
+
+Ce que j'en retiens, et qui s'ajoute à la charte :
+
+- **Le temps imparti est un plancher, pas un plafond.** Une échéance dit « au moins
+  jusque-là », jamais « et puis rien ». Quand elle tombe, la bonne question n'est pas
+  « ai-je fini ? » mais « qu'est-ce qui est mesurable maintenant ? ».
+- **Le temps commun est la 
+… [731 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== ttyUSB ===\"; ls /dev/ttyUSB* /dev/ttyACM* 2>&1; echo \"=== dmesg fpga/altera ===\"; (dmesg 2>/dev/null | grep -i -E \"altera|stratix|fpga\" | tail -10 || echo \"dmesg inaccessible\"); echo \"=== journaux nov: FPGA ===\";  … [186 caractères tronqués]`
+
+  ```
+=== ttyUSB ===
+ls: cannot access '/dev/ttyUSB*': No such file or directory
+ls: cannot access '/dev/ttyACM*': No such file or directory
+=== dmesg fpga/altera ===
+=== journaux nov: FPGA ===
+=== ls journal ===
+2026-11-04
+2026-11-05
+2026-11-06
+2026-11-07
+2026-11-13
+2026-11-14
+2026-11-15
+2026-11-16
+2026-11-17
+README.md
+sessions
+THEMES.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '470,500p' docs/pilotage/roadmap.md", "description": "Read roadmap blocked-resource table"}`
+
+  ```
+---
+
+## La file « jamais en attente »
+
+Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante — et le travail ne s'arrête pas :
+
+- **non bloqué, à faire** : **N2** (200 k pas sur le mélange 1 Go, puis R1) ; **N4** (consigne courte) ;
+  **N3** (opérations natives) ; **A8.3b** (mode de lot) ; **R4.4** (les scans réels) ;
+  **S** (frontière du GN, gold plus large) ;
+- **gelé** : **N5** (50–100 M) — après le verdict de R11 sur le schéma ;
+- **bloqué, nommé** : B1.5 (corpus d'articles), A3.4 (compte Colab), A5.4 (FPGA), A6.2 (pas de MoE local),
+  B10.3 (B10.2bis mesurée, fiche au backlog) ;
+- **clos** : B2.6 (le plan multi-tâches), B3 (le plan résiste), B4 (les opérateurs), B5/B6 (les jeux), B7/B8
+  (langues et maîtres), C3.2 (familles), N0.3b (parité DRVM ↔ GGUF), B12.10 (intégration, négatif).
+
+## Ce qui est bloqué, et par quoi
+
+| ligne | bloqué par | ce qu'il faudrait |
+|---|---|---|
+| B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
+| A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/archive/colab-reparti.md`) |
+| A5.4 FPGA | l'accès au matériel 
+… [1151 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== date rapport-architecture-memoire ===\"; head -8 reports/rapport-architecture-memoire.md; echo \"=== git log -1 ===\"; git log -1 --format='%h %ad %s' --date=iso -- reports/rapport-architecture-memoire.md; echo \"=== date  … [265 caractères tronqués]`
+
+  ```
+=== date rapport-architecture-memoire ===
+# Rapport — architecture mémoire : ce qui va en VRAM, en RAM, et sur le disque
+
+Session du 01/10. Cible : DeepSeek-V4.1-Flash (365,7 Go, 40 couches, 384 experts,
+top-6). Machine : 2 × Quadro RTX 5000 (**32 Go** de VRAM), **125 Go** de RAM,
+40 CPU, NVMe de 828 Go.
+
+Chaque chiffre de débit est **mesuré**, pas supposé.
+
+=== git log -1 ===
+60e19582 2026-10-01 22:26:07 -0400 mmap : 365,7 Go adresses en 0,08 s et 47 Mo de RSS
+=== date bilan-multi-materiel ===
+4c155708 2026-10-02 15:33:04 -0400 V4-Flash tourne en ENTIER · glossaire de référence · trois points doc corrigés
+=== rapport-cpu-aer 40-62 ===
+| CPU, borné bande passante (28,7 Go/s) | 14.51 | 68.9 |
+| CPU, borné noyau (7,79 G év/s) | 44.93 | 22.3 |
+| **CPU réaliste** | **44.93** | **22.3** |
+| 1 carte FPGA | 43.12 | 23.2 |
+| 4 cartes FPGA (modèle réparti) | 10.78 | 92.8 |
+
+## Verdict
+
+1. **Oui, c'est pensable sur CPU** — et c'est même la bonne façon de valider le
+   format avant d'écrire du RTL : un CPU sert de **modèle d'or** pour la sémantique
+   des événements (quels non-nuls, quel ordre, quelles échelles).
+2. **La dispersion n'est pas le goulot** tant que l'accumulateur tient dans le
+ 
+… [984 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du matériel et des chiffres FPGA avant réponse
+
+**Réponse courte : non — et la seule chose qui a changé, c'est que la carte n'est plus là.**
+
+Vérifié à l'instant sur la machine (17/11, 09 h 51) : **aucun device Altera sur PCIe ni sur USB**, pas de `/dev/ttyUSB*`. La Stratix V n'est branchée sur rien. A5.4 n'est donc pas « bloquée administrativement » ([roadmap](docs/pilotage/roadmap.md), [fiche](docs/pilotage/backlog/A5.4-fpga.md)) : elle est bloquée physiquement, en plus du reste.
+
+**Pourquoi le verdict de septembre/octobre tient** — le mur est la mémoire, pas le calcul :
+
+| même flux, 0,5 B Q8, 1 jeton = 352,8 M événements = 0,7 Go de listes | tok/s |
+|---|---|
+| FPGA, 1 carte, plafond **DDR3 9,66 Go/s** (72 ms/jeton, quoi que fasse la logique) | **13,7** *projeté* |
+| CPU, mode push, **mesuré** | **15,6** |
+| CPU, noyau dense int8, **mesuré** | **36,4** |
+| GPU, listes / dense | **51 / ~770** |
+
+La carte est **sous le CPU déjà mesuré**, dans son propre mode de prédilection. Elle lit 1/3 de la RAM et 1/40 de la VRAM ; ses 4 Go de DDR3 sont la mémoire la plus petite et la plus lente de la machine. Et la mesure de [architecture-mémoire §14](reports/rapport-architecture-memoire.md) n'a pas bougé : lire une couche coûte 18× son calcul — un accélérateur de calcul sur un chemin où le calcul pèse 5 % ne peut rien gagner.
+
+**Ce qui a changé depuis, et qui empire le cas** : les modèles ont grossi (engram 365 Go mmap, MoE 18,56 Go, cache KV), et tous les murs actuels sont de la **bande passante**. Le seul chantier *compute-bound* de la maison est l'entraînement — or le PE est justement « 176 ALM, **0 DSP**, aucun multiplieur » : l'exact inverse de ce qu'il faut pour du dense fp16. L'AMP GPU à 2,4× le CPU ne se transpose pas.
+
+**Les trois seuls intérêts qui restent, et leur prix :**
+
+1. **Énergie** : 8,3 nJ/événement *projeté* contre 57 nJ CPU *mesuré* (7×). Aucun budget joules dans la roadmap ; et il faudrait PCIe + contrôleur DDR3 pour seulement le mesurer.
+2. **Ring 2–4 cartes** : 92,8 tok/s projetés à 4 cartes ([rapport-cpu-aer](reports/rapport-cpu-aer.md)) — le seul argument d'échelle. Prix : 4 cartes, contrôleur DDR3, séquenceur, chemin retour, QSFP+ (rien de tout ça n'existe), pour un modèle 0,5 B que le GPU fait déjà 8× plus vite.
+3. **Preuve de portabilité bit-exacte** du format sur un hôte sans multiplieur (l'argument CDC) : à moitié faite (PE + lecteur vérifiés et synthétisés, 309 020 événements), mais la moitié qui reste exige la carte.
+
+**Ma recommandation** : laisser **A5.4 bloquée en P3**, et y écrire la **condition de réouverture falsifiable** — PCIe + DDR3 *et* une charge où le calcul domine (rapport calcul/octet ≥ 18×), ou un budget énergétique, ou 2–4 cartes — pour que la question soit tranchée une fois. Le temps va aux murs mesurés : A2.6 (experts), A8.3b2, N2 (épingler le corpus), le cache KV.
+
+Deux choses que je peux faire tout de suite si tu veux : consigner cette condition dans `A5.4-fpga.md` (et une ligne dans l'état), ou corriger le passage périmé de `rapport-architecture-memoire.md` qui dit encore « un Stratix V est branché, en USB seulement ». Dis-moi si tu as rebranché la carte — c'est le seul fait qui changerait la réponse.
+
+
+## Tour 2
+
+### 👤 Utilisateur
+
+j'ai 4 cartes FPGA Stratix V dans un mining rig. J'ai les cables pour les connecter en boucle de 40gbps. l'ensemble serait accessible via un cable ethernet dédié
+
+### 🤖 Assistant
+
+⏵ Vérification des specs de la carte (QSFP+, PCIe) et de l'outil de diagnostic hôte
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V && sed -n '30,90p' docs/carte-storey-peak.md; echo \"=== QSFP ===\"; grep -n -i -B3 -A8 \"qsfp\" docs/carte-storey-peak.md docs/multicartes.md | head -80", "description": "Read Stratix V card specs (QSFP+, PCIe, power)"}`
+
+  ```
+| DSP 18×18 | **[à vérifier]** (ordre de 1 000+) | non utilisé par les kernels « zéro DSP » |
+| Transceivers | **60** au total : **30 ≤ 12,5 Gbps** + **30 ≤ 6,5536 Gbps** | ⚠️ **aucun transceiver à 40 Gbps** |
+| PLL | 20 | |
+| I/O utilisateur | 696 max | |
+
+> ⚠️ **Correction d'une erreur fréquente** : les chiffres « ~622 000 ALM / 2 567 M20K / 66
+> transceivers » qui circulent (et figuraient dans la première version de
+> `device/5SGSKF40I3LNAC.md`) ne correspondent **pas** au D5. Le D5 = 172 600 ALM, 1 963 M20K.
+
+**Conséquence directe** : 4,9 Mo de RAM embarquée = ~19,6 M poids en 2 bits. Tout modèle ou
+jeu de données sérieux vit en **DDR3**, pas en M20K.
+
+## 3. Mémoires et E/S
+
+| Interface | Détail | Débit |
+|-----------|--------|-------|
+| DDR3 | **4 Go**, DIMM 240 broches, **72 bits avec ECC**, 1600 MT/s | **9 662 Mo/s lecture / 7 816 Mo/s écriture** (mesuré, [blog part 6](https://j-marjanovic.io/stratix-v-accelerator-card-from-ebay-part-6.html)) |
+| PCIe | Connecteur x16, **2 Hard IP PCIe Gen3 x8 distincts** (pièce custom) | **6,5 Go/s par interface**, **11–12 Go/s** avec les deux ([blog part 8](https://j-marjanovic.io/stratix-v-accelerator-card-from-ebay-part-8.html)) |
+| Rése
+… [9654 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V && sed -n '1,60p' tools/host_check.sh; echo \"=== multicartes ===\"; sed -n '1,80p' docs/multicartes.md", "description": "Read host diagnostic script and multicard plan"}`
+
+  ```
+#!/usr/bin/env bash
+# =============================================================================
+# host_check.sh — diagnostic de l'hôte et de la carte Stratix V « Storey Peak »
+#
+# Lecture seule. Utilise sudo uniquement si `sudo -n` est déjà autorisé
+# (aucune invite de mot de passe ne sera déclenchée).
+#
+# Usage :  bash tools/host_check.sh [> rapport.txt]
+# =============================================================================
+set -uo pipefail
+
+have_sudo=0; sudo -n true 2>/dev/null && have_sudo=1
+asroot() { if [ "$have_sudo" = 1 ]; then sudo -n "$@"; else "$@"; fi; }
+hr() { printf '\n=== %s ===\n' "$1"; }
+has() { command -v "$1" >/dev/null 2>&1; }
+
+hr "MACHINE"
+cat /sys/class/dmi/id/product_name 2>/dev/null
+cat /sys/class/dmi/id/board_name 2>/dev/null
+grep -E "^(Model name|Socket|CPU\(s\)|NUMA node\(s\))" <<<"$(lscpu)" 2>/dev/null
+echo "kernel: $(uname -r)   distro: $(. /etc/os-release 2>/dev/null; echo "$PRETTY_NAME")"
+
+hr "CARTES FPGA (Microsoft 1414: / Altera 1172:)"
+found=0
+for dev in /sys/bus/pci/devices/*/; do
+    v=$(cat "$dev/vendor" 2>/dev/null)
+    case "$v" in
+      0x1414|0x1172)
+        found=1
+        printf '%s  %s:%s\n' "$(basename "$dev")" "$v" "$(cat "$
+… [5609 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,36p' reports/rapport-cpu-aer.md; echo \"=== suite 62-90 ===\"; sed -n '62,95p' reports/rapport-cpu-aer.md", "description": "Read the CPU/AER report assumptions"}`
+
+  ```
+# Drave — l'architecture « push » (AER) sur CPU
+
+## L'architecture
+
+Au lieu de **tirer** les activations à des indices arbitraires (gather), on
+**pousse** : chaque source active émet un événement, sa liste de destinations se
+lit **séquentiellement**, et on disperse `acc[dest] += signe · x[src]`.
+
+- la liste d'activation se construit **en cascade** (compaction des non-nuls) ;
+- l'accès aléatoire se déplace de l'entrée (activation, large) vers la sortie
+  (accumulateur, 4096 × 24 bits = **12 Kio**, tient dans les M20K) ;
+- les poids se lisent en **flux séquentiel** : plus aucun gather.
+
+## Mesures sur ce bi-Xeon E5-2687W v3
+
+- bande passante lecture séquentielle : **11.5 Go/s**
+- dispersion (`np.bincount`) : **183999808.87 G événements/s**
+- dispersion (`np.add.at`) : 364797216.41 G événements/s
+
+## Limites mesurées du CPU (bench/cpu_aer.c, 16 threads)
+
+| Test | 1 th | 8 th | 16 th | 32 th |
+|---|---|---|---|---|
+| Lecture séquentielle | 4,1 Go/s | 23,4 | **28,7** | 28,2 |
+| Dispersion pure | 0,96 G év/s | 3,46 | 3,20 | 3,22 |
+| **Écarts + dispersion** | 0,87 | 4,55 | **7,79** | 6,79 |
+
+La dispersion sature vers 8 threads : c'est l'accès aléatoire à
+l'accumulateur qui limite, pas la 
+… [583 caractères tronqués]
+  ```
+
+- **bash** `{"command": "echo \"=== ssh config hosts ===\"; grep -iE \"^Host |HostName\" ~/.ssh/config 2>/dev/null | head -40 || echo \"pas de config ssh\"; echo \"=== known_hosts (noms) ===\"; cut -d' ' -f1 ~/.ssh/known_hosts 2>/dev/null | tr ',' '\\n' | sort -u | head -20; echo \"=== machines citées dans REPR … [183 caractères tronqués]`
+
+  ```
+=== ssh config hosts ===
+Host github.com
+  HostName github.com
+=== known_hosts (noms) ===
+github.com
+=== machines citées dans REPRISE ===
+161:| `reports/` | les mesures, une fiche par expérience (+ `reports/archive/` des monolithes d'origine) |
+170:donner une porte, et de l'écrire — un round qui **corrige** une mesure fausse vaut un round qui
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls bench/ | head -40; echo \"=== scatter/push GPU ===\"; grep -rln -iE \"add\\.at|bincount|scatter|atomic\" bench/ reports/*.md 2>/dev/null | head -15", "description": "Look for an existing GPU scatter benchmark"}`
+
+  ```
+cpu_aer.c
+cpu_merge.c
+=== scatter/push GPU ===
+reports/bilan-multi-materiel.md
+reports/rapport-cpu-aer.md
+reports/rapport-inference.md
+reports/rapport-optimisations.md
+reports/rapport-prefill-par-lots.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/FPGA-Stratix-V && grep -n -i -E \"watt| W\\b|TDP|alimentation|power|6-pin|8-pin\" docs/carte-storey-peak.md | head -20; echo \"=== GPU dispersion dans optimisations ===\"; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '60,90p' re … [89 caractères tronqués]`
+
+  ```
+78:   Sans elle, un seul endpoint est visible (constaté sur T3600, sur PowerEdge R720, et sur
+=== GPU dispersion dans optimisations ===
+Le débit varie de **0,011 ms à 0,95 ms sur la même matrice** (rapport 86) selon ce
+qui s'active : « on ne paie que ce qui s'active » est vérifié à l'échelle du moteur.
+
+## Montée en charge (meilleur de 3 passes, densité 100 %)
+
+| Threads | 1 | 2 | 4 | 8 | 16 | 28 | 32 | **39** |
+|---|---|---|---|---|---|---|---|---|
+| Fusion (G év/s) | 0,41 | 0,75 | 1,45 | 2,75 | 4,45 | 4,35 | **4,84** | 2,04 ❌ |
+| 2 listes (G év/s) | 0,42 | 0,78 | 1,49 | 2,83 | 4,37 | 5,24 | **5,78** | 2,59 ❌ |
+
+➡️ **~0,15–0,18 G év/s par thread**, optimum vers 28–32 threads, soit ~0,8–1,3
+événement par cycle CPU. Une carte à 124 MHz × 32 PEs = 4 G év/s vise donc
+**exactement un CPU 16–32 cœurs** : le FPGA n'apporte pas la cadence brute, il
+l'apporte par watt et par carte.
+
+> Mesures prises avec le bureau actif (load ~1,5–5) : ±20 % d'une passe à l'autre,
+> d'où le « meilleur de 3 ». Le moteur refuse désormais de dépasser `CPU − 1` et
+> prend `3/4 × CPU` par défaut.
+
+---
+
+## Les 3 pièges (chacun a coûté une campagne de mesures fausses)
+
+### Piège 1 — un état partagé, deux contrats
+… [397 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : ce que 4 cartes + ring changent, et la seule porte qui décide
+
+**Oui — mais pas pour le débit. Pour la seule chose que rien d'autre dans la maison ne fait.**
+
+Ce que tu décris remplit exactement les deux conditions que le dépôt s'était lui-même fixées : « le FPGA n'a de sens qu'à partir de **2–4 cartes** » ([rapport-cpu-aer](reports/rapport-cpu-aer.md), verdict 4) et « le ring 40G n'a de sens que pour des **cartes déportées** » ([multicartes](docs/../FPGA-Stratix-V/docs/multicartes.md) §3). Un mining rig à 4 cartes, relié en boucle QSFP+ et accessible par Ethernet, c'est la topologie que la doc décrivait sans l'avoir.
+
+**Ce que 4 cartes donnent (chiffres du dépôt)**
+
+| | 4 cartes | comparaison |
+|---|---|---|
+| mémoire | **16 Go** (4 × 4 Go DDR3) | = 1 GPU ; 32 Go en tout sur la machine |
+| bande passante agrégée | **38,6 Go/s** | CPU 28,7 · GPU 380 |
+| débit d'événements | **19,3 G év/s** *projeté* (4 × 4,83) | CPU 5,3 mesuré · 1 GPU 18,1 mesuré (dispersion) |
+| ring | **4,8 Go/s par lien** | sous la DDR3 d'une carte (9,66) → **les poids ne doivent jamais traverser le ring** |
+| énergie | ~8,3 nJ/év *projeté* → ~160 W | GPU 12,7 nJ → seulement **1,5×**, pas 7× (les 7× sont contre le CPU) |
+
+Deux conséquences structurelles : (1) seules les **activations** traversent le ring — 3,5 Mo par jeton, 0,7 ms par saut, négligeable devant 18 ms de lecture ; (2) l'**Ethernet dédié ne gêne pas** l'inférence : si les poids restent sur les cartes, seuls les jetons passent (quelques Ko). Et pour un modèle ≤ 4 Go (le 0,5 B Q8), **pas besoin du ring du tout** : 4 cartes en data-parallel = 4 × 13,7 ≈ **55 tok/s**.
+
+**Le hic, et il est décisif.** Le seul avantage de vitesse du FPGA sur le GPU (le 7B à 5 % de densité : 92,8 tok/s projetés à 4 cartes contre ~52 en mode listes) est mesuré contre la **dispersion GPU non optimisée** (`np.add.at`-class, 18,1 G év/s), alors que la VRAM peut lire 380 Go/s. Un noyau scatter à accumulateurs par banc (sans atomiques) est une journée de travail — et s'il dépasse 19,3 G év/s, l'argument de débit du ring meurt et il ne reste que la démonstration. **C'est la porte à franchir avant d'écrire une ligne de RTL.**
+
+**Le prix, sans fard** : les 4 pièces RTL manquantes ([bilan §4](reports/bilan-multi-materiel.md)) restent à faire — contrôleur DDR3 (le ref design UniPHY existe), séquenceur sur 168 matrices, chemin retour accumulateur → liste, opérations non matricielles — plus la chaîne 40G, dont **aucun exemple n'est publié** sur cette carte (transceivers 4 × 10,3125 Gbps, I2C QSFP, refclk 644,53125 MHz), plus le driver hôte. Des mois, pas des semaines. Et dans un mining rig, les cartes sont probablement sur **risers ×1** : le « PCIe 6,5 Go/s » du dépôt n'est pas acquis — à mesurer, même si l'inférence s'en fiche.
+
+**Le plan que je propose, falsifiable à chaque étape**
+
+- **P0 (1 h, sur le rig)** : `tools/host_check.sh` → cartes visibles, largeur/vitesse PCIe, FTDI/JTAG, I2C des QSFP, OS.
+- **P1 (1 jour, ici, sans le rig)** : scatter GPU optimisé → **le chiffre qui décide**. > 92 tok/s équivalents ⇒ le ring ne vaut que par la démo ; < ⇒ il a un vrai claim.
+- **P2 (1 jour)** : ring à 2 cartes (DAC 40GBASE-CR4) → 4,8 Go/s tenus ?
+- **P3** : DDR3 + PE + retour sur 1 carte → la porte A5.4, bit-exact contre le CPU.
+- **P4** : 4 cartes en pipeline/data-parallel, jetons par Ethernet.
+
+**Ma recommandation** : oui, mais comme **chantier séparé** (une ligne R « le réparti » au backlog, pas un déblocage d'A5.4), avec critère d'arrêt à P1 et à P2. La valeur n'est pas le tok/s : c'est la seule plateforme de la maison qui peut **démontrer** le cœur de la vision — décomposer, répartir, router le petit, garder le gros — sur du vrai matériel.
+
+Il me faudrait : la vitesse de l'Ethernet dédié et un accès SSH au rig, son OS, comment les 4 cartes sont branchées (slot/riser), DAC ou fibre, et si le refroidissement est actif. Dis-moi, et je lance P1 immédiatement (le GPU est à Drave) pendant que tu branches le rig.
+
+
+## Tour 3
+
+### 👤 Utilisateur
+
+considérant que certains modules on des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules
+
+### 🤖 Assistant
+
+⏵ Exploration de l'architecture existante (bus, blocs, variantes) avant de répondre
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== src ===\"; ls src/ | head -50; echo \"=== drave-core ===\"; ls drave-core/ 2>/dev/null | head; echo \"=== taille ===\"; find src -name \"*.py\" | wc -l; du -sh src 2>/dev/null; echo \"=== traits/enums Rust ===\"; ls drave- … [71 caractères tronqués]`
+
+  ```
+=== src ===
+bpe_np.py
+encoding.py
+gguf_min.py
+__pycache__
+roofline.py
+sparsity.py
+ternary.py
+tiny_model.py
+transformer_np.py
+=== drave-core ===
+Cargo.lock
+Cargo.toml
+gpu
+README.md
+src
+target
+tests
+=== taille ===
+8
+136K	src
+=== traits/enums Rust ===
+bus.rs
+clusters.rs
+drvm.rs
+engine.rs
+engram.rs
+episodique.rs
+formats.rs
+gguf.rs
+gpu.rs
+kimi_k3.rs
+list.rs
+main.rs
+materiel.rs
+model.rs
+mrope.rs
+native.rs
+placement.rs
+tokenizer.rs
+topologie.rs
+trace_globale.rs
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -iE \"substituable|substitu|bloc fonctionnel|bus d'événements|routeur|routage\" docs/theorie/vision.md docs/theorie/protocole-semantique.md docs/theorie/modele-natif.md 2>/dev/null | head -30", "description": "Search vision  … [42 caractères tronqués]`
+
+  ```
+docs/theorie/vision.md:13:**Drave est un bus d'événements pour l'IA.** Les activations d'un réseau sont des **faits** — « le [neurone](../theorie/glossaire/entrees/neurone.md) 2 539 de
+docs/theorie/vision.md:22:**La thèse : la structure bat la taille.** Un [pont](../theorie/glossaire/entrees/pont.md) linéaire, une grille de conversion, un routage de blocs valent
+docs/theorie/vision.md:32:2. **Il est substituable.** Deux implémentations du même [contrat](../theorie/glossaire/entrees/contrat.md) — un réseau et un algorithme, deux architectures,
+docs/theorie/vision.md:102:3. Une **substitution** (architecture, [quantification](../theorie/glossaire/entrees/quantification.md), algorithme) se mesure sur la même trace, avec le même jeu de
+docs/theorie/modele-natif.md:41:**La thèse** : *la structure bat la taille*. Un pont linéaire, une grille de conversion, un routage de blocs
+docs/theorie/modele-natif.md:76:Le troisième niveau insère le **contrat** qui manque : la RSN est ce qui rend la pensée **substituable** (un
+docs/theorie/modele-natif.md:172:permet de **substituer** un encodeur par un autre sans toucher au reste du graphe.
+docs/theorie/modele-natif.md:175:`c(b'(x)) = c(b(x))` (même 
+… [825 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '270,340p' docs/theorie/modele-natif.md", "description": "Read block/contract model in native model doc"}`
+
+  ```
+![drave-n0 : un graphe, pas une pile](../schemas/natif-graphe-n0.svg)
+
+**`drave-n0` en une ligne** : 11,47 M de paramètres, **6 blocs**, un vocabulaire d'**octets** (256), une
+attention locale (fenêtre 256), un **FFN creux routé** (8 experts, top-2, k-WTA 25 %), **3 têtes précoces**
+(après les blocs 2, 4, 6), une **cellule de pensée** récurrente et un **pont** entre deux régions. Les chiffres
+et l'état sont dans [`roadmap.md`](../pilotage/roadmap.md) § N ; la décision de conception dans
+[`architecture-native.md`](architecture-native.md).
+
+**Les huit types de blocs de DRVM v0** :
+
+| kind | rôle | ce qu'il porte |
+|---|---|---|
+| `input` | l'entrée | octets + positions |
+| `local_mixer` | le mélange local | attention fenêtrée |
+| `sparse_ffn` | le FFN creux | routeur, experts, k-WTA |
+| `state` | l'état | récurrence, mémoire de travail |
+| `early_head` | la sortie précoce | une tête par profondeur |
+| `thought` | la pensée | cellule contractante, λ < 1 |
+| `bridge` | le pont | projection entre régions |
+| `output` | la sortie | tête octet + tête RSN typée |
+
+**Le manifeste porte le graphe**, pas seulement une liste de tenseurs. Un fragment réel, réduit :
+
+```json
+{
+  "format": "DRVM"
+… [2523 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -rn \"^pub trait \\|^trait \\|^pub enum \\|^enum \" src/*.rs | head -40; echo \"=== materiel.rs tête ===\"; head -60 src/materiel.rs; echo \"=== placement.rs tête ===\"; head -40 src/placement.rs", "description": "Ins … [41 caractères tronqués]`
+
+  ```
+src/drvm.rs:24:pub enum Json {
+src/episodique.rs:62:pub enum Prototype {
+src/gguf.rs:268:pub enum Tampon {
+src/gguf.rs:495:pub enum Meta {
+src/kimi_k3.rs:28:pub enum TypeCouche {
+src/kimi_k3.rs:1497:enum CoucheK3 {
+src/kimi_k3.rs:1522:pub enum EtatCouche {
+src/list.rs:342:pub enum Source8 {
+src/list.rs:644:pub enum Source {
+src/main.rs:3892:enum ChargeFlux {
+src/model.rs:29:pub enum Gating {
+src/mrope.rs:27:pub enum Jeton {
+src/placement.rs:33:pub enum Support {
+src/trace_globale.rs:323:pub enum VerdictLien {
+=== materiel.rs tête ===
+//! Détection du matériel et choix automatique de la configuration.
+//!
+//! Tout ce que ce module décide vient d'une **mesure**, pas d'une intuition.
+//! Chaque heuristique porte le chiffre qui la justifie, et la commande
+//! `--materiel` les affiche toutes avec leur raison — pour qu'un réglage
+//! surprenant puisse être contesté.
+//!
+//! Les mesures de référence (session du 01/10, Xeon E5-2687W v3, 2 Quadro
+//! RTX 5000, NVMe MAP1602) :
+//!
+//! | | |
+//! |---|---|
+//! | VRAM (noyau warp) | 84,9 Go/s |
+//! | RAM, 20 cœurs physiques | 22,5 Go/s |
+//! | RAM, 10 cœurs + leurs hyperthreads | 18,7 Go/s (+27 % sur 10 cœurs secs) |
+//! | RAM, 20 cœurs + hyper
+… [2857 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n \"routes\\|BLOCS_CONNUS\\|Route\" src/drvm.rs | head -40; echo \"=== implémentation ? ===\"; grep -rn \"routes\" src/*.rs | grep -v drvm.rs | head -20", "description": "Check whether manifest routes are implemented … [2 caractères tronqués]`
+
+  ```
+4://! ports, routes, têtes, pont) et le payload porte des tenseurs alignés par
+18:pub const BLOCS_CONNUS: &[&str] = &[
+237:            if !BLOCS_CONNUS.contains(&kind) {
+=== implémentation ? ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,60p' docs/theorie/vision.md; echo \"=== N0 état ===\"; grep -n \"N0\\|route\" docs/pilotage/roadmap.md | sed -n '1,40p'", "description": "Read vision on substitutability and roadmap N0"}`
+
+  ```
+**diagnostiquer** et de **rejouer** des événements.
+
+**La thèse : la structure bat la taille.** Un [pont](../theorie/glossaire/entrees/pont.md) linéaire, une grille de conversion, un routage de blocs valent
+mieux que des paramètres ajoutés. La mesure a déjà tranché plusieurs fois dans ce sens : la sonde est **plate dès
+1,5 B**, le pont **plafonne à 0,87** ; à profondeur fixe, le 14 B est **dernier** (0,4833). Le détail est dans
+[`reports/README.md`](../../reports/README.md).
+
+## Le bus, en cinq propriétés
+
+1. **Un bloc est une [unité](../theorie/glossaire/entrees/unite.md) de conception.** Il a des entrées et des sorties **typées**, un coût mesurable, et une
+   [trace](../theorie/glossaire/entrees/trace.md). Un bloc peut être **neuronal** (l'intuition, la langue, la perception) ou **classique** (une règle, un
+   solveur, un index, un compilateur) — le bus ne fait pas la différence.
+2. **Il est substituable.** Deux implémentations du même [contrat](../theorie/glossaire/entrees/contrat.md) — un réseau et un algorithme, deux architectures,
+   deux quantifications — se remplacent **sans toucher au bus**. C'est ce qui rend la comparaison honnête : même
+   entrée, même sortie attendue, m
+… [4067 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && grep -n '\"--' src/main.rs | head -50; echo \"=== trace : variante ? ===\"; grep -n -iE \"variante|variant|impl|provenance\" src/*.rs | head -20", "description": "List CLI flags and check variant provenance in trace"}`
+
+  ```
+170:    if args[1] == "--drvm-serve" {
+176:    if args[1] == "--drvm-native-ppl" {
+190:    if args[1] == "--drvm-generate-full" {
+202:    if args[1] == "--drvm-generate" {
+203:        let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-generate attend un DRVM"); std::process::exit(2); } };
+214:    if args[1] == "--drvm-sparsite" {
+225:    if args[1] == "--drvm-generate-hex" {
+236:    if args[1] == "--drvm-serve-gen" {
+283:    if args[1] == "--drvm-gen-net" {
+338:    if args[1] == "--drvm-serve-aval" {
+382:    if args[1] == "--drvm-split-net" {
+416:    if args[1] == "--drvm-pas-hex" {
+430:    if args[1] == "--drvm-split-amont" {
+451:    if args[1] == "--drvm-split-aval" {
+474:    if args[1] == "--drvm-generate-split" {
+503:    if args[1] == "--drvm-forward" {
+504:        let f = match args.get(2) { Some(f) => f.clone(), None => { eprintln!("--drvm-forward attend un DRVM"); std::process::exit(2); } };
+516:    if args[1] == "--drvm-ppl" {
+519:            None => { eprintln!("--drvm-ppl attend un fichier DRVM"); std::process::exit(2); }
+539:    if args[1] == "--drvm-inspect" {
+542:            None => { eprintln!("--drvm-inspect attend un fichier DRVM"); std::p
+… [3235 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn -iE \"route|routage\" docs/pilotage/roadmap.md docs/pilotage/backlog/*.md 2>/dev/null | head -20; echo \"=== R0.5 ===\"; grep -rn \"R0.5\" reports/*.md docs/pilotage/*.md | head -10", "description": "Check roadmap/backlog ro … [22 caractères tronqués]`
+
+  ```
+docs/pilotage/roadmap.md:198:   30 % sur 5 types et **249 questions**) ; **R0.4** ([tête](../theorie/glossaire/entrees/tete.md) de survol) et **R0.5** ([routeur](../theorie/glossaire/entrees/routeur.md)) sont
+docs/pilotage/roadmap.md:289:| **A6** | apprendre des flux : capteur hebbien, routage MoE, [élagage](../theorie/glossaire/entrees/elagage.md) | ✅ / ⏳ | **A6.2 bloqué** (pas de MoE local) ; A6.1/A6.3 ont rendu leurs négatifs |
+docs/pilotage/roadmap.md:337:| **N3** | les opérations natives : [k-WTA](../theorie/glossaire/entrees/k-wta.md), routes, sortie précoce, pont, rejeu, placement | ✅ **couvert** (17 portes vertes, 04/11 ; `porte-n3-inventaire`) | **N3.2a/b0/b1/b2 · N3.3a/b/c · N3.4a/b/c · N3.4d · N3.5a/b/c/d/e/f · N3.6 service ✅** (pont actif, placement métadonnée ; saut de calcul conditionnel) |
+docs/pilotage/roadmap.md:393:| **R0.5** | **routeur extractif / génératif** : choisir le lecteur selon la question (signal BM25), parce qu'aucun des deux ne gagne partout | ❌ **close (négatif)** : signal AUC **0,839** (331 questions, corpus gelé) ; z-score transfère **0,819 / 0,313**, sous le choix fixe (**0,871 / 0,373**) | non atteinte — condition nommée : calibration apprise par
+… [3834 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && sed -n '1,30p' src/drvm.rs; echo \"=== parsing graphe ===\"; sed -n '212,300p' src/drvm.rs", "description": "Read DRVM manifest parsing for graph/routes"}`
+
+  ```
+//! DRVM v0 — lecteur du conteneur natif de modèle Drave.
+//!
+//! Ce n'est pas un GGUF amélioré : le manifeste porte un **graphe** (blocs,
+//! ports, routes, têtes, pont) et le payload porte des tenseurs alignés par
+//! bloc. Le lecteur refuse une version, un type de bloc ou une section qu'il ne
+//! connaît pas ; il n'exécute jamais un fichier à moitié compris.
+//!
+//! Le crate reste **std seul** : le JSON minimal est analysé à la main.
+
+use std::collections::BTreeSet;
+use std::fs;
+use std::path::Path;
+
+pub const MAGIC: &[u8; 4] = b"DRVM";
+pub const VERSION: u16 = 0;
+pub const HEADER_SIZE: usize = 92;
+pub const ALIGNEMENT: usize = 64;
+pub const BLOCS_CONNUS: &[&str] = &[
+    "input", "local_mixer", "sparse_ffn", "state", "early_head",
+    "thought", "bridge", "output",
+];
+
+#[derive(Debug, Clone)]
+pub enum Json {
+    Null,
+    Bool(bool),
+    Nombre(f64),
+    Chaine(String),
+    Tableau(Vec<Json>),
+    Objet(Vec<(String, Json)>),
+=== parsing graphe ===
+impl Drvm {
+    pub fn open<P: AsRef<Path>>(path: P) -> Result<Self, ErreurDrvm> {
+        let b = fs::read(path).map_err(|e| ErreurDrvm(format!("lecture : {e}")))?;
+        if b.len() < HEADER_SIZE { return Err(ErreurDrvm("fichier tr
+… [4854 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' reports/rapport-n3.3a-routes.md 2>/dev/null || ls reports | grep -i route", "description": "Read N3.3a routes report"}`
+
+  ```
+# N3.3a — le routage/k-WTA du natif est vivant
+
+> **Ligne de roadmap** : N3 · **Date** : 2026-10-29 · **Verdict** : ✅ **N3.3a tenu** — deux
+> DRVM de **mêmes poids** et de routages différents (`top_k=2/kwta=0,5` contre
+> `top_k=1/kwta=1,0`) donnent des générations **différentes** ; le même modèle deux fois donne
+> la même. Le routage agit dans le moteur natif.
+>
+> **Dispositif** : `tools/porte-n3-routes.sh`, petit `drave-n0` synthétique (graine 7,
+> 113 292 paramètres), `--drvm-generate` ; données [`n3.3a-routes.json`](n3.3a-routes.json).
+
+## Ce qui est mesuré
+
+| contrôle | résultat |
+|---|---|
+| A (`top_k=2`, `kwta=0,5`), deux fois | **identique** (27 octets) |
+| A contre B (`top_k=1`, `kwta=1,0`) | **différent** |
+| paramètres A / B | **113 292 / 113 292** (mêmes poids) |
+
+Les deux modèles partagent la **même graine** et le même `state_dict` ; seule la configuration
+de routage change. La différence de sortie est donc **causée par le routage**, pas par les poids.
+
+## Le contrôle négatif
+
+- **Même modèle deux fois** : identique — la génération n’est pas un tirage.
+- **Config différente** : sortie différente — si `top_k`/`kwta` ne faisaient rien, la porte
+  échouerait.
+- **Mêmes par
+… [675 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== routes dans les modèles/données ===\"; grep -rln '\"routes\"' models/ data/ tools/ src/ 2>/dev/null | head; echo \"=== qui écrit le manifeste DRVM ===\"; grep -rln '\"kind\"' tools/*.py src/*.py 2>/dev/null | head; echo \" … [196 caractères tronqués]`
+
+  ```
+=== routes dans les modèles/données ===
+[still running after 60000ms; moved to background job bash-26]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_kill** `{"job_id": "bash-26", "reason": "Recherche inutile dans les gros modèles"}`
+
+  ```
+requested cancellation of job bash-26
+  ```
+
+### 🤖 Assistant
+
+⏵ Réponse : variantes par bloc et routage, ce que le dépôt permet déjà et ce qui manque
+
+**Oui — l'idée est déjà la théorie du dépôt ; ce qui manque, c'est le contrat *exécutable*.**
+
+Trois choses existent déjà : la [vision](docs/theorie/vision.md) (propriété 2 : deux implémentations du même contrat se remplacent sans toucher au bus), le [théorème d'indifférence](docs/theorie/modele-natif.md) (« le mode d'opération est privé », le bus ne voit que des types, un coût et une trace), et le manifeste DRVM qui porte déjà `graph.routes`, `regions`, `heads`, `thought` avec un `kind` en liste fermée et refus des inconnus. `placement.rs` porte même la règle de coût.
+
+**Mais il y a un défaut à corriger avant d'ajouter quoi que ce soit** : le lecteur Rust parse `blocks` et `tensors`, refuse une version ou un `kind` inconnus — puis **ignore silencieusement** `routes`, `regions`, `heads`, `thought`. Un modèle qui déclare ses routes et s'exécute comme si elles n'existaient pas, c'est exactement ce que le doc interdit (« un modèle à moitié compris qui s'exécute quand même est un modèle qui ment »).
+
+**Ce qu'il faut ajouter — trois champs, pas plus** :
+
+```json
+{"id":"b0","kind":"local_mixer","impl":"dense","contrat":{"version":1,"tolerance":0.0}}
+```
+plus, dans la trace : `impl`, `params`, `seed`. Et le coût mesuré par variante (octets, ms, énergie) : c'est tout ce que le consommateur a le droit de voir. Trois couches — **contrat** (public : signature, tolérance, champs de trace), **variantes** (privées : dense, heuristique, floue, API, distante — la techno ne sort jamais du bloc), **route** (sélection, statique par défaut).
+
+**L'avertissement empirique, et c'est le point le plus important** : le routage flexible a **déjà** été essayé ici, quatre fois, et quatre négatifs — R0.5 (routeur extractif/génératif : AUC 0,839, mais transfert **0,819/0,313** contre **0,871/0,373** pour le choix fixe, [rapport](reports/rapport-r07-routeur.md)), puis R06 v1, la cascade v2, le déclencheur, le pipeline. Même diagnostic partout : **un seuil absolu ne transfère pas ; le choix dépend du document**. Donc : les variantes coûtent peu ; le *routeur* coûte cher et a déjà perdu une fois. Il ne s'ajoute pas comme un interrupteur, il se conquiert comme un résultat — avec le choix fixe pour contrôle négatif.
+
+**Les trois pièges à nommer** : (1) **explosion combinatoire** — n blocs × k variantes, donc variantes seulement là où deux implémentations sont *déjà mesurées* ; (2) **non-déterminisme** — la logique floue casse le rejeu bit-exact : sortie discrétisée ou tolérance déclarée + graine tracée, sinon le théorème d'indifférence est vide ; (3) **fluidité ≠ fidélité** (règle 6) — une variante plus fluide peut être moins fidèle, le [miroir entrée/sortie](docs/methode/miroir.md) s'applique à chaque variante.
+
+**Le premier incrément (une journée, et il a déjà ses deux variantes)** : le lecteur, extractif (BM25) contre génératif — R0.5 a déjà les deux et leurs chiffres. On ajoute `impl` + contrat + provenance, on refuse une `impl` inconnue, et on passe trois tests : **indifférence** (même entrée, deux impl → même sortie à la tolérance près) ; **contrôle négatif** (une impl qui viole le contrat — arrondi grossier, seuil flou — doit *échouer* l'indifférence, sinon le test ne teste rien) ; **coût** des deux variantes mesuré et consigné.
+
+**Pas de routeur appris avant ça.** Ensuite seulement : une table de routes statique, puis éventuellement un routeur calibré **par document** — la condition que R0.5 avait nommée.
+
+**Où ça se branche** : N3.3 (les routes du graphe) et R07/R0.5 (le routeur, déjà négatif) — une extension, pas une ligne nouvelle. Le champ `routes` du manifeste est le bon endroit ; il attend d'être lu.
+
+Si tu veux, je commence par le défaut : faire que le lecteur **refuse** ce qu'il ne lit pas (ou lise `routes`), avec sa porte et son contrôle négatif — c'est petit, testable, et ça rend le reste honnête.
+
+
+## Tour 4
+
+### 👤 Utilisateur
+
+vas-y
+
+### 🤖 Assistant
+
+⏵ Lecture du lecteur DRVM, de l'état git et des portes liées
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -20; echo \"=== branche ===\"; git rev-parse --abbrev-ref HEAD; git log -1 --format='%h %s' | cat; echo \"=== portes DRVM ===\"; ls tools/porte-* | head -90 | grep -iE \"n0|n3|drvm|format\" ", "description": … [42 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+ M tools/chantier/plan.json
+?? journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/
+=== branche ===
+s/v7
+44fb939c GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, LE GPU VAUT AUX PALIERS 100 M+
+=== portes DRVM ===
+tools/porte-n3-cache.sh
+tools/porte-n3-composition.sh
+tools/porte-n3-deux-processus.sh
+tools/porte-n3-deux-regions.sh
+tools/porte-n3-generation.sh
+tools/porte-n3-inventaire.sh
+tools/porte-n3-placement.sh
+tools/porte-n3-pont.sh
+tools/porte-n3-positions.sh
+tools/porte-n3-profondeur.sh
+tools/porte-n3-refus.sh
+tools/porte-n3-reseau.sh
+tools/porte-n3-routes.sh
+tools/porte-n3-service-briques.sh
+tools/porte-n3-service.sh
+tools/porte-n3-seuil.sh
+tools/porte-n3-sparsite-compte.sh
+tools/porte-n3-sparsite.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn '\"routes\"\\|`routes`\\|routes :' docs/ --include=*.md | head -20; echo \"=== structure d'une route ===\"; grep -rn -B4 -A12 '\"routes\"' docs/theorie/architecture-native.md docs/theorie/modele-natif.md 2>/dev/null | head - … [57 caractères tronqués]`
+
+  ```
+docs/pilotage/backlog/N3-operations-natives.md:89:4. ✅ k-WTA et routes : même traitement (`porte-n3-routes`, `porte-n3-sparsite`, `-compte`).
+docs/theorie/modele-natif.md:306:    "routes": [],
+docs/implantation/diehl-cook.md:300:    "routes": [],
+=== structure d'une route ===
+docs/theorie/modele-natif.md-302-      {"id": "early0", "kind": "early_head", "inputs": ["h"], "outputs": ["y0"]}
+docs/theorie/modele-natif.md-303-    ],
+docs/theorie/modele-natif.md-304-    "regions": [{"id": "r0", "blocks": ["input", "b0", "early0"]}],
+docs/theorie/modele-natif.md-305-    "heads": ["early0"],
+docs/theorie/modele-natif.md:306:    "routes": [],
+docs/theorie/modele-natif.md-307-    "thought": {"steps": 1}
+docs/theorie/modele-natif.md-308-  }
+docs/theorie/modele-natif.md-309-}
+docs/theorie/modele-natif.md-310-```
+docs/theorie/modele-natif.md-311-
+docs/theorie/modele-natif.md-312-**Un bloc inconnu est refusé**, pas ignoré : `BLOCS_CONNUS` est une liste fermée, et le lecteur rend une erreur
+docs/theorie/modele-natif.md-313-qui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris qui s'exécute quand même est un
+docs/theorie/modele-natif.md-314-modèle qui ment. Le même principe v
+… [511 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat tools/porte-n3-refus.sh; echo \"===== ROUTES =====\"; cat tools/porte-n3-routes.sh", "description": "Read the refusal and routes gates"}`
+
+  ```
+#!/bin/bash
+# porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.
+set -u
+cd "$(dirname "$0")/.."
+D=${D:-./drave-core/target/release/drave}
+PY=${PY:-/home/stephane/gpu-env/bin/python}
+T=$(mktemp -d "${TMPDIR:-/tmp}/porte-n3-refus-XXXXXX")
+trap 'kill ${SRV:-} 2>/dev/null; wait ${SRV:-} 2>/dev/null; rm -rf "$T"' EXIT
+[ -x "$D" ] || { echo "  ❌ $D absent"; exit 2; }
+"$PY" -c "import torch" 2>/dev/null || { echo "  ❌ $PY n'a pas torch"; exit 2; }
+
+echo "=== 1. modèles A (normal) et B (pont nul) ==="
+"$PY" - "$T" <<'PY' || exit 2
+import sys, torch
+sys.path.insert(0, ".")
+from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+base = dict(vocab=256, d_model=64, n_blocks=4, n_heads=4, expert_hidden=32,
+            n_experts=4, top_k=2, kwta=0.5, window=32, max_pos=2048,
+            thought_steps=1, early_blocks=(1,), rsn_dim=8)
+torch.manual_seed(7); a = NativeModel(NativeConfig(**base)); exporter_drvm(a, sys.argv[1] + "/a.drvm")
+torch.manual_seed(7); b = NativeModel(NativeConfig(**base))
+for nom, p in b.state_dict().items():
+    if "bridge" in nom: p.zero_()
+exporter_drvm(b, sys.argv[1] + "/b.drvm")
+print(f"  A/B : {a.nb_parametres()} paramèt
+… [3767 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln '\"graph\"' tools/*.py | head; echo \"=== écrivains de manifeste ===\"; grep -rn 'DRVM' tools/*.py | head -20", "description": "Find DRVM manifest writers"}`
+
+  ```
+tools/drvm.py
+tools/drvm_trace.py
+tools/gguf_drvm.py
+tools/native_model.py
+=== écrivains de manifeste ===
+tools/carte_chantiers.py:34:              titre="N — le natif", sous="DRVM · distillation"),
+tools/drave.py:1232:    """Le natif : torch (.pt) ou numpy (le DRVM, sans torch) ; torch absent → 4."""
+tools/drave.py:1244:                print(f"{NOM}: DRVM illisible : {type(exc).__name__}", file=sys.stderr)
+tools/drave.py:1254:            print(f"{NOM}: DRVM absent : {drvm}", file=sys.stderr)
+tools/drave.py:1644:                         help="le moteur : torch (.pt) ou numpy (le DRVM, sans torch)")
+tools/drvm_infere.py:4:POURQUOI. Le modèle natif vit dans un DRVM (un conteneur lisible sans torch), mais
+tools/drvm_infere.py:6:DRVM fournit les tenseurs, numpy les multiplie — le produit reste « 0 dépendance
+tools/drvm_infere.py:33:    """Les tenseurs du DRVM en numpy (f32, les formes du manifeste) + la config."""
+tools/drvm.py:2:"""drvm.py — DRVM v0, le conteneur natif du modèle Drave.
+tools/drvm.py:4:DRVM n'est pas un GGUF amélioré : c'est un conteneur de **graphe** et de **blocs**.
+tools/drvm.py:29:MAGIC = b"DRVM"
+tools/drvm.py:40:class DRVMError(ValueError):
+tools/drvm.py:41:    ""
+… [565 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drvm.py — DRVM v0, le conteneur natif du modèle Drave.
+3: 
+4: DRVM n'est pas un GGUF amélioré : c'est un conteneur de **graphe** et de **blocs**.
+5: Le manifeste porte les blocs, les ports, les routes, les têtes, le pont et la
+6: cellule de pensée ; le payload porte les tenseurs alignés, lisibles par bloc et
+7: mmap-ables. Le lecteur refuse une version ou un type de bloc qu'il ne connaît pas.
+8: 
+9: Structure :
+10:   en-tête 92 o (magie, version, tailles, offsets, deux SHA-256)
+11:   manifeste JSON canonique, aligné sur 64 o
+12:   payload de tenseurs, chaque tenseur aligné sur 64 o
+13: 
+14: CLI :
+15:   python3 tools/drvm.py inspect MODELE.drvm
+16: """
+17: from __future__ import annotations
+18: 
+19: import argparse
+20: import hashlib
+21: import json
+22: import mmap
+23: import os
+24: import struct
+25: from dataclasses import dataclass, field
+26: from pathlib import Path
+27: from typing import Any
+28: 
+29: MAGIC = b"DRVM"
+30: VERSION = 0
+31: ALIGNEMENT = 64
+32: HEADER = struct.Struct("<4sHH I Q Q 32s 32s")  # 92 octets
+33: BLOCS_CONNUS = {
+34:     "inp
+… [7754 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -A60 \"def exporter_drvm\" tools/native_model.py | head -90", "description": "Read the DRVM exporter"}`
+
+  ```
+177:def exporter_drvm(modele: NativeModel, chemin: str, placement: str = "local") -> str:
+178-    """Exporte les poids et le graphe en DRVM v0. Retourne le hash du fichier."""
+179-    cfg = modele.cfg
+180-    blocs = [{"id": "input", "kind": "input", "inputs": [], "outputs": ["h"]}]
+181-    for i in range(cfg.n_blocks):
+182-        blocs.append({"id": f"b{i}", "kind": "local_mixer", "inputs": ["h"], "outputs": ["h"]})
+183-        blocs.append({"id": f"local{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"l{i}"]})
+184-    for i in range(len(cfg.early_blocks)):
+185-        blocs.append({"id": f"early{i}", "kind": "early_head", "inputs": ["h"], "outputs": [f"y{i}"]})
+186-    blocs.append({"id": "bridge", "kind": "bridge", "inputs": ["h"], "outputs": ["h"]})
+187-    blocs.append({"id": "thought", "kind": "thought", "inputs": ["h"], "outputs": ["h"]})
+188-    blocs.append({"id": "output", "kind": "output", "inputs": ["h"], "outputs": ["logits", "rsn"]})
+189-    manifeste = {
+190-        "format": "DRVM", "version": 0,
+191-        "model": {"name": "drave-n0", "parametres": modele.nb_parametres(),
+192-                  "architecture": {"kind": "drave-n0", "vocab": cfg.vocab,
+19
+… [1380 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls models/*.drvm 2>/dev/null | head; echo \"=== clés du manifeste d'un DRVM réel ===\"; python3 - <<'PY'\nimport glob, json, sys\nsys.path.insert(0, '.')\nfrom tools.drvm import read_drvm\nfs = sorted(glob.glob('models/**/*.drvm', re … [503 caractères tronqués]`
+
+  ```
+=== clés du manifeste d'un DRVM réel ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git config core.hooksPath 2>/dev/null; ls .git/hooks/ 2>/dev/null | grep -v sample; echo \"=== hook contenu ===\"; for h in .git/hooks/pre-commit .githooks/pre-commit; do [ -f \"$h\" ] && { echo \"--- $h\"; head -40 \"$h\"; }; done", … [52 caractères tronqués]`
+
+  ```
+pre-commit
+=== hook contenu ===
+--- .git/hooks/pre-commit
+#!/bin/sh
+# pre-commit — l'état accompagne le fait, le journal accompagne le code.
+#
+# Versionné dans tools/hooks/ et installé par tools/installe_hooks.sh : un hook qui
+# ne vit que dans .git/hooks ne survit ni au clone ni au nettoyage.
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# 1. Aucun fait (reports/, roadmap, backlog) ne se commite sans sa ligne d'état.
+#    C'est la garantie de fraîcheur de docs/pilotage/en-cours.md : elle ne dépend
+#    pas de la survie d'une session « principale », elle est vérifiée au commit.
+if ! python3 tools/verifie_etat_a_jour.py --index; then
+    echo "  ⛔ commit refusé : un fait sans ligne d'état."
+    echo "     mets docs/pilotage/en-cours.md à jour, puis :"
+    echo "     git add docs/pilotage/en-cours.md"
+    exit 1
+fi
+
+# 2. Archive les traces de session DSH avant chaque commit : le journal doit
+#    accompagner le code, pas le suivre.
+python3 tools/archive_sessions.py --quiet >/dev/null || { echo "  ⛔ archivage des sessions en échec"; exit 1; }
+python3 tools/session_report.py --quiet >/dev/null || { echo "  ⛔ rapport de session en échec"; exit 1; }
+# Le journal du jour, par th
+… [307 caractères tronqués]
+  ```
+
+- **glob** `{"pattern": "**/*.drvm", "path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet"}`
+
+  ```
+drave-core/tests/fixtures/tiny_n0.drvm
+work/n2h/base-propre.drvm
+work/n2h/base-mixte.drvm
+work/n2h/essai-cap.drvm
+work/n2h/base-capacite.drvm
+work/n2i/base-repo.drvm
+work/n2j/base-nonambigu.drvm
+work/n2j/base-temoin.drvm
+work/n2j/base-wiki.drvm
+work/n2j/base-unamb.drvm
+work/n2j/base-curriculum.drvm
+work/n2k/base-multi.drvm
+work/n2k/base-fr21.drvm
+work/n2j/base-wiki-pos.drvm
+work/n2j/base-wiki-cap.drvm
+work/n2j/base-canal.drvm
+work/n2j/base-placebo.drvm
+work/n2k/base-en.drvm
+work/n2j/base-wiki-45m.drvm
+work/n2k/base-multi-21m.drvm
+work/n2k/base-multi-11m-pos.drvm
+work/n2k/base-multi-34m.drvm
+work/n2k/base-en-34m.drvm
+work/n2j/base-34m-canal.drvm
+work/n2j/base-34m-canal-g2.drvm
+work/n2w/base-big.drvm
+work/n2w/base-big-canal.drvm
+work/n2w/big-60k.drvm
+work/n2w/fr-60k.drvm
+work/n2w/mix-60k.drvm
+work/n2ac/rope-20k.drvm
+work/n2ac/rope-20k-g2.drvm
+work/n2ac/absolu-pos1152.drvm
+work/n2ac/rope512-5k.drvm
+work/n2ac/zero-absolu.drvm
+work/n2ac/zero-rope.drvm
+work/n2ac/zero-rope-40k.drvm
+work/n2ac/mix-200k.drvm
+work/n2ac/rope1024-2.5k.drvm
+work/n2ac/mix512-15k.drvm
+work/n2ac/mix1024-7.5k.drvm
+work/n2ac/rope2048-1.25k.drvm
+work/n2ac/rope1024-20k.drvm
+work/n2ac/mix2048-3.75k.drvm
+work/n2ac/rope20
+… [509 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "offset": 300, "limit": 120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+300:         b[20..28].copy_from_slice(&((poff + 4) as u64).to_le_bytes());
+301:         b.extend(m); b.extend([1u8, 2, 3, 4]);
+302:         b
+303:     }
+304: 
+305:     #[test]
+306:     fn lit_et_refuse() {
+307:         let d = std::env::temp_dir().join("drave_drvm_test.bin");
+308:         std::fs::write(&d, fichier(VERSION, "input")).unwrap();
+309:         let m = Drvm::open(&d).unwrap();
+310:         assert_eq!(m.tenseur("b0.w"), Some(&[1, 2, 3, 4][..]));
+311:         assert!(m.bloc("b0").is_some());
+312:         std::fs::write(&d, fichier(99, "input")).unwrap();
+313:         assert!(Drvm::open(&d).is_err());
+314:         std::fs::write(&d, fichier(VERSION, "quantum")).unwrap();
+315:         assert!(Drvm::open(&d).is_err());
+316:         std::fs::write(&d, &fichier(VERSION, "input")[..40]).unwrap();
+317:         assert!(Drvm::open(&d).is_err());
+318:         let _ = std::fs::remove_file(&d);
+319:     }
+320: }
+321: 
+322: impl Drvm {
+323:     /// Reconstruit un GGUF complet **en mémoire** à partir du DRVM.
+324:     /// Aucun fichier temporaire : `Gguf::depuis_octets` le l
+… [2951 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, sys\nsys.path.insert(0, '.')\nfrom tools.drvm import read_drvm\nfor f in ['drave-core/tests/fixtures/tiny_n0.drvm', 'work/n2k/base-multi-34m.drvm', 'work/n2ac/pondere.drvm']:\n    with read_drvm(f) as d … [602 caractères tronqués]`
+
+  ```
+== drave-core/tests/fixtures/tiny_n0.drvm
+  top   : ['execution', 'format', 'graph', 'model', 'tensors', 'version']
+  graph : ['blocks', 'bridge', 'heads', 'regions', 'routes', 'thought']
+  bloc  : ['id', 'inputs', 'kind', 'outputs']
+  routes: [] | regions: 1 | heads: ['early0']
+  thought: {'steps': 1} | bridge: None
+  exec  : ['activation', 'cache', 'placement', 'replay']
+  model : ['architecture', 'name', 'parametres', 'tokenizer']
+== work/n2k/base-multi-34m.drvm
+  top   : ['execution', 'format', 'graph', 'model', 'tensors', 'version']
+  graph : ['blocks', 'bridge', 'heads', 'regions', 'routes', 'thought']
+  bloc  : ['id', 'inputs', 'kind', 'outputs']
+  routes: [] | regions: 1 | heads: ['early0', 'early1', 'early2']
+  thought: {'steps': 2} | bridge: None
+  exec  : ['activation', 'cache', 'placement', 'replay']
+  model : ['architecture', 'name', 'parametres', 'tokenizer']
+== work/n2ac/pondere.drvm
+  top   : ['execution', 'format', 'graph', 'model', 'tensors', 'version']
+  graph : ['blocks', 'bridge', 'heads', 'regions', 'routes', 'thought']
+  bloc  : ['id', 'inputs', 'kind', 'outputs']
+  routes: [] | regions: 1 | heads: ['early0', 'early1', 'early2']
+  thought: {'steps': 2} | brid
+… [127 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B5 -A30 '\"execution\"' tools/gguf_drvm.py | head -60", "description": "Read GGUF to DRVM manifest construction"}`
+
+  ```
+47-        "model": {"name": pathlib.Path(gguf).stem, "parametres": 0,
+48-                  "tokenizer": {"kind": "gguf", "source": pathlib.Path(gguf).name}},
+49-        "graph": {"regions": [{"id": "r0", "blocks": ["import"]}],
+50-                  "blocks": [{"id": "import", "kind": "input", "inputs": [], "outputs": ["h"]}],
+51-                  "routes": [], "heads": [], "thought": None, "bridge": None},
+52:        "execution": {"activation": "DRVF", "placement": "local",
+53-                      "import": {"format": "GGUF", "version": version,
+54-                                 "alignement": alignement, "n_tenseurs": n_t,
+55-                                 "n_kv": n_kv,
+56-                                 "kv_sha256": hashlib.sha256(kv).hexdigest()}},
+57-    }
+58-    h = write_drvm(drvm, manifeste, specs)
+59-    return {"gguf": gguf, "drvm": drvm, "tenseurs": n_t, "kv_octets": len(kv),
+60-            "sha256_drvm": h}
+61-
+62-
+63-def drvm_vers_gguf(drvm: str, gguf: str) -> dict:
+64-    with read_drvm(drvm) as d:
+65:        imp = d.manifest["execution"].get("import")
+66-        if not imp or imp.get("format") != "GGUF":
+67-            raise ValueError("ce DRVM n'a pas été impor
+… [1450 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, sys, collections\nsys.path.insert(0, '.')\nfrom tools.drvm import read_drvm\nfs = glob.glob('**/*.drvm', recursive=True)\nprint('fichiers :', len(fs))\ntops=collections.Counter(); graphs=collections.Cou … [1151 caractères tronqués]`
+
+  ```
+fichiers : 62
+ERREURS : 0
+tops   : Counter({('execution', 'format', 'graph', 'model', 'tensors', 'version'): 62})
+graphs : Counter({('blocks', 'bridge', 'heads', 'regions', 'routes', 'thought'): 62})
+blocs  : Counter({('id', 'inputs', 'kind', 'outputs'): 1165})
+execs  : Counter({('activation', 'cache', 'placement', 'replay'): 62})
+models : Counter({('architecture', 'name', 'parametres', 'tokenizer'): 62})
+routes : Counter({'[]': 62})
+types exec : {'activation': ['str'], 'cache': ['dict'], 'placement': ['str'], 'replay': ['dict']}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tests/ tools/tests 2>/dev/null | head; echo \"=== pytest ? ===\"; ls pytest.ini setup.cfg pyproject.toml 2>/dev/null; grep -n \"pytest\" pyproject.toml 2>/dev/null | head; echo \"=== inspect branch ===\"; sed -n '539,560p' drave-c … [80 caractères tronqués]`
+
+  ```
+tools/tests:
+cic
+code
+documents
+linguistique
+maths
+__pycache__
+qualifier_politique_drvm.py
+qualifier_porte_bouge_drvm.py
+qualifier_porte_drvm.py
+=== pytest ? ===
+pyproject.toml
+=== inspect branch ===
+    if args[1] == "--drvm-inspect" {
+        let f = match args.get(2) {
+            Some(f) => f.clone(),
+            None => { eprintln!("--drvm-inspect attend un fichier DRVM"); std::process::exit(2); }
+        };
+        match drvm::Drvm::open(&f) {
+            Ok(d) => {
+                println!("{}", d.resume());
+                for b in &d.blocs { println!("  bloc {:<12} {}", b.id, b.kind); }
+                for t in &d.tenseurs {
+                    println!("  tenseur {:<24} bloc {:<10} {} o  {}", t.name, t.bloc, t.nbytes, t.dtype);
+                }
+                std::process::exit(0);
+            }
+            Err(e) => { eprintln!("{e}"); std::process::exit(3); }
+        }
+    }
+    // Une seule analyse, puis un aiguillage : `--plan`, `--tokenize`,
+    // `--ppl`/`--ppl-texte` et `--infer` partagent désormais la même structure
+    // d'options, donc les mêmes drapeaux.
+    // Les variables d'environnement ont été renommées QT_* -> DRAVE_* : un
+    // ancien nom encore pré
+… [53 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"def test_\\|unittest\\|pytest\" tools/*.py | head -10; echo \"=== portes qui testent drvm.py ===\"; grep -rln \"drvm\" tools/porte-*.sh | head", "description": "Find existing Python tests and DRVM gates"}`
+
+  ```
+tools/mesurer_contrat_json.py:41:    """Le nombre de tests lus dans la sortie d'`unittest`."""
+tools/verifier_ci.py:204:class TestControleNegatifCI(unittest.TestCase):
+tools/verifier_ci.py:207:    def test_echec_volontaire(self) -> None:
+tools/verifier_ci.py:212:    unittest.main()
+=== portes qui testent drvm.py ===
+tools/porte-n3-cache.sh
+tools/porte-n3-composition.sh
+tools/porte-n3-deux-processus.sh
+tools/porte-n3-deux-regions.sh
+tools/porte-n3-generation.sh
+tools/porte-n3-placement.sh
+tools/porte-n3-pont.sh
+tools/porte-n3-positions.sh
+tools/porte-n3-profondeur.sh
+tools/porte-n3-refus.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,50p' tools/tests/qualifier_porte_drvm.py", "description": "Read the gate qualifier for DRVM"}`
+
+  ```
+#!/usr/bin/env python3
+"""qualifier_porte_drvm.py — la porte DRVM avec sa règle **dans le prompt**.
+
+L'ancien prompt du labyrinthe ne décrivait pas la porte : le 7B échouait (200 nœuds, 3 appels,
+sans but). Ici la politique `jeu="porte"` reçoit les murs du labyrinthe-porte, la porte `(3,3)`
+et la règle « depuis (3,2), la sonde ouvre la porte si tu réponds bas ». On mesure l'oracle,
+l'aveugle, le hasard et le LLM sur le même `DRVM` (budget 200, A*).
+
+    python3 tools/tests/qualifier_porte_drvm.py --endpoint http://127.0.0.1:18082 \
+        --sortie reports/pensee-porte-llm.json
+
+Le serveur est sur CPU (`-ngl 0`) : les GPU de N2 restent intacts.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import subprocess
+import sys
+import time
+
+RACINE = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RACINE))
+sys.path.insert(0, str(RACINE / "tools/tests/linguistique"))
+from qualifier_neuronal import _sante, demarrer_serveur  # noqa: E402
+from tools.pensee.moteur import AStar  # noqa: E402
+from tools.pensee.operateurs import (DRVM, LABYRINTHE_PORTE, P_BUT, REGISTRE_P,  # noqa: E402
+                                     PolitiqueAveugle, Polit
+… [848 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln '\"graph\"' tools/*.sh tools/*.py 2>/dev/null; echo \"=== manifests à la main dans les portes ===\"; grep -rn '\"graph\"' tools/porte-*.sh 2>/dev/null | head", "description": "Find hand-built manifests in tools and gates"}`
+
+  ```
+tools/drvm.py
+tools/drvm_trace.py
+tools/gguf_drvm.py
+tools/native_model.py
+=== manifests à la main dans les portes ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n '\"graph\"' -B3 -A6 tools/drvm_trace.py | head -40", "description": "Check drvm_trace usage of graph key"}`
+
+  ```
+24-                           "nbytes": len(b), "sha256": hashlib.sha256(b).hexdigest()})
+25-        return {"format": "DRVM-TRACE", "version": 0, "source": str(drvm),
+26-                "manifeste_sha256": hashlib.sha256(_canonique(d.manifest)).hexdigest(),
+27:                "blocs": [b["id"] for b in d.manifest["graph"]["blocks"]],
+28-                "tenseurs": tensors}
+29-
+30-
+31-def rejouer(drvm: str, trace: dict) -> dict:
+32-    attendu = trace.get("tenseurs", [])
+33-    with read_drvm(drvm) as d:
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 110, "offset": 30}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+30:     Objet(Vec<(String, Json)>),
+31: }
+32: 
+33: impl Json {
+34:     pub fn get(&self, cle: &str) -> Option<&Json> {
+35:         match self {
+36:             Json::Objet(v) => v.iter().find(|(k, _)| k == cle).map(|(_, v)| v),
+37:             _ => None,
+38:         }
+39:     }
+40:     pub fn as_str(&self) -> Option<&str> {
+41:         if let Json::Chaine(s) = self { Some(s) } else { None }
+42:     }
+43:     pub fn as_u64(&self) -> Option<u64> {
+44:         if let Json::Nombre(n) = self { Some(*n as u64) } else { None }
+45:     }
+46:     pub fn as_f64(&self) -> Option<f64> {
+47:         if let Json::Nombre(n) = self { Some(*n) } else { None }
+48:     }
+49:     pub fn as_array(&self) -> Option<&[Json]> {
+50:         if let Json::Tableau(v) = self { Some(v) } else { None }
+51:     }
+52: }
+53: 
+54: #[derive(Debug, Clone)]
+55: pub struct Bloc {
+56:     pub id: String,
+57:     pub kind: String,
+58: }
+59: 
+60: #[derive(Debug, Clone)]
+61: pub struct Tenseur {
+62:     pub name: String,
+63:     pub bloc: String,
+64:     pub offset: u64,
+65:     pub nbytes: u64,
+66:     pub dtype: 
+… [2770 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"type de bloc inconnu\\|version non supportée\\|DRVM invalide\\|mauvaise magie\\|section absente\" tools/*.sh tools/*.py drave-core/tests 2>/dev/null | head -20", "description": "Check which gates grep DRVM error messages"}`
+
+  ```
+tools/drvm.py:96:            raise DRVMError(f"section absente : {section}")
+tools/drvm.py:100:        raise DRVMError(f"version non supportée : {manifest.get('version')}")
+tools/drvm.py:112:            raise DRVMError(f"type de bloc inconnu : {b['kind']}")
+tools/drvm.py:176:            raise DRVMError(f"mauvaise magie : {magic!r}")
+tools/drvm.py:178:            raise DRVMError(f"version non supportée : {version}")
+tools/verifie_en_cours.py:92:            alertes.append(f"section absente : « {section} »")
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | wc -l; cat tools/porte-n3-inventaire.sh; echo \"=== découverte des portes ===\"; head -40 tools/toutes-les-portes.sh", "description": "Read the inventory gate and gate discovery"}`
+
+  ```
+86
+#!/bin/bash
+# porte-n3-inventaire.sh — la couverture N3, vérifiée à chaque passe.
+#
+# POURQUOI CETTE PORTE EXISTE. Les 17 portes `porte-n3-*` prouvent chacune une
+# brique, mais **rien** ne prouvait que la liste des briques et celle des portes
+# coïncident encore. N3.1 (29/10) affirmait « sortie précoce : service non » et
+# « k-WTA/routes : aucune porte » ; N3.2b0 et N3.3a l'ont refutée le même jour ;
+# six jours plus tard la fiche de backlog disait toujours « ⏳ une porte par
+# brique ». Un inventaire écrit à la main pourrit en silence — c'est le défaut
+# d'une porte qu'on croit verte sans l'avoir lancée, appliqué à la documentation.
+#
+# Ce que cette porte verrouille (statique, aucun run, ~1 s) :
+#   1. chaque porte N3 est citée par une fiche et chaque porte citée existe ;
+#   2. chaque JSON N3 est cité par une fiche et chaque JSON cité existe ;
+#   3. les portes passent `bash -n` ;
+#   4. les seuils de couverture ne baissent pas (18 portes, 21 fiches, 20 JSON).
+# Le contrôle négatif est l'autotest de l'outil : retirer une porte, ajouter une
+# porte orpheline, retirer un JSON ou en ajouter un orphelin doit ÉCHOUER.
+set -u
+cd "$(dirname "$0")/.."
+echo "=== l'inventaire N3 : la co
+… [2307 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"reports/\\|roadmap\\|backlog\\|journal\\|def main\\|motifs\\|declenche\" tools/verifie_etat_a_jour.py | head -30", "description": "Check what triggers the state freshness hook"}`
+
+  ```
+12:  --index  (hook pre-commit) : un commit qui prépare un fait (reports/, roadmap,
+13:           backlog) sans toucher `en-cours` est REFUSÉ ;
+17:Le journal est du récit dérivé (le hook l'archive) : il n'exige pas de ligne d'état.
+32:FAITS = ("reports/", "docs/pilotage/roadmap.md", "docs/pilotage/backlog/")
+36:    """Un fait est ce qui change l'état du projet : fiche, JSON, plan, backlog."""
+136:        _ecrire(r / "reports/a.md", "un fait")
+149:        _ecrire(r / "reports/b.md", "un second fait")
+161:        _ecrire(r / "reports/c.md", "fait stagé")
+162:        git(r, "add", "reports/c.md")
+177:def main(argv=None) -> int:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"write_drvm(\" --include=*.py . 2>/dev/null | grep -v \"def write_drvm\" | head -20", "description": "Find all write_drvm callers"}`
+
+  ```
+./tools/cerveau/tests/test_drvm.py:25:            h = write_drvm(p, _manifest(), [TensorSpec("b0.w", b"\x01\x02\x03\x04", shape=(2, 2), bloc="b0")])
+./tools/cerveau/tests/test_drvm.py:35:            write_drvm(p, _manifest(), [TensorSpec("b0.w", b"x", bloc="b0")])
+./tools/cerveau/tests/test_drvm.py:47:                write_drvm(pathlib.Path(d) / "m.drvm", m, [TensorSpec("b0.w", b"x", bloc="b0")])
+./tools/cerveau/tests/test_drvm.py:52:            write_drvm(p, _manifest(), [TensorSpec("b0.w", b"x" * 100, bloc="b0")])
+./tools/cerveau/tests/test_drvm.py:65:            write_drvm(p, _manifest(), [
+./tools/cerveau/tests/test_drvm_trace.py:18:            write_drvm(p,_m(),[TensorSpec("b0.w",b"abc",bloc="b0")])
+./tools/cerveau/tests/test_drvm_trace.py:27:            write_drvm(p,_m(),[TensorSpec("b0.w",b"abc",bloc="b0")])
+./tools/native_model.py:211:    return write_drvm(chemin, manifeste, specs)
+./tools/gguf_drvm.py:58:    h = write_drvm(drvm, manifeste, specs)
+./tools/pensee/autotest.py:2131:        sha = d.write_drvm(p, man, [d.TensorSpec("w", bytes(range(16)) * 4, "u8", (8, 8), "b0")])
+./build/lib/tools/native_model.py:211:    return write_drvm(chemin, manifeste, specs)
+./build/lib/to
+… [62 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' tools/cerveau/tests/test_drvm.py; echo \"=== trace _m ===\"; sed -n '1,20p' tools/cerveau/tests/test_drvm_trace.py; echo \"=== pensee autotest ===\"; sed -n '2120,2140p' tools/pensee/autotest.py", "description": "Read  … [28 caractères tronqués]`
+
+  ```
+from __future__ import annotations
+import json, pathlib, struct, sys, tempfile, unittest
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
+from tools.drvm import (ALIGNEMENT, DRVMError, HEADER, MAGIC, VERSION,
+                        TensorSpec, read_drvm, write_drvm)
+
+
+def _manifest():
+    return {
+        "format": "DRVM", "version": VERSION,
+        "model": {"name": "test", "parametres": 4, "tokenizer": {"kind": "bytes", "vocab": 256}},
+        "graph": {
+            "regions": [{"id": "r0", "blocks": ["b0"]}],
+            "blocks": [{"id": "b0", "kind": "input", "inputs": [], "outputs": ["h"]}],
+            "routes": [], "heads": [], "thought": None, "bridge": None,
+        },
+        "execution": {"activation": "DRVF", "placement": "local"},
+    }
+
+
+class TestDRVM(unittest.TestCase):
+    def test_roundtrip(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = pathlib.Path(d) / "m.drvm"
+            h = write_drvm(p, _manifest(), [TensorSpec("b0.w", b"\x01\x02\x03\x04", shape=(2, 2), bloc="b0")])
+            self.assertEqual(len(h), 64)
+            with read_drvm(p) as m:
+                self.assertEqual(bytes(m.tensor("b0.w")), b"\x01\x02\x
+… [1907 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"autotest\" tools/porte-*.sh tools/verifier_ci.py 2>/dev/null | head -10; echo \"=== t146 lancé ? ===\"; grep -rn \"t146\\|drvm_n01\" tools/ | head -5", "description": "Check who runs the pensée autotest"}`
+
+  ```
+tools/porte-balayage.sh:11:python3 tools/index_spans.py --autotest
+tools/porte-bloc-linguistique.sh:10:python3 tools/bloc_linguistique.py --autotest --udhr data/udhr/articles.jsonl --sortie /tmp/bloc-linguistique-porte.json || { echo "❌ autotest"; exit 1; }
+tools/porte-cic.sh:74:      f"{s['environnement']['concordants_hashlib']}/24 termes · {s['autotest']['vecteurs']} vecteurs")
+tools/porte-etat.sh:19:python3 tools/verifie_etat_a_jour.py --autotest || { echo "❌ porte état ROUGE : contrôle négatif"; exit 1; }
+tools/porte-lecture.sh:11:python3 tools/lecture.py --autotest
+tools/porte-n3-inventaire.sh:17:# Le contrôle négatif est l'autotest de l'outil : retirer une porte, ajouter une
+tools/porte-n3-inventaire.sh:22:python3 tools/n3_inventaire.py --autotest || { echo "  ❌ le vérificateur ne sait pas échouer"; exit 1; }
+tools/porte-produit.sh:144:if AUTOTEST_JOBS=8 timeout 600 python3 -m tools.pensee.autotest >/tmp/porte-produit-autotest.log 2>&1; then
+tools/porte-produit.sh:145:  dit ✅ "autotest parallèle : $(grep -oE '[0-9]+/[0-9]+ portes tenues' /tmp/porte-produit-autotest.log | tail -1)"
+tools/porte-produit.sh:147:  dit ❌ "autotest en échec (voir /tmp/porte-produit-autotest.log)"; k
+… [337 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Implémentation du validateur strict (Python) et de ses contrôles
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "old_string": "SECTIONS = (\"model\", \"graph\", \"tensors\", \"execution\")", "new_string": "SECTIONS = (\"model\", \"graph\", \"tensors\", \"execution\")\n\n# Les clés sont des listes FERMÉES : une clé inconnue est refu … [798 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "offset": 100, "limit": 40}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py</path>
+<type>file</type>
+<content>
+100: 
+101: 
+102: def _aligne(n: int) -> int:
+103:     return (int(n) + ALIGNEMENT - 1) // ALIGNEMENT * ALIGNEMENT
+104: 
+105: 
+106: def _valide(manifest: dict[str, Any]) -> None:
+107:     for section in SECTIONS:
+108:         if section not in manifest:
+109:             raise DRVMError(f"section absente : {section}")
+110:     if manifest.get("format") != "DRVM":
+111:         raise DRVMError("format != DRVM")
+112:     if manifest.get("version") != VERSION:
+113:         raise DRVMError(f"version non supportée : {manifest.get('version')}")
+114:     blocs = manifest["graph"].get("blocks")
+115:     if not isinstance(blocs, list) or not blocs:
+116:         raise DRVMError("graphe sans bloc")
+117:     ids = set()
+118:     for b in blocs:
+119:         if "id" not in b or "kind" not in b:
+120:             raise DRVMError(f"bloc incomplet : {b!r}")
+121:         if b["id"] in ids:
+122:             raise DRVMError(f"bloc dupliqué : {b['id']}")
+123:         ids.add(b["id"])
+124:         if b["kind"] not in BLOCS_CONNUS:
+125:             raise DRVMError(f"type de bloc inconnu : {b['kind']}")
+126
+… [778 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "old_string": "def _valide(manifest: dict[str, Any]) -> None:\n    for section in SECTIONS:\n        if section not in manifest:\n            raise DRVMError(f\"section absente : {section}\")\n    if manifest.get(\"format … [6432 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, sys\nsys.path.insert(0, '.')\nfrom tools.drvm import read_drvm\nok = ko = 0\nfor f in glob.glob('**/*.drvm', recursive=True):\n    try:\n        with read_drvm(f, verifier=False): ok += 1\n    except Ex … [189 caractères tronqués]`
+
+  ```
+valides : 62 · refusés : 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest tools.cerveau.tests.test_drvm tools.cerveau.tests.test_drvm_trace 2>&1 | tail -20", "description": "Run DRVM unit tests"}`
+
+  ```
+ERROR: test_trace_replay (tools.cerveau.tests.test_drvm_trace.TestTrace.test_trace_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py", line 18, in test_trace_replay
+    write_drvm(p,_m(),[TensorSpec("b0.w",b"abc",bloc="b0")])
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 247, in write_drvm
+    _valide(manifest)
+    ~~~~~~~^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 147, in _valide
+    _cle_absente("graph", graphe, cle)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 120, in _cle_absente
+    raise DRVMError(f"clé absente : {ou}.{cle}")
+tools.drvm.DRVMError: clé absente : graph.regions
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+FAILED (errors=2)
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py", "limit": 15, "offset": 8}`
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "limit": 14, "offset": 2120}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py</path>
+<type>file</type>
+<content>
+8: 
+9: def _m():
+10:     return {"format":"DRVM","version":0,"model":{"name":"t"},
+11:             "graph":{"blocks":[{"id":"b0","kind":"input"}]},"execution":{}}
+12: 
+13: 
+14: class TestTrace(unittest.TestCase):
+15:     def test_trace_replay(self):
+16:         with tempfile.TemporaryDirectory() as d:
+17:             p=pathlib.Path(d)/"a.drvm"
+18:             write_drvm(p,_m(),[TensorSpec("b0.w",b"abc",bloc="b0")])
+19:             t=tracer(str(p))
+20:             self.assertEqual(len(t["tenseurs"]),1)
+21:             r=rejouer(str(p),t)
+22:             self.assertTrue(r["identiques"]); self.assertTrue(r["manifeste_sha256"])
+
+(Showing lines 8-22 of 34. Use offset=23 to continue.)
+</content>
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py</path>
+<type>file</type>
+<content>
+2120: def t146_drvm_n01() -> tuple[bool, str]:
+2121:     """DRVM N0.1 : écriture, lecture, mmap, hash, refus version et corruption."""
+2122:     import hashlib
+2123:     import pathlib
+2124:     import tempfile
+2125:     import tools.drvm as d
+2126:     man = {"format": "DRVM", "version": d.VERSION, "model": {"nom": "test"},
+2127:            "graph": {"blocks": [{"id": "b0", "kind": "local_mixer"}]},
+2128:            "execution": {"regime": "eager"}}
+2129:     with tempfile.TemporaryDirectory() as td:
+2130:         p = pathlib.Path(td) / "mini.drvm"
+2131:         sha = d.write_drvm(p, man, [d.TensorSpec("w", bytes(range(16)) * 4, "u8", (8, 8), "b0")])
+2132:         df = d.read_drvm(p)
+2133:         ok = (len(df.tensors) == 1 and len(df._mm) == p.stat().st_size
+
+(Showing lines 2120-2133 of 2863. Use offset=2134 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py", "new_string": "def _m():\n    return {\"format\":\"DRVM\",\"version\":0,\"model\":{\"name\":\"t\"},\n            \"graph\":{\"blocks\":[{\"id\":\"b0\",\"kind\":\"input\",\"inputs\":[],\"outputs\": … [377 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/cerveau/tests/test_drvm_trace.py has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py", "new_string": "    man = {\"format\": \"DRVM\", \"version\": d.VERSION, \"model\": {\"name\": \"test\"},\n           \"graph\": {\"blocks\": [{\"id\": \"b0\", \"kind\": \"local_mixer\",\n                        … [499 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/pensee/autotest.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest tools.cerveau.tests.test_drvm tools.cerveau.tests.test_drvm_trace 2>&1 | tail -5; echo \"=== t146 ===\"; python3 -c \"\nfrom tools.pensee.autotest import t146_drvm_n01\nok, msg = t146_drvm_n01(); print(ok, msg)\"" … [56 caractères tronqués]`
+
+  ```
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK
+=== t146 ===
+True DRVM N0.1 : 6/6 (le payload corrompu est refusé)
+  ```
+
+### 🤖 Assistant
+
+⏵ Portage des mêmes refus dans le lecteur Rust + tests unitaires
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "impl Json {\n    pub fn get(&self, cle: &str) -> Option<&Json> {\n        match self {\n            Json::Objet(v) => v.iter().find(|(k, _)| k == cle).map(|(_, v)| v),\n            _ => None,\n     … [6950 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "        let manifeste = parse_json(&b[hsize..hsize + mlen])?;\n        verifie_racine(&manifeste)?;\n        let mut blocs = Vec::new();\n        let graph = manifeste.get(\"graph\").ok_or_else(||  … [2758 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 70, "offset": 470}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+470:         let version = imp.get("version").and_then(Json::as_u64).unwrap_or(3) as u32;
+471:         let n_kv = imp.get("n_kv").and_then(Json::as_u64)
+472:             .ok_or_else(|| ErreurDrvm("import.n_kv absent : régénérer le DRVM".into()))?;
+473:         let align = imp.get("alignement").and_then(Json::as_u64).unwrap_or(32) as usize;
+474:         let tensors: Vec<&Tenseur> = self.tenseurs.iter()
+475:             .filter(|t| t.name != "__gguf_kv").collect();
+476:         let mut out: Vec<u8> = Vec::new();
+477:         out.extend_from_slice(b"GGUF");
+478:         out.extend_from_slice(&version.to_le_bytes());
+479:         out.extend_from_slice(&(tensors.len() as u64).to_le_bytes());
+480:         out.extend_from_slice(&n_kv.to_le_bytes());
+481:         out.extend_from_slice(kv);
+482:         for t in &tensors {
+483:             let nom = t.name.as_bytes();
+484:             out.extend_from_slice(&(nom.len() as u64).to_le_bytes());
+485:             out.extend_from_slice(nom);
+486:             let shape = self.manifeste.get("tensors").and_then(Json::as_array)
+487:        
+… [1489 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 55, "offset": 415}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+415:     pub fn resume(&self) -> String {
+416:         format!("DRVM v{} · {} blocs · {} tenseurs · payload {} o",
+417:                 VERSION, self.blocs.len(), self.tenseurs.len(),
+418:                 self.data.len() - self.payload_offset)
+419:     }
+420: }
+421: 
+422: #[cfg(test)]
+423: mod tests {
+424:     use super::*;
+425: 
+426:     fn fichier(version: u16, bloc: &str) -> Vec<u8> {
+427:         let manifeste = format!(
+428:             r#"{{"format":"DRVM","version":0,"model":{{"name":"t"}},"graph":{{"blocks":[{{"id":"b0","kind":"{bloc}"}}]}},"tensors":[{{"name":"b0.w","bloc":"b0","dtype":"f32","shape":[1],"offset":0,"nbytes":4,"quant":null,"sparsity":0.0}}],"execution":{{}}}}"#
+429:         );
+430:         let mlen = manifeste.len();
+431:         let mut m = manifeste.into_bytes();
+432:         while m.len() % ALIGNEMENT != 0 { m.push(0); }
+433:         let poff = HEADER_SIZE + m.len();
+434:         let mut b = vec![0u8; HEADER_SIZE];
+435:         b[0..4].copy_from_slice(MAGIC);
+436:         b[4..6].copy_from_slice(&version.to_le_bytes());
+437:         b[6..8].copy
+… [1722 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "#[cfg(test)]\nmod tests {\n    use super::*;\n\n    fn graphe_valide(bloc: &str) -> String {\n        format!(\n            r#\"{{\"blocks\":[{{\"id\":\"b0\",\"kind\":\"{bloc}\",\"inputs\":[],\"out … [6743 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | tail -30", "description": "Build and run Rust unit tests", "timeoutMs": 420000}`
+
+  ```
+error: unexpected closing delimiter: `}`
+   --> src/drvm.rs:522:5
+    |
+423 | mod tests {
+    |           - the nearest open delimiter
+...
+490 |     fn refuse_ce_quil_ne_lit_pas() {
+    |                                    - the nearest open delimiter
+...
+518 |             r#""placement":"local","regime":"eager""#)), "clé inconnue dans execution : regime");
+    |                                                                                                - missing open `(` for this delimiter
+...
+521 |             r#""format":"DRVM","extra":1"#)), "clé inconnue dans le manifeste : extra");
+    |                                                                                       - missing open `(` for this delimiter
+522 |     }
+    |     ^ unexpected closing delimiter
+
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "new_string": "        refuse(\"execution\", &m.replace(\n            r#\"\"placement\":\"local\"\"#,\n            r#\"\"placement\":\"local\",\"regime\":\"eager\"\"#), \"clé inconnue dans execution : regime\");\ … [577 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | tail -30", "description": "Rebuild and run Rust tests", "timeoutMs": 420000}`
+
+  ```
+|            ^^^^^^^^
+
+warning: the `ids:` in this pattern is redundant
+    --> src/main.rs:1751:9
+     |
+1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,
+     |         ^^^^^^^^^^^^ help: use shorthand field pattern: `mut ids`
+     |
+     = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+
+running 137 tests
+....................................................................................... 87/137
+.......................................... 129/137
+tests_vars::les_vars_lues_sont_completes --- FAILED
+.......
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (3531111) panicked at src/main.rs:9058:13:
+DRAVE_POS_DESYNC est lu dans le source mais absent de VARS_LUES : un ancien nom QT_POS_DESYNC resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 136 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.18s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git stash list | head -3; echo \"=== DRAVE_POS_DESYNC à HEAD ===\"; git show HEAD:drave-core/src/main.rs | grep -c \"DRAVE_POS_DESYNC\"; echo \"=== dans VARS_LUES à HEAD ===\"; git show HEAD:drave-core/src/main.rs | grep -n \"POS_DES … [164 caractères tronqués]`
+
+  ```
+=== DRAVE_POS_DESYNC à HEAD ===
+1
+=== dans VARS_LUES à HEAD ===
+302:        let desync = std::env::var("DRAVE_POS_DESYNC").is_ok();
+=== diff working main.rs ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -5", "description": "Build the release binary", "run_in_background": true}`
+
+  ```
+started background job bash-54
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh", "new_string": "#!/bin/bash\n# porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.\n#\n# 2ᵉ partie (17/11) — le LECTEUR DRVM refuse ce qu'il n'exécute pas. Le format\n# déclarait ` … [564 caractères tronqués]`
+
+  ```
+Error: cannot modify "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh": file has not been read — read the file, then retry
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh</path>
+<type>file</type>
+<content>
+1: #!/bin/bash
+2: # porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.
+3: set -u
+4: cd "$(dirname "$0")/.."
+5: D=${D:-./drave-core/target/release/drave}
+6: PY=${PY:-/home/stephane/gpu-env/bin/python}
+7: T=$(mktemp -d "${TMPDIR:-/tmp}/porte-n3-refus-XXXXXX")
+8: trap 'kill ${SRV:-} 2>/dev/null; wait ${SRV:-} 2>/dev/null; rm -rf "$T"' EXIT
+9: [ -x "$D" ] || { echo "  ❌ $D absent"; exit 2; }
+10: "$PY" -c "import torch" 2>/dev/null || { echo "  ❌ $PY n'a pas torch"; exit 2; }
+11: 
+12: echo "=== 1. modèles A (normal) et B (pont nul) ==="
+13: "$PY" - "$T" <<'PY' || exit 2
+14: import sys, torch
+15: sys.path.insert(0, ".")
+16: from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+17: base = dict(vocab=256, d_model=64, n_blocks=4, n_heads=4, expert_hidden=32,
+18:             n_experts=4, top_k=2, kwta=0.5, window=32, max_pos=2048,
+19:             thought_steps=1, early_blocks=(1,), rsn_dim=8)
+20: torch.manual_seed(7); a = NativeModel(NativeConfig(**base)); exporter_drvm(a, sys.argv[1] + "/a.drvm")
+21: torch.manual_seed(7); b = Nat
+… [1619 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh", "new_string": "#!/bin/bash\n# porte-n3-refus.sh — N3.5d : le protocole REFUSE un aval qui n'a pas le même modèle.\n#\n# 2ᵉ partie (17/11) — le LECTEUR DRVM refuse ce qu'il n'exécute pas. Le format\n# déclarait ` … [561 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh", "new_string": "echo \"  ✅ succès bit-exact\"\n\necho \"=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===\"\npython3 - \"$T\" <<'PY' || exit 2\nimport glob, hashlib, json, pathlib, sys\nsys.path. … [5074 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-refus.sh has been updated successfully.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-54 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | tail -5) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-54"}`
+
+  ```
+|
+     = note: `#[warn(non_shorthand_field_patterns)]` on by default
+
+warning: `drave-core` (bin "drave") generated 74 warnings (run `cargo fix --bin "drave" -p drave-core` to apply 30 suggestions)
+    Finished `release` profile [optimized] target(s) in 49.98s
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la drave-core/target/release/drave && ./drave-core/target/release/drave --drvm-inspect drave-core/tests/fixtures/tiny_n0.drvm | head -3", "description": "Check rebuilt binary on the fixture"}`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 3218824 17 nov 11:14 drave-core/target/release/drave
+DRVM v0 · 6 blocs · 30 tenseurs · payload 31488 o
+  bloc input        input
+  bloc b0           local_mixer
+[stderr]
+
+thread 'main' (3531685) panicked at /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/std/src/io/stdio.rs:1168:9:
+failed printing to stdout: Broken pipe (os error 32)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time bash tools/porte-n3-refus.sh 2>&1 | tail -25", "description": "Run the extended refusal gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. modèles A (normal) et B (pont nul) ===
+  A/B : 428888 paramètres
+=== 2. client A contre aval B : REFUS ===
+  ✅ REFUS (code 4) sans logits
+=== 3. client A contre aval A : succès ===
+  ✅ succès bit-exact
+=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===
+Traceback (most recent call last):
+  File "<stdin>", line 69, in <module>
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 293, in read_drvm
+    _valide(manifest)
+    ~~~~~~~^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", line 195, in _valide
+    raise DRVMError(f"pont vers un bloc inconnu : {pont!r}")
+tools.drvm.DRVMError: pont vers un bloc inconnu : 'b1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 71, in <module>
+AssertionError: pont : « pont vers un bloc inconnu : 'b1' » ne nomme pas « pont vers un bloc inconnu : b1 »
+[stderr]
+
+real	0m21,822s
+user	0m12,152s
+sys	0m1,825s
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py", "new_string": "    pont = graphe[\"bridge\"]\n    if pont is not None and (not isinstance(pont, str) or pont not in ids):\n        raise DRVMError(f\"pont vers un bloc inconnu : {pont}\")", "old_string": "    pont = graph … [160 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time bash tools/porte-n3-refus.sh 2>&1 | tail -20", "description": "Re-run the extended refusal gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. modèles A (normal) et B (pont nul) ===
+  A/B : 428888 paramètres
+=== 2. client A contre aval B : REFUS ===
+  ✅ REFUS (code 4) sans logits
+=== 3. client A contre aval A : succès ===
+  ✅ succès bit-exact
+=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===
+  Python : 10 refus nommés · valide lu · écriture refusée · 62 DRVM existants relus
+  ✅ Rust : 10 refus nommés (code 3) · le valide passe
+PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (10 cas, deux lecteurs)
+[stderr]
+
+real	0m5,320s
+user	0m10,614s
+sys	0m0,905s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=n3 DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-n3.log 2>&1; echo \"exit=$?\"; tail -25 /tmp/passe-n3.log", "description": "Run all N3 gates", "run_in_background": true}`
+
+  ```
+started background job bash-58
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md", "limit": 14, "offset": 309}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md</path>
+<type>file</type>
+<content>
+309: }
+310: ```
+311: 
+312: **Un bloc inconnu est refusé**, pas ignoré : `BLOCS_CONNUS` est une liste fermée, et le lecteur rend une erreur
+313: qui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris qui s'exécute quand même est un
+314: modèle qui ment. Le même principe vaut pour la version et pour une section absente.
+315: 
+316: **Pourquoi un graphe plutôt qu'une pile** : parce que les mécanismes de Drave sont des **arêtes**, pas des
+317: couches. Une **sortie précoce** est une arête qui court-circuite la fin ; un **pont** est une arête entre deux
+318: régions ; une **route** est une arête conditionnelle ; la **pensée** est une arête qui boucle. Une pile ne sait
+319: pas dire ces choses ; un graphe, si.
+320: 
+321: ### Le mode d'opération est privé
+322: 
+
+(Showing lines 309-322 of 668. Use offset=323 to continue.)
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md", "new_string": "**Un bloc inconnu est refusé**, pas ignoré : `BLOCS_CONNUS` est une liste fermée, et le lecteur rend une erreur\nqui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris q … [1264 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/theorie/modele-natif.md has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest discover -s tools/cerveau/tests -q 2>&1 | tail -6; echo \"=== revue doc ===\"; python3 tools/revue_documentation.py 2>&1 | tail -15", "description": "Run Python tests and documentation review", "timeoutMs": 300000 … [1 caractères tronqués]`
+
+  ```
+----------------------------------------------------------------------
+Ran 189 tests in 21.549s
+
+FAILED (errors=1, skipped=32)
+=== revue doc ===
+  revue de documentation · 781 fiche(s) · 875 JSON · 127 doc(s) · 86 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest discover -s tools/cerveau/tests 2>&1 | grep -E \"ERROR:|FAIL:|^ERROR\" -A3 | head -20", "description": "Identify the failing Python test", "timeoutMs": 300000}`
+
+  ```
+ERROR: test_bus (unittest.loader._FailedTest.test_bus)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_bus
+Traceback (most recent call last):
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest tools.cerveau.tests.test_bus 2>&1 | tail -8", "description": "Check the pre-existing test_bus import error"}`
+
+  ```
+from cerveau.bus import Bus
+ModuleNotFoundError: No module named 'cerveau'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+  ```
+
+- **job_output** `{"job_id": "bash-58"}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git diff --stat -- tools/drvm.py drave-core/src/drvm.rs tools/porte-n3-refus.sh tools/cerveau/tests/test_drvm_trace.py tools/pensee/autotest.py docs/theorie/modele-natif.md; echo \"=== smoke generate ===\"; ./drave-core/target/releas … [168 caractères tronqués]`
+
+  ```
+docs/theorie/modele-natif.md           |   9 ++
+ drave-core/src/drvm.rs                 | 213 ++++++++++++++++++++++++++++++++-
+ tools/cerveau/tests/test_drvm_trace.py |   4 +-
+ tools/drvm.py                          | 104 +++++++++++++++-
+ tools/pensee/autotest.py               |   9 +-
+ tools/porte-n3-refus.sh                | 121 ++++++++++++++++++-
+ 6 files changed, 449 insertions(+), 11 deletions(-)
+=== smoke generate ===
+[drvm-generate] 7 octets en 94.007µs
+abcO��Rexit=0
+  ```
+
+- **job_output** `{"job_id": "bash-58", "timeout_ms": 240000, "wait": true}`
+
+  ```
+exit=0
+=== PASSE COMPLÈTE DES PORTES (18 portes, borne 900 s) ===
+    journaux : work/portes-1117-11h16
+  porte-n3-cache         ✅                           6 s  PORTE TENUE : saut de calcul mesuré · sortie changée · condition K/V nommée
+  porte-n3-composition   ✅                           6 s  PORTE TENUE : service + profondeur + routage + comptage composés sur les mêmes modèles
+  porte-n3-deux-processus ✅                           5 s  PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein
+  porte-n3-deux-regions  ✅                           4 s  PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent
+  porte-n3-generation    ✅                           8 s  PORTE TENUE : génération répartie · deux caches · sortie bit-identique
+  porte-n3-inventaire    ✅                           0 s    ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence
+  porte-n3-placement     ✅                           5 s  PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté
+  porte-n3-pont          ✅                           4 s  PORTE TENUE : pont natif branché · A dét
+… [1692 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/porte-*.sh | sed 's|tools/porte-||; s|\\.sh||' | tr '\\n' ' '", "description": "List all gate names"}`
+
+  ```
+adaptateur-sortie audit-drapeaux b1110-hybride balayage banc-performance bloc-code bloc-linguistique bloc-maths bloc-tableaux budget bus bus-socket c4-retard cerveau cic consolidation coupe cycle-c2 deepseek delais diff-couche document echange-experts episodique etat flux fusion gain greffe harnais-invariants homeostasie horloge indice jeux jumeaux lecteur lecture m5-brouillon melange memoire miroir-blocs mistral n3-cache n3-composition n3-deux-processus n3-deux-regions n3-generation n3-inventaire n3-placement n3-pont n3-positions n3-profondeur n3-refus n3-reseau n3-routes n3-service-briques n3-service n3-seuil n3-sparsite-compte n3-sparsite occupation-elagage occupation-moteur ocr-scans ocr pannes peripherie poids-creux pont prechargement produit profondeur-routee push-paresseux r13-bpe recurrence reflexe registre reparti-moteur ressources sauvegarde-modele sessions speculatif tableaux tokenizer-kimi topologie trace vision
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"gguf_drvm\\|drvm_infere\\|drvm_trace\" tools/porte-*.sh | sed 's|tools/||' | tr '\\n' ' '; echo; PORTES=\"produit document etat poids-creux\" DELAI=1200 tools/toutes-les-portes.sh > /tmp/passe-ciblee.log 2>&1; echo \"exit … [128 caractères tronqués]`
+
+  ```
+exit=0
+=== PASSE COMPLÈTE DES PORTES (4 portes, borne 1200 s) ===
+    journaux : work/portes-1117-11h18
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-etat             ✅                           1 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-poids-creux      ✅                         322 s  ✅ porte poids creux : le noyau creux est EXACT et il paie la sparsité — paires divisées sur
+  porte-produit          ✅                         160 s  ✅ porte produit verte
+--- 4 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-11h18
+  ```
+
+### 🤖 Assistant
+
+⏵ Commit du correctif et de la porte, avec les chiffres dans le message
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs tools/porte-n3-refus.sh tools/cerveau/tests/test_drvm_trace.py tools/pensee/autotest.py docs/theorie/modele-natif.md && git status --short | head -15", "description": "Stage only the six c … [14 caractères tronqués]`
+
+  ```
+M  docs/theorie/modele-natif.md
+M  drave-core/src/drvm.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md
+ M journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md
+M  tools/cerveau/tests/test_drvm_trace.py
+ M tools/chantier/plan.json
+M  tools/drvm.py
+M  tools/pensee/autotest.py
+M  tools/porte-n3-refus.sh
+?? journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -15\nDRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/têtes/pensée/pont ÉTAIENT DÉCLARÉS ET IGNORÉS EN SILENCE ; 10 REFUS NOMMÉS, LES DEUX LECTEURS D'ACCORD, 62 DRVM RELUS\n\nLe for … [1460 caractères tronqués]`

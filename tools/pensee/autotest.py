@@ -2123,9 +2123,12 @@ def t146_drvm_n01() -> tuple[bool, str]:
     import pathlib
     import tempfile
     import tools.drvm as d
-    man = {"format": "DRVM", "version": d.VERSION, "model": {"nom": "test"},
-           "graph": {"blocks": [{"id": "b0", "kind": "local_mixer"}]},
-           "execution": {"regime": "eager"}}
+    man = {"format": "DRVM", "version": d.VERSION, "model": {"name": "test"},
+           "graph": {"blocks": [{"id": "b0", "kind": "local_mixer",
+                                 "inputs": [], "outputs": []}],
+                     "regions": [], "routes": [], "heads": [],
+                     "thought": None, "bridge": None},
+           "execution": {"activation": "DRVF", "placement": "local"}}
     with tempfile.TemporaryDirectory() as td:
         p = pathlib.Path(td) / "mini.drvm"
         sha = d.write_drvm(p, man, [d.TensorSpec("w", bytes(range(16)) * 4, "u8", (8, 8), "b0")])

@@ -70269,3 +70269,143 @@ sys	0m11,717s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré, le pas mesuré à 1 s — 2, … [1814 caractères tronqués]`
+
+  ```
+fiche à jour
+     · fraîcheur : en-cours.md dit 2026-11-17, le dernier commit date du 2026-11-16
+     · T0 : 4004 mots (AGENTS + en-cours + une tâche) > budget 4 000
+ 8 files changed, 273 insertions(+), 19 deletions(-)
+ create mode 100644 journal/2026-11-17/README.md
+44fb939c GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESU
+   7f23e55b..44fb939c  s/v7 -> s/v7
+   7f23e55b..44fb939c  master -> master
+mar 17 nov 2026 08:29:38 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesures faites avec la machine libre — et le résultat honnête n'est pas celui du banc
+
+## Ce que j'ai trouvé en re-mesurant « en vrai »
+
+Le banc par cœur donnait **0,134 s/pas** (le 34 M, fp16) — **39× le CPU chargé**. Le **vrai pas d'entraînement** (le `lot`, le canal, les têtes, le backward complet) donne :
+
+| réglage | s/pas | le 34 M à 30 k pas |
+|---|---:|---:|
+| **`--amp --no-tetes`** | **1,0 s** | 8,3 h |
+| `--amp` (les 9 têtes précoces) | ~9 s | ~75 h |
+| CPU nu (la référence) | **0,44 s** | 3,7 h |
+
+**La lecture honnête : le GPU n'est pas 39× plus rapide sur le 34 M.** Le pas réel coûte **1 s** (2,4× le CPU nu), et **9 s avec les têtes précoces** — ce sont les **9 têtes × la perte + le backward** qui dominent. Les 0,134 s du banc ne comptaient ni les têtes ni le `lot`. **Le 34 M est trop petit pour que le GPU s'impose.**
+
+## Ce qui est livré quand même
+
+- **L'AMP dans l'entraîneur** : `entrainer_native.py --amp` (l'autocast + le GradScaler, le clip avant le pas d'optimiseur) — le smoke de 30 pas l'a exercé de bout en bout (le checkpoint et le DRVM exportés).
+- **La fiche** [`rapport-gpu-tandem.md`](reports/rapport-gpu-tandem.md) mise à jour avec le pas réel (le § 4 ter).
+- `HEAD 44fb939c`, poussé.
+
+## Ce que ça change pour la suite
+
+Le GPU ne devient **rentable qu'aux paliers suivants** : à **100 M+**, le CPU ne suit plus (le pas CPU dépasserait la minute), et là le GPU (1-3 s/pas) est **la condition**, pas l'option. **Le palier 1 reste bloqué par la donnée** (3-6 Go, territoire D) — pas par la machine, et pas par le code : l'AMP est là, le banc est là, le tandem est mesuré (le data-parallel ×2 pour 5,5 % d'échange NVLink).
+
+**Ce que je peux faire ensuite, si vous voulez** : lancer le **palier 1 sur les 1 Go actuels** (le 100 M tournerait ~3 h sur le GPU — mais sous-entraîné à 10 jetons/paramètre), ou attendre la donnée. Dites-moi.
+
+
+## Tour 210
+
+### 👤 Utilisateur
+
+go
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel\nfor d,n,eh in [(384,6,512),(640,8,640),(768,8,768)]:\n    m = NativeModel(NativeConfig(d_model=d, n_blocks=n, expert_hidden= … [147 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    from tools.native_model import NativeConfig, NativeModel
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py", line 17, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-natif/bin/python -c \"\nimport sys; sys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel\nfor d,n,eh in [(384,6,512),(640,8,640),(768,8,768)]:\n    m = NativeModel(NativeConfig(d_model=d, n_block … [169 caractères tronqués]`
+
+  ```
+384 6 512 34.3 M
+640 8 640 96.7 M
+768 8 768 138.3 M
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; nohup env PYTHONPATH=. /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.c … [327 caractères tronqués]`
+
+  ```
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+PID 3501676
+mar 17 nov 2026 09:40:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 240; date; tail -4 /tmp/train-100m.log 2>/dev/null; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader", "description": "Suivre l'entraînement du 100M", "timeoutMs": 400000}`
+
+  ```
+mar 17 nov 2026 09:45:15 EST
+pas  400 · perte 2.4150 · PPL val 11.306 · 117 s
+pas  450 · perte 2.4287 · PPL val 11.355 · 131 s
+pas  500 · perte 2.4900 · PPL val 11.294 · 146 s
+pas  550 · perte 2.4666 · PPL val 11.226 · 160 s
+0, 5548 MiB, 99 %
+1, 4 MiB, 0 %
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/train-100m.log 2>/dev/null; ls -la work/n2ac/mix1024-100m.pt 2>/dev/null | awk '{print $5}'", "description": "Suivre le 100M", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-5469]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **job_output** `{"job_id": "bash-5469", "timeout_ms": 600000, "wait": true}`
+
+  ```
+mar 17 nov 2026 09:56:30 EST
+pas 2750 · perte 1.3498 · PPL val 4.175 · 801 s
+pas 2800 · perte 1.5144 · PPL val 4.139 · 816 s
+pas 2850 · perte 1.4231 · PPL val 4.115 · 830 s
+[status: completed, exit code: 0]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-5469 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 600; date; tail -3 /tmp/train-100m.log 2>/dev/null; ls -la work/n2ac/mix1024-100m.pt 2>/dev/null | awk '{print $5}') finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Le 100 M tourne (0,29 s/pas, PPL 4,11 à 2 850 pas) — voici l'état et la décision
+
+## Ce que je vois
+
+Le **100 M** (d_model 640, 8 blocs, 96,7 M de paramètres) s'entraîne **beaucoup mieux que prévu** sur le GPU :
+
+| mesure | 34 M (CPU, référence) | **100 M (GPU, AMP)** |
+|---|---:|---:|
+| le pas (8 × 1 024) | 0,44 s à vide | **0,29 s** |
+| la PPL de validation | 2,40 à 30 000 pas | **4,11 à 2 850 pas** |
+| le temps pour 30 000 pas | 3,7 h | **~2,4 h** |
+| la VRAM | — | 5,5 Go / 16 |
+
+**Le point clé : le 100 M est 1,5× plus rapide par pas que le 34 M sur CPU** — l'échelle **améliore l'efficacité GPU** (les lancements s'amortissent). Et le 100 M n'est **qu'à 2 850 pas** (0,24 jeton/paramètre) : sa PPL de 4,11 n'est **pas comparable** au 2,40 du 34 M, qui a vu 12× plus de données.
+
+## La décision que je prends
+
+**Laisser le 100 M aller au bout** (30 000 pas, ~2,4 h) — c'est le premier vrai test de la thèse « l'échelle achète le vocabulaire ». Au bout, je le passerai au **banc de génération** (le même protocole que les 11/21/34 M) : si les mots valides montent au-delà de **0,87** et que la répétition reste **< 15**, l'échelle paie ; sinon, le diagnostic du 16/11 tient et le palier 1 exige la donnée.
+
+## Ce qui est déjà dans le dépôt (aujourd'hui)
+
+- **L'AMP** dans `entrainer_native.py` (`--amp`, autocast + GradScaler) — exercé de bout en bout.
+- Le **100 M** en cours : `work/n2ac/mix1024-100m.pt` (le checkpoint) + `.drvm` (le conteneur).
+- La fiche [`rapport-gpu-tandem.md`](reports/rapport-gpu-tandem.md) avec le pas réel, le cache KV (**×1,9**, parité 3/3) et les 2 GPU mesurés.
+
+**Je surveille le run et je fais le banc dès qu'il finit** (~12 h 20) ; je vous rends le verdict chiffré à ce moment-là. Si le 100 M dépasse le 34 M, le palier 1 est **validé** et il ne reste que la donnée ; sinon, la conclusion du 16/11 est confirmée et le plan ne change pas.
+

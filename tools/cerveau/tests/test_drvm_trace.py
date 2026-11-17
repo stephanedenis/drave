@@ -8,7 +8,9 @@ from tools.drvm import read_drvm
 
 def _m():
     return {"format":"DRVM","version":0,"model":{"name":"t"},
-            "graph":{"blocks":[{"id":"b0","kind":"input"}]},"execution":{}}
+            "graph":{"blocks":[{"id":"b0","kind":"input","inputs":[],"outputs":[]}],
+                     "regions":[],"routes":[],"heads":[],"thought":None,"bridge":None},
+            "execution":{"activation":"DRVF","placement":"local"}}
 
 
 class TestTrace(unittest.TestCase):

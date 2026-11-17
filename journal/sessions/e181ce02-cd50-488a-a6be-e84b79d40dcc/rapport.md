@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 399.8 h |
-| Tours | 209 |
-| Messages | 4352 |
-| Appels d'outils | 3900 |
+| Durée | 401.3 h |
+| Tours | 210 |
+| Messages | 4362 |
+| Appels d'outils | 3906 |
 | Fichiers touchés | 25 |
-| Commandes | 3230 |
+| Commandes | 3235 |
 | Sous-agents | 43 |
 | Commits | 520 |
 | Compactages de contexte | 9 |
@@ -491,6 +491,8 @@
 **Tour 208** — maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus?
 
 **Tour 209** — ok, j'ai fermé l'appli. la machine est toute à toi maintenant
+
+**Tour 210** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -11237,6 +11239,74 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Smoke test sans têtes précoces
 - bash — Committer l'AMP et le pas réel
 
+**Synthèse produite :**
+
+⏵ Mesures faites avec la machine libre — et le résultat honnête n'est pas celui du banc
+
+\## Ce que j'ai trouvé en re-mesurant « en vrai »
+
+Le banc par cœur donnait **0,134 s/pas** (le 34 M, fp16) — **39× le CPU chargé**. Le **vrai pas d'entraînement** (le `lot`, le canal, les têtes, le backward complet) donne :
+
+| réglage | s/pas | le 34 M à 30 k pas |
+|---|---:|---:|
+| **`--amp --no-tetes`** | **1,0 s** | 8,3 h |
+| `--amp` (les 9 têtes précoces) | ~9 s | ~75 h |
+| CPU nu (la référence) | **0,44 s** | 3,7 h |
+
+**La lecture honnête : le GPU n'est pas 39× plus rapide sur le 34 M.** Le pas réel coûte **1 s** (2,4× le CPU nu), et **9 s avec les têtes précoces** — ce sont les **9 têtes × la perte + le backward** qui dominent. Les 0,134 s du banc ne comptaient ni les têtes ni le `lot`. **Le 34 M est trop petit pour que le GPU s'impose.**
+
+\## Ce qui est livré quand même
+
+- **L'AMP dans l'entraîneur** : `entrainer_native.py --amp` (l'autocast + le GradScaler, le clip avant le pas d'optimiseur) — le smoke de 30 pas l'a exercé de bout en bout (le checkpoint et le DRVM exportés).
+- **La fiche** [`rapport-gpu-tandem.md`](reports/rapport-gpu-tandem.md) mise à jour avec le pas réel (le § 4 ter).
+- `HEAD 44fb939c`, poussé.
+
+\## Ce que ça change pour la suite
+
+Le GPU ne devient **rentable qu'aux paliers suivants** : à **100 M+**, le CPU ne suit plus (le pas CPU dépasserait la minute), et là le GPU (1-3 s/pas) est **la condition**, pas l'option. **Le palier 1 reste bloqué par la donnée** (3-6 Go, territoire D) — pas par la machine, et pas par le code : l'AMP est là, le banc est là, le tandem est mesuré (le data-parallel ×2 pour 5,5 % d'échange NVLink).
+
+**Ce que je peux faire ensuite, si vous voulez** : lancer le **palier 1 sur les 1 Go actuels** (le 100 M tournerait ~3 h sur le GPU — mais sous-entraîné à 10 jetons/paramètre), ou attendre la donnée. Dites-moi.
+
+### Tour 210 — go
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Calculer les tailles des configurations
+- bash — Calculer les tailles (venv)
+- bash — Lancer l'entraînement du 100M
+- bash — Suivre l'entraînement du 100M
+- bash — Suivre le 100M
+- job_output
+
+**Synthèse produite :**
+
+⏵ Le 100 M tourne (0,29 s/pas, PPL 4,11 à 2 850 pas) — voici l'état et la décision
+
+\## Ce que je vois
+
+Le **100 M** (d_model 640, 8 blocs, 96,7 M de paramètres) s'entraîne **beaucoup mieux que prévu** sur le GPU :
+
+| mesure | 34 M (CPU, référence) | **100 M (GPU, AMP)** |
+|---|---:|---:|
+| le pas (8 × 1 024) | 0,44 s à vide | **0,29 s** |
+| la PPL de validation | 2,40 à 30 000 pas | **4,11 à 2 850 pas** |
+| le temps pour 30 000 pas | 3,7 h | **~2,4 h** |
+| la VRAM | — | 5,5 Go / 16 |
+
+**Le point clé : le 100 M est 1,5× plus rapide par pas que le 34 M sur CPU** — l'échelle **améliore l'efficacité GPU** (les lancements s'amortissent). Et le 100 M n'est **qu'à 2 850 pas** (0,24 jeton/paramètre) : sa PPL de 4,11 n'est **pas comparable** au 2,40 du 34 M, qui a vu 12× plus de données.
+
+\## La décision que je prends
+
+**Laisser le 100 M aller au bout** (30 000 pas, ~2,4 h) — c'est le premier vrai test de la thèse « l'échelle achète le vocabulaire ». Au bout, je le passerai au **banc de génération** (le même protocole que les 11/21/34 M) : si les mots valides montent au-delà de **0,87** et que la répétition reste **< 15**, l'échelle paie ; sinon, le diagnostic du 16/11 tient et le palier 1 exige la donnée.
+
+\## Ce qui est déjà dans le dépôt (aujourd'hui)
+
+- **L'AMP** dans `entrainer_native.py` (`--amp`, autocast + GradScaler) — exercé de bout en bout.
+- Le **100 M** en cours : `work/n2ac/mix1024-100m.pt` (le checkpoint) + `.drvm` (le conteneur).
+- La fiche [`rapport-gpu-tandem.md`](reports/rapport-gpu-tandem.md) avec le pas réel, le cache KV (**×1,9**, parité 3/3) et les 2 GPU mesurés.
+
+**Je surveille le run et je fais le banc dès qu'il finit** (~12 h 20) ; je vous rends le verdict chiffré à ce moment-là. Si le 100 M dépasse le 34 M, le palier 1 est **validé** et il ne reste que la donnée ; sinon, la conclusion du 16/11 est confirmée et le plan ne change pas.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11357,7 +11427,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3190 autres
+- … et 3195 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11485,7 +11555,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 
 ## 5. Erreurs rencontrées
 
-91 sorties en erreur ou divergentes. Les premières :
+92 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]
