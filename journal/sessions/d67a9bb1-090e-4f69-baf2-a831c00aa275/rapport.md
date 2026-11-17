@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 4.1 h |
-| Tours | 5 |
-| Messages | 180 |
-| Appels d'outils | 203 |
-| Fichiers touchés | 17 |
-| Commandes | 121 |
+| Durée | 4.7 h |
+| Tours | 6 |
+| Messages | 202 |
+| Appels d'outils | 225 |
+| Fichiers touchés | 19 |
+| Commandes | 138 |
 | Sous-agents | 0 |
-| Commits | 5 |
+| Commits | 6 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -29,6 +29,10 @@
 … [306 caractères tronqués]
 - **create** — Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence rée
 … [164 caractères tronqués]
+- **complete** — Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence rée
+… [164 caractères tronqués]
+- **create** — Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, re
+… [221 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -41,6 +45,8 @@
 **Tour 4** — vas-y
 
 **Tour 5** — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+**Tour 6** — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
 ## 2. Déroulé, étape par étape
 
@@ -219,7 +225,7 @@ Et le garde-fou
 
 ### Tour 5 — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*102 appels d'outils.* Actions notables :
+*104 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Survey the native engine functions
@@ -235,11 +241,60 @@ Et le garde-fou
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
-- … et 66 autres
+- … et 67 autres
 
 **Synthèse produite :**
 
-⏵ Écriture de la porte des deux moteurs (mêmes logits, contrôles négatifs)
+⏵ Récapitulatif des cinq commits et de l'état du chantier
+
+**Cinq commits, tous verts, tous mesurés.** Le chantier « variantes + routage » est passé d'une idée à un contrat exécuté.
+
+| commit | ce qui est établi | le chiffre |
+|---|---|---|
+| `97579a55` | le lecteur refuse ce qu'il n'exécute pas (clés fermées, deux lecteurs) | **13 refus nommés**, 62 DRVM relus |
+| `20648db7` | substitution = contrat : `impl` + `contrat` par bloc, indifférence mesurée | **4,768e-07** ≤ 1e-4 |
+| `337715d1` | le moteur numpy exécute `bloque` et refuse `flou` | **2,831e-07** |
+| `49904862` | **les routes sont exécutées** (seuil 0 / 10⁹ / mixte) | **bit-exact / bit-exact / 5,779e-03** |
+| `b480a439` | les deux moteurs rendent le même corps, gardé à chaque passe | **3,576e-07 / 2,384e-07** |
+
+**Ce que ça change dans le manifeste** — deux mécanismes, deux usages, désormais séparés :
+
+```json
+{"id":"b0","kind":"local_mixer","impl":"bloque","contrat":{"version":0,"tolerance":1e-4}}
+{"id":"r0","bloc":"b1","si":{"kind":"position","seuil":512},"alors":"flou","sinon":"defaut"}
+```
+`impl` = **substitution** (même fonction, autre algorithme → indifférence dans la tolérance). `routes` = **routage** (autre fonction, même signature → la substitution est interdite, et le test doit le dire). Le nom du profil est public (manifeste → hash → trace), l'algorithme est privé, et **chaque moteur refuse ce qu'il n'exécute pas**.
+
+**Trois portes nouvelles** (89 au total) : `porte-n3-variante`, `porte-n3-route`, `porte-n3-moteurs`. Toutes ont un contrôle négatif qui **doit échouer** : `flou` échoue l'indifférence (5,790e-03), le comparateur ne doit pas être aveugle, numpy refuse les routes. La porte des routes a d'ailleurs **trouvé un vrai bug** : l'indice de bloc venait de la position dans `graph.blocks` au lieu du `i` de `b{i}` — la route ne s'appliquait jamais. C'est le bit-exact qui l'a révélé.
+
+**Les limites, écrites dans les fiches** : un modèle, une graine, un pas ; `bloque` n'est **pas plus rapide** ici (0,98–0,99×) ; le coût du routage n'est pas chronométré ; et surtout, **la politique de routage reste une question ouverte** — R0.5 et R06 ont montré quatre fois qu'un seuil global ne transfère pas. La porte prouve le mécanisme, pas qu'il faut router.
+
+**Ce que je ferais ensuite, et pourquoi ce n'est plus du même chantier** : la suite n'est pas un mécanisme de plus, c'est une **politique** qui batte le choix fixe sur un banc (la condition nommée par R0.5 : calibration apprise par document, plus
+… [802 caractères tronqués]
+
+### Tour 6 — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+*20 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Check the native perplexity command
+- bash — Add the court profile to the format and engine
+- bash — Measure court vs defaut on a synthetic window-dominated model
+- bash — Check the court window boundary behaviour
+- bash — Inspect the trained model config
+- bash — Measure perplexity defaut vs court on the trained model
+- bash — Clean timing and a second text for perplexity
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-court.sh`
+- bash — Run the court gate
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md`
+- bash — Update counters and state for the court profile
+- bash — Run N3 suite and key gates with court
+- bash — Look for an in-distribution corpus
+- … et 6 autres
+
+**Synthèse produite :**
+
+⏵ Mise à jour de la fiche avec la perplexité en distribution
 
 ## 3. Travail accompli
 
@@ -264,6 +319,8 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-route.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-moteurs.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-moteurs.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-court.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md` | 2 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -307,7 +364,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 81 autres
+- … et 98 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -417,6 +474,12 @@ Et le garde-fou
 - **T5** `bloque  médiane   84.1 ms  (CV 5 %)`
 - **T5** `defaut  médiane   85.1 ms  (CV 2 %)`
 - **T5** `bloque  médiane   84.5 ms  (CV 11 %)`
+- **T6** `defaut  médiane   83.6 ms  (CV 4 %)`
+- **T6** `court   médiane   55.9 ms  (CV 4 %)`
+- **T6** `defaut  médiane   83.9 ms  min   78.0  CV 3 %`
+- **T6** `court   médiane   56.1 ms  min   51.3  CV 3 %`
+- **T6** `defaut  médiane   80.8 ms  (CV 3 %)`
+- **T6** `court   médiane   56.0 ms  (CV 6 %)`
 
 ## 5. Erreurs rencontrées
 
@@ -435,4 +498,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-va
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_in
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/ro
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapp
 

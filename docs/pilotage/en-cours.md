@@ -89,7 +89,7 @@
 - **Panini B1** : **60 paires** ; **27/60**, calibration **42/44** ; [W4](../../reports/rapport-panini-manifeste.md), [B1](../../reports/rapport-protocole-date.md).
 - **Panini J12.1–J12.2 + B3** : CIC **42/42** ; B3 **42/42** types de Bruijn ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **Bilans** : F1 **0,7902**, chantier **20/21** ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [clôture](../../reports/rapport-cloture-chantier.md).
-- **N3.7–N3.9 — variantes, routes, moteurs** (17/11) : `impl` + `contrat` ; substitution **4,768e-07** ≤ 1e-4, contrôle négatif **5,790e-03**, coût **86 ± 2 ms** (0,98–0,99×) ; routes exécutées (seuil 0 = `flou` **bit-exact**, 10⁹ = `defaut` **bit-exact**, mixte **5,779e-03 / 1,132e-05**) ; Rust ↔ numpy **3,576e-07 / 2,384e-07** ; numpy refuse flou et les routes ; 13 refus nommés ; [variantes](../../reports/rapport-n3-variante.md), [routes](../../reports/rapport-n3-route.md), [moteurs](../../reports/rapport-n3-moteurs.md).
+- **N3.7–N3.10 — variantes, routes, moteurs, coût** (17/11) : `impl`+`contrat` (substitution **4,768e-07**) ; routes exécutées (0 = `flou` **bit-exact**, 10⁹ = `defaut` **bit-exact**) ; Rust ↔ numpy **3,576e-07** ; `court` **0,694×** le temps, PPL **23,7480 → 23,5824** à 2 048 o ; numpy refuse flou/court/routes ; [variantes](../../reports/rapport-n3-variante.md), [routes](../../reports/rapport-n3-route.md), [moteurs](../../reports/rapport-n3-moteurs.md), [court](../../reports/rapport-n3-court.md).
 
 ## Les chiffres de l'état
 
@@ -97,9 +97,9 @@
 
 | invariant | valeur | contrôle |
 |---|---|---|
-| portes | **89** (dont `porte-n3-variante`, `-route`, `-moteurs` le 17/11) | `tools/porte-*.sh` |
+| portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **784** / **875** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **785** / **875** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **127** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 

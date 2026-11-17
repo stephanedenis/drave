@@ -15,7 +15,7 @@ use crate::drvm::{Drvm, ErreurDrvm, Json};
 /// sigmoïde — AUTRE fonction sous la même signature, donc à router, pas à
 /// substituer. Le moteur numpy ne connaît que `Defaut` et refuse le reste.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Profil { Defaut, Bloque, Flou }
+pub enum Profil { Defaut, Bloque, Flou, Court }
 
 impl Profil {
     pub fn depuis(s: &str) -> Option<Profil> {
@@ -23,6 +23,7 @@ impl Profil {
             "defaut" => Some(Profil::Defaut),
             "bloque" => Some(Profil::Bloque),
             "flou" => Some(Profil::Flou),
+            "court" => Some(Profil::Court),
             _ => None,
         }
     }
@@ -31,6 +32,7 @@ impl Profil {
             Profil::Defaut => "defaut",
             Profil::Bloque => "bloque",
             Profil::Flou => "flou",
+            Profil::Court => "court",
         }
     }
 }
@@ -141,6 +143,13 @@ impl Native {
 
     fn p(&self, n: &str) -> &[f32] {
         self.poids.get(n).unwrap_or_else(|| panic!("tenseur natif absent : {n}"))
+    }
+
+    /// La fenêtre effective d'un profil : `court` divise par quatre la fenêtre du
+    /// modèle. C'est le premier profil qui change le COÛT (l'attention est en
+    /// O(fenêtre) par position), donc le premier qu'un routage peut faire payer.
+    fn fenetre(&self, p: Profil) -> usize {
+        if p == Profil::Court { (self.cfg.window / 4).max(1) } else { self.cfg.window }
     }
 
     /// Le profil du bloc `b` à la position `pos` : une route déclarée peut le
@@ -284,6 +293,8 @@ impl Native {
                             &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d)
             }).collect();
             for pos in 0..s {
+                let p = self.profil(b, pos);
+                let fen = self.fenetre(p);
                 let qkv = &qkv_all[pos];
                 let dh = c.d / c.n_heads;
                 let mut att = vec![0.0f32; c.d];
@@ -291,7 +302,7 @@ impl Native {
                     let q = &qkv[t * dh..(t + 1) * dh];
                     let mut sc = Vec::new(); let mut js = Vec::new();
                     for j in (0..=pos).rev() {
-                        if pos - j >= c.window { break; }
+                        if pos - j >= fen { break; }
                         let k = &qkv_all[j][c.d + t * dh..c.d + (t + 1) * dh];
                         let mut d = 0.0f32;
                         for qq in 0..dh { d += q[qq] * k[qq]; }
@@ -305,7 +316,6 @@ impl Native {
                         for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
                     }
                 }
-                let p = self.profil(b, pos);
                 let y = self.matvec(p, &format!("blocks.{b}.out.weight"),
                                     &format!("blocks.{b}.out.bias"), &att, c.d);
                 let z2 = self.ln(&(0..c.d).map(|k| h[pos][k] + y[k]).collect::<Vec<_>>(),
@@ -383,6 +393,7 @@ impl Native {
         cache.assurer(c.n_blocks, c.n_heads);
         for b in blocs {
             let p = self.profil(b, pos);
+            let fen = self.fenetre(p);
             let z = self.ln(x, &format!("blocks.{b}.ln1"));
             let qkv = self.matvec(p, &format!("blocks.{b}.qkv.weight"),
                                   &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
@@ -391,7 +402,7 @@ impl Native {
                 let q = &qkv[t * dh..(t + 1) * dh];
                 cache.k[b][t].extend_from_slice(&qkv[c.d + t * dh..c.d + (t + 1) * dh]);
                 cache.v[b][t].extend_from_slice(&qkv[2 * c.d + t * dh..2 * c.d + (t + 1) * dh]);
-                let debut = pos.saturating_sub(c.window - 1);
+                let debut = pos.saturating_sub(fen - 1);
                 let mut sc = Vec::new();
                 for j in debut..=pos {
                     let k = &cache.k[b][t][j * dh..(j + 1) * dh];

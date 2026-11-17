@@ -112,7 +112,7 @@
 | `porte-n3-deux-processus.sh` | 4 s | PORTE TENUE : deux processus · fichier de frontière · logits identiques au pas plein |
 | `porte-n3-deux-regions.sh` | 4 s | PORTE TENUE : découpage 0..k / k..n bit-exact · pont des deux côtés · prompt différent |
 | `porte-n3-generation.sh` | 8 s | PORTE TENUE : génération répartie · deux caches · sortie bit-identique |
-| `porte-n3-inventaire.sh` | 1 s | PORTE TENUE : inventaire N3 exécutable (autotest 5/5) · 21 portes, 23 fiches, 20 JSON, 0 orpheline |
+| `porte-n3-inventaire.sh` | 1 s | PORTE TENUE : inventaire N3 exécutable (autotest 5/5) · 22 portes, 24 fiches, 20 JSON, 0 orpheline |
 | `porte-n3-placement.sh` | 4 s | PORTE TENUE : placement natif = métadonnée · A déterministe · contrôle pont nul détecté |
 | `porte-n3-pont.sh` | 5 s | PORTE TENUE : pont natif branché · A déterministe · pont nul change la sortie |
 | `porte-n3-positions.sh` | 4 s | PORTE TENUE : position vérifiée pas à pas · désync refusée · succès bit-exact |

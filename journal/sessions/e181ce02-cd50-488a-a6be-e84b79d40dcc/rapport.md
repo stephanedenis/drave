@@ -7,12 +7,12 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 401.3 h |
-| Tours | 210 |
-| Messages | 4362 |
-| Appels d'outils | 3906 |
+| Durée | 405.9 h |
+| Tours | 212 |
+| Messages | 4369 |
+| Appels d'outils | 3910 |
 | Fichiers touchés | 25 |
-| Commandes | 3235 |
+| Commandes | 3239 |
 | Sous-agents | 43 |
 | Commits | 520 |
 | Compactages de contexte | 9 |
@@ -493,6 +493,10 @@
 **Tour 209** — ok, j'ai fermé l'appli. la machine est toute à toi maintenant
 
 **Tour 210** — go
+
+**Tour 211** — où en est-on
+
+**Tour 212** — go
 
 ## 2. Déroulé, étape par étape
 
@@ -11307,6 +11311,47 @@ Le **100 M** (d_model 640, 8 blocs, 96,7 M de paramètres) s'entraîne **beaucou
 
 **Je surveille le run et je fais le banc dès qu'il finit** (~12 h 20) ; je vous rends le verdict chiffré à ce moment-là. Si le 100 M dépasse le 34 M, le palier 1 est **validé** et il ne reste que la donnée ; sinon, la conclusion du 16/11 est confirmée et le plan ne change pas.
 
+### Tour 211 — où en est-on
+
+*2 appels d'outils.* Actions notables :
+
+- bash — État : le 100M et le dépôt
+- bash — Voir le 100M et les commits du jour
+
+**Synthèse produite :**
+
+⏵ Voici l'état, au 17/11 14 h 20
+
+\## Le 100 M : entraîné, et le résultat est là
+
+Le run a **fini** (3 000 pas en **14,6 min**, 275 Mo, GPU à 99 %) :
+
+| modèle | pas | PPL val | jetons/paramètre |
+|---|---:|---:|---:|
+| 34 M (CPU, la référence du 16/11) | 30 000 | **2,40** | 7,2 |
+| **100 M (GPU, AMP)** | 3 000 | **4,04** | **0,24** |
+
+**La lecture honnête** : le 100 M n'est **pas comparable** — il a vu **30× moins de données** que le 34 M (0,24 contre 7,2 jetons/paramètre). Sa PPL de 4,04 n'est **pas un échec** : c'est un modèle à 12 % d'un entraînement. Le point **positif** : le 100 M tourne à **0,29 s/pas** (le 34 M en CPU : 0,44) — **l'échelle améliore l'efficacité GPU**, exactement ce que la fiche GPU prédisait.
+
+\## Le reste de la machine
+
+- **5 commits d'une autre session** sont arrivés pendant la nuit (N3.7 → N3.9 : le moteur numpy exécute le profil, les routes, le Rust ↔ numpy **3,576e-07**, le lecteur qui refuse ce qu'il n'exécute pas) — le territoire N3 avance, je ne l'ai pas touché.
+- **Mes commits du jour** : `44fb939c` (l'AMP dans `entrainer_native`, exercé de bout en bout).
+- `HEAD b480a439`, **5 commits d'avance**, **pas encore poussés** (je pousse en fin de vague, et la session N3 est peut-être en train d'écrire).
+
+\## Ce que je fais maintenant
+
+Le **banc du 100 M** — le même protocole que les 11/21/34 M (20 prompts, 3 réglages, le contrôle aléatoire), pour répondre à la seule question qui compte : **les mots valides dépassent-ils 0,87, et la répétition reste-t-elle sous 15 ?** Si oui, l'échelle paie et le palier 1 est validé ; si non, le diagnostic du 16/11 tient.
+
+Le banc est en CPU (le 100 M y sera ~3× plus lent que le 34 M, donc ~45 min) — je le lance et je vous rends le verdict chiffré. **Rien n'est perdu** : le checkpoint (`work/n2ac/mix1024-100m.pt` + `.drvm`) et le JSON du run sont sur disque.
+
+### Tour 212 — go
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Banc du 100M sur GPU
+- bash — Suivre le banc du 100M
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11427,7 +11472,7 @@ Le **100 M** (d_model 640, 8 blocs, 96,7 M de paramètres) s'entraîne **beaucou
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3195 autres
+- … et 3199 autres
 
 ## 4. Mesures et résultats marquants
 

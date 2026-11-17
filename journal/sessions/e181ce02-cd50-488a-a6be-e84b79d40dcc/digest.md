@@ -70409,3 +70409,82 @@ Le **100 M** (d_model 640, 8 blocs, 96,7 M de paramètres) s'entraîne **beaucou
 
 **Je surveille le run et je fais le banc dès qu'il finit** (~12 h 20) ; je vous rends le verdict chiffré à ce moment-là. Si le 100 M dépasse le 34 M, le palier 1 est **validé** et il ne reste que la donnée ; sinon, la conclusion du 16/11 est confirmée et le plan ne change pas.
 
+
+## Tour 211
+
+### 👤 Utilisateur
+
+où en est-on
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== le 100M :\"; tail -4 /tmp/train-100m.log 2>/dev/null; ps aux | grep -c \"[e]ntrainer_native\"; nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv,noheader; echo \"=== git :\"; git log -1 --format=' … [340 caractères tronqués]`
+
+  ```
+mar 17 nov 2026 14:19:46 EST
+=== le 100M :
+ "drvm": "work/n2ac/mix1024-100m.drvm",
+ "sha256_drvm": "1011c1af0f3e311c6fbb8022d4b4bebbf821cd25de9ea9073f99c330ac65c178",
+ "duree_s": 879.9492771625519
+}
+0
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+=== git :
+HEAD b480a439 N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ N
+5
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2ac/mix1024-100m.pt work/n2ac/mix1024-100m.drvm 2>/dev/null | awk '{printf \"%.0f Mo %s\\n\", $5/1048576, $9}'; grep -E \"PPL val|pas 3000\" /tmp/train-100m.log 2>/dev/null | tail -2; echo \"=== les commits récents :\";  … [145 caractères tronqués]`
+
+  ```
+280 Mo work/n2ac/mix1024-100m.drvm
+280 Mo work/n2ac/mix1024-100m.pt
+pas 2950 · perte 1.5410 · PPL val 4.061 · 860 s
+pas 3000 · perte 1.4669 · PPL val 4.045 · 874 s
+=== les commits récents :
+b480a439 N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ NUMPY 3,576
+49904862 N3.8 — LES ROUTES SONT EXÉCUTÉES : SEUIL 0 = FLOU BIT-EXACT · SEUI
+337715d1 N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-
+20648db7 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e
+97579a55 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/t
+44fb939c GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), L
+6
+  ```
+
+### 🤖 Assistant
+
+⏵ Voici l'état, au 17/11 14 h 20
+
+## Le 100 M : entraîné, et le résultat est là
+
+Le run a **fini** (3 000 pas en **14,6 min**, 275 Mo, GPU à 99 %) :
+
+| modèle | pas | PPL val | jetons/paramètre |
+|---|---:|---:|---:|
+| 34 M (CPU, la référence du 16/11) | 30 000 | **2,40** | 7,2 |
+| **100 M (GPU, AMP)** | 3 000 | **4,04** | **0,24** |
+
+**La lecture honnête** : le 100 M n'est **pas comparable** — il a vu **30× moins de données** que le 34 M (0,24 contre 7,2 jetons/paramètre). Sa PPL de 4,04 n'est **pas un échec** : c'est un modèle à 12 % d'un entraînement. Le point **positif** : le 100 M tourne à **0,29 s/pas** (le 34 M en CPU : 0,44) — **l'échelle améliore l'efficacité GPU**, exactement ce que la fiche GPU prédisait.
+
+## Le reste de la machine
+
+- **5 commits d'une autre session** sont arrivés pendant la nuit (N3.7 → N3.9 : le moteur numpy exécute le profil, les routes, le Rust ↔ numpy **3,576e-07**, le lecteur qui refuse ce qu'il n'exécute pas) — le territoire N3 avance, je ne l'ai pas touché.
+- **Mes commits du jour** : `44fb939c` (l'AMP dans `entrainer_native`, exercé de bout en bout).
+- `HEAD b480a439`, **5 commits d'avance**, **pas encore poussés** (je pousse en fin de vague, et la session N3 est peut-être en train d'écrire).
+
+## Ce que je fais maintenant
+
+Le **banc du 100 M** — le même protocole que les 11/21/34 M (20 prompts, 3 réglages, le contrôle aléatoire), pour répondre à la seule question qui compte : **les mots valides dépassent-ils 0,87, et la répétition reste-t-elle sous 15 ?** Si oui, l'échelle paie et le palier 1 est validé ; si non, le diagnostic du 16/11 tient.
+
+Le banc est en CPU (le 100 M y sera ~3× plus lent que le 34 M, donc ~45 min) — je le lance et je vous rends le verdict chiffré. **Rien n'est perdu** : le checkpoint (`work/n2ac/mix1024-100m.pt` + `.drvm`) et le JSON du run sont sur disque.
+
+
+## Tour 212
+
+### 👤 Utilisateur
+
+go
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_generation.py'); t=p.read_text()\nt=t.replace('''def charger(chemin: str):\n    ck = torch.load(chemin, map_location=\"cpu\", weights_only=False)''','''def charger(chemin:  … [1357 caractères tronqués]`

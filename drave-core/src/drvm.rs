@@ -65,7 +65,7 @@ const CLES_REGION: &[&str] = &["id", "blocks"];
 const CLES_CONTRAT: &[&str] = &["version", "tolerance"];
 const CLES_ROUTE: &[&str] = &["id", "bloc", "si", "alors", "sinon"];
 const CLES_SI: &[&str] = &["kind", "seuil"];
-pub const IMPLS_CONNUES: &[&str] = &["defaut", "bloque", "flou"];
+pub const IMPLS_CONNUES: &[&str] = &["defaut", "bloque", "flou", "court"];
 
 fn cles_fermees(ou: &str, obj: &Json, connues: &[&str]) -> Result<(), ErreurDrvm> {
     match obj {

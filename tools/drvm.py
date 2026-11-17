@@ -62,7 +62,7 @@ CLES_SI = frozenset({"kind", "seuil"})
 #            ROUTAGE, pas à la substitution.
 # Le format connaît les trois ; chaque moteur refuse celles qu'il n'implémente
 # pas (le moteur numpy ne connaît que « defaut »).
-IMPLS_CONNUES = frozenset({"defaut", "bloque", "flou"})
+IMPLS_CONNUES = frozenset({"defaut", "bloque", "flou", "court"})
 IMPLS_MOTEUR_NUMPY = frozenset({"defaut", "bloque"})
 
 

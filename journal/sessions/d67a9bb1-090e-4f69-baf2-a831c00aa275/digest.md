@@ -4056,3 +4056,352 @@ exit=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md && git commit -F - <<'MSG' 2>&1 | tail -5\nN3.9 — LES DEUX MOTEURS RENDENT  … [1215 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 b480a439] N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ NUMPY 3,576e-07 (DEFAUT), 2,384e-07 (BLOQUE), COMPARATEUR NON VIDE À 5,790e-03
+ 13 files changed, 300 insertions(+), 25 deletions(-)
+ create mode 100644 reports/rapport-n3-moteurs.md
+ create mode 100755 tools/porte-n3-moteurs.sh
+---
+b480a439 N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ NUMPY 3,576e-07 (DEFAUT), 2,384e-07 (BLOQUE), COMPARATEUR NON VIDE À 5,790e-03
+49904862 N3.8 — LES ROUTES SONT EXÉCUTÉES : SEUIL 0 = FLOU BIT-EXACT · SEUIL 10^9 = DEFAUT BIT-EXACT · MIXTE 5,779e-03 / 1,132e-05 DÉTERMINISTE
+337715d1 N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-4, FLOU REFUSÉ
+20648db7 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)
+97579a55 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/têtes/pensée/pont ÉTAIENT DÉCLARÉS ET IGNORÉS EN SILENCE ; 10 REFUS NOMMÉS, LES DEUX LECTEURS D'ACCORD, 62 DRVM RELUS
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-5dc2d8bc-30fb-430b-a1ff-ca006c6729c1", "revision": 1}`
+
+> **Objectif** (complete) : Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence réelle — `flou` — doit être vue ; numpy refuse ce qu'il n'exécute pas ; deux exécutions identiques). Fiche `reports/`, compteurs et état à jour, commit, portes vertes.
+
+
+  ```
+{"goal":{"id":"goal-5dc2d8bc-30fb-430b-a1ff-ca006c6729c1","revision":2,"objective":"Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence réelle — `flou` — doit être vue ; numpy refuse ce qu'il n'exécute pas ; deux exécutions identiques). Fiche `reports/`, compteurs et état à jour, commit, portes vertes.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -8; echo \"=== dernières portes ===\"; tail -3 /tmp/passe-finale-n3.log; echo \"=== état ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2", "description": "Final working tree and state check"}`
+
+  ```
+M tools/chantier/plan.json
+=== dernières portes ===
+--- 24 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-13h51
+=== état ===
+  en-cours · 1699 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif des cinq commits et de l'état du chantier
+
+**Cinq commits, tous verts, tous mesurés.** Le chantier « variantes + routage » est passé d'une idée à un contrat exécuté.
+
+| commit | ce qui est établi | le chiffre |
+|---|---|---|
+| `97579a55` | le lecteur refuse ce qu'il n'exécute pas (clés fermées, deux lecteurs) | **13 refus nommés**, 62 DRVM relus |
+| `20648db7` | substitution = contrat : `impl` + `contrat` par bloc, indifférence mesurée | **4,768e-07** ≤ 1e-4 |
+| `337715d1` | le moteur numpy exécute `bloque` et refuse `flou` | **2,831e-07** |
+| `49904862` | **les routes sont exécutées** (seuil 0 / 10⁹ / mixte) | **bit-exact / bit-exact / 5,779e-03** |
+| `b480a439` | les deux moteurs rendent le même corps, gardé à chaque passe | **3,576e-07 / 2,384e-07** |
+
+**Ce que ça change dans le manifeste** — deux mécanismes, deux usages, désormais séparés :
+
+```json
+{"id":"b0","kind":"local_mixer","impl":"bloque","contrat":{"version":0,"tolerance":1e-4}}
+{"id":"r0","bloc":"b1","si":{"kind":"position","seuil":512},"alors":"flou","sinon":"defaut"}
+```
+`impl` = **substitution** (même fonction, autre algorithme → indifférence dans la tolérance). `routes` = **routage** (autre fonction, même signature → la substitution est interdite, et le test doit le dire). Le nom du profil est public (manifeste → hash → trace), l'algorithme est privé, et **chaque moteur refuse ce qu'il n'exécute pas**.
+
+**Trois portes nouvelles** (89 au total) : `porte-n3-variante`, `porte-n3-route`, `porte-n3-moteurs`. Toutes ont un contrôle négatif qui **doit échouer** : `flou` échoue l'indifférence (5,790e-03), le comparateur ne doit pas être aveugle, numpy refuse les routes. La porte des routes a d'ailleurs **trouvé un vrai bug** : l'indice de bloc venait de la position dans `graph.blocks` au lieu du `i` de `b{i}` — la route ne s'appliquait jamais. C'est le bit-exact qui l'a révélé.
+
+**Les limites, écrites dans les fiches** : un modèle, une graine, un pas ; `bloque` n'est **pas plus rapide** ici (0,98–0,99×) ; le coût du routage n'est pas chronométré ; et surtout, **la politique de routage reste une question ouverte** — R0.5 et R06 ont montré quatre fois qu'un seuil global ne transfère pas. La porte prouve le mécanisme, pas qu'il faut router.
+
+**Ce que je ferais ensuite, et pourquoi ce n'est plus du même chantier** : la suite n'est pas un mécanisme de plus, c'est une **politique** qui batte le choix fixe sur un banc (la condition nommée par R0.5 : calibration apprise par document, plusieurs centaines de paraphrases). Tant que ce banc n'existe pas, ajouter des profils serait de la mécanique sans mesure. Les murs mesurés de la roadmap restent A2.6 (experts) et N2 (épingler le corpus).
+
+Reproduire : `bash tools/porte-n3-variante.sh` · `bash tools/porte-n3-route.sh` · `bash tools/porte-n3-moteurs.sh` · `bash tools/porte-n3-refus.sh`
+
+Deux notes : la roue des portes passe **24/24** (n3 ×21 + produit + document + état) et la revue de documentation est verte (784 fiches, 89 portes, état 1 699 mots). Le test Rust rouge (`tests_vars::DRAVE_NATIVE_PROFONDEUR`) est **préexistant à HEAD** — il liste des variables lues sans déclaration, hors de ce diff. Le hook a balayé le journal de la session active dans les commits, et `tools/chantier/plan.json` reste non committé (session Pensée).
+
+
+## Tour 6
+
+### 👤 Utilisateur
+
+vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité … [263 caractères tronqués]`
+
+> **Objectif** (create) : Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, refuser le profil dans le moteur numpy, livrer la porte `porte-n3-court`, la fiche `reports/`, les compteurs et l'état, et committer. C'est le premier profil qui a un intérêt de COÛT : sans lui, aucun routage ne peut payer.
+
+
+  ```
+{"goal":{"id":"goal-95650b03-ffb8-4366-afb2-b5b085fe8265","revision":1,"objective":"Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, refuser le profil dans le moteur numpy, livrer la porte `porte-n3-court`, la fiche `reports/`, les compteurs et l'état, et committer. C'est le premier profil qui a un intérêt de COÛT : sans lui, aucun routage ne peut payer.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"drvm-native-ppl\\|drvm-ppl\" drave-core/src/main.rs | head -5; echo \"=== usage ===\"; sed -n '/--drvm-native-ppl/,+12p' drave-core/src/main.rs | head -16", "description": "Check the native perplexity command"}`
+
+  ```
+176:    if args[1] == "--drvm-native-ppl" {
+516:    if args[1] == "--drvm-ppl" {
+519:            None => { eprintln!("--drvm-ppl attend un fichier DRVM"); std::process::exit(2); }
+=== usage ===
+    if args[1] == "--drvm-native-ppl" {
+        let f = args.get(2).cloned().unwrap_or_default();
+        let mut texte = args.get(3).cloned().unwrap_or_else(|| "La France est un pays de la couche".into());
+        if let Some(f) = texte.strip_prefix('@') {
+            texte = std::fs::read_to_string(f).expect("fichier de texte illisible");
+        }
+        let limite: usize = args.get(4).and_then(|x| x.parse().ok()).unwrap_or(1024);
+        texte = texte.chars().take(limite).collect();
+        let d = drvm::Drvm::open(&f).expect("DRVM");
+        let nat = native::Native::open(&d).expect("natif");
+        let (p, n) = nat.perplexite(texte.as_bytes());
+        println!("PPL native {:.4} sur {} octets notés", p, n);
+        return;
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# format : un profil de plus\np = pathlib.Path('tools/drvm.py'); s = p.read_text()\nold = 'IMPLS_CONNUES = frozenset({\"defaut\", \"bloque\", \"flou\"})'\nnew = 'IMPLS_CONNUES = frozenset({\"defaut\" … [3173 caractères tronqués]`
+
+  ```
+ok
+build=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PY=/home/stephane/gpu-env/bin/python && $PY - <<'PY'\nimport sys, torch\nsys.path.insert(0,'.')\nfrom tools.native_model import NativeConfig, NativeModel, exporter_drvm\nbase = dict(vocab=256, d_model=32, n_blocks=2, n_heads=2, exper … [1446 caractères tronqués]`
+
+  ```
+export ok
+IDENTIQUES (problème)
+defaut  médiane   83.6 ms  (CV 4 %)
+court   médiane   55.9 ms  (CV 4 %)
+rapport court/defaut : 0.669×
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ./drave-core/target/release/drave --drvm-pas-hex /tmp/c-defaut.drvm \"abcdefghabcdefghabcdefghabcdefgh\" > /tmp/cr-defaut-long.txt && ./drave-core/target/release/drave --drvm-pas-hex /tmp/c-court.drvm \"abcdefghabcdefghabcdefghabcdef … [859 caractères tronqués]`
+
+  ```
+IDENTIQUES
+=== 128 octets ===
+DIFFÉRENTS (attendu)
+max|Δ| = 1.937e-02
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n2ac/mix1024-60k.drvm 2>/dev/null; python3 - <<'PY'\nimport sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\nwith read_drvm(\"work/n2ac/mix1024-60k.drvm\") as d:\n    a = d.manifest[\"model\"][\"architect … [301 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 137224476  3 nov 17:22 work/n2ac/mix1024-60k.drvm
+{'vocab': 256, 'd_model': 384, 'n_blocks': 6, 'n_heads': 4, 'window': 1024, 'expert_hidden': 512, 'n_experts': 8}
+blocs mixer : 6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport copy, sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import TensorSpec, read_drvm, write_drvm\nsrc = \"work/n2ac/mix1024-60k.drvm\"\nwith read_drvm(src) as d:\n    specs = [TensorSpec(t[\"name\"], bytes(d.te … [992 caractères tronqués]`
+
+  ```
+réécriture… 127 tenseurs
+ok /tmp/mix-court.drvm court
+=== PPL defaut ===
+PPL native 38.0766 sur 522 octets notés
+=== PPL court ===
+PPL native 36.9410 sur 522 octets notés
+[stderr]
+17.54 s
+18.18 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport statistics, subprocess, time\nD = \"./drave-core/target/release/drave\"\nprompt = \"abcdefgh\" * 128\nres = {\"defaut\": [], \"court\": []}\nfor _ in range(11):\n    for impl in (\"defaut\", \"court\"):\n     … [854 caractères tronqués]`
+
+  ```
+defaut  médiane   83.9 ms  min   78.0  CV 3 %
+court   médiane   56.1 ms  min   51.3  CV 3 %
+rapport médianes court/defaut : 0.669×
+=== 2e texte (PPL) ===
+PPL native 27.6780 sur 521 octets notés
+PPL native 28.5184 sur 521 octets notés
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte `court` (fenêtre, coût, non-substituabilité)
+
+- **write** `{"content": "#!/bin/bash\n# porte-n3-court.sh — N3.10 : le premier profil qui change le COÛT.\n#\n# LA QUESTION. `bloque` et `defaut` calculent la même fonction : substituables,\n# mais à coût égal. `flou` change la fonction à coût égal. Aucun des trois ne\n# donne à un ROUTAGE quelque chose à arbit … [5885 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-court.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-n3-court.sh && bash -n tools/porte-n3-court.sh && bash tools/porte-n3-court.sh 2>&1 | tail -14", "description": "Run the court gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. deux profils, même graine, fenêtre 256 ===
+  defaut  132720 paramètres
+  court   132720 paramètres
+=== 2. en deçà de la fenêtre courte : bit-exact (la fenêtre ne mord pas) ===
+  ✅ 32 octets : logits bit-exacts (seule la fenêtre diffère)
+=== 3. au-delà : non substituable (et le désaccord est mesuré) ===
+  1 024 octets : max|Δ| = 3.633e-02 > 0 → NON substituable
+=== 4. le coût : médiane de 11 passes alternées ===
+  defaut  médiane   80.8 ms  (CV 3 %)
+  court   médiane   56.0 ms  (CV 6 %)
+  rapport court / defaut : 0.694×
+=== 5. provenance et refus du moteur numpy ===
+  ✅ inspecteur : impl=court · numpy : court refusé (nommé)
+PORTE TENUE : en deçà de la fenêtre bit-exact · au-delà non substituable · 0,67× le temps sur une charge d'attention · numpy refuse court
+  ```
+
+- **write** `{"content": "# N3.10 — `court` : le premier profil qui change le coût\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ **N3.10 tenu** — `court`\n> (fenêtre d'attention divisée par quatre) est **bit-exact** en deçà de sa fenêtre, **non\n> substituable** au-delà (**3,633e-02**) … [3366 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep('| portes | **89** (dont ` … [2738 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 785 fiche(s) · 875 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1717 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  fiches ......... 24
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"n3 produit document etat\" DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-court.log 2>&1; echo \"exit=$?\"; tail -8 /tmp/passe-court.log", "description": "Run N3 suite and key gates with court", "timeoutMs": 1500000}`
+
+  ```
+exit=0
+  porte-n3-seuil         ✅                           6 s  PORTE TENUE : décision à seuil comptée · 0/1 aux extrêmes · mixte à 0,01 · déterministe
+  porte-n3-sparsite-compte ✅                           4 s  PORTE TENUE : compteurs réels · top_k agit sur les experts · kwta agit sur les canaux · A déterm
+  porte-n3-sparsite      ✅                           5 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+  porte-n3-variante      ✅                           6 s  PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance l
+  porte-produit          ✅                         167 s  ✅ porte produit verte
+--- 25 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-14h25
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/ | head -20; echo \"=== corpus candidats ===\"; ls work/n2ac 2>/dev/null | head -15; du -sh work/n2ac 2>/dev/null; find data -maxdepth 2 -name \"*.txt\" -o -maxdepth 2 -name \"*.jsonl\" 2>/dev/null | head -8", "description":  … [37 caractères tronqués]`
+
+  ```
+atomes_cohortes.py
+attente_portes.sh
+banc-performance
+chantier
+corpus-commun
+corpus-wiki-langues.log
+corpus-wiki.log
+corpus-wiki-reste.log
+dr
+entete-references.txt
+finaliser_ocr.py
+hub-nuit.md
+j32
+j71
+maj_references2.py
+maj_references3.py
+maj_references.py
+maj_table_seule.py
+msg-1335.txt
+msg-80-2.txt
+=== corpus candidats ===
+absolu-pos1152.drvm
+absolu-pos1152.log
+absolu-pos1152.pt
+absolu-pos1152.pt.json
+agrege_fenetre.py
+agrege_production.py
+agrege_r11.py
+cap-1147m-128.drvm
+cap-1147m-128.log
+cap-1147m-128.pt
+cap-1147m-128.pt.json
+cap-1147m-512.drvm
+cap-1147m-512.log
+cap-1147m-512.pt
+cap-1147m-512.pt.json
+8,3G	work/n2ac
+data/wikitext2_test.txt
+data/corpus_en_val.txt
+data/corpus_en.txt
+data/corpus_fr.txt
+data/corpus_mixte.txt
+data/corpus_fr_litterature.txt
+data/corpus_mixte_litt.txt
+data/corpus_mixte_litt2.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\nwith read_drvm(\"work/n2ac/mix1024-60k.drvm\") as d:\n    for t in d.manifest[\"tensors\"]:\n        if t[\"name\"] == \"pos.weight\":\n       … [413 caractères tronqués]`
+
+  ```
+pos.weight [2048, 384]
+tokenizer {'kind': 'bytes', 'vocab': 256}
+=== corpus mixte : 1024 chars ===
+1024 octets
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nt = pathlib.Path('data/corpus_mixte.txt').read_text(errors='replace')[:2048]\npathlib.Path('/tmp/txt-2048.txt').write_text(t)\nprint(len(t), 'octets')\"\necho \"=== PPL 1024 (in-distribution) ===\"; ./d … [545 caractères tronqués]`
+
+  ```
+2048 octets
+=== PPL 1024 (in-distribution) ===
+PPL native 22.9458 sur 1029 octets notés
+PPL native 22.9083 sur 1029 octets notés
+=== PPL 2048 (in-distribution) ===
+PPL native 23.7480 sur 2055 octets notés
+PPL native 23.5824 sur 2055 octets notés
+[stderr]
+
+real	1m13,904s
+user	1m13,649s
+sys	0m0,247s
+
+real	1m10,038s
+user	1m9,890s
+sys	0m0,139s
+  ```
+
+### 🤖 Assistant
+
+⏵ Mise à jour de la fiche avec la perplexité en distribution
+
+- **write** `{"content": "# N3.10 — `court` : le premier profil qui change le coût\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ **N3.10 tenu** — `court`\n> (fenêtre d'attention divisée par quatre) est **bit-exact** en deçà de sa fenêtre, **non\n> substituable** au-delà (**3,633e-02**) … [4021 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"`court` **bit-exact** < 64 o, **3,633e-02** au-delà, **0,694×** le temps (attention ~50 %) mais **rien** sur le 34 M (FFN dom … [610 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 785 fiche(s) · 875 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N3.7–N3.10 — variantes, routes, moteurs, coût** (17/11) :
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold_start = \"- **N3.7–N3.10 — variantes, routes, moteurs, coût** (17/11) :\"\nlines = s.split(\"\\n\")\nfor i, l in enumerate(li … [925 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1687 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapport-n3-court.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md && git commit -F  … [1456 caractères tronqués]`
