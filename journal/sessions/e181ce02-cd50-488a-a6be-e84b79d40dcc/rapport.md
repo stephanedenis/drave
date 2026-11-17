@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 383.7 h |
-| Tours | 208 |
-| Messages | 4343 |
-| Appels d'outils | 3893 |
+| Durée | 399.8 h |
+| Tours | 209 |
+| Messages | 4352 |
+| Appels d'outils | 3900 |
 | Fichiers touchés | 25 |
-| Commandes | 3223 |
+| Commandes | 3230 |
 | Sous-agents | 43 |
-| Commits | 519 |
+| Commits | 520 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -489,6 +489,8 @@
 **Tour 207** — <goal_round> Objective: "Autonomie du 2026-11-16 09 h 25 → 17 h 00 : trancher le diagnostic du MODÈLE NATIF — le banc de génération reproductible (20 prompts, le meilleur checkpoint, la cohérence mesurée, la vitesse), en installant torch CPU si le réseau le permet ou en écrivant une inférence numpy du DRVM sinon ; puis, selon le verdict, le levier le plus rentable (le tokenizer BPE, la mesure de c … [732 caractères tronqués]
 
 **Tour 208** — maintenant, étudie ce qui peut être optimisé avec nos 2 gpu en tandem nvlink vs cpu. peut-on décharger le cpu du gros de sa charge ou même plus?
+
+**Tour 209** — ok, j'ai fermé l'appli. la machine est toute à toi maintenant
 
 ## 2. Déroulé, étape par étape
 
@@ -11188,6 +11190,53 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - bash — Committer l'étude GPU
 - … et 8 autres
 
+**Synthèse produite :**
+
+⏵ L'étude est faite et mesurée — voici la réponse, en clair
+
+\## La réponse courte
+
+**Oui pour Drave, non pour le 34 M.** Les deux GPU (2 × Quadro RTX 5000, **NVLink 25,8 Go/s**, le P2P actif) **déchargent l'entraînement et le batch**, mais **pas la génération** du petit modèle : elle est bornée par la **bande passante mémoire**, pas par le CPU. Et **le « gros » de votre CPU n'est pas Drave** : c'est `vcam3d-studio` (10 cœurs) — un GPU pourrait le prendre, mais c'est votre application.
+
+\## Les mesures (faites aujourd'hui, sur la machine)
+
+| charge | CPU | GPU | gain |
+|---|---:|---:|---:|
+| **l'entraînement** du 34 M (8 × 1 024) | **5,2 s/pas** sous charge (0,44 à vide) | **0,416 s** (fp32) · **0,134 s** (fp16) | **×12,5** à **×39** |
+| **les 2 GPU en parallèle** (le tandem) | — | **0,136 s/pas** = **120 578 jetons/s** | **×77** vs CPU chargé |
+| **le préfill** (le batch) | ~1 500 jetons/s | **42 430 à 49 284 jetons/s** | **×12** |
+| **la génération** (1 octet) | 28 ms | 24 ms | **×1,2** |
+| **le cache KV** (mesuré) | 28 ms → **11 ms** | — | **×1,9** sur 16 octets, parité 3/3 |
+| **le NVLink** | — | **23,1 Go/s** (vs PCIe ~6–8) | ~3× le PCIe |
+| **l'échange des gradients** (137 Mo) | — | 7,3 ms | 5,5 % du pas |
+
+\## Pourquoi le 34 M n'utilise pas les GPU
+
+- **Le pas d'un jeton coûte 11 ms sur CPU et 11 ms de lancement sur GPU** : le modèle est trop petit, les noyaux dominent. Le GPU est **sous-utilisé** par le 34 M.
+- **La génération est memory-bound** : le CPU doit lire **136 Mo de poids** à ~12 Go/s (la DRAM) — d'où le cache KV qui ne fait que **×1,9**. Le GPU (448 Go/s) ne le débloque pas : son pas est déjà dominé par le lancement.
+- **Le vrai levier de la génération** : le **batch** (les requêtes simultanées) et les **CUDA graphs** (le lancement), pas le matériel seul.
+
+\## Ce qui se décharge — et ce que je recommande
+
+1. **L'entraînement → GPU** : le pas fp16 **×39** sous charge ; le palier 1 (100–150 M) sera **impossible en CPU** sous la charge actuelle. C'est la **condition**, pas l'option.
+2. **Le tandem → le palier 2** (300–600 M) : les 2 × 16 Go, le data-parallel (**×2** pour 5,5 % d'échange) ou le tensor-parallel ; le NVLink suffit.
+3. **Le préfill en lot → GPU** : ×12 pour les analyses massives (les 612 phrases, les 50 textes).
+4. **`vcam3d`** : s'il rend en GPU, le décharger libérerait **10 cœurs** — c'est votre code, pas le mien.
+5. **Le garde `hauru-gpu-guard` est inactif** : rien ne protège les GPU aujourd'hui ; le réactiver serait prudent (la
+… [490 caractères tronqués]
+
+### Tour 209 — ok, j'ai fermé l'appli. la machine est toute à toi maintenant
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Vérifier la charge et le device de l'entraînement
+- bash — Voir le script d'entraînement
+- bash — Ajouter l'AMP à l'entraînement
+- bash — Smoke test de l'AMP
+- bash — Smoke test avec PYTHONPATH
+- bash — Smoke test sans têtes précoces
+- bash — Committer l'AMP et le pas réel
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11308,7 +11357,7 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3183 autres
+- … et 3190 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -11975,4 +12024,5 @@ Le [quickstart](docs/produit/demarrage.md) et le [bilan final](reports/rapport-b
 - NATIF — LE BILAN FINAL (10 LIVRABLES) : LE DIAGNOSTIC, L'ÉCHELLE, LE RUNTIME SANS TORCH, L'ALERTE DE REPRODUCTIBILITÉ, LA PASSE" 2>&1 | tail -2; git log -1 --fo
 - ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST B
 - NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE CPU LIT 136 MO DE POIDS (MEMORY-BOUND), PAS PARCE QU'IL RECALCULE ; LE GPU EST
+- GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, 
 

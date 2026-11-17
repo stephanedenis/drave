@@ -74,6 +74,8 @@ def main() -> None:
                     help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
                     help="entraîner aussi les têtes précoces")
+    ap.add_argument("--amp", action="store_true",
+                    help="précision mixte fp16 sur GPU (autocast + GradScaler ; ×3 sur RTX 5000)")
     a = ap.parse_args()
     torch.manual_seed(a.graine)
     data = charger(a.corpus)
@@ -89,20 +91,26 @@ def main() -> None:
         modele.load_state_dict(ck["state"], strict=False)
         print(f"  init : {a.init}", flush=True)
     opt = torch.optim.AdamW(modele.parameters(), lr=a.lr, weight_decay=0.01)
+    amp = bool(a.amp) and str(a.device).startswith("cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=amp)
     t0 = time.time(); pertes = []
     for pas in range(1, a.pas + 1):
         modele.train()
         x, y, c = lot(train, a.lot, a.seq, a.device, pas * a.lot, canal_train)
         pos = random.randint(0, a.positions_aleatoires) if a.positions_aleatoires else 0
-        sortie = modele(x, pos_debut=pos, canal=c)
-        pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
-        if a.tetes:
-            for e in sortie["early"]:
-                pertes.append(F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)))
-        perte = sum(pertes) / len(pertes)
-        opt.zero_grad(); perte.backward()
+        with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
+            sortie = modele(x, pos_debut=pos, canal=c)
+            pertes = [F.cross_entropy(sortie["logits"].reshape(-1, 256), y.reshape(-1))]
+            if a.tetes:
+                for e in sortie["early"]:
+                    pertes.append(F.cross_entropy(e.reshape(-1, 256), y.reshape(-1)))
+            perte = sum(pertes) / len(pertes)
+        opt.zero_grad()
+        scaler.scale(perte).backward()
+        scaler.unscale_(opt)
         torch.nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
-        opt.step(); pertes.append(float(perte))
+        scaler.step(opt); scaler.update()
+        pertes.append(float(perte))
         if pas % 50 == 0 or pas == 1:
             p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2, canal=canal_val)
             print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)

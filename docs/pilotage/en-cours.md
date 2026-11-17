@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-16, 16 h 15 HNE (l'étude GPU + le cache KV mesuré ×1,9)**
+**Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré, le pas mesuré à 1 s — 2,4× le CPU nu, pas 39×)
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 

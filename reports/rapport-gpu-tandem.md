@@ -102,6 +102,23 @@ gain réel mais borné, et le GPU (448 Go/s) ne le débloque pas : son pas d'un 
 **24 ms, dominé par le lancement des noyaux** (11 ms à vide). Le vrai levier de la génération
 reste **le batch** (les requêtes simultanées) et **les CUDA graphs** (le lancement).
 
+## 4 ter. L'AMP en vrai — le pas réel (le 17/11, la machine libre)
+
+Le banc par cœur (`bench_gpu`) donnait 0,134 s/pas ; **le vrai pas d'entraînement** (le `lot`, le
+canal, les têtes, le backward complet) donne :
+
+| réglage | s/pas | le 34 M à 30 k pas |
+|---|---:|---:|
+| **`--amp --no-tetes`** | **1,0** | 8,3 h |
+| `--amp` (les 9 têtes précoces) | ~9 | ~75 h |
+| CPU nu (la référence) | 0,44 | 3,7 h |
+
+**La lecture honnête.** Le GPU **n'est pas 39× plus rapide** : le pas réel coûte **1 s** (2,4× le
+CPU nu *quand la machine est libre*), et **9 s** avec les têtes précoces — c'est **9 têtes × la
+perte + le backward** qui dominent. Le 34 M est **trop petit** pour que le GPU s'impose ; les
+0,134 s du banc ne comptaient ni les têtes ni le `lot`. **Le GPU devient le levier aux paliers
+suivants** (100 M+, où le CPU ne suit plus), pas sur le 34 M.
+
 ## 5. Les limites
 
 - **La règle 11** : les GPU sont **réservés à Drave** ; `vcam3d` n'en fait pas partie — le

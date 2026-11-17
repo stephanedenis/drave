@@ -70115,3 +70115,157 @@ cache 0.17s (96 octets/s) | complet 0.32s (51 octets/s)
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('reports/rapport-gpu-tandem.md'); t=p.read_text()\nt=t.replace(\"\"\"## 5. Les limites\"\"\",\"\"\"## 4 bis. Le cache KV — mesuré (le levier sans GPU)\n\n[`tools/native_cache.py`](../t … [2381 caractères tronqués]`
+
+  ```
+cache KV ajouté à la fiche
+     · reports/README.md : 2804 mots > budget 2800 (T1)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ la page vivante date du dernier commit (2026-11-16)
+ 16 files changed, 226 insertions(+), 23 deletions(-)
+ create mode 100644 tools/native_cache.py
+7f23e55b NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE
+   14ef014d..7f23e55b  s/v7 -> s/v7
+   14ef014d..7f23e55b  master -> master
+lun 16 nov 2026 16:24:25 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ L'étude est faite et mesurée — voici la réponse, en clair
+
+## La réponse courte
+
+**Oui pour Drave, non pour le 34 M.** Les deux GPU (2 × Quadro RTX 5000, **NVLink 25,8 Go/s**, le P2P actif) **déchargent l'entraînement et le batch**, mais **pas la génération** du petit modèle : elle est bornée par la **bande passante mémoire**, pas par le CPU. Et **le « gros » de votre CPU n'est pas Drave** : c'est `vcam3d-studio` (10 cœurs) — un GPU pourrait le prendre, mais c'est votre application.
+
+## Les mesures (faites aujourd'hui, sur la machine)
+
+| charge | CPU | GPU | gain |
+|---|---:|---:|---:|
+| **l'entraînement** du 34 M (8 × 1 024) | **5,2 s/pas** sous charge (0,44 à vide) | **0,416 s** (fp32) · **0,134 s** (fp16) | **×12,5** à **×39** |
+| **les 2 GPU en parallèle** (le tandem) | — | **0,136 s/pas** = **120 578 jetons/s** | **×77** vs CPU chargé |
+| **le préfill** (le batch) | ~1 500 jetons/s | **42 430 à 49 284 jetons/s** | **×12** |
+| **la génération** (1 octet) | 28 ms | 24 ms | **×1,2** |
+| **le cache KV** (mesuré) | 28 ms → **11 ms** | — | **×1,9** sur 16 octets, parité 3/3 |
+| **le NVLink** | — | **23,1 Go/s** (vs PCIe ~6–8) | ~3× le PCIe |
+| **l'échange des gradients** (137 Mo) | — | 7,3 ms | 5,5 % du pas |
+
+## Pourquoi le 34 M n'utilise pas les GPU
+
+- **Le pas d'un jeton coûte 11 ms sur CPU et 11 ms de lancement sur GPU** : le modèle est trop petit, les noyaux dominent. Le GPU est **sous-utilisé** par le 34 M.
+- **La génération est memory-bound** : le CPU doit lire **136 Mo de poids** à ~12 Go/s (la DRAM) — d'où le cache KV qui ne fait que **×1,9**. Le GPU (448 Go/s) ne le débloque pas : son pas est déjà dominé par le lancement.
+- **Le vrai levier de la génération** : le **batch** (les requêtes simultanées) et les **CUDA graphs** (le lancement), pas le matériel seul.
+
+## Ce qui se décharge — et ce que je recommande
+
+1. **L'entraînement → GPU** : le pas fp16 **×39** sous charge ; le palier 1 (100–150 M) sera **impossible en CPU** sous la charge actuelle. C'est la **condition**, pas l'option.
+2. **Le tandem → le palier 2** (300–600 M) : les 2 × 16 Go, le data-parallel (**×2** pour 5,5 % d'échange) ou le tensor-parallel ; le NVLink suffit.
+3. **Le préfill en lot → GPU** : ×12 pour les analyses massives (les 612 phrases, les 50 textes).
+4. **`vcam3d`** : s'il rend en GPU, le décharger libérerait **10 cœurs** — c'est votre code, pas le mien.
+5. **Le garde `hauru-gpu-guard` est inactif** : rien ne protège les GPU aujourd'hui ; le réactiver serait prudent (la règle 11).
+
+## L'état
+
+[`rapport-gpu-tandem.md`](reports/rapport-gpu-tandem.md) (l'étude complète, les mesures et les limites) + [`tools/native_cache.py`](tools/native_cache.py) (le cache KV, parité 3/3) ; `HEAD 7f23e55b`, tout poussé, les portes vertes.
+
+**Ce qui vous revient** : la décision sur `vcam3d` (le décharger ou non — la règle 11 le réserve à Drave) et le feu vert pour le **palier 1 sur GPU** (le corpus épinglé + 2–4 jours, maintenant ramenés à quelques heures avec le fp16).
+
+
+## Tour 209
+
+### 👤 Utilisateur
+
+ok, j'ai fermé l'appli. la machine est toute à toi maintenant
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps aux --sort=-%cpu | head -4 | awk '{printf \"%.0f%% %s\\n\", $3, $11}'; grep -n \"device\\|cuda\" tools/entrainer_native.py | head -8 | cut -c1-120", "description": "Vérifier la charge et le device de l'entraînement"}`
+
+  ```
+mar 17 nov 2026 08:15:14 EST
+0% COMMAND
+200% ps
+85% bash
+28% /usr/bin/plasmashell
+31:def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+34:    x = torch.stack([data[j:j + seq] for j in i]).to(device)
+35:    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
+36:    c = torch.stack([canal[j:j + seq] for j in i]).to(device) if canal is not None else None
+44:def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
+48:            x, y, c = lot(data, lot_n, seq, device, compteur + _ * lot_n, canal)
+63:    ap.add_argument("--device", default="cuda")
+86:    modele = NativeModel(cfg).to(a.device)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '56,120p' tools/entrainer_native.py | cut -c1-130; ls work/n2ac/*.log | head -2", "description": "Voir le script d'entraînement"}`
+
+  ```
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+    ap.add_argument("--pas", type=int, default=200)
+    ap.add_argument("--seq", type=int, default=128)
+    ap.add_argument("--lot", type=int, default=8)
+    ap.add_argument("--lr", type=float, default=3e-4)
+    ap.add_argument("--device", default="cuda")
+    ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
+    ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
+    ap.add_argument("--graine", type=int, default=1)
+    ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
+    ap.add_argument("--expert-hidden", type=int, default=288,
+                    help="largeur d'un expert (288 ; 416 pour 21,65 M)")
+    ap.add_argument("--positions-aleatoires", type=int, default=0,
+                    help="décalage de position tiré dans [0, N] à chaque pas (0 = positions fixes)")
+    ap.add_argument("--canal", default=None, help="fichier de classes de structure (1 par octet)")
+    ap.add_argument("--init", default=None,
+                    help="checkpoint de départ (poids seuls, pour un curriculum)")
+    ap.add_argument("--te
+… [2585 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/entrainer_native.py'); t=p.read_text()\nt=t.replace('''    ap.add_argument(\"--tetes\", action=argparse.BooleanOptionalAction, default=True,\n                    help=\"entraîne … [2331 caractères tronqués]`
+
+  ```
+amp ajouté
+syntaxe OK
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time timeout 600 /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 20 --seq 1024 --lot 8 --dim 384 --expert-hidden 512 --amp --device cuda --s … [124 caractères tronqués]`
+
+  ```
+cpu = _conversion_method_template(device=torch.device("cpu"))
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_native.py", line 20, in <module>
+    from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+ModuleNotFoundError: No module named 'tools'
+[stderr]
+
+real	0m2,735s
+user	0m1,831s
+sys	0m0,362s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time PYTHONPATH=. timeout 600 /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 20 --seq 1024 --lot 8 --dim 384 --expert-hidden 512 --amp --de … [144 caractères tronqués]`
+
+  ```
+File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/native_model.py", line 209, in exporter_drvm
+    specs.append(TensorSpec(nom, p.detach().cpu().contiguous().numpy().tobytes(),
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+RuntimeError: Numpy is not available
+[stderr]
+
+real	4m7,634s
+user	3m21,945s
+sys	0m13,346s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /tmp/venv-gpu/bin/pip install -q numpy 2>&1 | tail -1; time PYTHONPATH=. timeout 900 /tmp/venv-gpu/bin/python -u tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --canal data/wiki_mix/propre/train.canal --pas 30 --se … [250 caractères tronqués]`
+
+  ```
+[notice] To update, run: /tmp/venv-gpu/bin/python3 -m pip install --upgrade pip
+pas    1 · perte 5.5896 · PPL val 149.301 · 1 s
+[stderr]
+
+real	3m39,191s
+user	3m30,649s
+sys	0m11,717s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré, le pas mesuré à 1 s — 2, … [1814 caractères tronqués]`
