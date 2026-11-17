@@ -4513,3 +4513,127 @@ Journaux : work/portes-1117-14h39
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -4\nA5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'AC … [1350 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 24cb295e] A5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'ACCÈS AU RIG ET LE RTL, ET LA DÉCISION SE MESURE
+ 14 files changed, 232 insertions(+), 39 deletions(-)
+---
+24cb295e A5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'ACCÈS AU RIG ET LE RTL, ET LA DÉCISION SE MESURE
+ M tools/banc_generation.py
+ M tools/chantier/plan.json
+?? reports/banc-generation-100m.json
+  ```
+
+### 🤖 Assistant
+
+⏵ P1 : le banc scatter GPU qui décide du FPGA — vérification de la disponibilité GPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,name,memory.used,memory.total,utilization.gpu --format=csv 2>&1 | head -5; /home/stephane/gpu-env/bin/python -c \"import torch; print('torch', torch.__version__, 'cuda', torch.cuda.is_available(), torch.c … [110 caractères tronqués]`
+
+  ```
+index, name, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %
+1, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %
+torch 2.11.0+cu130 cuda True 2
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture du banc P1 (scatter GPU : atomiques vs bancs) et première mesure
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"bench/gpu_scatter.py — P1 : la dispersion GPU optimisée bat-elle la projection FPGA ?\n\nLA QUESTION. Le bilan multi-matériel mesure la dispersion GPU à **18,1 G év/s**\navec une primitive à atomiques (type `np.add.at`), et projette **19,3 G év/s**\npour 4  … [5302 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/gpu_scatter.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python bench/gpu_scatter.py --n 67108864 --sortie /tmp/gpu-scatter.json 2>&1 | tail -15", "description": "Run the P1 GPU scatter benchmark", "timeoutMs": 600000}`
+
+  ```
+carte : Quadro RTX 5000 · 15.6 Gio · 48 SM
+contrôle CPU (np.bincount) : écart maximal = 0
+  index_add         2.66 ms  →  25.22 G év/s
+  bancs_b1          2.69 ms  →  24.91 G év/s
+  bancs_b4          2.54 ms  →  26.40 G év/s
+  bancs_b16         2.47 ms  →  27.15 G év/s
+  bancs_b64         2.46 ms  →  27.31 G év/s
+  ✅ toutes les méthodes rendent le MÊME accumulateur (bit-exact)
+meilleur débit : 27.31 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+  écrit : /tmp/gpu-scatter.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for O in 1024 65536; do echo \"=== O=$O ===\"; /home/stephane/gpu-env/bin/python bench/gpu_scatter.py --n 67108864 --o $O 2>&1 | grep -E \"index_add|bancs_b|meilleur|contrôle\"; done; echo \"=== N=268M, O=4096 ===\"; /home/stephane/g … [227 caractères tronqués]`
+
+  ```
+=== O=1024 ===
+contrôle CPU (np.bincount) : écart maximal = 0
+  index_add         7.94 ms  →   8.45 G év/s
+  bancs_b1          7.90 ms  →   8.50 G év/s
+  bancs_b4          3.63 ms  →  18.49 G év/s
+  bancs_b16         2.48 ms  →  27.09 G év/s
+  bancs_b64         2.46 ms  →  27.32 G év/s
+meilleur débit : 27.32 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+=== O=65536 ===
+contrôle CPU (np.bincount) : écart maximal = 0
+  index_add         2.48 ms  →  27.03 G év/s
+  bancs_b1          2.49 ms  →  26.94 G év/s
+  bancs_b4          2.48 ms  →  27.10 G év/s
+  bancs_b16        24.79 ms  →   2.71 G év/s
+  bancs_b64        57.63 ms  →   1.16 G év/s
+meilleur débit : 27.10 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+=== N=268M, O=4096 ===
+contrôle CPU (np.bincount) : écart maximal = 0
+  index_add        10.47 ms  →  25.63 G év/s
+  bancs_b1         10.41 ms  →  25.79 G év/s
+  bancs_b16         9.17 ms  →  29.27 G év/s
+  bancs_b64         9.13 ms  →  29.41 G év/s
+meilleur débit : 29.41 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python bench/gpu_scatter.py --n 268435456 --o 4096 --bancs 1,4,16,64 --sortie reports/gpu-scatter.json 2>&1 | tail -10", "description": "Produce the canonical GPU scatter JSON", "timeoutMs": 900000}`
+
+  ```
+carte : Quadro RTX 5000 · 15.6 Gio · 48 SM
+contrôle CPU (np.bincount) : écart maximal = 0
+  index_add        10.47 ms  →  25.65 G év/s
+  bancs_b1         10.41 ms  →  25.79 G év/s
+  bancs_b4          9.20 ms  →  29.18 G év/s
+  bancs_b16         9.15 ms  →  29.34 G év/s
+  bancs_b64         9.14 ms  →  29.37 G év/s
+  ✅ toutes les méthodes rendent le MÊME accumulateur (bit-exact)
+meilleur débit : 29.37 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+  écrit : reports/gpu-scatter.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Fiche P1 : le GPU bat la projection FPGA, et la correction du chiffre 18,1
+
+- **write** `{"content": "# P1 — la dispersion GPU optimisée bat la projection FPGA\n\n> **Ligne de roadmap** : A5.4 (porte P1) · **Date** : 2026-11-17 · **Verdict** : ✅ **P1 tranché** —\n> la dispersion d'événements sur **une** Quadro RTX 5000 atteint **29,37 G év/s** avec des\n> accumulateurs par bancs (et **2 … [4208 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# A5.4 : P1 tranché\np = pathlib.Path('docs/pilotage/backlog/A5.4-fpga.md'); s = p.read_text()\nold = '''la vitesse ne change pas : sur le 0,5 B Q8, 4 cartes plafonnent à ~55 tok/s (DDR3-bound), quan … [3874 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 786 fiche(s) · 877 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1735 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md && git commit -F - <<'MSG' 2>&1 | tail -4\nP1 — LA DISPERSION  … [1545 caractères tronqués]`

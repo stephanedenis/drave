@@ -99,7 +99,7 @@
 |---|---|---|
 | portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **785** / **876** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **786** / **877** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **127** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 
@@ -130,7 +130,7 @@ externes** et la **prochaine action**.
 
 - **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
 - **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
-- **A5.4** : **4 cartes Stratix V + ring 40G + Ethernet dédiés** disponibles (17/11) → rouvrir ? **P1** (le GPU scatter bat-il 19,3 G év/s ?) et **P2** (le ring tient-il 4,8 Go/s ?) décident avant tout RTL ; [fiche](backlog/A5.4-fpga.md).
+- **A5.4** : 4 cartes + ring 40G disponibles (17/11) ; **P1 tranché** : la dispersion GPU fait **29,37 G év/s** > **19,3 G** projetés → le débit ne justifie pas le ring ; restent l'**énergie**, le **déterminisme**, la **démo** et **P2** (ring 4,8 Go/s) ; [fiche](backlog/A5.4-fpga.md), [P1](../../reports/rapport-gpu-scatter.md).
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la
   **restitution v1** : le miroir strict **ne monte pas** (0,1087), la forme canonique vaut
   **46/46** ; la **v3** sépare les cinq rôles (**18/18** au gold S) mais le gold v2

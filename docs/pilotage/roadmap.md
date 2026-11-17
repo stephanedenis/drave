@@ -488,7 +488,7 @@ Quand une ligne est bloquée (corpus, compte, matériel), on prend la suivante �
 |---|---|---|
 | B1.5 prose scientifique | aucun corpus parallèle humain d'articles FR/EN | un corpus (revue, actes, manuel) traduit par des humains |
 | A3.4 Colab | le compte et le runtime Colab | un compte (la recette est dans `docs/archive/colab-reparti.md`) |
-| A5.4 FPGA | l'accès au rig (4 cartes + ring 40G + Ethernet, à bringup) et le programme RTL | le diagnostic P0, puis P1 (GPU scatter) et P2 (ring) avant tout RTL ; le PE et le lecteur existent |
+| A5.4 FPGA | l'accès au rig (4 cartes + ring 40G + Ethernet, à bringup) et le programme RTL | **P1 tranché** (GPU 29,37 G > 19,3 G projetés : le débit ne justifie pas le ring) ; reste P0 (diagnostic du rig), P2 (ring 4,8 Go/s) et le RTL ; le PE et le lecteur existent |
 | A6.2 MoE local | aucun MoE local ne tient dans 16 Go de VRAM | un MoE qui tient, ou une machine plus grande |
 | B10.3 raisonnement sur `z` | le décodeur est sous le plancher chrF | une attention croisée, 20–30 articles, 3 graines |
 | R4.4 les scans | pas de **vérité humaine** sur les scans réels : trois vrais scans (Internet Archive) donnent des **accords**, pas des vérités | 10 pages **scannées** avec vérité humaine ; le fax 1 bit reste une limite d'information |

@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 4.8 h |
+| Durée | 4.9 h |
 | Tours | 6 |
-| Messages | 209 |
-| Appels d'outils | 233 |
-| Fichiers touchés | 20 |
-| Commandes | 144 |
+| Messages | 217 |
+| Appels d'outils | 241 |
+| Fichiers touchés | 22 |
+| Commandes | 150 |
 | Sous-agents | 0 |
-| Commits | 7 |
+| Commits | 8 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -276,7 +276,7 @@ Et le garde-fou
 
 ### Tour 6 — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*28 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the native perplexity command
@@ -292,11 +292,11 @@ Et le garde-fou
 - bash — Update counters and state for the court profile
 - bash — Run N3 suite and key gates with court
 - bash — Look for an in-distribution corpus
-- … et 14 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
-⏵ Consolidation du matériel FPGA (4 cartes + ring) dans la fiche A5.4 et l'état
+⏵ Fiche P1 : le GPU bat la projection FPGA, et la correction du chiffre 18,1
 
 ## 3. Travail accompli
 
@@ -324,6 +324,8 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-court.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md` | 2 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/gpu_scatter.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -367,7 +369,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 104 autres
+- … et 110 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -485,6 +487,13 @@ Et le garde-fou
 - **T6** `court   médiane   56.0 ms  (CV 6 %)`
 - **T6** `[s/v7 de967b7b] N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %`
 - **T6** `de967b7b N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %`
+- **T6** `0, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %`
+- **T6** `1, Quadro RTX 5000, 1 MiB, 16384 MiB, 0 %`
+- **T6** `index_add         2.66 ms  →  25.22 G év/s`
+- **T6** `bancs_b1          2.69 ms  →  24.91 G év/s`
+- **T6** `bancs_b4          2.54 ms  →  26.40 G év/s`
+- **T6** `bancs_b16         2.47 ms  →  27.15 G év/s`
+- … (tronqué)
 
 ## 5. Erreurs rencontrées
 
@@ -505,4 +514,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/ro
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapp
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commi
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog
 
