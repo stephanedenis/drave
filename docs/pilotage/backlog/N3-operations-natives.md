@@ -24,7 +24,12 @@
 > [`n3.5e-generation`](../../../reports/rapport-n3.5e-generation.md),
 > [`n3.5f-positions`](../../../reports/rapport-n3.5f-positions.md),
 > [`n3.6-service-briques`](../../../reports/rapport-n3.6-service-briques.md),
-> [`n3-inventaire`](../../../reports/rapport-n3-inventaire.md).
+> [`n3-inventaire`](../../../reports/rapport-n3-inventaire.md),
+> [`n3-variante`](../../../reports/rapport-n3-variante.md),
+> [`n3-route`](../../../reports/rapport-n3-route.md),
+> [`n3-moteurs`](../../../reports/rapport-n3-moteurs.md),
+> [`n3-court`](../../../reports/rapport-n3-court.md),
+> [`profils-modele`](../../../reports/rapport-profils-modele.md).
 > **Résumé** : les briques natives mesurées (k-WTA, routes, sortie précoce, pont, rejeu,
 > placement) doivent **tourner dans le moteur et être gardées par une porte**, pas rester
 > dans un outil.
@@ -86,7 +91,11 @@ fiche → JSON → porte complète, inventaire exécutable ([fiche](../../../rep
 2. ✅ profondeur routée, décision à seuil et pont dans le service (N3.2b0/b1, N3.6) ; le saut
    de calcul reste conditionnel (N3.2b2) ;
 3. ✅ une porte par brique (temps, perte, rejeu) — **17 portes vertes** le 04/11 11 h 32 ;
-4. ✅ k-WTA et routes : même traitement (`porte-n3-routes`, `porte-n3-sparsite`, `-compte`).
+4. ✅ k-WTA et routes : même traitement (`porte-n3-routes`, `porte-n3-sparsite`, `-compte`) ;
+5. ✅ **variantes, routes, moteurs, coût** (17/11) : `impl` + `contrat` (substitution **4,768e-07**
+   ≤ 1e-4), `graph.routes` **exécuté** (seuil 0 = `flou` bit-exact, 10⁹ = `defaut` bit-exact),
+   Rust ↔ numpy **2,980e-07** sur trois profils, `court` **0,694×** le temps — **22 portes**
+   (17 au 04/11).
 
 ## Voir aussi
 

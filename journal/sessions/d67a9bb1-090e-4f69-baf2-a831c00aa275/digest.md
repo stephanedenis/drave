@@ -5054,3 +5054,53 @@ Journaux : work/portes-1117-15h33
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/porte-n3-moteurs.sh tools/porte-n3-court.sh reports/rapport-n3-court.md reports/rapport-n3-moteurs.md docs/theorie/modele-natif.md docs/pilotage/en-cours.md && git commit -F - <<'MSG'  … [1142 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 7c219067] N3.10b — LE MOTEUR NUMPY EXÉCUTE `COURT` : PARITÉ RUST ↔ NUMPY 2,980e-07, FENÊTRE COURTE APPLIQUÉE
+ 19 files changed, 214 insertions(+), 62 deletions(-)
+7c219067 N3.10b — LE MOTEUR NUMPY EXÉCUTE `COURT` : PARITÉ RUST ↔ NUMPY 2,980e-07, FENÊTRE COURTE APPLIQUÉE
+ M tools/banc_generation.py
+ M tools/chantier/plan.json
+?? reports/banc-generation-100m.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' docs/pilotage/backlog/N3-operations-natives.md; echo \"...\"; sed -n '80,100p' docs/pilotage/backlog/N3-operations-natives.md", "description": "Read the N3 backlog fiche"}`
+
+  ```
+# N3 — Opérations natives : de la mesure à la production
+
+> **Statut** : mesurée · **Priorité** : P2 · **Programme** : N · **Dépend de** : N1
+> **Ligne de roadmap** : N3 · **Fiches de résultat** :
+> [`n4-porte-execution`](../../../reports/rapport-n4-porte-execution.md),
+> [`n4-dessin-b`](../../../reports/rapport-n4-dessin-b.md),
+> [`design-H`](../../../reports/rapport-design-H-profondeur-routee.md),
+> [`n3.1-etat`](../../../reports/rapport-n3.1-etat.md),
+> [`n3.2a-service`](../../../reports/rapport-n3.2a-service.md),
+> [`n3.3a-routes`](../../../reports/rapport-n3.3a-routes.md),
+> [`n3.2b0-profondeur`](../../../reports/rapport-n3.2b0-profondeur.md),
+> [`n3.3b-sparsite`](../../../reports/rapport-n3.3b-sparsite.md),
+> [`n3.3c-compte`](../../../reports/rapport-n3.3c-sparsite-compte.md),
+> [`n3.4a-composition`](../../../reports/rapport-n3.4a-composition.md),
+> [`n3.2b1-seuil`](../../../reports/rapport-n3.2b1-seuil.md),
+> [`n3.2b2-cache`](../../../reports/rapport-n3.2b2-cache.md),
+> [`n3.4b-pont`](../../../reports/rapport-n3.4b-pont.md),
+> [`n3.4c-placement`](../../../reports/rapport-n3.4c-placement.md),
+> [`n3.4d-couverture`](../../../reports/rapport-n3.4d-couverture.md),
+> [`n3.5a-deux
+… [1800 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/backlog/N3-operations-natives.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"> [ … [1480 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 787 fiche(s) · 878 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1750 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nN3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS\n\nLa ligne N3 était restée à 17 portes (04 … [746 caractères tronqués]`
