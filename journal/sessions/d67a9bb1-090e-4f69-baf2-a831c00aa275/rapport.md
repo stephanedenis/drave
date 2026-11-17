@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 4.7 h |
+| Durée | 4.8 h |
 | Tours | 6 |
-| Messages | 202 |
-| Appels d'outils | 225 |
-| Fichiers touchés | 19 |
-| Commandes | 138 |
+| Messages | 209 |
+| Appels d'outils | 233 |
+| Fichiers touchés | 20 |
+| Commandes | 144 |
 | Sous-agents | 0 |
-| Commits | 6 |
+| Commits | 7 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -32,6 +32,8 @@
 - **complete** — Livrer `porte-n3-moteurs` : prouver que les deux moteurs du même manifeste DRVM (Rust `native.rs` et numpy `drvm_infere.py`) rendent les mêmes logits dans la tolérance déclarée, pour les profils `defaut` et `bloque`, avec les contrôles négatifs qui rendent le comparateur non vide (une différence rée
 … [164 caractères tronqués]
 - **create** — Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, re
+… [221 caractères tronqués]
+- **complete** — Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, re
 … [221 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -274,7 +276,7 @@ Et le garde-fou
 
 ### Tour 6 — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*20 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the native perplexity command
@@ -290,11 +292,11 @@ Et le garde-fou
 - bash — Update counters and state for the court profile
 - bash — Run N3 suite and key gates with court
 - bash — Look for an in-distribution corpus
-- … et 6 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
-⏵ Mise à jour de la fiche avec la perplexité en distribution
+⏵ Consolidation du matériel FPGA (4 cartes + ring) dans la fiche A5.4 et l'état
 
 ## 3. Travail accompli
 
@@ -321,6 +323,7 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-moteurs.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-court.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-court.md` | 2 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -364,7 +367,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 98 autres
+- … et 104 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -480,6 +483,8 @@ Et le garde-fou
 - **T6** `court   médiane   56.1 ms  min   51.3  CV 3 %`
 - **T6** `defaut  médiane   80.8 ms  (CV 3 %)`
 - **T6** `court   médiane   56.0 ms  (CV 6 %)`
+- **T6** `[s/v7 de967b7b] N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %`
+- **T6** `de967b7b N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %`
 
 ## 5. Erreurs rencontrées
 
@@ -499,4 +504,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_in
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-n3-moteurs.sh reports/rapport-n3-moteurs.md docs/pilotage/en-cours.md docs/pilotage/ro
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapp
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commi
 

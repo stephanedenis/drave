@@ -70488,3 +70488,23 @@ Le banc est en CPU (le 100 M y sera ~3× plus lent que le 34 M, donc ~45 min) �
 go
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('tools/banc_generation.py'); t=p.read_text()\nt=t.replace('''def charger(chemin: str):\n    ck = torch.load(chemin, map_location=\"cpu\", weights_only=False)''','''def charger(chemin:  … [1357 caractères tronqués]`
+
+  ```
+device ajouté
+syntaxe OK
+PID 3628395
+mar 17 nov 2026 14:36:36 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 180; date; tail -4 /tmp/banc-100m.log 2>/dev/null; ps aux | grep -c \"[b]anc_generation\"", "description": "Suivre le banc du 100M", "timeoutMs": 300000}`
+
+  ```
+mar 17 nov 2026 14:39:44 EST
+écrit : reports/banc-generation-100m.json
+greedy       mots_valides=0.882 distinct_2=0.753 repetition=6 echo=0.03 octets/s=124.4
+top40_0.8    mots_valides=0.587 distinct_2=0.997 repetition=1 echo=0.01 octets/s=122.3
+top20_0.5    mots_valides=0.653 distinct_2=0.986 repetition=2 echo=0.03 octets/s=123.4
+0
+[exit code: 1]
+  ```
+

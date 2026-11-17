@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,20 +12,22 @@
 | 13:31 | `337715d1` | N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-4, FLOU REFUSÉ | `en-cours.md`, `modele-natif.md`, `README.md` (+13) |
 | 13:47 | `49904862` | N3.8 — LES ROUTES SONT EXÉCUTÉES : SEUIL 0 = FLOU BIT-EXACT · SEUIL 10^9 = DEFAUT BIT-EXACT · MIXTE 5,779e-03 / 1,132e-05 DÉTERMINISTE | `en-cours.md`, `references-non-regression.md`, `roadmap.md` (+18) |
 | 13:56 | `b480a439` | N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ NUMPY 3,576e-07 (DEFAUT), 2,384e-07 (BLOQUE), COMPARATEUR NON VIDE À 5,790e-03 | `en-cours.md`, `references-non-regression.md`, `roadmap.md` (+10) |
+| 14:35 | `de967b7b` | N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 % | `en-cours.md`, `references-non-regression.md`, `roadmap.md` (+15) |
 
 ## Chiffres du jour
 
-`86,4 ms`
+`5 %` · `0,694` · `23,7480` · `23,5824` · `86,4 ms`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 4.7 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
-- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 405.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 4.8 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 406.0 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-n3-court.md](../../reports/rapport-n3-court.md)
 - [reports/rapport-n3-moteurs.md](../../reports/rapport-n3-moteurs.md)
 - [reports/rapport-n3-route.md](../../reports/rapport-n3-route.md)
 - [reports/rapport-n3-variante.md](../../reports/rapport-n3-variante.md)

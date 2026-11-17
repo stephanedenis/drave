@@ -4405,3 +4405,111 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs tools/porte-n3-court.sh reports/rapport-n3-court.md docs/pilotage/en-cours.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md && git commit -F  … [1456 caractères tronqués]`
+
+  ```
+[s/v7 de967b7b] N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %
+ 18 files changed, 783 insertions(+), 45 deletions(-)
+ create mode 100644 reports/rapport-n3-court.md
+ create mode 100755 tools/porte-n3-court.sh
+---
+de967b7b N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-95650b03-ffb8-4366-afb2-b5b085fe8265", "revision": 1}`
+
+> **Objectif** (complete) : Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, refuser le profil dans le moteur numpy, livrer la porte `porte-n3-court`, la fiche `reports/`, les compteurs et l'état, et committer. C'est le premier profil qui a un intérêt de COÛT : sans lui, aucun routage ne peut payer.
+
+
+  ```
+{"goal":{"id":"goal-95650b03-ffb8-4366-afb2-b5b085fe8265","revision":2,"objective":"Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, refuser le profil dans le moteur numpy, livrer la porte `porte-n3-court`, la fiche `reports/`, les compteurs et l'état, et committer. C'est le premier profil qui a un intérêt de COÛT : sans lui, aucun routage ne peut payer.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Bloqué par\\|Statut\\|def lire_fiche\\|re\\.compile\" tools/verifie_backlog.py | head -15; echo \"=== fiche ===\"; sed -n '1,12p' docs/pilotage/backlog/A5.4-fpga.md", "description": "Check the backlog parser before editing  … [6 caractères tronqués]`
+
+  ```
+119:            "statut": c.get("Statut", ""),
+128:            "bloque": c.get("Bloqué par", ""),
+=== fiche ===
+# A5.4 — Opérateur FPGA complet
+
+> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A5 · **Bloqué par** : la carte Stratix V
+> **Ligne de roadmap** : A5.4 · **Fiche de résultat attendue** : rapport-a54-fpga.md (à créer dans `reports/`)
+> **Résumé** : Exécuter un opérateur complet sur FPGA, alimenté par le même format de flux.
+> **Glossaire** : [FPGA](../../theorie/glossaire/entrees/fpga.md) · [PE](../../theorie/glossaire/entrees/pe.md) · [événement](../../theorie/glossaire/entrees/evenement.md).
+
+## Le besoin
+
+Le PE événementiel et le lecteur DDR3 existent et sont vérifiés ; il manque l'accès au matériel Stratix V.
+
+## L'état
+  ```
+
+### 🤖 Assistant
+
+⏵ Consolidation du matériel FPGA (4 cartes + ring) dans la fiche A5.4 et l'état
+
+- **write** `{"content": "# A5.4 — Opérateur FPGA complet\n\n> **Statut** : bloquée · **Priorité** : P3 · **Programme** : A · **Dépend de** : A5 · **Bloqué par** : l'accès au rig (4 cartes + ring 40G + Ethernet dédiés, à bringup) et le programme RTL\n> **Ligne de roadmap** : A5.4 · **Fiche de résultat attendue** … [3357 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nold = '| A5.4 FPGA | l\\'accès au matériel Stratix V | la carte (le design existe) |'\nnew = '| A5.4 FPGA | l\\'accès au rig (4 cartes … [1146 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1728 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ❌ 2 anomalie(s) :
+     · compteurs : en-cours.md dit 875 JSON, le disque en a 876
+     · annotation : docs/pilotage/backlog/A5.4-fpga.md → ../../../FPGA-Stratix-V/docs/multicartes.md (cassé)
+  profondeur 5 : R01 → R02 → R03 → R31 → R32 → R51
+  frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lt reports/*.json | head -5; echo \"=== git status reports ===\"; git status --short reports/ | head -5; echo \"=== lien sibling existant ===\"; grep -rn \"FPGA-Stratix-V\" docs/ --include=*.md | grep -v A5.4 | head -3", "descrip … [62 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane   19805 17 nov 14:37 reports/banc-generation-100m.json
+-rw-r--r--. 1 stephane stephane    1038 16 nov 15:04 reports/banc-grammaticalite-echelle.json
+-rw-r--r--. 1 stephane stephane     360 16 nov 12:37 reports/banc-perplexite-gold.json
+-rw-r--r--. 1 stephane stephane   23993 16 nov 11:51 reports/banc-generation-21m.json
+-rw-r--r--. 1 stephane stephane   23390 16 nov 11:51 reports/banc-generation-11m.json
+=== git status reports ===
+?? reports/banc-generation-100m.json
+=== lien sibling existant ===
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/backlog/A5.4-fpga.md'); s = p.read_text()\nold = '[multicartes](../../../FPGA-Stratix-V/docs/multicartes.md) §3'\nnew = 'le doc `multicartes` du dépôt `FPGA-Stratix-V` … [593 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 785 fiche(s) · 876 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1728 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_backlog.py 2>&1 | tail -3; PORTES=\"document etat\" DELAI=600 tools/toutes-les-portes.sh 2>&1 | tail -6", "description": "Verify backlog graph and documentation gates", "timeoutMs": 900000}`
+
+  ```
+frontière (3) : A2.6, N2, N4
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+    journaux : work/portes-1117-14h39
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+--- 2 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-14h39
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -4\nA5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'AC … [1350 caractères tronqués]`

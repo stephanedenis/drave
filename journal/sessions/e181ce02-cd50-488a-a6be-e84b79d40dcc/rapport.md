@@ -7,9 +7,9 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 405.9 h |
+| Durée | 406.0 h |
 | Tours | 212 |
-| Messages | 4369 |
+| Messages | 4370 |
 | Appels d'outils | 3910 |
 | Fichiers touchés | 25 |
 | Commandes | 3239 |
@@ -11352,6 +11352,33 @@ Le banc est en CPU (le 100 M y sera ~3× plus lent que le 34 M, donc ~45 min) �
 - bash — Banc du 100M sur GPU
 - bash — Suivre le banc du 100M
 
+**Synthèse produite :**
+
+⏵ **Résultat majeur** : le 100 M à 3 000 pas bat déjà le 34 M à 30 000 — et la répétition est divisée par 2,5
+
+\## Le banc du 100 M (3 000 pas, 0,24 jeton/paramètre)
+
+| modèle | mots valides (greedy) | **répétition** | octets/s |
+|---|---:|---:|---:|
+| 34 M (30 000 pas, 7,2 j/p) | 0,870 | **15** | 36 (CPU) |
+| **100 M (3 000 pas, 0,24 j/p)** | **0,882** | **6** | **124 (GPU)** |
+
+**La lecture.** Le 100 M, avec **30× moins de données vues**, fait **mieux que le 34 M** sur les mots (0,882 contre 0,870) et **réduit la répétition de 2,5×** (6 contre 15). Sur le même nombre de jetons, il est donc **~10× plus efficace** — c'est la réponse à la question du 16/11 : **l'échelle paie**, et elle paie surtout sur **la dérive** (le défaut n°1 du 34 M).
+
+Les réglages échantillonnés (top-40 : 0,587 ; top-20 : 0,653) restent en dessous du greedy — la même signature que le 34 M.
+
+\## La décision
+
+Je lance le **30 000 pas** du 100 M (**~2,4 h** sur le GPU) — c'est le premier entraînement complet d'un modèle qui a déjà prouvé qu'il apprenait mieux par jeton. À la fin : le banc de comparaison (mots, répétition, GV) et la PPL — le verdict du palier 1.
+
+\## Ce qui est dans le dépôt
+
+- Le banc et son JSON : `reports/banc-generation-100m.json` (le `--device` ajouté à `banc_generation.py` pour le GPU).
+- Le checkpoint : `work/n2ac/mix1024-100m.pt` + `.drvm` (275 Mo, exportés).
+- **Rien n'est poussé encore** : 5 commits d'avance (dont 4 d'une autre session, N3.7–N3.9) — je pousserai en fin de vague, pour ne pas télescoper la session N3.
+
+Je lance le 30 k et je surveille.
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11600,7 +11627,7 @@ Le banc est en CPU (le 100 M y sera ~3× plus lent que le 34 M, donc ~45 min) �
 
 ## 5. Erreurs rencontrées
 
-92 sorties en erreur ou divergentes. Les premières :
+93 sorties en erreur ou divergentes. Les premières :
 
 - **T6** : === PID 6207    6207 sam oct 31 17:17:42 2026 pts/0       18:36:13 node /home/stephane/.local/share/../bin/dsh --profile dsh-tui === PID 7237    7237 sam oct 31 17:18:50 2026 pts/3       18:35:05 node
 - **T8** : -rw-------. 1 stephane stephane 9488 31 oct 18:02 /tmp/svgkit.py [exit code: 2]

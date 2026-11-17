@@ -99,7 +99,7 @@
 |---|---|---|
 | portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **785** / **875** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **785** / **876** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **127** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
 
@@ -110,7 +110,7 @@ externes** et la **prochaine action**.
 
 | chantier | frontière (graphe) | bloquant (ressource) | prochaine action |
 |---|---|---|---|
-| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 FPGA ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
+| **A — le moteur** | **A2.6** | A3.4 Colab ; A5.4 rig+ring ; **A6.2 libre** (MoE 18,56 Go, PPL 37,2013 ; résidence 16 GiB) | **A2.6** (experts et tête) ; **A6.2** rapport + A8.3b2 |
 | **B — l'intelligence** | **B13** | B1.5 corpus ; B10.3 bloqué ; **B13 : 183/183, F1 0,7902, 238/239, schéma v2, restit v1, produit T1–T6 ; U1 : α 1,08, 10 000 mots 0,82 s ; U2 : roue 1 727 201 o, mêmes JSON, sans gold → evaluer 4 ; U3 : profils 398 langues, 20/20, ambigu und ; V2 : exemples 27/27, 3 blocs corrigés ; V1 : --strict 0,8625/0,8891 ; V3 : clôture, tag** | **`g017` tranché** ; **J4** ; T132/T133, **[gold 452](../../reports/rapport-gold-452.md)** ; **B10.3 bloquée** |
 | **N — le natif** | **N2, N4** | N2 : **1 024 — 2,3911 / 2,3522** ; porte 2,7856 ; **[v2](../../reports/rapport-coordination-n2-v2.md)** ; **N4 tranché** — le banc (0,87, répétition 15), l'échelle (le vocabulaire seul), **la numpy (4/4)**, **le 2,40 non reproductible** ([alerte](../../reports/rapport-native-reproductibilite.md)) ; N5 gelé | **épingler le corpus** ([le plan](../../docs/pilotage/natif-plan.md)) ; la porte propre |
 | **R — le lecteur** | **R0.7** | **R0.7 — tagger 612 0,9575 ; réel 452 0,9500 ; W2 402 0,9643, H50 0,8607 ; W3 défaut hors ligne, pointe ; X3 : lot 1 000, 672 appels, 99 971 tokens, 0,02177 $ ; W5 : restitution v3, 20/46 (F1 0,5406), gold S 144/144, `--roles-v3` opt-in ; W6 : [rapport semaine 2](../../reports/rapport-semaine-2.md), tag `semaine-2-2026-11-20` sur `73edb3dd` ; Y1 : `--tagger auto` prototype (clé présente API 0/130 tokens ; invalide 0 ; sans clé 0 identique au défaut ; réseau coupé 0 après 3 essais ; défaut inchangé) ; **V3 : clôture, tag** ; R2/R3 attendent N5/N4 | **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; **[fiche W3](../../reports/rapport-tagger-defaut.md)**, **[fiche Y1](../../reports/rapport-tagger-auto.md)**, **[fiche X3](../../reports/rapport-tagger-lot.md)**, **[fiche W5](../../reports/rapport-restitution-v3.md)**, **[rapport W6](../../reports/rapport-semaine-2.md)** |
@@ -130,6 +130,7 @@ externes** et la **prochaine action**.
 
 - **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
 - **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
+- **A5.4** : **4 cartes Stratix V + ring 40G + Ethernet dédiés** disponibles (17/11) → rouvrir ? **P1** (le GPU scatter bat-il 19,3 G év/s ?) et **P2** (le ring tient-il 4,8 Go/s ?) décident avant tout RTL ; [fiche](backlog/A5.4-fpga.md).
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la
   **restitution v1** : le miroir strict **ne monte pas** (0,1087), la forme canonique vaut
   **46/46** ; la **v3** sépare les cinq rôles (**18/18** au gold S) mais le gold v2
