@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 5.5 h |
+| Durée | 5.6 h |
 | Tours | 7 |
-| Messages | 229 |
-| Appels d'outils | 251 |
-| Fichiers touchés | 22 |
-| Commandes | 158 |
+| Messages | 235 |
+| Appels d'outils | 257 |
+| Fichiers touchés | 24 |
+| Commandes | 162 |
 | Sous-agents | 0 |
-| Commits | 9 |
+| Commits | 10 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -321,7 +321,7 @@ Et le garde-fou
 
 ### Tour 7 — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
 
-*10 appels d'outils.* Actions notables :
+*16 appels d'outils.* Actions notables :
 
 - bash — Read the env-var completeness test
 - bash — Read VARS_LUES and the source() helper
@@ -333,10 +333,15 @@ Et le garde-fou
 - bash — Run the Rust tests after the vars fix
 - bash — Fix the comment reference and re-run tests
 - bash — Commit the env-var test fix
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/drvm_profils.py`
+- bash — Simplify the profile bench loop
+- bash — Run the profile bench on the trained model
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md`
+- … et 2 autres
 
 **Synthèse produite :**
 
-⏵ Correction du test rouge préexistant (`VARS_LUES`) avant d'attaquer un banc
+⏵ Banc des profils sur le modèle entraîné (perplexité et temps)
 
 ## 3. Travail accompli
 
@@ -366,6 +371,8 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/backlog/A5.4-fpga.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/gpu_scatter.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/drvm_profils.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -409,7 +416,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 118 autres
+- … et 122 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -556,4 +563,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A5.4-fpga.md docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commi
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter.md reports/gpu-scatter.json docs/pilotage/backlog
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('drave-core/src/main.rs'); s = p.read_text() old = "    /
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/drvm_profils.py reports/rapport-profils-modele.md reports/profils-34m.json docs/pilotage/en-
 

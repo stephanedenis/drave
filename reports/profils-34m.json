@@ -1,0 +1,33 @@
+{
+ "schema": "drave.profils-modele",
+ "version": 1,
+ "drvm": "work/n2ac/mix1024-60k.drvm",
+ "texte": "/tmp/txt-2048.txt",
+ "limite": 2048,
+ "resultats": {
+  "defaut": {
+   "ppl": 23.748,
+   "octets": 2055,
+   "s": 74.26835014508106,
+   "delta_pct": 0.0
+  },
+  "bloque": {
+   "ppl": 23.7585,
+   "octets": 2055,
+   "s": 61.564405233832076,
+   "delta_pct": 0.04421424962102183
+  },
+  "flou": {
+   "ppl": 24.2443,
+   "octets": 2055,
+   "s": 76.9406501648482,
+   "delta_pct": 2.089860198753568
+  },
+  "court": {
+   "ppl": 23.5824,
+   "octets": 2055,
+   "s": 69.62402694206685,
+   "delta_pct": -0.6973218797372449
+  }
+ }
+}

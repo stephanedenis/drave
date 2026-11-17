@@ -7,9 +7,9 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 406.7 h |
-| Tours | 213 |
-| Messages | 4375 |
+| Durée | 406.8 h |
+| Tours | 214 |
+| Messages | 4377 |
 | Appels d'outils | 3913 |
 | Fichiers touchés | 25 |
 | Commandes | 3242 |
@@ -499,6 +499,8 @@
 **Tour 212** — go
 
 **Tour 213** — où en est-on
+
+**Tour 214** — je ne cherche pas à publier (sauf commit et push), mais bien avoir un système utilisable au quotidien
 
 ## 2. Déroulé, étape par étape
 
@@ -11418,6 +11420,34 @@ Le **100 M à 3 000 pas** (0,24 jeton/paramètre) **bat le 34 M à 30 000 pas** 
 2. Ou, si vous préférez ne pas attendre : le **3 000 pas est déjà un résultat publiable** (le checkpoint et le banc sont sur disque) — je peux écrire la fiche du « palier 1 validé à 12 % » et laisser le 30 k pour la prochaine session.
 
 Dites-moi lequel des deux — je penche pour le 1 (le 30 k donne la PPL comparable au 2,40 du 34 M, donc le verdict complet), mais il dépend du GPU.
+
+### Tour 214 — je ne cherche pas à publier (sauf commit et push), mais bien avoir un système utilisable au quotidien
+
+**Synthèse produite :**
+
+⏵ Compris — on vise l'usage quotidien, pas la publication. Voici ce qui manque vraiment, et je m'y mets
+
+\## Ce que « utilisable au quotidien » veut dire ici
+
+Le produit `drave` sait déjà **analyser un texte** (POS 86,25 %, F1 79 %, attachement 238/239) et **s'installer** (`pip install -e .`, le quickstart 3/3). Ce qui manque pour l'usage **quotidien**, ce n'est pas la recherche — c'est la **friction** :
+
+| la friction | l'état | ce qu'il faut |
+|---|---|---|
+| **la qualité du POS** | 86 % par défaut | **`--tagger` à 95 %** — mais il faut la clé et le réseau ; le rendre **auto** (la clé existe → tagger, sinon heuristique, sans changer le code de sortie) |
+| **le service** | un CLI, un fichier à la fois | une **commande qui prend un répertoire** et sort les JSON (le lot) |
+| **la sortie exploitable** | le JSON v2 (les candidats objets, les rôles normalisés) | un **mode texte** lisible et un **mode JSON** stable — déjà là, à vérifier sur vos textes |
+| **la vitesse** | 0,82 s / 10 000 mots (le GPU ne sert pas ici) | rien à faire — c'est le bon ordre de grandeur |
+| **les erreurs** | codes 0/1/3/4/5 | documenté, testé |
+
+\## Ce que je fais maintenant (concret, pas de la recherche)
+
+1. **Le tagger `auto` par défaut** : si la clé existe, `drave analyser` utilise le tagger (95 %) ; sinon l'heuristique — **sans changer le code de sortie**, le hors-ligne reste garanti. C'est le gain de qualité le plus direct pour l'usage quotidien.
+2. **Le mode répertoire** : `drave analyser --repertoire corpus/ --jsonl` — analyser un dossier en une commande (le lot).
+3. **Le test sur vos textes** : je prends un texte réel (le corpus du dépôt) et je vérifie la sortie, le temps, les erreurs — le « ça marche ou pas » de l'usage quotidien.
+
+Le 30 k du 100 M, je le mets de côté : il ne rend pas le système plus **utilisable**, il rend le natif plus **étudié**. Si vous voulez les deux, dites-le, mais je priorise le quotidien.
+
+Je commence par le `auto` par défaut et le mode répertoire.
 
 ## 3. Travail accompli
 

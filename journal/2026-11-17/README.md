@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**9 commits** · **2 session(s)** · **4 thème(s)**
+**10 commits** · **2 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -15,13 +15,14 @@
 | mesures | 1 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
+| portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 5.5 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 406.7 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 5.6 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 406.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -36,6 +37,7 @@
 | 14:35 | `de967b7b` | N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 % |
 | 14:39 | `24cb295e` | A5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'ACCÈS AU RIG ET LE RTL, ET LA DÉCISION SE MESURE |
 | 14:44 | `a0d7fa3b` | P1 — LA DISPERSION GPU BAT LA PROJECTION FPGA : 29,37 G ÉV/S SUR UNE CARTE CONTRE 19,3 G PROJETÉS POUR QUATRE — LE DÉBIT NE JUSTIFIE PAS LE RING |
+| 15:20 | `6d720eaa` | TESTS — LA SUITE RUST PASSE À 139/139 : NATIVE_PROFONDEUR ET POS_DESYNC ENFIN DÉCLARÉES |
 
 ## Le récit de la journée (écrit à la main)
 

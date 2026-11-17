@@ -4829,3 +4829,101 @@ test result: ok. 139 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/main.rs'); s = p.read_text()\nold = \"    // cette ligne, un ancien nom QT_* resterait muet (cf. `REPRISE.md`).\"\nnew = \"    // cette ligne, un ancien nom QT_* rest … [939 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 139 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.24s
+
+  ✅ index : aucun fait stagé sans état
+[s/v7 6d720eaa] TESTS — LA SUITE RUST PASSE À 139/139 : NATIVE_PROFONDEUR ET POS_DESYNC ENFIN DÉCLARÉES
+ 12 files changed, 399 insertions(+), 34 deletions(-)
+6d720eaa TESTS — LA SUITE RUST PASSE À 139/139 : NATIVE_PROFONDEUR ET POS_DESYNC ENFIN DÉCLARÉES
+  ```
+
+### 🤖 Assistant
+
+⏵ Banc des profils sur le modèle entraîné (perplexité et temps)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"bench/drvm_profils.py — le catalogue de profils sur un modèle ENTRAÎNÉ.\n\nLA QUESTION. Les portes N3.7–N3.10 mesurent les profils sur un `drave-n0`\nsynthétique : la sémantique et le coût, pas la qualité. Ici on prend un modèle\n**entraîné** (34 M, fenêtre … [4887 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/drvm_profils.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('bench/drvm_profils.py'); s = p.read_text()\ndebut = s.index(\"    resultats = {}\\n\")\nfin = s.index(\"    ref = resultats[\\\"defaut\\\"][\\\"ppl\\\"]\")\nnouveau = '''    resulta … [1227 caractères tronqués]`
+
+  ```
+ok
+compile-ok
+    print(f"texte  : {a.texte} ({a.limite} octets)")
+
+    resultats = {}
+    for impl in a.impls.split(","):
+        impl = impl.strip()
+        with tempfile.TemporaryDirectory() as td:
+            if impl == "defaut":
+                chemin = pathlib.Path(a.drvm)   # le manifeste d'origine n'a pas d'`impl`
+            else:
+                chemin = pathlib.Path(td) / f"{impl}.drvm"
+                _reecrit(a.drvm, impl, chemin)
+            t0 = time.perf_counter()
+            out = subprocess.run([str(D), "--drvm-native-ppl", str(chemin),
+                                  f"@{a.texte}", str(a.limite)],
+                                 capture_output=True, text=True, check=True).stdout
+            temps = time.perf_counter() - t0
+        m = PPL.search(out)
+        assert m, out
+        resultats[impl] = {"ppl": float(m.group(1)), "octets": int(m.group(2)), "s": temps}
+        print(f"  {impl:7} PPL {m.group(1):>9} sur {m.group(2)} octets  "
+              f"({temps:6.1f} s, chargement du modèle inclus)")
+
+    ref = resultats["defaut"]["ppl"]
+    for impl, r in resultats.items():
+        r["delta_pct"] = (r["ppl"] / ref - 1.0) * 100.0
+    if a.sortie:
+        pathlib.
+… [272 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 bench/drvm_profils.py --drvm work/n2ac/mix1024-60k.drvm --texte /tmp/txt-2048.txt --limite 2048 --sortie reports/profils-34m.json 2>&1 | tail -10", "description": "Run the profile bench on the trained model", "timeoutMs" … [10 caractères tronqués]`
+
+  ```
+modèle : work/n2ac/mix1024-60k.drvm · 34301224 paramètres · d_model 384 · 6 blocs · fenêtre 1024
+texte  : /tmp/txt-2048.txt (2048 octets)
+  defaut  PPL   23.7480 sur 2055 octets  (  74.3 s, chargement du modèle inclus)
+  bloque  PPL   23.7585 sur 2055 octets  (  61.6 s, chargement du modèle inclus)
+  flou    PPL   24.2443 sur 2055 octets  (  76.9 s, chargement du modèle inclus)
+  court   PPL   23.5824 sur 2055 octets  (  69.6 s, chargement du modèle inclus)
+  écrit : reports/profils-34m.json
+[stderr]
+
+real	4m46,882s
+user	4m45,292s
+sys	0m1,551s
+  ```
+
+- **write** `{"content": "# Les profils sur un modèle entraîné — ce que le contrat garantit, et ce qu'il ne garantit pas\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ mesuré — sur un modèle\n> **entraîné** (34 301 224 paramètres, fenêtre 1 024), à poids identiques : `bloque` déplace la … [3377 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"`court` **0,694×** le te … [903 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1744 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 787 fiche(s) · 878 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/drvm_profils.py reports/rapport-profils-modele.md reports/profils-34m.json docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nPROFILS SUR UN MODÈLE ENTRAÎNÉ (34 M) : BLOQUE +0,04 % DE PPL · FLOU +2,09  … [1245 caractères tronqués]`
