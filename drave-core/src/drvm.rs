@@ -7,7 +7,7 @@
 //!
 //! Le crate reste **std seul** : le JSON minimal est analysé à la main.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::Path;
 
@@ -63,6 +63,8 @@ const CLES_EXECUTION: &[&str] = &["activation", "placement", "cache", "replay", 
 const CLES_THOUGHT: &[&str] = &["steps"];
 const CLES_REGION: &[&str] = &["id", "blocks"];
 const CLES_CONTRAT: &[&str] = &["version", "tolerance"];
+const CLES_ROUTE: &[&str] = &["id", "bloc", "si", "alors", "sinon"];
+const CLES_SI: &[&str] = &["kind", "seuil"];
 pub const IMPLS_CONNUES: &[&str] = &["defaut", "bloque", "flou"];
 
 fn cles_fermees(ou: &str, obj: &Json, connues: &[&str]) -> Result<(), ErreurDrvm> {
@@ -148,14 +150,68 @@ fn verifie_graphe(g: &Json, ids: &BTreeSet<String>) -> Result<(), ErreurDrvm> {
             }
         }
     }
-    let routes = g.get("routes").and_then(Json::as_array)
-        .ok_or_else(|| ErreurDrvm("graph.routes doit être une liste".into()))?;
-    if !routes.is_empty() {
-        return Err(ErreurDrvm(format!(
-            "routes non exécutées : {} route(s) — le lecteur refuse ce qu'il ne sait pas exécuter",
-            routes.len())));
-    }
     Ok(())
+}
+
+/// Les routes conditionnelles du graphe. Une route est `{id, bloc, si, alors,
+/// sinon?}` ; `si` est `{kind, seuil}` et le seul `kind` exécuté est `position`.
+/// Tout le reste est refusé et nommé — une route qu'on ne sait pas évaluer ne
+/// doit pas passer pour une route.
+fn lit_routes(g: &Json, blocs: &[Bloc]) -> Result<Vec<Route>, ErreurDrvm> {
+    let arr = g.get("routes").and_then(Json::as_array)
+        .ok_or_else(|| ErreurDrvm("graph.routes doit être une liste".into()))?;
+    let par_id: BTreeMap<&str, &Bloc> = blocs.iter().map(|b| (b.id.as_str(), b)).collect();
+    let mut vus = BTreeSet::new();
+    let mut cibles = BTreeSet::new();
+    let mut routes = Vec::new();
+    for r in arr {
+        cles_fermees("une route", r, CLES_ROUTE)?;
+        let id = r.get("id").and_then(Json::as_str)
+            .ok_or_else(|| ErreurDrvm("route sans id".into()))?;
+        if !vus.insert(id.to_string()) {
+            return Err(ErreurDrvm(format!("route dupliquée : {id}")));
+        }
+        let bloc = r.get("bloc").and_then(Json::as_str)
+            .ok_or_else(|| ErreurDrvm(format!("route sans bloc : {id}")))?;
+        let b = par_id.get(bloc)
+            .ok_or_else(|| ErreurDrvm(format!("route vers un bloc inconnu : {bloc}")))?;
+        if b.kind != "local_mixer" {
+            return Err(ErreurDrvm(format!("route vers un bloc non mixeur : {bloc} ({})", b.kind)));
+        }
+        if !cibles.insert(bloc.to_string()) {
+            return Err(ErreurDrvm(format!("deux routes pour le bloc : {bloc}")));
+        }
+        let si = r.get("si").ok_or_else(|| ErreurDrvm(format!("route sans condition : {id}")))?;
+        cles_fermees("si", si, CLES_SI)?;
+        let kind = si.get("kind").and_then(Json::as_str)
+            .ok_or_else(|| ErreurDrvm(format!("si.kind absent : {id}")))?;
+        if kind != "position" {
+            return Err(ErreurDrvm(format!("condition de route inconnue : {kind}")));
+        }
+        let seuil = si.get("seuil").and_then(Json::as_f64)
+            .ok_or_else(|| ErreurDrvm(format!("si.seuil absent : {id}")))?;
+        if seuil < 0.0 || seuil.fract() != 0.0 {
+            return Err(ErreurDrvm(format!("si.seuil invalide : {seuil} (route {id})")));
+        }
+        let alors = r.get("alors").and_then(Json::as_str)
+            .ok_or_else(|| ErreurDrvm(format!("route sans alors : {id}")))?;
+        if !IMPLS_CONNUES.contains(&alors) {
+            return Err(ErreurDrvm(format!("impl inconnue : {alors} (alors de {id})")));
+        }
+        let sinon = match r.get("sinon") {
+            None => None,
+            Some(v) => {
+                let x = v.as_str().ok_or_else(|| ErreurDrvm(format!("sinon non typé : {id}")))?;
+                if !IMPLS_CONNUES.contains(&x) {
+                    return Err(ErreurDrvm(format!("impl inconnue : {x} (sinon de {id})")));
+                }
+                Some(x.to_string())
+            }
+        };
+        routes.push(Route { id: id.to_string(), bloc: bloc.to_string(), seuil: seuil as u64,
+                            alors: alors.to_string(), sinon });
+    }
+    Ok(routes)
 }
 
 fn verifie_execution(m: &Json) -> Result<(), ErreurDrvm> {
@@ -174,6 +230,18 @@ fn verifie_execution(m: &Json) -> Result<(), ErreurDrvm> {
         }
     }
     Ok(())
+}
+
+/// Une route conditionnelle : le profil du bloc `bloc` change à partir de la
+/// position `seuil` (condition `position >= seuil`). Déterministe, déclarée, et
+/// sans apprentissage : la POLITIQUE (quand router) reste une question mesurée.
+#[derive(Debug, Clone)]
+pub struct Route {
+    pub id: String,
+    pub bloc: String,
+    pub seuil: u64,
+    pub alors: String,
+    pub sinon: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -202,6 +270,7 @@ pub struct Tenseur {
 pub struct Drvm {
     pub manifeste: Json,
     pub blocs: Vec<Bloc>,
+    pub routes: Vec<Route>,
     pub tenseurs: Vec<Tenseur>,
     payload_offset: usize,
     data: Vec<u8>,
@@ -416,6 +485,7 @@ impl Drvm {
         }
         if blocs.is_empty() { return Err(ErreurDrvm("graphe sans bloc".into())); }
         verifie_graphe(graph, &ids)?;
+        let routes = lit_routes(graph, &blocs)?;
         verifie_execution(&manifeste)?;
         let mut tenseurs = Vec::new();
         let arr = manifeste.get("tensors").and_then(Json::as_array)
@@ -438,7 +508,7 @@ impl Drvm {
             tenseurs.push(Tenseur { name: name.to_string(), bloc: bloc.to_string(),
                                     offset, nbytes, dtype: dtype.to_string(), shape });
         }
-        Ok(Drvm { manifeste, blocs, tenseurs, payload_offset: poff, data: b })
+        Ok(Drvm { manifeste, blocs, routes, tenseurs, payload_offset: poff, data: b })
     }
 
     pub fn bloc(&self, id: &str) -> Option<&Bloc> { self.blocs.iter().find(|b| b.id == id) }
@@ -527,9 +597,6 @@ mod tests {
     fn refuse_ce_quil_ne_lit_pas() {
         let g = graphe_valide("input");
         let m = manifeste_graphe(&g);
-        refuse("route", &manifeste_graphe(&g.replace(
-            r#""routes":[]"#,
-            r#""routes":[{"id":"r1","de":"b0","vers":"b0"}]"#)), "routes non exécutées");
         refuse("cle_graphe", &manifeste_graphe(&g.replace(
             r#""bridge":null"#,
             r#""bridge":null,"quota":1"#)), "clé inconnue dans graph : quota");
@@ -556,6 +623,48 @@ mod tests {
         refuse("racine", &m.replace(
             r#""format":"DRVM""#,
             r#""format":"DRVM","extra":1"#), "clé inconnue dans le manifeste : extra");
+    }
+
+    fn graphe_route(route: &str) -> String {
+        format!(
+            r#"{{"blocks":[{{"id":"b0","kind":"local_mixer","inputs":[],"outputs":[]}}],"regions":[{{"id":"r0","blocks":["b0"]}}],"routes":[{route}],"heads":[],"thought":null,"bridge":null}}"#
+        )
+    }
+
+    /// Une route est LUE (elle n'est plus refusée en bloc) et exécutable ; ce qui
+    /// n'est pas évaluable est refusé : bloc inconnu ou non mixeur, condition
+    /// inconnue, deux routes pour un bloc, `alors` absent, profil inconnu.
+    #[test]
+    fn les_routes_sont_lues_et_refusees() {
+        let d = std::env::temp_dir().join("drave_drvm_route_ok.bin");
+        std::fs::write(&d, entete(VERSION, &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"position","seuil":512},"alors":"flou","sinon":"defaut"}"#)))).unwrap();
+        let m = Drvm::open(&d).expect("route valide");
+        assert_eq!(m.routes.len(), 1);
+        assert_eq!(m.routes[0].seuil, 512);
+        assert_eq!(m.routes[0].alors, "flou");
+        assert_eq!(m.routes[0].sinon.as_deref(), Some("defaut"));
+        let _ = std::fs::remove_file(&d);
+
+        refuse("route_bloc", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b9","si":{"kind":"position","seuil":1},"alors":"flou"}"#)),
+            "route vers un bloc inconnu : b9");
+        refuse("route_mixeur", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"position","seuil":1},"alors":"flou"}"#)
+            .replace(r#""kind":"local_mixer""#, r#""kind":"output""#)),
+            "route vers un bloc non mixeur : b0 (output)");
+        refuse("route_cond", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"confiance","seuil":1},"alors":"flou"}"#)),
+            "condition de route inconnue : confiance");
+        refuse("route_double", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"position","seuil":1},"alors":"flou"},{"id":"r1","bloc":"b0","si":{"kind":"position","seuil":2},"alors":"bloque"}"#)),
+            "deux routes pour le bloc : b0");
+        refuse("route_sans_alors", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"position","seuil":1}}"#)),
+            "route sans alors : r0");
+        refuse("route_impl", &manifeste_graphe(&graphe_route(
+            r#"{"id":"r0","bloc":"b0","si":{"kind":"position","seuil":1},"alors":"magique"}"#)),
+            "impl inconnue : magique (alors de r0)");
     }
 
     fn graphe_variante(impl_: &str) -> String {

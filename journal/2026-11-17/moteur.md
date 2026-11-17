@@ -4,11 +4,12 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 13:23 | `20648db7` | N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×) | `en-cours.md`, `modele-natif.md`, `drvm.rs` (+16) |
+| 13:31 | `337715d1` | N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-4, FLOU REFUSÉ | `en-cours.md`, `modele-natif.md`, `README.md` (+13) |
 
 ## Chiffres du jour
 
@@ -18,7 +19,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 3.7 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 4.0 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 401.3 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés

@@ -37,6 +37,7 @@ def tracer(drvm: str) -> dict:
                 "manifeste_sha256": hashlib.sha256(_canonique(d.manifest)).hexdigest(),
                 "blocs": [b["id"] for b in d.manifest["graph"]["blocks"]],
                 "impls": _provenance(d.manifest),
+                "routes": d.manifest["graph"].get("routes", []),
                 "tenseurs": tensors}
 
 
@@ -51,6 +52,7 @@ def rejouer(drvm: str, trace: dict) -> dict:
     return {"identiques": not mauvais and not manquants,
             "tenseurs": len(attendu), "mauvais": mauvais, "manquants": manquants,
             "impls": impls == trace.get("impls", impls),
+            "routes": d.manifest["graph"].get("routes", []) == trace.get("routes", []),
             "manifeste_sha256": hashlib.sha256(
                 _canonique(d.manifest)).hexdigest() == trace.get("manifeste_sha256")}
 

@@ -313,14 +313,12 @@ et l'état sont dans [`roadmap.md`](../pilotage/roadmap.md) § N ; la décision 
 qui nomme le type. C'est une **fonctionnalité** : un modèle à moitié compris qui s'exécute quand même est un
 modèle qui ment. Le même principe vaut pour la version et pour une section absente.
 
-**Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** `graph.routes` vide est accepté ; une route
-déclarée est **refusée** tant que le moteur ne sait pas l'exécuter — l'implémenter, pas l'ignorer, est la
-prochaine étape. Une clé inconnue (manifeste, `graph`, bloc, `execution`), une région, une tête ou un pont qui
-nomme un bloc absent le sont aussi, et les **deux lecteurs** (Rust et `tools/drvm.py`) appliquent la même règle
-et la même erreur. C'est ce qui fait du manifeste un **contrat** : le jour où une variante d'implémentation
-s'ajoute (`impl`), elle devra se déclarer ici et porter sa trace, pas s'ajouter en silence. La porte
-[`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur dix refus nommés, avec le DRVM valide et les
-DRVM déjà sur le disque comme contrôles négatifs.
+**Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** Une clé inconnue (manifeste, `graph`, bloc,
+`execution`, route), une région, une tête ou un pont qui nomme un bloc absent, une route mal formée sont refusés,
+et les **deux lecteurs** (Rust et `tools/drvm.py`) appliquent la même règle et la même erreur. C'est ce qui fait
+du manifeste un **contrat** : ce qui s'ajoute (`impl`, route) se déclare ici et porte sa trace, jamais en
+silence. La porte [`porte-n3-refus`](../../tools/porte-n3-refus.sh) le vérifie sur **treize** refus nommés, avec
+le DRVM valide, une route valide écrite et les DRVM déjà sur le disque comme contrôles négatifs.
 
 **Une variante est un nom public, un algorithme privé.** Un bloc `local_mixer` peut déclarer
 `"impl": "bloque"` et `"contrat": {"version": 0, "tolerance": 1e-4}`. Le **nom** entre dans le manifeste,
@@ -330,6 +328,15 @@ fonction** (`defaut`, `bloque`) sont **indifférents** dans la tolérance — c'
 appartenance sigmoïde) **échoue** l'indifférence (**5,790e-03**) : il relève du **routage**, pas de la
 substitution. Chaque moteur refuse les profils qu'il n'exécute pas — le moteur numpy exécute `defaut` et `bloque`, et refuse `flou`.
 Chiffres et contrôle négatif : [`reports/rapport-n3-variante.md`](../../reports/rapport-n3-variante.md).
+
+**Une route est une condition exécutée, pas une arête décorative.** `graph.routes` accepte
+`{"id", "bloc", "si": {"kind": "position", "seuil"}, "alors", "sinon"?}` : à partir de la position `seuil`,
+le bloc mixeur prend le profil `alors` ; avant, `sinon` (ou son profil déclaré). Le moteur Rust l'exécute, le
+moteur numpy **refuse** le manifeste. Trois contrôles le prouvent : seuil 0 → logits **bit-exacts** du modèle
+pur `flou` ; seuil 10⁹ → **bit-exacts** du pur `defaut` ; seuil 1 sur trois octets → un mélange
+**déterministe** qui diffère des deux (5,779e-03 de `defaut`, 1,132e-05 de `flou`, l'héritage des K/V
+expliquant l'écart asymétrique). La **politique** — quand router — reste une question mesurée : R0.5 et R06
+ont montré qu'un seuil global ne transfère pas. Fiche : [`reports/rapport-n3-route.md`](../../reports/rapport-n3-route.md).
 
 **Pourquoi un graphe plutôt qu'une pile** : parce que les mécanismes de Drave sont des **arêtes**, pas des
 couches. Une **sortie précoce** est une arête qui court-circuite la fin ; un **pont** est une arête entre deux

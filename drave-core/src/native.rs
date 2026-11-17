@@ -35,6 +35,16 @@ impl Profil {
     }
 }
 
+/// Une route exécutable : à partir de `seuil`, le bloc `bloc` utilise `alors` ;
+/// avant, `sinon` (ou le profil déclaré du bloc). Déterministe, sans apprentissage.
+#[derive(Debug, Clone)]
+pub struct RouteExec {
+    pub bloc: usize,
+    pub seuil: u64,
+    pub alors: Profil,
+    pub sinon: Option<Profil>,
+}
+
 #[derive(Debug, Clone)]
 pub struct Cfg {
     pub vocab: usize,
@@ -64,6 +74,8 @@ pub struct Native {
     poids: HashMap<String, Vec<f32>>,
     /// Le profil de chaque bloc, dans l'ordre des indices de bloc.
     impls: Vec<Profil>,
+    /// Les routes conditionnelles déclarées par le manifeste.
+    routes: Vec<RouteExec>,
     // N3.3c — compteurs de sparsité réelle, remis à zéro à chaque chargement.
     appels_ffn: AtomicUsize,
     experts_actifs: AtomicUsize,
@@ -106,7 +118,24 @@ impl Native {
                 }
             }
         }
-        Ok(Native { cfg, poids, impls, appels_ffn: AtomicUsize::new(0),
+        let mut routes = Vec::new();
+        for r in &d.routes {
+            // L'indice de bloc du MOTEUR est le `i` de `b{i}` — pas la position du
+            // bloc dans la liste du manifeste (qui contient aussi input, local_i,
+            // early_i, bridge, thought, output).
+            let i = r.bloc.strip_prefix('b').and_then(|x| x.parse::<usize>().ok())
+                .filter(|i| *i < cfg.n_blocks)
+                .ok_or_else(|| ErreurDrvm(format!("route vers un bloc de modèle inconnu : {}", r.bloc)))?;
+            let alors = Profil::depuis(&r.alors).ok_or_else(|| ErreurDrvm(format!(
+                "impl non exécutée par le moteur natif : {} (route {})", r.alors, r.id)))?;
+            let sinon = match &r.sinon {
+                None => None,
+                Some(x) => Some(Profil::depuis(x).ok_or_else(|| ErreurDrvm(format!(
+                    "impl non exécutée par le moteur natif : {x} (route {})", r.id)))?),
+            };
+            routes.push(RouteExec { bloc: i, seuil: r.seuil, alors, sinon });
+        }
+        Ok(Native { cfg, poids, impls, routes, appels_ffn: AtomicUsize::new(0),
                     experts_actifs: AtomicUsize::new(0), canaux_actifs: AtomicUsize::new(0) })
     }
 
@@ -114,7 +143,13 @@ impl Native {
         self.poids.get(n).unwrap_or_else(|| panic!("tenseur natif absent : {n}"))
     }
 
-    fn profil(&self, b: usize) -> Profil {
+    /// Le profil du bloc `b` à la position `pos` : une route déclarée peut le
+    /// changer à partir de son seuil ; sinon c'est le profil du manifeste.
+    fn profil(&self, b: usize, pos: usize) -> Profil {
+        if let Some(r) = self.routes.iter().find(|r| r.bloc == b) {
+            if pos as u64 >= r.seuil { return r.alors; }
+            if let Some(s) = r.sinon { return s; }
+        }
         *self.impls.get(b).unwrap_or(&Profil::Defaut)
     }
 
@@ -172,9 +207,8 @@ impl Native {
         (0..x.len()).map(|i| (x[i] - m) * inv * w[i] + b[i]).collect()
     }
 
-    fn ffn(&self, x: &[f32], b: usize) -> Vec<f32> {
+    fn ffn(&self, x: &[f32], b: usize, p: Profil) -> Vec<f32> {
         let c = &self.cfg;
-        let p = self.profil(b);
         self.appels_ffn.fetch_add(1, Ordering::Relaxed);
         let rout = self.matvec(p, &format!("blocks.{b}.ffn.router.weight"),
                               &format!("blocks.{b}.ffn.router.bias"), x, c.n_experts);
@@ -239,12 +273,12 @@ impl Native {
             for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
         }
         for b in 0..c.n_blocks {
-            let p = self.profil(b);
             let mut nh = vec![vec![0.0f32; c.d]; s];
             // q/k/v de TOUTES les positions : l'attention d'une position lit les
             // précédentes. Calculer le qkv dans la boucle de position ne donnait
             // que le jeton courant (range out of bounds, attrapé).
             let qkv_all: Vec<Vec<f32>> = (0..s).map(|pos| {
+                let p = self.profil(b, pos);
                 let z = self.ln(&h[pos], &format!("blocks.{b}.ln1"));
                 self.matvec(p, &format!("blocks.{b}.qkv.weight"),
                             &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d)
@@ -271,11 +305,12 @@ impl Native {
                         for qq in 0..dh { att[t * dh + qq] += ex[jj] / se * v[qq]; }
                     }
                 }
+                let p = self.profil(b, pos);
                 let y = self.matvec(p, &format!("blocks.{b}.out.weight"),
                                     &format!("blocks.{b}.out.bias"), &att, c.d);
                 let z2 = self.ln(&(0..c.d).map(|k| h[pos][k] + y[k]).collect::<Vec<_>>(),
                                  &format!("blocks.{b}.ln2"));
-                let f = self.ffn(&z2, b);
+                let f = self.ffn(&z2, b, p);
                 for k in 0..c.d { nh[pos][k] = h[pos][k] + y[k] + f[k]; }
             }
             h = nh;
@@ -347,7 +382,7 @@ impl Native {
         let dh = c.d / c.n_heads;
         cache.assurer(c.n_blocks, c.n_heads);
         for b in blocs {
-            let p = self.profil(b);
+            let p = self.profil(b, pos);
             let z = self.ln(x, &format!("blocks.{b}.ln1"));
             let qkv = self.matvec(p, &format!("blocks.{b}.qkv.weight"),
                                   &format!("blocks.{b}.qkv.bias"), &z, 3 * c.d);
@@ -376,7 +411,7 @@ impl Native {
                                 &format!("blocks.{b}.out.bias"), &att, c.d);
             let z2 = self.ln(&(0..c.d).map(|k| x[k] + y[k]).collect::<Vec<_>>(),
                              &format!("blocks.{b}.ln2"));
-            let f = self.ffn(&z2, b);
+            let f = self.ffn(&z2, b, p);
             for k in 0..c.d { x[k] = x[k] + y[k] + f[k]; }
             if c.n_blocks >= 2 && b == c.n_blocks / 2 - 1 {
                 let br = self.matvec(Profil::Defaut, "bridge.weight", "bridge.bias", x, c.d);

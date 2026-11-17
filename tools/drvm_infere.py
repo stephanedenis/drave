@@ -40,6 +40,11 @@ def charger(chemin: str) -> tuple[dict[str, np.ndarray], dict]:
     with read_drvm(chemin) as d:
         impls = [b.get("impl", "defaut")
                  for b in d.manifest["graph"]["blocks"] if b["kind"] == "local_mixer"]
+        routes = d.manifest["graph"].get("routes", [])
+        if routes:
+            raise NotImplementedError(
+                f"routes non exécutées par le moteur numpy : {len(routes)} route(s) "
+                "(le moteur Rust les exécute ; celui-ci refuse au lieu de les ignorer)")
         refusees = sorted({v for v in impls if v not in IMPLS_MOTEUR_NUMPY})
         if refusees:
             raise NotImplementedError(

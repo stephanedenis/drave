@@ -7,20 +7,24 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 3.7 h |
+| Durée | 4.0 h |
 | Tours | 5 |
-| Messages | 148 |
-| Appels d'outils | 168 |
-| Fichiers touchés | 13 |
-| Commandes | 98 |
+| Messages | 172 |
+| Appels d'outils | 194 |
+| Fichiers touchés | 15 |
+| Commandes | 116 |
 | Sous-agents | 0 |
-| Commits | 3 |
+| Commits | 4 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
 
 - **create** — Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouv
 … [260 caractères tronqués]
+- **complete** — Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouv
+… [260 caractères tronqués]
+- **create** — Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans 
+… [306 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -211,7 +215,7 @@ Et le garde-fou
 
 ### Tour 5 — go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
-*67 appels d'outils.* Actions notables :
+*93 appels d'outils.* Actions notables :
 
 - get_goal
 - bash — Survey the native engine functions
@@ -227,11 +231,11 @@ Et le garde-fou
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs`
 - edit `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py`
-- … et 38 autres
+- … et 59 autres
 
 **Synthèse produite :**
 
-⏵ Fiche de résultat N3.7 avec les chiffres mesurés
+⏵ Écriture de la porte des routes (bit-exact actif / inactif / mixte)
 
 ## 3. Travail accompli
 
@@ -252,6 +256,8 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-variante.sh` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-variante.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md` | 0 | 3 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-route.sh` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-route.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -295,7 +301,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 58 autres
+- … et 76 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -408,16 +414,18 @@ Et le garde-fou
 
 ## 5. Erreurs rencontrées
 
-4 sorties en erreur ou divergentes. Les premières :
+5 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
 - **T4** : -rwxr-xr-x. 2 stephane stephane 3218824 17 nov 11:14 drave-core/target/release/drave DRVM v0 · 6 blocs · 30 tenseurs · payload 31488 o   bloc input        input   bloc b0           local_mixer [stderr
 - **T5** : ... 110 |     pub fn est_vide(&self) -> bool { self.lignes.is_empty() } 400 | pub fn existe(chemin: &str) -> bool { Path::new(chemin).is_file() } 187 | impl Episodique { ... 193 |     pub fn est_vide(
+- **T5** : ok ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (3595551) panicked at src/main.rs:9068:13: DRAVE_NATIVE_PROFONDEUR est lu dans le source
 
 ## 6. Commits
 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -15 DRVM — LE LECTEUR REFUSE CE QU'IL N'EXÉCUTE PAS : routes/régions/t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -F - <<'MSG' 2>&1 | tail -8 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-va
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_in
 

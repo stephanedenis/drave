@@ -3618,3 +3618,330 @@ Journaux : work/portes-1117-13h28
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/drave.py tools/porte-n3-variante.sh reports/rapport-n3-variante.md docs/theorie/modele-natif.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -5\nN3.7b — LE MOTEUR N … [887 caractères tronqués]`
+
+  ```
+✅ index : aucun fait stagé sans état
+[s/v7 337715d1] N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-4, FLOU REFUSÉ
+ 16 files changed, 302 insertions(+), 64 deletions(-)
+ create mode 100644 journal/2026-11-17/moteur.md
+---
+337715d1 N3.7b — LE MOTEUR NUMPY EXÉCUTE LE PROFIL : BLOQUE 2,831e-07 ≤ 1e-4, FLOU REFUSÉ
+20648db7 N3.7 — LES VARIANTES SONT UN CONTRAT : SUBSTITUTION 4,768e-07 ≤ 1e-4 · CONTRÔLE NÉGATIF 5,790e-03 > 1e-4 · COÛT 87,0/86,4 ms (0,99×)
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-60efb487-0d27-47c7-893a-806b786aaa52","revision":1,"objective":"Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouve : indifférence dans la tolérance déclarée, contrôle négatif qui DOIT échouer (variante hors contrat), refus d'une `impl` inconnue, coût mesuré par variante. Le tout committé, portes vertes, sans toucher `en-cours`/`roadmap`/`backlog` (session Pensée active).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"goal_id": "goal-60efb487-0d27-47c7-893a-806b786aaa52", "revision": 1, "action": "complete"}`
+
+> **Objectif** (complete) : Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouve : indifférence dans la tolérance déclarée, contrôle négatif qui DOIT échouer (variante hors contrat), refus d'une `impl` inconnue, coût mesuré par variante. Le tout committé, portes vertes, sans toucher `en-cours`/`roadmap`/`backlog` (session Pensée active).
+
+
+  ```
+{"goal":{"id":"goal-60efb487-0d27-47c7-893a-806b786aaa52","revision":2,"objective":"Ajouter au format DRVM les variantes d'implémentation par bloc (`impl` + `contrat {version, tolerance}`), les faire exécuter par les deux moteurs (Rust `native.rs` et numpy `tools/drvm_infere.py`), exposer la provenance dans l'inspecteur et la trace, et livrer une porte `porte-n3-variante` qui prouve : indifférence dans la tolérance déclarée, contrôle négatif qui DOIT échouer (variante hors contrat), refus d'une `impl` inconnue, coût mesuré par variante. Le tout committé, portes vertes, sans toucher `en-cours`/`roadmap`/`backlog` (session Pensée active).","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce q … [348 caractères tronqués]`
+
+> **Objectif** (create) : Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans l'inspecteur et la trace, et une porte `porte-n3-route` avec trois contrôles falsifiables : route toujours active = variante pure bit-exacte, route jamais active = profil par défaut bit-exact, route mixte ≠ les deux et déterministe. Committé, fiche dans `reports/`, état et compteurs à jour, portes vertes.
+
+
+  ```
+{"goal":{"id":"goal-dee2097a-55bd-42bb-ba03-7516baafe44d","revision":1,"objective":"Rendre `graph.routes` vivant dans le manifeste DRVM : schéma minimal déterministe (route conditionnelle par position vers un profil de bloc `local_mixer`), validation et refus dans les deux lecteurs, exécution par le moteur Rust (les deux moteurs refusent ce qu'ils n'exécutent pas), provenance dans l'inspecteur et la trace, et une porte `porte-n3-route` avec trois contrôles falsifiables : route toujours active = variante pure bit-exacte, route jamais active = profil par défaut bit-exact, route mixte ≠ les deux et déterministe. Committé, fiche dans `reports/`, état et compteurs à jour, portes vertes.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"porte-n3-refus\" reports/*.md | head; echo \"=== refs routes dans les fiches ===\"; grep -rn \"routes non exécutées\" reports/*.md docs/theorie/*.md tools/*.py tools/*.sh 2>/dev/null | head", "description": "Find the refu … [32 caractères tronqués]`
+
+  ```
+reports/rapport-n3.5d-refus.md
+reports/rapport-n3-inventaire.md
+reports/rapport-n3-variante.md
+=== refs routes dans les fiches ===
+tools/drvm.py:234:            f"routes non exécutées : {len(routes)} route(s) — le lecteur refuse "
+tools/porte-n3-refus.sh:110:ajoute("route",  "routes non exécutées", _route)
+tools/porte-n3-refus.sh:140:    assert "routes non exécutées" in str(e), e
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation du schéma de route dans les deux lecteurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/drvm.py'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\n\nrep('''CLES_CONTRAT = frozenset({\"versi … [3431 caractères tronqués]`
+
+  ```
+ok
+import-ok
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/drvm.rs'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\n\nrep('use std::collections::BTre … [5506 caractères tronqués]`
+
+  ```
+ok
+build=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/native.rs'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, f\"{s.count(old)}× : {old[:70]!r}\"\n    s = s.replace(old, new)\n\n#  … [4664 caractères tronqués]`
+
+  ```
+ok
+build=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# 1. inspecteur : les routes visibles\np = pathlib.Path('drave-core/src/main.rs'); s = p.read_text()\nold = '''                for t in &d.tenseurs {\n                    println!(\"  tenseur {:<24}  … [2866 caractères tronqués]`
+
+  ```
+ok
+build=0
+compile-ok
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 20, "offset": 556}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+556:         b[20..28].copy_from_slice(&((poff + 4) as u64).to_le_bytes());
+557:         b.extend(m); b.extend([1u8, 2, 3, 4]);
+558:         b
+559:     }
+560: 
+561:     fn fichier(version: u16, bloc: &str) -> Vec<u8> {
+562:         entete(version, &manifeste_graphe(&graphe_valide(bloc)))
+563:     }
+564: 
+565:     /// Refuse un manifeste et vérifie que l'erreur **nomme** la cause — un refus
+566:     /// muet ne vaut pas mieux qu'un silence.
+567:     fn refuse(nom: &str, manifeste: &str, attendu: &str) {
+568:         let d = std::env::temp_dir().join(format!("drave_drvm_refus_{nom}.bin"));
+569:         std::fs::write(&d, entete(VERSION, manifeste)).unwrap();
+570:         let e = match Drvm::open(&d) {
+571:             Err(e) => e.to_string(),
+572:             Ok(_) => panic!("{nom} : le lecteur a accepté ce qu'il n'exécute pas"),
+573:         };
+574:         assert!(e.contains(attendu), "{nom} : « {e} » ne nomme pas « {attendu} »");
+575:         let _ = std::fs::remove_file(&d);
+
+(Showing lines 556-575 of 714. Use offset=576 to continue.)
+</content>
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs", "limit": 40, "offset": 596}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/drvm.rs</path>
+<type>file</type>
+<content>
+596:     #[test]
+597:     fn refuse_ce_quil_ne_lit_pas() {
+598:         let g = graphe_valide("input");
+599:         let m = manifeste_graphe(&g);
+600:         refuse("route", &manifeste_graphe(&g.replace(
+601:             r#""routes":[]"#,
+602:             r#""routes":[{"id":"r1","de":"b0","vers":"b0"}]"#)), "routes non exécutées");
+603:         refuse("cle_graphe", &manifeste_graphe(&g.replace(
+604:             r#""bridge":null"#,
+605:             r#""bridge":null,"quota":1"#)), "clé inconnue dans graph : quota");
+606:         refuse("cle_bloc", &manifeste_graphe(&g.replace(
+607:             r#""inputs":[]"#,
+608:             r#""inputs":[],"poids":1"#)), "clé inconnue dans un bloc : poids");
+609:         refuse("region", &manifeste_graphe(&g.replace(
+610:             r#""blocks":["b0"]}"#,
+611:             r#""blocks":["b1"]}"#)), "région vers un bloc inconnu : b1");
+612:         refuse("tete", &manifeste_graphe(&g.replace(
+613:             r#""heads":[]"#,
+614:             r#""heads":["b1"]"#)), "tête vers un bloc inconnu : b1");
+615:         refuse("pont", &manifeste
+… [1253 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/drvm.rs'); s = p.read_text()\nold = '''        refuse(\"route\", &manifeste_graphe(&g.replace(\n            r#\"\"routes\":[]\"#,\n            r#\"\"routes\":[{\"id\" … [3271 caractères tronqués]`
+
+  ```
+ok
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (3595551) panicked at src/main.rs:9068:13:
+DRAVE_NATIVE_PROFONDEUR est lu dans le source mais absent de VARS_LUES : un ancien nom QT_NATIVE_PROFONDEUR resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 138 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.25s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de la porte des routes (bit-exact actif / inactif / mixte)
+
+- **write** `{"content": "#!/bin/bash\n# porte-n3-route.sh — N3.8 : une route est une condition EXÉCUTÉE, pas un commentaire.\n#\n# LA QUESTION. Le manifeste déclare `graph.routes` depuis le premier jour ; le\n# lecteur les refusait au nom de « ce qu'on ne sait pas exécuter ». Maintenant\n# qu'elles sont lues, i … [8673 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/porte-n3-route.sh</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod +x tools/porte-n3-route.sh && bash -n tools/porte-n3-route.sh && bash tools/porte-n3-route.sh 2>&1 | tail -24", "description": "Run the route gate", "timeoutMs": 600000}`
+
+  ```
+=== 1. un modèle, quatre écritures : pur defaut, pur flou, deux copies routées ===
+  écrits : defaut, flou, route-active (seuil 0), route-inactive (10^9), route-mixte (1)
+=== 2. la route est-elle EXÉCUTÉE ? (bit-exact, pas « à peu près ») ===
+  contrôle du contrôle : defaut vs flou = 5.790e-03 ≠ 0
+  route active   vs flou   : DIFFÉRENT
+  route inactive vs defaut : IDENTIQUE
+Traceback (most recent call last):
+  File "<stdin>", line 19, in <module>
+AssertionError: route active ≠ flou : la condition ne s'applique pas partout
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('src/native.rs'); s = p.read_text()\nold = '''            let i = d.blocs.iter().position(|b| b.id == r.bloc)\n                .ok_or_else(|| ErreurDrvm(format!(\"route ve … [823 caractères tronqués]`
+
+  ```
+ok
+build=0
+=== 1. un modèle, quatre écritures : pur defaut, pur flou, deux copies routées ===
+  écrits : defaut, flou, route-active (seuil 0), route-inactive (10^9), route-mixte (1)
+=== 2. la route est-elle EXÉCUTÉE ? (bit-exact, pas « à peu près ») ===
+  contrôle du contrôle : defaut vs flou = 5.790e-03 ≠ 0
+  route active   vs flou   : IDENTIQUE
+  route inactive vs defaut : IDENTIQUE
+  route mixte    vs defaut : 5.779e-03 · vs flou : 1.132e-05 · déterministe
+  ✅ seuil 0 = flou bit-exact · seuil 10^9 = defaut bit-exact · seuil 1 = mélange déterministe
+=== 3. provenance : routes dans l'inspecteur et la trace ===
+  ✅ inspecteur : « position >= 0 → flou » · trace : 2 routes déclarées
+=== 4. le moteur numpy REFUSE un manifeste à routes ===
+  ✅ numpy : routes refusées (nommées)
+=== 5. une route mal formée ne s'écrit pas ===
+  ✅ 4 routes mal formées refusées, chacune nommée
+PORTE TENUE : seuil 0 = flou bit-exact · seuil 10^9 = defaut bit-exact · mixte déterministe et différent · provenance lue · numpy refuse · routes invalides refusées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/porte-n3-refus.sh'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:80]\n    s = s.replace(old, new)\n\nrep('''# 2ᵉ partie (17/11) — l … [4746 caractères tronqués]`
+
+  ```
+ok
+=== 2. client A contre aval B : REFUS ===
+  ✅ REFUS (code 4) sans logits
+=== 3. client A contre aval A : succès ===
+  ✅ succès bit-exact
+=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===
+  Python : 13 refus nommés · valide lu · écriture refusée · 62 DRVM existants relus
+  ✅ Rust : 10 refus nommés (code 3) · le valide passe
+PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (10 cas, deux lecteurs)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/porte-n3-refus.sh'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep('''print(f\"  Python : {len( … [1140 caractères tronqués]`
+
+  ```
+ok
+  ✅ succès bit-exact
+=== 4. le manifeste : le lecteur REFUSE ce qu'il n'exécute pas ===
+  Python : 13 refus nommés · valide lu · route valide écrite · route fausse refusée · 62 DRVM existants relus
+  ✅ Rust : 13 refus nommés (code 3) · le valide passe
+PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (13 cas, deux lecteurs)
+  ```
+
+- **write** `{"content": "# N3.8 — les routes sont exécutées, et leur sémantique est mesurée\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ **N3.8 tenu** — une route\n> conditionnelle `position >= seuil → profil` **agit** : au seuil 0 les logits sont **bit-exacts**\n> ceux du modèle pur … [3471 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-n3-route.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/modele-natif.md'); s = p.read_text()\nold = '''**Les clés sont fermées, et ce qui n'est pas exécuté est refusé.** `graph.routes` vide est accepté ; une route\ndéclarée  … [4555 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 783 fiche(s) · 875 JSON · 127 doc(s) · 88 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · 11 puces dans « Ce qui est en cours » > 10
+  portes ......... 20  (20 citées par les fiches)
+  fiches ......... 22
+  JSON ........... 20  (20 cités par les fiches)
+  ✅ PORTE TENUE : chaque brique a sa porte, chaque fiche sa porte et son JSON — aucune référence morte, aucun instrument orphelin
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '''- **N3.7 — les variantes** (17/11) : `impl` + `contrat` par bloc ; substitution **4,768e-07** ≤ 1e-4, contrôle négatif **5,7 … [1240 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1702 mots · 7 sections · 4 session(s) · 10 puces · 3 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -m unittest tools.cerveau.tests.test_drvm tools.cerveau.tests.test_drvm_trace 2>&1 | tail -3; python3 -c \"\nfrom tools.pensee.autotest import t146_drvm_n01\nprint(t146_drvm_n01())\"", "description": "Run DRVM unit tests and  … [40 caractères tronqués]`
+
+  ```
+Ran 8 tests in 0.005s
+
+OK
+(True, 'DRVM N0.1 : 6/6 (le payload corrompu est refusé)')
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=n3 DELAI=900 tools/toutes-les-portes.sh > /tmp/passe-n3-route.log 2>&1; echo \"exit=$?\"; tail -8 /tmp/passe-n3-route.log", "description": "Run all N3 gates with routes", "run_in_background": true}`
+
+  ```
+started background job bash-112
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"86 portes\\|87 portes\\|88 portes\\|17 portes\\|18 portes\" docs/*.md docs/pilotage/*.md docs/theorie/*.md README.md 2>/dev/null | head; echo \"=== fiche 3.5d ===\"; head -20 reports/rapport-n3.5d-refus.md; echo \"...\"; g … [138 caractères tronqués]`
+
+  ```
+docs/pilotage/references-non-regression.md:3:> **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
+docs/pilotage/references-non-regression.md:115:| `porte-n3-inventaire.sh` | 1 s | PORTE TENUE : inventaire N3 exécutable (autotest 5/5) · 18 portes, 20 fiches, 20 JSON, 0 orpheline |
+docs/pilotage/roadmap.md:32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; **N3 couvert** (17 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; puis la **porte propre (0,29)** ; **N4** |
+docs/pilotage/roadmap.md:337:| **N3** | les opérations natives : [k-WTA](../theorie/glossaire/entrees/k-wta.md), routes, sortie précoce, pont, rejeu, placement | ✅ **couvert*
+… [1053 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep('**N3 couvert** (17 portes, … [1554 caractères tronqués]`
+
+  ```
+references ok
+  revue de documentation · 783 fiche(s) · 875 JSON · 127 doc(s) · 88 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **job_output** `{"job_id": "bash-112", "timeout_ms": 420000, "wait": true}`
+
+  ```
+exit=0
+  porte-n3-service       ✅                           6 s  PORTE TENUE : service natif vivant · /sante exact · génération déterministe · 404
+  porte-n3-seuil         ✅                           5 s  PORTE TENUE : décision à seuil comptée · 0/1 aux extrêmes · mixte à 0,01 · déterministe
+  porte-n3-sparsite-compte ✅                           4 s  PORTE TENUE : compteurs réels · top_k agit sur les experts · kwta agit sur les canaux · A déterm
+  porte-n3-sparsite      ✅                           4 s  PORTE TENUE : kwta et top_k agissent séparément · A déterministe
+  porte-n3-variante      ✅                           6 s  PORTE TENUE : substitution indifférente dans le contrat · contrôle négatif vivant · provenance l
+--- 20 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-13h42
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PORTES=\"produit document etat\" DELAI=900 tools/toutes-les-portes.sh 2>&1 | tail -8", "description": "Run product, document and state gates", "timeoutMs": 1200000}`
+
+  ```
+=== PASSE COMPLÈTE DES PORTES (3 portes, borne 900 s) ===
+    journaux : work/portes-1117-13h44
+  porte-document         ✅                           6 s  ✅ porte document verte
+  porte-etat             ✅                           0 s  ✅ porte état verte : aucun fait commité après le dernier état
+  porte-produit          ✅                         164 s  ✅ porte produit verte
+--- 3 vertes, 0 rouges ---
+TOUTES LES PORTES SONT VERTES — et elles ont TOUTES tourné, ce que rien ne garantissait avant.
+Journaux : work/portes-1117-13h44
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py drave-core/src/drvm.rs drave-core/src/native.rs drave-core/src/main.rs tools/drvm_infere.py tools/drvm_trace.py tools/porte-n3-route.sh tools/porte-n3-refus.sh reports/rapport-n3-route.md docs/theorie/modele-nat … [1823 caractères tronqués]`

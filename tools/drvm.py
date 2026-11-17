@@ -40,8 +40,8 @@ SECTIONS = ("model", "graph", "tensors", "execution")
 # C'est la même règle que pour `kind` (docs/theorie/modele-natif.md) : un manifeste
 # à moitié compris qui s'exécute est un manifeste qui ment. Avant le 17/11, le
 # lecteur déclarait `routes`, `regions`, `heads`, `thought`, `bridge` et les
-# ignorait en silence ; `routes` vide est accepté, une route est REFUSÉE tant que
-# le moteur ne sait pas l'exécuter.
+# ignorait en silence ; une route est maintenant LUE, validée et exécutée par le
+# moteur Rust (le moteur numpy, lui, refuse les routes).
 CLES_RACINE = frozenset({"format", "version", *SECTIONS})
 CLES_GRAPHE = frozenset({"blocks", "regions", "routes", "heads", "thought", "bridge"})
 CLES_BLOC = frozenset({"id", "kind", "inputs", "outputs", "impl", "contrat"})
@@ -49,6 +49,8 @@ CLES_EXECUTION = frozenset({"activation", "placement", "cache", "replay", "impor
 CLES_THOUGHT = frozenset({"steps"})
 CLES_REGION = frozenset({"id", "blocks"})
 CLES_CONTRAT = frozenset({"version", "tolerance"})
+CLES_ROUTE = frozenset({"id", "bloc", "si", "alors", "sinon"})
+CLES_SI = frozenset({"kind", "seuil"})
 
 # Les profils d'implémentation d'un bloc. Le NOM est public (il est dans le
 # manifeste, donc dans le hash, donc dans la trace) ; l'ALGORITHME est privé.
@@ -163,6 +165,7 @@ def _valide(manifest: dict[str, Any]) -> None:
     if not isinstance(blocs, list) or not blocs:
         raise DRVMError("graphe sans bloc")
     ids = set()
+    kinds = {}
     for b in blocs:
         _objet("un bloc", b)
         _cles_fermees("un bloc", b, CLES_BLOC)
@@ -173,6 +176,7 @@ def _valide(manifest: dict[str, Any]) -> None:
         if b["id"] in ids:
             raise DRVMError(f"bloc dupliqué : {b['id']}")
         ids.add(b["id"])
+        kinds[b["id"]] = b["kind"]
         if b["kind"] not in BLOCS_CONNUS:
             raise DRVMError(f"type de bloc inconnu : {b['kind']}")
         impl = b.get("impl", "defaut")
@@ -229,10 +233,39 @@ def _valide(manifest: dict[str, Any]) -> None:
     routes = graphe["routes"]
     if not isinstance(routes, list):
         raise DRVMError("graph.routes doit être une liste")
-    if routes:
-        raise DRVMError(
-            f"routes non exécutées : {len(routes)} route(s) — le lecteur refuse "
-            "ce qu'il ne sait pas exécuter")
+    vues_routes, cibles = set(), set()
+    for r in routes:
+        _objet("une route", r)
+        _cles_fermees("une route", r, CLES_ROUTE)
+        rid = _cle_absente("une route", r, "id")
+        if not isinstance(rid, str):
+            raise DRVMError(f"route sans id : {r!r}")
+        if rid in vues_routes:
+            raise DRVMError(f"route dupliquée : {rid}")
+        vues_routes.add(rid)
+        bloc = _cle_absente("une route", r, "bloc")
+        if not isinstance(bloc, str) or bloc not in ids:
+            raise DRVMError(f"route vers un bloc inconnu : {bloc}")
+        if kinds[bloc] != "local_mixer":
+            raise DRVMError(f"route vers un bloc non mixeur : {bloc} ({kinds[bloc]})")
+        if bloc in cibles:
+            raise DRVMError(f"deux routes pour le bloc : {bloc}")
+        cibles.add(bloc)
+        si = _objet("si", _cle_absente("une route", r, "si"))
+        _cles_fermees("si", si, CLES_SI)
+        kind = _cle_absente("si", si, "kind")
+        if kind != "position":
+            raise DRVMError(f"condition de route inconnue : {kind}")
+        seuil = _cle_absente("si", si, "seuil")
+        if not isinstance(seuil, int) or isinstance(seuil, bool) or seuil < 0:
+            raise DRVMError(f"si.seuil invalide : {seuil!r} (route {rid})")
+        if "alors" not in r:
+            raise DRVMError(f"route sans alors : {rid}")
+        for cle in ("alors", "sinon"):
+            if cle in r:
+                v = r[cle]
+                if not isinstance(v, str) or v not in IMPLS_CONNUES:
+                    raise DRVMError(f"impl inconnue : {v!r} ({cle} de la route {rid})")
     execution = _objet("execution", manifest["execution"])
     _cles_fermees("execution", execution, CLES_EXECUTION)
     for cle in ("activation", "placement"):

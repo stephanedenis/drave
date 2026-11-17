@@ -3,11 +3,12 @@
 #
 # 2ᵉ partie (17/11) — le LECTEUR DRVM refuse ce qu'il n'exécute pas. Le format
 # déclarait `routes`, `regions`, `heads`, `thought`, `bridge` et les ignorait en
-# silence : une route non vide, une clé inconnue, une région/tête/pont vers un
-# bloc absent sont maintenant refusés, nommés, par les DEUX lecteurs (Python et
-# Rust) — et l'écriture refuse aussi, pour qu'un manifeste ne puisse pas naître
-# menteur. Contrôle négatif : le DRVM valide doit passer, et les DRVM déjà sur le
-# disque doivent rester lisibles.
+# silence : une clé inconnue, une région/tête/pont vers un bloc absent, une route
+# mal formée (bloc inconnu ou non mixeur, condition inconnue, deux routes pour un
+# bloc, `alors` absent) sont maintenant refusés, nommés, par les DEUX lecteurs
+# (Python et Rust). Une route VALIDE, elle, s'écrit et se lit — c'est le moteur qui
+# l'exécute (porte-n3-route). Contrôle négatif : le DRVM valide doit passer, une
+# route valide doit s'écrire, et les DRVM déjà sur le disque restent lisibles.
 set -u
 cd "$(dirname "$0")/.."
 D=${D:-./drave-core/target/release/drave}
@@ -88,14 +89,28 @@ def valide():
 cas = {}
 
 
-def ajoute(nom, attendu, muter):
+def _mixeur():
     m = valide()
+    m["graph"]["blocks"][0]["kind"] = "local_mixer"
+    return m
+
+
+def ajoute(nom, attendu, muter, base=valide):
+    m = base()
     muter(m)
     (T / f"{nom}.drvm").write_bytes(entete(m))
     cas[nom] = attendu
 
 
-def _route(m):  m["graph"]["routes"] = [{"id": "r1", "de": "b0", "vers": "b0"}]
+def _route_bloc(m):   m["graph"]["routes"] = [{"id": "r0", "bloc": "b1",
+                                                "si": {"kind": "position", "seuil": 1}, "alors": "flou"}]
+def _route_cond(m):   m["graph"]["routes"] = [{"id": "r0", "bloc": "b0",
+                                                "si": {"kind": "confiance", "seuil": 1}, "alors": "flou"}]
+def _route_double(m): m["graph"]["routes"] = [
+    {"id": "r0", "bloc": "b0", "si": {"kind": "position", "seuil": 1}, "alors": "flou"},
+    {"id": "r1", "bloc": "b0", "si": {"kind": "position", "seuil": 2}, "alors": "bloque"}]
+def _route_alors(m):  m["graph"]["routes"] = [{"id": "r0", "bloc": "b0",
+                                                "si": {"kind": "position", "seuil": 1}}]
 def _graphe(m): m["graph"]["quota"] = 1
 def _bloc(m):   m["graph"]["blocks"][0]["poids"] = 1
 def _region(m): m["graph"]["regions"][0]["blocks"] = ["b1"]
@@ -107,7 +122,11 @@ def _exec(m):   m["execution"]["regime"] = "eager"
 def _racine(m): m["inconnue"] = 1
 
 
-ajoute("route",  "routes non exécutées", _route)
+# les routes se jugent sur un bloc MIXEUR : un bloc `input` n'en accepte pas
+ajoute("route_bloc",   "route vers un bloc inconnu : b1", _route_bloc, base=_mixeur)
+ajoute("route_cond",   "condition de route inconnue : confiance", _route_cond, base=_mixeur)
+ajoute("route_double", "deux routes pour le bloc : b0", _route_double, base=_mixeur)
+ajoute("route_alors",  "route sans alors : r0", _route_alors, base=_mixeur)
 ajoute("graphe", "clé inconnue dans graph : quota", _graphe)
 ajoute("bloc",   "clé inconnue dans un bloc : poids", _bloc)
 ajoute("region", "région vers un bloc inconnu : b1", _region)
@@ -130,16 +149,25 @@ for nom, attendu in cas.items():
     else:
         raise AssertionError(f"{nom} : le lecteur Python a accepté ce qu'il n'exécute pas")
 
-# L'écriture refuse aussi : un manifeste ne peut pas naître menteur.
-man = valide()
-man["graph"]["routes"] = [{"id": "r1", "de": "b0", "vers": "b0"}]
+# L'écriture est le miroir de la lecture : une route VALIDE s'écrit, une route
+# mal formée ne s'écrit pas (un manifeste ne peut pas naître menteur).
+man = _mixeur()
+man["graph"]["routes"] = [{"id": "r0", "bloc": "b0",
+                           "si": {"kind": "position", "seuil": 1}, "alors": "flou"}]
+d.write_drvm(T / "ecrit-route.drvm", man,
+             [d.TensorSpec("b0.w", b"\x01\x02\x03\x04", bloc="b0")])
+with d.read_drvm(T / "ecrit-route.drvm") as v:
+    assert v.manifest["graph"]["routes"][0]["alors"] == "flou", "route perdue à l'écriture"
+man = _mixeur()
+man["graph"]["routes"] = [{"id": "r0", "bloc": "b9",
+                           "si": {"kind": "position", "seuil": 1}, "alors": "flou"}]
 try:
-    d.write_drvm(T / "ecrit.drvm", man,
+    d.write_drvm(T / "ecrit-faux.drvm", man,
                  [d.TensorSpec("b0.w", b"\x01\x02\x03\x04", bloc="b0")])
 except d.DRVMError as e:
-    assert "routes non exécutées" in str(e), e
+    assert "route vers un bloc inconnu" in str(e), e
 else:
-    raise AssertionError("écriture acceptée avec une route non exécutée")
+    raise AssertionError("écriture acceptée avec une route vers un bloc inconnu")
 
 # Non-régression : les DRVM déjà sur le disque restent lisibles (dont la fixture).
 fixture = pathlib.Path("drave-core/tests/fixtures/tiny_n0.drvm")
@@ -152,8 +180,8 @@ for f in glob.glob("**/*.drvm", recursive=True):
         n += 1
 
 (T / "cas.json").write_text(json.dumps(cas))
-print(f"  Python : {len(cas)} refus nommés · valide lu · écriture refusée · "
-      f"{n} DRVM existants relus")
+print(f"  Python : {len(cas)} refus nommés · valide lu · route valide écrite · "
+      f"route fausse refusée · {n} DRVM existants relus")
 PY
 
 "$D" --drvm-inspect "$T/valide.drvm" >/dev/null 2>&1 || { echo "  ❌ le DRVM valide est refusé par le lecteur Rust"; exit 1; }
@@ -162,6 +190,7 @@ while IFS=$'\t' read -r nom attendu; do
     [ "$CODE" = "3" ] || { echo "  ❌ $nom : code $CODE au lieu de 3 : $OUT"; exit 1; }
     printf '%s' "$OUT" | grep -Fq -- "$attendu" || { echo "  ❌ $nom : « $OUT » ne nomme pas « $attendu »"; exit 1; }
 done < <(python3 -c "import json;[print(k,v,sep='\t') for k,v in json.load(open('$T/cas.json')).items()]")
-echo "  ✅ Rust : 10 refus nommés (code 3) · le valide passe"
+N=$(python3 -c "import json;print(len(json.load(open('$T/cas.json'))))")
+echo "  ✅ Rust : $N refus nommés (code 3) · le valide passe"
 
-echo "PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé (10 cas, deux lecteurs)"
+echo "PORTE TENUE : empreinte refusée (code 4) · même modèle bit-exact · manifeste refusé ($N cas, deux lecteurs)"

@@ -550,6 +550,11 @@ fn main() {
                     println!("  bloc {:<12} {:<12} impl={:<7} tol={}",
                              b.id, b.kind, b.implementation, b.tolerance);
                 }
+                for r in &d.routes {
+                    println!("  route {:<10} bloc {:<10} position >= {} → {} sinon {}",
+                             r.id, r.bloc, r.seuil, r.alors,
+                             r.sinon.as_deref().unwrap_or("(profil du bloc)"));
+                }
                 for t in &d.tenseurs {
                     println!("  tenseur {:<24} bloc {:<10} {} o  {}", t.name, t.bloc, t.nbytes, t.dtype);
                 }
