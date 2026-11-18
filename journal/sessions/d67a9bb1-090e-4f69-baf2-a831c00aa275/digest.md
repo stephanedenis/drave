@@ -7653,3 +7653,104 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**données** : **135,5 Go … [2373 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 798 fiche(s) · 889 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1696 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+ create mode 100644 reports/banc-generation-r1.json
+ create mode 100644 reports/banc-grammaticalite-r1.json
+ create mode 100644 reports/rapport-r1-13000-pas.md
+d37e46e7 N4 — LE 73 M À 13 000 PAS : L'ÉCHANTILLONNAGE DÉCOLLE (TOP-40 0,551 → 0,831), LE GREEDY SE DÉGRADE (RÉP 6 → 11, ÉCHO 0,149)
+pas  850 · perte 1.1078 · PPL val 3.570 · 237 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -l \"nvidia-smi\\|cuda\" tools/porte-*.sh 2>/dev/null | head; echo \"=== ci ===\"; ls .github/workflows/ 2>/dev/null; ls -la reports/rapport-ci.md 2>/dev/null; echo \"=== r2 ===\"; tail -1 work/n3/r2.log", "description": "Check  … [37 caractères tronqués]`
+
+  ```
+tools/porte-r13-bpe.sh
+tools/porte-ressources.sh
+=== ci ===
+ci.yml
+-rw-------. 1 stephane stephane 12057 16 nov 04:07 reports/rapport-ci.md
+=== r2 ===
+pas  900 · perte 1.2256 · PPL val 3.561 · 251 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^def \\|^REGLAGES\\|^PROMPTS\" tools/banc_generation.py; sed -n '120,155p' tools/banc_generation.py", "description": "Read the generation bench functions for reuse"}`
+
+  ```
+47:PROMPTS = [
+70:REGLAGES = [
+77:def charger(chemin: str, device: str = "cpu"):
+86:def charger_aleatoire(cfg: NativeConfig, graine: int = 1234):
+93:def vocabulaires(limite: int = 50_000) -> set[str]:
+104:def normaliser(mot: str) -> str:
+108:def mesurer(texte: str, prompt: str, vocab: set[str]) -> dict:
+128:def generer(modele, prompt: str, n: int, top_k: int, temperature: float) -> tuple[str, int]:
+151:def main() -> None:
+    mots_gen = [normaliser(m) for m in generes.split() if m.strip()]
+    echo = sum(1 for m in mots_gen if m in mots_prompt) / max(1, len(mots_gen))
+    return {"mots": len(mots), "mots_valides": round(valides, 4),
+            "distinct_2": round(distinct_2, 4), "repetition": repetition,
+            "echo": echo}
+
+
+@torch.no_grad()
+def generer(modele, prompt: str, n: int, top_k: int, temperature: float) -> tuple[str, int]:
+    ids = list(prompt.encode("utf-8"))
+    debut = time.perf_counter()
+    for _ in range(n):
+        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
+                         device=modele.embed.weight.device)
+        logits = modele(x)["logits"][0, -1]
+        if temperature <= 0:
+            suivant = int(logits.argmax())
+     
+… [720 caractères tronqués]
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"balayage_decodage.py — quel décodage pour le natif ? (le greedy se dégrade avec l'entraînement)\n\nPOURQUOI. Le checkpoint r1 (73 M, 13 000 pas) a un top-40 à 0,831 de mots valides mais un\n**greedy qui boucle** (répétition 11, écho 0,149) : le banc à trois … [2779 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/balayage_decodage.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time env PYTHONPATH=. /home/stephane/gpu-env/bin/python bench/balayage_decodage.py --modele work/n3/r1.pt --n 128 --device cuda:0 --sortie reports/balayage-decodage-r1.json 2>&1 | tail -14", "description": "Run the decoding sweep on  … [25 caractères tronqués]`
+
+  ```
+greedy     mots  27.1 · valides 0.902 · d2 0.329 · rép 5.7 · écho 0.149
+  k20_T0.5   mots  25.6 · valides 0.897 · d2 0.888 · rép 1.4 · écho 0.079
+  k20_T0.8   mots  22.8 · valides 0.871 · d2 0.979 · rép 1.1 · écho 0.035
+  k20_T1.0   mots  21.5 · valides 0.806 · d2 0.995 · rép 1.0 · écho 0.037
+  k40_T0.5   mots  24.1 · valides 0.907 · d2 0.835 · rép 1.7 · écho 0.075
+  k40_T0.8   mots  22.8 · valides 0.817 · d2 0.974 · rép 1.1 · écho 0.035
+  k40_T1.0   mots  20.9 · valides 0.706 · d2 0.991 · rép 1.0 · écho 0.028
+  k80_T0.5   mots  25.4 · valides 0.875 · d2 0.825 · rép 2.4 · écho 0.094
+  k80_T0.8   mots  22.9 · valides 0.862 · d2 0.963 · rép 1.1 · écho 0.033
+  k80_T1.0   mots  20.6 · valides 0.704 · d2 0.995 · rép 1.0 · écho 0.019
+  écrit : reports/balayage-decodage-r1.json
+[stderr]
+
+real	4m18,072s
+user	4m19,922s
+sys	0m2,218s
+  ```
+
+- **write** `{"content": "# Le décodage du 73 M à 13 000 pas : top-40 à T=0,5 bat le greedy sur tous les axes\n\n> **Ligne de roadmap** : N4 (l'usage du natif) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré — sur\n> le checkpoint r1 (73 M, 13 000 pas), le **greedy** donne 0,902 de mots valides mais **5,7 de\n> … [4116 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-decodage-r1.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**r1 — 13 000 pas** : PP … [2243 caractères tronqués]`

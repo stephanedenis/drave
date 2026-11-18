@@ -1,0 +1,99 @@
+{
+ "schema": "drave.balayage-decodage",
+ "version": 1,
+ "modele": "work/n3/r1.pt",
+ "n": 128,
+ "graine": 1234,
+ "regimes": {
+  "greedy": {
+   "mots_valides": 0.9023,
+   "distinct_2": 0.3294,
+   "repetition": 5.7,
+   "echo": 0.1495,
+   "mots": 27.1,
+   "top_k": 0,
+   "temperature": 0.0
+  },
+  "k20_T0.5": {
+   "mots_valides": 0.8966,
+   "distinct_2": 0.8884,
+   "repetition": 1.4,
+   "echo": 0.079,
+   "mots": 25.6,
+   "top_k": 20,
+   "temperature": 0.5
+  },
+  "k20_T0.8": {
+   "mots_valides": 0.8712,
+   "distinct_2": 0.9789,
+   "repetition": 1.05,
+   "echo": 0.0348,
+   "mots": 22.8,
+   "top_k": 20,
+   "temperature": 0.8
+  },
+  "k20_T1.0": {
+   "mots_valides": 0.8064,
+   "distinct_2": 0.9949,
+   "repetition": 1.0,
+   "echo": 0.0373,
+   "mots": 21.5,
+   "top_k": 20,
+   "temperature": 1.0
+  },
+  "k40_T0.5": {
+   "mots_valides": 0.9066,
+   "distinct_2": 0.8351,
+   "repetition": 1.7,
+   "echo": 0.0755,
+   "mots": 24.1,
+   "top_k": 40,
+   "temperature": 0.5
+  },
+  "k40_T0.8": {
+   "mots_valides": 0.8168,
+   "distinct_2": 0.9738,
+   "repetition": 1.1,
+   "echo": 0.0355,
+   "mots": 22.8,
+   "top_k": 40,
+   "temperature": 0.8
+  },
+  "k40_T1.0": {
+   "mots_valides": 0.7064,
+   "distinct_2": 0.9909,
+   "repetition": 1.0,
+   "echo": 0.028,
+   "mots": 20.9,
+   "top_k": 40,
+   "temperature": 1.0
+  },
+  "k80_T0.5": {
+   "mots_valides": 0.8751,
+   "distinct_2": 0.825,
+   "repetition": 2.35,
+   "echo": 0.0939,
+   "mots": 25.4,
+   "top_k": 80,
+   "temperature": 0.5
+  },
+  "k80_T0.8": {
+   "mots_valides": 0.8619,
+   "distinct_2": 0.9625,
+   "repetition": 1.15,
+   "echo": 0.0334,
+   "mots": 22.9,
+   "top_k": 80,
+   "temperature": 0.8
+  },
+  "k80_T1.0": {
+   "mots_valides": 0.704,
+   "distinct_2": 0.9947,
+   "repetition": 1.0,
+   "echo": 0.0195,
+   "mots": 20.6,
+   "top_k": 80,
+   "temperature": 1.0
+  }
+ }
+}
