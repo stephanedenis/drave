@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 31.6 h |
-| Tours | 14 |
-| Messages | 606 |
-| Appels d'outils | 588 |
+| Durée | 33.0 h |
+| Tours | 18 |
+| Messages | 633 |
+| Appels d'outils | 604 |
 | Fichiers touchés | 39 |
-| Commandes | 459 |
+| Commandes | 474 |
 | Sous-agents | 7 |
-| Commits | 42 |
+| Commits | 43 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -71,6 +71,14 @@
 **Tour 13** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 **Tour 14** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 15** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 16** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 17** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 18** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -597,7 +605,7 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 
 ### Tour 14 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Record the learning-rate probe data
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md`
@@ -606,6 +614,68 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 - bash — Read the exact N4 bullet text
 - bash — Apply the word cuts
 - bash — Commit the LR finding and the curve tool
+- bash — Ten minutes later: check the chains and the pass
+- bash — Ten minutes later: check
+- bash — Wait 25 minutes, then read the first tranche results
+
+**Synthèse produite :**
+
+⏵ Tranche 1 en approche : PPL 3,91 (v2) et 3,98 (v1) à ~6 400 pas — le relevé complet est programmé
+
+Les deux 142 M sont sortis du palier (PPL ~3,9 à 6 400 pas, contre 12,0 au palier) et l'échelle AMP croît sainement (65 536 → 524 288). La passe du soir est à 66 portes, toujours 2 rouges (les structurelles). Le relevé de la première tranche (avec banc complet) se fera automatiquement vers 18 h 33.
+
+### Tour 15 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Verify the v2 corpus pin
+
+**Synthèse produite :**
+
+⏵ L'épingle du corpus v2 est vérifiée (6,90 Go, 21 s) — j'attends la fin de la tranche 1 (le relevé est programmé)
+
+La vérification de l'épingle v2 vient de repasser : `train.txt` → **`e3112a842ed6d97a…`**, 6 900 585 097 octets, en 21 s. C'est le contrôle de l'objectif (1) : le corpus promu est bien celui qui a été dédupliqué et épinglé.
+
+Les deux chaînes sont à ~6 900 pas (PPL ~3,9), la passe du soir à 66 portes (2 rouges structurelles), et le relevé de la tranche 1 (banc complet) se déclenchera automatiquement vers 18 h 33.
+
+### Tour 16 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check the A2.6-related gates in the running pass
+
+**Synthèse produite :**
+
+⏵ Les portes A2.6 du soir sont vertes (flux, coupe, échange-experts) — la règle non branchée ne perturbe pas le régime 1 %
+
+Vérifié dans le registre de la passe en cours : `porte-flux` (26 s), `porte-coupe` (140 s) et `porte-echange-experts` (55 s) sont **vertes** — l'invariant du routage des experts n'a pas bougé, ce qui est le contrôle attendu d'un ajout non branché. 67 portes passées, 2 rouges structurelles, la passe se termine vers 18 h 45.
+
+La tranche 1 des deux 142 M se termine vers 18 h 33 (PPL ~3,9 en cours de route) ; le relevé complet suivra automatiquement.
+
+### Tour 17 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Inspect the material module's band tables
+- bash — Wait ten minutes and check the three runs
+
+**Synthèse produite :**
+
+⏵ Les deux 142 M sont à ~8 000 pas (PPL 3,78), passe à 72 portes — tranche 1 dans quelques minutes
+
+Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est passée à 1 048 576 (saine), et la passe n'a toujours que les deux rouges structurelles. Le relevé de la première tranche (banc complet sur les deux corpus) est programmé ; c'est lui qui donnera le premier point de comparaison v1/v2.
+
+### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Wait ten minutes, then check the first tranche outputs
+- bash — Check the first tranche completion and benches
+- job_output
+- bash — Check the v2 tranche 1 and the pass
+- bash — Wait for the evening pass to finish
+- bash — Record the evening pass 88/2
+- bash — Commit the evening pass record and the tranche 1 benches
 
 ## 3. Travail accompli
 
@@ -705,7 +775,7 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 419 autres
+- … et 434 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -833,7 +903,7 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 
 ## 5. Erreurs rencontrées
 
-12 sorties en erreur ou divergentes. Les premières :
+13 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -847,6 +917,7 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 - **T9** : mer 18 nov 2026 12:41:28 EST [stderr] Traceback (most recent call last):   File "<string>", line 3, in <module>     d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val']
 - **T10** : --> src/placement.rs:52:12    --> src/placement.rs:117:11    --> src/placement.rs:119:11    --> src/placement.rs:122:11    --> src/placement.rs:124:11    --> src/placement.rs:127:11 --- src/main.rs:83
 - **T11** : tests_vars::les_vars_lues_sont_completes --- FAILED ....... failures:  ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (1181902) panicked a
+- **T18** : mer 18 nov 2026 18:29:18 EST pas 9200 · perte 1.2103 · PPL val 3.676 · 3904 s · échelle 1048576 pas 9250 · perte 1.2407 · PPL val 3.680 · 3925 s · échelle 1048576 === bancs === [exit code: 2]
 
 ## 6. Commits
 
@@ -892,4 +963,5 @@ Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cour
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read
 

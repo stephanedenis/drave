@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**25 commits** · **9 session(s)** · **6 thème(s)**
+**26 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 4 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
-| mesures | 12 | [mesures.md](mesures.md) |
+| mesures | 13 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 3 | [portes.md](portes.md) |
 
@@ -28,7 +28,7 @@
 | `9f4f7b6d-c5aa-4269-b785-a0f444424470` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 0.2 h | [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md) |
 | `c7e46dba-11cb-456b-a3b6-715428927f99` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.4 h | [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md) |
 | `cbf7ca71-5b38-428e-9f19-298be1720918` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 1.0 h | [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md) |
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 31.6 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 33.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `da0f2984-32d0-459d-a761-d3faf6a10b8a` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 423.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
@@ -61,6 +61,7 @@
 | 16:40 | `75280cfe` | N/D — LE CORPUS V2 EST PROMU ET ÉPINGLÉ : 6,90 Go DANS data/, MANIFESTE 9861fb39… |
 | 16:49 | `837fb4dd` | A2.6 — LA RÈGLE SAIT CHIFFRER ET REFUSER LES EXPERTS : 7,0 Go/s PAR LECTEUR, 13/13 TESTS, 144/144 CRATE |
 | 16:53 | `a039fe51` | A2.6 — LA TRACE DES EXPERTS DIT LES CHIFFRES (5e TEST, 14/14 · 145/145) |
+| 17:26 | `d8972e8b` | N — LE 150 M : À lr 3e-4 LE PALIER NE CASSE PAS, À 1e-4 IL CASSE VERS 1 550 PAS (11,56 → 7,60) |
 
 ## Le récit de la journée (écrit à la main)
 

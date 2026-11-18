@@ -11078,3 +11078,277 @@ budget exit=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cours.md tools/entrainer_native.py && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nN — LE 150 M : À lr 3e-4 L … [1170 caractères tronqués]`
+
+  ```
+a039fe51..d8972e8b  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; echo \"passe: $(awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | wc -l) rouges / $(wc -l < work/portes/roue-1118-1712/registre.txt 2>/d … [154 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 17:38:33 EST
+pas 2050 · perte 2.1119 · PPL val 7.497 · 880 s · échelle 131072
+pas 2200 · perte 1.7936 · PPL val 6.561 · 872 s · échelle 131072
+passe: 0 rouges / 32 portes
+  porte-horloge          ✅                          27 s    ✅ borne atteinte : a
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; echo \"passe: $(awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | wc -l) rouges / $(wc -l < work/portes/roue-1118-1712/registre.txt 2>/d … [83 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 17:48:20 EST
+pas 3450 · perte 1.4376 · PPL val 4.703 · 1465 s · échelle 131072
+pas 3700 · perte 1.4704 · PPL val 4.668 · 1466 s · échelle 131072
+passe: 0 rouges / 32 portes
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; echo \"passe: $(awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | wc -l) rouges / $(wc -l < work/portes/roue-1118-1712/registre.txt 2>/d … [83 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 17:58:06 EST
+pas 4850 · perte 1.4011 · PPL val 4.123 · 2049 s · échelle 262144
+pas 5200 · perte 1.3310 · PPL val 4.151 · 2060 s · échelle 262144
+passe: 2 rouges / 52 portes
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; echo \"passe: $(awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | wc -l) rouges / $(wc -l < work/portes/roue-1118-1712/registre.txt 2>/d … [83 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:07:53 EST
+pas 6150 · perte 1.1945 · PPL val 3.910 · 2629 s · échelle 524288
+pas 6650 · perte 1.3236 · PPL val 3.980 · 2634 s · échelle 524288
+passe: 2 rouges / 66 portes
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+### 🤖 Assistant
+
+⏵ Attente longue jusqu'à la fin de la tranche 1 (≈ 18 h 35), puis relevé de courbe
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v21.pt work/n4/v11.pt 2>/dev/null; echo \"=== courbe ===\"; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | tail -12; echo \"=== passe ===\"; awk ' … [217 caractères tronqués]`
+
+  ```
+started background job bash-904
+  ```
+
+### 🤖 Assistant
+
+⏵ Tranche 1 en approche : PPL 3,91 (v2) et 3,98 (v1) à ~6 400 pas — le relevé complet est programmé
+
+Les deux 142 M sont sortis du palier (PPL ~3,9 à 6 400 pas, contre 12,0 au palier) et l'échelle AMP croît sainement (65 536 → 524 288). La passe du soir est à 66 portes, toujours 2 rouges (les structurelles). Le relevé de la première tranche (avec banc complet) se fera automatiquement vers 18 h 33.
+
+
+## Tour 15
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/epingle_corpus.py --corpus data/wiki_mix_v2 --sortie reports/corpus-epingle-v2.json --verifie 2>&1 | tail -3; date", "description": "Verify the v2 corpus pin", "timeoutMs": 600000}`
+
+  ```
+✅ train.txt : e3112a842ed6d97a… (6900585097 o)
+mer 18 nov 2026 18:08:40 EST
+[stderr]
+
+real	0m21,085s
+user	0m19,446s
+sys	0m1,637s
+  ```
+
+### 🤖 Assistant
+
+⏵ L'épingle du corpus v2 est vérifiée (6,90 Go, 21 s) — j'attends la fin de la tranche 1 (le relevé est programmé)
+
+La vérification de l'épingle v2 vient de repasser : `train.txt` → **`e3112a842ed6d97a…`**, 6 900 585 097 octets, en 21 s. C'est le contrôle de l'objectif (1) : le corpus promu est bien celui qui a été dédupliqué et épinglé.
+
+Les deux chaînes sont à ~6 900 pas (PPL ~3,9), la passe du soir à 66 portes (2 rouges structurelles), et le relevé de la tranche 1 (banc complet) se déclenchera automatiquement vers 18 h 33.
+
+
+## Tour 16
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"porte-(flux|pont|coupe|echange-experts|ressources|produit) \" work/portes/roue-1118-1712/registre.txt 2>/dev/null; echo \"---\"; wc -l < work/portes/roue-1118-1712/registre.txt; date", "description": "Check the A2.6-related … [28 caractères tronqués]`
+
+  ```
+porte-coupe 0 140
+porte-echange-experts 0 55
+porte-flux 0 26
+---
+67
+mer 18 nov 2026 18:09:07 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les portes A2.6 du soir sont vertes (flux, coupe, échange-experts) — la règle non branchée ne perturbe pas le régime 1 %
+
+Vérifié dans le registre de la passe en cours : `porte-flux` (26 s), `porte-coupe` (140 s) et `porte-echange-experts` (55 s) sont **vertes** — l'invariant du routage des experts n'a pas bougé, ce qui est le contrôle attendu d'un ajout non branché. 67 portes passées, 2 rouges structurelles, la passe se termine vers 18 h 45.
+
+La tranche 1 des deux 142 M se termine vers 18 h 33 (PPL ~3,9 en cours de route) ; le relevé complet suivra automatiquement.
+
+
+## Tour 17
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"BANDE\\|bande\\|cout_par_jeton\\|fn plan\" drave-core/src/materiel.rs | head -20; echo \"=== usages ===\"; grep -rn \"materiel::plan\\|cout_par_jeton\" drave-core/src/*.rs | head -5", "description": "Inspect the material mo … [20 caractères tronqués]`
+
+  ```
+311:    pub fn plan(&self, ctx: usize, taille_modele_go: f64, n_experts: usize,
+318:        // la bande passante sature) ; mais 10 cœurs = 14,7 contre 18,7 avec
+324:bande passante mémoire sature : 20 cœurs = 22,5 Go/s, 20 cœurs + hyperthreads = 18,9",
+404:    pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
+489:    fn plan_dans_les_bornes() {
+=== usages ===
+drave-core/src/main.rs:3661:        println!("  {}", m.cout_par_jeton(&plan, go, tete_go, 8.0));
+drave-core/src/materiel.rs:404:    pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; wc -l < work/portes/roue-1118-1712/registre.txt; awk '$2 != 0' work/portes/roue-1118-1712/registre.txt | wc -l", "description": "Wait ten minutes and chec … [39 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:19:26 EST
+pas 7800 · perte 1.1924 · PPL val 3.778 · 3319 s · échelle 524288
+pas 8400 · perte 1.2512 · PPL val 3.783 · 3327 s · échelle 1048576
+72
+2
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux 142 M sont à ~8 000 pas (PPL 3,78), passe à 72 portes — tranche 1 dans quelques minutes
+
+Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est passée à 1 048 576 (saine), et la passe n'a toujours que les deux rouges structurelles. Le relevé de la première tranche (banc complet sur les deux corpus) est programmé ; c'est lui qui donnera le premier point de comparaison v1/v2.
+
+
+## Tour 18
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la work/n4/v21.pt work/n4/v11.pt 2>/dev/null; tail -2 work/n4/v2.chaine.log; echo \"=== bancs ===\"; ls reports/banc-generation-v2*.json reports/banc-generation-v1*.json 2>/dev/null", "description": "Wait ten min … [65 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:29:18 EST
+pas 9200 · perte 1.2103 · PPL val 3.676 · 3904 s · échelle 1048576
+pas 9250 · perte 1.2407 · PPL val 3.680 · 3925 s · échelle 1048576
+=== bancs ===
+[exit code: 2]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-873 (bash: sleep 5400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo "=== v2 ==="; grep -E "=== tranche" work/n4/v2.chaine.log | tail -2; grep -E "ppl_val" work/n4/v2*.pt.json 2>/dev/null | tail -2; echo "=== v1 ==="; grep -E "=== tranche" work/n4/v1.chaine.log | tail -2; ls work/n4/*.pt 2>/dev/null | wc -l) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 330; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la work/n4/v21.pt work/n4/v11.pt 2>/dev/null; grep -E \"=== tranche 2\" work/n4/v2.chaine.log work/n4/v1.chaine.log; ls reports/banc-generation-v2*.json reports/banc-generation-v1*.json 2>/dev/null | head -4", "d … [83 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:34:57 EST
+-rw-r--r--. 1 stephane stephane 567776301 18 nov 18:29 work/n4/v11.pt
+work/n4/v1.chaine.log:=== tranche 2/11 18:32 ===
+reports/banc-generation-v11.json
+  ```
+
+### 👤 Utilisateur
+
+background job bash-904 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v21.pt work/n4/v11.pt 2>/dev/null; echo "=== courbe ==="; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | tail -12; echo "=== passe ==="; awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | head -3; tail -1 /tmp/passe-1118-soir.log | cut -c1-70) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-904"}`
+
+  ```
+mer 18 nov 2026 18:33:03 EST
+work/n4/v11.pt
+=== courbe ===
+
+== v2
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+
+== v1
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+
+  écrit : reports/courbe-150m.json
+=== passe ===
+porte-indice 1 870
+porte-melange 1 109
+  porte-push-paresseux   ✅                          29 s    PORTE TENU
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la work/n4/v21.pt 2>/dev/null; tail -1 work/n4/v2.chaine.log; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | tail -8; echo \"=== passe ===\"; awk '$2 != 0 … [177 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:43:31 EST
+-rw-r--r--. 1 stephane stephane 567776301 18 nov 18:35 work/n4/v21.pt
+pas  850 · perte 1.1706 · PPL val 3.615 · 372 s · échelle 65536
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+
+== v1
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+
+  écrit : reports/courbe-150m.json
+=== passe ===
+porte-indice 1 870
+porte-melange 1 109
+  porte-trace            ✅                          28 s    ✅ la trace
+  ```
+
+- **bash** `{"command": "sleep 460; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/passe-1118-soir.log; echo \"=== registre ===\"; wc -l < work/portes/roue-1118-1712/registre.txt; awk '$2 != 0' work/portes/roue-1118-1712/registre.txt", "description": "Wait for the evening pass to finis … [24 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 18:51:20 EST
+      ❌ l'état de A ne rend pas le code de A dans une
+         invite qui n'en contient aucun : le mélange ne pourrait rien dire
+Journaux complets : work/portes/roue-1118-1712
+=== registre ===
+91
+porte-indice 1 870
+porte-melange 1 109
+--- 88 vertes, 2 rouges ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"\"\"> **Passe — 2026-11-18 10 h 57 → 13 h 00 :** **90 portes, 88 vertes, 2 rouges** — `indice` (854 s) et\n> … [1997 caractères tronqués]`
+
+  ```
+references : 2510
+ok
+budget exit=1
+     · compteurs : en-cours.md dit 905 JSON, le disque en a 910
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"Les deu … [1922 caractères tronqués]`

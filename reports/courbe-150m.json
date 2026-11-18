@@ -1,0 +1,79 @@
+{
+ "schema": "drave.courbe-chaine",
+ "version": 1,
+ "n": 11,
+ "chaines": {
+  "v2": [
+   {
+    "pas": 10000,
+    "ppl_val": 3.556834555616988,
+    "precision_main": 0.629638671875,
+    "duree_s": 4270.652751207352,
+    "greedy": {
+     "mots_valides": 0.9965,
+     "repetition": 11,
+     "distinct_2": 0.2434,
+     "echo": 0.1605
+    },
+    "top40_0.8": {
+     "mots_valides": 0.8882,
+     "repetition": 1,
+     "distinct_2": 0.9798,
+     "echo": 0.0343
+    },
+    "top20_0.5": {
+     "mots_valides": 0.9592,
+     "repetition": 5,
+     "distinct_2": 0.8382,
+     "echo": 0.0777
+    }
+   },
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "v1": [
+   {
+    "pas": 10000,
+    "ppl_val": 3.508810782732683,
+    "precision_main": 0.630462646484375,
+    "duree_s": 3970.7184512615204,
+    "greedy": {
+     "mots_valides": 0.9854,
+     "repetition": 14,
+     "distinct_2": 0.2377,
+     "echo": 0.1572
+    },
+    "top40_0.8": {
+     "mots_valides": 0.8768,
+     "repetition": 2,
+     "distinct_2": 0.985,
+     "echo": 0.0514
+    },
+    "top20_0.5": {
+     "mots_valides": 0.9288,
+     "repetition": 4,
+     "distinct_2": 0.8709,
+     "echo": 0.0659
+    }
+   },
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ]
+ }
+}

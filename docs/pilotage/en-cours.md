@@ -84,9 +84,9 @@
 |---|---|---|
 | portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **807** / **905** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **807** / **910** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **18/11 10 h 57 → 13 h 00** : **90** portes, **88/2** ; seules `indice` (854 s) et `melange` (106 s) **structurelles** ; `sessions` **verte** ; passée machine chargée (r4 + dédups), donc verdict seul | `work/portes/roue-1118-1057/registre.txt` |
+| dernière passe | **18/11 16 h 51 → 18 h 51** : **90** portes, **88/2** ; seules `indice` (870 s) et `melange` (109 s) **structurelles** ; `sessions` **verte** ; machine chargée (deux 142 M), verdict seul | `work/portes/roue-1118-1712/registre.txt` |
 
 ## Les chantiers et leurs bloquants
 
