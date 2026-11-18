@@ -1,0 +1,19 @@
+{
+ "schema": "drave.val-deux-decoupages",
+ "version": 1,
+ "date": "2026-11-18",
+ "modele": "work/n2ac/mix1024-100m.pt (73 366 568 paramètres)",
+ "note": "mêmes poids, mêmes 65 536 jetons notés, seq 1024, lot 8 — seule la validation change",
+ "fin_du_train_5pct": {
+  "ppl_val": 4.01394552944023,
+  "source": "work/n2ac/mix1024-100m.pt.json (course du 17/11)"
+ },
+ "val_epingle": {
+  "ppl_val": 4.679211756472265,
+  "source": "data/wiki_mix/propre/val.txt",
+  "octets_val": 10330112,
+  "jetons_val": 65536,
+  "epingle_manifeste": "fae5bb7389c6c0a93d3d4400886d7912fe4afdb1788fe2df34eb1b3d01acb52f"
+ },
+ "ecart_pct": 16.57
+}

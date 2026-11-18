@@ -70,6 +70,10 @@ def main() -> None:
     ap.add_argument("--positions-aleatoires", type=int, default=0,
                     help="décalage de position tiré dans [0, N] à chaque pas (0 = positions fixes)")
     ap.add_argument("--canal", default=None, help="fichier de classes de structure (1 par octet)")
+    ap.add_argument("--val", default=None,
+                    help="corpus de VALIDATION épinglé (sinon : la fin du train, 5 %)")
+    ap.add_argument("--epingle", default="reports/corpus-epingle.json",
+                    help="manifeste d'épingle dont on recopie l'empreinte (provenance)")
     ap.add_argument("--init", default=None,
                     help="checkpoint de départ (poids seuls, pour un curriculum)")
     ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
@@ -80,10 +84,19 @@ def main() -> None:
     torch.manual_seed(a.graine)
     data = charger(a.corpus)
     canal_data = charger_canal(a.canal) if a.canal else None
-    n_val = max(10_000, len(data) // 20)
-    train, val = data[:-n_val], data[-n_val:]
-    canal_train = canal_data[:-n_val] if canal_data is not None else None
-    canal_val = canal_data[-n_val:] if canal_data is not None else None
+    if a.val:
+        # La validation ÉPINGLÉE : le vrai `val.txt`, pas la fin du train. C'est ce que
+        # l'alerte de reproductibilité demandait — sans elle, le `ppl_val` dépend du
+        # découpage et deux campagnes ne sont pas comparables.
+        train, val = data, charger(a.val)
+        canal_train = canal_data
+        canal_val = None
+        print(f"  validation épinglée : {a.val} ({len(val)} octets)", flush=True)
+    else:
+        n_val = max(10_000, len(data) // 20)
+        train, val = data[:-n_val], data[-n_val:]
+        canal_train = canal_data[:-n_val] if canal_data is not None else None
+        canal_val = canal_data[-n_val:] if canal_data is not None else None
     cfg = NativeConfig(d_model=a.dim, expert_hidden=a.expert_hidden)
     modele = NativeModel(cfg).to(a.device)
     if a.init:
@@ -130,8 +143,13 @@ def main() -> None:
     modele.eval()
     torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
     h = exporter_drvm(modele, a.drvm)
+    epingle = None
+    if a.epingle and pathlib.Path(a.epingle).exists():
+        epingle = json.loads(pathlib.Path(a.epingle).read_text()).get("manifeste_sha256")
     res = {"modele": "drave-n0", "parametres": modele.nb_parametres(),
-           "corpus": a.corpus, "octets": len(data), "pas": a.pas,
+           "corpus": a.corpus, "octets": len(data),
+           "val": a.val or "fin du train", "octets_train": len(train),
+           "octets_val": len(val), "epingle": epingle, "pas": a.pas,
            "seq": a.seq, "lot": a.lot, "lr": a.lr, "graine": a.graine,
            "perte_finale": pertes[-1], "ppl_val": p_val, "jetons_val": n_tok,
            "tetes": a.tetes, "precision_main": prec_main,

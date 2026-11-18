@@ -6476,3 +6476,288 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/epingle_corpus.py reports/corpus-epingle.json reports/rapport-corpus-epingle.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nN — LE CORPUS D'ENTRAÎNEMENT EST ÉPINGLÉ : TRAIN 0876b608… (1 017 487  … [1286 caractères tronqués]`
+
+  ```
+create mode 100644 reports/corpus-epingle.json
+ create mode 100644 reports/rapport-corpus-epingle.md
+ create mode 100644 tools/epingle_corpus.py
+bb57604c N — LE CORPUS D'ENTRAÎNEMENT EST ÉPINGLÉ : TRAIN 0876b608… (1 017 487 092 o, 2 480 766 lignes), VAL fbddef91…, MANIFESTE fae5bb73…
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"val\\|init\" tools/entrainer_native.py | head -30; echo \"=== main ===\"; sed -n '40,120p' tools/entrainer_native.py", "description": "Read the trainer's data and init logic"}`
+
+  ```
+45:    modele.eval(); total = 0.0; n = 0
+73:    ap.add_argument("--init", default=None,
+83:    n_val = max(10_000, len(data) // 20)
+84:    train, val = data[:-n_val], data[-n_val:]
+85:    canal_train = canal_data[:-n_val] if canal_data is not None else None
+86:    canal_val = canal_data[-n_val:] if canal_data is not None else None
+89:    if a.init:
+90:        ck = torch.load(a.init, map_location="cpu", weights_only=False)
+92:        print(f"  init : {a.init}", flush=True)
+115:            p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2, canal=canal_val)
+116:            print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
+117:    p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8, canal=canal_val)
+119:    modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0
+122:            x, y, c = lot(val, a.lot, a.seq, a.device, 10_000_000 + _ * a.lot, canal_val)
+127:            n_eval += y.numel()
+128:    prec_main = bons_main / max(1, n_eval)
+129:    prec_early = [b / max(1, n_eval) for b in bons_early]
+130:    modele.eval()
+136:           "perte_finale": pertes[-1], "ppl_val": p_val, 
+… [4460 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'PY'\nimport torch\nck = torch.load(\"work/n2ac/mix1024-100m.pt\", map_location=\"cpu\", weights_only=False)\nprint(\"config:\", {k: v for k, v in ck[\"config\"].items() if k in (\"d_model\",\"ex … [401 caractères tronqués]`
+
+  ```
+config: {'vocab': 256, 'd_model': 640, 'n_blocks': 6, 'expert_hidden': 640, 'top_k': 2, 'kwta': 0.25, 'window': 256, 'max_pos': 2048, 'thought_steps': 2, 'early_blocks': (1, 3, 5)}
+clés: ['config', 'state']
+nb params state: 73366568
+0, 0 %, 1 MiB
+1, 0 %, 1 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '128,160p' tools/entrainer_native.py", "description": "Read the trainer's metadata write"}`
+
+  ```
+prec_main = bons_main / max(1, n_eval)
+    prec_early = [b / max(1, n_eval) for b in bons_early]
+    modele.eval()
+    torch.save({"config": cfg.__dict__, "state": modele.state_dict()}, a.sortie)
+    h = exporter_drvm(modele, a.drvm)
+    res = {"modele": "drave-n0", "parametres": modele.nb_parametres(),
+           "corpus": a.corpus, "octets": len(data), "pas": a.pas,
+           "seq": a.seq, "lot": a.lot, "lr": a.lr, "graine": a.graine,
+           "perte_finale": pertes[-1], "ppl_val": p_val, "jetons_val": n_tok,
+           "tetes": a.tetes, "precision_main": prec_main,
+           "precision_early": prec_early,
+           "drvm": a.drvm, "sha256_drvm": h, "duree_s": time.time() - t0}
+    pathlib.Path(a.sortie + ".json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
+    print(json.dumps(res, ensure_ascii=False, indent=1))
+
+
+if __name__ == "__main__":
+    main()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep('''    ap.add_argument(\"- … [2225 caractères tronqués]`
+
+  ```
+ok
+compile-ok
+8:from __future__ import annotations
+10:import argparse
+11:import json
+12:import math
+13:import pathlib
+14:import random
+15:import time
+17:import torch
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; echo \"=== 50 pas de mesure ===\"; timeout 900 /home/stephane/gpu-env/bin/python tools/entrainer_native.py --corpus data/wiki_mix/propre/train.txt --val  … [317 caractères tronqués]`
+
+  ```
+0, 0 %, 1 MiB
+1, 0 %, 1 MiB
+=== 50 pas de mesure ===
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/entrainer_native.py", line 20, in <module>
+    from tools.native_model import NativeConfig, NativeModel, exporter_drvm
+ModuleNotFoundError: No module named 'tools'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 1200 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 50 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --expert-hidden 640 --no … [230 caractères tronqués]`
+
+  ```
+"precision_main": 0.54730224609375,
+ "precision_early": [
+  0.000213623046875,
+  0.002777099609375,
+  0.00469970703125
+ ],
+ "drvm": "/tmp/essai-50pas.drvm",
+ "sha256_drvm": "59f6a0d4e80fbd0e43d933954145b0a08e76aca89787b974d3d5685eea059db4",
+ "duree_s": 21.263863801956177
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('/tmp/essai-50pas.pt.json'))\nfor k in ('parametres','corpus','val','octets_train','octets_val','epingle','pas','lr','perte_finale','ppl_val','jetons_val','duree_s'):\n    print(f'{k:14} … [70 caractères tronqués]`
+
+  ```
+parametres     73366568
+corpus         data/wiki_mix/propre/train.txt
+val            data/wiki_mix/propre/val.txt
+octets_train   1017487092
+octets_val     10330112
+epingle        fae5bb7389c6c0a93d3d4400886d7912fe4afdb1788fe2df34eb1b3d01acb52f
+pas            50
+lr             0.0001
+perte_finale   1.4770317077636719
+ppl_val        4.679211756472265
+jetons_val     65536
+duree_s        21.263863801956177
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n3 && nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --ex … [417 caractères tronqués]`
+
+  ```
+pid 
+0, 0 %, 4 MiB
+1, 0 %, 124 MiB
+[stderr]
+bash: line 1: work/n3/r1.pid: No such file or directory
+cat: work/n3/r1.pid: No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -ld work; mkdir -p work/n3 2>&1; ls -ld work/n3 2>&1; ls work/ | head -5", "description": "Diagnose the work directory creation"}`
+
+  ```
+drwxr-xr-x. 1 stephane stephane 2858 18 nov 09:07 work
+drwxr-xr-x. 1 stephane stephane 12 18 nov 09:07 work/n3
+atomes_cohortes.py
+attente_portes.sh
+banc-performance
+chantier
+corpus-commun
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,etime,args | grep entrainer_native | grep -v grep | head -3; echo \"=== log ===\"; ls -la work/n3/ 2>/dev/null; tail -3 work/n3/r1.log 2>/dev/null", "description": "Check the training process and log"}`
+
+  ```
+mer 18 nov 2026 09:08:38 EST
+ 322953       00:41 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n3 && nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --expert-hidden 640 --no-tetes --amp --device cuda:0 --graine 1 --init work/n2ac/mix1024-100m.pt --sortie work/n3/r1.pt --drvm work/n3/r1.drvm > work/n3/r1.log 2>&1 & echo $! > work/n3/r1.pid; sleep 20; echo "pid $(cat work/n3/r1.pid)"; tail -3 work/n3/r1.log; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader
+ 322956       00:41 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --expert-hidden 640 --no-tetes --amp --device cuda:0 --graine 1 --init work/n2ac/mix1024-100m.pt --sortie work/n3/r1.pt --drvm work/n3/r1.drvm
+=== log ===
+total 0
+drwxr-xr-x. 1 stephane stephane   12 18 nov 09:07 .
+drwxr-xr-x. 1 stephane stephane 2858 18 nov 09:07 ..
+-rw-r--r--. 1 stephane stephane    0 18 nov 09
+… [10 caractères tronqués]
+  ```
+
+- **list_agents** `{}`
+
+  ```
+8c024745-95cb-4885-9d0b-865142606b6d [running] — Grammaticalité du 100 M
+c7e46dba-11cb-456b-a3b6-715428927f99 [running] — Reconnaissance A2.6 experts
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/rapport-a2.6-reconnaissance.md reports/banc-grammaticalite-100m.json reports/rapport-grammaticalite-100m.md 2>&1; echo \"=== git status ===\"; git status --short | head -10; echo \"=== processus python ===\"; ps -eo pi … [136 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/rapport-a2.6-reconnaissance.md': No such file or directory
+ls: cannot access 'reports/rapport-grammaticalite-100m.md': No such file or directory
+-rw-r--r--. 1 stephane stephane 1040 18 nov 09:04 reports/banc-grammaticalite-100m.json
+=== git status ===
+ M tools/entrainer_native.py
+?? reports/banc-grammaticalite-100m.json
+=== processus python ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/sessions.py --help 2>&1 | head -20; echo \"=== plan e181 ===\"; head -12 journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md 2>/dev/null; echo \"=== porte sessions ===\"; sed -n '1,30p' tools/porte-sessions.sh … [59 caractères tronqués]`
+
+  ```
+usage: sessions.py [-h] [--racine RACINE] [--status] [--check] [--strict]
+                   [--modele] [--autotest] [--depuis-en-cours]
+
+sessions.py — plans de session : qui fait quoi, avant d'écrire `en-cours`.
+Chaque session active expose son mandat dans `journal/sessions/<id>/plan.md` :
+périmètre, fichiers réservés, heartbeat, prochaine action, état. Les autres
+sessions consultent `--status` avant de claim, et `--check --strict` refuse
+les mandats incomplets, les identifiants dupliqués, les périmètres qui se
+recouvrent et les heartbeats périmés (le `--check` seul les signale). Les
+**fichiers proches** (une réservation imbriquée dans une autre, `data/` ⊃
+`data/structures/`) restent des **avertissements**, même en strict :
+l'imbrication est le régime normal d'un territoire partagé, et une porte qui
+échoue sur toute imbrication est rouge dès qu'une session réserve un sous-
+dossier — mesuré le 02/11, le strict sortait en 1 avec **0 erreur et 4
+avertissements**. `en-cours` reste la seule source de l'état : ce plan est le
+**contrat de travail** qui le précède. Une session arrêtée (reboot, panne)
+passe à `État : en pause` : elle reste dans l'état, son heartbeat n'est plus
+exigé, et la
+… [1406 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"État\\|heartbeat\\|Heartbeat\\|Prochaine action\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -10; echo \"=== check ===\"; python3 tools/sessions.py --check 2>&1 | head -8", "description": "Read the … [28 caractères tronqués]`
+
+  ```
+6:> Le heartbeat est celui de l'état ; il se rafraîchit à chaque cycle.
+18:- **Heartbeat** : 2026-11-16 14:50 EST
+19:- **Prochaine action** : le diagnostic du natif est livré (le banc, la numpy, l'alerte de reproductibilité) ; la suite est le palier 1 (le corpus épinglé).
+22:- **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
+23:- **État** : actif
+=== check ===
+  ⚠ mandat périmé (2540 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old,  … [1130 caractères tronqués]`
+
+  ```
+ok
+  ✅ plans cohérents
+  ✅ plans cohérents
+PORTE TENUE : plans lisibles · autotest doublon/champ manquant/pause · check strict
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\nessai = json.load(open(\"/tmp/essai-50pas.pt.json\"))\ndoc = {\"schema\": \"drave.val-deux-decoupages\", \"version\": 1, \"date\": \"2026-11-18\",\n       \"modele\": \"work/n2ac/mix1024-100m.p … [866 caractères tronqués]`
+
+  ```
+{
+ "schema": "drave.val-deux-decoupages",
+ "version": 1,
+ "date": "2026-11-18",
+ "modele": "work/n2ac/mix1024-100m.pt (73 366 568 paramètres)",
+ "note": "mêmes poids, mêmes 65 536 jetons notés, seq 1024, lot 8 — seule la validation change",
+ "fin_du_train_5pct": {
+  "ppl_val": 4.01394552944023,
+  "source": "work/n2ac/mix1024-100m.pt.json (course du 17/11)"
+ },
+ "val_epingle": {
+  "ppl_val": 4.679211756472265,
+  "source": "data/wiki_mix/propre/val.txt",
+  "octets_val": 10330112,
+  "jetons_val": 65536,
+  "epingle_manifeste": "fae5bb7389c6c0a93d3d4400886d7912fe4afdb1788fe2df34eb1b3d01acb52f"
+ },
+ "ecart_pct": 16.57
+}
+  ```
+
+- **write** `{"content": "# N — la validation change tout : 4,01 ou 4,68 selon le découpage, mêmes poids\n\n> **Ligne de roadmap** : N (le palier 1, la donnée) · **Date** : 2026-11-18 · **Verdict** : mêmes\n> poids (73 366 568 paramètres), mêmes **65 536 jetons** notés, même `seq`/`lot` : la perplexité de\n> val … [3043 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-natif-val-deux-decoupages.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**corpus épinglé** (trai … [1073 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 884 JSON, le disque en a 885
+  en-cours · 1592 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== training ===
+  pertes.append(float(perte))
+pas    1 · perte 2.9605 · PPL val 14.013 · 1 s
+  ```
+
+- **bash** `{"command": "sleep 45; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 work/n3/r1.log; echo \"=== ps ===\"; ps -p $(pgrep -f \"tools.entrainer_native\" | head -1) -o etime,args --no-headers 2>/dev/null | cut -c1-80", "description": "Check the training trajectory", "timeoutMs": 120000}`
+
+  ```
+pas  100 · perte 1.3747 · PPL val 4.688 · 29 s
+pas  150 · perte 1.4659 · PPL val 4.588 · 44 s
+pas  200 · perte 1.3707 · PPL val 4.558 · 58 s
+pas  250 · perte 1.4349 · PPL val 4.473 · 72 s
+=== ps ===
+      03:58 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **792** / **884** |'\nnew = '| fichiers / JSON de résultats | **792** / **885** |'\nassert s. … [1430 caractères tronqués]`

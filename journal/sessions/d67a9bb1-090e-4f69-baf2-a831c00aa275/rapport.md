@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 23.2 h |
+| Durée | 23.4 h |
 | Tours | 9 |
-| Messages | 336 |
-| Appels d'outils | 350 |
-| Fichiers touchés | 29 |
-| Commandes | 244 |
+| Messages | 356 |
+| Appels d'outils | 370 |
+| Fichiers touchés | 30 |
+| Commandes | 262 |
 | Sous-agents | 2 |
-| Commits | 17 |
+| Commits | 18 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*30 appels d'outils.* Actions notables :
+*50 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 16 autres
+- … et 36 autres
 
 **Synthèse produite :**
 
@@ -495,6 +495,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-banc-generation-100m.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/epingle_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-epingle.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-natif-val-deux-decoupages.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -543,7 +544,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 204 autres
+- … et 222 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -700,4 +701,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/banc_generation.py tools/chantier/plan.json reports/banc-generation-100m.json reports/banc-g
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/epingle_corpus.py reports/corpus-epingle.json reports/rapport-corpus-epingle.md docs/pilotag
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = '| 
 

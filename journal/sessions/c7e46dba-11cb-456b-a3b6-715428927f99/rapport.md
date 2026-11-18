@@ -7,12 +7,12 @@
 | Identifiant | `c7e46dba-11cb-456b-a3b6-715428927f99` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-18 08:58 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 26 |
-| Appels d'outils | 42 |
+| Messages | 49 |
+| Appels d'outils | 77 |
 | Fichiers touchés | 0 |
-| Commandes | 39 |
+| Commandes | 74 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français).  TÂCHE : une RE … [2128 caractères tronqués]
 
-*42 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - grep
@@ -41,11 +41,11 @@
 - bash — Find A6.2 backlog fiche and mentions
 - bash — Read A2.6 bilan body and A6.2 fiche
 - bash — List local models and expert tools
-- … et 28 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Lecture de la roadmap et de l'état pour cadrer la ligne A2.6
+⏵ Mesure courte du coût par jeton des experts sur le MoE local
 
 ## 3. Travail accompli
 
@@ -95,6 +95,8 @@
 - **T1** Read expert measurement tools
 - **T1** Check binary and token-id fixtures
 - **T1** Check GPU idle state and lot measurement script
+- **T1** Read prefill-by-experts timings
+- … et 34 autres
 
 ## 4. Mesures et résultats marquants
 

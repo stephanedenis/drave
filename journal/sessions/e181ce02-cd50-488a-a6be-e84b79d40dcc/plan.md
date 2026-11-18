@@ -15,12 +15,12 @@
   `tools/porte-bloc-linguistique.sh`, `tools/tests/linguistique/`,
   `docs/implantation/bloc-linguistique.md`, `docs/schemas/bloc-linguistique-*.svg`,
   `reports/bloc-*`, `journal/sessions/e181ce02-…/`
-- **Heartbeat** : 2026-11-16 14:50 EST
-- **Prochaine action** : le diagnostic du natif est livré (le banc, la numpy, l'alerte de reproductibilité) ; la suite est le palier 1 (le corpus épinglé).
+- **Heartbeat** : 2026-11-18 09:15 EST
+- **Prochaine action** : le diagnostic du natif est livré ; le corpus est **épinglé** (18/11, `reports/rapport-corpus-epingle.md`) et le 100 M est mesuré ; la suite est l'entraînement long sur le corpus épinglé.
 - **Note** : l'attachement est à **236/237 (0,9916)**, la couverture 0,9916, POS **86,25 %**, F1 **0,7535**, 2 spans ; la seule rouge est
   `cascade_pos` (documentée, tolérée).
 - **Arrêt** : 2026-11-02 15 h 06 (reboot) — reprise à **16 h 16** ; **actif** ; heartbeat rafraîchi.
-- **État** : actif
+- **État** : en pause
 - **Reprise** : le 04/11 10 h 14 ; quatre modes, élision 144/144.
 - **Plan** : 1) ~~RSN plurielle, arbre d'états, cycle multi-niveaux~~ ; 2) ~~portefeuille de
   stratégies, contrat, anytime~~ ; 3) ~~state store v0 (6/6 portes T0–T4)~~ ; 4) ~~moteur v0

@@ -7,12 +7,12 @@
 | Identifiant | `8c024745-95cb-4885-9d0b-865142606b6d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-18 08:58 |
-| Durée | 0.1 h |
+| Durée | 0.3 h |
 | Tours | 1 |
-| Messages | 23 |
-| Appels d'outils | 29 |
+| Messages | 44 |
+| Appels d'outils | 55 |
 | Fichiers touchés | 0 |
-| Commandes | 21 |
+| Commandes | 44 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est  … [2155 caractères tronqués]
 
-*29 appels d'outils.* Actions notables :
+*55 appels d'outils.* Actions notables :
 
 - bash — Liste les fichiers de grammaticalité
 - glob
@@ -41,11 +41,11 @@
 - bash — Vérifie le protocole 128 octets du 34M
 - bash — Génère 100M, 20 prompts, 128 octets, cuda:0
 - bash — Lit le récit du 16 novembre sur le modèle
-- … et 11 autres
+- … et 34 autres
 
 **Synthèse produite :**
 
-⏵ Test à blanc du pipeline de grammaticalité sur les JSON 64 octets existants
+⏵ Recherche des contextes de « a » qui gonflent les GV du 34 M
 
 ## 3. Travail accompli
 
@@ -77,6 +77,26 @@
 - **T1** Teste le banc de grammaticalité sur les données 64 octets
 - **T1** Attend et vérifie le job de génération
 - **T1** Attend la fin de la génération
+- **T1** Affiche les résultats de génération 100M 128 octets
+- **T1** Produit le JSON de grammaticalité 100M
+- **T1** Reproduit la référence 34M et compare
+- **T1** Génère le contrôle aléatoire 100M, 128 octets
+- **T1** Analyse la composition lexicale des générations
+- **T1** Lit les métadonnées du 34M et le log du 100M
+- **T1** Calcule les écarts et GV normalisés
+- **T1** Vérifie l'avancement du contrôle aléatoire
+- **T1** Lit la configuration par défaut du modèle natif
+- **T1** Mesure la part de « de » dans les classes fermées
+- **T1** Inspecte la classe Etiquette
+- **T1** Calcule la concentration de « de » dans les classes fermées
+- **T1** Attend le contrôle aléatoire 100M
+- **T1** Compare les préfixes greedy 64 et 128 octets
+- **T1** Vérifie la fin du contrôle aléatoire
+- **T1** Calcule la grammaticalité du contrôle 100M
+- **T1** Compare le greedy 34M CPU/GPU et inspecte le hasard
+- **T1** Affiche les deux générations greedy 34M
+- **T1** Refait la comparaison de préfixes dans le bon sens
+- … et 4 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -89,4 +109,14 @@
 - **T1** `1, 1 MiB, 0 %`
 - **T1** `0, 502 MiB, 57 %`
 - **T1** `1, 4 MiB, 0 %`
+- **T1** `0, 4 MiB, 0 %`
+- **T1** `1, 124 MiB, 0 %`
+- **T1** `top40_0.8 mots 101 top5 [('�', 2), ("�f&����7�+��*\x1b?]c�e����l�(zsu'i�\x00z:\x02ư�v߰��$l\x00wvw܋��g���ռ�f\x0el'#�g", 1), ('�\x11>h�˫/r�', 1), ('n*�ji*�', 1), ('l��3��\x12���(�y+ca\x05,c~ga"pdk�\x04%`
+
+## 5. Erreurs rencontrées
+
+2 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : {  "modele": "drave-n0-rope",  "parametres": 34301224,  "corpus": "data/wiki_mix/propre/train.txt",  "octets": 1017487092,  "pas": 30000,  "seq": 1024,  "lot": 8,  "lr": 0.0003,  "graine": 1,  "window
+- **T1** : greedy textes sans verbe (brut): top40_0.8 textes sans verbe (brut): top20_0.5 textes sans verbe (brut): == 34M [stderr] Traceback (most recent call last):   File "<stdin>", line 23, in <module>   Fil
 

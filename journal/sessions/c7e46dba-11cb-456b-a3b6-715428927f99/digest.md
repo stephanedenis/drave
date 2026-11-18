@@ -871,3 +871,778 @@ reports/rapport-vitesse-v41.md:51:| **cache RAM des experts** (justifié par une
   ```
 
 - **bash** `{"command": "find /home/stephane/IA /home/stephane/Data13TB -maxdepth 6 -name '*.gguf' -size +1G 2>/dev/null | head -20; echo ---; ls -la /home/stephane/IA/modeles/ 2>/dev/null | head -30", "description": "Inventory local GGUF models"}`
+
+  ```
+/home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf
+/home/stephane/IA/modeles-lourds/DeepSeek-V4.1-Flash-Q2.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-01.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-03.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-02.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-07.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-04.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-00.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-06.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters-v2/cluster-05.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-01.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-03.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-02.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-07.gguf
+/home/stephane/IA/artefacts/modeles-optimises/qwen3-30b-8clusters/cluster-04.gg
+… [614 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"gpt-oss\\|MXFP4\\|mxfp4\" reports/rapport-cache-experts-vram.md reports/rapport-etat-a.md | head -10; echo ---; sed -n 22,70p reports/rapport-cache-experts-vram.md", "description": "Read VRAM expert cache report body"}`
+
+  ```
+reports/rapport-etat-a.md:46:| **A4** rejouer, comparer | ✅ fait | A1, A2 | Qwen ctx 256 = **19,3885** ; gpt-oss = **15,6017** ; MLA **5,2e-7** contre numpy, **0,999024** contre llama.cpp ; divergence KV 8 bits : couche 1, jeton 1, 857 neurones, **9,3e-5** | `bash tools/porte-diff-couche.sh` ; `bash tools/porte-harnais-invariants.sh` |
+---
+
+Un cache d'experts ne peut retirer **que** les 25,83 Go routés. Donc :
+
+| taux de succès | gain |
+|---|---:|
+| 100 % (impossible) | **×1,41** |
+| 70 % | ×1,26 |
+| 47 % | ×1,16 |
+| 25 % | ×1,08 |
+
+## 2. Ce que la VRAM peut tenir
+
+2 × 16 Go = 32 Go. Une matrice d'expert K3 (3 × 3072 × 3584 à 4,25 bits) pèse
+**17,5 Mo** → **1 828 matrices**, soit **19,7 par couche sur 896**.
+
+Un jeton en choisit **16**. Le cache tient donc **1,2 jeton** — à peine plus que
+le besoin d'un seul. C'est la différence de fond avec Strata : chez eux 512
+experts par couche et 34-50 Go de experts **tiennent tous en RAM** ; ici 896 par
+couche et 1 508 Go au total.
+
+## 3. Le taux de succès, mesuré sur le routage RÉEL de K3
+
+Trace de routage obtenue du moteur (`DRAVE_K3_TRACE_EXPERTS`), 23 couches MoE ×
+24 jetons de texte réel = 552 relevés, 16 experts par jeton :
+
+| | K3 (896
+… [958 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"DRAVE_GPU_EXPERTS\\|cache d'experts\" reports/*.md | head -20", "description": "Find VRAM expert cache experiments"}`
+
+  ```
+reports/INDEX.md:111:| [rapport-cache-experts-vram.md](rapport-cache-experts-vram.md) | Rapport — un cache d'experts en VRAM pour Kimi-K3 : mesuré, et pourquoi c'est non |
+reports/rapport-budget-kimi-k3.md:25:   cache d'experts, routage — laisse donc **56 % du trafic** de côté.
+reports/rapport-budget-kimi-k3.md:46:| **dense en RAM + cache d'experts (80 %)** | 40 + 3,4 Go/s | 1,6 + 1,5 = **3,1 s** | c'est le scénario que la mesure du bloc 30 rend crédible |
+reports/rapport-cache-experts-vram.md:1:# Rapport — un cache d'experts en VRAM pour Kimi-K3 : mesuré, et pourquoi c'est non
+reports/rapport-cache-experts-vram.md:23:Un cache d'experts ne peut retirer **que** les 25,83 Go routés. Donc :
+reports/rapport-cache-experts-vram.md:85:1. **cache d'experts en VRAM** — mesuré ici, ×1,09 : non ;
+reports/rapport-coordination-a.md:73:- **Précision qui change la décision** : le cache VRAM d'experts (`DRAVE_GPU_EXPERTS`) n'est
+reports/rapport-drapeaux-ignores.md:113:| `DRAVE_GPU_TETE` · `DRAVE_GPU_KV` · `DRAVE_GPU_EXPERTS` · `DRAVE_GPU_EXPERTS_GO` | `Model::load` : 1391, 1413, 1505, 1508 | Inutiles sans `DRAVE_GPU` ; sans objet en BK/GB (bancs dédiés) | — |
+reports/rapport-empreinte-memoire.md:4
+… [1490 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 1983,2015p drave-core/src/model.rs; echo ...; sed -n 2026,2100p drave-core/src/model.rs", "description": "Read CacheExperts format support"}`
+
+  ```
+/// Cache VRAM des experts MoE (MXFP4), à éviction LRU.
+///
+/// Pourquoi un cache et pas un simple déport : un expert pèse 4,4 Mo et
+/// gpt-oss en a 4 608 (36 couches × 128) — 60 Go, la VRAM n'en tient pas le
+/// quart. Mais un expert SÉLECTIONNÉ est réutilisé d'un jeton à l'autre : c'est
+/// exactement ce qu'un cache attrape. La mesure d'activation
+/// (`reports/rapport-localite-activation.md`) dit qu'un préchargement STATIQUE
+/// ne paie pas ; une résidence dynamique, si.
+pub struct CacheExperts {
+    /// Une entrée par (couche, expert) : ses trois matrices (gate, up, down).
+    cartes: std::collections::HashMap<(usize, usize), (crate::gpu::MatriceGpu,
+                                                       crate::gpu::MatriceGpu,
+                                                       crate::gpu::MatriceGpu, u64)>,
+    pub octets: usize,
+    pub budget: usize,
+    pub demandes: u64,
+    pub manques: u64,
+    pub evictions: u64,
+    pub octets_envoyes: u64,
+    ticks: u64,
+    /// **Tampons libérés, réutilisables.** Deux raisons, mesurées le 12/10 :
+    ///   * `charger_mxfp4` ALLOUE à chaque montage, et l'allocation est **37 %** (Q4_K) à **91 %**
+    ///     (MXFP4) du coût d'un 
+… [4642 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+background job bash-290 (bash: find /home/stephane/IA /home/stephane/Data13TB -maxdepth 6 -name '*.gguf' -size +1G 2>/dev/null | head -20; echo ---; ls -la /home/stephane/IA/modeles/ 2>/dev/null | head -30) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-290"}`
+
+  ```
+---
+total 18121784
+drwxr-xr-x.  3 stephane stephane        4096 12 oct 15:50 .
+drwxr-xr-x  14 stephane stephane        4096 21 oct 16:30 ..
+drwxr-xr-x.  4 stephane stephane        4096 12 oct 16:04 ollama
+-rw-r--r--.  1 stephane stephane 18556686752  3 oct 13:17 qwen3-30b-a3b-Q4_K_M.gguf
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sed -n 70,110p reports/rapport-vram-transfert.md; echo ===; sed -n 195,205p reports/rapport-etat-a.md; echo ===; sed -n 60,80p reports/rapport-coordination-a.md", "description": "Read VRAM transfer report and coordination note"}`
+
+  ```
+ligne « copie seule » ne s'imprimait pas. **Un silence qui ressemble à un succès** : c'est la
+  même famille que « une mesure à un seul moment ne dit pas où ça casse » (`REPRISE.md` § 4).
+
+---
+
+## 5. Le pool, mesuré dans le moteur (13/10, 00 h 17)
+
+Le **pool de tampons VRAM** est entré dans `CacheExperts` : les évictions rendent leurs matrices au
+pool au lieu de les jeter, et un montage réutilise un tampon de la bonne forme (`gpu::recopier`),
+sinon il alloue. Le budget compte **aussi** le pool, sans quoi on dépasserait la carte en croyant la
+respecter.
+
+Mesures — gpt-oss-120b MXFP4, 2 jetons, `DRAVE_GPU_EXPERTS_GO=8`, mêmes identifiants, données
+chaudes en page cache (ce qui rend la comparaison **propre** : elle porte sur les montages, pas sur
+le disque) :
+
+| | temps mural | demandes | manques | montés sur le bus | **perplexité** |
+|---|---|---|---|---|---|
+| avant (allocation par montage) | 5,60 s | 288 | 264 (8,3 %) | 3,49 Go | 27736,1204 |
+| **après (pool)** | **4,95 s** | 288 | 264 (8,3 %) | 3,49 Go | 27736,1204 |
+
+**−11,6 % à travail identique** (mêmes 264 montages, mêmes 3,49 Go) : ~**2,5 ms par montage** de
+13,2 Mo, là où le banc annonçait l'allocation à ~10 ms sur un tampon
+… [3426 caractères tronqués]
+  ```
+
+- **bash** `{"command": "wc -l reports/rapport-coordination-a.md; sed -n 1,60p reports/rapport-coordination-a.md", "description": "Read coordination A report start"}`
+
+  ```
+474 reports/rapport-coordination-a.md
+# A — coordination : A6.2 est libre, A8.3b2 est nommée mais hors du graphe
+
+> **Ligne de roadmap** : A (le moteur) · **Tâche** : J4.4 · **Date** : 2026-11-13, 22 h 45 HNE
+> · **Branche** : `s/v7` · **HEAD** : `dc78f223`
+>
+> **Verdict** : **A6.2 n'est pas bloquée.** Le MoE local de 18 Go existe et tourne — la porte
+> de l'échange d'experts est **tenue** au HEAD, et `--ppl` redonne **37,2013**. Le seul blocage
+> est la **résidence mono-GPU 16 Go** (17,28 GiB > 16 GiB), avec une précision : le cache VRAM
+> d'experts n'est câblé que pour **MXFP4**, pas pour le **Q4_K** du modèle local. **A8.3b2 est
+> nommée** par A8.3b (« instrumenter `forward_lot` »), mais elle est **absente du backlog, de la
+> roadmap et du graphe** ; elle est libre. **Aucun fichier de A modifié** (ni `drave-core/`, ni
+> `data/`, ni `work/`) : deux fichiers neufs, celui-ci et son JSON.
+
+**En trois lignes.** (1) Le MoE `qwen3-30b-a3b-Q4_K_M` (18 556 686 752 o, 17,28 GiB,
+`sha256 6c997b8a…`) est présent, chargé en **9,82 s**, et rend **37,2013** de perplexité à
+`--limit 32` ; la porte `porte-echange-experts` rend **54,5202** à `N=16`, avec **768** décisions
+de routage, l'invariant 
+… [3226 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 80,140p reports/rapport-coordination-a.md", "description": "Read coordination A report recommendations"}`
+
+  ```
+- **Le cache RAM n'est pas la solution** : `DRAVE_EXPERTS_RAM` est mesuré **perdant** (+4 % à
+  4 Go, +21 % à 32 Go) — le noyau garde déjà les pages ; le cache ajoute un second exemplaire.
+- **Le cache VRAM n'est pas la solution immédiate** : `rapport-cache-experts-vram.md` donne un
+  plafond de **×1,09** (pour un cache qui capte 28,7 % des lectures), contre ×3,1 pour le dense.
+
+### 1.4 Ce qui est déjà mesuré pour A6.2 (et ce qui manque)
+
+| mesure | résultat | source |
+|---|---|---|
+| regroupement par expert, **lot 192** | **74 496 → 4 804** lectures d'experts, **÷15,51** ; borne à l'infini **÷12,1** | `rapport-prefill-par-experts.md` § 2 |
+| regroupement, **lot 64** | **÷7,08** | idem |
+| regroupement, **lot 8** | **÷2,27** | idem |
+| temps de préremplissage, **lot 192** | **×1,58** (le calcul dense et l'ordonnancement deviennent le mur) | idem § 1 |
+| découpage en **8 clusters** | ventilation **3,08** nœuds contre **5,32** au hasard (**÷1,73**) ; couverture **0,607** | `rapport-decoupage-moe.md` |
+| cache LRU, **25 %** des experts (32/128) | **74,8 à 87 %** des lectures servies | `rapport-reutilisation-experts.md` § 2 |
+| cache LRU, **50 %** (64/128) | **92 à 93 %** | idem |
+| ca
+… [2438 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 100,125p reports/rapport-drapeaux-ignores.md; echo ===; grep -rn \"DRAVE_GPU_TETE\" reports/rapport-prefill-par-lots.md | head; echo ===; grep -rln \"Q6_K\" reports/*.md | head -10", "description": "Check head GPU flags measurements"}`
+
+  ```
+| `--patch` | I (643) · P (2746) | Ailleurs : *sans objet* | — |
+| `--hebbian` | I (648) · P (2774) | Ailleurs : *sans objet* | — |
+| `--hebb-q` | I (648) | **P : `Hebb::new(…, 0.1)` en dur (2774)** — la valeur passée est ignorée | 🟠 |
+| `--hebb-out` | I (772) | **P : écrit `/tmp/act_log.bin` et `/tmp/loss_log.bin` en dur (2955-2957)** — le chemin demandé est ignoré | 🟡 |
+| `--ffn-gain` | P : 2750 | **I : jamais déstructuré** (bloc 535-542) ni appliqué. Vérifié empiriquement (§7.2) | 🔴 |
+| `--matrix` | D (68) · GB (2053-2063) | Ailleurs : *sans objet* (hérité du banc d'origine) | — |
+| `--couches-locales` `--flux-liste` `--flux-blocs` | PR seulement (1670, 1677-1679) | Ailleurs : *sans objet* | — |
+
+## 5. Variables d'environnement `DRAVE_*` (26)
+
+| Variable | Appliquée dans (fichier:ligne) | Modes où elle est ignorée / inerte | Gravité |
+|---|---|---|---|
+| `DRAVE_GPU` | Portail de `gpu::instance()` (gpu.rs:788, 813) | Tous les modes qui ne demandent pas de GPU (PL, T, TE, D, BV, BM) ; les autres variables GPU ne font RIEN sans elle — documenté (REPRISE.md:229) mais silencieux à l'exécution | 🟡 |
+| `DRAVE_GPU_TETE` · `DRAVE_GPU_KV` · `DRAVE_GPU_EXPERTS` · `DRAVE_GPU_EXPERTS_GO` | `
+… [1713 caractères tronqués]
+  ```
+
+- **bash** `{"command": "head -40 tools/mesurer_lecture_experts.py; echo ===; head -30 tools/analyse_experts_statique.py", "description": "Read expert measurement tools"}`
+
+  ```
+#!/usr/bin/env python3
+"""Lectures d'experts : série contre parallèle, sur un VRAI fichier froid.
+
+    tools/mesurer_lecture_experts.py <shard.gguf> [nb_blocs] [nb_fils]
+
+Pourquoi : le chargeur d'experts lit aujourd'hui les blocs un par un, en
+s'appuyant sur le défaut de page du mmap. Le disque de cette machine a été
+mesuré à **5,37 Go/s avec un lecteur et 31 Go/s avec seize** — donc si le défaut
+de page sérialise, il y a un facteur 5 à prendre. Mais « il y a un facteur à
+prendre » n'est pas une mesure, et le cache de pages a déjà fait mentir quatre
+mécanismes de prélecture sur des modèles qui tenaient en RAM.
+
+Ici on force le froid avec `posix_fadvise(DONTNEED)` sur les plages visées, et on
+compare deux passes sur des blocs DIFFÉRENTS de même taille (comparaison
+appariée) : une en touchant les pages une par une, l'autre en répartissant les
+blocs entre `nb_fils` fils.
+"""
+import mmap
+import os
+import sys
+import threading
+import time
+
+PAGE = 4096
+
+
+def toucher(mm, base, octets):
+    """Force la lecture des pages d'une plage (défaut de page, un par page)."""
+    total = 0
+    for off in range(base, base + octets, PAGE):
+        total += mm[off]
+    return total
+
+
+def main():
+    chem
+… [1557 caractères tronqués]
+  ```
+
+- **bash** `{"command": "ls -la drave-core/target/release/drave 2>/dev/null; ls $HOME/IA/scratch/prerequis/ 2>/dev/null | head -20; echo ---; ls tools | grep -i \"ids\\|jetons\\|token\" | head", "description": "Check binary and token-id fixtures"}`
+
+  ```
+-rwxr-xr-x. 2 stephane stephane 3241600 17 nov 14:21 drave-core/target/release/drave
+ids_0.5B_wt2_8192.txt
+ids_0.5B_wt2_off0.txt
+ids_0.5B_wt2_off10000.txt
+ids_0.5B_wt2_off20000.txt
+ids_0.5B_wt2_off30000.txt
+ids_0.5B_wt2_off40000.txt
+ids_0.5B_wt2_off50000.txt
+ids_0.5B_wt2_off60000.txt
+ids_oss_wt2.txt
+ids_qwen05_wt2.txt
+ids_qwen3_30b_wt2_off2.txt
+ids_qwen3_30b_wt2_off3.txt
+ids_qwen3_30b_wt2_off.txt
+ids_qwen3_30b_wt2.txt
+niah_4096_0.5.txt
+---
+entrainer_native_tokens.py
+occupation_poids.py
+porte-poids-creux.sh
+porte-tokenizer-kimi.sh
+tokenize_llama
+tokenize_llama.cpp
+tokenizer_bpe.py
+tokenizer_kimi
+  ```
+
+- **bash** `{"command": "nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv; echo ---; sed -n 1,40p tools/mesure_lot_disque.sh", "description": "Check GPU idle state and lot measurement script"}`
+
+  ```
+index, memory.used [MiB], utilization.gpu [%]
+0, 1 MiB, 0 %
+1, 1 MiB, 0 %
+---
+#!/bin/bash
+# mesure_lot_disque.sh — le préremplissage par LOTS, mesuré sur le DISQUE.
+#
+# POURQUOI CE SCRIPT EXISTE. Le batch 5 avait comparé `--lot 1` à `--lot 4..64`
+# sur le 30B : la première passe avait lu 10,9 Go et les suivantes ZÉRO octet. Le
+# protocole mesurait donc le cache de pages, pas le lot (§ 14 du rapport). Ce qui
+# manquait n'était pas le modèle : c'était **l'éviction**. On l'obtient sans être
+# root avec `posix_fadvise(POSIX_FADV_DONTNEED)` sur le fichier du modèle, qui
+# jette ses pages du cache — donc chaque réglage de lot repart à froid.
+#
+# CE QUI EST MESURÉ, PAR RÉGLAGE : les octets réellement lus (`File system
+# inputs`), le temps mur, le débit et la perplexité. Le lot doit diviser les
+# LECTURES ; s'il ne les divise pas, la mesure le dira.
+#
+# Usage :
+#   mesure_lot_disque.sh <modele.gguf> <ids> [--lots "1 2 4 8 16"] [--limit 192]
+#                        [--ctx 512] [--threads 20] [--journal F]
+set -u
+D=${D:-./drave-core/target/release/drave}
+MODELE=""; IDS=""; LOTS="1 2 4 8 16"; LIMIT=192; CTX=512; THREADS=20; JOURNAL=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --lots) L
+… [786 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 22,90p reports/rapport-prefill-par-experts.md", "description": "Read prefill-by-experts timings"}`
+
+  ```
+| 2 | 24,51 | 7,83 | 889 | 51,1 | 1,36× |
+| 4 | 23,29 | 8,27 | 864 | 50,3 | 1,43× |
+| 8 | 23,17 | 8,27 | 854 | 50,6 | 1,43× |
+| 16 | 22,45 | 8,53 | 851 | 49,3 | 1,48× |
+| 32 | 21,91 | 8,77 | 839 | 48,9 | 1,52× |
+| 64 | 21,27 | 9,03 | 831 | 48,2 | 1,56× |
+| 192 | 21,00 | 9,20 | 827 | 47,8 | **1,58×** |
+
+`mur_s` inclut le chargement du modèle (~27 s) : le gain porte bien sur
+`prompt_s`, la seule colonne qui mesure le préremplissage.
+
+## 2. Les octets
+
+`tools/analyse_union_experts.py` lit la trace de routage réelle
+(`DRAVE_TRACE_EXPERTS`, 48 couches × 194 jetons) et compte les matrices lues —
+pas une estimation, un compte :
+
+| bloc | lectures mode jeton | lectures mode groupe | gain | exp-éq/jeton |
+|---|---|---|---|---|
+| 1 | 74 496 | 74 496 | 1,00× | 8,000 |
+| 2 | 74 496 | 56 904 | 1,31× | 6,111 |
+| 4 | 74 496 | 43 427 | 1,72× | 4,664 |
+| 8 | 74 496 | 32 847 | 2,27× | 3,527 |
+| 16 | 74 496 | 23 946 | 3,11× | 2,572 |
+| 32 | 74 496 | 16 446 | 4,53× | 1,766 |
+| 64 | 74 496 | 10 526 | 7,08× | 1,130 |
+| 192 | 74 496 | 4 804 | **15,51×** | 0,516 |
+
+Borne (N → ∞) : 128 experts-équivalents par couche, soit 0,660 par jeton pour
+cette invite — **12,1×** moins que le mode jeton. Le bloc de 192
+… [1521 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -n \"prof\\b\\|self.prof\\|provenance\\|profil_neurones\" drave-core/src/model.rs | head -30; echo ---; grep -n \"profil\\|prof\" drave-core/src/main.rs | head -20", "description": "Check timing profiler exposure"}`
+
+  ```
+300:/// Décision de **routage** lue dans les métadonnées, avec sa provenance.
+302:/// La provenance compte : « sigmoïde » peut venir d'une clef GGUF explicite, du
+2829:    /// provenance : 0 = attention, 1 = experts routés, 2 = partagé (FFN dense,
+2890:    pub profil_neurones: Option<(Vec<u64>, Vec<f64>)>,   // (tirs, somme des |a|)
+2922:    pub prof: [f64; 6],
+5022:            profil_neurones: None,
+5039:            stop_id: None, stop_id2: None, prof: [0.0; 6],
+5400:    pub fn activer_profil_neurones(&mut self) {
+5402:        self.profil_neurones = Some((vec![0u64; self.cfg.n_layer * largeur],
+5405:            self.profil_experts = Some(vec![0u64; self.cfg.n_layer * self.cfg.n_expert]);
+5407:        self.profil_jetons = 0;
+5446:        let (tirs, poids) = self.profil_neurones.as_ref()?;
+5448:        let n_tok = self.profil_jetons.max(1);
+5505:        if let Some(exp) = self.profil_experts.as_ref() {
+5507:            let n_tok = self.profil_jetons.max(1) as f64;
+5535:        let Some((tirs, poids)) = self.profil_neurones.as_ref() else { return Ok(0) };
+5537:        let n_tok = self.profil_jetons.max(1) as f32;
+6170:            self.prof[0] += t_proj.elapsed().as_secs_f64();
+6317: 
+… [2363 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 2125,2155p drave-core/src/main.rs; echo ===; sed -n 6160,6175p drave-core/src/model.rs; echo ===; sed -n 6525,6545p drave-core/src/model.rs", "description": "Read prof printing and attribution sites"}`
+
+  ```
+for v in &hd.d { fic.write_all(&v.to_le_bytes()).unwrap(); }
+        eprintln!("[hebb-diff] D sauvé dans {f} : {} valeurs", hd.d.len());
+    }
+    if let Some(hb) = mdl.hebb.as_ref() {
+        use std::io::Write;
+        let mut f = std::fs::File::create(&hebb_out).expect("création du fichier hebbien");
+        for v in &hb.h { f.write_all(&v.to_le_bytes()).unwrap(); }
+        f.flush().unwrap();
+        let hb_ms = 0.0;   // le coût est mesuré à part
+        let _ = hb_ms;
+        println!("capteur hebbien : {} activations sur {} tokens, trace écrite dans {} ({:.1} Mo)",
+                 hb.n_fire, hb.n_token,
+                 hebb_out, (hb.h.len() * 4) as f64 / 1e6);
+    }
+    let n_tok = (st.n_prompt + st.n_gen) as f64;
+    let p = mdl.prof;
+    println!("postes (ms/token) : matvec-attn {:.1} | rope {:.1} | attention {:.1} | matvec+mlp {:.1} | total mesuré {:.1}",
+             p[0] / n_tok * 1e3, p[1] / n_tok * 1e3, p[2] / n_tok * 1e3, p[3] / n_tok * 1e3,
+             (p[0] + p[1] + p[2] + p[3]) / n_tok * 1e3);
+
+    {
+        use std::sync::atomic::Ordering;
+        let a = model::TETE_ACTIFS.load(Ordering::Relaxed);
+        let t = model::TETE_TOTAL.load(Ordering::Relaxed);
+   
+… [2341 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"6,2 ms\\|6.2 ms\" reports/*.md | head -10; echo ===; grep -rn -i \"tête.*Q6_K\\|Q6_K.*tête\\|tête.*Q8_0\" reports/*.md | head -10", "description": "Find head GPU timing source"}`
+
+  ```
+reports/rapport-cache-chunker.md:496:  (66,2 ms à 160, 266,2 ms à 320) ; lire les temps, pas les ratios.
+reports/rapport-etat-a.md:44:| **A2** placement machine, KV, top-k, ordonnanceur | ✅ / ⚠️ **A2.6 partiel** | A1 | KV ×**1,93** préremplissage / ×**5,8** attention à 8 k ; KV paginé 968 → **13,2 ms** ; attention 22,16 → **3,29 ms/jeton** ; projections 15,6 → **6,2 ms** ; top-k **9,7e-7** à 1 M | `bash tools/porte-flux.sh` ; `bash tools/porte-topologie.sh` ; A2.6 : `cargo test placement` |
+reports/rapport-prefill-par-lots.md:137:   le déport GPU (`DRAVE_GPU_TETE=1`, déjà mesuré à 6,2 ms/jeton contre 15,6 pour
+reports/rapport-v41-couches-brouillon.md:31:**V4.1** — `deepseek41`, **1 046 tenseurs**, **365,70 Go** de poids, en-têtes lus en **66,2 ms**
+===
+reports/rapport-architecture-memoire.md:80:| 3 | rien — déjà là (`charger_tete`, `charger_proj`, Q4_K/Q6_K/Q8_0/MXFP4) | tête + embeddings | −95 ms |
+reports/rapport-architecture-memoire.md:85:**Ce que le moteur sait déjà déporter** : Q4_K, Q6_K, Q8_0, MXFP4 (tête,
+reports/rapport-c8-tete-entrainee.md:15:> `ids_0.5B-Q8.txt`, 8 192 jetons, tête liée `token_embd.weight` (Q8_0, gelée) + `output_norm`.
+reports/rapport-etat-a.md:60:| **A2
+… [999 caractères tronqués]
+  ```
+
+- **bash** `{"command": "grep -rn \"TETE_ACTIFS\\|TETE_TOTAL\\|TETE_APPELS\" drave-core/src/model.rs | head -10; echo ===; grep -rn \"densite de l'entree\" -A3 -B10 drave-core/src/model.rs | head -40", "description": "Check head sparsity instrumentation"}`
+
+  ```
+3838:pub static TETE_ACTIFS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+3839:pub static TETE_TOTAL: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+3840:pub static TETE_APPELS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+9166:        TETE_ACTIFS.fetch_add(sv.idx.len() as u64, std::sync::atomic::Ordering::Relaxed);
+9167:        TETE_TOTAL.fetch_add(h.len() as u64, std::sync::atomic::Ordering::Relaxed);
+9168:        TETE_APPELS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+===
+  ```
+
+- **bash** `{"command": "sed -n 1,60p reports/rapport-logits-gpu-vs-cpu.md", "description": "Read GPU vs CPU logits report"}`
+
+  ```
+# Rapport — pourquoi le déport des projections change (ou non) la perplexité
+
+**En une ligne** : sur un modèle **dense**, le déport des projections donne des
+logits **identiques** au CPU (écart moyen 0,0000, fichiers bit à bit égaux) ; sur un
+**MoE**, il les décale de **0,038 nat** en moyenne — **497 jetons sur 511 gardent le
+même top-1** (14 divergent), et cela suffit à déplacer la perplexité de 1,2 %. L'hypothèse la plus simple, fortement étayée par ce contraste, est que de
+minuscules écarts numériques **changent le routage des experts** (top-8 sur 128).
+
+## Le doute, et d'où il vient
+
+Au sprint 2, gpt-oss-120b MXFP4 à `--ctx 1024`, 511 jetons :
+
+| chemin | perplexité | écart vs CPU |
+|---|---|---|
+| CPU | 18,5803 | — |
+| GPU, miroir KV seul (`DRAVE_GPU_KV`) | 18,3074 | −1,47 % |
+| GPU, projections seules (`DRAVE_GPU`) | 18,3538 | −1,22 % |
+
+Ajouter le miroir KV aux projections ne pèse que **0,25 % de plus** : l'essentiel
+(1,22 %) vient du déport des **projections** lui-même. Or les noyaux GPU sont exacts
+(2e-7 sur la tête Q8_0, **0,00e0** bit à bit sur un expert MXFP4 — `REPRISE.md` §6,
+huit chantiers, noyaux GPU). Une erreur de 1e-7 ne devrait pas peser
+1,2 % de perplexité — d'
+… [1745 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sed -n 25,60p reports/rapport-tete-garantie.md", "description": "Read head guarantee report"}`
+
+  ```
+la réponse juste, pas une réponse rapide et fausse.
+
+**Exactitude vérifiée** : mêmes jetons générés avec et sans l'option, sur
+Qwen2.5-0.5B, prompt « Le ciel est bleu parce que », 8 jetons gloutons :
+
+```
+sans  : [512, 13309, 321, 1788, 12422, 84, 13, 356]
+avec  : [512, 13309, 321, 1788, 12422, 84, 13, 356]
+```
+
+C'est le contrat : la sortie ne change **pas**.
+
+## 2. Ce qui est mesuré, et qui condamne la méthode
+
+Sur la vraie matrice de tête (Qwen2.5-0.5B, 151 936 × 896 en Q8_0, 2 048 lignes
+échantillonnées, activation aléatoire de même dimension) :
+
+| grandeur | valeur |
+|---|---|
+| logit maximal | **+1,4283** |
+| borne globale `max ‖w_i‖·‖h‖` | 18,0381 — **×12,6** le logit max |
+| borne par blocs de 32 `Σ_b ‖w_b‖·‖h_b‖` | 17,6646 — ×12,4 |
+| lignes encore candidates (globale) | **2 048 / 2 048 = 100 %** |
+| lignes encore candidates (par blocs) | **2 048 / 2 048 = 100 %** |
+
+Le raffinement par blocs n'apporte rien : la perte dominante est l'**alignement**
+entre `w` et `h`, pas la structure par blocs. Et à l'exécution, la boucle de
+paliers a effectivement calculé **151 936 lignes sur 151 936** à chaque jeton.
+
+C'est le même verdict que la session précédente (borne « 5 à 20× trop lâc
+… [260 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test à blanc de la commande « tête » (PPL CPU de référence)
+
+- **bash** `{"command": "ls -la $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt; head -c 120 $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt; echo; grep -n \"DRAVE_GPU\\b\" drave-core/src/gpu.rs | head -10", "description": "Inspect ids file and GPU gate"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 394684 13 oct 02:37 /home/stephane/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt
+198,284,8397,425,10965,465,284,14731,8397,425,10965,465,374,458,6364,4531,1154,12425,323,33496,12089,659,1260,1030,264,8
+1549:/// Instance unique du processus. `DRAVE_GPU` active le déport ; sans lui, aucune
+1559:        if std::env::var("DRAVE_GPU").is_err() { return None; }
+1585:        // `DRAVE_GPU=0` force le CPU ; `DRAVE_GPU=1` force la tentative GPU.
+1586:        if std::env::var("DRAVE_GPU").map(|v| v.trim() == "0").unwrap_or(false) {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt --ctx 512 --limit 32 --threads 8 2>&1 | tail -12", "description": "Baseline PPL and per-token timings on 0.5B … [23 caractères tronqués]`
+
+  ```
+=== perplexité 56.7642 sur 31 tokens (0 événements, 1.3 s) ===
+    24.6 tok/s effectifs (avant + tête)
+    attention : 0.01 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 45.5 M · experts 0.0 M · partagé 460.0 M · scores 6 K · total 505.5 M
+    occupation des poids : 99.2 % de non-nuls (489995762 sur 493961216) — attention 99.1 % · experts 0.0 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 501.4 M paires par token au lieu de 505.5 M (÷1.01)
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 9.0 %
+    postes (ms/token) : projets-attn 3.01 | rope 0.65 | attention 4.10 | proj+mlp 27.43 | somme 35.19 | reste (tête + échantillonnage) 8.87
+    dont tête de sortie 7.43 | notation log-sum-exp 1.42 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.12 | softmax 0.07 | somme pondérée + écriture KV 3.91
+[stderr]
+
+real	0m2,871s
+user	0m15,179s
+sys	0m0,798s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time env DRAVE_GPU=1 DRAVE_GPU_TETE=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt --ctx 512 --limit 32 --threads 8 2>&1 | tail -14", "description": "Head on G … [42 caractères tronqués]`
+
+  ```
+31 tokens notés — perplexité cumulée 56.764  (28.4 tok/s)
+
+=== perplexité 56.7642 sur 31 tokens (0 événements, 1.1 s) ===
+    28.4 tok/s effectifs (avant + tête)
+    attention : 0.01 M paires (requête, clé) par token
+    projections : 0.0 M événements par token
+    paires (poids × activation) par token : attention 45.5 M · experts 0.0 M · partagé 460.0 M · scores 6 K · total 505.5 M
+    occupation des poids : 99.2 % de non-nuls (489995762 sur 493961216) — attention 99.1 % · experts 0.0 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 501.4 M paires par token au lieu de 505.5 M (÷1.01)
+    dont en listes (une paire y est un événement) : 0.0 M — le reste est dense (déquantifié ou f32)
+    part de l'attention dans le flux total : 9.0 %
+    postes (ms/token) : projets-attn 2.91 | rope 0.64 | attention 4.02 | proj+mlp 27.92 | somme 35.49 | reste (tête + échantillonnage) 2.97
+    dont tête de sortie 1.82 | notation log-sum-exp 1.28 (le reste du « reste » n'est pas chronométré)
+    dont attention : scores 0.21 | softmax 0.07 | somme pondérée + écriture KV 3.73
+[stderr]
+
+real	0m2,679s
+user	0m12,534s
+sys	0m0,767s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env DRAVE_GPU=1 DRAVE_GPU_TETE=1 ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt --ctx 512 --limit 32 --threads 8 2>&1 | grep -i \"gpu\\|tête\\|perplex\" | head - … [54 caractères tronqués]`
+
+  ```
+[gpu] GPU 1 · tête 151936 × 896 (Q8_0) sur le GPU : 145 Mo résidents, 16571 Mo libres
+      31 tokens notés — perplexité cumulée 56.764  (28.3 tok/s)
+=== perplexité 56.7642 sur 31 tokens (0 événements, 1.1 s) ===
+    28.3 tok/s effectifs (avant + tête)
+    postes (ms/token) : projets-attn 2.92 | rope 0.68 | attention 3.97 | proj+mlp 28.18 | somme 35.74 | reste (tête + échantillonnage) 2.91
+    dont tête de sortie 1.80 | notation log-sum-exp 1.27 (le reste du « reste » n'est pas chronométré)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in models/Qwen2.5-0.5B-Q8_0.gguf models/Qwen2.5-0.5B-Q4_0.gguf; do echo \"== $m\"; ./drave-core/target/release/drave \"$m\" --tensors 2>/dev/null | grep -E \"output|token_embd\" | head -4; done; echo ---; grep -n '\"\\-q\"\\|q4 … [109 caractères tronqués]`
+
+  ```
+== models/Qwen2.5-0.5B-Q8_0.gguf
+  Q8_0     token_embd.weight                      [151936, 896] · 136.1 M poids · fichier 0
+  Q8_0     blk.0.attn_output.weight               [896, 896] · 0.8 M poids · fichier 0
+  Q8_0     blk.1.attn_output.weight               [896, 896] · 0.8 M poids · fichier 0
+  Q8_0     blk.10.attn_output.weight              [896, 896] · 0.8 M poids · fichier 0
+== models/Qwen2.5-0.5B-Q4_0.gguf
+  Q8_0     token_embd.weight                      [151936, 896] · 136.1 M poids · fichier 0
+  Q4_0     blk.0.attn_output.weight               [896, 896] · 0.8 M poids · fichier 0
+  Q4_0     blk.1.attn_output.weight               [896, 896] · 0.8 M poids · fichier 0
+  Q4_0     blk.10.attn_output.weight              [896, 896] · 0.8 M poids · fichier 0
+---
+1696:            "--q4" => { o.q4 |= 3; 1 }
+1697:            "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
+1698:            "--q4-attn" => { o.q4 = (o.q4 & 4) | 2; 1 }
+1699:            "--q4-tout" => { o.q4 |= 7; 1 }
+[stderr]
+grep: warning: stray \ before -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && env ./drave-core/target/release/drave models/Qwen2.5-0.5B-Q8_0.gguf --ppl $HOME/IA/scratch/prerequis/ids_0.5B_wt2_8192.txt --ctx 512 --limit 32 --threads 8 --q4-tout 2>&1 | grep -E \"tête|perplexité\" | head -8", "description": "Nega … [41 caractères tronqués]`
+
+  ```
+[tête 4 bits] 151936 × 896 → 4.50 b/poids, 72 Mo, 1.3 s
+      31 tokens notés — perplexité cumulée 79.949  (42.4 tok/s)
+=== perplexité 79.9488 sur 31 tokens (0 événements, 0.7 s) ===
+    42.4 tok/s effectifs (avant + tête)
+    postes (ms/token) : projets-attn 1.91 | rope 0.37 | attention 2.62 | proj+mlp 12.96 | somme 17.85 | reste (tête + échantillonnage) 9.40
+    dont tête de sortie 6.50 | notation log-sum-exp 1.31 (le reste du « reste » n'est pas chronométré)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head; echo ---; git log -1 --format='%h %ad' --date=iso; echo ---; wc -l reports/INDEX.md; head -8 reports/INDEX.md", "description": "Check clean tree and INDEX format"}`
+
+  ```
+M tools/entrainer_native.py
+?? reports/banc-grammaticalite-100m.json
+---
+bb57604c 2026-11-18 09:00:52 -0500
+---
+786 reports/INDEX.md
+# Index des fiches de reports/
+
+> **Généré** par `tools/index_reports.py` — **778 fiches**. Les fichiers
+> d'infrastructure (`README.md`, `INDEX.md`, `historique-*`) sont exclus du tableau ;
+> la page d'état, elle, compte tous les `.md` de `reports/`.
+
+| fiche | titre |
+|---|---|
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -3; echo ---; grep -n '\"-q\"\\|q4:' drave-core/src/main.rs | head; grep -n \"q4\" drave-core/src/main.rs | sed -n 1,15p", "description": "Check HEAD movement and q4 flag"}`
+
+  ```
+bb57604c N — LE CORPUS D'ENTRAÎNEMENT EST ÉPINGLÉ : TRAIN 0876b608… (1 017 487 092 o, 2 480 766 lignes), VAL fbddef91…, MANIFESTE fae5bb73…
+52b0b78d N4 — LE 100 M MESURÉ À RÉGLAGES APPARIÉS : LA RÉPÉTITION TOMBE DE 9 À 6, LE VOCABULAIRE NE GAGNE RIEN (0,882 CONTRE 0,884)
+d649467c CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ LIÉ
+---
+1346:    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+843:        let y4 = pool.matvec_dense_q4(&d4, &xv, 1.0);
+1346:    q4: u8, b6: u8, keep: f32, bits: u32, moe_topk: usize, pin: bool,
+1696:            "--q4" => { o.q4 |= 3; 1 }
+1697:            "--q4-ffn" => { o.q4 = (o.q4 & 4) | 1; 1 }
+1698:            "--q4-attn" => { o.q4 = (o.q4 & 4) | 2; 1 }
+1699:            "--q4-tout" => { o.q4 |= 7; 1 }
+1768:        ctx_impose, threads_impose, abits_impose, dense, auto, q4, b6, attn_sinks_impose,
+1783:    let mut mdl = model::Model::load_partiel(path, ctx, n_threads, dense, keep, auto, q4, b6,
+6590:    let nom_q4k = opt.matrix.clone();
+6591:    if !mx && nom_q4k != "output.weight" && nom_q4k != "token_embd.weight"
+6592:       
+… [320 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -1 --format='%h %s' -- drave-core/target/release/drave 2>/dev/null; ls -la drave-core/target/release/drave; git show -s --format='%h %ad' --date=iso HEAD", "description": "Compare binary timestamp to HEAD"}`
+
+  ```
+a44414d2 Hygiène : sortir les artefacts de compilation du dépôt, et committer la sentinelle
+-rwxr-xr-x. 2 stephane stephane 3241600 17 nov 14:21 drave-core/target/release/drave
+bb57604c 2026-11-18 09:00:52 -0500
+  ```
+
+- **bash** `{"command": "cat /proc/loadavg; pgrep -af \"drave|llama-server\" | head -5; echo ---; free -g | sed -n 2p", "description": "Check machine load before expert run"}`
+
+  ```
+15.91 7.01 4.43 24/2658 319390
+319383 bash -c cat /proc/loadavg; pgrep -af "drave|llama-server" | head -5; echo ---; free -g | sed -n 2p
+---
+Mem:             125          42          37          17          64          83
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"n_expert\\|expert_feed\\|moe_intermediate\" drave-core/src/model.rs | sed -n 1,5p; echo ---; M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\"; ./drave-core/target/release/drave \"$M\" --config 2>/dev/null | head -30", "desc … [43 caractères tronqués]`
+
+  ```
+270:    if !clusters && cfg.n_expert > 0 && g.tensor("blk.0.ffn_gate_exps.weight").is_none()
+276:incomplet", cfg.n_expert));
+307:    pub n_expert: usize,
+308:    pub n_expert_used: usize,
+326:    // pris pour un modèle dense (`n_expert = 0`), donc exécuté sans un seul
+---
+modèle        : /home/stephane/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf
+architecture  : qwen3moe
+couches       : 48 · cachés 2048
+experts       : 128 par couche, 8 par jeton · FFN expert 768
+routage       : softmax (source : défaut du moteur) · renormalisation oui · échelle aucune
+calculable    : oui (passe avant implémentée)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"self\\.prof\\[\" drave-core/src/model.rs", "description": "List profiler attribution sites"}`
+
+  ```
+6170:            self.prof[0] += t_proj.elapsed().as_secs_f64();
+6317:            self.prof[2] += t_att.elapsed().as_secs_f64();
+6535:            self.prof[3] += t_ffn.elapsed().as_secs_f64();
+7943:                self.prof[0] += tm.elapsed().as_secs_f64();
+7977:                self.prof[1] += tr.elapsed().as_secs_f64();
+8036:                    self.prof[4] += t_scores.elapsed().as_secs_f64();
+8054:                    self.prof[5] += t_soft.elapsed().as_secs_f64();
+8295:            self.prof[2] += ta.elapsed().as_secs_f64();
+8607:                self.prof[3] += tf.elapsed().as_secs_f64();
+8676:            self.prof[3] += tf.elapsed().as_secs_f64();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn forward\\b\\|fn forward_lot\\|fn forward_jeton\\|pub fn forward\" drave-core/src/model.rs | head", "description": "Locate forward functions"}`
+
+  ```
+5967:    pub fn forward_lot(&mut self, toks: &[u32], pos0: usize) -> Vec<Vec<f32>> {
+7363:    pub fn forward_mla(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+7496:    pub fn forward(&mut self, tok: u32, pos: usize) -> Vec<f32> {
+  ```
+
+### 🤖 Assistant
+
+⏵ Mesure courte du coût par jeton des experts sur le MoE local
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\" && IDS=\"$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt\" && time env DRAVE_TAMPONS=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 8 --threads 8 2>&1 | g … [156 caractères tronqués]`
+
+  ```
+[modele] 48 couches chargées en 8.616415621s — listes 0.91 Go , 8 threads
+[config] mélanges d'experts chargés : 48/48 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+[tampons] lecture séquentielle des experts dans nos tampons (les experts retenus sont lus en `pread`, par offset croissant, puis le calcul lit ces octets)
+       7 tokens notés — perplexité cumulée 799.856  (2.0 tok/s)
+=== perplexité 799.8557 sur 7 tokens (0 événements, 3.5 s) ===
+    2.0 tok/s effectifs (avant + tête)
+    attention : 0.01 M paires (requête, clé) par token
+    paires (poids × activation) par token : attention 1035.4 M · experts 2070.8 M · partagé 311.2 M · scores 8 K · total 3417.4 M
+    occupation des poids : 100.0 % de non-nuls (12582912 sur 12582912) — attention 0.0 % · experts 0.0 %
+    ⇒ si la représentation était CREUSE (non-nuls × activations vivantes, hypothèse) : 3417.3 M paires par token au lieu de 3417.3 M (÷1.00)
+    ⚠ 28991029248 poids d'experts NON comptés (format 4 bits sans décodeur d'occupation) : le chiffre est PARTIEL
+    dont en listes (une 
+… [380 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\" && IDS=\"$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt\" && time env DRAVE_TAMPONS=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 8 --threads 8 2>&1 | g … [133 caractères tronqués]`
+
+  ```
+7 tokens notés — perplexité cumulée 799.856  (2.1 tok/s)
+=== perplexité 799.8557 sur 7 tokens (0 événements, 3.4 s) ===
+    2.1 tok/s effectifs (avant + tête)
+    postes (ms/token) : projets-attn 99.20 | rope 4.67 | attention 106.62 | proj+mlp 352.80 | somme 563.29 | reste (tête + échantillonnage) -78.41
+    dont tête de sortie 21.15 | notation log-sum-exp 2.11 (le reste du « reste » n'est pas chronométré)
+[stderr]
+
+real	0m13,597s
+user	0m39,031s
+sys	0m6,142s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\" && IDS=\"$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt\" && for T in 4 16 40; do echo \"== threads $T\"; env DRAVE_TAMPONS=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\"  … [156 caractères tronqués]`
+
+  ```
+== threads 4
+    postes (ms/token) : projets-attn 149.19 | rope 4.58 | attention 156.25 | proj+mlp 433.64 | somme 743.66 | reste (tête + échantillonnage) -117.25
+== threads 16
+    postes (ms/token) : projets-attn 77.35 | rope 4.70 | attention 85.44 | proj+mlp 462.67 | somme 630.16 | reste (tête + échantillonnage) -59.46
+== threads 40
+    postes (ms/token) : projets-attn 692.59 | rope 5.68 | attention 700.60 | proj+mlp 6112.42 | somme 7511.29 | reste (tête + échantillonnage) -675.00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\" && IDS=\"$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt\" && for V in \"\" \"DRAVE_EXPERTS_RAM=4096\"; do echo \"== env: ${V:-defaut}\"; env $V ./drave-core/target/release/drave \"$M … [215 caractères tronqués]`
+
+  ```
+== env: defaut
+[config] cache KV : 32 bits, 0.10 Go pour 512 jetons
+    postes (ms/token) : projets-attn 65.68 | rope 3.89 | attention 71.50 | proj+mlp 194.82 | somme 335.89 | reste (tête + échantillonnage) -47.97
+== env: DRAVE_EXPERTS_RAM=4096
+[config] cache KV : 32 bits, 0.10 Go pour 512 jetons
+[experts] cache RAM des experts : 4096 Mo — ATTENTION, mesuré PLUS LENT que le cache de pages du noyau (ctx 32 : +4 % à 4 Go, +21 % à 32 Go ; voir `CacheExpertsRam`). Aucun octet du calcul ne change, mais le temps, si.
+    postes (ms/token) : projets-attn 65.02 | rope 3.56 | attention 70.46 | proj+mlp 567.91 | somme 706.95 | reste (tête + échantillonnage) -44.72
+31.37 20.98 10.65 4/2585 343314
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=\"$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf\" && IDS=\"$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt\" && for T in 4 16; do echo \"== defaut, threads $T\"; ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --lim … [149 caractères tronqués]`
+
+  ```
+== defaut, threads 4
+    postes (ms/token) : projets-attn 120.96 | rope 3.56 | attention 126.25 | proj+mlp 279.09 | somme 529.86 | reste (tête + échantillonnage) -93.50
+== defaut, threads 16
+    postes (ms/token) : projets-attn 52.48 | rope 3.60 | attention 57.74 | proj+mlp 188.82 | somme 302.64 | reste (tête + échantillonnage) -39.40
+13.67 17.77 10.19 5/2583 349972
+  ```
+
