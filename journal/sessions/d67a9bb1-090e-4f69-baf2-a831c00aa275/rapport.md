@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 24.4 h |
 | Tours | 9 |
-| Messages | 408 |
-| Appels d'outils | 413 |
+| Messages | 409 |
+| Appels d'outils | 414 |
 | Fichiers touchés | 34 |
-| Commandes | 295 |
+| Commandes | 296 |
 | Sous-agents | 4 |
-| Commits | 22 |
+| Commits | 23 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*93 appels d'outils.* Actions notables :
+*94 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 76 autres
+- … et 77 autres
 
 **Synthèse produite :**
 
@@ -550,7 +550,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 255 autres
+- … et 256 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -712,4 +712,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-lot-612-prep.md reports/tagger-612-dryrun-5.json reports/rapport-donnees-in
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)" && git log -1 --format='%h %s' | cat
 

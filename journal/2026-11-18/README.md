@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **6 session(s)** · **4 thème(s)**
+**8 commits** · **6 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
-| mesures | 4 | [mesures.md](mesures.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 
 ## Sessions DSH
@@ -38,6 +38,7 @@
 | 09:35 | `4832b87a` | N/A/D — TROIS SOUS-AGENTS INTÉGRÉS : GRAMMATICALITÉ (GV 6,90 → 1,45, RÉSERVES), A2.6 (BANDE EXPERTS 7,0 Go/s, PPL INVARIANTE), DONNÉES (135,5 Go DONT 7,5 EXPLOITABLES) |
 | 09:38 | `851174f5` | R0.7/B13 — LE LOT TAGGER 612 EST PRÊT POUR 11 h 30 : 608 APPELS, 87 550 TOKENS, 0,01869 $ REMISÉ, DRY-RUN HORS LIGNE 0 SOCKET |
 | 10:03 | `d37e46e7` | N4 — LE 73 M À 13 000 PAS : L'ÉCHANTILLONNAGE DÉCOLLE (TOP-40 0,551 → 0,831), LE GREEDY SE DÉGRADE (RÉP 6 → 11, ÉCHO 0,149) |
+| 10:12 | `b3354bd8` | N4 — LE DÉCODAGE : TOP-40 À T=0,5 BAT LE GREEDY SUR TOUS LES AXES (VALIDES 0,907 · RÉPÉTITION 1,7 CONTRE 5,7 · ÉCHO 0,075 CONTRE 0,149) |
 
 ## Le récit de la journée (écrit à la main)
 

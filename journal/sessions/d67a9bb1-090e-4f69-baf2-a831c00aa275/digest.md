@@ -7754,3 +7754,19 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**r1 — 13 000 pas** : PP … [2243 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 799 fiche(s) · 890 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N4 — grammaticalité et données** (18/11) : GV **6,90 → 1,4
+ create mode 100644 bench/balayage_decodage.py
+ create mode 100644 reports/balayage-decodage-r1.json
+ create mode 100644 reports/rapport-decodage-r1.md
+b3354bd8 N4 — LE DÉCODAGE : TOP-40 À T=0,5 BAT LE GREEDY SUR TOUS LES AXES (VALIDES 0,907 · RÉPÉTITION 1,7 CONTRE 5,7 · ÉCHO 0,075 CONTRE 0,149)
+=== r2 ===
+pas 2650 · perte 1.1849 · PPL val 3.539 · 738 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité et données** (18/11)\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N4 — grammaticalité, … [1049 caractères tronqués]`

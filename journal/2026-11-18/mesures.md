@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,10 +12,11 @@
 | 09:35 | `4832b87a` | N/A/D — TROIS SOUS-AGENTS INTÉGRÉS : GRAMMATICALITÉ (GV 6,90 → 1,45, RÉSERVES), A2.6 (BANDE EXPERTS 7,0 Go/s, PPL INVARIANTE), DONNÉES (135,5 Go DONT 7,5 EXPLOITABLES) | `en-cours.md`, `README.md`, `attention.md` (+22) |
 | 09:38 | `851174f5` | R0.7/B13 — LE LOT TAGGER 612 EST PRÊT POUR 11 h 30 : 608 APPELS, 87 550 TOKENS, 0,01869 $ REMISÉ, DRY-RUN HORS LIGNE 0 SOCKET | `checkpoint_bench.sh`, `en-cours.md`, `README.md` (+12) |
 | 10:03 | `d37e46e7` | N4 — LE 73 M À 13 000 PAS : L'ÉCHANTILLONNAGE DÉCOLLE (TOP-40 0,551 → 0,831), LE GREEDY SE DÉGRADE (RÉP 6 → 11, ÉCHO 0,149) | `en-cours.md`, `README.md`, `attention.md` (+11) |
+| 10:12 | `b3354bd8` | N4 — LE DÉCODAGE : TOP-40 À T=0,5 BAT LE GREEDY SUR TOUS LES AXES (VALIDES 0,907 · RÉPÉTITION 1,7 CONTRE 5,7 · ÉCHO 0,075 CONTRE 0,149) | `balayage_decodage.py`, `en-cours.md`, `README.md` (+11) |
 
 ## Chiffres du jour
 
-`0,551` · `0,831` · `0,149` · `7,0 Go` · `135,5 Go` · `0,882` · `0,884`
+`0,907` · `0,075` · `0,149` · `0,551` · `0,831` · `7,0 Go` · `135,5 Go` · `0,882` · `0,884`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -33,6 +34,7 @@
 - [reports/rapport-a2.6-bande-experts.md](../../reports/rapport-a2.6-bande-experts.md)
 - [reports/rapport-a2.6-reconnaissance.md](../../reports/rapport-a2.6-reconnaissance.md)
 - [reports/rapport-banc-generation-100m.md](../../reports/rapport-banc-generation-100m.md)
+- [reports/rapport-decodage-r1.md](../../reports/rapport-decodage-r1.md)
 - [reports/rapport-donnees-inventaire.md](../../reports/rapport-donnees-inventaire.md)
 - [reports/rapport-grammaticalite-100m.md](../../reports/rapport-grammaticalite-100m.md)
 - [reports/rapport-r1-13000-pas.md](../../reports/rapport-r1-13000-pas.md)
