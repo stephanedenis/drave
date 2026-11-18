@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 33.0 h |
+| Durée | 33.1 h |
 | Tours | 18 |
-| Messages | 633 |
-| Appels d'outils | 604 |
+| Messages | 638 |
+| Appels d'outils | 609 |
 | Fichiers touchés | 39 |
-| Commandes | 474 |
+| Commandes | 479 |
 | Sous-agents | 7 |
-| Commits | 43 |
+| Commits | 44 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -667,7 +667,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Wait ten minutes, then check the first tranche outputs
 - bash — Check the first tranche completion and benches
@@ -676,6 +676,11 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - bash — Wait for the evening pass to finish
 - bash — Record the evening pass 88/2
 - bash — Commit the evening pass record and the tranche 1 benches
+- bash — Add the missing A2.6 experts gate
+- bash — Inspect the test names in the release run
+- bash — Fix the gate's test-name pattern
+- bash — Update the gate count and the fiche
+- bash — Commit the new A2.6 gate
 
 ## 3. Travail accompli
 
@@ -775,7 +780,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 434 autres
+- … et 439 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -964,4 +969,5 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cour
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git
 

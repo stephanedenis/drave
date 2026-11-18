@@ -86,3 +86,11 @@ le **refus nommé**, la trace du classement et une `Precision` de tête à perte
 cache RAM), en opt-in `DRAVE_PERTE_MAX` — le défaut ne doit pas bouger — et ramener les trois tables
 de bandes de `materiel.rs` à une. C'est la tâche A2.6 suivante, et c'est celle qui a le plus de
 risque : le chemin de chargement.
+
+## La porte qui manquait (18/11)
+
+La reconnaissance le disait : « aucune porte ne mesure le placement des experts ». `tools/porte-a2.6-experts.sh`
+la crée : elle lance `cargo test --release placement` et **nomme** les cinq tests (bande, coût,
+refus, VRAM, trace) — un test renommé ou supprimé rougit. Elle ne vérifie pas le branchement (la
+règle n'est pas branchée) : elle vérifie que la règle existe, qu'elle reproduit la mesure et
+qu'elle refuse en le disant. Le total des portes passe de 90 à **91**.

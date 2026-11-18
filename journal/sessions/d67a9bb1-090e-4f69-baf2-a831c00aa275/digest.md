@@ -11352,3 +11352,65 @@ budget exit=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"Les deu … [1922 caractères tronqués]`
+
+  ```
+references : 2499
+ok
+budget exit=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   d8972e8b..19b22015  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/porte-a2.6-experts.sh <<'SH'\n#!/bin/bash\n# porte-a2.6-experts.sh — la règle de placement des experts : bande, coût, refus, trace.\n#\n# POURQUOI CETTE PORTE EXISTE. La reconnaissance A2.6 (18/11) a montré qu'**aucune\n# … [1609 caractères tronqués]`
+
+  ```
+=== PORTE A2.6 — LA RÈGLE DES EXPERTS ===
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ❌ test manquant ou en échec : la_bande_des_experts_reproduit_les_mesures
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --release placement 2>&1 | grep -E \"^test \" | head -16", "description": "Inspect the test names in the release run", "timeoutMs": 600000}`
+
+  ```
+test placement::tests::choisir_respecte_la_place ... ok
+test placement::tests::la_perte_decide_aussi ... ok
+test placement::tests::la_bande_des_experts_reproduit_les_mesures ... ok
+test placement::tests::la_regle_place_perte_choisit_le_kv_par_couche ... ok
+test placement::tests::la_tete_en_4_bits_est_refusee_par_un_budget_de_5_pour_cent ... ok
+test placement::tests::la_tete_q8_0_se_place_comme_le_f32_a_perte_nulle ... ok
+test placement::tests::la_trace_des_experts_dit_les_chiffres ... ok
+test placement::tests::la_vram_est_le_support_le_moins_cher_pour_un_gros_lecteur ... ok
+test placement::tests::le_cout_des_experts_reproduit_la_mesure ... ok
+test placement::tests::le_cout_est_proportionnel_aux_octets ... ok
+test placement::tests::le_refus_des_experts_est_nomme ... ok
+test placement::tests::le_kv_tient_si_la_reserve_est_respectee ... ok
+test placement::tests::un_budget_nul_interdit_toute_quantification ... ok
+test placement::tests::les_experts_tiennent_en_vram_quand_elle_est_libre ... ok
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -i 's/grep -q \"test tests::\\$t ... ok\"/grep -q \"placement::tests::$t ... ok\"/' tools/porte-a2.6-experts.sh && bash tools/porte-a2.6-experts.sh 2>&1 | tail -3; echo \"exit=$?\"", "description": "Fix the gate's test-name patte … [25 caractères tronqués]`
+
+  ```
+=== PORTE A2.6 — LA RÈGLE DES EXPERTS ===
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus nommé · trace
+exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"porte-\\*\" tools/toutes-les-portes.sh | head -3; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"| portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs` … [1173 caractères tronqués]`
+
+  ```
+13:#   1. il lance **TOUTES** les `tools/porte-*.sh`, séquentiellement ;
+35:portes=$(ls tools/porte-*.sh | sort)
+ok
+ok
+  revue de documentation · 807 fiche(s) · 910 JSON · 128 doc(s) · 91 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+budget exit=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nA2.6 — LA PORTE QUI MANQUAIT : `porte-a2.6-experts` NOMME LES C … [709 caractères tronqués]`
