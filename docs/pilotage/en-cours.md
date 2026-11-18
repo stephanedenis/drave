@@ -101,7 +101,7 @@
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
 | fichiers / JSON de résultats | **804** / **899** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
-| dernière passe | **17/11 20 h 42 → 22 h 39** : **90** portes, **87/3** ; rouges `indice` (862 s) et `melange` (106 s) **structurelles**, `sessions` **circonstance** (heartbeat `e181ce02`) — **réparée le 18/11** (mandat en pause) → **aucune rouge nouvelle** ; cumul **6 981 s** | `work/portes/roue-1117-2042/registre.txt` |
+| dernière passe | **18/11 10 h 57 → 13 h 00** : **90** portes, **88/2** ; seules `indice` (854 s) et `melange` (106 s) **structurelles** ; `sessions` **verte** ; passée machine chargée (r4 + dédups), donc verdict seul | `work/portes/roue-1118-1057/registre.txt` |
 
 ## Les chantiers et leurs bloquants
 

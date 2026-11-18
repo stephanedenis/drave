@@ -8917,3 +8917,51 @@ AssertionError: **r1/r2/r3** : PPL **3,4130 → 3,2321 → 3,1317**, top-40 **0,
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N — l'entraînement et le décodage**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N — l'entraînement et le  … [2020 caractères tronqués]`
+
+  ```
+mots : 54
+  revue de documentation · 804 fiche(s) · 899 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1754 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+5e5e8e5a N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867)
+mer 18 nov 2026 12:52:00 EST
+passe: 89 vertes, 4 rouges
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"❌\" /tmp/passe-1118.log | sed 's/  */ /g' | cut -c1-140", "description": "Identify the four red gates"}`
+
+  ```
+porte-indice ❌ code 1 854 s ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, questio
+ porte-melange ❌ code 1 106 s ❌ l'état de A ne rend pas le code de A dans une
+ ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, question qui ne la désigne pas) à 459 : l'écart est 
+ ❌ l'état de A ne rend pas le code de A dans une
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -4 /tmp/passe-1118.log; echo \"=== registre ===\"; awk '$2 != 0' work/portes/roue-1118-1057/registre.txt 2>/dev/null | head -4", "description": "Wait for the pass to finish", "timeoutMs": 600000}`
+
+  ```
+mer 18 nov 2026 13:00:34 EST
+    === 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+      ❌ l'état de A ne rend pas le code de A dans une
+         invite qui n'en contient aucun : le mélange ne pourrait rien dire
+Journaux complets : work/portes/roue-1118-1057
+=== registre ===
+porte-indice 1 854
+porte-melange 1 106
+--- 88 vertes, 2 rouges ---
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"# Référ … [1953 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 804 fiche(s) · 899 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1747 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nPASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AU … [823 caractères tronqués]`
