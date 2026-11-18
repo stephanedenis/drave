@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 24.4 h |
+| Durée | 24.8 h |
 | Tours | 9 |
-| Messages | 409 |
-| Appels d'outils | 414 |
+| Messages | 418 |
+| Appels d'outils | 422 |
 | Fichiers touchés | 34 |
-| Commandes | 296 |
-| Sous-agents | 4 |
-| Commits | 23 |
+| Commandes | 302 |
+| Sous-agents | 6 |
+| Commits | 24 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*94 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 77 autres
+- … et 85 autres
 
 **Synthèse produite :**
 
@@ -507,6 +507,8 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - tour 9 — Grammaticalité du 100 M
 - tour 9 — Préparation lot tagger 612
 - tour 9 — Inventaire des données D
+- tour 9 — Dédoublonnage par blocs
+- tour 9 — Précision de tête Q8_0
 
 ### Commandes exécutées (échantillon)
 
@@ -550,7 +552,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 256 autres
+- … et 262 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -678,7 +680,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ## 5. Erreurs rencontrées
 
-7 sorties en erreur ou divergentes. Les premières :
+8 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -687,6 +689,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T5** : ok ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (3595551) panicked at src/main.rs:9068:13: DRAVE_NATIVE_PROFONDEUR est lu dans le source
 - **T8** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<stdin>", line 3, in <lambda> ValueError: invalid literal for int() with base 10: 'n' [exit code: 1]
 - **T9** : work/n2ac/mix1024-100m.drvm work/n2ac/mix1024-100m.pt work/n2ac/mix1024-100m.pt.json === json du pt === {  "modele": "drave-n0",  "parametres": 73366568,  "corpus": "data/wiki_mix/propre/train.txt",  
+- **T9** : pas 3900 · perte 1.1655 · PPL val 3.510 · 1087 s pas 3950 · perte 1.2692 · PPL val 3.505 · 1101 s [exit code: 2]
 
 ## 6. Commits
 
@@ -713,4 +716,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)" && git log -1 --format='%h %s' | cat
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

@@ -171,6 +171,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `8c024745` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.5 h | 1 | 90 | 1 | 0 | [rapport](sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md) |
 | `8e04c99a` | Tu es VÉRIFICATEUR de documentation | 2026-09-30 18:07 | 0.2 h | 1 | 85 | 0 | 0 | [rapport](sessions/8e04c99a-8ba1-4675-9f80-fa3338449b17/rapport.md) |
 | `8eda56f8` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 15:11 | 0.1 h | 1 | 27 | 0 | 0 | [rapport](sessions/8eda56f8-9964-432f-8fa4-d5ad537369b7/rapport.md) |
+| `9f4f7b6d` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 0.2 h | 1 | 61 | 2 | 0 | [rapport](sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) |
 | `9fffd87b` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.2 h | 1 | 22 | 0 | 0 | [rapport](sessions/9fffd87b-4d0b-4ccb-b41a-0fbc7079d4aa/rapport.md) |
 | `a0d33fb7` | Tu travailles dans le dépôt | 2026-11-06 09:31 | 1.3 h | 1 | 140 | 0 | 0 | [rapport](sessions/a0d33fb7-37a9-4834-8a94-0da119e3b18f/rapport.md) |
 | `a117a3c1` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 10:30 | 0.7 h | 1 | 83 | 4 | 0 | [rapport](sessions/a117a3c1-8325-4a63-8e8f-14fea0bce484/rapport.md) |
@@ -204,6 +205,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `c776b71f` | Tu es relecteur ADVERSARIAL de | 2026-09-30 18:36 | 0.1 h | 1 | 54 | 0 | 0 | [rapport](sessions/c776b71f-525a-4bad-b83c-eff1c2d204ff/rapport.md) |
 | `c7e46dba` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.4 h | 1 | 102 | 1 | 0 | [rapport](sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) |
 | `caaf3018` | Reprise du hub et passe de portes | 2026-11-02 16:16 | 26.5 h | 34 | 624 | 6 | 36 | [rapport](sessions/caaf3018-e3e2-4416-8446-11f0335910aa/rapport.md) |
+| `cbf7ca71` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 0.3 h | 1 | 28 | 1 | 0 | [rapport](sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) |
 | `cdc16e57` | Tu travailles dans /home/stephane/Data13 | 2026-11-06 21:13 | 1.5 h | 1 | 111 | 2 | 0 | [rapport](sessions/cdc16e57-4a69-4890-8b3c-270539c64ff2/rapport.md) |
 | `cf0456ab` | Mécanisme de mise à jour pair douteux | 2026-10-29 15:51 | 21.6 h | 8 | 343 | 27 | 11 | [rapport](sessions/cf0456ab-e3f0-4f81-a4f5-bec4b3455f9f/rapport.md) |
 | `d04ed7a2` | Tu travailles dans le dépôt | 2026-10-08 09:18 | 0.1 h | 1 | 60 | 0 | 0 | [rapport](sessions/d04ed7a2-0988-4dfd-83c5-644695dc2f8f/rapport.md) |
@@ -214,7 +216,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `d58fb6be` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.5 h | 1 | 54 | 0 | 0 | [rapport](sessions/d58fb6be-cedc-4236-a298-aa953dfb21b7/rapport.md) |
 | `d622230d` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.3 h | 1 | 34 | 0 | 0 | [rapport](sessions/d622230d-649c-43cf-9202-da1eeb230259/rapport.md) |
 | `d629d7d7` | Continue the work | 2026-10-19 12:03 | 138.6 h | 286 | 3405 | 76 | 296 | [rapport](sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md) |
-| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 24.4 h | 9 | 414 | 34 | 23 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
+| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 24.8 h | 9 | 422 | 34 | 24 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
 | `da0f2984` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | 1 | 70 | 1 | 0 | [rapport](sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) |
 | `da69b1fa` | Tu travailles dans le dépôt | 2026-09-30 15:07 | 0.1 h | 1 | 45 | 1 | 0 | [rapport](sessions/da69b1fa-91b0-4c69-bb2b-58bf00e92e28/rapport.md) |
 | `dcaa24d6` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.0 h | 1 | 13 | 0 | 0 | [rapport](sessions/dcaa24d6-0017-4382-be21-8244c0fb9b7a/rapport.md) |

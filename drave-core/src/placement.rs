@@ -157,6 +157,74 @@ pub fn choisir_avec_perte(
     meilleur.map(|(s, p, _)| (s, p))
 }
 
+// --- La tête : son format est celui du fichier, pas une requantification -----
+//
+// La mesure du 18/11 (`reports/rapport-a2.6-reconnaissance.md` § 3.4) : la tête
+// Q8_0 du fichier, posée en VRAM, donne la **même** perplexité qu'en RAM
+// (56,7642 = 56,7642) et passe de 7,43 à 1,80 ms/jeton. Ce n'est pas un choix de
+// précision : le fichier est déjà quantifié, on ne choisit que la **place**. La
+// table `PRECISIONS` reste donc la carte des **requantifications** d'un opérateur
+// f32 (budget nul ⇒ f32) ; la tête a ses entrées à part, à perte nulle.
+
+/// La tête **telle que le fichier la stocke**, en Q8_0 : 34 octets par bloc de
+/// 32 poids (une échelle f16 + 32 quants), soit **1,0625 octet par valeur**.
+/// Mesurée en VRAM à perte nulle (voir ci-dessus) : aucune requantification.
+pub const TETE_Q8_0: Precision = Precision {
+    nom: "tête Q8_0",
+    octets_par_valeur: 34.0 / 32.0,
+    perte_ppl: 0.0,
+};
+
+/// La tête en **Q6_K** : 210 octets par super-bloc de 256 poids (128 + 64 + 16
+/// quants, 2 octets d'échelle), soit **0,8203 octet par valeur**. C'est le format
+/// des têtes liées des Qwen en Q4_K_M (`model.rs:4855`) ; le gain VRAM n'a été
+/// mesuré qu'en Q8_0 — Q6_K est à **rejouer** avant d'être cité comme mesuré.
+pub const TETE_Q6_K: Precision = Precision {
+    nom: "tête Q6_K",
+    octets_par_valeur: 210.0 / 256.0,
+    perte_ppl: 0.0,
+};
+
+/// La précision de la tête lue du **type ggml** du tenseur (`GGML_F32`,
+/// `GGML_Q8_0`, `GGML_Q6_K`). Ces entrées décrivent le **format du fichier** :
+/// placer ne requantifie pas, d'où la perte nulle. `None` pour un type **sans
+/// entrée** : la règle ne devine ni les octets ni la perte, l'appelant garde son
+/// défaut. La **requantification** 4 bits, elle, reste `TETE_4BIT` (+10 % mesurés).
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn precision_tete(type_ggml: u32) -> Option<Precision> {
+    use crate::gguf::{GGML_F32, GGML_Q6_K, GGML_Q8_0};
+    match type_ggml {
+        GGML_F32 => Some(F32),
+        GGML_Q8_0 => Some(TETE_Q8_0),
+        GGML_Q6_K => Some(TETE_Q6_K),
+        _ => None,
+    }
+}
+
+/// Place la **tête dans le format du fichier** : le support le moins cher où elle
+/// tient, à condition que sa perte tienne dans `perte_max` (0 = exiger une tête
+/// qui ne coûte rien à la PPL). La tête est lue **en entier** à chaque jeton, un
+/// seul lecteur : ses octets par jeton valent ses octets totaux.
+///
+/// Un `perte_max` **négatif** refuse la tête, même sans perte : le budget est un
+/// plafond, jamais un plancher implicite. C'est la garde qui empêche un appelant
+/// de « gagner » une place en payant une perte qu'il n'a pas déclarée.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn choisir_tete(
+    type_ggml: u32,
+    nb_valeurs: u64,
+    libre_vram: u64,
+    libre_ram: u64,
+    perte_max: f64,
+) -> Option<(Support, Precision)> {
+    let p = precision_tete(type_ggml)?;
+    if p.perte_ppl > perte_max {
+        return None;
+    }
+    let octets = (nb_valeurs as f64 * p.octets_par_valeur) as u64;
+    Some((choisir(octets, octets, libre_vram, libre_ram), p))
+}
+
 /// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :
 /// **+2,28 %** sur les premières, **+0,03 %** sur les dernières. La frontière mesurée
 /// est la moitié du réseau (les couches 0-11 contre 12-23 sur 24).
@@ -229,6 +297,55 @@ mod tests {
         // Et l'int4 global (+364 %) ne passe aucun budget raisonnable.
         let encore = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 10.0).unwrap();
         assert_ne!(encore.1.nom, "int4 global");
+    }
+
+    #[test]
+    fn la_tete_q8_0_se_place_comme_le_f32_a_perte_nulle() {
+        // La mesure de la reconnaissance (18/11, § 3.4) : tête Q8_0 en VRAM, même
+        // PPL qu'en RAM (56,7642 = 56,7642), 7,43 → 1,80 ms/jeton. La règle ne doit
+        // donc pas déplacer la tête Q8_0 : elle la pose où le f32 se poserait.
+        let n = 151_936u64 * 896;               // la tête d'un 0,5 B (vocab × caché)
+        let octets_f32 = n * 4;
+
+        // La référence : le f32 à budget nul, par la règle générique.
+        let (sup_f32, p_f32) = choisir_avec_perte(octets_f32, octets_f32, 16 << 30, 64 << 30, 0.0)
+            .unwrap();
+        assert_eq!(p_f32, F32);
+
+        // En f32, le nouveau chemin rend EXACTEMENT la réponse du chemin générique :
+        // il ne réinvente pas le placement.
+        assert_eq!(
+            choisir_tete(crate::gguf::GGML_F32, n, 16 << 30, 64 << 30, 0.0),
+            choisir_avec_perte(octets_f32, octets_f32, 16 << 30, 64 << 30, 0.0)
+        );
+
+        // La tête Q8_0 : la même place que la référence, perte nulle, et le bon
+        // format du fichier (8 bits utiles + l'échelle de bloc).
+        let (sup_q8, p_q8) =
+            choisir_tete(crate::gguf::GGML_Q8_0, n, 16 << 30, 64 << 30, 0.0).unwrap();
+        assert_eq!(p_q8, TETE_Q8_0);
+        assert_eq!(p_q8.perte_ppl, 0.0);
+        assert_eq!(sup_q8, sup_f32);
+        assert_eq!(p_q8.octets_par_valeur, 34.0 / 32.0);
+
+        // Q6_K : encore moins d'octets, même perte déclarée — le format des têtes
+        // liées des Qwen en Q4_K_M.
+        assert_eq!(TETE_Q6_K.octets_par_valeur, 210.0 / 256.0);
+        assert!(TETE_Q6_K.octets_par_valeur < TETE_Q8_0.octets_par_valeur);
+
+        // Un budget négatif refuse la tête, même sans perte : le plafond est un
+        // plafond. Sans cette garde, `perte_max = -0.1` gagnerait de la place.
+        assert_eq!(
+            choisir_tete(crate::gguf::GGML_Q8_0, n, 16 << 30, 64 << 30, -0.1),
+            None
+        );
+
+        // Contrôle négatif : un type sans entrée (Q4_K) rend None — la règle
+        // ne devine pas les octets d'un format qu'elle ne porte pas.
+        assert_eq!(
+            choisir_tete(crate::gguf::GGML_Q4_K, n, 16 << 30, 64 << 30, 0.0),
+            None
+        );
     }
 
     #[test]

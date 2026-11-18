@@ -7770,3 +7770,124 @@ pas 2650 · perte 1.1849 · PPL val 3.539 · 738 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité et données** (18/11)\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N4 — grammaticalité, … [1049 caractères tronqués]`
+
+  ```
+mots de la puce : 63
+  en-cours · 1687 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+8bec3cc8 ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **subagent** `{"description": "Dédoublonnage par blocs", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (Drave, en français). Machine dédiée (40 threads, 125 Go RAM). NE TOUCHE PAS à `data/` (lecture seule).\n\nCONTEXTE : l'inventaire `reports/rapport-donnees-inventaire.md` a montré … [2290 caractères tronqués]`
+- **subagent** `{"description": "Précision de tête Q8_0", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (Drave, en français). Machine dédiée. La reconnaissance `reports/rapport-a2.6-reconnaissance.md` a montré que `drave-core/src/placement.rs` n'a **aucune entrée `Precision` pour la  … [1740 caractères tronqués]`
+
+  ```
+started subagent cbf7ca71-5b38-428e-9f19-298be1720918
+  ```
+
+
+  ```
+started subagent 9f4f7b6d-c5aa-4269-b785-a0f444424470
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n3/r2.log; ls -la work/n3/r2.pt 2>/dev/null && python3 -c \"\nimport json; d=json.load(open('work/n3/r2.pt.json')); print('pas', d['pas'], 'ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main … [72 caractères tronqués]`
+
+  ```
+pas 3900 · perte 1.1655 · PPL val 3.510 · 1087 s
+pas 3950 · perte 1.2692 · PPL val 3.505 · 1101 s
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 360; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n3/r2.log; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n3/r2.pt.json')); print('FINI pas', d['pas'], 'ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4), 'duree', round … [132 caractères tronqués]`
+
+  ```
+pas 5250 · perte 1.1624 · PPL val 3.498 · 1463 s
+pas 5300 · perte 1.1382 · PPL val 3.478 · 1476 s
+pas encore fini
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,etime,pcpu,args | grep \"n3/r2\" | grep -v grep | head -2 | cut -c1-110; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; tail -2 work/n3/r2.log; uptime", "description": "Check whether  … [15 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 10:27:01 EST
+ 477257       26:40  100 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/pr
+0, 0 %, 4 MiB
+1, 100 %, 5628 MiB
+pas 5300 · perte 1.1382 · PPL val 3.478 · 1476 s
+pas 5350 · perte 1.2505 · PPL val 3.494 · 1490 s
+ 10:27:01  up 14 days 14:53,  2 users,  load average: 2,60, 3,14, 3,27
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r2.log; test -f work/n3/r2.pt.json && echo FINI || echo \"en cours\"", "description": "Wait for r2", "timeoutMs": 600000}`
+
+  ```
+mer 18 nov 2026 10:36:09 EST
+pas 7300 · perte 1.1274 · PPL val 3.462 · 2033 s
+en cours
+  ```
+
+### 👤 Utilisateur
+
+Agent 9f4f7b6d-c5aa-4269-b785-a0f444424470 sent a message: 
+A2.6 tête Q8_0/Q6_K — terminé, testé, aucun commit.
+
+DIFF : `drave-core/src/placement.rs` seul fichier de code modifié, **+117 / −0** (253 → 370 lignes). Ajouts : section tête (l.160-226) avec `TETE_Q8_0` (1,0625 o/valeur = 34/32, perte 0.0), `TETE_Q6_K` (0,8203125 = 210/256, perte 0.0), `precision_tete(type_ggml)` (GGML_F32/GGML_Q8_0/GGML_Q6_K → Precision, sinon None) et `choisir_tete(type_ggml, nb_valeurs, libre_vram, libre_ram, perte_max)` (refus si perte > budget, donc perte_max < 0 refuse tout ; tête lue en entier 1×/jeton → octets_par_jeton = octets_total). Test `la_tete_q8_0_se_place_comme_le_f32_a_perte_nulle` (l.302-349).
+
+DÉCISION DE CONCEPTION : les deux entrées sont **hors de `PRECISIONS`**, parce que `choisir_avec_perte` prend le moins cher sous budget : une entrée à perte 0 de 0,82-1,06 o/valeur gagnerait à budget 0 contre f32 et dès 1 % contre int8, ce qui casserait 2 des 8 tests existants (`un_budget_nul_interdit_toute_quantification`, `la_perte_decide_aussi`). La table générique et les 5 constantes sont inchangées au caractère près. `perte_ppl: 0.0` = **aucune perte due au placement** (même format du fichier), pas « Q8_0 = f32 » ; Q6_K n'a jamais été mesuré → signalé comme à rejouer.
+
+TESTS : `cargo test placement` **9/9** (avant 8/8) ; `cargo test` (crate) **140/140** (avant 139/139). Retrait temporaire de `GGML_Q8_0 => Some(TETE_Q8_0)` vérifié : **8 passed, 1 failed** (exit 101, panique sur l'unwrap), puis entrée remise → 9/9.
+
+CONTRAINTES : `model.rs`, `main.rs`, `en-cours`, `roadmap`, `AGENTS.md` non touchés ; rien branché ; pas de commit. Aucun nouvel avertissement build (les 2 fonctions portent `#[allow(dead_code)]` en attendant le câblage).
+
+RAPPORT : `reports/rapport-a2.6-tete-q8.md` (268 lignes) — mesure de la reconnaissance (56,7642 = 56,7642 ; 7,43 → 1,80 ms/jeton), diff, test, comtes, et ce qui pourrait le rendre faux (machine chargée 13,7→31,4, PPL à 4 décimales, Q6_K non mesuré, octets nominaux/alignement des blocs, repli NVMe silencieux).
+
+### 👤 Utilisateur
+
+Background subagent 9f4f7b6d-c5aa-4269-b785-a0f444424470 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Tâche terminée : entrées tête Q8_0/Q6_K ajoutées et testées
+
+## Diff (résumé)
+
+**`drave-core/src/placement.rs`** — seul fichier de code modifié : **+117 / −0** lignes (253 → 370), aucun commit.
+
+| élément | lignes | contenu |
+|---|---:|---|
+| `TETE_Q8_0` | 172-176 | `1,0625` o/valeur (34 o / bloc de 32), **perte 0,0** |
+| `TETE_Q6_K` | 182-186 | `0,8203125` o/valeur (210 o / bloc de 256), **perte 0,0** |
+| `precision_tete(type_ggml)` | 188-202 | `GGML_F32/GGML_Q8_0/GGML_Q6_K` → `Precision`, sinon `None` |
+| `choisir_tete(...)` | 204-226 | place la tête **dans son format** ; `perte_max` négatif ⇒ `None` |
+| test `la_tete_q8_0_se_place_comme_le_f32_a_perte_nulle` | 302-349 | le test demandé |
+
+**Choix assumé** : les entrées sont **hors de `PRECISIONS`**, car `choisir_avec_perte` prend le moins cher sous budget — une entrée à perte 0 y gagnerait à budget nul contre f32 (et dès 1 % contre int8), cassant 2 des 8 tests. La table générique, ses 5 constantes et `choisir_avec_perte` sont inchangés au caractère près. `perte_ppl: 0.0` signifie **aucune perte due au placement** (même format du fichier), pas « Q8_0 = f32 ».
+
+## Comptes
+
+| commande | avant | après |
+|---|---:|---:|
+| `cargo test placement` | 8/8 | **9/9**, 0 échec |
+| `cargo test` (crate) | 139/139 | **140/140**, 0 échec |
+
+**Contrôle de retrait** : sans la ligne `GGML_Q8_0 => Some(TETE_Q8_0)`, `cargo test placement` donne **8 passed, 1 failed** (exit 101, panique sur l'`unwrap`) ; entrée remise → 9/9. `model.rs` et `main.rs` sont intacts : aucun câblage, aucun changement de défaut.
+
+## Rapport
+
+**`reports/rapport-a2.6-tete-q8.md`** (268 lignes) : la mesure de la reconnaissance (56,7642 = 56,7642 ; 7,43 → 1,80 ms/jeton ; contrôle `DRAVE_GPU=0`), le diff et ses lignes, le test, les comptes, et ce qui pourrait le rendre faux — **machine chargée** (13,7 → 31,4, à rejouer au repos), égalité de PPL imprimée à 4 décimales, **Q6_K jamais mesuré** (0,0 par construction, signalé comme à rejouer), octets nominaux/alignement des blocs, repli NVMe silencieux préexistant.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet placement 2>&1 | tail -3; cd .. && git status --short | head -6", "description": "Verify the placement tests and status", "timeoutMs": 300000}`
+
+  ```
+.........
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+
+ M drave-core/src/placement.rs
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+?? journal/sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"PPL **37,2013 invariante … [2090 caractères tronqués]`
