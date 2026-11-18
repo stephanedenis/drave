@@ -8386,3 +8386,74 @@ puces : 65
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-612.md reports/tagger-612-api.json reports/rapport-courbe-r1-r3.md reports/banc-generation-r3.json reports/banc-grammaticalite-r3.json docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log  … [1354 caractères tronqués]`
+
+  ```
+e471d051 R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY
+mer 18 nov 2026 11:47:26 EST
+=== passe ===
+  porte-homeostasie      ✅                         516 s    ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+  porte-horloge          ✅                          25 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+vertes: 32 rouges: 0
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **subagent** `{"description": "Dédoublonnage par ligne", "prompt": "Tu travailles dans /home/stephane/Data13TB/stephane/GitHub/Qtrinet (Drave, en français). Machine dédiée. `data/` est en LECTURE SEULE.\n\nCONTEXTE : `reports/rapport-dedup-blocs.md` vient d'établir que le dédoublonnage par blocs n'écarte rien (0  … [2366 caractères tronqués]`
+
+  ```
+started subagent 6e7ba93b-7eb8-400a-8457-6f6a8fe67f54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" README.md | head -30; wc -l README.md", "description": "Read the README structure"}`
+
+  ```
+17:## Essayez — le premier produit
+40:## L'origine
+54:## Le cœur : des listes, pas des matrices
+75:## Les cinq axes de la vision
+77:### Axe 1 — Observer et régler le modèle, neurone par neurone
+85:### Axe 2 — Répartir sur les composants d'une machine
+99:### Axe 3 — Répartir sur plusieurs machines
+110:### Axe 4 — Rejouer, comparer, ne pas régresser
+118:### Axe 5 — Formats, matériels, énergie
+129:## L'intelligence : deux étages, par-dessus les flux
+143:## Ce qu'on a trouvé (expliqué sans jargon)
+148:### 1. Traduire : correct, jamais parfait
+162:### 2. Le raisonnement est déjà dans la tête du modèle
+176:### 3. Le français et l'anglais sont rangés dans deux espaces différents
+194:### 4. On peut apprendre au modèle à ranger ses deux langues ensemble
+204:### 5. Mais le fil d'une histoire, lui, ne se traduit pas
+218:### 6. Sur de vraies phrases, le même schéma
+232:### En une phrase
+239:## Comment on le sait (et pourquoi on peut nous croire)
+255:## Ce que contient le dépôt
+281:## Par où commencer
+300:## Ce qui est fait, et ce qui reste ouvert
+316 README.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '298,316p' README.md", "description": "Read the README closing section"}`
+
+  ```
+```
+
+## Ce qui est fait, et ce qui reste ouvert
+
+**Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),
+les 71 langues et les maîtres (B7/B8), le banc externe (B9), le protocole sémantique (B10), la base typée (B11)
+et les modules cerveau-langage (B12). Les **chiffres, les contrôles et les négatifs**
+— y compris le seuil de distillation 9,23–9,96 M, le meilleur écart 4,40 % (31,63 M / 610 ex.), la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
+[`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; le **plan**
+dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
+
+**Reste ouvert, bloqué par le dehors** :
+- **La prose scientifique** : le corpus parallèle humain manque.
+- **Le pic du 32 B** : nommé, non mesuré (10-20 h en 4 bits) — la tendance est établie par trois courbes.
+- **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab) et le FPGA (le matériel).
+
+---
+
+*Un résultat qui n'a pas de contrôle négatif n'est pas un résultat.*
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); s = p.read_text()\nold = '''**Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),\nles 71 langues et les maîtres ( … [3460 caractères tronqués]`

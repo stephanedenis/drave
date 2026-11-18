@@ -147,6 +147,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `657779e6` | Dépôt /home/stephane/GitHub/Qtrinet, f | 2026-10-27 18:48 | 0.8 h | 1 | 61 | 2 | 0 | [rapport](sessions/657779e6-ad04-4f29-9baf-dcbfd7d819df/rapport.md) |
 | `67637ea9` | MISSION STRICTEMENT EN LECTURE SEULE. | 2026-10-08 09:19 | 0.0 h | 1 | 28 | 0 | 0 | [rapport](sessions/67637ea9-78c6-4c20-a77c-0f90ee2a9ddc/rapport.md) |
 | `6d0c1d28` | Tu es relecteur ADVERSARIAL de | 2026-09-30 20:04 | 0.1 h | 1 | 36 | 0 | 0 | [rapport](sessions/6d0c1d28-76e1-42f8-9e8c-7f88395f9e55/rapport.md) |
+| `6e7ba93b` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 11:47 | 0.0 h | 1 | 9 | 0 | 0 | [rapport](sessions/6e7ba93b-7eb8-400a-8457-6f6a8fe67f54/rapport.md) |
 | `6f54102b` | Nous sommes dans /home/stephane/GitHub/Q | 2026-10-27 09:41 | 0.8 h | 1 | 69 | 2 | 0 | [rapport](sessions/6f54102b-c522-4de1-9027-a9c35dec6c8c/rapport.md) |
 | `6f65acfe` | Dépôt /home/stephane/GitHub/Qtrinet, s | 2026-10-27 15:11 | 0.1 h | 1 | 16 | 0 | 0 | [rapport](sessions/6f65acfe-ea1e-4ed9-a560-c923bb47b81a/rapport.md) |
 | `71d57f53` | Évaluation des techniques de lecture rapide pour Drave | 2026-10-29 07:42 | 29.9 h | 55 | 1128 | 18 | 98 | [rapport](sessions/71d57f53-8b41-4220-84dd-7bb9eedc88d9/rapport.md) |
@@ -216,7 +217,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `d58fb6be` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.5 h | 1 | 54 | 0 | 0 | [rapport](sessions/d58fb6be-cedc-4236-a298-aa953dfb21b7/rapport.md) |
 | `d622230d` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.3 h | 1 | 34 | 0 | 0 | [rapport](sessions/d622230d-649c-43cf-9202-da1eeb230259/rapport.md) |
 | `d629d7d7` | Continue the work | 2026-10-19 12:03 | 138.6 h | 286 | 3405 | 76 | 296 | [rapport](sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md) |
-| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 25.9 h | 9 | 455 | 36 | 27 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
+| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 26.0 h | 9 | 459 | 36 | 28 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
 | `da0f2984` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | 1 | 70 | 1 | 0 | [rapport](sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) |
 | `da69b1fa` | Tu travailles dans le dépôt | 2026-09-30 15:07 | 0.1 h | 1 | 45 | 1 | 0 | [rapport](sessions/da69b1fa-91b0-4c69-bb2b-58bf00e92e28/rapport.md) |
 | `dcaa24d6` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.0 h | 1 | 13 | 0 | 0 | [rapport](sessions/dcaa24d6-0017-4382-be21-8244c0fb9b7a/rapport.md) |

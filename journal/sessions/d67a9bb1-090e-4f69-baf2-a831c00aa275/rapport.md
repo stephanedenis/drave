@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 25.9 h |
+| Durée | 26.0 h |
 | Tours | 9 |
-| Messages | 455 |
-| Appels d'outils | 455 |
+| Messages | 459 |
+| Appels d'outils | 459 |
 | Fichiers touchés | 36 |
-| Commandes | 333 |
-| Sous-agents | 6 |
-| Commits | 27 |
+| Commandes | 336 |
+| Sous-agents | 7 |
+| Commits | 28 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*135 appels d'outils.* Actions notables :
+*139 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 117 autres
+- … et 121 autres
 
 **Synthèse produite :**
 
@@ -511,6 +511,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - tour 9 — Inventaire des données D
 - tour 9 — Dédoublonnage par blocs
 - tour 9 — Précision de tête Q8_0
+- tour 9 — Dédoublonnage par ligne
 
 ### Commandes exécutées (échantillon)
 
@@ -554,7 +555,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 293 autres
+- … et 296 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -722,4 +723,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --f
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/dedup_blocs.py reports/rapport-dedup-blocs.md reports/dedup-blocs-7.5go.json docs/pilotage/e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-612.md reports/tagger-612-api.json reports/rapport-courbe-r1-r3.md reports/
+- README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL" && git l
 

@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,21 +14,23 @@
 | 10:03 | `d37e46e7` | N4 — LE 73 M À 13 000 PAS : L'ÉCHANTILLONNAGE DÉCOLLE (TOP-40 0,551 → 0,831), LE GREEDY SE DÉGRADE (RÉP 6 → 11, ÉCHO 0,149) | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 10:12 | `b3354bd8` | N4 — LE DÉCODAGE : TOP-40 À T=0,5 BAT LE GREEDY SUR TOUS LES AXES (VALIDES 0,907 · RÉPÉTITION 1,7 CONTRE 5,7 · ÉCHO 0,075 CONTRE 0,149) | `balayage_decodage.py`, `en-cours.md`, `README.md` (+11) |
 | 11:25 | `aafffb7a` | D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS | `en-cours.md`, `README.md`, `attention.md` (+15) |
+| 11:44 | `e471d051` | R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY | `en-cours.md`, `README.md`, `attention.md` (+15) |
 
 ## Chiffres du jour
 
-`0 %` · `53,98 %` · `8,28 %` · `0,907` · `0,075` · `0,149` · `0,551` · `0,831` · `7,0 Go` · `135,5 Go` · `0,882` · `0,884`
+`0,9572` · `0,8625` · `0,870` · `0 %` · `53,98 %` · `8,28 %` · `0,907` · `0,075` · `0,149` · `0,551` · `0,831` · `7,0 Go`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
 - `174fd5ef-1163-4983-85b5-9101752ad711` — Tu travailles dans le dépôt (début 2026-11-18 09:15, 0.4 h) → [rapport](../sessions/174fd5ef-1163-4983-85b5-9101752ad711/rapport.md) · [digest](../sessions/174fd5ef-1163-4983-85b5-9101752ad711/digest.md)
+- `6e7ba93b-7eb8-400a-8457-6f6a8fe67f54` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 11:47, 0.0 h) → [rapport](../sessions/6e7ba93b-7eb8-400a-8457-6f6a8fe67f54/rapport.md) · [digest](../sessions/6e7ba93b-7eb8-400a-8457-6f6a8fe67f54/digest.md)
 - `8c024745-95cb-4885-9d0b-865142606b6d` — Tu travailles dans le dépôt (début 2026-11-18 08:58, 0.5 h) → [rapport](../sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md) · [digest](../sessions/8c024745-95cb-4885-9d0b-865142606b6d/digest.md)
 - `9f4f7b6d-c5aa-4269-b785-a0f444424470` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 0.2 h) → [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md)
 - `c7e46dba-11cb-456b-a3b6-715428927f99` — Tu travailles dans le dépôt (début 2026-11-18 08:58, 0.4 h) → [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md)
 - `cbf7ca71-5b38-428e-9f19-298be1720918` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 1.0 h) → [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md)
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 25.9 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 26.0 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `da0f2984-32d0-459d-a761-d3faf6a10b8a` — Tu travailles dans le dépôt (début 2026-11-18 09:15, 0.4 h) → [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 423.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
@@ -37,11 +39,13 @@
 - [reports/rapport-a2.6-bande-experts.md](../../reports/rapport-a2.6-bande-experts.md)
 - [reports/rapport-a2.6-reconnaissance.md](../../reports/rapport-a2.6-reconnaissance.md)
 - [reports/rapport-banc-generation-100m.md](../../reports/rapport-banc-generation-100m.md)
+- [reports/rapport-courbe-r1-r3.md](../../reports/rapport-courbe-r1-r3.md)
 - [reports/rapport-decodage-r1.md](../../reports/rapport-decodage-r1.md)
 - [reports/rapport-dedup-blocs.md](../../reports/rapport-dedup-blocs.md)
 - [reports/rapport-donnees-inventaire.md](../../reports/rapport-donnees-inventaire.md)
 - [reports/rapport-grammaticalite-100m.md](../../reports/rapport-grammaticalite-100m.md)
 - [reports/rapport-r1-13000-pas.md](../../reports/rapport-r1-13000-pas.md)
+- [reports/rapport-tagger-612.md](../../reports/rapport-tagger-612.md)
 - [reports/rapport-tagger-lot-612-prep.md](../../reports/rapport-tagger-lot-612-prep.md)
 
 <!-- notes -->

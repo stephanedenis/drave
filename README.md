@@ -301,7 +301,13 @@ bash tools/toutes-les-portes.sh        # toutes les portes (~1 h)
 
 **Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),
 les 71 langues et les maîtres (B7/B8), le banc externe (B9), le protocole sémantique (B10), la base typée (B11)
-et les modules cerveau-langage (B12). Les **chiffres, les contrôles et les négatifs**
+et les modules cerveau-langage (B12). S'y ajoutent, mesurés les 17 et 18/11 : le **contrat d'implémentation**
+du format DRVM (`impl` + `contrat`, routes conditionnelles, deux moteurs d'accord à 3e-7, le profil `court`
+à 0,694×) ; le **tagger API à 0,9572** contre 0,8625 hors ligne (+9,47, pour deux centimes les 612 phrases) ;
+le **corpus natif épinglé** (sha256, manifeste `fae5bb73…` ; la validation change le chiffre : 4,0139 ou
+4,6792) ; la **courbe du 73 M** (3 000 → 33 000 pas : PPL 4,6792 → 3,1317, top-40 0,551 → 0,870, le greedy
+qui boucle) ; **A2.6** (bande des experts 7,0 Go/s, tête Q8_0 dans la règle) ; **P1** (la dispersion GPU
+29,37 G év/s bat la projection FPGA de 19,3 G). Les **chiffres, les contrôles et les négatifs**
 — y compris le seuil de distillation 9,23–9,96 M, le meilleur écart 4,40 % (31,63 M / 610 ex.), la fenêtre 610/20 à 500 pas et le négatif 910/30 — sont dans
 [`reports/README.md`](reports/README.md) ; l'**état** dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; le **plan**
 dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md). Ces pages sont **facultatives** : on ne les charge que pour la tâche.
@@ -309,7 +315,11 @@ dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md). Ces pages sont **fa
 **Reste ouvert, bloqué par le dehors** :
 - **La prose scientifique** : le corpus parallèle humain manque.
 - **Le pic du 32 B** : nommé, non mesuré (10-20 h en 4 bits) — la tendance est établie par trois courbes.
-- **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab) et le FPGA (le matériel).
+- **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab).
+- **Le FPGA** : le matériel existe (4 cartes + ring 40G, et P1 est clos — le débit ne le justifie pas) ; il
+  reste **P2** (le ring tient-il 4,8 Go/s ?) et le programme RTL, quand le rig sera prêt.
+- **La donnée du natif** : 7,5 Go de français disponible, mais ~98 % Wikipédia ; la déduplication par ligne
+  (≈ 600 Mo) et la **diversité** (des livres) restent à faire.
 
 ---
 

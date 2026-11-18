@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**12 commits** · **8 session(s)** · **6 thème(s)**
+**13 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -23,11 +23,12 @@
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
 | `174fd5ef-1163-4983-85b5-9101752ad711` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | [rapport](../sessions/174fd5ef-1163-4983-85b5-9101752ad711/rapport.md) · [digest](../sessions/174fd5ef-1163-4983-85b5-9101752ad711/digest.md) |
+| `6e7ba93b-7eb8-400a-8457-6f6a8fe67f54` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 11:47 | 0.0 h | [rapport](../sessions/6e7ba93b-7eb8-400a-8457-6f6a8fe67f54/rapport.md) · [digest](../sessions/6e7ba93b-7eb8-400a-8457-6f6a8fe67f54/digest.md) |
 | `8c024745-95cb-4885-9d0b-865142606b6d` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.5 h | [rapport](../sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md) · [digest](../sessions/8c024745-95cb-4885-9d0b-865142606b6d/digest.md) |
 | `9f4f7b6d-c5aa-4269-b785-a0f444424470` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 0.2 h | [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md) |
 | `c7e46dba-11cb-456b-a3b6-715428927f99` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.4 h | [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md) |
 | `cbf7ca71-5b38-428e-9f19-298be1720918` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 1.0 h | [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md) |
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 25.9 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 26.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `da0f2984-32d0-459d-a761-d3faf6a10b8a` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 423.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
@@ -47,6 +48,7 @@
 | 10:36 | `fc1abadf` | A2.6 — LA TÊTE Q8_0/Q6_K ENTRE DANS LA RÈGLE : +117 LIGNES, PERTE 0, 9/9 TESTS, RIEN CÂBLÉ |
 | 10:52 | `3f33126e` | ROADMAP — A2.6 ET N À JOUR : BANDE EXPERTS 7,0 Go/s, TÊTE Q8_0 DANS LA RÈGLE, CORPUS ÉPINGLÉ, r1/r2 MESURÉS |
 | 11:25 | `aafffb7a` | D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS |
+| 11:44 | `e471d051` | R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY |
 
 ## Le récit de la journée (écrit à la main)
 
