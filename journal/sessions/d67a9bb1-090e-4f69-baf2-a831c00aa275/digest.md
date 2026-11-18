@@ -7448,3 +7448,208 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-lot-612-prep.md reports/tagger-612-dryrun-5.json reports/rapport-donnees-inventaire.md bench/checkpoint_bench.sh docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nR0.7/B13 — LE LOT TA … [1309 caractères tronqués]`
+
+  ```
+create mode 100755 bench/checkpoint_bench.sh
+ create mode 100644 reports/rapport-tagger-lot-612-prep.md
+ create mode 100644 reports/tagger-612-dryrun-5.json
+851174f5 R0.7/B13 — LE LOT TAGGER 612 EST PRÊT POUR 11 h 30 : 608 APPELS, 87 550 TOKENS, 0,01869 $ REMISÉ, DRY-RUN HORS LIGNE 0 SOCKET
+=== r1 ===
+pas 6300 · perte 1.2736 · PPL val 3.723 · 1826 s
+  ```
+
+### 👤 Utilisateur
+
+Agent 174fd5ef-1163-4983-85b5-9101752ad711 sent a message: 
+Lot API du tagger sur le gold 612 : PRÊT pour 11:30. Aucun appel au modèle / aucune requête à `api.deepseek.com/chat/completions` n'a été fait (la page publique de tarifs a seulement été lue en GET, comme la tâche l'autorise). Fiche : `reports/rapport-tagger-lot-612-prep.md` ; JSON de dry-run : `reports/tagger-612-dryrun-5.json`. Aucun commit, aucune modif de en-cours/roadmap/AGENTS.
+
+GOLD 612 — il n'existe pas de `gold_612.json`. Le 612 est `tools/tests/linguistique/gold.json` (20 hand) + `gold_reel.json` (432 reel) + `gold_synthetique.json` (160 synth) = 612 items / 3 179 tokens. Le corpus aplati est `/tmp/tagger-612/corpus-gold-612.txt` (612 blocs, 17 782 o, sha256 `4f5231c60db991426eeabd495538b82e1c9004a492efecd34af163bba6d99c2f`). Le « gold 452 » = hand+reel ; le `reel` = 432 ; `reports/tagger-612.json` est une mesure du 13/11, pas le gold.
+
+COMMANDE EXACTE À 11:30 (cache neuf ; le builder + les contrôles + l'audit sont dans la fiche § 6) :
+```
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+export DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key"
+export DEEPSEEK_MODEL=deepseek-chat
+export DEEPSEEK_CACHE="$(mktemp -d /tmp/tagger-612-cache.XXXXXX)"
+/usr/bin/time -v python3 tools/drave.py analyser \
+  --fichier /tmp/tagger-612/corpus-gold-612.txt --jsonl --tagger \
+  > /tmp/tagger-612/lot.jsonl 2> /tmp/tagger-612/lot.err
+# puis, même cache :
+python3 tools/drave.py evaluer --tagger --json \
+  > /tmp/tagger-612/eval.json 2> /tmp/tagger-612/eval.err
+```
+Le cache par défaut `data/deepseek/cache` n'est pas suffisant (604/608 prompts) ; sans `DEEPSEEK_CACHE` neuf, c'est un rejeu, pas une mesure.
+
+COÛT (mesuré par les 608 prompts du cache X3, prix page DeepSeek du 18/11 : 0,15/0,60 $/M hors pointe, 0,30/1,20 $/M pointe) :
+- batch seul : 608 appels réseau, 87 550 tokens (75 200 in + 12 350 out), 0,01869 $ remisé / 0,03738 $ plein, ~10 min 10 s, 614 lignes JSONL.
+- lot complet batch + éval (cache partagé) : 610 appels, 87 841 tokens, 0,01875 $ remisé / 0,03751 $ plein, ~10 min 20 s.
+- La règle de trois 612/1000 (0,01332 $) est fausse : le lot X3 de 1000 a 32,6 % de cache, le 612 n'a que 6 collisions. La bonne échelle est l'appel réseau.
+- 11:30 EST = 16:30 UTC = hors pointe selon la page et selon la règle 12 (fenêtre 11:30–19:30 EST, incluse dans l'hors-pointe de la page).
+
+DRY-RUN HORS LIGNE (5 items, défaut sans `--tagger`) : code 0, 5/5 JSON valides, 51 207 o, stderr vide, 0 socket (piège `socket.socket`/`create_connection`/`socketpair`), `tools.llm.deepseek` non importé. Sans clé : `--tagger` → code 4, stdout vide, 0 socket ; `evaluer --tagger` → 4. Passe 612 hors ligne : 614/614 JSON valides, 0,85 s (r308 et r318 coupés en deux). 30/30 tests tagger à transport factice, 0 réseau. Heuristique HEAD mesurée : POS 0,8625 (le 0,8500 de rapport-etat-r n'est plus le chiffre du HEAD) ; tagger attendu ~0,95, Δ ~+0,09.
+
+RISQUES PRINCIPAUX :
+1. Clé absente/refusée (401/403) : code 4, stdout vide ou partiel ; préflight `test -r` + mode 0600 (le fichier est présent, 0600, 36 o, clé trouvée 35 car., jamais affichée).
+2. Quota 429 : code 0 avec repli heuristique silencieux ; vérifier `tokens≈87 550` et `refus` faible ; si tokens < 50 000 ou refus > 20, relancer.
+3. Format : 614 lignes, pas 612 ; le JSONL n'a pas d'`id`, l'éval garde les 612 items.
+4. L'éval affiche `cout_pour_1000_phrases` chaud (~475 tokens) : ne pas le lire comme le coût du lot ; le coût est dans `lot.err` + l'audit du cache.
+5. Ne pas utiliser `qualifier_tagger_612.py` (ancien chemin à 2 appels/phrase : 1 218 appels, 358 962 tokens, ~21 min).
+6. Le cache X3 (`/tmp/tagger-lot-fiab-cache`, 608/608) donnerait 0 appel mais rejoue le 15/11 : contrôle, pas mesure.
+
+### 👤 Utilisateur
+
+Background subagent 174fd5ef-1163-4983-85b5-9101752ad711 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Bilan final : commande, coût, dry-run et risques
+
+**Verdict** : le lot est prêt pour 11:30. **Aucun appel au modèle n'a été fait** ; la page publique de tarifs a seulement été lue en GET (autorisé par la tâche). Rapport complet : `reports/rapport-tagger-lot-612-prep.md` ; dry-run : `reports/tagger-612-dryrun-5.json`. Rien n'a été commité.
+
+### Le gold 612
+Pas de `gold_612.json`. Le 612 est la concaténation de :
+- `tools/tests/linguistique/gold.json` — 20 `hand` ;
+- `gold_reel.json` — 432 `reel` ;
+- `gold_synthetique.json` — 160 `synth` ;
+soit **612 items / 3 179 tokens**. Le corpus aplati est `/tmp/tagger-612/corpus-gold-612.txt` (612 blocs, sha256 `4f5231c6…`). Le « gold 452 » = `hand + reel` ; le `reel` = 432 ; `reports/tagger-612.json` est une **mesure** du 13/11, pas le gold.
+
+### La commande exacte (à 11:30, cache neuf)
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+export DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key"
+export DEEPSEEK_MODEL=deepseek-chat
+export DEEPSEEK_CACHE="$(mktemp -d /tmp/tagger-612-cache.XXXXXX)"
+/usr/bin/time -v python3 tools/drave.py analyser \
+  --fichier /tmp/tagger-612/corpus-gold-612.txt --jsonl --tagger \
+  > /tmp/tagger-612/lot.jsonl 2> /tmp/tagger-612/lot.err
+python3 tools/drave.py evaluer --tagger --json \
+  > /tmp/tagger-612/eval.json 2> /tmp/tagger-612/eval.err
+```
+Le builder du corpus, les contrôles (614 lignes, `réseau=608`, `tokens=87550`, refus) et l'audit du coût sont dans la fiche § 6.
+
+### Le coût estimé
+Prix page DeepSeek du 18/11, identiques à X3 : **0,15/0,60 $/M hors pointe**, **0,30/1,20 $/M en pointe**.
+
+| | appels réseau | tokens | remisé | plein | durée |
+|---|---:|---:|---:|---:|---:|
+| **batch seul** | 608 | 87 550 | **0,01869 $** | **0,03738 $** | ~10 min 10 s |
+| **batch + éval** (cache partagé) | 610 | 87 841 | **0,01875 $** | **0,03751 $** | ~10 min 20 s |
+
+La règle de trois 612/1000 donnerait 0,01332 $, mais elle est **fausse** : le lot X3 de 1 000 items a 32,6 % de cache, le 612 n'a que 6 collisions. Le chiffre exact vient de la somme des `usage` des 608 prompts déjà dans le cache X3. 11:30 EST = 16:30 UTC = hors pointe.
+
+### Le dry-run
+- **5 items, défaut hors ligne** : code 0, **5/5 JSON valides**, 51 207 o, stderr vide, **0 socket**, `tools.llm.deepseek` non importé.
+- **Sans clé** : `--tagger` → **4**, stdout vide, 0 socket ; `evaluer --tagger` → **4**.
+- **Passe 612 hors ligne** : **614/614 JSON valides**, 0,85 s (r308 et r318 coupés en deux).
+- **30/30 tests** du tagger, transport factice, **0 réseau**.
+- Heuristique HEAD : **0,8625** (le 0,8500 de `rapport-etat-r` n'est plus le chiffre du HEAD) ; tagger attendu ~0,95.
+
+### Les risques
+1. **Clé absente/refusée** : code 4, stdout vide ou partiel ; préflight `test -r` + mode 0600 (fichier présent, 0600, 36 o, clé trouvée — jamais affichée).
+2. **Quota 429** : code **0** avec repli heuristique silencieux ; vérifier `tokens≈87 550` et `refus` faible ; si `tokens < 50 000` ou `refus > 20`, relancer.
+3. **Format** : **614 lignes**, pas 612 ; JSONL sans `id` ; l'éval garde les 612 items.
+4. **Cache** : sans `DEEPSEEK_CACHE` neuf, c'est un rejeu (défaut 604/608 ; X3 608/608, 0 $ mais réponses du 15/11).
+5. **Vieux harnais** : ne pas utiliser `qualifier_tagger_612.py` (2 appels/phrase : 1 218 appels, 358 962 tokens, ~21 min).
+6. **`cout_pour_1000_phrases`** de l'éval est chaud (~475 tokens) : ne pas le lire comme le coût du lot.
+
+Seuls `reports/rapport-tagger-lot-612-prep.md` et `reports/tagger-612-dryrun-5.json` ont été écrits ; les autres modifications visibles dans `git status` viennent du workspace partagé, pas de cette session.
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 work/n3/r1.log; ls -la work/n3/ 2>/dev/null | tail -3", "description": "Wait for the r1 run to finish", "timeoutMs": 500000}`
+
+  ```
+pas 7700 · perte 1.2453 · PPL val 3.649 · 2231 s
+pas 7750 · perte 1.2028 · PPL val 3.648 · 2246 s
+pas 7800 · perte 1.1766 · PPL val 3.651 · 2260 s
+drwxr-xr-x. 1 stephane stephane   12 18 nov 09:07 .
+drwxr-xr-x. 1 stephane stephane 2858 18 nov 09:07 ..
+-rw-r--r--. 1 stephane stephane 8543 18 nov 09:48 r1.log
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n3/r1.log; ls -la work/n3/r1.pt work/n3/r1.drvm 2>/dev/null; ls -la /tmp/tagger-612/corpus-gold-612.txt 2>/dev/null", "description": "Wait for r1 completion", "timeoutMs": 700000}`
+
+  ```
+pas 9650 · perte 1.2709 · PPL val 3.614 · 2796 s
+pas 9700 · perte 1.1652 · PPL val 3.612 · 2811 s
+-rw-r--r--. 1 stephane stephane 17782 18 nov 09:37 /tmp/tagger-612/corpus-gold-612.txt
+  ```
+
+- **bash** `{"command": "sleep 150; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 work/n3/r1.log; ls -la work/n3/r1.pt 2>/dev/null; python3 -c \"\nimport json\ntry:\n    d = json.load(open('work/n3/r1.pt.json'))\n    for k in ('pas','ppl_val','perte_finale','precision_main','duree_s','octets_val … [173 caractères tronqués]`
+
+  ```
+"sha256_drvm": "1c7b12e5fd43d8b3f3229b54af205ed9b41bd728e59006768e52c5f5d9622cbb",
+ "duree_s": 2903.129228115082
+}
+-rw-r--r--. 1 stephane stephane 293500776 18 nov 09:58 work/n3/r1.pt
+pas            10000
+ppl_val        3.412984416001532
+perte_finale   1.2085411548614502
+precision_main 0.63690185546875
+duree_s        2903.129228115082
+octets_val     10330112
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --expert-hidden 640 --no … [357 caractères tronqués]`
+
+  ```
+477257       00:15 /home/stephane/gpu-env/bin/python -m too
+0, 0 %, 1 MiB
+1, 0 %, 1 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time bash bench/checkpoint_bench.sh work/n3/r1.pt r1 2>&1 | tail -8", "description": "Run the full bench on checkpoint r1", "timeoutMs": 900000}`
+
+  ```
+top20_0.5    mots_valides=0.883 distinct_2=0.856 repetition=4 echo=0.06 octets/s=123.9
+natif     greedy     gv=0.50 gn=1.15 mots=27.2 ciment=0.632 attaches=0.901 sans_verbe=0.75
+natif     top40_0.8  gv=3.50 gn=2.95 mots=27.0 ciment=0.547 attaches=0.859 sans_verbe=0.05
+natif     top20_0.5  gv=2.55 gn=2.10 mots=27.9 ciment=0.600 attaches=0.899 sans_verbe=0.15
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.791 attaches=0.747 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.801 attaches=0.650 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+bancs : reports/banc-generation-r1.json · reports/banc-grammaticalite-r1.json
+[stderr]
+
+real	1m55,168s
+user	1m56,854s
+sys	0m2,352s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in (\"reports/banc-generation-r1.json\", \"reports/banc-generation-100m.json\", \"reports/banc-generation.json\", \"reports/banc-generation-34m-64o.json\"):\n    try:\n        d = json.load(open(f … [388 caractères tronqués]`
+
+  ```
+== reports/banc-generation-r1.json n= 128
+  greedy       mots=0.902 d2=0.329 rép=11 écho=0.149 127 o/s
+  top40_0.8    mots=0.831 d2=0.982 rép=2 écho=0.046 121 o/s
+  top20_0.5    mots=0.883 d2=0.856 rép=4 écho=0.059 124 o/s
+== reports/banc-generation-100m.json n= 64
+  greedy       mots=0.882 d2=0.753 rép=6 écho=0.027 124 o/s
+  top40_0.8    mots=0.587 d2=0.997 rép=1 écho=0.009 122 o/s
+  top20_0.5    mots=0.653 d2=0.986 rép=2 écho=0.026 123 o/s
+== reports/banc-generation.json n= 128
+  greedy       mots=0.870 d2=0.726 rép=15 écho=0.009 36 o/s
+  top40_0.8    mots=0.490 d2=1.000 rép=1 écho=0.013 36 o/s
+  top20_0.5    mots=0.735 d2=0.981 rép=1 écho=0.009 37 o/s
+== reports/banc-generation-34m-64o.json n= 64
+  greedy       mots=0.884 d2=0.790 rép=9 écho=0.009 130 o/s
+  top40_0.8    mots=0.518 d2=1.000 rép=1 écho=0.007 126 o/s
+  top20_0.5    mots=0.741 d2=0.990 rép=1 écho=0.015 126 o/s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in (\"/tmp/banc-generation-100m-128o.json\",):\n    try:\n        d = json.load(open(f))\n    except FileNotFoundError:\n        print(\"absent\", f); continue\n    print(\"==\", f, \"n=\", d.get( … [245 caractères tronqués]`
+
+  ```
+== /tmp/banc-generation-100m-128o.json n= 128
+  greedy       mots=0.878 d2=0.652 rép=6 écho=0.015
+  top40_0.8    mots=0.551 d2=1.000 rép=1 écho=0.016
+  top20_0.5    mots=0.673 d2=0.960 rép=2 écho=0.016
+  ```
+
+- **write** `{"content": "# Le 73 M à 13 000 pas — l'échantillonnage décolle, le greedy se dégrade\n\n> **Ligne de roadmap** : N4 (le banc du natif) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré —\n> 10 000 pas de plus sur le 73 M (13 000 au total, corpus épinglé, lr 1e-4) font passer la\n> perplexité de vali … [4440 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-r1-13000-pas.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**données** : **135,5 Go … [2373 caractères tronqués]`

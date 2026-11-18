@@ -2220,3 +2220,74 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-
 message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
   ```
 
+### 🤖 Assistant
+
+⏵ Vérification finale des deux livrables
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib, json\nr = pathlib.Path('reports/rapport-tagger-lot-612-prep.md')\nj = pathlib.Path('reports/tagger-612-dryrun-5.json')\nprint('rapport', r.stat().st_size, 'octets', len(r.read_text(encoding='utf-8').splitlines()), 'lignes')\nprint('dry-run', j.stat().s … [330 caractères tronqués]`
+
+  ```
+rapport 32091 octets 516 lignes
+dry-run 88245 octets
+clés dry-run ['but', 'cas', 'corpus_5', 'date', 'environnement', 'passe_complete_612_hors_ligne', 'rapport', 'sockets', 'tests_tagger', 'verdict']
+verdict {'defaut_code_0': True, 'defaut_5_lignes_valides': True, 'defaut_aucune_socket': True, 'defaut_nimporte_pas_deepseek': True, 'tagger_sans_cle_code_4_stdout_vide': True, 'evaluer_tagger_sans_cle_code_4': True}
+sockets 0
+---
+A  reports/rapport-tagger-lot-612-prep.md
+A  reports/tagger-612-dryrun-5.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan final : commande, coût, dry-run et risques
+
+**Verdict** : le lot est prêt pour 11:30. **Aucun appel au modèle n'a été fait** ; la page publique de tarifs a seulement été lue en GET (autorisé par la tâche). Rapport complet : `reports/rapport-tagger-lot-612-prep.md` ; dry-run : `reports/tagger-612-dryrun-5.json`. Rien n'a été commité.
+
+### Le gold 612
+Pas de `gold_612.json`. Le 612 est la concaténation de :
+- `tools/tests/linguistique/gold.json` — 20 `hand` ;
+- `gold_reel.json` — 432 `reel` ;
+- `gold_synthetique.json` — 160 `synth` ;
+soit **612 items / 3 179 tokens**. Le corpus aplati est `/tmp/tagger-612/corpus-gold-612.txt` (612 blocs, sha256 `4f5231c6…`). Le « gold 452 » = `hand + reel` ; le `reel` = 432 ; `reports/tagger-612.json` est une **mesure** du 13/11, pas le gold.
+
+### La commande exacte (à 11:30, cache neuf)
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+export DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key"
+export DEEPSEEK_MODEL=deepseek-chat
+export DEEPSEEK_CACHE="$(mktemp -d /tmp/tagger-612-cache.XXXXXX)"
+/usr/bin/time -v python3 tools/drave.py analyser \
+  --fichier /tmp/tagger-612/corpus-gold-612.txt --jsonl --tagger \
+  > /tmp/tagger-612/lot.jsonl 2> /tmp/tagger-612/lot.err
+python3 tools/drave.py evaluer --tagger --json \
+  > /tmp/tagger-612/eval.json 2> /tmp/tagger-612/eval.err
+```
+Le builder du corpus, les contrôles (614 lignes, `réseau=608`, `tokens=87550`, refus) et l'audit du coût sont dans la fiche § 6.
+
+### Le coût estimé
+Prix page DeepSeek du 18/11, identiques à X3 : **0,15/0,60 $/M hors pointe**, **0,30/1,20 $/M en pointe**.
+
+| | appels réseau | tokens | remisé | plein | durée |
+|---|---:|---:|---:|---:|---:|
+| **batch seul** | 608 | 87 550 | **0,01869 $** | **0,03738 $** | ~10 min 10 s |
+| **batch + éval** (cache partagé) | 610 | 87 841 | **0,01875 $** | **0,03751 $** | ~10 min 20 s |
+
+La règle de trois 612/1000 donnerait 0,01332 $, mais elle est **fausse** : le lot X3 de 1 000 items a 32,6 % de cache, le 612 n'a que 6 collisions. Le chiffre exact vient de la somme des `usage` des 608 prompts déjà dans le cache X3. 11:30 EST = 16:30 UTC = hors pointe.
+
+### Le dry-run
+- **5 items, défaut hors ligne** : code 0, **5/5 JSON valides**, 51 207 o, stderr vide, **0 socket**, `tools.llm.deepseek` non importé.
+- **Sans clé** : `--tagger` → **4**, stdout vide, 0 socket ; `evaluer --tagger` → **4**.
+- **Passe 612 hors ligne** : **614/614 JSON valides**, 0,85 s (r308 et r318 coupés en deux).
+- **30/30 tests** du tagger, transport factice, **0 réseau**.
+- Heuristique HEAD : **0,8625** (le 0,8500 de `rapport-etat-r` n'est plus le chiffre du HEAD) ; tagger attendu ~0,95.
+
+### Les risques
+1. **Clé absente/refusée** : code 4, stdout vide ou partiel ; préflight `test -r` + mode 0600 (fichier présent, 0600, 36 o, clé trouvée — jamais affichée).
+2. **Quota 429** : code **0** avec repli heuristique silencieux ; vérifier `tokens≈87 550` et `refus` faible ; si `tokens < 50 000` ou `refus > 20`, relancer.
+3. **Format** : **614 lignes**, pas 612 ; JSONL sans `id` ; l'éval garde les 612 items.
+4. **Cache** : sans `DEEPSEEK_CACHE` neuf, c'est un rejeu (défaut 604/608 ; X3 608/608, 0 $ mais réponses du 15/11).
+5. **Vieux harnais** : ne pas utiliser `qualifier_tagger_612.py` (2 appels/phrase : 1 218 appels, 358 962 tokens, ~21 min).
+6. **`cout_pour_1000_phrases`** de l'éval est chaud (~475 tokens) : ne pas le lire comme le coût du lot.
+
+Seuls `reports/rapport-tagger-lot-612-prep.md` et `reports/tagger-612-dryrun-5.json` ont été écrits ; les autres modifications visibles dans `git status` viennent du workspace partagé, pas de cette session.
+
