@@ -1,0 +1,16 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-18T16:37:55",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wiki_mix_v2",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "train.txt": {
+   "sha256": "e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552",
+   "octets": 6900585097,
+   "lignes": 63438199,
+   "mtime": "2026-11-18T16:37:25"
+  }
+ },
+ "manifeste_sha256": "9861fb39d38d247051bba1db41eca5137734196cfae14104e0b58580c9365ccc"
+}

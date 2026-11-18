@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 28.4 h |
-| Tours | 9 |
-| Messages | 545 |
-| Appels d'outils | 536 |
-| Fichiers touchés | 37 |
-| Commandes | 412 |
+| Durée | 30.8 h |
+| Tours | 10 |
+| Messages | 560 |
+| Appels d'outils | 550 |
+| Fichiers touchés | 38 |
+| Commandes | 422 |
 | Sous-agents | 7 |
-| Commits | 38 |
+| Commits | 39 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -37,6 +37,10 @@
 … [221 caractères tronqués]
 - **create** — De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les l
 … [191 caractères tronqués]
+- **complete** — De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les l
+… [191 caractères tronqués]
+- **create** — De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un
+… [253 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -57,6 +61,8 @@
 **Tour 8** — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul local.
 
 **Tour 9** — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin
+
+**Tour 10** — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain
 
 ## 2. Déroulé, étape par étape
 
@@ -438,7 +444,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*216 appels d'outils.* Actions notables :
+*218 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,11 +460,60 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 196 autres
+- … et 198 autres
 
 **Synthèse produite :**
 
-⏵ Passe complète des 90 portes lancée en fond (pendant que r3 s'entraîne)
+⏵ Bilan final de la période autonome
+
+\# Le 18/11, de 00 h 30 à 16 h — bilan
+
+**22 commits, tous poussés sur `s/v7` (HEAD `1fe0444d`), arbre propre, passe à 88/2.** Cinq chantiers avancés en parallèle, sept sous-agents, et deux résultats négatifs documentés — c'est le lot le plus dense de la semaine.
+
+\## 1. N — le natif : le corpus épinglé, la courbe 3k → 53k, le décodage
+
+| résultat | chiffre |
+|---|---|
+| **Corpus épinglé** | train `0876b608…` (1 017 487 092 o), val `fbddef91…`, manifeste `fae5bb73…`, `--verifie` 6,5 s |
+| **La validation change tout** | mêmes poids, mêmes 65 536 jetons : **4,0139** (fin du train) contre **4,6792** (val épinglé) — **+16,57 %** |
+| **Courbe 5 tranches** | PPL **4,6792 → 3,4130 → 3,2321 → 3,1317 → 3,0628 → 3,0098** (−36 %) |
+| **Génération** | top-40 **0,551 → 0,895**, top-20 **0,932** ; greedy toujours cassé (répétition 10-13) |
+| **Décodage** | **top-40 / T=0,5** bat le greedy sur tous les axes : 0,907 vs 0,902, rép **1,7 vs 5,7**, écho 0,075 vs 0,149 |
+
+Le critère du palier 1 (« répétition ≤ 3 ») est **tenu en échantillonnage**, jamais en greedy : il doit nommer son décodage. Le plateau 33k-43k s'est rouvert au 5e tour.
+
+\## 2. R0.7 — le tagger API gagne : 0,9572 contre 0,8625 (+9,47)
+
+Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 tokens, 0,01869 $, 612,6 s**. POS **0,9572** contre 0,8625 pour l'heuristique — le gain est dans les **classes ouvertes** (0,978 contre 0,7918, +18,6), les fermées à parité ; **0 refus**. Le coût prédit par le cache était exact à l'unité.
+
+\## 3. A2.6 — la bande des experts mesurée, la tête Q8_0 dans la règle
+
+- **7,0 Go/s à 8 fils** (16 fils : 165,40 ms, aucun gain), cache RAM 314 ms et tampons 231 ms (plus lents), **PPL 37,2013 invariante** — la règle doit porter ~7 Go/s et **un** lecteur, et refuser nommément.
+- `placement.rs` : **+117 lignes** (tête Q8_0/Q6_K, perte 0, hors `PRECISIONS`), **9/9** tests placement, **140/140** crate, contrôle de retrait vérifié (8/9 sans l'entrée).
+
+\## 4. D — 135,5 Go inventoriés, la dédup tranchée
+
+- **7,5 Go** de français exploitable (écart de volume fermable sans collecte) ; **la diversité (~0,1 Go hors Wikipédia) ne l'est pas**.
+- Dédup **par blocs : 0 %** (la duplication est courte et diffuse) → dédup **par ligne : 8,042 % des octets** (28,005 % des lignes) en **161 s**, idempotente, corpus v2 **6,90 Go** (`e3112a84…`).
+- Test v2 en entraînement : **+2,1 %** de PPL à pas égal, **mais confondu** (v1 n'a que 0,038 % de duplication
+… [1169 caractères tronqués]
+
+### Tour 10 — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois auto … [22 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Check resources and read the A2.6 code plan
+- bash — Read the A2.6 report structure
+- bash — Read the A2.6 code plan and risk
+- bash — Fix the corpus loader to use a uint8 tensor
+- bash — Control the new loader against the known r4 PPL
+- bash — Promote the deduped corpus and pin it
+- bash — Count the parameters at scale
+- bash — Time a 100-step 150M run on the v2 corpus
+- bash — Launch the two overnight chains (150M on v2 and v1)
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md`
+- bash — Commit the v2 corpus promotion
 
 ## 3. Travail accompli
 
@@ -503,6 +558,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-612.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-courbe-r1-r3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v2-slice.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -556,7 +612,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 372 autres
+- … et 382 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -737,4 +793,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "| 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "[c
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 (4 000 MOTS EXACTEMENT)" && git push origin s/v7 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

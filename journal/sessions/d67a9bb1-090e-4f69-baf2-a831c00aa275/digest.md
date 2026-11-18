@@ -10306,3 +10306,205 @@ docs.md
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \" ; le **v2 dédupliqué** à pas égal donne **+2,1 %** de PPL mais le test est confondu (v1 n'a que 0,038 % de duplication) ; [c … [896 caractères tronqués]`
+
+  ```
+en-cours : 1634
+budget exit=0
+  ✅ état court, structuré, multi-session et reprenable
+   9820c0ff..1fe0444d  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-fca84a92-1697-4285-a424-16225b74169f","revision":1,"objective":"De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les lots API en fenêtre remisée (tagger, J4) à partir de 11 h 30 ; (5) coordonner par subagents, committer chaque résultat avec sa fiche et son état, garder les portes vertes hors rouges tolérées.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-fca84a92-1697-4285-a424-16225b74169f", "revision": 1}`
+
+> **Objectif** (complete) : De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les lots API en fenêtre remisée (tagger, J4) à partir de 11 h 30 ; (5) coordonner par subagents, committer chaque résultat avec sa fiche et son état, garder les portes vertes hors rouges tolérées.
+
+
+  ```
+{"goal":{"id":"goal-fca84a92-1697-4285-a424-16225b74169f","revision":2,"objective":"De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les lots API en fenêtre remisée (tagger, J4) à partir de 11 h 30 ; (5) coordonner par subagents, committer chaque résultat avec sa fiche et son état, garder les portes vertes hors rouges tolérées.","phase":"complete","roundsStarted":0,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan final de la période autonome
+
+# Le 18/11, de 00 h 30 à 16 h — bilan
+
+**22 commits, tous poussés sur `s/v7` (HEAD `1fe0444d`), arbre propre, passe à 88/2.** Cinq chantiers avancés en parallèle, sept sous-agents, et deux résultats négatifs documentés — c'est le lot le plus dense de la semaine.
+
+## 1. N — le natif : le corpus épinglé, la courbe 3k → 53k, le décodage
+
+| résultat | chiffre |
+|---|---|
+| **Corpus épinglé** | train `0876b608…` (1 017 487 092 o), val `fbddef91…`, manifeste `fae5bb73…`, `--verifie` 6,5 s |
+| **La validation change tout** | mêmes poids, mêmes 65 536 jetons : **4,0139** (fin du train) contre **4,6792** (val épinglé) — **+16,57 %** |
+| **Courbe 5 tranches** | PPL **4,6792 → 3,4130 → 3,2321 → 3,1317 → 3,0628 → 3,0098** (−36 %) |
+| **Génération** | top-40 **0,551 → 0,895**, top-20 **0,932** ; greedy toujours cassé (répétition 10-13) |
+| **Décodage** | **top-40 / T=0,5** bat le greedy sur tous les axes : 0,907 vs 0,902, rép **1,7 vs 5,7**, écho 0,075 vs 0,149 |
+
+Le critère du palier 1 (« répétition ≤ 3 ») est **tenu en échantillonnage**, jamais en greedy : il doit nommer son décodage. Le plateau 33k-43k s'est rouvert au 5e tour.
+
+## 2. R0.7 — le tagger API gagne : 0,9572 contre 0,8625 (+9,47)
+
+Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 tokens, 0,01869 $, 612,6 s**. POS **0,9572** contre 0,8625 pour l'heuristique — le gain est dans les **classes ouvertes** (0,978 contre 0,7918, +18,6), les fermées à parité ; **0 refus**. Le coût prédit par le cache était exact à l'unité.
+
+## 3. A2.6 — la bande des experts mesurée, la tête Q8_0 dans la règle
+
+- **7,0 Go/s à 8 fils** (16 fils : 165,40 ms, aucun gain), cache RAM 314 ms et tampons 231 ms (plus lents), **PPL 37,2013 invariante** — la règle doit porter ~7 Go/s et **un** lecteur, et refuser nommément.
+- `placement.rs` : **+117 lignes** (tête Q8_0/Q6_K, perte 0, hors `PRECISIONS`), **9/9** tests placement, **140/140** crate, contrôle de retrait vérifié (8/9 sans l'entrée).
+
+## 4. D — 135,5 Go inventoriés, la dédup tranchée
+
+- **7,5 Go** de français exploitable (écart de volume fermable sans collecte) ; **la diversité (~0,1 Go hors Wikipédia) ne l'est pas**.
+- Dédup **par blocs : 0 %** (la duplication est courte et diffuse) → dédup **par ligne : 8,042 % des octets** (28,005 % des lignes) en **161 s**, idempotente, corpus v2 **6,90 Go** (`e3112a84…`).
+- Test v2 en entraînement : **+2,1 %** de PPL à pas égal, **mais confondu** (v1 n'a que 0,038 % de duplication ; les tranches couvrent des contenus différents) — négatif documenté tel quel.
+
+## 5. La passe et l'état
+
+**90 portes, 88 vertes, 2 rouges** : `indice` (854 s) et `melange` (106 s), les deux structurelles — **`sessions` est verte** (mandat `e181ce02` en pause), aucune rouge nouvelle. Les budgets de contexte sont repassés : **T0 = 4 000 exactement** (AGENTS 1 197, état 1 634, roadmap 9 003). Compteurs : **805 fiches, 903 JSON, 128 docs, 90 portes**.
+
+## Ce qui reste (les prochaines actions désignées)
+
+1. **Palier 1** : construire le corpus de 3-6 Go à partir des 7,50 Go dédupliqués **+ la diversité** (livres FR du domaine public), puis entraîner — le test propre de la dédup se fera là.
+2. **A2.6** : câbler la règle de placement (~200 lignes : coût experts, refus nommé, trace du classement).
+3. **R0.7** : router les classes ouvertes vers l'API, garder l'heuristique hors ligne pour les fermées.
+4. **Le gold 612 n'est pas gelé** et la part synthétique n'est pas humaine : le +9,47 est une borne haute, à refaire sur un gold tenu à l'écart.
+
+Les deux rouges structurelles (`indice`, `melange`) restent les seules, comme prévu aux références de non-régression.
+
+
+## Tour 10
+
+### 👤 Utilisateur
+
+continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec s … [295 caractères tronqués]`
+
+> **Objectif** (create) : De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push).
+
+
+  ```
+{"goal":{"id":"goal-002a8d00-91fd-4bd4-b861-382da2d944d9","revision":1,"objective":"De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push).","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; df -h . | tail -1; free -g | head -2; sed -n '/## 4. Le plan de code/,/## 5/p' reports/rapport-a2.6-reconnaissance.md | head -40", "description": "Check resources and read the A2.6 code plan"}`
+
+  ```
+mer 18 nov 2026 16:35:25 EST
+/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB
+               total        used        free      shared  buff/cache   available
+Mem:             125          34          23          17          87          91
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" reports/rapport-a2.6-reconnaissance.md", "description": "Read the A2.6 report structure"}`
+
+  ```
+17:## 1. Ce qui existe
+19:### 1.1 La règle, et où elle est appliquée
+45:### 1.2 Le placement réel : drapeaux et seuils, pas la règle
+69:### 1.3 Le chemin des experts dans le moteur — bien plus complet que la fiche ne le dit
+88:### 1.4 Ce qui est mesuré, et où
+113:## 2. Ce qui manque pour clore A2.6 (précisément)
+141:## 3. La prochaine expérience : épingler la bande des experts
+143:### 3.1 Ce qui a déjà été mesuré ici (à rejouer, machine au repos)
+177:### 3.2 Le protocole à exécuter (10 points, ≈ 4 min sur une machine au repos)
+228:### 3.3 La décision que cette mesure tranche
+236:### 3.4 Acquis au passage : la tête a une place à perte nulle (mesuré ici)
+263:## 4. Fichiers à modifier, et risque
+293:## 5. Ce que cette reconnaissance n'a pas fait
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '263,292p' reports/rapport-a2.6-reconnaissance.md", "description": "Read the A2.6 code plan and risk"}`
+
+  ```
+## 4. Fichiers à modifier, et risque
+
+| fichier | changement | taille | risque |
+|---|---|---:|---|
+| `drave-core/src/placement.rs` | `cout_experts` (octets, taux de succès, lecteurs) ; `BANDE_EXPERTS` = la valeur du § 3 ; `choisir` rendant un **refus nommé** (`Option<(Support, Precision, &'static str)>`) ; `TETE_FICHIER` (perte 0) ; 4-6 tests (dont un de reproductibilité) | **+100 à 150 lignes** | **`choisir` est appelé 2 fois** (`model.rs:4988`, tests) : changer sa signature est mécanique ; changer sa **sémantique** (refus au lieu de `Nvme`) casse le test 199-206, à réécrire — c'est le test qui **décrit** l'actuel « placement silencieux » |
+| `drave-core/src/model.rs` | brancher la règle aux 3 endroits : tête (4859-4885, 4988), cache VRAM d'experts (4956-4972), cache RAM (5053-5075) ; imprimer le classement et le coût retenu | **+40 à 60 lignes** | **chemin de chargement** : une erreur ici casse tous les modes ; **le défaut ne doit pas bouger** (opt-in `DRAVE_PERTE_MAX`), cf. A8.3b : « un changement de défaut qui déplace les chiffres des portes ne se fait pas sans les épingler » ; `DRAVE_GPU_*` sont lus **avant** le refus, l'ordre compte |
+| `drave-core/src/materiel.rs` | `plan()
+… [1765 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"\"\"    b = pathlib.Path … [1479 caractères tronqués]`
+
+  ```
+ok
+compile-ok
+dtype torch.uint8 taille 1017487092 octets distincts 207
+lot torch.Size([2, 8]) torch.int64 torch.int64 hex [65, 110, 116, 111, 105, 110, 101, 32]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 600 /home/stephane/gpu-env/bin/python -c \"\nimport torch, json\nfrom tools.entrainer_native import charger, ppl\nfrom tools.native_model import NativeConfig, NativeModel\nd = charger('data/wiki_mix/propre/val.tx … [499 caractères tronqués]`
+
+  ```
+PPL val du r4 avec le nouveau chargeur : 3.0628 · jetons 65536
+attendu (r4.pt.json) : 3.062780776012547
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p data/wiki_mix_v2 && time cp work/dedup/train-lignes.txt data/wiki_mix_v2/train.txt && ls -la data/wiki_mix_v2/ && python3 tools/epingle_corpus.py --corpus data/wiki_mix_v2 --sortie reports/corpus-epingle-v2.json", "descripti … [66 caractères tronqués]`
+
+  ```
+total 6738856
+drwxr-xr-x. 1 stephane stephane         18 18 nov 16:37 .
+drwxr-xr-x. 1 stephane stephane       2686 18 nov 16:37 ..
+-rw-r--r--. 1 stephane stephane 6900585097 18 nov 16:37 train.txt
+corpus épinglé : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wiki_mix_v2
+  train.txt    e3112a842ed6d97a…    6900585097 o     63438199 lignes  2026-11-18T16:37:25
+  manifeste : 9861fb39d38d2470… → reports/corpus-epingle-v2.json
+[stderr]
+
+real	0m0,317s
+user	0m0,001s
+sys	0m0,316s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. /home/stephane/gpu-env/bin/python -c \"\nfrom tools.native_model import NativeConfig, NativeModel\nfor d in (896, 1024):\n    m = NativeModel(NativeConfig(d_model=d, expert_hidden=d))\n    print(d, '->', m.nb_parametres( … [89 caractères tronqués]`
+
+  ```
+896 -> 141935400 paramètres
+1024 -> 184624808 paramètres
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/n4 && /usr/bin/time -v env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_mix/propre/val.txt --pas 100 --seq 1024 --lot 8 --lr 3e-4 --dim 896 … [272 caractères tronqués]`
+
+  ```
+pas  100 · perte 2.4391 · PPL val 12.303 · 42 s
+ "ppl_val": 12.630936526557484,
+ "duree_s": 51.708895444869995
+	Command being timed: "env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_mix/propre/val.txt --pas 100 --seq 1024 --lot 8 --lr 3e-4 --dim 896 --expert-hidden 896 --no-tetes --amp --device cuda:0 --graine 1 --sortie /tmp/essai150.pt --drvm /tmp/essai150.drvm"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:02.52
+	Maximum resident set size (kbytes): 14000624
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/chaine.sh <<'SH'\n#!/bin/bash\n# chaine.sh — entraîne N tranches de 10 000 pas, bench après chacune.\n#   bash work/n4/chaine.sh <gpu> <corpus> <prefixe> <n_tranches>\nset -u\nGPU=$1; CORPUS=$2; PREFIX=$3; N=${4:-12}\nP … [1786 caractères tronqués]`
+
+  ```
+script-ok
+lancées 16:39
+1158402 bash work/n4/chaine.sh 0 data/wiki_mix_v2/train.txt 
+1158403 bash work/n4/chaine.sh 1 data/wiki_mix/propre/train.
+0, 99 %, 7512 MiB
+1, 99 %, 7512 MiB
+  ```
+
+- **write** `{"content": "# Le corpus v2 est promu et épinglé : 6,90 Go dans `data/`, manifeste `9861fb39…`\n\n> **Ligne de roadmap** : N (le palier 1) / D · **Date** : 2026-11-18 · **Verdict** : ✅ le corpus\n> dédupliqué par ligne entre dans `data/` : `data/wiki_mix_v2/train.txt`, **6 900 585 097 o**\n> (6,43 G … [2962 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"corpus v2 **6,90 Go** (` … [1397 caractères tronqués]`
