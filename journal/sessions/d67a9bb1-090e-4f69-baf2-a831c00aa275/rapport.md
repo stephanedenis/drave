@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 26.0 h |
+| Durée | 26.9 h |
 | Tours | 9 |
-| Messages | 459 |
-| Appels d'outils | 459 |
+| Messages | 469 |
+| Appels d'outils | 467 |
 | Fichiers touchés | 36 |
-| Commandes | 336 |
+| Commandes | 344 |
 | Sous-agents | 7 |
-| Commits | 28 |
+| Commits | 29 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*139 appels d'outils.* Actions notables :
+*147 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 121 autres
+- … et 128 autres
 
 **Synthèse produite :**
 
@@ -555,7 +555,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 296 autres
+- … et 304 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -683,7 +683,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ## 5. Erreurs rencontrées
 
-8 sorties en erreur ou divergentes. Les premières :
+10 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -693,6 +693,8 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T8** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<stdin>", line 3, in <lambda> ValueError: invalid literal for int() with base 10: 'n' [exit code: 1]
 - **T9** : work/n2ac/mix1024-100m.drvm work/n2ac/mix1024-100m.pt work/n2ac/mix1024-100m.pt.json === json du pt === {  "modele": "drave-n0",  "parametres": 73366568,  "corpus": "data/wiki_mix/propre/train.txt",  
 - **T9** : pas 3900 · perte 1.1655 · PPL val 3.510 · 1087 s pas 3950 · perte 1.2692 · PPL val 3.505 · 1101 s [exit code: 2]
+- **T9** : mer 18 nov 2026 12:21:56 EST pas 5700 · perte 1.0961 · PPL val 3.286 · 1687 s passe: 71 vertes, 2 rouges   porte-prechargement    ✅                         163 s    PORTE TENUE [exit code: 2]
+- **T9** : mer 18 nov 2026 12:41:28 EST [stderr] Traceback (most recent call last):   File "<string>", line 3, in <module>     d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val']
 
 ## 6. Commits
 
@@ -724,4 +726,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/dedup_blocs.py reports/rapport-dedup-blocs.md reports/dedup-blocs-7.5go.json docs/pilotage/e
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-612.md reports/tagger-612-api.json reports/rapport-courbe-r1-r3.md reports/
 - README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL" && git l
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

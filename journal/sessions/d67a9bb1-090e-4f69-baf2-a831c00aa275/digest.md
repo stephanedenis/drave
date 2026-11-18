@@ -8457,3 +8457,385 @@ dans [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md). Ces pages sont **fa
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('README.md'); s = p.read_text()\nold = '''**Fait, mesuré** : le moteur (A7, B4, A8), la restitution par famille (C3.2), les jeux symboliques (B5/B6),\nles 71 langues et les maîtres ( … [3460 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 803 fiche(s) · 896 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+0d15bc36 README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL
+mer 18 nov 2026 11:51:21 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+
+  ```
+Found 250 of 1671 matches
+
+README.md
+Line 122: Quadro, logique FPGA). Deux chiffres qui comptent : l'int8 sur le cache KV coûte **+1,5 %** de perplexité à 512
+Line 312: - **Les langues peu dotées** hors périmètre ; la démonstration distante (le compte Colab) et le FPGA (le matériel).
+
+docs/implantation/convertisseur.md
+Line 99: | DDR3 de la carte FPGA | 9,66 Go/s | lecture de listes |
+Line 260: 1. **Q4_K sur FPGA** : le format des modèles réels, à porter dans `event_reader`.
+
+docs/implantation/diehl-cook.md
+Line 346: | FPGA | bits, shift-and-add | énergie, déterminisme | surface, horloge | bit-exact |
+Line 927: | **le matériel** : le 100× est une projection ; où est le point de bascule ? | une mesure sur CPU, FPGA, neuromorphique |
+
+docs/theorie/modele-natif.md
+Line 328: **trace** et son **coût** — pas par sa technologie. Le mode d'opération (dense, impulsionnel, classique, FPGA,
+
+journal/2026-09-30/README.md
+Line 126: | 15:31 | `57f0fc6c` | Corrections du second audit (2/2) : la journée au README, le mode 4 dans la recette Colab, le renvoi FPGA de la vision |
+Line 146: | 17:08 | `f1c265e0` | README : les prochaines étapes étaient restées à l'époque du FPGA |
+
+journal/2026-09-30/do
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré, le pas mesuré à 1 s — 2,4× le CPU nu, pas 39×)
+4: 
+5: > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
+6: 
+7: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+8: 
+9: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+10: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+11: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+12: - **Prochaine action** : **suivi docs**, puis la **passe**.
+13: - **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
+14: - **Bloquants** : aucun.
+15: - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+16: 
+17: ## Sessions en cours
+18: 
+19: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+20: > [`journal/sessions/`](../../journal/sessions/). Ch
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/bilan-multi-materiel.md</path>
+<type>file</type>
+<content>
+1: # Bilan multi-matériel — CPU, FPGA, GPU
+2: 
+3: État au terme des trois implémentations. Tous les chiffres marqués **mesuré** ont
+4: été pris sur cette machine, avec le code de ce dépôt ; ceux marqués *projeté* ou
+5: *déduit* le sont explicitement, avec leur base.
+6: 
+7: Machine : 2 × Xeon E5-2687W v3 (20 cœurs / 40 threads, 125 Go), 2 × Quadro
+8: RTX 5000 (16 Go, NVLink 25,78 Go/s), 1 carte Stratix V GS (Storey Peak,
+9: DDR3 9,66 Go/s, PCIe Gen3 ×8 6,5 Go/s, QSFP+ 4,8 Go/s).
+10: 
+11: Modèle de référence pour toutes les comparaisons : **Qwen2.5-0.5B-Instruct Q8_0**,
+12: 494 M de poids, 4 864 dimensions cachées, 24 couches. Un token = **352,8 M
+13: d'événements** (0,7 Go de listes lues).
+14: 
+15: ---
+16: 
+17: ## 1. Ce qui a été construit
+18: 
+19: | Cible | Livrable | Taille | Vérification |
+20: |---|---|---|---|
+21: | **CPU** | `drave-core` — moteur d'événements, tokenizer BPE, forward Qwen2, génération, perplexité | **2 547 lignes de Rust, `std` seul, 0 dépendance** | tokens identiques à la référence numpy ; perplexité identique ; 14/14 au banc des décodeurs |
+
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+| DSP 18×18 | **[à vérifier]** (ordre de 1 000+) | non utilisé par les kernels « zéro DSP » |
+| Transceivers | **60** au total : **30 ≤ 12,5 Gbps** + **30 ≤ 6,5536 Gbps** | ⚠️ **aucun transceiver à 40 Gbps** |
+| PLL | 20 | |
+| I/O utilisateur | 696 max | |
+
+> ⚠️ **Correction d'une erreur fréquente** : les chiffres « ~622 000 ALM / 2 567 M20K / 66
+> transceivers » qui circulent (et figuraient dans la première version de
+> `device/5SGSKF40I3LNAC.md`) ne correspondent **pas** au D5. Le D5 = 172 600 ALM, 1 963 M20K.
+
+**Conséquence directe** : 4,9 Mo de RAM embarquée = ~19,6 M poids en 2 bits. Tout modèle ou
+jeu de données sérieux vit en **DDR3**, pas en M20K.
+
+## 3. Mémoires et E/S
+
+| Interface | Détail | Débit |
+|-----------|--------|-------|
+| DDR3 | **4 Go**, DIMM 240 broches, **72 bits avec ECC**, 1600 MT/s | **9 662 Mo/s lecture / 7 816 Mo/s écriture** (mesuré, [blog part 6](https://j-marjanovic.io/stratix-v-accelerator-card-from-ebay-part-6.html)) |
+| PCIe | Connecteur x16, **2 Hard IP PCIe Gen3 x8 distincts** (pièce custom) | **6,5 Go/s par interface**, **11–12 Go/s** avec les deux ([blog part 8](https://j-marjanovic.io/stratix-v-accelerator-card-from-ebay-part-8.html)) |
+| Rése
+… [3958 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drvm.py</path>
+<type>file</type>
+<content>
+1: #!/usr/bin/env python3
+2: """drvm.py — DRVM v0, le conteneur natif du modèle Drave.
+3: 
+4: DRVM n'est pas un GGUF amélioré : c'est un conteneur de **graphe** et de **blocs**.
+5: Le manifeste porte les blocs, les ports, les routes, les têtes, le pont et la
+6: cellule de pensée ; le payload porte les tenseurs alignés, lisibles par bloc et
+7: mmap-ables. Le lecteur refuse une version ou un type de bloc qu'il ne connaît pas.
+8: 
+9: Structure :
+10:   en-tête 92 o (magie, version, tailles, offsets, deux SHA-256)
+11:   manifeste JSON canonique, aligné sur 64 o
+12:   payload de tenseurs, chaque tenseur aligné sur 64 o
+13: 
+14: CLI :
+15:   python3 tools/drvm.py inspect MODELE.drvm
+16: """
+17: from __future__ import annotations
+18: 
+19: import argparse
+20: import hashlib
+21: import json
+22: import mmap
+23: import os
+24: import struct
+25: from dataclasses import dataclass, field
+26: from pathlib import Path
+27: from typing import Any
+28: 
+29: MAGIC = b"DRVM"
+30: VERSION = 0
+31: ALIGNEMENT = 64
+32: HEADER = struct.Struct("<4sHH I Q Q 32s 32s")  # 92 octets
+33: BLOCS_CONNUS = {
+34:     "inp
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core/src/native.rs</path>
+<type>file</type>
+<content>
+140:             for k in 0..c.d { x[k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
+141:         }
+142:         // Pour cette version, on exécute la dernière position seulement, avec
+143:         // les positions précédentes comme contexte.
+144:         let s = ids.len();
+145:         let mut h = vec![vec![0.0f32; c.d]; s];
+146:         for (pos, &id) in ids.iter().enumerate() {
+147:             let e = self.p("embed.weight"); let pe = self.p("pos.weight");
+148:             for k in 0..c.d { h[pos][k] = e[id as usize * c.d + k] + pe[pos.min(c.max_pos.saturating_sub(1)) * c.d + k]; }
+149:         }
+150:         for b in 0..c.n_blocks {
+151:             let mut nh = vec![vec![0.0f32; c.d]; s];
+152:             // q/k/v de TOUTES les positions : l'attention d'une position lit les
+153:             // précédentes. Calculer le qkv dans la boucle de position ne donnait
+154:             // que le jeton courant (range out of bounds, attrapé).
+155:             let qkv_all: Vec<Vec<f32>> = (0..s).map(|pos| {
+156:                 let z = self.
+… [3959 caractères tronqués]
+  ```
+
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-18, 00 h 10 HNE (la passe 90 portes, 87/3, aucune nouvelle · le 100 M mesuré : répétition 9 → 6, la composition ne vient pas)**
+4: 
+5: > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
+6: 
+7: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+8: 
+9: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+10: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+11: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+12: - **Prochaine action** : **suivi docs**, puis la **passe**.
+13: - **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
+14: - **Bloquants** : aucun.
+15: - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+16: 
+17: ## Sessions en cours
+18: 
+19: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+20: > [`journa
+… [3959 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 1e-4 --dim 640 --expert-hidden 640 --no … [301 caractères tronqués]`
+
+  ```
+r4 lancé
+ 827489 /home/stephane/gpu-env/bin/python -m
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r4.log; echo \"passe: $(grep -c '✅' /tmp/passe-1118.log) vertes, $(grep -c '❌' /tmp/passe-1118.log) rouges\"; grep \"❌\" /tmp/passe-1118.log | sed 's/  */ /g' | cut -c1-80 | head -3", "description": " … [65 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:02:02 EST
+pas 1650 · perte 1.0900 · PPL val 3.313 · 500 s
+passe: 63 vertes, 2 rouges
+ porte-indice ❌ code 1 854 s ❌ l'indice extérieur tombe à 482 jetons de l'aiguil
+ porte-melange ❌ code 1 106 s ❌ l'état de A ne rend pas le code de A dans une
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r4.log; echo \"passe: $(grep -c '✅' /tmp/passe-1118.log) vertes, $(grep -c '❌' /tmp/passe-1118.log) rouges\"; tail -1 /tmp/passe-1118.log | cut -c1-90", "description": "Wait ten more minutes", "timeou … [13 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:11:59 EST
+pas 3650 · perte 1.1820 · PPL val 3.294 · 1093 s
+passe: 67 vertes, 2 rouges
+  porte-pannes           ✅                          47 s    ✅ pair absent : échec annoncé
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r4.log; echo \"passe: $(grep -c '✅' /tmp/passe-1118.log) vertes, $(grep -c '❌' /tmp/passe-1118.log) rouges\"; tail -1 /tmp/passe-1118.log | cut -c1-80; ls -la reports/rapport-dedup-lignes.md 2>/dev/nu … [65 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:21:56 EST
+pas 5700 · perte 1.0961 · PPL val 3.286 · 1687 s
+passe: 71 vertes, 2 rouges
+  porte-prechargement    ✅                         163 s    PORTE TENUE
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('r4 en cours' … [237 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:31:52 EST
+r4 en cours
+pas 7750 · perte 1.0364 · PPL val 3.274 · 2282 s
+passe: 72 vertes, 2 rouges
+  porte-produit          ✅                         165 s  ✅ porte produit verte
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('r4 en cours' … [169 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:41:19 EST
+r4 en cours
+passe: 85 vertes, 2 rouges
+  ```
+
+### 👤 Utilisateur
+
+Agent 6e7ba93b-7eb8-400a-8457-6f6a8fe67f54 sent a message: 
+Dédup par ligne terminé et mesuré sur les 7,50 Go. Aucun fichier de data/ touché, aucun commit, aucun appel API.
+
+## Chiffres (passe principale)
+- Entrée : data/corpus_wiki_fr_texte/train.txt, 7 504 078 589 o, sha256 27277e320d7781e0dc8957a449fff386a7d1fa712838bba42f8a1e728dd0924b.
+- Sortie : work/dedup/train-lignes.txt, **6 900 585 097 o** (6,43 Gio), **63 438 199 lignes**, sha256 **e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552**.
+- Écarté : **24 676 233 lignes (28,005 %** ; 37,919 % des non-vides), **603 493 492 o (8,042 %)**.
+- Préservé : **23 037 969 lignes vides** (26,146 % des lignes, 0,307 % des octets).
+- Temps : **161,1 s de passe** (2 min 41 s) + 21,3 s de relecture `--verifier` = **182,4 s** ; 44,4 Mio/s de passe ; CPU 169,97 s user + 8,51 s sys (97,8 %).
+- RSS : **ru_maxrss 1 053,4 Mio**, VmRSS 1 053,8, pour budget **2 048 Mio** (marge 994,6 Mio) ; table exacte de 1 GiB (2^27 cases, 40 400 230 entrées, charge 30,10 %). /usr/bin/time confirme 1 078 684 Kio = 1 053,4 Mio.
+- Preuve 200 Mo : budget **64 Mio**, ru_maxrss **49,5 Mio** (marge 14,5), table 16 Mio, 263 917 lignes / 7 053 497 o écartés (15,156 % / 3,527 %), sortie 192 946 503 o.
+- Idempotence : 2e passe sur la sortie → **0 ligne écartée**, même sha256, mêmes 6 900 585 097 o ; 118,5 s, même RSS. 
+- Variante --normaliser (corpus entier, sortie /dev/null) : +164 547 lignes / +6 528 572 o (8,129 %), 260,8 s ; défaut conservateur retenu.
+
+## Comparaison au 53,98 % / 8,28 % (rapport blocs)
+Réconciliation exacte :
+- 47 563 661 − 23 037 968 (vides préservées) + 150 540 (variantes d'espaces de fin) = **24 676 233 lignes**.
+- 621 277 675 − 23 037 968 + 5 253 785 = **603 493 492 o**.
+- Équivalent « vides dédoublonnées » : **54,150 % / 8,349 %** (les +0,070 point viennent du rstrip) ; effectif : **28,005 % / 8,042 %** (les vides expliquent −0,307 point).
+
+## Autotest : 16/16
+Les 6 cas :
+(a) ligne unique gardée (6 non-vides) ;
+(b) copie exacte écartée (1) ;
+(c) copie avec espaces de fin écartée par défaut (1), 1re occurrence écrite telle quelle avec ses espaces ;
+(d) ligne différente gardée ;
+(e) 4 lignes vides préservées (3 `\n` + 1 `   \n`), `vides_lues = 4` ;
+(f) deux passes → même sha256 (3de1a6d9…), sorties identiques.
+Extras : `--normaliser` (4 écartées vs 2, sha stable), `budget_memoire_impossible` rc 3, `capacite_depassee` rc 3 (850k uniques / 56 Mio), `memoire_depassee` rc 3 (plafond test 1 Mio), `--verifier` OK, première occurrence telle quelle.
+
+## Chemins
+- outils/dedup_lignes.py
+- reports/rapport-dedup-lignes.md
+- reports/dedup-lignes-7.5go.json
+- work/dedup/train-lignes.txt (corpus v2)
+- work/dedup/prouve-200Mo-lignes.json
+- work/dedup/autotest-lignes/autotest.json
+- work/dedup/idempotence-train-lignes.json
+- work/dedup/normalise-train-lignes.json
+
+## Suite proposée
+Le corpus v2 est prêt et épinglé (chemin, 6 900 585 097 o, 63 438 199 lignes, sha256 ci-dessus), dans work/ et non data/. Avant de l'utiliser : compter les jetons v1/v2 et mesurer une petite perplexité/qualité (8,04 % d'octets en moins ne valent que si la qualité tient) ; décider du filtre éditorial (les lignes de 80 o et + pèsent 2,59 % du fichier) ; ne pas promouvoir dans data/ sans copie explicite et épingle. Je n'ai pas touché en-cours/roadmap/AGENTS.
+
+Limites documentées : collisions 64 bits ≈4,4 × 10⁻⁵ attendue (0,004 % de risque), lignes quasi identiques non détectées (un mot, une casse Unicode, un refluage), ordre = première occurrence, vides tous préservés, budget exact tant que la table n'est pas pleine (107 374 182 entrées max à 2 048 Mio).
+
+### 👤 Utilisateur
+
+Background subagent 6e7ba93b-7eb8-400a-8457-6f6a8fe67f54 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Dédoublonnage par ligne terminé, mesuré et contrôlé
+
+## Chiffres (passe principale)
+
+- **Entrée** : `data/corpus_wiki_fr_texte/train.txt`, **7 504 078 589 o**, sha256 `27277e32…`
+- **Sortie** : `work/dedup/train-lignes.txt`, **6 900 585 097 o** (6,43 Gio), **63 438 199 lignes**, sha256 **`e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552`**
+- **Écarté** : **24 676 233 lignes (28,005 %** ; 37,919 % des non-vides) et **603 493 492 o (8,042 %)**
+- **Préservé** : **23 037 969 lignes vides** (26,146 % des lignes, 0,307 % des octets)
+- **Temps** : **161,1 s de passe** (2 min 41 s) + 21,3 s de relecture `--verifier` = **182,4 s** ; **44,4 Mio/s** de passe ; CPU 169,97 s user + 8,51 s sys.
+- **RSS** : `ru_maxrss` **1 053,4 Mio**, VmRSS 1 053,8, pour budget **2 048 Mio** (marge **994,6 Mio**). Table exacte de 1 GiB (2^27 cases, 40 400 230 entrées, charge 30,10 %).
+- **Preuve 200 Mo** : budget **64 Mio**, `ru_maxrss` **49,5 Mio** (marge 14,5), table 16 Mio, 263 917 lignes / 7 053 497 o écartés (15,156 % / 3,527 %), sortie 192 946 503 o.
+- **Idempotence** : 2ᵉ passe sur la sortie → **0 ligne écartée**, même sha256, mêmes 6 900 585 097 o ; 118,5 s, même RSS.
+
+## Comparaison aux 53,98 % / 8,28 %
+
+Réconciliation exacte avec le rapport blocs :
+- `47 563 661 − 23 037 968 (vides préservées) + 150 540 (espaces de fin) = 24 676 233 lignes`
+- `621 277 675 − 23 037 968 + 5 253 785 = 603 493 492 o`
+
+Soit **54,150 % / 8,349 %** à politique de lignes vides égale, et **28,005 % / 8,042 %** en pratique (les vides expliquent −0,307 point ; le `rstrip` ajoute +0,070 point). La variante `--normaliser` retire 164 547 lignes / 6 528 572 o de plus, mais coûte 260,8 s.
+
+## Autotest : 16/16
+
+(a) ligne unique gardée (6 non-vides, sortie exacte) ;
+(b) copie exacte écartée (1) ;
+(c) copie avec espaces de fin écartée par défaut (1), première occurrence écrite **telle quelle** avec ses espaces ;
+(d) ligne différente gardée ;
+(e) 4 lignes vides préservées (3 `\n` + 1 `   \n`), `vides_lues = 4` ;
+(f) deux passes → **même sha256** `3de1a6d9…`, sorties identiques.
+
+Extras : `--normaliser` (4 écartées vs 2, sha stable), `budget_memoire_impossible` rc 3, `capacite_depassee` rc 3, `memoire_depassee` rc 3, `--verifier` OK.
+
+## Chemins
+
+- `tools/dedup_lignes.py`
+- `reports/rapport-dedup-lignes.md`
+- `reports/dedup-lignes-7.5go.json`
+- `work/dedup/train-lignes.txt` (corpus v2)
+- `work/dedup/prouve-200Mo-lignes.json`
+- `work/dedup/autotest-lignes/autotest.json`
+- `work/dedup/idempotence-train-lignes.json`
+
+## Limites et suite
+
+Collisions 64 bits : ≈ 4,4 × 10⁻⁵ attendue (0,0044 % de risque). Les lignes quasi identiques (un mot, une casse Unicode, un refluage) ne sont pas détectées ; l'ordre garde la première occurrence ; les vides sont tous préservés ; la table exacte s'arrête proprement à 107 374 182 entrées à 2 048 Mio. La prose de 80 o et + reste ≈ 2,6 % du fichier.
+
+Le corpus v2 est prêt dans `work/` (pas dans `data/`) : taille, lignes et sha256 ci-dessus. Prochaine étape recommandée : compter les jetons v1/v2 et mesurer une petite perplexité/qualité avant de s'en servir. Aucun fichier de `data/` modifié, aucun commit, aucun appel API, `en-cours`/`roadmap`/`AGENTS` non touchés.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nd=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))\" && bash bench/checkpoint_bench.sh work/n3/r4.pt r4 2>&1 | tail -2 … [254 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 12:41:28 EST
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))
+                ~~~~^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'work/n3/r4.pt.json'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"la dédup doit être **par … [2223 caractères tronqués]`

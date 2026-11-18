@@ -1,0 +1,201 @@
+{
+ "outil": "tools/dedup_lignes.py",
+ "date": "2026-11-18T12:18:08",
+ "verdict": "ok",
+ "entree": {
+  "chemin": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/corpus_wiki_fr_texte/train.txt",
+  "octets": 7504078589,
+  "mtime": "2026-11-01T17:25:40"
+ },
+ "sortie": {
+  "chemin": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/dedup/train-lignes.txt",
+  "octets": 6900585097,
+  "sha256": "e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552",
+  "lignes": 63438199
+ },
+ "parametres": {
+  "memoire_mo": 2048.0,
+  "normaliser": false,
+  "hachage": "BLAKE2b-64 (digest_size=8, non salé)",
+  "lecture": "flux ligne à ligne, tampon 4 Mio",
+  "verifier": true
+ },
+ "memoire": {
+  "budget_mio": 2048.0,
+  "plancher_mio": 48.0,
+  "structure": "table de hachage exacte à adressage ouvert linéaire (array('Q'))",
+  "octets_par_slot": 8,
+  "capacite_slots": 134217728,
+  "octets_table": 1073741824,
+  "charge_max": 0.8,
+  "entrees_max": 107374182,
+  "plafond_test_mio": null,
+  "plafond_mio": 2048.0,
+  "rss_max_mio": 1053.8,
+  "rss_max_source": "maximum de VmRSS (/proc/self/status), échantillonné après allocation puis toutes les 65 536 lignes",
+  "ru_maxrss_mio": 1053.4,
+  "marge_mio": 994.2,
+  "marge_ru_maxrss_mio": 994.6,
+  "plafond_atteint": false
+ },
+ "table": {
+  "slots_utilises": 40400230,
+  "charge_finale": 0.301,
+  "entrees_max": 107374182
+ },
+ "lignes": {
+  "lues": 88114432,
+  "gardees": 63438199,
+  "ecartees": 24676233,
+  "vides_lues": 23037969,
+  "vides_gardees": 23037969,
+  "non_vides_lues": 65076463,
+  "non_vides_gardees": 40400230,
+  "non_vides_ecartees": 24676233,
+  "plus_longue_ligne_octets": 10389
+ },
+ "octets": {
+  "entree": 7504078589,
+  "sortie": 6900585097,
+  "gardes": 6900585097,
+  "ecartes": 603493492,
+  "vides_gardes": 23037969,
+  "non_vides_entree": 7481040620,
+  "non_vides_sortie": 6877547128
+ },
+ "taux": {
+  "pct_lignes_ecartees": 28.005,
+  "pct_lignes_ecartees_hors_vides": 37.919,
+  "pct_octets_ecartes": 8.042,
+  "pct_octets_vides": 0.307,
+  "pct_lignes_gardees": 71.995,
+  "pct_lignes_vides": 26.146,
+  "pct_sortie": 91.958
+ },
+ "integrite": {
+  "sha256_sortie": "e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552",
+  "octets": 6900585097,
+  "lignes": 63438199,
+  "verifie": true,
+  "methode": "relecture séquentielle par blocs de 4 Mio",
+  "octets_relus": 6900585097,
+  "lignes_relues": 63438199,
+  "sha256_relu": "e3112a842ed6d97a15b2da0dd20d5f3d6ea81477356d0741fce175d7f3858552"
+ },
+ "comparaison_blocs": {
+  "source": "reports/rapport-dedup-blocs.md § 4.3 (mesure exacte, 2026-11-18)",
+  "lignes_dupliquees_pct_diagnostic": 53.98,
+  "octets_dupliques_pct_diagnostic": 8.28,
+  "lignes_vides_diagnostic": 23037969,
+  "note": "le diagnostic supprimait toutes les lignes vides sauf une ; ici toutes sont préservées, d'où deux taux : effectif (vides gardées) et équivalent (vides dédoublonnées comme le diagnostic)",
+  "mesure_equivalente": {
+   "lignes_ecartees": 47714201,
+   "pct_lignes_ecartees": 54.15,
+   "octets_ecartes": 626531460,
+   "pct_octets_ecartes": 8.349
+  }
+ },
+ "duree_s": 182.4,
+ "duree_passe_s": 161.1,
+ "duree_verification_s": 21.3,
+ "debit_mio_s": 44.4,
+ "debit_total_mio_s": 39.2,
+ "journal": [
+  {
+   "lignes_lues": 4587520,
+   "pct_lignes_ecartees": 16.5,
+   "rss_mio": 1053.6,
+   "s": 10.1
+  },
+  {
+   "lignes_lues": 9961472,
+   "pct_lignes_ecartees": 20.34,
+   "rss_mio": 1053.8,
+   "s": 20.1
+  },
+  {
+   "lignes_lues": 15466496,
+   "pct_lignes_ecartees": 23.63,
+   "rss_mio": 1053.8,
+   "s": 30.1
+  },
+  {
+   "lignes_lues": 20119552,
+   "pct_lignes_ecartees": 23.63,
+   "rss_mio": 1053.8,
+   "s": 40.2
+  },
+  {
+   "lignes_lues": 25755648,
+   "pct_lignes_ecartees": 23.66,
+   "rss_mio": 1053.8,
+   "s": 50.3
+  },
+  {
+   "lignes_lues": 31326208,
+   "pct_lignes_ecartees": 23.96,
+   "rss_mio": 1053.8,
+   "s": 60.4
+  },
+  {
+   "lignes_lues": 36700160,
+   "pct_lignes_ecartees": 24.32,
+   "rss_mio": 1053.8,
+   "s": 70.4
+  },
+  {
+   "lignes_lues": 42467328,
+   "pct_lignes_ecartees": 24.74,
+   "rss_mio": 1053.8,
+   "s": 80.6
+  },
+  {
+   "lignes_lues": 48103424,
+   "pct_lignes_ecartees": 25.25,
+   "rss_mio": 1053.8,
+   "s": 90.7
+  },
+  {
+   "lignes_lues": 53870592,
+   "pct_lignes_ecartees": 25.77,
+   "rss_mio": 1053.8,
+   "s": 100.8
+  },
+  {
+   "lignes_lues": 59899904,
+   "pct_lignes_ecartees": 26.32,
+   "rss_mio": 1053.8,
+   "s": 110.8
+  },
+  {
+   "lignes_lues": 65863680,
+   "pct_lignes_ecartees": 26.88,
+   "rss_mio": 1053.8,
+   "s": 120.9
+  },
+  {
+   "lignes_lues": 71827456,
+   "pct_lignes_ecartees": 27.4,
+   "rss_mio": 1053.8,
+   "s": 130.9
+  },
+  {
+   "lignes_lues": 77791232,
+   "pct_lignes_ecartees": 27.62,
+   "rss_mio": 1053.8,
+   "s": 141.0
+  },
+  {
+   "lignes_lues": 83623936,
+   "pct_lignes_ecartees": 27.86,
+   "rss_mio": 1053.8,
+   "s": 151.1
+  }
+ ],
+ "journal_tronque": false,
+ "integrite_lecture": {
+  "octets_lus": 7504078589,
+  "octets_stat": 7504078589,
+  "coherent": true
+ }
+}
