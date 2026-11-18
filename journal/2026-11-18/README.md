@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**4 commits** · **6 session(s)** · **4 thème(s)**
+**5 commits** · **6 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 
 ## Sessions DSH
@@ -35,6 +35,7 @@
 | 08:53 | `52b0b78d` | N4 — LE 100 M MESURÉ À RÉGLAGES APPARIÉS : LA RÉPÉTITION TOMBE DE 9 À 6, LE VOCABULAIRE NE GAGNE RIEN (0,882 CONTRE 0,884) |
 | 09:00 | `bb57604c` | N — LE CORPUS D'ENTRAÎNEMENT EST ÉPINGLÉ : TRAIN 0876b608… (1 017 487 092 o, 2 480 766 lignes), VAL fbddef91…, MANIFESTE fae5bb73… |
 | 09:12 | `df6b9495` | N — LA VALIDATION CHANGE TOUT : 4,0139 OU 4,6792 SELON LE DÉCOUPAGE, MÊMES POIDS (+16,57 %) |
+| 09:35 | `4832b87a` | N/A/D — TROIS SOUS-AGENTS INTÉGRÉS : GRAMMATICALITÉ (GV 6,90 → 1,45, RÉSERVES), A2.6 (BANDE EXPERTS 7,0 Go/s, PPL INVARIANTE), DONNÉES (135,5 Go DONT 7,5 EXPLOITABLES) |
 
 ## Le récit de la journée (écrit à la main)
 

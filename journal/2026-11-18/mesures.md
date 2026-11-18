@@ -4,15 +4,16 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (1)
+## Commits du jour (2)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 08:53 | `52b0b78d` | N4 — LE 100 M MESURÉ À RÉGLAGES APPARIÉS : LA RÉPÉTITION TOMBE DE 9 À 6, LE VOCABULAIRE NE GAGNE RIEN (0,882 CONTRE 0,884) | `en-cours.md`, `README.md`, `attention.md` (+13) |
+| 09:35 | `4832b87a` | N/A/D — TROIS SOUS-AGENTS INTÉGRÉS : GRAMMATICALITÉ (GV 6,90 → 1,45, RÉSERVES), A2.6 (BANDE EXPERTS 7,0 Go/s, PPL INVARIANTE), DONNÉES (135,5 Go DONT 7,5 EXPLOITABLES) | `en-cours.md`, `README.md`, `attention.md` (+22) |
 
 ## Chiffres du jour
 
-`0,882` · `0,884`
+`7,0 Go` · `135,5 Go` · `0,882` · `0,884`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -27,7 +28,11 @@
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-a2.6-bande-experts.md](../../reports/rapport-a2.6-bande-experts.md)
+- [reports/rapport-a2.6-reconnaissance.md](../../reports/rapport-a2.6-reconnaissance.md)
 - [reports/rapport-banc-generation-100m.md](../../reports/rapport-banc-generation-100m.md)
+- [reports/rapport-donnees-inventaire.md](../../reports/rapport-donnees-inventaire.md)
+- [reports/rapport-grammaticalite-100m.md](../../reports/rapport-grammaticalite-100m.md)
 
 <!-- notes -->
 

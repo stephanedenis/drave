@@ -2007,3 +2007,216 @@ Created file
 </content>
   ```
 
+### 🤖 Assistant
+
+⏵ Relecture de la fiche pour vérifier les chiffres et le markdown
+
+- **read** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "limit": 220}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md</path>
+<type>file</type>
+<content>
+1: # R0.7 / B13 — le lot API du tagger sur le gold 612 : la commande prête pour 11 h 30, sans appel payant
+2: 
+3: > **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : préparation du lot 612 ·
+4: > **Date** : 2026-11-18 09:32 EST · **HEAD** : `df6b9495` · **Verdict** : ✅ **prêt à lancer à
+5: > 11:30** — le gold 612 est identifié (trois fichiers, 612 items), la clé est présente (0600,
+6: > jamais affichée), le défaut hors ligne est prouvé **sans socket**, et le coût du lot complet
+7: > est **87 841 tokens** (batch + évaluation), soit **0,01875 $ remisé / 0,03751 $ plein**,
+8: > ~10 min 20 s. **Aucun appel API payant n'a été fait.**
+9: 
+10: **En trois lignes.** (1) Le « gold 612 » n'est **pas** un fichier : c'est `gold.json` (20 `hand`)
+11: \+ `gold_reel.json` (432 `reel`) + `gold_synthetique.json` (160 `synth`), soit **612 items /
+12: 3 179 tokens** ; le corpus aplati fait **612 blocs**, sha256
+13: `4f5231c60db991426eeabd495538b82e1c9004a492efecd34af163bba6d99c2f`. (2) La commande du lot est
+14: le CLI `analyser --fichier … --jsonl --tagger
+… [12509 caractères tronqués]
+  ```
+
+- **read** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "offset": 220, "limit": 300}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md</path>
+<type>file</type>
+<content>
+220: 
+221: ### 5.1 La base mesurée
+222: 
+223: Le lot CLI fait **614 segments** ; ils donnent **608 prompts distincts** (6 collisions : 3 textes
+224: en double + 3 variantes de ponctuation). Les 608 prompts sont **tous présents dans le cache X3**
+225: `/tmp/tagger-lot-fiab-cache` (les 676 fichiers du run du 15/11), avec leur `usage` exact. La
+226: somme est donc **mesurée**, pas extrapolée :
+227: 
+228: | jeu de prompts | prompts | appels réseau à froid | entrée | sortie | **tokens** | remisé | plein | latence réseau |
+229: |---|---:|---:|---:|---:|---:|---:|---:|---:|
+230: | **batch CLI** (614 segments) | 608 | 608 | 75 200 | 12 350 | **87 550** | **0,018690 $** | **0,037380 $** | 610,8 s |
+231: | **évaluation** (612 items) | 606 | 606 | 74 988 | 12 340 | **87 328** | 0,018652 $ | 0,037304 $ | 608,8 s |
+232: | **union** (batch + éval, cache partagé) | **610** | **610** | **75 448** | **12 393** | **87 841** | **0,018753 $** | **0,037506 $** | 612,9 s |
+233: 
+234: **Le chiffre à retenir** : le lot complet (batch **et** évaluation, un seul cache neuf) coûte
+2
+… [19180 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections ciblées de la fiche (452/réel, tokens du cache par défaut, formulation)
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "old_string": "- **Le gold 452** est le sous-ensemble `hand + reel` (20 + 432) ; c'est la base de\n  `evaluer --reel` et de [`rapport-gold-452.md`](rapport-gold-452.md). Le 612 **ajoute 160\n  phrases synthétiques** : le 612 n'est pas « le réel … [389 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "old_string": "| défaut `data/deepseek/cache` | 604 / 608 | 4 appels, ~300 tokens, ~0 $ — rejeu partiel des réponses du 03–15/11 |", "new_string": "| défaut `data/deepseek/cache` | 604 / 608 | 4 appels, **~513 tokens**, ~0 $ — rejeu partiel des … [25 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "old_string": "- **Les deux phrases coupées.** `r308` et `r318` sont comptées deux fois par le CLI `--jsonl` ;\n  c'est pourquoi le lot fait 614 lignes et 608 prompts, pas 612/606. L'évaluation, elle, garde\n  les 612 items et les 606 prompts." … [248 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "old_string": "print(\"ATTENTION : cout_pour_1000_phrases est chaud (291 tokens), ne pas le lire comme le lot\")", "new_string": "print(\"ATTENTION : cout_pour_1000_phrases est chaud (291 tokens mesurés, extrapolé à ~475)\")"}`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "new_string": "**Si l'on ne veut que la qualité R0.7**, l'étape 4 seule avec un cache neuf suffit (exporter\n`DEEPSEEK_KEY_FILE` et un `DEEPSEEK_CACHE` vide) : `evaluer --tagger --json` fait **606 appels**,\n**87 328 tokens**, **0,01865 $ remis … [759 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "new_string": "attendu est **+8,5 à +9,5 points**. Le chiffre **0,8500** de `rapport-etat-r.md` n'est plus celui\ndu HEAD : `evaluer --json` mesure 0,8625. La fiche R0.7 doit publier le chiffre du jour, pas\n0,8500.", "old_string": "attendu est … [171 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Validation syntaxique du bloc shell de la fiche
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib\nt = pathlib.Path('reports/rapport-tagger-lot-612-prep.md').read_text(encoding='utf-8')\ndebut = t.index('cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\\n\\n# 0.')\nfin = t.index('\\n```', debut)\nbloc = t[debut:fin]\npathlib.Path('/tmp/tagger-612/ … [236 caractères tronqués]`
+
+  ```
+bloc 105 lignes
+bash -n exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Test hors ligne des heredocs Python du runbook (sans le pas payant)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\npython3 - <<'PY'\nimport hashlib, json, pathlib\nracine = pathlib.Path(\"tools/tests/linguistique\")\nitems = []\nfor nom, source in ((\"gold.json\", \"hand\"), (\"gold_reel.json\", \"reel\"),\n                    (\"gold_synthetique.j … [2576 caractères tronqués]`
+
+  ```
+items 612 sha256 4f5231c60db991426eeabd495538b82e1c9004a492efecd34af163bba6d99c2f
+SHA-OK
+614/614 JSON valides · 4747475 octets
+sources Counter({'heuristique': 614})
+refus 0 []
+POS neuronal 0 / 3749
+fichiers=676 entrée=85376 sortie=15108 total=100484
+remisé=0.021871 $ · plein=0.043742 $
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des liens locaux de la fiche
+
+- **bash** `{"command": "python3 - <<'EOF'\nimport pathlib, re\np = pathlib.Path('reports/rapport-tagger-lot-612-prep.md')\nt = p.read_text(encoding='utf-8')\nliens = re.findall(r'\\[[^\\]]+\\]\\(([^)]+)\\)', t)\nfor l in liens:\n    if l.startswith('http'): continue\n    cible = (p.parent / l).resolve()\n    p … [124 caractères tronqués]`
+
+  ```
+OK  ../tools/tests/linguistique/gold.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold.json
+OK  ../tools/tests/linguistique/gold_reel.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_reel.json
+OK  ../tools/tests/linguistique/gold_synthetique.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/tests/linguistique/gold_synthetique.json
+OK  rapport-gold-452.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gold-452.md
+OK  ../tools/drave.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/drave.py
+OK  ../tools/bloc_linguistique.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/bloc_linguistique.py
+OK  ../tools/llm/deepseek.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/llm/deepseek.py
+OK  ../tools/llm/enseignant.py -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/llm/enseignant.py
+OK  rapport-coordination-r.md -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-coordination-r.md
+OK  tagger-612.json -> /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/tagger-612.json
+OK  rapport-tagger-option.md -> /home/stephane/Data13TB/steph
+… [1159 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle qu'aucune clé n'a fuité dans les fichiers écrits
+
+- **bash** `{"command": "grep -n \"sk-\\|Bearer\\|Authorization\" reports/rapport-tagger-lot-612-prep.md reports/tagger-612-dryrun-5.json || echo \"aucune trace de clé (sk-/Bearer/Authorization)\"", "description": "Check for leaked key patterns in outputs"}`
+
+  ```
+aucune trace de clé (sk-/Bearer/Authorization)
+  ```
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "new_string": "Le lot CLI fait **614 segments** ; ils donnent **608 prompts distincts** (6 collisions : 3 textes\nen double + 3 variantes de ponctuation). Les 608 prompts sont **tous présents dans le cache X3**\n`/tmp/tagger-lot-fiab-cache` (67 … [473 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final du diff (deux fichiers autorisés seulement)
+
+- **bash** `{"command": "git status --short; echo '---'; wc -l reports/rapport-tagger-lot-612-prep.md; ls -l reports/tagger-612-dryrun-5.json; echo '---'; git diff --stat; echo '--- non commité'; git status --porcelain | wc -l", "description": "Check final working tree changes"}`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/digest.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+A  reports/a2.6-bande-experts.json
+A  reports/banc-grammaticalite-100m.json
+A  reports/rapport-a2.6-bande-experts.md
+A  reports/rapport-a2.6-reconnaissance.md
+AM reports/rapport-donnees-inventaire.md
+A  reports/rapport-grammaticalite-100m.md
+?? bench/checkpoint_bench.sh
+?? journal/sessions/174fd5ef-1163-4983-85b5-9101752ad711/
+?? journal/sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/
+?? reports/rapport-tagger-lot-612-prep.md
+?? reports/tagger-612-dryrun-5.json
+---
+514 reports/rapport-tagger-lot-612-prep.md
+-rw-r--r--. 1 stephane stephane 88245 18 nov 09:31 reports/tagger-612-dryrun-5.json
+---
+ journal/README.md                                  |  10 +-
+ .../8c024745-95cb-4885-9d0b-865142606b6d/digest.md 
+… [557 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Correction d'une formulation sur la requête à la page tarifaire
+
+- **edit** `{"file_path": "reports/rapport-tagger-lot-612-prep.md", "new_string": "- **Est** : la préparation exécutable du lot API du tagger sur le gold 612 — le gold exact, la\n  commande exacte, la clé et son code 4, le dry-run hors ligne, le coût mesuré par les prompts\n  déjà en cache, les risques et le co … [669 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-lot-612-prep.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat consolidé à l'agent parent
+
+- **send_message** `{"agent_id": "d67a9bb1-090e-4f69-baf2-a831c00aa275", "message": "Lot API du tagger sur le gold 612 : PRÊT pour 11:30. Aucun appel au modèle / aucune requête à `api.deepseek.com/chat/completions` n'a été fait (la page publique de tarifs a seulement été lue en GET, comme la tâche l'autorise). Fiche :  … [3491 caractères tronqués]`
+
+  ```
+message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
+  ```
+

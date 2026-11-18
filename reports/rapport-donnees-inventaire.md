@@ -42,8 +42,8 @@ re-épinglage).
 
 | famille | octets apparents | fichiers | part |
 |---|---:|---:|---:|
-| 10 langues — wikitext (`data/corpus_wiki_<lang>/`) | 38,78 Go | 30 | 28,6 % |
-| 10 langues — texte (`data/corpus_wiki_<lang>_texte/`) | 81,32 Go | 30 | 60,0 % |
+| 10 langues — résumés (`data/corpus_wiki_<lang>/`) | 38,78 Go | 30 | 28,6 % |
+| 10 langues — plein texte (`data/corpus_wiki_<lang>_texte/`) | 81,32 Go | 30 | 60,0 % |
 | dérivés Wikipédia FR (`wiki_fr`, `wiki_big`, `wiki_mix`) | 5,76 Go | 19 | 4,3 % |
 | `wiki_multi` (10 langues) | 0,86 Go | 25 | 0,6 % |
 | corpus FR du dépôt + PDF/OCR | 1,30 Go | 40 | 1,0 % |
@@ -56,12 +56,12 @@ re-épinglage).
 `data/pidgin`, qui est un lien symbolique vers `/home/stephane/IA/drave-data/pidgin`
 (328 747 430 o, compté une fois via `pidgin.old`).
 
-Le français est le **4ᵉ** corpus des 10 langues (en 21 Go, ru 11, de 10, **fr 7,8**, ja 6,9, es 6,4,
-it 5,0, ar 3,4, pt 3,0, zh 2,5).
+Le français est le **4ᵉ** corpus des 10 langues (en 21 Gio, ru 11, de 10, **fr 7,8**, ja 6,9, es 6,4,
+it 5,0, ar 3,4, pt 3,0, zh 2,5 — valeurs `du`).
 
 **Hors `data/` (pour mémoire, non compté ici)** : `/home/stephane/Data13TB/stephane/data/wikipedia`
-= **132 Go** (bases sqlite + dumps), dont le dump FR `frwiki-…xml.bz2` = **7,13 Go** ;
-`corpus/wiki_apparie` = **12 Go** (6 084 fichiers, 10 langues, appariés par titre). Ce sont les
+= **132 Gio** (bases sqlite + dumps), dont le dump FR `frwiki-…xml.bz2` = **7,13 Go** ;
+`corpus/wiki_apparie` = **12 Gio** (6 084 fichiers, 10 langues, appariés par titre). Ce sont les
 **sources** des corpus ci-dessus (même dump), pas du volume nouveau ; `wiki_apparie` recoupe les
 extractions et doit être dédupliqué avant tout comptage.
 
@@ -197,8 +197,10 @@ décompositions l'un de l'autre, et qu'il ne faut pas les additionner :
 `corpus_wiki_fr_texte` (plein texte, 7,50 Go), `corpus_wiki_fr` (résumés, 3,43 Go) et
 `wiki_fr`/`wiki_big` (186 + 831 Mo, déjà dans le pin). Le test des 200 titres rend **200/200**
 retrouvés dans le plein texte (182 dans le train — cohérent avec la part train de 90,0 % —, le
-reste dans val/test) : **le corpus épinglé est un sous-ensemble de contenu** de
-`corpus_wiki_fr_texte`. Additionner les deux compte deux fois la même encyclopédie.
+reste dans val/test) : la partie **`wiki_big` du pin (82 %)** est donc un **sous-ensemble de
+contenu** de `corpus_wiki_fr_texte`. La partie `wiki_fr` (résumés, 18 %) vient des **mêmes
+articles** (même dump, mêmes page_id) — recouvrement d'articles certain, recouvrement d'octets non
+mesuré. Additionner les deux corpus compte deux fois la même encyclopédie.
 
 **Autres doublons** :
 

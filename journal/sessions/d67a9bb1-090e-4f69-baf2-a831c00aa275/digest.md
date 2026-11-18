@@ -7327,3 +7327,124 @@ ls: write error: Broken pipe
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **796** / **886** |'\nnew = '| fichiers / JSON de résultats | **796** / **887** |'\nassert s. … [2125 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 796 fichiers, le disque en a 797
+ create mode 100644 reports/rapport-a2.6-reconnaissance.md
+ create mode 100644 reports/rapport-donnees-inventaire.md
+ create mode 100644 reports/rapport-grammaticalite-100m.md
+4832b87a N/A/D — TROIS SOUS-AGENTS INTÉGRÉS : GRAMMATICALITÉ (GV 6,90 → 1,45, RÉSERVES), A2.6 (BANDE EXPERTS 7,0 Go/s, PPL INVARIANTE), DONNÉES (135,5 Go DONT 7,5 EXPLOITABLES)
+=== r1 ===
+pas 5650 · perte 1.2176 · PPL val 3.746 · 1638 s
+  ```
+
+### 👤 Utilisateur
+
+Agent da0f2984-32d0-459d-a761-d3faf6a10b8a sent a message: 
+INVENTAIRE DONNÉES PALIER 1 — terminé. Rapport : `reports/rapport-donnees-inventaire.md` (296 lignes). Aucune donnée modifiée, aucun téléchargement, aucun commit.
+
+**TOTAL** : `data/` = **135,5 Go apparents** (135 523 369 596 o), **4 428 fichiers**, dont **120,1 Go de Wikipédia en 10 langues** (38,78 Go de résumés + 81,32 Go de plein texte). En Gio : 126 Gio (du -sh 127G). ~0,74 Go ne sont pas des données (0,56 Go de .npz, 0,18 Go de LoRA) et 2,38 Go sont de l'évaluation (xnli).
+
+**CORPUS ÉPINGLÉ** : train 1 017 487 092 o / 2 480 766 lignes ; val 10 330 112 o / 24 498 lignes (sha du manifeste, non refait). Composition prouvée à l'octet près : `wiki_fr/propre/train` (186 089 472) + `wiki_big/propre/train` (831 397 620) = le train. Le val du pin EST `wiki_fr/propre/val.txt` (même sha) → train dominé par wiki_big (82 %, plein texte), val en résumés : domaines différents, candidat pour l'alerte PPL du 16/11.
+
+**ÉCART AU PALIER 1 (3–6 Go)** : il manque **1,98 Go** pour 3 Go et **4,98 Go** pour 6 Go (le pin = 33,9 % / 17,0 % de la cible ; 6,8–10,2 octets/paramètre seulement).
+
+**MAIS l'écart de volume est déjà sur le disque** : `data/corpus_wiki_fr_texte/train.txt` = **7,50 Go** (88,1 M lignes, 2,15 M articles, fr ≈ 99 %, CC-BY-SA). Déduplication mesurée sur les 7,5 Go : 2,93 % de shingles revus, ~2,0 % après correction des collisions 32 bits → **≈ 7,2–7,35 Go**, dont **1,02 Go recouvre le pin** (test : 200/200 titres de wiki_big retrouvés en ligne exacte dans le plein texte, 182 dans le train = cohérent avec la part train 90 %) → **≈ 6,2–6,3 Go nets ajoutables**, soit 1,25× les 4,98 Go manquants. **Aucune collecte n'est nécessaire pour le volume.**
+
+**LES 3 SOURCES LES PLUS PROMETTEUSES DÉJÀ PRÉSENTES**
+1. `data/corpus_wiki_fr_texte/` — 7,50 Go, fr ≈ 99 %, CC-BY-SA : ferme l'écart à elle seule (+6,2–6,3 Go nets), mais même encyclopédie/domaine que le pin.
+2. Parallèles FR-EN — 12,79 Go décompressés (multiun 5,14 + opensubtitles 6,24 + wikimatrix 1,05 + jrc 0,24 + ted 0,12), ≈ 4,5 Go de français estimés, genres nouveaux (ONU, sous-titres, TED, droit UE) ; licences hétérogènes à trier.
+3. Prose FR hors Wikipédia déjà nettoyée ≈ 0,10 Go (littérature 15,3 Mo, corpus_fr 3,2 Mo, dépôt 4,8 Mo, ~72 Mo de FR dans les PDF) — volume négligeable, seule diversité de domaine immédiate.
+
+**CE QUI CHANGE LA DÉCISION** : (a) le vrai manque n'est pas le volume mais la **diversité** (le corpus resterait ~98 % Wikipédia) ; (b) les PDF sont **majoritairement anglais** (corpus_pdf ~70 % EN / 8 % FR ; documents ~71 % EN / 6 % FR — mesuré par `de`/`the` calibré) donc 1,10 Go de PDF ≈ 72 Mo de français seulement ; (c) `corpus_pdf_documents` contient des **PII** (avis de cotisation, NAS partiel) → à exclure ; (d) le prérequis est l'**outillage** : `tools/corpus_propre.py` tient tous les shingles en mémoire (~80 Go/Go) → 7,5 Go demanderait ~600 Go de RAM ; il faut une passe par blocs avant une épingle v2.
+
+**PROCHAINE ACTION DE COLLECTE (non faite)** : livres FR en domaine public (Wikisource FR + Gutenberg FR), extraction/filtre/dédup contre les 7,5 Go, objectif +0,5 à 1 Go de prose longue — pas de Wikipédia (déjà 7,5 Go, 0 savoir nouveau).
+
+Note : `git status` montre `reports/rapport-donnees-inventaire.md` en `AM` (staged puis modifié) — ce staging ne vient pas de moi (je n'ai fait aucun `git add`) ; je n'ai pas commité.
+
+### 👤 Utilisateur
+
+Background subagent da0f2984-32d0-459d-a761-d3faf6a10b8a finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Clôture : synthèse des quatre chiffres demandés
+
+**Inventaire terminé** — `data/` n'a pas été modifié, aucun téléchargement, aucun commit. Le rapport est écrit : `reports/rapport-donnees-inventaire.md` (296 lignes, 21 Ko).
+
+## 1. Total des données
+
+**135,5 Go apparents** (135 523 369 596 o, **4 428 fichiers**) ; **126 Gio** au `du -sh` (127G). Dont **120,1 Go de Wikipédia en 10 langues** (38,78 Go de résumés + 81,32 Go de plein texte), 5,76 Go de dérivés Wikipédia FR, 2,96 Go de parallèles FR-EN compressés (12,79 Go décompressés), 2,38 Go d'évaluation, 1,30 Go de corpus FR/PDF/OCR. À noter : 0,74 Go ne sont pas des données (.npz, adaptateurs LoRA) et les PDF sont **majoritairement anglais** (~70 % EN, 6–8 % FR).
+
+## 2. Écart au palier 1 (3–6 Go)
+
+| | Go | part de la cible |
+|---|---:|---:|
+| corpus épinglé | **1,017** | 33,9 % (3 Go) / 17,0 % (6 Go) |
+| **manque pour 3 Go** | **1,98** | 66,1 % |
+| **manque pour 6 Go** | **4,98** | 83,0 % |
+
+Mais **ces octets sont déjà sur le disque** : `data/corpus_wiki_fr_texte/train.txt` = **7,50 Go** (fr ≈ 99 %, CC-BY-SA), qui donne **6,2–6,3 Go nets** après déduplication (~2,0 % mesuré) et retrait du recouvrement avec le pin — soit 1,25× les 4,98 Go manquants. **L'écart de volume est fermable sans collecte ; l'écart de diversité (~0,1 Go hors Wikipédia) ne l'est pas.**
+
+## 3. Les 3 sources les plus prometteuses déjà présentes
+
+1. **`data/corpus_wiki_fr_texte/`** — 7,50 Go, 2,15 M articles, fr ≈ 99 %, CC-BY-SA : ferme l'écart de volume à elle seule, mais même encyclopédie que le pin (les 200 titres testés de `wiki_big` y sont tous, 182/200 dans le train = part train attendue de 90 %).
+2. **Les parallèles FR-EN** — 12,79 Go décompressés (multiun, opensubtitles, wikimatrix, jrc, ted), ≈ 4,5 Go de français estimés, genres réellement nouveaux ; licences hétérogènes à trier.
+3. **La prose FR hors Wikipédia déjà nettoyée** — ≈ 0,10 Go (littérature 15,3 Mo, corpus_fr 3,2 Mo, dépôt 4,8 Mo, ~72 Mo de FR dans les PDF) : volume négligeable mais seule diversité immédiate ; les PDF personnels contiennent des **PII** (NAS partiel, adresse) et sont à exclure.
+
+## Prochaine action de collecte (non faite)
+
+Livres français en domaine public (**Wikisource FR + Gutenberg FR**) pour la diversité, pas pour le volume — et **pas de Wikipédia** (7,5 Go déjà là, zéro savoir nouveau). Prérequis technique avant une épingle v2 : une passe de déduplication **par blocs** (l'outil actuel demande ~80 Go de RAM par Go de texte, soit ~600 Go pour 7,5 Go).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git status --short | head -8; echo \"=== nouveaux reports ===\"; ls -lt reports/rapport-*.md | head -3; echo \"=== r1 ===\"; tail -2 work/n3/r1.log", "description": "Check status, new reports and training"}`
+
+  ```
+mer 18 nov 2026 09:38:09 EST
+ M reports/rapport-donnees-inventaire.md
+?? bench/checkpoint_bench.sh
+?? reports/rapport-tagger-lot-612-prep.md
+?? reports/tagger-612-dryrun-5.json
+=== nouveaux reports ===
+-rw-------. 1 stephane stephane 31949 18 nov 09:37 reports/rapport-tagger-lot-612-prep.md
+-rw-------. 1 stephane stephane 21004 18 nov 09:36 reports/rapport-donnees-inventaire.md
+-rw-------. 1 stephane stephane  3777 18 nov 09:34 reports/rapport-a2.6-bande-experts.md
+=== r1 ===
+pas 5600 · perte 1.1709 · PPL val 3.752 · 1623 s
+pas 5650 · perte 1.2176 · PPL val 3.746 · 1638 s
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,30p' reports/rapport-tagger-lot-612-prep.md", "description": "Read the tagger prep fiche summary"}`
+
+  ```
+# R0.7 / B13 — le lot API du tagger sur le gold 612 : la commande prête pour 11 h 30, sans appel payant
+
+> **Ligne de roadmap** : **R0.7** (le lecteur) / **B13** · **Tâche** : préparation du lot 612 ·
+> **Date** : 2026-11-18 09:32 EST · **HEAD** : `df6b9495` · **Verdict** : ✅ **prêt à lancer à
+> 11:30** — le gold 612 est identifié (trois fichiers, 612 items), la clé est présente (0600,
+> jamais affichée), le défaut hors ligne est prouvé **sans socket**, et le coût du lot complet
+> est **87 841 tokens** (batch + évaluation), soit **0,01875 $ remisé / 0,03751 $ plein**,
+> ~10 min 20 s. **Aucun appel API payant n'a été fait.**
+
+**En trois lignes.** (1) Le « gold 612 » n'est **pas** un fichier : c'est `gold.json` (20 `hand`)
+\+ `gold_reel.json` (432 `reel`) + `gold_synthetique.json` (160 `synth`), soit **612 items /
+3 179 tokens** ; le corpus aplati fait **612 blocs**, sha256
+`4f5231c60db991426eeabd495538b82e1c9004a492efecd34af163bba6d99c2f`. (2) La commande du lot est
+le CLI `analyser --fichier … --jsonl --tagger` ; à froid, elle fera **608 appels réseau**,
+**87 550 tokens** et **0,01869 $ remisé / 0,03738 $ plein** (batch seul), avec **614 lignes
+JSONL** (deux phrases du gold contien
+… [1045 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"- **W2/W3 — le tagger**  … [913 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 797 fiche(s) · 887 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1675 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-lot-612-prep.md reports/tagger-612-dryrun-5.json reports/rapport-donnees-inventaire.md bench/checkpoint_bench.sh docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nR0.7/B13 — LE LOT TA … [1309 caractères tronqués]`

@@ -9,10 +9,10 @@
 | Début | 2026-11-18 09:15 |
 | Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 60 |
-| Appels d'outils | 77 |
+| Messages | 68 |
+| Appels d'outils | 84 |
 | Fichiers touchés | 2 |
-| Commandes | 57 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est  … [2676 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*84 appels d'outils.* Actions notables :
 
 - bash — Show working directory, date and top-level files
 - glob
@@ -41,11 +41,51 @@
 - bash — Read drave.py analyser path
 - bash — Read evaluer command implementation
 - bash — List CLI arguments and limite options
-- … et 55 autres
+- … et 62 autres
 
 **Synthèse produite :**
 
-⏵ Test hors ligne des heredocs Python du runbook (sans le pas payant)
+⏵ Bilan final : commande, coût, dry-run et risques
+
+**Verdict** : le lot est prêt pour 11:30. **Aucun appel au modèle n'a été fait** ; la page publique de tarifs a seulement été lue en GET (autorisé par la tâche). Rapport complet : `reports/rapport-tagger-lot-612-prep.md` ; dry-run : `reports/tagger-612-dryrun-5.json`. Rien n'a été commité.
+
+\### Le gold 612
+Pas de `gold_612.json`. Le 612 est la concaténation de :
+- `tools/tests/linguistique/gold.json` — 20 `hand` ;
+- `gold_reel.json` — 432 `reel` ;
+- `gold_synthetique.json` — 160 `synth` ;
+soit **612 items / 3 179 tokens**. Le corpus aplati est `/tmp/tagger-612/corpus-gold-612.txt` (612 blocs, sha256 `4f5231c6…`). Le « gold 452 » = `hand + reel` ; le `reel` = 432 ; `reports/tagger-612.json` est une **mesure** du 13/11, pas le gold.
+
+\### La commande exacte (à 11:30, cache neuf)
+```bash
+cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+export DEEPSEEK_KEY_FILE="$HOME/.config/drave/deepseek.key"
+export DEEPSEEK_MODEL=deepseek-chat
+export DEEPSEEK_CACHE="$(mktemp -d /tmp/tagger-612-cache.XXXXXX)"
+/usr/bin/time -v python3 tools/drave.py analyser \
+  --fichier /tmp/tagger-612/corpus-gold-612.txt --jsonl --tagger \
+  > /tmp/tagger-612/lot.jsonl 2> /tmp/tagger-612/lot.err
+python3 tools/drave.py evaluer --tagger --json \
+  > /tmp/tagger-612/eval.json 2> /tmp/tagger-612/eval.err
+```
+Le builder du corpus, les contrôles (614 lignes, `réseau=608`, `tokens=87550`, refus) et l'audit du coût sont dans la fiche § 6.
+
+\### Le coût estimé
+Prix page DeepSeek du 18/11, identiques à X3 : **0,15/0,60 $/M hors pointe**, **0,30/1,20 $/M en pointe**.
+
+| | appels réseau | tokens | remisé | plein | durée |
+|---|---:|---:|---:|---:|---:|
+| **batch seul** | 608 | 87 550 | **0,01869 $** | **0,03738 $** | ~10 min 10 s |
+| **batch + éval** (cache partagé) | 610 | 87 841 | **0,01875 $** | **0,03751 $** | ~10 min 20 s |
+
+La règle de trois 612/1000 donnerait 0,01332 $, mais elle est **fausse** : le lot X3 de 1 000 items a 32,6 % de cache, le 612 n'a que 6 collisions. Le chiffre exact vient de la somme des `usage` des 608 prompts déjà dans le cache X3. 11:30 EST = 16:30 UTC = hors pointe.
+
+\### Le dry-run
+- **5 items, défaut hors ligne** : code 0, **5/5 JSON valides**, 51 207 o, stderr vide, **0 socket**, `tools.llm.deepseek` non importé.
+- **Sans clé** : `--tagger` → **4**, stdout vide, 0 socket ; `evaluer --tagger` → **4**.
+- **Passe 612 hors ligne** : **614/614 JSON valides**, 0,85 s (r308 et r318 coupés en deux).
+- **30/30 tests** du tagge
+… [1127 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -54,7 +94,7 @@
 | Fichier | Écritures | Éditions |
 |---|---|---|
 | `/tmp/tagger-612/dryrun_612.py` | 1 | 0 |
-| `reports/rapport-tagger-lot-612-prep.md` | 1 | 6 |
+| `reports/rapport-tagger-lot-612-prep.md` | 1 | 8 |
 
 ### Commandes exécutées (échantillon)
 
@@ -98,7 +138,7 @@
 - **T1** Run full 612 offline heuristic pass and count lines
 - **T1** Analyze CLI segmentation and estimate segment tokens
 - **T1** Compute exact cost for 608 segment prompts
-- … et 17 autres
+- … et 21 autres
 
 ## 4. Mesures et résultats marquants
 

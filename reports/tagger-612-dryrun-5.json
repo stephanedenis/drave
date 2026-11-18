@@ -1,0 +1,4111 @@
+{
+ "rapport": "tagger-612-dryrun-5",
+ "date": "2026-11-18 09:23:56 EST",
+ "but": "dry-run hors ligne du lot 612 (défaut) sur 5 items, contrôle négatif du --tagger sans clé, et passe heuristique complète 612",
+ "environnement": {
+  "HOME": "/tmp/tmp.Untnpe8i6b",
+  "DEEPSEEK_KEY_FILE": false,
+  "DSH_KEY_FILE": false,
+  "DEEPSEEK_API_KEY": false,
+  "DSH_API_KEY": false,
+  "DEEPSEEK_MODEL": null
+ },
+ "corpus_5": {
+  "chemin": "/tmp/tagger-612/corpus-gold-5.txt",
+  "sha256": "9bce3e13716ad08aa9dd84df6878614b32c52119418ad36b6f82d1ebc98aa68c",
+  "texte": "Le chat dort.\n\nLe chat de la voisine dort.\n\nLa femme a vu l'homme dans le parc.\n\nIl a couru pour attraper le bus.\n\nElle a dit qu'elle viendrait hier.\n"
+ },
+ "sockets": {
+  "tentatives": 0,
+  "piege": "socket.socket, socket.create_connection et socket.socketpair remplacés par des fonctions qui lèvent"
+ },
+ "cas": {
+  "defaut_5_jsonl": {
+   "argv": [
+    "analyser",
+    "--fichier",
+    "/tmp/tagger-612/corpus-gold-5.txt",
+    "--jsonl"
+   ],
+   "code": 0,
+   "stdout_octets": 51207,
+   "stderr": "",
+   "lignes": 5,
+   "json_valides": 5,
+   "json_invalides": [],
+   "sources": [
+    "heuristique"
+   ],
+   "deepseek_importe": false,
+   "modules_importes_pendant": [
+    "generateur"
+   ],
+   "sockets_pendant": 0,
+   "stdout_sha256": "2c4b723e3b0976112114daf5049c1af0ee5a5ba49f82c59d0eefe91f039646ba",
+   "annotations": [
+    {
+     "schema": "drave.annotation",
+     "version": 2,
+     "texte": "Le chat dort.",
+     "langue": "fr",
+     "script": "Latn",
+     "source": "heuristique",
+     "refus": "",
+     "etiquettes": [
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "Le chat",
+       "debut": 0,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "structure la plus proche",
+        "dort"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "agent",
+        "niveau": 1,
+        "attachement": {
+         "segment": "Le chat",
+         "cible": "dort",
+         "candidats": [
+          {
+           "span": {
+            "debut": 8,
+            "fin": 12
+           },
+           "cible": "dort",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "discours",
+       "type": "paragraphe",
+       "valeur": "suite",
+       "debut": 0,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.5,
+       "candidats": [
+        "suite",
+        "contraste",
+        "cause",
+        "conséquence"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "document",
+       "type": "paragraphe",
+       "valeur": "Le chat dort.",
+       "debut": 0,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.7,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "phrase",
+       "type": "type",
+       "valeur": "déclarative",
+       "debut": 0,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pragmatique",
+       "type": "acte",
+       "valeur": "assertion",
+       "debut": 0,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.45,
+       "candidats": [
+        "assertion",
+        "question",
+        "ordre"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 2,
+       "fin": 3,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 7,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "dort",
+       "debut": 8,
+       "fin": 12,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "dort",
+       "debut": 8,
+       "fin": 12,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "VERB",
+       "valeur": "dort",
+       "debut": 8,
+       "fin": 12,
+       "source": "heuristique",
+       "confiance": 0.72,
+       "candidats": [
+        "verb"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "dort",
+       "debut": 8,
+       "fin": 12,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "structure la plus proche"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0,
+        "attachement": {
+         "segment": "dort",
+         "cible": "chat",
+         "candidats": [
+          {
+           "span": {
+            "debut": 3,
+            "fin": 7
+           },
+           "cible": "chat",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 12,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 12,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PONCT",
+       "valeur": ".",
+       "debut": 12,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.95,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      }
+     ],
+     "unites_semantiques": [
+      {
+       "debut": 3,
+       "fin": 7
+      },
+      {
+       "debut": 8,
+       "fin": 12
+      }
+     ],
+     "fraction_semantique": 0.6154,
+     "trace": [
+      {
+       "etape": "langue",
+       "langue": "fr",
+       "script": "Latn",
+       "confiance": 0.6667,
+       "indice": ""
+      },
+      {
+       "etape": "niveaux",
+       "etiquettes": 20,
+       "niveaux": [
+        "discours",
+        "document",
+        "graphème",
+        "mot",
+        "phrase",
+        "pos",
+        "pragmatique",
+        "syntagme"
+       ],
+       "unites_semantiques": 2,
+       "fraction": 0.6154
+      }
+     ],
+     "cout": {
+      "octets": 13,
+      "caracteres": 13,
+      "etiquettes": 20
+     },
+     "contexte": ""
+    },
+    {
+     "schema": "drave.annotation",
+     "version": 2,
+     "texte": "Le chat de la voisine dort.",
+     "langue": "fr",
+     "script": "Latn",
+     "source": "heuristique",
+     "refus": "",
+     "etiquettes": [
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "Le",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "Le chat",
+       "debut": 0,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« de la voisine dort » → Le chat",
+        "dort",
+        "chat"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "agent",
+        "niveau": 0,
+        "attachement": {
+         "segment": "Le chat",
+         "cible": "dort",
+         "candidats": [
+          {
+           "span": {
+            "debut": 22,
+            "fin": 26
+           },
+           "cible": "dort",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 7
+           },
+           "cible": "Le chat",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 3,
+            "fin": 7
+           },
+           "cible": "chat",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "discours",
+       "type": "paragraphe",
+       "valeur": "suite",
+       "debut": 0,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.5,
+       "candidats": [
+        "suite",
+        "contraste",
+        "cause",
+        "conséquence"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "document",
+       "type": "paragraphe",
+       "valeur": "Le chat de la voisine dort.",
+       "debut": 0,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.7,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "phrase",
+       "type": "type",
+       "valeur": "déclarative",
+       "debut": 0,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pragmatique",
+       "type": "acte",
+       "valeur": "assertion",
+       "debut": 0,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.45,
+       "candidats": [
+        "assertion",
+        "question",
+        "ordre"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 2,
+       "fin": 3,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "chat",
+       "debut": 3,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 7,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "de",
+       "debut": 8,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "de",
+       "debut": 8,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "de",
+       "debut": 8,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GP",
+       "valeur": "de la voisine",
+       "debut": 8,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "GP",
+        "chat",
+        "dort"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "objet",
+        "niveau": 1,
+        "union": true,
+        "attachement": {
+         "segment": "de la voisine",
+         "cible": "chat",
+         "candidats": [
+          {
+           "span": {
+            "debut": 3,
+            "fin": 7
+           },
+           "cible": "chat",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 22,
+            "fin": 26
+           },
+           "cible": "dort",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 1,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GV",
+          "debut": 22,
+          "fin": 26,
+          "source": "heuristique",
+          "union": true,
+          "relation": "croise",
+          "rang": 2,
+          "role": "predicat"
+         },
+         {
+          "type": "GP",
+          "debut": 8,
+          "fin": 26,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclus",
+          "rang": 3,
+          "attachement": {
+           "segment": "de la voisine dort",
+           "cible": "dort",
+           "candidats": [
+            {
+             "span": {
+              "debut": 22,
+              "fin": 26
+             },
+             "cible": "dort",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 7
+             },
+             "cible": "Le chat",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 3,
+              "fin": 7
+             },
+             "cible": "chat",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "possesseur"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GP",
+       "valeur": "de la voisine dort",
+       "debut": 8,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« de la voisine dort » → Le chat",
+        "dort",
+        "chat"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "possesseur",
+        "niveau": 1,
+        "attachement": {
+         "segment": "de la voisine dort",
+         "cible": "dort",
+         "candidats": [
+          {
+           "span": {
+            "debut": 22,
+            "fin": 26
+           },
+           "cible": "dort",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 7
+           },
+           "cible": "Le chat",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 3,
+            "fin": 7
+           },
+           "cible": "chat",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 3,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GP",
+          "debut": 8,
+          "fin": 21,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclut",
+          "rang": 1,
+          "attachement": {
+           "segment": "de la voisine",
+           "cible": "chat",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 7
+             },
+             "cible": "chat",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 22,
+              "fin": 26
+             },
+             "cible": "dort",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "GV",
+          "debut": 22,
+          "fin": 26,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclut",
+          "rang": 2,
+          "role": "predicat"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 10,
+       "fin": 11,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "la",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "la",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "la",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 13,
+       "fin": 14,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "voisine",
+       "debut": 14,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "voisine",
+       "debut": 14,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "voisine",
+       "debut": 14,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 21,
+       "fin": 22,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "dort",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "dort",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "VERB",
+       "valeur": "dort",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.72,
+       "candidats": [
+        "verb"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "dort",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "GV"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0,
+        "union": true,
+        "partition": {
+         "groupe": 0,
+         "rang": 2,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GP",
+          "debut": 8,
+          "fin": 21,
+          "source": "heuristique",
+          "union": true,
+          "relation": "croise",
+          "rang": 1,
+          "attachement": {
+           "segment": "de la voisine",
+           "cible": "chat",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 7
+             },
+             "cible": "chat",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 22,
+              "fin": 26
+             },
+             "cible": "dort",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "GP",
+          "debut": 8,
+          "fin": 26,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclus",
+          "rang": 3,
+          "attachement": {
+           "segment": "de la voisine dort",
+           "cible": "dort",
+           "candidats": [
+            {
+             "span": {
+              "debut": 22,
+              "fin": 26
+             },
+             "cible": "dort",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 7
+             },
+             "cible": "Le chat",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 3,
+              "fin": 7
+             },
+             "cible": "chat",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "possesseur"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 26,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 26,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PONCT",
+       "valeur": ".",
+       "debut": 26,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.95,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      }
+     ],
+     "unites_semantiques": [
+      {
+       "debut": 3,
+       "fin": 7
+      },
+      {
+       "debut": 14,
+       "fin": 21
+      },
+      {
+       "debut": 22,
+       "fin": 26
+      }
+     ],
+     "fraction_semantique": 0.5556,
+     "trace": [
+      {
+       "etape": "langue",
+       "langue": "fr",
+       "script": "Latn",
+       "confiance": 1.0,
+       "indice": ""
+      },
+      {
+       "etape": "niveaux",
+       "etiquettes": 34,
+       "niveaux": [
+        "discours",
+        "document",
+        "graphème",
+        "mot",
+        "phrase",
+        "pos",
+        "pragmatique",
+        "syntagme"
+       ],
+       "unites_semantiques": 3,
+       "fraction": 0.5556
+      }
+     ],
+     "cout": {
+      "octets": 27,
+      "caracteres": 27,
+      "etiquettes": 34
+     },
+     "contexte": ""
+    },
+    {
+     "schema": "drave.annotation",
+     "version": 2,
+     "texte": "La femme a vu l'homme dans le parc.",
+     "langue": "fr",
+     "script": "Latn",
+     "source": "heuristique",
+     "refus": "",
+     "etiquettes": [
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "La",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "La",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "La",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "La femme",
+       "debut": 0,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« dans le parc » → l'homme",
+        "« dans le parc » → a vu",
+        "vu",
+        "homme"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "agent",
+        "niveau": 1,
+        "attachement": {
+         "segment": "La femme",
+         "cible": "vu",
+         "candidats": [
+          {
+           "span": {
+            "debut": 11,
+            "fin": 13
+           },
+           "cible": "vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 14,
+            "fin": 21
+           },
+           "cible": "l'homme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 9,
+            "fin": 13
+           },
+           "cible": "a vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 16,
+            "fin": 21
+           },
+           "cible": "homme",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "discours",
+       "type": "paragraphe",
+       "valeur": "suite",
+       "debut": 0,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.5,
+       "candidats": [
+        "suite",
+        "contraste",
+        "cause",
+        "conséquence"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "document",
+       "type": "paragraphe",
+       "valeur": "La femme a vu l'homme dans le parc.",
+       "debut": 0,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.7,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "phrase",
+       "type": "type",
+       "valeur": "déclarative",
+       "debut": 0,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pragmatique",
+       "type": "acte",
+       "valeur": "assertion",
+       "debut": 0,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.45,
+       "candidats": [
+        "assertion",
+        "question",
+        "ordre"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 2,
+       "fin": 3,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "femme",
+       "debut": 3,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "femme",
+       "debut": 3,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "femme",
+       "debut": 3,
+       "fin": 8,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 8,
+       "fin": 9,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "a",
+       "debut": 9,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "a",
+       "debut": 9,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "a",
+       "debut": 9,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "a vu",
+       "debut": 9,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« dans le parc » → l'homme",
+        "« dans le parc » → a vu",
+        "homme",
+        "vu"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0,
+        "attachement": {
+         "segment": "a vu",
+         "cible": "femme",
+         "candidats": [
+          {
+           "span": {
+            "debut": 3,
+            "fin": 8
+           },
+           "cible": "femme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 14,
+            "fin": 21
+           },
+           "cible": "l'homme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 9,
+            "fin": 13
+           },
+           "cible": "a vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 16,
+            "fin": 21
+           },
+           "cible": "homme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 11,
+            "fin": 13
+           },
+           "cible": "vu",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 3,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GV",
+          "debut": 9,
+          "fin": 21,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclus",
+          "rang": 1,
+          "role": "predicat"
+         },
+         {
+          "type": "GN",
+          "debut": 14,
+          "fin": 21,
+          "source": "heuristique",
+          "union": false,
+          "relation": "croise",
+          "rang": 2,
+          "attachement": {
+           "segment": "l'homme",
+           "cible": "femme",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 8
+             },
+             "cible": "femme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 14,
+              "fin": 21
+             },
+             "cible": "l'homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 9,
+              "fin": 13
+             },
+             "cible": "a vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 11,
+              "fin": 13
+             },
+             "cible": "vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 16,
+              "fin": 21
+             },
+             "cible": "homme",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "a vu l'homme",
+       "debut": 9,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "GV"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0,
+        "union": true,
+        "partition": {
+         "groupe": 0,
+         "rang": 1,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GN",
+          "debut": 14,
+          "fin": 21,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclut",
+          "rang": 2,
+          "attachement": {
+           "segment": "l'homme",
+           "cible": "femme",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 8
+             },
+             "cible": "femme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 14,
+              "fin": 21
+             },
+             "cible": "l'homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 9,
+              "fin": 13
+             },
+             "cible": "a vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 11,
+              "fin": 13
+             },
+             "cible": "vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 16,
+              "fin": 21
+             },
+             "cible": "homme",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "GV",
+          "debut": 9,
+          "fin": 13,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclut",
+          "rang": 3,
+          "attachement": {
+           "segment": "a vu",
+           "cible": "femme",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 8
+             },
+             "cible": "femme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 14,
+              "fin": 21
+             },
+             "cible": "l'homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 9,
+              "fin": 13
+             },
+             "cible": "a vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 16,
+              "fin": 21
+             },
+             "cible": "homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 11,
+              "fin": 13
+             },
+             "cible": "vu",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "predicat"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 10,
+       "fin": 11,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "vu",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "vu",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "VERB",
+       "valeur": "vu",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.72,
+       "candidats": [
+        "verb"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 13,
+       "fin": 14,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "l",
+       "debut": 14,
+       "fin": 15,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "l'",
+       "debut": 14,
+       "fin": 16,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "l'",
+       "debut": 14,
+       "fin": 16,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "l'homme",
+       "debut": 14,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« dans le parc » → l'homme",
+        "« dans le parc » → a vu",
+        "vu",
+        "homme"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "objet",
+        "niveau": 1,
+        "attachement": {
+         "segment": "l'homme",
+         "cible": "femme",
+         "candidats": [
+          {
+           "span": {
+            "debut": 3,
+            "fin": 8
+           },
+           "cible": "femme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 14,
+            "fin": 21
+           },
+           "cible": "l'homme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 9,
+            "fin": 13
+           },
+           "cible": "a vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 11,
+            "fin": 13
+           },
+           "cible": "vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 16,
+            "fin": 21
+           },
+           "cible": "homme",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 2,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "GV",
+          "debut": 9,
+          "fin": 21,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclus",
+          "rang": 1,
+          "role": "predicat"
+         },
+         {
+          "type": "GV",
+          "debut": 9,
+          "fin": 13,
+          "source": "heuristique",
+          "union": false,
+          "relation": "croise",
+          "rang": 3,
+          "attachement": {
+           "segment": "a vu",
+           "cible": "femme",
+           "candidats": [
+            {
+             "span": {
+              "debut": 3,
+              "fin": 8
+             },
+             "cible": "femme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 14,
+              "fin": 21
+             },
+             "cible": "l'homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 9,
+              "fin": 13
+             },
+             "cible": "a vu",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 16,
+              "fin": 21
+             },
+             "cible": "homme",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 11,
+              "fin": 13
+             },
+             "cible": "vu",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "predicat"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": "'",
+       "debut": 15,
+       "fin": 16,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "homme",
+       "debut": 16,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "homme",
+       "debut": 16,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "homme",
+       "debut": 16,
+       "fin": 21,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 21,
+       "fin": 22,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "dans",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "dans",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "dans",
+       "debut": 22,
+       "fin": 26,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GP",
+       "valeur": "dans le parc",
+       "debut": 22,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« dans le parc » → l'homme",
+        "« dans le parc » → a vu",
+        "vu",
+        "homme"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "lieu",
+        "niveau": 1,
+        "attachement": {
+         "segment": "dans le parc",
+         "cible": "vu",
+         "candidats": [
+          {
+           "span": {
+            "debut": 11,
+            "fin": 13
+           },
+           "cible": "vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 14,
+            "fin": 21
+           },
+           "cible": "l'homme",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 9,
+            "fin": 13
+           },
+           "cible": "a vu",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 16,
+            "fin": 21
+           },
+           "cible": "homme",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 26,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "le",
+       "debut": 27,
+       "fin": 29,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "le",
+       "debut": 27,
+       "fin": 29,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "le",
+       "debut": 27,
+       "fin": 29,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 29,
+       "fin": 30,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "parc",
+       "debut": 30,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "parc",
+       "debut": 30,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "parc",
+       "debut": 30,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 34,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 34,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PONCT",
+       "valeur": ".",
+       "debut": 34,
+       "fin": 35,
+       "source": "heuristique",
+       "confiance": 0.95,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      }
+     ],
+     "unites_semantiques": [
+      {
+       "debut": 3,
+       "fin": 8
+      },
+      {
+       "debut": 11,
+       "fin": 13
+      },
+      {
+       "debut": 16,
+       "fin": 21
+      },
+      {
+       "debut": 30,
+       "fin": 34
+      }
+     ],
+     "fraction_semantique": 0.4571,
+     "trace": [
+      {
+       "etape": "langue",
+       "langue": "fr",
+       "script": "Latn",
+       "confiance": 1.0,
+       "indice": ""
+      },
+      {
+       "etape": "niveaux",
+       "etiquettes": 47,
+       "niveaux": [
+        "discours",
+        "document",
+        "graphème",
+        "mot",
+        "phrase",
+        "pos",
+        "pragmatique",
+        "syntagme"
+       ],
+       "unites_semantiques": 4,
+       "fraction": 0.4571
+      }
+     ],
+     "cout": {
+      "octets": 35,
+      "caracteres": 35,
+      "etiquettes": 47
+     },
+     "contexte": ""
+    },
+    {
+     "schema": "drave.annotation",
+     "version": 2,
+     "texte": "Il a couru pour attraper le bus.",
+     "langue": "fr",
+     "script": "Latn",
+     "source": "heuristique",
+     "refus": "",
+     "etiquettes": [
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "Il",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "Il",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PRON",
+       "valeur": "Il",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "Il",
+       "debut": 0,
+       "fin": 2,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« pour attraper le bus » → Il a couru",
+        "« pour attraper le bus » = cause",
+        "couru"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "agent",
+        "niveau": 0,
+        "attachement": {
+         "segment": "Il",
+         "cible": "couru",
+         "candidats": [
+          {
+           "span": {
+            "debut": 5,
+            "fin": 10
+           },
+           "cible": "couru",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 10
+           },
+           "cible": "Il a couru",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "discours",
+       "type": "connecteur",
+       "valeur": "pour",
+       "debut": 0,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "but"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "discours",
+       "type": "paragraphe",
+       "valeur": "suite",
+       "debut": 0,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.5,
+       "candidats": [
+        "suite",
+        "contraste",
+        "cause",
+        "conséquence"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "document",
+       "type": "paragraphe",
+       "valeur": "Il a couru pour attraper le bus.",
+       "debut": 0,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.7,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "phrase",
+       "type": "type",
+       "valeur": "déclarative",
+       "debut": 0,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pragmatique",
+       "type": "acte",
+       "valeur": "assertion",
+       "debut": 0,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.45,
+       "candidats": [
+        "assertion",
+        "question",
+        "ordre"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 2,
+       "fin": 3,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "a",
+       "debut": 3,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "a",
+       "debut": 3,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "a",
+       "debut": 3,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "a couru",
+       "debut": 3,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« pour attraper le bus » → Il a couru",
+        "« pour attraper le bus » = cause",
+        "couru"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 4,
+       "fin": 5,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "morphème",
+       "type": "préfixe",
+       "valeur": "co",
+       "debut": 5,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.32,
+       "candidats": [
+        "préfixe"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "couru",
+       "debut": 5,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "couru",
+       "debut": 5,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "couru",
+       "debut": 5,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 10,
+       "fin": 11,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "pour",
+       "debut": 11,
+       "fin": 15,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "pour",
+       "debut": 11,
+       "fin": 15,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "pour",
+       "debut": 11,
+       "fin": 15,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GP",
+       "valeur": "pour attraper le bus",
+       "debut": 11,
+       "fin": 31,
+       "source": "heuristique",
+       "confiance": 0.4,
+       "candidats": [
+        "« pour attraper le bus » → Il a couru",
+        "« pour attraper le bus » = cause",
+        "couru"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "destinataire",
+        "niveau": 1,
+        "attachement": {
+         "segment": "pour attraper le bus",
+         "cible": "couru",
+         "candidats": [
+          {
+           "span": {
+            "debut": 5,
+            "fin": 10
+           },
+           "cible": "couru",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 10
+           },
+           "cible": "Il a couru",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 15,
+       "fin": 16,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "attraper",
+       "debut": 16,
+       "fin": 24,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "attraper",
+       "debut": 16,
+       "fin": 24,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "attraper",
+       "debut": 16,
+       "fin": 24,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true,
+        "contexte": "PREP"
+       }
+      },
+      {
+       "niveau": "morphème",
+       "type": "suffixe",
+       "valeur": "er",
+       "debut": 22,
+       "fin": 24,
+       "source": "heuristique",
+       "confiance": 0.32,
+       "candidats": [
+        "suffixe"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 24,
+       "fin": 25,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "le",
+       "debut": 25,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "le",
+       "debut": 25,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "DET",
+       "valeur": "le",
+       "debut": 25,
+       "fin": 27,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 27,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "bus",
+       "debut": 28,
+       "fin": 31,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "bus",
+       "debut": 28,
+       "fin": 31,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "NOUN",
+       "valeur": "bus",
+       "debut": 28,
+       "fin": 31,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "noun"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 31,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 31,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PONCT",
+       "valeur": ".",
+       "debut": 31,
+       "fin": 32,
+       "source": "heuristique",
+       "confiance": 0.95,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      }
+     ],
+     "unites_semantiques": [
+      {
+       "debut": 5,
+       "fin": 10
+      },
+      {
+       "debut": 16,
+       "fin": 24
+      },
+      {
+       "debut": 28,
+       "fin": 31
+      }
+     ],
+     "fraction_semantique": 0.5,
+     "trace": [
+      {
+       "etape": "langue",
+       "langue": "fr",
+       "script": "Latn",
+       "confiance": 1.0,
+       "indice": ""
+      },
+      {
+       "etape": "niveaux",
+       "etiquettes": 40,
+       "niveaux": [
+        "discours",
+        "document",
+        "graphème",
+        "morphème",
+        "mot",
+        "phrase",
+        "pos",
+        "pragmatique",
+        "syntagme"
+       ],
+       "unites_semantiques": 3,
+       "fraction": 0.5
+      }
+     ],
+     "cout": {
+      "octets": 32,
+      "caracteres": 32,
+      "etiquettes": 40
+     },
+     "contexte": ""
+    },
+    {
+     "schema": "drave.annotation",
+     "version": 2,
+     "texte": "Elle a dit qu'elle viendrait hier.",
+     "langue": "fr",
+     "script": "Latn",
+     "source": "heuristique",
+     "refus": "",
+     "etiquettes": [
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "Elle",
+       "debut": 0,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "Elle",
+       "debut": 0,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PRON",
+       "valeur": "Elle",
+       "debut": 0,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GN",
+       "valeur": "Elle",
+       "debut": 0,
+       "fin": 4,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« hier » → Elle a dit",
+        "dit"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "agent",
+        "niveau": 0,
+        "attachement": {
+         "segment": "Elle",
+         "cible": "dit",
+         "candidats": [
+          {
+           "span": {
+            "debut": 7,
+            "fin": 10
+           },
+           "cible": "dit",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 10
+           },
+           "cible": "Elle a dit",
+           "source": "heuristique"
+          }
+         ]
+        }
+       }
+      },
+      {
+       "niveau": "discours",
+       "type": "paragraphe",
+       "valeur": "suite",
+       "debut": 0,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.5,
+       "candidats": [
+        "suite",
+        "contraste",
+        "cause",
+        "conséquence"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "document",
+       "type": "paragraphe",
+       "valeur": "Elle a dit qu'elle viendrait hier.",
+       "debut": 0,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.7,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "phrase",
+       "type": "type",
+       "valeur": "déclarative",
+       "debut": 0,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.85,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pragmatique",
+       "type": "acte",
+       "valeur": "assertion",
+       "debut": 0,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.45,
+       "candidats": [
+        "assertion",
+        "question",
+        "ordre"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 4,
+       "fin": 5,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "a",
+       "debut": 5,
+       "fin": 6,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "a",
+       "debut": 5,
+       "fin": 6,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PREP",
+       "valeur": "a",
+       "debut": 5,
+       "fin": 6,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GV",
+       "valeur": "a dit",
+       "debut": 5,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« hier » → Elle a dit",
+        "dit"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "predicat",
+        "niveau": 0
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 6,
+       "fin": 7,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "dit",
+       "debut": 7,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "dit",
+       "debut": 7,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "VERB",
+       "valeur": "dit",
+       "debut": 7,
+       "fin": 10,
+       "source": "heuristique",
+       "confiance": 0.72,
+       "candidats": [
+        "verb"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 10,
+       "fin": 11,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "qu",
+       "debut": 11,
+       "fin": 13,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "qu'elle",
+       "debut": 11,
+       "fin": 18,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PRON",
+       "valeur": "qu'elle",
+       "debut": 11,
+       "fin": 18,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "SUB",
+       "valeur": "qu'elle viendrait",
+       "debut": 11,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« hier » → Elle a dit",
+        "dit"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "objet",
+        "niveau": 1,
+        "attachement": {
+         "segment": "qu'elle viendrait",
+         "cible": "dit",
+         "candidats": [
+          {
+           "span": {
+            "debut": 7,
+            "fin": 10
+           },
+           "cible": "dit",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 10
+           },
+           "cible": "Elle a dit",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 2,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "SUB",
+          "debut": 11,
+          "fin": 33,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclus",
+          "rang": 1,
+          "attachement": {
+           "segment": "qu'elle viendrait hier",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "GP",
+          "debut": 29,
+          "fin": 33,
+          "source": "heuristique",
+          "union": false,
+          "relation": "croise",
+          "rang": 3,
+          "attachement": {
+           "segment": "hier",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 10
+             },
+             "cible": "Elle a dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "temps"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "SUB",
+       "valeur": "qu'elle viendrait hier",
+       "debut": 11,
+       "fin": 33,
+       "source": "heuristique",
+       "confiance": 0.3,
+       "candidats": [
+        "SUB",
+        "dit",
+        "dit"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "objet",
+        "niveau": 1,
+        "union": true,
+        "attachement": {
+         "segment": "qu'elle viendrait hier",
+         "cible": "dit",
+         "candidats": [
+          {
+           "span": {
+            "debut": 7,
+            "fin": 10
+           },
+           "cible": "dit",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 1,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "SUB",
+          "debut": 11,
+          "fin": 28,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclut",
+          "rang": 2,
+          "attachement": {
+           "segment": "qu'elle viendrait",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 10
+             },
+             "cible": "Elle a dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "GP",
+          "debut": 29,
+          "fin": 33,
+          "source": "heuristique",
+          "union": false,
+          "relation": "inclut",
+          "rang": 3,
+          "attachement": {
+           "segment": "hier",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 10
+             },
+             "cible": "Elle a dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "temps"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": "'",
+       "debut": 13,
+       "fin": 14,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "elle",
+       "debut": 14,
+       "fin": 18,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 18,
+       "fin": 19,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "viendrait",
+       "debut": 19,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "viendrait",
+       "debut": 19,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "VERB",
+       "valeur": "viendrait",
+       "debut": 19,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.72,
+       "candidats": [
+        "verb"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": true
+       }
+      },
+      {
+       "niveau": "morphème",
+       "type": "suffixe",
+       "valeur": "ait",
+       "debut": 25,
+       "fin": 28,
+       "source": "heuristique",
+       "confiance": 0.32,
+       "candidats": [
+        "suffixe"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "espace",
+       "valeur": " ",
+       "debut": 28,
+       "fin": 29,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "graphème",
+       "type": "lettres",
+       "valeur": "hier",
+       "debut": 29,
+       "fin": 33,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "mot",
+       "valeur": "hier",
+       "debut": 29,
+       "fin": 33,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "ADV",
+       "valeur": "hier",
+       "debut": 29,
+       "fin": 33,
+       "source": "heuristique",
+       "confiance": 0.92,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      },
+      {
+       "niveau": "syntagme",
+       "type": "GP",
+       "valeur": "hier",
+       "debut": 29,
+       "fin": 33,
+       "source": "heuristique",
+       "confiance": 0.55,
+       "candidats": [
+        "« hier » → Elle a dit",
+        "dit"
+       ],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "role": "temps",
+        "niveau": 1,
+        "attachement": {
+         "segment": "hier",
+         "cible": "dit",
+         "candidats": [
+          {
+           "span": {
+            "debut": 7,
+            "fin": 10
+           },
+           "cible": "dit",
+           "source": "heuristique"
+          },
+          {
+           "span": {
+            "debut": 0,
+            "fin": 10
+           },
+           "cible": "Elle a dit",
+           "source": "heuristique"
+          }
+         ]
+        },
+        "partition": {
+         "groupe": 0,
+         "rang": 3,
+         "membres": 3,
+         "vue": "alternative"
+        },
+        "alternative": [
+         {
+          "type": "SUB",
+          "debut": 11,
+          "fin": 33,
+          "source": "heuristique",
+          "union": true,
+          "relation": "inclus",
+          "rang": 1,
+          "attachement": {
+           "segment": "qu'elle viendrait hier",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         },
+         {
+          "type": "SUB",
+          "debut": 11,
+          "fin": 28,
+          "source": "heuristique",
+          "union": false,
+          "relation": "croise",
+          "rang": 2,
+          "attachement": {
+           "segment": "qu'elle viendrait",
+           "cible": "dit",
+           "candidats": [
+            {
+             "span": {
+              "debut": 7,
+              "fin": 10
+             },
+             "cible": "dit",
+             "source": "heuristique"
+            },
+            {
+             "span": {
+              "debut": 0,
+              "fin": 10
+             },
+             "cible": "Elle a dit",
+             "source": "heuristique"
+            }
+           ]
+          },
+          "role": "objet"
+         }
+        ]
+       }
+      },
+      {
+       "niveau": "graphème",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 33,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.99,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "mot",
+       "type": "ponctuation",
+       "valeur": ".",
+       "debut": 33,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.98,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {}
+      },
+      {
+       "niveau": "pos",
+       "type": "PONCT",
+       "valeur": ".",
+       "debut": 33,
+       "fin": 34,
+       "source": "heuristique",
+       "confiance": 0.95,
+       "candidats": [],
+       "langue": "fr",
+       "script": "Latn",
+       "meta": {
+        "ouvert": false
+       }
+      }
+     ],
+     "unites_semantiques": [
+      {
+       "debut": 7,
+       "fin": 10
+      },
+      {
+       "debut": 19,
+       "fin": 28
+      }
+     ],
+     "fraction_semantique": 0.3529,
+     "trace": [
+      {
+       "etape": "langue",
+       "langue": "fr",
+       "script": "Latn",
+       "confiance": 0.6667,
+       "indice": ""
+      },
+      {
+       "etape": "niveaux",
+       "etiquettes": 38,
+       "niveaux": [
+        "discours",
+        "document",
+        "graphème",
+        "morphème",
+        "mot",
+        "phrase",
+        "pos",
+        "pragmatique",
+        "syntagme"
+       ],
+       "unites_semantiques": 2,
+       "fraction": 0.3529
+      }
+     ],
+     "cout": {
+      "octets": 34,
+      "caracteres": 34,
+      "etiquettes": 38
+     },
+     "contexte": ""
+    }
+   ]
+  },
+  "defaut_1_json": {
+   "argv": [
+    "analyser",
+    "Le chat dort.",
+    "--json"
+   ],
+   "code": 0,
+   "stdout_octets": 6179,
+   "stderr": "",
+   "lignes": 1,
+   "json_valides": 1,
+   "json_invalides": [],
+   "sources": [
+    "heuristique"
+   ],
+   "deepseek_importe": false,
+   "modules_importes_pendant": [],
+   "sockets_pendant": 0,
+   "stdout_sha256": "586830dfcd3120a49c8481b1a6c8afe125f11e28b898ac2f76e7b72580c90c36",
+   "resume": {
+    "texte": "Le chat dort.",
+    "langue": "fr",
+    "source": "heuristique",
+    "pos": [
+     [
+      "Le",
+      "DET"
+     ],
+     [
+      "chat",
+      "NOUN"
+     ],
+     [
+      "dort",
+      "VERB"
+     ],
+     [
+      ".",
+      "PONCT"
+     ]
+    ]
+   }
+  },
+  "tagger_sans_cle": {
+   "argv": [
+    "analyser",
+    "Le chat dort.",
+    "--tagger",
+    "--json"
+   ],
+   "code": 4,
+   "stdout_octets": 0,
+   "stderr": "drave: dépendance absente : clé DeepSeek absente : exportez DEEPSEEK_KEY_FILE, déposez la clé dans ~/.config/drave/deepseek.key, ou exportez DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.\n",
+   "lignes": 0,
+   "json_valides": 0,
+   "json_invalides": [],
+   "sources": [],
+   "deepseek_importe": true,
+   "modules_importes_pendant": [
+    "tools.llm",
+    "tools.llm.deepseek"
+   ],
+   "sockets_pendant": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "evaluer_tagger_sans_cle": {
+   "argv": [
+    "evaluer",
+    "--tagger",
+    "--json"
+   ],
+   "code": 4,
+   "stdout_octets": 0,
+   "stderr": "drave: dépendance absente : clé DeepSeek absente : exportez DEEPSEEK_KEY_FILE, déposez la clé dans ~/.config/drave/deepseek.key, ou exportez DEEPSEEK_API_KEY. Sans --tagger, le défaut reste l'heuristique hors ligne.\n",
+   "lignes": 0,
+   "json_valides": 0,
+   "json_invalides": [],
+   "sources": [],
+   "deepseek_importe": true,
+   "modules_importes_pendant": [
+    "_drave_evaluer_gold"
+   ],
+   "sockets_pendant": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ },
+ "passe_complete_612_hors_ligne": {
+  "commande": "python3 tools/drave.py analyser --fichier /tmp/tagger-612/corpus-gold-612.txt --jsonl (sans --tagger, HOME vide)",
+  "lignes": 614,
+  "json_valides": 614,
+  "sha256": "de4b0a22a6b02262205eba5b4575649443ceb924e3bd002db922cfe563a8da6e",
+  "octets": 4747475,
+  "duree_s": 0.85,
+  "pic_rss_kio": 33612,
+  "note": "612 items, 614 lignes : r308 et r318 contiennent deux phrases et sont coupées par Heuristique._phrases"
+ },
+ "tests_tagger": {
+  "tests": 30,
+  "ok": 30,
+  "reseau": 0,
+  "duree_s": 6.569,
+  "commande": "python3 tools/tests/test_tagger_api.py (transport factice, HOME vide)"
+ },
+ "verdict": {
+  "defaut_code_0": true,
+  "defaut_5_lignes_valides": true,
+  "defaut_aucune_socket": true,
+  "defaut_nimporte_pas_deepseek": true,
+  "tagger_sans_cle_code_4_stdout_vide": true,
+  "evaluer_tagger_sans_cle_code_4": true
+ }
+}

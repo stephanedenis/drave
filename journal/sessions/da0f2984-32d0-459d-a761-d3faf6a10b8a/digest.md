@@ -1576,3 +1576,99 @@ The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-donnees
 The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-donnees-inventaire.md has been updated successfully.
   ```
 
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-donnees-inventaire.md", "new_string": "**Recouvrement Wikipédia (le risque principal).** Trois extractions du **même dump** FR cohabitent :\n`corpus_wiki_fr_texte` (plein texte, 7,50 Go), `corpus_wiki_fr` (résumés, 3,43 G … [1124 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-donnees-inventaire.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification finale : liens, intégrité du fichier, aucune modification ailleurs
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l -c reports/rapport-donnees-inventaire.md && echo \"=== liens ===\" && grep -o '](\\([^)]*\\))' reports/rapport-donnees-inventaire.md | sed 's/^](//;s/)$//' | sort -u | while read -r l; do case \"$l\" in http*) echo \"URL $l\";; … [143 caractères tronqués]`
+
+  ```
+296 21004 reports/rapport-donnees-inventaire.md
+=== liens ===
+ok  corpus-epingle.json
+ok  corpus-litt-propre.json
+ok  corpus-pdf-documents.json
+ok  corpus-pdf.json
+ok  corpus-propre.json
+ok  corpus-wiki-big-propre.json
+ok  corpus-wiki-fr.json
+ok  corpus-wiki-fr-texte.json
+ok  corpus-wiki-propre.json
+ok  ../docs/pilotage/natif-plan.md
+ok  inventaire-donnees-entrainement.md
+ok  rapport-corpus-epingle.md
+ok  rapport-n2-corpus-1go.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain | head -20; echo \"=== data intact ? ===\"; find data -newermt \"2026-11-18 09:00\" -type f 2>/dev/null | head -5", "description": "Vérifie qu'aucun fichier de data n'a été modifié"}`
+
+  ```
+M  docs/pilotage/en-cours.md
+ M journal/README.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/digest.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+A  reports/a2.6-bande-experts.json
+A  reports/banc-grammaticalite-100m.json
+A  reports/rapport-a2.6-bande-experts.md
+A  reports/rapport-a2.6-reconnaissance.md
+AM reports/rapport-donnees-inventaire.md
+A  reports/rapport-grammaticalite-100m.md
+?? bench/checkpoint_bench.sh
+?? journal/sessions/174fd5ef-1163-4983-85b5-9101752ad711/
+?? journal/sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/
+?? reports/rapport-tagger-lot-612-prep.md
+?? reports/tagger-612-dryrun-5.json
+=== data intact ? ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat consolidé à l'agent parent
+
+- **send_message** `{"agent_id": "d67a9bb1-090e-4f69-baf2-a831c00aa275", "message": "INVENTAIRE DONNÉES PALIER 1 — terminé. Rapport : `reports/rapport-donnees-inventaire.md` (296 lignes). Aucune donnée modifiée, aucun téléchargement, aucun commit.\n\n**TOTAL** : `data/` = **135,5 Go apparents** (135 523 369 596 o), **4 … [3137 caractères tronqués]`
+
+  ```
+message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
+  ```
+
+### 🤖 Assistant
+
+⏵ Clôture : synthèse des quatre chiffres demandés
+
+**Inventaire terminé** — `data/` n'a pas été modifié, aucun téléchargement, aucun commit. Le rapport est écrit : `reports/rapport-donnees-inventaire.md` (296 lignes, 21 Ko).
+
+## 1. Total des données
+
+**135,5 Go apparents** (135 523 369 596 o, **4 428 fichiers**) ; **126 Gio** au `du -sh` (127G). Dont **120,1 Go de Wikipédia en 10 langues** (38,78 Go de résumés + 81,32 Go de plein texte), 5,76 Go de dérivés Wikipédia FR, 2,96 Go de parallèles FR-EN compressés (12,79 Go décompressés), 2,38 Go d'évaluation, 1,30 Go de corpus FR/PDF/OCR. À noter : 0,74 Go ne sont pas des données (.npz, adaptateurs LoRA) et les PDF sont **majoritairement anglais** (~70 % EN, 6–8 % FR).
+
+## 2. Écart au palier 1 (3–6 Go)
+
+| | Go | part de la cible |
+|---|---:|---:|
+| corpus épinglé | **1,017** | 33,9 % (3 Go) / 17,0 % (6 Go) |
+| **manque pour 3 Go** | **1,98** | 66,1 % |
+| **manque pour 6 Go** | **4,98** | 83,0 % |
+
+Mais **ces octets sont déjà sur le disque** : `data/corpus_wiki_fr_texte/train.txt` = **7,50 Go** (fr ≈ 99 %, CC-BY-SA), qui donne **6,2–6,3 Go nets** après déduplication (~2,0 % mesuré) et retrait du recouvrement avec le pin — soit 1,25× les 4,98 Go manquants. **L'écart de volume est fermable sans collecte ; l'écart de diversité (~0,1 Go hors Wikipédia) ne l'est pas.**
+
+## 3. Les 3 sources les plus prometteuses déjà présentes
+
+1. **`data/corpus_wiki_fr_texte/`** — 7,50 Go, 2,15 M articles, fr ≈ 99 %, CC-BY-SA : ferme l'écart de volume à elle seule, mais même encyclopédie que le pin (les 200 titres testés de `wiki_big` y sont tous, 182/200 dans le train = part train attendue de 90 %).
+2. **Les parallèles FR-EN** — 12,79 Go décompressés (multiun, opensubtitles, wikimatrix, jrc, ted), ≈ 4,5 Go de français estimés, genres réellement nouveaux ; licences hétérogènes à trier.
+3. **La prose FR hors Wikipédia déjà nettoyée** — ≈ 0,10 Go (littérature 15,3 Mo, corpus_fr 3,2 Mo, dépôt 4,8 Mo, ~72 Mo de FR dans les PDF) : volume négligeable mais seule diversité immédiate ; les PDF personnels contiennent des **PII** (NAS partiel, adresse) et sont à exclure.
+
+## Prochaine action de collecte (non faite)
+
+Livres français en domaine public (**Wikisource FR + Gutenberg FR**) pour la diversité, pas pour le volume — et **pas de Wikipédia** (7,5 Go déjà là, zéro savoir nouveau). Prérequis technique avant une épingle v2 : une passe de déduplication **par blocs** (l'outil actuel demande ~80 Go de RAM par Go de texte, soit ~600 Go pour 7,5 Go).
+
