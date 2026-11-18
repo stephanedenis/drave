@@ -13,6 +13,7 @@ chaque rapport renvoie à son jour et à `en-cours`.
 
 | jour | index | thèmes |
 |---|---|---|
+| **2026-11-18** | [2026-11-18/README.md](2026-11-18/README.md) | — |
 | **2026-11-17** | [2026-11-17/README.md](2026-11-17/README.md) | [attention](2026-11-17/attention.md) · [distribue](2026-11-17/distribue.md) · [mesures](2026-11-17/mesures.md) · [modele](2026-11-17/modele.md) · [moteur](2026-11-17/moteur.md) · [portes](2026-11-17/portes.md) |
 | **2026-11-16** | [2026-11-16/README.md](2026-11-16/README.md) | [distribue](2026-11-16/distribue.md) · [docs](2026-11-16/docs.md) · [memoire](2026-11-16/memoire.md) · [mesures](2026-11-16/mesures.md) · [modele](2026-11-16/modele.md) · [moteur](2026-11-16/moteur.md) · [portes](2026-11-16/portes.md) |
 | **2026-11-15** | [2026-11-15/README.md](2026-11-15/README.md) | [distribue](2026-11-15/distribue.md) · [docs](2026-11-15/docs.md) · [memoire](2026-11-15/memoire.md) · [mesures](2026-11-15/mesures.md) · [modele](2026-11-15/modele.md) · [outils](2026-11-15/outils.md) · [portes](2026-11-15/portes.md) |
@@ -210,7 +211,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `d58fb6be` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.5 h | 1 | 54 | 0 | 0 | [rapport](sessions/d58fb6be-cedc-4236-a298-aa953dfb21b7/rapport.md) |
 | `d622230d` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.3 h | 1 | 34 | 0 | 0 | [rapport](sessions/d622230d-649c-43cf-9202-da1eeb230259/rapport.md) |
 | `d629d7d7` | Continue the work | 2026-10-19 12:03 | 138.6 h | 286 | 3405 | 76 | 296 | [rapport](sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md) |
-| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 12.9 h | 8 | 320 | 26 | 15 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
+| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 23.1 h | 9 | 336 | 27 | 16 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
 | `da69b1fa` | Tu travailles dans le dépôt | 2026-09-30 15:07 | 0.1 h | 1 | 45 | 1 | 0 | [rapport](sessions/da69b1fa-91b0-4c69-bb2b-58bf00e92e28/rapport.md) |
 | `dcaa24d6` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.0 h | 1 | 13 | 0 | 0 | [rapport](sessions/dcaa24d6-0017-4382-be21-8244c0fb9b7a/rapport.md) |
 | `ddf8d740` | Tâche autonome de mesure, dans | 2026-10-22 08:28 | 0.1 h | 1 | 14 | 0 | 0 | [rapport](sessions/ddf8d740-9433-4f97-a5d8-38bd92bd45f6/rapport.md) |

@@ -71075,3 +71075,31 @@ passes compactées
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nimport re\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-17, 20 h 30 HNE (la règle 12 : les deux fenêtres tarifai … [615 caractères tronqués]`
+
+  ```
+9 files changed, 450 insertions(+), 17 deletions(-)
+ create mode 100644 journal/2026-11-18/README.md
+d649467c CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 
+   02cc66d4..d649467c  s/v7 -> s/v7
+   02cc66d4..d649467c  master -> master
+mer 18 nov 2026 08:36:36 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ C'est fait : la règle 12 est dans `AGENTS.md` — tous les agents la lisent à l'entrée
+
+## Ce qui a été ajouté aux consignes
+
+**La règle 12** (le § 2 des règles non négociables, lue par **tous** les agents au démarrage) :
+
+> **La tarification de l'API a deux fenêtres** : remisé pendant **UTC 16:30 → 00:30** (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; plein tarif le reste. **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+Avec le **plan détaillé** [`docs/pilotage/plans-tarif.md`](docs/pilotage/plans-tarif.md) : les per-chantier (N, R, B13 = API ; A, S, L = local ; D = à mesurer), la journée type, la file « jamais en attente ».
+
+## L'état
+
+Committé **`d649467c`**, poussé. **Il est 08 h 36 EST — la fenêtre pleine** : la file locale est ouverte (le 30 k du 100 M si le GPU se libère, les gates, les docs).
+
+Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêtre remisée sont celles de la documentation officielle DeepSeek — à revérifier avant un gros lot ; et le « week-end = tarif réduit toute la journée » vient de la presse, pas de la page officielle, donc je ne le tiens pas pour acquis.
+

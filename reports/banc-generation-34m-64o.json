@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/mix1024-60k.pt",
+ "aleatoire": false,
+ "n": 64,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8836,
+   "distinct_2": 0.7901,
+   "repetition": 9,
+   "echo": 0.0094,
+   "octets": 1280,
+   "secondes": 9.89,
+   "octets_s": 129.5,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.05,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don d d da d 20 n dese de 1 20 20 aba dele  1  la  1 20 20 201 ",
+     "octets": 64
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 le por le de la da la le e e de de e ena 20 1 esa la en ena da ",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de pre dile de de de e de d ese e esinanoré e e ene e es ec",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.05,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don d d da d 20 n dese de 1 20 20 aba dele  1  la  1 20 20 201 ",
+     "octets": 64
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 le por le de la da la le e e de de e ena 20 1 esa la en ena da ",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de pre dile de de de e de d ese e esinanoré e e ene e es ec",
+     "octets": 64
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.64,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatin de en 1 1 de a 1 la da 1 1 1  1 19 1 1 19 1 19 li 19 19 1 19 ",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.6538,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La meri a  a a a a a a a a popra ux a d du  a da d a asa a a de a da l",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.8846,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent a e e a d d pu puna  d a e e 1 e de 20120 fa 1 20 la lan 1 20 2",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de de da d pat a l d 1 20 atena Ne es en= la la espana 201 Lent",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est pana e d 1 e de da loni a da and  at a e fre e e e esed este en",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme des di dan e don d dan d d dana danat a d da da ana n da 1 dun ",
+     "octets": 64
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.625,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique d  de A de etris d da  fata  A  A A A A A Ba  a A A si A  A A A",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.7308,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre dend e 1 e e e ende d e 20 de e e  e d 1 ese 20 en 1 e 1 1  e e",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6923,
+     "repetition": 3,
+     "echo": 0.038461538461538464,
+     "prompt": "La guerre",
+     "texte": "La guerre list 1 1 1 e : 1 1 la 1 19 1 1 de pa 1 197 1 1 li 19 19 1 1 1 1",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.5455,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économien de de de e de de de de de e de d d  e e  e  e enes e d e  ene ",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.6667,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport d d d d d d de d  de den d d Wedend d winine deninat d d 1  den",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.7727,
+     "repetition": 2,
+     "echo": 0.047619047619047616,
+     "prompt": "La science",
+     "texte": "La science a a d A destome de de  a d e f   a d a   d frine a d ana  da la",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville des des den e de d d da   Non  f  Nonin Bina da Norin de 1 Non ",
+     "octets": 64
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps en d ce  1 este e st e en e 1 e deson e 1 flin  e a e 1  1  19 ",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6923,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie da de s de e de de de d  e a de e de e d a   de e e e e 20 1  e",
+     "octets": 64
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4231,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde den en 1   1 19 1 19 1919 19 1 19 1 1 1 1 1 1 1 1 10 1 1 1 1 1 ",
+     "octets": 64
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.7826,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question da dand da d d d l  d d d d d de de 1 delat  e ene 20 1  da de ",
+     "octets": 64
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.518,
+   "distinct_2": 1.0,
+   "repetition": 1,
+   "echo": 0.007,
+   "octets": 1127,
+   "secondes": 8.98,
+   "octets_s": 125.5,
+   "echantillons": [
+    {
+     "mots": 18,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don mbuna d bBor   d sora lus frun dia Recodrad dr 21 agovischt",
+     "octets": 64
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.5833,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ra : . apochunée pa  piquné ée é.inena .chtondé ust/forar�",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois, ne ce mendese pra poidorten cimrae divore d elar r echy 20. ec",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 18,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays don mbuna d bBor   d sora lus frun dia Recodrad dr 21 agovischt",
+     "octets": 64
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.5833,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ra : . apochunée pa  piquné ée é.inena .chtondé ust/forar�",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois, ne ce mendese pra poidorten cimrae divore d elar r echy 20. ec",
+     "octets": 64
+    },
+    {
+     "mots": 9,
+     "mots_valides": 0.2222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chate denasorie locone: 200120005 20 (téna (hen. (fowestréed202019",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0625,
+     "prompt": "La mer",
+     "texte": "La merna a   di Tóž 206 St la (Fova   Mó�  a Ma We ca mitá: Sol  n",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent taga a 1014kuriSa Ta va lid ca cacra  ca Mafa LaPhtar Bembrin d",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé é dé son lon  lane d Nore10 onates Cononan é frst2020  ba. l",
+     "octets": 64
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est chith rara\n",
+     "octets": 12
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.3333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme| prochamant nan mes ct elila desuninne pa lequs de telenesonaun",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.6842,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique  da :.fè  d. Soris Anipra a l 2 1 Sta e 10 mix 2. 14. : De fre",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre den La Lonst s eson pl'St 1012 1 man 2015, ston 120101015: Nata",
+     "octets": 64
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre tana plast fa 20ssata l\n",
+     "octets": 25
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.4667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économienen es. dete ce prana e. d ete eted lor. Moca e ar Se stsononeSt",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport denda Ne Renz,  193  quit 201Elata p20 19) 1, Lené esmaton Red",
+     "octets": 64
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.4615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "La science",
+     "texte": "La science a : Fanoniri Spa,11 : villa La Andem a0s Bró le, Ranali Gadnem",
+     "octets": 64
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.5385,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville s  juri-Le pog Lia Gage n mana Af as orqukhemounas.a sskumsonda",
+     "octets": 64
+    },
+    {
+     "mots": 2,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 0,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempst\n",
+     "octets": 2
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vieairo 1  217cz-pouli97 1 den.nadja esaine 2019013-1 1 : dad una 1",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monder Memet 20 : Navene oja at cha fa ainika la Col ibeme d 207h bac",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5294,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question da en, ala : A Fe  a en e Rurrexi Ga Bese 2Aty &cone (rC. gègo",
+     "octets": 64
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.7412,
+   "distinct_2": 0.9896,
+   "repetition": 1,
+   "echo": 0.0152,
+   "octets": 1280,
+   "secondes": 10.14,
+   "octets_s": 126.2,
+   "echantillons": [
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays donausta pri 20 prinatena s ciste prinalestetena enana e 20 2 e",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ponaistira listé da dag lgé de lela s age es dené lare len e",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7778,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de ese pre ene e desile e en et es. sinetanicestst. dist ne 20.",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays donausta pri 20 prinatena s ciste prinalestetena enana e 20 2 e",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ponaistira listé da dag lgé de lela s age es dené lare len e",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7778,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de ese pre ene e desile e en et es. sinetanicestst. dist ne 20.",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatin    A (ma 1 set 1 de gus ge 19 m er 2 finfæ e Sore 201 A. ste",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La mer",
+     "texte": "La mercha  i  : de a : ba Bra La  bad pa la  do 101 deni Boma d 19 1 2",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.7,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent en st 1 Noux 20 18 1  dena 1: 205 jat a Bin coiNon Bila d RÉta",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.5882,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.15384615384615385,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé le pece e e endese a daple e pra dena enananenesce. 20 astapo..",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est end cept pla), 111 1 1 20s  pon1 10  11 a 2 115 cor e la enalen",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8824,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme listen dan dan né n de da n da. 10 da ne  e on estralinonavie ",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique l  de 1 de par a d pe t 20 1 a (enerine a pofe da sora e e d be",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.6875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre dend stror e 2 e 1 2 a 201201 12013 201 2020. 201 2012012012020",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre pr encht 1 est 1 e Lenit 20ilela sona 20 a 1 201 et 20  -ma d f",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économien e de des pon 2 dé de de de dese d. e a é est de. Au pa  ena ",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport dend  1 e 1 2 La  deun Lena 20 20 pucistete  17 la (es 119 enal",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La science",
+     "texte": "La science de lus co e la va fila ca a dina s d si a dan ma a Ma  a  cone ",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville des des : pe esa fsta 1 20sthté ce const de e focena 1 pecen m",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.7,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le tempsi Leme 1  s este d d en en 1 sta d en a te faran e ex entretrint",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7895,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie  en en de de pe : : ndi al pora ne e e e tsese fa No.  Nutht. f",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7778,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde n  e t nd n ng pe pen polestht olespos 2   ste pa ecouman 19 St",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question e liralen 1 dise lin a Bila da desest. Be deta p. e 1 t. 15 co ",
+     "octets": 64
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

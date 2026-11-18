@@ -74,12 +74,12 @@ REGLAGES = [
 ]
 
 
-def charger(chemin: str):
+def charger(chemin: str, device: str = "cpu"):
     ck = torch.load(chemin, map_location="cpu", weights_only=False)
     cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
     m = NativeModel(cfg)
     m.load_state_dict(ck["state"])
-    m.eval()
+    m.to(device).eval()
     return m, cfg
 
 
@@ -129,7 +129,8 @@ def generer(modele, prompt: str, n: int, top_k: int, temperature: float) -> tupl
     ids = list(prompt.encode("utf-8"))
     debut = time.perf_counter()
     for _ in range(n):
-        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long)
+        x = torch.tensor([ids[-modele.cfg.max_pos:]], dtype=torch.long,
+                         device=modele.embed.weight.device)
         logits = modele(x)["logits"][0, -1]
         if temperature <= 0:
             suivant = int(logits.argmax())
@@ -154,6 +155,7 @@ def main() -> None:
     ap.add_argument("--sortie", default="")
     ap.add_argument("--aleatoire", action="store_true", help="le contrôle : poids au hasard")
     ap.add_argument("--limite-vocab", type=int, default=50_000)
+    ap.add_argument("--device", default="cpu")
     a = ap.parse_args()
 
     vocab = vocabulaires(a.limite_vocab)
@@ -162,7 +164,7 @@ def main() -> None:
         cfg = NativeConfig(**{k: v for k, v in ck["config"].items() if k in NativeConfig.__annotations__})
         modele = charger_aleatoire(cfg)
     else:
-        modele, cfg = charger(a.modele)
+        modele, cfg = charger(a.modele, a.device)
 
     resultat = {"modele": a.modele, "aleatoire": bool(a.aleatoire), "n": a.n,
                 "vocabulaire": len(vocab), "reglages": {}, "prompts": PROMPTS}

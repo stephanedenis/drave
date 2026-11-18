@@ -9,7 +9,7 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 423.9 h |
 | Tours | 216 |
-| Messages | 4396 |
+| Messages | 4397 |
 | Appels d'outils | 3927 |
 | Fichiers touchés | 25 |
 | Commandes | 3255 |
@@ -11518,6 +11518,24 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - bash — Corriger A5.4 et trim les références
 - bash — Compacter les passes anciennes
 - bash — Committer la règle 12
+
+**Synthèse produite :**
+
+⏵ C'est fait : la règle 12 est dans `AGENTS.md` — tous les agents la lisent à l'entrée
+
+\## Ce qui a été ajouté aux consignes
+
+**La règle 12** (le § 2 des règles non négociables, lue par **tous** les agents au démarrage) :
+
+> **La tarification de l'API a deux fenêtres** : remisé pendant **UTC 16:30 → 00:30** (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; plein tarif le reste. **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+Avec le **plan détaillé** [`docs/pilotage/plans-tarif.md`](docs/pilotage/plans-tarif.md) : les per-chantier (N, R, B13 = API ; A, S, L = local ; D = à mesurer), la journée type, la file « jamais en attente ».
+
+\## L'état
+
+Committé **`d649467c`**, poussé. **Il est 08 h 36 EST — la fenêtre pleine** : la file locale est ouverte (le 30 k du 100 M si le GPU se libère, les gates, les docs).
+
+Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêtre remisée sont celles de la documentation officielle DeepSeek — à revérifier avant un gros lot ; et le « week-end = tarif réduit toute la journée » vient de la presse, pas de la page officielle, donc je ne le tiens pas pour acquis.
 
 ## 3. Travail accompli
 

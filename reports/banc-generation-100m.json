@@ -1,0 +1,759 @@
+{
+ "modele": "work/n2ac/mix1024-100m.pt",
+ "aleatoire": false,
+ "n": 64,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8824,
+   "distinct_2": 0.7531,
+   "repetition": 6,
+   "echo": 0.0266,
+   "octets": 1280,
+   "secondes": 10.29,
+   "octets_s": 124.4,
+   "echantillons": [
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.5909,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de de de des de de de de lande lande s de lande s de de lande l",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950isale s ses es de s se mise de de lans des le de s de de s de la",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 0.9048,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de la pré de ére le de la de s ére de ére land s de stio",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.5909,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de de de des de de de de lande lande s de lande s de de lande l",
+     "octets": 64
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950isale s ses es de s se mise de de lans des le de s de de s de la",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 0.9048,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de de la pré de ére le de la de s ére de ére land s de stio",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.05555555555555555,
+     "prompt": "Le chat",
+     "texte": "Le chate de le de de de de lande lande s de de lande lande ss de de lan",
+     "octets": 64
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8095,
+     "distinct_2": 0.85,
+     "repetition": 2,
+     "echo": 0.05,
+     "prompt": "La mer",
+     "texte": "La mere d de le s e de de la s des de de de de lans de stion de lantis",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.95,
+     "distinct_2": 0.7895,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de des lande des s de lat des landes de de landes de s de de de",
+     "octets": 64
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 0.7,
+     "repetition": 2,
+     "echo": 0.058823529411764705,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé late de de de le de de lande lande s de de lande de s de lande ",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7222,
+     "distinct_2": 0.8235,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris este de ans aure de s aure de ste de aure de de demilantis de de st",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 0.7368,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme  alis es ale de s de de lande de s de des de de lande de se lan",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.875,
+     "distinct_2": 0.9333,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de des ans des de maurales des des de landes ces de de latistio",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.9444,
+     "distinct_2": 0.5294,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de de de de de de de de lande de lande lande de stionse de land",
+     "octets": 64
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre e s e e e de de de le de s de de de de lande landes e de lande ",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie s de den den de de den de de de dest le de de de leux de destio",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8947,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.05555555555555555,
+     "prompt": "Le sport",
+     "texte": "Le sporte de des landes de de s de de lans des de de landes de de le de ",
+     "octets": 64
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6957,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "La science",
+     "texte": "La science e de e s de de la de de s de de lande s de la se de de le de la",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville de de de s de de de le de lande de de lantie de stionse de lant",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4737,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de de de de de de de de lande de lande lande de s de de lande l",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vies ones e es es emes e emese des andes est de lans de de le stion",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8947,
+     "distinct_2": 0.7222,
+     "repetition": 2,
+     "echo": 0.17647058823529413,
+     "prompt": "Le monde",
+     "texte": "Le monde de le de de de de le de latie de de lantie de lande le lande de",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8235,
+     "distinct_2": 0.9375,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question e des es est des des s des des pon des delantiques estes des de",
+     "octets": 64
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.5869,
+   "distinct_2": 0.9974,
+   "repetition": 1,
+   "echo": 0.0093,
+   "octets": 1233,
+   "secondes": 10.08,
+   "octets_s": 122.3,
+   "echantillons": [
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de son dest de Sonans dge : landes salante dent alaux régiathu",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950ismalesatres avie lese de ales Janse, ses auletin agist dales de",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois s ée é dis aut erill aist dé es enditale drans d polatis de ",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de son dest de Sonans dge : landes salante dent alaux régiathu",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950ismalesatres avie lese de ales Janse, ses auletin agist dales de",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois s ée é dis aut erill aist dé es enditale drans d polatis de ",
+     "octets": 64
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.4545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chatule thures on qus de danonale Pe fon déemiesitaullantitishel qu",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La merte in ansaumes, ce ala de pon poul ans ponale dïque can, de e l",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.6429,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent s, patiomiqusois ses e duminanes s émie daulagable tis vise é",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.6111,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé pulaland d pais que ond pande s fon déséralis é e e de éral",
+     "octets": 64
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.5385,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris estaures des malem rans de s detionst restemétagale diqule le de c",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme hon ton ves  male demes des agussonan semment s naticon semme m",
+     "octets": 64
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.5385,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musiques mationse tion  on ton alabulant gées e sthe cons aules tique ",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06666666666666667,
+     "prompt": "Le livre",
+     "texte": "Le livre ie d pre s ©me e sondion fre psideure c  de vile schale le de ",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.6,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre ée phminée poré des 1 de pon selande ses chie és ale gnagia",
+     "octets": 64
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.4545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie »sé le Leson e elagre mponnat vechile al, milatistime demiati",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le sport",
+     "texte": "Le sportene nd me s e e e dent dese h ragon lesem de de se e le. Sor sé",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science des es es fondeme ve dess, s semes milatiche essteurise e émes",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villes fice es on des s qure, ent des Caus se n millatith demin aties",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.06666666666666667,
+     "prompt": "Le temps",
+     "texte": "Le temps de e f porem de des de meme anse des donsele chide nsemes de le",
+     "octets": 64
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.2,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vieais onsese soralos e lagorondes mons paque réesese trionsssolon",
+     "octets": 64
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.7273,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde s la s mis lats lande ralariqux de ranco\n",
+     "octets": 42
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question es le e dures de e que ses e demintal\n",
+     "octets": 39
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.6529,
+   "distinct_2": 0.9857,
+   "repetition": 2,
+   "echo": 0.0263,
+   "octets": 1280,
+   "secondes": 10.37,
+   "octets_s": 123.4,
+   "echantillons": [
+    {
+     "mots": 19,
+     "mots_valides": 0.6842,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de ale des de mionse de de pos de des ansemisé lant de enantit",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950ales s ponemife desont emmese e nale mble ess mandons at es dans",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois auré demioien llans s porétales t de ce quronales ande ps é ",
+     "octets": 64
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 19,
+     "mots_valides": 0.6842,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de ale des de mionse de de pos de des ansemisé lant de enantit",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950ales s ponemife desont emmese e nale mble ess mandons at es dans",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.5625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois auré demioien llans s porétales t de ce quronales ande ps é ",
+     "octets": 64
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chate ée e sele s de ce prées de on de s de lande ce de ction de e",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.5789,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mere s s e es ales es fe les fs anande des ce des ela antite ron le",
+     "octets": 64
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent de le des lande s le m des de s seland s on de meron de e lenta",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07692307692307693,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé me de lalande roidess se de le de cte latistion ste é comilate",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.4706,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris este de sest onele fe mmest anemes es ans e dest son dele ses ct qu",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme s dres de dance le randes lant est des de de lans s teurnde le ",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.75,
+     "distinct_2": 0.9333,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique me le des de des lation de de s testitre ales de de ctipativion",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7368,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.058823529411764705,
+     "prompt": "Le livre",
+     "texte": "Le livre aus che de e me, émes fis de cistre s aure le mis des lan s de",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre e d les des e de de mmes de rande stices de chonales de videre ",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.625,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie s e e en vile f fale de s pande te demise prée anse atilllant ",
+     "octets": 64
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.5333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07142857142857142,
+     "prompt": "Le sport",
+     "texte": "Le sporte de de cth coran le fise e f demmilatéris de secon de latisant",
+     "octets": 64
+    },
+    {
+     "mots": 16,
+     "mots_valides": 0.4375,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science qule pes e es able ches dre e antiesste de ponde dale s ponande",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7647,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La villes e e ce s poin de sonde de le conde de gens ende de lantiverit ",
+     "octets": 64
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.11764705882352941,
+     "prompt": "Le temps",
+     "texte": "Le temps de de de de saude onde de le de de ntralande le s pors e de des",
+     "octets": 64
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.4286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vies eres e esesese ponon s seme laleme des fandes lemes dantes dem",
+     "octets": 64
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.6471,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "Le monde",
+     "texte": "Le mondes de aurale cond de de e ctans e de le ckmande le de chatish qum",
+     "octets": 64
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.7222,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question ques es e des landes des de anses des ponses ponse e de cte e r",
+     "octets": 64
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

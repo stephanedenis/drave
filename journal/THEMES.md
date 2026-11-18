@@ -60,6 +60,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-03](2026-11-03/attention.md) | `2,343` · `0,0078` · `2,9121` · `2,5276` · `2,3911` · `2,3522` · `2,4759` · `2,4373` · `2,9943` · `2,7856` |
 | [2026-11-05](2026-11-05/attention.md) | — |
 | [2026-11-17](2026-11-17/attention.md) | — |
+| [2026-11-18](2026-11-18/attention.md) | — |
 
 ### `memoire` — Mémoire épisodique, consolidation, greffe
 

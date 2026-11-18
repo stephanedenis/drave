@@ -924,6 +924,53 @@
      "attendu": "FICHE-OK"
     }
    ]
+  },
+  {
+   "id": "Z1",
+   "jour": 22,
+   "titre": "L'intégration continue — le workflow",
+   "mandat": "Tâche Z1 (exploitable, la protection) : l'**intégration continue** — un `.github/workflows/ci.yml` : la matrice **Python 3.10 / 3.13**, `pip install -e .`, `python3 tools/tests/test_produit.py`, `python3 tools/tests/test_tagger_api.py`, `bash tools/porte-produit.sh`, `python3 tools/tests/test_schema_produit.py` ; le **contrôle négatif** : un test qui casse doit faire échouer le job (le prouver en local) ; la doc. Fiche `reports/rapport-ci.md` + JSON. Si l'environnement n'a pas `act`, prouve au moins que le YAML est valide (un parseur) et que les commandes qu'il lance passent en local.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f .github/workflows/ci.yml && echo CI-OK",
+     "attendu": "CI-OK"
+    },
+    {
+     "commande": "test -f reports/rapport-ci.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
+  },
+  {
+   "id": "Z2",
+   "jour": 22,
+   "titre": "La passe complète de la nuit",
+   "mandat": "Tâche Z2 (clôture technique) : la **passe complète** — `bash tools/toutes-les-portes.sh` avec `JOURNAUX=work/portes/passe-1611` ; lis le registre par `awk '$2 != 0'` (jamais par un tail) ; note les rouges, compare aux **rouges tolérées** de `docs/pilotage/references-non-regression.md`, mets à jour la section « passe » du document, et écris `reports/rapport-passe-1611.md` + JSON (portes, vertes, rouges, la liste).",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-passe-1611.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    },
+    {
+     "commande": "grep -c 'PASSE 1611\\|passe du 16/11' docs/pilotage/references-non-regression.md",
+     "attendu": "1"
+    }
+   ]
+  },
+  {
+   "id": "Z3",
+   "jour": 22,
+   "titre": "Le bilan final de la nuit exploitable",
+   "mandat": "Tâche Z3 (le bilan pour l'humain) : un **bilan court** (le matin) — `reports/rapport-bilan-final.md` + JSON : ce qui est installable (les 3 voies : editable, roue, le chemin historique), le quickstart, l'API du JSON, la performance (α 1,08, ×4,9), les codes, le CI, les portes ; les **négatifs nommés** ; **ce qu'il reste à décider** (le tagger `auto`, l'or de rôles, Panini). 40 lignes max, lisible en 3 minutes.",
+   "budget_min": 90,
+   "acceptation": [
+    {
+     "commande": "test -f reports/rapport-bilan-final.md && echo FICHE-OK",
+     "attendu": "FICHE-OK"
+    }
+   ]
   }
  ]
 }

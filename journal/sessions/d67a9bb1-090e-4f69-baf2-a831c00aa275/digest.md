@@ -5844,3 +5844,365 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 État : **90 portes**, 789 fiches, 880 JSON, état 1 635 mots, tests Rust **139/139**. La session N2 garde son travail non committé (`tools/banc_generation.py`, `reports/banc-generation-100m.json`) : je n'y touche pas.
 
+
+## Tour 9
+
+### 👤 Utilisateur
+
+commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 🤖 Assistant
+
+⏵ État git, remote, et inspection du travail en attente avant commit + push
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -10; echo \"=== remote ===\"; git remote -v; echo \"=== branche ===\"; git branch -vv | head -3; echo \"=== diff banc_generation ===\"; git diff --stat tools/banc_generation.py; git diff tools/banc_generatio … [75 caractères tronqués]`
+
+  ```
+M tools/banc_generation.py
+ M tools/chantier/plan.json
+?? reports/banc-generation-100m.json
+=== remote ===
+origin	git@github.com:stephanedenis/drave.git (fetch)
+origin	git@github.com:stephanedenis/drave.git (push)
+=== branche ===
+  backup/pre-scrub-20261101-133055 5d5c1ee9 DONNÉES — LES DIX LANGUES SONT LÀ : 21,6 M ARTICLES, 31,4 G CARACTÈRES, 38,8 GO, 0 FUITE
+  master                           d649467c [origin/master] CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ LIÉ
+  s/close                          1d2cd6af ÉTAT — HEURE 16 H 33 ; B13 165/165 (CANDIDATS VERBES), D RESTAURÉ 62, 2 048 À 3 950 PAS
+=== diff banc_generation ===
+ tools/banc_generation.py | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+diff --git a/tools/banc_generation.py b/tools/banc_generation.py
+index 532b9bda..cf9f3704 100644
+--- a/tools/banc_generation.py
++++ b/tools/banc_generation.py
+@@ -74,12 +74,12 @@ REGLAGES = [
+ ]
+ 
+ 
+-def charger(chemin: str):
++def charger(chemin: str, device: str = "cpu"):
+     ck = torch.load(chemin, map_location="cpu", weights_only=False)
+     cfg = NativeC
+… [1284 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -20 reports/banc-generation-100m.json 2>/dev/null; echo \"...\"; git diff tools/chantier/plan.json | head -20; echo \"=== fiche génération ? ===\"; ls reports/ | grep -i \"banc-generation\\|generation\" | head", "description": " … [41 caractères tronqués]`
+
+  ```
+{
+ "modele": "work/n2ac/mix1024-100m.pt",
+ "aleatoire": false,
+ "n": 64,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8824,
+   "distinct_2": 0.7531,
+   "repetition": 6,
+   "echo": 0.0266,
+   "octets": 1280,
+   "secondes": 10.29,
+   "octets_s": 124.4,
+   "echantillons": [
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.5909,
+     "repetition": 3,
+...
+diff --git a/tools/chantier/plan.json b/tools/chantier/plan.json
+index 297606eb..be82fe39 100644
+--- a/tools/chantier/plan.json
++++ b/tools/chantier/plan.json
+@@ -924,6 +924,53 @@
+      "attendu": "FICHE-OK"
+     }
+    ]
++  },
++  {
++   "id": "Z1",
++   "jour": 22,
++   "titre": "L'intégration continue — le workflow",
++   "mandat": "Tâche Z1 (exploitable, la protection) : l'**intégration continue** — un `.github/workflows/ci.yml` : la matrice **Python 3.10 / 3.13**, `pip install -e .`, `python3 tools/tests/test_produit.py`, `python3 tools/tests/test_tagger_api.py`, `bash tools/porte-produit.sh`, `python3 tools/tests/test_schema_produit.py` ; le **contrôle négatif** : un test qui casse doit faire échouer le job (le prouver en local) ; la doc. Fiche `reports/rapport-ci.md` + JSON. Si l'env
+… [565 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' reports/rapport-banc-generation.md; echo \"=== cite 100m ? ===\"; grep -n \"100m\\|100 M\" reports/rapport-banc-generation.md | head", "description": "Read the generation bench fiche"}`
+
+  ```
+# Le banc de génération du natif — le modèle a appris les mots, pas la phrase
+
+> **Ligne de roadmap** : **N4** (l'usage du natif) · **Date** : 2026-11-16 · **Modèle mesuré** :
+> `work/n2ac/mix1024-60k.pt` (**34,3 M** paramètres, RoPE, seq 1 024, PPL **2,40**, corpus
+> `wiki_mix/propre`) · **Verdict** : ❌ **le natif n'est pas un générateur de texte** — il a
+> appris le **vocabulaire** (87 % de mots réels), pas la **composition** (un trigramme répété
+> **15 fois** en greedy, des pseudo-mots en échantillonnage).
+>
+> **Le chiffre, en une ligne.** Sur **20 prompts** fixes et **128 octets** par prompt, trois
+> réglages : **greedy** 0,870 de mots valides mais une **répétition de 15** ; **top-40/0,8**
+> 0,490 de mots valides et une diversité de 1,000 ; **top-20/0,5** 0,735 et 0,981. Le
+> **contrôle aléatoire** (même architecture, poids au hasard) : **0,336** de mots valides et
+> **1** de répétition — le banc discrimine le modèle du bruit.
+
+## 1. Le dispositif
+
+[`tools/banc_generation.py`](../tools/banc_generation.py) : 20 prompts français
+(« La France est un pays », « Dans les années 1950 », « Il était une fois »…), trois réglages
+(greedy ; top-40 + 0,8 ; top-20 + 0,5), 128 octets par géné
+… [1149 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd = json.load(open(\"reports/banc-generation-100m.json\"))\nprint(\"modèle:\", d[\"modele\"], \"| n:\", d[\"n\"], \"| aléatoire:\", d[\"aleatoire\"])\nfor nom, r in d[\"reglages\"].items():\n    print(f … [510 caractères tronqués]`
+
+  ```
+modèle: work/n2ac/mix1024-100m.pt | n: 64 | aléatoire: False
+greedy       mots_valides=0.8824 distinct2=0.753 repetition=6 echo=0.0266 octets/s=124.4 secondes=10.29
+top40_0.8    mots_valides=0.5869 distinct2=0.997 repetition=1 echo=0.0093 octets/s=122.3 secondes=10.08
+top20_0.5    mots_valides=0.6529 distinct2=0.986 repetition=2 echo=0.0263 octets/s=123.4 secondes=10.37
+-rw-r--r--. 1 stephane stephane 30819 16 nov 10:43 reports/banc-generation-aleatoire.json
+aléatoire: {'greedy': 0.3356, 'top40_0.8': 0.2516, 'top20_0.5': 0.2186}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\\|PROMPTS\" tools/banc_generation.py | head -15", "description": "Read the generation bench arguments"}`
+
+  ```
+47:PROMPTS = [
+153:    ap.add_argument("--modele", required=True)
+154:    ap.add_argument("--n", type=int, default=128)
+155:    ap.add_argument("--sortie", default="")
+156:    ap.add_argument("--aleatoire", action="store_true", help="le contrôle : poids au hasard")
+157:    ap.add_argument("--limite-vocab", type=int, default=50_000)
+158:    ap.add_argument("--device", default="cpu")
+170:                "vocabulaire": len(vocab), "reglages": {}, "prompts": PROMPTS}
+173:        for prompt in PROMPTS:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-60k.pt --n 64 --device cuda --sortie /tmp/banc-34m-gpu.json 2>&1 | tail -6; echo \"=== aléatoire ===\"; /home/stephane/gpu-env/bin/python tools/ban … [224 caractères tronqués]`
+
+  ```
+écrit : /tmp/banc-34m-gpu.json
+greedy       mots_valides=0.884 distinct_2=0.790 repetition=9 echo=0.01 octets/s=129.5
+top40_0.8    mots_valides=0.518 distinct_2=1.000 repetition=1 echo=0.01 octets/s=125.5
+top20_0.5    mots_valides=0.741 distinct_2=0.990 repetition=1 echo=0.02 octets/s=126.2
+=== aléatoire ===
+écrit : /tmp/banc-alea-gpu.json
+greedy       mots_valides=0.366 distinct_2=1.000 repetition=1 echo=0.00 octets/s=48.4
+top40_0.8    mots_valides=0.337 distinct_2=1.000 repetition=1 echo=0.00 octets/s=50.7
+top20_0.5    mots_valides=0.329 distinct_2=1.000 repetition=1 echo=0.00 octets/s=53.6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/banc-34m-gpu.json reports/banc-generation-34m-64o.json && cp /tmp/banc-alea-gpu.json reports/banc-generation-alea-64o.json && python3 - <<'PY'\nimport json\nfor f in (\"reports/banc-generation-34m-64o.json\", \"reports/banc-g … [219 caractères tronqués]`
+
+  ```
+reports/banc-generation-34m-64o.json | modèle: work/n2ac/mix1024-60k.pt | aléatoire: False | n: 64
+reports/banc-generation-alea-64o.json | modèle: work/n2ac/mix1024-60k.pt | aléatoire: True | n: 64
+  ```
+
+- **write** `{"content": "# N4 — le banc de génération du 100 M : la répétition tombe de 9 à 6, la composition ne vient pas\n\n> **Ligne de roadmap** : **N4** (l'usage du natif) · **Date** : 2026-11-17 · **Verdict** : à\n> réglages **appariés** (20 prompts, 64 octets, GPU), le 100 M **ne gagne pas** en mots vali … [3706 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-banc-generation-100m.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N2 — \" docs/pilotage/en-cours.md | head -3; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Locate the N2 bullet and counters"}`
+
+  ```
+84:- **N2 — en pause** : commande **`eval_longueurs.py --rope --val <dir>`** (**2,7856**) ; **jamais `--rope` seul** (**40,0658**) ; [v2 : 3,09 tenu](../../reports/rapport-coordination-n2-v2.md) ; puis **porte propre (0,29)**.
+102:| fichiers / JSON de résultats | **789** / **880** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"- **N2 — en pause** : co … [929 caractères tronqués]`
+
+  ```
+ok
+     · fraîcheur : en-cours.md dit 2026-11-17, le dernier commit date du 2026-11-18
+     · compteurs : en-cours.md dit 883 JSON, le disque en a 882
+  en-cours · 1567 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep('| fichiers / JSON de résu … [570 caractères tronqués]`
+
+  ```
+· fraîcheur : en-cours.md dit 2026-11-17, le dernier commit date du 2026-11-18
+     · compteurs : en-cours.md dit 883 JSON, le disque en a 882
+  en-cours · 1567 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: **Mis à jour : 2026-11-17, 08 h 30 HNE (le GPU : l'AMP livré
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,6p' docs/pilotage/en-cours.md", "description": "Read the current state header"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-17, 20 h 30 HNE (la règle 12 : les deux fenêtres tarifaires, pour tous les agents)**
+
+> **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"**Mis à jour : 2026-11-1 … [577 caractères tronqués]`
+
+  ```
+· fraîcheur : en-cours.md dit 2026-11-17, le dernier commit date du 2026-11-18
+     · compteurs : en-cours.md dit 883 JSON, le disque en a 882
+  en-cours · 1567 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: | fichiers / JSON de résultats | **789** / **880** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,3p' docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; git diff --stat docs/pilotage/en-cours.md", "description": "Read the exact current state lines"}`
+
+  ```
+# En ce moment
+
+**Mis à jour : 2026-11-17, 20 h 30 HNE (la règle 12 : les deux fenêtres tarifaires, pour tous les agents)**
+102:| fichiers / JSON de résultats | **790** / **883** | `reports/*.md` / `reports/*.json` |
+ docs/pilotage/en-cours.md | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\na = '| fichiers / JSON de résultats | **790** / **883** |'\nb = '| fichiers / JSON de résultats | **790** / **882** |'\nassert s.coun … [564 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 790 fiche(s) · 882 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1577 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/banc_generation.py tools/chantier/plan.json reports/banc-generation-100m.json reports/banc-generation-34m-64o.json reports/banc-generation-alea-64o.json reports/rapport-banc-generation-100m.md docs/pilotage/en-cours.md  … [1269 caractères tronqués]`
