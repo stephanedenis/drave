@@ -10773,3 +10773,308 @@ test result: ok. 145 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text()\nold = \"**Tests** (4 nouveaux, `cargo test placement` **13/13**, crate **144/144**) :\"\nnew = \"**Tests** (5 nouveaux, ` … [1919 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+budget exit=0
+   837fb4dd..a039fe51  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ A2.6 : la trace des experts est testée et poussée (`a039fe51`) — j'attends la fin de la première tranche (≈ 17 h 45) et la passe du soir
+
+État de la nuit à 17 h 05 :
+
+- **Chaînes 150 M** : tranche 1/12 en cours sur les deux GPU (≈ 0,4 s/pas, 10 000 pas), PPL de validation autour de 12,2 en début de course — les deux runs sont partis du même init (graine 1, `d=896`, 142 M paramètres) pour que la comparaison v2/v1 soit appariée. Banc complet après chaque tranche.
+- **Passe des 90 portes** : lancée à 16 h 51, en cours (`work/portes/roue-1118-1712`).
+- **A2.6** : la règle sait désormais **chiffrer** les experts (7,0 Go/s par lecteur, saturation à 8), **refuser** nommément (avec le coût NVMe qu'elle refuse) et **tracer** ses chiffres — 5 nouveaux tests, `placement` 14/14, crate **145/145**. Reste le branchement dans `model.rs`, que je ne toucherai pas tant que la passe tourne (elle recompile le binaire).
+
+Prochain point de contrôle automatique dans ~75 minutes.
+
+
+## Tour 12
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/courbe_chaine.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"courbe_chaine.py — la table d'une chaîne d'entraînement (tranches + bancs).\n\nPOURQUOI. La nuit du 18/11 entraîne deux 150 M (corpus v1 et v2) en tranches de\n10 000 … [3146 caractères tronqués]`
+
+  ```
+compile-ok
+== v1
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+
+  écrit : /tmp/courbe-test.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v1.chaine.log; tail -1 work/n4/v2.chaine.log; echo \"passe: $(grep -cE '✅|❌' /tmp/passe-1118-soir.log) lignes de verdict\"; tail -1 /tmp/passe-1118-soir.log | cut -c1-70", "description": "Check progress of the c … [20 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 16:57:09 EST
+pas 2600 · perte 2.5390 · PPL val 12.293 · 1028 s
+pas 2350 · perte 2.6152 · PPL val 12.373 · 1031 s
+passe: 9 lignes de verdict
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc
+  ```
+
+### 🤖 Assistant
+
+⏵ Outil de courbe écrit (`tools/courbe_chaine.py`) : la nuit se lira en une table — j'attends la première tranche (≈ 17 h 45)
+
+Les deux chaînes sont à ~2 500 pas de leur première tranche (PPL de validation ~12,3 en début de course, ce qui est le régime d'un modèle neuf), la passe du soir est à sa 9ᵉ porte, et l'outil `tools/courbe_chaine.py` produira la table des 12 tranches × 2 corpus (PPL, précision, trois régimes du banc) dès les premiers JSON. Prochain point complet à la fin de la tranche 1 et au fil de la passe.
+
+
+## Tour 13
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v1.chaine.log; tail -1 work/n4/v2.chaine.log; echo \"=== passe: $(awk '$2 != 0' work/portes/roue-1118-1712/registre.txt 2>/dev/null | wc -l) rouges / $(wc -l < work/portes/roue-1118-1712/registre.txt  … [100 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 17:07:08 EST
+pas 4150 · perte 2.5639 · PPL val 12.933 · 1642 s
+pas 3800 · perte 2.5129 · PPL val 13.122 · 1634 s
+=== passe: 0 rouges / 19 portes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"pas \" work/n4/v2.chaine.log | awk 'NR%10==1' | head -12; echo \"...\"; grep \"pas \" work/n4/v2.chaine.log | tail -3; echo \"=== v1 ===\"; grep \"pas \" work/n4/v1.chaine.log | awk 'NR%10==1' | head -8", "description": "Read  … [38 caractères tronqués]`
+
+  ```
+pas    1 · perte 5.6184 · PPL val 96.964 · 2 s
+pas  500 · perte 2.4064 · PPL val 12.179 · 209 s
+pas 1000 · perte 2.5361 · PPL val 12.073 · 417 s
+pas 1500 · perte 2.4628 · PPL val 12.153 · 626 s
+pas 2000 · perte 2.5236 · PPL val 12.206 · 849 s
+pas 2500 · perte 2.5044 · PPL val 12.394 · 1093 s
+pas 3000 · perte 2.4888 · PPL val 12.482 · 1302 s
+pas 3500 · perte 2.4669 · PPL val 12.693 · 1510 s
+...
+pas 3750 · perte 2.5426 · PPL val 12.646 · 1614 s
+pas 3800 · perte 2.5129 · PPL val 13.122 · 1634 s
+pas 3850 · perte 2.4403 · PPL val 12.994 · 1655 s
+=== v1 ===
+pas    1 · perte 5.6109 · PPL val 99.073 · 2 s
+pas  500 · perte 2.4391 · PPL val 12.038 · 198 s
+pas 1000 · perte 2.4736 · PPL val 12.032 · 395 s
+pas 1500 · perte 2.4819 · PPL val 12.088 · 593 s
+pas 2000 · perte 2.5353 · PPL val 12.222 · 791 s
+pas 2500 · perte 2.5360 · PPL val 12.302 · 988 s
+pas 3000 · perte 2.5964 · PPL val 12.390 · 1186 s
+pas 3500 · perte 2.6108 · PPL val 12.563 · 1384 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1158402 1158403 2>/dev/null; sleep 2; pkill -f \"chaine.sh 0 data/wiki_mix_v2\" 2>/dev/null; pkill -f \"chaine.sh 1 data/wiki_mix/propre\" 2>/dev/null; sleep 3; ps -eo pid,args | grep -E \"chaine.sh|entrainer_native\" | grep -v  … [146 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,etime,args | grep -E \"entrainer_native|chaine\" | grep -v grep | head -5; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader", "description": "Check whether the chains are stopped"}`
+
+  ```
+mer 18 nov 2026 17:08:25 EST
+1158409       28:46 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 3e-4 --dim 896 --expert-hidden 896 --no-tetes --amp --device cuda:0 --graine 1 --sortie work/n4/v21.pt --drvm work/n4/v21.drvm
+1158410       28:46 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix/propre/train.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 --lr 3e-4 --dim 896 --expert-hidden 896 --no-tetes --amp --device cuda:1 --graine 1 --sortie work/n4/v11.pt --drvm work/n4/v11.drvm
+1168000       16:38 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=work/portes/roue-1118-1712 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1118-soir.log 2>&1 & sleep 5; echo "passe lancée $(date +%H:%M)"; tail -1 work/n4/v2.chaine.log
+0, 99 %, 8296 MiB
+1, 99 %, 8304 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && kill 1158409 1158410; sleep 4; ps -p 1158409,1158410 -o pid,args --no-headers 2>/dev/null | cut -c1-50; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; date", "description": "Kill the orphaned trainers … [2 caractères tronqués]`
+
+  ```
+0, 0 %, 4 MiB
+1, 0 %, 124 MiB
+mer 18 nov 2026 17:08:34 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for spec in \"0 1e-4\" \"1 2e-4\"; do set -- $spec; nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_mix/propre/val.txt --pas 2000 --seq 1024 --lot … [392 caractères tronqués]`
+
+  ```
+sondes lancées 17:08
+0, 0 %, 702 MiB
+1, 0 %, 124 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 15; ps -eo pid,args | grep \"sonde-lr\" | grep -v grep | head -3 | cut -c1-120; ls -la work/n4/sonde-lr*.log 2>/dev/null; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader", "description": "Check th … [19 caractères tronqués]`
+
+  ```
+1288711 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_
+1288712 /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus data/wiki_mix_v2/train.txt --val data/wiki_
+-rw-r--r--. 1 stephane stephane 471 18 nov 17:08 work/n4/sonde-lr1e-4.log
+-rw-r--r--. 1 stephane stephane 471 18 nov 17:08 work/n4/sonde-lr2e-4.log
+0, 100 %, 7624 MiB
+1, 100 %, 7744 MiB
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in work/n4/sonde-lr1e-4.log work/n4/sonde-lr2e-4.log; do echo \"== $f\"; grep -E \"pas +(500|1000|1500|2000) \" \"$f\" | tail -4; done", "description": "Check the LR probes", "timeoutMs": 550000}`
+
+  ```
+mer 18 nov 2026 17:17:35 EST
+== work/n4/sonde-lr1e-4.log
+pas  500 · perte 2.4043 · PPL val 12.089 · 210 s
+pas 1000 · perte 2.5024 · PPL val 11.882 · 419 s
+== work/n4/sonde-lr2e-4.log
+pas  500 · perte 2.4038 · PPL val 12.141 · 199 s
+pas 1000 · perte 2.5091 · PPL val 11.883 · 398 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/ | grep -i \"mix1024\\|100m\" | head; grep -l \"pas 1000\" work/n2ac/*.log 2>/dev/null | head -3; grep -E \"pas +(500|1000|2000|3000) \" work/n2ac/mix1024*.log 2>/dev/null | head -6", "description": "Find the 73M scratch … [10 caractères tronqués]`
+
+  ```
+eval-mix1024-30k.json
+eval-mix1024-60k.json
+eval-mix1024-7.5k.json
+miroir-mix1024-60k.json
+mix1024-100m.drvm
+mix1024-100m.pt
+mix1024-100m.pt.json
+mix1024-30k.drvm
+mix1024-30k.log
+mix1024-30k.pt
+work/n2ac/absolu-pos1152.log
+work/n2ac/kd2-mix512-30k.log
+work/n2ac/kd-mix512-15k.log
+work/n2ac/mix1024-30k.log:pas    500 · perte 1.0804 · PPL val 2.639 · 238 s
+work/n2ac/mix1024-30k.log:pas   1000 · perte 1.1073 · PPL val 2.631 · 462 s
+work/n2ac/mix1024-30k.log:pas   2000 · perte 0.9591 · PPL val 2.607 · 922 s
+work/n2ac/mix1024-30k.log:pas   3000 · perte 1.0695 · PPL val 2.597 · 1369 s
+work/n2ac/mix1024-60k.log:pas    500 · perte 1.0094 · PPL val 2.470 · 222 s
+work/n2ac/mix1024-60k.log:pas   1000 · perte 1.0390 · PPL val 2.478 · 445 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/entrainer_native.py'); s = p.read_text()\nold = '''            print(f\"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s\", flush=True)'''\nn … [501 caractères tronqués]`
+
+  ```
+ok
+compile-ok
+mer 18 nov 2026 17:18:11 EST
+pas 1250 · perte 2.4879 · PPL val 11.781 · 524 s
+pas 1300 · perte 2.4237 · PPL val 11.744 · 545 s
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in work/n4/sonde-lr1e-4.log work/n4/sonde-lr2e-4.log; do echo \"== $f\"; grep -E \"pas +(500|1000|1500|2000) \" \"$f\" | tail -3; tail -2 \"$f\" | head -1; done; nvidia-smi --query-gpu=index,utilization.gpu,mem … [103 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 17:23:18 EST
+== work/n4/sonde-lr1e-4.log
+pas 1000 · perte 2.5024 · PPL val 11.882 · 419 s
+pas 1500 · perte 2.3977 · PPL val 11.563 · 628 s
+pas 2000 · perte 2.0275 · PPL val 7.602 · 837 s
+ "duree_s": 846.6321368217468
+== work/n4/sonde-lr2e-4.log
+pas 1000 · perte 2.5091 · PPL val 11.883 · 398 s
+pas 1500 · perte 2.4258 · PPL val 11.687 · 596 s
+pas 2000 · perte 2.0735 · PPL val 7.977 · 794 s
+ "duree_s": 803.0048427581787
+0, 0 %, 4 MiB
+1, 0 %, 124 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('work/n4/chaine.sh'); s = p.read_text()\ns = s.replace('GPU=$1; CORPUS=$2; PREFIX=$3; N=${4:-12}', 'GPU=$1; CORPUS=$2; PREFIX=$3; N=${4:-12}; LR=${5:-1e-4}')\ns = s.replace('--pas 10 … [588 caractères tronqués]`
+
+  ```
+ok
+script-ok
+relancées 17:24
+0, 100 %, 7624 MiB
+1, 99 %, 8304 MiB
+pas    1 · perte 5.6184 · PPL val 185.496 · 2 s · échelle 65536
+  ```
+
+### 🤖 Assistant
+
+⏵ Relance des chaînes 150 M à lr 1e-4 après la découverte d'un palier — la sonde montre la percée à 2 000 pas
+
+**Ce que la sonde a appris.** La première版本 (lr 3e-4) plafonnait à une perte de ~2,5 et sa PPL de validation *montait* (12,0 → 13,1) : instabilité. Deux sondes de 2 000 pas à **lr 1e-4** et 2e-4 montrent un **palier puis une percée** : PPL 11,9 (1 000 pas) → 11,6 (1 500) → **7,6** (2 000) à 1e-4 (7,98 à 2e-4). La recette retenue est **lr 1e-4**, et les chaînes sont relancées depuis 17 h 24 (11 tranches de 10 000 pas, banc après chacune, échelle AMP journalisée).
+
+Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain point complet à la fin de la tranche 1 (≈ 18 h 35).
+
+
+## Tour 14
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib, re\ndef points(log):\n    pts = {}\n    for ligne in pathlib.Path(log).read_text().splitlines():\n        m = re.search(r\"pas +(\\d+) · perte ([\\d.]+) · PPL val ([\\d.]+)\", ligne)\n        i … [1418 caractères tronqués]`
+
+  ```
+3e-4: {1: 185.496, 50: 13.694, 100: 12.53, 150: 12.315, 200: 12.224, 250: 12.252, 300: 12.09, 350: 12.162, 400: 12.146, 450: 12.147, 500: 12.179, 550: 12.168, 600: 12.184, 650: 12.106, 700: 12.055, 750: 12.111, 800: 12.053, 850: 12.194, 900: 12.146, 950: 12.166, 1000: 12.073, 1050: 12.172, 1100: 12.069, 1150: 12.167, 1200: 12.084, 1250: 12.147, 1300: 12.15, 1350: 12.242, 1400: 12.163, 1450: 12.147, 1500: 12.153, 1550: 12.137, 1600: 12.203, 1650: 12.157, 1700: 12.187, 1750: 12.145, 1800: 12.226, 1850: 12.229, 1900: 12.185, 1950: 12.196, 2000: 12.206, 2050: 12.274, 2100: 12.211, 2150: 12.382, 2200: 12.297, 2250: 12.248, 2300: 12.284, 2350: 12.373, 2400: 12.553, 2450: 12.917, 2500: 12.394, 2550: 12.434, 2600: 12.442, 2650: 12.395, 2700: 12.431, 2750: 12.369, 2800: 12.366, 2850: 12.364, 2900: 12.667, 2950: 12.454, 3000: 12.482, 3050: 12.362, 3100: 12.766, 3150: 12.532, 3200: 12.328, 3250: 12.508, 3300: 12.587, 3350: 12.675, 3400: 12.558, 3450: 12.926, 3500: 12.693, 3550: 12.639, 3600: 12.443, 3650: 12.484, 3700: 12.429, 3750: 12.646, 3800: 13.122, 3850: 12.994, 3900: 12.877, 3950: 12.657, 4000: 12.656}
+1e-4: {1: 185.496, 50: 13.694, 100: 12.531, 150: 12.381, 200: 12.305, 250: 12.258, 3
+… [1010 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Le 150 M : à lr 3e-4 le palier ne casse pas, à 1e-4 il casse vers 1 550 pas\n\n> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré — sur le\n> 142 M (`d=896`, 141 935 400 paramètres) au corpus v2, **lr 3e-4** plafonne à une PPL de validation\n> de … [3355 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"courbe **3k → 53k** — PP … [1331 caractères tronqués]`
+
+  ```
+ok
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+budget exit=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**150 M : lr 1e-4** (per … [753 caractères tronqués]`
+
+  ```
+· T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+budget exit=1
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: la duplication est courte et diffuse
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N4 — grammaticalité\" docs/pilotage/en-cours.md | cut -c1-400", "description": "Read the exact N4 bullet text"}`
+
+  ```
+74:- **N4 — grammaticalité et données** (18/11) : GV **6,90 → 1,45** (34 M → 73 M 3 000 pas) ; **135,5 Go** de données, **7,5 Go** exploitable ; dédup **par blocs** 0 %, dédup **par ligne** retire **8,042 %** des octets (161 s, idempotent) — corpus v2 **6,90 Go** promu et épinglé (`9861fb39…`) ; [grammaticalité](../../reports/rapport-grammaticalite-100m.md), [données](../../reports/rapport-donnees
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**150 M : lr 1e-4** (per … [790 caractères tronqués]`
+
+  ```
+ok
+budget exit=0
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cours.md tools/entrainer_native.py && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nN — LE 150 M : À lr 3e-4 L … [1170 caractères tronqués]`

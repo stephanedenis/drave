@@ -25,14 +25,17 @@ def charger(chemin: str) -> torch.Tensor:
     b = pathlib.Path(chemin).read_bytes()
     if len(b) < 100_000:
         raise SystemExit(f"{chemin} : corpus trop court")
-    return torch.tensor(list(b), dtype=torch.long)
+    # Octets -> tenseur uint8 SANS liste Python : `torch.tensor(list(b))` coûte ~8 octets
+    # par octet de corpus (~55 Go pour 6,9 Go). frombuffer partage la mémoire ; le .long()
+    # se fait dans `lot`, par lot, jamais sur le corpus entier.
+    return torch.frombuffer(bytearray(b), dtype=torch.uint8)
 
 
 def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
     # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
     i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
-    x = torch.stack([data[j:j + seq] for j in i]).to(device)
-    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
+    x = torch.stack([data[j:j + seq] for j in i]).long().to(device)
+    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).long().to(device)
     c = torch.stack([canal[j:j + seq] for j in i]).to(device) if canal is not None else None
     return x, y, c
 
@@ -126,7 +129,9 @@ def main() -> None:
         pertes.append(float(perte))
         if pas % 50 == 0 or pas == 1:
             p, n = ppl(modele, val, a.seq, a.lot, a.device, n_lots=2, canal=canal_val)
-            print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s", flush=True)
+            echelle = scaler.get_scale() if amp else 0.0
+            print(f"pas {pas:4d} · perte {float(perte):.4f} · PPL val {p:.3f} · {time.time()-t0:.0f} s"
+                  f" · échelle {echelle:.0f}", flush=True)
     p_val, n_tok = ppl(modele, val, a.seq, a.lot, a.device, n_lots=8, canal=canal_val)
     # Précision top-1 : tête principale et têtes précoces.
     modele.eval(); bons_main = 0; bons_early = [0] * len(modele.cfg.early_blocks); n_eval = 0

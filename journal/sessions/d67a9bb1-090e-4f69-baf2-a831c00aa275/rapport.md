@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 31.1 h |
-| Tours | 11 |
-| Messages | 579 |
-| Appels d'outils | 567 |
-| Fichiers touchés | 38 |
-| Commandes | 439 |
+| Durée | 31.6 h |
+| Tours | 14 |
+| Messages | 606 |
+| Appels d'outils | 588 |
+| Fichiers touchés | 39 |
+| Commandes | 459 |
 | Sous-agents | 7 |
-| Commits | 41 |
+| Commits | 42 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -65,6 +65,12 @@
 **Tour 10** — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain
 
 **Tour 11** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 12** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 13** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 14** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -541,7 +547,65 @@ Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les 
 
 **Synthèse produite :**
 
-⏵ Point de contrôle de la nuit : chaînes 150 M, passe du soir
+⏵ A2.6 : la trace des experts est testée et poussée (`a039fe51`) — j'attends la fin de la première tranche (≈ 17 h 45) et la passe du soir
+
+État de la nuit à 17 h 05 :
+
+- **Chaînes 150 M** : tranche 1/12 en cours sur les deux GPU (≈ 0,4 s/pas, 10 000 pas), PPL de validation autour de 12,2 en début de course — les deux runs sont partis du même init (graine 1, `d=896`, 142 M paramètres) pour que la comparaison v2/v1 soit appariée. Banc complet après chaque tranche.
+- **Passe des 90 portes** : lancée à 16 h 51, en cours (`work/portes/roue-1118-1712`).
+- **A2.6** : la règle sait désormais **chiffrer** les experts (7,0 Go/s par lecteur, saturation à 8), **refuser** nommément (avec le coût NVMe qu'elle refuse) et **tracer** ses chiffres — 5 nouveaux tests, `placement` 14/14, crate **145/145**. Reste le branchement dans `model.rs`, que je ne toucherai pas tant que la passe tourne (elle recompile le binaire).
+
+Prochain point de contrôle automatique dans ~75 minutes.
+
+### Tour 12 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Write the chain-curve analysis tool
+- bash — Check progress of the chains and the pass
+
+**Synthèse produite :**
+
+⏵ Outil de courbe écrit (`tools/courbe_chaine.py`) : la nuit se lira en une table — j'attends la première tranche (≈ 17 h 45)
+
+Les deux chaînes sont à ~2 500 pas de leur première tranche (PPL de validation ~12,3 en début de course, ce qui est le régime d'un modèle neuf), la passe du soir est à sa 9ᵉ porte, et l'outil `tools/courbe_chaine.py` produira la table des 12 tranches × 2 corpus (PPL, précision, trois régimes du banc) dès les premiers JSON. Prochain point complet à la fin de la tranche 1 et au fil de la passe.
+
+### Tour 13 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Sleep ten minutes and check the night
+- bash — Read the loss trajectory of the 150M runs
+- bash — Stop the diverging chains
+- bash — Check whether the chains are stopped
+- bash — Kill the orphaned trainers
+- bash — Probe two learning rates on the 150M
+- bash — Check the probe processes
+- bash — Check the LR probes
+- bash — Find the 73M scratch run log
+- bash — Add the AMP scale to the training log
+- bash — Check the probes' final numbers
+- bash — Relaunch the chains at lr 1e-4
+
+**Synthèse produite :**
+
+⏵ Relance des chaînes 150 M à lr 1e-4 après la découverte d'un palier — la sonde montre la percée à 2 000 pas
+
+**Ce que la sonde a appris.** La première版本 (lr 3e-4) plafonnait à une perte de ~2,5 et sa PPL de validation *montait* (12,0 → 13,1) : instabilité. Deux sondes de 2 000 pas à **lr 1e-4** et 2e-4 montrent un **palier puis une percée** : PPL 11,9 (1 000 pas) → 11,6 (1 500) → **7,6** (2 000) à 1e-4 (7,98 à 2e-4). La recette retenue est **lr 1e-4**, et les chaînes sont relancées depuis 17 h 24 (11 tranches de 10 000 pas, banc après chacune, échelle AMP journalisée).
+
+Les deux GPU tournent à 99 %, la passe du soir est à sa ~25ᵉ porte. Prochain point complet à la fin de la tranche 1 (≈ 18 h 35).
+
+### Tour 14 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Record the learning-rate probe data
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md`
+- bash — Update the state for the LR finding
+- bash — Trim the state under the T0 budget
+- bash — Read the exact N4 bullet text
+- bash — Apply the word cuts
+- bash — Commit the LR finding and the curve tool
 
 ## 3. Travail accompli
 
@@ -587,6 +651,7 @@ Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-courbe-r1-r3.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v2-slice.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -640,7 +705,7 @@ Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 399 autres
+- … et 419 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -826,4 +891,5 @@ Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cour
 
