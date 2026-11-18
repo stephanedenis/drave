@@ -5298,3 +5298,55 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"restent l'**énergie**, l … [1874 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 788 fiche(s) · 879 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1770 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+ 15 files changed, 401 insertions(+), 42 deletions(-)
+ create mode 100644 reports/gpu-scatter-grille.json
+ create mode 100644 reports/rapport-gpu-scatter-grille.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/profils/*.json 2>/dev/null | wc -l; for f in /tmp/profils/*.log; do echo \"--- $f\"; tail -5 \"$f\"; done 2>/dev/null | head -30", "description": "Check the profile batch progress"}`
+
+  ```
+0
+--- /tmp/profils/mix1024-60k.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('bench/gpu_scatter.py'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep('''    ap.add_argument(\"--sort … [806 caractères tronqués]`
+
+  ```
+ok
+carte : Quadro RTX 5000 · 15.6 Gio · 48 SM
+  index_add         2.66 ms  →  25.20 G év/s
+  bancs_b64         2.38 ms  →  28.14 G év/s
+meilleur débit : 28.14 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+carte : Quadro RTX 5000 · 15.6 Gio · 48 SM
+  index_add         2.66 ms  →  25.23 G év/s
+  bancs_b64         2.48 ms  →  27.07 G év/s
+meilleur débit : 27.09 G év/s  (projection FPGA 4 cartes : 19,3 · référence atomiques mesurée : 18,1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-gpu-scatter-grille.md'); s = p.read_text()\nold = '''- **Le retournement est mesuré**, pas supposé : c'est lui qui donne un domaine à la technique.'''\nnew = '''- ** … [620 caractères tronqués]`
+
+  ```
+ok
+1
+--- mix1024-60k.log
+  court   PPL   23.5824 sur 2055 octets  (  72.6 s, chargement du modèle inclus)
+  écrit : /tmp/profils/mix1024-60k.json
+--- rope2048-20k.log
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && P=$(python3 -c \"print('abcdefgh'*8)\") && ./drave-core/target/release/drave --drvm-pas-hex work/n2ac/mix1024-60k.drvm \"$P\" > /tmp/rust-34m.txt && python3 - <<'PY'\nimport struct, sys, time\nimport numpy as np\nsys.path.insert(0, \ … [713 caractères tronqués]`
+
+  ```
+chargement 0.5 s · passe 64 positions 1.9 s · impls=['defaut', 'defaut', 'defaut', 'defaut', 'defaut', 'defaut']
+Rust vs numpy (34 M, 64 octets) : max|Δ| = 1.526e-05
+  ```
+
+- **bash** `{"command": "sleep 240; ls /tmp/profils/*.json 2>/dev/null | wc -l; for f in /tmp/profils/*.log; do echo \"--- $(basename $f)\"; tail -3 \"$f\"; done 2>/dev/null | head -25", "description": "Wait and check batch progress", "timeoutMs": 300000}`

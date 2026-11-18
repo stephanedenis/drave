@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 10.4 h |
+| Durée | 10.5 h |
 | Tours | 8 |
-| Messages | 259 |
-| Appels d'outils | 280 |
+| Messages | 264 |
+| Appels d'outils | 285 |
 | Fichiers touchés | 25 |
-| Commandes | 184 |
+| Commandes | 189 |
 | Sous-agents | 0 |
 | Commits | 13 |
 | Compactages de contexte | 0 |
@@ -375,7 +375,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 
 ### Tour 8 — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul loca … [2 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — List trained models and their configs
 - bash — Batch profile benchmarks on five trained models
@@ -385,6 +385,11 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - bash — Merge the scatter grid into one JSON
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md`
 - bash — Commit the scatter grid fiche
+- bash — Check the profile batch progress
+- bash — Check card-to-card variance on both GPUs
+- bash — Add the two-GPU control and check batch progress
+- bash — Measure Rust vs numpy parity on the real 34M model
+- bash — Wait and check batch progress
 
 **Synthèse produite :**
 
@@ -464,7 +469,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 144 autres
+- … et 149 autres
 
 ## 4. Mesures et résultats marquants
 

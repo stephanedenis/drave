@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **2 session(s)** · **6 thème(s)**
+**14 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
-| mesures | 1 | [mesures.md](mesures.md) |
+| mesures | 2 | [mesures.md](mesures.md) |
 | modele | 2 | [modele.md](modele.md) |
 | moteur | 6 | [moteur.md](moteur.md) |
 | portes | 2 | [portes.md](portes.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 10.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 10.5 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 411.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -42,6 +42,7 @@
 | 15:29 | `0e5da7bd` | PROFILS SUR UN MODÈLE ENTRAÎNÉ (34 M) : BLOQUE +0,04 % DE PPL · FLOU +2,09 % · COURT −0,70 % — LE CONTRAT TIENT SUR LES LOGITS, PAS SUR LA PERPLEXITÉ |
 | 15:38 | `7c219067` | N3.10b — LE MOTEUR NUMPY EXÉCUTE `COURT` : PARITÉ RUST ↔ NUMPY 2,980e-07, FENÊTRE COURTE APPLIQUÉE |
 | 15:41 | `a85da6f3` | N3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS |
+| 20:12 | `d6e08d6a` | P1b — LA GRILLE : LA BANQUE VAUT 6× À 512 SORTIES, RIEN À 4 096, ET NUIT À 65 536 |
 
 ## Le récit de la journée (écrit à la main)
 

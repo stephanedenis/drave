@@ -9,12 +9,12 @@
 | Début | 2026-10-31 17:40 |
 | Durée | 411.6 h |
 | Tours | 215 |
-| Messages | 4379 |
-| Appels d'outils | 3914 |
+| Messages | 4385 |
+| Appels d'outils | 3920 |
 | Fichiers touchés | 25 |
-| Commandes | 3243 |
+| Commandes | 3248 |
 | Sous-agents | 43 |
-| Commits | 520 |
+| Commits | 521 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -11453,9 +11453,15 @@ Je commence par le `auto` par défaut et le mode répertoire.
 
 ### Tour 215 — pour chaque chantier, fais des plans de travail qui tioenne compte des heures de tarification réduite en chine vs canada … [185 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*7 appels d'outils.* Actions notables :
 
 - bash — Chercher les infos de tarification DeepSeek
+- web_search
+- bash — Calculer les fenêtres tarifaires
+- bash — Écrire les plans par fenêtre tarifaire
+- bash — Voir les lignes longues de l'en-cours
+- bash — Trim l'en-cours
+- bash — Committer les plans tarifaires
 
 ## 3. Travail accompli
 
@@ -11577,7 +11583,7 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3203 autres
+- … et 3208 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12245,4 +12251,5 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - ÉTUDE — LES 2 GPU NVLink VS CPU : L'ENTRAÎNEMENT ×12-39 (×77 EN TANDEM), LE PRÉFILL ×12, LE NVLink 23 Go/s, MAIS LE 34 M EST SOUS-UTILISÉ ET LA GÉNÉRATION EST B
 - NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE CPU LIT 136 MO DE POIDS (MEMORY-BOUND), PAS PARCE QU'IL RECALCULE ; LE GPU EST
 - GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, 
+- PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N,
 

@@ -15,7 +15,7 @@
 
 | fichier | ce qu'il porte |
 |---|---|
-| [`rapport-gpu-tandem.md`](rapport-gpu-tandem.md) | **N** — les 2 GPU NVLink vs CPU |
+| [`rapport-gpu-tandem.md`](rapport-gpu-tandem.md) | **N** — les 2 GPU vs CPU |
 | [`rapport-native-reproductibilite.md`](rapport-native-reproductibilite.md) | **N4** — le 2,40 invérifiable |
 | [`rapport-natif-numpy.md`](rapport-natif-numpy.md) | **N4** — l'inférence numpy |
 | [`rapport-bilan-natif.md`](rapport-bilan-natif.md) | **Bilan** — le natif |
