@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**14 commits** · **9 session(s)** · **6 thème(s)**
+**15 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -50,6 +50,7 @@
 | 11:25 | `aafffb7a` | D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS |
 | 11:44 | `e471d051` | R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY |
 | 11:48 | `0d15bc36` | README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL |
+| 12:41 | `4f4f4fa1` | D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…) |
 
 ## Le récit de la journée (écrit à la main)
 

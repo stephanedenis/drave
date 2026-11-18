@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,10 +15,11 @@
 | 10:12 | `b3354bd8` | N4 — LE DÉCODAGE : TOP-40 À T=0,5 BAT LE GREEDY SUR TOUS LES AXES (VALIDES 0,907 · RÉPÉTITION 1,7 CONTRE 5,7 · ÉCHO 0,075 CONTRE 0,149) | `balayage_decodage.py`, `en-cours.md`, `README.md` (+11) |
 | 11:25 | `aafffb7a` | D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS | `en-cours.md`, `README.md`, `attention.md` (+15) |
 | 11:44 | `e471d051` | R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY | `en-cours.md`, `README.md`, `attention.md` (+15) |
+| 12:41 | `4f4f4fa1` | D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…) | `en-cours.md`, `README.md`, `attention.md` (+15) |
 
 ## Chiffres du jour
 
-`0,9572` · `0,8625` · `0,870` · `0 %` · `53,98 %` · `8,28 %` · `0,907` · `0,075` · `0,149` · `0,551` · `0,831` · `7,0 Go`
+`8,042 %` · `161 s` · `6,90 Go` · `8,042` · `0,9572` · `0,8625` · `0,870` · `0 %` · `53,98 %` · `8,28 %` · `0,907` · `0,075`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -42,6 +43,7 @@
 - [reports/rapport-courbe-r1-r3.md](../../reports/rapport-courbe-r1-r3.md)
 - [reports/rapport-decodage-r1.md](../../reports/rapport-decodage-r1.md)
 - [reports/rapport-dedup-blocs.md](../../reports/rapport-dedup-blocs.md)
+- [reports/rapport-dedup-lignes.md](../../reports/rapport-dedup-lignes.md)
 - [reports/rapport-donnees-inventaire.md](../../reports/rapport-donnees-inventaire.md)
 - [reports/rapport-grammaticalite-100m.md](../../reports/rapport-grammaticalite-100m.md)
 - [reports/rapport-r1-13000-pas.md](../../reports/rapport-r1-13000-pas.md)

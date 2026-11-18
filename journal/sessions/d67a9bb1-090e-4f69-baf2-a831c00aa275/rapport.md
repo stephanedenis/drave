@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 26.9 h |
 | Tours | 9 |
-| Messages | 469 |
-| Appels d'outils | 467 |
+| Messages | 470 |
+| Appels d'outils | 468 |
 | Fichiers touchés | 36 |
-| Commandes | 344 |
+| Commandes | 345 |
 | Sous-agents | 7 |
-| Commits | 29 |
+| Commits | 30 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*147 appels d'outils.* Actions notables :
+*148 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 128 autres
+- … et 129 autres
 
 **Synthèse produite :**
 
@@ -555,7 +555,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 304 autres
+- … et 305 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -727,4 +727,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-612.md reports/tagger-612-api.json reports/rapport-courbe-r1-r3.md reports/
 - README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL" && git l
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)" && echo ok; date; python3 -c " import json try:     d=json.load(open('work/n3/r4.pt.json'
 

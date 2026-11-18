@@ -8839,3 +8839,16 @@ FileNotFoundError: [Errno 2] No such file or directory: 'work/n3/r4.pt.json'
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"la dédup doit être **par … [2223 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 804 fiche(s) · 897 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N4 — grammaticalité et données** (18/11) : GV **6,90 → 1,4
+4f4f4fa1 D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité et données**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N4 — grammaticalité et donné … [1204 caractères tronqués]`
