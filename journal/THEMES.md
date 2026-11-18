@@ -371,6 +371,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-15](2026-11-15/portes.md) | `88,91 %` · `79,06 %` · `99,46 %` |
 | [2026-11-16](2026-11-16/portes.md) | — |
 | [2026-11-17](2026-11-17/portes.md) | — |
+| [2026-11-18](2026-11-18/portes.md) | — |
 
 ### `docs` — Documentation, état, conventions
 

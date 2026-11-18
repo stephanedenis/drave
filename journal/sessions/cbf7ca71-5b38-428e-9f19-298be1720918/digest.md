@@ -852,3 +852,455 @@ shingles 1334 1334 communs 1334
 … [2654 caractères tronqués]
   ```
 
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/dedup_blocs.py /tmp/dbg_dedup.py && python3 - <<'EOF'\nimport re\np = '/tmp/dbg_dedup.py'\ns = open(p).read()\ns = s.replace('''            vus.update(liste)\n\n            fraction = vus_bloc / ech_bloc if ech_bloc else 0.0 … [665 caractères tronqués]`
+
+  ```
+DBG bloc=1 debut=0 fin=65536 deb_n=0 fin_n=64101 len_norm=65411 tot_c=1336 liste=1336 vus=1336 norm_coeur_debut=b'beau mourir feu arriv\xc3\xa9e rouge chaque savoir voir bleu vent '
+DBG bloc=2 debut=65536 fin=131072 deb_n=1212 fin_n=65293 len_norm=66603 tot_c=1335 liste=1335 vus=2671 norm_coeur_debut=b'enfant for\xc3\xaat recevoir enseigner m\xc3\xa8re vivre ces p\xc3\xa8re temps'
+DBG bloc=3 debut=131072 fin=196608 deb_n=1260 fin_n=65430 len_norm=66740 tot_c=1337 liste=1337 vus=4008 norm_coeur_debut=b'\xc3\x89toile \xc3\xa9toile partout voir certain rue nouveau vous jour p'
+DBG bloc=4 debut=196608 fin=262144 deb_n=1271 fin_n=65278 len_norm=66588 tot_c=1333 liste=1333 vus=5341 norm_coeur_debut=b'r\xc3\xa9cit de arriv\xc3\xa9e route devoir pays femme roi le \xc5\x93uvre ces'
+DBG bloc=5 debut=262144 fin=327680 deb_n=1216 fin_n=65317 len_norm=66627 tot_c=1335 liste=1335 vus=6676 norm_coeur_debut=b'beau mourir feu arriv\xc3\xa9e rouge chaque savoir voir bleu vent '
+DBG bloc=6 debut=327680 fin=393216 deb_n=1212 fin_n=65293 len_norm=66603 tot_c=1335 liste=1335 vus=6676 norm_coeur_debut=b'enfant for\xc3\xaat recevoir enseigner m\xc3\xa8re vivre ces p\xc3\xa8re temps'
+  ```
+
+### 🤖 Assistant
+
+⏵ Investigating a subtle phase-alignment flaw in the fixed-stride grid
+
+The control revealed a real flaw: a copy at an offset not aligned with the stride matches nothing. Let me quantify this on the real corpus before fixing the design.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, struct, time, re\nd = open('/tmp/bench/slice.bin','rb').read()   # 200 MB du vrai train\nprint(\"octets\", len(d))\nBLANC = re.compile(rb\"[ \\t\\r\\f\\v]+\")\ndef h(w): return struct.unpack(\"<Q\", … [982 caractères tronqués]`
+
+  ```
+octets 200000000
+grille pas=96 : 2083333 shingles, 27942 vus (1.34 %) en 2.7s
+grille pas=48 : 4166665 shingles, 64493 vus (1.55 %) en 5.4s
+lignes        : 1741348 shingles, 48527 vus (2.79 %) en 2.6s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, struct, time, re\nd = open('/tmp/bench/slice.bin','rb').read()[:50_000_000]   # 50 MB\nprint(\"octets\", len(d))\nW = 96\ndef h(w): return struct.unpack(\"<Q\", hashlib.blake2b(w, digest_size=8).dig … [751 caractères tronqués]`
+
+  ```
+octets 50000000
+ancrage mots  : 7596803 shingles, 23735 vus (0.31 %) en 12.5s
+stride 1 (/8) : 6249988 shingles, 5080 vus (0.08 %) en 19.5s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, struct, time, re\nd = open('/tmp/bench/slice.bin','rb').read()[:20_000_000]\nW = 96\ndef h(w): return struct.unpack(\"<Q\", hashlib.blake2b(w, digest_size=8).digest())[0]\n\ndef mesure(nom, gen, gar … [904 caractères tronqués]`
+
+  ```
+tous, hash 1/16: 1249191 éch., 3035 vus (0.24 %) en 21.8s
+grille 96      : 208333 éch., 17 vus (0.01 %) en 0.3s
+grille 48      : 416665 éch., 57 vus (0.01 %) en 0.5s
+lignes         : 145317 éch., 462 vus (0.32 %) en 0.2s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport hashlib, struct, time, re\nd = open('/tmp/bench/slice.bin','rb').read()   # 200 MB\nW = 96\nHBLANC = re.compile(rb\"[ \\t\\r\\f\\v]+\")\ndef normalise(b): return HBLANC.sub(b\" \", b.lower())\ndef h(w): retu … [1090 caractères tronqués]`
+
+  ```
+octets 200000000 normalisés 200000000
+lignes 1741349
+débuts de ligne seuls: 1279914 ancres (0.006/octet), 34632 vus (2.71 %), 2.5s
+lignes + pas 192: 1905640 ancres (0.010/octet), 49546 vus (2.60 %), 3.6s
+lignes + pas 96: 2829425 ancres (0.014/octet), 70820 vus (2.50 %), 5.1s
+lignes + pas 48: 4830662 ancres (0.024/octet), 116448 vus (2.41 %), 8.3s
+  ```
+
+### 🤖 Assistant
+
+The fixed-stride grid is fundamentally biased (0.01 % vs 0.24 % at 20 MB). I'll switch to content-defined anchors (line starts + stride within a line), which is shift-invariant.
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"dedup_blocs.py — dédoublonner du texte par blocs, à mémoire bornée.\n\nPOURQUOI. `tools/corpus_propre.py` garde **tous** les shingles en mémoire (≈ 80 Go par Go\nde texte, cf. `reports/rapport-n2-corpus-1go.md`) : dédupliquer les 7,50 Go de\n`data/corpus_wi … [37900 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py</path>
+<type>file</type>
+<content>
+Updated file
+</content>
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", "new_string": "                    \"lignes\": brut_coeur.count(b\"\\n\"),\n                    \"shingles\": tot_bloc,\n                    \"vus\": vus_bloc,", "old_string": "                    \"lignes\": brut_ … [195 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/dedup_blocs.py --autotest 2>&1 | python3 -c \"\nimport json,sys\nr = json.load(sys.stdin)\nprint('OK =', r['ok'])\nfor c in r['cas']:\n    print(('  ✅' if c['ok'] else '  ❌'), c['nom'], json.dumps(c['detail'], ensu … [160 caractères tronqués]`
+
+  ```
+OK = False
+  ❌ a_texte_unique_garde {"blocs": [true, true, true, true], "rc": 1}
+  ❌ b_copie_exacte_ecartee {"blocs": [true, false, false, false], "fractions": [0.0, 0.9632, 0.9626, 0.9618]}
+  ❌ b_fraction_1 {"fractions": [0.0, 0.9632, 0.9626, 0.9618]}
+  ❌ c_copie_10pct_ecartee_a_080 {"blocs": [true, true, true, true], "fractions": [0.54, 0.2085, 0.4162, 0.0889]}
+  ✅ d_texte_different_garde {"blocs": [true, true, true, true], "fractions": [0.0, 0.0, 0.0, 0.0]}
+  ❌ sortie_egale_a_plus_d {"octets": 0, "attendu": 524288}
+  ✅ budget_respecte_controle {"rss_max_mio": 30.6, "budget_mio": 512.0}
+  ✅ stable_sha256 {"sha1": "882942f7297ccd93e41747eb0792ed412b12735983969a3e873d12842cab5ebd", "sha2": "882942f7297ccd93e41747eb0792ed412b12735983969a3e873d12842cab5ebd
+  ✅ stable_blocs {"identiques": true}
+  ✅ stable_octets {"octets": 851968}
+  ✅ c_garde_a_095 {"blocs": [true, true, true, true], "fractions": [0.54, 0.2085, 0.4162, 0.0889]}
+  ❌ c_fraction_entre_080_et_095 {"fractions": [0.54, 0.2085, 0.4162, 0.0889]}
+  ❌ sortie_095_egale_a_plus_c_plus_d {"octets": 0}
+  ✅ copie_decalee_ecartee {"blocs": [], "fractions": []}
+  ✅ copie_10pct_disperse_gardee {"blocs": [true, true, true, true], "fracti
+… [742 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf work/dedup/controle && python3 tools/dedup_blocs.py --entree work/dedup/controle/controle.txt --sortie /tmp/x.txt --bloc-mo 0.0625 --seuil 0.8 --memoire-mo 512 2>&1 | tail -20", "description": "Run tool directly to see the tra … [8 caractères tronqués]`
+
+  ```
+ERREUR entree_invalide: /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/dedup/controle/controle.txt n'est pas un fichier lisible
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/dedup_blocs.py --autotest >/dev/null 2>&1; ls -la work/dedup/controle/ | head; echo \"=== run direct ===\"; python3 tools/dedup_blocs.py --entree work/dedup/controle/controle.txt --sortie /tmp/x.txt --bloc-mo 0.0625 --s … [103 caractères tronqués]`
+
+  ```
+total 2320
+drwxr-xr-x. 1 stephane stephane     374 18 nov 10:45 .
+drwxr-xr-x. 1 stephane stephane     108 18 nov 10:45 ..
+-rw-r--r--. 1 stephane stephane    2756 18 nov 10:45 autotest.json
+-rw-r--r--. 1 stephane stephane    1570 18 nov 10:45 budget_impossible.json
+-rw-r--r--. 1 stephane stephane  786453 18 nov 10:45 controle_decale.txt
+-rw-r--r--. 1 stephane stephane  524587 18 nov 10:45 controle_disperse.txt
+-rw-r--r--. 1 stephane stephane 1048576 18 nov 10:45 controle.txt
+-rw-r--r--. 1 stephane stephane       0 18 nov 10:45 garde-080-bis.txt
+-rw-r--r--. 1 stephane stephane       0 18 nov 10:45 garde-080.txt
+=== run direct ===
+Traceback (most recent call last):
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", line 802, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", line 773, in main
+    execute(a, rapport)
+    ~~~~~~~^^^^^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", line 344, in execute
+    remplir(besoin)
+    ~~~~~~~^^^^^^^^
+  File "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", line 322, in remplir
+  
+… [161 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py", "new_string": "    def remplir(jusqua: int) -> None:\n        nonlocal tampon\n        while base + len(tampon) < jusqua:", "old_string": "    def remplir(jusqua: int) -> None:\n        while base + len(tampon) < j … [8 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py has been updated successfully.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf work/dedup/controle && time python3 tools/dedup_blocs.py --autotest 2>&1 | python3 -c \"\nimport json,sys\nr = json.load(sys.stdin)\nprint('OK =', r['ok'])\nfor c in r['cas']:\n    print(('  OK ' if c['ok'] else '  KO '), c['n … [190 caractères tronqués]`
+
+  ```
+OK = True
+  OK  a_texte_unique_garde {"blocs": [true, true, true, true], "rc": 0}
+  OK  b_copie_exacte_ecartee {"blocs": [false, false, false, false], "fractions": [1.0, 1.0, 1.0, 1.0]}
+  OK  b_fraction_1 {"fractions": [1.0, 1.0, 1.0, 1.0]}
+  OK  c_copie_10pct_ecartee_a_080 {"blocs": [false, false, false, false], "fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  d_texte_different_garde {"blocs": [true, true, true, true], "fractions": [0.0, 0.0, 0.0, 0.0]}
+  OK  sortie_egale_a_plus_d {"octets": 524288, "attendu": 524288}
+  OK  budget_respecte_controle {"rss_max_mio": 30.9, "budget_mio": 512.0}
+  OK  stable_sha256 {"sha1": "1a5c01ef8c713c541c0a2ad6f50e2aa4ff4d7ce858a9e4d51e65033f4a402244", "sha2": "1a5c01ef8c713c541c0a2ad6f50e2aa4ff4d7ce858a9e4d51e65033f4a402244"}
+  OK  stable_blocs {"identiques": true}
+  OK  stable_octets {"octets": 524288}
+  OK  c_garde_a_095 {"blocs": [true, true, true, true], "fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  c_fraction_entre_080_et_095 {"fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  sortie_095_egale_a_plus_c_plus_d {"octets": 786432}
+  OK  copie_decalee_ecartee {"blocs": [false, false, false, false], "fractions": [0.9992, 1.0, 1.0, 1.
+… [858 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /tmp && python3 - <<'EOF'\nimport sys, resource, time\nfor n in (10_000, 20_000, 100_000, 1_000_000, 10_000_000):\n    s = set()\n    for i in range(n):\n        s.add((i * 0x9E3779B97F4A7C15) & 0xFFFFFFFFFFFFFFFF)\n    rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024\ … [218 caractères tronqués]`
+
+  ```
+n=     10000 sizeof/n=  52.5  int=28  RSS=   11.6 Mio  RSS/n=1219.4
+n=     20000 sizeof/n= 104.9  int=28  RSS=   14.4 Mio  RSS/n=757.1
+n=    100000 sizeof/n=  41.9  int=28  RSS=   22.0 Mio  RSS/n=230.2
+n=   1000000 sizeof/n=  33.6  int=28  RSS=   95.4 Mio  RSS/n=100.0
+n=  10000000 sizeof/n=  26.8  int=28  RSS=  757.0 Mio  RSS/n= 79.4
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re\np = 'tools/dedup_blocs.py'\ns = open(p).read()\n\nold = '''def calibre(n: int = 20_000) -> dict:\n    \"\"\"Mesure le coût d'une entrée de `set` : table + entier, avec le pic de redimensionnement.\n\n    … [2188 caractères tronqués]`
+
+  ```
+97:COUT_ENTREE_OCTETS = 80.0  # octets par entrée de set (mesuré, voir cout_entree())
+157:    return {"cout_entree_octets": COUT_ENTREE_OCTETS,
+232:    cal = cout_entree()
+235:    attendus = max(1, math.ceil(1.5 * taille / a.pas))
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && rm -rf work/dedup/controle && python3 tools/dedup_blocs.py --autotest 2>&1 | python3 -c \"\nimport json,sys\nr = json.load(sys.stdin)\nprint('OK =', r['ok'])\nfor c in r['cas']:\n    print(('  OK ' if c['ok'] else '  KO '), c['nom'], … [185 caractères tronqués]`
+
+  ```
+OK = True
+  OK  a_texte_unique_garde {"blocs": [true, true, true, true], "rc": 0}
+  OK  b_copie_exacte_ecartee {"blocs": [false, false, false, false], "fractions": [1.0, 1.0, 1.0, 1.0]}
+  OK  b_fraction_1 {"fractions": [1.0, 1.0, 1.0, 1.0]}
+  OK  c_copie_10pct_ecartee_a_080 {"blocs": [false, false, false, false], "fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  d_texte_different_garde {"blocs": [true, true, true, true], "fractions": [0.0, 0.0, 0.0, 0.0]}
+  OK  sortie_egale_a_plus_d {"octets": 524288, "attendu": 524288}
+  OK  budget_respecte_controle {"rss_max_mio": 30.9, "budget_mio": 512.0}
+  OK  stable_sha256 {"sha1": "1a5c01ef8c713c541c0a2ad6f50e2aa4ff4d7ce858a9e4d51e65033f4a402244", "sha2": "1a5c01ef8c713c541c0a2ad6f50e2aa4ff
+  OK  stable_blocs {"identiques": true}
+  OK  stable_octets {"octets": 524288}
+  OK  c_garde_a_095 {"blocs": [true, true, true, true], "fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  c_fraction_entre_080_et_095 {"fractions": [0.9021, 0.9016, 0.9004, 0.9006]}
+  OK  sortie_095_egale_a_plus_c_plus_d {"octets": 786432}
+  OK  copie_decalee_ecartee {"blocs": [false, false, false, false], "fractions": [0.9992, 1.0, 1.0, 1.0]}
+  OK  copie_10pct_disperse_g
+… [720 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Proving the memory bound on 200 MB with a 256 MiB budget
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/bench/slice.bin work/dedup/slice-200Mo.txt && ls -l work/dedup/slice-200Mo.txt && /usr/bin/time -v python3 tools/dedup_blocs.py --entree work/dedup/slice-200Mo.txt --sortie work/dedup/slice-200Mo-garde.txt --bloc-mo 8 --memoi … [170 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 200000000 18 nov 10:46 work/dedup/slice-200Mo.txt
+ERREUR memoire_depassee: RSS max 318 Mio > plafond 256 Mio au bloc 1
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.85
+	Maximum resident set size (kbytes): 326064
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -c 1000000 work/dedup/slice-200Mo.txt > /tmp/petit.txt && for b in 0.25 1 8; do echo \"=== bloc $b ===\"; /usr/bin/time -v python3 tools/dedup_blocs.py --entree /tmp/petit.txt --sortie /tmp/petit-out.txt --bloc-mo $b --memoire-m … [108 caractères tronqués]`
+
+  ```
+=== bloc 0.25 ===
+	Maximum resident set size (kbytes): 34088
+=== bloc 1 ===
+	Maximum resident set size (kbytes): 58236
+=== bloc 8 ===
+	Maximum resident set size (kbytes): 58244
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, tracemalloc, resource, types\nsys.path.insert(0, 'tools')\nimport dedup_blocs as D\n\na = types.SimpleNamespace(entree='/tmp/petit.txt', sortie='/tmp/petit-out2.txt', bloc_mo=1.0,\n                      … [676 caractères tronqués]`
+
+  ```
+tracemalloc pic 33.9743537902832 Mio
+     0.0 Mio         1  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:281
+     0.0 Mio         3  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:415
+     0.0 Mio         2  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:304
+     0.0 Mio         1  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:454
+     0.0 Mio         1  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:287
+     0.0 Mio         3  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:140
+     0.0 Mio         3  <stdin>:13
+     0.0 Mio         1  /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/dedup_blocs.py:451
+RSS 70.10546875 Mio
+[stderr]
+[bloc 1] 0/1 Mio, 0.0% vu, gardé, RSS 70 Mio, 7 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport sys, time, types\nsys.path.insert(0, 'tools')\nimport dedup_blocs as D\n\n# mesure des briques\nd = open('/tmp/petit.txt','rb').read()\nprint(\"octets\", len(d), \"lignes\", d.count(b'\\n'))\nt=time.perf_cou … [948 caractères tronqués]`
+
+  ```
+octets 1000000 lignes 7506
+normalise 0.061 s -> 1000000
+hachage 20832 fenêtres en 0.031 s
+ancres 23497 lignes 7507 en 0.005 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp tools/dedup_blocs.py /tmp/dbg2.py && python3 - <<'EOF'\np='/tmp/dbg2.py'; s=open(p).read()\ns = s.replace(\"\"\"            brut_coeur = bytes(tampon[p1:p2])\"\"\",\"\"\"            print(f\"  RSS avant bloc: {rss_max_octets()/MIB … [841 caractères tronqués]`
+
+  ```
+RSS avant bloc: 23.7 Mio, tampon=0.95 Mio
+  RSS après normalise: 57.8 Mio, norm=0.95 Mio
+  RSS après hachage: 57.8 Mio, tot=23497, liste=23497
+[bloc 1] 0/1 Mio, 0.0% vu, gardé, RSS 58 Mio, 0 s
+{
+ "entree_octets": 1000000,
+ "duree_s": 0.1,
+ "debit_mio_s": 9.1,
+ "rss_max_mio": 57.8,
+ "budget_mio": 256.0,
+ "blocs": {
+  "total": 1,
+  "gardes": 1,
+  "ecartes": 0,
+  "octets_gardes": 1000000,
+  "octets_ecartes": 0,
+  "pct_octets_ecartes": 0.0
+ },
+ "shingles": {
+  "shingle_octets": 96,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport re, resource, time\ndef rss(): return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/1024\nd = open('/tmp/petit.txt','rb').read()\nprint(\"départ RSS\", round(rss(),1), \"Mio\")\nR1 = re.compile(rb\"[ \\ … [487 caractères tronqués]`
+
+  ```
+départ RSS 12.6 Mio
+1+ (actuel): 60.8 ms, pic RSS 45.9 Mio (+33.3), len=1000000
+2+ (proposé): 19.0 ms, pic RSS 45.9 Mio (+0.0), len=1000000
+espaces simples: 146472 runs 2+: 0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='tools/dedup_blocs.py'; s=open(p).read()\ns = s.replace('HBLANC = re.compile(rb\"[ \\\\t\\\\r\\\\f\\\\v]+\")     # espaces horizontaux ; les \\\\n sont conservés',\n              'HBLANC = re.compile(rb\"[ \\\\t\ … [1621 caractères tronqués]`
+
+  ```
+86:HBLANC = re.compile(rb"[ \t\r\f\v]{2,}")   # suites de 2+ espaces ; les \n restent
+132:    return HBLANC.sub(b" ", bloc.lower())
+=== 1 Mo ===
+ "rss_max_mio": 28.5,
+	Maximum resident set size (kbytes): 29212
+=== 200 Mo, budget 256 ===
+[bloc 18] 136/191 Mio, 15.9% vu, gardé, RSS 121 Mio, 8 s
+[bloc 19] 144/191 Mio, 7.6% vu, gardé, RSS 121 Mio, 9 s
+[bloc 20] 152/191 Mio, 2.8% vu, gardé, RSS 121 Mio, 9 s
+[bloc 21] 160/191 Mio, 3.7% vu, gardé, RSS 126 Mio, 10 s
+[bloc 22] 168/191 Mio, 1.3% vu, gardé, RSS 127 Mio, 10 s
+[bloc 23] 176/191 Mio, 0.3% vu, gardé, RSS 128 Mio, 10 s
+[bloc 24] 184/191 Mio, 0.6% vu, gardé, RSS 128 Mio, 11 s
+	Maximum resident set size (kbytes): 131308
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\nimport json\nr = json.load(open('work/dedup/prouve-200Mo.json'))\nprint(json.dumps({k: r[k] for k in ('memoire','shingles','blocs','distribution','duree_s','debit_mio_s')}, ensure_ascii=False, indent=1))\nprint(\"f … [117 caractères tronqués]`
+
+  ```
+{
+ "memoire": {
+  "budget_mio": 256.0,
+  "plancher_mio": 112.6,
+  "bloc_mio": 8.0,
+  "recouvrement_octets": 167772,
+  "recouvrement_origine": "2 % du bloc, plafonné à 1 Mio",
+  "cout_entree": {
+   "cout_entree_octets": 80.0,
+   "source": "mesure 2026-11-18 : set de 10 M d'entiers 64 bits = 757 Mio de ru_maxrss, soit 79,4 o/entrée"
+  },
+  "ancres_attendues": 6250000,
+  "capacite_entrees": 1879048,
+  "taux_echantillonnage": "1/8",
+  "p": 0.125,
+  "plafond_test_mio": null,
+  "rss_max_mio": 128.2,
+  "marge_mio": 127.8
+ },
+ "shingles": {
+  "shingle_octets": 96,
+  "pas": 48,
+  "hash_bits": 64,
+  "graine": 0,
+  "taux_echantillonnage": "1/8",
+  "ancrage": "début de ligne + tous les --pas octets dans la ligne (positions définies par le contenu : insensibles au décalage)",
+  "calcules": 4830660,
+  "echantillonnes": 604152,
+  "vus": 11853,
+  "vus_pct": 1.962
+ },
+ "blocs": {
+  "total": 24,
+  "gardes": 24,
+  "ecartes": 0,
+  "octets_gardes": 200000000,
+  "octets_ecartes": 0,
+  "pct_octets_ecartes": 0.0
+ },
+ "distribution": {
+  "fraction_seuil": {
+   "0": 2,
+   "0-1": 15,
+   "1-5": 4,
+   "5-20": 3,
+   "20-50": 0,
+   "50-80": 0,
+   "80-95": 0,
+   "95-100": 0
+  }
+ },
+ "duree_s": 11.1,
+ "debit_mio_s
+… [212 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'EOF'\np='tools/dedup_blocs.py'; s=open(p).read()\n\nold = \"\"\"            fraction = vus_bloc / tot_bloc if tot_bloc else 0.0\n            garde = (tot_bloc == 0) or (fraction < seuil)\n            vus.update(liste)\"\ … [1976 caractères tronqués]`
+
+  ```
+{
+ "entree_octets": 200000000,
+ "duree_s": 11.0,
+ "debit_mio_s": 17.3,
+ "rss_max_mio": 121.0,
+ "budget_mio": 256.0,
+ "blocs": {
+  "total": 24,
+  "gardes": 24,
+  "ecartes": 0,
+  "octets_gardes": 200000000,
+  "octets_ecartes": 0,
+  "pct_octets_ecartes": 0.0
+ },
+ "shingles": {
+  "shingle_octets": 96,
+  "pas": 48,
+  "hash_bits": 64,
+  "graine": 0,
+  "taux_echantillonnage": "1/8",
+  "ancrage": "début de ligne + tous les --pas octets dans la ligne (positions définies par le contenu : insensibles au décalage)",
+  "calcules": 4830660,
+  "echantillonnes": 604152,
+  "vus": 11853,
+  "vus_pct": 1.962,
+  "vus_incluant_bloc": 14206,
+  "vus_incluant_bloc_pct": 2.351,
+  "definition": "vus_pct = déjà présents avant le bloc (métrique de décision) ; vus_incluant_bloc_pct = y compris les répétitions internes au bloc (même définition qu'une passe unique, comparable à l'inventaire)"
+ },
+ "sortie": {
+  ```
+
+### 🤖 Assistant
+
+⏵ Launching the full 7.5 GB pass in the background
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && df -h /home/stephane/Data13TB | tail -1 && /usr/bin/time -v python3 tools/dedup_blocs.py --entree data/corpus_wiki_fr_texte/train.txt --sortie work/dedup/train.txt --bloc-mo 64 --memoire-mo 2048 --json reports/dedup-blocs-7.5go.json  … [177 caractères tronqués]`
+
+  ```
+started background job bash-643
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 20 && tail -3 work/dedup/train-pass.log", "description": "Check main run progress"}`
+
+  ```
+[bloc 5] 256/7156 Mio, 3.3% vu, gardé, RSS 437 Mio, 18 s
+[bloc 6] 320/7156 Mio, 1.5% vu, gardé, RSS 439 Mio, 22 s
+[bloc 7] 384/7156 Mio, 1.9% vu, gardé, RSS 442 Mio, 26 s
+  ```
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"diagnostic_ancrage.py — pourquoi une grille à pas fixe sous-estime la duplication.\n\nLe 2026-11-18, l'inventaire (`reports/rapport-donnees-inventaire.md` § 1) a mesuré\n2,93 % de shingles de 96 octets déjà vus sur les 7,50 Go du train, avec un pas de 96\no … [4530 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/dedup/diagnostic_ancrage.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/dedup/train-pass.log && ls -l work/dedup/train.txt 2>/dev/null", "description": "Check main run progress"}`
+
+  ```
+[bloc 14] 832/7156 Mio, 1.8% vu, gardé, RSS 504 Mio, 52 s
+[bloc 15] 896/7156 Mio, 7.0% vu, gardé, RSS 506 Mio, 56 s
+-rw-r--r--. 1 stephane stephane 1006630218 18 nov 10:50 work/dedup/train.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60 && tail -2 work/dedup/train-pass.log", "description": "Check progress again"}`
+
+  ```
+[still running after 60000ms; moved to background job bash-646]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/dedup/train-pass.log && ls -l work/dedup/train.txt", "description": "Check main run progress"}`
+
+  ```
+[bloc 37] 2304/7156 Mio, 1.4% vu, gardé, RSS 587 Mio, 139 s
+[bloc 38] 2368/7156 Mio, 2.0% vu, gardé, RSS 589 Mio, 143 s
+-rw-r--r--. 1 stephane stephane 2550127754 18 nov 10:52 work/dedup/train.txt
+  ```
+
+### 👤 Utilisateur
+
+background job bash-646 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 60 && tail -2 work/dedup/train-pass.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 90; tail -2 work/dedup/train-pass.log; ls -l work/dedup/train.txt", "description": "Wait and check progress", "timeoutMs": 120000}`

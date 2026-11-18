@@ -7891,3 +7891,134 @@ test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"PPL **37,2013 invariante … [2090 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 800 fiche(s) · 890 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1702 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+ create mode 100644 journal/sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md
+ create mode 100644 journal/sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md
+ create mode 100644 reports/rapport-a2.6-tete-q8.md
+fc1abadf A2.6 — LA TÊTE Q8_0/Q6_K ENTRE DANS LA RÈGLE : +117 LIGNES, PERTE 0, 9/9 TESTS, RIEN CÂBLÉ
+=== r2 ===
+pas 7900 · perte 1.0835 · PPL val 3.446 · 2201 s
+  ```
+
+- **bash** `{"command": "sleep 480; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r2.log; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n3/r2.pt.json')); print('FINI pas', d['pas'], 'ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4), 'duree', … [132 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 10:47:09 EST
+pas 9650 · perte 1.2031 · PPL val 3.439 · 2688 s
+en cours
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n3/r2.pt.json')); print('FINI pas', d['pas'], 'ppl_val', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4), 'duree', round(d['duree_s']))\" && nohup env PYT … [496 caractères tronqués]`
+
+  ```
+FINI pas 10000 ppl_val 3.2321 precision 0.6527 duree 2791
+ 506547 /home/stephane/gpu-env/bin/python -m tools
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash bench/checkpoint_bench.sh work/n3/r2.pt r2 2>&1 | tail -6", "description": "Bench checkpoint r2", "timeoutMs": 900000}`
+
+  ```
+natif     top40_0.8  gv=3.35 gn=3.05 mots=26.3 ciment=0.523 attaches=0.871 sans_verbe=0.00
+natif     top20_0.5  gv=2.05 gn=2.40 mots=26.6 ciment=0.574 attaches=0.881 sans_verbe=0.20
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.791 attaches=0.747 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.801 attaches=0.650 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+bancs : reports/banc-generation-r2.json · reports/banc-grammaticalite-r2.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nfor f in (\"reports/banc-generation-r1.json\", \"reports/banc-generation-r2.json\"):\n    d = json.load(open(f))\n    print(\"==\", f)\n    for nom, r in d[\"reglages\"].items():\n        print(f\"  {no … [465 caractères tronqués]`
+
+  ```
+== reports/banc-generation-r1.json
+  greedy       mots=0.902 d2=0.329 rép=11 écho=0.149
+  top40_0.8    mots=0.831 d2=0.982 rép=2 écho=0.046
+  top20_0.5    mots=0.883 d2=0.856 rép=4 écho=0.059
+== reports/banc-generation-r2.json
+  greedy       mots=0.924 d2=0.390 rép=11 écho=0.164
+  top40_0.8    mots=0.845 d2=0.973 rép=2 écho=0.038
+  top20_0.5    mots=0.854 d2=0.834 rép=9 écho=0.071
+=== grammaticalité r2 ===
+  greedy     gv=1.10 gn=1.65 ciment=0.641 sans_verbe=0.65
+  top40_0.8  gv=3.35 gn=3.05 ciment=0.523 sans_verbe=0.00
+  top20_0.5  gv=2.05 gn=2.40 ciment=0.574 sans_verbe=0.20
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la $HOME/.config/drave/deepseek.key 2>&1 | awk '{print $1, $5, $9}'; ls -la /tmp/tagger-612/corpus-gold-612.txt 2>&1 | awk '{print $5, $9}'; ls /tmp/tagger-612/ 2>/dev/null | head; date", "description": "Verify the API key file a … [20 caractères tronqués]`
+
+  ```
+-rw-------. 36 /home/stephane/.config/drave/deepseek.key
+17782 /tmp/tagger-612/corpus-gold-612.txt
+attendu-612.json
+corpus-gold-5.txt
+corpus-gold-612.txt
+cout-612.json
+dryrun-5.err
+dryrun-5.jsonl
+dryrun_612.py
+dryrun-summary.json
+eval-heuristique-612.err
+eval-heuristique-612.json
+mer 18 nov 2026 10:51:48 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"A2.6\" docs/pilotage/roadmap.md | head -6", "description": "Locate the A2.6 roadmap rows"}`
+
+  ```
+30:| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués** ; **A6.2 libre** (MoE local 18 Go) ; A2.6 partiel ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** (experts : A6.2 bloqué) ; le lot ≥ 2 assumé |
+36:| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
+238:[A2.6] lasts 2 days and is 30% complete and is colored in #b26a00
+256:[A2.6] starts at [A8.3b/c]'s end
+257:[A3.4/A5.4/A6.2] starts at [A2.6]'s 
+… [3 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '32p;34p' docs/pilotage/roadmap.md | cut -c1-400", "description": "Read the N and R roadmap rows"}`
+
+  ```
+| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v7** : **61/61** types, **144/144** rôles, **56 tests** ; **19/19 verdicts `/paragraphes`** (11 acceptés, 8 exclus) **committés `389b99f`** ; le fait divers tranché (la tête du GN arrête le verbe) ; [fiche](../../reports/rapport-s-fait-divers.md). **v6** : h050, h053 et « si fort que » **fermés**, gold
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"épingler le corpus[^|]*\" docs/pilotage/roadmap.md | head -2; grep -c \"A2.6 partiel\" docs/pilotage/roadmap.md", "description": "Find the exact roadmap strings to update"}`
+
+  ```
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"porte propre\" docs/pilotage/roadmap.md | head -4; grep -o \"N2\\*\\* : \\*\\*clôturée[^|]*\" docs/pilotage/roadmap.md | head -2", "description": "Locate the N row's next action"}`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; **N3 couvert** (22 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; puis la **porte propre (0,29)** ; **N4** |
+N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; puis la **porte propre (0,29)** ; **N4**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"**A2.6 partiel**\", \"**A … [672 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 890 JSON, le disque en a 892
+mer 18 nov 2026 10:52:22 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: **A2.6 partiel**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"A6.2 libre** (MoE local 1 … [1043 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 800 fiche(s) · 892 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1702 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nROADMAP — A2.6 ET N À JOUR : BANDE EXPERTS 7,0 Go/s, TÊTE Q8_0 DANS LA RÈGLE, CORPUS ÉPINGLÉ, r1/r2 MESURÉ … [718 caractères tronqués]`
