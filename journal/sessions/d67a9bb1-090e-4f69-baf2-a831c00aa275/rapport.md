@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 31.0 h |
-| Tours | 10 |
-| Messages | 568 |
-| Appels d'outils | 558 |
+| Durée | 31.1 h |
+| Tours | 11 |
+| Messages | 579 |
+| Appels d'outils | 567 |
 | Fichiers touchés | 38 |
-| Commandes | 430 |
+| Commandes | 439 |
 | Sous-agents | 7 |
-| Commits | 40 |
+| Commits | 41 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -63,6 +63,8 @@
 **Tour 9** — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin
 
 **Tour 10** — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois autonome jusqu'à 8h demain
+
+**Tour 11** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -500,7 +502,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 
 ### Tour 10 — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois auto … [22 caractères tronqués]
 
-*20 appels d'outils.* Actions notables :
+*23 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check resources and read the A2.6 code plan
@@ -516,7 +518,30 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - bash — Commit the v2 corpus promotion
 - bash — Read the placement module
 - bash — Read the placement tests layout
-- … et 6 autres
+- … et 9 autres
+
+**Synthèse produite :**
+
+⏵ Les deux chaînes 150 M tournent (GPU 0/1 à 99 %), la passe du soir est en cours — j'attends le premier point de contrôle
+
+Les deux chaînes d'entraînement sont lancées depuis 16 h 39 (150 M, `d=896`, corpus v2 et v1, tranches de 10 000 pas avec banc après chacune), la passe complète des 90 portes tourne depuis 16 h 51, et le corpus v2 (6,90 Go) est promu et épinglé (`9861fb39…`). Le chargeur de corpus a été réparé au passage (`torch.frombuffer`), avec un contrôle bit-identique : la PPL du checkpoint r4 sur le val épinglé rend **3,0628**, exactement la valeur enregistrée.
+
+Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les deux runs), progression de la passe, et premier regard sur la courbe 150 M.
+
+### Tour 11 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
+
+*6 appels d'outils.* Actions notables :
+
+- bash — Check the night's progress
+- bash — Locate the experts placement site
+- bash — Add the experts trace and test
+- bash — Identify the failing test
+- bash — Remove the unwired env name and re-test
+- bash — Commit the experts trace
+
+**Synthèse produite :**
+
+⏵ Point de contrôle de la nuit : chaînes 150 M, passe du soir
 
 ## 3. Travail accompli
 
@@ -615,7 +640,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 390 autres
+- … et 399 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -743,7 +768,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 
 ## 5. Erreurs rencontrées
 
-11 sorties en erreur ou divergentes. Les premières :
+12 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -756,6 +781,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - **T9** : mer 18 nov 2026 12:21:56 EST pas 5700 · perte 1.0961 · PPL val 3.286 · 1687 s passe: 71 vertes, 2 rouges   porte-prechargement    ✅                         163 s    PORTE TENUE [exit code: 2]
 - **T9** : mer 18 nov 2026 12:41:28 EST [stderr] Traceback (most recent call last):   File "<string>", line 3, in <module>     d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val']
 - **T10** : --> src/placement.rs:52:12    --> src/placement.rs:117:11    --> src/placement.rs:119:11    --> src/placement.rs:122:11    --> src/placement.rs:124:11    --> src/placement.rs:127:11 --- src/main.rs:83
+- **T11** : tests_vars::les_vars_lues_sont_completes --- FAILED ....... failures:  ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (1181902) panicked a
 
 ## 6. Commits
 
@@ -798,5 +824,6 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "[c
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 (4 000 MOTS EXACTEMENT)" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 

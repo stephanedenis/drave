@@ -4,12 +4,19 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (2)
+## Commits du jour (3)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
 | 10:36 | `fc1abadf` | A2.6 — LA TÊTE Q8_0/Q6_K ENTRE DANS LA RÈGLE : +117 LIGNES, PERTE 0, 9/9 TESTS, RIEN CÂBLÉ | `en-cours.md`, `placement.rs`, `README.md` (+15) |
 | 13:01 | `e75ee564` | PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE | `en-cours.md`, `references-non-regression.md`, `README.md` (+11) |
+| 16:49 | `837fb4dd` | A2.6 — LA RÈGLE SAIT CHIFFRER ET REFUSER LES EXPERTS : 7,0 Go/s PAR LECTEUR, 13/13 TESTS, 144/144 CRATE | `en-cours.md`, `placement.rs`, `README.md` (+12) |
+
+## Chiffres du jour
+
+`7,0 Go`
+
+*Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
@@ -19,12 +26,13 @@
 - `9f4f7b6d-c5aa-4269-b785-a0f444424470` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 0.2 h) → [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md)
 - `c7e46dba-11cb-456b-a3b6-715428927f99` — Tu travailles dans le dépôt (début 2026-11-18 08:58, 0.4 h) → [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md)
 - `cbf7ca71-5b38-428e-9f19-298be1720918` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 1.0 h) → [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md)
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 31.0 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 31.1 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `da0f2984-32d0-459d-a761-d3faf6a10b8a` — Tu travailles dans le dépôt (début 2026-11-18 09:15, 0.4 h) → [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 423.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
 
+- [reports/rapport-a2.6-bande-experts.md](../../reports/rapport-a2.6-bande-experts.md)
 - [reports/rapport-a2.6-tete-q8.md](../../reports/rapport-a2.6-tete-q8.md)
 
 <!-- notes -->

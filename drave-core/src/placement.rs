@@ -301,6 +301,29 @@ budget {:.1} ms ; VRAM libre {:.2} Go, RAM libre {:.2} Go — le NVMe (3,5 Go/s)
     ))
 }
 
+/// La **trace** du placement des experts, pour le branchement opt-in à venir : une
+/// ligne qui dit ce que la règle a vu et ce qu'elle aurait choisi (ou refusé).
+/// Elle ne décide rien : c'est le témoin qui rend le placement auditable.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn trace_experts(
+    octets_par_jeton: u64,
+    libre_vram: u64,
+    libre_ram: u64,
+    lecteurs: usize,
+    cout_max_s: f64,
+) -> String {
+    let bande = bande_experts(lecteurs) / 1e9;
+    let cout = cout_experts(octets_par_jeton, lecteurs) * 1e3;
+    match choisir_experts(octets_par_jeton, libre_vram, libre_ram, lecteurs, cout_max_s) {
+        Ok(s) => format!(
+            "experts : {:.2} Go/jeton · {} lecteurs · bande {:.2} Go/s · {:.1} ms/jeton → {} \
+(VRAM libre {:.2} Go, RAM libre {:.2} Go, budget {:.1} ms)",
+            octets_par_jeton as f64 / 1e9, lecteurs, bande, cout, s.nom(),
+            libre_vram as f64 / 1e9, libre_ram as f64 / 1e9, cout_max_s * 1e3),
+        Err(e) => e,
+    }
+}
+
 /// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :
 /// **+2,28 %** sur les premières, **+0,03 %** sur les dernières. La frontière mesurée
 /// est la moitié du réseau (les couches 0-11 contre 12-23 sur 24).
@@ -474,5 +497,17 @@ mod tests {
         assert_eq!(choisir_experts(1_000_000, 2_000_000, 0, 8, 1.0), Ok(Support::Vram));
         // La RAM suffit quand la VRAM non, et le coût reste dans le budget.
         assert_eq!(choisir_experts(1_000_000, 0, 2_000_000, 8, 1.0), Ok(Support::Ram));
+    }
+
+    #[test]
+    fn la_trace_des_experts_dit_les_chiffres() {
+        let t = trace_experts(1_097_000_000, 4 << 30, 64 << 30, 8, 1.0);
+        assert!(t.contains("1.10 Go/jeton"), "{t}");
+        assert!(t.contains("6.99 Go/s"), "{t}");
+        assert!(t.contains("156.9 ms/jeton"), "{t}");
+        assert!(t.contains("VRAM"), "{t}");
+        // Le refus passe par la même trace, et reste nommé.
+        let r = trace_experts(1_097_000_000, 0, 0, 8, 0.05);
+        assert!(r.contains("REFUSÉS"), "{r}");
     }
 }

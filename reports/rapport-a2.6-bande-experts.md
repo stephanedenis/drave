@@ -73,12 +73,14 @@ le **refus nommé**, la trace du classement et une `Precision` de tête à perte
 - `choisir_experts(...) -> Result<Support, String>` : VRAM, sinon RAM, sinon **refus nommé** — le
   message porte les Go/jeton, la bande, le budget et le coût NVMe qu'on refuse (313,4 ms).
 
-**Tests** (4 nouveaux, `cargo test placement` **13/13**, crate **144/144**) :
+**Tests** (5 nouveaux, `cargo test placement` **14/14**, crate **145/145**) :
 
 - la bande reproduit les deux points mesurés (4 et 8 fils) et la saturation ;
 - le coût reproduit la mesure : 1,097 Go/jeton à 8 fils → **156,9 ms** (mesuré 156,95) ;
 - le refus est nommé (contient « REFUSÉS », la bande et le coût NVMe) ;
-- VRAM si elle tient, RAM sinon.
+- VRAM si elle tient, RAM sinon ;
+- la **trace** (`trace_experts`) dit les chiffres — `1.10 Go/jeton · 6.99 Go/s · 156.9 ms → VRAM` — et
+  le refus passe par la même ligne.
 
 **Ce qui reste** : brancher `choisir_experts` dans `model.rs` (les trois sites : tête, cache VRAM,
 cache RAM), en opt-in `DRAVE_PERTE_MAX` — le défaut ne doit pas bouger — et ramener les trois tables

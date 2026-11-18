@@ -10649,3 +10649,127 @@ warning: constant `TETE_4BIT` is never used
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text()\nadd = '''\n## La règle sait chiffrer les experts (18/11, après la mesure)\n\n`placement.rs` porte désormais les constante … [3129 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+budget exit=0
+   75280cfe..837fb4dd  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in work/n4/v1.chaine.log work/n4/v2.chaine.log; do echo \"== $f\"; grep -E \"=== tranche|pas  *[0-9]+ · perte\" \"$f\" 2>/dev/null | tail -2; done; ls work/n4/*.pt 2>/dev/null | head; nvidia-smi --query-gpu=index,utilizat … [87 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 16:51:36 EST
+== work/n4/v1.chaine.log
+pas 1750 · perte 2.5152 · PPL val 12.223 · 692 s
+pas 1800 · perte 2.5437 · PPL val 12.184 · 712 s
+== work/n4/v2.chaine.log
+pas 1600 · perte 2.4118 · PPL val 12.203 · 668 s
+pas 1650 · perte 2.4485 · PPL val 12.157 · 688 s
+0, 98 %, 8296 MiB
+1, 100 %, 8184 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=work/portes/roue-1118-1712 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1118-soir.log 2>&1 & sleep 5; echo \"passe lancée $(date +%H:%M)\"; tail -1 work/n4/v2.chaine.log", "description": "Launch the evening g … [10 caractères tronqués]`
+
+  ```
+passe lancée 16:51
+pas 1700 · perte 2.4247 · PPL val 12.187 · 709 s
+  ```
+
+- **bash** `{"command": "sleep 5400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== v2 ===\"; grep -E \"=== tranche\" work/n4/v2.chaine.log | tail -2; grep -E \"ppl_val\" work/n4/v2*.pt.json 2>/dev/null | tail -2; echo \"=== v1 ===\"; grep -E \"=== tranche\" work/n4/v1.chaine.log | tail  … [124 caractères tronqués]`
+
+  ```
+started background job bash-873
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux chaînes 150 M tournent (GPU 0/1 à 99 %), la passe du soir est en cours — j'attends le premier point de contrôle
+
+Les deux chaînes d'entraînement sont lancées depuis 16 h 39 (150 M, `d=896`, corpus v2 et v1, tranches de 10 000 pas avec banc après chacune), la passe complète des 90 portes tourne depuis 16 h 51, et le corpus v2 (6,90 Go) est promu et épinglé (`9861fb39…`). Le chargeur de corpus a été réparé au passage (`torch.frombuffer`), avec un contrôle bit-identique : la PPL du checkpoint r4 sur le val épinglé rend **3,0628**, exactement la valeur enregistrée.
+
+Prochain point de contrôle dans ~90 minutes : fin de la première tranche (les deux runs), progression de la passe, et premier regard sur la courbe 150 M.
+
+
+## Tour 11
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+### 🤖 Assistant
+
+⏵ Point de contrôle de la nuit : chaînes 150 M, passe du soir
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== v2 ===\"; grep -E \"=== tranche\" work/n4/v2.chaine.log | tail -2; ls work/n4/v2*.pt 2>/dev/null; echo \"=== v1 ===\"; grep -E \"=== tranche\" work/n4/v1.chaine.log | tail -2; ls work/n4/v1*.pt 2>/dev/null; echo \"== … [184 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 16:52:32 EST
+=== v2 ===
+=== tranche 1/12 16:39 ===
+=== v1 ===
+=== tranche 1/12 16:39 ===
+=== passe ===
+0
+    journaux : work/portes/roue-1118-1712
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"DRAVE_EXPERTS_RAM\\|DRAVE_GPU_EXPERTS_GO\\|cache VRAM\" drave-core/src/model.rs | head -8", "description": "Locate the experts placement site"}`
+
+  ```
+1583:/// **Cache RAM des experts** (`DRAVE_EXPERTS_RAM` en Mo).
+1669:    /// redevient le cache mesuré perdant (`DRAVE_EXPERTS_RAM`).
+3111:    /// Cache RAM des experts (`DRAVE_EXPERTS_RAM`), voir `CacheExpertsRam`.
+4967:            let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
+5061:                } else { match std::env::var("DRAVE_EXPERTS_RAM").ok()
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/placement.rs'); s = p.read_text()\nanchor = \"/// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :\"\ncode = '''/// La **trace** d … [1960 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | grep -E \"FAILED|panicked|test .* \\.\\.\\. FAILED|failures:\" -A3 | head -20", "description": "Identify the failing test", "timeoutMs": 600000}`
+
+  ```
+tests_vars::les_vars_lues_sont_completes --- FAILED
+.......
+failures:
+
+---- tests_vars::les_vars_lues_sont_completes stdout ----
+
+thread 'tests_vars::les_vars_lues_sont_completes' (1181902) panicked at src/main.rs:9073:13:
+DRAVE_PLACEMENT_TRACE est lu dans le source mais absent de VARS_LUES : un ancien nom QT_PLACEMENT_TRACE resterait muet
+
+
+failures:
+    tests_vars::les_vars_lues_sont_completes
+
+test result: FAILED. 144 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.21s
+
+error: test failed, to rerun pass `--bin drave`
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/placement.rs'); s = p.read_text()\nold = \"/// La **trace** du placement des experts, pour `DRAVE_PLACEMENT_TRACE=1` : une\\n/// ligne qui dit ce que la règle a vu et … [428 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 145 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text()\nold = \"**Tests** (4 nouveaux, `cargo test placement` **13/13**, crate **144/144**) :\"\nnew = \"**Tests** (5 nouveaux, ` … [1919 caractères tronqués]`
