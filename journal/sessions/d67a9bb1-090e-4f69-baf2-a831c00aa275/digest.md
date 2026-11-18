@@ -8226,3 +8226,163 @@ mer 18 nov 2026 11:25:33 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/dedup_blocs.py reports/rapport-dedup-blocs.md reports/dedup-blocs-7.5go.json docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nD — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0  … [1477 caractères tronqués]`
+
+  ```
+aafffb7a D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS
+mer 18 nov 2026 11:28:24 EST
+pas 7950 · perte 1.0657 · PPL val 3.336 · 2233 s
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"=== lot tagger ===\"; tail -12 /tmp/tagger-612/lot.log 2>/dev/null; echo \"=== r3 ===\"; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n3/r3.pt.json')); print('FINI pas', d['pas'], 'ppl_val', ro … [169 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 11:37:49 EST
+=== lot tagger ===
+calculé à 11:30:10 · cache NEUF : /tmp/tagger-612-cache.5HYI1v
+=== r3 ===
+en cours
+pas 9950 · perte 1.0553 · PPL val 3.334 · 2795 s
+  ```
+
+- **bash** `{"command": "sleep 180; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"lignes JSONL: $(wc -l < /tmp/tagger-612/lot.jsonl 2>/dev/null)\"; tail -6 /tmp/tagger-612/lot.log 2>/dev/null; echo \"=== r3 ===\"; tail -2 work/n3/r3.log; python3 -c \"\nimport json\ntry:\n    d=json.load(ope … [242 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 11:40:55 EST
+lignes JSONL: 614
+   "tokens": 475,
+   "latence_s": 4.136
+  }
+ }
+}
+fini à 11:40:33
+=== r3 ===
+ "duree_s": 2814.276571035385
+}
+FINI ppl_val 3.1317 precision 0.6615
+  ```
+
+### 👤 Utilisateur
+
+background job bash-715 (bash: sleep 300; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== lot tagger ==="; /tmp/tagger-612/lancer.sh > /tmp/tagger-612/lot.log 2>&1; echo "exit=$?"; tail -8 /tmp/tagger-612/lot.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"analyser|evaluer|réseau|tokens|refus|coût|fini|Elapsed|Maximum resident\" /tmp/tagger-612/lot.log | head -15; echo \"=== eval ===\"; cat /tmp/tagger-612/eval.json 2>/dev/null | head -40; echo \"=== err ===\"; grep -E \"rése … [104 caractères tronqués]`
+
+  ```
+analyser : exit=0 · 614 lignes JSONL
+drave: TAGGER API · modèle=deepseek-chat · appels=611 · réseau=608 · cache=3 · tokens=87550 · latence=612.6 s
+evaluer : exit=0
+  "refus": 0,
+  "refus_detail": [],
+   "tokens": 291,
+   "tokens": 475,
+fini à 11:40:33
+=== eval ===
+{
+ "version": "0.1.0",
+ "gold": {
+  "nom": "vivant (hand + reel + synthétique)",
+  "gele": false,
+  "phrases": 612,
+  "tokens": 3179,
+  "cibles_attachement": 239
+ },
+ "heuristique": {
+  "bloc": "heuristique",
+  "phrases": 612,
+  "pos": {
+   "exactitude": 0.8625,
+   "exactitude_ferme": 0.9373,
+   "exactitude_ouvert": 0.7918,
+   "tokens": 3179,
+   "confusions": {
+    "ADJ": {
+     "ADJ": 65,
+     "NOUN": 65,
+     "VERB": 4
+    },
+    "ADV": {
+     "ADV": 131,
+     "NOUN": 7,
+     "PREP": 1,
+     "ADJ": 1,
+     "?": 1
+    },
+    "AUX": {
+     "PREP": 4,
+     "AUX": 119,
+     "?": 3,
+     "NOUN": 1,
+     "VERB": 1
+    },
+    "CONJ": {
+     "PRON": 15,
+     "CONJ": 68,
+=== err ===
+drave: TAGGER API · modèle=deepseek-chat · appels=611 · réseau=608 · cache=3 · tokens=87550 · latence=612.6 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json\nd = json.load(open(\"/tmp/tagger-612/eval.json\"))\nprint(\"gold:\", d[\"gold\"][\"phrases\"], \"phrases\")\nfor bloc in (\"heuristique\", \"tagger\"):\n    if bloc in d:\n        b = d[bloc]\n        p … [427 caractères tronqués]`
+
+  ```
+gold: 612 phrases
+heuristique  POS 0.8625 · fermé 0.9373 · ouvert 0.7918 · tokens 3179
+  attachement: {'cibles': 239, 'labels': 238, 'top1': 238, 'topk': 236, 'exact': 238, 'top1_taux': 0.9958, 'topk_taux': 0.9874, 'exact_taux': 0.9958, 'exact_any': 238, 'exact_any_taux_span': 1.0, 'top1_taux_span': 1.0, 'topk_taux_span': 0.9916, 'topk_exact': 236, 'topk_exact_taux': 0.9874, 'topk_exact_taux_span': 0.9916, 'exact_taux_span': 1.0, 'verbe': {'cibles': 158, 'justes': 158, 'taux': 1.0}, 'nom': {'cibles': 80, 'justes': 80, 'taux': 1.0}, 'couverture': 0.9958, 'par_langue': {'fr': {'cibles': 151, 'labels': 151, 'exact': 151, 'topk': 149, 'exact_taux_span': 1.0}, 'en': {'cibles': 88, 'labels': 87, 'exact': 87, 'topk': 87, 'exact_taux_span': 1.0}}}
+tagger       POS 0.9572 · fermé 0.9353 · ouvert 0.978 · tokens 3179
+  refus: 0
+clés: ['version', 'gold', 'heuristique', 'reel', 'syntagmes_lineaire', 'attachement_lineaire', 'controle_negatif', 'tagger']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp /tmp/tagger-612/eval.json reports/tagger-612-api.json && bash bench/checkpoint_bench.sh work/n3/r3.pt r3 2>&1 | tail -4; python3 -c \"\nimport json\nfor f in ('r2','r3'):\n    d=json.load(open(f'reports/banc-generation-{f}.json')) … [264 caractères tronqués]`
+
+  ```
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.791 attaches=0.747 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.801 attaches=0.650 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+bancs : reports/banc-generation-r3.json · reports/banc-grammaticalite-r3.json
+r2 greedy 0.9244 rép 11 | top40 0.8446 rép 2
+r3 greedy 0.8646 rép 10 | top40 0.8703 rép 2
+  ```
+
+- **write** `{"content": "# R0.7 — le tagger API sur le gold 612 : POS 0,9572 contre 0,8625 (heuristique), +9,47\n\n> **Ligne de roadmap** : R0.7 (le lecteur) · **Date** : 2026-11-18 11 h 30 → 11 h 40 EST (fenêtre\n> remisée) · **Verdict** : ✅ **le tagger API gagne** — POS **0,9572** contre **0,8625** pour\n> l' … [3748 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-tagger-612.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **write** `{"content": "# La courbe 3 000 → 33 000 pas : la PPL baisse, l'échantillonnage monte, le greedy reste cassé\n\n> **Ligne de roadmap** : N4 (le banc du natif) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré —\n> trois tranches de 10 000 pas sur le 73 M (corpus épinglé, lr 1e-4, AMP) : PPL de validat … [3194 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-courbe-r1-r3.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"**r1/r2** : PPL **3,4130 … [1298 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 803 fiche(s) · 896 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N4 — grammaticalité, données, décodage** (18/11) : GV **6,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité, données, décodage**\")\nfin = s.index(\"\\n\", debut)\nnouvelles = (\n\"- **N4 — grammatic … [1390 caractères tronqués]`
+
+  ```
+puces : 65
+  en-cours · 1758 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 803 fiche(s) · 896 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-tagger-612.md reports/tagger-612-api.json reports/rapport-courbe-r1-r3.md reports/banc-generation-r3.json reports/banc-grammaticalite-r3.json docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log  … [1354 caractères tronqués]`
