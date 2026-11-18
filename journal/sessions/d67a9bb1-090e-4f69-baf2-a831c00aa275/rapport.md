@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 10.5 h |
+| Durée | 10.8 h |
 | Tours | 8 |
-| Messages | 264 |
-| Appels d'outils | 285 |
-| Fichiers touchés | 25 |
-| Commandes | 189 |
+| Messages | 277 |
+| Appels d'outils | 297 |
+| Fichiers touchés | 26 |
+| Commandes | 199 |
 | Sous-agents | 0 |
-| Commits | 13 |
+| Commits | 14 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -375,7 +375,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 
 ### Tour 8 — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul loca … [2 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — List trained models and their configs
 - bash — Batch profile benchmarks on five trained models
@@ -390,10 +390,12 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - bash — Add the two-GPU control and check batch progress
 - bash — Measure Rust vs numpy parity on the real 34M model
 - bash — Wait and check batch progress
+- bash — Wait for the batch to finish
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Lancement du banc massif : 5 modèles × 4 profils (calcul long) et grille scatter GPU
+⏵ Assemblage du banc des cinq modèles (table + JSON + fiche)
 
 ## 3. Travail accompli
 
@@ -426,6 +428,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/drvm_profils.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-5-modeles.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -469,7 +472,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 149 autres
+- … et 159 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -621,4 +624,5 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/porte-n3-moteurs.sh tools/porte-n3-court.sh reports/rappo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/en-cours.md && git commit -F - <<'MSG
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter-grille.md reports/rapport-profils-5-modeles.md re
 

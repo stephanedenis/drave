@@ -73,10 +73,11 @@ def main() -> None:
     ap.add_argument("--n", type=int, default=1 << 26)   # 67,1 M d'événements
     ap.add_argument("--o", type=int, default=4096)      # l'accumulateur du PE (4096 × 24 bits)
     ap.add_argument("--bancs", type=str, default="1,4,16,64")
+    ap.add_argument("--gpu", type=int, default=0, help="ordinal CUDA (contrôle inter-cartes)")
     ap.add_argument("--sortie", default="")
     a = ap.parse_args()
     assert torch.cuda.is_available(), "pas de CUDA"
-    dev = torch.device("cuda:0")
+    dev = torch.device(f"cuda:{a.gpu}")
     torch.cuda.set_device(dev)
     props = torch.cuda.get_device_properties(dev)
     print(f"carte : {props.name} · {props.total_memory / 2**30:.1f} Gio · "
@@ -114,7 +115,7 @@ def main() -> None:
     if a.sortie:
         with open(a.sortie, "w", encoding="utf-8") as f:
             json.dump({"schema": "drave.gpu-scatter", "version": 1,
-                       "carte": props.name, "n": a.n, "o": a.o,
+                       "carte": props.name, "gpu": a.gpu, "n": a.n, "o": a.o,
                        "resultats": resultats, "meilleur_G_ev_s": meilleur,
                        "controle_cpu_ecart": ecart}, f, indent=1, ensure_ascii=False)
         print(f"  écrit : {a.sortie}")

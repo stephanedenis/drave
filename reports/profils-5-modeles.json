@@ -1,0 +1,183 @@
+{
+ "schema": "drave.profils-5-modeles",
+ "version": 1,
+ "date": "2026-11-17",
+ "note": "PPL native, 2 055 octets de data/corpus_mixte.txt ; les PPL absolues ne sont PAS comparables entre modèles (données/étapes différents) — seuls les deltas internes le sont",
+ "modeles": {
+  "base-en-34m": {
+   "drvm": "work/n2k/base-en-34m.drvm",
+   "parametres": 34301224,
+   "fenetre": 256,
+   "n_blocs": 6,
+   "d_model": 384,
+   "resultats": {
+    "defaut": {
+     "ppl": 12.3656,
+     "octets": 2055,
+     "s": 68.81132636708207,
+     "delta_pct": 0.0
+    },
+    "bloque": {
+     "ppl": 12.3657,
+     "octets": 2055,
+     "s": 58.24149774201214,
+     "delta_pct": 0.000808695089604683
+    },
+    "flou": {
+     "ppl": 12.605,
+     "octets": 2055,
+     "s": 72.30339694209397,
+     "delta_pct": 1.936016044510569
+    },
+    "court": {
+     "ppl": 12.5456,
+     "octets": 2055,
+     "s": 70.35072701587342,
+     "delta_pct": 1.4556511612861422
+    }
+   },
+   "texte": "/tmp/txt-2048.txt",
+   "limite": 2048
+  },
+  "base-multi-34m": {
+   "drvm": "work/n2k/base-multi-34m.drvm",
+   "parametres": 34301224,
+   "fenetre": 256,
+   "n_blocs": 6,
+   "d_model": 384,
+   "resultats": {
+    "defaut": {
+     "ppl": 13.2374,
+     "octets": 2055,
+     "s": 68.24627289688215,
+     "delta_pct": 0.0
+    },
+    "bloque": {
+     "ppl": 13.2374,
+     "octets": 2055,
+     "s": 56.09082691394724,
+     "delta_pct": 0.0
+    },
+    "flou": {
+     "ppl": 13.3797,
+     "octets": 2055,
+     "s": 68.51844065007754,
+     "delta_pct": 1.0749845135751723
+    },
+    "court": {
+     "ppl": 13.647,
+     "octets": 2055,
+     "s": 67.6787971497979,
+     "delta_pct": 3.0942632238959433
+    }
+   },
+   "texte": "/tmp/txt-2048.txt",
+   "limite": 2048
+  },
+  "mix1024-60k": {
+   "drvm": "work/n2ac/mix1024-60k.drvm",
+   "parametres": 34301224,
+   "fenetre": 1024,
+   "n_blocs": 6,
+   "d_model": 384,
+   "resultats": {
+    "defaut": {
+     "ppl": 23.748,
+     "octets": 2055,
+     "s": 72.42252248502336,
+     "delta_pct": 0.0
+    },
+    "bloque": {
+     "ppl": 23.7585,
+     "octets": 2055,
+     "s": 61.91320638102479,
+     "delta_pct": 0.04421424962102183
+    },
+    "flou": {
+     "ppl": 24.2443,
+     "octets": 2055,
+     "s": 74.98454739805311,
+     "delta_pct": 2.089860198753568
+    },
+    "court": {
+     "ppl": 23.5824,
+     "octets": 2055,
+     "s": 72.62217051908374,
+     "delta_pct": -0.6973218797372449
+    }
+   },
+   "texte": "/tmp/txt-2048.txt",
+   "limite": 2048
+  },
+  "propre512-8k": {
+   "drvm": "work/n2ac/propre512-8k.drvm",
+   "parametres": 34301224,
+   "fenetre": 512,
+   "n_blocs": 6,
+   "d_model": 384,
+   "resultats": {
+    "defaut": {
+     "ppl": 133.6858,
+     "octets": 2055,
+     "s": 73.93628435698338,
+     "delta_pct": 0.0
+    },
+    "bloque": {
+     "ppl": 133.6342,
+     "octets": 2055,
+     "s": 58.809710738947615,
+     "delta_pct": -0.03859796627615486
+    },
+    "flou": {
+     "ppl": 143.0279,
+     "octets": 2055,
+     "s": 73.49765959801152,
+     "delta_pct": 6.988101952488579
+    },
+    "court": {
+     "ppl": 117.4667,
+     "octets": 2055,
+     "s": 67.85803958890028,
+     "delta_pct": -12.13225338816838
+    }
+   },
+   "texte": "/tmp/txt-2048.txt",
+   "limite": 2048
+  },
+  "rope2048-20k": {
+   "drvm": "work/n2ac/rope2048-20k.drvm",
+   "parametres": 34301224,
+   "fenetre": 2048,
+   "n_blocs": 6,
+   "d_model": 384,
+   "resultats": {
+    "defaut": {
+     "ppl": 18.5578,
+     "octets": 2055,
+     "s": 76.36420308193192,
+     "delta_pct": 0.0
+    },
+    "bloque": {
+     "ppl": 18.5579,
+     "octets": 2055,
+     "s": 63.39345281012356,
+     "delta_pct": 0.0005388569765729656
+    },
+    "flou": {
+     "ppl": 19.1311,
+     "octets": 2055,
+     "s": 76.32399266585708,
+     "delta_pct": 3.0892670467404626
+    },
+    "court": {
+     "ppl": 19.4066,
+     "octets": 2055,
+     "s": 72.68297067284584,
+     "delta_pct": 4.573818017221876
+    }
+   },
+   "texte": "/tmp/txt-2048.txt",
+   "limite": 2048
+  }
+ }
+}

@@ -5350,3 +5350,181 @@ Rust vs numpy (34 M, 64 octets) : max|Δ| = 1.526e-05
   ```
 
 - **bash** `{"command": "sleep 240; ls /tmp/profils/*.json 2>/dev/null | wc -l; for f in /tmp/profils/*.log; do echo \"--- $(basename $f)\"; tail -3 \"$f\"; done 2>/dev/null | head -25", "description": "Wait and check batch progress", "timeoutMs": 300000}`
+
+  ```
+2
+--- mix1024-60k.log
+  flou    PPL   24.2443 sur 2055 octets  (  75.0 s, chargement du modèle inclus)
+  court   PPL   23.5824 sur 2055 octets  (  72.6 s, chargement du modèle inclus)
+  écrit : /tmp/profils/mix1024-60k.json
+--- propre512-8k.log
+--- rope2048-20k.log
+  flou    PPL   19.1311 sur 2055 octets  (  76.3 s, chargement du modèle inclus)
+  court   PPL   19.4066 sur 2055 octets  (  72.7 s, chargement du modèle inclus)
+  écrit : /tmp/profils/rope2048-20k.json
+  ```
+
+- **bash** `{"command": "sleep 420; ls /tmp/profils/*.json 2>/dev/null | wc -l; for f in /tmp/profils/*.log; do echo \"--- $(basename $f)\"; tail -2 \"$f\"; done 2>/dev/null | head -20", "description": "Wait for the batch to finish", "timeoutMs": 600000}`
+
+  ```
+3
+--- base-en-34m.log
+--- mix1024-60k.log
+  court   PPL   23.5824 sur 2055 octets  (  72.6 s, chargement du modèle inclus)
+  écrit : /tmp/profils/mix1024-60k.json
+--- propre512-8k.log
+  court   PPL  117.4667 sur 2055 octets  (  67.9 s, chargement du modèle inclus)
+  écrit : /tmp/profils/propre512-8k.json
+--- rope2048-20k.log
+  court   PPL   19.4066 sur 2055 octets  (  72.7 s, chargement du modèle inclus)
+  écrit : /tmp/profils/rope2048-20k.json
+  ```
+
+- **bash** `{"command": "sleep 300; ls /tmp/profils/*.json 2>/dev/null | wc -l; for f in /tmp/profils/*.log; do echo \"--- $(basename $f)\"; tail -2 \"$f\"; done 2>/dev/null | head -24", "description": "Wait for the last models", "timeoutMs": 600000}`
+
+  ```
+4
+--- base-en-34m.log
+  court   PPL   12.5456 sur 2055 octets  (  70.4 s, chargement du modèle inclus)
+  écrit : /tmp/profils/base-en-34m.json
+--- base-multi-34m.log
+--- mix1024-60k.log
+  court   PPL   23.5824 sur 2055 octets  (  72.6 s, chargement du modèle inclus)
+  écrit : /tmp/profils/mix1024-60k.json
+--- propre512-8k.log
+  court   PPL  117.4667 sur 2055 octets  (  67.9 s, chargement du modèle inclus)
+  écrit : /tmp/profils/propre512-8k.json
+--- rope2048-20k.log
+  court   PPL   19.4066 sur 2055 octets  (  72.7 s, chargement du modèle inclus)
+  écrit : /tmp/profils/rope2048-20k.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, json, os, sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\nlignes = []\nfor f in sorted(glob.glob(\"/tmp/profils/*.json\")):\n    d = json.load(open(f))\n    r = d[\"resultats\"]\n    b … [756 caractères tronqués]`
+
+  ```
+modèle                   fen    defaut    bloque      Δ%      flou      Δ%     court      Δ%
+base-en-34m              256   12.3656   12.3657   +0.00   12.6050   +1.94   12.5456   +1.46
+mix1024-60k             1024   23.7480   23.7585   +0.04   24.2443   +2.09   23.5824   -0.70
+propre512-8k             512  133.6858  133.6342   -0.04  143.0279   +6.99  117.4667  -12.13
+rope2048-20k            2048   18.5578   18.5579   +0.00   19.1311   +3.09   19.4066   +4.57
+  ```
+
+- **bash** `{"command": "sleep 200; ls /tmp/profils/*.json | wc -l; tail -3 /tmp/profils/base-multi-34m.log 2>/dev/null; python3 - <<'PY'\nimport glob, json, os, sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\nlignes = []\nfor f in sorted(glob.glob(\"/tmp/profils/*.json\")):\n    d = json.load … [696 caractères tronqués]`
+
+  ```
+5
+  flou    PPL   13.3797 sur 2055 octets  (  68.5 s, chargement du modèle inclus)
+  court   PPL   13.6470 sur 2055 octets  (  67.7 s, chargement du modèle inclus)
+  écrit : /tmp/profils/base-multi-34m.json
+modèle                   fen    defaut    bloque      Δ%      flou      Δ%     court      Δ%
+base-en-34m              256   12.3656   12.3657   +0.00   12.6050   +1.94   12.5456   +1.46
+base-multi-34m           256   13.2374   13.2374   +0.00   13.3797   +1.07   13.6470   +3.09
+mix1024-60k             1024   23.7480   23.7585   +0.04   24.2443   +2.09   23.5824   -0.70
+propre512-8k             512  133.6858  133.6342   -0.04  143.0279   +6.99  117.4667  -12.13
+rope2048-20k            2048   18.5578   18.5579   +0.00   19.1311   +3.09   19.4066   +4.57
+  ```
+
+### 👤 Utilisateur
+
+background job bash-179 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/profils && for m in work/n2ac/mix1024-60k work/n2ac/rope2048-20k work/n2ac/propre512-8k work/n2k/base-en-34m work/n2k/base-multi-34m; do n=$(basename $m); python3 bench/drvm_profils.py --drvm $m.drvm --texte /tmp/txt-2048.txt --limite 2048 --sortie /tmp/profils/$n.json > /tmp/profils/$n.log 2>&1; echo "fini $n"; done) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Assemblage du banc des cinq modèles (table + JSON + fiche)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, json, os, sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\nmodeles = {}\nfor f in sorted(glob.glob(\"/tmp/profils/*.json\")):\n    d = json.load(open(f)); nom = os.path.basename(f)[:-5] … [998 caractères tronqués]`
+
+  ```
+écrit · 5 modèles
+  ```
+
+- **write** `{"content": "# Les profils sur cinq modèles entraînés — ce qui est stable, ce qui dépend du modèle\n\n> **Ligne de roadmap** : N3 · **Date** : 2026-11-17 · **Verdict** : ✅ mesuré sur **cinq** modèles\n> entraînés (34,3 M, fenêtres 256 · 256 · 512 · 1 024 · 2 048), même texte de 2 055 octets, quatre\ … [4237 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-5-modeles.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"sur 34 M : bloque **+0,0 … [562 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1629 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  revue de documentation · 789 fiche(s) · 880 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short docs/ | head; grep -n \"documents de\" docs/pilotage/en-cours.md; python3 - <<'PY'\nimport pathlib\nn = len([p for p in pathlib.Path(\"docs\").rglob(\"*.md\") if \"archive\" not in p.parts and p.name != \"README.md … [93 caractères tronqués]`
+
+  ```
+M docs/pilotage/en-cours.md
+103:| documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
+docs comptés : 463
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --oneline -4 | cat; echo \"=== dernier commit touchant en-cours ===\"; git log -3 --format='%h %ad %s' --date=iso -- docs/pilotage/en-cours.md | cat; echo \"=== docs non suivis ===\"; git status --short | grep -v \"^ M\\|^??. … [82 caractères tronqués]`
+
+  ```
+02cc66d4 PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N, R, B13) ET CEUX QUI SONT LOCAUX PAR NATURE
+d6e08d6a P1b — LA GRILLE : LA BANQUE VAUT 6× À 512 SORTIES, RIEN À 4 096, ET NUIT À 65 536
+a85da6f3 N3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS
+7c219067 N3.10b — LE MOTEUR NUMPY EXÉCUTE `COURT` : PARITÉ RUST ↔ NUMPY 2,980e-07, FENÊTRE COURTE APPLIQUÉE
+=== dernier commit touchant en-cours ===
+02cc66d4 2026-11-17 20:18:16 -0500 PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N, R, B13) ET CEUX QUI SONT LOCAUX PAR NATURE
+d6e08d6a 2026-11-17 20:12:57 -0500 P1b — LA GRILLE : LA BANQUE VAUT 6× À 512 SORTIES, RIEN À 4 096, ET NUIT À 65 536
+a85da6f3 2026-11-17 15:41:35 -0500 N3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS
+=== docs non suivis ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git show --stat 02cc66d4 | head -12; echo \"=== le doc ajouté ===\"; ls -lt docs/pilotage/*.md | head -3", "description": "Inspect the tariff-window plan commit"}`
+
+  ```
+commit 02cc66d4ab251d5481722e7ba80a9105aa9fea99
+Author: Stéphane <stephane@localhost>
+Date:   Tue Nov 17 20:18:16 2026 -0500
+
+    PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N, R, B13) ET CEUX QUI SONT LOCAUX PAR NATURE
+
+ docs/README.md                                     |  1 +
+ docs/pilotage/en-cours.md                          |  8 +--
+ docs/pilotage/plans-tarif.md                       | 67 ++++++++++++++++++++++
+ journal/2026-11-17/README.md                       |  7 ++-
+ journal/2026-11-17/attention.md                    |  2 +-
+ journal/2026-11-17/distribue.md                    |  2 +-
+=== le doc ajouté ===
+-rw-r--r--. 1 stephane stephane 12883 17 nov 20:39 docs/pilotage/en-cours.md
+-rw-r--r--. 1 stephane stephane  4633 17 nov 20:16 docs/pilotage/plans-tarif.md
+-rw-r--r--. 1 stephane stephane 65029 17 nov 14:44 docs/pilotage/roadmap.md
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plans-tarif.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/plans-tarif.md</path>
+<type>file</type>
+<content>
+1: # Les plans de travail par fenêtre tarifaire — l'API à tarif réduit, le local au plein tarif
+2: 
+3: > **Le principe.** DeepSeek applique un **tarif réduit** pendant la fenêtre **UTC 16:30 → 00:30**
+4: > (la Chine 00:30 → 08:30), et un tarif plein le reste du temps. Pour le Canada (EST, UTC−5),
+5: > la fenêtre remisée tombe **11:30 → 19:30** — c'est-à-dire **l'après-midi de travail** ; la
+6: > fenêtre pleine couvre **19:30 → 11:30** (la nuit et le matin).
+7: >
+8: > **La règle.** On place les tâches **qui appellent l'API** dans la fenêtre remisée, et on garde
+9: > **une file de tâches locales** (GPU, CPU, docs, tests) pour la fenêtre pleine — de sorte que
+10: > **rien n'attende** et que le coût API soit minimal.
+11: 
+12: ## 1. Les deux fenêtres (heure du Canada, EST)
+13: 
+14: | fenêtre | heures (EST) | heures (Chine) | tarif | ce qu'on y fait |
+15: |---|---|---|---|---|
+16: | **remisée** | **11:30 → 19:30** | 00:30 → 08:30 | **−50 %** (chat) / **−75 %** (raisonneur) | **tout ce qui appelle l'API** : le tagger, la distillation, les sorties de modèle |
+17: | **pleine
+… [3695 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter-grille.md reports/rapport-profils-5-modeles.md reports/profils-5-modeles.json docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nPROFILS SUR CINQ MODÈLES : BL … [1503 caractères tronqués]`

@@ -7,9 +7,9 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 411.6 h |
+| Durée | 411.7 h |
 | Tours | 215 |
-| Messages | 4385 |
+| Messages | 4386 |
 | Appels d'outils | 3920 |
 | Fichiers touchés | 25 |
 | Commandes | 3248 |
@@ -11462,6 +11462,48 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - bash — Voir les lignes longues de l'en-cours
 - bash — Trim l'en-cours
 - bash — Committer les plans tarifaires
+
+**Synthèse produite :**
+
+⏵ Les plans par fenêtre tarifaire sont écrits, committés et poussés
+
+\## Les deux fenêtres (heure du Canada)
+
+| fenêtre | heures EST | heures Chine | tarif | la file |
+|---|---|---|---|---|
+| **remisée** | **11:30 → 19:30** | 00:30 → 08:30 | −50 % (chat) / −75 % (raisonneur) | **tout ce qui appelle l'API** |
+| **pleine** | **19:30 → 11:30** | 08:30 → 00:30 | plein | **tout ce qui est local** |
+
+**Le point clé** : la fenêtre remisée tombe **l'après-midi de travail** au Canada — elle couvre exactement vos heures utiles. Il suffit de mettre l'API l'après-midi et le local le matin/le soir.
+
+\## Les plans par chantier
+
+| chantier | en remisée (l'API) | en pleine (le local) |
+|---|---|---|
+| **B / B13 le produit** | le tagger sur les textes réels, les sorties pour la distillation | les tests, le CLI, le schéma, la doc, la porte produit |
+| **R le lecteur** | le tagger sur le gold 612, les PPL par API | les mesures locales, les conventions |
+| **N le natif** | la **distillation** (l'API → le natif), les paires d'instruction | l'**entraînement GPU**, le banc, le cache KV |
+| **A le moteur** | — (local) | les kernels, le FPGA, la dispersion |
+| **S les structures** | — | le générateur, la page |
+| **D les données** | l'étiquetage **si** l'API gagne (à mesurer) | le corpus, le nettoyage |
+| **L le bloc langue** | — | les règles, le lexique |
+
+**Les trois qui gagnent le plus** : **N** (la distillation), **R** (le tagger), **B13** (les sorties). Les autres sont **locaux par nature** — bonne nouvelle : la fenêtre pleine ne les ralentit pas.
+
+\## La journée type
+
+- **08:00 → 11:30** (pleine) : le GPU (l'entraînement), les tests, les docs, les portes.
+- **11:30 → 19:30** (remisée) : **l'API** (le tagger, la distillation), le GPU en parallèle.
+- **19:30 → 08:00** (pleine) : les longs runs GPU, les passes, le rangement.
+
+**La file « jamais en attente »** : chaque chantier a **deux files** ; si la fenêtre bascule et que l'une est vide, on prend l'autre.
+
+\## L'état
+
+`docs/pilotage/plans-tarif.md` (committé `02cc66d4`, poussé) ; la journée type, les deux files, les trois chantiers gagnants. **Il est 20 h 20 EST — la fenêtre pleine** : la file locale est ouverte (le 30 k du 100 M, les gates, les docs).
+
+**Deux réserves honnêtes** : (1) les heures exactes sont celles de la **documentation officielle DeepSeek** — à revérifier avant un gros lot ; (2) la mesure « week-end = tarif réduit toute la journée » vient de la presse, pas de la page officielle — je ne la tiens pas pour acquise
+… [1 caractères tronqués]
 
 ## 3. Travail accompli
 

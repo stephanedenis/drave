@@ -39,6 +39,8 @@
   `B=1` (bancs) ≡ atomiques, ce qui valide le harnais de bancs.
 - **Référence CPU** : `np.bincount` sur 1 M d'événements — écart maximal **0**.
 - **Le retournement est mesuré**, pas supposé : c'est lui qui donne un domaine à la technique.
+- **Les deux cartes** (Quadro identiques, `--gpu 0` / `--gpu 1`) : atomiques **25,20 / 25,23**,
+  bancs B=64 **28,14 / 27,07** — ~4 % d'écart, dans le bruit. La mesure n'est pas liée à une carte.
 
 ## Ce qui pourrait le rendre faux
 
