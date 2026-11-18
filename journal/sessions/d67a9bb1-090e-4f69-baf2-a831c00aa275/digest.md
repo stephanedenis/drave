@@ -8022,3 +8022,207 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nROADMAP — A2.6 ET N À JOUR : BANDE EXPERTS 7,0 Go/s, TÊTE Q8_0 DANS LA RÈGLE, CORPUS ÉPINGLÉ, r1/r2 MESURÉ … [718 caractères tronqués]`
+
+  ```
+3f33126e ROADMAP — A2.6 ET N À JOUR : BANDE EXPERTS 7,0 Go/s, TÊTE Q8_0 DANS LA RÈGLE, CORPUS ÉPINGLÉ, r1/r2 MESURÉS
+mer 18 nov 2026 10:55:18 EST
+=== dedup ===
+ls: cannot access 'reports/rapport-dedup-blocs.md': No such file or directory
+-rw-------. 1 stephane stephane 38230 18 nov 10:49 tools/dedup_blocs.py
+      05:18 bash -c cd /home/stephane/Data13TB/stephane/GitH
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -40 tools/porte-ressources.sh", "description": "Read the resource gate behavior"}`
+
+  ```
+#!/bin/bash
+# porte-ressources.sh — le registre des ressources tient : autotest et cohérence.
+#
+# POURQUOI CETTE PORTE EXISTE. Le registre `tools/ressources.py` est consultatif : il n'empêche
+# pas un job de tourner, il rend le conflit visible. Une porte doit vérifier ce qui est
+# vérifiable sans la machine : le code du registre (autotest des 9 cas : claim, conflit, file,
+# admission, check) et la cohérence du registre courant (aucune ressource sur-réservée).
+#
+# CE QU'ELLE NE VÉRIFIE PAS : le réel (processus GPU non déclarés, charge CPU, espace disque) —
+# c'est `--actual`, informatif, et le mapping processus→claim reste manuel. Les avertissements
+# de stockage (RAID à 33 Gio) et de NUMA (un GPU avec des fils sur cpu1) restent VISIBLES mais
+# ne font pas échouer la porte : ce sont des limites nommées, pas des régressions.
+#
+# Usage : tools/porte-ressources.sh
+set -u
+cd "$(dirname "$0")/.."
+echo "=== PORTE RESSOURCES — REGISTRE, CLAIMS, COHÉRENCE ==="
+if ! python3 tools/ressources.py --autotest; then
+    echo "  ❌ autotest du registre en échec"
+    exit 1
+fi
+if ! python3 tools/ressources.py --check; then
+    echo "  ❌ registre incohérent : une ressource est sur-réservée"
+    exit 1
+… [591 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète des 90 portes lancée en fond (pendant que r3 s'entraîne)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=work/portes/roue-1118-1057 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1118.log 2>&1 & sleep 5; echo \"lancée $(date +%H:%M)\"; tail -1 work/n3/r3.log", "description": "Start the full gate pass in the backgr … [6 caractères tronqués]`
+
+  ```
+lancée 10:55
+pas  950 · perte 1.1528 · PPL val 3.408 · 266 s
+  ```
+
+- **bash** `{"command": "cat > /tmp/tagger-612/lancer.sh <<'SH'\n#!/bin/bash\n# Le lot API du tagger sur le gold 612 — fenêtre remisée (11:30-19:30 EST).\nset -u\ncd /home/stephane/Data13TB/stephane/GitHub/Qtrinet\nexport DEEPSEEK_KEY_FILE=\"$HOME/.config/drave/deepseek.key\"\nexport DEEPSEEK_MODEL=deepseek-cha … [849 caractères tronqués]`
+
+  ```
+wrapper-ok
+mer 18 nov 2026 10:55:56 EST
+pas 1050 · perte 1.1827 · PPL val 3.389 · 294 s
+  ```
+
+- **bash** `{"command": "sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r3.log; echo \"=== passe ===\"; tail -2 /tmp/passe-1118.log; echo \"vertes: $(grep -c '✅' /tmp/passe-1118.log) rouges: $(grep -c '❌' /tmp/passe-1118.log)\"", "description": "Wait 25 minutes and check … [33 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-662]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r3.log; tail -2 /tmp/passe-1118.log", "description": "Check the time and the running jobs"}`
+
+  ```
+mer 18 nov 2026 11:06:06 EST
+pas 3200 · perte 1.1048 · PPL val 3.390 · 898 s
+  porte-cic              ✅                          11 s  ✅ porte CIC verte : 42/42 verdicts, empreintes, de Bruijn, sha256 2e implémentation,
+  porte-consolidation    ✅                          69 s    ✅ porte tenue (fusion exacte : nulle ⇒ identique, réelle ⇒ visible, lecteur ⇒ hors fichier)
+  ```
+
+- **bash** `{"command": "sleep 580; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r3.log; echo \"passe: $(grep -c '✅' /tmp/passe-1118.log) vertes, $(grep -c '❌' /tmp/passe-1118.log) rouges\"", "description": "Wait ten minutes", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 11:15:52 EST
+pas 5300 · perte 1.0873 · PPL val 3.361 · 1488 s
+passe: 27 vertes, 0 rouges
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r3.log", "description": "Wait nine minutes", "timeoutMs": 600000}`
+
+  ```
+mer 18 nov 2026 11:24:59 EST
+pas 7250 · perte 1.0560 · PPL val 3.339 · 2036 s
+  ```
+
+### 👤 Utilisateur
+
+Agent cbf7ca71-5b38-428e-9f19-298be1720918 sent a message: 
+TÂCHE TERMINÉE (sous-agent dédup par blocs). Aucun commit, aucune écriture dans data/, aucun appel API, en-cours/roadmap/AGENTS intacts.
+
+## Livrables
+- `tools/dedup_blocs.py` (CLI exacte demandée + `--pas/--hash-bits/--graine/--autotest`, erreurs nommées, autotest intégré)
+- `reports/rapport-dedup-blocs.md` (dispositif, chiffres, contrôles, failles, comparaison inventaire)
+- `reports/dedup-blocs-7.5go.json` (manifeste de la passe)
+- `work/dedup/` : `train.txt` (sortie 7 504 078 589 o, sha256 `27277e32…`), `prouve-200Mo.json`, `controle/` (autotest), `granularite/`, 3 diagnostics
+
+## Chiffres de la passe 7,50 Go (`--bloc-mo 64 --memoire-mo 2048`)
+- temps **430,7 s = 7 min 11 s** (16,6 Mio/s, CPU 99 % : 419,9 s user) ; RSS max **954,3 Mio** pour 2 048 Mio (marge 1 094) ; confirmé par /usr/bin/time (977 200 Kio)
+- **112 blocs : 112 gardés, 0 écarté, 0 octet écarté** → sortie identique à l'entrée (`cmp`), 88 114 432 lignes
+- 191 312 755 shingles calculés, 6 006 207 échantillonnés (1/32) ; **4,177 % déjà vus avant le bloc**, **5,171 % avec les répétitions internes**
+- distribution par bloc : max **48,9 %**, 3 blocs seulement > 20 %
+- **% écarté = 0,000 %** (au sens blocs/octets)
+
+## Les 4 cas de contrôle (autotest, 18/18 OK, `python3 tools/dedup_blocs.py --autotest`)
+- (a) texte unique : **gardé** (0,0 %)
+- (b) copie exacte : **écarté** (100,0 %)
+- (c) copie à 9,4 % modifiée (paragraphes entiers) : **écarté à seuil 0,8** (90,04–90,21 %) et **gardé à 0,95** → le seuil tranche bien entre 0,90 et 0,95
+- (d) texte différent : **gardé** (0,0 %)
+- en plus : copie **décalée de 21 o écartée** (99,9–100 %) — c'est ce qu'une grille à pas fixe rate ; copie à **10 % de mots dispersés gardée** (1–3 % vus)
+- **stabilité** : deux passes → même sha256 (`1a5c01ef…`), mêmes décisions, mêmes octets
+- **budget** : 200 Mo avec 256 Mio → RSS **120,8 Mio** (marge 135) ; budget impossible → `ERREUR budget_memoire_impossible` (rc 3) ; chien de garde déclenché → `ERREUR memoire_depassee` (rc 3)
+
+## Résultat qui change la suite
+1) **La dédup par blocs ne ferme pas l'écart** : à 64 Mio, 0 % ; même à 4 Kio, 0,147 % seulement. La duplication est **courte et diffuse**, pas « en blocs ».
+2) Mesure exacte ligne à ligne sur les 7,50 Go : **53,98 % des lignes sont des répétitions = 8,28 % des octets** (621 Mo, dont 23 Mo de lignes vides à préserver → 598 Mo de contenu, 2,59 % pour les lignes de 80 o et +).
+3) **Le chiffre de l'inventaire (2,93 % → « 2,0 % réel ») est biaisé** : sa grille à pas fixe sous-estime de **16×** sur 100 Mo (0,04 % contre 0,62 % pour toutes les fenêtres) ; à 7,50 Go l'écart tombe à 1,8× (2,93 vs 5,17 %). Correction à porter dans les docs de pilotage.
+4) **Prochaine action recommandée** : un dédup **par ligne** en flux (hacher chaque ligne, garder la première occurrence, préserver les séparateurs vides) avec le même modèle de budget — coût mesuré ≈ 2 min, et c'est là qu'est la masse retirable. Le prototype par blocs est le bon bâtiment (budget prouvé, erreurs nommées, déterminisme) mais la mauvaise maille pour ce corpus.
+
+## Reproductibilité
+`python3 tools/dedup_blocs.py --autotest` ; puis la commande de la tâche (mêmes options) ; diagnostics : `work/dedup/diagnostic_ancrage.py` (grille vs ancres), `work/dedup/diagnostic_lignes_exact.py` (lignes exactes), `work/dedup/granularite/bloc-*.json`.
+
+### 👤 Utilisateur
+
+Background subagent cbf7ca71-5b38-428e-9f19-298be1720918 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Bilan final : chiffres, contrôles, chemins
+
+Travail terminé. Voici le bilan.
+
+## Livrables
+
+| fichier | quoi |
+|---|---|
+| `tools/dedup_blocs.py` | l'outil (CLI demandée + autotest intégré, erreurs nommées) |
+| `reports/rapport-dedup-blocs.md` | le rapport (dispositif, chiffres, contrôles, failles, comparaison inventaire) |
+| `reports/dedup-blocs-7.5go.json` | le manifeste JSON de la passe |
+| `work/dedup/train.txt` | la sortie (7 504 078 589 o, sha256 `27277e32…`), + `prouve-200Mo.json`, `controle/`, `granularite/`, diagnostics |
+
+`data/` n'a pas été modifié (`train.txt` intact, mtime inchangé), aucun commit, aucun appel API, `en-cours`/`roadmap`/`AGENTS` intacts.
+
+## Chiffres — 7,50 Go, `--bloc-mo 64 --memoire-mo 2048`
+
+- **Temps : 430,7 s = 7 min 11 s** (16,6 Mio/s ; CPU 99 %, 419,9 s user) — c'est le hachage qui domine, pas l'I/O.
+- **RSS max : 954,3 Mio** pour un budget de 2 048 Mio (marge 1 094) ; confirmé de l'extérieur par `/usr/bin/time` (977 200 Kio).
+- **112 blocs : 112 gardés, 0 écarté, 0 octet écarté → 0,000 %** ; sortie identique à l'entrée à l'octet près (`cmp`).
+- 191 312 755 shingles calculés, 6 006 207 échantillonnés (1/32) : **4,177 % déjà vus avant leur bloc, 5,171 % avec les répétitions internes**. Le bloc le plus chargé est à **48,9 %** — loin du seuil de 80 %.
+- Preuve de budget : **200 Mo avec 256 Mio → RSS 120,8 Mio** (marge 135) ; budget impossible → `ERREUR budget_memoire_impossible` (rc 3) ; chien de garde déclenché pour de vrai → `ERREUR memoire_depassee` (rc 3).
+
+## Les 4 cas de contrôle (18/18 assertions vertes)
+
+| cas | attendu | observé |
+|---|---|---|
+| (a) texte unique | gardé | **gardé**, 0,0 % |
+| (b) copie exacte | écarté | **écarté**, 100,0 % |
+| (c) copie à 9,4 % modifiée | écarté à 0,8, gardé à 0,95 | **écarté** (90,04–90,21 %), **gardé à 0,95** — le seuil tranche entre 0,90 et 0,95 |
+| (d) texte différent | gardé | **gardé**, 0,0 % |
+
+En plus : copie **décalée de 21 octets** écartée (99,9–100 %) — c'est précisément ce qu'une grille à pas fixe rate ; copie à **10 % de mots dispersés gardée** (1–3 % vus) ; **stabilité** : deux passes → même sha256 (`1a5c01ef…`), mêmes décisions, mêmes octets.
+
+## Le résultat qui change la suite
+
+Le dédoublonnage **par blocs ne ferme pas l'écart** : à 64 Mio, 0 % ; même à 4 Kio, 0,147 % seulement. La mesure exacte ligne à ligne montre pourquoi : **53,98 % des lignes sont des répétitions, mais 8,28 % des octets** (621 Mo, dont 23 Mo de lignes vides à préserver → 598 Mo de contenu ; 2,59 % pour les lignes de 80 o et +). La duplication est courte et diffuse, pas « en blocs ».
+
+Et le chiffre de l'inventaire est biaisé : sa grille à pas fixe sous-estime de **16×** sur 100 Mo (0,04 % contre 0,62 % pour toutes les fenêtres), encore **1,8×** à 7,50 Go (2,93 % contre 5,17 %). La correction à retenir : ~5 % des shingles, 8,28 % des octets, et la prochaine action est un dédup **par ligne** en flux (≈ 2 min) — pas un dédup par blocs.
+
+### 👤 Utilisateur
+
+background job bash-662 (bash: sleep 1500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n3/r3.log; echo "=== passe ==="; tail -2 /tmp/passe-1118.log; echo "vertes: $(grep -c '✅' /tmp/passe-1118.log) rouges: $(grep -c '❌' /tmp/passe-1118.log)") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 300; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== lot tagger ===\"; /tmp/tagger-612/lancer.sh > /tmp/tagger-612/lot.log 2>&1; echo \"exit=$?\"; tail -8 /tmp/tagger-612/lot.log", "description": "Launch the paid tagger lot at the discounted window", "run_in … [19 caractères tronqués]`
+
+  ```
+started background job bash-715
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité, données, décodage**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N4 — grammaticalité, … [1347 caractères tronqués]`
+
+  ```
+mots : 82
+compteurs ok
+  revue de documentation · 801 fiche(s) · 893 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ❌ 1 anomalie(s) :
+     · puce > 80 mots : **N4 — grammaticalité, données, décodage** (18/11) : GV **6,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**r1/r2** : PPL **3,4130 → 3,2321**, top-40 **0,831 → 0,845**, et **top-40/T=0,5** bat le greedy (**0,907**, rép **1,7**) ;\" … [390 caractères tronqués]`
+
+  ```
+ok
+  en-cours · 1717 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== lot ===
+mer 18 nov 2026 11:25:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/dedup_blocs.py reports/rapport-dedup-blocs.md reports/dedup-blocs-7.5go.json docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nD — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0  … [1477 caractères tronqués]`

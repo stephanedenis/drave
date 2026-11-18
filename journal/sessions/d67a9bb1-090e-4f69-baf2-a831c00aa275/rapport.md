@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 25.0 h |
+| Durée | 25.6 h |
 | Tours | 9 |
-| Messages | 430 |
-| Appels d'outils | 434 |
+| Messages | 444 |
+| Appels d'outils | 445 |
 | Fichiers touchés | 34 |
-| Commandes | 314 |
+| Commandes | 325 |
 | Sous-agents | 6 |
-| Commits | 25 |
+| Commits | 26 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*114 appels d'outils.* Actions notables :
+*125 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,11 +454,11 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 96 autres
+- … et 107 autres
 
 **Synthèse produite :**
 
-⏵ Deux sous-agents de plus : la préparation du lot tagger (11 h 30) et l'inventaire des données
+⏵ Passe complète des 90 portes lancée en fond (pendant que r3 s'entraîne)
 
 ## 3. Travail accompli
 
@@ -552,7 +552,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 274 autres
+- … et 285 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -718,4 +718,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)" && git log -1 --format='%h %s' | cat
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --f
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/dedup_blocs.py reports/rapport-dedup-blocs.md reports/dedup-blocs-7.5go.json docs/pilotage/e
 
