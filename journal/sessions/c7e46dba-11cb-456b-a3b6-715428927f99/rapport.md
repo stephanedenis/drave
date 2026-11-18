@@ -7,12 +7,12 @@
 | Identifiant | `c7e46dba-11cb-456b-a3b6-715428927f99` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-18 08:58 |
-| Durée | 0.3 h |
+| Durée | 0.4 h |
 | Tours | 1 |
-| Messages | 49 |
-| Appels d'outils | 77 |
-| Fichiers touchés | 0 |
-| Commandes | 74 |
+| Messages | 73 |
+| Appels d'outils | 102 |
+| Fichiers touchés | 1 |
+| Commandes | 93 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français).  TÂCHE : une RE … [2128 caractères tronqués]
 
-*77 appels d'outils.* Actions notables :
+*102 appels d'outils.* Actions notables :
 
 - bash — Check repo state and recent commits
 - grep
@@ -41,11 +41,23 @@
 - bash — Find A6.2 backlog fiche and mentions
 - bash — Read A2.6 bilan body and A6.2 fiche
 - bash — List local models and expert tools
-- … et 63 autres
+- … et 84 autres
 
 **Synthèse produite :**
 
-⏵ Mesure courte du coût par jeton des experts sur le MoE local
+⏵ Reconnaissance A2.6 terminée, rapport écrit
+
+**Résumé (A2.6 — experts et tête)**
+
+1. **Existe** : `placement.rs` (253 l., **8 tests**) mais la règle ne décide **que du KV** ; experts et tête sont placés par drapeaux/seuils durs (`SEUIL_GPU` 8 Mio, `DRAVE_GPU_EXPERTS_GO` = VRAM−2 Go, `DRAVE_EXPERTS_RAM`, `materiel::plan` imprimé, jamais appliqué).
+2. Le chemin experts est déjà riche : 4 conventions de routage (`model.rs:26-46`), trace/imposition/élagage (`432-480`), `Moe` (`1504-1553`), caches RAM (`1583-1700`) et VRAM MXFP4 seulement (`1983-2100`, garde `8486`), prélecture 8 fils, noyau GPU Q4_K mesuré mais **non branché**.
+3. **Manque** : coût « experts » (réutilisation + nb de lecteurs), **refus nommé** (`choisir` retombe sur NVMe en silence), trace du classement et test de reproductibilité, `Precision` tête à perte 0, et **une bande experts** — trois tables contradictoires (3,5 vs 31 Go/s) donnent 313 ou 35 ms pour le même opérateur.
+4. **Mesuré ici** : 1,097 Go d'experts/jeton ; `proj+mlp` 194,8 ms à 8 fils (**5,6 Go/s**), 188,8 à 16 (saturation), 279,1 à 4 ; cache RAM 567,9 ms et tampons 362,8 ms (plus lents) ; PPL 799,8557 invariante.
+5. **Bonus** : tête Q8_0 en VRAM → PPL **56,7642 = 56,7642**, tête **7,43 → 1,80 ms/jeton** (÷4,1), contrôle `DRAVE_GPU=0` = 7,75 ms.
+6. **Prochaine expérience** : bande experts au `--limit 32` sur 4/8/16 fils, contrôles « cache RAM et tampons plus lents » + « PPL 37,2013 invariante » ; attendu 195 ms à 8 fils = **un lecteur**, pas 31 Go/s.
+7. **Risque** : ≈ 200 lignes (3 fichiers) ; le risque est le chemin de chargement et le défaut → opt-in `DRAVE_PERTE_MAX`, portes `flux`/`pont`/`coupe`, `porte-echange-experts`, `cargo test placement`.
+
+**Rapport** : `reports/rapport-a2.6-reconnaissance.md` — non committé, aucun autre fichier modifié.
 
 ## 3. Travail accompli
 
@@ -53,6 +65,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `reports/rapport-a2.6-reconnaissance.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +109,7 @@
 - **T1** Check binary and token-id fixtures
 - **T1** Check GPU idle state and lot measurement script
 - **T1** Read prefill-by-experts timings
-- … et 34 autres
+- … et 53 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -221,4 +234,10 @@
 - **T1** `[still running after 60000ms; moved to background job bash-290]`
 - **T1** `| 100 % (impossible) | **×1,41** |`
 - … (tronqué)
+
+## 5. Erreurs rencontrées
+
+1 sorties en erreur ou divergentes. Les premières :
+
+- **T1** : #!/bin/bash # toutes-les-portes.sh — LA PASSE COMPLÈTE, et l'instrument qui manquait. # # POURQUOI CETTE PORTE EXISTE. Le 12 octobre, `tools/porte-gain.sh` §9 exigeait un REFUS # (`--attn-window` en r
 

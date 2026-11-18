@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 23.4 h |
+| Durée | 23.8 h |
 | Tours | 9 |
-| Messages | 356 |
-| Appels d'outils | 370 |
-| Fichiers touchés | 30 |
-| Commandes | 262 |
-| Sous-agents | 2 |
-| Commits | 18 |
+| Messages | 385 |
+| Appels d'outils | 394 |
+| Fichiers touchés | 31 |
+| Commandes | 279 |
+| Sous-agents | 4 |
+| Commits | 19 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*50 appels d'outils.* Actions notables :
+*74 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,11 +454,11 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 36 autres
+- … et 57 autres
 
 **Synthèse produite :**
 
-⏵ Écriture de l'outil d'épinglage du corpus (sha256, manifeste, autotest)
+⏵ Deux sous-agents de plus : la préparation du lot tagger (11 h 30) et l'inventaire des données
 
 ## 3. Travail accompli
 
@@ -496,11 +496,14 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/epingle_corpus.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-epingle.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-natif-val-deux-decoupages.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-bande-experts.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
 - tour 9 — Reconnaissance A2.6 experts
 - tour 9 — Grammaticalité du 100 M
+- tour 9 — Préparation lot tagger 612
+- tour 9 — Inventaire des données D
 
 ### Commandes exécutées (échantillon)
 
@@ -544,7 +547,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 222 autres
+- … et 239 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -701,5 +704,6 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/banc_generation.py tools/chantier/plan.json reports/banc-generation-100m.json reports/banc-g
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/epingle_corpus.py reports/corpus-epingle.json reports/rapport-corpus-epingle.md docs/pilotag
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = '| 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = '| 
 

@@ -1,0 +1,25 @@
+{
+ "schema": "drave.a2.6-bande-experts",
+ "version": 1,
+ "date": "2026-11-18",
+ "modele": "qwen3-30b-a3b-Q4_K_M.gguf (18,5 Go)",
+ "ctx": 512,
+ "limit": 32,
+ "jetons": 31,
+ "octets_experts_par_jeton": 1097000000.0,
+ "note": "proj+mlp en ms/jeton, 2e passe (lecture chaude) ; PPL 37.2013 sur tous les chemins",
+ "points": {
+  "4 fils": 222.45,
+  "8 fils": 156.95,
+  "16 fils": 165.4,
+  "DRAVE_EXPERTS_RAM=4096, 8 fils": 314.36,
+  "DRAVE_TAMPONS=1, 8 fils": 231.32
+ },
+ "bande_implicite_Go_s": {
+  "4 fils": 4.93,
+  "8 fils": 6.99,
+  "16 fils": 6.63,
+  "DRAVE_EXPERTS_RAM=4096, 8 fils": 3.49,
+  "DRAVE_TAMPONS=1, 8 fils": 4.74
+ }
+}

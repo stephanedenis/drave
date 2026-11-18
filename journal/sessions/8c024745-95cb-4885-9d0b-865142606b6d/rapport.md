@@ -7,12 +7,12 @@
 | Identifiant | `8c024745-95cb-4885-9d0b-865142606b6d` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-18 08:58 |
-| Durée | 0.3 h |
+| Durée | 0.5 h |
 | Tours | 1 |
-| Messages | 44 |
-| Appels d'outils | 55 |
-| Fichiers touchés | 0 |
-| Commandes | 44 |
+| Messages | 74 |
+| Appels d'outils | 90 |
+| Fichiers touchés | 1 |
+| Commandes | 61 |
 | Sous-agents | 0 |
 | Commits | 0 |
 | Compactages de contexte | 0 |
@@ -25,7 +25,7 @@
 
 ### Tour 1 — Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est  … [2155 caractères tronqués]
 
-*55 appels d'outils.* Actions notables :
+*90 appels d'outils.* Actions notables :
 
 - bash — Liste les fichiers de grammaticalité
 - glob
@@ -41,11 +41,59 @@
 - bash — Vérifie le protocole 128 octets du 34M
 - bash — Génère 100M, 20 prompts, 128 octets, cuda:0
 - bash — Lit le récit du 16 novembre sur le modèle
-- … et 34 autres
+- … et 65 autres
 
 **Synthèse produite :**
 
-⏵ Recherche des contextes de « a » qui gonflent les GV du 34 M
+⏵ Récapitulatif final
+
+\## Livrables
+
+- `reports/banc-grammaticalite-100m.json` — clés `n128`, `n64`, `controle_100m_n128`
+- `reports/rapport-grammaticalite-100m.md` — fiche complète (protocole, tableaux, contrôles, limites, protocole r1)
+- Aucun code modifié : `banc_grammaticalite.py` ne charge pas de modèle et `banc_generation.py` avait déjà `--device`. Aucun commit, aucun fichier interdit touché.
+
+\## Chiffres clés
+
+**n=128 (protocole exact du 34 M, 20 prompts, 3 réglages, même analyseur) :**
+
+| modèle | réglage | GV | ciment | GV/100 mots |
+|---|---|---:|---:|---:|
+| 34 M | greedy | **6,90** | **0,335** | 15,4 |
+| 34 M | top-40/0,8 | 6,35 | 0,377 | 18,0 |
+| 34 M | top-20/0,5 | 5,85 | 0,310 | 15,2 |
+| **100 M** | greedy | **1,45** | **0,661** | 4,1 |
+| **100 M** | top-40/0,8 | 4,00 | 0,375 | 14,4 |
+| **100 M** | top-20/0,5 | 2,65 | 0,461 | 8,3 |
+
+En greedy, 8/20 textes du 100 M n'ont aucun GV (3/20 pour le 34 M).
+
+**n=64 (contrôle de longueur) :** 34 M greedy **3,35 GV / 0,427** ; 100 M greedy **1,10 / 0,693** ; contrôle 34 M aléatoire n=64 **1,50 / 0,790**. Le contrôle 100 M aléatoire n=128 donne **4,75 GV / 0,763**.
+
+**Ratios GV/100 au hasard :** 34 M **3,4–4,7×** (stable à 64 et 128 octets) ; 100 M greedy **0,8×** (n=128, son propre hasard) et **1,8×** (n=64) — au plancher ; top-40/top-20 **1,9–3,4×**.
+
+\## Deux réserves majeures
+
+1. **Le « 100 M » fait 73 366 568 paramètres** (×2,14, pas ×3) et **3 000 pas** contre 30 000 pour le 34 M (PPL val **4,014** contre **2,404**) : la comparaison confond échelle et entraînement. Ne pas conclure « l'échelle n'achète pas la grammaire ».
+2. **GV et ciment mesurent surtout la classe du token de boucle** : 42 % des GV du 34 M sont le seul « a » (58/138) ; 46 % des mots du 100 M sont « de » (304/661). Le 100 M est plus répétitif (46 % vs 18 % de mot dominant) et moins divers (74 vs 149 types), mais le banc ne prouve pas qu'il est « moins grammatical ».
+
+\## Commandes
+
+```bash
+\# génération 100 M, n=128, GPU
+/home/stephane/gpu-env/bin/python tools/banc_generation.py \
+  --modele work/n2ac/mix1024-100m.pt --n 128 --device cuda:0 \
+  --sortie /tmp/banc-generation-100m-128o.json
+
+\# grammaticalité n=128, contrôle 34 M aléatoire n=128
+/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \
+  --entree /tmp/banc-generation-100m-128o.json \
+  --controle reports/banc-generation-aleatoire.json \
+  --sortie /tmp/banc-grammaticalite-100m-128o-controle34.json
+
+\# grammaticalité n=64, contrôle 34 M aléatoire n=64
+/home/stepha
+… [510 caractères tronqués]
 
 ## 3. Travail accompli
 
@@ -53,6 +101,7 @@
 
 | Fichier | Écritures | Éditions |
 |---|---|---|
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md` | 1 | 12 |
 
 ### Commandes exécutées (échantillon)
 
@@ -96,7 +145,7 @@
 - **T1** Compare le greedy 34M CPU/GPU et inspecte le hasard
 - **T1** Affiche les deux générations greedy 34M
 - **T1** Refait la comparaison de préfixes dans le bon sens
-- … et 4 autres
+- … et 21 autres
 
 ## 4. Mesures et résultats marquants
 

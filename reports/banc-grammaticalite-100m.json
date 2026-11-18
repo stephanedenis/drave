@@ -1,0 +1,152 @@
+{
+ "note": "n128 : 100 M natif, 128 octets, controle 34 M aleatoire n128 (reports/banc-generation-aleatoire.json). n64 : 100 M natif, 64 octets, controle 34 M aleatoire n64 (reports/banc-generation-alea-64o.json). controle_100m_n128 : controle scale-matched 100 M aleatoire n128 (poids au hasard, graine 1234).",
+ "n128": {
+  "natif": {
+   "greedy": {
+    "textes": 20,
+    "gv_moyen": 1.45,
+    "gn_moyen": 1.55,
+    "mots_moyen": 35.2,
+    "ciment": 0.6611,
+    "attaches": 0.9052,
+    "sans_verbe": 0.4
+   },
+   "top40_0.8": {
+    "textes": 20,
+    "gv_moyen": 4.0,
+    "gn_moyen": 1.85,
+    "mots_moyen": 27.7,
+    "ciment": 0.3748,
+    "attaches": 0.7708,
+    "sans_verbe": 0.0
+   },
+   "top20_0.5": {
+    "textes": 20,
+    "gv_moyen": 2.65,
+    "gn_moyen": 1.9,
+    "mots_moyen": 32.0,
+    "ciment": 0.4605,
+    "attaches": 0.8707,
+    "sans_verbe": 0.0
+   }
+  },
+  "aleatoire": {
+   "greedy": {
+    "textes": 20,
+    "gv_moyen": 2.3,
+    "gn_moyen": 1.8,
+    "mots_moyen": 62.5,
+    "ciment": 0.7912,
+    "attaches": 0.7466,
+    "sans_verbe": 0.0
+   },
+   "top40_0.8": {
+    "textes": 20,
+    "gv_moyen": 3.35,
+    "gn_moyen": 2.8,
+    "mots_moyen": 87.8,
+    "ciment": 0.8008,
+    "attaches": 0.6503,
+    "sans_verbe": 0.1
+   },
+   "top20_0.5": {
+    "textes": 20,
+    "gv_moyen": 4.0,
+    "gn_moyen": 2.35,
+    "mots_moyen": 89.6,
+    "ciment": 0.7959,
+    "attaches": 0.6701,
+    "sans_verbe": 0.05
+   }
+  }
+ },
+ "n64": {
+  "natif": {
+   "greedy": {
+    "textes": 20,
+    "gv_moyen": 1.1,
+    "gn_moyen": 1.3,
+    "mots_moyen": 19.9,
+    "ciment": 0.6927,
+    "attaches": 0.8698,
+    "sans_verbe": 0.45
+   },
+   "top40_0.8": {
+    "textes": 20,
+    "gv_moyen": 2.15,
+    "gn_moyen": 1.95,
+    "mots_moyen": 15.1,
+    "ciment": 0.3749,
+    "attaches": 0.8139,
+    "sans_verbe": 0.0
+   },
+   "top20_0.5": {
+    "textes": 20,
+    "gv_moyen": 1.6,
+    "gn_moyen": 1.8,
+    "mots_moyen": 17.4,
+    "ciment": 0.4712,
+    "attaches": 0.8365,
+    "sans_verbe": 0.1
+   }
+  },
+  "aleatoire": {
+   "greedy": {
+    "textes": 20,
+    "gv_moyen": 1.5,
+    "gn_moyen": 1.75,
+    "mots_moyen": 47.5,
+    "ciment": 0.7904,
+    "attaches": 0.7754,
+    "sans_verbe": 0.05
+   },
+   "top40_0.8": {
+    "textes": 20,
+    "gv_moyen": 2.05,
+    "gn_moyen": 2.1,
+    "mots_moyen": 48.6,
+    "ciment": 0.7955,
+    "attaches": 0.7388,
+    "sans_verbe": 0.05
+   },
+   "top20_0.5": {
+    "textes": 20,
+    "gv_moyen": 2.15,
+    "gn_moyen": 2.0,
+    "mots_moyen": 51.6,
+    "ciment": 0.8189,
+    "attaches": 0.685,
+    "sans_verbe": 0.0
+   }
+  }
+ },
+ "controle_100m_n128": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 4.75,
+   "gn_moyen": 3.15,
+   "mots_moyen": 90.4,
+   "ciment": 0.7627,
+   "attaches": 0.558,
+   "sans_verbe": 0.0
+  },
+  "top40_0.8": {
+   "textes": 20,
+   "gv_moyen": 5.25,
+   "gn_moyen": 3.45,
+   "mots_moyen": 105.1,
+   "ciment": 0.8157,
+   "attaches": 0.7575,
+   "sans_verbe": 0.05
+  },
+  "top20_0.5": {
+   "textes": 20,
+   "gv_moyen": 3.85,
+   "gn_moyen": 2.05,
+   "mots_moyen": 87.4,
+   "ciment": 0.7954,
+   "attaches": 0.6722,
+   "sans_verbe": 0.0
+  }
+ }
+}

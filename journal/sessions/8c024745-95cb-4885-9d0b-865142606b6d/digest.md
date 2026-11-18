@@ -1170,3 +1170,625 @@ aleatoire top20_0.5  gv=3.85 gn=2.05 mots=87.4 ciment=0.795 attaches=0.672 sans_
 … [233 caractères tronqués]
   ```
 
+### 🤖 Assistant
+
+⏵ Inspection des GV détectés : verbes réels ou artefacts de boucle ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json, sys, collections\nsys.path.insert(0,'.')\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique()\nfor nom,p in [(\"34M\",\"reports/banc-generation.json\"),(\"100M\",\"/ … [603 caractères tronqués]`
+
+  ```
+===== 34M greedy
+  ex GV: ['est', 'est un pays don']
+  top GV: [('a', 58), ('de', 6), ('d', 5), ('A', 3), ('A Ba', 3), ('a a', 3), ('est', 2), ('a da', 2), ('a e e', 2), ('e', 2), ('est un pays don', 1), ('en ena da da es  da da es', 1), ('en e lala lana e dese', 1), ('était', 1), ('était une fois', 1)]
+===== 100M greedy
+  ex GV: ['est', 'est un pays', 'landes']
+  top GV: [('est', 3), ('ss', 3), ('mise', 2), ('est un pays', 1), ('landes', 1), ('es', 1), ('se mise', 1), ('était', 1), ('était une fois', 1), ('jouent', 1), ('lantis', 1), ('a décidé late', 1), ('este', 1), ('alis es ale', 1), ('es ale', 1)]
+  ```
+
+### 🤖 Assistant
+
+⏵ Recherche des contextes de « a » qui gonflent les GV du 34 M
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json, sys, collections\nsys.path.insert(0,'.')\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique()\nd=json.load(open(\"reports/banc-generation.json\"))\nbest=[]\nfor l in … [413 caractères tronqués]`
+
+  ```
+--- 39 GV | La science
+La science a a d A destome de de  a d e f   a d a   d frine a d ana  da lan 1 an a a de a a a a a a a  1 a  a de a a a a a a a a a a a  a 
+GV: ['a', 'a a', 'a', 'd', 'A destome', 'a', 'a', 'd', 'a', 'a', 'an', 'a', 'a a', 'a', 'de', 'a', 'a a a a a a a  1 a  a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'de', 'a', 'a a a a a a a a a a a  a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a']
+--- 37 GV | La mer
+La meri a  a a a a a a a a popra ux a d du  a da d a asa a a de a da la a do e 1 a de a esa a da lla d a A  a de a a a a pr a de pre d
+GV: ['a', 'a  a a a a a a a a popra ux a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a popra ux', 'a', 'a da', 'd', 'a asa', 'a asa a a', 'a', 'a', 'de', 'a da', 'a do e', 'a do e 1 a', 'a', 'de', 'a esa', 'a esa a da lla', 'a da lla', 'd', 'a', 'a A  a', 'a', 'de', 'a', 'a a a a pr a', 'a', 'a', 'a pr', 'a']
+--- 11 GV | La musique
+La musique d  de A de etris d da  fata  A  A A A A A Ba  a A A si A  A A A A Ba Ala A Ba A Ba A A A A Ana An Am Aba Ana A Ana A An A A Ala
+GV: ['A', 'A  A A A A A Ba  a A A', 'A Ba', 'a', 'A', 'A Ba', 'A Ba', 'A Ana An Am Aba Ana', 'A Ana', 'A An', 'A Ala']
+  ```
+
+### 🤖 Assistant
+
+⏵ Analyse des verbes produits : types et concentration
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json, sys, collections\nsys.path.insert(0,'.')\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique()\nfor nom,p in [(\"34M\",\"reports/banc-generation.json\"),(\"100M\",\"/ … [591 caractères tronqués]`
+
+  ```
+===== 34M
+  greedy     verbes= 17 types= 8 top=[('es', 7), ('est', 4), ('était', 1), ('espenes', 1), ('jouent', 1), ('esed', 1)]
+  top40_0.8  verbes= 11 types= 9 top=[('est', 3), ('esovors', 1), ('es', 1), ('était', 1), ('ponecunovons', 1), ('jouent', 1)]
+  top20_0.5  verbes= 15 types= 7 top=[('es', 7), ('est', 3), ('était', 1), ('desespes', 1), ('jouent', 1), ('pis', 1)]
+===== 100M
+  greedy     verbes= 19 types=10 top=[('es', 5), ('est', 3), ('ss', 3), ('landes', 2), ('était', 1), ('jouent', 1)]
+  top40_0.8  verbes= 41 types=38 top=[('és', 3), ('lus', 2), ('est', 1), ('ables', 1), ('blandes', 1), ('mmpois', 1)]
+  top20_0.5  verbes= 37 types=31 top=[('es', 3), ('est', 2), ('ales', 2), ('demis', 2), ('ans', 2), ('attes', 1)]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json, sys\nsys.path.insert(0,'.')\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique()\nd=json.load(open(\"reports/banc-generation.json\"))\nt=[l for l in d[\"reglages\"][ … [406 caractères tronqués]`
+
+  ```
+La science a a d A destome de de  a d e f   a d a   d frine a d ana  da lan 1 an a a de a a a a a a a  1 a  a de a a a a a a a a a a a  a 
+POS: [('La', 'DET'), ('science', 'NOUN'), ('a', 'PREP'), ('a', 'PREP'), ('d', 'PREP'), ('A', 'PREP'), ('destome', 'NOUN'), ('de', 'PREP'), ('de', 'PREP'), ('a', 'PREP'), ('d', 'PREP'), ('e', 'NOUN'), ('f', 'NOUN'), ('a', 'PREP'), ('d', 'PREP'), ('a', 'PREP'), ('d', 'PREP'), ('frine', 'NOUN'), ('a', 'PREP'), ('d', 'PREP'), ('ana', 'NOUN'), ('da', 'NOUN'), ('lan', 'NOUN'), ('1', 'NUM'), ('an', 'NOUN'), ('a', 'PREP'), ('a', 'PREP'), ('de', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('a', 'PREP'), ('1', 'NUM'), ('a', 'PREP'), ('a', 'PREP'), ('de', 'PREP'), ('a', 'PREP')]
+SYNT: [('La science', 'GN', {'role': 'agent', 'niveau': 1, 'attachement': {'segment': 'La science', 'cible': 'd', 'candidats': [{'span': {'debut': 15, 'fin': 16}, 'cible': 'd', 'source': 'heuristique'}, {'span': {'debut': 54, 'fin': 59}, 'cible': 'frine', 'source': 'heuristique'}, {'span': {'debut': 0, 'fin': 10}, 'cible': 'La science', 'source': 'heuristique'}, {'span': {'debut': 1, 'fin': 2}, 'cible': 'a', 'source': 'heuristi
+… [5376 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Test d'un GV « à appui verbal » : le banc compte-t-il vraiment des verbes ?
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json, sys\nsys.path.insert(0,'.')\nfrom tools import bloc_linguistique as bl\na=bl.Heuristique()\nfor nom,p in [(\"34M\",\"reports/banc-generation.json\"),(\"100M\",\"/tmp/banc-gene … [1065 caractères tronqués]`
+
+  ```
+===== 34M
+  greedy     GV=138 GV_appui_verbal=16 GV_tete_verbale=13 tokens_VERB/AUX= 17 par_texte=[2, 1, 4, 0, 0, 1, 1, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0]
+  top40_0.8  GV=127 GV_appui_verbal=16 GV_tete_verbale=12 tokens_VERB/AUX= 11 par_texte=[3, 1, 5, 0, 0, 1, 0, 1, 0, 0, 2, 2, 0, 0, 0, 0, 1, 0, 0, 0]
+  top20_0.5  GV=117 GV_appui_verbal=19 GV_tete_verbale=14 tokens_VERB/AUX= 15 par_texte=[2, 2, 5, 0, 0, 4, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 1, 0]
+===== 100M
+  greedy     GV= 29 GV_appui_verbal=20 GV_tete_verbale=19 tokens_VERB/AUX= 19 par_texte=[3, 1, 2, 1, 0, 2, 0, 0, 2, 0, 0, 2, 0, 1, 0, 0, 0, 3, 0, 3]
+  top40_0.8  GV= 80 GV_appui_verbal=43 GV_tete_verbale=34 tokens_VERB/AUX= 41 par_texte=[4, 3, 4, 1, 1, 4, 1, 1, 1, 1, 3, 2, 0, 4, 3, 2, 1, 3, 2, 2]
+  top20_0.5  GV= 53 GV_appui_verbal=37 GV_tete_verbale=35 tokens_VERB/AUX= 37 par_texte=[6, 2, 3, 0, 2, 4, 0, 1, 2, 0, 2, 3, 1, 0, 2, 3, 0, 1, 3, 2]
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi d'un point d'étape au parent (taille réelle, budget d'entraînement, confound)
+
+- **send_message** `{"agent_id": "d67a9bb1-090e-4f69-baf2-a831c00aa275", "message": "Point d'étape — banc de grammaticalité 100 M (mesure terminée, rapport en cours d'écriture).\n\n1) Le fichier work/n2ac/mix1024-100m.pt ne fait pas 100 M : 73 366 568 paramètres (vérifié dans le checkpoint et le .pt.json), et il n'a qu … [1719 caractères tronqués]`
+
+  ```
+message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des positions (RoPE vs absolues) avant d'écrire le rapport
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport torch\nfor p in [\"work/n2ac/mix1024-60k.pt\",\"work/n2ac/mix1024-100m.pt\"]:\n    ck=torch.load(p,map_location=\"cpu\",weights_only=False)\n    ks=[k for k in ck[\"state\"] if (\"r … [296 caractères tronqués]`
+
+  ```
+work/n2ac/mix1024-60k.pt clés rope/pos: ['pos.weight']
+  config: {'vocab': 256, 'd_model': 384, 'n_blocks': 6, 'n_heads': 4, 'expert_hidden': 512, 'n_experts': 8, 'top_k': 2, 'kwta': 0.25, 'window': 1024, 'max_pos': 2048, 'thought_steps': 2, 'early_blocks': (1, 3, 5), 'rsn_dim': 120}
+work/n2ac/mix1024-100m.pt clés rope/pos: ['pos.weight']
+  config: {'vocab': 256, 'd_model': 640, 'n_blocks': 6, 'n_heads': 4, 'expert_hidden': 640, 'n_experts': 8, 'top_k': 2, 'kwta': 0.25, 'window': 256, 'max_pos': 2048, 'thought_steps': 2, 'early_blocks': (1, 3, 5), 'rsn_dim': 120}
+=== code rope ===
+  ```
+
+### 👤 Utilisateur
+
+Agent d67a9bb1-090e-4f69-baf2-a831c00aa275 sent a message: 
+Important : ton JSON `banc-grammaticalite-100m.json` compare le 100 M (généré à **n=64**) au contrôle `reports/banc-generation-aleatoire.json` (généré à **n=128**) — les textes n'ont pas la même longueur (le contrôle a 90 mots, le natif 35), donc gv_moyen et ciment ne sont pas comparables et le contrôle paraît « meilleur » (ciment 0,76 contre 0,66).
+
+J'ai créé le contrôle APPARIÉ : `reports/banc-generation-alea-64o.json` (poids au hasard, n=64, même graine). Refais la passe `banc_grammaticalite.py` avec `--controle reports/banc-generation-alea-64o.json`, réécris `banc-grammaticalite-100m.json`, et dans la fiche : (1) compare au 34 M en gardant la réserve que son JSON de référence est en n=128 ; (2) note que le GV baisse de 6,9 (34 M) à 1,45 (100 M) — est-ce la longueur, le modèle, ou l'analyseur ? (3) le contrôle apparié. Donne les deux chiffres (n=128 historique, n=64 apparié) plutôt que de mélanger.
+
+### 👤 Utilisateur
+
+Agent d67a9bb1-090e-4f69-baf2-a831c00aa275 sent a message: 
+Excellent point d'étape, et tes deux réserves sont les bonnes : (1) le « 100 M » fait 73,4 M et n'a que 3 000 pas (contre 30 000 pour le 34 M) — la comparaison confond échelle et entraînement ; (2) GV et ciment mesurent surtout le token de boucle (« a » vs « de ») et il faut le GV/100 mots. Garde tout ça dans la fiche, avec les deux chiffres bruts ET normalisés.
+
+De mon côté, la confusion « 3 000 pas » est en cours de traitement : j'entraîne le 73 M (init = ce checkpoint, lr 1e-4, AMP, seq 1024, lot 8, val épinglée) pour 10 000 pas — il sera à 13 000 pas vers 10 h 05. Si tu veux, prépare ton rapport pour accueillir ce point : je te donnerai le banc de génération du checkpoint r1 (mêmes 20 prompts, n=128) et tu pourras dire si la répétition et le token de boucle bougent avec l'entraînement. Termine d'abord la fiche actuelle (73 M à 3 000 pas) avec ses réserves ; on fera une seconde fiche pour r1.
+
+### 🤖 Assistant
+
+⏵ Correction du malentendu n=64/n=128 et calcul des deux passes appariées n=64
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== 100M n=64 vs controle 34M alea n=64 ===\" && /home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py --entree reports/banc-generation-100m.json --controle reports/banc-generation-alea-64o.json --sortie /tmp/banc-gra … [368 caractères tronqués]`
+
+  ```
+=== 100M n=64 vs controle 34M alea n=64 ===
+natif     greedy     gv=1.10 gn=1.30 mots=19.9 ciment=0.693 attaches=0.870 sans_verbe=0.45
+natif     top40_0.8  gv=2.15 gn=1.95 mots=15.1 ciment=0.375 attaches=0.814 sans_verbe=0.00
+natif     top20_0.5  gv=1.60 gn=1.80 mots=17.4 ciment=0.471 attaches=0.837 sans_verbe=0.10
+aleatoire greedy     gv=1.50 gn=1.75 mots=47.5 ciment=0.790 attaches=0.775 sans_verbe=0.05
+aleatoire top40_0.8  gv=2.05 gn=2.10 mots=48.6 ciment=0.795 attaches=0.739 sans_verbe=0.05
+aleatoire top20_0.5  gv=2.15 gn=2.00 mots=51.6 ciment=0.819 attaches=0.685 sans_verbe=0.00
+=== 34M n=64 vs controle 34M alea n=64 ===
+natif     greedy     gv=3.35 gn=2.25 mots=24.6 ciment=0.427 attaches=0.765 sans_verbe=0.20
+natif     top40_0.8  gv=3.10 gn=2.40 mots=15.8 ciment=0.343 attaches=0.773 sans_verbe=0.05
+natif     top20_0.5  gv=3.40 gn=2.30 mots=20.3 ciment=0.342 attaches=0.668 sans_verbe=0.05
+aleatoire greedy     gv=1.50 gn=1.75 mots=47.5 ciment=0.790 attaches=0.775 sans_verbe=0.05
+aleatoire top40_0.8  gv=2.05 gn=2.10 mots=48.6 ciment=0.795 attaches=0.739 sans_verbe=0.05
+aleatoire top20_0.5  gv=2.15 gn=2.00 mots=51.6 ciment=0.819 attaches=0.685 sans_verbe=0.00
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json\nfor p in [\"reports/banc-generation-100m.json\",\"reports/banc-generation-34m-64o.json\",\"reports/banc-generation-alea-64o.json\",\"/tmp/banc-generation-100m-128o.json\",\"/t … [214 caractères tronqués]`
+
+  ```
+reports/banc-generation-100m.json n= 64 aleatoire= False modele= work/n2ac/mix1024-100m.pt
+reports/banc-generation-34m-64o.json n= 64 aleatoire= False modele= work/n2ac/mix1024-60k.pt
+reports/banc-generation-alea-64o.json n= 64 aleatoire= True modele= work/n2ac/mix1024-60k.pt
+/tmp/banc-generation-100m-128o.json n= 128 aleatoire= False modele= work/n2ac/mix1024-100m.pt
+/tmp/banc-generation-alea-100m-128o.json n= 128 aleatoire= True modele= work/n2ac/mix1024-100m.pt
+  ```
+
+### 🤖 Assistant
+
+⏵ Calcul du tableau complet n=128 et n=64, avec ratios au hasard
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json\n# n=128\nr34_128=json.load(open(\"reports/banc-grammaticalite.json\"))\nr100_128=json.load(open(\"/tmp/banc-grammaticalite-100m-controle-100m.json\"))  # 100M natif + 100M ale … [2243 caractères tronqués]`
+
+  ```
+### n=128
+34M        greedy     GV=6.90 GN=2.85 mots=44.8 ciment=0.3346 attaches=0.7368 sans=0.15 GV100=15.4
+34M        top40_0.8  GV=6.35 GN=3.15 mots=35.2 ciment=0.3769 attaches=0.8870 sans=0.00 GV100=18.0
+34M        top20_0.5  GV=5.85 GN=3.15 mots=38.5 ciment=0.3098 attaches=0.7892 sans=0.00 GV100=15.2
+100M       greedy     GV=1.45 GN=1.55 mots=35.2 ciment=0.6611 attaches=0.9052 sans=0.40 GV100=4.1
+100M       top40_0.8  GV=4.00 GN=1.85 mots=27.7 ciment=0.3748 attaches=0.7708 sans=0.00 GV100=14.4
+100M       top20_0.5  GV=2.65 GN=1.90 mots=32.0 ciment=0.4605 attaches=0.8707 sans=0.00 GV100=8.3
+34M alea   greedy     GV=2.30 GN=1.80 mots=62.5 ciment=0.7912 attaches=0.7466 sans=0.00 GV100=3.7
+34M alea   top40_0.8  GV=3.35 GN=2.80 mots=87.8 ciment=0.8008 attaches=0.6503 sans=0.10 GV100=3.8
+34M alea   top20_0.5  GV=4.00 GN=2.35 mots=89.6 ciment=0.7959 attaches=0.6701 sans=0.05 GV100=4.5
+100M alea  greedy     GV=4.75 GN=3.15 mots=90.4 ciment=0.7627 attaches=0.5580 sans=0.00 GV100=5.3
+100M alea  top40_0.8  GV=5.25 GN=3.45 mots=105.1 ciment=0.8157 attaches=0.7575 sans=0.05 GV100=5.0
+100M alea  top20_0.5  GV=3.85 GN=2.05 mots=87.4 ciment=0.7954 attaches=0.6722 sans=0.00 GV100=4.4
+
+### n=64
+… [1194 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe n=128 avec le contrôle 34 M (référence), puis assemblage du JSON à deux sections
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py --entree /tmp/banc-generation-100m-128o.json --controle reports/banc-generation-aleatoire.json --sortie /tmp/banc-grammaticalite-100m-128o-controle34.json && echo \"=== a … [1083 caractères tronqués]`
+
+  ```
+natif     greedy     gv=1.45 gn=1.55 mots=35.2 ciment=0.661 attaches=0.905 sans_verbe=0.40
+natif     top40_0.8  gv=4.00 gn=1.85 mots=27.7 ciment=0.375 attaches=0.771 sans_verbe=0.00
+natif     top20_0.5  gv=2.65 gn=1.90 mots=32.0 ciment=0.461 attaches=0.871 sans_verbe=0.00
+aleatoire greedy     gv=2.30 gn=1.80 mots=62.5 ciment=0.791 attaches=0.747 sans_verbe=0.00
+aleatoire top40_0.8  gv=3.35 gn=2.80 mots=87.8 ciment=0.801 attaches=0.650 sans_verbe=0.10
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+=== assemblage ===
+{
+ "note": "n128 : 100 M natif, 128 octets, controle 34 M aleatoire n128 (reports/banc-generation-aleatoire.json). n64 : 100 M natif, 64 octets, controle 34 M aleatoire n64 (reports/banc-generation-alea-64o.json). controle_100m_n128 : controle scale-matched 100 M aleatoire n128 (poids au hasard, graine 1234).",
+ "n128": {
+  "natif": {
+   "greedy": {
+    "textes": 20,
+    "gv_moyen": 1.45,
+    "gn_moyen": 1.55,
+    "mots_moyen": 35.2,
+    "ciment": 0.6611,
+    "attaches": 0.9052,
+    "sans_verbe": 0.4
+   },
+   "top40_0.8": {
+    "textes": 20,
+    "gv_moyen": 4.0,
+    "gn_moyen": 1.85,
+    "mots_moyen": 27.7,
+    "ciment": 0.3748
+… [2428 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi de la correction n=64/n=128 et des chiffres appariés au parent
+
+- **send_message** `{"agent_id": "d67a9bb1-090e-4f69-baf2-a831c00aa275", "message": "Correction sur le n : mon JSON n'était pas n=64. Le 100 M a été généré à n=128 (/tmp/banc-generation-100m-128o.json) et le contrôle scale-matched aussi (/tmp/banc-generation-alea-100m-128o.json). Les 35 mots du natif et les 90 du contr … [1679 caractères tronqués]`
+
+  ```
+message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
+  ```
+
+### 🤖 Assistant
+
+⏵ Rédaction de la fiche `rapport-grammaticalite-100m.md` avec les deux longueurs et les réserves
+
+- **write** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "content": "# N4 — la grammaticalité du « 100 M » : moins de GV, plus de ciment, un banc piégé par la boucle\n\n> **Ligne de roadmap** : **N4** (l'usage du natif) · **Date** : 2026-11-18 · **Modèl … [19370 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification du JSON, des liens et de l'état git
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python -m json.tool reports/banc-grammaticalite-100m.json >/dev/null && echo \"JSON valide\" && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport re, pathlib\np=pathlib.Path(\"reports/rapport-grammaticali … [399 caractères tronqués]`
+
+  ```
+JSON valide
+liens: 15
+OK   ../tools/banc_generation.py
+OK   ../tools/banc_grammaticalite.py
+OK   banc-grammaticalite-100m.json
+OK   ../tools/banc_generation.py
+OK   ../tools/banc_grammaticalite.py
+OK   rapport-banc-generation.md
+OK   rapport-banc-generation-100m.md
+OK   banc-grammaticalite-100m.json
+OK   banc-grammaticalite.json
+OK   banc-generation.json
+OK   banc-generation-aleatoire.json
+OK   banc-generation-100m.json
+OK   banc-generation-alea-64o.json
+OK   banc-generation-34m-64o.json
+OK   ../docs/pilotage/natif-plan.md
+mots: 3516
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --porcelain; echo \"=== fichiers créés ===\"; ls -la reports/banc-grammaticalite-100m.json reports/rapport-grammaticalite-100m.md; echo \"=== diff outils ===\"; git diff --stat tools/banc_grammaticalite.py", "description": … [47 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/digest.md
+ M journal/sessions/8c024745-95cb-4885-9d0b-865142606b6d/rapport.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md
+ M journal/sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+?? bench/checkpoint_bench.sh
+?? journal/sessions/174fd5ef-1163-4983-85b5-9101752ad711/
+?? journal/sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/
+?? reports/banc-grammaticalite-100m.json
+?? reports/rapport-a2.6-reconnaissance.md
+?? reports/rapport-grammaticalite-100m.md
+=== fichiers créés ===
+-rw-r--r--. 1 stephane stephane  3064 18 nov 09:21 reports/banc-grammaticalite-100m.json
+-rw-------. 1 stephane stephane 19839 18 nov 09:23 reports/rapport-grammaticalite-100m.md
+=== diff outils ===
+  ```
+
+### 🤖 Assistant
+
+⏵ Corrections de précision dans la fiche (greedy explicite, contrôle n=64, budget r1)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "old_string": "> **Verdict** : à 128 octets (protocole du 34 M), le 100 M **perd les GV** (1,45 contre 6,90) et\n> **monte le ciment** (0,661 contre 0,335) ; à 64 octets (contrôle de longueur), le … [334 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "old_string": "- **Le modèle** : le 100 M produit moins de mots par texte (19,9 contre 24,6 à 64 octets) et\n  les concentre sur un token, « de ». Le 34 M boucle sur « a ». La classe du token de b … [342 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "Le 34 M à 64 octets a été mesuré de la même façon :\n\n```bash\n/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \\\n    --entree reports/banc-generation-34m-64o.json  … [287 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "| contrôle 34 M aléatoire | top-20 | 2,15 | 2,00 | 51,6 | 0,819 | 4,2 | 1,0 |\n\n*Le hasard est le 34 M aléatoire (seul contrôle n=64 disponible) ; le 100 M aléatoire n'a été\nmesur … [160 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "Le banc lexical dit que le 100 M est **comparable ou meilleur** en greedy et top-40 (et qu'il\nrépète moins : 6 contre 15), tandis que le banc de grammaticalité dit qu'il a **près d … [270 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "2. **La prochaine action est l'entraînement à parité**, pas le 300 M : amener le 73 M à un budget\n   comparable (**13 000 pas pour r1**, **30 000 pas pour la parité stricte** avec  … [418 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Clarification des contrôles utilisés dans les ratios (propre hasard vs 34 M)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "| 64 octets | 100 M | **1,8×** | 3,4× | 2,2× |\n\n*Lecture des contrôles : à 128 octets, chaque modèle est comparé à son propre aléatoire (34 M\npour le 34 M, 100 M pour le 100 M) ; … [731 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Relecture complète de la fiche
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md</path>
+<type>file</type>
+<content>
+1: # N4 — la grammaticalité du « 100 M » : moins de GV, plus de ciment, un banc piégé par la boucle
+2: 
+3: > **Ligne de roadmap** : **N4** (l'usage du natif) · **Date** : 2026-11-18 · **Modèle mesuré** :
+4: > `work/n2ac/mix1024-100m.pt` (**73,37 M** paramètres réels, 3 000 pas, PPL val **4,014**) ·
+5: > **Référence** : `work/n2ac/mix1024-60k.pt` (**34,30 M**, 30 000 pas, PPL **2,404**) ·
+6: > **Verdict** : en greedy, à 128 octets (protocole du 34 M), le 100 M **perd les GV** (1,45
+7: > contre 6,90) et **monte le ciment** (0,661 contre 0,335) ; à 64 octets (contrôle de longueur),
+8: > le même écart tient (1,10 contre 3,35 ; 0,693 contre 0,427). Mais **42 %** des GV du 34 M sont le seul token
+9: > « a » et **46 %** des mots du 100 M sont « de » : GV et ciment mesurent surtout la **classe du
+10: > token de boucle**. Le 100 M est **plus répétitif et moins divers** ; il n'est pas démontré
+11: > « moins grammatical ». Le fichier fait **73,37 M** et **3 000 pas** (10× moins que le 34 M) :
+12: > la comparaison d'échelle est confondue avec l'entraînement.
+13: 
+14: 
+… [20427 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernières précisions de formulation (verbe « a », saturation lexicale, lecture r1)
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "« a a » (3), « est » (2), « a da » (2), « a e e » (2). Les GV du 34 M sont donc massivement des\n**runs de « a »**, le plus souvent le verbe avoir sans accent, que l'analyseur étiqu … [513 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "moins de GV** (6,90 / 1,45 = 4,76). Les deux axes ne mesurent pas la même chose : en greedy, les\nmots valides sont saturés dès 34 M, la structure non. C'est exactement la raison d' … [396 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "répétition (6) et les mots valides (0,878). Si la part de « de » reste haute et que le GV/100 ne\nmonte pas vers 10–15 à 13 000 pas, le budget seul ne suffira probablement pas ; si  … [345 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des outils de documentation (périmètre reports) et du compte de mots
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"reports\\|RACINE\\|docs\" tools/taille_documents.py | head -20; echo \"=== revue ===\"; grep -n \"reports\\|glob\\|docs\" tools/revue_documentation.py | head -25; echo \"=== mots ===\"; wc -w reports/rapport-grammaticalite- … [66 caractères tronqués]`
+
+  ```
+11:Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
+23:RACINE = pathlib.Path(__file__).resolve().parent.parent
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+29:    ("T1", "docs/methode/organisation-du-depot.md", 1800),
+30:    ("T1", "docs/methode/modularisation.md", 1600),
+31:    ("T1", "docs/methode/relations-humaines.md", 1400),
+32:    ("T0", "docs/methode/*.md", 1200),
+33:    ("T1", "docs/README.md", 1000),
+34:    ("T1", "docs/theorie/carte.md", 1100),
+35:    ("T1", "docs/theorie/synthese/index.md", 2000),
+36:    ("T1", "docs/theorie/synthese/0*.md", 2000),
+37:    ("T1", "docs/pilotage/roadmap.md", 9000),
+38:    ("T1", "docs/theorie/glossaire.md", 1500),
+39:    ("T1", "docs/theorie/glossaire/0*.md", 5000),
+40:    ("T1", "docs/theorie/glossaire/1*.md", 5000),
+41:    ("T1", "docs/theorie/glossaire/README.md", 2000),
+42:    ("T1", "docs/schemas/README.md", 1500),
+43:    ("CARTE", "docs/theorie/glossaire/entrees/*.md", 150),
+44:    ("T1", "reports/README.md", 2800),
+47:    ("T1", "docs/pilotage/utilisation.md", 2500),
+=== revue ===
+5:  1. classement : pas de résultats dans docs/ (les fiches sont dans reports/ et citées) ;
+7:  3. annotat
+… [1370 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe de revue documentaire ciblée sur la nouvelle fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 /home/stephane/gpu-env/bin/python tools/revue_documentation.py > /tmp/revue.txt 2>&1; code=$?; echo \"exit=$code\"; echo \"=== lignes concernant la fiche ===\"; grep -n -i \"grammaticalite-100m\\|rapport-grammaticalite\"  … [171 caractères tronqués]`
+
+  ```
+exit=1
+=== lignes concernant la fiche ===
+aucune
+=== fin ===
+  revue de documentation · 794 fiche(s) · 885 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 792 fichiers, le disque en a 794
+  ```
+
+### 🤖 Assistant
+
+⏵ Vérification des tableaux Markdown de la fiche
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,40p' tools/porte-tableaux.sh 2>/dev/null; echo \"=== run ===\"; timeout 120 bash tools/porte-tableaux.sh > /tmp/tableaux.txt 2>&1; code=$?; echo \"exit=$code\"; tail -20 /tmp/tableaux.txt", "description": "Lance la porte de … [33 caractères tronqués]`
+
+  ```
+#!/bin/bash
+# porte-tableaux.sh — un tableau Markdown qui ne rend pas est un tableau qui n'existe PAS.
+#
+# POURQUOI CETTE PORTE EXISTE. Le 13/10, le premier tableau de `docs/etat-cerveau.md` s'affichait
+# comme du TEXTE dans docwatch : une seule ligne (`| **C2 (cycle 2 régions)** | … |`) avait
+# **4 cellules pour 5 colonnes** — un lien qui avait glissé d'une colonne. Le rendu (mistune,
+# puis markdown_it, puis markdown) refuse alors le tableau ENTIER, sans rien dire : les 13 lignes
+# disparaissent de la page et personne ne le voit, parce que le texte est toujours là, en gris.
+#
+# CE QU'ELLE VÉRIFIE (trois conditions, toutes nécessaires au rendu) :
+#   1. l'en-tête et le séparateur d'un tableau ont le MÊME nombre de cellules ;
+#   2. chaque ligne du corps a ce nombre de cellules ;
+#   3. aucun `\|` ne subsiste : mistune ne le déséchappe NI dans un espace de code NI dans la
+#      prose (il s'affiche alors littéralement). Pour une barre de valeur absolue dans du code,
+#      on écrit `∣` (U+2223), qui rend partout et ne casse pas la lecture.
+# Les tableaux DANS une citation (`> | … |`) sont valides et vérifiés aussi.
+#
+# CE QU'ELLE NE VÉRIFIE PAS : les tableaux « écrasés » sur une se
+… [1141 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Contrôle final des fichiers et de l'absence de modification de code
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && chmod 644 reports/rapport-grammaticalite-100m.md && ls -la reports/banc-grammaticalite-100m.json reports/rapport-grammaticalite-100m.md && echo \"=== git diff code ===\" && git diff --stat -- tools/banc_grammaticalite.py tools/banc_g … [255 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane  3064 18 nov 09:21 reports/banc-grammaticalite-100m.json
+-rw-r--r--. 1 stephane stephane 20618 18 nov 09:27 reports/rapport-grammaticalite-100m.md
+=== git diff code ===
+(vide = aucune modification)
+=== mes fichiers ===
+?? reports/banc-grammaticalite-100m.json
+?? reports/rapport-grammaticalite-100m.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && /home/stephane/gpu-env/bin/python - <<'EOF'\nimport json\nd=json.load(open(\"reports/banc-grammaticalite-100m.json\"))\nprint(\"clés:\", list(d))\nfor section in [\"n128\",\"n64\"]:\n    print(section, \"natif greedy:\", d[section][\ … [295 caractères tronqués]`
+
+  ```
+clés: ['note', 'n128', 'n64', 'controle_100m_n128']
+n128 natif greedy: {'textes': 20, 'gv_moyen': 1.45, 'gn_moyen': 1.55, 'mots_moyen': 35.2, 'ciment': 0.6611, 'attaches': 0.9052, 'sans_verbe': 0.4} | controle greedy: 2.3 0.7912
+n64 natif greedy: {'textes': 20, 'gv_moyen': 1.1, 'gn_moyen': 1.3, 'mots_moyen': 19.9, 'ciment': 0.6927, 'attaches': 0.8698, 'sans_verbe': 0.45} | controle greedy: 1.5 0.7904
+controle_100m_n128 greedy: {'textes': 20, 'gv_moyen': 4.75, 'gn_moyen': 3.15, 'mots_moyen': 90.4, 'ciment': 0.7627, 'attaches': 0.558, 'sans_verbe': 0.0}
+  ```
+
+### 🤖 Assistant
+
+⏵ Ajout de la traçabilité des sources de contrôle dans la fiche
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "*Lecture des contrôles : à 128 octets, chaque modèle est comparé à son propre aléatoire (34 M\npour le 34 M, 100 M pour le 100 M) ; à 64 octets, les deux sont comparés au 34 M aléat … [399 caractères tronqués]`
+
+  ```
+Error: cannot edit "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md": file changed since it was read — re-read the file, then retry
+  ```
+
+### 🤖 Assistant
+
+⏵ Le fichier a changé : relecture de la section concernée avant édition
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && stat -c '%y %s' reports/rapport-grammaticalite-100m.md; grep -n \"Lecture des contrôles\" -A4 -B2 reports/rapport-grammaticalite-100m.md", "description": "Vérifie la modification et le passage concerné"}`
+
+  ```
+2026-11-18 09:27:14.622776469 -0500 20618
+180-| 64 octets | 100 M | **1,8×** | 3,4× | 2,2× |
+181-
+182:*Lecture des contrôles : à 128 octets, chaque modèle est comparé à son propre aléatoire (34 M
+183-pour le 34 M, 100 M pour le 100 M) ; à 64 octets, les deux sont comparés au 34 M aléatoire,
+184-seul contrôle n=64 disponible.*
+185-
+186-**Ce que le contrôle dit.** Le 34 M est **3,4 à 4,7× au-dessus de son bruit**, stable d'une
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "offset": 175, "limit": 20}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md</path>
+<type>file</type>
+<content>
+175: | longueur | modèle | greedy | top-40 | top-20 |
+176: |---|---|---:|---:|---:|
+177: | 128 octets | 34 M | **4,2×** | **4,7×** | **3,4×** |
+178: | 128 octets | 100 M | **0,8×** | 2,9× | 1,9× |
+179: | 64 octets | 34 M | **4,3×** | **4,7×** | **4,0×** |
+180: | 64 octets | 100 M | **1,8×** | 3,4× | 2,2× |
+181: 
+182: *Lecture des contrôles : à 128 octets, chaque modèle est comparé à son propre aléatoire (34 M
+183: pour le 34 M, 100 M pour le 100 M) ; à 64 octets, les deux sont comparés au 34 M aléatoire,
+184: seul contrôle n=64 disponible.*
+185: 
+186: **Ce que le contrôle dit.** Le 34 M est **3,4 à 4,7× au-dessus de son bruit**, stable d'une
+187: longueur à l'autre. Le 100 M greedy est **au plancher** (0,8× de son propre hasard à 128 octets ;
+188: 1,8× du hasard 34 M à 64 octets : selon la longueur et le contrôle, il passe juste sous ou juste
+189: au-dessus du hasard). En top-40 et top-20, il
+190: garde un signal (1,9–3,4×), mais plus faible que le 34 M. Le 100 M n'est donc pas du bruit pur
+191: en échantillonnage ; en greedy, il n'est pas distinguable du 
+… [279 caractères tronqués]
+  ```
+
+- **edit** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md", "new_string": "*Lecture des contrôles : à 128 octets, chaque modèle est comparé à son propre aléatoire (34 M\npour le 34 M, 100 M pour le 100 M) ; à 64 octets, les deux sont comparés au 34 M aléat … [399 caractères tronqués]`
+
+  ```
+The file /home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-grammaticalite-100m.md has been updated successfully.
+  ```
+
+### 🤖 Assistant
+
+⏵ Dernière passe tableaux/liens après l'ajout de la note
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 120 bash tools/porte-tableaux.sh 2>&1 | tail -5; echo \"exit=${PIPESTATUS[0]}\"", "description": "Revérifie les tableaux et liens", "timeoutMs": 180000}`
+
+  ```
+✅ 1893 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 4973 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-18)
+exit=0
+  ```
+
+### 🤖 Assistant
+
+⏵ Envoi du résultat final consolidé au parent
+
+- **send_message** `{"agent_id": "d67a9bb1-090e-4f69-baf2-a831c00aa275", "message": "RÉSULTAT FINAL — banc de grammaticalité du « 100 M » (73,37 M réels, 3 000 pas) vs 34 M (30 000 pas).\n\nFICHIERS\n- reports/banc-grammaticalite-100m.json (clés `n128`, `n64`, `controle_100m_n128`)\n- reports/rapport-grammaticalite-100 … [3242 caractères tronqués]`
+
+  ```
+message delivered to agent d67a9bb1-090e-4f69-baf2-a831c00aa275
+  ```
+
+### 🤖 Assistant
+
+⏵ Récapitulatif final
+
+## Livrables
+
+- `reports/banc-grammaticalite-100m.json` — clés `n128`, `n64`, `controle_100m_n128`
+- `reports/rapport-grammaticalite-100m.md` — fiche complète (protocole, tableaux, contrôles, limites, protocole r1)
+- Aucun code modifié : `banc_grammaticalite.py` ne charge pas de modèle et `banc_generation.py` avait déjà `--device`. Aucun commit, aucun fichier interdit touché.
+
+## Chiffres clés
+
+**n=128 (protocole exact du 34 M, 20 prompts, 3 réglages, même analyseur) :**
+
+| modèle | réglage | GV | ciment | GV/100 mots |
+|---|---|---:|---:|---:|
+| 34 M | greedy | **6,90** | **0,335** | 15,4 |
+| 34 M | top-40/0,8 | 6,35 | 0,377 | 18,0 |
+| 34 M | top-20/0,5 | 5,85 | 0,310 | 15,2 |
+| **100 M** | greedy | **1,45** | **0,661** | 4,1 |
+| **100 M** | top-40/0,8 | 4,00 | 0,375 | 14,4 |
+| **100 M** | top-20/0,5 | 2,65 | 0,461 | 8,3 |
+
+En greedy, 8/20 textes du 100 M n'ont aucun GV (3/20 pour le 34 M).
+
+**n=64 (contrôle de longueur) :** 34 M greedy **3,35 GV / 0,427** ; 100 M greedy **1,10 / 0,693** ; contrôle 34 M aléatoire n=64 **1,50 / 0,790**. Le contrôle 100 M aléatoire n=128 donne **4,75 GV / 0,763**.
+
+**Ratios GV/100 au hasard :** 34 M **3,4–4,7×** (stable à 64 et 128 octets) ; 100 M greedy **0,8×** (n=128, son propre hasard) et **1,8×** (n=64) — au plancher ; top-40/top-20 **1,9–3,4×**.
+
+## Deux réserves majeures
+
+1. **Le « 100 M » fait 73 366 568 paramètres** (×2,14, pas ×3) et **3 000 pas** contre 30 000 pour le 34 M (PPL val **4,014** contre **2,404**) : la comparaison confond échelle et entraînement. Ne pas conclure « l'échelle n'achète pas la grammaire ».
+2. **GV et ciment mesurent surtout la classe du token de boucle** : 42 % des GV du 34 M sont le seul « a » (58/138) ; 46 % des mots du 100 M sont « de » (304/661). Le 100 M est plus répétitif (46 % vs 18 % de mot dominant) et moins divers (74 vs 149 types), mais le banc ne prouve pas qu'il est « moins grammatical ».
+
+## Commandes
+
+```bash
+# génération 100 M, n=128, GPU
+/home/stephane/gpu-env/bin/python tools/banc_generation.py \
+  --modele work/n2ac/mix1024-100m.pt --n 128 --device cuda:0 \
+  --sortie /tmp/banc-generation-100m-128o.json
+
+# grammaticalité n=128, contrôle 34 M aléatoire n=128
+/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \
+  --entree /tmp/banc-generation-100m-128o.json \
+  --controle reports/banc-generation-aleatoire.json \
+  --sortie /tmp/banc-grammaticalite-100m-128o-controle34.json
+
+# grammaticalité n=64, contrôle 34 M aléatoire n=64
+/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \
+  --entree reports/banc-generation-100m.json \
+  --controle reports/banc-generation-alea-64o.json \
+  --sortie /tmp/banc-grammaticalite-100m-64o.json
+```
+
+Les deux autres passes (contrôle 100 M aléatoire n=128 et 34 M n=64) sont dans la fiche §1. `porte-tableaux.sh` est vert ; `revue_documentation.py` ne signale que le compteur d'`en-cours` (792 vs 794, +2 fiches), à mettre à jour dans `docs/pilotage/en-cours.md` — fichier que je ne pouvais pas toucher.
+

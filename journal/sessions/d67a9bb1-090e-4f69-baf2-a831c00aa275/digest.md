@@ -6761,3 +6761,569 @@ pas  250 · perte 1.4349 · PPL val 4.473 · 72 s
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **792** / **884** |'\nnew = '| fichiers / JSON de résultats | **792** / **885** |'\nassert s. … [1430 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 792 fiche(s) · 885 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+ create mode 100644 journal/2026-11-18/modele.md
+ create mode 100644 reports/natif-val-deux-decoupages.json
+ create mode 100644 reports/rapport-natif-val-deux-decoupages.md
+df6b9495 N — LA VALIDATION CHANGE TOUT : 4,0139 OU 4,6792 SELON LE DÉCOUPAGE, MÊMES POIDS (+16,57 %)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/banc-grammaticalite-100m.json reports/rapport-grammaticalite-100m.md 2>&1 | head; echo \"=== log training ===\"; tail -2 work/n3/r1.log; echo \"=== charge ===\"; uptime", "description": "Check subagent output and train … [14 caractères tronqués]`
+
+  ```
+ls: cannot access 'reports/rapport-grammaticalite-100m.md': No such file or directory
+-rw-r--r--. 1 stephane stephane 1044 18 nov 09:12 reports/banc-grammaticalite-100m.json
+=== log training ===
+pas  800 · perte 1.4246 · PPL val 4.236 · 232 s
+pas  850 · perte 1.2942 · PPL val 4.234 · 246 s
+=== charge ===
+ 09:14:56  up 14 days 13:40,  2 users,  load average: 4,47, 11,59, 9,12
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux sous-agents de plus : la préparation du lot tagger (11 h 30) et l'inventaire des données
+
+- **subagent** `{"description": "Préparation lot tagger 612", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est dédiée. Il est ~09 h 15 ; la fenêtre tarifaire REMISÉE de l'API DeepSeek s'ouvre à 11 h 30 (heure de l'Est) — donc AUCUN ap … [2111 caractères tronqués]`
+- **subagent** `{"description": "Inventaire des données D", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est dédiée.\n\nTÂCHE : l'INVENTAIRE des données disponibles pour le palier 1 du modèle natif (100-150 M, 3-6 Go de français propr … [1725 caractères tronqués]`
+
+  ```
+started subagent 174fd5ef-1163-4983-85b5-9101752ad711
+  ```
+
+
+  ```
+started subagent da0f2984-32d0-459d-a761-d3faf6a10b8a
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/banc_grammaticalite.py | head -12; echo \"=== log ===\"; tail -1 work/n3/r1.log", "description": "Read the grammaticality bench arguments"}`
+
+  ```
+60:    ap.add_argument("--entree", default="reports/banc-generation.json")
+61:    ap.add_argument("--controle", default="reports/banc-generation-aleatoire.json")
+62:    ap.add_argument("--sortie", default="reports/banc-grammaticalite.json")
+=== log ===
+pas 1000 · perte 1.3024 · PPL val 4.193 · 290 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat reports/banc-grammaticalite-100m.json; echo \"=== schéma de référence ===\"; head -20 reports/banc-grammaticalite.json 2>/dev/null", "description": "Read the grammaticality JSON schema"}`
+
+  ```
+{
+ "natif": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 1.45,
+   "gn_moyen": 1.55,
+   "mots_moyen": 35.2,
+   "ciment": 0.6611,
+   "attaches": 0.9052,
+   "sans_verbe": 0.4
+  },
+  "top40_0.8": {
+   "textes": 20,
+   "gv_moyen": 4.0,
+   "gn_moyen": 1.85,
+   "mots_moyen": 27.7,
+   "ciment": 0.3748,
+   "attaches": 0.7708,
+   "sans_verbe": 0.0
+  },
+  "top20_0.5": {
+   "textes": 20,
+   "gv_moyen": 2.65,
+   "gn_moyen": 1.9,
+   "mots_moyen": 32.0,
+   "ciment": 0.4605,
+   "attaches": 0.8707,
+   "sans_verbe": 0.0
+  }
+ },
+ "aleatoire": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 4.75,
+   "gn_moyen": 3.15,
+   "mots_moyen": 90.4,
+   "ciment": 0.7627,
+   "attaches": 0.558,
+   "sans_verbe": 0.0
+  },
+  "top40_0.8": {
+   "textes": 20,
+   "gv_moyen": 5.25,
+   "gn_moyen": 3.45,
+   "mots_moyen": 105.1,
+   "ciment": 0.8157,
+   "attaches": 0.7575,
+   "sans_verbe": 0.05
+  },
+  "top20_0.5": {
+   "textes": 20,
+   "gv_moyen": 3.85,
+   "gn_moyen": 2.05,
+   "mots_moyen": 87.4,
+   "ciment": 0.7954,
+   "attaches": 0.6722,
+   "sans_verbe": 0.0
+  }
+ }
+}
+=== schéma de référence ===
+{
+ "natif": {
+  "greedy": {
+   "textes": 20,
+   "gv_moyen": 6.9,
+   "gn_moyen": 2.85,
+   "mots_moyen": 44.8,
+   "ciment": 0.3346
+… [219 caractères tronqués]
+  ```
+
+- **send_message** `{"agent_id": "8c024745-95cb-4885-9d0b-865142606b6d", "message": "Important : ton JSON `banc-grammaticalite-100m.json` compare le 100 M (généré à **n=64**) au contrôle `reports/banc-generation-aleatoire.json` (généré à **n=128**) — les textes n'ont pas la même longueur (le contrôle a 90 mots, le nati … [683 caractères tronqués]`
+
+  ```
+message delivered to agent 8c024745-95cb-4885-9d0b-865142606b6d
+  ```
+
+### 👤 Utilisateur
+
+Agent 8c024745-95cb-4885-9d0b-865142606b6d sent a message: 
+Point d'étape — banc de grammaticalité 100 M (mesure terminée, rapport en cours d'écriture).
+
+1) Le fichier work/n2ac/mix1024-100m.pt ne fait pas 100 M : 73 366 568 paramètres (vérifié dans le checkpoint et le .pt.json), et il n'a que 3 000 pas (PPL val 4,014) contre 34 301 224 paramètres / 30 000 pas (PPL val 2,404) pour le 34 M. La comparaison « échelle ×3 » est donc en réalité ×2,14 et surtout confondue avec 10× moins d'entraînement. Ne pas conclure « l'échelle n'achète pas la grammaire » avec ce checkpoint.
+
+2) Chiffres bruts (même protocole : 20 prompts, 128 octets, 3 réglages, même analyseur Heuristique, contrôle aléatoire apparié graine 1234) :
+- 34 M greedy : GV 6,90 ; ciment 0,335 ; 3/20 textes sans GV.
+- 100 M greedy : GV 1,45 ; ciment 0,661 ; 8/20 textes sans GV.
+- 100 M top40 : GV 4,00 ; ciment 0,375. 100 M top20 : GV 2,65 ; ciment 0,461.
+- Contrôle 100 M aléatoire : GV 4,75 ; ciment 0,763 ; 90 mots/texte (d'où la colonne GV/100 mots).
+- GV/100 mots : 34 M 15,4 ; 100 M 4,1 ; hasard 100 M 5,3. Le greedy 100 M est sous son propre hasard.
+
+3) Réserve méthodologique majeure : l'inspection des GV montre que 42 % des GV du 34 M sont le seul token « a » (58/138), token de sa boucle, et que 46 % des mots générés par le 100 M en greedy sont « de » (304/661). Le 34 M boucle sur un verbe, le 100 M sur une préposition : GV et ciment mesurent surtout la classe du token de boucle. Le 100 M est plus répétitif (mot dominant 46 % vs 18 %) et moins divers (74 vs 149 types), mais le banc ne prouve pas qu'il est « moins grammatical » : ses rares GV sont plus variés (est, était, jouent, a décidé). Je détaille cette réserve dans le rapport.
+
+Fichiers : reports/banc-grammaticalite-100m.json et reports/rapport-grammaticalite-100m.md (à venir). Aucune modification de code nécessaire : banc_grammaticalite.py ne charge pas de modèle, et banc_generation.py a déjà --device. Le 34 M de référence est reproduit à l'identique.
+
+- **send_message** `{"agent_id": "8c024745-95cb-4885-9d0b-865142606b6d", "message": "Excellent point d'étape, et tes deux réserves sont les bonnes : (1) le « 100 M » fait 73,4 M et n'a que 3 000 pas (contre 30 000 pour le 34 M) — la comparaison confond échelle et entraînement ; (2) GV et ciment mesurent surtout le toke … [677 caractères tronqués]`
+
+  ```
+message delivered to agent 8c024745-95cb-4885-9d0b-865142606b6d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n3/r1.log; date; echo \"=== sous-agents ===\"; ls -la reports/rapport-a2.6-reconnaissance.md reports/rapport-grammaticalite-100m.md reports/rapport-tagger-lot-612-prep.md reports/rapport-donnees-inventaire.md 2>&1 | tail … [64 caractères tronqués]`
+
+  ```
+pas 1200 · perte 1.3330 · PPL val 4.152 · 348 s
+mer 18 nov 2026 09:16:36 EST
+=== sous-agents ===
+ls: cannot access 'reports/rapport-a2.6-reconnaissance.md': No such file or directory
+ls: cannot access 'reports/rapport-grammaticalite-100m.md': No such file or directory
+ls: cannot access 'reports/rapport-tagger-lot-612-prep.md': No such file or directory
+ls: cannot access 'reports/rapport-donnees-inventaire.md': No such file or directory
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > bench/checkpoint_bench.sh <<'SH'\n#!/bin/bash\n# checkpoint_bench.sh — le banc complet d'un checkpoint : génération (128 o) puis grammaticalité.\n#\n#   bash bench/checkpoint_bench.sh work/n3/r1.pt [nom]\n#\n# Deux JSON : repor … [1073 caractères tronqués]`
+
+  ```
+script-ok
+pas 1250 · perte 1.3228 · PPL val 4.160 · 362 s
+  ```
+
+- **list_agents** `{}`
+
+  ```
+8c024745-95cb-4885-9d0b-865142606b6d [running] — Grammaticalité du 100 M
+c7e46dba-11cb-456b-a3b6-715428927f99 [running] — Reconnaissance A2.6 experts
+da0f2984-32d0-459d-a761-d3faf6a10b8a [running] — Inventaire des données D
+174fd5ef-1163-4983-85b5-9101752ad711 [running] — Préparation lot tagger 612
+  ```
+
+- **send_message** `{"agent_id": "c7e46dba-11cb-456b-a3b6-715428927f99", "message": "Point de coordination : tu tournes depuis un moment. Donne-moi un point d'étape MAINTENANT en 5 lignes (ce que tu as trouvé, ce qui reste à lire), puis termine `reports/rapport-a2.6-reconnaissance.md` dans les 15 minutes — même partiel … [356 caractères tronqués]`
+
+  ```
+message delivered to agent c7e46dba-11cb-456b-a3b6-715428927f99
+  ```
+
+- **bash** `{"command": "sleep 120; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n3/r1.log; ls -la reports/rapport-a2.6-reconnaissance.md reports/rapport-grammaticalite-100m.md 2>&1 | tail -2", "description": "Wait and check the subagent deliverables", "timeoutMs": 300000}`
+
+  ```
+pas 1750 · perte 1.3026 · PPL val 4.067 · 507 s
+ls: cannot access 'reports/rapport-grammaticalite-100m.md': No such file or directory
+-rw-------. 1 stephane stephane 21780 18 nov 09:18 reports/rapport-a2.6-reconnaissance.md
+  ```
+
+### 👤 Utilisateur
+
+Agent c7e46dba-11cb-456b-a3b6-715428927f99 sent a message: 
+Point d'étape A2.6 — le rapport est DÉJÀ ÉCRIT (reports/rapport-a2.6-reconnaissance.md, non committé), je vérifie les lignes citées.
+
+1. Existe : `placement.rs` (8 tests, pas 4) mais la règle n'est le chemin de décision QUE du KV ; experts = drapeaux/seuils durs (`DRAVE_GPU_EXPERTS_GO` défaut VRAM−2 Go, `DRAVE_EXPERTS_RAM`, `SEUIL_GPU` 8 Mio, `materiel::plan` imprimé et jamais appliqué) ; chemin experts très complet (routage 4 conventions, trace/force/élagage, clusters, caches RAM/VRAM, prélecture).
+2. Manque : un objet/coût « experts » dans la règle (réutilisation + lecteurs), un refus nommé (aujourd'hui `choisir` retombe sur NVMe en silence), la trace du classement, une `Precision` tête Q8_0/Q6_K (perte 0), et 3 tables de bandes contradictoires (NVMe 3,5 vs 31 Go/s).
+3. Mesuré ici (machine chargée, 13 s/point) : experts = 1,097 Go/jeton ; `proj+mlp` 194,8 ms à 8 fils (5,6 Go/s), 188,8 à 16 (saturation), 279 à 4 ; cache RAM 567,9 ms et tampons 362,8 ms (plus lents) ; PPL identique 799,8557. Tête Q8_0 en VRAM : PPL 56,7642 = 56,7642, tête 7,43 → 1,80 ms/jeton (÷4,1), contrôle `DRAVE_GPU=0` = 7,75 ms.
+4. Prochaine expérience : épingler la bande experts au `--limit 32` sur 4/8/16 fils + contrôles (cache RAM et tampons doivent être plus lents, PPL 37,2013 invariante) — commandes exactes au § 3.2 du rapport.
+5. Reste 10 min : relire le rapport (numéros de ligne, cohérence), rien d'autre à lire.
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n3/r1.log; ls -la reports/rapport-a2.6-reconnaissance.md reports/rapport-grammaticalite-100m.md 2>&1 | tail -2; echo \"=== §3.2 ===\"; grep -n -A20 \"3.2\" reports/rapport-a2.6-reconnaissance.md 2>/dev/null |  … [94 caractères tronqués]`
+
+  ```
+pas 2650 · perte 1.3152 · PPL val 3.985 · 768 s
+-rw-------. 1 stephane stephane 21881 18 nov 09:20 reports/rapport-a2.6-reconnaissance.md
+-rw-------. 1 stephane stephane 19839 18 nov 09:23 reports/rapport-grammaticalite-100m.md
+=== §3.2 ===
+25:| `BANDE_VRAM` 84,9 Go/s · `BANDE_RAM` 22,5 · `BANDE_NVME` 3,5 · `BANDE_RESEAU` 0,03125 | 21-27 | constantes mesurées le 24/10 (`rapport-placement-kv-8k.md`) |
+26-| `Support` + `bande()` + `nom()` | 33-60 | 4 supports |
+27-| `cout(octets_par_jeton, support)` | 64 | **octets ÷ bande**, sans réutilisation ni nombre de lecteurs |
+28-| `classement(octets_par_jeton)` | 69 | tri par coût |
+29-| `kv_en_vram` | 79 | KV + réserve ≤ VRAM libre |
+30-| `choisir` | 90-103 | le moins cher où ça tient ; **retombe sur `Support::Nvme`** si rien ne tient |
+31-| `Precision` / `PRECISIONS` (f32, int8 tardif, int4 tardif, **tête 4 bits +10 %**, int4 global +364 %) | 107-127 | table de précisions, **aucune entrée tête Q6_K/Q8_0** |
+32-| `choisir_avec_perte` | 136-158 | place **et** perte sous `perte_max` |
+33-| `perte_kv_int8` / `kv_precision` | 163-174 | int8 par couche (A5.3) |
+34-| **8 tests** | 176-253 | `cargo test placement` |
+35-
+36-**Sites d'appel réels** 
+… [1300 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+Agent c7e46dba-11cb-456b-a3b6-715428927f99 sent a message: 
+A2.6 — reconnaissance terminée. Rapport : `reports/rapport-a2.6-reconnaissance.md` (302 lignes, NON committé ; `en-cours`, `roadmap`, `AGENTS` et le code non touchés).
+
+1. **Existe** : `placement.rs` (8 tests, pas 4) mais la règle n'est le chemin de décision **que du KV** ; experts et tête sont placés par drapeaux/seuils durs (`SEUIL_GPU` 8 Mio, `DRAVE_GPU_EXPERTS_GO` = VRAM−2 Go, `DRAVE_EXPERTS_RAM`, `materiel::plan` imprimé et jamais appliqué). Chemin experts complet : 4 conventions de routage, trace/imposition/élagage, clusters, caches RAM et VRAM (MXFP4 seulement, garde `model.rs:8486`), prélecture 8 fils, noyau GPU Q4_K mesuré mais non branché.
+2. **Manque** : un coût « experts » dans la règle (réutilisation + nb de lecteurs), un **refus nommé** (`choisir` retombe sur NVMe en silence, test l.199-206 l'exige), la trace du classement, une `Precision` tête à perte 0 (Q8_0/Q6_K), et **une bande experts** : trois tables coexistent (NVMe 3,5 vs 31 Go/s), donnant 313 ou 35 ms pour le même opérateur.
+3. **Mesuré ici** (machine chargée 13,7→31,4, 13 s/point) : experts = **1,097 Go/jeton** ; `proj+mlp` **194,8 ms** à 8 fils (5,6 Go/s), 188,8 à 16 (saturation), 279,1 à 4 ; cache RAM **567,9 ms** et tampons **362,8 ms** (plus lents) ; PPL **799,8557 invariante**. Bonus : tête Q8_0 en VRAM, PPL **56,7642 = 56,7642**, tête **7,43 → 1,80 ms/jeton**, contrôle `DRAVE_GPU=0` = 7,75 ms (étape 4 de la fiche, acquis à rejouer/committer).
+4. **Prochaine expérience** : épingler la bande experts au `--limit 32` sur 4/8/16 fils (2 passes), contrôles « cache RAM et tampons plus lents » + « PPL 37,2013 invariante » ; attendu 195 ms à 8 fils = **un lecteur**, pas les 31 Go/s à 16 ; si 16 fils divise par 2, l'opérateur est borné par le calcul et la règle doit **refuser** de placer.
+5. **Risque** : ≈ 200 lignes sur 3 fichiers (`placement.rs` +100-150, `model.rs` +40-60, `materiel.rs` +20-30) ; le risque est le **chemin de chargement et le défaut**, pas la taille → opt-in `DRAVE_PERTE_MAX`, portes `porte-flux`/`porte-pont`/`porte-coupe`, `porte-echange-experts`, `cargo test placement`.
+
+### 👤 Utilisateur
+
+Background subagent c7e46dba-11cb-456b-a3b6-715428927f99 finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Reconnaissance A2.6 terminée, rapport écrit
+
+**Résumé (A2.6 — experts et tête)**
+
+1. **Existe** : `placement.rs` (253 l., **8 tests**) mais la règle ne décide **que du KV** ; experts et tête sont placés par drapeaux/seuils durs (`SEUIL_GPU` 8 Mio, `DRAVE_GPU_EXPERTS_GO` = VRAM−2 Go, `DRAVE_EXPERTS_RAM`, `materiel::plan` imprimé, jamais appliqué).
+2. Le chemin experts est déjà riche : 4 conventions de routage (`model.rs:26-46`), trace/imposition/élagage (`432-480`), `Moe` (`1504-1553`), caches RAM (`1583-1700`) et VRAM MXFP4 seulement (`1983-2100`, garde `8486`), prélecture 8 fils, noyau GPU Q4_K mesuré mais **non branché**.
+3. **Manque** : coût « experts » (réutilisation + nb de lecteurs), **refus nommé** (`choisir` retombe sur NVMe en silence), trace du classement et test de reproductibilité, `Precision` tête à perte 0, et **une bande experts** — trois tables contradictoires (3,5 vs 31 Go/s) donnent 313 ou 35 ms pour le même opérateur.
+4. **Mesuré ici** : 1,097 Go d'experts/jeton ; `proj+mlp` 194,8 ms à 8 fils (**5,6 Go/s**), 188,8 à 16 (saturation), 279,1 à 4 ; cache RAM 567,9 ms et tampons 362,8 ms (plus lents) ; PPL 799,8557 invariante.
+5. **Bonus** : tête Q8_0 en VRAM → PPL **56,7642 = 56,7642**, tête **7,43 → 1,80 ms/jeton** (÷4,1), contrôle `DRAVE_GPU=0` = 7,75 ms.
+6. **Prochaine expérience** : bande experts au `--limit 32` sur 4/8/16 fils, contrôles « cache RAM et tampons plus lents » + « PPL 37,2013 invariante » ; attendu 195 ms à 8 fils = **un lecteur**, pas 31 Go/s.
+7. **Risque** : ≈ 200 lignes (3 fichiers) ; le risque est le chemin de chargement et le défaut → opt-in `DRAVE_PERTE_MAX`, portes `flux`/`pont`/`coupe`, `porte-echange-experts`, `cargo test placement`.
+
+**Rapport** : `reports/rapport-a2.6-reconnaissance.md` — non committé, aucun autre fichier modifié.
+
+### 👤 Utilisateur
+
+Agent 8c024745-95cb-4885-9d0b-865142606b6d sent a message: 
+Correction sur le n : mon JSON n'était pas n=64. Le 100 M a été généré à n=128 (/tmp/banc-generation-100m-128o.json) et le contrôle scale-matched aussi (/tmp/banc-generation-alea-100m-128o.json). Les 35 mots du natif et les 90 du contrôle sont tous les deux à n=128 : le natif boucle sur « de » (3 octets/mot), le hasard découpe des fragments. Le n=64 ne supprime pas l'écart de mots (100 M n=64 = 19,9 mots ; contrôle 34 M n=64 = 47,5).
+
+J'ai fait les deux passes n=64 demandées (100 M n=64 et 34 M n=64 contre reports/banc-generation-alea-64o.json) :
+- n=64, greedy : 34 M GV 3,35 / ciment 0,427 / GV100 13,6 ; 100 M 1,10 / 0,693 / 5,5 ; contrôle 1,50 / 0,790 / 3,2.
+- n=64, top40 : 34 M 3,10 / 0,343 / 19,6 ; 100 M 2,15 / 0,375 / 14,2 ; contrôle 2,05 / 0,795 / 4,2.
+- n=64, top20 : 34 M 3,40 / 0,342 / 16,7 ; 100 M 1,60 / 0,471 / 9,2 ; contrôle 2,15 / 0,819 / 4,2.
+Ratios GV/100 au hasard : 34 M 4,3×/4,7×/4,0× ; 100 M 1,8×/3,4×/2,2×.
+À n=128 : 34 M 4,2×/4,7×/3,4× ; 100 M 0,8×/2,9×/1,9×. La conclusion qualitative est stable : 34 M 3,4–4,7× au-dessus du bruit ; 100 M au plancher en greedy (0,8–1,8×) et 1,9–3,4× en échantillonnage.
+
+Réponse à ta question (2) : la baisse 6,9 → 1,45 n'est ni purement la longueur ni purement le modèle. À n=64, la baisse persiste (3,35 → 1,10) et le GV/100 passe de 13,6 à 5,5 (2,5×) contre 3,8× à n=128 : la longueur explique une part des valeurs absolues, pas l'écart. Le reste est le token de boucle (« a » chez le 34 M, « de » chez le 100 M) et l'analyseur, qui construit un GV autour de « a » (étiqueté PREP) mais un GP autour de « de ».
+
+Le ciment monte aussi à n=64 (34 M 0,335→0,427 ; 100 M 0,661→0,693) parce que le prompt pèse plus à 64 octets : le ciment n'est pas purement indépendant de la longueur.
+
+JSON réécrit en deux sections (`n128`, `n64`) + `controle_100m_n128` (scale-matched). La fiche donne brut, normalisé et ratios. Je termine la fiche.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B2 -A18 \"expérience\" reports/rapport-a2.6-reconnaissance.md | head -50", "description": "Read the A2.6 next-experiment commands"}`
+
+  ```
+139-   décision déjà prise (PPL −0,006 %, +27 % de calcul).
+140-
+141:## 3. La prochaine expérience : épingler la bande des experts
+142-
+143-### 3.1 Ce qui a déjà été mesuré ici (à rejouer, machine au repos)
+144-
+145-```bash
+146-cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet
+147-M="$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf"
+148-IDS="$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt"
+149-
+150-# 1. la reference : chemin mmap par defaut, 8 fils
+151-./drave-core/target/release/drave "$M" --ppl "$IDS" --ctx 512 --limit 8 --threads 8 \
+152-  | grep -E "postes|perplexit"
+153-# 2. le controle : le cache RAM doit etre PLUS LENT (sinon la mesure est un artefact)
+154-DRAVE_EXPERTS_RAM=4096 ./drave-core/target/release/drave "$M" --ppl "$IDS" \
+155-  --ctx 512 --limit 8 --threads 8 | grep -E "postes|perplexit"
+156-# 3. le chemin tampons doit etre plus lent aussi
+157-DRAVE_TAMPONS=1 ./drave-core/target/release/drave "$M" --ppl "$IDS" \
+158-  --ctx 512 --limit 8 --threads 8 | grep -E "postes|perplexit"
+159-# 4. la saturation : 4, 8, 16 fils (meme graine, meme prompt)
+--
+288-**Portes concernées** : `porte-flux`, `porte-pont`, `porte-coupe` (régime 1 %), `porte-echange-experts`
+289-(invariant du
+… [986 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '160,200p' reports/rapport-a2.6-reconnaissance.md; echo \"=== fichiers ===\"; ls -la $HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf $HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt 2>&1", "description": "Read the exact experiment  … [30 caractères tronqués]`
+
+  ```
+for T in 4 8 16; do ./drave-core/target/release/drave "$M" --ppl "$IDS" \
+  --ctx 512 --limit 8 --threads "$T" | grep postes; done
+```
+
+Résultats obtenus pendant cette reconnaissance (durée ≈ 13 s par point, **charge 13,7 → 31,4**) :
+
+| réglage | `proj+mlp` (ms/jeton) | bande implicite (1,097 Go ÷ t) |
+|---|---:|---:|
+| défaut, 4 fils | 279,1 | 3,9 Go/s |
+| **défaut, 8 fils** | **194,8** | **5,6 Go/s** |
+| défaut, 16 fils | 188,8 | 5,8 Go/s |
+| `DRAVE_TAMPONS=1`, 8 fils | 362,8 | 3,0 Go/s |
+| `DRAVE_EXPERTS_RAM=4096`, 8 fils | **567,9** | 1,9 Go/s |
+
+Perplexité **identique** (799,8557) sur tous les chemins : un placement change le temps, jamais le
+chiffre — c'est l'invariance qui rend les temps comparables.
+
+### 3.2 Le protocole à exécuter (10 points, ≈ 4 min sur une machine au repos)
+
+Même commande, `--limit 32` (31 jetons notés) pour la statistique, et **deux passes** par réglage
+(la première paie la lecture froide) :
+
+```bash
+for T in 4 8 16; do
+  for P in 1 2; do
+    ./drave-core/target/release/drave "$M" --ppl "$IDS" --ctx 512 --limit 32 --threads "$T" \
+      2>&1 | grep -E "postes|perplexit"
+  done
+done
+DRAVE_EXPERTS_RAM=4096 ./drave-core/target/release/drave "$M" --ppl "$ID
+… [994 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; { for T in 4 8 16; do for P in 1 2; do echo \"=== T=$T P=$P $(date +%H:%M:%S)\"; /usr/bin/time -f \"  %e s\" ./drave-core/target/rele … [722 caractères tronqués]`
+
+  ```
+started background job bash-487
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== r1 ===\"; tail -2 work/n3/r1.log; echo \"=== a26 ===\"; cat /tmp/a26-bande.log 2>/dev/null | tail -12; echo \"=== sous-agents ===\"; ls -la reports/rapport-grammaticalite-100m.md reports/rapport-donnees-inventai … [150 caractères tronqués]`
+
+  ```
+=== r1 ===
+pas 4600 · perte 1.3286 · PPL val 3.843 · 1333 s
+pas 4650 · perte 1.2456 · PPL val 3.827 · 1348 s
+=== a26 ===
+    postes (ms/token) : projets-attn 49.15 | rope 3.47 | attention 55.20 | proj+mlp 314.36 | somme 422.18 | reste (tête + échantillonnage) -30.70
+  20.37 s
+=== TAMPONS 09:26:10
+[config] cache KV : 32 bits, 0.10 Go pour 512 jetons
+[modele] 48 couches chargées en 7.284109282s — listes 0.91 Go , 8 threads
+[tête 4 bits] 151936 × 2048 → 6.56 b/poids, 0 Mo, 0.0 s
+      31 tokens notés — perplexité cumulée 37.201  (3.2 tok/s)
+[tampons] 32 allocations, 36832 réutilisations, 8 gardés (7.1 Mo) — le pool évite 100 % des allocations
+=== perplexité 37.2013 sur 31 tokens (0 événements, 9.6 s) ===
+    postes (ms/token) : projets-attn 51.49 | rope 3.64 | attention 58.17 | proj+mlp 231.32 | somme 344.63 | reste (tête + échantillonnage) -33.77
+  17.39 s
+fini 09:26:27
+=== sous-agents ===
+ls: cannot access 'reports/rapport-tagger-lot-612-prep.md': No such file or directory
+-rw-------. 1 stephane stephane 20414 18 nov 09:33 reports/rapport-donnees-inventaire.md
+-rw-r--r--. 1 stephane stephane 20739 18 nov 09:29 reports/rapport-grammaticalite-100m.md
+  ```
+
+### 👤 Utilisateur
+
+background job bash-487 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; { for T in 4 8 16; do for P in 1 2; do echo "=== T=$T P=$P $(date +%H:%M:%S)"; /usr/bin/time -f "  %e s" ./drave-core/target/release/drave "$M" --ppl "$IDS" --ctx 512 --limit 32 --threads "$T" 2>&1 | grep -E "postes|perplexit|s$"; done; done; echo "=== RAM 4096 $(date +%H:%M:%S)"; DRAVE_EXPERTS_RAM=4096 /usr/bin/time -f "  %e s" ./drave-core/target/release/drave "$M" --ppl "$IDS" --ctx 512 --limit 32 --threads 8 2>&1 | grep -E "postes|perplexit|s$"; echo "=== TAMPONS $(date +%H:%M:%S)"; DRAVE_TAMPONS=1 /usr/bin/time -f "  %e s" ./drave-core/target/release/drave "$M" --ppl "$IDS" --ctx 512 --limit 32 --threads 8 2>&1 | grep -E "postes|perplexit|s$"; } > /tmp/a26-bande.log 2>&1; echo "fini $(date +%H:%M:%S)" >> /tmp/a26-bande.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 👤 Utilisateur
+
+Agent 8c024745-95cb-4885-9d0b-865142606b6d sent a message: 
+RÉSULTAT FINAL — banc de grammaticalité du « 100 M » (73,37 M réels, 3 000 pas) vs 34 M (30 000 pas).
+
+FICHIERS
+- reports/banc-grammaticalite-100m.json (clés `n128`, `n64`, `controle_100m_n128`)
+- reports/rapport-grammaticalite-100m.md
+- Aucun code modifié : banc_grammaticalite.py ne charge pas de modèle, banc_generation.py a déjà --device. Aucun commit, docs/pilotage et AGENTS intacts.
+
+CHIFFRES — n=128 (protocole du 34 M), format GV / ciment / GV pour 100 mots
+- 34 M : greedy 6,90 / 0,335 / 15,4 ; top40 6,35 / 0,377 / 18,0 ; top20 5,85 / 0,310 / 15,2.
+- 100 M : greedy 1,45 / 0,661 / 4,1 ; top40 4,00 / 0,375 / 14,4 ; top20 2,65 / 0,461 / 8,3.
+- 8/20 textes du 100 M sans GV contre 3/20 pour le 34 M (greedy).
+
+CHIFFRES — n=64 (contrôle de longueur, contrôle 34 M aléatoire n=64)
+- 34 M : 3,35 / 0,427 / 13,6 ; 3,10 / 0,343 / 19,6 ; 3,40 / 0,342 / 16,7.
+- 100 M : 1,10 / 0,693 / 5,5 ; 2,15 / 0,375 / 14,2 ; 1,60 / 0,471 / 9,2.
+- Contrôle n=64 : 1,50 / 0,790 / 3,2 ; 2,05 / 0,795 / 4,2 ; 2,15 / 0,819 / 4,2.
+
+CONTRÔLES ET RATIOS
+- 100 M aléatoire n=128 : 4,75 / 0,763 / 5,3 ; 5,25 / 0,816 / 5,0 ; 3,85 / 0,795 / 4,4.
+- Ratios GV/100 au hasard : 34 M 4,2×/4,7×/3,4× (n128) et 4,3×/4,7×/4,0× (n64) ; 100 M 0,8×/2,9×/1,9× (n128, son propre hasard) et 1,8×/3,4×/2,2× (n64, hasard 34 M). Le 34 M est stable 3,4–4,7× au-dessus du bruit ; le 100 M greedy est au plancher, l'échantillonnage garde 1,9–3,4×.
+
+LES DEUX RÉSERVES MAJEURES
+1) Le fichier fait 73 366 568 paramètres (×2,14, pas ×3) et 3 000 pas (10× moins), PPL val 4,014 contre 2,404 : la comparaison confond échelle et entraînement. Ne pas conclure « l'échelle n'achète pas la grammaire ».
+2) 42 % des GV du 34 M sont le seul token « a » (58/138) ; 46 % des mots du 100 M sont « de » (304/661), 65 % de ses classes fermées. GV et ciment mesurent la classe du token de boucle : le 34 M boucle sur un verbe, le 100 M sur une préposition. Le 100 M reste plus répétitif (mot dominant 46 % vs 18 %) et moins divers (74 vs 149 types), mais le banc ne prouve pas qu'il est « moins grammatical ».
+
+COMMANDES (les 5 passes complètes sont dans la fiche §1)
+- Génération n=128 : /home/stephane/gpu-env/bin/python tools/banc_generation.py --modele work/n2ac/mix1024-100m.pt --n 128 --device cuda:0 --sortie /tmp/banc-generation-100m-128o.json
+- Contrôle 100 M aléatoire n=128 : même commande + --aleatoire --n 128 --sortie /tmp/banc-generation-alea-100m-128o.json
+- Grammaticalité n=128 : tools/banc_grammaticalite.py --entree /tmp/banc-generation-100m-128o.json --controle reports/banc-generation-aleatoire.json --sortie /tmp/banc-grammaticalite-100m-128o-controle34.json
+- Grammaticalité n=64 : --entree reports/banc-generation-100m.json --controle reports/banc-generation-alea-64o.json --sortie /tmp/banc-grammaticalite-100m-64o.json
+- 34 M n=64 : --entree reports/banc-generation-34m-64o.json --controle reports/banc-generation-alea-64o.json --sortie /tmp/banc-grammaticalite-34m-64o.json
+
+DIVERS
+- Le JSON de génération n=128 reste dans /tmp (contrainte de n'écrire que les deux reports) ; la fiche donne la commande.
+- revue_documentation.py : seule anomalie = compteur en-cours (792 vs 794, +2 fiches). À corriger dans en-cours.md, que je ne peux pas toucher.
+- porte-tableaux.sh : vert (1893 fichiers, 4973 liens).
+- Prêt pour r1 : la fiche §9 donne le protocole et les 4 métriques à comparer (part de « de », GV/100 et ratio au hasard, ciment + diversité, répétition/mots valides).
+
+### 👤 Utilisateur
+
+Background subagent 8c024745-95cb-4885-9d0b-865142606b6d finished and will do no further work unless you send it more.
+Its closing message:
+⏵ Récapitulatif final
+
+## Livrables
+
+- `reports/banc-grammaticalite-100m.json` — clés `n128`, `n64`, `controle_100m_n128`
+- `reports/rapport-grammaticalite-100m.md` — fiche complète (protocole, tableaux, contrôles, limites, protocole r1)
+- Aucun code modifié : `banc_grammaticalite.py` ne charge pas de modèle et `banc_generation.py` avait déjà `--device`. Aucun commit, aucun fichier interdit touché.
+
+## Chiffres clés
+
+**n=128 (protocole exact du 34 M, 20 prompts, 3 réglages, même analyseur) :**
+
+| modèle | réglage | GV | ciment | GV/100 mots |
+|---|---|---:|---:|---:|
+| 34 M | greedy | **6,90** | **0,335** | 15,4 |
+| 34 M | top-40/0,8 | 6,35 | 0,377 | 18,0 |
+| 34 M | top-20/0,5 | 5,85 | 0,310 | 15,2 |
+| **100 M** | greedy | **1,45** | **0,661** | 4,1 |
+| **100 M** | top-40/0,8 | 4,00 | 0,375 | 14,4 |
+| **100 M** | top-20/0,5 | 2,65 | 0,461 | 8,3 |
+
+En greedy, 8/20 textes du 100 M n'ont aucun GV (3/20 pour le 34 M).
+
+**n=64 (contrôle de longueur) :** 34 M greedy **3,35 GV / 0,427** ; 100 M greedy **1,10 / 0,693** ; contrôle 34 M aléatoire n=64 **1,50 / 0,790**. Le contrôle 100 M aléatoire n=128 donne **4,75 GV / 0,763**.
+
+**Ratios GV/100 au hasard :** 34 M **3,4–4,7×** (stable à 64 et 128 octets) ; 100 M greedy **0,8×** (n=128, son propre hasard) et **1,8×** (n=64) — au plancher ; top-40/top-20 **1,9–3,4×**.
+
+## Deux réserves majeures
+
+1. **Le « 100 M » fait 73 366 568 paramètres** (×2,14, pas ×3) et **3 000 pas** contre 30 000 pour le 34 M (PPL val **4,014** contre **2,404**) : la comparaison confond échelle et entraînement. Ne pas conclure « l'échelle n'achète pas la grammaire ».
+2. **GV et ciment mesurent surtout la classe du token de boucle** : 42 % des GV du 34 M sont le seul « a » (58/138) ; 46 % des mots du 100 M sont « de » (304/661). Le 100 M est plus répétitif (46 % vs 18 % de mot dominant) et moins divers (74 vs 149 types), mais le banc ne prouve pas qu'il est « moins grammatical ».
+
+## Commandes
+
+```bash
+# génération 100 M, n=128, GPU
+/home/stephane/gpu-env/bin/python tools/banc_generation.py \
+  --modele work/n2ac/mix1024-100m.pt --n 128 --device cuda:0 \
+  --sortie /tmp/banc-generation-100m-128o.json
+
+# grammaticalité n=128, contrôle 34 M aléatoire n=128
+/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \
+  --entree /tmp/banc-generation-100m-128o.json \
+  --controle reports/banc-generation-aleatoire.json \
+  --sortie /tmp/banc-grammaticalite-100m-128o-controle34.json
+
+# grammaticalité n=64, contrôle 34 M aléatoire n=64
+/home/stephane/gpu-env/bin/python tools/banc_grammaticalite.py \
+  --entree reports/banc-generation-100m.json \
+  --controle reports/banc-generation-alea-64o.json \
+  --sortie /tmp/banc-grammaticalite-100m-64o.json
+```
+
+Les deux autres passes (contrôle 100 M aléatoire n=128 et 34 M n=64) sont dans la fiche §1. `porte-tableaux.sh` est vert ; `revue_documentation.py` ne signale que le compteur d'`en-cours` (792 vs 794, +2 fiches), à mettre à jour dans `docs/pilotage/en-cours.md` — fichier que je ne pouvais pas toucher.
+
+- **bash** `{"command": "cat /tmp/a26-bande.log | grep -E \"===|postes|perplexité\" | sed 's/  */ /g' | head -40", "description": "Read the full A2.6 bandwidth sweep"}`
+
+  ```
+=== T=4 P=1 09:24:07
+ 31 tokens notés — perplexité cumulée 37.201 (2.4 tok/s)
+=== perplexité 37.2013 sur 31 tokens (0 événements, 13.0 s) ===
+ postes (ms/token) : projets-attn 85.74 | rope 3.62 | attention 92.24 | proj+mlp 295.63 | somme 477.22 | reste (tête + échantillonnage) -59.16
+=== T=4 P=2 09:24:28
+ 31 tokens notés — perplexité cumulée 37.201 (2.9 tok/s)
+=== perplexité 37.2013 sur 31 tokens (0 événements, 10.7 s) ===
+ postes (ms/token) : projets-attn 85.55 | rope 3.48 | attention 91.68 | proj+mlp 222.45 | somme 403.16 | reste (tête + échantillonnage) -59.28
+=== T=8 P=1 09:24:47
+ 31 tokens notés — perplexité cumulée 37.201 (4.1 tok/s)
+=== perplexité 37.2013 sur 31 tokens (0 événements, 7.6 s) ===
+ postes (ms/token) : projets-attn 54.21 | rope 3.51 | attention 60.25 | proj+mlp 162.16 | somme 280.13 | reste (tête + échantillonnage) -36.04
+=== T=8 P=2 09:25:03
+ 31 tokens notés — perplexité cumulée 37.201 (4.3 tok/s)
+=== perplexité 37.2013 sur 31 tokens (0 événements, 7.2 s) ===
+ postes (ms/token) : projets-attn 49.99 | rope 3.66 | attention 56.37 | proj+mlp 156.95 | somme 266.97 | reste (tête + échantillonnage) -34.62
+=== T=16 P=1 09:25:18
+ 31 tokens notés — perplexité cumulée 37
+… [1077 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Go\\|écart\\|manquent\\|total\" reports/rapport-donnees-inventaire.md | head -20; echo \"=== r1 ===\"; tail -2 work/n3/r1.log", "description": "Read the data inventory summary and training status"}`
+
+  ```
+1:# L'inventaire des données pour le palier 1 : 1,02 Go épinglés sur 3–6 Go demandés
+4:> **Verdict** : le dépôt porte **135,5 Go** de données apparentes (4 428 fichiers), dont **120,1 Go
+5:> de Wikipédia en 10 langues**. Le français vraiment exploitable se réduit à **7,5 Go** — et le
+6:> corpus épinglé (**1,017 Go**) en est un **sous-ensemble de contenu**. Il manque **1,98 Go** pour
+7:> 3 Go et **4,98 Go** pour 6 Go, mais ces octets sont **déjà sur le disque**
+8:> (`data/corpus_wiki_fr_texte/`, 7,50 Go) : l'écart de **volume** est fermable sans aucune collecte ;
+9:> l'écart de **diversité** (≈ 0,1 Go de français hors Wikipédia) ne l'est pas.
+25:   `corpus_en.txt` (861 039 `the` pour 7 210 `de` sur 0,100 Go) et `corpus_wiki_fr_texte`
+26:   (68 688 961 `de` pour 580 410 `the` sur 7,504 Go), soit un rapport **118:1** en faveur du
+28:2. **Déduplication** : passe sur les **7,50 Go** du train avec des shingles de 96 octets (pas de 96 o,
+40:## 2. Le total : 135,5 Go, dont 120 Go de Wikipédia
+44:| 10 langues — wikitext (`data/corpus_wiki_<lang>/`) | 38,78 Go | 30 | 28,6 % |
+45:| 10 langues — texte (`data/corpus_wiki_<lang>_texte/`) | 81,32 Go | 30 | 60,0 % |
+46:| dérivés Wikipédia FR (`wik
+… [599 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\ndoc = {\"schema\": \"drave.a2.6-bande-experts\", \"version\": 1, \"date\": \"2026-11-18\",\n       \"modele\": \"qwen3-30b-a3b-Q4_K_M.gguf (18,5 Go)\", \"ctx\": 512, \"limit\": 32, \"jetons\":  … [842 caractères tronqués]`
+
+  ```
+{
+ "4 fils": 4.93,
+ "8 fils": 6.99,
+ "16 fils": 6.63,
+ "DRAVE_EXPERTS_RAM=4096, 8 fils": 3.49,
+ "DRAVE_TAMPONS=1, 8 fils": 4.74
+}
+  ```
+
+- **write** `{"content": "# A2.6 — la bande des experts : 7,0 Go/s à 8 fils, saturation à 8, PPL 37,2013 invariante\n\n> **Ligne de roadmap** : A2.6 (les experts et la tête) · **Date** : 2026-11-18 · **Verdict** : ✅\n> mesuré — sur `qwen3-30b-a3b-Q4_K_M` à `--limit 32` (31 jetons notés), `proj+mlp` vaut\n> **156 … [3564 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-bande-experts.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\n# 1. fusion des trois puces Pa … [2409 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 886 JSON, le disque en a 887
+  en-cours · 1661 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -lt reports/*.json | head -5", "description": "Identify the newest JSON"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane     629 18 nov 09:34 reports/a2.6-bande-experts.json
+-rw-r--r--. 1 stephane stephane   88245 18 nov 09:31 reports/tagger-612-dryrun-5.json
+-rw-r--r--. 1 stephane stephane    3064 18 nov 09:21 reports/banc-grammaticalite-100m.json
+-rw-r--r--. 1 stephane stephane     628 18 nov 09:10 reports/natif-val-deux-decoupages.json
+-rw-r--r--. 1 stephane stephane    1134 18 nov 08:59 reports/corpus-epingle.json
+[stderr]
+ls: write error: Broken pipe
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **796** / **886** |'\nnew = '| fichiers / JSON de résultats | **796** / **887** |'\nassert s. … [2125 caractères tronqués]`
