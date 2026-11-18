@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 28.3 h |
+| Durée | 28.4 h |
 | Tours | 9 |
-| Messages | 538 |
-| Appels d'outils | 529 |
+| Messages | 542 |
+| Appels d'outils | 533 |
 | Fichiers touchés | 37 |
-| Commandes | 405 |
+| Commandes | 409 |
 | Sous-agents | 7 |
-| Commits | 35 |
+| Commits | 37 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*209 appels d'outils.* Actions notables :
+*213 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 189 autres
+- … et 193 autres
 
 **Synthèse produite :**
 
@@ -556,7 +556,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 365 autres
+- … et 369 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -734,4 +734,6 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG'
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-courbe-r1-r3.md reports/rapport-v2-slice.md reports/banc-generation-r5a.json repor
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add AGENTS.md README.md docs/README.md reports/README.md docs/pilotage/roadmap.md docs/pilotage/refere
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "| 
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "[c
 

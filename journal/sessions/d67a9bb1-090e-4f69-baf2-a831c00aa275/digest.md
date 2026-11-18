@@ -10212,3 +10212,59 @@ taille exit=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add AGENTS.md README.md docs/README.md reports/README.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nCLÔTURE —  … [1061 caractères tronqués]`
+
+  ```
+92609175 CLÔTURE — LE BUDGET DE CONTEXTE REPASSE : T0 = 4 000 (AGENTS 1 197, état 1 627, roadmap 9 003)
+To github.com:stephanedenis/drave.git
+   52b0b78d..92609175  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"=== branche ===\"; git status -sb | head -1; echo \"=== commits du jour (18/11) ===\"; git log --since=\"2026-11-18 00:00\" --oneline | wc -l; git log --since=\"2026-11-18 00:00\" --oneline | head … [47 caractères tronqués]`
+
+  ```
+?? reports/banc-generation-r2.json
+?? reports/banc-grammaticalite-r2.json
+=== branche ===
+## s/v7...origin/s/v7
+=== commits du jour (18/11) ===
+20
+92609175 CLÔTURE — LE BUDGET DE CONTEXTE REPASSE : T0 = 4 000 (AGENTS 1 197, état 1 627, roadmap 9 003)
+f3d0a886 N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU
+e75ee564 PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE
+5e5e8e5a N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867)
+9da9bd90 ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)
+4f4f4fa1 D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…)
+0d15bc36 README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL
+e471d051 R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY
+aafffb7a D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES
+… [1458 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"| **892** | 92 portes, 30 portes |\"  # contrôle inventé\n# petite retouche factuelle : la courbe cite r2 comme point mesuré\ … [998 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+92609175 CLÔTURE — LE BUDGET DE CONTEXTE REPASSE : T0 = 4 000 (AGENTS 1 197, état 1 627, roadmap 9 003)
+## s/v7...origin/s/v7
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+AssertionError
+  ❌ commit refusé : 2 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/banc-generation-r2.json
+     · reports/banc-grammaticalite-r2.json
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"0,551\" docs/pilotage/en-cours.md | head -2", "description": "Find the exact curve bullet text"}`
+
+  ```
+75:- **N — l'entraînement et le décodage** (18/11) : courbe **3k → 53k** — PPL **4,6792 → 3,0098**, top-40 **0,551 → 0,895**, top-20 **0,932**, le greedy **reste cassé** (rép 10–13) ; **top-40/T=0,5** le bat (**0,907**, rép **1,7**) ; le **v2 dédupliqué** à pas égal donne **+2,1 %** de PPL mais le test est confondu (v1 n'a que 0,038 % de duplication) ; [courbe](../../reports/rapport-courbe-r1-r3.md), [v2](../../reports/rapport-v2-slice.md), [décodage](../../reports/rapport-decodage-r1.md).
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"[courbe](../../reports/rapport-courbe-r1-r3.md), [v2](../../reports/rapport-v2-slice.md), [décodage](../../reports/rapport-de … [1060 caractères tronqués]`

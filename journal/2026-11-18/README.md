@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **9 session(s)** · **6 thème(s)**
+**20 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
-| distribue | 1 | [distribue.md](distribue.md) |
+| distribue | 2 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | mesures | 10 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -28,7 +28,7 @@
 | `9f4f7b6d-c5aa-4269-b785-a0f444424470` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 0.2 h | [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md) |
 | `c7e46dba-11cb-456b-a3b6-715428927f99` | Tu travailles dans le dépôt | 2026-11-18 08:58 | 0.4 h | [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md) |
 | `cbf7ca71-5b38-428e-9f19-298be1720918` | Tu travailles dans /home/stephane/Data13 | 2026-11-18 10:17 | 1.0 h | [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md) |
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 28.3 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 28.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `da0f2984-32d0-459d-a761-d3faf6a10b8a` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 423.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
@@ -55,6 +55,7 @@
 | 12:49 | `5e5e8e5a` | N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867) |
 | 13:01 | `e75ee564` | PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE |
 | 14:02 | `f3d0a886` | N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU |
+| 14:09 | `92609175` | CLÔTURE — LE BUDGET DE CONTEXTE REPASSE : T0 = 4 000 (AGENTS 1 197, état 1 627, roadmap 9 003) |
 
 ## Le récit de la journée (écrit à la main)
 
