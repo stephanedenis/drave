@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 5.9 h |
-| Tours | 7 |
-| Messages | 249 |
-| Appels d'outils | 271 |
-| Fichiers touchés | 24 |
-| Commandes | 176 |
+| Durée | 10.4 h |
+| Tours | 8 |
+| Messages | 259 |
+| Appels d'outils | 280 |
+| Fichiers touchés | 25 |
+| Commandes | 184 |
 | Sous-agents | 0 |
-| Commits | 12 |
+| Commits | 13 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 **Tour 6** — vas-y avec les prochains chantiers, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)
 
 **Tour 7** — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
+
+**Tour 8** — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul local.
 
 ## 2. Déroulé, étape par étape
 
@@ -321,7 +323,7 @@ Et le garde-fou
 
 ### Tour 7 — le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose
 
-*30 appels d'outils.* Actions notables :
+*31 appels d'outils.* Actions notables :
 
 - bash — Read the env-var completeness test
 - bash — Read VARS_LUES and the source() helper
@@ -337,11 +339,56 @@ Et le garde-fou
 - bash — Simplify the profile bench loop
 - bash — Run the profile bench on the trained model
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md`
-- … et 16 autres
+- … et 17 autres
 
 **Synthèse produite :**
 
-⏵ Le moteur numpy exécute `court` : parité à trois profils
+⏵ Bilan des quatre derniers commits et de la matrice de capacités
+
+**Quatre commits de plus, et la ligne N3 est maintenant close proprement.**
+
+| commit | chantier | le chiffre |
+|---|---|---|
+| `6d720eaa` | **tests** : `NATIVE_PROFONDEUR` et `POS_DESYNC` déclarées | suite Rust **139/139** |
+| `0e5da7bd` | **profils sur le 34 M entraîné** | `bloque` **+0,04 %**, `flou` **+2,09 %**, `court` **−0,70 %** de PPL |
+| `7c219067` | **numpy exécute `court`** | parité Rust ↔ numpy **2,980e-07** sur 128 octets |
+| `a85da6f3` | **backlog N3** : cinq fiches, étape 5 | **22 portes** (17 au 04/11) |
+
+**La nuance qui compte, et elle est écrite dans la fiche** : le contrat d'indifférence porte sur les **logits** (5e-7, sous 1e-4), **pas sur la perplexité**. `bloque` déplace la PPL de **+0,04 %** — la PPL est une fonction non linéaire de tous les logits, où le décalage s'accumule. Promettre l'invariance de la PPL aurait été un mensonge de plus. À l'inverse, `flou` coûte **+2,09 %** (une dégradation réelle), et `court` **−0,70 %** (la fenêtre de 1 024 n'est pas utilisée au-delà de 256 sur ce modèle). Les temps de cette passe ne sont **pas** interprétables (machine partagée : `bloque`, à coût identique, varie de −17 % à +4 %) — le chiffre de temps valide reste le banc contrôlé (0,694×).
+
+**La matrice de capacités des deux moteurs, désormais explicite** :
+
+| | Rust | numpy |
+|---|---|---|
+| `defaut`, `bloque`, `court` | ✅ | ✅ (parité 2,98–3,58e-07) |
+| `flou` | ✅ | **refusé** (nommé) |
+| routes | ✅ (seuil 0/10⁹ bit-exacts) | **refusées** (nommées) |
+
+Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle du format appliquée aux moteurs eux-mêmes.
+
+**Les temps valides, sans bruit** : `court` **0,694×** sur une charge dominée par l'attention (11 passes alternées, CV 3–6 %) ; **29,37 G év/s** pour la dispersion GPU (P1, sur 268 M d'événements, bit-exact contre `np.bincount`).
+
+**Ce que je ne fais pas, et pourquoi** : la politique de routage demanderait un modèle et un corpus où la fenêtre longue **sert** (celui-ci ne l'utilise pas au-delà de 256) ; P2 demanderait le rig (chantier à part entière, comme tu l'as dit) ; `flou` dans numpy serait de la complétude sans usage (il coûte 2 % de PPL et ne gagne rien). Les lignes A2.6 et N2 appartiennent à d'autres sessions.
+
+**État du dépôt** : 12 commits sur la journée, **90 portes**, **787 fiches**, **878 JSON**, état **1 750 mots**, revue de documentation verte, graphe backlog cohérent, tests Rust **139/139**. Le tra
+… [340 caractères tronqués]
+
+### Tour 8 — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul loca … [2 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — List trained models and their configs
+- bash — Batch profile benchmarks on five trained models
+- bash — Run the GPU scatter grid across accumulator sizes
+- bash — Assemble the GPU scatter grid table
+- bash — List and parse the grid JSONs correctly
+- bash — Merge the scatter grid into one JSON
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md`
+- bash — Commit the scatter grid fiche
+
+**Synthèse produite :**
+
+⏵ Lancement du banc massif : 5 modèles × 4 profils (calcul long) et grille scatter GPU
 
 ## 3. Travail accompli
 
@@ -373,6 +420,7 @@ Et le garde-fou
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/bench/drvm_profils.py` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-modele.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md` | 1 | 0 |
 
 ### Commandes exécutées (échantillon)
 
@@ -416,7 +464,7 @@ Et le garde-fou
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 136 autres
+- … et 144 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -544,13 +592,14 @@ Et le garde-fou
 
 ## 5. Erreurs rencontrées
 
-5 sorties en erreur ou divergentes. Les premières :
+6 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
 - **T4** : -rwxr-xr-x. 2 stephane stephane 3218824 17 nov 11:14 drave-core/target/release/drave DRVM v0 · 6 blocs · 30 tenseurs · payload 31488 o   bloc input        input   bloc b0           local_mixer [stderr
 - **T5** : ... 110 |     pub fn est_vide(&self) -> bool { self.lignes.is_empty() } 400 | pub fn existe(chemin: &str) -> bool { Path::new(chemin).is_file() } 187 | impl Episodique { ... 193 |     pub fn est_vide(
 - **T5** : ok ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (3595551) panicked at src/main.rs:9068:13: DRAVE_NATIVE_PROFONDEUR est lu dans le source
+- **T8** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<stdin>", line 3, in <lambda> ValueError: invalid literal for int() with base 10: 'n' [exit code: 1]
 
 ## 6. Commits
 
@@ -566,4 +615,5 @@ Et le garde-fou
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/drvm_profils.py reports/rapport-profils-modele.md reports/profils-34m.json docs/pilotage/en-
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/drvm.py tools/drvm_infere.py tools/porte-n3-moteurs.sh tools/porte-n3-court.sh reports/rappo
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/en-cours.md && git commit -F - <<'MSG
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

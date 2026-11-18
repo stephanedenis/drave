@@ -1,0 +1,44 @@
+{
+ "schema": "drave.gpu-scatter-grille",
+ "version": 1,
+ "carte": "Quadro RTX 5000",
+ "n": 67108864,
+ "note": "G év/s, int32 exact, destinations uniformes, médiane de 3 passes ; bancs_bK = K accumulateurs puis réduction",
+ "grille": {
+  "65536": {
+   "index_add": 26.98,
+   "bancs_b1": 26.42,
+   "bancs_b4": 26.36,
+   "bancs_b16": 2.7,
+   "bancs_b64": 1.16
+  },
+  "16384": {
+   "index_add": 26.58,
+   "bancs_b1": 25.92,
+   "bancs_b4": 26.51,
+   "bancs_b16": 26.64,
+   "bancs_b64": 2.73
+  },
+  "4096": {
+   "index_add": 25.18,
+   "bancs_b1": 24.68,
+   "bancs_b4": 26.02,
+   "bancs_b16": 26.51,
+   "bancs_b64": 26.57
+  },
+  "1024": {
+   "index_add": 8.42,
+   "bancs_b1": 8.38,
+   "bancs_b4": 19.65,
+   "bancs_b16": 27.14,
+   "bancs_b64": 27.53
+  },
+  "512": {
+   "index_add": 4.76,
+   "bancs_b1": 4.75,
+   "bancs_b4": 16.55,
+   "bancs_b16": 28.16,
+   "bancs_b64": 28.52
+  }
+ }
+}

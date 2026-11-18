@@ -5104,3 +5104,197 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nN3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS\n\nLa ligne N3 était restée à 17 portes (04 … [746 caractères tronqués]`
+
+  ```
+[s/v7 a85da6f3] N3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS
+ 14 files changed, 108 insertions(+), 20 deletions(-)
+ create mode 100644 journal/2026-11-17/attention.md
+a85da6f3 N3 — LA FICHE DE BACKLOG PASSE À 22 PORTES ET CINQ FICHES DE PLUS
+7c219067 N3.10b — LE MOTEUR NUMPY EXÉCUTE `COURT` : PARITÉ RUST ↔ NUMPY 2,980e-07, FENÊTRE COURTE APPLIQUÉE
+0e5da7bd PROFILS SUR UN MODÈLE ENTRAÎNÉ (34 M) : BLOQUE +0,04 % DE PPL · FLOU +2,09 % · COURT −0,70 % — LE CONTRAT TIENT SUR LES LOGITS, PAS SUR LA PERPLEXITÉ
+6d720eaa TESTS — LA SUITE RUST PASSE À 139/139 : NATIVE_PROFONDEUR ET POS_DESYNC ENFIN DÉCLARÉES
+a0d7fa3b P1 — LA DISPERSION GPU BAT LA PROJECTION FPGA : 29,37 G ÉV/S SUR UNE CARTE CONTRE 19,3 G PROJETÉS POUR QUATRE — LE DÉBIT NE JUSTIFIE PAS LE RING
+24cb295e A5.4 — LE MATÉRIEL FPGA EXISTE : 4 CARTES + RING 40G + ETHERNET DÉDIÉS ; LE BLOCAGE DEVIENT L'ACCÈS AU RIG ET LE RTL, ET LA DÉCISION SE MESURE
+de967b7b N3.10 — `COURT` : LE PREMIER PROFIL QUI PAIE — BIT-EXACT < 64 o · 3,633e-02 AU-DELÀ · 0,694× LE TEMPS · SUR LE 34 M PPL 23,7480 → 23,5824 ET ~5 %
+b480a439 N3.9 — LES DEUX MOTEURS RENDENT LE MÊME CORPS : RUST ↔ NUMPY 3,576e-07 (DEFAUT), 2,384e-07 (BLOQUE), CO
+… [598 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; echo \"=== tests ===\"; cd drave-core && cargo test --quiet 2>&1 | tail -2; cd .. && echo \"=== état ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -2; echo \"=== revue ===\"; python3 tools/revue_d … [115 caractères tronqués]`
+
+  ```
+M tools/banc_generation.py
+ M tools/chantier/plan.json
+?? reports/banc-generation-100m.json
+=== tests ===
+test result: ok. 139 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+
+=== état ===
+  en-cours · 1750 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+=== revue ===
+  revue de documentation · 787 fiche(s) · 878 JSON · 127 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+### 🤖 Assistant
+
+⏵ Bilan des quatre derniers commits et de la matrice de capacités
+
+**Quatre commits de plus, et la ligne N3 est maintenant close proprement.**
+
+| commit | chantier | le chiffre |
+|---|---|---|
+| `6d720eaa` | **tests** : `NATIVE_PROFONDEUR` et `POS_DESYNC` déclarées | suite Rust **139/139** |
+| `0e5da7bd` | **profils sur le 34 M entraîné** | `bloque` **+0,04 %**, `flou` **+2,09 %**, `court` **−0,70 %** de PPL |
+| `7c219067` | **numpy exécute `court`** | parité Rust ↔ numpy **2,980e-07** sur 128 octets |
+| `a85da6f3` | **backlog N3** : cinq fiches, étape 5 | **22 portes** (17 au 04/11) |
+
+**La nuance qui compte, et elle est écrite dans la fiche** : le contrat d'indifférence porte sur les **logits** (5e-7, sous 1e-4), **pas sur la perplexité**. `bloque` déplace la PPL de **+0,04 %** — la PPL est une fonction non linéaire de tous les logits, où le décalage s'accumule. Promettre l'invariance de la PPL aurait été un mensonge de plus. À l'inverse, `flou` coûte **+2,09 %** (une dégradation réelle), et `court` **−0,70 %** (la fenêtre de 1 024 n'est pas utilisée au-delà de 256 sur ce modèle). Les temps de cette passe ne sont **pas** interprétables (machine partagée : `bloque`, à coût identique, varie de −17 % à +4 %) — le chiffre de temps valide reste le banc contrôlé (0,694×).
+
+**La matrice de capacités des deux moteurs, désormais explicite** :
+
+| | Rust | numpy |
+|---|---|---|
+| `defaut`, `bloque`, `court` | ✅ | ✅ (parité 2,98–3,58e-07) |
+| `flou` | ✅ | **refusé** (nommé) |
+| routes | ✅ (seuil 0/10⁹ bit-exacts) | **refusées** (nommées) |
+
+Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle du format appliquée aux moteurs eux-mêmes.
+
+**Les temps valides, sans bruit** : `court` **0,694×** sur une charge dominée par l'attention (11 passes alternées, CV 3–6 %) ; **29,37 G év/s** pour la dispersion GPU (P1, sur 268 M d'événements, bit-exact contre `np.bincount`).
+
+**Ce que je ne fais pas, et pourquoi** : la politique de routage demanderait un modèle et un corpus où la fenêtre longue **sert** (celui-ci ne l'utilise pas au-delà de 256) ; P2 demanderait le rig (chantier à part entière, comme tu l'as dit) ; `flou` dans numpy serait de la complétude sans usage (il coûte 2 % de PPL et ne gagne rien). Les lignes A2.6 et N2 appartiennent à d'autres sessions.
+
+**État du dépôt** : 12 commits sur la journée, **90 portes**, **787 fiches**, **878 JSON**, état **1 750 mots**, revue de documentation verte, graphe backlog cohérent, tests Rust **139/139**. Le travail en cours de la session N2 (`tools/banc_generation.py`, `reports/banc-generation-100m.json`) est laissé intact : c'est à elle de le committer avec sa fiche.
+
+Le prochain pas, quand le rig sera prêt : **P0** (diagnostic `host_check.sh`) puis **P2** (le ring tient-il 4,8 Go/s ?) — la fiche A5.4 porte la marche à suivre et les contrôles.
+
+
+## Tour 8
+
+### 👤 Utilisateur
+
+on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul local.
+
+### 🤖 Assistant
+
+⏵ Repérage des modèles entraînés utilisables pour un banc massif (peu de réflexion, beaucoup de calcul)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, sys\nsys.path.insert(0, \".\")\nfrom tools.drvm import read_drvm\ncands = [\"work/n2ac/mix1024-60k.drvm\", \"work/n2ac/mix200k.drvm\", \"work/n2ac/rope2048-20k.drvm\",\n         \"work/n2ac/rope1024-20k … [676 caractères tronqués]`
+
+  ```
+work/n2ac/mix1024-60k.drvm           params=  34301224 d=384 blocs=6 fen=1024 max_pos=2048
+work/n2ac/mix200k.drvm               ABSENT/ERREUR : FileNotFoundError
+work/n2ac/rope2048-20k.drvm          params=  34301224 d=384 blocs=6 fen=2048 max_pos=2048
+work/n2ac/rope1024-20k.drvm          params=  34301224 d=384 blocs=6 fen=1024 max_pos=2048
+work/n2k/base-en-34m.drvm            params=  34301224 d=384 blocs=6 fen= 256 max_pos=2048
+work/n2k/base-multi-34m.drvm         params=  34301224 d=384 blocs=6 fen= 256 max_pos=2048
+work/n2ac/propre512-8k.drvm          params=  34301224 d=384 blocs=6 fen= 512 max_pos=2048
+  ```
+
+### 🤖 Assistant
+
+⏵ Lancement du banc massif : 5 modèles × 4 profils (calcul long) et grille scatter GPU
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/profils && for m in work/n2ac/mix1024-60k work/n2ac/rope2048-20k work/n2ac/propre512-8k work/n2k/base-en-34m work/n2k/base-multi-34m; do n=$(basename $m); python3 bench/drvm_profils.py --drvm $m.drvm --texte /tmp/txt-20 … [196 caractères tronqués]`
+
+  ```
+started background job bash-179
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p /tmp/grille && for O in 512 1024 4096 16384 65536; do /home/stephane/gpu-env/bin/python bench/gpu_scatter.py --n 67108864 --o $O --bancs 1,4,16,64 --sortie /tmp/grille/o$O.json > /tmp/grille/o$O.log 2>&1; echo \"fini O=$O\"; … [97 caractères tronqués]`
+
+  ```
+fini O=512
+fini O=1024
+fini O=4096
+fini O=16384
+fini O=65536
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, json\nrows = []\nfor f in sorted(glob.glob(\"/tmp/grille/o*.json\"), key=lambda x: int(x.split(\"o\")[-1].split(\".\")[0])):\n    d = json.load(open(f))\n    o = d[\"o\"]\n    r = d[\"resultats\"]\n     … [430 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "<stdin>", line 3, in <lambda>
+ValueError: invalid literal for int() with base 10: 'n'
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls /tmp/grille/; python3 - <<'PY'\nimport glob, json, re\nrows = []\nfor f in glob.glob(\"/tmp/grille/*.json\"):\n    m = re.search(r\"/o(\\d+)\\.json$\", f)\n    if not m: \n        print(\"ignoré\", f); continue\n    d = json.load( … [528 caractères tronqués]`
+
+  ```
+o1024.json
+o1024.log
+o16384.json
+o16384.log
+o4096.json
+o4096.log
+o512.json
+o512.log
+o65536.json
+o65536.log
+     O atomiques     B=4    B=16    B=64 meilleur
+   512      4.76   16.55   28.16   28.52    28.52
+  1024      8.42   19.65   27.14   27.53    27.53
+  4096     25.18   26.02   26.51   26.57    26.57
+ 16384     26.58   26.51   26.64    2.73    26.64
+ 65536     26.98   26.36    2.70    1.16    26.98
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport glob, json, re\ngrille = {}\nfor f in glob.glob(\"/tmp/grille/*.json\"):\n    m = re.search(r\"/o(\\d+)\\.json$\", f)\n    d = json.load(open(f))\n    grille[str(d[\"o\"])] = {k: round(v[\"G_ev_s\"], 2) for k … [537 caractères tronqués]`
+
+  ```
+{
+ "65536": {
+  "index_add": 26.98,
+  "bancs_b1": 26.42,
+  "bancs_b4": 26.36,
+  "bancs_b16": 2.7,
+  "bancs_b64": 1.16
+ },
+ "16384": {
+  "index_add": 26.58,
+  "bancs_b1": 25.92,
+  "bancs_b4": 26.51,
+  "bancs_b16": 26.64,
+  "bancs_b64": 2.73
+ },
+ "4096": {
+  "index_add": 25.18,
+  "bancs_b1": 24.68,
+  "bancs_b4": 26.02,
+  "bancs_b16": 26.51,
+  "bancs_b64": 26.57
+ },
+ "1024": {
+  "index_add": 8.42,
+  "bancs_b1": 8.38,
+  "bancs_b4": 19.65,
+  "bancs_b16": 27.14,
+  "bancs_b64": 27.53
+ },
+ "512": {
+  "index_add": 4.76,
+  "bancs_b1": 4.75,
+  "bancs_b4": 16.55,
+  "bancs_b16": 28.16,
+  "bancs_b64": 28.52
+ }
+}
+  ```
+
+- **write** `{"content": "# P1b — la grille : la banque est un remède à la contention, pas un accélérateur\n\n> **Ligne de roadmap** : A5.4 (P1) · **Date** : 2026-11-17 · **Verdict** : ✅ mesuré — sur la même\n> Quadro RTX 5000 et 67,1 M d'événements, la dispersion par bancs vaut **6,0×** à **512** sorties,\n> ** … [3104 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"restent l'**énergie**, l … [1874 caractères tronqués]`
