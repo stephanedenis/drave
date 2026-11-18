@@ -8965,3 +8965,484 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nPASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AU … [823 caractères tronqués]`
+
+  ```
+e75ee564 PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE
+mer 18 nov 2026 13:03:42 EST
+e75ee564 PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE
+5e5e8e5a N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867)
+9da9bd90 ÉTAT — LA PUCE N4 SOUS 80 MOTS (LE DÉTAIL EST DANS LES QUATRE FICHES)
+4f4f4fa1 D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…)
+0d15bc36 README — CE QUI EST FAIT PASSE AU 18/11 : LE CONTRAT DRVM, LE TAGGER 0,9572, LE CORPUS ÉPINGLÉ, LA COURBE DU 73 M, A2.6 ET P1 ; LE FPGA RESTE P2 + RTL
+e471d051 R0.7 + N — LE TAGGER API GAGNE (+9,47 : 0,9572 CONTRE 0,8625) · LA COURBE 33 k PAS MONTE EN TOP-40 (0,870), PAS EN GREEDY
+aafffb7a D — LE DÉDOUBLONNAGE PAR BLOCS NE FERME RIEN (0 % ÉCARTÉ) : LA DUPLICATION EST COURTE ET DIFFUSE — 53,98 % DES LIGNES, 8,28 % DES OCTETS
+3f33126e ROADMAP — A2.6 ET N À JOUR : BANDE EXPERTS 7,0 Go/s, TÊTE Q8_0 DANS LA RÈGLE, CORPUS ÉPINGLÉ, r1/r2 MESURÉS
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '25,45p' tools/entrainer_native.py; free -g | head -2", "description": "Check the trainer's corpus loader and free RAM"}`
+
+  ```
+b = pathlib.Path(chemin).read_bytes()
+    if len(b) < 100_000:
+        raise SystemExit(f"{chemin} : corpus trop court")
+    return torch.tensor(list(b), dtype=torch.long)
+
+
+def lot(data: torch.Tensor, n: int, seq: int, device: str, compteur: int, canal=None):
+    # Van der Corput : même compteur = mêmes fenêtres, sans état aléatoire.
+    i = torch.tensor(departs_vdc(compteur, n, len(data) - seq - 1, seq), dtype=torch.long)
+    x = torch.stack([data[j:j + seq] for j in i]).to(device)
+    y = torch.stack([data[j + 1:j + seq + 1] for j in i]).to(device)
+    c = torch.stack([canal[j:j + seq] for j in i]).to(device) if canal is not None else None
+    return x, y, c
+
+
+def charger_canal(chemin: str) -> torch.Tensor:
+    return torch.tensor(list(pathlib.Path(chemin).read_bytes()), dtype=torch.long)
+
+
+def ppl(modele, data, seq, lot_n, device, n_lots=8, compteur=0, canal=None):
+    modele.eval(); total = 0.0; n = 0
+               total        used        free      shared  buff/cache   available
+Mem:             125          33          24          17          86          92
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\nsrc = pathlib.Path(\"work/dedup/train-lignes.txt\")\ndst = pathlib.Path(\"work/n3/v2-1go.txt\")\nn = 1 << 30\nwith src.open(\"rb\") as f:\n    b = f.read(n)\ncut = b.rfind(b\"\\n\")\ndst.write_bytes( … [554 caractères tronqués]`
+
+  ```
+slice work/n3/v2-1go.txt 1073741652 octets
+r5a lancé
+mer 18 nov 2026 13:04:24 EST
+  ```
+
+- **bash** `{"command": "sleep 200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n3/r5a.log; free -g | head -2; nohup env PYTHONPATH=. /home/stephane/gpu-env/bin/python -m tools.entrainer_native --corpus work/n3/v2-1go.txt --val data/wiki_mix/propre/val.txt --pas 10000 --seq 1024 --lot 8 - … [300 caractères tronqués]`
+
+  ```
+pas  300 · perte 0.9816 · PPL val 3.260 · 87 s
+pas  350 · perte 1.1718 · PPL val 3.259 · 101 s
+               total        used        free      shared  buff/cache   available
+Mem:             125          42          14          17          88          83
+r5b lancé
+mer 18 nov 2026 13:07:54 EST
+               total        used        free      shared  buff/cache   available
+Mem:             125          47           9          17          87          78
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls journal/sessions/ | tail -6; ls journal/2026-11-18/ 2>/dev/null; echo \"=== sessions status ===\"; python3 tools/sessions.py --status 2>&1 | head -6", "description": "Check the session archives and status"}`
+
+  ```
+session-e9ee2692-96f9-42d2-886c-c5abfb51ce07
+session-ed9b8942-25a3-48ee-9f86-f6821e56df9d
+session-f198001c-49da-4e65-8a44-782f9605fd7a
+session-f30f0289-2506-4596-be01-4e10f2a2073c
+session-f71c99b5-4cd1-41cd-81b4-87e7e7c8bfeb
+session-faf940b2-b9f9-4948-abe4-6aee0d73595c
+attention.md
+distribue.md
+docs.md
+mesures.md
+modele.md
+portes.md
+README.md
+=== sessions status ===
+sessions · plans de mandat
+    0733c5bb-f90b-4f58 · terminé  · 18886 min · N2 (200 000 pas sur le mélange, PPL domaine/littérature/anglais/wikitext2, courbe de longueur), R1.1/R1.2 mesurés depuis N2
+      → **surveiller les runs relancés à 09 h 30** — `kd2` (gpu0, chargement du corpus) et `rope2048` (gpu1, en cours) ; puis mesurer et committer ; ensuite la **porte propre (0,29)**.
+    0b0a6a0d-05f5-4308 · terminé  · 24753 min · N2.h — corpus propre, porte honnête, généralité, verrou de longueur
+      → close — N2.i (3,13 / 12,93 / 33,83) et Pensée v0 (6/6 portes) sont committés.
+    0b69f616-5c75-4c34 · terminé  · 26827 min · R0.4, R0.5, R13, R4.1–R4.3, en-cours, roadmap, backlog
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"r5a: $(tail -1 work/n3/r5a.log)\"; echo \"r5b: $(tail -1 work/n3/r5b.log)\"; free -g | head -2", "description": "Wait and check the A/B runs", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 13:18:11 EST
+r5a: pas 2450 · perte 1.0626 · PPL val 3.233 · 711 s
+r5b: pas 1750 · perte 1.0694 · PPL val 3.268 · 488 s
+               total        used        free      shared  buff/cache   available
+Mem:             125          53           6          17          84          72
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"r5a: $(tail -1 work/n3/r5a.log)\"; echo \"r5b: $(tail -1 work/n3/r5b.log)\"", "description": "Wait and check the A/B runs", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 13:28:08 EST
+r5a: pas 4550 · perte 1.0916 · PPL val 3.234 · 1321 s
+r5b: pas 3900 · perte 1.1041 · PPL val 3.233 · 1088 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; echo \"r5a: $(tail -1 work/n3/r5a.log)\"; echo \"r5b: $(tail -1 work/n3/r5b.log)\"", "description": "Wait for r5a", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 13:38:04 EST
+r5a: pas 6550 · perte 1.0397 · PPL val 3.224 · 1905 s
+r5b: pas 6050 · perte 1.0880 · PPL val 3.240 · 1687 s
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor n in ('r5a','r5b'):\n    try:\n        d=json.load(open(f'work/n3/{n}.pt.json')); print(n, 'FINI ppl', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))\n    except Fil … [101 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 13:47:59 EST
+r5a en cours
+r5b en cours
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor n in ('r5a','r5b'):\n    try:\n        d=json.load(open(f'work/n3/{n}.pt.json')); print(n, 'FINI ppl', round(d['ppl_val'],4), 'precision', round(d['precision_main'],4))\n    except Fil … [103 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 13:57:23 EST
+r5a FINI ppl 3.0098 precision 0.6716
+r5b FINI ppl 3.0723 precision 0.6682
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && time python3 tools/dedup_lignes.py --entree data/wiki_mix/propre/train.txt --sortie work/n3/v1-dedup.txt --memoire-mo 2048 --json work/n3/v1-dedup.json 2>&1 | tail -6; ls -la work/n3/v1-dedup.txt", "description": "Dedup the v1 corpus … [46 caractères tronqués]`
+
+  ```
+"pct_octets_ecartes": 0.038,
+ "duree_s": 8.2,
+ "duree_passe_s": 8.2,
+ "rss_max_mio": 1053.6,
+ "sha256": "ec6b2888e9a8d7b76f16224d4201f88253a750c8bb5cc565af21c5c1419b08ba"
+}
+-rw-r--r--. 1 stephane stephane 1017101434 18 nov 13:57 work/n3/v1-dedup.txt
+[stderr]
+
+real	0m8,263s
+user	0m7,230s
+sys	0m1,035s
+  ```
+
+
+> **Compactage de contexte** — résumé conservé :
+
+```
+<compacted-summary>
+## Primary Request and Intent
+- Original question: "aurait-on un intérêt pour le FPGA maintenant?" — whether the FPGA project is worth pursuing now.
+- Follow-ups: user revealed **4 Stratix V cards in a mining rig, QSFP+ 40Gbps loop, dedicated Ethernet** → asks if FPGA has value now.
+- Then: "considérant que certains modules ont des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules" → implement per-module implementation variants + flexible routing.
+- "vas-y" / "go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)".
+- "le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose".
+- "on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul local."
+- Latest: "commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin".
+- Latest addendum: "la machine est dédiée à ton travail. N'hésites pas à travailler sur plusieurs chantiers simultanément pour faire bon usage des ressources locales et gagner du temps".
+
+## Key Technical Concepts
+- Drave: event-bus AI architecture; activations as pushed weighted lists (`push`/AER); "structure beats size"; blocks substitutable via contract + trace + cost.
+- DRVM v0 format: 92-byte header, canonical JSON manifest, 64-byte-aligned tensors; closed key sets; both readers (Rust `drvm.rs`, Python `tools/drvm.py`) must refuse what they don't execute.
+- "Théorème d'indifférence": same signature + contract + trace ⇒ substitutable; operation mode (neural/heuristic/FPGA) is private.
+- Profiles: `defaut` (row matvec), `bloque` (4-accumulator tiled sum), `flou` (k-WTA threshold → sigmoid membership), `court` (attention window/4).
+- `graph.routes`: `{id, bloc, si:{kind:"position",seuil}, alors, sinon?}`; executed by Rust engine per position; numpy refuses routes.
+- Tariff windows (rule 12): DeepSeek discounted UTC 16:30–00:30 = EST 11:30–19:30 (API work); full tariff EST 19:30–11:30 (local GPU/CPU work).
+- Gates: `tools/toutes-les-portes.sh`, registry read via `awk '$2 != 0'`, 90 gates; tolerated reds in `docs/pilotage/references-non-regression.md`.
+- Hook `verifie_etat_a_jour.py --index`: any reports/roadmap/backlog change requires an `en-cours` change in same commit.
+
+## Files and Code
+- `tools/drvm.py`: closed key sets (`CLES_RACINE`, `CLES_GRAPHE`, `CLES_BLOC`, `CLES_EXECUTION`, `CLES_CONTRAT`, `CLES_ROUTE`, `CLES_SI`); `IMPLS_CONNUES={defaut,bloque,flou,court}`; `IMPLS_MOTEUR_NUMPY={defaut,bloque,court}`; strict `_valide`/`_lecture_routes`.
+- `drave-core/src/drvm.rs`: mirrors validation; `Bloc{id,kind,implementation,tolerance}`, `Route{id,bloc,seuil,alors,sinon}`, `Drvm.routes`; `lit_routes`, tests `refuse_ce_quil_ne_lit_pas`, `les_variantes_sont_un_contrat`, `les_routes_sont_lues_et_refusees`.
+- `drave-core/src/native.rs`: `Profil{Defaut,Bloque,Flou,Court}`, `RouteExec`, `impls`, `routes`, `profil(b,pos)`, `fenetre(p)`, `matvec(p,...)`, `matvec_lignes`/`matvec_tuile`, `ffn(x,b,p)` with Flou sigmoid.
+- `drave-core/src/main.rs`: `--drvm-inspect` prints `impl=` and `tol=` and routes; `VARS_LUES` += `"NATIVE_PROFONDEUR", "POS_DESYNC"`.
+- `tools/drvm_infere.py`: numpy engine executes `defaut`/`bloque`/`court` (window/4 mask), refuses `flou` and routes (`NotImplementedError`); `charger` returns `(tenseurs, cfg, impls)`.
+- `tools/drvm_trace.py`: trace adds `impls` and `routes`.
+- `bench/gpu_scatter.py`: GPU scatter bench (index_add vs B banks), `--gpu`, int32 exact, CPU bincount control.
+- `bench/drvm_profils.py`: rewrites manifest impl for each profile, measures native PPL.
+- Gates added: `tools/porte-n3-variante.sh`, `porte-n3-route.sh`, `porte-n3-moteurs.sh`, `porte-n3-court.sh`; `porte-n3-refus.sh` §4 extended to 13 cases.
+- Fiches: `reports/rapport-n3-variante.md`, `rapport-n3-route.m
+… [4156 caractères tronqués]
+```
+
+### 👤 Utilisateur
+
+This is an automatically generated checkpoint condensing an earlier span of the conversation to free up context. Treat the captured context as established background and build on it without restating it. Continue the task directly from the messages that follow, without acknowledging this checkpoint.
+
+<compacted-summary>
+<compacted-summary>
+## Primary Request and Intent
+- Original question: "aurait-on un intérêt pour le FPGA maintenant?" — whether the FPGA project is worth pursuing now.
+- Follow-ups: user revealed **4 Stratix V cards in a mining rig, QSFP+ 40Gbps loop, dedicated Ethernet** → asks if FPGA has value now.
+- Then: "considérant que certains modules ont des équivalents heuristiques ou logique floue, peut-on ajouter les différentes options d'implémentation pour chaque module et avoir un routage flexible entre les modules" → implement per-module implementation variants + flexible routing.
+- "vas-y" / "go, continue tant qu'on est sur le tarif réduit de DeepSeek (jour ici, nuit en chine)".
+- "le rig n'est pas prêt (c'est un chantier en soit) continue sur d'autre chose".
+- "on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul local."
+- Latest: "commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucoup de subagents au besoin".
+- Latest addendum: "la machine est dédiée à ton travail. N'hésites pas à travailler sur plusieurs chantiers simultanément pour faire bon usage des ressources locales et gagner du temps".
+
+## Key Technical Concepts
+- Drave: event-bus AI architecture; activations as pushed weighted lists (`push`/AER); "structure beats size"; blocks substitutable via contract + trace + cost.
+- DRVM v0 format: 92-byte header, canonical JSON manifest, 64-byte-aligned tensors; closed key sets; both readers (Rust `drvm.rs`, Python `tools/drvm.py`) must refuse what they don't execute.
+- "Théorème d'indifférence": same signature + contract + trace ⇒ substitutable; operation mode (neural/heuristic/FPGA) is private.
+- Profiles: `defaut` (row matvec), `bloque` (4-accumulator tiled sum), `flou` (k-WTA threshold → sigmoid membership), `court` (attention window/4).
+- `graph.routes`: `{id, bloc, si:{kind:"position",seuil}, alors, sinon?}`; executed by Rust engine per position; numpy refuses routes.
+- Tariff windows (rule 12): DeepSeek discounted UTC 16:30–00:30 = EST 11:30–19:30 (API work); full tariff EST 19:30–11:30 (local GPU/CPU work).
+- Gates: `tools/toutes-les-portes.sh`, registry read via `awk '$2 != 0'`, 90 gates; tolerated reds in `docs/pilotage/references-non-regression.md`.
+- Hook `verifie_etat_a_jour.py --index`: any reports/roadmap/backlog change requires an `en-cours` change in same commit.
+
+## Files and Code
+- `tools/drvm.py`: closed key sets (`CLES_RACINE`, `CLES_GRAPHE`, `CLES_BLOC`, `CLES_EXECUTION`, `CLES_CONTRAT`, `CLES_ROUTE`, `CLES_SI`); `IMPLS_CONNUES={defaut,bloque,flou,court}`; `IMPLS_MOTEUR_NUMPY={defaut,bloque,court}`; strict `_valide`/`_lecture_routes`.
+- `drave-core/src/drvm.rs`: mirrors validation; `Bloc{id,kind,implementation,tolerance}`, `Route{id,bloc,seuil,alors,sinon}`, `Drvm.routes`; `lit_routes`, tests `refuse_ce_quil_ne_lit_pas`, `les_variantes_sont_un_contrat`, `les_routes_sont_lues_et_refusees`.
+- `drave-core/src/native.rs`: `Profil{Defaut,Bloque,Flou,Court}`, `RouteExec`, `impls`, `routes`, `profil(b,pos)`, `fenetre(p)`, `matvec(p,...)`, `matvec_lignes`/`matvec_tuile`, `ffn(x,b,p)` with Flou sigmoid.
+- `drave-core/src/main.rs`: `--drvm-inspect` prints `impl=` and `tol=` and routes; `VARS_LUES` += `"NATIVE_PROFONDEUR", "POS_DESYNC"`.
+- `tools/drvm_infere.py`: numpy engine executes `defaut`/`bloque`/`court` (window/4 mask), refuses `flou` and routes (`NotImplementedError`); `charger` returns `(tenseurs, cfg, impls)`.
+- `tools/drvm_trace.py`: trace adds `impls` and `routes`.
+- `bench/gpu_scatter.py`: GPU scatter bench (index_add vs B banks), `--gpu`, int32 exact, CPU bincount control.
+- `bench/drvm_profils.py`: rewrites manifest impl for each profile, measures native PPL.
+- Gates added: `tools/porte-n3-variante.sh`, `porte-n3-route.sh`, `porte-n3-moteurs.sh`, `porte-n3-court.sh`; `porte-n3-refus.sh` §4 extended to 13 cases.
+- Fiches: `reports/rapport-n3-variante.md`, `rapport-n3-route.md`, `rapport-n3-moteurs.md`, `rapport-n3-court.md`, `rapport-profils-modele.md`, `rapport-profils-5-modeles.md`, `rapport-gpu-scatter.md`, `rapport-gpu-scatter-grille.md`, `rapport-banc-generation-100m.md`.
+- JSON: `reports/gpu-scatter.json`, `gpu-scatter-grille.json`, `profils-34m.json`, `profils-5-modeles.json`, `banc-generation-100m.json`, `banc-generation-34m-64o.json`, `banc-generation-alea-64o.json`.
+- `docs/pilotage/backlog/A5.4-fpga.md`: rewritten with 4-card rig table, P1 closed, P2 next.
+- `docs/pilotage/plans-tarif.md`: tariff windows (added by another session, commit `02cc66d4`).
+
+## Errors and Fixes
+- Route block index bug: used position in `graph.blocks` (1,3) instead of `b{i}` (0,1) → route never applied; caught by bit-exact control; fixed via `strip_prefix('b')`.
+- `matvec_colonnes` was bit-identical to `matvec_lignes` (same add order) → replaced with `matvec_tuile` (4 accumulators) giving 4.768e-07.
+- `refuse("route")` expected "routes non exécutées" after routes became valid → replaced with 5 route-validation cases.
+- Pre-existing red `tests_vars::les_vars_lues_sont_completes` → fixed by adding `NATIVE_PROFONDEUR`/`POS_DESYNC` to `VARS_LUES`; suite now 139/139.
+- en-cours revue errors: stale date (17/11 vs 18/11), JSON counter off-by-one (untracked `banc-generation-100m.json` already counted) → fixed to `790 / 882`, header updated to 2026-11-18 00 h 10.
+
+## Pending Jobs
+- Autonomous work until 16:00 (18/11) across all chantiers, coordinating, using multiple subagents.
+- Night (full tariff): local compute — GPU training, benches, tests, docs, gates.
+- 11:30→16:00 (discounted): API work — tagger on gold, distillation, model outputs.
+- Clear `porte-sessions` circumstance red: mandate `e181ce02-cd50-488a-a6be-e84b79d40dcc` expired 1896 min (heartbeat).
+- A2.6 (experts and head) next A action; N2 pin corpus then "porte propre (0,29)"; R J4; B13 J4.
+
+## Current Work
+- Just pushed: `git push -u origin s/v7` succeeded `d649467c..52b0b78d s/v7 -> s/v7`; branch tracks origin/s/v7.
+- Last commit `52b0b78d`: integrated N2 100M bench + matched comparison (34M re-run, random control) + fiche; state updated.
+- Reconnaissance in progress: read `docs/pilotage/natif-plan.md` (paliers 0–3; palier 1 = 100–150M, 3–6 Go data, criterion "50 octets cohérents sur 3 prompts, répétition ≤3"; **pin the corpus first**: sha256 train/val, date, cleaning version) and `python3 tools/sessions.py --status` (N2 0733c5bb terminated; next: "surveiller les runs relancés à 09 h 30 — kd2 (gpu0), rope2048 (gpu1)" puis **porte propre (0,29)**).
+
+## Next Step
+- Read `docs/pilotage/en-cours.md` current sections + roadmap "jamais en attente" queue, create a goal for the autonomous period (max_goal_rounds 1000), then dispatch 2–4 subagents on disjoint scopes (corpus pinning, local bench, doc/counter audit) and start a long GPU training run; keep en-cours as sole writer.
+
+## Critical Context
+- Machine dedicated to this work; multiple chantiers in parallel encouraged; GPUs reserved for Drave (rule 11).
+- Tariff: full until 11:30 EST, discounted 11:30→19:30 EST.
+- Rule 10: subagents must NOT touch `en-cours`/`roadmap`/`AGENTS`; they return a diff; explicit `git add`.
+- Results need: number, device, negative control, what could falsify, commit, fiche in `reports/`, journal, état line, roadmap line.
+- Final measured numbers: substitution 4.768e-07 ≤ 1e-4; flou 5.790e-03; routes seuil 0 = flou bit-exact, 10⁹ = defaut bit-exact, mixte 5.779e-03/1.132e-05; Rust↔numpy 2.980e-07 (128 bytes), real 34M model 1.526e-05; court 0.694× time; 5-model PPL: bloque ±0.04%, flou +1.07…+6.99%, court −12.13…+4.57%; GPU scatter 29.37 G ev/s (268M, O=4096, B=64) vs 19.3 G FPGA projection; grid 6.0× at O=512, 1.06× at O=4096, collapse at O=65536; full pass 90 gates, 87/3 (indice 862s, melange 106s structural; sessions circumstance), 6981s total.
+- Working tree clean after last commit; N2 session may still hold runs (kd2/rope2048) and the `sessions` heartbeat red is theirs to refresh (coordinator may mark en pause).
+- State counters: 790 fiches, 882 JSON, 128 docs, 90 portes, état 1577 mots.
+- Tests: Rust 139/139.
+</compacted-summary>
+</compacted-summary>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The following workspace instructions may be relevant to your work. Use them as guidance when applicable. More specific instructions take precedence over broader ones. They do not override system, developer, or direct user instructions.
+
+Instructions from: AGENTS.md
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+> charger « pour être complet » : c'est du contexte qui coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
+- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+
+</system-reminder>
+
+### 👤 Utilisateur
+
+<system-reminder>
+The available skill catalog changed. This complete catalog replaces every earlier available-skills list in this session:
+
+<available_skills>
+- `microsoft-foundry`: Deploy, evaluate, fine-tune, and manage Foundry agents end-to-end with azd: hosted agent scaffold/run/deploy, prompt agent create, batch eval, continuous eval, prompt optimizer, Agent Optimizer scaffold, agent.yaml, dataset curation from traces, model fine-tuning (SFT/DPO/RFT). USE FOR: azd ai agent, azd provision/deploy, deploy agent, hosted agent, create agent, add tool to agent, invoke agent, evaluate agent, continuous eval, continuous monitoring, agent CI/CD, optimize prompt, improve prom...
+</available_skills>
+
+Use only names in this replacement catalog. If the user names a listed skill, or the task clearly matches its description, call the `skill` tool with the exact name before acting.
+A user may also invoke a skill directly; its <skill_content> block then appears in this conversation. Follow it, and do not call the `skill` tool again for that skill.
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && (bash bench/checkpoint_bench.sh work/n3/r5a.pt r5a > /tmp/bench-r5a.log 2>&1 &) ; (GPU=1 bash bench/checkpoint_bench.sh work/n3/r5b.pt r5b > /tmp/bench-r5b.log 2>&1 &) ; sleep 150; tail -1 /tmp/bench-r5a.log; tail -1 /tmp/bench-r5b.l … [346 caractères tronqués]`
+
+  ```
+bancs : reports/banc-generation-r5a.json · reports/banc-grammaticalite-r5a.json
+bancs : reports/banc-generation-r5b.json · reports/banc-grammaticalite-r5b.json
+r5a {'greedy': (0.8973, 11), 'top40_0.8': (0.8948, 2), 'top20_0.5': (0.9321, 3)}
+r5b {'greedy': (0.895, 11), 'top40_0.8': (0.8884, 2), 'top20_0.5': (0.8893, 2)}
+  ```
+
+### 👤 Utilisateur
+
+Current runtime context. This snapshot supersedes earlier runtime-context snapshots.
+
+Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.
+
+Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-courbe-r1-r3.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"# La courbe 3 000  … [2731 caractères tronqués]`
+
+  ```
+vérif
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 899 JSON, le disque en a 903
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: > quatre tranches de 10 000 pas sur le 73 M (corpus épinglé, lr 1e-4,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,20p' reports/rapport-courbe-r1-r3.md", "description": "Read the curve fiche header"}`
+
+  ```
+# La courbe 3 000 → 43 000 pas : la PPL baisse encore, l'échantillonnage plafonne, le greedy reste cassé
+
+> **Ligne de roadmap** : N4 (le banc du natif) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré —
+> quatre tranches de 10 000 pas sur le 73 M (corpus épinglé, lr 1e-4, AMP) : PPL de validation
+> **4,6792 → 3,4130 → 3,2321 → 3,1317 → 3,0628** (−35 % au total) ; l'**échantillonnage top-40
+> plafonne** (0,551 → 0,831 → 0,845 → 0,870 → **0,867**) à partir de 33 000 pas, alors que la PPL
+> baisse encore ; le **greedy est instable** (0,902 → 0,924 → 0,865 → 0,896) et sa répétition
+> reste à **10–13**.
+>
+> **Dispositif** : `entrainer_native.py` chaîné (`--init` du checkpoint précédent), `--val` épinglé,
+> 4 × 10 000 pas (~48 min chacun) ; banc complet après chaque tranche
+> ([`checkpoint_bench.sh`](../bench/checkpoint_bench.sh)) ; données `banc-generation-r{1,2,3,4}.json`
+> et `banc-grammaticalite-r{1,2,3,4}.json`.
+
+## La courbe
+
+| étape | pas | PPL val | greedy valides / rép / écho | top-40 valides / rép | top-20 valides |
+|---|---:|---:|---|---|---:|
+| init | 3 000 | 4,6792 | 0,878 / 6 / 0,015 | 0,551 / 1 | 0,673 |
+| r1 | 13 000 | 3,4130 | 0,902 / 11 / 0,149 | 0,831 / 2 | 0,883 |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-courbe-r1-r3.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"# La courbe 3 000  … [2554 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 899 JSON, le disque en a 903
+  ```
+
+- **write** `{"content": "# Le corpus dédupliqué en entraînement : +2,1 % de PPL à pas égal — mais le test est confondu\n\n> **Ligne de roadmap** : N4 / D · **Date** : 2026-11-18 · **Verdict** : ⚠️ **négatif et confondu** — à\n> pas égal (10 000 pas depuis r4, mêmes réglages), le **corpus v1** donne PPL **3,0098 … [3017 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v2-slice.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N — l'entraînement et le décodage**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N — l'entraînement et le  … [993 caractères tronqués]`
+
+  ```
+mots : 65
+  revue de documentation · 805 fiche(s) · 903 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1758 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-courbe-r1-r3.md reports/rapport-v2-slice.md reports/banc-generation-r5a.json reports/banc-grammaticalite-r5a.json reports/banc-generation-r5b.json reports/banc-grammaticalite-r5b.json docs/pilotage/en-cours.md … [1083 caractères tronqués]`

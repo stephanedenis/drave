@@ -87,7 +87,7 @@
 - **R0.7 / W2–W3 — le tagger** : 402 **0,9198 → 0,9643**, H50 **0,6842 → 0,8607** ; défaut hors ligne **0 socket**, `--tagger` **code 4** sans clé ; **lot 612 exécuté** (11:30, **608 appels**, 87 550 tokens, **0,01869 $**) : POS **0,9572** contre **0,8625** (**+9,47**), ouvert **0,978** contre 0,7918, fermé à parité, **0 refus** — [W2](../../reports/rapport-tagger-h50.md), [lot](../../reports/rapport-tagger-612.md).
 - **Panini** : **14 atomes** ; UDHR **418/438** ; J3.2 **5/21** langues, **V14 3/21** ; B2 **négatif** ; B1 **60 paires**, **27/60**, calibration **42/44** ; CIC **42/42**, B3 **42/42** types de Bruijn ; [atomes](../../reports/rapport-atomes-niveaux.md), [B1](../../reports/rapport-protocole-date.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **N4 — grammaticalité et données** (18/11) : GV **6,90 → 1,45** (34 M → 73 M 3 000 pas) ; **135,5 Go** de données, **7,5 Go** exploitable ; le dédup **par blocs** écarte 0 %, le dédup **par ligne** retire **8,042 %** des octets (161 s, idempotent) — corpus v2 **6,90 Go** (`e3112a84…`) à promouvoir ; [grammaticalité](../../reports/rapport-grammaticalite-100m.md), [données](../../reports/rapport-donnees-inventaire.md), [blocs](../../reports/rapport-dedup-blocs.md), [lignes](../../reports/rapport-dedup-lignes.md).
-- **N — l'entraînement et le décodage** (18/11) : courbe **3k → 43k** — PPL **4,6792 → 3,0628**, top-40 **0,551 → 0,867** (plafond dès 33k), greedy **instable** (rép 10–13) ; **top-40/T=0,5** bat le greedy (**0,907**, rép **1,7**) ; le critère du palier 1 (rép ≤ 3) n'est tenu qu'en échantillonnage ; [courbe](../../reports/rapport-courbe-r1-r3.md), [r1](../../reports/rapport-r1-13000-pas.md), [décodage](../../reports/rapport-decodage-r1.md).
+- **N — l'entraînement et le décodage** (18/11) : courbe **3k → 53k** — PPL **4,6792 → 3,0098**, top-40 **0,551 → 0,895**, top-20 **0,932**, le greedy **reste cassé** (rép 10–13) ; **top-40/T=0,5** le bat (**0,907**, rép **1,7**) ; le **v2 dédupliqué** à pas égal donne **+2,1 %** de PPL mais le test est confondu (v1 n'a que 0,038 % de duplication) ; [courbe](../../reports/rapport-courbe-r1-r3.md), [v2](../../reports/rapport-v2-slice.md), [décodage](../../reports/rapport-decodage-r1.md).
 - **A2.6 — la bande des experts** (18/11) : **7,0 Go/s à 8 fils** (16 : aucun gain), chemins optimisés **plus lents**, PPL **37,2013 invariante** ; **tête Q8_0/Q6_K** ajoutée à `placement.rs` (perte 0, **9/9** tests, non câblée) ; le reste du code (~200 lignes) reste ; [recon](../../reports/rapport-a2.6-reconnaissance.md), [bande](../../reports/rapport-a2.6-bande-experts.md), [tête](../../reports/rapport-a2.6-tete-q8.md).
 - **N3.7–N3.10** (17/11) : variantes, routes, moteurs Rust ↔ numpy **3,576e-07**, le profil « court » bit-exact.
 
@@ -99,7 +99,7 @@
 |---|---|---|
 | portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
 | chapitres de la synthèse | **8** | `docs/theorie/synthese/0*.md` |
-| fichiers / JSON de résultats | **804** / **899** | `reports/*.md` / `reports/*.json` |
+| fichiers / JSON de résultats | **805** / **903** | `reports/*.md` / `reports/*.json` |
 | documents de `docs/` | **128** (hors archive et README) | `docs/**/*.md` |
 | dernière passe | **18/11 10 h 57 → 13 h 00** : **90** portes, **88/2** ; seules `indice` (854 s) et `melange` (106 s) **structurelles** ; `sessions` **verte** ; passée machine chargée (r4 + dédups), donc verdict seul | `work/portes/roue-1118-1057/registre.txt` |
 

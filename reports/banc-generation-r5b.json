@@ -1,0 +1,759 @@
+{
+ "modele": "work/n3/r5b.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.895,
+   "distinct_2": 0.5342,
+   "repetition": 11,
+   "echo": 0.121,
+   "octets": 2454,
+   "secondes": 19.65,
+   "octets_s": 124.9,
+   "echantillons": [
+    {
+     "mots": 33,
+     "mots_valides": 0.7879,
+     "distinct_2": 0.5625,
+     "repetition": 4,
+     "echo": 0.17857142857142858,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la province de la Sarthe et de la France entre les deux provinces de la Sarthe et le Sarthe et le Sarthe et le Sarthe et le ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.18181818181818182,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil de la commune de Saint-Martin-de-la-Roche est catégorisé dans les années 1950 et le conseil de la commune de Sai",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.8667,
+     "distinct_2": 0.4828,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le monde de la commune de Bourgogne et de la commune de Bourgogne et de la commune de Bourgogne et de la commune de Bourgog",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 33,
+     "mots_valides": 0.7879,
+     "distinct_2": 0.5625,
+     "repetition": 4,
+     "echo": 0.17857142857142858,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la province de la Sarthe et de la France entre les deux provinces de la Sarthe et le Sarthe et le Sarthe et le Sarthe et le ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.18181818181818182,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil de la commune de Saint-Martin-de-la-Roche est catégorisé dans les années 1950 et le conseil de la commune de Sai",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.8667,
+     "distinct_2": 0.4828,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le monde de la commune de Bourgogne et de la commune de Bourgogne et de la commune de Bourgogne et de la commune de Bourgog",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.625,
+     "repetition": 3,
+     "echo": 0.043478260869565216,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de Bourgogne et de la commune de Bourgogne est située dans le bassin Saint-Martin de Bourgogne et de la commune ",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.17647058823529413,
+     "prompt": "La mer",
+     "texte": "La mer de la commune de Bourgogne-Franche-Comté et de la commune de Bourgogne-Franche-Comté et de la commune de Bourgogne-Franche-Co",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.3214,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent un rôle de la pression de la pression de la pression de la pression de la pression de la pression de la pression de la pressio",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5417,
+     "repetition": 5,
+     "echo": 0.09523809523809523,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de le prendre le premier projet de la construction de la construction de la construction de la construction de la construction ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est le premier président de la République de Castille et de la Constitution de 1990 à 1991. Le , le président de la Constitutio",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie de la compagnie",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2143,
+     "repetition": 8,
+     "echo": 0.3333333333333333,
+     "prompt": "La musique",
+     "texte": "La musique de la comédie de la comédie de la comédie de la comédie de la comédie de la comédie de la comédie de la comédie de la c",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.4074,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la commune de Bourgogne et de la région de la région de Bourgogne et de la région de Bourgogne et de la région de Bourgo",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.6818,
+     "distinct_2": 0.2857,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Martin et de Saint-Martin et de Saint-Martin et de Saint-Martin et de Saint-Martin et de Saint-Martin et de Saint-Mart",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.5833,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de Bourgogne et de la commune de Bourgogne est desservie par le ruisseau de Bourgogne et de la commune de Bourgog",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune de Saint-Martin-de-la-Ville est surtout construite en 1889.\n",
+     "octets": 75
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.5385,
+     "repetition": 4,
+     "echo": 0.16,
+     "prompt": "La science",
+     "texte": "La science de la commune de Bourgogne et de la commune de Bourgogne est dans le bassin versant de la Commune de Bourgogne et de la Commune",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1176,
+     "repetition": 11,
+     "echo": 0.6363636363636364,
+     "prompt": "La ville",
+     "texte": "La ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La V",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de Saint-Martin-de-la-Ville est surtout construite en 1889.\n",
+     "octets": 75
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.17647058823529413,
+     "prompt": "La vie",
+     "texte": "La vie de la commune de Bourgogne-Franche-Comté et de la commune de Bourgogne-Franche-Comté et de la commune de Bourgogne-Franche-Co",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.10526315789473684,
+     "prompt": "Le monde",
+     "texte": "Le monde de la commune de Saint-Martin-de-la-Ville est surtout construite en 1900 par le canal de la Saint-Martin-de-la-Ville et le cana",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3182,
+     "repetition": 5,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la propriété de la propriété de la propriété de la constitution de la propriété de la constitution de la propriété",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8884,
+   "distinct_2": 0.9729,
+   "repetition": 2,
+   "echo": 0.0443,
+   "octets": 2117,
+   "secondes": 17.51,
+   "octets_s": 120.9,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de 1793 à en proposition ; il s'agit d'une force de grossesse (voir de l'Airbus Euricotus) en proposant le château de Franco.",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950-1970, présentant un journal de la meilleur acteur club acteur de la meilleure actrice, abaissant la perte de critiques de la d",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le mal de cours, entouré de plus, et de plus de 10 % de la société américaine.\n",
+     "octets": 84
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de 1793 à en proposition ; il s'agit d'une force de grossesse (voir de l'Airbus Euricotus) en proposant le château de Franco.",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950-1970, présentant un journal de la meilleur acteur club acteur de la meilleure actrice, abaissant la perte de critiques de la d",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le mal de cours, entouré de plus, et de plus de 10 % de la société américaine.\n",
+     "octets": 84
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le chat",
+     "texte": "Le chat de son ouvrage somptueux de premières ligne au parc national de Guillermont, qui appraît le revendica d'Eurosus et des droits",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer d'Oxférée (1989 - 1996), coureur français.\n",
+     "octets": 47
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent les Britanniques. Les Fontaines à l'écran en 1976 sous la contrainte a été nommée aux violences de Grenobloy. Ses principa",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de soutenir les chefs de feu de l'exploration de dégradation et de route est envisagée avant Chers. Elle effectue un seul gra",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est interdite de moins de 12 50 50 millions d'euros pour expansion de 13 50 autres formats : ou plus de 8 000 km spatials ; le site",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.381,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme politique intermédiaire de Mannick Mannick : Bernard Cheeling : John Poman et John Slamer. Paris : Tom Oris Davis et John Slam",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1111111111111111,
+     "prompt": "La musique",
+     "texte": "La musique de dénomination de dépenses présentant l'application de la série.\n",
+     "octets": 71
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "Le livre",
+     "texte": "Le livre de la seigneurie de Domproputia le . Au début de sa situation primaire, en Afrique du Nord, le Sud de la Seigneurie était don",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.75,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.16666666666666666,
+     "prompt": "La guerre",
+     "texte": "La guerre ou la Guerre de Guerre à l'hôpital américain, traduit par Richard Buella, puis fusilletti et Jean-François Dupart (évêque",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.9444,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'évêché est servis le siège de l'époque actuelle () ; il est composé de l'ancienne épopée d'occupation biophysique ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Le sport",
+     "texte": "Le sport où la lutte frontière a repoussé la chasse de l'art (phos de la lutte pour franchir), en territoriale en , le sport de Haute",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La science",
+     "texte": "La science avec la ville de Metropolis : les autres maisons en étapes ont exclusivement en les troupes du procès, les rentrèrent des di",
+     "octets": 128
+    },
+    {
+     "mots": 3,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville issue.\n",
+     "octets": 8
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps les plus connues, vient d'une variante plus simple renversée d'un réseau hybride, pour pierre de l'électricité, au premier ",
+     "octets": 128
+    },
+    {
+     "mots": 8,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie anglaise fermé par l’évêque de Marlus.\n",
+     "octets": 45
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7273,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Le monde",
+     "texte": "Le monde Sagan : Le Corris de Paris-Brichy, fondée par la suite Louis-Christophe Pincard : À la suite de la condition de l'Église Sai",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.2,
+     "prompt": "La question",
+     "texte": "La question de la haute stratégie de la République générale des Historiques.\n",
+     "octets": 70
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.8893,
+   "distinct_2": 0.938,
+   "repetition": 2,
+   "echo": 0.0352,
+   "octets": 2017,
+   "secondes": 16.6,
+   "octets_s": 121.5,
+   "echantillons": [
+    {
+     "mots": 16,
+     "mots_valides": 0.6875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays nommé Burge et le château de Marie-Saint-Pierre de Courtenaine, en 1305.\n",
+     "octets": 76
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ; le château de Bourgogne est aussi une première personne de grande propriété d'une part de la commune de Bourgogne.\n",
+     "octets": 122
+    },
+    {
+     "mots": 5,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le .\n",
+     "octets": 6
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 16,
+     "mots_valides": 0.6875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays nommé Burge et le château de Marie-Saint-Pierre de Courtenaine, en 1305.\n",
+     "octets": 76
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 ; le château de Bourgogne est aussi une première personne de grande propriété d'une part de la commune de Bourgogne.\n",
+     "octets": 122
+    },
+    {
+     "mots": 5,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le .\n",
+     "octets": 6
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.7391,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de l'église Saint-Jean de La Vallée de Montréal. La commune compte de la commune de Tournouse, et de la commune de Tournouse",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.5714,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer de Charles de Robert Partic\n",
+     "octets": 29
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent la grande majorité de la comédie dramatique de Hanoïse, rencontre le roman de la proposition de l'histoire de la comédie dr",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la mise en œuvre de plus en plus simple que les plus célèbres de l'équipement de la Marne.\n",
+     "octets": 99
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.8667,
+     "distinct_2": 0.9286,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un site de la communauté de communes française de la Garonne de l'Ariège.\n",
+     "octets": 78
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme principal pour la première fois par les autres professions avec les professions sociales de l'assassinat de la gauche de la ga",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "La musique",
+     "texte": "La musique s'est aujourd'hui considérée comme un modèle dont définitivement se rendent à l'activité de ce modèle de la propriété ",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de l'ancienne chambre de la commune de La Forêt.\n",
+     "octets": 51
+    },
+    {
+     "mots": 6,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre de France en 1983.\n",
+     "octets": 20
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8824,
+     "distinct_2": 0.9375,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie syntaxique est également différente dans l'intermédiaire de la théorie des crocombes d'intermédiaires supérieurs de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "Le sport",
+     "texte": "Le sport de la place de l'eau dans le sol (sur le canton de Saint-Jean). Il faut accueillir une réponse à l'arrivée de la Constitutio",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.8636,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "La science",
+     "texte": "La science égyptienne de l'égyptienne et de la population de la menace à l'activité et la sensation de la construction de la construct",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La ville",
+     "texte": "La ville de Kamersky, qui représente de l'armée américaine avec la suite de la commune de Kamersky (fils de Kamersky) et présente la",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de l'histoire de la prise de l'époque de l'Histoire, qui ne se produit pas plus de première partie du cours de la dépolition",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "La vie",
+     "texte": "La vie de Ross se déroule dans les manufactures de l'évêque de Paul Garner et le gouvernement de la rue de la Rue (rue d'Arces-Cala",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le monde",
+     "texte": "Le monde fait partie de la province de la Montagne, au nord-est de l'île de Tripolitaine. Elle a été accusée dans le district de Mar",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La question",
+     "texte": "La question de son premier disciple de cette époque est un enseignement administratif de la région de Napoléon Belgique, et le soulèvem",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}
