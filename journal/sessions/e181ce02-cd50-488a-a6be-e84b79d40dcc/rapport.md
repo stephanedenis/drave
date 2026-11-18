@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 411.7 h |
-| Tours | 215 |
-| Messages | 4386 |
-| Appels d'outils | 3920 |
+| Durée | 423.9 h |
+| Tours | 216 |
+| Messages | 4396 |
+| Appels d'outils | 3927 |
 | Fichiers touchés | 25 |
-| Commandes | 3248 |
+| Commandes | 3255 |
 | Sous-agents | 43 |
-| Commits | 521 |
+| Commits | 522 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -503,6 +503,8 @@
 **Tour 214** — je ne cherche pas à publier (sauf commit et push), mais bien avoir un système utilisable au quotidien
 
 **Tour 215** — pour chaque chantier, fais des plans de travail qui tioenne compte des heures de tarification réduite en chine vs canada de sorte que nos journées exploitent le tarif réduit de chine et qu'on a des tâches toutes prêtes pour n'utiliser presque juste les ressouyrces locale quand DeepSeek est à plein tarif.
+
+**Tour 216** — ajoute ça aux consignes pour tous les agents
 
 ## 2. Déroulé, étape par étape
 
@@ -11505,6 +11507,18 @@ Je commence par le `auto` par défaut et le mode répertoire.
 **Deux réserves honnêtes** : (1) les heures exactes sont celles de la **documentation officielle DeepSeek** — à revérifier avant un gros lot ; (2) la mesure « week-end = tarif réduit toute la journée » vient de la presse, pas de la page officielle — je ne la tiens pas pour acquise
 … [1 caractères tronqués]
 
+### Tour 216 — ajoute ça aux consignes pour tous les agents
+
+*7 appels d'outils.* Actions notables :
+
+- bash — Voir la structure d'AGENTS.md
+- bash — Ajouter la règle 12 aux AGENTS
+- bash — Raccourcir la règle 12
+- bash — Trim les lignes A5.4 et N3.7
+- bash — Corriger A5.4 et trim les références
+- bash — Compacter les passes anciennes
+- bash — Committer la règle 12
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11625,7 +11639,7 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3208 autres
+- … et 3215 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12294,4 +12308,5 @@ Je commence par le `auto` par défaut et le mode répertoire.
 - NATIF — LE CACHE KV MESURÉ (×1,9, PARITÉ 3/3) : LE JETON COÛTE 11 MS PARCE QUE LE CPU LIT 136 MO DE POIDS (MEMORY-BOUND), PAS PARCE QU'IL RECALCULE ; LE GPU EST
 - GPU — L'AMP LIVRÉ (autocast + GradScaler dans entrainer_native), LE PAS RÉEL MESURÉ : 1 S SANS LES TÊTES (2,4× LE CPU NU), 9 S AVEC — LE 34 M RESTE TROP PETIT, 
 - PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N,
+- CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ 
 

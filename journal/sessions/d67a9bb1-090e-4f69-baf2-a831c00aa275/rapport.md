@@ -7,9 +7,9 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 12.8 h |
+| Durée | 12.9 h |
 | Tours | 8 |
-| Messages | 304 |
+| Messages | 305 |
 | Appels d'outils | 320 |
 | Fichiers touchés | 26 |
 | Commandes | 221 |
@@ -395,7 +395,42 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 
 **Synthèse produite :**
 
-⏵ Passe complète des 90 portes (calcul local long, verdict global)
+⏵ Bilan des trois gros calculs locaux (grille, cinq modèles, passe complète)
+
+**Trois calculs longs, trois commits, zéro nouvelle rouge.**
+
+**1. La grille du scatter GPU** (`d6e08d6a`) — 5 tailles d'accumulateur × 4 bancs :
+
+| O \ B | atomiques | B=16 | B=64 |
+|---:|---:|---:|---:|
+| 512 | 4,76 | 28,16 | **28,52** |
+| 1 024 | 8,42 | 27,14 | **27,53** |
+| 4 096 | 25,18 | 26,51 | **26,57** |
+| 16 384 | **26,58** | 26,64 | 2,73 |
+| 65 536 | **26,98** | 2,70 | 1,16 |
+
+La banque est un **remède à la contention**, pas un accélérateur : **6,0×** à 512 sorties, 1,06× à 4 096, et elle **se retourne** à 65 536 (le tableau de bancs ne tient plus dans le cache). Les deux cartes donnent le même plateau (25,20 / 25,23 en atomiques). Même le pire cas (25,2 G) reste au-dessus des 19,3 G projetés pour 4 cartes.
+
+**2. Les profils sur cinq modèles entraînés** (`18d49ce7`) — 34,3 M chacun, même texte de 2 055 octets :
+
+| modèle | fenêtre | `bloque` Δ | `flou` Δ | `court` Δ |
+|---|---:|---:|---:|---:|
+| base-en-34m | 256 | +0,00 % | +1,94 % | +1,46 % |
+| base-multi-34m | 256 | +0,00 % | +1,07 % | +3,09 % |
+| mix1024-60k | 1 024 | +0,04 % | +2,09 % | −0,70 % |
+| propre512-8k | 512 | −0,04 % | +6,99 % | **−12,13 %** |
+| rope2048-20k | 2 048 | +0,00 % | +3,09 % | **+4,57 %** |
+
+`bloque` ne biaise pas (±0,04 %, des deux signes) ; `flou` est **toujours** une perte (5/5) ; `court` **change de signe** selon le modèle — le « gratuit » de mix1024 était une exception. Contrôle : sur le vrai modèle, Rust ↔ numpy à **1,526e-05** (≤ 1e-4).
+
+**3. La passe complète** (`e6fa9c0d`) — 90 portes, **87 vertes, 3 rouges**, 116 min de calcul, cumul 6 981 s :
+- `indice` (862 s) et `melange` (106 s) : **structurelles**, connues ;
+- `sessions` (0 s) : **circonstance** — le mandat `e181ce02` est périmé de 1 896 min, c'est à sa session de rafraîchir son heartbeat ;
+- **aucune rouge nouvelle** : les 22 portes N3 (dont les quatre du jour) sont vertes.
+
+J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) : il place les tâches API en remisée (11 h 30 → 19 h 30 EST) et le local en pleine — ce lot est exactement dans sa file « locale ».
+
+État : **90 portes**, 789 fiches, 880 JSON, état 1 635 mots, tests Rust **139/139**. La session N2 garde son travail non committé (`tools/banc_generation.py`, `reports/banc-generation-100m.json`) : je n'y touche pas.
 
 ## 3. Travail accompli
 

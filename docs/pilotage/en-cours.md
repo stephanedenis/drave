@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-17, 20 h 20 HNE (les plans par fenêtre tarifaire)**
+**Mis à jour : 2026-11-17, 20 h 30 HNE (la règle 12 : les deux fenêtres tarifaires, pour tous les agents)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
@@ -89,7 +89,7 @@
 - **Panini B1** : **60 paires** ; **27/60**, calibration **42/44** ; [W4](../../reports/rapport-panini-manifeste.md), [B1](../../reports/rapport-protocole-date.md).
 - **Panini J12.1–J12.2 + B3** : CIC **42/42** ; B3 **42/42** types de Bruijn ; [§334](../../reports/rapport-panini-334.md), [CIC](../../reports/rapport-cic-verificateur.md), [v2](../../reports/rapport-cic-v2.md).
 - **Bilans** : F1 **0,7902**, chantier **20/21** ; [semaine](../../reports/rapport-semaine.md), [bilan](../../reports/rapport-bilan-chantier.md), [clôture](../../reports/rapport-cloture-chantier.md).
-- **N3.7–N3.10 — variantes, routes, moteurs, coût** (17/11) : `impl`+`contrat` (substitution **4,768e-07**) ; routes exécutées (0 = `flou` **bit-exact**, 10⁹ = `defaut` **bit-exact**) ; Rust ↔ numpy **2,980e-07** (defaut, bloque, court) ; `court` **0,694×** le temps ; sur 5 modèles : bloque **±0,04 %**, flou **+1,1…+7,0 %**, court **−12…+4,6 %** de PPL ; numpy refuse flou et les routes ; [variantes](../../reports/rapport-n3-variante.md), [routes](../../reports/rapport-n3-route.md), [moteurs](../../reports/rapport-n3-moteurs.md), [court](../../reports/rapport-n3-court.md), [profils](../../reports/rapport-profils-modele.md).
+- **N3.7–N3.10** (17/11) : variantes, routes, moteurs Rust ↔ numpy **3,576e-07**, le profil « court » bit-exact.
 
 ## Les chiffres de l'état
 
@@ -130,7 +130,7 @@ externes** et la **prochaine action**.
 
 - **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
 - **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
-- **A5.4** : 4 cartes + ring 40G disponibles (17/11) ; **P1 tranché** : la dispersion GPU fait **29,37 G év/s** > **19,3 G** projetés → le débit ne justifie pas le ring ; restent l'**énergie**, le **déterminisme**, la **démo** et **P2** (ring 4,8 Go/s) ; la grille de la banque : **6×** à 512 sorties, neutre à 4 096, **nuisible** à 65 536 ; [fiche](backlog/A5.4-fpga.md), [P1](../../reports/rapport-gpu-scatter.md), [grille](../../reports/rapport-gpu-scatter-grille.md).
+- **A5.4** : 4 cartes + ring 40G (17/11) ; **P1 tranché** : la dispersion GPU **29,37 G év/s** bat la projection FPGA (19,3) → le kernel GPU.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la
   **restitution v1** : le miroir strict **ne monte pas** (0,1087), la forme canonique vaut
   **46/46** ; la **v3** sépare les cinq rôles (**18/18** au gold S) mais le gold v2

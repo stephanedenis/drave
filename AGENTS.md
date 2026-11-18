@@ -59,6 +59,11 @@ en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejo
     `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
     → [`docs/methode/ressources.md`](docs/methode/ressources.md)
 
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
 ## 3. Routage : lire le document de sa tâche, pas les autres
 
 | si la tâche est… | lire |
