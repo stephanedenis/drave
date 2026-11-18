@@ -10268,3 +10268,41 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"[courbe](../../reports/rapport-courbe-r1-r3.md), [v2](../../reports/rapport-v2-slice.md), [décodage](../../reports/rapport-de … [1060 caractères tronqués]`
+
+  ```
+ok
+  ✅ état court, structuré, multi-session et reprenable
+   92609175..9820c0ff  s/v7 -> s/v7
+9820c0ff N — LES DEUX JSON DU BANC r2 ENTRENT DANS LE DÉPÔT (ILS ÉTAIENT CITÉS PAR LA COURBE SANS Y ÊTRE)
+## s/v7...origin/s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== état ===\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget exit=$?\"; echo \"=== branche ===\"; git status -sb | head -1; git log --oneline origin/s/v7 -1 … [327 caractères tronqués]`
+
+  ```
+=== état ===
+  ✅ état court, structuré, multi-session et reprenable
+budget exit=1
+=== branche ===
+## s/v7...origin/s/v7
+9820c0ff N — LES DEUX JSON DU BANC r2 ENTRENT DANS LE DÉPÔT (ILS ÉTAIENT CITÉS PAR LA COURBE SANS Y ÊTRE)
+=== compteurs ===
+| portes | **90** (dont `porte-n3-variante`, `-route`, `-moteurs`, `-court` le 17/11) | `tools/porte-*.sh` |
+| fichiers / JSON de résultats | **805** / **903** | `reports/*.md` / `reports/*.json` |
+=== aujourd'hui ===
+21
+=== journal ===
+attention.md
+distribue.md
+docs.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"> budget\" | head -3", "description": "Identify the budget violation"}`
+
+  ```
+· T0 : 4005 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \" ; le **v2 dédupliqué** à pas égal donne **+2,1 %** de PPL mais le test est confondu (v1 n'a que 0,038 % de duplication) ; [c … [896 caractères tronqués]`

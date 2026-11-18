@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**20 commits** · **9 session(s)** · **6 thème(s)**
+**21 commits** · **9 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
-| mesures | 10 | [mesures.md](mesures.md) |
+| mesures | 11 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -56,6 +56,7 @@
 | 13:01 | `e75ee564` | PASSE — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES) : SESSIONS EST VERTE, AUCUNE NOUVELLE |
 | 14:02 | `f3d0a886` | N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU |
 | 14:09 | `92609175` | CLÔTURE — LE BUDGET DE CONTEXTE REPASSE : T0 = 4 000 (AGENTS 1 197, état 1 627, roadmap 9 003) |
+| 14:12 | `9820c0ff` | N — LES DEUX JSON DU BANC r2 ENTRENT DANS LE DÉPÔT (ILS ÉTAIENT CITÉS PAR LA COURBE SANS Y ÊTRE) |
 
 ## Le récit de la journée (écrit à la main)
 

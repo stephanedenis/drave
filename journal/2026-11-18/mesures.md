@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (10)
+## Commits du jour (11)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -18,6 +18,7 @@
 | 12:41 | `4f4f4fa1` | D — LE DÉDOUBLONNAGE PAR LIGNE RETIRE 8,042 % DES OCTETS EN 161 s : LE CORPUS V2 FAIT 6,90 Go (0,0431851234…) | `en-cours.md`, `README.md`, `attention.md` (+15) |
 | 12:49 | `5e5e8e5a` | N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867) | `en-cours.md`, `README.md`, `attention.md` (+12) |
 | 14:02 | `f3d0a886` | N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU | `en-cours.md`, `README.md`, `attention.md` (+15) |
+| 14:12 | `9820c0ff` | N — LES DEUX JSON DU BANC r2 ENTRENT DANS LE DÉPÔT (ILS ÉTAIENT CITÉS PAR LA COURBE SANS Y ÊTRE) | `en-cours.md`, `README.md`, `attention.md` (+11) |
 
 ## Chiffres du jour
 

@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 28.4 h |
 | Tours | 9 |
-| Messages | 542 |
-| Appels d'outils | 533 |
+| Messages | 545 |
+| Appels d'outils | 536 |
 | Fichiers touchés | 37 |
-| Commandes | 409 |
+| Commandes | 412 |
 | Sous-agents | 7 |
-| Commits | 37 |
+| Commits | 38 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -438,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*213 appels d'outils.* Actions notables :
+*216 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -454,7 +454,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 193 autres
+- … et 196 autres
 
 **Synthèse produite :**
 
@@ -556,7 +556,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 369 autres
+- … et 372 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -736,4 +736,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add AGENTS.md README.md docs/README.md reports/README.md docs/pilotage/roadmap.md docs/pilotage/refere
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "| 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "[c
+- ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 (4 000 MOTS EXACTEMENT)" && git push origin s/v7 2>&1 | tail -1
 
