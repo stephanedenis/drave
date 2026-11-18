@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 23.1 h |
+| Durée | 23.2 h |
 | Tours | 9 |
-| Messages | 323 |
-| Appels d'outils | 336 |
-| Fichiers touchés | 27 |
-| Commandes | 236 |
-| Sous-agents | 0 |
-| Commits | 16 |
+| Messages | 336 |
+| Appels d'outils | 350 |
+| Fichiers touchés | 29 |
+| Commandes | 244 |
+| Sous-agents | 2 |
+| Commits | 17 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -35,6 +35,8 @@
 … [221 caractères tronqués]
 - **complete** — Ajouter le profil d'implémentation `court` (fenêtre d'attention divisée par 4) au format DRVM et au moteur Rust, prouver qu'il n'est PAS substituable (logits différents) et qu'il PAIE en temps sur une charge dominée par l'attention, mesurer son coût de qualité (perplexité) sur un modèle entraîné, re
 … [221 caractères tronqués]
+- **create** — De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les l
+… [191 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -436,7 +438,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ### Tour 9 — commit et push, puis sois autonome jusqu'à 16h. Tu est en charge de tous les chantiers. Coordonne-les et utilise beaucou … [24 caractères tronqués]
 
-*16 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - bash — Inspect pending work, remote and branch
 - bash — Inspect the N2 bench JSON and plan diff
@@ -452,11 +454,11 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - bash — Read the current state header
 - bash — Apply the header and counter fixes
 - bash — Read the exact current state lines
-- … et 2 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
-⏵ État git, remote, et inspection du travail en attente avant commit + push
+⏵ Écriture de l'outil d'épinglage du corpus (sha256, manifeste, autotest)
 
 ## 3. Travail accompli
 
@@ -491,6 +493,13 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-gpu-scatter-grille.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-profils-5-modeles.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-banc-generation-100m.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/epingle_corpus.py` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-epingle.md` | 1 | 0 |
+
+### Sous-agents lancés
+
+- tour 9 — Reconnaissance A2.6 experts
+- tour 9 — Grammaticalité du 100 M
 
 ### Commandes exécutées (échantillon)
 
@@ -534,7 +543,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 196 autres
+- … et 204 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -662,7 +671,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 
 ## 5. Erreurs rencontrées
 
-6 sorties en erreur ou divergentes. Les premières :
+7 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -670,6 +679,7 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - **T5** : ... 110 |     pub fn est_vide(&self) -> bool { self.lignes.is_empty() } 400 | pub fn existe(chemin: &str) -> bool { Path::new(chemin).is_file() } 187 | impl Episodique { ... 193 |     pub fn est_vide(
 - **T5** : ok ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (3595551) panicked at src/main.rs:9068:13: DRAVE_NATIVE_PROFONDEUR est lu dans le source
 - **T8** : [stderr] Traceback (most recent call last):   File "<stdin>", line 3, in <module>   File "<stdin>", line 3, in <lambda> ValueError: invalid literal for int() with base 10: 'n' [exit code: 1]
+- **T9** : work/n2ac/mix1024-100m.drvm work/n2ac/mix1024-100m.pt work/n2ac/mix1024-100m.pt.json === json du pt === {  "modele": "drave-n0",  "parametres": 73366568,  "corpus": "data/wiki_mix/propre/train.txt",  
 
 ## 6. Commits
 
@@ -689,4 +699,5 @@ J'ai vu au passage le commit `02cc66d4` d'une autre session (`plans-tarif.md`) :
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter-grille.md reports/rapport-profils-5-modeles.md re
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/banc_generation.py tools/chantier/plan.json reports/banc-generation-100m.json reports/banc-g
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/epingle_corpus.py reports/corpus-epingle.json reports/rapport-corpus-epingle.md docs/pilotag
 

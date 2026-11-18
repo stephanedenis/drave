@@ -6206,3 +6206,273 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/banc_generation.py tools/chantier/plan.json reports/banc-generation-100m.json reports/banc-generation-34m-64o.json reports/banc-generation-alea-64o.json reports/rapport-banc-generation-100m.md docs/pilotage/en-cours.md  … [1269 caractères tronqués]`
+
+  ```
+create mode 100644 reports/banc-generation-34m-64o.json
+ create mode 100644 reports/banc-generation-alea-64o.json
+ create mode 100644 reports/rapport-banc-generation-100m.md
+52b0b78d N4 — LE 100 M MESURÉ À RÉGLAGES APPARIÉS : LA RÉPÉTITION TOMBE DE 9 À 6, LE VOCABULAIRE NE GAGNE RIEN (0,882 CONTRE 0,884)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -3; echo \"=== push ===\"; timeout 300 git push -u origin s/v7 2>&1 | tail -8", "description": "Push the branch to origin", "timeoutMs": 360000}`
+
+  ```
+=== push ===
+To github.com:stephanedenis/drave.git
+   d649467c..52b0b78d  s/v7 -> s/v7
+branch 's/v7' set up to track 'origin/s/v7'.
+  ```
+
+- **read** `{"file_path": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md"}`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/docs/pilotage/en-cours.md</path>
+<type>file</type>
+<content>
+1: # En ce moment
+2: 
+3: **Mis à jour : 2026-11-18, 00 h 10 HNE (la passe 90 portes, 87/3, aucune nouvelle · le 100 M mesuré : répétition 9 → 6, la composition ne vient pas)**
+4: 
+5: > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
+6: 
+7: ### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+8: 
+9: - **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+10: - **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+11: - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+12: - **Prochaine action** : **suivi docs**, puis la **passe**.
+13: - **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
+14: - **Bloquants** : aucun.
+15: - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+16: 
+17: ## Sessions en cours
+18: 
+19: > Contrat : [`continuite.md`](../methode/continuite.md) · sessions terminées :
+20: > [`journa
+… [11446 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Reconnaissance du plan N (le corpus à épingler) et de l'état des sessions
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' docs/pilotage/natif-plan.md; echo \"=== sessions ===\"; python3 tools/sessions.py --status 2>&1 | head -20", "description": "Read the native plan and session status"}`
+
+  ```
+# Le plan du natif — de 34 M (collages) à un modèle qui écrit
+
+> **Ce que ce document est.** Le **plan de travail** du modèle natif : les paliers, leur coût, leur
+> critère de sortie, l'ordre des chantiers. Il part du diagnostic du 16/11
+> ([`rapport-natif-exploitable.md`](../../reports/rapport-natif-exploitable.md)) : le 34 M
+> **modélise** (PPL 2,40) mais **ne compose pas** (le banc de génération). Il ne promet pas de
+> dates : il nomme les **critères** et les **dépendances**.
+
+## 1. Le diagnostic, en une ligne
+
+**La plomberie est faite** (entraînement, génération, service HTTP/Rust, DRVM, distillation, SFT) ;
+**la qualité manque** — et elle se paie en **échelle + données + alignement**, pas en jours.
+
+## 2. Les paliers
+
+| palier | modèle | données | effort (CPU/GPU) | critère de sortie (mesuré) | ce qu'on obtient |
+|---|---|---|---|---|---|
+| **0 — aujourd'hui** | 34 M | 1 Go | 3,7 h (fait) | PPL 2,40 ; 0,87 de mots valides ; répétition 15 | des collages |
+| **1 — le pas suivant** | **100–150 M** | **3–6 Go** | **~2–4 jours CPU** (ou 1–2 j GPU) | **50 octets cohérents sur 3 prompts** (le banc) ; répétition ≤ 3 | des phrases |
+| **2 — le produit** | **300–600 M** | **10–20 Go** |
+… [5320 caractères tronqués]
+  ```
+
+### 👤 Utilisateur
+
+la machine est dédiée à ton travail. N'hésites pas à travailler sur plusieurs chantiers simultanément pour faire bon usage des ressources locales et gagner du temps
+
+### 🤖 Assistant
+
+⏵ Goal d'autonomie + deux sous-agents en parallèle (A2.6, grammaticalité du 100 M)
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2. … [233 caractères tronqués]`
+
+> **Objectif** (create) : De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les lots API en fenêtre remisée (tagger, J4) à partir de 11 h 30 ; (5) coordonner par subagents, committer chaque résultat avec sa fiche et son état, garder les portes vertes hors rouges tolérées.
+
+
+  ```
+{"goal":{"id":"goal-fca84a92-1697-4285-a424-16225b74169f","revision":1,"objective":"De 00 h 30 à 16 h le 18/11, en charge de TOUS les chantiers, machine dédiée : (1) épingler le corpus natif (sha256, manifeste, fiche) et lancer l'entraînement 100 M sur GPU avec bancs aux checkpoints ; (2) mesurer la grammaticalité du 100 M ; (3) instruire A2.6 (experts et tête) ; (4) exécuter les lots API en fenêtre remisée (tagger, J4) à partir de 11 h 30 ; (5) coordonner par subagents, committer chaque résultat avec sa fiche et son état, garder les portes vertes hors rouges tolérées.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **subagent** `{"description": "Reconnaissance A2.6 experts", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français).\n\nTÂCHE : une RECONNAISSANCE de la ligne A2.6 (« les experts et la tête » du moteur GGUF), pour que la session coordinatrice décide quoi … [1570 caractères tronqués]`
+- **subagent** `{"description": "Grammaticalité du 100 M", "prompt": "Tu travailles dans le dépôt /home/stephane/Data13TB/stephane/GitHub/Qtrinet (projet Drave, en français). La machine est dédiée : 2 GPU Quadro RTX 5000 libres, 40 threads.\n\nTÂCHE : mesurer la GRAMMATICALITÉ du modèle natif de 100 M (work/n2ac/mi … [1588 caractères tronqués]`
+
+  ```
+started subagent c7e46dba-11cb-456b-a3b6-715428927f99
+  ```
+
+
+  ```
+started subagent 8c024745-95cb-4885-9d0b-865142606b6d
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n2ac/*100m* 2>/dev/null; echo \"=== json du pt ===\"; cat work/n2ac/mix1024-100m.pt.json 2>/dev/null | head -20; echo \"=== log ===\"; ls work/n2ac/*.log | tail -5; tail -5 work/n2ac/mix1024-100m.log 2>/dev/null", "descriptio … [48 caractères tronqués]`
+
+  ```
+work/n2ac/mix1024-100m.drvm
+work/n2ac/mix1024-100m.pt
+work/n2ac/mix1024-100m.pt.json
+=== json du pt ===
+{
+ "modele": "drave-n0",
+ "parametres": 73366568,
+ "corpus": "data/wiki_mix/propre/train.txt",
+ "octets": 1017487092,
+ "pas": 3000,
+ "seq": 1024,
+ "lot": 8,
+ "lr": 0.0003,
+ "graine": 1,
+ "perte_finale": 1.4668956995010376,
+ "ppl_val": 4.01394552944023,
+ "jetons_val": 65536,
+ "tetes": false,
+ "precision_main": 0.591796875,
+ "precision_early": [
+  0.000518798828125,
+  0.00372314453125,
+  0.002532958984375
+ ],
+=== log ===
+work/n2ac/rope-20k.log
+work/n2ac/rope512-5k.log
+work/n2ac/zero-absolu.log
+work/n2ac/zero-rope-40k.log
+work/n2ac/zero-rope.log
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"add_argument\" tools/entrainer_native.py | head -25; echo \"=== corpus ===\"; ls -la data/wiki_mix/propre/ 2>/dev/null; echo \"=== epingle existant ? ===\"; grep -rln \"epingle\\|sha256.*corpus\\|corpus.*sha256\" tools/*.py … [94 caractères tronqués]`
+
+  ```
+58:    ap.add_argument("--corpus", default="data/corpus_fr.txt")
+59:    ap.add_argument("--pas", type=int, default=200)
+60:    ap.add_argument("--seq", type=int, default=128)
+61:    ap.add_argument("--lot", type=int, default=8)
+62:    ap.add_argument("--lr", type=float, default=3e-4)
+63:    ap.add_argument("--device", default="cuda")
+64:    ap.add_argument("--sortie", default="/tmp/drave-n0.pt")
+65:    ap.add_argument("--drvm", default="/tmp/drave-n0.drvm")
+66:    ap.add_argument("--graine", type=int, default=1)
+67:    ap.add_argument("--dim", type=int, default=224, help="d_model (224 = 11,47 M ; 296 = 21,65 M)")
+68:    ap.add_argument("--expert-hidden", type=int, default=288,
+70:    ap.add_argument("--positions-aleatoires", type=int, default=0,
+72:    ap.add_argument("--canal", default=None, help="fichier de classes de structure (1 par octet)")
+73:    ap.add_argument("--init", default=None,
+75:    ap.add_argument("--tetes", action=argparse.BooleanOptionalAction, default=True,
+77:    ap.add_argument("--amp", action="store_true",
+=== corpus ===
+total 2007456
+drwxr-xr-x. 1 stephane stephane         72  2 nov 12:25 .
+drwxr-xr-x. 1 stephane stephane         12  2 nov 12:25 ..
+-rw-r--r-
+… [407 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 tools/corpus_gele.py; echo \"=== usages ===\"; grep -rn \"corpus_gele\" tools/*.sh reports/*.md 2>/dev/null | head -5", "description": "Check the frozen-corpus tool"}`
+
+  ```
+#!/usr/bin/env python3
+"""corpus_gele.py — le corpus des bancs, figé et vérifiable.
+
+POURQUOI CE FICHIER EXISTE. Les bancs de R0.3 sont adossés à des documents **vivants** : quand
+une session réécrit `continuite.md`, le gold d'une question ne résout plus et le banc ment
+(arrivé le 29/10 : une question perdue, puis deux). Un banc qui bouge avec la documentation ne
+mesure pas une progression, il mesure le dernier commit.
+
+Le gel : chaque document du corpus est **copié** dans `tools/tests/documents/corpus/`, avec son
+sha256 et sa source. Les constructeurs de bancs lisent la copie ; la source peut évoluer sans
+casser le banc. `--verifie` recalcule les empreintes : une copie modifiée est signalée.
+
+Usage :
+  python3 tools/corpus_gele.py --fige      # copie et écrit le manifeste
+  python3 tools/corpus_gele.py --verifie   # recalcule les sha256
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import pathlib
+import shutil
+import sys
+
+RACINE = pathlib.Path(__file__).resolve().parent.parent
+CORPUS = RACINE / "tools/tests/documents/corpus"
+MANIFESTE = CORPUS / "manifeste.json"
+
+
+=== usages ===
+reports/rapport-corpus-gele.md:8:> **Dispositif** : `tools/corpus_
+… [390 caractères tronqués]
+  ```
+
+### 🤖 Assistant
+
+⏵ Écriture de l'outil d'épinglage du corpus (sha256, manifeste, autotest)
+
+- **write** `{"content": "#!/usr/bin/env python3\n\"\"\"epingle_corpus.py — l'épingle du corpus d'entraînement : sans elle, chaque PPL est une rumeur.\n\nPOURQUOI CE FICHIER EXISTE. L'alerte du 16/11 (`reports/rapport-native-reproductibilite.md`) a\nmontré que le `ppl_val` 2,40 annoncé **ne se reproduit pas** av … [5887 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/epingle_corpus.py</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/epingle_corpus.py'); s = p.read_text()\nold = '''    canon = json.dumps(fichiers, sort_keys=True, ensure_ascii=False, separators=(\",\", \":\"))'''\nnew = '''    canon = json. … [557 caractères tronqués]`
+
+  ```
+ok
+  cas 1 : intact
+  ✅ train.txt : 50632d79c33744bd… (10000 o)
+  ✅ val.txt : 4f80f6ced9f3018e… (1400 o)
+  cas 2 : un octet changé
+  ❌ train.txt : 5b1ce044a0541422… ≠ 50632d79c33744bd…
+  ✅ val.txt : 4f80f6ced9f3018e… (1400 o)
+  ✅ autotest : intact reconnu, un octet changé détecté
+=== épinglage réel ===
+corpus épinglé : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wiki_mix/propre
+  train.txt    0876b6089aaebb5d…    1017487092 o      2480766 lignes  2026-11-02T12:25:22
+  val.txt      fbddef918166f1d6…      10330112 o        24498 lignes  2026-11-02T12:25:22
+  train.canal  04efed3039f8398e…    1017487092 o            0 lignes  2026-11-02T12:25:22
+  val.canal    f1abc5d1d63c3207…      10330112 o            0 lignes  2026-11-02T12:25:22
+  manifeste : fae5bb7389c6c0a9… → reports/corpus-epingle.json
+[stderr]
+
+real	0m6,482s
+user	0m5,902s
+sys	0m0,506s
+  ```
+
+- **write** `{"content": "# N — le corpus d'entraînement est épinglé\n\n> **Ligne de roadmap** : N (le palier 1, « la donnée d'abord ») · **Date** : 2026-11-18 ·\n> **Verdict** : ✅ le corpus de `data/wiki_mix/propre` est **épinglé** — sha256 du train, du val et\n> de leurs canaux, tailles, lignes, dates, emprein … [2796 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-epingle.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --verifie 2>&1 | tail -6; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n  … [1012 caractères tronqués]`
+
+  ```
+✅ train.txt : 0876b6089aaebb5d… (1017487092 o)
+  ✅ val.txt : fbddef918166f1d6… (10330112 o)
+  ✅ train.canal : 04efed3039f8398e… (1017487092 o)
+  ✅ val.canal : f1abc5d1d63c3207… (10330112 o)
+ok
+  revue de documentation · 791 fiche(s) · 883 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1576 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/epingle_corpus.py reports/corpus-epingle.json reports/rapport-corpus-epingle.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nN — LE CORPUS D'ENTRAÎNEMENT EST ÉPINGLÉ : TRAIN 0876b608… (1 017 487  … [1286 caractères tronqués]`
