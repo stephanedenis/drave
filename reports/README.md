@@ -1,7 +1,7 @@
 # Les rapports — données intermédiaires et références
 
-> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
-> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> **Ce dossier porte les résultats et les données**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches sont citées depuis le tableau de bord
 > [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
 
 > **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·

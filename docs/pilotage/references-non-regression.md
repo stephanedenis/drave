@@ -1,10 +1,9 @@
 # Références de non-régression
 
 > **Passe — 2026-11-18 10 h 57 → 13 h 00 :** **90 portes, 88 vertes, 2 rouges** — `indice` (854 s) et
-> `melange` (106 s), les deux **structurelles** connues, et **aucune autre** : `sessions` est **verte**
-> (le mandat `e181ce02` est passé « en pause »). La passe a tourné pendant l'entraînement r4 et les
-> dédups (machine chargée) : les portes de temps n'ont pas été interprétées, seulement le verdict.
-> Journaux `work/portes/roue-1118-1057/`.
+> `melange` (106 s), les deux **structurelles** ; `sessions` **verte** (mandat `e181ce02` en pause) ;
+> **aucune autre**. Passée machine chargée (r4 + dédups) : verdict seul. Journaux
+> `work/portes/roue-1118-1057/`.
 
 > **Passe — 2026-11-17 20 h 42 → 22 h 39 :** **90 portes, 87 vertes, 3 rouges** — `indice` (862 s)
 > et `melange` (106 s) **structurelles** ; `sessions` (0 s) de **circonstance** (mandat périmé de
@@ -13,36 +12,23 @@
 > 90 portes ont tourné, cumul **6 981 s** (116 min). Journaux `work/portes/roue-1117-2042/`.
 
 > **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
-> `melange` structurelles ; `produit` (V1 inachevée) et `sessions` (heartbeat) de circonstance.
-> Journaux `work/portes/roue-1116/`. **Vérification ciblée (V3)** : `sessions` **0** et `produit`
-> **0** (`--strict` 5 tests, exemples **27/27**, autotest **183/183**) ; journaux
-> `work/portes/verif-cloture-1116/`. Après : **84 vertes, 2 rouges structurelles**.
+> `melange` structurelles ; `produit` et `sessions` de circonstance, **réparées** en vérification
+> ciblée (V3 : `--strict` 5 tests, 27/27 exemples, autotest 183/183) → **84 vertes, 2 rouges**.
+> Journaux `work/portes/roue-1116/` et `work/portes/verif-cloture-1116/`.
 
 > **Passe — 2026-11-15 09 h 53 → 12 h 15 :** **85 portes, 81 vertes, 4 rouges** — `indice` et
-> `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
-> **environnementale** (deux passes en parallèle ; PPL identique 799,8557 ; verte le 14/11).
-> Journaux `work/portes-1115-09h53/`. **Pas de passe complète pour W6** ; ciblage
-> `work/portes/w6-ciblage` (8/9), `w6-ciblage2` (2/2) puis `w6-final` (9/9).
+> `melange` structurelles ; `sessions` réparée à 12 h 20 ; `prechargement` environnementale
+> (deux passes en parallèle). Journaux `work/portes-1115-09h53/` ; ciblages W6 8/9 puis 9/9.
 
-> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
-> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
-> `e181ce02`). `porte-produit` et `porte-bloc` **vertes**. Journal :
-> `work/portes/passe-1311-23h15.log`.
->
-> **Vérification ciblée — 2026-11-14 06 h 55 (J14.1) :** `porte-sessions` **verte** (hub en pause,
-> heartbeat `e181ce02` rafraîchi) ; `porte-indice` et `porte-melange` restent **rouges
-> structurelles** (indice 482 contre témoin 459 ; état de A sans son code). Journaux
-> `work/portes/verif-cloture/`.
+> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — les deux structurelles et
+> `sessions` (mandats périmés du hub et de `e181ce02`) ; vérification ciblée à 06 h 55 : `sessions`
+> **verte**, les deux structurelles inchangées. Journal `work/portes/passe-1311-23h15.log`.
 
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
-> 4 rouges**, **2 h 29** (journaux durables `work/portes/passe-2404-23h45`), **machine au repos**
-> (GPU libres, aucune réservation). Les **2 rouges structurelles connues** restent : `porte-indice`
-> (1 207 s), `porte-melange` (148 s). Deux rouges nouvelles, **hors dépôt** : `porte-lecteur` (0 s)
-> échouait sur une ancre du banc pilote (« < 2,5 ») que la réécriture de la roadmap du 04/11
-> (« sous 2,5 ») avait rendue introuvable — **corrigée et rejouée verte** ; `porte-sessions` (0 s)
-> signale les heartbeats périmés du hub et de `e181ce02` au moment de la passe — le hub l'a rafraîchi
-> à 01 h 55, **`e181ce02` reste à rafraîchir par sa session**. Longues vertes : `greffe` **840 s**,
-> `homeostasie` **755 s**, `profondeur-routee` **700 s**, `vision` **670 s**, `ocr-scans` **529 s**.
+> 4 rouges**, 2 h 29, machine au repos : les 2 structurelles (`indice` 1 207 s, `melange` 148 s) ;
+> `lecteur` corrigée en séance (une ancre de la roadmap) ; `sessions` (heartbeats du hub et de
+> `e181ce02`). Longues vertes : `greffe` 840 s, `homeostasie` 755 s, `profondeur-routee` 700 s,
+> `vision` 670 s, `ocr-scans` 529 s. Journaux `work/portes/passe-2404-23h45`.
 
 > **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3
 > (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle est entrée **verte** dans la

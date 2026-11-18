@@ -9446,3 +9446,769 @@ mots : 65
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-courbe-r1-r3.md reports/rapport-v2-slice.md reports/banc-generation-r5a.json reports/banc-grammaticalite-r5a.json reports/banc-generation-r5b.json reports/banc-grammaticalite-r5b.json docs/pilotage/en-cours.md … [1083 caractères tronqués]`
+
+  ```
+f3d0a886 N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | tail -2; python3 tools/verifie_journal.py 2>&1 | tail -2; python3 tools/verifier_schemas.py 2>&1 | tail -2; bash tools/porte-tableaux.sh 2>&1 | tail -2", "description": "Run the closing checks … [23 caractères tronqués]`
+
+  ```
+· docs/pilotage/references-non-regression.md : 2653 mots > budget 2500 (T1)
+     · T0 : 4182 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  journal · 50 jour(s) · 239 session(s) · 2857 lien(s)
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+  ✅ 5075 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-18)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | head -12", "description": "Read the full document budget report"}`
+
+  ```
+budget de contexte · documents chargeables
+    mots lignes  cat budget  document
+    9086    522   T1   9000  docs/pilotage/roadmap.md
+    5999    597 DATÉ      0  docs/implantation/contexte-long.md
+    4858    515   T1   5000  docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+    4085    431 DATÉ      0  docs/implantation/numa-segregation.md
+    3494    327   T1   3500  README.md
+    3072    341 DATÉ      0  docs/implantation/convertisseur.md
+    2962    364   T1   5000  docs/theorie/glossaire/02-modeles-et-architectures.md
+    2896    352 DATÉ      0  docs/implantation/configuration-nvme-raid-amd.md
+    2803    239   T1   2800  reports/README.md
+    2653    182   T1   2500  docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"T0\\|budget\" tools/taille_documents.py | head -20; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"exit=$?\"", "description": "Understand the budget checker and its exit code"}`
+
+  ```
+2:"""taille_documents.py — le budget de contexte et la cohésion des documents.
+5:  1. la taille des documents **chargeables** (T0/T1) en mots, avec un budget par catégorie ;
+11:Les fiches de `reports/` (sauf `reports/README.md`) et le `journal/` sont **hors budget** :
+12:ils ne sont pas chargés automatiquement. Le budget est en **mots** ; l'estimation de tokens
+16:elles ne comptent pas dans le budget ; le document les porte, la page montre le SVG.
+25:# (catégorie, budget en mots). Les globs sont résolus dans l'ordre ; le premier match gagne.
+27:    ("T0", "AGENTS.md", 1200),
+28:    ("T0", "docs/pilotage/en-cours.md", 2000),
+32:    ("T0", "docs/methode/*.md", 1200),
+77:#: pas dans le budget de contexte. Le rendu (docwatch) est ce que voit le lecteur ;
+90:    for cat, motif, budget in BUDGETS:
+92:            return cat, budget
+101:    for cat, motif, budget in BUDGETS:
+110:            lignes.append((n, t.count("\n") + 1, rel, cat, budget))
+112:            if cat in ("T0", "T1"):
+122:            if budget and n > budget:
+123:                violations.append(f"{rel} : {n} mots > budget {budget} ({cat})")
+140:    # T0 : la somme des trois lectures par défaut
+145:    # Le T0 est « AGENT
+… [173 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" docs/pilotage/references-non-regression.md; wc -w docs/pilotage/references-non-regression.md", "description": "Read the references doc structure"}`
+
+  ```
+64:## 1. Ce qui se vérifie en une commande
+78:## 2. Les repères imprimés par chaque porte
+166:## 3. Les trois invariants qui ne sont pas des chiffres
+175:## 4. Où sont les autres chiffres
+2653 docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,63p' docs/pilotage/references-non-regression.md", "description": "Read the references doc head"}`
+
+  ```
+# Références de non-régression
+
+> **Passe — 2026-11-18 10 h 57 → 13 h 00 :** **90 portes, 88 vertes, 2 rouges** — `indice` (854 s) et
+> `melange` (106 s), les deux **structurelles** connues, et **aucune autre** : `sessions` est **verte**
+> (le mandat `e181ce02` est passé « en pause »). La passe a tourné pendant l'entraînement r4 et les
+> dédups (machine chargée) : les portes de temps n'ont pas été interprétées, seulement le verdict.
+> Journaux `work/portes/roue-1118-1057/`.
+
+> **Passe — 2026-11-17 20 h 42 → 22 h 39 :** **90 portes, 87 vertes, 3 rouges** — `indice` (862 s)
+> et `melange` (106 s) **structurelles** ; `sessions` (0 s) de **circonstance** (mandat périmé de
+> `e181ce02`, heartbeat à 1 896 min). **Aucune rouge nouvelle** : les quatre portes du jour
+> (`n3-variante`, `n3-route`, `n3-moteurs`, `n3-court`) et les 22 portes N3 sont vertes ; les
+> 90 portes ont tourné, cumul **6 981 s** (116 min). Journaux `work/portes/roue-1117-2042/`.
+
+> **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
+> `melange` structurelles ; `produit` (V1 inachevée) et `sessions` (heartbeat) de circonstance.
+> Journaux `work/portes/roue-1116/`. **Vérification c
+… [3068 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\n# 1. ma passe … [3260 caractères tronqués]`
+
+  ```
+mots : 2542
+    2542    175   T1   2500  docs/pilotage/references-non-regression.md
+  T0 max : 4182 mots (budget 4 000)
+     · AGENTS.md : 1250 mots > budget 1200 (T0)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"\"\"> **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et\n> `melang … [1007 caractères tronqués]`
+
+  ```
+mots : 2532
+    2532    174   T1   2500  docs/pilotage/references-non-regression.md
+     · docs/pilotage/references-non-regression.md : 2532 mots > budget 2500 (T1)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"\"\"> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et\n> `porte-mela … [1081 caractères tronqués]`
+
+  ```
+mots : 2495
+    2495    168   T1   2500  docs/pilotage/references-non-regression.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Chargement facultatif\" -A4 AGENTS.md", "description": "Read the AGENTS loading paragraph"}`
+
+  ```
+92:> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
+93-> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
+94-> charger « pour être complet » : c'est du contexte qui coûte et périme.
+95-
+96-> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('AGENTS.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"\"\"> **Chargement facultatif.** Les doc … [1169 caractères tronqués]`
+
+  ```
+mots AGENTS : 1234
+  T0 max : 4166 mots (budget 4 000)
+     · AGENTS.md : 1234 mots > budget 1200 (T0)
+     · T0 : 4166 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
+> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
+> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
+> `python3 tools/taille_documents.py`.
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.
+
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('AGENTS.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"\"\"> **Le contexte est un budget.** Par … [1108 caractères tronqués]`
+
+  ```
+mots AGENTS : 1212
+  T0 max : 4144 mots (budget 4 000)
+     · AGENTS.md : 1212 mots > budget 1200 (T0)
+  ```
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `en-cours` + **un** document de tâche
+> ([`docs/methode/contexte.md`](docs/methode/contexte.md) ; vérifier `tools/taille_documents.py`).
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.
+
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('AGENTS.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"| **charger le contexte** (budget, proto … [504 caractères tronqués]`
+
+  ```
+mots AGENTS : 1197
+  T0 max : 4129 mots (budget 4 000)
+     · T0 : 4129 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+### 👤 Utilisateur
+
+<system-reminder>
+Updated instructions from: AGENTS.md
+
+This file changed after it was loaded. Use the following content instead of the previously loaded instructions from this file.
+
+# Directives de l'agent — Drave
+
+> **Compteurs vivants.** Dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; ne pas les recopier ici.
+
+> **Porte d'entrée.** Lis ce fichier en entier (2 min) : il porte la **vision**, les règles non négociables et le
+> **routage** vers le document de chaque tâche. Le détail n'est pas ici : il est dans [`docs/methode/`](docs/methode/)
+> (tableau § 3). L'**état courant** est dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) ; la **roadmap** dans
+> [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) ; le récit daté dans [`journal/`](journal/).
+
+## 1. La vision (l'essentiel)
+
+**Drave est une vision de l'IA centrée sur les flots de données, pas sur le calcul brut.** Les activations d'un
+réseau sont des **faits** regroupés en **listes valuées poussées** vers leurs lecteurs : le coût du calcul devient proportionnel à l'**activité**, et le modèle devient **décomposable**, **répartissable** et **observable**. Le principe : la structure bat la taille. Construire le moteur et modèle optimisé qui rend cette structure observable, décomposable, répartissable et rejouable permet d'atteindre de nouveaux sommets. L'approche par **bus d'événements** rend chaque bloc fonctionnel optimisable, comparable et substituable (neuronal là où l'intuition aide, computationnel là où la fiabilité prime).
+
+Né du besoin de faire tourner des modèles **de types différents** sur des machines **limitées**, de les
+**combiner**, de les **décomposer** en couches et grappes exécutables par du matériel divers, voire **distribué
+en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejouer** des événements.
+
+
+## 2. Les règles non négociables
+
+1. **Rangement** : `docs/` = état, vision, concepts (ce qui reste vrai quand les chiffres changent) ; `reports/` =
+   résultats mesurés, fiches, JSON ; `journal/` = récit daté ; `data/` = corpus. *Un résultat qui traîne dans
+   `docs/` **déménage**.* → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+2. **Un résultat** porte le chiffre, la mesure, le dispositif, un **contrôle négatif**, et **ce qui pourrait le
+   rendre faux** — puis un **commit**, la **fiche** dans `reports/`, le **récit** dans `journal/`, l'**état** dans
+   `docs/pilotage/en-cours.md`, et il **nomme sa ligne de roadmap** (A… / B… / N… / R…). *Sans contrôle négatif, ce n'est pas un
+   résultat.* → [`docs/methode/resultats.md`](docs/methode/resultats.md)
+3. **Les portes** : `bash tools/toutes-les-portes.sh` ; le registre est dans `$JOURNAUX/registre.txt` (affiché au
+   lancement) et le verdict se lit par `awk '$2 != 0'` — **jamais** par les marqueurs ni à travers un tube. Rouges
+   tolérées : **celles listées dans [`docs/pilotage/references-non-regression.md`](docs/pilotage/references-non-regression.md)** ; toute autre est une régression. →
+   [`docs/methode/portes.md`](docs/methode/portes.md)
+4. **La revue de documentation** avant chaque commit de clôture : `python3 tools/revue_documentation.py` (et
+   `tools/porte-tableaux.sh`) ; **corriger** ce qu'elle signale. → [`docs/methode/rangement.md`](docs/methode/rangement.md)
+5. **Panini et Nipada** à chaque cycle : lire ce qui a bougé chez eux, confronter ; la théorie va dans
+   [`docs/theorie/genealogie-des-langues.md`](docs/theorie/genealogie-des-langues.md), **jamais** les chiffres. Leur avertissement :
+   la surface capte **l'époque** (β +0,138) bien plus que la **filiation** (β +0,049) — contrôler la date dans tout
+   test de style, la surface dans tout test de famille. → [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md)
+6. **Le miroir entrée/sortie** : toute mesure d'entrée se double d'une mesure de **sortie** (restitution, boucle) ;
+   la **fluidité n'est pas la fidélité**. → [`docs/methode/miroir.md`](docs/methode/miroir.md)
+7. **La roadmap** ([`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md)) : chaque chantier a une **prochaine action** ; l'ordre est la **valeur** et les **dépendances**, jamais une date. Un chantier est **fini** quand il est
+   mesuré, écrit et committé ; il est **marqué**, et le suivant désigné.
+8. **Ne jamais bloquer, ne jamais rester en attente** : une question humaine se **consolide** dans `en-cours` et on **continue** ; si une ligne est bloquée (corpus, compte, matériel), on prend la suivante
+   — la **file « jamais en attente »** de la roadmap. → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+9. **Les illustrations sont des SVG.** Aucun **ASCII art** dans un bloc de code. Un schéma est un
+   **`.svg`** — direct, ou généré par **docwatch** depuis `.mmd`/`.puml` (l'image pointe vers
+   `<source>.svg`) — avec `viewBox`, `<title>`, `<desc>`, liens relatifs ; il vit dans
+   `docs/schemas/` ou `docs/theorie/synthese/schemas/`. Vérifier : `python3 tools/verifier_schemas.py`.
+   → [`docs/methode/illustrations.md`](docs/methode/illustrations.md)
+10. **Pilotage : cycles longs, sous-agents, état unique.** Un goal par programme (`max_goal_rounds`
+    1 000) ; on s'arrête sur un résultat mesuré, écrit, committé, ou un blocage. Les tâches
+    indépendantes : **sous-agents** (2–4), sans toucher `en-cours`/`roadmap`/`AGENTS` ; ils
+    rendent un **diff**. **État** : une session écrit `en-cours` à la fois ; aucun fait
+    sans sa ligne (hook `verifie_etat_a_jour.py`). Git : `git add` explicite. La clôture met `en-cours` à jour (≤ 2 000 mots).
+    → [`docs/methode/continuite.md`](docs/methode/continuite.md)
+
+11. **Les GPU sont exclusivement réservés à Drave** ; les **professeurs** passent par l'**API
+    DeepSeek** (`tools/llm/enseignant.py`), jamais par un serveur local (`llama-server`,
+    `ollama`). Garde-fous : `hauru-gpu-guard` (timer 30 s), `porte-ressources` (contrôle GPU).
+    → [`docs/methode/ressources.md`](docs/methode/ressources.md)
+
+12. **La tarification de l'API a deux fenêtres** : **remisé** pendant **UTC 16:30 → 00:30**
+    (la Chine 00:30 → 08:30), soit au Canada **11:30 → 19:30** ; **plein tarif** le reste.
+    **L'API en remisée** (le tagger, la distillation), **le local en pleine** (l'entraînement, les
+    tests, les docs) ; **deux files** par chantier. → [`plans-tarif.md`](docs/pilotage/plans-tarif.md)
+
+## 3. Routage : lire le document de sa tâche, pas les autres
+
+| si la tâche est… | lire |
+|---|---|
+| comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
+| la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
+| **la lecture rapide** et son backlog | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
+| écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
+| ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
+| **charger le contexte** | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
+| **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
+| **dessiner un schéma** | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
+| étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
+| concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
+| planifier une campagne, le matériel | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
+| **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
+| **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
+| le **vocabulaire** (couche vs étage, termes du dépôt) | [`docs/theorie/glossaire.md`](docs/theorie/glossaire.md) |
+| **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
+| la carte de la documentation | [`docs/README.md`](docs/README.md) |
+
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
+
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `en-cours` + **un** document de tâche
+> ([`docs/methode/contexte.md`](docs/methode/contexte.md) ; vérifier `tools/taille_documents.py`).
+
+## 4. Le minimum avant de conclure
+
+- l'état est à jour dans [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) (synthèse, chantiers, questions en attente) ;
+- la **roadmap** est à jour : le chantier fini y est marqué, le suivant est désigné ;
+- la fiche est dans `reports/`, le récit dans `journal/`, le commit porte le chiffre ;
+- les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
+- la revue de documentation passe, et les liens résolvent.
+- le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.
+
+</system-reminder>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/### Session/,/## /p' docs/pilotage/en-cours.md | head -60", "description": "Read the session blocks of the state"}`
+
+  ```
+### Session `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — le hub de reprise du 04/11 *(en pause)*
+
+- **Id** : `1e7ef596-93e6-45f1-b7f2-2940044b6e3a` — [`plan.md`](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/plan.md).
+- **Rôle** : **Hub de reprise** — état, docs, intégration, passe.
+- **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
+- **Prochaine action** : **suivi docs**, puis la **passe**.
+- **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
+- **Bloquants** : aucun.
+- **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
+
+## Sessions en cours
+### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)*
+
+- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
+- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
+- **Plan** : état.
+- **Ambition** : reprise.
+- **Stratégie** : flux.
+- **Objectif final** : zéro.
+- **Ce qu'elle fait** : intégration ; passe **82, 80/2**.
+- **Ce que font les autres** : **N2**, **S**, **Pensée**.
+- **
+… [1501 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\navant = len(s.split())\n# retirer les champs de boilerplate des sessions en pause (ils ne portent aucun fait daté)\nfor ligne in  … [734 caractères tronqués]`
+
+  ```
+mots : 1758 → 1723
+     · session « Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)* » ne dit pas « **Ce que font les autres** »
+     · session « Session `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Pensée, la RSN plurielle et le moteur N3 *(en pause)* » ne dit pas « **Ce que font les autres** »
+  T0 max : 4094 mots (budget 4 000)
+     · T0 : 4094 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n# restaurer le champ exigé par le vérificateur\ns = s.replace(\"- **Jouet** : la session\", \"- **Jouet** : la session\")  # no-o … [707 caractères tronqués]`
+
+  ```
+mots : 1734
+     · session « Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)* » ne dit pas « **Stratégie** »
+     · session « Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)* » ne dit pas « **Objectif final** »
+  T0 max : 4105 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7`\")\nfin = s.index(\"### Session `29ad180d-38a5-4481-a9a7-ec6ab31 … [292 caractères tronqués]`
+
+  ```
+mots : 1662
+  en-cours · 1662 mots · 7 sections · 3 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4033 mots (budget 4 000)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Les questions ouvertes/,/^## /p' docs/pilotage/en-cours.md | head -14", "description": "Read the open questions"}`
+
+  ```
+## Les questions ouvertes
+
+- **R1** : **1 024 octets** ? → **R1.2** (3,0107 à octets constants).
+- **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
+- **A5.4** : 4 cartes + ring 40G (17/11) ; **P1 tranché** : la dispersion GPU **29,37 G év/s** bat la projection FPGA (19,3) → le kernel GPU.
+- **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la
+  **restitution v1** : le miroir strict **ne monte pas** (0,1087), la forme canonique vaut
+  **46/46** ; la **v3** sépare les cinq rôles (**18/18** au gold S) mais le gold v2
+  reste à **20/46** ; J4 (or de rôles) suit.
+
+## La carte
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"\"\"- **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la\n  **restitution v1** : le miroir stri … [800 caractères tronqués]`
+
+  ```
+mots : 1662
+  en-cours · 1650 mots · 7 sections · 3 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  T0 max : 4021 mots (budget 4 000)
+exit=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** roue 1 727 201 o … [917 caractères tronqués]`
+
+  ```
+mots : 1650
+exit=1
+  T0 max : 4010 mots (budget 4 000)
+     · docs/README.md : 1013 mots > budget 1000 (T1)
+     · docs/pilotage/roadmap.md : 9086 mots > budget 9000 (T1)
+     · reports/README.md : 2803 mots > budget 2800 (T1)
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\n# reports/README.md : retirer 5 mots\np = pathlib.Path('reports/README.md'); s = p.read_text()\nold = \"Les fiches sont classées par chantier ; chacune porte le chiffre, le dispositif, le contrôle né … [579 caractères tronqués]`
+
+  ```
+motif absent ; extrait : Les fiches courantes sont citées depuis le tableau de bord
+4:> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+14:## Les fiches courantes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -8 reports/README.md; echo \"=== docs/README ===\"; head -12 docs/README.md", "description": "Read the README heads"}`
+
+  ```
+# Les rapports — données intermédiaires et références
+
+> **Ce dossier porte les résultats et les données de nos travaux**, jamais la documentation de référence
+> (elle est dans [`docs/`](../docs/)). Les fiches courantes sont citées depuis le tableau de bord
+> [`docs/pilotage/en-cours.md`](../docs/pilotage/en-cours.md).
+
+> **Navigation** : [la carte des sujets](../docs/theorie/carte.md) · [l'état du moment](../docs/pilotage/en-cours.md) ·
+> [l'inventaire des docs](../docs/README.md) · [le journal](../journal/README.md).
+=== docs/README ===
+# La documentation de [Drave](theorie/glossaire/entrees/drave.md) — quatre familles
+
+> **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'implantation. Les **chiffres** et les
+> séries vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/). Une page de
+> `docs/` qui se remplit de tableaux de mesures **déménage** dans `reports/`.
+
+> **Chargement facultatif.** Aucun document de ce dossier n'est nécessaire pour commencer une tâche : lire
+> [`AGENTS.md`](../AGENTS.md), puis le document de la tâche. Le reste se [charge](theorie/glossaire/entrees/charge-flux-charge
+… [68 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/README.md'); s = p.read_text()\ns = s.replace(\"les résultats et les données de nos travaux\", \"les résultats et les données\")\ns = s.replace(\"Les fiches courantes sont c … [839 caractères tronqués]`
+
+  ```
+reports/README : 2799
+docs/README : 1013
+     · docs/README.md : 1004 mots > budget 1000 (T1)
+     · docs/pilotage/roadmap.md : 9086 mots > budget 9000 (T1)
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/README.md'); s = p.read_text()\ns = s.replace(\"Les **chiffres** et les\\n> séries vivent dans [`reports/`](../reports/)\", \"Les **chiffres** vivent dans [`reports/`](../repor … [180 caractères tronqués]`
+
+  ```
+docs/README : 1000
+| **A — le moteur** | formats, placement, transport, [rejeu](../theorie/glossaire/entrees/rejeu.md), matériels, ordonnanceur | ✅ A1–A8 ; **A3.4, A5.4 bloqués** ; **A6.2 libre** (MoE local 18 Go) ; **A2.6 mesuré** (bande experts **7,0 Go/s**, tête **Q8_0/Q6_K** dans la règle) ; A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; **A2.6/A8.3 : le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 % calcul, PPL −0,006 %)** | **A2.6** — câbler la règle (coût experts ~7 Go/s, refus nommé) ; le lot ≥ 2 assumé |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '36p' docs/pilotage/roadmap.md | cut -c1-1500", "description": "Read the D row"}`
+
+  ```
+| **D — les données** | inventaire, corpus 10 langues, texte intégral, PDF/[OCR](../theorie/glossaire/entrees/ocr.md), documents, genres | ✅ inventaire ; **10 corpus texte intégral** (20,53 M art., 67,73 G car., 81,2 Go, **8 Ko 0**) ; **PDF** (1 927 doc., 322 Mo) ; **documents** (3 384 doc., 872 M car., 8 Ko 2,07 %) ; **OCR** (20 livres, 7 381 p, 15,36 M, 8 Ko 0 ; [CEGEP](../theorie/glossaire/entrees/cegep.md) **91 scans uniques**, 60 documents, 1 982 p, 4,41 M car., 8 Ko 0) ; **genres** mesurés | **l'OCR est clos** (limite : 8 scans `.PDF`, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A) |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"✅ A1–A8 ; **A3.4, A5.4 bl … [1441 caractères tronqués]`
+
+  ```
+roadmap : 9385
+     · docs/pilotage/roadmap.md : 9059 mots > budget 9000 (T1)
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '34p' docs/pilotage/roadmap.md | cut -c1-900", "description": "Read the S row"}`
+
+  ```
+| **S — les structures** | coloration, rôles, validation humaine, banque d'interprétations | ✅ **v7** : **61/61** types, **144/144** rôles, **56 tests** ; **19/19 verdicts `/paragraphes`** (11 acceptés, 8 exclus) **committés `389b99f`** ; le fait divers tranché (la tête du GN arrête le verbe) ; [fiche](../../reports/rapport-s-fait-divers.md). **v6** : h050, h053 et « si fort que » **fermés**, gold **60** (vague 5) ; **60/60** types, **142/142** rôles, **50/50** compléments, couverture 1,00 ; corpus 65,5 %/9,1 %, 596/1 184 homographes ; **55 tests**. **v5** : arbre parent/enfant (**99 candidats à ≥3**, 37 à 1) et **référents proposés** (294/371 formes, 77 sans contexte) ; **SVG** d'Alice, page **`/paragraphes`** (arbre, référents, verdict), **traduction** 14/14 référents ; gold **55**, analyseur **54/55** types, **131/131** rôles ; corpus **55** (SHA `76accf9d…`) ; banque partielle **142/
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nlines = s.split(\"\\n\")\nfor i, l in enumerate(lines):\n    if l.startswith(\"| **S — les structures**\"):\n        cellules = l.spli … [200 caractères tronqués]`
+
+  ```
+cellule 3, longueur mots : 119
+fin de cellule :  proposés** (294/371 formes, 77 sans contexte) ; **SVG** d'Alice, page **`/paragraphes`** (arbre, référents, verdict), **traduction** 14/14 référents ; gold **55**, analyseur **54/55** types, **131/131** rôles ; corpus **55** (SHA `76accf9d…`) ; banque partielle **142/71**, **81/65** ; **50 tests**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\nlines = s.split(\"\\n\")\nfor i, l in enumerate(lines):\n    if l.startswith(\"| **S — les structures**\"):\n        c = l.split(\"|\" … [709 caractères tronqués]`
+
+  ```
+nouveau : 63 mots (avant 119)
+     · docs/pilotage/roadmap.md : 9003 mots > budget 9000 (T1)
+     · T0 : 4010 mots (AGENTS + en-cours + une tâche) > budget 4 000
+  revue de documentation · 805 fiche(s) · 903 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"**l'OCR est clos** (limit … [573 caractères tronqués]`
+
+  ```
+en-cours : 1631
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+exit=1
+  ❌ 1 anomalie(s) :
+     · session « Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)* » ne dit pas « **Bloquants** »
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\n# restaurer le champ exigé pour 0733c5bb\ns = s.replace(\"- **Prochaine action** : **surveiller les runs relancés à 09 h 30**\",\n    … [670 caractères tronqués]`
+
+  ```
+· T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+exit=1
+  ❌ 1 anomalie(s) :
+     · session « Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)* » ne dit pas « **Bloquants** »
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 9, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/Session `0733c5bb/,/^###/p' docs/pilotage/en-cours.md | head -14", "description": "Read the N2 session block"}`
+
+  ```
+### Session `0733c5bb-f90b-4f58-9241-3364fa32e46c` — N2 : la production et la capacité *(en pause)*
+
+- **Id** : `0733c5bb-f90b-4f58-9241-3364fa32e46c` — [`plan.md`](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/plan.md).
+- **Rôle** : **N2** — la production et la capacité.
+- **Plan** : fenêtre.
+- **Ambition** : la longueur et la capacité.
+- **Stratégie** : budgets contrôlés, mêmes bancs.
+- **Objectif final** : la production qui tient.
+- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119**
+- **Ce que font les autres** : **hub**, **S**, **Pensée**.
+- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
+- **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
+
+## Ce qui est en cours
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.\",\n              \"- **Bloquants** : au … [776 caractères tronqués]`
+
+  ```
+en-cours : 1631
+     · T0 : 4002 mots (AGENTS + en-cours + une tâche) > budget 4 000
+exit=1
+  en-cours · 1631 mots · 7 sections · 3 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Ce qui reste\" -A6 docs/pilotage/en-cours.md | head -10", "description": "Read the remaining section"}`
+
+  ```
+106:## Ce qui reste
+107-
+108-**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ciblée ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
+109-
+110-**Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
+111-
+112-**Panini** — **26 signatures V14** manquantes, calibration **42/44**, rejeu **27/60** : le test attend ; **R0.7** — `--tagger auto` prototype livré (**opt-in**, défaut hors ligne inchangé), **décision humaine** ; **N2** — porte (0,2856/0,3566) ; **A** — A6.2, A8.3b2.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ns = s.replace(\"**V3 — la clôture** : **T1–T6**\", \"**V3** : **T1–T6**\")\ns = s.replace(\"**84/2** après vérification ciblée\", \"* … [507 caractères tronqués]`
+
+  ```
+en-cours : 1627
+taille exit=0
+  revue de documentation · 805 fiche(s) · 903 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add AGENTS.md README.md docs/README.md reports/README.md docs/pilotage/roadmap.md docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git log -1 --format='%h %s' | cat\nCLÔTURE —  … [1061 caractères tronqués]`

@@ -70,18 +70,18 @@ en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejo
 |---|---|
 | comprendre la **vision** (les flots, les cinq axes, ce qu'elle n'est pas) | [`docs/theorie/vision.md`](docs/theorie/vision.md) |
 | la **roadmap** (A/B/N/R, l'ordre, la file « jamais en attente ») | [`docs/pilotage/roadmap.md`](docs/pilotage/roadmap.md) |
-| **la lecture rapide** et son backlog (techniques, couches, fiches) | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
+| **la lecture rapide** et son backlog | [`docs/theorie/lecture-rapide.md`](docs/theorie/lecture-rapide.md) · [`docs/pilotage/backlog/index.md`](docs/pilotage/backlog/index.md) |
 | comprendre la mission et les priorités | [`docs/methode/mission.md`](docs/methode/mission.md) |
 | écrire un résultat (fiche, JSON, commit, journal) | [`docs/methode/resultats.md`](docs/methode/resultats.md) |
 | ranger un fichier, revue de documentation, synthèse | [`docs/methode/rangement.md`](docs/methode/rangement.md) |
-| **charger le contexte** (budget, protocole, ce qu'on ne charge pas) | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
+| **charger le contexte** | [`docs/methode/contexte.md`](docs/methode/contexte.md) |
 | **cycles DSH, sous-agents, reprise** | [`docs/methode/continuite.md`](docs/methode/continuite.md) |
 | **rapporter à l'humain, un round** | [`docs/methode/relations-humaines.md`](docs/methode/relations-humaines.md) |
-| **dessiner un schéma**, convertir un diagramme, améliorer une illustration | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
+| **dessiner un schéma** | [`docs/methode/illustrations.md`](docs/methode/illustrations.md) |
 | lancer ou lire les portes | [`docs/methode/portes.md`](docs/methode/portes.md) |
 | étudier Panini/Nipada, la généalogie | [`docs/methode/panini-nipada.md`](docs/methode/panini-nipada.md) |
 | concevoir un test d'entrée/sortie, corriger | [`docs/methode/miroir.md`](docs/methode/miroir.md) |
-| planifier une campagne, le matériel, carpe diem | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
+| planifier une campagne, le matériel | [`docs/methode/ressources.md`](docs/methode/ressources.md) |
 | **les jeux symboliques** (surface → RSN-jeu → pensée, 71 langues, maîtres) | [`docs/theorie/jeux-symboliques.md`](docs/theorie/jeux-symboliques.md) |
 | **le protocole sémantique** (rejouer, convergence, sens → texte, raisonnement gelé) | [`docs/theorie/protocole-semantique.md`](docs/theorie/protocole-semantique.md) |
 | **l'état courant** (synthèse + chantiers + questions) | [`docs/pilotage/en-cours.md`](docs/pilotage/en-cours.md) |
@@ -89,14 +89,12 @@ en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejo
 | **trouver un sujet** (un concept, un chantier, une phase) | [`docs/theorie/carte.md`](docs/theorie/carte.md) |
 | la carte de la documentation | [`docs/README.md`](docs/README.md) |
 
-> **Chargement facultatif.** Les documents de cette table, `docs/pilotage/en-cours.md`, `docs/pilotage/roadmap.md`, `reports/` et
-> `journal/` ne se lisent **que pour la tâche en cours** : le fichier de tâche suffit. Ne pas les
-> charger « pour être complet » : c'est du contexte qui coûte et périme.
+> **Chargement facultatif.** Les documents de cette table, `en-cours`, `roadmap`, `reports/` et
+> `journal/` ne se lisent **que pour la tâche** : le fichier de tâche suffit. Charger « pour être
+> complet » coûte et périme.
 
-> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `docs/pilotage/en-cours.md` + **un** document de
-> tâche. Le protocole, les budgets et les cas « ne pas charger » sont dans
-> [`docs/methode/contexte.md`](docs/methode/contexte.md) ; la vérification est
-> `python3 tools/taille_documents.py`.
+> **Le contexte est un budget.** Par défaut : `AGENTS.md` + `en-cours` + **un** document de tâche
+> ([`docs/methode/contexte.md`](docs/methode/contexte.md) ; vérifier `tools/taille_documents.py`).
 
 ## 4. Le minimum avant de conclure
 
@@ -106,6 +104,5 @@ en réseau**, de les **diagnostiquer** en étudiant leurs **flux**, et de **rejo
 - les portes sont vertes, **hors les rouges tolérées listées dans `docs/pilotage/references-non-regression.md`** ;
 - la revue de documentation passe, et les liens résolvent.
 - le budget de contexte est vérifié : `python3 tools/taille_documents.py`.
-- l'état est court et reprenable : `python3 tools/verifie_en_cours.py`.
-- journal : dossiers/jour, sessions liées → `tools/verifie_journal.py`.
-- les schémas sont des SVG valides et référencés : `python3 tools/verifier_schemas.py`.
+- l'état est court et reprenable : `tools/verifie_en_cours.py` ; journal : `tools/verifie_journal.py`.
+- les schémas sont des SVG valides et référencés : `tools/verifier_schemas.py`.

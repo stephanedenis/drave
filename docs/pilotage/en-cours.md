@@ -11,7 +11,6 @@
 - **Fait** : index réparé ; **N3 intégré** ; N2/S/L actifs.
 - **Prochaine action** : **suivi docs**, puis la **passe**.
 - **État** : **en pause** depuis le 05/11 ; la clôture J14.1 est portée par `e181ce02`.
-- **Bloquants** : aucun.
 - **Journal** : [la session](../../journal/sessions/1e7ef596-93e6-45f1-b7f2-2940044b6e3a/).
 
 ## Sessions en cours
@@ -22,20 +21,6 @@
 > le hook pre-commit refuse un fait sans ligne d'état ; une session arrêtée passe `État : en pause`.
 >
 > **Règle 11** : serveurs locaux arrêtés ; professeurs par l'**API DeepSeek** ; GPU à Drave.
-
-### Session `536cd5d6-94ac-4057-8fe9-11709a4587c7` — le hub, l'intégration et la reprise *(en pause)*
-
-- **Id** : `536cd5d6-94ac-4057-8fe9-11709a4587c7` — [`plan.md`](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/plan.md).
-- **Rôle** : **Hub** — intégration, état, roadmap, journal, compteurs ; reprise après reboot ; runbook.
-- **Plan** : état.
-- **Ambition** : reprise.
-- **Stratégie** : flux.
-- **Objectif final** : zéro.
-- **Ce qu'elle fait** : intégration ; passe **82, 80/2**.
-- **Ce que font les autres** : **N2**, **S**, **Pensée**.
-- **Prochaine action** : reprise par le hub `1e7ef596` ; l'état du 04/11 est la source.
-- **Bloquants** : aucun.
-- **Journal** : [la session](../../journal/sessions/536cd5d6-94ac-4057-8fe9-11709a4587c7/).
 
 ### Session `29ad180d-38a5-4481-a9a7-ec6ab31c895f` — S, les structures *(en pause)*
 
@@ -58,8 +43,8 @@
 - **Rôle** : **Pensée** — RSN, arbre d'états, N3 ; heuristique ; bloc linguistique.
 - **Plan** : B13 · **Stratégie** : v0 · **Ambition** : tracé · **Objectif final** : moteur v0.
 - **Fait** : B13 **183/183** ; **POS 86,25 %**, **238/239**.
+- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**) ; **U1** 4,0 → 0,82 s ; **U2** roue 1 727 201 o ; **U3** profils 20/20 ; **V1** 0,8625/0,8891 ; **V2** **27/27** ; **V3** la clôture — **86/82/4** → **84/2**, tag `exploitable-2026-11-16` ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)).
 - **Ce que font les autres** : N2.
-- **Ce qu'elle fait** : **W5** v3 (gold S **144/144**, v2 **20/46**) ; **U1** 4,0 → 0,82 s (α 1,08) ; **U2** roue 1 727 201 o, sans gold → 4 ; **U3** profils 20/20, `und` ; **V1** `--strict` 0,8625/0,8891 ; **V2** exemples **27/27** ; **V3** la clôture — **86/82/4** → **84/2**, tag `exploitable-2026-11-16` ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)).
 - **Prochaine action** : **J4** ; T132/T133 ; la décision `auto`.
 - **Bloquants** : 7B locales interdites (règle 11) ; **gold de pensée**.
 - **Journal** : [la session](../../journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/).
@@ -72,10 +57,10 @@
 - **Ambition** : la longueur et la capacité.
 - **Stratégie** : budgets contrôlés, mêmes bancs.
 - **Objectif final** : la production qui tient.
-- **Ce qu'elle fait** : **erratum 04/11** : la distillation native ne gagne rien à parité stricte ; `kd2` et `rope2048` **arrêtés** ; **paire propre** : **3,1500** → **3,1119**
+- **Ce qu'elle fait** : erratum 04/11 — la distillation ne gagne rien à parité stricte ; `kd2`/`rope2048` arrêtés ; **paire propre 3,1500 → 3,1119**
 - **Ce que font les autres** : **hub**, **S**, **Pensée**.
-- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
 - **Bloquants** : aucun.
+- **Prochaine action** : la **porte propre (0,29)** ; le **2 048** est fini.
 - **Journal** : [la session](../../journal/sessions/0733c5bb-f90b-4f58-9241-3364fa32e46c/).
 
 ## Ce qui est en cours
@@ -120,7 +105,7 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**V3 — la clôture** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ciblée ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
+**V3** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
 
 **Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
 
@@ -132,9 +117,8 @@ externes** et la **prochaine action**.
 - **N2** : **< 2,5** ? → **oui par la fenêtre** : 2,4759 / 2,4373 au grand corpus (1 024, 30 k pas) ; la porte **propre** reste à 2,7856.
 - **A5.4** : 4 cartes + ring 40G (17/11) ; **P1 tranché** : la dispersion GPU **29,37 G év/s** bat la projection FPGA (19,3) → le kernel GPU.
 - **Pensée** : l'**absence** est-elle annotable ? → le **v0 suivant** tranche ; la
-  **restitution v1** : le miroir strict **ne monte pas** (0,1087), la forme canonique vaut
-  **46/46** ; la **v3** sépare les cinq rôles (**18/18** au gold S) mais le gold v2
-  reste à **20/46** ; J4 (or de rôles) suit.
+  restitution v1 **ne monte pas** (0,1087) ; la v3 sépare les cinq rôles (**18/18**) mais le
+  gold v2 reste à **20/46** ; J4 (or de rôles) suit.
 
 ## La carte
 

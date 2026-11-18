@@ -1,11 +1,10 @@
 # La documentation de [Drave](theorie/glossaire/entrees/drave.md) — quatre familles
 
-> **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'implantation. Les **chiffres** et les
-> séries vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/). Une page de
+> **`docs/` dit ce qui reste vrai** : la méthode, l'[état](theorie/glossaire/entrees/etat.md), la théorie, l'implantation. Les **chiffres** vivent dans [`reports/`](../reports/) ; le **récit daté** dans [`journal/`](../journal/). Une page de
 > `docs/` qui se remplit de tableaux de mesures **déménage** dans `reports/`.
 
-> **Chargement facultatif.** Aucun document de ce dossier n'est nécessaire pour commencer une tâche : lire
-> [`AGENTS.md`](../AGENTS.md), puis le document de la tâche. Le reste se [charge](theorie/glossaire/entrees/charge-flux-chargeflux.md) au besoin.
+> **Chargement facultatif.** Aucun document n'est nécessaire pour commencer une tâche : lire
+> [`AGENTS.md`](../AGENTS.md), puis le document de la tâche.
 
 ## En trois portes
 
