@@ -5528,3 +5528,269 @@ Date:   Tue Nov 17 20:18:16 2026 -0500
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter-grille.md reports/rapport-profils-5-modeles.md reports/profils-5-modeles.json docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nPROFILS SUR CINQ MODÈLES : BL … [1503 caractères tronqués]`
+
+  ```
+18 files changed, 576 insertions(+), 37 deletions(-)
+ create mode 100644 reports/profils-5-modeles.json
+ create mode 100644 reports/rapport-profils-5-modeles.md
+18d49ce7 PROFILS SUR CINQ MODÈLES : BLOQUE ±0,04 % (LE CONTRAT NE BIAISE PAS) · FLOU +1,1 À +7,0 % (TOUJOURS UNE PERTE) · COURT −12,1 À +4,6 % (LE SENS DÉPEND DU MODÈLE)
+=== charge ===
+ 20:42:43  up 14 days  1:08,  2 users,  load average: 2,28, 2,10, 2,41
+0, 0 %, 1 MiB
+1, 0 %, 1 MiB
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète des 90 portes (calcul local long, verdict global)
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=work/portes/roue-1117-2042 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo \"exit=$?\" >> /tmp/passe-complete.log", "description": "Run the complete 90-gate pass", "run_in_background": true}`
+
+  ```
+started background job bash-200
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,60p' docs/pilotage/references-non-regression.md", "description": "Read the tolerated-reds register"}`
+
+  ```
+# Références de non-régression
+
+> **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
+> `melange` structurelles ; `produit` (V1 inachevée) et `sessions` (heartbeat) de circonstance.
+> Journaux `work/portes/roue-1116/`. **Vérification ciblée (V3)** : `sessions` **0** et `produit`
+> **0** (`--strict` 5 tests, exemples **27/27**, autotest **183/183**) ; journaux
+> `work/portes/verif-cloture-1116/`. Après : **84 vertes, 2 rouges structurelles**.
+
+> **Passe — 2026-11-15 09 h 53 → 12 h 15 :** **85 portes, 81 vertes, 4 rouges** — `indice` et
+> `melange` structurelles ; `sessions` (heartbeat) **réparée** à 12 h 20 ; `prechargement`
+> **environnementale** (deux passes en parallèle ; PPL identique 799,8557 ; verte le 14/11).
+> Journaux `work/portes-1115-09h53/`. **Pas de passe complète pour W6** ; ciblage
+> `work/portes/w6-ciblage` (8/9), `w6-ciblage2` (2/2) puis `w6-final` (9/9).
+
+> **Passe — 2026-11-14 00 h 30 :** **84 portes, 81 vertes, 3 rouges** — `porte-indice` et
+> `porte-melange` (structurelles) et `porte-sessions` (mandats périmés du hub `1e7ef596` et de
+> `e181ce02`). `porte-produit` et `porte-bloc` **vertes**. Journal :
+> `work/portes/passe-
+… [2673 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -6 /tmp/passe-complete.log; echo \"---\"; grep -c \"✅\\|❌\" /tmp/passe-complete.log", "description": "Check the pass after five minutes", "timeoutMs": 360000}`
+
+  ```
+porte-balayage         ✅                           0 s  ✅ porte balayage verte
+  porte-banc-performance ✅                          15 s  ✅ porte banc-performance verte
+  porte-bloc-code        ✅                          14 s  ✅ porte bloc code verte
+  porte-bloc-linguistique ✅                          20 s  ✅ porte bloc linguistique verte
+  porte-bloc-maths       ✅                           1 s  ✅ porte bloc maths verte
+  porte-bloc-tableaux    ✅                           2 s  ✅ porte bloc tableaux verte
+---
+9
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/passe-complete.log; echo \"--- vertes/rouges ---\"; grep -c \"✅\" /tmp/passe-complete.log; grep \"❌\" /tmp/passe-complete.log | head -5", "description": "Check the pass after ten more minutes", "timeoutMs": 70 … [5 caractères tronqués]`
+
+  ```
+[still running after 600000ms; moved to background job bash-203]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; grep \"❌\" /tmp/passe-complete.log | head -5", "description": "Read the pass log directl … [3 caractères tronqués]`
+
+  ```
+porte-coupe            ✅                         134 s    ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit
+  porte-cycle-c2         ✅                         124 s    ✅ porte tenue (chaîne exacte · pas 1 exact · borné · coût dit · trajectoire déterministe ·
+  porte-deepseek         ✅                           1 s    ✅ le banc DeepSeek tient hors réseau : adaptateur, prompts, corpus, distillation.
+  porte-delais           ✅                          21 s    ✅ le temps, lui, augmente : 6.65 s → 9.99 s (+3.3 s ≈ 50 ms × 64 pas)
+--- vertes : 20 · rouges : 0
+  ```
+
+### 👤 Utilisateur
+
+background job bash-203 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -4 /tmp/passe-complete.log; echo "--- vertes/rouges ---"; grep -c "✅" /tmp/passe-complete.log; grep "❌" /tmp/passe-complete.log | head -5) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"", "description": "Wait nine minutes and check the pass", "timeoutMs": 600000}`
+
+  ```
+porte-flux             ✅                          24 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         213 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+--- vertes : 28 · rouges : 0
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -3 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"", "description": "Wait and check the pass again", "timeoutMs": 600000}`
+
+  ```
+porte-flux             ✅                          24 s    mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         213 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+--- vertes : 28 · rouges : 0
+  ```
+
+- **bash** `{"command": "ps -eo pid,etime,args | grep -E \"porte-|toutes-les-portes\" | grep -v grep | head -5; echo \"---\"; tail -2 /tmp/passe-complete.log", "description": "Identify the running gate"}`
+
+  ```
+3767257       33:55 bash -c cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=work/portes/roue-1117-2042 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "exit=$?" >> /tmp/passe-complete.log
+3767268       33:55 /bin/bash tools/toutes-les-portes.sh
+3924049       10:20 timeout 1800 bash tools/porte-greffe.sh
+3924050       10:20 bash tools/porte-greffe.sh
+3927646       00:35 bash tools/porte-greffe.sh
+---
+  porte-fusion           ✅                           8 s    ✅ v1 refusée (code 2), trace seule refusée (code 2)
+  porte-gain             ✅                         213 s    ✅ drapeau VIVANT mais conditionnel : 0 casse (29.0206 → 1297.5437), 24 améliore (27.4439), san
+  ```
+
+- **job_output** `{"job_id": "bash-200", "timeout_ms": 600000, "wait": true}`
+
+  ```
+(no new output)
+[status: running]
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; ps -eo etime,args | grep \"timeout 1800 bash tools/porte-\" | grep -v grep |  … [85 caractères tronqués]`
+
+  ```
+porte-homeostasie      ✅                         505 s    ✅ porte tenue (×0 exact · activité monotone · dominance reproduite)
+  porte-horloge          ✅                          26 s    ✅ borne atteinte : arrêt EXPLICITE (code 5) et AUCUNE perplexité rendue
+--- vertes : 32 · rouges : 0
+      08:12 timeout 1800 bash tools/porte-indice.sh
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; ps -eo etime,args | grep \"timeout 1800 bash tools/porte-\" | grep -v grep |  … [77 caractères tronqués]`
+
+  ```
+porte-lecture          ✅                           2 s  ✅ porte lecture verte
+  porte-m5-brouillon     ✅                           0 s    ✅ brouillon déclaré (cibles [37,38,39]) et porté : 75 tenseurs, 41 263 M poids
+--- vertes : 37 · rouges : 1
+      00:37 timeout 1800 bash tools/porte-melange.sh
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"❌\" /tmp/passe-complete.log | head -3; sleep 480; echo \"--- après attente ---\"; tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"" … [83 caractères tronqués]`
+
+  ```
+porte-indice           ❌ code 1                  862 s    ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, questio
+--- après attente ---
+  porte-occupation-elagage ✅                          60 s  ✅ porte occupation × élagage : la cible annoncée est VÉRIFIÉE dans le fichier exporté
+  porte-occupation-moteur ✅                          54 s  ✅ porte occupation du moteur : la ligne « occupation des poids » est annoncée, elle COLLE à
+--- vertes : 64 · rouges : 2
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"❌\" /tmp/passe-complete.log | sed 's/ \\+/ /g' | cut -c1-90 | head -3; sleep 540; echo \"--- après attente ---\"; tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c … [110 caractères tronqués]`
+
+  ```
+porte-indice ❌ code 1 862 s ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'in
+ porte-melange ❌ code 1 106 s ❌ l'état de A ne rend pas le code de A dans une
+--- après attente ---
+  porte-pannes           ✅                          47 s    ✅ pair absent : échec annoncé en 3 s (code 7), aucune perplexité
+  porte-peripherie       ✅                          14 s  PORTE TENUE : l'entrée est injectée, la sortie est écrite, le délai est exact, les refus sont
+--- vertes : 68 · rouges : 2
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; ps -eo etime,args | grep \"timeout 1800 bash tools/porte-\" | grep -v grep |  … [72 caractères tronqués]`
+
+  ```
+porte-pont             ✅                          80 s    ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+  porte-prechargement    ✅                         178 s    PORTE TENUE
+--- vertes : 71 · rouges : 2
+      02:04 timeout 1800 bash tools/porte-produit.sh
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; ps -eo etime,args | grep \"timeout 1800 bash tools/porte-\" | grep -v grep |  … [72 caractères tronqués]`
+
+  ```
+porte-prechargement    ✅                         178 s    PORTE TENUE
+  porte-produit          ✅                         165 s  ✅ porte produit verte
+--- vertes : 72 · rouges : 2
+      08:25 timeout 1800 bash tools/porte-profondeur-routee.sh
+  ```
+
+- **bash** `{"command": "sleep 540; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-complete.log; echo \"--- vertes : $(grep -c '✅' /tmp/passe-complete.log) · rouges : $(grep -c '❌' /tmp/passe-complete.log)\"; ps -eo etime,args | grep \"timeout 1800 bash tools/porte-\" | grep -v grep |  … [72 caractères tronqués]`
+
+  ```
+porte-topologie        ✅                          96 s    ✅ PPL épinglées : reference 17.4702 · historique 30.4363 · topologie 30.4363 · relais 2 42.547
+  porte-trace            ✅                          27 s    ✅ la trace fausse est détectée et nommée
+--- vertes : 86 · rouges : 3
+      00:01 timeout 1800 bash tools/porte-vision.sh
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep \"❌\" /tmp/passe-complete.log | sed 's/ \\+/ /g' | cut -c1-140", "description": "Identify the third red gate"}`
+
+  ```
+porte-indice ❌ code 1 862 s ❌ l'indice extérieur tombe à 482 jetons de l'aiguille et l'indice TÉMOIN (même invite, questio
+ porte-melange ❌ code 1 106 s ❌ l'état de A ne rend pas le code de A dans une
+ porte-sessions ❌ code 1 0 s ❌ mandat périmé (1896 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== registre ===\"; tail -3 work/portes/roue-1117-2042/registre.txt 2>/dev/null; echo \"=== fin ===\"; tail -3 /tmp/passe-complete.log", "description": "Wait ten minutes and read the registry", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-216]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 👤 Utilisateur
+
+background job bash-200 (bash: cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && JOURNAUX=work/portes/roue-1117-2042 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-complete.log 2>&1; echo "exit=$?" >> /tmp/passe-complete.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -8 /tmp/passe-complete.log; echo \"=== registre (extrait) ===\"; awk '$2 != 0' work/portes/roue-1117-2042/registre.txt 2>/dev/null | head; echo \"=== compte ===\"; awk '{v[$2]++} END {for (k in v) print \"code\", k, \":\", v[k]} … [114 caractères tronqués]`
+
+  ```
+=== 2. CALIBRATION : quelle position porte vraiment le contenu ? ===
+      ❌ l'état de A ne rend pas le code de A dans une
+         invite qui n'en contient aucun : le mélange ne pourrait rien dire
+  --- porte-sessions ---
+    autotest OK : plan valide, périmètre dupliqué refusé, champ manquant refusé, pause sans heartbeat exigé, mandat long avec claim accepté, reservation imbriquée avertie sans refus
+      ❌ mandat périmé (1896 min) : e181ce02-cd50-488a-a6be-e84b79d40dcc — heartbeat à rafraîchir
+Journaux complets : work/portes/roue-1117-2042
+exit=1
+=== registre (extrait) ===
+porte-indice 1 862
+porte-melange 1 106
+porte-sessions 1 0
+--- 87 vertes, 3 rouges ---
+=== compte ===
+code 0 : 87
+code 1 : 3
+code 87 : 1
+  ```
+
+### 👤 Utilisateur
+
+background job bash-216 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo "=== registre ==="; tail -3 work/portes/roue-1117-2042/registre.txt 2>/dev/null; echo "=== fin ==="; tail -3 /tmp/passe-complete.log) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && stat -c '%y %n' work/portes/roue-1117-2042/registre.txt /tmp/passe-complete.log; echo \"=== début ===\"; head -3 /tmp/passe-complete.log; echo \"=== total ===\"; awk '{s+=$3} END {printf \"cumul des portes : %d s (%.1f min)\\n\", s,  … [115 caractères tronqués]`
+
+  ```
+2026-11-17 22:39:12.050218434 -0500 work/portes/roue-1117-2042/registre.txt
+2026-11-17 22:39:12.058218460 -0500 /tmp/passe-complete.log
+=== début ===
+=== PASSE COMPLÈTE DES PORTES (90 portes, borne 1800 s) ===
+    journaux : work/portes/roue-1117-2042
+  porte-adaptateur-sortie ✅                          65 s    ✅ porte tenue (écriture fidèle · invariant · effet · refus)
+=== total ===
+cumul des portes : 6981 s (116.3 min)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"dernière passe\" docs/pilotage/en-cours.md; grep -n \"138 tests\\|85 portes\" docs/pilotage/references-non-regression.md", "description": "Locate the pass counters to update"}`
+
+  ```
+104:| dernière passe | **16/11 00 h 45 → 03 h 01** : **86** portes, **82/4** ; rouges `indice`, `melange` (structurelles) et `produit`, `sessions` (circonstance) ; **vérification ciblée** : `sessions` **0**, `produit` **0** → **84/2** | `work/portes/roue-1116/registre.txt` ; `work/portes/verif-cloture-1116/` |
+9:> **Passe — 2026-11-15 09 h 53 → 12 h 15 :** **85 portes, 81 vertes, 4 rouges** — `indice` et
+56:| tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
+57:| toutes les portes | `tools/toutes-les-portes.sh` | **85 portes** ; voir la **passe du 15/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"# Référ … [2016 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 789 fiche(s) · 880 JSON · 128 doc(s) · 90 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  en-cours · 1635 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>&1 | tail -3\nPASSE — 90 PORTES, 87 VERTES, 3 ROUGES, AUCUNE NOUVELLE (116 MIN DE CALCUL LOCAL)\n\n`tools/toutes-les-portes.sh` … [881 caractères tronqués]`

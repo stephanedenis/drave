@@ -1,5 +1,11 @@
 # Références de non-régression
 
+> **Passe — 2026-11-17 20 h 42 → 22 h 39 :** **90 portes, 87 vertes, 3 rouges** — `indice` (862 s)
+> et `melange` (106 s) **structurelles** ; `sessions` (0 s) de **circonstance** (mandat périmé de
+> `e181ce02`, heartbeat à 1 896 min). **Aucune rouge nouvelle** : les quatre portes du jour
+> (`n3-variante`, `n3-route`, `n3-moteurs`, `n3-court`) et les 22 portes N3 sont vertes ; les
+> 90 portes ont tourné, cumul **6 981 s** (116 min). Journaux `work/portes/roue-1117-2042/`.
+
 > **Passe — 2026-11-16 00 h 45 → 03 h 01 :** **86 portes, 82 vertes, 4 rouges** — `indice` et
 > `melange` structurelles ; `produit` (V1 inachevée) et `sessions` (heartbeat) de circonstance.
 > Journaux `work/portes/roue-1116/`. **Vérification ciblée (V3)** : `sessions` **0** et `produit`
@@ -53,8 +59,8 @@
 
 | quoi | commande | attendu |
 |---|---|---|
-| tests unitaires | `cargo test --release` (dans `drave-core/`) | **138 tests** (le compte est dans la sortie) |
-| toutes les portes | `tools/toutes-les-portes.sh` | **85 portes** ; voir la **passe du 15/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
+| tests unitaires | `cargo test --release` (dans `drave-core/`) | **139 tests** (le compte est dans la sortie) |
+| toutes les portes | `tools/toutes-les-portes.sh` | **90 portes** ; voir la **passe du 17/11** ci-dessus · ⚠ **ne jamais lire une porte à travers un `tail`** |
 | une porte | `tools/porte-<nom>.sh` | la dernière ligne dit ce qu'elle verrouille |
 
 > **16/10 — l'audit des 46 portes** (deux vrais défauts corrigés, des faux positifs

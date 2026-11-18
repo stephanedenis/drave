@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 10.8 h |
+| Durée | 12.8 h |
 | Tours | 8 |
-| Messages | 277 |
-| Appels d'outils | 297 |
+| Messages | 304 |
+| Appels d'outils | 320 |
 | Fichiers touchés | 26 |
-| Commandes | 199 |
+| Commandes | 221 |
 | Sous-agents | 0 |
-| Commits | 14 |
+| Commits | 15 |
 | Compactages de contexte | 0 |
 
 ## Objectifs déclarés
@@ -375,7 +375,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 
 ### Tour 8 — on est en soirée, donc tarif de jour en chine. fais des tâches qui demandent peu de réflexion et beaucoup de calcul loca … [2 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*48 appels d'outils.* Actions notables :
 
 - bash — List trained models and their configs
 - bash — Batch profile benchmarks on five trained models
@@ -391,11 +391,11 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - bash — Measure Rust vs numpy parity on the real 34M model
 - bash — Wait and check batch progress
 - bash — Wait for the batch to finish
-- … et 11 autres
+- … et 32 autres
 
 **Synthèse produite :**
 
-⏵ Assemblage du banc des cinq modèles (table + JSON + fiche)
+⏵ Passe complète des 90 portes (calcul local long, verdict global)
 
 ## 3. Travail accompli
 
@@ -472,7 +472,7 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 159 autres
+- … et 181 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -625,4 +625,5 @@ Chaque moteur déclare ce qu'il exécute et refuse le reste — c'est la règle 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/N3-operations-natives.md docs/pilotage/en-cours.md && git commit -F - <<'MSG
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add bench/gpu_scatter.py reports/rapport-gpu-scatter-grille.md reports/rapport-profils-5-modeles.md re
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/references-non-regression.md docs/pilotage/en-cours.md && git commit -F - <<'MSG' 2>
 
