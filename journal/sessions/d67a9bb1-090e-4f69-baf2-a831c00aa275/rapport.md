@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 30.8 h |
+| Durée | 31.0 h |
 | Tours | 10 |
-| Messages | 560 |
-| Appels d'outils | 550 |
+| Messages | 568 |
+| Appels d'outils | 558 |
 | Fichiers touchés | 38 |
-| Commandes | 422 |
+| Commandes | 430 |
 | Sous-agents | 7 |
-| Commits | 39 |
+| Commits | 40 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -500,7 +500,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 
 ### Tour 10 — continue en mode IA léger pendant la période plein tarif tout en exploitant au maximul les ressources locales. Sois auto … [22 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check resources and read the A2.6 code plan
@@ -514,6 +514,9 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - bash — Launch the two overnight chains (150M on v2 and v1)
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md`
 - bash — Commit the v2 corpus promotion
+- bash — Read the placement module
+- bash — Read the placement tests layout
+- … et 6 autres
 
 ## 3. Travail accompli
 
@@ -612,7 +615,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 382 autres
+- … et 390 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -740,7 +743,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 
 ## 5. Erreurs rencontrées
 
-10 sorties en erreur ou divergentes. Les premières :
+11 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -752,6 +755,7 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - **T9** : pas 3900 · perte 1.1655 · PPL val 3.510 · 1087 s pas 3950 · perte 1.2692 · PPL val 3.505 · 1101 s [exit code: 2]
 - **T9** : mer 18 nov 2026 12:21:56 EST pas 5700 · perte 1.0961 · PPL val 3.286 · 1687 s passe: 71 vertes, 2 rouges   porte-prechargement    ✅                         163 s    PORTE TENUE [exit code: 2]
 - **T9** : mer 18 nov 2026 12:41:28 EST [stderr] Traceback (most recent call last):   File "<string>", line 3, in <module>     d=json.load(open('work/n3/r4.pt.json')); print('r4 FINI ppl_val', round(d['ppl_val']
+- **T10** : --> src/placement.rs:52:12    --> src/placement.rs:117:11    --> src/placement.rs:119:11    --> src/placement.rs:122:11    --> src/placement.rs:124:11    --> src/placement.rs:127:11 --- src/main.rs:83
 
 ## 6. Commits
 
@@ -794,4 +798,5 @@ Lot lancé à **11 h 30:10**, fenêtre remisée : **608 appels réseau, 87 550 t
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "[c
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 (4 000 MOTS EXACTEMENT)" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text
 

@@ -62,3 +62,25 @@ le **refus nommé**, la trace du classement et une `Precision` de tête à perte
 
 - [la reconnaissance A2.6](rapport-a2.6-reconnaissance.md) · [les données](a2.6-bande-experts.json) ·
   [placement](../drave-core/src/placement.rs) · [le programme A](../docs/pilotage/roadmap.md)
+
+## La règle sait chiffrer les experts (18/11, après la mesure)
+
+`placement.rs` porte désormais les constantes mesurées et la règle :
+
+- `BANDE_EXPERTS_8 = 6,99 Go/s`, `BANDE_EXPERTS_4 = 4,93`, `LECTEURS_SATURATION = 8` ;
+- `bande_experts(lecteurs)` : linéaire de 0 à 4 puis de 4 à 8, **plate** au-delà (16 < 8, mesuré) ;
+- `cout_experts(octets, lecteurs)` : octets ÷ bande du **lecteur** ;
+- `choisir_experts(...) -> Result<Support, String>` : VRAM, sinon RAM, sinon **refus nommé** — le
+  message porte les Go/jeton, la bande, le budget et le coût NVMe qu'on refuse (313,4 ms).
+
+**Tests** (4 nouveaux, `cargo test placement` **13/13**, crate **144/144**) :
+
+- la bande reproduit les deux points mesurés (4 et 8 fils) et la saturation ;
+- le coût reproduit la mesure : 1,097 Go/jeton à 8 fils → **156,9 ms** (mesuré 156,95) ;
+- le refus est nommé (contient « REFUSÉS », la bande et le coût NVMe) ;
+- VRAM si elle tient, RAM sinon.
+
+**Ce qui reste** : brancher `choisir_experts` dans `model.rs` (les trois sites : tête, cache VRAM,
+cache RAM), en opt-in `DRAVE_PERTE_MAX` — le défaut ne doit pas bouger — et ramener les trois tables
+de bandes de `materiel.rs` à une. C'est la tâche A2.6 suivante, et c'est celle qui a le plus de
+risque : le chemin de chargement.

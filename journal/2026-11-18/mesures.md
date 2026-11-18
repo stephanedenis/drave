@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (11)
+## Commits du jour (12)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -19,10 +19,11 @@
 | 12:49 | `5e5e8e5a` | N — r4 : 43 000 PAS, PPL 3,0628 (−35 % DEPUIS L'INIT), MAIS L'ÉCHANTILLONNAGE PLAFONNE (TOP-40 0,867) | `en-cours.md`, `README.md`, `attention.md` (+12) |
 | 14:02 | `f3d0a886` | N — r5a (53 000 PAS) : PPL 3,0098 (−36 %), TOP-20 0,932 ; LE v2 DÉDUPLIQUÉ À PAS ÉGAL : +2,1 %, TEST CONFONDU | `en-cours.md`, `README.md`, `attention.md` (+15) |
 | 14:12 | `9820c0ff` | N — LES DEUX JSON DU BANC r2 ENTRENT DANS LE DÉPÔT (ILS ÉTAIENT CITÉS PAR LA COURBE SANS Y ÊTRE) | `en-cours.md`, `README.md`, `attention.md` (+11) |
+| 16:40 | `75280cfe` | N/D — LE CORPUS V2 EST PROMU ET ÉPINGLÉ : 6,90 Go DANS data/, MANIFESTE 9861fb39… | `en-cours.md`, `README.md`, `attention.md` (+11) |
 
 ## Chiffres du jour
 
-`−36 %` · `+2,1 %` · `3,0098` · `0,932` · `−35 %` · `3,0628` · `0,867` · `8,042 %` · `161 s` · `6,90 Go` · `8,042` · `0,9572`
+`6,90 Go` · `−36 %` · `+2,1 %` · `3,0098` · `0,932` · `−35 %` · `3,0628` · `0,867` · `8,042 %` · `161 s` · `8,042` · `0,9572`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
@@ -34,7 +35,7 @@
 - `9f4f7b6d-c5aa-4269-b785-a0f444424470` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 0.2 h) → [rapport](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/rapport.md) · [digest](../sessions/9f4f7b6d-c5aa-4269-b785-a0f444424470/digest.md)
 - `c7e46dba-11cb-456b-a3b6-715428927f99` — Tu travailles dans le dépôt (début 2026-11-18 08:58, 0.4 h) → [rapport](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/rapport.md) · [digest](../sessions/c7e46dba-11cb-456b-a3b6-715428927f99/digest.md)
 - `cbf7ca71-5b38-428e-9f19-298be1720918` — Tu travailles dans /home/stephane/Data13 (début 2026-11-18 10:17, 1.0 h) → [rapport](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/rapport.md) · [digest](../sessions/cbf7ca71-5b38-428e-9f19-298be1720918/digest.md)
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 30.8 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 31.0 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `da0f2984-32d0-459d-a761-d3faf6a10b8a` — Tu travailles dans le dépôt (début 2026-11-18 09:15, 0.4 h) → [rapport](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) · [digest](../sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 423.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
@@ -43,6 +44,7 @@
 - [reports/rapport-a2.6-bande-experts.md](../../reports/rapport-a2.6-bande-experts.md)
 - [reports/rapport-a2.6-reconnaissance.md](../../reports/rapport-a2.6-reconnaissance.md)
 - [reports/rapport-banc-generation-100m.md](../../reports/rapport-banc-generation-100m.md)
+- [reports/rapport-corpus-v2.md](../../reports/rapport-corpus-v2.md)
 - [reports/rapport-courbe-r1-r3.md](../../reports/rapport-courbe-r1-r3.md)
 - [reports/rapport-decodage-r1.md](../../reports/rapport-decodage-r1.md)
 - [reports/rapport-dedup-blocs.md](../../reports/rapport-dedup-blocs.md)

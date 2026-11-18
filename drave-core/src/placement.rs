@@ -225,6 +225,82 @@ pub fn choisir_tete(
     Some((choisir(octets, octets, libre_vram, libre_ram), p))
 }
 
+
+// --- Les experts : leur bande est celle d'UN lecteur, pas celle du support ----
+//
+// La mesure du 18/11 (`reports/rapport-a2.6-bande-experts.md`) : sur
+// `qwen3-30b-a3b-Q4_K_M` à `--limit 32`, `proj+mlp` vaut **156,95 ms/jeton à
+// 8 fils** (6,99 Go/s pour 1,097 Go d'experts par jeton), **165,40 à 16 fils**
+// (aucun gain : la contention) et 222,45 à 4 ; les chemins « optimisés » sont
+// plus lents (cache RAM 314,36, tampons 231,32, PPL 37,2013 invariante). La
+// règle par support (RAM 22,5 Go/s, NVMe 3,5) se trompe donc d'un facteur ~3
+// dans les deux sens : pour un opérateur *experts*, la bande est celle du
+// **lecteur**, et elle sature à 8.
+
+/// La bande mesurée des experts à 8 fils, en octets par seconde.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub const BANDE_EXPERTS_8: f64 = 6.99e9;
+/// La bande mesurée des experts à 4 fils.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub const BANDE_EXPERTS_4: f64 = 4.93e9;
+/// Le nombre de lecteurs au-delà duquel la bande ne progresse plus (16 < 8, mesuré).
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub const LECTEURS_SATURATION: usize = 8;
+
+/// La bande des experts pour `lecteurs` lecteurs : **linéaire** de 0 à 4, de 4 à 8
+/// (les deux points mesurés), **plate** ensuite. Un seul lecteur vaut donc ~3,4 Go/s,
+/// huit ~7,0 — et seize ne valent pas mieux que huit.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn bande_experts(lecteurs: usize) -> f64 {
+    let n = lecteurs.min(LECTEURS_SATURATION) as f64;
+    if n <= 4.0 {
+        BANDE_EXPERTS_4 * n / 4.0
+    } else {
+        BANDE_EXPERTS_4 + (BANDE_EXPERTS_8 - BANDE_EXPERTS_4) * (n - 4.0) / 4.0
+    }
+}
+
+/// Le coût des experts : leurs octets lus par jeton divisés par la bande du
+/// **lecteur** (secondes par jeton).
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn cout_experts(octets_par_jeton: u64, lecteurs: usize) -> f64 {
+    octets_par_jeton as f64 / bande_experts(lecteurs)
+}
+
+/// Place les experts : VRAM si tout tient, sinon RAM, sinon **refus nommé** — la
+/// règle ne retombe **pas** en silence sur le NVMe (3,5 Go/s), qui coûterait le
+/// triple et que l'appelant n'a pas demandé. Le message porte les chiffres : ce
+/// qui a été essayé, ce que ça aurait coûté, et le budget.
+#[allow(dead_code)] // pas encore branché : le câblage est la tâche A2.6 suivante
+pub fn choisir_experts(
+    octets_par_jeton: u64,
+    libre_vram: u64,
+    libre_ram: u64,
+    lecteurs: usize,
+    cout_max_s: f64,
+) -> Result<Support, String> {
+    let cout = cout_experts(octets_par_jeton, lecteurs);
+    if octets_par_jeton <= libre_vram && cout <= cout_max_s {
+        return Ok(Support::Vram);
+    }
+    if octets_par_jeton <= libre_ram && cout <= cout_max_s {
+        return Ok(Support::Ram);
+    }
+    Err(format!(
+        "experts REFUSÉS : {:.2} Go/jeton, {} lecteurs → {:.1} ms/jeton (bande {:.2} Go/s), \
+budget {:.1} ms ; VRAM libre {:.2} Go, RAM libre {:.2} Go — le NVMe (3,5 Go/s) coûterait \
+{:.1} ms et n'est pas un placement choisi",
+        octets_par_jeton as f64 / 1e9,
+        lecteurs,
+        cout * 1e3,
+        bande_experts(lecteurs) / 1e9,
+        cout_max_s * 1e3,
+        libre_vram as f64 / 1e9,
+        libre_ram as f64 / 1e9,
+        octets_par_jeton as f64 / BANDE_NVME * 1e3,
+    ))
+}
+
 /// La perte **mesurée** de l'int8 sur le KV selon la couche (A5.3, 0,5 B, 255 jetons) :
 /// **+2,28 %** sur les premières, **+0,03 %** sur les dernières. La frontière mesurée
 /// est la moitié du réseau (les couches 0-11 contre 12-23 sur 24).
@@ -366,5 +442,37 @@ mod tests {
         let a = cout(1 << 20, Support::Ram);
         let b = cout(2 << 20, Support::Ram);
         assert!((b - 2.0 * a).abs() < 1e-15);
+    }
+
+    #[test]
+    fn la_bande_des_experts_reproduit_les_mesures() {
+        // Les deux points mesurés (18/11) et la saturation à 8.
+        assert!((bande_experts(4) - 4.93e9).abs() < 1.0);
+        assert!((bande_experts(8) - 6.99e9).abs() < 1.0);
+        assert!((bande_experts(16) - 6.99e9).abs() < 1.0);
+        // Un seul lecteur vaut moins que quatre : la bande n'est pas celle du support.
+        assert!(bande_experts(1) < bande_experts(4));
+    }
+
+    #[test]
+    fn le_cout_des_experts_reproduit_la_mesure() {
+        // 1,097 Go d'experts par jeton à 8 fils : 156,95 ms mesurés, 156,9 calculés.
+        let ms = cout_experts(1_097_000_000, 8) * 1e3;
+        assert!((ms - 156.9).abs() < 1.0, "{ms}");
+    }
+
+    #[test]
+    fn le_refus_des_experts_est_nomme() {
+        let msg = choisir_experts(1_097_000_000, 0, 0, 8, 0.05).unwrap_err();
+        assert!(msg.contains("REFUSÉS"), "{msg}");
+        assert!(msg.contains("6.99 Go/s"), "{msg}");
+        assert!(msg.contains("313.4"), "le coût NVMe doit être nommé : {msg}");
+    }
+
+    #[test]
+    fn les_experts_tiennent_en_vram_quand_elle_est_libre() {
+        assert_eq!(choisir_experts(1_000_000, 2_000_000, 0, 8, 1.0), Ok(Support::Vram));
+        // La RAM suffit quand la VRAM non, et le coût reste dans le budget.
+        assert_eq!(choisir_experts(1_000_000, 0, 2_000_000, 8, 1.0), Ok(Support::Ram));
     }
 }

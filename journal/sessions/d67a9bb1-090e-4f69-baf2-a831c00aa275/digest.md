@@ -10508,3 +10508,144 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"corpus v2 **6,90 Go** (` … [1397 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+budget exit=0
+   1fe0444d..75280cfe  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1,70p' drave-core/src/placement.rs; echo \"...\"; sed -n '155,240p' drave-core/src/placement.rs", "description": "Read the placement module"}`
+
+  ```
+//! Le placement des opérateurs — la règle de coût, **mesurée**.
+//!
+//! La vision (axe 2) : « on place un opérateur là où son flux coûte le moins
+//! cher ». Cet axe était réglé par des `if` codés en dur et des seuils choisis
+//! à la main ; ce module porte la **règle** et ses constantes mesurées
+//! (`reports/rapport-placement-kv-8k.md`) :
+//!
+//! | support | bande mesurée | ce qu'on y met |
+//! |---|---:|---|
+//! | VRAM | 84,9 Go/s | le KV au-delà de ~2-4 k jetons, l'attention, la tête |
+//! | RAM | 22,5 Go/s | les poids (mmap, non copiés), le KV court |
+//! | NVMe | 3,5 Go/s | les poids qui ne tiennent pas en RAM (streaming) |
+//! | réseau | 0,25 Mbit/s | les activations seules (jamais les poids) |
+//!
+//! Le coût d'un opérateur est **ses octets lus par jeton divisés par la bande
+//! du support** ; le placement est le minimum sous la contrainte de place. La
+//! mesure du 24/10 valide la première ligne : le KV en VRAM donne ×1,93 sur le
+//! préremplissage à 8 k et ×5,8 sur l'attention.
+
+/// La bande passante mesurée de la VRAM (Go/s → octets/s).
+pub const BANDE_VRAM: f64 = 84.9e9;
+/// La bande passante mesurée de la RAM.
+pub const BANDE_RAM: f64 = 22.5e9;
+/// La bande passante m
+… [5517 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '270,310p' drave-core/src/placement.rs; echo \"=== fin ===\"; tail -20 drave-core/src/placement.rs", "description": "Read the placement tests layout"}`
+
+  ```
+// Un petit KV (100 Mo) va en VRAM.
+        assert_eq!(choisir(100 << 20, 100 << 20, 4 << 30, 64 << 30), Support::Vram);
+        // Rien ne tient (200 Go pour 64 Go de RAM) : le NVMe.
+        assert_eq!(choisir(1 << 30, 200 << 30, 16 << 30, 64 << 30), Support::Nvme);
+    }
+
+    #[test]
+    fn la_perte_decide_aussi() {
+        // Le KV tardif : l'int8 (+0,03 %) passe un budget de 1 % ; l'int4 (+2,7 %) non.
+        let (_, p8) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 1.0).unwrap();
+        assert_eq!(p8.nom, "int8 tardif");
+        let (_, p4) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 5.0).unwrap();
+        assert_eq!(p4.nom, "int4 tardif");
+        assert!(p4.octets_par_valeur < p8.octets_par_valeur);
+    }
+
+    #[test]
+    fn un_budget_nul_interdit_toute_quantification() {
+        let (_, p0) = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 << 30, 0.0).unwrap();
+        assert_eq!(p0.nom, "f32");
+    }
+
+    #[test]
+    fn la_tete_en_4_bits_est_refusee_par_un_budget_de_5_pour_cent() {
+        // +10 % de PPL : elle « tient », mais la place n'est pas la qualité.
+        let choisi = choisir_avec_perte(100 << 20, 100 << 20, 4 << 30, 64 <<
+… [1590 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/placement.rs'); s = p.read_text()\n\ncode = '''\n// --- Les experts : leur bande est celle d'UN lecteur, pas celle du support ----\n//\n// La mesure du 18/11 (`report … [4858 caractères tronqués]`
+
+  ```
+ok
+running 13 tests
+.............
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo build --release 2>&1 | grep -E \"warning: (function|constant|unused)\" | head -5; cargo test --quiet 2>&1 | tail -3", "description": "Check build warnings and the full test suite", "timeoutMs": 900000}`
+
+  ```
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+warning: unused variable: `t`
+warning: unused variable: `se`
+warning: unused variable: `j`
+.........................................................
+test result: ok. 144 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.26s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && touch src/placement.rs && cargo build --release 2>&1 | grep -E \"placement\\.rs|bande_experts|cout_experts|choisir_experts\" | head -6; echo \"---\"; grep -n \"^mod placement\\|^pub mod placement\" src/lib.rs src/main.rs 2 … [98 caractères tronqués]`
+
+  ```
+--> src/placement.rs:52:12
+   --> src/placement.rs:117:11
+   --> src/placement.rs:119:11
+   --> src/placement.rs:122:11
+   --> src/placement.rs:124:11
+   --> src/placement.rs:127:11
+---
+src/main.rs:83:mod placement;
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/placement.rs'); s = p.read_text()\nfor nom in (\"pub const BANDE_EXPERTS_8\", \"pub const BANDE_EXPERTS_4\", \"pub const LECTEURS_SATURATION\",\n            \"pub fn  … [453 caractères tronqués]`
+
+  ```
+ok
+7
+test result: ok. 144 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.20s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && touch src/placement.rs && cargo build --release 2>&1 | grep -B2 -A2 \"placement.rs\" | head -20", "description": "Read the placement warnings", "timeoutMs": 600000}`
+
+  ```
+warning: method `nom` is never used
+  --> src/placement.rs:52:12
+   |
+40 | impl Support {
+--
+
+warning: constant `INT8_TARDIF` is never used
+   --> src/placement.rs:117:11
+    |
+117 | pub const INT8_TARDIF: Precision = Precision { nom: "int8 tardif", octets_par_valeur: 1.0, perte_ppl: 0.03 };
+--
+
+warning: constant `INT4_TARDIF` is never used
+   --> src/placement.rs:119:11
+    |
+119 | pub const INT4_TARDIF: Precision = Precision { nom: "int4 tardif", octets_par_valeur: 0.5, perte_ppl: 2.7 };
+--
+
+warning: constant `TETE_4BIT` is never used
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-bande-experts.md'); s = p.read_text()\nadd = '''\n## La règle sait chiffrer les experts (18/11, après la mesure)\n\n`placement.rs` porte désormais les constante … [3129 caractères tronqués]`
