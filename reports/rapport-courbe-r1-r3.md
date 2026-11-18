@@ -1,15 +1,16 @@
-# La courbe 3 000 → 33 000 pas : la PPL baisse, l'échantillonnage monte, le greedy reste cassé
+# La courbe 3 000 → 43 000 pas : la PPL baisse encore, l'échantillonnage plafonne, le greedy reste cassé
 
 > **Ligne de roadmap** : N4 (le banc du natif) · **Date** : 2026-11-18 · **Verdict** : ✅ mesuré —
-> trois tranches de 10 000 pas sur le 73 M (corpus épinglé, lr 1e-4, AMP) : PPL de validation
-> **4,6792 → 3,4130 → 3,2321 → 3,1317** (−33 % au total) ; l'**échantillonnage top-40 monte
-> régulièrement** (0,551 → 0,831 → 0,845 → **0,870**), le **greedy est instable** (0,878 → 0,902 →
-> 0,924 → **0,865**) et sa répétition reste à **10–11**.
+> quatre tranches de 10 000 pas sur le 73 M (corpus épinglé, lr 1e-4, AMP) : PPL de validation
+> **4,6792 → 3,4130 → 3,2321 → 3,1317 → 3,0628** (−35 % au total) ; l'**échantillonnage top-40
+> plafonne** (0,551 → 0,831 → 0,845 → 0,870 → **0,867**) à partir de 33 000 pas, alors que la PPL
+> baisse encore ; le **greedy est instable** (0,902 → 0,924 → 0,865 → 0,896) et sa répétition
+> reste à **10–13**.
 >
 > **Dispositif** : `entrainer_native.py` chaîné (`--init` du checkpoint précédent), `--val` épinglé,
-> 3 × 10 000 pas (~48 min chacun) ; banc complet après chaque tranche
-> ([`checkpoint_bench.sh`](../bench/checkpoint_bench.sh)) ; données `banc-generation-r{1,2,3}.json`
-> et `banc-grammaticalite-r{1,2,3}.json`.
+> 4 × 10 000 pas (~48 min chacun) ; banc complet après chaque tranche
+> ([`checkpoint_bench.sh`](../bench/checkpoint_bench.sh)) ; données `banc-generation-r{1,2,3,4}.json`
+> et `banc-grammaticalite-r{1,2,3,4}.json`.
 
 ## La courbe
 
@@ -18,14 +19,16 @@
 | init | 3 000 | 4,6792 | 0,878 / 6 / 0,015 | 0,551 / 1 | 0,673 |
 | r1 | 13 000 | 3,4130 | 0,902 / 11 / 0,149 | 0,831 / 2 | 0,883 |
 | r2 | 23 000 | 3,2321 | **0,924** / 11 / 0,164 | 0,845 / 2 | 0,854 |
-| r3 | 33 000 | **3,1317** | 0,865 / 10 / — | **0,870** / 2 | — |
+| r3 | 33 000 | 3,1317 | 0,865 / 10 / — | **0,870** / 2 | — |
+| r4 | 43 000 | **3,0628** | 0,896 / 13 / 0,146 | 0,867 / 2 | 0,879 |
 
 ## Lecture
 
 1. **La PPL baisse encore, de moins en moins** : −1,27 (init → r1), −0,18, −0,10 par 10 000 pas.
    Le rendement décroît, comme attendu sur 1 Go de données (0,66 → 2 époques).
-2. **L'échantillonnage progresse de façon monotone** : top-40 0,551 → 0,831 → 0,845 → 0,870. C'est
-   le seul indicateur qui suit l'entraînement sans à-coups.
+2. **L'échantillonnage progresse puis plafonne** : top-40 0,551 → 0,831 → 0,845 → 0,870 → 0,867.
+   Entre 33 000 et 43 000 pas, la PPL baisse encore de 2,2 % mais la génération ne bouge plus : les
+   deux métriques **se découplent** — la perplexité mesure l'ajustement, pas la composition.
 3. **Le greedy ne suit pas** : il culmine à 0,924 (r2) puis retombe à 0,865 (r3), avec une
    répétition de 10–11 et un écho de 0,15 — il est **instable par nature** sur ce modèle. Le
    balayage de décodage ([fiche](rapport-decodage-r1.md)) a montré que top-40/T=0,5 le bat sur tous

@@ -1,0 +1,759 @@
+{
+ "modele": "work/n3/r4.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8956,
+   "distinct_2": 0.5103,
+   "repetition": 13,
+   "echo": 0.1463,
+   "octets": 2560,
+   "secondes": 20.2,
+   "octets_s": 126.8,
+   "echantillons": [
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.4615,
+     "repetition": 4,
+     "echo": 0.22727272727272727,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la compagnie de la Communauté de communes de la Communauté de communes de la Communauté de communes de la Communauté de ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5312,
+     "repetition": 6,
+     "echo": 0.034482758620689655,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950. Il est le premier album de la série de course de la course de la course de la course de la course de la course de la ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.7308,
+     "distinct_2": 0.72,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le comte de Bernard Barthélémy et le premier de la comtesse de Bernard Barthélémy et de Bernard Barthélémy et de Bern",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.4615,
+     "repetition": 4,
+     "echo": 0.22727272727272727,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la compagnie de la Communauté de communes de la Communauté de communes de la Communauté de communes de la Communauté de ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5312,
+     "repetition": 6,
+     "echo": 0.034482758620689655,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1950. Il est le premier album de la série de course de la course de la course de la course de la course de la course de la ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.7308,
+     "distinct_2": 0.72,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le comte de Bernard Barthélémy et le premier de la comtesse de Bernard Barthélémy et de Bernard Barthélémy et de Bern",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.75,
+     "distinct_2": 0.4194,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de Louis XV est un chanteur de la commune de Louis XV de la commune de Louis XV de la commune de Louis XV de la c",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 0.9677,
+     "distinct_2": 0.3,
+     "repetition": 8,
+     "echo": 0.27586206896551724,
+     "prompt": "La mer",
+     "texte": "La mer de Saint-Jean de La Marche et de La Marche de La Marche de La Marche et de La Marche de La Marche de La Marche de La Marche de ",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3158,
+     "repetition": 13,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le premier premier premier premier premier premier premier premier premier premier premier premier premier premier premier prem",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.8571,
+     "repetition": 2,
+     "echo": 0.16666666666666666,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de rendre le comté de Saint-Pierre-de-Beaumont. Le gouvernement de la commune est de  de la commune de Saint-Pierre-de-Beaumon",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5455,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un producteur de la production de la communauté de communication de la production de la communauté de communication de la pro",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.68,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires et de la commune de Saint-Louis de La République de Caroline du Nord et de la commune de Caroline du Nord. Le comt�",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8148,
+     "repetition": 2,
+     "echo": 0.15384615384615385,
+     "prompt": "La musique",
+     "texte": "La musique de la compétition en 2014 et en 2015 pour la saison 2015. Elle est la sélection de la compétition en 2015 et en 2016 et est ",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.4211,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la commune de Saint-Martin-des-Prés de la commune de Saint-Martin-des-Prés de la commune de Saint-Martin-des-Prés de la c",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7273,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.2,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Louis de La Roche-sur-Mer (1777-1841), et de la guerre de Saint-Louis de La Roche-sur-Mer (1777-1849). Le groupe de Sa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8148,
+     "distinct_2": 0.4231,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de la commune de La Chambre des communes de la Charente de la Charente de la Charente de la Charente de la Charen",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.4211,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune de Saint-Martin-des-Prés de la commune de Saint-Martin-des-Prés de la commune de Saint-Martin-des-Prés de la c",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.75,
+     "distinct_2": 0.4348,
+     "repetition": 5,
+     "echo": 0.2727272727272727,
+     "prompt": "La science",
+     "texte": "La science de l'art de la commune de Saint-Louis de La Saint-Louis de La Saint-Louis de La Saint-Louis de La Saint-Louis de La Saint-Louis",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1176,
+     "repetition": 11,
+     "echo": 0.6363636363636364,
+     "prompt": "La ville",
+     "texte": "La ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La V",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8235,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de Saint-Martin-des-Provences de la commune de Saint-Martin-des-Provences de la commune de Saint-Martin-des-Prove",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La vie",
+     "texte": "La vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la v",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.125,
+     "prompt": "Le monde",
+     "texte": "Le monde de l'année 2014 et le premier match de la compétition en 2015 et 2017. Il remporte le championnat du monde de l'année 2015 e",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.5556,
+     "repetition": 3,
+     "echo": 0.19230769230769232,
+     "prompt": "La question",
+     "texte": "La question de la commune de La Roche-sur-Seine est située à  au sud de la commune de La Roche-sur-Seine et à  au sud de la commune de L",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8672,
+   "distinct_2": 0.977,
+   "repetition": 2,
+   "echo": 0.0345,
+   "octets": 2560,
+   "secondes": 21.14,
+   "octets_s": 121.1,
+   "echantillons": [
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.9231,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays obtenu par les limites de Barcelone du San Francisco Barrazzi. Les limites de la Plaine sont venus après avoir été morts pri",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, l'Afrique des Sociétés et scénaristes de musique française et de travaux pour la première fois en 1960. Elle se produit d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois un visage dans plusieurs compositeurs des résistantes de catégorie à Versailles avant de s'engager sur le manachisme. En rai",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.9231,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays obtenu par les limites de Barcelone du San Francisco Barrazzi. Les limites de la Plaine sont venus après avoir été morts pri",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, l'Afrique des Sociétés et scénaristes de musique française et de travaux pour la première fois en 1960. Elle se produit d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois un visage dans plusieurs compositeurs des résistantes de catégorie à Versailles avant de s'engager sur le manachisme. En rai",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.6957,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat Librairie de la Burgos Rosano Capha. Il évoque une population avec les  obtienno de l'Avellino et de la Prosano Petriopor Race",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.8846,
+     "repetition": 1,
+     "echo": 0.2,
+     "prompt": "La mer",
+     "texte": "La mer du Marc porte une station de la mer, dont Dierace, de la Grande Arme et de la Roumanie sociale du Sara (La Ville comporte dans ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.7931,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des projets victimes de Louis XV de 2015 à 2016 et est mort le  à Dublin en 2017. Son premier Brian Joseph Musura. Il a été",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de commencer ses premiers éclos. La presse haut de composition est quasi artistique dans les régions de l'armée de la Mariti",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8095,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est une femme politique française publiée à La Politique et conservatrice française de Sante Bruno et de Huez. Disparition L'é",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'environ ses Totalego de 100 à 100 m 112. L'équipe nationale de l'armée de l'armée est de son père a pu approuv de sélec",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.037037037037037035,
+     "prompt": "La musique",
+     "texte": "La musique de La Casalty passe de nom de bande en salle avec le National Paul Montpellin.. Il est alors en 1880 sous le mot de duc de Volt",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre des années 1980. Chevalier de la Vierge de Saint-Christiani, il décide d'avoir ensemble à la transmission de la péninsurit�",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre de Lucarnie était déjà écrit de nombreuses gilles. Protection et intervités aux Angles de l'église et compagnies de cette",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "L'économie",
+     "texte": "L'économie à celle de Medsigny à ce nom précédemment géré par les efforts des peaux de l'économie à passager. Elle obtient son Pre",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Le sport",
+     "texte": "Le sport de faction de Louis X du jury de Scott (1990-1992), basé sur le côté sud-Ouest à la ligne de matériaux de la revues célè",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La science",
+     "texte": "La science et le congé qui est à partir de l'armée américaine de la Séance à l'occupation Championship. En 1920, il fait ses débuts",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La ville",
+     "texte": "La ville de Saint-Paulin au nord de la Soissons qui sont les premiers exploits extérieurs du Brésil et du Liaou des artistes contempor",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de Merey Moreau. Il est à la cours plate-t-ils du championnat pandis des courses de 1963 à 1964. Fin de son novembre, il joue",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La vie",
+     "texte": "La vie de la vie en Belgique, en Suisse. Ainsi, il est divorcé sa famille et au Centre-Neuve-et-Yonne La vie et diplômé de Francisc",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde est un archevêque de Valamis Balane. Il est l'aîné de l'Église catholique de France d'Angers. Biographie Jeunesse The You e",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La question",
+     "texte": "La question de fonctions de deux ans de pierre. Cette éducation est annoncée par son train de nombreux prieuré pour la première fois à",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.8787,
+   "distinct_2": 0.8205,
+   "repetition": 7,
+   "echo": 0.0499,
+   "octets": 2560,
+   "secondes": 21.0,
+   "octets_s": 121.9,
+   "echantillons": [
+    {
+     "mots": 32,
+     "mots_valides": 0.9062,
+     "distinct_2": 0.871,
+     "repetition": 2,
+     "echo": 0.14814814814814814,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays produit par le nom de la République de Paris et le nord de la Somme de Montpellier. Il est aussi formé avec le nom de la Rép",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, ce qui est interdit dans la région de Colombie et du Conseil d'administration de la Conseil d'administration de la Conseil d'",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois en croisière à l'Université de Caux en 1997. Biographie Carrière En club Autre de l'histoire de l'Assemblée Nationale de l",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 32,
+     "mots_valides": 0.9062,
+     "distinct_2": 0.871,
+     "repetition": 2,
+     "echo": 0.14814814814814814,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays produit par le nom de la République de Paris et le nord de la Somme de Montpellier. Il est aussi formé avec le nom de la Rép",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, ce qui est interdit dans la région de Colombie et du Conseil d'administration de la Conseil d'administration de la Conseil d'",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois en croisière à l'Université de Caux en 1997. Biographie Carrière En club Autre de l'histoire de l'Assemblée Nationale de l",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7273,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le chat",
+     "texte": "Le chat de la première épouse de l'armée d'Aurian Rousseau (1840-1891). Il est également le père de Lippe et de Juliette Bourgogne",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.6071,
+     "repetition": 5,
+     "echo": 0.037037037037037035,
+     "prompt": "La mer",
+     "texte": "La mer de La Ferté des Boucles et les communautés des Arts et Bertrand du Canada et des Arts et des Arts et des Arts et des Arts et ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 3,
+     "echo": 0.045454545454545456,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent les sites de l'armée de l'armée de l'Agriculture au sein de l'armée de l'Agriculture sur la rue de l'Agriculture en armée d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de reprendre le conseil de l'armée de l'Académie de La Nouvelle-Orléans et de la Révolution française de la Nouvelle-Orlé",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.4828,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un hôtel de la ville de La Cause du Parlement de La Cause de Cause de la Cause du Parlement de La Cause du Parlement de La Cau",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.9474,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires étaient remplacés dans les États-Unis. Les années 1990 sont une compagnie de contrôle d'une année constituant ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.09090909090909091,
+     "prompt": "La musique",
+     "texte": "La musique comprenait le poste de son pays de changement de courant à l'échelle de la musique comprenant le poste de chanteuse de l'éch",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6786,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la Coupe du monde de football 1999 et de la Coupe du monde de football 1999 et 1999. Il dispute un monde de champion du mond",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La guerre",
+     "texte": "La guerre de Simon Cup a deux comptes sur la protection de la compétition en 1994. Le , il s'implique dans les récits de compétition e",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.8571,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'Église de Montréal de Beauville en 1482. Elle est élue par l'Association des dangers de l'Association des dangers de Be",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Le sport",
+     "texte": "Le sport en compte de Lisbonne en 1973 et interprété par le Parti républicain en 1986. C'est une version de l'interprétation de la C",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.6429,
+     "repetition": 3,
+     "echo": 0.18518518518518517,
+     "prompt": "La science",
+     "texte": "La science de la science de Berlin de 1921 à 1929. Il est député de la Coupe d'Europe de la science de Berlin de 1920 à 1929. Il rempo",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.2857,
+     "distinct_2": 0.4615,
+     "repetition": 7,
+     "echo": 0.08333333333333333,
+     "prompt": "La ville",
+     "texte": "La ville de La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roche-sur-La Roch",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.5714,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la province du Tour de Saint-Luc et de la province du Tour de Saint-Luc de Jérôme de La Mesure et de la province du Tour d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "La vie",
+     "texte": "La vie de l'est du palais de Saint-Paul est située dans la ville de Montesque (à l'ouest de la Charente). Le palais de Saint-Paul es",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de France se situe en Suisse à l'extrémité de l'Algérie en France. En 1994, il s'agit de la première école de l'architect",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La question",
+     "texte": "La question de son comté, et peut aussi le projet de comté de Saint-Gilles de Londres, et le soulèvement de la presse de Saint-Gilles au",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

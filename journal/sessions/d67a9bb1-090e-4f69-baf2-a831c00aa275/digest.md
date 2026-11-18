@@ -8852,3 +8852,68 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N4 — grammaticalité et données**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N4 — grammaticalité et donné … [1204 caractères tronqués]`
+
+  ```
+mots : 61
+  en-cours · 1751 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+ok
+mer 18 nov 2026 12:46:52 EST
+r4 FINI ppl 3.0628
+passe: 87 vertes, 2 rouges
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash bench/checkpoint_bench.sh work/n3/r4.pt r4 2>&1 | tail -2; python3 -c \"\nimport json\nd=json.load(open('reports/banc-generation-r4.json'))\nfor k,v in d['reglages'].items(): print(k, 'valides', v['mots_valides'], 'rép', v['repe … [103 caractères tronqués]`
+
+  ```
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0.670 sans_verbe=0.05
+bancs : reports/banc-generation-r4.json · reports/banc-grammaticalite-r4.json
+greedy valides 0.8956 rép 13 écho 0.1463 d2 0.5103
+top40_0.8 valides 0.8672 rép 2 écho 0.0345 d2 0.977
+top20_0.5 valides 0.8787 rép 7 écho 0.0499 d2 0.8205
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-courbe-r1-r3.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\nrep(\"# La courbe 3 000  … [2488 caractères tronqués]`
+
+  ```
+ok
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 897 JSON, le disque en a 899
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**r1/r2/r3** : PPL **3,4 … [1606 caractères tronqués]`
+
+  ```
+❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 897 JSON, le disque en a 899
+  en-cours · 1751 mots · 7 sections · 4 session(s) · 10 puces · 4 questions
+  ✅ état court, structuré, multi-session et reprenable
+mer 18 nov 2026 12:49:17 EST
+  porte-topologie        ✅                          96 s    ✅ PPL épinglées : reference 17.4702 · hi
+  porte-trace            ✅                          27 s    ✅ la trace fausse est détectée et nommée
+passe: 87 vertes, 2 rouges
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: **r1/r2/r3** : PPL **3,4130 → 3,2321 → 3,1317**, top-40 **0,
+  ❌ commit refusé : 3 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/banc-generation-r4.json
+     · reports/banc-grammaticalite-r4.json
+     · reports/rapport-courbe-r1-r3.md
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"N — l'entraînement et le décodage\" docs/pilotage/en-cours.md; grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md", "description": "Read the exact state lines"}`
+
+  ```
+90:- **N — l'entraînement et le décodage** (18/11) : courbe **3k → 33k** — PPL **4,6792 → 3,1317**, top-40 **0,551 → 0,870**, greedy **instable** (rép 10–11) ; **top-40/T=0,5** bat le greedy (**0,907**, rép **1,7**) ; le critère du palier 1 (rép ≤ 3) n'est tenu qu'en échantillonnage ; [courbe](../../reports/rapport-courbe-r1-r3.md), [r1](../../reports/rapport-r1-13000-pas.md), [décodage](../../reports/rapport-decodage-r1.md).
+102:| fichiers / JSON de résultats | **804** / **897** | `reports/*.md` / `reports/*.json` |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N — l'entraînement et le décodage**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N — l'entraînement et le  … [2020 caractères tronqués]`
