@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 50.3 h |
+| Durée | 50.4 h |
 | Tours | 33 |
-| Messages | 911 |
-| Appels d'outils | 847 |
+| Messages | 912 |
+| Appels d'outils | 848 |
 | Fichiers touchés | 44 |
-| Commandes | 706 |
+| Commandes | 707 |
 | Sous-agents | 7 |
-| Commits | 68 |
+| Commits | 69 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1053,7 +1053,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 
 ### Tour 33 — continue avec les prochaines actions jusqu'à 17h
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the source corpora and compute the v1 reference at 30k
@@ -1067,6 +1067,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - bash — Confirm the test suite count
 - bash — Commit the A2.6 decision branch
 - bash — Restore the budget after the A2.6 decision commit
+- bash — Final budget trim
 
 ## 3. Travail accompli
 
@@ -1171,7 +1172,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 666 autres
+- … et 667 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1387,4 +1388,5 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()
 - ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE)" && git push origin s/v7 2>&1 | tail -1; date
+- ÉTAT — T0 À 3 997" && git push origin s/v7 2>&1 | tail -1
 

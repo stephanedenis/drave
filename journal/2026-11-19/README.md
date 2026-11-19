@@ -5,14 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**22 commits** · **1 session(s)** · **6 thème(s)**
+**23 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
-| docs | 6 | [docs.md](docs.md) |
+| docs | 7 | [docs.md](docs.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
 | moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 50.3 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 50.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -50,6 +50,7 @@
 | 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) |
 | 11:44 | `e4cd1953` | ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS |
 | 12:06 | `01303f2f` | A2.6 — LA DÉCISION : LE CACHE DES EXPERTS PASSE PAR LA RÈGLE (VRAM SI ELLE LE PLACE, REFUS NOMMÉ SINON) |
+| 12:09 | `90d9242e` | ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE) |
 
 ## Le récit de la journée (écrit à la main)
 
