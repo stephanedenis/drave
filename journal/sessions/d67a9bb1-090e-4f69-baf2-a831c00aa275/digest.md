@@ -13743,3 +13743,14 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()\nold = \"**Lecture attendue** : si `cl3` ou `rf3` tombent sous 7,43, le balisage/la fragmentation comptaient ;\\nsi les troi … [1873 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+budget=1
+   693508ff..c92dac72  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** (350 o/ligne ; 3 runs, milieu de c … [450 caractères tronqués]`

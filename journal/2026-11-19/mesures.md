@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (6)
+## Commits du jour (7)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -14,10 +14,11 @@
 | 08:12 | `5e142446` | N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 | 09:48 | `1512afde` | D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 10:21 | `693508ff` | N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON | `en-cours.md`, `README.md`, `distribue.md` (+11) |
+| 10:24 | `c92dac72` | N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 
 ## Chiffres du jour
 
-`6,874 Go` · `6,874` · `6,867` · `7,093` · `2,844` · `3,038` · `0,948` · `0,900`
+`+0,6 %` · `6,874 Go` · `6,874` · `6,867` · `7,093` · `2,844` · `3,038` · `0,948` · `0,900`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

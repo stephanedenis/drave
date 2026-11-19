@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**15 commits** · **1 session(s)** · **5 thème(s)**
+**16 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
-| mesures | 6 | [mesures.md](mesures.md) |
+| mesures | 7 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -42,6 +42,7 @@
 | 10:04 | `cddc7b39` | A2.6 — LE BRANCHEMENT A SON MODE D'EMPLOI : SITES, ENTRÉES, TEST, PORTES |
 | 10:17 | `b67af8de` | A2.6 — LA RÈGLE DES EXPERTS EST BRANCHÉE : TRACE SOUS OPT-IN SUR LE VRAI 30B (1,10 Go/JETON · 6,99 Go/s · 156,9 ms → VRAM) |
 | 10:21 | `693508ff` | N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON |
+| 10:24 | `c92dac72` | N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT |
 
 ## Le récit de la journée (écrit à la main)
 

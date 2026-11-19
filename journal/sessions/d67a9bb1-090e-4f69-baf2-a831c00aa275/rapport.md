@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 48.6 h |
 | Tours | 26 |
-| Messages | 852 |
-| Appels d'outils | 805 |
+| Messages | 853 |
+| Appels d'outils | 806 |
 | Fichiers touchés | 44 |
-| Commandes | 667 |
+| Commandes | 668 |
 | Sous-agents | 7 |
-| Commits | 61 |
+| Commits | 62 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -878,9 +878,10 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 
 ### Tour 26 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
 
-*1 appels d'outils.* Actions notables :
+*2 appels d'outils.* Actions notables :
 
 - bash — Record the intermediate points of the three-way test
+- bash — Restore the budget
 
 ## 3. Travail accompli
 
@@ -985,7 +986,7 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 627 autres
+- … et 628 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1194,4 +1195,5 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON" && git push origin s/v7 2>&1 | tail -1
 - N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT" && git push origin s/v7 2>&1 | tail -1
+- ÉTAT — T0 REPASSÉ" && git push origin s/v7 2>&1 | tail -1
 
