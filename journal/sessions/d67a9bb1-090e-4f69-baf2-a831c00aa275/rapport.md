@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 45.9 h |
 | Tours | 19 |
-| Messages | 766 |
-| Appels d'outils | 735 |
+| Messages | 767 |
+| Appels d'outils | 736 |
 | Fichiers touchés | 41 |
-| Commandes | 601 |
+| Commandes | 602 |
 | Sous-agents | 7 |
-| Commits | 49 |
+| Commits | 50 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -720,7 +720,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 19 — continue avec les prochaines actions
 
-*19 appels d'outils.* Actions notables :
+*20 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the wikitext2 val and the eval tool
@@ -736,7 +736,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Inspect the cleaning tool and prepare the 30k reference
 - bash — Compute the v2 checkpoint at 30k on wikitext2
 - bash — Write the corpus cleaner and run its autotest
-- … et 5 autres
+- … et 6 autres
 
 **Synthèse produite :**
 
@@ -842,7 +842,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 561 autres
+- … et 562 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1039,4 +1039,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)" && git push origin s/v7 2>&1 | tail -1;
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "le
+- ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0" && git push origin s/v7 2>&1 | tail -1
 

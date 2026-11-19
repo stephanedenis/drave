@@ -12744,3 +12744,13 @@ fiche corrigée
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier doit **nettoyer**\"\nnew = \"le palier doit **nettoyer** (outil `nettoyer_corpus.py`, 0,263 % d'octets, mais 410 co … [1275 caractères tronqués]`
+
+  ```
+ok
+budget=1
+   32d766c8..10caffe5  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, ol … [796 caractères tronqués]`
