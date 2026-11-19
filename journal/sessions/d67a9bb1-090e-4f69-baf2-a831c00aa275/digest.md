@@ -12864,3 +12864,62 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"le palier **nettoie** (6 … [520 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3993 mots (budget 4 000)
+   665c8050..851daeec  s/v7 -> s/v7
+jeu 19 nov 2026 08:03:54 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/reflow_corpus.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"reflow_corpus.py — recoller les paragraphes du plein texte (défragmentation).\n\nPOURQUOI. Le 19/11, la mesure a montré que le corpus v2 fait **108,8 octets par ligne … [3707 caractères tronqués]`
+
+  ```
+✅ autotest : deux paragraphes recollés, la ligne vide sépare
+{
+ "entree": "/tmp/clean-20m.txt",
+ "sortie": "/tmp/reflow-20m.txt",
+ "octets_in": 20000000,
+ "octets_out": 19997883,
+ "lignes_out": 43372,
+ "octets_par_ligne": 461.1
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/reflow && nohup python3 tools/reflow_corpus.py --entree work/clean/train.txt --sortie work/reflow/train.txt --json work/reflow/reflow.json > work/reflow/reflow.log 2>&1 & sleep 5; echo \"reflow lancé $(date +%H:%M)\"; t … [104 caractères tronqués]`
+
+  ```
+reflow lancé 08:04
+pas 1300 · perte 2.4107 · PPL val 11.720 · 541 s · échelle 65536
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,args | grep reflow_corpus | grep -v grep | head -1 | cut -c1-40; ls -la work/reflow/train.txt 2>/dev/null; tail -8 work/reflow/reflow.json 2>/dev/null", "description": "Check the reflow completion", "timeo … [14 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 08:11:41 EST
+-rw-r--r--. 1 stephane stephane 6893866028 19 nov 08:06 work/reflow/train.txt
+{
+ "entree": "work/clean/train.txt",
+ "sortie": "work/reflow/train.txt",
+ "octets_in": 6894225744,
+ "octets_out": 6893866028,
+ "lignes_out": 19717480,
+ "octets_par_ligne": 349.6
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --corpus work/reflow --sortie reports/corpus-epingle-reflow.json 2>&1 | tail -3; nohup bash work/n4/chaine.sh 1 work/reflow/train.txt rf 3 1e-4 > /tmp/rf-chaine.out 2>&1 & sleep 20; echo \"chaîne reflo … [198 caractères tronqués]`
+
+  ```
+corpus épinglé : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/reflow
+  train.txt    9a5ca658b9879b8f…    6893866028 o     39434960 lignes  2026-11-19T08:06:29
+  manifeste : f9214450b32ee86b… → reports/corpus-epingle-reflow.json
+chaîne reflow lancée 08:12
+0, 99 %, 8296 MiB
+1, 100 %, 6770 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()\nold = \"## Le test\\n\\n- **Run `cl`** : 30 000 pas (3 tranches) sur le corpus nettoyé, depuis zéro, même recette (lr 1e-4, … [3327 caractères tronqués]`

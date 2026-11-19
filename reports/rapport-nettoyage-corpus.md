@@ -26,15 +26,24 @@ Le nettoyage **retire le balisage et les titres isolés**, mais il ne peut pas *
 paragraphes** : la maille reste à 170 o/ligne contre 410 pour v1. Si la fragmentation est la cause
 des 3,2 %, ce run le dira à moitié — il faudra un recollement des paragraphes pour l'éliminer.
 
-## Le test
+## Le test à trois
 
-- **Run `cl`** : 30 000 pas (3 tranches) sur le corpus nettoyé, depuis zéro, même recette (lr 1e-4,
-  AMP, `d=896`, graine 1) · banc complet après chaque tranche.
-- **Référence** : le checkpoint `v23` (v2 brut, 30 000 pas) → wikitext2 **7,4277**, val v1
-  **3,1922** ([[`ppl-wikitext2.json`](ppl-wikitext2.json), [`courbe-150m.json`](courbe-150m.json)]).
-- **Lecture attendue** : si `cl3` tombe sous 7,43 sur wikitext2, le balisage/les titres comptaient ;
-  s'il reste au-dessus, c'est la **sélection du contenu** (plein texte vs résumés) ou la
-  fragmentation qu'il faut accuser — et le recollement des paragraphes devient la prochaine étape.
+Deux corpus dérivés du même v2, deux runs de 30 000 pas (3 tranches de 10 000, depuis zéro, même
+recette : lr 1e-4, AMP, `d=896`, graine 1) :
+
+| run | corpus | octets/ligne | état |
+|---|---|---:|---|
+| `v23` | v2 **brut** | 108,8 | fait — wikitext2 **7,4277** |
+| `cl` | v2 **nettoyé** (`860aeb6a…`, `2f79f863…`) | 170,7 | en cours (3 tranches) |
+| `rf` | v2 **nettoyé + recollé** (`9a5ca658…`, `f9214450…`, `tools/reflow_corpus.py`) | **349,6** | lancé (3 tranches) |
+
+Le recollement (`reflow_corpus.py`, autotest) joint les lignes d'un paragraphe en une seule :
+**349,6 o/ligne**, la maille de v1 (410,2). Les trois runs sont jugés sur **wikitext2** (tout le
+val, 352 256 jetons) — le val tiers qui a montré le biais.
+
+**Lecture attendue** : si `cl3` ou `rf3` tombent sous 7,43, le balisage/la fragmentation comptaient ;
+si les trois restent au même niveau, c'est la **sélection du contenu** (plein texte vs résumés) qu'il
+faut accuser, et le prochain corpus doit changer de source, pas de forme.
 
 ## Ce qui pourrait le rendre faux
 

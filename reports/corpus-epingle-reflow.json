@@ -1,0 +1,16 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-19T08:12:09",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/reflow",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "train.txt": {
+   "sha256": "9a5ca658b9879b8fe79e949e4de78e07dcd3cab60ff749248a6685a4d872ef36",
+   "octets": 6893866028,
+   "lignes": 39434960,
+   "mtime": "2026-11-19T08:06:29"
+  }
+ },
+ "manifeste_sha256": "f9214450b32ee86b4bbd4b07112ae0c846052a69e83a57bcba9aa1c957d85297"
+}

@@ -5,13 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**7 commits** · **1 session(s)** · **4 thème(s)**
+**8 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
+| docs | 1 | [docs.md](docs.md) |
 | mesures | 3 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -20,7 +21,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 46.2 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 46.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -33,6 +34,7 @@
 | 07:47 | `a72abe73` | ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 |
 | 07:56 | `c50c53b0` | N — LE CORPUS NETTOYÉ : 6,874 Go, `]]` À ZÉRO, 40,4 M LIGNES DE CONTENU, ÉPINGLÉ 860aeb6a… |
 | 07:58 | `665c8050` | ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 |
+| 08:01 | `851daeec` | ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE) |
 
 ## Le récit de la journée (écrit à la main)
 
