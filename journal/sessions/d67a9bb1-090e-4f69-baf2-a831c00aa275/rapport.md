@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 46.4 h |
-| Tours | 19 |
-| Messages | 783 |
-| Appels d'outils | 752 |
-| Fichiers touchés | 42 |
-| Commandes | 617 |
+| Durée | 48.0 h |
+| Tours | 20 |
+| Messages | 808 |
+| Appels d'outils | 774 |
+| Fichiers touchés | 43 |
+| Commandes | 638 |
 | Sous-agents | 7 |
-| Commits | 55 |
+| Commits | 56 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -85,6 +85,8 @@
 **Tour 18** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 **Tour 19** — continue avec les prochaines actions
+
+**Tour 20** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -720,7 +722,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 19 — continue avec les prochaines actions
 
-*36 appels d'outils.* Actions notables :
+*46 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the wikitext2 val and the eval tool
@@ -736,11 +738,30 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Inspect the cleaning tool and prepare the 30k reference
 - bash — Compute the v2 checkpoint at 30k on wikitext2
 - bash — Write the corpus cleaner and run its autotest
-- … et 22 autres
+- … et 29 autres
 
 **Synthèse produite :**
 
-⏵ Prochaines actions : un val tiers (wikitext2) pour trancher v1/v2, puis le branchement A2.6
+⏵ Deux runs de contrôle en cours (nettoyé GPU 0, recollé GPU 1) — point complet à 30 minutes
+
+À 10 000 pas, sur le val de v1 : v2 brut **3,5568**, nettoyé **3,5913**, recollé **3,5763** — le nettoyage et le recollement ne payent pas encore, et c'est exactement ce que le test doit trancher : la comparaison décisive se fait à **30 000 pas sur wikitext2** (le val tiers), où le brut est à 7,4277. Les deux chaînes tournent (GPU 0/1), la clôture de l'expérience est prévue vers 12 h.
+
+### Tour 20 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*12 appels d'outils.* Actions notables :
+
+- bash — Test whether the machine can download from Gutenberg
+- bash — Diagnose the network access
+- bash — Test the Wikisource API for French novels
+- bash — Write and test the Wikisource collector
+- bash — Extend to chapters and test on 6 books
+- bash — Check the novels result and test the tales category
+- bash — Inspect a Wikisource tale's raw wikitext
+- bash — Diagnose the cleaning on real pages
+- bash — Retry the Wikisource API with a delay and inspect a page
+- bash — Diagnose the batch yield on 40 tales
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md`
+- bash — Commit the diversity blocker
 
 ## 3. Travail accompli
 
@@ -790,6 +811,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-nuit.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-nettoyage-corpus.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -843,7 +865,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 577 autres
+- … et 598 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -971,7 +993,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ## 5. Erreurs rencontrées
 
-19 sorties en erreur ou divergentes. Les premières :
+20 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -1046,4 +1068,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()
 - ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text(
 

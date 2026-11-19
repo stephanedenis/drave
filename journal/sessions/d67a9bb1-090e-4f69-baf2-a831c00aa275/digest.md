@@ -12934,3 +12934,242 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0\" | head -1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[: … [726 caractères tronqués]`
+
+  ```
+T0 max : 4001 mots (budget 4 000)
+ok
+budget=0
+  T0 max : 3997 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+   5e142446..25b60495  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/cl.chaine.log | cut -c1-45; tail -1 work/n4/rf.chaine.log | cut -c1-45", "description": "Ten-minute check of the two chains", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 08:28:23 EST
+pas 4750 · perte 1.3141 · PPL val 4.197 · 197
+pas 2400 · perte 1.6770 · PPL val 6.087 · 947
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/cl.chaine.log | cut -c1-45; tail -1 work/n4/rf.chaine.log | cut -c1-45", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 08:38:28 EST
+pas 6200 · perte 1.3459 · PPL val 3.919 · 258
+pas 3950 · perte 1.4040 · PPL val 4.471 · 155
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/cl.chaine.log | cut -c1-45; tail -1 work/n4/rf.chaine.log | cut -c1-45", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 08:48:31 EST
+pas 7650 · perte 1.2249 · PPL val 3.811 · 318
+pas 5450 · perte 1.3035 · PPL val 4.082 · 215
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/cl.chaine.log | cut -c1-45; tail -1 work/n4/rf.chaine.log | cut -c1-45", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 08:58:36 EST
+pas 9100 · perte 1.1541 · PPL val 3.728 · 379
+pas 7000 · perte 1.2823 · PPL val 3.874 · 276
+  ```
+
+### 👤 Utilisateur
+
+You are repeating the exact same tool call with identical arguments. Carefully analyze the previous result before calling again: if the task is not complete, try a different approach or different arguments instead of repeating the call.
+
+- **bash** `{"command": "sleep 430; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/cl1.pt work/n4/rf1.pt 2>/dev/null; python3 -c \"\nimport json\nfor f in ('cl1','rf1'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'précision', roun … [161 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 09:05:59 EST
+work/n4/cl1.pt
+cl1 ppl 3.5913 précision 0.6263
+rf1 en cours
+  ```
+
+- **bash** `{"command": "sleep 520; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/rf1.pt.json')); print('rf1 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('rf1 en cours')\"; t … [112 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 09:14:47 EST
+rf1 en cours
+pas 1100 · perte 1.1322 · PPL val 3.633
+  ```
+
+- **bash** `{"command": "sleep 550; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/rf1.pt.json')); print('rf1 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('rf1 en cours')\"; t … [119 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 09:24:03 EST
+rf1 ppl 3.5763 précision 0.627
+pas  500 · perte 1.2145 · PPL val 3.666 · 198 s ·
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/cl.chaine.log | cut -c1-42; tail -1 work/n4/rf.chaine.log | cut -c1-42", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 09:34:09 EST
+pas 3850 · perte 1.1881 · PPL val 3.541 · 
+pas 2050 · perte 1.1630 · PPL val 3.577 ·
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 09:44:12 EST
+  ```
+
+- **bash** `{"command": "sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl1','rf1','cl2','rf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"; tail -1 w … [171 caractères tronqués]`
+
+  ```
+started background job bash-1067
+  ```
+
+### 🤖 Assistant
+
+⏵ Deux runs de contrôle en cours (nettoyé GPU 0, recollé GPU 1) — point complet à 30 minutes
+
+À 10 000 pas, sur le val de v1 : v2 brut **3,5568**, nettoyé **3,5913**, recollé **3,5763** — le nettoyage et le recollement ne payent pas encore, et c'est exactement ce que le test doit trancher : la comparaison décisive se fait à **30 000 pas sur wikitext2** (le val tiers), où le brut est à 7,4277. Les deux chaînes tournent (GPU 0/1), la clôture de l'expérience est prévue vers 12 h.
+
+
+## Tour 20
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 30 python3 -c \"\nimport urllib.request\nr = urllib.request.urlopen('https://www.gutenberg.org/cache/epub/17489/pg17489.txt', timeout=20)\nb = r.read(2000)\nprint('OK', len(b), b[:80])\" 2>&1 | head -3; date", "description":  … [75 caractères tronqués]`
+
+  ```
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    r = urllib.request.urlopen('https://www.gutenberg.org/cache/epub/17489/pg17489.txt', timeout=20)
+jeu 19 nov 2026 09:44:42 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 25 curl -sS -o /dev/null -w \"gutenberg: %{http_code}\\n\" https://www.gutenberg.org/ 2>&1 | tail -2; timeout 25 curl -sS -o /dev/null -w \"wikipedia: %{http_code}\\n\" https://fr.wikipedia.org/ 2>&1 | tail -2; timeout 25 cur … [153 caractères tronqués]`
+
+  ```
+gutenberg: 503
+wikipedia: 301
+github: 200
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 30 curl -sS \"https://fr.wikisource.org/w/api.php?action=query&list=categorymembers&cmtitle=Cat%C3%A9gorie:Romans&cmlimit=10&format=json\" 2>&1 | head -c 400; echo; date", "description": "Test the Wikisource API for French no … [26 caractères tronqués]`
+
+  ```
+{"batchcomplete":"","continue":{"cmcontinue":"page|534945474652494544204554204c45204c494d4f5553494e0a534945474652494544204554204c45204c494d4f5553494e|2289764","continue":"-||"},"query":{"categorymembers":[{"pageid":4013283,"ns":0,"title":"Les Faux Monnayeurs au dix-neuvi\u00e8me si\u00e8cle"},{"pageid":3342990,"ns":0,"title":"Le Mariage d\u2019un sous-pr\u00e9fet \u2014 La Statue d\u2019Apollon"},
+jeu 19 nov 2026 09:45:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/collecter_wikisource.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"collecter_wikisource.py — la diversité du corpus : des textes FR hors Wikipédia.\n\nPOURQUOI. Le palier 1 a 7,5 Go de Wikipédia et ~0,1 Go hors Wikipédia : l'é … [5433 caractères tronqués]`
+
+  ```
+"octets": 7
+  },
+  {
+   "titre": "Souvenirs d’une actrice",
+   "octets": 8
+  },
+  {
+   "titre": "Stello",
+   "octets": 7
+  }
+ ]
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/collecter_wikisource.py'); s = p.read_text()\nold = '''def textes(titres: list[str]) -> list[tuple[str, int, str]]:'''\nnew = '''def sous_pages(titre: str, maxi: int = 400) -> … [1847 caractères tronqués]`
+
+  ```
+ok
+  {
+   "titre": "Notre-Dame de Paris, 1844/02/07",
+   "octets": 0
+  },
+  {
+   "titre": "Notre-Dame de Paris, 1844/03",
+   "octets": 2
+  }
+ ]
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('/tmp/livres-test2.json')); print('livres', d['pages'], 'gardés', d['gardes'], 'octets', d['octets'])\"; timeout 200 python3 tools/collecter_wikisource.py --categorie \"Catégorie:Contes\"  … [277 caractères tronqués]`
+
+  ```
+livres 84 gardés 0 octets 1
+  15 livres, 44 pages de texte
+ "gardes": 0,
+ "octets": 1,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 40 curl -sS \"https://fr.wikisource.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&titles=Le%20Petit%20Chaperon%20rouge&format=json\" 2>&1 | python3 -c \"\nimport json,sys\nd=json.load(sys.stdin)\nfor p … [219 caractères tronqués]`
+
+  ```
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    d=json.load(sys.stdin)
+  File "/usr/lib64/python3.13/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/usr/lib64/python3.13/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/json/decoder.py", line 363, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 200 python3 - <<'PY'\nimport sys\nsys.path.insert(0, '.')\nfrom tools.collecter_wikisource import membres, textes, nettoie_wikitexte\ntitres = membres('Catégorie:Contes', 5)\nprint('titres:', titres[:5])\nfor titre, revid, co … [283 caractères tronqués]`
+
+  ```
+titres: []
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sleep 5; timeout 120 python3 - <<'PY'\nimport sys, time\nsys.path.insert(0, '.')\nfrom tools.collecter_wikisource import api, nettoie_wikitexte\nd = api({\"action\": \"query\", \"list\": \"categorymembers\", \"cmtitle\": \"Catégorie: … [688 caractères tronqués]`
+
+  ```
+membres: ['À bord de la Touraine', 'A deux de jeu', 'À la poursuite d’un chapeau', 'À l’œil (recueil)', 'À Monsieur Ousquémont-Hyatt, à Gand']
+page: Le Petit Chaperon rouge brut 936 propre 361
+"{{homonymie}}\n== Éditions de [[Auteur:Charles Perrault|Charles Perrault]] ==\n* ''[[Œuvres choisies de Charles Perrault, édition 1826/Contes de ma mère l’Oye/Le Petit Chaperon Rouge|Le Petit Chaperon Rouge]]'' de [[Auteur:Charles Perrault|Charles Perrault]], édition de Collin de Plancy, 1826\n* ''[[Co"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 200 python3 - <<'PY'\nimport sys, time\nsys.path.insert(0, '.')\nfrom tools.collecter_wikisource import api, membres, nettoie_wikitexte\ntitres = membres('Catégorie:Contes', 40)\nprint(len(titres), 'membres')\nd = api({\"acti … [670 caractères tronqués]`
+
+  ```
+40 membres
+pages 6 brut total 1241 propre total 127
+('A deux de jeu', 202, 3)
+('Azeline', 187, 2)
+('Béjarec le faiseur d’enfants', 172, 2)
+('Les Aventures de la nuit de Saint-Sylvestre (tr. Nerval)', 340, 36)
+('Les Beaux-arts devant M. Francisque Sarcey', 166, 82)
+('L’alliance', 174, 2)
+  ```
+
+- **write** `{"content": "# La diversité du corpus : les sources ne se laissent pas moissonner (503 Gutenberg, Wikisource à transclusions)\n\n> **Ligne de roadmap** : N (le palier 1) / D · **Date** : 2026-11-19 · **Verdict** : ⚠️ **bloqué par\n> les sources** — les deux voies essayées ne rendent pas de texte exp … [2684 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text()\nold = \"- `tools/collecter_wikisource.py` (écrit, testé sur deux catégories) **n'est pas retenu** : il ne\\n  résout pas l … [2413 caractères tronqués]`
