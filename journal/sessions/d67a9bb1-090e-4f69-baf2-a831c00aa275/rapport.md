@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 48.8 h |
-| Tours | 29 |
-| Messages | 869 |
-| Appels d'outils | 815 |
+| Durée | 49.9 h |
+| Tours | 32 |
+| Messages | 893 |
+| Appels d'outils | 831 |
 | Fichiers touchés | 44 |
-| Commandes | 677 |
+| Commandes | 693 |
 | Sous-agents | 7 |
-| Commits | 64 |
+| Commits | 65 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -105,6 +105,12 @@
 **Tour 28** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 **Tour 29** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
+
+**Tour 30** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
+
+**Tour 31** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
+
+**Tour 32** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -935,6 +941,60 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 - bash — Commit the 20k wikitext2 comparison
 - bash — Trim the state to the budget
 
+**Synthèse produite :**
+
+⏵ Wikitext2 à 20 000 pas : le brut gagne encore (7,8688 contre 7,9091 nettoyé et 8,0378 recollé) — la forme n'est pas la cause
+
+**Le point clé** : sur le val tiers, à 20 000 pas, le corpus **brut** reste le meilleur, le nettoyé est à +0,5 %, le recollé à +2,1 %. Le nettoyage et le recollement **n'aident pas** : la seule différence qui tient entre v1 et v2 est la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de `wiki_fr_texte`), pas la forme. C'est consigné dans la fiche et le JSON (`ppl-wikitext2.json`).
+
+Les dernières tranches (30 000 pas) se terminent vers 11 h 25-40 ; je calculerai alors les trois PPL finaux et je clorai la fiche. Tout le reste de l'objectif est fait ou nommé : val tiers mesuré, A2.6 branchée, diversité documentée bloquée.
+
+### Tour 30 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check the last tranche progress
+- bash — Verify the clean and reflow corpus pins
+
+**Synthèse produite :**
+
+⏵ Les deux corpus dérivés sont vérifiés (nettoyé `860aeb6a…`, recollé `9a5ca658…`) — les runs lisent bien les fichiers épinglés
+
+**Vérification faite** : les épingles des deux corpus dérivés repassent — `work/clean/train.txt` (6 894 225 744 o, sha `860aeb6a…`) et `work/reflow/train.txt` (6 893 866 028 o, sha `9a5ca658…`) sont intacts, donc les runs en cours lisent bien les fichiers mesurés et pinnés.
+
+Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PPL ~3,37-3,39). Clôture attendue vers 11 h 30-40, puis les trois PPL sur wikitext2 et la fiche finale.
+
+### Tour 31 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Read the roadmap's N row
+- bash — Read the N row's next-action cell
+- bash — Check the roadmap's budget headroom
+- bash — Closing checks before the final integration
+
+**Synthèse produite :**
+
+⏵ Tous les contrôles de clôture sont verts (revue, état, budget, arbre synchronisé) — il ne reste que la lecture des dernières tranches
+
+**Vérifié à 10 h 40** : revue de documentation ✅ (812 fiches, 961 JSON, 128 docs, 91 portes), état court ✅, budget T0 à 3 998/4 000 ✅, arbre propre et synchronisé avec `origin/s/v7`. La roadmap est à 8 999/9 000 mots — je ne l'ai pas touchée pour ne pas la faire déborder.
+
+**Le seul point ouvert** : les troisièmes tranches (30 000 pas) du test à trois, qui se terminent vers 11 h 30-40, puis les trois PPL finaux sur wikitext2 et la fiche de clôture. Le reste de l'objectif est fait (val tiers mesuré, A2.6 branchée) ou nommé (diversité bloquée par les sources, décision A2.6 et sélection du contenu comme suites).
+
+### Tour 32 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and progress
+- bash — Ten-minute pause
+- bash — Wait for the last tranche of the cleaned run
+- bash — Check the cleaned run's final tranche
+- bash — Compute the clean 30k wikitext2 PPL
+- bash — Check the reflow run's final tranche
+- bash — Compute the reflow 30k wikitext2 PPL
+- bash — Record the final three-way results
+- bash — Commit the three-way verdict
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -1038,7 +1098,7 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 637 autres
+- … et 653 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1166,7 +1226,7 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 
 ## 5. Erreurs rencontrées
 
-21 sorties en erreur ou divergentes. Les premières :
+22 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -1250,4 +1310,5 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 - ÉTAT — T0 REPASSÉ" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep "T0 max"; python3 - <<'PY' import pathlib p = pathlib.Path('
 - ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

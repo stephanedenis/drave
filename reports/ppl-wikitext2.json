@@ -50,6 +50,18 @@
    "corpus": "v2 recollé à 20 000 pas",
    "pas": 20000,
    "ppl": 8.037755445437018
+  },
+  {
+   "modele": "work/n4/cl3.pt",
+   "corpus": "v2 nettoyé à 30 000 pas",
+   "pas": 30000,
+   "ppl": 7.618931049981478
+  },
+  {
+   "modele": "work/n4/rf3.pt",
+   "corpus": "v2 recollé à 30 000 pas",
+   "pas": 30000,
+   "ppl": 7.747619990035492
   }
  ],
  "marquage_wiki_par_20Mo": {

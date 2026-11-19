@@ -1,7 +1,9 @@
 # Le corpus nettoyé : 6,874 Go, `]]` à zéro, 40,4 M lignes de contenu — le test à 30 000 pas est lancé
 
-> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ nettoyé et
-> épinglé — `tools/nettoyer_corpus.py` (flux, autotest 7/7) fait passer le corpus v2 de
+> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ testé — le
+> nettoyage et le recollement **ne payent pas** sur le val tiers (brut **7,4277**, nettoyé **7,6189**,
+> recollé **7,7476** à 30 000 pas) ; la **forme n'est pas la cause** du déficit de v2, la sélection du
+> contenu reste l'hypothèse. Corpus **nettoyé et épinglé** — `tools/nettoyer_corpus.py` (flux, autotest 7/7) fait passer le corpus v2 de
 > **6 900 585 097** à **6 894 225 744 o** (−0,378 %), de **63 438 199** à **60 117 634** lignes
 > (40,4 M de contenu + 19,7 M de vides), et les `]]` de **2 631 à 0** par 20 Mo. L'effet sur le
 > modèle est **en cours de mesure** : un run de 30 000 pas sur le corpus nettoyé, comparé au
@@ -51,16 +53,19 @@ faut accuser, et le prochain corpus doit changer de source, pas de forme.
 |---:|---|---|---|
 | 10 000 | 3,5568 / 0,888 | 3,5913 / **0,918** | 3,5763 / 0,883 |
 | 20 000 | **3,2989** / 7,8688 | 3,3201 / 7,9091 | 3,4200 / 8,0378 |
-| 30 000 | — | *(en cours)* | *(en cours)* |
+| 30 000 | **3,1922** / **7,4277** | 3,2029 / 7,6189 | 3,1811 / 7,7476 |
 
 À 20 000 pas, le nettoyé est à **+0,6 %** de PPL du brut (3,3201 contre 3,2989) et son meilleur
 top-40 du début (0,918) est retombé à 0,871 : la forme ne creuse pas d'écart sur la PPL, et son
 avantage d'échantillonnage n'est pas stable. Le juge reste wikitext2.
 
 **Wikitext2 à 20 000 pas** (le val tiers) : brut **7,8688**, nettoyé **7,9091**, recollé **8,0378** —
-le **brut gagne encore**, et le recollé est le plus mauvais. La forme n'explique donc pas le déficit
-de v2 face à v1 : la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de
-`wiki_fr_texte`) reste la seule différence qui tienne.
+le **brut gagne encore**, et le recollé est le plus mauvais. **Au terme des 30 000 pas** (trois
+tranches, même recette) : brut **7,4277**, nettoyé **7,6189** (+2,6 %), recollé **7,7476** (+4,3 %).
+Les deux verdicts (val de v1 et wikitext2) **se contredisent** : le recollé est le meilleur sur le val
+de v1 (3,1811 contre 3,1922) et le plus mauvais sur wikitext2. La **forme n'est donc pas la cause**
+du déficit de v2 face à v1 : la **sélection du contenu** (résumés + « big » de v1 contre le plein
+texte de `wiki_fr_texte`) reste la seule différence qui tienne, et c'est elle qu'il faut attaquer.
 
 ## Ce qui pourrait le rendre faux
 

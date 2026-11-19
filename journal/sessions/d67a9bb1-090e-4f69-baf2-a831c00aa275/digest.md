@@ -13918,3 +13918,208 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** (à 20k, le brut gagne : 7,87 contre 7,91 et 8,04)\"\nnew = \"le palier **nettoie et recolle* … [511 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3998 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+   8392a482..d074a300  s/v7 -> s/v7
+jeu 19 nov 2026 10:38:52 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Wikitext2 à 20 000 pas : le brut gagne encore (7,8688 contre 7,9091 nettoyé et 8,0378 recollé) — la forme n'est pas la cause
+
+**Le point clé** : sur le val tiers, à 20 000 pas, le corpus **brut** reste le meilleur, le nettoyé est à +0,5 %, le recollé à +2,1 %. Le nettoyage et le recollement **n'aident pas** : la seule différence qui tient entre v1 et v2 est la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de `wiki_fr_texte`), pas la forme. C'est consigné dans la fiche et le JSON (`ppl-wikitext2.json`).
+
+Les dernières tranches (30 000 pas) se terminent vers 11 h 25-40 ; je calculerai alors les trois PPL finaux et je clorai la fiche. Tout le reste de l'objectif est fait ou nommé : val tiers mesuré, A2.6 branchée, diversité documentée bloquée.
+
+
+## Tour 30
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/cl.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; tail -1 work/n4/rf.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"", "description": "Check the last tranche progr … [5 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 10:39:06 EST
+pas 2650 · perte 1.0868 · PPL val 3.366
+pas 1550 · perte 1.1287 · PPL val 3.385
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --corpus work/clean --sortie reports/corpus-epingle-clean.json --verifie 2>&1 | tail -2; python3 tools/epingle_corpus.py --corpus work/reflow --sortie reports/corpus-epingle-reflow.json --verifie 2>&1  … [96 caractères tronqués]`
+
+  ```
+✅ train.txt : 860aeb6a0cd39ce7… (6894225744 o)
+  ✅ train.txt : 9a5ca658b9879b8f… (6893866028 o)
+jeu 19 nov 2026 10:39:54 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux corpus dérivés sont vérifiés (nettoyé `860aeb6a…`, recollé `9a5ca658…`) — les runs lisent bien les fichiers épinglés
+
+**Vérification faite** : les épingles des deux corpus dérivés repassent — `work/clean/train.txt` (6 894 225 744 o, sha `860aeb6a…`) et `work/reflow/train.txt` (6 893 866 028 o, sha `9a5ca658…`) sont intacts, donc les runs en cours lisent bien les fichiers mesurés et pinnés.
+
+Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PPL ~3,37-3,39). Clôture attendue vers 11 h 30-40, puis les trois PPL sur wikitext2 et la fiche finale.
+
+
+## Tour 31
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"corpus épinglé\" docs/pilotage/roadmap.md | head -2 | cut -c1-400", "description": "Read the roadmap's N row"}`
+
+  ```
+32:| **N — le natif** | DRVM, `drave-n0`, [distillation](../theorie/glossaire/entrees/distillation.md), usage, échelle | 🔬 N0/N1 mesurés ; **N0.3b close** ; **N0.1 6/6** ; N2.h : 3,0904 domaine, 3,85 hors dépôt ; **N2.ac (1 Go) : 3,49 / 6,03 / 8,34 — production** ; **200 k pas : val_fr 3,16, littérature 5,61, anglais 7,28, wikitext2 8,00** ; **fenêtre 1 024 : 2,4759 / 2,4373 au grand corpus — sous
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1102 (bash: sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('cl2','rf2'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/cl.chaine.log | cut -c1-38; tail -1 work/n4/rf.chaine.log | cut -c1-38) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '32p' docs/pilotage/roadmap.md | grep -o \"décodage top-40/0,5.*\" | cut -c1-300; python3 -c \"\nimport pathlib\nl = pathlib.Path('docs/pilotage/roadmap.md').read_text().splitlines()[31]\nprint(l[-400:])\"", "description": "Re … [33 caractères tronqués]`
+
+  ```
+décodage top-40/0,5** ; la **porte propre (0,29)** ; **N4** |
+2,4759 / 2,4373 au grand corpus — sous 2,5** ; porte propre **2,7856** ; **N3 couvert** (22 portes, inventaire ; deux conditions) ; N4 partiel | **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; **corpus épinglé** (18/11, `fae5bb73…`), **r1/r2** (PPL 3,23), **décodage top-40/0,5** ; la **porte propre (0,29)** ; **N4** |
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"roadmap\" | head -2; python3 tools/taille_documents.py 2>&1 | grep \"> budget\" | head -3", "description": "Check the roadmap's budget headroom"}`
+
+  ```
+8999    522   T1   9000  docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; git status -sb | head -1; date", "description": "Closing ch … [56 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+budget=0
+## s/v7...origin/s/v7
+jeu 19 nov 2026 10:40:40 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Tous les contrôles de clôture sont verts (revue, état, budget, arbre synchronisé) — il ne reste que la lecture des dernières tranches
+
+**Vérifié à 10 h 40** : revue de documentation ✅ (812 fiches, 961 JSON, 128 docs, 91 portes), état court ✅, budget T0 à 3 998/4 000 ✅, arbre propre et synchronisé avec `origin/s/v7`. La roadmap est à 8 999/9 000 mots — je ne l'ai pas touchée pour ne pas la faire déborder.
+
+**Le seul point ouvert** : les troisièmes tranches (30 000 pas) du test à trois, qui se terminent vers 11 h 30-40, puis les trois PPL finaux sur wikitext2 et la fiche de clôture. Le reste de l'objectif est fait (val tiers mesuré, A2.6 branchée) ou nommé (diversité bloquée par les sources, décision A2.6 et sélection du contenu comme suites).
+
+
+## Tour 32
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/cl.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; tail -1 work/n4/rf.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"", "description": "Ten-minute pause  … [35 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 10:50:50 EST
+pas 4350 · perte 1.0865 · PPL val 3.380
+pas 3300 · perte 1.0978 · PPL val 3.360
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 11:00:46 EST
+  ```
+
+- **bash** `{"command": "sleep 590; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 11:10:41 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl2','rf2','cl3','rf3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descript … [74 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 11:20:36 EST
+cl2 3.3201
+rf2 3.3005
+cl3 -
+rf3 -
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1110 (bash: sleep 3000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('cl2','rf2','cl3','rf3'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/cl.chaine.log | cut -c1-38; tail -1 work/n4/rf.chaine.log | cut -c1-38) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/cl3.pt.json')); print('cl3 ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\nexcept FileNotFoundError: print('cl3 -')\"; tail -1 work/ … [108 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 11:30:35 EST
+cl3 ppl 3.2029 préc 0.6591
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/cl3.pt --val data/wikitext2_test.txt --device cuda:0 2>/dev/null | grep -o '\"ppl\": [0-9.]*'; date; tail -1 work/n4/rf.chaine.log | grep - … [112 caractères tronqués]`
+
+  ```
+"ppl": 7.618931049981478
+jeu 19 nov 2026 11:31:06 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/rf3.pt.json')); print('rf3 ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\nexcept FileNotFoundError: print('rf3 -')\"; tail -2 work/ … [107 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 11:41:03 EST
+rf3 ppl 3.1811 préc 0.6607
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 
+=== chaîne rf finie 11:36 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/rf3.pt --val data/wikitext2_test.txt --device cuda:0 2>/dev/null | grep -o '\"ppl\": [0-9.]*'; date", "description": "Compute the reflow 30 … [38 caractères tronqués]`
+
+  ```
+"ppl": 7.747619990035492
+jeu 19 nov 2026 11:41:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path('reports/ppl-wikitext2.json'); d = json.loads(p.read_text())\nd[\"resultats\"] += [\n  {\"modele\": \"work/n4/cl3.pt\", \"corpus\": \"v2 nettoyé à 30 000 pas\", \"pas\": 30000, … [2367 caractères tronqués]`
+
+  ```
+fiche ok
+     · compteurs : en-cours.md dit 961 JSON, le disque en a 965
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"le palier **nettoie et r … [1897 caractères tronqués]`
