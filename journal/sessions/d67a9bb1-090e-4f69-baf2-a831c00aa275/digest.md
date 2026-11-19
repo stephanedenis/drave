@@ -12333,3 +12333,70 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1 && git log -1 --format='%h %s' | cat\nN — LA NUIT DU PALIER 1 : DEUX 142 M, DEUX CORPUS, 110 000 PAS — v1 GARDE LA PPL (2,844 CONTRE 3,038), v2 GAGNE LE TOP-20 (0,948  … [1228 caractères tronqués]`
+
+  ```
+19f58c39..8d3ee6a2  s/v7 -> s/v7
+8d3ee6a2 N — LA NUIT DU PALIER 1 : DEUX 142 M, DEUX CORPUS, 110 000 PAS — v1 GARDE LA PPL (2,844 CONTRE 3,038), v2 GAGNE LE TOP-20 (0,948 CONTRE 0,900)
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status -sb | head -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/verifie_journal.py 2>&1 | tail -1; python3 t … [152 caractères tronqués]`
+
+  ```
+0
+## s/v7...origin/s/v7
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+       que personne ne peut lire.
+jeu 19 nov 2026 06:45:38 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifier_schemas.py 2>&1 | tail -6; echo \"---\"; bash tools/porte-tableaux.sh 2>&1 | tail -4", "description": "Read the schema and table verifications fully", "timeoutMs": 600000}`
+
+  ```
+schémas · 468 document(s) · 67 SVG · 2 source(s)
+  ✅ aucun ASCII art, SVG valides et référencés, blocs PlantUML inline valides,
+     sources et images relatives.
+---
+     et le dernier commit date du 2026-11-19.
+     → mettre à jour docs/pilotage/en-cours.md (l'état du travail, les questions ouvertes, ce qui est
+       nouveau), puis relancer cette porte. Un petit cycle sans page à jour est un cycle
+       que personne ne peut lire.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-tableaux.sh > /tmp/pt.log 2>&1; echo \"exit=$?\"; head -12 /tmp/pt.log; echo \"...\"; grep -n \"page vivante\\|page-vivante\" tools/porte-tableaux.sh | head -3", "description": "Read the table gate verdict and code", … [21 caractères tronqués]`
+
+  ```
+exit=1
+  ✅ 1911 fichier(s) : chaque tableau a le même nombre de cellules partout (en-tête, séparateur, lignes), et aucun « \| » ne s'affichera
+  ✅ 5095 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ❌ LA PAGE VIVANTE EST EN RETARD : docs/pilotage/en-cours.md dit « Mis à jour : 2026-11-18 »,
+     et le dernier commit date du 2026-11-19.
+     → mettre à jour docs/pilotage/en-cours.md (l'état du travail, les questions ouvertes, ce qui est
+       nouveau), puis relancer cette porte. Un petit cycle sans page à jour est un cycle
+       que personne ne peut lire.
+...
+136:[ -n "$PAGE" ] || { echo "  ❌ docs/pilotage/en-cours.md : aucune ligne « Mis à jour : AAAA-MM-JJ » — la page vivante n'est pas datée"; exit 1; }
+145:echo "  ✅ la page vivante date du dernier commit ($PAGE)"
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Mis à jour\" docs/pilotage/en-cours.md | head -2", "description": "Read the state header date"}`
+
+  ```
+3:**Mis à jour : 2026-11-18, 00 h 10 HNE (la passe 90 portes, 87/3, aucune nouvelle · le 100 M mesuré : répétition 9 → 6, la composition ne vient pas)**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-18, 00 h 10 HNE (la passe 90 portes, 87/3, aucune nouvelle · le 100 M mesuré : répétition 9 → 6, la co … [559 caractères tronqués]`
+
+  ```
+ok
+  ✅ 5095 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-19)
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -m \"ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)\" && git push origin s/v7 2>&1 | tail -1; git status -sb  … [89 caractères tronqués]`

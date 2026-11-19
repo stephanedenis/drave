@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 44.9 h |
 | Tours | 18 |
-| Messages | 736 |
-| Appels d'outils | 707 |
+| Messages | 742 |
+| Appels d'outils | 713 |
 | Fichiers touchés | 40 |
-| Commandes | 576 |
+| Commandes | 582 |
 | Sous-agents | 7 |
-| Commits | 46 |
+| Commits | 47 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -667,7 +667,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*110 appels d'outils.* Actions notables :
+*116 appels d'outils.* Actions notables :
 
 - bash — Wait ten minutes, then check the first tranche outputs
 - bash — Check the first tranche completion and benches
@@ -683,7 +683,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - bash — Commit the new A2.6 gate
 - bash — Wait ten minutes and check the chains
 - bash — Read the experts placement site in model.rs
-- … et 66 autres
+- … et 72 autres
 
 ## 3. Travail accompli
 
@@ -784,7 +784,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 536 autres
+- … et 542 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -978,4 +978,5 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG'
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1 && git log -1 --format='%h %s' | cat N —
+- ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)" && git push origin s/v7 2>&1 | tail -1;
 

@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-18, 00 h 10 HNE (la passe 90 portes, 87/3, aucune nouvelle · le 100 M mesuré : répétition 9 → 6, la composition ne vient pas)**
+**Mis à jour : 2026-11-19, 06 h 50 HNE (la nuit du palier 1 : deux 142 M sur deux corpus, 110 000 pas — v1 2,844 contre v2 3,038 · la passe 91 portes, 89/2 · le corpus v2 épinglé à 6,90 Go)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
