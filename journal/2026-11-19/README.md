@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**21 commits** · **1 session(s)** · **5 thème(s)**
+**22 commits** · **1 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,6 +14,7 @@
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -48,6 +49,7 @@
 | 10:36 | `d074a300` | ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE) |
 | 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) |
 | 11:44 | `e4cd1953` | ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS |
+| 12:06 | `01303f2f` | A2.6 — LA DÉCISION : LE CACHE DES EXPERTS PASSE PAR LA RÈGLE (VRAM SI ELLE LE PLACE, REFUS NOMMÉ SINON) |
 
 ## Le récit de la journée (écrit à la main)
 

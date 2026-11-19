@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 50.3 h |
 | Tours | 33 |
-| Messages | 910 |
-| Appels d'outils | 846 |
+| Messages | 911 |
+| Appels d'outils | 847 |
 | Fichiers touchés | 44 |
-| Commandes | 705 |
+| Commandes | 706 |
 | Sous-agents | 7 |
-| Commits | 67 |
+| Commits | 68 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -1053,7 +1053,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 
 ### Tour 33 — continue avec les prochaines actions jusqu'à 17h
 
-*11 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the source corpora and compute the v1 reference at 30k
@@ -1066,6 +1066,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - bash — Run the tests and the five A2.6 gates
 - bash — Confirm the test suite count
 - bash — Commit the A2.6 decision branch
+- bash — Restore the budget after the A2.6 decision commit
 
 ## 3. Travail accompli
 
@@ -1170,7 +1171,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 665 autres
+- … et 666 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1385,4 +1386,5 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()
+- ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE)" && git push origin s/v7 2>&1 | tail -1; date
 

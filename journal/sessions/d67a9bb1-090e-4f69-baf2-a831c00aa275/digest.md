@@ -14347,3 +14347,17 @@ test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fi
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()\nadd = '''\n## La décision (19/11, 12 h) — le cache des experts passe par la règle\n\nLe second pas est fait : sous `DRAVE_P … [3236 caractères tronqués]`
+
+  ```
+ok
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+budget=1
+  T0 max : 4004 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+   e4cd1953..01303f2f  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"la **décision** est branchée (le cache vetoé par la règle sous opt-in) ; les clusters restent\"\nnew = \"la **décision** est  … [564 caractères tronqués]`
