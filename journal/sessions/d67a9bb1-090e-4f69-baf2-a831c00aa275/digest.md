@@ -14374,3 +14374,955 @@ jeu 19 nov 2026 12:11:58 EST
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"la **décision** est branchée (cache vetoé par la règle) ; les clusters restent\"\nnew = \"la **décision** est branchée ; les  … [454 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3996 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+   90d9242e..7b234e98  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb1','wf1'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFound … [222 caractères tronqués]`
+
+  ```
+started background job bash-1148
+  ```
+
+### 🤖 Assistant
+
+⏵ A2.6 est **close** : la décision passe par la règle (le cache experts n'est créé que si elle le place en VRAM, refus nommé sinon) — 146 tests, cinq portes vertes
+
+**Ce qui vient d'être fait** : le second pas d'A2.6 est committé (`7b234e98`). Sous `DRAVE_PERTE_MAX`, la création du cache VRAM des experts est soumise à `choisir_experts` : sur cette machine la règle rend VRAM (156,9 ms < 1 s) et le cache est créé comme avant ; un refus ne créerait pas le cache et le dirait. Sans l'opt-in, rien ne change. Testé sur le 30B (`DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_MAX=1`) : une trace `experts : 1.10 Go/jeton · … → VRAM` puis `cache d'experts : budget 2.0 Go`. Il ne reste d'A2.6 que les **clusters** et la consolidation des tables de bandes — nommés au backlog.
+
+**En cours** : la décomposition de la sélection du contenu — `wiki_big` seul (GPU 0, 831 Mo) et `wiki_fr` seul (GPU 1, 186 Mo), 3 tranches de 10 000 pas chacun, jugés sur wikitext2 contre la référence v1 (**7,3987** à 30 000 pas) et v2 (**7,4277**). Premières tranches vers 13 h 05, verdicts vers 15 h 30, fiche avant 17 h.
+
+
+## Tour 34
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nfor f in ('data/wiki_big/propre/train.txt','data/wiki_fr/propre/train.txt','data/wiki_mix_v2/train.txt'):\n    p = pathlib.Path(f); b = p.stat().st_size\n    l = sum(1 for _ in open(p,'rb'))\n    print( … [210 caractères tronqués]`
+
+  ```
+data/wiki_big/propre/train.txt octets 831397620 lignes 2040058 o/ligne 407.5
+data/wiki_fr/propre/train.txt octets 186089472 lignes 440709 o/ligne 422.3
+data/wiki_mix_v2/train.txt octets 6900585097 lignes 63438199 o/ligne 108.8
+Jean Henri Le Febvre
+
+Jean Henri Le Febvre, né le  à Montpellier (Hérault) et mort le  à Fleury-les-Aubrais (Loiret), est un homme politique français. Biographie Licencié en droit, il entre à l'école militaire de Saint-Cyr en 1890. Il quitte 
+Antoine Meillet
+
+Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meiljeu 19 nov 2026 12:15:28 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux sources de v1 sont caractérisées : `wiki_big` 831 Mo / 407,5 o par ligne, `wiki_fr` 186 Mo / 422,3 — contre 108,8 pour le plein texte de v2
+
+**Ce que la décomposition va dire** : v1 = `wiki_big` (2,04 M lignes, 407,5 o/ligne) + `wiki_fr` (440 709 lignes, 422,3 o/ligne), deux corpus « propres » à lignes longues ; v2 = le plein texte (63,4 M lignes, 108,8 o/ligne). Les deux runs en cours (wiki_big seul GPU 0, wiki_fr seul GPU 1) diront si l'avantage de v1 vient d'une **source** ou de leur **mélange**.
+
+Références à 30 000 pas sur wikitext2 : **v1 7,3987**, **v2 7,4277** (et le nettoyé/recollé écartés). Les premières tranches tombent vers 13 h 05, les verdicts vers 15 h 30 ; la fiche et le commit suivront avant 17 h. A2.6 est clos (décision branchée, 146 tests, cinq portes vertes).
+
+
+## Tour 35
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in wb wf; do grep -m2 \"pas \" work/n4/$f.chaine.log | tail -1 | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]* · [0-9]* s\"; tail -1 work/n4/$f.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; done", "descr … [39 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:15:53 EST
+pas   50 · perte 2.7250 · PPL val 13.868 · 22 s
+pas 2750 · perte 1.7157
+pas   50 · perte 2.5882 · PPL val 13.465 · 21 s
+pas 2900 · perte 1.5122
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux runs de sources tiennent le rythme (0,44 s/pas, ~2 800 pas ; pertes 1,71 et 1,51) — première tranche vers 13 h 05
+
+**Le point** : `wiki_big` (831 Mo) et `wiki_fr` (186 Mo) s'entraînent à pas égal depuis 11 h 56, à 0,44 s/pas, et apprennent normalement (perte 1,71 et 1,51 à ~2 800 pas). Les premières tranches (10 000 pas) tombent vers 13 h 05 ; les verdicts à 30 000 pas vers 15 h 30, puis les trois PPL sur wikitext2 et la fiche.
+
+**Rappel des références** : à 30 000 pas sur wikitext2, v1 (le mélange) = **7,3987**, v2 (le plein texte) = **7,4277** ; le nettoyé (7,6189) et le recollé (7,7476) sont écartés. A2.6 est clos côté dépôt (décision branchée, 146 tests, cinq portes vertes).
+
+
+## Tour 36
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-selection-contenu.md <<'MD'\n# La sélection du contenu : `wiki_big` seul, `wiki_fr` seul, le mélange — à pas égal sur wikitext2\n\n> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : … [2750 caractères tronqués]`
+
+  ```
+fiche écrite (non committée)
+jeu 19 nov 2026 12:16:24 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ La fiche de la décomposition est écrite (sources caractérisées, références posées, lignes `wiki_big`/`wiki_fr` en attente)
+
+**Fait** : `reports/rapport-selection-contenu.md` est rédigée — les deux sources de v1 sont caractérisées (`wiki_big` 831 Mo / 407,5 o par ligne, `wiki_fr` 186 Mo / 422,3 o par ligne), les références à 30 000 pas sont posées (v1 **7,3987**, v2 **7,4277**) et la question est cadrée : l'avantage de v1 vient-il d'une source ou de leur mélange ? Il ne manque que les deux lignes `wiki_big` et `wiki_fr`, à remplir quand les runs terminent (~15 h 30) — puis le verdict, l'état et le commit.
+
+A2.6 est clos côté dépôt, les runs tiennent le rythme (0,44 s/pas), et rien d'autre n'est ouvert.
+
+
+## Tour 37
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --corpus data/wiki_big/propre --sortie reports/corpus-epingle-wikibig.json 2>&1 | tail -4; python3 tools/epingle_corpus.py --corpus data/wiki_fr/propre --sortie reports/corpus-epingle-wikifr.json 2>&1  … [83 caractères tronqués]`
+
+  ```
+val.txt      61c0826fd892982a…      46186496 o       113462 lignes  2026-11-02T10:03:54
+  train.canal  1fdae8873dfdf20a…     831397620 o            0 lignes  2026-11-02T10:27:50
+  val.canal    21be89eb22067726…      46186496 o            0 lignes  2026-11-02T10:28:34
+  manifeste : 11aa9b74ac563ed5… → reports/corpus-epingle-wikibig.json
+  test.canal   a0b6aa9ba6469684…      10330245 o            0 lignes  2026-11-01T18:36:05
+  train.canal  38b7ee5aa9c92a28…     186089472 o            0 lignes  2026-11-01T18:38:53
+  val.canal    f1abc5d1d63c3207…      10330112 o            0 lignes  2026-11-01T18:35:56
+  manifeste : d2804870aadae3cf… → reports/corpus-epingle-wikifr.json
+jeu 19 nov 2026 12:17:19 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-selection-contenu.md'); s = p.read_text()\nold = \"v1 = les deux premiers ; v2 = le troisième. La question : l'avantage de v1 (7,3987 contre 7,4277 à\\npas égal, 3,2 … [626 caractères tronqués]`
+
+  ```
+ok
+jeu 19 nov 2026 12:17:27 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux sources de v1 sont épinglées (`wiki_big` `11aa9b74…`, `wiki_fr` `d2804870…`) : la fiche de la décomposition est complète, il ne manque que les mesures
+
+**Fait** : les corpus `wiki_big` (831 Mo + val 46 Mo) et `wiki_fr` (186 Mo + val) sont épinglés et cités dans `reports/rapport-selection-contenu.md` — la fiche est prête, seules les deux lignes de résultats manquent. Notons au passage que `wiki_big` a un val de 46 Mo (un cinquième val possible pour plus tard).
+
+**En cours** : les deux runs à 0,44 s/pas ; première tranche vers 13 h 05, verdicts vers 15 h 30. Ensuite : les trois PPL (v1 7,3987 et v2 7,4277 déjà connus, wiki_big et wiki_fr à calculer), le verdict, l'état et le commit — avant 17 h.
+
+
+## Tour 38
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 597; date; nvidia-smi --query-gpu=index,temperature.gpu,utilization.gpu,memory.used --format=csv,noheader; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/wb.chaine.log | cut -c1-35; tail -1 work/n4/wf.chaine.log | cut -c1-35", "description": "Ten-minute paus … [45 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:27:40 EST
+0, 87, 99 %, 8184 MiB
+1, 75, 99 %, 8184 MiB
+pas 4400 · perte 1.3708 · PPL val 4
+pas 4650 · perte 1.3858 · PPL val 4
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux runs sont à ~4 500 pas (pertes 1,37-1,39), GPU à 87 °C et 75 °C — tout est nominal
+
+**Le point** : `wiki_big` (GPU 0) et `wiki_fr` (GPU 1) tiennent 0,44 s/pas, les pertes descendent (1,37-1,39), et les GPU sont à 87 °C et 75 °C — chaud mais stable, comme pendant la nuit. Première tranche (10 000 pas) vers 13 h 05, puis les deux suivantes ; verdicts à 30 000 pas vers 15 h 30, fiche et commit avant 17 h.
+
+Rien d'autre n'est ouvert : A2.6 est branchée et décidée (146 tests, cinq portes vertes), la fiche de la décomposition attend ses deux mesures, et les pins des sources sont en place.
+
+
+## Tour 39
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --corpus data/wiki_big/propre --sortie reports/corpus-epingle-wikibig.json --verifie 2>&1 | grep -c \"✅\"; python3 tools/epingle_corpus.py --corpus data/wiki_fr/propre --sortie reports/corpus-epingle-w … [115 caractères tronqués]`
+
+  ```
+5
+7
+jeu 19 nov 2026 12:28:03 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les épingles des deux sources vérifient (5 et 7 fichiers ✅) — les runs liront des fichiers intacts
+
+**Vérification faite** : `wiki_big` (5 fichiers) et `wiki_fr` (7 fichiers) correspondent exactement à leurs manifestes (`11aa9b74…`, `d2804870…`). Les runs en cours lisent donc des corpus dont l'identité est prouvée, et la fiche les cite correctement.
+
+**Prochain point** : la première tranche des deux runs (10 000 pas) vers 13 h 05 ; ensuite les deux dernières tranches et les trois PPL sur wikitext2. A2.6 est clos, les fiches attendent leurs mesures, et le commit de clôture est prévu avant 17 h.
+
+
+## Tour 40
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in wb wf; do l=$(tail -1 work/n4/$f.chaine.log); p=$(echo \"$l\" | grep -o \"pas *[0-9]*\"); t=$(echo \"$l\" | grep -o \" [0-9]* s$\" | tr -d ' s'); echo \"$f : $p, $t s de tranche\"; done", "description": "Check the runs … [29 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:28:15 EST
+wb : pas 4500,  s de tranche
+wf : pas 4750,  s de tranche
+  ```
+
+### 🤖 Assistant
+
+⏵ Les runs sont à 4 500 et 4 750 pas de leur première tranche — rien à signaler
+
+**Le point** : `wiki_big` (4 500 pas) et `wiki_fr` (4 750 pas) avancent normalement ; la première tranche tombe vers 13 h 05. Les épingles des sources vérifient, la fiche de la décomposition attend ses deux mesures, et le commit de clôture est prévu avant 17 h. Aucun autre chantier n'est ouvert.
+
+
+## Tour 41
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -6; echo \"---\"; git log -1 --format='%h %s' | cut -c1-80; date", "description": "Check the pending tree before the final commit"}`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+?? reports/corpus-epingle-wikibig.json
+?? reports/corpus-epingle-wikifr.json
+---
+7b234e98 ÉTAT — T0 À 3 997
+jeu 19 nov 2026 12:28:31 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ L'arbre porte les deux épingles des sources et le journal auto-généré — tout entrera avec le commit de clôture
+
+**Le point** : les seuls fichiers en attente sont les deux JSON d'épingle des sources (`corpus-epingle-wikibig.json`, `-wikifr.json`), la fiche de la décomposition (non committée) et les mises à jour du journal que le hook régénère. Rien d'anormal : le commit de clôture, après les mesures de 15 h 30, les emportera tous.
+
+Les runs sont à ~4 500-4 750 pas de la première tranche ; la suite est automatique (tranches 2 et 3, puis les trois PPL sur wikitext2).
+
+
+## Tour 42
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]* · PPL val [0-9.]*\"", "description": "Ten-minute pause  … [35 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:38:45 EST
+pas 6000 · perte 1.2969 · PPL val 4.008
+pas 6350 · perte 1.3733 · PPL val 3.766
+  ```
+
+### 🤖 Assistant
+
+⏵ Mi-tranche : `wiki_fr` mène sur la PPL (3,77 contre 4,01) — mais le val est celui de v1, qui contient `wiki_fr` à 18 %
+
+**Le point** : à ~6 000 pas, `wiki_fr` (le petit corpus de résumés, 186 Mo) a une PPL de 3,77 contre 4,01 pour `wiki_big` (831 Mo) — cohérent avec le fait que le val de v1 contient `wiki_fr` à ~18 %, donc plus proche de lui. La comparaison décisive reste **wikitext2 à 30 000 pas**, où les deux sources seront jugées hors de leur propre distribution.
+
+Première tranche vers 13 h 05 ; les deux dernières et les PPL vers 15 h 30-45 ; commit de clôture avant 17 h.
+
+
+## Tour 43
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/wb1.pt work/n4/wf1.pt 2>/dev/null | wc -l; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check the  … [36 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:48:55 EST
+0
+pas 7500
+pas 7900
+  ```
+
+### 🤖 Assistant
+
+⏵ Les runs sont à 7 500 et 7 900 pas ; la première tranche tombe vers 13 h 00-05
+
+**Le point** : `wiki_big` (7 500 pas) et `wiki_fr` (7 900) finissent leur première tranche ; les JSON de résultat (PPL et banc) arrivent dans quelques minutes. Ensuite les deux dernières tranches, puis les trois PPL sur wikitext2 (v1 7,3987, v2 7,4277 déjà connus) et la fiche.
+
+Rien d'autre n'est ouvert : A2.6 est close (décision branchée, 146 tests, cinq portes vertes), les épingles des sources vérifient, et le commit de clôture est prévu avant 17 h.
+
+
+## Tour 44
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 11/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb1','wf1'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [106 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 12:58:58 EST
+wb1 -
+wf1 -
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb1','wf1'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [151 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 13:06:03 EST
+wb1 -
+wf1 ppl 3.3255 préc 0.6447
+reports/banc-generation-wf1.json
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1148 (bash: sleep 3000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('wb1','wf1'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/wb.chaine.log | cut -c1-38; tail -1 work/n4/wf.chaine.log | cut -c1-38) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Première tranche : `wiki_fr` rend 3,3255 (précision 0,6447) — `wiki_big` la suit de quelques minutes
+
+**Le point** : `wiki_fr` (186 Mo) finit sa première tranche à **PPL 3,3255** sur le val de v1 ; son banc est écrit (`banc-generation-wf1.json`). `wiki_big` (831 Mo), parti un peu plus tard, termine dans quelques minutes. Les deux runs enchaînent ensuite les tranches 2 et 3 (30 000 pas) ; les PPL sur wikitext2 suivront vers 15 h 30-45, puis la fiche et le commit de clôture.
+
+
+## Tour 45
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 12/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 300; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb1','wf1'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [95 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 13:11:17 EST
+wb1 ppl 3.5054 préc 0.6302
+wf1 ppl 3.3255 préc 0.6447
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux premières tranches sont là : `wiki_fr` 3,3255, `wiki_big` 3,5054 — le petit corpus mène sur le val de v1
+
+**Le point** : à 10 000 pas, `wiki_fr` (186 Mo) mène sur le val de v1 (**3,3255** contre **3,5054** pour `wiki_big`) — attendu, puisque ce val contient `wiki_fr` à ~18 % et que le petit corpus y est vu plus souvent. La mesure décisive reste **wikitext2 à 30 000 pas**, hors distribution des deux sources.
+
+Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL sur wikitext2, la fiche et le commit de clôture.
+
+
+## Tour 46
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 13/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; timeout 300 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 4 2>&1 | grep -E \"perplexité cumulée\" | tail  … [99 caractères tronqués]`
+
+  ```
+3 tokens notés — perplexité cumulée 6449.733  (2.9 tok/s)
+jeu 19 nov 2026 13:11:48 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le chemin par défaut rend bien une PPL sans trace (branchement sous opt-in seulement) — rien n'a bougé par défaut
+
+**Contrôle fait** : sans `DRAVE_PERTE_MAX`, le binaire rend une perplexité normale et **aucune trace** d'experts — la décision ne s'active que sous l'opt-in, et les cinq portes A2.6 (dont `porte-flux` et `porte-echange-experts`, qui tournent en mode par défaut) restent vertes. C'est la garantie que le branchement n'a pas déplacé le défaut.
+
+**En cours** : les tranches 2 des deux runs de sources (fin ≈ 14 h 15), puis les troisièmes (≈ 15 h 30) et les deux PPL sur wikitext2. Fiche et commit de clôture avant 17 h.
+
+
+## Tour 47
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 14/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb2','wf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFound … [230 caractères tronqués]`
+
+  ```
+started background job bash-1164
+  ```
+
+### 🤖 Assistant
+
+⏵ Point de contrôle programmé à 13 h 55 (tranche 2 en cours) — les runs tournent, rien à faire d'ici là
+
+**Le point** : `wiki_big` et `wiki_fr` sont dans leur deuxième tranche (fin ≈ 14 h 15), puis la troisième (≈ 15 h 30). Les PPL sur wikitext2 suivront, puis la fiche, l'état, le commit et le bilan à 17 h. A2.6 est close et son défaut est contrôlé ; les épingles des sources vérifient ; aucun autre chantier n'est ouvert.
+
+
+## Tour 48
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 15/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=work/portes/roue-1119-1316 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1119-13.log 2>&1 & sleep 5; echo \"passe 91 portes lancée $(date +%H:%M)\"; date", "description": "Launch a fresh full gate pass during  … [10 caractères tronqués]`
+
+  ```
+passe 91 portes lancée 13:12
+jeu 19 nov 2026 13:12:24 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe complète des 91 portes relancée à 13 h 12 sur l'arbre final (A2.6 décision incluse) — elle finira vers 15 h 15, avec les runs
+
+**Pourquoi maintenant** : la dernière passe date de la nuit (88/2, avant le branchement et la décision A2.6). Une passe fraîche sur l'arbre actuel — 91 portes, machine chargée par les deux runs de sources — donnera le verdict de clôture en même temps que les résultats du test. C'est aussi la vérification que la décision A2.6 n'a déplacé aucun défaut.
+
+**En cours** : les tranches 2 des runs (fin ≈ 14 h 15), puis les troisièmes (≈ 15 h 30) et les deux PPL sur wikitext2. La passe, les PPL, la fiche, l'état et le commit s'enchaîneront entre 15 h 15 et 17 h.
+
+
+## Tour 49
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 16/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1119-1316/registre.txt 2>/dev/null; awk '$2 != 0' work/portes/roue-1119-1316/registre.txt 2>/dev/null | head -2; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten- … [53 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 13:22:31 EST
+16
+pas 1850
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 16 portes (aucune rouge), runs en tranche 2 — tout est nominal
+
+**Le point** : la passe des 91 portes avance (16 portes, 0 rouge), `wiki_big` et `wiki_fr` sont en tranche 2, et la machine tient (GPU ~87/75 °C). Les prochains jalons : fin de la tranche 2 (≈ 14 h 15), de la passe (≈ 15 h 15), des troisièmes tranches (≈ 15 h 30), puis les deux PPL sur wikitext2 et la clôture (fiche, état, commit, bilan) avant 17 h.
+
+
+## Tour 50
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 17/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1119-1316/registre.txt; awk '$2 != 0' work/portes/roue-1119-1316/registre.txt 2>/dev/null; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute … [40 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 13:32:33 EST
+26
+pas 4150 · perte 1.2174
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 26 portes (aucune rouge), tranche 2 à 4 150 pas — tout avance
+
+**Le point** : la passe des 91 portes est à 26 (0 rouge), `wiki_fr` à 4 150 pas de sa tranche 2. Les jalons restent : tranche 2 (≈ 14 h 15), passe (≈ 15 h 15), tranche 3 (≈ 15 h 30), puis les deux PPL sur wikitext2 et la clôture avant 17 h.
+
+
+## Tour 51
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 18/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1119-1316/registre.txt; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and checks", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 13:42:34 EST
+29
+pas 4700 · perte 1.2283
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 29 portes, tranche 2 à 4 700 pas — rien à signaler
+
+**Le point** : la passe des 91 portes est à 29 (0 rouge), `wiki_big` à 4 700 pas de sa tranche 2. Prochains jalons : tranche 2 (≈ 14 h 15), passe (≈ 15 h 15), tranche 3 (≈ 15 h 30), puis les PPL sur wikitext2 et la clôture.
+
+
+## Tour 52
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 19/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; awk '$2 != 0' work/portes/roue-1119-1316/registre.txt 2>/dev/null; wc -l < work/portes/roue-1119-1316/registre.txt; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check … [24 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 13:52:34 EST
+31
+pas 7200
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1164 (bash: sleep 2400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('wb2','wf2'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/wb.chaine.log | grep -o "pas *[0-9]*"; tail -1 work/n4/wf.chaine.log | grep -o "pas *[0-9]*") finished [status: completed, exit code: 0]. Read its output with job_output.
+
+### 🤖 Assistant
+
+⏵ Passe à 31 portes (0 rouge), `wiki_fr` à 7 200 pas de sa tranche 2 — les deuxièmes résultats arrivent vers 14 h 15
+
+**Le point** : la passe avance sans rouge (31 portes), les runs finissent leur deuxième tranche vers 14 h 10-20. Prochains jalons : les deuxièmes résultats (PPL), la passe (≈ 15 h 15), les troisièmes résultats (≈ 15 h 30), puis les PPL sur wikitext2, la fiche et le commit de clôture.
+
+
+## Tour 53
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 20/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/wb2.pt work/n4/wf2.pt 2>/dev/null | wc -l; python3 -c \"\nimport json\nfor f in ('wb2','wf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))\n    except File … [166 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:02:37 EST
+0
+wb2 -
+wf2 -
+33
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 33 portes, deuxièmes tranches en cours — résultats vers 14 h 15
+
+**Le point** : la passe est à 33 portes (0 rouge) ; `wiki_big` et `wiki_fr` terminent leur deuxième tranche d'ici 14 h 10-20. Ensuite : passe (≈ 15 h 15), troisièmes tranches (≈ 15 h 30), PPL sur wikitext2, fiche et commit avant 17 h.
+
+
+## Tour 54
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 21/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb2','wf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [143 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:12:37 EST
+wb2 -
+wf2 ppl 3.022 préc 0.6705
+34
+  ```
+
+### 🤖 Assistant
+
+⏵ Deuxième tranche : `wiki_fr` à **3,0220** (précision 0,6705) — le petit corpus domine le val de v1, comme attendu puisque c'en est la source
+
+**Le point** : à 20 000 pas, `wiki_fr` (186 Mo) rend **3,0220** sur le val de v1 — meilleur que v2 (3,2989) et que v1 (3,2186) à pas égal. C'est le signe que ce val est *sa* distribution (il en vient), pas une preuve de qualité. `wiki_big` termine sa tranche dans quelques minutes, et le juge décisif reste **wikitext2 à 30 000 pas** (v1 7,3987, v2 7,4277). La passe est à 34 portes, sans rouge.
+
+
+## Tour 55
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 22/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb2','wf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [144 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:19:32 EST
+wb2 -
+wf2 ppl 3.022 préc 0.6705
+65
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 65 portes (0 rouge), `wiki_big` finit sa tranche 2 dans quelques minutes
+
+**Le point** : la passe a franchi les portes lourdes (65 portes, 0 rouge) et finira vers 15 h. `wiki_fr` est à 3,0220 à 20 000 pas ; `wiki_big` termine sa tranche 2 (≈ 14 h 25). Les troisièmes tranches (30 000 pas) terminent vers 15 h 30, puis les deux PPL sur wikitext2 et la clôture.
+
+
+## Tour 56
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 23/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb2','wf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [224 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:26:24 EST
+wb2 ppl 3.2209 préc 0.6503
+wf2 ppl 3.022 préc 0.6705
+porte-indice 1 859
+porte-melange 1 106
+67
+  ```
+
+### 🤖 Assistant
+
+⏵ Tranche 2 : `wiki_big` 3,2209, `wiki_fr` 3,0220 — le mélange v1 (3,2186) se comporte comme `wiki_big` seul ; la passe est à 67 portes, 2 rouges (les structurelles)
+
+**Le point** : à 20 000 pas sur le val de v1, `wiki_big` seul (3,2209) est au niveau du mélange v1 (3,2186), et `wiki_fr` seul est bien meilleur (3,0220) — ce val étant les résumés `wiki_fr`, c'est attendu. La question que tranchera **wikitext2 à 30 000 pas** : laquelle des deux sources généralise le mieux ? La passe est à 67 portes avec les **deux rouges structurelles** (`indice` 859 s, `melange` 106 s) et aucune autre.
+
+
+## Tour 57
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 24/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1119-1316/registre.txt; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and checks", "timeo … [14 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:36:32 EST
+72
+pas 1950
+pas 3500
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 72 portes (2 rouges structurelles), tranche 3 à 1 950 et 3 500 pas — les deux finissent vers 15 h 10-30
+
+**Le point** : la passe franchit les dernières portes lourdes (72/91), les runs sont dans leur tranche finale. Vers 15 h 10 : le verdict de la passe ; vers 15 h 30 : les deuxièmes PPL sur wikitext2 ; ensuite la fiche, l'état, le commit et le bilan de 17 h.
+
+
+## Tour 58
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 25/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/passe-1119-13.log | cut -c1-70; wc -l < work/portes/roue-1119-1316/registre.txt; tail -1 work/n4/wf.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and check the pass", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:46:34 EST
+  porte-prechargement    ✅                         177 s    PORTE TENU
+  porte-produit          ✅                         169 s  ✅ porte prod
+75
+pas 5000
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 75 portes (produit, préchargement vertes), tranche 3 à 5 000 pas — la fin approche
+
+**Le point** : la passe est à 75 portes, toujours avec les deux rouges structurelles ; `wiki_fr` est à 5 000 pas de sa dernière tranche. Vers 15 h 10 : le verdict de la passe ; vers 15 h 25-30 : les PPL finaux sur wikitext2 ; ensuite la fiche, l'état, le commit et le bilan.
+
+
+## Tour 59
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 26/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; wc -l < work/portes/roue-1119-1316/registre.txt; tail -1 work/n4/wb.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 /tmp/passe-1119-13.log | cut -c1-60", "description": "Ten-minute pause and checks", "timeoutMs": 65000 … [2 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 14:56:34 EST
+83
+pas 4700
+  porte-ressources       ✅                           1 s  ✅
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe à 83 portes (ressources verte), tranche 3 à 4 700 pas — la passe finit dans ~10 minutes
+
+**Le point** : il reste une poignée de portes (dont `vision`, la plus longue) ; les runs sont à mi-tranche finale. Vers 15 h 10 : le verdict de la passe ; vers 15 h 25-30 : les PPL finaux ; puis la fiche, l'état, le commit et le bilan.
+
+
+## Tour 60
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 27/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -3 /tmp/passe-1119-13.log | cut -c1-70; awk '$2 != 0' work/portes/roue-1119-1316/registre.txt 2>/dev/null; wc -l < work/portes/roue-1119-1316/registre.txt", "description": "Wait for the pass verdict", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 15:06:35 EST
+  porte-tokenizer-kimi   ✅                           6 s    ✅ 10 texte
+  porte-topologie        ✅                          99 s    ✅ PPL épin
+  porte-trace            ✅                          27 s    ✅ la trace
+porte-indice 1 859
+porte-melange 1 106
+90
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -2 /tmp/passe-1119-13.log | cut -c1-70; wc -l < work/portes/roue-1119-1316/registre.txt; python3 -c \"\nimport json\nfor f in ('wb3','wf3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, … [156 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 15:16:31 EST
+         invite qui n'en contient aucun : le mélange ne pourrait rien 
+Journaux complets : work/portes/roue-1119-1316
+92
+wb3 -
+wf3 -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -E \"vertes|rouges\" /tmp/passe-1119-13.log | tail -1; grep -c \"✅\" /tmp/passe-1119-13.log; awk '$2 != 0' work/portes/roue-1119-1316/registre.txt 2>/dev/null; date", "description": "Read the pass summary"}`
+
+  ```
+--- 89 vertes, 2 rouges ---
+90
+porte-indice 1 859
+porte-melange 1 106
+--- 89 vertes, 2 rouges ---
+jeu 19 nov 2026 15:16:36 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Passe de clôture : **91 portes, 89 vertes, 2 rouges** (les deux structurelles `indice` 859 s et `melange` 106 s) — aucune autre
+
+**Le verdict de la passe** : 91 portes, **89 vertes, 2 rouges** — `indice` (859 s) et `melange` (106 s), les deux structurelles connues, et **aucune autre**. L'arbre actuel (branchement et décision A2.6 inclus) ne déplace donc aucun défaut, machine chargée par les deux runs.
+
+**Ensuite** : les troisièmes tranches de `wiki_big` et `wiki_fr` finissent vers 15 h 25, puis leurs deux PPL sur wikitext2 — le verdict de la décomposition, la fiche, l'état et le commit avant 17 h.
+
+
+## Tour 61
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 28/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 450; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('wb3','wf3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFoundE … [192 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 15:24:18 EST
+wb3 -
+wf3 ppl 2.8973 préc 0.6814
+pas 8650 · perte 1.0673 · PPL val 3
+=== chaîne wf finie 15:21 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/wf3.pt --val data/wikitext2_test.txt --device cuda:1 2>/dev/null | grep -o '\"ppl\": [0-9.]*'; date", "description": "Compute the wiki_fr w … [35 caractères tronqués]`
+
+  ```
+"ppl": 8.087574314859944
+jeu 19 nov 2026 15:24:45 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ `wiki_fr` seul sur wikitext2 : **8,0876** — le meilleur sur le val de v1 (2,8973) et le pire sur le val tiers ; `wiki_big` finit dans ~5 minutes
+
+**Le premier verdict** : `wiki_fr` (186 Mo de résumés) est le meilleur sur le val de v1 (2,8973) mais le **pire** sur wikitext2 (8,0876, contre 7,3987 pour le mélange v1 et 7,4277 pour le plein texte) — il sur-apprend sa propre distribution. La question qui reste : `wiki_big` (831 Mo d'articles longs) fait-il aussi bien que le mélange ? Sa tranche finale se termine vers 15 h 30 ; je calcule sa PPL juste après, puis la fiche et le commit.
+
+
+## Tour 62
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+Round: 29/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 350; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/wb3.pt.json')); print('wb3 ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\nexcept FileNotFoundError: print('wb3 -')\"; tail -1 work/ … [103 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 15:30:48 EST
+wb3 -
+pas 9600 · perte 1.0249 · PPL val 3.308
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/wb3.pt.json')); print('wb3 ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\nexcept FileNotFoundError: print('wb3 -')\"; tail -1 work/ … [101 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 15:37:33 EST
+wb3 ppl 3.1144 préc 0.6608
+=== chaîne wb finie 15:35 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/wb3.pt --val data/wikitext2_test.txt --device cuda:0 2>/dev/null | grep -o '\"ppl\": [0-9.]*'; date", "description": "Compute the wiki_big  … [36 caractères tronqués]`
+
+  ```
+"ppl": 7.223723714428504
+jeu 19 nov 2026 15:38:02 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path('reports/ppl-wikitext2.json'); d = json.loads(p.read_text())\nd[\"resultats\"] += [\n  {\"modele\": \"work/n4/wb3.pt\", \"corpus\": \"wiki_big seul à 30 000 pas\", \"pas\": 300 … [3020 caractères tronqués]`
+
+  ```
+fiche ok
+     · compteurs : en-cours.md dit 965 JSON, le disque en a 979
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ndebut = s.index(\"- **N — l'en … [1963 caractères tronqués]`
+
+  ```
+T0 max : 3996 mots (budget 4 000)
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 21, in <module>
+  File "<stdin>", line 5, in rep
+AssertionError: dédup **par blocs** 0 %, **par ligne** **8,042 %**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ndebut = s.index(\"- **N — l'en … [1855 caractères tronqués]`
+
+  ```
+état ok
+  T0 max : 3993 mots (budget 4 000)
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"\"\"> **Passes — 2026-11-18 et 19 :** matin **90 portes, 88/2** ; soir **90 portes, 88/2** ; nuit\n> **91 po … [1190 caractères tronqués]`
+
+  ```
+references : 2490
+    2490    167   T1   2500  docs/pilotage/references-non-regression.md
+  T0 max : 3993 mots (budget 4 000)
+budget=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.json reports/corpus-epingle-wikifr.json reports/banc-generation-wb*.json reports/banc-grammaticalite-wb*.json reports/banc-generat … [1376 caractères tronqués]`

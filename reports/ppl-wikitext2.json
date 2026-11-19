@@ -62,6 +62,18 @@
    "corpus": "v2 recollé à 30 000 pas",
    "pas": 30000,
    "ppl": 7.747619990035492
+  },
+  {
+   "modele": "work/n4/wb3.pt",
+   "corpus": "wiki_big seul à 30 000 pas",
+   "pas": 30000,
+   "ppl": 7.223723714428504
+  },
+  {
+   "modele": "work/n4/wf3.pt",
+   "corpus": "wiki_fr seul à 30 000 pas",
+   "pas": 30000,
+   "ppl": 8.087574314859944
   }
  ],
  "marquage_wiki_par_20Mo": {

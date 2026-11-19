@@ -1,0 +1,40 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-19T12:17:10",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/data/wiki_big/propre",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "test.txt": {
+   "sha256": "d8b43236304f9dcfd3edb9ce7604b565a9951e3a62f48e3e500621397c943045",
+   "octets": 46186496,
+   "lignes": 113686,
+   "mtime": "2026-11-02T10:03:54"
+  },
+  "train.txt": {
+   "sha256": "1de9aaf3ac6628162e709eff1f7665fb147e53ac574e8c8ee58d9048b55080d6",
+   "octets": 831397620,
+   "lignes": 2040058,
+   "mtime": "2026-11-02T10:03:54"
+  },
+  "val.txt": {
+   "sha256": "61c0826fd892982a25da6a7822c2fe2118cbed91b3e13b139e8f5bc8ba1dce57",
+   "octets": 46186496,
+   "lignes": 113462,
+   "mtime": "2026-11-02T10:03:54"
+  },
+  "train.canal": {
+   "sha256": "1fdae8873dfdf20a6cc01fcfaa1912cd6844863d705cb011c05774ba6dfedf01",
+   "octets": 831397620,
+   "lignes": 0,
+   "mtime": "2026-11-02T10:27:50"
+  },
+  "val.canal": {
+   "sha256": "21be89eb2206772674f0fb7b31c6d0e898979b12d793dfecc70df00e84c2bc75",
+   "octets": 46186496,
+   "lignes": 0,
+   "mtime": "2026-11-02T10:28:34"
+  }
+ },
+ "manifeste_sha256": "11aa9b74ac563ed5f67c80cd88ac42e0badd3f32d83661a139709606b0e1e8a1"
+}

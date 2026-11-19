@@ -1,9 +1,9 @@
 # Références de non-régression
 
-> **Passes — 2026-11-18 et 19 :** matin **90 portes, 88/2** ; soir **90 portes, 88/2** ; nuit
-> **91 portes, 89/2** (la 91ᵉ, `porte-a2.6-experts`, est verte) — `indice` (854 / 870 / 870 s) et
-> `melange` (106 / 109 / 108 s), les deux **structurelles** ; `sessions` **verte** ; aucune autre.
-> Machine chargée les trois fois : verdict seul. Journaux `roue-1118-1057/`, `-1712/`, `roue-1119-0345/`.
+> **Passes — 2026-11-18 et 19 :** **90/88-2** (matin et soir), puis **91 portes, 89/2** deux fois
+> (nuit et 19/11 13 h 12) — `indice` (854 / 870 / 870 / 859 s) et `melange` (106 / 109 / 108 / 106 s),
+> les deux **structurelles** ; `sessions` **verte** ; aucune autre. Machine chargée chaque fois :
+> verdict seul. Journaux `roue-1118-1057/`, `-1712/`, `roue-1119-0345/`, `roue-1119-1316/`.
 
 > **Passe — 2026-11-17 20 h 42 → 22 h 39 :** **90 portes, 87 vertes, 3 rouges** — `indice` (862 s)
 > et `melange` (106 s) **structurelles** ; `sessions` (0 s) de **circonstance** (mandat périmé de

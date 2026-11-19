@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/wf2.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9599,
+   "distinct_2": 0.3313,
+   "repetition": 20,
+   "echo": 0.1514,
+   "octets": 2560,
+   "secondes": 23.15,
+   "octets_s": 110.6,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.2857,
+     "repetition": 8,
+     "echo": 0.3333333333333333,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.6296,
+     "distinct_2": 0.3846,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil d'État de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charl",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5385,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le commerce de la province de La Communauté de communes de la Communauté de communes de la Communauté de communes de la ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.2857,
+     "repetition": 8,
+     "echo": 0.3333333333333333,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise de la franchise",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.6296,
+     "distinct_2": 0.3846,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le conseil d'État de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charles de Charl",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5385,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le commerce de la province de La Communauté de communes de la Communauté de communes de la Communauté de communes de la ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Ch",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.9688,
+     "distinct_2": 0.2903,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent un contexte de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maiso",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4583,
+     "repetition": 5,
+     "echo": 0.09523809523809523,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé le premier gouvernement de la Constitution de la Constitution de la Constitution de la Constitution de la Constitution de la Co",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.3333,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un projet de la production de la production de la production de la production de la production de la production de la productio",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 1.0,
+     "distinct_2": 0.25,
+     "repetition": 6,
+     "echo": 0.1935483870967742,
+     "prompt": "La guerre",
+     "texte": "La guerre de la Coupe du monde de la Coupe du monde de la Coupe du monde de la Coupe du monde de la Coupe du monde de la Coupe du monde d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.6923,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la province de La Chapelle-du-Nord est une commune du département du Nord de la Marne et de la Marne et de la Marne. La com",
+     "octets": 128
+    },
+    {
+     "mots": 34,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3333,
+     "repetition": 20,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune est de  et  est de  et  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  en  e",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2667,
+     "repetition": 12,
+     "echo": 0.034482758620689655,
+     "prompt": "La science",
+     "texte": "La science de la province de Livre de Livre de Livre de Livre de Livre de Livre de Livre de Livre de Livre de Livre de Livre de Livre de L",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.5556,
+     "repetition": 4,
+     "echo": 0.38461538461538464,
+     "prompt": "La ville",
+     "texte": "La ville de La Rochelle est une ville de la ville de La Rochelle et de la ville de La Rochelle. La ville est située dans le départemen",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.9655,
+     "distinct_2": 0.6071,
+     "repetition": 4,
+     "echo": 0.037037037037037035,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune est de  et le plus grand parc de la commune de Champagne et de la commune de Champagne et de la commune de Champa",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la province de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La C",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la maison de la mais",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.898,
+   "distinct_2": 0.9617,
+   "repetition": 3,
+   "echo": 0.0492,
+   "octets": 2560,
+   "secondes": 23.36,
+   "octets_s": 109.6,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.9643,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de maisons de la franchise privotante des Guachina et son franchi par sa capitale et par des guachina. Le site de tel connu con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.913,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, la communauté de communes de Couples, à l'ouest de Lyon. Le communauté de communes attribuèrent à couvrir un cours d'eau ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois plus de  en sélection du système de kilomètre sous le monde et la substitution. Elle avait retour l'époque planière en on ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.9643,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de maisons de la franchise privotante des Guachina et son franchi par sa capitale et par des guachina. Le site de tel connu con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.913,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, la communauté de communes de Couples, à l'ouest de Lyon. Le communauté de communes attribuèrent à couvrir un cours d'eau ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois plus de  en sélection du système de kilomètre sous le monde et la substitution. Elle avait retour l'époque planière en on ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Le chat",
+     "texte": "Le chat de la ville d'Italie foncier. Le but du personnage se fait déclarer pour les Beaux-Deucare et définitif au canton de Beller e",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La mer",
+     "texte": "La mer Magicalii est une mer de formes ou d'histoire homologique comme le principal schématique de l’Ukraine de 1850. Son père met",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le principe de l'université de Charles Chambre (1924-1990) dans le marché Claire. Il est néerlandais de Bernard Linné, en 1",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.931,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé à la défense. Le duché se situe au sud-ouest du mont Malan via que de la Constition reposait soin et trois filles, ce qui se",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est le nom du Valais à l'origine du pays de Canal de 1938 à 1940. Il aurait encore une conservation de bus et de photographies en",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme en 1998. Le , roi de Nashschwar Shangon Patricka est le restaurateur sur les équipes de l'équipe des Tansers en Ligue de la c",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.8,
+     "repetition": 2,
+     "echo": 0.2631578947368421,
+     "prompt": "La musique",
+     "texte": "La musique de la fédération de la littérature (la critique) en 1174. La plus ancienne fédération de la littérature civile travaillai",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "Le livre",
+     "texte": "Le livre se situe dans les anciennes communes de Saint-Julien et de Paris en mars 2015. Le bourg des communes se situe dans le départem",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La guerre",
+     "texte": "La guerre civile est présentée comme similaire dans la présidence directe du manuscrit. Des deux systèmes les plus anciens plus ancie",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.7,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie autrique de Charles Louis Durand Meilleur nom avait été évêques de Marchán, mais il mourut le  (collection de l'automatism",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport formé de génération est encore plus grand personnage de la lettre de toutes lettres. L'ensemble des sports est appartenu dan",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La science",
+     "texte": "La science qui passe au moyen de son complexe serait d'un proton ou d'un alpin.. Les alpinismes sous forme de son nom de la légitiménie ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La ville",
+     "texte": "La ville prend plus de  et de mosquer avec le territoire montagneux de la ville de Compremont, en raison de l'est du Milieu (partie mont",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le temps",
+     "texte": "Le temps de la racismontation des pages des magiciens restant le long magicien des résultats francophones et des membres de l'acisme ge",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La vie",
+     "texte": "La vie d'arbres. Un autre arbuste de Sagorane se trouve au nord de Ben Balan, la ville d'État, et les fortifications entre la ville d",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.9444,
+     "distinct_2": 0.7647,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de Nombreux mondial. Nombreux nombreux nombreux nombreux nombreux personnages sont l'abbaye de Montmorency. Nombreux nombreux n",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La question",
+     "texte": "La question du château de monde industriel au cours de la République française en 1953. La commune voit la barquereau bierge en trois co",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9162,
+   "distinct_2": 0.8231,
+   "repetition": 6,
+   "echo": 0.1045,
+   "octets": 2560,
+   "secondes": 23.29,
+   "octets_s": 109.9,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.9286,
+     "repetition": 1,
+     "echo": 0.12,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de l'ancienne région de Lorraine et de l'Autriche. Le roi de Lorraine est une partie du roi de France et un bourg de consei",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.68,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le département de la Corne et le département de la Moselle en région Britannique et le département de la Moselle. Cette an",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.7857,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois au centre de la saison 1969-1969. Le film se double marquer au centre de la saison 1961-1969 et de la saison 1966-1969 et la sa",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.8621,
+     "distinct_2": 0.9286,
+     "repetition": 1,
+     "echo": 0.12,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de l'ancienne région de Lorraine et de l'Autriche. Le roi de Lorraine est une partie du roi de France et un bourg de consei",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.68,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le département de la Corne et le département de la Moselle en région Britannique et le département de la Moselle. Cette an",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.8966,
+     "distinct_2": 0.7857,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois au centre de la saison 1969-1969. Le film se double marquer au centre de la saison 1961-1969 et de la saison 1966-1969 et la sa",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le chat",
+     "texte": "Le chat est un ensemble de latin consistant une chatse de polygones de polygones étant le titre d'un processus du polygone relatif. La",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.09523809523809523,
+     "prompt": "La mer",
+     "texte": "La mer de l'échouait et de la distance contre le parc naturel régional de la Seconde Guerre mondiale contre le parc naturel régiona",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le projet proprement dans des cours d'eau. Le , le barière de la France. Le , le barière de la France en fait des montagnes d",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.7619,
+     "repetition": 2,
+     "echo": 0.4444444444444444,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de comprendre le gouvernement de l'Angleterre. Le gouvernement passé par le gouvernement de la République et le gouvernement ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.04,
+     "prompt": "Paris est",
+     "texte": "Paris est un proche de la maison de la fin des années 1970 par les travaux de l'infant. Cette filiale est un proche de la population de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la fin de l'année 1992 et le premier chanteur d'une vitesse de premier passage de l'édition de la construction de la premi",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "La musique",
+     "texte": "La musique de nombreux mondes de la population pour le poids de la population de transport dans le domaine de l'année. Il est donc le nom",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08,
+     "prompt": "Le livre",
+     "texte": "Le livre est un livre français à l'ouest du monde. Il est le plus ou moins une forme de plus en plus de construction en son élément ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Denis est la plus riche de l'État de l'Angleterre et de l'Ouest. La plus riche de la Saint-Denis connait un grand nom",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de cette économie de la majeure pour l'histoire de la région de Charente-de-Saint-Denis. Le nom de la majeure pour la communa",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.875,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "Le sport",
+     "texte": "Le sport de la Communauté de communes du Cantal de Saint-Pierre, par le pays de Saint-Pierre et de Saint-Pierre. Le sport est élu en 2",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.7826,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "La science",
+     "texte": "La science de la ville de Springsfeld en 1995. Le groupe devient le premier succès de la Société libérale de la Société libérale de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.16,
+     "prompt": "La ville",
+     "texte": "La ville de La Tireau est une ville de La Tireau (littéralement « préfecture » du Canada et du Canada). Il est élu député de la L",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5,
+     "repetition": 6,
+     "echo": 0.047619047619047616,
+     "prompt": "Le temps",
+     "texte": "Le temps de couronne est un temps plus simple de l'époque de l'époque de l'époque de l'époque de l'époque de l'époque de l'époque",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.6538,
+     "repetition": 3,
+     "echo": 0.18518518518518517,
+     "prompt": "La vie",
+     "texte": "La vie de la vallée de la Ventine (), pour des parties et des rivières de la vallée de la Ventine (), ou des monts de la vallée de",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.2222222222222222,
+     "prompt": "Le monde",
+     "texte": "Le monde. Le , le plus grand rapport au cours de la province de Le Province. Le cours d'eau connaisse le sol de la province de Le Provin",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.16666666666666666,
+     "prompt": "La question",
+     "texte": "La question du monde de la ville de Saint-Germain-de-Saint-Germain dans le début de la Charente et la région de Saint-Germain-de-Saint-Ge",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

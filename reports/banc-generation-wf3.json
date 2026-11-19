@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/wf3.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9462,
+   "distinct_2": 0.4007,
+   "repetition": 13,
+   "echo": 0.1448,
+   "octets": 2560,
+   "secondes": 23.11,
+   "octets_s": 110.8,
+   "echantillons": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.4444,
+     "repetition": 4,
+     "echo": 0.16666666666666666,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Saint-Laurent et de la commune de Saint-Laurent et de la commune de Saint-Laurent et de la commune de Saint",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le projet de la production de travail est de conservation de travail et de conservation de travail en travail de conservation ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le prince de la Constitution de 1994 à 2004. Il est le principal principal principal de la Constitution de 1994 à 2005. I",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.4444,
+     "repetition": 4,
+     "echo": 0.16666666666666666,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Saint-Laurent et de la commune de Saint-Laurent et de la commune de Saint-Laurent et de la commune de Saint",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le projet de la production de travail est de conservation de travail et de conservation de travail en travail de conservation ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le prince de la Constitution de 1994 à 2004. Il est le principal principal principal de la Constitution de 1994 à 2005. I",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4643,
+     "repetition": 4,
+     "echo": 0.2222222222222222,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune est desservi par le chat de la commune de Champagne et le chat de la commune de Champagne et le chat de la commun",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.6071,
+     "distinct_2": 0.5556,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent un rôle dans le monde de la maison de la maison de Marie Carlo Carlo Carlo Carlo Carlo Carlo Carlo Carlo Carlo Carlo Carlo Car",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.3333,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4286,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un personnage de la série de production de production de production de production de production de production de production de",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2593,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la famille des Arabes de la famille des Arabes de la famille des Arabes de la famille des Arabes de la famille des Arabes de",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.7083,
+     "distinct_2": 0.3478,
+     "repetition": 5,
+     "echo": 0.09090909090909091,
+     "prompt": "La guerre",
+     "texte": "La guerre de Saint-Paul et la guerre de Saint-Paul et de Saint-Paul et de Saint-Paul et de Saint-Paul et Saint-Paul et Saint-Paul et Sain",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3478,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la province de La Chapelle de Chapelle de Chapelle de Chapelle de Chapelle de Chapelle de Chapelle de Chapelle de Chapelle d",
+     "octets": 128
+    },
+    {
+     "mots": 12,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune est de  de la commune de Champagne-Champagne-Champagne-Champagne-Champagne-Champagne-Champagne-Champagne-Champagn",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.4762,
+     "repetition": 4,
+     "echo": 0.2,
+     "prompt": "La science",
+     "texte": "La science de la première de la première de la première des premières première de la première des premières des premières premièr",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4286,
+     "repetition": 6,
+     "echo": 0.2962962962962963,
+     "prompt": "La ville",
+     "texte": "La ville de La Chapelle est une partie de la province de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La Chapelle de La C",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La vie",
+     "texte": "La vie de la protection de la protection de la protection de la protection de la protection de la protection de la protection de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.2917,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la première partie de la première partie de la première partie de la première partie de la première partie de la premi�",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.2917,
+     "repetition": 5,
+     "echo": 0.2608695652173913,
+     "prompt": "La question",
+     "texte": "La question de la première partie de la première partie de la première partie de la première partie de la première partie de la premi�",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.9145,
+   "distinct_2": 0.9748,
+   "repetition": 2,
+   "echo": 0.0248,
+   "octets": 2451,
+   "secondes": 22.4,
+   "octets_s": 109.4,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage comprenant la Compagnie de la Vienne situé dans le département du Kamandara. Elle doit son nom à desservir sous le Texas,",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le droit de SansMore, démocrate britannique de la cinémathèque musicale de Thomas de Rutherfusse. Son père est commerciali",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par des couronnes réunissant une province sous le nom de science-fiction N. 1976, p. 65. Il était possible d'attente depuis l",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage comprenant la Compagnie de la Vienne situé dans le département du Kamandara. Elle doit son nom à desservir sous le Texas,",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le droit de SansMore, démocrate britannique de la cinémathèque musicale de Thomas de Rutherfusse. Son père est commerciali",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par des couronnes réunissant une province sous le nom de science-fiction N. 1976, p. 65. Il était possible d'attente depuis l",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le chat",
+     "texte": "Le chat publié par Charles Michel de Chloïn, fils de Montluçan. Il a été président de la chambre de construction de Frédéric Le",
+     "octets": 128
+    },
+    {
+     "mots": 4,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer Marhousse (Chant)\n",
+     "octets": 19
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent une traduction historique de combat en 1956 et qui le remplace immédiate du corps et du soupçonnisme en sept philosophies. Ce",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de nouveau en vitesse alors l'existence des religieuses des allures des allures de l'album (probable, venise, obligation) et de",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est le seul grand saut français. Il écrit à proximité des divers pensionnaires des mains des films. Le premier ordre peut de di",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de cet universite est la température de montagne-religion avocatus. La fin du , il quitte le passage : il est sur le plateau q",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "La musique",
+     "texte": "La musique comptant rouge par le nom de Sitti Liwe. Ce nom de Sitti a été originaire du Parti communiste des Congrès de la Congrèse pu",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le livre",
+     "texte": "Le livre à docter est repris en 1983 par le quotidien en deux tamps et ce signal, puis la Convention s'intègre après ses rapports ave",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre civile avant les maîtres et renommés à Paris, le dirigeant part ainsi de 1917 à 2014.  classé notar  Rarare, le directeur ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie du patrimoine mondial en 1995. Un des ceux-ci fut connu comme membre de la ville mondiale en latin Le Tribunal pour avoir lieu ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport en danse. L'établissement permet de traverser la mesure de la risque de la production de la loi de formation de l'ensemble de ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science est un système de type groupe, ce qui s’est densité ensuite sur les systèmes systémiques associés : c’est ce sens de m",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La ville",
+     "texte": "La ville de Flammariolles, située à une altitude moyenne de 21 à  au nord de Macrogoria et à une altitude moyenne de profondeur et �",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.043478260869565216,
+     "prompt": "Le temps",
+     "texte": "Le temps connu a soin par la dernière nouvelle champions par deux, le monde est relégué par la dernière saison de la Suède de 1944 ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La vie",
+     "texte": "La vie de la plante se propagera sur le fleuve Inglinde. Sur la commune et les pétales vouluent des biens importants et des marais pr",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde qui, durant toujours deux, en commun à la RD 78. Cette première section de la musique, qui est vice-présidente de l'escadron",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question de toute référence à un action de compétence apparente de l'emploi de « mouvement », depuis les mêmes six millions d'eux",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.8971,
+   "distinct_2": 0.854,
+   "repetition": 7,
+   "echo": 0.0556,
+   "octets": 2473,
+   "secondes": 22.66,
+   "octets_s": 109.1,
+   "echantillons": [
+    {
+     "mots": 10,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de l'ancien village de Saint-Laurent\n",
+     "octets": 41
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8929,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le surnom de la musique source officiel dans le contenu des contenus de la vie populaire. La vie est la vie familiale qui a é",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.7857,
+     "distinct_2": 0.9259,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le comté de Charles II en 1849, à la suite de l'état-major de la maison de Charles II de Rochefort (1811-1856). Il est ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 10,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de l'ancien village de Saint-Laurent\n",
+     "octets": 41
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8929,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le surnom de la musique source officiel dans le contenu des contenus de la vie populaire. La vie est la vie familiale qui a é",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.7857,
+     "distinct_2": 0.9259,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois dans le comté de Charles II en 1849, à la suite de l'état-major de la maison de Charles II de Rochefort (1811-1856). Il est ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.12,
+     "prompt": "Le chat",
+     "texte": "Le chat de la campagne de La Balle du Sud de la Sud. Le chat de la commune s'étend sur plusieurs cours d'eau sur le site lion1906.com ",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.5556,
+     "distinct_2": 0.2353,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer Catherine Monte Catherine Monte Catherine Monte Catherine Monte Catherine Monte Catherine Monte Catherine Monte Catherine Monte",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent un bon nouveau face à l'apparition de la capitale de l'empereur Robert de Bourgogne. Il est alors connu pour ses deux volumes ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.22727272727272727,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé par le conseil d'acteur et de mettre en anglais : le gouvernement de la Constitution de 1999, le gouvernement de la Constitutio",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 0.9,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un personnage de bande dessinée de bande dessinée par les films de Christiana (1994). Selon les secondes secondaires : coméd",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de toute la même année. La deuxième état du livre de Californie est plus en plus grand que le producteur d'alimentation. Le",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "La musique",
+     "texte": "La musique des années 1970 et 1970 utilisées pour le roman de Soul dans le complexe de la musique de la guitare française. Liens extern",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Le livre",
+     "texte": "Le livre d'art et de résistance de fiction graphique de la distribution de la vie de l'architecture de la vie de ses patrons et le plus",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.913,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "La guerre",
+     "texte": "La guerre du Maroc, et le chanteur du comptage des batailles de l'Organisation de la ville de Carcassonne (1776-1802) et le chanteur de l",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6538,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie du concept de champion de la Coupe du monde de la Coupe du monde de feu de la Coupe du monde des champion d'arrondissement de l",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.5714,
+     "distinct_2": 0.6923,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de Saint-Laurent de Saint-Laurent-de-Vilaine, de Saint-Laurent-de-Vilaine de Brenais, de Saint-Laurent-de-Vilaine, de Vilaine, ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "La science",
+     "texte": "La science de La Chapelle-Saint-Louis et de Marie Cannes. Le statut de mariage reste en amont de la province de La Chapelle-Saint-Louis et",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La ville",
+     "texte": "La ville de Californie (San Francisco) est un exemplaire de français, créé en 1937 par le gouvernement de la Santé et de la Constitu",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps en référence à un second matériel de montagne de la science sur les physiciens de la science et de la physique de l'article",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La vie",
+     "texte": "La vie de la maison de Constantinople est aussi le seuil de l'ancien parti national de la principauté de Constantinople. Le parti est",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le monde",
+     "texte": "Le monde de cette position a prouvé de guerre au monde en 1999. La société est l'un des compositeurs de l'art médiéval de l'art mé",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La question",
+     "texte": "La question de la compagnie est la litude de l'état des compagnies européennes (par exemple : le développement des compagnies est donc d",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

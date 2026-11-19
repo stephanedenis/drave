@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,10 +15,11 @@
 | 10:36 | `d074a300` | ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE) | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 11:44 | `e4cd1953` | ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS | `en-cours.md`, `README.md`, `mesures.md` (+5) |
 | 12:09 | `90d9242e` | ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE) | `en-cours.md`, `README.md`, `moteur.md` (+5) |
+| 12:12 | `7b234e98` | ÉTAT — T0 À 3 997 | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 50.4 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 53.8 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 
 <!-- notes -->
 

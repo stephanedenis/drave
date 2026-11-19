@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 50.4 h |
-| Tours | 33 |
-| Messages | 912 |
-| Appels d'outils | 848 |
+| Durée | 53.8 h |
+| Tours | 62 |
+| Messages | 1014 |
+| Appels d'outils | 890 |
 | Fichiers touchés | 44 |
-| Commandes | 707 |
+| Commandes | 749 |
 | Sous-agents | 7 |
-| Commits | 69 |
+| Commits | 70 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -117,6 +117,64 @@
 **Tour 32** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
 
 **Tour 33** — continue avec les prochaines actions jusqu'à 17h
+
+**Tour 34** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [535 caractères tronqués]
+
+**Tour 35** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [535 caractères tronqués]
+
+**Tour 36** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 3 … [535 caractères tronqués]
+
+**Tour 37** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 4 … [535 caractères tronqués]
+
+**Tour 38** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 5 … [535 caractères tronqués]
+
+**Tour 39** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 6 … [535 caractères tronqués]
+
+**Tour 40** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 7 … [535 caractères tronqués]
+
+**Tour 41** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 8 … [535 caractères tronqués]
+
+**Tour 42** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 9 … [535 caractères tronqués]
+
+**Tour 43** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 44** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 45** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 46** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 47** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 48** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 49** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 50** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 51** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 52** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 1 … [536 caractères tronqués]
+
+**Tour 53** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 54** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 55** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 56** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 57** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 58** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 59** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 60** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 61** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 62** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1053,7 +1111,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 
 ### Tour 33 — continue avec les prochaines actions jusqu'à 17h
 
-*13 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the source corpora and compute the v1 reference at 30k
@@ -1068,6 +1126,395 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - bash — Commit the A2.6 decision branch
 - bash — Restore the budget after the A2.6 decision commit
 - bash — Final budget trim
+- bash — Wait 50 minutes, then check the first tranche of the source runs
+
+**Synthèse produite :**
+
+⏵ A2.6 est **close** : la décision passe par la règle (le cache experts n'est créé que si elle le place en VRAM, refus nommé sinon) — 146 tests, cinq portes vertes
+
+**Ce qui vient d'être fait** : le second pas d'A2.6 est committé (`7b234e98`). Sous `DRAVE_PERTE_MAX`, la création du cache VRAM des experts est soumise à `choisir_experts` : sur cette machine la règle rend VRAM (156,9 ms < 1 s) et le cache est créé comme avant ; un refus ne créerait pas le cache et le dirait. Sans l'opt-in, rien ne change. Testé sur le 30B (`DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_MAX=1`) : une trace `experts : 1.10 Go/jeton · … → VRAM` puis `cache d'experts : budget 2.0 Go`. Il ne reste d'A2.6 que les **clusters** et la consolidation des tables de bandes — nommés au backlog.
+
+**En cours** : la décomposition de la sélection du contenu — `wiki_big` seul (GPU 0, 831 Mo) et `wiki_fr` seul (GPU 1, 186 Mo), 3 tranches de 10 000 pas chacun, jugés sur wikitext2 contre la référence v1 (**7,3987** à 30 000 pas) et v2 (**7,4277**). Premières tranches vers 13 h 05, verdicts vers 15 h 30, fiche avant 17 h.
+
+### Tour 34 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Characterize the two source corpora
+
+**Synthèse produite :**
+
+⏵ Les deux sources de v1 sont caractérisées : `wiki_big` 831 Mo / 407,5 o par ligne, `wiki_fr` 186 Mo / 422,3 — contre 108,8 pour le plein texte de v2
+
+**Ce que la décomposition va dire** : v1 = `wiki_big` (2,04 M lignes, 407,5 o/ligne) + `wiki_fr` (440 709 lignes, 422,3 o/ligne), deux corpus « propres » à lignes longues ; v2 = le plein texte (63,4 M lignes, 108,8 o/ligne). Les deux runs en cours (wiki_big seul GPU 0, wiki_fr seul GPU 1) diront si l'avantage de v1 vient d'une **source** ou de leur **mélange**.
+
+Références à 30 000 pas sur wikitext2 : **v1 7,3987**, **v2 7,4277** (et le nettoyé/recollé écartés). Les premières tranches tombent vers 13 h 05, les verdicts vers 15 h 30 ; la fiche et le commit suivront avant 17 h. A2.6 est clos (décision branchée, 146 tests, cinq portes vertes).
+
+### Tour 35 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check the source runs' pace
+
+**Synthèse produite :**
+
+⏵ Les deux runs de sources tiennent le rythme (0,44 s/pas, ~2 800 pas ; pertes 1,71 et 1,51) — première tranche vers 13 h 05
+
+**Le point** : `wiki_big` (831 Mo) et `wiki_fr` (186 Mo) s'entraînent à pas égal depuis 11 h 56, à 0,44 s/pas, et apprennent normalement (perte 1,71 et 1,51 à ~2 800 pas). Les premières tranches (10 000 pas) tombent vers 13 h 05 ; les verdicts à 30 000 pas vers 15 h 30, puis les trois PPL sur wikitext2 et la fiche.
+
+**Rappel des références** : à 30 000 pas sur wikitext2, v1 (le mélange) = **7,3987**, v2 (le plein texte) = **7,4277** ; le nettoyé (7,6189) et le recollé (7,7476) sont écartés. A2.6 est clos côté dépôt (décision branchée, 146 tests, cinq portes vertes).
+
+### Tour 36 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Draft the content-selection fiche
+
+**Synthèse produite :**
+
+⏵ La fiche de la décomposition est écrite (sources caractérisées, références posées, lignes `wiki_big`/`wiki_fr` en attente)
+
+**Fait** : `reports/rapport-selection-contenu.md` est rédigée — les deux sources de v1 sont caractérisées (`wiki_big` 831 Mo / 407,5 o par ligne, `wiki_fr` 186 Mo / 422,3 o par ligne), les références à 30 000 pas sont posées (v1 **7,3987**, v2 **7,4277**) et la question est cadrée : l'avantage de v1 vient-il d'une source ou de leur mélange ? Il ne manque que les deux lignes `wiki_big` et `wiki_fr`, à remplir quand les runs terminent (~15 h 30) — puis le verdict, l'état et le commit.
+
+A2.6 est clos côté dépôt, les runs tiennent le rythme (0,44 s/pas), et rien d'autre n'est ouvert.
+
+### Tour 37 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Pin the two source corpora
+- bash — Add the source pins to the fiche
+
+**Synthèse produite :**
+
+⏵ Les deux sources de v1 sont épinglées (`wiki_big` `11aa9b74…`, `wiki_fr` `d2804870…`) : la fiche de la décomposition est complète, il ne manque que les mesures
+
+**Fait** : les corpus `wiki_big` (831 Mo + val 46 Mo) et `wiki_fr` (186 Mo + val) sont épinglés et cités dans `reports/rapport-selection-contenu.md` — la fiche est prête, seules les deux lignes de résultats manquent. Notons au passage que `wiki_big` a un val de 46 Mo (un cinquième val possible pour plus tard).
+
+**En cours** : les deux runs à 0,44 s/pas ; première tranche vers 13 h 05, verdicts vers 15 h 30. Ensuite : les trois PPL (v1 7,3987 et v2 7,4277 déjà connus, wiki_big et wiki_fr à calculer), le verdict, l'état et le commit — avant 17 h.
+
+### Tour 38 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause with a thermal check
+
+**Synthèse produite :**
+
+⏵ Les deux runs sont à ~4 500 pas (pertes 1,37-1,39), GPU à 87 °C et 75 °C — tout est nominal
+
+**Le point** : `wiki_big` (GPU 0) et `wiki_fr` (GPU 1) tiennent 0,44 s/pas, les pertes descendent (1,37-1,39), et les GPU sont à 87 °C et 75 °C — chaud mais stable, comme pendant la nuit. Première tranche (10 000 pas) vers 13 h 05, puis les deux suivantes ; verdicts à 30 000 pas vers 15 h 30, fiche et commit avant 17 h.
+
+Rien d'autre n'est ouvert : A2.6 est branchée et décidée (146 tests, cinq portes vertes), la fiche de la décomposition attend ses deux mesures, et les pins des sources sont en place.
+
+### Tour 39 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Verify the two source pins
+
+**Synthèse produite :**
+
+⏵ Les épingles des deux sources vérifient (5 et 7 fichiers ✅) — les runs liront des fichiers intacts
+
+**Vérification faite** : `wiki_big` (5 fichiers) et `wiki_fr` (7 fichiers) correspondent exactement à leurs manifestes (`11aa9b74…`, `d2804870…`). Les runs en cours lisent donc des corpus dont l'identité est prouvée, et la fiche les cite correctement.
+
+**Prochain point** : la première tranche des deux runs (10 000 pas) vers 13 h 05 ; ensuite les deux dernières tranches et les trois PPL sur wikitext2. A2.6 est clos, les fiches attendent leurs mesures, et le commit de clôture est prévu avant 17 h.
+
+### Tour 40 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check the runs' progress and elapsed time
+
+**Synthèse produite :**
+
+⏵ Les runs sont à 4 500 et 4 750 pas de leur première tranche — rien à signaler
+
+**Le point** : `wiki_big` (4 500 pas) et `wiki_fr` (4 750 pas) avancent normalement ; la première tranche tombe vers 13 h 05. Les épingles des sources vérifient, la fiche de la décomposition attend ses deux mesures, et le commit de clôture est prévu avant 17 h. Aucun autre chantier n'est ouvert.
+
+### Tour 41 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check the pending tree before the final commit
+
+**Synthèse produite :**
+
+⏵ L'arbre porte les deux épingles des sources et le journal auto-généré — tout entrera avec le commit de clôture
+
+**Le point** : les seuls fichiers en attente sont les deux JSON d'épingle des sources (`corpus-epingle-wikibig.json`, `-wikifr.json`), la fiche de la décomposition (non committée) et les mises à jour du journal que le hook régénère. Rien d'anormal : le commit de clôture, après les mesures de 15 h 30, les emportera tous.
+
+Les runs sont à ~4 500-4 750 pas de la première tranche ; la suite est automatique (tranches 2 et 3, puis les trois PPL sur wikitext2).
+
+### Tour 42 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [815 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and progress
+
+**Synthèse produite :**
+
+⏵ Mi-tranche : `wiki_fr` mène sur la PPL (3,77 contre 4,01) — mais le val est celui de v1, qui contient `wiki_fr` à 18 %
+
+**Le point** : à ~6 000 pas, `wiki_fr` (le petit corpus de résumés, 186 Mo) a une PPL de 3,77 contre 4,01 pour `wiki_big` (831 Mo) — cohérent avec le fait que le val de v1 contient `wiki_fr` à ~18 %, donc plus proche de lui. La comparaison décisive reste **wikitext2 à 30 000 pas**, où les deux sources seront jugées hors de leur propre distribution.
+
+Première tranche vers 13 h 05 ; les deux dernières et les PPL vers 15 h 30-45 ; commit de clôture avant 17 h.
+
+### Tour 43 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check the first tranche
+
+**Synthèse produite :**
+
+⏵ Les runs sont à 7 500 et 7 900 pas ; la première tranche tombe vers 13 h 00-05
+
+**Le point** : `wiki_big` (7 500 pas) et `wiki_fr` (7 900) finissent leur première tranche ; les JSON de résultat (PPL et banc) arrivent dans quelques minutes. Ensuite les deux dernières tranches, puis les trois PPL sur wikitext2 (v1 7,3987, v2 7,4277 déjà connus) et la fiche.
+
+Rien d'autre n'est ouvert : A2.6 est close (décision branchée, 146 tests, cinq portes vertes), les épingles des sources vérifient, et le commit de clôture est prévu avant 17 h.
+
+### Tour 44 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and read the first tranche
+- bash — Read the first tranche results
+
+**Synthèse produite :**
+
+⏵ Première tranche : `wiki_fr` rend 3,3255 (précision 0,6447) — `wiki_big` la suit de quelques minutes
+
+**Le point** : `wiki_fr` (186 Mo) finit sa première tranche à **PPL 3,3255** sur le val de v1 ; son banc est écrit (`banc-generation-wf1.json`). `wiki_big` (831 Mo), parti un peu plus tard, termine dans quelques minutes. Les deux runs enchaînent ensuite les tranches 2 et 3 (30 000 pas) ; les PPL sur wikitext2 suivront vers 15 h 30-45, puis la fiche et le commit de clôture.
+
+### Tour 45 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Check the wiki_big first tranche
+
+**Synthèse produite :**
+
+⏵ Les deux premières tranches sont là : `wiki_fr` 3,3255, `wiki_big` 3,5054 — le petit corpus mène sur le val de v1
+
+**Le point** : à 10 000 pas, `wiki_fr` (186 Mo) mène sur le val de v1 (**3,3255** contre **3,5054** pour `wiki_big`) — attendu, puisque ce val contient `wiki_fr` à ~18 % et que le petit corpus y est vu plus souvent. La mesure décisive reste **wikitext2 à 30 000 pas**, hors distribution des deux sources.
+
+Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL sur wikitext2, la fiche et le commit de clôture.
+
+### Tour 46 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Control the default PPL after the decision branch
+
+**Synthèse produite :**
+
+⏵ Le chemin par défaut rend bien une PPL sans trace (branchement sous opt-in seulement) — rien n'a bougé par défaut
+
+**Contrôle fait** : sans `DRAVE_PERTE_MAX`, le binaire rend une perplexité normale et **aucune trace** d'experts — la décision ne s'active que sous l'opt-in, et les cinq portes A2.6 (dont `porte-flux` et `porte-echange-experts`, qui tournent en mode par défaut) restent vertes. C'est la garantie que le branchement n'a pas déplacé le défaut.
+
+**En cours** : les tranches 2 des deux runs de sources (fin ≈ 14 h 15), puis les troisièmes (≈ 15 h 30) et les deux PPL sur wikitext2. Fiche et commit de clôture avant 17 h.
+
+### Tour 47 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Wait 40 minutes, then check the second tranche
+
+**Synthèse produite :**
+
+⏵ Point de contrôle programmé à 13 h 55 (tranche 2 en cours) — les runs tournent, rien à faire d'ici là
+
+**Le point** : `wiki_big` et `wiki_fr` sont dans leur deuxième tranche (fin ≈ 14 h 15), puis la troisième (≈ 15 h 30). Les PPL sur wikitext2 suivront, puis la fiche, l'état, le commit et le bilan à 17 h. A2.6 est close et son défaut est contrôlé ; les épingles des sources vérifient ; aucun autre chantier n'est ouvert.
+
+### Tour 48 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Launch a fresh full gate pass during the runs
+
+**Synthèse produite :**
+
+⏵ Passe complète des 91 portes relancée à 13 h 12 sur l'arbre final (A2.6 décision incluse) — elle finira vers 15 h 15, avec les runs
+
+**Pourquoi maintenant** : la dernière passe date de la nuit (88/2, avant le branchement et la décision A2.6). Une passe fraîche sur l'arbre actuel — 91 portes, machine chargée par les deux runs de sources — donnera le verdict de clôture en même temps que les résultats du test. C'est aussi la vérification que la décision A2.6 n'a déplacé aucun défaut.
+
+**En cours** : les tranches 2 des runs (fin ≈ 14 h 15), puis les troisièmes (≈ 15 h 30) et les deux PPL sur wikitext2. La passe, les PPL, la fiche, l'état et le commit s'enchaîneront entre 15 h 15 et 17 h.
+
+### Tour 49 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and pass progress
+
+**Synthèse produite :**
+
+⏵ Passe à 16 portes (aucune rouge), runs en tranche 2 — tout est nominal
+
+**Le point** : la passe des 91 portes avance (16 portes, 0 rouge), `wiki_big` et `wiki_fr` sont en tranche 2, et la machine tient (GPU ~87/75 °C). Les prochains jalons : fin de la tranche 2 (≈ 14 h 15), de la passe (≈ 15 h 15), des troisièmes tranches (≈ 15 h 30), puis les deux PPL sur wikitext2 et la clôture (fiche, état, commit, bilan) avant 17 h.
+
+### Tour 50 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and checks
+
+**Synthèse produite :**
+
+⏵ Passe à 26 portes (aucune rouge), tranche 2 à 4 150 pas — tout avance
+
+**Le point** : la passe des 91 portes est à 26 (0 rouge), `wiki_fr` à 4 150 pas de sa tranche 2. Les jalons restent : tranche 2 (≈ 14 h 15), passe (≈ 15 h 15), tranche 3 (≈ 15 h 30), puis les deux PPL sur wikitext2 et la clôture avant 17 h.
+
+### Tour 51 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and checks
+
+**Synthèse produite :**
+
+⏵ Passe à 29 portes, tranche 2 à 4 700 pas — rien à signaler
+
+**Le point** : la passe des 91 portes est à 29 (0 rouge), `wiki_big` à 4 700 pas de sa tranche 2. Prochains jalons : tranche 2 (≈ 14 h 15), passe (≈ 15 h 15), tranche 3 (≈ 15 h 30), puis les PPL sur wikitext2 et la clôture.
+
+### Tour 52 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and checks
+
+**Synthèse produite :**
+
+⏵ Passe à 31 portes (0 rouge), `wiki_fr` à 7 200 pas de sa tranche 2 — les deuxièmes résultats arrivent vers 14 h 15
+
+**Le point** : la passe avance sans rouge (31 portes), les runs finissent leur deuxième tranche vers 14 h 10-20. Prochains jalons : les deuxièmes résultats (PPL), la passe (≈ 15 h 15), les troisièmes résultats (≈ 15 h 30), puis les PPL sur wikitext2, la fiche et le commit de clôture.
+
+### Tour 53 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check the second tranche
+
+**Synthèse produite :**
+
+⏵ Passe à 33 portes, deuxièmes tranches en cours — résultats vers 14 h 15
+
+**Le point** : la passe est à 33 portes (0 rouge) ; `wiki_big` et `wiki_fr` terminent leur deuxième tranche d'ici 14 h 10-20. Ensuite : passe (≈ 15 h 15), troisièmes tranches (≈ 15 h 30), PPL sur wikitext2, fiche et commit avant 17 h.
+
+### Tour 54 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read the second tranche results
+
+**Synthèse produite :**
+
+⏵ Deuxième tranche : `wiki_fr` à **3,0220** (précision 0,6705) — le petit corpus domine le val de v1, comme attendu puisque c'en est la source
+
+**Le point** : à 20 000 pas, `wiki_fr` (186 Mo) rend **3,0220** sur le val de v1 — meilleur que v2 (3,2989) et que v1 (3,2186) à pas égal. C'est le signe que ce val est *sa* distribution (il en vient), pas une preuve de qualité. `wiki_big` termine sa tranche dans quelques minutes, et le juge décisif reste **wikitext2 à 30 000 pas** (v1 7,3987, v2 7,4277). La passe est à 34 portes, sans rouge.
+
+### Tour 55 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read the wiki_big second tranche
+
+**Synthèse produite :**
+
+⏵ Passe à 65 portes (0 rouge), `wiki_big` finit sa tranche 2 dans quelques minutes
+
+**Le point** : la passe a franchi les portes lourdes (65 portes, 0 rouge) et finira vers 15 h. `wiki_fr` est à 3,0220 à 20 000 pas ; `wiki_big` termine sa tranche 2 (≈ 14 h 25). Les troisièmes tranches (30 000 pas) terminent vers 15 h 30, puis les deux PPL sur wikitext2 et la clôture.
+
+### Tour 56 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read the wiki_big second tranche and the pass
+
+**Synthèse produite :**
+
+⏵ Tranche 2 : `wiki_big` 3,2209, `wiki_fr` 3,0220 — le mélange v1 (3,2186) se comporte comme `wiki_big` seul ; la passe est à 67 portes, 2 rouges (les structurelles)
+
+**Le point** : à 20 000 pas sur le val de v1, `wiki_big` seul (3,2209) est au niveau du mélange v1 (3,2186), et `wiki_fr` seul est bien meilleur (3,0220) — ce val étant les résumés `wiki_fr`, c'est attendu. La question que tranchera **wikitext2 à 30 000 pas** : laquelle des deux sources généralise le mieux ? La passe est à 67 portes avec les **deux rouges structurelles** (`indice` 859 s, `melange` 106 s) et aucune autre.
+
+### Tour 57 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and checks
+
+**Synthèse produite :**
+
+⏵ Passe à 72 portes (2 rouges structurelles), tranche 3 à 1 950 et 3 500 pas — les deux finissent vers 15 h 10-30
+
+**Le point** : la passe franchit les dernières portes lourdes (72/91), les runs sont dans leur tranche finale. Vers 15 h 10 : le verdict de la passe ; vers 15 h 30 : les deuxièmes PPL sur wikitext2 ; ensuite la fiche, l'état, le commit et le bilan de 17 h.
+
+### Tour 58 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check the pass
+
+**Synthèse produite :**
+
+⏵ Passe à 75 portes (produit, préchargement vertes), tranche 3 à 5 000 pas — la fin approche
+
+**Le point** : la passe est à 75 portes, toujours avec les deux rouges structurelles ; `wiki_fr` est à 5 000 pas de sa dernière tranche. Vers 15 h 10 : le verdict de la passe ; vers 15 h 25-30 : les PPL finaux sur wikitext2 ; ensuite la fiche, l'état, le commit et le bilan.
+
+### Tour 59 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and checks
+
+**Synthèse produite :**
+
+⏵ Passe à 83 portes (ressources verte), tranche 3 à 4 700 pas — la passe finit dans ~10 minutes
+
+**Le point** : il reste une poignée de portes (dont `vision`, la plus longue) ; les runs sont à mi-tranche finale. Vers 15 h 10 : le verdict de la passe ; vers 15 h 25-30 : les PPL finaux ; puis la fiche, l'état, le commit et le bilan.
+
+### Tour 60 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Wait for the pass verdict
+- bash — Check the pass verdict and the final tranche
+- bash — Read the pass summary
+
+**Synthèse produite :**
+
+⏵ Passe de clôture : **91 portes, 89 vertes, 2 rouges** (les deux structurelles `indice` 859 s et `melange` 106 s) — aucune autre
+
+**Le verdict de la passe** : 91 portes, **89 vertes, 2 rouges** — `indice` (859 s) et `melange` (106 s), les deux structurelles connues, et **aucune autre**. L'arbre actuel (branchement et décision A2.6 inclus) ne déplace donc aucun défaut, machine chargée par les deux runs.
+
+**Ensuite** : les troisièmes tranches de `wiki_big` et `wiki_fr` finissent vers 15 h 25, puis leurs deux PPL sur wikitext2 — le verdict de la décomposition, la fiche, l'état et le commit avant 17 h.
+
+### Tour 61 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Read the final tranche of the source runs
+- bash — Compute the wiki_fr wikitext2 PPL
+
+**Synthèse produite :**
+
+⏵ `wiki_fr` seul sur wikitext2 : **8,0876** — le meilleur sur le val de v1 (2,8973) et le pire sur le val tiers ; `wiki_big` finit dans ~5 minutes
+
+**Le premier verdict** : `wiki_fr` (186 Mo de résumés) est le meilleur sur le val de v1 (2,8973) mais le **pire** sur wikitext2 (8,0876, contre 7,3987 pour le mélange v1 et 7,4277 pour le plein texte) — il sur-apprend sa propre distribution. La question qui reste : `wiki_big` (831 Mo d'articles longs) fait-il aussi bien que le mélange ? Sa tranche finale se termine vers 15 h 30 ; je calcule sa PPL juste après, puis la fiche et le commit.
+
+### Tour 62 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Check the wiki_big final tranche
+- bash — Read the wiki_big final result
+- bash — Compute the wiki_big wikitext2 PPL
+- bash — Fill the selection fiche with the final results
+- bash — Update the state with the selection verdict and the pass
+- bash — Apply the state updates
+- bash — Record the fresh pass in the references
+- bash — Commit the content-selection verdict and the pass
 
 ## 3. Travail accompli
 
@@ -1172,7 +1619,7 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 667 autres
+- … et 709 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1389,4 +1836,5 @@ Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **p
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()
 - ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE)" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — T0 À 3 997" && git push origin s/v7 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.jso
 
