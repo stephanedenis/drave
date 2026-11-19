@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/cl1.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9989,
+   "distinct_2": 0.223,
+   "repetition": 13,
+   "echo": 0.2378,
+   "octets": 2560,
+   "secondes": 23.55,
+   "octets_s": 108.7,
+   "echantillons": [
+    {
+     "mots": 44,
+     "mots_valides": 0.9773,
+     "distinct_2": 0.2093,
+     "repetition": 12,
+     "echo": 0.3333333333333333,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la f",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5357,
+     "repetition": 4,
+     "echo": 0.5384615384615384,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les années 1950 sont des années 1950 et 1950, les années 1950 et les années 1950 sont des années 1950. Le contrat de la c",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3548,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le projet de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 44,
+     "mots_valides": 0.9773,
+     "distinct_2": 0.2093,
+     "repetition": 12,
+     "echo": 0.3333333333333333,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la fin de la f",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5357,
+     "repetition": 4,
+     "echo": 0.5384615384615384,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les années 1950 sont des années 1950 et 1950, les années 1950 et les années 1950 sont des années 1950. Le contrat de la c",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3548,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le projet de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La mer",
+     "texte": "La mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la mer de la m",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4483,
+     "repetition": 6,
+     "echo": 0.037037037037037035,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent les plus grands sont des programmes de la commune de la commune de la commune de la commune de la commune de la commune de la c",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2581,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2857,
+     "repetition": 8,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un personnage de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1786,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un hommes de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1765,
+     "repetition": 10,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la ligne de la l",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.32142857142857145,
+     "prompt": "La guerre",
+     "texte": "La guerre de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1786,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La science",
+     "texte": "La science de la science de la science de la science de la science de la science de la science de la science de la science de la science d",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1176,
+     "repetition": 11,
+     "echo": 0.6363636363636364,
+     "prompt": "La ville",
+     "texte": "La ville de la ville de la ville de la ville de la ville de la ville de la ville de la ville de la ville de la ville de la ville de la v",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La vie",
+     "texte": "La vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la v",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.32142857142857145,
+     "prompt": "La question",
+     "texte": "La question de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune de la commune d",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.9181,
+   "distinct_2": 0.9695,
+   "repetition": 2,
+   "echo": 0.0428,
+   "octets": 2008,
+   "secondes": 18.46,
+   "octets_s": 108.8,
+   "echantillons": [
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays studio de chaque casse communicative par la suite du Parti communiste (deux démocrates de l'équipe d'équipe caractérisés p",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.9286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et produite dans la région, capte du nom de série.\n",
+     "octets": 54
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.8889,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois place pour l'échiquie, d'une divinité de lice, du fait de la bois sur le soutien national de Purie et du fait de la réunion ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays studio de chaque casse communicative par la suite du Parti communiste (deux démocrates de l'équipe d'équipe caractérisés p",
+     "octets": 128
+    },
+    {
+     "mots": 14,
+     "mots_valides": 0.9286,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et produite dans la région, capte du nom de série.\n",
+     "octets": 54
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.8889,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois place pour l'échiquie, d'une divinité de lice, du fait de la bois sur le soutien national de Purie et du fait de la réunion ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le chat",
+     "texte": "Le chat inscrit sur le plat triple face au plat de la première grande d'altitude. Il diagnoit la bonne de William Laigler du Corte de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.21739130434782608,
+     "prompt": "La mer",
+     "texte": "La mer est la mer. La première fois auraient desservie, et une création de la sortie contre les gravures de la ferme de l'église po",
+     "octets": 128
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.9231,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent sur la législature contre l'autre au poste de l'Alsace mauvaise.\n",
+     "octets": 67
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.875,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de plus à l'épreuve de l'université de la star de l'université de plusieurs arts et de la commune de mariage constituante.\n",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9286,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est nommé avec l'école de seconde musique du petit-fils de seconde musical en salles.\n",
+     "octets": 85
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme politer le caméra de Reims et qu'ils ont attribués.\n",
+     "octets": 55
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La musique",
+     "texte": "La musique à cette épisode universitaire, dont l'on peut affecter des conceptions de la fédération des tels que les données d'infecti",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.9,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "Le livre",
+     "texte": "Le livre actuelle le mangement de ballet des programmes indépendants.\n",
+     "octets": 63
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La guerre",
+     "texte": "La guerre contribue au troisième au travailler dans la chambre de La Banque des Empires de la montagne, et City arrivant de l'espace de ",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie, qui a été considéré comme Le Cadre de la Normandie.\n",
+     "octets": 58
+    },
+    {
+     "mots": 12,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport final de 2012, aux évêques de l'ancien 1926, à l'entreprise.\n",
+     "octets": 65
+    },
+    {
+     "mots": 7,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science d'Urcose d' soldats (') considéré celtique.\n",
+     "octets": 47
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La ville",
+     "texte": "La ville de l'Aragon étant une grande fille ayant le second, professeur de la fuite d'Aragon de fer en main de l'année FME pour la fui",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps patronnel de résistant de mars 1947 (discours de l'élargiste des fonctions classiques) et des années 1950. En l'existence po",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La vie",
+     "texte": "La vie de Munne, il est accessible de celle-ci comme le plus ou malgré une vie de l'empreinte Line et remplie le pour le plus indique",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 0.9474,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la morale, sont conséquents au début du , à dire de l'autre d'Oregon et de la Marine d'Urbaine ().\n",
+     "octets": 106
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question dans le convol de chaque convol de pilote du cloc de France en 1990. Tous les anciens étaient régulièrement évoqués par le",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9627,
+   "distinct_2": 0.8159,
+   "repetition": 6,
+   "echo": 0.1123,
+   "octets": 2267,
+   "secondes": 21.1,
+   "octets_s": 107.5,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.15,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de consommateur de la même année. Le diocèse est déterminé à l'étranger de l'activité de la Seconde Guerre mondiale. Le",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.09090909090909091,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les représentations de la Société de la Société de communication de la formation des années 1960. Mais la commune de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois certains proportions de l'antisémition des gravures de la famille d'un pays de la proportion de l'année 2000. Le secteur est ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.15,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de consommateur de la même année. Le diocèse est déterminé à l'étranger de l'activité de la Seconde Guerre mondiale. Le",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.09090909090909091,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les représentations de la Société de la Société de communication de la formation des années 1960. Mais la commune de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois certains proportions de l'antisémition des gravures de la famille d'un pays de la proportion de l'année 2000. Le secteur est ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de l'exposition de la capitale est une composition de la province de la terre de la population de la population de la province ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La mer",
+     "texte": "La mer est un échange de la provençalité de l'armée de l'aux échanges de l'autorité de la communauté d'autres contraintes et de",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent leur compagne de série et leur caractère, en tant que pour les autres sont déclarés que les caractères sont découvertes d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de retourner le principe de la liste des conseillers et les plus importants. La plupart des conseillers et les conseillers et l",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est composée d'un millionnaire de la commune d'éléments de la cathédrale de ce qu'il a été désigné par le département de l",
+     "octets": 128
+    },
+    {
+     "mots": 7,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'autres cas de ses armes.\n",
+     "octets": 28
+    },
+    {
+     "mots": 13,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La musique",
+     "texte": "La musique de la ville de Sandy (l'éditeur de la Ligue de Mer)\n",
+     "octets": 54
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.4483,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la Ligue de la Ligue de la Ligue des artistes de la Révolution de la Commune de la Ligue de la Ligue de la Ligue des artist",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4444,
+     "repetition": 2,
+     "echo": 0.75,
+     "prompt": "La guerre",
+     "texte": "La guerre (La guerre et La Guerre) et La Guerre.\n",
+     "octets": 40
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8824,
+     "distinct_2": 0.9375,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la métropolitaine autour de la transition de l'histoire du Saint-Maladeleine. Cette concernaissance est considérée comme ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8696,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport de l'empereur était par les faits de la base de celle de la famille de personnes de la classe de la radio.\n",
+     "octets": 109
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.72,
+     "repetition": 2,
+     "echo": 0.25,
+     "prompt": "La science",
+     "texte": "La science de la Société des communautés de la communauté de Toulouse et de la formation de la communauté de cette science et de la s",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7308,
+     "repetition": 3,
+     "echo": 0.28,
+     "prompt": "La ville",
+     "texte": "La ville de l'académie de la catastrophe de la ville de Tonkin avant de la construction de la famille de Salema et expose la ville de l",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la comarque de communes par les automoteurs de combat de ses déplacements de la commune de la commune de Paris et du commun",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.7083,
+     "repetition": 2,
+     "echo": 0.17391304347826086,
+     "prompt": "La vie",
+     "texte": "La vie de la commune d'un moteur à l'ancien match et des anciens appelles de la commune de l'adaptation de l'adaptation de la vie de ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7826,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Le monde",
+     "texte": "Le monde de la médiation de la Révolution de la révolution de l'attaque en 1948. Elle sera un homme de la monde en 1958.\n",
+     "octets": 116
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.8,
+     "repetition": 2,
+     "echo": 0.08333333333333333,
+     "prompt": "La question",
+     "texte": "La question pour le cartour de la commune de son autorité de son match de ses premières définitives de la commune de France le cartour d",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

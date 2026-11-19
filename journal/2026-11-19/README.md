@@ -5,13 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**13 commits** · **1 session(s)** · **5 thème(s)**
+**14 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
-| distribue | 2 | [distribue.md](distribue.md) |
+| distribue | 3 | [distribue.md](distribue.md) |
 | docs | 3 | [docs.md](docs.md) |
 | mesures | 5 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
@@ -40,6 +40,7 @@
 | 09:48 | `1512afde` | D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O) |
 | 09:51 | `864a495f` | ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS) |
 | 10:04 | `cddc7b39` | A2.6 — LE BRANCHEMENT A SON MODE D'EMPLOI : SITES, ENTRÉES, TEST, PORTES |
+| 10:17 | `b67af8de` | A2.6 — LA RÈGLE DES EXPERTS EST BRANCHÉE : TRACE SOUS OPT-IN SUR LE VRAI 30B (1,10 Go/JETON · 6,99 Go/s · 156,9 ms → VRAM) |
 
 ## Le récit de la journée (écrit à la main)
 

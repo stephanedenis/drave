@@ -8,13 +8,13 @@
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
 | Durée | 48.5 h |
-| Tours | 22 |
-| Messages | 838 |
-| Appels d'outils | 799 |
+| Tours | 24 |
+| Messages | 846 |
+| Appels d'outils | 803 |
 | Fichiers touchés | 44 |
-| Commandes | 661 |
+| Commandes | 665 |
 | Sous-agents | 7 |
-| Commits | 59 |
+| Commits | 60 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -91,6 +91,10 @@
 **Tour 21** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 **Tour 22** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 23** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 24** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -801,7 +805,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 22 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
 
-*14 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Read the construction site's context
 - bash — Check the octets_tensor context and the type of g
@@ -817,6 +821,36 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-branchement.md`
 - bash — Update the state for the A2.6 branch
 - bash — Commit the A2.6 branch
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ A2.6 est **branchée** : la règle parle sur le vrai 30B (`1,10 Go/jeton · 6,99 Go/s · 156,9 ms → VRAM`), le défaut ne bouge pas, les cinq portes sont vertes
+
+**Ce qui vient d'être fait.** Le branchement A2.6 est committé (`b67af8de`) : `model::octets_experts_par_jeton` scanne les tenseurs `ffn_*_exps` du fichier, `placement::octets_experts` ramène au nombre d'experts allumés, et sous `DRAVE_PERTE_MAX` la construction imprime la trace — **1,10 Go/jeton, 156,9 ms → VRAM**, exactement la mesure. Sans l'opt-in : aucune trace, aucun changement de défaut. **146 tests**, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Ce qui reste d'A2.6 est dit : la **décision** (le cache experts réglé par la règle) et les clusters.
+
+**En cours** : les deux variantes du corpus v2 finissent leur deuxième tranche (nettoyé GPU 0, recollé GPU 1) ; la comparaison décisive sur wikitext2 à 30 000 pas est attendue vers 11 h 45.
+
+### Tour 23 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Check the second tranche and the tree
+- bash — Read the clean t2 result and the tree status
+
+**Synthèse produite :**
+
+⏵ Tranche 2 du corpus nettoyé : PPL 3,3201 (brut : 3,2989) — le nettoyage ne paye toujours pas sur la PPL, le top-40 reste son argument
+
+**Le point à 20 000 pas** : le corpus nettoyé donne **3,3201** (précision 0,6485) contre **3,2989** pour le brut — l'écart se resserre mais reste en faveur du brut sur le val de v1. Le recollement (GPU 1) finit sa deuxième tranche. Les trois runs seront jugés à **30 000 pas sur wikitext2** (brut : 7,4277), où le nettoyage avait montré son meilleur top-40 à 10 000 pas (0,918 contre 0,888).
+
+Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être committés avec la fiche. A2.6 est clos au niveau du branchement (trace), la diversité est documentée bloquée ; il ne reste que ce test à lire.
+
+### Tour 24 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Commit the variant benches and fix the counter
 
 ## 3. Travail accompli
 
@@ -921,7 +955,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 621 autres
+- … et 625 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1128,4 +1162,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON" && git push origin s/v7 2>&1 | tail -1
 

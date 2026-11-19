@@ -13602,3 +13602,84 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"chemins optimisés plus l … [2369 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+   cddc7b39..b67af8de  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 1200; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl2','rf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFound … [211 caractères tronqués]`
+
+  ```
+started background job bash-1102
+  ```
+
+### 🤖 Assistant
+
+⏵ A2.6 est **branchée** : la règle parle sur le vrai 30B (`1,10 Go/jeton · 6,99 Go/s · 156,9 ms → VRAM`), le défaut ne bouge pas, les cinq portes sont vertes
+
+**Ce qui vient d'être fait.** Le branchement A2.6 est committé (`b67af8de`) : `model::octets_experts_par_jeton` scanne les tenseurs `ffn_*_exps` du fichier, `placement::octets_experts` ramène au nombre d'experts allumés, et sous `DRAVE_PERTE_MAX` la construction imprime la trace — **1,10 Go/jeton, 156,9 ms → VRAM**, exactement la mesure. Sans l'opt-in : aucune trace, aucun changement de défaut. **146 tests**, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Ce qui reste d'A2.6 est dit : la **décision** (le cache experts réglé par la règle) et les clusters.
+
+**En cours** : les deux variantes du corpus v2 finissent leur deuxième tranche (nettoyé GPU 0, recollé GPU 1) ; la comparaison décisive sur wikitext2 à 30 000 pas est attendue vers 11 h 45.
+
+
+## Tour 23
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 4/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/cl2.pt work/n4/rf2.pt 2>/dev/null; tail -1 work/n4/cl.chaine.log | cut -c1-42; tail -1 work/n4/rf.chaine.log | cut -c1-42; git status --short | wc -l", "description": "Check the second tranche and the tree"}`
+
+  ```
+jeu 19 nov 2026 10:20:45 EST
+work/n4/cl2.pt
+pas  200 · perte 1.0865 · PPL val 3.426 · 
+pas 9100 · perte 1.0680 · PPL val 3.422 · 
+6
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n4/cl2.pt.json')); print('cl2 ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\"; git status --short | head -8", "description": "Read the clean t2 result and the tr … [11 caractères tronqués]`
+
+  ```
+cl2 ppl 3.3201 préc 0.6485
+?? reports/banc-generation-cl1.json
+?? reports/banc-generation-cl2.json
+?? reports/banc-generation-rf1.json
+?? reports/banc-grammaticalite-cl1.json
+?? reports/banc-grammaticalite-cl2.json
+?? reports/banc-grammaticalite-rf1.json
+  ```
+
+### 🤖 Assistant
+
+⏵ Tranche 2 du corpus nettoyé : PPL 3,3201 (brut : 3,2989) — le nettoyage ne paye toujours pas sur la PPL, le top-40 reste son argument
+
+**Le point à 20 000 pas** : le corpus nettoyé donne **3,3201** (précision 0,6485) contre **3,2989** pour le brut — l'écart se resserre mais reste en faveur du brut sur le val de v1. Le recollement (GPU 1) finit sa deuxième tranche. Les trois runs seront jugés à **30 000 pas sur wikitext2** (brut : 7,4277), où le nettoyage avait montré son meilleur top-40 à 10 000 pas (0,918 contre 0,888).
+
+Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être committés avec la fiche. A2.6 est clos au niveau du branchement (trace), la diversité est documentée bloquée ; il ne reste que ce test à lire.
+
+
+## Tour 24
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 5/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/*.json | wc -l; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **812** / **957** |'\nnew = '| fichiers / JSON de résultats | **81 … [812 caractères tronqués]`
