@@ -12754,3 +12754,89 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep -E \"T0\" | head -1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, ol … [796 caractères tronqués]`
+
+  ```
+T0 max : 4008 mots (budget 4 000)
+ok
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+   10caffe5..a72abe73  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls -la work/clean/ 2>/dev/null; ps -eo pid,etime,args | grep nettoyer_corpus | grep -v grep | head -1 | cut -c1-50; tail -2 work/clean/nettoyage.log 2>/dev/null", "description": "Check the cleaning progress"}`
+
+  ```
+jeu 19 nov 2026 07:49:49 EST
+total 4040200
+drwxr-xr-x. 1 stephane stephane         44 19 nov 07:43 .
+drwxr-xr-x. 1 stephane stephane       2882 19 nov 07:43 ..
+-rw-r--r--. 1 stephane stephane          0 19 nov 07:43 nettoyage.log
+-rw-r--r--. 1 stephane stephane 4137160869 19 nov 07:49 train.txt
+2535312       05:52 python3 tools/nettoyer_corpus.
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,args | grep nettoyer_corpus | grep -v grep | head -1 | cut -c1-40; ls -la work/clean/train.txt 2>/dev/null; tail -12 work/clean/nettoyage.json 2>/dev/null | head -12", "description": "Check the cleaning co … [31 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 07:53:57 EST
+-rw-r--r--. 1 stephane stephane 6894225744 19 nov 07:53 work/clean/train.txt
+{
+ "entree": "data/wiki_mix_v2/train.txt",
+ "sortie": "work/clean/train.txt",
+ "lignes_in": 63438199,
+ "lignes_out": 40400154,
+ "octets_in": 6900585097,
+ "octets_out": 6874508264,
+ "vides_gardes": 19717480,
+ "pct_octets_retires": 0.378
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(head -c 20000000 work/clean/train.txt | grep -o '\\]\\]' | wc -l); t=$(head -c 20000000 work/clean/train.txt | grep -o '==' | wc -l); echo \"marqueurs propres (20 Mo) : ]] =$n, == =$t\"; python3 tools/epingle_corpus.py --corpus w … [557 caractères tronqués]`
+
+  ```
+marqueurs propres (20 Mo) : ]] =0, == =48
+corpus épinglé : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/clean
+  train.txt    860aeb6a0cd39ce7…    6894225744 o     60117634 lignes  2026-11-19T07:53:39
+  manifeste : 2f79f863c794d52d… → reports/corpus-epingle-clean.json
+run propre 1 lancé 07:54
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && pkill -f \"sortie work/clean/c1.pt\" 2>/dev/null; sleep 3; ps -eo pid,args | grep \"work/clean/c1.pt\" | grep -v grep | head -1 | cut -c1-40; nohup bash work/n4/chaine.sh 0 work/clean/train.txt cl 3 1e-4 > /tmp/cl-chaine.out 2>&1 & s … [219 caractères tronqués]`
+
+  ```
+(no output)
+[killed by signal: SIGTERM]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ps -eo pid,etime,args | grep -E \"entrainer_native|chaine.sh\" | grep -v grep | head -3 | cut -c1-100; nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; tail -1 work/n4/cl.chaine.log 2>/dev/null",  … [54 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 07:55:04 EST
+0, 0 %, 1 MiB
+1, 0 %, 1 MiB
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n4/chaine.sh 0 work/clean/train.txt cl 3 1e-4 > /tmp/cl-chaine.out 2>&1 & sleep 20; echo \"chaîne propre lancée $(date +%H:%M)\"; ps -eo pid,args | grep \"chaine.sh\" | grep -v grep | head -1 | cut -c1-70; nvidia-smi  … [142 caractères tronqués]`
+
+  ```
+chaîne propre lancée 07:55
+2543577 bash work/n4/chaine.sh 0 work/clean/train.txt cl 3 1e-4
+0, 99 %, 7624 MiB
+1, 0 %, 4 MiB
+  ```
+
+- **write** `{"content": "# Le corpus nettoyé : 6,874 Go, `]]` à zéro, 40,4 M lignes de contenu — le test à 30 000 pas est lancé\n\n> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ nettoyé et\n> épinglé — `tools/nettoyer_corpus.py` (flux, autotest 7/7) fait passer le corpus v2 d … [2930 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-nettoyage-corpus.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"le palier doit **nettoye … [1510 caractères tronqués]`

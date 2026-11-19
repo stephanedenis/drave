@@ -1,0 +1,16 @@
+{
+ "schema": "drave.corpus-epingle",
+ "version": 1,
+ "date": "2026-11-19T07:54:30",
+ "corpus": "/home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/clean",
+ "note": "sha256 du train, du val et des canaux ; --verifie recalcule et compare l'empreinte de chaque fichier et l'empreinte du manifeste",
+ "fichiers": {
+  "train.txt": {
+   "sha256": "860aeb6a0cd39ce78f9cb0338af4c91d8fd8a63e049ccad605d6930844c51413",
+   "octets": 6894225744,
+   "lignes": 60117634,
+   "mtime": "2026-11-19T07:53:39"
+  }
+ },
+ "manifeste_sha256": "2f79f863c794d52da3af0b3236068788c7a73b5d13edee65c68a01c21bdbf646"
+}

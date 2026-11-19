@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 45.9 h |
+| Durée | 46.1 h |
 | Tours | 19 |
-| Messages | 767 |
-| Appels d'outils | 736 |
-| Fichiers touchés | 41 |
-| Commandes | 602 |
+| Messages | 775 |
+| Appels d'outils | 744 |
+| Fichiers touchés | 42 |
+| Commandes | 609 |
 | Sous-agents | 7 |
-| Commits | 50 |
+| Commits | 51 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -720,7 +720,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 19 — continue avec les prochaines actions
 
-*20 appels d'outils.* Actions notables :
+*28 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the wikitext2 val and the eval tool
@@ -736,7 +736,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Inspect the cleaning tool and prepare the 30k reference
 - bash — Compute the v2 checkpoint at 30k on wikitext2
 - bash — Write the corpus cleaner and run its autotest
-- … et 6 autres
+- … et 14 autres
 
 **Synthèse produite :**
 
@@ -789,6 +789,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-nuit.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-nettoyage-corpus.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -842,7 +843,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 562 autres
+- … et 569 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -970,7 +971,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ## 5. Erreurs rencontrées
 
-18 sorties en erreur ou divergentes. Les premières :
+19 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -1040,4 +1041,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = "le
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0" && git push origin s/v7 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

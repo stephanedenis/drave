@@ -5,12 +5,13 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**4 commits** · **1 session(s)** · **3 thème(s)**
+**5 commits** · **1 session(s)** · **4 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
+| distribue | 1 | [distribue.md](distribue.md) |
 | mesures | 2 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
@@ -19,7 +20,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 45.9 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 46.1 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -29,6 +30,7 @@
 | 06:46 | `efb3d45b` | ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ) |
 | 07:39 | `32d766c8` | N — LE VAL TIERS TRANCHE : v1 GAGNE AUSSI SUR WIKITEXT2 (6,867 CONTRE 7,093), ET LA CAUSE EST LA PROPRETÉ |
 | 07:44 | `10caffe5` | N — LE NETTOYAGE DU CORPUS : OUTIL LIVRÉ (AUTOTEST 7/7), ET LA CAUSE EST LA STRUCTURE, PAS LES OCTETS |
+| 07:47 | `a72abe73` | ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 |
 
 ## Le récit de la journée (écrit à la main)
 
