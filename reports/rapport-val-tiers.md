@@ -22,19 +22,24 @@
 Sur le val de la nuit, v1 gagnait de 6,4 % ; sur wikitext2, de **3,2 %** — même sens, amplitude
 plus faible. L'avantage de v1 n'est donc **pas** un pur artefact du val.
 
-## Pourquoi v2 perd : la propreté, pas le volume
+## Pourquoi v2 perd : la structure, pas les octets de balisage
 
-La différence de texture est mesurable sur 20 Mo de chaque corpus :
+Le balisage est un **marqueur**, pas la cause : `tools/nettoyer_corpus.py` (nouveau) retire le
+balisage, les titres isolés et les lignes vides en double, et sur 30 Mo il n'enlève que **0,263 % des
+octets** (30 000 000 → 29 921 269) — les `]]` pèsent quelques kilo-octets par 20 Mo. Ce n'est pas ça
+qui coûte 3 %.
 
-| marqueur (par 20 Mo) | v1 « propre » | v2 « dédupliqué » |
+Ce qui diffère vraiment, c'est la **maille des lignes** :
+
+| | v1 « propre » | v2 « dédupliqué » |
 |---|---:|---:|
-| `]]` (légendes, liens) | **5** | **2 631** |
-| `==` (titres de sections) | 0 | 48 |
-| `[[` | 7 | 3 |
+| octets par ligne | **410,2** | **108,8** |
+| lignes | 2 480 766 | 63 438 199 |
 
-v2 garde des **résidus de balisage** (`Musée du Louvre.]]`), des **titres de sections isolés** et une
-structure de lignes différente. Le modèle dépense de la capacité sur ce bruit : à pas égal, 6,9 Go
-sales perdent contre 1 Go propre.
+v2 est **fragmenté** (titres, listes, paragraphes courts) : le modèle de bytes apprend une
+distribution de sauts de ligne quatre fois plus dense, et c'est un autre problème que le texte long
+de wikitext2. L'hypothèse à tester est donc **structurelle et de sélection** (v1 = résumés + « big »,
+v2 = plein texte fragmenté), pas « du bruit dans les octets ».
 
 ## Les contrôles
 
@@ -57,10 +62,11 @@ sales perdent contre 1 Go propre.
 
 ## Ce que ça change
 
-Le palier 1 ne doit pas chercher **plus** de données : il doit **nettoyer** les 6,9 Go (retirer le
-balisage, les titres isolés, les lignes vides en double), puis re-mesurer. Le test devient simple :
-à même recette et même pas, le corpus nettoyé doit battre le sale sur wikitext2 **et** sur un val v2
-tenu à l'écart. La propreté est mesurable (les marqueurs ci-dessus), donc l'effet est attribuable.
+Le palier 1 ne doit pas chercher **plus** de données : il doit **défragmenter** les 6,9 Go
+(supprimer les titres isolés, recoller les paragraphes) — le nettoyage est écrit
+(`tools/nettoyer_corpus.py`, autotest 7/7) et le test est en cours : un run de **30 000 pas** sur le
+corpus nettoyé, comparé au checkpoint v2 de 30 000 pas (**wikitext2 7,4277**). Si la structure est la
+cause, la PPL doit tomber ; sinon, c'est la sélection du contenu qu'il faut revoir.
 
 ## Voir aussi
 

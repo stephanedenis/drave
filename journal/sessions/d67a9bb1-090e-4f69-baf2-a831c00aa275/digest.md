@@ -12642,3 +12642,105 @@ budget exit=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"GV **6,90 → 1,45** (34 → … [2109 caractères tronqués]`
+
+  ```
+ok
+budget exit=0
+  ✅ état court, structuré, multi-session et reprenable
+   efb3d45b..32d766c8  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def \\|re.sub\\|replace(\" tools/corpus_propre.py | head -25; echo \"=== v23 wikitext2 ===\"; PYTHONPATH=. timeout 600 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/v23.pt --val data/wikiitext2_test.t … [130 caractères tronqués]`
+
+  ```
+42:def hachages(data: bytes, fenetre: int) -> list[int]:
+59:def couverture(hs: list[int], fenetre: int) -> list[bool]:
+82:def deduit(data: bytes, fenetre: int, min_run: int = 64) -> tuple[bytes, dict]:
+109:def decoupe(texte: bytes, chunk: int) -> list[bytes]:
+113:def split(chunks: list[bytes], val_un_sur: int, test_un_sur: int):
+125:def taux_contamination(train: bytes, val: bytes, fenetre: int = 128, pas: int = 64,
+136:def plus_longue_repetition(train: bytes, val: bytes, essais: int = 40, graine: int = 0) -> int:
+161:def main() -> int:
+=== v23 wikitext2 ===
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/wikiitext2_test.txt'
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 600 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/v23.pt --val data/wikitext2_test.txt --device cuda:0 2>&1 | grep -E '\"ppl\"|\"n_lots\"'", "description": "Compute the v2 checkpoint at 30k … [36 caractères tronqués]`
+
+  ```
+"n_lots": 43,
+ "ppl": 7.42769186466465
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/nettoyer_corpus.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"nettoyer_corpus.py — le nettoyage du plein texte Wikipédia (balisage, titres, tables).\n\nPOURQUOI CE FICHIER EXISTE. Le 19/11, le val tiers (wikitext2) a montré qu … [4911 caractères tronqués]`
+
+  ```
+[stderr]
+usage: nettoyer_corpus.py [-h] --entree ENTREE --sortie SORTIE [--json JSON]
+                          [--autotest]
+nettoyer_corpus.py: error: the following arguments are required: --entree, --sortie
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/nettoyer_corpus.py'); s = p.read_text()\ns = s.replace('    ap.add_argument(\"--entree\", required=True)\\n    ap.add_argument(\"--sortie\", required=True)',\n              '  … [987 caractères tronqués]`
+
+  ```
+ok
+  ❌ modèle : '  Texte.' ≠ ' Texte.'
+---
+{
+ "entree": "/tmp/v2-30m.txt",
+ "sortie": "/tmp/v2-30m-clean.txt",
+ "lignes_in": 205150,
+ "lignes_out": 138229,
+ "octets_in": 30000000,
+ "octets_out": 29921269,
+ "vides_gardes": 65575,
+ "pct_octets_retires": 0.262
+}
+=== marqueurs avant/après (par 20 Mo) ===
+/tmp/v2-30m.txt : ]] =3846 ==59
+/tmp/v2-30m-clean.txt : ]] =0 ==59
+[stderr]
+
+real	0m1,613s
+user	0m1,567s
+sys	0m0,048s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/nettoyer_corpus.py'); s = p.read_text()\nold = '''    l = ORPHELIN.sub(\"\", l)\n    l = ENTITES.sub(\" \", l)\n    return l.rstrip()'''\nnew = '''    l = ORPHELIN.sub(\"\", l … [813 caractères tronqués]`
+
+  ```
+ok
+  ✅ autotest : 7/7 cas (lien, titre, modèle, tableau, référence, italique, lien cassé)
+ "lignes_in": 205150,
+ "lignes_out": 138229,
+ "pct_octets_retires": 0.263
+=== taille de ligne ===
+data/wiki_mix/propre/train.txt lignes 2480766 octets/ligne 410.2
+data/wiki_mix_v2/train.txt lignes 63438199 octets/ligne 108.8
+[stderr]
+
+real	0m2,377s
+user	0m2,312s
+sys	0m0,067s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/clean && nohup python3 tools/nettoyer_corpus.py --entree data/wiki_mix_v2/train.txt --sortie work/clean/train.txt --json work/clean/nettoyage.json > work/clean/nettoyage.log 2>&1 & sleep 5; echo \"nettoyage lancé $(date … [161 caractères tronqués]`
+
+  ```
+nettoyage lancé 07:44
+2535312 python3 tools/nettoyer_corpus.py --entree data/wiki_
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path('reports/ppl-wikitext2.json'); d = json.loads(p.read_text())\nd[\"resultats\"].append({\"modele\": \"work/n4/v23.pt\", \"parametres\": 141935400,\n                       \"corp … [3079 caractères tronqués]`
+
+  ```
+fiche corrigée
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier doit **nettoyer**\"\nnew = \"le palier doit **nettoyer** (outil `nettoyer_corpus.py`, 0,263 % d'octets, mais 410 co … [1275 caractères tronqués]`
