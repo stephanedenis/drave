@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nl1.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9725,
+   "distinct_2": 0.3267,
+   "repetition": 13,
+   "echo": 0.1657,
+   "octets": 2560,
+   "secondes": 27.39,
+   "octets_s": 93.5,
+   "echantillons": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.3448,
+     "repetition": 6,
+     "echo": 0.24,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960. Le premier contrat de la première contraction de la première contraction de la première contraction de la première",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3929,
+     "repetition": 3,
+     "echo": 0.12,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le premier tour de la première fois par le premier tour de la première fois par le premier tour de la première fois par ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 30,
+     "mots_valides": 0.9667,
+     "distinct_2": 0.3448,
+     "repetition": 6,
+     "echo": 0.24,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5652,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960. Le premier contrat de la première contraction de la première contraction de la première contraction de la première",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3929,
+     "repetition": 3,
+     "echo": 0.12,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le premier tour de la première fois par le premier tour de la première fois par le premier tour de la première fois par ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.2727,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2692,
+     "repetition": 6,
+     "echo": 0.24,
+     "prompt": "La mer",
+     "texte": "La mer de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4643,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le premier tour de la première fois dans le cadre de la première fois dans le cadre de la première fois dans le cadre de la ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.3333,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.36,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un peu plus proche de la production de la production de la production de la production de la production de la production de la ",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la première première première présidente de la première première préside de la première première première préside",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2692,
+     "repetition": 6,
+     "echo": 0.24,
+     "prompt": "La musique",
+     "texte": "La musique de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2692,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2692,
+     "repetition": 6,
+     "echo": 0.24,
+     "prompt": "La guerre",
+     "texte": "La guerre de la première fois de la première fois de la première fois de la première fois de la première fois de la première fois d",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 0.3,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la première économie de la première économie de la première économie de la première économie de la première économ",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 0.9688,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportif de la série de la série de la série de la série de la série de la série de la série de la série de la série de la s�",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La science",
+     "texte": "La science de la science de la science de la science de la science de la science de la science de la science de la science de la science d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.3462,
+     "repetition": 7,
+     "echo": 0.48,
+     "prompt": "La ville",
+     "texte": "La ville de la ville de la ville de la ville de la ville de la ville de la ville de Saint-Martin-de-la-Ville. Le premier président de l",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.28,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la première place de la première place de la première place de la première place de la première place de la première p",
+     "octets": 128
+    },
+    {
+     "mots": 41,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1,
+     "repetition": 13,
+     "echo": 0.6410256410256411,
+     "prompt": "La vie",
+     "texte": "La vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la vie de la v",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.6522,
+     "repetition": 3,
+     "echo": 0.13636363636363635,
+     "prompt": "Le monde",
+     "texte": "Le monde en 1971. Le monde est décoré par le premier président de la communauté de la communauté de la communauté de la communaut�",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 0.7241,
+     "distinct_2": 0.2143,
+     "repetition": 8,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la sous-est de la sous-est de la sous-est de la sous-est de la sous-est de la sous-est de la sous-est de la sous-est de la s",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8835,
+   "distinct_2": 0.9935,
+   "repetition": 1,
+   "echo": 0.0293,
+   "octets": 2275,
+   "secondes": 24.8,
+   "octets_s": 91.7,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays international dont l'électologieux présidés en 1965 et de l'autre présidé de premier Bordeaux en 1977. En 1977, il est con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950; Fille de Jacques Flaville m III, et l'un des plus recondues au département de la répression présidentielle de la réalité ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois un couple des deux aliments de prestation par le désir établie de la Bretagne, de maison porterait aux couples, qui se dispos",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays international dont l'électologieux présidés en 1965 et de l'autre présidé de premier Bordeaux en 1977. En 1977, il est con",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950; Fille de Jacques Flaville m III, et l'un des plus recondues au département de la répression présidentielle de la réalité ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois un couple des deux aliments de prestation par le désir établie de la Bretagne, de maison porterait aux couples, qui se dispos",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7391,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de communiqueuse, l’exprimer et la description de la sécurité de sa fontée ouvrante au carton de ce qui précédera les zo",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La mer",
+     "texte": "La mer, dans le comic des sons ou particulièrement par les rares plus professionnelles de la distribution. Il est reçu par les techn",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent lui-même de la télévision d'Armau Lyonnien en accords inconnus à l'église des visions d'Arnaux Arnaux avant d'été la pé",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de la gare pouvant être une police en cas d'un volume de problème supérieur.\n",
+     "octets": 81
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est en 1911 et en 1915 en 2006. Entre les Cards, en 1906, un Jappen Robert apparaît le fait d'une rendance de personnes communes p",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme du générique américain à trois autres militaires en orbitanité au lycée de l'Allemand. Son procès se rapproche sous les ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La musique",
+     "texte": "La musique présence de l’agro-statut comme sol d'origine à l'origine de fuir de ses journées et mentionner en application à la perso",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le livre",
+     "texte": "Le livre de Kstara le qui lui existe des pionniers et des ce qui se produition. Il en 1953, l'ancien gardien et l'école est renour en t",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "La guerre",
+     "texte": "La guerre destinée à la construction d'atteindre le tapis de l'aéroport Erika Freij, d'autre département comme ses deux pentits premi",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie est basée au domaine de l'écologiste. Il existe dans la léguration du chercheur de son école, en particulier, ce qui concer",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8889,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le sport",
+     "texte": "Le sportive en référence () de Simon Schlafor (). Le sportif contemporain appelle à l'université de 2011, l'ancien communication de ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science sont trouvées dans les faubles à l'abbaye pendant l'Ouest (Alforme des infanteries ainsi que le vaisseau triple), soit les m�",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.25,
+     "prompt": "La ville",
+     "texte": "La ville sur contre la tête. \n",
+     "octets": 23
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8182,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps apose rapidement pour un tirage pour douter de leurs ou manoirs, avec une chaînie les sergents. Entre les recherches spécifi�",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.9,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie au-delà de l'artillerie du Neer et de l'Enseignement.\n",
+     "octets": 56
+    },
+    {
+     "mots": 12,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde du ne peut être partiellement très été à la réglementation.\n",
+     "octets": 67
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La question",
+     "texte": "La question du « State Ne sous le territoire féministe ». Les affaires ont été reliés par la suite d'une ambiance de début au nord d",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9451,
+   "distinct_2": 0.8362,
+   "repetition": 5,
+   "echo": 0.0613,
+   "octets": 2560,
+   "secondes": 28.02,
+   "octets_s": 91.4,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de l'arrière de l'année suivante. Les relations entre les deux saisons et les deux entre les articles du succès de l'armée ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8889,
+     "repetition": 2,
+     "echo": 0.04,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950. Il est première premier titre de la première fois sur le retour de la première fois en 1960. Pour les deux sont reconnus pa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par les autres chanteurs de la superficie de travailler et de l'époque. La première partie de la station de la station de l'a",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de l'arrière de l'année suivante. Les relations entre les deux saisons et les deux entre les articles du succès de l'armée ",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8889,
+     "repetition": 2,
+     "echo": 0.04,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950. Il est première premier titre de la première fois sur le retour de la première fois en 1960. Pour les deux sont reconnus pa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par les autres chanteurs de la superficie de travailler et de l'époque. La première partie de la station de la station de l'a",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Le chat",
+     "texte": "Le chat de la première année par les rendements par le projet de la disponibilité de la première moitié de la mérite de l'interva",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.8636,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La mer",
+     "texte": "La mer de la famille de l'Argentine et le Maréchal de l'Argentine. Le premier chanteur est le premier tour de l'Argentine est inconnu",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le deuxième de face à une candidature mais sur le contrôle de la ville. À la fin de la deuxième planification de l'artille",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8148,
+     "distinct_2": 0.8846,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de l'université de Beard de Chambert et de Beard de Laurent Nicole en 1780. Le gouvernement fait partie de la même année sui",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un scénario sur la saison propre de terres arables et de la saison présentant des conditions par les premières. Les conditio",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.6154,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de régiment comme des guerres de la statue du label de la statue de la statue de la statue de la statue d'archestration et de ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.20833333333333334,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la loi de la commune, et des travaux de la première commune des pourraits et des assistants. Le programme s'a",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6957,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la majorité de la majorité de la forteresse de l'hypothèse de la population de la sécurité de la place de l'architecte ",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.75,
+     "repetition": 4,
+     "echo": 0.14814814814814814,
+     "prompt": "La guerre",
+     "texte": "La guerre de la base de l'action de la base de tous les deux politiques de la base des prés sont accessibles dans une phase de la base d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.7391,
+     "repetition": 3,
+     "echo": 0.043478260869565216,
+     "prompt": "L'économie",
+     "texte": "L'économie des sols de la sécurisation de la ville de Bulletier et de la ville de Saint-Marie de Saint-Jacques à l'économie de la ville",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.7391,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Le sport",
+     "texte": "Le sportif principal avec le sportif de la station à la station de la production de la différence de la construction de la constructio",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.15,
+     "prompt": "La science",
+     "texte": "La science économique des strictes de la distingue de la construction de l'économie de la construction de l'armée de l'église de l'ég",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9048,
+     "repetition": 1,
+     "echo": 0.15,
+     "prompt": "La ville",
+     "texte": "La ville des voies de la commune de La Ville (Saint-Pierre-la-Fille), mais elle est désormais gravée par le premier volume de l'arbre ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps après la première place de la ville. Cette dernière de l'activité supérieure de la série est l'arrivée de la ville. En 1",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.7391,
+     "repetition": 3,
+     "echo": 0.13636363636363635,
+     "prompt": "La vie",
+     "texte": "La vie de l'échappe de la construction de la langue de l'échelle de l'échelle de la route de l'origine et de l'échelle de l'échel",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le monde",
+     "texte": "Le monde en 1922 et proposée par le match à la traduction de l'arrivée du pays de la Seconde Guerre mondiale. De plus de 3 recettes d",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La question",
+     "texte": "La question de la commune et de la ligne de l'Arménanie. Le communisme se déroule à l'école sur libre en visite à l'intérieur de l'ar",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

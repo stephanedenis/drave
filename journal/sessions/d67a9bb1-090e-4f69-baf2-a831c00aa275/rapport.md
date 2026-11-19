@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 54.9 h |
-| Tours | 64 |
-| Messages | 1050 |
-| Appels d'outils | 922 |
+| Durée | 56.3 h |
+| Tours | 72 |
+| Messages | 1082 |
+| Appels d'outils | 937 |
 | Fichiers touchés | 44 |
-| Commandes | 778 |
+| Commandes | 793 |
 | Sous-agents | 7 |
-| Commits | 72 |
+| Commits | 74 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -183,6 +183,22 @@
 **Tour 63** — que reste-t-il à faire?
 
 **Tour 64** — d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte. puis enchaine avec la préparation des travaux de nuit (tarif DeepSeek plus élevé, donc moins de sollicitation LLM et des travaux plus longs localement. continue jusqu'à demain 8h en autonomie totale
+
+**Tour 65** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 66** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 67** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 68** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 69** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 70** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 71** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
+
+**Tour 72** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [687 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1611,7 +1627,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 64 — d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte. puis enchaine avec la préparation des travau … [154 caractères tronqués]
 
-*25 appels d'outils.* Actions notables :
+*26 appels d'outils.* Actions notables :
 
 - bash — Refresh the roadmap's A and N rows
 - bash — Trim the roadmap back under budget
@@ -1627,11 +1643,117 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Extract the long-form corpus in the background
 - bash — Write the night chain script and check the extraction
 - bash — Check the long-form extraction result
-- … et 10 autres
+- … et 11 autres
 
 **Synthèse produite :**
 
-⏵ Rafraîchissement de la roadmap puis de l'état, avant de préparer la nuit
+⏵ La file est exacte (roadmap + état), A2.6 est close (bandes et garde des clusters), et la nuit tourne : deux chaînes de 11 tranches sur les GPU
+
+**Le rafraîchissement est fait** (`62719c32`) : la ligne A de la roadmap ne dit plus « câbler la règle » mais « les clusters et les bandes », la ligne N porte le 150 M et la sélection, et l'état a un « Ce qui reste » réécrit au 19/11 au lieu de la liste du 16/11. Budget respecté : roadmap 8 999/9 000, état 3 997/4 000.
+
+**A2.6 est close** (`c932aa35`), les deux dernières pièces sont faites : `materiel::cout_par_jeton` lit une seule table de bandes (celle de la règle) et la bande **mesurée** des experts — 7,0 Go/s, pas les 31 du pread à 16 lecteurs ; le coût estimé du 30B passe de ~160 à **231 ms**, plus honnête. Et un modèle en clusters ne rend plus une trace fausse à 0 Go/jeton : la règle ne tranche pas, le message le dit. 146 tests, portes A2.6 vertes.
+
+**La nuit** : le corpus « long-forme » (les lignes ≥ 200 o du plein texte, sans rien recoller) fait **4,79 Go à 464 o/ligne** et il est épinglé (`a50f6045…`, manifeste `12e4620d…`). Deux chaînes tournent depuis 16 h 36, 11 tranches de 10 000 pas chacune — `wiki_big` seul (GPU 0) et le long-forme (GPU 1) — avec, après **chaque** tranche, le banc de génération, la grammaticalité et la **PPL sur wikitext2** (`bench/chaine_nuit.sh`). Fin prévue vers 5 h 30-6 h ; la fiche de la nuit et le bilan à 8 h.
+
+### Tour 65 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Inspect the clusters module
+- bash — Read the cluster Mapping structure
+
+**Synthèse produite :**
+
+⏵ Les clusters ne sont pas scannables sans ouvrir leurs fichiers (le `Mapping` ne porte que les indices) — le garde est la bonne réponse pour l'instant ; les runs tournent
+
+**Précision sur les clusters** : le `Mapping` des clusters ne contient que les indices (cluster, ligne), pas les chemins des fichiers — lire réellement leurs experts demanderait d'ouvrir les 8 GGUF de clusters au démarrage pour en sommer les tenseurs. C'est un chargement de métadonnées dédié, pas une ligne. Le **garde** commité est donc la bonne réponse : la règle ne tranche pas sur un 0 faux, et le message le dit. La fiche le précise déjà.
+
+**La nuit** : les deux chaînes (`wiki_big` GPU 0, long-forme GPU 1) sont en première tranche, avec banc + grammaticalité + **PPL wikitext2** après chacune. Premier relevé programmé vers 17 h 55, bilan à 8 h.
+
+### Tour 66 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check the night runs
+
+**Synthèse produite :**
+
+⏵ Les deux chaînes sont à ~3 000 pas (pertes 1,57 et 1,32) — premières tranches vers 17 h 45
+
+**Le point** : `wiki_big` (GPU 0) et le long-forme (GPU 1) sont sortis du palier et apprennent (pertes 1,57 et 1,32 à ~3 000 pas). Le premier relevé complet — PPL sur le val de v1, banc, grammaticalité et **PPL wikitext2** — arrive vers 17 h 55, programmé automatiquement. Ensuite les tranches s'enchaînent jusqu'à 5 h 30-6 h.
+
+### Tour 67 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Wait 100 minutes, then read the first tranches
+- bash — Ten-minute pause and check
+
+**Synthèse produite :**
+
+⏵ Tranche 1 à 4 450 et 4 700 pas — rien à signaler, premier relevé vers 17 h 55
+
+**Le point** : les deux runs sont à mi-première tranche ; le relevé automatique (PPL val, banc, grammaticalité, wikitext2) tombe vers 17 h 55.
+
+### Tour 68 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Add the wikitext2 column to the curve tool
+
+**Synthèse produite :**
+
+⏵ L'outil de courbe sait lire la PPL wikitext2 de chaque tranche — la nuit se lira en une table (val, wikitext2, banc)
+
+**Fait** : `tools/courbe_chaine.py` lit désormais `reports/ppl-wikitext2-<prefixe><tranche>.json` et ajoute la colonne **wikitext2** à la table — c'est elle qui jugera les deux corpus de la nuit. Modifié mais pas encore committé (il partira avec la fiche de la nuit).
+
+**Le point** : les runs sont en fin de première tranche ; le relevé (les deux PPL, les deux wikitext2, les bancs) arrive vers 17 h 55.
+
+### Tour 69 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check
+
+**Synthèse produite :**
+
+⏵ Tranche 1 à 5 950 pas — les checkpoints tombent vers 17 h 45
+
+**Le point** : les deux runs approchent de la fin de leur première tranche ; le relevé (PPL val, wikitext2, banc) arrive vers 17 h 45-55.
+
+### Tour 70 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check
+- bash — Read the first night tranche
+- bash — Check the first tranche again
+- bash — Check the wikitext2 of the first tranche
+
+**Synthèse produite :**
+
+⏵ Première tranche de la nuit : `wiki_big` **8,86** sur wikitext2 (PPL v1 3,53) contre **9,94** pour le long-forme (3,67) — le long-forme est derrière
+
+**Le point** : à 10 000 pas, `wiki_big` mène sur les deux juges (wikitext2 **8,86** contre **9,94** ; val de v1 3,53 contre 3,67). C'est cohérent avec la décomposition de cet après-midi (le long-forme, 464 o/ligne, n'est pas `wiki_big`). Les tranches 2 sont lancées (800 et 1 400 pas) ; le point décisif sera **30 000 pas** (≈ 19 h 45), comparé aux références : `wiki_big` seul 7,2237 et v1 7,3987.
+
+### Tour 71 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Ten-minute pause and check
+
+**Synthèse produite :**
+
+⏵ Tranche 2 à 2 300 et 2 950 pas — le point à 30 000 pas (les références) tombe vers 20 h 20
+
+**Le point** : les deux runs sont dans leur deuxième tranche ; les checkpoints à 30 000 pas — comparables aux références de l'après-midi (`wiki_big` 7,2237, v1 7,3987) — arriveront vers 20 h 20. Les tranches 4 à 11 s'enchaînent ensuite jusqu'à ~5 h 30.
+
+### Tour 72 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [967 caractères tronqués]
+
+*2 appels d'outils.* Actions notables :
+
+- bash — Commit the first night tranche's data
+- bash — Commit the first night tranche with the corrected counter
 
 ## 3. Travail accompli
 
@@ -1736,7 +1858,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 738 autres
+- … et 753 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1956,4 +2078,6 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.jso
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp work/n4/nuit.sh bench/chaine_nuit.sh && git add drave-core/src/model.rs drave-core/src/materiel.rs tool
+- N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2" && git push origin s/v
+- N — LA NUIT, TRANCHE 1 : wiki_big 8,86 SUR WIKITEXT2 (PPL v1 3,53) CONTRE 9,94 POUR LE LONG-FORME (3,67) ; LA COURBE SAIT LIRE WIKITEXT2" && git push origin s/v
 
