@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (4)
+## Commits du jour (5)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | 07:39 | `32d766c8` | N — LE VAL TIERS TRANCHE : v1 GAGNE AUSSI SUR WIKITEXT2 (6,867 CONTRE 7,093), ET LA CAUSE EST LA PROPRETÉ | `en-cours.md`, `README.md`, `mesures.md` (+9) |
 | 07:56 | `c50c53b0` | N — LE CORPUS NETTOYÉ : 6,874 Go, `]]` À ZÉRO, 40,4 M LIGNES DE CONTENU, ÉPINGLÉ 860aeb6a… | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 08:12 | `5e142446` | N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ | `en-cours.md`, `README.md`, `distribue.md` (+12) |
+| 09:48 | `1512afde` | D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 
 ## Chiffres du jour
 
@@ -26,6 +27,7 @@
 ## Mesures et rapports touchés
 
 - [reports/rapport-150m-nuit.md](../../reports/rapport-150m-nuit.md)
+- [reports/rapport-diversite-sources.md](../../reports/rapport-diversite-sources.md)
 - [reports/rapport-nettoyage-corpus.md](../../reports/rapport-nettoyage-corpus.md)
 - [reports/rapport-val-tiers.md](../../reports/rapport-val-tiers.md)
 

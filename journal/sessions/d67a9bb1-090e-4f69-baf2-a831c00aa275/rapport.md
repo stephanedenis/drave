@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 48.0 h |
 | Tours | 20 |
-| Messages | 808 |
-| Appels d'outils | 774 |
+| Messages | 809 |
+| Appels d'outils | 775 |
 | Fichiers touchés | 43 |
-| Commandes | 638 |
+| Commandes | 639 |
 | Sous-agents | 7 |
-| Commits | 56 |
+| Commits | 57 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -748,7 +748,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 20 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*13 appels d'outils.* Actions notables :
 
 - bash — Test whether the machine can download from Gutenberg
 - bash — Diagnose the network access
@@ -762,6 +762,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Diagnose the batch yield on 40 tales
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md`
 - bash — Commit the diversity blocker
+- bash — Fix the budget after the diversity commit
 
 ## 3. Travail accompli
 
@@ -865,7 +866,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 598 autres
+- … et 599 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1069,4 +1070,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()
 - ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text(
+- ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS)" && git push origin s/v7 2>&1 | tail -1; date
 

@@ -13173,3 +13173,15 @@ Created file
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text()\nold = \"- `tools/collecter_wikisource.py` (écrit, testé sur deux catégories) **n'est pas retenu** : il ne\\n  résout pas l … [2413 caractères tronqués]`
+
+  ```
+ok
+budget=1
+     · compteurs : en-cours.md dit 953 JSON, le disque en a 957
+  ✅ état court, structuré, multi-session et reprenable
+   25b60495..1512afde  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n  … [834 caractères tronqués]`

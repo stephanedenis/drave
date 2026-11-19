@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**10 commits** · **1 session(s)** · **5 thème(s)**
+**11 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 2 | [docs.md](docs.md) |
-| mesures | 4 | [mesures.md](mesures.md) |
+| mesures | 5 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -37,6 +37,7 @@
 | 08:01 | `851daeec` | ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE) |
 | 08:12 | `5e142446` | N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ |
 | 08:15 | `25b60495` | ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE) |
+| 09:48 | `1512afde` | D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O) |
 
 ## Le récit de la journée (écrit à la main)
 
