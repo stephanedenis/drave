@@ -13367,3 +13367,238 @@ budget2=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"dans `placement.rs` (**1 … [1664 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3996 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+   864a495f..cddc7b39  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Le branchement A2.6 a son mode d'emploi dans le backlog (sites, entrées, test, portes) — j'attends la tranche 2 des deux runs
+
+**Fait depuis le dernier point** : les instructions précises du branchement A2.6 (le helper `octets_experts_par_jeton` à écrire, `gguf::octets_tensor` et `g.tensor("blk.N.ffn_*_exps.weight")` comme entrées, le test qui doit rendre 1,097 Go sur le 30B, l'opt-in `DRAVE_PERTE_MAX`, les portes à relancer) sont dans `docs/pilotage/backlog/A2.6-ordonnanceur.md`. Le branchement lui-même reste à faire — c'est le seul point de l'objectif qui n'est pas clos.
+
+**En cours** : les deux variantes du corpus v2 (nettoyé GPU 0, recollé GPU 1) finissent leur deuxième tranche vers 10 h 35-50 ; la comparaison décisive (wikitext2 à 30 000 pas, contre 7,4277) tombe vers 11 h 45.
+
+
+## Tour 22
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 3/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4895,4925p' drave-core/src/model.rs; echo \"...\"; sed -n '4975,4995p' drave-core/src/model.rs", "description": "Read the construction site's context"}`
+
+  ```
+} else if machines.is_empty() { None } else {
+                // Les couches sont réparties EN TOURNANT sur les périphériques :
+                // à deux cartes, chacune porte la moitié du cache — c'est ce qui
+                // fait tenir un contexte très long sans rien évincer.
+                let mut v: Vec<(usize, crate::gpu::KvGpu)> = Vec::with_capacity(caches_kv.len());
+                let mut complet = true;
+                for (l, c) in caches_kv.iter().enumerate() {
+                    let idx = l % machines.len();
+                    match machines[idx].kv_allouer(c.n_kv, c.ctx, c.hd, c.bits) {
+                        Some(m) => v.push((idx, m)),
+                        None => { complet = false; break; }
+                    }
+                }
+                let mixte = caches_kv.iter().any(|c| c.k_f32 || c.v_f32 || c.k_f16);
+                if mixte {
+                    println!("[gpu] KV déporté désactivé : les variantes d'attribution \
+(clés ou valeurs en f32) supposent une disposition homogène");
+                }
+                if complet && !mixte {
+                    let total: usize = v.iter().map(|(_, m)| m.octets).sum();
+                    for (i, machine)
+… [2120 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1085,1100p' drave-core/src/gguf.rs; echo \"=== type de g ===\"; grep -n \"g: \\|g =\" drave-core/src/model.rs | sed -n '1,6p'; grep -n \"let g = \\|g: &\" drave-core/src/model.rs | head -4", "description": "Check the octets_t … [33 caractères tronqués]`
+
+  ```
+/// poids par bloc, donc la taille n'est pas `nelem × taille d'un poids`.
+    ///
+    /// La table est celle de ggml, **relevée** et non devinée : un petit
+    /// programme lié à `libggml` imprime `ggml_blck_size`/`ggml_type_size` pour
+    /// chaque type (voir `docs/format-clusters.md`). Une taille inventée ferait
+    /// un inventaire faux, et c'est exactement ainsi que l'inventaire de
+    /// DeepSeek-V4-Flash a annoncé 8,56 Go pour 86,9 Go de fichiers : les
+    /// tenseurs d'experts en `iq1_m` n'étaient pas dans la table.
+    pub fn octets_tensor(t: &TensorInfo) -> u64 {
+        if let Some(v) = Self::octets_tensor_opt(t) { return v; }
+        // Un type hors table est compté zéro : le total serait faux, et c'est
+        // ainsi qu'un inventaire a annoncé 8,56 Go pour 86,9 Go de fichiers
+        // (les tenseurs d'experts en `iq1_m` n'étaient pas dans la table). On le
+        // dit, une fois par type, plutôt que de rendre un chiffre trop petit.
+        static SIGNALES: std::sync::Mutex<Vec<u32>> = std::sync::Mutex::new(Vec::new());
+        if let Ok(mut v) = SIGNALES.lock() {
+=== type de g ===
+88:pub fn manques_architecture(g: &Gguf, cfg: &Cfg, ctx: usize, clusters: bool) -
+… [706 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk 'NR<4960 && /^    pub fn |^    fn |^pub fn /{line=NR\": \"$0} END{}' drave-core/src/model.rs 2>/dev/null | tail -1; grep -n \"^    pub fn \\|^    fn \" drave-core/src/model.rs | awk -F: '$1 < 4960' | tail -2; sed -n '4830,4845p'  … [83 caractères tronqués]`
+
+  ```
+3888:    pub fn load_partiel(path: &str, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+3896:    pub fn load_partiel_g(g: Gguf, ctx: usize, n_threads: usize, dense: bool, keep: f32,
+retardé : YaRN au-delà de quatre fois la longueur d'origine, seuil mesuré sur gpt-oss) — \
+mais les couches COMPRESSÉES sont en YaRN ×{} à TOUTES les positions, comme llama.cpp \
+(`deepseek4.cpp:872-879`) et vLLM (`rope.py:28-46`) ; `DRAVE_YARN=1`/`--sans-yarn` \
+forcent l'un ou l'autre partout",
+                         g.cfg("rope.scaling.factor").and_then(|m| m.as_f64())
+                          .or_else(|| g.json_nombre("factor")).unwrap_or(1.0)),
+            _ => println!("[config] rotation : RoPE simple (le modèle ne déclare pas YaRN)"),
+        }
+        // Tête en 4 bits : la plus grosse matrice du modèle, donc le plus gros
+        // gain possible sur un noyau déjà au mur de la bande passante.
+        // La tête emprunte dès que la source est déjà quantifiée sur 4 ou
+        // 6 bits : c'est exact (aucune requantification) et six fois plus
+        // rapide que le chemin scalaire Q6_K, qui coûtait 42 % du temps par
+        // jeton sur un 7B.
+        let tete_quantifiee = g.q6k_blocks(
+… [129 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"let n_layer_total\" drave-core/src/model.rs | head -2; sed -n '578,600p' drave-core/src/model.rs; grep -n \"struct Cfg\" drave-core/src/*.rs | head -3", "description": "Check n_layer_total and the Cfg fields"}`
+
+  ```
+4131:        let n_layer_total = cfg.n_layer;
+    let _ = &mut probs;
+    chosis.into_iter().zip(poids).collect()
+}
+
+pub struct Cfg {
+    pub n_layer: usize,
+    pub hidden: usize,
+    pub n_head: usize,
+    pub n_kv_head: usize,
+    pub head_dim: usize,
+    pub ffn: usize,
+    pub eps: f32,
+    pub rope_base: f32,
+    pub vocab: usize,
+    /// MoE : nombre d'experts, combien sont allumés par jeton, et leur taille
+    /// intermédiaire. `n_expert = 0` pour un modèle dense.
+    pub n_expert: usize,
+    pub n_expert_used: usize,
+    pub ffn_exp: usize,
+    /// Activation du FFN. gpt-oss n'utilise **pas** SiLU : c'est
+    /// `g·σ(1,702·g)·(u+1)`, avec `g` et `u` écrêtés à ±7 — une sigmoïde
+    /// rapide de type GELU, et un décalage de `up` de +1. Prendre SiLU par
+    /// défaut donne une perplexité de 1 396 au lieu de la bonne.
+drave-core/src/model.rs:582:pub struct Cfg {
+drave-core/src/native.rs:51:pub struct Cfg {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/placement.rs'); s = p.read_text()\nanchor = \"/// La **trace** du placement des experts, pour le branchement opt-in à venir\"\ncode = '''/// Les octets d'experts qu'u … [1091 caractères tronqués]`
+
+  ```
+placement ok
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/model.rs'); s = p.read_text()\n# 1. le helper, avant load_partiel_g\nanchor = \"    pub fn load_partiel_g(g: Gguf, ctx: usize, n_threads: usize, dense: bool, keep: f3 … [2033 caractères tronqués]`
+
+  ```
+model ok
+warning: unused imports: `GGML_IQ1_M`, `GGML_IQ1_S`, `GGML_IQ2_XXS`, and `GGML_IQ3_XXS`
+warning: unused attribute
+error[E0425]: cannot find function `octets_experts_par_jeton` in this scope
+warning: unused variable: `t`
+warning: unused variable: `se`
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `drave-core` (bin "drave" test) due to 1 previous error; 38 warnings emitted
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/model.rs'); s = p.read_text()\nold = \"let octets = octets_experts_par_jeton(&g, n_layer_total, cfg.n_expert, cfg.n_expert_used);\"\nnew = \"let octets = Self::octets … [342 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.53s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; timeout 300 env DRAVE_PERTE_MAX=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 8 2>&1 | grep -E \"expert … [123 caractères tronqués]`
+
+  ```
+[config] mélanges d'experts chargés : 48/48 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+  experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM (VRAM libre 14.57 Go, RAM libre 68.72 Go, budget 1000.0 ms)
+       7 tokens notés — perplexité cumulée 813.887  (3.1 tok/s)
+jeu 19 nov 2026 10:10:24 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; timeout 300 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\" --ctx 512 --limit 8 2>&1 | grep -E \"experts|perplexité\" | head  … [212 caractères tronqués]`
+
+  ```
+[config] mélanges d'experts chargés : 48/48 couches · mapping absent (experts en clair dans le fichier)
+[config] puits appris sur 0/48 couches · n_rot 128 · ffn 6144 · experts 128
+=== portes ===
+  ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus nommé · trace
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+jeu 19 nov 2026 10:11:43 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in pont coupe echange-experts; do printf \"%-16s \" \"$p\"; bash tools/porte-$p.sh > /tmp/g-$p.log 2>&1; echo \"exit=$? · $(tail -1 /tmp/g-$p.log | cut -c1-80)\"; done; date", "description": "Run the three remaining A2.6 gates" … [22 caractères tronqués]`
+
+  ```
+pont             exit=0 ·   ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre les deux
+coupe            exit=0 ·   ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y 
+echange-experts  exit=0 ·   PORTE TENUE
+jeu 19 nov 2026 10:16:27 EST
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1067 (bash: sleep 1800; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('cl1','rf1','cl2','rf2'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/cl.chaine.log | cut -c1-38; tail -1 work/n4/rf.chaine.log | cut -c1-38) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1067"}`
+
+  ```
+jeu 19 nov 2026 10:14:19 EST
+cl1 3.5913
+rf1 3.5763
+cl2 -
+rf2 -
+pas 9650 · perte 1.1605 · PPL val 3.42
+pas 8150 · perte 1.1415 · PPL val 3.42
+[status: completed, exit code: 0]
+  ```
+
+- **write** `{"content": "# A2.6 — la règle des experts est branchée (trace sous opt-in) : 1,10 Go/jeton, 6,99 Go/s, 156,9 ms → VRAM\n\n> **Ligne de roadmap** : A2.6 (les experts et la tête) · **Date** : 2026-11-19 · **Verdict** : ✅\n> **branchée** — sous `DRAVE_PERTE_MAX` (l'opt-in du KV), la construction du mo … [3380 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-branchement.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **A2.6 — la bande des experts**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **A2.6 — la règle des experts** ( … [1042 caractères tronqués]`
+
+  ```
+mots : 58
+  T0 max : 4001 mots (budget 4 000)
+budget=1
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"chemins optimisés plus l … [2369 caractères tronqués]`

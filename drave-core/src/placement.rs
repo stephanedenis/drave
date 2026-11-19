@@ -301,6 +301,13 @@ budget {:.1} ms ; VRAM libre {:.2} Go, RAM libre {:.2} Go — le NVMe (3,5 Go/s)
     ))
 }
 
+/// Les octets d'experts qu'un jeton fait lire : `total × n_expert_used / n_expert`.
+/// C'est l'entrée de la règle, et elle se calcule sur le fichier (voir
+/// `model::octets_experts_par_jeton`) : sur le 30B, 128 experts de 8 allumés.
+pub fn octets_experts(total: u64, n_expert: usize, n_expert_used: usize) -> u64 {
+    total / n_expert.max(1) as u64 * n_expert_used.max(1) as u64
+}
+
 /// La **trace** du placement des experts, pour le branchement opt-in à venir : une
 /// ligne qui dit ce que la règle a vu et ce qu'elle aurait choisi (ou refusé).
 /// Elle ne décide rien : c'est le témoin qui rend le placement auditable.
@@ -509,5 +516,13 @@ mod tests {
         // Le refus passe par la même trace, et reste nommé.
         let r = trace_experts(1_097_000_000, 0, 0, 8, 0.05);
         assert!(r.contains("REFUSÉS"), "{r}");
+    }
+
+    #[test]
+    fn les_octets_des_experts_sont_par_jeton() {
+        // Le 30B : 17 Go d'experts, 128 experts, 8 allumés → 1,06 Go/jeton.
+        assert_eq!(octets_experts(17_000_000_000, 128, 8), 1_062_500_000);
+        // Un modèle dense (n_expert = 0) ne lit rien par le routage.
+        assert_eq!(octets_experts(1_000_000, 0, 0), 1_000_000);
     }
 }

@@ -3893,6 +3893,22 @@ impl Model {
 
     /// Même chargement, mais le `Gguf` est déjà en mémoire (DRVM natif).
     #[allow(clippy::too_many_arguments)]
+/// Les octets d'experts qu'un jeton fait lire (A2.6) : les trois tenseurs
+/// `ffn_*_exps` de chaque couche, ramenés au nombre d'experts allumés. C'est
+/// l'entrée de la règle de placement — 1,097 Go/jeton sur le 30B, la mesure de
+/// `reports/rapport-a2.6-bande-experts.md`.
+fn octets_experts_par_jeton(g: &Gguf, couches: usize, n_expert: usize, n_expert_used: usize) -> u64 {
+    let mut total = 0u64;
+    for l in 0..couches {
+        for nom in ["ffn_gate_exps.weight", "ffn_up_exps.weight", "ffn_down_exps.weight"] {
+            if let Some(t) = g.tensor(&format!("blk.{l}.{nom}")) {
+                total = total.saturating_add(Gguf::octets_tensor(t));
+            }
+        }
+    }
+    crate::placement::octets_experts(total, n_expert, n_expert_used)
+}
+
     pub fn load_partiel_g(g: Gguf, ctx: usize, n_threads: usize, dense: bool, keep: f32,
                            auto: bool, q4: u8, b6: u8, couches: Option<(usize, usize)>) -> Model {
         let t0 = Instant::now();
@@ -4980,6 +4996,14 @@ forcent l'un ou l'autre partout",
             let m = crate::materiel::Materiel::detecter();
             m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum()
         };
+        // La règle des experts (A2.6, 19/11) : sous le même opt-in que le KV, elle
+        // dit ce qu'elle voit et ce qu'elle choisirait. Elle ne décide rien ici —
+        // le défaut ne bouge pas — mais la trace est le témoin qui rend le
+        // placement auditable, et le refus serait nommé.
+        if std::env::var_os("DRAVE_PERTE_MAX").is_some() && cfg.n_expert > 0 {
+            let octets = Self::octets_experts_par_jeton(&g, n_layer_total, cfg.n_expert, cfg.n_expert_used);
+            eprintln!("  {}", crate::placement::trace_experts(octets, libre_vram, 64 << 30, 8, 1.0));
+        }
         // MESURÉ PUIS REVERTÉ (24/10) : placer la tête en 4 bits « parce qu'elle tient »
         // coûte +10 % de perplexité (30,7660 → 33,8230). La règle de PLACE ne dit rien
         // de la QUALITÉ : le 4 bits de la tête est un choix de précision, pas de

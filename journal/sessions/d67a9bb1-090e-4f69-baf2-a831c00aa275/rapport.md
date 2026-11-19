@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 48.2 h |
-| Tours | 21 |
-| Messages | 821 |
-| Appels d'outils | 785 |
-| Fichiers touchés | 43 |
-| Commandes | 649 |
+| Durée | 48.5 h |
+| Tours | 22 |
+| Messages | 838 |
+| Appels d'outils | 799 |
+| Fichiers touchés | 44 |
+| Commandes | 661 |
 | Sous-agents | 7 |
-| Commits | 58 |
+| Commits | 59 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -89,6 +89,8 @@
 **Tour 20** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 **Tour 21** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 22** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -789,6 +791,33 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Write the A2.6 branch instructions in the backlog
 - bash — Commit the A2.6 branch instructions
 
+**Synthèse produite :**
+
+⏵ Le branchement A2.6 a son mode d'emploi dans le backlog (sites, entrées, test, portes) — j'attends la tranche 2 des deux runs
+
+**Fait depuis le dernier point** : les instructions précises du branchement A2.6 (le helper `octets_experts_par_jeton` à écrire, `gguf::octets_tensor` et `g.tensor("blk.N.ffn_*_exps.weight")` comme entrées, le test qui doit rendre 1,097 Go sur le 30B, l'opt-in `DRAVE_PERTE_MAX`, les portes à relancer) sont dans `docs/pilotage/backlog/A2.6-ordonnanceur.md`. Le branchement lui-même reste à faire — c'est le seul point de l'objectif qui n'est pas clos.
+
+**En cours** : les deux variantes du corpus v2 (nettoyé GPU 0, recollé GPU 1) finissent leur deuxième tranche vers 10 h 35-50 ; la comparaison décisive (wikitext2 à 30 000 pas, contre 7,4277) tombe vers 11 h 45.
+
+### Tour 22 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*14 appels d'outils.* Actions notables :
+
+- bash — Read the construction site's context
+- bash — Check the octets_tensor context and the type of g
+- bash — Find the enclosing function of the site
+- bash — Check n_layer_total and the Cfg fields
+- bash — Add the experts-bytes arithmetic and its test
+- bash — Add the helper and the trace to the engine
+- bash — Fix the call qualification and rebuild
+- bash — Test the experts trace on the real 30B model
+- bash — Control the default path and run the A2.6 gates
+- bash — Run the three remaining A2.6 gates
+- job_output
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-branchement.md`
+- bash — Update the state for the A2.6 branch
+- bash — Commit the A2.6 branch
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -838,6 +867,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-nettoyage-corpus.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-a2.6-branchement.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -891,7 +921,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 609 autres
+- … et 621 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1019,7 +1049,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ## 5. Erreurs rencontrées
 
-20 sorties en erreur ou divergentes. Les premières :
+21 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -1096,5 +1126,6 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text(
 - ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS)" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 
