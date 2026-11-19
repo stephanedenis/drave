@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 46.1 h |
+| Durée | 46.2 h |
 | Tours | 19 |
-| Messages | 776 |
-| Appels d'outils | 745 |
+| Messages | 777 |
+| Appels d'outils | 746 |
 | Fichiers touchés | 42 |
-| Commandes | 610 |
+| Commandes | 611 |
 | Sous-agents | 7 |
-| Commits | 52 |
+| Commits | 53 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -720,7 +720,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 19 — continue avec les prochaines actions
 
-*29 appels d'outils.* Actions notables :
+*30 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the wikitext2 val and the eval tool
@@ -736,7 +736,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Inspect the cleaning tool and prepare the 30k reference
 - bash — Compute the v2 checkpoint at 30k on wikitext2
 - bash — Write the corpus cleaner and run its autotest
-- … et 15 autres
+- … et 16 autres
 
 **Synthèse produite :**
 
@@ -843,7 +843,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 570 autres
+- … et 571 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1043,4 +1043,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0" && git push origin s/v7 2>&1 | tail -1
+- ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE)" && git push origin s/v7 2>&1 | tail -1; date
 
