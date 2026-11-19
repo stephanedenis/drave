@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (8)
+## Commits du jour (9)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -16,10 +16,11 @@
 | 10:21 | `693508ff` | N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 | 10:24 | `c92dac72` | N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 10:33 | `8392a482` | N — LE TEST À TROIS SUR WIKITEXT2 À 20 000 PAS : LE BRUT GAGNE ENCORE (7,8688 CONTRE 7,9091 ET 8,0378) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) | `en-cours.md`, `README.md`, `distribue.md` (+16) |
 
 ## Chiffres du jour
 
-`7,8688` · `7,9091` · `8,0378` · `+0,6 %` · `6,874 Go` · `6,874` · `6,867` · `7,093` · `2,844` · `3,038` · `0,948` · `0,900`
+`7,4277` · `7,6189` · `7,7476` · `7,8688` · `7,9091` · `8,0378` · `+0,6 %` · `6,874 Go` · `6,874` · `6,867` · `7,093` · `2,844`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 

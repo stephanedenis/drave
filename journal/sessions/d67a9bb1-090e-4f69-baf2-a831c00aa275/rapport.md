@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 49.9 h |
 | Tours | 32 |
-| Messages | 893 |
-| Appels d'outils | 831 |
+| Messages | 894 |
+| Appels d'outils | 832 |
 | Fichiers touchés | 44 |
-| Commandes | 693 |
+| Commandes | 694 |
 | Sous-agents | 7 |
-| Commits | 65 |
+| Commits | 66 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -983,7 +983,7 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 
 ### Tour 32 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*11 appels d'outils.* Actions notables :
 
 - bash — Ten-minute pause and progress
 - bash — Ten-minute pause
@@ -994,6 +994,7 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - bash — Compute the reflow 30k wikitext2 PPL
 - bash — Record the final three-way results
 - bash — Commit the three-way verdict
+- bash — Fix the budget and push the verdict
 
 ## 3. Travail accompli
 
@@ -1098,7 +1099,7 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 653 autres
+- … et 654 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1311,4 +1312,5 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep "T0 max"; python3 - <<'PY' import pathlib p = pathlib.Path('
 - ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS" && git push origin s/v7 2>&1 | tail -1; date
 

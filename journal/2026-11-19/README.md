@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**19 commits** · **1 session(s)** · **5 thème(s)**
+**20 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 3 | [distribue.md](distribue.md) |
 | docs | 5 | [docs.md](docs.md) |
-| mesures | 8 | [mesures.md](mesures.md) |
+| mesures | 9 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 2 | [portes.md](portes.md) |
 
@@ -46,6 +46,7 @@
 | 10:27 | `fa12ff52` | ÉTAT — T0 REPASSÉ |
 | 10:33 | `8392a482` | N — LE TEST À TROIS SUR WIKITEXT2 À 20 000 PAS : LE BRUT GAGNE ENCORE (7,8688 CONTRE 7,9091 ET 8,0378) |
 | 10:36 | `d074a300` | ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE) |
+| 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) |
 
 ## Le récit de la journée (écrit à la main)
 

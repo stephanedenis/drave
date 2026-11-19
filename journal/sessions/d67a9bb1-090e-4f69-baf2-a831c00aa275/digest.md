@@ -14123,3 +14123,15 @@ fiche ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"le palier **nettoie et r … [1897 caractères tronqués]`
+
+  ```
+ok
+budget=1
+  T0 max : 4003 mots (budget 4 000)
+  ✅ état court, structuré, multi-session et reprenable
+   d074a300..8de4b3d8  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** : écarté (brut 7,43 contre 7,62 et 7,75 sur wikitext2 à 30k)\"\nnew = \"le palier **nettoie  … [601 caractères tronqués]`
