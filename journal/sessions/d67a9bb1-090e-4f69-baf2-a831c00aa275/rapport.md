@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 48.7 h |
+| Durée | 48.8 h |
 | Tours | 29 |
-| Messages | 868 |
-| Appels d'outils | 814 |
+| Messages | 869 |
+| Appels d'outils | 815 |
 | Fichiers touchés | 44 |
-| Commandes | 676 |
+| Commandes | 677 |
 | Sous-agents | 7 |
-| Commits | 63 |
+| Commits | 64 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -926,13 +926,14 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 
 ### Tour 29 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
 
-*5 appels d'outils.* Actions notables :
+*6 appels d'outils.* Actions notables :
 
 - bash — Compare the three 20k checkpoints on wikitext2
 - bash — Record the 20k wikitext2 comparison
 - bash — Find the exact fiche anchor
 - bash — Apply the 20k comparison edits correctly
 - bash — Commit the 20k wikitext2 comparison
+- bash — Trim the state to the budget
 
 ## 3. Travail accompli
 
@@ -1037,7 +1038,7 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 636 autres
+- … et 637 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1248,4 +1249,5 @@ La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40
 - N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT" && git push origin s/v7 2>&1 | tail -1
 - ÉTAT — T0 REPASSÉ" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep "T0 max"; python3 - <<'PY' import pathlib p = pathlib.Path('
+- ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1; date
 

@@ -13905,3 +13905,16 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n  … [1636 caractères tronqués]`
+
+  ```
+T0 max : 4007 mots (budget 4 000)
+ok
+budget=1
+  T0 max : 4002 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   fa12ff52..8392a482  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** (à 20k, le brut gagne : 7,87 contre 7,91 et 8,04)\"\nnew = \"le palier **nettoie et recolle* … [511 caractères tronqués]`
