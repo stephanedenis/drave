@@ -11414,3 +11414,121 @@ budget exit=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nA2.6 — LA PORTE QUI MANQUAIT : `porte-a2.6-experts` NOMME LES C … [709 caractères tronqués]`
+
+  ```
+19b22015..6dcf0f5c  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -c \"=== tranche\" work/n4/v2.chaine.log work/n4/v1.chaine.log; tail -1 work/n4/v2.chaine.log; tail -1 work/n4/v1.chaine.log; uptime", "description": "Wait ten minutes and check the chains", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 19:08:21 EST
+work/n4/v2.chaine.log:3
+work/n4/v1.chaine.log:3
+pas 4400 · perte 1.1586 · PPL val 3.513 · 1852 s · échelle 262144
+pas 5450 · perte 1.1752 · PPL val 3.480 · 2152 s · échelle 262144
+ 19:08:21  up 14 days 23:34,  2 users,  load average: 2,74, 3,01, 4,84
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '5035,5080p' drave-core/src/model.rs", "description": "Read the experts placement site in model.rs"}`
+
+  ```
+attn_window: fenetre,
+            swa_pattern,
+            attn_sinks: if fenetre > 0 { 0 } else { 4 },
+            seuil_push: 0.22,
+            stop_id: None, stop_id2: None, prof: [0.0; 6],
+            tete,
+            tete_gpu, tete_gpu_q6k, head4, tete_restreinte: None,
+            normes_tete: None, ordre_normes: None, tete_garantie: None,
+            tete_calculees: 0, tete_appels_g: 0,
+            sinks_vus, kv_gpu, attn_gpu_part: Vec::new(),
+            clamp_exp, clamp_shexp,
+            etat_entree: std::env::var("DRAVE_ETAT_ENTREE").ok(),
+            dump_couches: std::env::var("DRAVE_DUMP_COUCHES").ok(),
+            couche_debut: couches.map(|(a, _)| a).unwrap_or(0),
+            couche_fin: couches.map(|(_, b)| b).unwrap_or(n_layer_total),
+            flux_brut: false, tete_partielle: false,
+            adaptateur_sortie: None,
+            cache_experts,
+            cache_ram: if crate::gguf::tampons_voulus() {
+                    // Lecture séquentielle dans nos tampons : le « cache » n'est ici qu'un
+                    // PORTEUR pour les octets d'UNE couche (il est vidé à chaque couche) —
+                    // 1 Gio portent la couche la plus grosse vue jusqu'ici (
+… [1318 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/pilotage/backlog/ | grep -i \"a2\\|a6\" | head -5; grep -n \"prochaine action\\|Prochaine action\" docs/pilotage/backlog/A2.6*.md 2>/dev/null | head -3", "description": "Check the A2.6 backlog file"}`
+
+  ```
+A2.6-ordonnanceur.md
+A6.2-moe-local.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"^## \\|^### \" docs/pilotage/backlog/A2.6-ordonnanceur.md | head -10; sed -n '1,12p' docs/pilotage/backlog/A2.6-ordonnanceur.md", "description": "Read the A2.6 backlog structure"}`
+
+  ```
+9:## Le besoin
+16:## L'état
+25:## Le contrat
+34:## Portes
+40:## Contrôles négatifs
+46:## Ce qui pourrait le rendre faux
+52:## Étapes
+59:## Voir aussi
+# A2.6 — Ordonnanceur : experts et tête
+
+> **Statut** : partiel · **Priorité** : P2 · **Programme** : A · **Dépend de** : A2
+> **Ligne de roadmap** : A2.6 · **Fiche de résultat** :
+> [`placement-kv-8k`](../../../reports/rapport-placement-kv-8k.md).
+> **Résumé** : chaque opérateur là où son flux coûte le moins cher — et **seulement** là où
+> la qualité le permet.
+
+## Le besoin
+
+Le placement n'est pas un choix de confort : un opérateur mal placé paie le flux à chaque
+passe. La règle doit dire, pour un opérateur, **où il tient** et **ce qu'il coûte** — et
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '16,33p' docs/pilotage/backlog/A2.6-ordonnanceur.md; sed -n '52,58p' docs/pilotage/backlog/A2.6-ordonnanceur.md", "description": "Read the A2.6 state and steps"}`
+
+  ```
+## L'état
+
+**Partiel** — `drave-core/src/placement.rs` porte les **bandes mesurées**, `cout`,
+`classement`, `kv_en_vram` et la règle générale `choisir` (**4 tests verts**) : le moins cher
+**où ça tient**. Le **KV l'applique** : à 8 k, **×1,93 / ×5,8**
+([fiche](../../../reports/rapport-placement-kv-8k.md)). La **tête** a été essayée par la règle
+puis **revertée** : le 4 bits y coûte **+10 % de PPL** — la place n'est pas la qualité.
+**Restent les experts et la tête** comme objets de l'ordonnanceur.
+
+## Le contrat
+
+| élément | contenu |
+|---|---|
+| **entrée** | un opérateur (couche, tête, expert, KV), sa taille, les bandes disponibles |
+| **sortie** | un placement (support + précision) ou un refus nommé |
+| **coût** | le flux de l'opérateur sur son support, par passe |
+| **trace** | le classement et le coût retenu sont imprimés et testés |
+
+## Étapes
+
+1. ✅ la règle `choisir` et ses tests ; le KV l'applique ;
+2. ✅ la tête essayée (refusée : +10 % de PPL) ;
+3. ⏳ experts : taille, flux, placements possibles, test de la règle ;
+4. ⏳ tête : une place qui ne coûte pas la PPL.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/backlog/A2.6-ordonnanceur.md'); s = p.read_text()\nold = \"\"\"**Partiel** — `drave-core/src/placement.rs` porte les **bandes mesurées**, `cout`,\n`classement`, `kv_en … [2633 caractères tronqués]`
+
+  ```
+ok
+budget exit=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nA2.6 — LE BACKLOG DIT OÙ EN EST LA RÈGLE : TÊTE ET EXPERTS ENTRÉS ET MESURÉS, LE BRANC … [703 caractères tronqués]`

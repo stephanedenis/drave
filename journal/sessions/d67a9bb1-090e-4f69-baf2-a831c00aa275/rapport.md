@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 33.1 h |
+| Durée | 33.3 h |
 | Tours | 18 |
-| Messages | 638 |
-| Appels d'outils | 609 |
+| Messages | 645 |
+| Appels d'outils | 616 |
 | Fichiers touchés | 39 |
-| Commandes | 479 |
+| Commandes | 486 |
 | Sous-agents | 7 |
-| Commits | 44 |
+| Commits | 45 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -667,7 +667,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*12 appels d'outils.* Actions notables :
+*19 appels d'outils.* Actions notables :
 
 - bash — Wait ten minutes, then check the first tranche outputs
 - bash — Check the first tranche completion and benches
@@ -681,6 +681,9 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - bash — Fix the gate's test-name pattern
 - bash — Update the gate count and the fiche
 - bash — Commit the new A2.6 gate
+- bash — Wait ten minutes and check the chains
+- bash — Read the experts placement site in model.rs
+- … et 5 autres
 
 ## 3. Travail accompli
 
@@ -780,7 +783,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 439 autres
+- … et 446 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -970,4 +973,5 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/courbe_chaine.py reports/rapport-150m-lr.md reports/sonde-lr-150m.json docs/pilotage/en-cour
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG'
 
