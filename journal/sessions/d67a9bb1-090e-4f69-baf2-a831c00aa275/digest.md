@@ -13185,3 +13185,185 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n  … [834 caractères tronqués]`
+
+  ```
+T0 max : 4005 mots (budget 4 000)
+ok
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+   1512afde..864a495f  s/v7 -> s/v7
+jeu 19 nov 2026 09:54:12 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor f in ('cl1','rf1'):\n    try:\n        d=json.load(open(f'reports/banc-generation-{f}.json'))\n        print(f, {k:(v['mots_valides'], v['repetition']) for k,v in d['reglages'].items()})\n    except Fi … [332 caractères tronqués]`
+
+  ```
+cl1 {'greedy': (0.9989, 13), 'top40_0.8': (0.9181, 2), 'top20_0.5': (0.9627, 6)}
+rf1 {'greedy': (0.9919, 9), 'top40_0.8': (0.8826, 2), 'top20_0.5': (0.9389, 5)}
+jeu 19 nov 2026 10:02:19 EST
+cl2 -
+rf2 -
+  ```
+
+- **bash** `{"command": "sleep 1700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl2','rf2'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))\n    except FileNotFound … [204 caractères tronqués]`
+
+  ```
+started background job bash-1081
+  ```
+
+### 🤖 Assistant
+
+⏵ Diversité documentée comme bloquée ; les deux variantes du corpus courent — à 10 000 pas, le corpus **nettoyé** a le meilleur top-40 (0,918 contre 0,888 au brut)
+
+**Le point.** La diversité (livres FR) est **bloquée par les sources** : Gutenberg répond 503, Wikisource renvoie des portails à transclusions (40 pages de contes = 1 241 octets bruts). C'est documenté (`reports/rapport-diversite-sources.md`), le moissonneur est committé comme point de départ, et aucun texte n'a été ajouté au corpus. La réserve hors Wikipédia reste ≈ 0,1 Go.
+
+**Le test en cours.** Les deux variantes du corpus v2 tournent (GPU 0 = nettoyé, GPU 1 = nettoyé + recollé, 3 tranches de 10 000 pas chacune). À 10 000 pas, les signaux sont déjà intéressants : le corpus **nettoyé** a le meilleur **top-40** (0,918 contre 0,888 pour le brut et 0,883 pour le recollé), alors que sa PPL sur le val de v1 est légèrement moins bonne (3,591 contre 3,557). La comparaison décisive reste **wikitext2 à 30 000 pas** (brut : 7,4277), prévue vers 11 h 45.
+
+
+## Tour 21
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '1504,1560p' drave-core/src/model.rs | head -55", "description": "Read the Moe struct for the expert sizes"}`
+
+  ```
+pub struct Moe {
+    /// Routeur `[n_expert × n_embd]`, rangée par expert, en f32.
+    pub routeur: Vec<f32>,
+    /// Biais du routeur (gpt-oss en a un) : ajouté aux logits **avant** le
+    /// softmax.
+    pub routeur_biais: Option<Vec<f32>>,
+    /// Biais par expert, `[n_expert × n_ff]` : chaque expert a les siens, pour
+    /// ses trois projections. Absents chez Qwen3-MoE, présents chez gpt-oss.
+    pub biais_gate: Option<Vec<f32>>,
+    pub biais_up: Option<Vec<f32>>,
+    pub biais_down: Option<Vec<f32>>,
+    pub n_ff: usize,
+    /// Une vue par fichier porteur d'experts. Un GGUF ordinaire n'en a qu'une ;
+    /// un modèle en clusters en a une par `cluster-XX.gguf`, chacune ne
+    /// contenant que ses `experts_par_cluster` lignes.
+    pub gate: Vec<Vue4>,
+    pub up: Vec<Vue4>,
+    pub down: Vec<Vue4>,
+    /// **Formes creuses des experts** (`DRAVE_POIDS_CREUX=1`) : une par expert et par projection,
+    /// `None` quand le format n'a pas de décodeur d'occupation. Les experts pèsent 1,8 M des
+    /// 2,3 M de paires du modèle de test : sans eux, le noyau creux ne paierait que l'attention.
+    pub gate_c: Vec<Option<Creux>>,
+    pub up_c: Vec<Option<Creux>>,
+    pub down_c: Vec<O
+… [1723 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"ffn_gate_exps\\|_exps\" drave-core/src/model.rs drave-core/src/gguf.rs | head -8; grep -n \"pub fn tenseurs\\|pub struct Tenseur\\|octets\" drave-core/src/gguf.rs | head -8", "description": "Find how the expert tensor sizes … [17 caractères tronqués]`
+
+  ```
+drave-core/src/model.rs:267:    // « blk.0.ffn_gate_exps.weight absent » y est normal. Ce contrôle a refusé
+drave-core/src/model.rs:270:    if !clusters && cfg.n_expert > 0 && g.tensor("blk.0.ffn_gate_exps.weight").is_none()
+drave-core/src/model.rs:271:        && g.tensor("blk.1.ffn_gate_exps.weight").is_none()
+drave-core/src/model.rs:275:(blk.0.ffn_gate_exps.weight absent) — fichier tronqué, ou découpage en clusters \
+drave-core/src/model.rs:819:/// Les trois tenseurs `ffn_*_exps` sont des tenseurs **3D** dont la première
+drave-core/src/model.rs:919:    let (numeros, gate) = vues("ffn_gate_exps.weight")?;
+drave-core/src/model.rs:920:    let (num_up, up) = vues("ffn_up_exps.weight")?;
+drave-core/src/model.rs:921:    let (num_down, down) = vues("ffn_down_exps.weight")?;
+26:/// à la demande. Un modèle qu'on inspecte coûte quelques mégaoctets ; un modèle
+28:/// octets. Les pages touchées sont partagées avec le cache de pages, donc pas
+85:pub fn prelire(ptr: *const u8, octets: usize) {
+86:    if ptr.is_null() || octets == 0 { return; }
+92:        unsafe { madvise(ptr as *mut u8, octets, MADV_WILLNEED); }
+96:    while fait < octets {
+97:        let n = TRANCHE_PRELECTURE.min(octets - fa
+… [96 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Tenseur\" -A12 drave-core/src/gguf.rs | head -16; grep -n \"pub n_expert_used\\|pub n_expert\\b\\|pub n_layer\\b\" drave-core/src/*.rs | head -6", "description": "Inspect the tensor and config structures"}`
+
+  ```
+drave-core/src/model.rs:307:    pub n_expert: usize,
+drave-core/src/model.rs:308:    pub n_expert_used: usize,
+drave-core/src/model.rs:583:    pub n_layer: usize,
+drave-core/src/model.rs:594:    pub n_expert: usize,
+drave-core/src/model.rs:595:    pub n_expert_used: usize,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub fn tensor\" -A8 drave-core/src/gguf.rs | head -20; grep -n \"pub struct Vue\\|pub struct .*Tenseur\\|octets:\" drave-core/src/gguf.rs | head -8", "description": "Read the gguf tensor accessor"}`
+
+  ```
+1356:    pub fn tensor(&self, name: &str) -> Option<&TensorInfo> {
+1357-        self.tensors.iter().find(|t| t.name == name)
+1358-    }
+1359-
+1360-    /// Conversion f32 → f16 (arrondi au plus proche pair). Sert aux tests qui
+1361-    /// fabriquent des blocs quantifiés ; le moteur, lui, ne fait que l'inverse.
+1362-    pub fn f32_to_f16(f: f32) -> u16 {
+1363-        let bits = f.to_bits();
+1364-        let signe = ((bits >> 16) & 0x8000) as u16;
+85:pub fn prelire(ptr: *const u8, octets: usize) {
+117:unsafe fn toucher(addr: usize, octets: usize) {
+218:pub fn prelire_tout(ptr: *const u8, octets: usize) {
+369:pub fn emprunter_tampon(octets: usize) -> Box<[u8]> {
+723:    pub fn depuis_octets(octets: Vec<u8>) -> std::io::Result<Self> {
+2492:    pub(crate) fn ecrire(nom: &str, octets: &[u8]) -> std::path::PathBuf {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"struct TensorInfo\" -A14 drave-core/src/gguf.rs | head -18", "description": "Read the TensorInfo structure"}`
+
+  ```
+557:pub struct TensorInfo {
+558-    pub name: String,
+559-    pub dims: Vec<u64>,     // en convention numpy (le plus lent d'abord)
+560-    pub ttype: u32,
+561-    pub offset: u64,
+562-    /// Index du fichier qui porte ce tenseur. Un modèle « éclaté » (shards
+563-    /// `-00001-of-00003`, ou notre format en clusters) est une seule liste de
+564-    /// tenseurs répartie sur plusieurs fichiers : sans ce champ, `offset`
+565-    /// désignerait le mauvais octet.
+566-    pub fichier: usize,
+567-}
+568-
+569-impl TensorInfo {
+570-    pub fn nelem(&self) -> usize { self.dims.iter().product::<u64>() as usize }
+571-}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fn .*size\\|fn .*octets_du\\|fn bloc\\|fn type_size\\|bloc_de\" drave-core/src/gguf.rs | head -10; grep -n \"pub fn taille\\|fn octets\" drave-core/src/gguf.rs | head -8", "description": "Find the ggml type size helper"}`
+
+  ```
+41:    fn mmap(addr: *mut u8, len: usize, prot: i32, flags: i32, fd: i32, offset: i64) -> *mut u8;
+42:    fn munmap(addr: *mut u8, len: usize) -> i32;
+49:    fn madvise(addr: *mut u8, len: usize, advice: i32) -> i32;
+85:pub fn prelire(ptr: *const u8, octets: usize) {
+117:unsafe fn toucher(addr: usize, octets: usize) {
+165:pub fn fils_prelecture() -> usize {
+189:pub fn prelecture_parallele(plages: &[(usize, usize)], fils: usize) {
+218:pub fn prelire_tout(ptr: *const u8, octets: usize) {
+237:    fn ouvrir(f: &File, len: usize) -> std::io::Result<Mappe> {
+282:    pub fn len(&self) -> usize { (**self).len() }
+1064:    fn octets_de<'a>(bufs: &'a [Tampon], starts: &[usize], t: &TensorInfo) -> io_result<'a> {
+1093:    pub fn octets_tensor(t: &TensorInfo) -> u64 {
+1111:    pub fn octets_tensor_opt(t: &TensorInfo) -> Option<u64> {
+1153:    pub fn octets_poids(&self) -> u64 {
+1163:    pub fn octets_charges(&self) -> u64 { self.bufs.iter().map(|b| b.len() as u64).sum() }
+1225:    pub fn octets_tenseur(&self, nom: &str) -> Option<&[u8]> {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/backlog/A2.6-ordonnanceur.md'); s = p.read_text()\nadd = '''\n## Le branchement, mode d'emploi (relevé le 19/11)\n\nLe travail restant est **localisé** et ses entrées  … [2002 caractères tronqués]`
+
+  ```
+ok
+     · compteurs : en-cours.md dit 953 JSON, le disque en a 957
+✅ le graphe est cohérent : aucune arête morte, aucun cycle, aucune priorité inversée.
+budget=0
+état ok
+budget2=1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"dans `placement.rs` (**1 … [1664 caractères tronqués]`

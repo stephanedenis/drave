@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 48.0 h |
-| Tours | 20 |
-| Messages | 809 |
-| Appels d'outils | 775 |
+| Durée | 48.2 h |
+| Tours | 21 |
+| Messages | 821 |
+| Appels d'outils | 785 |
 | Fichiers touchés | 43 |
-| Commandes | 639 |
+| Commandes | 649 |
 | Sous-agents | 7 |
-| Commits | 57 |
+| Commits | 58 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -87,6 +87,8 @@
 **Tour 19** — continue avec les prochaines actions
 
 **Tour 20** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 21** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -748,7 +750,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 20 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
 
-*13 appels d'outils.* Actions notables :
+*15 appels d'outils.* Actions notables :
 
 - bash — Test whether the machine can download from Gutenberg
 - bash — Diagnose the network access
@@ -763,6 +765,29 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-diversite-sources.md`
 - bash — Commit the diversity blocker
 - bash — Fix the budget after the diversity commit
+- bash — Read the t1 benches and wait for t2
+- … et 1 autres
+
+**Synthèse produite :**
+
+⏵ Diversité documentée comme bloquée ; les deux variantes du corpus courent — à 10 000 pas, le corpus **nettoyé** a le meilleur top-40 (0,918 contre 0,888 au brut)
+
+**Le point.** La diversité (livres FR) est **bloquée par les sources** : Gutenberg répond 503, Wikisource renvoie des portails à transclusions (40 pages de contes = 1 241 octets bruts). C'est documenté (`reports/rapport-diversite-sources.md`), le moissonneur est committé comme point de départ, et aucun texte n'a été ajouté au corpus. La réserve hors Wikipédia reste ≈ 0,1 Go.
+
+**Le test en cours.** Les deux variantes du corpus v2 tournent (GPU 0 = nettoyé, GPU 1 = nettoyé + recollé, 3 tranches de 10 000 pas chacune). À 10 000 pas, les signaux sont déjà intéressants : le corpus **nettoyé** a le meilleur **top-40** (0,918 contre 0,888 pour le brut et 0,883 pour le recollé), alors que sa PPL sur le val de v1 est légèrement moins bonne (3,591 contre 3,557). La comparaison décisive reste **wikitext2 à 30 000 pas** (brut : 7,4277), prévue vers 11 h 45.
+
+### Tour 21 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Read the Moe struct for the expert sizes
+- bash — Find how the expert tensor sizes are accessible
+- bash — Inspect the tensor and config structures
+- bash — Read the gguf tensor accessor
+- bash — Read the TensorInfo structure
+- bash — Find the ggml type size helper
+- bash — Write the A2.6 branch instructions in the backlog
+- bash — Commit the A2.6 branch instructions
 
 ## 3. Travail accompli
 
@@ -866,7 +891,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 599 autres
+- … et 609 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1071,4 +1096,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-diversite-sources.md'); s = p.read_text(
 - ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS)" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 
