@@ -4983,9 +4983,30 @@ forcent l'un ou l'autre partout",
             let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
                 .and_then(|v| v.parse().ok()).unwrap_or(defaut);
             let budget = (go * 1e9) as usize;
-            println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
-                     go);
-            Some(CacheExperts::nouveau(budget))
+            // La règle des experts (A2.6, 19/11) : sous le même opt-in que le KV, elle
+            // décide si la VRAM est le bon support — coût tenu dans le budget — ou le
+            // refuse nommément, auquel cas le cache n'est pas créé. Sans l'opt-in, le
+            // comportement est celui des drapeaux, inchangé.
+            let decision = if std::env::var_os("DRAVE_PERTE_MAX").is_some() {
+                let m = crate::materiel::Materiel::detecter();
+                let vram: u64 = m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum();
+                let ram: u64 = (m.ram_libre_go.max(0.0) * 1e9) as u64;
+                let octets = Self::octets_experts_par_jeton(&g, n_layer_total, cfg.n_expert, cfg.n_expert_used);
+                let r = crate::placement::choisir_experts(octets, vram, ram, 8, 1.0);
+                eprintln!("  {}", match &r {
+                    Ok(_) => crate::placement::trace_experts(octets, vram, ram, 8, 1.0),
+                    Err(e) => e.clone(),
+                });
+                r
+            } else { Ok(crate::placement::Support::Vram) };
+            if decision.is_err() {
+                println!("[gpu] cache d'experts REFUSÉ par la règle de placement (voir le message)");
+                None
+            } else {
+                println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
+                         go);
+                Some(CacheExperts::nouveau(budget))
+            }
         } else { None };
         // La TÊTE à 4 bits (A2.6) : c'était un drapeau (`-q 4`). La règle de placement
         // dit ce qui décide vraiment : la tête quantifiée tient-elle en VRAM ? Oui sur
@@ -4996,14 +5017,6 @@ forcent l'un ou l'autre partout",
             let m = crate::materiel::Materiel::detecter();
             m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum()
         };
-        // La règle des experts (A2.6, 19/11) : sous le même opt-in que le KV, elle
-        // dit ce qu'elle voit et ce qu'elle choisirait. Elle ne décide rien ici —
-        // le défaut ne bouge pas — mais la trace est le témoin qui rend le
-        // placement auditable, et le refus serait nommé.
-        if std::env::var_os("DRAVE_PERTE_MAX").is_some() && cfg.n_expert > 0 {
-            let octets = Self::octets_experts_par_jeton(&g, n_layer_total, cfg.n_expert, cfg.n_expert_used);
-            eprintln!("  {}", crate::placement::trace_experts(octets, libre_vram, 64 << 30, 8, 1.0));
-        }
         // MESURÉ PUIS REVERTÉ (24/10) : placer la tête en 4 bits « parce qu'elle tient »
         // coûte +10 % de perplexité (30,7660 → 33,8230). La règle de PLACE ne dit rien
         // de la QUALITÉ : le 4 bits de la tête est un choix de précision, pas de

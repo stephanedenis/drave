@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 49.9 h |
-| Tours | 32 |
-| Messages | 894 |
-| Appels d'outils | 832 |
+| Durée | 50.3 h |
+| Tours | 33 |
+| Messages | 910 |
+| Appels d'outils | 846 |
 | Fichiers touchés | 44 |
-| Commandes | 694 |
+| Commandes | 705 |
 | Sous-agents | 7 |
-| Commits | 66 |
+| Commits | 67 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -45,6 +45,10 @@
 … [253 caractères tronqués]
 - **create** — Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe
 … [116 caractères tronqués]
+- **complete** — Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe
+… [116 caractères tronqués]
+- **create** — D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec l
+… [65 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -111,6 +115,8 @@
 **Tour 31** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
 
 **Tour 32** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [587 caractères tronqués]
+
+**Tour 33** — continue avec les prochaines actions jusqu'à 17h
 
 ## 2. Déroulé, étape par étape
 
@@ -983,7 +989,7 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 
 ### Tour 32 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [867 caractères tronqués]
 
-*11 appels d'outils.* Actions notables :
+*14 appels d'outils.* Actions notables :
 
 - bash — Ten-minute pause and progress
 - bash — Ten-minute pause
@@ -995,6 +1001,71 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - bash — Record the final three-way results
 - bash — Commit the three-way verdict
 - bash — Fix the budget and push the verdict
+- bash — Final verification before the handoff
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Bilan — les trois prochaines actions sont traitées : deux mesurées, une bloquée par les sources
+
+\# Les prochaines actions — ce qui est fait, ce qui est bloqué
+
+**Depuis minuit : 21 commits, tous poussés (HEAD `e4cd1953`), arbre propre, revue verte, budget T0 à 3 997/4 000.** Aucun sous-agent, aucun appel API payant.
+
+\## 1. Le val tiers — ✅ mesuré, et il tranche
+
+Les trois checkpoints passés sur **wikitext2 français** (tout le val, 352 256 jetons) :
+
+| modèle | PPL wikitext2 |
+|---|---:|
+| 142 M corpus **v1** (1,017 Go propre) | **6,8674** |
+| 142 M corpus **v2** (6,90 Go dédupliqué) | 7,0930 |
+| 73 M (référence d'échelle) | 7,3508 |
+
+**v1 gagne aussi hors du val v1-centré** (−3,2 %) : l'avantage n'est pas un artefact de distribution. Fiche `reports/rapport-val-tiers.md`, données `reports/ppl-wikitext2.json`.
+
+**La suite désignée** — nettoyer et recoller le corpus (l'hypothèse « forme ») — a été **testée et écartée**. Trois runs de 30 000 pas, même recette :
+
+| corpus | PPL val v1 | PPL wikitext2 |
+|---|---:|---:|
+| v2 brut | 3,1922 | **7,4277** |
+| v2 nettoyé (`860aeb6a…`) | 3,2029 | 7,6189 (+2,6 %) |
+| v2 recollé (`9a5ca658…`) | **3,1811** | 7,7476 (+4,3 %) |
+
+Les deux juges **se contredisent** : le recollé est le meilleur sur le val de v1 et le plus mauvais sur wikitext2. **La forme n'est pas la cause** du déficit de v2 ; la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de `wiki_fr_texte`) est la seule différence qui tienne. Fiche `reports/rapport-nettoyage-corpus.md`, outils `tools/nettoyer_corpus.py` et `tools/reflow_corpus.py` (autotests 7/7 et ok).
+
+\## 2. A2.6 — ✅ branchée (trace sous opt-in), décision restante
+
+Sous `DRAVE_PERTE_MAX`, la construction du moteur appelle la règle et imprime sur le **vrai 30B** :
+
+```
+experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM
+(VRAM libre 14.57 Go, RAM libre 68.72 Go, budget 1000.0 ms)
+```
+
+Ce sont les chiffres de la mesure (1,097 Go ; 156,95 ms). **Sans l'opt-in : aucune trace, aucun changement de défaut.** 146 tests, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Ce qui reste — la **décision** (le cache experts réglé par la règle) et les clusters — est dit dans le backlog et la fiche `rapport-a2.6-branchement.md`.
+
+\## 3. La diversité — ⚠️ bloquée par les sources
+
+Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **portails à transclusions** (40 pages de contes = 1 241 octets b
+… [1306 caractères tronqués]
+
+### Tour 33 — continue avec les prochaines actions jusqu'à 17h
+
+*11 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Check the source corpora and compute the v1 reference at 30k
+- bash — Launch the wiki_big and wiki_fr runs
+- bash — Check the Materiel fields for the free RAM
+- bash — Wire the placement decision for the experts cache
+- bash — Test the decision branch on the real 30B
+- bash — Remove the duplicate trace and verify a single one
+- bash — Verify the single trace and the test suite
+- bash — Run the tests and the five A2.6 gates
+- bash — Confirm the test suite count
+- bash — Commit the A2.6 decision branch
 
 ## 3. Travail accompli
 
@@ -1099,7 +1170,7 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 654 autres
+- … et 665 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1313,4 +1384,5 @@ Les troisièmes tranches avancent (nettoyé à 2 650 pas, recollé à 1 550 ; PP
 - ÉTAT — T0 REPASSÉ (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - ÉTAT — T0 REPASSÉ APRÈS LE VERDICT DU TEST À TROIS" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()
 

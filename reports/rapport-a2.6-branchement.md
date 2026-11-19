@@ -52,3 +52,16 @@ règle) et la consolidation des trois tables de bandes de `materiel.rs` restent 
 
 - [la bande des experts](rapport-a2.6-bande-experts.md) · [la règle](rapport-a2.6-bande-experts.md#la-règle-sait-chiffrer-les-experts-18-11-après-la-mesure) ·
   [le backlog A2.6](../docs/pilotage/backlog/A2.6-ordonnanceur.md) · [le mode d'emploi](../docs/pilotage/backlog/A2.6-ordonnanceur.md#le-branchement-mode-demploi-relevé-le-19-11)
+
+## La décision (19/11, 12 h) — le cache des experts passe par la règle
+
+Le second pas est fait : sous `DRAVE_PERTE_MAX`, la création du **cache VRAM des experts** est
+soumise à `choisir_experts` (les mêmes octets/jeton, la même bande, le même budget de 1 s). Si la
+règle rend **VRAM** — le cas sur cette machine, 156,9 ms < 1 s — le cache est créé comme avant ; si
+elle **refuse**, le cache n'est pas créé et le message nommé dit pourquoi. Sans l'opt-in, le
+comportement reste celui des drapeaux (`DRAVE_GPU_EXPERTS`, `DRAVE_GPU_EXPERTS_GO`).
+
+Testé sur le 30B avec `DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_MAX=1` : une seule
+trace `experts : 1.10 Go/jeton · … → VRAM` puis `[gpu] cache d'experts : budget 2.0 Go`. Les cinq
+portes A2.6 restent **vertes**, 146 tests. Restent : les **clusters** (le scan du seul fichier
+principal rend 0) et la consolidation des trois tables de bandes de `materiel.rs`.

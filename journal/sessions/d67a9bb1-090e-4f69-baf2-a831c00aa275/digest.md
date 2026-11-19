@@ -14135,3 +14135,215 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** : écarté (brut 7,43 contre 7,62 et 7,75 sur wikitext2 à 30k)\"\nnew = \"le palier **nettoie  … [601 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3997 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+   8de4b3d8..e4cd1953  s/v7 -> s/v7
+jeu 19 nov 2026 11:47:20 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status -sb | head -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; pytho … [183 caractères tronqués]`
+
+  ```
+0
+## s/v7...origin/s/v7
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+21
+jeu 19 nov 2026 11:47:37 EST
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-4caeb0f8-89e3-4695-aa03-2a8698361e3a","revision":1,"objective":"Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push.","phase":"active","roundsStarted":13,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-4caeb0f8-89e3-4695-aa03-2a8698361e3a", "revision": 1}`
+
+> **Objectif** (complete) : Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push.
+
+
+  ```
+{"goal":{"id":"goal-4caeb0f8-89e3-4695-aa03-2a8698361e3a","revision":2,"objective":"Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push.","phase":"complete","roundsStarted":13,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Bilan — les trois prochaines actions sont traitées : deux mesurées, une bloquée par les sources
+
+# Les prochaines actions — ce qui est fait, ce qui est bloqué
+
+**Depuis minuit : 21 commits, tous poussés (HEAD `e4cd1953`), arbre propre, revue verte, budget T0 à 3 997/4 000.** Aucun sous-agent, aucun appel API payant.
+
+## 1. Le val tiers — ✅ mesuré, et il tranche
+
+Les trois checkpoints passés sur **wikitext2 français** (tout le val, 352 256 jetons) :
+
+| modèle | PPL wikitext2 |
+|---|---:|
+| 142 M corpus **v1** (1,017 Go propre) | **6,8674** |
+| 142 M corpus **v2** (6,90 Go dédupliqué) | 7,0930 |
+| 73 M (référence d'échelle) | 7,3508 |
+
+**v1 gagne aussi hors du val v1-centré** (−3,2 %) : l'avantage n'est pas un artefact de distribution. Fiche `reports/rapport-val-tiers.md`, données `reports/ppl-wikitext2.json`.
+
+**La suite désignée** — nettoyer et recoller le corpus (l'hypothèse « forme ») — a été **testée et écartée**. Trois runs de 30 000 pas, même recette :
+
+| corpus | PPL val v1 | PPL wikitext2 |
+|---|---:|---:|
+| v2 brut | 3,1922 | **7,4277** |
+| v2 nettoyé (`860aeb6a…`) | 3,2029 | 7,6189 (+2,6 %) |
+| v2 recollé (`9a5ca658…`) | **3,1811** | 7,7476 (+4,3 %) |
+
+Les deux juges **se contredisent** : le recollé est le meilleur sur le val de v1 et le plus mauvais sur wikitext2. **La forme n'est pas la cause** du déficit de v2 ; la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de `wiki_fr_texte`) est la seule différence qui tienne. Fiche `reports/rapport-nettoyage-corpus.md`, outils `tools/nettoyer_corpus.py` et `tools/reflow_corpus.py` (autotests 7/7 et ok).
+
+## 2. A2.6 — ✅ branchée (trace sous opt-in), décision restante
+
+Sous `DRAVE_PERTE_MAX`, la construction du moteur appelle la règle et imprime sur le **vrai 30B** :
+
+```
+experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM
+(VRAM libre 14.57 Go, RAM libre 68.72 Go, budget 1000.0 ms)
+```
+
+Ce sont les chiffres de la mesure (1,097 Go ; 156,95 ms). **Sans l'opt-in : aucune trace, aucun changement de défaut.** 146 tests, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Ce qui reste — la **décision** (le cache experts réglé par la règle) et les clusters — est dit dans le backlog et la fiche `rapport-a2.6-branchement.md`.
+
+## 3. La diversité — ⚠️ bloquée par les sources
+
+Gutenberg répond **503** ; Wikisource est joignable mais ses pages sont des **portails à transclusions** (40 pages de contes = 1 241 octets bruts). La réserve hors Wikipédia reste ≈ 0,1 Go. C'est documenté (`rapport-diversite-sources.md`), le moissonneur est committé comme point de départ, et **aucun texte n'a été ajouté**. Aller au-delà demande un vrai chantier (dump Wikisource + résolveur de transclusions, ou catalogue Gutenberg avec les délais conformes).
+
+## Ce que vous devriez regarder en premier
+
+1. **`reports/rapport-nettoyage-corpus.md`** — le résultat négatif qui compte : la forme ne sauve pas le corpus, la sélection du contenu est la piste suivante.
+2. **`reports/rapport-a2.6-branchement.md`** — la trace sur le 30B et ce que « branchée » veut dire (trace) versus « décide » (pas encore).
+3. **`reports/rapport-diversite-sources.md`** — le blocage, avec les mesures (503, transclusions) et les trois voies de contournement.
+
+## Prochaines actions désignées
+
+- **La sélection du contenu** : comparer les sources (v1 = `wiki_big` + `wiki_fr` contre `wiki_fr_texte`) à pas égal, ou construire un corpus dont la sélection est explicite — c'est la seule hypothèse qui reste après l'élimination de la forme.
+- **La décision A2.6** (le cache experts réglé par la règle) et les clusters.
+- **Le moissonneur diversité** (dump Wikisource) si vous voulez des livres.
+
+Rien n'est bloqué côté dépôt ; tout attend votre prochaine instruction.
+
+
+## Tour 33
+
+### 👤 Utilisateur
+
+continue avec les prochaines actions jusqu'à 17h
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache ex … [107 caractères tronqués]`
+
+> **Objectif** (create) : D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat.
+
+
+  ```
+{"goal":{"id":"goal-a47b8dea-dba9-4164-8b43-322146de3247","revision":1,"objective":"D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/wiki_big/propre/train.txt data/wiki_fr/propre/train.txt 2>/dev/null; PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/v13.pt --val data/wikitext2_test.txt --device cuda:0 2>/de … [143 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 831397620  2 nov 10:03 data/wiki_big/propre/train.txt
+-rw-r--r--. 1 stephane stephane 186089472  1 nov 11:54 data/wiki_fr/propre/train.txt
+"ppl": 7.398732602584229
+jeu 19 nov 2026 11:56:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup bash work/n4/chaine.sh 0 data/wiki_big/propre/train.txt wb 3 1e-4 > /tmp/wb-chaine.out 2>&1 & nohup bash work/n4/chaine.sh 1 data/wiki_fr/propre/train.txt wf 3 1e-4 > /tmp/wf-chaine.out 2>&1 & sleep 20; echo \"chaînes wiki_big  … [209 caractères tronqués]`
+
+  ```
+chaînes wiki_big (GPU 0) et wiki_fr (GPU 1) lancées 11:56
+0, 99 %, 7512 MiB
+1, 99 %, 7512 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"pub struct Materiel\" -A12 drave-core/src/materiel.rs | head -15; grep -n \"ram_libre\\|memoire_libre\" drave-core/src/materiel.rs | head -5", "description": "Check the Materiel fields for the free RAM"}`
+
+  ```
+65:pub struct Materiel {
+66-    pub cpu: Cpu,
+67-    pub gpus: Vec<Gpu>,
+68-    pub ram_totale_go: f64,
+69-    pub ram_libre_go: f64,
+70-    pub disques: Vec<Disque>,
+71-}
+72-
+73-/// Ce que le moteur va utiliser, avec la raison de chaque choix.
+74-#[derive(Debug, Clone)]
+75-pub struct Plan {
+76-    pub threads: usize,
+77-    /// Placement explicite, quand le défaut ne suffit pas (nœud restreint).
+48:    pub vram_libre_go: f64,
+69:    pub ram_libre_go: f64,
+203:        gpus.push(Gpu { ordinal, nom: c[1].to_string(), vram_libre_go: libre,
+212:pub fn ram_libre_go() -> f64 {
+302:        let (ram_totale_go, ram_libre_go) = detecter_ram();
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/model.rs'); s = p.read_text()\nold = '''            let budget = (go * 1e9) as usize;\n            println!(\"[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), é … [2035 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.81s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; timeout 300 env DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_MAX=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\"  … [169 caractères tronqués]`
+
+  ```
+experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM (VRAM libre 15.01 Go, RAM libre 94.61 Go, budget 1000.0 ms)
+[gpu] cache d'experts : budget 2.0 Go de VRAM (LRU), éviction par (couche, expert)
+  experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM (VRAM libre 15.01 Go, RAM libre 68.72 Go, budget 1000.0 ms)
+jeu 19 nov 2026 11:58:49 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/model.rs'); s = p.read_text()\nold = '''        // La règle des experts (A2.6, 19/11) : sous le même opt-in que le KV, elle\n        // dit ce qu'elle voit et ce qu'e … [1063 caractères tronqués]`
+
+  ```
+ok
+
+3
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && M=$HOME/IA/modeles/qwen3-30b-a3b-Q4_K_M.gguf; IDS=$HOME/IA/scratch/prerequis/ids_qwen3_30b_wt2.txt; timeout 300 env DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_MAX=1 ./drave-core/target/release/drave \"$M\" --ppl \"$IDS\"  … [214 caractères tronqués]`
+
+  ```
+experts : 1.10 Go/jeton · 8 lecteurs · bande 6.99 Go/s · 156.9 ms/jeton → VRAM (VRAM libre 15.01 Go, RAM libre 94.52 Go, budget 1000.0 ms)
+[gpu] cache d'experts : budget 2.0 Go de VRAM (LRU), éviction par (couche, expert)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test --quiet 2>&1 | tail -1; cd .. && for p in a2.6-experts flux pont coupe echange-experts; do printf \"%-16s \" \"$p\"; bash tools/porte-$p.sh > /tmp/g2-$p.log 2>&1; echo \"exit=$? · $(tail -1 /tmp/g2-$p.log | cut  … [100 caractères tronqués]`
+
+  ```
+a2.6-experts     exit=0 ·   ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus n
+flux             exit=0 ·   mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœu
+pont             exit=0 ·   ✅ 448 fibres : +2.81 % · 392 fibres : +25.35 % — la marche est entre
+coupe            exit=0 ·   ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/2
+echange-experts  exit=0 ·   PORTE TENUE
+jeu 19 nov 2026 12:06:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/drave-core && cargo test 2>&1 | grep -E \"^test result\" | tail -2", "description": "Confirm the test suite count", "timeoutMs": 600000}`
+
+  ```
+test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.22s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()\nadd = '''\n## La décision (19/11, 12 h) — le cache des experts passe par la règle\n\nLe second pas est fait : sous `DRAVE_P … [3236 caractères tronqués]`
