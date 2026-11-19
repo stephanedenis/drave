@@ -105,11 +105,11 @@ externes** et la **prochaine action**.
 
 ## Ce qui reste
 
-**V3** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
-
-**Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
-
-**Panini** — **26 signatures V14** manquantes, calibration **42/44**, rejeu **27/60** : le test attend ; **R0.7** — `--tagger auto` prototype livré (**opt-in**, défaut hors ligne inchangé), **décision humaine** ; **N2** — porte (0,2856/0,3566) ; **A** — A6.2, A8.3b2.
+**N** : le corpus du palier 1 sur `wiki_big` + textes longs, à époques égales ; la porte propre (0,29) ; N4.
+**A** : les clusters et les bandes d'A2.6 ; A3.4 (Colab), A5.4 (FPGA : P2 + RTL), A6.2. **R** : la
+décision de routage du tagger (+9,47 mesuré) ; J4. **S** : migrer `/` vers la v7 (41 à re-juger).
+**B** : B13 (gold neuronal) ; B10.3. **Panini** : 26 signatures V14, calibration 42/44. **L** : la
+pragmatique, r353. **D** : la diversité — bloquée (Gutenberg 503, Wikisource).
 
 ## Les questions ouvertes
 

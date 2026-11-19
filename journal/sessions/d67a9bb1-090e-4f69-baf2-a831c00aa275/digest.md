@@ -15326,3 +15326,286 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.json reports/corpus-epingle-wikifr.json reports/banc-generation-wb*.json reports/banc-grammaticalite-wb*.json reports/banc-generat … [1376 caractères tronqués]`
+
+  ```
+7b234e98..10a3e49c  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | wc -l; git status -sb | head -1; python3 tools/taille_documents.py >/dev/null 2>&1; echo \"budget=$?\"; python3 tools/revue_documentation.py 2>&1 | tail -1; python3 tools/verifie_en_cours.py 2>&1 | tail -1; pytho … [261 caractères tronqués]`
+
+  ```
+0
+## s/v7...origin/s/v7
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ un dossier par jour, sessions ancrées, liens relatifs résolus
+     sources et images relatives.
+  ✅ la page vivante date du dernier commit (2026-11-19)
+25
+jeu 19 nov 2026 15:42:14 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for u in \"https://www.gutenberg.org/cache/epub/17489/pg17489.txt\" \"https://fr.wikisource.org/w/api.php?action=query&list=categorymembers&cmtitle=Cat%C3%A9gorie:Contes&cmlimit=3&format=json\"; do printf \"%-70s \" \"$(echo $u | cut … [250 caractères tronqués]`
+
+  ```
+https://www.gutenberg.org/cache/epub/17489/pg17489.txt                 503 913o
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=
+https://fr.wikisource.org/w/api.php?action=query&list=catego           200 358o
+{"batchcomplete":"","continue":{"cmcontinue":"page|41204ce28099c592494c0ac380204ce28099c592494c20285
+jeu 19 nov 2026 15:42:24 EST
+  ```
+
+- **get_goal** `{}`
+
+  ```
+{"goal":{"id":"goal-a47b8dea-dba9-4164-8b43-322146de3247","revision":1,"objective":"D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat.","phase":"active","roundsStarted":29,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-a47b8dea-dba9-4164-8b43-322146de3247", "revision": 1}`
+
+> **Objectif** (complete) : D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat.
+
+
+  ```
+{"goal":{"id":"goal-a47b8dea-dba9-4164-8b43-322146de3247","revision":2,"objective":"D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat.","phase":"complete","roundsStarted":29,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Bilan de la session jusqu'à 17 h — la sélection du contenu est identifiée, A2.6 est close, la passe est verte
+
+# Décomposition de la sélection du contenu — le résultat
+
+Trois sources mesurées **seules** à 30 000 pas (même recette), jugées sur **wikitext2** (352 256 jetons, tout le val) :
+
+| corpus | PPL wikitext2 | PPL val de v1 |
+|---|---:|---:|
+| **`wiki_big` seul** (831 Mo d'articles longs) | **7,2237** | 3,1144 |
+| v1 (le mélange `wiki_big` + `wiki_fr`) | 7,3987 | 3,0763 |
+| v2 (le plein texte, 6,9 Go) | 7,4277 | 3,1922 |
+| `wiki_fr` seul (186 Mo de résumés) | 8,0876 | **2,8973** |
+
+**La lecture** : c'est bien la **sélection du contenu** qui décide, pas la forme (le nettoyage et le recollement du plein texte avaient déjà été écartés : 7,62 et 7,75). `wiki_big` seul **bat le mélange de 2,4 %** et le plein texte de 2,8 %. `wiki_fr` (les résumés) sur-apprend : premier sur son propre val, dernier sur le val tiers — à pas égal il est vu 1,6 époque contre 0,35 pour `wiki_big`, donc c'est aussi une question d'**époques**. Conséquence pour le palier 1 : sélection **explicite** (articles longs), époques équilibrées.
+
+Fiche `reports/rapport-selection-contenu.md`, données `reports/ppl-wikitext2.json`, sources épinglées (`11aa9b74…`, `d2804870…`).
+
+# A2.6 — close (branchement et décision)
+
+Sous `DRAVE_PERTE_MAX`, la construction du moteur **appelle la règle** et imprime sur le vrai 30B : `experts : 1.10 Go/jeton · 8 lecteurs · 6.99 Go/s · 156.9 ms → VRAM`, puis le **cache VRAM des experts n'est créé que si la règle le place en VRAM** (un refus ne crée rien et le dit). Sans l'opt-in : aucune trace, aucun changement. **146 tests**, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Restent, nommés au backlog : les **clusters** (le scan du seul fichier principal rend 0) et la consolidation des bandes de `materiel.rs`. Fiche `reports/rapport-a2.6-branchement.md`.
+
+# Passe de clôture et état
+
+**91 portes, 89 vertes, 2 rouges** (`indice` 859 s, `melange` 106 s — les deux structurelles), machine chargée par les deux runs. Arbre **propre**, 25 commits depuis minuit, tout poussé (HEAD `10a3e49c`), revue verte (813 fiches, 979 JSON), budget T0 à 3 993/4 000, journal et schémas verts.
+
+# Ce que vous devriez regarder / décider
+
+1. **`reports/rapport-selection-contenu.md`** — le résultat qui oriente le palier 1 : partir de `wiki_big` et équilibrer les époques, pas empiler du volume.
+2. **La suite concrète** : construire le corpus du palier 1 à partir de `wiki_big` (et de sources longues), puis un run à époques égales — c'est la prochaine expérience désignée.
+3. **La diversité** : retestée à 15 h 42 — Gutenberg répond toujours **503**, Wikisource répond 200 mais reste un portail à transclusions ; le moissonneur dédié (dump + résolveur) est le seul chemin, et il n'est pas commencé.
+
+Rien n'est bloqué côté dépôt ; tout attend votre prochaine instruction.
+
+
+## Tour 63
+
+### 👤 Utilisateur
+
+que reste-t-il à faire?
+
+### 🤖 Assistant
+
+⏵ Relecture de l'état et de la roadmap pour répondre exactement
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '/## Ce qui reste/,/## /p' docs/pilotage/en-cours.md | head -30", "description": "Read the state's remaining-work section"}`
+
+  ```
+## Ce qui reste
+
+**V3** : **T1–T6**, **U1–U3**, **V1–V2** ; **86/82/4** → **84/2** après vérification ; tag `exploitable-2026-11-16` sur `ae3c24f2` ; [bilan 2](../../reports/rapport-bilan-exploitable-2.md), [U1](../../reports/rapport-performance-fix.md), [U2](../../reports/rapport-roue.md), [U3](../../reports/rapport-profils.md), [V1](../../reports/rapport-evaluer-strict.md), [V2](../../reports/rapport-exemples-v2.md), [Z1](../../reports/rapport-ci.md).
+
+**Pensée** — `g017`, T132/T133, gold de pensée ; **J4 — l'or de rôles** (seconds cadres). **Le gold de S** (61 phrases/144 rôles) n'est pas un or humain indépendant ; **S** — page `/` : décision et recette (106/41), **12/28** référents faux.
+
+**Panini** — **26 signatures V14** manquantes, calibration **42/44**, rejeu **27/60** : le test attend ; **R0.7** — `--tagger auto` prototype livré (**opt-in**, défaut hors ligne inchangé), **décision humaine** ; **N2** — porte (0,2856/0,3566) ; **A** — A6.2, A8.3b2.
+
+## Les questions ouvertes
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nfor l in pathlib.Path('docs/pilotage/roadmap.md').read_text().splitlines():\n    if l.startswith('| **') and l.count('|') >= 4:\n        c = l.split('|')\n        print(c[1].strip()[:22], '→', c[-2].str … [180 caractères tronqués]`
+
+  ```
+**A — le moteur** → **A2.6** — câbler la règle (coût experts ~7 Go/s, refus nommé) ; le lot ≥ 2 assumé
+**B — l'intelligence** → B10.3 attend un **encodeur qui porte** ; **B13** : **gold neuronal** (POS **0,9415** ; **cascade vrai modèle** : syntagmes **0,6130**, tête **0,7574**
+**N — le natif** → **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; **corpus épinglé** (1
+**R — le lecteur** → **R4.4 close** ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; **1 024 octets entraînés** ; **`rope2048`** **fini** (2
+**S — les structures** → **migrer `/` vers la v7** (106 paires sauvées, **41** à re-juger) ; corriger les référents ; rétro-traduction API
+**L — le bloc langue** → la **pragmatique neuronale** ; le **refus r353** ; la **signature V14 multilingue des 21 langues** (prochaine mesure de J3.2)
+**D — les données** → **l'OCR est clos** (8 scans, 58 p) ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A)
+**A1** → aucune — la table est faite, la [quantification](../theorie/glossaire/entrees/quantification.md) testée
+**A2** → **partielle** — tête 4 bits refusée (+10 % PPL), experts b
+… [359 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport pathlib\nfor l in pathlib.Path('docs/pilotage/roadmap.md').read_text().splitlines():\n    if l.startswith('| **N —') or l.startswith('| **B —') or l.startswith('| **R —') or l.startswith('| **C —'):\n        c = … [140 caractères tronqués]`
+
+  ```
+**B — l'intelligence** → B10.3 attend un **encodeur qui porte** ; **B13** : **gold neuronal** (POS **0,9415** ; **cascade vrai modèle** : syntagmes **0,6130**, tête **0,7574**, acte **1,0** ; **gold réel 432 : 0,9065 / 0,4598 / 0,5633 / 0,9954, verdict `false`**) ; **politique DRVM/native** (cadenas **3 nœuds** avec règle, minimal **0** ; labyrinthe **2 sonde** ; porte **27 nœuds** avec la règle (200 sans)) ; **pragmatiqu
+
+**N — le natif** → **N2** : **clôturée** le 03/11 11 h 25, la **fenêtre est la recette de production** ; **paire propre de distillation** (04/11) ; **corpus épinglé** (18/11, `fae5bb73…`), **r1/r2** (PPL 3,23), **décodage top-40/0,5** ; la **porte propre (0,29)** ; **N4**
+
+**R — le lecteur** → **R4.4 close** ; **R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; **1 024 octets entraînés** ; **`rope2048`** **fini** (2×10 000 pas, deux drvm) ; **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; R2/R3 attendent N5/N4
+  ```
+
+### 🤖 Assistant
+
+⏵ Inventaire de ce qui reste, chantier par chantier
+
+# Ce qui reste à faire
+
+Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il reste du travail dans chaque programme. Voici l'inventaire, classé par valeur.
+
+## 1. N — le natif (la priorité, la plus proche d'un résultat)
+
+- **La prochaine expérience est mesurée et désignée** : construire le corpus du palier 1 à partir de **`wiki_big`** (la source qui gagne : 7,2237 sur wikitext2) et de textes longs, avec des **époques équilibrées**, puis entraîner à époque égale (pas à pas égal). C'est la suite directe de `rapport-selection-contenu.md`.
+- La **« porte propre (0,29) »** de la ligne N2 (l'ancien critère) n'est toujours pas franchie.
+- **N4** reste partiel (le 73 M, la courbe, le décodage — mais pas la composition).
+
+## 2. A — le moteur
+
+- **A2.6** : il ne reste que deux pièces, nommées au backlog — les **clusters** (le scan des experts du seul fichier principal rend 0) et la **consolidation des trois tables de bandes** de `materiel.rs`.
+- **A3.4** bloqué (le compte Colab), **A5.4** : le FPGA (P2 : le ring tient-il 4,8 Go/s ? puis le RTL), **A6.2** : le MoE local 18 Go.
+- Le **lot ≥ 2** assumé (le lot ne divise pas les lectures denses).
+
+## 3. R — le lecteur
+
+- **R0.7** : la **décision de routage** (le tagger API gagne de +9,47 sur les classes ouvertes, mesuré ; le `--tagger auto` est un prototype opt-in) — c'est une décision humaine.
+- **J4 — l'or de rôles** (les seconds cadres).
+- **R2/R3** attendent N4/N5 ; **R1.1/R1.2** sont mesurés.
+
+## 4. S, B, Pensée, Panini, L, D
+
+- **S** : migrer la page `/` vers la **v7** (106 paires sauvées, 41 à re-juger), corriger les référents (12/28 faux), la rétro-traduction API.
+- **B** : **B13** le gold neuronal (POS 0,9415 ; cascade 0,6130/0,7574 ; le gold réel 432 est à 0,9065/0,4598/0,5633) ; **B10.3** attend un encodeur qui porte.
+- **Pensée** : `g017`, T132/T133, le gold de pensée.
+- **Panini** : les **26 signatures V14**, la calibration 42/44, le rejeu 27/60.
+- **L** : la pragmatique neuronale, le refus r353, la signature V14 des 21 langues.
+- **D — la diversité** : **bloqué par les sources** (Gutenberg 503, Wikisource à transclusions — re-testé à 15 h 42). Le moissonneur dédié (dump + résolveur) est le seul chemin, non commencé.
+
+## 5. Les dettes de pilotage (petites, réelles)
+
+- **La roadmap a deux lignes périmées** : la ligne A dit encore « câbler la règle » (fait aujourd'hui : trace + décision) et la ligne N parle encore de r1/r2 et du top-40/0,5 sans le 150 M ni le val tiers.
+- La section **« Ce qui reste »** de `en-cours.md` date du 16/11 et ne reflète ni les 150 M ni la sélection.
+- Les **deux rouges structurelles** (`indice`, `melange`) restent tolérées — c'est un choix, pas une dette.
+
+## L'ordre que je propose
+
+1. **Le corpus du palier 1 sur `wiki_big`** + un run à époques égales — c'est le chemin mesuré.
+2. **Les clusters et les bandes d'A2.6** (petit, ferme A2.6).
+3. **Le routage du tagger** (gain produit déjà chiffré, décision à prendre).
+4. **La migration v7 de S** et les référents.
+5. **Le moissonneur de diversité** (un chantier à part entière).
+6. Ensuite J4, le gold de B13, Panini.
+
+Si vous voulez, je peux enchaîner sur le point 1 (construire le corpus et lancer le run) ou d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte.
+
+
+## Tour 64
+
+### 👤 Utilisateur
+
+d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte.
+puis enchaine avec la préparation des travaux de nuit (tarif DeepSeek plus élevé, donc moins de sollicitation LLM et des travaux plus longs localement. continue jusqu'à demain 8h en autonomie totale
+
+### 🤖 Assistant
+
+⏵ Rafraîchissement de la roadmap puis de l'état, avant de préparer la nuit
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:70]\n    s = s.replace(old, new)\n# 1. ligne A : la règle est bra … [1004 caractères tronqués]`
+
+  ```
+roadmap : 9363
+    9037    522   T1   9000  docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef coupe(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ncoupe(\"politique DRVM/native … [984 caractères tronqués]`
+
+  ```
+9037    522   T1   9000  docs/pilotage/roadmap.md
+     · docs/pilotage/roadmap.md : 9037 mots > budget 9000 (T1)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<stdin>", line 5, in coupe
+AssertionError: politique DRVM/native (cadenas **3 nœuds** avec règle, minim
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"politique DRVM/native[^;]*;[^;]*;[^;]*\" docs/pilotage/roadmap.md | head -1; grep -o \"R1.1/R1.2 mesurées[^;]*;[^;]*\" docs/pilotage/roadmap.md | head -1", "description": "Read the exact roadmap substrings"}`
+
+  ```
+politique DRVM/native** (cadenas **3 nœuds** avec règle, minimal **0** ; labyrinthe **2 sonde** ; porte **27 nœuds** avec la règle (200 sans)) 
+R1.1/R1.2 mesurées** (RoPE **3,2545** à 1 000 octets, fenêtre **−0,244**) ; **1 024 octets entraînés**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef coupe(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ncoupe(\"politique DRVM/native … [988 caractères tronqués]`
+
+  ```
+roadmap : 9331
+    9005    522   T1   9000  docs/pilotage/roadmap.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef coupe(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ncoupe(\"**A3.2/A3.3 mesurées* … [525 caractères tronqués]`
+
+  ```
+· docs/pilotage/roadmap.md : 9005 mots > budget 9000 (T1)
+budget=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+  File "<stdin>", line 5, in coupe
+AssertionError: **A3.2/A3.3 mesurées** ; **A8.3c/d expliqués**
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -o \"A3.2/A3.3[^|]*A8.3c/d[^|]*\" docs/pilotage/roadmap.md | head -1; grep -o \"l'OCR est clos[^|]*\" docs/pilotage/roadmap.md | head -1", "description": "Read the exact fragments to trim"}`
+
+  ```
+A3.2/A3.3 mesurées ; **A8.3c/d expliqués** ; le [lot](../theorie/glossaire/entrees/lot.md) ne divise pas les lectures denses (+27 %, PPL −0,006 %) 
+l'OCR est clos** ; la préparation **R1.1/R1.2** (N2) et **A2.6** (A)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/roadmap.md'); s = p.read_text()\ndef coupe(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\ncoupe(\"A3.2/A3.3 mesurées ;  … [714 caractères tronqués]`
+
+  ```
+roadmap : 9323
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"## Ce qui reste\")\nfin = s.index(\"## Les questions ouvertes\")\nnouveau = \"\"\"## Ce qui reste\n\n**N — le palie … [1439 caractères tronqués]`
+
+  ```
+état ok
+  T0 max : 4063 mots (budget 4 000)
+budget=1
+  ✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"## Ce qui reste\")\nfin = s.index(\"## Les questions ouvertes\")\nnouveau = \"\"\"## Ce qui reste\n\n**N** : le cor … [757 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3979 mots (budget 4 000)
+budget=0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nP … [766 caractères tronqués]`

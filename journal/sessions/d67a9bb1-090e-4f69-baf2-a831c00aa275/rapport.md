@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 53.8 h |
-| Tours | 62 |
-| Messages | 1014 |
-| Appels d'outils | 890 |
+| Durée | 54.6 h |
+| Tours | 64 |
+| Messages | 1036 |
+| Appels d'outils | 907 |
 | Fichiers touchés | 44 |
-| Commandes | 749 |
+| Commandes | 764 |
 | Sous-agents | 7 |
-| Commits | 70 |
+| Commits | 71 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -48,6 +48,8 @@
 - **complete** — Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe
 … [116 caractères tronqués]
 - **create** — D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec l
+… [65 caractères tronqués]
+- **complete** — D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec l
 … [65 caractères tronqués]
 
 ## 1. Ce qui a été demandé
@@ -175,6 +177,10 @@
 **Tour 61** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
 
 **Tour 62** — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec les portes ; (3) fiche, état, commit et push pour chaque résultat." Round: 2 … [536 caractères tronqués]
+
+**Tour 63** — que reste-t-il à faire?
+
+**Tour 64** — d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte. puis enchaine avec la préparation des travaux de nuit (tarif DeepSeek plus élevé, donc moins de sollicitation LLM et des travaux plus longs localement. continue jusqu'à demain 8h en autonomie totale
 
 ## 2. Déroulé, étape par étape
 
@@ -1505,7 +1511,7 @@ Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL 
 
 ### Tour 62 — <goal_round> Objective: "D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les  … [816 caractères tronqués]
 
-*8 appels d'outils.* Actions notables :
+*12 appels d'outils.* Actions notables :
 
 - bash — Check the wiki_big final tranche
 - bash — Read the wiki_big final result
@@ -1515,6 +1521,109 @@ Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL 
 - bash — Apply the state updates
 - bash — Record the fresh pass in the references
 - bash — Commit the content-selection verdict and the pass
+- bash — Final closing checks
+- bash — Retry the diversity sources
+- get_goal
+- update_goal
+
+**Synthèse produite :**
+
+⏵ Bilan de la session jusqu'à 17 h — la sélection du contenu est identifiée, A2.6 est close, la passe est verte
+
+\# Décomposition de la sélection du contenu — le résultat
+
+Trois sources mesurées **seules** à 30 000 pas (même recette), jugées sur **wikitext2** (352 256 jetons, tout le val) :
+
+| corpus | PPL wikitext2 | PPL val de v1 |
+|---|---:|---:|
+| **`wiki_big` seul** (831 Mo d'articles longs) | **7,2237** | 3,1144 |
+| v1 (le mélange `wiki_big` + `wiki_fr`) | 7,3987 | 3,0763 |
+| v2 (le plein texte, 6,9 Go) | 7,4277 | 3,1922 |
+| `wiki_fr` seul (186 Mo de résumés) | 8,0876 | **2,8973** |
+
+**La lecture** : c'est bien la **sélection du contenu** qui décide, pas la forme (le nettoyage et le recollement du plein texte avaient déjà été écartés : 7,62 et 7,75). `wiki_big` seul **bat le mélange de 2,4 %** et le plein texte de 2,8 %. `wiki_fr` (les résumés) sur-apprend : premier sur son propre val, dernier sur le val tiers — à pas égal il est vu 1,6 époque contre 0,35 pour `wiki_big`, donc c'est aussi une question d'**époques**. Conséquence pour le palier 1 : sélection **explicite** (articles longs), époques équilibrées.
+
+Fiche `reports/rapport-selection-contenu.md`, données `reports/ppl-wikitext2.json`, sources épinglées (`11aa9b74…`, `d2804870…`).
+
+\# A2.6 — close (branchement et décision)
+
+Sous `DRAVE_PERTE_MAX`, la construction du moteur **appelle la règle** et imprime sur le vrai 30B : `experts : 1.10 Go/jeton · 8 lecteurs · 6.99 Go/s · 156.9 ms → VRAM`, puis le **cache VRAM des experts n'est créé que si la règle le place en VRAM** (un refus ne crée rien et le dit). Sans l'opt-in : aucune trace, aucun changement. **146 tests**, `porte-a2.6-experts`, `porte-flux`, `porte-pont`, `porte-coupe`, `porte-echange-experts` **vertes**. Restent, nommés au backlog : les **clusters** (le scan du seul fichier principal rend 0) et la consolidation des bandes de `materiel.rs`. Fiche `reports/rapport-a2.6-branchement.md`.
+
+\# Passe de clôture et état
+
+**91 portes, 89 vertes, 2 rouges** (`indice` 859 s, `melange` 106 s — les deux structurelles), machine chargée par les deux runs. Arbre **propre**, 25 commits depuis minuit, tout poussé (HEAD `10a3e49c`), revue verte (813 fiches, 979 JSON), budget T0 à 3 993/4 000, journal et schémas verts.
+
+\# Ce que vous devriez regarder / décider
+
+1. **`reports/rapport-selection-contenu.md`** — le résultat qui oriente le palier 1 : partir de `wiki_big` et équilibrer les époques, pas empiler du volume.
+2. **La suite concrète** : construire le co
+… [434 caractères tronqués]
+
+### Tour 63 — que reste-t-il à faire?
+
+*3 appels d'outils.* Actions notables :
+
+- bash — Read the state's remaining-work section
+- bash — Read the roadmap's next actions per chantier
+- bash — Read the N, B, R, C next actions fully
+
+**Synthèse produite :**
+
+⏵ Inventaire de ce qui reste, chantier par chantier
+
+\# Ce qui reste à faire
+
+Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il reste du travail dans chaque programme. Voici l'inventaire, classé par valeur.
+
+\## 1. N — le natif (la priorité, la plus proche d'un résultat)
+
+- **La prochaine expérience est mesurée et désignée** : construire le corpus du palier 1 à partir de **`wiki_big`** (la source qui gagne : 7,2237 sur wikitext2) et de textes longs, avec des **époques équilibrées**, puis entraîner à époque égale (pas à pas égal). C'est la suite directe de `rapport-selection-contenu.md`.
+- La **« porte propre (0,29) »** de la ligne N2 (l'ancien critère) n'est toujours pas franchie.
+- **N4** reste partiel (le 73 M, la courbe, le décodage — mais pas la composition).
+
+\## 2. A — le moteur
+
+- **A2.6** : il ne reste que deux pièces, nommées au backlog — les **clusters** (le scan des experts du seul fichier principal rend 0) et la **consolidation des trois tables de bandes** de `materiel.rs`.
+- **A3.4** bloqué (le compte Colab), **A5.4** : le FPGA (P2 : le ring tient-il 4,8 Go/s ? puis le RTL), **A6.2** : le MoE local 18 Go.
+- Le **lot ≥ 2** assumé (le lot ne divise pas les lectures denses).
+
+\## 3. R — le lecteur
+
+- **R0.7** : la **décision de routage** (le tagger API gagne de +9,47 sur les classes ouvertes, mesuré ; le `--tagger auto` est un prototype opt-in) — c'est une décision humaine.
+- **J4 — l'or de rôles** (les seconds cadres).
+- **R2/R3** attendent N4/N5 ; **R1.1/R1.2** sont mesurés.
+
+\## 4. S, B, Pensée, Panini, L, D
+
+- **S** : migrer la page `/` vers la **v7** (106 paires sauvées, 41 à re-juger), corriger les référents (12/28 faux), la rétro-traduction API.
+- **B** : **B13** le gold neuronal (POS 0,9415 ; cascade 0,6130/0,7574 ; le gold réel 432 est à 0,9065/0,4598/0,5633) ; **B10.3** attend un encodeur qui porte.
+- **Pensée** : `g017`, T132/T133, le gold de pensée.
+- **Panini** : les **26 signatures V14**, la calibration 42/44, le rejeu 27/60.
+- **L** : la pragmatique neuronale, le refus r353, la signature V14 des 21 langues.
+- **D — la diversité** : **bloqué par les sources** (Gutenberg 503, Wikisource à transclusions — re-testé à 15 h 42). Le moissonneur dédié (dump + résolveur) est le seul chemin, non commencé.
+
+\## 5. Les dettes de pilotage (petites, réelles)
+
+- **La roadmap a deux lignes périmées** : la ligne A dit encore « câbler la règle » (fait aujourd'hui : trace + décision) et la ligne N parle encore de r1/r2 et du top-40/0
+… [832 caractères tronqués]
+
+### Tour 64 — d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte. puis enchaine avec la préparation des travau … [154 caractères tronqués]
+
+*10 appels d'outils.* Actions notables :
+
+- bash — Refresh the roadmap's A and N rows
+- bash — Trim the roadmap back under budget
+- bash — Read the exact roadmap substrings
+- bash — Apply the roadmap trims
+- bash — Finish the roadmap trims
+- bash — Read the exact fragments to trim
+- bash — Refresh the state's remaining-work section
+- bash — Compact the remaining-work section
+- bash — Commit the pilotage refresh
+
+**Synthèse produite :**
+
+⏵ Rafraîchissement de la roadmap puis de l'état, avant de préparer la nuit
 
 ## 3. Travail accompli
 
@@ -1619,7 +1728,7 @@ Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 709 autres
+- … et 724 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1837,4 +1946,5 @@ Les tranches 2 et 3 se terminent vers 14 h 15 et 15 h 30 ; ensuite les deux PPL 
 - ÉTAT — T0 REPASSÉ (A2.6 : LA DÉCISION EST BRANCHÉE)" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — T0 À 3 997" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.jso
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git
 

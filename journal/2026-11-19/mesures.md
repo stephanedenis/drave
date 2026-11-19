@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (9)
+## Commits du jour (10)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -17,22 +17,24 @@
 | 10:24 | `c92dac72` | N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT | `en-cours.md`, `README.md`, `distribue.md` (+9) |
 | 10:33 | `8392a482` | N — LE TEST À TROIS SUR WIKITEXT2 À 20 000 PAS : LE BRUT GAGNE ENCORE (7,8688 CONTRE 7,9091 ET 8,0378) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 11:42 | `8de4b3d8` | N — LE TEST À TROIS EST TRANCHE : NI LE NETTOYAGE NI LE RECOLLEMENT NE PAYENT (WIKITEXT2 À 30 000 PAS : 7,4277 BRUT, 7,6189 NETTOYÉ, 7,7476 RECOLLÉ) | `en-cours.md`, `README.md`, `distribue.md` (+16) |
+| 15:39 | `10a3e49c` | N — LA SÉLECTION DU CONTENU EST LA VARIABLE : `wiki_big` SEUL BAT LE MÉLANGE ET LE PLEIN TEXTE (7,2237 CONTRE 7,3987 ET 7,4277) | `en-cours.md`, `references-non-regression.md`, `README.md` (+26) |
 
 ## Chiffres du jour
 
-`7,4277` · `7,6189` · `7,7476` · `7,8688` · `7,9091` · `8,0378` · `+0,6 %` · `6,874 Go` · `6,874` · `6,867` · `7,093` · `2,844`
+`7,2237` · `7,3987` · `7,4277` · `7,6189` · `7,7476` · `7,8688` · `7,9091` · `8,0378` · `+0,6 %` · `6,874 Go` · `6,874` · `6,867`
 
 *Extraits des sujets de commit et des étapes — le détail et les conditions sont dans la fiche correspondante de `reports/`.*
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 53.8 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 54.6 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 
 ## Mesures et rapports touchés
 
 - [reports/rapport-150m-nuit.md](../../reports/rapport-150m-nuit.md)
 - [reports/rapport-diversite-sources.md](../../reports/rapport-diversite-sources.md)
 - [reports/rapport-nettoyage-corpus.md](../../reports/rapport-nettoyage-corpus.md)
+- [reports/rapport-selection-contenu.md](../../reports/rapport-selection-contenu.md)
 - [reports/rapport-val-tiers.md](../../reports/rapport-val-tiers.md)
 
 <!-- notes -->
