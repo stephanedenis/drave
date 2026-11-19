@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**8 commits** · **1 session(s)** · **5 thème(s)**
+**9 commits** · **1 session(s)** · **5 thème(s)**
 
 ## Thèmes du jour
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | distribue | 2 | [distribue.md](distribue.md) |
 | docs | 1 | [docs.md](docs.md) |
-| mesures | 3 | [mesures.md](mesures.md) |
+| mesures | 4 | [mesures.md](mesures.md) |
 | outils | 1 | [outils.md](outils.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -35,6 +35,7 @@
 | 07:56 | `c50c53b0` | N — LE CORPUS NETTOYÉ : 6,874 Go, `]]` À ZÉRO, 40,4 M LIGNES DE CONTENU, ÉPINGLÉ 860aeb6a… |
 | 07:58 | `665c8050` | ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 |
 | 08:01 | `851daeec` | ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE) |
+| 08:12 | `5e142446` | N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ |
 
 ## Le récit de la journée (écrit à la main)
 

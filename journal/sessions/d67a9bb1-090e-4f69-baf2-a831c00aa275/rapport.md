@@ -9,12 +9,12 @@
 | Début | 2026-11-17 09:50 |
 | Durée | 46.4 h |
 | Tours | 19 |
-| Messages | 782 |
-| Appels d'outils | 751 |
+| Messages | 783 |
+| Appels d'outils | 752 |
 | Fichiers touchés | 42 |
-| Commandes | 616 |
+| Commandes | 617 |
 | Sous-agents | 7 |
-| Commits | 54 |
+| Commits | 55 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -720,7 +720,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 
 ### Tour 19 — continue avec les prochaines actions
 
-*35 appels d'outils.* Actions notables :
+*36 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Check the wikitext2 val and the eval tool
@@ -736,7 +736,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - bash — Inspect the cleaning tool and prepare the 30k reference
 - bash — Compute the v2 checkpoint at 30k on wikitext2
 - bash — Write the corpus cleaner and run its autotest
-- … et 21 autres
+- … et 22 autres
 
 **Synthèse produite :**
 
@@ -843,7 +843,7 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 576 autres
+- … et 577 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1045,4 +1045,5 @@ Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange`
 - ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0" && git push origin s/v7 2>&1 | tail -1
 - ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE)" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()
+- ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)" && git push origin s/v7 2>&1 | tail -1
 

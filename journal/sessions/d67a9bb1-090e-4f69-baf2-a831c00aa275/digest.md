@@ -12923,3 +12923,14 @@ chaîne reflow lancée 08:12
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()\nold = \"## Le test\\n\\n- **Run `cl`** : 30 000 pas (3 tranches) sur le corpus nettoyé, depuis zéro, même recette (lr 1e-4, … [3327 caractères tronqués]`
+
+  ```
+ok
+budget=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   851daeec..5e142446  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0\" | head -1; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[: … [726 caractères tronqués]`
