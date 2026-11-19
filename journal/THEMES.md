@@ -373,6 +373,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-16](2026-11-16/portes.md) | — |
 | [2026-11-17](2026-11-17/portes.md) | — |
 | [2026-11-18](2026-11-18/portes.md) | `7,0 Go` |
+| [2026-11-19](2026-11-19/portes.md) | `2,844` · `3,038` |
 
 ### `docs` — Documentation, état, conventions
 

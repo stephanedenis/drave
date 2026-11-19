@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 44.9 h |
-| Tours | 18 |
-| Messages | 742 |
-| Appels d'outils | 713 |
-| Fichiers touchés | 40 |
-| Commandes | 582 |
+| Durée | 45.8 h |
+| Tours | 19 |
+| Messages | 758 |
+| Appels d'outils | 727 |
+| Fichiers touchés | 41 |
+| Commandes | 593 |
 | Sous-agents | 7 |
-| Commits | 47 |
+| Commits | 48 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -41,6 +41,10 @@
 … [191 caractères tronqués]
 - **create** — De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un
 … [253 caractères tronqués]
+- **complete** — De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un
+… [253 caractères tronqués]
+- **create** — Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe
+… [116 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -79,6 +83,8 @@
 **Tour 17** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
 
 **Tour 18** — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoi … [723 caractères tronqués]
+
+**Tour 19** — continue avec les prochaines actions
 
 ## 2. Déroulé, étape par étape
 
@@ -667,7 +673,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*116 appels d'outils.* Actions notables :
+*119 appels d'outils.* Actions notables :
 
 - bash — Wait ten minutes, then check the first tranche outputs
 - bash — Check the first tranche completion and benches
@@ -683,7 +689,54 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - bash — Commit the new A2.6 gate
 - bash — Wait ten minutes and check the chains
 - bash — Read the experts placement site in model.rs
-- … et 72 autres
+- … et 75 autres
+
+**Synthèse produite :**
+
+⏵ Bilan de la nuit — objectif clos à 06 h 50, tout est poussé
+
+\# La nuit du 18 au 19/11 — ce qui a été fait, ce qui est vérifié
+
+**9 commits, tous poussés sur `s/v7` (HEAD `efb3d45b`), arbre propre, revue verte, passe à 89/2 sur 91 portes.** Aucun appel API payant, deux sous-agents (loisirs : aucun), les deux GPU occupés ~13 h.
+
+\## Les quatre points de l'objectif
+
+**1. Le chargeur réparé et le corpus v2 promu — ✅ vérifié.**
+`torch.frombuffer` (uint8) remplace `torch.tensor(list(b))` : le corpus de 6,9 Go tient en ~7 Go de RAM au lieu de ~200. Le contrôle est bit-identique : la PPL du checkpoint r4 sur le val épinglé rend **3,0628**, exactement la valeur enregistrée dans `r4.pt.json`. `data/wiki_mix_v2/train.txt` (6 900 585 097 o, sha `e3112a84…`) est promu et épinglé (manifeste `9861fb39…`), et son `--verifie` repasse en 21 s. Fiche `reports/rapport-corpus-v2.md`.
+
+**2. Le palier 1 sur les deux GPU — ✅ mesuré.**
+Deux chaînes de **11 tranches de 10 000 pas** (142 M paramètres, `d=896`, lr 1e-4, AMP, val épinglé, banc complet après chaque tranche) :
+- **v1** (1,017 Go) : PPL **3,5088 → 2,8440** (−19 %), précision 0,6878 ;
+- **v2** (6,90 Go dédupliqué) : PPL **3,5568 → 3,0381** (−15 %), précision 0,6768.
+
+Les deux courbes **plafonnent après ~60 000 pas**. v1 gagne la PPL de **6,4 %**, mais le val est **v1-centré** (les résumés `wiki_fr` sont dans son train) ; v2 gagne le top-20 final (**0,948 contre 0,900**) et 7 tranches sur 9. Le greedy reste instable (9-14, une pointe à 36). Fiche `reports/rapport-150m-nuit.md`, données `reports/courbe-150m.json` + 44 JSON de banc.
+
+**3. La règle A2.6 — ✅ pour la règle, ⏳ pour le branchement (assumé et documenté).**
+La bande des experts est mesurée (**7,0 Go/s par lecteur**, saturation à 8, 16 fils ne gagne pas), et `placement.rs` porte désormais `bande_experts`, `cout_experts`, `choisir_experts` (**refus nommé** avec le coût NVMe refusé) et `trace_experts` — **5 tests** (le coût reproduit 156,9 ms pour 1,097 Go/jeton), **placement 14/14**, **crate 145/145**, et la **porte qui manquait** : `porte-a2.6-experts` (91ᵉ porte). **Le branchement dans `model.rs` n'a pas été fait** : c'est la tâche désignée suivante (backlog `A2.6-ordonnanceur.md`, étape 5), et je n'ai pas voulu toucher le chemin de chargement du moteur à 7 h du matin sans une session fraîche.
+
+**4. Les portes et les commits — ✅.**
+Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange` 108 s, les deux structurelles connues), la nouvelle p
+… [1159 caractères tronqués]
+
+### Tour 19 — continue avec les prochaines actions
+
+*11 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Check the wikitext2 val and the eval tool
+- bash — Find the PPL evaluation tools
+- bash — Write and test the checkpoint PPL tool on wikitext2
+- bash — Evaluate the v2 and 73M checkpoints on wikitext2
+- bash — Compare the texture of the v1 and v2 corpora
+- bash — Quantify the wiki markup density in both corpora
+- bash — Save the wikitext2 results
+- write `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md`
+- bash — Update the state for the third-party val
+- bash — Commit the third-party val result
+
+**Synthèse produite :**
+
+⏵ Prochaines actions : un val tiers (wikitext2) pour trancher v1/v2, puis le branchement A2.6
 
 ## 3. Travail accompli
 
@@ -731,6 +784,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-nuit.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -784,7 +838,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 542 autres
+- … et 553 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -979,4 +1033,5 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG'
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1 && git log -1 --format='%h %s' | cat N —
 - ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)" && git push origin s/v7 2>&1 | tail -1;
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

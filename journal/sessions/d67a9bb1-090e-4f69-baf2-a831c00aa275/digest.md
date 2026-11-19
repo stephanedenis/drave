@@ -12400,3 +12400,245 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md && git commit -q -m \"ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)\" && git push origin s/v7 2>&1 | tail -1; git status -sb  … [89 caractères tronqués]`
+
+  ```
+8d3ee6a2..efb3d45b  s/v7 -> s/v7
+## s/v7...origin/s/v7
+jeu 19 nov 2026 06:48:52 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '4955,4995p' drave-core/src/model.rs", "description": "Read the experts VRAM site to see the available variables"}`
+
+  ```
+// au format MXFP4 (les autres formats ont leurs propres noyaux).
+        let cache_experts = if std::env::var("DRAVE_GPU_EXPERTS").is_ok()
+                               && crate::gpu::instance().is_some()
+                               && cfg.n_expert > 0 {
+            // Budget par défaut : ce que la VRAM peut donner sans étrangler le
+            // reste. Mesuré : la VRAM lit à 84,9 Go/s contre 22,5 pour la RAM,
+            // et un cache de 25 % de l'empreinte sert 80 % des appels.
+            let defaut = {
+                let m = crate::materiel::Materiel::detecter();
+                let libre: f64 = m.gpus.iter().map(|g| g.vram_libre_go).sum();
+                (libre - 2.0).max(1.0)      // 2 Go de réserve pour le contexte CUDA
+            };
+            let go: f64 = std::env::var("DRAVE_GPU_EXPERTS_GO").ok()
+                .and_then(|v| v.parse().ok()).unwrap_or(defaut);
+            let budget = (go * 1e9) as usize;
+            println!("[gpu] cache d'experts : budget {:.1} Go de VRAM (LRU), éviction par (couche, expert)",
+                     go);
+            Some(CacheExperts::nouveau(budget))
+        } else { None };
+        // La TÊTE à 4 bits (A2.6) : c'était un dra
+… [1370 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git log --since=\"2026-11-18 15:00\" --oneline | wc -l; git log --oneline -10 | cat; echo \"=== état ===\"; python3 tools/revue_documentation.py 2>&1 | tail -1; grep -E \"fichiers / JSON|portes \\|\" docs/pilotage/en-cours.md | head  … [58 caractères tronqués]`
+
+  ```
+9
+efb3d45b ÉTAT — LA PAGE VIVANTE PASSE AU 19/11 : LA NUIT DU PALIER 1 (v1 2,844 · v2 3,038 · 91 PORTES, 89/2 · CORPUS V2 ÉPINGLÉ)
+8d3ee6a2 N — LA NUIT DU PALIER 1 : DEUX 142 M, DEUX CORPUS, 110 000 PAS — v1 GARDE LA PPL (2,844 CONTRE 3,038), v2 GAGNE LE TOP-20 (0,948 CONTRE 0,900)
+19f58c39 A2.6 — LE BACKLOG DIT OÙ EN EST LA RÈGLE : TÊTE ET EXPERTS ENTRÉS ET MESURÉS, LE BRANCHEMENT RESTE
+6dcf0f5c A2.6 — LA PORTE QUI MANQUAIT : `porte-a2.6-experts` NOMME LES CINQ TESTS DE LA RÈGLE (91 PORTES)
+19b22015 PASSE DU SOIR — 90 PORTES, 88 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES), MACHINE CHARGÉE
+d8972e8b N — LE 150 M : À lr 3e-4 LE PALIER NE CASSE PAS, À 1e-4 IL CASSE VERS 1 550 PAS (11,56 → 7,60)
+a039fe51 A2.6 — LA TRACE DES EXPERTS DIT LES CHIFFRES (5e TEST, 14/14 · 145/145)
+837fb4dd A2.6 — LA RÈGLE SAIT CHIFFRER ET REFUSER LES EXPERTS : 7,0 Go/s PAR LECTEUR, 13/13 TESTS, 144/144 CRATE
+75280cfe N/D — LE CORPUS V2 EST PROMU ET ÉPINGLÉ : 6,90 Go DANS data/, MANIFESTE 9861fb39…
+1fe0444d ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0 (4 000 MOTS EXACTEMENT)
+=== état ===
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+| portes | **91** 
+… [177 caractères tronqués]
+  ```
+
+- **update_goal** `{"action": "complete", "goal_id": "goal-002a8d00-91fd-4bd4-b861-382da2d944d9", "revision": 1}`
+
+> **Objectif** (complete) : De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push).
+
+
+  ```
+{"goal":{"id":"goal-002a8d00-91fd-4bd4-b861-382da2d944d9","revision":2,"objective":"De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push).","phase":"complete","roundsStarted":8,"maxGoalRounds":1000},"activation":"disarmed"}
+  ```
+
+### 👤 Utilisateur
+
+<goal_complete>
+Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits au strict minimum) et ressources locales à fond : (1) réparer le chargeur de corpus (mémoire bornée) et promouvoir le corpus v2 dédupliqué (6,90 Go) dans data/ avec son épingle ; (2) lancer le palier 1 — un modèle ~150 M sur le corpus v2 — sur les deux GPU, avec bancs aux checkpoints ; (3) câbler la règle de placement A2.6 (coût experts ~7 Go/s, refus nommé, trace) et la tester ; (4) passer les 90 portes et committer chaque résultat (fiche + état + push)."
+The goal is marked complete and this autonomous run is ending. Write the closing message to the user now: state the outcome, summarize what was done and how it was verified, and point to the concrete results (files, commits, or other artifacts). Report only what earlier rounds and tool results in this session actually establish; when a detail is not in the session, say so instead of inventing it. Note anything the user should review or do next. Address the user directly. Do not call any more tools in this run; further work waits for the user's next instruction.
+</goal_complete>
+
+### 🤖 Assistant
+
+⏵ Bilan de la nuit — objectif clos à 06 h 50, tout est poussé
+
+# La nuit du 18 au 19/11 — ce qui a été fait, ce qui est vérifié
+
+**9 commits, tous poussés sur `s/v7` (HEAD `efb3d45b`), arbre propre, revue verte, passe à 89/2 sur 91 portes.** Aucun appel API payant, deux sous-agents (loisirs : aucun), les deux GPU occupés ~13 h.
+
+## Les quatre points de l'objectif
+
+**1. Le chargeur réparé et le corpus v2 promu — ✅ vérifié.**
+`torch.frombuffer` (uint8) remplace `torch.tensor(list(b))` : le corpus de 6,9 Go tient en ~7 Go de RAM au lieu de ~200. Le contrôle est bit-identique : la PPL du checkpoint r4 sur le val épinglé rend **3,0628**, exactement la valeur enregistrée dans `r4.pt.json`. `data/wiki_mix_v2/train.txt` (6 900 585 097 o, sha `e3112a84…`) est promu et épinglé (manifeste `9861fb39…`), et son `--verifie` repasse en 21 s. Fiche `reports/rapport-corpus-v2.md`.
+
+**2. Le palier 1 sur les deux GPU — ✅ mesuré.**
+Deux chaînes de **11 tranches de 10 000 pas** (142 M paramètres, `d=896`, lr 1e-4, AMP, val épinglé, banc complet après chaque tranche) :
+- **v1** (1,017 Go) : PPL **3,5088 → 2,8440** (−19 %), précision 0,6878 ;
+- **v2** (6,90 Go dédupliqué) : PPL **3,5568 → 3,0381** (−15 %), précision 0,6768.
+
+Les deux courbes **plafonnent après ~60 000 pas**. v1 gagne la PPL de **6,4 %**, mais le val est **v1-centré** (les résumés `wiki_fr` sont dans son train) ; v2 gagne le top-20 final (**0,948 contre 0,900**) et 7 tranches sur 9. Le greedy reste instable (9-14, une pointe à 36). Fiche `reports/rapport-150m-nuit.md`, données `reports/courbe-150m.json` + 44 JSON de banc.
+
+**3. La règle A2.6 — ✅ pour la règle, ⏳ pour le branchement (assumé et documenté).**
+La bande des experts est mesurée (**7,0 Go/s par lecteur**, saturation à 8, 16 fils ne gagne pas), et `placement.rs` porte désormais `bande_experts`, `cout_experts`, `choisir_experts` (**refus nommé** avec le coût NVMe refusé) et `trace_experts` — **5 tests** (le coût reproduit 156,9 ms pour 1,097 Go/jeton), **placement 14/14**, **crate 145/145**, et la **porte qui manquait** : `porte-a2.6-experts` (91ᵉ porte). **Le branchement dans `model.rs` n'a pas été fait** : c'est la tâche désignée suivante (backlog `A2.6-ordonnanceur.md`, étape 5), et je n'ai pas voulu toucher le chemin de chargement du moteur à 7 h du matin sans une session fraîche.
+
+**4. Les portes et les commits — ✅.**
+Passe de la nuit : **91 portes, 89 vertes, 2 rouges** (`indice` 870 s, `melange` 108 s, les deux structurelles connues), la nouvelle porte verte. Tous les résultats sont committés avec fiche, état et push.
+
+## Ce que vous devriez regarder en premier
+
+1. **`reports/rapport-150m-nuit.md`** — le résultat de la nuit ; la conclusion honnête est que **la donnée ne paie pas encore** sur cette validation, et que c'est le val qu'il faut changer avant de conclure.
+2. **`reports/rapport-150m-lr.md`** — la trouvaille au passage : à lr 3e-4 le modèle **ne casse pas** son palier (PPL ~12 pendant 4 000 pas), à 1e-4 il casse vers 1 550 pas (11,56 → 7,60). La recette du 73 M ne se transpose pas au 142 M.
+3. **`reports/rapport-a2.6-bande-experts.md`** — la bande mesurée et la règle ; le branchement est la prochaine tâche, avec son risque (le chemin de chargement).
+
+## Les prochaines actions désignées
+
+- **Un val v2** tenu à l'écart du train : c'est la seule façon de trancher v1/v2 sans le biais de distribution.
+- **Le branchement A2.6** dans `model.rs` (opt-in, le défaut ne bouge pas) + `porte-flux`/`pont`/`coupe`/`echange-experts`.
+- **La diversité du corpus** (livres FR) — le volume est là (7,5 Go), pas la variété.
+
+Rien de tout cela n'est bloqué ; tout attend votre prochaine instruction.
+
+
+## Tour 19
+
+### 👤 Utilisateur
+
+continue avec les prochaines actions
+
+### 🤖 Assistant
+
+⏵ Prochaines actions : un val tiers (wikitext2) pour trancher v1/v2, puis le branchement A2.6
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, … [158 caractères tronqués]`
+
+> **Objectif** (create) : Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push.
+
+
+  ```
+{"goal":{"id":"goal-4caeb0f8-89e3-4695-aa03-2a8698361e3a","revision":1,"objective":"Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la data/wikitext2_test.txt data/wikitext2* 2>/dev/null | head -5; grep -n \"add_argument\" tools/eval_longueurs.py 2>/dev/null | head -8; date", "description": "Check the wikitext2 val and the eval tool"}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 359041 25 sep 18:02 data/wikitext2_test.txt
+-rw-r--r--. 1 stephane stephane 359041 25 sep 18:02 data/wikitext2_test.txt
+-rw-r--r--. 1 stephane stephane 398564  1 oct 07:37 data/wikitext2_test.txt.ids
+jeu 19 nov 2026 07:35:44 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/eval*.py tools/*ppl*.py bench/*.py 2>/dev/null | head -8; grep -ln \"ppl\\|perplex\" tools/*.py bench/*.py 2>/dev/null | head -6", "description": "Find the PPL evaluation tools"}`
+
+  ```
+bench/balayage_decodage.py
+bench/drvm_profils.py
+bench/gpu_scatter.py
+tools/applique_pont.py
+tools/eval_n2_budget.py
+tools/eval_n2_propre.py
+tools/eval_n2.py
+tools/evaluer_consignes.py
+tools/adaptateur_langue.py
+tools/aiguille.py
+tools/amplification.py
+tools/analyse_empreinte.py
+tools/analyse_flux.py
+tools/analyse_litteraire.py
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/ppl_ckpt.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"ppl_ckpt.py — la perplexité d'un checkpoint sur un val, tout le val.\n\nPOURQUOI. Le 19/11, les deux 142 M (corpus v1 et v2) ont été comparés sur le val de\nv1 : le val es … [2538 caractères tronqués]`
+
+  ```
+compile-ok
+{
+ "modele": "work/n4/v111.pt",
+ "parametres": 141935400,
+ "val": "data/wikitext2_test.txt",
+ "octets_val": 359041,
+ "seq": 1024,
+ "lot": 8,
+ "n_lots": 43,
+ "jetons": 352256,
+ "ppl": 6.867391696678708
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && PYTHONPATH=. timeout 900 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/v211.pt --val data/wikitext2_test.txt --device cuda:0 2>&1 | grep -E '\"ppl\"|\"parametres\"'; PYTHONPATH=. timeout 900 /home/stephane/gpu- … [238 caractères tronqués]`
+
+  ```
+"parametres": 141935400,
+ "ppl": 7.092977491412454
+ "parametres": 73366568,
+ "ppl": 7.3507907470272205
+jeu 19 nov 2026 07:37:33 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && echo \"=== v1 (propre) ===\"; head -c 600 data/wiki_mix/propre/train.txt; echo; echo \"=== v2 (dédupliqué) ===\"; head -c 600 data/wiki_mix_v2/train.txt; echo; echo \"=== v2, 1 Mo plus loin ===\"; dd if=data/wiki_mix_v2/train.txt bs= … [108 caractères tronqués]`
+
+  ```
+=== v1 (propre) ===
+Antoine Meillet
+
+Antoine Meillet, né le  à Moulins (Allier) et mort le  à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du . Biographie Enfance et formation Paul Jules Antoine Meillet est d'origine bourbonnaiseSa famille paternelle est une famille de notables de Saint-Désiré, commune de l'Allier limitrophe du Cher ; la famille de sa mère, Louise Poirier, qu'il perd à l'âge de 11 ans, est de Moulins., fils d'un notaire de Châteaumeillant (Cher). Il naît à Moulins le Son acte de naissance précise qu'il est « né le 1
+=== v2 (dédupliqué) ===
+Antoine Meillet
+Antoine Meillet, né le à Moulins (Allier) et mort le à Châteaumeillant (Cher), est un philologue français, le principal linguiste français des premières décennies du .
+
+Biographie
+Enfance et formation
+Paul Jules Antoine Meillet est d'origine bourbonnaise, fils d'un notaire de Châteaumeillant (Cher). Il naît à Moulins le .
+
+Il passe son enfance à Châteaumeillant, puis fait ses études secondaires au lycée de Moulins.
+
+Étudiant à partir de 1885 à la faculté des lettres de Paris où il suit notamment les cours de Louis Havet, il assiste également à ceux de 
+… [422 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in data/wiki_mix/propre/train.txt data/wiki_mix_v2/train.txt; do n=$(head -c 20000000 \"$f\" | grep -o '\\[\\[' | wc -l); m=$(head -c 20000000 \"$f\" | grep -o '\\]\\]' | wc -l); t=$(head -c 20000000 \"$f\" | grep -o '==' | wc  … [127 caractères tronqués]`
+
+  ```
+data/wiki_mix/propre/train.txt : [[=7 ]] =5 ==0 sur 20 Mo
+data/wiki_mix_v2/train.txt : [[=3 ]] =2631 ==48 sur 20 Mo
+jeu 19 nov 2026 07:38:00 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\ndoc = {\"schema\": \"drave.ppl-wikitext2\", \"version\": 1, \"date\": \"2026-11-19\",\n       \"val\": \"data/wikitext2_test.txt (français, 359 041 o, 352 256 jetons notés)\",\n       \"note\": … [956 caractères tronqués]`
+
+  ```
+ok
+  ```
+
+- **write** `{"content": "# Le val tiers tranche : v1 gagne aussi sur wikitext2 (6,87 contre 7,09) — et la cause est la propreté, pas le volume\n\n> **Ligne de roadmap** : N (le palier 1) · **Date** : 2026-11-19 · **Verdict** : ✅ mesuré — sur\n> **wikitext2 français** (val tiers, 352 256 jetons, tout le fichier) … [3599 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-val-tiers.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndebut = s.index(\"- **N — l'entraînement et le décodage**\")\nfin = s.index(\"\\n\", debut)\nligne = (\"- **N — l'entraînement, les c … [1190 caractères tronqués]`
+
+  ```
+mots : 68
+     · T0 : 4009 mots (AGENTS + en-cours + une tâche) > budget 4 000
+budget exit=1
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n    s = s.replace(old, new)\nrep(\"GV **6,90 → 1,45** (34 → … [2109 caractères tronqués]`

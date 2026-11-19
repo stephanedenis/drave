@@ -1,0 +1,42 @@
+{
+ "schema": "drave.ppl-wikitext2",
+ "version": 1,
+ "date": "2026-11-19",
+ "val": "data/wikitext2_test.txt (français, 359 041 o, 352 256 jetons notés)",
+ "note": "tout le val (43 lots de 8 × 1 024), seq 1 024, un seul passage",
+ "resultats": [
+  {
+   "modele": "work/n4/v111.pt",
+   "parametres": 141935400,
+   "corpus": "v1 (1,017 Go propre)",
+   "pas": 110000,
+   "ppl": 6.867391696678708
+  },
+  {
+   "modele": "work/n4/v211.pt",
+   "parametres": 141935400,
+   "corpus": "v2 (6,90 Go plein texte dédupliqué)",
+   "pas": 110000,
+   "ppl": 7.092977491412454
+  },
+  {
+   "modele": "work/n3/r5a.pt",
+   "parametres": 73366568,
+   "corpus": "v1 (73 M, référence d'échelle)",
+   "pas": 53000,
+   "ppl": 7.3507907470272205
+  }
+ ],
+ "marquage_wiki_par_20Mo": {
+  "v1": {
+   "[[": 7,
+   "]]": 5,
+   "==": 0
+  },
+  "v2": {
+   "[[": 3,
+   "]]": 2631,
+   "==": 48
+  }
+ }
+}
