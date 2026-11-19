@@ -1,9 +1,9 @@
 # Références de non-régression
 
-> **Passes — 2026-11-18 :** **matin** (10 h 57 → 13 h 00) **90 portes, 88/2** et **soir** (16 h 51 →
-> 18 h 51) **90 portes, 88/2** — `indice` (854 / 870 s) et `melange` (106 / 109 s), les deux
-> **structurelles** ; `sessions` **verte** ; aucune autre. Les deux ont tourné machine chargée : verdict seul.
-> Journaux `roue-1118-1057/`, `roue-1118-1712/`.
+> **Passes — 2026-11-18 et 19 :** matin **90 portes, 88/2** ; soir **90 portes, 88/2** ; nuit
+> **91 portes, 89/2** (la 91ᵉ, `porte-a2.6-experts`, est verte) — `indice` (854 / 870 / 870 s) et
+> `melange` (106 / 109 / 108 s), les deux **structurelles** ; `sessions` **verte** ; aucune autre.
+> Machine chargée les trois fois : verdict seul. Journaux `roue-1118-1057/`, `-1712/`, `roue-1119-0345/`.
 
 > **Passe — 2026-11-17 20 h 42 → 22 h 39 :** **90 portes, 87 vertes, 3 rouges** — `indice` (862 s)
 > et `melange` (106 s) **structurelles** ; `sessions` (0 s) de **circonstance** (mandat périmé de
@@ -27,7 +27,7 @@
 > **Passe précédente — 2026-11-04 23 h 43 → 2026-11-05 02 h 12 :** **83 portes, 79 vertes,
 > 4 rouges**, 2 h 29, machine au repos : les 2 structurelles (`indice` 1 207 s, `melange` 148 s) ;
 > `lecteur` corrigée en séance (une ancre de la roadmap) ; `sessions` (heartbeats du hub et de
-> `e181ce02`). Longues vertes : `greffe` 840 s, `homeostasie` 755 s, `vision` 670 s. Journaux `work/portes/passe-2404-23h45`.
+> `e181ce02`). Journaux `work/portes/passe-2404-23h45`.
 
 > **83e porte — 04/11 :** `porte-n3-inventaire` (1 s) ajoutée et **verte** dans la passe N3
 > (17/17, 92 s, 0 rouge, `work/portes-n3-cloture/registre.txt`) ; elle est entrée **verte** dans la

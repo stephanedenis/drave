@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/v26.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.8862,
+   "distinct_2": 0.533,
+   "repetition": 36,
+   "echo": 0.1139,
+   "octets": 2528,
+   "secondes": 26.66,
+   "octets_s": 94.8,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8077,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Castellane dans le département de la France entre les communes de Castellane et les communes de Castellane",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.625,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le commandant de la République de Coréens est remplacé par le commandant de la République de Coréens par le commandant de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois consacré à la propagande de la communauté de communes de la commune de Chartres-sur-Orne et de la communauté de communes de",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8077,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.13636363636363635,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Castellane dans le département de la France entre les communes de Castellane et les communes de Castellane",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.625,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le commandant de la République de Coréens est remplacé par le commandant de la République de Coréens par le commandant de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois consacré à la propagande de la communauté de communes de la commune de Chartres-sur-Orne et de la communauté de communes de",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.55,
+     "repetition": 3,
+     "echo": 0.10526315789473684,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune de Saint-Jean-de-Commercy est le chat de la commune de Saint-Jean-de-Commercy et de la commune de Saint-Jean-de-C",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.8333,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer en 1923 et le comte de Bourg-en-Bresse en 1925. Le comte de Bourg-en-Bresse est le fils de Bourg-en-Bresse et de son épouse Al",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.36,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le rôle de la propriété de la propriété de la propriété de la propriété de la propriété de la propriété de la prop",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.7727,
+     "repetition": 2,
+     "echo": 0.10526315789473684,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de renverser le gouvernement au sein de la Confédération des Affaires étrangères et de la Confédération des Affaires étr",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Paris est",
+     "texte": "Paris est un compositeur et professeur de la faculté de musique de l'université de Marseille de 1990 à 1994. Il est le fils de Marseil",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.7037,
+     "repetition": 2,
+     "echo": 0.038461538461538464,
+     "prompt": "Un homme",
+     "texte": "Un homme de la construction de la province de Tanger et de la construction de la ville de Tanger. Il est aussi le premier homme de la co",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2609,
+     "repetition": 7,
+     "echo": 0.3181818181818182,
+     "prompt": "La musique",
+     "texte": "La musique de la composition de la composition de la composition de la composition de la composition de la composition de la composition d",
+     "octets": 128
+    },
+    {
+     "mots": 43,
+     "mots_valides": 0.1163,
+     "distinct_2": 0.1429,
+     "repetition": 36,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la série TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV TV ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.5,
+     "repetition": 5,
+     "echo": 0.2857142857142857,
+     "prompt": "La guerre",
+     "texte": "La guerre de 1914-1915 est la première constitution de la constitution de la constitution de la constitution de la constitution de la co",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.2381,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.56,
+     "repetition": 3,
+     "echo": 0.08333333333333333,
+     "prompt": "Le sport",
+     "texte": "Le sport est de la compétition de la province de San Francisco en 1993. Le sport est de la compétition de la compétition de la compé",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.44,
+     "repetition": 3,
+     "echo": 0.2916666666666667,
+     "prompt": "La science",
+     "texte": "La science et le reste de la conscience de la propagande de la conscience de la propagande de la conscience de la propagande de la conscie",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.4615,
+     "repetition": 4,
+     "echo": 0.24,
+     "prompt": "La ville",
+     "texte": "La ville de Toulouse est le chef-lieu de la ville de Toulouse et le chef-lieu de la ville de Toulouse. Le chef-lieu de la ville de Toulo",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.2727,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la construction de la construction de la construction de la construction de la construction de la construction de la constru",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.8929,
+     "distinct_2": 0.4074,
+     "repetition": 3,
+     "echo": 0.23076923076923078,
+     "prompt": "La vie",
+     "texte": "La vie de la construction de la ville de Berlin et de la construction de la ville de Berlin et de la construction de la ville de Berli",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8824,
+     "distinct_2": 0.75,
+     "repetition": 2,
+     "echo": 0.06666666666666667,
+     "prompt": "Le monde",
+     "texte": "Le monde est le plus proche de la commune de Saint-Pétersbourg et de la commune de Saint-Pétersbourg.\n",
+     "octets": 96
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.2727,
+     "repetition": 6,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la constitution de la constitution de la constitution de la constitution de la constitution de la constitution de la constit",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8685,
+   "distinct_2": 0.9872,
+   "repetition": 1,
+   "echo": 0.0368,
+   "octets": 2096,
+   "secondes": 22.64,
+   "octets_s": 92.6,
+   "echantillons": [
+    {
+     "mots": 13,
+     "mots_valides": 0.7692,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage chez les conversations avec le groupe Engagaistes (Falai).\n",
+     "octets": 63
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7273,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le Crépine iranien Pologna par la Comédie-Française Limandes est opposé au témoin par le consultateur de l'émission Scho",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la paix de Saint-Denis et son frère aîné. Les casinos espagnols de Russia reprennent le pied. Parmi les deux attentions poli",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 13,
+     "mots_valides": 0.7692,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage chez les conversations avec le groupe Engagaistes (Falai).\n",
+     "octets": 63
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7273,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le Crépine iranien Pologna par la Comédie-Française Limandes est opposé au témoin par le consultateur de l'émission Scho",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois la paix de Saint-Denis et son frère aîné. Les casinos espagnols de Russia reprennent le pied. Parmi les deux attentions poli",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le chat",
+     "texte": "Le chat est associé à une queue produite. Ce lieutenant éclate dans le cadre de la Nouvelle-Zélande au mathématicien Jane Stewart,",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.85,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La mer",
+     "texte": "La mer patronisée de l'espace variable où résident de la tourmente de deux parties : trois lignes présentent des allocutions méca",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent un rôle majeur anatomose (2010–2011), la ville remonte à la même année et installe au centre de France (50 millions de me",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de retransmettre la cellule et interdit la victoire d'opposition de la partenaire du président de la Division America.\n",
+     "octets": 121
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est en mars 1830, à la suite de l'attentat dans le cadre de la station bilingue Bassins Malte en 1939, de la constitution législa",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme politique du comté de Walsigan dans le district républicain de Nancy, avant d'être formé lors du tournoi de sa fille dans l",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de ce genre, est composée de vertuil. Elle est de plusieurs compositions et de plusieurs éléments de personnages auteurs qui",
+     "octets": 128
+    },
+    {
+     "mots": 4,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre en 2015 \n",
+     "octets": 10
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7619,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La guerre",
+     "texte": "La guerre de Tulis-le-Vendés par des partis de violent de la défense adoptée en partie pénalisée par Eugène Géreau, équateur sur ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la paix à New York, compte trois compagnies et constitue les médias à la défense. Dans ces actions de l'organité cinét",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.9333,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport à football se solde par un groupe de pays à l'Université de Moscou.\n",
+     "octets": 72
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "La science",
+     "texte": "La science de l’africaine de la mesure. Elle obtient son premier hypothèse de cette même année. Elle devient alors toujours sur le se",
+     "octets": 128
+    },
+    {
+     "mots": 10,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La ville",
+     "texte": "La ville de La Nouvelle-Saulne, dans le département du Haut-Corrèze.\n",
+     "octets": 63
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.88,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la troisième place. Il déclare une dépendance des feuilles de la fois à l'époque du club, de la végétation et de la d",
+     "octets": 128
+    },
+    {
+     "mots": 15,
+     "mots_valides": 0.6667,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.07142857142857142,
+     "prompt": "La vie",
+     "texte": "La vieille vie du clan Raper, Silvia et Sorate ont été directement ravités par MIX.\n",
+     "octets": 81
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde est créé à l’étranger dans une philosophie de Phylogent et de la parution. Ce sont les propos des groupes de reposant sur",
+     "octets": 128
+    },
+    {
+     "mots": 5,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la télépatité.\n",
+     "octets": 22
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9403,
+   "distinct_2": 0.8242,
+   "repetition": 6,
+   "echo": 0.1023,
+   "octets": 2405,
+   "secondes": 24.67,
+   "octets_s": 97.5,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la ligne de tramway de la commune de Bourg-en-Bresse et du canal de Bourg-en-Bresse. Le projet du projet serait définiti",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, la direction de la société Condition de Liste contre les autres communautés et les agents de la population de la communaut�",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.9412,
+     "distinct_2": 0.8125,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de la première construction de la seconde construction de la ville de Saint-Félix-en-le-Layen.\n",
+     "octets": 98
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la ligne de tramway de la commune de Bourg-en-Bresse et du canal de Bourg-en-Bresse. Le projet du projet serait définiti",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, la direction de la société Condition de Liste contre les autres communautés et les agents de la population de la communaut�",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.9412,
+     "distinct_2": 0.8125,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de la première construction de la seconde construction de la ville de Saint-Félix-en-le-Layen.\n",
+     "octets": 98
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8846,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le chat",
+     "texte": "Le chat le lieutenant de la flotte de la surface de la place de la ville. Les armées font l'objet de ses deux fonctions contrat avec l",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.7083,
+     "repetition": 2,
+     "echo": 0.30434782608695654,
+     "prompt": "La mer",
+     "texte": "La mer était un artisan français de part de la construction de la mer était une ancienne station de construction de la mer. La mer ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent la chanson de la chanson. Cela était considéré comme un spectacle très peu près de ce mariage et comme un bon échec par l",
+     "octets": 128
+    },
+    {
+     "mots": 16,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9333,
+     "repetition": 1,
+     "echo": 0.25,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de contrôler le gouvernement le plus ancien traité de la Garde nationale.\n",
+     "octets": 77
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est l'un des premiers exemples du roman et de la série Bibliothèque de l'Université de Cambridge. Il se spécialise dans le cadr",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "Un homme",
+     "texte": "Un homme comptait pour ses petits marchés avec une tentative de la cathédrale de Rennes et un peu plus tard. Il est signé avec un pro",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.8182,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique est produite par le concerté de l'European College de Paris par le ministère de l'Éducation et de l'European College de Pari",
+     "octets": 128
+    },
+    {
+     "mots": 11,
+     "mots_valides": 0.8182,
+     "distinct_2": 0.8,
+     "repetition": 2,
+     "echo": 0.2,
+     "prompt": "Le livre",
+     "texte": "Le livre de la publicité : Le livre de Raymond Martin (2022)\n",
+     "octets": 54
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.48,
+     "repetition": 5,
+     "echo": 0.25,
+     "prompt": "La guerre",
+     "texte": "La guerre anti-capitaliste (MP-ROS), comme dans le cadre de la Commune de la Commune de la Commune de la Commune de la Commune de la Comm",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3684,
+     "repetition": 6,
+     "echo": 0.3684210526315789,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'économie de l'économie de l'économie de la promotion de l'économie et de l'économie de l'économie de l'économie de ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8846,
+     "repetition": 2,
+     "echo": 0.08,
+     "prompt": "Le sport",
+     "texte": "Le sport est proposé par le premier club lors du dernier championnat de l'Union SC espoirs par le club de l'Union SC en 2017 et 2018. L",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.95,
+     "distinct_2": 0.7368,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science-fiction de son premier album et disparaît sur ses motions appelées « son premier album » (« son premier album » et « son",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.19047619047619047,
+     "prompt": "La ville",
+     "texte": "La ville possède un secteur de la frontière traversée par la Bourges et la république du Conseil des communes du département de la ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Le temps",
+     "texte": "Le temps de réparation a été réparé par le président de la République parlementaire en 1918. Il a été nommé maire de la Maison",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8846,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La vie",
+     "texte": "La vie est concernée par le roi d'État. Dans les campagnes, le roi Louis XIII est abandonné par le roi d'État de Navarre et de ses",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 0.5909,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde central masculin fait partie de la commune de Failly-sur-Loire et de la commune de Failly-sur-Loire et de la commune de Failly-",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "La question",
+     "texte": "La question du Conseil des représentants de la république de Couronnes. Il est accepté par le gouvernement fédéral de l'Alliance sous ",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

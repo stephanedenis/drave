@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/v111.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.948,
+   "distinct_2": 0.5081,
+   "repetition": 11,
+   "echo": 0.1113,
+   "octets": 2560,
+   "secondes": 22.66,
+   "octets_s": 113.0,
+   "echantillons": [
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de couleur de couleur blanche de la région de l'Argentine. Il est accepté par le couleur blanche de la région de l'Argent",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6087,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier professeur de physique de l'époque de la construction de la construction de la construction de la construction de ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.7879,
+     "distinct_2": 0.8125,
+     "repetition": 2,
+     "echo": 0.034482758620689655,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le comte de Berne et de son fils aîné Adolphe II de Berne. Il est le frère de Jean II de Berne et de son épouse Marie d",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 0.7692,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de couleur de couleur blanche de la région de l'Argentine. Il est accepté par le couleur blanche de la région de l'Argent",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6087,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le premier professeur de physique de l'époque de la construction de la construction de la construction de la construction de ",
+     "octets": 128
+    },
+    {
+     "mots": 33,
+     "mots_valides": 0.7879,
+     "distinct_2": 0.8125,
+     "repetition": 2,
+     "echo": 0.034482758620689655,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par le comte de Berne et de son fils aîné Adolphe II de Berne. Il est le frère de Jean II de Berne et de son épouse Marie d",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.8667,
+     "distinct_2": 0.4828,
+     "repetition": 2,
+     "echo": 0.10714285714285714,
+     "prompt": "Le chat",
+     "texte": "Le chat de la maison de Barrett est un chat de la maison de Barrett et de la commune de Barrett et de la commune de Barrett. Le chat de",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1935,
+     "repetition": 9,
+     "echo": 0.3333333333333333,
+     "prompt": "La mer",
+     "texte": "La mer de La Maison de La Maison de La Maison de La Maison de La Maison de La Maison de La Maison de La Maison de La Maison de La Mais",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.4286,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent dans des conditions de production de production de production de production de production de production de production de produc",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5185,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de se rendre à la suite de la construction de la construction de la construction de la construction de la construction de la c",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9231,
+     "repetition": 2,
+     "echo": 0.08,
+     "prompt": "Paris est",
+     "texte": "Paris est un projet de construction de la construction de la ville de Paris en 1977. Il est construit en 1982 par le chantier naval de Pa",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.5926,
+     "distinct_2": 0.5,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires et de mariages de la famille de Charles III de Charles III de Charles III de Charles III de Charles III de Charles I",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2,
+     "repetition": 11,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de chambre de chambre de chambre de chambre de chambre de chambre de chambre de chambre de chambre de chambre de chambre de cha",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.6818,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la communauté de communes de Saint-Laurent est constitué de communes de la commune de Saint-Laurent, de la commune de Sain",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9091,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre de Sécession de 1947 à 1952, et le premier conseiller d'arrondissement de Paris à partir de 1952. Le , le premier conseiller",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3636,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la protection de la communauté de communes de la Communauté de communes de la Communauté de communes de la Communauté de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.7083,
+     "repetition": 2,
+     "echo": 0.08695652173913043,
+     "prompt": "Le sport",
+     "texte": "Le sport de la compétition est remporté par le championnat de France de course en 1992. Le championnat de France de course en 1992 est",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.28,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La science",
+     "texte": "La science et la protection de la protection de la protection de la protection de la protection de la protection de la protection de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 35,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1176,
+     "repetition": 11,
+     "echo": 0.6363636363636364,
+     "prompt": "La ville",
+     "texte": "La ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La Ville de La V",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 2,
+     "echo": 0.034482758620689655,
+     "prompt": "Le temps",
+     "texte": "Le temps de la commune de La Roche est situé à  de Paris. Le temple est situé à  au sud de la commune de La Roche et à  de Paris. L",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5185,
+     "repetition": 3,
+     "echo": 0.11538461538461539,
+     "prompt": "La vie",
+     "texte": "La vie de chanteurs de musique de chanteurs de musique de chant de la chanson Le Monde de la chanson Le Monde de la chanson Le Monde d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la production de la production de la production de la production de la production de la production de la production de la pr",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.24,
+     "repetition": 7,
+     "echo": 0.3333333333333333,
+     "prompt": "La question",
+     "texte": "La question de la protection de la protection de la protection de la protection de la protection de la protection de la protection de la pr",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.8707,
+   "distinct_2": 0.9844,
+   "repetition": 1,
+   "echo": 0.0272,
+   "octets": 2560,
+   "secondes": 22.93,
+   "octets_s": 111.7,
+   "echantillons": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays catholique situé à Paris. Il fera l'aire d'Algérie à Renaud en 1797 puis comte d'Algérie en 1797 lui vaut au moment de ses",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, Sloane est une tendue internationale, de 3 patinyages avec un concept très plus efdéable. Pour Thores, le jeu de voyage est ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois répertoire mâle de couleur de simplement en faisant annuler son design. Biologie Le mâle possède les âges avec une sauvega",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 28,
+     "mots_valides": 0.8571,
+     "distinct_2": 0.963,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays catholique situé à Paris. Il fera l'aire d'Algérie à Renaud en 1797 puis comte d'Algérie en 1797 lui vaut au moment de ses",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, Sloane est une tendue internationale, de 3 patinyages avec un concept très plus efdéable. Pour Thores, le jeu de voyage est ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois répertoire mâle de couleur de simplement en faisant annuler son design. Biologie Le mâle possède les âges avec une sauvega",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat est l’inventeur du poteau par des anciens dessins scribes familiaux. Les meilleurs de toit sont constituées des parties ne c",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.8235,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La mer",
+     "texte": "La mer Méditerranée, Méditerranée, 1879. Production et émission Certains montres nourricis de concession réalisée à un acteur ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent également à la succession de l'agression des fêtes qui seules auraient un rôle dans l'éphémère et ces derniers. Un agres",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de composer les démocrates actuels dans le domaine de l'université de Virginie et de celui-ci. Le premier étant de l'Euro es",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.7143,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un chevalier et Les Notes du livre aux grands aventures, dont René Guyouarev, Henri Duty dépose à Lausanne (Loire-Bernade). ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme qui se trouve au début du , et la sixième siècle de l'avant incarne les séparatistes. Lorsque Nelson est allée par les Vas",
+     "octets": 128
+    },
+    {
+     "mots": 17,
+     "mots_valides": 0.7059,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique au XIXe siècle Catégorie:Naissance en novembre 1841 Catégorie:Décès en mai 1937 Catégorie:Décès à Bruxelles Catégorie",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.7727,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre propose une transite fabriquée dans la salle d'allure à ce restaurant. Cette chanson s'appela aussi quelques Poi  de la chans",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La guerre",
+     "texte": "La guerre de Troie se trouve sur la conférence agricole de Ramond Aguiland et la demeure officielle de la religion de l'Église catholiq",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'UNESA est un droit régulier de circonscription de la Constitution du chapitre des États américains, au départ du Parti",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sportif est originaire, de la création d'une petite maison des Nations Langues Langues françaises, dans les années 1980 à  du pr",
+     "octets": 128
+    },
+    {
+     "mots": 20,
+     "mots_valides": 0.9,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science figurant vie aux codifications africaines incluant contre les personnes visites pour rejoindre eux-mêmes en se souvenant au se",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.16666666666666666,
+     "prompt": "La ville",
+     "texte": "La ville de La Herbage a dessiné comme la nature de la commune, sur une carte de treingente retrouvée à l'autre. La commune de Jons (",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps est aujourd'hui un nouveau club anglais. Les clubs de basket-ball se déroulent tous les joutes du golfe car les clubs orientau",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "La vie",
+     "texte": "La vie aux États-Unis, il est agressé par la Constitution le , ainsi qu'un succès en douze ans auparavant. Le , il est nommé assis",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.7895,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde emblématique contre les deux communautés sud-afrique juliennes en France. Cette distinction de cette distinction est André E",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "La question",
+     "texte": "La question des fipels Josef Stein a été celui de ses fonctions suivantes : La réputation de l'esprit avec pour chef Josef Stein contre ",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.8998,
+   "distinct_2": 0.9183,
+   "repetition": 3,
+   "echo": 0.0646,
+   "octets": 2560,
+   "secondes": 22.93,
+   "octets_s": 111.6,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la Loire du Nord de l'Est de l'Indonésie et de la Communauté française de la Communauté française de l'Indonésie, avec",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il intervient dans le domaine de la profession de l'académie de technologie de la recherche, de la santé et de l'interaction",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le crâne et l'une des plus grandes communautés de culture et de politique de communautés de communes. Elle a été construit",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.76,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la Loire du Nord de l'Est de l'Indonésie et de la Communauté française de la Communauté française de l'Indonésie, avec",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, il intervient dans le domaine de la profession de l'académie de technologie de la recherche, de la santé et de l'interaction",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois le crâne et l'une des plus grandes communautés de culture et de politique de communautés de communes. Elle a été construit",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.76,
+     "distinct_2": 0.7083,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le chat",
+     "texte": "Le chat de la femme de Mohammad Andras Bourget et de la première femme de Valentino Strats (1906-1972) et de la première femme de Val",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.18518518518518517,
+     "prompt": "La mer",
+     "texte": "La mer de la route est de . La première pierre est présente dans la partie de la pointe de la route de l'Arc de Tours le . Architect",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des manifestations pour les participants de son équipe de repérussion de leurs pensées et de sélections en première divisi",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8519,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de planter un certain nombre de commerces et uniques de compromis de la construction du pays et de la construction du pays en 1",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 0.9091,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un auteur de bande dessinée français et de bande dessinée de la rivalité des Pays-Bas. Biographie En 1972, Luca Aravaca re�",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Un homme",
+     "texte": "Un homme d'affaires de l'Union européenne (UAP) est un homme politique public puis décelui de la famille des Paacerdocidae. Il est le ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.8,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La musique",
+     "texte": "La musique de Martin Arthur a été construite en 1948 par le professeur Charles Lucius Pertiner et montrant son fief de comédie qui a co",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9444,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre comporte un concept de la société thématique de l'analyse de l'analyse d'expression d'un système d'information et d'unités",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.913,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "La guerre",
+     "texte": "La guerre de Transcaut, commandant de la bataille de Barrance, et la guerre de Transylvanie. Le , il est affecté au mariage de Villas Ma",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie publique a attribué à la suite de l'assassinat de la première décision de sa propre génération. Le président de la Répu",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le sport",
+     "texte": "Le sport restant recouvert de bronites restant toute l'armée en provenance de Barcelonne et de Barcelone, sur le site de la Commission ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La science",
+     "texte": "La science consacrée à l'Église catholique en 1623. En 1642, il est désigné comme président de la Société des artistes comme prés",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8696,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La ville",
+     "texte": "La ville de Karthoum a été créée en 1985. L'ancien président du groupe s'appelait ainsi Par la suite Jean-Paul II, et la majorité ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8148,
+     "distinct_2": 0.8846,
+     "repetition": 2,
+     "echo": 0.12,
+     "prompt": "Le temps",
+     "texte": "Le temps de San José est construit par le temple de l'église de San José en 1075 par le Tribunal de Mantoura. Le palais a été const",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8519,
+     "distinct_2": 0.7692,
+     "repetition": 3,
+     "echo": 0.16,
+     "prompt": "La vie",
+     "texte": "La vie de Chevry, et le premier est attribué à des manuscrits de la vie de danse. Les conciseurs de la vie de Chevry, en pleine vill",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8947,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05555555555555555,
+     "prompt": "Le monde",
+     "texte": "Le monde est composé de deux critères : le support de l'organisation commerciale (PCC), de l'instance de la communauté internationale",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.10526315789473684,
+     "prompt": "La question",
+     "texte": "La question des soins de gauche est destinée à la constitution de l'hôpital de la Castille de Rosario. L'intégration est représentée ",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

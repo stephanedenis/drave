@@ -11532,3 +11532,804 @@ budget exit=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nA2.6 — LE BACKLOG DIT OÙ EN EST LA RÈGLE : TÊTE ET EXPERTS ENTRÉS ET MESURÉS, LE BRANC … [703 caractères tronqués]`
+
+  ```
+6dcf0f5c..19f58c39  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -E \"=== tranche|^ \\\"ppl_val\\\"\" work/n4/v2.chaine.log | tail -3; grep -E \"=== tranche|^ \\\"ppl_val\\\"\" work/n4/v1.chaine.log | tail -3", "description": "Wait ten minutes and check the tranche boundaries … [23 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 19:21:55 EST
+=== tranche 1/11 17:23 ===
+ "ppl_val": 3.556834555616988,
+=== tranche 2/11 18:37 ===
+=== tranche 1/11 17:23 ===
+ "ppl_val": 3.508810782732683,
+=== tranche 2/11 18:32 ===
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log | cut -c1-70; tail -1 work/n4/v1.chaine.log | cut -c1-70", "description": "Wait ten minutes and read the two logs", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 19:31:50 EST
+pas 7800 · perte 1.0794 · PPL val 3.463 · 3271 s · échelle 524288
+pas 9050 · perte 1.1430 · PPL val 3.417 · 3572 s · échelle 1048576
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v12.pt work/n4/v22.pt 2>/dev/null; grep -E \"=== tranche 3\" work/n4/v2.chaine.log work/n4/v1.chaine.log; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2 … [82 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 19:41:46 EST
+work/n4/v12.pt
+work/n4/v1.chaine.log:=== tranche 3/11 19:40 ===
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+
+== v1
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+
+  écrit : reports/courbe-150m.json
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v22.pt 2>/dev/null; grep -E \"=== tranche 3\" work/n4/v2.chaine.log; tail -1 work/n4/v2.chaine.log | cut -c1-60", "description": "Wait ten minutes and check v2's tranche 2", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 19:51:43 EST
+work/n4/v22.pt
+=== tranche 3/11 19:49 ===
+pas  300 · perte 1.1099 · PPL val 3.436 · 127 s · échelle 65
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"tranche|^ +[0-9]\" | head -8", "description": "Read the two first tranches of both chains", "timeoutM … [11 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 20:01:50 EST
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+  tranche   pas    PPL val   précision   greedy (val/rép)   top-40 (val/rép)   top-20 (val/rép)
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0
+  ```
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log | cut -c1-55; tail -1 work/n4/v1.chaine.log | cut -c1-55", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 20:11:56 EST
+pas 3200 · perte 1.1177 · PPL val 3.368 · 1336 s · éche
+pas 4800 · perte 1.2009 · PPL val 3.338 · 1894 s · éche
+  ```
+
+- **bash** `{"command": "sleep 598; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v23.pt work/n4/v13.pt 2>/dev/null; grep -cE \"=== tranche\" work/n4/v2.chaine.log work/n4/v1.chaine.log; du -sh work/n4 2>/dev/null", "description": "Ten-minute check of the tranche 3 and disk", "timeoutMs … [10 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 20:22:01 EST
+work/n4/v2.chaine.log:4
+work/n4/v1.chaine.log:4
+6,4G	work/n4
+  ```
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -E '\"ppl_val\"' work/n4/v13.pt.json work/n4/v23.pt.json 2>/dev/null | sed 's/.*\"ppl_val\": //' | cut -c1-10", "description": "Read the tranche 3 PPLs when available", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 20:32:04 EST
+  ```
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v13.pt work/n4/v23.pt 2>/dev/null; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -8", "description": "Check the tranch … [34 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 20:42:09 EST
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0
+  ```
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log | cut -c1-65; tail -1 work/n4/v1.chaine.log | cut -c1-65", "description": "Check the end of tranche 3", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 20:52:09 EST
+pas 9000 · perte 1.0676 · PPL val 3.306 · 3754 s · échelle 104857
+pas  550 · perte 1.2601 · PPL val 3.284 · 218 s · échelle 65536
+  ```
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -8; grep -E \"=== tranche 4\" work/n4/v2.chaine.log work/n4/v1.chaine.log", "descri … [57 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 20:58:54 EST
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+work/n4/v1.chaine.log:=== tranche 4/11 20:48 ===
+  ```
+
+- **bash** `{"command": "sleep 595; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -E \"=== tranche 4\" work/n4/v2.chaine.log; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v23.pt.json')); print('v2 t3 ppl', round(d['ppl_val'],4))\nexcept FileNotFoundError: print('v2 t3 en co … [80 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 21:08:54 EST
+=== tranche 4/11 21:01 ===
+v2 t3 ppl 3.1922
+  ```
+
+- **bash** `{"command": "sleep 598; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/v2.chaine.log | cut -c1-50; tail -1 work/n4/v1.chaine.log | cut -c1-50", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 21:18:59 EST
+pas 2500 · perte 1.0749 · PPL val 3.301 · 1042 s ·
+pas 4650 · perte 1.0132 · PPL val 3.234 · 1837 s ·
+  ```
+
+- **bash** `{"command": "sleep 597; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; free -g | head -2; df -h . | tail -1; ps -eo pid,pcpu,pmem,args | grep entrainer_native | grep -v grep | awk '{print $1, $2, $3}' | head -3; nvidia-smi --query-gpu=index,utilization.gpu,memory.used,temperature.gpu -- … [105 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 21:29:01 EST
+               total        used        free      shared  buff/cache   available
+Mem:             125          45          16          18          84          80
+/dev/mapper/system-root   11T  9,0T  1,9T  83% /home/stephane/Data13TB
+1769212 100 2.3
+1773364 100 6.6
+0, 100 %, 8296 MiB, 86
+1, 99 %, 8408 MiB, 76
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-50; tail -1 work/n4/v1.chaine.log | cut -c1-50", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 21:39:08 EST
+pas 5400 · perte 1.0023 · PPL val 3.267 · 2249 s ·
+pas 7700 · perte 1.0573 · PPL val 3.212 · 3042 s ·
+  ```
+
+- **bash** `{"command": "sleep 598; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls work/n4/v24.pt work/n4/v14.pt 2>/dev/null; tail -1 work/n4/v1.chaine.log | cut -c1-55", "description": "Check the tranche 4 outputs", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 21:49:13 EST
+pas 9250 · perte 0.9474 · PPL val 3.205 · 3654 s · éche
+  ```
+
+- **bash** `{"command": "sleep 598; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -9", "description": "Read the tranche 4 curves", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 21:59:16 EST
+        1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        3  10000    3.1922     0.6572   0.919/10.0      0.883/2.0       0.932/4.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+        4  10000    3.0007     0.6750   0.907/11.0      0.888/2.0       0.932/10.0
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-50", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 22:09:28 EST
+pas 9800 · perte 1.0140 · PPL val 3.256 · 4081 s ·
+  ```
+
+- **bash** `{"command": "sleep 420; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nd=json.load(open('work/n4/v24.pt.json')); print('v2 t4 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\" 2>/dev/null || echo \"v24 en cours\"; grep -E \"=== tranche … [116 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 22:16:34 EST
+v2 t4 ppl 3.1224 précision 0.6632
+work/n4/v2.chaine.log:=== tranche 5/11 22:12 ===
+work/n4/v1.chaine.log:=== tranche 5/11 21:56 ===
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-48; tail -1 work/n4/v1.chaine.log | cut -c1-48", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 22:26:38 EST
+pas 1900 · perte 0.9713 · PPL val 3.239 · 794 s 
+pas 4600 · perte 1.0601 · PPL val 3.177 · 1815 s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/banc-generation-v1*.json reports/banc-generation-v2*.json 2>/dev/null | wc -l; ls reports/banc-grammaticalite-v1*.json reports/banc-grammaticalite-v2*.json 2>/dev/null | wc -l; date", "description": "Count the bench JSONs  … [24 caractères tronqués]`
+
+  ```
+8
+8
+mer 18 nov 2026 22:26:43 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-45", "description": "Ten-minute check", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 22:36:47 EST
+pas 6100 · perte 1.0383 · PPL val 3.178 · 240
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nvidia-smi --query-gpu=index,temperature.gpu,utilization.gpu,power.draw --format=csv,noheader; tail -1 work/n4/v2.chaine.log | grep -o \"pas [0-9]* · perte [0-9.]* · PPL val [0-9.]*\"", "description": "Thermal and pr … [35 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 22:46:53 EST
+0, 86, 100 %, 171.24 W
+1, 76, 99 %, 208.38 W
+pas 4850 · perte 1.0563 · PPL val 3.203
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | grep -o \"pas [0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; ls work/n4/v15.pt 2>/dev/null", "description": "Check the tranche 5 progress", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 22:56:58 EST
+pas 9200 · perte 1.0393 · PPL val 3.169
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "sleep 420; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n4/v15.pt.json')); print('v1 t5 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\" 2>/dev/null || echo \"v15 en cours\"; tail -1 work/n4/v2.ch … [128 caractères tronqués]`
+
+  ```
+mer 18 nov 2026 23:04:03 EST
+v1 t5 ppl 2.9583 précision 0.6768
+pas 7300 · perte 0.9292 · PPL val 3.224
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 23:14:08 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la work/n4/v15.drvm 2>/dev/null; ./drave-core/target/release/drave --drvm-inspect work/n4/v15.drvm 2>&1 | head -8", "description": "Inspect a 142M DRVM export from the chain", "timeoutMs": 300000}`
+
+  ```
+-rw-r--r--. 1 stephane stephane 567761564 18 nov 23:02 work/n4/v15.drvm
+DRVM v0 · 19 blocs · 127 tenseurs · payload 567741824 o
+  bloc input        input        impl=defaut  tol=0
+  bloc b0           local_mixer  impl=defaut  tol=0
+  bloc local0       early_head   impl=defaut  tol=0
+  bloc b1           local_mixer  impl=defaut  tol=0
+  bloc local1       early_head   impl=defaut  tol=0
+  bloc b2           local_mixer  impl=defaut  tol=0
+  bloc local2       early_head   impl=defaut  tol=0
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | grep -o \"pas [0-9]* · PPL val [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 23:24:22 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n4/v1.chaine.log | cut -c1-90; tail -1 work/n4/v2.chaine.log | cut -c1-60; date", "description": "Read the chain tails"}`
+
+  ```
+pas 3000 · perte 1.0873 · PPL val 3.144 · 1184 s · échelle 131072
+pas 3050 · perte 0.9610 · PPL val 3.156 · 1204 s · échelle 131072
+}
+mer 18 nov 2026 23:24:28 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -10; date", "description": "Read the tranche 5 curves"}`
+
+  ```
+1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        3  10000    3.1922     0.6572   0.919/10.0      0.883/2.0       0.932/4.0 
+        4  10000    3.1224     0.6632   0.920/9.0       0.888/2.0       0.887/5.0 
+        5  10000    3.0913     0.6679   0.000/0.0       0.000/0.0       0.000/0.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+        4  10000    3.0007     0.6750   0.907/11.0      0.888/2.0       0.932/10.0
+        5  10000    2.9583     0.6768   0.946/9.0       0.888/1.0       0.910/4.0 
+mer 18 nov 2026 23:24:34 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/banc-generation-v25.json reports/banc-grammaticalite-v25.json 2>/dev/null; head -c 300 reports/banc-generation-v25.json 2>/dev/null; echo; tail -5 work/n4/v2.chaine.log | cut -c1-100", "description": "Inspect the v2 tr … [15 caractères tronqués]`
+
+  ```
+],
+ "drvm": "work/n4/v25.drvm",
+ "sha256_drvm": "a52b1b6efeee1729a8ba3394778db26cc3ed9bb8aedce868e22fb4bd82c2cd7e",
+ "duree_s": 4180.961575746536
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Traceback\\|Error\\|erreur\\|banc_generation\" work/n4/v2.chaine.log | tail -5; ls reports/banc-generation-v24.json reports/banc-grammaticalite-v24.json 2>/dev/null; ls -la work/n4/v25.drvm 2>/dev/null; date", "description" … [51 caractères tronqués]`
+
+  ```
+reports/banc-generation-v24.json
+reports/banc-grammaticalite-v24.json
+-rw-r--r--. 1 stephane stephane 567761564 18 nov 23:22 work/n4/v25.drvm
+mer 18 nov 2026 23:24:51 EST
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls -la reports/banc-generation-v25.json 2>/dev/null; python3 -c \"\nimport json\nd=json.load(open('reports/banc-generation-v25.json'))\nfor k,v in d['reglages'].items(): print(k, v['mots_valides'], v['repetition'])\" 2>/de … [112 caractères tronqués]`
+
+  ```
+-rw-r--r--. 1 stephane stephane 23568 18 nov 23:24 reports/banc-generation-v25.json
+greedy 0.9432 9
+top40_0.8 0.8833 1
+top20_0.5 0.9376 3
+mer 18 nov 2026 23:29:01 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 23:39:07 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | grep -o \"pas [0-9]* · perte.*\" | cut -c1-60", "description": "Ten-minute pause and progress", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 23:49:23 EST
+pas 6800 · perte 1.0535 · PPL val 3.117 · 2682 s · échelle 5
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+mer 18 nov 2026 23:59:27 EST
+  ```
+
+- **bash** `{"command": "sleep 597; date; uptime", "description": "Ten-minute pause with load check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 00:09:28 EST
+ 00:09:28  up 15 days  4:35,  2 users,  load average: 4,33, 3,92, 3,62
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v16.pt work/n4/v26.pt 2>/dev/null", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 00:19:31 EST
+work/n4/v16.pt
+[exit code: 2]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -12; date", "description": "Read the tranche 6 curves"}`
+
+  ```
+1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        3  10000    3.1922     0.6572   0.919/10.0      0.883/2.0       0.932/4.0 
+        4  10000    3.1224     0.6632   0.920/9.0       0.888/2.0       0.887/5.0 
+        5  10000    3.0913     0.6679   0.943/9.0       0.883/1.0       0.938/3.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+        4  10000    3.0007     0.6750   0.907/11.0      0.888/2.0       0.932/10.0
+        5  10000    2.9583     0.6768   0.946/9.0       0.888/1.0       0.910/4.0 
+        6  10000    2.9141     0.6823   0.956/13.0      0.842/2.0       0.926/3.0 
+jeu 19 nov 2026 00:19:35 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | grep -o \"pas [0-9]* · perte [0-9.]* · PPL val [0-9.]*\"; grep -cE \"=== tranche\" work/n4/v2.chaine.log", "description": "Ten-minute pause and progress", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 00:29:41 EST
+pas 9300 · perte 1.1238 · PPL val 3.182
+7
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v26.pt.json')); print('v2 t6 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v26 en cours')\"" … [61 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 00:39:45 EST
+v2 t6 ppl 3.0554 précision 0.6718
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 00:49:49 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && bash tools/porte-a2.6-experts.sh 2>&1 | tail -2; bash tools/porte-flux.sh 2>&1 | tail -1; bash tools/porte-coupe.sh 2>&1 | tail -1; date", "description": "Re-run the A2.6-related gates", "timeoutMs": 900000}`
+
+  ```
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.00s
+  ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus nommé · trace
+  mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœuds 60.5427)
+  ✅ le coût du pont va de +0.52 % (coupe 18/24) à +17.09 % (coupe 15/24) — il y a un bon endroit pour couper
+jeu 19 nov 2026 00:52:44 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | grep -o \"pas [0-9]* · perte [0-9.]* · PPL val [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 01:02:51 EST
+pas 7650 · perte 0.9466 · PPL val 3.119
+  ```
+
+- **bash** `{"command": "sleep 595; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v17.pt 2>/dev/null; tail -1 work/n4/v2.chaine.log | grep -o \"pas [0-9]* · PPL val [0-9.]*\"", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 01:12:54 EST
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-70; tail -1 work/n4/v2.chaine.log | cut -c1-70; date", "description": "Read the chain tails"}`
+
+  ```
+pas 9200 · perte 1.0040 · PPL val 3.118 · 3630 s · échelle 1048576
+pas 5200 · perte 1.0652 · PPL val 3.179 · 2168 s · échelle 262144
+jeu 19 nov 2026 01:12:58 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v17.pt.json')); print('v1 t7 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v17 en cours')\"" … [61 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 01:23:03 EST
+v1 t7 ppl 2.8919 précision 0.6839
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-55", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 01:33:11 EST
+pas 8100 · perte 0.9651 · PPL val 3.181 · 3376 s · éche
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 01:43:14 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v27.pt 2>/dev/null; tail -1 work/n4/v1.chaine.log | cut -c1-50", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 01:53:16 EST
+work/n4/v27.pt
+pas 5000 · perte 0.9187 · PPL val 3.082 · 1972 s ·
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n4/v27.pt.json')); print('v2 t7 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\"; date", "description": "Read v2's tranche 7"}`
+
+  ```
+v2 t7 ppl 3.042 précision 0.6729
+jeu 19 nov 2026 01:53:21 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-55", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 02:03:26 EST
+pas 6550 · perte 0.9658 · PPL val 3.095 · 2584 s · éche
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 02:13:29 EST
+  ```
+
+- **bash** `{"command": "sleep 595; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v18.pt work/n4/v28.pt 2>/dev/null | wc -l", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 02:23:28 EST
+0
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -m1 \"pas    1 \" work/n4/v1.chaine.log | cut -c1-80; grep -m1 \"pas    1 \" work/n4/v2.chaine.log | cut -c1-80; date", "description": "Read the first-step PPLs of both chains"}`
+
+  ```
+pas    1 · perte 5.6109 · PPL val 99.073 · 2 s
+pas    1 · perte 5.6184 · PPL val 96.964 · 2 s
+jeu 19 nov 2026 02:23:39 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v18.pt work/n4/v28.pt 2>/dev/null; tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 02:34:19 EST
+work/n4/v18.pt
+pas 6550 · perte 0.9849 · PPL val 3.171 · 273
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('work/n4/v18.pt.json')); print('v1 t8 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\"; date", "description": "Read v1's tranche 8"}`
+
+  ```
+v1 t8 ppl 2.8731 précision 0.6868
+jeu 19 nov 2026 02:34:23 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-45; tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Ten-minute pause and check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 02:44:27 EST
+pas 2450 · perte 0.9337 · PPL val 3.073 · 967
+pas 8000 · perte 0.9380 · PPL val 3.167 · 333
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v28.pt.json')); print('v2 t8 ppl', round(d['ppl_val'],4))\nexcept FileNotFoundError: print('v28 en cours')\"", "description": "Check v2's tranche 8", "t … [18 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 02:54:30 EST
+v28 en cours
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v28.pt.json')); print('v2 t8 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v28 en cours')\"" … [67 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 03:04:32 EST
+v2 t8 ppl 3.0361 précision 0.6718
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-45", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 03:14:35 EST
+pas 7000 · perte 0.8696 · PPL val 3.081 · 276
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 03:24:39 EST
+pas 3450 · perte 0.9199 · PPL val 3.172 · 143
+  ```
+
+- **bash** `{"command": "sleep 598; date", "description": "Ten-minute pause", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 03:34:41 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v19.pt.json')); print('v1 t9 ppl', round(d['ppl_val'],4))\nexcept FileNotFoundError: print('v19 en cours')\"", "description": "Check v1's tranche 9", "t … [18 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 03:44:43 EST
+v1 t9 ppl 2.859
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && nohup env JOURNAUX=work/portes/roue-1119-0345 DELAI=1800 tools/toutes-les-portes.sh > /tmp/passe-1119.log 2>&1 & sleep 5; echo \"passe 91 portes lancée $(date +%H:%M)\"; grep -c \"porte-\" tools/porte-*.sh 2>/dev/null | wc -l; ls too … [65 caractères tronqués]`
+
+  ```
+passe 91 portes lancée 03:44
+91
+91
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '$2 != 0' work/portes/roue-1119-0345/registre.txt 2>/dev/null | head -3; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null", "description": "Ten-minute pause and pass check", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 03:55:03 EST
+16
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '$2 != 0' work/portes/roue-1119-0345/registre.txt 2>/dev/null; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null; tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Ten-minute pause and checks … [23 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 04:05:06 EST
+26
+pas 9150 · perte 0.8620 · PPL val 3.179 · 386
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v29.pt.json')); print('v2 t9 ppl', round(d['ppl_val'],4))\nexcept FileNotFoundError: print('v29 en cours')\"; awk '$2 != 0' work/portes/roue-1119-0345/r … [159 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 04:15:12 EST
+v2 t9 ppl 3.0363
+29
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '$2 != 0' work/portes/roue-1119-0345/registre.txt 2>/dev/null; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null; tail -1 work/n4/v1.chaine.log | cut -c1-45", "description": "Ten-minute pause and checks … [23 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 04:25:19 EST
+31
+pas 7400 · perte 0.8978 · PPL val 3.074 · 292
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -20; date", "description": "Read the near-final curves"}`
+
+  ```
+1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        3  10000    3.1922     0.6572   0.919/10.0      0.883/2.0       0.932/4.0 
+        4  10000    3.1224     0.6632   0.920/9.0       0.888/2.0       0.887/5.0 
+        5  10000    3.0913     0.6679   0.943/9.0       0.883/1.0       0.938/3.0 
+        6  10000    3.0554     0.6718   0.886/36.0      0.869/1.0       0.940/6.0 
+        7  10000    3.0420     0.6729   0.933/9.0       0.898/3.0       0.915/4.0 
+        8  10000    3.0361     0.6718   0.942/13.0      0.897/1.0       0.947/4.0 
+        9  10000    3.0363     0.6740   0.932/10.0      0.897/2.0       0.931/4.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+        4  10000    3.0007     0.6750   0.907/11.0      0.888/2.0       0.932/10.0
+        5  10000    2.9583     0.6768   0.946/9.0       0.888/1.0       0.910/4.0 
+        6  10000    2.9141     0.6823   0.956/
+… [314 caractères tronqués]
+  ```
+
+- **write** `{"content": "# Le palier 1 : deux 142 M, deux corpus, 110 000 pas — v1 garde la PPL, v2 gagne l'échantillonnage\n\n> **Ligne de roadmap** : N (le palier 1) · **Date** : 18-19/11 · **Verdict** : ✅ mesuré — à **pas\n> égal** (110 000 pas, 11 tranches de 10 000, lr 1e-4, même architecture, même val épi … [5101 caractères tronqués]`
+
+  ```
+<path>/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-nuit.md</path>
+<type>file</type>
+<content>
+Created file
+</content>
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && awk '$2 != 0' work/portes/roue-1119-0345/registre.txt 2>/dev/null; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null; tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Ten-minute pause and checks … [23 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 04:36:23 EST
+33
+pas 3200 · perte 0.9546 · PPL val 3.159 · 136
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v1.chaine.log | cut -c1-45; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null", "description": "Ten-minute pause and checks", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 04:46:26 EST
+pas  200 · perte 0.8796 · PPL val 3.075 · 80 
+34
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nfor n in ('v1','v2'):\n    try:\n        d=json.load(open(f'work/n4/{n}0.pt.json')); print(n, 't10 ppl', round(d['ppl_val'],4))\n    except FileNotFoundError: print(n, 't10 en cours')\"; w … [128 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 04:56:29 EST
+v1 t10 en cours
+v2 t10 en cours
+67
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v110.pt work/n4/v210.pt 2>/dev/null; python3 -c \"\nimport json\nfor f in ('v110','v210'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'précision', round(d['precisio … [141 caractères tronqués]`
+
+  ```
+work/n4/v110.pt
+v110 ppl 2.8452 précision 0.6883
+v210 en cours
+jeu 19 nov 2026 04:56:35 EST
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v111.pt work/n4/v210.pt 2>/dev/null; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null", "description": "Ten-minute pause and checks", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 05:06:47 EST
+71
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -1 work/n4/v2.chaine.log | cut -c1-45; ls work/n4/v211.pt 2>/dev/null; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null", "description": "Ten-minute pause and checks", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 05:16:51 EST
+pas 8950 · perte 0.8958 · PPL val 3.196 · 379
+75
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v210.pt.json')); print('v2 t10 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v210 en cours') … [126 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 05:26:56 EST
+v2 t10 ppl 3.0276 précision 0.6754
+79
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v111.pt 2>/dev/null; tail -1 work/n4/v1.chaine.log | cut -c1-45; wc -l < work/portes/roue-1119-0345/registre.txt 2>/dev/null", "description": "Ten-minute pause and checks", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 05:37:00 EST
+pas 7900 · perte 0.8663 · PPL val 3.067 · 313
+90
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 /tmp/passe-1119.log | cut -c1-70; awk '$2 != 0' work/portes/roue-1119-0345/registre.txt 2>/dev/null; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v111.pt.json')); print('v1 t11 ppl', round( … [196 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 05:47:03 EST
+         invite qui n'en contient aucun : le mélange ne pourrait rien 
+Journaux complets : work/portes/roue-1119-0345
+porte-indice 1 870
+porte-melange 1 108
+--- 89 vertes, 2 rouges ---
+v111 en cours
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read_text()\nold = \"\"\"> **Passes — 2026-11-18 :** **matin** (10 h 57 → 13 h 00) **90 portes, 88/2** et **soir** (16 h 51 →\n>  … [1941 caractères tronqués]`
+
+  ```
+references : 2489
+ok
+budget exit=0
+     · compteurs : en-cours.md dit 910 JSON, le disque en a 946
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls work/n4/v111.pt 2>/dev/null; python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v111.pt.json')); print('v1 t11 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFo … [161 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 05:57:28 EST
+work/n4/v111.pt
+v1 t11 ppl 2.844 précision 0.6878
+pas 4400 · perte 0.9248 · PPL val 3.190 · 185
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && tail -2 work/n4/v1.chaine.log | cut -c1-70; tail -1 work/n4/v2.chaine.log | cut -c1-45", "description": "Confirm v1's chain end and v2's progress", "timeoutMs": 650000}`
+
+  ```
+jeu 19 nov 2026 06:07:32 EST
+aleatoire top20_0.5  gv=4.00 gn=2.35 mots=89.6 ciment=0.796 attaches=0
+=== chaîne v1 finie 05:53 ===
+pas 5850 · perte 0.8471 · PPL val 3.190 · 245
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v211.pt.json')); print('v2 t11 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v211 en cours') … [111 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 06:17:40 EST
+v211 en cours
+pas 7300 · perte 0.8415 · PPL val 3.158 · 305
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v211.pt.json')); print('v2 t11 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v211 en cours') … [111 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 06:27:42 EST
+v211 en cours
+pas 8700 · perte 0.8705 · PPL val 3.209 · 3636 s · échelle 1048576
+pas 8750 · perte 0.8450 · PPL val 3.210 · 3657 s · échelle 1048576
+  ```
+
+- **bash** `{"command": "sleep 598; date; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\ntry:\n    d=json.load(open('work/n4/v211.pt.json')); print('v2 t11 ppl', round(d['ppl_val'],4), 'précision', round(d['precision_main'],4))\nexcept FileNotFoundError: print('v211 en cours') … [118 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 06:37:45 EST
+v2 t11 ppl 3.0381 précision 0.6768
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/courbe_chaine.py --prefixe v2 --prefixe v1 --n 11 --sortie reports/courbe-150m.json 2>&1 | grep -E \"^ +[0-9]\" | head -22; echo \"=== JSONs ===\"; ls reports/*.json | wc -l; git status --short | wc -l", "description":  … [33 caractères tronqués]`
+
+  ```
+1  10000    3.5568     0.6296   0.997/11.0      0.888/1.0       0.959/5.0 
+        2  10000    3.2989     0.6491   0.954/13.0      0.896/2.0       0.907/4.0 
+        3  10000    3.1922     0.6572   0.919/10.0      0.883/2.0       0.932/4.0 
+        4  10000    3.1224     0.6632   0.920/9.0       0.888/2.0       0.887/5.0 
+        5  10000    3.0913     0.6679   0.943/9.0       0.883/1.0       0.938/3.0 
+        6  10000    3.0554     0.6718   0.886/36.0      0.869/1.0       0.940/6.0 
+        7  10000    3.0420     0.6729   0.933/9.0       0.898/3.0       0.915/4.0 
+        8  10000    3.0361     0.6718   0.942/13.0      0.897/1.0       0.947/4.0 
+        9  10000    3.0363     0.6740   0.932/10.0      0.897/2.0       0.931/4.0 
+       10  10000    3.0276     0.6754   0.931/13.0      0.878/3.0       0.924/15.0
+       11  10000    3.0381     0.6768   0.000/0.0       0.000/0.0       0.000/0.0 
+        1  10000    3.5088     0.6305   0.985/14.0      0.877/2.0       0.929/4.0 
+        2  10000    3.2186     0.6531   0.886/11.0      0.837/2.0       0.939/4.0 
+        3  10000    3.0763     0.6664   0.939/11.0      0.829/2.0       0.920/4.0 
+        4  10000    3.0007     0.6750   0.907/
+… [638 caractères tronqués]
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd=json.load(open('reports/banc-generation-v211.json'))\nfor k,v in d['reglages'].items(): print(k, v['mots_valides'], v['repetition'])\" 2>/dev/null || echo \"banc v211 en cours\"; ls reports/*. … [125 caractères tronqués]`
+
+  ```
+greedy 0.925 9
+top40_0.8 0.8494 2
+top20_0.5 0.9481 6
+950
+48
+jeu 19 nov 2026 06:42:00 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-150m-nuit.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"| 9 | 90 000 | 2,8590 … [3222 caractères tronqués]`
+
+  ```
+fiche ok
+mots : 56
+budget exit=0
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **807** / **910** |'\nnew = '| fichiers / JSON de résultats | **808** / **950** |'\nassert s. … [489 caractères tronqués]`
+
+  ```
+ok
+  revue de documentation · 808 fiche(s) · 950 JSON · 128 doc(s) · 91 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+48
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1 && git log -1 --format='%h %s' | cat\nN — LA NUIT DU PALIER 1 : DEUX 142 M, DEUX CORPUS, 110 000 PAS — v1 GARDE LA PPL (2,844 CONTRE 3,038), v2 GAGNE LE TOP-20 (0,948  … [1228 caractères tronqués]`

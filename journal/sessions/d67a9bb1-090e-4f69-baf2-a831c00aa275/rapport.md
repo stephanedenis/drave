@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 33.3 h |
+| Durée | 44.9 h |
 | Tours | 18 |
-| Messages | 645 |
-| Appels d'outils | 616 |
-| Fichiers touchés | 39 |
-| Commandes | 486 |
+| Messages | 736 |
+| Appels d'outils | 707 |
+| Fichiers touchés | 40 |
+| Commandes | 576 |
 | Sous-agents | 7 |
-| Commits | 45 |
+| Commits | 46 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -667,7 +667,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ### Tour 18 — <goal_round> Objective: "De 15 h 30 le 18/11 à 8 h le 19/11, en IA légère (aucun appel API payant, sous-agents réduits a … [1003 caractères tronqués]
 
-*19 appels d'outils.* Actions notables :
+*110 appels d'outils.* Actions notables :
 
 - bash — Wait ten minutes, then check the first tranche outputs
 - bash — Check the first tranche completion and benches
@@ -683,7 +683,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - bash — Commit the new A2.6 gate
 - bash — Wait ten minutes and check the chains
 - bash — Read the experts placement site in model.rs
-- … et 5 autres
+- … et 66 autres
 
 ## 3. Travail accompli
 
@@ -730,6 +730,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-v2-slice.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-corpus-v2.md` | 1 | 0 |
 | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-lr.md` | 1 | 0 |
+| `/home/stephane/Data13TB/stephane/GitHub/Qtrinet/reports/rapport-150m-nuit.md` | 1 | 0 |
 
 ### Sous-agents lancés
 
@@ -783,7 +784,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 446 autres
+- … et 536 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -911,7 +912,7 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 
 ## 5. Erreurs rencontrées
 
-13 sorties en erreur ou divergentes. Les premières :
+17 sorties en erreur ou divergentes. Les premières :
 
 - **T4** : pre-commit === hook contenu === --- .git/hooks/pre-commit #!/bin/sh # pre-commit — l'état accompagne le fait, le journal accompagne le code. # # Versionné dans tools/hooks/ et installé par tools/insta
 - **T4** : |            ^^^^^^^^  warning: the `ids:` in this pattern is redundant     --> src/main.rs:1751:9      | 1751 |         ids: mut ids, ids_file, prompt, n: n_new, temp, top_p, topk, rep_pen, hist,    
@@ -926,6 +927,8 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - **T10** : --> src/placement.rs:52:12    --> src/placement.rs:117:11    --> src/placement.rs:119:11    --> src/placement.rs:122:11    --> src/placement.rs:124:11    --> src/placement.rs:127:11 --- src/main.rs:83
 - **T11** : tests_vars::les_vars_lues_sont_completes --- FAILED ....... failures:  ---- tests_vars::les_vars_lues_sont_completes stdout ----  thread 'tests_vars::les_vars_lues_sont_completes' (1181902) panicked a
 - **T18** : mer 18 nov 2026 18:29:18 EST pas 9200 · perte 1.2103 · PPL val 3.676 · 3904 s · échelle 1048576 pas 9250 · perte 1.2407 · PPL val 3.680 · 3925 s · échelle 1048576 === bancs === [exit code: 2]
+- **T18** : mer 18 nov 2026 22:56:58 EST pas 9200 · perte 1.0393 · PPL val 3.169 [exit code: 2]
+- **T18** : mer 18 nov 2026 23:24:22 EST [exit code: 1]
 
 ## 6. Commits
 
@@ -974,4 +977,5 @@ Aucune anomalie : la PPL descend régulièrement (3,78), l'échelle AMP est pass
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/references-non-regression.md'); s = p.read
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add tools/porte-a2.6-experts.sh reports/rapport-a2.6-bande-experts.md docs/pilotage/en-cours.md && git
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/backlog/A2.6-ordonnanceur.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG'
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1 && git log -1 --format='%h %s' | cat N —
 
