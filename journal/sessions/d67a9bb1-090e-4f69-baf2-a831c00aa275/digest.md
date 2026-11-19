@@ -13683,3 +13683,63 @@ Continue working toward the objective in this same session. Treat the current wo
 </goal_round>
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/*.json | wc -l; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **812** / **957** |'\nnew = '| fichiers / JSON de résultats | **81 … [812 caractères tronqués]`
+
+  ```
+959
+compteur : 959
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   b67af8de..693508ff  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Les bancs des variantes sont committés (cl1, cl2, rf1 — compteurs à 959), l'arbre est propre
+
+**Hygiène faite** : les six JSON de banc des deux variantes (nettoyé, recollé) sont entrés dans `reports/`, le compteur est passé à **959** et la revue est verte. Le message du commit dit « 963 » alors que le disque en avait 959 — coquille dans le message, l'état est juste.
+
+**En cours** : le corpus recollé finit sa deuxième tranche (≈ 10 h 50), puis les troisièmes tranches ; la comparaison décisive sur wikitext2 (brut : 7,4277) est attendue vers 11 h 50. A2.6 est branchée (trace) et la diversité est documentée bloquée.
+
+
+## Tour 25
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 6/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl1','cl2','rf1','rf2'):\n    try:\n        d=json.load(open(f'reports/banc-generation-{f}.json'))\n        print(f, {k:(v['mots_valides'], v['repetition']) for k,v in d['reglages'].items( … [139 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 10:24:03 EST
+cl1 {'greedy': (0.9989, 13), 'top40_0.8': (0.9181, 2), 'top20_0.5': (0.9627, 6)}
+cl2 {'greedy': (0.9175, 13), 'top40_0.8': (0.871, 2), 'top20_0.5': (0.9123, 8)}
+rf1 {'greedy': (0.9919, 9), 'top40_0.8': (0.8826, 2), 'top20_0.5': (0.9389, 5)}
+rf2 -
+pas 9600 · perte 1.0830 · PPL val 3.413
+  ```
+
+### 🤖 Assistant
+
+⏵ Bancs des variantes relevés (top-40 : cl1 0,918 → cl2 0,871 ; rf1 0,883) — les troisièmes tranches décideront
+
+**Ce que disent les bancs** : le corpus nettoyé garde le meilleur top-40 à la première tranche (0,918) mais redescend à 0,871 à la deuxième ; le recollé est à 0,883. La PPL, elle, reste en faveur du brut (3,299 contre 3,320 pour le nettoyé à 20 000 pas). Les troisièmes tranches (fin ≈ 11 h 30 pour le nettoyé, 11 h 50 pour le recollé) puis les trois PPL sur wikitext2 trancheront — le point complet et la fiche suivront.
+
+
+## Tour 26
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 7/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()\nold = \"**Lecture attendue** : si `cl3` ou `rf3` tombent sous 7,43, le balisage/la fragmentation comptaient ;\\nsi les troi … [1873 caractères tronqués]`

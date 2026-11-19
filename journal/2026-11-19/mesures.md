@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (5)
+## Commits du jour (6)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -13,6 +13,7 @@
 | 07:56 | `c50c53b0` | N — LE CORPUS NETTOYÉ : 6,874 Go, `]]` À ZÉRO, 40,4 M LIGNES DE CONTENU, ÉPINGLÉ 860aeb6a… | `en-cours.md`, `README.md`, `distribue.md` (+10) |
 | 08:12 | `5e142446` | N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ | `en-cours.md`, `README.md`, `distribue.md` (+12) |
 | 09:48 | `1512afde` | D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O) | `en-cours.md`, `README.md`, `distribue.md` (+10) |
+| 10:21 | `693508ff` | N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON | `en-cours.md`, `README.md`, `distribue.md` (+11) |
 
 ## Chiffres du jour
 
@@ -22,7 +23,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 48.5 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 48.6 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 
 ## Mesures et rapports touchés
 

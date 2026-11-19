@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 48.5 h |
-| Tours | 24 |
-| Messages | 846 |
-| Appels d'outils | 803 |
+| Durée | 48.6 h |
+| Tours | 26 |
+| Messages | 852 |
+| Appels d'outils | 805 |
 | Fichiers touchés | 44 |
-| Commandes | 665 |
+| Commandes | 667 |
 | Sous-agents | 7 |
-| Commits | 60 |
+| Commits | 61 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -95,6 +95,10 @@
 **Tour 23** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 **Tour 24** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 25** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
+
+**Tour 26** — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque r … [586 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -852,6 +856,32 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 
 - bash — Commit the variant benches and fix the counter
 
+**Synthèse produite :**
+
+⏵ Les bancs des variantes sont committés (cl1, cl2, rf1 — compteurs à 959), l'arbre est propre
+
+**Hygiène faite** : les six JSON de banc des deux variantes (nettoyé, recollé) sont entrés dans `reports/`, le compteur est passé à **959** et la revue est verte. Le message du commit dit « 963 » alors que le disque en avait 959 — coquille dans le message, l'état est juste.
+
+**En cours** : le corpus recollé finit sa deuxième tranche (≈ 10 h 50), puis les troisièmes tranches ; la comparaison décisive sur wikitext2 (brut : 7,4277) est attendue vers 11 h 50. A2.6 est branchée (trace) et la diversité est documentée bloquée.
+
+### Tour 25 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Read the variant benches
+
+**Synthèse produite :**
+
+⏵ Bancs des variantes relevés (top-40 : cl1 0,918 → cl2 0,871 ; rf1 0,883) — les troisièmes tranches décideront
+
+**Ce que disent les bancs** : le corpus nettoyé garde le meilleur top-40 à la première tranche (0,918) mais redescend à 0,871 à la deuxième ; le recollé est à 0,883. La PPL, elle, reste en faveur du brut (3,299 contre 3,320 pour le nettoyé à 20 000 pas). Les troisièmes tranches (fin ≈ 11 h 30 pour le nettoyé, 11 h 50 pour le recollé) puis les trois PPL sur wikitext2 trancheront — le point complet et la fiche suivront.
+
+### Tour 26 — <goal_round> Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val t … [866 caractères tronqués]
+
+*1 appels d'outils.* Actions notables :
+
+- bash — Record the intermediate points of the three-way test
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -955,7 +985,7 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 625 autres
+- … et 627 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1163,4 +1193,5 @@ Les JSON de banc des tranches 1-2 (6 fichiers) attendent la clôture pour être 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON" && git push origin s/v7 2>&1 | tail -1
+- N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT" && git push origin s/v7 2>&1 | tail -1
 

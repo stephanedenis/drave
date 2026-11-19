@@ -45,6 +45,18 @@ val, 352 256 jetons) — le val tiers qui a montré le biais.
 si les trois restent au même niveau, c'est la **sélection du contenu** (plein texte vs résumés) qu'il
 faut accuser, et le prochain corpus doit changer de source, pas de forme.
 
+## Les points intermédiaires (val de v1, PPL / top-40)
+
+| tranche | v2 brut | v2 nettoyé (`cl`) | v2 recollé (`rf`) |
+|---:|---|---|---|
+| 10 000 | 3,5568 / 0,888 | 3,5913 / **0,918** | 3,5763 / 0,883 |
+| 20 000 | **3,2989** / — | 3,3201 / 0,871 | *(en cours)* |
+| 30 000 | — | *(en cours)* | *(en cours)* |
+
+À 20 000 pas, le nettoyé est à **+0,6 %** de PPL du brut (3,3201 contre 3,2989) et son meilleur
+top-40 du début (0,918) est retombé à 0,871 : la forme ne creuse pas d'écart sur la PPL, et son
+avantage d'échantillonnage n'est pas stable. Le juge reste wikitext2.
+
 ## Ce qui pourrait le rendre faux
 
 - **Une seule graine, une seule comparaison à 30 000 pas** : l'écart attendu (~3 %) est petit devant
