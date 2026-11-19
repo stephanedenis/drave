@@ -50,12 +50,17 @@ faut accuser, et le prochain corpus doit changer de source, pas de forme.
 | tranche | v2 brut | v2 nettoyé (`cl`) | v2 recollé (`rf`) |
 |---:|---|---|---|
 | 10 000 | 3,5568 / 0,888 | 3,5913 / **0,918** | 3,5763 / 0,883 |
-| 20 000 | **3,2989** / — | 3,3201 / 0,871 | *(en cours)* |
+| 20 000 | **3,2989** / 7,8688 | 3,3201 / 7,9091 | 3,4200 / 8,0378 |
 | 30 000 | — | *(en cours)* | *(en cours)* |
 
 À 20 000 pas, le nettoyé est à **+0,6 %** de PPL du brut (3,3201 contre 3,2989) et son meilleur
 top-40 du début (0,918) est retombé à 0,871 : la forme ne creuse pas d'écart sur la PPL, et son
 avantage d'échantillonnage n'est pas stable. Le juge reste wikitext2.
+
+**Wikitext2 à 20 000 pas** (le val tiers) : brut **7,8688**, nettoyé **7,9091**, recollé **8,0378** —
+le **brut gagne encore**, et le recollé est le plus mauvais. La forme n'explique donc pas le déficit
+de v2 face à v1 : la **sélection du contenu** (résumés + « big » de v1 contre le plein texte de
+`wiki_fr_texte`) reste la seule différence qui tienne.
 
 ## Ce qui pourrait le rendre faux
 

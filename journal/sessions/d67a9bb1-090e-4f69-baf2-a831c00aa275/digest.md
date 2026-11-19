@@ -13754,3 +13754,154 @@ budget=1
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"le palier **nettoie et recolle** (350 o/ligne ; 3 runs, milieu de c … [450 caractères tronqués]`
+
+  ```
+T0 max : 4001 mots (budget 4 000)
+ok
+budget=0
+  ✅ état court, structuré, multi-session et reprenable
+   c92dac72..fa12ff52  s/v7 -> s/v7
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Les points intermédiaires du test à trois sont dans la fiche (20 000 pas : brut 3,2989 · nettoyé 3,3201) — j'attends les troisièmes tranches
+
+**Fait** : la fiche du nettoyage porte désormais le tableau des points intermédiaires (PPL et top-40) et la lecture honnête — à 20 000 pas, le corpus nettoyé est à **+0,6 %** de PPL du brut et son avantage de top-40 (0,918 à 10 000 pas) est retombé à 0,871, donc pas stable. Le juge reste **wikitext2** aux 30 000 pas.
+
+**En cours** : le recollé finit sa deuxième tranche (≈ 10 h 50), puis les troisièmes (≈ 11 h 30-50). À ce moment-là : les trois PPL sur wikitext2, la fiche finale et le commit de clôture.
+
+
+## Tour 27
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 8/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; for f in cl rf; do t=$(grep -o \"tranche [0-9]/3\" work/n4/$f.chaine.log | tail -1); s=$(tail -1 work/n4/$f.chaine.log | grep -o \"pas *[0-9]*\" | head -1); echo \"$f : $t, $s\"; done", "description": "Check the chains' tranche … [11 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 10:29:53 EST
+cl : tranche 3/3, pas 1500
+rf : tranche 3/3, pas  150
+  ```
+
+- **bash** `{"command": "sleep 3000; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('cl2','rf2','cl3','rf3'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"; tail -1 w … [171 caractères tronqués]`
+
+  ```
+started background job bash-1110
+  ```
+
+### 🤖 Assistant
+
+⏵ Les deux variantes sont dans leur **dernière tranche** (nettoyé à 1 500 pas, recollé à 150) — la clôture de l'expérience est programmée
+
+Les deux runs terminent leur 3/3 (≈ 11 h 25 pour le nettoyé, ≈ 11 h 40 pour le recollé), avec le banc complet après chacun. Ensuite : les trois PPL sur **wikitext2** (brut 7,4277, nettoyé et recollé à calculer), la fiche finale et le commit de clôture. Tout le reste de l'objectif est fait ou nommé : le val tiers est mesuré (v1 6,867 / v2 7,093 / 73 M 7,351), A2.6 est branchée en trace sous opt-in, et la diversité est documentée bloquée par les sources.
+
+
+## Tour 28
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 9/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; git log --since=\"2026-11-19 00:00\" --oneline | wc -l; git log --oneline -12 | cat", "description": "Review the session's commits for the handoff"}`
+
+  ```
+jeu 19 nov 2026 10:30:19 EST
+17
+fa12ff52 ÉTAT — T0 REPASSÉ
+c92dac72 N — LE TEST À TROIS A SES POINTS INTERMÉDIAIRES : À 20 000 PAS, LE NETTOYÉ EST À +0,6 % DE PPL DU BRUT
+693508ff N — LES BANCS DES VARIANTES ENTRENT (cl1, cl2, rf1) : COMPTEURS À 963 JSON
+b67af8de A2.6 — LA RÈGLE DES EXPERTS EST BRANCHÉE : TRACE SOUS OPT-IN SUR LE VRAI 30B (1,10 Go/JETON · 6,99 Go/s · 156,9 ms → VRAM)
+cddc7b39 A2.6 — LE BRANCHEMENT A SON MODE D'EMPLOI : SITES, ENTRÉES, TEST, PORTES
+864a495f ÉTAT — DIVERSITÉ BLOQUÉE, T0 REPASSÉ (COMPTEURS JSON À LA CLÔTURE DES RUNS)
+1512afde D — LA DIVERSITÉ EST BLOQUÉE PAR LES SOURCES : GUTENBERG 503, WIKISOURCE À TRANSCLUSIONS (40 PAGES, 1 241 O)
+25b60495 ÉTAT — T0 REPASSE SOUS 4 000 (PUCE N RESSERRÉE)
+5e142446 N — LE RECOLLEMENT DES PARAGRAPHES : 349,6 O/LIGNE (LA MAILLE DE v1), ÉPINGLÉ 9a5ca658…, TEST À TROIS LANCÉ
+851daeec ÉTAT — T0 À 4 000 (LA PUCE N SE RESSERRE)
+665c8050 ÉTAT — LA PUCE N REPASSE SOUS LE BUDGET T0
+c50c53b0 N — LE CORPUS NETTOYÉ : 6,874 Go, `]]` À ZÉRO, 40,4 M LIGNES DE CONTENU, ÉPINGLÉ 860aeb6a…
+  ```
+
+### 🤖 Assistant
+
+⏵ 17 commits depuis minuit, l'arbre est propre et poussé — il ne reste que la lecture des deux dernières tranches (clôture ≈ 11 h 25-40)
+
+**État du chantier à 10 h 30** : le val tiers est mesuré (v1 **6,867** / v2 **7,093** / 73 M **7,351**), la règle A2.6 est branchée en trace sous opt-in sur le vrai 30B, la diversité est documentée bloquée (Gutenberg 503, Wikisource à transclusions), et le test à trois (brut / nettoyé / recollé) termine ses dernières tranches. Les points intermédiaires sont dans la fiche : à 20 000 pas, le nettoyé est à +0,6 % de PPL du brut, son avantage de top-40 n'est pas stable.
+
+La suite est automatique : les troisièmes tranches se terminent vers 11 h 25-40, puis je calcule les trois PPL sur wikitext2, je clos la fiche et je fais le point complet.
+
+
+## Tour 29
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "Enchaîner les prochaines actions désignées : (1) mesurer les deux 150 M et le 73 M sur un val tiers disjoint (wikitext2 français) pour trancher v1/v2 sans le biais de distribution ; (2) brancher la règle A2.6 dans model.rs en opt-in (coût experts, refus nommé, trace), avec les portes flux/pont/coupe/echange-experts ; (3) ouvrir la diversité du corpus (livres FR) ; chaque résultat avec fiche, état, commit et push."
+Round: 10/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for m in v22 cl2 rf2; do printf \"%-5s \" \"$m\"; PYTHONPATH=. timeout 300 /home/stephane/gpu-env/bin/python tools/ppl_ckpt.py --modele work/n4/$m.pt --val data/wikitext2_test.txt --device cuda:0 2>/dev/null | grep -o '\"ppl\": [0-9. … [103 caractères tronqués]`
+
+  ```
+v22   "ppl": 7.868775124476321
+cl2   "ppl": 7.909131134951548
+rf2   "ppl": 8.037755445437018
+jeu 19 nov 2026 10:33:03 EST
+  ```
+
+### 👤 Utilisateur
+
+background job bash-1081 (bash: sleep 1700; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c "
+import json
+for f in ('cl2','rf2'):
+    try:
+        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl', round(d['ppl_val'],4), 'préc', round(d['precision_main'],4))
+    except FileNotFoundError: print(f, '-')"; tail -1 work/n4/cl.chaine.log | cut -c1-40; tail -1 work/n4/rf.chaine.log | cut -c1-40) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport json, pathlib\np = pathlib.Path('reports/ppl-wikitext2.json'); d = json.loads(p.read_text())\nd[\"resultats\"] += [\n  {\"modele\": \"work/n4/v22.pt\", \"corpus\": \"v2 brut à 20 000 pas\", \"pas\": 20000, \" … [1748 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 959 JSON, le disque en a 961
+budget=0
+  T0 max : 3998 mots (budget 4 000)
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 21, in <module>
+AssertionError
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Le juge reste\" reports/rapport-nettoyage-corpus.md; sed -n '/Le juge reste/,+3p' reports/rapport-nettoyage-corpus.md", "description": "Find the exact fiche anchor"}`
+
+  ```
+58:avantage d'échantillonnage n'est pas stable. Le juge reste wikitext2.
+avantage d'échantillonnage n'est pas stable. Le juge reste wikitext2.
+
+## Ce qui pourrait le rendre faux
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-nettoyage-corpus.md'); s = p.read_text()\nold = \"| 20 000 | **3,2989** / — | 3,3201 / 0,871 | *(en cours)* |\"\nnew = \"| 20 000 | **3,2989** / 7,8688 | 3,3201 / 7, … [1485 caractères tronqués]`
+
+  ```
+json : 961
+     · compteurs : en-cours.md dit 813 fichiers, le disque en a 812
+budget=1
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/taille_documents.py 2>&1 | grep \"T0 max\"; python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:50]\n  … [1636 caractères tronqués]`

@@ -32,6 +32,24 @@
    "corpus": "v2 (6,90 Go) à 30 000 pas",
    "pas": 30000,
    "ppl": 7.42769186466465
+  },
+  {
+   "modele": "work/n4/v22.pt",
+   "corpus": "v2 brut à 20 000 pas",
+   "pas": 20000,
+   "ppl": 7.868775124476321
+  },
+  {
+   "modele": "work/n4/cl2.pt",
+   "corpus": "v2 nettoyé à 20 000 pas",
+   "pas": 20000,
+   "ppl": 7.909131134951548
+  },
+  {
+   "modele": "work/n4/rf2.pt",
+   "corpus": "v2 recollé à 20 000 pas",
+   "pas": 20000,
+   "ppl": 8.037755445437018
   }
  ],
  "marquage_wiki_par_20Mo": {
