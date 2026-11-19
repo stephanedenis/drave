@@ -65,3 +65,15 @@ Testé sur le 30B avec `DRAVE_GPU_EXPERTS=1 DRAVE_GPU_EXPERTS_GO=2 DRAVE_PERTE_M
 trace `experts : 1.10 Go/jeton · … → VRAM` puis `[gpu] cache d'experts : budget 2.0 Go`. Les cinq
 portes A2.6 restent **vertes**, 146 tests. Restent : les **clusters** (le scan du seul fichier
 principal rend 0) et la consolidation des trois tables de bandes de `materiel.rs`.
+
+## Les deux dernières pièces (19/11, 16 h 40)
+
+- **Les bandes** : `materiel::cout_par_jeton` ne porte plus ses trois constantes (VRAM 84,9, RAM
+  22,5 **morte**, NVMe **31**) — il lit `placement::BANDE_*` et la bande **mesurée** des experts
+  (7,0 Go/s à 8 lecteurs). Le coût estimé du 30B passe d'environ **160 à 231 ms** : la différence
+  est celle du pread à 16 lecteurs (31 Go/s), qui n'est pas le chemin par défaut. Aucune fiche ne
+  citait ce chiffre (vérifié par recherche).
+- **Les clusters** : quand le scan du fichier principal rend **0** (modèle en clusters), la règle
+  **ne tranche pas** — un message le dit et les drapeaux restent maîtres, au lieu d'une trace à
+  0 Go/jeton. Lire réellement les clusters (leurs fichiers) reste à faire.
+- 146 tests, `porte-a2.6-experts` et `porte-ressources` vertes.

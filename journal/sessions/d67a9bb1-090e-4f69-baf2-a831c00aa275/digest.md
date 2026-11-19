@@ -15609,3 +15609,176 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git add docs/pilotage/roadmap.md docs/pilotage/en-cours.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nP … [766 caractères tronqués]`
+
+  ```
+✅ état court, structuré, multi-session et reprenable
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   10a3e49c..62719c32  s/v7 -> s/v7
+jeu 19 nov 2026 16:31:12 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long … [259 caractères tronqués]`
+
+> **Objectif** (create) : De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h.
+
+
+  ```
+{"goal":{"id":"goal-50e1ce95-48ff-47ec-bd31-15edebc32d53","revision":1,"objective":"De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes d'A2.6 (le scan des clusters, les bandes de `materiel.rs`) et les tester ; (3) fiche, état, commit et push pour chaque résultat ; bilan à 8 h.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/extraire_lignes_longues.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"extraire_lignes_longues.py — le corpus « long-forme » : les lignes qui portent du texte.\n\nPOURQUOI. Le 19/11, la décomposition de la sélection a montré qu … [2977 caractères tronqués]`
+
+  ```
+✅ autotest : 2 lignes longues gardées, 2 courtes jetées
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && mkdir -p work/long && nohup python3 tools/extraire_lignes_longues.py --entree data/wiki_mix_v2/train.txt --sortie work/long/train.txt --min 200 --json work/long/extraction.json > work/long/extraction.log 2>&1 & sleep 5; echo \"extrac … [194 caractères tronqués]`
+
+  ```
+extraction lancée 16:31
+3396865 python3 tools/extraire_lignes_longues.py -
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > work/n4/nuit.sh <<'SH'\n#!/bin/bash\n# nuit.sh — la chaîne de la nuit : 10 000 pas, banc, grammaticalité, PPL wikitext2.\n#   bash work/n4/nuit.sh <gpu> <corpus> <prefixe> <n_tranches>\nset -u\nGPU=$1; CORPUS=$2; PREFIX=$3; N=$ … [1717 caractères tronqués]`
+
+  ```
+script-ok
+jeu 19 nov 2026 16:32:04 EST
+total 1948000
+drwxr-xr-x. 1 stephane stephane         46 19 nov 16:31 .
+drwxr-xr-x. 1 stephane stephane       2902 19 nov 16:31 ..
+-rw-r--r--. 1 stephane stephane          0 19 nov 16:31 extraction.log
+-rw-r--r--. 1 stephane stephane 1994750223 19 nov 16:32 train.txt
+  ```
+
+- **bash** `{"command": "sleep 240; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -12 work/long/extraction.json 2>/dev/null; ls -la work/long/train.txt; ps -eo pid,args | grep extraire_lignes | grep -v grep | head -1 | cut -c1-30", "description": "Check the long-form extraction result", "time … [15 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 16:36:08 EST
+{
+ "entree": "data/wiki_mix_v2/train.txt",
+ "sortie": "work/long/train.txt",
+ "min": 200,
+ "lignes_in": 63438199,
+ "lignes_out": 10321137,
+ "octets_in": 6900585097,
+ "octets_out": 4791385111,
+ "pct_octets_gardes": 69.43,
+ "octets_par_ligne": 464.2
+}
+-rw-r--r--. 1 stephane stephane 4791385111 19 nov 16:32 work/long/train.txt
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/epingle_corpus.py --corpus work/long --sortie reports/corpus-epingle-long.json 2>&1 | tail -3; nohup bash work/n4/nuit.sh 0 data/wiki_big/propre/train.txt nb 11 > /tmp/nb-nuit.out 2>&1 & nohup bash work/n4/nuit.sh 1 wor … [280 caractères tronqués]`
+
+  ```
+corpus épinglé : /home/stephane/Data13TB/stephane/GitHub/Qtrinet/work/long
+  train.txt    a50f604599cf277c…    4791385111 o     10321137 lignes  2026-11-19T16:32:52
+  manifeste : 12e4620d63b7d024… → reports/corpus-epingle-long.json
+chaînes de nuit lancées 16:36
+0, 99 %, 7512 MiB
+1, 100 %, 7512 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '300,340p' drave-core/src/materiel.rs; echo \"...\"; sed -n '395,430p' drave-core/src/materiel.rs", "description": "Read the materiel plan and cost functions"}`
+
+  ```
+let cpu = detecter_cpu();
+        let gpus = detecter_gpus();
+        let (ram_totale_go, ram_libre_go) = detecter_ram();
+        let disques = detecter_disques();
+        Materiel { cpu, gpus, ram_totale_go, ram_libre_go, disques }
+    }
+
+    /// Le plan de configuration, avec la raison de chaque choix.
+    ///
+    /// `ctx` et `taille_modele_go` orientent deux décisions : la quantification
+    /// du cache KV et la répartition entre mémoire et disque.
+    pub fn plan(&self, ctx: usize, taille_modele_go: f64, n_experts: usize,
+                mo_par_expert: f64) -> Plan {
+        let mut raisons = Vec::new();
+
+        // --- threads : les cœurs PHYSIQUES, et les paires HT si on est pauvre.
+        //
+        // Mesuré : 20 cœurs = 22,5 Go/s, 20 cœurs + HT = 18,9 (rien de plus,
+        // la bande passante sature) ; mais 10 cœurs = 14,7 contre 18,7 avec
+        // leurs hyperthreads (+27 %, la latence mémoire est masquée et le L2
+        // de 256 Ko est partagé). Trois fils par cœur régresse (15,0).
+        let threads = self.cpu.physiques;
+        raisons.push(format!(
+            "threads = {} cœurs physiques ({} logiques détectés) — au-delà, la \
+bande passante mémoire sature :
+… [2631 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"coût par jeton estimé\" docs/ reports/ --include=*.md | head -5; grep -rn \"31,0 Go/s\\|31 Go/s\" docs/pilotage/*.md reports/rapport-plan* 2>/dev/null | head -3; date", "description": "Check the cost line's citations befor … [22 caractères tronqués]`
+
+  ```
+jeu 19 nov 2026 16:37:32 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/materiel.rs'); s = p.read_text()\nold = '''        const VRAM: f64 = 84.9;\n        const RAM: f64 = 22.5;\n        const NVME: f64 = 31.0;      // 16 lecteurs parall … [3032 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.19s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for p in a2.6-experts ressources flux echange-experts; do printf \"%-16s \" \"$p\"; bash tools/porte-$p.sh > /tmp/g3-$p.log 2>&1; echo \"exit=$? · $(tail -1 /tmp/g3-$p.log | cut -c1-70)\"; done; grep -n \"cout_par_jeton\" -B4 drave-c … [115 caractères tronqués]`
+
+  ```
+a2.6-experts     exit=0 ·   ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus n
+ressources       exit=0 · ✅ porte ressources verte : autotest 9 cas, registre cohérent, GPU rése
+flux             exit=0 ·   mode 4 — lot en listes           4.45e-3  ✅  (réf 60.8135 / deux nœu
+echange-experts  exit=0 ·   PORTE TENUE
+3657-        let couches = 40.0;
+3658-        let go = topk * couches * mo_expert / 1000.0;
+3659-        // La tête : vocabulaire × dimension × octets par poids (Q4_K ≈ 0,56).
+3660-        let tete_go = 1.32;
+3661:        println!("  {}", m.cout_par_jeton(&plan, go, tete_go, 8.0));
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '3630,3665p' drave-core/src/main.rs | head -12; ./drave-core/target/release/drave --help 2>&1 | grep -iE \"plan|materiel|coût\" | head -3", "description": "Find and test the plan print", "timeoutMs": 300000}`
+
+  ```
+println!("Modèle : {} · {:.1} Go · dense (aucun expert)\n", arch, total);
+            }
+            (total, n_exp, mo, arch)
+        }
+        Err(_) => (0.0, 384, 9.95, String::from("DeepSeek-V4.1 (défaut)")),
+    };
+    let _ = arch;
+    let plan = m.plan(ctx, taille_go, n_experts, mo_expert);
+    println!();
+    println!("Plan pour un contexte de {ctx} jetons, d'après les dimensions du modèle :");
+    println!("  threads          : {}", plan.threads);
+    if let Some(e) = &plan.epinglage {
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 60 ./drave-core/target/release/drave --plan 2>&1 | grep -E \"coût par jeton|threads\" | head -3; date", "description": "Test the plan's cost line", "timeoutMs": 120000}`
+
+  ```
+jeu 19 nov 2026 16:41:16 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('drave-core/src/model.rs'); s = p.read_text()\nold = '''            let decision = if std::env::var_os(\"DRAVE_PERTE_MAX\").is_some() {\n                let m = crate::materiel::Mate … [1848 caractères tronqués]`
+
+  ```
+ok
+test result: ok. 146 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.50s
+  ✅ bande 4,93/6,99 Go/s · coût 156,9 ms pour 1,097 Go/jeton · refus nommé · trace
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-a2.6-branchement.md'); s = p.read_text()\nadd = '''\n## Les deux dernières pièces (19/11, 16 h 40)\n\n- **Les bandes** : `materiel::cout_par_jeton` ne porte plus ses … [2659 caractères tronqués]`
+
+  ```
+ok
+  T0 max : 3997 mots (budget 4 000)
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp work/n4/nuit.sh bench/chaine_nuit.sh && git add drave-core/src/model.rs drave-core/src/materiel.rs tools/extraire_lignes_longues.py bench/chaine_nuit.sh reports/corpus-epingle-long.json reports/rapport-a2.6-branchement.md docs/pil … [1297 caractères tronqués]`

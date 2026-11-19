@@ -403,29 +403,31 @@ une copie", taille_modele_go));
     /// mesures de disque, pas d'une fiche technique.
     pub fn cout_par_jeton(&self, plan: &Plan, go_experts_par_jeton: f64,
                           go_tete: f64, go_commun: f64) -> String {
-        const VRAM: f64 = 84.9;
-        const RAM: f64 = 22.5;
-        const NVME: f64 = 31.0;      // 16 lecteurs parallèles, mesuré
-        // Taux de succès du cache d'experts : mesuré, 25 % de l'empreinte sert
-        // 80 % des appels. On l'applique au trafic, pas à la place occupée.
+        // Une seule table de bandes : celle de la règle de placement (A2.6, 19/11).
+        // Les experts lus sur disque suivent la bande MESURÉE de leur opérateur
+        // (7,0 Go/s à 8 lecteurs, `rapport-a2.6-bande-experts.md`) — pas les
+        // 31 Go/s d'un pread à 16 lecteurs, qui n'est pas le chemin par défaut,
+        // ni les 3,5 du lecteur unique.
         const SUCCES: f64 = 0.80;
+        let vram = crate::placement::BANDE_VRAM / 1e9;
+        let experts_bande = crate::placement::bande_experts(8) / 1e9;
 
         let vram_totale: f64 = self.gpus.iter().map(|g| g.vram_libre_go).sum();
         // Le commun et la tête sont RELUS à chaque jeton : ils restent en VRAM.
         let fixes = go_commun + go_tete;
         let cache = (vram_totale - fixes).max(0.0);
-        // Ce qui manque au cache se lit sur le disque, en parallèle.
+        // Ce qui manque au cache se lit sur le disque, par l'opérateur experts.
         let experts_disque = go_experts_par_jeton * (1.0 - SUCCES);
         let experts_cache = go_experts_par_jeton - experts_disque;
 
-        let ms = 1000.0 * (fixes / VRAM + experts_cache / VRAM + experts_disque / NVME);
+        let ms = 1000.0 * (fixes / vram + experts_cache / vram + experts_disque / experts_bande);
         format!(
             "coût par jeton estimé : {ms:.0} ms — commun + tête {fixes:.1} Go en VRAM \
 ({:.0} ms) · {experts_cache:.2} Go d'experts servis par le cache de {cache:.1} Go \
-({:.0} ms) · {experts_disque:.2} Go lus sur NVMe à {NVME:.0} Go/s ({:.0} ms)",
-            1000.0 * fixes / VRAM,
-            1000.0 * experts_cache / VRAM,
-            1000.0 * experts_disque / NVME)
+({:.0} ms) · {experts_disque:.2} Go lus sur NVMe à {experts_bande:.0} Go/s ({:.0} ms)",
+            1000.0 * fixes / vram,
+            1000.0 * experts_cache / vram,
+            1000.0 * experts_disque / experts_bande)
     }
 
     pub fn resume(&self) -> String {

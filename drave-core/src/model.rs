@@ -4992,7 +4992,15 @@ forcent l'un ou l'autre partout",
                 let vram: u64 = m.gpus.iter().map(|g| (g.vram_libre_go.max(0.0) * 1e9) as u64).sum();
                 let ram: u64 = (m.ram_libre_go.max(0.0) * 1e9) as u64;
                 let octets = Self::octets_experts_par_jeton(&g, n_layer_total, cfg.n_expert, cfg.n_expert_used);
-                let r = crate::placement::choisir_experts(octets, vram, ram, 8, 1.0);
+                if octets == 0 {
+                    // Modèle en clusters : les experts sont dans d'autres fichiers, le
+                    // scan du principal ne les voit pas. La règle ne tranche pas sur un
+                    // chiffre faux — on le dit, et les drapeaux restent maîtres.
+                    eprintln!("  experts : scan du fichier principal vide (clusters ?) — \
+la règle de placement ne tranche pas, les drapeaux restent maîtres");
+                }
+                let r = if octets == 0 { Ok(crate::placement::Support::Vram) }
+                        else { crate::placement::choisir_experts(octets, vram, ram, 8, 1.0) };
                 eprintln!("  {}", match &r {
                     Ok(_) => crate::placement::trace_experts(octets, vram, ram, 8, 1.0),
                     Err(e) => e.clone(),

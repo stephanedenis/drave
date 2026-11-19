@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 54.6 h |
+| Durée | 54.9 h |
 | Tours | 64 |
-| Messages | 1036 |
-| Appels d'outils | 907 |
+| Messages | 1050 |
+| Appels d'outils | 922 |
 | Fichiers touchés | 44 |
-| Commandes | 764 |
+| Commandes | 778 |
 | Sous-agents | 7 |
-| Commits | 71 |
+| Commits | 72 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -51,6 +51,8 @@
 … [65 caractères tronqués]
 - **complete** — D'ici 17 h le 19/11 : (1) décomposer la sélection du contenu — mesurer à pas égal (30 000) les corpus wiki_big seul, wiki_fr seul et la référence v1, sur le val tiers wikitext2, en lançant les deux runs sur les GPU ; (2) finir A2.6 par la décision (le cache experts réglé par la règle, opt-in) avec l
 … [65 caractères tronqués]
+- **create** — De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec é
+… [217 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -1609,7 +1611,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 64 — d'abord rafraîchir la roadmap et l'état pour que la file redevienne exacte. puis enchaine avec la préparation des travau … [154 caractères tronqués]
 
-*10 appels d'outils.* Actions notables :
+*25 appels d'outils.* Actions notables :
 
 - bash — Refresh the roadmap's A and N rows
 - bash — Trim the roadmap back under budget
@@ -1620,6 +1622,12 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Refresh the state's remaining-work section
 - bash — Compact the remaining-work section
 - bash — Commit the pilotage refresh
+- create_goal
+- bash — Create the night goal and the long-lines extractor
+- bash — Extract the long-form corpus in the background
+- bash — Write the night chain script and check the extraction
+- bash — Check the long-form extraction result
+- … et 10 autres
 
 **Synthèse produite :**
 
@@ -1728,7 +1736,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 724 autres
+- … et 738 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -1947,4 +1955,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - ÉTAT — T0 À 3 997" && git push origin s/v7 2>&1 | tail -1
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-selection-contenu.md reports/ppl-wikitext2.json reports/corpus-epingle-wikibig.jso
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/verifie_en_cours.py 2>&1 | tail -1; python3 tools/revue_documentation.py 2>&1 | tail -1; git
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cp work/n4/nuit.sh bench/chaine_nuit.sh && git add drave-core/src/model.rs drave-core/src/materiel.rs tool
 

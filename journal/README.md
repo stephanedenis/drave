@@ -218,7 +218,7 @@ de la session ; le `digest.md` voisin en donne le verbatim complet.
 | `d58fb6be` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.5 h | 1 | 54 | 0 | 0 | [rapport](sessions/d58fb6be-cedc-4236-a298-aa953dfb21b7/rapport.md) |
 | `d622230d` | Tu es dans /home/stephane/Data13TB/steph | 2026-10-29 22:25 | 0.3 h | 1 | 34 | 0 | 0 | [rapport](sessions/d622230d-649c-43cf-9202-da1eeb230259/rapport.md) |
 | `d629d7d7` | Continue the work | 2026-10-19 12:03 | 138.6 h | 286 | 3405 | 76 | 296 | [rapport](sessions/d629d7d7-e122-4596-8757-f4264a2b15cf/rapport.md) |
-| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 54.6 h | 64 | 907 | 44 | 71 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
+| `d67a9bb1` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 54.9 h | 64 | 922 | 44 | 72 | [rapport](sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) |
 | `da0f2984` | Tu travailles dans le dépôt | 2026-11-18 09:15 | 0.4 h | 1 | 70 | 1 | 0 | [rapport](sessions/da0f2984-32d0-459d-a761-d3faf6a10b8a/rapport.md) |
 | `da69b1fa` | Tu travailles dans le dépôt | 2026-09-30 15:07 | 0.1 h | 1 | 45 | 1 | 0 | [rapport](sessions/da69b1fa-91b0-4c69-bb2b-58bf00e92e28/rapport.md) |
 | `dcaa24d6` | Tu travailles dans le dépôt | 2026-10-02 15:03 | 0.0 h | 1 | 13 | 0 | 0 | [rapport](sessions/dcaa24d6-0017-4382-be21-8244c0fb9b7a/rapport.md) |
