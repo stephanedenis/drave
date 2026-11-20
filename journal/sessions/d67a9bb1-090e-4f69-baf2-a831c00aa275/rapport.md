@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 74.0 h |
-| Tours | 85 |
-| Messages | 1344 |
-| Appels d'outils | 1163 |
+| Durée | 75.2 h |
+| Tours | 86 |
+| Messages | 1357 |
+| Appels d'outils | 1174 |
 | Fichiers touchés | 44 |
-| Commandes | 1013 |
+| Commandes | 1024 |
 | Sous-agents | 7 |
-| Commits | 96 |
+| Commits | 97 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -229,6 +229,8 @@
 **Tour 84** — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élevé. go en mode autonome jusqu'à 16h
 
 **Tour 85** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
+
+**Tour 86** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2076,7 +2078,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 85 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
 
-*23 appels d'outils.* Actions notables :
+*29 appels d'outils.* Actions notables :
 
 - bash — Read the N2 clean-gate context
 - bash — Run the retro-translation v2
@@ -2092,7 +2094,23 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Check the variance runs' progress
 - bash — Read the seed-2 second tranche
 - bash — Read the tagger fiche's summary
-- … et 7 autres
+- … et 11 autres
+
+**Synthèse produite :**
+
+⏵ Graine 3 à 30 000 pas : **7,5607** sur wikitext2 — l'écart entre graines (7,22 / 7,35 / 7,56) est plus grand que l'écart wiki_big/v2
+
+**Le point** : la graine 3 finit à **7,5607**, contre 7,2237 et 7,3531 pour les deux exécutions de la graine 1. L'écart entre graines (jusqu'à **4,6 %**) dépasse donc les écarts que la sélection du contenu prétendait mesurer (wiki_big 6,83 vs v1 6,87 : −0,5 % ; vs v2 7,09 : −3,6 %). C'est un résultat important — et sobre — pour la fiche de variance : **à 30 000 pas, une seule graine ne tranche pas**. La graine 2 arrive vers 12 h 50 ; ensuite le run du palier 1 (3,69 Go) part sur le GPU et la fiche de variance sera écrite.
+
+### Tour 86 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Read the seed-2 final tranche
+- bash — Read the seed-2 final results
+- bash — Launch the palier-1 runs (two seeds)
+- bash — Finalize the variance fiche and the state
+- bash — Commit the variance result
 
 ## 3. Travail accompli
 
@@ -2197,7 +2215,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 973 autres
+- … et 984 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2441,4 +2459,5 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() old = '| 
 

@@ -19188,3 +19188,126 @@ pragmatique, r353. **D** : la diversité — bloquée (Gutenberg 503, Wikisource
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"décision de routage du t … [1481 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   450cbb6c..fc9c77be  s/v7 -> s/v7
+ven 20 nov 2026 11:54:09 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 12:04:06 EST
+pas 2950
+pas 4400
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-variance-graines.md <<'MD'\n# La variance du run-à-run : trois graines de `wiki_big` à 30 000 pas\n\n> **Ligne de roadmap** : N · **Date** : 2026-11-20 · **Verdict** : *(en cours — la tranche 30 000\n> reste)* — … [1767 caractères tronqués]`
+
+  ```
+brouillon écrit
+ven 20 nov 2026 12:04:25 EST
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; nvidia-smi --query-gpu=index,temperature.gpu --format=csv,noheader", " … [71 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 12:14:21 EST
+pas 4450 · perte 1.1740
+pas 5950 · perte 1.0345
+0, 86
+1, 75
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/g3.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 12:24:16 EST
+pas 5850
+pas 7450
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g23','g33'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\"", "descriptio … [59 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 12:34:11 EST
+g23 -
+g33 -
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g23','g33'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g23 … [251 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 12:44:06 EST
+g23 -
+g33 ppl v1 3.1595
+g23 wikitext2 -
+g33 wikitext2 7.5607
+  ```
+
+### 🤖 Assistant
+
+⏵ Graine 3 à 30 000 pas : **7,5607** sur wikitext2 — l'écart entre graines (7,22 / 7,35 / 7,56) est plus grand que l'écart wiki_big/v2
+
+**Le point** : la graine 3 finit à **7,5607**, contre 7,2237 et 7,3531 pour les deux exécutions de la graine 1. L'écart entre graines (jusqu'à **4,6 %**) dépasse donc les écarts que la sélection du contenu prétendait mesurer (wiki_big 6,83 vs v1 6,87 : −0,5 % ; vs v2 7,09 : −3,6 %). C'est un résultat important — et sobre — pour la fiche de variance : **à 30 000 pas, une seule graine ne tranche pas**. La graine 2 arrive vers 12 h 50 ; ensuite le run du palier 1 (3,69 Go) part sur le GPU et la fiche de variance sera écrite.
+
+
+## Tour 86
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h."
+Round: 2/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "sleep 400; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g23','g33'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g23 … [295 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 12:51:05 EST
+g23 -
+g33 ppl v1 3.1595
+g23 wikitext2 -
+g33 wikitext2 7.5607
+pas 9700 · perte 1.1481 · PPL val 3.294 · 406
+  ```
+
+- **bash** `{"command": "sleep 500; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g23','g33'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g23 … [295 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 12:59:32 EST
+g23 ppl v1 3.1045
+g33 ppl v1 3.1595
+g23 wikitext2 7.424
+g33 wikitext2 7.5607
+}
+=== chaîne g2 finie 12:55 ===
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -e 's/--graine 1/--graine \"$GRAINE\"/' -e 's/^GPU=\\$1; CORPUS=\\$2; PREFIX=\\$3; N=\\${4:-11}/GPU=$1; CORPUS=$2; PREFIX=$3; GRAINE=${4:-1}; N=${5:-11}/' work/n4/nuit.sh > work/n4/graine.sh 2>/dev/null; nohup bash work/n4/graine … [384 caractères tronqués]`
+
+  ```
+runs du palier 1 lancés 13:00
+0, 100 %, 7624 MiB
+1, 99 %, 7624 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-variance-graines.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"> **Ligne de r … [2500 caractères tronqués]`
+
+  ```
+fiche ok
+etat ok 1068
+budget=0
+  T0 max : 3821 mots (budget 4 000)
+     · compteurs : en-cours.md dit 818 fichiers, le disque en a 819
+  ✅ état court, structuré, multi-session et reprenable
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = '| fichiers / JSON de résultats | **818** / **1068** |'\nnew = '| fichiers / JSON de résultats | **819** / **1068** |'\nassert  … [1656 caractères tronqués]`
