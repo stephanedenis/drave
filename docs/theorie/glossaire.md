@@ -57,44 +57,44 @@ périmètre : ils sont signalés quand ils portent un chiffre utilisé partout.
 
 ## Parcours de lecture conseillé
 
-**Si tu ne lis qu'un document, lis `docs/theorie/vision.md`** (121 lignes) : c'est la
+**Si tu ne lis qu'un document, lis [la vision](vision.md)** (121 lignes) : c'est la
 vision — des listes d'activation plutôt que des matrices, cinq axes, ce que le
 projet n'est pas, et le nom. Tout le reste du dépôt en découle.
 
 Ensuite, dans cet ordre :
 
-1. **`docs/theorie/histoire.md`** (78 lignes) — pourquoi le projet s'appelait Qtrinet et
+1. **[l'histoire du nom](histoire.md)** (78 lignes) — pourquoi le projet s'appelait Qtrinet et
    s'appelle Drave, et la table de conversion des anciens noms de variables. À
    lire tôt : tous les rapports antérieurs au 30/09/2026 emploient encore
    « Qtrinet », `QT_*` et `qtrinet-core`.
-2. **`docs/pilotage/roadmap.md`** — le **plan unique** (A, B, N, R) : l'état réel de chaque
+2. **[la roadmap](../pilotage/roadmap.md)** — le **plan unique** (A, B, N, R) : l'état réel de chaque
    chantier et sa prochaine action. C'est le document qui dit ce qui est
    fait (✅), en cours (🔬), à faire (⏳) ou bloqué (🧱) ; le détail mesuré est dans l'archive liée.
-3. **`docs/implantation/format-flux.md`** (209 lignes) — le format `DRVF` : ce qu'est une trace,
+3. **[le format DRVF](../implantation/format-flux.md)** (209 lignes) — le format `DRVF` : ce qu'est une trace,
    comment elle se relit, et le protocole réseau **v5** avec ses cinq modes. Le
    cœur technique du projet est là.
-4. **`docs/methode/resultats.md`** (47 lignes) — ce qu'un résultat doit porter
+4. **[la méthode des résultats](../methode/resultats.md)** (47 lignes) — ce qu'un résultat doit porter
    (chiffre, dispositif, contrôle négatif, fiche) : la méthode qui donne son sens
    au reste.
-5. **`reports/rapport-inference.md`** — la mesure fondatrice : un moteur de
+5. **[la mesure fondatrice](../../reports/rapport-inference.md)** — la mesure fondatrice : un moteur de
    2 319 lignes de Rust sans dépendance, 5,3 G événements/s sur CPU, 16 jetons
    identiques sur 16 à la référence numpy.
-6. **`reports/rapport-croisement-push-pull.md`** — la mesure qui fixe la frontière
+6. **[la frontière push/pull](../../reports/rapport-croisement-push-pull.md)** — la mesure qui fixe la frontière
    du projet : le chemin « push » (listes) bat le dense en dessous de ~22 % de
    densité d'activation, et perd au-dessus. Tout le reste en dépend.
-7. **`docs/implantation/contexte-long.md`** — ce que « 1 M de jetons de contexte » veut dire, et
+7. **[le contexte long](../implantation/contexte-long.md)** — ce que « 1 M de jetons de contexte » veut dire, et
    par où ça casse (préremplissage, bande passante du cache, rotation).
-8. **`docs/implantation/format-clusters.md`** — comment un modèle est éclaté en grappes
+8. **[les grappes](../implantation/format-clusters.md)** — comment un modèle est éclaté en grappes
    (`commun.gguf` + `cluster-XX.gguf`) et pourquoi c'est le mécanisme de placement.
-9. **`docs/theorie/synthese/index.md`** — la théorie en **huit chapitres** et sept schémas ;
+9. **[la synthèse en huit chapitres](synthese/index.md)** — la théorie en **huit chapitres** et sept schémas ;
    c'est la lecture qui relie le moteur, la langue et la pensée.
 
-Pour aller plus loin, et pour l'histoire : `docs/archive/sprints.md` (la charte des
-sprints de 2 h), `docs/archive/plan-deepseek41-complet.md` (le chantier V4.1),
-`docs/archive/programme-recherche.md` (la thèse et ses critères d'arrêt),
-`docs/archive/comparaison-spiking.md` (ce que les réseaux à spikes changent),
-`docs/archive/plan-mla-vision.md` (attention latente et vision), et — quand un chiffre
-semble contradictoire — `reports/rapport-coherence-docs-2.md`, l'audit qui recense
+Pour aller plus loin, et pour l'histoire : [la charte des sprints](../archive/sprints.md) (la charte des
+sprints de 2 h), [le chantier V4.1](../archive/plan-deepseek41-complet.md) (le chantier V4.1),
+[la thèse et ses critères](../archive/programme-recherche.md) (la thèse et ses critères d'arrêt),
+[ce que les réseaux à spikes changent](../archive/comparaison-spiking.md) (ce que les réseaux à spikes changent),
+[l'attention latente et la vision](../archive/plan-mla-vision.md) (attention latente et vision), et — quand un chiffre
+semble contradictoire — [l'audit de cohérence](../../reports/rapport-coherence-docs-2.md), l'audit qui recense
 les affirmations périmées du corpus.
 
 À la racine, `README.md` (19 ko) donne l'état général et `REPRISE.md` (12 ko) la

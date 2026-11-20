@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 473.6 h |
-| Tours | 219 |
-| Messages | 4426 |
-| Appels d'outils | 3950 |
+| Durée | 473.9 h |
+| Tours | 220 |
+| Messages | 4432 |
+| Appels d'outils | 3954 |
 | Fichiers touchés | 25 |
-| Commandes | 3278 |
+| Commandes | 3282 |
 | Sous-agents | 43 |
-| Commits | 524 |
+| Commits | 525 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -511,6 +511,8 @@
 **Tour 218** — compacte la session et reprends
 
 **Tour 219** — Le glossaire est intéressant en version courte, mais il faudrait que les fiches aient la version courte en intro tldr pour les tooltips et début de fiche web, puis chaque fiche doit être enrichie ave la vulgarisation nécessaire (cross referencée sans définitions circulaires) et un ensemble de références externes pour les notions de bases et explications des concepts plus courants.
+
+**Tour 220** — Parcours de lecture conseillé dans glossaire.md mentionne des documents sans les lier
 
 ## 2. Déroulé, étape par étape
 
@@ -11610,6 +11612,47 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - bash — Régénérer les fiches et vérifier
 - bash — Committer le glossaire
 
+**Synthèse produite :**
+
+⏵ Le glossaire a maintenant le TL;DR en tête de chaque fiche, avec les deux places à remplir
+
+\## Ce qui est en place
+
+**Chaque fiche du glossaire (335) s'ouvre désormais sur** :
+
+```
+> **TL;DR — <terme>.** <le résumé en 2 phrases, ≤ 60 mots — pour les tooltips et le début de fiche web>
+>
+> **Ce que c'est, en clair.** <la vulgarisation, à enrichir — aujourd'hui « Définition complète dans la famille »>
+>
+> **Famille :** … · **Index :** … · **Définition complète :** …
+>
+> **Références externes :** <… ou le lien vers les sources citées>
+```
+
+- **Le TL;DR** est **généré depuis la définition** (les 2 premières phrases, ≤ 60 mots) — c'est l'unité courte que docwatch peut afficher en contexte.
+- **« Ce que c'est, en clair »** est une **place réservée** : le générateur l'accepte (`e['vulgarisation']`), mais il n'y a pas encore de contenu pour les 335 entrées — c'est le travail d'enrichissement.
+- **Les références externes** : le générateur accepte `e['references']` par entrée ; en attendant, chaque fiche renvoie aux [sources citées](../docs/theorie/glossaire/09-sources-externes-citees.md) (les 100+ articles déjà vérifiés : Vaswani, Ioffe, Sennrich, Hu, DeepSeek-V2/V3, etc.).
+
+\## Ce qui reste (le vrai chantier)
+
+Les **335 entrées** n'ont pas encore leur **vulgarisation** ni leurs **références par entrée**. Le générateur est prêt ; il faut :
+
+1. **Écrire les vulgarisations** dans les familles (la source des définitions) — en **cross-référençant** (jamais « définir A par B » quand B est défini par A) et sans circularité.
+2. **Rattacher les références externes** aux notions de base (ce que la famille 09 a déjà, mais au niveau de l'entrée).
+3. **Régénérer** (`python3 tools/glossaire_cartes.py`).
+
+C'est un travail de fond (335 entrées × ~10 min = plusieurs jours d'agent). Je peux le lancer **par familles** (les 13), en commençant par les familles les plus lues (le moteur, la mesure, le pont) — dites-moi par laquelle commencer, ou je prends l'ordre des familles.
+
+### Tour 220 — Parcours de lecture conseillé dans glossaire.md mentionne des documents sans les lier
+
+*4 appels d'outils.* Actions notables :
+
+- bash — Voir le parcours de lecture
+- bash — Vérifier l'existence des documents cités
+- bash — Lier les documents du parcours
+- bash — Committer les liens du parcours
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11730,7 +11773,7 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3238 autres
+- … et 3242 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12402,4 +12445,5 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ 
 - README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 2
 - GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTIPS ET LE DÉBUT DE FICHE WEB), AVEC UNE PLACE POUR « CE QUE C'EST, EN CLAIR » ET LES RÉFÉRENCES
+- GLOSSAIRE — LE PARCOURS DE LECTURE EST ENTIÈREMENT LIÉ (16 DOCUMENTS, DE LA VISION À L'AUDIT) : PLUS UN NOM DE FICHIER NU" 2>&1 | tail -2; git log -1 --format='
 

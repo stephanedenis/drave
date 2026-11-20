@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 72.4 h |
-| Tours | 84 |
-| Messages | 1318 |
-| Appels d'outils | 1139 |
+| Durée | 72.7 h |
+| Tours | 85 |
+| Messages | 1326 |
+| Appels d'outils | 1145 |
 | Fichiers touchés | 44 |
-| Commandes | 989 |
+| Commandes | 995 |
 | Sous-agents | 7 |
-| Commits | 91 |
+| Commits | 93 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -227,6 +227,8 @@
 **Tour 83** — "en-cours.md" montre 3 sessions en pause. Peux-tu les reprendre, ou tu as des choses a terminer avant?
 
 **Tour 84** — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élevé. go en mode autonome jusqu'à 16h
+
+**Tour 85** — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-trad … [658 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -2046,7 +2048,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*76 appels d'outils.* Actions notables :
+*77 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,20 +2064,25 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 62 autres
+- … et 63 autres
 
 **Synthèse produite :**
 
-⏵ Matinée productive : S a sa profondeur (324/369) et sa rétro-traduction, le corpus du palier 1 est bâti (3,69 Go), les runs de graine tournent
+⏵ Les graines 2 et 3 à 10 000 pas : **8,78** et **9,50** sur wikitext2 (graine 1 : 8,86) — l'écart entre graines est déjà visible
 
-**Ce qui est fait et committé** :
+**Le point** : à 10 000 pas, les trois graines de `wiki_big` donnent **8,78** (g2), **8,86** (g1) et **9,50** (g3) sur wikitext2 — un écart de 8 % qui inclut l'initialisation (les PPL du pas 1 diffèrent : 185,5 / 185,7). C'est exactement ce que la nuit avait pointé : **le run-à-run est le bruit qui limite les comparaisons fines**. Les tranches 20k (≈ 11 h 30) et 30k (≈ 12 h 50) diront si l'écart se resserre en convergeant — c'est la mesure qui manque pour juger la sélection du contenu.
 
-- **S / migration `/` v7** : la profondeur de l'analyseur entre dans la banque **sans casser les 150 verdicts** — 324 des 369 candidats appariés, **95 à profondeur ≥ 3** (max 5), `app.js` lit `profondeur ?? niveau`. Fiche `rapport-s-migration-profondeur.md`, sous-module `f15ab58`.
-- **S / rétro-traduction** : le script existe (`retro_traduction.py`), **9/9 paragraphes traduits**, 39 paires, 18 accords de classe — mais l'appariement était par position (a002 : « l' » → *it* comparé à *she*), donc **46,2 % est un plancher d'alignement**. Le prompt v2 est écrit (anaphores numérotées + référent) ; la passe API et l'analyse sont prévues à 11 h 30. Fiche `rapport-s-retro-traduction.md`.
-- **N / corpus du palier 1** : les **résumés Wikipédia** (le registre de `wiki_big`, pas le plein texte) — `frwiki_v14`, filtre 300 o : **3,69 Go, 4,9 M lignes, 753 o/ligne**, épinglé `469a6d78…`. Fiche `rapport-corpus-palier1.md`.
-- **Runs de graine** : deux réplications de `wiki_big` (graines 2 et 3, GPU 0 et 1) pour mesurer la variance du run-à-run — première tranche vers 10 h 30, fin vers 12 h 50. Le run du palier 1 partira derrière.
+À 11 h 30, la fenêtre remisée s'ouvre : je lance la **rétro-traduction v2** (anaphores numérotées) et son analyse contre le gold des a001-a003, comme prévu.
 
-**Noté** : vous avez réécrit le README et l'en-tête de l'état à 09 h 48-10 h 00 ; j'ai **ajouté** mes faits à votre en-tête sans le remplacer, et mes commits sont passés (`fed7ad31`).
+### Tour 85 — <goal_round> Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches  … [938 caractères tronqués]
+
+*5 appels d'outils.* Actions notables :
+
+- bash — Read the N2 clean-gate context
+- bash — Run the retro-translation v2
+- bash — Inspect the v2 pairs against the gold paragraphs
+- bash — Update the retro-translation fiche with the v2 analysis
+- bash — Commit the retro-translation v2 analysis
 
 ## 3. Travail accompli
 
@@ -2180,7 +2187,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 949 autres
+- … et 955 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2419,4 +2426,6 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT : LA MIGRATION / v7 (324/369) ET LA RÉTRO-TRADUCTION (9/9, ALIGNEMENT À RAFFINER)" && git push origin s/v7 2>&1 | ta
 - S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT : LA MIGRATION / v7 (324/369) ET LA RÉTRO-TRADUCTION (9/9, ALIGNEMENT À RAFFINER) ; L'ÉTAT PASSE AU 20/11 09 H 58" &
 - S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/369, RÉTRO-TRADUCTION 9/9) ; L'ÉTAT AJOUTE CES FAITS À SON EN-TÊTE" && git push origin s/v7 2>&1
+- S — RÉTRO-TRADUCTION v2 : LES ANAPHORES NUMÉROTÉES PAR L'ANALYSEUR (LE MODÈLE LES REND DANS L'ORDRE)" && git push origin master 2>&1 | tail -1
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY' import pathlib p = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text() def rep(o
 

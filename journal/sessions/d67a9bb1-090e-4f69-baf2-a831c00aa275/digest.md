@@ -18907,3 +18907,92 @@ pas 8400 · perte 1.2555 · PPL val 3.898 · 331
   ```
 
 - **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g21','g31'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g21 … [259 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 10:23:03 EST
+g21 -
+g31 -
+g21 wikitext2 -
+g31 wikitext2 -
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g21','g31'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g21 … [266 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 10:32:29 EST
+g21 ppl v1 3.5305
+g31 ppl v1 3.5662
+g21 wikitext2 8.7836
+g31 wikitext2 9.4978
+  ```
+
+### 🤖 Assistant
+
+⏵ Les graines 2 et 3 à 10 000 pas : **8,78** et **9,50** sur wikitext2 (graine 1 : 8,86) — l'écart entre graines est déjà visible
+
+**Le point** : à 10 000 pas, les trois graines de `wiki_big` donnent **8,78** (g2), **8,86** (g1) et **9,50** (g3) sur wikitext2 — un écart de 8 % qui inclut l'initialisation (les PPL du pas 1 diffèrent : 185,5 / 185,7). C'est exactement ce que la nuit avait pointé : **le run-à-run est le bruit qui limite les comparaisons fines**. Les tranches 20k (≈ 11 h 30) et 30k (≈ 12 h 50) diront si l'écart se resserre en convergeant — c'est la mesure qui manque pour juger la sélection du contenu.
+
+À 11 h 30, la fenêtre remisée s'ouvre : je lance la **rétro-traduction v2** (anaphores numérotées) et son analyse contre le gold des a001-a003, comme prévu.
+
+
+## Tour 85
+
+### 👤 Utilisateur
+
+<goal_round>
+Objective: "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h."
+Round: 1/1000
+
+Continue working toward the objective in this same session. Treat the current workspace, tool results, and durable session state as authoritative; inspect them instead of assuming earlier narration is still current. Make concrete progress and verify the result. Before claiming completion, gather evidence that the whole objective is achieved, read the current goal, and mark it complete. If work remains, leave the goal active for the next round. Follow the configured goal-tool policy before reporting a blocker.
+</goal_round>
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B2 -A6 \"porte propre\" docs/pilotage/backlog/N2-distillation.md | head -20; date", "description": "Read the N2 clean-gate context"}`
+
+  ```
+41-## Prochaine action
+42-
+43:**La fenêtre est la recette ; il reste la porte propre.** Prochaine action : la **porte propre**
+44-(0,29 manquant à 2,7856) — données ou capacité — puis **R1.2 à 1 024** entraînée et **N4**. Les
+45-200 k pas seuls ne suffisent pas (3,16) ; la longueur reste le levier de la largeur (positions
+46-aléatoires : 256 octets de 14,11 à 3,25).
+47-
+48-## Voir aussi
+49-
+ven 20 nov 2026 10:32:59 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && source ~/.bashrc >/dev/null 2>&1 && timeout 300 python3 tools/structures/retro_traduction.py --json reports/retro-traduction-v2.json 2>&1 | tail -2; date", "description": "Run the retro-translation v2", "timeoutMs": 400000}`
+
+  ```
+{"paragraphes": 9, "traduits": 9, "paires": 35, "accord": 13, "taux": 37.1}
+ven 20 nov 2026 10:33:28 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/retro-traduction-v2.json'))\nfor x in d['detail']:\n    if x['id'] in ('a001','a002','a003'):\n        print(x['id'], '·', x['fr'], '→', x['en'], '·', x.get('referent',''), '· s … [92 caractères tronqués]`
+
+  ```
+a001 · Elle → She ·  · source: She
+a001 · se → herself ·  · source: herself
+a001 · elle → she ·  · source: she
+a001 · se → herself ·  · source: it
+a001 · lui → her ·  · source: she
+a001 · en → from it ·  · source: herself
+a002 · Elle → She ·  · source: her
+a002 · en → in it ·  · source: she
+a002 · y → in it ·  · source: it
+a003 · Elle → she ·  · source: She
+a003 · sa → her ·  · source: herself
+a003 · sa → her ·  · source: her
+a003 · elle → she ·  · source: her
+a003 · se → herself ·  · source: it
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-s-retro-traduction.md'); s = p.read_text()\nold = \"## Ce que le premier passage montre déjà\"\nnew = \"\"\"## La v2 (anaphores numérotées) et l'analyse des a001-a00 … [1454 caractères tronqués]`
+
+  ```
+fiche ok
+     · compteurs : en-cours.md dit 1055 JSON, le disque en a 1056
+   f15ab58..dcd7284  master -> master
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"**rétro-traduction** — s … [1564 caractères tronqués]`

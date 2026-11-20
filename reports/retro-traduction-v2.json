@@ -1,0 +1,310 @@
+{
+ "paragraphes": 9,
+ "traduits": 9,
+ "paires": 35,
+ "accord": 13,
+ "taux": 37.1,
+ "lignes": [
+  {
+   "id": "a001",
+   "anaphores": 6,
+   "traduit": true,
+   "traduction": "She had a habit of giving herself very good advice (though she rarely followed it), and sometimes she scolded herself so"
+  },
+  {
+   "id": "a002",
+   "anaphores": 3,
+   "traduit": true,
+   "traduction": "She then caught sight of a little glass box that was under the table, opened it and in it found a very small cake on whi"
+  },
+  {
+   "id": "a003",
+   "anaphores": 5,
+   "traduit": true,
+   "traduction": "So she ate a small piece of the cake, and, putting her hand on her head, she said to herself, quite worried: \"Which one "
+  },
+  {
+   "id": "a004",
+   "anaphores": 1,
+   "traduit": true,
+   "traduction": "ALICE, sitting next to her sister on the grass, was beginning to get bored of staying there doing nothing."
+  },
+  {
+   "id": "a005",
+   "anaphores": 3,
+   "traduit": true,
+   "traduction": "Suddenly she met on her passage a little three-legged table, of solid glass, and nothing on it but a tiny golden key."
+  },
+  {
+   "id": "a006",
+   "anaphores": 4,
+   "traduit": true,
+   "traduction": "As that was not advancing anything to spend his time waiting at the little door, she returned to the table, almost hopin"
+  },
+  {
+   "id": "a007",
+   "anaphores": 1,
+   "traduit": true,
+   "traduction": "It is very easy to say \"Drink me\", but Alice was too clever to obey blindly."
+  },
+  {
+   "id": "a008",
+   "anaphores": 7,
+   "traduit": true,
+   "traduction": "\"I feel all funny,\" said Alice, \"one would say that I am going back into myself and that I am closing like a telescope.\""
+  },
+  {
+   "id": "a009",
+   "anaphores": 5,
+   "traduit": true,
+   "traduction": "A moment after, seeing that nothing more was happening, she decided to go at once to the garden; but alas, poor Alice! o"
+  }
+ ],
+ "detail": [
+  {
+   "id": "a001",
+   "fr": "Elle",
+   "en": "She",
+   "source": "She",
+   "accord": true
+  },
+  {
+   "id": "a001",
+   "fr": "se",
+   "en": "herself",
+   "source": "herself",
+   "accord": true
+  },
+  {
+   "id": "a001",
+   "fr": "elle",
+   "en": "she",
+   "source": "she",
+   "accord": true
+  },
+  {
+   "id": "a001",
+   "fr": "se",
+   "en": "herself",
+   "source": "it",
+   "accord": false
+  },
+  {
+   "id": "a001",
+   "fr": "lui",
+   "en": "her",
+   "source": "she",
+   "accord": true
+  },
+  {
+   "id": "a001",
+   "fr": "en",
+   "en": "from it",
+   "source": "herself",
+   "accord": false
+  },
+  {
+   "id": "a002",
+   "fr": "Elle",
+   "en": "She",
+   "source": "her",
+   "accord": true
+  },
+  {
+   "id": "a002",
+   "fr": "en",
+   "en": "in it",
+   "source": "she",
+   "accord": false
+  },
+  {
+   "id": "a002",
+   "fr": "y",
+   "en": "in it",
+   "source": "it",
+   "accord": false
+  },
+  {
+   "id": "a003",
+   "fr": "Elle",
+   "en": "she",
+   "source": "She",
+   "accord": true
+  },
+  {
+   "id": "a003",
+   "fr": "sa",
+   "en": "her",
+   "source": "herself",
+   "accord": true
+  },
+  {
+   "id": "a003",
+   "fr": "sa",
+   "en": "her",
+   "source": "her",
+   "accord": true
+  },
+  {
+   "id": "a003",
+   "fr": "elle",
+   "en": "she",
+   "source": "her",
+   "accord": true
+  },
+  {
+   "id": "a003",
+   "fr": "se",
+   "en": "herself",
+   "source": "it",
+   "accord": false
+  },
+  {
+   "id": "a004",
+   "fr": "sa",
+   "en": "her",
+   "source": "her",
+   "accord": true
+  },
+  {
+   "id": "a005",
+   "fr": "elle",
+   "en": "she",
+   "source": "she",
+   "accord": true
+  },
+  {
+   "id": "a005",
+   "fr": "son",
+   "en": "her",
+   "source": "it",
+   "accord": false
+  },
+  {
+   "id": "a005",
+   "fr": "en",
+   "en": "of it",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a006",
+   "fr": "cela",
+   "en": "that",
+   "source": "she",
+   "accord": false
+  },
+  {
+   "id": "a006",
+   "fr": "son",
+   "en": "his",
+   "source": "she",
+   "accord": true
+  },
+  {
+   "id": "a006",
+   "fr": "elle",
+   "en": "she",
+   "source": "it",
+   "accord": false
+  },
+  {
+   "id": "a006",
+   "fr": "y",
+   "en": "there",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a007",
+   "fr": "Buvez-moi",
+   "en": "Drink me",
+   "source": "It",
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "Je",
+   "en": "I",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "me",
+   "en": "myself",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "on",
+   "en": "one",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "je",
+   "en": "I",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "en",
+   "en": "into",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "je",
+   "en": "I",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a008",
+   "fr": "me",
+   "en": "myself",
+   "source": null,
+   "accord": false
+  },
+  {
+   "id": "a009",
+   "fr": "se",
+   "en": "was happening",
+   "source": "she",
+   "accord": false
+  },
+  {
+   "id": "a009",
+   "fr": "elle",
+   "en": "she",
+   "source": "she",
+   "accord": true
+  },
+  {
+   "id": "a009",
+   "fr": "se",
+   "en": "decided",
+   "source": "she",
+   "accord": false
+  },
+  {
+   "id": "a009",
+   "fr": "en",
+   "en": "on arriving",
+   "source": "she",
+   "accord": false
+  },
+  {
+   "id": "a009",
+   "fr": "elle",
+   "en": "she",
+   "source": null,
+   "accord": false
+  }
+ ]
+}

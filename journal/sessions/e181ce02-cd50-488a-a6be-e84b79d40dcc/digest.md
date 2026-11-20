@@ -71771,3 +71771,100 @@ carte mise à jour
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-20, 10 h 25 HNE (les fiches du glossaire : TL;DR en tête, la pl … [782 caractères tronqués]`
+
+  ```
+✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+ 352 files changed, 2100 insertions(+), 706 deletions(-)
+ create mode 100644 journal/2026-11-20/distribue.md
+5ba387d6 GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTIPS ET LE DÉBUT 
+   fed7ad31..5ba387d6  s/v7 -> s/v7
+   b1b1e26e..5ba387d6  master -> master
+ven 20 nov 2026 10:21:37 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Le glossaire a maintenant le TL;DR en tête de chaque fiche, avec les deux places à remplir
+
+## Ce qui est en place
+
+**Chaque fiche du glossaire (335) s'ouvre désormais sur** :
+
+```
+> **TL;DR — <terme>.** <le résumé en 2 phrases, ≤ 60 mots — pour les tooltips et le début de fiche web>
+>
+> **Ce que c'est, en clair.** <la vulgarisation, à enrichir — aujourd'hui « Définition complète dans la famille »>
+>
+> **Famille :** … · **Index :** … · **Définition complète :** …
+>
+> **Références externes :** <… ou le lien vers les sources citées>
+```
+
+- **Le TL;DR** est **généré depuis la définition** (les 2 premières phrases, ≤ 60 mots) — c'est l'unité courte que docwatch peut afficher en contexte.
+- **« Ce que c'est, en clair »** est une **place réservée** : le générateur l'accepte (`e['vulgarisation']`), mais il n'y a pas encore de contenu pour les 335 entrées — c'est le travail d'enrichissement.
+- **Les références externes** : le générateur accepte `e['references']` par entrée ; en attendant, chaque fiche renvoie aux [sources citées](../docs/theorie/glossaire/09-sources-externes-citees.md) (les 100+ articles déjà vérifiés : Vaswani, Ioffe, Sennrich, Hu, DeepSeek-V2/V3, etc.).
+
+## Ce qui reste (le vrai chantier)
+
+Les **335 entrées** n'ont pas encore leur **vulgarisation** ni leurs **références par entrée**. Le générateur est prêt ; il faut :
+
+1. **Écrire les vulgarisations** dans les familles (la source des définitions) — en **cross-référençant** (jamais « définir A par B » quand B est défini par A) et sans circularité.
+2. **Rattacher les références externes** aux notions de base (ce que la famille 09 a déjà, mais au niveau de l'entrée).
+3. **Régénérer** (`python3 tools/glossaire_cartes.py`).
+
+C'est un travail de fond (335 entrées × ~10 min = plusieurs jours d'agent). Je peux le lancer **par familles** (les 13), en commençant par les familles les plus lues (le moteur, la mesure, le pont) — dites-moi par laquelle commencer, ou je prends l'ordre des familles.
+
+
+## Tour 220
+
+### 👤 Utilisateur
+
+Parcours de lecture conseillé dans glossaire.md mentionne des documents sans les lier
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; grep -n \"Parcours\" docs/theorie/glossaire.md | head -3; sed -n \"$(grep -n 'Parcours de lecture' docs/theorie/glossaire.md | head -1 | cut -d: -f1),+40p\" docs/theorie/glossaire.md | cut -c1-140", "description": "Voir le parc … [17 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 10:31:59 EST
+58:## Parcours de lecture conseillé
+## Parcours de lecture conseillé
+
+**Si tu ne lis qu'un document, lis `docs/theorie/vision.md`** (121 lignes) : c'est la
+vision — des listes d'activation plutôt que des matrices, cinq axes, ce que le
+projet n'est pas, et le nom. Tout le reste du dépôt en découle.
+
+Ensuite, dans cet ordre :
+
+1. **`docs/theorie/histoire.md`** (78 lignes) — pourquoi le projet s'appelait Qtrinet et
+   s'appelle Drave, et la table de conversion des anciens noms de variables. À
+   lire tôt : tous les rapports antérieurs au 30/09/2026 emploient encore
+   « Qtrinet », `QT_*` et `qtrinet-core`.
+2. **`docs/pilotage/roadmap.md`** — le **plan unique** (A, B, N, R) : l'état réel de chaque
+   chantier et sa prochaine action. C'est le document qui dit ce qui est
+   fait (✅), en cours (🔬), à faire (⏳) ou bloqué (🧱) ; le détail mesuré est dans l'archive liée.
+3. **`docs/implantation/format-flux.md`** (209 lignes) — le format `DRVF` : ce qu'est une trace,
+   comment elle se relit, et le protocole réseau **v5** avec ses cinq modes. Le
+   cœur technique du projet est là.
+4. **`docs/methode/resultats.md`** (47 lignes) — ce qu'un résultat doit porter
+   (ch
+… [1539 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && for f in docs/theorie/vision.md docs/theorie/histoire.md docs/pilotage/roadmap.md docs/implantation/format-flux.md docs/methode/resultats.md reports/rapport-inference.md reports/rapport-croisement-push-pull.md docs/implantation/conte … [985 caractères tronqués]`
+
+  ```
+16
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/theorie/glossaire.md'); t = p.read_text()\nliens = [\n    (\"`docs/theorie/vision.md`\", \"[la vision](vision.md)\"),\n    (\"`docs/theorie/histoire.md`\", \"[l'histoire du nom … [1879 caractères tronqués]`
+
+  ```
+16 / 16 liens
+  ❌ 1 anomalie(s) :
+     · compteurs : en-cours.md dit 1049 JSON, le disque en a 1055
+  ✅ 5136 lien(s) relatif(s) résolvent (docs + reports, hors blocs de code)
+  ✅ la page vivante date du dernier commit (2026-11-20)
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nn_md=len(list(pathlib.Path('reports').glob('*.md'))); n_json=len(list(pathlib.Path('reports').glob('*.json')))\nt=re.sub(r\"\\| fichi … [916 caractères tronqués]`
