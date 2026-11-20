@@ -72558,3 +72558,44 @@ README mots: 3495
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && timeout 300 git add docs/theorie/parcours.md docs/README.md README.md docs/pilotage/en-cours.md && timeout 300 git commit -m \"PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR … [396 caractères tronqués]`
+
+  ```
+17 files changed, 400 insertions(+), 44 deletions(-)
+ create mode 100644 docs/theorie/parcours.md
+d0cf6cf1 PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEU
+   c0126f88..d0cf6cf1  s/v7 -> s/v7
+   c0126f88..d0cf6cf1  master -> master
+ven 20 nov 2026 15:32:26 EST
+  ```
+
+### 🤖 Assistant
+
+⏵ Les parcours de lecture sont en place — cinq profils, cinq chemins, neuf documents de théorie
+
+## Ce qui a été fait
+
+**`docs/theorie/parcours.md`** (nouveau) — le **guidon** de la documentation :
+
+| profil | son chemin | le temps |
+|---|---|---|
+| **1. Le curieux** — « c'est quoi, ce projet ? » | README → [la vision](docs/theorie/vision.md) → [la vue d'ensemble en une image](docs/theorie/synthese/schemas/vue-ensemble.svg) | 20 min |
+| **2. L'utilisateur** — « je veux analyser un texte » | [le démarrage](docs/produit/demarrage.md) → [la notice](docs/produit/README.md) → [les exemples](docs/produit/exemples.md) | 15 min |
+| **3. L'ingénieur** — « comment c'est construit ? » | [architecture-native](docs/theorie/architecture-native.md) → [le traité](docs/theorie/modele-natif.md) → [DRVF](docs/implantation/format-flux.md) → [DRVM](docs/theorie/modele-natif.md#5-drvm--le-conteneur) → [les grappes](docs/implantation/format-clusters.md) | 2 h |
+| **4. Le chercheur** — « qu'avez-vous mesuré ? » | [la synthèse](docs/theorie/synthese/index.md) → [les fiches](reports/README.md) → [la méthode](docs/methode/resultats.md) → [la non-régression](docs/pilotage/references-non-regression.md) | 1 h |
+| **5. L'agent** — « j'agis sur le dépôt » | [AGENTS](AGENTS.md) → [l'état](docs/pilotage/en-cours.md) → [la roadmap](docs/pilotage/roadmap.md) → [sa tâche](docs/README.md) | 10 min |
+
+**La théorie tient en 9 documents** (au lieu de 38) : la vision, l'architecture native, le traité, la synthèse (8 chapitres), le protocole sémantique, les jeux symboliques, la pensée itérative, la généalogie, le glossaire — avec le nombre de mots et le profil principal de chacun.
+
+## La règle de non-redondance (inscrite dans le document)
+
+1. **Un fait, un document** : le chiffre vit dans `reports/`, le concept dans `docs/theorie/`, l'état dans `en-cours` — les autres **citent** (un lien, pas une copie).
+2. **Un document, un parcours principal** (le tableau le dit).
+3. **La revue le vérifie** : `revue_documentation` signale les doublons de titre et les orphelins.
+4. **Quand un document grossit**, on le découpe par **question**, pas par public.
+
+## Les vérifications
+
+`taille_documents` ✅ (README 3 495, `docs/README` 1 000) · `revue_documentation` ✅ · `porte-tableaux` ✅ · `verifie_en_cours` ✅.
+
+Committé `d0cf6cf1`, poussé. **Les limites, dites dans le document** : il **décrit** l'organisation, il ne la **force** pas — le `modele-natif.md` (7 300 mots) et la `synthese/` (8 000) restent à découper, c'est le chantier de fond.
+

@@ -19615,3 +19615,58 @@ pas  600
   ```
 
 - **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]* · perte [0-9.]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 15:39:21 EST
+pas 2050 · perte 1.0410
+pas 3400 · perte 0.9165
+  ```
+
+- **bash** `{"command": "sleep 590; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/p1.chaine.log | grep -o \"pas *[0-9]*\"; tail -1 work/n4/p2.chaine.log | grep -o \"pas *[0-9]*\"", "description": "Ten-minute pause and progress", "timeoutMs": 660000}`
+
+  ```
+ven 20 nov 2026 15:49:24 EST
+pas 3500
+pas 4900
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-palier1-resumes.md <<'MD'\n# Le palier 1 : les résumés Wikipédia, 3,69 Go — à 20 000 pas, il mène `wiki_big`\n\n> **Ligne de roadmap** : N · **Date** : 2026-11-20 · **Verdict** : *(tranche 30 000 en cours)* — le … [1914 caractères tronqués]`
+
+  ```
+fiche écrite
+ven 20 nov 2026 15:49:50 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60] … [2038 caractères tronqués]`
+
+  ```
+budget=0
+  T0 max : 3843 mots (budget 4 000)
+     · compteurs : en-cours.md dit 820 fichiers, le disque en a 821
+ven 20 nov 2026 15:50:05 EST
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "<stdin>", line 6, in rep
+AssertionError: | fichiers / JSON de résultats | **820** / **1069** |
+  ❌ commit refusé : 13 fait(s) stagé(s) sans docs/pilotage/en-cours.md
+     · reports/banc-generation-p11.json
+     · reports/banc-generation-p12.json
+     · reports/banc-generation-p21.json
+     · reports/banc-generation-p22.json
+     · reports/banc-grammaticalite-p11.json
+     → mettre l'état à jour, puis `git add docs/pilotage/en-cours.md`
+  ⛔ commit refusé : un fait sans ligne d'état.
+     mets docs/pilotage/en-cours.md à jour, puis :
+     git add docs/pilotage/en-cours.md
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"fichiers / JSON\" docs/pilotage/en-cours.md; grep -n \"palier 1\" docs/pilotage/en-cours.md | head -2", "description": "Read the current counters and N bullet"}`
+
+  ```
+64:| fichiers / JSON de résultats | **820** / **1081** | `reports/*.md` / `reports/*.json` |
+76:| **B — l'intelligence** | **B13** | **B13 : 183/183, F1 0,7902, 238/239** ; le produit installable (roue, quickstart) ; le tagger 95,75 % ; D1–E2 ; le natif (le banc, la numpy) | **le palier 1** (le corpus épinglé) ; B10.3 bloqué |
+85:**N** : le corpus du palier 1 (résumés, **3,69 Go**, épinglé) — le run à époques égales ; la porte propre (0,29) ; N4.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60] … [1995 caractères tronqués]`

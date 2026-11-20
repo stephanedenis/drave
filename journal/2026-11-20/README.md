@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**20 commits** · **2 session(s)** · **6 thème(s)**
+**21 commits** · **2 session(s)** · **7 thème(s)**
 
 ## Thèmes du jour
 
@@ -16,14 +16,15 @@
 | docs | 6 | [docs.md](docs.md) |
 | mesures | 9 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
+| moteur | 1 | [moteur.md](moteur.md) |
 | portes | 1 | [portes.md](portes.md) |
 
 ## Sessions DSH
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 77.7 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 478.8 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 78.0 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 478.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -49,6 +50,7 @@
 | 13:04 | `e961548d` | S — LA RÉTRO-TRADUCTION MESURÉE CONTRE LE GOLD : 14/14 (12 RÉFÉRENTS + 2 NON-RÉFÉRENTS) |
 | 13:10 | `36b5dbda` | J4 — LES SECONDS CADRES : UN SECOND ANNOTATEUR NE CONFIRME PAS L'OR DE RÔLES (F1 0,71), ET CERTAINS DÉSACCORDS SONT LES ERREURS DE L'OR |
 | 14:57 | `c0126f88` | ARCHITECTURE — DOCUMENTÉE DANS LE README (TROIS NIVEAUX, LE BUS, LE PRODUIT) ET DANS LA VISION (LE TRAJET D'UN TEXTE, LE BUS, LE GRAPHE) ; LES SCHÉMAS DE LA SYNTHÈSE LIÉS (vue-ensemble, étages, bus) ET L'ILLUSTRATION DANS architecture-native |
+| 15:29 | `d0cf6cf1` | PARCOURS DE LECTURE — CINQ PROFILS, CINQ CHEMINS (CURIEUX 20 MIN, UTILISATEUR 15, INGÉNIEUR 2 H, CHERCHEUR 1 H, AGENT 10), NEUF DOCUMENTS DE THÉORIE AU TOTAL, LA RÈGLE DE NON-REDONDANCE (UN FAIT, UN DOCUMENT) ; LE README ET LA CARTE Y RENVOIENT |
 
 ## Le récit de la journée (écrit à la main)
 
