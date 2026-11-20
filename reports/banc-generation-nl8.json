@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nl8.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9391,
+   "distinct_2": 0.6979,
+   "repetition": 6,
+   "echo": 0.0839,
+   "octets": 2560,
+   "secondes": 22.46,
+   "octets_s": 114.0,
+   "echantillons": [
+    {
+     "mots": 33,
+     "mots_valides": 0.8788,
+     "distinct_2": 0.6562,
+     "repetition": 2,
+     "echo": 0.39285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la France et le Pays de la France est de nouveau en 1990. Le pays est alors renouvelé en 2005 pour la France et le Pays de ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4333,
+     "repetition": 5,
+     "echo": 0.03571428571428571,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les programmes de la série de romans et de la série de romans de la série de romans de la série de romans de la série de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois consécutive à la construction de l'ancienne commune de Bourgogne en 1960. Il est le fils de Georges Leclerc et de Jean-Pierre",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 33,
+     "mots_valides": 0.8788,
+     "distinct_2": 0.6562,
+     "repetition": 2,
+     "echo": 0.39285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la France et le Pays de la France est de nouveau en 1990. Le pays est alors renouvelé en 2005 pour la France et le Pays de ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4333,
+     "repetition": 5,
+     "echo": 0.03571428571428571,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, les programmes de la série de romans et de la série de romans de la série de romans de la série de romans de la série de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois consécutive à la construction de l'ancienne commune de Bourgogne en 1960. Il est le fils de Georges Leclerc et de Jean-Pierre",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.4444,
+     "repetition": 6,
+     "echo": 0.11538461538461539,
+     "prompt": "Le chat",
+     "texte": "Le chat de la rivière et le chat de la rivière est de la rivière de la rivière de la rivière et de la rivière Saint-Pierre et le ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.875,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La mer",
+     "texte": "La mer de la ville de Barcelone et de la région de Barcelone. Le , le comté de Barcelone est réputé pour la première fois défini",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.7917,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des communautés de la communauté de communes de la communauté de communes du Languedoc-Rouge et de la France entre 1982 et 2",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4583,
+     "repetition": 5,
+     "echo": 0.047619047619047616,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de retrouver le contrôle de la construction de la construction de la construction de la construction de la construction de la ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 0.8095,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un personnel qui a été construit par le président de la République populaire de Californie. Le président de la République",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.875,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme politique et de la protection de la province de Londres. Le , le président de la République de Londres est annulé par le pr�",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La musique",
+     "texte": "La musique est présentée à la fois en 2006 et en 2007. Le tableau ci-dessous présente la même formation que les personnes et les pers",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.56,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de la communauté de communes du Pays de Loire, et de la communauté de communes du Pays de Loire, de la communauté de commune",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre a été accusée de manière inconnue en 1944. Le , le gouvernement de l'État de l'Armée de l'Air est accusé d'avoir pris le",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.7647,
+     "repetition": 2,
+     "echo": 0.058823529411764705,
+     "prompt": "L'économie",
+     "texte": "L'économie de l'Union européenne et l'agriculture de la commune de Saint-Laurent-sur-Saëne et l'économie de la commune de Saint-Laurent",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 2,
+     "echo": 0.041666666666666664,
+     "prompt": "Le sport",
+     "texte": "Le sport de la compétition est la première place du championnat de France en 1998. Le club est la première fois de sa carrière en 19",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La science",
+     "texte": "La science et les contes de la communauté de communes du Pays de la Montagne et de la région Auvergne-Rhône-Alpes. Le premier présiden",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.6154,
+     "repetition": 3,
+     "echo": 0.32,
+     "prompt": "La ville",
+     "texte": "La ville de Bourgogne est une ville de la province de Bourgogne. Elle est la première ville de la ville de Bourgogne et de la ville de ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3043,
+     "repetition": 5,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de la construction de la construction de la construction de la chapelle de la construction de la chapelle de la construction de",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9286,
+     "distinct_2": 0.5926,
+     "repetition": 2,
+     "echo": 0.19230769230769232,
+     "prompt": "La vie",
+     "texte": "La vie de la communauté de communes du Pays de la Loire et de la restauration de la communauté de communes du Pays de la Loire. Le p",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6154,
+     "repetition": 3,
+     "echo": 0.04,
+     "prompt": "Le monde",
+     "texte": "Le monde de la série de la série de télévision et de son épouse est le premier à série de la série de télévision et de science",
+     "octets": 128
+    },
+    {
+     "mots": 34,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3333,
+     "repetition": 5,
+     "echo": 0.03125,
+     "prompt": "La question",
+     "texte": "La question de la loi sur le projet de loi sur le projet de loi sur le projet de loi de loi sur le projet de loi sur le projet de loi sur l",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.9152,
+   "distinct_2": 0.9764,
+   "repetition": 1,
+   "echo": 0.0485,
+   "octets": 2560,
+   "secondes": 22.64,
+   "octets_s": 113.1,
+   "echantillons": [
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays du Rhône aborde à l'université du début des années 1960 à 1960. Un pays limite leurs productions de la Révolution franç",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950-1960, l'un de ses neuf unités l'autre traversée, une importante surveillance des Millenniers du Vendersey, de maintenance de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de plus un point d’avance sur les étendues de médecine engagés après son employé. La partie était reliée par les magas",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 26,
+     "mots_valides": 0.9231,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.14285714285714285,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays du Rhône aborde à l'université du début des années 1960 à 1960. Un pays limite leurs productions de la Révolution franç",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.8571,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950-1960, l'un de ses neuf unités l'autre traversée, une importante surveillance des Millenniers du Vendersey, de maintenance de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de plus un point d’avance sur les étendues de médecine engagés après son employé. La partie était reliée par les magas",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.7826,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le chat",
+     "texte": "Le chat l'ouest du Bijlard, à l'échelle de la Dordogne. Le Bijlard a été découvert à l'échelle d'Aragon comme étant sur les pla",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.8636,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.19047619047619047,
+     "prompt": "La mer",
+     "texte": "La mer n'est entrequant que dans la Rivière. Cette région au réseau des Artilles étroites : la région, la région et la plate-for",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent le rôle, les époux ne se réalisent pas dans la culture socialiste ou aux lettres et aux libertés de l'Église. L'époux du ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de rester à chercher un candidat à nouveau de députés européens, son positionnement d'acquisition non déployé (grâce à",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.75,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est sensible à celle de James Sniker à partir de son ont fait l'objet d'une catégorie du DVD de disques (James Lawrence, Robert ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme d’affaires européen et dans le pays. En raison de l’expansion de la partie était de la ville de Drigo. Son ami ayant affi",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.10526315789473684,
+     "prompt": "La musique",
+     "texte": "La musique se développe ainsi rapidement fortement pendant cette période classique. La musique est vendue à plus de spectateurs dans le",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.04,
+     "prompt": "Le livre",
+     "texte": "Le livre qui a interdit celui des scènes de de la même année envers le premier. Cela relate les sept biens juifs de la pratique du ch",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.9231,
+     "repetition": 1,
+     "echo": 0.16,
+     "prompt": "La guerre",
+     "texte": "La guerre olympique entre les divisions de la NBA au cours de la Seconde Guerre mondiale. En 1931, le district de NBA du NBA suivi de la ",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie d'un établissement de coopération interactive ou réparation de structures environnementales et de service social porte sur u",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "Le sport",
+     "texte": "Le sport de la maison, est une scène écrite par l'écrivaine et scénographe Deszous. En effet, le film est interrogé (guerriers) dan",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science de l'éducation technocriologique et des essais de construction et de transit des informations de ces lieux de réservation et ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.72,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La ville",
+     "texte": "La ville, de Worder et de Borkersha est fondée en 1445 par le bian central de Chlorgon Manuel Andorre. En 1866, l'arrestation de la vil",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le temps",
+     "texte": "Le temps de Bouilles est finalement monté par les autorités de l'Ordre bénédictin sous l'impulsion du directeur et l'emport strict d",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "La vie",
+     "texte": "La vie de l'Art est consacré au service du préfet Talbirath à l'école ennemie. Sur la partie médiévale, on présente la demande ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde en et est de nouveau début de la fin de la décennie précédente. Cette dernière, inscrite sur la liste du la position dans ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.9091,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question d'égalité des cellules dans lesquelles les choix de traitement dans les cellules dans les années 1970 n'ont donc pas fait un",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9531,
+   "distinct_2": 0.9022,
+   "repetition": 3,
+   "echo": 0.0666,
+   "octets": 2442,
+   "secondes": 21.54,
+   "octets_s": 113.4,
+   "echantillons": [
+    {
+     "mots": 29,
+     "mots_valides": 0.931,
+     "distinct_2": 0.8929,
+     "repetition": 2,
+     "echo": 0.125,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays au sein de la région, situé à l'est de la région de Carenta et dans la région centrale du Massif central. Le débutant des",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960.\n",
+     "octets": 10
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par contre la création de la Commission de la création de députés pour le comité de la compétition et de la sélection de",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 29,
+     "mots_valides": 0.931,
+     "distinct_2": 0.8929,
+     "repetition": 2,
+     "echo": 0.125,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays au sein de la région, situé à l'est de la région de Carenta et dans la région centrale du Massif central. Le débutant des",
+     "octets": 128
+    },
+    {
+     "mots": 6,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950 et 1960.\n",
+     "octets": 10
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8077,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois par contre la création de la Commission de la création de députés pour le comité de la compétition et de la sélection de",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.7083,
+     "repetition": 3,
+     "echo": 0.043478260869565216,
+     "prompt": "Le chat",
+     "texte": "Le chat dans les sources de restes de la région de la région de la Colombie-Française, le bassin versant de la région étant de la ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.038461538461538464,
+     "prompt": "La mer",
+     "texte": "La mer qui a lieu à la fin du . Le comte de Thomas Agathe est promu au grade de lieutenant-colonel le . Le comte d'Angers est lieuten",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.17391304347826086,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent dans leurs vies : les femmes, les souffrances et les hommes de leurs propres outils afin de pouvoir entrer en contact avec les ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de créer une agence de recherche sur la proposition de loisirs et de permettre aux préventions de respecter le gouvernement p",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9545,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est accueilli par le magazine A qui s'est avéré être un seul type de champignon avec le constructeur électromagnétique de l'Ac",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme pour avoir brisé le couple de femmes de son père et de ses enfants. Le couple de femmes et de suite sont reprochées pour ce ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.8462,
+     "repetition": 2,
+     "echo": 0.08,
+     "prompt": "La musique",
+     "texte": "La musique de la musique a été créée et a été traduite en anglais par l'artiste de l'autel en 1912 et a été basée sur le personna",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.96,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre et ses productions de conte et de ses réimpressions en ligne de son père, a été publié en 2005 et a été successivement r",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La guerre",
+     "texte": "La guerre civile de la province et de la frontière entre le Parti communiste de Barcelone et le Parti démocratique dont le nombre de pa",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 0.9091,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la planète reste au sein de la planète en province de Liège. Les autres établissements sont autant de construits dans le",
+     "octets": 128
+    },
+    {
+     "mots": 28,
+     "mots_valides": 0.9643,
+     "distinct_2": 0.7778,
+     "repetition": 2,
+     "echo": 0.038461538461538464,
+     "prompt": "Le sport",
+     "texte": "Le sport de la seconde place de la marquise de Bachelor (ou Bachelor) en 1973 et de la seconde place de la Sarra est le capitaine d'un g",
+     "octets": 128
+    },
+    {
+     "mots": 18,
+     "mots_valides": 1.0,
+     "distinct_2": 0.8235,
+     "repetition": 2,
+     "echo": 0.05555555555555555,
+     "prompt": "La science",
+     "texte": "La science-fiction contient plusieurs éléments de l'élément : l'instrument de l'élément de l'élément de la contrebasse (entre le s",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.88,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "La ville",
+     "texte": "La ville se trouve sur les communes de Saint-Cyr. Le comté de Saint-Cyr est situé sur la rive gauche de la ville de Saint-Cyr et débo",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9167,
+     "repetition": 2,
+     "echo": 0.13043478260869565,
+     "prompt": "Le temps",
+     "texte": "Le temps de se met à défaites de la compétition. Le score est quand les deux parties se retrouvent dans le temps de leur participatio",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "La vie",
+     "texte": "La vie de La Voyette et de son aventure. Il continue les conditions de contrainte avec les travailleurs de ce qui n'est pas le cas de ",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le monde",
+     "texte": "Le monde apparaît dans le tome 1 de la comédie dramatique Ellen Brooke en 1998. Les écrits de l'album sont des versions différentes ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.25,
+     "prompt": "La question",
+     "texte": "La question de la vie de la liberté de l'employeur de la paix. En 2010, dans la lutte pour la reconnaissance de l'autorité de la liberté",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}
