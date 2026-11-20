@@ -4,7 +4,7 @@
 > Seul le bloc « notes » en fin de fichier est écrit à la main et préservé.
 > Heures en **HAE** (EDT, UTC−4), lues dans git. Index du jour : [README.md](README.md). Convention : `docs/methode/organisation-du-depot.md`.
 
-## Commits du jour (7)
+## Commits du jour (8)
 
 | heure | commit | fait | fichiers |
 |---|---|---|---|
@@ -15,6 +15,7 @@
 | 10:37 | `450cbb6c` | S — LA RÉTRO-TRADUCTION v2 : 13/13 SUR LE GOLD DES a001-a003 (LE TAUX BRUT DU SCRIPT EST FAUX COMME MESURE) | `en-cours.md`, `README.md`, `attention.md` (+11) |
 | 11:51 | `fc9c77be` | R0.7 — LA DÉCISION DE ROUTAGE DU TAGGER EST PRÉPARÉE : OPTION (b) RECOMMANDÉE — LES OUVERTES À L'API (+18,6), LES FERMÉES À L'HEURISTIQUE (PARITÉ), LE DÉFAUT HORS LIGNE | `en-cours.md`, `README.md`, `attention.md` (+10) |
 | 13:00 | `24b14905` | N — LA VARIANCE DU RUN-À-RUN EST MESURÉE : 7,22 / 7,35 / 7,42 / 7,56 À 30 000 PAS (ÉTENDUE 4,7 %) — UNE SEULE GRAINE NE TRANCHE PAS | `en-cours.md`, `README.md`, `attention.md` (+28) |
+| 13:04 | `e961548d` | S — LA RÉTRO-TRADUCTION MESURÉE CONTRE LE GOLD : 14/14 (12 RÉFÉRENTS + 2 NON-RÉFÉRENTS) | `en-cours.md`, `README.md`, `mesures.md` (+7) |
 
 ## Chiffres du jour
 
@@ -24,7 +25,7 @@
 
 ## Sessions actives ce jour
 
-- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 75.2 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
+- `d67a9bb1-090e-4f69-baf2-a831c00aa275` — Intérêt pour le FPGA maintenant (début 2026-11-17 09:50, 75.3 h) → [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md)
 - `e181ce02-cd50-488a-a6be-e84b79d40dcc` — Documentation Drave avec diagrammes et implémentation (début 2026-10-31 17:40, 473.9 h) → [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md)
 
 ## Mesures et rapports touchés
@@ -32,6 +33,7 @@
 - [reports/rapport-corpus-palier1.md](../../reports/rapport-corpus-palier1.md)
 - [reports/rapport-nuit-wikibig.md](../../reports/rapport-nuit-wikibig.md)
 - [reports/rapport-r0.7-decision.md](../../reports/rapport-r0.7-decision.md)
+- [reports/rapport-s-retro-traduction.md](../../reports/rapport-s-retro-traduction.md)
 - [reports/rapport-variance-graines.md](../../reports/rapport-variance-graines.md)
 
 <!-- notes -->

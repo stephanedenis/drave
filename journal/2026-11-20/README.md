@@ -5,7 +5,7 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**17 commits** · **2 session(s)** · **6 thème(s)**
+**18 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
@@ -14,7 +14,7 @@
 | attention | 1 | [attention.md](attention.md) |
 | distribue | 1 | [distribue.md](distribue.md) |
 | docs | 6 | [docs.md](docs.md) |
-| mesures | 7 | [mesures.md](mesures.md) |
+| mesures | 8 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
 | portes | 1 | [portes.md](portes.md) |
 
@@ -22,7 +22,7 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 75.2 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 75.3 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
 | `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 473.9 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
@@ -46,6 +46,7 @@
 | 10:37 | `450cbb6c` | S — LA RÉTRO-TRADUCTION v2 : 13/13 SUR LE GOLD DES a001-a003 (LE TAUX BRUT DU SCRIPT EST FAUX COMME MESURE) |
 | 11:51 | `fc9c77be` | R0.7 — LA DÉCISION DE ROUTAGE DU TAGGER EST PRÉPARÉE : OPTION (b) RECOMMANDÉE — LES OUVERTES À L'API (+18,6), LES FERMÉES À L'HEURISTIQUE (PARITÉ), LE DÉFAUT HORS LIGNE |
 | 13:00 | `24b14905` | N — LA VARIANCE DU RUN-À-RUN EST MESURÉE : 7,22 / 7,35 / 7,42 / 7,56 À 30 000 PAS (ÉTENDUE 4,7 %) — UNE SEULE GRAINE NE TRANCHE PAS |
+| 13:04 | `e961548d` | S — LA RÉTRO-TRADUCTION MESURÉE CONTRE LE GOLD : 14/14 (12 RÉFÉRENTS + 2 NON-RÉFÉRENTS) |
 
 ## Le récit de la journée (écrit à la main)
 

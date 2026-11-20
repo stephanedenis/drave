@@ -19351,3 +19351,118 @@ ok
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('reports/rapport-s-retro-traduction.md'); s = p.read_text()\nold = \"## Ce que le premier passage montre déjà\"\nnew = \"\"\"## Le gold, mesuré par le script (20/11)\n\n`--gold` appa … [2325 caractères tronqués]`
+
+  ```
+fiche ok
+etat ok
+budget=0
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   dcd7284..1ccf3df  master -> master
+   24b14905..e961548d  s/v7 -> s/v7
+ven 20 nov 2026 13:07:19 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rn \"or de rôles\\|seconds cadres\\|cadres\" docs/pilotage/roadmap.md docs/theorie/*.md reports/rapport-*.md 2>/dev/null | grep -i \"rôle\\|cadre\" | head -4", "description": "Search for the J4 roles gold definition"}`
+
+  ```
+docs/pilotage/roadmap.md:33:| **R — le lecteur** | document, politique de [lecture](../theorie/glossaire/entrees/lecture.md), fenêtre, mémoire, restitution | ✅ R0.1–R0.3 **mesurés** ; **R0.4 et R0.5 closes (négatifs nommés)** ; **R1.2-1024 mesuré** (2,6256 à 1 000 o) ; **R4.1–R4.4 mesurées** (4/5 familles ≥ 90 %) ; **R0.7 — bloc linguistique** (398 langues, 0,9687) ; **W2 — tagger 402/H50 : 402 0,9643 (+4,45), H50 0,8607 (+17,65), fermé 402 −1,55** ([fiche](../../reports/rapport-tagger-h50.md)) ; **W3 — matrice du tagger** ([fiche](../../reports/rapport-tagger-defaut.md)) ; **W5 — restitution v3 : gold S 144/144, cinq rôles 18/18, permutation 0/18 ; `--roles-v3` opt-in** ([fiche](../../reports/rapport-restitution-v3.md)) ; **T1–T6 — produit exploitable : installable, quickstart, JSON v2, performance, CLI 20/20** ([bilan](../../reports/rapport-bilan-exploitable.md)) ; **U1–U3, V1–V2, V3** ([bilan 2](../../reports/rapport-bilan-exploitable-2.md)) | **R4.4 close** ; **R1.1/R1.2 mesurées** (RoPE 3,2545, fenêtre −0,244) ; **`rope2048`** fini ; **J4 — l'or de rôles** (seconds cadres) ; **Panini** si les 26 signatures arrivent ; R2/R3 attendent N5/N4 |
+docs/theorie/semantique-universaux.m
+… [415 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -rln \"144\" reports/rapport-restitution-v3.md reports/rapport-s-*.md 2>/dev/null | head -3; ls reports/ | grep -i \"gold\\|roles\" | head -5", "description": "Locate the roles gold data"}`
+
+  ```
+reports/rapport-restitution-v3.md
+reports/rapport-s-analyseur-roles.md
+reports/rapport-s-fait-divers.md
+banc-perplexite-gold.json
+or-roles-base-v1.json
+pensee-anaphore-roles.json
+pensee-gold-200.json
+pensee-gold-342.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/or-roles-base-v1.json'))\nprint(type(d).__name__, len(d) if hasattr(d,'__len__') else '')\nif isinstance(d, dict): print('clés:', list(d)[:6])\nif isinstance(d, list):\n    prin … [149 caractères tronqués]`
+
+  ```
+dict 7
+clés: ['schema', 'version', 'date', 'source', 'source_sha256', 'note']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/or-roles-base-v1.json'))\nprint(list(d))\nfor k, v in d.items():\n    if isinstance(v, list): print(k, len(v), '· exemple:', {kk: str(vv)[:50] for kk,vv in v[0].items()} if isin … [183 caractères tronqués]`
+
+  ```
+['schema', 'version', 'date', 'source', 'source_sha256', 'note', 'textes']
+schema drave.or.roles.base
+version 1
+date 2026-11-15
+source tools/tests/linguistique/gold_restitution_v2.json
+source_sha256 1b5af926e55f514e806528c88c92c6852b0839784553c21ed927516b06b6b5ed
+note Base de départ, provisoire : 46 textes du gold v2, première variante, rôles agen
+textes 46 · exemple: {'schema': 'drave.or.roles', 'version': '1', 'id': 'or-f01', 'source': 'gold_v2', 'source_id': 'f01', 'split': 'base', 'texte': 'Le chat dort.', 'langue': 'fr', 'cadres': "[{'id': 'c1', 'principal': True, 'roles': {'agent'", 'hors_cadre': '[]', 'meta': "{'codeur': 'base', 'date': '2026-11-15', 'statut':"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/or-roles-base-v1.json'))\nfor t in d['textes'][:2]:\n    print(t['id'], '|', t['texte'])\n    print('  cadres:', t['cadres'][:220])\n    print('  hors:', t['hors_cadre'], '· met … [78 caractères tronqués]`
+
+  ```
+or-f01 | Le chat dort.
+  cadres: [{'id': 'c1', 'principal': True, 'roles': {'agent': [{'texte': 'Le chat', 'debut': 0, 'fin': 7}], 'predicat': [{'texte': 'dort', 'debut': 8, 'fin': 12}], 'lieu': [], 'temps': [], 'destinataire': [], 'possession': [], 'complement': []}}]
+[stderr]
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+    print('  hors:', t['hors_cadre'], '· meta:', t['meta'][:100])
+                                                 ~~~~~~~~~^^^^^^
+KeyError: slice(None, 100, None)
+[exit code: 1]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/or_roles_second.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"or_roles_second.py — J4, les **seconds cadres** : un second annotateur (l'API) sur l'or de rôles.\n\nPOURQUOI. L'or de rôles (`reports/or-roles-base-v1.json`, 46 te … [6136 caractères tronqués]`
+
+  ```
+TypeError: the JSON object must be str, bytes or bytearray, not list
+ven 20 nov 2026 13:08:35 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/or_roles_second.py'); s = p.read_text()\nold = '''        gold = roles_du_gold(json.loads(t[\"cadres\"]))'''\nnew = '''        cadres = t[\"cadres\"]\n        if isinstance(ca … [370 caractères tronqués]`
+
+  ```
+ok
+{"textes": 46, "annotés": 0, "f1_moyen": null}
+ven 20 nov 2026 13:08:42 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && source ~/.bashrc >/dev/null 2>&1 && timeout 600 python3 tools/or_roles_second.py --json reports/or-roles-second.json 2>&1 | tail -2; date", "description": "Run the second annotator on the roles gold", "timeoutMs": 700000}`
+
+  ```
+{"textes": 46, "annotés": 46, "f1_moyen": 0.7085}
+ven 20 nov 2026 13:09:38 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('reports/or-roles-second.json'))\nok = [x for x in d['detail'] if 'f1_roles' in x]\nroles = list(ok[0]['f1_roles'])\nfor r in roles:\n    print(r, round(sum(x['f1_roles'][r] for x in ok) … [358 caractères tronqués]`
+
+  ```
+agent 0.607
+predicat 0.613
+lieu 0.935
+temps 0.674
+destinataire 0.935
+possession 0.913
+complement 0.283
+--- les 6 textes les plus faibles ---
+0.02 or-f50 # Notes de terrain
+Le chat de la voisine qui dort sur le toi
+   pred: {'agent': ['cette phrase', 'il', 'ils', 'la boulangere', 'la science', 'la synthese', 'la voisine', 'le chat de la voisine', 'les caracteres speciaux', 'les chats du quartier', 'les donnees brutes', 'les emojis', 'nous', 'personne', 'son fils', 'tout le monde', 'trois chats', 'un seul', 'une question', 'vous'], 'predicat': ['a', 'affirme', 'appelez', 'avons observe', 'changent', 'chasse', 'commence', 'comparons', 'connaitre', 'constatons', 'contient', 'contourne', 'descend', 'disparait', 'dort', 'doutons', 'ecrivez', 'en notant', 'est', 'est ce', 'finit', 'jure', 'ne supprimez pas', 'paraisse', 'passe', 'pense', 'portait', 'pretendons pas repondre', 'prevoit', 'restent lisibles', 'restent ouverte', 'reviennent', 'sait', 'se retrouvent', 'se reveille', 'semblent', 'separent', 'sont', 'sont acceptes', 'sont entres', 'visitez', 'voit'], 'lieu': ['a six sur le meme toit', 'au meme endroit', 'dans la cour', 'dans la grange', 'dans le fichier  home observateur notes tx
+… [2440 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-j4-seconds-cadres.md <<'MD'\n# J4 — les seconds cadres : un second annotateur ne confirme pas l'or de rôles (F1 0,71), et certains désaccords sont les erreurs de l'or\n\n> **Ligne de roadmap** : B13 / Pensée (J4 … [3131 caractères tronqués]`
+
+  ```
+· compteurs : en-cours.md dit 1068 JSON, le disque en a 1069
+ven 20 nov 2026 13:10:20 EST
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60]\n    s = s.replace(old, new)\nrep(\"décision de routage du t … [1786 caractères tronqués]`
