@@ -1,0 +1,18 @@
+{
+ "phrases": 207,
+ "candidats": 369,
+ "apparies": 324,
+ "profondeur": {
+  "0": 324,
+  "1": 1149,
+  "2": 516,
+  "3": 104,
+  "4": 13,
+  "5": 2
+ },
+ "candidats_sans_appariement": 45,
+ "ecrit": [
+  "phrases.json",
+  "phrases_generees.json"
+ ]
+}

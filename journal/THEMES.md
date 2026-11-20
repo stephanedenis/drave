@@ -61,6 +61,7 @@ possible (`ls journal/*_<thème>.md`).
 | [2026-11-05](2026-11-05/attention.md) | — |
 | [2026-11-17](2026-11-17/attention.md) | — |
 | [2026-11-18](2026-11-18/attention.md) | — |
+| [2026-11-20](2026-11-20/attention.md) | — |
 
 ### `memoire` — Mémoire épisodique, consolidation, greffe
 

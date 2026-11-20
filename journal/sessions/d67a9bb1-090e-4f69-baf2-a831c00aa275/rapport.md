@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 70.5 h |
-| Tours | 83 |
-| Messages | 1240 |
-| Appels d'outils | 1063 |
+| Durée | 71.5 h |
+| Tours | 84 |
+| Messages | 1271 |
+| Appels d'outils | 1093 |
 | Fichiers touchés | 44 |
-| Commandes | 916 |
+| Commandes | 945 |
 | Sous-agents | 7 |
-| Commits | 83 |
+| Commits | 85 |
 | Compactages de contexte | 2 |
 
 ## Objectifs déclarés
@@ -55,6 +55,8 @@
 … [217 caractères tronqués]
 - **complete** — De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec é
 … [217 caractères tronqués]
+- **create** — De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches 
+… [188 caractères tronqués]
 
 ## 1. Ce qui a été demandé
 
@@ -223,6 +225,8 @@
 **Tour 82** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 **Tour 83** — "en-cours.md" montre 3 sessions en pause. Peux-tu les reprendre, ou tu as des choses a terminer avant?
+
+**Tour 84** — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élevé. go en mode autonome jusqu'à 16h
 
 ## 2. Déroulé, étape par étape
 
@@ -2025,7 +2029,40 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 **Synthèse produite :**
 
-⏵ Lecture des trois sessions en pause et de leurs prochaines actions
+⏵ Rien à terminer d'abord — S est reprise, N2 était terminé, Pensée attend sa fenêtre
+
+**Non, je n'ai rien à terminer avant** : le goal de la nuit est clos (les 11 commits, la passe de clôture 91 portes / 89-2, l'arbre propre, le bilan livré à 8 h). Les sessions n'attendaient donc que la reprise.
+
+**Ce que j'ai fait à l'instant** (`e0fd67e7`, poussé) :
+
+- **S (`29ad180d`) — reprise, actif.** Son heartbeat est rafraîchi (20/11 08 h 10) et son plan est passé à « actif ». Sa prochaine action est concrète : **la validation sur `/paragraphes`** — a001-a003 faits (14/14 référents confirmés par l'anglais), **8 restants** (a004-a011) — puis la rétro-traduction et les 71 langues.
+- **N2 (`0733c5bb`) — terminé**, pas en pause : son `plan.md` dit « terminé » depuis le 05/11, alors que l'état le listait encore. Son bloc sort de `en-cours`, et sa pièce restante — la **porte propre (0,29)** — est une action de la ligne **N**, pas d'une session : je la porte avec le palier 1.
+- **Le hub du 04/11 (`1e7ef596`)** sort aussi : il est superseded par le pilotage courant.
+- **Pensée (`e181ce02`) — reste en pause, mais pour une bonne raison** : l'entraînement long qu'elle attendait est **fait** (les 150 M du 19-20/11). Ce qui lui reste, c'est **J4** (l'or de rôles) — qui passe par l'API et donc par la **fenêtre remisée de 11 h 30**. Je la reprendrai à ce moment-là ; d'ici là je peux faire ses parties locales (T132/T133).
+
+**État** : 2 sessions (S actif, Pensée en pause), revue verte, budget respecté (T0 3 9xx/4 000).
+
+**La suite** : je continue la validation de S (`/paragraphes`, a004-a011) — c'est sa prochaine action, et elle est purement locale. Dites-moi si vous préférez que je prenne d'abord la porte propre (0,29) de N2 ou le corpus du palier 1.
+
+### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
+
+*30 appels d'outils.* Actions notables :
+
+- create_goal
+- bash — Create the goal and find the paragraphs data
+- bash — Read the paragraphs data structure
+- bash — Read the paragraphs list
+- bash — Read the paragraph IDs and the S state fiche
+- bash — Launch the two variance runs (seeds 2 and 3)
+- bash — Inspect the structures tooling for the / page migration
+- bash — Inspect the tree measure and the stored phrases
+- bash — Read the tree measure and the server's root route
+- bash — Read the root page handler
+- bash — Read the data state builder of the root page
+- bash — Read the data loader and the analyzer output
+- bash — Inspect the stored bank's shape
+- bash — Compare the stored and fresh analyzer outputs
+- … et 16 autres
 
 ## 3. Travail accompli
 
@@ -2130,7 +2167,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 876 autres
+- … et 905 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2361,4 +2398,6 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-wikibig.md reports/banc-generation-nb11.json reports/banc-grammaticalite-nb11
 - PASSE DE CLÔTURE — 91 PORTES, 89 VERTES, 2 ROUGES (LES DEUX STRUCTURELLES), MACHINE AU REPOS" && git push origin s/v7 2>&1 | tail -1; date
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git com
+- S — LA PROFONDEUR ENTRE DANS LA BANQUE : 324/369 CANDIDATS APPARIÉS, 95 À PROFONDEUR ≥ 3 (MIGRATION NON DESTRUCTIVE, LES 150 VERDICTS INTACTS)" && git push orig
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 

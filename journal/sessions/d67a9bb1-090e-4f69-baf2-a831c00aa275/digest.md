@@ -17817,3 +17817,483 @@ budget=0
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add docs/pilotage/en-cours.md journal/sessions/29ad180d-38a5-4481-a9a7-ec6ab31c895f/plan.md && git commit -q -F - <<'MSG' && git push origin s/v7 2>&1 | tail -1\nSESSIONS — S REPRISE (LE HUB ET N2 SORTENT DE L'ÉTAT), PENSÉE ATTEN … [803 caractères tronqués]`
+
+  ```
+8c581925..e0fd67e7  s/v7 -> s/v7
+ven 20 nov 2026 08:25:16 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+### 🤖 Assistant
+
+⏵ Rien à terminer d'abord — S est reprise, N2 était terminé, Pensée attend sa fenêtre
+
+**Non, je n'ai rien à terminer avant** : le goal de la nuit est clos (les 11 commits, la passe de clôture 91 portes / 89-2, l'arbre propre, le bilan livré à 8 h). Les sessions n'attendaient donc que la reprise.
+
+**Ce que j'ai fait à l'instant** (`e0fd67e7`, poussé) :
+
+- **S (`29ad180d`) — reprise, actif.** Son heartbeat est rafraîchi (20/11 08 h 10) et son plan est passé à « actif ». Sa prochaine action est concrète : **la validation sur `/paragraphes`** — a001-a003 faits (14/14 référents confirmés par l'anglais), **8 restants** (a004-a011) — puis la rétro-traduction et les 71 langues.
+- **N2 (`0733c5bb`) — terminé**, pas en pause : son `plan.md` dit « terminé » depuis le 05/11, alors que l'état le listait encore. Son bloc sort de `en-cours`, et sa pièce restante — la **porte propre (0,29)** — est une action de la ligne **N**, pas d'une session : je la porte avec le palier 1.
+- **Le hub du 04/11 (`1e7ef596`)** sort aussi : il est superseded par le pilotage courant.
+- **Pensée (`e181ce02`) — reste en pause, mais pour une bonne raison** : l'entraînement long qu'elle attendait est **fait** (les 150 M du 19-20/11). Ce qui lui reste, c'est **J4** (l'or de rôles) — qui passe par l'API et donc par la **fenêtre remisée de 11 h 30**. Je la reprendrai à ce moment-là ; d'ici là je peux faire ses parties locales (T132/T133).
+
+**État** : 2 sessions (S actif, Pensée en pause), revue verte, budget respecté (T0 3 9xx/4 000).
+
+**La suite** : je continue la validation de S (`/paragraphes`, a004-a011) — c'est sa prochaine action, et elle est purement locale. Dites-moi si vous préférez que je prenne d'abord la porte propre (0,29) de N2 ou le corpus du palier 1.
+
+
+## Tour 84
+
+### 👤 Utilisateur
+
+prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élevé. go en mode autonome jusqu'à 16h
+
+- **create_goal** `{"max_goal_rounds": 1000, "objective": "De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h … [230 caractères tronqués]`
+
+> **Objectif** (create) : De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h.
+
+
+  ```
+{"goal":{"id":"goal-5cffed98-4568-4b64-8d6e-b0700d2612db","revision":1,"objective":"De 08 h 30 à 16 h le 20/11, en autonomie : (1) avant 11 h 30 (plein tarif DeepSeek) les tâches locales et peu coûteuses en LLM — la validation de S sur `/paragraphes` (a004-a011), la porte propre (0,29) de N2, la préparation du corpus du palier 1 ; (2) de 11 h 30 à 16 h (fenêtre remisée) les tâches qui demandent du raisonnement par l'API — J4 (l'or de rôles), la rétro-traduction de S, la décision de routage du tagger ; fiches, état, commits et push pour chaque résultat, bilan à 16 h.","phase":"active","roundsStarted":0,"maxGoalRounds":1000},"activation":"armed"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && find . -name \"paragraphes*.json\" -not -path \"./.git/*\" 2>/dev/null | head -5; grep -rln \"a004\" --include=*.json --include=*.py --include=*.html --include=*.md . 2>/dev/null | grep -v \".git\" | head -5", "description": "Create  … [60 caractères tronqués]`
+
+  ```
+./tools/structures/donnees/paragraphes.json
+./reports/corpus-pdf.json
+./reports/rapport-etat-s.md
+./reports/pensee-etat-s.json
+./reports/rapport-coordination-s.md
+./reports/rapport-coordination-s.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('tools/structures/donnees/paragraphes.json'))\nprint(type(d).__name__, len(d))\nif isinstance(d, dict):\n    print('clés:', list(d)[:5])\n    for k in list(d)[:2]: print(k, '→', str(d[k] … [266 caractères tronqués]`
+
+  ```
+dict 6
+clés: ['version', 'note', 'source', 'paragraphes', 'note_en']
+version → 1
+note → Paragraphes complets réels (Alice au pays des merveilles, domaine public) : la phrase cible et la ou les phrases de contexte qui portent l'antécédent
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('tools/structures/donnees/paragraphes.json'))\nps = d['paragraphes']\nprint(type(ps).__name__, len(ps))\nif isinstance(ps, list):\n    print('champs:', list(ps[0]))\n    for p in ps[:4]: … [146 caractères tronqués]`
+
+  ```
+list 9
+champs: ['id', 'contexte', 'cible', 'antecedent', 'contexte_en', 'source_en']
+a001 ·  · source_en
+a002 ·  · source_en
+a003 ·  · source_en
+a004 ·  · source_en
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('tools/structures/donnees/paragraphes.json'))\nfor p in d['paragraphes']:\n    print(p['id'], '· cible:', str(p.get('cible',''))[:70])\n\"; echo \"=== rapport-etat-s (tête) ===\"; head - … [93 caractères tronqués]`
+
+  ```
+a001 · cible: Elle avait pour habitude de se donner de très-bons conseils (bien qu'e
+a002 · cible: Elle aperçut alors une petite boîte en verre qui était sous la table, 
+a003 · cible: Elle mangea donc un petit morceau du gâteau, et, portant sa main sur s
+a004 · cible: ALICE, assise auprès de sa sœur sur le gazon, commençait à s'ennuyer d
+a005 · cible: Tout à coup elle rencontra sur son passage une petite table à trois pi
+a006 · cible: Comme cela n'avançait à rien de passer son temps à attendre à la petit
+a007 · cible: C'est bien facile à dire « Buvez-moi », mais Alice était trop fine pou
+a008 · cible: « Je me sens toute drôle, » dit Alice, « on dirait que je rentre en mo
+a009 · cible: Un moment après, voyant qu'il ne se passait plus rien, elle se décida 
+=== rapport-etat-s (tête) ===
+# S — 9/9 paragraphes jugés (19/19), 150 verdicts de banque ; la page `/` sert encore l'ancien arbre plat et la rétro-traduction n'existe pas
+
+> **Ligne de roadmap** : S · **Date** : 2026-11-06 · **Verdict** : le chantier S a deux couches
+> désormais séparées. La passe de validation des candidats sur **`/paragraphes`** est **finie** :
+> 9 paragraphes, 19 candidats,
+> **19 verdicts**, **0 restant**, **1
+… [964 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -e 's/--graine 1/--graine \"$GRAINE\"/' -e 's/^GPU=\\$1; CORPUS=\\$2; PREFIX=\\$3; N=\\${4:-11}/GPU=$1; CORPUS=$2; PREFIX=$3; GRAINE=${4:-1}; N=${5:-11}/' work/n4/nuit.sh > work/n4/graine.sh && chmod +x work/n4/graine.sh && bash  … [447 caractères tronqués]`
+
+  ```
+script ok
+runs de graine lancés 09:18
+0, 99 %, 7512 MiB
+1, 100 %, 7512 MiB
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/structures/ | head -12; grep -rn \"369\\|profondeur\" tools/structures/*.py 2>/dev/null | head -6; grep -rn \"369\" docs/pilotage/en-cours.md reports/rapport-etat-s.md | head -3", "description": "Inspect the structures tooli … [29 caractères tronqués]`
+
+  ```
+arbre_svg.py
+candidats_corpus.py
+construire_donnees.py
+donnees
+exporter_corpus.py
+generateur.py
+llm.py
+mesure_analyseur.py
+mesure_arbre.py
+mesure_corpus.py
+__pycache__
+README.md
+tools/structures/arbre_svg.py:4:Le retour humain du 03/11 demandait deux choses : un arbre qui a de la **profondeur** et des
+tools/structures/arbre_svg.py:6:placés par `profondeur` (le GV racine, puis ses enfants, petits-enfants…), et chaque
+tools/structures/arbre_svg.py:54:                          "par profondeur, et les flèches pointillées des pronoms vers Alice, "
+tools/structures/arbre_svg.py:63:        par_niveau.setdefault(s["profondeur"], []).append(i)
+tools/structures/generateur.py:295:                 "cible_verbe", "parent", "profondeur")
+tools/structures/generateur.py:304:        self.profondeur = 0     # la profondeur dans l'arbre (le GV racine = 0)
+docs/pilotage/en-cours.md:25:- **Ce qu'elle fait** : **session close** ; **`/paragraphes`** v7, **`/`** ancien arbre (369) ; **`s/v7`** à fusionner.
+reports/rapport-etat-s.md:8:> (35,7 %), **84 lectures acceptées**, mais la page sert les **369 candidats stockés le 02/11**,
+reports/rapport-etat-s.md:25:| banque affichée vs v7 | **369** stockés (0 `pr
+… [90 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls tools/structures/donnees/ | head -12; grep -n \"def \\|phrases_generees\" tools/structures/mesure_arbre.py | head -12; grep -rln \"phrases_generees\" tools/ drave-web/ 2>/dev/null | head -4", "description": "Inspect the tree measu … [27 caractères tronqués]`
+
+  ```
+gold-analyseur.json
+llm.jsonl
+mesure-analyseur.json
+mesure-arbre.json
+mesure-corpus.json
+paragraphes.json
+paragraphes-validations.jsonl
+phrases-corpus-manifest.json
+phrases_generees.json
+phrases.json
+validations.jsonl
+26:def phrases() -> list[dict]:
+28:    g = DONNEES / "phrases_generees.json"
+34:def mesurer() -> dict:
+74:def main() -> int:
+tools/structures/donnees/phrases-corpus-manifest.json
+tools/structures/__pycache__/exporter_corpus.cpython-313.pyc
+tools/structures/__pycache__/candidats_corpus.cpython-313.pyc
+tools/structures/__pycache__/serveur.cpython-313.pyc
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '20,75p' tools/structures/mesure_arbre.py; echo \"=== serveur ===\"; ls tools/structures/serveur.py 2>/dev/null; grep -rn \"def page_racine\\|'/'\\|\\\"/\\\"\" tools/structures/serveur.py 2>/dev/null | head -5", "description": … [53 caractères tronqués]`
+
+  ```
+RACINE = pathlib.Path(__file__).resolve().parent
+DONNEES = RACINE / "donnees"
+SORTIE = DONNEES / "mesure-arbre.json"
+POSSESSIFS = set("mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs".split())
+
+
+def phrases() -> list[dict]:
+    sortie = json.loads((DONNEES / "phrases.json").read_text(encoding="utf-8"))["phrases"]
+    g = DONNEES / "phrases_generees.json"
+    if g.exists():
+        sortie += json.loads(g.read_text(encoding="utf-8"))["phrases"]
+    return sortie
+
+
+def mesurer() -> dict:
+    maxs: Counter = Counter()
+    niveaux: Counter = Counter()
+    segments = candidats = 0
+    refs = phrases_refs = avec = sans = 0
+    formes: Counter = Counter()
+    for p in phrases():
+        rs = generateur.referents(p["texte"])
+        if rs:
+            phrases_refs += 1
+        for r in rs:
+            refs += 1
+            formes.update([r["anaphore"]])
+            if r["candidats"]:
+                avec += 1
+            else:
+                sans += 1
+        for c in generateur.analyser(p["texte"]):
+            candidats += 1
+            ns = [s["profondeur"] for s in c["segments"]]
+            segments += len(ns)
+            if ns:
+                maxs[max(ns)] += 1
+     
+… [796 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '235,275p' tools/structures/serveur.py", "description": "Read the root page handler"}`
+
+  ```
+return {}
+        return json.loads(self.rfile.read(n).decode("utf-8"))
+
+    def do_GET(self):
+        u = urlparse(self.path)
+        if u.path in ("/", "/index.html"):
+            return self._fichier(STATIQUE / "index.html")
+        if u.path in ("/paragraphes", "/paragraphes.html"):
+            return self._fichier(STATIQUE / "paragraphes.html")
+        if u.path.startswith("/static/"):
+            return self._fichier(STATIQUE / u.path[len("/static/"):])
+        if u.path == "/api/phrases":
+            return self._json(200, self.server.donnees.etat())
+        if u.path == "/api/paragraphes":
+            return self._json(200, self.server.donnees.etat_paragraphes())
+        if u.path == "/api/paragraphes-export":
+            corps = self.server.donnees.paragraphes_export()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/x-ndjson; charset=utf-8")
+            self.send_header("Content-Disposition",
+                             'attachment; filename="paragraphes-verdicts.jsonl"')
+            self.send_header("Content-Length", str(len(corps)))
+            self.end_headers()
+            return self.wfile.write(corps)
+        if u.path =
+… [754 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"class Donnees\\|def etat(\" tools/structures/serveur.py; sed -n \"$(grep -n 'def etat(' tools/structures/serveur.py | head -1 | cut -d: -f1),+40p\" tools/structures/serveur.py", "description": "Read the data state builder o … [17 caractères tronqués]`
+
+  ```
+40:class Donnees:
+176:    def etat(self) -> dict:
+    def etat(self) -> dict:
+        return {"phrases": self.phrases, "validations": self._journal("validations.jsonl"),
+                "llm": self._journal("llm.jsonl"), "niveaux": NIVEAUX,
+                "niveaux_minimaux": self.niveaux_minimaux()}
+
+    def exporter(self) -> bytes:
+        """La banque : une ligne par **lecture conservée**, avec son contexte et son statut.
+
+        Un sens `resolu` sort seul ; un sens `compatible` sort comme lecture secondaire ; deux
+        sens `double_sens` sortent ensemble, avec le même `groupe` — l'ambiguïté voulue est un
+        fait à conserver, pas un défaut à trancher.
+        """
+        par_id = {(p["id"], c["id"]): (p, c) for p in self.phrases for c in p["candidats"]}
+        dernier = {}
+        for v in self._journal("validations.jsonl"):
+            dernier[(v["phrase_id"], v["candidat_id"])] = v
+        lignes = []
+        for (pid, cid), v in sorted(dernier.items()):
+            if v["statut"] not in ("resolu", "compatible", "double_sens"):
+                continue
+            p, c = par_id[(pid, cid)]
+            lignes.append(json.dumps({
+                "phrase": p["texte"], "
+… [865 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '40,80p' tools/structures/serveur.py; python3 -c \"\nimport sys; sys.path.insert(0,'tools/structures')\nimport generateur\np = {'texte': 'Alice mangea le gâteau et elle se sentit grandir.'}\ncs = generateur.analyser(p['texte'] … [266 caractères tronqués]`
+
+  ```
+class Donnees:
+    """Les phrases fixes + deux journaux append-only : validations humaines et évaluations LLM."""
+
+    def __init__(self, dossier: pathlib.Path):
+        self.dossier = pathlib.Path(dossier)
+        self.verrou = threading.Lock()
+        self.fichier_generees = self.dossier / "phrases_generees.json"
+        self.fichier_paragraphes = self.dossier / "paragraphes.json"
+        self.phrases = json.loads((self.dossier / "phrases.json").read_text(encoding="utf-8"))["phrases"]
+        if self.fichier_generees.exists():
+            self.phrases += json.loads(self.fichier_generees.read_text(encoding="utf-8"))["phrases"]
+
+
+    def paragraphes(self) -> list[dict]:
+        """Les paragraphes complets : cible, contexte, antécédent, candidats, référents, arbre SVG."""
+        if not self.fichier_paragraphes.exists():
+            return []
+        source = json.loads(self.fichier_paragraphes.read_text(encoding="utf-8"))
+        validations = self._journal("paragraphes-validations.jsonl")
+        sortie = []
+        for p in source.get("paragraphes", []):
+            cands = generateur.analyser(p["cible"])
+            for k, c in enumerate(cands, 1):
+                c["id"] = f'{p
+… [1218 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nd = json.load(open('tools/structures/donnees/phrases_generees.json'))\nprint('clés:', list(d))\nps = d['phrases']; print(len(ps), 'phrases')\np = ps[0]; print('phrase:', {k: str(v)[:60] for k,v in p.items( … [159 caractères tronqués]`
+
+  ```
+clés: ['version', 'note', 'source', 'phrases']
+200 phrases
+phrase: {'id': 'c001', 'texte': 'Au lecteur Cette version électronique reproduit dans son int', 'source': 'data/corpus_fr_litterature.txt'}
+candidat: {'id': 'c001-c1', 'nom': '« dans son intégralité la version originale » → reproduit', 'lecture': '« dans son intégralité la version originale » se rattache à « reprodui', 'attachement': "{'segment': 'dans son intégralité la version originale', 'cible': 'rep", 'segments': "[{'debut': 0, 'fin': 47, 'texte': 'Au lecteur Cette version électroniq"}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport sys, json; sys.path.insert(0,'tools/structures')\nimport generateur\nd = json.load(open('tools/structures/donnees/phrases_generees.json'))\np = d['phrases'][0]\ncs = generateur.analyser(p['texte'])\nprint('stock … [470 caractères tronqués]`
+
+  ```
+stockés: 1 · analyseur: 1
+stocké seg: [(0, 47, 'destinataire'), (48, 89, 'lieu')]
+neuf  seg: [(0, 47, 'destinataire', 0), (48, 89, 'lieu', 1)]
+lecture égale: True
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > tools/structures/regenerer_banque.py <<'PY'\n#!/usr/bin/env python3\n\"\"\"regenerer_banque.py — la migration `/` vers la v7 : la **profondeur** entre dans la banque.\n\nLe 06/11, l'état de S a mesuré l'écart : la page `/` sert … [3045 caractères tronqués]`
+
+  ```
+"candidats": 369,
+ "apparies": 324,
+ "profondeur": {
+  "0": 324,
+  "1": 1149,
+  "2": 516,
+  "3": 104,
+  "4": 13,
+  "5": 2
+ },
+ "candidats_sans_appariement": 45
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 -c \"\nimport json\nf = json.load(open('tools/structures/donnees/phrases.json'))\ng = json.load(open('tools/structures/donnees/phrases_generees.json'))\nprint('phrases.json:', len(f['phrases']), 'phrases ·', sum(len(p.get('ca … [303 caractères tronqués]`
+
+  ```
+phrases.json: 7 phrases · 14 candidats
+phrases_generees.json: 200 phrases · 355 candidats
+phrases.json clés: ['id', 'texte', 'candidats', 'contexte_exemple', 'niveau_exemple']
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/structures/regenerer_banque.py'); s = p.read_text()\nold = '''def migrer() -> dict:\n    phrases = []\n    for nom in (\"phrases.json\", \"phrases_generees.json\"):\n        f … [1798 caractères tronqués]`
+
+  ```
+ok
+ "candidats_sans_appariement": 45,
+ "ecrit": [
+  "phrases.json",
+  "phrases_generees.json"
+ ]
+}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short tools/structures/donnees/ | head -3; git check-ignore -v tools/structures/donnees/phrases_generees.json 2>/dev/null; grep -c \"profondeur\" tools/structures/donnees/phrases_generees.json; ls -la tools/structures/do … [89 caractères tronqués]`
+
+  ```
+2108
+-rw-r--r--. 1 stephane stephane 578032 20 nov 09:20 tools/structures/donnees/phrases_generees.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git status --short | head -5; git ls-files tools/structures/donnees/ | head -5; git diff --stat | head -3; cat .gitignore 2>/dev/null | grep -n \"donnees\\|structures\" | head -3", "description": "Diagnose the bank files' git trackin … [3 caractères tronqués]`
+
+  ```
+M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+ m tools/structures
+ journal/README.md                                  |  4 +-
+ journal/sessions/MANIFEST.md                       |  2 +-
+ .../d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md | 94 ++++++++++++++++++++++
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git status --short | head -6; git branch --show-current; git log -1 --oneline; git remote -v | head -2", "description": "Inspect the structures submodule"}`
+
+  ```
+M donnees/phrases_generees.json
+?? regenerer_banque.py
+master
+648adce U1 — générateur S : construire_arbre et cibles en O(k), sorties identiques (620 textes)
+origin	/home/stephane/Data13TB/stephane/GitHub/drave-structures (fetch)
+origin	/home/stephane/Data13TB/stephane/GitHub/drave-structures (push)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && git diff --stat; git diff donnees/phrases_generees.json | head -20; grep -rn \"profondeur\" statique/*.js statique/*.html 2>/dev/null | head -4", "description": "Review the bank diff and the page's depth usage"}`
+
+  ```
+donnees/phrases_generees.json | 6324 +++++++++++++++++++++++++++--------------
+ 1 file changed, 4216 insertions(+), 2108 deletions(-)
+diff --git a/donnees/phrases_generees.json b/donnees/phrases_generees.json
+index f931790..db3dd78 100644
+--- a/donnees/phrases_generees.json
++++ b/donnees/phrases_generees.json
+@@ -24,7 +24,8 @@
+        "texte": "Au lecteur Cette version électronique reproduit",
+        "type": "GP",
+        "role": "destinataire",
+-       "niveau": 1
++       "niveau": 1,
++       "profondeur": 0
+       },
+       {
+        "debut": 48,
+@@ -32,7 +33,8 @@
+        "texte": "dans son intégralité la version originale",
+        "type": "GP",
+        "role": "lieu",
+-       "niveau": 2
++       "niveau": 2,
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && ls statique/ 2>/dev/null | head; grep -ln \"profondeur\\|segments\" statique/* 2>/dev/null | head -3; grep -o \"profondeur[^,}]*\" statique/index.html 2>/dev/null | head -3", "description": "Inspect the page's static … [8 caractères tronqués]`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"STATIQUE\" serveur.py | head -2; ls web/ statique/ 2>/dev/null | head -5; find . -name \"index.html\" -not -path \"./.git/*\" 2>/dev/null | head -3", "description": "Locate the page's static files"}`
+
+  ```
+28:STATIQUE = RACINE / "static"
+241:            return self._fichier(STATIQUE / "index.html")
+./static/index.html
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -o \"niveau[^,;)]\\{0,40\\}\" static/index.html | head -4; wc -l static/index.html; grep -c \"profondeur\" static/index.html", "description": "Check the root page's segment rendering"}`
+
+  ```
+55 static/index.html
+1
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && sed -n '1,55p' static/index.html | grep -n \"profondeur\\|script\\|app.js\\|segments\" | head -8; ls static/ | head -6", "description": "Read the root page's structure"}`
+
+  ```
+31:  <span class="astuce">l'indentation = la profondeur d'attachement</span>
+53:<script src="/static/app.js"></script>
+app.js
+index.html
+paragraphes.html
+paragraphes.js
+style.css
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && grep -n \"profondeur\\|niveau\\|segments\" static/app.js | head -8", "description": "Check the app's segment rendering fields"}`
+
+  ```
+9:  for (const s of cand.segments) {
+19:  return cand.segments.map((s) =>
+20:    `<div class="bloc" style="margin-left:${s.niveau * 1.4}em">
+36:function niveauDe(phrase) {
+38:  if (v.length) return v[v.length - 1].niveau ?? 0;
+39:  return phrase.niveau_exemple ?? 0;
+50:    const niveau = niveauDe(p);
+51:    const mini = etat.niveaux_minimaux && etat.niveaux_minimaux[p.id];
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('static/app.js'); s = p.read_text()\nold = '`<div class=\"bloc\" style=\"margin-left:${s.niveau * 1.4}em\">'\nnew = '`<div class=\"bloc\" style=\"margin-left:${(s.pr … [815 caractères tronqués]`
+
+  ```
+app.js ok
+candidats 369 avec profondeur 324 max>=3 95 segments 2108 max 5
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet/tools/structures && ls tests/ 2>/dev/null | head -5; python3 -m pytest -q 2>&1 | tail -3", "description": "Run the structures submodule's tests", "timeoutMs": 600000}`
+
+  ```
+__pycache__
+test_arbre_svg.py
+test_candidats_corpus.py
+test_export.py
+test_generateur.py
+.........................................................                [100%]
+57 passed in 4.55s
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && cat > reports/rapport-s-migration-profondeur.md <<'MD'\n# S — La profondeur entre dans la banque : 324/369 candidats appariés, 95 à profondeur ≥ 3\n\n> **Ligne de roadmap** : S · **Date** : 2026-11-20 · **Verdict** : la migration `/` … [2202 caractères tronqués]`
+
+  ```
+648adce..578e836  master -> master
+ M journal/README.md
+ M journal/sessions/MANIFEST.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md
+ M journal/sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md
+A  reports/banque-profondeur.json
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - \"$n\" <<'PY'\nimport pathlib, sys\nn = sys.argv[1]\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\ndef rep(old, new):\n    global s\n    assert s.count(old) == 1, old[:60] … [1564 caractères tronqués]`
