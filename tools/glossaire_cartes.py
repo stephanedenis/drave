@@ -178,11 +178,14 @@ def carte(e: dict) -> str:
     return f"""<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
 # {e['terme']}
 
-> **Fiche glossaire — {e['terme']}.** {e['resume']}
+> **TL;DR — {e['terme']}.** {e['resume']}
+>
+> **Ce que c'est, en clair.** {e.get('vulgarisation') or 'Définition complète dans la famille.'}
 >
 > **Famille :** [{e['famille']}](../{e['fichier']}) · **Index :** [toutes les entrées](../README.md)
+> · **Définition complète :** [la famille](../{e['fichier']})
 >
-> **Définition complète :** [la famille](../{e['fichier']})
+> **Références externes :** {e.get('references') or 'voir [les sources citées](../09-sources-externes-citees.md)'}
 """
 
 

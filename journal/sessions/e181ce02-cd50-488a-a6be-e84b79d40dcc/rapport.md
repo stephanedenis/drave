@@ -7,14 +7,14 @@
 | Identifiant | `e181ce02-cd50-488a-a6be-e84b79d40dcc` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-10-31 17:40 |
-| Durée | 473.2 h |
-| Tours | 218 |
-| Messages | 4414 |
-| Appels d'outils | 3939 |
+| Durée | 473.6 h |
+| Tours | 219 |
+| Messages | 4426 |
+| Appels d'outils | 3950 |
 | Fichiers touchés | 25 |
-| Commandes | 3267 |
+| Commandes | 3278 |
 | Sous-agents | 43 |
-| Commits | 523 |
+| Commits | 524 |
 | Compactages de contexte | 9 |
 
 ## Objectifs déclarés
@@ -509,6 +509,8 @@
 **Tour 217** — vérifie l'état et la qualité de toute la documentation du repo. assure-toi que le readme à la racine est bien représentatif de la vision du projet et son état actuel. Mets à jour le dossier théorie et assure toi d'avoir une vulgarisation solide dans le readme de la racine car ce fichier n'est pas pour les experts.
 
 **Tour 218** — compacte la session et reprends
+
+**Tour 219** — Le glossaire est intéressant en version courte, mais il faudrait que les fiches aient la version courte en intro tldr pour les tooltips et début de fiche web, puis chaque fiche doit être enrichie ave la vulgarisation nécessaire (cross referencée sans définitions circulaires) et un ensemble de références externes pour les notions de bases et explications des concepts plus courants.
 
 ## 2. Déroulé, étape par étape
 
@@ -11592,6 +11594,22 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 
 **Une remarque honnête** : le commit a embarqué aussi une fiche d'une autre session (`rapport-s-retro-traduction.md`) — elle était dans l'index au moment du commit. Rien de cassé, mais si vous voulez des commits strictement séparés par session, il faudra que je vérifie l'index avant chaque commit.
 
+### Tour 219 — Le glossaire est intéressant en version courte, mais il faudrait que les fiches aient la version courte en intro tldr po … [263 caractères tronqués]
+
+*11 appels d'outils.* Actions notables :
+
+- bash — Voir le glossaire
+- bash — Voir des entrées du glossaire
+- bash — Lire le générateur des cartes
+- bash — Voir comment le résumé est extrait
+- bash — Voir les sources externes du glossaire
+- bash — Modifier le patron de fiche
+- bash — Trouver le générateur de fiche
+- bash — Voir le bloc de génération de fiche
+- bash — Mettre à jour la carte et vérifier
+- bash — Régénérer les fiches et vérifier
+- bash — Committer le glossaire
+
 ## 3. Travail accompli
 
 ### Fichiers créés ou modifiés
@@ -11712,7 +11730,7 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - **T1** Lire l'écrivain DRVM
 - **T1** Vérifier la date et la règle d'état à jour
 - **T1** Voir la modification en cours de l'état
-- … et 3227 autres
+- … et 3238 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -12383,4 +12401,5 @@ Une réserve que j'ai inscrite dans le doc : **les heures exactes** de la fenêt
 - PLANS — LES FILES PAR FENÊTRE TARIFAIRE : L'API EN REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE (19 h 30 → 11 h 30) ; LES TROIS CHANTIERS QUI GAGNENT (N,
 - CONSIGNES — LA RÈGLE 12 POUR TOUS LES AGENTS : L'API EN FENÊTRE REMISÉE (11 h 30 → 19 h 30 EST), LE LOCAL EN PLEINE, DEUX FILES PAR CHANTIER ; LE PLAN DÉTAILLÉ 
 - README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 2
+- GLOSSAIRE — CHAQUE FICHE OUVRE SUR UN TL;DR (OUTIL POUR LES TOOLTIPS ET LE DÉBUT DE FICHE WEB), AVEC UNE PLACE POUR « CE QUE C'EST, EN CLAIR » ET LES RÉFÉRENCES
 

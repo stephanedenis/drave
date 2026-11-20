@@ -1,8 +1,11 @@
 <!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
 # Banc de lecture rapide
 
-> **Fiche glossaire — Banc de lecture rapide.** Banc qui mesure la **compréhension par unité de calcul** sur plusieurs types de documents, avec des modes (intégral, écrémage, balayage, sélectif) et des contrôles négatifs (closed-book, régions aléatoires, sections mélangées).
+> **TL;DR — Banc de lecture rapide.** Banc qui mesure la **compréhension par unité de calcul** sur plusieurs types de documents, avec des modes (intégral, écrémage, balayage, sélectif) et des contrôles négatifs (closed-book, régions aléatoires, sections mélangées).
+>
+> **Ce que c'est, en clair.** Définition complète dans la famille.
 >
 > **Famille :** [12. La lecture, le document et leurs mesures](../12-la-lecture-le-document-et-ses-mesures.md) · **Index :** [toutes les entrées](../README.md)
+> · **Définition complète :** [la famille](../12-la-lecture-le-document-et-ses-mesures.md)
 >
-> **Définition complète :** [la famille](../12-la-lecture-le-document-et-ses-mesures.md)
+> **Références externes :** voir [les sources citées](../09-sources-externes-citees.md)

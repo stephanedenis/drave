@@ -18835,3 +18835,75 @@ AssertionError
   ```
 
 - **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('docs/pilotage/en-cours.md'); s = p.read_text()\nold = \"**Mis à jour : 2026-11-20, 10 h 00 HNE (le README racine réécrit : la vision, l'état du 20/11, la vulgarisation)**\"\nnew = \ … [840 caractères tronqués]`
+
+  ```
+ok
+budget=0
+  T0 max : 3840 mots (budget 4 000)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+   ff8fa0ff..fed7ad31  s/v7 -> s/v7
+ven 20 nov 2026 10:01:44 EST
+[stderr]
+  ✅ index : aucun fait stagé sans état
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n -B1 -A3 \"J4\" journal/sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/plan.md | head -12; grep -rn \"J4\" docs/pilotage/backlog/*.md 2>/dev/null | head -3", "description": "Read the J4 definition"}`
+
+  ```
+(no output)
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls reports/ | grep -i \"tagger\" | head -5; grep -rn \"9,47\\|+9.47\" reports/*.md 2>/dev/null | head -3", "description": "Find the tagger routing fiche"}`
+
+  ```
+pensee-tagger-option.json
+rapport-exemples-tagger.json
+rapport-exemples-tagger.md
+rapport-tagger-612.md
+rapport-tagger-auto.json
+reports/rapport-n2-multilingue-distille.md:35:| **zh** | 9,6509 | 9,4781 | 9,4517 | **9,4649** | **−0,19** |
+reports/rapport-n4-porte-execution.md:72:| `lora` | 257,66 / 219,47 | 262,72 / 225,68 | +2,0 % / +2,8 % |
+reports/rapport-tagger-612.md:1:# R0.7 — le tagger API sur le gold 612 : POS 0,9572 contre 0,8625 (heuristique), +9,47
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/structures/retro_traduction.py'); s = p.read_text()\n# 1. le prompt v2 : des anaphores numérotées + le référent\nold = '''def prompt(cible: str, contexte: str) -> str:\n    re … [2460 caractères tronqués]`
+
+  ```
+prompt v2 ok
+compile-ok
+  ```
+
+- **bash** `{"command": "sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | cut -c1-45; tail -1 work/n4/g3.chaine.log | cut -c1-45", "description": "Wait and check the variance runs", "timeoutMs": 700000}`
+
+  ```
+[still running after 600000ms; moved to background job bash-1428]
+The command keeps running in the background. You will be notified when it finishes; read newer output with job_output, stop it with job_kill.
+  ```
+
+### 🤖 Assistant
+
+⏵ Matinée productive : S a sa profondeur (324/369) et sa rétro-traduction, le corpus du palier 1 est bâti (3,69 Go), les runs de graine tournent
+
+**Ce qui est fait et committé** :
+
+- **S / migration `/` v7** : la profondeur de l'analyseur entre dans la banque **sans casser les 150 verdicts** — 324 des 369 candidats appariés, **95 à profondeur ≥ 3** (max 5), `app.js` lit `profondeur ?? niveau`. Fiche `rapport-s-migration-profondeur.md`, sous-module `f15ab58`.
+- **S / rétro-traduction** : le script existe (`retro_traduction.py`), **9/9 paragraphes traduits**, 39 paires, 18 accords de classe — mais l'appariement était par position (a002 : « l' » → *it* comparé à *she*), donc **46,2 % est un plancher d'alignement**. Le prompt v2 est écrit (anaphores numérotées + référent) ; la passe API et l'analyse sont prévues à 11 h 30. Fiche `rapport-s-retro-traduction.md`.
+- **N / corpus du palier 1** : les **résumés Wikipédia** (le registre de `wiki_big`, pas le plein texte) — `frwiki_v14`, filtre 300 o : **3,69 Go, 4,9 M lignes, 753 o/ligne**, épinglé `469a6d78…`. Fiche `rapport-corpus-palier1.md`.
+- **Runs de graine** : deux réplications de `wiki_big` (graines 2 et 3, GPU 0 et 1) pour mesurer la variance du run-à-run — première tranche vers 10 h 30, fin vers 12 h 50. Le run du palier 1 partira derrière.
+
+**Noté** : vous avez réécrit le README et l'en-tête de l'état à 09 h 48-10 h 00 ; j'ai **ajouté** mes faits à votre en-tête sans le remplacer, et mes commits sont passés (`fed7ad31`).
+
+### 👤 Utilisateur
+
+background job bash-1428 (bash: sleep 600; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; tail -1 work/n4/g2.chaine.log | cut -c1-45; tail -1 work/n4/g3.chaine.log | cut -c1-45) finished [status: completed, exit code: 0]. Read its output with job_output.
+
+- **job_output** `{"job_id": "bash-1428"}`
+
+  ```
+ven 20 nov 2026 10:13:21 EST
+pas 7950 · perte 1.1016 · PPL val 3.894 · 331
+pas 8400 · perte 1.2555 · PPL val 3.898 · 331
+[status: completed, exit code: 0]
+  ```
+
+- **bash** `{"command": "sleep 560; cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; python3 -c \"\nimport json\nfor f in ('g21','g31'):\n    try:\n        d=json.load(open(f'work/n4/{f}.pt.json')); print(f, 'ppl v1', round(d['ppl_val'],4))\n    except FileNotFoundError: print(f, '-')\nfor f in ('g21 … [259 caractères tronqués]`

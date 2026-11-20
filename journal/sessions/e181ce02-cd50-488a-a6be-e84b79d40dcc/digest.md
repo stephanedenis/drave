@@ -71512,3 +71512,262 @@ ven 20 nov 2026 09:51:36 EST
 
 **Une remarque honnête** : le commit a embarqué aussi une fiche d'une autre session (`rapport-s-retro-traduction.md`) — elle était dans l'index au moment du commit. Rien de cassé, mais si vous voulez des commits strictement séparés par session, il faudra que je vérifie l'index avant chaque commit.
 
+
+## Tour 219
+
+### 👤 Utilisateur
+
+Le glossaire est intéressant en version courte, mais il faudrait que les fiches aient la version courte en intro tldr pour les tooltips et début de fiche web, puis chaque fiche doit être enrichie ave la vulgarisation nécessaire (cross referencée sans définitions circulaires) et un ensemble de références externes pour les notions de bases et explications des concepts plus courants.
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && date; ls docs/theorie/glossaire/ | head -8; ls docs/theorie/glossaire/entrees/ 2>/dev/null | head -10; ls docs/theorie/glossaire/entrees/ 2>/dev/null | wc -l; head -40 docs/theorie/glossaire.md | cut -c1-130", "description": "Voir le … [12 caractères tronqués]`
+
+  ```
+ven 20 nov 2026 10:14:32 EST
+01-le-projet-ses-noms-sa-methode.md
+02-modeles-et-architectures.md
+03-formats-quantification-encodage.md
+04-le-moteur-drave-execution-structures-out.md
+05-flux-protocole-et-transport.md
+06-repartition-materiel-et-energie.md
+07-mesure-qualite-et-methode-experimentale.md
+08-points-releves-non-corriges.md
+a-b.md
+accumulateur.md
+aer.md
+aiguillage.md
+alm.md
+amplification-chaotique.md
+analyse-discriminante-lineaire.md
+apport-propre.md
+ast.md
+attention-creuse.md
+335
+# Glossaire raisonné de Drave
+
+Ce document explique **tout le vocabulaire** employé dans `docs/` et `reports/`, pour quelqu'un qui ne
+connaît ni les grands modèles de langage, ni le matériel, ni le vocabulaire de la
+mesure de performance. Il se lit seul : chaque notion est définie sur place, et
+chaque définition renvoie au fichier du dépôt qui l'emploie.
+
+---
+
+## Mode d'emploi
+
+**Ce que contient une entrée.** Chaque entrée suit le même patron :
+
+> **Terme** *(forme développée française ; forme anglaise)* — définition en une à
+> trois phrases, sans prérequis. La définition dit **où** le moteur s'en sert
+> (fichier, outil ou drapeau du dépôt, avec un numéro de ligne quand il aide) et,
+> quand une sou
+… [1366 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && head -30 docs/theorie/glossaire/entrees/accumulateur.md | cut -c1-160; echo \"=== AER :\"; head -20 docs/theorie/glossaire/entrees/aer.md | cut -c1-140; echo \"=== la taille :\"; du -sh docs/theorie/glossaire/entrees/ 2>/dev/null; py … [254 caractères tronqués]`
+
+  ```
+<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
+# Accumulateur
+
+> **Fiche glossaire — Accumulateur.** Vecteur de sortie dans lequel le mode « push » disperse les contributions : `acc[destination] += valeur × poids`. Sa taill
+>
+> **Famille :** [4. Le moteur Drave : exécution, structures, outils](../04-le-moteur-drave-execution-structures-out.md) · **Index :** [toutes les entrées](../RE
+>
+> **Définition complète :** [la famille](../04-le-moteur-drave-execution-structures-out.md)
+=== AER :
+<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
+# AER (Address Event Representation ; représentation par adresses d'événements)
+
+> **Fiche glossaire — AER (Address Event Representation ; représentation par adresses d'événements).** Voir la définition dans la famille.
+>
+> **Famille :** [4. Le moteur Drave : exécution, structures, outils](../04-le-moteur-drave-execution-structures-out.md) · **Index :** [toute
+>
+> **Définition complète :** [la famille](../04-le-moteur-drave-execution-structures-out.md)
+=== la taille :
+1,4M	docs/theorie/glossaire/entrees/
+entrées: 335 | mots: 28221
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && wc -l tools/glossaire_cartes.py; head -50 tools/glossaire_cartes.py | cut -c1-130", "description": "Lire le générateur des cartes"}`
+
+  ```
+298 tools/glossaire_cartes.py
+#!/usr/bin/env python3
+"""glossaire_cartes.py — une fiche par entrée de glossaire, un index, un manifeste.
+
+Le glossaire est découpé en **13 familles** (les définitions longues). Ce script en extrait
+les **entrées** et génère :
+
+  - `docs/glossaire/entrees/<slug>.md` : une **fiche courte** (titre, résumé, famille,
+    lien vers la définition complète) — c'est l'unité que docwatch peut afficher en contexte ;
+  - `docs/glossaire/README.md` : l'**index** groupé par famille, avec un lien direct par entrée ;
+  - `docs/glossaire/index.json` : le **manifeste** (slug, terme, famille, fichier, fiche, résumé)
+    pour la résolution côté docwatch.
+
+Les familles restent la source des définitions : une fiche est une **carte**, pas une copie.
+Après une modification d'une famille, relancer :
+
+    python3 tools/glossaire_cartes.py
+
+Options :
+  --pilote   ne générer que les entrées du pilote (les autres fiches restent absentes) ;
+  --force    réécrire une fiche même si elle ne porte pas le marqueur de génération ;
+  --seche    afficher le compte sans écrire.
+"""
+from __future__ import annotations
+import argparse
+import json
+import pathlib
+import re
+import unicodedata
+f
+… [861 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"def resume\\|def extraire\\|resume =\" tools/glossaire_cartes.py | head -6; sed -n \"$(grep -n 'def resume' tools/glossaire_cartes.py | head -1 | cut -d: -f1),+20p\" tools/glossaire_cartes.py | cut -c1-130", "description":  … [37 caractères tronqués]`
+
+  ```
+89:def resume(body: list[str]) -> str:
+def resume(body: list[str]) -> str:
+    par = premier_paragraphe(body)
+    par = re.sub(r"\s+", " ", par).strip()
+    # deux premières phrases, puis 60 mots au plus
+    phrases = re.split(r"(?<=[.!?])\s+", par)
+    court = " ".join(phrases[:2]).strip()
+    mots = court.split()
+    if len(mots) > 60:
+        court = " ".join(mots[:60]) + "…"
+    return court or par[:240] or "Voir la définition dans la famille."
+
+
+def parser_famille(chemin: pathlib.Path):
+    texte = chemin.read_text(encoding="utf-8", errors="ignore")
+    famille = titre_famille(texte)
+    lignes = texte.splitlines()
+    est_10 = chemin.name.startswith("10-")
+    entrees = []
+    courante = None
+    for ligne in lignes:
+        if est_10:
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && ls docs/theorie/glossaire/*.md; echo \"=== le 09 :\"; head -30 docs/theorie/glossaire/09-sources-externes-citees.md 2>/dev/null | cut -c1-130; echo \"=== l'index :\"; ls docs/theorie/glossaire/README.md docs/theorie/glossaire/index.j … [74 caractères tronqués]`
+
+  ```
+docs/theorie/glossaire/01-le-projet-ses-noms-sa-methode.md
+docs/theorie/glossaire/02-modeles-et-architectures.md
+docs/theorie/glossaire/03-formats-quantification-encodage.md
+docs/theorie/glossaire/04-le-moteur-drave-execution-structures-out.md
+docs/theorie/glossaire/05-flux-protocole-et-transport.md
+docs/theorie/glossaire/06-repartition-materiel-et-energie.md
+docs/theorie/glossaire/07-mesure-qualite-et-methode-experimentale.md
+docs/theorie/glossaire/08-points-releves-non-corriges.md
+docs/theorie/glossaire/09-sources-externes-citees.md
+docs/theorie/glossaire/10-le-pont-linguistico-semantique-le-vocabu.md
+docs/theorie/glossaire/11-sources-externes-ajoutees-par-le-10.md
+docs/theorie/glossaire/12-la-lecture-le-document-et-ses-mesures.md
+docs/theorie/glossaire/13-le-corpus-et-la-mesure-documentaire.md
+docs/theorie/glossaire/README.md
+=== le 09 :
+# 9. Sources externes citées
+
+> **Famille 9 du glossaire** (12 familles). Index : [le glossaire](../glossaire.md).
+
+---
+
+## 9. Sources externes citées
+
+Articles et spécifications, par ordre d'apparition dans le glossaire. Toutes les
+adresses de cette liste ont été testées (réponse HTTP 200) ; les documents que je
+n'ai pas pu vérifier sont cités 
+… [1822 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/glossaire_cartes.py'); t = p.read_text()\n# 1) la fiche : le TL;DR en tête (le résumé devient le « TL;DR »), la définition, les références externes\nt = t.replace('''> **Fiche … [687 caractères tronqués]`
+
+  ```
+patron de fiche mis à jour
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && grep -n \"Fiche glossaire\\|def ecrire_fiche\\|def fiche\" tools/glossaire_cartes.py | head -5; sed -n \"$(grep -n 'def ecrire_fiche\\|def fiche' tools/glossaire_cartes.py | head -1 | cut -d: -f1),+25p\" tools/glossaire_cartes.py | c … [61 caractères tronqués]`
+
+  ```
+181:> **Fiche glossaire — {e['terme']}.** {e['resume']}
+[stderr]
+sed: -e expression #1, char 1: unknown command: ','
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && sed -n '170,205p' tools/glossaire_cartes.py | cut -c1-140", "description": "Voir le bloc de génération de fiche"}`
+
+  ```
+e["slug"] = slug
+            e["resume"] = resume(e["body"])
+            e["resume"] = e["resume"][:1].upper() + e["resume"][1:]
+            toutes.append(e)
+    return toutes
+
+
+def carte(e: dict) -> str:
+    return f"""<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
+# {e['terme']}
+
+> **Fiche glossaire — {e['terme']}.** {e['resume']}
+>
+> **Famille :** [{e['famille']}](../{e['fichier']}) · **Index :** [toutes les entrées](../README.md)
+>
+> **Définition complète :** [la famille](../{e['fichier']})
+"""
+
+
+def lien(e: dict) -> str:
+    cible = ENTREES / f"{e['slug']}.md"
+    if cible.exists():
+        return f"[{e['terme']}](entrees/{e['slug']}.md)"
+    return e['terme']
+
+
+def index(toutes: list[dict]) -> str:
+    n_fam = len({e["famille"] for e in toutes})
+    lignes = [
+        "# L'index des entrées du glossaire",
+        "",
+        "> **Ce que ce fichier est.** L'index **généré** des entrées du glossaire : une ligne par",
+        "> entrée, groupée par famille, avec un lien direct vers sa **fiche** courte. Les définitions",
+        f"> complètes restent dans les {n_fam} familles ; le manifeste [`index.json`](index.json) sert à",
+        "> docwatch pour affi
+… [117 caractères tronqués]
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib\np = pathlib.Path('tools/glossaire_cartes.py'); t = p.read_text()\nt = t.replace('''> **Fiche glossaire — {e['terme']}.** {e['resume']}\n>\n> **Famille :** [{e['famille']}](../{e['fichier']}) · **Inde … [820 caractères tronqués]`
+
+  ```
+carte mise à jour
+  fait-mesure-projete-deduit     1. Le projet, ses noms, sa mét Fait · mesuré · projeté · déduit
+  harnais                        1. Le projet, ses noms, sa mét Harnais (harness)
+  journal-de-session             1. Le projet, ses noms, sa mét Journal de session
+181:> **TL;DR — {e['terme']}.** {e['resume']}
+183:> **Ce que c'est, en clair.** {e.get('vulgarisation') or 'Définition complète dans la famille.'}
+188:> **Références externes :** {e.get('references') or 'voir [les sources citées](../09-sources-externes-citees.md)'}
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 tools/glossaire_cartes.py 2>&1 | tail -3; head -14 docs/theorie/glossaire/entrees/accumulateur.md | cut -c1-150; echo \"=== la revue :\"; python3 tools/revue_documentation.py 2>&1 | tail -2; python3 tools/taille_documents.py  … [67 caractères tronqués]`
+
+  ```
+335 entrées · 335 fiche(s) écrite(s) · index et manifeste à jour
+<!-- généré par tools/glossaire_cartes.py — ne pas éditer à la main -->
+# Accumulateur
+
+> **TL;DR — Accumulateur.** Vecteur de sortie dans lequel le mode « push » disperse les contributions : `acc[destination] += valeur × poids`. Sa taill
+>
+> **Ce que c'est, en clair.** Définition complète dans la famille.
+>
+> **Famille :** [4. Le moteur Drave : exécution, structures, outils](../04-le-moteur-drave-execution-structures-out.md) · **Index :** [toutes les entr
+> · **Définition complète :** [la famille](../04-le-moteur-drave-execution-structures-out.md)
+>
+> **Références externes :** voir [les sources citées](../09-sources-externes-citees.md)
+=== la revue :
+  revue de documentation · 817 fiche(s) · 1049 JSON · 128 doc(s) · 91 porte(s) · 8 chapitre(s)
+  ✅ tout passe : classement, structure, annotation, fraîcheur, compteurs, cohérence, vocabulaire, navigation
+  ✅ tous les documents chargeables sont dans leur budget et ont un résumé.
+  ```
+
+- **bash** `{"command": "cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && python3 - <<'PY'\nimport pathlib, re\np=pathlib.Path('docs/pilotage/en-cours.md'); t=p.read_text()\nt=re.sub(r\"\\*\\*Mis à jour : [^\\n]*\\n\", \"**Mis à jour : 2026-11-20, 10 h 25 HNE (les fiches du glossaire : TL;DR en tête, la pl … [782 caractères tronqués]`

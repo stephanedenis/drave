@@ -5,13 +5,14 @@
 > le bloc « notes » (marqueurs HTML). Retour : [l'index du journal](../README.md) ·
 > [l'index des sessions](../README.md#sessions).
 
-**11 commits** · **2 session(s)** · **5 thème(s)**
+**12 commits** · **2 session(s)** · **6 thème(s)**
 
 ## Thèmes du jour
 
 | thème | commits | fichier |
 |---|---|---|
 | attention | 1 | [attention.md](attention.md) |
+| distribue | 1 | [distribue.md](distribue.md) |
 | docs | 4 | [docs.md](docs.md) |
 | mesures | 4 | [mesures.md](mesures.md) |
 | modele | 1 | [modele.md](modele.md) |
@@ -21,8 +22,8 @@
 
 | session | titre | début | durée | liens |
 |---|---|---|---|---|
-| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 72.1 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
-| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 473.2 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
+| `d67a9bb1-090e-4f69-baf2-a831c00aa275` | Intérêt pour le FPGA maintenant | 2026-11-17 09:50 | 72.4 h | [rapport](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/rapport.md) · [digest](../sessions/d67a9bb1-090e-4f69-baf2-a831c00aa275/digest.md) |
+| `e181ce02-cd50-488a-a6be-e84b79d40dcc` | Documentation Drave avec diagrammes et implémentation | 2026-10-31 17:40 | 473.6 h | [rapport](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/rapport.md) · [digest](../sessions/e181ce02-cd50-488a-a6be-e84b79d40dcc/digest.md) |
 
 ## Tous les commits (heure réelle)
 
@@ -39,6 +40,7 @@
 | 09:45 | `cdc12ad8` | N — LE CORPUS DU PALIER 1 EST CONSTRUIT : LES RÉSUMÉS WIKIPÉDIA, 3,69 Go À 753 o/LIGNE (ÉPINGLÉ) |
 | 09:48 | `b1b1e26e` | README — LA VULGARISATION ET L'ÉTAT RÉEL : « CE QUE C'EST, EN CLAIR » (LE PROBLÈME, L'IDÉE, CE QUE ÇA CHANGE), LES CHIFFRES DU 20/11 (86,25 / 95,75 / 0,7902 / 238/239), L'ÉTAT DU NATIF (IL APPREND, IL NE COMPOSE PAS) ; 3 195 MOTS |
 | 09:55 | `ff8fa0ff` | S — LE POINTEUR DU SOUS-MODULE ENTRE LA RÉTRO-TRADUCTION (SOUS-MODULE f15ab58) |
+| 09:59 | `fed7ad31` | S — LA LIGNE DE ROADMAP DIT CE QUI EST FAIT (MIGRATION / v7 324/369, RÉTRO-TRADUCTION 9/9) ; L'ÉTAT AJOUTE CES FAITS À SON EN-TÊTE |
 
 ## Le récit de la journée (écrit à la main)
 

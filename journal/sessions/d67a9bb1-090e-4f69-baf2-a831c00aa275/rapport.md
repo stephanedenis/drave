@@ -7,12 +7,12 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 72.1 h |
+| Durée | 72.4 h |
 | Tours | 84 |
-| Messages | 1310 |
-| Appels d'outils | 1133 |
+| Messages | 1318 |
+| Appels d'outils | 1139 |
 | Fichiers touchés | 44 |
-| Commandes | 984 |
+| Commandes | 989 |
 | Sous-agents | 7 |
 | Commits | 91 |
 | Compactages de contexte | 2 |
@@ -2046,7 +2046,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 
 ### Tour 84 — prends tâches qui demandent plus de raisonnement pendant le jour et les tâches plus légères en LLM pendant le tarif élev … [34 caractères tronqués]
 
-*70 appels d'outils.* Actions notables :
+*76 appels d'outils.* Actions notables :
 
 - create_goal
 - bash — Create the goal and find the paragraphs data
@@ -2062,7 +2062,20 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - bash — Read the data loader and the analyzer output
 - bash — Inspect the stored bank's shape
 - bash — Compare the stored and fresh analyzer outputs
-- … et 56 autres
+- … et 62 autres
+
+**Synthèse produite :**
+
+⏵ Matinée productive : S a sa profondeur (324/369) et sa rétro-traduction, le corpus du palier 1 est bâti (3,69 Go), les runs de graine tournent
+
+**Ce qui est fait et committé** :
+
+- **S / migration `/` v7** : la profondeur de l'analyseur entre dans la banque **sans casser les 150 verdicts** — 324 des 369 candidats appariés, **95 à profondeur ≥ 3** (max 5), `app.js` lit `profondeur ?? niveau`. Fiche `rapport-s-migration-profondeur.md`, sous-module `f15ab58`.
+- **S / rétro-traduction** : le script existe (`retro_traduction.py`), **9/9 paragraphes traduits**, 39 paires, 18 accords de classe — mais l'appariement était par position (a002 : « l' » → *it* comparé à *she*), donc **46,2 % est un plancher d'alignement**. Le prompt v2 est écrit (anaphores numérotées + référent) ; la passe API et l'analyse sont prévues à 11 h 30. Fiche `rapport-s-retro-traduction.md`.
+- **N / corpus du palier 1** : les **résumés Wikipédia** (le registre de `wiki_big`, pas le plein texte) — `frwiki_v14`, filtre 300 o : **3,69 Go, 4,9 M lignes, 753 o/ligne**, épinglé `469a6d78…`. Fiche `rapport-corpus-palier1.md`.
+- **Runs de graine** : deux réplications de `wiki_big` (graines 2 et 3, GPU 0 et 1) pour mesurer la variance du run-à-run — première tranche vers 10 h 30, fin vers 12 h 50. Le run du palier 1 partira derrière.
+
+**Noté** : vous avez réécrit le README et l'en-tête de l'état à 09 h 48-10 h 00 ; j'ai **ajouté** mes faits à votre en-tête sans le remplacer, et mes commits sont passés (`fed7ad31`).
 
 ## 3. Travail accompli
 
@@ -2167,7 +2180,7 @@ Deux chaînes de 11 tranches de 10 000 pas, avec le banc, la grammaticalité et 
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 944 autres
+- … et 949 autres
 
 ## 4. Mesures et résultats marquants
 

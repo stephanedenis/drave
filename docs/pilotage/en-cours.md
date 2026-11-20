@@ -1,6 +1,6 @@
 # En ce moment
 
-**Mis à jour : 2026-11-20, 10 h 05 HNE (le README racine réécrit : la vision, l'état du 20/11, la vulgarisation · S : la banque reçoit la profondeur — 324/369 — et la rétro-traduction existe — 9/9 · le corpus du palier 1 est bâti — 3,69 Go)**
+**Mis à jour : 2026-11-20, 10 h 25 HNE (les fiches du glossaire : TL;DR en tête, la place pour la vulgarisation et les références)**
 
 > **État courant, pas histoire** : une sous-section par session active ; preuves et plan plus bas (**La carte**).
 
