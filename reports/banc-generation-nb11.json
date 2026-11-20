@@ -1,0 +1,759 @@
+{
+ "modele": "work/n4/nb11.pt",
+ "aleatoire": false,
+ "n": 128,
+ "vocabulaire": 50000,
+ "reglages": {
+  "greedy": {
+   "mots_valides": 0.9566,
+   "distinct_2": 0.5456,
+   "repetition": 9,
+   "echo": 0.1918,
+   "octets": 2560,
+   "secondes": 23.03,
+   "octets_s": 111.2,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Saint-Pétersbourg situé à Saint-Pétersbourg en France. Le parc est un parc de construction de la commun",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le projet est désormais décrit comme un projet de la construction de la construction de la construction de la construction d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3478,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois chaussure de la construction de la construction de la construction de la construction de la construction de la construction de ",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la commune de Saint-Pétersbourg situé à Saint-Pétersbourg en France. Le parc est un parc de construction de la commun",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.6667,
+     "repetition": 4,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, le projet est désormais décrit comme un projet de la construction de la construction de la construction de la construction d",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3478,
+     "repetition": 6,
+     "echo": 0.0,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois chaussure de la construction de la construction de la construction de la construction de la construction de la construction de ",
+     "octets": 128
+    },
+    {
+     "mots": 32,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5484,
+     "repetition": 4,
+     "echo": 0.2,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commune est de  et  de large. Le chat est de  et le chat de  est de  et  de  et  de longueur sous le chat de  et  de long",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9333,
+     "distinct_2": 0.7586,
+     "repetition": 2,
+     "echo": 0.14285714285714285,
+     "prompt": "La mer",
+     "texte": "La mer du Nord est un peintre français né le  à l'âge de seize ans de paysages de la ville de La Marsa de la ville de La Marsa de ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.7308,
+     "repetition": 3,
+     "echo": 0.0,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent au club de la Ligue des champions de l'UEFA et de champions de l'UEFA et de champions de l'UEFA. Le , il est sélectionné pour",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4091,
+     "repetition": 3,
+     "echo": 0.5789473684210527,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de rejoindre le gouvernement a décidé de rejoindre le gouvernement a décidé de rejoindre le gouvernement au gouvernement al",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9048,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un court métrage documentaire français réalisé par Jean-Paul Bourgeois, sorti en 1933. Synopsis Un jour, un jeune homme de ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4615,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme de la communauté de communes de la ville de La Couronne, de la communauté de communes de la ville de La Couronne, de la commu",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1379,
+     "repetition": 9,
+     "echo": 0.6428571428571429,
+     "prompt": "La musique",
+     "texte": "La musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique de la musique d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5769,
+     "repetition": 3,
+     "echo": 0.12,
+     "prompt": "Le livre",
+     "texte": "Le livre de la chanson de l'album est une chanson de l'album de l'album de l'année 2013. Le livre de la chanson de l'album est un livre",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.13636363636363635,
+     "prompt": "La guerre",
+     "texte": "La guerre de Sécession de la Ligue de Sécessisse (LALL) de 1945 à 1950, est un homme politique français. Biographie Fils de la guerre",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de la production de cinéma est de 2013 à 2014. Le titre de construction est de 2014 à 2016. Le titre de constructeur est de ",
+     "octets": 128
+    },
+    {
+     "mots": 31,
+     "mots_valides": 0.871,
+     "distinct_2": 0.3333,
+     "repetition": 4,
+     "echo": 0.034482758620689655,
+     "prompt": "Le sport",
+     "texte": "Le sport de La Palace est un sport de la commune de La Palace de la Commune de La Palace de la Commune de La Palace de la Commune de La ",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 1.0,
+     "distinct_2": 0.2069,
+     "repetition": 9,
+     "echo": 0.32142857142857145,
+     "prompt": "La science",
+     "texte": "La science de la chanson de La Chanson de La Chanson de La Chanson de La Chanson de La Chanson de La Chanson de La Chanson de La Chanson d",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.7778,
+     "distinct_2": 0.5,
+     "repetition": 5,
+     "echo": 0.32,
+     "prompt": "La ville",
+     "texte": "La ville de La Chauvière est une ville de la commune de La Chauvière et de La Chauvière de la Chauvière de la Chauvière de la Chauv",
+     "octets": 128
+    },
+    {
+     "mots": 29,
+     "mots_valides": 1.0,
+     "distinct_2": 0.4643,
+     "repetition": 6,
+     "echo": 0.07407407407407407,
+     "prompt": "Le temps",
+     "texte": "Le temps de la chanson est diffusée depuis le  sur le site de la chanson de la chanson de la chanson de la chanson de la chanson de la ",
+     "octets": 128
+    },
+    {
+     "mots": 38,
+     "mots_valides": 1.0,
+     "distinct_2": 0.1892,
+     "repetition": 8,
+     "echo": 0.5,
+     "prompt": "La vie",
+     "texte": "La vie et la personne de La vie et la personne de La vie et de La vie et de La vie et de La vie et de La vie et de La vie et de La vie",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 1.0,
+     "distinct_2": 0.5769,
+     "repetition": 3,
+     "echo": 0.2222222222222222,
+     "prompt": "Le monde",
+     "texte": "Le monde de la compétition est de 2013 à 2016. Le , le monde de la compétition est de 2016 à 2017. Le , le monde de la compétition ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 1.0,
+     "distinct_2": 0.3333,
+     "repetition": 6,
+     "echo": 0.30434782608695654,
+     "prompt": "La question",
+     "texte": "La question de la production de la constitution est de la production de la production de la production de la production de la production de",
+     "octets": 128
+    }
+   ]
+  },
+  "top40_0.8": {
+   "mots_valides": 0.918,
+   "distinct_2": 0.977,
+   "repetition": 1,
+   "echo": 0.0508,
+   "octets": 2560,
+   "secondes": 26.86,
+   "octets_s": 95.3,
+   "echantillons": [
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la Seine à défilement considéré comme un artisan basal dans lequel il a été conservé dans la chaussure de la vallée ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, tout en s'associent et s'associe au Maroc Atlanta, La Recherche et les Évangiles : l'intention de dire comme un homme politiq",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois urinaire dans la zone rurale de Nord, contrairement à la partie nord de la chose le conseil des femmes qui signait une persist",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 27,
+     "mots_valides": 0.963,
+     "distinct_2": 0.9615,
+     "repetition": 1,
+     "echo": 0.18181818181818182,
+     "prompt": "La France est un pays",
+     "texte": "La France est un pays de la Seine à défilement considéré comme un artisan basal dans lequel il a été conservé dans la chaussure de la vallée ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.045454545454545456,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, tout en s'associent et s'associe au Maroc Atlanta, La Recherche et les Évangiles : l'intention de dire comme un homme politiq",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.9259,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois urinaire dans la zone rurale de Nord, contrairement à la partie nord de la chose le conseil des femmes qui signait une persist",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05263157894736842,
+     "prompt": "Le chat",
+     "texte": "Le chat est desservi par deux nouveaux catholiques des autres et ses performances ont supprimé à des activités spéciales. Le navire",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.08333333333333333,
+     "prompt": "La mer",
+     "texte": "La merci 1802 est l'un des meneurs de la ville. Pour les trois tons travaillants de l'Espagne, lors de l'appel du grand de la Seconde ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.043478260869565216,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent des productions de toutes les deux logements noirs de la saison avec le Rampage, Linux au stade de route de Linux en recueillit",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de faire de construire une mission importante existante et par habitude pour payer les conventions religieuses des monts des vi",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Paris est",
+     "texte": "Paris est le plus grand américain de la ville et de la guerre. La capitale coopérative de l'Autriche est fondée en 1914. Le , une cinq",
+     "octets": 128
+    },
+    {
+     "mots": 19,
+     "mots_valides": 0.8421,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Un homme",
+     "texte": "Un homme politique étranger Ali Saheliani a poursuivi ses études d'écoles de conférences à Pleine Université et d'immédiatement d",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.05,
+     "prompt": "La musique",
+     "texte": "La musique régionale est actuellement recouverte par des droits de l'homonyme chinois durant la Seconde Guerre mondiale en 1943. Le , il ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.88,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre du site de Sykestor Tibble est défait sur ses premières chansons à la bande qui a été découvert par l'Étoile de la litt�",
+     "octets": 128
+    },
+    {
+     "mots": 21,
+     "mots_valides": 0.9524,
+     "distinct_2": 0.95,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La guerre",
+     "texte": "La guerre est étirée de celles de l'armée impériale japonaise. Le réservoir Le , un assis de l'armée éthiopienne entre les guerres",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.9565,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie de Tracy a dessiné une race de protocoles et une masse de l'organisation analogique. Elle a été reconnue par le conseiller d",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.9615,
+     "distinct_2": 0.92,
+     "repetition": 1,
+     "echo": 0.125,
+     "prompt": "Le sport",
+     "texte": "Le sport a été retransmis dans le système de contenu et de la chimie en Autriche. Le sport est alors interrompu dans un système de c",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La science",
+     "texte": "La science, scientifique et scientifique est agrandie et servite de financer dès ses vingt-deux ans puis rentre en jeu et rendre son cœu",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.8846,
+     "repetition": 1,
+     "echo": 0.15384615384615385,
+     "prompt": "La ville",
+     "texte": "La ville sur londonien de Tranzay.. Le , à la suite de la mort de celle-ci joint du cours de la campagne de Tranzay et de la communaut�",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 0.9091,
+     "distinct_2": 0.9524,
+     "repetition": 1,
+     "echo": 0.1,
+     "prompt": "Le temps",
+     "texte": "Le temps de la mortLe temps de l'augmentation de l'authenticité, Le Chœur, 2008, pages sous l'égide de concile, situé à Templeuve d",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.09523809523809523,
+     "prompt": "La vie",
+     "texte": "La vie est de Charles Lawrence à Charles, à l'emplacement de la Tate latérale de la Société des artistes français et des études",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le monde",
+     "texte": "Le monde de la fourniture a été utilisé pour construire une station baroque locale sur un certain nombre de pernons. Les chaînes act",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "La question",
+     "texte": "La question de Bornaville, est un philologue et dessinateur allemand. Il a été le premier supporteur net devient un an plus tard une éco",
+     "octets": 128
+    }
+   ]
+  },
+  "top20_0.5": {
+   "mots_valides": 0.9104,
+   "distinct_2": 0.8794,
+   "repetition": 3,
+   "echo": 0.0898,
+   "octets": 2560,
+   "secondes": 27.28,
+   "octets_s": 93.8,
+   "echantillons": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la maison de Marie-Louise Lazare dans la municipalité de La Guerre de la Première Guerre mondiale. Historique La famill",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, Romans devient un professeur de l'université de l'Illinois à l'université de Toronto en 1954, où il obtient un diplôme en",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9,
+     "distinct_2": 0.8276,
+     "repetition": 2,
+     "echo": 0.03571428571428571,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de plus de  en plus de la course de la course de la saison 2016 avec la Saint-Servan de Castagnol le . Le , il annonce le  suiv",
+     "octets": 128
+    }
+   ],
+   "lignes": [
+    {
+     "mots": 25,
+     "mots_valides": 0.84,
+     "distinct_2": 0.9167,
+     "repetition": 1,
+     "echo": 0.23809523809523808,
+     "prompt": "La France est un pays",
+     "texte": "La France est un paysage de la maison de Marie-Louise Lazare dans la municipalité de La Guerre de la Première Guerre mondiale. Historique La famill",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9167,
+     "distinct_2": 0.9565,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Dans les années 1950",
+     "texte": "Dans les années 1950, Romans devient un professeur de l'université de l'Illinois à l'université de Toronto en 1954, où il obtient un diplôme en",
+     "octets": 128
+    },
+    {
+     "mots": 30,
+     "mots_valides": 0.9,
+     "distinct_2": 0.8276,
+     "repetition": 2,
+     "echo": 0.03571428571428571,
+     "prompt": "Il était une fois",
+     "texte": "Il était une fois de plus de  en plus de la course de la course de la saison 2016 avec la Saint-Servan de Castagnol le . Le , il annonce le  suiv",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.4783,
+     "repetition": 3,
+     "echo": 0.09090909090909091,
+     "prompt": "Le chat",
+     "texte": "Le chat de la commande de la chatteuse Carrière de pierre (2011-2015) Le chat de la commande de la chatteuse Carrière de la chatteuse",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.08695652173913043,
+     "prompt": "La mer",
+     "texte": "La merciale est composée de 5 membres, comme l'artiste et le député de la circonscription de Savoie. Le , le président de la Cour ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.8261,
+     "repetition": 2,
+     "echo": 0.19047619047619047,
+     "prompt": "Les enfants jouent",
+     "texte": "Les enfants jouent dans les majeures de la carrière de la saison 1985-1986. Les enfants jouent des performances concessionnelles au sein de la di",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.92,
+     "distinct_2": 0.9583,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le gouvernement a décidé",
+     "texte": "Le gouvernement a décidé de rendre des contraintes pour l'assister à cause de la défense de la campagne de l'armée américaine. En 1991, le gouvernem",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.8333,
+     "distinct_2": 0.913,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Paris est",
+     "texte": "Paris est un groupe de rock indépendant français né le  à Rouen (Indre-et-Loire), et mort le  à Rouen (à l'âge de 18 ans). Biograp",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.875,
+     "distinct_2": 0.8696,
+     "repetition": 2,
+     "echo": 0.045454545454545456,
+     "prompt": "Un homme",
+     "texte": "Un homme de loi sur la construction du terrain de la construction du terrain dans le mont South Singhuman Recherche est un ancien foncti",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 0.9583,
+     "distinct_2": 0.913,
+     "repetition": 1,
+     "echo": 0.13043478260869565,
+     "prompt": "La musique",
+     "texte": "La musique de la formation est décrite comme . Il est principalement comme  décrite par le service de la candidature de la Corée du Sud",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.0,
+     "prompt": "Le livre",
+     "texte": "Le livre de rapport avec la policière La Villette, comprend cinq appareils dans la présence de la policière La Villette, publié en 1",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.7273,
+     "repetition": 2,
+     "echo": 0.2857142857142857,
+     "prompt": "La guerre",
+     "texte": "La guerre d'indépendance de la région de Danemark est une guerre froide de la ville de Danemark, comme la guerre d'indépendance de la ",
+     "octets": 128
+    },
+    {
+     "mots": 22,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "L'économie",
+     "texte": "L'économie est composée de plusieurs découvertes de formes très similaires et de sources de transport sur le territoire de la carte de ",
+     "octets": 128
+    },
+    {
+     "mots": 25,
+     "mots_valides": 0.96,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.0,
+     "prompt": "Le sport",
+     "texte": "Le sport a été achevé en 1962 et la première fois en 1978. Il a ensuite achevé les sources historiques en 1981. Situation et descri",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.8261,
+     "distinct_2": 0.8636,
+     "repetition": 2,
+     "echo": 0.09523809523809523,
+     "prompt": "La science",
+     "texte": "La science des États-Unis se déroule le  à San Francisco de Columbia. La science des États-Unis a progressé le domaine de l'État de ",
+     "octets": 128
+    },
+    {
+     "mots": 27,
+     "mots_valides": 0.8889,
+     "distinct_2": 0.8846,
+     "repetition": 1,
+     "echo": 0.16,
+     "prompt": "La ville",
+     "texte": "La ville de Bourgogne de Montereau est accordée à l'étage de la pointe de la ville. Le cours de la montagne est rendu du massif de Bo",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 0.8462,
+     "distinct_2": 0.84,
+     "repetition": 1,
+     "echo": 0.041666666666666664,
+     "prompt": "Le temps",
+     "texte": "Le temps de la reine de la Sardaigne. Le diocèse de Lisbonne est en grande partie de la commune de Lisbonne et la région de Lisbonne. ",
+     "octets": 128
+    },
+    {
+     "mots": 24,
+     "mots_valides": 1.0,
+     "distinct_2": 1.0,
+     "repetition": 1,
+     "echo": 0.09090909090909091,
+     "prompt": "La vie",
+     "texte": "La vie a été transformée en chantier naval, sur les pentes de l'artère de la fin de l'année en 1950. La société est accompagné",
+     "octets": 128
+    },
+    {
+     "mots": 23,
+     "mots_valides": 0.913,
+     "distinct_2": 0.9545,
+     "repetition": 1,
+     "echo": 0.047619047619047616,
+     "prompt": "Le monde",
+     "texte": "Le monde des prix au festival de Montpellier est récompensé par la Fondation de Montpellier et le Conseil d'action de la recherche de ",
+     "octets": 128
+    },
+    {
+     "mots": 26,
+     "mots_valides": 1.0,
+     "distinct_2": 0.84,
+     "repetition": 1,
+     "echo": 0.20833333333333334,
+     "prompt": "La question",
+     "texte": "La question de la charge se déroule sur la rive se déroule en raison de la souveraineté de la forme de la construction du chantier naval",
+     "octets": 128
+    }
+   ]
+  }
+ },
+ "prompts": [
+  "La France est un pays",
+  "Dans les années 1950",
+  "Il était une fois",
+  "Le chat",
+  "La mer",
+  "Les enfants jouent",
+  "Le gouvernement a décidé",
+  "Paris est",
+  "Un homme",
+  "La musique",
+  "Le livre",
+  "La guerre",
+  "L'économie",
+  "Le sport",
+  "La science",
+  "La ville",
+  "Le temps",
+  "La vie",
+  "Le monde",
+  "La question"
+ ]
+}

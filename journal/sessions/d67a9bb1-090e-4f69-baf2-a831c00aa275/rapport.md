@@ -7,14 +7,14 @@
 | Identifiant | `d67a9bb1-090e-4f69-baf2-a831c00aa275` |
 | Dossier | `/home/stephane/Data13TB/stephane/GitHub/Qtrinet` |
 | Début | 2026-11-17 09:50 |
-| Durée | 67.0 h |
-| Tours | 81 |
-| Messages | 1188 |
-| Appels d'outils | 1021 |
+| Durée | 68.1 h |
+| Tours | 82 |
+| Messages | 1200 |
+| Appels d'outils | 1031 |
 | Fichiers touchés | 44 |
-| Commandes | 876 |
+| Commandes | 886 |
 | Sous-agents | 7 |
-| Commits | 80 |
+| Commits | 81 |
 | Compactages de contexte | 1 |
 
 ## Objectifs déclarés
@@ -217,6 +217,8 @@
 **Tour 80** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 **Tour 81** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
+
+**Tour 82** — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun sous-agent) : (1) construire un corpus « long-forme » (les lignes ≥ 200 o du plein texte) épinglé, et lancer deux runs longs sur les GPU — `wiki_big` seul et le long-forme, 11 tranches de 10 000 pas avec évaluation wikitext2 à chaque tranche ; (2) faire les deux pièces restantes  … [688 caractères tronqués]
 
 ## 2. Déroulé, étape par étape
 
@@ -1924,7 +1926,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 
 ### Tour 81 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
 
-*7 appels d'outils.* Actions notables :
+*9 appels d'outils.* Actions notables :
 
 - bash — Ten-minute pause
 - bash — Ten-minute pause and progress
@@ -1933,6 +1935,26 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - bash — Commit the 100k milestone
 - bash — Fix the fiche counter
 - bash — Update the state header to the 20/11
+- bash — Read the long-form final tranche
+
+**Synthèse produite :**
+
+⏵ Le long-forme est fini : **7,7479** à 110 000 pas (PPL v1 3,1525) — sa meilleure tranche était 80 000 (7,61) ; `wiki_big` termine vers 5 h 50
+
+**Le point** : la chaîne long-forme est close (05 h 10) à **7,7479** sur wikitext2, avec un pic à 7,6053 (80 000 pas) puis une dégradation — filtrer les lignes longues du plein texte ne tient pas sur la durée. `wiki_big` termine sa onzième tranche vers 5 h 50 ; ensuite la fiche de la nuit (les deux courbes complètes) et le bilan de 8 h.
+
+### Tour 82 — <goal_round> Objective: "De 16 h 30 le 19/11 à 8 h le 20/11, en autonomie totale et IA minimale (aucun appel API, aucun  … [968 caractères tronqués]
+
+*8 appels d'outils.* Actions notables :
+
+- bash — Fill the long-form's final rows in the fiche
+- bash — Ten-minute pause and progress
+- bash — Check the wiki_big final tranche
+- bash — Read the wiki_big final tranche
+- bash — Read the wiki_big final results
+- bash — Finalize the night's fiche
+- bash — Update the state with the night's final results
+- bash — Commit the night's final results
 
 ## 3. Travail accompli
 
@@ -2037,7 +2059,7 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - **T4** Find existing Python tests and DRVM gates
 - **T4** Read the gate qualifier for DRVM
 - **T4** Find hand-built manifests in tools and gates
-- … et 836 autres
+- … et 846 autres
 
 ## 4. Mesures et résultats marquants
 
@@ -2265,4 +2287,5 @@ Le dépôt est **propre et vert** (91 portes, 89/2, arbre poussé), mais il rest
 - cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && n=$(ls reports/*.json | wc -l); python3 - "$n" <<'PY' import pathlib, sys n = sys.argv[1] p = pathlib.Path
 - ÉTAT — LA FICHE DE LA NUIT COMPTE (814 FICHES)" && git push origin s/v7 2>&1 | tail -1; date
 - ÉTAT — LA PAGE VIVANTE PASSE AU 20/11 (LA NUIT wiki_big)" && git push origin s/v7 2>&1 | tail -1; date
+- cd /home/stephane/Data13TB/stephane/GitHub/Qtrinet && git add reports/rapport-nuit-wikibig.md reports/banc-generation-nb11.json reports/banc-grammaticalite-nb11
 

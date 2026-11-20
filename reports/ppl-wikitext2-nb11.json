@@ -1,0 +1,11 @@
+{
+ "modele": "work/n4/nb11.pt",
+ "parametres": 141935400,
+ "val": "data/wikitext2_test.txt",
+ "octets_val": 359041,
+ "seq": 1024,
+ "lot": 8,
+ "n_lots": 43,
+ "jetons": 352256,
+ "ppl": 6.8349009721161655
+}
